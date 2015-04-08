@@ -1,0 +1,59 @@
+.torrent {
+
+    &,
+    &__header {
+        display: flex;
+        padding: 10px 20px;
+    }
+
+    &__header {
+        background: $torrent--header--background;
+        border-bottom: 1px solid $torrent--header--border;
+        border-top: 1px solid $torrent--header--border;
+        color: $torrent--header--foreground;
+        display: flex;
+        font-size: 0.5em;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+    }
+
+}
+
+.torrent {
+
+    &__details,
+    &__list {
+        list-style: none;
+    }
+
+    &__detail {
+
+        &--primary,
+        &--secondary {
+            flex: 1;
+        }
+
+        &--primary {
+
+            .torrent & {
+                color: $torrent--primary--foreground;
+                font-size: 1.1em;
+            }
+
+        }
+
+        &--secondary {
+            display: flex;
+
+            &--sub {
+                flex: 1;
+            }
+
+        }
+
+        label {
+            display: block;
+        }
+    }
+
+}

@@ -1,0 +1,10 @@
+.filter-bar {
+    background: $filter-bar--background;
+    color: $filter-bar--foreground;
+    padding: 30px 0;
+
+    &__item {
+        border-bottom: 1px solid $filter-bar--border;
+    }
+
+}

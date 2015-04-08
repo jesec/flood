@@ -1,0 +1,28 @@
+html,
+body {
+    height: 100%;
+}
+
+.container {
+    height: 100%;
+    width: 100%;
+}
+
+.flood {
+    display: flex;
+    height: 100%;
+}
+
+.filter-bar {
+    flex: 25%;
+    min-width: 200px;
+    max-width: 240px;
+}
+
+.torrent {
+
+    &__list {
+        flex: 100%;
+    }
+
+}
