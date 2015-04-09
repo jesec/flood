@@ -1,8 +1,22 @@
 .torrent {
+    transition: background 0.25s;
+
+    &:hover {
+        background: rgba(#fff, 0.05);
+    }
+
+}
+
+.torrent {
+
+    &__header,
+    &__details {
+        display: flex;
+        flex-flow: row wrap;
+    }
 
     &,
     &__header {
-        display: flex;
         padding: 10px 20px;
     }
 
@@ -17,11 +31,15 @@
         text-transform: uppercase;
     }
 
+    &__details {
+        margin-bottom: 4px;
+    }
+
 }
 
 .torrent {
 
-    &__details,
+    &__detail--list,
     &__list {
         list-style: none;
     }
@@ -44,9 +62,16 @@
 
         &--secondary {
             display: flex;
+            font-size: 0.85em;
 
             &--sub {
                 flex: 1;
+            }
+
+            .unit {
+                font-size: 0.7em;
+                margin-left: 0;
+                vertical-align: middle;
             }
 
         }
@@ -54,6 +79,20 @@
         label {
             display: block;
         }
+
+    }
+
+}
+
+.progress-bar {
+    background: $progress-bar--background;
+    border-radius: 20px;
+    height: 5px;
+    overflow: hidden;
+
+    &__fill {
+        background: $progress-bar--fill;
+        height: 100%;
     }
 
 }

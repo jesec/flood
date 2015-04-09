@@ -139,7 +139,18 @@ client.prototype.getTorrentList = function(callback) {
 
         rTorrent.get('d.multicall', defaults.torrentPropertyMethods)
             .then(function(data) {
-                callback(null, mapProps(defaults.torrentProperties, data));
+
+                // create torrent array, each item in the array being
+                // an object with human-readable property values
+                var torrents = mapProps(defaults.torrentProperties, data);
+
+                // add percent complete
+                var torrents = torrents.map(function(torrent) {
+                    torrent['percentComplete'] = (torrent['bytesDone'] / torrent['sizeBytes'] * 100).toFixed(2);
+                    return torrent;
+                });
+
+                callback(null, torrents);
             }, function(error) {
                 callback(error, null)
             });
