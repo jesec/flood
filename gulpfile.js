@@ -7,7 +7,8 @@ var gulp = require('gulp'),
     browserify = require('browserify'),
     watchify = require('watchify'),
     reactify = require('reactify'),
-    source = require('vinyl-source-stream');
+    source = require('vinyl-source-stream'),
+    svgmin = require('gulp-svgmin');
 
 var supportedBrowsers = ['last 2 versions', '> 1%', 'ie >= 8', 'Firefox ESR', 'Opera >= 12'],
     jsFiles = [];
@@ -75,6 +76,15 @@ gulp.task('scripts', function() {
 
     return rebundle();
 });
+
+gulp.task('svg', function() {
+
+    return gulp.src(sourceDir + '/scripts/components/icons/icons/*.svg')
+        .pipe(svgmin())
+        .pipe(gulp.dest(sourceDir + '/scripts/components/icons/icons'));
+});
+
+
 
 gulp.task('watch', function () {
     gulp.watch(sourceDir + 'scripts/**/*.js', ['scripts', reload]);

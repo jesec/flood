@@ -2,7 +2,11 @@
     transition: background 0.25s;
 
     &:hover {
-        background: rgba(#fff, 0.05);
+        background: $torrent--background--hover;
+    }
+
+    &.is-selected {
+        background: $torrent--background--selected;
     }
 
 }

@@ -1,5 +1,6 @@
 var React = require('react');
 var FilterBar = require('./filter-bar/FilterBar');
+var ActionBar = require('./action-bar/ActionBar');
 var TorrentList = require('./torrent-list/TorrentList');
 
 var FloodApp = React.createClass({
@@ -8,19 +9,19 @@ var FloodApp = React.createClass({
         return null;
     },
 
-    componentDidMount: function() {
-
-    },
-
     render: function() {
 
         return (
             <div className="flood">
                 <FilterBar />
-                <TorrentList />
+                <div className="main">
+                    <ActionBar />
+                    <TorrentList />
+                </div>
             </div>
         );
     }
+
 });
 
 module.exports = FloodApp;

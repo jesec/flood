@@ -2,6 +2,7 @@ var React = require('react');
 var TorrentActions = require('../../actions/TorrentActions');
 var ProgressBar = require('./ProgressBar');
 var format = require('../../helpers/formatData');
+var classNames = require('classnames');
 
 var Torrent = React.createClass({
 
@@ -12,9 +13,12 @@ var Torrent = React.createClass({
 
     render: function() {
 
-        var torrent = this.props.data;
+        var classes = classNames({
+            'torrent': true,
+            'is-selected': this.props.selected
+        });
 
-        console.log(torrent);
+        var torrent = this.props.data;
 
         var uploadRate = format.data(torrent.uploadRate, '/s');
         var uploadTotal = format.data(torrent.uploadTotal);
@@ -22,7 +26,7 @@ var Torrent = React.createClass({
         var downloadTotal = format.data(torrent.downloadTotal);
 
         return (
-            <li className="torrent">
+            <li className={classes} onClick={this._onClick}>
                 <div className="torrent__details">
                     <span className="torrent__detail--primary">{torrent.name}</span>
                     <ul className="torrent__detail--list torrent__detail--secondary">
@@ -57,6 +61,10 @@ var Torrent = React.createClass({
                 <ProgressBar percent={torrent.percentComplete} />
             </li>
         );
+    },
+
+    _onClick: function() {
+        TorrentActions.click(this.props.data.hash);
     },
 
     _onStop: function() {

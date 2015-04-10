@@ -1,4 +1,5 @@
 var React = require('react');
+var Icon = require('../icons/Icon');
 
 var Action = React.createClass({
 
@@ -11,7 +12,10 @@ var Action = React.createClass({
         var classString = 'action action--' + this.props.slug;
 
         return (
-            <span className={classString} onClick={this.props.clickHandler}>{this.props.label}</span>
+            <li className={classString} onClick={this.props.clickHandler}>
+                <Icon icon={this.props.icon} />
+                <span className="action__label">{this.props.label}</span>
+            </li>
         );
     }
 });

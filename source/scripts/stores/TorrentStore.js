@@ -3,7 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var TorrentConstants = require('../constants/TorrentConstants');
 var assign = require('object-assign');
 
-var _torrents = [];
+var _torrents = {};
 
 var getTorrentList = function(callback) {
 

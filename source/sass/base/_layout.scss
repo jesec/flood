@@ -14,15 +14,12 @@ body {
 }
 
 .filter-bar {
-    flex: 25%;
+    flex: 1;
     min-width: 200px;
     max-width: 240px;
 }
 
-.torrent {
-
-    &__list {
-        flex: 100%;
-    }
-
+.main {
+    flex: 5;
+    flex-direction: column;
 }

@@ -1,0 +1,44 @@
+.action-bar {
+    background: #38353b;
+    color: $action-bar--foreground;
+    flex: 1;
+    padding: 0 20px;
+}
+
+.actions {
+    font-size: 0;
+    list-style: none;
+}
+
+.action {
+    cursor: pointer;
+    display: inline-block;
+    height: 60px;
+    position: relative;
+    width: 60px;
+    text-align: center;
+    transition: background 0.25s;
+
+    &:hover {
+        background: $action--background--hover;
+    }
+
+    &__label {
+        display: block;
+        position: absolute;
+        top: 100%;
+        visibility: hidden;
+    }
+
+    .icon {
+        fill: $action--foreground;
+        height: 30px;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transition: fill 0.25s;
+        transform: translateX(-50%) translateY(-50%);
+        width: 30px;
+    }
+
+}

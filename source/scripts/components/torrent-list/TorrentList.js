@@ -1,10 +1,19 @@
 var React = require('react');
 var Torrent = require('./Torrent');
-var TorrentStore = require('../../stores/TorrentStore.js')
+var TorrentStore = require('../../stores/TorrentStore')
+var UIStore = require('../../stores/UIStore')
 
 var getTorrentList = function() {
+
     return {
         allTorrents: TorrentStore.getAll()
+    }
+};
+
+var getSelectedTorrents = function() {
+
+    return {
+        selectedTorrents: UIStore.getSelectedTorrents()
     }
 }
 
@@ -13,26 +22,37 @@ var TorrentList = React.createClass({
     getInitialState: function() {
 
         return {
-            allTorrents: []
+            selectedTorrents: [],
+            allTorrents: {}
         };
     },
 
     componentDidMount: function() {
-        TorrentStore.addChangeListener(this._onChange);
+        TorrentStore.addChangeListener(this._onTorrentStoreChange);
+        UIStore.addChangeListener(this._onUIStoreChange);
     },
 
     componentWillUnmount: function() {
-        TorrentStore.removeChangeListener(this._onChange);
+        TorrentStore.removeChangeListener(this._onTorrentStoreChange);
+        TorrentStore.removeChangeListener(this._onUIStoreChange);
     },
 
     render: function() {
 
         var torrents = this.state.allTorrents;
 
-        var torrentList = torrents.map(function(torrent) {
+        var that = this;
+
+        var torrentList = Object.keys(torrents).map(function(hash) {
+
+            var isSelected = false;
+
+            if (that.state.selectedTorrents.indexOf(hash) > -1) {
+                isSelected = true;
+            }
 
             return (
-                <Torrent key={torrent.hash} data={torrent} />
+                <Torrent key={hash} data={torrents[hash]} selected={isSelected} />
             );
         });
 
@@ -56,8 +76,12 @@ var TorrentList = React.createClass({
         );
     },
 
-    _onChange: function() {
+    _onTorrentStoreChange: function() {
         this.setState(getTorrentList);
+    },
+
+    _onUIStoreChange: function() {
+        this.setState(getSelectedTorrents);
     }
 
 });
