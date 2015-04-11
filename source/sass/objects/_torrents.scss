@@ -52,11 +52,11 @@
 
         &--primary,
         &--secondary {
-            flex: 1;
+            vertical-align: middle;
         }
 
         &--primary {
-            flex: 1;
+            flex: 2;
 
             .torrent & {
                 color: $torrent--primary--foreground;
@@ -67,11 +67,12 @@
 
         &--secondary {
             display: flex;
-            flex: 2;
+            flex: 3;
             font-size: 0.85em;
 
             &--sub {
-                flex: 1;
+                padding: 0 2px;
+                vertical-align: middle;
             }
 
             .unit {
@@ -80,6 +81,22 @@
                 vertical-align: middle;
             }
 
+        }
+
+        &--speed,
+        &--eta,
+        &--ratio,
+        &--peers,
+        &--seeds {
+            flex: 1;
+        }
+
+        &--size {
+            flex: 1.5;
+        }
+
+        &--completed{
+            flex: 2.5;
         }
 
         label {

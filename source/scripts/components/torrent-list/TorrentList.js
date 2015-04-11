@@ -58,19 +58,19 @@ var TorrentList = React.createClass({
 
         return (
             <ul className="torrent__list">
-                <header className="torrent__header">
+                <li className="torrent__header">
                     <span className="torrent__detail--primary">Name</span>
                     <div className="torrent__detail--secondary">
-                        <span className="torrent__detail--secondary--sub">Up</span>
-                        <span className="torrent__detail--secondary--sub">Down</span>
-                        <span className="torrent__detail--secondary--sub">ETA</span>
-                        <span className="torrent__detail--secondary--sub">Completed</span>
-                        <span className="torrent__detail--secondary--sub">Size</span>
-                        <span className="torrent__detail--secondary--sub">Ratio</span>
-                        <span className="torrent__detail--secondary--sub">Peers</span>
-                        <span className="torrent__detail--secondary--sub">Seeds</span>
+                        <span className="torrent__detail--secondary--sub torrent__detail--speed">Up</span>
+                        <span className="torrent__detail--secondary--sub torrent__detail--speed">Down</span>
+                        <span className="torrent__detail--secondary--sub torrent__detail--eta">ETA</span>
+                        <span className="torrent__detail--secondary--sub torrent__detail--completed">Completed</span>
+                        <span className="torrent__detail--secondary--sub torrent__detail--size">Size</span>
+                        <span className="torrent__detail--secondary--sub torrent__detail--ratio">Ratio</span>
+                        <span className="torrent__detail--secondary--sub torrent__detail--peers">Peers</span>
+                        <span className="torrent__detail--secondary--sub torrent__detail--seeds">Seeds</span>
                     </div>
-                </header>
+                </li>
                 {torrentList}
             </ul>
         );

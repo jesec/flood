@@ -80,18 +80,18 @@ var Torrent = React.createClass({
                 <div className="torrent__details">
                     <span className="torrent__detail--primary">{torrent.name}: {torrent.state}</span>
                     <ul className="torrent__detail--list torrent__detail--secondary">
-                        <li className="torrent__detail--secondary--sub">
+                        <li className="torrent__detail--secondary--sub torrent__detail--speed">
                             {uploadRate.value}
                             <em className="unit">{uploadRate.unit}</em>
                         </li>
-                        <li className="torrent__detail--secondary--sub">
+                        <li className="torrent__detail--secondary--sub torrent__detail--speed">
                             {downloadRate.value}
                             <em className="unit">{downloadRate.unit}</em>
                         </li>
-                        <li className="torrent__detail--secondary--sub">
+                        <li className="torrent__detail--secondary--sub torrent__detail--eta">
                             {eta}
                         </li>
-                        <li className="torrent__detail--secondary--sub">
+                        <li className="torrent__detail--secondary--sub torrent__detail--completed">
                             <span>
                                 {torrent.percentComplete}
                                 <em className="unit">%</em>
@@ -101,17 +101,17 @@ var Torrent = React.createClass({
                                 <em className="unit">{completed.unit}</em>
                             </span>
                         </li>
-                        <li className="torrent__detail--secondary--sub">
+                        <li className="torrent__detail--secondary--sub torrent__detail--size">
                             {totalSize.value}
                             <em className="unit">{totalSize.unit}</em>
                         </li>
-                        <li className="torrent__detail--secondary--sub">
+                        <li className="torrent__detail--secondary--sub torrent__detail--ratio">
                             {torrent.ratio}
                         </li>
-                        <li className="torrent__detail--secondary--sub">
+                        <li className="torrent__detail--secondary--sub torrent__detail--peers">
                             Prs
                         </li>
-                        <li className="torrent__detail--secondary--sub">
+                        <li className="torrent__detail--secondary--sub torrent__detail--seeds">
                             Sds
                         </li>
                     </ul>
