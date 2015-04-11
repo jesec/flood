@@ -1,6 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var TorrentConstants = require('../constants/TorrentConstants');
+var $ = require('jquery');
 var assign = require('object-assign');
 
 var _torrents = {};

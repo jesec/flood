@@ -1,6 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var ClientConstants = require('../constants/ClientConstants');
+var $ = require('jquery');
 var assign = require('object-assign');
 
 var _stats = {};
