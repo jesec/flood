@@ -15,12 +15,12 @@ var performAction = function(action, hash, success, error) {
             console.error(torrentsData, status, err.toString());
         }.bind(this)
     });
+
 };
 
 var TorrentActions = {
 
     click: function(hash) {
-
         AppDispatcher.dispatch({
             actionType: TorrentConstants.TORRENT_CLICK,
             hash: hash

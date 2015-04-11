@@ -15,7 +15,7 @@ var getSelectedTorrents = function() {
     return {
         selectedTorrents: UIStore.getSelectedTorrents()
     }
-}
+};
 
 var TorrentList = React.createClass({
 
@@ -61,14 +61,14 @@ var TorrentList = React.createClass({
                 <header className="torrent__header">
                     <span className="torrent__detail--primary">Name</span>
                     <div className="torrent__detail--secondary">
-                        <span className="torrent__detail--secondary--sub">State</span>
                         <span className="torrent__detail--secondary--sub">Up</span>
-                        <span className="torrent__detail--secondary--sub">&nbsp;</span>
                         <span className="torrent__detail--secondary--sub">Down</span>
-                        <span className="torrent__detail--secondary--sub">&nbsp;</span>
+                        <span className="torrent__detail--secondary--sub">ETA</span>
+                        <span className="torrent__detail--secondary--sub">Completed</span>
+                        <span className="torrent__detail--secondary--sub">Size</span>
                         <span className="torrent__detail--secondary--sub">Ratio</span>
-                        <span className="torrent__detail--secondary--sub">Start</span>
-                        <span className="torrent__detail--secondary--sub">Stop</span>
+                        <span className="torrent__detail--secondary--sub">Peers</span>
+                        <span className="torrent__detail--secondary--sub">Seeds</span>
                     </div>
                 </header>
                 {torrentList}

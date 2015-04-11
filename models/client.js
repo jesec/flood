@@ -121,14 +121,20 @@ var mapProps = function(props, data) {
     return mappedObject;
 };
 
-var createMulticallRequest = function(data) {
+var createMulticallRequest = function(data, params) {
+
+    params = params || [];
 
     var methodCall = [];
+
+    if (!util.isArray(data)) {
+        data = [data];
+    }
 
     for (i = 0, len = data.length; i < len; i++) {
         methodCall.push({
             'methodName': data[i],
-            'params': []
+            'params': params
         });
     }
 
@@ -142,15 +148,78 @@ client.prototype.getTorrentList = function(callback) {
         rTorrent.get('d.multicall', defaults.torrentPropertyMethods)
             .then(function(data) {
 
-                // create torrent array, each item in the array being
-                // an object with human-readable property values
-                var torrents = mapProps(defaults.torrentProperties, data, 'torrent-list');
+                try {
 
-                // add percent complete
-                Object.keys(torrents).map(function(hash) {
+                    // create torrent array, each item in the array being
+                    // an object with human-readable property values
+                    var torrents = mapProps(defaults.torrentProperties, data, 'torrent-list');
 
-                    torrents[hash]['percentComplete'] = (torrents[hash]['bytesDone'] / torrents[hash]['sizeBytes'] * 100).toFixed(2);
-                });
+                    // add percent complete
+                    Object.keys(torrents).map(function(hash) {
+
+                        var torrent = torrents[hash];
+                        var percentComplete = (torrent['bytesDone'] / torrent['sizeBytes'] * 100).toFixed(2);
+
+                        var eta = function() {
+
+                            if (torrent['downloadRate'] > 0) {
+
+                                var seconds = (torrent['sizeBytes'] - torrent['bytesDone']) / torrent['downloadRate'];
+                                var years = Math.floor(seconds / 31536000);
+                                var weeks = Math.floor((seconds % 31536000) / 604800);
+                                var days = Math.floor(((seconds % 31536000) % 604800) / 86400);
+                                var hours = Math.floor((((seconds % 31536000) % 604800) % 86400) / 3600);
+                                var minutes = Math.floor(((((seconds % 31536000) % 604800) % 86400) % 3600) / 60);
+                                var wholeSeconds = Math.floor((((((seconds % 31536000) % 604800) % 86400) % 3600) % 60) / 60);
+                                var timeRemaining = {};
+
+                                if (years > 0) {
+                                    timeRemaining = {
+                                        years: years,
+                                        weeks: weeks
+                                    }
+                                } else if (weeks > 0) {
+                                    timeRemaining = {
+                                        weeks: weeks,
+                                        days: days
+                                    }
+                                } else if (days > 0) {
+                                    timeRemaining = {
+                                        days: days,
+                                        hours: hours
+                                    }
+                                } else if (hours > 0) {
+                                    timeRemaining = {
+                                        hours: hours,
+                                        minutes: minutes
+                                    }
+                                } else if (minutes > 0) {
+                                    timeRemaining = {
+                                        minutes: minutes,
+                                        seconds: wholeSeconds
+                                    }
+                                } else {
+                                    timeRemaining = {
+                                        seconds: wholeSeconds
+                                    }
+                                }
+
+                                return timeRemaining;
+
+                            } else {
+
+                                return 'Infinity';
+                            }
+
+                        }
+
+                        torrent['percentComplete'] = percentComplete;
+                        torrent['eta'] = eta();
+                    });
+
+                } catch (error) {
+                    console.log(error);
+                }
 
                 callback(null, torrents);
             }, function(error) {
@@ -165,31 +234,41 @@ client.prototype.getTorrentList = function(callback) {
 
 client.prototype.stopTorrent = function(hash, callback) {
 
+    hash = hash.split(',');
+
     if (!util.isArray(hash)) {
         hash = [hash];
     }
 
-    rTorrent.get('d.stop', hash).then(function(data) {
-        callback(null, data);
-    }, function(error) {
-        console.log(error);
-        callback(error, null);
-    });
+    for (i = 0, len = hash.length; i < len; i++) {
+
+        rTorrent.get('d.stop', [hash[i]]).then(function(data) {
+            callback(null, data);
+        }, function(error) {
+            callback(error, null);
+        });
+
+    }
 
 };
 
 client.prototype.startTorrent = function(hash, callback) {
 
+    hash = hash.split(',');
+
     if (!util.isArray(hash)) {
         hash = [hash];
     }
 
-    rTorrent.get('d.start', hash).then(function(data) {
-        callback(null, data);
-    }, function(error) {
-        console.log(error);
-        callback(error, null);
-    });
+    for (i = 0, len = hash.length; i < len; i++) {
+
+        rTorrent.get('d.start', [hash[i]]).then(function(data) {
+            callback(null, data);
+        }, function(error) {
+            callback(error, null);
+        });
+
+    }
 
 };
 
