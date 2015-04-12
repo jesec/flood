@@ -12,16 +12,12 @@
 }
 
 .torrent {
+    padding: 10px 20px;
 
     &__header,
     &__details {
         display: flex;
         flex-flow: row wrap;
-    }
-
-    &,
-    &__header {
-        padding: 10px 20px;
     }
 
     &__header {
@@ -31,8 +27,34 @@
         color: $torrent--header--foreground;
         display: flex;
         font-size: 0.5em;
+        font-weight: 600;
+        left: 0;
         letter-spacing: 0.1em;
+        padding: 0 20px;
+        position: absolute;
+        top: 0;
         text-transform: uppercase;
+        width: 100%;
+
+        .torrent {
+
+            &__detail {
+
+                &--primary,
+                &--secondary--sub {
+                    padding: 10px 0;
+                }
+
+            }
+
+        }
+
+    }
+
+    &__list {
+        overflow: auto;
+        padding-top: 35px;
+        position: relative;
     }
 
     &__details {
@@ -52,7 +74,7 @@
 
         &--primary,
         &--secondary {
-            vertical-align: middle;
+            align-items: center;
         }
 
         &--primary {
@@ -72,11 +94,11 @@
 
             &--sub {
                 padding: 0 2px;
-                vertical-align: middle;
             }
 
             .unit {
                 font-size: 0.7em;
+                line-height: 1;
                 margin-left: 0;
                 vertical-align: middle;
             }
@@ -99,23 +121,19 @@
             flex: 2.5;
         }
 
+        &--segment {
+            margin-right: 5px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+        }
+
         label {
             display: block;
         }
 
-    }
-
-}
-
-.progress-bar {
-    background: $progress-bar--background;
-    border-radius: 20px;
-    height: 5px;
-    overflow: hidden;
-
-    &__fill {
-        background: $progress-bar--fill;
-        height: 100%;
     }
 
 }

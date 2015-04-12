@@ -1,5 +1,6 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TorrentConstants = require('../constants/TorrentConstants');
+var $ = require('jquery');
 
 var performAction = function(action, hash, success, error) {
 

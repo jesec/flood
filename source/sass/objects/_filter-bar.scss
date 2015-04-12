@@ -1,10 +1,41 @@
 .filter-bar {
     background: $filter-bar--background;
     color: $filter-bar--foreground;
-    padding: 30px 0;
 
     &__item {
         border-bottom: 1px solid $filter-bar--border;
+    }
+
+}
+
+.filter-bar {
+
+    &__item {
+
+        &--search {
+
+            .textbox {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                border: none;
+                background: $search-torrents--background;
+                color: $search-torrents--foreground;
+                display: block;
+                font-size: 1.1em;
+                outline: none;
+                padding: 15px 30px;
+                width: 100%;
+
+                &::placeholder {
+                    color: $search-torrents--placeholder;
+                    font-style: italic;
+                }
+
+            }
+
+        }
+
     }
 
 }

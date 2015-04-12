@@ -1,9 +1,7 @@
 $background: #2e2a30;
 $foreground: #686469;
 
-$filter-bar--background: #1b191c;
-$filter-bar--foreground: #7f7e80;
-$filter-bar--border: #161316;
+// action bar
 
 $action-bar--background: #38353b;
 $action-bar--foreground: #1b1a1c;
@@ -11,9 +9,21 @@ $action-bar--foreground: #1b1a1c;
 $action--foreground: #1b1a1c;
 $action--background--hover: #4c4a4f;
 
+// filter bar
+
+$filter-bar--background: #1b191c;
+$filter-bar--foreground: #7f7e80;
+$filter-bar--border: #161316;
+
 $client-stats--primary: #e4dde6;
 $client-stats--secondary: #8b858d;
 $client-stats--tertiary: #363337;
+
+$search-torrents--background: #161316;
+$search-torrents--foreground: #625e66;
+$search-torrents--placeholder: #252327;
+
+// torrents list
 
 $torrent--primary--foreground: #aaa8ab;
 $torrent--secondary--foreground: #686469;

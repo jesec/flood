@@ -1,7 +1,8 @@
 var React = require('react');
 var Torrent = require('./Torrent');
-var TorrentStore = require('../../stores/TorrentStore')
-var UIStore = require('../../stores/UIStore')
+var TorrentListHeader = require('./TorrentListHeader');
+var TorrentStore = require('../../stores/TorrentStore');
+var UIStore = require('../../stores/UIStore');
 
 var getTorrentList = function() {
 
@@ -23,7 +24,7 @@ var TorrentList = React.createClass({
 
         return {
             selectedTorrents: [],
-            allTorrents: {}
+            allTorrents: []
         };
     },
 
@@ -43,34 +44,23 @@ var TorrentList = React.createClass({
 
         var that = this;
 
-        var torrentList = Object.keys(torrents).map(function(hash) {
+        var torrentList = torrents.map(function(torrent) {
 
             var isSelected = false;
+            var hash = torrent.hash;
 
             if (that.state.selectedTorrents.indexOf(hash) > -1) {
                 isSelected = true;
             }
 
             return (
-                <Torrent key={hash} data={torrents[hash]} selected={isSelected} />
+                <Torrent key={hash} data={torrent} selected={isSelected} />
             );
         });
 
         return (
             <ul className="torrent__list">
-                <li className="torrent__header">
-                    <span className="torrent__detail--primary">Name</span>
-                    <div className="torrent__detail--secondary">
-                        <span className="torrent__detail--secondary--sub torrent__detail--speed">Up</span>
-                        <span className="torrent__detail--secondary--sub torrent__detail--speed">Down</span>
-                        <span className="torrent__detail--secondary--sub torrent__detail--eta">ETA</span>
-                        <span className="torrent__detail--secondary--sub torrent__detail--completed">Completed</span>
-                        <span className="torrent__detail--secondary--sub torrent__detail--size">Size</span>
-                        <span className="torrent__detail--secondary--sub torrent__detail--ratio">Ratio</span>
-                        <span className="torrent__detail--secondary--sub torrent__detail--peers">Peers</span>
-                        <span className="torrent__detail--secondary--sub torrent__detail--seeds">Seeds</span>
-                    </div>
-                </li>
+                <TorrentListHeader />
                 {torrentList}
             </ul>
         );

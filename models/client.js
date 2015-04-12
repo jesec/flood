@@ -93,7 +93,7 @@ var defaults = {
 
 var mapProps = function(props, data) {
 
-    var mappedObject = {};
+    var mappedObject = [];
 
     if (data[0].length === 1) {
 
@@ -107,12 +107,10 @@ var mapProps = function(props, data) {
 
         for (i = 0, lenI = data.length; i < lenI; i++) {
 
-            var hash = data[i][0];
-
-            mappedObject[hash] = {};
+            mappedObject[i] = {};
 
             for (a = 0, lenA = props.length; a < lenA; a++) {
-                mappedObject[hash][props[a]] = data[i][a];
+                mappedObject[i][props[a]] = data[i][a];
             }
         }
 
@@ -155,9 +153,10 @@ client.prototype.getTorrentList = function(callback) {
                     var torrents = mapProps(defaults.torrentProperties, data, 'torrent-list');
 
                     // add percent complete
-                    Object.keys(torrents).map(function(hash) {
+                    torrents = torrents.map(function(torrent) {
 
-                        var torrent = torrents[hash];
+                        var hash = torrent.hash;
+
                         var percentComplete = (torrent['bytesDone'] / torrent['sizeBytes'] * 100).toFixed(2);
 
                         var eta = function() {
@@ -215,6 +214,8 @@ client.prototype.getTorrentList = function(callback) {
 
                         torrent['percentComplete'] = percentComplete;
                         torrent['eta'] = eta();
+
+                        return torrent;
                     });
 
                 } catch (error) {
