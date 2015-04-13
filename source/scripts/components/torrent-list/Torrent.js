@@ -93,7 +93,7 @@ var Torrent = React.createClass({
         })();
 
         return (
-            <li className={classes} onClick={this._onClick}>
+            <li className={classes} onClick={this._onClick} onContextMenu={this._onRightClick}>
                 <div className="torrent__details">
                     <span className="torrent__detail--primary">{torrent.name}: {torrent.state}</span>
                     <ul className="torrent__detail--list torrent__detail--secondary">
@@ -140,6 +140,10 @@ var Torrent = React.createClass({
 
     _onClick: function() {
         TorrentActions.click(this.props.data.hash);
+    },
+
+    _onRightClick: function() {
+        console.log(event);
     }
 
 });

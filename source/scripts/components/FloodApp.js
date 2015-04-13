@@ -1,12 +1,35 @@
 var React = require('react');
 var FilterBar = require('./filter-bar/FilterBar');
 var ActionBar = require('./action-bar/ActionBar');
+var TorrentStore = require('../stores/TorrentStore');
 var TorrentList = require('./torrent-list/TorrentList');
+var TorrentListHeader = require('./torrent-list/TorrentListHeader');
+
+var getSortCriteria = function() {
+
+    return {
+        sortCriteria: TorrentStore.getSortCriteria()
+    }
+};
 
 var FloodApp = React.createClass({
 
     getInitialState: function() {
-        return null;
+        return {
+            sortCriteria: {
+                direction: 'asc',
+                property: 'name'
+            }
+        };
+    },
+
+    componentDidMount: function() {
+        TorrentStore.addSortChangeListener(this._onSortChange);
+
+    },
+
+    componentWillUnmount: function() {
+        TorrentStore.removeSortChangeListener(this._onSortChange);
     },
 
     render: function() {
@@ -14,12 +37,17 @@ var FloodApp = React.createClass({
         return (
             <div className="flood">
                 <FilterBar />
-                <div className="main">
+                <main className="main">
                     <ActionBar />
+                    <TorrentListHeader sortCriteria={this.state.sortCriteria} />
                     <TorrentList />
-                </div>
+                </main>
             </div>
         );
+    },
+
+    _onSortChange: function() {
+        this.setState(getSortCriteria);
     }
 
 });

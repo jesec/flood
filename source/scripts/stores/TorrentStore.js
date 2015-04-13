@@ -25,16 +25,37 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
 
     },
 
+    getSortCriteria: function() {
+
+        if (_sorted) {
+            return _sortCriteria;
+        } else {
+            return false;
+        }
+    },
+
     emitChange: function() {
         this.emit(TorrentConstants.TORRENT_LIST_CHANGE);
+    },
+
+    emitSortChange: function() {
+        this.emit(TorrentConstants.FILTER_SORT_CHANGE);
     },
 
     addChangeListener: function(callback) {
         this.on(TorrentConstants.TORRENT_LIST_CHANGE, callback);
     },
 
+    addSortChangeListener: function(callback) {
+        this.on(TorrentConstants.FILTER_SORT_CHANGE, callback);
+    },
+
     removeChangeListener: function(callback) {
         this.removeListener(TorrentConstants.TORRENT_LIST_CHANGE, callback);
+    },
+
+    removeSortChangeListener: function(callback) {
+        this.removeListener(TorrentConstants.FILTER_SORT_CHANGE, callback);
     }
 
 });
@@ -54,15 +75,17 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             break;
 
         case TorrentConstants.FILTER_SORT_CHANGE:
-            console.log('heard sort change');
-            console.log(action);
-            TorrentStore.emitChange();
-
-        case TorrentConstants.FILTER_SEARCH_CHANGE:
             _sortCriteria.property = action.property;
             _sortCriteria.direction = action.direction;
             sortTorrentList();
+            TorrentStore.emitSortChange();
             TorrentStore.emitChange();
+            break;
+
+        case TorrentConstants.FILTER_SEARCH_CHANGE:
+            console.log(action);
+            TorrentStore.emitChange();
+            break;
 
         default:
             // nothing

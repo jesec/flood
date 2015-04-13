@@ -11,7 +11,7 @@ var SearchBox = React.createClass({
 
         return (
             <div className="filter-bar__item filter-bar__item--search">
-                <input className="textbox" type="search" placeholder="Search Torrents" onKeyUp={this.props.searchChangeHandler} />
+                <input className="textbox" type="text" placeholder="Search Torrents" onKeyUp={this.props.searchChangeHandler} />
             </div>
         );
     }

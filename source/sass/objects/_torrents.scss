@@ -1,4 +1,5 @@
 .torrent {
+    cursor: default;
     transition: background 0.25s;
 
     &:hover {
@@ -17,6 +18,7 @@
     &__header,
     &__details {
         display: flex;
+        flex: 1;
         flex-flow: row wrap;
     }
 
@@ -26,25 +28,61 @@
         border-top: 1px solid $torrent--header--border;
         color: $torrent--header--foreground;
         display: flex;
+        flex: 1;
         font-size: 0.5em;
         font-weight: 600;
-        left: 0;
         letter-spacing: 0.1em;
         padding: 0 20px;
-        position: absolute;
-        top: 0;
         text-transform: uppercase;
-        width: 100%;
 
-        .torrent {
+        &__item {
+            cursor: pointer;
+            padding: 10px 0;
+            transition: color 0.25s;
+            white-space: nowrap;
 
-            &__detail {
+            &:hover {
+                color: lighten($torrent--header--foreground, 10%);
 
-                &--primary,
-                &--secondary--sub {
-                    padding: 10px 0;
+                &:after {
+                    opacity: 1;
                 }
 
+            }
+
+            &:after {
+                content: '';
+                display: inline-block;
+                border-bottom: 4px solid transparent;
+                border-left: 3px solid transparent;
+                border-right: 3px solid transparent;
+                height: 0;
+                margin-left: 3px;
+                opacity: 0.5;
+                transform: translateY(-2px) rotate(0);
+                transition: border 0.25s, margin 0.25s, opacity 0.25s, transform 0.25s;
+                vertical-align: middle;
+            }
+
+            &.is-sorted {
+                position: relative;
+
+                &:after {
+                    border-bottom: 4px solid $torrent--header--foreground;
+                }
+
+                &--desc {
+
+                    &:after {
+                        transform: translateY(-1px) rotate(180deg);
+                    }
+
+                }
+
+            }
+
+            &.torrent__detail--secondary--sub {
+                padding: 10px 0;
             }
 
         }
@@ -53,7 +91,6 @@
 
     &__list {
         overflow: auto;
-        padding-top: 35px;
         position: relative;
     }
 

@@ -5,6 +5,7 @@ var $ = require('jquery');
 var FilterActions = {
 
     searchTorrents: function(query) {
+        console.log('search action called');
         AppDispatcher.dispatch({
             actionType: TorrentConstants.FILTER_SEARCH_CHANGE,
             query: query

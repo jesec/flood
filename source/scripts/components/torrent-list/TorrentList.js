@@ -1,6 +1,5 @@
 var React = require('react');
 var Torrent = require('./Torrent');
-var TorrentListHeader = require('./TorrentListHeader');
 var TorrentStore = require('../../stores/TorrentStore');
 var UIStore = require('../../stores/UIStore');
 
@@ -23,19 +22,20 @@ var TorrentList = React.createClass({
     getInitialState: function() {
 
         return {
-            selectedTorrents: [],
-            allTorrents: []
+            allTorrents: [],
+            selectedTorrents: []
         };
     },
 
     componentDidMount: function() {
         TorrentStore.addChangeListener(this._onTorrentStoreChange);
         UIStore.addChangeListener(this._onUIStoreChange);
+
     },
 
     componentWillUnmount: function() {
         TorrentStore.removeChangeListener(this._onTorrentStoreChange);
-        TorrentStore.removeChangeListener(this._onUIStoreChange);
+        UIStore.removeChangeListener(this._onUIStoreChange);
     },
 
     render: function() {
@@ -60,7 +60,6 @@ var TorrentList = React.createClass({
 
         return (
             <ul className="torrent__list">
-                <TorrentListHeader />
                 {torrentList}
             </ul>
         );
