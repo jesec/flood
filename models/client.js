@@ -170,27 +170,33 @@ client.prototype.getTorrentList = function(callback) {
                                 var hours = Math.floor((((seconds % 31536000) % 604800) % 86400) / 3600);
                                 var minutes = Math.floor(((((seconds % 31536000) % 604800) % 86400) % 3600) / 60);
                                 var wholeSeconds = Math.floor((((((seconds % 31536000) % 604800) % 86400) % 3600) % 60) / 60);
+
                                 var timeRemaining = {};
+                                seconds = Math.floor(seconds);
 
                                 if (years > 0) {
                                     timeRemaining = {
                                         years: years,
-                                        weeks: weeks
+                                        weeks: weeks,
+                                        seconds: seconds
                                     }
                                 } else if (weeks > 0) {
                                     timeRemaining = {
                                         weeks: weeks,
-                                        days: days
+                                        days: days,
+                                        seconds: seconds
                                     }
                                 } else if (days > 0) {
                                     timeRemaining = {
                                         days: days,
-                                        hours: hours
+                                        hours: hours,
+                                        seconds: seconds
                                     }
                                 } else if (hours > 0) {
                                     timeRemaining = {
                                         hours: hours,
-                                        minutes: minutes
+                                        minutes: minutes,
+                                        seconds: seconds
                                     }
                                 } else if (minutes > 0) {
                                     timeRemaining = {

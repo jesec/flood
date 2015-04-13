@@ -52,7 +52,7 @@ var TorrentListHeader = React.createClass({
                 <div className="torrent__detail--secondary">
                     <HeaderItem label="Up" slug="speed" propertyVar="uploadRate" sortCriteria={this.props.sortCriteria} />
                     <HeaderItem label="Down" slug="speed" propertyVar="downloadRate" sortCriteria={this.props.sortCriteria} />
-                    <HeaderItem label="ETA" slug="eta" propertyVar="name" sortCriteria={this.props.sortCriteria} />
+                    <HeaderItem label="ETA" slug="eta" propertyVar="eta" sortCriteria={this.props.sortCriteria} />
                     <HeaderItem label="Completed" slug="completed" propertyVar="percentComplete" sortCriteria={this.props.sortCriteria} />
                     <HeaderItem label="Size" slug="size" propertyVar="sizeBytes" sortCriteria={this.props.sortCriteria} />
                     <HeaderItem label="Ratio" slug="ratio" propertyVar="ratio" sortCriteria={this.props.sortCriteria} />

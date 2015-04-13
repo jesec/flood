@@ -124,34 +124,54 @@ var sortTorrentList = function() {
 
     var sortedList = _torrents.sort(function(a, b) {
 
-        var propA = a[property];
-        var propB = b[property];
+        var valA = a[property];
+        var valB = b[property];
 
-        if (property === 'name') {
-            propA = propA.toLowerCase();
-            propB = propB.toLowerCase();
+        if (property === 'eta') {
+
+            // keep infinity at bottom of array when sorting by eta
+            if (valA === 'Infinity' && valB !== 'Infinity') {
+                return 1;
+            } else if (valA !== 'Infinity' && valB === 'Infinity') {
+                return -1;
+            }
+
+            // if it's not infinity, compare the second as numbers
+            if (valA !== 'Infinity') {
+                valA = Number(valA.seconds);
+            }
+
+            if (valB !== 'Infinity') {
+                valB = Number(valB.seconds);
+            }
+
+        } else if (property === 'name') {
+
+            valA = valA.toLowerCase();
+            valB = valB.toLowerCase();
         } else {
-            propA = Number(propA);
-            propB = Number(propB);
+
+            valA = Number(valA);
+            valB = Number(valB);
         }
 
         if (direction === 'asc') {
 
-            if (propA > propB) {
+            if (valA > valB) {
                 return 1;
             }
 
-            if (propA < propB) {
+            if (valA < valB) {
                 return -1;
             }
 
         } else {
 
-            if (propA > propB) {
+            if (valA > valB) {
                 return -1;
             }
 
-            if (propA < propB) {
+            if (valA < valB) {
                 return 1;
             }
 
