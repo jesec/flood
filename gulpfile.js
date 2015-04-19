@@ -62,9 +62,7 @@ gulp.task('scripts', function() {
     bundler.transform(reactify);
 
     function rebundle() {
-
         var stream = bundler.bundle();
-
         return stream.on('error', handleErrors)
             .pipe(source('app.js'))
             .pipe(gulp.dest(destDir + 'scripts/'));
@@ -87,7 +85,6 @@ gulp.task('svg', function() {
 
 
 gulp.task('watch', function () {
-    gulp.watch(sourceDir + 'scripts/**/*.js', ['scripts', reload]);
     gulp.watch(sourceDir + 'sass/**/*.scss', ['styles', reload]);
 });
 

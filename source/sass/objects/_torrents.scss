@@ -1,5 +1,6 @@
 .torrent {
     cursor: default;
+    padding: 10px 20px;
     transition: background 0.25s;
 
     &:hover {
@@ -13,7 +14,6 @@
 }
 
 .torrent {
-    padding: 10px 20px;
 
     &__header,
     &__details {
@@ -89,11 +89,6 @@
 
     }
 
-    &__list {
-        overflow: auto;
-        position: relative;
-    }
-
     &__details {
         margin-bottom: 4px;
     }
@@ -105,6 +100,11 @@
     &__detail--list,
     &__list {
         list-style: none;
+    }
+
+    &__list {
+        overflow: auto;
+        position: relative;
     }
 
     &__detail {
@@ -119,7 +119,9 @@
 
             .torrent & {
                 color: $torrent--primary--foreground;
-                font-size: 1.1em;
+                font-size: 1em;
+                overflow: hidden;
+                white-space: nowrap;
             }
 
         }
