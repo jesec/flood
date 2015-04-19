@@ -63,6 +63,14 @@ var TorrentList = React.createClass({
     },
 
     componentDidMount: function() {
+        var viewportHeight = React.findDOMNode(this.refs.torrentList).offsetHeight;
+        var torrentsInViewport = Math.ceil(viewportHeight / this.state.torrentHeight);
+
+        this.setState({
+            viewportHeight: React.findDOMNode(this.refs.torrentList).offsetHeight,
+            maxTorrentIndex: torrentsInViewport
+        });
+
         TorrentStore.addChangeListener(this._onTorrentStoreChange);
         UIStore.addChangeListener(this._onUIStoreChange);
     },
@@ -117,18 +125,23 @@ var TorrentList = React.createClass({
 
         // debounce this event
 
-        var buffer = 1;
+        var buffer = 2;
         var scrolledPosition = event.target.scrollTop;
         var totalTorrents = this.state.allTorrents.length;
         var elementsInView = Math.floor(this.state.viewportHeight / this.state.torrentHeight);
         var hiddenItemsTop = Math.floor(scrolledPosition / this.state.torrentHeight) - buffer;
-        var hiddenItemsBottom = hiddenItemsTop + elementsInView + buffer;
+
+        if ((hiddenItemsTop + elementsInView) >= totalTorrents) {
+            var hiddenItemsBottom = hiddenItemsTop + elementsInView;
+        } else {
+            var hiddenItemsBottom = hiddenItemsTop + elementsInView + buffer;
+        }
 
         this.setState({
             minTorrentIndex: hiddenItemsTop,
             maxTorrentIndex: hiddenItemsBottom,
             spacerTop: getSpacerTop(hiddenItemsTop, this.state.torrentHeight),
-            spacerBottom: getSpacerBottom(hiddenItemsBottom, totalTorrents, this.state.torrentHeight)
+            spacerBottom: getSpacerBottom(hiddenItemsBottom, totalTorrents - 1, this.state.torrentHeight)
         });
 
     }
