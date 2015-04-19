@@ -16,6 +16,9 @@ var defaults = {
         'state',
         'stateChanged',
         'isActive',
+        'isComplete',
+        'isHashChecking',
+        'isOpen',
 
         'uploadRate',
         'uploadTotal',
@@ -50,6 +53,9 @@ var defaults = {
         'd.get_state=',
         'd.get_state_changed=',
         'd.is_active=',
+        'd.get_complete=',
+        'd.is_hash_checking=',
+        'd.is_open=',
 
         'd.get_up_rate=',
         'd.get_up_total=',
@@ -157,7 +163,9 @@ client.prototype.getTorrentList = function(callback) {
 
                         var hash = torrent.hash;
 
-                        var percentComplete = (torrent['bytesDone'] / torrent['sizeBytes'] * 100).toFixed(2);
+                        var percentComplete = function() {
+                            return (torrent['bytesDone'] / torrent['sizeBytes'] * 100).toFixed(2);
+                        }
 
                         var eta = function() {
 
@@ -218,8 +226,33 @@ client.prototype.getTorrentList = function(callback) {
 
                         }
 
-                        torrent['percentComplete'] = percentComplete;
+                        var status = function() {
+
+                            if (torrent['isHashChecking'] === '1') {
+                               return 'checking';
+                            } else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '1' && torrent['state'] === '1') {
+                        		return 'seeding';
+                        	} else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '1' && torrent['state'] === '0') {
+                        		return 'paused';
+                        	} else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '0' && torrent['state'] === '0') {
+                        		return 'finished';
+                        	} else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '0' && torrent['state'] === '1') {
+                        		return 'finished';
+                        	} else if (torrent['isComplete'] === '0' && torrent['isOpen'] === '1' && torrent['state'] === '1') {
+                        		return 'downloading';
+                        	} else if (torrent['isComplete'] === '0' && torrent['isOpen'] === '1' && torrent['state'] === '0') {
+                        		return 'paused';
+                        	} else if (torrent['isComplete'] === '0' && torrent['isOpen'] === '0' && torrent['state'] === '1') {
+                        		return 'stopped';
+                        	} else if (torrent['isComplete'] === '0' && torrent['isOpen'] === '0' && torrent['state'] === '0') {
+                        		return 'stopped';
+                        	}
+
+                        }
+
+                        torrent['percentComplete'] = percentComplete();
                         torrent['eta'] = eta();
+                        torrent['status'] = status();
 
                         return torrent;
                     });
@@ -249,7 +282,7 @@ client.prototype.stopTorrent = function(hash, callback) {
 
     for (i = 0, len = hash.length; i < len; i++) {
 
-        rTorrent.get('d.stop', [hash[i]]).then(function(data) {
+        rTorrent.get('d.close', [hash[i]]).then(function(data) {
             callback(null, data);
         }, function(error) {
             callback(error, null);
@@ -269,7 +302,7 @@ client.prototype.startTorrent = function(hash, callback) {
 
     for (i = 0, len = hash.length; i < len; i++) {
 
-        rTorrent.get('d.start', [hash[i]]).then(function(data) {
+        rTorrent.get('d.resume', [hash[i]]).then(function(data) {
             callback(null, data);
         }, function(error) {
             callback(error, null);

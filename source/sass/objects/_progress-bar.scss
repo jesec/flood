@@ -7,6 +7,12 @@
     &__fill {
         background: $progress-bar--fill;
         height: 100%;
+        transition: background 0.25s, width 0.25s;
+
+        .is-stopped & {
+            background: $progress-bar--fill--stopped;
+        }
+
     }
 
 }

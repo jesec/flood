@@ -14,11 +14,6 @@ var Torrent = React.createClass({
 
     render: function() {
 
-        var classes = classNames({
-            'torrent': true,
-            'is-selected': this.props.selected
-        });
-
         var torrent = this.props.data;
 
         var uploadRate = format.data(torrent.uploadRate, '/s');
@@ -27,6 +22,17 @@ var Torrent = React.createClass({
         var downloadTotal = format.data(torrent.downloadTotal);
         var completed = format.data(torrent.bytesDone);
         var totalSize = format.data(torrent.sizeBytes);
+
+        var classes = classNames({
+            'torrent': true,
+            'is-selected': this.props.selected,
+            'is-stopped': torrent.status === 'stopped',
+            'is-paused': torrent.status === 'paused',
+            'is-downloading': torrent.status === 'downloading',
+            'is-seeding': torrent.status === 'seeding',
+            'is-finished': torrent.status === 'finished',
+            'is-checking': torrent.status === 'checking'
+        });
 
         var eta = (function() {
 
@@ -93,9 +99,9 @@ var Torrent = React.createClass({
         })();
 
         return (
-            <li className={classes} onClick={this._onClick} onContextMenu={this._onRightClick}>
+            <li className={classes} onClick={this._onClick} onContextMenu={this._onRightClick} title={torrent.status}>
                 <div className="torrent__details">
-                    <span className="torrent__detail--primary">{torrent.name}: {torrent.state}</span>
+                    <span className="torrent__detail--primary">{torrent.name}</span>
                     <ul className="torrent__detail--list torrent__detail--secondary">
                         <li className="torrent__detail--secondary--sub torrent__detail--speed">
                             {uploadRate.value}
@@ -126,10 +132,10 @@ var Torrent = React.createClass({
                             {torrent.ratio}
                         </li>
                         <li className="torrent__detail--secondary--sub torrent__detail--peers">
-                            Prs
+                            # / #
                         </li>
                         <li className="torrent__detail--secondary--sub torrent__detail--seeds">
-                            Sds
+                            # / #
                         </li>
                     </ul>
                 </div>

@@ -118,9 +118,9 @@
             flex: 2;
 
             .torrent & {
-                color: $torrent--primary--foreground;
                 font-size: 1em;
                 overflow: hidden;
+                transition: color 0.25s;
                 white-space: nowrap;
             }
 
@@ -171,6 +171,26 @@
 
         label {
             display: block;
+        }
+
+    }
+
+}
+
+.torrent {
+
+    &__detail {
+
+        &--primary {
+
+            .torrent & {
+                color: $torrent--primary--foreground;
+            }
+
+            .is-stopped & {
+                color: $torrent--secondary--foreground;
+            }
+
         }
 
     }
