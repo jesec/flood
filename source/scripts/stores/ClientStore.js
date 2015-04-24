@@ -39,10 +39,6 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
         case ClientConstants.REMOVE_TORRENT:
             getClientStats();
             break;
-
-        default:
-            // nothing
-
     }
 });
 

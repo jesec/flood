@@ -88,9 +88,6 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             TorrentStore.emitChange();
             break;
 
-        default:
-            // nothing
-
     }
 });
 

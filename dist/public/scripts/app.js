@@ -30941,18 +30941,17 @@ var _spaceBottom = 0;
 var UIStore = assign({}, EventEmitter.prototype, {
 
     getSelectedTorrents: function() {
+
         return _selectedTorrents;
     },
 
-    getTorrentHeight: function() {
-        return 53;
-    },
-
     getMinTorrentRendered: function() {
+
         return _minTorrentRendered;
     },
 
     getMaxTorrentRendered: function() {
+
         return _maxTorrentRendered;
     },
 
@@ -30964,11 +30963,6 @@ var UIStore = assign({}, EventEmitter.prototype, {
     getSpaceBottom: function(hiddenTorrents) {
 
         return _spaceBottom;
-    },
-
-    setViewportHeight: function(height) {
-
-        _viewportHeight = height;
     },
 
     emitSelectionChange: function() {
@@ -31025,16 +31019,13 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             break;
 
         case UIConstants.TORRENT_LIST_SCROLL:
-            // debounce this event
             setRenderLimit(event.target.scrollTop, action.torrentCount);
             UIStore.emitViewportPaddingChange();
             break;
 
         case UIConstants.TORRENT_LIST_VIEWPORT_RESIZE:
-            console.log('viewport padding change');
-            _viewportHeight = action.viewportHeight;
+            setViewportHeight(action.viewportHeight);
             UIStore.emitViewportPaddingChange();
-
             break;
 
         default:
@@ -31043,40 +31034,32 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
     }
 });
 
-var getSpaceTop = function(minVisible) {
-
-    var spacerHeight = 0;
-
-    if (minVisible > 0) {
-        spacerHeight = minVisible * _torrentHeight;
-    }
-
-    return spacerHeight;
+var setViewportHeight = function(height) {
+    _viewportHeight = height;
 }
 
-var getSpaceBottom = function(maxVisible, torrentCount) {
+var getSpacer = function(torrents) {
 
-    var hiddenTorrents = torrentCount - 1 - maxVisible;
     var spacerHeight = 0;
 
-    if (hiddenTorrents > 0) {
-        spacerHeight = hiddenTorrents * _torrentHeight;
+    if (torrents > 0) {
+        spacerHeight = torrents * _torrentHeight;
     }
-
-    console.log(spacerHeight);
 
     return spacerHeight;
 }
 
 var setRenderLimit = function(scrollPosition, torrentCount) {
-    var elementsInView = Math.floor(_viewportHeight / _torrentHeight);
-    var minTorrentRendered = Math.floor(scrollPosition / _torrentHeight) - _torrentRenderBuffer;
-    var maxTorrentRendered = minTorrentRendered + elementsInView + (_torrentRenderBuffer * 2);
 
-    _minTorrentRendered = minTorrentRendered;
-    _maxTorrentRendered = maxTorrentRendered;
-    _spaceTop = getSpaceTop(minTorrentRendered);
-    _spaceBottom = getSpaceBottom(maxTorrentRendered, torrentCount);
+    var elementsInView = Math.floor(_viewportHeight / _torrentHeight);
+    
+    _minTorrentRendered = Math.floor(scrollPosition / _torrentHeight) - _torrentRenderBuffer;
+    _maxTorrentRendered = _minTorrentRendered + elementsInView + (_torrentRenderBuffer * 2);
+
+    console.log(_minTorrentRendered, _maxTorrentRendered);
+
+    _spaceTop = getSpacer(_minTorrentRendered);
+    _spaceBottom = getSpacer(torrentCount - 1 - _maxTorrentRendered);
 }
 
 module.exports = UIStore;
