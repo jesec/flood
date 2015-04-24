@@ -1,6 +1,6 @@
 var React = require('react');
 
-var ClientStats = React.createClass({
+var StatusFilter = React.createClass({
 
     getInitialState: function() {
 
@@ -37,4 +37,4 @@ var ClientStats = React.createClass({
 
 });
 
-module.exports = ClientStats;
+module.exports = StatusFilter;

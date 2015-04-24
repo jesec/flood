@@ -1,5 +1,5 @@
 var React = require('react');
-var FilterActions = require('../../actions/FilterActions');
+var UIActions = require('../../actions/UIActions');
 var classNames = require('classnames');
 
 var HeaderItem = React.createClass({
@@ -32,7 +32,7 @@ var HeaderItem = React.createClass({
 
     _onClick: function() {
         var newDirection = this.props.sortCriteria.direction === 'asc' ? 'desc' : 'asc';
-        FilterActions.sortTorrents(this.props.propertyVar, newDirection);
+        UIActions.sortTorrents(this.props.propertyVar, newDirection);
     }
 
 });

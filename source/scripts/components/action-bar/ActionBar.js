@@ -20,7 +20,7 @@ var FilterBar = React.createClass({
     },
 
     componentDidMount: function() {
-        UIStore.addChangeListener(this._onUIStoreChange);
+        UIStore.addSelectionChangeListener(this._onUIStoreChange);
     },
 
     componentWillUnmount: function() {

@@ -14,7 +14,7 @@ var supportedBrowsers = ['last 2 versions', '> 1%', 'ie >= 8', 'Firefox ESR', 'O
     jsFiles = [];
 
 var sourceDir = './source/',
-    destDir = './public/';
+    destDir = './dist/public/';
 
 var reload = browserSync.reload;
 
@@ -81,8 +81,6 @@ gulp.task('svg', function() {
         .pipe(svgmin())
         .pipe(gulp.dest(sourceDir + '/scripts/components/icons/icons'));
 });
-
-
 
 gulp.task('watch', function () {
     gulp.watch(sourceDir + 'sass/**/*.scss', ['styles', reload]);

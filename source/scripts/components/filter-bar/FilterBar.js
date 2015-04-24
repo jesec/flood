@@ -2,17 +2,13 @@ var React = require('react');
 var ClientStats = require('./ClientStats');
 var StatusFilter = require('./StatusFilter');
 var SearchBox = require('./SearchBox');
-var FilterActions = require('../../actions/FilterActions');
+var UIActions = require('../../actions/UIActions');
 
 var FilterBar = React.createClass({
 
     getInitialState: function() {
 
         return null;
-    },
-
-    handleClick: function(event) {
-        console.log('click ' + event.target);
     },
 
     render: function() {
@@ -27,7 +23,7 @@ var FilterBar = React.createClass({
     },
 
     _onSearchChange: function(event) {
-        FilterActions.searchTorrents(event.target.value);
+        UIActions.searchTorrents(event.target.value);
     }
 
 });

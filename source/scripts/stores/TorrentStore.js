@@ -1,6 +1,7 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var TorrentConstants = require('../constants/TorrentConstants');
+var UIConstants = require('../constants/UIConstants');
 var $ = require('jquery');
 var assign = require('object-assign');
 
@@ -39,7 +40,7 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
     },
 
     emitSortChange: function() {
-        this.emit(TorrentConstants.FILTER_SORT_CHANGE);
+        this.emit(UIConstants.FILTER_SORT_CHANGE);
     },
 
     addChangeListener: function(callback) {
@@ -47,7 +48,7 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
     },
 
     addSortChangeListener: function(callback) {
-        this.on(TorrentConstants.FILTER_SORT_CHANGE, callback);
+        this.on(UIConstants.FILTER_SORT_CHANGE, callback);
     },
 
     removeChangeListener: function(callback) {
@@ -55,7 +56,7 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
     },
 
     removeSortChangeListener: function(callback) {
-        this.removeListener(TorrentConstants.FILTER_SORT_CHANGE, callback);
+        this.removeListener(UIConstants.FILTER_SORT_CHANGE, callback);
     }
 
 });
@@ -74,7 +75,7 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             getTorrentList();
             break;
 
-        case TorrentConstants.FILTER_SORT_CHANGE:
+        case UIConstants.FILTER_SORT_CHANGE:
             _sortCriteria.property = action.property;
             _sortCriteria.direction = action.direction;
             sortTorrentList();
