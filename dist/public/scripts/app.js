@@ -30390,7 +30390,7 @@ var getTorrentRange = function() {
 var TorrentList = React.createClass({displayName: "TorrentList",
 
     getInitialState: function() {
-        
+
         return {
             allTorrents: [],
             selectedTorrents: [],
@@ -30461,8 +30461,6 @@ var TorrentList = React.createClass({displayName: "TorrentList",
     _onViewportPaddingChange: function() {
         var listPadding = getListPadding();
         var torrentRange = getTorrentRange();
-
-        console.log('viewport padding change, new min: ' + torrentRange.min + ' new max: ' + torrentRange.max);
 
         this.setState({
             minTorrentIndex: torrentRange.min,
@@ -30684,10 +30682,6 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
         case ClientConstants.REMOVE_TORRENT:
             getClientStats();
             break;
-
-        default:
-            // nothing
-
     }
 });
 
@@ -30818,9 +30812,6 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             console.log(action);
             TorrentStore.emitChange();
             break;
-
-        default:
-            // nothing
 
     }
 });
@@ -31028,9 +31019,6 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             UIStore.emitViewportPaddingChange();
             break;
 
-        default:
-            // nothing
-
     }
 });
 
@@ -31052,7 +31040,7 @@ var getSpacer = function(torrents) {
 var setRenderLimit = function(scrollPosition, torrentCount) {
 
     var elementsInView = Math.floor(_viewportHeight / _torrentHeight);
-    
+
     _minTorrentRendered = Math.floor(scrollPosition / _torrentHeight) - _torrentRenderBuffer;
     _maxTorrentRendered = _minTorrentRendered + elementsInView + (_torrentRenderBuffer * 2);
 
