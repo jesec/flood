@@ -26,12 +26,14 @@ var Torrent = React.createClass({
         var classes = classNames({
             'torrent': true,
             'is-selected': this.props.selected,
-            'is-stopped': torrent.status === 'stopped',
-            'is-paused': torrent.status === 'paused',
-            'is-downloading': torrent.status === 'downloading',
-            'is-seeding': torrent.status === 'seeding',
-            'is-finished': torrent.status === 'finished',
-            'is-checking': torrent.status === 'checking'
+            'is-stopped': torrent.status.indexOf('is-stopped') > -1,
+            'is-paused': torrent.status.indexOf('is-paused') > -1,
+            'is-downloading': torrent.status.indexOf('is-downloading') > -1,
+            // 'is-seeding': torrent.status.indexOf('is-seeding') > -1,
+            'is-completed': torrent.status.indexOf('is-completed') > -1,
+            'is-checking': torrent.status.indexOf('is-checking') > -1,
+            'is-active': torrent.status.indexOf('is-active'),
+            'is-inactive': torrent.status.indexOf('is-inactive') > -1
         });
 
         var eta = (function() {

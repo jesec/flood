@@ -4,19 +4,24 @@ var UIConstants = require('../constants/UIConstants');
 
 var UIActions = {
 
-    searchTorrents: function(query) {
-        console.log('search action called');
+    filterTorrentList: function(status) {
         AppDispatcher.dispatch({
-            actionType: TorrentConstants.FILTER_SEARCH_CHANGE,
-            query: query
+            actionType: UIConstants.FILTER_STATUS_CHANGE,
+            status: status
         });
     },
 
-    sortTorrents: function(property, direction) {
+    scrollTorrentList: function(torrentCount) {
         AppDispatcher.dispatch({
-            actionType: UIConstants.FILTER_SORT_CHANGE,
-            property: property,
-            direction: direction
+            actionType: UIConstants.TORRENT_LIST_SCROLL,
+            torrentCount: torrentCount
+        });
+    },
+
+    searchTorrents: function(query) {
+        AppDispatcher.dispatch({
+            actionType: UIConstants.FILTER_SEARCH_CHANGE,
+            query: query
         });
     },
 
@@ -27,10 +32,11 @@ var UIActions = {
         });
     },
 
-    scrollTorrentList: function(torrentCount) {
+    sortTorrents: function(property, direction) {
         AppDispatcher.dispatch({
-            actionType: UIConstants.TORRENT_LIST_SCROLL,
-            torrentCount: torrentCount
+            actionType: UIConstants.FILTER_SORT_CHANGE,
+            property: property,
+            direction: direction
         });
     }
 

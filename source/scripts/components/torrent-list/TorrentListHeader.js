@@ -4,11 +4,6 @@ var classNames = require('classnames');
 
 var HeaderItem = React.createClass({
 
-    getInitialState: function() {
-
-        return null;
-    },
-
     render: function() {
 
         var isSorted = this.props.sortCriteria.property === this.props.propertyVar;
@@ -38,11 +33,6 @@ var HeaderItem = React.createClass({
 });
 
 var TorrentListHeader = React.createClass({
-
-    getInitialState: function() {
-
-        return null;
-    },
 
     render: function() {
 

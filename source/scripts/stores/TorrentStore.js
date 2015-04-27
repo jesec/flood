@@ -2,11 +2,14 @@ var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var TorrentConstants = require('../constants/TorrentConstants');
 var UIConstants = require('../constants/UIConstants');
-var $ = require('jquery');
 var assign = require('object-assign');
+var $ = require('jquery');
+var _ = require('underscore');
 
 var _torrents = [];
-
+var _filtered = true;
+var _filterText = '';
+var _filterStatus = 'all';
 var _sortedTorrents = [];
 var _sorted = true;
 var _sortCriteria = {
@@ -19,8 +22,16 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
     getAll: function() {
 
         if (_sorted) {
+
+            _sortedTorrents = sortTorrentList();
+
+            if (_filtered) {
+                _sortedTorrents = filterTorrentList();
+            }
+
             return _sortedTorrents;
         } else {
+
             return _torrents;
         }
 
@@ -78,18 +89,50 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
         case UIConstants.FILTER_SORT_CHANGE:
             _sortCriteria.property = action.property;
             _sortCriteria.direction = action.direction;
-            sortTorrentList();
             TorrentStore.emitSortChange();
             TorrentStore.emitChange();
             break;
 
-        case TorrentConstants.FILTER_SEARCH_CHANGE:
-            console.log(action);
+        case UIConstants.FILTER_SEARCH_CHANGE:
+            _filterText = action.query;
+            TorrentStore.emitChange();
+            break;
+
+        case UIConstants.FILTER_STATUS_CHANGE:
+            _filterStatus = action.status;
+            console.log(_filterStatus);
             TorrentStore.emitChange();
             break;
 
     }
 });
+
+var filterTorrentList = function() {
+
+    var torrents = _sortedTorrents.slice();
+
+    torrents = _.filter(torrents, function(torrent) {
+
+        if (_filterStatus !== 'all') {
+            return torrent.status.indexOf('is-' + _filterStatus) > -1;
+        } else {
+            return true;
+        }
+    });
+
+    try {
+        torrents = _.filter(torrents, function(torrent) {
+            var query = new RegExp(_filterText, 'gi');
+            return torrent.name.match(query)
+        });
+    } catch (error) {
+
+        return torrents;
+    }
+
+    return torrents;
+
+}
 
 var getTorrentList = function(callback) {
 
@@ -119,8 +162,9 @@ var sortTorrentList = function() {
 
     var property = _sortCriteria.property;
     var direction = _sortCriteria.direction;
+    var sortedList = _torrents.slice();
 
-    var sortedList = _torrents.sort(function(a, b) {
+    sortedList = sortedList.sort(function(a, b) {
 
         var valA = a[property];
         var valB = b[property];

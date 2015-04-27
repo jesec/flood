@@ -228,25 +228,36 @@ client.prototype.getTorrentList = function(callback) {
 
                         var status = function() {
 
+                            var torrentStatus = [];
+
                             if (torrent['isHashChecking'] === '1') {
-                               return 'checking';
+                                torrentStatus.push('is-checking');
                             } else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '1' && torrent['state'] === '1') {
-                        		return 'seeding';
+                                // torrentStatus.push('is-seeding');
+                                torrentStatus.push('is-completed');
                         	} else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '1' && torrent['state'] === '0') {
-                        		return 'paused';
+                                torrentStatus.push('is-paused');
                         	} else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '0' && torrent['state'] === '0') {
-                        		return 'finished';
+                                torrentStatus.push('is-completed');
                         	} else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '0' && torrent['state'] === '1') {
-                        		return 'finished';
+                                torrentStatus.push('is-completed');
                         	} else if (torrent['isComplete'] === '0' && torrent['isOpen'] === '1' && torrent['state'] === '1') {
-                        		return 'downloading';
+                                torrentStatus.push('is-downloading');
                         	} else if (torrent['isComplete'] === '0' && torrent['isOpen'] === '1' && torrent['state'] === '0') {
-                        		return 'paused';
+                                torrentStatus.push('is-paused');
                         	} else if (torrent['isComplete'] === '0' && torrent['isOpen'] === '0' && torrent['state'] === '1') {
-                        		return 'stopped';
+                                torrentStatus.push('is-stopped');
                         	} else if (torrent['isComplete'] === '0' && torrent['isOpen'] === '0' && torrent['state'] === '0') {
-                        		return 'stopped';
+                                torrentStatus.push('is-stopped');
                         	}
+
+                            if (torrent['uploadRate'] === '0' && torrent['downloadRate'] === '0') {
+                                torrentStatus.push('is-inactive');
+                            } else {
+                                torrentStatus.push('is-active');
+                            }
+
+                            return torrentStatus.join(' ');
 
                         }
 

@@ -40,7 +40,7 @@ var getTorrentRange = function() {
 var TorrentList = React.createClass({
 
     getInitialState: function() {
-        
+
         return {
             allTorrents: [],
             selectedTorrents: [],
@@ -57,14 +57,15 @@ var TorrentList = React.createClass({
         TorrentStore.addChangeListener(this._onTorrentStoreChange);
         UIStore.addSelectionChangeListener(this._onTorrentSelectionChange);
         UIStore.addViewportPaddingChangeListener(this._onViewportPaddingChange);
-
-        UIActions.setViewportHeight(React.findDOMNode(this.refs.torrentList).offsetHeight, this.getDOMNode().scrollTop);
+        window.addEventListener('resize', this._onWindowResize);
+        this._onWindowResize();
     },
 
     componentWillUnmount: function() {
         TorrentStore.removeChangeListener(this._onTorrentStoreChange);
         UIStore.removeSelectionChangeListener(this._onTorrentSelectionChange);
         UIStore.removeViewportPaddingChangeListener(this._onViewportPaddingChange);
+        window.removeEventListener('resize', this._onWindowResize);
     },
 
     render: function() {
@@ -112,8 +113,6 @@ var TorrentList = React.createClass({
         var listPadding = getListPadding();
         var torrentRange = getTorrentRange();
 
-        console.log('viewport padding change, new min: ' + torrentRange.min + ' new max: ' + torrentRange.max);
-
         this.setState({
             minTorrentIndex: torrentRange.min,
             maxTorrentIndex: torrentRange.max,
@@ -124,6 +123,10 @@ var TorrentList = React.createClass({
 
     _onScroll: function() {
         UIActions.scrollTorrentList(this.state.torrentCount);
+    },
+
+    _onWindowResize: function() {
+        UIActions.setViewportHeight(React.findDOMNode(this.refs.torrentList).offsetHeight, this.getDOMNode().scrollTop);
     }
 
 });

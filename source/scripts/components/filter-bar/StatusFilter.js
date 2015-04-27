@@ -1,11 +1,30 @@
 var React = require('react');
+var UIActions = require('../../actions/UIActions');
+var classnames = require('classnames');
 
 var StatusFilter = React.createClass({
 
-    getInitialState: function() {
+    render: function() {
 
-        return null;
+        var uniqueClass = 'status-filter__item--' + this.props.slug;
+
+        var classNames = classnames({
+            'status-filter__item': true,
+            uniqueClass: true
+        });
+
+        return (
+            <li className={classNames} onClick={this._onClick}>{this.props.name}</li>
+        );
     },
+
+    _onClick: function(action) {
+        UIActions.filterTorrentList(this.props.slug);
+    }
+
+});
+
+var StatusFilterList = React.createClass({
 
     render: function() {
 
@@ -18,23 +37,18 @@ var StatusFilter = React.createClass({
             'Error'
         ];
 
-        var filterEls = filters.map(function(filter) {
-
-            var filterSlug = filter.toLowerCase();
-            var classString = 'status-filter__item status-filter__item--' + filterSlug;
-
-            return (
-                <li className={classString}>{filter}</li>
-            );
-        });
-
         return (
             <ul className="status-filter filter-bar__item">
-                {filterEls}
+                <StatusFilter name="All" slug="all" />
+                <StatusFilter name="Downloading" slug="downloading" />
+                <StatusFilter name="Completed" slug="completed" />
+                <StatusFilter name="Active" slug="active" />
+                <StatusFilter name="Inactive" slug="inactive" />
+                <StatusFilter name="Error" slug="error" />
             </ul>
         );
     }
 
 });
 
-module.exports = StatusFilter;
+module.exports = StatusFilterList;

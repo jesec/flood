@@ -95,11 +95,13 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             break;
 
         case UIConstants.TORRENT_LIST_SCROLL:
+            // debounce this event
             setRenderLimit(event.target.scrollTop, action.torrentCount);
             UIStore.emitViewportPaddingChange();
             break;
 
         case UIConstants.TORRENT_LIST_VIEWPORT_RESIZE:
+            // debounce this event
             setViewportHeight(action.viewportHeight);
             UIStore.emitViewportPaddingChange();
             break;
@@ -128,8 +130,6 @@ var setRenderLimit = function(scrollPosition, torrentCount) {
 
     _minTorrentRendered = Math.floor(scrollPosition / _torrentHeight) - _torrentRenderBuffer;
     _maxTorrentRendered = _minTorrentRendered + elementsInView + (_torrentRenderBuffer * 2);
-
-    console.log(_minTorrentRendered, _maxTorrentRendered);
 
     _spaceTop = getSpacer(_minTorrentRendered);
     _spaceBottom = getSpacer(torrentCount - 1 - _maxTorrentRendered);
