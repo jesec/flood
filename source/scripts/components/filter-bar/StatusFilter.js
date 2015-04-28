@@ -1,16 +1,33 @@
 var React = require('react');
 var UIActions = require('../../actions/UIActions');
+var TorrentStore = require('../../stores/TorrentStore');
 var classnames = require('classnames');
 
 var StatusFilter = React.createClass({
 
+    getInitialState: function() {
+
+        return {
+            activeFilter: TorrentStore.getFilterCriteria()
+        }
+    },
+
+    componentDidMount: function() {
+        TorrentStore.addFilterChangeListener(this._onFilterChange);
+    },
+
+    componentWillUnmount: function() {
+        TorrentStore.removeFilterChangeListener(this._onFilterChange);
+    },
+
     render: function() {
 
-        var uniqueClass = 'status-filter__item--' + this.props.slug;
+        var itemClass = 'status-filter__item--' + this.props.slug;
 
         var classNames = classnames({
             'status-filter__item': true,
-            uniqueClass: true
+            itemClass: true,
+            'is-active': this.state.activeFilter === this.props.slug
         });
 
         return (
@@ -20,6 +37,12 @@ var StatusFilter = React.createClass({
 
     _onClick: function(action) {
         UIActions.filterTorrentList(this.props.slug);
+    },
+
+    _onFilterChange: function() {
+        this.setState({
+            activeFilter: TorrentStore.getFilterCriteria()
+        })
     }
 
 });

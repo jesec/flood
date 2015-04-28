@@ -31602,11 +31602,6 @@ var React = require('react');
 
 var SearchBox = React.createClass({displayName: "SearchBox",
 
-    getInitialState: function() {
-
-        return null;
-    },
-
     render: function() {
 
         return (
@@ -31625,17 +31620,34 @@ module.exports = SearchBox;
 },{"react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/filter-bar/StatusFilter.js":[function(require,module,exports){
 var React = require('react');
 var UIActions = require('../../actions/UIActions');
+var TorrentStore = require('../../stores/TorrentStore');
 var classnames = require('classnames');
 
 var StatusFilter = React.createClass({displayName: "StatusFilter",
 
+    getInitialState: function() {
+
+        return {
+            activeFilter: TorrentStore.getFilterCriteria()
+        }
+    },
+
+    componentDidMount: function() {
+        TorrentStore.addFilterChangeListener(this._onFilterChange);
+    },
+
+    componentWillUnmount: function() {
+        TorrentStore.removeFilterChangeListener(this._onFilterChange);
+    },
+
     render: function() {
 
-        var uniqueClass = 'status-filter__item--' + this.props.slug;
+        var itemClass = 'status-filter__item--' + this.props.slug;
 
         var classNames = classnames({
             'status-filter__item': true,
-            uniqueClass: true
+            itemClass: true,
+            'is-active': this.state.activeFilter === this.props.slug
         });
 
         return (
@@ -31645,6 +31657,12 @@ var StatusFilter = React.createClass({displayName: "StatusFilter",
 
     _onClick: function(action) {
         UIActions.filterTorrentList(this.props.slug);
+    },
+
+    _onFilterChange: function() {
+        this.setState({
+            activeFilter: TorrentStore.getFilterCriteria()
+        })
     }
 
 });
@@ -31679,7 +31697,7 @@ var StatusFilterList = React.createClass({displayName: "StatusFilterList",
 module.exports = StatusFilterList;
 
 
-},{"../../actions/UIActions":"/Users/John/Development/Flood/flood/source/scripts/actions/UIActions.js","classnames":"/Users/John/Development/Flood/flood/node_modules/classnames/index.js","react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/icons/Icon.js":[function(require,module,exports){
+},{"../../actions/UIActions":"/Users/John/Development/Flood/flood/source/scripts/actions/UIActions.js","../../stores/TorrentStore":"/Users/John/Development/Flood/flood/source/scripts/stores/TorrentStore.js","classnames":"/Users/John/Development/Flood/flood/node_modules/classnames/index.js","react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/icons/Icon.js":[function(require,module,exports){
 var React = require('react');
 
 var Icon = React.createClass({displayName: "Icon",
@@ -32339,12 +32357,21 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
         }
     },
 
+    getFilterCriteria: function() {
+
+        return _filterStatus;
+    },
+
     emitChange: function() {
         this.emit(TorrentConstants.TORRENT_LIST_CHANGE);
     },
 
     emitSortChange: function() {
         this.emit(UIConstants.FILTER_SORT_CHANGE);
+    },
+
+    emitFilterChange: function() {
+        this.emit(UIConstants.FILTER_STATUS_CHANGE);
     },
 
     addChangeListener: function(callback) {
@@ -32355,12 +32382,20 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
         this.on(UIConstants.FILTER_SORT_CHANGE, callback);
     },
 
+    addFilterChangeListener: function(callback) {
+        this.on(UIConstants.FILTER_STATUS_CHANGE, callback);
+    },
+
     removeChangeListener: function(callback) {
         this.removeListener(TorrentConstants.TORRENT_LIST_CHANGE, callback);
     },
 
     removeSortChangeListener: function(callback) {
         this.removeListener(UIConstants.FILTER_SORT_CHANGE, callback);
+    },
+
+    removeFilterChangeListener: function(callback) {
+        this.removeListener(UIConstants.FILTER_STATUS_CHANGE, callback);
     }
 
 });
@@ -32395,6 +32430,7 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             _filterStatus = action.status;
             console.log(_filterStatus);
             TorrentStore.emitChange();
+            TorrentStore.emitFilterChange();
             break;
 
     }

@@ -721,7 +721,13 @@ body {
   padding: 30px 0; }
   .status-filter__item {
     cursor: pointer;
-    padding: 3px 20px; }
+    padding: 3px 20px;
+    -webkit-transition: color 0.25s;
+         -o-transition: color 0.25s;
+            transition: color 0.25s; }
+    .status-filter__item.is-active {
+      color: #fff;
+      font-weight: 700; }
 
 .progress-bar {
   background: #28242a;

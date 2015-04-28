@@ -46,12 +46,21 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
         }
     },
 
+    getFilterCriteria: function() {
+
+        return _filterStatus;
+    },
+
     emitChange: function() {
         this.emit(TorrentConstants.TORRENT_LIST_CHANGE);
     },
 
     emitSortChange: function() {
         this.emit(UIConstants.FILTER_SORT_CHANGE);
+    },
+
+    emitFilterChange: function() {
+        this.emit(UIConstants.FILTER_STATUS_CHANGE);
     },
 
     addChangeListener: function(callback) {
@@ -62,12 +71,20 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
         this.on(UIConstants.FILTER_SORT_CHANGE, callback);
     },
 
+    addFilterChangeListener: function(callback) {
+        this.on(UIConstants.FILTER_STATUS_CHANGE, callback);
+    },
+
     removeChangeListener: function(callback) {
         this.removeListener(TorrentConstants.TORRENT_LIST_CHANGE, callback);
     },
 
     removeSortChangeListener: function(callback) {
         this.removeListener(UIConstants.FILTER_SORT_CHANGE, callback);
+    },
+
+    removeFilterChangeListener: function(callback) {
+        this.removeListener(UIConstants.FILTER_STATUS_CHANGE, callback);
     }
 
 });
@@ -102,6 +119,7 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             _filterStatus = action.status;
             console.log(_filterStatus);
             TorrentStore.emitChange();
+            TorrentStore.emitFilterChange();
             break;
 
     }

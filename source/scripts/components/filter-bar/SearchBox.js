@@ -2,11 +2,6 @@ var React = require('react');
 
 var SearchBox = React.createClass({
 
-    getInitialState: function() {
-
-        return null;
-    },
-
     render: function() {
 
         return (
