@@ -646,16 +646,16 @@ body {
   padding: 15px 30px;
   width: 100%; }
   .filter-bar__item--search .textbox::-webkit-input-placeholder {
-    color: #252327;
+    color: #38353b;
     font-style: italic; }
   .filter-bar__item--search .textbox::-moz-placeholder {
-    color: #252327;
+    color: #38353b;
     font-style: italic; }
   .filter-bar__item--search .textbox:-ms-input-placeholder {
-    color: #252327;
+    color: #38353b;
     font-style: italic; }
   .filter-bar__item--search .textbox::placeholder {
-    color: #252327;
+    color: #38353b;
     font-style: italic; }
 
 .action-bar {

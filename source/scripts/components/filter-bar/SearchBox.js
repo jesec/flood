@@ -13,5 +13,4 @@ var SearchBox = React.createClass({
 
 });
 
-
 module.exports = SearchBox;
