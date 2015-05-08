@@ -291,9 +291,12 @@ client.prototype.stopTorrent = function(hash, callback) {
         hash = [hash];
     }
 
+    console.log('stopping: ' + hash);
+
     for (i = 0, len = hash.length; i < len; i++) {
 
         rTorrent.get('d.close', [hash[i]]).then(function(data) {
+            console.log('success: ' + data);
             callback(null, data);
         }, function(error) {
             callback(error, null);
