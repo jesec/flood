@@ -1,7 +1,22 @@
 .action-bar {
     background: #38353b;
     color: $action-bar--foreground;
+    display: flex;
     flex: 1;
+
+    &__item {
+        flex: 1;
+
+        &--first {
+            text-align: left;
+        }
+
+        &--last {
+            text-align: right;
+        }
+
+    }
+
 }
 
 .actions {

@@ -1,0 +1,35 @@
+.modal {
+    animation: fade-in 0.25s forwards;
+    background: $modal--overlay;
+    height: 100%;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+
+    &__window {
+        background: $modal--background;
+        left: 50%;
+        max-width: 100%;
+        padding: 30px;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+    }
+
+}
+
+.modal {
+
+    &__header {
+        margin-bottom: 20px;
+
+        h1 {
+            color: $modal--header--foreground;
+            font-size: 1.35em;
+            font-weight: 400;
+        }
+
+    }
+
+}

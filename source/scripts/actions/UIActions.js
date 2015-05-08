@@ -4,6 +4,13 @@ var UIConstants = require('../constants/UIConstants');
 
 var UIActions = {
 
+    dismissModals: function() {
+
+        AppDispatcher.dispatch({
+            actionType: UIConstants.MODALS_DISMISS
+        });
+    },
+
     filterTorrentList: function(status) {
         AppDispatcher.dispatch({
             actionType: UIConstants.FILTER_STATUS_CHANGE,
@@ -37,6 +44,12 @@ var UIActions = {
             actionType: UIConstants.FILTER_SORT_CHANGE,
             property: property,
             direction: direction
+        });
+    },
+
+    toggleAddTorrentModal: function() {
+        AppDispatcher.dispatch({
+            actionType: UIConstants.TORRENT_ADD_MODAL_TOGGLE
         });
     }
 

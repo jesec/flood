@@ -31276,6 +31276,13 @@ var UIConstants = require('../constants/UIConstants');
 
 var UIActions = {
 
+    dismissModals: function() {
+
+        AppDispatcher.dispatch({
+            actionType: UIConstants.MODALS_DISMISS
+        });
+    },
+
     filterTorrentList: function(status) {
         AppDispatcher.dispatch({
             actionType: UIConstants.FILTER_STATUS_CHANGE,
@@ -31310,6 +31317,12 @@ var UIActions = {
             property: property,
             direction: direction
         });
+    },
+
+    toggleAddTorrentModal: function() {
+        AppDispatcher.dispatch({
+            actionType: UIConstants.TORRENT_ADD_MODAL_TOGGLE
+        });
     }
 
 }
@@ -31322,20 +31335,16 @@ var React = require('react');
 var FilterBar = require('./filter-bar/FilterBar');
 var ActionBar = require('./action-bar/ActionBar');
 var TorrentStore = require('../stores/TorrentStore');
+var UIStore = require('../stores/UIStore');
 var TorrentList = require('./torrent-list/TorrentList');
 var TorrentListHeader = require('./torrent-list/TorrentListHeader');
-
-var getSortCriteria = function() {
-
-    return {
-        sortCriteria: TorrentStore.getSortCriteria()
-    }
-};
+var Modals = require('./modals/Modals');
 
 var FloodApp = React.createClass({displayName: "FloodApp",
 
     getInitialState: function() {
         return {
+            modal: null,
             sortCriteria: {
                 direction: 'asc',
                 property: 'name'
@@ -31345,17 +31354,19 @@ var FloodApp = React.createClass({displayName: "FloodApp",
 
     componentDidMount: function() {
         TorrentStore.addSortChangeListener(this._onSortChange);
-
+        UIStore.addModalChangeListener(this._onModalChange);
     },
 
     componentWillUnmount: function() {
         TorrentStore.removeSortChangeListener(this._onSortChange);
+        UIStore.removeModalChangeListener(this._onModalChange);
     },
 
     render: function() {
 
         return (
             React.createElement("div", {className: "flood"}, 
+                React.createElement(Modals, {type: this.state.modal}), 
                 React.createElement(FilterBar, null), 
                 React.createElement("main", {className: "main"}, 
                     React.createElement(ActionBar, null), 
@@ -31367,7 +31378,15 @@ var FloodApp = React.createClass({displayName: "FloodApp",
     },
 
     _onSortChange: function() {
-        this.setState(getSortCriteria);
+        this.setState({
+            sortCriteria: TorrentStore.getSortCriteria()
+        });
+    },
+
+    _onModalChange: function() {
+        this.setState({
+            modal: UIStore.getActiveModal()
+        });
     }
 
 });
@@ -31375,7 +31394,7 @@ var FloodApp = React.createClass({displayName: "FloodApp",
 module.exports = FloodApp;
 
 
-},{"../stores/TorrentStore":"/Users/John/Development/Flood/flood/source/scripts/stores/TorrentStore.js","./action-bar/ActionBar":"/Users/John/Development/Flood/flood/source/scripts/components/action-bar/ActionBar.js","./filter-bar/FilterBar":"/Users/John/Development/Flood/flood/source/scripts/components/filter-bar/FilterBar.js","./torrent-list/TorrentList":"/Users/John/Development/Flood/flood/source/scripts/components/torrent-list/TorrentList.js","./torrent-list/TorrentListHeader":"/Users/John/Development/Flood/flood/source/scripts/components/torrent-list/TorrentListHeader.js","react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/action-bar/Action.js":[function(require,module,exports){
+},{"../stores/TorrentStore":"/Users/John/Development/Flood/flood/source/scripts/stores/TorrentStore.js","../stores/UIStore":"/Users/John/Development/Flood/flood/source/scripts/stores/UIStore.js","./action-bar/ActionBar":"/Users/John/Development/Flood/flood/source/scripts/components/action-bar/ActionBar.js","./filter-bar/FilterBar":"/Users/John/Development/Flood/flood/source/scripts/components/filter-bar/FilterBar.js","./modals/Modals":"/Users/John/Development/Flood/flood/source/scripts/components/modals/Modals.js","./torrent-list/TorrentList":"/Users/John/Development/Flood/flood/source/scripts/components/torrent-list/TorrentList.js","./torrent-list/TorrentListHeader":"/Users/John/Development/Flood/flood/source/scripts/components/torrent-list/TorrentListHeader.js","react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/action-bar/Action.js":[function(require,module,exports){
 var React = require('react');
 var Icon = require('../icons/Icon');
 
@@ -31406,13 +31425,7 @@ var React = require('react');
 var Action = require('./Action');
 var UIStore = require('../../stores/UIStore');
 var TorrentActions = require('../../actions/TorrentActions');
-
-var getSelectedTorrents = function() {
-
-    return {
-        selectedTorrents: UIStore.getSelectedTorrents()
-    }
-};
+var UIActions = require('../../actions/UIActions');
 
 var FilterBar = React.createClass({displayName: "FilterBar",
 
@@ -31435,10 +31448,13 @@ var FilterBar = React.createClass({displayName: "FilterBar",
 
         return (
             React.createElement("nav", {className: "action-bar"}, 
-                React.createElement("ul", {className: "actions"}, 
+                React.createElement("ul", {className: "actions action-bar__item action-bar__item--first"}, 
                     React.createElement(Action, {label: "Start Torrent", slug: "start-torrent", icon: "start", clickHandler: this._start}), 
                     React.createElement(Action, {label: "Stop Torrent", slug: "stop-torrent", icon: "stop", clickHandler: this._stop}), 
                     React.createElement(Action, {label: "Pause Torrent", slug: "pause-torrent", icon: "pause", clickHandler: this._pause})
+                ), 
+                React.createElement("ul", {className: "actions action-bar__item action-bar__item--last"}, 
+                    React.createElement(Action, {label: "Add Torrent", slug: "add-torrent", icon: "add", clickHandler: this._onAddTorrent})
                 )
             )
         );
@@ -31457,7 +31473,13 @@ var FilterBar = React.createClass({displayName: "FilterBar",
     },
 
     _onUIStoreChange: function() {
-        this.setState(getSelectedTorrents);
+        this.setState({
+            selectedTorrents: UIStore.getSelectedTorrents()
+        });
+    },
+
+    _onAddTorrent: function() {
+        UIActions.toggleAddTorrentModal();
     }
 
 });
@@ -31466,7 +31488,7 @@ var FilterBar = React.createClass({displayName: "FilterBar",
 module.exports = FilterBar;
 
 
-},{"../../actions/TorrentActions":"/Users/John/Development/Flood/flood/source/scripts/actions/TorrentActions.js","../../stores/UIStore":"/Users/John/Development/Flood/flood/source/scripts/stores/UIStore.js","./Action":"/Users/John/Development/Flood/flood/source/scripts/components/action-bar/Action.js","react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/filter-bar/ClientStats.js":[function(require,module,exports){
+},{"../../actions/TorrentActions":"/Users/John/Development/Flood/flood/source/scripts/actions/TorrentActions.js","../../actions/UIActions":"/Users/John/Development/Flood/flood/source/scripts/actions/UIActions.js","../../stores/UIStore":"/Users/John/Development/Flood/flood/source/scripts/stores/UIStore.js","./Action":"/Users/John/Development/Flood/flood/source/scripts/components/action-bar/Action.js","react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/filter-bar/ClientStats.js":[function(require,module,exports){
 var React = require('react');
 var ClientStore = require('../../stores/ClientStore');
 var format = require('../../helpers/formatData');
@@ -31711,13 +31733,27 @@ var Icon = React.createClass({displayName: "Icon",
         var className = 'icon icon--' + this.props.icon;
 
         return (
-            React.createElement("svg", {className: className, viewBox: "0 0 60 60"}, 
+            React.createElement("svg", {className: className, xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 60 60"}, 
                 icon
             )
         );
     },
 
     _icons: {
+
+        add: function() {
+
+            return (
+                React.createElement("path", {"fill-rule": "evenodd", "clip-rule": "evenodd", fill: "#010101", d: "M53.7 25.3h-19v-19h-9.4v19h-19v9.4h19v19h9.4v-19h19"})
+            );
+        },
+
+        pause: function() {
+
+            return (
+                React.createElement("path", {d: "M13.5 51h11V9h-11v42zm22-42v42h11V9h-11z", "fill-rule": "evenodd", "clip-rule": "evenodd"})
+            )
+        },
 
         start: function() {
 
@@ -31731,13 +31767,6 @@ var Icon = React.createClass({displayName: "Icon",
             return (
                 React.createElement("path", {d: "M11.9 11.9H48v36.2H11.9V11.9z", "fill-rule": "evenodd", "clip-rule": "evenodd"})
             )
-        },
-
-        pause: function() {
-
-            return (
-                React.createElement("path", {d: "M13.5 51h11V9h-11v42zm22-42v42h11V9h-11z", "fill-rule": "evenodd", "clip-rule": "evenodd"})
-            )
         }
     }
 
@@ -31746,7 +31775,83 @@ var Icon = React.createClass({displayName: "Icon",
 module.exports = Icon;
 
 
-},{"react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/torrent-list/ProgressBar.js":[function(require,module,exports){
+},{"react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/modals/AddTorrent.js":[function(require,module,exports){
+var React = require('react');
+var Icon = require('../icons/Icon');
+var UIActions = require('../../actions/UIActions');
+
+var Modal = React.createClass({displayName: "Modal",
+
+    render: function() {
+
+        return (
+            React.createElement("aside", {className: "modal__window", onClick: this.props.clickHandler}, 
+                React.createElement("header", {className: "modal__header modal__header--toggle"}, 
+                    React.createElement("h1", null, "Add Torrent")
+                ), 
+                React.createElement("div", {className: "modal__content"}, 
+                    React.createElement("div", {className: "form__row"}, 
+                        React.createElement("input", {className: "textbox", type: "text", placeholder: "Torrent URL"})
+                    ), 
+                    React.createElement("div", {className: "form__row"}, 
+                        React.createElement("button", {className: "button"}, "Add Torrent")
+                    )
+                )
+            )
+        );
+    }
+});
+
+module.exports = Modal;
+
+
+},{"../../actions/UIActions":"/Users/John/Development/Flood/flood/source/scripts/actions/UIActions.js","../icons/Icon":"/Users/John/Development/Flood/flood/source/scripts/components/icons/Icon.js","react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/modals/Modals.js":[function(require,module,exports){
+var React = require('react');
+var Icon = require('../icons/Icon');
+var UIActions = require('../../actions/UIActions');
+var AddTorrent = require('./AddTorrent');
+
+var Modal = React.createClass({displayName: "Modal",
+
+    render: function() {
+
+        var modal = null;
+
+        switch (this.props.type) {
+
+            case 'torrent-add':
+                modal = React.createElement(AddTorrent, {clickHandler: this._onModalClick});
+                break;
+
+        }
+
+        if (modal) {
+
+            return (
+                React.createElement("div", {className: "modal", onClick: this._onOverlayClick}, 
+                    modal
+                )
+            );
+        } else {
+
+            return null;
+        }
+
+    },
+
+    _onModalClick: function(e) {
+        e.stopPropagation();
+    },
+
+    _onOverlayClick: function() {
+        UIActions.dismissModals();
+    }
+});
+
+module.exports = Modal;
+
+
+},{"../../actions/UIActions":"/Users/John/Development/Flood/flood/source/scripts/actions/UIActions.js","../icons/Icon":"/Users/John/Development/Flood/flood/source/scripts/components/icons/Icon.js","./AddTorrent":"/Users/John/Development/Flood/flood/source/scripts/components/modals/AddTorrent.js","react":"/Users/John/Development/Flood/flood/node_modules/react/react.js"}],"/Users/John/Development/Flood/flood/source/scripts/components/torrent-list/ProgressBar.js":[function(require,module,exports){
 var React = require('react');
 
 var ProgressBar = React.createClass({displayName: "ProgressBar",
@@ -32165,7 +32270,10 @@ module.exports = keyMirror({
     FILTER_STATUS_CHANGE: 'filter--status--change',
     TORRENT_LIST_SCROLL: 'torrent-list--scroll',
     TORRENT_LIST_VIEWPORT_RESIZE: 'torrent-list--resize',
-    TORRENT_LIST_PADDING_CHANGE: 'torrent-list--padding--change'
+    TORRENT_LIST_PADDING_CHANGE: 'torrent-list--padding--change',
+    TORRENT_ADD_MODAL_TOGGLE: 'add-modal--toggle',
+    TORRENT_ADD_MODAL_TOGGLE_CHANGE: 'add-modal--change',
+    MODALS_DISMISS: 'modal--dismiss'
 });
 
 
@@ -32566,6 +32674,7 @@ var TorrentConstants = require('../constants/TorrentConstants');
 var UIConstants = require('../constants/UIConstants');
 var assign = require('object-assign');
 
+var _activeModal = null;
 var _selectedTorrents = [];
 var _torrentCount = 0;
 var _torrentHeight = 53;
@@ -32577,6 +32686,11 @@ var _spaceTop = 0;
 var _spaceBottom = 0;
 
 var UIStore = assign({}, EventEmitter.prototype, {
+
+    getActiveModal: function() {
+
+        return _activeModal;
+    },
 
     getSelectedTorrents: function() {
 
@@ -32611,6 +32725,10 @@ var UIStore = assign({}, EventEmitter.prototype, {
         this.emit(UIConstants.TORRENT_LIST_PADDING_CHANGE);
     },
 
+    emitModalChange: function() {
+        this.emit(UIConstants.TORRENT_ADD_MODAL_TOGGLE_CHANGE);
+    },
+
     addSelectionChangeListener: function(callback) {
         this.on(TorrentConstants.TORRENT_SELECTION_CHANGE, callback);
     },
@@ -32619,13 +32737,21 @@ var UIStore = assign({}, EventEmitter.prototype, {
         this.on(UIConstants.TORRENT_LIST_PADDING_CHANGE, callback);
     },
 
+    addModalChangeListener: function(callback) {
+        this.on(UIConstants.TORRENT_ADD_MODAL_TOGGLE_CHANGE, callback);
+    },
+
     removeSelectionChangeListener: function(callback) {
         this.removeListener(TorrentConstants.TORRENT_SELECTION_CHANGE, callback);
     },
 
     removeViewportPaddingChangeListener: function(callback) {
         this.removeListener(UIConstants.TORRENT_LIST_PADDING_CHANGE, callback);
-    }
+    },
+
+    removeModalChangeListener: function(callback) {
+        this.removeListener(UIConstants.TORRENT_ADD_MODAL_TOGGLE_CHANGE, callback);
+    },
 
 });
 
@@ -32666,6 +32792,20 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             // debounce this event
             setViewportHeight(action.viewportHeight);
             UIStore.emitViewportPaddingChange();
+            break;
+
+        case UIConstants.TORRENT_ADD_MODAL_TOGGLE:
+            if (_activeModal !== 'torrent-add') {
+                _activeModal = 'torrent-add';
+            } else {
+                _activeModal = null;
+            }
+            UIStore.emitModalChange();
+            break;
+
+        case UIConstants.MODALS_DISMISS:
+            _activeModal = null;
+            UIStore.emitModalChange();
             break;
 
     }

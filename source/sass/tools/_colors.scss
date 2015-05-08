@@ -1,6 +1,16 @@
 $background: #2e2a30;
 $foreground: #686469;
 
+// form elements
+
+$textbox--background: #201e21;
+$textbox--foreground: #68636a;
+$textbox--placeholder: #383539;
+
+$button--border: rgba(#aaa8ab, 0.3);
+$button--border--hover: #aaa8ab;
+$botton--foreground: #aaa8ab;
+
 // action bar
 
 $action-bar--background: #38353b;
@@ -41,3 +51,9 @@ $progress-bar--background: #28242a;
 $progress-bar--fill: #0e8761;
 
 $progress-bar--fill--stopped: desaturate(lighten($progress-bar--background, 20%), 5%);
+
+// modal windows
+
+$modal--background: #2f2c30;
+$modal--overlay: rgba(#161516, 0.9);
+$modal--header--foreground: #aaa8ab;

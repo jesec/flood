@@ -4,6 +4,7 @@ var TorrentConstants = require('../constants/TorrentConstants');
 var UIConstants = require('../constants/UIConstants');
 var assign = require('object-assign');
 
+var _activeModal = null;
 var _selectedTorrents = [];
 var _torrentCount = 0;
 var _torrentHeight = 53;
@@ -15,6 +16,11 @@ var _spaceTop = 0;
 var _spaceBottom = 0;
 
 var UIStore = assign({}, EventEmitter.prototype, {
+
+    getActiveModal: function() {
+
+        return _activeModal;
+    },
 
     getSelectedTorrents: function() {
 
@@ -49,6 +55,10 @@ var UIStore = assign({}, EventEmitter.prototype, {
         this.emit(UIConstants.TORRENT_LIST_PADDING_CHANGE);
     },
 
+    emitModalChange: function() {
+        this.emit(UIConstants.TORRENT_ADD_MODAL_TOGGLE_CHANGE);
+    },
+
     addSelectionChangeListener: function(callback) {
         this.on(TorrentConstants.TORRENT_SELECTION_CHANGE, callback);
     },
@@ -57,13 +67,21 @@ var UIStore = assign({}, EventEmitter.prototype, {
         this.on(UIConstants.TORRENT_LIST_PADDING_CHANGE, callback);
     },
 
+    addModalChangeListener: function(callback) {
+        this.on(UIConstants.TORRENT_ADD_MODAL_TOGGLE_CHANGE, callback);
+    },
+
     removeSelectionChangeListener: function(callback) {
         this.removeListener(TorrentConstants.TORRENT_SELECTION_CHANGE, callback);
     },
 
     removeViewportPaddingChangeListener: function(callback) {
         this.removeListener(UIConstants.TORRENT_LIST_PADDING_CHANGE, callback);
-    }
+    },
+
+    removeModalChangeListener: function(callback) {
+        this.removeListener(UIConstants.TORRENT_ADD_MODAL_TOGGLE_CHANGE, callback);
+    },
 
 });
 
@@ -104,6 +122,20 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
             // debounce this event
             setViewportHeight(action.viewportHeight);
             UIStore.emitViewportPaddingChange();
+            break;
+
+        case UIConstants.TORRENT_ADD_MODAL_TOGGLE:
+            if (_activeModal !== 'torrent-add') {
+                _activeModal = 'torrent-add';
+            } else {
+                _activeModal = null;
+            }
+            UIStore.emitModalChange();
+            break;
+
+        case UIConstants.MODALS_DISMISS:
+            _activeModal = null;
+            UIStore.emitModalChange();
             break;
 
     }

@@ -1,4 +1,5 @@
 @charset "UTF-8";
+@import url('http://fonts.googleapis.com/css?family=Roboto:500,400italic,300,700,400');
 /*!
  * inuitcss, by @csswizardry
  *
@@ -478,6 +479,68 @@ body {
   margin-left: 0.3em;
   opacity: 0.8; }
 
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+
+@-o-keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+
+@keyframes fade-in {
+  0% {
+    opacity: 0; }
+
+  100% {
+    opacity: 1; } }
+
+.textbox, .button {
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  outline: none; }
+
+.textbox {
+  background: #201e21;
+  border: none;
+  color: #68636a;
+  display: block;
+  padding: 15px 25px;
+  width: 100%; }
+  .textbox::-webkit-input-placeholder {
+    color: #383539;
+    font-style: italic; }
+  .textbox::-moz-placeholder {
+    color: #383539;
+    font-style: italic; }
+  .textbox:-ms-input-placeholder {
+    color: #383539;
+    font-style: italic; }
+  .textbox::placeholder {
+    color: #383539;
+    font-style: italic; }
+
+.button {
+  background: transparent;
+  border: 2px solid rgba(170, 168, 171, 0.3);
+  color: #aaa8ab;
+  cursor: pointer;
+  padding: 10px 20px;
+  -webkit-transition: border 0.25s;
+       -o-transition: border 0.25s;
+          transition: border 0.25s; }
+  .button:hover {
+    border-color: #aaa8ab; }
+
+.form__row + .form__row {
+  margin-top: 20px; }
+
 .torrent {
   cursor: default;
   padding: 10px 20px;
@@ -661,10 +724,23 @@ body {
 .action-bar {
   background: #38353b;
   color: #1b1a1c;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1; }
+  .action-bar__item {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1; }
+    .action-bar__item--first {
+      text-align: left; }
+    .action-bar__item--last {
+      text-align: right; }
 
 .actions {
   font-size: 0;
@@ -742,3 +818,32 @@ body {
             transition: background 0.25s, width 0.25s; }
     .is-stopped .progress-bar__fill {
       background: #5b585c; }
+
+.modal {
+  -webkit-animation: fade-in 0.25s forwards;
+       -o-animation: fade-in 0.25s forwards;
+          animation: fade-in 0.25s forwards;
+  background: rgba(22, 21, 22, 0.9);
+  height: 100%;
+  position: fixed;
+  width: 100%;
+  z-index: 100; }
+  .modal__window {
+    background: #2f2c30;
+    left: 50%;
+    max-width: 100%;
+    padding: 30px;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+         -o-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+    width: 500px; }
+
+.modal__header {
+  margin-bottom: 20px; }
+  .modal__header h1 {
+    color: #aaa8ab;
+    font-size: 1.35em;
+    font-weight: 400; }

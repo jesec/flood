@@ -11,6 +11,8 @@
 @import "base/main";
 @import "base/layout";
 @import "base/typography";
+@import "base/animations";
+@import "base/form-elements";
 
 @import "objects/torrents";
 @import "objects/filter-bar";
@@ -18,3 +20,4 @@
 @import "objects/client-stats";
 @import "objects/status-filter";
 @import "objects/progress-bar";
+@import "objects/modals";

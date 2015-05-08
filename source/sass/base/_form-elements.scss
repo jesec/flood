@@ -1,0 +1,48 @@
+.textbox,
+.button {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+}
+
+.textbox {
+    background: $textbox--background;
+    border: none;
+    color: $textbox--foreground;
+    display: block;
+    padding: 15px 25px;
+    width: 100%;
+
+    &::placeholder {
+        color: $textbox--placeholder;
+        font-style: italic;
+    }
+
+}
+
+.button {
+    background: transparent;
+    border: 2px solid $button--border;
+    color: $botton--foreground;
+    cursor: pointer;
+    padding: 10px 20px;
+    transition: border 0.25s;
+
+    &:hover {
+        border-color: $button--border--hover;
+    }
+
+}
+
+.form {
+
+    &__row {
+
+        & + .form__row {
+            margin-top: 20px;
+        }
+
+    }
+
+}

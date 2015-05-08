@@ -2,20 +2,16 @@ var React = require('react');
 var FilterBar = require('./filter-bar/FilterBar');
 var ActionBar = require('./action-bar/ActionBar');
 var TorrentStore = require('../stores/TorrentStore');
+var UIStore = require('../stores/UIStore');
 var TorrentList = require('./torrent-list/TorrentList');
 var TorrentListHeader = require('./torrent-list/TorrentListHeader');
-
-var getSortCriteria = function() {
-
-    return {
-        sortCriteria: TorrentStore.getSortCriteria()
-    }
-};
+var Modals = require('./modals/Modals');
 
 var FloodApp = React.createClass({
 
     getInitialState: function() {
         return {
+            modal: null,
             sortCriteria: {
                 direction: 'asc',
                 property: 'name'
@@ -25,17 +21,19 @@ var FloodApp = React.createClass({
 
     componentDidMount: function() {
         TorrentStore.addSortChangeListener(this._onSortChange);
-
+        UIStore.addModalChangeListener(this._onModalChange);
     },
 
     componentWillUnmount: function() {
         TorrentStore.removeSortChangeListener(this._onSortChange);
+        UIStore.removeModalChangeListener(this._onModalChange);
     },
 
     render: function() {
 
         return (
             <div className="flood">
+                <Modals type={this.state.modal} />
                 <FilterBar />
                 <main className="main">
                     <ActionBar />
@@ -47,7 +45,15 @@ var FloodApp = React.createClass({
     },
 
     _onSortChange: function() {
-        this.setState(getSortCriteria);
+        this.setState({
+            sortCriteria: TorrentStore.getSortCriteria()
+        });
+    },
+
+    _onModalChange: function() {
+        this.setState({
+            modal: UIStore.getActiveModal()
+        });
     }
 
 });

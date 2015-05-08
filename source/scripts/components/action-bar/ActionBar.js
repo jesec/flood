@@ -2,13 +2,7 @@ var React = require('react');
 var Action = require('./Action');
 var UIStore = require('../../stores/UIStore');
 var TorrentActions = require('../../actions/TorrentActions');
-
-var getSelectedTorrents = function() {
-
-    return {
-        selectedTorrents: UIStore.getSelectedTorrents()
-    }
-};
+var UIActions = require('../../actions/UIActions');
 
 var FilterBar = React.createClass({
 
@@ -31,10 +25,13 @@ var FilterBar = React.createClass({
 
         return (
             <nav className="action-bar">
-                <ul className="actions">
+                <ul className="actions action-bar__item action-bar__item--first">
                     <Action label="Start Torrent" slug="start-torrent" icon="start" clickHandler={this._start} />
                     <Action label="Stop Torrent" slug="stop-torrent" icon="stop" clickHandler={this._stop} />
                     <Action label="Pause Torrent" slug="pause-torrent" icon="pause" clickHandler={this._pause} />
+                </ul>
+                <ul className="actions action-bar__item action-bar__item--last">
+                    <Action label="Add Torrent" slug="add-torrent" icon="add" clickHandler={this._onAddTorrent} />
                 </ul>
             </nav>
         );
@@ -53,7 +50,13 @@ var FilterBar = React.createClass({
     },
 
     _onUIStoreChange: function() {
-        this.setState(getSelectedTorrents);
+        this.setState({
+            selectedTorrents: UIStore.getSelectedTorrents()
+        });
+    },
+
+    _onAddTorrent: function() {
+        UIActions.toggleAddTorrentModal();
     }
 
 });

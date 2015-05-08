@@ -52,12 +52,12 @@ gulp.task('styles', function() {
 
 gulp.task('scripts', function() {
 
-    var bundler = watchify(browserify({
+    var bundler = browserify({
         entries: [sourceDir + '/scripts/app.js'],
         cache: {},
         packageCache: {},
         fullPaths: true
-    }));
+    });
 
     bundler.transform(reactify);
 
@@ -77,13 +77,14 @@ gulp.task('scripts', function() {
 
 gulp.task('svg', function() {
 
-    return gulp.src(sourceDir + '/scripts/components/icons/icons/*.svg')
+    return gulp.src(sourceDir + '/images/*.svg')
         .pipe(svgmin())
-        .pipe(gulp.dest(sourceDir + '/scripts/components/icons/icons'));
+        .pipe(gulp.dest(sourceDir + '/images'));
 });
 
 gulp.task('watch', function () {
-    gulp.watch(sourceDir + 'sass/**/*.scss', ['styles', reload]);
+    gulp.watch(sourceDir + 'sass/**/*.scss', ['styles']);
+    gulp.watch(sourceDir + 'scripts/**/*.js', ['scripts', reload]);
 });
 
 gulp.task('default', ['scripts', 'styles', 'watch', 'browser-sync']);
