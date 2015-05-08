@@ -312,7 +312,7 @@ client.prototype.startTorrent = function(hash, callback) {
 
     for (i = 0, len = hash.length; i < len; i++) {
 
-        rTorrent.get('d.resume', [hash[i]]).then(function(data) {
+        rTorrent.get('d.start', [hash[i]]).then(function(data) {
             callback(null, data);
         }, function(error) {
             callback(error, null);
