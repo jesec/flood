@@ -233,8 +233,7 @@ client.prototype.getTorrentList = function(callback) {
                             if (torrent['isHashChecking'] === '1') {
                                 torrentStatus.push('is-checking');
                             } else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '1' && torrent['state'] === '1') {
-                                // torrentStatus.push('is-seeding');
-                                torrentStatus.push('is-completed');
+                                torrentStatus.push('is-seeding');
                         	} else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '1' && torrent['state'] === '0') {
                                 torrentStatus.push('is-paused');
                         	} else if (torrent['isComplete'] === '1' && torrent['isOpen'] === '0' && torrent['state'] === '0') {
@@ -291,12 +290,9 @@ client.prototype.stopTorrent = function(hash, callback) {
         hash = [hash];
     }
 
-    console.log('stopping: ' + hash);
-
     for (i = 0, len = hash.length; i < len; i++) {
 
-        rTorrent.get('d.stop', [hash[i]]).then(function(data) {
-            console.log('success: ' + data);
+        rTorrent.get('d.close', [hash[i]]).then(function(data) {
             callback(null, data);
         }, function(error) {
             callback(error, null);

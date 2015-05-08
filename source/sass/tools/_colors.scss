@@ -51,6 +51,7 @@ $progress-bar--background: #28242a;
 $progress-bar--fill: #0e8761;
 
 $progress-bar--fill--stopped: desaturate(lighten($progress-bar--background, 20%), 5%);
+$progress-bar--fill--completed: #385f7d;
 
 // modal windows
 

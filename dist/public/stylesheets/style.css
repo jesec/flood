@@ -816,6 +816,10 @@ body {
     -webkit-transition: background 0.25s, width 0.25s;
          -o-transition: background 0.25s, width 0.25s;
             transition: background 0.25s, width 0.25s; }
+    .is-completed .progress-bar__fill {
+      background: #5b585c; }
+    .is-seeding .progress-bar__fill {
+      background: #385f7d; }
     .is-stopped .progress-bar__fill {
       background: #5b585c; }
 

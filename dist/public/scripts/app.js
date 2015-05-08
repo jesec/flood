@@ -31911,10 +31911,10 @@ var Torrent = React.createClass({displayName: "Torrent",
             'is-stopped': torrent.status.indexOf('is-stopped') > -1,
             'is-paused': torrent.status.indexOf('is-paused') > -1,
             'is-downloading': torrent.status.indexOf('is-downloading') > -1,
-            // 'is-seeding': torrent.status.indexOf('is-seeding') > -1,
+            'is-seeding': torrent.status.indexOf('is-seeding') > -1,
             'is-completed': torrent.status.indexOf('is-completed') > -1,
             'is-checking': torrent.status.indexOf('is-checking') > -1,
-            'is-active': torrent.status.indexOf('is-active'),
+            'is-active': torrent.status.indexOf('is-active') > -1,
             'is-inactive': torrent.status.indexOf('is-inactive') > -1
         });
 

@@ -16,7 +16,6 @@ rtorrent.get = function(api, array) {
 
 	try {
 		xml = Serializer.serializeMethodCall(api, array);
-		console.log(xml);
 	} catch (error) {
 		console.trace(error);
 	}
