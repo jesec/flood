@@ -12,22 +12,24 @@ var xmlBuilder      = require('xmlbuilder')
  *     - {String} xml                     - The method call XML.
  */
 exports.serializeMethodCall = function(method, params) {
+
     var params = params || [];
 
     var xml = xmlBuilder
-        .create('methodCall')
-        .ele('methodName')
-            .txt(method)
-        .up()
-        .ele('params');
+      .create('methodCall')
+      .ele('methodName')
+          .txt(method)
+      .up()
+      .ele('params');
 
     params.forEach(function(param) {
-        serializeValue(param, xml.ele('param'))
-});
+      serializeValue(param, xml.ele('param'))
+    });
 
     // Includes the <?xml ...> declaration
 
     var xmlString = xml.doc().toString()
+
     return xmlString;
 }
 

@@ -1,27 +1,27 @@
 .client-stats {
-    padding: 30px 20px;
+  padding: 30px 20px;
 
-    .speed,
-    .transferred {
-        display: block;
-        font-size: 1.25em;
-        line-height: 1.2;
-    }
+  .speed,
+  .transferred {
+    display: block;
+    font-size: 1.25em;
+    line-height: 1.2;
+  }
 
-    .speed {
-        color: $client-stats--primary;
-    }
+  .speed {
+    color: $client-stats--primary;
+  }
 
-    .transferred {
-        color: $client-stats--secondary;
-    }
+  .transferred {
+    color: $client-stats--secondary;
+  }
 
 }
 
 .client-stat {
 
-    & + .client-stat {
-        margin-top: 20px;
-    }
+  & + .client-stat {
+    margin-top: 20px;
+  }
 
 }

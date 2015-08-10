@@ -1,47 +1,47 @@
 html,
 body {
-    height: 100%;
-    overflow: hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 .container {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 .flood {
-    display: flex;
-    height: 100%;
+  display: flex;
+  height: 100%;
 }
 
 .filter-bar {
-    flex: 1;
-    min-width: 200px;
-    max-width: 240px;
+  flex: 1;
+  min-width: 200px;
+  max-width: 240px;
 }
 
 .main {
-    display: flex;
-    flex: 5;
-    flex-direction: column;
+  display: flex;
+  flex: 5;
+  flex-direction: column;
 }
 
 .action-bar {
-    flex: 1;
-    min-height: 60px;
-    max-height: 60px;
+  flex: 1;
+  min-height: 60px;
+  max-height: 60px;
 }
 
 .torrent {
 
-    &__header {
-        flex: 1;
-        min-height: 35px;
-        max-height: 35px;
-    }
+  &__header {
+    flex: 1;
+    min-height: 35px;
+    max-height: 35px;
+  }
 
-    &__list {
-        flex: 5;
-    }
+  &__list {
+    flex: 5;
+  }
 
 }

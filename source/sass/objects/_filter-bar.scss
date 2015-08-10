@@ -1,41 +1,35 @@
 .filter-bar {
-    background: $filter-bar--background;
-    color: $filter-bar--foreground;
-
-    &__item {
-        border-bottom: 1px solid $filter-bar--border;
-    }
-
+  color: $filter-bar--foreground;
 }
 
 .filter-bar {
 
-    &__item {
+  &__item {
 
-        &--search {
+    &--search {
 
-            .textbox {
-                appearance: none;
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                border: none;
-                background: $search-torrents--background;
-                color: $search-torrents--foreground;
-                display: block;
-                font-size: 1.1em;
-                outline: none;
-                padding: 15px 30px;
-                width: 100%;
+      .textbox {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: none;
+        background: $search-torrents--background;
+        color: $search-torrents--foreground;
+        display: block;
+        font-size: 1.1em;
+        outline: none;
+        padding: 15px 30px;
+        width: 100%;
 
-                &::placeholder {
-                    color: $search-torrents--placeholder;
-                    font-style: italic;
-                }
-
-            }
-
+        &::placeholder {
+          color: $search-torrents--placeholder;
+          font-style: italic;
         }
 
+      }
+
     }
+
+  }
 
 }

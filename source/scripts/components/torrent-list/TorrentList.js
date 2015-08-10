@@ -6,128 +6,128 @@ var UIActions = require('../../actions/UIActions');
 
 var getTorrentList = function() {
 
-    var torrentList = TorrentStore.getAll();
+  var torrentList = TorrentStore.getAll();
 
-    return {
-        allTorrents: torrentList,
-        torrentCount: torrentList.length
-    }
+  return {
+    allTorrents: torrentList,
+    torrentCount: torrentList.length
+  }
 }
 
 var getSelectedTorrents = function() {
 
-    return {
-        selectedTorrents: UIStore.getSelectedTorrents()
-    }
+  return {
+    selectedTorrents: UIStore.getSelectedTorrents()
+  }
 }
 
 var getListPadding = function() {
 
-    return {
-        spaceTop: UIStore.getSpaceTop(),
-        spaceBottom: UIStore.getSpaceBottom()
-    }
+  return {
+    spaceTop: UIStore.getSpaceTop(),
+    spaceBottom: UIStore.getSpaceBottom()
+  }
 }
 
 var getTorrentRange = function() {
 
-    return {
-        min: UIStore.getMinTorrentRendered(),
-        max: UIStore.getMaxTorrentRendered()
-    }
+  return {
+    min: UIStore.getMinTorrentRendered(),
+    max: UIStore.getMaxTorrentRendered()
+  }
 }
 
 var TorrentList = React.createClass({
 
-    getInitialState: function() {
+  getInitialState: function() {
 
-        return {
-            allTorrents: [],
-            selectedTorrents: [],
-            torrentCount: 0,
-            torrentHeight: 53,
-            minTorrentIndex: 0,
-            maxTorrentIndex: 4,
-            spaceTop: 0,
-            spaceBottom: 0
-        };
-    },
+    return {
+      allTorrents: [],
+      selectedTorrents: [],
+      torrentCount: 0,
+      torrentHeight: 53,
+      minTorrentIndex: 0,
+      maxTorrentIndex: 4,
+      spaceTop: 0,
+      spaceBottom: 0
+    };
+  },
 
-    componentDidMount: function() {
-        TorrentStore.addChangeListener(this._onTorrentStoreChange);
-        UIStore.addSelectionChangeListener(this._onTorrentSelectionChange);
-        UIStore.addViewportPaddingChangeListener(this._onViewportPaddingChange);
-        window.addEventListener('resize', this._onWindowResize);
-        this._onWindowResize();
-    },
+  componentDidMount: function() {
+    TorrentStore.addChangeListener(this._onTorrentStoreChange);
+    UIStore.addSelectionChangeListener(this._onTorrentSelectionChange);
+    UIStore.addViewportPaddingChangeListener(this._onViewportPaddingChange);
+    window.addEventListener('resize', this._onWindowResize);
+    this._onWindowResize();
+  },
 
-    componentWillUnmount: function() {
-        TorrentStore.removeChangeListener(this._onTorrentStoreChange);
-        UIStore.removeSelectionChangeListener(this._onTorrentSelectionChange);
-        UIStore.removeViewportPaddingChangeListener(this._onViewportPaddingChange);
-        window.removeEventListener('resize', this._onWindowResize);
-    },
+  componentWillUnmount: function() {
+    TorrentStore.removeChangeListener(this._onTorrentStoreChange);
+    UIStore.removeSelectionChangeListener(this._onTorrentSelectionChange);
+    UIStore.removeViewportPaddingChangeListener(this._onViewportPaddingChange);
+    window.removeEventListener('resize', this._onWindowResize);
+  },
 
-    render: function() {
+  render: function() {
 
-        var torrents = this.state.allTorrents;
+    var torrents = this.state.allTorrents;
 
-        var that = this;
+    var that = this;
 
-        var torrentList = torrents.map(function(torrent, index) {
+    var torrentList = torrents.map(function(torrent, index) {
 
-            if (index >= that.state.minTorrentIndex && index <= that.state.maxTorrentIndex) {
+      if (index >= that.state.minTorrentIndex && index <= that.state.maxTorrentIndex) {
 
-                var isSelected = false;
-                var hash = torrent.hash;
+        var isSelected = false;
+        var hash = torrent.hash;
 
-                if (that.state.selectedTorrents.indexOf(hash) > -1) {
-                    isSelected = true;
-                }
-
-                return (
-                    <Torrent key={hash} data={torrent} selected={isSelected} />
-                );
-            }
-
-        });
+        if (that.state.selectedTorrents.indexOf(hash) > -1) {
+          isSelected = true;
+        }
 
         return (
-            <ul className="torrent__list" ref="torrentList" onScroll={this._onScroll}>
-                <li className="torrent__spacer torrent__spacer--top" style={{height: this.state.spaceTop + 'px'}}></li>
-                {torrentList}
-                <li className="torrent__spacer torrent__spacer--bottom" style={{height: this.state.spaceBottom + 'px'}}></li>
-            </ul>
+          <Torrent key={hash} data={torrent} selected={isSelected} />
         );
-    },
+      }
 
-    _onTorrentStoreChange: function() {
-        this.setState(getTorrentList);
-    },
+    });
 
-    _onTorrentSelectionChange: function() {
-        this.setState(getSelectedTorrents);
-    },
+    return (
+      <ul className="torrent__list" ref="torrentList" onScroll={this._onScroll}>
+        <li className="torrent__spacer torrent__spacer--top" style={{height: this.state.spaceTop + 'px'}}></li>
+        {torrentList}
+        <li className="torrent__spacer torrent__spacer--bottom" style={{height: this.state.spaceBottom + 'px'}}></li>
+      </ul>
+    );
+  },
 
-    _onViewportPaddingChange: function() {
-        var listPadding = getListPadding();
-        var torrentRange = getTorrentRange();
+  _onTorrentStoreChange: function() {
+    this.setState(getTorrentList);
+  },
 
-        this.setState({
-            minTorrentIndex: torrentRange.min,
-            maxTorrentIndex: torrentRange.max,
-            spaceTop: listPadding.spaceTop,
-            spaceBottom: listPadding.spaceBottom
-        });
-    },
+  _onTorrentSelectionChange: function() {
+    this.setState(getSelectedTorrents);
+  },
 
-    _onScroll: function() {
-        UIActions.scrollTorrentList(this.state.torrentCount);
-    },
+  _onViewportPaddingChange: function() {
+    var listPadding = getListPadding();
+    var torrentRange = getTorrentRange();
 
-    _onWindowResize: function() {
-        UIActions.setViewportHeight(React.findDOMNode(this.refs.torrentList).offsetHeight, this.getDOMNode().scrollTop);
-    }
+    this.setState({
+      minTorrentIndex: torrentRange.min,
+      maxTorrentIndex: torrentRange.max,
+      spaceTop: listPadding.spaceTop,
+      spaceBottom: listPadding.spaceBottom
+    });
+  },
+
+  _onScroll: function() {
+    UIActions.scrollTorrentList(this.state.torrentCount);
+  },
+
+  _onWindowResize: function() {
+    UIActions.setViewportHeight(React.findDOMNode(this.refs.torrentList).offsetHeight, this.getDOMNode().scrollTop);
+  }
 
 });
 

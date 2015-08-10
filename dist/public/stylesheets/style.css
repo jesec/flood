@@ -1,15 +1,16 @@
 @charset "UTF-8";
+@import url(http://fonts.googleapis.com/css?family=Roboto:400italic,700italic,300,700,300italic,400);
 @import url('http://fonts.googleapis.com/css?family=Roboto:500,400italic,300,700,400');
 /*!
  * inuitcss, by @csswizardry
  *
  * github.com/inuitcss | inuitcss.com
  */
-/*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+/*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */
 /**
  * 1. Set default font family to sans-serif.
- * 2. Prevent iOS text size adjust after orientation change, without disabling
- *    user zoom.
+ * 2. Prevent iOS and IE text size adjust after device orientation change,
+ *    without disabling user zoom.
  */
 html {
   font-family: sans-serif;
@@ -56,7 +57,7 @@ audio:not([controls]) {
 
 /**
  * Address `[hidden]` styling not present in IE 8/9/10.
- * Hide the `template` element in IE 8/9/11, Safari, and Firefox < 22.
+ * Hide the `template` element in IE 8/9/10/11, Safari, and Firefox < 22.
  */
 [hidden], template {
   display: none; }
@@ -70,7 +71,8 @@ a {
   background-color: transparent; }
 
 /**
- * Improve readability when focused and also mouse hovered in all browsers.
+ * Improve readability of focused elements when they are also in an
+ * active/hover state.
  */
 a:active, a:hover {
   outline: 0; }
@@ -264,14 +266,13 @@ input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-o
 
 /**
  * 1. Address `appearance` set to `searchfield` in Safari and Chrome.
- * 2. Address `box-sizing` set to `border-box` in Safari and Chrome
- *    (include `-moz` to future-proof).
+ * 2. Address `box-sizing` set to `border-box` in Safari and Chrome.
  */
 input[type="search"] {
   -webkit-appearance: textfield;
   /* 1 */
-  /* 2 */
-  box-sizing: content-box; }
+  box-sizing: content-box;
+  /* 2 */ }
 
 /**
  * Remove inner padding and search cancel button in Safari and Chrome on OS X.
@@ -406,7 +407,7 @@ html {
   /* [5] */ }
 
 body {
-  background: #2e2a30; }
+  background: #e6e5e3; }
 
 ul {
   list-style: none; }
@@ -507,23 +508,23 @@ body {
   outline: none; }
 
 .textbox {
-  background: #201e21;
+  background: #dfdedd;
   border: none;
   color: #68636a;
   display: block;
   padding: 15px 25px;
   width: 100%; }
   .textbox::-webkit-input-placeholder {
-    color: #383539;
+    color: #b5b5b3;
     font-style: italic; }
   .textbox::-moz-placeholder {
-    color: #383539;
+    color: #b5b5b3;
     font-style: italic; }
   .textbox:-ms-input-placeholder {
-    color: #383539;
+    color: #b5b5b3;
     font-style: italic; }
   .textbox::placeholder {
-    color: #383539;
+    color: #b5b5b3;
     font-style: italic; }
 
 .button {
@@ -550,7 +551,7 @@ body {
   .torrent:hover {
     background: rgba(255, 255, 255, 0.05); }
   .torrent.is-selected {
-    background: rgba(255, 255, 255, 0.1); }
+    background: #258de5; }
 
 .torrent__header, .torrent__details {
   display: -webkit-box;
@@ -627,6 +628,7 @@ body {
 .torrent__detail--list, .torrent__list {
   list-style: none; }
 .torrent__list {
+  background: #fff;
   overflow: auto;
   position: relative; }
 .torrent__detail--primary, .torrent__detail--secondary {
@@ -691,17 +693,14 @@ body {
   color: #686469; }
 
 .filter-bar {
-  background: #1b191c;
-  color: #7f7e80; }
-  .filter-bar__item {
-    border-bottom: 1px solid #161316; }
+  color: #686867; }
 
 .filter-bar__item--search .textbox {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   border: none;
-  background: #161316;
+  background: #dfdedd;
   color: #625e66;
   display: block;
   font-size: 1.1em;
@@ -709,20 +708,19 @@ body {
   padding: 15px 30px;
   width: 100%; }
   .filter-bar__item--search .textbox::-webkit-input-placeholder {
-    color: #38353b;
+    color: #b5b5b3;
     font-style: italic; }
   .filter-bar__item--search .textbox::-moz-placeholder {
-    color: #38353b;
+    color: #b5b5b3;
     font-style: italic; }
   .filter-bar__item--search .textbox:-ms-input-placeholder {
-    color: #38353b;
+    color: #b5b5b3;
     font-style: italic; }
   .filter-bar__item--search .textbox::placeholder {
-    color: #38353b;
+    color: #b5b5b3;
     font-style: italic; }
 
 .action-bar {
-  background: #38353b;
   color: #1b1a1c;
   display: -webkit-box;
   display: -webkit-flex;
@@ -785,9 +783,9 @@ body {
     font-size: 1.25em;
     line-height: 1.2; }
   .client-stats .speed {
-    color: #e4dde6; }
+    color: #333332; }
   .client-stats .transferred {
-    color: #8b858d; }
+    color: #999997; }
 
 .client-stat + .client-stat {
   margin-top: 20px; }
@@ -802,7 +800,7 @@ body {
          -o-transition: color 0.25s;
             transition: color 0.25s; }
     .status-filter__item.is-active {
-      color: #fff;
+      color: #258de5;
       font-weight: 700; }
 
 .progress-bar {

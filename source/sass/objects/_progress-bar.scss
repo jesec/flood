@@ -1,26 +1,26 @@
 .progress-bar {
-    background: $progress-bar--background;
-    border-radius: 20px;
-    height: 5px;
-    overflow: hidden;
+  background: $progress-bar--background;
+  border-radius: 20px;
+  height: 5px;
+  overflow: hidden;
 
-    &__fill {
-        background: $progress-bar--fill;
-        height: 100%;
-        transition: background 0.25s, width 0.25s;
+  &__fill {
+    background: $progress-bar--fill;
+    height: 100%;
+    transition: background 0.25s, width 0.25s;
 
-        .is-completed & {
-            background: $progress-bar--fill--stopped;
-        }
-
-        .is-seeding & {
-            background: $progress-bar--fill--completed;
-        }
-
-        .is-stopped & {
-            background: $progress-bar--fill--stopped;
-        }
-
+    .is-completed & {
+      background: $progress-bar--fill--stopped;
     }
+
+    .is-seeding & {
+      background: $progress-bar--fill--completed;
+    }
+
+    .is-stopped & {
+      background: $progress-bar--fill--stopped;
+    }
+
+  }
 
 }

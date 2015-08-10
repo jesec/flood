@@ -6,25 +6,25 @@ var UIActions = require('../../actions/UIActions');
 
 var FilterBar = React.createClass({
 
-    getInitialState: function() {
+  getInitialState: function() {
 
-        return null;
-    },
+    return null;
+  },
 
-    render: function() {
+  render: function() {
 
-        return (
-            <nav className="filter-bar">
-                <SearchBox searchChangeHandler={this._onSearchChange} />
-                <ClientStats />
-                <StatusFilter />
-            </nav>
-        );
-    },
+    return (
+      <nav className="filter-bar">
+        <ClientStats />
+        <SearchBox searchChangeHandler={this._onSearchChange} />
+        <StatusFilter />
+      </nav>
+    );
+  },
 
-    _onSearchChange: function(event) {
-        UIActions.searchTorrents(event.target.value);
-    }
+  _onSearchChange: function(event) {
+    UIActions.searchTorrents(event.target.value);
+  }
 
 });
 

@@ -1,17 +1,17 @@
 .status-filter {
-    font-size: 0.85em;
-    padding: 30px 0;
+  font-size: 0.85em;
+  padding: 30px 0;
 
-    &__item {
-        cursor: pointer;
-        padding: 3px 20px;
-        transition: color 0.25s;
+  &__item {
+    cursor: pointer;
+    padding: 3px 20px;
+    transition: color 0.25s;
 
-        &.is-active {
-            color: $status-filter--active--foreground;
-            font-weight: 700;
-        }
-
+    &.is-active {
+      color: $status-filter--active--foreground;
+      font-weight: 700;
     }
+
+  }
 
 }

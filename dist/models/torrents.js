@@ -1,25 +1,26 @@
 var client = require('./client')();
 
 function torrents() {
+  if((this instanceof torrents) === false) {
+    return new torrents();
+  }
+};
 
-    if((this instanceof torrents) === false) {
-        return new torrents();
-    }
+torrents.prototype.add = function(data, callback) {
+  // console.log(data);
+  client.add(data, callback);
 };
 
 torrents.prototype.listTorrents = function(callback) {
-
-    client.getTorrentList(callback);
+  client.getTorrentList(callback);
 };
 
 torrents.prototype.stopTorrent = function(hash, callback) {
-
-    client.stopTorrent(hash, callback);
+  client.stopTorrent(hash, callback);
 };
 
 torrents.prototype.startTorrent = function(hash, callback) {
-
-    client.startTorrent(hash, callback);
+  client.startTorrent(hash, callback);
 };
 
 module.exports = torrents;

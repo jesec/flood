@@ -9,52 +9,51 @@ var Modals = require('./modals/Modals');
 
 var FloodApp = React.createClass({
 
-    getInitialState: function() {
-        return {
-            modal: null,
-            sortCriteria: {
-                direction: 'asc',
-                property: 'name'
-            }
-        };
-    },
+  getInitialState: function() {
+    return {
+      modal: null,
+      sortCriteria: {
+        direction: 'asc',
+        property: 'name'
+      }
+    };
+  },
 
-    componentDidMount: function() {
-        TorrentStore.addSortChangeListener(this._onSortChange);
-        UIStore.addModalChangeListener(this._onModalChange);
-    },
+  componentDidMount: function() {
+    TorrentStore.addSortChangeListener(this._onSortChange);
+    UIStore.addModalChangeListener(this._onModalChange);
+  },
 
-    componentWillUnmount: function() {
-        TorrentStore.removeSortChangeListener(this._onSortChange);
-        UIStore.removeModalChangeListener(this._onModalChange);
-    },
+  componentWillUnmount: function() {
+    TorrentStore.removeSortChangeListener(this._onSortChange);
+    UIStore.removeModalChangeListener(this._onModalChange);
+  },
 
-    render: function() {
+  render: function() {
 
-        return (
-            <div className="flood">
-                <Modals type={this.state.modal} />
-                <FilterBar />
-                <main className="main">
-                    <ActionBar />
-                    <TorrentListHeader sortCriteria={this.state.sortCriteria} />
-                    <TorrentList />
-                </main>
-            </div>
-        );
-    },
+    return (
+      <div className="flood">
+        <Modals type={this.state.modal} />
+        <FilterBar />
+        <main className="main">
+          <ActionBar />
+          <TorrentList />
+        </main>
+      </div>
+    );
+  },
 
-    _onSortChange: function() {
-        this.setState({
-            sortCriteria: TorrentStore.getSortCriteria()
-        });
-    },
+  _onSortChange: function() {
+    this.setState({
+      sortCriteria: TorrentStore.getSortCriteria()
+    });
+  },
 
-    _onModalChange: function() {
-        this.setState({
-            modal: UIStore.getActiveModal()
-        });
-    }
+  _onModalChange: function() {
+    this.setState({
+      modal: UIStore.getActiveModal()
+    });
+  }
 
 });
 
