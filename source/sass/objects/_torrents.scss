@@ -1,6 +1,18 @@
 .torrent {
+
+  &__list {
+    background: $torrent-list--background;
+    box-shadow: -1px -1px $torrent-list--border;
+    list-style: none;
+    overflow: auto;
+    padding: 10px 0;
+    position: relative;
+  }
+}
+
+.torrent {
   cursor: default;
-  padding: 10px 20px;
+  padding: 10px 25px;
   transition: background 0.25s;
 
   &:hover {
@@ -10,190 +22,107 @@
   &.is-selected {
     background: $torrent--background--selected;
   }
-
 }
 
 .torrent {
 
-  &__header,
   &__details {
+    align-items: center;
     display: flex;
     flex: 1;
     flex-flow: row wrap;
-  }
-
-  &__header {
-    background: $torrent--header--background;
-    border-bottom: 1px solid $torrent--header--border;
-    border-top: 1px solid $torrent--header--border;
-    color: $torrent--header--foreground;
-    display: flex;
-    flex: 1;
-    font-size: 0.5em;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    padding: 0 20px;
-    text-transform: uppercase;
-
-    &__item {
-      cursor: pointer;
-      padding: 10px 0;
-      transition: color 0.25s;
-      white-space: nowrap;
-
-      &:hover {
-        color: lighten($torrent--header--foreground, 10%);
-
-        &:after {
-          opacity: 1;
-        }
-
-      }
-
-      &:after {
-        content: '';
-        display: inline-block;
-        border-bottom: 4px solid transparent;
-        border-left: 3px solid transparent;
-        border-right: 3px solid transparent;
-        height: 0;
-        margin-left: 3px;
-        opacity: 0.5;
-        transform: translateY(-2px) rotate(0);
-        transition: border 0.25s, margin 0.25s, opacity 0.25s, transform 0.25s;
-        vertical-align: middle;
-      }
-
-      &.is-sorted {
-        position: relative;
-
-        &:after {
-          border-bottom: 4px solid $torrent--header--foreground;
-        }
-
-        &--desc {
-
-          &:after {
-            transform: translateY(-1px) rotate(180deg);
-          }
-
-        }
-
-      }
-
-      &.torrent__detail--secondary--sub {
-        padding: 10px 0;
-      }
-
-    }
-
-  }
-
-  &__details {
-    margin-bottom: 4px;
-  }
-
-}
-
-.torrent {
-
-  &__detail--list,
-  &__list {
     list-style: none;
-  }
-
-  &__list {
-    background: $torrent-list--background;
-    overflow: auto;
-    position: relative;
-  }
-
-  &__detail {
 
     &--primary,
-    &--secondary {
-      align-items: center;
+    &--secondary,
+    &--tertiary {
+      transition: color 0.25s;
     }
 
     &--primary {
-      flex: 2;
+      color: $torrent--primary--foreground;
+      flex: 4;
+      font-size: 1.1em;
 
-      .torrent & {
-        font-size: 1em;
-        overflow: hidden;
-        transition: color 0.25s;
-        white-space: nowrap;
+      .is-stopped & {
+        color: $torrent--primary--foreground--stopped;
       }
 
+      .is-selected & {
+        color: $torrent--primary--foreground--selected;
+      }
+
+      .is-selected.is-stopped & {
+        color: $torrent--primary--foreground--selected--stopped;
+      }
     }
 
     &--secondary {
+      align-items: flex-end;
+      color: $torrent--secondary--foreground;
       display: flex;
-      flex: 3;
-      font-size: 0.85em;
-
-      &--sub {
-        padding: 0 2px;
-      }
-
-      .unit {
-        font-size: 0.7em;
-        line-height: 1;
-        margin-left: 0;
-        vertical-align: middle;
-      }
-
-    }
-
-    &--speed,
-    &--eta,
-    &--ratio,
-    &--peers,
-    &--seeds {
       flex: 1;
-    }
+      font-size: 0.9em;
 
-    &--size {
-      flex: 1.5;
-    }
-
-    &--completed{
-      flex: 2.5;
-    }
-
-    &--segment {
-      margin-right: 5px;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-    }
-
-    label {
-      display: block;
-    }
-
-  }
-
-}
-
-.torrent {
-
-  &__detail {
-
-    &--primary {
-
-      .torrent & {
-        color: $torrent--primary--foreground;
+      li {
+        flex: 1;
       }
 
       .is-stopped & {
-        color: $torrent--secondary--foreground;
+        color: $torrent--secondary--foreground--stopped;
       }
 
+      .is-selected & {
+        color: $torrent--secondary--foreground--selected;
+      }
+
+      .is-selected.is-stopped & {
+        color: $torrent--secondary--foreground--selected--stopped;
+      }
     }
 
-  }
+    &--tertiary {
+      color: $torrent--tertiary--foreground;
+      display: block;
+      font-size: 0.75em;
 
+      li {
+        display: inline-block;
+        margin-right: 1em;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .is-stopped & {
+        color: $torrent--tertiary--foreground--stopped;
+      }
+
+      .is-selected & {
+        color: $torrent--tertiary--foreground--selected;
+      }
+
+      .is-selected.is-stopped & {
+        color: $torrent--tertiary--foreground--selected--stopped;
+      }
+    }
+  }
+}
+
+.torrent {
+
+  &__details {
+
+    &--eta {
+      opacity: 0;
+      transition: opacity 1s, visibility 1s;
+      visibility: hidden;
+
+      .is-actively-downloading & {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
 }

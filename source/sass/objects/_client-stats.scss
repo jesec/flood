@@ -1,27 +1,99 @@
 .client-stats {
-  padding: 30px 20px;
-
-  .speed,
-  .transferred {
-    display: block;
-    font-size: 1.25em;
-    line-height: 1.2;
-  }
-
-  .speed {
-    color: $client-stats--primary;
-  }
-
-  .transferred {
-    color: $client-stats--secondary;
-  }
-
+  padding: 30px 20px 20px 20px;
 }
 
 .client-stat {
+  display: flex;
 
   & + .client-stat {
     margin-top: 20px;
   }
 
+  &__icon,
+  &__data {
+    vertical-align: top;
+  }
+
+  &__icon {
+    flex: 0 0 23px;
+
+    .icon {
+      display: inline-block;
+      fill: $client-stats--icon;
+      height: 25px;
+      margin: 6px 0 0 -5px;
+      width: auto;
+    }
+  }
+
+  &__data {
+    flex: 1;
+
+    &--primary,
+    &--secondary {
+      display: block;
+      font-weight: 100;
+      line-height: 1.2;
+    }
+
+    &--primary {
+      color: $client-stats--primary;
+      font-size: 1.9em;
+    }
+
+    &--secondary {
+      color: $client-stats--secondary;
+      font-size: 0.9em;
+      font-style: italic;
+    }
+  }
+}
+
+.client-stat {
+
+  &--limits {
+    background: none;
+    border: none;
+    color: $client-stats--limits--foreground;
+    display: block;
+    margin: 15px 0 0 0;
+    outline: none;
+    padding: 2px 0 2px 25px;
+    font-size: 0.85em;
+    text-align: left;
+    transition: color 0.25s;
+    vertical-align: middle;
+    width: 100%;
+
+    .icon {
+      display: inline-block;
+      fill: $client-stats--limits--foreground;
+      margin: -2px 5px 0 0;
+      transition: fill 0.25s;
+      vertical-align: middle;
+      width: 14.5px;
+
+      .limits {
+
+        &__bars {
+
+          &--top {
+            opacity: 0.4;
+          }
+
+          &--bottom {
+            opacity: 0.6;
+          }
+        }
+      }
+    }
+
+    &:hover {
+      color: $client-stats--limist--icon--hover;
+
+      .icon {
+        fill: $client-stats--limist--icon--hover;
+      }
+    }
+  }
 }

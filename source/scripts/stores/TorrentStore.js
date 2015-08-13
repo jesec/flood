@@ -13,234 +13,233 @@ var _filterStatus = 'all';
 var _sortedTorrents = [];
 var _sorted = true;
 var _sortCriteria = {
-    property: 'name',
-    direction: 'asc'
+  property: 'name',
+  direction: 'asc'
 }
 
 var TorrentStore = assign({}, EventEmitter.prototype, {
 
-    getAll: function() {
+  getAll: function() {
 
-        if (_sorted) {
+    if (_sorted) {
+      _sortedTorrents = sortTorrentList();
 
-            _sortedTorrents = sortTorrentList();
+      if (_filtered) {
+        _sortedTorrents = filterTorrentList();
+      }
 
-            if (_filtered) {
-                _sortedTorrents = filterTorrentList();
-            }
+      return _sortedTorrents;
+    } else {
 
-            return _sortedTorrents;
-        } else {
-
-            return _torrents;
-        }
-
-    },
-
-    getSortCriteria: function() {
-
-        if (_sorted) {
-            return _sortCriteria;
-        } else {
-            return false;
-        }
-    },
-
-    getFilterCriteria: function() {
-
-        return _filterStatus;
-    },
-
-    emitChange: function() {
-        this.emit(TorrentConstants.TORRENT_LIST_CHANGE);
-    },
-
-    emitSortChange: function() {
-        this.emit(UIConstants.FILTER_SORT_CHANGE);
-    },
-
-    emitFilterChange: function() {
-        this.emit(UIConstants.FILTER_STATUS_CHANGE);
-    },
-
-    addChangeListener: function(callback) {
-        this.on(TorrentConstants.TORRENT_LIST_CHANGE, callback);
-    },
-
-    addSortChangeListener: function(callback) {
-        this.on(UIConstants.FILTER_SORT_CHANGE, callback);
-    },
-
-    addFilterChangeListener: function(callback) {
-        this.on(UIConstants.FILTER_STATUS_CHANGE, callback);
-    },
-
-    removeChangeListener: function(callback) {
-        this.removeListener(TorrentConstants.TORRENT_LIST_CHANGE, callback);
-    },
-
-    removeSortChangeListener: function(callback) {
-        this.removeListener(UIConstants.FILTER_SORT_CHANGE, callback);
-    },
-
-    removeFilterChangeListener: function(callback) {
-        this.removeListener(UIConstants.FILTER_STATUS_CHANGE, callback);
+      return _torrents;
     }
+
+  },
+
+  getSortCriteria: function() {
+
+    if (_sorted) {
+      return _sortCriteria;
+    } else {
+      return false;
+    }
+  },
+
+  getFilterCriteria: function() {
+
+    return _filterStatus;
+  },
+
+  emitChange: function() {
+    this.emit(TorrentConstants.TORRENT_LIST_CHANGE);
+  },
+
+  emitSortChange: function() {
+    this.emit(UIConstants.FILTER_SORT_CHANGE);
+  },
+
+  emitFilterChange: function() {
+    this.emit(UIConstants.FILTER_STATUS_CHANGE);
+  },
+
+  addChangeListener: function(callback) {
+    this.on(TorrentConstants.TORRENT_LIST_CHANGE, callback);
+  },
+
+  addSortChangeListener: function(callback) {
+    this.on(UIConstants.FILTER_SORT_CHANGE, callback);
+  },
+
+  addFilterChangeListener: function(callback) {
+    this.on(UIConstants.FILTER_STATUS_CHANGE, callback);
+  },
+
+  removeChangeListener: function(callback) {
+    this.removeListener(TorrentConstants.TORRENT_LIST_CHANGE, callback);
+  },
+
+  removeSortChangeListener: function(callback) {
+    this.removeListener(UIConstants.FILTER_SORT_CHANGE, callback);
+  },
+
+  removeFilterChangeListener: function(callback) {
+    this.removeListener(UIConstants.FILTER_STATUS_CHANGE, callback);
+  }
 
 });
 
 var dispatcherIndex = AppDispatcher.register(function(action) {
 
-    var text;
+  var text;
 
-    switch(action.actionType) {
+  switch(action.actionType) {
 
-        case TorrentConstants.TORRENT_STOP:
-            getTorrentList();
-            break;
+    case TorrentConstants.TORRENT_STOP:
+      getTorrentList();
+      break;
 
-        case TorrentConstants.TORRENT_START:
-            getTorrentList();
-            break;
+    case TorrentConstants.TORRENT_START:
+      getTorrentList();
+      break;
 
-        case UIConstants.FILTER_SORT_CHANGE:
-            _sortCriteria.property = action.property;
-            _sortCriteria.direction = action.direction;
-            TorrentStore.emitSortChange();
-            TorrentStore.emitChange();
-            break;
+    case UIConstants.FILTER_SORT_CHANGE:
+      _sortCriteria.property = action.property;
+      _sortCriteria.direction = action.direction;
+      TorrentStore.emitSortChange();
+      TorrentStore.emitChange();
+      break;
 
-        case UIConstants.FILTER_SEARCH_CHANGE:
-            _filterText = action.query;
-            TorrentStore.emitChange();
-            break;
+    case UIConstants.FILTER_SEARCH_CHANGE:
+      _filterText = action.query;
+      TorrentStore.emitChange();
+      break;
 
-        case UIConstants.FILTER_STATUS_CHANGE:
-            _filterStatus = action.status;
-            console.log(_filterStatus);
-            TorrentStore.emitChange();
-            TorrentStore.emitFilterChange();
-            break;
+    case UIConstants.FILTER_STATUS_CHANGE:
+      _filterStatus = action.status;
+      console.log(_filterStatus);
+      TorrentStore.emitChange();
+      TorrentStore.emitFilterChange();
+      break;
 
-    }
+  }
 });
 
 var filterTorrentList = function() {
 
-    var torrents = _sortedTorrents.slice();
+  var torrents = _sortedTorrents.slice();
 
-    torrents = _.filter(torrents, function(torrent) {
+  torrents = _.filter(torrents, function(torrent) {
 
-        if (_filterStatus !== 'all') {
-            return torrent.status.indexOf('is-' + _filterStatus) > -1;
-        } else {
-            return true;
-        }
-    });
-
-    try {
-        torrents = _.filter(torrents, function(torrent) {
-            var query = new RegExp(_filterText, 'gi');
-            return torrent.name.match(query)
-        });
-    } catch (error) {
-
-        return torrents;
+    if (_filterStatus !== 'all') {
+      return torrent.status.indexOf('is-' + _filterStatus) > -1;
+    } else {
+      return true;
     }
+  });
+
+  try {
+    torrents = _.filter(torrents, function(torrent) {
+      var query = new RegExp(_filterText, 'gi');
+      return torrent.name.match(query)
+    });
+  } catch (error) {
 
     return torrents;
+  }
+
+  return torrents;
 
 }
 
 var getTorrentList = function(callback) {
 
-    $.ajax({
-        url: '/torrents/list',
-        dataType: 'json',
+  $.ajax({
+    url: '/torrents/list',
+    dataType: 'json',
 
-        success: function(data) {
+    success: function(data) {
 
-            _torrents = data;
+      _torrents = data;
 
-            if (_sorted) {
-                _sortedTorrents = sortTorrentList();
-            }
+      if (_sorted) {
+        _sortedTorrents = sortTorrentList();
+      }
 
-            TorrentStore.emitChange();
-        }.bind(this),
+      TorrentStore.emitChange();
+    }.bind(this),
 
-        error: function(xhr, status, err) {
-            console.error('/torrents/list', status, err.toString());
-        }.bind(this)
-    });
+    error: function(xhr, status, err) {
+      console.error('/torrents/list', status, err.toString());
+    }.bind(this)
+  });
 
 };
 
 var sortTorrentList = function() {
 
-    var property = _sortCriteria.property;
-    var direction = _sortCriteria.direction;
-    var sortedList = _torrents.slice();
+  var property = _sortCriteria.property;
+  var direction = _sortCriteria.direction;
+  var sortedList = _torrents.slice();
 
-    sortedList = sortedList.sort(function(a, b) {
+  sortedList = sortedList.sort(function(a, b) {
 
-        var valA = a[property];
-        var valB = b[property];
+    var valA = a[property];
+    var valB = b[property];
 
-        if (property === 'eta') {
+    if (property === 'eta') {
 
-            // keep infinity at bottom of array when sorting by eta
-            if (valA === 'Infinity' && valB !== 'Infinity') {
-                return 1;
-            } else if (valA !== 'Infinity' && valB === 'Infinity') {
-                return -1;
-            }
+      // keep infinity at bottom of array when sorting by eta
+      if (valA === 'Infinity' && valB !== 'Infinity') {
+        return 1;
+      } else if (valA !== 'Infinity' && valB === 'Infinity') {
+        return -1;
+      }
 
-            // if it's not infinity, compare the second as numbers
-            if (valA !== 'Infinity') {
-                valA = Number(valA.seconds);
-            }
+      // if it's not infinity, compare the second as numbers
+      if (valA !== 'Infinity') {
+        valA = Number(valA.seconds);
+      }
 
-            if (valB !== 'Infinity') {
-                valB = Number(valB.seconds);
-            }
+      if (valB !== 'Infinity') {
+        valB = Number(valB.seconds);
+      }
 
-        } else if (property === 'name') {
+    } else if (property === 'name') {
 
-            valA = valA.toLowerCase();
-            valB = valB.toLowerCase();
-        } else {
+      valA = valA.toLowerCase();
+      valB = valB.toLowerCase();
+    } else {
 
-            valA = Number(valA);
-            valB = Number(valB);
-        }
+      valA = Number(valA);
+      valB = Number(valB);
+    }
 
-        if (direction === 'asc') {
+    if (direction === 'asc') {
 
-            if (valA > valB) {
-                return 1;
-            }
+      if (valA > valB) {
+        return 1;
+      }
 
-            if (valA < valB) {
-                return -1;
-            }
+      if (valA < valB) {
+        return -1;
+      }
 
-        } else {
+    } else {
 
-            if (valA > valB) {
-                return -1;
-            }
+      if (valA > valB) {
+        return -1;
+      }
 
-            if (valA < valB) {
-                return 1;
-            }
+      if (valA < valB) {
+        return 1;
+      }
 
-        }
+    }
 
-        return 0;
-    });
+    return 0;
+  });
 
-    return sortedList;
+  return sortedList;
 };
 
 getTorrentList();

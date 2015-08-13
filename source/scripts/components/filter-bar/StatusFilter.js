@@ -1,6 +1,7 @@
 var React = require('react');
 var UIActions = require('../../actions/UIActions');
 var TorrentStore = require('../../stores/TorrentStore');
+var Icon = require('../icons/Icon.js');
 var classnames = require('classnames');
 
 var StatusFilter = React.createClass({
@@ -31,7 +32,10 @@ var StatusFilter = React.createClass({
     });
 
     return (
-      <li className={classNames} onClick={this._onClick}>{this.props.name}</li>
+      <li className={classNames} onClick={this._onClick}>
+        <Icon icon={this.props.icon} />
+        {this.props.name}
+      </li>
     );
   },
 
@@ -62,12 +66,15 @@ var StatusFilterList = React.createClass({
 
     return (
       <ul className="status-filter filter-bar__item">
-        <StatusFilter name="All" slug="all" />
-        <StatusFilter name="Downloading" slug="downloading" />
-        <StatusFilter name="Completed" slug="completed" />
-        <StatusFilter name="Active" slug="active" />
-        <StatusFilter name="Inactive" slug="inactive" />
-        <StatusFilter name="Error" slug="error" />
+        <li className="status-filter__item status-filter__item--heading">
+          Filter by Status
+        </li>
+        <StatusFilter icon="all" name="All" slug="all" />
+        <StatusFilter icon="downloadSmall" name="Downloading" slug="downloading" />
+        <StatusFilter icon="completed" name="Completed" slug="completed" />
+        <StatusFilter icon="active" name="Active" slug="active" />
+        <StatusFilter icon="inactive" name="Inactive" slug="inactive" />
+        <StatusFilter icon="error" name="Error" slug="error" />
       </ul>
     );
   }

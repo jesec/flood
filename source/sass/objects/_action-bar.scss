@@ -1,39 +1,49 @@
 .action-bar {
   color: $action-bar--foreground;
   display: flex;
-  flex: 1;
 
   &__item {
-    flex: 1;
+    flex: 6;
 
-    &--first {
+    &--dropdown {
+      flex: 1 1 120px;
+    }
+
+    &:first-child {
       text-align: left;
     }
 
-    &--last {
+    &:last-child {
       text-align: right;
     }
-
   }
-
 }
 
 .actions {
-  font-size: 0;
   list-style: none;
 }
 
 .action {
+  box-shadow:
+    1px 0 transparent,
+    -1px 0 transparent;
   cursor: pointer;
   display: inline-block;
   height: 60px;
   position: relative;
   width: 60px;
   text-align: center;
-  transition: background 0.25s;
+  transition: background 0.25s, box-shadow 0.25s;
 
   &:hover {
     background: $action--background--hover;
+    box-shadow:
+      1px 0 $action--border--hover,
+      -1px 0 $action--border--hover;
+
+    .icon {
+      fill: $action--foreground--hover;
+    }
   }
 
   &__label {
@@ -45,7 +55,7 @@
 
   .icon {
     fill: $action--foreground;
-    height: 30px;
+    height: 25px;
     left: 50%;
     position: absolute;
     top: 50%;
@@ -53,5 +63,89 @@
     transform: translateX(-50%) translateY(-50%);
     width: 30px;
   }
+}
 
+.dropdown {
+  max-width: 200px;
+  position: relative;
+  z-index: 2;
+
+  &__button {
+    cursor: pointer;
+    display: block;
+    padding: 15px 0 11px 0;
+    text-align: left;
+    width: auto;
+    word-wrap: none;
+  }
+
+  &__label {
+    color: $dropdown--label;
+    display: block;
+    font-size: 0.65em;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 0.9em;
+    text-transform: uppercase;
+  }
+
+  &__value {
+    color: $dropdown--value;
+
+    &:after {
+      border-top: 5px solid $dropdown--value;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      content: '';
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+  }
+
+  &__menu {
+    background: $dropdown--background;
+    color: $dropdown--foreground;
+    left: 0;
+    margin-left: -5px;
+    margin-top: -5px;
+    min-width: 250px;
+    padding: 5px 0;
+    position: absolute;
+    top: 100%;
+    z-index: 2;
+
+    &:after {
+      border-bottom: 6px solid $dropdown--background;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      content: '';
+      display: block;
+      left: 20px;
+      position: absolute;
+      top: -6px;
+    }
+
+    &-enter {
+      animation: fade-in 0.25s;
+    }
+
+    &-leave {
+      animation: fade-out 0.25s;
+    }
+
+    li {
+      cursor: pointer;
+      display: block;
+      padding: 5px 20px;
+
+      &:hover {
+        background: rgba(#fff, 0.1);
+      }
+    }
+  }
+
+  &__wrapper {
+    box-shadow: 1px 0 $dropdown--container--border;
+  }
 }

@@ -1,17 +1,9 @@
 var React = require('react');
 
 var ProgressBar = React.createClass({
-
-  getInitialState: function() {
-
-    return null;
-  },
-
   render: function() {
-
     var percent = this.props.percent;
-
-    var className = 'progress-bar progress-bar--' + (Math.floor(percent / 1) * 10);
+    var className = 'progress-bar';
 
     return (
       <div className={className}>

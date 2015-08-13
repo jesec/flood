@@ -1,5 +1,6 @@
 var React = require('react');
 var ClientStore = require('../../stores/ClientStore');
+var Icon = require('../icons/Icon');
 var format = require('../../helpers/formatData');
 
 var getClientStats = function() {
@@ -7,36 +8,6 @@ var getClientStats = function() {
     clientStats: ClientStore.getStats()
   }
 }
-
-var Speed = React.createClass({
-  getInitialState: function() {
-    return null;
-  },
-
-  render: function() {
-    return (
-      <span className="speed">
-        {this.props.value}
-        <em className="unit">{this.props.unit}</em>
-      </span>
-    );
-  }
-});
-
-var DataTransferred = React.createClass({
-  getInitialState: function() {
-    return null;
-  },
-
-  render: function() {
-    return (
-      <span className="transferred">
-        {this.props.value}
-        <em className="unit">{this.props.unit}</em>
-      </span>
-    );
-  }
-});
 
 var ClientStats = React.createClass({
 
@@ -72,14 +43,45 @@ var ClientStats = React.createClass({
 
     return (
       <div className="client-stats filter-bar__item">
-        <div className="client-stat client-stat--upload">
-          <Speed value={uploadSpeed.value} unit={uploadSpeed.unit} />
-          <DataTransferred value={uploadTotal.value} unit={uploadTotal.unit} />
-        </div>
         <div className="client-stat client-stat--download">
-          <Speed value={downloadSpeed.value} unit={downloadSpeed.unit} />
-          <DataTransferred value={downloadTotal.value} unit={downloadTotal.unit} />
+          <span className="client-stat__icon">
+            <Icon icon="download" />
+          </span>
+          <div className="client-stat__data">
+            <div className="client-stat__data--primary">
+              {downloadSpeed.value}
+              <em className="unit">{downloadSpeed.unit}</em>
+            </div>
+            <div className="client-stat__data--secondary">
+              200<em className="unit">kB/s</em> Limit
+            </div>
+            <div className="client-stat__data--secondary">
+              {downloadTotal.value}
+              <em className="unit">{downloadTotal.unit}</em> Downloaded
+            </div>
+          </div>
         </div>
+        <div className="client-stat client-stat--upload">
+          <span className="client-stat__icon">
+            <Icon icon="upload" />
+          </span>
+          <div className="client-stat__data">
+            <div className="client-stat__data--primary">
+              {uploadSpeed.value}
+              <em className="unit">{uploadSpeed.unit}</em>
+            </div>
+            <div className="client-stat__data--secondary">
+              200<em className="unit">kB/s</em> Limit
+            </div>
+            <div className="client-stat__data--secondary">
+              {uploadTotal.value}
+              <em className="unit">{uploadTotal.unit}</em> Uploaded
+            </div>
+          </div>
+        </div>
+        <button className="client-stats client-stat--limits">
+          <Icon icon="limits" /> Limits
+        </button>
       </div>
     );
   },
@@ -87,7 +89,6 @@ var ClientStats = React.createClass({
   _onChange: function() {
     this.setState(getClientStats);
   }
-
 });
 
 module.exports = ClientStats;

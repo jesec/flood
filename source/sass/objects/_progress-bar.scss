@@ -1,16 +1,45 @@
 .progress-bar {
-  background: $progress-bar--background;
-  border-radius: 20px;
-  height: 5px;
-  overflow: hidden;
+  height: 3px;
+  position: relative;
+  transition: opacity 0.25s;
+  z-index: 1;
+
+  .is-selected.is-stopped & {
+    opacity: 0.5;
+  }
+
+  &:after {
+    background: $progress-bar--background;
+    content: '';
+    height: 1px;
+    left: 0;
+    position: absolute;
+    z-index: 0;
+    top: 1px;
+    transition: background 0.25s;
+    width: 100%;
+
+    .is-selected & {
+      background: $progress-bar--background--selected;
+    }
+
+    .is-selected.is-stopped & {
+      background: $progress-bar--background--selected--stopped;
+    }
+  }
 
   &__fill {
     background: $progress-bar--fill;
+    bottom: 0;
     height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
     transition: background 0.25s, width 0.25s;
+    z-index: 1;
 
     .is-completed & {
-      background: $progress-bar--fill--stopped;
+      background: $progress-bar--fill--completed;
     }
 
     .is-seeding & {
@@ -21,6 +50,8 @@
       background: $progress-bar--fill--stopped;
     }
 
+    .is-selected & {
+      background: $progress-bar--fill--selected;
+    }
   }
-
 }

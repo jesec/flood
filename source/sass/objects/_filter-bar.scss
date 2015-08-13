@@ -7,29 +7,38 @@
   &__item {
 
     &--search {
+      position: relative;
+
+      .icon {
+        fill: $search-torrents--icon--foreground;
+        height: 22px;
+        left: 17px;
+        opacity: 0.5;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 22px;
+      }
 
       .textbox {
         appearance: none;
         -webkit-appearance: none;
         -moz-appearance: none;
-        border: none;
+        border-bottom: 1px solid $search-torrents--border;
+        border-top: 1px solid $search-torrents--border;
         background: $search-torrents--background;
         color: $search-torrents--foreground;
         display: block;
-        font-size: 1.1em;
+        font-size: 1em;
         outline: none;
-        padding: 15px 30px;
+        padding: 12px 0 12px 45px;
         width: 100%;
 
         &::placeholder {
           color: $search-torrents--placeholder;
           font-style: italic;
         }
-
       }
-
     }
-
   }
-
 }

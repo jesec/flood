@@ -1,8 +1,9 @@
+$blue: #258de5;
+
 $background: #e6e5e3;
 $foreground: #686469;
 
 // form elements
-
 $textbox--background: #dfdedd;
 $textbox--foreground: #68636a;
 $textbox--placeholder: #b5b5b3;
@@ -12,52 +13,74 @@ $button--border--hover: #aaa8ab;
 $botton--foreground: #aaa8ab;
 
 // action bar
-
-
-// $action-bar--background: #e6e5e3;
 $action-bar--foreground: #1b1a1c;
 
-$action--foreground: #1b1a1c;
-$action--background--hover: #4c4a4f;
+$action--foreground: #686867;
+$action--foreground--hover: $blue;
+$action--background--hover: #dfdedd;
+$action--border--hover: #d4d3d1;
 
 // filter bar
-
-// $filter-bar--background: #e6e5e3;
 $filter-bar--foreground: #686867;
 $filter-bar--border: #161316;
 
 $client-stats--primary: #333332;
 $client-stats--secondary: #999997;
-$client-stats--tertiary: #363337;
+$client-stats--icon: #8c8c8a;
+
+$client-stats--limits--foreground: #999997;
+$client-stats--limits--foreground--hover: darken($client-stats--limits--foreground, 20%);
+$client-stats--limist--icon--hover: $blue;
 
 $search-torrents--background: #dfdedd;
+$search-torrents--border: #d4d3d1;
 $search-torrents--foreground: #625e66;
 $search-torrents--placeholder: #b5b5b3;
 
-$status-filter--active--foreground: #258de5;
+$search-torrents--icon--foreground: #333332;
+
+$status-filter--foreground: #686867;
+$status-filter--foreground--header: #b5b5b3;
+$status-filter--foreground--active: $blue;
+$status-filter--foreground--hover: darken($status-filter--foreground, 15%);
 
 // torrents list
-
 $torrent-list--background: #fff;
+$torrent-list--border: rgba(#000, 0.1);
 
-$torrent--primary--foreground: #aaa8ab;
-$torrent--secondary--foreground: #686469;
+$torrent--primary--foreground: #333332;
+$torrent--primary--foreground--stopped: rgba(#333332, 0.5);
+$torrent--primary--foreground--selected: #fff;
+$torrent--primary--foreground--selected--stopped: rgba($torrent--primary--foreground--selected, 0.6);
+$torrent--secondary--foreground: #807f7e;
+$torrent--secondary--foreground--stopped: rgba(#807f7e, 0.5);
+$torrent--secondary--foreground--selected: #fff;
+$torrent--secondary--foreground--selected--stopped: rgba(#fff, 0.6);
+$torrent--tertiary--foreground: #807f7e;
+$torrent--tertiary--foreground--stopped: rgba(#807f7e, 0.5);
+$torrent--tertiary--foreground--selected: rgba(#fff, 0.9);
+$torrent--tertiary--foreground--selected--stopped: rgba(#fff, 0.5);
 
-$torrent--header--foreground: #5b595c;
-$torrent--header--background: #29262b;
-$torrent--header--border: #221f24;
+$torrent--background--hover: #f5f5f4;
+$torrent--background--selected: $blue;
 
-$torrent--background--hover: rgba(#fff, 0.05);
-$torrent--background--selected: #258de5;
+$progress-bar--background: #e6e5e3;
+$progress-bar--background--selected: rgba(#fff, 0.5);
+$progress-bar--background--selected--stopped: rgba(#fff, 0.5);
+$progress-bar--fill: #39ce83;
 
-$progress-bar--background: #28242a;
-$progress-bar--fill: #0e8761;
+$progress-bar--fill--stopped: #e6e5e3;
+$progress-bar--fill--completed: $blue;
+$progress-bar--fill--selected: #fff;
 
-$progress-bar--fill--stopped: desaturate(lighten($progress-bar--background, 20%), 5%);
-$progress-bar--fill--completed: #385f7d;
+// dropdown menu
+$dropdown--background: #2e2e2d;
+$dropdown--foreground: #bcbbb9;
+$dropdown--container--border: #d4d3d1;
+$dropdown--label: $status-filter--foreground--header;
+$dropdown--value: #807f7e;
 
 // modal windows
-
 $modal--background: #2f2c30;
 $modal--overlay: rgba(#161516, 0.9);
 $modal--header--foreground: #aaa8ab;
