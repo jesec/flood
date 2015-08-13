@@ -699,19 +699,42 @@ body {
     font-size: 1em;
     outline: none;
     padding: 12px 0 12px 45px;
+    -webkit-transition: background 0.25s, border 0.25s, color 0.25s;
+         -o-transition: background 0.25s, border 0.25s, color 0.25s;
+            transition: background 0.25s, border 0.25s, color 0.25s;
     width: 100%; }
     .filter-bar__item--search .textbox::-webkit-input-placeholder {
       color: #b5b5b3;
-      font-style: italic; }
+      font-style: italic;
+      -webkit-transition: color 0.25s;
+              transition: color 0.25s; }
     .filter-bar__item--search .textbox::-moz-placeholder {
       color: #b5b5b3;
-      font-style: italic; }
+      font-style: italic;
+      transition: color 0.25s; }
     .filter-bar__item--search .textbox:-ms-input-placeholder {
       color: #b5b5b3;
-      font-style: italic; }
+      font-style: italic;
+      transition: color 0.25s; }
     .filter-bar__item--search .textbox::placeholder {
       color: #b5b5b3;
-      font-style: italic; }
+      font-style: italic;
+      -webkit-transition: color 0.25s;
+           -o-transition: color 0.25s;
+              transition: color 0.25s; }
+  .filter-bar__item--search.is-in-use .textbox {
+    background: #39ce83;
+    border-bottom: 1px solid #33b574;
+    border-top: 1px solid #33b574;
+    color: #1e8954; }
+    .filter-bar__item--search.is-in-use .textbox::-webkit-input-placeholder {
+      color: #2cad6d; }
+    .filter-bar__item--search.is-in-use .textbox::-moz-placeholder {
+      color: #2cad6d; }
+    .filter-bar__item--search.is-in-use .textbox:-ms-input-placeholder {
+      color: #2cad6d; }
+    .filter-bar__item--search.is-in-use .textbox::placeholder {
+      color: #2cad6d; }
 
 .action-bar {
   color: #1b1a1c;

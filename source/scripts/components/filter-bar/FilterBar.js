@@ -22,8 +22,8 @@ var FilterBar = React.createClass({
     );
   },
 
-  _onSearchChange: function(event) {
-    UIActions.searchTorrents(event.target.value);
+  _onSearchChange: function(value) {
+    UIActions.searchTorrents(value);
   }
 
 });

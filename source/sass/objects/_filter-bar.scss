@@ -32,11 +32,27 @@
         font-size: 1em;
         outline: none;
         padding: 12px 0 12px 45px;
+        transition: background 0.25s, border 0.25s, color 0.25s;
         width: 100%;
 
         &::placeholder {
           color: $search-torrents--placeholder;
           font-style: italic;
+          transition: color 0.25s;
+        }
+      }
+
+      &.is-in-use {
+
+        .textbox {
+          background: $search-torrents--background--active;
+          border-bottom: 1px solid $search-torrents--border--active;
+          border-top: 1px solid $search-torrents--border--active;
+          color: $search-torrents--foreground--active;
+
+          &::placeholder {
+            color: $search-torrents--placeholder--active;
+          }
         }
       }
     }

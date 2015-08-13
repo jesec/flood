@@ -33920,8 +33920,8 @@ var FilterBar = React.createClass({displayName: "FilterBar",
     );
   },
 
-  _onSearchChange: function(event) {
-    UIActions.searchTorrents(event.target.value);
+  _onSearchChange: function(value) {
+    UIActions.searchTorrents(value);
   }
 
 });
@@ -33934,16 +33934,36 @@ module.exports = FilterBar;
 var React = require('react');
 var Icon = require('../icons/Icon');
 
+var classnames = require('classnames');
+
 var SearchBox = React.createClass({displayName: "SearchBox",
 
-  render: function() {
+  getInitialState: function() {
+    return {
+      searchValue: ''
+    };
+  },
 
+  render: function() {
+    var classSet = classnames({
+      'filter-bar__item': true,
+      'filter-bar__item--search': true,
+      'is-in-use': this.state.searchValue !== ''
+    });
     return (
-      React.createElement("div", {className: "filter-bar__item filter-bar__item--search"}, 
+      React.createElement("div", {className: classSet}, 
         React.createElement(Icon, {icon: "search"}), 
-        React.createElement("input", {className: "textbox", type: "text", placeholder: "Search Torrents", onKeyUp: this.props.searchChangeHandler})
+        React.createElement("input", {className: "textbox", type: "text", placeholder: "Search Torrents", onKeyUp: this._handleKeyUp})
       )
     );
+  },
+
+  _handleKeyUp: function(evt) {
+    var value = evt.target.value;
+    this.setState({
+      searchValue: value
+    });
+    this.props.searchChangeHandler(value);
   }
 
 });
@@ -33951,7 +33971,7 @@ var SearchBox = React.createClass({displayName: "SearchBox",
 module.exports = SearchBox;
 
 
-},{"../icons/Icon":"/Users/john/Personal/Flood/source/scripts/components/icons/Icon.js","react":"/Users/john/Personal/Flood/node_modules/react/react.js"}],"/Users/john/Personal/Flood/source/scripts/components/filter-bar/StatusFilter.js":[function(require,module,exports){
+},{"../icons/Icon":"/Users/john/Personal/Flood/source/scripts/components/icons/Icon.js","classnames":"/Users/john/Personal/Flood/node_modules/classnames/index.js","react":"/Users/john/Personal/Flood/node_modules/react/react.js"}],"/Users/john/Personal/Flood/source/scripts/components/filter-bar/StatusFilter.js":[function(require,module,exports){
 var React = require('react');
 var UIActions = require('../../actions/UIActions');
 var TorrentStore = require('../../stores/TorrentStore');
