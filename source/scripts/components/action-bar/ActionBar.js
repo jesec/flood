@@ -1,8 +1,10 @@
 var React = require('react');
-var SortDropdown = require('./SortDropdown');
+
 var Action = require('./Action');
-var UIStore = require('../../stores/UIStore');
+var AddTorrent = require('./AddTorrent');
+var SortDropdown = require('./SortDropdown');
 var TorrentActions = require('../../actions/TorrentActions');
+var UIStore = require('../../stores/UIStore');
 var UIActions = require('../../actions/UIActions');
 
 var FilterBar = React.createClass({
@@ -26,19 +28,19 @@ var FilterBar = React.createClass({
 
     return (
       <nav className="action-bar">
-        <ul className="actions action-bar__item action-bar__item--dropdown dropdown__wrapper">
-          <li>
-            <SortDropdown />
-          </li>
-        </ul>
-        <ul className="actions action-bar__item action-bar__item--torrent-status">
-          <Action label="Start Torrent" slug="start-torrent" icon="start" clickHandler={this._start} />
-          <Action label="Stop Torrent" slug="stop-torrent" icon="stop" clickHandler={this._stop} />
-          <Action label="Pause Torrent" slug="pause-torrent" icon="pause" clickHandler={this._pause} />
-        </ul>
-        <ul className="actions action-bar__item">
-          <Action label="Add Torrent" slug="add-torrent" icon="add" clickHandler={this._onAddTorrent} />
-        </ul>
+        <div className="actions action-bar__item action-bar__item--sort-torrents">
+          <SortDropdown />
+        </div>
+        <div className="actions action-bar__item action-bar__item--torrent-operations">
+          <div className="action-bar__group">
+            <Action label="Start Torrent" slug="start-torrent" icon="start" clickHandler={this._start} />
+            <Action label="Stop Torrent" slug="stop-torrent" icon="stop" clickHandler={this._stop} />
+            <Action label="Pause Torrent" slug="pause-torrent" icon="pause" clickHandler={this._pause} />
+          </div>
+          <div className="action-bar__group">
+            <AddTorrent />
+          </div>
+        </div>
       </nav>
     );
   },

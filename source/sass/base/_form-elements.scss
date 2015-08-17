@@ -8,7 +8,8 @@
 
 .textbox {
   background: $textbox--background;
-  border: none;
+  border-radius: 5px;
+  border: 1px solid $textbox--border;
   color: $textbox--foreground;
   display: block;
   padding: 15px 25px;

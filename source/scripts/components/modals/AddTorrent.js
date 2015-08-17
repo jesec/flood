@@ -34,7 +34,7 @@ var Modal = React.createClass({
               type="text" />
           </div>
           <div className="form__row">
-            <button className="button" onClick={this._onAdd}>Add Torrent</button>
+            <button className="button" onClick={this._onAddTorrent}>Add Torrent</button>
           </div>
         </div>
       </aside>

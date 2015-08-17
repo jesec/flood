@@ -33571,7 +33571,7 @@ var Action = React.createClass({displayName: "Action",
     var classString = 'action action--' + this.props.slug;
 
     return (
-      React.createElement("li", {className: classString, onClick: this.props.clickHandler}, 
+      React.createElement("div", {className: classString, onClick: this.props.clickHandler}, 
         React.createElement(Icon, {icon: this.props.icon}), 
         React.createElement("span", {className: "action__label"}, this.props.label)
       )
@@ -33584,10 +33584,12 @@ module.exports = Action;
 
 },{"../icons/Icon":"/Users/john/Personal/Flood/source/scripts/components/icons/Icon.js","react":"/Users/john/Personal/Flood/node_modules/react/react.js"}],"/Users/john/Personal/Flood/source/scripts/components/action-bar/ActionBar.js":[function(require,module,exports){
 var React = require('react');
-var SortDropdown = require('./SortDropdown');
+
 var Action = require('./Action');
-var UIStore = require('../../stores/UIStore');
+var AddTorrent = require('./AddTorrent');
+var SortDropdown = require('./SortDropdown');
 var TorrentActions = require('../../actions/TorrentActions');
+var UIStore = require('../../stores/UIStore');
 var UIActions = require('../../actions/UIActions');
 
 var FilterBar = React.createClass({displayName: "FilterBar",
@@ -33611,18 +33613,18 @@ var FilterBar = React.createClass({displayName: "FilterBar",
 
     return (
       React.createElement("nav", {className: "action-bar"}, 
-        React.createElement("ul", {className: "actions action-bar__item action-bar__item--dropdown dropdown__wrapper"}, 
-          React.createElement("li", null, 
-            React.createElement(SortDropdown, null)
+        React.createElement("div", {className: "actions action-bar__item action-bar__item--sort-torrents"}, 
+          React.createElement(SortDropdown, null)
+        ), 
+        React.createElement("div", {className: "actions action-bar__item action-bar__item--torrent-operations"}, 
+          React.createElement("div", {className: "action-bar__group"}, 
+            React.createElement(Action, {label: "Start Torrent", slug: "start-torrent", icon: "start", clickHandler: this._start}), 
+            React.createElement(Action, {label: "Stop Torrent", slug: "stop-torrent", icon: "stop", clickHandler: this._stop}), 
+            React.createElement(Action, {label: "Pause Torrent", slug: "pause-torrent", icon: "pause", clickHandler: this._pause})
+          ), 
+          React.createElement("div", {className: "action-bar__group"}, 
+            React.createElement(AddTorrent, null)
           )
-        ), 
-        React.createElement("ul", {className: "actions action-bar__item action-bar__item--torrent-status"}, 
-          React.createElement(Action, {label: "Start Torrent", slug: "start-torrent", icon: "start", clickHandler: this._start}), 
-          React.createElement(Action, {label: "Stop Torrent", slug: "stop-torrent", icon: "stop", clickHandler: this._stop}), 
-          React.createElement(Action, {label: "Pause Torrent", slug: "pause-torrent", icon: "pause", clickHandler: this._pause})
-        ), 
-        React.createElement("ul", {className: "actions action-bar__item"}, 
-          React.createElement(Action, {label: "Add Torrent", slug: "add-torrent", icon: "add", clickHandler: this._onAddTorrent})
         )
       )
     );
@@ -33656,7 +33658,121 @@ var FilterBar = React.createClass({displayName: "FilterBar",
 module.exports = FilterBar;
 
 
-},{"../../actions/TorrentActions":"/Users/john/Personal/Flood/source/scripts/actions/TorrentActions.js","../../actions/UIActions":"/Users/john/Personal/Flood/source/scripts/actions/UIActions.js","../../stores/UIStore":"/Users/john/Personal/Flood/source/scripts/stores/UIStore.js","./Action":"/Users/john/Personal/Flood/source/scripts/components/action-bar/Action.js","./SortDropdown":"/Users/john/Personal/Flood/source/scripts/components/action-bar/SortDropdown.js","react":"/Users/john/Personal/Flood/node_modules/react/react.js"}],"/Users/john/Personal/Flood/source/scripts/components/action-bar/SortDropdown.js":[function(require,module,exports){
+},{"../../actions/TorrentActions":"/Users/john/Personal/Flood/source/scripts/actions/TorrentActions.js","../../actions/UIActions":"/Users/john/Personal/Flood/source/scripts/actions/UIActions.js","../../stores/UIStore":"/Users/john/Personal/Flood/source/scripts/stores/UIStore.js","./Action":"/Users/john/Personal/Flood/source/scripts/components/action-bar/Action.js","./AddTorrent":"/Users/john/Personal/Flood/source/scripts/components/action-bar/AddTorrent.js","./SortDropdown":"/Users/john/Personal/Flood/source/scripts/components/action-bar/SortDropdown.js","react":"/Users/john/Personal/Flood/node_modules/react/react.js"}],"/Users/john/Personal/Flood/source/scripts/components/action-bar/AddTorrent.js":[function(require,module,exports){
+var React = require('react/addons');
+var TransitionGroup = React.addons.CSSTransitionGroup;
+var classnames = require('classnames');
+
+var Action = require('./Action');
+
+var SortDropdown = React.createClass({displayName: "SortDropdown",
+  componentDidMount: function() {
+    window.addEventListener('click', this._handleExternalClick);
+  },
+
+  componentWillUnmount: function() {
+    window.removeEventListener('click', this._handleExternalClick);
+  },
+
+  getInitialState: function() {
+    return {
+      isExpanded: false
+    }
+  },
+
+  getChildren: function() {
+    return (
+      React.createElement("div", {className: "dropdown__content", onClick: this._handleMenuWrapperClick}, 
+        React.createElement("div", {className: "dropdown__content__header"}, "Add Torrent"), 
+        React.createElement("div", {className: "dropdown__content__container"}, 
+          React.createElement("div", {className: "form__row"}, 
+            React.createElement("input", {className: "textbox", 
+              onChange: this._handleUrlChange, 
+              placeholder: "Torrent URL", 
+              value: this.state.url, 
+              type: "text"})
+          ), 
+          React.createElement("div", {className: "form__row"}, 
+            React.createElement("input", {className: "textbox", 
+              onChange: this._handleDestinationChange, 
+              placeholder: "Destination", 
+              value: this.state.destination, 
+              type: "text"})
+          ), 
+          React.createElement("div", {className: "form__row"}, 
+            React.createElement("button", {className: "button", onClick: this._handleAddTorrent}, "Add Torrent")
+          )
+        )
+      )
+    );
+  },
+
+  render: function() {
+    var classSet = classnames({
+      'dropdown': true,
+      'dropdown--align-right': true,
+      'is-expanded': this.state.isExpanded
+    });
+    var children = null;
+
+    if (this.state.isExpanded) {
+      children = this.getChildren();
+    }
+
+    return (
+      React.createElement("div", {className: classSet}, 
+        React.createElement(Action, {label: "Add Torrent", slug: "add-torrent", icon: "add", clickHandler: this._handleButtonClick}), 
+        React.createElement(TransitionGroup, {transitionName: "dropdown__content"}, 
+          children
+        )
+      )
+    );
+  },
+
+  handleDestinationChange: function(event) {
+    this.setState({
+      destination: event.target.value
+    })
+  },
+
+  _handleUrlChange: function(event) {
+    this.setState({
+      url: event.target.value
+    })
+  },
+
+  _handleAddTorrent: function() {
+    TorrentActions.add({
+      method: 'url',
+      url: this.state.url,
+      destination: this.state.destination
+    });
+  },
+
+  _handleButtonClick: function(evt) {
+    evt.stopPropagation();
+    this.setState({
+      isExpanded: !this.state.isExpanded
+    });
+  },
+
+  _handleExternalClick: function() {
+    if (this.state.isExpanded) {
+      this.setState({
+        isExpanded: false
+      });
+    }
+  },
+
+  _handleMenuWrapperClick: function(evt) {
+    evt.stopPropagation();
+  }
+});
+
+module.exports = SortDropdown;
+
+
+},{"./Action":"/Users/john/Personal/Flood/source/scripts/components/action-bar/Action.js","classnames":"/Users/john/Personal/Flood/node_modules/classnames/index.js","react/addons":"/Users/john/Personal/Flood/node_modules/react/addons.js"}],"/Users/john/Personal/Flood/source/scripts/components/action-bar/SortDropdown.js":[function(require,module,exports){
 var React = require('react/addons');
 var TransitionGroup = React.addons.CSSTransitionGroup;
 var classnames = require('classnames');
@@ -33725,14 +33841,15 @@ var SortDropdown = React.createClass({displayName: "SortDropdown",
 
     var menuItems = sortableProperties.map(function(property, index) {
       return (
-        React.createElement("li", {key: index, onClick: this._handleMenuClick.bind(this, property)}, 
+        React.createElement("li", {className: "dropdown__content__item", key: index, onClick: this._handleMenuClick.bind(this, property)}, 
           property.displayName
         )
       );
     }, this);
 
     return (
-      React.createElement("ul", {className: "dropdown__menu", onClick: this._handleMenuWrapperClick}, 
+      React.createElement("ul", {className: "dropdown__content", onClick: this._handleMenuWrapperClick}, 
+        React.createElement("li", {className: "dropdown__content__header"}, "Sort Torrents"), 
         menuItems
       )
     );
@@ -33752,12 +33869,12 @@ var SortDropdown = React.createClass({displayName: "SortDropdown",
     }
 
     return (
-      React.createElement("li", {className: classSet}, 
+      React.createElement("div", {className: classSet}, 
         React.createElement("a", {className: "dropdown__button", onClick: this._handleButtonClick}, 
           React.createElement("label", {className: "dropdown__label"}, "Sort By"), 
           React.createElement("span", {className: "dropdown__value"}, this.state.sortBy.displayName)
         ), 
-        React.createElement(TransitionGroup, {transitionName: "dropdown__menu"}, 
+        React.createElement(TransitionGroup, {transitionName: "dropdown__content"}, 
           menu
         )
       )
@@ -34157,7 +34274,7 @@ var Modal = React.createClass({displayName: "Modal",
               type: "text"})
           ), 
           React.createElement("div", {className: "form__row"}, 
-            React.createElement("button", {className: "button", onClick: this._onAdd}, "Add Torrent")
+            React.createElement("button", {className: "button", onClick: this._onAddTorrent}, "Add Torrent")
           )
         )
       )

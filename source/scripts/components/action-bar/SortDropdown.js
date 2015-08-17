@@ -66,14 +66,15 @@ var SortDropdown = React.createClass({
 
     var menuItems = sortableProperties.map(function(property, index) {
       return (
-        <li key={index} onClick={this._handleMenuClick.bind(this, property)}>
+        <li className="dropdown__content__item" key={index} onClick={this._handleMenuClick.bind(this, property)}>
           {property.displayName}
         </li>
       );
     }, this);
 
     return (
-      <ul className="dropdown__menu" onClick={this._handleMenuWrapperClick}>
+      <ul className="dropdown__content" onClick={this._handleMenuWrapperClick}>
+        <li className="dropdown__content__header">Sort Torrents</li>
         {menuItems}
       </ul>
     );
@@ -93,15 +94,15 @@ var SortDropdown = React.createClass({
     }
 
     return (
-      <li className={classSet}>
+      <div className={classSet}>
         <a className="dropdown__button" onClick={this._handleButtonClick}>
           <label className="dropdown__label">Sort By</label>
           <span className="dropdown__value">{this.state.sortBy.displayName}</span>
         </a>
-        <TransitionGroup transitionName="dropdown__menu">
+        <TransitionGroup transitionName="dropdown__content">
           {menu}
         </TransitionGroup>
-      </li>
+      </div>
     );
   },
 
