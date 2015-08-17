@@ -1,12 +1,13 @@
 $blue: #258de5;
 
-$background: #e6e5e3;
+$background: #e3e5e5;
 $foreground: #686469;
 
 // form elements
-$textbox--background: #dfdedd;
+$textbox--background: rgba(#232424, 0.4);
 $textbox--foreground: #68636a;
-$textbox--placeholder: #b5b5b3;
+$textbox--placeholder: rgba(#979899, 0.3);
+$textbox--border: rgba(#202121, 0.85);
 
 $button--border: rgba(#aaa8ab, 0.3);
 $button--border--hover: #aaa8ab;
@@ -14,14 +15,15 @@ $botton--foreground: #aaa8ab;
 
 // action bar
 $action-bar--foreground: #1b1a1c;
+$action-bar--group--border: rgba(#7a8080, 0.15);
 
-$action--foreground: #686867;
+$action--foreground: #909799;
 $action--foreground--hover: $blue;
-$action--background--hover: #dfdedd;
-$action--border--hover: #d4d3d1;
+$action--background--hover: rgba(#333e4a, 0.05);
+$action--border--hover: rgba(#333e4a, 0.15);
 
 // filter bar
-$filter-bar--foreground: #686867;
+$filter-bar--foreground: #626466;
 $filter-bar--border: #161316;
 
 $client-stats--primary: #333332;
@@ -32,18 +34,19 @@ $client-stats--limits--foreground: #999997;
 $client-stats--limits--foreground--hover: darken($client-stats--limits--foreground, 20%);
 $client-stats--limist--icon--hover: $blue;
 
-$search-torrents--background: #dfdedd;
+$search-torrents--background: #d9ddde;
 $search-torrents--background--active: #39ce83;
-$search-torrents--border: #d4d3d1;
+$search-torrents--border: rgba(#babfc2, 0.5);
 $search-torrents--border--active: #33b574;
 $search-torrents--foreground: #625e66;
 $search-torrents--foreground--active: #1e8954;
-$search-torrents--placeholder: #b5b5b3;
+$search-torrents--placeholder: rgba(#909799, 0.7);
 $search-torrents--placeholder--active: #2cad6d;
 
-$search-torrents--icon--foreground: #333332;
+$search-torrents--icon--foreground: #8a9ca6;
+$search-torrents--icon--foreground--active: #2c9e65;
 
-$status-filter--foreground: #686867;
+$status-filter--foreground: #626466;
 $status-filter--foreground--header: #b5b5b3;
 $status-filter--foreground--active: $blue;
 $status-filter--foreground--hover: darken($status-filter--foreground, 15%);
@@ -65,24 +68,29 @@ $torrent--tertiary--foreground--stopped: rgba(#807f7e, 0.5);
 $torrent--tertiary--foreground--selected: rgba(#fff, 0.9);
 $torrent--tertiary--foreground--selected--stopped: rgba(#fff, 0.5);
 
-$torrent--background--hover: #f5f5f4;
+$torrent--background--hover: #f4f5f5;
 $torrent--background--selected: $blue;
 
-$progress-bar--background: #e6e5e3;
+$progress-bar--background: #e3e5e5;
 $progress-bar--background--selected: rgba(#fff, 0.5);
 $progress-bar--background--selected--stopped: rgba(#fff, 0.5);
 $progress-bar--fill: #39ce83;
 
-$progress-bar--fill--stopped: #e6e5e3;
+$progress-bar--fill--stopped: #e3e5e5;
 $progress-bar--fill--completed: $blue;
 $progress-bar--fill--selected: #fff;
 
 // dropdown menu
-$dropdown--background: #2e2e2d;
-$dropdown--foreground: #bcbbb9;
+$dropdown--background: #2c2d2e;
+$dropdown--foreground: #979899;
 $dropdown--container--border: #d4d3d1;
 $dropdown--label: $status-filter--foreground--header;
 $dropdown--value: #807f7e;
+$dropdown--header--background: #222324;
+$dropdown--header--foreground: #e6e9eb;
+$dropdown--header--border: #383b3f;
+$dropdown--item--background--hover: #3d3f42;
+$dropdown--item--foreground--hover: #bdbebf;
 
 // modal windows
 $modal--background: #2f2c30;
