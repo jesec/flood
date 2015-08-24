@@ -94,11 +94,11 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
 
-    case TorrentConstants.TORRENT_STOP:
+    case TorrentConstants.TORRENT_STOP_SUCCESS:
       getTorrentList();
       break;
 
-    case TorrentConstants.TORRENT_START:
+    case TorrentConstants.TORRENT_START_SUCCESS:
       getTorrentList();
       break;
 
