@@ -25,15 +25,15 @@ router.get('/list', function(req, res, next) {
   });
 });
 
-router.get('/:hash/stop', function(req, res, next) {
-  var hash = req.params.hash;
+router.post('/stop', function(req, res, next) {
+  var hash = req.body.hash;
   torrents.stopTorrent(hash, function(error, results) {
     res.json(results);
   })
 });
 
-router.get('/:hash/start', function(req, res, next) {
-  var hash = req.params.hash;
+router.post('/start', function(req, res, next) {
+  var hash = req.body.hash;
   torrents.startTorrent(hash, function(error, results) {
     res.json(results);
   })

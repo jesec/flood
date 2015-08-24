@@ -7,7 +7,6 @@ function torrents() {
 };
 
 torrents.prototype.add = function(data, callback) {
-  // console.log(data);
   client.add(data, callback);
 };
 

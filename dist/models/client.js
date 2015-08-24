@@ -83,10 +83,10 @@ client.prototype.getTorrentList = function(callback) {
 };
 
 client.prototype.stopTorrent = function(hash, callback) {
-  hash = hash.split(',');
-
   if (!util.isArray(hash)) {
     hash = [hash];
+  } else {
+    hash = String(hash).split(',');
   }
 
   for (i = 0, len = hash.length; i < len; i++) {

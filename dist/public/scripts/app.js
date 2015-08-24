@@ -33360,49 +33360,33 @@ module.exports = require('./lib/React');
 },{}],"/Users/john/Personal/Flood/source/scripts/actions/TorrentActions.js":[function(require,module,exports){
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TorrentConstants = require('../constants/TorrentConstants');
+
 var $ = require('jquery');
 
-var performAction = function(action, hash, success, error) {
-  $.ajax({
-    url: '/torrents/' + hash + '/' + action,
-    dataType: 'json',
-
-    success: function(data) {
-      success(data);
-    }.bind(this),
-
-    error: function(xhr, status, err) {
-      console.error(torrentsData, status, err.toString());
-    }.bind(this)
-  });
-
-};
-
-var add = function(data) {
-  $.ajax({
-    data: data,
-    dataType: 'json',
+var clientRequest = function(action, data) {
+  return $.ajax({
+    data: JSON.stringify(data),
+    contentType: 'application/json; charset=utf-8',
     type: 'POST',
-    url: '/torrents/add',
-
-    success: function(data) {
-      success(data);
-    }.bind(this),
-
-    error: function(xhr, status, err) {
-      console.error(torrentsData, status, err.toString());
-    }.bind(this)
+    url: action
   });
 };
 
 var TorrentActions = {
   add: function(data) {
-    add(data, function(data) {
-      AppDispatcher.dispatch({
-        actionType: TorrentConstants.TORRENT_ADD_URL,
-        data: data
+    clientRequest('/torrents/add', data)
+      .done(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_ADD_SUCCESS,
+          data: response
+        });
+      })
+      .fail(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_ADD_FAIL,
+          data: response
+        });
       });
-    });
   },
 
   click: function(hash) {
@@ -33412,20 +33396,36 @@ var TorrentActions = {
     });
   },
 
-  start: function(hash) {
-    performAction('start', hash, function(data) {
-      AppDispatcher.dispatch({
-        actionType: TorrentConstants.TORRENT_START
+  start: function(data) {
+    clientRequest('/torrents/start', data)
+      .done(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_START_SUCCESS,
+          data: response
+        });
+      })
+      .fail(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_START_FAIL,
+          data: response
+        });
       });
-    });
   },
 
-  stop: function(hash) {
-    performAction('stop', hash, function(data) {
-      AppDispatcher.dispatch({
-        actionType: TorrentConstants.TORRENT_STOP
+  stop: function(data) {
+    clientRequest('/torrents/stop', data)
+      .done(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_STOP_SUCCESS,
+          data: response
+        });
+      })
+      .fail(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_STOP_FAIL,
+          data: response
+        });
       });
-    });
   }
 };
 
@@ -33438,56 +33438,53 @@ var TorrentConstants = require('../constants/TorrentConstants');
 var UIConstants = require('../constants/UIConstants');
 
 var UIActions = {
+  dismissModals: function() {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.MODALS_DISMISS
+    });
+  },
 
-    dismissModals: function() {
+  filterTorrentList: function(status) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.FILTER_STATUS_CHANGE,
+      status: status
+    });
+  },
 
-        AppDispatcher.dispatch({
-            actionType: UIConstants.MODALS_DISMISS
-        });
-    },
+  scrollTorrentList: function(torrentCount) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TORRENT_LIST_SCROLL,
+      torrentCount: torrentCount
+    });
+  },
 
-    filterTorrentList: function(status) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.FILTER_STATUS_CHANGE,
-            status: status
-        });
-    },
+  searchTorrents: function(query) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.FILTER_SEARCH_CHANGE,
+      query: query
+    });
+  },
 
-    scrollTorrentList: function(torrentCount) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.TORRENT_LIST_SCROLL,
-            torrentCount: torrentCount
-        });
-    },
+  setViewportHeight: function(height) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TORRENT_LIST_VIEWPORT_RESIZE,
+      viewportHeight: height
+    });
+  },
 
-    searchTorrents: function(query) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.FILTER_SEARCH_CHANGE,
-            query: query
-        });
-    },
+  sortTorrents: function(property, direction) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.FILTER_SORT_CHANGE,
+      property: property,
+      direction: direction
+    });
+  },
 
-    setViewportHeight: function(height) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.TORRENT_LIST_VIEWPORT_RESIZE,
-            viewportHeight: height
-        });
-    },
-
-    sortTorrents: function(property, direction) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.FILTER_SORT_CHANGE,
-            property: property,
-            direction: direction
-        });
-    },
-
-    toggleAddTorrentModal: function() {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.TORRENT_ADD_MODAL_TOGGLE
-        });
-    }
-
+  toggleAddTorrentModal: function() {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TORRENT_ADD_MODAL_TOGGLE
+    });
+  }
 }
 
 module.exports = UIActions;
@@ -33639,7 +33636,9 @@ var FilterBar = React.createClass({displayName: "FilterBar",
   },
 
   _stop: function() {
-    TorrentActions.stop(this.state.selectedTorrents);
+    TorrentActions.stop({
+      hash: this.state.selectedTorrents
+    });
   },
 
   _onUIStoreChange: function() {
@@ -33664,6 +33663,7 @@ var TransitionGroup = React.addons.CSSTransitionGroup;
 var classnames = require('classnames');
 
 var Action = require('./Action');
+var TorrentActions = require('../../actions/TorrentActions');
 
 var SortDropdown = React.createClass({displayName: "SortDropdown",
   componentDidMount: function() {
@@ -33729,7 +33729,7 @@ var SortDropdown = React.createClass({displayName: "SortDropdown",
     );
   },
 
-  handleDestinationChange: function(event) {
+  _handleDestinationChange: function(event) {
     this.setState({
       destination: event.target.value
     })
@@ -33743,7 +33743,6 @@ var SortDropdown = React.createClass({displayName: "SortDropdown",
 
   _handleAddTorrent: function() {
     TorrentActions.add({
-      method: 'url',
       url: this.state.url,
       destination: this.state.destination
     });
@@ -33772,7 +33771,7 @@ var SortDropdown = React.createClass({displayName: "SortDropdown",
 module.exports = SortDropdown;
 
 
-},{"./Action":"/Users/john/Personal/Flood/source/scripts/components/action-bar/Action.js","classnames":"/Users/john/Personal/Flood/node_modules/classnames/index.js","react/addons":"/Users/john/Personal/Flood/node_modules/react/addons.js"}],"/Users/john/Personal/Flood/source/scripts/components/action-bar/SortDropdown.js":[function(require,module,exports){
+},{"../../actions/TorrentActions":"/Users/john/Personal/Flood/source/scripts/actions/TorrentActions.js","./Action":"/Users/john/Personal/Flood/source/scripts/components/action-bar/Action.js","classnames":"/Users/john/Personal/Flood/node_modules/classnames/index.js","react/addons":"/Users/john/Personal/Flood/node_modules/react/addons.js"}],"/Users/john/Personal/Flood/source/scripts/components/action-bar/SortDropdown.js":[function(require,module,exports){
 var React = require('react/addons');
 var TransitionGroup = React.addons.CSSTransitionGroup;
 var classnames = require('classnames');
@@ -34750,10 +34749,13 @@ module.exports = keyMirror({
 var keyMirror = require('keymirror');
 
 module.exports = keyMirror({
-  TORRENT_ADD_URL: 'torrent--add--url',
+  TORRENT_ADD_SUCCESS: 'torrent__add--success',
+  TORRENT_ADD_FAIL: 'torrent__add--fail',
   TORRENT_CLICK: 'torrent--click',
-  TORRENT_STOP: 'torrent--stop',
-  TORRENT_START: 'torrent--start',
+  TORRENT_STOP_SUCCESS: 'torrent--stop',
+  TORRENT_STOP_FAIL: 'torrent--stop',
+  TORRENT_START_SUCCESS: 'torrent__start--success',
+  TORRENT_START_FAIL: 'torrent__start--fail',
   TORRENT_LIST_CHANGE: 'torrent-list--change',
   TORRENT_SELECTION_CHANGE: 'torrent--select--change'
 });
@@ -35010,11 +35012,11 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
 
   switch(action.actionType) {
 
-    case TorrentConstants.TORRENT_STOP:
+    case TorrentConstants.TORRENT_STOP_SUCCESS:
       getTorrentList();
       break;
 
-    case TorrentConstants.TORRENT_START:
+    case TorrentConstants.TORRENT_START_SUCCESS:
       getTorrentList();
       break;
 
