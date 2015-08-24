@@ -54,7 +54,9 @@ var FilterBar = React.createClass({
   },
 
   _stop: function() {
-    TorrentActions.stop(this.state.selectedTorrents);
+    TorrentActions.stop({
+      hash: this.state.selectedTorrents
+    });
   },
 
   _onUIStoreChange: function() {

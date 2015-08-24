@@ -3,6 +3,7 @@ var TransitionGroup = React.addons.CSSTransitionGroup;
 var classnames = require('classnames');
 
 var Action = require('./Action');
+var TorrentActions = require('../../actions/TorrentActions');
 
 var SortDropdown = React.createClass({
   componentDidMount: function() {
@@ -68,7 +69,7 @@ var SortDropdown = React.createClass({
     );
   },
 
-  handleDestinationChange: function(event) {
+  _handleDestinationChange: function(event) {
     this.setState({
       destination: event.target.value
     })
@@ -82,7 +83,6 @@ var SortDropdown = React.createClass({
 
   _handleAddTorrent: function() {
     TorrentActions.add({
-      method: 'url',
       url: this.state.url,
       destination: this.state.destination
     });
