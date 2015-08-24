@@ -1,48 +1,32 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var TorrentConstants = require('../constants/TorrentConstants');
+
 var $ = require('jquery');
 
-var performAction = function(action, hash, success, error) {
-  $.ajax({
-    url: '/torrents/' + hash + '/' + action,
-    dataType: 'json',
-
-    success: function(data) {
-      success(data);
-    }.bind(this),
-
-    error: function(xhr, status, err) {
-      console.error(torrentsData, status, err.toString());
-    }.bind(this)
-  });
-
-};
-
-var add = function(data) {
-  $.ajax({
-    data: data,
-    dataType: 'json',
+var clientRequest = function(action, data) {
+  return $.ajax({
+    data: JSON.stringify(data),
+    contentType: 'application/json; charset=utf-8',
     type: 'POST',
-    url: '/torrents/add',
-
-    success: function(data) {
-      success(data);
-    }.bind(this),
-
-    error: function(xhr, status, err) {
-      console.error(torrentsData, status, err.toString());
-    }.bind(this)
+    url: action
   });
 };
 
 var TorrentActions = {
   add: function(data) {
-    add(data, function(data) {
-      AppDispatcher.dispatch({
-        actionType: TorrentConstants.TORRENT_ADD_URL,
-        data: data
+    clientRequest('/torrents/add', data)
+      .done(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_ADD_SUCCESS,
+          data: response
+        });
+      })
+      .fail(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_ADD_FAIL,
+          data: response
+        });
       });
-    });
   },
 
   click: function(hash) {
@@ -52,20 +36,36 @@ var TorrentActions = {
     });
   },
 
-  start: function(hash) {
-    performAction('start', hash, function(data) {
-      AppDispatcher.dispatch({
-        actionType: TorrentConstants.TORRENT_START
+  start: function(data) {
+    clientRequest('/torrents/start', data)
+      .done(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_START_SUCCESS,
+          data: response
+        });
+      })
+      .fail(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_START_FAIL,
+          data: response
+        });
       });
-    });
   },
 
-  stop: function(hash) {
-    performAction('stop', hash, function(data) {
-      AppDispatcher.dispatch({
-        actionType: TorrentConstants.TORRENT_STOP
+  stop: function(data) {
+    clientRequest('/torrents/stop', data)
+      .done(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_STOP_SUCCESS,
+          data: response
+        });
+      })
+      .fail(function(response) {
+        AppDispatcher.dispatch({
+          actionType: TorrentConstants.TORRENT_STOP_FAIL,
+          data: response
+        });
       });
-    });
   }
 };
 

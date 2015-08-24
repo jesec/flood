@@ -3,56 +3,53 @@ var TorrentConstants = require('../constants/TorrentConstants');
 var UIConstants = require('../constants/UIConstants');
 
 var UIActions = {
+  dismissModals: function() {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.MODALS_DISMISS
+    });
+  },
 
-    dismissModals: function() {
+  filterTorrentList: function(status) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.FILTER_STATUS_CHANGE,
+      status: status
+    });
+  },
 
-        AppDispatcher.dispatch({
-            actionType: UIConstants.MODALS_DISMISS
-        });
-    },
+  scrollTorrentList: function(torrentCount) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TORRENT_LIST_SCROLL,
+      torrentCount: torrentCount
+    });
+  },
 
-    filterTorrentList: function(status) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.FILTER_STATUS_CHANGE,
-            status: status
-        });
-    },
+  searchTorrents: function(query) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.FILTER_SEARCH_CHANGE,
+      query: query
+    });
+  },
 
-    scrollTorrentList: function(torrentCount) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.TORRENT_LIST_SCROLL,
-            torrentCount: torrentCount
-        });
-    },
+  setViewportHeight: function(height) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TORRENT_LIST_VIEWPORT_RESIZE,
+      viewportHeight: height
+    });
+  },
 
-    searchTorrents: function(query) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.FILTER_SEARCH_CHANGE,
-            query: query
-        });
-    },
+  sortTorrents: function(property, direction) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.FILTER_SORT_CHANGE,
+      property: property,
+      direction: direction
+    });
+  },
 
-    setViewportHeight: function(height) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.TORRENT_LIST_VIEWPORT_RESIZE,
-            viewportHeight: height
-        });
-    },
-
-    sortTorrents: function(property, direction) {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.FILTER_SORT_CHANGE,
-            property: property,
-            direction: direction
-        });
-    },
-
-    toggleAddTorrentModal: function() {
-        AppDispatcher.dispatch({
-            actionType: UIConstants.TORRENT_ADD_MODAL_TOGGLE
-        });
-    }
-
+  toggleAddTorrentModal: function() {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TORRENT_ADD_MODAL_TOGGLE
+    });
+  }
 }
 
 module.exports = UIActions;
