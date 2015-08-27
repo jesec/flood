@@ -4,72 +4,110 @@ var ClientConstants = require('../constants/ClientConstants');
 var $ = require('jquery');
 var assign = require('object-assign');
 
+var _historyLength = 20;
 var _stats = {};
+var _uploadSpeedHistory = [];
+var _downloadSpeedHistory = [];
 
 var ClientStore = assign({}, EventEmitter.prototype, {
+  getStats: function() {
+    return _stats;
+  },
 
-    getStats: function() {
-        return _stats;
-    },
+  emitChange: function() {
+    this.emit(ClientConstants.CLIENT_STATS_CHANGE);
+  },
 
-    emitChange: function() {
-        this.emit(ClientConstants.CLIENT_STATS_CHANGE);
-    },
+  addChangeListener: function(callback) {
+    this.on(ClientConstants.CLIENT_STATS_CHANGE, callback);
+  },
 
-    addChangeListener: function(callback) {
-        this.on(ClientConstants.CLIENT_STATS_CHANGE, callback);
-    },
-
-    removeChangeListener: function(callback) {
-        this.removeListener(ClientConstants.CLIENT_STATS_CHANGE, callback);
-    }
-
+  removeChangeListener: function(callback) {
+    this.removeListener(ClientConstants.CLIENT_STATS_CHANGE, callback);
+  }
 });
 
 var dispatcherIndex = AppDispatcher.register(function(action) {
+  var text;
 
-    var text;
+  switch(action.actionType) {
 
-    switch(action.actionType) {
+    case ClientConstants.ADD_TORRENT:
+      getClientStats();
+      break;
 
-        case ClientConstants.ADD_TORRENT:
-            getClientStats();
-            break;
-
-        case ClientConstants.REMOVE_TORRENT:
-            getClientStats();
-            break;
-    }
+    case ClientConstants.REMOVE_TORRENT:
+      getClientStats();
+      break;
+  }
 });
 
+var addHistory = function(uploadSpeed, downloadSpeed) {
+  var index = 0;
+
+  console.log(uploadSpeed, downloadSpeed);
+
+  while (index < _historyLength) {
+    if (index < _historyLength - 1) {
+      if (_uploadSpeedHistory[index] != null && _uploadSpeedHistory[index].x != null) {
+        _uploadSpeedHistory[index].y = _uploadSpeedHistory[index + 1].y;
+        _downloadSpeedHistory[index].y = _downloadSpeedHistory[index + 1].y;
+      } else {
+        _uploadSpeedHistory[index] = {
+          x: index,
+          y: 0
+        }
+        _downloadSpeedHistory[index] = {
+          x: index,
+          y: 0
+        }
+      }
+    } else {
+      _uploadSpeedHistory[index] = {
+        x: index,
+        y: uploadSpeed
+      }
+      _downloadSpeedHistory[index] = {
+        x: index,
+        y: downloadSpeed
+      }
+    }
+
+    index++;
+  }
+}
+
 var getClientStats = function(callback) {
+  $.ajax({
+    url: '/client/stats',
+    dataType: 'json',
 
+    success: function(data) {
+      addHistory(data.uploadRate, data.downloadRate);
 
-    $.ajax({
-        url: '/client/stats',
-        dataType: 'json',
+      _stats = {
+        currentSpeed: {
+          upload: data.uploadRate,
+          download: data.downloadRate
+        },
+        historicalSpeed: {
+          upload: _uploadSpeedHistory,
+          download: _downloadSpeedHistory
+        },
+        transferred: {
+          upload: data.uploadTotal,
+          download: data.downloadTotal
+        }
+      };
 
-        success: function(data) {
+      ClientStore.emitChange();
 
-            _stats = {
-                speed: {
-                    upload: data.uploadRate,
-                    download: data.downloadRate
-                },
-                transferred: {
-                    upload: data.uploadTotal,
-                    download: data.downloadTotal
-                }
-            };
+    }.bind(this),
 
-            ClientStore.emitChange();
-
-        }.bind(this),
-
-        error: function(xhr, status, err) {
-            console.error('/client/stats', status, err.toString());
-        }.bind(this)
-    });
+    error: function(xhr, status, err) {
+      console.error('/client/stats', status, err.toString());
+    }.bind(this)
+  });
 
 };
 

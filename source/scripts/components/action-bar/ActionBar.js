@@ -50,7 +50,9 @@ var FilterBar = React.createClass({
   },
 
   _start: function() {
-    TorrentActions.start(this.state.selectedTorrents);
+    TorrentActions.start({
+      hash: this.state.selectedTorrents
+    });
   },
 
   _stop: function() {

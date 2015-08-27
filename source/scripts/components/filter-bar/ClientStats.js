@@ -2,6 +2,7 @@ var React = require('react');
 var ClientStore = require('../../stores/ClientStore');
 var Icon = require('../icons/Icon');
 var format = require('../../helpers/formatData');
+var LineChart = require('./LineChart');
 
 var getClientStats = function() {
   return {
@@ -14,20 +15,28 @@ var ClientStats = React.createClass({
   getInitialState: function() {
     return {
       clientStats: {
-        speed: {
+        currentSpeed: {
           upload: 0,
           download: 0
+        },
+        historicalSpeed: {
+          download: [],
+          upload: []
         },
         transferred: {
           upload: 0,
           download: 0
         }
-      }
+      },
+      sidebarWidth: 0
     };
   },
 
   componentDidMount: function() {
     ClientStore.addChangeListener(this._onChange);
+    this.setState({
+      sidebarWidth: React.findDOMNode(this).offsetWidth
+    });
   },
 
   componentWillUnmount: function() {
@@ -35,10 +44,9 @@ var ClientStats = React.createClass({
   },
 
   render: function() {
-
-    var uploadSpeed = format.data(this.state.clientStats.speed.upload, '/s');
+    var uploadSpeed = format.data(this.state.clientStats.currentSpeed.upload, '/s');
     var uploadTotal = format.data(this.state.clientStats.transferred.upload);
-    var downloadSpeed = format.data(this.state.clientStats.speed.download, '/s');
+    var downloadSpeed = format.data(this.state.clientStats.currentSpeed.download, '/s');
     var downloadTotal = format.data(this.state.clientStats.transferred.download);
 
     return (
@@ -60,6 +68,12 @@ var ClientStats = React.createClass({
               <em className="unit">{downloadTotal.unit}</em> Downloaded
             </div>
           </div>
+          <LineChart
+            data={this.state.clientStats.historicalSpeed.download}
+            height={100}
+            id="graph--download"
+            slug="graph--download"
+            width={this.state.sidebarWidth} />
         </div>
         <div className="client-stat client-stat--upload">
           <span className="client-stat__icon">
@@ -78,6 +92,12 @@ var ClientStats = React.createClass({
               <em className="unit">{uploadTotal.unit}</em> Uploaded
             </div>
           </div>
+          <LineChart
+            data={this.state.clientStats.historicalSpeed.upload}
+            height={100}
+            id="graph--upload"
+            slug="graph--upload"
+            width={this.state.sidebarWidth} />
         </div>
         <button className="client-stats client-stat--limits">
           <Icon icon="limits" /> Limits

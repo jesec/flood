@@ -26,13 +26,19 @@ var SortDropdown = React.createClass({
         <div className="dropdown__content__header">Add Torrent</div>
         <div className="dropdown__content__container">
           <div className="form__row">
+            <label className="form__label">
+              Torrents
+            </label>
             <input className="textbox"
               onChange={this._handleUrlChange}
-              placeholder="Torrent URL"
+              placeholder="Torrent URLs"
               value={this.state.url}
               type="text" />
           </div>
           <div className="form__row">
+            <label className="form__label">
+              Destination
+            </label>
             <input className="textbox"
               onChange={this._handleDestinationChange}
               placeholder="Destination"
@@ -40,7 +46,7 @@ var SortDropdown = React.createClass({
               type="text" />
           </div>
           <div className="form__row">
-            <button className="button" onClick={this._handleAddTorrent}>Add Torrent</button>
+            <button className="button button--primary" onClick={this._handleAddTorrent}>Add Torrent</button>
           </div>
         </div>
       </div>
