@@ -1,17 +1,23 @@
 $blue: #258de5;
+$green: #39ce83;
 
 $background: #e3e5e5;
 $foreground: #686469;
 
 // form elements
+$form--label--foreground: #979999;
+
 $textbox--background: rgba(#232424, 0.4);
-$textbox--foreground: #68636a;
+$textbox--foreground: #979999;
 $textbox--placeholder: rgba(#979899, 0.3);
 $textbox--border: rgba(#202121, 0.85);
+$textbox--active--background: rgba(#232424, 0.6);
+$textbox--active--border: #28679c;
+$textbox--active--foreground: $blue;
+$textbox--active--placeholder: rgba(lighten($blue, 10%), 0.4);
 
-$button--border: rgba(#aaa8ab, 0.3);
-$button--border--hover: #aaa8ab;
-$botton--foreground: #aaa8ab;
+$button--primary--foreground: #fff;
+$button--primary--background: $green;
 
 // action bar
 $action-bar--foreground: #1b1a1c;
@@ -30,9 +36,21 @@ $client-stats--primary: #333332;
 $client-stats--secondary: #999997;
 $client-stats--icon: #8c8c8a;
 
+$client-stats--download--primary--foreground: #2387d9;
+$client-stats--download--secondary--foreground: rgba($client-stats--download--primary--foreground, 0.75);
+$client-stats--download--graph--stroke: rgba(#2387d9, 0.4);
+$client-stats--download--graph--fill--top: rgba(#2387d9, 0.2);
+$client-stats--download--graph--fill--bottom: rgba(#2387d9, 0);
+
+$client-stats--upload--primary--foreground: #2bae6c;
+$client-stats--upload--secondary--foreground: rgba($client-stats--upload--primary--foreground, 0.75);
+$client-stats--upload--graph--stroke: rgba(#2bae6c, 0.4);
+$client-stats--upload--graph--fill--top: rgba(#2bae6c, 0.2);
+$client-stats--upload--graph--fill--bottom: rgba(#2bae6c, 0);
+
 $client-stats--limits--foreground: #999997;
 $client-stats--limits--foreground--hover: darken($client-stats--limits--foreground, 20%);
-$client-stats--limist--icon--hover: $blue;
+$client-stats--limits--icon--hover: $blue;
 
 $search-torrents--background: #d9ddde;
 $search-torrents--background--active: #39ce83;
@@ -86,8 +104,8 @@ $dropdown--foreground: #979899;
 $dropdown--container--border: #d4d3d1;
 $dropdown--label: $status-filter--foreground--header;
 $dropdown--value: #807f7e;
-$dropdown--header--background: #222324;
-$dropdown--header--foreground: #e6e9eb;
+$dropdown--header--background: #282929;
+$dropdown--header--foreground: #e3e5e5;
 $dropdown--header--border: #383b3f;
 $dropdown--item--background--hover: #3d3f42;
 $dropdown--item--foreground--hover: #bdbebf;

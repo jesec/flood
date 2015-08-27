@@ -1,17 +1,12 @@
-.client-stats {
-  padding: 30px 20px 20px 20px;
-}
-
 .client-stat {
   display: flex;
-
-  & + .client-stat {
-    margin-top: 20px;
-  }
+  padding: 30px 20px 20px 20px;
 
   &__icon,
   &__data {
+    position: relative;
     vertical-align: top;
+    z-index: 1;
   }
 
   &__icon {
@@ -19,7 +14,6 @@
 
     .icon {
       display: inline-block;
-      fill: $client-stats--icon;
       height: 25px;
       margin: 6px 0 0 -5px;
       width: auto;
@@ -37,14 +31,13 @@
     }
 
     &--primary {
-      color: $client-stats--primary;
       font-size: 1.9em;
     }
 
     &--secondary {
-      color: $client-stats--secondary;
       font-size: 0.9em;
       font-style: italic;
+      font-weight: 400;
     }
   }
 }
@@ -89,11 +82,124 @@
     }
 
     &:hover {
-      color: $client-stats--limist--icon--hover;
+      color: $client-stats--limits--icon--hover;
 
       .icon {
-        fill: $client-stats--limist--icon--hover;
+        fill: $client-stats--limits--icon--hover;
       }
     }
   }
+}
+
+.client-stat {
+  position: relative;
+
+  .graph {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0;
+
+    svg {
+      height: 100%;
+      width: 100%;
+    }
+
+    &--line {
+      fill: none;
+      stroke-width: 2px;
+    }
+
+  }
+
+  &--download {
+
+    .icon {
+      fill: $client-stats--download--secondary--foreground;
+    }
+
+    .client-stat {
+
+      &__data {
+
+        &--primary {
+          color: $client-stats--download--primary--foreground;
+        }
+
+        &--secondary {
+          color: $client-stats--download--secondary--foreground;
+        }
+
+      }
+
+    }
+
+    .graph {
+
+      .graph--download--gradient--top {
+        stop-color: $client-stats--download--graph--fill--top;
+      }
+
+      .graph--download--gradient--bottom {
+        stop-color: $client-stats--download--graph--fill--bottom;
+      }
+
+      &--area {
+        fill: url('#graph--download--gradient')
+      }
+
+      &--line {
+        stroke: $client-stats--download--graph--stroke;
+      }
+
+    }
+
+  }
+
+  &--upload {
+
+    .icon {
+      fill: $client-stats--upload--secondary--foreground;
+    }
+
+    .client-stat {
+
+      &__data {
+
+        &--primary {
+          color: $client-stats--upload--primary--foreground;
+        }
+
+        &--secondary {
+          color: $client-stats--upload--secondary--foreground;
+        }
+
+      }
+
+    }
+
+    .graph {
+
+      .graph--upload--gradient--top {
+        stop-color: $client-stats--upload--graph--fill--top;
+      }
+
+      .graph--upload--gradient--bottom {
+        stop-color: $client-stats--upload--graph--fill--bottom;
+      }
+
+      &--area {
+        fill: url('#graph--upload--gradient')
+      }
+
+      &--line {
+        stroke: $client-stats--upload--graph--stroke;
+      }
+
+    }
+
+  }
+
 }

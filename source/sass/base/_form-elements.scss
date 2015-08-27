@@ -12,31 +12,53 @@
   border: 1px solid $textbox--border;
   color: $textbox--foreground;
   display: block;
-  padding: 15px 25px;
+  font-size: 1em;
+  padding: 12px 20px;
+  transition: background 0.25s, border 0.25s, color 0.25s;
   width: 100%;
 
   &::placeholder {
     color: $textbox--placeholder;
     font-style: italic;
+    transition: color 0.25s;
+  }
+
+  &:focus {
+    background: $textbox--active--background;
+    border-color: $textbox--active--border;
+    color: $textbox--active--foreground;
+
+    &::placeholder {
+      color: $textbox--active--placeholder;
+    }
+
   }
 
 }
 
 .button {
   background: transparent;
-  border: 2px solid $button--border;
-  color: $botton--foreground;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
   padding: 10px 20px;
   transition: border 0.25s;
 
-  &:hover {
-    border-color: $button--border--hover;
+  &--primary {
+    background: $button--primary--background;
+    color: $button--primary--foreground;
+    font-weight: 400;
   }
 
 }
 
 .form {
+
+  &__label {
+    color: $form--label--foreground;
+    display: block;
+    margin-bottom: 0.1em;
+  }
 
   &__row {
 

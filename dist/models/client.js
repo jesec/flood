@@ -99,10 +99,10 @@ client.prototype.stopTorrent = function(hash, callback) {
 };
 
 client.prototype.startTorrent = function(hash, callback) {
-  hash = hash.split(',');
-
   if (!util.isArray(hash)) {
     hash = [hash];
+  } else {
+    hash = String(hash).split(',');
   }
 
   for (i = 0, len = hash.length; i < len; i++) {
@@ -125,8 +125,6 @@ client.prototype.getClientStats = function(callback) {
     var request = ClientUtil.createMulticallRequest(ClientUtil.defaults.clientPropertyMethods);
 
     request = [request];
-
-    // console.log(request);
 
     rTorrent.get('system.multicall', request)
       .then(function(data) {

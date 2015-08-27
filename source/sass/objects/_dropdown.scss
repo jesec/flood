@@ -8,6 +8,7 @@
     left: 0;
     margin-top: -5px;
     position: absolute;
+    text-align: left;
     top: 100%;
     z-index: 2;
 
@@ -15,7 +16,7 @@
       background: $dropdown--header--background;
       border-bottom: 1px solid $dropdown--header--border;
       font-size: 1.15em;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
       padding: 18px 30px 15px 30px;
     }
 
