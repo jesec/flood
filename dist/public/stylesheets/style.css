@@ -635,6 +635,7 @@ body {
     width: 30px; }
 
 .action-bar {
+  background: rgba(255, 255, 255, 0.75);
   color: #1b1a1c;
   display: -webkit-box;
   display: -webkit-flex;
