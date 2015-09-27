@@ -18,7 +18,7 @@ var SortDropdown = React.createClass({
       sortBy: {
         displayName: 'Date Added',
         property: 'added',
-        direction: 'desc'
+        direction: 'asc'
       },
       isExpanded: false
     }

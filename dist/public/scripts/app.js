@@ -43294,7 +43294,7 @@ var SortDropdown = React.createClass({displayName: "SortDropdown",
       sortBy: {
         displayName: 'Date Added',
         property: 'added',
-        direction: 'desc'
+        direction: 'asc'
       },
       isExpanded: false
     }
@@ -44503,8 +44503,8 @@ var _filterStatus = 'all';
 var _sortedTorrents = [];
 var _sorted = true;
 var _sortCriteria = {
-  property: 'name',
-  direction: 'asc'
+  property: 'added',
+  direction: 'desc'
 }
 
 var TorrentStore = assign({}, EventEmitter.prototype, {
