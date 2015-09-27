@@ -13,10 +13,10 @@ var Torrent = React.createClass({
     } else if (eta.years > 0) {
       return (
         <span>
-          <span>
+          <span className="torrent__details--segment">
             {eta.years}<em className="unit">yr</em>
           </span>
-          <span>
+          <span className="torrent__details--segment">
             {eta.weeks}<em className="unit">wk</em>
           </span>
         </span>
@@ -46,7 +46,7 @@ var Torrent = React.createClass({
     } else if (eta.hours > 0) {
       return (
         <span>
-          <span>
+          <span className="torrent__details--segment">
             {eta.hours}<em className="unit">hr</em>
           </span>
           <span className="torrent__details--segment">
@@ -57,7 +57,7 @@ var Torrent = React.createClass({
     } else if (eta.minutes > 0) {
       return (
         <span>
-          <span>
+          <span className="torrent__details--segment">
             {eta.minutes}<em className="unit">m</em>
           </span>
           <span className="torrent__details--segment">

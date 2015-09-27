@@ -43903,10 +43903,10 @@ var Torrent = React.createClass({displayName: "Torrent",
     } else if (eta.years > 0) {
       return (
         React.createElement("span", null, 
-          React.createElement("span", null, 
+          React.createElement("span", {className: "torrent__details--segment"}, 
             eta.years, React.createElement("em", {className: "unit"}, "yr")
           ), 
-          React.createElement("span", null, 
+          React.createElement("span", {className: "torrent__details--segment"}, 
             eta.weeks, React.createElement("em", {className: "unit"}, "wk")
           )
         )
@@ -43936,7 +43936,7 @@ var Torrent = React.createClass({displayName: "Torrent",
     } else if (eta.hours > 0) {
       return (
         React.createElement("span", null, 
-          React.createElement("span", null, 
+          React.createElement("span", {className: "torrent__details--segment"}, 
             eta.hours, React.createElement("em", {className: "unit"}, "hr")
           ), 
           React.createElement("span", {className: "torrent__details--segment"}, 
@@ -43947,7 +43947,7 @@ var Torrent = React.createClass({displayName: "Torrent",
     } else if (eta.minutes > 0) {
       return (
         React.createElement("span", null, 
-          React.createElement("span", null, 
+          React.createElement("span", {className: "torrent__details--segment"}, 
             eta.minutes, React.createElement("em", {className: "unit"}, "m")
           ), 
           React.createElement("span", {className: "torrent__details--segment"}, 
