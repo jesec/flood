@@ -43292,8 +43292,8 @@ var SortDropdown = React.createClass({displayName: "SortDropdown",
   getInitialState: function() {
     return {
       sortBy: {
-        displayName: 'Name',
-        property: 'name',
+        displayName: 'Date Added',
+        property: 'added',
         direction: 'desc'
       },
       isExpanded: false
@@ -43337,6 +43337,10 @@ var SortDropdown = React.createClass({displayName: "SortDropdown",
       {
         displayName: 'File Size',
         property: 'sizeBytes'
+      },
+      {
+        displayName: 'Date Added',
+        property: 'added'
       }
     ];
 
@@ -43480,9 +43484,6 @@ var ClientStats = React.createClass({displayName: "ClientStats",
               React.createElement("em", {className: "unit"}, downloadSpeed.unit)
             ), 
             React.createElement("div", {className: "client-stat__data--secondary"}, 
-              "200", React.createElement("em", {className: "unit"}, "kB/s"), " Limit"
-            ), 
-            React.createElement("div", {className: "client-stat__data--secondary"}, 
               downloadTotal.value, 
               React.createElement("em", {className: "unit"}, downloadTotal.unit), " Downloaded"
             )
@@ -43502,9 +43503,6 @@ var ClientStats = React.createClass({displayName: "ClientStats",
             React.createElement("div", {className: "client-stat__data--primary"}, 
               uploadSpeed.value, 
               React.createElement("em", {className: "unit"}, uploadSpeed.unit)
-            ), 
-            React.createElement("div", {className: "client-stat__data--secondary"}, 
-              "200", React.createElement("em", {className: "unit"}, "kB/s"), " Limit"
             ), 
             React.createElement("div", {className: "client-stat__data--secondary"}, 
               uploadTotal.value, 
@@ -43899,21 +43897,100 @@ var classNames = require('classnames');
 
 var Torrent = React.createClass({displayName: "Torrent",
 
-  getInitialState: function() {
+  getEta: function(eta) {
+    if (eta === 'Infinity') {
+      return '∞';
+    } else if (eta.years > 0) {
+      return (
+        React.createElement("span", null, 
+          React.createElement("span", null, 
+            eta.years, React.createElement("em", {className: "unit"}, "yr")
+          ), 
+          React.createElement("span", null, 
+            eta.weeks, React.createElement("em", {className: "unit"}, "wk")
+          )
+        )
+      );
+    } else if (eta.weeks > 0) {
+      return (
+        React.createElement("span", null, 
+          React.createElement("span", {className: "torrent__details--segment"}, 
+            eta.weeks, React.createElement("em", {className: "unit"}, "wk")
+          ), 
+          React.createElement("span", {className: "torrent__details--segment"}, 
+            eta.days, React.createElement("em", {className: "unit"}, "d")
+          )
+        )
+      );
+    } else if (eta.days > 0) {
+      return (
+        React.createElement("span", null, 
+          React.createElement("span", {className: "torrent__details--segment"}, 
+            eta.days, React.createElement("em", {className: "unit"}, "d")
+          ), 
+          React.createElement("span", {className: "torrent__details--segment"}, 
+            eta.hours, React.createElement("em", {className: "unit"}, "hr")
+          )
+        )
+      );
+    } else if (eta.hours > 0) {
+      return (
+        React.createElement("span", null, 
+          React.createElement("span", null, 
+            eta.hours, React.createElement("em", {className: "unit"}, "hr")
+          ), 
+          React.createElement("span", {className: "torrent__details--segment"}, 
+            eta.minutes, React.createElement("em", {className: "unit"}, "m")
+          )
+        )
+      );
+    } else if (eta.minutes > 0) {
+      return (
+        React.createElement("span", null, 
+          React.createElement("span", null, 
+            eta.minutes, React.createElement("em", {className: "unit"}, "m")
+          ), 
+          React.createElement("span", {className: "torrent__details--segment"}, 
+            eta.seconds, React.createElement("em", {className: "unit"}, "s")
+          )
+        )
+      );
+    } else {
+      return (
+        React.createElement("span", null, 
+          eta.seconds, React.createElement("em", {className: "unit"}, "s")
+        )
+      );
+    }
+  },
 
-    return null;
+  getRatio: function(ratio) {
+    var ratio = ratio / 1000;
+    var precision = 1;
+
+    if (ratio < 10) {
+      precision = 2;
+    } else if (ratio < 100) {
+      precision = 0;
+    }
+
+    return ratio.toFixed(precision);
   },
 
   render: function() {
-
     var torrent = this.props.data;
 
-    var uploadRate = format.data(torrent.uploadRate, '/s');
-    var uploadTotal = format.data(torrent.uploadTotal);
+    var added = new Date(torrent.added * 1000);
+    var addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
+      added.getFullYear();
+    var completed = format.data(torrent.bytesDone);
     var downloadRate = format.data(torrent.downloadRate, '/s');
     var downloadTotal = format.data(torrent.downloadTotal);
-    var completed = format.data(torrent.bytesDone);
+    var eta = this.getEta(torrent.eta);
+    var ratio = this.getRatio(torrent.ratio);
     var totalSize = format.data(torrent.sizeBytes);
+    var uploadRate = format.data(torrent.uploadRate, '/s');
+    var uploadTotal = format.data(torrent.uploadTotal);
 
     var classes = classNames({
       'torrent': true,
@@ -43928,70 +44005,6 @@ var Torrent = React.createClass({displayName: "Torrent",
       'is-active': torrent.status.indexOf('is-active') > -1,
       'is-inactive': torrent.status.indexOf('is-inactive') > -1
     });
-
-    var eta = (function() {
-
-      if (torrent.eta === 'Infinity') {
-        return '∞';
-      } else if (torrent.eta.years > 0) {
-        return (
-          React.createElement("span", null, 
-            torrent.eta.years, React.createElement("em", {className: "unit"}, "y")
-          )
-        );
-      } else if (torrent.eta.weeks > 0) {
-        return (
-          React.createElement("span", null, 
-            React.createElement("span", {className: "torrent__details--segment"}, 
-              torrent.eta.weeks, React.createElement("em", {className: "unit"}, "w")
-            ), 
-            React.createElement("span", {className: "torrent__details--segment"}, 
-              torrent.eta.days, React.createElement("em", {className: "unit"}, "d")
-            )
-          )
-        );
-      } else if (torrent.eta.days > 0) {
-        return (
-          React.createElement("span", null, 
-            React.createElement("span", {className: "torrent__details--segment"}, 
-              torrent.eta.days, React.createElement("em", {className: "unit"}, "d")
-            ), 
-            React.createElement("span", {className: "torrent__details--segment"}, 
-              torrent.eta.hours, React.createElement("em", {className: "unit"}, "h")
-            )
-          )
-        );
-      } else if (torrent.eta.hours > 0) {
-        return (
-          React.createElement("span", null, 
-            React.createElement("span", null, 
-              torrent.eta.hours, React.createElement("em", {className: "unit"}, "h")
-            ), 
-            React.createElement("span", {className: "torrent__details--segment"}, 
-              torrent.eta.minutes, React.createElement("em", {className: "unit"}, "m")
-            )
-          )
-        );
-      } else if (torrent.eta.minutes > 0) {
-        return (
-          React.createElement("span", null, 
-            React.createElement("span", null, 
-              torrent.eta.minutes, React.createElement("em", {className: "unit"}, "m")
-            ), 
-            React.createElement("span", {className: "torrent__details--segment"}, 
-              torrent.eta.seconds, React.createElement("em", {className: "unit"}, "s")
-            )
-          )
-        );
-      } else {
-        return (
-          React.createElement("span", null, 
-            torrent.eta.seconds, React.createElement("em", {className: "unit"}, "s")
-          )
-        );
-      }
-
-    })();
 
     return (
       React.createElement("li", {className: classes, onClick: this._onClick, onContextMenu: this._onRightClick}, 
@@ -44013,32 +44026,33 @@ var Torrent = React.createClass({displayName: "Torrent",
                 React.createElement("em", {className: "unit"}, uploadRate.unit)
               ), 
               React.createElement("li", {className: "torrent__details--ratio"}, 
-                torrent.ratio
+                ratio
               )
             )
           )
         ), 
         React.createElement("ul", {className: "torrent__details torrent__details--tertiary"}, 
           React.createElement("li", {className: "torrent__details--completed"}, 
+            React.createElement("span", {className: "torrent__details__label"}, "Downloaded"), 
             torrent.percentComplete, 
             React.createElement("em", {className: "unit"}, "%"), 
             " — ", 
             completed.value, 
-            React.createElement("em", {className: "unit"}, completed.unit), " Downloaded"
+            React.createElement("em", {className: "unit"}, completed.unit)
           ), 
           React.createElement("li", {className: "torrent__details--uploaded"}, 
+            React.createElement("span", {className: "torrent__details__label"}, "Uploaded"), 
             uploadTotal.value, 
-            React.createElement("em", {className: "unit"}, uploadTotal.unit), " Uploaded"
+            React.createElement("em", {className: "unit"}, uploadTotal.unit)
           ), 
           React.createElement("li", {className: "torrent__details--size"}, 
+            React.createElement("span", {className: "torrent__details__label"}, "Size"), 
             totalSize.value, 
-            React.createElement("em", {className: "unit"}, totalSize.unit), " Size"
+            React.createElement("em", {className: "unit"}, totalSize.unit)
           ), 
-          React.createElement("li", {className: "torrent__details--peers"}, 
-            "0/1 Peers"
-          ), 
-          React.createElement("li", {className: "torrent__details--seeds"}, 
-            "0/1 Seeds"
+          React.createElement("li", {className: "torrent__details--added"}, 
+            React.createElement("span", {className: "torrent__details__label"}, "Added"), 
+            addedString
           )
         ), 
         React.createElement(ProgressBar, {percent: torrent.percentComplete})
@@ -44308,47 +44322,47 @@ module.exports = new Dispatcher();
 },{"flux":"/Users/john/Personal/Flood/node_modules/flux/index.js"}],"/Users/john/Personal/Flood/source/scripts/helpers/formatData.js":[function(require,module,exports){
 var format = {
 
-    data: function(bytes, extraUnits, precision) {
+  data: function(bytes, extraUnits, precision) {
 
-        var precision = precision || 2;
+    var precision = precision || 2;
 
-    	var kilobyte = 1024,
-    		megabyte = kilobyte * 1024,
-    		gigabyte = megabyte * 1024,
-    		terabyte = gigabyte * 1024,
-    		value = '',
-    		unit = '';
+  	var kilobyte = 1024,
+  		megabyte = kilobyte * 1024,
+  		gigabyte = megabyte * 1024,
+  		terabyte = gigabyte * 1024,
+  		value = '',
+  		unit = '';
 
-    	if ((bytes >= 0) && (bytes < kilobyte)) {
-    		value = bytes;
-    		unit = 'B';
-    	} else if ((bytes >= kilobyte) && (bytes < megabyte)) {
-    		value = (bytes / kilobyte).toFixed(precision);
-    		unit = 'kB';
-    	} else if ((bytes >= megabyte) && (bytes < gigabyte)) {
-    		value = (bytes / megabyte).toFixed(precision);
-    		unit = 'MB';
-    	} else if ((bytes >= gigabyte) && (bytes < terabyte)) {
-    		value = (bytes / gigabyte).toFixed(precision);
-    		unit = 'GB';
-    	} else if (bytes >= terabyte) {
-    		value = (bytes / terabyte).toFixed(precision);
-    		unit = 'TB';
-    	} else {
-    		value = bytes;
-    		unit = 'B';
-    	}
+  	if ((bytes >= 0) && (bytes < kilobyte)) {
+  		value = bytes;
+  		unit = 'B';
+  	} else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+  		value = (bytes / kilobyte).toFixed(precision);
+  		unit = 'kB';
+  	} else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+  		value = (bytes / megabyte).toFixed(precision);
+  		unit = 'MB';
+  	} else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+  		value = (bytes / gigabyte).toFixed(precision);
+  		unit = 'GB';
+  	} else if (bytes >= terabyte) {
+  		value = (bytes / terabyte).toFixed(precision);
+  		unit = 'TB';
+  	} else {
+  		value = bytes;
+  		unit = 'B';
+  	}
 
-        if (extraUnits) {
-            unit += extraUnits;
-        }
+      if (extraUnits) {
+          unit += extraUnits;
+      }
 
-    	return {
-    		'value': value,
-    		'unit': unit
-    	};
+  	return {
+  		'value': value,
+  		'unit': unit
+  	};
 
-    }
+  }
 
 }
 
@@ -44402,8 +44416,6 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
 
 var addHistory = function(uploadSpeed, downloadSpeed) {
   var index = 0;
-
-  console.log(uploadSpeed, downloadSpeed);
 
   while (index < _historyLength) {
     if (index < _historyLength - 1) {

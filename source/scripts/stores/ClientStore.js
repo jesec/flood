@@ -45,8 +45,6 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
 var addHistory = function(uploadSpeed, downloadSpeed) {
   var index = 0;
 
-  console.log(uploadSpeed, downloadSpeed);
-
   while (index < _historyLength) {
     if (index < _historyLength - 1) {
       if (_uploadSpeedHistory[index] != null && _uploadSpeedHistory[index].x != null) {

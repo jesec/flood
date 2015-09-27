@@ -61,9 +61,6 @@ var ClientStats = React.createClass({
               <em className="unit">{downloadSpeed.unit}</em>
             </div>
             <div className="client-stat__data--secondary">
-              200<em className="unit">kB/s</em> Limit
-            </div>
-            <div className="client-stat__data--secondary">
               {downloadTotal.value}
               <em className="unit">{downloadTotal.unit}</em> Downloaded
             </div>
@@ -83,9 +80,6 @@ var ClientStats = React.createClass({
             <div className="client-stat__data--primary">
               {uploadSpeed.value}
               <em className="unit">{uploadSpeed.unit}</em>
-            </div>
-            <div className="client-stat__data--secondary">
-              200<em className="unit">kB/s</em> Limit
             </div>
             <div className="client-stat__data--secondary">
               {uploadTotal.value}

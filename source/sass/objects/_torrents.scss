@@ -60,13 +60,16 @@
     &--secondary {
       align-items: flex-end;
       color: $torrent--secondary--foreground;
-      display: flex;
       flex: 1;
-      font-size: 0.9em;
-      min-width: 220px;
+      font-size: 0.75em;
+      min-width: 200px;
 
       li {
-        flex: 1;
+        flex: 1 1 25%;
+
+        &.torrent__details--ratio {
+          flex: 1 1 1.5em;
+        }
       }
 
       .is-stopped & {
@@ -108,6 +111,11 @@
         color: $torrent--tertiary--foreground--selected--stopped;
       }
     }
+
+    &__label {
+      margin-right: 0.5em;
+      opacity: 0.5;
+    }
   }
 }
 
@@ -119,6 +127,14 @@
       opacity: 0;
       transition: opacity 1s, visibility 1s;
       visibility: hidden;
+
+      .torrent__details--segment {
+        margin-right: 0.25em;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
 
       .is-actively-downloading & {
         opacity: 1;

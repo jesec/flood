@@ -7,21 +7,100 @@ var classNames = require('classnames');
 
 var Torrent = React.createClass({
 
-  getInitialState: function() {
+  getEta: function(eta) {
+    if (eta === 'Infinity') {
+      return '∞';
+    } else if (eta.years > 0) {
+      return (
+        <span>
+          <span>
+            {eta.years}<em className="unit">yr</em>
+          </span>
+          <span>
+            {eta.weeks}<em className="unit">wk</em>
+          </span>
+        </span>
+      );
+    } else if (eta.weeks > 0) {
+      return (
+        <span>
+          <span className="torrent__details--segment">
+            {eta.weeks}<em className="unit">wk</em>
+          </span>
+          <span className="torrent__details--segment">
+            {eta.days}<em className="unit">d</em>
+          </span>
+        </span>
+      );
+    } else if (eta.days > 0) {
+      return (
+        <span>
+          <span className="torrent__details--segment">
+            {eta.days}<em className="unit">d</em>
+          </span>
+          <span className="torrent__details--segment">
+            {eta.hours}<em className="unit">hr</em>
+          </span>
+        </span>
+      );
+    } else if (eta.hours > 0) {
+      return (
+        <span>
+          <span>
+            {eta.hours}<em className="unit">hr</em>
+          </span>
+          <span className="torrent__details--segment">
+            {eta.minutes}<em className="unit">m</em>
+          </span>
+        </span>
+      );
+    } else if (eta.minutes > 0) {
+      return (
+        <span>
+          <span>
+            {eta.minutes}<em className="unit">m</em>
+          </span>
+          <span className="torrent__details--segment">
+            {eta.seconds}<em className="unit">s</em>
+          </span>
+        </span>
+      );
+    } else {
+      return (
+        <span>
+          {eta.seconds}<em className="unit">s</em>
+        </span>
+      );
+    }
+  },
 
-    return null;
+  getRatio: function(ratio) {
+    var ratio = ratio / 1000;
+    var precision = 1;
+
+    if (ratio < 10) {
+      precision = 2;
+    } else if (ratio < 100) {
+      precision = 0;
+    }
+
+    return ratio.toFixed(precision);
   },
 
   render: function() {
-
     var torrent = this.props.data;
 
-    var uploadRate = format.data(torrent.uploadRate, '/s');
-    var uploadTotal = format.data(torrent.uploadTotal);
+    var added = new Date(torrent.added * 1000);
+    var addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
+      added.getFullYear();
+    var completed = format.data(torrent.bytesDone);
     var downloadRate = format.data(torrent.downloadRate, '/s');
     var downloadTotal = format.data(torrent.downloadTotal);
-    var completed = format.data(torrent.bytesDone);
+    var eta = this.getEta(torrent.eta);
+    var ratio = this.getRatio(torrent.ratio);
     var totalSize = format.data(torrent.sizeBytes);
+    var uploadRate = format.data(torrent.uploadRate, '/s');
+    var uploadTotal = format.data(torrent.uploadTotal);
 
     var classes = classNames({
       'torrent': true,
@@ -36,70 +115,6 @@ var Torrent = React.createClass({
       'is-active': torrent.status.indexOf('is-active') > -1,
       'is-inactive': torrent.status.indexOf('is-inactive') > -1
     });
-
-    var eta = (function() {
-
-      if (torrent.eta === 'Infinity') {
-        return '∞';
-      } else if (torrent.eta.years > 0) {
-        return (
-          <span>
-            {torrent.eta.years}<em className="unit">y</em>
-          </span>
-        );
-      } else if (torrent.eta.weeks > 0) {
-        return (
-          <span>
-            <span className="torrent__details--segment">
-              {torrent.eta.weeks}<em className="unit">w</em>
-            </span>
-            <span className="torrent__details--segment">
-              {torrent.eta.days}<em className="unit">d</em>
-            </span>
-          </span>
-        );
-      } else if (torrent.eta.days > 0) {
-        return (
-          <span>
-            <span className="torrent__details--segment">
-              {torrent.eta.days}<em className="unit">d</em>
-            </span>
-            <span className="torrent__details--segment">
-              {torrent.eta.hours}<em className="unit">h</em>
-            </span>
-          </span>
-        );
-      } else if (torrent.eta.hours > 0) {
-        return (
-          <span>
-            <span>
-              {torrent.eta.hours}<em className="unit">h</em>
-            </span>
-            <span className="torrent__details--segment">
-              {torrent.eta.minutes}<em className="unit">m</em>
-            </span>
-          </span>
-        );
-      } else if (torrent.eta.minutes > 0) {
-        return (
-          <span>
-            <span>
-              {torrent.eta.minutes}<em className="unit">m</em>
-            </span>
-            <span className="torrent__details--segment">
-              {torrent.eta.seconds}<em className="unit">s</em>
-            </span>
-          </span>
-        );
-      } else {
-        return (
-          <span>
-            {torrent.eta.seconds}<em className="unit">s</em>
-          </span>
-        );
-      }
-
-    })();
 
     return (
       <li className={classes} onClick={this._onClick} onContextMenu={this._onRightClick}>
@@ -121,32 +136,33 @@ var Torrent = React.createClass({
                 <em className="unit">{uploadRate.unit}</em>
               </li>
               <li className="torrent__details--ratio">
-                {torrent.ratio}
+                {ratio}
               </li>
             </ul>
           </li>
         </ul>
         <ul className="torrent__details torrent__details--tertiary">
           <li className="torrent__details--completed">
+            <span className="torrent__details__label">Downloaded</span>
             {torrent.percentComplete}
             <em className="unit">%</em>
             &nbsp;&mdash;&nbsp;
             {completed.value}
-            <em className="unit">{completed.unit}</em> Downloaded
+            <em className="unit">{completed.unit}</em>
           </li>
           <li className="torrent__details--uploaded">
+            <span className="torrent__details__label">Uploaded</span>
             {uploadTotal.value}
-            <em className="unit">{uploadTotal.unit}</em> Uploaded
+            <em className="unit">{uploadTotal.unit}</em>
           </li>
           <li className="torrent__details--size">
+            <span className="torrent__details__label">Size</span>
             {totalSize.value}
-            <em className="unit">{totalSize.unit}</em> Size
+            <em className="unit">{totalSize.unit}</em>
           </li>
-          <li className="torrent__details--peers">
-            0/1 Peers
-          </li>
-          <li className="torrent__details--seeds">
-            0/1 Seeds
+          <li className="torrent__details--added">
+            <span className="torrent__details__label">Added</span>
+            {addedString}
           </li>
         </ul>
         <ProgressBar percent={torrent.percentComplete} />

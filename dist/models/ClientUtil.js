@@ -34,8 +34,8 @@ var ClientUtil = {
       'basePath',
       'creationDate',
 
-      'customSeedingTime',
-      'customAddTime'
+      'seeding',
+      'added'
     ],
     torrentPropertyMethods: [
       'main',

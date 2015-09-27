@@ -16,8 +16,8 @@ var SortDropdown = React.createClass({
   getInitialState: function() {
     return {
       sortBy: {
-        displayName: 'Name',
-        property: 'name',
+        displayName: 'Date Added',
+        property: 'added',
         direction: 'desc'
       },
       isExpanded: false
@@ -61,6 +61,10 @@ var SortDropdown = React.createClass({
       {
         displayName: 'File Size',
         property: 'sizeBytes'
+      },
+      {
+        displayName: 'Date Added',
+        property: 'added'
       }
     ];
 
