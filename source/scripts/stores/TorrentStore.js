@@ -116,7 +116,6 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
 
     case UIConstants.FILTER_STATUS_CHANGE:
       _filterStatus = action.status;
-      console.log(_filterStatus);
       TorrentStore.emitChange();
       TorrentStore.emitFilterChange();
       break;
@@ -138,17 +137,27 @@ var filterTorrentList = function() {
   });
 
   try {
-    torrents = _.filter(torrents, function(torrent) {
-      var query = new RegExp(_filterText, 'gi');
-      return torrent.name.match(query)
-    });
-  } catch (error) {
+    var searchTerms = _filterText.split(' ');
+    var queries = [];
 
+    for (i = 0, len = searchTerms.length; i < len; i++) {
+      queries.push(new RegExp(searchTerms[i], 'gi'));
+    }
+
+    torrents = _.filter(torrents, function(torrent) {
+      for (i = 0, len = queries.length; i < len; i++) {
+        if (!torrent.name.match(queries[i])) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+  } catch (error) {
     return torrents;
   }
 
   return torrents;
-
 }
 
 var getTorrentList = function(callback) {
