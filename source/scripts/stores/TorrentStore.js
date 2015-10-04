@@ -137,8 +137,8 @@ var filterTorrentList = function() {
   });
 
   try {
-    var searchTerms = _filterText.split(' ');
     var queries = [];
+    var searchTerms = _filterText.replace(/,/g, ' ').split(' ');
 
     for (i = 0, len = searchTerms.length; i < len; i++) {
       queries.push(new RegExp(searchTerms[i], 'gi'));
