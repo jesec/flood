@@ -1,12 +1,17 @@
-var React = require('react');
-var Icon = require('../icons/Icon');
-var UIActions = require('../../actions/UIActions');
-var AddTorrent = require('./AddTorrent');
+import React from 'react';
 
-var Modal = React.createClass({
+import AddTorrent from './AddTorrent';
+import Icon from '../icons/Icon';
+import UIActions from '../../actions/UIActions';
 
-  render: function() {
-    var modal = null;
+export default class Modal extends React.Component {
+
+  constructor() {
+    super();
+  }
+
+  render() {
+    let modal = null;
 
     switch (this.props.type) {
       case 'torrent-add':
@@ -15,26 +20,23 @@ var Modal = React.createClass({
     }
 
     if (modal) {
-
       return (
         <div className="modal" onClick={this._onOverlayClick}>
           {modal}
         </div>
       );
     } else {
-
       return null;
     }
 
-  },
+  }
 
-  _onModalClick: function(e) {
-    e.stopPropagation();
-  },
+  _onModalClick(event) {
+    event.stopPropagation();
+  }
 
-  _onOverlayClick: function() {
+  _onOverlayClick() {
     UIActions.dismissModals();
   }
-});
 
-module.exports = Modal;
+}

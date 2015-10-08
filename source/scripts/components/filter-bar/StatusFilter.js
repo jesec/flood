@@ -1,31 +1,44 @@
-var React = require('react');
-var UIActions = require('../../actions/UIActions');
-var TorrentStore = require('../../stores/TorrentStore');
-var Icon = require('../icons/Icon.js');
-var classnames = require('classnames');
+import classnames from 'classnames';
+import React from 'react';
 
-var StatusFilter = React.createClass({
+import Icon from '../icons/Icon.js';
+import TorrentStore from '../../stores/TorrentStore';
+import UIActions from '../../actions/UIActions';
 
-  getInitialState: function() {
+const methodsToBind = [
+  'componentDidMount',
+  'componentWillUnmount',
+  '_onClick',
+  '_onFilterChange'
+];
 
-    return {
+class StatusFilter extends React.Component {
+
+  constructor() {
+    super();
+
+    this.state = {
       activeFilter: TorrentStore.getFilterCriteria()
-    }
-  },
+    };
 
-  componentDidMount: function() {
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
     TorrentStore.addFilterChangeListener(this._onFilterChange);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     TorrentStore.removeFilterChangeListener(this._onFilterChange);
-  },
+  }
 
-  render: function() {
+  render() {
 
-    var itemClass = 'status-filter__item--' + this.props.slug;
+    let itemClass = 'status-filter__item--' + this.props.slug;
 
-    var classNames = classnames({
+    let classNames = classnames({
       'status-filter__item': true,
       itemClass: true,
       'is-active': this.state.activeFilter === this.props.slug
@@ -37,25 +50,29 @@ var StatusFilter = React.createClass({
         {this.props.name}
       </li>
     );
-  },
+  }
 
-  _onClick: function(action) {
+  _onClick(action) {
     UIActions.filterTorrentList(this.props.slug);
-  },
+  }
 
-  _onFilterChange: function() {
+  _onFilterChange() {
     this.setState({
       activeFilter: TorrentStore.getFilterCriteria()
     })
   }
 
-});
+}
 
-var StatusFilterList = React.createClass({
+export default class StatusFilterList extends React.Component {
 
-  render: function() {
+  constructor() {
+    super();
+  }
 
-    var filters = [
+  render() {
+
+    let filters = [
       'All',
       'Downloading',
       'Completed',
@@ -79,6 +96,4 @@ var StatusFilterList = React.createClass({
     );
   }
 
-});
-
-module.exports = StatusFilterList;
+}

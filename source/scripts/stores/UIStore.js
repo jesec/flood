@@ -1,21 +1,21 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var TorrentConstants = require('../constants/TorrentConstants');
-var UIConstants = require('../constants/UIConstants');
-var assign = require('object-assign');
+let AppDispatcher = require('../dispatcher/AppDispatcher');
+let EventEmitter = require('events').EventEmitter;
+let TorrentConstants = require('../constants/TorrentConstants');
+let UIConstants = require('../constants/UIConstants');
+let assign = require('object-assign');
 
-var _activeModal = null;
-var _selectedTorrents = [];
-var _torrentCount = 0;
-var _torrentHeight = 68;
-var _viewportHeight = 200;
-var _minTorrentRendered = 0;
-var _maxTorrentRendered = 10;
-var _torrentRenderBuffer = 2;
-var _spaceTop = 0;
-var _spaceBottom = 0;
+let _activeModal = null;
+let _selectedTorrents = [];
+let _torrentCount = 0;
+let _torrentHeight = 68;
+let _viewportHeight = 200;
+let _minTorrentRendered = 0;
+let _maxTorrentRendered = 10;
+let _torrentRenderBuffer = 2;
+let _spaceTop = 0;
+let _spaceBottom = 0;
 
-var UIStore = assign({}, EventEmitter.prototype, {
+let UIStore = assign({}, EventEmitter.prototype, {
 
     getActiveModal: function() {
 
@@ -85,16 +85,16 @@ var UIStore = assign({}, EventEmitter.prototype, {
 
 });
 
-var dispatcherIndex = AppDispatcher.register(function(action) {
+let dispatcherIndex = AppDispatcher.register(function(action) {
 
-    var text;
+    let text;
 
     switch(action.actionType) {
 
         case TorrentConstants.TORRENT_CLICK:
-            var hash = action.hash;
-            var hashLocation = _selectedTorrents.indexOf(hash);
-            var isSelected = hashLocation > -1;
+            let hash = action.hash;
+            let hashLocation = _selectedTorrents.indexOf(hash);
+            let isSelected = hashLocation > -1;
 
             if (!event.metaKey && !event.shiftKey && !event.ctrlKey) {
                 // if command, shift, and control are not pressed, clear other selected torrents
@@ -141,13 +141,13 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
     }
 });
 
-var setViewportHeight = function(height) {
+let setViewportHeight = function(height) {
     _viewportHeight = height;
 }
 
-var getSpacer = function(torrents) {
+let getSpacer = function(torrents) {
 
-    var spacerHeight = 0;
+    let spacerHeight = 0;
 
     if (torrents > 0) {
         spacerHeight = torrents * _torrentHeight;
@@ -156,9 +156,9 @@ var getSpacer = function(torrents) {
     return spacerHeight;
 }
 
-var setRenderLimit = function(scrollPosition, torrentCount) {
+let setRenderLimit = function(scrollPosition, torrentCount) {
 
-    var elementsInView = Math.floor(_viewportHeight / _torrentHeight);
+    let elementsInView = Math.floor(_viewportHeight / _torrentHeight);
 
     _minTorrentRendered = Math.floor(scrollPosition / _torrentHeight) - _torrentRenderBuffer;
     _maxTorrentRendered = _minTorrentRendered + elementsInView + (_torrentRenderBuffer * 2);

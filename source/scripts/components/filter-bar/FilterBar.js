@@ -1,18 +1,17 @@
-var React = require('react');
-var ClientStats = require('./ClientStats');
-var StatusFilter = require('./StatusFilter');
-var SearchBox = require('./SearchBox');
-var UIActions = require('../../actions/UIActions');
+import React from 'react';
 
-var FilterBar = React.createClass({
+import ClientStats from './ClientStats';
+import StatusFilter from './StatusFilter';
+import SearchBox from './SearchBox';
+import UIActions from '../../actions/UIActions';
 
-  getInitialState: function() {
+export default class FilterBar extends React.Component {
 
-    return null;
-  },
+  constructor() {
+    super();
+  }
 
-  render: function() {
-
+  render() {
     return (
       <nav className="filter-bar">
         <ClientStats />
@@ -20,13 +19,10 @@ var FilterBar = React.createClass({
         <StatusFilter />
       </nav>
     );
-  },
+  }
 
-  _onSearchChange: function(value) {
+  _onSearchChange(value) {
     UIActions.searchTorrents(value);
   }
 
-});
-
-
-module.exports = FilterBar;
+}

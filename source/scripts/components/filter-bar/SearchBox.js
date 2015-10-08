@@ -1,38 +1,47 @@
-var React = require('react');
-var Icon = require('../icons/Icon');
+import classnames from'classnames';
+import React from'react';
 
-var classnames = require('classnames');
+import Icon from'../icons/Icon';
 
-var SearchBox = React.createClass({
+const methodsToBind = [
+  '_handleKeyUp'
+];
 
-  getInitialState: function() {
-    return {
+export default class SearchBox extends React.Component {
+
+  constructor() {
+    super();
+
+    this.state = {
       searchValue: ''
     };
-  },
 
-  render: function() {
-    var classSet = classnames({
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  render() {
+    let classSet = classnames({
       'filter-bar__item': true,
       'filter-bar__item--search': true,
       'is-in-use': this.state.searchValue !== ''
     });
+
     return (
       <div className={classSet}>
         <Icon icon="search" />
         <input className="textbox" type="text" placeholder="Search Torrents" onKeyUp={this._handleKeyUp} />
       </div>
     );
-  },
+  }
 
-  _handleKeyUp: function(evt) {
-    var value = evt.target.value;
+  _handleKeyUp(event) {
+    let value = event.target.value;
     this.setState({
       searchValue: value
     });
     this.props.searchChangeHandler(value);
   }
 
-});
-
-module.exports = SearchBox;
+}

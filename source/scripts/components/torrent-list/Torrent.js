@@ -1,13 +1,25 @@
-var React = require('react');
-var TorrentActions = require('../../actions/TorrentActions');
-var ProgressBar = require('./ProgressBar');
+import classNames from 'classnames';
+import React from 'react';
 
-var format = require('../../helpers/formatData');
-var classNames = require('classnames');
+import format from '../../helpers/formatData';
+import TorrentActions from '../../actions/TorrentActions';
+import ProgressBar from './ProgressBar';
 
-var Torrent = React.createClass({
+const methodsToBind = [
+  '_onClick'
+];
 
-  getEta: function(eta) {
+export default class Torrent extends React.Component {
+
+  constructor() {
+    super();
+
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  getEta(eta) {
     if (eta === 'Infinity') {
       return '∞';
     } else if (eta.years > 0) {
@@ -72,11 +84,11 @@ var Torrent = React.createClass({
         </span>
       );
     }
-  },
+  }
 
-  getRatio: function(ratio) {
-    var ratio = ratio / 1000;
-    var precision = 1;
+  getRatio(ratio) {
+    ratio = ratio / 1000;
+    let precision = 1;
 
     if (ratio < 10) {
       precision = 2;
@@ -85,24 +97,24 @@ var Torrent = React.createClass({
     }
 
     return ratio.toFixed(precision);
-  },
+  }
 
-  render: function() {
-    var torrent = this.props.data;
+  render() {
+    let torrent = this.props.data;
 
-    var added = new Date(torrent.added * 1000);
-    var addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
+    let added = new Date(torrent.added * 1000);
+    let addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
       added.getFullYear();
-    var completed = format.data(torrent.bytesDone);
-    var downloadRate = format.data(torrent.downloadRate, '/s');
-    var downloadTotal = format.data(torrent.downloadTotal);
-    var eta = this.getEta(torrent.eta);
-    var ratio = this.getRatio(torrent.ratio);
-    var totalSize = format.data(torrent.sizeBytes);
-    var uploadRate = format.data(torrent.uploadRate, '/s');
-    var uploadTotal = format.data(torrent.uploadTotal);
+    let completed = format.data(torrent.bytesDone);
+    let downloadRate = format.data(torrent.downloadRate, '/s');
+    let downloadTotal = format.data(torrent.downloadTotal);
+    let eta = this.getEta(torrent.eta);
+    let ratio = this.getRatio(torrent.ratio);
+    let totalSize = format.data(torrent.sizeBytes);
+    let uploadRate = format.data(torrent.uploadRate, '/s');
+    let uploadTotal = format.data(torrent.uploadTotal);
 
-    var classes = classNames({
+    let classes = classNames({
       'torrent': true,
       'is-selected': this.props.selected,
       'is-stopped': torrent.status.indexOf('is-stopped') > -1,
@@ -168,16 +180,14 @@ var Torrent = React.createClass({
         <ProgressBar percent={torrent.percentComplete} />
       </li>
     );
-  },
+  }
 
-  _onClick: function() {
+  _onClick() {
     TorrentActions.click(this.props.data.hash);
-  },
+  }
 
-  _onRightClick: function() {
+  _onRightClick() {
     console.log(event);
   }
 
-});
-
-module.exports = Torrent;
+}

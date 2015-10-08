@@ -1,9 +1,14 @@
-var React = require('react');
+import React from 'react';
 
-var ProgressBar = React.createClass({
-  render: function() {
-    var percent = this.props.percent;
-    var className = 'progress-bar';
+export default class ProgressBar extends React.Component {
+
+  constructor() {
+    super();
+  }
+
+  render() {
+    let percent = this.props.percent;
+    let className = 'progress-bar';
 
     return (
       <div className={className}>
@@ -12,6 +17,4 @@ var ProgressBar = React.createClass({
     );
   }
 
-});
-
-module.exports = ProgressBar;
+}

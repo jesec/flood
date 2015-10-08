@@ -1,9 +1,9 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var TorrentConstants = require('../constants/TorrentConstants');
+import $ from 'jquery';
 
-var $ = require('jquery');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import TorrentConstants from '../constants/TorrentConstants';
 
-var clientRequest = function(action, data) {
+let clientRequest = function(action, data) {
   return $.ajax({
     data: JSON.stringify(data),
     contentType: 'application/json; charset=utf-8',
@@ -12,8 +12,9 @@ var clientRequest = function(action, data) {
   });
 };
 
-var TorrentActions = {
-  add: function(data) {
+const TorrentActions = {
+
+  add(data) {
     clientRequest('/torrents/add', data)
       .done(function(response) {
         AppDispatcher.dispatch({
@@ -29,14 +30,14 @@ var TorrentActions = {
       });
   },
 
-  click: function(hash) {
+  click(hash) {
     AppDispatcher.dispatch({
       actionType: TorrentConstants.TORRENT_CLICK,
       hash: hash
     });
   },
 
-  start: function(data) {
+  start(data) {
     clientRequest('/torrents/start', data)
       .done(function(response) {
         AppDispatcher.dispatch({
@@ -52,7 +53,7 @@ var TorrentActions = {
       });
   },
 
-  stop: function(data) {
+  stop(data) {
     clientRequest('/torrents/stop', data)
       .done(function(response) {
         AppDispatcher.dispatch({
@@ -67,6 +68,7 @@ var TorrentActions = {
         });
       });
   }
+
 };
 
-module.exports = TorrentActions;
+export default TorrentActions;

@@ -1,10 +1,10 @@
-var format = {
+const format = {
 
   data: function(bytes, extraUnits, precision) {
 
-    var precision = precision || 2;
+    precision = precision || 2;
 
-  	var kilobyte = 1024,
+  	let kilobyte = 1024,
   		megabyte = kilobyte * 1024,
   		gigabyte = megabyte * 1024,
   		terabyte = gigabyte * 1024,
@@ -42,6 +42,6 @@ var format = {
 
   }
 
-}
+};
 
-module.exports = format;
+export default format;

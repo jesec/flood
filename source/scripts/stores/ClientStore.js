@@ -1,15 +1,16 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var ClientConstants = require('../constants/ClientConstants');
-var $ = require('jquery');
-var assign = require('object-assign');
+import $ from 'jquery';
+import assign from 'object-assign';
+import {EventEmitter} from 'events';
 
-var _historyLength = 20;
-var _stats = {};
-var _uploadSpeedHistory = [];
-var _downloadSpeedHistory = [];
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import ClientConstants from '../constants/ClientConstants';
 
-var ClientStore = assign({}, EventEmitter.prototype, {
+let _historyLength = 20;
+let _stats = {};
+let _uploadSpeedHistory = [];
+let _downloadSpeedHistory = [];
+
+let ClientStore = assign({}, EventEmitter.prototype, {
   getStats: function() {
     return _stats;
   },
@@ -27,8 +28,8 @@ var ClientStore = assign({}, EventEmitter.prototype, {
   }
 });
 
-var dispatcherIndex = AppDispatcher.register(function(action) {
-  var text;
+let dispatcherIndex = AppDispatcher.register(function(action) {
+  let text;
 
   switch(action.actionType) {
 
@@ -42,8 +43,8 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
   }
 });
 
-var addHistory = function(uploadSpeed, downloadSpeed) {
-  var index = 0;
+let addHistory = function(uploadSpeed, downloadSpeed) {
+  let index = 0;
 
   while (index < _historyLength) {
     if (index < _historyLength - 1) {
@@ -75,7 +76,7 @@ var addHistory = function(uploadSpeed, downloadSpeed) {
   }
 }
 
-var getClientStats = function(callback) {
+let getClientStats = function(callback) {
   $.ajax({
     url: '/client/stats',
     dataType: 'json',
@@ -112,4 +113,4 @@ var getClientStats = function(callback) {
 getClientStats();
 setInterval(getClientStats, 5000);
 
-module.exports = ClientStore;
+export default ClientStore;

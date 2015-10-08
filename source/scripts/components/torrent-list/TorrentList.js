@@ -1,12 +1,13 @@
-var React = require('react');
-var Torrent = require('./Torrent');
-var TorrentStore = require('../../stores/TorrentStore');
-var UIStore = require('../../stores/UIStore');
-var UIActions = require('../../actions/UIActions');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var getTorrentList = function() {
+import Torrent from './Torrent';
+import TorrentStore from '../../stores/TorrentStore';
+import UIActions from '../../actions/UIActions';
+import UIStore from '../../stores/UIStore';
 
-  var torrentList = TorrentStore.getAll();
+let getTorrentList = function() {
+  let torrentList = TorrentStore.getAll();
 
   return {
     allTorrents: torrentList,
@@ -14,34 +15,40 @@ var getTorrentList = function() {
   }
 }
 
-var getSelectedTorrents = function() {
-
+let getSelectedTorrents = function() {
   return {
     selectedTorrents: UIStore.getSelectedTorrents()
   }
 }
 
-var getListPadding = function() {
-
+let getListPadding = function() {
   return {
     spaceTop: UIStore.getSpaceTop(),
     spaceBottom: UIStore.getSpaceBottom()
   }
 }
 
-var getTorrentRange = function() {
-
+let getTorrentRange = function() {
   return {
     min: UIStore.getMinTorrentRendered(),
     max: UIStore.getMaxTorrentRendered()
   }
 }
 
-var TorrentList = React.createClass({
+const methodsToBind = [
+  '_onTorrentStoreChange',
+  '_onTorrentSelectionChange',
+  '_onViewportPaddingChange',
+  '_onScroll',
+  '_onWindowResize'
+];
 
-  getInitialState: function() {
+export default class TorrentList extends React.Component {
 
-    return {
+  constructor() {
+    super();
+
+    this.state = {
       allTorrents: [],
       selectedTorrents: [],
       torrentCount: 0,
@@ -51,35 +58,39 @@ var TorrentList = React.createClass({
       spaceTop: 0,
       spaceBottom: 0
     };
-  },
 
-  componentDidMount: function() {
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
     TorrentStore.addChangeListener(this._onTorrentStoreChange);
     UIStore.addSelectionChangeListener(this._onTorrentSelectionChange);
     UIStore.addViewportPaddingChangeListener(this._onViewportPaddingChange);
     window.addEventListener('resize', this._onWindowResize);
     this._onWindowResize();
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     TorrentStore.removeChangeListener(this._onTorrentStoreChange);
     UIStore.removeSelectionChangeListener(this._onTorrentSelectionChange);
     UIStore.removeViewportPaddingChangeListener(this._onViewportPaddingChange);
     window.removeEventListener('resize', this._onWindowResize);
-  },
+  }
 
-  render: function() {
+  render() {
 
-    var torrents = this.state.allTorrents;
+    let torrents = this.state.allTorrents;
 
-    var that = this;
+    let that = this;
 
-    var torrentList = torrents.map(function(torrent, index) {
+    let torrentList = torrents.map(function(torrent, index) {
 
       if (index >= that.state.minTorrentIndex && index <= that.state.maxTorrentIndex) {
 
-        var isSelected = false;
-        var hash = torrent.hash;
+        let isSelected = false;
+        let hash = torrent.hash;
 
         if (that.state.selectedTorrents.indexOf(hash) > -1) {
           isSelected = true;
@@ -99,19 +110,19 @@ var TorrentList = React.createClass({
         <li className="torrent__spacer torrent__spacer--bottom" style={{height: this.state.spaceBottom + 'px'}}></li>
       </ul>
     );
-  },
+  }
 
-  _onTorrentStoreChange: function() {
+  _onTorrentStoreChange() {
     this.setState(getTorrentList);
-  },
+  }
 
-  _onTorrentSelectionChange: function() {
+  _onTorrentSelectionChange() {
     this.setState(getSelectedTorrents);
-  },
+  }
 
-  _onViewportPaddingChange: function() {
-    var listPadding = getListPadding();
-    var torrentRange = getTorrentRange();
+  _onViewportPaddingChange() {
+    let listPadding = getListPadding();
+    let torrentRange = getTorrentRange();
 
     this.setState({
       minTorrentIndex: torrentRange.min,
@@ -119,16 +130,14 @@ var TorrentList = React.createClass({
       spaceTop: listPadding.spaceTop,
       spaceBottom: listPadding.spaceBottom
     });
-  },
-
-  _onScroll: function() {
-    UIActions.scrollTorrentList(this.state.torrentCount);
-  },
-
-  _onWindowResize: function() {
-    UIActions.setViewportHeight(React.findDOMNode(this.refs.torrentList).offsetHeight, this.getDOMNode().scrollTop);
   }
 
-});
+  _onScroll() {
+    UIActions.scrollTorrentList(this.state.torrentCount);
+  }
 
-module.exports = TorrentList;
+  _onWindowResize() {
+    UIActions.setViewportHeight(ReactDOM.findDOMNode(this.refs.torrentList).offsetHeight, ReactDOM.findDOMNode(this).scrollTop);
+  }
+
+}

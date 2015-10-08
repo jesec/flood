@@ -1,19 +1,28 @@
-var React = require('react');
-var ClientStore = require('../../stores/ClientStore');
-var Icon = require('../icons/Icon');
-var format = require('../../helpers/formatData');
-var LineChart = require('./LineChart');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-var getClientStats = function() {
+import ClientStore from '../../stores/ClientStore';
+import format from '../../helpers/formatData';
+import Icon from '../icons/Icon';
+import LineChart from './LineChart';
+
+let getClientStats = function() {
   return {
     clientStats: ClientStore.getStats()
   }
-}
+};
 
-var ClientStats = React.createClass({
+const methodsToBind = [
+  'componentDidMount',
+  '_onChange'
+];
 
-  getInitialState: function() {
-    return {
+export default class ClientStats extends React.Component {
+
+  constructor() {
+    super();
+
+    this.state = {
       clientStats: {
         currentSpeed: {
           upload: 0,
@@ -30,24 +39,28 @@ var ClientStats = React.createClass({
       },
       sidebarWidth: 0
     };
-  },
 
-  componentDidMount: function() {
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
     ClientStore.addChangeListener(this._onChange);
     this.setState({
-      sidebarWidth: React.findDOMNode(this).offsetWidth
+      sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     ClientStore.removeChangeListener(this._onChange);
-  },
+  }
 
-  render: function() {
-    var uploadSpeed = format.data(this.state.clientStats.currentSpeed.upload, '/s');
-    var uploadTotal = format.data(this.state.clientStats.transferred.upload);
-    var downloadSpeed = format.data(this.state.clientStats.currentSpeed.download, '/s');
-    var downloadTotal = format.data(this.state.clientStats.transferred.download);
+  render() {
+    let uploadSpeed = format.data(this.state.clientStats.currentSpeed.upload, '/s');
+    let uploadTotal = format.data(this.state.clientStats.transferred.upload);
+    let downloadSpeed = format.data(this.state.clientStats.currentSpeed.download, '/s');
+    let downloadTotal = format.data(this.state.clientStats.transferred.download);
 
     return (
       <div className="client-stats filter-bar__item">
@@ -98,11 +111,10 @@ var ClientStats = React.createClass({
         </button>
       </div>
     );
-  },
+  }
 
-  _onChange: function() {
+  _onChange() {
     this.setState(getClientStats);
   }
-});
 
-module.exports = ClientStats;
+}

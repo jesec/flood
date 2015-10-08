@@ -1,7 +1,9 @@
-var keyMirror = require('keymirror');
+import keyMirror from 'keymirror';
 
-module.exports = keyMirror({
-    ADD_TORRENT: 'client--add-torrent',
-    REMOVE_TORRENT: 'client--remove-torrent',
-    CLIENT_STATS_CHANGE: 'client--stats-change'
+const ClientConstants = keyMirror({
+  ADD_TORRENT: 'client--add-torrent',
+  REMOVE_TORRENT: 'client--remove-torrent',
+  CLIENT_STATS_CHANGE: 'client--stats-change'
 });
+
+export default ClientConstants;

@@ -1,5 +1,18 @@
-var React = require('react');
-var FloodApp = require('./components/FloodApp');
-var mountNode = document.getElementById('app');
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-React.render(<FloodApp />, mountNode);
+import FloodApp from './components/FloodApp';
+
+class FloodAppWrapper extends React.Component {
+
+  constructor() {
+    super();
+  }
+
+  render() {
+    return <FloodApp />
+  }
+
+}
+
+ReactDOM.render(<FloodAppWrapper />, document.getElementById('app'));

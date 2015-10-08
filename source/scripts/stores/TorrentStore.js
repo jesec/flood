@@ -1,23 +1,23 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var TorrentConstants = require('../constants/TorrentConstants');
-var UIConstants = require('../constants/UIConstants');
-var assign = require('object-assign');
-var $ = require('jquery');
-var _ = require('underscore');
+let AppDispatcher = require('../dispatcher/AppDispatcher');
+let EventEmitter = require('events').EventEmitter;
+let TorrentConstants = require('../constants/TorrentConstants');
+let UIConstants = require('../constants/UIConstants');
+let assign = require('object-assign');
+let $ = require('jquery');
+let _ = require('underscore');
 
-var _torrents = [];
-var _filtered = true;
-var _filterText = '';
-var _filterStatus = 'all';
-var _sortedTorrents = [];
-var _sorted = true;
-var _sortCriteria = {
+let _torrents = [];
+let _filtered = true;
+let _filterText = '';
+let _filterStatus = 'all';
+let _sortedTorrents = [];
+let _sorted = true;
+let _sortCriteria = {
   property: 'added',
   direction: 'desc'
 }
 
-var TorrentStore = assign({}, EventEmitter.prototype, {
+let TorrentStore = assign({}, EventEmitter.prototype, {
 
   getAll: function() {
 
@@ -88,9 +88,9 @@ var TorrentStore = assign({}, EventEmitter.prototype, {
 
 });
 
-var dispatcherIndex = AppDispatcher.register(function(action) {
+let dispatcherIndex = AppDispatcher.register(function(action) {
 
-  var text;
+  let text;
 
   switch(action.actionType) {
 
@@ -123,9 +123,9 @@ var dispatcherIndex = AppDispatcher.register(function(action) {
   }
 });
 
-var filterTorrentList = function() {
+let filterTorrentList = function() {
 
-  var torrents = _sortedTorrents.slice();
+  let torrents = _sortedTorrents.slice();
 
   torrents = _.filter(torrents, function(torrent) {
 
@@ -137,15 +137,16 @@ var filterTorrentList = function() {
   });
 
   try {
-    var queries = [];
-    var searchTerms = _filterText.replace(/,/g, ' ').split(' ');
 
-    for (i = 0, len = searchTerms.length; i < len; i++) {
+    let queries = [];
+    let searchTerms = _filterText.replace(/,/g, ' ').split(' ');
+
+    for (let i = 0, len = searchTerms.length; i < len; i++) {
       queries.push(new RegExp(searchTerms[i], 'gi'));
     }
 
     torrents = _.filter(torrents, function(torrent) {
-      for (i = 0, len = queries.length; i < len; i++) {
+      for (let i = 0, len = queries.length; i < len; i++) {
         if (!torrent.name.match(queries[i])) {
           return false;
         }
@@ -160,7 +161,7 @@ var filterTorrentList = function() {
   return torrents;
 }
 
-var getTorrentList = function(callback) {
+let getTorrentList = function(callback) {
 
   $.ajax({
     url: '/torrents/list',
@@ -184,16 +185,16 @@ var getTorrentList = function(callback) {
 
 };
 
-var sortTorrentList = function() {
+let sortTorrentList = function() {
 
-  var property = _sortCriteria.property;
-  var direction = _sortCriteria.direction;
-  var sortedList = _torrents.slice();
+  let property = _sortCriteria.property;
+  let direction = _sortCriteria.direction;
+  let sortedList = _torrents.slice();
 
   sortedList = sortedList.sort(function(a, b) {
 
-    var valA = a[property];
-    var valB = b[property];
+    let valA = a[property];
+    let valB = b[property];
 
     if (property === 'eta') {
 

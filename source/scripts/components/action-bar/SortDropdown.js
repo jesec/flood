@@ -1,31 +1,47 @@
-var React = require('react/addons');
-var TransitionGroup = React.addons.CSSTransitionGroup;
-var classnames = require('classnames');
-var UIActions = require('../../actions/UIActions');
+import classnames from 'classnames';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
+import React from 'react';
 
-var SortDropdown = React.createClass({
+import UIActions from '../../actions/UIActions';
 
-  componentDidMount: function() {
-    window.addEventListener('click', this._handleExternalClick);
-  },
+const methodsToBind = [
+  'componentDidMount',
+  'componentWillUnmount',
+  'getMenu',
+  '_handleButtonClick',
+  '_handleExternalClick',
+  '_handleMenuClick'
+];
 
-  componentWillUnmount: function() {
-    window.removeEventListener('click', this._handleExternalClick);
-  },
+export default class SortDropdown extends React.Component {
 
-  getInitialState: function() {
-    return {
+  constructor() {
+    super();
+
+    this.state = {
       sortBy: {
         displayName: 'Date Added',
         property: 'added',
         direction: 'asc'
       },
       isExpanded: false
-    }
-  },
+    };
 
-  getMenu: function() {
-    var sortableProperties = [
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
+    window.addEventListener('click', this._handleExternalClick);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this._handleExternalClick);
+  }
+
+  getMenu() {
+    let sortableProperties = [
       {
         displayName: 'Name',
         property: 'name'
@@ -68,7 +84,7 @@ var SortDropdown = React.createClass({
       }
     ];
 
-    var menuItems = sortableProperties.map(function(property, index) {
+    let menuItems = sortableProperties.map(function(property, index) {
       return (
         <li className="dropdown__content__item" key={index} onClick={this._handleMenuClick.bind(this, property)}>
           {property.displayName}
@@ -82,16 +98,16 @@ var SortDropdown = React.createClass({
         {menuItems}
       </ul>
     );
-  },
+  }
 
-  render: function() {
+  render() {
 
-    var classSet = classnames({
+    let classSet = classnames({
       'dropdown': true,
       'is-expanded': this.state.isExpanded
     });
 
-    var menu = null;
+    let menu = null;
 
     if (this.state.isExpanded) {
       menu = this.getMenu();
@@ -103,29 +119,32 @@ var SortDropdown = React.createClass({
           <label className="dropdown__label">Sort By</label>
           <span className="dropdown__value">{this.state.sortBy.displayName}</span>
         </a>
-        <TransitionGroup transitionName="dropdown__content">
+        <CSSTransitionGroup
+          transitionName="dropdown__content"
+          transitionEnterTimeout={250}
+          transitionLeaveTimeout={250}>
           {menu}
-        </TransitionGroup>
+        </CSSTransitionGroup>
       </div>
     );
-  },
+  }
 
-  _handleButtonClick: function(evt) {
+  _handleButtonClick(evt) {
     evt.stopPropagation();
     this.setState({
       isExpanded: !this.state.isExpanded
     });
-  },
+  }
 
-  _handleExternalClick: function() {
+  _handleExternalClick() {
     if (this.state.isExpanded) {
       this.setState({
         isExpanded: false
       });
     }
-  },
+  }
 
-  _handleMenuClick: function(property) {
+  _handleMenuClick(property) {
     this.setState({
       isExpanded: false,
       sortBy: {
@@ -134,11 +153,10 @@ var SortDropdown = React.createClass({
       }
     });
     UIActions.sortTorrents(property.property, this.state.sortBy.direction);
-  },
+  }
 
-  _handleMenuWrapperClick: function(evt) {
+  _handleMenuWrapperClick(evt) {
     evt.stopPropagation();
   }
-});
 
-module.exports = SortDropdown;
+}

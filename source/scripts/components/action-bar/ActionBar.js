@@ -1,30 +1,41 @@
-var React = require('react');
+import React from 'react';
 
-var Action = require('./Action');
-var AddTorrent = require('./AddTorrent');
-var SortDropdown = require('./SortDropdown');
-var TorrentActions = require('../../actions/TorrentActions');
-var UIStore = require('../../stores/UIStore');
-var UIActions = require('../../actions/UIActions');
+import Action from './Action';
+import AddTorrent from './AddTorrent';
+import SortDropdown from './SortDropdown';
+import TorrentActions from '../../actions/TorrentActions';
+import UIStore from '../../stores/UIStore';
+import UIActions from '../../actions/UIActions';
 
-var FilterBar = React.createClass({
+const methodsToBind = [
+  '_start',
+  '_stop',
+  '_onUIStoreChange'
+];
 
-  getInitialState: function() {
+export default class FilterBar extends React.Component {
 
-    return {
+  constructor() {
+    super();
+
+    this.state = {
       selectedTorrents: []
     };
-  },
 
-  componentDidMount: function() {
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
     UIStore.addSelectionChangeListener(this._onUIStoreChange);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     TorrentStore.removeChangeListener(this._onUIStoreChange);
-  },
+  }
 
-  render: function() {
+  render() {
 
     return (
       <nav className="action-bar">
@@ -43,35 +54,32 @@ var FilterBar = React.createClass({
         </div>
       </nav>
     );
-  },
+  }
 
-  _pause: function() {
+  _pause() {
 
-  },
+  }
 
-  _start: function() {
+  _start() {
     TorrentActions.start({
       hash: this.state.selectedTorrents
     });
-  },
+  }
 
-  _stop: function() {
+  _stop() {
     TorrentActions.stop({
       hash: this.state.selectedTorrents
     });
-  },
+  }
 
-  _onUIStoreChange: function() {
+  _onUIStoreChange() {
     this.setState({
       selectedTorrents: UIStore.getSelectedTorrents()
     });
-  },
+  }
 
-  _onAddTorrent: function() {
+  _onAddTorrent() {
     UIActions.toggleAddTorrentModal();
   }
 
-});
-
-
-module.exports = FilterBar;
+}

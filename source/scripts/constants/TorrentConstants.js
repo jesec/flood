@@ -1,6 +1,6 @@
-var keyMirror = require('keymirror');
+import keyMirror from 'keymirror';
 
-module.exports = keyMirror({
+const TorrentConstants = keyMirror({
   TORRENT_ADD_SUCCESS: 'torrent__add--success',
   TORRENT_ADD_FAIL: 'torrent__add--fail',
   TORRENT_CLICK: 'torrent--click',
@@ -11,3 +11,5 @@ module.exports = keyMirror({
   TORRENT_LIST_CHANGE: 'torrent-list--change',
   TORRENT_SELECTION_CHANGE: 'torrent--select--change'
 });
+
+export default TorrentConstants;

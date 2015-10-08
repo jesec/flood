@@ -1,32 +1,44 @@
-var React = require('react');
-var FilterBar = require('./filter-bar/FilterBar');
-var ActionBar = require('./action-bar/ActionBar');
-var TorrentStore = require('../stores/TorrentStore');
-var UIStore = require('../stores/UIStore');
-var TorrentList = require('./torrent-list/TorrentList');
-var TorrentListHeader = require('./torrent-list/TorrentListHeader');
+import React from 'react';
 
-var FloodApp = React.createClass({
+import ActionBar from './action-bar/ActionBar';
+import FilterBar from './filter-bar/FilterBar';
+import TorrentList from './torrent-list/TorrentList';
+import TorrentListHeader from './torrent-list/TorrentListHeader';
+import TorrentStore from '../stores/TorrentStore';
+import UIStore from '../stores/UIStore';
 
-  getInitialState: function() {
-    return {
+const methodsToBind = [
+  'componentDidMount',
+  'componentWillUnmount',
+  '_onSortChange'
+];
+
+export default class FloodApp extends React.Component {
+
+  constructor() {
+    super();
+
+    this.state = {
       sortCriteria: {
         direction: 'asc',
         property: 'name'
       }
     };
-  },
 
-  componentDidMount: function() {
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
     TorrentStore.addSortChangeListener(this._onSortChange);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     TorrentStore.removeSortChangeListener(this._onSortChange);
-  },
+  }
 
-  render: function() {
-
+  render() {
     return (
       <div className="flood">
         <FilterBar />
@@ -36,14 +48,12 @@ var FloodApp = React.createClass({
         </main>
       </div>
     );
-  },
+  }
 
-  _onSortChange: function() {
+  _onSortChange() {
     this.setState({
       sortCriteria: TorrentStore.getSortCriteria()
     });
   }
 
-});
-
-module.exports = FloodApp;
+}

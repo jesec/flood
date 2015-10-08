@@ -1,26 +1,45 @@
-var React = require('react/addons');
-var TransitionGroup = React.addons.CSSTransitionGroup;
-var classnames = require('classnames');
+import classnames from 'classnames';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
+import React from 'react';
 
-var Action = require('./Action');
-var TorrentActions = require('../../actions/TorrentActions');
+import Action from './Action';
+import TorrentActions from '../../actions/TorrentActions';
 
-var SortDropdown = React.createClass({
-  componentDidMount: function() {
-    window.addEventListener('click', this._handleExternalClick);
-  },
+const methodsToBind = [
+  'componentDidMount',
+  'componentWillUnmount',
+  'getChildren',
+  '_handleDestinationChange',
+  '_handleUrlChange',
+  '_handleAddTorrent',
+  '_handleButtonClick',
+  '_handleExternalClick',
+  '_handleExternalClick'
+];
 
-  componentWillUnmount: function() {
-    window.removeEventListener('click', this._handleExternalClick);
-  },
+export default class AddTorrentPanel extends React.Component {
 
-  getInitialState: function() {
-    return {
+  constructor() {
+    super();
+
+    this.state = {
       isExpanded: false
-    }
-  },
+    };
 
-  getChildren: function() {
+    methodsToBind.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
+    window.addEventListener('click', this._handleExternalClick);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('click', this._handleExternalClick);
+  }
+
+  getChildren() {
     return (
       <div className="dropdown__content" onClick={this._handleMenuWrapperClick}>
         <div className="dropdown__content__header">Add Torrent</div>
@@ -51,15 +70,15 @@ var SortDropdown = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  render: function() {
-    var classSet = classnames({
+  render() {
+    let classSet = classnames({
       'dropdown': true,
       'dropdown--align-right': true,
       'is-expanded': this.state.isExpanded
     });
-    var children = null;
+    let children = null;
 
     if (this.state.isExpanded) {
       children = this.getChildren();
@@ -68,50 +87,52 @@ var SortDropdown = React.createClass({
     return (
       <div className={classSet}>
         <Action label="Add Torrent" slug="add-torrent" icon="add" clickHandler={this._handleButtonClick} />
-        <TransitionGroup transitionName="dropdown__content">
+        <CSSTransitionGroup
+          transitionName="dropdown__content"
+          transitionEnterTimeout={250}
+          transitionLeaveTimeout={250}>
           {children}
-        </TransitionGroup>
+        </CSSTransitionGroup>
       </div>
     );
-  },
+  }
 
-  _handleDestinationChange: function(event) {
+  _handleDestinationChange(event) {
     this.setState({
       destination: event.target.value
     })
-  },
+  }
 
-  _handleUrlChange: function(event) {
+  _handleUrlChange(event) {
     this.setState({
       url: event.target.value
     })
-  },
+  }
 
-  _handleAddTorrent: function() {
+  _handleAddTorrent() {
     TorrentActions.add({
       url: this.state.url,
       destination: this.state.destination
     });
-  },
+  }
 
-  _handleButtonClick: function(evt) {
+  _handleButtonClick(evt) {
     evt.stopPropagation();
     this.setState({
       isExpanded: !this.state.isExpanded
     });
-  },
+  }
 
-  _handleExternalClick: function() {
+  _handleExternalClick() {
     if (this.state.isExpanded) {
       this.setState({
         isExpanded: false
       });
     }
-  },
+  }
 
-  _handleMenuWrapperClick: function(evt) {
+  _handleMenuWrapperClick(evt) {
     evt.stopPropagation();
   }
-});
 
-module.exports = SortDropdown;
+}

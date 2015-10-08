@@ -1,15 +1,15 @@
-var React = require('react');
-var Icon = require('../icons/Icon');
+import React from 'react';
 
-var Action = React.createClass({
+import Icon from '../icons/Icon';
 
-  getInitialState: function() {
-    return null;
-  },
+export default class Action extends React.Component {
 
-  render: function() {
+  constructor() {
+    super();
+  }
 
-    var classString = 'action action--' + this.props.slug;
+  render() {
+    let classString = 'action action--' + this.props.slug;
 
     return (
       <div className={classString} onClick={this.props.clickHandler}>
@@ -18,6 +18,5 @@ var Action = React.createClass({
       </div>
     );
   }
-});
 
-module.exports = Action;
+}

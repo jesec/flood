@@ -1,43 +1,44 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var TorrentConstants = require('../constants/TorrentConstants');
-var UIConstants = require('../constants/UIConstants');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import TorrentConstants from '../constants/TorrentConstants';
+import UIConstants from '../constants/UIConstants';
 
-var UIActions = {
-  dismissModals: function() {
+const UIActions = {
+
+  dismissModals() {
     AppDispatcher.dispatch({
       actionType: UIConstants.MODALS_DISMISS
     });
   },
 
-  filterTorrentList: function(status) {
+  filterTorrentList(status) {
     AppDispatcher.dispatch({
       actionType: UIConstants.FILTER_STATUS_CHANGE,
       status: status
     });
   },
 
-  scrollTorrentList: function(torrentCount) {
+  scrollTorrentList(torrentCount) {
     AppDispatcher.dispatch({
       actionType: UIConstants.TORRENT_LIST_SCROLL,
       torrentCount: torrentCount
     });
   },
 
-  searchTorrents: function(query) {
+  searchTorrents(query) {
     AppDispatcher.dispatch({
       actionType: UIConstants.FILTER_SEARCH_CHANGE,
       query: query
     });
   },
 
-  setViewportHeight: function(height) {
+  setViewportHeight(height) {
     AppDispatcher.dispatch({
       actionType: UIConstants.TORRENT_LIST_VIEWPORT_RESIZE,
       viewportHeight: height
     });
   },
 
-  sortTorrents: function(property, direction) {
+  sortTorrents(property, direction) {
     AppDispatcher.dispatch({
       actionType: UIConstants.FILTER_SORT_CHANGE,
       property: property,
@@ -45,11 +46,12 @@ var UIActions = {
     });
   },
 
-  toggleAddTorrentModal: function() {
+  toggleAddTorrentModal() {
     AppDispatcher.dispatch({
       actionType: UIConstants.TORRENT_ADD_MODAL_TOGGLE
     });
   }
-}
 
-module.exports = UIActions;
+};
+
+export default UIActions;

@@ -1,14 +1,19 @@
-var React = require('react');
-var UIActions = require('../../actions/UIActions');
-var classNames = require('classnames');
+import classNames from 'classnames';
+import React from 'react';
 
-var HeaderItem = React.createClass({
+import UIActions from '../../actions/UIActions';
 
-  render: function() {
+class HeaderItem extends React.Component {
 
-    var isSorted = this.props.sortCriteria.property === this.props.propertyVar;
+  constructor() {
+    super();
+  }
 
-    var classes = classNames({
+  render() {
+
+    let isSorted = this.props.sortCriteria.property === this.props.propertylet;
+
+    let classes = classNames({
       'is-sorted': isSorted,
       'is-sorted--asc': isSorted && (this.props.sortCriteria.direction === 'asc'),
       'is-sorted--desc': isSorted && (this.props.sortCriteria.direction === 'desc'),
@@ -22,37 +27,37 @@ var HeaderItem = React.createClass({
     return (
       <span className={classes} onClick={this._onClick}>{this.props.label}</span>
     );
-
-  },
-
-  _onClick: function() {
-    var newDirection = this.props.sortCriteria.direction === 'asc' ? 'desc' : 'asc';
-    UIActions.sortTorrents(this.props.propertyVar, newDirection);
   }
 
-});
+  _onClick() {
+    let newDirection = this.props.sortCriteria.direction === 'asc' ? 'desc' : 'asc';
+    UIActions.sortTorrents(this.props.propertylet, newDirection);
+  }
 
-var TorrentListHeader = React.createClass({
+}
 
-  render: function() {
+export default class TorrentListHeader extends React.Component {
 
+  constructor() {
+    super();
+  }
+
+  render() {
     return (
       <div className="torrent__header">
-        <HeaderItem primary="true" label="Name" slug="name" propertyVar="name" sortCriteria={this.props.sortCriteria} />
+        <HeaderItem primary="true" label="Name" slug="name" propertylet="name" sortCriteria={this.props.sortCriteria} />
         <div className="torrent__detail--secondary">
-          <HeaderItem label="Up" slug="speed" propertyVar="uploadRate" sortCriteria={this.props.sortCriteria} />
-          <HeaderItem label="Down" slug="speed" propertyVar="downloadRate" sortCriteria={this.props.sortCriteria} />
-          <HeaderItem label="ETA" slug="eta" propertyVar="eta" sortCriteria={this.props.sortCriteria} />
-          <HeaderItem label="Completed" slug="completed" propertyVar="percentComplete" sortCriteria={this.props.sortCriteria} />
-          <HeaderItem label="Size" slug="size" propertyVar="sizeBytes" sortCriteria={this.props.sortCriteria} />
-          <HeaderItem label="Ratio" slug="ratio" propertyVar="ratio" sortCriteria={this.props.sortCriteria} />
-          <HeaderItem label="Peers" slug="peers" propertyVar="name" sortCriteria={this.props.sortCriteria} />
-          <HeaderItem label="Seeds" slug="seeds" propertyVar="name" sortCriteria={this.props.sortCriteria} />
+          <HeaderItem label="Up" slug="speed" propertylet="uploadRate" sortCriteria={this.props.sortCriteria} />
+          <HeaderItem label="Down" slug="speed" propertylet="downloadRate" sortCriteria={this.props.sortCriteria} />
+          <HeaderItem label="ETA" slug="eta" propertylet="eta" sortCriteria={this.props.sortCriteria} />
+          <HeaderItem label="Completed" slug="completed" propertylet="percentComplete" sortCriteria={this.props.sortCriteria} />
+          <HeaderItem label="Size" slug="size" propertylet="sizeBytes" sortCriteria={this.props.sortCriteria} />
+          <HeaderItem label="Ratio" slug="ratio" propertylet="ratio" sortCriteria={this.props.sortCriteria} />
+          <HeaderItem label="Peers" slug="peers" propertylet="name" sortCriteria={this.props.sortCriteria} />
+          <HeaderItem label="Seeds" slug="seeds" propertylet="name" sortCriteria={this.props.sortCriteria} />
         </div>
       </div>
     );
   }
 
-});
-
-module.exports = TorrentListHeader;
+}

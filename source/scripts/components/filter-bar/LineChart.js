@@ -1,19 +1,23 @@
-var React = require('react');
-var d3 = require('d3');
+import d3 from 'd3';
+import React from 'react';
 
-var LineChart = React.createClass({
+export default class LineChart extends React.Component {
 
-  componentWillUpdate: function() {
-    var graph = d3.select('#' + this.props.id);
-    var lineData = this.props.data;
-    var margin = {
+  constructor() {
+    super();
+  }
+
+  componentWillUpdate() {
+    let graph = d3.select('#' + this.props.id);
+    let lineData = this.props.data;
+    let margin = {
       bottom: 10,
       top: 10
     };
-    var width = this.props.width;
-    var height = this.props.height;
+    let width = this.props.width;
+    let height = this.props.height;
 
-    var xRange = d3
+    let xRange = d3
       .scale
       .linear()
       .range([0, width])
@@ -26,7 +30,7 @@ var LineChart = React.createClass({
         })
       ]);
 
-    var yRange = d3
+    let yRange = d3
       .scale
       .linear()
       .range([height - margin.bottom - margin.top, 0])
@@ -41,7 +45,7 @@ var LineChart = React.createClass({
 
     // debugger;
 
-    var lineFunc = d3
+    let lineFunc = d3
       .svg
       .line()
       .x(function(d) {
@@ -52,7 +56,7 @@ var LineChart = React.createClass({
       })
       .interpolate('basis');
 
-    var areaFunc = d3
+    let areaFunc = d3
       .svg
       .area()
       .x(function(d) {
@@ -64,8 +68,8 @@ var LineChart = React.createClass({
       })
       .interpolate('basis');
 
-    var points = lineFunc(lineData);
-    var area = areaFunc(lineData);
+    let points = lineFunc(lineData);
+    let area = areaFunc(lineData);
 
     graph
       .select('g')
@@ -84,9 +88,9 @@ var LineChart = React.createClass({
       .attr('class', 'graph--line')
       .attr('d', points)
       .attr('transform', 'translate(0,' + margin.top + ')');
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <svg className="graph" id={this.props.id}>
         <defs>
@@ -103,6 +107,5 @@ var LineChart = React.createClass({
       </svg>
     );
   }
-});
 
-module.exports = LineChart;
+}

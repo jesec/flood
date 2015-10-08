@@ -1,86 +1,175 @@
-var gulp = require('gulp'),
-  sass = require('gulp-sass'),
-  autoprefixer = require('gulp-autoprefixer'),
-  watch = require('gulp-watch'),
-  notify = require('gulp-notify'),
-  browserSync = require('browser-sync'),
-  browserify = require('browserify'),
-  watchify = require('watchify'),
-  reactify = require('reactify'),
-  sourcemaps = require('gulp-sourcemaps'),
-  source = require('vinyl-source-stream'),
-  svgmin = require('gulp-svgmin');
+// dependencies
+var autoprefixer = require('gulp-autoprefixer');
+var browserSync = require('browser-sync');
+var eslint = require('gulp-eslint');
+var gulp = require('gulp');
+var gulpif = require('gulp-if');
+var gutil = require('gulp-util');
+var imagemin = require('gulp-imagemin');
+var minifyCSS = require('gulp-minify-css');
+var sass = require('gulp-sass');
+var sourcemaps = require('gulp-sourcemaps');
+var uglify = require('gulp-uglify');
+var webpack = require('webpack');
 
-var supportedBrowsers = ['last 2 versions', '> 1%', 'ie >= 8', 'Firefox ESR', 'Opera >= 12'],
-  jsFiles = [];
+var packageInfo = require('./package');
 
-var sourceDir = './source/',
-  destDir = './dist/public/';
+var development = process.env.NODE_ENV === 'development';
 
-var reload = browserSync.reload;
+var dirs = {
+  src: 'source',
+  dist: 'dist',
+  js: 'scripts',
+  jsDist: 'public/scripts',
+  styles: 'sass',
+  stylesDist: 'public/stylesheets',
+  img: 'images',
+  imgDist: 'images'
+};
 
-function handleErrors() {
-  var args = Array.prototype.slice.call(arguments);
-  notify.onError({
-    title: "Compile Error",
-    message: "<%= error.message %>"
-  }).apply(this, args);
-  this.emit('end');
+var files = {
+  mainJs: 'app',
+  mainJsDist: 'app',
+  mainStyles: 'style',
+  mainStylesDist: 'style'
+};
+
+var webpackDevtool = 'source-map';
+var webpackWatch = false;
+if (development) {
+  webpackDevtool = 'eval-source-map';
+  webpackWatch = true;
 }
 
-gulp.task('browser-sync', function() {
-  return browserSync.init({
-    port: 3001
+var webpackConfig = {
+  devtool: webpackDevtool,
+  entry: './' + dirs.src + '/' + dirs.js + '/' + files.mainJs + '.js',
+  output: {
+    filename: './' + dirs.dist + '/' + dirs.jsDist + '/' + files.mainJsDist + '.js'
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader?cacheDirectory'
+      }
+    ],
+    preLoaders: [
+      {
+        test: /\.js$/,
+        loader: 'source-map-loader',
+        exclude: /node_modules/
+      }
+    ],
+    postLoaders: [
+      {
+        loader: 'transform/cacheable?envify'
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['', '.js']
+  },
+  watch: webpackWatch
+};
+
+gulp.task('browsersync', function () {
+  browserSync.init({
+    online: true,
+    open: false,
+    port: 4200,
+    server: {
+      baseDir: dirs.dist
+    },
+    socket: {
+      domain: 'localhost:4200'
+    }
   });
 });
 
-gulp.task('styles', function() {
-  return gulp.src(sourceDir + 'sass/style.scss')
-    .pipe(sass({
-      errLogToConsole: true
+// Create a function so we can use it inside of webpack's watch function.
+function eslintFn () {
+  return gulp.src([dirs.js + '/**/*.?(js|jsx)'])
+    .pipe(eslint())
+    .pipe(eslint.formatEach('stylish', process.stderr));
+};
+
+gulp.task('eslint', eslintFn);
+
+gulp.task('images', function () {
+  return gulp.src([dirs.img + '/**/*.*', '!' + dirs.img + '/**/_exports/**/*.*'])
+    .pipe(imagemin({
+      progressive: true,
+      svgoPlugins: [{removeViewBox: false}]
     }))
-    .pipe(autoprefixer({
-      browsers: supportedBrowsers,
-      map: true
-    }))
-    .pipe(browserSync.reload({
-      stream: true
-    }))
-    .pipe(gulp.dest(destDir + 'stylesheets'));
+    .pipe(gulp.dest(dirs.dist + '/' + dirs.imgDist));
 });
 
-gulp.task('scripts', function() {
-  var bundler = browserify({
-    entries: [sourceDir + '/scripts/app.js'],
-    cache: {},
-    packageCache: {},
-    fullPaths: true
-  });
+gulp.task('sass', function () {
+  return gulp.src(dirs.src + '/' + dirs.styles + '/' + files.mainStyles + '.scss')
+    .pipe(gulpif(development, sourcemaps.init()))
+    .pipe(sass())
+    .pipe(autoprefixer())
+    .pipe(gulpif(development, sourcemaps.write('.')))
+    .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist))
+    .pipe(gulpif(development, browserSync.stream()));
+});
 
-  bundler.transform(reactify);
-  function rebundle() {
-    var stream = bundler.bundle();
-    return stream.on('error', handleErrors)
-      .pipe(source('app.js'))
-      .pipe(gulp.dest(destDir + 'scripts/'));
+gulp.task('minify-css', ['sass'], function () {
+  return gulp.src(dirs.dist + '/' + dirs.stylesDist + '/' + files.mainStylesDist + '.css')
+    .pipe(minifyCSS())
+    .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist));
+});
+
+gulp.task('minify-js', function () {
+  return gulp.src(dirs.dist + '/' + dirs.jsDist + '/' + files.mainJs + '.js')
+    .pipe(uglify({
+      mangle: true,
+      compress: true
+    }))
+    .pipe(gulp.dest(dirs.dist + '/' + dirs.jsDist));
+});
+
+gulp.task('reload', function () {
+  if (development) {
+    browserSync.reload();
   }
-
-  bundler.on('update', function() {
-    rebundle();
-  });
-
-  return rebundle();
-});
-
-gulp.task('svg', function() {
-  return gulp.src(sourceDir + '/images/*.svg')
-    .pipe(svgmin())
-    .pipe(gulp.dest(sourceDir + '/images'));
 });
 
 gulp.task('watch', function () {
-  gulp.watch(sourceDir + 'sass/**/*.scss', ['styles']);
-  gulp.watch(sourceDir + 'scripts/**/*.js', ['scripts', reload]);
+  gulp.watch(dirs.src + '/' + dirs.styles + '/**/*.scss', ['sass']);
+  gulp.watch(dirs.src + '/' + dirs.img + '/**/*', ['images']);
 });
 
-gulp.task('default', ['scripts', 'styles', 'watch', 'browser-sync']);
+gulp.task('webpack', function (callback) {
+  var isFirstRun = true;
+
+  webpack(webpackConfig, function (err, stats) {
+    if (err) {
+      throw new gutil.PluginError('webpack', err);
+    }
+
+    gutil.log('[webpack]', stats.toString({
+      children: false,
+      chunks: false,
+      colors: true,
+      modules: false,
+      timing: true
+    }));
+
+    if (isFirstRun) {
+      // This runs on initial gulp webpack load.
+      isFirstRun = false;
+      callback();
+    } else {
+      // This runs after webpack's internal watch rebuild.
+      // eslintFn();
+    }
+  });
+});
+
+gulp.task('default', ['webpack', 'sass', 'images', 'reload']);
+
+gulp.task('dist', ['default', 'minify-css', 'minify-js']);
+
+gulp.task('livereload', ['default', 'browsersync', 'watch']);
