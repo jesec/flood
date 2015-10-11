@@ -86,7 +86,8 @@ export default class TorrentList extends React.Component {
     let hiddenBottom = torrentCount - 1 - maxTorrentIndex;
     let hiddenTop = minTorrentIndex;
 
-    let bottom = maxTorrentIndex <= torrentCount ? hiddenBottom * this.state.torrentHeight : 0;
+    let bottom = maxTorrentIndex <= torrentCount ? hiddenBottom *
+      this.state.torrentHeight : 0;
     let top = minTorrentIndex > 0 ? hiddenTop * this.state.torrentHeight : 0;
 
     return {
@@ -134,7 +135,8 @@ export default class TorrentList extends React.Component {
 
     let torrentList = torrents.map(function(torrent, index) {
 
-      if (index >= viewportLimits.minTorrentIndex && index <= viewportLimits.maxTorrentIndex) {
+      if (index >= viewportLimits.minTorrentIndex &&
+          index <= viewportLimits.maxTorrentIndex) {
         let isSelected = false;
         let hash = torrent.hash;
 
@@ -151,9 +153,13 @@ export default class TorrentList extends React.Component {
 
     return (
       <ul className="torrent__list" ref="torrentList" onScroll={this.onScroll}>
-        <li className="torrent__spacer torrent__spacer--top" style={{height: listPadding.top + 'px'}}></li>
+        <li className="torrent__spacer torrent__spacer--top" style={{
+          height: listPadding.top + 'px'
+        }}></li>
         {torrentList}
-        <li className="torrent__spacer torrent__spacer--bottom" style={{height: listPadding.bottom + 'px'}}></li>
+        <li className="torrent__spacer torrent__spacer--bottom" style={{
+          height: listPadding.bottom + 'px'
+        }}></li>
       </ul>
     );
   }

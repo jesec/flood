@@ -805,33 +805,33 @@ body {
       fill: none;
       stroke-width: 2px; }
   .client-stat--download .icon {
-    fill: rgba(35, 135, 217, 0.75); }
+    fill: rgba(43, 174, 108, 0.75); }
   .client-stat--download .client-stat__data--primary {
-    color: #2387d9; }
+    color: #2bae6c; }
   .client-stat--download .client-stat__data--secondary {
-    color: rgba(35, 135, 217, 0.75); }
+    color: rgba(43, 174, 108, 0.75); }
   .client-stat--download .graph .graph--download--gradient--top {
-    stop-color: rgba(35, 135, 217, 0.2); }
+    stop-color: rgba(43, 174, 108, 0.2); }
   .client-stat--download .graph .graph--download--gradient--bottom {
-    stop-color: rgba(35, 135, 217, 0); }
+    stop-color: rgba(43, 174, 108, 0); }
   .client-stat--download .graph--area {
     fill: url("#graph--download--gradient"); }
   .client-stat--download .graph--line {
-    stroke: rgba(35, 135, 217, 0.4); }
+    stroke: rgba(43, 174, 108, 0.4); }
   .client-stat--upload .icon {
-    fill: rgba(43, 174, 108, 0.75); }
+    fill: rgba(35, 135, 217, 0.75); }
   .client-stat--upload .client-stat__data--primary {
-    color: #2bae6c; }
+    color: #2387d9; }
   .client-stat--upload .client-stat__data--secondary {
-    color: rgba(43, 174, 108, 0.75); }
+    color: rgba(35, 135, 217, 0.75); }
   .client-stat--upload .graph .graph--upload--gradient--top {
-    stop-color: rgba(43, 174, 108, 0.2); }
+    stop-color: rgba(35, 135, 217, 0.2); }
   .client-stat--upload .graph .graph--upload--gradient--bottom {
-    stop-color: rgba(43, 174, 108, 0); }
+    stop-color: rgba(35, 135, 217, 0); }
   .client-stat--upload .graph--area {
     fill: url("#graph--upload--gradient"); }
   .client-stat--upload .graph--line {
-    stroke: rgba(43, 174, 108, 0.4); }
+    stroke: rgba(35, 135, 217, 0.4); }
 
 .dropdown {
   position: relative;
@@ -1180,5 +1180,3 @@ body {
   .is-actively-downloading .torrent__details--eta {
     opacity: 1;
     visibility: visible; }
-
-/*# sourceMappingURL=style.css.map */
