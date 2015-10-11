@@ -1,10 +1,11 @@
-let AppDispatcher = require('../dispatcher/AppDispatcher');
-let EventEmitter = require('events').EventEmitter;
-let TorrentConstants = require('../constants/TorrentConstants');
-let UIConstants = require('../constants/UIConstants');
-let assign = require('object-assign');
-let $ = require('jquery');
-let _ = require('underscore');
+import $ from 'jquery';
+import _ from 'underscore';
+import assign from 'object-assign';
+import {EventEmitter} from 'events';
+
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import TorrentConstants from '../constants/TorrentConstants';
+import UIConstants from '../constants/UIConstants';
 
 let _torrents = [];
 let _filtered = true;
@@ -255,4 +256,4 @@ let sortTorrentList = function() {
 getTorrentList();
 setInterval(getTorrentList, 5000);
 
-module.exports = TorrentStore;
+export default TorrentStore;

@@ -17,9 +17,10 @@ const UIActions = {
     });
   },
 
-  scrollTorrentList(torrentCount) {
+  scrollTorrentList(torrentListScrollPosition, torrentCount) {
     AppDispatcher.dispatch({
       actionType: UIConstants.TORRENT_LIST_SCROLL,
+      torrentListScrollPosition: torrentListScrollPosition,
       torrentCount: torrentCount
     });
   },
