@@ -16,6 +16,10 @@ var packageInfo = require('./package');
 
 var development = process.env.NODE_ENV === 'development';
 
+if (development) {
+  console.log('hello');
+}
+
 var dirs = {
   src: 'source',
   dist: 'dist',
@@ -78,12 +82,7 @@ gulp.task('browsersync', function () {
     online: true,
     open: false,
     port: 4200,
-    server: {
-      baseDir: dirs.dist
-    },
-    socket: {
-      domain: 'localhost:4200'
-    }
+    proxy: 'localhost:3000'
   });
 });
 
@@ -164,6 +163,9 @@ gulp.task('webpack', function (callback) {
     } else {
       // This runs after webpack's internal watch rebuild.
       // eslintFn();
+      if (development) {
+        browserSync.reload();
+      }
     }
   });
 });
