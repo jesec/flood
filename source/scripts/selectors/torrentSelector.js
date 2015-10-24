@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { sortTorrents } from '../util/sortTorrents';
 
-const torrentListSort = (state) => {
+const torrentListSortBy = (state) => {
   return state.ui.torrentList.sortBy;
 };
 
@@ -10,10 +10,10 @@ const torrentList = (state) => {
 };
 
 const torrentSelector = createSelector(
-  torrentListSort,
+  torrentListSortBy,
   torrentList,
-  (torrentListSort, torrentList) => {
-    return sortTorrents(torrentList, torrentListSort);
+  (torrentListSortBy, torrentList) => {
+    return sortTorrents(torrentList, torrentListSortBy);
   }
 );
 
