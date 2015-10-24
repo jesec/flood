@@ -8,9 +8,9 @@ const methodsToBind = [
   'componentDidMount',
   'componentWillUnmount',
   'getMenu',
-  '_handleButtonClick',
-  '_handleExternalClick',
-  '_handleMenuClick'
+  'onItemSelect',
+  'onDropdownClick',
+  'onExternalClick'
 ];
 
 export default class SortDropdown extends React.Component {
@@ -19,11 +19,6 @@ export default class SortDropdown extends React.Component {
     super();
 
     this.state = {
-      sortBy: {
-        displayName: 'Date Added',
-        property: 'added',
-        direction: 'asc'
-      },
       isExpanded: false
     };
 
@@ -33,11 +28,11 @@ export default class SortDropdown extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('click', this._handleExternalClick);
+    window.addEventListener('click', this.onExternalClick);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('click', this._handleExternalClick);
+    window.removeEventListener('click', this.onExternalClick);
   }
 
   getMenu() {
@@ -86,23 +81,45 @@ export default class SortDropdown extends React.Component {
 
     let menuItems = sortableProperties.map(function(property, index) {
       return (
-        <li className="dropdown__content__item" key={index} onClick={this._handleMenuClick.bind(this, property)}>
+        <li className="dropdown__content__item" key={index} onClick={this.onItemSelect.bind(this, property)}>
           {property.displayName}
         </li>
       );
     }, this);
 
     return (
-      <ul className="dropdown__content" onClick={this._handleMenuWrapperClick}>
+      <ul className="dropdown__content">
         <li className="dropdown__content__header">Sort Torrents</li>
         {menuItems}
       </ul>
     );
   }
 
-  render() {
+  onDropdownClick(event) {
+    event.stopPropagation();
+    this.setState({
+      isExpanded: !this.state.isExpanded
+    });
+  }
 
-    let classSet = classnames({
+  onExternalClick() {
+    if (this.state.isExpanded) {
+      this.setState({
+        isExpanded: false
+      });
+    }
+  }
+
+  onItemSelect(sortBy) {
+    this.setState({
+      isExpanded: false,
+      sortBy
+    });
+    this.props.onSortChange(sortBy);
+  }
+
+  render() {
+    let classes = classnames({
       'dropdown': true,
       'is-expanded': this.state.isExpanded
     });
@@ -114,10 +131,10 @@ export default class SortDropdown extends React.Component {
     }
 
     return (
-      <div className={classSet}>
-        <a className="dropdown__button" onClick={this._handleButtonClick}>
+      <div className={classes}>
+        <a className="dropdown__button" onClick={this.onDropdownClick}>
           <label className="dropdown__label">Sort By</label>
-          <span className="dropdown__value">{this.state.sortBy.displayName}</span>
+          <span className="dropdown__value">{this.props.selectedItem.displayName}</span>
         </a>
         <CSSTransitionGroup
           transitionName="dropdown__content"
@@ -127,36 +144,6 @@ export default class SortDropdown extends React.Component {
         </CSSTransitionGroup>
       </div>
     );
-  }
-
-  _handleButtonClick(evt) {
-    evt.stopPropagation();
-    this.setState({
-      isExpanded: !this.state.isExpanded
-    });
-  }
-
-  _handleExternalClick() {
-    if (this.state.isExpanded) {
-      this.setState({
-        isExpanded: false
-      });
-    }
-  }
-
-  _handleMenuClick(property) {
-    this.setState({
-      isExpanded: false,
-      sortBy: {
-        displayName: property.displayName,
-        property: property.property
-      }
-    });
-    UIActions.sortTorrents(property.property, this.state.sortBy.direction);
-  }
-
-  _handleMenuWrapperClick(evt) {
-    evt.stopPropagation();
   }
 
 }

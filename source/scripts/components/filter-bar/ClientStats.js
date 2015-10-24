@@ -1,16 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ClientStore from '../../stores/ClientStore';
 import format from '../../helpers/formatData';
 import Icon from '../icons/Icon';
 import LineChart from './LineChart';
-
-let getClientStats = function() {
-  return {
-    clientStats: ClientStore.getStats()
-  }
-};
 
 const methodsToBind = [
   'componentDidMount',
@@ -46,14 +39,9 @@ export default class ClientStats extends React.Component {
   }
 
   componentDidMount() {
-    ClientStore.addChangeListener(this._onChange);
     this.setState({
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
-  }
-
-  componentWillUnmount() {
-    ClientStore.removeChangeListener(this._onChange);
   }
 
   render() {

@@ -2,11 +2,10 @@ import classNames from 'classnames';
 import React from 'react';
 
 import format from '../../helpers/formatData';
-import TorrentActions from '../../actions/TorrentActions';
 import ProgressBar from './ProgressBar';
 
 const methodsToBind = [
-  '_onClick'
+  'handleClick'
 ];
 
 export default class Torrent extends React.Component {
@@ -99,6 +98,13 @@ export default class Torrent extends React.Component {
     return ratio.toFixed(precision);
   }
 
+  handleClick(event) {
+    this.props.handleClick({
+      hash: this.props.data.hash,
+      event
+    })
+  }
+
   render() {
     let torrent = this.props.data;
 
@@ -129,7 +135,10 @@ export default class Torrent extends React.Component {
     });
 
     return (
-      <li className={classes} onClick={this._onClick} onContextMenu={this._onRightClick}>
+      <li
+        className={classes}
+        onMouseDown={this.handleClick}
+        onContextMenu={this._onRightClick}>
         <ul className="torrent__details">
           <li className="torrent__details--primary">
             {torrent.name}
@@ -180,10 +189,6 @@ export default class Torrent extends React.Component {
         <ProgressBar percent={torrent.percentComplete} />
       </li>
     );
-  }
-
-  _onClick() {
-    TorrentActions.click(this.props.data.hash);
   }
 
   _onRightClick() {

@@ -2,12 +2,9 @@ import classnames from 'classnames';
 import React from 'react';
 
 import Icon from '../icons/Icon.js';
-import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
 const methodsToBind = [
-  'componentDidMount',
-  'componentWillUnmount',
   '_onClick',
   '_onFilterChange'
 ];
@@ -17,21 +14,9 @@ class StatusFilter extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      activeFilter: TorrentStore.getFilterCriteria()
-    };
-
     methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
-
-  componentDidMount() {
-    TorrentStore.addFilterChangeListener(this._onFilterChange);
-  }
-
-  componentWillUnmount() {
-    TorrentStore.removeFilterChangeListener(this._onFilterChange);
   }
 
   render() {
@@ -41,7 +26,7 @@ class StatusFilter extends React.Component {
     let classNames = classnames({
       'status-filter__item': true,
       itemClass: true,
-      'is-active': this.state.activeFilter === this.props.slug
+      'is-active': this.props.activeFilter === this.props.slug
     });
 
     return (
