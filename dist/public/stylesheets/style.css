@@ -465,6 +465,10 @@ body {
   width: 100%; }
 
 .flood {
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -1073,9 +1077,14 @@ body {
   background: #fff;
   box-shadow: -1px -1px rgba(0, 0, 0, 0.1);
   list-style: none;
+  opacity: 1;
   overflow: auto;
   padding: 10px 0;
-  position: relative; }
+  position: relative;
+  -webkit-transition: opacity 1s;
+          transition: opacity 1s; }
+  .torrent__list--empty {
+    opacity: 0; }
 
 .torrent {
   cursor: default;
@@ -1180,3 +1189,5 @@ body {
   .is-actively-downloading .torrent__details--eta {
     opacity: 1;
     visibility: visible; }
+
+/*# sourceMappingURL=style.css.map */
