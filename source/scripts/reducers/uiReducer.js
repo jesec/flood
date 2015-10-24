@@ -2,7 +2,7 @@ const initialState = {
   fetchingData: true,
   torrentList: {
     count: 10,
-    selected: null,
+    selected: [],
     sortBy: {
       direction: 'asc',
       displayName: 'Date Added',
@@ -34,7 +34,7 @@ export default function uiReducer(state = initialState, action) {
         // clicked torrent is only item in list.
         selectedTorrents = [hash];
       }
-      console.log(selectedTorrents);
+
       return Object.assign(
         {},
         state,
