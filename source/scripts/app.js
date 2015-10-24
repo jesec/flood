@@ -1,18 +1,19 @@
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import thunkMiddleware from 'redux-thunk';
 
-import FloodApp from './components/FloodApp';
+import { fetchTorrents } from './actions/TorrentActions';
+import App from './containers/App';
+import rootReducer from './reducers/rootReducer';
 
-class FloodAppWrapper extends React.Component {
+const createStoreWithMiddleware = applyMiddleware(thunkMiddleware)(createStore);
 
-  constructor() {
-    super();
-  }
+let store = createStoreWithMiddleware(rootReducer);
 
-  render() {
-    return <FloodApp />
-  }
-
-}
-
-ReactDOM.render(<FloodAppWrapper />, document.getElementById('app'));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>, document.getElementById('app')
+);
