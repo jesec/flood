@@ -8,13 +8,13 @@ import UIActions from '../actions/UIActions';
 const methodsToBind = [
   'componentDidMount',
   'componentWillUnmount',
-  'handleTorrentSelectionChange',
   'handleScroll',
   'handleTorrentClick',
   'handleWindowResize',
   'getListPadding',
   'getViewportLimits',
-  'setViewportHeight'
+  'setViewportHeight',
+  'shouldComponentUpdate'
 ];
 
 export default class TorrentList extends React.Component {
@@ -23,8 +23,6 @@ export default class TorrentList extends React.Component {
     super();
 
     this.state = {
-      allTorrents: [],
-      selectedTorrents: [],
       torrentCount: 0,
       torrentHeight: 64,
       torrentRenderBuffer: 2,
@@ -50,14 +48,20 @@ export default class TorrentList extends React.Component {
     window.removeEventListener('resize', this.handleWindowResize);
   }
 
-  handleTorrentClick(stuff) {
-    this.props.dispatch(handleTorrentClick(stuff));
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.isFetching === true) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
-  handleTorrentSelectionChange() {
-    this.setState({
-      selectedTorrents: UIStore.getSelectedTorrents()
-    });
+  handleTorrentClick(hash, event) {
+    this.props.dispatch(handleTorrentClick({
+      hash,
+      event,
+      torrentList: this.props.torrents
+    }));
   }
 
   handleScroll() {
@@ -116,7 +120,7 @@ export default class TorrentList extends React.Component {
   }
 
   render() {
-    let selectedTorrents = this.state.selectedTorrents;
+    let selectedTorrents = this.props.selectedTorrents;
     let torrents = this.props.torrents;
     let viewportLimits = this.getViewportLimits();
     let listPadding = this.getListPadding(viewportLimits.minTorrentIndex,
