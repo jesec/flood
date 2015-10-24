@@ -4,9 +4,15 @@
     background: $torrent-list--background;
     box-shadow: -1px -1px $torrent-list--border;
     list-style: none;
+    opacity: 1;
     overflow: auto;
     padding: 10px 0;
     position: relative;
+    transition: opacity 1s;
+
+    &--empty {
+      opacity: 0;
+    }
   }
 }
 
