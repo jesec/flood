@@ -99,10 +99,7 @@ export default class Torrent extends React.Component {
   }
 
   handleClick(event) {
-    this.props.handleClick({
-      hash: this.props.data.hash,
-      event
-    })
+    this.props.handleClick(this.props.data.hash, event);
   }
 
   render() {

@@ -54,8 +54,10 @@ class FloodApp extends React.Component {
         <main className="main">
           <ActionBar dispatch={this.props.dispatch} uiStore={this.props.ui} />
           <TorrentList dispatch={this.props.dispatch}
+            selectedTorrents={this.props.ui.torrentList.selected}
             torrents={this.props.torrents}
-            isLoading={this.props.ui.fetchingData} />
+            uiStore={this.props.ui}
+            isFetching={this.props.ui.fetchingData} />
         </main>
       </div>
     );
