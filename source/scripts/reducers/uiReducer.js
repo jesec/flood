@@ -17,10 +17,53 @@ export default function uiReducer(state = initialState, action) {
       let event = action.payload.event;
       let hash = action.payload.hash;
       let selectedTorrents = Object.assign([], state.torrentList.selected);
+      let torrentList = action.payload.torrentList;
 
       if (event.shiftKey) {
-        // if clicked torrent is in list, remove from list. else add clicked
-        // torrent & all torrents in between
+
+        if (selectedTorrents.length) {
+          let lastHash = selectedTorrents[selectedTorrents.length - 1];
+          let currentHashIndex;
+          let lastHashIndex;
+
+          // get the index of the last selected torrent.
+          torrentList.some(function(torrent, index) {
+            if (torrent.hash === lastHash) {
+              lastHashIndex = index;
+              return true;
+            }
+          });
+
+          // get the index of the newly selected torrent.
+          torrentList.some(function(torrent, index) {
+            if (torrent.hash === hash) {
+              currentHashIndex = index;
+              return true;
+            }
+          });
+
+          // from the previously selected index to the currently selected index,
+          // add all torrent hashes to the selected array.
+          // if the newly selcted hash is larger than the previous, start from
+          // the newly selected hash and work backwards. otherwise go forwards.
+          let increment = 1;
+
+          if (currentHashIndex > lastHashIndex) {
+            increment = -1;
+          }
+
+          while (currentHashIndex !== lastHashIndex) {
+            let foundHash = torrentList[currentHashIndex].hash;
+            // if the torrent isn't already selected, add the hash to the array.
+            if (selectedTorrents.indexOf(foundHash) === -1) {
+              selectedTorrents.push(foundHash);
+            }
+            currentHashIndex += increment;
+          }
+        } else {
+          selectedTorrents = [hash];
+        }
+
       } else if (event.metaKey || event.ctrlKey) {
         let hashPosition = selectedTorrents.indexOf(hash);
         if (hashPosition === -1) {
