@@ -1082,7 +1082,11 @@ body {
   padding: 10px 0;
   position: relative;
   -webkit-transition: opacity 1s;
-          transition: opacity 1s; }
+          transition: opacity 1s;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none; }
   .torrent__list--empty {
     opacity: 0; }
 
