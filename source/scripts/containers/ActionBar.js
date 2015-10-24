@@ -28,7 +28,9 @@ export default class FilterBar extends React.Component {
   }
 
   handleSortChange(sortBy) {
-    this.props.dispatch(setTorrentsSort(sortBy));
+    this.props.dispatch(setTorrentsSort({
+      sortBy
+    }));
   }
 
   handlePause() {
