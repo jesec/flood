@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 
 import clientSelector from './clientSelector';
-import { sortTorrents } from '../util/sortTorrents';
 import torrentSelector from './torrentSelector';
 import uiSelector from './uiSelector';
 
@@ -12,7 +11,7 @@ const rootSelector = createSelector(
   (client, torrents, ui) => {
     return {
       client,
-      torrents: sortTorrents(torrents, ui.torrentList.sortBy),
+      torrents,
       ui
     };
   }

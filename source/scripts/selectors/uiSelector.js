@@ -1,31 +1,37 @@
 import { createSelector } from 'reselect';
 
-const fetchingDataSelector = (state) => {
+const fetchingData = (state) => {
   return state.ui.fetchingData;
 }
 
-const torrentListCountSelector = (state) => {
+const torrentListCount = (state) => {
   return state.ui.torrentList.count;
 };
 
-const torrentListSortSelector = (state) => {
+const torrentListSelected = (state) => {
+  return state.ui.torrentList.selected;
+}
+
+const torrentListSort = (state) => {
   return state.ui.torrentList.sortBy;
 };
 
-const torrentListSelector = createSelector(
-  torrentListCountSelector,
-  torrentListSortSelector,
-  (count, sortBy) => {
+const torrentList = createSelector(
+  torrentListCount,
+  torrentListSelected,
+  torrentListSort,
+  (count, selected, sortBy) => {
     return {
       count,
+      selected,
       sortBy
     };
   }
 );
 
 const uiSelector = createSelector(
-  fetchingDataSelector,
-  torrentListSelector,
+  fetchingData,
+  torrentList,
   (fetchingData, torrentList) => {
     return {
       fetchingData,
