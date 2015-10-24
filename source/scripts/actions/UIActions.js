@@ -1,18 +1,13 @@
-export function handleTorrentClick(options) {
+export function handleTorrentClick(payload) {
   return {
     type: 'CLICK_TORRENT',
-    payload: {
-      hash: options.hash,
-      event: options.event
-    }
+    payload
   };
 }
 
-export function setTorrentsSort(sortBy) {
+export function setTorrentsSort(payload) {
   return {
     type: 'UI_SORT_TORRENTS',
-    payload: {
-      sortBy
-    }
+    payload
   };
 }
