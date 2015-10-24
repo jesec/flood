@@ -1,18 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Torrent from './Torrent';
-import TorrentStore from '../../stores/TorrentStore';
-import UIActions from '../../actions/UIActions';
-import UIStore from '../../stores/UIStore';
+import { handleTorrentClick } from '../actions/UIActions';
+import Torrent from '../components/torrent-list/Torrent';
+import UIActions from '../actions/UIActions';
 
 const methodsToBind = [
   'componentDidMount',
   'componentWillUnmount',
-  'onTorrentStoreChange',
-  'onTorrentSelectionChange',
-  'onScroll',
-  'onWindowResize',
+  'handleTorrentSelectionChange',
+  'handleScroll',
+  'handleTorrentClick',
+  'handleWindowResize',
   'getListPadding',
   'getViewportLimits',
   'setViewportHeight'
@@ -43,38 +42,29 @@ export default class TorrentList extends React.Component {
   }
 
   componentDidMount() {
-    TorrentStore.addChangeListener(this.onTorrentStoreChange);
-    UIStore.addSelectionChangeListener(this.onTorrentSelectionChange);
-    window.addEventListener('resize', this.onWindowResize);
+    window.addEventListener('resize', this.handleWindowResize);
     this.setViewportHeight();
   }
 
   componentWillUnmount() {
-    TorrentStore.removeChangeListener(this.onTorrentStoreChange);
-    UIStore.removeSelectionChangeListener(this.onTorrentSelectionChange);
-    window.removeEventListener('resize', this.onWindowResize);
+    window.removeEventListener('resize', this.handleWindowResize);
   }
 
-  onTorrentStoreChange() {
-    let allTorrents = TorrentStore.getAll();
-
-    this.setState({
-      allTorrents: allTorrents,
-      torrentCount: allTorrents.length
-    });
+  handleTorrentClick(stuff) {
+    this.props.dispatch(handleTorrentClick(stuff));
   }
 
-  onTorrentSelectionChange() {
+  handleTorrentSelectionChange() {
     this.setState({
       selectedTorrents: UIStore.getSelectedTorrents()
     });
   }
 
-  onScroll() {
+  handleScroll() {
     this.setScrollPosition();
   }
 
-  onWindowResize() {
+  handleWindowResize() {
     this.setViewportHeight();
   }
 
@@ -127,39 +117,47 @@ export default class TorrentList extends React.Component {
 
   render() {
     let selectedTorrents = this.state.selectedTorrents;
-    let torrents = this.state.allTorrents;
+    let torrents = this.props.torrents;
     let viewportLimits = this.getViewportLimits();
     let listPadding = this.getListPadding(viewportLimits.minTorrentIndex,
       viewportLimits.maxTorrentIndex,
       torrents.length);
+    let torrentList = null;
 
-    let torrentList = torrents.map(function(torrent, index) {
+    if (torrents && torrents.length) {
+      var self = this;
+      torrentList = torrents.map(function(torrent, index) {
 
-      if (index >= viewportLimits.minTorrentIndex &&
-          index <= viewportLimits.maxTorrentIndex) {
-        let isSelected = false;
-        let hash = torrent.hash;
+        if (index >= viewportLimits.minTorrentIndex &&
+            index <= viewportLimits.maxTorrentIndex) {
+          let isSelected = false;
+          let hash = torrent.hash;
 
-        if (selectedTorrents.indexOf(hash) > -1) {
-          isSelected = true;
+          if (selectedTorrents.indexOf(hash) > -1) {
+            isSelected = true;
+          }
+
+          return (
+            <Torrent key={hash} data={torrent} selected={isSelected}
+              handleClick={self.handleTorrentClick} />
+          );
         }
 
-        return (
-          <Torrent key={hash} data={torrent} selected={isSelected} />
-        );
-      }
-
-    });
+      });
+    }
 
     return (
-      <ul className="torrent__list" ref="torrentList" onScroll={this.onScroll}>
-        <li className="torrent__spacer torrent__spacer--top" style={{
-          height: listPadding.top + 'px'
-        }}></li>
+      <ul className="torrent__list" ref="torrentList"
+        onScroll={this.handleScroll}>
+        <li className="torrent__spacer torrent__spacer--top"
+          style={{
+            height: listPadding.top + 'px'
+          }}></li>
         {torrentList}
-        <li className="torrent__spacer torrent__spacer--bottom" style={{
-          height: listPadding.bottom + 'px'
-        }}></li>
+        <li className="torrent__spacer torrent__spacer--bottom"
+          style={{
+            height: listPadding.bottom + 'px'
+          }}></li>
       </ul>
     );
   }
