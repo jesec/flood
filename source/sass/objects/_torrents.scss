@@ -9,6 +9,7 @@
     padding: 10px 0;
     position: relative;
     transition: opacity 1s;
+    user-select: none;
 
     &--empty {
       opacity: 0;
