@@ -21,9 +21,9 @@ const filteredTorrents = createSelector(
 
 const searchedTorrents = createSelector(
   torrentListSearchString,
-  torrentList,
-  (torrentListSearchString, torrentList) => {
-    return searchTorrents(torrentList, torrentListSearchString);
+  filteredTorrents,
+  (torrentListSearchString, filteredTorrents) => {
+    return searchTorrents(filteredTorrents, torrentListSearchString);
   }
 );
 
