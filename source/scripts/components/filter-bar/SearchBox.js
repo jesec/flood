@@ -4,7 +4,7 @@ import React from'react';
 import Icon from'../icons/Icon';
 
 const methodsToBind = [
-  '_handleKeyUp'
+  'handleKeyUp'
 ];
 
 export default class SearchBox extends React.Component {
@@ -21,6 +21,14 @@ export default class SearchBox extends React.Component {
     });
   }
 
+  handleKeyUp(event) {
+    let value = event.target.value;
+    this.setState({
+      searchValue: value
+    });
+    this.props.handleSearchChange(value);
+  }
+
   render() {
     let classSet = classnames({
       'filter-bar__item': true,
@@ -31,17 +39,12 @@ export default class SearchBox extends React.Component {
     return (
       <div className={classSet}>
         <Icon icon="search" />
-        <input className="textbox" type="text" placeholder="Search Torrents" onKeyUp={this._handleKeyUp} />
+        <input className="textbox"
+          type="text"
+          placeholder="Search Torrents"
+          onKeyUp={this.handleKeyUp} />
       </div>
     );
-  }
-
-  _handleKeyUp(event) {
-    let value = event.target.value;
-    this.setState({
-      searchValue: value
-    });
-    this.props.searchChangeHandler(value);
   }
 
 }
