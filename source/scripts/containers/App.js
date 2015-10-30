@@ -3,7 +3,7 @@ import React from 'react';
 
 import ActionBar from '../containers/ActionBar';
 import { fetchTorrents } from '../actions/ClientActions';
-import FilterBar from '../components/filter-bar/FilterBar';
+import FilterBar from './FilterBar';
 import rootSelector from '../selectors/rootSelector';
 import TorrentList from '../containers/TorrentList';
 import TorrentListHeader from '../components/torrent-list/TorrentListHeader';
@@ -50,7 +50,7 @@ class FloodApp extends React.Component {
   render() {
     return (
       <div className="flood">
-        <FilterBar />
+        <FilterBar dispatch={this.props.dispatch} uiStore={this.props.ui} />
         <main className="main">
           <ActionBar dispatch={this.props.dispatch} uiStore={this.props.ui} />
           <TorrentList dispatch={this.props.dispatch}
