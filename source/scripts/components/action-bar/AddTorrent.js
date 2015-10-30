@@ -3,7 +3,6 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import Action from './Action';
-import TorrentActions from '../../actions/TorrentActions';
 
 const methodsToBind = [
   'componentDidMount',
@@ -110,10 +109,10 @@ export default class AddTorrentPanel extends React.Component {
   }
 
   _handleAddTorrent() {
-    TorrentActions.add({
-      url: this.state.url,
-      destination: this.state.destination
-    });
+    // TorrentActions.add({
+    //   url: this.state.url,
+    //   destination: this.state.destination
+    // });
   }
 
   _handleButtonClick(evt) {

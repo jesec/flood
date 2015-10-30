@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import thunkMiddleware from 'redux-thunk';
 
-import { fetchTorrents } from './actions/TorrentActions';
 import App from './containers/App';
 import rootReducer from './reducers/rootReducer';
 

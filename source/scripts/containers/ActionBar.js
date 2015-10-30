@@ -1,10 +1,10 @@
 import React from 'react';
 
 import Action from '../components/action-bar/Action';
+import { addTorrent, startTorrent, stopTorrent } from '../actions/ClientActions';
 import AddTorrent from '../components/action-bar/AddTorrent';
 import { setTorrentsSort } from '../actions/UIActions';
 import SortDropdown from '../components/action-bar/SortDropdown';
-import TorrentActions from '../actions/TorrentActions';
 import UIActions from '../actions/UIActions';
 
 const methodsToBind = [
@@ -33,20 +33,12 @@ export default class FilterBar extends React.Component {
     }));
   }
 
-  handlePause() {
-
-  }
-
   handleStart() {
-    TorrentActions.start({
-      hash: this.state.selectedTorrents
-    });
+    this.props.dispatch(startTorrent(this.props.uiStore.torrentList.selected));
   }
 
   handleStop() {
-    TorrentActions.stop({
-      hash: this.state.selectedTorrents
-    });
+    this.props.dispatch(stopTorrent(this.props.uiStore.torrentList.selected));
   }
 
   render() {
