@@ -1,4 +1,4 @@
-export default function torrentsReducer(state = {}, action) {
+export default function torrentsReducer(state = [], action) {
   switch (action.type) {
     case 'RECEIVE_TORRENTS':
       return Object.assign(

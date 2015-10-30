@@ -1,19 +1,37 @@
 import { createSelector } from 'reselect';
+import { filterTorrents } from '../util/filterTorrents';
+import { searchTorrents } from '../util/searchTorrents';
 import { sortTorrents } from '../util/sortTorrents';
 
-const torrentListSortBy = (state) => {
-  return state.ui.torrentList.sortBy;
-};
+const torrentListSearchString = state => state.ui.torrentList.searchString;
 
-const torrentList = (state) => {
-  return state.torrents;
-};
+const torrentListSortBy = state => state.ui.torrentList.sortBy;
+
+const torrentListFilterBy = state => state.ui.torrentList.filterBy;
+
+const torrentList = state => state.torrents;
+
+const filteredTorrents = createSelector(
+  torrentListFilterBy,
+  torrentList,
+  (torrentListFilterBy, torrentList) => {
+    return filterTorrents(torrentList, torrentListFilterBy);
+  }
+);
+
+const searchedTorrents = createSelector(
+  torrentListSearchString,
+  torrentList,
+  (torrentListSearchString, torrentList) => {
+    return searchTorrents(torrentList, torrentListSearchString);
+  }
+);
 
 const torrentSelector = createSelector(
   torrentListSortBy,
-  torrentList,
-  (torrentListSortBy, torrentList) => {
-    return sortTorrents(torrentList, torrentListSortBy);
+  searchedTorrents,
+  (torrentListSortBy, searchedTorrents) => {
+    return sortTorrents(searchedTorrents, torrentListSortBy);
   }
 );
 
