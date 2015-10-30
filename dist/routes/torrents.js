@@ -26,15 +26,15 @@ router.get('/list', function(req, res, next) {
 });
 
 router.post('/stop', function(req, res, next) {
-  var hash = req.body.hash;
-  torrents.stopTorrent(hash, function(error, results) {
+  var hashes = req.body.hashes;
+  torrents.stopTorrent(hashes, function(error, results) {
     res.json(results);
   })
 });
 
 router.post('/start', function(req, res, next) {
-  var hash = req.body.hash;
-  torrents.startTorrent(hash, function(error, results) {
+  var hashes = req.body.hashes;
+  torrents.startTorrent(hashes, function(error, results) {
     res.json(results);
   })
 });
