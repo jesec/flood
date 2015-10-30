@@ -2,14 +2,12 @@ import classnames from 'classnames';
 import React from 'react';
 
 import Icon from '../icons/Icon.js';
-import UIActions from '../../actions/UIActions';
 
 const methodsToBind = [
-  '_onClick',
-  '_onFilterChange'
+  'handleClick'
 ];
 
-class StatusFilter extends React.Component {
+export default class StatusFilter extends React.Component {
 
   constructor() {
     super();
@@ -19,65 +17,26 @@ class StatusFilter extends React.Component {
     });
   }
 
-  render() {
+  handleClick() {
+    this.props.handleClick({
+      filterBy: this.props.slug
+    });
+  }
 
+  render() {
     let itemClass = 'status-filter__item--' + this.props.slug;
 
     let classNames = classnames({
       'status-filter__item': true,
       itemClass: true,
-      'is-active': this.props.activeFilter === this.props.slug
+      'is-active': this.props.isActive
     });
 
     return (
-      <li className={classNames} onClick={this._onClick}>
+      <li className={classNames} onClick={this.handleClick}>
         <Icon icon={this.props.icon} />
         {this.props.name}
       </li>
-    );
-  }
-
-  _onClick(action) {
-    UIActions.filterTorrentList(this.props.slug);
-  }
-
-  _onFilterChange() {
-    this.setState({
-      activeFilter: TorrentStore.getFilterCriteria()
-    })
-  }
-
-}
-
-export default class StatusFilterList extends React.Component {
-
-  constructor() {
-    super();
-  }
-
-  render() {
-
-    let filters = [
-      'All',
-      'Downloading',
-      'Completed',
-      'Active',
-      'Inactive',
-      'Error'
-    ];
-
-    return (
-      <ul className="status-filter filter-bar__item">
-        <li className="status-filter__item status-filter__item--heading">
-          Filter by Status
-        </li>
-        <StatusFilter icon="all" name="All" slug="all" />
-        <StatusFilter icon="downloadSmall" name="Downloading" slug="downloading" />
-        <StatusFilter icon="completed" name="Completed" slug="completed" />
-        <StatusFilter icon="active" name="Active" slug="active" />
-        <StatusFilter icon="inactive" name="Inactive" slug="inactive" />
-        <StatusFilter icon="error" name="Error" slug="error" />
-      </ul>
     );
   }
 
