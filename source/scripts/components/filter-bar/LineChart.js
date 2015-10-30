@@ -43,8 +43,6 @@ export default class LineChart extends React.Component {
         })
       ]);
 
-    // debugger;
-
     let lineFunc = d3
       .svg
       .line()

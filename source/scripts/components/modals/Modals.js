@@ -10,6 +10,14 @@ export default class Modal extends React.Component {
     super();
   }
 
+  handleModalClick(event) {
+    event.stopPropagation();
+  }
+
+  handleOverlayClick() {
+    UIActions.dismissModals();
+  }
+
   render() {
     let modal = null;
 
@@ -29,14 +37,6 @@ export default class Modal extends React.Component {
       return null;
     }
 
-  }
-
-  _onModalClick(event) {
-    event.stopPropagation();
-  }
-
-  _onOverlayClick() {
-    UIActions.dismissModals();
   }
 
 }

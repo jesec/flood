@@ -5,7 +5,8 @@ import format from '../../helpers/formatData';
 import ProgressBar from './ProgressBar';
 
 const methodsToBind = [
-  'handleClick'
+  'handleClick',
+  'handleRightClick'
 ];
 
 export default class Torrent extends React.Component {
@@ -102,6 +103,10 @@ export default class Torrent extends React.Component {
     this.props.handleClick(this.props.data.hash, event);
   }
 
+  handleRightClick(event) {
+    console.log(event);
+  }
+
   render() {
     let torrent = this.props.data;
 
@@ -135,7 +140,7 @@ export default class Torrent extends React.Component {
       <li
         className={classes}
         onMouseDown={this.handleClick}
-        onContextMenu={this._onRightClick}>
+        onContextMenu={this.handleRightClick}>
         <ul className="torrent__details">
           <li className="torrent__details--primary">
             {torrent.name}
@@ -186,10 +191,6 @@ export default class Torrent extends React.Component {
         <ProgressBar percent={torrent.percentComplete} />
       </li>
     );
-  }
-
-  _onRightClick() {
-    console.log(event);
   }
 
 }
