@@ -26,7 +26,9 @@ export default class SearchBox extends React.Component {
     this.setState({
       searchValue: value
     });
-    this.props.handleSearchChange(value);
+    this.props.handleSearchChange({
+      searchString: value
+    });
   }
 
   render() {
