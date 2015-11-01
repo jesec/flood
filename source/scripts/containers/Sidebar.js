@@ -1,9 +1,9 @@
 import React from 'react';
 
-import ClientStats from '../components/filter-bar/ClientStats';
+import ClientStats from '../components/sidebar/ClientStats';
 import { setTorrentsFilter, setTorrentsSearch } from '../actions/UIActions';
-import StatusFilters from '../components/filter-bar/StatusFilters';
-import SearchBox from '../components/filter-bar/SearchBox';
+import StatusFilters from '../components/sidebar/StatusFilters';
+import SearchBox from '../components/sidebar/SearchBox';
 import UIActions from '../actions/UIActions';
 
 const methodsToBind = [
@@ -11,7 +11,7 @@ const methodsToBind = [
   'handleSearchChange'
 ];
 
-export default class FilterBar extends React.Component {
+export default class Sidebar extends React.Component {
 
   constructor() {
     super();
@@ -31,11 +31,11 @@ export default class FilterBar extends React.Component {
 
   render() {
     return (
-      <nav className="filter-bar">
+      <nav className="sidebar">
         <ClientStats />
         <SearchBox handleSearchChange={this.handleSearchChange} />
         <StatusFilters handleFilterChange={this.handleFilterChange}
-          activeFilter={this.props.uiStore.torrentList.filterBy} />
+          activeFilter={this.props.filterBy} />
       </nav>
     );
   }

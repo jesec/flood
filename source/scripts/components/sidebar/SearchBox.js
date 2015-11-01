@@ -33,8 +33,8 @@ export default class SearchBox extends React.Component {
 
   render() {
     let classSet = classnames({
-      'filter-bar__item': true,
-      'filter-bar__item--search': true,
+      'sidebar__item': true,
+      'sidebar__item--search': true,
       'is-in-use': this.state.searchValue !== ''
     });
 

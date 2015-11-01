@@ -69,7 +69,7 @@ export default class StatusFilters extends React.Component {
     let filters = this.getFilters();
 
     return (
-      <ul className="status-filter filter-bar__item">
+      <ul className="status-filter sidebar__item">
         <li className="status-filter__item status-filter__item--heading">
           Filter by Status
         </li>

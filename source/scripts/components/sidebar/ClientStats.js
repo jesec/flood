@@ -51,7 +51,7 @@ export default class ClientStats extends React.Component {
     let downloadTotal = format.data(this.state.clientStats.transferred.download);
 
     return (
-      <div className="client-stats filter-bar__item">
+      <div className="client-stats sidebar__item">
         <div className="client-stat client-stat--download">
           <span className="client-stat__icon">
             <Icon icon="download" />
