@@ -1,0 +1,145 @@
+.actions {
+  list-style: none;
+}
+
+.action {
+  box-shadow:
+    1px 0 transparent,
+    -1px 0 transparent;
+  cursor: pointer;
+  display: inline-block;
+  height: 60px;
+  position: relative;
+  width: 60px;
+  text-align: center;
+  transition: background 0.25s, box-shadow 0.25s;
+
+  &:hover {
+    background: $action--background--hover;
+    box-shadow:
+      1px 0 $action--border--hover,
+      -1px 0 $action--border--hover;
+
+    .icon {
+      fill: $action--foreground--hover;
+    }
+  }
+
+  &__label {
+    display: block;
+    position: absolute;
+    top: 100%;
+    visibility: hidden;
+  }
+
+  .icon {
+    fill: $action--foreground;
+    height: 25px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transition: fill 0.25s;
+    transform: translateX(-50%) translateY(-50%);
+    width: 30px;
+  }
+}
+
+.action-bar {
+  background: $action-bar--background;
+  color: $action-bar--foreground;
+  display: flex;
+
+  &__item {
+    flex: 3;
+
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
+  }
+
+  &__group {
+    display: inline-block;
+    padding: 0 15px;
+
+    &--has-divider {
+      position: relative;
+
+      &:before {
+        background: $action-bar--group--border;
+        content: '';
+        position: absolute;
+        height: 80%;
+        left: 0;
+        top: 10%;
+        width: 1px;
+      }
+    }
+  }
+}
+
+.action-bar {
+
+  &__item {
+
+    &--sort-torrents {
+      box-shadow: -1px 0 $action-bar--group--border;
+      max-width: 225px;
+
+      .dropdown {
+        margin: 5px 0 0 15px;
+
+        &__label {
+          color: $dropdown--label;
+          cursor: pointer;
+          display: block;
+          font-size: 0.65em;
+          font-weight: 500;
+          letter-spacing: 0.1em;
+          line-height: 0.9em;
+          text-transform: uppercase;
+        }
+
+        &__value {
+          color: $dropdown--value;
+
+          &:after {
+            border-top: 5px solid $dropdown--value;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            content: '';
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+          }
+        }
+
+        &__content {
+          min-width: 250px;
+        }
+      }
+    }
+  }
+}
+
+.action-bar {
+
+  &__item {
+
+    &--torrent-operations {
+
+      .dropdown {
+        display: inline-block;
+        height: 60px;
+
+        &__content {
+          min-width: 430px;
+          right: 4px;
+        }
+      }
+    }
+  }
+}

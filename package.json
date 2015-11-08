@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "livereload": "NODE_ENV='development' ./node_modules/.bin/gulp livereload",
-    "start": "node ./dist/bin/www"
+    "start": "node ./server/bin/www"
   },
   "dependencies": {
     "axios": "^0.7.0",

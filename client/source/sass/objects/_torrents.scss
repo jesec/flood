@@ -1,0 +1,155 @@
+.torrent {
+
+  &__list {
+    background: $torrent-list--background;
+    border-radius: 4px 4px 0 0;
+    box-shadow: 0 0 0 1px $torrent-list--border;
+    list-style: none;
+    opacity: 1;
+    overflow: auto;
+    padding: 10px 0;
+    position: relative;
+    transition: opacity 1s;
+    user-select: none;
+
+    &--empty {
+      opacity: 0;
+    }
+  }
+}
+
+.torrent {
+  cursor: default;
+  padding: 10px 25px;
+  transition: background 0.25s;
+
+  &:hover {
+    background: $torrent--background--hover;
+  }
+
+  &.is-selected {
+    background: $torrent--background--selected;
+  }
+}
+
+.torrent {
+
+  &__details {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    flex-flow: row wrap;
+    list-style: none;
+
+    &--primary,
+    &--secondary,
+    &--tertiary {
+      transition: color 0.25s;
+    }
+
+    &--primary {
+      color: $torrent--primary--foreground;
+      flex: 4;
+      line-height: 1.3;
+
+      .is-stopped & {
+        color: $torrent--primary--foreground--stopped;
+      }
+
+      .is-selected & {
+        color: $torrent--primary--foreground--selected;
+      }
+
+      .is-selected.is-stopped & {
+        color: $torrent--primary--foreground--selected--stopped;
+      }
+    }
+
+    &--secondary {
+      align-items: flex-end;
+      color: $torrent--secondary--foreground;
+      flex: 1;
+      font-size: 0.75em;
+      min-width: 200px;
+
+      li {
+        flex: 1 1 auto;
+        min-width: 15%;
+
+        &.torrent__details--ratio {
+          max-width: 30px;
+        }
+      }
+
+      .is-stopped & {
+        color: $torrent--secondary--foreground--stopped;
+      }
+
+      .is-selected & {
+        color: $torrent--secondary--foreground--selected;
+      }
+
+      .is-selected.is-stopped & {
+        color: $torrent--secondary--foreground--selected--stopped;
+      }
+    }
+
+    &--tertiary {
+      color: $torrent--tertiary--foreground;
+      display: block;
+      font-size: 0.75em;
+      margin: 0 0 3px 0;
+
+      li {
+        display: inline-block;
+        margin-right: 1em;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .is-stopped & {
+        color: $torrent--tertiary--foreground--stopped;
+      }
+
+      .is-selected & {
+        color: $torrent--tertiary--foreground--selected;
+      }
+
+      .is-selected.is-stopped & {
+        color: $torrent--tertiary--foreground--selected--stopped;
+      }
+    }
+
+    &__label {
+      margin-right: 0.5em;
+      opacity: 0.5;
+    }
+  }
+}
+
+.torrent {
+
+  &__details {
+
+    &--eta {
+      opacity: 0;
+      transition: opacity 1s, visibility 1s;
+      visibility: hidden;
+
+      .torrent__details--segment {
+        margin-right: 0.25em;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .is-actively-downloading & {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+}

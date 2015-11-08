@@ -17,12 +17,12 @@ var packageInfo = require('./package');
 var development = process.env.NODE_ENV === 'development';
 
 var dirs = {
-  src: 'source',
-  dist: 'dist',
+  src: 'client/source',
+  dist: 'server/assets',
   js: 'scripts',
-  jsDist: 'public/scripts',
+  jsDist: '',
   styles: 'sass',
-  stylesDist: 'public/stylesheets',
+  stylesDist: '',
   img: 'images',
   imgDist: 'images'
 };
@@ -92,7 +92,7 @@ function eslintFn () {
 gulp.task('eslint', eslintFn);
 
 gulp.task('images', function () {
-  return gulp.src([dirs.img + '/**/*.*', '!' + dirs.img + '/**/_exports/**/*.*'])
+  return gulp.src(dirs.src + '/' + dirs.img + '/**/*.*')
     .pipe(imagemin({
       progressive: true,
       svgoPlugins: [{removeViewBox: false}]
@@ -103,7 +103,15 @@ gulp.task('images', function () {
 gulp.task('sass', function () {
   return gulp.src(dirs.src + '/' + dirs.styles + '/' + files.mainStyles + '.scss')
     .pipe(gulpif(development, sourcemaps.init()))
-    .pipe(sass())
+    .pipe(sass().on('error', function(error) {
+      gutil.log(
+        gutil.colors.green('Sass Error!\n'),
+        '\n',
+        error.messageFormatted,
+        '\n'
+      );
+      this.emit('end');
+    }))
     .pipe(autoprefixer())
     .pipe(gulpif(development, sourcemaps.write('.')))
     .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist))
@@ -160,6 +168,7 @@ gulp.task('webpack', function (callback) {
       // This runs after webpack's internal watch rebuild.
       // eslintFn();
       if (development) {
+        console.log('reloading from webpack');
         browserSync.reload();
       }
     }

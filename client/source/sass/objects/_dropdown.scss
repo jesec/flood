@@ -1,0 +1,93 @@
+.dropdown {
+  display: inline-block;
+  position: relative;
+  z-index: 2;
+
+  &__button {
+    cursor: pointer;
+    display: block;
+    padding: 12px 15px 7px 15px;
+    text-align: left;
+    width: auto;
+    word-wrap: none;
+  }
+
+  &__content {
+    background: $dropdown--background;
+    border-radius: 3px;
+    box-shadow:
+      0 0 0 1px $dropdown--container--border,
+      0 0 35px $dropdown--container--shadow;
+    color: $dropdown--foreground;
+    left: 0;
+    position: absolute;
+    text-align: left;
+    top: 0;
+    z-index: 2;
+  }
+
+  &__header {
+    position: relative;
+
+    &:after {
+      background: $dropdown--header--border;
+      bottom: 0;
+      content: '';
+      display: block;
+      height: 1px;
+      left: 5%;
+      position: absolute;
+      width: 90%;
+    }
+  }
+
+  &__items {
+    padding: 10px 0;
+  }
+
+  &__item {
+    cursor: pointer;
+    display: block;
+    font-size: 0.9em;
+    padding: 5px 15px;
+    transition: background 0.25s, color 0.25s;
+
+    &:hover {
+      background: $dropdown--item--background--hover;
+      color: $dropdown--item--foreground--hover;
+    }
+
+    &.is-selected {
+      color: $dropdown--item--foreground--active;
+    }
+  }
+
+  &--align-right & {
+    left: auto;
+    right: 0;
+  }
+}
+
+.dropdown {
+
+  &__content {
+
+    &-enter {
+      animation: fade-in 0.25s both;
+    }
+
+    &-leave {
+      animation: fade-out 0.25s both;
+    }
+  }
+}
+
+.dropdown {
+
+  &__content {
+
+    &__container {
+      padding: 25px 30px;
+    }
+  }
+}

@@ -2,5 +2,4 @@
 node_modules
 npm-debug.log
 bower_components
-public/stylesheets
-public/scripts
+server/assets
