@@ -1,13 +1,19 @@
 .modal {
-  animation: fade-in 0.25s forwards;
   background: $modal--overlay;
   height: 100%;
+  left: 0;
   position: fixed;
+  top: 0;
+  transition: opacity 0.5s;
   width: 100%;
   z-index: 100;
 
-  &__window {
+  &__content {
     background: $modal--background;
+    border-radius: 5px;
+    box-shadow:
+      0 0 0 1px $modal--content--border,
+      0 0 35px $modal--content--shadow;
     left: 50%;
     max-width: 100%;
     padding: 30px;
@@ -28,5 +34,25 @@
       font-size: 1.35em;
       font-weight: 400;
     }
+  }
+}
+
+.modal {
+
+  &__animation-enter {
+    opacity: 0;
+  }
+
+  &__animation-enter-active {
+    opacity: 1;
+  }
+
+  &__animation-leave {
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  &__animation-leave-active {
+    opacity: 0;
   }
 }
