@@ -9,14 +9,14 @@ $main-content--background: #e9eef2;
 // form elements
 $form--label--foreground: #979999;
 
-$textbox--background: rgba(#232424, 0.4);
-$textbox--foreground: #979999;
-$textbox--placeholder: rgba(#979899, 0.3);
-$textbox--border: rgba(#202121, 0.85);
-$textbox--active--background: rgba(#232424, 0.6);
-$textbox--active--border: #28679c;
+$textbox--background: rgba($main-content--background, 0.3);
+$textbox--foreground: $foreground;
+$textbox--placeholder: #abbac7;
+$textbox--border: $main-content--background;
+$textbox--active--background: $textbox--background;
+$textbox--active--border: $main-content--background;
 $textbox--active--foreground: $blue;
-$textbox--active--placeholder: rgba(lighten($blue, 10%), 0.4);
+$textbox--active--placeholder: $textbox--placeholder;
 
 $button--primary--foreground: #fff;
 $button--primary--background: $green;
@@ -104,12 +104,15 @@ $dropdown--container--border: rgba($background, 0.1);
 $dropdown--container--shadow: rgba($background, 0.3);
 $dropdown--label: #abbac7;
 $dropdown--value: #8899a8;
+$dropdown--value--active: #4e6a7c;
 $dropdown--header--border: rgba($background, 0.05);
 $dropdown--item--background--hover: rgba($main-content--background, 0.4);
 $dropdown--item--foreground--hover: darken($dropdown--foreground, 10%);
 $dropdown--item--foreground--active: $blue;
 
 // modal windows
-$modal--background: #2f2c30;
-$modal--overlay: rgba(#161516, 0.9);
+$modal--background: #fff;
+$modal--overlay: rgba($background, 0.5);
 $modal--header--foreground: #aaa8ab;
+$modal--content--border: rgba($background, 0.1);
+$modal--content--shadow: rgba($background, 0.3);
