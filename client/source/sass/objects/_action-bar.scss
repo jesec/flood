@@ -63,6 +63,7 @@
 
   &__group {
     display: inline-block;
+    font-size: 0;
     padding: 0 15px;
 
     &--has-divider {
@@ -91,31 +92,6 @@
 
       .dropdown {
         margin: 5px 0 0 15px;
-
-        &__label {
-          color: $dropdown--label;
-          cursor: pointer;
-          display: block;
-          font-size: 0.65em;
-          font-weight: 500;
-          letter-spacing: 0.1em;
-          line-height: 0.9em;
-          text-transform: uppercase;
-        }
-
-        &__value {
-          color: $dropdown--value;
-
-          &:after {
-            border-top: 5px solid $dropdown--value;
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            content: '';
-            display: inline-block;
-            margin-left: 10px;
-            vertical-align: middle;
-          }
-        }
 
         &__content {
           min-width: 250px;

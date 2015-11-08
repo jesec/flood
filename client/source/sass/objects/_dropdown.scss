@@ -26,6 +26,48 @@
     z-index: 2;
   }
 
+  &.is-expanded {
+
+    .dropdown {
+
+      &__header {
+
+        .dropdown {
+
+          &__value {
+            color: $dropdown--value--active;
+          }
+        }
+      }
+    }
+  }
+
+  &__label {
+    color: $dropdown--label;
+    cursor: pointer;
+    display: block;
+    font-size: 0.65em;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 0.9em;
+    text-transform: uppercase;
+  }
+
+  &__value {
+    color: $dropdown--value;
+    transition: color 0.25s;
+
+    &:after {
+      border-top: 5px solid $dropdown--value;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      content: '';
+      display: inline-block;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+  }
+
   &__header {
     position: relative;
 
