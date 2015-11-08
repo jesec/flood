@@ -2,12 +2,12 @@ import React from 'react';
 
 import Action from '../components/action-bar/Action';
 import { addTorrent, startTorrent, stopTorrent } from '../actions/ClientActions';
-import AddTorrent from '../components/action-bar/AddTorrent';
+import { displayModal } from '../actions/UIActions';
 import { setTorrentsSort } from '../actions/UIActions';
 import SortDropdown from '../components/action-bar/SortDropdown';
-import UIActions from '../actions/UIActions';
 
 const methodsToBind = [
+  'handleAddTorrents',
   'handleSortChange',
   'handleStart',
   'handleStop'
@@ -25,6 +25,12 @@ export default class FilterBar extends React.Component {
     methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+  }
+
+  handleAddTorrents() {
+    this.props.dispatch(displayModal({
+      modal: 'add-torrents'
+    }));
   }
 
   handleSortChange(sortBy) {
@@ -58,7 +64,8 @@ export default class FilterBar extends React.Component {
               clickHandler={this.handlePause} />
           </div>
           <div className="action-bar__group action-bar__group--has-divider">
-            <AddTorrent />
+            <Action label="Add Torrent" slug="add-torrent" icon="add"
+              clickHandler={this.handleAddTorrents} />
           </div>
         </div>
       </nav>
