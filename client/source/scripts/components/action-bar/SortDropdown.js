@@ -20,7 +20,7 @@ export default class SortDropdown extends React.Component {
     super();
 
     this.state = {
-      isExpanded: true
+      isExpanded: false
     };
 
     methodsToBind.forEach((method) => {
