@@ -3,6 +3,7 @@ import React from 'react';
 
 import ActionBar from '../containers/ActionBar';
 import { fetchTorrents, fetchTransferData } from '../actions/ClientActions';
+import Modals from '../components/modals/Modals';
 import Sidebar from './Sidebar';
 import rootSelector from '../selectors/rootSelector';
 import TorrentList from '../containers/TorrentList';
@@ -73,6 +74,7 @@ class FloodApp extends React.Component {
             torrents={this.props.torrents}
             isFetching={this.props.ui.fetchingData} />
         </main>
+        <Modals dispatch={this.props.dispatch} type={this.props.ui.modal} />
       </div>
     );
   }
