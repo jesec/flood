@@ -2,6 +2,7 @@ import { selectTorrents } from '../util/selectTorrents';
 
 const initialState = {
   fetchingData: true,
+  modal: null,
   torrentList: {
     count: 10,
     filterBy: 'all',
@@ -63,6 +64,17 @@ export default function uiReducer(state = initialState, action) {
             ...state.torrentList,
             count: action.payload.torrents.length
           }
+        }
+      );
+
+    case 'UI_DISPLAY_MODAL':
+      console.log(action.payload);
+      return Object.assign(
+        {},
+        state,
+        {
+          ...state,
+          modal: action.payload.modal
         }
       );
 

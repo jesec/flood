@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 
 const fetchingData = state => state.ui.fetchingData;
 
+const modal = state => state.ui.modal;
+
 const torrentListCount = state => state.ui.torrentList.count;
 
 const torrentListSelected = state => state.ui.torrentList.selected;
@@ -31,10 +33,12 @@ const torrentList = createSelector(
 
 const uiSelector = createSelector(
   fetchingData,
+  modal,
   torrentList,
-  (fetchingData, torrentList) => {
+  (fetchingData, modal, torrentList) => {
     return {
       fetchingData,
+      modal,
       torrentList
     };
   }
