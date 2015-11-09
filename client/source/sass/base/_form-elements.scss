@@ -8,12 +8,12 @@
 
 .textbox {
   background: $textbox--background;
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid $textbox--border;
   color: $textbox--foreground;
   display: block;
   font-size: 1em;
-  padding: 12px 20px;
+  padding: 10px 15px;
   transition: background 0.25s, border 0.25s, color 0.25s;
   width: 100%;
 
@@ -31,7 +31,6 @@
     &::placeholder {
       color: $textbox--active--placeholder;
     }
-
   }
 
 }
@@ -39,15 +38,29 @@
 .button {
   background: transparent;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  padding: 10px 20px;
-  transition: border 0.25s;
+  font-weight: 400;
+  padding: 10px 30px;
+  transition: background 0.25s;
+
+  &--deemphasize {
+    background: $button--deemphasized--background;
+    color: $button--deemphasized--foreground;
+
+    &:hover {
+      background: $button--deemphasized--background--hover;
+      color: $button--deemphasized--foreground--hover;
+    }
+  }
 
   &--primary {
     background: $button--primary--background;
     color: $button--primary--foreground;
-    font-weight: 400;
+
+    &:hover {
+      background: $button--primary--background--hover;
+    }
   }
 
 }
@@ -65,7 +78,6 @@
     & + .form__row {
       margin-top: 20px;
     }
-
   }
 
 }
