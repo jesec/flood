@@ -6,7 +6,7 @@ const modal = state => state.ui.modal;
 
 const torrentListCount = state => state.ui.torrentList.count;
 
-const torrentListSelected = state => state.ui.torrentList.selected;
+const torrentListSelected = state => state.torrents.selectedTorrents;
 
 const torrentListSearchString = state => state.ui.torrentList.searchString;
 
