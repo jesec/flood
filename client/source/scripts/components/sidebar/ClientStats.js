@@ -76,7 +76,7 @@ export default class ClientStats extends React.Component {
     if (nextProps.transferData.updatedAt !== this.props.transferData.updatedAt) {
       return true;
     } else {
-      return true;
+      return false;
     }
   }
 
