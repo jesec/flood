@@ -6,8 +6,10 @@ $foreground: #53718a;
 
 $main-content--background: #e9eef2;
 
+$header--foreground: #313436;
+
 // form elements
-$form--label--foreground: #979999;
+$form--label--foreground: #53718a;
 
 $textbox--background: rgba($main-content--background, 0.3);
 $textbox--foreground: $foreground;
@@ -18,8 +20,20 @@ $textbox--active--border: $main-content--background;
 $textbox--active--foreground: $blue;
 $textbox--active--placeholder: $textbox--placeholder;
 
+$textbox-repeater--button--background: #fff;
+$textbox-repeater--button--background--hover: $main-content--background;
+$textbox-repeater--button--border: rgba($background, 0.1);
+$textbox-repeater--button--border--hover: rgba($background, 0.2);
+$textbox-repeater--button--foreground: rgba($background, 0.3);
+$textbox-repeater--button--foreground--hover: rgba($background, 0.5);
+
 $button--primary--foreground: #fff;
-$button--primary--background: $green;
+$button--primary--background: $blue;
+$button--primary--background--hover: darken($button--primary--background, 5%);
+$button--deemphasized--foreground: #66717a;
+$button--deemphasized--background: $main-content--background;
+$button--deemphasized--foreground--hover: darken($button--deemphasized--foreground, 5%);
+$button--deemphasized--background--hover: darken($button--deemphasized--background, 5%);
 
 // action bar
 $action-bar--background: transparent;
@@ -113,6 +127,6 @@ $dropdown--item--foreground--active: $blue;
 // modal windows
 $modal--background: #fff;
 $modal--overlay: rgba($background, 0.5);
-$modal--header--foreground: #aaa8ab;
+$modal--header--foreground: $header--foreground;
 $modal--content--border: rgba($background, 0.1);
 $modal--content--shadow: rgba($background, 0.3);

@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-export function addTorrent(hashes) {
+export function addTorrents(urls, destination) {
   return function(dispatch) {
     return axios.post('/torrents/add', {
-        hashes
+        urls,
+        destination
       })
       .then((json = {}) => {
         return json.data;
@@ -21,8 +22,6 @@ export function addTorrent(hashes) {
       });
   }
 };
-
-// CLIENT_RECEIVE_TRANSFER_DATA
 
 export function fetchTransferData() {
   return function(dispatch) {
