@@ -28,13 +28,20 @@ client.prototype.add = function(data, callback) {
   var torrentsAdded = 0;
 
   while (torrentsAdded < data.urls.length) {
+    var parameters = [
+      '',
+      data.urls[torrentsAdded]
+    ];
+
+    if (data.destination !== null && data.destination !== '') {
+      parameters.push('d.directory.set="' + data.destination + '"');
+    }
+
+    parameters.push('d.custom.set=addtime,' + Math.floor(Date.now() / 1000));
+
     multicall[0].push({
       methodName: 'load.start',
-      params: [
-        '',
-        data.urls[torrentsAdded],
-        'd.directory.set="' + data.destination + '"'
-      ]
+      params: parameters
     });
 
     torrentsAdded++;
