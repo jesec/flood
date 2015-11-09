@@ -3,6 +3,7 @@ import React from 'react';
 const _icons = {
   active: <path d="M25.7,25.7H13v17.4H2.6L19.3,60L36,43.1H25.7V25.7z M40.7,0L24,16.9h10.3v17.4H47V16.9h10.3L40.7,0z"/>,
   add: <path d="M53.7 25.3h-19v-19h-9.4v19h-19v9.4h19v19h9.4v-19h19"/>,
+  addMini: <polygon points="8,3.5 4.5,3.5 4.5,0 3.5,0 3.5,3.5 0,3.5 0,4.5 3.5,4.5 3.5,8 4.5,8 4.5,4.5 8,4.5"/>,
   all: <polygon points="52,20.6 48.6,14.7 33.4,24 33.4,8.7 26.6,8.7 26.6,24 11.4,14.7 8,20.6 23.4,30 8,39.4 11.4,45.3 26.6,36 26.6,51.3 33.4,51.3 33.4,36 48.6,45.3 52,39.4 36.6,30 "/>,
   completed: <polygon points="55.5,18.6 46.1,8.7 24.4,31.5 13.9,20.4 4.5,30.3 24.4,51.3 24.4,51.3 24.4,51.3"/>,
   download:
@@ -27,6 +28,7 @@ const _icons = {
       <path className="limits__bars--middle" d="M42.2,27.8h15.6c1.2,0,2.2,1,2.2,2.2s-1,2.2-2.2,2.2H42.2c-1.2,0-2.2-1-2.2-2.2S41,27.8,42.2,27.8z"/>
     </g>,
   pause: <path d="M13.5 51h11V9h-11v42zm22-42v42h11V9h-11z"/>,
+  removeMini: <rect y="3.5" width="8" height="1"/>,
   search:
     <g>
       <path d="M26,38.9c-7.1,0-12.8-5.8-12.8-12.8C13.2,19,19,13.2,26,13.2c7.1,0,12.8,5.8,12.8,12.8 C38.9,33.1,33.1,38.9,26,38.9z M26,18.2c-4.3,0-7.8,3.5-7.8,7.8s3.5,7.8,7.8,7.8s7.8-3.5,7.8-7.8S30.4,18.2,26,18.2z"/>
@@ -50,9 +52,14 @@ export default class Icon extends React.Component {
   render() {
     let className = 'icon icon--' + this.props.icon;
     let icon = _icons[this.props.icon];
+    let viewBox = '0 0 60 60';
+
+    if (this.props.size && this.props.size === 'mini') {
+      viewBox = '0 0 8 8';
+    }
 
     return (
-      <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60">
+      <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox={viewBox}>
         {icon}
       </svg>
     );
