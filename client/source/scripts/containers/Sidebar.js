@@ -1,3 +1,4 @@
+import { connect } from 'react-redux';
 import React from 'react';
 
 import ClientStats from '../components/sidebar/ClientStats';
@@ -5,13 +6,14 @@ import { setTorrentsFilter, setTorrentsSearch } from '../actions/UIActions';
 import StatusFilters from '../components/sidebar/StatusFilters';
 import SearchBox from '../components/sidebar/SearchBox';
 import UIActions from '../actions/UIActions';
+import uiSelector from '../selectors/uiSelector';
 
 const methodsToBind = [
   'handleFilterChange',
   'handleSearchChange'
 ];
 
-export default class Sidebar extends React.Component {
+class Sidebar extends React.Component {
 
   constructor() {
     super();
@@ -35,9 +37,11 @@ export default class Sidebar extends React.Component {
         <ClientStats transferData={this.props.transferData} />
         <SearchBox handleSearchChange={this.handleSearchChange} />
         <StatusFilters handleFilterChange={this.handleFilterChange}
-          activeFilter={this.props.filterBy} />
+          activeFilter={this.props.torrentList.filterBy} />
       </aside>
     );
   }
 
 }
+
+export default connect(uiSelector)(Sidebar);

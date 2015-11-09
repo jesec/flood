@@ -9,7 +9,9 @@ const torrentListSortBy = state => state.ui.torrentList.sortBy;
 
 const torrentListFilterBy = state => state.ui.torrentList.filterBy;
 
-const torrentList = state => state.torrents;
+const selectedTorrents = state => state.torrents.selectedTorrents;
+
+const torrentList = state => state.torrents.torrents;
 
 const filteredTorrents = createSelector(
   torrentListFilterBy,
@@ -27,11 +29,22 @@ const searchedTorrents = createSelector(
   }
 );
 
-const torrentSelector = createSelector(
-  torrentListSortBy,
+const sortedTorrents = createSelector(
   searchedTorrents,
-  (torrentListSortBy, searchedTorrents) => {
+  torrentListSortBy,
+  (searchedTorrents, torrentListSortBy) => {
     return sortTorrents(searchedTorrents, torrentListSortBy);
+  }
+);
+
+const torrentSelector = createSelector(
+  selectedTorrents,
+  sortedTorrents,
+  (selectedTorrents, sortedTorrents) => {
+    return {
+      selectedTorrents,
+      torrents: sortedTorrents
+    };
   }
 );
 

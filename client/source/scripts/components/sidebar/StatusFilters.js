@@ -19,6 +19,14 @@ export default class StatusFilters extends React.Component {
     });
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.activeFilter !== this.props.activeFilter) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   getFilters() {
     let filters = [
       {

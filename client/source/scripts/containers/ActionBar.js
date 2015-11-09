@@ -1,3 +1,4 @@
+import { connect } from 'react-redux';
 import React from 'react';
 
 import Action from '../components/action-bar/Action';
@@ -5,6 +6,7 @@ import { addTorrent, startTorrent, stopTorrent } from '../actions/ClientActions'
 import { displayModal } from '../actions/UIActions';
 import { setTorrentsSort } from '../actions/UIActions';
 import SortDropdown from '../components/action-bar/SortDropdown';
+import uiSelector from '../selectors/uiSelector';
 
 const methodsToBind = [
   'handleAddTorrents',
@@ -13,7 +15,7 @@ const methodsToBind = [
   'handleStop'
 ];
 
-export default class FilterBar extends React.Component {
+class ActionBar extends React.Component {
 
   constructor() {
     super();
@@ -40,11 +42,11 @@ export default class FilterBar extends React.Component {
   }
 
   handleStart() {
-    this.props.dispatch(startTorrent(this.props.uiStore.torrentList.selected));
+    this.props.dispatch(startTorrent(this.props.torrentList.selected));
   }
 
   handleStop() {
-    this.props.dispatch(stopTorrent(this.props.uiStore.torrentList.selected));
+    this.props.dispatch(stopTorrent(this.props.torrentList.selected));
   }
 
   render() {
@@ -52,7 +54,7 @@ export default class FilterBar extends React.Component {
       <nav className="action-bar">
         <div className="actions action-bar__item action-bar__item--sort-torrents">
           <SortDropdown onSortChange={this.handleSortChange}
-            selectedItem={this.props.uiStore.torrentList.sortBy} />
+            selectedItem={this.props.torrentList.sortBy} />
         </div>
         <div className="actions action-bar__item action-bar__item--torrent-operations">
           <div className="action-bar__group">
@@ -73,3 +75,5 @@ export default class FilterBar extends React.Component {
   }
 
 }
+
+export default connect(uiSelector)(ActionBar);

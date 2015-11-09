@@ -1,15 +1,17 @@
+import { connect } from 'react-redux';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import AddTorrents from './AddTorrents';
 import { dismissModal } from '../../actions/UIActions';
 import Icon from '../icons/Icon';
+import uiSelector from '../../selectors/uiSelector';
 
 const methodsToBind = [
   'handleOverlayClick'
 ];
 
-export default class Modal extends React.Component {
+class Modal extends React.Component {
 
   constructor() {
     super();
@@ -27,10 +29,18 @@ export default class Modal extends React.Component {
     this.props.dispatch(dismissModal());
   }
 
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.modal !== this.props.modal) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   render() {
     let modal = null;
 
-    switch (this.props.type) {
+    switch (this.props.modal) {
       case 'add-torrents':
         modal = (
           <AddTorrents clickHandler={this.onModalClick}
@@ -60,3 +70,5 @@ export default class Modal extends React.Component {
   }
 
 }
+
+export default connect(uiSelector)(Modal);

@@ -1,9 +1,13 @@
+import { connect } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { fetchTorrents } from '../actions/ClientActions';
 import { handleTorrentClick } from '../actions/UIActions';
 import Torrent from '../components/torrent-list/Torrent';
+import torrentSelector from '../selectors/torrentSelector';
 import UIActions from '../actions/UIActions';
+import uiSelector from '../selectors/uiSelector';
 
 const methodsToBind = [
   'componentDidMount',
@@ -12,25 +16,28 @@ const methodsToBind = [
   'handleTorrentClick',
   'handleWindowResize',
   'getListPadding',
+  'getTorrents',
   'getViewportLimits',
   'setViewportHeight',
   'shouldComponentUpdate'
 ];
 
-export default class TorrentList extends React.Component {
+class TorrentList extends React.Component {
 
   constructor() {
     super();
 
     this.state = {
+      count: 0,
+      maxTorrentIndex: 4,
+      minTorrentIndex: 0,
+      scrollPosition: 0,
+      spaceBottom: 0,
+      spaceTop: 0,
       torrentCount: 0,
+      torrentFetchInterval: null,
       torrentHeight: 64,
       torrentRenderBuffer: 2,
-      minTorrentIndex: 0,
-      maxTorrentIndex: 4,
-      spaceTop: 0,
-      spaceBottom: 0,
-      scrollPosition: 0,
       viewportHeight: 0
     };
 
@@ -46,6 +53,17 @@ export default class TorrentList extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleWindowResize);
+    clearInterval(this.state.torrentFetchInterval);
+  }
+
+  componentWillMount() {
+    let getTorrents = this.getTorrents;
+
+    this.state.torrentFetchInterval = setInterval(function() {
+      getTorrents();
+    }, 5000);
+
+    getTorrents();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -54,6 +72,10 @@ export default class TorrentList extends React.Component {
     } else {
       return true;
     }
+  }
+
+  getTorrents() {
+    this.props.dispatch(fetchTorrents());
   }
 
   handleTorrentClick(hash, event) {
@@ -167,3 +189,5 @@ export default class TorrentList extends React.Component {
   }
 
 }
+
+export default connect(torrentSelector)(TorrentList);

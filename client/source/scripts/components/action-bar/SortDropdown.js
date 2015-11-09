@@ -130,10 +130,23 @@ export default class SortDropdown extends React.Component {
 
   onItemSelect(sortBy) {
     this.setState({
-      isExpanded: false,
-      sortBy
+      isExpanded: false
     });
-    this.props.onSortChange(sortBy);
+    let direction = this.props.selectedItem.direction;
+
+    if (this.props.selectedItem.property === sortBy.property) {
+      direction = direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      direction = 'asc';
+    }
+
+    let sortProperty = {
+      displayName: sortBy.displayName,
+      property: sortBy.property,
+      direction
+    };
+
+    this.props.onSortChange(sortProperty);
   }
 
   render() {
