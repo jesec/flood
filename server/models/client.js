@@ -10,28 +10,37 @@ function client() {
 };
 
 client.prototype.add = function(data, callback) {
-  var commands = [
-    [
-      {
-        methodName: 'execute',
-        params: [
-          'mkdir',
-          '-p',
-          data.destination
-        ]
-      },
-      {
-        methodName: 'load.start',
-        params: [
-          '',
-          data.url,
-          'd.directory.set="' + data.destination + '"'
-        ]
-      }
-    ]
+  var multicall = [
+    []
   ];
 
-  rTorrent.get('system.multicall', commands).then(function(data) {
+  if (data.destination !== null && data.destination !== '') {
+    multicall[0].push({
+      methodName: 'execute',
+      params: [
+        'mkdir',
+        '-p',
+        data.destination
+      ]
+    });
+  }
+
+  var torrentsAdded = 0;
+
+  while (torrentsAdded < data.urls.length) {
+    multicall[0].push({
+      methodName: 'load.start',
+      params: [
+        '',
+        data.urls[torrentsAdded],
+        'd.directory.set="' + data.destination + '"'
+      ]
+    });
+
+    torrentsAdded++;
+  }
+
+  rTorrent.get('system.multicall', multicall).then(function(data) {
     callback(null, data);
   }, function(error) {
     callback(error, null);
