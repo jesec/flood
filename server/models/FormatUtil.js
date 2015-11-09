@@ -13,7 +13,7 @@ var FormatUtil = {
       var days = Math.floor(((seconds % 31536000) % 604800) / 86400);
       var hours = Math.floor((((seconds % 31536000) % 604800) % 86400) / 3600);
       var minutes = Math.floor(((((seconds % 31536000) % 604800) % 86400) % 3600) / 60);
-      var wholeSeconds = Math.floor((((((seconds % 31536000) % 604800) % 86400) % 3600) % 60) / 60);
+      var wholeSeconds = Math.floor(seconds);
 
       var timeRemaining = {};
 

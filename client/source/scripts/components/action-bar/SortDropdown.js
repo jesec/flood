@@ -53,7 +53,7 @@ export default class SortDropdown extends React.Component {
       },
       {
         displayName: 'ETA',
-        property: 'seconds'
+        property: 'eta'
       },
       {
         displayName: 'Download Speed',
