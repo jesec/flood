@@ -68,7 +68,6 @@ export default function uiReducer(state = initialState, action) {
       );
 
     case 'UI_DISPLAY_MODAL':
-      console.log(action.payload);
       return Object.assign(
         {},
         state,
