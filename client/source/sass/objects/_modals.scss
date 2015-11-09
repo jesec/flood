@@ -15,25 +15,38 @@
       0 0 0 1px $modal--content--border,
       0 0 35px $modal--content--shadow;
     left: 50%;
-    max-width: 100%;
+    max-height: 80%;
+    max-width: 80%;
+    overflow: auto;
     padding: 30px;
     position: absolute;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    top: 10%;
+    transform: translate(-50%, 0);
     width: 500px;
   }
 }
 
 .modal {
 
-  &__header {
-    margin-bottom: 20px;
+  &__button-group {
+    text-align: right;
 
-    h1 {
-      color: $modal--header--foreground;
-      font-size: 1.35em;
-      font-weight: 400;
+    .button {
+
+      & + .button {
+        margin-left: 20px;
+      }
     }
+  }
+}
+
+.modal {
+
+  &__header {
+    color: $modal--header--foreground;
+    font-size: 1.1em;
+    font-weight: 400;
+    margin-bottom: 20px;
   }
 }
 
