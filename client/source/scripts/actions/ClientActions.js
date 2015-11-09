@@ -62,7 +62,7 @@ export function fetchTorrents() {
         });
       })
       .catch((error) => {
-        console.error('error', error);
+        console.error(error);
       });
   }
 }
@@ -85,7 +85,7 @@ export function startTorrent(hashes) {
         dispatch(fetchTorrents());
       })
       .catch((error) => {
-        console.error('error', error);
+        console.error(error);
       });
   }
 }
@@ -108,7 +108,7 @@ export function stopTorrent(hashes) {
         dispatch(fetchTorrents());
       })
       .catch((error) => {
-        console.error('error', error);
+        console.error(error);
       });
   }
 }
