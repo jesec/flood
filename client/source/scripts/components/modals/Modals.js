@@ -1,7 +1,7 @@
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
-import AddTorrent from './AddTorrent';
+import AddTorrents from './AddTorrents';
 import { dismissModal } from '../../actions/UIActions';
 import Icon from '../icons/Icon';
 
@@ -24,7 +24,6 @@ export default class Modal extends React.Component {
   }
 
   handleOverlayClick() {
-    console.log(dismissModal());
     this.props.dispatch(dismissModal());
   }
 
@@ -33,7 +32,11 @@ export default class Modal extends React.Component {
 
     switch (this.props.type) {
       case 'add-torrents':
-        modal = <AddTorrent clickHandler={this.onModalClick} />;
+        modal = (
+          <AddTorrents clickHandler={this.onModalClick}
+            dismissModal={this.handleOverlayClick}
+            dispatch={this.props.dispatch} />
+        );
         break;
     }
 
