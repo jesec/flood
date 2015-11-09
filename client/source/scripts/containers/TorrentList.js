@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,12 +13,11 @@ import uiSelector from '../selectors/uiSelector';
 const methodsToBind = [
   'componentDidMount',
   'componentWillUnmount',
-  'handleScroll',
   'handleTorrentClick',
-  'handleWindowResize',
   'getListPadding',
   'getTorrents',
   'getViewportLimits',
+  'setScrollPosition',
   'setViewportHeight',
   'shouldComponentUpdate'
 ];
@@ -43,6 +43,14 @@ class TorrentList extends React.Component {
 
     methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
+    });
+
+    this.handleScroll = _.throttle(this.setScrollPosition, 150, {
+      leading: true
+    });
+
+    this.handleWindowResize = _.throttle(this.setViewportHeight, 350, {
+      leading: true
     });
   }
 
@@ -86,14 +94,6 @@ class TorrentList extends React.Component {
     }));
   }
 
-  handleScroll() {
-    this.setScrollPosition();
-  }
-
-  handleWindowResize() {
-    this.setViewportHeight();
-  }
-
   getListPadding(minTorrentIndex, maxTorrentIndex, torrentCount) {
     if (maxTorrentIndex > torrentCount - 1) {
       maxTorrentIndex = torrentCount - 1;
@@ -113,7 +113,7 @@ class TorrentList extends React.Component {
   }
 
   getViewportLimits() {
-    let buffer = 3;
+    let buffer = 10;
 
     let elementsInView = Math.floor(this.state.viewportHeight /
       this.state.torrentHeight);
