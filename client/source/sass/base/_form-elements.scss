@@ -57,6 +57,7 @@
   &--primary {
     background: $button--primary--background;
     color: $button--primary--foreground;
+    white-space: nowrap;
 
     &:hover {
       background: $button--primary--background--hover;
