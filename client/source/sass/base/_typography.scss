@@ -12,3 +12,9 @@ body {
   margin-bottom: 0.1em;
   opacity: 0.8;
 }
+
+.text-overflow {
+  overflow: hidden;
+  position: relative;
+  text-overflow: ellipsis;
+}
