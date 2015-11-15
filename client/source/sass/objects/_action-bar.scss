@@ -48,6 +48,18 @@
   background: $action-bar--background;
   color: $action-bar--foreground;
   display: flex;
+  position: relative;
+
+  &:after {
+    background: $torrent-list--border;
+    bottom: 0;
+    content: '';
+    height: 1px;
+    left: 9px;
+    position: absolute;
+    right: 0;
+    width: auto;
+  }
 
   &__item {
     flex: 3;

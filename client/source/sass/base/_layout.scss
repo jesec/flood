@@ -42,8 +42,10 @@ body {
   }
 
   &__list {
-    flex: 5;
-    margin: 0 10px;
+
+    &__wrapper {
+      flex: 5;
+    }
   }
 
 }

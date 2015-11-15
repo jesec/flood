@@ -173,18 +173,19 @@ class TorrentList extends React.Component {
     }
 
     return (
-      <ul className="torrent__list" ref="torrentList"
-        onScroll={this.handleScroll}>
-        <li className="torrent__spacer torrent__spacer--top"
-          style={{
-            height: listPadding.top + 'px'
-          }}></li>
-        {torrentList}
-        <li className="torrent__spacer torrent__spacer--bottom"
-          style={{
-            height: listPadding.bottom + 'px'
-          }}></li>
-      </ul>
+      <div className="torrent__list__wrapper" onScroll={this.handleScroll} ref="torrentList">
+        <ul className="torrent__list">
+          <li className="torrent__spacer torrent__spacer--top"
+            style={{
+              height: listPadding.top + 'px'
+            }}></li>
+          {torrentList}
+          <li className="torrent__spacer torrent__spacer--bottom"
+            style={{
+              height: listPadding.bottom + 'px'
+            }}></li>
+        </ul>
+      </div>
     );
   }
 

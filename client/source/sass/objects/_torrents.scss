@@ -1,16 +1,30 @@
 .torrent {
 
   &__list {
-    background: $torrent-list--background;
-    border-radius: 4px 4px 0 0;
-    box-shadow: 0 0 0 1px $torrent-list--border;
-    list-style: none;
-    opacity: 1;
-    overflow: auto;
+    box-shadow: -1px 0 0 0 $torrent-list--border;
+    margin: 0 0 0 10px;
     padding: 10px 0;
     position: relative;
-    transition: opacity 1s;
-    user-select: none;
+
+    &__wrapper {
+      list-style: none;
+      opacity: 1;
+      overflow: auto;
+      position: relative;
+      transition: opacity 1s;
+      user-select: none;
+    }
+
+    &:before {
+      background: $torrent-list--background;
+      bottom: 0;
+      content: '';
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 0;
+    }
 
     &--empty {
       opacity: 0;
@@ -20,15 +34,32 @@
 
 .torrent {
   cursor: default;
-  padding: 10px 25px;
+  padding: 10px 20px;
+  position: relative;
   transition: background 0.25s;
 
   &:hover {
     background: $torrent--background--hover;
+
+    .torrent {
+
+      &__more-info {
+        opacity: 1;
+      }
+    }
   }
 
   &.is-selected {
     background: $torrent--background--selected;
+  }
+
+  &__more-info {
+    margin-top: -8px;
+    position: absolute;
+    left: -8px;
+    opacity: 0;
+    top: 50%;
+    transition: opacity 0.25s;
   }
 }
 
