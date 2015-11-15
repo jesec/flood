@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 import format from '../../helpers/formatData';
+import Icon from '../icons/Icon';
 import ProgressBar from './ProgressBar';
 
 const methodsToBind = [
@@ -141,7 +142,7 @@ export default class Torrent extends React.Component {
         onMouseDown={this.handleClick}
         onContextMenu={this.handleRightClick}>
         <ul className="torrent__details">
-          <li className="torrent__details--primary">
+          <li className="torrent__details--primary text-overflow">
             {torrent.name}
           </li>
           <li className="torrent__details--secondary">
@@ -188,6 +189,9 @@ export default class Torrent extends React.Component {
           </li>
         </ul>
         <ProgressBar percent={torrent.percentComplete} />
+        <button className="torrent__more-info floating-action__button">
+          <Icon icon="dotsMini" size="mini" />
+        </button>
       </li>
     );
   }
