@@ -21,7 +21,7 @@ export default class TextboxRepeater extends React.Component {
   getTextboxes() {
     let textboxes = this.props.textboxes.map((textbox, index) => {
       let addButton = (
-        <button className="textbox-repeater__button textbox-repeater__add"
+        <button className="textbox-repeater__add floating-action__button"
           onClick={this.props.handleTextboxAdd.bind(textbox, index)}>
           <Icon icon="addMini" size="mini" />
         </button>
@@ -30,7 +30,7 @@ export default class TextboxRepeater extends React.Component {
 
       if (index > 0) {
         removeButton = (
-          <button className="textbox-repeater__button textbox-repeater__remove"
+          <button className="textbox-repeater__remove floating-action__button"
             onClick={this.props.handleTextboxRemove.bind(textbox, index)}>
             <Icon icon="removeMini" size="mini" />
           </button>
@@ -44,7 +44,7 @@ export default class TextboxRepeater extends React.Component {
             placeholder={this.props.placeholder}
             value={textbox.value}
             type="text" />
-          <div className="textbox-repeater__button-group">
+          <div className="floating-action__group">
             {removeButton}
             {addButton}
           </div>
