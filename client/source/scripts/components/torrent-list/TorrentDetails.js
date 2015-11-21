@@ -80,10 +80,15 @@ class TorrentDetails extends React.Component {
     }
 
     return (
-      <table className="torrent-details__table">
+      <table className="torrent-details__table table">
         <thead>
           <tr>
-            <th>Peers {peerCount}</th>
+            <th>
+              Peers
+              <span className="table__heading--sub-heading">
+                {peerCount}
+              </span>
+            </th>
             <th>DL</th>
             <th>UL</th>
           </tr>

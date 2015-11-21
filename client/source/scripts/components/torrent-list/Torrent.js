@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 
-import format from '../../helpers/formatData';
+import format from '../../util/formatData';
 import Icon from '../icons/Icon';
 import ProgressBar from './ProgressBar';
 
@@ -37,6 +37,7 @@ export default class Torrent extends React.Component {
     } else if (eta.weeks > 0) {
       return (
         <span>
+          
           <span className="torrent__details--segment">
             {eta.weeks}<em className="unit">wk</em>
           </span>
@@ -189,7 +190,8 @@ export default class Torrent extends React.Component {
           </li>
         </ul>
         <ProgressBar percent={torrent.percentComplete} />
-        <button className="torrent__more-info floating-action__button">
+        <button className="torrent__more-info floating-action__button"
+          onClick={this.props.handleDetailsClick.bind(this, torrent)}>
           <Icon icon="dotsMini" size="mini" />
         </button>
       </li>

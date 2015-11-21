@@ -1,11 +1,13 @@
 import _ from 'lodash';
-import { connect } from 'react-redux';
+import classNames from 'classnames';
+import {connect} from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { fetchTorrents } from '../actions/ClientActions';
-import { handleTorrentClick } from '../actions/UIActions';
+import {getTorrents, getTorrentDetails} from '../actions/ClientActions';
+import {handleTorrentClick} from '../actions/UIActions';
 import Torrent from '../components/torrent-list/Torrent';
+import TorrentDetails from '../components/torrent-list/TorrentDetails';
 import torrentSelector from '../selectors/torrentSelector';
 import UIActions from '../actions/UIActions';
 import uiSelector from '../selectors/uiSelector';
@@ -13,6 +15,7 @@ import uiSelector from '../selectors/uiSelector';
 const methodsToBind = [
   'componentDidMount',
   'componentWillUnmount',
+  'handleDetailsClick',
   'handleTorrentClick',
   'getListPadding',
   'getTorrents',
@@ -28,6 +31,7 @@ class TorrentList extends React.Component {
     super();
 
     this.state = {
+      detailsPanelOpen: false,
       count: 0,
       maxTorrentIndex: 4,
       minTorrentIndex: 0,
@@ -83,10 +87,21 @@ class TorrentList extends React.Component {
   }
 
   getTorrents() {
-    this.props.dispatch(fetchTorrents());
+    this.props.dispatch(getTorrents());
+  }
+
+  handleDetailsClick(torrent) {
+    this.props.dispatch(getTorrentDetails(torrent.hash));
+    this.setState({
+      detailsPanelOpen: !this.state.detailsPanelOpen
+    });
   }
 
   handleTorrentClick(hash, event) {
+    if (this.state.detailsPanelOpen) {
+      this.props.dispatch(getTorrentDetails(hash));
+    }
+
     this.props.dispatch(handleTorrentClick({
       hash,
       event,
@@ -142,16 +157,19 @@ class TorrentList extends React.Component {
   }
 
   render() {
+    let classes = classNames({
+      'torrents': true,
+      'has-sidepanel': this.state.detailsPanelOpen
+    });
     let selectedTorrents = this.props.selectedTorrents;
+    let torrentList = null;
     let torrents = this.props.torrents;
     let viewportLimits = this.getViewportLimits();
     let listPadding = this.getListPadding(viewportLimits.minTorrentIndex,
       viewportLimits.maxTorrentIndex,
       torrents.length);
-    let torrentList = null;
 
     if (torrents && torrents.length) {
-      var self = this;
       torrentList = torrents.map(function(torrent, index) {
 
         if (index >= viewportLimits.minTorrentIndex &&
@@ -165,26 +183,34 @@ class TorrentList extends React.Component {
 
           return (
             <Torrent key={hash} data={torrent} selected={isSelected}
-              handleClick={self.handleTorrentClick} />
+              handleClick={this.handleTorrentClick}
+              handleDetailsClick={this.handleDetailsClick} />
           );
         }
 
-      });
+      }, this);
     }
 
     return (
-      <div className="torrent__list__wrapper" onScroll={this.handleScroll} ref="torrentList">
-        <ul className="torrent__list">
-          <li className="torrent__spacer torrent__spacer--top"
-            style={{
-              height: listPadding.top + 'px'
-            }}></li>
-          {torrentList}
-          <li className="torrent__spacer torrent__spacer--bottom"
-            style={{
-              height: listPadding.bottom + 'px'
-            }}></li>
-        </ul>
+      <div className={classes}>
+        <div className="torrent__list__wrapper" onScroll={this.handleScroll}
+          ref="torrentList">
+          <ul className="torrent__list">
+            <li className="torrent__spacer torrent__spacer--top"
+              style={{
+                height: listPadding.top + 'px'
+              }}></li>
+            {torrentList}
+            <li className="torrent__spacer torrent__spacer--bottom"
+              style={{
+                height: listPadding.bottom + 'px'
+              }}></li>
+          </ul>
+        </div>
+        <div className="torrent-details__placeholder"></div>
+        <TorrentDetails selectedTorrents={selectedTorrents}
+          torrents={torrents}
+          visible={this.state.detailsPanelOpen} />
       </div>
     );
   }
