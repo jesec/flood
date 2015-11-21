@@ -1,0 +1,51 @@
+.torrent-details {
+  background: $torrent-details--background;
+  box-shadow: -1px 0 0 $torrent-details--border;
+  height: 100%;
+  width: 40%;
+  overflow: auto;
+  padding: $spacing-unit;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(0);
+  transition: transform 0.5s;
+  z-index: 2;
+
+  &.torrent-details-enter {
+    transform: translateX(100%);
+  }
+
+  &.torrent-details-enter-active {
+    transform: translateX(0);
+  }
+
+  &.torrent-details-leave {
+    transform: translateX(100%);
+  }
+
+  &__transfer-data {
+
+    .transfer-data {
+      display: inline-block;
+      margin-right: 10px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    .icon {
+      height: 12px;
+      width: 12px;
+    }
+  }
+
+  &__table {
+    width: 100%;
+
+    thead {
+      text-align: left;
+    }
+  }
+}
