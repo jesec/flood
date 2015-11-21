@@ -1,4 +1,5 @@
 const initialState = {
+  torrentDetails: {},
   transfers: {
     updatedAt: 0,
     download: {
@@ -14,6 +15,19 @@ const initialState = {
 
 export default function clientReducer(state = initialState, action) {
   switch (action.type) {
+
+    case 'RECEIVE_TORRENT_DETAILS':
+      let torrentDetails = {};
+      torrentDetails[action.payload.hash] = action.payload.torrentDetails;
+
+      return Object.assign(
+          {},
+          state,
+          {
+            ...state,
+            torrentDetails
+          }
+        );
 
     case 'CLIENT_RECEIVE_TRANSFER_DATA':
       return Object.assign(

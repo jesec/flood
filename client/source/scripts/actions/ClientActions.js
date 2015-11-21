@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export function addTorrents(urls, destination) {
   return function(dispatch) {
-    return axios.post('/torrents/add', {
+    return axios.post('/client/add', {
         urls,
         destination
       })
@@ -23,7 +23,7 @@ export function addTorrents(urls, destination) {
   }
 };
 
-export function fetchTransferData() {
+export function getTransferData() {
   return function(dispatch) {
     return axios.get('/client/stats')
       .then((json = {}) => {
@@ -41,7 +41,7 @@ export function fetchTransferData() {
   }
 }
 
-export function fetchTorrents() {
+export function getTorrents() {
   return function(dispatch) {
     dispatch({
       type: 'REQUEST_TORRENTS',
@@ -49,7 +49,7 @@ export function fetchTorrents() {
         text: 'Begin requesting torrents.'
       }
     });
-    return axios.get('/torrents/list')
+    return axios.get('/client/list')
       .then((json = {}) => {
         return json.data;
       })
@@ -67,9 +67,32 @@ export function fetchTorrents() {
   }
 }
 
+export function getTorrentDetails(hash) {
+  return function(dispatch) {
+    return axios.post('/client/torrent-details', {
+        hash
+      })
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then(torrentDetails => {
+        dispatch({
+          type: 'RECEIVE_TORRENT_DETAILS',
+          payload: {
+            hash,
+            torrentDetails
+          }
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+}
+
 export function startTorrent(hashes) {
   return function(dispatch) {
-    return axios.post('/torrents/start', {
+    return axios.post('/client/start', {
         hashes
       })
       .then((json = {}) => {
@@ -82,7 +105,7 @@ export function startTorrent(hashes) {
             response
           }
         });
-        dispatch(fetchTorrents());
+        dispatch(getTorrents());
       })
       .catch((error) => {
         console.error(error);
@@ -92,7 +115,7 @@ export function startTorrent(hashes) {
 
 export function stopTorrent(hashes) {
   return function(dispatch) {
-    return axios.post('/torrents/stop', {
+    return axios.post('/client/stop', {
         hashes
       })
       .then((json = {}) => {
@@ -105,7 +128,7 @@ export function stopTorrent(hashes) {
             response
           }
         });
-        dispatch(fetchTorrents());
+        dispatch(getTorrents());
       })
       .catch((error) => {
         console.error(error);
