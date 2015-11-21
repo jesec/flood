@@ -1,5 +1,5 @@
 var xmlBuilder      = require('xmlbuilder')
-    , dateFormatter = require('./date_formatter')
+    , dateFormatter = require('./dateFormatter')
 
 /**
  * Creates the XML for an XML-RPC method call.

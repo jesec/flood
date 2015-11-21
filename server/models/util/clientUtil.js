@@ -1,6 +1,6 @@
 var util = require('util');
 
-var ClientUtil = {
+var clientUtil = {
   defaults: {
     torrentProperties: [
       'hash',
@@ -134,4 +134,4 @@ var ClientUtil = {
 
 }
 
-module.exports = ClientUtil;
+module.exports = clientUtil;

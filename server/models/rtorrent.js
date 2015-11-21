@@ -1,8 +1,7 @@
-var xmlrpc = require('xmlrpc')
 var Q = require('q');
 var net = require('net');
-var Deserializer = require('./deserializer');
-var Serializer = require('./serializer');
+var Deserializer = require('./util/deserializer');
+var Serializer = require('./util/serializer');
 
 var rtorrent = {};
 

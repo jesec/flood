@@ -1,7 +1,7 @@
 var rTorrent = require('./rtorrent');
 var util = require('util');
-var ClientUtil = require('./ClientUtil');
-var FormatUtil = require('./FormatUtil');
+var clientUtil = require('./util/clientUtil');
+var formatUtil = require('./util/formatUtil');
 
 function client() {
   if((this instanceof client) === false) {
@@ -55,29 +55,29 @@ client.prototype.add = function(data, callback) {
 }
 
 client.prototype.getTorrentList = function(callback) {
-  rTorrent.get('d.multicall', ClientUtil.defaults.torrentPropertyMethods)
+  rTorrent.get('d.multicall', clientUtil.defaults.torrentPropertyMethods)
     .then(function(data) {
       try {
         // create torrent array, each item in the array being
         // an object with human-readable property values
-        var torrents = ClientUtil.mapProps(
-          ClientUtil.defaults.torrentProperties,
+        var torrents = clientUtil.mapProps(
+          clientUtil.defaults.torrentProperties,
           data
         );
         // Calculate extra properties.
         torrents = torrents.map(function(torrent) {
-          torrent.percentComplete = FormatUtil.percentComplete(
+          torrent.percentComplete = formatUtil.percentComplete(
             torrent.bytesDone,
             torrent.sizeBytes
           );
 
-          torrent.eta = FormatUtil.eta(
+          torrent.eta = formatUtil.eta(
             torrent.downloadRate,
             torrent.bytesDone,
             torrent.sizeBytes
           );
 
-          torrent.status = FormatUtil.status(
+          torrent.status = formatUtil.status(
             torrent.isHashChecking,
             torrent.isComplete,
             torrent.isOpen,
@@ -139,13 +139,13 @@ client.prototype.startTorrent = function(hash, callback) {
 
 client.prototype.getClientStats = function(callback) {
   try {
-    var request = ClientUtil.createMulticallRequest(ClientUtil.defaults.clientPropertyMethods);
+    var request = clientUtil.createMulticallRequest(clientUtil.defaults.clientPropertyMethods);
 
     request = [request];
 
     rTorrent.get('system.multicall', request)
       .then(function(data) {
-        callback(null, ClientUtil.mapProps(ClientUtil.defaults.clientProperties, data));
+        callback(null, clientUtil.mapProps(clientUtil.defaults.clientProperties, data));
       }, function(error) {
         callback(error, null);
       });

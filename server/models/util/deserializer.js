@@ -1,5 +1,5 @@
 var sax             = require('sax')
-    , dateFormatter = require('./date_formatter')
+    , dateFormatter = require('./dateFormatter')
 
 var Deserializer = function(encoding) {
     this.type = null
