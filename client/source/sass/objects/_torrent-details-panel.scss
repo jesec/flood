@@ -1,8 +1,8 @@
 .torrent-details {
   background: $torrent-details--background;
   box-shadow: -1px 0 0 $torrent-details--border;
+  font-size: 0.85em;
   height: 100%;
-  width: 40%;
   overflow: auto;
   padding: $spacing-unit;
   position: absolute;
@@ -10,6 +10,7 @@
   top: 0;
   transform: translateX(0);
   transition: transform 0.5s;
+  width: 40%;
   z-index: 2;
 
   &.torrent-details-enter {
@@ -23,6 +24,10 @@
   &.torrent-details-leave {
     transform: translateX(100%);
   }
+
+}
+
+.torrent-details {
 
   &__transfer-data {
 
@@ -44,8 +49,21 @@
   &__table {
     width: 100%;
 
-    thead {
-      text-align: left;
+    &__heading {
+      color: $torrent-details--table--header;
+      font-size: 0.7em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+
+      th {
+        font-weight: 500;
+      }
+
+      &__count {
+        color: $torrent-details--table--header--count;
+        display: inline-block;
+        margin-left: 5px;
+      }
     }
   }
 }
