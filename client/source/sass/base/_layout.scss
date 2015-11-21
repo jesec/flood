@@ -23,6 +23,7 @@ body {
 
 .content {
   display: flex;
+  height: 100%;
   flex: 5;
   flex-direction: column;
 }
@@ -41,11 +42,11 @@ body {
     max-height: 35px;
   }
 
+
   &__list {
 
     &__wrapper {
-      flex: 5;
+      flex: 1;
     }
   }
-
 }

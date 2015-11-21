@@ -102,6 +102,9 @@ $torrent--tertiary--foreground--selected--stopped: rgba(#fff, 0.5);
 $torrent--background--hover: #f6f8fa;
 $torrent--background--selected: $blue;
 
+$torrent-details--background: #f7fafc;
+$torrent-details--border: rgba($background, 0.1);
+
 $progress-bar--background: #e3e5e5;
 $progress-bar--background--selected: rgba(#fff, 0.5);
 $progress-bar--background--selected--stopped: rgba(#fff, 0.5);
@@ -110,6 +113,10 @@ $progress-bar--fill: $green;
 $progress-bar--fill--stopped: #e3e5e5;
 $progress-bar--fill--completed: $blue;
 $progress-bar--fill--selected: #fff;
+
+// tansfer data
+$transfer-data--download: $green;
+$transfer-data--upload: $blue;
 
 // dropdown menu
 $dropdown--background: rgba(#fff, 0.98);;
