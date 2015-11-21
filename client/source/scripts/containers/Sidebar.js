@@ -1,8 +1,8 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import React from 'react';
 
 import ClientStats from '../components/sidebar/ClientStats';
-import { setTorrentsFilter, setTorrentsSearch } from '../actions/UIActions';
+import {setTorrentsFilter, setTorrentsSearch} from '../actions/UIActions';
 import StatusFilters from '../components/sidebar/StatusFilters';
 import SearchBox from '../components/sidebar/SearchBox';
 import UIActions from '../actions/UIActions';

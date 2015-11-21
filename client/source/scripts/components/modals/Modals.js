@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import AddTorrents from './AddTorrents';
-import { dismissModal } from '../../actions/UIActions';
+import {dismissModal} from '../../actions/UIActions';
 import Icon from '../icons/Icon';
 import uiSelector from '../../selectors/uiSelector';
 

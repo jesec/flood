@@ -1,4 +1,4 @@
-import { selectTorrents } from '../util/selectTorrents';
+import {selectTorrents} from '../util/selectTorrents';
 
 const initialState = {
   selectedTorrents: [],

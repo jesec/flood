@@ -1,10 +1,10 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import clientSelector from '../../selectors/clientSelector';
-import { fetchTransferData } from '../../actions/ClientActions';
-import format from '../../helpers/formatData';
+import {getTransferData} from '../../actions/ClientActions';
+import format from '../../util/formatData';
 import Icon from '../icons/Icon';
 import LineChart from './LineChart';
 
@@ -100,7 +100,7 @@ class ClientStats extends React.Component {
   }
 
   getTransferData() {
-    this.props.dispatch(fetchTransferData());
+    this.props.dispatch(getTransferData());
   }
 
   render() {

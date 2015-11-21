@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 
 import client from './clientReducer';
 import torrents from './torrentsReducer';

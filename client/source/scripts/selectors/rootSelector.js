@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import {createSelector} from 'reselect';
 
 import clientSelector from './clientSelector';
 import torrentSelector from './torrentSelector';

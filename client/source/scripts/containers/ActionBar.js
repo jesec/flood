@@ -1,10 +1,10 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import React from 'react';
 
 import Action from '../components/action-bar/Action';
-import { addTorrent, startTorrent, stopTorrent } from '../actions/ClientActions';
-import { displayModal } from '../actions/UIActions';
-import { setTorrentsSort } from '../actions/UIActions';
+import {addTorrent, startTorrent, stopTorrent} from '../actions/ClientActions';
+import {displayModal} from '../actions/UIActions';
+import {setTorrentsSort} from '../actions/UIActions';
 import SortDropdown from '../components/action-bar/SortDropdown';
 import uiSelector from '../selectors/uiSelector';
 

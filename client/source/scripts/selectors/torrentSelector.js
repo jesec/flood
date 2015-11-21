@@ -1,7 +1,7 @@
-import { createSelector } from 'reselect';
-import { filterTorrents } from '../util/filterTorrents';
-import { searchTorrents } from '../util/searchTorrents';
-import { sortTorrents } from '../util/sortTorrents';
+import {createSelector} from 'reselect';
+import {filterTorrents} from '../util/filterTorrents';
+import {searchTorrents} from '../util/searchTorrents';
+import {sortTorrents} from '../util/sortTorrents';
 
 const torrentListSearchString = state => state.ui.torrentList.searchString;
 

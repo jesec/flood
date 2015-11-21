@@ -2,7 +2,7 @@ import _ from 'lodash';
 import classnames from 'classnames';
 import React from 'react';
 
-import { addTorrents } from '../../actions/ClientActions';
+import {addTorrents} from '../../actions/ClientActions';
 import TextboxRepeater from '../forms/TextboxRepeater';
 
 const methodsToBind = [
