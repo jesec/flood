@@ -3,57 +3,65 @@ var net = require('net');
 var Deserializer = require('./util/deserializer');
 var Serializer = require('./util/serializer');
 
-var rtorrent = {};
+var rtorrent = {
 
-rtorrent.get = function(api, array) {
-	var stream = net.connect({
-		port: 5000,
-		host: 'localhost'
-	});
-	var deferred = Q.defer();
-	var xml;
-	var length = 0;
+	initialized: false,
 
-	stream.on('error', function(error) {
-		console.log(error);
-	});
+	get: function(api, array) {
 
-	stream.setEncoding('UTF8');
+		var stream = net.connect({
+			port: 5000,
+			host: 'localhost'
+		});
 
-	try {
-		xml = Serializer.serializeMethodCall(api, array);
-	} catch (error) {
-		console.trace(error);
-	}
+		var deferred = Q.defer();
 
-	var head = [
-		'CONTENT_LENGTH' + String.fromCharCode(0) + xml.length + String.fromCharCode(0),
-		'SCGI' + String.fromCharCode(0) + '1' + String.fromCharCode(0)
-	];
+		stream.on('error', function(error) {
+			console.log(error);
+		});
 
-	head.forEach(function (item) {
-		length += item.length;
-	});
+		stream.setEncoding('UTF8');
 
-	stream.write(length + ':');
+		var xml;
+		var length = 0;
 
-	head.forEach(function (item) {
-		stream.write(item);
-	});
-
-	stream.write(',');
-	stream.write(xml);
-
-	var deserializer = new Deserializer('utf8');
-	deserializer.deserializeMethodResponse(stream, function (err, data) {
-
-		if (err) {
-			return deferred.reject(err);
+		try {
+			xml = Serializer.serializeMethodCall(api, array);
+		} catch (error) {
+			console.trace(error);
 		}
-		return deferred.resolve(data);
-	});
 
-	return deferred.promise;
+		var head = [
+			'CONTENT_LENGTH' + String.fromCharCode(0) + xml.length + String.fromCharCode(0),
+			'SCGI' + String.fromCharCode(0) + '1' + String.fromCharCode(0)
+		];
+
+		head.forEach(function (item) {
+			length += item.length;
+		});
+
+		var payload = length + ':';
+
+		head.forEach(function(item) {
+			payload += item;
+		});
+
+		payload += ',' + xml;
+
+		stream.write(payload);
+
+		var deserializer = new Deserializer('utf8');
+
+		deserializer.deserializeMethodResponse(stream, function (err, data) {
+
+			if (err) {
+				return deferred.reject(err);
+			}
+			return deferred.resolve(data);
+		});
+
+		return deferred.promise;
+	}
 
 }
 

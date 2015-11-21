@@ -87,10 +87,38 @@ var clientUtil = {
 
       'get_down_rate',
       'get_down_total'
+    ],
+    peerProperties: [
+      'address',
+      'completedPercent',
+      'clientVersion',
+      'downloadRate',
+      'downloadTotal',
+      'uploadRate',
+      'uploadTotal',
+      'id',
+      'peerRate',
+      'peerTotal',,
+      'isEncrypted',
+      'isIncoming'
+    ],
+    peerPropertyMethods: [
+      'p.get_address=',
+      'p.get_completed_percent=',
+      'p.get_client_version=',
+      'p.get_down_rate=',
+      'p.get_down_total=',
+      'p.get_up_rate=',
+      'p.get_up_total=',
+      'p.get_id=',
+      'p.get_peer_rate=',
+      'p.get_peer_total=',
+      'p.is_encrypted=',
+      'p.is_incoming='
     ]
   },
 
-  mapProps: function(props, data) {
+  mapClientProps: function(props, data) {
     var mappedObject = [];
 
     if (data[0].length === 1) {
@@ -110,21 +138,21 @@ var clientUtil = {
     return mappedObject;
   },
 
-  createMulticallRequest: function(data, params) {
+  createMulticallRequest: function(methodCalls, params) {
     params = params || [];
     var methodCall = [];
 
-    if (!util.isArray(data)) {
-      data = [data];
+    if (!util.isArray(methodCalls)) {
+      methodCalls = [methodCalls];
     }
 
-    for (i = 0, len = data.length; i < len; i++) {
+    for (i = 0, len = methodCalls.length; i < len; i++) {
       var param = [];
       if (params[i]) {
         param = [params[i]];
       }
       methodCall.push({
-        'methodName': data[i],
+        'methodName': methodCalls[i],
         'params': param
       });
     }
