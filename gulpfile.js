@@ -115,7 +115,7 @@ gulp.task('sass', function () {
     .pipe(autoprefixer())
     .pipe(gulpif(development, sourcemaps.write('.')))
     .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist))
-    .pipe(gulpif(development, browserSync.stream()));
+    .pipe(browserSync.stream({match: "**/*.css"}));
 });
 
 gulp.task('minify-css', ['sass'], function () {
@@ -168,7 +168,6 @@ gulp.task('webpack', function (callback) {
       // This runs after webpack's internal watch rebuild.
       // eslintFn();
       if (development) {
-        console.log('reloading from webpack');
         browserSync.reload();
       }
     }
