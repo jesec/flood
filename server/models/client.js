@@ -71,14 +71,27 @@ var client = {
 
     rTorrent.get('system.multicall', multicall)
       .then(function(data) {
-        var peers = clientUtil.mapClientProps(
-          clientUtil.defaults.peerProperties,
-          data[0][0]
-        );
-        var files = clientUtil.mapClientProps(
-          clientUtil.defaults.fileProperties,
-          data[1][0]
-        );
+        // This is ugly, but it handles several types of responses from the
+        // client.
+        var peersData = data[0][0] || null;
+        var filesData = data[1][0] || null;
+        var peers = null;
+        var files = null;
+
+        if (peersData && peersData.length) {
+          peers = clientUtil.mapClientProps(
+            clientUtil.defaults.peerProperties,
+            peersData
+          );
+        }
+
+        if (filesData && filesData.length) {
+          files = clientUtil.mapClientProps(
+            clientUtil.defaults.fileProperties,
+            filesData
+          );
+        }
+
         callback(null, {
           peers: peers,
           files: files
