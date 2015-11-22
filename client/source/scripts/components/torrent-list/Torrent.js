@@ -20,87 +20,6 @@ export default class Torrent extends React.Component {
     });
   }
 
-  getEta(eta) {
-    if (eta === 'Infinity') {
-      return '∞';
-    } else if (eta.years > 0) {
-      return (
-        <span>
-          <span className="torrent__details--segment">
-            {eta.years}<em className="unit">yr</em>
-          </span>
-          <span className="torrent__details--segment">
-            {eta.weeks}<em className="unit">wk</em>
-          </span>
-        </span>
-      );
-    } else if (eta.weeks > 0) {
-      return (
-        <span>
-          
-          <span className="torrent__details--segment">
-            {eta.weeks}<em className="unit">wk</em>
-          </span>
-          <span className="torrent__details--segment">
-            {eta.days}<em className="unit">d</em>
-          </span>
-        </span>
-      );
-    } else if (eta.days > 0) {
-      return (
-        <span>
-          <span className="torrent__details--segment">
-            {eta.days}<em className="unit">d</em>
-          </span>
-          <span className="torrent__details--segment">
-            {eta.hours}<em className="unit">hr</em>
-          </span>
-        </span>
-      );
-    } else if (eta.hours > 0) {
-      return (
-        <span>
-          <span className="torrent__details--segment">
-            {eta.hours}<em className="unit">hr</em>
-          </span>
-          <span className="torrent__details--segment">
-            {eta.minutes}<em className="unit">m</em>
-          </span>
-        </span>
-      );
-    } else if (eta.minutes > 0) {
-      return (
-        <span>
-          <span className="torrent__details--segment">
-            {eta.minutes}<em className="unit">m</em>
-          </span>
-          <span className="torrent__details--segment">
-            {eta.seconds}<em className="unit">s</em>
-          </span>
-        </span>
-      );
-    } else {
-      return (
-        <span>
-          {eta.seconds}<em className="unit">s</em>
-        </span>
-      );
-    }
-  }
-
-  getRatio(ratio) {
-    ratio = ratio / 1000;
-    let precision = 1;
-
-    if (ratio < 10) {
-      precision = 2;
-    } else if (ratio < 100) {
-      precision = 0;
-    }
-
-    return ratio.toFixed(precision);
-  }
-
   handleClick(event) {
     this.props.handleClick(this.props.data.hash, event);
   }
@@ -117,8 +36,8 @@ export default class Torrent extends React.Component {
     let completed = format.data(torrent.bytesDone);
     let downloadRate = format.data(torrent.downloadRate, '/s');
     let downloadTotal = format.data(torrent.downloadTotal);
-    let eta = this.getEta(torrent.eta);
-    let ratio = this.getRatio(torrent.ratio);
+    let eta = format.eta(torrent.eta);
+    let ratio = format.ratio(torrent.ratio);
     let totalSize = format.data(torrent.sizeBytes);
     let uploadRate = format.data(torrent.uploadRate, '/s');
     let uploadTotal = format.data(torrent.uploadTotal);
