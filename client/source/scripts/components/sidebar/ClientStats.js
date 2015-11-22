@@ -55,7 +55,7 @@ class ClientStats extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // check that the transfers was actually updated since the last component
+    // check that the transferData was actually updated since the last component
     // update. if it was updated, add the latest download & upload rates to the
     // end of the array and remove the first element in the array. if the arrays
     // are empty, fill in zeros for the first n entries.
