@@ -52,14 +52,37 @@ var client = {
   },
 
   getTorrentDetails: function(hash, callback) {
-    var params = [hash, ''].concat(clientUtil.defaults.peerPropertyMethods);
-    rTorrent.get('p.multicall', params)
+    var peerParams = [hash, ''].concat(clientUtil.defaults.peerPropertyMethods);
+    var fileParams = [hash, ''].concat(clientUtil.defaults.filePropertyMethods);
+
+    var multicall = [
+      []
+    ];
+
+    multicall[0].push({
+      methodName: 'p.multicall',
+      params: peerParams
+    });
+
+    multicall[0].push({
+      methodName: 'f.multicall',
+      params: fileParams
+    });
+
+    rTorrent.get('system.multicall', multicall)
       .then(function(data) {
         var peers = clientUtil.mapClientProps(
           clientUtil.defaults.peerProperties,
-          data
+          data[0][0]
         );
-        callback(null, peers);
+        var files = clientUtil.mapClientProps(
+          clientUtil.defaults.fileProperties,
+          data[1][0]
+        );
+        callback(null, {
+          peers: peers,
+          files: files
+        });
       }, function(error) {
         callback(error, null);
       });

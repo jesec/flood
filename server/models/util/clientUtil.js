@@ -31,8 +31,8 @@ var clientUtil = {
       'peersNotConnected',
       'trackerFocus',
 
-      'basePath',
-      'creationDate',
+      'directory',
+      'filename',
 
       'seeding',
       'added'
@@ -68,11 +68,25 @@ var clientUtil = {
       'd.get_peers_not_connected=',
       'd.get_tracker_focus=',
 
-      'd.get_base_path=',
-      'd.get_creation_date=',
+      'd.get_directory=',
+      'd.get_base_filename=',
 
       'd.get_custom=seedingtime',
       'd.get_custom=addtime'
+    ],
+    fileProperties: [
+      'path',
+      'pathComponents',
+      'pathDepth',
+      'priority',
+      'sizeBytes'
+    ],
+    filePropertyMethods: [
+      'f.get_path=',
+      'f.get_path_components=',
+      'f.get_path_depth=',
+      'f.get_priority=',
+      'f.get_size_bytes='
     ],
     clientProperties: [
       'uploadRate',
