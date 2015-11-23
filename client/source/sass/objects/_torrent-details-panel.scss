@@ -49,12 +49,19 @@
 
   &__file-data {
 
+    &__item {
+      line-height: 1.2;
+      margin-bottom: 5px;
+      word-wrap: break-word;
+    }
+
     &__directory {
       color: $torrent-details--file-data--directory;
       font-size: 0.85em;
     }
 
-    &__depth--1 {
+    &__depth--1,
+    &__filename {
       padding-left: 10px;
     }
 
