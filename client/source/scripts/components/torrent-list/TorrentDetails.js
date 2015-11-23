@@ -53,18 +53,6 @@ class TorrentDetails extends React.Component {
     let parentDirectory = torrent.directory;
     let filename = torrent.filename;
 
-    if (parentDirectory.endsWith(torrent.filename)) {
-      parentDirectory = parentDirectory.substring(
-        0, parentDirectory.length - torrent.filename.length
-      );
-    }
-
-    if (parentDirectory.endsWith('/') || parentDirectory.endsWith('\\')) {
-      parentDirectory = parentDirectory.substr(
-        0, parentDirectory.length - 1
-      );
-    }
-
     if (files) {
       let fileList = files.map(pathItem => {
         let classes = classNames({
