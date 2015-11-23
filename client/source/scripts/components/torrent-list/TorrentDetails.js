@@ -41,7 +41,8 @@ class TorrentDetails extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (this.props.visible === true || (nextProps.visible !== this.props.visible)) {
+    if (this.props.visible === true ||
+      (nextProps.visible !== this.props.visible)) {
       return true;
     } else {
       return false;
@@ -67,8 +68,10 @@ class TorrentDetails extends React.Component {
     if (files) {
       let fileList = files.map(pathItem => {
         let classes = classNames({
+          'torrent-details__file-data__item': true,
           'torrent-details__file-data__filename': true,
-          [`torrent-details__file-data__depth--${pathItem.pathDepth}`]: pathItem.pathDepth > 0
+          [`torrent-details__file-data__depth--${pathItem.pathDepth}`]:
+            pathItem.pathDepth > 0
         });
         return (
           <div className={classes}
@@ -79,7 +82,8 @@ class TorrentDetails extends React.Component {
       });
       return (
         <div className="torrent-details__file-data torrent-details__section">
-          <div className="torrent-details__file-data__directory">
+          <div className="torrent-details__file-data__item
+            torrent-details__file-data__directory">
             {parentDirectory}
           </div>
           {fileList}
@@ -88,10 +92,13 @@ class TorrentDetails extends React.Component {
     } else {
       return (
         <div className="torrent-details__file-data torrent-details__section">
-          <div className="torrent-details__file-data__directory">
+          <div className="torrent-details__file-data__item
+            torrent-details__file-data__directory">
             {parentDirectory}
           </div>
-          <div className="torrent-details__file-data__filename">
+          <div className="torrent-details__file-data__item
+            torrent-details__file-data__filename
+            torrent-details__file-data__depth--1">
             {filename}
           </div>
         </div>
