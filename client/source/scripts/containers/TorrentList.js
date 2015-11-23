@@ -78,6 +78,38 @@ class TorrentList extends React.Component {
     getTorrents();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if ((nextProps.selectedTorrents.length !== 1 &&
+      this.state.detailsPanelOpen) || nextProps.torrents.length === 0) {
+      // Close the detail side panel if more than one torrent is selected.
+      this.setState({
+        detailsPanelOpen: false
+      });
+    } else if (this.state.detailsPanelOpen) {
+      // Close the detail side panel if the currently selected torrent isn't
+      // visible.
+      let searchingForSelectedTorrent = true;
+      let index = 0;
+
+      while (searchingForSelectedTorrent) {
+        if (nextProps.torrents[index].hash === nextProps.selectedTorrents[0]) {
+          // The currently selected torrent is visible.
+          searchingForSelectedTorrent = false;
+        } else if (index === nextProps.torrents.length - 1) {
+          // The currently selected torrent is not visible, so clos the details
+          // panel.
+          this.setState({
+            detailsPanelOpen: false
+          });
+          index++;
+          searchingForSelectedTorrent = false;
+        } else {
+          index++;
+        }
+      }
+    }
+  }
+
   shouldComponentUpdate(nextProps) {
     if (nextProps.isFetching === true) {
       return false;
@@ -207,7 +239,6 @@ class TorrentList extends React.Component {
               }}></li>
           </ul>
         </div>
-        <div className="torrent-details__placeholder"></div>
         <TorrentDetails selectedTorrents={selectedTorrents}
           torrents={torrents}
           visible={this.state.detailsPanelOpen} />
