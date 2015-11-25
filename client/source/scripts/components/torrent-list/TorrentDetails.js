@@ -10,6 +10,8 @@ import clientSelector from '../../selectors/clientSelector';
 
 const methodsToBind = [
   'getFileData',
+  'getFileTreeDomNodes',
+  'getFileTreeFromPaths',
   'getHeading',
   'getSidePanel'
 ];
@@ -49,35 +51,69 @@ class TorrentDetails extends React.Component {
     }
   }
 
+  getFileTreeDomNodes(tree) {
+    return Object.keys(tree).map(branchName => {
+      let branch = tree[branchName];
+      let domNodes = [];
+
+      if (branchName === 'files') {
+        branch.sort((a, b) => {
+          return a.filename.localeCompare(b.filename);
+        });
+        domNodes = branch.map(file => {
+          return <div>{file.filename}</div>
+        });
+      } else {
+        domNodes.push(<div><strong>{branchName}</strong></div>);
+        domNodes.push(this.getFileTreeDomNodes(tree[branchName]));
+      }
+
+      return domNodes;
+    });
+  }
+
+  getFileTreeFromPaths(tree = {}, directory, file, depth = 0) {
+    if (depth < file.pathComponents.length - 1) {
+      depth++;
+      tree[directory] = this.getFileTreeFromPaths(tree[directory], file.pathComponents[depth], file, depth);
+    } else {
+      if (!tree.files) {
+        tree.files = [];
+      }
+      tree.files.push(file);
+    }
+    return tree;
+  }
+
+  getFileList(files) {
+    let tree = {};
+
+    files.forEach(file => {
+      tree = this.getFileTreeFromPaths(tree, file.pathComponents[0], file);
+    });
+
+    let directoryTree = this.getFileTreeDomNodes(tree);
+
+    return directoryTree;
+  }
+
   getFileData(torrent, files) {
     let parentDirectory = torrent.directory;
     let filename = torrent.filename;
 
     if (files) {
-      let fileList = files.map(pathItem => {
-        let classes = classNames({
-          'torrent-details__file-data__item': true,
-          'torrent-details__file-data__filename': true,
-          [`torrent-details__file-data__depth--${pathItem.pathDepth}`]:
-            pathItem.pathDepth > 0
-        });
-        return (
-          <div className={classes}
-            key={pathItem.path}>
-            {pathItem.path}
-          </div>
-        );
-      });
+      // We've received full file details from the client.
       return (
         <div className="torrent-details__file-data torrent-details__section">
           <div className="torrent-details__file-data__item
             torrent-details__file-data__directory">
             {parentDirectory}
           </div>
-          {fileList}
+          {this.getFileList(files)}
         </div>
       );
     } else {
+      // We've only received the top-level file details from the torrent list.
       return (
         <div className="torrent-details__file-data torrent-details__section">
           <div className="torrent-details__file-data__item

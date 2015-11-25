@@ -90,6 +90,10 @@ var client = {
             clientUtil.defaults.fileProperties,
             filesData
           );
+          files = files.map(function (file) {
+            file.filename = file.pathComponents[file.pathComponents.length - 1];
+            return file;
+          });
         }
 
         callback(null, {
