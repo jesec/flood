@@ -47,38 +47,6 @@
     }
   }
 
-  &__file-data {
-
-    &__item {
-      line-height: 1.2;
-      margin-bottom: 5px;
-      word-wrap: break-word;
-    }
-
-    &__directory {
-      color: $torrent-details--file-data--directory;
-      font-size: 0.85em;
-    }
-
-    &__depth--1,
-    &__filename {
-      padding-left: 10px;
-    }
-
-    &__depth--2 {
-      padding-left: 20px;
-    }
-
-    &__depth--3 {
-      padding-left: 30px;
-    }
-
-    &__depth--4 {
-      padding-left: 40px;
-    }
-
-  }
-
   &__table {
     width: 100%;
 

@@ -11,7 +11,7 @@ import clientSelector from '../../selectors/clientSelector';
 const methodsToBind = [
   'getFileData',
   'getFileTreeDomNodes',
-  'getFileTreeFromPaths',
+  'createFileTree',
   'getHeading',
   'getSidePanel'
 ];
@@ -51,31 +51,15 @@ class TorrentDetails extends React.Component {
     }
   }
 
-  getFileTreeDomNodes(tree) {
-    return Object.keys(tree).map(branchName => {
-      let branch = tree[branchName];
-      let domNodes = [];
-
-      if (branchName === 'files') {
-        branch.sort((a, b) => {
-          return a.filename.localeCompare(b.filename);
-        });
-        domNodes = branch.map(file => {
-          return <div>{file.filename}</div>
-        });
-      } else {
-        domNodes.push(<div><strong>{branchName}</strong></div>);
-        domNodes.push(this.getFileTreeDomNodes(tree[branchName]));
-      }
-
-      return domNodes;
-    });
-  }
-
-  getFileTreeFromPaths(tree = {}, directory, file, depth = 0) {
+  createFileTree(tree = {}, directory, file, depth = 0) {
     if (depth < file.pathComponents.length - 1) {
       depth++;
-      tree[directory] = this.getFileTreeFromPaths(tree[directory], file.pathComponents[depth], file, depth);
+      tree[directory] = this.createFileTree(
+        tree[directory],
+        file.pathComponents[depth],
+        file,
+        depth
+      );
     } else {
       if (!tree.files) {
         tree.files = [];
@@ -85,11 +69,49 @@ class TorrentDetails extends React.Component {
     return tree;
   }
 
+  getFileTreeDomNodes(tree, depth = 0) {
+    let index = 0;
+    depth++;
+    return Object.keys(tree).map((branchName) => {
+      let branch = tree[branchName];
+      let domNodes = null;
+      index++;
+
+      if (branchName === 'files') {
+        branch.sort((a, b) => {
+          return a.filename.localeCompare(b.filename);
+        });
+        domNodes = branch.map((file, fileIndex) => {
+          return (
+            <div className="file-list__node file-list__node--file"
+              key={`${fileIndex}`}>
+              <Icon icon="file" />
+              {file.filename}
+            </div>
+          );
+        });
+      } else {
+        let classes = `file-list__branch file-list__branch--depth-${depth}`;
+        domNodes = (
+          <div className={classes} key={`${index}${depth}`}>
+            <div className="file-list__node file-list__node--directory">
+              <Icon icon="directoryOutlined" />
+              {branchName}
+            </div>
+            {this.getFileTreeDomNodes(tree[branchName], depth)}
+          </div>
+        );
+      }
+
+      return domNodes;
+    });
+  }
+
   getFileList(files) {
     let tree = {};
 
-    files.forEach(file => {
-      tree = this.getFileTreeFromPaths(tree, file.pathComponents[0], file);
+    files.forEach((file) => {
+      tree = this.createFileTree(tree, file.pathComponents[0], file);
     });
 
     let directoryTree = this.getFileTreeDomNodes(tree);
@@ -104,9 +126,9 @@ class TorrentDetails extends React.Component {
     if (files) {
       // We've received full file details from the client.
       return (
-        <div className="torrent-details__file-data torrent-details__section">
-          <div className="torrent-details__file-data__item
-            torrent-details__file-data__directory">
+        <div className="file-list torrent-details__section">
+          <div className="file-list__node file-list__parent-directory">
+            <Icon icon="directoryFilled" />
             {parentDirectory}
           </div>
           {this.getFileList(files)}
@@ -115,14 +137,13 @@ class TorrentDetails extends React.Component {
     } else {
       // We've only received the top-level file details from the torrent list.
       return (
-        <div className="torrent-details__file-data torrent-details__section">
-          <div className="torrent-details__file-data__item
-            torrent-details__file-data__directory">
+        <div className="file-list torrent-details__section">
+          <div className="file-list__node file-list__parent-directory">
+            <Icon icon="directoryFilled" />
             {parentDirectory}
           </div>
-          <div className="torrent-details__file-data__item
-            torrent-details__file-data__filename
-            torrent-details__file-data__depth--1">
+          <div className="file-list__node file-list__node--file">
+            <Icon icon="file" />
             {filename}
           </div>
         </div>
@@ -223,11 +244,11 @@ class TorrentDetails extends React.Component {
           </li>
           <li className="transfer-data transfer-data--ratio">
             <Icon icon="ratio" />
-            1<em className="unit">yr</em>
+            {ratio}
           </li>
           <li className="transfer-data transfer-data--eta">
-            <Icon icon="download" />
-            1<em className="unit">yr</em>
+            <Icon icon="eta" />
+            {eta}
           </li>
         </ul>
         {this.getFileData(torrent, torrentDetails.files)}
