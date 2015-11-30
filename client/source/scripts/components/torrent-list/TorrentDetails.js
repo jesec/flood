@@ -228,6 +228,10 @@ class TorrentDetails extends React.Component {
     let uploadRate = format.data(torrent.uploadRate, '/s');
     let uploadTotal = format.data(torrent.uploadTotal);
 
+    if (torrent) {
+      console.log(torrent.message);
+    }
+
     return (
       <div className="torrent-details" key={this.props.visible}>
         {this.getHeading()}
@@ -251,8 +255,48 @@ class TorrentDetails extends React.Component {
             {eta}
           </li>
         </ul>
+        {this.getTrackerList(torrentDetails.trackers)}
         {this.getFileData(torrent, torrentDetails.files)}
         {this.getPeerList(torrentDetails.peers)}
+      </div>
+    );
+  }
+
+  getTrackerList(trackers = []) {
+    let trackerCount = trackers.length;
+    let trackerTypes = ['http', 'udp', 'dht'];
+
+    let trackerDetails = trackers.map((tracker, index) => {
+      return (
+        <tr key={index}>
+          <td>
+            {tracker.url}
+          </td>
+          <td>
+            {trackerTypes[tracker.type - 1]}
+          </td>
+        </tr>
+      );
+    });
+
+    return (
+      <div className="torrent-details__peers torrent-details__section">
+        <table className="torrent-details__table table">
+          <thead className="torrent-details__table__heading">
+            <tr>
+              <th>
+                Trackers
+                <span className="torrent-details__table__heading__count">
+                  {trackerCount}
+                </span>
+              </th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {trackerDetails}
+          </tbody>
+        </table>
       </div>
     );
   }

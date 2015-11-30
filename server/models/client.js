@@ -42,8 +42,6 @@ var client = {
       torrentsAdded++;
     }
 
-    console.log(multicall);
-
     rTorrent.get('system.multicall', multicall).then(function(data) {
       callback(null, data);
     }, function(error) {
@@ -54,6 +52,7 @@ var client = {
   getTorrentDetails: function(hash, callback) {
     var peerParams = [hash, ''].concat(clientUtil.defaults.peerPropertyMethods);
     var fileParams = [hash, ''].concat(clientUtil.defaults.filePropertyMethods);
+    var trackerParams = [hash, ''].concat(clientUtil.defaults.trackerPropertyMethods);
 
     var multicall = [
       []
@@ -69,14 +68,21 @@ var client = {
       params: fileParams
     });
 
+    multicall[0].push({
+      methodName: 't.multicall',
+      params: trackerParams
+    });
+
     rTorrent.get('system.multicall', multicall)
       .then(function(data) {
         // This is ugly, but it handles several types of responses from the
         // client.
         var peersData = data[0][0] || null;
         var filesData = data[1][0] || null;
+        var trackerData = data[2][0] || null;
         var peers = null;
         var files = null;
+        var trackers = null;
 
         if (peersData && peersData.length) {
           peers = clientUtil.mapClientProps(
@@ -96,9 +102,17 @@ var client = {
           });
         }
 
+        if (trackerData && trackerData.length) {
+          trackers = clientUtil.mapClientProps(
+            clientUtil.defaults.trackerProperties,
+            trackerData
+          );
+        }
+
         callback(null, {
           peers: peers,
-          files: files
+          files: files,
+          trackers: trackers
         });
       }, function(error) {
         callback(error, null);
@@ -148,6 +162,17 @@ var client = {
         console.log(error);
         callback(error, null)
       });
+  },
+
+  listMethods: function(method, args, callback) {
+    if (args) {
+      args = [args];
+    }
+    rTorrent.get(method, args).then(function(data) {
+      callback(null, data);
+    }, function(error) {
+      callback(error, null);
+    });
   },
 
   stopTorrent: function(hash, callback) {

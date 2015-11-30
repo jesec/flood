@@ -5,6 +5,7 @@ var clientUtil = {
     torrentProperties: [
       'hash',
       'name',
+      'message',
 
       'state',
       'stateChanged',
@@ -33,6 +34,9 @@ var clientUtil = {
 
       'directory',
       'filename',
+      'basePath',
+      'baseFilename',
+      'directoryBase',
 
       'seeding',
       'added'
@@ -42,6 +46,7 @@ var clientUtil = {
 
       'd.get_hash=',
       'd.get_name=',
+      'd.get_message=',
 
       'd.get_state=',
       'd.get_state_changed=',
@@ -70,6 +75,9 @@ var clientUtil = {
 
       'd.get_directory=',
       'd.get_base_filename=',
+      'd.get_base_path=',
+      'd.get_base_filename=',
+      'd.get_directory_base=',
 
       'd.get_custom=seedingtime',
       'd.get_custom=addtime'
@@ -87,6 +95,22 @@ var clientUtil = {
       'f.get_path_depth=',
       'f.get_priority=',
       'f.get_size_bytes='
+    ],
+    trackerProperties: [
+      'group',
+      'url',
+      'id',
+      'minInterval',
+      'normalInterval',
+      'type'
+    ],
+    trackerPropertyMethods: [
+      't.get_group=',
+      't.get_url=',
+      't.get_id=',
+      't.get_min_interval=',
+      't.get_normal_interval=',
+      't.get_type='
     ],
     clientProperties: [
       'uploadRate',

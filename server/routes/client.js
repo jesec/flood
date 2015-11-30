@@ -48,4 +48,18 @@ router.get('/stats', function(req, res, next) {
   client.getTransferStats(handleClientResponse(res));
 });
 
+router.get('/methods.json', function(req, res, next) {
+  var type = req.query.type;
+  var args = req.query.args;
+  var method = 'system.listMethods';
+
+  if (type === 'help') {
+    method = 'system.methodHelp';
+  } else if (type === 'signature') {
+    method = 'system.methodSignature';
+  }
+
+  client.listMethods(method, args, handleClientResponse(res));
+});
+
 module.exports = router;
