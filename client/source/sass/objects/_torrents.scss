@@ -33,9 +33,9 @@
       user-select: none;
       z-index: 1;
 
-      .has-sidepanel & {
-        max-width: 60%;
-      }
+      // .has-sidepanel & {
+      //   max-width: 60%;
+      // }
     }
 
     &--empty {

@@ -29,16 +29,10 @@
   }
 
   &__branch {
+    padding-left: 10px;
 
     & + .file-list__branch {
       margin-top: 10px;
-    }
-
-    @for $i from 1 through 10 {
-
-      &--depth-#{$i} {
-        padding-left: ($i - 1) * 15px;
-      }
     }
   }
 }
