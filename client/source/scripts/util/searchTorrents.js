@@ -1,9 +1,9 @@
-export function searchTorrents(torrentList, torrentListSearchString) {
-  let searchedTorrents = torrentList;
+export function searchTorrents(torrents, searchString) {
+  let searchedTorrents = torrents;
 
-  if (torrentListSearchString !== '') {
+  if (searchString !== '') {
     let queries = [];
-    let searchTerms = torrentListSearchString.replace(/,/g, ' ').split(' ');
+    let searchTerms = searchString.replace(/,/g, ' ').split(' ');
 
     for (let i = 0, len = searchTerms.length; i < len; i++) {
       queries.push(new RegExp(searchTerms[i], 'gi'));

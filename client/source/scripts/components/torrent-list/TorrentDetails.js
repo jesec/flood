@@ -1,28 +1,37 @@
 import _ from 'lodash';
 import classNames from 'classnames';
-import {connect} from 'react-redux';
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
+import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import Icon from '../icons/Icon';
-import clientSelector from '../../selectors/clientSelector';
+import TorrentActions from '../../actions/TorrentActions';
+import TorrentStore from '../../stores/TorrentStore';
+import UIStore from '../../stores/UIStore';
 
 const methodsToBind = [
   'getFileData',
   'getFileTreeDomNodes',
+  'onTorrentDetailsHashChange',
+  'onOpenChange',
+  'onTorrentDetailsChange',
   'createFileTree',
   'getHeading',
   'getSidePanel'
 ];
 
-class TorrentDetails extends React.Component {
-
+export default class TorrentDetails extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      selectedTorrentHash: null
+      isOpen: false,
+      torrentDetailsSuccess: false,
+      torrentDetailsError: false,
+      selectedTorrent: {},
+      selectedTorrentHash: null,
+      torrentDetails: {}
     };
 
     methodsToBind.forEach((method) => {
@@ -30,25 +39,41 @@ class TorrentDetails extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.visible === true) {
-      let nextHash = nextProps.selectedTorrents[0];
-      this.setState({
-        selectedTorrentHash: nextHash,
-        selectedTorrent: _.find(nextProps.torrents, torrent => {
-          return torrent.hash === nextHash;
-        })
-      });
+  componentDidMount() {
+    TorrentStore.listen(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
+    UIStore.listen(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE, this.onOpenChange);
+    UIStore.listen(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE, this.onTorrentDetailsHashChange);
+  }
+
+  componentWillUnmount() {
+    TorrentStore.stopPollingTorrentDetails();
+    TorrentStore.unlisten(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
+    UIStore.unlisten(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE, this.onOpenChange);
+    UIStore.unlisten(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE, this.onTorrentDetailsHashChange);
+  }
+
+  onTorrentDetailsHashChange() {
+    if (UIStore.isTorrentDetailsOpen()) {
+      TorrentStore.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (this.props.visible === true ||
-      (nextProps.visible !== this.props.visible)) {
-      return true;
+  onOpenChange() {
+    if (!UIStore.isTorrentDetailsOpen()) {
+      TorrentStore.stopPollingTorrentDetails();
     } else {
-      return false;
+      TorrentStore.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
     }
+
+    this.setState({
+      isOpen: UIStore.isTorrentDetailsOpen()
+    });
+  }
+
+  onTorrentDetailsChange() {
+    this.setState({
+      torrentDetails: TorrentStore.getTorrentDetails(UIStore.getTorrentDetailsHash())
+    });
   }
 
   createFileTree(tree = {}, directory, file, depth = 0) {
@@ -208,11 +233,12 @@ class TorrentDetails extends React.Component {
   }
 
   getSidePanel() {
-    if (!this.props.visible) {
+    if (!this.state.isOpen) {
       return null;
     }
 
-    let torrent = this.state.selectedTorrent;
+    let selectedHash = UIStore.getTorrentDetailsHash();
+    let torrent = TorrentStore.getTorrent(selectedHash);
     let added = new Date(torrent.added * 1000);
     let addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
       added.getFullYear();
@@ -222,18 +248,12 @@ class TorrentDetails extends React.Component {
     let eta = format.eta(torrent.eta);
     let ratio = format.ratio(torrent.ratio);
     let totalSize = format.data(torrent.sizeBytes);
-    let torrentDetails = this.props.torrentDetails[
-      this.state.selectedTorrentHash
-    ] || {};
+    let torrentDetails = this.state.torrentDetails || {};
     let uploadRate = format.data(torrent.uploadRate, '/s');
     let uploadTotal = format.data(torrent.uploadTotal);
 
-    if (torrent) {
-      console.log(torrent.message);
-    }
-
     return (
-      <div className="torrent-details" key={this.props.visible}>
+      <div className="torrent-details" key={this.state.isOpen}>
         {this.getHeading()}
         <ul className="torrent-details__transfer-data torrent-details__section">
           <li className="transfer-data transfer-data--download">
@@ -311,7 +331,4 @@ class TorrentDetails extends React.Component {
       </CSSTransitionGroup>
     );
   }
-
 }
-
-export default connect(clientSelector)(TorrentDetails);

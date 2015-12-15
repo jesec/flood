@@ -1,43 +1,55 @@
-export function displayModal(payload) {
-  return {
-    type: 'UI_DISPLAY_MODAL',
-    payload
-  };
-}
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import ActionTypes from '../constants/ActionTypes';
 
-export function dismissModal(payload) {
-  return {
-    type: 'UI_DISPLAY_MODAL',
-    payload: {
-      modal: null
-    }
-  };
-}
+const UIActions = {
+  displayModal: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_DISPLAY_MODAL,
+      data
+    });
+  },
 
-export function handleTorrentClick(payload) {
-  return {
-    type: 'CLICK_TORRENT',
-    payload
-  };
-}
+  dismissModal: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_DISPLAY_MODAL,
+      data: null
+    });
+  },
 
-export function setTorrentsFilter(payload) {
-  return {
-    type: 'UI_FILTER_TORRENTS',
-    payload
-  };
-}
+  handleDetailsClick: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_CLICK_TORRENT_DETAILS,
+      data
+    });
+  },
 
-export function setTorrentsSearch(payload) {
-  return {
-    type: 'UI_SEARCH_TORRENTS',
-    payload
-  };
-}
+  handleTorrentClick: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_CLICK_TORRENT,
+      data
+    });
+  },
 
-export function setTorrentsSort(payload) {
-  return {
-    type: 'UI_SORT_TORRENTS',
-    payload
-  };
-}
+  setTorrentStatusFilter: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_SET_TORRENT_STATUS_FILTER,
+      data
+    });
+  },
+
+  setTorrentsSearchFilter: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_SET_TORRENT_SEARCH_FILTER,
+      data
+    });
+  },
+
+  setTorrentsSort: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_SET_TORRENT_SORT,
+      data
+    });
+  }
+};
+
+export default UIActions;

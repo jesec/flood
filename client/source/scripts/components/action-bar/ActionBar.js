@@ -1,27 +1,27 @@
-import {connect} from 'react-redux';
 import React from 'react';
 
-import Action from '../components/action-bar/Action';
-import {addTorrent, startTorrent, stopTorrent} from '../actions/ClientActions';
-import {displayModal} from '../actions/UIActions';
-import {setTorrentsSort} from '../actions/UIActions';
-import SortDropdown from '../components/action-bar/SortDropdown';
-import uiSelector from '../selectors/uiSelector';
+import Action from './Action';
+import EventTypes from '../../constants/EventTypes';
+import SortDropdown from './SortDropdown';
+import TorrentActions from '../../actions/TorrentActions';
+import TorrentFilterStore from '../../stores/TorrentFilterStore';
+import TorrentStore from '../../stores/TorrentStore';
+import UIActions from '../../actions/UIActions';
 
 const methodsToBind = [
   'handleAddTorrents',
   'handleSortChange',
   'handleStart',
-  'handleStop'
+  'handleStop',
+  'onSortChange'
 ];
 
-class ActionBar extends React.Component {
-
+export default class ActionBar extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      selectedTorrents: []
+      sortBy: TorrentFilterStore.getTorrentsSort()
     };
 
     methodsToBind.forEach((method) => {
@@ -29,24 +29,34 @@ class ActionBar extends React.Component {
     });
   }
 
+  componentDidMount() {
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_SORT_CHANGE, this.onSortChange);
+  }
+
+  componentWillUnmount() {
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_SORT_CHANGE, this.onSortChange);
+  }
+
   handleAddTorrents() {
-    this.props.dispatch(displayModal({
-      modal: 'add-torrents'
-    }));
+    UIActions.displayModal('add-torrents');
   }
 
   handleSortChange(sortBy) {
-    this.props.dispatch(setTorrentsSort({
-      sortBy
-    }));
+    UIActions.setTorrentsSort(sortBy);
   }
 
   handleStart() {
-    this.props.dispatch(startTorrent(this.props.torrentList.selected));
+    TorrentActions.startTorrents(TorrentStore.getSelectedTorrents());
   }
 
   handleStop() {
-    this.props.dispatch(stopTorrent(this.props.torrentList.selected));
+    TorrentActions.stopTorrents(TorrentStore.getSelectedTorrents());
+  }
+
+  onSortChange() {
+    this.setState({
+      sortBy: TorrentFilterStore.getTorrentsSort()
+    });
   }
 
   render() {
@@ -54,7 +64,7 @@ class ActionBar extends React.Component {
       <nav className="action-bar">
         <div className="actions action-bar__item action-bar__item--sort-torrents">
           <SortDropdown onSortChange={this.handleSortChange}
-            selectedItem={this.props.torrentList.sortBy} />
+            selectedItem={this.state.sortBy} />
         </div>
         <div className="actions action-bar__item action-bar__item--torrent-operations">
           <div className="action-bar__group">
@@ -75,5 +85,3 @@ class ActionBar extends React.Component {
   }
 
 }
-
-export default connect(uiSelector)(ActionBar);

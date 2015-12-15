@@ -80,7 +80,6 @@ export default class SortDropdown extends React.Component {
   }
 
   handleItemSelect(sortBy) {
-    console.log(sortBy);
     let direction = this.props.selectedItem.direction;
 
     if (this.props.selectedItem.property === sortBy.property) {

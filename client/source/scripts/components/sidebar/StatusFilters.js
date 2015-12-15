@@ -1,30 +1,47 @@
 import classnames from 'classnames';
 import React from 'react';
 
+import EventTypes from '../../constants/EventTypes';
 import Icon from '../icons/Icon.js';
 import StatusFilter from './StatusFilter';
+import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
 const methodsToBind = [
-  'getFilters'
+  'getFilters',
+  'handleClick',
+  'onStatusFilterChange'
 ];
 
 export default class StatusFilters extends React.Component {
-
   constructor() {
     super();
+
+    this.state = {
+      statusFilter: TorrentFilterStore.getStatusFilter()
+    };
 
     methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.activeFilter !== this.props.activeFilter) {
-      return true;
-    } else {
-      return false;
-    }
+  componentDidMount() {
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
+  }
+
+  componentWillUnmount() {
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
+  }
+
+  handleClick(filter) {
+    UIActions.setTorrentStatusFilter(filter);
+  }
+
+  onStatusFilterChange() {
+    this.setState({
+      statusFilter: TorrentFilterStore.getStatusFilter()
+    });
   }
 
   getFilters() {
@@ -61,11 +78,11 @@ export default class StatusFilters extends React.Component {
       }
     ];
 
-    let filterElements = filters.map(filter => {
-      return <StatusFilter handleClick={this.props.handleFilterChange}
+    let filterElements = filters.map((filter) => {
+      return <StatusFilter handleClick={this.handleClick}
         key={filter.slug}
         icon={filter.icon}
-        isActive={this.props.activeFilter === filter.slug}
+        isActive={filter.slug === this.state.statusFilter}
         name={filter.label}
         slug={filter.slug} />;
     });
@@ -85,5 +102,4 @@ export default class StatusFilters extends React.Component {
       </ul>
     );
   }
-
 }

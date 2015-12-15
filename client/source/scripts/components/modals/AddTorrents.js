@@ -2,8 +2,8 @@ import _ from 'lodash';
 import classnames from 'classnames';
 import React from 'react';
 
-import {addTorrents} from '../../actions/ClientActions';
 import TextboxRepeater from '../forms/TextboxRepeater';
+import TorrentActions from '../../actions/TorrentActions';
 
 const methodsToBind = [
   'getContent',
@@ -15,18 +15,13 @@ const methodsToBind = [
 ];
 
 export default class AddTorrents extends React.Component {
-
   constructor() {
     super();
 
     this.state = {
       destination: null,
       isExpanded: false,
-      urlTextboxes: [
-        {
-          value: null
-        }
-      ]
+      urlTextboxes: [{value: null}]
     };
 
     methodsToBind.forEach((method) => {
@@ -66,9 +61,7 @@ export default class AddTorrents extends React.Component {
 
   handleAddTorrents() {
     let torrentUrls = _.pluck(this.state.urlTextboxes, 'value');
-    this.props.dispatch(
-      addTorrents(torrentUrls, this.state.destination)
-    );
+    TorrentActions.addTorrents(torrentUrls, this.state.destination);
   }
 
   handleDestinationChange(event) {
@@ -91,24 +84,17 @@ export default class AddTorrents extends React.Component {
 
   handleUrlAdd(index) {
     let urlTextboxes = Object.assign([], this.state.urlTextboxes);
-    urlTextboxes.splice(index + 1, 0, {
-      value: null
-    });
-    this.setState({
-      urlTextboxes
-    });
+    urlTextboxes.splice(index + 1, 0, {value: null});
+    this.setState({urlTextboxes});
   }
 
   handleUrlChange(index, value) {
     let urlTextboxes = Object.assign([], this.state.urlTextboxes);
     urlTextboxes[index].value = value;
-    this.setState({
-      urlTextboxes
-    });
+    this.setState({urlTextboxes});
   }
 
   render() {
     return this.getContent();
   }
-
 }

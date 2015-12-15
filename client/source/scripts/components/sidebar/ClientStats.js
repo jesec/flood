@@ -1,32 +1,25 @@
-import {connect} from 'react-redux';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import clientSelector from '../../selectors/clientSelector';
-import {getTransferData} from '../../actions/ClientActions';
+import ClientDataStore from '../../stores/ClientDataStore';
+import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import Icon from '../icons/Icon';
 import LineChart from './LineChart';
 
 const methodsToBind = [
-  'componentDidMount',
-  'componentWillReceiveProps',
-  'getTransferData',
-  'shouldComponentUpdate'
+  'onTransferDataRequestError',
+  'onTransferDataRequestSuccess'
 ];
 
 class ClientStats extends React.Component {
-
   constructor() {
     super();
 
     this.state = {
-      clientDataFetchInterval: null,
       sidebarWidth: 0,
-      transfers: {
-        download: [],
-        upload: []
-      }
+      transferDataRequestError: false,
+      transferDataRequestSuccess: false
     };
 
     methodsToBind.forEach((method) => {
@@ -38,76 +31,49 @@ class ClientStats extends React.Component {
     this.setState({
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
-  }
-
-  componentWillMount() {
-    let getTransferData = this.getTransferData;
-
-    this.state.clientDataFetchInterval = setInterval(function() {
-      getTransferData();
-    }, 5000);
-
-    getTransferData();
+    ClientDataStore.listen(
+      EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
+      this.onTransferDataRequestSuccess
+    );
+    ClientDataStore.fetchTransferData();
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.clientDataFetchInterval);
+    ClientDataStore.unlisten(
+      EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
+      this.onTransferDataRequestSuccess
+    );
   }
 
-  componentWillReceiveProps(nextProps) {
-    // check that the transferData was actually updated since the last component
-    // update. if it was updated, add the latest download & upload rates to the
-    // end of the array and remove the first element in the array. if the arrays
-    // are empty, fill in zeros for the first n entries.
-    if (nextProps.transfers.updatedAt !== this.props.transfers.updatedAt) {
-      let index = 0;
-      let uploadRateHistory = Object.assign([], this.state.transfers.upload);
-      let downloadRateHistory = Object.assign([], this.state.transfers.download);
-
-      if (uploadRateHistory.length === this.props.historyLength) {
-        uploadRateHistory.shift();
-        downloadRateHistory.shift();
-        uploadRateHistory.push(parseInt(nextProps.transfers.upload.rate));
-        downloadRateHistory.push(parseInt(nextProps.transfers.download.rate));
-      } else {
-        while (index < this.props.historyLength) {
-          if (index < this.props.historyLength - 1) {
-            uploadRateHistory[index] = 0;
-            downloadRateHistory[index] = 0;
-          } else {
-            uploadRateHistory[index] = parseInt(nextProps.transfers.upload.rate);
-            downloadRateHistory[index] = parseInt(nextProps.transfers.download.rate);
-          }
-          index++;
-        }
-      }
-
-      this.setState({
-        transfers: {
-          download: downloadRateHistory,
-          upload: uploadRateHistory
-        }
-      });
-    }
+  onTransferDataRequestError() {
+    this.setState({
+      transferDataRequestError: true,
+      transferDataRequestSuccess: false
+    });
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.transfers.updatedAt !== this.props.transfers.updatedAt) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  getTransferData() {
-    this.props.dispatch(getTransferData());
+  onTransferDataRequestSuccess() {
+    this.setState({
+      transferDataRequestError: false,
+      transferDataRequestSuccess: true
+    });
   }
 
   render() {
-    let uploadRate = format.data(this.props.transfers.upload.rate, '/s');
-    let uploadTotal = format.data(this.props.transfers.upload.total);
-    let downloadRate = format.data(this.props.transfers.download.rate, '/s');
-    let downloadTotal = format.data(this.props.transfers.download.total);
+    if (this.state.transferDataRequestError) {
+      return <div>Error</div>;
+    } else if (!this.state.transferDataRequestSuccess) {
+      return <div>Loading</div>;
+    }
+
+    let transferRate = ClientDataStore.getTransferRate();
+    let transferRates = ClientDataStore.getTransferRates();
+    let transferTotals = ClientDataStore.getTransferTotals();
+
+    let uploadRate = format.data(transferRate.upload, '/s');
+    let uploadTotal = format.data(transferTotals.upload);
+    let downloadRate = format.data(transferRate.download, '/s');
+    let downloadTotal = format.data(transferTotals.download);
 
     return (
       <div className="client-stats sidebar__item">
@@ -126,7 +92,7 @@ class ClientStats extends React.Component {
             </div>
           </div>
           <LineChart
-            data={this.state.transfers.download}
+            data={transferRates.download}
             height={100}
             id="graph--download"
             slug="graph--download"
@@ -147,7 +113,7 @@ class ClientStats extends React.Component {
             </div>
           </div>
           <LineChart
-            data={this.state.transfers.upload}
+            data={transferRates.upload}
             height={100}
             id="graph--upload"
             slug="graph--upload"
@@ -166,4 +132,4 @@ ClientStats.defaultProps = {
   historyLength: 20
 };
 
-export default connect(clientSelector)(ClientStats);
+export default ClientStats;

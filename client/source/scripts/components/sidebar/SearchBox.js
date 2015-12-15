@@ -1,14 +1,14 @@
 import classnames from'classnames';
 import React from'react';
 
-import Icon from'../icons/Icon';
+import Icon from '../icons/Icon';
+import UIActions from '../../actions/UIActions';
 
 const methodsToBind = [
   'handleKeyUp'
 ];
 
 export default class SearchBox extends React.Component {
-
   constructor() {
     super();
 
@@ -26,9 +26,7 @@ export default class SearchBox extends React.Component {
     this.setState({
       searchValue: value
     });
-    this.props.handleSearchChange({
-      searchString: value
-    });
+    UIActions.setTorrentsSearchFilter(value);
   }
 
   render() {
@@ -48,5 +46,4 @@ export default class SearchBox extends React.Component {
       </div>
     );
   }
-
 }

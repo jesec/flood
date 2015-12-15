@@ -18,9 +18,7 @@ export default class StatusFilter extends React.Component {
   }
 
   handleClick() {
-    this.props.handleClick({
-      filterBy: this.props.slug
-    });
+    this.props.handleClick(this.props.slug);
   }
 
   render() {

@@ -1,24 +1,36 @@
-import {connect} from 'react-redux';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import AddTorrents from './AddTorrents';
-import {dismissModal} from '../../actions/UIActions';
+import EventTypes from '../../constants/EventTypes';
 import Icon from '../icons/Icon';
-import uiSelector from '../../selectors/uiSelector';
+import UIActions from '../../actions/UIActions';
+import UIStore from '../../stores/UIStore';
 
 const methodsToBind = [
-  'handleOverlayClick'
+  'handleOverlayClick',
+  'onModalChange'
 ];
 
-class Modal extends React.Component {
-
+export default class Modal extends React.Component {
   constructor() {
     super();
+
+    this.state = {
+      activeModal: null
+    };
 
     methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+  }
+
+  componentDidMount() {
+    UIStore.listen(EventTypes.UI_MODAL_CHANGE, this.onModalChange);
+  }
+
+  componentWillUnmount() {
+    UIStore.unlisten(EventTypes.UI_MODAL_CHANGE, this.onModalChange);
   }
 
   handleModalClick(event) {
@@ -26,33 +38,27 @@ class Modal extends React.Component {
   }
 
   handleOverlayClick() {
-    this.props.dispatch(dismissModal());
+    UIActions.dismissModal();
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (nextProps.modal !== this.props.modal) {
-      return true;
-    } else {
-      return false;
-    }
+  onModalChange() {
+    this.setState({activeModal: UIStore.getActiveModal()});
   }
 
   render() {
     let modal = null;
 
-    switch (this.props.modal) {
+    switch (this.state.activeModal) {
       case 'add-torrents':
         modal = (
-          <AddTorrents clickHandler={this.onModalClick}
-            dismissModal={this.handleOverlayClick}
-            dispatch={this.props.dispatch} />
+          <AddTorrents dismissModal={this.handleOverlayClick} />
         );
         break;
     }
 
     if (modal !== null) {
       modal = (
-        <div className="modal" onClick={this.handleOverlayClick}>
+        <div key={this.state.activeModal} className="modal" onClick={this.handleOverlayClick}>
           {modal}
         </div>
       );
@@ -68,7 +74,4 @@ class Modal extends React.Component {
     )
 
   }
-
 }
-
-export default connect(uiSelector)(Modal);
