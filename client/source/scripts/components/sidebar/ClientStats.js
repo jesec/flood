@@ -119,9 +119,6 @@ class ClientStats extends React.Component {
             slug="graph--upload"
             width={this.state.sidebarWidth} />
         </div>
-        <button className="client-stats client-stat--limits">
-          <Icon icon="limits" /> Limits
-        </button>
       </div>
     );
   }
