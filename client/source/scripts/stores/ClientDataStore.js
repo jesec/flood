@@ -2,10 +2,8 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import ClientActions from '../actions/ClientActions';
+import config from '../config/config';
 import EventTypes from '../constants/EventTypes';
-
-const historyLength = 100;
-const pollInterval = 5000;
 
 class ClientDataStoreClass extends BaseStore {
   constructor() {
@@ -54,14 +52,14 @@ class ClientDataStoreClass extends BaseStore {
     let downloadRateHistory = Object.assign([], this.transferRates.download);
     let uploadRateHistory = Object.assign([], this.transferRates.upload);
 
-    if (uploadRateHistory.length === historyLength) {
+    if (uploadRateHistory.length === config.maxHistoryStates) {
       downloadRateHistory.shift();
       uploadRateHistory.shift();
       downloadRateHistory.push(parseInt(transferData.downloadRate));
       uploadRateHistory.push(parseInt(transferData.uploadRate));
     } else {
-      while (index < historyLength) {
-        if (index < historyLength - 1) {
+      while (index < config.maxHistoryStates) {
+        if (index < config.maxHistoryStates - 1) {
           uploadRateHistory[index] = 0;
           downloadRateHistory[index] = 0;
         } else {
@@ -87,7 +85,7 @@ class ClientDataStoreClass extends BaseStore {
   startPollingTransferData() {
     this.pollTransferDataID = setInterval(
       this.fetchTransferData.bind(this),
-      pollInterval
+      config.pollInterval
     );
   }
 

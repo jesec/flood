@@ -3,6 +3,7 @@ import _ from 'lodash';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
+import config from '../config/config';
 import EventTypes from '../constants/EventTypes';
 import {filterTorrents} from '../util/filterTorrents';
 import {searchTorrents} from '../util/searchTorrents';
@@ -12,16 +13,13 @@ import TorrentActions from '../actions/TorrentActions';
 import TorrentFilterStore from './TorrentFilterStore';
 import UIStore from './UIStore';
 
-const pollInterval = 5000;
-
 class TorrentStoreClass extends BaseStore {
   constructor() {
     super();
 
+    this.filteredTorrents = [];
     this.pollTorrentDetailsIntervalID = null;
     this.pollTorrentsIntervalID = null;
-    this.isPollingTorrentDetails = false;
-    this.isPollingTorrents = false;
     this.selectedTorrents = [];
     this.torrentDetails = {};
     this.torrents = [];
@@ -29,7 +27,7 @@ class TorrentStoreClass extends BaseStore {
 
   fetchTorrentDetails() {
     TorrentActions.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
-    if (!this.isPollingTorrentDetails) {
+    if (this.pollTorrentDetailsIntervalID === null) {
       this.stopPollingTorrentDetails();
       this.startPollingTorrentDetails();
     }
@@ -38,7 +36,7 @@ class TorrentStoreClass extends BaseStore {
   fetchTorrents() {
     TorrentActions.fetchTorrents();
 
-    if (!this.isPollingTorrents) {
+    if (this.pollTorrentsIntervalID === null) {
       this.startPollingTorrents();
     }
   }
@@ -108,29 +106,27 @@ class TorrentStoreClass extends BaseStore {
   }
 
   startPollingTorrentDetails() {
-    this.isPollingTorrentDetails = true;
     this.pollTorrentDetailsIntervalID = setInterval(
       this.fetchTorrentDetails.bind(this),
-      pollInterval
+      config.pollInterval
     );
   }
 
   startPollingTorrents() {
-    this.isPollingTorrents = true;
     this.pollTorrentsIntervalID = setInterval(
       this.fetchTorrents.bind(this),
-      pollInterval
+      config.pollInterval
     );
   }
 
   stopPollingTorrentDetails() {
     clearInterval(this.pollTorrentDetailsIntervalID);
-    this.isPollingTorrents = false;
+    this.pollTorrentDetailsIntervalID = null;
   }
 
   stopPollingTorrents() {
     clearInterval(this.pollTorrentsIntervalID);
-    this.isPollingTorrentDetails = false;
+    this.pollTorrentsIntervalID = null;
   }
 
   triggerTorrentsFilter() {
