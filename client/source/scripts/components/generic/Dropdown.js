@@ -12,7 +12,6 @@ const methodsToBind = [
 ];
 
 export default class SortDropdown extends React.Component {
-
   constructor() {
     super();
 
@@ -49,7 +48,7 @@ export default class SortDropdown extends React.Component {
     return (
       <div className="dropdown__content">
         <div className="dropdown__header">
-          {this.props.header()}
+          {this.props.header}
         </div>
         <ul className="dropdown__items">
           {menuItems}
@@ -95,7 +94,7 @@ export default class SortDropdown extends React.Component {
 
     return (
       <div className={classes} onClick={this.onDropdownClick}>
-        {this.props.header()}
+        {this.props.header}
         <CSSTransitionGroup
           transitionName="dropdown__content"
           transitionEnterTimeout={250}
@@ -105,5 +104,4 @@ export default class SortDropdown extends React.Component {
       </div>
     );
   }
-
 }

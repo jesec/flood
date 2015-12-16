@@ -11,7 +11,6 @@ const methodsToBind = [
 ];
 
 export default class SortDropdown extends React.Component {
-
   constructor() {
     super();
 
@@ -76,11 +75,9 @@ export default class SortDropdown extends React.Component {
         property: 'added'
       }
     ];
-
   }
 
   handleItemSelect(sortBy) {
-    console.log(sortBy);
     let direction = this.props.selectedItem.direction;
 
     if (this.props.selectedItem.property === sortBy.property) {
@@ -102,11 +99,10 @@ export default class SortDropdown extends React.Component {
     return (
       <Dropdown
         handleItemSelect={this.handleItemSelect}
-        header={this.getDropdownHeader}
+        header={this.getDropdownHeader()}
         menuItems={this.getMenuItems()}
         selectedItem={this.props.selectedItem}
         />
     );
   }
-
 }
