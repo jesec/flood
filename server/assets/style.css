@@ -852,7 +852,9 @@ body {
   background: #e9eef2; }
 
 .dropdown {
+  cursor: pointer;
   display: inline-block;
+  outline: none;
   position: relative;
   z-index: 2; }
   .dropdown__button {
