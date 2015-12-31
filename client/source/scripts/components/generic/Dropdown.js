@@ -3,15 +3,15 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 const methodsToBind = [
-  'componentDidMount',
-  'componentWillUnmount',
+  'getDropdownButton',
   'getDropdownMenu',
-  'onItemSelect',
-  'onDropdownClick',
-  'onExternalClick'
+  'handleDropdownBlur',
+  'handleDropdownClick',
+  'handleDropdownFocus',
+  'handleItemSelect'
 ];
 
-export default class SortDropdown extends React.Component {
+export default class Dropdown extends React.Component {
   constructor() {
     super();
 
@@ -24,12 +24,37 @@ export default class SortDropdown extends React.Component {
     });
   }
 
-  componentDidMount() {
-    window.addEventListener('click', this.onExternalClick);
+  handleDropdownBlur() {
+    this.setState({
+      isExpanded: false
+    });
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('click', this.onExternalClick);
+  handleDropdownClick() {
+    if (this.state.isExpanded) {
+      this.refs.dropdown.blur();
+    } else {
+      this.refs.dropdown.focus();
+    }
+  }
+
+  handleDropdownFocus(event) {
+    this.setState({
+      isExpanded: true
+    });
+  }
+
+  handleItemSelect(item) {
+    this.refs.dropdown.blur();
+    this.props.handleItemSelect(item);
+  }
+
+  getDropdownButton() {
+    return (
+      <div className={this.props.dropdownButtonClass} onClick={this.handleDropdownClick}>
+        {this.props.header}
+      </div>
+    );
   }
 
   getDropdownMenu() {
@@ -39,7 +64,7 @@ export default class SortDropdown extends React.Component {
         'is-selected': this.props.selectedItem.property === property.property
       })
       return (
-        <li className={classes} key={index} onClick={this.onItemSelect.bind(this, property)}>
+        <li className={classes} key={index} onClick={this.handleItemSelect.bind(this, property)}>
           {property.displayName}
         </li>
       );
@@ -48,7 +73,7 @@ export default class SortDropdown extends React.Component {
     return (
       <div className="dropdown__content">
         <div className="dropdown__header">
-          {this.props.header}
+          {this.getDropdownButton()}
         </div>
         <ul className="dropdown__items">
           {menuItems}
@@ -57,33 +82,10 @@ export default class SortDropdown extends React.Component {
     );
   }
 
-  onDropdownClick(event) {
-    event.stopPropagation();
-    this.setState({
-      isExpanded: !this.state.isExpanded
-    });
-  }
-
-  onExternalClick() {
-    if (this.state.isExpanded) {
-      this.setState({
-        isExpanded: false
-      });
-    }
-  }
-
-  onItemSelect(item) {
-    this.setState({
-      isExpanded: false
-    });
-    this.props.handleItemSelect(item);
-  }
-
   render() {
-    let classes = classnames({
-      'dropdown': true,
-      'is-expanded': this.state.isExpanded,
-      [this.props.dropdownClasses]: true
+    let dropdownWrapperClass = classnames({
+      [this.props.dropdownWrapperClass]: true,
+      'is-expanded': this.state.isExpanded
     });
 
     let menu = null;
@@ -93,8 +95,8 @@ export default class SortDropdown extends React.Component {
     }
 
     return (
-      <div className={classes} onClick={this.onDropdownClick}>
-        {this.props.header}
+      <div className={dropdownWrapperClass} onFocus={this.handleDropdownFocus} onBlur={this.handleDropdownBlur} ref="dropdown" tabIndex="0">
+        {this.getDropdownButton()}
         <CSSTransitionGroup
           transitionName="dropdown__content"
           transitionEnterTimeout={250}
@@ -105,3 +107,8 @@ export default class SortDropdown extends React.Component {
     );
   }
 }
+
+Dropdown.defaultProps = {
+  dropdownWrapperClass: 'dropdown',
+  dropdownButtonClass: 'dropdown__trigger'
+};

@@ -14,9 +14,9 @@ class Sidebar extends React.Component {
 
   getDropdownHeader() {
     return (
-      <button className="client-stats client-stat--limits">
+      <a className="client-stats client-stat--limits">
         <Icon icon="limits" /> Speed Limits
-      </button>
+      </a>
     );
   }
 
