@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
@@ -5,6 +6,7 @@ import React from 'react';
 const methodsToBind = [
   'getDropdownButton',
   'getDropdownMenu',
+  'getDropdownMenuItems',
   'handleDropdownBlur',
   'handleDropdownClick',
   'handleDropdownFocus',
@@ -57,16 +59,12 @@ export default class Dropdown extends React.Component {
     );
   }
 
-  getDropdownMenu() {
-    let menuItems = this.props.menuItems.map(function(property, index) {
-      let classes = classnames({
-        'dropdown__item': true,
-        'is-selected': this.props.selectedItem.property === property.property
-      })
+  getDropdownMenu(items) {
+    let dropdownLists = items.map(function(itemList, index) {
       return (
-        <li className={classes} key={index} onClick={this.handleItemSelect.bind(this, property)}>
-          {property.displayName}
-        </li>
+        <div className="dropdown__list" key={index}>
+          {this.getDropdownMenuItems(itemList)}
+        </div>
       );
     }, this);
 
@@ -76,10 +74,25 @@ export default class Dropdown extends React.Component {
           {this.getDropdownButton()}
         </div>
         <ul className="dropdown__items">
-          {menuItems}
+          {dropdownLists}
         </ul>
       </div>
     );
+  }
+
+  getDropdownMenuItems(listItems) {
+    return listItems.map(function(property, index) {
+      let classes = classnames({
+        'dropdown__item': true,
+        'is-selected': this.props.selectedItem.property === property.property &&
+          this.props.selectedItem.value === property.value
+      })
+      return (
+        <li className={classes} key={index} onClick={this.handleItemSelect.bind(this, property)}>
+          {property.displayName}
+        </li>
+      );
+    }, this);
   }
 
   render() {
@@ -91,7 +104,7 @@ export default class Dropdown extends React.Component {
     let menu = null;
 
     if (this.state.isExpanded) {
-      menu = this.getDropdownMenu();
+      menu = this.getDropdownMenu(this.props.menuItems);
     }
 
     return (
@@ -111,4 +124,8 @@ export default class Dropdown extends React.Component {
 Dropdown.defaultProps = {
   dropdownWrapperClass: 'dropdown',
   dropdownButtonClass: 'dropdown__trigger'
+};
+
+Dropdown.propTypes = {
+  menuItems: React.PropTypes.arrayOf(React.PropTypes.arrayOf(React.PropTypes.object)).isRequired
 };

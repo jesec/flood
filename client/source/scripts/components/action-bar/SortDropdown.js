@@ -14,10 +14,6 @@ export default class SortDropdown extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      isExpanded: false
-    };
-
     methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
     });
@@ -34,62 +30,75 @@ export default class SortDropdown extends React.Component {
 
   getMenuItems() {
     return [
-      {
-        displayName: 'Name',
-        property: 'name'
-      },
-      {
-        displayName: 'ETA',
-        property: 'eta'
-      },
-      {
-        displayName: 'Download Speed',
-        property: 'downloadRate'
-      },
-      {
-        displayName: 'Upload Speed',
-        property: 'uploadRate'
-      },
-      {
-        displayName: 'Ratio',
-        property: 'ratio'
-      },
-      {
-        displayName: 'Percent Complete',
-        property: 'percentComplete'
-      },
-      {
-        displayName: 'Downloaded',
-        property: 'downloadTotal'
-      },
-      {
-        displayName: 'Uploaded',
-        property: 'uploadTotal'
-      },
-      {
-        displayName: 'File Size',
-        property: 'sizeBytes'
-      },
-      {
-        displayName: 'Date Added',
-        property: 'added'
-      }
+      [
+        {
+          displayName: 'Name',
+          property: 'sortBy',
+          value: 'name'
+        },
+        {
+          displayName: 'ETA',
+          property: 'sortBy',
+          value: 'eta'
+        },
+        {
+          displayName: 'Download Speed',
+          property: 'sortBy',
+          value: 'downloadRate'
+        },
+        {
+          displayName: 'Upload Speed',
+          property: 'sortBy',
+          value: 'uploadRate'
+        },
+        {
+          displayName: 'Ratio',
+          property: 'sortBy',
+          value: 'ratio'
+        },
+        {
+          displayName: 'Percent Complete',
+          property: 'sortBy',
+          value: 'percentComplete'
+        },
+        {
+          displayName: 'Downloaded',
+          property: 'sortBy',
+          value: 'downloadTotal'
+        },
+        {
+          displayName: 'Uploaded',
+          property: 'sortBy',
+          value: 'uploadTotal'
+        },
+        {
+          displayName: 'File Size',
+          property: 'sortBy',
+          value: 'sizeBytes'
+        },
+        {
+          displayName: 'Date Added',
+          property: 'sortBy',
+          value: 'added'
+        }
+      ]
     ];
   }
 
   handleItemSelect(sortBy) {
     let direction = this.props.selectedItem.direction;
 
-    if (this.props.selectedItem.property === sortBy.property) {
+    if (this.props.selectedItem.value === sortBy.value) {
       direction = direction === 'asc' ? 'desc' : 'asc';
     } else {
       direction = 'asc';
     }
 
     let sortProperty = {
+      direction,
       displayName: sortBy.displayName,
-      property: sortBy.property,
-      direction
+      property: 'sortBy',
+      value: sortBy.value
     };
 
     this.props.onSortChange(sortProperty);
