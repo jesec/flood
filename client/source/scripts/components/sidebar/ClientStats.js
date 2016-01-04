@@ -66,14 +66,15 @@ class ClientStats extends React.Component {
       return <div>Loading</div>;
     }
 
+    let throttles = ClientDataStore.getThrottles();
     let transferRate = ClientDataStore.getTransferRate();
     let transferRates = ClientDataStore.getTransferRates();
     let transferTotals = ClientDataStore.getTransferTotals();
 
-    let uploadRate = format.data(transferRate.upload, '/s');
-    let uploadTotal = format.data(transferTotals.upload);
     let downloadRate = format.data(transferRate.download, '/s');
     let downloadTotal = format.data(transferTotals.download);
+    let uploadRate = format.data(transferRate.upload, '/s');
+    let uploadTotal = format.data(transferTotals.upload);
 
     return (
       <div className="client-stats sidebar__item">
@@ -95,6 +96,7 @@ class ClientStats extends React.Component {
             data={transferRates.download}
             height={100}
             id="graph--download"
+            limit={throttles.download}
             slug="graph--download"
             width={this.state.sidebarWidth} />
         </div>
@@ -116,6 +118,7 @@ class ClientStats extends React.Component {
             data={transferRates.upload}
             height={100}
             id="graph--upload"
+            limit={throttles.upload}
             slug="graph--upload"
             width={this.state.sidebarWidth} />
         </div>

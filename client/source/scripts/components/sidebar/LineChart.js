@@ -2,14 +2,14 @@ import d3 from 'd3';
 import React from 'react';
 
 export default class LineChart extends React.Component {
-
   constructor() {
     super();
   }
 
   componentDidUpdate() {
     let graph = d3.select('#' + this.props.id);
-    let lineData = this.props.data;
+    let transferData = this.props.data;
+    let transferLimit = this.props.limit;
     let margin = {
       bottom: 10,
       top: 10
@@ -22,52 +22,55 @@ export default class LineChart extends React.Component {
       .linear()
       .range([0, width])
       .domain([
-        d3.min(lineData, function(d,i) {
-          return i;
+        d3.min(transferData, function(dataPoint, index) {
+          return index;
         }),
-        d3.max(lineData, function(d,i) {
-          return i;
+        d3.max(transferData, function(dataPoint, index) {
+          return index;
         })
       ]);
 
     let yRange = d3
       .scale
       .linear()
-      .range([height - margin.bottom - margin.top, 0])
+      .range([height - margin.top, margin.bottom])
       .domain([
-        d3.min(lineData, function(d) {
-          return d;
-        }),
-        d3.max(lineData, function(d) {
-          return d;
+        0,
+        d3.max(transferData, function(dataPoint, index) {
+          if (dataPoint >= transferLimit[index]) {
+            return dataPoint;
+          } else {
+            return transferLimit[index];
+          }
         })
       ]);
 
     let lineFunc = d3
       .svg
       .line()
-      .x(function(d,i) {
-        return xRange(i);
+      .x(function(dataPoint, index) {
+        return xRange(index);
       })
-      .y(function(d) {
-        return yRange(d);
+      .y(function(dataPoint) {
+        return yRange(dataPoint);
       })
       .interpolate('basis');
 
     let areaFunc = d3
       .svg
       .area()
-      .x(function(d,i) {
-        return xRange(i);
+      .x(function(dataPoint, index) {
+        return xRange(index);
       })
       .y0(height)
-      .y1(function(d) {
-        return yRange(d);
+      .y1(function(dataPoint) {
+        return yRange(dataPoint);
       })
       .interpolate('basis');
 
-    let points = lineFunc(lineData);
-    let area = areaFunc(lineData);
+    let transferDataLinePoints = lineFunc(transferData);
+    let transferLimitLinePoints = lineFunc(transferLimit);
+    let transferDataAreaPoints = areaFunc(transferData);
 
     graph
       .select('g')
@@ -76,30 +79,30 @@ export default class LineChart extends React.Component {
     graph
       .append('g')
       .append('svg:path')
-      .attr('class', 'graph--area')
-      .attr('d', area)
-      .attr('transform', 'translate(0,' + margin.top + ')');;
+      .attr('class', 'graph__area')
+      .attr('d', transferDataAreaPoints);
 
     graph
       .select('g')
       .append('svg:path')
-      .attr('class', 'graph--line')
-      .attr('d', points)
-      .attr('transform', 'translate(0,' + margin.top + ')');
+      .attr('class', 'graph__line graph__line--limit')
+      .attr('d', transferLimitLinePoints);
+
+    graph
+      .select('g')
+      .append('svg:path')
+      .attr('class', 'graph__line graph__line--rate')
+      .attr('d', transferDataLinePoints);
   }
 
   render() {
     return (
       <svg className="graph" id={this.props.id}>
         <defs>
-          <linearGradient
-            id={this.props.slug + '--gradient'}
-            x1="0%"
-            y1="0%"
-            x2="0%"
-            y2="100%">
-            <stop className={this.props.slug + '--gradient--top'} offset="0%"/>
-            <stop className={this.props.slug + '--gradient--bottom'} offset="100%"/>
+          <linearGradient id={`${this.props.slug}--gradient`} x1="0%" y1="0%"
+            x2="0%" y2="100%">
+            <stop className={`${this.props.slug}--gradient--top`} offset="0%"/>
+            <stop className={`${this.props.slug}--gradient--bottom`} offset="100%"/>
           </linearGradient>
         </defs>
       </svg>

@@ -63,5 +63,17 @@
         }
       }
     }
+
+    &--speed-limit {
+      padding-left: 5px;
+      padding-top: 5px;
+
+      .dropdown {
+
+        &__content {
+          min-width: 180px;
+        }
+      }
+    }
   }
 }

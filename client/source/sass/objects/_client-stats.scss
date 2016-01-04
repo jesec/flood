@@ -49,9 +49,8 @@
     border: none;
     color: $client-stats--limits--foreground;
     display: block;
-    margin: 15px 0 0 0;
     outline: none;
-    padding: 2px 0 2px 25px;
+    padding: 10px 15px;
     font-size: 0.85em;
     text-align: left;
     transition: color 0.25s;
@@ -107,9 +106,17 @@
       width: 100%;
     }
 
-    &--line {
+    &__line {
       fill: none;
-      stroke-width: 2px;
+
+      &--limit {
+        stroke-dasharray: 4px;
+        stroke-width: 1px;
+      }
+
+      &--rate {
+        stroke-width: 2px;
+      }
     }
 
   }
@@ -146,12 +153,19 @@
         stop-color: $client-stats--download--graph--fill--bottom;
       }
 
-      &--area {
+      &__area {
         fill: url('#graph--download--gradient')
       }
 
-      &--line {
-        stroke: $client-stats--download--graph--stroke;
+      &__line {
+
+        &--limit {
+          stroke: $client-stats--download--limits--line;
+        }
+
+        &--rate {
+          stroke: $client-stats--download--graph--stroke;
+        }
       }
 
     }
@@ -190,12 +204,19 @@
         stop-color: $client-stats--upload--graph--fill--bottom;
       }
 
-      &--area {
+      &__area {
         fill: url('#graph--upload--gradient')
       }
 
-      &--line {
-        stroke: $client-stats--upload--graph--stroke;
+      &__line {
+
+        &--limit {
+          stroke: $client-stats--upload--limits--line;
+        }
+
+        &--rate {
+          stroke: $client-stats--upload--graph--stroke;
+        }
       }
 
     }

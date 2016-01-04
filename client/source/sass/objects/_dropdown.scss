@@ -86,7 +86,12 @@
   }
 
   &__items {
+    display: flex;
     padding: 10px 0;
+  }
+
+  &__list {
+    flex: 1;
   }
 
   &__item {
