@@ -115,16 +115,20 @@ var clientUtil = {
     clientProperties: [
       'uploadRate',
       'uploadTotal',
+      'uploadThrottle',
 
       'downloadRate',
-      'downloadTotal'
+      'downloadTotal',
+      'downloadThrottle'
     ],
     clientPropertyMethods: [
       'get_up_rate',
       'get_up_total',
+      'throttle.global_up.max_rate',
 
       'get_down_rate',
-      'get_down_total'
+      'get_down_total',
+      'throttle.global_down.max_rate'
     ],
     peerProperties: [
       'address',
@@ -185,7 +189,7 @@ var clientUtil = {
     }
 
     for (i = 0, len = methodCalls.length; i < len; i++) {
-      var param = [];
+      var param = [''];
       if (params[i]) {
         param = [params[i]];
       }

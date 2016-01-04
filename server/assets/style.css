@@ -778,9 +778,8 @@ body {
   border: none;
   color: #53718a;
   display: block;
-  margin: 15px 0 0 0;
   outline: none;
-  padding: 2px 0 2px 25px;
+  padding: 10px 15px;
   font-size: 0.85em;
   text-align: left;
   -webkit-transition: color 0.25s;
@@ -816,9 +815,13 @@ body {
     .client-stat .graph svg {
       height: 100%;
       width: 100%; }
-    .client-stat .graph--line {
-      fill: none;
-      stroke-width: 2px; }
+    .client-stat .graph__line {
+      fill: none; }
+      .client-stat .graph__line--limit {
+        stroke-dasharray: 4px;
+        stroke-width: 1px; }
+      .client-stat .graph__line--rate {
+        stroke-width: 2px; }
   .client-stat--download .icon {
     fill: rgba(43, 174, 108, 0.75); }
   .client-stat--download .client-stat__data--primary {
@@ -829,9 +832,11 @@ body {
     stop-color: rgba(43, 174, 108, 0.2); }
   .client-stat--download .graph .graph--download--gradient--bottom {
     stop-color: rgba(43, 174, 108, 0); }
-  .client-stat--download .graph--area {
+  .client-stat--download .graph__area {
     fill: url("#graph--download--gradient"); }
-  .client-stat--download .graph--line {
+  .client-stat--download .graph__line--limit {
+    stroke: rgba(102, 217, 159, 0.2); }
+  .client-stat--download .graph__line--rate {
     stroke: rgba(43, 174, 108, 0.4); }
   .client-stat--upload .icon {
     fill: rgba(35, 135, 217, 0.75); }
@@ -843,9 +848,11 @@ body {
     stop-color: rgba(35, 135, 217, 0.2); }
   .client-stat--upload .graph .graph--upload--gradient--bottom {
     stop-color: rgba(35, 135, 217, 0); }
-  .client-stat--upload .graph--area {
+  .client-stat--upload .graph__area {
     fill: url("#graph--upload--gradient"); }
-  .client-stat--upload .graph--line {
+  .client-stat--upload .graph__line--limit {
+    stroke: rgba(121, 183, 233, 0.2); }
+  .client-stat--upload .graph__line--rate {
     stroke: rgba(35, 135, 217, 0.4); }
 
 .content {
@@ -909,7 +916,16 @@ body {
       position: absolute;
       width: 90%; }
   .dropdown__items {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
     padding: 10px 0; }
+  .dropdown__list {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1; }
   .dropdown__item {
     cursor: pointer;
     display: block;
@@ -1069,6 +1085,11 @@ body {
         color: #2cad6d; }
       .sidebar__item--search.is-in-use .textbox::placeholder {
         color: #2cad6d; }
+  .sidebar__item--speed-limit {
+    padding-left: 5px;
+    padding-top: 5px; }
+    .sidebar__item--speed-limit .dropdown__content {
+      min-width: 180px; }
 
 .modal {
   background: rgba(26, 47, 61, 0.5);

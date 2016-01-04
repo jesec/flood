@@ -12,6 +12,7 @@ class ClientDataStoreClass extends BaseStore {
     this.pollTransferDataID = null;
     this.transferRates = {download: [], upload: []};
     this.transferTotals = {download: null, upload: null};
+    this.throttles = {download: null, upload: null};
   }
 
   fetchTransferData() {
@@ -20,6 +21,10 @@ class ClientDataStoreClass extends BaseStore {
     if (this.pollTransferDataID === null) {
       this.startPollingTransferData();
     }
+  }
+
+  getThrottles() {
+    return this.throttles;
   }
 
   getTransferTotals() {
@@ -34,6 +39,15 @@ class ClientDataStoreClass extends BaseStore {
     return this.transferRates;
   }
 
+  handleSetThrottleSuccess(data) {
+    this.fetchTransferData();
+    this.emit(EventTypes.CLIENT_SET_THROTTLE_SUCCESS);
+  }
+
+  handleSetThrottleError(error) {
+    this.emit(EventTypes.CLIENT_SET_THROTTLE_ERROR);
+  }
+
   handleTransferDataSuccess(transferData) {
     this.transferTotals = {
       download: transferData.downloadTotal,
@@ -45,20 +59,34 @@ class ClientDataStoreClass extends BaseStore {
       upload: transferData.uploadRate
     };
 
+    // this.throttles = {
+    //   download: transferData.downloadThrottle,
+    //   upload: transferData.uploadThrottle
+    // };
+
     // add the latest download & upload rates to the end of the array and remove
     // the first element in the array. if the arrays are empty, fill in zeros
     // for the first n entries.
     let index = 0;
     let downloadRateHistory = Object.assign([], this.transferRates.download);
+    let downloadRateThrottleHistory = Object.assign([], this.throttles.download);
     let uploadRateHistory = Object.assign([], this.transferRates.upload);
+    let uploadRateThrottleHistory = Object.assign([], this.throttles.upload);
 
     if (uploadRateHistory.length === config.maxHistoryStates) {
       downloadRateHistory.shift();
+      downloadRateThrottleHistory.shift();
       uploadRateHistory.shift();
+      uploadRateThrottleHistory.shift();
+
       downloadRateHistory.push(parseInt(transferData.downloadRate));
+      downloadRateThrottleHistory.push(parseInt(transferData.downloadThrottle));
       uploadRateHistory.push(parseInt(transferData.uploadRate));
+      uploadRateThrottleHistory.push(parseInt(transferData.uploadThrottle));
     } else {
       while (index < config.maxHistoryStates) {
+        // if we don't have historical values, we assume zero for the transfer
+        // rate history.
         if (index < config.maxHistoryStates - 1) {
           uploadRateHistory[index] = 0;
           downloadRateHistory[index] = 0;
@@ -66,6 +94,11 @@ class ClientDataStoreClass extends BaseStore {
           downloadRateHistory[index] = parseInt(transferData.downloadRate);
           uploadRateHistory[index] = parseInt(transferData.uploadRate);
         }
+
+        // we assume the throttle history has been the same for all previous
+        // history states.
+        uploadRateThrottleHistory[index] = parseInt(transferData.uploadThrottle);
+        downloadRateThrottleHistory[index] = parseInt(transferData.downloadThrottle);
         index++;
       }
     }
@@ -73,6 +106,11 @@ class ClientDataStoreClass extends BaseStore {
     this.transferRates = {
       download: downloadRateHistory,
       upload: uploadRateHistory
+    };
+
+    this.throttles = {
+      download: downloadRateThrottleHistory,
+      upload: uploadRateThrottleHistory
     };
 
     this.emit(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS);
@@ -111,6 +149,12 @@ AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_FETCH_TRANSFER_DATA_ERROR:
       ClientDataStore.handleTransferDataError(action.data.error);
+      break;
+    case ActionTypes.CLIENT_SET_THROTTLE_SUCCESS:
+      ClientDataStore.handleSetThrottleSuccess(action.data.transferData);
+      break;
+    case ActionTypes.CLIENT_SET_THROTTLE_ERROR:
+      ClientDataStore.handleSetThrottleError(action.data.error);
       break;
   }
 });

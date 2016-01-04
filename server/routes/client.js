@@ -17,9 +17,9 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.get('/add', function(req, res, next) {
-  client.add('get', handleClientResponse(res));
-});
+// router.get('/add', function(req, res, next) {
+//   client.add('get', handleClientResponse(res));
+// });
 
 router.post('/add', function(req, res, next) {
   client.add(req.body, handleClientResponse(res));
@@ -29,9 +29,8 @@ router.get('/list', function(req, res, next) {
   client.getTorrentList(handleClientResponse(res));
 });
 
-router.post('/stop', function(req, res, next) {
-  var hashes = req.body.hashes;
-  client.stopTorrent(hashes, handleClientResponse(res));
+router.put('/settings/speed-limits', function(req, res, next) {
+  client.setSpeedLimits(req.body, handleClientResponse(res));
 });
 
 router.post('/start', function(req, res, next) {
@@ -39,13 +38,18 @@ router.post('/start', function(req, res, next) {
   client.startTorrent(hashes, handleClientResponse(res));
 });
 
+router.get('/stats', function(req, res, next) {
+  client.getTransferStats(handleClientResponse(res));
+});
+
+router.post('/stop', function(req, res, next) {
+  var hashes = req.body.hashes;
+  client.stopTorrent(hashes, handleClientResponse(res));
+});
+
 router.post('/torrent-details', function(req, res, next) {
   var hash = req.body.hash;
   client.getTorrentDetails(hash, handleClientResponse(res));
-});
-
-router.get('/stats', function(req, res, next) {
-  client.getTransferStats(handleClientResponse(res));
 });
 
 router.get('/methods.json', function(req, res, next) {

@@ -13,7 +13,8 @@ class TorrentFilterStoreClass extends BaseStore {
     this.sortTorrentsBy = {
       direction: 'desc',
       displayName: 'Date Added',
-      property: 'added'
+      property: 'sortBy',
+      value: 'added'
     };
   }
 

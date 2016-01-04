@@ -175,6 +175,33 @@ var client = {
     });
   },
 
+  setSpeedLimits: function(data, callback) {
+    var methodName = 'throttle.global_down.max_rate.set';
+
+    if (data.direction === 'upload') {
+      methodName = 'throttle.global_up.max_rate.set';
+    }
+
+    var multicall = [
+      [
+        {
+          methodName: methodName,
+          params: [
+            '',
+            data.throttle
+          ]
+        }
+      ]
+    ];
+
+    rTorrent.get('system.multicall', multicall)
+      .then(function(data) {
+        callback(null, data);
+      }, function(error) {
+        callback(error, null);
+      });
+  },
+
   stopTorrent: function(hash, callback) {
     if (!util.isArray(hash)) {
       hash = [hash];
@@ -224,8 +251,9 @@ var client = {
       rTorrent.get('system.multicall', request)
         .then(function(data) {
           callback(null, clientUtil.mapClientProps(
-            clientUtil.defaults.clientProperties, data)
-          );
+            clientUtil.defaults.clientProperties,
+            data
+          ));
         }, function(error) {
           callback(error, null);
         });
