@@ -80,27 +80,27 @@ class TorrentStoreClass extends BaseStore {
   }
 
   setTorrents(torrents) {
+    let torrentsSort = TorrentFilterStore.getTorrentsSort();
+
     this.torrents = sortTorrents(
       Object.assign([], torrents),
-      TorrentFilterStore.getTorrentsSort()
+      {direction: torrentsSort.direction, property: torrentsSort.value}
     );
 
     let statusFilter = TorrentFilterStore.getStatusFilter();
     let searchFilter = TorrentFilterStore.getSearchFilter();
 
-    if (statusFilter || searchFilter) {
-      let filteredTorrents = Object.assign([], this.torrents);
+    let filteredTorrents = Object.assign([], this.torrents);
 
-      if (statusFilter && statusFilter !== 'all') {
-        filteredTorrents = filterTorrents(filteredTorrents, statusFilter);
-      }
-
-      if (searchFilter && searchFilter !== '') {
-        filteredTorrents = searchTorrents(filteredTorrents, searchFilter);
-      }
-
-      this.filteredTorrents = filteredTorrents;
+    if (statusFilter && statusFilter !== 'all') {
+      filteredTorrents = filterTorrents(filteredTorrents, statusFilter);
     }
+
+    if (searchFilter && searchFilter !== '') {
+      filteredTorrents = searchTorrents(filteredTorrents, searchFilter);
+    }
+
+    this.filteredTorrents = filteredTorrents;
 
     this.emit(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS);
   }

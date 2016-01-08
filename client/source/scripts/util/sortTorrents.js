@@ -2,9 +2,8 @@ export function sortTorrents(torrents, sortBy) {
   if (torrents.length) {
     let direction = sortBy.direction;
     let property = sortBy.property;
-    let sortedTorrents = Object.assign([], torrents);
 
-    sortedTorrents.sort(function(a, b) {
+    torrents.sort(function(a, b) {
       let valA = a[property];
       let valB = b[property];
 
@@ -49,7 +48,7 @@ export function sortTorrents(torrents, sortBy) {
       return 0;
     });
 
-    return sortedTorrents;
+    return torrents;
   } else {
     return torrents;
   }
