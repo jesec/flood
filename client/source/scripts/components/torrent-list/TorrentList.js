@@ -148,7 +148,7 @@ export default class TorrentListContainer extends React.Component {
     let maxTorrentIndex = minTorrentIndex + elementsInView + buffer * 2 + 1;
 
     if (this.state.torrentCount < maxTorrentIndex) {
-      maxTorrentIndex = this.state.torrentCount - 1;
+      maxTorrentIndex = this.state.torrentCount;
     }
 
     if (minTorrentIndex < 0) {
