@@ -86,8 +86,14 @@ export default class Dropdown extends React.Component {
         'is-selectable': property.selectable !== false,
         'is-selected': property.selected
       })
+      let clickHandler = null;
+
+      if (property.selectable !== false) {
+        clickHandler = this.handleItemSelect.bind(this, property);
+      }
+
       return (
-        <li className={classes} key={index} onClick={this.handleItemSelect.bind(this, property)}>
+        <li className={classes} key={index} onClick={clickHandler}>
           {property.displayName}
         </li>
       );
