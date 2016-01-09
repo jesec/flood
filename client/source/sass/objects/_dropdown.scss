@@ -1,12 +1,15 @@
 .dropdown {
-  cursor: pointer;
   display: inline-block;
   outline: none;
   position: relative;
   z-index: 2;
 
-  &__button {
+  &__button,
+  &__trigger {
     cursor: pointer;
+  }
+
+  &__button {
     display: block;
     padding: 12px 15px 7px 15px;
     text-align: left;
@@ -46,13 +49,16 @@
 
   &__label {
     color: $dropdown--label;
-    cursor: pointer;
     display: block;
     font-size: 0.65em;
     font-weight: 500;
     letter-spacing: 0.1em;
     line-height: 0.9em;
     text-transform: uppercase;
+
+    .dropdown__button & {
+      cursor: pointer;
+    }
   }
 
   &__value {
