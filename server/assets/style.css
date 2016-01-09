@@ -767,9 +767,9 @@ body {
       font-weight: 100;
       line-height: 1.2; }
     .client-stat__data--primary {
-      font-size: 1.9em; }
+      font-size: 1.75em; }
     .client-stat__data--secondary {
-      font-size: 0.9em;
+      font-size: 0.8em;
       font-style: italic;
       font-weight: 400; }
 
