@@ -10,6 +10,49 @@ const METHODS_TO_BIND = [
   'handleItemSelect'
 ];
 
+const SORT_PROPERTIES = [
+  {
+    displayName: 'Name',
+    value: 'name'
+  },
+  {
+    displayName: 'ETA',
+    value: 'eta'
+  },
+  {
+    displayName: 'Download Speed',
+    value: 'downloadRate'
+  },
+  {
+    displayName: 'Upload Speed',
+    value: 'uploadRate'
+  },
+  {
+    displayName: 'Ratio',
+    value: 'ratio'
+  },
+  {
+    displayName: 'Percent Complete',
+    value: 'percentComplete'
+  },
+  {
+    displayName: 'Downloaded',
+    value: 'downloadTotal'
+  },
+  {
+    displayName: 'Uploaded',
+    value: 'uploadTotal'
+  },
+  {
+    displayName: 'File Size',
+    value: 'sizeBytes'
+  },
+  {
+    displayName: 'Date Added',
+    value: 'added'
+  }
+];
+
 export default class SortDropdown extends React.Component {
   constructor() {
     super();
@@ -28,61 +71,18 @@ export default class SortDropdown extends React.Component {
     );
   }
 
-  getMenuItems() {
-    return [
-      [
-        {
-          displayName: 'Name',
-          property: 'sortBy',
-          value: 'name'
-        },
-        {
-          displayName: 'ETA',
-          property: 'sortBy',
-          value: 'eta'
-        },
-        {
-          displayName: 'Download Speed',
-          property: 'sortBy',
-          value: 'downloadRate'
-        },
-        {
-          displayName: 'Upload Speed',
-          property: 'sortBy',
-          value: 'uploadRate'
-        },
-        {
-          displayName: 'Ratio',
-          property: 'sortBy',
-          value: 'ratio'
-        },
-        {
-          displayName: 'Percent Complete',
-          property: 'sortBy',
-          value: 'percentComplete'
-        },
-        {
-          displayName: 'Downloaded',
-          property: 'sortBy',
-          value: 'downloadTotal'
-        },
-        {
-          displayName: 'Uploaded',
-          property: 'sortBy',
-          value: 'uploadTotal'
-        },
-        {
-          displayName: 'File Size',
-          property: 'sortBy',
-          value: 'sizeBytes'
-        },
-        {
-          displayName: 'Date Added',
-          property: 'sortBy',
-          value: 'added'
-        }
-      ]
-    ];
+  getDropdownMenus() {
+    let items = SORT_PROPERTIES.map((sortProp) => {
+      return {
+        displayName: sortProp.displayName,
+        property: 'sortBy',
+        selected: this.props.selectedItem.value === sortProp.value,
+        value: sortProp.value
+      }
+    });
+
+    // Dropdown expects an array of arrays.
+    return [items];
   }
 
   handleItemSelect(sortBy) {
@@ -109,8 +109,7 @@ export default class SortDropdown extends React.Component {
       <Dropdown
         handleItemSelect={this.handleItemSelect}
         header={this.getDropdownHeader()}
-        menuItems={this.getMenuItems()}
-        selectedItem={this.props.selectedItem}
+        menuItems={this.getDropdownMenus()}
         />
     );
   }
