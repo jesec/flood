@@ -1,7 +1,6 @@
 import React from 'react';
 
 const format = {
-
   eta: function(eta) {
     if (eta === 'Infinity') {
       return '∞';
@@ -69,9 +68,7 @@ const format = {
     }
   },
 
-  data: function(bytes, extraUnits, precision) {
-    precision = precision || 2;
-
+  data: function(bytes, extraUnits, precision = 2) {
   	let kilobyte = 1024,
   		megabyte = kilobyte * 1024,
   		gigabyte = megabyte * 1024,
@@ -99,9 +96,9 @@ const format = {
   		unit = 'B';
   	}
 
-      if (extraUnits) {
-          unit += extraUnits;
-      }
+    if (extraUnits) {
+      unit += extraUnits;
+    }
 
   	return {
   		value,
@@ -121,7 +118,6 @@ const format = {
 
     return ratio.toFixed(precision);
   }
-
 };
 
 export default format;
