@@ -8,7 +8,7 @@ import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'handleAddTorrents',
   'handleSortChange',
   'handleStart',
@@ -24,7 +24,7 @@ export default class ActionBar extends React.Component {
       sortBy: TorrentFilterStore.getTorrentsSort()
     };
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

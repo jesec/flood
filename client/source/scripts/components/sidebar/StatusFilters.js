@@ -7,7 +7,7 @@ import StatusFilter from './StatusFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'getFilters',
   'handleClick',
   'onStatusFilterChange'
@@ -21,7 +21,7 @@ export default class StatusFilters extends React.Component {
       statusFilter: TorrentFilterStore.getStatusFilter()
     };
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

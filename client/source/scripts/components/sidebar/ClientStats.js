@@ -7,7 +7,7 @@ import format from '../../util/formatData';
 import Icon from '../icons/Icon';
 import LineChart from './LineChart';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'onTransferDataRequestError',
   'onTransferDataRequestSuccess'
 ];
@@ -22,7 +22,7 @@ class ClientStats extends React.Component {
       transferDataRequestSuccess: false
     };
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

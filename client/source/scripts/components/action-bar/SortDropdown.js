@@ -5,7 +5,7 @@ import React from 'react';
 import Dropdown from '../generic/Dropdown';
 import UIActions from '../../actions/UIActions';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'getDropdownHeader',
   'handleItemSelect'
 ];
@@ -14,7 +14,7 @@ export default class SortDropdown extends React.Component {
   constructor() {
     super();
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

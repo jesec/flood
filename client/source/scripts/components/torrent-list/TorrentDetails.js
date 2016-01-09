@@ -10,7 +10,7 @@ import TorrentActions from '../../actions/TorrentActions';
 import TorrentStore from '../../stores/TorrentStore';
 import UIStore from '../../stores/UIStore';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'getFileData',
   'getFileTreeDomNodes',
   'onTorrentDetailsHashChange',
@@ -34,7 +34,7 @@ export default class TorrentDetails extends React.Component {
       torrentDetails: {}
     };
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

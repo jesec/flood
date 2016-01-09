@@ -4,7 +4,7 @@ import React from'react';
 import Icon from '../icons/Icon';
 import UIActions from '../../actions/UIActions';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'handleKeyUp'
 ];
 
@@ -16,7 +16,7 @@ export default class SearchBox extends React.Component {
       searchValue: ''
     };
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

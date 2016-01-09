@@ -5,7 +5,7 @@ import React from 'react';
 import TextboxRepeater from '../forms/TextboxRepeater';
 import TorrentActions from '../../actions/TorrentActions';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'getContent',
   'handleDestinationChange',
   'handleUrlAdd',
@@ -24,7 +24,7 @@ export default class AddTorrents extends React.Component {
       urlTextboxes: [{value: null}]
     };
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

@@ -7,7 +7,7 @@ import Icon from '../icons/Icon';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'handleOverlayClick',
   'onModalChange'
 ];
@@ -20,7 +20,7 @@ export default class Modal extends React.Component {
       activeModal: null
     };
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

@@ -5,7 +5,7 @@ import React from 'react';
 import TorrentDetails from './TorrentDetails';
 import TorrentList from './TorrentList';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'toggleDetailsPanel'
 ];
 

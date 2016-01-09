@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'getDropdownButton',
   'getDropdownMenu',
   'getDropdownMenuItems',
@@ -21,7 +21,7 @@ export default class Dropdown extends React.Component {
       isExpanded: false
     };
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -82,10 +82,9 @@ export default class Dropdown extends React.Component {
 
   getDropdownMenuItems(listItems) {
     return listItems.map(function(property, index) {
-      let classes = classnames({
-        'dropdown__item': true,
-        'is-selected': this.props.selectedItem.property === property.property &&
-          this.props.selectedItem.value === property.value
+      let classes = classnames('dropdown__item', property.className, {
+        'is-selectable': property.selectable !== false,
+        'is-selected': property.selected
       })
       return (
         <li className={classes} key={index} onClick={this.handleItemSelect.bind(this, property)}>

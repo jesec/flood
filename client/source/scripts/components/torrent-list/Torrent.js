@@ -5,7 +5,7 @@ import format from '../../util/formatData';
 import Icon from '../icons/Icon';
 import ProgressBar from './ProgressBar';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'handleClick',
   'handleRightClick'
 ];
@@ -15,7 +15,7 @@ export default class Torrent extends React.Component {
   constructor() {
     super();
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }

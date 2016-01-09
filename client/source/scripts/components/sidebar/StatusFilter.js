@@ -3,7 +3,7 @@ import React from 'react';
 
 import Icon from '../icons/Icon.js';
 
-const methodsToBind = [
+const METHODS_TO_BIND = [
   'handleClick'
 ];
 
@@ -12,7 +12,7 @@ export default class StatusFilter extends React.Component {
   constructor() {
     super();
 
-    methodsToBind.forEach((method) => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
