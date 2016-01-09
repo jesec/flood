@@ -23,7 +23,15 @@ class ClientDataStoreClass extends BaseStore {
     }
   }
 
-  getThrottles() {
+  getThrottles(options = {}) {
+    if (options.latest) {
+      return {
+        download: this.throttles.download ?
+          this.throttles.download[this.throttles.download.length - 1] : null,
+        upload: this.throttles.upload ?
+          this.throttles.upload[this.throttles.upload.length - 1] : null
+      };
+    }
     return this.throttles;
   }
 
