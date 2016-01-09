@@ -4,6 +4,7 @@ import ClientActions from '../../actions/ClientActions';
 import ClientDataStore from '../../stores/ClientDataStore';
 import Dropdown from '../generic/Dropdown';
 import EventTypes from '../../constants/EventTypes';
+import format from '../../util/formatData';
 import Icon from '../icons/Icon';
 
 const METHODS_TO_BIND = ['onTransferDataRequestSuccess'];
@@ -54,10 +55,14 @@ class Sidebar extends React.Component {
   getHumanReadableSpeed(bytes) {
     if (bytes === 0) {
       return 'Unlimited';
-    } else if (bytes < 1048576) {
-      return <span>{bytes / 1024}<em className="unit">kB/s</em></span>;
     } else {
-      return <span>{bytes / 1024 / 1024}<em className="unit">MB/s</em></span>;
+      let formattedData = format.data(bytes, '/s', 0);
+      return (
+        <span>
+          {formattedData.value}
+          <em className="unit">{formattedData.unit}</em>
+        </span>
+      );
     }
   }
 
@@ -74,13 +79,14 @@ class Sidebar extends React.Component {
 
     let items = SPEEDS.map((bytes) => {
       let selected = false;
+
+      // Check if the current throttle setting exists in the preset speeds list.
+      // Determine if we need to add the current throttle setting to the menu.
       if (currentThrottle && currentThrottle[property] === bytes) {
-        if (property === 'upload') {
-          console.log('current: ', currentThrottle[property], property);
-        }
         selected = true;
         insertCurrentThrottle = false;
       }
+
       return {
         displayName: this.getHumanReadableSpeed(bytes),
         property,
@@ -90,12 +96,17 @@ class Sidebar extends React.Component {
       };
     });
 
+    // If the current throttle setting doesn't exist in the pre-set speeds list,
+    // add it and show it as selected.
     if (insertCurrentThrottle && currentThrottle) {
+      // Find the position to insert the current throttle setting so that it
+      // remains sorted from lowest to highest.
       let insertionPoint = _.sortedIndex(SPEEDS, currentThrottle[property]);
 
       items.splice(insertionPoint, 0, {
         displayName: this.getHumanReadableSpeed(currentThrottle[property]),
         property: property,
+        selected: true,
         selectable: true,
         value: currentThrottle[property]
       });
@@ -106,8 +117,8 @@ class Sidebar extends React.Component {
     return items;
   }
 
-  getDropdownLists() {
-    return [this.getSpeedList('upload'), this.getSpeedList('download')];
+  getDropdownMenus() {
+    return [this.getSpeedList('download'), this.getSpeedList('upload')];
   }
 
   handleItemSelect(data) {
@@ -120,7 +131,7 @@ class Sidebar extends React.Component {
         <Dropdown
           handleItemSelect={this.handleItemSelect}
           header={this.getDropdownHeader()}
-          menuItems={this.getDropdownLists()}
+          menuItems={this.getDropdownMenus()}
           />
       </div>
     );
