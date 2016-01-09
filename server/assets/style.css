@@ -927,17 +927,18 @@ body {
         -ms-flex: 1;
             flex: 1; }
   .dropdown__item {
-    cursor: pointer;
-    display: block;
-    font-size: 0.9em;
-    padding: 5px 15px;
-    -webkit-transition: background 0.25s, color 0.25s;
-    transition: background 0.25s, color 0.25s; }
-    .dropdown__item:hover {
-      background: rgba(233, 238, 242, 0.4);
-      color: #788997; }
-    .dropdown__item.is-selected {
-      color: #258de5; }
+    padding: 5px 15px; }
+    .dropdown__item.is-selectable {
+      cursor: pointer;
+      display: block;
+      font-size: 0.9em;
+      -webkit-transition: background 0.25s, color 0.25s;
+      transition: background 0.25s, color 0.25s; }
+      .dropdown__item.is-selectable:hover {
+        background: rgba(233, 238, 242, 0.4);
+        color: #788997; }
+      .dropdown__item.is-selectable.is-selected {
+        color: #258de5; }
   .dropdown--align-right .dropdown {
     left: auto;
     right: 0; }
