@@ -32,6 +32,15 @@
 
     &--primary {
       font-size: 1.75em;
+      white-space: nowrap;
+
+      .unit {
+        font-size: 0.65em;
+        margin-bottom: 0;
+        opacity: 0.5;
+        position: relative;
+        top: -0.1em;
+      }
     }
 
     &--secondary {
@@ -110,12 +119,12 @@
       fill: none;
 
       &--limit {
-        stroke-dasharray: 4px;
+        stroke-dasharray: 3px 5px;
         stroke-width: 1px;
       }
 
       &--rate {
-        stroke-width: 2px;
+        stroke-width: 1px;
       }
     }
 

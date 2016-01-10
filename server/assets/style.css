@@ -768,7 +768,14 @@ body {
       font-weight: 100;
       line-height: 1.2; }
     .client-stat__data--primary {
-      font-size: 1.75em; }
+      font-size: 1.75em;
+      white-space: nowrap; }
+      .client-stat__data--primary .unit {
+        font-size: 0.65em;
+        margin-bottom: 0;
+        opacity: 0.5;
+        position: relative;
+        top: -0.1em; }
     .client-stat__data--secondary {
       font-size: 0.8em;
       font-style: italic;
@@ -819,10 +826,10 @@ body {
     .client-stat .graph__line {
       fill: none; }
       .client-stat .graph__line--limit {
-        stroke-dasharray: 4px;
+        stroke-dasharray: 3px 5px;
         stroke-width: 1px; }
       .client-stat .graph__line--rate {
-        stroke-width: 2px; }
+        stroke-width: 1px; }
   .client-stat--download .icon {
     fill: rgba(43, 174, 108, 0.75); }
   .client-stat--download .client-stat__data--primary {
@@ -836,7 +843,7 @@ body {
   .client-stat--download .graph__area {
     fill: url("#graph--download--gradient"); }
   .client-stat--download .graph__line--limit {
-    stroke: rgba(102, 217, 159, 0.2); }
+    stroke: rgba(102, 217, 159, 0.15); }
   .client-stat--download .graph__line--rate {
     stroke: rgba(43, 174, 108, 0.4); }
   .client-stat--upload .icon {
@@ -852,7 +859,7 @@ body {
   .client-stat--upload .graph__area {
     fill: url("#graph--upload--gradient"); }
   .client-stat--upload .graph__line--limit {
-    stroke: rgba(121, 183, 233, 0.2); }
+    stroke: rgba(121, 183, 233, 0.15); }
   .client-stat--upload .graph__line--rate {
     stroke: rgba(35, 135, 217, 0.4); }
 

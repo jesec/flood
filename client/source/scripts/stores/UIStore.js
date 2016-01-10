@@ -35,14 +35,11 @@ class UIStoreClass extends BaseStore {
   }
 
   handleTorrentClick(hash) {
-    console.log('set torrent details hash');
     this.torrentDetailsHash = hash;
     this.emit(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE);
   }
 
   handleTorrentDetailsClick(hash, event) {
-    console.log(hash);
-    console.log(this.torrentDetailsHash);
     this.torrentDetailsOpen = !this.torrentDetailsOpen;
     this.emit(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE);
   }
