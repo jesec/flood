@@ -1,0 +1,22 @@
+var users = [
+  {
+    username: 'username',
+    password: 'password'
+  }
+];
+
+var usersDB = {
+  findByUsername: function(username, callback) {
+    process.nextTick(function() {
+      for (var i = 0, len = users.length; i < len; i++) {
+        var user = users[i];
+        if (user.username === username) {
+          return callback(null, user);
+        }
+      }
+      return callback(null, null);
+    });
+  }
+};
+
+module.exports = usersDB;

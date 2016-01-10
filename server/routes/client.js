@@ -13,14 +13,6 @@ var handleClientResponse = function (res) {
   }
 }
 
-router.get('/', function(req, res, next) {
-
-});
-
-// router.get('/add', function(req, res, next) {
-//   client.add('get', handleClientResponse(res));
-// });
-
 router.post('/add', function(req, res, next) {
   client.add(req.body, handleClientResponse(res));
 });
