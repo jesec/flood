@@ -489,7 +489,7 @@ th {
   border: 1px solid #e9eef2;
   color: #53718a;
   display: block;
-  font-size: 1em;
+  font-size: 0.9em;
   padding: 10px 15px;
   -webkit-transition: background 0.25s, border 0.25s, color 0.25s;
   transition: background 0.25s, border 0.25s, color 0.25s;
@@ -532,8 +532,9 @@ th {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 0.9em;
   font-weight: 400;
-  padding: 10px 30px;
+  padding: 8px 22px;
   -webkit-transition: background 0.25s;
   transition: background 0.25s; }
   .button--deemphasize {
@@ -1347,13 +1348,15 @@ body {
   .torrent.is-selected {
     background: #258de5; }
   .torrent__more-info {
-    margin-top: -8px;
+    height: 20px;
+    margin-top: -10px;
     position: absolute;
-    left: -8px;
+    left: -7px;
     opacity: 0;
     top: 50%;
-    -webkit-transition: opacity 0.25s;
-    transition: opacity 0.25s; }
+    -webkit-transition: background 0.25s, box-shadow 0.25s, opacity 0.25s;
+    transition: background 0.25s, box-shadow 0.25s, opacity 0.25s;
+    width: 20px; }
 
 .torrent__details {
   -webkit-box-align: center;

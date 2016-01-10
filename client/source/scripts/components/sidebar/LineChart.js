@@ -2,10 +2,6 @@ import d3 from 'd3';
 import React from 'react';
 
 export default class LineChart extends React.Component {
-  constructor() {
-    super();
-  }
-
   componentDidUpdate() {
     let graph = d3.select('#' + this.props.id);
     let transferData = this.props.data;

@@ -32,10 +32,6 @@
       transition: max-width 0.5s, opacity 1s;
       user-select: none;
       z-index: 1;
-
-      // .has-sidepanel & {
-      //   max-width: 60%;
-      // }
     }
 
     &--empty {
@@ -66,12 +62,14 @@
   }
 
   &__more-info {
-    margin-top: -8px;
+    height: 20px;
+    margin-top: -10px;
     position: absolute;
-    left: -8px;
+    left: -7px;
     opacity: 0;
     top: 50%;
-    transition: opacity 0.25s;
+    transition: background 0.25s, box-shadow 0.25s, opacity 0.25s;
+    width: 20px;
   }
 }
 

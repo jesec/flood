@@ -14,6 +14,13 @@ class UIStoreClass extends BaseStore {
     this.torrentDetailsOpen = false;
   }
 
+  closeTorrentDetailsPanel() {
+    if (this.torrentDetailsOpen) {
+      this.torrentDetailsOpen = false;
+      this.emit(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE);
+    }
+  }
+
   getActiveModal() {
     return this.activeModal;
   }
@@ -28,11 +35,14 @@ class UIStoreClass extends BaseStore {
   }
 
   handleTorrentClick(hash) {
+    console.log('set torrent details hash');
     this.torrentDetailsHash = hash;
     this.emit(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE);
   }
 
   handleTorrentDetailsClick(hash, event) {
+    console.log(hash);
+    console.log(this.torrentDetailsHash);
     this.torrentDetailsOpen = !this.torrentDetailsOpen;
     this.emit(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE);
   }
@@ -48,11 +58,11 @@ AppDispatcher.register((payload) => {
   const {action, source} = payload;
 
   switch (action.type) {
-    case ActionTypes.UI_CLICK_TORRENT:
-      UIStore.handleTorrentClick(action.data.hash);
-      break;
     case ActionTypes.UI_CLICK_TORRENT_DETAILS:
       UIStore.handleTorrentDetailsClick(action.data.hash, action.data.event);
+      break;
+    case ActionTypes.UI_CLICK_TORRENT:
+      UIStore.handleTorrentClick(action.data.hash);
       break;
     case ActionTypes.UI_DISPLAY_MODAL:
       UIStore.setActiveModal(action.data);

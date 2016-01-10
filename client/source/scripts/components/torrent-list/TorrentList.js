@@ -10,6 +10,7 @@ import TorrentDetails from './TorrentDetails';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
+import UIStore from '../../stores/UIStore';
 
 const METHODS_TO_BIND = [
   'onReceiveTorrentsError',
@@ -29,7 +30,6 @@ export default class TorrentListContainer extends React.Component {
     super();
 
     this.state = {
-      detailsPanelOpen: false,
       maxTorrentIndex: 10,
       minTorrentIndex: 0,
       scrollPosition: 0,
@@ -106,16 +106,11 @@ export default class TorrentListContainer extends React.Component {
   }
 
   onTorrentSelectionChange() {
-    if ((TorrentStore.getSelectedTorrents().length !== 1 &&
-      this.state.detailsPanelOpen) || TorrentStore.getTorrents().length === 0) {
-      // Close the detail side panel if more than one torrent is selected or if
-      // none are selected.
-      this.setState({
-        detailsPanelOpen: false
-      });
-    } else {
-      this.forceUpdate();
+    if (TorrentStore.getSelectedTorrents().length !== 1) {
+      UIStore.closeTorrentDetailsPanel();
     }
+
+    this.forceUpdate();
   }
 
   getListPadding(minTorrentIndex, maxTorrentIndex, torrentCount) {
