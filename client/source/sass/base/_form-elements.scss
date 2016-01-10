@@ -12,7 +12,7 @@
   border: 1px solid $textbox--border;
   color: $textbox--foreground;
   display: block;
-  font-size: 1em;
+  font-size: 0.9em;
   padding: 10px 15px;
   transition: background 0.25s, border 0.25s, color 0.25s;
   width: 100%;
@@ -40,8 +40,9 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 0.9em;
   font-weight: 400;
-  padding: 10px 30px;
+  padding: 8px 22px;
   transition: background 0.25s;
 
   &--deemphasize {
