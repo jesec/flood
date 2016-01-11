@@ -50,19 +50,22 @@ $sidebar--foreground: #53718a;
 $sidebar--border: rgba(darken($sidebar--foreground, 40%), 0.3);
 
 $client-stats--limits--opacity: 0.15;
+$client-stats--speed--fill--top--opacity: 0.2;
+$client-stats--speed--fill--bottom--opacity: 0;
+$client-stats--speed--stroke--opacity: 0.4;
 
 $client-stats--download--primary--foreground: #2bae6c;
 $client-stats--download--secondary--foreground: rgba($client-stats--download--primary--foreground, 0.75);
-$client-stats--download--graph--stroke: rgba(#2bae6c, 0.4);
-$client-stats--download--graph--fill--top: rgba(#2bae6c, 0.2);
-$client-stats--download--graph--fill--bottom: rgba(#2bae6c, 0);
+$client-stats--download--graph--stroke: rgba(#2bae6c, $client-stats--speed--stroke--opacity);
+$client-stats--download--graph--fill--top: rgba(#2bae6c, $client-stats--speed--fill--top--opacity);
+$client-stats--download--graph--fill--bottom: rgba(#2bae6c, $client-stats--speed--fill--bottom--opacity);
 $client-stats--download--limits--line: rgba(lighten($client-stats--download--primary--foreground, 20%), $client-stats--limits--opacity);
 
 $client-stats--upload--primary--foreground: #2387d9;
 $client-stats--upload--secondary--foreground: rgba($client-stats--upload--primary--foreground, 0.75);
-$client-stats--upload--graph--stroke: rgba(#2387d9, 0.4);
-$client-stats--upload--graph--fill--top: rgba(#2387d9, 0.2);
-$client-stats--upload--graph--fill--bottom: rgba(#2387d9, 0);
+$client-stats--upload--graph--stroke: rgba(#2387d9, $client-stats--speed--stroke--opacity);
+$client-stats--upload--graph--fill--top: rgba(#2387d9, $client-stats--speed--fill--top--opacity);
+$client-stats--upload--graph--fill--bottom: rgba(#2387d9, $client-stats--speed--fill--bottom--opacity);
 $client-stats--upload--limits--line: rgba(lighten($client-stats--upload--primary--foreground, 20%), $client-stats--limits--opacity);
 
 $client-stats--limits--foreground: $foreground;
@@ -119,8 +122,8 @@ $progress-bar--fill--selected: #fff;
 $torrent-details--background: #f7fafc;
 $torrent-details--border: rgba($background, 0.1);
 
-$torrent-details--file-data--directory: #a5b0b9;
-$torrent-details--file-list--icon-fill: #a5b0b9;
+$torrent-details--directory-tree--directory: #a5b0b9;
+$torrent-details--directory-tree--icon-fill: #a5b0b9;
 
 $torrent-details--table--header: #c0cad3;
 $torrent-details--table--header--count: #778c9e;

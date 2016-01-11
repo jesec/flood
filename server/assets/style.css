@@ -826,10 +826,10 @@ body {
     .client-stat .graph__line {
       fill: none; }
       .client-stat .graph__line--limit {
-        stroke-dasharray: 3px 5px;
+        stroke-dasharray: 3px 4px;
         stroke-width: 1px; }
       .client-stat .graph__line--rate {
-        stroke-width: 1px; }
+        stroke-width: 1.1px; }
   .client-stat--download .icon {
     fill: rgba(43, 174, 108, 0.75); }
   .client-stat--download .client-stat__data--primary {
@@ -865,6 +865,32 @@ body {
 
 .content {
   background: #e9eef2; }
+
+.directory-tree .icon {
+  display: inline-block;
+  fill: #a5b0b9;
+  height: 14px;
+  margin-right: 5px;
+  vertical-align: middle;
+  width: 14px; }
+
+.directory-tree__node {
+  line-height: 1.2;
+  margin-bottom: 5px;
+  word-wrap: break-word; }
+  .directory-tree__node--file {
+    padding-left: 5px; }
+
+.directory-tree__parent-directory {
+  color: #a5b0b9;
+  font-size: 0.85em; }
+  .directory-tree__parent-directory .icon {
+    opacity: 0.75; }
+
+.directory-tree__branch {
+  padding-left: 10px; }
+  .directory-tree__branch + .directory-tree__branch {
+    margin-top: 10px; }
 
 .dropdown {
   display: inline-block;
@@ -962,32 +988,6 @@ body {
 
 .dropdown__content__container {
   padding: 25px 30px; }
-
-.file-list .icon {
-  display: inline-block;
-  fill: #a5b0b9;
-  height: 14px;
-  margin-right: 5px;
-  vertical-align: middle;
-  width: 14px; }
-
-.file-list__node {
-  line-height: 1.2;
-  margin-bottom: 5px;
-  word-wrap: break-word; }
-  .file-list__node--file {
-    padding-left: 5px; }
-
-.file-list__parent-directory {
-  color: #a5b0b9;
-  font-size: 0.85em; }
-  .file-list__parent-directory .icon {
-    opacity: 0.75; }
-
-.file-list__branch {
-  padding-left: 10px; }
-  .file-list__branch + .file-list__branch {
-    margin-top: 10px; }
 
 .floating-action__button {
   background: #fff;

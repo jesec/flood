@@ -1,8 +1,8 @@
-.file-list {
+.directory-tree {
 
   .icon {
     display: inline-block;
-    fill: $torrent-details--file-list--icon-fill;
+    fill: $torrent-details--directory-tree--icon-fill;
     height: 14px;
     margin-right: 5px;
     vertical-align: middle;
@@ -20,7 +20,7 @@
   }
 
   &__parent-directory {
-    color: $torrent-details--file-data--directory;
+    color: $torrent-details--directory-tree--directory;
     font-size: 0.85em;
 
     .icon {
@@ -31,7 +31,7 @@
   &__branch {
     padding-left: 10px;
 
-    & + .file-list__branch {
+    & + .directory-tree__branch {
       margin-top: 10px;
     }
   }
