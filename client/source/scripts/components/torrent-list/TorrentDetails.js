@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
+import TorrentFiles from './TorrentFiles';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import Icon from '../icons/Icon';
@@ -11,12 +12,9 @@ import TorrentStore from '../../stores/TorrentStore';
 import UIStore from '../../stores/UIStore';
 
 const METHODS_TO_BIND = [
-  'getFileData',
-  'getFileTreeDomNodes',
   'onTorrentDetailsHashChange',
   'onOpenChange',
   'onTorrentDetailsChange',
-  'createFileTree',
   'getHeading',
   'getSidePanel'
 ];
@@ -74,106 +72,6 @@ export default class TorrentDetails extends React.Component {
     this.setState({
       torrentDetails: TorrentStore.getTorrentDetails(UIStore.getTorrentDetailsHash())
     });
-  }
-
-  createFileTree(tree = {}, directory, file, depth = 0) {
-    if (depth < file.pathComponents.length - 1) {
-      depth++;
-      tree[directory] = this.createFileTree(
-        tree[directory],
-        file.pathComponents[depth],
-        file,
-        depth
-      );
-    } else {
-      if (!tree.files) {
-        tree.files = [];
-      }
-      tree.files.push(file);
-    }
-    return tree;
-  }
-
-  getFileTreeDomNodes(tree, depth = 0) {
-    let index = 0;
-    depth++;
-    return Object.keys(tree).map((branchName) => {
-      let branch = tree[branchName];
-      let domNodes = null;
-      index++;
-
-      if (branchName === 'files') {
-        branch.sort((a, b) => {
-          return a.filename.localeCompare(b.filename);
-        });
-        domNodes = branch.map((file, fileIndex) => {
-          return (
-            <div className="file-list__node file-list__node--file"
-              key={`${fileIndex}`}>
-              <Icon icon="file" />
-              {file.filename}
-            </div>
-          );
-        });
-      } else {
-        let classes = `file-list__branch file-list__branch--depth-${depth}`;
-        domNodes = (
-          <div className={classes} key={`${index}${depth}`}>
-            <div className="file-list__node file-list__node--directory">
-              <Icon icon="directoryOutlined" />
-              {branchName}
-            </div>
-            {this.getFileTreeDomNodes(tree[branchName], depth)}
-          </div>
-        );
-      }
-
-      return domNodes;
-    });
-  }
-
-  getFileList(files) {
-    let tree = {};
-
-    files.forEach((file) => {
-      tree = this.createFileTree(tree, file.pathComponents[0], file);
-    });
-
-    let directoryTree = this.getFileTreeDomNodes(tree);
-
-    return directoryTree;
-  }
-
-  getFileData(torrent, files) {
-    let parentDirectory = torrent.directory;
-    let filename = torrent.filename;
-
-    if (files) {
-      // We've received full file details from the client.
-      return (
-        <div className="file-list torrent-details__section">
-          <div className="file-list__node file-list__parent-directory">
-            <Icon icon="directoryFilled" />
-            {parentDirectory}
-          </div>
-          {this.getFileList(files)}
-        </div>
-      );
-    } else {
-      // We've only received the top-level file details from the torrent list.
-      return (
-        <div className="file-list torrent-details__section">
-          <div className="file-list__node file-list__parent-directory">
-            <Icon icon="directoryFilled" />
-            {parentDirectory}
-          </div>
-          <div className="file-list__node file-list__node--file">
-            <Icon icon="file" />
-            {filename}
-          </div>
-        </div>
-      );
-    }
   }
 
   getHeading() {
@@ -276,7 +174,7 @@ export default class TorrentDetails extends React.Component {
           </li>
         </ul>
         {this.getTrackerList(torrentDetails.trackers)}
-        {this.getFileData(torrent, torrentDetails.files)}
+        <TorrentFiles files={torrentDetails.files} torrent={torrent} />
         {this.getPeerList(torrentDetails.peers)}
       </div>
     );
@@ -322,13 +220,17 @@ export default class TorrentDetails extends React.Component {
   }
 
   render() {
-    return (
-      <CSSTransitionGroup
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}
-        transitionName="torrent-details">
-        {this.getSidePanel()}
-      </CSSTransitionGroup>
-    );
+    try {
+      return (
+        <CSSTransitionGroup
+          transitionEnterTimeout={500}
+          transitionLeaveTimeout={500}
+          transitionName="torrent-details">
+          {this.getSidePanel()}
+        </CSSTransitionGroup>
+      );
+    } catch (err) {
+      console.trace(err);
+    }
   }
 }
