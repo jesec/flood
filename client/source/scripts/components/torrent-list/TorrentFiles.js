@@ -1,7 +1,8 @@
 import React from 'react';
 
+import DirectoryFilled from '../icons/DirectoryFilled';
 import DirectoryTree from './DirectoryTree';
-import Icon from '../icons/Icon';
+import File from '../icons/File';
 
 export default class TorrentFiles extends React.Component {
   constructDirectoryTree(tree = {}, directory, file, depth = 0) {
@@ -41,7 +42,7 @@ export default class TorrentFiles extends React.Component {
       return (
         <div className="directory-tree torrent-details__section">
           <div className="directory-tree__node directory-tree__parent-directory">
-            <Icon icon="directoryFilled" />
+            <DirectoryFilled />
             {parentDirectory}
           </div>
           {this.getFileList(files)}
@@ -52,11 +53,11 @@ export default class TorrentFiles extends React.Component {
       return (
         <div className="directory-tree torrent-details__section">
           <div className="directory-tree__node directory-tree__parent-directory">
-            <Icon icon="directoryFilled" />
+            <DirectoryFilled />
             {parentDirectory}
           </div>
           <div className="directory-tree__node directory-tree__node--file">
-            <Icon icon="file" />
+            <File />
             {filename}
           </div>
         </div>

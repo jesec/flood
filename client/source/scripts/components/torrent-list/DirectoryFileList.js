@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Icon from '../icons/Icon';
+import File from '../icons/File';
 
 export default class DirectoryFiles extends React.Component {
   render() {
@@ -14,7 +14,7 @@ export default class DirectoryFiles extends React.Component {
       return (
         <div className="directory-tree__node directory-tree__node--file"
           key={`${fileIndex}`}>
-          <Icon icon="file" />
+          <File />
           {file.filename}
         </div>
       );

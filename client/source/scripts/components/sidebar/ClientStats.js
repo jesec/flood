@@ -2,10 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ClientDataStore from '../../stores/ClientDataStore';
+import Download from '../icons/Download';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
-import Icon from '../icons/Icon';
 import LineChart from './LineChart';
+import Upload from '../icons/Upload';
 
 const METHODS_TO_BIND = [
   'onTransferDataRequestError',
@@ -80,7 +81,7 @@ class ClientStats extends React.Component {
       <div className="client-stats sidebar__item">
         <div className="client-stat client-stat--download">
           <span className="client-stat__icon">
-            <Icon icon="download" />
+            <Download />
           </span>
           <div className="client-stat__data">
             <div className="client-stat__data--primary">
@@ -102,7 +103,7 @@ class ClientStats extends React.Component {
         </div>
         <div className="client-stat client-stat--upload">
           <span className="client-stat__icon">
-            <Icon icon="upload" />
+            <Upload />
           </span>
           <div className="client-stat__data">
             <div className="client-stat__data--primary">

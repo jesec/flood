@@ -5,7 +5,7 @@ import ClientDataStore from '../../stores/ClientDataStore';
 import Dropdown from '../generic/Dropdown';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
-import Icon from '../icons/Icon';
+import Limits from '../icons/Limits';
 
 const METHODS_TO_BIND = ['onTransferDataRequestSuccess'];
 const SPEEDS = [1024, 10240, 102400, 1048576, 2097152, 5242880, 10485760, 0];
@@ -47,7 +47,7 @@ class Sidebar extends React.Component {
   getDropdownHeader() {
     return (
       <a className="client-stats client-stat--limits">
-        <Icon icon="limits" /> Speed Limits
+        <Limits /> Speed Limits
       </a>
     );
   }

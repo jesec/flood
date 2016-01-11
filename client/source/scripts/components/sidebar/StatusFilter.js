@@ -1,14 +1,11 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import Icon from '../icons/Icon.js';
-
 const METHODS_TO_BIND = [
   'handleClick'
 ];
 
 export default class StatusFilter extends React.Component {
-
   constructor() {
     super();
 
@@ -32,10 +29,9 @@ export default class StatusFilter extends React.Component {
 
     return (
       <li className={classNames} onClick={this.handleClick}>
-        <Icon icon={this.props.icon} />
+        {this.props.icon}
         {this.props.name}
       </li>
     );
   }
-
 }

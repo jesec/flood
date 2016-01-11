@@ -2,7 +2,6 @@ import React from 'react';
 
 import DirectoryFileList from './DirectoryFileList';
 import DirectoryTreeNode from './DirectoryTreeNode';
-import Icon from '../icons/Icon';
 
 export default class DirectoryTree extends React.Component {
   getDirectoryTreeDomNodes(tree, depth = 0) {

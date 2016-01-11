@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import React from 'react';
 
+import DotsMini from '../icons/DotsMini';
 import format from '../../util/formatData';
-import Icon from '../icons/Icon';
 import ProgressBar from './ProgressBar';
 
 const METHODS_TO_BIND = [
@@ -111,7 +111,7 @@ export default class Torrent extends React.Component {
         <ProgressBar percent={torrent.percentComplete} />
         <button className="torrent__more-info floating-action__button"
           onClick={this.props.handleDetailsClick.bind(this, torrent)}>
-          <Icon icon="dotsMini" size="mini" />
+          <DotsMini size="mini" />
         </button>
       </li>
     );

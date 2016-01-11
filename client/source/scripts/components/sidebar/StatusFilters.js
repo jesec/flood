@@ -1,8 +1,13 @@
 import classnames from 'classnames';
 import React from 'react';
 
+import Active from '../../components/icons/Active';
+import All from '../../components/icons/All';
+import Completed from '../../components/icons/Completed';
+import DownloadSmall from '../../components/icons/DownloadSmall';
+import Error from '../../components/icons/Error';
 import EventTypes from '../../constants/EventTypes';
-import Icon from '../icons/Icon.js';
+import Inactive from '../../components/icons/Inactive';
 import StatusFilter from './StatusFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
@@ -49,32 +54,32 @@ export default class StatusFilters extends React.Component {
       {
         label: 'All',
         slug: 'all',
-        icon: 'all'
+        icon: <All />
       },
       {
         label: 'Downloading',
         slug: 'downloading',
-        icon: 'downloadSmall'
+        icon: <DownloadSmall />
       },
       {
         label: 'Completed',
         slug: 'completed',
-        icon: 'completed'
+        icon: <Completed />
       },
       {
         label: 'Active',
         slug: 'active',
-        icon: 'active'
+        icon: <Active />
       },
       {
         label: 'Inactive',
         slug: 'inactive',
-        icon: 'inactive'
+        icon: <Inactive />
       },
       {
         label: 'Error',
         slug: 'error',
-        icon: 'error'
+        icon: <Error />
       }
     ];
 

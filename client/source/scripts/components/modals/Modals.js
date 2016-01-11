@@ -3,7 +3,6 @@ import React from 'react';
 
 import AddTorrents from './AddTorrents';
 import EventTypes from '../../constants/EventTypes';
-import Icon from '../icons/Icon';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 

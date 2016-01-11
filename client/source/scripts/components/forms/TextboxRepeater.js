@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import Icon from '../icons/Icon.js';
+import AddMini from '../icons/AddMini';
 
 const METHODS_TO_BIND = [
   'getTextboxes',
@@ -23,7 +23,7 @@ export default class TextboxRepeater extends React.Component {
       let addButton = (
         <button className="textbox-repeater__add floating-action__button"
           onClick={this.props.handleTextboxAdd.bind(textbox, index)}>
-          <Icon icon="addMini" size="mini" />
+          <AddMini size="mini" />
         </button>
       );
       let removeButton = null;

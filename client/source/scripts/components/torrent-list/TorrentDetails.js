@@ -3,13 +3,16 @@ import classNames from 'classnames';
 import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
+import Download from '../../components/icons/Download';
 import TorrentFiles from './TorrentFiles';
 import EventTypes from '../../constants/EventTypes';
+import ETA from '../../components/icons/ETA';
 import format from '../../util/formatData';
-import Icon from '../icons/Icon';
+import Ratio from '../../components/icons/Ratio';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentStore from '../../stores/TorrentStore';
 import UIStore from '../../stores/UIStore';
+import Upload from '../../components/icons/Upload';
 
 const METHODS_TO_BIND = [
   'onTorrentDetailsHashChange',
@@ -155,21 +158,21 @@ export default class TorrentDetails extends React.Component {
         {this.getHeading()}
         <ul className="torrent-details__transfer-data torrent-details__section">
           <li className="transfer-data transfer-data--download">
-            <Icon icon="download" />
+            <Download />
             {downloadRate.value}
             <em className="unit">{downloadRate.unit}</em>
           </li>
           <li className="transfer-data transfer-data--upload">
-            <Icon icon="upload" />
+            <Upload />
             {uploadRate.value}
             <em className="unit">{uploadRate.unit}</em>
           </li>
           <li className="transfer-data transfer-data--ratio">
-            <Icon icon="ratio" />
+            <Ratio />
             {ratio}
           </li>
           <li className="transfer-data transfer-data--eta">
-            <Icon icon="eta" />
+            <ETA />
             {eta}
           </li>
         </ul>

@@ -1,7 +1,7 @@
 import classnames from'classnames';
 import React from'react';
 
-import Icon from '../icons/Icon';
+import Search from '../icons/Search';
 import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [
@@ -38,7 +38,7 @@ export default class SearchBox extends React.Component {
 
     return (
       <div className={classSet}>
-        <Icon icon="search" />
+        <Search />
         <input className="textbox"
           type="text"
           placeholder="Search Torrents"
