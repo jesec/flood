@@ -6,7 +6,7 @@ export default class Limits extends BaseIcon {
   render() {
     return (
       <svg className={`icon icon--limits ${this.props.className}`}
-        xmlns={this.getXmlns} viewBox={this.getViewBox()}>
+        xmlns={this.getXmlns()} viewBox={this.getViewBox()}>
         <path className="limits__bars--bottom" d="M24.4,48.5c0,3.3,2.5,6,5.6,6s5.6-2.7,5.6-6V18.6H24.4V48.5z M4.4,48.2c0,3.5,2.5,6.3,5.6,6.3 s5.6-2.8,5.6-6.3v-9.3H4.4V48.2z M44.4,30v18.2c0,3.5,2.5,6.3,5.6,6.3s5.6-2.8,5.6-6.3V30H44.4z"/>
         <path className="limits__bars--top" d="M24.4,18.7v-7.6c0-3.1,2.5-5.5,5.6-5.5s5.6,2.5,5.6,5.5v7.6H24.4z"/>
         <path className="limits__bars--top" d="M4.4,38.9v-27c0-3.5,2.5-6.3,5.6-6.3s5.6,2.8,5.6,6.3v27H4.4z"/>
