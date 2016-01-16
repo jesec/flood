@@ -11,15 +11,13 @@
 
   &__node {
     line-height: 1.2;
-    margin-bottom: 5px;
-    word-wrap: break-word;
+    overflow: hidden;
+    padding-bottom: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     &--directory {
       cursor: pointer;
-    }
-
-    &--file {
-      padding-left: 5px;
     }
   }
 
@@ -32,11 +30,11 @@
     }
   }
 
-  &__branch {
-    padding-left: 10px;
+  &__tree {
+    padding-left: 1px;
 
-    & + .directory-tree__branch {
-      margin-top: 10px;
+    .directory-tree__tree {
+      padding-left: 3px;
     }
   }
 }

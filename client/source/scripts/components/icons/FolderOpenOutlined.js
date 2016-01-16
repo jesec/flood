@@ -2,7 +2,7 @@ import React from 'react';
 
 import BaseIcon from './BaseIcon';
 
-export default class DirectoryOutlined extends BaseIcon {
+export default class FolderOpenOutlined extends BaseIcon {
   render() {
     return (
       <svg className={`icon icon--directory-outlined ${this.props.className}`}
@@ -13,6 +13,6 @@ export default class DirectoryOutlined extends BaseIcon {
   }
 }
 
-DirectoryOutlined.defaultProps = {
+FolderOpenOutlined.defaultProps = {
   className: ''
 };

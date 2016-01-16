@@ -876,12 +876,12 @@ body {
 
 .directory-tree__node {
   line-height: 1.2;
-  margin-bottom: 5px;
-  word-wrap: break-word; }
+  overflow: hidden;
+  padding-bottom: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap; }
   .directory-tree__node--directory {
     cursor: pointer; }
-  .directory-tree__node--file {
-    padding-left: 5px; }
 
 .directory-tree__parent-directory {
   color: #a5b0b9;
@@ -889,10 +889,10 @@ body {
   .directory-tree__parent-directory .icon {
     opacity: 0.75; }
 
-.directory-tree__branch {
-  padding-left: 10px; }
-  .directory-tree__branch + .directory-tree__branch {
-    margin-top: 10px; }
+.directory-tree__tree {
+  padding-left: 1px; }
+  .directory-tree__tree .directory-tree__tree {
+    padding-left: 3px; }
 
 .dropdown {
   display: inline-block;

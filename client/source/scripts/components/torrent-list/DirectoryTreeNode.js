@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DirectoryOutlined from '../icons/DirectoryOutlined';
+import FolderOpenOutlined from '../icons/FolderOpenOutlined';
 import DirectoryTree from './DirectoryTree';
 
 const METHODS_TO_BIND = ['handleDirectoryClick'];
@@ -42,8 +42,8 @@ export default class DirectoryTreeNode extends React.Component {
     return (
       <div className={classes}>
         <div className="directory-tree__node directory-tree__node--directory"
-          onClick={this.handleDirectoryClick}>
-          <DirectoryOutlined />
+          onClick={this.handleDirectoryClick} title={this.props.directoryName}>
+          <FolderOpenOutlined />
           {this.props.directoryName}
         </div>
         {this.getSubTree()}

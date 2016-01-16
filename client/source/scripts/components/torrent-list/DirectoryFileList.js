@@ -13,7 +13,7 @@ export default class DirectoryFiles extends React.Component {
     let files = branch.map((file, fileIndex) => {
       return (
         <div className="directory-tree__node directory-tree__node--file"
-          key={`${fileIndex}`}>
+          key={`${fileIndex}`} title={file.filename}>
           <File />
           {file.filename}
         </div>
