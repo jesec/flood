@@ -6,8 +6,8 @@ export default class Start extends BaseIcon {
   render() {
     return (
       <svg className={`icon icon--start ${this.props.className}`}
-        xmlns={this.getXmlns} viewBox={this.getViewBox()}>
-        <path d="M11.9 11.9H48v36.2H11.9V11.9z"/>
+        xmlns={this.getXmlns()} viewBox={this.getViewBox()}>
+       <path d="M13.1 9.5L46.9 30 13.1 50.5v-41z"/>
       </svg>
     );
   }
