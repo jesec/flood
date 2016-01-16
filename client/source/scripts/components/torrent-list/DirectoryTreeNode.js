@@ -1,5 +1,6 @@
 import React from 'react';
 
+import FolderClosedOutlined from '../icons/FolderClosedOutlined';
 import FolderOpenOutlined from '../icons/FolderOpenOutlined';
 import DirectoryTree from './DirectoryTree';
 
@@ -39,11 +40,17 @@ export default class DirectoryTreeNode extends React.Component {
   render() {
     let classes = `directory-tree__branch directory-tree__branch--depth-${this.props.depth}`;
 
+    let icon = <FolderClosedOutlined />;
+
+    if (this.state.expanded) {
+      icon = <FolderOpenOutlined />;
+    }
+
     return (
       <div className={classes}>
         <div className="directory-tree__node directory-tree__node--directory"
           onClick={this.handleDirectoryClick} title={this.props.directoryName}>
-          <FolderOpenOutlined />
+          {icon}
           {this.props.directoryName}
         </div>
         {this.getSubTree()}

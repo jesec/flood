@@ -151,3 +151,10 @@ $modal--overlay: rgba($background, 0.5);
 $modal--header--foreground: $header--foreground;
 $modal--content--border: rgba($background, 0.1);
 $modal--content--shadow: rgba($background, 0.3);
+
+// directory torrent-details--directory-tree--icon-fill
+$directory-tree--filename--foreground: rgba(#566573, 0.8);
+$directory-tree--directory--foreground: #566573;
+
+$directory-tree--icon--file: rgba(#566573, 0.4);
+$directory-tree--icon--folder: rgba(#566573, 0.6);

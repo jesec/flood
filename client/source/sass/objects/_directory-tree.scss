@@ -2,22 +2,45 @@
 
   .icon {
     display: inline-block;
-    fill: $torrent-details--directory-tree--icon-fill;
     height: 14px;
     margin-right: 5px;
-    vertical-align: middle;
+    vertical-align: top;
     width: 14px;
   }
 
   &__node {
-    line-height: 1.2;
-    overflow: hidden;
-    padding-bottom: 5px;
+    line-height: 1.75;
     text-overflow: ellipsis;
     white-space: nowrap;
 
     &--directory {
+      color: $directory-tree--directory--foreground;
       cursor: pointer;
+      font-weight: 500;
+      transition: opacity 0.125s;
+
+      &:active {
+        opacity: 0.7;
+      }
+
+      .icon {
+        fill: $directory-tree--icon--folder;
+        position: relative;
+
+      }
+    }
+
+    &--file {
+      color: $directory-tree--filename--foreground;
+      line-height: 1.5;
+
+      .icon {
+        fill: $directory-tree--icon--file;
+      }
+    }
+
+    &--file-list {
+      margin-bottom: 3px;
     }
   }
 
@@ -26,6 +49,7 @@
     font-size: 0.85em;
 
     .icon {
+      fill: $torrent-details--directory-tree--icon-fill;
       opacity: 0.75;
     }
   }
