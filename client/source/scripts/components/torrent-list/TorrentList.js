@@ -114,41 +114,45 @@ export default class TorrentListContainer extends React.Component {
   }
 
   getListPadding(minTorrentIndex, maxTorrentIndex, torrentCount) {
-    if (maxTorrentIndex > torrentCount - 1) {
-      maxTorrentIndex = torrentCount - 1;
-    }
-
-    let hiddenBottom = torrentCount - 1 - maxTorrentIndex;
-    let hiddenTop = minTorrentIndex;
-
-    let bottom = maxTorrentIndex <= torrentCount ? hiddenBottom *
-      this.state.torrentHeight : 0;
-    let top = minTorrentIndex > 0 ? hiddenTop * this.state.torrentHeight : 0;
-
-    return {
-      bottom,
-      top
-    };
-  }
-
-  getViewportLimits() {
-    let buffer = 10;
-
-    let elementsInView = Math.floor(this.state.viewportHeight /
-      this.state.torrentHeight);
-
-    let minTorrentIndex = Math.floor(this.state.scrollPosition /
-      this.state.torrentHeight) - buffer;
-
-    let maxTorrentIndex = minTorrentIndex + elementsInView + buffer * 2 + 1;
-
-    if (this.state.torrentCount < maxTorrentIndex) {
-      maxTorrentIndex = this.state.torrentCount;
-    }
-
+    // Calculate the number of pixels to pad the visible item list.
+    // If the minimum item index is less than 0, then we're already at the top
+    // of the list and don't need to render any padding there.
     if (minTorrentIndex < 0) {
       minTorrentIndex = 0;
     }
+
+    if (maxTorrentIndex > torrentCount) {
+      maxTorrentIndex = torrentCount;
+    }
+
+    let hiddenBottom = torrentCount - maxTorrentIndex;
+    let hiddenTop = minTorrentIndex;
+
+    let bottom = hiddenBottom * this.state.torrentHeight;
+    let top = hiddenTop * this.state.torrentHeight;
+
+    return {bottom, top};
+  }
+
+  getViewportLimits() {
+    // Calculate the number of items that should be rendered based on the height
+    // of the viewport. We offset this to render a few more outide of the
+    // container's dimensions, which looks nicer when the user scrolls.
+    let offset = 10;
+
+    // The number of elements in view is the height of the viewport divided
+    // by the height of the elements.
+    let elementsInView = Math.floor(this.state.viewportHeight /
+      this.state.torrentHeight);
+
+    // The minimum item index to render is the number of items above the
+    // viewport's current scroll position, minus the offset.
+    let minTorrentIndex = Math.floor(this.state.scrollPosition /
+      this.state.torrentHeight) - offset;
+
+    // The maximum item index to render is the minimum item rendered, plus the
+    // number of items in view, plus double the offset.
+    let maxTorrentIndex = minTorrentIndex + elementsInView + offset * 2;
 
     return {minTorrentIndex, maxTorrentIndex};
   }
@@ -170,24 +174,27 @@ export default class TorrentListContainer extends React.Component {
   }
 
   render() {
-    let torrentListContent = null;
+    let content = <LoadingIndicator />;
 
-    if (!this.state.torrentRequestSuccess) {
-      torrentListContent = <LoadingIndicator />;
-    } else {
+    if (this.state.torrentRequestSuccess) {
       let selectedTorrents = TorrentStore.getSelectedTorrents();
       let torrents = this.state.torrents;
       let viewportLimits = this.getViewportLimits();
+
       let listPadding = this.getListPadding(
         viewportLimits.minTorrentIndex,
         viewportLimits.maxTorrentIndex,
         torrents.length
       );
 
-      let visibleTorrents = torrents.slice(
-        viewportLimits.minTorrentIndex,
-        viewportLimits.maxTorrentIndex
-      );
+      let maxTorrentIndex = viewportLimits.maxTorrentIndex;
+      let minTorrentIndex = viewportLimits.minTorrentIndex;
+
+      if (minTorrentIndex < 0) {
+        minTorrentIndex = 0;
+      }
+
+      let visibleTorrents = torrents.slice(minTorrentIndex, maxTorrentIndex);
 
       let torrentList = visibleTorrents.map((torrent, index) => {
         let isSelected = false;
@@ -204,7 +211,7 @@ export default class TorrentListContainer extends React.Component {
         );
       });
 
-      torrentListContent = (
+      content = (
         <ul className="torrent__list">
           <li className="torrent__spacer torrent__spacer--top"
             style={{height: `${listPadding.top}px`}}></li>
@@ -218,7 +225,7 @@ export default class TorrentListContainer extends React.Component {
     return (
       <div className="torrent__list__wrapper" onScroll={this.handleScroll}
         ref="torrentList">
-        {torrentListContent}
+        {content}
       </div>
     );
   }
