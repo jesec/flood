@@ -2,13 +2,14 @@ import React from 'react';
 
 import ClientActions from '../../actions/ClientActions';
 import ClientDataStore from '../../stores/ClientDataStore';
-import Dropdown from '../generic/Dropdown';
+import Dropdown from '../forms/Dropdown';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import Limits from '../icons/Limits';
+import SidebarItem from '../sidebar/SidebarItem';
 
 const METHODS_TO_BIND = ['onTransferDataRequestSuccess'];
-const SPEEDS = [1024, 10240, 102400, 1048576, 2097152, 5242880, 10485760, 0];
+const SPEEDS = [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0];
 
 class Sidebar extends React.Component {
   constructor() {
@@ -46,7 +47,7 @@ class Sidebar extends React.Component {
 
   getDropdownHeader() {
     return (
-      <a className="client-stats client-stat--limits">
+      <a className="client-stat--limits">
         <Limits /> Speed Limits
       </a>
     );
@@ -127,13 +128,13 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <div className="client-stats sidebar__item sidebar__item--speed-limit">
+      <SidebarItem modifier="speed-limit">
         <Dropdown
           handleItemSelect={this.handleItemSelect}
           header={this.getDropdownHeader()}
           menuItems={this.getDropdownMenus()}
           />
-      </div>
+      </SidebarItem>
     );
   }
 }

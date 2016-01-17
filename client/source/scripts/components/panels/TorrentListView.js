@@ -1,0 +1,65 @@
+import classnames from 'classnames';
+import React from 'react';
+
+import ActionBar from '../torrent-list/ActionBar';
+import ApplicationPanel from '../layout/ApplicationPanel';
+import EventTypes from '../../constants/EventTypes';
+import TorrentListContainer from '../torrent-list/TorrentListContainer';
+import TorrentStore from '../../stores/TorrentStore';
+import UIStore from '../../stores/UIStore';
+import Wrapper from '../layout/Wrapper';
+
+const METHODS_TO_BIND = ['onOpenChange'];
+
+class TorrentListView extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      isTorrentDetailsOpen: false
+    };
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
+    UIStore.listen(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE, this.onOpenChange);
+  }
+
+  componentWillUnmount() {
+    UIStore.unlisten(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE, this.onOpenChange);
+  }
+
+  onOpenChange() {
+    if (!UIStore.isTorrentDetailsOpen()) {
+      TorrentStore.stopPollingTorrentDetails();
+    } else {
+      TorrentStore.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
+    }
+
+    this.setState({
+      isTorrentDetailsOpen: UIStore.isTorrentDetailsOpen()
+    });
+  }
+
+  render() {
+    let classes = classnames({'is-open': this.state.isTorrentDetailsOpen});
+
+    return (
+      <ApplicationPanel modifier="torrent-list" extension={classes}>
+        <Wrapper className="view--torrent-list">
+          <ActionBar />
+          <TorrentListContainer />
+        </Wrapper>
+      </ApplicationPanel>
+    );
+  }
+}
+
+TorrentListView.propTypes = {
+  children: React.PropTypes.node
+};
+
+export default TorrentListView;

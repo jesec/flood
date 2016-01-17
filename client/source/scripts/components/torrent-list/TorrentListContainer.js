@@ -1,6 +1,5 @@
 import React from 'react';
 
-import TorrentDetails from './TorrentDetails';
 import TorrentList from './TorrentList';
 
 export default class TorrentListContainer extends React.Component {
@@ -8,7 +7,6 @@ export default class TorrentListContainer extends React.Component {
     return (
       <div className="torrents">
         <TorrentList />
-        <TorrentDetails />
       </div>
     );
   }

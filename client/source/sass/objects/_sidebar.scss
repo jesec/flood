@@ -1,6 +1,8 @@
 .sidebar {
-  box-shadow: inset -1px 0 $sidebar--border;
+  box-shadow: 1px 0 $sidebar--border;
   color: $sidebar--foreground;
+  position: relative;
+  z-index: 2;
 
   &__item {
 

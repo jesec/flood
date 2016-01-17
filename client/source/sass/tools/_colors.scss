@@ -91,7 +91,7 @@ $status-filter--foreground--hover: lighten($status-filter--foreground, 15%);
 
 // torrents list
 $torrent-list--background: #fff;
-$torrent-list--border: rgba($background, 0.1);
+$torrent-list--border: rgba($background, 0.15);
 
 $torrent--primary--foreground: #333332;
 $torrent--primary--foreground--stopped: rgba(#333332, 0.5);
@@ -119,7 +119,7 @@ $progress-bar--fill--completed: $blue;
 $progress-bar--fill--selected: #fff;
 
 // torrent details
-$torrent-details--background: #f7fafc;
+$torrent-details--background: #162835;
 $torrent-details--border: rgba($background, 0.1);
 
 $torrent-details--directory-tree--directory: #a5b0b9;

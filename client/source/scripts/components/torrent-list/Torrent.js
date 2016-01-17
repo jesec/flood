@@ -3,7 +3,7 @@ import React from 'react';
 
 import DotsMini from '../icons/DotsMini';
 import format from '../../util/formatData';
-import ProgressBar from './ProgressBar';
+import ProgressBar from '../ui/ProgressBar';
 
 const METHODS_TO_BIND = [
   'handleClick',

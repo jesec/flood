@@ -4,9 +4,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import EventTypes from '../../constants/EventTypes';
-import LoadingIndicator from '../generic/LoadingIndicator';
+import LoadingIndicator from '../ui/LoadingIndicator';
 import Torrent from './Torrent';
-import TorrentDetails from './TorrentDetails';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';

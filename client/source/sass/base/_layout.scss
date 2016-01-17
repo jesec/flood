@@ -21,17 +21,39 @@ body {
   max-width: 240px;
 }
 
-.content {
-  display: flex;
-  height: 100%;
-  flex: 5;
-  flex-direction: column;
-}
+.application {
 
-.action-bar {
-  flex: 1;
-  min-height: 60px;
-  max-height: 60px;
+  &__content {
+    display: flex;
+    height: 100vh;
+    flex: 1 2 auto;
+    flex-direction: column;
+    position: relative;
+  }
+
+  &__panel {
+    display: flex;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    &--torrent-list {
+      transition: transform 0.5s;
+      z-index: 2;
+
+      &.is-open {
+        transform: translateX($torrent-details--width);
+      }
+    }
+
+    &--torrent-details {
+      right: 100% - $torrent-details--width;
+      width: $torrent-details--width;
+      z-index: 1;
+    }
+  }
 }
 
 .torrent {
@@ -48,5 +70,17 @@ body {
     &__wrapper {
       flex: 1;
     }
+  }
+}
+
+.view {
+
+  &--torrent-list {
+    background: #e9eef2;
+    box-shadow: -1px 0 $torrent-list--border;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    flex: 0 1 100%;
   }
 }
