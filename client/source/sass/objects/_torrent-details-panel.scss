@@ -1,3 +1,13 @@
+.application {
+
+  &__panel {
+
+    &--torrent-details {
+      background: $torrent-details--background;
+    }
+  }
+}
+
 .torrent-details {
   background: $torrent-details--background;
   bottom: 0;
@@ -10,6 +20,7 @@
   position: absolute;
   right: 0;
   top: 0;
+  transition: opacity 1s;
   z-index: 2;
 
   &__section {
@@ -54,4 +65,17 @@
       }
     }
   }
+}
+
+.torrent-details-enter {
+  opacity: 0;
+}
+
+.torrent-details-enter-active {
+  opacity: 1;
+}
+
+.torrent-details-leave {
+  opacity: 0;
+  transition: opacity 0.5s;
 }

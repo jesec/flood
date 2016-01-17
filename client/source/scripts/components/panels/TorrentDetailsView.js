@@ -22,7 +22,7 @@ const METHODS_TO_BIND = [
   'onOpenChange',
   'onTorrentDetailsChange',
   'getHeading',
-  'getSidePanel'
+  'getTorrentDetailsView'
 ];
 
 export default class TorrentDetails extends React.Component {
@@ -88,7 +88,7 @@ export default class TorrentDetails extends React.Component {
     // );
   }
 
-  getSidePanel() {
+  getTorrentDetailsView() {
     let torrentDetailsContent = null;
 
     if (this.state.isOpen) {
@@ -130,7 +130,6 @@ export default class TorrentDetails extends React.Component {
               {eta}
             </li>
           </ul>
-
           <TorrentTrackers trackers={torrentDetails.trackers} />
           <TorrentFiles files={torrentDetails.files} torrent={torrent} />
           <TorrentPeers peers={torrentDetails.peers} />
@@ -138,21 +137,19 @@ export default class TorrentDetails extends React.Component {
       );
     }
 
-    return (
-      <ApplicationPanel modifier="torrent-details">
-        {torrentDetailsContent}
-      </ApplicationPanel>
-    );
+    return torrentDetailsContent;
   }
 
   render() {
     return (
-      <CSSTransitionGroup
-        transitionEnterTimeout={500}
-        transitionLeaveTimeout={500}
-        transitionName="torrent-details">
-        {this.getSidePanel()}
-      </CSSTransitionGroup>
+      <ApplicationPanel modifier="torrent-details">
+        <CSSTransitionGroup
+          transitionEnterTimeout={1000}
+          transitionLeaveTimeout={1000}
+          transitionName="torrent-details">
+          {this.getTorrentDetailsView()}
+        </CSSTransitionGroup>
+      </ApplicationPanel>
     );
   }
 }

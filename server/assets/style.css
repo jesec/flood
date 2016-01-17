@@ -916,29 +916,29 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap; }
   .directory-tree__node--directory {
-    color: #566573;
+    color: #7793a7;
     cursor: pointer;
     font-weight: 500;
-    -webkit-transition: opacity 0.125s;
-    transition: opacity 0.125s; }
+    -webkit-transition: color 0.125s;
+    transition: color 0.125s; }
     .directory-tree__node--directory:active {
-      opacity: 0.7; }
+      color: #a5b8c5; }
     .directory-tree__node--directory .icon {
-      fill: rgba(86, 101, 115, 0.6);
+      fill: #3c5465;
       position: relative; }
   .directory-tree__node--file {
-    color: rgba(86, 101, 115, 0.8);
+    color: #567285;
     line-height: 1.5; }
     .directory-tree__node--file .icon {
-      fill: rgba(86, 101, 115, 0.4); }
+      fill: #344b5b; }
   .directory-tree__node--file-list {
     margin-bottom: 3px; }
 
 .directory-tree__parent-directory {
-  color: #a5b0b9;
+  color: #375468;
   font-size: 0.85em; }
   .directory-tree__parent-directory .icon {
-    fill: #a5b0b9;
+    fill: #375468;
     opacity: 0.75; }
 
 .directory-tree__tree {
@@ -1300,6 +1300,9 @@ body {
 .textbox-repeater .textbox__wrapper {
   position: relative; }
 
+.application__panel--torrent-details {
+  background: #162835; }
+
 .torrent-details {
   background: #162835;
   bottom: 0;
@@ -1312,6 +1315,8 @@ body {
   position: absolute;
   right: 0;
   top: 0;
+  -webkit-transition: opacity 1s;
+  transition: opacity 1s;
   z-index: 2; }
   .torrent-details__section {
     margin-bottom: 25px; }
@@ -1338,6 +1343,17 @@ body {
         color: #778c9e;
         display: inline-block;
         margin-left: 5px; }
+
+.torrent-details-enter {
+  opacity: 0; }
+
+.torrent-details-enter-active {
+  opacity: 1; }
+
+.torrent-details-leave {
+  opacity: 0;
+  -webkit-transition: opacity 0.5s;
+  transition: opacity 0.5s; }
 
 .torrents {
   display: -webkit-box;

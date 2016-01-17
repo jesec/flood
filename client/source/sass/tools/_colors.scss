@@ -122,8 +122,8 @@ $progress-bar--fill--selected: #fff;
 $torrent-details--background: #162835;
 $torrent-details--border: rgba($background, 0.1);
 
-$torrent-details--directory-tree--directory: #a5b0b9;
-$torrent-details--directory-tree--icon-fill: #a5b0b9;
+$torrent-details--directory-tree--directory: #375468;
+$torrent-details--directory-tree--icon-fill: #375468;
 
 $torrent-details--table--header: #c0cad3;
 $torrent-details--table--header--count: #778c9e;
@@ -153,8 +153,10 @@ $modal--content--border: rgba($background, 0.1);
 $modal--content--shadow: rgba($background, 0.3);
 
 // directory torrent-details--directory-tree--icon-fill
-$directory-tree--filename--foreground: rgba(#566573, 0.8);
-$directory-tree--directory--foreground: #566573;
+$directory-tree--filename--foreground: #567285;
+$directory-tree--directory--foreground: #7793a7;
+$directory-tree--directory--foreground--active: lighten($directory-tree--directory--foreground, 15%);
 
-$directory-tree--icon--file: rgba(#566573, 0.4);
-$directory-tree--icon--folder: rgba(#566573, 0.6);
+$directory-tree--icon--file: #344b5b;
+$directory-tree--icon--folder: #3c5465;
+$directory-tree--icon--folder--active: lighten($directory-tree--icon--folder, 15%);

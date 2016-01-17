@@ -17,10 +17,10 @@
       color: $directory-tree--directory--foreground;
       cursor: pointer;
       font-weight: 500;
-      transition: opacity 0.125s;
+      transition: color 0.125s;
 
       &:active {
-        opacity: 0.7;
+        color: $directory-tree--directory--foreground--active;
       }
 
       .icon {
