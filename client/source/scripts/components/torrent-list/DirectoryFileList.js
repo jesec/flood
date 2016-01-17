@@ -7,6 +7,7 @@ export default class DirectoryFiles extends React.Component {
     let branch = Object.assign([], this.props.branch);
 
     branch.sort((a, b) => {
+      console.log(a, b);
       return a.filename.localeCompare(b.filename);
     });
 

@@ -4,7 +4,21 @@ import FolderOpenSolid from '../icons/FolderOpenSolid';
 import DirectoryTree from './DirectoryTree';
 import File from '../icons/File';
 
+const METHODS_TO_BIND = ['handleParentDirectoryClick'];
+
 export default class TorrentFiles extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      expanded: true
+    };
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
   constructDirectoryTree(tree = {}, directory, file, depth = 0) {
     if (depth < file.pathComponents.length - 1) {
       depth++;
@@ -39,13 +53,20 @@ export default class TorrentFiles extends React.Component {
 
     if (files) {
       // We've received full file details from the client.
+      let fileList = null;
+
+      if (this.state.expanded) {
+        fileList = this.getFileList(files);
+      }
+
       return (
         <div className="directory-tree torrent-details__section">
-          <div className="directory-tree__node directory-tree__parent-directory">
+          <div className="directory-tree__node directory-tree__parent-directory"
+            onClick={this.handleParentDirectoryClick}>
             <FolderOpenSolid />
             {parentDirectory}
           </div>
-          {this.getFileList(files)}
+          {fileList}
         </div>
       );
     } else {
@@ -63,6 +84,12 @@ export default class TorrentFiles extends React.Component {
         </div>
       );
     }
+  }
+
+  handleParentDirectoryClick() {
+    this.setState({
+      expanded: !this.state.expanded
+    });
   }
 
   render() {
