@@ -5,7 +5,7 @@ class ApplicationContent extends React.Component {
   render() {
     let classes = classnames(this.props.baseClassName, {
       [`${this.props.baseClassName}--${this.props.modifier}`]: this.props.baseClassName,
-      [this.props.extension]: this.props.extension
+      [this.props.className]: this.props.className
     });
 
     return (
@@ -22,7 +22,7 @@ ApplicationContent.defaultProps = {
 
 ApplicationContent.propTypes = {
   children: React.PropTypes.node,
-  extension: React.PropTypes.string,
+  className: React.PropTypes.string,
   modifier: React.PropTypes.string
 };
 

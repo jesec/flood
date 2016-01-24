@@ -1,0 +1,18 @@
+.transfer-data {
+
+  &--download {
+    color: $transfer-data--download;
+
+    .icon {
+      fill: $transfer-data--download;
+    }
+  }
+
+  &--upload {
+    color: $transfer-data--upload;
+
+    .icon {
+      fill: $transfer-data--upload;
+    }
+  }
+}

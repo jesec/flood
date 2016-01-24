@@ -1,0 +1,121 @@
+.action-bar {
+  background: $action-bar--background;
+  color: $action-bar--foreground;
+  display: flex;
+  flex: 0 0 60px;
+  position: relative;
+
+  &:after {
+    background: $torrent-list--border;
+    bottom: 0;
+    content: '';
+    height: 1px;
+    left: 9px;
+    position: absolute;
+    right: 0;
+    width: auto;
+  }
+
+  &__item {
+    flex: 3;
+
+    &:first-child {
+      text-align: left;
+    }
+
+    &:last-child {
+      text-align: right;
+    }
+
+    &--sort-torrents {
+      max-width: 225px;
+
+      .dropdown {
+        margin: 5px 0 0 15px;
+
+        &__content {
+          min-width: 250px;
+        }
+      }
+    }
+
+    &--torrent-operations {
+
+      .dropdown {
+        display: inline-block;
+        height: 60px;
+
+        &__content {
+          min-width: 430px;
+          right: 4px;
+        }
+      }
+    }
+  }
+
+  &__group {
+    display: inline-block;
+    font-size: 0;
+    padding: 0 15px;
+
+    &--has-divider {
+      position: relative;
+
+      &:before {
+        background: $action-bar--group--border;
+        content: '';
+        position: absolute;
+        height: 80%;
+        left: 0;
+        top: 10%;
+        width: 1px;
+      }
+    }
+  }
+}
+
+.actions {
+  list-style: none;
+}
+
+.action {
+  box-shadow:
+    1px 0 transparent,
+    -1px 0 transparent;
+  cursor: pointer;
+  display: inline-block;
+  height: 60px;
+  position: relative;
+  width: 60px;
+  text-align: center;
+  transition: background 0.25s, box-shadow 0.25s;
+
+  &:hover {
+    background: $action--background--hover;
+    box-shadow:
+      1px 0 $action--border--hover,
+      -1px 0 $action--border--hover;
+
+    .icon {
+      fill: $action--foreground--hover;
+    }
+  }
+
+  &__label {
+    display: block;
+    position: absolute;
+    top: 100%;
+    visibility: hidden;
+  }
+
+  .icon {
+    fill: $action--foreground;
+    height: 25px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transition: fill 0.25s;
+    transform: translateX(-50%) translateY(-50%);
+    width: 30px;
+  }
+}

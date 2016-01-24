@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 
 import Application from './components/layout/Application';
 import ApplicationContent from './components/layout/ApplicationContent';
-import ApplicationPanel from './components/layout/ApplicationPanel';
 import Modals from './components/modals/Modals';
 import Sidebar from './components/panels/Sidebar';
 import TorrentListView from './components/panels/TorrentListView';

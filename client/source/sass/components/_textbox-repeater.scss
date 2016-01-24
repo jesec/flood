@@ -1,0 +1,23 @@
+.textbox-repeater {
+
+  .floating-action {
+
+    &__group {
+      margin-top: -8px;
+      position: absolute;
+      right: -8px;
+      top: 50%;
+    }
+
+    &__button {
+      position: relative;
+    }
+  }
+
+  .textbox {
+
+    &__wrapper {
+      position: relative;
+    }
+  }
+}

@@ -1,9 +1,5 @@
 import React from 'react';
 
-import FolderOpenSolid from '../icons/FolderOpenSolid';
-import DirectoryTree from '../filesystem/DirectoryTree';
-import File from '../icons/File';
-
 export default class TorrentTrackrs extends React.Component {
   getTrackerList(trackers = []) {
     let trackerCount = trackers.length;
@@ -23,7 +19,7 @@ export default class TorrentTrackrs extends React.Component {
     });
 
     return (
-      <div className="torrent-details__peers torrent-details__section">
+      <div className="torrent-details__trackers torrent-details__section">
         <table className="torrent-details__table table">
           <thead className="torrent-details__table__heading">
             <tr>

@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import React from 'react';
 
 import AddMini from '../icons/AddMini';
+import RemoveMini from '../icons/RemoveMini';
 
 const METHODS_TO_BIND = [
   'getTextboxes',
@@ -32,7 +33,7 @@ export default class TextboxRepeater extends React.Component {
         removeButton = (
           <button className="textbox-repeater__remove floating-action__button"
             onClick={this.props.handleTextboxRemove.bind(textbox, index)}>
-            <Icon icon="removeMini" size="mini" />
+            <RemoveMini size="mini" />
           </button>
         );
       }

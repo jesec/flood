@@ -7,7 +7,6 @@ import EventTypes from '../../constants/EventTypes';
 import TorrentListContainer from '../torrent-list/TorrentListContainer';
 import TorrentStore from '../../stores/TorrentStore';
 import UIStore from '../../stores/UIStore';
-import Wrapper from '../layout/Wrapper';
 
 const METHODS_TO_BIND = ['onOpenChange'];
 
@@ -45,14 +44,12 @@ class TorrentListView extends React.Component {
   }
 
   render() {
-    let classes = classnames({'is-open': this.state.isTorrentDetailsOpen});
+    let classes = classnames({'is-open': this.state.isTorrentDetailsOpen}, 'view--torrent-list');
 
     return (
-      <ApplicationPanel modifier="torrent-list" extension={classes}>
-        <Wrapper className="view--torrent-list">
-          <ActionBar />
-          <TorrentListContainer />
-        </Wrapper>
+      <ApplicationPanel modifier="torrent-list" className={classes}>
+        <ActionBar />
+        <TorrentListContainer />
       </ApplicationPanel>
     );
   }

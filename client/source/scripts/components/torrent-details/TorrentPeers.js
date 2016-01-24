@@ -52,7 +52,7 @@ export default class TorrentPeers extends React.Component {
         </div>
       )
     } else {
-      return <strong>'no peers'</strong>;
+      return null;
     }
   }
 

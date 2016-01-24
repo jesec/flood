@@ -15,12 +15,6 @@ body {
   height: 100%;
 }
 
-.sidebar {
-  flex: 1;
-  min-width: 200px;
-  max-width: 240px;
-}
-
 .application {
 
   &__content {
@@ -64,23 +58,10 @@ body {
     max-height: 35px;
   }
 
-
   &__list {
 
     &__wrapper {
       flex: 1;
     }
-  }
-}
-
-.view {
-
-  &--torrent-list {
-    background: #e9eef2;
-    box-shadow: -1px 0 $torrent-list--border;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    flex: 0 1 100%;
   }
 }

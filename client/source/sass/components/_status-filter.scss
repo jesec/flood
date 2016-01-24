@@ -1,0 +1,58 @@
+.status-filter {
+  font-size: 0.85em;
+  padding: 30px 0;
+
+  &__item {
+    color: $status-filter--foreground;
+    cursor: pointer;
+    padding: 3px 20px;
+    transition: color 0.25s;
+
+    &:hover {
+      color: $status-filter--foreground--hover;
+
+      .icon {
+        fill: $status-filter--foreground--hover;
+      }
+    }
+
+    &.is-active {
+      color: $status-filter--foreground--active;
+      font-weight: 700;
+
+      .icon {
+        fill: $status-filter--foreground--active;
+      }
+    }
+
+    .icon {
+      display: inline-block;
+      fill: $status-filter--foreground;
+      height: 14px;
+      margin-right: 7px;
+      transition: fill 0.25s;
+      vertical-align: middle;
+      width: auto;
+    }
+  }
+}
+
+
+.status-filter {
+
+  &__item {
+
+    &--heading {
+      cursor: default;
+      font-size: 0.8em;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+
+      &,
+      &:hover {
+        color: $status-filter--foreground--header;
+      }
+    }
+  }
+}
