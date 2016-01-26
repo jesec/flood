@@ -1,7 +1,9 @@
 import React from 'react';
 
 export default class TorrentTrackrs extends React.Component {
-  getTrackerList(trackers = []) {
+  render() {
+    let trackers = this.props.trackers || [];
+
     let trackerCount = trackers.length;
     let trackerTypes = ['http', 'udp', 'dht'];
 
@@ -38,9 +40,5 @@ export default class TorrentTrackrs extends React.Component {
         </table>
       </div>
     );
-  }
-
-  render() {
-    return this.getTrackerList(this.props.trackers);
   }
 }

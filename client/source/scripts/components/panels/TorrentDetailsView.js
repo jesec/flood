@@ -4,26 +4,22 @@ import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 import ApplicationPanel from '../layout/ApplicationPanel';
-import Download from '../icons/Download';
 import EventTypes from '../../constants/EventTypes';
-import ETA from '../icons/ETA';
 import format from '../../util/formatData';
-import ProgressBar from '../ui/ProgressBar';
-import Ratio from '../../components/icons/Ratio';
+import NavigationList from '../ui/NavigationList';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFiles from '../torrent-details/TorrentFiles';
+import TorrentHeading from '../torrent-details/TorrentHeading';
 import TorrentPeers from '../torrent-details/TorrentPeers';
 import TorrentStore from '../../stores/TorrentStore';
 import TorrentTrackers from '../torrent-details/TorrentTrackers';
 import UIStore from '../../stores/UIStore';
-import Upload from '../icons/Upload';
 
 const METHODS_TO_BIND = [
+  'handleNavChange',
   'onTorrentDetailsHashChange',
   'onOpenChange',
-  'onTorrentDetailsChange',
-  'getHeading',
-  'getTorrentDetailsView'
+  'onTorrentDetailsChange'
 ];
 
 export default class TorrentDetails extends React.Component {
@@ -36,7 +32,8 @@ export default class TorrentDetails extends React.Component {
       torrentDetailsError: false,
       selectedTorrent: {},
       selectedTorrentHash: null,
-      torrentDetails: {}
+      torrentDetails: {},
+      torrentDetailsPane: 'files'
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -81,111 +78,76 @@ export default class TorrentDetails extends React.Component {
     });
   }
 
-  getHeading(torrent) {
-    let added = new Date(torrent.added * 1000);
-    let addedString = `${added.getMonth() + 1}/${added.getDate()}/` +
-      `${added.getFullYear()}`;
-    let completed = format.data(torrent.bytesDone);
-    let downloadRate = format.data(torrent.downloadRate, '/s');
-    let downloadTotal = format.data(torrent.downloadTotal);
-    let eta = format.eta(torrent.eta);
-    let ratio = format.ratio(torrent.ratio);
-    let totalSize = format.data(torrent.sizeBytes);
-    let uploadRate = format.data(torrent.uploadRate, '/s');
-    let uploadTotal = format.data(torrent.uploadTotal);
+  getNavigationItem(item) {
+    let selectedHash = UIStore.getTorrentDetailsHash();
+    let torrent = TorrentStore.getTorrent(selectedHash);
+    let torrentDetails = this.state.torrentDetails || {};
 
-    let classes = classNames('torrent-details__heading torrent-details__section', {
-      'is-selected': this.props.selected,
-      'is-stopped': torrent.status.indexOf('is-stopped') > -1,
-      'is-paused': torrent.status.indexOf('is-paused') > -1,
-      'is-actively-downloading': downloadRate.value > 0,
-      'is-downloading': torrent.status.indexOf('is-downloading') > -1,
-      'is-seeding': torrent.status.indexOf('is-seeding') > -1,
-      'is-completed': torrent.status.indexOf('is-completed') > -1,
-      'is-checking': torrent.status.indexOf('is-checking') > -1,
-      'is-active': torrent.status.indexOf('is-active') > -1,
-      'is-inactive': torrent.status.indexOf('is-inactive') > -1
-    });
+    switch (item) {
+      case 'files':
+        return <TorrentFiles files={torrentDetails.files} torrent={torrent} />;
+        break;
+      case 'trackers':
+        return <TorrentTrackers trackers={torrentDetails.trackers} />;
+        break;
+      case 'peers':
+        return <TorrentPeers peers={torrentDetails.peers} />;
+        break;
+    }
 
-    return (
-      <div className={classes}>
-        <h1 className="torrent__details--name">{torrent.name}</h1>
-        <ul className="torrent__details torrent__details--tertiary">
-          <li className="torrent__details--download transfer-data--download">
-            <Download />
-            {downloadRate.value}
-            <em className="unit">{downloadRate.unit}</em>
-          </li>
-          <li className="torrent__details--upload transfer-data--upload">
-            <Upload />
-            {uploadRate.value}
-            <em className="unit">{uploadRate.unit}</em>
-          </li>
-          <li className="torrent__details--ratio">
-            <Ratio />
-            {ratio}
-          </li>
-          <li className="torrent__details--eta">
-            <ETA />
-            {eta}
-          </li>
-          <li className="torrent__details--completed">
-            <span className="torrent__details__label">Downloaded</span>
-            {torrent.percentComplete}
-            <em className="unit">%</em>
-            &nbsp;&mdash;&nbsp;
-            {completed.value}
-            <em className="unit">{completed.unit}</em>
-          </li>
-          <li className="torrent__details--uploaded">
-            <span className="torrent__details__label">Uploaded</span>
-            {uploadTotal.value}
-            <em className="unit">{uploadTotal.unit}</em>
-          </li>
-          <li className="torrent__details--size">
-            <span className="torrent__details__label">Size</span>
-            {totalSize.value}
-            <em className="unit">{totalSize.unit}</em>
-          </li>
-          <li className="torrent__details--added">
-            <span className="torrent__details__label">Added</span>
-            {addedString}
-          </li>
-        </ul>
-        <ProgressBar percent={torrent.percentComplete} />
-      </div>
-    );
+    return null;
   }
 
-  getTorrentDetailsView() {
-    let torrentDetailsContent = null;
+  getNavigationItems() {
+    return [
+      {
+        slug: 'files',
+        label: 'Files'
+      },
+      {
+        slug: 'peers',
+        label: 'Peers'
+      },
+      {
+        slug: 'trackers',
+        label: 'Trackers'
+      }
+    ];
+  }
+
+  handleNavChange(item) {
+    this.setState({torrentDetailsPane: item.slug});
+  }
+
+  render() {
+    let detailContent = null;
 
     if (this.state.isOpen) {
       let selectedHash = UIStore.getTorrentDetailsHash();
       let torrent = TorrentStore.getTorrent(selectedHash);
-      let torrentDetails = this.state.torrentDetails || {};
 
-      torrentDetailsContent = (
+      detailContent = (
         <div className="torrent-details">
-          {this.getHeading(torrent)}
-          <TorrentTrackers trackers={torrentDetails.trackers} />
-          <TorrentFiles files={torrentDetails.files} torrent={torrent} />
-          <TorrentPeers peers={torrentDetails.peers} />
+          <TorrentHeading torrent={torrent} />
+          <div className="torrent-details__content__wrapper">
+            <NavigationList defaultItem={this.state.torrentDetailsPane}
+              items={this.getNavigationItems()} onChange={this.handleNavChange}
+              uniqueClassName="torrent-details__navigation" />
+            <div className="torrent-details__content">
+              {this.getNavigationItem(this.state.torrentDetailsPane)}
+            </div>
+          </div>
         </div>
       );
     }
 
-    return torrentDetailsContent;
-  }
-
-  render() {
     return (
       <ApplicationPanel modifier="torrent-details">
         <CSSTransitionGroup
           transitionEnterTimeout={1000}
           transitionLeaveTimeout={1000}
           transitionName="torrent-details">
-          {this.getTorrentDetailsView()}
+          {detailContent}
         </CSSTransitionGroup>
       </ApplicationPanel>
     );

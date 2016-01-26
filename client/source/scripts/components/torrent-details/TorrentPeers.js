@@ -6,7 +6,9 @@ import File from '../icons/File';
 import format from '../../util/formatData';
 
 export default class TorrentPeers extends React.Component {
-  getPeerList(peers) {
+  render() {
+    let peers = this.props.peers;
+
     if (peers) {
       let peerList = null;
       let peerCount = 0;
@@ -54,9 +56,5 @@ export default class TorrentPeers extends React.Component {
     } else {
       return null;
     }
-  }
-
-  render() {
-    return this.getPeerList(this.props.peers);
   }
 }

@@ -915,9 +915,9 @@ body {
     opacity: 0.75; }
 
 .directory-tree__tree {
-  padding-left: 1px; }
+  padding-left: 3px; }
   .directory-tree__tree .directory-tree__tree {
-    padding-left: 3px; }
+    padding-left: 6px; }
 
 .dropdown {
   display: inline-block;
@@ -1288,34 +1288,46 @@ body {
   background: #162835;
   bottom: 0;
   box-shadow: -1px 0 0 rgba(26, 47, 61, 0.1);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
   font-size: 0.8em;
   left: 0;
   min-width: 400px;
   overflow: auto;
-  padding: 25px;
   position: absolute;
   right: 0;
   top: 0;
   -webkit-transition: opacity 1s;
   transition: opacity 1s;
   z-index: 2; }
-  .torrent-details__heading .torrent__details--name {
-    color: #97bbd5;
-    font-size: 1.7em;
-    font-weight: 300; }
-  .torrent-details__heading .torrent__details--tertiary {
-    color: #7b9cb4;
-    font-size: 1em; }
-  .torrent-details__heading .torrent__details--download .icon, .torrent-details__heading .torrent__details--upload .icon, .torrent-details__heading .torrent__details--eta .icon, .torrent-details__heading .torrent__details--ratio .icon {
-    height: 12px;
-    width: 12px; }
-  .torrent-details__heading .torrent__details--eta {
-    opacity: 1;
-    visibility: visible; }
-  .torrent-details__heading .progress-bar:after {
-    background: #2a3e4c; }
-  .torrent-details__section {
-    margin-bottom: 25px; }
+  .torrent-details__heading {
+    box-shadow: 0 1px 0 rgba(4, 13, 19, 0.3);
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+        -ms-flex: 0 0 auto;
+            flex: 0 0 auto; }
+    .torrent-details__heading .torrent__details--name {
+      color: #97bbd5;
+      font-size: 1.7em;
+      font-weight: 300; }
+    .torrent-details__heading .torrent__details--tertiary {
+      color: #7b9cb4;
+      font-size: 1em; }
+    .torrent-details__heading .torrent__details--download .icon, .torrent-details__heading .torrent__details--upload .icon, .torrent-details__heading .torrent__details--eta .icon, .torrent-details__heading .torrent__details--ratio .icon {
+      height: 12px;
+      width: 12px; }
+    .torrent-details__heading .torrent__details--eta {
+      opacity: 1;
+      visibility: visible; }
+    .torrent-details__heading .progress-bar:after {
+      background: #2a3e4c; }
   .torrent-details__table {
     color: #567285;
     width: 100%; }
@@ -1330,6 +1342,27 @@ body {
         color: #778c9e;
         display: inline-block;
         margin-left: 5px; }
+  .torrent-details__heading, .torrent-details__content, .torrent-details__navigation {
+    padding: 12.5px 25px; }
+  .torrent-details__content {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    overflow: auto; }
+    .torrent-details__content__wrapper {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-flex: 1;
+      -webkit-flex: 1;
+          -ms-flex: 1;
+              flex: 1;
+      overflow: hidden; }
+  .torrent-details__navigation {
+    box-shadow: 1px 0 0 rgba(4, 13, 19, 0.5);
+    background: rgba(12, 27, 38, 0.5); }
 
 .torrent-details-enter {
   opacity: 0; }

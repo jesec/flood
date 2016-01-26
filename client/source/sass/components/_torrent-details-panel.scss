@@ -12,11 +12,12 @@
   background: $torrent-details--background;
   bottom: 0;
   box-shadow: -1px 0 0 $torrent-details--border;
+  display: flex;
+  flex-direction: column;
   font-size: 0.8em;
   left: 0;
   min-width: 400px;
   overflow: auto;
-  padding: $spacing-unit;
   position: absolute;
   right: 0;
   top: 0;
@@ -24,6 +25,8 @@
   z-index: 2;
 
   &__heading {
+    box-shadow: 0 1px 0 rgba(#040d13, 0.3);
+    flex: 0 0 auto;
 
     .torrent {
 
@@ -66,10 +69,6 @@
     }
   }
 
-  &__section {
-    margin-bottom: $spacing-unit;
-  }
-
   &__table {
     color: $torrent-details--table--foreground;
     width: 100%;
@@ -92,7 +91,27 @@
     }
   }
 
+  &__heading,
+  &__content,
+  &__navigation {
+    padding: $spacing-unit * 1/2 $spacing-unit;
+  }
 
+  &__content {
+    flex: 1;
+    overflow: auto;
+
+    &__wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+  }
+
+  &__navigation {
+    box-shadow: 1px 0 0 rgba(#040d13, 0.5);
+    background: rgba(#0c1b26, 0.5);
+  }
 }
 
 .torrent-details-enter {

@@ -48,10 +48,27 @@ export default class TorrentFiles extends React.Component {
   }
 
   getFileData(torrent, files) {
-    let parentDirectory = torrent.directory;
-    let filename = torrent.filename;
 
-    if (files) {
+  }
+
+  handleParentDirectoryClick() {
+    this.setState({
+      expanded: !this.state.expanded
+    });
+  }
+
+  isLoaded() {
+    if (this.props.files) {
+      return true;
+    }
+
+    return false;
+  }
+
+  render() {
+    let {files, torrent} = this.props;
+
+    if (this.isLoaded()) {
       // We've received full file details from the client.
       let fileList = null;
 
@@ -64,7 +81,7 @@ export default class TorrentFiles extends React.Component {
           <div className="directory-tree__node directory-tree__parent-directory"
             onClick={this.handleParentDirectoryClick}>
             <FolderOpenSolid />
-            {parentDirectory}
+            {torrent.directory}
           </div>
           {fileList}
         </div>
@@ -73,26 +90,17 @@ export default class TorrentFiles extends React.Component {
       // We've only received the top-level file details from the torrent list.
       return (
         <div className="directory-tree torrent-details__section">
-          <div className="directory-tree__node directory-tree__parent-directory">
+          <div className="directory-tree__node
+            directory-tree__parent-directory">
             <FolderOpenSolid />
-            {parentDirectory}
+            {torrent.directory}
           </div>
           <div className="directory-tree__node directory-tree__node--file">
             <File />
-            {filename}
+            {torrent.filename}
           </div>
         </div>
       );
     }
-  }
-
-  handleParentDirectoryClick() {
-    this.setState({
-      expanded: !this.state.expanded
-    });
-  }
-
-  render() {
-    return this.getFileData(this.props.torrent, this.props.files);
   }
 }
