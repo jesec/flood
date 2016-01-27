@@ -111,6 +111,25 @@
   &__navigation {
     box-shadow: 1px 0 0 rgba(#040d13, 0.5);
     background: rgba(#0c1b26, 0.5);
+    padding-left: 0;
+    padding-right: 0;
+
+    .navigation {
+
+      &__item {
+        cursor: pointer;
+        padding: $spacing-unit * 1/4 $spacing-unit;
+        text-align: right;
+        transition: background 0.25s, box-shadow 0.25s, color 0.25s;
+
+        &.is-active {
+          background: rgba(#349cf4, 0.07);
+          box-shadow:
+            1px 0 0 #349cf4;
+          color: #349cf4;
+        }
+      }
+    }
   }
 }
 

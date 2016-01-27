@@ -57,7 +57,7 @@ class NavigationList extends React.Component {
 NavigationList.defaultProps = {
   itemClassName: 'navigation__item',
   listClassName: 'navigation',
-  selectedClassName: 'is-selected'
+  selectedClassName: 'is-active'
 };
 
 NavigationList.propTypes = {

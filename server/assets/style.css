@@ -1362,7 +1362,19 @@ body {
       overflow: hidden; }
   .torrent-details__navigation {
     box-shadow: 1px 0 0 rgba(4, 13, 19, 0.5);
-    background: rgba(12, 27, 38, 0.5); }
+    background: rgba(12, 27, 38, 0.5);
+    padding-left: 0;
+    padding-right: 0; }
+    .torrent-details__navigation .navigation__item {
+      cursor: pointer;
+      padding: 6.25px 25px;
+      text-align: right;
+      -webkit-transition: background 0.25s, box-shadow 0.25s, color 0.25s;
+      transition: background 0.25s, box-shadow 0.25s, color 0.25s; }
+      .torrent-details__navigation .navigation__item.is-active {
+        background: rgba(52, 156, 244, 0.07);
+        box-shadow: 1px 0 0 #349cf4;
+        color: #349cf4; }
 
 .torrent-details-enter {
   opacity: 0; }
