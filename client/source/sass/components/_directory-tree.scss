@@ -3,39 +3,86 @@
   .icon {
     display: inline-block;
     height: 14px;
-    margin-right: 5px;
-    vertical-align: top;
+    margin-right: 6px;
     width: 14px;
   }
 
   &__node {
+    color: $directory-tree--filename--foreground;
     line-height: 1.75;
     text-overflow: ellipsis;
+    vertical-align: middle;
     white-space: nowrap;
+
+    &--group {
+      padding-left: 10px;
+      position: relative;
+
+      &:after {
+        background: rgba(#527893, 0.1);
+        content: '';
+        height: 100%;
+        left: 5px;
+        position: absolute;
+        top: -5px;
+        width: 2px;
+      }
+    }
 
     &--directory {
       color: $directory-tree--directory--foreground;
       cursor: pointer;
-      font-weight: 500;
       transition: color 0.125s;
 
-      &:active {
-        color: $directory-tree--directory--foreground--active;
+      &.is-expanded {
+        color: $directory-tree--directory--foreground--open;
+        font-weight: 500;
+
+        .icon {
+          fill: $directory-tree--icon--folder--active;
+        }
       }
 
       .icon {
         fill: $directory-tree--icon--folder;
-        position: relative;
-
       }
     }
 
-    &--file {
-      color: $directory-tree--filename--foreground;
-      line-height: 1.5;
+    .file {
+      display: flex;
+      line-height: 1.7;
+      width: 100%;
+
+      &:hover {
+
+        .file {
+
+          &__size,
+          &__priority {
+            color: $directory-tree--file-details--hover--foreground;
+          }
+        }
+      }
 
       .icon {
         fill: $directory-tree--icon--file;
+      }
+
+      &__name {
+        flex: 1 1 auto;
+      }
+
+      &__size,
+      &__priority {
+        color: $directory-tree--file-details--foreground;
+        flex: 0 0 auto;
+        font-size: 0.95em;
+        text-align: right;
+        transition: color 0.25s;
+      }
+
+      &__size {
+        padding-right: $spacing-unit * 1/4;
       }
     }
 
@@ -45,17 +92,17 @@
   }
 
   &__parent-directory {
-    color: $torrent-details--directory-tree--directory;
-    font-size: 0.85em;
+    color: $torrent-details--directory-tree--parent-directory--foreground;
+    font-size: 1.125em;
 
     .icon {
-      fill: $torrent-details--directory-tree--icon-fill;
-      opacity: 0.75;
+      fill: $torrent-details--directory-tree--parent-directory--icon--fill;
+      margin-right: 8px;
+      vertical-align: middle;
     }
   }
 
   &__tree {
-    padding-left: 3px;
 
     .directory-tree__tree {
       padding-left: 6px;

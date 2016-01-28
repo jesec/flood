@@ -1,7 +1,8 @@
+import classnames from 'classnames';
 import React from 'react';
 
-import FolderClosedOutlined from '../icons/FolderClosedOutlined';
-import FolderOpenOutlined from '../icons/FolderOpenOutlined';
+import FolderClosedSolid from '../icons/FolderClosedSolid';
+import FolderOpenSolid from '../icons/FolderOpenSolid';
 import DirectoryTree from './DirectoryTree';
 
 const METHODS_TO_BIND = ['handleDirectoryClick'];
@@ -38,17 +39,20 @@ export default class DirectoryTreeNode extends React.Component {
   }
 
   render() {
-    let classes = `directory-tree__branch directory-tree__branch--depth-${this.props.depth}`;
+    let branchClasses = `directory-tree__branch directory-tree__branch--depth-${this.props.depth}`;
+    let directoryClasses = classnames('directory-tree__node',
+      'directory-tree__node--directory', {'is-expanded': this.state.expanded}
+    );
 
-    let icon = <FolderClosedOutlined />;
+    let icon = <FolderClosedSolid />;
 
     if (this.state.expanded) {
-      icon = <FolderOpenOutlined />;
+      icon = <FolderOpenSolid />;
     }
 
     return (
-      <div className={classes}>
-        <div className="directory-tree__node directory-tree__node--directory"
+      <div className={branchClasses}>
+        <div className={directoryClasses}
           onClick={this.handleDirectoryClick} title={this.props.directoryName}>
           {icon}
           {this.props.directoryName}

@@ -122,8 +122,19 @@ $progress-bar--fill--selected: #fff;
 $torrent-details--background: #162835;
 $torrent-details--border: rgba($background, 0.1);
 
-$torrent-details--directory-tree--directory: #375468;
-$torrent-details--directory-tree--icon-fill: #375468;
+$torrent-details--header--border: rgba(#040d13, 0.3);
+$torrent-details--header--name--foreground: #97bbd5;
+$torrent-details--header--tertiary--foreground: #7b9cb4;
+$torrent-details--header--progress-bar--track: #2a3e4c;
+
+$torrent-details--navigation--border: rgba(#040d13, 0.5);
+$torrent-details--navigation--item--background--active: rgba(#349cf4, 0.07);
+$torrent-details--navigation--item--foreground--active: #349cf4;
+$torrent-details--navigation--item--border--active: #349cf4;
+$torrent-details--navigation--background: rgba(#0c1b26, 0.5);
+
+$torrent-details--directory-tree--parent-directory--foreground: #3a5c74;
+$torrent-details--directory-tree--parent-directory--icon--fill: rgba(#3a5c74, 0.5);
 
 $torrent-details--table--foreground: #567285;
 $torrent-details--table--header: #c0cad3;
@@ -134,7 +145,7 @@ $transfer-data--download: $green;
 $transfer-data--upload: $blue;
 
 // dropdown menu
-$dropdown--background: rgba(#fff, 0.98);;
+$dropdown--background: rgba(#fff, 0.98);
 $dropdown--foreground: #95a2ad;
 $dropdown--container--border: rgba($background, 0.1);
 $dropdown--container--shadow: rgba($background, 0.3);
@@ -154,10 +165,14 @@ $modal--content--border: rgba($background, 0.1);
 $modal--content--shadow: rgba($background, 0.3);
 
 // directory torrent-details--directory-tree--icon-fill
-$directory-tree--filename--foreground: #567285;
-$directory-tree--directory--foreground: #7793a7;
-$directory-tree--directory--foreground--active: lighten($directory-tree--directory--foreground, 15%);
+$directory-tree--filename--foreground: #527893;
+$directory-tree--directory--foreground: $directory-tree--filename--foreground;
+$directory-tree--directory--foreground--open: #719bb7;
 
 $directory-tree--icon--file: #344b5b;
-$directory-tree--icon--folder: #3c5465;
-$directory-tree--icon--folder--active: lighten($directory-tree--icon--folder, 15%);
+$directory-tree--icon--folder: rgba(#527893, 0.4);
+$directory-tree--icon--folder--active: rgba(#82aac5, 0.5);
+$directory-tree--icon--folder--open: rgba(#82aac5, 0.5);
+
+$directory-tree--file-details--foreground: #2b4456;
+$directory-tree--file-details--hover--foreground: #527893;

@@ -25,7 +25,7 @@
   z-index: 2;
 
   &__heading {
-    box-shadow: 0 1px 0 rgba(#040d13, 0.3);
+    box-shadow: 0 1px 0 $torrent-details--header--border;
     flex: 0 0 auto;
 
     .torrent {
@@ -33,13 +33,13 @@
       &__details {
 
         &--name {
-          color: #97bbd5;
+          color: $torrent-details--header--name--foreground;
           font-size: 1.7em;
           font-weight: 300;
         }
 
         &--tertiary {
-          color: #7b9cb4;
+          color: $torrent-details--header--tertiary--foreground;
           font-size: 1em;
         }
 
@@ -64,7 +64,7 @@
     .progress-bar {
 
       &:after {
-        background: #2a3e4c;
+        background: $torrent-details--header--progress-bar--track;
       }
     }
   }
@@ -109,8 +109,8 @@
   }
 
   &__navigation {
-    box-shadow: 1px 0 0 rgba(#040d13, 0.5);
-    background: rgba(#0c1b26, 0.5);
+    box-shadow: 1px 0 0 $torrent-details--navigation--border;
+    background: $torrent-details--navigation--background;
     padding-left: 0;
     padding-right: 0;
 
@@ -123,10 +123,9 @@
         transition: background 0.25s, box-shadow 0.25s, color 0.25s;
 
         &.is-active {
-          background: rgba(#349cf4, 0.07);
-          box-shadow:
-            1px 0 0 #349cf4;
-          color: #349cf4;
+          background: $torrent-details--navigation--item--background--active;
+          box-shadow: 1px 0 0 $torrent-details--navigation--item--border--active;
+          color: $torrent-details--navigation--item--foreground--active;
         }
       }
     }

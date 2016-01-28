@@ -5,7 +5,6 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 import ApplicationPanel from '../layout/ApplicationPanel';
 import EventTypes from '../../constants/EventTypes';
-import format from '../../util/formatData';
 import NavigationList from '../ui/NavigationList';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFiles from '../torrent-details/TorrentFiles';

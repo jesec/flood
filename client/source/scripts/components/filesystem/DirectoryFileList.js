@@ -1,6 +1,7 @@
 import React from 'react';
 
 import File from '../icons/File';
+import format from '../../util/formatData';
 
 export default class DirectoryFiles extends React.Component {
   render() {
@@ -11,11 +12,23 @@ export default class DirectoryFiles extends React.Component {
     });
 
     let files = branch.map((file, fileIndex) => {
+      // console.log(file);
+      let fileSize = format.data(file.sizeBytes, '', 1);
+
       return (
-        <div className="directory-tree__node directory-tree__node--file"
+        <div className="directory-tree__node directory-tree__node--file file"
           key={`${fileIndex}`} title={file.filename}>
-          <File />
-          {file.filename}
+          <div className="file__detail file__name">
+            <File />
+            {file.filename}
+          </div>
+          <div className="file__detail file__size">
+            {fileSize.value}
+            <em className="unit">{fileSize.unit}</em>
+          </div>
+          <div className="file__detail file__priority">
+            {file.priority}
+          </div>
         </div>
       );
     });

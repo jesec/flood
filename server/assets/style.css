@@ -880,44 +880,79 @@ body {
 .directory-tree .icon {
   display: inline-block;
   height: 14px;
-  margin-right: 5px;
-  vertical-align: top;
+  margin-right: 6px;
   width: 14px; }
 
 .directory-tree__node {
+  color: #527893;
   line-height: 1.75;
   text-overflow: ellipsis;
+  vertical-align: middle;
   white-space: nowrap; }
+  .directory-tree__node--group {
+    padding-left: 10px;
+    position: relative; }
+    .directory-tree__node--group:after {
+      background: rgba(82, 120, 147, 0.1);
+      content: '';
+      height: 100%;
+      left: 5px;
+      position: absolute;
+      top: -5px;
+      width: 2px; }
   .directory-tree__node--directory {
-    color: #7793a7;
+    color: #527893;
     cursor: pointer;
-    font-weight: 500;
     -webkit-transition: color 0.125s;
     transition: color 0.125s; }
-    .directory-tree__node--directory:active {
-      color: #a5b8c5; }
+    .directory-tree__node--directory.is-expanded {
+      color: #719bb7;
+      font-weight: 500; }
+      .directory-tree__node--directory.is-expanded .icon {
+        fill: rgba(130, 170, 197, 0.5); }
     .directory-tree__node--directory .icon {
-      fill: #3c5465;
-      position: relative; }
-  .directory-tree__node--file {
-    color: #567285;
-    line-height: 1.5; }
-    .directory-tree__node--file .icon {
+      fill: rgba(82, 120, 147, 0.4); }
+  .directory-tree__node .file {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    line-height: 1.7;
+    width: 100%; }
+    .directory-tree__node .file:hover .file__size, .directory-tree__node .file:hover .file__priority {
+      color: #527893; }
+    .directory-tree__node .file .icon {
       fill: #344b5b; }
+    .directory-tree__node .file__name {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+          -ms-flex: 1 1 auto;
+              flex: 1 1 auto; }
+    .directory-tree__node .file__size, .directory-tree__node .file__priority {
+      color: #2b4456;
+      -webkit-box-flex: 0;
+      -webkit-flex: 0 0 auto;
+          -ms-flex: 0 0 auto;
+              flex: 0 0 auto;
+      font-size: 0.95em;
+      text-align: right;
+      -webkit-transition: color 0.25s;
+      transition: color 0.25s; }
+    .directory-tree__node .file__size {
+      padding-right: 6.25px; }
   .directory-tree__node--file-list {
     margin-bottom: 3px; }
 
 .directory-tree__parent-directory {
-  color: #375468;
-  font-size: 0.85em; }
+  color: #3a5c74;
+  font-size: 1.125em; }
   .directory-tree__parent-directory .icon {
-    fill: #375468;
-    opacity: 0.75; }
+    fill: rgba(58, 92, 116, 0.5);
+    margin-right: 8px;
+    vertical-align: middle; }
 
-.directory-tree__tree {
-  padding-left: 3px; }
-  .directory-tree__tree .directory-tree__tree {
-    padding-left: 6px; }
+.directory-tree__tree .directory-tree__tree {
+  padding-left: 6px; }
 
 .dropdown {
   display: inline-block;

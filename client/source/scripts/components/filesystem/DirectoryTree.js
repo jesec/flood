@@ -13,10 +13,14 @@ export default class DirectoryTree extends React.Component {
       index++;
 
       if (branchName === 'files') {
-        return <DirectoryFileList branch={branch} key={`${index}${depth}`} />;
+        return (
+          <DirectoryFileList branch={branch} key={`${index}${depth}`} />
+        );
       } else {
-        return <DirectoryTreeNode depth={depth} directoryName={branchName}
-          subTree={branch} key={`${index}${depth}`} />;
+        return (
+          <DirectoryTreeNode depth={depth} directoryName={branchName}
+            subTree={branch} key={`${index}${depth}`} />
+        );
       }
     });
   }
