@@ -13,7 +13,3 @@ export default class Search extends BaseIcon {
     );
   }
 }
-
-Search.defaultProps = {
-  className: ''
-};

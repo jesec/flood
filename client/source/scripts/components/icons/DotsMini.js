@@ -14,7 +14,3 @@ export default class DotsMini extends BaseIcon {
     );
   }
 }
-
-DotsMini.defaultProps = {
-  className: ''
-};

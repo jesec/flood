@@ -13,7 +13,3 @@ export default class Upload extends BaseIcon {
     );
   }
 }
-
-Upload.defaultProps = {
-  className: ''
-};

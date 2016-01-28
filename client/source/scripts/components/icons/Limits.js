@@ -18,7 +18,3 @@ export default class Limits extends BaseIcon {
     );
   }
 }
-
-Limits.defaultProps = {
-  className: ''
-};

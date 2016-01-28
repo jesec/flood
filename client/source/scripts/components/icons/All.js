@@ -12,7 +12,3 @@ export default class All extends BaseIcon {
     );
   }
 }
-
-All.defaultProps = {
-  className: ''
-};

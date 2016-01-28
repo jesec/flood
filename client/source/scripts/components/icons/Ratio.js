@@ -12,7 +12,3 @@ export default class Ratio extends BaseIcon {
     );
   }
 }
-
-Ratio.defaultProps = {
-  className: ''
-};

@@ -12,7 +12,3 @@ export default class Start extends BaseIcon {
     );
   }
 }
-
-Start.defaultProps = {
-  className: ''
-};

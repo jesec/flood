@@ -12,7 +12,3 @@ export default class Inactive extends BaseIcon {
     );
   }
 }
-
-Inactive.defaultProps = {
-  className: ''
-};

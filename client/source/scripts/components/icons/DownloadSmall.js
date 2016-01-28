@@ -12,7 +12,3 @@ export default class DownloadSmall extends BaseIcon {
     );
   }
 }
-
-DownloadSmall.defaultProps = {
-  className: ''
-};

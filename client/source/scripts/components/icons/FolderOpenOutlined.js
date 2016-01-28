@@ -12,7 +12,3 @@ export default class FolderOpenOutlined extends BaseIcon {
     );
   }
 }
-
-FolderOpenOutlined.defaultProps = {
-  className: ''
-};

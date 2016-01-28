@@ -12,7 +12,3 @@ export default class RemoveMini extends BaseIcon {
     );
   }
 }
-
-RemoveMini.defaultProps = {
-  className: ''
-};

@@ -12,7 +12,3 @@ export default class Completed extends BaseIcon {
     );
   }
 }
-
-Completed.defaultProps = {
-  className: ''
-};

@@ -13,7 +13,3 @@ export default class Download extends BaseIcon {
     );
   }
 }
-
-Download.defaultProps = {
-  className: ''
-};

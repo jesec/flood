@@ -12,7 +12,3 @@ export default class Pause extends BaseIcon {
     );
   }
 }
-
-Pause.defaultProps = {
-  className: ''
-};

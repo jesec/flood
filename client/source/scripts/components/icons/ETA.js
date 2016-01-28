@@ -14,7 +14,3 @@ export default class ETA extends BaseIcon {
     );
   }
 }
-
-ETA.defaultProps = {
-  className: ''
-};

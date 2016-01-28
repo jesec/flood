@@ -12,7 +12,3 @@ export default class Stop extends BaseIcon {
     );
   }
 }
-
-Stop.defaultProps = {
-  className: ''
-};

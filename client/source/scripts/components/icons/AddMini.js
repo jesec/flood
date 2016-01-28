@@ -12,7 +12,3 @@ export default class AddMini extends BaseIcon {
     );
   }
 }
-
-AddMini.defaultProps = {
-  className: ''
-};

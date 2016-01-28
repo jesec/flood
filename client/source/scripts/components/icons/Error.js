@@ -12,7 +12,3 @@ export default class Error extends BaseIcon {
     );
   }
 }
-
-Error.defaultProps = {
-  className: ''
-};
