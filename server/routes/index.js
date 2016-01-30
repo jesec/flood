@@ -5,7 +5,8 @@ var Strategy = require('passport-http').BasicStrategy;
 
 var users = require('../db/users');
 
-var collectHistory = require('../models/collectHistory');
+var history = require('../models/history');
+history.startPolling();
 
 passport.use(new Strategy(
   function(username, password, callback) {

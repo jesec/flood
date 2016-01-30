@@ -71,8 +71,8 @@ class HistoryEra {
           let currentDownAvg = Number(doc.dn);
           let currentUpAvg = Number(doc.up);
 
-          let downAvg = ((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
-          let upAvg = ((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
+          let downAvg = Number((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
+          let upAvg = Number((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
 
           console.log(`updating, old avg: ${doc.dn}, new number: ${data.download}, new avg: ${downAvg}`);
 
@@ -161,13 +161,13 @@ class HistoryEra {
       let upTotal = 0;
 
       docs.forEach(function (doc) {
-        downTotal += doc.dn;
-        upTotal += doc.up;
+        downTotal += Number(doc.dn);
+        upTotal += Number(doc.up);
       });
 
       this.opts.nextEra.addData({
-        download: (downTotal / docs.length).toFixed(1),
-        upload: (upTotal / docs.length).toFixed(1)
+        download: Number(downTotal / docs.length).toFixed(1),
+        upload: Number(upTotal / docs.length).toFixed(1)
       });
     });
   }

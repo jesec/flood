@@ -60,15 +60,26 @@ let fiveMinSnapshot = new HistoryEra({
   nextEra: thirtyMinSnapshot
 });
 
-pollInterval = setInterval(function() {
-  client.getTransferStats(function (err, data) {
-    if (err) {
-      return;
-    }
+let history = {
+  startPolling: function () {
+    pollInterval = setInterval(function() {
+      client.getTransferStats(function (err, data) {
+        if (err) {
+          return;
+        }
 
-    fiveMinSnapshot.addData({
-      upload: data.uploadRate,
-      download: data.downloadRate
-    });
-  });
-}, 1000 * 5);
+        fiveMinSnapshot.addData({
+          upload: data.uploadRate,
+          download: data.downloadRate
+        });
+      });
+    }, 1000 * 5);
+  },
+
+  stopPolling: function() {
+    clearInterval(pollInterval);
+    pollInterval = null;
+  }
+}
+
+module.exports = history;
