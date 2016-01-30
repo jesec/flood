@@ -71,12 +71,12 @@ class HistoryEra {
           let currentDownAvg = Number(doc.dn);
           let currentUpAvg = Number(doc.up);
 
-          let downAvg = Number((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
-          let upAvg = Number((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
+          let downAvg = ((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
+          let upAvg = ((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
 
           console.log(`updating, old avg: ${doc.dn}, new number: ${data.download}, new avg: ${downAvg}`);
 
-          this.db.update({ts: this.lastUpdate}, {ts: this.lastUpdate, up: upAvg, dn: downAvg, num: numUpdates + 1});
+          this.db.update({ts: this.lastUpdate}, {ts: this.lastUpdate, up: Number(upAvg), dn: Number(downAvg), num: numUpdates + 1});
         }
       });
     }

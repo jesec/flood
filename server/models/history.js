@@ -61,6 +61,10 @@ let fiveMinSnapshot = new HistoryEra({
 });
 
 let history = {
+  getHistory: function (opts) {
+
+  },
+
   startPolling: function () {
     pollInterval = setInterval(function() {
       client.getTransferStats(function (err, data) {
