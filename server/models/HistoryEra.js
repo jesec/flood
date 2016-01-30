@@ -24,6 +24,7 @@ class HistoryEra {
     this.startedAt = Date.now();
 
     this.db = this.loadDatabase(this.opts.name);
+    this.setLastUpdate(this.db);
     this.removeOutdatedData(this.db);
 
     let cleanupInterval = this.opts.maxTime;
@@ -50,13 +51,35 @@ class HistoryEra {
       return;
     }
 
-    console.log(`insert data in ${this.opts.name}`);
+    let currentTime = Date.now();
 
-    this.db.insert({
-      ts: Date.now(),
-      up: data.upload,
-      dn: data.download
-    });
+    if (currentTime - this.lastUpdate >= this.opts.interval) {
+      console.log(`creating new record in ${this.opts.name}`);
+
+      this.lastUpdate = currentTime;
+
+      this.db.insert({
+        ts: currentTime,
+        up: Number(data.upload),
+        dn: Number(data.download)
+      });
+    } else {
+      this.db.find({ts: this.lastUpdate}, (err, docs) => {
+        if (docs.length !== 0) {
+          let doc = docs[0];
+          let numUpdates = Number(doc.num || 1);
+          let currentDownAvg = Number(doc.dn);
+          let currentUpAvg = Number(doc.up);
+
+          let downAvg = ((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
+          let upAvg = ((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
+
+          console.log(`updating, old avg: ${doc.dn}, new number: ${data.download}, new avg: ${downAvg}`);
+
+          this.db.update({ts: this.lastUpdate}, {ts: this.lastUpdate, up: upAvg, dn: downAvg, num: numUpdates + 1});
+        }
+      });
+    }
   }
 
   cleanup(db) {
@@ -84,7 +107,6 @@ class HistoryEra {
     });
 
     this.ready = true;
-
     return db;
   }
 
@@ -95,6 +117,19 @@ class HistoryEra {
         console.log(`removed ${numRemoved} entries from ${this.opts.name}`)
       });
     }
+  }
+
+  setLastUpdate(db) {
+    let lastUpdate = 0;
+
+    db.find({}, (err, docs) => {
+      docs.forEach(function (doc) {
+        if (doc.ts > lastUpdate) {
+          lastUpdate = doc.ts;
+        }
+      });
+      this.lastUpdate = lastUpdate;
+    });
   }
 
   startAutoCleanup(interval, db) {
@@ -126,8 +161,8 @@ class HistoryEra {
       let upTotal = 0;
 
       docs.forEach(function (doc) {
-        downTotal += parseInt(doc.dn);
-        upTotal += parseInt(doc.up);
+        downTotal += doc.dn;
+        upTotal += doc.up;
       });
 
       this.opts.nextEra.addData({
