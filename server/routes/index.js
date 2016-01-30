@@ -5,6 +5,8 @@ var Strategy = require('passport-http').BasicStrategy;
 
 var users = require('../db/users');
 
+var collectHistory = require('../models/collectHistory');
+
 passport.use(new Strategy(
   function(username, password, callback) {
     users.findByUsername(username, function(err, user) {

@@ -2,3 +2,4 @@
 node_modules
 npm-debug.log
 server/db/users.js
+server/db/history

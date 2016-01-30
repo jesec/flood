@@ -241,25 +241,22 @@ var client = {
   },
 
   getTransferStats: function(callback) {
-    try {
-      var request = clientUtil.createMulticallRequest(
-        clientUtil.defaults.clientPropertyMethods
-      );
+    var request = clientUtil.createMulticallRequest(
+      clientUtil.defaults.clientPropertyMethods
+    );
 
-      request = [request];
+    request = [request];
 
-      rTorrent.get('system.multicall', request)
-        .then(function(data) {
-          callback(null, clientUtil.mapClientProps(
-            clientUtil.defaults.clientProperties,
-            data
-          ));
-        }, function(error) {
-          callback(error, null);
-        });
-    } catch(err) {
-      console.log(err);
-    }
+    rTorrent.get('system.multicall', request)
+      .then(function(data) {
+        var parsedData = clientUtil.mapClientProps(
+          clientUtil.defaults.clientProperties,
+          data
+        );
+        callback(null, parsedData);
+      }, function(error) {
+        callback(error, null);
+      });
   }
 };
 
