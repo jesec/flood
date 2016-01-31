@@ -41,6 +41,7 @@
         &--tertiary {
           color: $torrent-details--header--tertiary--foreground;
           font-size: 1em;
+          margin-bottom: $spacing-unit * 1/2;
         }
 
         &--download,
@@ -50,7 +51,18 @@
 
           .icon {
             height: 12px;
+            margin-right: 3px;
+            margin-top: -3px;
+            vertical-align: middle;
             width: 12px;
+          }
+        }
+
+        &--ratio,
+        &--eta {
+
+          .icon {
+            fill: $torrent-details--header--icon--default--fill;
           }
         }
 
@@ -95,6 +107,10 @@
   &__content,
   &__navigation {
     padding: $spacing-unit * 1/2 $spacing-unit;
+  }
+
+  &__heading {
+    padding: $spacing-unit * 1/2 $spacing-unit $spacing-unit * 2/3 $spacing-unit;
   }
 
   &__content {
