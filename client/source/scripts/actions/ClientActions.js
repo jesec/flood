@@ -27,6 +27,27 @@ const ClientActions = {
       });
   },
 
+  fetchTransferHistory(opts) {
+    return axios.get('/client/history', {
+      params: opts
+    })
+    .then((json = {}) => {
+      return json.data;
+    })
+    .then((data) => {
+      AppDispatcher.dispatchServerAction({
+        type: ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_SUCCESS,
+        data
+      });
+    })
+    .catch((error) => {
+      AppDispatcher.dispatchServerAction({
+        type: ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_ERROR,
+        error
+      });
+    })
+  },
+
   setThrottle: function(direction, throttle) {
     return axios.put('/client/settings/speed-limits', {
         direction,

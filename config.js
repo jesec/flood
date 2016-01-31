@@ -3,4 +3,4 @@ const config = {
   pollInterval: 5000
 };
 
-export default config;
+module.exports = config;

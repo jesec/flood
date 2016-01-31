@@ -7,6 +7,7 @@ let stringUtil = require('./util/stringUtil');
 const FILE_PATH = './server/db/history/';
 const MAX_CLEANUP_INTERVAL = 1000 * 60 * 60; // 1 hour
 const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
+const CUMULATIVE_DATA_BUFFER = 1000 * 2;
 const REQUIRED_FIELDS = ['interval', 'maxTime', 'name'];
 
 class HistoryEra {
@@ -28,6 +29,7 @@ class HistoryEra {
     this.removeOutdatedData(this.db);
 
     let cleanupInterval = this.opts.maxTime;
+
     let nextEraUpdateInterval = this.opts.nextEraUpdateInterval;
 
     if (cleanupInterval === 0 || cleanupInterval > MAX_CLEANUP_INTERVAL) {
@@ -53,7 +55,7 @@ class HistoryEra {
 
     let currentTime = Date.now();
 
-    if (currentTime - this.lastUpdate >= this.opts.interval) {
+    if (currentTime - this.lastUpdate >= this.opts.interval - CUMULATIVE_DATA_BUFFER) {
       console.log(`creating new record in ${this.opts.name}`);
 
       this.lastUpdate = currentTime;
@@ -85,6 +87,16 @@ class HistoryEra {
   cleanup(db) {
     this.removeOutdatedData(db);
     db.persistence.compactDatafile();
+  }
+
+  getData(opts, callback) {
+    let minTimestamp = Date.now() - this.opts.maxTime;
+
+    this.db.find({ts: {$gte: minTimestamp}}).sort({ts: 1})
+      .exec(function (err, docs) {
+        callback(err, docs);
+      }
+    );
   }
 
   hasRequiredFields(opts) {

@@ -2,6 +2,7 @@
 var Datastore = require('nedb');
 
 var client = require('./client');
+var config = require('../../config');
 var HistoryEra = require('./HistoryEra');
 
 let pollInterval = null;
@@ -60,9 +61,46 @@ let fiveMinSnapshot = new HistoryEra({
   nextEra: thirtyMinSnapshot
 });
 
-let history = {
-  getHistory: function (opts) {
+let processData = function (opts, callback, error, data) {
+  if (error) {
+    callback(error);
+  }
 
+  data = data.slice(data.length - config.maxHistoryStates);
+
+  let downloadRateHistory = [];
+  let uploadRateHistory = [];
+
+  data.forEach(function (snapshot) {
+    downloadRateHistory.push(snapshot.dn);
+    uploadRateHistory.push(snapshot.up);
+  });
+
+  callback(error, {
+    download: downloadRateHistory,
+    upload: uploadRateHistory
+  });
+};
+
+let history = {
+  get: function (opts, callback) {
+    opts = opts || {};
+
+    if (opts.snapshot === 'fiveMin') {
+      fiveMinSnapshot.getData(opts, processData.bind(this, opts, callback));
+    } else if (opts.snapshot === 'thirtyMin') {
+      thirtyMinSnapshot.getData(opts, processData.bind(this, opts, callback));
+    } else if (opts.snapshot === 'hour') {
+      hourSnapshot.getData(opts, processData.bind(this, opts, callback));
+    } else if (opts.snapshot === 'day') {
+      daySnapshot.getData(opts, processData.bind(this, opts, callback));
+    } else if (opts.snapshot === 'week') {
+      weekSnapshot.getData(opts, processData.bind(this, opts, callback));
+    } else if (opts.snapshot === 'month') {
+      monthSnapshot.getData(opts, processData.bind(this, opts, callback));
+    } else if (opts.snapshot === 'year') {
+      yearSnapshot.getData(opts, processData.bind(this, opts, callback));
+    }
   },
 
   startPolling: function () {

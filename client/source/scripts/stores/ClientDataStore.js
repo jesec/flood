@@ -2,7 +2,7 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import ClientActions from '../actions/ClientActions';
-import config from '../config/config';
+import config from '../../../../config';
 import EventTypes from '../constants/EventTypes';
 
 class ClientDataStoreClass extends BaseStore {
@@ -16,6 +16,10 @@ class ClientDataStoreClass extends BaseStore {
   }
 
   fetchTransferData() {
+    ClientActions.fetchTransferHistory({
+      snapshot: 'fiveMin'
+    });
+
     ClientActions.fetchTransferData();
 
     if (this.pollTransferDataID === null) {
@@ -67,42 +71,22 @@ class ClientDataStoreClass extends BaseStore {
       upload: transferData.uploadRate
     };
 
-    // this.throttles = {
-    //   download: transferData.downloadThrottle,
-    //   upload: transferData.uploadThrottle
-    // };
-
-    // add the latest download & upload rates to the end of the array and remove
-    // the first element in the array. if the arrays are empty, fill in zeros
-    // for the first n entries.
+    // add the latest download & upload throttles to the end of the array and
+    // remove the first element in the array. if the arrays are empty, fill in
+    // zeros the last known throttle value.
     let index = 0;
-    let downloadRateHistory = Object.assign([], this.transferRates.download);
     let downloadRateThrottleHistory = Object.assign([], this.throttles.download);
-    let uploadRateHistory = Object.assign([], this.transferRates.upload);
     let uploadRateThrottleHistory = Object.assign([], this.throttles.upload);
 
-    if (uploadRateHistory.length === config.maxHistoryStates) {
-      downloadRateHistory.shift();
+    if (downloadRateThrottleHistory.length === config.maxHistoryStates) {
+
       downloadRateThrottleHistory.shift();
-      uploadRateHistory.shift();
       uploadRateThrottleHistory.shift();
 
-      downloadRateHistory.push(parseInt(transferData.downloadRate));
       downloadRateThrottleHistory.push(parseInt(transferData.downloadThrottle));
-      uploadRateHistory.push(parseInt(transferData.uploadRate));
       uploadRateThrottleHistory.push(parseInt(transferData.uploadThrottle));
     } else {
       while (index < config.maxHistoryStates) {
-        // if we don't have historical values, we assume zero for the transfer
-        // rate history.
-        if (index < config.maxHistoryStates - 1) {
-          uploadRateHistory[index] = 0;
-          downloadRateHistory[index] = 0;
-        } else {
-          downloadRateHistory[index] = parseInt(transferData.downloadRate);
-          uploadRateHistory[index] = parseInt(transferData.uploadRate);
-        }
-
         // we assume the throttle history has been the same for all previous
         // history states.
         uploadRateThrottleHistory[index] = parseInt(transferData.uploadThrottle);
@@ -110,11 +94,6 @@ class ClientDataStoreClass extends BaseStore {
         index++;
       }
     }
-
-    this.transferRates = {
-      download: downloadRateHistory,
-      upload: uploadRateHistory
-    };
 
     this.throttles = {
       download: downloadRateThrottleHistory,
@@ -126,6 +105,19 @@ class ClientDataStoreClass extends BaseStore {
 
   handleTransferDataError() {
     this.emit(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_ERROR);
+  }
+
+  handleTransferHistoryError(error) {
+    console.trace(error);
+  }
+
+  handleTransferHistorySuccess(transferData) {
+    this.transferRates = {
+      download: transferData.download,
+      upload: transferData.upload
+    };
+
+    this.emit(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS);
   }
 
   startPollingTransferData() {
@@ -163,6 +155,12 @@ AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_SET_THROTTLE_ERROR:
       ClientDataStore.handleSetThrottleError(action.data.error);
+      break;
+    case ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_ERROR:
+      ClientDataStore.handleTransferHistoryError(action.error);
+      break;
+    case ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_SUCCESS:
+      ClientDataStore.handleTransferHistorySuccess(action.data);
       break;
   }
 });
