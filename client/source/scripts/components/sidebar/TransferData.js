@@ -50,8 +50,10 @@ class ClientStats extends React.Component {
   }
 
   isLoading() {
-    return !this.state.transferHistoryRequestSuccess ||
-      !this.state.transferDataRequestSuccess;
+    if (!this.state.transferHistoryRequestSuccess ||
+      !this.state.transferDataRequestSuccess) {
+      return true;
+    }
   }
 
   onTransferDataRequestError() {
