@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
@@ -14,6 +16,25 @@ const UIActions = {
       type: ActionTypes.UI_DISPLAY_MODAL,
       data: null
     });
+  },
+
+  fetchSortProps: function() {
+    return axios.get('/ui/sort-props')
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.UI_SORT_PROPS_REQUEST_SUCCESS,
+          data
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.UI_SORT_PROPS_REQUEST_ERROR,
+          error
+        });
+      });
   },
 
   handleDetailsClick: function(data) {
@@ -45,6 +66,12 @@ const UIActions = {
   },
 
   setTorrentsSort: function(data) {
+    axios
+      .post('/ui/sort-props', data)
+      .catch(function (error) {
+        console.log(error);
+      });
+
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_SORT,
       data

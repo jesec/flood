@@ -4,11 +4,9 @@ var Deserializer = require('./util/deserializer');
 var Serializer = require('./util/serializer');
 
 var rtorrent = {
-
 	initialized: false,
 
 	get: function(api, array) {
-
 		var stream = net.connect({
 			port: 5000,
 			host: 'localhost'
@@ -62,7 +60,6 @@ var rtorrent = {
 
 		return deferred.promise;
 	}
-
 }
 
 module.exports = rtorrent;

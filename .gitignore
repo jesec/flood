@@ -1,5 +1,6 @@
 .DS_Store
 node_modules
 npm-debug.log
+server/db/uiSettings.db
 server/db/users.js
 server/db/history

@@ -10,6 +10,7 @@ class UIStoreClass extends BaseStore {
     super();
 
     this.activeModal = null;
+    this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
     this.torrentDetailsOpen = false;
   }
@@ -21,17 +22,29 @@ class UIStoreClass extends BaseStore {
     }
   }
 
+  fetchLatestTorrentLocation() {
+    TorrentActions.fetchLatestTorrentLocation();
+  }
+
   getActiveModal() {
     return this.activeModal;
   }
 
-  setActiveModal(modal) {
-    this.activeModal = modal;
-    this.emit(EventTypes.UI_MODAL_CHANGE);
+  getLatestTorrentLocation() {
+    return this.latestTorrentLocation;
   }
 
   getTorrentDetailsHash() {
     return this.torrentDetailsHash;
+  }
+
+  handleLatestTorrentLocationRequestSuccess(location) {
+    this.latestTorrentLocation = location;
+    this.emit(EventTypes.UI_LATEST_TORRENT_LOCATION_CHANGE);
+  }
+
+  handleLatestTorrentLocationRequestError(error) {
+    console.log(error);
   }
 
   handleTorrentClick(hash) {
@@ -46,6 +59,11 @@ class UIStoreClass extends BaseStore {
 
   isTorrentDetailsOpen() {
     return this.torrentDetailsOpen;
+  }
+
+  setActiveModal(modal) {
+    this.activeModal = modal;
+    this.emit(EventTypes.UI_MODAL_CHANGE);
   }
 }
 
@@ -63,6 +81,12 @@ AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_DISPLAY_MODAL:
       UIStore.setActiveModal(action.data);
+      break;
+    case ActionTypes.UI_LATEST_TORRENT_LOCATION_REQUEST_SUCCESS:
+      UIStore.handleLatestTorrentLocationRequestSuccess(action.data.path);
+      break;
+    case ActionTypes.UI_LATEST_TORRENT_LOCATION_REQUEST_ERROR:
+      UIStore.handleLatestTorrentLocationRequestError(action.error);
       break;
   }
 });

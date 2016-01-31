@@ -2,8 +2,10 @@ import _ from 'lodash';
 import classnames from 'classnames';
 import React from 'react';
 
+import EventTypes from '../../constants/EventTypes';
 import TextboxRepeater from '../forms/TextboxRepeater';
 import TorrentActions from '../../actions/TorrentActions';
+import UIStore from '../../stores/UIStore';
 
 const METHODS_TO_BIND = [
   'getContent',
@@ -11,7 +13,8 @@ const METHODS_TO_BIND = [
   'handleUrlAdd',
   'handleUrlChange',
   'handleUrlRemove',
-  'handleAddTorrents'
+  'handleAddTorrents',
+  'onLatestTorrentLocationChange'
 ];
 
 export default class AddTorrents extends React.Component {
@@ -27,6 +30,23 @@ export default class AddTorrents extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+  }
+
+  componentWillMount() {
+    this.setState({destination: UIStore.getLatestTorrentLocation()});
+  }
+
+  componentDidMount() {
+    UIStore.listen(EventTypes.UI_LATEST_TORRENT_LOCATION_CHANGE, this.onLatestTorrentLocationChange);
+  }
+
+  componentWillUnmount() {
+    UIStore.unlisten(EventTypes.UI_LATEST_TORRENT_LOCATION_CHANGE, this.onLatestTorrentLocationChange);
+    UIStore.fetchLatestTorrentLocation();
+  }
+
+  onLatestTorrentLocationChange() {
+    this.setState({destination: UIStore.getLatestTorrentLocation()});
   }
 
   getContent() {

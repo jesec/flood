@@ -1,52 +1,46 @@
-var express = require('express');
-var router = express.Router();
-var xmlrpc = require('xmlrpc');
+'use strict';
 
-var client = require('../models/client');
-var history = require('../models/history');
+let express = require('express');
+let router = express.Router();
+let xmlrpc = require('xmlrpc');
 
-var handleClientResponse = function (res) {
-  return function (error, response) {
-    if (error) {
-      console.log(error);
-    }
-    res.json(response);
-  }
-}
+let ajaxUtil = require('../util/ajaxUtil');
+let client = require('../models/client');
+let history = require('../models/history');
 
 router.post('/add', function(req, res, next) {
-  client.add(req.body, handleClientResponse(res));
+  client.add(req.body, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/history', function(req, res, next) {
-  history.get(req.query, handleClientResponse(res));
+  history.get(req.query, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/list', function(req, res, next) {
-  client.getTorrentList(handleClientResponse(res));
+  client.getTorrentList(ajaxUtil.getResponseFn(res));
 });
 
 router.put('/settings/speed-limits', function(req, res, next) {
-  client.setSpeedLimits(req.body, handleClientResponse(res));
+  client.setSpeedLimits(req.body, ajaxUtil.getResponseFn(res));
 });
 
 router.post('/start', function(req, res, next) {
   var hashes = req.body.hashes;
-  client.startTorrent(hashes, handleClientResponse(res));
+  client.startTorrent(hashes, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/stats', function(req, res, next) {
-  client.getTransferStats(handleClientResponse(res));
+  client.getTransferStats(ajaxUtil.getResponseFn(res));
 });
 
 router.post('/stop', function(req, res, next) {
   var hashes = req.body.hashes;
-  client.stopTorrent(hashes, handleClientResponse(res));
+  client.stopTorrent(hashes, ajaxUtil.getResponseFn(res));
 });
 
 router.post('/torrent-details', function(req, res, next) {
   var hash = req.body.hash;
-  client.getTorrentDetails(hash, handleClientResponse(res));
+  client.getTorrentDetails(hash, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/methods.json', function(req, res, next) {
@@ -60,7 +54,7 @@ router.get('/methods.json', function(req, res, next) {
     method = 'system.methodSignature';
   }
 
-  client.listMethods(method, args, handleClientResponse(res));
+  client.listMethods(method, args, ajaxUtil.getResponseFn(res));
 });
 
 module.exports = router;

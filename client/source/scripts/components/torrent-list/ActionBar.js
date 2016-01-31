@@ -34,6 +34,7 @@ export default class ActionBar extends React.Component {
   }
 
   componentDidMount() {
+    TorrentFilterStore.fetchSortProps();
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_SORT_CHANGE, this.onSortChange);
   }
 

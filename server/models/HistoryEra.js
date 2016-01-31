@@ -2,9 +2,9 @@
 
 let Datastore = require('nedb');
 
+let config = require('../../config');
 let stringUtil = require('./util/stringUtil');
 
-const FILE_PATH = './server/db/history/';
 const MAX_CLEANUP_INTERVAL = 1000 * 60 * 60; // 1 hour
 const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
 const CUMULATIVE_DATA_BUFFER = 1000 * 2;
@@ -92,7 +92,8 @@ class HistoryEra {
   getData(opts, callback) {
     let minTimestamp = Date.now() - this.opts.maxTime;
 
-    this.db.find({ts: {$gte: minTimestamp}}).sort({ts: 1})
+    this.db.find({ts: {$gte: minTimestamp}})
+      .sort({ts: 1})
       .exec(function (err, docs) {
         callback(err, docs);
       }
@@ -104,7 +105,7 @@ class HistoryEra {
 
     REQUIRED_FIELDS.forEach(function (field) {
       if (opts[field] == null) {
-        console.warn(`historyEra requires ${field}`);
+        console.warn(`HistoryEra requires ${field}`);
         requirementsMet = false;
       }
     });
@@ -115,7 +116,7 @@ class HistoryEra {
   loadDatabase(dbName) {
     let db = new Datastore({
       autoload: true,
-      filename: `${FILE_PATH}${dbName}.db`
+      filename: `${config.databasePath}history/${dbName}.db`
     });
 
     this.ready = true;

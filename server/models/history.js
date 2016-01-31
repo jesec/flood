@@ -1,5 +1,4 @@
 'use strict';
-var Datastore = require('nedb');
 
 var client = require('./client');
 var config = require('../../config');

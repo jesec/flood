@@ -41,16 +41,18 @@ export default class LineChart extends React.Component {
         })
       ]);
 
-    let lineFunc = d3
-      .svg
-      .line()
-      .x(function(dataPoint, index) {
-        return xRange(index);
-      })
-      .y(function(dataPoint) {
-        return yRange(dataPoint);
-      })
-      .interpolate('basis');
+    let lineFunc = function (interpolation) {
+      return d3
+        .svg
+        .line()
+        .x(function(dataPoint, index) {
+          return xRange(index);
+        })
+        .y(function(dataPoint) {
+          return yRange(dataPoint);
+        })
+        .interpolate(interpolation);
+    }
 
     let areaFunc = d3
       .svg
@@ -64,8 +66,8 @@ export default class LineChart extends React.Component {
       })
       .interpolate('basis');
 
-    let transferDataLinePoints = lineFunc(transferData);
-    let transferLimitLinePoints = lineFunc(transferLimit);
+    let transferDataLinePoints = lineFunc('basis')(transferData);
+    let transferLimitLinePoints = lineFunc('step-after')(transferLimit);
     let transferDataAreaPoints = areaFunc(transferData);
 
     graph

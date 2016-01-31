@@ -1,16 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ClientDataStore from '../../stores/ClientDataStore';
 import Download from '../icons/Download';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import LineChart from '../ui/LineChart';
+import LoadingIndicator from '../ui/LoadingIndicator';
+import TransferDataStore from '../../stores/TransferDataStore';
 import Upload from '../icons/Upload';
 
 const METHODS_TO_BIND = [
   'onTransferDataRequestError',
-  'onTransferDataRequestSuccess'
+  'onTransferDataRequestSuccess',
+  'onTransferHistoryRequestSuccess'
 ];
 
 class ClientStats extends React.Component {
@@ -19,6 +21,7 @@ class ClientStats extends React.Component {
 
     this.state = {
       sidebarWidth: 0,
+      transferHistoryRequestSuccess: false,
       transferDataRequestError: false,
       transferDataRequestSuccess: false
     };
@@ -32,18 +35,23 @@ class ClientStats extends React.Component {
     this.setState({
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
-    ClientDataStore.listen(
-      EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
-      this.onTransferDataRequestSuccess
-    );
-    ClientDataStore.fetchTransferData();
+    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
+      this.onTransferDataRequestSuccess);
+    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
+      this.onTransferHistoryRequestSuccess);
+    TransferDataStore.fetchTransferData();
   }
 
   componentWillUnmount() {
-    ClientDataStore.unlisten(
+    TransferDataStore.unlisten(
       EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
       this.onTransferDataRequestSuccess
     );
+  }
+
+  isLoading() {
+    return !this.state.transferHistoryRequestSuccess ||
+      !this.state.transferDataRequestSuccess;
   }
 
   onTransferDataRequestError() {
@@ -60,17 +68,25 @@ class ClientStats extends React.Component {
     });
   }
 
+  onTransferHistoryRequestSuccess() {
+    if (!this.state.transferHistoryRequestSuccess) {
+      this.setState({
+        transferHistoryRequestSuccess: true
+      });
+    }
+  }
+
   render() {
     if (this.state.transferDataRequestError) {
       return <div>Error</div>;
-    } else if (!this.state.transferDataRequestSuccess) {
-      return <div>Loading</div>;
+    } else if (this.isLoading()) {
+      return <LoadingIndicator />;
     }
 
-    let throttles = ClientDataStore.getThrottles();
-    let transferRate = ClientDataStore.getTransferRate();
-    let transferRates = ClientDataStore.getTransferRates();
-    let transferTotals = ClientDataStore.getTransferTotals();
+    let throttles = TransferDataStore.getThrottles();
+    let transferRate = TransferDataStore.getTransferRate();
+    let transferRates = TransferDataStore.getTransferRates();
+    let transferTotals = TransferDataStore.getTransferTotals();
 
     let downloadRate = format.data(transferRate.download, '/s');
     let downloadTotal = format.data(transferTotals.download);

@@ -7,8 +7,13 @@ import Modals from './components/modals/Modals';
 import Sidebar from './components/panels/Sidebar';
 import TorrentListView from './components/panels/TorrentListView';
 import TorrentDetailsView from './components/panels/TorrentDetailsView';
+import TorrentActions from './actions/TorrentActions';
 
 class FloodApp extends React.Component {
+  componentDidMount() {
+    TorrentActions.fetchLatestTorrentLocation();
+  }
+
   render() {
     return (
       <Application>

@@ -1,8 +1,9 @@
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import TorrentActions from '../actions/TorrentActions';
 import EventTypes from '../constants/EventTypes';
+import TorrentActions from '../actions/TorrentActions';
+import UIActions from '../actions/UIActions';
 
 class TorrentFilterStoreClass extends BaseStore {
   constructor() {
@@ -18,17 +19,24 @@ class TorrentFilterStoreClass extends BaseStore {
     };
   }
 
-  getStatusFilter() {
-    return this.statusFilter;
-  }
-
-  setStatusFilter(filter) {
-    this.statusFilter = filter;
-    this.emit(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE);
+  fetchSortProps() {
+    UIActions.fetchSortProps();
   }
 
   getSearchFilter() {
     return this.searchFilter;
+  }
+
+  getStatusFilter() {
+    return this.statusFilter;
+  }
+
+  getTorrentsSort() {
+    return this.sortTorrentsBy;
+  }
+
+  handleSortPropsRequestSuccess(sortBy) {
+    this.setTorrentsSort(sortBy);
   }
 
   setSearchFilter(filter) {
@@ -36,8 +44,9 @@ class TorrentFilterStoreClass extends BaseStore {
     this.emit(EventTypes.UI_TORRENTS_FILTER_SEARCH_CHANGE);
   }
 
-  getTorrentsSort() {
-    return this.sortTorrentsBy;
+  setStatusFilter(filter) {
+    this.statusFilter = filter;
+    this.emit(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE);
   }
 
   setTorrentsSort(sortBy) {
@@ -60,6 +69,9 @@ AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_SET_TORRENT_SORT:
       TorrentFilterStore.setTorrentsSort(action.data);
+      break;
+    case ActionTypes.UI_SORT_PROPS_REQUEST_SUCCESS:
+      TorrentFilterStore.handleSortPropsRequestSuccess(action.data);
       break;
   }
 });
