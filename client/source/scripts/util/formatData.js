@@ -55,7 +55,7 @@ const format = {
             {eta.minutes}<em className="unit">m</em>
           </span>
           <span className="torrent__details--segment">
-            {eta.seconds}<em className="unit">s</em>
+            {eta.remainingSeconds}<em className="unit">s</em>
           </span>
         </span>
       );

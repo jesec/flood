@@ -98,6 +98,7 @@
   }
 
   &__content {
+    background: $torrent-details--content--background;
     flex: 1;
     overflow: auto;
 

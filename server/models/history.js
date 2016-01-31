@@ -9,7 +9,7 @@ let pollInterval = null;
 let yearSnapshot = new HistoryEra({
   interval: 1000 * 60 * 60 * 24 * 7, // 7 days
   name: 'yearSnapshot',
-  maxTime: 0 // 365 days
+  maxTime: 0 // infinite
 });
 
 let monthSnapshot = new HistoryEra({
