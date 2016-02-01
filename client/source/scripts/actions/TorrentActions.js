@@ -36,6 +36,25 @@ const TorrentActions = {
       });
   },
 
+  deleteTorrents: function(hash) {
+    return axios.post('/client/torrents/delete', {hash})
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_REMOVE_TORRENT_SUCCESS,
+          data
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_REMOVE_TORRENT_ERROR,
+          error
+        });
+      });
+  },
+
   fetchLatestTorrentLocation: function () {
     return axios.get('/ui/torrent-location')
       .then((json = {}) => {
@@ -56,7 +75,7 @@ const TorrentActions = {
   },
 
   fetchTorrents: function () {
-    return axios.get('/client/list')
+    return axios.get('/client/torrents')
       .then((json = {}) => {
         return json.data;
       })

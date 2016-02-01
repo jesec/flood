@@ -57,7 +57,7 @@ export default class Torrent extends React.Component {
     });
 
     return (
-      <li className={classes} onMouseDown={this.handleClick}
+      <li className={classes} onClick={this.handleClick}
         onContextMenu={this.handleRightClick}>
         <ul className="torrent__details">
           <li className="torrent__details--primary text-overflow">

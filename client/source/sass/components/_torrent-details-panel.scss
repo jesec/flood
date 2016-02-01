@@ -128,6 +128,7 @@
   &__navigation {
     box-shadow: 1px 0 0 $torrent-details--navigation--border;
     background: $torrent-details--navigation--background;
+    min-width: 125px;
     padding-left: 0;
     padding-right: 0;
 

@@ -23,10 +23,15 @@
     top: 10%;
     transform: translate(-50%, 0);
     width: 500px;
-  }
-}
 
-.modal {
+    &--align-center {
+      text-align: center;
+    }
+  }
+
+  &__footer {
+    margin-top: $spacing-unit;
+  }
 
   &__button-group {
     text-align: right;
@@ -38,9 +43,6 @@
       }
     }
   }
-}
-
-.modal {
 
   &__header {
     color: $modal--header--foreground;
@@ -48,9 +50,6 @@
     font-weight: 400;
     margin-bottom: 20px;
   }
-}
-
-.modal {
 
   &__animation-enter {
     opacity: 0;

@@ -4,9 +4,11 @@ import Action from './Action';
 import Add from '../icons/Add';
 import EventTypes from '../../constants/EventTypes';
 import Pause from '../icons/Pause';
+import Remove from '../icons/Remove';
 import SortDropdown from './SortDropdown';
 import Start from '../icons/Start';
 import Stop from '../icons/Stop';
+import stringUtil from '../../../../../util/stringUtil';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
@@ -14,6 +16,7 @@ import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [
   'handleAddTorrents',
+  'handleRemoveTorrents',
   'handleSortChange',
   'handleStart',
   'handleStop',
@@ -44,6 +47,55 @@ export default class ActionBar extends React.Component {
 
   handleAddTorrents() {
     UIActions.displayModal('add-torrents');
+  }
+
+  handleRemoveTorrentConfirm(torrents) {
+    TorrentActions.deleteTorrents(torrents);
+  }
+
+  handleRemoveTorrentDecline() {
+    console.log('decline');
+  }
+
+  handleRemoveTorrents() {
+    let selectedTorrents = TorrentStore.getSelectedTorrents() || [];
+    let selectedTorrentCount = selectedTorrents.length;
+
+    let actions = [
+      {
+        clickHandler: this.handleRemoveTorrentDecline,
+        content: 'No',
+        triggerDismiss: true,
+        type: 'secondary'
+      },
+      {
+        clickHandler: this.handleRemoveTorrentConfirm.bind(this, selectedTorrents),
+        content: 'Yes',
+        triggerDismiss: true,
+        type: 'primary'
+      }
+    ];
+    let torrentText = stringUtil.pluralize('torrent', selectedTorrentCount);
+    let content = `You are about to remove ${selectedTorrentCount} ${torrentText}.`;
+
+    if (selectedTorrentCount === 0) {
+      actions = [
+        {
+          clickHandler: null,
+          content: 'OK',
+          triggerDismiss: true,
+          type: 'primary'
+        }
+      ];
+      content = 'You haven\'t selected any torrents.';
+    }
+
+    UIActions.displayModal({
+      actions,
+      content,
+      heading: 'Are you sure?',
+      type: 'confirm'
+    });
   }
 
   handleSortChange(sortBy) {
@@ -83,6 +135,8 @@ export default class ActionBar extends React.Component {
           <div className="action-bar__group action-bar__group--has-divider">
             <Action label="Add Torrent" slug="add-torrent" icon={<Add />}
               clickHandler={this.handleAddTorrents} />
+            <Action label="Remove Torrent" slug="remove-torrent" icon={<Remove />}
+              clickHandler={this.handleRemoveTorrents} />
           </div>
         </div>
       </nav>

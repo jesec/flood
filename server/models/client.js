@@ -49,6 +49,22 @@ var client = {
     });
   },
 
+  deleteTorrents: function(hash, callback) {
+    if (!util.isArray(hash)) {
+      hash = [hash];
+    } else {
+      hash = String(hash).split(',');
+    }
+
+    for (i = 0, len = hash.length; i < len; i++) {
+      rTorrent.get('d.erase', [hash[i]]).then(function(data) {
+        callback(null, data);
+      }, function(error) {
+        callback(error, null);
+      });
+    }
+  },
+
   getTorrentDetails: function(hash, callback) {
     var peerParams = [hash, ''].concat(clientUtil.defaults.peerPropertyMethods);
     var fileParams = [hash, ''].concat(clientUtil.defaults.filePropertyMethods);

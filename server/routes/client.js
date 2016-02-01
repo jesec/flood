@@ -16,10 +16,6 @@ router.get('/history', function(req, res, next) {
   history.get(req.query, ajaxUtil.getResponseFn(res));
 });
 
-router.get('/list', function(req, res, next) {
-  client.getTorrentList(ajaxUtil.getResponseFn(res));
-});
-
 router.put('/settings/speed-limits', function(req, res, next) {
   client.setSpeedLimits(req.body, ajaxUtil.getResponseFn(res));
 });
@@ -41,6 +37,15 @@ router.post('/stop', function(req, res, next) {
 router.post('/torrent-details', function(req, res, next) {
   var hash = req.body.hash;
   client.getTorrentDetails(hash, ajaxUtil.getResponseFn(res));
+});
+
+router.get('/torrents', function(req, res, next) {
+  client.getTorrentList(ajaxUtil.getResponseFn(res));
+});
+
+router.post('/torrents/delete', function(req, res, next) {
+  var hash = req.body.hash;
+  client.deleteTorrents(hash, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/methods.json', function(req, res, next) {

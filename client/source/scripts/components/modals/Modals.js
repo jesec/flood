@@ -3,6 +3,7 @@ import React from 'react';
 
 import AddTorrents from './AddTorrents';
 import EventTypes from '../../constants/EventTypes';
+import Modal from './Modal';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
@@ -11,7 +12,7 @@ const METHODS_TO_BIND = [
   'onModalChange'
 ];
 
-export default class Modal extends React.Component {
+export default class Modals extends React.Component {
   constructor() {
     super();
 
@@ -32,12 +33,16 @@ export default class Modal extends React.Component {
     UIStore.unlisten(EventTypes.UI_MODAL_CHANGE, this.onModalChange);
   }
 
+  dismissModal() {
+    UIActions.dismissModal();
+  }
+
   handleModalClick(event) {
     event.stopPropagation();
   }
 
   handleOverlayClick() {
-    UIActions.dismissModal();
+    this.dismissModal();
   }
 
   onModalChange() {
@@ -47,7 +52,24 @@ export default class Modal extends React.Component {
   render() {
     let modal = null;
 
-    switch (this.state.activeModal) {
+    let modalOptions = null;
+    let modalType = this.state.activeModal;
+
+    if (modalType && modalType.type) {
+      modalOptions = modalType;
+      modalType = modalType.type;
+    }
+
+    switch (modalType) {
+      case 'confirm':
+        modal = (
+          <Modal actions={modalOptions.actions}
+            alignment="center"
+            content={modalOptions.content}
+            dismiss={this.dismissModal}
+            heading={modalOptions.heading} />
+        );
+        break;
       case 'add-torrents':
         modal = (
           <AddTorrents dismissModal={this.handleOverlayClick} />

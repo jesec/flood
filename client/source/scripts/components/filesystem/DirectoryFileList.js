@@ -12,7 +12,6 @@ export default class DirectoryFiles extends React.Component {
     });
 
     let files = branch.map((file, fileIndex) => {
-      // console.log(file);
       let fileSize = format.data(file.sizeBytes, '', 1);
 
       return (

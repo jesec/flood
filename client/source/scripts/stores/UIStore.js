@@ -61,7 +61,7 @@ class UIStoreClass extends BaseStore {
     return this.torrentDetailsOpen;
   }
 
-  setActiveModal(modal) {
+  setActiveModal(modal = {}) {
     this.activeModal = modal;
     this.emit(EventTypes.UI_MODAL_CHANGE);
   }

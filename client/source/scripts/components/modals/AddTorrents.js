@@ -3,8 +3,10 @@ import classnames from 'classnames';
 import React from 'react';
 
 import EventTypes from '../../constants/EventTypes';
+import Modal from './Modal';
 import TextboxRepeater from '../forms/TextboxRepeater';
 import TorrentActions from '../../actions/TorrentActions';
+import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
 const METHODS_TO_BIND = [
@@ -45,35 +47,47 @@ export default class AddTorrents extends React.Component {
     UIStore.fetchLatestTorrentLocation();
   }
 
+  dismissModal() {
+    UIActions.dismissModal();
+  }
+
   onLatestTorrentLocationChange() {
     this.setState({destination: UIStore.getLatestTorrentLocation()});
   }
 
+  getActions() {
+    return [
+      {
+        clickHandler: null,
+        content: 'Cancel',
+        triggerDismiss: true,
+        type: 'secondary'
+      },
+      {
+        clickHandler: this.handleAddTorrents,
+        content: 'Add Torrent',
+        triggerDismiss: true,
+        type: 'primary'
+      }
+    ];
+  }
+
   getContent() {
     return (
-      <div className="modal__content" onClick={this.handleMenuWrapperClick}>
-        <div className="modal__header">Add Torrents</div>
-        <div className="modal__content__container">
-          <div className="form__row">
-            <TextboxRepeater placeholder="Torrent URL"
-              handleTextboxAdd={this.handleUrlAdd}
-              handleTextboxChange={this.handleUrlChange}
-              handleTextboxRemove={this.handleUrlRemove}
-              textboxes={this.state.urlTextboxes} />
-          </div>
-          <div className="form__row">
-            <input className="textbox"
-              onChange={this.handleDestinationChange}
-              placeholder="Destination"
-              value={this.state.destination}
-              type="text" />
-          </div>
-          <div className="modal__button-group form__row">
-            <button className="button button--deemphasize"
-              onClick={this.props.dismissModal}>Cancel</button>
-            <button className="button button--primary"
-              onClick={this.handleAddTorrents}>Add Torrent</button>
-          </div>
+      <div className="form">
+        <div className="form__row">
+          <TextboxRepeater placeholder="Torrent URL"
+            handleTextboxAdd={this.handleUrlAdd}
+            handleTextboxChange={this.handleUrlChange}
+            handleTextboxRemove={this.handleUrlRemove}
+            textboxes={this.state.urlTextboxes} />
+        </div>
+        <div className="form__row">
+          <input className="textbox"
+            onChange={this.handleDestinationChange}
+            placeholder="Destination"
+            value={this.state.destination}
+            type="text" />
         </div>
       </div>
     );
@@ -115,6 +129,11 @@ export default class AddTorrents extends React.Component {
   }
 
   render() {
-    return this.getContent();
+    return (
+      <Modal heading="Add Torrents"
+        content={this.getContent()}
+        actions={this.getActions()}
+        dismiss={this.dismissModal} />
+    );
   }
 }
