@@ -125,6 +125,8 @@ export default class TorrentDetails extends React.Component {
       let selectedHash = UIStore.getTorrentDetailsHash();
       let torrent = TorrentStore.getTorrent(selectedHash);
 
+      console.log(torrent.message);
+
       detailContent = (
         <div className="torrent-details">
           <TorrentHeading torrent={torrent} />

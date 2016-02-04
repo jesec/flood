@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
@@ -8,6 +9,7 @@ import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
 const METHODS_TO_BIND = [
+  'handleKeyPress',
   'handleOverlayClick',
   'onModalChange'
 ];
@@ -23,18 +25,28 @@ export default class Modals extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+
+    this.handleKeyPress = _.throttle(this.handleKeyPress, 1000);
   }
 
   componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyPress);
     UIStore.listen(EventTypes.UI_MODAL_CHANGE, this.onModalChange);
   }
 
   componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyPress);
     UIStore.unlisten(EventTypes.UI_MODAL_CHANGE, this.onModalChange);
   }
 
   dismissModal() {
     UIActions.dismissModal();
+  }
+
+  handleKeyPress(event) {
+    if (this.state.activeModal != null && event.keyCode === 27) {
+      this.dismissModal();
+    }
   }
 
   handleModalClick(event) {

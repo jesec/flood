@@ -10,7 +10,8 @@ const METHODS_TO_BIND = [
   'handleDropdownBlur',
   'handleDropdownClick',
   'handleDropdownFocus',
-  'handleItemSelect'
+  'handleItemSelect',
+  'handleKeyPress'
 ];
 
 export default class Dropdown extends React.Component {
@@ -24,6 +25,20 @@ export default class Dropdown extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+
+    this.handleKeyPress = _.throttle(this.handleKeyPress, 1000);
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyPress);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyPress);
+  }
+
+  closeDropdown() {
+    this.refs.dropdown.blur();
   }
 
   handleDropdownBlur() {
@@ -34,7 +49,7 @@ export default class Dropdown extends React.Component {
 
   handleDropdownClick() {
     if (this.state.isExpanded) {
-      this.refs.dropdown.blur();
+      this.closeDropdown();
     } else {
       this.refs.dropdown.focus();
     }
@@ -47,8 +62,14 @@ export default class Dropdown extends React.Component {
   }
 
   handleItemSelect(item) {
-    this.refs.dropdown.blur();
+    this.closeDropdown();
     this.props.handleItemSelect(item);
+  }
+
+  handleKeyPress(event) {
+    if (this.state.isExpanded && event.keyCode === 27) {
+      this.closeDropdown();
+    }
   }
 
   getDropdownButton() {

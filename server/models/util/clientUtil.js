@@ -26,6 +26,7 @@ var clientUtil = {
       'chunkSize',
       'chunksCompleted',
 
+      'message',
       'peersAccounted',
       'peersComplete',
       'peerExchange',
@@ -67,6 +68,7 @@ var clientUtil = {
       'd.get_chunk_size=',
       'd.get_completed_chunks=',
 
+      'd.get_message=',
       'd.get_peers_accounted=',
       'd.get_peers_complete=',
       'd.get_peer_exchange=',

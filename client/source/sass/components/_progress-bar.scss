@@ -53,5 +53,9 @@
     .is-selected & {
       background: $progress-bar--fill--selected;
     }
+
+    .has-error & {
+      background: $progress-bar--fill--error;
+    }
   }
 }

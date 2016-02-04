@@ -93,8 +93,7 @@
   }
 
   &__parent-directory {
-    color: $torrent-details--directory-tree--parent-directory--foreground;
-    font-size: 1.125em;
+    margin-left: -1px;
 
     .icon {
       fill: $torrent-details--directory-tree--parent-directory--icon--fill;

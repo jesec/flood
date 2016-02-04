@@ -44,6 +44,7 @@ export default class Torrent extends React.Component {
 
     let classes = classNames({
       'torrent': true,
+      'has-error': torrent.status.indexOf('has-error') > -1,
       'is-selected': this.props.selected,
       'is-stopped': torrent.status.indexOf('is-stopped') > -1,
       'is-paused': torrent.status.indexOf('is-paused') > -1,

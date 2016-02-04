@@ -164,7 +164,8 @@ var client = {
               torrent.isOpen,
               torrent.uploadRate,
               torrent.downloadRate,
-              torrent.state
+              torrent.state,
+              torrent.message
             );
 
             return torrent;

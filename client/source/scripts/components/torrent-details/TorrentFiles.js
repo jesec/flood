@@ -23,6 +23,15 @@ export default class TorrentFiles extends React.Component {
     return tree;
   }
 
+  getFileData(torrent) {
+    return (
+      <div className="directory-tree__node directory-tree__node--file">
+        <File />
+        {torrent.filename}
+      </div>
+    );
+  }
+
   getFileList(files) {
     let tree = {};
 
@@ -31,10 +40,6 @@ export default class TorrentFiles extends React.Component {
     });
 
     return <DirectoryTree tree={tree} depth={0} />;
-  }
-
-  getFileData(torrent, files) {
-
   }
 
   isLoaded() {
@@ -47,35 +52,27 @@ export default class TorrentFiles extends React.Component {
 
   render() {
     let {files, torrent} = this.props;
+    let fileInfo = null;
+
+    let directoryHeading = (
+      <div className="directory-tree__node
+        directory-tree__parent-directory torrent-details__section__heading">
+        <Disk />
+        {torrent.directory}
+      </div>
+    );
 
     if (this.isLoaded()) {
-      // We've received full file details from the client.
-      let fileList = this.getFileList(files);
-
-      return (
-        <div className="directory-tree torrent-details__section">
-          <div className="directory-tree__node directory-tree__parent-directory">
-            <Disk />
-            {torrent.directory}
-          </div>
-          {fileList}
-        </div>
-      );
-    } else {
-      // We've only received the top-level file details from the torrent list.
-      return (
-        <div className="directory-tree torrent-details__section">
-          <div className="directory-tree__node
-            directory-tree__parent-directory">
-            <Disk />
-            {torrent.directory}
-          </div>
-          <div className="directory-tree__node directory-tree__node--file">
-            <File />
-            {torrent.filename}
-          </div>
-        </div>
-      );
+      fileInfo = this.getFileList(files);
+    } else if (torrent.filename) {
+      fileInfo = this.getFileData(torrent);
     }
+
+    return (
+      <div className="directory-tree torrent-details__section">
+        {directoryHeading}
+        {fileInfo}
+      </div>
+    );
   }
 }

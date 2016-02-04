@@ -60,7 +60,7 @@ var FormatUtil = {
     }
   },
 
-  status: function(isHashChecking, isComplete, isOpen, uploadRate, downloadRate, state) {
+  status: function(isHashChecking, isComplete, isOpen, uploadRate, downloadRate, state, message) {
     var torrentStatus = [];
 
     if (isHashChecking === '1') {
@@ -82,6 +82,10 @@ var FormatUtil = {
   	} else if (isComplete === '0' && isOpen === '0' && state === '0') {
       torrentStatus.push('is-stopped');
   	}
+
+    if (message.length) {
+      torrentStatus.push('has-error');
+    }
 
     if (uploadRate === '0' && downloadRate === '0') {
       torrentStatus.push('is-inactive');

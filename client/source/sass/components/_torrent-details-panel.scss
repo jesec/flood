@@ -27,6 +27,20 @@
   &__heading {
     box-shadow: 0 1px 0 $torrent-details--header--border;
     flex: 0 0 auto;
+    padding: $spacing-unit * 1/2 $spacing-unit $spacing-unit * 2/3 $spacing-unit;
+
+    &.is-stopped {
+
+      .torrent {
+
+        &__details {
+
+          &--tertiary {
+            color: $torrent-details--header--tertiary--foreground;
+          }
+        }
+      }
+    }
 
     .torrent {
 
@@ -86,37 +100,26 @@
     width: 100%;
 
     &__heading {
-      color: $torrent-details--table--header;
-      font-size: 0.7em;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
 
-      th {
-        font-weight: 500;
+      &--primary {
+        color: $torrent-details--directory-tree--parent-directory--foreground;
+        font-size: 1.125em;
       }
 
-      &__count {
-        color: $torrent-details--table--header--count;
-        display: inline-block;
-        margin-left: 5px;
+      &--secondary {
+        color: $torrent-details--table--header;
+        font-size: 0.7em;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
       }
     }
-  }
-
-  &__heading,
-  &__content,
-  &__navigation {
-    padding: $spacing-unit * 1/2 $spacing-unit;
-  }
-
-  &__heading {
-    padding: $spacing-unit * 1/2 $spacing-unit $spacing-unit * 2/3 $spacing-unit;
   }
 
   &__content {
     background: $torrent-details--content--background;
     flex: 1;
     overflow: auto;
+    padding: $spacing-unit * 2/3 $spacing-unit;
 
     &__wrapper {
       display: flex;
@@ -129,8 +132,7 @@
     box-shadow: 1px 0 0 $torrent-details--navigation--border;
     background: $torrent-details--navigation--background;
     min-width: 125px;
-    padding-left: 0;
-    padding-right: 0;
+    padding: $spacing-unit * 1/2 0;
 
     .navigation {
 
@@ -145,6 +147,30 @@
           box-shadow: 1px 0 0 $torrent-details--navigation--item--border--active;
           color: $torrent-details--navigation--item--foreground--active;
         }
+      }
+    }
+  }
+
+  &__section {
+
+    &__heading,
+    &__null-data {
+      color: $torrent-details--directory-tree--parent-directory--foreground;
+      font-size: 1.125em;
+    }
+
+    &__heading {
+
+      &__count {
+        background: $torrent-details--table--header--count--background;
+        border-radius: 20px;
+        color: $torrent-details--table--header--count--foreground;
+        display: inline-block;
+        font-size: 0.6em;
+        line-height: 1.4;
+        margin-left: 5px;
+        padding: 0 5px;
+        vertical-align: middle;
       }
     }
   }

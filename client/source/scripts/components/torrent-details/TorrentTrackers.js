@@ -20,25 +20,36 @@ export default class TorrentTrackrs extends React.Component {
       );
     });
 
-    return (
-      <div className="torrent-details__trackers torrent-details__section">
-        <table className="torrent-details__table table">
-          <thead className="torrent-details__table__heading">
-            <tr>
-              <th>
-                Trackers
-                <span className="torrent-details__table__heading__count">
-                  {trackerCount}
-                </span>
-              </th>
-              <th>Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            {trackerDetails}
-          </tbody>
-        </table>
-      </div>
-    );
+    if (trackerCount) {
+      return (
+        <div className="torrent-details__trackers torrent-details__section">
+          <table className="torrent-details__table table">
+            <thead className="torrent-details__table__heading">
+              <tr>
+                <th className="torrent-details__table__heading--primary">
+                  Trackers
+                  <span
+                    className="torrent-details__section__heading__count">
+                    {trackerCount}
+                  </span>
+                </th>
+                <th className="torrent-details__table__heading--secondary">
+                  Type
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {trackerDetails}
+            </tbody>
+          </table>
+        </div>
+      );
+    } else {
+      return (
+        <span className="torrent-details__section__null-data">
+          There is no tracker data for this torrent.
+        </span>
+      );
+    }
   }
 }

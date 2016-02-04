@@ -53,10 +53,6 @@ export default class ActionBar extends React.Component {
     TorrentActions.deleteTorrents(torrents);
   }
 
-  handleRemoveTorrentDecline() {
-    console.log('decline');
-  }
-
   handleRemoveTorrents() {
     let selectedTorrents = TorrentStore.getSelectedTorrents() || [];
     let selectedTorrentCount = selectedTorrents.length;
