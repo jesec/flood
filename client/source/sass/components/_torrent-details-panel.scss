@@ -42,6 +42,16 @@
       }
     }
 
+    &.has-error {
+
+      .progress-bar {
+
+        &__fill {
+          background: $torrent-details--header--progress-bar--fill--error;
+        }
+      }
+    }
+
     .torrent {
 
       &__details {

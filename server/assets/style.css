@@ -1178,7 +1178,7 @@ body {
     .is-selected .progress-bar__fill {
       background: #fff; }
     .has-error .progress-bar__fill {
-      background: #c81831; }
+      background: #e95779; }
 
 .application__sidebar {
   box-shadow: 1px 0 rgba(6, 9, 11, 0.3);
@@ -1354,6 +1354,8 @@ body {
     padding: 12.5px 25px 16.66667px 25px; }
     .torrent-details__heading.is-stopped .torrent__details--tertiary {
       color: #7b9cb4; }
+    .torrent-details__heading.has-error .progress-bar__fill {
+      background: #be2558; }
     .torrent-details__heading .torrent__details--name {
       color: #97bbd5;
       font-size: 1.7em;

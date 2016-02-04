@@ -27,6 +27,7 @@ export default class TorrentHeading extends React.Component {
     let uploadTotal = format.data(torrent.uploadTotal);
 
     let classes = classNames('torrent-details__heading', {
+      'has-error': torrent.status.indexOf('has-error') > -1,
       'is-selected': this.props.selected,
       'is-stopped': torrent.status.indexOf('is-stopped') > -1,
       'is-paused': torrent.status.indexOf('is-paused') > -1,

@@ -117,7 +117,7 @@ $progress-bar--fill: $green;
 $progress-bar--fill--stopped: #e3e5e5;
 $progress-bar--fill--completed: $blue;
 $progress-bar--fill--selected: #fff;
-$progress-bar--fill--error: #c81831;
+$progress-bar--fill--error: #e95779;
 
 // torrent details
 $torrent-details--background: #162835;
@@ -127,6 +127,7 @@ $torrent-details--header--border: rgba(#040d13, 0.3);
 $torrent-details--header--name--foreground: #97bbd5;
 $torrent-details--header--tertiary--foreground: #7b9cb4;
 $torrent-details--header--progress-bar--track: #2a3e4c;
+$torrent-details--header--progress-bar--fill--error: #be2558;
 
 $torrent-details--navigation--border: rgba(#040d13, 0.35);
 $torrent-details--navigation--item--background--active: rgba(#349cf4, 0.07);
