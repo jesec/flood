@@ -23,15 +23,15 @@ var clientUtil = {
       'bytesDone',
       'sizeBytes',
 
-      'chunkSize',
-      'chunksCompleted',
+      // 'chunkSize',
+      // 'chunksCompleted',
 
-      'message',
-      'peersAccounted',
-      'peersComplete',
-      'peerExchange',
-      'peersNotConnected',
-      'trackerFocus',
+      'connectedPeers',
+      'connectedSeeds',
+      // 'peerExchange',
+      'peersConnected',
+      // 'peersNotConnected',
+      // 'trackerFocus',
 
       'directory',
       'filename',
@@ -40,49 +40,98 @@ var clientUtil = {
       'directoryBase',
 
       'seeding',
-      'added'
+      'added',
+
+      // 'leeches',
+      // 'seeds',
+      'creationDate',
+      'freeDiskSpace',
+      // 'localId',
+      // 'localIdHtml',
+      // 'maxFileSize',
+      // 'maxSizePex',
+      'throttleName',
+      // 'tiedToFile',
+      // 'trackerNumWant',
+      // 'trackerSize',
+      // 'isMultiFile',
+      // 'isPexActive',
+      'isPrivate',
+
+      'comment',
+      'ignoreScheduler',
+      'totalSeeds',
+      'totalPeers',
+      // 'cat_dViews',
+
+      // 'mode'
     ],
     torrentPropertyMethods: [
+      '', // yep, rTorrent requires an empty string as the first item.
       'main',
 
-      'd.get_hash=',
-      'd.get_name=',
-      'd.get_message=',
+      'd.hash=',
+      'd.name=',
+      'd.message=',
 
-      'd.get_state=',
-      'd.get_state_changed=',
+      'd.state=',
+      'd.state_changed=',
       'd.is_active=',
-      'd.get_complete=',
+      'd.complete=',
       'd.is_hash_checking=',
       'd.is_open=',
 
-      'd.get_up_rate=',
-      'd.get_up_total=',
-      'd.get_down_rate=',
-      'd.get_down_total=',
-      'd.get_ratio=',
+      'd.up.rate=',
+      'd.up.total=',
+      'd.down.rate=',
+      'd.down.total=',
+      'd.ratio=',
 
-      'd.get_bytes_done=',
-      'd.get_size_bytes=',
+      'd.bytes_done=',
+      'd.size_bytes=',
 
-      'd.get_chunk_size=',
-      'd.get_completed_chunks=',
+      // 'd.chunk_size=',
+      // 'd.completed_chunks=',
 
-      'd.get_message=',
-      'd.get_peers_accounted=',
-      'd.get_peers_complete=',
-      'd.get_peer_exchange=',
-      'd.get_peers_not_connected=',
-      'd.get_tracker_focus=',
+      'd.peers_accounted=', // connnected peers
+      'd.peers_complete=', // connected seeds
+      // 'd.peer_exchange=',
+      'd.peers_connected=', // connected peers + seeds
+      // 'd.peers_not_connected=',
+      // 'd.tracker_focus=',
 
-      'd.get_directory=',
-      'd.get_base_filename=',
-      'd.get_base_path=',
-      'd.get_base_filename=',
-      'd.get_directory_base=',
+      'd.directory=',
+      'd.base_filename=',
+      'd.base_path=',
+      'd.base_filename=',
+      'd.directory_base=',
 
-      'd.get_custom=seedingtime',
-      'd.get_custom=addtime'
+      'd.custom=seedingtime',
+      'd.custom=addtime',
+
+      // 'd.connection_leech=',
+      // 'd.connection_seed=',
+      'd.creation_date=',
+      'd.free_diskspace=',
+      // 'd.local_id=',
+      // 'd.local_id_html=',
+      // 'd.max_file_size=',
+      // 'd.max_size_pex=',
+      'd.throttle_name=',
+      // 'd.tied_to_file=',
+      // 'd.tracker_numwant=',
+      // 'd.tracker_size=',
+      // 'd.is_multi_file=',
+      // 'd.is_pex_active=',
+      'd.is_private=',
+
+      'd.custom2=',
+      'd.custom=sch_ignore', // ignore scheduler
+      'cat="$t.multicall=d.hash=,t.scrape_complete=,cat={@!@}"', // total seeds
+      'cat="$t.multicall=d.hash=,t.scrape_incomplete=,cat={@!@}"', // total peers
+      // 'cat=$d.views=',
+
+      // 'd.mode='
     ],
     fileProperties: [
       'path',

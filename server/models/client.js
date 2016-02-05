@@ -136,7 +136,7 @@ var client = {
   },
 
   getTorrentList: function(callback) {
-    rTorrent.get('d.multicall', clientUtil.defaults.torrentPropertyMethods)
+    rTorrent.get('d.multicall2', clientUtil.defaults.torrentPropertyMethods)
       .then(function(data) {
         try {
           // create torrent array, each item in the array being
@@ -147,6 +147,8 @@ var client = {
           );
           // Calculate extra properties.
           torrents = torrents.map(function(torrent) {
+            torrent.totalPeers = formatUtil.parsePeers(torrent.totalPeers);
+            torrent.totalSeeds = formatUtil.parsePeers(torrent.totalSeeds);
             torrent.percentComplete = formatUtil.percentComplete(
               torrent.bytesDone,
               torrent.sizeBytes

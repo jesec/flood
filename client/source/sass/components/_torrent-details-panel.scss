@@ -126,12 +126,12 @@
   }
 
   &__content {
-    background: $torrent-details--content--background;
     flex: 1;
     overflow: auto;
     padding: $spacing-unit * 2/3 $spacing-unit;
 
     &__wrapper {
+      background: $torrent-details--content--background;
       display: flex;
       flex: 1;
       overflow: hidden;
@@ -139,8 +139,8 @@
   }
 
   &__navigation {
-    box-shadow: 1px 0 0 $torrent-details--navigation--border;
     background: $torrent-details--navigation--background;
+    box-shadow: 1px 0 0 $torrent-details--navigation--border;
     min-width: 125px;
     padding: $spacing-unit * 1/2 0;
 

@@ -8,6 +8,7 @@ import EventTypes from '../../constants/EventTypes';
 import NavigationList from '../ui/NavigationList';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFiles from '../torrent-details/TorrentFiles';
+import TorrentGeneralInfo from '../torrent-details/TorrentGeneralInfo';
 import TorrentHeading from '../torrent-details/TorrentHeading';
 import TorrentPeers from '../torrent-details/TorrentPeers';
 import TorrentStore from '../../stores/TorrentStore';
@@ -32,7 +33,7 @@ export default class TorrentDetails extends React.Component {
       selectedTorrent: {},
       selectedTorrentHash: null,
       torrentDetails: {},
-      torrentDetailsPane: 'files'
+      torrentDetailsPane: 'general'
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -78,11 +79,13 @@ export default class TorrentDetails extends React.Component {
   }
 
   getNavigationItem(item) {
+    let torrentDetails = this.state.torrentDetails || {};
     let selectedHash = UIStore.getTorrentDetailsHash();
     let torrent = TorrentStore.getTorrent(selectedHash);
-    let torrentDetails = this.state.torrentDetails || {};
 
     switch (item) {
+      case 'general':
+        return <TorrentGeneralInfo torrent={torrent} />
       case 'files':
         return <TorrentFiles files={torrentDetails.files} torrent={torrent} />;
         break;
@@ -99,6 +102,10 @@ export default class TorrentDetails extends React.Component {
 
   getNavigationItems() {
     return [
+      {
+        slug: 'general',
+        label: 'General'
+      },
       {
         slug: 'files',
         label: 'Files'

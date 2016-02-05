@@ -60,6 +60,11 @@ var FormatUtil = {
     }
   },
 
+  parsePeers: function(string) {
+    var markerPosition = string.indexOf('@!@');
+    return string.substr(0, markerPosition);
+  },
+
   status: function(isHashChecking, isComplete, isOpen, uploadRate, downloadRate, state, message) {
     var torrentStatus = [];
 

@@ -14,15 +14,11 @@ import Upload from '../icons/Upload';
 export default class TorrentHeading extends React.Component {
   render() {
     let torrent = this.props.torrent;
-    let added = new Date(torrent.added * 1000);
-    let addedString = `${added.getMonth() + 1}/${added.getDate()}/` +
-      `${added.getFullYear()}`;
     let completed = format.data(torrent.bytesDone);
     let downloadRate = format.data(torrent.downloadRate, '/s');
     let downloadTotal = format.data(torrent.downloadTotal);
     let eta = format.eta(torrent.eta);
     let ratio = format.ratio(torrent.ratio);
-    let totalSize = format.data(torrent.sizeBytes);
     let uploadRate = format.data(torrent.uploadRate, '/s');
     let uploadTotal = format.data(torrent.uploadTotal);
 
@@ -48,11 +44,17 @@ export default class TorrentHeading extends React.Component {
             <Download />
             {downloadRate.value}
             <em className="unit">{downloadRate.unit}</em>
+              &nbsp;&mdash;&nbsp;
+              {completed.value}
+              <em className="unit">{completed.unit}</em>
           </li>
           <li className="torrent__details--upload transfer-data--upload">
             <Upload />
             {uploadRate.value}
             <em className="unit">{uploadRate.unit}</em>
+            &nbsp;&mdash;&nbsp;
+            {uploadTotal.value}
+            <em className="unit">{uploadTotal.unit}</em>
           </li>
           <li className="torrent__details--ratio">
             <Ratio />
@@ -61,28 +63,6 @@ export default class TorrentHeading extends React.Component {
           <li className="torrent__details--eta">
             <ETA />
             {eta}
-          </li>
-          <li className="torrent__details--completed">
-            <span className="torrent__details__label">Downloaded</span>
-            {torrent.percentComplete}
-            <em className="unit">%</em>
-            &nbsp;&mdash;&nbsp;
-            {completed.value}
-            <em className="unit">{completed.unit}</em>
-          </li>
-          <li className="torrent__details--uploaded">
-            <span className="torrent__details__label">Uploaded</span>
-            {uploadTotal.value}
-            <em className="unit">{uploadTotal.unit}</em>
-          </li>
-          <li className="torrent__details--size">
-            <span className="torrent__details__label">Size</span>
-            {totalSize.value}
-            <em className="unit">{totalSize.unit}</em>
-          </li>
-          <li className="torrent__details--added">
-            <span className="torrent__details__label">Added</span>
-            {addedString}
           </li>
         </ul>
         <ProgressBar percent={torrent.percentComplete} />
