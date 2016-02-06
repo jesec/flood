@@ -752,6 +752,20 @@ body {
 .application__content {
   background: #e9eef2; }
 
+.badge {
+  background: #2b4456;
+  border-radius: 100px;
+  color: #132532;
+  display: inline-block;
+  font-size: 0.8em;
+  font-weight: 800;
+  line-height: 1;
+  margin-left: 10px;
+  padding: 1px 5px;
+  -webkit-transition: background 0.25s;
+  transition: background 0.25s;
+  vertical-align: baseline; }
+
 .client-stat {
   display: -webkit-box;
   display: -webkit-flex;
@@ -1350,7 +1364,7 @@ body {
         fill: #7a97af; }
     .status-filter__item.is-active {
       color: #258de5; }
-      .status-filter__item.is-active .status-filter__count {
+      .status-filter__item.is-active .badge {
         background: #3b586d; }
       .status-filter__item.is-active .icon {
         fill: #258de5; }
@@ -1363,19 +1377,9 @@ body {
       transition: fill 0.25s;
       vertical-align: middle;
       width: auto; }
-  .status-filter__count {
+  .status-filter .badge {
     background: #2b4456;
-    border-radius: 100px;
-    color: #132532;
-    display: inline-block;
-    font-size: 0.8em;
-    font-weight: 800;
-    line-height: 1;
-    margin-left: 10px;
-    padding: 1px 5px;
-    -webkit-transition: background 0.25s;
-    transition: background 0.25s;
-    vertical-align: baseline; }
+    color: #132532; }
 
 .status-filter__item--heading {
   cursor: default;
@@ -1503,16 +1507,9 @@ body {
   .torrent-details__section__heading, .torrent-details__section__null-data {
     color: #3a5c74;
     font-size: 1.125em; }
-  .torrent-details__section__heading__count {
+  .torrent-details__section__heading .badge {
     background: rgba(82, 120, 147, 0.5);
-    border-radius: 20px;
-    color: #0c1b26;
-    display: inline-block;
-    font-size: 0.6em;
-    line-height: 1.4;
-    margin-left: 5px;
-    padding: 0 5px;
-    vertical-align: middle; }
+    color: #0c1b26; }
 
 .torrent-details-enter {
   opacity: 0; }

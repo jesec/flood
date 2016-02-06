@@ -171,16 +171,9 @@
 
     &__heading {
 
-      &__count {
+      .badge {
         background: $torrent-details--table--header--count--background;
-        border-radius: 20px;
         color: $torrent-details--table--header--count--foreground;
-        display: inline-block;
-        font-size: 0.6em;
-        line-height: 1.4;
-        margin-left: 5px;
-        padding: 0 5px;
-        vertical-align: middle;
       }
     }
   }

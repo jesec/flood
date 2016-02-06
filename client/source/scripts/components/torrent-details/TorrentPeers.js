@@ -1,8 +1,9 @@
 import React from 'react';
 
-import FolderOpenSolid from '../icons/FolderOpenSolid';
+import Badge from '../ui/Badge';
 import DirectoryTree from '../filesystem/DirectoryTree';
 import File from '../icons/File';
+import FolderOpenSolid from '../icons/FolderOpenSolid';
 import format from '../../util/formatData';
 
 export default class TorrentPeers extends React.Component {
@@ -35,10 +36,9 @@ export default class TorrentPeers extends React.Component {
               <tr>
                 <th className="torrent-details__table__heading--primary">
                   Peers
-                  <span
-                    className="torrent-details__section__heading__count">
+                  <Badge>
                     {peers.length}
-                  </span>
+                  </Badge>
                 </th>
                 <th className="torrent-details__table__heading--secondary">
                   DL
