@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import classNames from 'classnames';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -133,6 +134,10 @@ export default class TorrentListContainer extends React.Component {
     return {bottom, top};
   }
 
+  getLoadingIndicator() {
+    return <LoadingIndicator />;
+  }
+
   getViewportLimits() {
     // Calculate the number of items that should be rendered based on the height
     // of the viewport. We offset this to render a few more outide of the
@@ -173,7 +178,7 @@ export default class TorrentListContainer extends React.Component {
   }
 
   render() {
-    let content = <LoadingIndicator />;
+    let content = this.getLoadingIndicator();
 
     if (this.state.torrentRequestSuccess) {
       let selectedTorrents = TorrentStore.getSelectedTorrents();
@@ -211,7 +216,7 @@ export default class TorrentListContainer extends React.Component {
       });
 
       content = (
-        <ul className="torrent__list">
+        <ul className="torrent__list" key="torrent__list">
           <li className="torrent__spacer torrent__spacer--top"
             style={{height: `${listPadding.top}px`}}></li>
           {torrentList}
@@ -222,10 +227,16 @@ export default class TorrentListContainer extends React.Component {
     }
 
     return (
-      <div className="torrent__list__wrapper" onScroll={this.handleScroll}
-        ref="torrentList">
+      <CSSTransitionGroup
+        component="div"
+        className="torrent__list__wrapper"
+        onScroll={this.handleScroll}
+        ref="torrentList"
+        transitionName="torrent__list--loading"
+        transitionEnterTimeout={1000}
+        transitionLeaveTimeout={1000}>
         {content}
-      </div>
+      </CSSTransitionGroup>
     );
   }
 

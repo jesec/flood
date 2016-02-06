@@ -1088,6 +1088,71 @@ body {
 .icon--eta .icon__ring {
   fill-opacity: 1; }
 
+@-webkit-keyframes loading-indicator-swipe {
+  0% {
+    -webkit-transform: translateX(-100%);
+            transform: translateX(-100%); }
+  50% {
+    -webkit-transform: translateX(400%);
+            transform: translateX(400%); }
+  100% {
+    -webkit-transform: translateX(400%);
+            transform: translateX(400%); } }
+
+@keyframes loading-indicator-swipe {
+  0% {
+    -webkit-transform: translateX(-100%);
+            transform: translateX(-100%); }
+  50% {
+    -webkit-transform: translateX(400%);
+            transform: translateX(400%); }
+  100% {
+    -webkit-transform: translateX(400%);
+            transform: translateX(400%); } }
+
+.loading-indicator {
+  height: 18px;
+  position: relative;
+  width: 32px; }
+  .loading-indicator__bar {
+    background: #e9eef2;
+    border-radius: 10px;
+    height: 3px;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    -webkit-transform: translateY(0);
+        -ms-transform: translateY(0);
+            transform: translateY(0);
+    width: 100%; }
+    .loading-indicator__bar:after {
+      -webkit-animation: loading-indicator-swipe 3s ease-in-out infinite;
+              animation: loading-indicator-swipe 3s ease-in-out infinite;
+      background: rgba(37, 141, 229, 0.75);
+      border-radius: 10px;
+      content: '';
+      display: block;
+      height: 100%;
+      -webkit-transform: translateX(-100%);
+          -ms-transform: translateX(-100%);
+              transform: translateX(-100%);
+      width: 25%; }
+    .loading-indicator__bar--1 {
+      top: 0; }
+    .loading-indicator__bar--2 {
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+          -ms-transform: translateY(-50%);
+              transform: translateY(-50%); }
+      .loading-indicator__bar--2:after {
+        -webkit-animation-delay: 0.5s;
+                animation-delay: 0.5s; }
+    .loading-indicator__bar--3 {
+      bottom: 0; }
+      .loading-indicator__bar--3:after {
+        -webkit-animation-delay: 1s;
+                animation-delay: 1s; }
+
 .modal {
   background: rgba(26, 47, 61, 0.5);
   height: 100%;
@@ -1466,6 +1531,13 @@ body {
     position: absolute;
     right: 0;
     top: 0; }
+  .torrents .loading-indicator {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); }
 
 .torrent__list {
   margin: 0 0 0 10px;
@@ -1476,14 +1548,25 @@ body {
     max-width: 100%;
     opacity: 1;
     overflow: auto;
-    position: relative;
-    -webkit-transition: max-width 0.5s, opacity 1s;
-    transition: max-width 0.5s, opacity 1s;
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s;
     -webkit-user-select: none;
        -moz-user-select: none;
         -ms-user-select: none;
             user-select: none;
     z-index: 1; }
+  .torrent__list--loading-enter {
+    opacity: 0;
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s; }
+    .torrent__list--loading-enter-active {
+      opacity: 1; }
+  .torrent__list--loading-leave {
+    opacity: 1;
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s; }
+    .torrent__list--loading-leave-active {
+      opacity: 0; }
   .torrent__list--empty {
     opacity: 0; }
 

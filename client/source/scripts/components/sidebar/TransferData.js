@@ -82,7 +82,7 @@ class ClientStats extends React.Component {
     if (this.state.transferDataRequestError) {
       return <div>Error</div>;
     } else if (this.isLoading()) {
-      return <LoadingIndicator />;
+      return <div>Loading</div>;
     }
 
     let throttles = TransferDataStore.getThrottles();

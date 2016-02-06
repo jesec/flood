@@ -1,0 +1,62 @@
+@keyframes loading-indicator-swipe {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(400%);
+  }
+
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.loading-indicator {
+  height: 18px;
+  position: relative;
+  width: 32px;
+
+  &__bar {
+    background: #e9eef2;
+    border-radius: 10px;
+    height: 3px;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    transform: translateY(0);
+    width: 100%;
+
+    &:after {
+      animation: loading-indicator-swipe 3s ease-in-out infinite;
+      background: rgba($blue, 0.75);
+      border-radius: 10px;
+      content: '';
+      display: block;
+      height: 100%;
+      transform: translateX(-100%);
+      width: 25%;
+    }
+
+    &--1 {
+      top: 0;
+    }
+
+    &--2 {
+      top: 50%;
+      transform: translateY(-50%);
+
+      &:after {
+        animation-delay: 0.5s;
+      }
+    }
+
+    &--3 {
+      bottom: 0;
+
+      &:after {
+        animation-delay: 1s;
+      }
+    }
+  }
+}
