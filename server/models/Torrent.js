@@ -153,6 +153,7 @@ class Torrent {
   	} else if (isComplete === '1' && isOpen === '1' && state === '0') {
       torrentStatus.push('p'); // paused
   	} else if (isComplete === '1' && isOpen === '0') {
+      torrentStatus.push('s'); // stopped
       torrentStatus.push('c'); // complete
   	} else if (isComplete === '0' && isOpen === '1' && state === '1') {
       torrentStatus.push('d'); // downloading

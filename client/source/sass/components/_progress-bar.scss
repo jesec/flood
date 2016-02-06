@@ -4,8 +4,11 @@
   transition: opacity 0.25s;
   z-index: 1;
 
-  .is-selected.is-stopped & {
-    opacity: 0.5;
+  .is-selected {
+
+    &.is-stopped & {
+      opacity: 0.5;
+    }
   }
 
   &:after {
@@ -38,14 +41,11 @@
     transition: background 0.25s, width 0.25s;
     z-index: 1;
 
-    .is-completed & {
-      background: $progress-bar--fill--completed;
-    }
-
     .is-seeding & {
       background: $progress-bar--fill--completed;
     }
 
+    .is-completed &,
     .is-stopped & {
       background: $progress-bar--fill--stopped;
     }
