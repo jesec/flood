@@ -123,6 +123,25 @@ const TorrentActions = {
       });
   },
 
+  fetchTorrentStatusCount: function() {
+    return axios.get('/client/torrents/status-count')
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_SUCCESS,
+          data
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_ERROR,
+          error
+        });
+      });
+  },
+
   startTorrents: function(hashes) {
     return axios.post('/client/start', {
         hashes

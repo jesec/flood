@@ -30,6 +30,7 @@ export default class Torrent extends React.Component {
 
   render() {
     let torrent = this.props.data;
+
     let added = new Date(torrent.added * 1000);
     let addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
       added.getFullYear();
@@ -44,17 +45,17 @@ export default class Torrent extends React.Component {
 
     let classes = classNames({
       'torrent': true,
-      'has-error': torrent.status.indexOf('has-error') > -1,
+      'has-error': torrent.status.indexOf('e') > -1,
       'is-selected': this.props.selected,
-      'is-stopped': torrent.status.indexOf('is-stopped') > -1,
-      'is-paused': torrent.status.indexOf('is-paused') > -1,
+      'is-stopped': torrent.status.indexOf('s') > -1,
+      'is-paused': torrent.status.indexOf('p') > -1,
       'is-actively-downloading': downloadRate.value > 0,
-      'is-downloading': torrent.status.indexOf('is-downloading') > -1,
-      'is-seeding': torrent.status.indexOf('is-seeding') > -1,
-      'is-completed': torrent.status.indexOf('is-completed') > -1,
-      'is-checking': torrent.status.indexOf('is-checking') > -1,
-      'is-active': torrent.status.indexOf('is-active') > -1,
-      'is-inactive': torrent.status.indexOf('is-inactive') > -1
+      'is-downloading': torrent.status.indexOf('d') > -1,
+      'is-seeding': torrent.status.indexOf('sd') > -1,
+      'is-completed': torrent.status.indexOf('c') > -1,
+      'is-checking': torrent.status.indexOf('ch') > -1,
+      'is-active': torrent.status.indexOf('a') > -1,
+      'is-inactive': torrent.status.indexOf('i') > -1
     });
 
     return (

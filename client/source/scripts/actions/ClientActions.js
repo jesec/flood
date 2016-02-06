@@ -27,7 +27,7 @@ const ClientActions = {
       });
   },
 
-  fetchTransferHistory(opts) {
+  fetchTransferHistory: function(opts) {
     return axios.get('/client/history', {
       params: opts
     })

@@ -6,6 +6,7 @@ import format from '../../util/formatData';
 export default class TorrentGeneralInfo extends React.Component {
   render() {
     let torrent = this.props.torrent;
+
     let added = new Date(torrent.added * 1000);
     let addedString = `${added.getHours() + 1}:${added.getMinutes() + 1}:${added.getSeconds() + 1}, ${added.getMonth() + 1}/${added.getDate()}/` +
       `${added.getFullYear()}`;

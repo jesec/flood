@@ -1341,6 +1341,7 @@ body {
   .status-filter__item {
     color: #53718a;
     cursor: pointer;
+    font-weight: 400;
     padding: 3px 20px;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
@@ -1349,8 +1350,7 @@ body {
       .status-filter__item:hover .icon {
         fill: #7a97af; }
     .status-filter__item.is-active {
-      color: #258de5;
-      font-weight: 700; }
+      color: #258de5; }
       .status-filter__item.is-active .icon {
         fill: #258de5; }
     .status-filter__item .icon {
@@ -1362,6 +1362,17 @@ body {
       transition: fill 0.25s;
       vertical-align: middle;
       width: auto; }
+  .status-filter__count {
+    background: #2b4456;
+    border-radius: 100px;
+    color: #132532;
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: 800;
+    line-height: 1;
+    margin-left: 10px;
+    padding: 1px 5px;
+    vertical-align: baseline; }
 
 .status-filter__item--heading {
   cursor: default;

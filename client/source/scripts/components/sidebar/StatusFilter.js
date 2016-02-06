@@ -1,6 +1,9 @@
 import classnames from 'classnames';
 import React from 'react';
 
+import TorrentFilterStore from '../../stores/TorrentFilterStore';
+import EventTypes from '../../constants/EventTypes';
+
 const METHODS_TO_BIND = [
   'handleClick'
 ];
@@ -31,6 +34,9 @@ export default class StatusFilter extends React.Component {
       <li className={classNames} onClick={this.handleClick}>
         {this.props.icon}
         {this.props.name}
+        <span className="status-filter__count">
+          {this.props.count}
+        </span>
       </li>
     );
   }

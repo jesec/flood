@@ -1,7 +1,14 @@
-var rTorrent = require('./rtorrent');
-var util = require('util');
-var clientUtil = require('./util/clientUtil');
-var formatUtil = require('./util/formatUtil');
+'use strict';
+
+let rTorrent = require('./rtorrent');
+let util = require('util');
+
+let propsMap = require('../../shared/constants/propsMap');
+let clientUtil = require('./util/clientUtil');
+let formatUtil = require('./util/formatUtil');
+let Torrent = require('./Torrent');
+
+let _statusCount = {};
 
 var client = {
   add: function(data, callback) {
@@ -63,6 +70,10 @@ var client = {
         callback(error, null);
       });
     }
+  },
+
+  getTorrentStatusCount: function(callback) {
+    callback(null, _statusCount);
   },
 
   getTorrentDetails: function(hash, callback) {
@@ -138,47 +149,39 @@ var client = {
   getTorrentList: function(callback) {
     rTorrent.get('d.multicall2', clientUtil.defaults.torrentPropertyMethods)
       .then(function(data) {
-        try {
-          // create torrent array, each item in the array being
-          // an object with human-readable property values
-          var torrents = clientUtil.mapClientProps(
-            clientUtil.defaults.torrentProperties,
-            data
-          );
-          // Calculate extra properties.
-          torrents = torrents.map(function(torrent) {
-            torrent.totalPeers = formatUtil.parsePeers(torrent.totalPeers);
-            torrent.totalSeeds = formatUtil.parsePeers(torrent.totalSeeds);
-            torrent.percentComplete = formatUtil.percentComplete(
-              torrent.bytesDone,
-              torrent.sizeBytes
-            );
+        // Create torrent array of torrent attributes, each item in the array
+        // being an object with human-readable property values.
+        // TODO This should be refactored into something like:
+        // return new TorrentCollection(data); which would be a collection
+        // of Torrent instances.
+        var torrents = clientUtil.mapClientProps(
+          clientUtil.defaults.torrentProperties,
+          data
+        );
 
-            torrent.eta = formatUtil.eta(
-              torrent.downloadRate,
-              torrent.bytesDone,
-              torrent.sizeBytes
-            );
+        let statusMap = propsMap.serverStatus;
 
-            torrent.status = formatUtil.status(
-              torrent.isHashChecking,
-              torrent.isComplete,
-              torrent.isOpen,
-              torrent.uploadRate,
-              torrent.downloadRate,
-              torrent.state,
-              torrent.message
-            );
+        Object.keys(statusMap).forEach(function (key) {
+          _statusCount[statusMap[key]] = 0;
+        });
 
-            return torrent;
+        // Create Torrent instance, with additonal deduced properties.
+        torrents = torrents.map(function(torrent, index) {
+          let torrentData = new Torrent(torrent).data;
+
+          torrentData.status.forEach(function (status) {
+            if (statusMap[status] == null) {
+              console.log(status);
+            }
+            _statusCount[statusMap[status]] = _statusCount[statusMap[status]] + 1;
           });
-        } catch (error) {
-          console.log(error);
-        }
+          return torrentData;
+        });
+
+        _statusCount.all = torrents.length || 0;
 
         callback(null, torrents);
       }, function(error) {
-        console.log(error);
         callback(error, null)
       });
   },

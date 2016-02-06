@@ -10,12 +10,14 @@ import EventTypes from '../../constants/EventTypes';
 import Inactive from '../../components/icons/Inactive';
 import StatusFilter from './StatusFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
+import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [
   'getFilters',
   'handleClick',
-  'onStatusFilterChange'
+  'onStatusFilterChange',
+  'onTorrentStatusCountChange'
 ];
 
 export default class StatusFilters extends React.Component {
@@ -23,6 +25,7 @@ export default class StatusFilters extends React.Component {
     super();
 
     this.state = {
+      statusCount: {},
       statusFilter: TorrentFilterStore.getStatusFilter()
     };
 
@@ -32,10 +35,13 @@ export default class StatusFilters extends React.Component {
   }
 
   componentDidMount() {
+    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onTorrentRequestSuccess);
+    TorrentFilterStore.listen(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
   }
 
   componentWillUnmount() {
+    TorrentFilterStore.unlisten(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
   }
 
@@ -46,6 +52,16 @@ export default class StatusFilters extends React.Component {
   onStatusFilterChange() {
     this.setState({
       statusFilter: TorrentFilterStore.getStatusFilter()
+    });
+  }
+
+  onTorrentRequestSuccess() {
+    TorrentFilterStore.fetchTorrentStatusCount();
+  }
+
+  onTorrentStatusCountChange() {
+    this.setState({
+      statusCount: TorrentFilterStore.getTorrentStatusCount()
     });
   }
 
@@ -84,12 +100,15 @@ export default class StatusFilters extends React.Component {
     ];
 
     let filterElements = filters.map((filter) => {
-      return <StatusFilter handleClick={this.handleClick}
-        key={filter.slug}
-        icon={filter.icon}
-        isActive={filter.slug === this.state.statusFilter}
-        name={filter.label}
-        slug={filter.slug} />;
+      return (
+        <StatusFilter handleClick={this.handleClick}
+          count={this.state.statusCount[filter.slug] || 0}
+          key={filter.slug}
+          icon={filter.icon}
+          isActive={filter.slug === this.state.statusFilter}
+          name={filter.label}
+          slug={filter.slug} />
+      );
     });
 
     return filterElements;

@@ -43,6 +43,11 @@ router.get('/torrents', function(req, res, next) {
   client.getTorrentList(ajaxUtil.getResponseFn(res));
 });
 
+router.get('/torrents/status-count', function(req, res, next) {
+  // client.getTorrentList(ajaxUtil.getResponseFn(res));
+  client.getTorrentStatusCount(ajaxUtil.getResponseFn(res));
+});
+
 router.post('/torrents/delete', function(req, res, next) {
   var hash = req.body.hash;
   client.deleteTorrents(hash, ajaxUtil.getResponseFn(res));
