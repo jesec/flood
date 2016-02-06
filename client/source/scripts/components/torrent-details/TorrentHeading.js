@@ -9,6 +9,7 @@ import File from '../icons/File';
 import format from '../../util/formatData';
 import ProgressBar from '../ui/ProgressBar';
 import Ratio from '../../components/icons/Ratio';
+import {torrentStatusClasses} from '../../util/torrentStatusClasses';
 import Upload from '../icons/Upload';
 
 export default class TorrentHeading extends React.Component {
@@ -22,22 +23,10 @@ export default class TorrentHeading extends React.Component {
     let uploadRate = format.data(torrent.uploadRate, '/s');
     let uploadTotal = format.data(torrent.uploadTotal);
 
-    let classes = classNames('torrent-details__heading', {
-      'has-error': torrent.status.indexOf('has-error') > -1,
-      'is-selected': this.props.selected,
-      'is-stopped': torrent.status.indexOf('is-stopped') > -1,
-      'is-paused': torrent.status.indexOf('is-paused') > -1,
-      'is-actively-downloading': downloadRate.value > 0,
-      'is-downloading': torrent.status.indexOf('is-downloading') > -1,
-      'is-seeding': torrent.status.indexOf('is-seeding') > -1,
-      'is-completed': torrent.status.indexOf('is-completed') > -1,
-      'is-checking': torrent.status.indexOf('is-checking') > -1,
-      'is-active': torrent.status.indexOf('is-active') > -1,
-      'is-inactive': torrent.status.indexOf('is-inactive') > -1
-    });
+    let torrentClasses = torrentStatusClasses(torrent, 'torrent-details__heading');
 
     return (
-      <div className={classes}>
+      <div className={torrentClasses}>
         <h1 className="torrent__details--name">{torrent.name}</h1>
         <ul className="torrent__details torrent__details--tertiary">
           <li className="torrent__details--download transfer-data--download">
