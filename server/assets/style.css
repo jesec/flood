@@ -1351,6 +1351,8 @@ body {
         fill: #7a97af; }
     .status-filter__item.is-active {
       color: #258de5; }
+      .status-filter__item.is-active .status-filter__count {
+        background: #3b586d; }
       .status-filter__item.is-active .icon {
         fill: #258de5; }
     .status-filter__item .icon {
@@ -1372,6 +1374,8 @@ body {
     line-height: 1;
     margin-left: 10px;
     padding: 1px 5px;
+    -webkit-transition: background 0.25s;
+    transition: background 0.25s;
     vertical-align: baseline; }
 
 .status-filter__item--heading {

@@ -89,8 +89,10 @@ $status-filter--foreground--header: rgba($status-filter--foreground, 0.5);
 $status-filter--foreground--active: $blue;
 $status-filter--foreground--hover: lighten($status-filter--foreground, 15%);
 
-$status-filter--count--background: #2b4456;
 $status-filter--count--foreground: #132532;
+$status-filter--count--background: #2b4456;
+$status-filter--count--background--active: #3b586d;
+
 
 // torrents list
 $torrent-list--background: #fff;
