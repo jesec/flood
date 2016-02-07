@@ -8,7 +8,7 @@ import Remove from '../icons/Remove';
 import SortDropdown from './SortDropdown';
 import Start from '../icons/Start';
 import Stop from '../icons/Stop';
-import stringUtil from '../../../../../util/stringUtil';
+import stringUtil from '../../../../../shared/util/stringUtil';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';

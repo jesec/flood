@@ -1,4 +1,8 @@
-export function sortTorrents(torrents, sortBy) {
+export function sortTorrents(torrentsHash, sortBy) {
+  let torrents = Object.keys(torrentsHash).map((hash) => {
+    return {hash, ...torrentsHash[hash]};
+  });
+
   if (torrents.length) {
     let direction = sortBy.direction;
     let property = sortBy.property;

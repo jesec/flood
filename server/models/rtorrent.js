@@ -1,7 +1,7 @@
 var Q = require('q');
 var net = require('net');
-var Deserializer = require('./util/deserializer');
-var Serializer = require('./util/serializer');
+var Deserializer = require('../util/deserializer');
+var Serializer = require('../util/serializer');
 
 var rtorrent = {
 	initialized: false,

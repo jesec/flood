@@ -3,7 +3,7 @@
 let Datastore = require('nedb');
 
 let config = require('../../config');
-let stringUtil = require('../../util/stringUtil');
+let stringUtil = require('../../shared/util/stringUtil');
 
 const MAX_CLEANUP_INTERVAL = 1000 * 60 * 60; // 1 hour
 const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
