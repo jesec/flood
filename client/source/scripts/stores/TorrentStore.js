@@ -17,12 +17,12 @@ class TorrentStoreClass extends BaseStore {
   constructor() {
     super();
 
-    this.filteredTorrents = [];
+    this.filteredTorrents = {};
     this.pollTorrentDetailsIntervalID = null;
     this.pollTorrentsIntervalID = null;
     this.selectedTorrents = [];
-    this.torrentDetails = {};
-    this.torrents = [];
+    this.sortedTorrents = [];
+    this.torrents = {};
   }
 
   fetchTorrentDetails() {
@@ -42,11 +42,11 @@ class TorrentStoreClass extends BaseStore {
   }
 
   getTorrentDetails(hash) {
-    return this.torrentDetails[hash] || {};
+    return this.torrents[hash].details || {};
   }
 
   setTorrentDetails(hash, torrentDetails) {
-    this.torrentDetails[hash] = torrentDetails;
+    this.torrents[hash].details = torrentDetails;
     this.emit(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE);
   }
 
@@ -59,15 +59,13 @@ class TorrentStoreClass extends BaseStore {
       event,
       hash,
       selectedTorrents: this.selectedTorrents,
-      torrentList: this.torrents
+      torrentList: this.sortedTorrents
     });
     this.emit(EventTypes.UI_TORRENT_SELECTION_CHANGE);
   }
 
   getTorrent(hash) {
-    return _.find(this.torrents, (torrent) => {
-      return torrent.hash === hash;
-    });
+    return this.torrents[hash];
   }
 
   getTorrents() {
@@ -76,21 +74,22 @@ class TorrentStoreClass extends BaseStore {
       return this.filteredTorrents;
     }
 
-    return this.torrents;
+    return this.sortedTorrents;
   }
 
   setTorrents(torrents) {
     let torrentsSort = TorrentFilterStore.getTorrentsSort();
 
-    this.torrents = sortTorrents(
-      Object.assign([], torrents),
-      {direction: torrentsSort.direction, property: torrentsSort.value}
-    );
+    this.torrents = torrents;
+
+    // Convert torrents hash to array and sort it.
+    this.sortedTorrents = sortTorrents(this.torrents,
+      {direction: torrentsSort.direction, property: torrentsSort.value});
 
     let statusFilter = TorrentFilterStore.getStatusFilter();
     let searchFilter = TorrentFilterStore.getSearchFilter();
 
-    let filteredTorrents = Object.assign([], this.torrents);
+    let filteredTorrents = Object.assign([], this.sortedTorrents);
 
     if (statusFilter && statusFilter !== 'all') {
       filteredTorrents = filterTorrents(filteredTorrents, statusFilter);

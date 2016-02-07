@@ -4,6 +4,7 @@ import React from 'react';
 import DotsMini from '../icons/DotsMini';
 import format from '../../util/formatData';
 import ProgressBar from '../ui/ProgressBar';
+import {torrentStatusClasses} from '../../util/torrentStatusClasses';
 
 const METHODS_TO_BIND = [
   'handleClick',
@@ -43,23 +44,10 @@ export default class Torrent extends React.Component {
     let uploadRate = format.data(torrent.uploadRate, '/s');
     let uploadTotal = format.data(torrent.uploadTotal);
 
-    let classes = classNames({
-      'torrent': true,
-      'has-error': torrent.status.indexOf('e') > -1,
-      'is-selected': this.props.selected,
-      'is-stopped': torrent.status.indexOf('s') > -1,
-      'is-paused': torrent.status.indexOf('p') > -1,
-      'is-actively-downloading': downloadRate.value > 0,
-      'is-downloading': torrent.status.indexOf('d') > -1,
-      'is-seeding': torrent.status.indexOf('sd') > -1,
-      'is-completed': torrent.status.indexOf('c') > -1,
-      'is-checking': torrent.status.indexOf('ch') > -1,
-      'is-active': torrent.status.indexOf('a') > -1,
-      'is-inactive': torrent.status.indexOf('i') > -1
-    });
+    let torrentClasses = torrentStatusClasses(torrent, this.props.selected ? 'is-selected' : null, 'torrent');
 
     return (
-      <li className={classes} onClick={this.handleClick}
+      <li className={torrentClasses} onClick={this.handleClick}
         onContextMenu={this.handleRightClick}>
         <ul className="torrent__details">
           <li className="torrent__details--primary text-overflow">

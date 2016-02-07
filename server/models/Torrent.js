@@ -2,7 +2,7 @@
 
 let _ = require('lodash');
 
-let stringUtil = require('../../util/stringUtil');
+let stringUtil = require('../../shared/util/stringUtil');
 
 const CALCULATED_DATA = [
   'eta',
@@ -50,8 +50,9 @@ class Torrent {
       return;
     }
 
-    clientData = clientData || {};
     opts = opts || {};
+
+    this._lastUpdated = opts.currentTime || Date.now();
     this._torrentData = this.getCalculatedClientData(clientData, opts);
   }
 
@@ -60,6 +61,10 @@ class Torrent {
     // get was called. Perhaps identify the last time it was called by ID so
     // different consumers can use it. And/or allow users to get everything.
     return Object.assign({}, this._torrentData);
+  }
+
+  get status() {
+    return this._torrentData.status || [];
   }
 
   getCalculatedClientData(clientData, opts) {
@@ -182,6 +187,12 @@ class Torrent {
 
   getCalculatedTotalSeeds(clientData) {
     return this.getPeerCount(clientData.totalSeeds);
+  }
+
+  updateData(clientData, opts) {
+    // TODO somehow communicate that only some props were updated
+    this._lastUpdated = opts.currentTime || Date.now();
+    this._torrentData = this.getCalculatedClientData(clientData, opts);
   }
 }
 

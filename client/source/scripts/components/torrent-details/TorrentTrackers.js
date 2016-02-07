@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Badge from '../ui/Badge';
+
 export default class TorrentTrackrs extends React.Component {
   render() {
     let trackers = this.props.trackers || [];
@@ -28,10 +30,9 @@ export default class TorrentTrackrs extends React.Component {
               <tr>
                 <th className="torrent-details__table__heading--primary">
                   Trackers
-                  <span
-                    className="torrent-details__section__heading__count">
+                  <Badge>
                     {trackerCount}
-                  </span>
+                  </Badge>
                 </th>
                 <th className="torrent-details__table__heading--secondary">
                   Type

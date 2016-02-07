@@ -4,11 +4,13 @@ let rTorrent = require('./rtorrent');
 let util = require('util');
 
 let propsMap = require('../../shared/constants/propsMap');
-let clientUtil = require('./util/clientUtil');
-let formatUtil = require('./util/formatUtil');
+let clientUtil = require('../util/clientUtil');
+let formatUtil = require('../util/formatUtil');
 let Torrent = require('./Torrent');
+let TorrentCollection = require('./TorrentCollection');
 
 let _statusCount = {};
+let _torrentCollection = new TorrentCollection();
 
 var client = {
   add: function(data, callback) {
@@ -149,38 +151,9 @@ var client = {
   getTorrentList: function(callback) {
     rTorrent.get('d.multicall2', clientUtil.defaults.torrentPropertyMethods)
       .then(function(data) {
-        // Create torrent array of torrent attributes, each item in the array
-        // being an object with human-readable property values.
-        // TODO This should be refactored into something like:
-        // return new TorrentCollection(data); which would be a collection
-        // of Torrent instances.
-        var torrents = clientUtil.mapClientProps(
-          clientUtil.defaults.torrentProperties,
-          data
-        );
-
-        let statusMap = propsMap.serverStatus;
-
-        Object.keys(statusMap).forEach(function (key) {
-          _statusCount[statusMap[key]] = 0;
-        });
-
-        // Create Torrent instance, with additonal deduced properties.
-        torrents = torrents.map(function(torrent, index) {
-          let torrentData = new Torrent(torrent).data;
-
-          torrentData.status.forEach(function (status) {
-            if (statusMap[status] == null) {
-              console.log(status);
-            }
-            _statusCount[statusMap[status]] = _statusCount[statusMap[status]] + 1;
-          });
-          return torrentData;
-        });
-
-        _statusCount.all = torrents.length || 0;
-
-        callback(null, torrents);
+        _torrentCollection.updateTorrents(data);
+        _statusCount = _torrentCollection.statusCount;
+        callback(null, _torrentCollection.torrents);
       }, function(error) {
         callback(error, null)
       });
