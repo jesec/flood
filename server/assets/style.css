@@ -1221,7 +1221,7 @@ body {
   -webkit-transition: opacity 0.25s;
   transition: opacity 0.25s;
   z-index: 1; }
-  .progress-bar .is-selected.is-stopped .progress-bar .is-selected {
+  .is-selected.is-stopped .progress-bar {
     opacity: 0.5; }
   .progress-bar:after {
     background: #e3e5e5;

@@ -4,11 +4,8 @@
   transition: opacity 0.25s;
   z-index: 1;
 
-  .is-selected {
-
-    &.is-stopped & {
-      opacity: 0.5;
-    }
+  .is-selected.is-stopped & {
+    opacity: 0.5;
   }
 
   &:after {
