@@ -84,14 +84,14 @@ $search-torrents--placeholder--active: #2cad6d;
 $search-torrents--icon--foreground: $sidebar--foreground;
 $search-torrents--icon--foreground--active: #2c9e65;
 
-$status-filter--foreground: $sidebar--foreground;
-$status-filter--foreground--header: rgba($status-filter--foreground, 0.5);
-$status-filter--foreground--active: $blue;
-$status-filter--foreground--hover: lighten($status-filter--foreground, 15%);
+$sidebar-filter--foreground: $sidebar--foreground;
+$sidebar-filter--foreground--header: rgba($sidebar-filter--foreground, 0.5);
+$sidebar-filter--foreground--active: $blue;
+$sidebar-filter--foreground--hover: lighten($sidebar-filter--foreground, 15%);
 
-$status-filter--count--foreground: #132532;
-$status-filter--count--background: #2b4456;
-$status-filter--count--background--active: #3b586d;
+$sidebar-filter--count--foreground: #132532;
+$sidebar-filter--count--background: #2b4456;
+$sidebar-filter--count--background--active: #3b586d;
 
 
 // torrents list

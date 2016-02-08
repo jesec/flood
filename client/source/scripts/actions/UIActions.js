@@ -58,6 +58,13 @@ const UIActions = {
     });
   },
 
+  setTorrentTrackerFilter: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_SET_TORRENT_TRACKER_FILTER,
+      data
+    });
+  },
+
   setTorrentsSearchFilter: function(data) {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_SEARCH_FILTER,

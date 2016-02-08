@@ -1221,7 +1221,7 @@ body {
   -webkit-transition: opacity 0.25s;
   transition: opacity 0.25s;
   z-index: 1; }
-  .progress-bar .is-selected.is-stopped .progress-bar .is-selected {
+  .is-selected.is-stopped .progress-bar {
     opacity: 0.5; }
   .progress-bar:after {
     background: #e3e5e5;
@@ -1267,6 +1267,7 @@ body {
           flex: 1;
   min-width: 200px;
   max-width: 240px;
+  overflow: auto;
   position: relative;
   z-index: 2; }
 
@@ -1348,27 +1349,28 @@ body {
   .sidebar__item--speed-limit .dropdown__items {
     font-size: 0.9em; }
 
-.status-filter {
+.sidebar-filter {
   font-size: 0.85em;
-  padding: 30px 0; }
-  .status-filter__item {
+  padding: 30px 0 0 0; }
+  .sidebar-filter__item {
     color: #53718a;
     cursor: pointer;
     font-weight: 400;
     padding: 3px 20px;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-    .status-filter__item:hover {
+    .sidebar-filter__item:hover {
       color: #7a97af; }
-      .status-filter__item:hover .icon {
+      .sidebar-filter__item:hover .icon {
         fill: #7a97af; }
-    .status-filter__item.is-active {
-      color: #258de5; }
-      .status-filter__item.is-active .badge {
+    .sidebar-filter__item.is-active {
+      color: #258de5;
+      font-weight: 700; }
+      .sidebar-filter__item.is-active .badge {
         background: #3b586d; }
-      .status-filter__item.is-active .icon {
+      .sidebar-filter__item.is-active .icon {
         fill: #258de5; }
-    .status-filter__item .icon {
+    .sidebar-filter__item .icon {
       display: inline-block;
       fill: #53718a;
       height: 14px;
@@ -1377,17 +1379,17 @@ body {
       transition: fill 0.25s;
       vertical-align: middle;
       width: auto; }
-  .status-filter .badge {
+  .sidebar-filter .badge {
     background: #2b4456;
     color: #132532; }
 
-.status-filter__item--heading {
+.sidebar-filter__item--heading {
   cursor: default;
   font-size: 0.8em;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase; }
-  .status-filter__item--heading, .status-filter__item--heading:hover {
+  .sidebar-filter__item--heading, .sidebar-filter__item--heading:hover {
     color: rgba(83, 113, 138, 0.5); }
 
 .textbox-repeater .floating-action__group {

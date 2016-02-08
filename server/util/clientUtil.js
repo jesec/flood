@@ -60,6 +60,7 @@ var clientUtil = {
 
       'comment',
       'ignoreScheduler',
+      'trackers',
       'totalSeeds',
       'totalPeers',
       // 'cat_dViews',
@@ -127,6 +128,7 @@ var clientUtil = {
 
       'd.custom2=',
       'd.custom=sch_ignore', // ignore scheduler
+      'cat="$t.multicall=d.hash=,t.get_url=,cat={@!@}"',
       'cat="$t.multicall=d.hash=,t.scrape_complete=,cat={@!@}"', // total seeds
       'cat="$t.multicall=d.hash=,t.scrape_incomplete=,cat={@!@}"', // total peers
       // 'cat=$d.views=',

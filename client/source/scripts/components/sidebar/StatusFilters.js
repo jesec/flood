@@ -8,7 +8,8 @@ import DownloadSmall from '../../components/icons/DownloadSmall';
 import Error from '../../components/icons/Error';
 import EventTypes from '../../constants/EventTypes';
 import Inactive from '../../components/icons/Inactive';
-import StatusFilter from './StatusFilter';
+import propsMap from '../../../../../shared/constants/propsMap';
+import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
@@ -17,7 +18,9 @@ const METHODS_TO_BIND = [
   'getFilters',
   'handleClick',
   'onStatusFilterChange',
-  'onTorrentStatusCountChange'
+  'onTorrentStatusCountChange',
+  'onTrackerFilterChange',
+  'updateStatusCount'
 ];
 
 export default class StatusFilters extends React.Component {
@@ -26,7 +29,8 @@ export default class StatusFilters extends React.Component {
 
     this.state = {
       statusCount: {},
-      statusFilter: TorrentFilterStore.getStatusFilter()
+      statusFilter: TorrentFilterStore.getStatusFilter(),
+      trackerFilter: TorrentFilterStore.getTrackerFilter()
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -38,11 +42,13 @@ export default class StatusFilters extends React.Component {
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onTorrentRequestSuccess);
     TorrentFilterStore.listen(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE, this.onTrackerFilterChange);
   }
 
   componentWillUnmount() {
     TorrentFilterStore.unlisten(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE, this.onTrackerFilterChange);
   }
 
   handleClick(filter) {
@@ -60,9 +66,11 @@ export default class StatusFilters extends React.Component {
   }
 
   onTorrentStatusCountChange() {
-    this.setState({
-      statusCount: TorrentFilterStore.getTorrentStatusCount()
-    });
+    this.updateStatusCount();
+  }
+
+  onTrackerFilterChange() {
+    this.updateStatusCount();
   }
 
   getFilters() {
@@ -101,7 +109,7 @@ export default class StatusFilters extends React.Component {
 
     let filterElements = filters.map((filter) => {
       return (
-        <StatusFilter handleClick={this.handleClick}
+        <SidebarFilter handleClick={this.handleClick}
           count={this.state.statusCount[filter.slug] || 0}
           key={filter.slug}
           icon={filter.icon}
@@ -114,12 +122,41 @@ export default class StatusFilters extends React.Component {
     return filterElements;
   }
 
+  updateStatusCount() {
+    let statusCount = TorrentFilterStore.getTorrentStatusCount();
+    let trackerFilter = TorrentFilterStore.getTrackerFilter();
+
+    if (TorrentFilterStore.getTrackerFilter() !== 'all') {
+      let totalStatusCount = 0;
+      let torrents = TorrentStore.getAllTorrents();
+
+      Object.keys(statusCount).forEach(function(key) {
+        statusCount[key] = 0;
+      });
+
+      Object.keys(torrents).forEach(function(hash) {
+        let torrent = torrents[hash];
+
+        if (torrent.trackers.indexOf(trackerFilter) > -1) {
+          totalStatusCount++;
+          torrent.status.forEach(function (status) {
+            statusCount[propsMap.serverStatus[status]]++;
+          });
+        }
+      });
+
+      statusCount.all = totalStatusCount;
+    }
+
+    this.setState({statusCount});
+  }
+
   render() {
     let filters = this.getFilters();
 
     return (
-      <ul className="status-filter sidebar__item">
-        <li className="status-filter__item status-filter__item--heading">
+      <ul className="sidebar-filter sidebar__item">
+        <li className="sidebar-filter__item sidebar-filter__item--heading">
           Filter by Status
         </li>
         {filters}

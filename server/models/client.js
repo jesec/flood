@@ -11,6 +11,7 @@ let TorrentCollection = require('./TorrentCollection');
 
 let _statusCount = {};
 let _torrentCollection = new TorrentCollection();
+let _trackerCount = {};
 
 var client = {
   add: function(data, callback) {
@@ -76,6 +77,10 @@ var client = {
 
   getTorrentStatusCount: function(callback) {
     callback(null, _statusCount);
+  },
+
+  getTorrentTrackerCount: function(callback) {
+    callback(null, _trackerCount);
   },
 
   getTorrentDetails: function(hash, callback) {
@@ -151,8 +156,13 @@ var client = {
   getTorrentList: function(callback) {
     rTorrent.get('d.multicall2', clientUtil.defaults.torrentPropertyMethods)
       .then(function(data) {
-        _torrentCollection.updateTorrents(data);
-        _statusCount = _torrentCollection.statusCount;
+        try {
+          _torrentCollection.updateTorrents(data);
+          _statusCount = _torrentCollection.statusCount;
+          _trackerCount = _torrentCollection.trackerCount;
+        } catch (err) {
+          console.log(err);
+        }
         callback(null, _torrentCollection.torrents);
       }, function(error) {
         callback(error, null)

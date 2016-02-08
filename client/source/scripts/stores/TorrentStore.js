@@ -68,9 +68,12 @@ class TorrentStoreClass extends BaseStore {
     return this.torrents[hash];
   }
 
+  getAllTorrents() {
+    return this.torrents;
+  }
+
   getTorrents() {
-    if (TorrentFilterStore.getStatusFilter() ||
-      TorrentFilterStore.getSearchFilter()) {
+    if (TorrentFilterStore.isFilterActive()) {
       return this.filteredTorrents;
     }
 
@@ -86,17 +89,28 @@ class TorrentStoreClass extends BaseStore {
     this.sortedTorrents = sortTorrents(this.torrents,
       {direction: torrentsSort.direction, property: torrentsSort.value});
 
-    let statusFilter = TorrentFilterStore.getStatusFilter();
     let searchFilter = TorrentFilterStore.getSearchFilter();
+    let statusFilter = TorrentFilterStore.getStatusFilter();
+    let trackerFilter = TorrentFilterStore.getTrackerFilter();
 
     let filteredTorrents = Object.assign([], this.sortedTorrents);
 
-    if (statusFilter && statusFilter !== 'all') {
-      filteredTorrents = filterTorrents(filteredTorrents, statusFilter);
-    }
-
     if (searchFilter && searchFilter !== '') {
       filteredTorrents = searchTorrents(filteredTorrents, searchFilter);
+    }
+
+    if (statusFilter && statusFilter !== 'all') {
+      filteredTorrents = filterTorrents(filteredTorrents, {
+        type: 'status',
+        filter: statusFilter
+      });
+    }
+
+    if (trackerFilter && trackerFilter !== 'all') {
+      filteredTorrents = filterTorrents(filteredTorrents, {
+        type: 'tracker',
+        filter: trackerFilter
+      });
     }
 
     this.filteredTorrents = filteredTorrents;
@@ -152,6 +166,7 @@ AppDispatcher.register((payload) => {
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);
       break;
     case ActionTypes.UI_SET_TORRENT_STATUS_FILTER:
+    case ActionTypes.UI_SET_TORRENT_TRACKER_FILTER:
     case ActionTypes.UI_SET_TORRENT_SEARCH_FILTER:
     case ActionTypes.UI_SET_TORRENT_SORT:
       TorrentStore.triggerTorrentsFilter();
