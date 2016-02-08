@@ -13,7 +13,7 @@ class TorrentCollection {
     this._statusCount = {all: 0};
     this._torrents = {};
     this._torrentData = {};
-    this._trackerCount = {};
+    this._trackerCount = {all: 0};
   }
 
   get statusCount() {
@@ -32,6 +32,16 @@ class TorrentCollection {
 
   get trackerCount() {
     return Object.assign({}, this._trackerCount);
+  }
+
+  incrementTrackerCount(trackers) {
+    trackers.forEach((tracker) => {
+      if (typeof this._trackerCount[tracker] === 'number') {
+        this._trackerCount[tracker]++;
+      } else {
+        this._trackerCount[tracker] = 1;
+      }
+    });
   }
 
   incrementStatusCount(statusData) {
@@ -57,6 +67,10 @@ class TorrentCollection {
     });
   }
 
+  resetTrackerCount() {
+    this._trackerCount = {all: 0};
+  }
+
   updateTorrents(clientData) {
     let currentTime = Date.now();
     let knownHashes = [];
@@ -65,6 +79,7 @@ class TorrentCollection {
     );
 
     this.resetStatusCount();
+    this.resetTrackerCount();
 
     // Create Torrent instances with additonal calculated properties.
     torrentData.forEach((torrent, index) => {
@@ -81,11 +96,13 @@ class TorrentCollection {
 
       // Update the status count with this torrent's status.
       this.incrementStatusCount(this._torrents[hash].status);
+      this.incrementTrackerCount(this._torrents[hash].trackers);
     });
 
     this.removeOutdatedTorrents(knownHashes);
 
     this._statusCount.all = torrentData.length || 0;
+    this._trackerCount.all = torrentData.length || 0;
   }
 }
 

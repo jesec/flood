@@ -11,6 +11,7 @@ class TorrentFilterStoreClass extends BaseStore {
 
     this.searchFilter = null;
     this.statusFilter = 'all';
+    this.trackerFilter = 'all';
     this.sortTorrentsBy = {
       direction: 'desc',
       displayName: 'Date Added',
@@ -27,12 +28,20 @@ class TorrentFilterStoreClass extends BaseStore {
     TorrentActions.fetchTorrentStatusCount();
   }
 
+  fetchTorrentTrackerCount() {
+    TorrentActions.fetchTorrentTrackerCount();
+  }
+
   getSearchFilter() {
     return this.searchFilter;
   }
 
   getStatusFilter() {
     return this.statusFilter;
+  }
+
+  getTrackerFilter() {
+    return this.trackerFilter;
   }
 
   getTorrentsSort() {
@@ -43,12 +52,21 @@ class TorrentFilterStoreClass extends BaseStore {
     return this.torrentStatusCount;
   }
 
+  getTorrentTrackerCount() {
+    return this.torrentTrackerCount;
+  }
+
   handleSortPropsRequestSuccess(sortBy) {
     this.setTorrentsSort(sortBy);
   }
 
   handleTorrentStatusCountRequestError() {
 
+  }
+
+  isFilterActive() {
+    return this.getStatusFilter() || this.getSearchFilter()
+      || this.getTrackerFilter();
   }
 
   setSearchFilter(filter) {
@@ -58,7 +76,14 @@ class TorrentFilterStoreClass extends BaseStore {
 
   setStatusFilter(filter) {
     this.statusFilter = filter;
+    this.emit(EventTypes.UI_TORRENTS_FILTER_CHANGE);
     this.emit(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE);
+  }
+
+  setTrackerFilter(filter) {
+    this.trackerFilter = filter;
+    this.emit(EventTypes.UI_TORRENTS_FILTER_CHANGE);
+    this.emit(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE);
   }
 
   setTorrentsSort(sortBy) {
@@ -69,6 +94,11 @@ class TorrentFilterStoreClass extends BaseStore {
   setTorrentStatusCount(statusCount) {
     this.torrentStatusCount = statusCount;
     this.emit(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE);
+  }
+
+  setTorrentTrackerCount(statusCount) {
+    this.torrentTrackerCount = statusCount;
+    this.emit(EventTypes.CLIENT_TORRENT_TRACKER_COUNT_CHANGE);
   }
 }
 
@@ -84,6 +114,9 @@ AppDispatcher.register((payload) => {
     case ActionTypes.UI_SET_TORRENT_STATUS_FILTER:
       TorrentFilterStore.setStatusFilter(action.data);
       break;
+    case ActionTypes.UI_SET_TORRENT_TRACKER_FILTER:
+      TorrentFilterStore.setTrackerFilter(action.data);
+      break;
     case ActionTypes.UI_SET_TORRENT_SORT:
       TorrentFilterStore.setTorrentsSort(action.data);
       break;
@@ -95,6 +128,12 @@ AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_ERROR:
       TorrentFilterStore.handleTorrentStatusCountRequestError(action.data);
+      break;
+    case ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_SUCCESS:
+      TorrentFilterStore.setTorrentTrackerCount(action.data);
+      break;
+    case ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_ERROR:
+      TorrentFilterStore.handleTorrentTrackerCountRequestError(action.data);
       break;
   }
 });

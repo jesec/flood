@@ -44,8 +44,11 @@ router.get('/torrents', function(req, res, next) {
 });
 
 router.get('/torrents/status-count', function(req, res, next) {
-  // client.getTorrentList(ajaxUtil.getResponseFn(res));
   client.getTorrentStatusCount(ajaxUtil.getResponseFn(res));
+});
+
+router.get('/torrents/tracker-count', function(req, res, next) {
+  client.getTorrentTrackerCount(ajaxUtil.getResponseFn(res));
 });
 
 router.post('/torrents/delete', function(req, res, next) {

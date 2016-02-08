@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
   'onReceiveTorrentsSuccess',
   'handleDetailsClick',
   'handleTorrentClick',
-  'onStatusFilterChange',
+  'onTorrentFilterChange',
   'onTorrentSelectionChange',
   'getListPadding',
   'getViewportLimits',
@@ -60,7 +60,7 @@ export default class TorrentListContainer extends React.Component {
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     TorrentStore.fetchTorrents();
     window.addEventListener('resize', this.handleWindowResize);
     this.setViewportHeight();
@@ -72,7 +72,7 @@ export default class TorrentListContainer extends React.Component {
     TorrentStore.unlisten(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
   }
 
   handleDetailsClick(torrent, event) {
@@ -101,7 +101,7 @@ export default class TorrentListContainer extends React.Component {
     });
   }
 
-  onStatusFilterChange() {
+  onTorrentFilterChange() {
     this.forceUpdate();
   }
 

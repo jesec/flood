@@ -2,12 +2,14 @@
 
 let _ = require('lodash');
 
+let regEx = require('../../shared/util/regEx');
 let stringUtil = require('../../shared/util/stringUtil');
 
 const CALCULATED_DATA = [
   'eta',
   'percentComplete',
   'status',
+  'trackers',
   'totalPeers',
   'totalSeeds'
 ];
@@ -29,6 +31,7 @@ const REQUESTED_DATA = [
   'totalSeeds',
   'uploadTotal',
   'uploadRate',
+  'trackers',
 
   // Torrent Details data
   'creationDate',
@@ -51,7 +54,6 @@ class Torrent {
     }
 
     opts = opts || {};
-
     this._lastUpdated = opts.currentTime || Date.now();
     this._torrentData = this.getCalculatedClientData(clientData, opts);
   }
@@ -65,6 +67,10 @@ class Torrent {
 
   get status() {
     return this._torrentData.status || [];
+  }
+
+  get trackers() {
+    return this._torrentData.trackers || [];
   }
 
   getCalculatedClientData(clientData, opts) {
@@ -187,6 +193,36 @@ class Torrent {
 
   getCalculatedTotalSeeds(clientData) {
     return this.getPeerCount(clientData.totalSeeds);
+  }
+
+  getCalculatedTrackers(clientData) {
+    let trackers = clientData.trackers.split('@!@');
+    let trackerDomains = [];
+
+    trackers.forEach(function (tracker) {
+      let domain = regEx.domainName.exec(tracker);
+
+      if (domain && domain[1]) {
+        domain = domain[1];
+
+        let domainSubsets = domain.split('.');
+        let desiredSubsets = 2;
+        let subsetMinLength = 3;
+
+        if (domainSubsets.length > desiredSubsets) {
+          let lastDesiredSubset = domainSubsets[domainSubsets.length - desiredSubsets];
+          if (lastDesiredSubset.length <= 3) {
+            desiredSubsets++;
+          }
+        }
+
+        domain = domainSubsets.slice(desiredSubsets * -1).join('.');
+
+        trackerDomains.push(domain);
+      }
+    });
+
+    return trackerDomains;
   }
 
   updateData(clientData, opts) {
