@@ -1351,7 +1351,9 @@ body {
 
 .sidebar-filter {
   font-size: 0.85em;
-  padding: 30px 0 0 0; }
+  padding: 30px 0; }
+  .sidebar-filter + .sidebar-filter {
+    padding-top: 0; }
   .sidebar-filter__item {
     color: #53718a;
     cursor: pointer;
