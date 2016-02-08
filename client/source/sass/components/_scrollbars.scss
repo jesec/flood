@@ -1,0 +1,35 @@
+.scrollbars {
+
+  &__thumb {
+    background: $scrollbar--thumb--background--inactive;
+    border-radius: 10px;
+    cursor: pointer;
+    opacity: 0;
+    transition: background 0.25s, opacity 0.25s;
+
+    &:active {
+      opacity: 1;
+    }
+
+    &:hover,
+    &:active {
+      background: $scrollbar--thumb--background--hover;
+    }
+
+    .is-inverted & {
+      background: $scrollbar--thumb--background--inverted--inactive;
+
+      &:hover,
+      &:active {
+        background: $scrollbar--thumb--background--inverted--hover;
+      }
+    }
+  }
+
+  &:hover {
+
+    .scrollbars__thumb {
+      opacity: 1;
+    }
+  }
+}

@@ -51,7 +51,8 @@ var webpackConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel-loader?cacheDirectory'
+        loader: 'babel-loader?cacheDirectory',
+        exclude: /node_modules/
       }
     ],
     preLoaders: [

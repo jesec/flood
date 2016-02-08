@@ -613,7 +613,6 @@ body {
     z-index: 2; }
     .application__panel--torrent-list.is-open {
       -webkit-transform: translateX(85%);
-          -ms-transform: translateX(85%);
               transform: translateX(85%); }
   .application__panel--torrent-details {
     right: 15%;
@@ -629,10 +628,20 @@ body {
   max-height: 35px; }
 
 .torrent__list__wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
       -ms-flex: 1;
           flex: 1; }
+  .torrent__list__wrapper--custom-scroll {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    height: auto !important; }
 
 body {
   background: #1a2f3d; }
@@ -745,7 +754,6 @@ body {
     -webkit-transition: fill 0.25s;
     transition: fill 0.25s;
     -webkit-transform: translateX(-50%) translateY(-50%);
-        -ms-transform: translateX(-50%) translateY(-50%);
             transform: translateX(-50%) translateY(-50%);
     width: 30px; }
 
@@ -1095,7 +1103,6 @@ body {
     -webkit-transition: fill 0.25s;
     transition: fill 0.25s;
     -webkit-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
     width: 8px; }
 
@@ -1136,7 +1143,6 @@ body {
     overflow: hidden;
     position: absolute;
     -webkit-transform: translateY(0);
-        -ms-transform: translateY(0);
             transform: translateY(0);
     width: 100%; }
     .loading-indicator__bar:after {
@@ -1148,7 +1154,6 @@ body {
       display: block;
       height: 100%;
       -webkit-transform: translateX(-100%);
-          -ms-transform: translateX(-100%);
               transform: translateX(-100%);
       width: 25%; }
     .loading-indicator__bar--1 {
@@ -1156,7 +1161,6 @@ body {
     .loading-indicator__bar--2 {
       top: 50%;
       -webkit-transform: translateY(-50%);
-          -ms-transform: translateY(-50%);
               transform: translateY(-50%); }
       .loading-indicator__bar--2:after {
         -webkit-animation-delay: 0.5s;
@@ -1189,7 +1193,6 @@ body {
     position: absolute;
     top: 10%;
     -webkit-transform: translate(-50%, 0);
-        -ms-transform: translate(-50%, 0);
             transform: translate(-50%, 0);
     width: 500px; }
     .modal__content--align-center {
@@ -1258,6 +1261,25 @@ body {
     .has-error .progress-bar__fill {
       background: #e95779; }
 
+.scrollbars__thumb {
+  background: rgba(26, 47, 61, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  opacity: 0;
+  -webkit-transition: background 0.25s, opacity 0.25s;
+  transition: background 0.25s, opacity 0.25s; }
+  .scrollbars__thumb:active {
+    opacity: 1; }
+  .scrollbars__thumb:hover, .scrollbars__thumb:active {
+    background: rgba(26, 47, 61, 0.6); }
+  .is-inverted .scrollbars__thumb {
+    background: rgba(233, 238, 242, 0.3); }
+    .is-inverted .scrollbars__thumb:hover, .is-inverted .scrollbars__thumb:active {
+      background: rgba(233, 238, 242, 0.6); }
+
+.scrollbars:hover .scrollbars__thumb {
+  opacity: 1; }
+
 .application__sidebar {
   box-shadow: 1px 0 rgba(6, 9, 11, 0.3);
   color: #53718a;
@@ -1283,7 +1305,6 @@ body {
     -webkit-transition: fill 0.25s, opacity 0.25s;
     transition: fill 0.25s, opacity 0.25s;
     -webkit-transform: translateY(-50%);
-        -ms-transform: translateY(-50%);
             transform: translateY(-50%);
     width: 22px; }
   .sidebar__item--search .textbox {
@@ -1551,7 +1572,6 @@ body {
     position: absolute;
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%); }
 
 .torrent__list {
@@ -1562,7 +1582,6 @@ body {
     list-style: none;
     max-width: 100%;
     opacity: 1;
-    overflow: auto;
     -webkit-transition: opacity 1s;
     transition: opacity 1s;
     -webkit-user-select: none;
@@ -1646,6 +1665,7 @@ body {
     -webkit-box-align: end;
     -webkit-align-items: flex-end;
         -ms-flex-align: end;
+                -ms-grid-row-align: flex-end;
             align-items: flex-end;
     color: #807f7e;
     -webkit-box-flex: 1;

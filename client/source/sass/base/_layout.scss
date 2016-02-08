@@ -61,7 +61,13 @@ body {
   &__list {
 
     &__wrapper {
+      display: flex;
       flex: 1;
+
+      &--custom-scroll {
+        flex: 1;
+        height: auto !important;
+      }
     }
   }
 }
