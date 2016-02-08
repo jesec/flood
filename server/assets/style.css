@@ -628,10 +628,6 @@ body {
   max-height: 35px; }
 
 .torrent__list__wrapper {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
       -ms-flex: 1;
@@ -1582,6 +1578,7 @@ body {
     list-style: none;
     max-width: 100%;
     opacity: 1;
+    overflow: auto;
     -webkit-transition: opacity 1s;
     transition: opacity 1s;
     -webkit-user-select: none;
