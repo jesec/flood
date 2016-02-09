@@ -54,6 +54,14 @@ class TorrentStoreClass extends BaseStore {
     return this.selectedTorrents;
   }
 
+  handleAddTorrentError(error) {
+    this.emit(EventTypes.CLIENT_ADD_TORRENT_ERROR);
+  }
+
+  handleAddTorrentSuccess(data) {
+    this.emit(EventTypes.CLIENT_ADD_TORRENT_SUCCESS);
+  }
+
   setSelectedTorrents(event, hash) {
     this.selectedTorrents = selectTorrents({
       event,
@@ -155,6 +163,12 @@ AppDispatcher.register((payload) => {
   switch (action.type) {
     case ActionTypes.CLIENT_FETCH_TORRENT_DETAILS_SUCCESS:
       TorrentStore.setTorrentDetails(action.data.hash, action.data.torrentDetails);
+      break;
+    case ActionTypes.CLIENT_ADD_TORRENT_ERROR:
+      TorrentStore.handleAddTorrentError(action.error);
+      break;
+    case ActionTypes.CLIENT_ADD_TORRENT_SUCCESS:
+      TorrentStore.handleAddTorrentSuccess(action.data);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENTS_SUCCESS:
       TorrentStore.setTorrents(action.data.torrents);

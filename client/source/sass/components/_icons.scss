@@ -1,3 +1,13 @@
+@keyframes loading-indicator-dots-pulse {
+  0% {
+    fill-opacity: 0.2;
+  }
+
+  100% {
+    fill-opacity: 0.8;
+  }
+}
+
 .icon {
 
   &--eta {
@@ -6,6 +16,28 @@
 
       &__ring {
         fill-opacity: 1;
+      }
+    }
+  }
+
+  &--loading-indicator {
+
+    .loading-indicator {
+
+      &--dots {
+
+        &__dot {
+          animation: loading-indicator-dots-pulse 0.6s linear alternate infinite;
+          fill: $white;
+
+          &--center {
+            animation-delay: 0.2s;
+          }
+
+          &--right {
+            animation-delay: 0.4s;
+          }
+        }
       }
     }
   }

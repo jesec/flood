@@ -537,6 +537,15 @@ th {
   padding: 8px 22px;
   -webkit-transition: background 0.25s;
   transition: background 0.25s; }
+  .button.has-icon .icon {
+    height: 16px;
+    margin: 0 8.33333px;
+    vertical-align: middle;
+    width: 16px; }
+    .button.has-icon .icon:first-child {
+      margin-left: 0; }
+    .button.has-icon .icon:last-child {
+      margin-right: 0; }
   .button--deemphasize {
     background: #e9eef2;
     color: #66717a; }
@@ -1129,8 +1138,31 @@ body {
             transform: translate(-50%, -50%);
     width: 8px; }
 
+@-webkit-keyframes loading-indicator-dots-pulse {
+  0% {
+    fill-opacity: 0.2; }
+  100% {
+    fill-opacity: 0.8; } }
+
+@keyframes loading-indicator-dots-pulse {
+  0% {
+    fill-opacity: 0.2; }
+  100% {
+    fill-opacity: 0.8; } }
+
 .icon--eta .icon__ring {
   fill-opacity: 1; }
+
+.icon--loading-indicator .loading-indicator--dots__dot {
+  -webkit-animation: loading-indicator-dots-pulse 0.6s linear alternate infinite;
+          animation: loading-indicator-dots-pulse 0.6s linear alternate infinite;
+  fill: #fff; }
+  .icon--loading-indicator .loading-indicator--dots__dot--center {
+    -webkit-animation-delay: 0.2s;
+            animation-delay: 0.2s; }
+  .icon--loading-indicator .loading-indicator--dots__dot--right {
+    -webkit-animation-delay: 0.4s;
+            animation-delay: 0.4s; }
 
 @-webkit-keyframes loading-indicator-swipe {
   0% {
