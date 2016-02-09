@@ -1,6 +1,8 @@
+import classnames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 import Download from '../icons/Download';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
@@ -54,6 +56,8 @@ class ClientStats extends React.Component {
       !this.state.transferDataRequestSuccess) {
       return true;
     }
+
+    return false;
   }
 
   onTransferDataRequestError() {
@@ -79,69 +83,82 @@ class ClientStats extends React.Component {
   }
 
   render() {
-    if (this.state.transferDataRequestError) {
-      return <div>Error</div>;
-    } else if (this.isLoading()) {
-      return <div>Loading</div>;
+    let content = <LoadingIndicator inverse={true} />
+
+    if (!this.isLoading()) {
+      let throttles = TransferDataStore.getThrottles();
+      let transferRate = TransferDataStore.getTransferRate();
+      let transferRates = TransferDataStore.getTransferRates();
+      let transferTotals = TransferDataStore.getTransferTotals();
+
+      let downloadRate = format.data(transferRate.download, '/s');
+      let downloadTotal = format.data(transferTotals.download);
+      let uploadRate = format.data(transferRate.upload, '/s');
+      let uploadTotal = format.data(transferTotals.upload);
+
+      content = (
+        <div key="loaded">
+          <div className="client-stat client-stat--download">
+            <span className="client-stat__icon">
+              <Download />
+            </span>
+            <div className="client-stat__data">
+              <div className="client-stat__data--primary">
+                {downloadRate.value}
+                <em className="unit">{downloadRate.unit}</em>
+              </div>
+              <div className="client-stat__data--secondary">
+                {downloadTotal.value}
+                <em className="unit">{downloadTotal.unit}</em> Downloaded
+              </div>
+            </div>
+            <LineChart
+              data={transferRates.download}
+              height={100}
+              id="graph--download"
+              limit={throttles.download}
+              slug="graph--download"
+              width={this.state.sidebarWidth} />
+          </div>
+          <div className="client-stat client-stat--upload">
+            <span className="client-stat__icon">
+              <Upload />
+            </span>
+            <div className="client-stat__data">
+              <div className="client-stat__data--primary">
+                {uploadRate.value}
+                <em className="unit">{uploadRate.unit}</em>
+              </div>
+              <div className="client-stat__data--secondary">
+                {uploadTotal.value}
+                <em className="unit">{uploadTotal.unit}</em> Uploaded
+              </div>
+            </div>
+            <LineChart
+              data={transferRates.upload}
+              height={100}
+              id="graph--upload"
+              limit={throttles.upload}
+              slug="graph--upload"
+              width={this.state.sidebarWidth} />
+          </div>
+        </div>
+      );
     }
 
-    let throttles = TransferDataStore.getThrottles();
-    let transferRate = TransferDataStore.getTransferRate();
-    let transferRates = TransferDataStore.getTransferRates();
-    let transferTotals = TransferDataStore.getTransferTotals();
-
-    let downloadRate = format.data(transferRate.download, '/s');
-    let downloadTotal = format.data(transferTotals.download);
-    let uploadRate = format.data(transferRate.upload, '/s');
-    let uploadTotal = format.data(transferTotals.upload);
+    let transitionGroupClasses = classnames('client-stats sidebar__item', {
+      'is-loading': this.isLoading()
+    })
 
     return (
-      <div className="client-stats sidebar__item">
-        <div className="client-stat client-stat--download">
-          <span className="client-stat__icon">
-            <Download />
-          </span>
-          <div className="client-stat__data">
-            <div className="client-stat__data--primary">
-              {downloadRate.value}
-              <em className="unit">{downloadRate.unit}</em>
-            </div>
-            <div className="client-stat__data--secondary">
-              {downloadTotal.value}
-              <em className="unit">{downloadTotal.unit}</em> Downloaded
-            </div>
-          </div>
-          <LineChart
-            data={transferRates.download}
-            height={100}
-            id="graph--download"
-            limit={throttles.download}
-            slug="graph--download"
-            width={this.state.sidebarWidth} />
-        </div>
-        <div className="client-stat client-stat--upload">
-          <span className="client-stat__icon">
-            <Upload />
-          </span>
-          <div className="client-stat__data">
-            <div className="client-stat__data--primary">
-              {uploadRate.value}
-              <em className="unit">{uploadRate.unit}</em>
-            </div>
-            <div className="client-stat__data--secondary">
-              {uploadTotal.value}
-              <em className="unit">{uploadTotal.unit}</em> Uploaded
-            </div>
-          </div>
-          <LineChart
-            data={transferRates.upload}
-            height={100}
-            id="graph--upload"
-            limit={throttles.upload}
-            slug="graph--upload"
-            width={this.state.sidebarWidth} />
-        </div>
-      </div>
+      <CSSTransitionGroup
+        className={transitionGroupClasses}
+        component="div"
+        transitionEnterTimeout={3000}
+        transitionLeaveTimeout={3000}
+        transitionName="transfer-data">
+        {content}
+      </CSSTransitionGroup>
     );
   }
 

@@ -770,12 +770,39 @@ body {
   transition: background 0.25s;
   vertical-align: baseline; }
 
+.client-stats {
+  height: 200px;
+  position: relative; }
+  .client-stats .loading-indicator {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%); }
+  .client-stats .transfer-data-enter {
+    opacity: 0;
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s; }
+    .client-stats .transfer-data-enter.transfer-data-enter-active {
+      opacity: 1; }
+  .client-stats .transfer-data-leave {
+    opacity: 1;
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s; }
+    .client-stats .transfer-data-leave.transfer-data-leave-active {
+      opacity: 0; }
+
 .client-stat {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  padding: 30px 20px 20px 20px; }
+  height: 100px;
+  padding: 0 20px; }
   .client-stat__icon, .client-stat__data {
     position: relative;
     vertical-align: top;
@@ -1131,6 +1158,10 @@ body {
   height: 18px;
   position: relative;
   width: 32px; }
+  .loading-indicator.is-inverse .loading-indicator__bar {
+    background: rgba(56, 88, 109, 0.7); }
+    .loading-indicator.is-inverse .loading-indicator__bar:after {
+      background: rgba(37, 141, 229, 0.75); }
   .loading-indicator__bar {
     background: #e9eef2;
     border-radius: 10px;

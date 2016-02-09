@@ -17,8 +17,22 @@
   position: relative;
   width: 32px;
 
+  &.is-inverse {
+
+    .loading-indicator {
+
+      &__bar {
+        background: $loading-indicator--bar--background--inverse;
+
+        &:after {
+          background: $loading-indicator--tick--background--inverse;
+        }
+      }
+    }
+  }
+
   &__bar {
-    background: #e9eef2;
+    background: $loading-indicator--bar--background;
     border-radius: 10px;
     height: 3px;
     left: 0;
@@ -29,7 +43,7 @@
 
     &:after {
       animation: loading-indicator-swipe 3s ease-in-out infinite;
-      background: rgba($blue, 0.75);
+      background: $loading-indicator--tick--background;
       border-radius: 10px;
       content: '';
       display: block;

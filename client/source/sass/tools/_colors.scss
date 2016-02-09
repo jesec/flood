@@ -194,3 +194,9 @@ $scrollbar--thumb--background--inactive: rgba(#1a2f3d, 0.3);
 $scrollbar--thumb--background--hover: rgba(#1a2f3d, 0.6);
 $scrollbar--thumb--background--inverted--inactive: rgba(#e9eef2, 0.3);
 $scrollbar--thumb--background--inverted--hover: rgba(#e9eef2, 0.6);
+
+// loading indicator
+$loading-indicator--bar--background: #e9eef2;
+$loading-indicator--bar--background--inverse: rgba(#38586d, 0.7);
+$loading-indicator--tick--background: rgba($blue, 0.75);
+$loading-indicator--tick--background--inverse: rgba($blue, 0.75);

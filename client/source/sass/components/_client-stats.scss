@@ -1,6 +1,38 @@
+.client-stats {
+  height: 200px;
+  position: relative;
+
+  .loading-indicator {
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .transfer-data-enter {
+    opacity: 0;
+    transition: opacity 1s;
+
+    &.transfer-data-enter-active {
+      opacity: 1;
+    }
+  }
+
+  .transfer-data-leave {
+    opacity: 1;
+    transition: opacity 1s;
+
+    &.transfer-data-leave-active {
+      opacity: 0;
+    }
+  }
+}
+
 .client-stat {
+  align-items: center;
   display: flex;
-  padding: 30px 20px 20px 20px;
+  height: 100px;
+  padding: 0 20px;
 
   &__icon,
   &__data {
