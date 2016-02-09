@@ -6,6 +6,7 @@ export default class Modal extends React.Component {
   getModalButtons(actions) {
     let buttons = actions.map((action, index) => {
       let classes = classnames('button', {
+        [action.supplementalClassName]: action.supplementalClassName,
         'button--deemphasize': action.type === 'secondary',
         'button--primary': action.type === 'primary'
       });
