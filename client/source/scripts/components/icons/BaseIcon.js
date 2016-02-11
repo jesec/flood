@@ -18,7 +18,6 @@ export default class BaseIcon extends React.Component {
 
 BaseIcon.defaultProps = {
   className: '',
-  what: 'hello',
   viewBox: '0 0 60 60'
 };
 

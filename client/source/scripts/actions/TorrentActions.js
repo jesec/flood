@@ -209,6 +209,31 @@ const TorrentActions = {
           }
         });
       });
+  },
+
+  setFilePriority: function(hash, fileIndices, priority) {
+    console.log(hash, fileIndices, priority);
+    return axios.patch(`/client/torrents/${hash}/priority`, {
+        hash,
+        fileIndices,
+        priority
+      })
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        console.log(data);
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_STOP_TORRENT_SUCCESS,
+          data
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_STOP_TORRENT_ERROR,
+          error
+        });
+      });
   }
 };
 

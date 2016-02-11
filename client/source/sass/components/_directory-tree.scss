@@ -58,9 +58,12 @@
 
         .file {
 
-          &__size,
-          &__priority {
-            color: $directory-tree--file-details--hover--foreground;
+          &__detail {
+
+            &--size,
+            &--priority {
+              color: $directory-tree--file-details--hover--foreground;
+            }
           }
         }
       }
@@ -69,21 +72,33 @@
         fill: $directory-tree--icon--file;
       }
 
-      &__name {
+      &__detail {
         flex: 1 1 auto;
-      }
-
-      &__size,
-      &__priority {
-        color: $directory-tree--file-details--foreground;
-        flex: 0 0 auto;
-        font-size: 0.95em;
-        text-align: right;
-        transition: color 0.25s;
-      }
-
-      &__size {
+        overflow: hidden;
         padding-right: $spacing-unit * 1/4;
+        text-overflow: ellipsis;
+
+        &--size,
+        &--priority {
+          color: $directory-tree--file-details--foreground;
+          flex: 0 0 auto;
+          font-size: 0.95em;
+          text-align: right;
+          transition: color 0.25s;
+        }
+
+        &--priority {
+
+          .icon {
+            height: auto;
+            margin-right: 0;
+            width: 16px;
+          }
+        }
+
+        &:last-child {
+          padding-right: 0;
+        }
       }
     }
 
@@ -94,6 +109,8 @@
 
   &__parent-directory {
     margin-left: -1px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     .icon {
       fill: $torrent-details--directory-tree--parent-directory--icon--fill;

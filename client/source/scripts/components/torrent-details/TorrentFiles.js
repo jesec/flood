@@ -39,7 +39,9 @@ export default class TorrentFiles extends React.Component {
       this.constructDirectoryTree(tree, file.pathComponents[0], file);
     });
 
-    return <DirectoryTree tree={tree} depth={0} />;
+    return (
+      <DirectoryTree tree={tree} depth={0} hash={this.props.torrent.hash} />
+    );
   }
 
   isLoaded() {

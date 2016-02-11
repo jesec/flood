@@ -138,16 +138,18 @@ var clientUtil = {
     fileProperties: [
       'path',
       'pathComponents',
-      'pathDepth',
       'priority',
-      'sizeBytes'
+      'sizeBytes',
+      'sizeChunks',
+      'completedChunks'
     ],
     filePropertyMethods: [
       'f.get_path=',
       'f.get_path_components=',
-      'f.get_path_depth=',
       'f.get_priority=',
-      'f.get_size_bytes='
+      'f.get_size_bytes=',
+      'f.get_size_chunks=',
+      'f.completed_chunks='
     ],
     trackerProperties: [
       'group',
@@ -213,7 +215,9 @@ var clientUtil = {
     ]
   },
 
-  mapClientProps: function(props, data) {
+  // TODO clean this up, write comments...
+  mapClientProps: function(props, data, includeIndex) {
+    var index = 0;
     var mappedObject = [];
 
     if (data[0].length === 1) {
@@ -227,6 +231,8 @@ var clientUtil = {
         for (a = 0, lenA = props.length; a < lenA; a++) {
           mappedObject[i][props[a]] = data[i][a];
         }
+        // Index is needed for setting a file's priorities.
+        mappedObject[i].index = index++;
       }
     }
 

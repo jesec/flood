@@ -130,8 +130,12 @@ var client = {
             clientUtil.defaults.fileProperties,
             filesData
           );
+
           files = files.map(function (file) {
             file.filename = file.pathComponents[file.pathComponents.length - 1];
+            file.percentComplete = (file.completedChunks / file.sizeChunks * 100).toFixed(0);
+            delete(file.completedChunks);
+            delete(file.sizeChunks);
             return file;
           });
         }
@@ -178,6 +182,36 @@ var client = {
     }, function(error) {
       callback(error, null);
     });
+  },
+
+  setPriority: function (hash, data, callback) {
+    // TODO Add support for multiple hashes.
+    var fileIndex = data.fileIndices[0];
+
+    var multicall = [
+      [
+        {
+          methodName: 'f.priority.set',
+          params: [
+            hash + ':f' + fileIndex,
+            data.priority
+          ]
+        },
+        {
+          methodName: 'd.update_priorities',
+          params: [
+            hash
+          ]
+        }
+      ]
+    ];
+
+    rTorrent.get('system.multicall', multicall)
+      .then(function(data) {
+        callback(null, data);
+      }, function(error) {
+        callback(error, null);
+      });
   },
 
   setSpeedLimits: function(data, callback) {

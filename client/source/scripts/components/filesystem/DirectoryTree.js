@@ -3,9 +3,20 @@ import React from 'react';
 import DirectoryFileList from './DirectoryFileList';
 import DirectoryTreeNode from './DirectoryTreeNode';
 
+const METHODS_TO_BIND = ['getDirectoryTreeDomNodes'];
+
 export default class DirectoryTree extends React.Component {
+  constructor() {
+    super();
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
   getDirectoryTreeDomNodes(tree, depth = 0) {
     let index = 0;
+    let hash = this.props.hash;
     depth++;
 
     return Object.keys(tree).map((branchName) => {
@@ -14,12 +25,13 @@ export default class DirectoryTree extends React.Component {
 
       if (branchName === 'files') {
         return (
-          <DirectoryFileList branch={branch} key={`${index}${depth}`} />
+          <DirectoryFileList branch={branch} hash={hash}
+            key={`${index}${depth}`} />
         );
       } else {
         return (
           <DirectoryTreeNode depth={depth} directoryName={branchName}
-            subTree={branch} key={`${index}${depth}`} />
+            hash={hash} subTree={branch} key={`${index}${depth}`} />
         );
       }
     });
