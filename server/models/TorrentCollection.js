@@ -54,8 +54,6 @@ class TorrentCollection {
     let currentHashes = Object.keys(this._torrents);
     let removedHashes = _.difference(currentHashes, newHashes);
 
-    console.log(`removing ${removedHashes.length} hashes`);
-
     removedHashes.forEach((hash) => {
       delete this._torrents[hash];
     });
