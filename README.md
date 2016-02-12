@@ -1,5 +1,7 @@
 # Flood
-Flood is a new web interface for rTorrent. It's a work-in-progress, and new features are added weekly by order of usefulness. If your definition of usefulness is different than mine, feel free to file an issue and I'll prioritize your request.
+Flood is another web interface for rTorrent. It's intended to be both beautiful and functional.
+
+It's heavily a work-in-progress, and it doesn't yet have all of the features that you're going to need. New features are added on a regular basis by order of usefulness. If your definition of usefulness is different than mine, feel free to file an issue and I'll prioritize your request.
 
 # How to Use
 * [rtorrent](https://github.com/rakshasa/rtorrent) needs to be intalled with XMLRPC support.
