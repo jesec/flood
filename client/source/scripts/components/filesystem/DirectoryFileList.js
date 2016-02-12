@@ -69,7 +69,7 @@ export default class DirectoryFiles extends React.Component {
 
       return (
         <div className="directory-tree__node directory-tree__node--file file"
-          key={`${index}`} title={file.filename}>
+          key={`${index}-${file.filename}`} title={file.filename}>
           <div className="file__detail file__name">
             <File />
             {file.filename}
@@ -83,7 +83,8 @@ export default class DirectoryFiles extends React.Component {
           </div>
           <div className="file__detail file__detail--priority">
             <PriorityMeter level={this.state.priorities[file.index]}
-              fileIndex={file.index} onChange={this.handlePriorityChange} />
+              fileIndex={file.index} onChange={this.handlePriorityChange}
+              key={`${file.index}-${file.filename}`} />
           </div>
         </div>
       );

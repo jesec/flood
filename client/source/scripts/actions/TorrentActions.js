@@ -212,7 +212,6 @@ const TorrentActions = {
   },
 
   setFilePriority: function(hash, fileIndices, priority) {
-    console.log(hash, fileIndices, priority);
     return axios.patch(`/client/torrents/${hash}/priority`, {
         hash,
         fileIndices,

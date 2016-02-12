@@ -1,5 +1,7 @@
 var Q = require('q');
 var net = require('net');
+
+var config = require('../../config');
 var Deserializer = require('../util/deserializer');
 var Serializer = require('../util/serializer');
 
@@ -8,8 +10,8 @@ var rtorrent = {
 
 	get: function(api, array) {
 		var stream = net.connect({
-			port: 5000,
-			host: 'localhost'
+			port: config.hostPort,
+			host: config.host
 		});
 
 		var deferred = Q.defer();

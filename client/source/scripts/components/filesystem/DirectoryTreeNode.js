@@ -25,7 +25,7 @@ export default class DirectoryTreeNode extends React.Component {
       return (
         <div className="directory-tree__node directory-tree__node--group">
           <DirectoryTree tree={this.props.subTree} depth={this.props.depth}
-            hash={this.props.hash} />
+            hash={this.props.hash} key={`${this.state.expanded}-${this.props.depth}`} />
         </div>
       );
     } else {

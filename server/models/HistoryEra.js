@@ -56,8 +56,6 @@ class HistoryEra {
     let currentTime = Date.now();
 
     if (currentTime - this.lastUpdate >= this.opts.interval - CUMULATIVE_DATA_BUFFER) {
-      console.log(`creating new record in ${this.opts.name}`);
-
       this.lastUpdate = currentTime;
 
       this.db.insert({
@@ -76,7 +74,13 @@ class HistoryEra {
           let downAvg = ((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
           let upAvg = ((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
 
-          console.log(`updating, old avg: ${doc.dn}, new number: ${data.download}, new avg: ${downAvg}`);
+          if (downAvg == null || upAvg == null) {
+            console.log('\n\n');
+            console.log('Warning: null values set in database!');
+            console.log(`DB: ${this.opts.name}`);
+            console.log(`numUpdates: ${numUpdates}\ncurrentDownAvg: ${currentDownAvg}\ncurrentUpAvg: ${currentUpAvg}\ndownAvg: ${downAvg}\nupAvg: ${upAvg}`);
+            console.log('\n\n');
+          }
 
           this.db.update({ts: this.lastUpdate}, {ts: this.lastUpdate, up: Number(upAvg), dn: Number(downAvg), num: numUpdates + 1});
         }
