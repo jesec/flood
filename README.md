@@ -23,3 +23,5 @@ Flood is a new web interface for rTorrent. It's a work-in-progress, and new feat
   * Requires Node `4.x`. I recommend managing node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n).
   * Run `npm install` in your terminal at the repo's root.    
 * Run the server by running `npm start` in your terminal at the repo's root.
+  * Access the UI in your browser at `localhost:3000`.
+  * To change the default port, run `npm start localhost {port}`.
