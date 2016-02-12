@@ -5,7 +5,7 @@ It's heavily a work-in-progress, and it doesn't yet have all of the features you
 
 # Usage
 #### Pre-Requisites
-* [rTorrent](https://github.com/rakshasa/rtorrent) needs to be intalled with XMLRPC support.
+* [rTorrent](https://github.com/rakshasa/rtorrent) needs to be intalled with XMLRPC support (if you're already using a web interface like [ruTorrent](https://github.com/Novik/ruTorrent), you've already done this).
   * On OS X, this can be done really easily with [brew](http://brew.sh/). You'd just run `brew install rtorrent --with-xmlrpc-c`.
   * For Linux distros, there are plenty of guides available. [Here's one](http://linoxide.com/ubuntu-how-to/setup-rtorrent-rutorrent/).
   * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows) (I haven't tested this myself).
