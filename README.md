@@ -4,7 +4,7 @@ Flood is another web interface for [rtorrent](https://github.com/rakshasa/rtorre
 It's heavily a work-in-progress, and it doesn't yet have all of the features that you're going to need. New features are added on a regular basis by order of usefulness. If your definition of usefulness is different than mine, feel free to file an issue and I'll prioritize your request.
 
 # Usage
-## Pre-Requisites
+#### Pre-Requisites
 * [rTorrent](https://github.com/rakshasa/rtorrent) needs to be intalled with XMLRPC support.
   * On OS X, this can be done really easily with [brew](http://brew.sh/). You'd just run `brew install rtorrent --with-xmlrpc-c`.
   * For Linux distros, there are plenty of guides available. [Here's one](http://linoxide.com/ubuntu-how-to/setup-rtorrent-rutorrent/).
@@ -13,11 +13,11 @@ It's heavily a work-in-progress, and it doesn't yet have all of the features tha
   * Use Node `4.x` (Node versions can be managed effortlessly with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)).
   * Run `npm install` in your terminal at the repo's root.
 
-## Configuration
+#### Configuration
 * Add your SCGI host and port in `config.js`. Defaults are `localhost` and `5000`.
 * Copy `server/db/users.js.example` to `server/db/users.js` and add a username and password (password is stored in plain text for now, but this file is not accessible via the web server).
 
-## Starting the Web Server
+#### Starting the Web Server
 * Run `npm start` in your terminal at this repo's root.
 * Access the UI in your browser at `localhost:3000`.
   * To change the default port, run `npm start localhost {port}`.
