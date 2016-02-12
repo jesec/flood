@@ -32,12 +32,6 @@ class TorrentListView extends React.Component {
   }
 
   onOpenChange() {
-    if (!UIStore.isTorrentDetailsOpen()) {
-      TorrentStore.stopPollingTorrentDetails();
-    } else {
-      TorrentStore.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
-    }
-
     this.setState({
       isTorrentDetailsOpen: UIStore.isTorrentDetailsOpen()
     });

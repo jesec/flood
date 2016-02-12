@@ -47,8 +47,15 @@ export default class TorrentDetails extends React.Component {
     UIStore.listen(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE, this.onTorrentDetailsHashChange);
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.isOpen && !this.state.isOpen) {
+      TorrentStore.fetchTorrentDetails();
+    } else if (!nextState.isOpen) {
+      TorrentStore.stopPollingTorrentDetails();
+    }
+  }
+
   componentWillUnmount() {
-    TorrentStore.stopPollingTorrentDetails();
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
     UIStore.unlisten(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE, this.onOpenChange);
     UIStore.unlisten(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE, this.onTorrentDetailsHashChange);
@@ -61,12 +68,6 @@ export default class TorrentDetails extends React.Component {
   }
 
   onOpenChange() {
-    if (!UIStore.isTorrentDetailsOpen()) {
-      TorrentStore.stopPollingTorrentDetails();
-    } else {
-      TorrentStore.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
-    }
-
     this.setState({
       isOpen: UIStore.isTorrentDetailsOpen()
     });

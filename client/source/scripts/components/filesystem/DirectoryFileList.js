@@ -26,9 +26,13 @@ export default class DirectoryFiles extends React.Component {
     this.processPriorities();
   }
 
+  componentWillReceiveProps() {
+    this.processPriorities();
+  }
+
   handlePriorityChange(fileIndex) {
     let priorities = this.state.priorities;
-    let priorityLevel = priorities[fileIndex];
+    let priorityLevel = priorities[`${this.props.hash}-${fileIndex}`];
 
     if (priorityLevel == null) {
       return;
@@ -38,7 +42,7 @@ export default class DirectoryFiles extends React.Component {
       priorityLevel = 0;
     }
 
-    priorities[fileIndex] = priorityLevel;
+    priorities[`${this.props.hash}-${fileIndex}`] = priorityLevel;
 
     this.setState({priorities});
 
@@ -48,9 +52,9 @@ export default class DirectoryFiles extends React.Component {
   processPriorities() {
     let priorities = this.state.priorities;
 
-    this.props.branch.forEach(function (file, index) {
-      if (priorities[file.index] == null) {
-        priorities[file.index] = Number(file.priority);
+    this.props.branch.forEach((file, index) => {
+      if (priorities[`${this.props.hash}-${file.index}`] == null) {
+        priorities[`${this.props.hash}-${file.index}`] = Number(file.priority);
       }
     });
 
@@ -66,6 +70,11 @@ export default class DirectoryFiles extends React.Component {
 
     let files = branch.map((file, index) => {
       let fileSize = format.data(file.sizeBytes, '', 1);
+      let priorityLevel = this.state.priorities[`${this.props.hash}-${file.index}`];
+
+      if (priorityLevel == null) {
+        priorityLevel = file.priority;
+      }
 
       return (
         <div className="directory-tree__node directory-tree__node--file file"
@@ -82,8 +91,8 @@ export default class DirectoryFiles extends React.Component {
             {file.percentComplete}%
           </div>
           <div className="file__detail file__detail--priority">
-            <PriorityMeter level={this.state.priorities[file.index]}
-              fileIndex={file.index} onChange={this.handlePriorityChange}
+            <PriorityMeter level={priorityLevel} fileIndex={file.index}
+              onChange={this.handlePriorityChange}
               key={`${file.index}-${file.filename}`} />
           </div>
         </div>

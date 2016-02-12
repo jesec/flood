@@ -221,15 +221,14 @@ const TorrentActions = {
         return json.data;
       })
       .then((data) => {
-        console.log(data);
         AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_STOP_TORRENT_SUCCESS,
+          type: ActionTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS,
           data
         });
       })
       .catch((error) => {
         AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_STOP_TORRENT_ERROR,
+          type: ActionTypes.CLIENT_SET_FILE_PRIORITY_ERROR,
           error
         });
       });

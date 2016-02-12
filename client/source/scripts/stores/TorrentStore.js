@@ -27,8 +27,8 @@ class TorrentStoreClass extends BaseStore {
 
   fetchTorrentDetails() {
     TorrentActions.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
+
     if (this.pollTorrentDetailsIntervalID === null) {
-      this.stopPollingTorrentDetails();
       this.startPollingTorrentDetails();
     }
   }

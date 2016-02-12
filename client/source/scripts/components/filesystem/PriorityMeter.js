@@ -9,21 +9,9 @@ export default class PriorityMeter extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      level: null
-    };
-
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
-
-  getLevel() {
-    if (this.state.level == null) {
-      return this.props.level;
-    } else {
-      return this.state.level;
-    }
   }
 
   handleClick() {
@@ -31,11 +19,9 @@ export default class PriorityMeter extends React.Component {
   }
 
   render() {
-    let level = this.props.level;
-
     return (
       <div className="priority-meter__wrapper" onClick={this.handleClick}>
-        <div className={`priority-meter priority-meter--level-${level}`}/>
+        <div className={`priority-meter priority-meter--level-${this.props.level}`}/>
       </div>
     );
   }
