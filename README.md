@@ -16,9 +16,10 @@ Flood is a new web interface for rTorrent. It's a work-in-progress, and new feat
 ![Torrent details view](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-g.png)
 ![Torrent details view](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-h.png)
 
-## Test it out!
-* ensure rTorrent is running
-* `npm install`
-* `bower install`
-* `gulp scripts styles`
-* `npm start`
+# How to Use
+* Add your SCGI port and host in `config.js`. Default is `localhost:5000`.
+* Copy `server/db/users.js.example` to `server/db/users.js` and add a username and password. This is stored in plain text for now, but is not accessible publicly.
+* Install the dependencies
+  * Run `npm install` in your terminal at the repo's root.
+    * Requires Node `4.x`. I recommend managing node versions with ![nvm](https://github.com/creationix/nvm) or ![n](https://github.com/tj/n).
+* Run the server by running `npm start` in your terminal at the repo's root.
