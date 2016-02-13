@@ -29,7 +29,7 @@ export default class CustomScrollbar extends React.Component {
         ref="scrollbar"
         renderThumbHorizontal={this.getHorizontalThumb}
         renderThumbVertical={this.getVerticalThumb}
-        onScroll={this.props.scrollHandler}>
+        onScrollFrame={this.props.scrollHandler}>
         {this.props.children}
       </Scrollbars>
     );

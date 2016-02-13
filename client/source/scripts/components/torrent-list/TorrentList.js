@@ -46,7 +46,7 @@ export default class TorrentListContainer extends React.Component {
       this[method] = this[method].bind(this);
     });
 
-    this.handleScroll = _.throttle(this.setScrollPosition, 100, {
+    this.setScrollPosition = _.throttle(this.setScrollPosition, 200, {
       leading: true,
       trailing: true
     });
@@ -142,7 +142,7 @@ export default class TorrentListContainer extends React.Component {
     // Calculate the number of items that should be rendered based on the height
     // of the viewport. We offset this to render a few more outide of the
     // container's dimensions, which looks nicer when the user scrolls.
-    let offset = 10;
+    let offset = 40;
 
     // The number of elements in view is the height of the viewport divided
     // by the height of the elements.
@@ -161,12 +161,8 @@ export default class TorrentListContainer extends React.Component {
     return {minTorrentIndex, maxTorrentIndex};
   }
 
-  setScrollPosition() {
-    if (this.refs.torrentList) {
-      this.setState({
-        scrollPosition: this.refs.torrentList.refs.scrollbar.getScrollTop()
-      });
-    }
+  setScrollPosition(scrollValues) {
+    this.setState({scrollPosition: scrollValues.scrollTop});
   }
 
   setViewportHeight() {
@@ -230,12 +226,11 @@ export default class TorrentListContainer extends React.Component {
       <CSSTransitionGroup
         component="div"
         className="torrent__list__wrapper"
-        onScroll={this.handleScroll}
         transitionName="torrent__list--loading"
         transitionEnterTimeout={1000}
         transitionLeaveTimeout={1000}>
         <CustomScrollbars className="torrent__list__wrapper--custom-scroll"
-          ref="torrentList" scrollHandler={this.props.setScrollPosition}>
+          ref="torrentList" scrollHandler={this.setScrollPosition}>
           {content}
         </CustomScrollbars>
       </CSSTransitionGroup>
