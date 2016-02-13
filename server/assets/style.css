@@ -637,6 +637,10 @@ body {
   max-height: 35px; }
 
 .torrent__list__wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
   -webkit-box-flex: 1;
   -webkit-flex: 1;
       -ms-flex: 1;
@@ -1375,8 +1379,8 @@ body {
   border-radius: 10px;
   cursor: pointer;
   opacity: 0;
-  -webkit-transition: background 0.25s, opacity 0.25s;
-  transition: background 0.25s, opacity 0.25s; }
+  -webkit-transition: background 0.25s, opacity 0.5s;
+  transition: background 0.25s, opacity 0.5s; }
   .scrollbars__thumb:active {
     opacity: 1; }
   .scrollbars__thumb:hover, .scrollbars__thumb:active {

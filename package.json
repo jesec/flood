@@ -36,7 +36,7 @@
     "q": "^1.2.0",
     "react": "^0.14.7",
     "react-addons-css-transition-group": "^0.14.7",
-    "react-custom-scrollbars": "^2.3.0",
+    "react-custom-scrollbars": "^3.0.0",
     "react-dom": "^0.14.7",
     "sax": "^0.6.1",
     "serve-favicon": "~2.2.0",

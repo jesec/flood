@@ -5,7 +5,7 @@
     border-radius: 10px;
     cursor: pointer;
     opacity: 0;
-    transition: background 0.25s, opacity 0.25s;
+    transition: background 0.25s, opacity 0.5s;
 
     &:active {
       opacity: 1;

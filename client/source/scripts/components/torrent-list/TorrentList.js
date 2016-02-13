@@ -4,7 +4,7 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// import CustomScrollbars from '../ui/CustomScrollbars';
+import CustomScrollbars from '../ui/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicator from '../ui/LoadingIndicator';
 import Torrent from './Torrent';
@@ -69,7 +69,6 @@ export default class TorrentListContainer extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleWindowResize);
-
     TorrentStore.unlisten(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
@@ -165,8 +164,7 @@ export default class TorrentListContainer extends React.Component {
   setScrollPosition() {
     if (this.refs.torrentList) {
       this.setState({
-        // scrollPosition: this.refs.torrentList.refs.scrollbar.getScrollTop()
-        scrollPosition: ReactDOM.findDOMNode(this.refs.torrentList).scrollTop
+        scrollPosition: this.refs.torrentList.refs.scrollbar.getScrollTop()
       });
     }
   }
@@ -174,8 +172,7 @@ export default class TorrentListContainer extends React.Component {
   setViewportHeight() {
     if (this.refs.torrentList) {
       this.setState({
-        // viewportHeight: this.refs.torrentList.refs.scrollbar.getHeight()
-        viewportHeight: ReactDOM.findDOMNode(this.refs.torrentList).offsetHeight
+        viewportHeight: this.refs.torrentList.refs.scrollbar.getClientHeight()
       });
     }
   }
@@ -234,11 +231,13 @@ export default class TorrentListContainer extends React.Component {
         component="div"
         className="torrent__list__wrapper"
         onScroll={this.handleScroll}
-        ref="torrentList"
         transitionName="torrent__list--loading"
         transitionEnterTimeout={1000}
         transitionLeaveTimeout={1000}>
-        {content}
+        <CustomScrollbars className="torrent__list__wrapper--custom-scroll"
+          ref="torrentList" scrollHandler={this.props.setScrollPosition}>
+          {content}
+        </CustomScrollbars>
       </CSSTransitionGroup>
     );
   }
