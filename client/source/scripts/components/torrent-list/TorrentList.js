@@ -46,7 +46,7 @@ export default class TorrentListContainer extends React.Component {
       this[method] = this[method].bind(this);
     });
 
-    this.setScrollPosition = _.throttle(this.setScrollPosition, 200, {
+    this.setScrollPosition = _.throttle(this.setScrollPosition, 100, {
       leading: true,
       trailing: true
     });
@@ -142,7 +142,7 @@ export default class TorrentListContainer extends React.Component {
     // Calculate the number of items that should be rendered based on the height
     // of the viewport. We offset this to render a few more outide of the
     // container's dimensions, which looks nicer when the user scrolls.
-    let offset = 40;
+    let offset = 10;
 
     // The number of elements in view is the height of the viewport divided
     // by the height of the elements.
