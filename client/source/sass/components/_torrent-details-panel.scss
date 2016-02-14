@@ -135,7 +135,8 @@
     &__heading,
     &__null-data {
       color: $torrent-details--directory-tree--parent-directory--foreground;
-      font-size: 1.125em;
+      font-size: 1.15em;
+      margin-bottom: $spacing-unit * 1/10;
     }
 
     &__heading {

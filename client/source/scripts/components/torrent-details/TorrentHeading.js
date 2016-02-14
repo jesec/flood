@@ -66,25 +66,9 @@ export default class TorrentHeading extends React.Component {
       'stop': <Stop />
     };
     let torrentActions = ['start', 'pause', 'stop'];
+    let torrentActionElements = [];
 
-    torrentActions = torrentActions.map((torrentAction, index) => {
-      let capitalizedAction = stringUtil.capitalize(torrentAction);
-      let classes = 'torrent-details__sub-heading__tertiary torrent-details__action';
-
-      if (torrentAction === currentStatus) {
-        classes += ' is-active';
-      }
-
-      return (
-        <li className={classes} key={index}
-          onClick={this[`handle${capitalizedAction}`]}>
-          {statusIcons[torrentAction]}
-          {capitalizedAction}
-        </li>
-      );
-    });
-
-    torrentActions.push(
+    torrentActionElements.push(
       <li className="torrent-details__sub-heading__tertiary"
         key={torrentActions.length + 1}>
         <PriorityMeter id={torrent.hash} key={torrent.hash}
@@ -93,7 +77,24 @@ export default class TorrentHeading extends React.Component {
       </li>
     );
 
-    return torrentActions;
+    torrentActions.forEach((torrentAction, index) => {
+      let capitalizedAction = stringUtil.capitalize(torrentAction);
+      let classes = 'torrent-details__sub-heading__tertiary torrent-details__action';
+
+      if (torrentAction === currentStatus) {
+        classes += ' is-active';
+      }
+
+      torrentActionElements.push(
+        <li className={classes} key={index}
+          onClick={this[`handle${capitalizedAction}`]}>
+          {statusIcons[torrentAction]}
+          {capitalizedAction}
+        </li>
+      );
+    });
+
+    return torrentActionElements;
   }
 
   handlePause() {

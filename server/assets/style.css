@@ -1664,7 +1664,8 @@ body {
         color: #349cf4; }
   .torrent-details__section__heading, .torrent-details__section__null-data {
     color: #3a5c74;
-    font-size: 1.125em; }
+    font-size: 1.15em;
+    margin-bottom: 2.5px; }
   .torrent-details__section__heading .badge {
     background: rgba(82, 120, 147, 0.5);
     color: #0c1b26; }
