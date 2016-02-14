@@ -1,12 +1,11 @@
 // dependencies
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync');
+var cssnano = require('gulp-cssnano');
 var eslint = require('gulp-eslint');
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
-var imagemin = require('gulp-imagemin');
-var minifyCSS = require('gulp-minify-css');
 var sass = require('gulp-sass');
 var sourcemaps = require('gulp-sourcemaps');
 var uglify = require('gulp-uglify');
@@ -94,10 +93,6 @@ gulp.task('eslint', eslintFn);
 
 gulp.task('images', function () {
   return gulp.src(dirs.src + '/' + dirs.img + '/**/*.*')
-    .pipe(imagemin({
-      progressive: true,
-      svgoPlugins: [{removeViewBox: false}]
-    }))
     .pipe(gulp.dest(dirs.dist + '/' + dirs.imgDist));
 });
 
@@ -121,7 +116,7 @@ gulp.task('sass', function () {
 
 gulp.task('minify-css', ['sass'], function () {
   return gulp.src(dirs.dist + '/' + dirs.stylesDist + '/' + files.mainStylesDist + '.css')
-    .pipe(minifyCSS())
+    .pipe(cssnano())
     .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist));
 });
 
