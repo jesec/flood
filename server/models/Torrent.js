@@ -31,6 +31,7 @@ const REQUESTED_DATA = [
   'totalSeeds',
   'uploadTotal',
   'uploadRate',
+  'priority',
   'trackers',
 
   // Torrent Details data

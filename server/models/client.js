@@ -184,7 +184,7 @@ var client = {
     });
   },
 
-  setPriority: function (hash, data, callback) {
+  setFilePriority: function (hash, data, callback) {
     // TODO Add support for multiple hashes.
     var fileIndex = data.fileIndices[0];
 
@@ -194,6 +194,34 @@ var client = {
           methodName: 'f.priority.set',
           params: [
             hash + ':f' + fileIndex,
+            data.priority
+          ]
+        },
+        {
+          methodName: 'd.update_priorities',
+          params: [
+            hash
+          ]
+        }
+      ]
+    ];
+
+    rTorrent.get('system.multicall', multicall)
+      .then(function(data) {
+        callback(null, data);
+      }, function(error) {
+        callback(error, null);
+      });
+  },
+
+  setPriority: function (hash, data, callback) {
+    // TODO Add support for multiple hashes.
+    var multicall = [
+      [
+        {
+          methodName: 'd.set_priority',
+          params: [
+            hash,
             data.priority
           ]
         },

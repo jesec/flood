@@ -161,6 +161,31 @@ const TorrentActions = {
       });
   },
 
+  pauseTorrents: function(hashes) {
+    return axios.post('/client/pause', {
+        hashes
+      })
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((response) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_START_TORRENT_SUCCESS,
+          data: {
+            response
+          }
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_START_TORRENT_ERROR,
+          data: {
+            error
+          }
+        });
+      });
+  },
+
   startTorrents: function(hashes) {
     return axios.post('/client/start', {
         hashes
@@ -211,8 +236,30 @@ const TorrentActions = {
       });
   },
 
-  setFilePriority: function(hash, fileIndices, priority) {
+  setPriority: function(hash, priority) {
     return axios.patch(`/client/torrents/${hash}/priority`, {
+        hash,
+        priority
+      })
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS,
+          data
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_SET_FILE_PRIORITY_ERROR,
+          error
+        });
+      });
+  },
+
+  setFilePriority: function(hash, fileIndices, priority) {
+    return axios.patch(`/client/torrents/${hash}/file-priority`, {
         hash,
         fileIndices,
         priority

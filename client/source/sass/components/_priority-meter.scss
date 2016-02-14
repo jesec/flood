@@ -1,11 +1,12 @@
 .priority-meter {
   height: 8px;
   position: relative;
-  width: 17px;
 
   &__wrapper {
+    cursor: pointer;
     display: inline-block;
     padding: 5px;
+    user-select: none;
     vertical-align: middle;
   }
 
@@ -31,39 +32,101 @@
     width: 2px;
   }
 
-  &--level-0 {
+  &--max-2 {
+    width: 18px;
 
-    &:before {
-      background: $priority-meter--track--level-0--background;
-    }
+    &.priority-meter {
 
-    &:after {
-      left: 0;
-      background: $priority-meter--bar--level-0--background;
+      &--level-0 {
+
+        &:before {
+          background: $priority-meter--track--level-0--background;
+        }
+
+        &:after {
+          left: 0;
+          background: $priority-meter--bar--level-0--background;
+        }
+      }
+
+      &--level-1 {
+
+        &:before {
+          background: $priority-meter--track--level-1--background;
+        }
+
+        &:after {
+          left: 8px;
+          background: $priority-meter--bar--level-1--background;
+        }
+      }
+
+      &--level-2 {
+
+        &:before {
+          background: $priority-meter--track--level-2--background;
+        }
+
+        &:after {
+          background: $priority-meter--bar--level-2--background;
+          left: 16px;
+        }
+      }
     }
   }
 
-  &--level-1 {
+  &--max-3 {
+    width: 26px;
 
-    &:before {
-      background: $priority-meter--track--level-1--background;
-    }
+    &.priority-meter {
 
-    &:after {
-      left: 8px;
-      background: $priority-meter--bar--level-1--background;
-    }
-  }
+      &--level-0 {
 
-  &--level-2 {
+        &:before {
+          background: $priority-meter--track--level-0--background;
+        }
 
-    &:before {
-      background: $priority-meter--track--level-2--background;
-    }
+        &:after {
+          left: 0;
+          background: $priority-meter--bar--level-0--background;
+        }
+      }
 
-    &:after {
-      background: $priority-meter--bar--level-2--background;
-      left: 15px;
+      &--level-1 {
+
+        &:before {
+          background: $priority-meter--track--level-1--background;
+        }
+
+        &:after {
+          left: 8px;
+          background: $priority-meter--bar--level-1--background;
+        }
+      }
+
+      &--level-2 {
+
+        &:before {
+          background: $priority-meter--track--level-2--background;
+        }
+
+        &:after {
+          background: $priority-meter--bar--level-2--background;
+          left: 16px;
+        }
+      }
+
+      &--level-3 {
+
+        &:before {
+          background: $priority-meter--track--level-2--background;
+        }
+
+        &:after {
+          background: $priority-meter--bar--level-2--background;
+          left: 24px;
+        }
+      }
     }
   }
 }

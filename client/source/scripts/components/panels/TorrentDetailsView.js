@@ -19,6 +19,7 @@ const METHODS_TO_BIND = [
   'handleNavChange',
   'onTorrentDetailsHashChange',
   'onOpenChange',
+  'onReceiveTorrentsSuccess',
   'onTorrentDetailsChange'
 ];
 
@@ -43,6 +44,7 @@ export default class TorrentDetails extends React.Component {
 
   componentDidMount() {
     TorrentStore.listen(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
+    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     UIStore.listen(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE, this.onOpenChange);
     UIStore.listen(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE, this.onTorrentDetailsHashChange);
   }
@@ -57,8 +59,14 @@ export default class TorrentDetails extends React.Component {
 
   componentWillUnmount() {
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
+    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     UIStore.unlisten(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE, this.onOpenChange);
     UIStore.unlisten(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE, this.onTorrentDetailsHashChange);
+  }
+
+  onReceiveTorrentsSuccess() {
+    // console.log('torrent update success');
+    this.forceUpdate();
   }
 
   onTorrentDetailsHashChange() {

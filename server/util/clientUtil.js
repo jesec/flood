@@ -14,6 +14,8 @@ var clientUtil = {
       'isHashChecking',
       'isOpen',
 
+      'priority',
+
       'uploadRate',
       'uploadTotal',
       'downloadRate',
@@ -81,6 +83,8 @@ var clientUtil = {
       'd.complete=',
       'd.is_hash_checking=',
       'd.is_open=',
+
+      'd.priority=',
 
       'd.up.rate=',
       'd.up.total=',

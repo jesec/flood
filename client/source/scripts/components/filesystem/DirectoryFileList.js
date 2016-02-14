@@ -5,15 +5,13 @@ import format from '../../util/formatData';
 import PriorityMeter from './PriorityMeter';
 import TorrentActions from '../../actions/TorrentActions';
 
-const MAX_LEVEL = 2;
-const METHODS_TO_BIND = ['handlePriorityChange', 'processPriorities'];
+const METHODS_TO_BIND = ['handlePriorityChange'];
 
 export default class DirectoryFiles extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      priorities: {},
       files: null
     };
 
@@ -22,43 +20,8 @@ export default class DirectoryFiles extends React.Component {
     });
   }
 
-  componentWillMount() {
-    this.processPriorities();
-  }
-
-  componentWillReceiveProps() {
-    this.processPriorities();
-  }
-
-  handlePriorityChange(fileIndex) {
-    let priorities = this.state.priorities;
-    let priorityLevel = priorities[`${this.props.hash}-${fileIndex}`];
-
-    if (priorityLevel == null) {
-      return;
-    }
-
-    if (priorityLevel++ >= MAX_LEVEL) {
-      priorityLevel = 0;
-    }
-
-    priorities[`${this.props.hash}-${fileIndex}`] = priorityLevel;
-
-    this.setState({priorities});
-
+  handlePriorityChange(fileIndex, priorityLevel) {
     TorrentActions.setFilePriority(this.props.hash, [fileIndex], priorityLevel);
-  }
-
-  processPriorities() {
-    let priorities = this.state.priorities;
-
-    this.props.branch.forEach((file, index) => {
-      if (priorities[`${this.props.hash}-${file.index}`] == null) {
-        priorities[`${this.props.hash}-${file.index}`] = Number(file.priority);
-      }
-    });
-
-    this.setState({priorities});
   }
 
   render() {
@@ -70,11 +33,6 @@ export default class DirectoryFiles extends React.Component {
 
     let files = branch.map((file, index) => {
       let fileSize = format.data(file.sizeBytes, '', 1);
-      let priorityLevel = this.state.priorities[`${this.props.hash}-${file.index}`];
-
-      if (priorityLevel == null) {
-        priorityLevel = file.priority;
-      }
 
       return (
         <div className="directory-tree__node directory-tree__node--file file"
@@ -91,8 +49,8 @@ export default class DirectoryFiles extends React.Component {
             {file.percentComplete}%
           </div>
           <div className="file__detail file__detail--priority">
-            <PriorityMeter level={priorityLevel} fileIndex={file.index}
-              onChange={this.handlePriorityChange}
+            <PriorityMeter level={file.priority} id={file.index}
+              maxLevel={2} onChange={this.handlePriorityChange}
               key={`${file.index}-${file.filename}`} />
           </div>
         </div>
