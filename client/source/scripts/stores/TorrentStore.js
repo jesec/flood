@@ -67,7 +67,7 @@ class TorrentStoreClass extends BaseStore {
       event,
       hash,
       selectedTorrents: this.selectedTorrents,
-      torrentList: this.sortedTorrents
+      torrentList: this.filteredTorrents
     });
     this.emit(EventTypes.UI_TORRENT_SELECTION_CHANGE);
   }
