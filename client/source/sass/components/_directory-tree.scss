@@ -50,11 +50,20 @@
     }
 
     .file {
+      align-items: center;
       display: flex;
-      line-height: 1.7;
+      line-height: 1.4;
+      margin-left: -9px;
+      padding: 2px 0 2px 9px;
+      transition: background 0.25s, box-shadow 0.25s, color 0.25s;
       width: 100%;
 
       &:hover {
+        background: $torrent-details--directory-tree--file--hover--background;
+        box-shadow:
+          0 1px 0 $torrent-details--directory-tree--file--hover--border,
+          0 -1px 0 $torrent-details--directory-tree--file--hover--border;
+        color: $torrent-details--directory-tree--file--hover--foreground;
 
         .file {
 
@@ -70,6 +79,8 @@
 
       .icon {
         fill: $directory-tree--icon--file;
+        margin-top: -3px;
+        vertical-align: middle;
       }
 
       &__detail {

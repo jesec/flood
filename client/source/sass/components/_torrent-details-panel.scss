@@ -24,6 +24,15 @@
   transition: opacity 1s;
   z-index: 2;
 
+  &__wrapper {
+    flex: 1;
+    height: 100%;
+  }
+
+  &__scroll-container {
+    height: auto !important;
+  }
+
   &__header {
     box-shadow: 0 1px 0 $torrent-details--header--border;
     flex: 0 0 auto;

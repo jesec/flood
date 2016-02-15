@@ -4,6 +4,7 @@ import React from 'react';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 
 import ApplicationPanel from '../layout/ApplicationPanel';
+import CustomScrollbars from '../ui/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import NavigationList from '../ui/NavigationList';
 import TorrentActions from '../../actions/TorrentActions';
@@ -65,7 +66,6 @@ export default class TorrentDetails extends React.Component {
   }
 
   onReceiveTorrentsSuccess() {
-    // console.log('torrent update success');
     this.forceUpdate();
   }
 
@@ -148,9 +148,11 @@ export default class TorrentDetails extends React.Component {
             <NavigationList defaultItem={this.state.torrentDetailsPane}
               items={this.getNavigationItems()} onChange={this.handleNavChange}
               uniqueClassName="torrent-details__navigation" />
-            <div className="torrent-details__content">
-              {this.getNavigationItem(this.state.torrentDetailsPane)}
-            </div>
+              <CustomScrollbars className="torrent-details__scroll-container" inverted={true}>
+                <div className="torrent-details__content">
+                  {this.getNavigationItem(this.state.torrentDetailsPane)}
+                </div>
+              </CustomScrollbars>
           </div>
         </div>
       );
@@ -159,6 +161,7 @@ export default class TorrentDetails extends React.Component {
     return (
       <ApplicationPanel modifier="torrent-details">
         <CSSTransitionGroup
+          className="torrent-details__wrapper"
           transitionEnterTimeout={1000}
           transitionLeaveTimeout={1000}
           transitionName="torrent-details">

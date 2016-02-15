@@ -972,16 +972,30 @@ body {
     .directory-tree__node--directory .icon {
       fill: rgba(82, 120, 147, 0.4); }
   .directory-tree__node .file {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    line-height: 1.7;
+    line-height: 1.4;
+    margin-left: -9px;
+    padding: 2px 0 2px 9px;
+    -webkit-transition: background 0.25s, box-shadow 0.25s, color 0.25s;
+    transition: background 0.25s, box-shadow 0.25s, color 0.25s;
     width: 100%; }
-    .directory-tree__node .file:hover .file__detail--size, .directory-tree__node .file:hover .file__detail--priority {
-      color: #527893; }
+    .directory-tree__node .file:hover {
+      background: rgba(26, 45, 60, 0.8);
+      box-shadow: 0 1px 0 #1f3647, 0 -1px 0 #1f3647;
+      color: #79a7c7; }
+      .directory-tree__node .file:hover .file__detail--size, .directory-tree__node .file:hover .file__detail--priority {
+        color: #527893; }
     .directory-tree__node .file .icon {
-      fill: #344b5b; }
+      fill: #344b5b;
+      margin-top: -3px;
+      vertical-align: middle; }
     .directory-tree__node .file__detail {
       -webkit-box-flex: 1;
       -webkit-flex: 1 1 auto;
@@ -1594,6 +1608,14 @@ body {
   -webkit-transition: opacity 1s;
   transition: opacity 1s;
   z-index: 2; }
+  .torrent-details__wrapper {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    height: 100%; }
+  .torrent-details__scroll-container {
+    height: auto !important; }
   .torrent-details__header {
     box-shadow: 0 1px 0 rgba(4, 13, 19, 0.3);
     -webkit-box-flex: 0;
@@ -1648,8 +1670,8 @@ body {
               flex: 1;
       overflow: hidden; }
   .torrent-details__navigation {
-    background: rgba(16, 26, 34, 0.1);
-    box-shadow: 1px 0 0 rgba(4, 13, 19, 0.35);
+    background: transparent;
+    box-shadow: 1px 0 0 rgba(4, 13, 19, 0.4);
     min-width: 125px;
     padding: 12.5px 0; }
     .torrent-details__navigation .navigation__item {
