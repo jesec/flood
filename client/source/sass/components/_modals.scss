@@ -1,3 +1,7 @@
+$modal--border-radius: 3px;
+$modal-content--padding--horizontal: $spacing-unit;
+$modal-content--padding--vertical: $modal-content--padding--horizontal * 1/2;
+
 .modal {
   background: $modal--overlay;
   height: 100%;
@@ -8,21 +12,78 @@
   width: 100%;
   z-index: 100;
 
+  &__header {
+    background: $modal--heading--background;
+    border-radius: $modal--border-radius $modal--border-radius 0 0;
+    box-shadow: inset 0 -1px 0 $modal--heading--border;
+    color: $modal--heading--foreground;
+    flex: 0 0 auto;
+    font-size: 1.1em;
+    font-weight: 400;
+    padding: $modal-content--padding--vertical $modal-content--padding--horizontal 0 $modal-content--padding--horizontal;
+  }
+
+  &__tabs {
+    color: $modal--tab--foreground;
+    font-size: 0.7em;
+    margin: 0 $spacing-unit * -1/5;
+
+    .modal {
+
+      &__tab {
+        cursor: pointer;
+        display: inline-block;
+        margin-right: $spacing-unit * 1/4;
+        padding: $spacing-unit * 1/5;
+        position: relative;
+
+        &:after {
+          bottom: 0;
+          content: '';
+          height: 1px;
+          left: 0;
+          position: absolute;
+          right: 0;
+          transition: background 0.25s;
+        }
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        &.is-active {
+          color: $modal--tab--foreground--active;
+          font-weight: 600;
+
+          &:after {
+            background: $modal--tab--border--active;
+          }
+        }
+      }
+    }
+  }
+
   &__content {
-    background: $modal--background;
-    border-radius: 5px;
-    box-shadow:
-      0 0 0 1px $modal--content--border,
-      0 0 35px $modal--content--shadow;
-    left: 50%;
-    max-height: 80%;
-    max-width: 80%;
+    flex: 1 1 auto;
     overflow: auto;
-    padding: 30px;
-    position: absolute;
-    top: 10%;
-    transform: translate(-50%, 0);
-    width: 500px;
+    padding: $modal-content--padding--vertical $modal-content--padding--horizontal;
+
+    &__wrapper {
+      background: $modal--background;
+      border-radius: $modal--border-radius;
+      box-shadow:
+        0 0 0 1px $modal--content--border,
+        0 0 35px $modal--content--shadow;
+      display: flex;
+      flex-direction: column;
+      left: 50%;
+      max-height: 80%;
+      max-width: 80%;
+      position: absolute;
+      top: 10%;
+      transform: translate(-50%, 0);
+      width: 500px;
+    }
 
     &--align-center {
       text-align: center;
@@ -31,6 +92,7 @@
 
   &__footer {
     margin-top: $spacing-unit;
+    padding: 0 0 $modal-content--padding--vertical 0;
   }
 
   &__button-group {
@@ -42,13 +104,6 @@
         margin-left: 20px;
       }
     }
-  }
-
-  &__header {
-    color: $modal--header--foreground;
-    font-size: 1.1em;
-    font-weight: 400;
-    margin-bottom: 20px;
   }
 
   &__animation-enter {

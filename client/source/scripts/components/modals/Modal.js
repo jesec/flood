@@ -2,7 +2,32 @@ import _ from 'lodash';
 import classnames from 'classnames';
 import React from 'react';
 
+import CustomScrollbars from '../ui/CustomScrollbars';
+import ModalTabs from './ModalTabs';
+
+const METHODS_TO_BIND = ['handleTabChange'];
+
 export default class Modal extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      activeTabId: null
+    };
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  getActiveTabId() {
+    if (this.state.activeTabId) {
+      return this.state.activeTabId;
+    }
+
+    return Object.keys(this.props.tabs)[0];
+  }
+
   getModalButtons(actions) {
     let buttons = actions.map((action, index) => {
       let classes = classnames('button', {
@@ -37,22 +62,41 @@ export default class Modal extends React.Component {
     }
   }
 
+  handleTabChange(tab) {
+    this.setState({activeTabId: tab.id});
+  }
+
   handleMenuWrapperClick(event) {
     event.stopPropagation();
   }
 
   render() {
-    let contentClasses = classnames('modal__content',
-      `modal__content--align-${this.props.alignment}`);
+    let content = this.props.content;
+    let contentClasses = classnames('modal__content__wrapper',
+      `modal--align-${this.props.alignment}`);
+    let tabs = null;
+
+    if (this.props.tabs) {
+      let activeTabId = this.getActiveTabId();
+
+      content = this.props.tabs[activeTabId].content;
+      tabs = (
+        <ModalTabs activeTabId={activeTabId} onTabChange={this.handleTabChange}
+          tabs={this.props.tabs} />
+      );
+    }
 
     return (
       <div className={contentClasses} onClick={this.handleMenuWrapperClick}>
-        <div className="modal__header">{this.props.heading}</div>
-        <div className="modal__content__container">
-          {this.props.content}
+        <div className="modal__header">
+          {this.props.heading}
+          {tabs}
         </div>
-        <div className="modal__footer">
-          {this.getModalButtons(this.props.actions)}
+        <div className="modal__content">
+          {content}
+          <div className="modal__footer">
+            {this.getModalButtons(this.props.actions)}
+          </div>
         </div>
       </div>
     );

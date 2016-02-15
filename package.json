@@ -38,6 +38,7 @@
     "react-addons-css-transition-group": "^0.14.7",
     "react-custom-scrollbars": "^3.0.0",
     "react-dom": "^0.14.7",
+    "react-dropzone": "^3.3.2",
     "sax": "^0.6.1",
     "serve-favicon": "~2.2.0",
     "xmlbuilder": "^2.6.2",

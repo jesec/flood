@@ -33,6 +33,9 @@
     }
   }
 
+  &.is-fulfilled {
+    background: $textbox--fulfilled--background;
+  }
 }
 
 .button {
@@ -89,14 +92,14 @@
   &__label {
     color: $form--label--foreground;
     display: block;
-    margin-bottom: 0.1em;
+    font-size: 0.8em;
+    margin-bottom: 0.5em;
   }
 
   &__row {
 
     & + .form__row {
-      margin-top: 20px;
+      margin-top: $spacing-unit;
     }
   }
-
 }

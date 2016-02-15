@@ -20,4 +20,14 @@
       position: relative;
     }
   }
+
+  .form {
+
+    &__row {
+
+      & + .form__row {
+        margin-top: $spacing-unit * 1/2;
+      }
+    }
+  }
 }

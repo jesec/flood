@@ -10,14 +10,15 @@ $main-content--background: #e9eef2;
 $header--foreground: #313436;
 
 // form elements
-$form--label--foreground: #53718a;
+$form--label--foreground: #abbac7;
 
-$textbox--background: rgba($main-content--background, 0.3);
-$textbox--foreground: $foreground;
+$textbox--background: #e9eff5;
+$textbox--foreground: #53718a;
 $textbox--placeholder: #abbac7;
-$textbox--border: $main-content--background;
-$textbox--active--background: $textbox--background;
-$textbox--active--border: $main-content--background;
+$textbox--border: #d6e2ea;
+$textbox--fulfilled--background: #fdfefe;
+$textbox--active--background: #fdfefe;
+$textbox--active--border: desaturate(darken($textbox--border, 5%), 5%);
 $textbox--active--foreground: $blue;
 $textbox--active--placeholder: $textbox--placeholder;
 
@@ -138,7 +139,7 @@ $torrent-details--navigation--border: rgba(#040d13, 0.4);
 $torrent-details--navigation--item--background--active: rgba(#349cf4, 0.07);
 $torrent-details--navigation--item--foreground--active: #349cf4;
 $torrent-details--navigation--item--border--active: #349cf4;
-$torrent-details--navigation--background: transparent; // rgba(desaturate(#0c1b26, 15%), 0.1)
+$torrent-details--navigation--background: transparent;
 
 $torrent-details--content--background: rgba(desaturate(#0c1b26, 15%), 0.4);
 
@@ -173,9 +174,14 @@ $dropdown--item--foreground--hover: darken($dropdown--foreground, 10%);
 $dropdown--item--foreground--active: $blue;
 
 // modal windows
-$modal--background: #fff;
+$modal--background: #f7fafc;
+$modal--heading--background: #fff;
+$modal--heading--foreground: $header--foreground;
+$modal--heading--border: #dde7ed;
+$modal--tab--foreground: #abbac7;
+$modal--tab--foreground--active: $blue;
+$modal--tab--border--active: $blue;
 $modal--overlay: rgba($background, 0.5);
-$modal--header--foreground: $header--foreground;
 $modal--content--border: rgba($background, 0.1);
 $modal--content--shadow: rgba($background, 0.3);
 

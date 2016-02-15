@@ -10,7 +10,6 @@ const METHODS_TO_BIND = [
 ];
 
 export default class TextboxRepeater extends React.Component {
-
   constructor() {
     super();
 
@@ -38,9 +37,13 @@ export default class TextboxRepeater extends React.Component {
         );
       }
 
+      let inputClasses = classnames('textbox', {
+        'is-fulfilled': textbox.value && textbox.value !== ''
+      });
+
       return (
         <div className="textbox__wrapper form__row" key={index}>
-          <input className="textbox"
+          <input className={inputClasses}
             onChange={this.handleTextboxChange.bind(textbox, index)}
             placeholder={this.props.placeholder}
             value={textbox.value}
@@ -66,5 +69,4 @@ export default class TextboxRepeater extends React.Component {
       </div>
     );
   }
-
 }
