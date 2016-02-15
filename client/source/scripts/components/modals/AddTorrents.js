@@ -138,7 +138,7 @@ export default class AddTorrents extends React.Component {
 
   handleAddTorrents() {
     this.setState({isAddingTorrents: true});
-    let torrentUrls = _.pluck(this.state.urlTextboxes, 'value');
+    let torrentUrls = _.map(this.state.urlTextboxes, 'value');
     TorrentActions.addTorrents(torrentUrls, this.state.destination);
   }
 

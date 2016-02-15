@@ -103,7 +103,6 @@ export default class TorrentHeading extends React.Component {
   }
 
   handlePriorityChange(hash, level) {
-    console.log(hash, level);
     TorrentActions.setPriority(hash, level);
   }
 
