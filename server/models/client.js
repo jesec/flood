@@ -269,42 +269,64 @@ var client = {
       });
   },
 
-  stopTorrent: function(hash, callback) {
-    if (!util.isArray(hash)) {
-      hash = [hash];
+  stopTorrent: function(hashes, callback) {
+    if (!util.isArray(hashes)) {
+      hashes = [hashes];
     } else {
-      hash = String(hash).split(',');
+      hashes = String(hashes).split(',');
     }
 
-    for (i = 0, len = hash.length; i < len; i++) {
-      rTorrent.get('d.close', [hash[i]]).then(function(data) {
-        callback(null, data);
-      }, function(error) {
-        callback(error, null);
+    var multicall = [
+      []
+    ];
+
+    hashes.forEach(function (hash) {
+      multicall[0].push({
+        methodName: 'd.stop',
+        params: [hash]
       });
-    }
+      multicall[0].push({
+        methodName: 'd.close',
+        params: [hash]
+      });
+    });
+
+    rTorrent.get('system.multicall', multicall)
+    .then(function(data) {
+      callback(null, data);
+    }, function(error) {
+      callback(error, null);
+    });
   },
 
-  startTorrent: function(hash, callback) {
-    if (!util.isArray(hash)) {
-      hash = [hash];
+  startTorrent: function(hashes, callback) {
+    if (!util.isArray(hashes)) {
+      hashes = [hashes];
     } else {
-      hash = String(hash).split(',');
+      hashes = String(hashes).split(',');
     }
 
-    for (i = 0, len = hash.length; i < len; i++) {
-      rTorrent.get('d.resume', [hash[i]]).then(function(data) {
-        callback(null, data);
-      }, function(error) {
-        callback(error, null);
-      });
+    var multicall = [
+      []
+    ];
 
-      rTorrent.get('d.start', [hash[i]]).then(function(data) {
-        callback(null, data);
-      }, function(error) {
-        callback(error, null);
+    hashes.forEach(function (hash) {
+      multicall[0].push({
+        methodName: 'd.open',
+        params: [hash]
       });
-    }
+      multicall[0].push({
+        methodName: 'd.start',
+        params: [hash]
+      });
+    });
+
+    rTorrent.get('system.multicall', multicall)
+    .then(function(data) {
+      callback(null, data);
+    }, function(error) {
+      callback(error, null);
+    });
   },
 
   getTransferStats: function(callback) {
