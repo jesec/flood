@@ -38,11 +38,10 @@ export default class AddTorrents extends React.Component {
 
   componentWillUnmount() {
     TorrentStore.unlisten(EventTypes.CLIENT_ADD_TORRENT_SUCCESS, this.onAddTorrentSuccess);
-    UIStore.fetchLatestTorrentLocation();
   }
 
   dismissModal() {
-    UIActions.dismissModal();
+    this.props.dismiss();
   }
 
   onAddTorrentError() {
@@ -56,37 +55,6 @@ export default class AddTorrents extends React.Component {
     this.dismissModal();
   }
 
-  getActions() {
-    let icon = null;
-    let primaryButtonText = 'Add Torrent';
-
-    if (this.state.isAddingTorrents) {
-      icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Adding...';
-    }
-
-    return [
-      {
-        clickHandler: null,
-        content: 'Cancel',
-        triggerDismiss: true,
-        type: 'secondary'
-      },
-      {
-        clickHandler: this.handleAddTorrents,
-        content: (
-          <span>
-            {icon}
-            {primaryButtonText}
-          </span>
-        ),
-        supplementalClassName: icon != null ? 'has-icon' : '',
-        triggerDismiss: true,
-        type: 'primary'
-      }
-    ];
-  }
-
   getAddByFileContent() {
     return <span>add by file</span>;
   }
@@ -97,15 +65,14 @@ export default class AddTorrents extends React.Component {
         content: <AddTorrentsByURL />,
         label: 'By URL'
       },
-      'by-file': {
-        content: <AddTorrentsByFile />,
-        label: 'By File'
-      }
+      // 'by-file': {
+      //   content: <AddTorrentsByFile />,
+      //   label: 'By File'
+      // }
     };
 
     return (
       <Modal heading="Add Torrents"
-        actions={this.getActions()}
         dismiss={this.dismissModal}
         tabs={tabs} />
     );

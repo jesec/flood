@@ -1,6 +1,7 @@
 'use strict';
 
 let express = require('express');
+let multer = require('multer');
 let router = express.Router();
 let xmlrpc = require('xmlrpc');
 
@@ -8,9 +9,25 @@ let ajaxUtil = require('../util/ajaxUtil');
 let client = require('../models/client');
 let history = require('../models/history');
 
-router.post('/add', function(req, res, next) {
-  client.add(req.body, ajaxUtil.getResponseFn(res));
+let upload = multer({
+  dest: 'uploads/',
+  limits: {fileSize: 10000000}
 });
+
+router.post('/add', function(req, res, next) {
+  client.addUrls(req.body, ajaxUtil.getResponseFn(res));
+});
+
+try {
+  router.post('/add-files', upload.array('torrents'), function(req, res, next) {
+    // console.log('hi');
+    console.log('router', req.file);
+    console.log('router', req.files);
+    client.addFiles(req.body, ajaxUtil.getResponseFn(res));
+  });
+} catch (err) {
+  console.log(err);
+}
 
 router.get('/history', function(req, res, next) {
   history.get(req.query, ajaxUtil.getResponseFn(res));

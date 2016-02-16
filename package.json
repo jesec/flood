@@ -28,6 +28,7 @@
     "keymirror": "^0.1.1",
     "lodash": "^4.3.0",
     "morgan": "~1.5.1",
+    "multer": "^1.1.0",
     "nedb": "^1.7.2",
     "nodemon": "^1.8.1",
     "object-assign": "^2.0.0",

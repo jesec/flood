@@ -14,7 +14,7 @@ let _torrentCollection = new TorrentCollection();
 let _trackerCount = {};
 
 var client = {
-  add: function(data, callback) {
+  addUrls: function(data, callback) {
     var multicall = [
       []
     ];
@@ -57,6 +57,53 @@ var client = {
     }, function(error) {
       callback(error, null);
     });
+  },
+
+  addFiles: function(data, callback) {
+    console.log(data.torrents);
+    callback(null, {message: 'hi'});
+    // var multicall = [
+    //   []
+    // ];
+    //
+    // if (data.destination !== null && data.destination !== '') {
+    //   multicall[0].push({
+    //     methodName: 'execute',
+    //     params: [
+    //       'mkdir',
+    //       '-p',
+    //       data.destination
+    //     ]
+    //   });
+    // }
+    //
+    // var torrentsAdded = 0;
+    //
+    // while (torrentsAdded < data.urls.length) {
+    //   var parameters = [
+    //     '',
+    //     data.urls[torrentsAdded]
+    //   ];
+    //
+    //   if (data.destination !== null && data.destination !== '') {
+    //     parameters.push('d.directory.set="' + data.destination + '"');
+    //   }
+    //
+    //   parameters.push('d.custom.set=addtime,' + Math.floor(Date.now() / 1000));
+    //
+    //   multicall[0].push({
+    //     methodName: 'load.start',
+    //     params: parameters
+    //   });
+    //
+    //   torrentsAdded++;
+    // }
+    //
+    // rTorrent.get('system.multicall', multicall).then(function(data) {
+    //   callback(null, data);
+    // }, function(error) {
+    //   callback(error, null);
+    // });
   },
 
   deleteTorrents: function(hash, callback) {

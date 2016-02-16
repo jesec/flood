@@ -176,7 +176,7 @@ $dropdown--item--foreground--active: $blue;
 // modal windows
 $modal--background: #f7fafc;
 $modal--heading--background: #fff;
-$modal--heading--foreground: $header--foreground;
+$modal--heading--foreground: #5c6e80;
 $modal--heading--border: #dde7ed;
 $modal--tab--foreground: #abbac7;
 $modal--tab--foreground--active: $blue;
@@ -217,3 +217,16 @@ $priority-meter--track--level-1--background: rgba($blue, 0.2);
 $priority-meter--bar--level-1--background: $blue;
 $priority-meter--track--level-2--background: rgba($green, 0.2);
 $priority-meter--bar--level-2--background: $green;
+
+// dropzone
+$dropzone--background: #e9eff5;
+$dropzone--foreground: #53718a;
+$dropzone--foreground--hover: darken($dropzone--foreground, 20%);
+$dropzone--foreground--dragging: $blue;
+$dropzone--border: #d6e2ea;
+$dropzone--border--hover: darken($dropzone--border, 20%);
+$dropzone--border--dragging: $blue;
+$dropzone--browse--foreground: $blue;
+$dropzone--icon--fill: #c7d3df;
+$dropzone--icon--fill--hover: darken($dropzone--icon--fill, 15%);
+$dropzone--icon--fill--dragging: $blue;

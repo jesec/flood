@@ -84,7 +84,7 @@ export default class Modals extends React.Component {
         break;
       case 'add-torrents':
         modal = (
-          <AddTorrents dismissModal={this.handleOverlayClick} />
+          <AddTorrents dismiss={this.dismissModal} />
         );
         break;
     }

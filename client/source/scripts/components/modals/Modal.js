@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import React from 'react';
 
 import CustomScrollbars from '../ui/CustomScrollbars';
+import ModalActions from './ModalActions';
 import ModalTabs from './ModalTabs';
 
 const METHODS_TO_BIND = ['handleTabChange'];
@@ -28,40 +29,6 @@ export default class Modal extends React.Component {
     return Object.keys(this.props.tabs)[0];
   }
 
-  getModalButtons(actions) {
-    let buttons = actions.map((action, index) => {
-      let classes = classnames('button', {
-        [action.supplementalClassName]: action.supplementalClassName,
-        'button--deemphasize': action.type === 'secondary',
-        'button--primary': action.type === 'primary'
-      });
-
-      return (
-        <button className={classes} onClick={this.getClickHandler(action)} key={index}>
-          {action.content}
-        </button>
-      );
-    });
-
-    return (
-      <div className="modal__button-group form__row">
-        {buttons}
-      </div>
-    );
-  }
-
-  getClickHandler(action) {
-    return () => {
-      if (action.triggerDismiss) {
-        this.props.dismiss();
-      }
-
-      if (action.clickHandler) {
-        action.clickHandler();
-      }
-    }
-  }
-
   handleTabChange(tab) {
     this.setState({activeTabId: tab.id});
   }
@@ -72,6 +39,7 @@ export default class Modal extends React.Component {
 
   render() {
     let content = this.props.content;
+    let footer = null;
     let contentClasses = classnames('modal__content__wrapper',
       `modal--align-${this.props.alignment}`);
     let tabs = null;
@@ -86,6 +54,10 @@ export default class Modal extends React.Component {
       );
     }
 
+    if (this.props.actions) {
+      footer = <ModalActions actions={this.props.actions} dismiss={this.props.dismiss} />;
+    }
+
     return (
       <div className={contentClasses} onClick={this.handleMenuWrapperClick}>
         <div className="modal__header">
@@ -94,9 +66,7 @@ export default class Modal extends React.Component {
         </div>
         <div className="modal__content">
           {content}
-          <div className="modal__footer">
-            {this.getModalButtons(this.props.actions)}
-          </div>
+          {footer}
         </div>
       </div>
     );

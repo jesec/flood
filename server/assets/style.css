@@ -476,14 +476,14 @@ th {
   100% {
     opacity: 0; } }
 
-.textbox,
+.textbox, .dropzone__selected-files,
 .button {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
   outline: none; }
 
-.textbox {
+.textbox, .dropzone__selected-files {
   background: #e9eff5;
   border-radius: 4px;
   border: 1px solid #d6e2ea;
@@ -494,39 +494,39 @@ th {
   -webkit-transition: background 0.25s, border 0.25s, color 0.25s;
   transition: background 0.25s, border 0.25s, color 0.25s;
   width: 100%; }
-  .textbox::-webkit-input-placeholder {
+  .textbox::-webkit-input-placeholder, .dropzone__selected-files::-webkit-input-placeholder {
     color: #abbac7;
     font-style: italic;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-  .textbox::-moz-placeholder {
+  .textbox::-moz-placeholder, .dropzone__selected-files::-moz-placeholder {
     color: #abbac7;
     font-style: italic;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-  .textbox:-ms-input-placeholder {
+  .textbox:-ms-input-placeholder, .dropzone__selected-files:-ms-input-placeholder {
     color: #abbac7;
     font-style: italic;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-  .textbox::placeholder {
+  .textbox::placeholder, .dropzone__selected-files::placeholder {
     color: #abbac7;
     font-style: italic;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-  .textbox:focus {
+  .textbox:focus, .dropzone__selected-files:focus {
     background: #fdfefe;
     border-color: #c7d6df;
     color: #258de5; }
-    .textbox:focus::-webkit-input-placeholder {
+    .textbox:focus::-webkit-input-placeholder, .dropzone__selected-files:focus::-webkit-input-placeholder {
       color: #abbac7; }
-    .textbox:focus::-moz-placeholder {
+    .textbox:focus::-moz-placeholder, .dropzone__selected-files:focus::-moz-placeholder {
       color: #abbac7; }
-    .textbox:focus:-ms-input-placeholder {
+    .textbox:focus:-ms-input-placeholder, .dropzone__selected-files:focus:-ms-input-placeholder {
       color: #abbac7; }
-    .textbox:focus::placeholder {
+    .textbox:focus::placeholder, .dropzone__selected-files:focus::placeholder {
       color: #abbac7; }
-  .textbox.is-fulfilled {
+  .textbox.is-fulfilled, .dropzone__selected-files {
     background: #fdfefe; }
 
 .button {
@@ -565,7 +565,7 @@ th {
   color: #abbac7;
   display: block;
   font-size: 0.8em;
-  margin-bottom: 0.5em; }
+  margin-bottom: 0.35em; }
 
 .form__row + .form__row {
   margin-top: 25px; }
@@ -1135,6 +1135,78 @@ body {
 .dropdown__content__container {
   padding: 25px 30px; }
 
+.dropzone {
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background: #e9eff5;
+  border: 1px dashed #d6e2ea;
+  border-radius: 4px;
+  color: #53718a;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  text-align: center;
+  -webkit-transition: border 0.25s, color 0.25s;
+  transition: border 0.25s, color 0.25s;
+  width: 100%; }
+  .dropzone:hover {
+    border-color: #93b2c7; }
+    .dropzone:hover .dropzone__icon .icon {
+      fill: #96adc3; }
+  .dropzone--is-dragging, .dropzone--is-dragging:hover {
+    border-color: #258de5;
+    color: #258de5; }
+    .dropzone--is-dragging .dropzone__icon .icon, .dropzone--is-dragging:hover .dropzone__icon .icon {
+      fill: #258de5; }
+  .dropzone__icon .icon--files {
+    fill: #c7d3df;
+    height: 64px;
+    -webkit-transition: fill 0.25s;
+    transition: fill 0.25s;
+    width: 64px; }
+    .dropzone__icon .icon--files__file--right, .dropzone__icon .icon--files__file--left {
+      fill-opacity: 0.5; }
+  .dropzone__copy {
+    cursor: pointer;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    font-size: 0.85em;
+    padding: 25px;
+    width: 100%; }
+  .dropzone__browse-button {
+    color: #258de5;
+    text-decoration: underline; }
+  .dropzone__selected-files {
+    font-size: 0.8em;
+    padding: 12.5px;
+    width: 100%; }
+    .dropzone__selected-files__file {
+      display: block;
+      text-align: left; }
+      .dropzone__selected-files__file .icon {
+        display: inline-block;
+        fill: #adbfce;
+        height: 12px;
+        margin-right: 4px;
+        vertical-align: baseline;
+        width: 12px; }
+      .dropzone__selected-files__file .icon--close {
+        height: 8px;
+        margin-left: 4px;
+        margin-right: 0;
+        vertical-align: middle;
+        width: 8px; }
+
 .floating-action__button {
   background: #fff;
   border: none;
@@ -1274,7 +1346,7 @@ body {
     background: #fff;
     border-radius: 3px 3px 0 0;
     box-shadow: inset 0 -1px 0 #dde7ed;
-    color: #313436;
+    color: #5c6e80;
     -webkit-box-flex: 0;
     -webkit-flex: 0 0 auto;
         -ms-flex: 0 0 auto;
@@ -1338,7 +1410,7 @@ body {
       width: 500px; }
     .modal__content--align-center {
       text-align: center; }
-  .modal__footer {
+  .modal__actions {
     margin-top: 25px;
     padding: 0 0 12.5px 0; }
   .modal__button-group {
@@ -1513,7 +1585,7 @@ body {
     -webkit-transform: translateY(-50%);
             transform: translateY(-50%);
     width: 22px; }
-  .sidebar__item--search .textbox {
+  .sidebar__item--search .textbox, .sidebar__item--search .dropzone__selected-files {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -1531,22 +1603,22 @@ body {
     -webkit-transition: background 0.25s, border 0.25s, color 0.25s;
     transition: background 0.25s, border 0.25s, color 0.25s;
     width: 100%; }
-    .sidebar__item--search .textbox::-webkit-input-placeholder {
+    .sidebar__item--search .textbox::-webkit-input-placeholder, .sidebar__item--search .dropzone__selected-files::-webkit-input-placeholder {
       color: rgba(83, 113, 138, 0.4);
       font-style: italic;
       -webkit-transition: color 0.25s;
       transition: color 0.25s; }
-    .sidebar__item--search .textbox::-moz-placeholder {
+    .sidebar__item--search .textbox::-moz-placeholder, .sidebar__item--search .dropzone__selected-files::-moz-placeholder {
       color: rgba(83, 113, 138, 0.4);
       font-style: italic;
       -webkit-transition: color 0.25s;
       transition: color 0.25s; }
-    .sidebar__item--search .textbox:-ms-input-placeholder {
+    .sidebar__item--search .textbox:-ms-input-placeholder, .sidebar__item--search .dropzone__selected-files:-ms-input-placeholder {
       color: rgba(83, 113, 138, 0.4);
       font-style: italic;
       -webkit-transition: color 0.25s;
       transition: color 0.25s; }
-    .sidebar__item--search .textbox::placeholder {
+    .sidebar__item--search .textbox::placeholder, .sidebar__item--search .dropzone__selected-files::placeholder {
       color: rgba(83, 113, 138, 0.4);
       font-style: italic;
       -webkit-transition: color 0.25s;
@@ -1554,18 +1626,18 @@ body {
   .sidebar__item--search.is-in-use .icon {
     fill: #2c9e65;
     opacity: 1; }
-  .sidebar__item--search.is-in-use .textbox {
+  .sidebar__item--search.is-in-use .textbox, .sidebar__item--search.is-in-use .dropzone__selected-files {
     background: #39ce83;
     border-bottom: 1px solid #39ce83;
     border-top: 1px solid #39ce83;
     color: #1e8954; }
-    .sidebar__item--search.is-in-use .textbox::-webkit-input-placeholder {
+    .sidebar__item--search.is-in-use .textbox::-webkit-input-placeholder, .sidebar__item--search.is-in-use .dropzone__selected-files::-webkit-input-placeholder {
       color: #2cad6d; }
-    .sidebar__item--search.is-in-use .textbox::-moz-placeholder {
+    .sidebar__item--search.is-in-use .textbox::-moz-placeholder, .sidebar__item--search.is-in-use .dropzone__selected-files::-moz-placeholder {
       color: #2cad6d; }
-    .sidebar__item--search.is-in-use .textbox:-ms-input-placeholder {
+    .sidebar__item--search.is-in-use .textbox:-ms-input-placeholder, .sidebar__item--search.is-in-use .dropzone__selected-files:-ms-input-placeholder {
       color: #2cad6d; }
-    .sidebar__item--search.is-in-use .textbox::placeholder {
+    .sidebar__item--search.is-in-use .textbox::placeholder, .sidebar__item--search.is-in-use .dropzone__selected-files::placeholder {
       color: #2cad6d; }
 
 .sidebar__item--speed-limit {

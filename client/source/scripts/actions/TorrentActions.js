@@ -4,7 +4,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 const TorrentActions = {
-  addTorrents: function(urls, destination) {
+  addTorrentsByUrls: function(urls, destination) {
     axios.post('/ui/torrent-location', {
         destination
       })
@@ -15,6 +15,35 @@ const TorrentActions = {
         urls,
         destination
       })
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((response) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_ADD_TORRENT_SUCCESS,
+          data: {
+            response
+          }
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_ADD_TORRENT_ERROR,
+          data: {
+            error
+          }
+        });
+      });
+  },
+
+  addTorrentsByFiles: function(files, destination) {
+    axios.post('/ui/torrent-location', {
+        destination
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    return axios.post('/client/add-files', files)
       .then((json = {}) => {
         return json.data;
       })

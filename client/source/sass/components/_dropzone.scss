@@ -1,0 +1,105 @@
+$dropzone--file--icon--fill: #adbfce;
+
+.dropzone {
+  align-items: center;
+  background: $dropzone--background;
+  border: 1px dashed $dropzone--border;
+  border-radius: 4px;
+  color: $dropzone--foreground;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  transition: border 0.25s, color 0.25s;
+  width: 100%;
+
+  &:hover {
+    border-color: $dropzone--border--hover;
+
+    .dropzone__icon {
+
+      .icon {
+        fill: $dropzone--icon--fill--hover;
+      }
+    }
+  }
+
+  &--is-dragging {
+
+    &,
+    &:hover {
+      border-color: $dropzone--border--dragging;
+      color: $dropzone--foreground--dragging;
+
+      .dropzone__icon {
+
+        .icon {
+          fill: $dropzone--icon--fill--dragging;
+        }
+      }
+    }
+  }
+
+  &__icon {
+
+    .icon {
+
+      &--files {
+        fill: $dropzone--icon--fill;
+        height: 64px;
+        transition: fill 0.25s;
+        width: 64px;
+
+        &__file {
+
+          &--right,
+          &--left {
+            fill-opacity: 0.5;
+          }
+        }
+      }
+    }
+  }
+
+  &__copy {
+    cursor: pointer;
+    flex: 1;
+    font-size: 0.85em;
+    padding: $spacing-unit;
+    width: 100%;
+  }
+
+  &__browse-button {
+    color: $dropzone--browse--foreground;
+    text-decoration: underline;
+  }
+
+  &__selected-files {
+    @extend .textbox;
+    @extend .textbox.is-fulfilled;
+    font-size: 0.8em;
+    padding: $spacing-unit * 1/2;
+    width: 100%;
+
+    &__file {
+      display: block;
+      text-align: left;
+
+      .icon {
+        display: inline-block;
+        fill: $dropzone--file--icon--fill;
+        height: 12px;
+        margin-right: 4px;
+        vertical-align: baseline;
+        width: 12px;
+      }
+
+      .icon--close {
+        height: 8px;
+        margin-left: 4px;
+        margin-right: 0;
+        vertical-align: middle;
+        width: 8px;
+      }
+    }
+  }
+}
