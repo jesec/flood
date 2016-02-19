@@ -12,7 +12,8 @@ import TorrentActions from '../../actions/TorrentActions';
 const METHODS_TO_BIND = [
   'handleAddTorrents',
   'handleDestinationChange',
-  'handleFileDrop'
+  'handleFileDrop',
+  'handleFileRemove'
 ];
 
 export default class AddTorrents extends React.Component {
@@ -33,8 +34,11 @@ export default class AddTorrents extends React.Component {
     this.setState({files});
   }
 
-  handleFileRemove(file) {
-    console.log(file);
+  handleFileRemove(fileIndex) {
+    let files = this.state.files;
+    files.splice(fileIndex, 1);
+
+    this.setState({files});
   }
 
   handleFilesClick(event) {
@@ -97,7 +101,9 @@ export default class AddTorrents extends React.Component {
           <li className="dropzone__selected-files__file" key={index}>
             <File />
             {file.name}
-            <Close onClick={this.handleFileRemove.bind(this, file)} />
+            <span onClick={this.handleFileRemove.bind(this, index)}>
+              <Close />
+            </span>
           </li>
         );
       });
