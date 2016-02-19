@@ -3,9 +3,10 @@
 let rTorrent = require('./rtorrent');
 let util = require('util');
 
-let propsMap = require('../../shared/constants/propsMap');
 let clientUtil = require('../util/clientUtil');
+let propsMap = require('../../shared/constants/propsMap');
 let formatUtil = require('../util/formatUtil');
+let fs = require('fs');
 let Torrent = require('./Torrent');
 let TorrentCollection = require('./TorrentCollection');
 
@@ -59,51 +60,60 @@ var client = {
     });
   },
 
-  addFiles: function(data, callback) {
-    console.log(data.torrents);
-    callback(null, {message: 'hi'});
-    // var multicall = [
-    //   []
-    // ];
-    //
-    // if (data.destination !== null && data.destination !== '') {
-    //   multicall[0].push({
-    //     methodName: 'execute',
-    //     params: [
-    //       'mkdir',
-    //       '-p',
-    //       data.destination
-    //     ]
-    //   });
-    // }
-    //
-    // var torrentsAdded = 0;
-    //
-    // while (torrentsAdded < data.urls.length) {
-    //   var parameters = [
-    //     '',
-    //     data.urls[torrentsAdded]
-    //   ];
-    //
-    //   if (data.destination !== null && data.destination !== '') {
-    //     parameters.push('d.directory.set="' + data.destination + '"');
-    //   }
-    //
-    //   parameters.push('d.custom.set=addtime,' + Math.floor(Date.now() / 1000));
-    //
-    //   multicall[0].push({
-    //     methodName: 'load.start',
-    //     params: parameters
-    //   });
-    //
-    //   torrentsAdded++;
-    // }
-    //
-    // rTorrent.get('system.multicall', multicall).then(function(data) {
-    //   callback(null, data);
-    // }, function(error) {
-    //   callback(error, null);
-    // });
+  addFiles: function(req, callback) {
+    let torrentDestination = req.body.destination;
+    let uploadedTorrents = req.files;
+
+    let torrentsAdded = 0;
+
+    while (torrentsAdded < uploadedTorrents.length) {
+      let file = uploadedTorrents[torrentsAdded];
+      let filename = file.filename;
+      let fileContents = file.buffer;
+      let multicall = [
+        []
+      ];
+
+      if (torrentDestination !== null && torrentDestination !== '') {
+        multicall[0].push({
+          methodName: 'execute',
+          params: [
+            'mkdir',
+            '-p',
+            torrentDestination
+          ]
+        });
+      }
+
+      var parameters = [
+        '',
+        fileContents
+      ];
+
+      if (torrentDestination !== null && torrentDestination !== '') {
+        parameters.push('d.directory.set="' + torrentDestination + '"');
+      }
+
+      parameters.push('d.custom.set=x-filename,' + filename);
+
+      parameters.push('d.custom.set=addtime,' + Math.floor(Date.now() / 1000));
+
+      multicall[0].push({
+        methodName: 'load.raw_start',
+        params: parameters
+      });
+
+      torrentsAdded++;
+
+      console.log('hi');
+
+      rTorrent.get('system.multicall', multicall).then(function(data) {
+        console.log(data);
+        callback(null, data);
+      }, function(error) {
+        callback(error, null);
+      });
+    }
   },
 
   deleteTorrents: function(hash, callback) {

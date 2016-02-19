@@ -8,7 +8,7 @@ var Serializer = require('../util/serializer');
 var rtorrent = {
 	initialized: false,
 
-	get: function(api, array) {
+	get: function(api, array, type) {
 		var stream = net.connect({
 			port: config.hostPort,
 			host: config.host

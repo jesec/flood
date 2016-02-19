@@ -11,7 +11,8 @@ let history = require('../models/history');
 
 let upload = multer({
   dest: 'uploads/',
-  limits: {fileSize: 10000000}
+  limits: {fileSize: 10000000},
+  storage: multer.memoryStorage()
 });
 
 router.post('/add', function(req, res, next) {
@@ -20,10 +21,7 @@ router.post('/add', function(req, res, next) {
 
 try {
   router.post('/add-files', upload.array('torrents'), function(req, res, next) {
-    // console.log('hi');
-    console.log('router', req.file);
-    console.log('router', req.files);
-    client.addFiles(req.body, ajaxUtil.getResponseFn(res));
+    client.addFiles(req, ajaxUtil.getResponseFn(res));
   });
 } catch (err) {
   console.log(err);

@@ -46,7 +46,13 @@ export default class AddTorrents extends React.Component {
   }
 
   onLatestTorrentLocationChange() {
-    this.setState({destination: UIStore.getLatestTorrentLocation()});
+    let destination = UIStore.getLatestTorrentLocation();
+
+    if (this.props.onChange) {
+      this.props.onChange(destination);
+    }
+
+    this.setState({destination});
   }
 
   render() {

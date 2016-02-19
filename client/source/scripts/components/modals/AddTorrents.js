@@ -65,10 +65,10 @@ export default class AddTorrents extends React.Component {
         content: <AddTorrentsByURL />,
         label: 'By URL'
       },
-      // 'by-file': {
-      //   content: <AddTorrentsByFile />,
-      //   label: 'By File'
-      // }
+      'by-file': {
+        content: <AddTorrentsByFile />,
+        label: 'By File'
+      }
     };
 
     return (

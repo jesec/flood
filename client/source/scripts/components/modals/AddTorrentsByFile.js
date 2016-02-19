@@ -123,6 +123,8 @@ export default class AddTorrents extends React.Component {
       fileData.append('torrents', file);
     });
 
+    fileData.append('destination', this.state.destination);
+
     TorrentActions.addTorrentsByFiles(fileData, this.state.destination);
   }
 

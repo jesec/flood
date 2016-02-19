@@ -36,14 +36,14 @@ const TorrentActions = {
       });
   },
 
-  addTorrentsByFiles: function(files, destination) {
+  addTorrentsByFiles: function(filesData, destination) {
     axios.post('/ui/torrent-location', {
         destination
       })
       .catch(function (error) {
         console.log(error);
       });
-    return axios.post('/client/add-files', files)
+    return axios.post('/client/add-files', filesData)
       .then((json = {}) => {
         return json.data;
       })
