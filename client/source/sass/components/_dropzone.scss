@@ -76,13 +76,19 @@ $dropzone--file--icon--fill: #adbfce;
   &__selected-files {
     @extend .textbox;
     @extend .textbox.is-fulfilled;
+    border-radius: 4px 4px 0 0 ;
     font-size: 0.8em;
     padding: $spacing-unit * 1/2;
     width: 100%;
 
+    & + .dropzone {
+      border-radius: 0 0 4px 4px;
+      border-top: none;
+    }
+
     &__file {
-      display: block;
       text-align: left;
+      white-space: nowrap;
 
       .icon {
         display: inline-block;
@@ -100,6 +106,33 @@ $dropzone--file--icon--fill: #adbfce;
         vertical-align: middle;
         width: 8px;
       }
+    }
+  }
+
+  &__file {
+    display: flex;
+    width: 100%;
+
+    &__item {
+      flex: 1 0 auto;
+
+      &--icon {
+        flex: 0 0 auto;
+      }
+
+      &--file-name {
+        flex: 1 1 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &--remove-icon {
+        cursor: pointer;
+      }
+    }
+
+    .icon {
+
     }
   }
 }

@@ -80,8 +80,7 @@ export default class AddTorrents extends React.Component {
     let dropzoneClasses = classnames('form__dropzone dropzone', {
       'is-fulfilled': this.state.files && this.state.files.length > 0
     });
-
-    let content = (
+    let dropzoneContent = (
       <Dropzone activeClassName="dropzone--is-dragging"
         className={dropzoneClasses} ref="dropzone"
         onDrop={this.handleFileDrop} disablePreview={true}>
@@ -94,26 +93,38 @@ export default class AddTorrents extends React.Component {
         </div>
       </Dropzone>
     );
+    let fileContent = null;
 
     if (this.state.files && this.state.files.length > 0) {
       let files = this.state.files.map((file, index) => {
         return (
-          <li className="dropzone__selected-files__file" key={index}>
-            <File />
-            {file.name}
-            <span onClick={this.handleFileRemove.bind(this, index)}>
+          <li className="dropzone__selected-files__file dropzone__file" key={index}>
+            <span className="dropzone__file__item dropzone__file__item--icon">
+              <File />
+            </span>
+            <span className="dropzone__file__item dropzone__file__item--file-name">
+              {file.name}{file.name}
+            </span>
+            <span className="dropzone__file__item dropzone__file__item--icon dropzone__file__item--remove-icon" onClick={this.handleFileRemove.bind(this, index)}>
               <Close />
             </span>
           </li>
         );
       });
 
-      content = (
+      fileContent = (
         <ul className="dropzone__selected-files" onClick={this.handleFilesClick}>
           {files}
         </ul>
       );
     }
+
+    let content = (
+      <div>
+        {fileContent}
+        {dropzoneContent}
+      </div>
+    );
 
     return content;
   }

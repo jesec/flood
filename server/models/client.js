@@ -241,6 +241,59 @@ var client = {
     });
   },
 
+  moveFiles: function(data, callback) {
+    let files = data.files || [];
+
+    var multicall = [
+      []
+    ];
+
+    if (data.destination !== null && data.destination !== '') {
+      multicall[0].push({
+        methodName: 'execute',
+        params: [
+          'mkdir',
+          '-p',
+          data.destination
+        ]
+      });
+    }
+
+    var torrentsAdded = 0;
+
+    // loop through the torrents:
+    //  stop torrents, call d.stop and d.close
+    //  move torrents
+    //  set new torrent directory
+    //  start torrents, call d.start and d.open
+
+    while (torrentsAdded < data.urls.length) {
+      var parameters = [
+        '',
+        data.urls[torrentsAdded]
+      ];
+
+      if (data.destination !== null && data.destination !== '') {
+        parameters.push('d.directory.set="' + data.destination + '"');
+      }
+
+      parameters.push('d.custom.set=addtime,' + Math.floor(Date.now() / 1000));
+
+      multicall[0].push({
+        methodName: 'load.start',
+        params: parameters
+      });
+
+      torrentsAdded++;
+    }
+
+    rTorrent.get('system.multicall', multicall).then(function(data) {
+      callback(null, data);
+    }, function(error) {
+      callback(error, null);
+    });
+  },
+
   setFilePriority: function (hash, data, callback) {
     // TODO Add support for multiple hashes.
     var fileIndex = data.fileIndices[0];

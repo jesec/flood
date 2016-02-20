@@ -1196,12 +1196,16 @@ body {
     color: #258de5;
     text-decoration: underline; }
   .dropzone__selected-files {
+    border-radius: 4px 4px 0 0;
     font-size: 0.8em;
     padding: 12.5px;
     width: 100%; }
+    .dropzone__selected-files + .dropzone {
+      border-radius: 0 0 4px 4px;
+      border-top: none; }
     .dropzone__selected-files__file {
-      display: block;
-      text-align: left; }
+      text-align: left;
+      white-space: nowrap; }
       .dropzone__selected-files__file .icon {
         display: inline-block;
         fill: #adbfce;
@@ -1215,6 +1219,31 @@ body {
         margin-right: 0;
         vertical-align: middle;
         width: 8px; }
+  .dropzone__file {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%; }
+    .dropzone__file__item {
+      -webkit-box-flex: 1;
+      -webkit-flex: 1 0 auto;
+          -ms-flex: 1 0 auto;
+              flex: 1 0 auto; }
+      .dropzone__file__item--icon {
+        -webkit-box-flex: 0;
+        -webkit-flex: 0 0 auto;
+            -ms-flex: 0 0 auto;
+                flex: 0 0 auto; }
+      .dropzone__file__item--file-name {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 auto;
+            -ms-flex: 1 1 auto;
+                flex: 1 1 auto;
+        overflow: hidden;
+        text-overflow: ellipsis; }
+      .dropzone__file__item--remove-icon {
+        cursor: pointer; }
 
 .floating-action__button {
   background: #fff;
