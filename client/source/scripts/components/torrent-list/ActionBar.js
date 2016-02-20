@@ -72,7 +72,7 @@ export default class ActionBar extends React.Component {
       }
     ];
     let torrentText = stringUtil.pluralize('torrent', selectedTorrentCount);
-    let content = `You are about to remove ${selectedTorrentCount} ${torrentText}.`;
+    let content = `Are you sure you want to remove ${selectedTorrentCount} ${torrentText}?`;
 
     if (selectedTorrentCount === 0) {
       actions = [
@@ -89,7 +89,7 @@ export default class ActionBar extends React.Component {
     UIActions.displayModal({
       actions,
       content,
-      heading: 'Are you sure?',
+      heading: 'Remove Torrents',
       type: 'confirm'
     });
   }

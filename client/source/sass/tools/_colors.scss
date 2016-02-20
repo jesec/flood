@@ -32,10 +32,15 @@ $textbox-repeater--button--foreground--hover: rgba($background, 0.5);
 $button--primary--foreground: #fff;
 $button--primary--background: $blue;
 $button--primary--background--hover: darken($button--primary--background, 5%);
+$button--primary--border: darken($button--primary--background, 5%);
+$button--primary--border--hover: darken($button--primary--border, 5%);
+
 $button--deemphasized--foreground: #66717a;
 $button--deemphasized--background: $main-content--background;
 $button--deemphasized--foreground--hover: darken($button--deemphasized--foreground, 5%);
 $button--deemphasized--background--hover: darken($button--deemphasized--background, 5%);
+$button--deemphasized--border: darken($button--deemphasized--background, 5%);
+$button--deemphasized--border--hover: darken($button--deemphasized--border, 5%);
 
 // action bar
 $action-bar--background: transparent;
@@ -178,10 +183,15 @@ $modal--background: #f7fafc;
 $modal--heading--background: #fff;
 $modal--heading--foreground: #5c6e80;
 $modal--heading--border: #dde7ed;
+
+$modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
+
 $modal--tab--foreground: #abbac7;
 $modal--tab--foreground--active: $blue;
 $modal--tab--border--active: $blue;
+
 $modal--overlay: rgba($background, 0.5);
+
 $modal--content--border: rgba($background, 0.1);
 $modal--content--shadow: rgba($background, 0.3);
 

@@ -42,6 +42,9 @@ export default class Modal extends React.Component {
     let footer = null;
     let contentClasses = classnames('modal__content__wrapper',
       `modal--align-${this.props.alignment}`);
+    let headerClasses = classnames('modal__header', {
+      'has-tabs': this.props.tabs
+    });
     let tabs = null;
 
     if (this.props.tabs) {
@@ -60,12 +63,14 @@ export default class Modal extends React.Component {
 
     return (
       <div className={contentClasses} onClick={this.handleMenuWrapperClick}>
-        <div className="modal__header">
+        <div className={headerClasses}>
           {this.props.heading}
           {tabs}
         </div>
         <div className="modal__content">
-          {content}
+          <div className="modal__body">
+            {content}
+          </div>
           {footer}
         </div>
       </div>

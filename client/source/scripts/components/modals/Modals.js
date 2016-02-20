@@ -63,7 +63,6 @@ export default class Modals extends React.Component {
 
   render() {
     let modal = null;
-
     let modalOptions = null;
     let modalType = this.state.activeModal;
 
