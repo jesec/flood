@@ -30,7 +30,7 @@ $modal--tabs--margin--left: $spacing-unit * -1/5;
 
   &__tabs {
     color: $modal--tab--foreground;
-    font-size: 0.7em;
+    font-size: 0.65em;
     font-weight: 400;
     margin: $modal--tabs--margin--top $modal--tabs--margin--right $modal--tabs--margin--bottom $modal--tabs--margin--left;
 
@@ -39,8 +39,8 @@ $modal--tabs--margin--left: $spacing-unit * -1/5;
       &__tab {
         cursor: pointer;
         display: inline-block;
-        margin-right: $spacing-unit * 1/4;
-        padding: $spacing-unit * 1/5;
+        margin-right: $spacing-unit * 2/5;
+        padding: $spacing-unit * 1/5 $spacing-unit * 1/5 $spacing-unit * 2/5 $spacing-unit * 1/5;
         position: relative;
 
         &:after {
