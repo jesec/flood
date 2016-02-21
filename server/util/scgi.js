@@ -8,50 +8,50 @@ let Serializer = require('xmlrpc/lib/serializer');
 let config = require('../../config');
 
 let scgi = {
-	methodCall: function(methodName, parameters) {
-		let deferred = Q.defer();
-		let deserializer = new Deserializer('utf8');
-		let itemLength = 0;
-		let nullChar = String.fromCharCode(0);
-		let stream = net.connect({
-			port: config.hostPort,
-			host: config.host
-		});
-		let xml = Serializer.serializeMethodCall(methodName, parameters);
+  methodCall: function(methodName, parameters) {
+    let deferred = Q.defer();
+    let deserializer = new Deserializer('utf8');
+    let itemLength = 0;
+    let nullChar = String.fromCharCode(0);
+    let stream = net.connect({
+      port: config.hostPort,
+      host: config.host
+    });
+    let xml = Serializer.serializeMethodCall(methodName, parameters);
 
-		stream.setEncoding('UTF8');
+    stream.setEncoding('UTF8');
 
-		// TODO: Remove this debugging info.
-		stream.on('error', function(error) {
-			console.trace(error);
-		});
+    // TODO: Remove this debugging info.
+    stream.on('error', function(error) {
+      console.trace(error);
+    });
 
-		let header = [
-			`CONTENT_LENGTH${nullChar}${xml.length}${nullChar}`,
-			`SCGI${nullChar}1${nullChar}`
-		];
+    let header = [
+      `CONTENT_LENGTH${nullChar}${xml.length}${nullChar}`,
+      `SCGI${nullChar}1${nullChar}`
+    ];
 
-		header.forEach(function (item) {
-			itemLength += item.length;
-		});
+    header.forEach(function (item) {
+      itemLength += item.length;
+    });
 
-		let payload = itemLength + ':';
+    let payload = itemLength + ':';
 
-		header.forEach(function(headerItem) {
-			payload += headerItem;
-		});
+    header.forEach(function(headerItem) {
+      payload += headerItem;
+    });
 
-		stream.write(`${payload},${xml}`);
+    stream.write(`${payload},${xml}`);
 
-		deserializer.deserializeMethodResponse(stream, function (error, response) {
-			if (error) {
-				return deferred.reject(error);
-			}
-			return deferred.resolve(response);
-		});
+    deserializer.deserializeMethodResponse(stream, function (error, response) {
+      if (error) {
+        return deferred.reject(error);
+      }
+      return deferred.resolve(response);
+    });
 
-		return deferred.promise;
-	}
+    return deferred.promise;
+  }
 }
 
 module.exports = scgi;
