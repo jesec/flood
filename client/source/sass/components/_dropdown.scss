@@ -18,15 +18,8 @@
   }
 
   &__content {
-    background: $dropdown--background;
-    border-radius: 3px;
-    box-shadow:
-      0 0 0 1px $dropdown--container--border,
-      0 0 35px $dropdown--container--shadow;
-    color: $dropdown--foreground;
     left: 0;
     position: absolute;
-    text-align: left;
     top: 0;
     z-index: 2;
   }
@@ -98,26 +91,6 @@
 
   &__list {
     flex: 1;
-  }
-
-  &__item {
-    padding: 5px 15px;
-
-    &.is-selectable {
-      cursor: pointer;
-      display: block;
-      font-size: 0.9em;
-      transition: background 0.25s, color 0.25s;
-
-      &:hover {
-        background: $dropdown--item--background--hover;
-        color: $dropdown--item--foreground--hover;
-      }
-
-      &.is-selected {
-        color: $dropdown--item--foreground--active;
-      }
-    }
   }
 
   &--align-right & {

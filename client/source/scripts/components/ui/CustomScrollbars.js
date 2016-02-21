@@ -17,6 +17,14 @@ export default class CustomScrollbar extends React.Component {
     );
   }
 
+  renderView(props) {
+    return (
+      <div {...props} className="scrollbars__view">
+        {props.children}
+      </div>
+    );
+  }
+
   render() {
     let classes = classnames('scrollbars', {
       [this.props.className]: this.props.className,
@@ -27,8 +35,10 @@ export default class CustomScrollbar extends React.Component {
       <Scrollbars
         className={classes}
         ref="scrollbar"
+        renderView={this.renderView}
         renderThumbHorizontal={this.getHorizontalThumb}
         renderThumbVertical={this.getVerticalThumb}
+        onScroll={this.props.nativeScrollHandler}
         onScrollFrame={this.props.scrollHandler}>
         {this.props.children}
       </Scrollbars>
@@ -39,5 +49,6 @@ export default class CustomScrollbar extends React.Component {
 CustomScrollbar.defaultProps = {
   className: '',
   inverted: false,
+  nativeScrollHandler: null,
   scrollHandler: null
 };

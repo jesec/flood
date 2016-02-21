@@ -947,6 +947,12 @@ body {
   .client-stat--upload .graph__line--rate {
     stroke: rgba(35, 135, 217, 0.4); }
 
+.context-menu {
+  font-size: 0.9em;
+  padding: 10px 0;
+  position: fixed;
+  z-index: 10; }
+
 .directory-tree .icon {
   display: inline-block;
   fill: rgba(82, 120, 147, 0.4);
@@ -1061,13 +1067,8 @@ body {
     width: auto;
     word-wrap: none; }
   .dropdown__content {
-    background: rgba(255, 255, 255, 0.98);
-    border-radius: 3px;
-    box-shadow: 0 0 0 1px rgba(26, 47, 61, 0.1), 0 0 35px rgba(26, 47, 61, 0.3);
-    color: #95a2ad;
     left: 0;
     position: absolute;
-    text-align: left;
     top: 0;
     z-index: 2; }
   .dropdown.is-expanded .dropdown__header .dropdown__value {
@@ -1116,19 +1117,6 @@ body {
     -webkit-flex: 1;
         -ms-flex: 1;
             flex: 1; }
-  .dropdown__item {
-    padding: 5px 15px; }
-    .dropdown__item.is-selectable {
-      cursor: pointer;
-      display: block;
-      font-size: 0.9em;
-      -webkit-transition: background 0.25s, color 0.25s;
-      transition: background 0.25s, color 0.25s; }
-      .dropdown__item.is-selectable:hover {
-        background: rgba(233, 238, 242, 0.4);
-        color: #788997; }
-      .dropdown__item.is-selectable.is-selected {
-        color: #258de5; }
   .dropdown--align-right .dropdown {
     left: auto;
     right: 0; }
@@ -1369,6 +1357,26 @@ body {
       .loading-indicator__bar--3:after {
         -webkit-animation-delay: 1s;
                 animation-delay: 1s; }
+
+.menu {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(26, 47, 61, 0.1), 0 0 35px rgba(26, 47, 61, 0.3);
+  color: #95a2ad;
+  text-align: left; }
+  .menu__item {
+    padding: 5px 15px; }
+    .menu__item.is-selectable {
+      cursor: pointer;
+      display: block;
+      font-size: 0.9em;
+      -webkit-transition: background 0.25s, color 0.25s;
+      transition: background 0.25s, color 0.25s; }
+      .menu__item.is-selectable:hover {
+        background: rgba(233, 238, 242, 0.4);
+        color: #788997; }
+      .menu__item.is-selectable.is-selected {
+        color: #258de5; }
 
 .modal {
   background: rgba(26, 47, 61, 0.5);

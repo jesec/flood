@@ -4,6 +4,13 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 const UIActions = {
+  displayContextMenu: function(data) {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,
+      data
+    });
+  },
+
   displayModal: function(data) {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_MODAL,
@@ -11,7 +18,14 @@ const UIActions = {
     });
   },
 
-  dismissModal: function(data) {
+  dismissContextMenu: function() {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,
+      data: null
+    });
+  },
+
+  dismissModal: function() {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_MODAL,
       data: null
