@@ -105,8 +105,6 @@ var client = {
 
       torrentsAdded++;
 
-      console.log('hi');
-
       scgi.methodCall('system.multicall', multicall).then(function(data) {
         console.log(data);
         callback(null, data);
