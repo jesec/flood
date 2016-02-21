@@ -1,11 +1,13 @@
 import classnames from'classnames';
 import React from'react';
 
+import Close from '../icons/Close';
 import Search from '../icons/Search';
 import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [
-  'handleKeyUp'
+  'handleSearchChange',
+  'resetSearch'
 ];
 
 export default class SearchBox extends React.Component {
@@ -21,28 +23,46 @@ export default class SearchBox extends React.Component {
     });
   }
 
-  handleKeyUp(event) {
-    let value = event.target.value;
-    this.setState({
-      searchValue: value
-    });
-    UIActions.setTorrentsSearchFilter(value);
+  handleSearchChange(event) {
+    let searchValue = event.target.value;
+    this.setState({searchValue});
+    UIActions.setTorrentsSearchFilter(searchValue);
+  }
+
+  isSearchActive() {
+    return this.state.searchValue !== '';
+  }
+
+  resetSearch() {
+    this.setState({searchValue: ''});
+    UIActions.setTorrentsSearchFilter('');
   }
 
   render() {
-    let classSet = classnames({
+    let clearSearchButton = null;
+    let classes = classnames({
       'sidebar__item': true,
-      'sidebar__item--search': true,
-      'is-in-use': this.state.searchValue !== ''
+      'search': true,
+      'is-in-use': this.isSearchActive()
     });
 
+    if (this.isSearchActive()) {
+      clearSearchButton = (
+        <div className="button search__reset-button" onClick={this.resetSearch}>
+          <Close />
+        </div>
+      );
+    }
+
     return (
-      <div className={classSet}>
+      <div className={classes}>
+        {clearSearchButton}
         <Search />
         <input className="textbox"
           type="text"
           placeholder="Search Torrents"
-          onKeyUp={this.handleKeyUp} />
+          onChange={this.handleSearchChange}
+          value={this.state.searchValue} />
       </div>
     );
   }
