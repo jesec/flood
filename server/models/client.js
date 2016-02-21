@@ -1,12 +1,12 @@
 'use strict';
 
-let rTorrent = require('./rtorrent');
+let fs = require('fs');
 let util = require('util');
 
 let clientUtil = require('../util/clientUtil');
 let propsMap = require('../../shared/constants/propsMap');
 let formatUtil = require('../util/formatUtil');
-let fs = require('fs');
+let scgi = require('../util/scgi');
 let Torrent = require('./Torrent');
 let TorrentCollection = require('./TorrentCollection');
 
@@ -53,7 +53,7 @@ var client = {
       torrentsAdded++;
     }
 
-    rTorrent.get('system.multicall', multicall).then(function(data) {
+    scgi.methodCall('system.multicall', multicall).then(function(data) {
       callback(null, data);
     }, function(error) {
       callback(error, null);
@@ -107,7 +107,7 @@ var client = {
 
       console.log('hi');
 
-      rTorrent.get('system.multicall', multicall).then(function(data) {
+      scgi.methodCall('system.multicall', multicall).then(function(data) {
         console.log(data);
         callback(null, data);
       }, function(error) {
@@ -124,7 +124,7 @@ var client = {
     }
 
     for (i = 0, len = hash.length; i < len; i++) {
-      rTorrent.get('d.erase', [hash[i]]).then(function(data) {
+      scgi.methodCall('d.erase', [hash[i]]).then(function(data) {
         callback(null, data);
       }, function(error) {
         callback(error, null);
@@ -164,7 +164,7 @@ var client = {
       params: trackerParams
     });
 
-    rTorrent.get('system.multicall', multicall)
+    scgi.methodCall('system.multicall', multicall)
       .then(function(data) {
         // This is ugly, but it handles several types of responses from the
         // client.
@@ -215,7 +215,7 @@ var client = {
   },
 
   getTorrentList: function(callback) {
-    rTorrent.get('d.multicall2', clientUtil.defaults.torrentPropertyMethods)
+    scgi.methodCall('d.multicall2', clientUtil.defaults.torrentPropertyMethods)
       .then(function(data) {
         try {
           _torrentCollection.updateTorrents(data);
@@ -234,7 +234,7 @@ var client = {
     if (args) {
       args = [args];
     }
-    rTorrent.get(method, args).then(function(data) {
+    scgi.methodCall(method, args).then(function(data) {
       callback(null, data);
     }, function(error) {
       callback(error, null);
@@ -287,7 +287,7 @@ var client = {
       torrentsAdded++;
     }
 
-    rTorrent.get('system.multicall', multicall).then(function(data) {
+    scgi.methodCall('system.multicall', multicall).then(function(data) {
       callback(null, data);
     }, function(error) {
       callback(error, null);
@@ -316,7 +316,7 @@ var client = {
       ]
     ];
 
-    rTorrent.get('system.multicall', multicall)
+    scgi.methodCall('system.multicall', multicall)
       .then(function(data) {
         callback(null, data);
       }, function(error) {
@@ -344,7 +344,7 @@ var client = {
       ]
     ];
 
-    rTorrent.get('system.multicall', multicall)
+    scgi.methodCall('system.multicall', multicall)
       .then(function(data) {
         callback(null, data);
       }, function(error) {
@@ -371,7 +371,7 @@ var client = {
       ]
     ];
 
-    rTorrent.get('system.multicall', multicall)
+    scgi.methodCall('system.multicall', multicall)
       .then(function(data) {
         callback(null, data);
       }, function(error) {
@@ -401,7 +401,7 @@ var client = {
       });
     });
 
-    rTorrent.get('system.multicall', multicall)
+    scgi.methodCall('system.multicall', multicall)
     .then(function(data) {
       callback(null, data);
     }, function(error) {
@@ -431,7 +431,7 @@ var client = {
       });
     });
 
-    rTorrent.get('system.multicall', multicall)
+    scgi.methodCall('system.multicall', multicall)
     .then(function(data) {
       callback(null, data);
     }, function(error) {
@@ -446,7 +446,7 @@ var client = {
 
     request = [request];
 
-    rTorrent.get('system.multicall', request)
+    scgi.methodCall('system.multicall', request)
       .then(function(data) {
         var parsedData = clientUtil.mapClientProps(
           clientUtil.defaults.clientProperties,

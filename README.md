@@ -1,11 +1,11 @@
 # Flood
-Flood is another web interface for [rtorrent](https://github.com/rakshasa/rtorrent). It's intended to be beautiful and functional, but let me know if you feel otherwise!
+Flood is another web interface for [rtorrent](https://github.com/rakshasa/rtorrent). It implements a Node.js server for communicating with the rTorrent API, storing historical data, and serving the web UI.
 
-It's heavily a work-in-progress, and it doesn't yet have all of the features you're going to need to use this as your daily driver. However, new features are added frequently by order of usefulness. If your definition of usefulness is different than mine, feel free to file an issue and I'll prioritize your request.
+It's a work-in-progress, and it might not have all of the features you want (yet). However, new features are added frequently. Feel free to file an issue and I'll try to prioritize your feature requests.
 
 # Usage
 #### Pre-Requisites
-* [rTorrent](https://github.com/rakshasa/rtorrent) needs to be intalled with XMLRPC support (if you're already using a web interface like [ruTorrent](https://github.com/Novik/ruTorrent), you've already done this).
+* [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed with XMLRPC support (if you're already using a web interface like [ruTorrent](https://github.com/Novik/ruTorrent), you've already done this).
   * On OS X, this can be done really easily with [brew](http://brew.sh/). You'd just run `brew install rtorrent --with-xmlrpc-c`.
   * For Linux distros, there are plenty of guides available. [Here's one](http://linoxide.com/ubuntu-how-to/setup-rtorrent-rutorrent/).
   * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows) (I haven't tested this myself).
