@@ -11,12 +11,9 @@ let scgi = {
   methodCall: function(methodName, parameters) {
     let deferred = Q.defer();
     let deserializer = new Deserializer('utf8');
-    let itemLength = 0;
+    let headerLength = 0;
     let nullChar = String.fromCharCode(0);
-    let stream = net.connect({
-      port: config.hostPort,
-      host: config.host
-    });
+    let stream = net.connect({port: config.hostPort, host: config.host});
     let xml = Serializer.serializeMethodCall(methodName, parameters);
 
     stream.setEncoding('UTF8');
@@ -26,22 +23,22 @@ let scgi = {
       console.trace(error);
     });
 
-    let header = [
+    let headerItems = [
       `CONTENT_LENGTH${nullChar}${xml.length}${nullChar}`,
       `SCGI${nullChar}1${nullChar}`
     ];
 
-    header.forEach(function (item) {
-      itemLength += item.length;
+    headerItems.forEach(function (item) {
+      headerLength += item.length;
     });
 
-    let payload = itemLength + ':';
+    let header = `${headerLength}:`;
 
-    header.forEach(function(headerItem) {
-      payload += headerItem;
+    headerItems.forEach(function(headerItem) {
+      header += headerItem;
     });
 
-    stream.write(`${payload},${xml}`);
+    stream.write(`${header},${xml}`);
 
     deserializer.deserializeMethodResponse(stream, function (error, response) {
       if (error) {
