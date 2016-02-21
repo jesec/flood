@@ -3,10 +3,10 @@
 let express = require('express');
 let multer = require('multer');
 let router = express.Router();
-let xmlrpc = require('xmlrpc');
 
 let ajaxUtil = require('../util/ajaxUtil');
 let client = require('../models/client');
+let clientUtil = require('../util/clientUtil');
 let history = require('../models/history');
 
 let upload = multer({
@@ -19,13 +19,9 @@ router.post('/add', function(req, res, next) {
   client.addUrls(req.body, ajaxUtil.getResponseFn(res));
 });
 
-try {
-  router.post('/add-files', upload.array('torrents'), function(req, res, next) {
-    client.addFiles(req, ajaxUtil.getResponseFn(res));
-  });
-} catch (err) {
-  console.log(err);
-}
+router.post('/add-files', upload.array('torrents'), function(req, res, next) {
+  client.addFiles(req, ajaxUtil.getResponseFn(res));
+});
 
 router.get('/history', function(req, res, next) {
   history.get(req.query, ajaxUtil.getResponseFn(res));
