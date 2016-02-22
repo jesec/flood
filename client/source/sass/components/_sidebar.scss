@@ -16,66 +16,6 @@
 
   &__item {
 
-    &--search {
-      position: relative;
-
-      .icon {
-        fill: $search-torrents--icon--foreground;
-        height: 22px;
-        left: 17px;
-        opacity: 0.5;
-        position: absolute;
-        top: 50%;
-        transition: fill 0.25s, opacity 0.25s;
-        transform: translateY(-50%);
-        width: 22px;
-      }
-
-      .textbox {
-        appearance: none;
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        border: 1px solid $search-torrents--border;
-        border-left: none;
-        border-right: none;
-        border-radius: 0;
-        background: $search-torrents--background;
-        box-shadow: none;
-        color: $search-torrents--foreground;
-        display: block;
-        font-size: 1em;
-        outline: none;
-        padding: 12px 0 12px 45px;
-        transition: background 0.25s, border 0.25s, color 0.25s;
-        width: 100%;
-
-        &::placeholder {
-          color: $search-torrents--placeholder;
-          font-style: italic;
-          transition: color 0.25s;
-        }
-      }
-
-      &.is-in-use {
-
-        .icon {
-          fill: $search-torrents--icon--foreground--active;
-          opacity: 1;
-        }
-
-        .textbox {
-          background: $search-torrents--background--active;
-          border-bottom: 1px solid $search-torrents--border--active;
-          border-top: 1px solid $search-torrents--border--active;
-          color: $search-torrents--foreground--active;
-
-          &::placeholder {
-            color: $search-torrents--placeholder--active;
-          }
-        }
-      }
-    }
-
     &--speed-limit {
       padding-left: 5px;
       padding-top: 5px;

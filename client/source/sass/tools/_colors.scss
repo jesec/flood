@@ -80,16 +80,16 @@ $client-stats--limits--icon--hover: $blue;
 
 $search-torrents--base: #091824;
 $search-torrents--background: rgba($search-torrents--base, 0.3);
-$search-torrents--background--active: $green;
+$search-torrents--background--active: rgba($blue, 0.25);
 $search-torrents--border: rgba($search-torrents--background, 0.4);
-$search-torrents--border--active: $search-torrents--background--active;
+$search-torrents--border--active: rgba($blue, 0.3);
 $search-torrents--foreground: $sidebar--foreground;
-$search-torrents--foreground--active: #1e8954;
+$search-torrents--foreground--active: $blue;
 $search-torrents--placeholder: rgba($sidebar--foreground, 0.4);
-$search-torrents--placeholder--active: #2cad6d;
+$search-torrents--placeholder--active: rgba($blue, 0.4);
 
 $search-torrents--icon--foreground: $sidebar--foreground;
-$search-torrents--icon--foreground--active: #2c9e65;
+$search-torrents--icon--foreground--active: $blue;
 
 $sidebar-filter--foreground: $sidebar--foreground;
 $sidebar-filter--foreground--header: rgba($sidebar-filter--foreground, 0.5);
