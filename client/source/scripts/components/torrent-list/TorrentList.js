@@ -4,10 +4,12 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import ContextMenu from '../ui/ContextMenu';
 import CustomScrollbars from '../ui/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicator from '../ui/LoadingIndicator';
 import Torrent from './Torrent';
+import TorrentActions from '../../actions/TorrentActions';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
@@ -17,7 +19,9 @@ const METHODS_TO_BIND = [
   'onReceiveTorrentsError',
   'onReceiveTorrentsSuccess',
   'handleDetailsClick',
+  'handleRightClick',
   'handleTorrentClick',
+  'onContextMenuChange',
   'onTorrentFilterChange',
   'onTorrentSelectionChange',
   'getListPadding',
@@ -31,6 +35,7 @@ export default class TorrentListContainer extends React.Component {
     super();
 
     this.state = {
+      contextMenu: null,
       maxTorrentIndex: 10,
       minTorrentIndex: 0,
       scrollPosition: 0,
@@ -62,6 +67,7 @@ export default class TorrentListContainer extends React.Component {
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
+    UIStore.listen(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
     TorrentStore.fetchTorrents();
     window.addEventListener('resize', this.handleWindowResize);
     this.setViewportHeight();
@@ -73,6 +79,47 @@ export default class TorrentListContainer extends React.Component {
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
+    UIStore.unlisten(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
+  }
+
+  getContextMenuItems() {
+    let clickHandler = this.handleContextMenuItemClick;
+
+    return [{
+      action: 'start',
+      clickHandler,
+      label: 'Start'
+    }, {
+      action: 'stop',
+      clickHandler,
+      label: 'Stop'
+    }, {
+      action: 'pause',
+      clickHandler,
+      label: 'Pause'
+    }, {
+      action: 'remove',
+      clickHandler,
+      label: 'Remove'
+    }];
+  }
+
+  handleContextMenuItemClick(action) {
+    let selectedTorrents = TorrentStore.getSelectedTorrents();
+    switch (action) {
+      case 'start':
+        TorrentActions.startTorrents(selectedTorrents);
+        break;
+      case 'stop':
+        TorrentActions.stopTorrents(selectedTorrents);
+        break;
+      case 'pause':
+        TorrentActions.pauseTorrents(selectedTorrents);
+        break;
+      case 'remove':
+        TorrentActions.deleteTorrents(selectedTorrents);
+        break;
+    }
   }
 
   handleDetailsClick(torrent, event) {
@@ -82,8 +129,24 @@ export default class TorrentListContainer extends React.Component {
     });
   }
 
+  handleRightClick(torrent, event) {
+    event.preventDefault();
+
+    UIStore.setActiveContextMenu({
+      clickPosition: {
+        x: event.clientX,
+        y: event.clientY
+      },
+      items: this.getContextMenuItems()
+    });
+  }
+
   handleTorrentClick(hash, event) {
     UIActions.handleTorrentClick({hash, event});
+  }
+
+  onContextMenuChange() {
+    this.setState({contextMenu: UIStore.getActiveContextMenu()});
   }
 
   onReceiveTorrentsError() {
@@ -177,6 +240,7 @@ export default class TorrentListContainer extends React.Component {
     let content = this.getLoadingIndicator();
 
     if (this.state.torrentRequestSuccess) {
+      let contextMenu = null;
       let selectedTorrents = TorrentStore.getSelectedTorrents();
       let torrents = this.state.torrents;
       let viewportLimits = this.getViewportLimits();
@@ -194,6 +258,13 @@ export default class TorrentListContainer extends React.Component {
         minTorrentIndex = 0;
       }
 
+      if (this.state.contextMenu != null) {
+        contextMenu = (
+          <ContextMenu clickPosition={this.state.contextMenu.clickPosition}
+            items={this.state.contextMenu.items} />
+        );
+      }
+
       let visibleTorrents = torrents.slice(minTorrentIndex, maxTorrentIndex);
 
       let torrentList = visibleTorrents.map((torrent, index) => {
@@ -207,12 +278,14 @@ export default class TorrentListContainer extends React.Component {
         return (
           <Torrent key={hash} data={torrent} selected={isSelected}
             handleClick={this.handleTorrentClick}
+            handleRightClick={this.handleRightClick}
             handleDetailsClick={this.handleDetailsClick} />
         );
       });
 
       content = (
         <ul className="torrent__list" key="torrent__list">
+          {contextMenu}
           <li className="torrent__spacer torrent__spacer--top"
             style={{height: `${listPadding.top}px`}}></li>
           {torrentList}

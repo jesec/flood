@@ -90,7 +90,7 @@ export default class Dropdown extends React.Component {
     }, this);
 
     return (
-      <div className="dropdown__content">
+      <div className="dropdown__content menu">
         <div className="dropdown__header">
           {this.getDropdownButton()}
         </div>
@@ -103,7 +103,7 @@ export default class Dropdown extends React.Component {
 
   getDropdownMenuItems(listItems) {
     return listItems.map(function(property, index) {
-      let classes = classnames('dropdown__item', property.className, {
+      let classes = classnames('dropdown__item menu__item', property.className, {
         'is-selectable': property.selectable !== false,
         'is-selected': property.selected
       })

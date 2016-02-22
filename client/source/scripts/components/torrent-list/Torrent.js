@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import React from 'react';
 
 import DotsMini from '../icons/DotsMini';
+import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import ProgressBar from '../ui/ProgressBar';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
@@ -12,7 +13,6 @@ const METHODS_TO_BIND = [
 ];
 
 export default class Torrent extends React.Component {
-
   constructor() {
     super();
 
@@ -26,7 +26,10 @@ export default class Torrent extends React.Component {
   }
 
   handleRightClick(event) {
-    console.log(event);
+    if (!this.props.selected) {
+      this.handleClick(event);
+    }
+    this.props.handleRightClick(this.props.data, event);
   }
 
   render() {
@@ -104,5 +107,4 @@ export default class Torrent extends React.Component {
       </li>
     );
   }
-
 }

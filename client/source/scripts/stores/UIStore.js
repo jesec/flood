@@ -9,6 +9,7 @@ class UIStoreClass extends BaseStore {
   constructor() {
     super();
 
+    this.activeContextMenu = null;
     this.activeModal = null;
     this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
@@ -24,6 +25,10 @@ class UIStoreClass extends BaseStore {
 
   fetchLatestTorrentLocation() {
     TorrentActions.fetchLatestTorrentLocation();
+  }
+
+  getActiveContextMenu() {
+    return this.activeContextMenu;
   }
 
   getActiveModal() {
@@ -61,6 +66,11 @@ class UIStoreClass extends BaseStore {
     return this.torrentDetailsOpen;
   }
 
+  setActiveContextMenu(contextMenu = {}) {
+    this.activeContextMenu = contextMenu;
+    this.emit(EventTypes.UI_CONTEXT_MENU_CHANGE);
+  }
+
   setActiveModal(modal = {}) {
     this.activeModal = modal;
     this.emit(EventTypes.UI_MODAL_CHANGE);
@@ -81,6 +91,9 @@ AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_DISPLAY_MODAL:
       UIStore.setActiveModal(action.data);
+      break;
+    case ActionTypes.UI_DISPLAY_CONTEXT_MENU:
+      UIStore.setActiveContextMenu(action.data);
       break;
     case ActionTypes.UI_LATEST_TORRENT_LOCATION_REQUEST_SUCCESS:
       UIStore.handleLatestTorrentLocationRequestSuccess(action.data.path);

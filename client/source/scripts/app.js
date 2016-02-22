@@ -8,10 +8,14 @@ import Sidebar from './components/panels/Sidebar';
 import TorrentActions from './actions/TorrentActions';
 import TorrentDetailsView from './components/panels/TorrentDetailsView';
 import TorrentListView from './components/panels/TorrentListView';
+import UIActions from './actions/UIActions';
 
 class FloodApp extends React.Component {
   componentDidMount() {
     TorrentActions.fetchLatestTorrentLocation();
+    window.addEventListener('click', function () {
+      UIActions.dismissContextMenu();
+    });
   }
 
   render() {
