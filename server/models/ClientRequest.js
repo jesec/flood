@@ -78,9 +78,8 @@ class ClientRequest {
       .catch(this.handleError.bind(this));
   }
 
-  // rTorrent method calls.
   // TODO: Separate these and add support for additional clients.
-
+  // rTorrent method calls.
   addFilesMethodCall(options) {
     let files = this.getEnsuredArray(options.files);
 
@@ -131,6 +130,16 @@ class ClientRequest {
     this.requests.push(this.getMethodCall('p.multicall', peerParams));
     this.requests.push(this.getMethodCall('f.multicall', fileParams));
     this.requests.push(this.getMethodCall('t.multicall', trackerParams));
+  }
+
+  getTorrentListMethodCall(options) {
+    this.requests.push(this.getMethodCall('d.multicall2', options.props));
+  }
+
+  getTransferDataMethodCall(options) {
+    Object.keys(rTorrentPropMap.transferData).forEach((key) => {
+      this.requests.push(this.getMethodCall(rTorrentPropMap.transferData[key]));
+    });
   }
 
   listMethodsMethodCall(options) {
@@ -197,16 +206,6 @@ class ClientRequest {
       this.requests.push(this.getMethodCall('d.stop', [hash]));
       this.requests.push(this.getMethodCall('d.close', [hash]));
     });
-  }
-
-  getTransferDataMethodCall(options) {
-    Object.keys(rTorrentPropMap.transferData).forEach((key) => {
-      this.requests.push(this.getMethodCall(rTorrentPropMap.transferData[key]));
-    });
-  }
-
-  getTorrentListMethodCall(options) {
-    this.requests.push(this.getMethodCall('d.multicall2', options.props));
   }
 }
 
