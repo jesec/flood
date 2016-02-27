@@ -100,25 +100,21 @@ class ClientRequest {
   }
 
   addURLsMethodCall(options) {
-    try {
-      let path = options.path;
-      let urls = this.getEnsuredArray(options.urls);
+    let path = options.path;
+    let urls = this.getEnsuredArray(options.urls);
 
-      urls.forEach((url) => {
-        let parameters = ['', url];
-        let timeAdded = Math.floor(Date.now() / 1000);
+    urls.forEach((url) => {
+      let parameters = ['', url];
+      let timeAdded = Math.floor(Date.now() / 1000);
 
-        if (path && path !== '') {
-          parameters.push(`d.directory.set="${path}"`);
-        }
+      if (path && path !== '') {
+        parameters.push(`d.directory.set="${path}"`);
+      }
 
-        parameters.push(`d.custom.set=addtime,${timeAdded}`);
+      parameters.push(`d.custom.set=addtime,${timeAdded}`);
 
-        this.requests.push(this.getMethodCall('load.start', parameters));
-      });
-    } catch (error) {
-      console.log(error);
-    }
+      this.requests.push(this.getMethodCall('load.start', parameters));
+    });
   }
 
   createDirectoryMethodCall(options) {
