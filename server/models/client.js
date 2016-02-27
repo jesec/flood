@@ -3,6 +3,8 @@
 let fs = require('fs');
 let util = require('util');
 
+let clientResponseUtil = require('../util/clientResponseUtil');
+let ClientRequest = require('./ClientRequest');
 let clientUtil = require('../util/clientUtil');
 let propsMap = require('../../shared/constants/propsMap');
 let formatUtil = require('../util/formatUtil');
@@ -15,119 +17,47 @@ let _torrentCollection = new TorrentCollection();
 let _trackerCount = {};
 
 var client = {
-  addUrls: function(data, callback) {
-    var multicall = [
-      []
-    ];
+  addFiles: function(req, callback) {
+    let files = req.files;
+    let path = req.body.destination;
+    let request = new ClientRequest();
+    
+    request.add('createDirectory', {path});
+    request.send();
 
-    if (data.destination !== null && data.destination !== '') {
-      multicall[0].push({
-        methodName: 'execute',
-        params: [
-          'mkdir',
-          '-p',
-          data.destination
-        ]
-      });
-    }
-
-    var torrentsAdded = 0;
-
-    while (torrentsAdded < data.urls.length) {
-      var parameters = [
-        '',
-        data.urls[torrentsAdded]
-      ];
-
-      if (data.destination !== null && data.destination !== '') {
-        parameters.push('d.directory.set="' + data.destination + '"');
+    // TODO: Clean this up, it's ugly.
+    // Each torrent is sent individually because rTorrent accepts a total
+    // filesize of 524 kilobytes or less.
+    files.forEach((file, index) => {
+      let fileRequest = new ClientRequest();
+      fileRequest.add('addFiles', {files: file, path});
+      // Call the callback on the last request.
+      if (index === files.length - 1) {
+        fileRequest.onComplete(function (data) {
+          callback(data);
+        });
       }
-
-      parameters.push('d.custom.set=addtime,' + Math.floor(Date.now() / 1000));
-
-      multicall[0].push({
-        methodName: 'load.start',
-        params: parameters
-      });
-
-      torrentsAdded++;
-    }
-
-    scgi.methodCall('system.multicall', multicall).then(function(data) {
-      callback(null, data);
-    }, function(error) {
-      callback(error, null);
+      fileRequest.send();
     });
   },
 
-  addFiles: function(req, callback) {
-    let torrentDestination = req.body.destination;
-    let uploadedTorrents = req.files;
+  addUrls: function(data, callback) {
+    let urls = data.urls;
+    let path = data.destination;
+    let request = new ClientRequest();
 
-    let torrentsAdded = 0;
-
-    while (torrentsAdded < uploadedTorrents.length) {
-      let file = uploadedTorrents[torrentsAdded];
-      let filename = file.filename;
-      let fileContents = file.buffer;
-      let multicall = [
-        []
-      ];
-
-      if (torrentDestination !== null && torrentDestination !== '') {
-        multicall[0].push({
-          methodName: 'execute',
-          params: [
-            'mkdir',
-            '-p',
-            torrentDestination
-          ]
-        });
-      }
-
-      var parameters = [
-        '',
-        fileContents
-      ];
-
-      if (torrentDestination !== null && torrentDestination !== '') {
-        parameters.push('d.directory.set="' + torrentDestination + '"');
-      }
-
-      parameters.push('d.custom.set=x-filename,' + filename);
-
-      parameters.push('d.custom.set=addtime,' + Math.floor(Date.now() / 1000));
-
-      multicall[0].push({
-        methodName: 'load.raw_start',
-        params: parameters
-      });
-
-      torrentsAdded++;
-
-      scgi.methodCall('system.multicall', multicall).then(function(data) {
-        console.log(data);
-        callback(null, data);
-      }, function(error) {
-        callback(error, null);
-      });
-    }
+    request.add('createDirectory', {path});
+    request.add('addURLs', {urls, path});
+    request.onComplete(callback);
+    request.send();
   },
 
-  deleteTorrents: function(hash, callback) {
-    if (!util.isArray(hash)) {
-      hash = [hash];
-    } else {
-      hash = String(hash).split(',');
-    }
+  deleteTorrents: function(hashes, callback) {
+    let request = new ClientRequest();
 
-    for (i = 0, len = hash.length; i < len; i++) {
-      scgi.methodCall('d.erase', [hash[i]]).then(function(data) {
-        callback(null, data);
-      }, function(error) {
-        callback(error, null);
-      });
-    }
+    request.add('removeTorrents', {hashes});
+    request.onComplete(callback);
+    request.send();
   },
 
   getTorrentStatusCount: function(callback) {
@@ -139,321 +69,101 @@ var client = {
   },
 
   getTorrentDetails: function(hash, callback) {
-    var peerParams = [hash, ''].concat(clientUtil.defaults.peerPropertyMethods);
-    var fileParams = [hash, ''].concat(clientUtil.defaults.filePropertyMethods);
-    var trackerParams = [hash, ''].concat(clientUtil.defaults.trackerPropertyMethods);
+    let request = new ClientRequest();
 
-    var multicall = [
-      []
-    ];
-
-    multicall[0].push({
-      methodName: 'p.multicall',
-      params: peerParams
+    request.add('getTorrentDetails', {
+      hash,
+      fileProps: clientUtil.defaults.filePropertyMethods,
+      peerProps: clientUtil.defaults.peerPropertyMethods,
+      trackerProps: clientUtil.defaults.trackerPropertyMethods
     });
-
-    multicall[0].push({
-      methodName: 'f.multicall',
-      params: fileParams
-    });
-
-    multicall[0].push({
-      methodName: 't.multicall',
-      params: trackerParams
-    });
-
-    scgi.methodCall('system.multicall', multicall)
-      .then(function(data) {
-        // This is ugly, but it handles several types of responses from the
-        // client.
-        var peersData = data[0][0] || null;
-        var filesData = data[1][0] || null;
-        var trackerData = data[2][0] || null;
-        var peers = null;
-        var files = null;
-        var trackers = null;
-
-        if (peersData && peersData.length) {
-          peers = clientUtil.mapClientProps(
-            clientUtil.defaults.peerProperties,
-            peersData
-          );
-        }
-
-        if (filesData && filesData.length) {
-          files = clientUtil.mapClientProps(
-            clientUtil.defaults.fileProperties,
-            filesData
-          );
-
-          files = files.map(function (file) {
-            file.filename = file.pathComponents[file.pathComponents.length - 1];
-            file.percentComplete = (file.completedChunks / file.sizeChunks * 100).toFixed(0);
-            delete(file.completedChunks);
-            delete(file.sizeChunks);
-            return file;
-          });
-        }
-
-        if (trackerData && trackerData.length) {
-          trackers = clientUtil.mapClientProps(
-            clientUtil.defaults.trackerProperties,
-            trackerData
-          );
-        }
-
-        callback(null, {
-          peers: peers,
-          files: files,
-          trackers: trackers
-        });
-      }, function(error) {
-        callback(error, null);
-      });
+    request.postProcess(clientResponseUtil.processTorrentDetails);
+    request.onComplete(callback);
+    request.send();
   },
 
   getTorrentList: function(callback) {
-    scgi.methodCall('d.multicall2', clientUtil.defaults.torrentPropertyMethods)
-      .then(function(data) {
-        try {
-          _torrentCollection.updateTorrents(data);
-          _statusCount = _torrentCollection.statusCount;
-          _trackerCount = _torrentCollection.trackerCount;
-        } catch (err) {
-          console.log(err);
-        }
-        callback(null, _torrentCollection.torrents);
-      }, function(error) {
-        callback(error, null)
-      });
+    let request = new ClientRequest();
+
+    request.add('getTorrentList',
+      {props: clientUtil.defaults.torrentPropertyMethods});
+    request.postProcess(function(data) {
+      _torrentCollection.updateTorrents(data[0][0]);
+      _statusCount = _torrentCollection.statusCount;
+      _trackerCount = _torrentCollection.trackerCount;
+
+      return _torrentCollection.torrents;
+    });
+    request.onComplete(callback);
+    request.send();
   },
 
   listMethods: function(method, args, callback) {
-    if (args) {
-      args = [args];
-    }
-    scgi.methodCall(method, args).then(function(data) {
-      callback(null, data);
-    }, function(error) {
-      callback(error, null);
-    });
+    let request = new ClientRequest();
+
+    request.add('listMethods', {method, args});
+    request.onComplete(callback);
+    request.send();
   },
 
   moveFiles: function(data, callback) {
-    let files = data.files || [];
-
-    var multicall = [
-      []
-    ];
-
-    if (data.destination !== null && data.destination !== '') {
-      multicall[0].push({
-        methodName: 'execute',
-        params: [
-          'mkdir',
-          '-p',
-          data.destination
-        ]
-      });
-    }
-
-    var torrentsAdded = 0;
-
     // loop through the torrents:
     //  stop torrents, call d.stop and d.close
     //  move torrents
     //  set new torrent directory
     //  start torrents, call d.start and d.open
-
-    while (torrentsAdded < data.urls.length) {
-      var parameters = [
-        '',
-        data.urls[torrentsAdded]
-      ];
-
-      if (data.destination !== null && data.destination !== '') {
-        parameters.push('d.directory.set="' + data.destination + '"');
-      }
-
-      parameters.push('d.custom.set=addtime,' + Math.floor(Date.now() / 1000));
-
-      multicall[0].push({
-        methodName: 'load.start',
-        params: parameters
-      });
-
-      torrentsAdded++;
-    }
-
-    scgi.methodCall('system.multicall', multicall).then(function(data) {
-      callback(null, data);
-    }, function(error) {
-      callback(error, null);
-    });
   },
 
-  setFilePriority: function (hash, data, callback) {
+  setFilePriority: function (hashes, data, callback) {
     // TODO Add support for multiple hashes.
-    var fileIndex = data.fileIndices[0];
+    let fileIndex = data.fileIndices[0];
+    let request = new ClientRequest();
 
-    var multicall = [
-      [
-        {
-          methodName: 'f.priority.set',
-          params: [
-            hash + ':f' + fileIndex,
-            data.priority
-          ]
-        },
-        {
-          methodName: 'd.update_priorities',
-          params: [
-            hash
-          ]
-        }
-      ]
-    ];
-
-    scgi.methodCall('system.multicall', multicall)
-      .then(function(data) {
-        callback(null, data);
-      }, function(error) {
-        callback(error, null);
-      });
+    request.add('setFilePriority', {hashes, fileIndex, priority: data.priority});
+    request.onComplete(callback);
+    request.send();
   },
 
-  setPriority: function (hash, data, callback) {
-    // TODO Add support for multiple hashes.
-    var multicall = [
-      [
-        {
-          methodName: 'd.set_priority',
-          params: [
-            hash,
-            data.priority
-          ]
-        },
-        {
-          methodName: 'd.update_priorities',
-          params: [
-            hash
-          ]
-        }
-      ]
-    ];
+  setPriority: function (hashes, data, callback) {
+    let request = new ClientRequest();
 
-    scgi.methodCall('system.multicall', multicall)
-      .then(function(data) {
-        callback(null, data);
-      }, function(error) {
-        callback(error, null);
-      });
+    request.add('setPriority', {hashes, priority: data.priority});
+    request.onComplete(callback);
+    request.send();
   },
 
   setSpeedLimits: function(data, callback) {
-    var methodName = 'throttle.global_down.max_rate.set';
+    let request = new ClientRequest();
 
-    if (data.direction === 'upload') {
-      methodName = 'throttle.global_up.max_rate.set';
-    }
-
-    var multicall = [
-      [
-        {
-          methodName: methodName,
-          params: [
-            '',
-            data.throttle
-          ]
-        }
-      ]
-    ];
-
-    scgi.methodCall('system.multicall', multicall)
-      .then(function(data) {
-        callback(null, data);
-      }, function(error) {
-        callback(error, null);
-      });
+    request.add('setThrottle',
+      {direction: data.direction, throttle: data.throttle});
+    request.onComplete(callback);
+    request.send();
   },
 
   stopTorrent: function(hashes, callback) {
-    if (!util.isArray(hashes)) {
-      hashes = [hashes];
-    } else {
-      hashes = String(hashes).split(',');
-    }
+    let request = new ClientRequest();
 
-    var multicall = [
-      []
-    ];
-
-    hashes.forEach(function (hash) {
-      multicall[0].push({
-        methodName: 'd.stop',
-        params: [hash]
-      });
-      multicall[0].push({
-        methodName: 'd.close',
-        params: [hash]
-      });
-    });
-
-    scgi.methodCall('system.multicall', multicall)
-    .then(function(data) {
-      callback(null, data);
-    }, function(error) {
-      callback(error, null);
-    });
+    request.add('stopTorrents', {hashes});
+    request.onComplete(callback);
+    request.send();
   },
 
   startTorrent: function(hashes, callback) {
-    if (!util.isArray(hashes)) {
-      hashes = [hashes];
-    } else {
-      hashes = String(hashes).split(',');
-    }
+    let request = new ClientRequest();
 
-    var multicall = [
-      []
-    ];
-
-    hashes.forEach(function (hash) {
-      multicall[0].push({
-        methodName: 'd.open',
-        params: [hash]
-      });
-      multicall[0].push({
-        methodName: 'd.start',
-        params: [hash]
-      });
-    });
-
-    scgi.methodCall('system.multicall', multicall)
-    .then(function(data) {
-      callback(null, data);
-    }, function(error) {
-      callback(error, null);
-    });
+    request.add('startTorrents', {hashes});
+    request.onComplete(callback);
+    request.send();
   },
 
   getTransferStats: function(callback) {
-    var request = clientUtil.createMulticallRequest(
-      clientUtil.defaults.clientPropertyMethods
-    );
+    let request = new ClientRequest();
 
-    request = [request];
-
-    scgi.methodCall('system.multicall', request)
-      .then(function(data) {
-        var parsedData = clientUtil.mapClientProps(
-          clientUtil.defaults.clientProperties,
-          data
-        );
-        callback(null, parsedData);
-      }, function(error) {
-        callback(error, null);
-      });
+    request.add('getTransferData');
+    request.postProcess(clientResponseUtil.processTransferStats);
+    request.onComplete(callback);
+    request.send();
   }
 };
 
