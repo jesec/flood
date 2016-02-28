@@ -60,8 +60,12 @@ class TorrentFilterStoreClass extends BaseStore {
     this.setTorrentsSort(sortBy);
   }
 
-  handleTorrentStatusCountRequestError() {
+  handleTorrentTrackerCountRequestError(error) {
+    this.emit(EventTypes.CLIENT_TORRENT_TRACKER_COUNT_REQUEST_ERROR);
+  }
 
+  handleTorrentStatusCountRequestError(error) {
+    this.emit(EventTypes.CLIENT_TORRENT_STATUS_COUNT_REQUEST_ERROR);
   }
 
   isFilterActive() {
@@ -127,13 +131,13 @@ AppDispatcher.register((payload) => {
       TorrentFilterStore.setTorrentStatusCount(action.data);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_ERROR:
-      TorrentFilterStore.handleTorrentStatusCountRequestError(action.data);
+      TorrentFilterStore.handleTorrentStatusCountRequestError(action.error);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_SUCCESS:
       TorrentFilterStore.setTorrentTrackerCount(action.data);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_ERROR:
-      TorrentFilterStore.handleTorrentTrackerCountRequestError(action.data);
+      TorrentFilterStore.handleTorrentTrackerCountRequestError(action.error);
       break;
   }
 });

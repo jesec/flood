@@ -108,7 +108,7 @@ class TransferDataStoreClass extends BaseStore {
   }
 
   handleTransferHistoryError(error) {
-    console.trace(error);
+    this.emit(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_ERROR);
   }
 
   handleTransferHistorySuccess(transferData) {

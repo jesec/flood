@@ -3,6 +3,7 @@
 let util = require('util');
 
 let clientUtil = require('../util/clientUtil');
+let Q = require('q');
 let rTorrentPropMap = require('../util/rTorrentPropMap');
 let scgi = require('../util/scgi');
 let stringUtil = require('../../shared/util/stringUtil');
@@ -40,6 +41,10 @@ class ClientRequest {
     return item;
   }
 
+  clearRequestQueue() {
+    this.requests = [];
+  }
+
   getMethodCall(methodName, params) {
     params = params || [];
     return {methodName, params};
@@ -48,19 +53,24 @@ class ClientRequest {
   handleError(error) {
     console.trace(error);
 
+    this.clearRequestQueue();
+
     if (this.onCompleteFn) {
-      this.onCompleteFn(error);
+      this.onCompleteFn(null, error);
     }
   }
 
   handleSuccess(data) {
     let response = data;
+
+    this.clearRequestQueue();
+
     if (this.postProcessFn) {
       response = this.postProcessFn(data);
     }
 
     if (this.onCompleteFn) {
-      this.onCompleteFn(null, response);
+      this.onCompleteFn(response);
     }
   }
 
@@ -145,6 +155,16 @@ class ClientRequest {
   listMethodsMethodCall(options) {
     let args = this.getEnsuredArray(options.args);
     this.requests.push(this.getMethodCall(options.method, [args]));
+  }
+
+  moveTorrentsMethodCall(options) {
+    let hashes = this.getEnsuredArray(options.hashes);
+    let destinationPath = options.destinationPath;
+    let sourcePath = options.sourcePath;
+
+    this.moveInProgress = true;
+
+    // let {hashes, destinationPath, sourcePath} = options;
   }
 
   removeTorrentsMethodCall(options) {

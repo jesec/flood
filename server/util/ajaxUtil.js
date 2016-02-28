@@ -2,11 +2,13 @@
 
 let ajaxUtil = {
   getResponseFn: function (res) {
-    return function (error, response) {
+    return function (data, error) {
       if (error) {
-        console.log('error in getResponseFn', error);
+        res.status(500).json(error);
+        return;
+      } else {
+        res.json(data);
       }
-      res.json(response);
     }
   }
 };

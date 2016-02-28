@@ -49,7 +49,7 @@ class HistoryEra {
 
   addData(data) {
     if (!this.ready) {
-      console.warn('database is not ready');
+      console.error('database is not ready');
       return;
     }
 
@@ -74,12 +74,13 @@ class HistoryEra {
           let downAvg = ((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
           let upAvg = ((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
 
+          // TODO: Remove this nonsense, I think this bug is resolved.
           if (downAvg == null || upAvg == null) {
-            console.log('\n\n');
-            console.log('Warning: null values set in database!');
-            console.log(`DB: ${this.opts.name}`);
-            console.log(`numUpdates: ${numUpdates}\ncurrentDownAvg: ${currentDownAvg}\ncurrentUpAvg: ${currentUpAvg}\ndownAvg: ${downAvg}\nupAvg: ${upAvg}`);
-            console.log('\n\n');
+            console.error('\n\n');
+            console.error('Warning: null values set in database!');
+            console.error(`DB: ${this.opts.name}`);
+            console.error(`numUpdates: ${numUpdates}\ncurrentDownAvg: ${currentDownAvg}\ncurrentUpAvg: ${currentUpAvg}\ndownAvg: ${downAvg}\nupAvg: ${upAvg}`);
+            console.error('\n\n');
           }
 
           this.db.update({ts: this.lastUpdate}, {ts: this.lastUpdate, up: Number(upAvg), dn: Number(downAvg), num: numUpdates + 1});
@@ -99,7 +100,12 @@ class HistoryEra {
     this.db.find({ts: {$gte: minTimestamp}})
       .sort({ts: 1})
       .exec(function (err, docs) {
-        callback(err, docs);
+        if (err) {
+          callback(null, err);
+          return;
+        }
+
+        callback(docs);
       }
     );
   }
@@ -109,7 +115,7 @@ class HistoryEra {
 
     REQUIRED_FIELDS.forEach(function (field) {
       if (opts[field] == null) {
-        console.warn(`HistoryEra requires ${field}`);
+        console.error(`HistoryEra requires ${field}`);
         requirementsMet = false;
       }
     });
@@ -131,7 +137,7 @@ class HistoryEra {
     if (this.opts.maxTime > 0) {
       let minTimestamp = Date.now() - this.opts.maxTime;
       db.remove({ts: {$lt: minTimestamp}}, {multi: true}, (err, numRemoved) => {
-        console.log(`removed ${numRemoved} entries from ${this.opts.name}`)
+        console.error(`removed ${numRemoved} entries from ${this.opts.name}`)
       });
     }
   }
