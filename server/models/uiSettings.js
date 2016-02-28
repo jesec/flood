@@ -15,12 +15,12 @@ let uiSettings = {
   getLatestTorrentLocation: function(callback) {
     uiDB.find({type: 'location'}, function(error, docs) {
       if (error) {
-        callback(error);
+        callback(null, error);
         return;
       }
 
       if (docs.length) {
-        callback(error, docs[0]);
+        callback(docs[0]);
       }
     });
   },
@@ -28,12 +28,12 @@ let uiSettings = {
   getSortProps: function(callback) {
     uiDB.find({type: 'sort'}, function(error, docs) {
       if (error) {
-        callback(error);
+        callback(null, error);
         return;
       }
 
       if (docs.length) {
-        callback(error, docs[0]);
+        callback(docs[0]);
       }
     });
   },
@@ -42,12 +42,12 @@ let uiSettings = {
     let newLocationData = Object.assign({}, {type: 'location'}, {path: data.destination});
     uiDB.update({type: 'location'}, newLocationData, {upsert: true}, function (error, docs) {
       if (error) {
-        callback(error);
+        callback(null, error);
         return;
       }
 
       if (docs.length) {
-        callback(error, docs);
+        callback(docs);
       }
     });
   },
@@ -56,12 +56,12 @@ let uiSettings = {
     let newSortPropData = Object.assign({}, {type: 'sort'}, sortProps);
     uiDB.update({type: 'sort'}, newSortPropData, {upsert: true}, function (error, docs) {
       if (error) {
-        callback(error);
+        callback(null, error);
         return;
       }
 
       if (docs.length) {
-        callback(error, docs);
+        callback(docs);
       }
     });
   }

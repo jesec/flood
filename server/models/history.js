@@ -60,9 +60,10 @@ let fiveMinSnapshot = new HistoryEra({
   nextEra: thirtyMinSnapshot
 });
 
-let processData = function (opts, callback, error, data) {
+let processData = function (opts, callback, data, error) {
   if (error) {
-    callback(error);
+    callback(null, error);
+    return;
   }
 
   data = data.slice(data.length - config.maxHistoryStates);
@@ -75,7 +76,7 @@ let processData = function (opts, callback, error, data) {
     uploadRateHistory.push(snapshot.up);
   });
 
-  callback(error, {
+  callback({
     download: downloadRateHistory,
     upload: uploadRateHistory
   });
@@ -104,7 +105,7 @@ let history = {
 
   startPolling: function () {
     pollInterval = setInterval(function() {
-      client.getTransferStats(function (err, data) {
+      client.getTransferStats(function (data, err) {
         if (err) {
           return;
         }

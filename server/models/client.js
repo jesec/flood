@@ -21,22 +21,24 @@ var client = {
     let files = req.files;
     let path = req.body.destination;
     let request = new ClientRequest();
-    
+
     request.add('createDirectory', {path});
     request.send();
 
-    // TODO: Clean this up, it's ugly.
     // Each torrent is sent individually because rTorrent accepts a total
-    // filesize of 524 kilobytes or less.
+    // filesize of 524 kilobytes or less. This allows the user to send many
+    // torrent files reliably.
     files.forEach((file, index) => {
       let fileRequest = new ClientRequest();
       fileRequest.add('addFiles', {files: file, path});
-      // Call the callback on the last request.
+
+      // Set the callback for only the last request.
       if (index === files.length - 1) {
         fileRequest.onComplete(function (data) {
           callback(data);
         });
       }
+
       fileRequest.send();
     });
   },
@@ -61,11 +63,11 @@ var client = {
   },
 
   getTorrentStatusCount: function(callback) {
-    callback(null, _statusCount);
+    callback(_statusCount);
   },
 
   getTorrentTrackerCount: function(callback) {
-    callback(null, _trackerCount);
+    callback(_trackerCount);
   },
 
   getTorrentDetails: function(hash, callback) {
@@ -88,6 +90,7 @@ var client = {
     request.add('getTorrentList',
       {props: clientUtil.defaults.torrentPropertyMethods});
     request.postProcess(function(data) {
+      // TODO: Remove this nasty nested array business.
       _torrentCollection.updateTorrents(data[0][0]);
       _statusCount = _torrentCollection.statusCount;
       _trackerCount = _torrentCollection.trackerCount;
@@ -107,11 +110,19 @@ var client = {
   },
 
   moveFiles: function(data, callback) {
-    // loop through the torrents:
-    //  stop torrents, call d.stop and d.close
-    //  move torrents
-    //  set new torrent directory
-    //  start torrents, call d.start and d.open
+    let destinationPath = data.destination;
+    let hashes = data.hashes;
+    let sourcePath = data.source;
+    let request = new ClientRequest();
+
+    request.add('createDirectory', {path: destinationPath});
+    request.add('stopTorrents', {hashes});
+    request.onComplete(function () {
+      request.add('moveTorrents', {hashes, destinationPath, sourcePath});
+      request.add('startTorrents', {hashes});
+      request.onComplete(callback);
+    })
+    request.send();
   },
 
   setFilePriority: function (hashes, data, callback) {
