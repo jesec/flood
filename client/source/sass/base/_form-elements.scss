@@ -92,6 +92,70 @@
   }
 }
 
+.checkbox {
+  line-height: 1;
+  position: relative;
+
+  &:hover {
+
+    .checkbox {
+
+      &__decoy {
+        border-color: $blue;
+      }
+    }
+  }
+
+  input[type="checkbox"] {
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &:checked {
+
+      & + .checkbox {
+
+        &__decoy {
+
+          .icon {
+            fill: $blue;
+          }
+        }
+      }
+    }
+  }
+
+  &__decoy {
+    @extend .textbox;
+    background: $white;
+    display: inline-block;
+    height: $spacing-unit * 3/5;
+    margin-right: $spacing-unit * 1.5/5;
+    margin-top: -2px;
+    padding: 0;
+    position: relative;
+    vertical-align: middle;
+    width: $spacing-unit * 3/5;
+
+    .icon {
+      fill: transparent;
+      height: 10px;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transition: fill 0.25s;
+      transform: translate(-43%, -43%);
+      width: 10px;
+    }
+  }
+
+  &__label {
+    color: darken($modal--body--foreground, 10%);
+  }
+}
+
 .form {
 
   &__label {

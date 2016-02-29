@@ -56,7 +56,7 @@ var clientUtil = {
       // 'tiedToFile',
       // 'trackerNumWant',
       // 'trackerSize',
-      // 'isMultiFile',
+      'isMultiFile',
       // 'isPexActive',
       'isPrivate',
 
@@ -126,7 +126,7 @@ var clientUtil = {
       // 'd.tied_to_file=',
       // 'd.tracker_numwant=',
       // 'd.tracker_size=',
-      // 'd.is_multi_file=',
+      'd.is_multi_file=',
       // 'd.is_pex_active=',
       'd.is_private=',
 

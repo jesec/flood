@@ -7,7 +7,7 @@ let stringUtil = require('../../shared/util/stringUtil');
 
 const MAX_CLEANUP_INTERVAL = 1000 * 60 * 60; // 1 hour
 const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
-const CUMULATIVE_DATA_BUFFER = 1000 * 2;
+const CUMULATIVE_DATA_BUFFER = 1000 * 2; // 2 seconds
 const REQUIRED_FIELDS = ['interval', 'maxTime', 'name'];
 
 class HistoryEra {
@@ -29,7 +29,6 @@ class HistoryEra {
     this.removeOutdatedData(this.db);
 
     let cleanupInterval = this.opts.maxTime;
-
     let nextEraUpdateInterval = this.opts.nextEraUpdateInterval;
 
     if (cleanupInterval === 0 || cleanupInterval > MAX_CLEANUP_INTERVAL) {
@@ -40,11 +39,11 @@ class HistoryEra {
       nextEraUpdateInterval = MAX_NEXT_ERA_UPDATE_INTERVAL;
     }
 
-    this.startAutoCleanup(cleanupInterval, this.db);
-
     if (nextEraUpdateInterval) {
       this.startNextEraUpdate(nextEraUpdateInterval, this.db);
     }
+
+    this.startAutoCleanup(cleanupInterval, this.db);
   }
 
   addData(data) {

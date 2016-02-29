@@ -128,9 +128,9 @@ class TransferDataStoreClass extends BaseStore {
   }
 }
 
-const TransferDataStore = new TransferDataStoreClass();
+let TransferDataStore = new TransferDataStoreClass();
 
-AppDispatcher.register((payload) => {
+TransferDataStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action, source} = payload;
 
   switch (action.type) {

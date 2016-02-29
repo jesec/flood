@@ -4,12 +4,13 @@ export default class BaseStore extends EventEmitter {
   constructor() {
     super();
 
+    this.dispatcherID = null;
     this.on('uncaughtException', this.handleError);
     this.setMaxListeners(20);
   }
 
   handleError(error) {
-    console.error(error);
+    console.trace(error);
   }
 
   listen(event, callback) {

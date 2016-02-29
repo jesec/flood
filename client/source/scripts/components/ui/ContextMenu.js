@@ -130,7 +130,7 @@ export default class ContextMenu extends React.Component {
 }
 
 ContextMenu.defaultProps = {
-  width: 150
+  width: 200
 };
 
 ContextMenu.propTypes = {

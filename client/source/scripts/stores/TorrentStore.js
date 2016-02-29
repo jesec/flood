@@ -54,11 +54,23 @@ class TorrentStoreClass extends BaseStore {
     return this.selectedTorrents;
   }
 
-  handleAddTorrentError(error) {
+  getSelectedTorrentsDownloadLocations() {
+    return this.selectedTorrents.map((hash) => {
+      return this.torrents[hash].basePath;
+    });
+  }
+
+  getSelectedTorrentsFilename() {
+    return this.selectedTorrents.map((hash) => {
+      return this.torrents[hash].filename;
+    });
+  }
+
+  handleAddTorrentError() {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_ERROR);
   }
 
-  handleAddTorrentSuccess(data) {
+  handleAddTorrentSuccess() {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_SUCCESS);
   }
 
@@ -86,6 +98,14 @@ class TorrentStoreClass extends BaseStore {
     }
 
     return this.sortedTorrents;
+  }
+
+  handleMoveTorrentsSuccess(data) {
+    this.emit(EventTypes.CLIENT_MOVE_TORRENTS_SUCCESS);
+  }
+
+  handleMoveTorrentsError(error) {
+    this.emit(EventTypes.CLIENT_MOVE_TORRENTS_REQUEST_ERROR);
   }
 
   setTorrents(torrents) {
@@ -155,9 +175,9 @@ class TorrentStoreClass extends BaseStore {
   }
 }
 
-const TorrentStore = new TorrentStoreClass();
+let TorrentStore = new TorrentStoreClass();
 
-AppDispatcher.register((payload) => {
+TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action, source} = payload;
 
   switch (action.type) {
@@ -172,6 +192,12 @@ AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_FETCH_TORRENTS_SUCCESS:
       TorrentStore.setTorrents(action.data.torrents);
+      break;
+    case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
+      TorrentStore.handleMoveTorrentsSuccess(action.data);
+      break;
+    case ActionTypes.CLIENT_MOVE_TORRENTS_ERROR:
+      TorrentStore.handleMoveTorrentsError(action.error);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENTS_ERROR:
       console.log(action);

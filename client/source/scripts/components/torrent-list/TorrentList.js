@@ -18,6 +18,7 @@ import UIStore from '../../stores/UIStore';
 const METHODS_TO_BIND = [
   'onReceiveTorrentsError',
   'onReceiveTorrentsSuccess',
+  'handleContextMenuItemClick',
   'handleDetailsClick',
   'handleRightClick',
   'handleTorrentClick',
@@ -101,6 +102,10 @@ export default class TorrentListContainer extends React.Component {
       action: 'remove',
       clickHandler,
       label: 'Remove'
+    }, {
+      action: 'move',
+      clickHandler,
+      label: 'Set Download Location'
     }];
   }
 
@@ -119,7 +124,14 @@ export default class TorrentListContainer extends React.Component {
       case 'remove':
         TorrentActions.deleteTorrents(selectedTorrents);
         break;
+      case 'move':
+        this.handleContextMenuMoveClick(selectedTorrents);
+        break;
     }
+  }
+
+  handleContextMenuMoveClick(hashes) {
+    UIActions.displayModal('move-torrents');
   }
 
   handleDetailsClick(torrent, event) {

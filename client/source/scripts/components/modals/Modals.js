@@ -3,6 +3,7 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import AddTorrents from './AddTorrents';
+import MoveTorrents from './MoveTorrents';
 import EventTypes from '../../constants/EventTypes';
 import Modal from './Modal';
 import UIActions from '../../actions/UIActions';
@@ -79,6 +80,11 @@ export default class Modals extends React.Component {
             content={modalOptions.content}
             dismiss={this.dismissModal}
             heading={modalOptions.heading} />
+        );
+        break;
+      case 'move-torrents':
+        modal = (
+          <MoveTorrents dismiss={this.dismissModal} />
         );
         break;
       case 'add-torrents':

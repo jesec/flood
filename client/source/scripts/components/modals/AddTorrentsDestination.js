@@ -23,7 +23,11 @@ export default class AddTorrents extends React.Component {
   }
 
   componentWillMount() {
-    this.setState({destination: UIStore.getLatestTorrentLocation()});
+    let destination = UIStore.getLatestTorrentLocation();
+    if (this.props.suggested) {
+      destination = this.props.suggested;
+    }
+    this.setState({destination});
   }
 
   componentDidMount() {
@@ -46,6 +50,10 @@ export default class AddTorrents extends React.Component {
   }
 
   onLatestTorrentLocationChange() {
+    if (this.props.suggested) {
+      return;
+    }
+
     let destination = UIStore.getLatestTorrentLocation();
 
     if (this.props.onChange) {
