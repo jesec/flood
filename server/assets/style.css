@@ -476,14 +476,14 @@ th {
   100% {
     opacity: 0; } }
 
-.textbox, .dropzone__selected-files,
+.textbox, .checkbox__decoy, .dropzone__selected-files,
 .button {
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
   outline: none; }
 
-.textbox, .dropzone__selected-files {
+.textbox, .checkbox__decoy, .dropzone__selected-files {
   background: #e9eff5;
   border-radius: 4px;
   border: 1px solid #d6e2ea;
@@ -494,39 +494,39 @@ th {
   -webkit-transition: background 0.25s, border 0.25s, color 0.25s;
   transition: background 0.25s, border 0.25s, color 0.25s;
   width: 100%; }
-  .textbox::-webkit-input-placeholder, .dropzone__selected-files::-webkit-input-placeholder {
+  .textbox::-webkit-input-placeholder, .checkbox__decoy::-webkit-input-placeholder, .dropzone__selected-files::-webkit-input-placeholder {
     color: #abbac7;
     font-style: italic;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-  .textbox::-moz-placeholder, .dropzone__selected-files::-moz-placeholder {
+  .textbox::-moz-placeholder, .checkbox__decoy::-moz-placeholder, .dropzone__selected-files::-moz-placeholder {
     color: #abbac7;
     font-style: italic;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-  .textbox:-ms-input-placeholder, .dropzone__selected-files:-ms-input-placeholder {
+  .textbox:-ms-input-placeholder, .checkbox__decoy:-ms-input-placeholder, .dropzone__selected-files:-ms-input-placeholder {
     color: #abbac7;
     font-style: italic;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-  .textbox::placeholder, .dropzone__selected-files::placeholder {
+  .textbox::placeholder, .checkbox__decoy::placeholder, .dropzone__selected-files::placeholder {
     color: #abbac7;
     font-style: italic;
     -webkit-transition: color 0.25s;
     transition: color 0.25s; }
-  .textbox:focus, .dropzone__selected-files:focus {
+  .textbox:focus, .checkbox__decoy:focus, .dropzone__selected-files:focus {
     background: #fdfefe;
     border-color: #c7d6df;
     color: #258de5; }
-    .textbox:focus::-webkit-input-placeholder, .dropzone__selected-files:focus::-webkit-input-placeholder {
+    .textbox:focus::-webkit-input-placeholder, .checkbox__decoy:focus::-webkit-input-placeholder, .dropzone__selected-files:focus::-webkit-input-placeholder {
       color: #abbac7; }
-    .textbox:focus::-moz-placeholder, .dropzone__selected-files:focus::-moz-placeholder {
+    .textbox:focus::-moz-placeholder, .checkbox__decoy:focus::-moz-placeholder, .dropzone__selected-files:focus::-moz-placeholder {
       color: #abbac7; }
-    .textbox:focus:-ms-input-placeholder, .dropzone__selected-files:focus:-ms-input-placeholder {
+    .textbox:focus:-ms-input-placeholder, .checkbox__decoy:focus:-ms-input-placeholder, .dropzone__selected-files:focus:-ms-input-placeholder {
       color: #abbac7; }
-    .textbox:focus::placeholder, .dropzone__selected-files:focus::placeholder {
+    .textbox:focus::placeholder, .checkbox__decoy:focus::placeholder, .dropzone__selected-files:focus::placeholder {
       color: #abbac7; }
-  .textbox.is-fulfilled, .dropzone__selected-files {
+  .textbox.is-fulfilled, .is-fulfilled.checkbox__decoy, .dropzone__selected-files {
     background: #fdfefe; }
 
 .button {
@@ -568,6 +568,44 @@ th {
     .button--primary:hover {
       background: #1a80d7;
       box-shadow: inset 0 0 0 1px #1773c0; }
+
+.checkbox {
+  line-height: 1;
+  position: relative; }
+  .checkbox:hover .checkbox__decoy {
+    border-color: #258de5; }
+  .checkbox input[type="checkbox"] {
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+            transform: translateY(-50%); }
+    .checkbox input[type="checkbox"]:checked + .checkbox__decoy .icon {
+      fill: #258de5; }
+  .checkbox__decoy {
+    background: #fff;
+    display: inline-block;
+    height: 15px;
+    margin-right: 7.5px;
+    margin-top: -2px;
+    padding: 0;
+    position: relative;
+    vertical-align: middle;
+    width: 15px; }
+    .checkbox__decoy .icon {
+      fill: transparent;
+      height: 10px;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      -webkit-transition: fill 0.25s;
+      transition: fill 0.25s;
+      -webkit-transform: translate(-43%, -43%);
+              transform: translate(-43%, -43%);
+      width: 10px; }
+  .checkbox__label {
+    color: #768a9a; }
 
 .form__label {
   color: #abbac7;
@@ -1642,7 +1680,7 @@ body {
       -webkit-transform: translate(-50%, -50%);
               transform: translate(-50%, -50%);
       width: 10px; }
-  .search .textbox, .search .dropzone__selected-files {
+  .search .textbox, .search .checkbox__decoy, .search .dropzone__selected-files {
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -1660,22 +1698,22 @@ body {
     -webkit-transition: background 0.25s, border 0.25s, color 0.25s;
     transition: background 0.25s, border 0.25s, color 0.25s;
     width: 100%; }
-    .search .textbox::-webkit-input-placeholder, .search .dropzone__selected-files::-webkit-input-placeholder {
+    .search .textbox::-webkit-input-placeholder, .search .checkbox__decoy::-webkit-input-placeholder, .search .dropzone__selected-files::-webkit-input-placeholder {
       color: rgba(83, 113, 138, 0.4);
       font-style: italic;
       -webkit-transition: color 0.25s;
       transition: color 0.25s; }
-    .search .textbox::-moz-placeholder, .search .dropzone__selected-files::-moz-placeholder {
+    .search .textbox::-moz-placeholder, .search .checkbox__decoy::-moz-placeholder, .search .dropzone__selected-files::-moz-placeholder {
       color: rgba(83, 113, 138, 0.4);
       font-style: italic;
       -webkit-transition: color 0.25s;
       transition: color 0.25s; }
-    .search .textbox:-ms-input-placeholder, .search .dropzone__selected-files:-ms-input-placeholder {
+    .search .textbox:-ms-input-placeholder, .search .checkbox__decoy:-ms-input-placeholder, .search .dropzone__selected-files:-ms-input-placeholder {
       color: rgba(83, 113, 138, 0.4);
       font-style: italic;
       -webkit-transition: color 0.25s;
       transition: color 0.25s; }
-    .search .textbox::placeholder, .search .dropzone__selected-files::placeholder {
+    .search .textbox::placeholder, .search .checkbox__decoy::placeholder, .search .dropzone__selected-files::placeholder {
       color: rgba(83, 113, 138, 0.4);
       font-style: italic;
       -webkit-transition: color 0.25s;
@@ -1683,19 +1721,19 @@ body {
   .search.is-in-use .icon {
     fill: #258de5;
     opacity: 1; }
-  .search.is-in-use .textbox, .search.is-in-use .dropzone__selected-files {
+  .search.is-in-use .textbox, .search.is-in-use .checkbox__decoy, .search.is-in-use .dropzone__selected-files {
     background: rgba(37, 141, 229, 0.25);
     border-bottom: 1px solid rgba(37, 141, 229, 0.3);
     border-top: 1px solid rgba(37, 141, 229, 0.3);
     color: #258de5;
     padding-right: 45px; }
-    .search.is-in-use .textbox::-webkit-input-placeholder, .search.is-in-use .dropzone__selected-files::-webkit-input-placeholder {
+    .search.is-in-use .textbox::-webkit-input-placeholder, .search.is-in-use .checkbox__decoy::-webkit-input-placeholder, .search.is-in-use .dropzone__selected-files::-webkit-input-placeholder {
       color: rgba(37, 141, 229, 0.4); }
-    .search.is-in-use .textbox::-moz-placeholder, .search.is-in-use .dropzone__selected-files::-moz-placeholder {
+    .search.is-in-use .textbox::-moz-placeholder, .search.is-in-use .checkbox__decoy::-moz-placeholder, .search.is-in-use .dropzone__selected-files::-moz-placeholder {
       color: rgba(37, 141, 229, 0.4); }
-    .search.is-in-use .textbox:-ms-input-placeholder, .search.is-in-use .dropzone__selected-files:-ms-input-placeholder {
+    .search.is-in-use .textbox:-ms-input-placeholder, .search.is-in-use .checkbox__decoy:-ms-input-placeholder, .search.is-in-use .dropzone__selected-files:-ms-input-placeholder {
       color: rgba(37, 141, 229, 0.4); }
-    .search.is-in-use .textbox::placeholder, .search.is-in-use .dropzone__selected-files::placeholder {
+    .search.is-in-use .textbox::placeholder, .search.is-in-use .checkbox__decoy::placeholder, .search.is-in-use .dropzone__selected-files::placeholder {
       color: rgba(37, 141, 229, 0.4); }
 
 .application__sidebar {

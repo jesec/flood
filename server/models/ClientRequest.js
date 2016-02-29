@@ -3,7 +3,9 @@
 let util = require('util');
 
 let clientUtil = require('../util/clientUtil');
-let Q = require('q');
+let fs = require('fs');
+let mv = require('mv');
+let path = require('path');
 let rTorrentPropMap = require('../util/rTorrentPropMap');
 let scgi = require('../util/scgi');
 let stringUtil = require('../../shared/util/stringUtil');
@@ -22,6 +24,10 @@ class ClientRequest {
 
     if (options.postProcess) {
       this.postProcessFn = options.postProcess;
+    }
+
+    if (options.name) {
+      this.name = options.name;
     }
   }
 
@@ -51,7 +57,7 @@ class ClientRequest {
   }
 
   handleError(error) {
-    console.trace(error);
+    console.trace(this.name, error);
 
     this.clearRequestQueue();
 
@@ -83,9 +89,16 @@ class ClientRequest {
   }
 
   send() {
+    // TODO: Remove this.
+    if (!this) {
+      console.log('\n\n\n\n\n\n\nthis is null\n\n\n\n\n\n');
+    }
+    let handleSuccess = this.handleSuccess.bind(this);
+    let handleError = this.handleError.bind(this);
+
     scgi.methodCall('system.multicall', [this.requests])
-      .then(this.handleSuccess.bind(this))
-      .catch(this.handleError.bind(this));
+      .then(handleSuccess)
+      .catch(handleError);
   }
 
   // TODO: Separate these and add support for additional clients.
@@ -126,6 +139,14 @@ class ClientRequest {
     });
   }
 
+  checkHashMethodCall(options) {
+    let hashes = this.getEnsuredArray(options.hashes);
+
+    hashes.forEach((hash) => {
+      this.requests.push(this.getMethodCall('d.check_hash', [hash]));
+    })
+  }
+
   createDirectoryMethodCall(options) {
     this.requests.push(
       this.getMethodCall('execute', ['mkdir', '-p', options.path])
@@ -160,11 +181,24 @@ class ClientRequest {
   moveTorrentsMethodCall(options) {
     let hashes = this.getEnsuredArray(options.hashes);
     let destinationPath = options.destinationPath;
-    let sourcePath = options.sourcePath;
+    let filenames = this.getEnsuredArray(options.filenames);
+    let sourcePaths = this.getEnsuredArray(options.sourcePaths);
 
-    this.moveInProgress = true;
+    sourcePaths.forEach((source, index) => {
+      let callback = function () {};
+      let destination = `${destinationPath}${path.sep}${filenames[index]}`;
+      let isLastRequest = index + 1 === sourcePaths.length;
 
-    // let {hashes, destinationPath, sourcePath} = options;
+      if (isLastRequest) {
+        callback = this.handleSuccess.bind(this);
+      }
+
+      if (source !== destination) {
+        mv(source, destination, {mkdirp: true}, callback);
+      } else if (isLastRequest) {
+        callback();
+      }
+    });
   }
 
   removeTorrentsMethodCall(options) {
@@ -172,6 +206,17 @@ class ClientRequest {
 
     hashes.forEach((hash) => {
       this.requests.push(this.getMethodCall('d.erase', [hash]));
+    });
+  }
+
+  setDownloadPathMethodCall(options) {
+    let hashes = this.getEnsuredArray(options.hashes);
+
+    hashes.forEach((hash) => {
+      this.requests.push(this.getMethodCall('d.directory.set',
+        [hash, options.path]));
+      this.requests.push(this.getMethodCall('d.open', [hash]));
+      this.requests.push(this.getMethodCall('d.close', [hash]));
     });
   }
 

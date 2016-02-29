@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import TorrentStore from '../stores/TorrentStore';
 
 const UIActions = {
   displayContextMenu: function(data) {

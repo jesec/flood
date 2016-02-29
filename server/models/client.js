@@ -109,20 +109,46 @@ var client = {
     request.send();
   },
 
-  moveFiles: function(data, callback) {
+  moveTorrents: function(data, callback) {
     let destinationPath = data.destination;
     let hashes = data.hashes;
-    let sourcePath = data.source;
-    let request = new ClientRequest();
+    let filenames = data.filenames;
+    let moveFiles = data.moveFiles;
+    let sourcePaths = data.sources;
+    let mainRequest = new ClientRequest();
 
-    request.add('createDirectory', {path: destinationPath});
-    request.add('stopTorrents', {hashes});
-    request.onComplete(function () {
-      request.add('moveTorrents', {hashes, destinationPath, sourcePath});
-      request.add('startTorrents', {hashes});
-      request.onComplete(callback);
-    })
-    request.send();
+    let startTorrents = function() {
+      let startTorrentsRequest = new ClientRequest();
+      startTorrentsRequest.add('startTorrents', {hashes});
+      startTorrentsRequest.onComplete(callback);
+      startTorrentsRequest.send();
+    };
+
+    let checkHash = function() {
+      let checkHashRequest = new ClientRequest();
+      checkHashRequest.add('checkHash', {hashes});
+      checkHashRequest.onComplete(afterCheckHash);
+      checkHashRequest.send();
+    }
+
+    let moveTorrents = function () {
+      let moveTorrentsRequest = new ClientRequest();
+      moveTorrentsRequest.onComplete(checkHash);
+      moveTorrentsRequest.add('moveTorrents',
+        {filenames, sourcePaths, destinationPath});
+    };
+
+    let afterCheckHash = startTorrents;
+    let afterSetPath = checkHash;
+
+    if (moveFiles) {
+      afterSetPath = moveTorrents;
+    }
+
+    mainRequest.add('stopTorrents', {hashes});
+    mainRequest.add('setDownloadPath', {hashes, path: destinationPath});
+    mainRequest.onComplete(afterSetPath);
+    mainRequest.send();
   },
 
   setFilePriority: function (hashes, data, callback) {

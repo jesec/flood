@@ -62,6 +62,10 @@ router.patch('/torrents/:hash/file-priority', function(req, res, next) {
   client.setFilePriority(req.params.hash, req.body, ajaxUtil.getResponseFn(res));
 });
 
+router.post('/torrents/move', function(req, res, next) {
+  client.moveTorrents(req.body, ajaxUtil.getResponseFn(res));
+});
+
 router.get('/torrents/status-count', function(req, res, next) {
   client.getTorrentStatusCount(ajaxUtil.getResponseFn(res));
 });

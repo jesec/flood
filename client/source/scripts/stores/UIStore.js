@@ -4,6 +4,7 @@ import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
 import {selectTorrents} from '../util/selectTorrents';
 import TorrentActions from '../actions/TorrentActions';
+import TorrentStore from './TorrentStore';
 
 class UIStoreClass extends BaseStore {
   constructor() {
@@ -77,9 +78,9 @@ class UIStoreClass extends BaseStore {
   }
 }
 
-const UIStore = new UIStoreClass();
+let UIStore = new UIStoreClass();
 
-AppDispatcher.register((payload) => {
+UIStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action, source} = payload;
 
   switch (action.type) {
@@ -91,6 +92,9 @@ AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_DISPLAY_MODAL:
       UIStore.setActiveModal(action.data);
+      break;
+    case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
+      UIStore.setActiveModal(null);
       break;
     case ActionTypes.UI_DISPLAY_CONTEXT_MENU:
       UIStore.setActiveContextMenu(action.data);

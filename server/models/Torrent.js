@@ -45,7 +45,8 @@ const REQUESTED_DATA = [
   'comment',
   'isPrivate',
   'directory',
-  'filename'
+  'filename',
+  'isMultiFile'
 ];
 
 class Torrent {

@@ -106,9 +106,9 @@ class TorrentFilterStoreClass extends BaseStore {
   }
 }
 
-const TorrentFilterStore = new TorrentFilterStoreClass();
+let TorrentFilterStore = new TorrentFilterStoreClass();
 
-AppDispatcher.register((payload) => {
+TorrentFilterStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action, source} = payload;
 
   switch (action.type) {

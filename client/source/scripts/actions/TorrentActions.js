@@ -190,6 +190,28 @@ const TorrentActions = {
       });
   },
 
+  moveTorrents: function(hashes, options) {
+    let {destination, filenames, sources, moveFiles} = options;
+
+    return axios.post('/client/torrents/move',
+      {hashes, destination, filenames, sources, moveFiles})
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS,
+          data
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_MOVE_TORRENTS_ERROR,
+          error
+        });
+      });
+  },
+
   pauseTorrents: function(hashes) {
     return axios.post('/client/pause', {
         hashes
