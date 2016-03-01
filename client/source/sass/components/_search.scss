@@ -1,3 +1,18 @@
+$sidebar--foreground: #53718a;
+
+$search-torrents--base: #091824;
+$search-torrents--background: rgba($search-torrents--base, 0.3);
+$search-torrents--background--active: rgba($blue, 0.25);
+$search-torrents--border: rgba($search-torrents--background, 0.4);
+$search-torrents--border--active: rgba($blue, 0.3);
+$search-torrents--foreground: $sidebar--foreground;
+$search-torrents--foreground--active: $blue;
+$search-torrents--placeholder: rgba($sidebar--foreground, 0.4);
+$search-torrents--placeholder--active: rgba($blue, 0.4);
+
+$search-torrents--icon--foreground: $sidebar--foreground;
+$search-torrents--icon--foreground--active: $blue;
+
 .search {
   position: relative;
 

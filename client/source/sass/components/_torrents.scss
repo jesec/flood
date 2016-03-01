@@ -1,3 +1,22 @@
+$torrent-list--background: #fff;
+$torrent-list--border: rgba($background, 0.15);
+
+$torrent--primary--foreground: #333332;
+$torrent--primary--foreground--stopped: rgba(#333332, 0.5);
+$torrent--primary--foreground--selected: #fff;
+$torrent--primary--foreground--selected--stopped: rgba($torrent--primary--foreground--selected, 0.6);
+$torrent--secondary--foreground: #807f7e;
+$torrent--secondary--foreground--stopped: rgba(#807f7e, 0.5);
+$torrent--secondary--foreground--selected: #fff;
+$torrent--secondary--foreground--selected--stopped: rgba(#fff, 0.6);
+$torrent--tertiary--foreground: #807f7e;
+$torrent--tertiary--foreground--stopped: rgba(#807f7e, 0.5);
+$torrent--tertiary--foreground--selected: rgba(#fff, 0.9);
+$torrent--tertiary--foreground--selected--stopped: rgba(#fff, 0.5);
+
+$torrent--background--hover: #f6f8fa;
+$torrent--background--selected: $blue;
+
 .torrents {
   display: flex;
   flex: 1 1 100px;

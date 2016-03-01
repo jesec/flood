@@ -1,3 +1,27 @@
+$torrent-details--background: saturate(lighten(#0c1b26, 2.5%), 4%); //#162835;
+$torrent-details--border: rgba($background, 0.1);
+
+$torrent-details--header--border: rgba(#040d13, 0.3);
+$torrent-details--header--name--foreground: #c7dbeb;
+$torrent-details--header--tertiary--foreground: #7b9cb4;
+$torrent-details--header--progress-bar--track: #2a3e4c;
+$torrent-details--header--progress-bar--fill--error: #be2558;
+
+$torrent-details--navigation--border: rgba(#040d13, 0.4);
+$torrent-details--navigation--item--background--active: rgba(#349cf4, 0.07);
+$torrent-details--navigation--item--foreground--active: #349cf4;
+$torrent-details--navigation--item--border--active: #349cf4;
+$torrent-details--navigation--background: transparent;
+
+$torrent-details--content--background: rgba(desaturate(#0c1b26, 15%), 0.4);
+
+$torrent-details--table--foreground: #527893;
+$torrent-details--table--header: rgba(#527893, 0.5);
+$torrent-details--table--header--count--background: rgba(#527893, 0.5);
+$torrent-details--table--header--count--foreground: #0c1b26;
+
+$torrent-details--header--icon--default--fill: rgba(#4d6f87, 0.5);
+
 .application {
 
   &__panel {

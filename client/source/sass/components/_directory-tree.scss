@@ -1,3 +1,22 @@
+$directory-tree--filename--foreground: #527893;
+$directory-tree--directory--foreground: $directory-tree--filename--foreground;
+$directory-tree--directory--foreground--open: #719bb7;
+
+$directory-tree--icon--file: #344b5b;
+$directory-tree--icon--folder: rgba(#527893, 0.4);
+$directory-tree--icon--folder--active: rgba(#82aac5, 0.5);
+$directory-tree--icon--folder--open: rgba(#82aac5, 0.5);
+
+$directory-tree--file-details--foreground: #2b4456;
+$directory-tree--file-details--hover--foreground: #527893;
+
+$torrent-details--directory-tree--file--hover--background: rgba(#1a2d3c, 0.8);
+$torrent-details--directory-tree--file--hover--foreground: #79a7c7;
+$torrent-details--directory-tree--file--hover--border: #1f3647;
+
+$torrent-details--directory-tree--parent-directory--foreground: #3a5c74;
+$torrent-details--directory-tree--parent-directory--icon--fill: rgba(#3a5c74, 0.5);
+
 .directory-tree {
 
   .icon {

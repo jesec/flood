@@ -1,3 +1,8 @@
+$loading-indicator--bar--background: #e9eef2;
+$loading-indicator--bar--background--inverse: rgba(#38586d, 0.7);
+$loading-indicator--tick--background: rgba($blue, 0.75);
+$loading-indicator--tick--background--inverse: rgba($blue, 0.75);
+
 @keyframes loading-indicator-swipe {
   0% {
     transform: translateX(-100%);

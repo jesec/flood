@@ -1,3 +1,14 @@
+$action-bar--background: transparent;
+$action-bar--foreground: #1b1a1c;
+$action-bar--group--border: rgba(#7a8080, 0.15);
+
+$action--foreground: #909799;
+$action--foreground--hover: $blue;
+$action--background--hover: rgba(#333e4a, 0.05);
+$action--border--hover: rgba(#333e4a, 0.15);
+
+$torrent-list--border: rgba($background, 0.15);
+
 .action-bar {
   background: $action-bar--background;
   color: $action-bar--foreground;

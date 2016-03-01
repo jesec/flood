@@ -1,3 +1,11 @@
+$sidebar--foreground: #53718a;
+$sidebar--border: rgba(darken($sidebar--foreground, 40%), 0.3);
+
+$sidebar-filter--foreground: $sidebar--foreground;
+$sidebar-filter--foreground--header: rgba($sidebar-filter--foreground, 0.5);
+$sidebar-filter--foreground--active: $blue;
+$sidebar-filter--foreground--hover: lighten($sidebar-filter--foreground, 15%);
+
 .application {
 
   &__sidebar {

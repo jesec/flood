@@ -1,3 +1,10 @@
+$priority-meter--track--level-0--background: rgba(#436076, 0.2);
+$priority-meter--bar--level-0--background: #436076;
+$priority-meter--track--level-1--background: rgba($blue, 0.2);
+$priority-meter--bar--level-1--background: $blue;
+$priority-meter--track--level-2--background: rgba($green, 0.2);
+$priority-meter--bar--level-2--background: $green;
+
 .priority-meter {
   height: 8px;
   position: relative;

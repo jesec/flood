@@ -1,3 +1,14 @@
+$dropzone--background: #e9eff5;
+$dropzone--foreground: #53718a;
+$dropzone--foreground--hover: darken($dropzone--foreground, 20%);
+$dropzone--foreground--dragging: $blue;
+$dropzone--border: #d6e2ea;
+$dropzone--border--hover: darken($dropzone--border, 20%);
+$dropzone--border--dragging: $blue;
+$dropzone--browse--foreground: $blue;
+$dropzone--icon--fill: #c7d3df;
+$dropzone--icon--fill--hover: darken($dropzone--icon--fill, 15%);
+$dropzone--icon--fill--dragging: $blue;
 $dropzone--file--icon--fill: #adbfce;
 
 .dropzone {

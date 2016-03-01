@@ -1,3 +1,37 @@
+$form--label--foreground: #abbac7;
+
+$textbox--background: #e9eff5;
+$textbox--foreground: #53718a;
+$textbox--placeholder: #abbac7;
+$textbox--border: #d6e2ea;
+$textbox--fulfilled--background: #fdfefe;
+$textbox--active--background: #fdfefe;
+$textbox--active--border: desaturate(darken($textbox--border, 5%), 5%);
+$textbox--active--foreground: $blue;
+$textbox--active--placeholder: $textbox--placeholder;
+
+$textbox-repeater--button--background: #fff;
+$textbox-repeater--button--background--hover: $main-content--background;
+$textbox-repeater--button--border: rgba($background, 0.1);
+$textbox-repeater--button--border--hover: rgba($background, 0.2);
+$textbox-repeater--button--foreground: rgba($background, 0.3);
+$textbox-repeater--button--foreground--hover: rgba($background, 0.5);
+
+$button--primary--foreground: #fff;
+$button--primary--background: $blue;
+$button--primary--background--hover: darken($button--primary--background, 5%);
+$button--primary--border: darken($button--primary--background, 5%);
+$button--primary--border--hover: darken($button--primary--border, 5%);
+
+$button--deemphasized--foreground: #66717a;
+$button--deemphasized--background: $main-content--background;
+$button--deemphasized--foreground--hover: darken($button--deemphasized--foreground, 5%);
+$button--deemphasized--background--hover: darken($button--deemphasized--background, 5%);
+$button--deemphasized--border: darken($button--deemphasized--background, 5%);
+$button--deemphasized--border--hover: darken($button--deemphasized--border, 5%);
+
+$modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
+
 .textbox,
 .button {
   appearance: none;
