@@ -48,6 +48,7 @@ export default class TrackerFilters extends React.Component {
     TorrentFilterStore.unlisten(EventTypes.CLIENT_TORRENT_TRACKER_COUNT_CHANGE, this.onTorrentTrackerCountChange);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE, this.onTrackerFilterChange);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
+    TorrentFilterStore.fetchTorrentTrackerCount();
   }
 
   handleClick(filter) {

@@ -43,6 +43,7 @@ export default class StatusFilters extends React.Component {
     TorrentFilterStore.listen(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE, this.onTrackerFilterChange);
+    TorrentFilterStore.fetchTorrentStatusCount();
   }
 
   componentWillUnmount() {
