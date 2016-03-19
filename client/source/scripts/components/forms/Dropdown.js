@@ -137,7 +137,7 @@ export default class Dropdown extends React.Component {
       <div className={dropdownWrapperClass} onFocus={this.handleDropdownFocus} onBlur={this.handleDropdownBlur} ref="dropdown" tabIndex="0">
         {this.getDropdownButton()}
         <CSSTransitionGroup
-          transitionName="dropdown__content"
+          transitionName="menu"
           transitionEnterTimeout={250}
           transitionLeaveTimeout={250}>
           {menu}

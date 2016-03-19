@@ -322,7 +322,12 @@ export default class TorrentListContainer extends React.Component {
 
       content = (
         <ul className="torrent__list" key="torrent__list">
-          {contextMenu}
+          <CSSTransitionGroup
+            transitionName="menu"
+            transitionEnterTimeout={250}
+            transitionLeaveTimeout={250}>
+            {contextMenu}
+          </CSSTransitionGroup>
           <li className="torrent__spacer torrent__spacer--top"
             style={{height: `${listPadding.top}px`}}></li>
           {torrentList}

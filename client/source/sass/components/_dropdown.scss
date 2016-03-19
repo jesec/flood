@@ -115,20 +115,6 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
 
   &__content {
 
-    &-enter {
-      animation: fade-in 0.25s both;
-    }
-
-    &-leave {
-      animation: fade-out 0.25s both;
-    }
-  }
-}
-
-.dropdown {
-
-  &__content {
-
     &__container {
       padding: 25px 30px;
     }

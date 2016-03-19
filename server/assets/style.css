@@ -871,6 +871,12 @@ body {
         color: #788997; }
       .menu__item.is-selectable.is-selected {
         color: #258de5; }
+  .menu-enter {
+    -webkit-animation: fade-in 0.25s both;
+            animation: fade-in 0.25s both; }
+  .menu-leave {
+    -webkit-animation: fade-out 0.25s both;
+            animation: fade-out 0.25s both; }
 
 .client-stats {
   height: 200px;
@@ -1197,14 +1203,6 @@ body {
   .dropdown--align-right .dropdown {
     left: auto;
     right: 0; }
-
-.dropdown__content-enter {
-  -webkit-animation: fade-in 0.25s both;
-          animation: fade-in 0.25s both; }
-
-.dropdown__content-leave {
-  -webkit-animation: fade-out 0.25s both;
-          animation: fade-out 0.25s both; }
 
 .dropdown__content__container {
   padding: 25px 30px; }
