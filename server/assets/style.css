@@ -860,6 +860,11 @@ body {
       color: #cfd4d9;
       display: block;
       font-size: 0.85em; }
+    .menu__item--separator {
+      background: rgba(26, 47, 61, 0.1);
+      height: 1px;
+      margin: 5px 0;
+      padding: 0; }
     .menu__item.is-selectable {
       cursor: pointer;
       display: block;

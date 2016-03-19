@@ -10,6 +10,7 @@ $menu--item--foreground: #95a2ad;
 $menu--item--foreground--hover: darken($menu--item--foreground, 10%);
 $menu--item--secondary--foreground: lighten($menu--item--foreground, 20%);
 $menu--item--foreground--active: $blue;
+$menu--item--separator--background: $menu--container--border;
 
 .menu {
   background: $menu--background;
@@ -51,6 +52,13 @@ $menu--item--foreground--active: $blue;
         display: block;
         font-size: 0.85em;
       }
+    }
+
+    &--separator {
+      background: $menu--item--separator--background;
+      height: 1px;
+      margin: 5px 0;
+      padding: 0;
     }
 
     &.is-selectable {

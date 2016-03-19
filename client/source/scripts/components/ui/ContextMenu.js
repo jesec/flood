@@ -88,7 +88,11 @@ export default class ContextMenu extends React.Component {
 
   getMenuItems(items) {
     return items.map((item, index) => {
-      let labelAction, labelSecondary;
+      let labelAction, labelSecondary, menuItemContent;
+      let menuItemClasses = classnames('menu__item', {
+        'is-selectable': item.clickHandler,
+        'menu__item--separator': item.type === 'separator'
+      });
       let primaryLabelClasses = classnames('menu__item__label--primary', {
         'has-action': item.labelAction
       });
@@ -109,15 +113,23 @@ export default class ContextMenu extends React.Component {
         );
       }
 
-      return (
-        <li className="menu__item is-selectable" key={index} onClick={this.handleMenuItemClick.bind(this, item)}>
-          <span className={primaryLabelClasses}>
-            <span className="menu__item__label">
-              {item.label}
+      if (item.type !== 'separator') {
+        menuItemContent = (
+          <span>
+            <span className={primaryLabelClasses}>
+              <span className="menu__item__label">
+                {item.label}
+              </span>
+              {labelAction}
             </span>
-            {labelAction}
+            {labelSecondary}
           </span>
-          {labelSecondary}
+        );
+      }
+
+      return (
+        <li className={menuItemClasses} key={index} onClick={this.handleMenuItemClick.bind(this, item)}>
+          {menuItemContent}
         </li>
       );
     });

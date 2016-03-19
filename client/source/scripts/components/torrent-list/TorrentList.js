@@ -111,13 +111,15 @@ export default class TorrentListContainer extends React.Component {
       clickHandler,
       label: 'Remove'
     }, {
+      type: 'separator'
+    }, {
       action: 'move',
       clickHandler,
-      label: 'Set Download Location'
+      label: 'Download Location...'
     }, {
       action: 'set-priority',
       clickHandler,
-      label: 'Set Priority',
+      label: 'Priority',
       labelAction: (
         <PriorityMeter id={torrent.hash} key={torrent.hash}
           bindExternalChangeHandler={this.bindExternalPriorityChangeHandler}
