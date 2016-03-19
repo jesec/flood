@@ -1,6 +1,6 @@
 $menu--background: rgba(#fff, 0.98);
-$menu--container--border: rgba($background, 0.1);
-$menu--container--shadow: rgba($background, 0.3);
+$menu--container--border: rgba($background, 0.075);
+$menu--container--shadow: rgba($background, 0.15);
 $menu--label: #abbac7;
 $menu--value: #8899a8;
 $menu--value--active: #4e6a7c;
@@ -17,7 +17,8 @@ $menu--item--separator--background: $menu--container--border;
   border-radius: 3px;
   box-shadow:
     0 0 0 1px $menu--container--border,
-    0 0 35px $menu--container--shadow;
+    0 1px 4px $menu--container--shadow,
+    0 3px 15px $menu--container--shadow;
   color: $menu--item--foreground;
   text-align: left;
 
