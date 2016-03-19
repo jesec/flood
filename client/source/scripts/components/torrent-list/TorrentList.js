@@ -68,6 +68,7 @@ export default class TorrentListContainer extends React.Component {
   }
 
   componentDidMount() {
+    UIStore.registerDependency('torrent-list');
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
@@ -201,6 +202,10 @@ export default class TorrentListContainer extends React.Component {
       torrentRequestError: false,
       torrentRequestSuccess: true
     });
+
+    if (!UIStore.hasSatisfiedDependencies()) {
+      UIStore.satisfyDependency('torrent-list');
+    }
   }
 
   onTorrentFilterChange() {
@@ -340,17 +345,12 @@ export default class TorrentListContainer extends React.Component {
     }
 
     return (
-      <CSSTransitionGroup
-        component="div"
-        className="torrent__list__wrapper"
-        transitionName="torrent__list--loading"
-        transitionEnterTimeout={1000}
-        transitionLeaveTimeout={1000}>
+      <div className="torrent__list__wrapper">
         <CustomScrollbars className="torrent__list__wrapper--custom-scroll"
           ref="torrentList" scrollHandler={this.setScrollPosition}>
           {content}
         </CustomScrollbars>
-      </CSSTransitionGroup>
+      </div>
     );
   }
 

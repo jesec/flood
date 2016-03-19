@@ -12,6 +12,7 @@ class UIStoreClass extends BaseStore {
 
     this.activeContextMenu = null;
     this.activeModal = null;
+    this.dependencies = [];
     this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
     this.torrentDetailsOpen = false;
@@ -63,8 +64,34 @@ class UIStoreClass extends BaseStore {
     this.emit(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE);
   }
 
+  hasSatisfiedDependencies() {
+    return this.dependencies.length === 0;
+  }
+
   isTorrentDetailsOpen() {
     return this.torrentDetailsOpen;
+  }
+
+  registerDependency(ids) {
+    if (!Array.isArray(ids)) {
+      ids = [ids];
+    }
+
+    ids.forEach((id) => {
+      if (this.dependencies.indexOf(id) === -1) {
+        this.dependencies.push(id);
+      }
+    });
+  }
+
+  satisfyDependency(id) {
+    let dependencyIndex = this.dependencies.indexOf(id);
+
+    if (dependencyIndex > -1) {
+      this.dependencies.splice(dependencyIndex, 1);
+    }
+
+    this.verifyDependencies();
   }
 
   setActiveContextMenu(contextMenu = {}) {
@@ -75,6 +102,12 @@ class UIStoreClass extends BaseStore {
   setActiveModal(modal = {}) {
     this.activeModal = modal;
     this.emit(EventTypes.UI_MODAL_CHANGE);
+  }
+
+  verifyDependencies() {
+    if (this.dependencies.length === 0) {
+      this.emit(EventTypes.UI_DEPENDENCIES_LOADED);
+    }
   }
 }
 

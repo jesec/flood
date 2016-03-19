@@ -137,6 +137,10 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.UI_TORRENT_SELECTION_CHANGE);
   }
 
+  handleFetchTorrentsError(action) {
+    console.log(action);
+  }
+
   handleFetchTorrentsSuccess(torrents) {
     this.sortTorrents(torrents);
     this.filterTorrents();
@@ -216,7 +220,6 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_FETCH_TORRENTS_ERROR:
       TorrentStore.handleFetchTorrentsError();
-      console.log(action);
       break;
     case ActionTypes.UI_CLICK_TORRENT:
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);

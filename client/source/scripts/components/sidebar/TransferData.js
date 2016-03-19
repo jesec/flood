@@ -9,6 +9,7 @@ import format from '../../util/formatData';
 import LineChart from '../ui/LineChart';
 import LoadingIndicator from '../ui/LoadingIndicator';
 import TransferDataStore from '../../stores/TransferDataStore';
+import UIStore from '../../stores/UIStore';
 import Upload from '../icons/Upload';
 
 const METHODS_TO_BIND = [
@@ -34,6 +35,7 @@ class ClientStats extends React.Component {
   }
 
   componentDidMount() {
+    UIStore.registerDependency(['transfer-data', 'transfer-history']);
     this.setState({
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
@@ -72,6 +74,10 @@ class ClientStats extends React.Component {
       transferDataRequestError: false,
       transferDataRequestSuccess: true
     });
+
+    if (!UIStore.hasSatisfiedDependencies()) {
+      UIStore.satisfyDependency('transfer-data');
+    }
   }
 
   onTransferHistoryRequestSuccess() {
@@ -79,6 +85,10 @@ class ClientStats extends React.Component {
       this.setState({
         transferHistoryRequestSuccess: true
       });
+    }
+
+    if (!UIStore.hasSatisfiedDependencies()) {
+      UIStore.satisfyDependency('transfer-history');
     }
   }
 
@@ -146,19 +156,10 @@ class ClientStats extends React.Component {
       );
     }
 
-    let transitionGroupClasses = classnames('client-stats sidebar__item', {
-      'is-loading': this.isLoading()
-    })
-
     return (
-      <CSSTransitionGroup
-        className={transitionGroupClasses}
-        component="div"
-        transitionEnterTimeout={3000}
-        transitionLeaveTimeout={3000}
-        transitionName="transfer-data">
+      <div className="client-stats sidebar__item">
         {content}
-      </CSSTransitionGroup>
+      </div>
     );
   }
 

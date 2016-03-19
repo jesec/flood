@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Application from './components/layout/Application';
 import ApplicationContent from './components/layout/ApplicationContent';
+import ApplicationLoadingIndicator from './components/layout/ApplicationLoadingIndicator';
 import Modals from './components/modals/Modals';
 import Sidebar from './components/panels/Sidebar';
 import TorrentActions from './actions/TorrentActions';
@@ -21,6 +22,7 @@ class FloodApp extends React.Component {
   render() {
     return (
       <Application>
+        <ApplicationLoadingIndicator />
         <Sidebar />
         <ApplicationContent>
           <TorrentDetailsView />

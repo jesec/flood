@@ -1,8 +1,27 @@
 import d3 from 'd3';
 import React from 'react';
 
+const METHODS_TO_BIND = ['renderGraphData'];
+
 export default class LineChart extends React.Component {
+  constructor() {
+    super();
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentDidMount() {
+    this.renderGraphData();
+  }
+
   componentDidUpdate() {
+    this.renderGraphData();
+  }
+
+  renderGraphData() {
+    // console.log('')
     let graph = d3.select('#' + this.props.id);
     let transferData = this.props.data;
     let transferLimit = this.props.limit;
