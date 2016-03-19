@@ -1,14 +1,14 @@
-$dropdown--background: rgba(#fff, 0.98);
-$dropdown--foreground: #95a2ad;
-$dropdown--container--border: rgba($background, 0.1);
-$dropdown--container--shadow: rgba($background, 0.3);
-$dropdown--label: #abbac7;
-$dropdown--value: #8899a8;
-$dropdown--value--active: #4e6a7c;
-$dropdown--header--border: rgba($background, 0.05);
-$dropdown--item--background--hover: rgba($main-content--background, 0.4);
-$dropdown--item--foreground--hover: darken($dropdown--foreground, 10%);
-$dropdown--item--foreground--active: $blue;
+$dropdown--background: $menu--background;
+$dropdown--container--border: $menu--container--border;
+$dropdown--container--shadow: $menu--container--shadow;
+$dropdown--label: $menu--label;
+$dropdown--value: $menu--value;
+$dropdown--value--active: $menu--value--active;
+$dropdown--header--border: $menu--header--border;
+$dropdown--item--foreground: $menu--item--foreground;
+$dropdown--item--background--hover: $menu--item--background--hover;
+$dropdown--item--foreground--hover: $menu--item--foreground--hover;
+$dropdown--item--foreground--active: $menu--item--foreground--active;
 
 .dropdown {
   display: inline-block;
