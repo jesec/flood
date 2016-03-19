@@ -8,6 +8,8 @@ import ContextMenu from '../ui/ContextMenu';
 import CustomScrollbars from '../ui/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicator from '../ui/LoadingIndicator';
+import PriorityLevels from '../../constants/PriorityLevels';
+import PriorityMeter from '../filesystem/PriorityMeter';
 import Torrent from './Torrent';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
@@ -16,6 +18,7 @@ import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
 const METHODS_TO_BIND = [
+  'bindExternalPriorityChangeHandler',
   'onReceiveTorrentsError',
   'onReceiveTorrentsSuccess',
   'handleContextMenuItemClick',
@@ -36,6 +39,7 @@ export default class TorrentListContainer extends React.Component {
     super();
 
     this.state = {
+      handleTorrentPriorityChange: null,
       contextMenu: null,
       maxTorrentIndex: 10,
       minTorrentIndex: 0,
@@ -83,7 +87,11 @@ export default class TorrentListContainer extends React.Component {
     UIStore.unlisten(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
   }
 
-  getContextMenuItems() {
+  bindExternalPriorityChangeHandler(eventHandler) {
+    this.setState({handleTorrentPriorityChange: eventHandler});
+  }
+
+  getContextMenuItems(torrent) {
     let clickHandler = this.handleContextMenuItemClick;
 
     return [{
@@ -106,10 +114,20 @@ export default class TorrentListContainer extends React.Component {
       action: 'move',
       clickHandler,
       label: 'Set Download Location'
+    }, {
+      action: 'set-priority',
+      clickHandler,
+      label: 'Set Priority',
+      labelAction: (
+        <PriorityMeter id={torrent.hash} key={torrent.hash}
+          bindExternalChangeHandler={this.bindExternalPriorityChangeHandler}
+          level={torrent.priority} maxLevel={3} priorityType="torrent"
+          onChange={this.handleTorrentPriorityChange} showLabel={false} />
+      )
     }];
   }
 
-  handleContextMenuItemClick(action) {
+  handleContextMenuItemClick(action, event) {
     let selectedTorrents = TorrentStore.getSelectedTorrents();
     switch (action) {
       case 'start':
@@ -126,6 +144,9 @@ export default class TorrentListContainer extends React.Component {
         break;
       case 'move':
         this.handleContextMenuMoveClick(selectedTorrents);
+        break;
+      case 'set-priority':
+        this.state.handleTorrentPriorityChange(event);
         break;
     }
   }
@@ -149,12 +170,16 @@ export default class TorrentListContainer extends React.Component {
         x: event.clientX,
         y: event.clientY
       },
-      items: this.getContextMenuItems()
+      items: this.getContextMenuItems(torrent)
     });
   }
 
   handleTorrentClick(hash, event) {
     UIActions.handleTorrentClick({hash, event});
+  }
+
+  handleTorrentPriorityChange(hash, level) {
+    TorrentActions.setPriority(hash, level);
   }
 
   onContextMenuChange() {
@@ -288,7 +313,7 @@ export default class TorrentListContainer extends React.Component {
         }
 
         return (
-          <Torrent key={hash} data={torrent} selected={isSelected}
+          <Torrent key={hash} torrent={torrent} selected={isSelected}
             handleClick={this.handleTorrentClick}
             handleRightClick={this.handleRightClick}
             handleDetailsClick={this.handleDetailsClick} />

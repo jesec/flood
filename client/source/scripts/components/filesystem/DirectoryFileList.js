@@ -50,7 +50,7 @@ export default class DirectoryFiles extends React.Component {
           </div>
           <div className="file__detail file__detail--priority">
             <PriorityMeter level={file.priority} id={file.index}
-              maxLevel={2} onChange={this.handlePriorityChange}
+              maxLevel={2} onChange={this.handlePriorityChange} type="file"
               key={`${file.index}-${file.filename}`} />
           </div>
         </div>

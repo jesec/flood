@@ -1,20 +1,9 @@
 import classnames from 'classnames';
 import React from 'react';
 
+import PiorityLevels from '../../constants/PriorityLevels';
+
 const METHODS_TO_BIND = ['handleClick'];
-const PRIORITY_MAP = {
-  2: {
-    0: 'Don\'t Download',
-    1: 'Normal',
-    2: 'High'
-  },
-  3: {
-    0: 'Don\'t Download',
-    1: 'Low',
-    2: 'Normal',
-    3: 'High'
-  }
-};
 
 export default class PriorityMeter extends React.Component {
   constructor() {
@@ -31,8 +20,20 @@ export default class PriorityMeter extends React.Component {
     });
   }
 
+  componentDidMount() {
+    if (this.props.bindExternalChangeHandler) {
+      this.props.bindExternalChangeHandler(this.handleClick);
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.bindExternalChangeHandler) {
+      this.props.bindExternalChangeHandler(null);
+    }
+  }
+
   getPriorityLabel() {
-    return PRIORITY_MAP[this.props.maxLevel][this.getPriorityLevel()];
+    return PiorityLevels[this.props.priorityType][this.getPriorityLevel()];
   }
 
   getPriorityLevel() {
@@ -43,7 +44,9 @@ export default class PriorityMeter extends React.Component {
     return this.props.level;
   }
 
-  handleClick() {
+  handleClick(event) {
+    event.stopPropagation();
+
     let level = this.getPriorityLevel();
 
     if (level++ >= this.props.maxLevel) {

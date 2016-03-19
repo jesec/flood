@@ -22,18 +22,18 @@ export default class Torrent extends React.Component {
   }
 
   handleClick(event) {
-    this.props.handleClick(this.props.data.hash, event);
+    this.props.handleClick(this.props.torrent.hash, event);
   }
 
   handleRightClick(event) {
     if (!this.props.selected) {
       this.handleClick(event);
     }
-    this.props.handleRightClick(this.props.data, event);
+    this.props.handleRightClick(this.props.torrent, event);
   }
 
   render() {
-    let torrent = this.props.data;
+    let torrent = this.props.torrent;
 
     let added = new Date(torrent.added * 1000);
     let addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +

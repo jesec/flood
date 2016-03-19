@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -88,17 +89,44 @@ export default class ContextMenu extends React.Component {
 
   getMenuItems(items) {
     return items.map((item, index) => {
+      let labelAction, labelSecondary;
+      let primaryLabelClasses = classnames('menu__item__label--primary', {
+        'has-action': item.labelAction
+      });
+
+      if (item.labelSecondary) {
+        labelSecondary = (
+          <span className="menu__item__label--secondary">
+            {item.labelSecondary}
+          </span>
+        );
+      }
+
+      if (item.labelAction) {
+        labelAction = (
+          <span className="menu__item__label__action">
+            {item.labelAction}
+          </span>
+        );
+      }
+
       return (
         <li className="menu__item is-selectable" key={index} onClick={this.handleMenuItemClick.bind(this, item)}>
-          {item.label}
+          <span className={primaryLabelClasses}>
+            <span className="menu__item__label">
+              {item.label}
+            </span>
+            {labelAction}
+          </span>
+          {labelSecondary}
         </li>
       );
     });
   }
 
-  handleMenuItemClick(item) {
+  handleMenuItemClick(item, event) {
     if (item.clickHandler) {
-      item.clickHandler(item.action);
+      item.clickHandler(item.action, event);
     }
   }
 

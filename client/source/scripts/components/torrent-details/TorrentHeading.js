@@ -72,7 +72,7 @@ export default class TorrentHeading extends React.Component {
       <li className="torrent-details__sub-heading__tertiary"
         key={torrentActions.length + 1}>
         <PriorityMeter id={torrent.hash} key={torrent.hash}
-          level={torrent.priority} maxLevel={3}
+          level={torrent.priority} maxLevel={3} priorityType="torrent"
           onChange={this.handlePriorityChange} showLabel={true} />
       </li>
     );

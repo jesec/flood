@@ -833,6 +833,45 @@ body {
   transition: background 0.25s;
   vertical-align: baseline; }
 
+.menu {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(26, 47, 61, 0.1), 0 0 35px rgba(26, 47, 61, 0.3);
+  color: #95a2ad;
+  text-align: left; }
+  .menu__item {
+    padding: 5px 15px; }
+    .menu__item__label--primary.has-action {
+      display: -webkit-box;
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex; }
+      .menu__item__label--primary.has-action .menu__item__label {
+        -webkit-box-flex: 1;
+        -webkit-flex: 1 1 auto;
+            -ms-flex: 1 1 auto;
+                flex: 1 1 auto; }
+        .menu__item__label--primary.has-action .menu__item__label__action {
+          -webkit-box-flex: 0;
+          -webkit-flex: 0 0 auto;
+              -ms-flex: 0 0 auto;
+                  flex: 0 0 auto; }
+    .menu__item__label--secondary {
+      color: #cfd4d9;
+      display: block;
+      font-size: 0.85em; }
+    .menu__item.is-selectable {
+      cursor: pointer;
+      display: block;
+      font-size: 0.9em;
+      -webkit-transition: background 0.25s, color 0.25s;
+      transition: background 0.25s, color 0.25s; }
+      .menu__item.is-selectable:hover {
+        background: rgba(233, 238, 242, 0.4);
+        color: #788997; }
+      .menu__item.is-selectable.is-selected {
+        color: #258de5; }
+
 .client-stats {
   height: 200px;
   position: relative; }
@@ -1395,26 +1434,6 @@ body {
       .loading-indicator__bar--3:after {
         -webkit-animation-delay: 1s;
                 animation-delay: 1s; }
-
-.menu {
-  background: rgba(255, 255, 255, 0.98);
-  border-radius: 3px;
-  box-shadow: 0 0 0 1px rgba(26, 47, 61, 0.1), 0 0 35px rgba(26, 47, 61, 0.3);
-  color: #95a2ad;
-  text-align: left; }
-  .menu__item {
-    padding: 5px 15px; }
-    .menu__item.is-selectable {
-      cursor: pointer;
-      display: block;
-      font-size: 0.9em;
-      -webkit-transition: background 0.25s, color 0.25s;
-      transition: background 0.25s, color 0.25s; }
-      .menu__item.is-selectable:hover {
-        background: rgba(233, 238, 242, 0.4);
-        color: #788997; }
-      .menu__item.is-selectable.is-selected {
-        color: #258de5; }
 
 .modal {
   background: rgba(26, 47, 61, 0.5);
