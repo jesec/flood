@@ -40,8 +40,6 @@ class ApplicationLoadingIndicator extends React.Component {
       );
     }
 
-    console.log(this.state.dependenciesLoaded);
-
     return (
       <CSSTransitionGroup
         className="application__loading-indicator__wrapper"
