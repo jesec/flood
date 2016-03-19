@@ -7,7 +7,7 @@ export function sortTorrents(torrentsHash, sortBy) {
     let direction = sortBy.direction;
     let property = sortBy.property;
 
-    torrents.sort(function(a, b) {
+    torrents.sort((a, b) => {
       let valA = a[property];
       let valB = b[property];
 

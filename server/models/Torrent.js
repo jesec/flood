@@ -201,7 +201,7 @@ class Torrent {
     let trackers = clientData.trackers.split('@!@');
     let trackerDomains = [];
 
-    trackers.forEach(function (tracker) {
+    trackers.forEach((tracker) => {
       let domain = regEx.domainName.exec(tracker);
 
       if (domain && domain[1]) {

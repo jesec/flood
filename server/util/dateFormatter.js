@@ -4,7 +4,7 @@
  * ISO8601 formatted strings. Accepts formats with and without
  * hyphen/colon separators and correctly parses zoning info.
  */
-var DateFormatter = function (opts) {
+var DateFormatter = (opts) => {
   this.opts = {}
   this.setOpts(opts)
 }
@@ -49,11 +49,11 @@ DateFormatter.ISO8601 = new RegExp(
  * @param {Boolean} opts.offset  - Enable/Disable output of UTC offset
  *                                 (default: false)
  */
-DateFormatter.prototype.setOpts = function (opts) {
+DateFormatter.prototype.setOpts = (opts) => {
   if (!opts) opts = DateFormatter.DEFAULT_OPTIONS
 
   var ctx = this;
-  Object.keys(DateFormatter.DEFAULT_OPTIONS).forEach(function (k) {
+  Object.keys(DateFormatter.DEFAULT_OPTIONS).forEach((k) => {
     ctx.opts[k] = opts.hasOwnProperty(k) ?
       opts[k] : DateFormatter.DEFAULT_OPTIONS[k]
   })
@@ -66,7 +66,7 @@ DateFormatter.prototype.setOpts = function (opts) {
  * @param {String} time - String representation of timestamp.
  * @return {Date}       - Date object from timestamp.
  */
-DateFormatter.prototype.decodeIso8601 = function(time) {
+DateFormatter.prototype.decodeIso8601 = (time) => {
   var dateParts = time.toString().match(DateFormatter.ISO8601)
   if (!dateParts) {
     throw new Error('Expected a ISO8601 datetime but got \'' + time + '\'')
@@ -98,7 +98,7 @@ DateFormatter.prototype.decodeIso8601 = function(time) {
  * @param {Date} date - Date object.
  * @return {String}   - String representation of timestamp.
  */
-DateFormatter.prototype.encodeIso8601 = function(date) {
+DateFormatter.prototype.encodeIso8601 = (date) => {
   var parts = this.opts.local ?
     DateFormatter.getLocalDateParts(date) :
     DateFormatter.getUTCDateParts(date)
@@ -120,7 +120,7 @@ DateFormatter.prototype.encodeIso8601 = function(date) {
  * @param {Date} date - Date Object
  * @return {String[]}
  */
-DateFormatter.getUTCDateParts = function (date) {
+DateFormatter.getUTCDateParts = (date) => {
   return [
     date.getUTCFullYear()
   , DateFormatter.zeroPad(date.getUTCMonth()+1,2)
@@ -139,7 +139,7 @@ DateFormatter.getUTCDateParts = function (date) {
  * @param {Date} date - Date Object
  * @return {String[]}
  */
-DateFormatter.getLocalDateParts = function (date) {
+DateFormatter.getLocalDateParts = (date) => {
   return [
     date.getFullYear()
   , DateFormatter.zeroPad(date.getMonth()+1,2)
@@ -159,7 +159,7 @@ DateFormatter.getLocalDateParts = function (date) {
  *                          already length.
  * @return {String}       - String with the padded digit
  */
-DateFormatter.zeroPad = function (digit, length) {
+DateFormatter.zeroPad = (digit, length) => {
   var padded = '' + digit
   while (padded.length < length) {
     padded = '0' + padded
@@ -174,7 +174,7 @@ DateFormatter.zeroPad = function (digit, length) {
  *
  * @return {String} - in the format /Z|[+-]\d{2}:\d{2}/
  */
-DateFormatter.formatCurrentOffset = function (d) {
+DateFormatter.formatCurrentOffset = (d) => {
   var offset = (d || new Date()).getTimezoneOffset()
   return (offset === 0) ? 'Z' : [
       (offset < 0) ? '+' : '-'

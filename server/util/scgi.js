@@ -8,7 +8,7 @@ let Serializer = require('xmlrpc/lib/serializer');
 let config = require('../../config');
 
 let scgi = {
-  methodCall: function(methodName, parameters) {
+  methodCall: (methodName, parameters) => {
     let deferred = Q.defer();
     let deserializer = new Deserializer('utf8');
     let headerLength = 0;
@@ -19,7 +19,7 @@ let scgi = {
     stream.setEncoding('UTF8');
 
     // TODO: Remove this debugging info.
-    stream.on('error', function(error) {
+    stream.on('error', () => {
       console.trace(error);
     });
 
@@ -28,19 +28,19 @@ let scgi = {
       `SCGI${nullChar}1${nullChar}`
     ];
 
-    headerItems.forEach(function (item) {
+    headerItems.forEach((item) => {
       headerLength += item.length;
     });
 
     let header = `${headerLength}:`;
 
-    headerItems.forEach(function(headerItem) {
+    headerItems.forEach((headerItem) => {
       header += headerItem;
     });
 
     stream.write(`${header},${xml}`);
 
-    deserializer.deserializeMethodResponse(stream, function (error, response) {
+    deserializer.deserializeMethodResponse(stream, (error, response) => {
       if (error) {
         return deferred.reject(error);
       }

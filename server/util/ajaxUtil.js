@@ -1,8 +1,8 @@
 'use strict';
 
 let ajaxUtil = {
-  getResponseFn: function (res) {
-    return function (data, error) {
+  getResponseFn: (res) => {
+    return (data, error) => {
       if (error) {
         res.status(500).json(error);
         return;

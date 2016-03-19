@@ -13,7 +13,7 @@ import UIActions from './actions/UIActions';
 class FloodApp extends React.Component {
   componentDidMount() {
     TorrentActions.fetchLatestTorrentLocation();
-    window.addEventListener('click', function () {
+    window.addEventListener('click', () => {
       UIActions.dismissContextMenu();
     });
   }

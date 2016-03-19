@@ -5,7 +5,7 @@ import propsMap from '../../../../shared/constants/propsMap';
 export function torrentStatusClasses(torrent, ...classes) {
   let additionalClasses = [];
 
-  classes.forEach(function (className) {
+  classes.forEach((className) => {
     if (className) {
       additionalClasses.push(className);
     }

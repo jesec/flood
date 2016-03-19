@@ -1,20 +1,20 @@
 var util = require('util');
 
 var FormatUtil = {
-  percentComplete: function(numerator, denominator) {
+  percentComplete: (numerator, denominator) => {
 
   },
 
-  eta: function(rate, completed, total) {
-    
+  eta: (rate, completed, total) => {
+
   },
 
-  parsePeers: function(string) {
+  parsePeers: (string) => {
     var markerPosition = string.indexOf('@!@');
     return string.substr(0, markerPosition);
   },
 
-  status: function(isHashChecking, isComplete, isOpen, uploadRate, downloadRate, state, message) {
+  status: (isHashChecking, isComplete, isOpen, uploadRate, downloadRate, state, message) => {
     var torrentStatus = [];
 
     if (isHashChecking === '1') {

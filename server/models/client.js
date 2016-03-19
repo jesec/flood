@@ -17,7 +17,7 @@ let _torrentCollection = new TorrentCollection();
 let _trackerCount = {};
 
 var client = {
-  addFiles: function(req, callback) {
+  addFiles: (req, callback) => {
     let files = req.files;
     let path = req.body.destination;
     let request = new ClientRequest();
@@ -34,7 +34,7 @@ var client = {
 
       // Set the callback for only the last request.
       if (index === files.length - 1) {
-        fileRequest.onComplete(function (data) {
+        fileRequest.onComplete((data) => {
           callback(data);
         });
       }
@@ -43,7 +43,7 @@ var client = {
     });
   },
 
-  addUrls: function(data, callback) {
+  addUrls: (data, callback) => {
     let urls = data.urls;
     let path = data.destination;
     let request = new ClientRequest();
@@ -54,7 +54,7 @@ var client = {
     request.send();
   },
 
-  deleteTorrents: function(hashes, callback) {
+  deleteTorrents: (hashes, callback) => {
     let request = new ClientRequest();
 
     request.add('removeTorrents', {hashes});
@@ -62,15 +62,15 @@ var client = {
     request.send();
   },
 
-  getTorrentStatusCount: function(callback) {
+  getTorrentStatusCount: (callback) => {
     callback(_statusCount);
   },
 
-  getTorrentTrackerCount: function(callback) {
+  getTorrentTrackerCount: (callback) => {
     callback(_trackerCount);
   },
 
-  getTorrentDetails: function(hash, callback) {
+  getTorrentDetails: (hash, callback) => {
     let request = new ClientRequest();
 
     request.add('getTorrentDetails', {
@@ -84,12 +84,12 @@ var client = {
     request.send();
   },
 
-  getTorrentList: function(callback) {
+  getTorrentList: (callback) => {
     let request = new ClientRequest();
 
     request.add('getTorrentList',
       {props: clientUtil.defaults.torrentPropertyMethods});
-    request.postProcess(function(data) {
+    request.postProcess((data) => {
       // TODO: Remove this nasty nested array business.
       _torrentCollection.updateTorrents(data[0][0]);
       _statusCount = _torrentCollection.statusCount;
@@ -101,7 +101,7 @@ var client = {
     request.send();
   },
 
-  listMethods: function(method, args, callback) {
+  listMethods: (method, args, callback) => {
     let request = new ClientRequest();
 
     request.add('listMethods', {method, args});
@@ -109,7 +109,7 @@ var client = {
     request.send();
   },
 
-  moveTorrents: function(data, callback) {
+  moveTorrents: (data, callback) => {
     let destinationPath = data.destination;
     let hashes = data.hashes;
     let filenames = data.filenames;
@@ -117,21 +117,21 @@ var client = {
     let sourcePaths = data.sources;
     let mainRequest = new ClientRequest();
 
-    let startTorrents = function() {
+    let startTorrents = () => {
       let startTorrentsRequest = new ClientRequest();
       startTorrentsRequest.add('startTorrents', {hashes});
       startTorrentsRequest.onComplete(callback);
       startTorrentsRequest.send();
     };
 
-    let checkHash = function() {
+    let checkHash = () => {
       let checkHashRequest = new ClientRequest();
       checkHashRequest.add('checkHash', {hashes});
       checkHashRequest.onComplete(afterCheckHash);
       checkHashRequest.send();
     }
 
-    let moveTorrents = function () {
+    let moveTorrents = () => {
       let moveTorrentsRequest = new ClientRequest();
       moveTorrentsRequest.onComplete(checkHash);
       moveTorrentsRequest.add('moveTorrents',
@@ -151,7 +151,7 @@ var client = {
     mainRequest.send();
   },
 
-  setFilePriority: function (hashes, data, callback) {
+  setFilePriority:  (hashes, data, callback) => {
     // TODO Add support for multiple hashes.
     let fileIndex = data.fileIndices[0];
     let request = new ClientRequest();
@@ -161,7 +161,7 @@ var client = {
     request.send();
   },
 
-  setPriority: function (hashes, data, callback) {
+  setPriority:  (hashes, data, callback) => {
     let request = new ClientRequest();
 
     request.add('setPriority', {hashes, priority: data.priority});
@@ -169,7 +169,7 @@ var client = {
     request.send();
   },
 
-  setSpeedLimits: function(data, callback) {
+  setSpeedLimits: (data, callback) => {
     let request = new ClientRequest();
 
     request.add('setThrottle',
@@ -178,7 +178,7 @@ var client = {
     request.send();
   },
 
-  stopTorrent: function(hashes, callback) {
+  stopTorrent: (hashes, callback) => {
     let request = new ClientRequest();
 
     request.add('stopTorrents', {hashes});
@@ -186,7 +186,7 @@ var client = {
     request.send();
   },
 
-  startTorrent: function(hashes, callback) {
+  startTorrent: (hashes, callback) => {
     let request = new ClientRequest();
 
     request.add('startTorrents', {hashes});
@@ -194,7 +194,7 @@ var client = {
     request.send();
   },
 
-  getTransferStats: function(callback) {
+  getTransferStats: (callback) => {
     let request = new ClientRequest();
 
     request.add('getTransferData');

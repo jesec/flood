@@ -130,16 +130,16 @@ export default class StatusFilters extends React.Component {
       let totalStatusCount = 0;
       let torrents = TorrentStore.getAllTorrents();
 
-      Object.keys(statusCount).forEach(function(key) {
+      Object.keys(statusCount).forEach((key) => {
         statusCount[key] = 0;
       });
 
-      Object.keys(torrents).forEach(function(hash) {
+      Object.keys(torrents).forEach((hash) => {
         let torrent = torrents[hash];
 
         if (torrent.trackers.indexOf(trackerFilter) > -1) {
           totalStatusCount++;
-          torrent.status.forEach(function (status) {
+          torrent.status.forEach((status) => {
             statusCount[propsMap.serverStatus[status]]++;
           });
         }

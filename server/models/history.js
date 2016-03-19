@@ -60,7 +60,7 @@ let fiveMinSnapshot = new HistoryEra({
   nextEra: thirtyMinSnapshot
 });
 
-let processData = function (opts, callback, data, error) {
+let processData = (opts, callback, data, error) => {
   if (error) {
     callback(null, error);
     return;
@@ -71,7 +71,7 @@ let processData = function (opts, callback, data, error) {
   let downloadRateHistory = [];
   let uploadRateHistory = [];
 
-  data.forEach(function (snapshot) {
+  data.forEach((snapshot) => {
     downloadRateHistory.push(snapshot.dn);
     uploadRateHistory.push(snapshot.up);
   });
@@ -83,7 +83,7 @@ let processData = function (opts, callback, data, error) {
 };
 
 let history = {
-  get: function (opts, callback) {
+  get: (opts, callback) => {
     opts = opts || {};
 
     if (opts.snapshot === 'fiveMin') {
@@ -103,9 +103,9 @@ let history = {
     }
   },
 
-  startPolling: function () {
-    pollInterval = setInterval(function() {
-      client.getTransferStats(function (data, err) {
+  startPolling: () => {
+    pollInterval = setInterval(() => {
+      client.getTransferStats((data, err) => {
         if (err) {
           return;
         }
@@ -118,7 +118,7 @@ let history = {
     }, 1000 * 5);
   },
 
-  stopPolling: function() {
+  stopPolling: () => {
     clearInterval(pollInterval);
     pollInterval = null;
   }

@@ -18,10 +18,10 @@ export default class LineChart extends React.Component {
       .linear()
       .range([0, width])
       .domain([
-        d3.min(transferData, function(dataPoint, index) {
+        d3.min(transferData, (dataPoint, index) => {
           return index;
         }),
-        d3.max(transferData, function(dataPoint, index) {
+        d3.max(transferData, (dataPoint, index) => {
           return index;
         })
       ]);
@@ -32,7 +32,7 @@ export default class LineChart extends React.Component {
       .range([height - margin.top, margin.bottom])
       .domain([
         0,
-        d3.max(transferData, function(dataPoint, index) {
+        d3.max(transferData, (dataPoint, index) => {
           if (dataPoint >= transferLimit[index]) {
             return dataPoint;
           } else {
@@ -41,14 +41,14 @@ export default class LineChart extends React.Component {
         })
       ]);
 
-    let lineFunc = function (interpolation) {
+    let lineFunc = (interpolation) => {
       return d3
         .svg
         .line()
-        .x(function(dataPoint, index) {
+        .x((dataPoint, index) => {
           return xRange(index);
         })
-        .y(function(dataPoint) {
+        .y((dataPoint) => {
           return yRange(dataPoint);
         })
         .interpolate(interpolation);
@@ -57,11 +57,11 @@ export default class LineChart extends React.Component {
     let areaFunc = d3
       .svg
       .area()
-      .x(function(dataPoint, index) {
+      .x((dataPoint, index) => {
         return xRange(index);
       })
       .y0(height)
-      .y1(function(dataPoint) {
+      .y1((dataPoint) => {
         return yRange(dataPoint);
       })
       .interpolate('basis');

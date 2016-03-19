@@ -136,7 +136,7 @@ export default class AddTorrents extends React.Component {
 
     let fileData = new FormData();
 
-    this.state.files.forEach(function (file) {
+    this.state.files.forEach((file) => {
       fileData.append('torrents', file);
     });
 

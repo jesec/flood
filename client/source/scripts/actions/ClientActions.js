@@ -4,7 +4,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 const ClientActions = {
-  fetchTransferData: function() {
+  fetchTransferData: () => {
     return axios.get('/client/stats')
       .then((json = {}) => {
         return json.data;
@@ -27,7 +27,7 @@ const ClientActions = {
       });
   },
 
-  fetchTransferHistory: function(opts) {
+  fetchTransferHistory: (opts) => {
     return axios.get('/client/history', {
       params: opts
     })
@@ -48,7 +48,7 @@ const ClientActions = {
     })
   },
 
-  setThrottle: function(direction, throttle) {
+  setThrottle: (direction, throttle) => {
     return axios.put('/client/settings/speed-limits', {
         direction,
         throttle

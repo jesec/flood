@@ -185,7 +185,7 @@ class ClientRequest {
     let sourcePaths = this.getEnsuredArray(options.sourcePaths);
 
     sourcePaths.forEach((source, index) => {
-      let callback = function () {};
+      let callback = () => {};
       let destination = `${destinationPath}${path.sep}${filenames[index]}`;
       let isLastRequest = index + 1 === sourcePaths.length;
 

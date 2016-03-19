@@ -7,13 +7,13 @@ export function filterTorrents(torrentList, opts) {
   if (filter !== 'all') {
     if (type === 'status') {
       let statusFilter = statusMap[filter];
-      return torrentList.filter(function(torrent) {
+      return torrentList.filter((torrent) => {
         if (torrent.status.indexOf(statusFilter) > -1) {
           return torrent;
         }
       });
     } else if (type === 'tracker') {
-      return torrentList.filter(function(torrent) {
+      return torrentList.filter((torrent) => {
         if (torrent.trackers.indexOf(filter) > -1) {
           return torrent;
         }

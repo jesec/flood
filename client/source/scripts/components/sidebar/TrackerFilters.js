@@ -95,16 +95,16 @@ export default class TrackerFilters extends React.Component {
       let torrentCount = 0;
       let torrents = TorrentStore.getAllTorrents();
 
-      Object.keys(trackerCount).forEach(function(key) {
+      Object.keys(trackerCount).forEach((key) => {
         trackerCount[key] = 0;
       });
 
-      Object.keys(torrents).forEach(function(hash) {
+      Object.keys(torrents).forEach((hash) => {
         let torrent = torrents[hash];
 
         if (torrent.status.indexOf(propsMap.clientStatus[statusFilter]) > -1) {
           torrentCount++;
-          torrent.trackers.forEach(function (tracker) {
+          torrent.trackers.forEach((tracker) => {
             trackerCount[tracker]++;
           });
         }

@@ -81,7 +81,7 @@ export default class Dropdown extends React.Component {
   }
 
   getDropdownMenu(items) {
-    let dropdownLists = items.map(function(itemList, index) {
+    let dropdownLists = items.map((itemList, index) => {
       return (
         <div className="dropdown__list" key={index}>
           {this.getDropdownMenuItems(itemList)}
@@ -102,7 +102,7 @@ export default class Dropdown extends React.Component {
   }
 
   getDropdownMenuItems(listItems) {
-    return listItems.map(function(property, index) {
+    return listItems.map((property, index) => {
       let classes = classnames('dropdown__item menu__item', property.className, {
         'is-selectable': property.selectable !== false,
         'is-selected': property.selected

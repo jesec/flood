@@ -9,19 +9,19 @@ let client = require('../models/client');
 let history = require('../models/history');
 let uiSettings = require('../models/uiSettings');
 
-router.post('/sort-props', function(req, res, next) {
+router.post('/sort-props', (req, res, next) => {
   uiSettings.setSortProps(req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.get('/sort-props', function(req, res, next) {
+router.get('/sort-props', (req, res, next) => {
   uiSettings.getSortProps(ajaxUtil.getResponseFn(res));
 });
 
-router.get('/torrent-location', function(req, res, next) {
+router.get('/torrent-location', (req, res, next) => {
   uiSettings.getLatestTorrentLocation(ajaxUtil.getResponseFn(res));
 });
 
-router.post('/torrent-location', function(req, res, next) {
+router.post('/torrent-location', (req, res, next) => {
   uiSettings.setLatestTorrentLocation(req.body, ajaxUtil.getResponseFn(res));
 });
 

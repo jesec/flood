@@ -4,7 +4,7 @@ let clientUtil = require('./clientUtil');
 let util = require('util');
 
 let clientResponseUtil = {
-  processTorrentDetails: function(data) {
+  processTorrentDetails: (data) => {
     // TODO: This is ugly.
     let peersData = data[0][0] || null;
     let filesData = data[1][0] || null;
@@ -26,7 +26,7 @@ let clientResponseUtil = {
         filesData
       );
 
-      files = files.map(function (file) {
+      files = files.map((file) => {
         file.filename = file.pathComponents[file.pathComponents.length - 1];
         file.percentComplete = (file.completedChunks / file.sizeChunks * 100).toFixed(0);
         delete(file.completedChunks);
@@ -45,7 +45,7 @@ let clientResponseUtil = {
     return {peers, files, trackers};
   },
 
-  processTransferStats: function(data) {
+  processTransferStats: (data) => {
     return clientUtil.mapClientProps(clientUtil.defaults.clientProperties,
       data);
   }

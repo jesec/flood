@@ -1,7 +1,7 @@
 import React from 'react';
 
 const format = {
-  eta: function(eta) {
+  eta: (eta) => {
     if (eta === 'Infinity') {
       return '∞';
     } else if (eta.years > 0) {
@@ -68,7 +68,7 @@ const format = {
     }
   },
 
-  data: function(bytes, extraUnits, precision = 2) {
+  data: (bytes, extraUnits, precision = 2) => {
   	let kilobyte = 1024,
   		megabyte = kilobyte * 1024,
   		gigabyte = megabyte * 1024,
@@ -106,7 +106,7 @@ const format = {
   	};
   },
 
-  ratio: function(ratio) {
+  ratio: (ratio) => {
     ratio = ratio / 1000;
     let precision = 1;
 

@@ -8,7 +8,7 @@ export function selectTorrents(options) {
       let lastHashIndex;
 
       // get the index of the last selected torrent.
-      options.torrentList.some(function(torrent, index) {
+      options.torrentList.some((torrent, index) => {
         if (torrent.hash === lastHash) {
           lastHashIndex = index;
           return true;
@@ -16,7 +16,7 @@ export function selectTorrents(options) {
       });
 
       // get the index of the newly selected torrent.
-      options.torrentList.some(function(torrent, index) {
+      options.torrentList.some((torrent, index) => {
         if (torrent.hash === options.hash) {
           currentHashIndex = index;
           return true;

@@ -11,7 +11,7 @@ export default class TorrentPeers extends React.Component {
     let peers = this.props.peers;
 
     if (peers) {
-      let peerList = peers.map(function(peer, index) {
+      let peerList = peers.map((peer, index) => {
         let downloadRate = format.data(peer.downloadRate, '/s');
         let uploadRate = format.data(peer.uploadRate, '/s');
         return (

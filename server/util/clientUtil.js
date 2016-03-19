@@ -220,7 +220,7 @@ var clientUtil = {
   },
 
   // TODO clean this up, write comments...
-  mapClientProps: function(props, data, includeIndex) {
+  mapClientProps: (props, data, includeIndex) => {
     var index = 0;
     var mappedObject = [];
 
@@ -243,7 +243,7 @@ var clientUtil = {
     return mappedObject;
   },
 
-  createMulticallRequest: function(methodCalls, params) {
+  createMulticallRequest: (methodCalls, params) => {
     params = params || [];
     var methodCall = [];
 

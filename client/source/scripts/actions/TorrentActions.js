@@ -4,11 +4,11 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 const TorrentActions = {
-  addTorrentsByUrls: function(urls, destination) {
+  addTorrentsByUrls: (urls, destination) => {
     axios.post('/ui/torrent-location', {
         destination
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
     return axios.post('/client/add', {
@@ -36,11 +36,11 @@ const TorrentActions = {
       });
   },
 
-  addTorrentsByFiles: function(filesData, destination) {
+  addTorrentsByFiles: (filesData, destination) => {
     axios.post('/ui/torrent-location', {
         destination
       })
-      .catch(function (error) {
+      .catch((error) => {
         console.log(error);
       });
     return axios.post('/client/add-files', filesData)
@@ -65,7 +65,7 @@ const TorrentActions = {
       });
   },
 
-  deleteTorrents: function(hash) {
+  deleteTorrents: (hash) => {
     return axios.post('/client/torrents/delete', {hash})
       .then((json = {}) => {
         return json.data;
@@ -84,7 +84,7 @@ const TorrentActions = {
       });
   },
 
-  fetchLatestTorrentLocation: function () {
+  fetchLatestTorrentLocation: () => {
     return axios.get('/ui/torrent-location')
       .then((json = {}) => {
         return json.data;
@@ -103,7 +103,7 @@ const TorrentActions = {
       });
   },
 
-  fetchTorrents: function () {
+  fetchTorrents: () => {
     return axios.get('/client/torrents')
       .then((json = {}) => {
         return json.data;
@@ -126,7 +126,7 @@ const TorrentActions = {
       });
   },
 
-  fetchTorrentDetails: function(hash) {
+  fetchTorrentDetails: (hash) => {
     return axios.post('/client/torrent-details', {
         hash
       })
@@ -152,7 +152,7 @@ const TorrentActions = {
       });
   },
 
-  fetchTorrentStatusCount: function() {
+  fetchTorrentStatusCount: () => {
     return axios.get('/client/torrents/status-count')
       .then((json = {}) => {
         return json.data;
@@ -171,7 +171,7 @@ const TorrentActions = {
       });
   },
 
-  fetchTorrentTrackerCount: function() {
+  fetchTorrentTrackerCount: () => {
     return axios.get('/client/torrents/tracker-count')
       .then((json = {}) => {
         return json.data;
@@ -190,7 +190,7 @@ const TorrentActions = {
       });
   },
 
-  moveTorrents: function(hashes, options) {
+  moveTorrents: (hashes, options) => {
     let {destination, filenames, sources, moveFiles} = options;
 
     return axios.post('/client/torrents/move',
@@ -212,7 +212,7 @@ const TorrentActions = {
       });
   },
 
-  pauseTorrents: function(hashes) {
+  pauseTorrents: (hashes) => {
     return axios.post('/client/pause', {
         hashes
       })
@@ -237,7 +237,7 @@ const TorrentActions = {
       });
   },
 
-  startTorrents: function(hashes) {
+  startTorrents: (hashes) => {
     return axios.post('/client/start', {
         hashes
       })
@@ -262,7 +262,7 @@ const TorrentActions = {
       });
   },
 
-  stopTorrents: function(hashes) {
+  stopTorrents: (hashes) => {
     return axios.post('/client/stop', {
         hashes
       })
@@ -287,7 +287,7 @@ const TorrentActions = {
       });
   },
 
-  setPriority: function(hash, priority) {
+  setPriority: (hash, priority) => {
     return axios.patch(`/client/torrents/${hash}/priority`, {
         hash,
         priority
@@ -309,7 +309,7 @@ const TorrentActions = {
       });
   },
 
-  setFilePriority: function(hash, fileIndices, priority) {
+  setFilePriority: (hash, fileIndices, priority) => {
     return axios.patch(`/client/torrents/${hash}/file-priority`, {
         hash,
         fileIndices,

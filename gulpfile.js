@@ -2,7 +2,6 @@
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync');
 var cssnano = require('gulp-cssnano');
-var eslint = require('gulp-eslint');
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
@@ -73,7 +72,7 @@ var webpackConfig = {
   watch: webpackWatch
 };
 
-gulp.task('browsersync', function () {
+gulp.task('browsersync', () => {
   browserSync.init({
     online: true,
     open: false,
@@ -82,24 +81,15 @@ gulp.task('browsersync', function () {
   });
 });
 
-// Create a function so we can use it inside of webpack's watch function.
-function eslintFn () {
-  return gulp.src([dirs.js + '/**/*.?(js|jsx)'])
-    .pipe(eslint())
-    .pipe(eslint.formatEach('stylish', process.stderr));
-};
-
-gulp.task('eslint', eslintFn);
-
-gulp.task('images', function () {
+gulp.task('images', () => {
   return gulp.src(dirs.src + '/' + dirs.img + '/**/*.*')
     .pipe(gulp.dest(dirs.dist + '/' + dirs.imgDist));
 });
 
-gulp.task('sass', function () {
+gulp.task('sass', () => {
   return gulp.src(dirs.src + '/' + dirs.styles + '/' + files.mainStyles + '.scss')
     .pipe(gulpif(development, sourcemaps.init()))
-    .pipe(sass().on('error', function(error) {
+    .pipe(sass().on('error', () => {
       gutil.log(
         gutil.colors.green('Sass Error!\n'),
         '\n',
@@ -114,13 +104,13 @@ gulp.task('sass', function () {
     .pipe(browserSync.stream({match: "**/*.css"}));
 });
 
-gulp.task('minify-css', ['sass'], function () {
+gulp.task('minify-css', ['sass'], () => {
   return gulp.src(dirs.dist + '/' + dirs.stylesDist + '/' + files.mainStylesDist + '.css')
     .pipe(cssnano())
     .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist));
 });
 
-gulp.task('minify-js', function () {
+gulp.task('minify-js', () => {
   return gulp.src(dirs.dist + '/' + dirs.jsDist + '/' + files.mainJs + '.js')
     .pipe(uglify({
       mangle: true,
@@ -129,21 +119,21 @@ gulp.task('minify-js', function () {
     .pipe(gulp.dest(dirs.dist + '/' + dirs.jsDist));
 });
 
-gulp.task('reload', function () {
+gulp.task('reload', () => {
   if (development) {
     browserSync.reload();
   }
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', () => {
   gulp.watch(dirs.src + '/' + dirs.styles + '/**/*.scss', ['sass']);
   gulp.watch(dirs.src + '/' + dirs.img + '/**/*', ['images']);
 });
 
-gulp.task('webpack', function (callback) {
+gulp.task('webpack', (callback) => {
   var isFirstRun = true;
 
-  webpack(webpackConfig, function (err, stats) {
+  webpack(webpackConfig, (err, stats) => {
     if (err) {
       throw new gutil.PluginError('webpack', err);
     }
@@ -157,12 +147,9 @@ gulp.task('webpack', function (callback) {
     }));
 
     if (isFirstRun) {
-      // This runs on initial gulp webpack load.
       isFirstRun = false;
       callback();
     } else {
-      // This runs after webpack's internal watch rebuild.
-      // eslintFn();
       if (development) {
         browserSync.reload();
       }

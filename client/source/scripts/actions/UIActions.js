@@ -5,35 +5,35 @@ import ActionTypes from '../constants/ActionTypes';
 import TorrentStore from '../stores/TorrentStore';
 
 const UIActions = {
-  displayContextMenu: function(data) {
+  displayContextMenu: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,
       data
     });
   },
 
-  displayModal: function(data) {
+  displayModal: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_MODAL,
       data
     });
   },
 
-  dismissContextMenu: function() {
+  dismissContextMenu: () => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,
       data: null
     });
   },
 
-  dismissModal: function() {
+  dismissModal: () => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_MODAL,
       data: null
     });
   },
 
-  fetchSortProps: function() {
+  fetchSortProps: () => {
     return axios.get('/ui/sort-props')
       .then((json = {}) => {
         return json.data;
@@ -52,45 +52,45 @@ const UIActions = {
       });
   },
 
-  handleDetailsClick: function(data) {
+  handleDetailsClick: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_CLICK_TORRENT_DETAILS,
       data
     });
   },
 
-  handleTorrentClick: function(data) {
+  handleTorrentClick: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_CLICK_TORRENT,
       data
     });
   },
 
-  setTorrentStatusFilter: function(data) {
+  setTorrentStatusFilter: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_STATUS_FILTER,
       data
     });
   },
 
-  setTorrentTrackerFilter: function(data) {
+  setTorrentTrackerFilter: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_TRACKER_FILTER,
       data
     });
   },
 
-  setTorrentsSearchFilter: function(data) {
+  setTorrentsSearchFilter: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_SEARCH_FILTER,
       data
     });
   },
 
-  setTorrentsSort: function(data) {
+  setTorrentsSort: (data) => {
     axios
       .post('/ui/sort-props', data)
-      .catch(function (error) {
+      .catch(() => {
         console.log(error);
       });
 
