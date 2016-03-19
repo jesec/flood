@@ -26,7 +26,10 @@ class TorrentStoreClass extends BaseStore {
   }
 
   fetchTorrentDetails() {
-    TorrentActions.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
+    if (!this.isRequestPending('fetch-torrent-details')) {
+      this.beginRequest('fetch-torrent-details');
+      TorrentActions.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
+    }
 
     if (this.pollTorrentDetailsIntervalID === null) {
       this.startPollingTorrentDetails();
@@ -34,20 +37,46 @@ class TorrentStoreClass extends BaseStore {
   }
 
   fetchTorrents() {
-    TorrentActions.fetchTorrents();
+    if (!this.isRequestPending('fetch-torrents')) {
+      this.beginRequest('fetch-torrents');
+      TorrentActions.fetchTorrents();
+    }
 
     if (this.pollTorrentsIntervalID === null) {
       this.startPollingTorrents();
     }
   }
 
-  getTorrentDetails(hash) {
-    return this.torrents[hash].details || {};
+  filterTorrents() {
+    let searchFilter = TorrentFilterStore.getSearchFilter();
+    let statusFilter = TorrentFilterStore.getStatusFilter();
+    let trackerFilter = TorrentFilterStore.getTrackerFilter();
+
+    let filteredTorrents = Object.assign([], this.sortedTorrents);
+
+    if (searchFilter && searchFilter !== '') {
+      filteredTorrents = searchTorrents(filteredTorrents, searchFilter);
+    }
+
+    if (statusFilter && statusFilter !== 'all') {
+      filteredTorrents = filterTorrents(filteredTorrents, {
+        type: 'status',
+        filter: statusFilter
+      });
+    }
+
+    if (trackerFilter && trackerFilter !== 'all') {
+      filteredTorrents = filterTorrents(filteredTorrents, {
+        type: 'tracker',
+        filter: trackerFilter
+      });
+    }
+
+    this.filteredTorrents = filteredTorrents;
   }
 
-  setTorrentDetails(hash, torrentDetails) {
-    this.torrents[hash].details = torrentDetails;
-    this.emit(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE);
+  getTorrentDetails(hash) {
+    return this.torrents[hash].details || {};
   }
 
   getSelectedTorrents() {
@@ -74,16 +103,6 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_SUCCESS);
   }
 
-  setSelectedTorrents(event, hash) {
-    this.selectedTorrents = selectTorrents({
-      event,
-      hash,
-      selectedTorrents: this.selectedTorrents,
-      torrentList: this.filteredTorrents
-    });
-    this.emit(EventTypes.UI_TORRENT_SELECTION_CHANGE);
-  }
-
   getTorrent(hash) {
     return this.torrents[hash];
   }
@@ -108,7 +127,31 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.CLIENT_MOVE_TORRENTS_REQUEST_ERROR);
   }
 
-  setTorrents(torrents) {
+  setSelectedTorrents(event, hash) {
+    this.selectedTorrents = selectTorrents({
+      event,
+      hash,
+      selectedTorrents: this.selectedTorrents,
+      torrentList: this.filteredTorrents
+    });
+    this.emit(EventTypes.UI_TORRENT_SELECTION_CHANGE);
+  }
+
+  handleFetchTorrentsSuccess(torrents) {
+    this.sortTorrents(torrents);
+    this.filterTorrents();
+
+    this.emit(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS);
+    this.resolveRequest('fetch-torrents');
+  }
+
+  setTorrentDetails(hash, torrentDetails) {
+    this.torrents[hash].details = torrentDetails;
+    this.emit(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE);
+    this.resolveRequest('fetch-torrent-details');
+  }
+
+  sortTorrents(torrents) {
     let torrentsSort = TorrentFilterStore.getTorrentsSort();
 
     this.torrents = torrents;
@@ -116,34 +159,6 @@ class TorrentStoreClass extends BaseStore {
     // Convert torrents hash to array and sort it.
     this.sortedTorrents = sortTorrents(this.torrents,
       {direction: torrentsSort.direction, property: torrentsSort.value});
-
-    let searchFilter = TorrentFilterStore.getSearchFilter();
-    let statusFilter = TorrentFilterStore.getStatusFilter();
-    let trackerFilter = TorrentFilterStore.getTrackerFilter();
-
-    let filteredTorrents = Object.assign([], this.sortedTorrents);
-
-    if (searchFilter && searchFilter !== '') {
-      filteredTorrents = searchTorrents(filteredTorrents, searchFilter);
-    }
-
-    if (statusFilter && statusFilter !== 'all') {
-      filteredTorrents = filterTorrents(filteredTorrents, {
-        type: 'status',
-        filter: statusFilter
-      });
-    }
-
-    if (trackerFilter && trackerFilter !== 'all') {
-      filteredTorrents = filterTorrents(filteredTorrents, {
-        type: 'tracker',
-        filter: trackerFilter
-      });
-    }
-
-    this.filteredTorrents = filteredTorrents;
-
-    this.emit(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS);
   }
 
   startPollingTorrentDetails() {
@@ -171,7 +186,7 @@ class TorrentStoreClass extends BaseStore {
   }
 
   triggerTorrentsFilter() {
-    this.setTorrents(this.torrents);
+    this.filterTorrents();
   }
 }
 
@@ -191,7 +206,7 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       TorrentStore.handleAddTorrentSuccess(action.data);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENTS_SUCCESS:
-      TorrentStore.setTorrents(action.data.torrents);
+      TorrentStore.handleFetchTorrentsSuccess(action.data.torrents);
       break;
     case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
       TorrentStore.handleMoveTorrentsSuccess(action.data);
@@ -200,6 +215,7 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       TorrentStore.handleMoveTorrentsError(action.error);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENTS_ERROR:
+      TorrentStore.handleFetchTorrentsError();
       console.log(action);
       break;
     case ActionTypes.UI_CLICK_TORRENT:

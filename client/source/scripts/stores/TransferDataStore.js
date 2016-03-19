@@ -16,11 +16,17 @@ class TransferDataStoreClass extends BaseStore {
   }
 
   fetchTransferData() {
-    ClientActions.fetchTransferHistory({
-      snapshot: 'fiveMin'
-    });
+    if (!this.isRequestPending('fetch-transfer-history')) {
+      this.beginRequest('fetch-transfer-history');
+      ClientActions.fetchTransferHistory({
+        snapshot: 'fiveMin'
+      });
+    }
 
-    ClientActions.fetchTransferData();
+    if (!this.isRequestPending('fetch-transfer-data')) {
+      this.beginRequest('fetch-transfer-data');
+      ClientActions.fetchTransferData();
+    }
 
     if (this.pollTransferDataID === null) {
       this.startPollingTransferData();
@@ -101,14 +107,17 @@ class TransferDataStoreClass extends BaseStore {
     };
 
     this.emit(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS);
+    this.resolveRequest('fetch-transfer-data');
   }
 
   handleTransferDataError() {
     this.emit(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_ERROR);
+    this.resolveRequest('fetch-transfer-data');
   }
 
   handleTransferHistoryError(error) {
     this.emit(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_ERROR);
+    this.resolveRequest('fetch-transfer-history');
   }
 
   handleTransferHistorySuccess(transferData) {
@@ -118,6 +127,7 @@ class TransferDataStoreClass extends BaseStore {
     };
 
     this.emit(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS);
+    this.resolveRequest('fetch-transfer-history');
   }
 
   startPollingTransferData() {
