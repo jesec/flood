@@ -174,8 +174,7 @@ class TorrentStoreClass extends BaseStore {
 
   startPollingTorrents() {
     this.pollTorrentsIntervalID = setInterval(
-      this.fetchTorrents.bind(this),
-      config.pollInterval
+      this.fetchTorrents.bind(this), config.pollInterval
     );
   }
 
@@ -191,6 +190,11 @@ class TorrentStoreClass extends BaseStore {
 
   triggerTorrentsFilter() {
     this.filterTorrents();
+    this.emit(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS);
+  }
+
+  triggerTorrentsSort() {
+    this.sortTorrents(this.torrents);
   }
 }
 
@@ -224,6 +228,8 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.UI_CLICK_TORRENT:
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);
       break;
+    case ActionTypes.UI_SET_TORRENT_SORT:
+      TorrentStore.triggerTorrentsSort();
     case ActionTypes.UI_SET_TORRENT_STATUS_FILTER:
     case ActionTypes.UI_SET_TORRENT_TRACKER_FILTER:
     case ActionTypes.UI_SET_TORRENT_SEARCH_FILTER:

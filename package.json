@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "livereload": "NODE_ENV='development' && ./node_modules/.bin/gulp livereload",
+    "livereload": "NODE_ENV='development' ./node_modules/.bin/gulp livereload",
     "start": "npm prune && npm install && ./node_modules/.bin/gulp dist && nodemon ./server/bin/www"
   },
   "dependencies": {
