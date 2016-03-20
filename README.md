@@ -18,7 +18,7 @@ It's a work-in-progress, and it might not have all of the features you want (yet
 
 #### Start the Web Server
 * Run `npm start` in your terminal at this repo's root.
-  * On first run, this may take a few minutes while it installs Node dependencies.
+  * On first run, this may take a few minutes while it installs dependencies and transpiles JavaScript & CSS assets.
 * Access the UI in your browser at `localhost:3000`.
   * To change the default port, run `npm start localhost {port}`.
 
