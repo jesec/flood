@@ -5,7 +5,6 @@ let Datastore = require('nedb');
 let config = require('../../config');
 let stringUtil = require('../../shared/util/stringUtil');
 
-const MAX_CLEANUP_INTERVAL = 1000 * 60 * 60; // 1 hour
 const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
 const CUMULATIVE_DATA_BUFFER = 1000 * 2; // 2 seconds
 const REQUIRED_FIELDS = ['interval', 'maxTime', 'name'];
@@ -31,8 +30,8 @@ class HistoryEra {
     let cleanupInterval = this.opts.maxTime;
     let nextEraUpdateInterval = this.opts.nextEraUpdateInterval;
 
-    if (cleanupInterval === 0 || cleanupInterval > MAX_CLEANUP_INTERVAL) {
-      cleanupInterval = MAX_CLEANUP_INTERVAL;
+    if (cleanupInterval === 0 || cleanupInterval > config.dbCleanInterval) {
+      cleanupInterval = config.dbCleanInterval;
     }
 
     if (nextEraUpdateInterval && nextEraUpdateInterval > MAX_NEXT_ERA_UPDATE_INTERVAL) {
@@ -125,7 +124,7 @@ class HistoryEra {
   loadDatabase(dbName) {
     let db = new Datastore({
       autoload: true,
-      filename: `${config.databasePath}history/${dbName}.db`
+      filename: `${config.dbPath}history/${dbName}.db`
     });
 
     this.ready = true;

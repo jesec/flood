@@ -13,15 +13,10 @@ let scgi = {
     let deserializer = new Deserializer('utf8');
     let headerLength = 0;
     let nullChar = String.fromCharCode(0);
-    let stream = net.connect({port: config.hostPort, host: config.host});
+    let stream = net.connect({port: config.scgiHostPort, host: config.scgiHost});
     let xml = Serializer.serializeMethodCall(methodName, parameters);
 
     stream.setEncoding('UTF8');
-
-    // TODO: Remove this debugging info.
-    stream.on('error', () => {
-      console.trace(error);
-    });
 
     let headerItems = [
       `CONTENT_LENGTH${nullChar}${xml.length}${nullChar}`,

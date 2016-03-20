@@ -1,8 +1,11 @@
 @import url('http://fonts.googleapis.com/css?family=Roboto:500,400italic,300,700,400');
 
-body {
+html {
   color: $foreground;
   font-family: $font;
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 .unit {

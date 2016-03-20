@@ -1,10 +1,10 @@
 const config = {
-  databasePath: './server/db/',
-  host: 'localhost',
-  hostPort: 5000,
+  dbCleanInterval: 1000 * 60 * 60,
+  dbPath: './server/db/',
   maxHistoryStates: 30,
-  pollInterval: 5000,
-  uiDatabaseCleanInterval: 1000 * 60 * 60 // 1 hour
+  pollInterval: 1000 * 5,
+  scgiHost: 'localhost',
+  scgiHostPort: 5000
 };
 
 module.exports = config;

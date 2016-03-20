@@ -57,7 +57,10 @@ class ClientRequest {
   }
 
   handleError(error) {
-    console.trace(this.name, error);
+    if (error.code === 'ECONNREFUSED') {
+      console.error(`Connection refused at ${error.address}:${error.port}. ` +
+        `Check these values in config.js and ensure that rTorrent is running.`);
+    }
 
     this.clearRequestQueue();
 

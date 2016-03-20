@@ -6,10 +6,10 @@ let config = require('../../config');
 
 let uiDB = new Datastore({
   autoload: true,
-  filename: `${config.databasePath}uiSettings.db`
+  filename: `${config.dbPath}uiSettings.db`
 });
 
-uiDB.persistence.setAutocompactionInterval(config.uiDatabaseCleanInterval);
+uiDB.persistence.setAutocompactionInterval(config.dbCleanInterval);
 
 let uiSettings = {
   getLatestTorrentLocation: function(callback) {

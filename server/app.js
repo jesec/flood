@@ -1,3 +1,5 @@
+require('events').EventEmitter.defaultMaxListeners = Infinity;
+
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var cookieParser = require('cookie-parser');
