@@ -5,25 +5,25 @@ It's a work-in-progress, and it might not have all of the features you want (yet
 
 # Usage
 #### Pre-Requisites
-* [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed __with XMLRPC__ configuration. _If you are currently using a web UI for rTorrent, you've already done this and may proceed to the next step._
+1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed __with XMLRPC__ configuration. _If you are currently using a web UI for rTorrent, you've already done this._
   * On OS X, [brew](http://brew.sh/) makes it simple. After [installing brew](http://brew.sh/), just run `brew install rtorrent --with-xmlrpc-c`.
   * For Linux, there are plenty of guides available. [Here's one](https://terminal28.com/how-to-install-and-configure-rutorrent-rtorrent-libtorrent-xmlrpc-screen-debian-7-wheezy/#4_Install_XMLRPC).
   * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows) (I haven't tested this, let me know if you have problems).
-* Install NodeJS version `4.x`:
+2. Install NodeJS version `4.x`:
   * I recommend managing different Node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n).
 
 #### Configuration
-* Add your rTorrent SCGI hostname and port in `config.js`. Defaults are `localhost` and `5000`.
-* Copy `server/db/users.js.example` to `server/db/users.js` and add a username and password (password is stored in plain text for now, but this file is not accessible publicly).
+1. Add your rTorrent SCGI hostname and port in `config.js`. Defaults are `localhost` and `5000`.
+2. Copy `server/db/users.js.example` to `server/db/users.js` and add a username and password (password is stored in plain text for now, but this file is not accessible publicly).
 
 #### Start It
-* Run `npm start` in your terminal at this repo's root.
+1. Run `npm start` in your terminal at this repo's root.
   * On first run, this may take a few minutes while it installs dependencies and transpiles JavaScript & CSS assets.
-* Access the UI in your browser at `localhost:3000`.
+2. Access the UI in your browser at `localhost:3000`.
   * To change the default port, run `npm start localhost {port}`.
 
 #### Updating
-* To update, simply `git pull` in this repository's directory, then kill the running server (generally `ctrl+c`) and restart it with `npm start`.
+1. To update, simply `git pull` in this repository's directory, then kill the running server (generally `ctrl+c`) and restart it with `npm start`.
   * The `start` script removes old dependencies, installs new ones, transpiles JavaScript and CSS, and starts the web server.
 
 #### Tips
