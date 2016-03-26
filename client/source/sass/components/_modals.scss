@@ -9,10 +9,11 @@ $modal--tab--foreground: #abbac7;
 $modal--tab--foreground--active: $blue;
 $modal--tab--border--active: $blue;
 
-$modal--overlay: rgba($background, 0.5);
+$modal--overlay--base: darken($background, 5%);
+$modal--overlay: rgba($modal--overlay--base, 0.8);
 
-$modal--content--border: rgba($background, 0.1);
-$modal--content--shadow: rgba($background, 0.3);
+$modal--content--border: rgba($modal--overlay--base, 0.1);
+$modal--content--shadow: rgba($modal--overlay--base, 0.3);
 
 $modal--border-radius: 3px;
 $modal--padding--horizontal: $spacing-unit;
