@@ -89,7 +89,7 @@ gulp.task('images', () => {
 gulp.task('sass', () => {
   return gulp.src(dirs.src + '/' + dirs.styles + '/' + files.mainStyles + '.scss')
     .pipe(gulpif(development, sourcemaps.init()))
-    .pipe(sass().on('error', () => {
+    .pipe(sass().on('error', (error) => {
       gutil.log(
         gutil.colors.green('Sass Error!\n'),
         '\n',

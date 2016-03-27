@@ -18,58 +18,58 @@ export default class TorrentGeneralInfo extends React.Component {
 
     return (
       <ul>
-        <li className="torrent__details--size">
-          <span className="torrent__details__label">Size</span>
+        <li className="torrent-details__detail--size">
+          <span className="torrent-details__detail__label">Size</span>
           {totalSize.value}
           <em className="unit">{totalSize.unit}</em>
         </li>
-        <li className="torrent__details--completed">
-          <span className="torrent__details__label">Downloaded</span>
+        <li className="torrent-details__detail--completed">
+          <span className="torrent-details__detail__label">Downloaded</span>
           {torrent.percentComplete}
           <em className="unit">%</em>
         </li>
-        <li className="torrent__details--added">
-          <span className="torrent__details__label">Added</span>
+        <li className="torrent-details__detail--added">
+          <span className="torrent-details__detail__label">Added</span>
           {addedString}
         </li>
-        <li className="torrent__details--peers">
-          <span className="torrent__details__label">Peers</span>
+        <li className="torrent-details__detail--peers">
+          <span className="torrent-details__detail__label">Peers</span>
           {torrent.connectedPeers} of {torrent.totalPeers}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Seeds</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Seeds</span>
           {torrent.connectedSeeds} of {torrent.totalSeeds}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Hash</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Hash</span>
           {torrent.hash}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Tracker Message</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Tracker Message</span>
           {torrent.message}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Creation Date</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Creation Date</span>
           {creationString}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Location</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Location</span>
           {torrent.basePath}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Scheduler</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Scheduler</span>
           {torrent.ignoreScheduler === '1' ? 'Ignored' : 'Obeyed'}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Comment</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Comment</span>
           {torrent.comment.substr(10)}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Type</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Type</span>
           {torrent.isPrivate === '0' ? 'Public' : 'Private'}
         </li>
-        <li className="torrent__details--seeds">
-          <span className="torrent__details__label">Free Disk Space</span>
+        <li className="torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Free Disk Space</span>
           {freeDiskSpace.value}
           <em className="unit">{freeDiskSpace.unit}</em>
         </li>

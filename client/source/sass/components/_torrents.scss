@@ -164,14 +164,17 @@ $torrent--background--error: #e95779;
     }
 
     &--secondary {
-      align-items: flex-end;
       color: $torrent--secondary--foreground;
       flex: 0 0 245px;
       font-size: 0.75em;
-      min-width: 255px;
+      min-width: 200px;
       text-align: right;
       white-space: nowrap;
       vertical-align: baseline;
+
+      .is-actively-downloading & {
+        min-width: 265px;
+      }
 
       li {
         display: inline-block;
@@ -280,7 +283,7 @@ $torrent--background--error: #e95779;
     }
 
     &--speed {
-      width: 60px;
+      width: 65px;
 
       &--download,
       &--upload {
