@@ -20,10 +20,10 @@ export function sortTorrents(torrentsHash, sortBy) {
         }
         // if it's not infinity, compare the second as numbers
         if (valA !== 'Infinity') {
-          valA = Number(valA.seconds);
+          valA = Number(valA.cumSeconds);
         }
         if (valB !== 'Infinity') {
-          valB = Number(valB.seconds);
+          valB = Number(valB.cumSeconds);
         }
       } else if (property === 'name') {
         valA = valA.toLowerCase();

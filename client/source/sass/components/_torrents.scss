@@ -289,6 +289,10 @@ $torrent--background--error: #e95779;
         .is-selected & {
           color: #fff;
         }
+
+        .is-selected.is-stopped & {
+          color: $torrent--tertiary--foreground--selected--stopped;
+        }
       }
 
       &--download {
