@@ -45,7 +45,7 @@ export default class TorrentListContainer extends React.Component {
       minTorrentIndex: 0,
       scrollPosition: 0,
       torrentCount: 0,
-      torrentHeight: 64,
+      torrentHeight: 72,
       torrents: null,
       torrentRequestError: false,
       torrentRequestSuccess: false,

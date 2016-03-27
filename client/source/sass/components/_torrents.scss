@@ -165,16 +165,12 @@ $torrent--background--error: #e95779;
 
     &--secondary {
       color: $torrent--secondary--foreground;
-      flex: 0 0 245px;
+      flex: 0 0 210px;
       font-size: 0.75em;
-      min-width: 200px;
+      min-width: 265px;
       text-align: right;
       white-space: nowrap;
       vertical-align: baseline;
-
-      .is-actively-downloading & {
-        min-width: 265px;
-      }
 
       li {
         display: inline-block;
@@ -209,7 +205,7 @@ $torrent--background--error: #e95779;
       color: $torrent--tertiary--foreground;
       display: block;
       font-size: 0.75em;
-      margin: 0 0 3px 0;
+      margin: 1px 0;
 
       li {
         display: inline-block;
@@ -218,6 +214,10 @@ $torrent--background--error: #e95779;
 
         &:last-child {
           margin-right: 0;
+        }
+
+        .icon {
+          fill-opacity: 0.75;
         }
       }
 
