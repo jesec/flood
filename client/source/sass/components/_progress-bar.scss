@@ -72,7 +72,7 @@ $progress-bar--fill--error: #e95779;
     .has-error & {
       background: $progress-bar--fill--error;
     }
-    
+
     .is-selected & {
       background: $progress-bar--fill--selected;
     }
@@ -82,16 +82,25 @@ $progress-bar--fill--error: #e95779;
       position: relative;
 
       &:after {
-        background: $progress-bar--background;
+        background: $progress-bar--fill;
         content: '';
         height: 1px;
         left: 0;
+        opacity: 0.5;
         position: absolute;
         z-index: 0;
         top: 50%;
         transform: translateY(-50%);
-        transition: background 0.25s;
+        transition: background 0.25s, opacity 0.25s;
         width: 100%;
+
+        .is-stopped & {
+          background: $progress-bar--fill--stopped;
+        }
+
+        .has-error & {
+          background: $progress-bar--fill--error;
+        }
 
         .is-selected & {
           background: $progress-bar--background--selected;
@@ -99,6 +108,7 @@ $progress-bar--fill--error: #e95779;
 
         .is-selected.is-stopped & {
           background: $progress-bar--background--selected--stopped;
+          opacity: 1;
         }
       }
     }

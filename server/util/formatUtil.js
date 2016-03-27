@@ -2,7 +2,7 @@ var util = require('util');
 
 var FormatUtil = {
   percentComplete: (numerator, denominator) => {
-
+    
   },
 
   eta: (rate, completed, total) => {

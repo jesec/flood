@@ -145,7 +145,15 @@ class Torrent {
   }
 
   getCalculatedPercentComplete(clientData) {
-    return (clientData.bytesDone / clientData.sizeBytes * 100).toFixed(2);
+    let percentComplete = clientData.bytesDone / clientData.sizeBytes * 100;
+
+    if (percentComplete > 0 && percentComplete < 10) {
+      return percentComplete.toFixed(2);
+    } else if (percentComplete > 10 && percentComplete < 100) {
+      return percentComplete.toFixed(1);
+    } else {
+      return percentComplete;
+    }
   }
 
   getCalculatedStatus(clientData) {

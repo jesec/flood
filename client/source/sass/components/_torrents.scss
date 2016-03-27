@@ -2,6 +2,7 @@ $torrent-list--background: #fff;
 $torrent-list--border: rgba($background, 0.15);
 
 $torrent--primary--foreground: #5b6d7c;
+$torrent--primary--foreground--error: #e95779;
 $torrent--primary--foreground--stopped: rgba(#333332, 0.5);
 $torrent--primary--foreground--selected: #fff;
 $torrent--primary--foreground--selected--stopped: rgba($torrent--primary--foreground--selected, 0.6);
@@ -149,6 +150,10 @@ $torrent--background--error: #e95779;
         color: $torrent--primary--foreground--stopped;
       }
 
+      .has-error & {
+        color: $torrent--primary--foreground--error;
+      }
+
       .is-selected & {
         color: $torrent--primary--foreground--selected;
       }
@@ -161,16 +166,26 @@ $torrent--background--error: #e95779;
     &--secondary {
       align-items: flex-end;
       color: $torrent--secondary--foreground;
-      flex: 1;
+      flex: 0 0 245px;
       font-size: 0.75em;
-      min-width: 200px;
+      min-width: 255px;
+      text-align: right;
+      white-space: nowrap;
+      vertical-align: baseline;
 
       li {
-        flex: 1 1 auto;
-        min-width: 15%;
+        display: inline-block;
+        font-weight: 500;
+        margin-right: 5px;
+        text-align: left;
+        white-space: nowrap;
 
-        &.torrent__details--ratio {
-          max-width: 30px;
+        .unit {
+          font-weight: 400;
+        }
+
+        &:last-child {
+          margin-right: 0;
         }
       }
 
@@ -195,7 +210,8 @@ $torrent--background--error: #e95779;
 
       li {
         display: inline-block;
-        margin-right: 1em;
+        margin-right: 15px;
+        white-space: nowrap;
 
         &:last-child {
           margin-right: 0;
@@ -218,6 +234,74 @@ $torrent--background--error: #e95779;
     &__label {
       margin-right: 0.5em;
       opacity: 0.5;
+    }
+
+    &__icon {
+      display: inline-block;
+      padding-right: 5px;
+      transform: translateY(1px);
+      vertical-align: baseline;
+
+      .icon {
+        display: block;
+        fill: currentColor;
+        height: 12px;
+        opacity: 0.66;
+        width: 12px;
+      }
+    }
+
+    &--completed {
+      width: 100px;
+    }
+
+    &--uploaded {
+      width: 60px;
+    }
+
+    &--size {
+      width: 60px;
+    }
+
+    &--peers {
+      width: 60px;
+    }
+
+    &--seeds {
+      width: 60px;
+    }
+
+    &--added {
+      width: 90px;
+    }
+
+    &--eta {
+      width: 70px;
+    }
+
+    &--speed {
+      width: 60px;
+
+      &--download,
+      &--upload {
+        transition: color 0.25s;
+
+        .is-selected & {
+          color: #fff;
+        }
+      }
+
+      &--download {
+        color: $green;
+      }
+
+      &--upload {
+        color: $blue;
+      }
+    }
+
+    &--ratio {
+      width: 50px;
     }
   }
 }

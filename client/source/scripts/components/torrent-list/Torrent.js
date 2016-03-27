@@ -1,12 +1,20 @@
 import classNames from 'classnames';
 import React from 'react';
 
+import CalendarIcon from '../icons/CalendarIcon';
+import ClockIcon from '../icons/ClockIcon';
+import DiskIcon from '../icons/DiskIcon';
 import DotsMini from '../icons/DotsMini';
+import DownloadThickIcon from '../icons/DownloadThickIcon';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
+import PeersIcon from '../icons/PeersIcon';
 import ProgressBar from '../ui/ProgressBar';
+import RatioIcon from '../icons/RatioIcon';
+import SeedsIcon from '../icons/SeedsIcon';
 import {torrentStatusIcons} from '../../util/torrentStatusIcons';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
+import UploadThickIcon from '../icons/UploadThickIcon';
 
 const METHODS_TO_BIND = [
   'handleClick',
@@ -61,17 +69,21 @@ export default class Torrent extends React.Component {
           <li className="torrent__details--secondary">
             <ul className="torrent__details">
               <li className="torrent__details--eta">
+                <span className="torrent__details__icon"><ClockIcon /></span>
                 {eta}
               </li>
-              <li className="torrent__details--speed">
+              <li className="torrent__details--speed torrent__details--speed--download">
+                <span className="torrent__details__icon"><DownloadThickIcon /></span>
                 {downloadRate.value}
                 <em className="unit">{downloadRate.unit}</em>
               </li>
-              <li className="torrent__details--speed">
+              <li className="torrent__details--speed torrent__details--speed--upload">
+                <span className="torrent__details__icon"><UploadThickIcon /></span>
                 {uploadRate.value}
                 <em className="unit">{uploadRate.unit}</em>
               </li>
               <li className="torrent__details--ratio">
+                <span className="torrent__details__icon"><RatioIcon /></span>
                 {ratio}
               </li>
             </ul>
@@ -79,7 +91,7 @@ export default class Torrent extends React.Component {
         </ul>
         <ul className="torrent__details torrent__details--tertiary">
           <li className="torrent__details--completed">
-            <span className="torrent__details__label">Downloaded</span>
+            <span className="torrent__details__icon"><DownloadThickIcon /></span>
             {torrent.percentComplete}
             <em className="unit">%</em>
             &nbsp;&mdash;&nbsp;
@@ -87,17 +99,25 @@ export default class Torrent extends React.Component {
             <em className="unit">{completed.unit}</em>
           </li>
           <li className="torrent__details--uploaded">
-            <span className="torrent__details__label">Uploaded</span>
+            <span className="torrent__details__icon"><UploadThickIcon /></span>
             {uploadTotal.value}
             <em className="unit">{uploadTotal.unit}</em>
           </li>
           <li className="torrent__details--size">
-            <span className="torrent__details__label">Size</span>
+            <span className="torrent__details__icon"><DiskIcon /></span>
             {totalSize.value}
             <em className="unit">{totalSize.unit}</em>
           </li>
+          <li className="torrent__details--peers">
+            <span className="torrent__details__icon"><PeersIcon /></span>
+            {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
+          </li>
+          <li className="torrent__details--seeds">
+            <span className="torrent__details__icon"><SeedsIcon /></span>
+            {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
+          </li>
           <li className="torrent__details--added">
-            <span className="torrent__details__label">Added</span>
+            <span className="torrent__details__icon"><CalendarIcon /></span>
             {addedString}
           </li>
         </ul>

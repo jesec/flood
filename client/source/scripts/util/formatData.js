@@ -73,28 +73,37 @@ const format = {
   		megabyte = kilobyte * 1024,
   		gigabyte = megabyte * 1024,
   		terabyte = gigabyte * 1024,
-  		value = '',
+  		value = 0,
   		unit = '';
 
   	if ((bytes >= 0) && (bytes < kilobyte)) {
   		value = bytes;
   		unit = 'B';
   	} else if ((bytes >= kilobyte) && (bytes < megabyte)) {
-  		value = (bytes / kilobyte).toFixed(precision);
+  		value = (bytes / kilobyte);
   		unit = 'KB';
   	} else if ((bytes >= megabyte) && (bytes < gigabyte)) {
-  		value = (bytes / megabyte).toFixed(precision);
+  		value = (bytes / megabyte);
   		unit = 'MB';
   	} else if ((bytes >= gigabyte) && (bytes < terabyte)) {
-  		value = (bytes / gigabyte).toFixed(precision);
+  		value = (bytes / gigabyte);
   		unit = 'GB';
   	} else if (bytes >= terabyte) {
-  		value = (bytes / terabyte).toFixed(precision);
+  		value = (bytes / terabyte);
   		unit = 'TB';
   	} else {
   		value = bytes;
   		unit = 'B';
   	}
+
+    value = Number(value);
+    if (!!value && value < 10) {
+      value = value.toFixed(precision);
+    } else if (!!value && value > 10 && value < 100) {
+      value = value.toFixed(precision - 1);
+    } else if (!!value && value > 100) {
+      value = Math.floor(value);
+    }
 
     if (extraUnits) {
       unit += extraUnits;
