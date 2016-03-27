@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Stop from '../icons/Stop';
+import StopIcon from '../icons/StopIcon';
 
 export default class Action extends React.Component {
   render() {

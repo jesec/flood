@@ -9,42 +9,54 @@ $progress-bar--fill--selected: #fff;
 $progress-bar--fill--error: #e95779;
 
 .progress-bar {
-  height: 3px;
-  position: relative;
+  display: flex;
   transition: opacity 0.25s;
+  width: 100%;
   z-index: 1;
 
   .is-selected.is-stopped & {
     opacity: 0.5;
   }
 
-  &:after {
-    background: $progress-bar--background;
-    content: '';
-    height: 1px;
-    left: 0;
-    position: absolute;
-    z-index: 0;
-    top: 1px;
-    transition: background 0.25s;
-    width: 100%;
+  &__icon {
+    flex: 0 0 auto;
+    padding-right: 5px;
 
-    .is-selected & {
-      background: $progress-bar--background--selected;
-    }
+    .icon {
+      display: block;
+      fill: $green;
+      height: 12px;
+      transition: fill 0.25s, opacity 0.25s;
+      width: 12px;
 
-    .is-selected.is-stopped & {
-      background: $progress-bar--background--selected--stopped;
+      .is-seeding & {
+        fill: $progress-bar--fill--completed;
+      }
+
+      .is-completed &,
+      .is-stopped & {
+        fill: $progress-bar--fill--stopped;
+      }
+
+      .has-error & {
+        fill: $progress-bar--fill--error;
+      }
+
+      .is-selected & {
+        fill: $progress-bar--fill--selected;
+      }
     }
   }
 
   &__fill {
+    align-items: center;
     background: $progress-bar--fill;
     bottom: 0;
-    height: 100%;
+    height: 3px;
     left: 0;
     position: absolute;
-    top: 0;
+    top: 50%;
+    transform: translateY(-50%);
     transition: background 0.25s, width 0.25s;
     z-index: 1;
 
@@ -57,12 +69,38 @@ $progress-bar--fill--error: #e95779;
       background: $progress-bar--fill--stopped;
     }
 
+    .has-error & {
+      background: $progress-bar--fill--error;
+    }
+    
     .is-selected & {
       background: $progress-bar--fill--selected;
     }
 
-    .has-error & {
-      background: $progress-bar--fill--error;
+    &__wrapper {
+      flex: 1 1 auto;
+      position: relative;
+
+      &:after {
+        background: $progress-bar--background;
+        content: '';
+        height: 1px;
+        left: 0;
+        position: absolute;
+        z-index: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: background 0.25s;
+        width: 100%;
+
+        .is-selected & {
+          background: $progress-bar--background--selected;
+        }
+
+        .is-selected.is-stopped & {
+          background: $progress-bar--background--selected--stopped;
+        }
+      }
     }
   }
 }

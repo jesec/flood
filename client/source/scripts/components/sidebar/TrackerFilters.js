@@ -1,13 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import Active from '../../components/icons/Active';
-import All from '../../components/icons/All';
-import Completed from '../../components/icons/Completed';
-import DownloadSmall from '../../components/icons/DownloadSmall';
-import Error from '../../components/icons/Error';
 import EventTypes from '../../constants/EventTypes';
-import Inactive from '../../components/icons/Inactive';
 import propsMap from '../../../../../shared/constants/propsMap';
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';

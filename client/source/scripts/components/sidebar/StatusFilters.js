@@ -5,7 +5,7 @@ import Active from '../../components/icons/Active';
 import All from '../../components/icons/All';
 import Completed from '../../components/icons/Completed';
 import DownloadSmall from '../../components/icons/DownloadSmall';
-import Error from '../../components/icons/Error';
+import ErrorIcon from '../../components/icons/ErrorIcon';
 import EventTypes from '../../constants/EventTypes';
 import Inactive from '../../components/icons/Inactive';
 import propsMap from '../../../../../shared/constants/propsMap';
@@ -104,7 +104,7 @@ export default class StatusFilters extends React.Component {
       {
         label: 'Error',
         slug: 'error',
-        icon: <Error />
+        icon: <ErrorIcon />
       }
     ];
 

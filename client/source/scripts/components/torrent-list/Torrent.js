@@ -5,6 +5,7 @@ import DotsMini from '../icons/DotsMini';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import ProgressBar from '../ui/ProgressBar';
+import {torrentStatusIcons} from '../../util/torrentStatusIcons';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
 
 const METHODS_TO_BIND = [
@@ -48,6 +49,7 @@ export default class Torrent extends React.Component {
     let uploadTotal = format.data(torrent.uploadTotal);
 
     let torrentClasses = torrentStatusClasses(torrent, this.props.selected ? 'is-selected' : null, 'torrent');
+    let torrentStatusIcon = torrentStatusIcons(torrent.status);
 
     return (
       <li className={torrentClasses} onClick={this.handleClick}
@@ -99,7 +101,7 @@ export default class Torrent extends React.Component {
             {addedString}
           </li>
         </ul>
-        <ProgressBar percent={torrent.percentComplete} />
+        <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcon} />
         <button className="torrent__more-info floating-action__button"
           onClick={this.props.handleDetailsClick.bind(this, torrent)}>
           <DotsMini size="mini" />

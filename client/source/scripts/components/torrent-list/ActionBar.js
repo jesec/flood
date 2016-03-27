@@ -3,11 +3,11 @@ import React from 'react';
 import Action from './Action';
 import Add from '../icons/Add';
 import EventTypes from '../../constants/EventTypes';
-import Pause from '../icons/Pause';
+import PauseIcon from '../icons/PauseIcon';
 import Remove from '../icons/Remove';
 import SortDropdown from './SortDropdown';
-import Start from '../icons/Start';
-import Stop from '../icons/Stop';
+import StartIcon from '../icons/StartIcon';
+import StopIcon from '../icons/StopIcon';
 import stringUtil from '../../../../../shared/util/stringUtil';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
@@ -121,11 +121,11 @@ export default class ActionBar extends React.Component {
         </div>
         <div className="actions action-bar__item action-bar__item--torrent-operations">
           <div className="action-bar__group">
-            <Action label="Start Torrent" slug="start-torrent" icon={<Start />}
+            <Action label="Start Torrent" slug="start-torrent" icon={<StartIcon />}
               clickHandler={this.handleStart} />
-            <Action label="Stop Torrent" slug="stop-torrent" icon={<Stop />}
+            <Action label="Stop Torrent" slug="stop-torrent" icon={<StopIcon />}
               clickHandler={this.handleStop} />
-            <Action label="Pause Torrent" slug="pause-torrent" icon={<Pause />}
+            <Action label="Pause Torrent" slug="pause-torrent" icon={<PauseIcon />}
               clickHandler={this.handlePause} />
           </div>
           <div className="action-bar__group action-bar__group--has-divider">

@@ -8,13 +8,13 @@ import ETA from '../icons/ETA';
 import EventTypes from '../../constants/EventTypes';
 import File from '../icons/File';
 import format from '../../util/formatData';
-import Pause from '../../components/icons/Pause';
+import PauseIcon from '../../components/icons/PauseIcon';
 import PriorityMeter from '../filesystem/PriorityMeter';
 import ProgressBar from '../ui/ProgressBar';
 import propsMap from '../../../../../shared/constants/propsMap';
 import Ratio from '../../components/icons/Ratio';
-import Start from '../../components/icons/Start';
-import Stop from '../../components/icons/Stop';
+import StartIcon from '../../components/icons/StartIcon';
+import StopIcon from '../../components/icons/StopIcon';
 import stringUtil from '../../../../../shared/util/stringUtil';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentStore from '../../stores/TorrentStore';
@@ -61,9 +61,9 @@ export default class TorrentHeading extends React.Component {
     let currentStatus = this.state.optimisticData.currentStatus
       || this.getCurrentStatus(torrent.status);
     let statusIcons = {
-      'pause': <Pause />,
-      'start': <Start />,
-      'stop': <Stop />
+      'pause': <PauseIcon />,
+      'start': <StartIcon />,
+      'stop': <StopIcon />
     };
     let torrentActions = ['start', 'pause', 'stop'];
     let torrentActionElements = [];
