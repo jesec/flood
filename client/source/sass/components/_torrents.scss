@@ -204,7 +204,7 @@ $torrent--background--error: #e95779;
     &--tertiary {
       color: $torrent--tertiary--foreground;
       display: block;
-      font-size: 0.75em;
+      font-size: 0.7em;
       margin: 1px 0;
 
       li {
@@ -255,27 +255,27 @@ $torrent--background--error: #e95779;
     }
 
     &--completed {
-      width: 100px;
+      width: 90px;
     }
 
     &--uploaded {
-      width: 60px;
+      width: 55px;
     }
 
     &--size {
-      width: 60px;
-    }
-
-    &--peers {
-      width: 60px;
-    }
-
-    &--seeds {
-      width: 60px;
+      width: 55px;
     }
 
     &--added {
-      width: 90px;
+      width: 80px;
+    }
+
+    &--peers {
+      width: 55px;
+    }
+
+    &--seeds {
+      width: 55px;
     }
 
     &--eta {

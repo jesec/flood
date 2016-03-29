@@ -108,6 +108,10 @@ export default class Torrent extends React.Component {
             {totalSize.value}
             <em className="unit">{totalSize.unit}</em>
           </li>
+          <li className="torrent__details--added">
+            <span className="torrent__details__icon"><CalendarIcon /></span>
+            {addedString}
+          </li>
           <li className="torrent__details--peers">
             <span className="torrent__details__icon"><PeersIcon /></span>
             {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
@@ -115,10 +119,6 @@ export default class Torrent extends React.Component {
           <li className="torrent__details--seeds">
             <span className="torrent__details__icon"><SeedsIcon /></span>
             {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
-          </li>
-          <li className="torrent__details--added">
-            <span className="torrent__details__icon"><CalendarIcon /></span>
-            {addedString}
           </li>
         </ul>
         <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcon} />
