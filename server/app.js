@@ -28,10 +28,10 @@ app.use(express.static(path.join(__dirname, 'assets')));
 
 app.use((req, res, next) => {
   req.socket.on("error", (err) => {
-    console.log(err);
+    console.trace(err);
   });
   res.socket.on("error", (err) => {
-    console.log(err);
+    console.trace(err);
   });
   next();
 });
