@@ -1,25 +1,21 @@
-import classNames from 'classnames';
+import classnames from 'classnames';
 import React from 'react';
 
-import FolderOpenSolid from '../icons/FolderOpenSolid';
-import DirectoryTree from '../filesystem/DirectoryTree';
-import Download from '../icons/Download';
-import ETA from '../icons/ETA';
-import EventTypes from '../../constants/EventTypes';
-import File from '../icons/File';
+import ClockIcon from '../icons/ClockIcon';
+import DownloadThickIcon from '../icons/DownloadThickIcon';
 import format from '../../util/formatData';
 import PauseIcon from '../../components/icons/PauseIcon';
 import PriorityMeter from '../filesystem/PriorityMeter';
 import ProgressBar from '../ui/ProgressBar';
 import propsMap from '../../../../../shared/constants/propsMap';
-import Ratio from '../../components/icons/Ratio';
+import RatioIcon from '../../components/icons/RatioIcon';
 import StartIcon from '../../components/icons/StartIcon';
 import StopIcon from '../../components/icons/StopIcon';
 import stringUtil from '../../../../../shared/util/stringUtil';
 import TorrentActions from '../../actions/TorrentActions';
-import TorrentStore from '../../stores/TorrentStore';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
-import Upload from '../icons/Upload';
+import {torrentStatusIcons} from '../../util/torrentStatusIcons';
+import UploadThickIcon from '../icons/UploadThickIcon';
 
 const METHODS_TO_BIND = [
   'getCurrentStatus',
@@ -66,24 +62,21 @@ export default class TorrentHeading extends React.Component {
       'stop': <StopIcon />
     };
     let torrentActions = ['start', 'pause', 'stop'];
-    let torrentActionElements = [];
-
-    torrentActionElements.push(
+    let torrentActionElements = [
       <li className="torrent-details__sub-heading__tertiary"
         key={torrentActions.length + 1}>
-        <PriorityMeter id={torrent.hash} key={torrent.hash}
-          level={torrent.priority} maxLevel={3} priorityType="torrent"
-          onChange={this.handlePriorityChange} showLabel={true} />
+        <PriorityMeter id={torrent.hash} level={torrent.priority} maxLevel={3}
+          priorityType="torrent" onChange={this.handlePriorityChange}
+          showLabel={true} />
       </li>
-    );
+    ];
 
     torrentActions.forEach((torrentAction, index) => {
       let capitalizedAction = stringUtil.capitalize(torrentAction);
-      let classes = 'torrent-details__sub-heading__tertiary torrent-details__action';
-
-      if (torrentAction === currentStatus) {
-        classes += ' is-active';
-      }
+      let classes = classnames('torrent-details__sub-heading__tertiary',
+        'torrent-details__action', {
+          'is-active': torrentAction === currentStatus
+        });
 
       torrentActionElements.push(
         <li className={classes} key={index}
@@ -127,6 +120,7 @@ export default class TorrentHeading extends React.Component {
     let uploadTotal = format.data(torrent.uploadTotal);
 
     let torrentClasses = torrentStatusClasses(torrent, 'torrent-details__header');
+    let torrentStatusIcon = torrentStatusIcons(torrent.status);
 
     return (
       <div className={torrentClasses}>
@@ -134,7 +128,7 @@ export default class TorrentHeading extends React.Component {
         <div className="torrent-details__sub-heading">
           <ul className="torrent-details__sub-heading__secondary">
             <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--download">
-              <Download />
+              <DownloadThickIcon />
               {downloadRate.value}
               <em className="unit">{downloadRate.unit}</em>
                 &nbsp;&mdash;&nbsp;
@@ -142,7 +136,7 @@ export default class TorrentHeading extends React.Component {
                 <em className="unit">{completed.unit}</em>
             </li>
             <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--upload">
-              <Upload />
+              <UploadThickIcon />
               {uploadRate.value}
               <em className="unit">{uploadRate.unit}</em>
               &nbsp;&mdash;&nbsp;
@@ -150,11 +144,11 @@ export default class TorrentHeading extends React.Component {
               <em className="unit">{uploadTotal.unit}</em>
             </li>
             <li className="torrent-details__sub-heading__tertiary">
-              <Ratio />
+              <RatioIcon />
               {ratio}
             </li>
             <li className="torrent-details__sub-heading__tertiary">
-              <ETA />
+              <ClockIcon />
               {eta}
             </li>
           </ul>
@@ -162,7 +156,7 @@ export default class TorrentHeading extends React.Component {
             {this.getTorrentActions(torrent)}
           </ul>
         </div>
-        <ProgressBar percent={torrent.percentComplete} />
+        <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcon} />
       </div>
     );
   }

@@ -46,7 +46,7 @@ export default class ActionBar extends React.Component {
   }
 
   handleAddTorrents() {
-    UIActions.displayModal('add-torrents');
+    UIActions.displayModal({id: 'add-torrents'});
   }
 
   handleRemoveTorrentConfirm(torrents) {
@@ -87,10 +87,12 @@ export default class ActionBar extends React.Component {
     }
 
     UIActions.displayModal({
-      actions,
-      content,
-      heading: 'Remove Torrents',
-      type: 'confirm'
+      id: 'confirm',
+      options: {
+        actions,
+        content,
+        heading: 'Remove Torrents'
+      }
     });
   }
 

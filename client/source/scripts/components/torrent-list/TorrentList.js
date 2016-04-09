@@ -155,7 +155,7 @@ export default class TorrentListContainer extends React.Component {
   }
 
   handleContextMenuMoveClick(hashes) {
-    UIActions.displayModal('move-torrents');
+    UIActions.displayModal({id: 'move-torrents'});
   }
 
   handleDetailsClick(torrent, event) {
@@ -253,7 +253,7 @@ export default class TorrentListContainer extends React.Component {
 
     // The number of elements in view is the height of the viewport divided
     // by the height of the elements.
-    let elementsInView = Math.floor(this.state.viewportHeight /
+    let elementsInView = Math.ceil(this.state.viewportHeight /
       this.state.torrentHeight);
 
     // The minimum item index to render is the number of items above the

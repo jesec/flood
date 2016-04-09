@@ -3,9 +3,10 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import AddTorrents from './AddTorrents';
-import MoveTorrents from './MoveTorrents';
+import ConfirmModal from './ConfirmModal';
 import EventTypes from '../../constants/EventTypes';
 import Modal from './Modal';
+import MoveTorrents from './MoveTorrents';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
@@ -18,6 +19,12 @@ const METHODS_TO_BIND = [
 export default class Modals extends React.Component {
   constructor() {
     super();
+
+    this.modals = {
+      confirm: ConfirmModal,
+      'move-torrents': MoveTorrents,
+      'add-torrents': AddTorrents
+    };
 
     this.state = {
       activeModal: null
@@ -44,6 +51,15 @@ export default class Modals extends React.Component {
     UIActions.dismissModal();
   }
 
+  getModal() {
+    let ActiveModal = this.modals[this.state.activeModal.id];
+
+    return (
+      <ActiveModal dismiss={this.dismissModal}
+        options={this.state.activeModal.options} />
+    );
+  }
+
   handleKeyPress(event) {
     if (this.state.activeModal != null && event.keyCode === 27) {
       this.dismissModal();
@@ -63,41 +79,13 @@ export default class Modals extends React.Component {
   }
 
   render() {
-    let modal = null;
-    let modalOptions = null;
-    let modalType = this.state.activeModal;
+    let modal;
 
-    if (modalType && modalType.type) {
-      modalOptions = modalType;
-      modalType = modalType.type;
-    }
-
-    switch (modalType) {
-      case 'confirm':
-        modal = (
-          <Modal actions={modalOptions.actions}
-            alignment="center"
-            content={modalOptions.content}
-            dismiss={this.dismissModal}
-            heading={modalOptions.heading} />
-        );
-        break;
-      case 'move-torrents':
-        modal = (
-          <MoveTorrents dismiss={this.dismissModal} />
-        );
-        break;
-      case 'add-torrents':
-        modal = (
-          <AddTorrents dismiss={this.dismissModal} />
-        );
-        break;
-    }
-
-    if (modal !== null) {
+    if (this.state.activeModal != null) {
       modal = (
-        <div key={this.state.activeModal} className="modal" onClick={this.handleOverlayClick}>
-          {modal}
+        <div key={this.state.activeModal.id} className="modal modal-overlay"
+          onClick={this.handleOverlayClick}>
+          {this.getModal()}
         </div>
       );
     }
