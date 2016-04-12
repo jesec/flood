@@ -89,15 +89,7 @@ gulp.task('images', () => {
 gulp.task('sass', () => {
   return gulp.src(dirs.src + '/' + dirs.styles + '/' + files.mainStyles + '.scss')
     .pipe(gulpif(development, sourcemaps.init()))
-    .pipe(sass().on('error', (error) => {
-      gutil.log(
-        gutil.colors.green('Sass Error!\n'),
-        '\n',
-        error.messageFormatted,
-        '\n'
-      );
-      this.emit('end');
-    }))
+    .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer())
     .pipe(gulpif(development, sourcemaps.write('.')))
     .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist))
