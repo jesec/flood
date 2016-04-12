@@ -41,7 +41,10 @@ export default class Modal extends React.Component {
     let content = this.props.content;
     let footer = null;
     let contentClasses = classnames('modal__content__wrapper',
-      `modal--align-${this.props.alignment}`);
+      `modal--align-${this.props.alignment}`, {
+        'modal--orientation--horizontal': this.props.orientation === 'horizontal',
+        'modal--orientation--vertical': this.props.orientation === 'vertical'
+      }, this.props.classNames);
     let headerClasses = classnames('modal__header', {
       'has-tabs': this.props.tabs
     });
@@ -58,7 +61,10 @@ export default class Modal extends React.Component {
     }
 
     if (this.props.actions) {
-      footer = <ModalActions actions={this.props.actions} dismiss={this.props.dismiss} />;
+      footer = (
+        <ModalActions actions={this.props.actions}
+          dismiss={this.props.dismiss} />
+      );
     }
 
     return (
@@ -79,5 +85,7 @@ export default class Modal extends React.Component {
 }
 
 Modal.defaultProps = {
-  alignment: 'left'
+  alignment: 'left',
+  classNames: null,
+  orientation: 'horizontal'
 };

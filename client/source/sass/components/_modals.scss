@@ -31,6 +31,16 @@ $modal--tabs--margin--right: $spacing-unit * -1/5;
 $modal--tabs--margin--bottom: 0;
 $modal--tabs--margin--left: $spacing-unit * -1/5;
 
+$modal--tabs--padding--top: $spacing-unit * 1/5;
+$modal--tabs--padding--right: $spacing-unit * 1/5;
+$modal--tabs--padding--bottom: $spacing-unit * 2/5;
+$modal--tabs--padding--left: $spacing-unit * 1/5;
+
+$modal--tabs--padding--vertical--top: $spacing-unit * 2/5;
+$modal--tabs--padding--vertical--right: $spacing-unit * 2/5;
+$modal--tabs--padding--vertical--bottom: $spacing-unit * 2/5;
+$modal--tabs--padding--vertical--left: $modal--padding--horizontal;
+
 .modal {
   background: $modal--overlay;
   height: 100%;
@@ -57,7 +67,7 @@ $modal--tabs--margin--left: $spacing-unit * -1/5;
         cursor: pointer;
         display: inline-block;
         margin-right: $spacing-unit * 2/5;
-        padding: $spacing-unit * 1/5 $spacing-unit * 1/5 $spacing-unit * 2/5 $spacing-unit * 1/5;
+        padding: $modal--tabs--padding--top $modal--tabs--padding--right $modal--tabs--padding--bottom $modal--tabs--padding--left;
         position: relative;
 
         &:after {
@@ -83,6 +93,15 @@ $modal--tabs--margin--left: $spacing-unit * -1/5;
           }
         }
       }
+    }
+  }
+
+  &__tab {
+
+    &__introduction {
+      color: $modal--heading--foreground;
+      font-size: 0.9em;
+      margin-bottom: $spacing-unit * 3/4;
     }
   }
 
@@ -164,5 +183,70 @@ $modal--tabs--margin--left: $spacing-unit * -1/5;
 
   &__animation-leave-active {
     opacity: 0;
+  }
+
+  &--orientation {
+
+    &--vertical {
+
+      &.modal__content__wrapper {
+        flex-direction: row;
+      }
+
+      .modal {
+
+        &__header {
+          border-radius: $modal--border-radius 0 0 $modal--border-radius;
+          box-shadow: inset -1px 0 0 $modal--heading--border;
+          flex-basis: 175px;
+          padding-bottom: $modal--padding--horizontal;
+          padding-right: 0;
+          max-width: 175px;
+        }
+
+        &__tabs {
+          margin: 10px 0 0 $modal--padding--horizontal * -1;
+
+          .modal {
+
+            &__tab {
+              display: block;
+              margin-right: 0;
+              padding: $modal--tabs--padding--vertical--top $modal--tabs--padding--vertical--right $modal--tabs--padding--vertical--bottom $modal--tabs--padding--vertical--left;
+
+              &:after {
+                bottom: 0;
+                content: '';
+                height: auto;
+                left: auto;
+                position: absolute;
+                right: 0;
+                top: 0;
+                transition: background 0.25s;
+                width: 1px;
+              }
+            }
+          }
+        }
+
+        &__content {
+          display: flex;
+          flex-direction: column;
+          min-height: 500px;
+        }
+
+        &__body {
+          flex: 1 0 auto;
+        }
+
+        &__actions {
+          flex: 0 0 auto;
+        }
+      }
+    }
+  }
+
+  &--large {
+    width: 700px;
   }
 }

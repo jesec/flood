@@ -8,6 +8,7 @@ let ajaxUtil = require('../util/ajaxUtil');
 let client = require('../models/client');
 let clientUtil = require('../util/clientUtil');
 let history = require('../models/history');
+let settings = require('../models/settings');
 
 let upload = multer({
   dest: 'uploads/',
@@ -25,6 +26,14 @@ router.post('/add-files', upload.array('torrents'), function(req, res, next) {
 
 router.get('/history', function(req, res, next) {
   history.get(req.query, ajaxUtil.getResponseFn(res));
+});
+
+router.get('/settings', function(req, res, next) {
+  settings.get(req.query, ajaxUtil.getResponseFn(res));
+});
+
+router.patch('/settings', function(req, res, next) {
+  settings.set(req.body, ajaxUtil.getResponseFn(res));
 });
 
 router.put('/settings/speed-limits', function(req, res, next) {

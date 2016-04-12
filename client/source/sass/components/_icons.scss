@@ -41,4 +41,21 @@
       }
     }
   }
+
+  &--limits {
+
+    .limits {
+
+        &__bars {
+
+          &--top {
+            fill-opacity: 0.4;
+          }
+
+          &--bottom {
+            fill-opacity: 0.6;
+          }
+        }
+      }
+  }
 }

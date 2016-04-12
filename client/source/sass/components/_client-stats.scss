@@ -127,20 +127,6 @@ $client-stats--limits--icon--hover: $blue;
       transition: fill 0.25s;
       vertical-align: middle;
       width: 14.5px;
-
-      .limits {
-
-        &__bars {
-
-          &--top {
-            opacity: 0.4;
-          }
-
-          &--bottom {
-            opacity: 0.6;
-          }
-        }
-      }
     }
 
     &:hover {

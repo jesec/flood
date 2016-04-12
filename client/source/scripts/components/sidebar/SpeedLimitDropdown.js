@@ -4,18 +4,25 @@ import ClientActions from '../../actions/ClientActions';
 import Dropdown from '../forms/Dropdown';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
-import Limits from '../icons/Limits';
+import LimitsIcon from '../icons/Limits';
 import SidebarItem from '../sidebar/SidebarItem';
+import SettingsStore from '../../stores/SettingsStore';
 import TransferDataStore from '../../stores/TransferDataStore';
 
-const METHODS_TO_BIND = ['onTransferDataRequestSuccess'];
+const METHODS_TO_BIND = ['handleSettingsFetchRequestSuccess', 'onTransferDataRequestSuccess'];
 const SPEEDS = [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0];
 
-class Sidebar extends React.Component {
+class SpeedLimitDropdown extends React.Component {
   constructor() {
     super();
 
     this.state = {
+      settings: {
+        speedLimits: {
+          download: [],
+          upload: []
+        }
+      },
       throttle: null
     };
 
@@ -25,6 +32,8 @@ class Sidebar extends React.Component {
   }
 
   componentDidMount() {
+    SettingsStore.listen(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS, this.handleSettingsFetchRequestSuccess);
+    SettingsStore.fetchSettings(EventTypes.SETTINGS_FETCH_REQUEST_ERROR, this.handleSettingsFetchRequestError);
     TransferDataStore.listen(
       EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
       this.onTransferDataRequestSuccess
@@ -33,6 +42,7 @@ class Sidebar extends React.Component {
   }
 
   componentWillUnmount() {
+    SettingsStore.unlisten(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS, this.handleSettingsFetchRequestSuccess);
     TransferDataStore.unlisten(
       EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
       this.onTransferDataRequestSuccess
@@ -48,7 +58,7 @@ class Sidebar extends React.Component {
   getDropdownHeader() {
     return (
       <a className="client-stat--limits">
-        <Limits /> Speed Limits
+        <LimitsIcon /> Speed Limits
       </a>
     );
   }
@@ -78,8 +88,9 @@ class Sidebar extends React.Component {
     let insertCurrentThrottle = true;
     let currentThrottle = this.state.throttle;
 
-    let items = SPEEDS.map((bytes) => {
+    let items = this.state.settings.speedLimits[property].map((bytes) => {
       let selected = false;
+      bytes = Number(bytes);
 
       // Check if the current throttle setting exists in the preset speeds list.
       // Determine if we need to add the current throttle setting to the menu.
@@ -126,7 +137,14 @@ class Sidebar extends React.Component {
     ClientActions.setThrottle(data.property, data.value);
   }
 
+  handleSettingsFetchRequestSuccess() {
+    this.setState({
+      settings: SettingsStore.getSettings()
+    });
+  }
+
   render() {
+    // return <span>hi</span>;
     return (
       <SidebarItem modifier="speed-limit">
         <Dropdown
@@ -139,4 +157,4 @@ class Sidebar extends React.Component {
   }
 }
 
-export default Sidebar;
+export default SpeedLimitDropdown;

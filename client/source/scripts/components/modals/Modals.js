@@ -7,6 +7,7 @@ import ConfirmModal from './ConfirmModal';
 import EventTypes from '../../constants/EventTypes';
 import Modal from './Modal';
 import MoveTorrents from './MoveTorrents';
+import SettingsModal from './SettingsModal';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
@@ -23,7 +24,8 @@ export default class Modals extends React.Component {
     this.modals = {
       confirm: ConfirmModal,
       'move-torrents': MoveTorrents,
-      'add-torrents': AddTorrents
+      'add-torrents': AddTorrents,
+      'settings': SettingsModal
     };
 
     this.state = {
