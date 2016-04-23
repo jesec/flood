@@ -46,10 +46,11 @@ var client = {
   addUrls: (data, callback) => {
     let urls = data.urls;
     let path = data.destination;
+    let start = data.start;
     let request = new ClientRequest();
 
     request.add('createDirectory', {path});
-    request.add('addURLs', {urls, path});
+    request.add('addURLs', {urls, path, start});
     request.onComplete(callback);
     request.send();
   },

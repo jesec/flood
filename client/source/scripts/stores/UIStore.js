@@ -127,6 +127,7 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
       UIStore.setActiveModal(action.data);
       break;
     case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
+    case ActionTypes.CLIENT_ADD_TORRENT_SUCCESS:
       UIStore.setActiveModal(null);
       break;
     case ActionTypes.UI_DISPLAY_CONTEXT_MENU:

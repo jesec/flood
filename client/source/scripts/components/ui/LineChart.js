@@ -21,7 +21,6 @@ export default class LineChart extends React.Component {
   }
 
   renderGraphData() {
-    // console.log('')
     let graph = d3.select('#' + this.props.id);
     let transferData = this.props.data;
     let transferLimit = this.props.limit;
@@ -71,7 +70,7 @@ export default class LineChart extends React.Component {
           return yRange(dataPoint);
         })
         .interpolate(interpolation);
-    }
+    };
 
     let areaFunc = d3
       .svg

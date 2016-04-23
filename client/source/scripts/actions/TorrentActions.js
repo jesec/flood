@@ -4,17 +4,14 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 const TorrentActions = {
-  addTorrentsByUrls: (urls, destination) => {
+  addTorrentsByUrls: (options) => {
     axios.post('/ui/torrent-location', {
-        destination
+        destination: options.destination
       })
       .catch((error) => {
         console.log(error);
       });
-    return axios.post('/client/add', {
-        urls,
-        destination
-      })
+    return axios.post('/client/add', options)
       .then((json = {}) => {
         return json.data;
       })

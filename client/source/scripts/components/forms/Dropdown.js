@@ -106,7 +106,7 @@ export default class Dropdown extends React.Component {
       let classes = classnames('dropdown__item menu__item', property.className, {
         'is-selectable': property.selectable !== false,
         'is-selected': property.selected
-      })
+      });
       let clickHandler = null;
 
       if (property.selectable !== false) {

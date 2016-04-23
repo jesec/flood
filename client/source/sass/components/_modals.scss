@@ -154,16 +154,20 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
   }
 
   &__button-group {
-    text-align: right;
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
 
     .modal--align-center & {
-      text-align: center;
+      justify-content: center;
     }
 
-    .button {
+    .button,
+    .checkbox {
 
-      & + .button {
-        margin-left: 20px;
+      & + .button,
+      & + .checkbox {
+        margin-left: $spacing-unit * 3/5;
       }
     }
   }

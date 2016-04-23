@@ -99,7 +99,6 @@ export default class Modals extends React.Component {
         transitionLeaveTimeout={500}>
         {modal}
       </CSSTransitionGroup>
-    )
-
+    );
   }
 }

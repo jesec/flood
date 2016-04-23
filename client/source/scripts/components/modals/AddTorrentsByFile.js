@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
+import AddTorrentsActions from './AddTorrentsActions';
 import AddTorrentsDestination from './AddTorrentsDestination';
 import Close from '../icons/Close';
 import File from '../icons/File';
@@ -43,37 +44,6 @@ export default class AddTorrents extends React.Component {
 
   handleFilesClick(event) {
     event.stopPropagation();
-  }
-
-  getActions() {
-    let icon = null;
-    let primaryButtonText = 'Add Torrent';
-
-    if (this.state.isAddingTorrents) {
-      icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Adding...';
-    }
-
-    return [
-      {
-        clickHandler: null,
-        content: 'Cancel',
-        triggerDismiss: true,
-        type: 'secondary'
-      },
-      {
-        clickHandler: this.handleAddTorrents,
-        content: (
-          <span>
-            {icon}
-            {primaryButtonText}
-          </span>
-        ),
-        supplementalClassName: icon != null ? 'has-icon' : '',
-        triggerDismiss: false,
-        type: 'primary'
-      }
-    ];
   }
 
   getModalContent() {
@@ -134,6 +104,8 @@ export default class AddTorrents extends React.Component {
       return;
     }
 
+    this.setState({isAddingTorrents: true});
+
     let fileData = new FormData();
 
     this.state.files.forEach((file) => {
@@ -159,7 +131,9 @@ export default class AddTorrents extends React.Component {
           {this.getModalContent()}
         </div>
         <AddTorrentsDestination onChange={this.handleDestinationChange} />
-        <ModalActions actions={this.getActions()} dismiss={this.props.dismiss} />
+        <AddTorrentsActions dismiss={this.props.dismissModal}
+          onAddTorrentsClick={this.handleAddTorrents}
+          isAddingTorrents={this.state.isAddingTorrents} />
       </div>
     );
   }

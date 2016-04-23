@@ -46,9 +46,7 @@ let uiSettings = {
         return;
       }
 
-      if (docs.length) {
-        callback(docs);
-      }
+      callback(docs);
     });
   },
 

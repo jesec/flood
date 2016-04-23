@@ -125,10 +125,13 @@ class ClientRequest {
   }
 
   addURLsMethodCall(options) {
+    console.log(options);
     let path = options.path;
+    let start = options.start;
     let urls = this.getEnsuredArray(options.urls);
 
     urls.forEach((url) => {
+      let methodCall = 'load.start';
       let parameters = ['', url];
       let timeAdded = Math.floor(Date.now() / 1000);
 
@@ -138,7 +141,11 @@ class ClientRequest {
 
       parameters.push(`d.custom.set=addtime,${timeAdded}`);
 
-      this.requests.push(this.getMethodCall('load.start', parameters));
+      if (!start) {
+        methodCall = 'load.normal';
+      }
+
+      this.requests.push(this.getMethodCall(methodCall, parameters));
     });
   }
 

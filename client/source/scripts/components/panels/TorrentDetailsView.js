@@ -94,7 +94,7 @@ export default class TorrentDetails extends React.Component {
 
     switch (item) {
       case 'general':
-        return <TorrentGeneralInfo torrent={torrent} />
+        return <TorrentGeneralInfo torrent={torrent} />;
       case 'files':
         return <TorrentFiles files={torrentDetails.files} torrent={torrent} />;
         break;

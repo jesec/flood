@@ -27,10 +27,17 @@ const UIActions = {
   },
 
   dismissModal: () => {
-    AppDispatcher.dispatchUIAction({
-      type: ActionTypes.UI_DISPLAY_MODAL,
-      data: null
-    });
+    try {
+      // if (AppDispatcher.isDispatching()) {
+      //   AppDispatcher.waitFor([TorrentStore.dispatcherID]);
+      // }
+      AppDispatcher.dispatchUIAction({
+        type: ActionTypes.UI_DISPLAY_MODAL,
+        data: null
+      });
+    } catch (err) {
+      console.error(err);
+    }
   },
 
   fetchSortProps: () => {

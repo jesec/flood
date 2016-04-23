@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
+import Checkbox from '../forms/Checkbox';
 import UIActions from '../../actions/UIActions';
 
 export default class ModalActions extends React.Component {
@@ -11,6 +12,15 @@ export default class ModalActions extends React.Component {
         'button--deemphasize': action.type === 'secondary',
         'button--primary': action.type === 'primary'
       });
+
+      if (action.type === 'checkbox') {
+        return (
+          <Checkbox checked={action.checked} key={index}
+            onChange={this.getClickHandler(action)}>
+            {action.content}
+          </Checkbox>
+        );
+      }
 
       return (
         <button className={classes} onClick={this.getClickHandler(action)} key={index}>
@@ -27,15 +37,15 @@ export default class ModalActions extends React.Component {
   }
 
   getClickHandler(action) {
-    return () => {
+    return (data) => {
       if (action.clickHandler) {
-        action.clickHandler();
+        action.clickHandler(data);
       }
 
       if (action.triggerDismiss) {
         UIActions.dismissModal();
       }
-    }
+    };
   }
 
   render() {

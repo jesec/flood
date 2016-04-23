@@ -45,7 +45,7 @@ const ClientActions = {
         type: ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_ERROR,
         error
       });
-    })
+    });
   },
 
   setThrottle: (direction, throttle) => {

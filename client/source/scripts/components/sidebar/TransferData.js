@@ -93,7 +93,7 @@ class ClientStats extends React.Component {
   }
 
   render() {
-    let content = <LoadingIndicator inverse={true} />
+    let content = <LoadingIndicator inverse={true} />;
 
     if (!this.isLoading()) {
       let throttles = TransferDataStore.getThrottles();

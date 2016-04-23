@@ -26,7 +26,7 @@ export default class SearchBox extends React.Component {
     let currentCheckedState = this.state.checked;
     let newCheckedState = !currentCheckedState;
 
-    this.setState({checked: newCheckedState})
+    this.setState({checked: newCheckedState});
 
     if (this.props.onChange) {
       this.props.onChange(newCheckedState);

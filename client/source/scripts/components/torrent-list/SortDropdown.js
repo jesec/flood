@@ -78,7 +78,7 @@ export default class SortDropdown extends React.Component {
         property: 'sortBy',
         selected: this.props.selectedItem.value === sortProp.value,
         value: sortProp.value
-      }
+      };
     });
 
     // Dropdown expects an array of arrays.

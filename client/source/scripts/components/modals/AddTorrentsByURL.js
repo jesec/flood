@@ -1,20 +1,17 @@
-import _ from 'lodash';
-import classnames from 'classnames';
 import React from 'react';
 
+import AddTorrentsActions from './AddTorrentsActions';
 import AddTorrentsDestination from './AddTorrentsDestination';
-import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
-import ModalActions from './ModalActions';
 import TextboxRepeater from '../forms/TextboxRepeater';
 import TorrentActions from '../../actions/TorrentActions';
-import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [
+  'handleAddTorrents',
+  'handleDestinationChange',
+  'handleStartTorrentsToggle',
   'handleUrlAdd',
   'handleUrlChange',
-  'handleUrlRemove',
-  'handleDestinationChange',
-  'handleAddTorrents'
+  'handleUrlRemove'
 ];
 
 export default class AddTorrents extends React.Component {
@@ -25,7 +22,8 @@ export default class AddTorrents extends React.Component {
       addTorrentsError: null,
       destination: null,
       isAddingTorrents: false,
-      urlTextboxes: [{value: null}]
+      urlTextboxes: [{value: null}],
+      startTorrents: true
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -33,56 +31,22 @@ export default class AddTorrents extends React.Component {
     });
   }
 
-  dismissModal() {
-    UIActions.dismissModal();
-  }
-
-  onAddTorrentError() {
-    this.setState({
-      addTorrentsError: 'There was an error, but I have no idea what happened!',
-      isAddingTorrents: false
-    });
-  }
-
-  getActions() {
-    let icon = null;
-    let primaryButtonText = 'Add Torrent';
-
-    if (this.state.isAddingTorrents) {
-      icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Adding...';
-    }
-
-    return [
-      {
-        clickHandler: null,
-        content: 'Cancel',
-        triggerDismiss: true,
-        type: 'secondary'
-      },
-      {
-        clickHandler: this.handleAddTorrents,
-        content: (
-          <span>
-            {icon}
-            {primaryButtonText}
-          </span>
-        ),
-        supplementalClassName: icon != null ? 'has-icon' : '',
-        triggerDismiss: true,
-        type: 'primary'
-      }
-    ];
-  }
-
   handleAddTorrents() {
     this.setState({isAddingTorrents: true});
-    let torrentUrls = _.map(this.state.urlTextboxes, 'value');
-    TorrentActions.addTorrentsByUrls(torrentUrls, this.state.destination);
+    let torrentURLs = _.map(this.state.urlTextboxes, 'value');
+    TorrentActions.addTorrentsByUrls({
+      urls: torrentURLs,
+      destination: this.state.destination,
+      start: this.state.startTorrents
+    });
   }
 
   handleDestinationChange(destination) {
     this.setState({destination});
+  }
+
+  handleStartTorrentsToggle(value) {
+    this.setState({startTorrents: value});
   }
 
   handleUrlRemove(index) {
@@ -128,7 +92,10 @@ export default class AddTorrents extends React.Component {
             textboxes={this.state.urlTextboxes} />
         </div>
         <AddTorrentsDestination onChange={this.handleDestinationChange} />
-        <ModalActions actions={this.getActions()} />
+        <AddTorrentsActions dismiss={this.props.dismissModal}
+          onAddTorrentsClick={this.handleAddTorrents}
+          onStartTorrentsToggle={this.handleStartTorrentsToggle}
+          isAddingTorrents={this.state.isAddingTorrents} />
       </div>
     );
   }

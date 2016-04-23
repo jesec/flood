@@ -293,8 +293,12 @@ $torrent--background--error: #e95779;
           color: #fff;
         }
 
+        .is-stopped & {
+          color: $torrent--tertiary--foreground--stopped;
+        }
+
         .is-selected.is-stopped & {
-          color: $torrent--tertiary--foreground--selected--stopped;
+          color: $torrent--tertiary--foreground--selected--stopped !important;
         }
       }
 

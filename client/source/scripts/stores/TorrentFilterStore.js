@@ -92,7 +92,7 @@ class TorrentFilterStoreClass extends BaseStore {
 
   setTorrentsSort(sortBy) {
     this.sortTorrentsBy = sortBy;
-    this.emit(EventTypes.UI_TORRENTS_SORT_CHANGE)
+    this.emit(EventTypes.UI_TORRENTS_SORT_CHANGE);
   }
 
   setTorrentStatusCount(statusCount) {

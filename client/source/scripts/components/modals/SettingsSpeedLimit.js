@@ -9,7 +9,7 @@ export default class AddTorrents extends React.Component {
     this.state = {
       downloadValue: null,
       uploadValue: null
-    }
+    };
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
