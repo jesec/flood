@@ -67,7 +67,7 @@ class SpeedLimitDropdown extends React.Component {
     if (bytes === 0) {
       return 'Unlimited';
     } else {
-      let formattedData = format.data(bytes, '/s', 0);
+      let formattedData = format.data(bytes, '/s', 1, {padded: false});
       return (
         <span>
           {formattedData.value}

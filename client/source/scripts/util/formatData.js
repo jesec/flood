@@ -68,7 +68,7 @@ const format = {
     }
   },
 
-  data: (bytes, extraUnits, precision = 2) => {
+  data: (bytes, extraUnits, precision = 2, options = {}) => {
   	let kilobyte = 1024,
   		megabyte = kilobyte * 1024,
   		gigabyte = megabyte * 1024,
@@ -98,11 +98,18 @@ const format = {
 
     value = Number(value);
     if (!!value && value < 10) {
-      value = value.toFixed(precision);
+      value = Number(value.toFixed(precision));
     } else if (!!value && value > 10 && value < 100) {
-      value = value.toFixed(precision - 1);
+      value = Number(value.toFixed(precision - 1));
     } else if (!!value && value > 100) {
       value = Math.floor(value);
+    }
+
+    if (options.padded === false) {
+      let decimal = value % 1;
+      if ((decimal < 0.1 && decimal >= 0) || (decimal > -0.1 && decimal <= 0)) {
+        value = value.toFixed(0);
+      }
     }
 
     if (extraUnits) {
