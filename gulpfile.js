@@ -1,7 +1,7 @@
-// dependencies
 var autoprefixer = require('gulp-autoprefixer');
 var browserSync = require('browser-sync');
 var cssnano = require('gulp-cssnano');
+var eslint = require('gulp-eslint');
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var gutil = require('gulp-util');
@@ -81,6 +81,12 @@ gulp.task('browsersync', () => {
   });
 });
 
+gulp.task('eslint', () => {
+  return gulp.src([dirs.src + '/' + dirs.js + '/**/*', '!node_modules/**'])
+    .pipe(eslint())
+    .pipe(eslint.format());
+});
+
 gulp.task('images', () => {
   return gulp.src(dirs.src + '/' + dirs.img + '/**/*.*')
     .pipe(gulp.dest(dirs.dist + '/' + dirs.imgDist));
@@ -120,6 +126,7 @@ gulp.task('reload', () => {
 gulp.task('watch', () => {
   gulp.watch(dirs.src + '/' + dirs.styles + '/**/*.scss', ['sass']);
   gulp.watch(dirs.src + '/' + dirs.img + '/**/*', ['images']);
+  gulp.watch(dirs.src + '/' + dirs.js + '/**/*', ['eslint']);
 });
 
 gulp.task('webpack', (callback) => {
