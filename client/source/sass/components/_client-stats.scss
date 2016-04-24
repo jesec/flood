@@ -106,40 +106,6 @@ $client-stats--limits--icon--hover: $blue;
 }
 
 .client-stat {
-
-  &--limits {
-    background: none;
-    border: none;
-    color: $client-stats--limits--foreground;
-    display: block;
-    outline: none;
-    padding: 10px 15px;
-    font-size: 0.85em;
-    text-align: left;
-    transition: color 0.25s;
-    vertical-align: middle;
-    width: 100%;
-
-    .icon {
-      display: inline-block;
-      fill: $client-stats--limits--foreground;
-      margin: -2px 5px 0 0;
-      transition: fill 0.25s;
-      vertical-align: middle;
-      width: 14.5px;
-    }
-
-    &:hover {
-      color: $client-stats--limits--icon--hover;
-
-      .icon {
-        fill: $client-stats--limits--icon--hover;
-      }
-    }
-  }
-}
-
-.client-stat {
   position: relative;
 
   .graph {

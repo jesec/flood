@@ -6,11 +6,10 @@ $sidebar-filter--foreground--header: rgba($sidebar-filter--foreground, 0.5);
 $sidebar-filter--foreground--active: $blue;
 $sidebar-filter--foreground--hover: lighten($sidebar-filter--foreground, 15%);
 
-$sidebar--icon-button--fill: $sidebar--foreground;
+$sidebar--icon-button--fill: rgba($sidebar--foreground, 0.7);
 $sidebar--icon-button--fill--hover: $blue;
-$sidebar--icon-button--foreground: $sidebar--foreground;
+$sidebar--icon-button--foreground: rgba($sidebar--foreground, 0.7);
 $sidebar--icon-button--foreground--hover: $blue;
-
 
 .application {
 
@@ -51,7 +50,9 @@ $sidebar--icon-button--foreground--hover: $blue;
     color: $sidebar--icon-button--foreground;
     cursor: pointer;
     display: block;
-    line-height: 0;
+    font-size: 0.8em;
+    line-height: 1;
+    padding: 10px;
     transition: color 0.25s;
 
     &:hover {
@@ -64,13 +65,15 @@ $sidebar--icon-button--foreground--hover: $blue;
 
     .icon {
       fill: $sidebar--icon-button--fill;
-      height: 16px;
+      height: 13px;
       transition: fill 0.25s;
-      width: 16px;
+      position: relative;
+      top: -1px;
+      vertical-align: middle;
+      width: 13px;
     }
 
     &--settings {
-      padding: 10px 15px;
       position: absolute;
       right: $spacing-unit * 1/5;
       top: $spacing-unit * 1/5;

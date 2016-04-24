@@ -16,7 +16,7 @@ class SettingsButton extends React.Component {
     return (
       <a className="sidebar__icon-button sidebar__icon-button--settings"
         onClick={this.handleSettingsButtonClick}>
-        <SettingsIcon />
+        Settings <SettingsIcon />
       </a>
     );
   }

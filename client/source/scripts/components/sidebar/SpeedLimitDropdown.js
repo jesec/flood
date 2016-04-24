@@ -57,7 +57,7 @@ class SpeedLimitDropdown extends React.Component {
 
   getDropdownHeader() {
     return (
-      <a className="client-stat--limits">
+      <a className="sidebar__icon-button sidebar__icon-button--limits">
         <LimitsIcon /> Speed Limits
       </a>
     );
@@ -144,7 +144,6 @@ class SpeedLimitDropdown extends React.Component {
   }
 
   render() {
-    // return <span>hi</span>;
     return (
       <SidebarItem modifier="speed-limit">
         <Dropdown
