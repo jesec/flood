@@ -8,13 +8,15 @@ import Close from '../icons/Close';
 import File from '../icons/File';
 import Files from '../icons/Files';
 import ModalActions from './ModalActions';
+import SettingsStore from '../../stores/SettingsStore';
 import TorrentActions from '../../actions/TorrentActions';
 
 const METHODS_TO_BIND = [
   'handleAddTorrents',
   'handleDestinationChange',
   'handleFileDrop',
-  'handleFileRemove'
+  'handleFileRemove',
+  'handleStartTorrentsToggle'
 ];
 
 export default class AddTorrents extends React.Component {
@@ -104,6 +106,8 @@ export default class AddTorrents extends React.Component {
       return;
     }
 
+    SettingsStore.saveSettings({id: 'torrentDestination', data: this.state.destination});
+
     this.setState({isAddingTorrents: true});
 
     let fileData = new FormData();
@@ -115,6 +119,10 @@ export default class AddTorrents extends React.Component {
     fileData.append('destination', this.state.destination);
 
     TorrentActions.addTorrentsByFiles(fileData, this.state.destination);
+  }
+
+  handleStartTorrentsToggle(value) {
+    this.setState({startTorrents: value});
   }
 
   handleDestinationChange(destination) {
@@ -133,6 +141,7 @@ export default class AddTorrents extends React.Component {
         <AddTorrentsDestination onChange={this.handleDestinationChange} />
         <AddTorrentsActions dismiss={this.props.dismissModal}
           onAddTorrentsClick={this.handleAddTorrents}
+          onStartTorrentsToggle={this.handleStartTorrentsToggle}
           isAddingTorrents={this.state.isAddingTorrents} />
       </div>
     );

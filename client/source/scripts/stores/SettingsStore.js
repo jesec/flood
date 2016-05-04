@@ -9,11 +9,15 @@ class SettingsStoreClass extends BaseStore {
     super();
   }
 
-  fetchSettings() {
-    SettingsActions.fetchSettings();
+  fetchSettings(property) {
+    SettingsActions.fetchSettings(property);
   }
 
-  getSettings() {
+  getSettings(property) {
+    if (property) {
+      return this.settings[property];
+    }
+
     return this.settings;
   }
 
@@ -27,6 +31,7 @@ class SettingsStoreClass extends BaseStore {
   }
 
   saveSettings(settings) {
+    this.settings[settings.id] = settings.data;
     SettingsActions.saveSettings(settings);
   }
 }

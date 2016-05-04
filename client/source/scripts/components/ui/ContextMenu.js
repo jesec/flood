@@ -2,6 +2,8 @@ import classnames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import UIActions from '../../actions/UIActions';
+
 export default class ContextMenu extends React.Component {
   constructor() {
     super();
@@ -13,6 +15,8 @@ export default class ContextMenu extends React.Component {
   }
 
   componentDidMount() {
+    document.addEventListener('click', UIActions.dismissContextMenu);
+
     if (this.props.onMenuOpen) {
       this.props.onMenuOpen();
     }
@@ -25,6 +29,8 @@ export default class ContextMenu extends React.Component {
   }
 
   componentWillUnmount() {
+    document.removeEventListener('click', UIActions.dismissContextMenu);
+
     if (this.props.onMenuClose) {
       this.props.onMenuClose();
     }

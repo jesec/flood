@@ -25,10 +25,6 @@ class UIStoreClass extends BaseStore {
     }
   }
 
-  fetchLatestTorrentLocation() {
-    TorrentActions.fetchLatestTorrentLocation();
-  }
-
   getActiveContextMenu() {
     return this.activeContextMenu;
   }
@@ -43,15 +39,6 @@ class UIStoreClass extends BaseStore {
 
   getTorrentDetailsHash() {
     return this.torrentDetailsHash;
-  }
-
-  handleLatestTorrentLocationRequestSuccess(location) {
-    this.latestTorrentLocation = location;
-    this.emit(EventTypes.UI_LATEST_TORRENT_LOCATION_CHANGE);
-  }
-
-  handleLatestTorrentLocationRequestError(error) {
-    console.log(error);
   }
 
   handleTorrentClick(hash) {
@@ -132,12 +119,6 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_DISPLAY_CONTEXT_MENU:
       UIStore.setActiveContextMenu(action.data);
-      break;
-    case ActionTypes.UI_LATEST_TORRENT_LOCATION_REQUEST_SUCCESS:
-      UIStore.handleLatestTorrentLocationRequestSuccess(action.data.path);
-      break;
-    case ActionTypes.UI_LATEST_TORRENT_LOCATION_REQUEST_ERROR:
-      UIStore.handleLatestTorrentLocationRequestError(action.error);
       break;
   }
 });

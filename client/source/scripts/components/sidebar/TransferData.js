@@ -18,7 +18,7 @@ const METHODS_TO_BIND = [
   'onTransferHistoryRequestSuccess'
 ];
 
-class ClientStats extends React.Component {
+class TransferData extends React.Component {
   constructor() {
     super();
 
@@ -165,8 +165,8 @@ class ClientStats extends React.Component {
 
 }
 
-ClientStats.defaultProps = {
+TransferData.defaultProps = {
   historyLength: 1
 };
 
-export default ClientStats;
+export default TransferData;

@@ -167,6 +167,7 @@ $torrent--background--error: #e95779;
       color: $torrent--secondary--foreground;
       flex: 0 0 auto;
       font-size: 0.75em;
+      font-weight: 500;
       margin-right: $spacing-unit * 2/5;
       text-align: right;
       white-space: nowrap;
@@ -276,6 +277,20 @@ $torrent--background--error: #e95779;
 
     &--speed {
 
+      &--download {
+
+        .is-actively-downloading & {
+          color: $green;
+        }
+      }
+
+      &--upload {
+
+        .is-actively-downloading & {
+          color: $blue;
+        }
+      }
+
       &--download,
       &--upload {
         transition: color 0.25s;
@@ -291,14 +306,6 @@ $torrent--background--error: #e95779;
         .is-selected.is-stopped & {
           color: $torrent--tertiary--foreground--selected--stopped !important;
         }
-      }
-
-      &--download {
-        color: $green;
-      }
-
-      &--upload {
-        color: $blue;
       }
     }
   }

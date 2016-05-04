@@ -32,7 +32,7 @@ export default class AddTorrents extends React.Component {
 
   componentDidMount() {
     SettingsStore.listen(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS, this.handleSettingsFetchRequestSuccess);
-    SettingsStore.fetchSettings(EventTypes.SETTINGS_FETCH_REQUEST_ERROR, this.handleSettingsFetchRequestError);
+    SettingsStore.fetchSettings('speedLimits');
   }
 
   componentWillUnmount() {
@@ -65,10 +65,17 @@ export default class AddTorrents extends React.Component {
   }
 
   handleSaveSettingsClick() {
-    SettingsStore.saveSettings(this.state.settings);
+    let settingsToSave = Object.keys(this.state.settings).map((settingsKey) =>  {
+      return {
+        id: settingsKey,
+        data: this.state.settings[settingsKey]
+      };
+    });
+
+    SettingsStore.saveSettings(settingsToSave);
   }
 
-  handleSettingsFetchRequestError() {
+  handleSettingsFetchRequestError(error) {
     console.log(error);
   }
 

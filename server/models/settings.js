@@ -2,36 +2,56 @@
 
 let Datastore = require('nedb');
 
-let client = require('./client');
 let config = require('../../config');
-let HistoryEra = require('./HistoryEra');
 
 let settingsDB = new Datastore({
   autoload: true,
   filename: `${config.dbPath}settings/settings.db`
 });
 
-let history = {
+let settings = {
   get: (opts, callback) => {
-    settingsDB.find({id: 'settings'}).exec((err, docs) => {
-        if (err) {
-          callback(null, err);
-          return;
-        }
-        callback(docs[0]);
-      }
-    );
-  },
+    let query = {};
+    let foundSettings = {};
 
-  set: (settings, callback) => {
-    settingsDB.update({id: 'settings'}, {$set: settings}, {upsert: true}, (err, docs) => {
+    if (opts.property) {
+      query.id = opts.property;
+    }
+
+    settingsDB.find(query).exec((err, docs) => {
       if (err) {
         callback(null, err);
         return;
       }
-      callback(docs);
+
+      docs.forEach((doc) => {
+        foundSettings[doc.id] = doc.data;
+      });
+      callback(foundSettings);
+    });
+  },
+
+  set: (payloads, callback) => {
+    let docsResponse = [];
+
+    if (!Array.isArray(payloads)) {
+      payloads = [payloads];
+    }
+
+    payloads.forEach((payload, index) => {
+      settingsDB.update({id: payload.id}, {$set: {data: payload.data}}, {upsert: true}, (err, docs) => {
+        docsResponse.push(docs);
+        if (index + 1 === payloads.length) {
+          if (err) {
+            callback(null, err);
+            return;
+          }
+          callback(docsResponse);
+          return;
+        }
+      });
     });
   }
 }
 
-module.exports = history;
+module.exports = settings;

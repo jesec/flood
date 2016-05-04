@@ -5,12 +5,6 @@ import ActionTypes from '../constants/ActionTypes';
 
 const TorrentActions = {
   addTorrentsByUrls: (options) => {
-    axios.post('/ui/torrent-location', {
-        destination: options.destination
-      })
-      .catch((error) => {
-        console.log(error);
-      });
     return axios.post('/client/add', options)
       .then((json = {}) => {
         return json.data;
@@ -34,12 +28,6 @@ const TorrentActions = {
   },
 
   addTorrentsByFiles: (filesData, destination) => {
-    axios.post('/ui/torrent-location', {
-        destination
-      })
-      .catch((error) => {
-        console.log(error);
-      });
     return axios.post('/client/add-files', filesData)
       .then((json = {}) => {
         return json.data;
@@ -76,25 +64,6 @@ const TorrentActions = {
       .catch((error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_REMOVE_TORRENT_ERROR,
-          error
-        });
-      });
-  },
-
-  fetchLatestTorrentLocation: () => {
-    return axios.get('/ui/torrent-location')
-      .then((json = {}) => {
-        return json.data;
-      })
-      .then((data) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.UI_LATEST_TORRENT_LOCATION_REQUEST_SUCCESS,
-          data
-        });
-      })
-      .catch((error) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.UI_LATEST_TORRENT_LOCATION_REQUEST_ERROR,
           error
         });
       });

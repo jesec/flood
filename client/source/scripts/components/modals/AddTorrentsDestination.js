@@ -2,12 +2,9 @@ import classnames from 'classnames';
 import React from 'react';
 
 import EventTypes from '../../constants/EventTypes';
-import UIStore from '../../stores/UIStore';
+import SettingsStore from '../../stores/SettingsStore';
 
-const METHODS_TO_BIND = [
-  'handleDestinationChange',
-  'onLatestTorrentLocationChange'
-];
+const METHODS_TO_BIND = ['handleDestinationChange'];
 
 export default class AddTorrents extends React.Component {
   constructor() {
@@ -23,38 +20,15 @@ export default class AddTorrents extends React.Component {
   }
 
   componentWillMount() {
-    let destination = UIStore.getLatestTorrentLocation();
+    let destination = SettingsStore.getSettings('torrentDestination');
     if (this.props.suggested) {
       destination = this.props.suggested;
     }
     this.setState({destination});
   }
 
-  componentDidMount() {
-    UIStore.listen(EventTypes.UI_LATEST_TORRENT_LOCATION_CHANGE, this.onLatestTorrentLocationChange);
-    UIStore.fetchLatestTorrentLocation();
-  }
-
-  componentWillUnmount() {
-    UIStore.unlisten(EventTypes.UI_LATEST_TORRENT_LOCATION_CHANGE, this.onLatestTorrentLocationChange);
-  }
-
   handleDestinationChange(event) {
     let destination = event.target.value;
-
-    if (this.props.onChange) {
-      this.props.onChange(destination);
-    }
-
-    this.setState({destination});
-  }
-
-  onLatestTorrentLocationChange() {
-    if (this.props.suggested) {
-      return;
-    }
-
-    let destination = UIStore.getLatestTorrentLocation();
 
     if (this.props.onChange) {
       this.props.onChange(destination);

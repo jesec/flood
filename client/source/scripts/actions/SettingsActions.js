@@ -4,8 +4,8 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 const SettingsActions = {
-  fetchSettings: () => {
-    return axios.get('/client/settings')
+  fetchSettings: (property) => {
+    return axios.get('/client/settings', {params: {property}})
       .then((json = {}) => {
         return json.data;
       })
@@ -16,6 +16,7 @@ const SettingsActions = {
         });
       })
       .catch((error) => {
+        console.trace(error);
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FETCH_REQUEST_ERROR,
           error
@@ -35,6 +36,7 @@ const SettingsActions = {
         });
       })
       .catch((error) => {
+        console.error(error);
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_SAVE_REQUEST_ERROR,
           error

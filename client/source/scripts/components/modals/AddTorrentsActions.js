@@ -2,8 +2,30 @@ import React from 'react';
 
 import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import ModalActions from './ModalActions';
+import SettingsStore from '../../stores/SettingsStore';
+
+const METHODS_TO_BIND = ['handleStartTorrentsToggle'];
 
 export default class AddTorrents extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      startTorrentsOnLoad: true
+    };
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentWillMount() {
+    let startTorrentsOnLoad = SettingsStore.getSettings('startTorrentsOnLoad');
+    if (startTorrentsOnLoad !== true) {
+      this.setState({startTorrentsOnLoad: false});
+    }
+  }
+
   getActions() {
     let icon = null;
     let primaryButtonText = 'Add Torrent';
@@ -15,8 +37,8 @@ export default class AddTorrents extends React.Component {
 
     return [
       {
-        checked: true,
-        clickHandler: this.props.onStartTorrentsToggle,
+        checked: this.state.startTorrentsOnLoad,
+        clickHandler: this.handleStartTorrentsToggle,
         content: 'Start Torrent',
         triggerDismiss: false,
         type: 'checkbox'
@@ -40,6 +62,13 @@ export default class AddTorrents extends React.Component {
         type: 'primary'
       }
     ];
+  }
+
+  handleStartTorrentsToggle(value) {
+    SettingsStore.saveSettings({id: 'startTorrentsOnLoad', data: value});
+    if (!!this.props.onStartTorrentsToggle) {
+      this.props.onStartTorrentsToggle(value);
+    }
   }
 
   render() {

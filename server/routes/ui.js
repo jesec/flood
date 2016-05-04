@@ -9,6 +9,14 @@ let client = require('../models/client');
 let history = require('../models/history');
 let uiSettings = require('../models/uiSettings');
 
+router.get('/settings', (req, res, next) => {
+  uiSettings.get(req.body.type, ajaxUtil.getResponseFn(res));
+});
+
+router.post('/settings', (req, res, next) => {
+  uiSettings.set(req.body, ajaxUtil.getResponseFn(res));
+});
+
 router.post('/sort-props', (req, res, next) => {
   uiSettings.setSortProps(req.body, ajaxUtil.getResponseFn(res));
 });

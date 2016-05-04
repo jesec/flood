@@ -10,19 +10,14 @@ import SettingsStore from '../../stores/SettingsStore';
 import TransferDataStore from '../../stores/TransferDataStore';
 
 const METHODS_TO_BIND = ['handleSettingsFetchRequestSuccess', 'onTransferDataRequestSuccess'];
-const SPEEDS = [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0];
+const DEFAULT_SPEEDS = [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0];
 
 class SpeedLimitDropdown extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      settings: {
-        speedLimits: {
-          download: [],
-          upload: []
-        }
-      },
+      speedLimits: {},
       throttle: null
     };
 
@@ -33,7 +28,7 @@ class SpeedLimitDropdown extends React.Component {
 
   componentDidMount() {
     SettingsStore.listen(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS, this.handleSettingsFetchRequestSuccess);
-    SettingsStore.fetchSettings(EventTypes.SETTINGS_FETCH_REQUEST_ERROR, this.handleSettingsFetchRequestError);
+    SettingsStore.fetchSettings('speedLimits');
     TransferDataStore.listen(
       EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
       this.onTransferDataRequestSuccess
@@ -87,8 +82,9 @@ class SpeedLimitDropdown extends React.Component {
 
     let insertCurrentThrottle = true;
     let currentThrottle = this.state.throttle;
+    let speeds = this.state.speedLimits[property] || DEFAULT_SPEEDS;
 
-    let items = this.state.settings.speedLimits[property].map((bytes) => {
+    let items = speeds.map((bytes) => {
       let selected = false;
       bytes = Number(bytes);
 
@@ -113,7 +109,7 @@ class SpeedLimitDropdown extends React.Component {
     if (insertCurrentThrottle && currentThrottle) {
       // Find the position to insert the current throttle setting so that it
       // remains sorted from lowest to highest.
-      let insertionPoint = _.sortedIndex(SPEEDS, currentThrottle[property]);
+      let insertionPoint = _.sortedIndex(speeds, currentThrottle[property]);
 
       items.splice(insertionPoint, 0, {
         displayName: this.getHumanReadableSpeed(currentThrottle[property]),
@@ -138,9 +134,11 @@ class SpeedLimitDropdown extends React.Component {
   }
 
   handleSettingsFetchRequestSuccess() {
-    this.setState({
-      settings: SettingsStore.getSettings()
-    });
+    let speedLimits = SettingsStore.getSettings('speedLimits');
+
+    if (!!speedLimits) {
+      this.setState({speedLimits});
+    }
   }
 
   render() {
