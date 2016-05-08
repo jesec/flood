@@ -131,7 +131,8 @@ $more-info--border: $textbox-repeater--button--border;
     top: 50%;
     transform: translateX(15px);
     transition: background 0.25s, box-shadow 0.25s, opacity 0.25s, transform 0.25s;
-    width: 42px;
+    width: 32px;
+    z-index: 1;
 
     .icon {
       fill: rgba($foreground, 0.5);
