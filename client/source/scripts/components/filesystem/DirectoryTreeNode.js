@@ -41,7 +41,7 @@ export default class DirectoryTreeNode extends React.Component {
 
   render() {
     let branchClasses = `directory-tree__branch directory-tree__branch--depth-${this.props.depth}`;
-    let directoryClasses = classnames('directory-tree__node',
+    let directoryClasses = classnames('directory-tree__node directory-tree__selectable',
       'directory-tree__node--directory', {'is-expanded': this.state.expanded}
     );
 

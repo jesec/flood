@@ -163,6 +163,11 @@ export default class TorrentListContainer extends React.Component {
       hash: torrent.hash,
       event
     });
+
+    UIActions.displayModal({
+      id: 'torrent-details',
+      options: {hash: torrent.hash}
+    });
   }
 
   handleRightClick(torrent, event) {
@@ -213,10 +218,6 @@ export default class TorrentListContainer extends React.Component {
   }
 
   onTorrentSelectionChange() {
-    if (TorrentStore.getSelectedTorrents().length !== 1) {
-      UIStore.closeTorrentDetailsPanel();
-    }
-
     this.forceUpdate();
   }
 

@@ -13,11 +13,11 @@ export default class AddTorrents extends React.Component {
   render() {
     let tabs = {
       'by-url': {
-        content: <AddTorrentsByURL />,
+        content: AddTorrentsByURL,
         label: 'By URL'
       },
       'by-file': {
-        content: <AddTorrentsByFile />,
+        content: AddTorrentsByFile,
         label: 'By File'
       }
     };

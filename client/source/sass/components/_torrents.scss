@@ -19,6 +19,9 @@ $torrent--background--hover: #f6f8fa;
 $torrent--background--selected: $blue;
 $torrent--background--error: #e95779;
 
+$more-info--box-shadow--hue: #1a2f3d;
+$more-info--border: $textbox-repeater--button--border;
+
 .torrents {
   display: flex;
   flex: 1 1 100px;
@@ -91,6 +94,7 @@ $torrent--background--error: #e95779;
 .torrent {
   cursor: default;
   padding: 10px 20px;
+  overflow: hidden;
   position: relative;
   transition: background 0.25s;
 
@@ -101,6 +105,7 @@ $torrent--background--error: #e95779;
 
       &__more-info {
         opacity: 1;
+        transform: translateX(0);
       }
     }
   }
@@ -114,14 +119,38 @@ $torrent--background--error: #e95779;
   }
 
   &__more-info {
-    height: 20px;
-    margin-top: -10px;
+    border-radius: 32px 0 0 32px;
+    box-shadow:
+      0 0 30px rgba($more-info--box-shadow--hue, 0.11),
+      0 0 0 1px rgba($more-info--box-shadow--hue, 0.07);
+    height: 32px;
+    margin-top: -16px;
     position: absolute;
-    left: -7px;
     opacity: 0;
+    right: -5px;
     top: 50%;
-    transition: background 0.25s, box-shadow 0.25s, opacity 0.25s;
-    width: 20px;
+    transform: translateX(15px);
+    transition: background 0.25s, box-shadow 0.25s, opacity 0.25s, transform 0.25s;
+    width: 42px;
+
+    .icon {
+      fill: rgba($foreground, 0.5);
+      position: absolute;
+      height: 16px;
+      left: 16px;
+      width: 16px;
+    }
+
+    &:hover {
+      background: $white;
+      box-shadow:
+        0 0 30px rgba($more-info--box-shadow--hue, 0.2),
+        0 0 0 1px rgba($more-info--box-shadow--hue, 0.1);
+
+      .icon {
+        fill: $blue;
+      }
+    }
   }
 }
 

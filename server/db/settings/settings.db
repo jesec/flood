@@ -2,3 +2,5 @@
 {"id":"torrentDestination","data":"/Users/john/Music/Ween","_id":"jc4oGMCYe8jpyBYE"}
 {"id":"startTorrents","data":false,"_id":"kaW53bQDKgERpgXm"}
 {"id":"speedLimits","data":{"download":[1024,10240,102400,512000,1048576,2097152,5242880,10485760,0],"upload":[1024,10240,102400,512000,1048576,2097152,5242880,10485760,0]},"_id":"nyOO9DKRnfjktreF"}
+{"id":"startTorrentsOnLoad","data":false,"_id":"FsReCALg9EWp5AZw"}
+{"id":"torrentDestination","data":"/Users/john/Music/fonts","_id":"jc4oGMCYe8jpyBYE"}

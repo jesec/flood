@@ -27,10 +27,8 @@ const UIActions = {
   },
 
   dismissModal: () => {
+    // TODO: Remove this try..catch.
     try {
-      // if (AppDispatcher.isDispatching()) {
-      //   AppDispatcher.waitFor([TorrentStore.dispatcherID]);
-      // }
       AppDispatcher.dispatchUIAction({
         type: ActionTypes.UI_DISPLAY_MODAL,
         data: null

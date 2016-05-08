@@ -26,6 +26,7 @@ export default class DirectoryFiles extends React.Component {
 
   render() {
     let branch = Object.assign([], this.props.branch);
+    let fileIcon = <File />;
 
     branch.sort((a, b) => {
       return a.filename.localeCompare(b.filename);
@@ -35,10 +36,10 @@ export default class DirectoryFiles extends React.Component {
       let fileSize = format.data(file.sizeBytes, '', 1);
 
       return (
-        <div className="directory-tree__node directory-tree__node--file file"
+        <div className="directory-tree__node directory-tree__selectable directory-tree__node--file file"
           key={`${index}-${file.filename}`} title={file.filename}>
           <div className="file__detail file__name">
-            <File />
+            {fileIcon}
             {file.filename}
           </div>
           <div className="file__detail file__detail--size">

@@ -110,16 +110,17 @@ export default class AddTorrents extends React.Component {
   render() {
     let tabs = {
       'speed-limit': {
-        content: (
-          <SettingsSpeedLimit onSettingsChange={this.handleSettingsChange}
-            settings={this.state.settings} />
-        ),
+        content: SettingsSpeedLimit,
+        props: {
+          onSettingsChange: this.handleSettingsChange,
+          settings: this.state.settings
+        },
         label: 'Speed Limits'
       }
     };
 
     return (
-      <Modal actions={this.getActions()} classNames="modal--large"
+      <Modal actions={this.getActions()} size="large"
         heading="Settings" orientation="vertical" dismiss={this.props.dismiss}
         tabs={tabs} />
     );

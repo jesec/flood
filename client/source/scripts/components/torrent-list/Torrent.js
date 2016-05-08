@@ -4,10 +4,10 @@ import React from 'react';
 import CalendarIcon from '../icons/CalendarIcon';
 import ClockIcon from '../icons/ClockIcon';
 import DiskIcon from '../icons/DiskIcon';
-import DotsMini from '../icons/DotsMini';
 import DownloadThickIcon from '../icons/DownloadThickIcon';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
+import InformationIcon from '../icons/InformationIcon';
 import PeersIcon from '../icons/PeersIcon';
 import ProgressBar from '../ui/ProgressBar';
 import RatioIcon from '../icons/RatioIcon';
@@ -141,7 +141,7 @@ export default class Torrent extends React.Component {
         <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcon} />
         <button className="torrent__more-info floating-action__button"
           onClick={this.props.handleDetailsClick.bind(this, torrent)}>
-          <DotsMini size="mini" />
+          <InformationIcon />
         </button>
       </li>
     );

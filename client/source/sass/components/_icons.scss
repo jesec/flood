@@ -20,6 +20,34 @@
     }
   }
 
+  &--information {
+
+    &__fill {
+      fill-opacity: 0.05;
+    }
+
+    &__ring {
+      fill-opacity: 0.6;
+    }
+  }
+
+  &--limits {
+
+    .limits {
+
+      &__bars {
+
+        &--top {
+          fill-opacity: 0.4;
+        }
+
+        &--bottom {
+          fill-opacity: 0.6;
+        }
+      }
+    }
+  }
+
   &--loading-indicator {
 
     .loading-indicator {
@@ -40,22 +68,5 @@
         }
       }
     }
-  }
-
-  &--limits {
-
-    .limits {
-
-        &__bars {
-
-          &--top {
-            fill-opacity: 0.4;
-          }
-
-          &--bottom {
-            fill-opacity: 0.6;
-          }
-        }
-      }
   }
 }

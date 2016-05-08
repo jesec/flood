@@ -7,11 +7,19 @@ export default class AddTorrents extends React.Component {
     super();
   }
 
+  getContent() {
+    return (
+      <div className="modal__content">
+        {this.props.options.content}
+      </div>
+    );
+  }
+
   render() {
     return (
       <Modal actions={this.props.options.actions}
         alignment="center"
-        content={this.props.options.content}
+        content={this.getContent()}
         dismiss={this.props.dismiss}
         heading={this.props.options.heading} />
     );

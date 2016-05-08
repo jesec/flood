@@ -1,5 +1,5 @@
 $modal--background: #f7fafc;
-$modal--heading--background: #fff;
+$modal--heading--background: $white;
 $modal--heading--foreground: #5c6e80;
 $modal--heading--border: #dde7ed;
 
@@ -36,10 +36,12 @@ $modal--tabs--padding--right: $spacing-unit * 1/5;
 $modal--tabs--padding--bottom: $spacing-unit * 2/5;
 $modal--tabs--padding--left: $spacing-unit * 1/5;
 
-$modal--tabs--padding--vertical--top: $spacing-unit * 2/5;
+$modal--tabs--padding--vertical--top: $spacing-unit * 1/5;
 $modal--tabs--padding--vertical--right: $spacing-unit * 2/5;
-$modal--tabs--padding--vertical--bottom: $spacing-unit * 2/5;
+$modal--tabs--padding--vertical--bottom: $spacing-unit * 1/5;
 $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
+
+$modal--tabs--in-body--background: rgba($white, 0.55);
 
 .modal {
   background: $modal--overlay;
@@ -57,7 +59,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 
   &__tabs {
     color: $modal--tab--foreground;
-    font-size: 0.65em;
+    font-size: 0.85rem;
     font-weight: 400;
     margin: $modal--tabs--margin--top $modal--tabs--margin--right $modal--tabs--margin--bottom $modal--tabs--margin--left;
 
@@ -73,7 +75,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
         &:after {
           bottom: 0;
           content: '';
-          height: 1px;
+          height: 2px;
           left: 0;
           position: absolute;
           right: 0;
@@ -114,16 +116,19 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     font-size: 1.25em;
     font-weight: 300;
     line-height: 1;
+    overflow: hidden;
     padding: $modal--padding--vertical $modal--padding--horizontal;
 
     &.has-tabs {
-      padding-bottom: 0;
+
+      .modal--tabs-in-header & {
+        padding-bottom: 0;
+      }
     }
   }
 
   &__content {
     flex: 1 1 auto;
-    overflow: auto;
     padding: $modal--content--padding--top $modal--content--padding--right $modal--content--padding--bottom $modal--content--padding--left;
 
     &__wrapper {
@@ -134,9 +139,11 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
         0 0 35px $modal--content--shadow;
       display: flex;
       flex-direction: column;
+      height: auto;
       left: 50%;
       max-height: 80%;
       max-width: 80%;
+      overflow: hidden;
       position: absolute;
       top: 10%;
       transform: translate(-50%, 0);
@@ -146,7 +153,25 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 
   &__body {
     color: $modal--body--foreground;
+    flex: 1 1 auto;
     font-size: 0.9em;
+    overflow: auto;
+    overflow-x: hidden;
+
+    .modal--tabs-in-body & {
+      overflow: hidden;
+    }
+  }
+
+  &__footer {
+    padding: 0 $modal--padding--horizontal $modal--padding--vertical $modal--padding--horizontal;
+
+    .modal {
+
+      &__actions {
+        margin-top: 0;
+      }
+    }
   }
 
   &__actions {
@@ -189,68 +214,113 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     opacity: 0;
   }
 
-  &--orientation {
+  &--vertical {
 
-    &--vertical {
+    &.modal {
 
-      &.modal__content__wrapper {
+      &--tabs-in-header {
         flex-direction: row;
+
+        .modal {
+
+          &__header {
+            border-radius: $modal--border-radius 0 0 $modal--border-radius;
+            box-shadow: inset -1px 0 0 $modal--heading--border;
+            flex-basis: 175px;
+            padding-bottom: $modal--padding--horizontal;
+            padding-right: 0;
+            max-width: 175px;
+          }
+
+          &__content {
+            flex: 1 0 auto;
+          }
+        }
       }
 
-      .modal {
+      &--tabs-in-body {
 
-        &__header {
-          border-radius: $modal--border-radius 0 0 $modal--border-radius;
-          box-shadow: inset -1px 0 0 $modal--heading--border;
-          flex-basis: 175px;
-          padding-bottom: $modal--padding--horizontal;
-          padding-right: 0;
-          max-width: 175px;
+        .modal {
+
+          &__body {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: row;
+          }
+
+          &__content {
+            overflow: auto;
+            overflow-x: hidden;
+          }
+
+          &__tabs {
+            background: $modal--tabs--in-body--background;
+            box-shadow: inset -1px 0 $modal--heading--border;
+            flex: 0 0 135px;
+            margin: 0;
+            padding-top: $modal--padding--vertical;
+          }
         }
+      }
+    }
 
-        &__tabs {
-          margin: 10px 0 0 $modal--padding--horizontal * -1;
+    .modal {
 
-          .modal {
+      &__tabs {
+        margin: $modal--padding--vertical 0 0 $modal--padding--horizontal * -1;
 
-            &__tab {
-              display: block;
-              margin-right: 0;
-              padding: $modal--tabs--padding--vertical--top $modal--tabs--padding--vertical--right $modal--tabs--padding--vertical--bottom $modal--tabs--padding--vertical--left;
+        .modal {
 
-              &:after {
-                bottom: 0;
-                content: '';
-                height: auto;
-                left: auto;
-                position: absolute;
-                right: 0;
-                top: 0;
-                transition: background 0.25s;
-                width: 1px;
-              }
+          &__tab {
+            display: block;
+            margin-right: 0;
+            padding: $modal--tabs--padding--vertical--top $modal--tabs--padding--vertical--right $modal--tabs--padding--vertical--bottom $modal--tabs--padding--vertical--left;
+
+            &:after {
+              bottom: 0;
+              content: '';
+              height: auto;
+              left: auto;
+              position: absolute;
+              right: 0;
+              top: 0;
+              transition: background 0.25s;
+              width: 2px;
             }
           }
         }
+      }
 
-        &__content {
-          display: flex;
-          flex-direction: column;
-          min-height: 500px;
-        }
+      &__body {
+        display: flex;
+        flex-direction: column;
+      }
 
-        &__body {
-          flex: 1 0 auto;
-        }
+      &__content {
+        display: flex;
+        flex-direction: column;
+      }
 
-        &__actions {
-          flex: 0 0 auto;
-        }
+      &__actions {
+        flex: 0 0 auto;
       }
     }
   }
 
-  &--large {
-    width: 700px;
+  &--size {
+
+    &-large {
+      width: 700px;
+
+      &.modal {
+
+        &__content {
+
+          &__wrapper {
+            bottom: 10%;
+          }
+        }
+      }
+    }
   }
 }

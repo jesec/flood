@@ -76,7 +76,7 @@ class TorrentStoreClass extends BaseStore {
   }
 
   getTorrentDetails(hash) {
-    return this.torrents[hash].details || {};
+    return this.torrents[hash].details || null;
   }
 
   getSelectedTorrents() {
@@ -151,13 +151,12 @@ class TorrentStoreClass extends BaseStore {
 
   setTorrentDetails(hash, torrentDetails) {
     this.torrents[hash].details = torrentDetails;
-    this.emit(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE);
     this.resolveRequest('fetch-torrent-details');
+    this.emit(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE);
   }
 
   sortTorrents(torrents) {
     let torrentsSort = TorrentFilterStore.getTorrentsSort();
-
     this.torrents = torrents;
 
     // Convert torrents hash to array and sort it.

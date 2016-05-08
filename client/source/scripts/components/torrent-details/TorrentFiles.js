@@ -71,7 +71,7 @@ export default class TorrentFiles extends React.Component {
     }
 
     return (
-      <div className="directory-tree torrent-details__section">
+      <div className="directory-tree torrent-details__section torrent-details__section--file-tree">
         {directoryHeading}
         {fileInfo}
       </div>

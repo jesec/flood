@@ -8,7 +8,6 @@ import Modals from './components/modals/Modals';
 import Sidebar from './components/panels/Sidebar';
 import SettingsStore from './stores/SettingsStore';
 import TorrentActions from './actions/TorrentActions';
-import TorrentDetailsView from './components/panels/TorrentDetailsView';
 import TorrentListView from './components/panels/TorrentListView';
 
 class FloodApp extends React.Component {
@@ -22,7 +21,6 @@ class FloodApp extends React.Component {
         <ApplicationLoadingIndicator />
         <Sidebar />
         <ApplicationContent>
-          <TorrentDetailsView />
           <TorrentListView />
         </ApplicationContent>
         <Modals />

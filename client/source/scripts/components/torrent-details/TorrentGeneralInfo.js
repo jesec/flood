@@ -17,7 +17,7 @@ export default class TorrentGeneralInfo extends React.Component {
     let freeDiskSpace = format.data(torrent.freeDiskSpace);
 
     return (
-      <ul>
+      <ul className="torrent-details__section">
         <li className="torrent-details__detail--size">
           <span className="torrent-details__detail__label">Size</span>
           {totalSize.value}

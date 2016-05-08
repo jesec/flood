@@ -3,7 +3,7 @@ import React from 'react';
 
 class NavigationList extends React.Component {
   constructor() {
-    constructor();
+    super();
 
     this.state = {
       selectedItem: null
