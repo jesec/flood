@@ -105,6 +105,7 @@ $more-info--border: $textbox-repeater--button--border;
 
       &__more-info {
         opacity: 1;
+        pointer-events: auto;
         transform: translateX(0);
       }
     }
@@ -127,6 +128,7 @@ $more-info--border: $textbox-repeater--button--border;
     margin-top: -16px;
     position: absolute;
     opacity: 0;
+    pointer-events: none;
     right: -5px;
     top: 50%;
     transform: translateX(15px);

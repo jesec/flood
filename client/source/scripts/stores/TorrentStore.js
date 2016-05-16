@@ -6,6 +6,7 @@ import BaseStore from './BaseStore';
 import config from '../../../../config';
 import EventTypes from '../constants/EventTypes';
 import {filterTorrents} from '../util/filterTorrents';
+import NotificationStore from './NotificationStore';
 import {searchTorrents} from '../util/searchTorrents';
 import {selectTorrents} from '../util/selectTorrents';
 import {sortTorrents} from '../util/sortTorrents';
@@ -99,8 +100,23 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_ERROR);
   }
 
-  handleAddTorrentSuccess() {
+  handleAddTorrentSuccess(responseData) {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_SUCCESS);
+
+    NotificationStore.add({
+      content: function (count = 0) {
+        if (count === 1) {
+          return 'Successfully added torrent.';
+        }
+
+        return `Successfully added ${count} torrents.`;
+      },
+      accumulation: {
+        id: 'add-torrents',
+        value: responseData.request.urls.length || 1
+      },
+      id: 'add-torrents'
+    });
   }
 
   getTorrent(hash) {

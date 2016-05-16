@@ -15,15 +15,7 @@ class UIStoreClass extends BaseStore {
     this.dependencies = [];
     this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
-    // this.torrentDetailsOpen = false;
   }
-
-  // closeTorrentDetailsPanel() {
-  //   if (this.torrentDetailsOpen) {
-  //     this.torrentDetailsOpen = false;
-  //     this.emit(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE);
-  //   }
-  // }
 
   getActiveContextMenu() {
     return this.activeContextMenu;
@@ -46,18 +38,9 @@ class UIStoreClass extends BaseStore {
     this.emit(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE);
   }
 
-  handleTorrentDetailsClick(hash, event) {
-    this.torrentDetailsOpen = !this.torrentDetailsOpen;
-    this.emit(EventTypes.UI_TORRENT_DETAILS_OPEN_CHANGE);
-  }
-
   hasSatisfiedDependencies() {
     return this.dependencies.length === 0;
   }
-
-  // isTorrentDetailsOpen() {
-  //   return this.torrentDetailsOpen;
-  // }
 
   registerDependency(ids) {
     if (!Array.isArray(ids)) {
@@ -104,9 +87,6 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action, source} = payload;
 
   switch (action.type) {
-    // case ActionTypes.UI_CLICK_TORRENT_DETAILS:
-    //   UIStore.handleTorrentDetailsClick(action.data.hash, action.data.event);
-    //   break;
     case ActionTypes.UI_CLICK_TORRENT:
       UIStore.handleTorrentClick(action.data.hash);
       break;

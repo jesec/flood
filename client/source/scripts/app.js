@@ -5,6 +5,7 @@ import Application from './components/layout/Application';
 import ApplicationContent from './components/layout/ApplicationContent';
 import ApplicationLoadingIndicator from './components/layout/ApplicationLoadingIndicator';
 import Modals from './components/modals/Modals';
+import Notifications from './components/notifications/Notifications';
 import Sidebar from './components/panels/Sidebar';
 import SettingsStore from './stores/SettingsStore';
 import TorrentActions from './actions/TorrentActions';
@@ -24,6 +25,7 @@ class FloodApp extends React.Component {
           <TorrentListView />
         </ApplicationContent>
         <Modals />
+        <Notifications />
       </Application>
     );
   }

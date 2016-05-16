@@ -12,7 +12,7 @@ $torrent-details--header--icon--default--fill: rgba(#4d6f87, 0.5);
 
 $torrent-details--detail--label--foreground: #527893;
 
-$directory-tree--filename--foreground: rgba(#527893, 0.7);
+$directory-tree--foreground: #527893;
 $directory-tree--directory--foreground: #527893;
 $directory-tree--directory--foreground--open: darken($directory-tree--directory--foreground, 5%);
 
@@ -159,9 +159,9 @@ $torrent-details--directory-tree--parent-directory--icon--fill: rgba(#527893, 0.
       margin-left: -8px;
 
       .directory-tree {
-        color: $directory-tree--filename--foreground;
 
         &__node {
+          color: $directory-tree--foreground;
 
           &--group {
 

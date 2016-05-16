@@ -2,7 +2,7 @@ import {EventEmitter} from 'events';
 
 export default class BaseStore extends EventEmitter {
   constructor() {
-    super();
+    super(...arguments);
 
     this.dispatcherID = null;
     this.on('uncaughtException', this.handleError);

@@ -13,6 +13,7 @@ const TorrentActions = {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_ADD_TORRENT_SUCCESS,
           data: {
+            request: options,
             response
           }
         });
