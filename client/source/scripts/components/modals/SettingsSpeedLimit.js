@@ -2,7 +2,7 @@ import React from 'react';
 
 const METHODS_TO_BIND = ['handleDownloadTextChange', 'handleUploadTextChange'];
 
-export default class AddTorrents extends React.Component {
+export default class SettingsSpeedLimit extends React.Component {
   constructor() {
     super();
 
@@ -97,8 +97,8 @@ export default class AddTorrents extends React.Component {
   }
 
   render() {
-    let downloadValue = this.getDownloadValue();
-    let uploadValue = this.getUploadValue();
+    let downloadValue = this.getDownloadValue() || 0;
+    let uploadValue = this.getUploadValue() || 0;
 
     return (
       <div>

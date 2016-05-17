@@ -20,7 +20,7 @@ const METHODS_TO_BIND = [
   'onMoveError'
 ];
 
-export default class AddTorrents extends React.Component {
+export default class MoveTorrents extends React.Component {
   constructor() {
     super();
 
@@ -121,13 +121,12 @@ export default class AddTorrents extends React.Component {
 
   getContent() {
     return (
-      <div className="form">
+      <div className="form modal__content">
         <AddTorrentsDestination onChange={this.handleDestinationChange}
           suggested={this.state.originalSource} />
         <div className="form__row">
           <Checkbox onChange={this.handleCheckboxChange}>Move data</Checkbox>
         </div>
-        <ModalActions actions={this.getActions()} />
       </div>
     );
   }
@@ -144,9 +143,10 @@ export default class AddTorrents extends React.Component {
 
   render() {
     return (
-      <Modal heading="Set Download Location"
+      <Modal actions={this.getActions()}
+        content={this.getContent()}
         dismiss={this.props.dismiss}
-        content={this.getContent()} />
+        heading="Set Download Location" />
     );
   }
 }

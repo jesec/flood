@@ -2,7 +2,7 @@ import React from 'react';
 
 import Modal from './Modal';
 
-export default class AddTorrents extends React.Component {
+export default class ConfirmModal extends React.Component {
   constructor() {
     super();
   }

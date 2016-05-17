@@ -19,7 +19,7 @@ const METHODS_TO_BIND = [
   'handleStartTorrentsToggle'
 ];
 
-export default class AddTorrents extends React.Component {
+export default class AddTorrentsByFile extends React.Component {
   constructor() {
     super();
 

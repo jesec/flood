@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import classnames from 'classnames';
+import createFragment from 'react-addons-create-fragment';
 import React from 'react';
 
 import CustomScrollbars from '../ui/CustomScrollbars';
@@ -46,8 +47,8 @@ export default class Modal extends React.Component {
         'modal--tabs-in-header': !this.props.tabsInBody,
         'modal--tabs-in-body': this.props.tabsInBody
       }, this.props.classNames);
-    let modalBody = [this.props.content];
-    let modalHeader = [this.props.heading];
+    let modalBody = [createFragment({'modal-body': this.props.content})];
+    let modalHeader = [createFragment({'modal-header': this.props.heading})];
     let headerClasses = classnames('modal__header', {
       'has-tabs': this.props.tabs
     });

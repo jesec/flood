@@ -12,7 +12,7 @@ const METHODS_TO_BIND = [
   'handleSettingsFetchRequestSuccess'
 ];
 
-export default class AddTorrents extends React.Component {
+export default class SettingsModal extends React.Component {
   constructor() {
     super();
 

@@ -15,7 +15,7 @@ const METHODS_TO_BIND = [
   'handleUrlRemove'
 ];
 
-export default class AddTorrents extends React.Component {
+export default class AddTorrentsByURL extends React.Component {
   constructor() {
     super();
 
@@ -23,7 +23,7 @@ export default class AddTorrents extends React.Component {
       addTorrentsError: null,
       destination: null,
       isAddingTorrents: false,
-      urlTextboxes: [{value: null}],
+      urlTextboxes: [{value: ''}],
       startTorrents: true
     };
 
@@ -59,7 +59,7 @@ export default class AddTorrents extends React.Component {
 
   handleUrlAdd(index) {
     let urlTextboxes = Object.assign([], this.state.urlTextboxes);
-    urlTextboxes.splice(index + 1, 0, {value: null});
+    urlTextboxes.splice(index + 1, 0, {value: ''});
     this.setState({urlTextboxes});
   }
 

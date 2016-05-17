@@ -6,7 +6,7 @@ import SettingsStore from '../../stores/SettingsStore';
 
 const METHODS_TO_BIND = ['handleStartTorrentsToggle'];
 
-export default class AddTorrents extends React.Component {
+export default class AddTorrentsActions extends React.Component {
   constructor() {
     super();
 

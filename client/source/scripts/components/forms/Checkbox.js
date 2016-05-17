@@ -5,7 +5,7 @@ import Checkmark from '../icons/Checkmark';
 
 const METHODS_TO_BIND = ['handleCheckboxChange'];
 
-export default class SearchBox extends React.Component {
+export default class Checkbox extends React.Component {
   constructor() {
     super();
 
@@ -17,7 +17,8 @@ export default class SearchBox extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.checked !== this.props.checked) {
+    if (this.props.checked != null
+      && this.state.checked !== this.props.checked) {
       this.setState({checked: this.props.checked});
     }
   }
@@ -52,3 +53,7 @@ export default class SearchBox extends React.Component {
     );
   }
 }
+
+Checkbox.defaultProps = {
+  checked: false
+};
