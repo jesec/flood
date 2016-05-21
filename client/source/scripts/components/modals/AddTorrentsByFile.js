@@ -8,7 +8,6 @@ import Close from '../icons/Close';
 import File from '../icons/File';
 import Files from '../icons/Files';
 import ModalActions from './ModalActions';
-import SettingsStore from '../../stores/SettingsStore';
 import TorrentActions from '../../actions/TorrentActions';
 
 const METHODS_TO_BIND = [
@@ -75,7 +74,7 @@ export default class AddTorrentsByFile extends React.Component {
               <File />
             </span>
             <span className="dropzone__file__item dropzone__file__item--file-name">
-              {file.name}{file.name}
+              {file.name}
             </span>
             <span className="dropzone__file__item dropzone__file__item--icon dropzone__file__item--remove-icon" onClick={this.handleFileRemove.bind(this, index)}>
               <Close />
@@ -105,8 +104,6 @@ export default class AddTorrentsByFile extends React.Component {
     if (!this.state.files || this.state.files.length === 0) {
       return;
     }
-
-    SettingsStore.saveSettings({id: 'torrentDestination', data: this.state.destination});
 
     this.setState({isAddingTorrents: true});
 

@@ -13,7 +13,8 @@ const TorrentActions = {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_ADD_TORRENT_SUCCESS,
           data: {
-            request: options,
+            count: options.urls.length,
+            destination: options.destination,
             response
           }
         });
@@ -37,6 +38,8 @@ const TorrentActions = {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_ADD_TORRENT_SUCCESS,
           data: {
+            count: filesData.getAll('torrents').length,
+            destination,
             response
           }
         });
@@ -59,13 +62,19 @@ const TorrentActions = {
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_REMOVE_TORRENT_SUCCESS,
-          data
+          data: {
+            data,
+            count: hash.length
+          }
         });
       })
       .catch((error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_REMOVE_TORRENT_ERROR,
-          error
+          error: {
+            error,
+            count: hash.length
+          }
         });
       });
   },
@@ -169,7 +178,10 @@ const TorrentActions = {
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS,
-          data
+          data: {
+            data,
+            count: hashes.length
+          }
         });
       })
       .catch((error) => {

@@ -27,29 +27,15 @@ class NotificationStoreClass extends BaseStore {
     notification.duration = this.getDuration(notification);
     notification.id = this.getID(notification);
 
-    if (notification.content == null) {
-      throw new Error('Notification content cannot be empty.');
-    }
-
     if (!!notification.accumulation) {
       this.accumulate(notification);
     }
 
     this.scheduleCleanse(notification);
 
-    this.notifications[notification.id] = {
-      content: this.getContent(notification)
-    };
+    this.notifications[notification.id] = notification;
 
     this.emit(EventTypes.NOTIFICATIONS_CHANGE);
-  }
-
-  getContent(notification) {
-    if (!!notification.accumulation) {
-      return notification.content(this.accumulation[notification.accumulation.id]);
-    }
-
-    return notification.content;
   }
 
   getDuration(notification) {
@@ -60,7 +46,13 @@ class NotificationStoreClass extends BaseStore {
     let notificationIDs = Object.keys(this.notifications).sort();
 
     return notificationIDs.map((id) => {
-      return this.notifications[id];
+      let notification = this.notifications[id];
+
+      if (!!notification.accumulation) {
+        notification.count = this.accumulation[notification.accumulation.id];
+      }
+
+      return notification;
     });
   }
 

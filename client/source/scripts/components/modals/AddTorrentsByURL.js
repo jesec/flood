@@ -2,7 +2,6 @@ import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import AddTorrentsDestination from './AddTorrentsDestination';
-import SettingsStore from '../../stores/SettingsStore';
 import TextboxRepeater from '../forms/TextboxRepeater';
 import TorrentActions from '../../actions/TorrentActions';
 
@@ -21,7 +20,7 @@ export default class AddTorrentsByURL extends React.Component {
 
     this.state = {
       addTorrentsError: null,
-      destination: null,
+      destination: '',
       isAddingTorrents: false,
       urlTextboxes: [{value: ''}],
       startTorrents: true
@@ -40,7 +39,6 @@ export default class AddTorrentsByURL extends React.Component {
       destination: this.state.destination,
       start: this.state.startTorrents
     });
-    SettingsStore.saveSettings({id: 'torrentDestination', data: this.state.destination});
   }
 
   handleDestinationChange(destination) {

@@ -4,6 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import EventTypes from '../../constants/EventTypes';
+import Notification from './Notification';
 import NotificationStore from '../../stores/NotificationStore';
 
 const METHODS_TO_BIND = ['handleNotificationChange'];
@@ -31,11 +32,7 @@ export default class NotificationList extends React.Component {
 
   getNotifications() {
     return this.state.notifications.map((notification, index) => {
-      return (
-        <li className="notifications__list__item" key={index}>
-          {notification.content}
-        </li>
-      );
+      return <Notification {...notification} key={index} />;
     });
   }
 

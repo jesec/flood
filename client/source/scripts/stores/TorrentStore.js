@@ -9,6 +9,7 @@ import {filterTorrents} from '../util/filterTorrents';
 import NotificationStore from './NotificationStore';
 import {searchTorrents} from '../util/searchTorrents';
 import {selectTorrents} from '../util/selectTorrents';
+import SettingsStore from './SettingsStore';
 import {sortTorrents} from '../util/sortTorrents';
 import TorrentActions from '../actions/TorrentActions';
 import TorrentFilterStore from './TorrentFilterStore';
@@ -100,22 +101,20 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_ERROR);
   }
 
-  handleAddTorrentSuccess(responseData) {
+  handleAddTorrentSuccess(response) {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_SUCCESS);
 
-    NotificationStore.add({
-      content: function (count = 0) {
-        if (count === 1) {
-          return 'Successfully added torrent.';
-        }
+    SettingsStore.saveSettings({id: 'torrentDestination', data: response.destination});
 
-        return `Successfully added ${count} torrents.`;
-      },
+    NotificationStore.add({
+      adverb: 'Successfully',
+      action: 'added',
+      subject: 'torrent',
       accumulation: {
-        id: 'add-torrents',
-        value: responseData.request.urls.length || 1
+        id: 'add-torrents-success',
+        value: response.count || 1
       },
-      id: 'add-torrents'
+      id: 'add-torrents-success'
     });
   }
 
@@ -135,12 +134,34 @@ class TorrentStoreClass extends BaseStore {
     return this.sortedTorrents;
   }
 
-  handleMoveTorrentsSuccess(data) {
+  handleMoveTorrentsSuccess(response) {
     this.emit(EventTypes.CLIENT_MOVE_TORRENTS_SUCCESS);
+
+    NotificationStore.add({
+      adverb: 'Successfully',
+      action: 'moved',
+      accumulation: {
+        id: 'move-torrents-success',
+        value: response.count
+      },
+      id: 'move-torrents-success',
+      subject: 'torrent'
+    });
   }
 
   handleMoveTorrentsError(error) {
     this.emit(EventTypes.CLIENT_MOVE_TORRENTS_REQUEST_ERROR);
+
+    NotificationStore.add({
+      adverb: 'Failed to',
+      action: 'move',
+      subject: 'torrent',
+      accumulation: {
+        id: 'move-torrents-error',
+        value: error.count
+      },
+      id: 'move-torrents-error'
+    });
   }
 
   setSelectedTorrents(event, hash) {
@@ -153,16 +174,54 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.UI_TORRENT_SELECTION_CHANGE);
   }
 
-  handleFetchTorrentsError(action) {
-    console.log(action);
+  handleFetchTorrentsError(error) {
+    console.log(error);
   }
 
   handleFetchTorrentsSuccess(torrents) {
+    NotificationStore.add({
+      adverb: 'Successfully',
+      action: 'fetched',
+      duration: 20000,
+      subject: 'torrent',
+      accumulation: {
+        id: 'remove-torrents-error',
+        value: 1
+      },
+      id: 'remove-torrents-error'
+    });
+
     this.sortTorrents(torrents);
     this.filterTorrents();
 
     this.emit(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS);
     this.resolveRequest('fetch-torrents');
+  }
+
+  handleRemoveTorrentsSuccess(response) {
+    NotificationStore.add({
+      adverb: 'Successfully',
+      action: 'removed',
+      subject: 'torrent',
+      accumulation: {
+        id: 'remove-torrents-error',
+        value: response.count
+      },
+      id: 'remove-torrents-error'
+    });
+  }
+
+  handleRemoveTorrentsError(error) {
+    NotificationStore.add({
+      adverb: 'Failed to',
+      action: 'remove',
+      subject: 'torrent',
+      accumulation: {
+        id: 'remove-torrents-error',
+        value: error.count
+      },
+      id: 'remove-torrents-error'
+    });
   }
 
   setTorrentDetails(hash, torrentDetails) {
@@ -231,14 +290,20 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.CLIENT_FETCH_TORRENTS_SUCCESS:
       TorrentStore.handleFetchTorrentsSuccess(action.data.torrents);
       break;
+    case ActionTypes.CLIENT_FETCH_TORRENTS_ERROR:
+      TorrentStore.handleFetchTorrentsError(action.error);
+      break;
     case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
       TorrentStore.handleMoveTorrentsSuccess(action.data);
       break;
     case ActionTypes.CLIENT_MOVE_TORRENTS_ERROR:
       TorrentStore.handleMoveTorrentsError(action.error);
       break;
-    case ActionTypes.CLIENT_FETCH_TORRENTS_ERROR:
-      TorrentStore.handleFetchTorrentsError();
+    case ActionTypes.CLIENT_REMOVE_TORRENT_SUCCESS:
+      TorrentStore.handleRemoveTorrentsSuccess(action.data);
+      break;
+    case ActionTypes.CLIENT_REMOVE_TORRENT_ERROR:
+      TorrentStore.handleRemoveTorrentsError(action.error);
       break;
     case ActionTypes.UI_CLICK_TORRENT:
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);

@@ -33,3 +33,54 @@ $notification--foreground: #8fa2b2;
     }
   }
 }
+
+.notification {
+  display: flex;
+
+  &.is-success {
+
+    .icon {
+      fill: $green;
+    }
+
+    .notification {
+
+      &__count {
+        color: $green;
+      }
+    }
+  }
+
+  &.is-error {
+
+    .icon {
+      fill: $red;
+    }
+
+    .notification {
+
+      &__count {
+        color: $red;
+      }
+    }
+  }
+
+  &__content {
+    flex: 1 1 auto;
+  }
+
+  &__count {
+    font-weight: 800;
+  }
+
+  .icon {
+    align-self: center;
+    display: inline-block;
+    fill: currentColor;
+    flex: 0 0 auto;
+    height: 20px;
+    margin-right: $spacing-unit * 1/4;
+    width: 20px;
+    vertical-align: middle;
+  }
+}

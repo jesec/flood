@@ -11,7 +11,7 @@ export default class AddTorrentsDestination extends React.Component {
     super();
 
     this.state = {
-      destination: null
+      destination: ''
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -20,7 +20,7 @@ export default class AddTorrentsDestination extends React.Component {
   }
 
   componentWillMount() {
-    let destination = SettingsStore.getSettings('torrentDestination');
+    let destination = SettingsStore.getSettings('torrentDestination') || '';
     if (this.props.suggested) {
       destination = this.props.suggested;
     }
