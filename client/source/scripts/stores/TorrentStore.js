@@ -179,18 +179,6 @@ class TorrentStoreClass extends BaseStore {
   }
 
   handleFetchTorrentsSuccess(torrents) {
-    NotificationStore.add({
-      adverb: 'Successfully',
-      action: 'fetched',
-      duration: 20000,
-      subject: 'torrent',
-      accumulation: {
-        id: 'remove-torrents-error',
-        value: 1
-      },
-      id: 'remove-torrents-error'
-    });
-
     this.sortTorrents(torrents);
     this.filterTorrents();
 
