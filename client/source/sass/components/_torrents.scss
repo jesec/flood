@@ -105,7 +105,6 @@ $more-info--border: $textbox-repeater--button--border;
     .torrent {
 
       &__more-info {
-        background: $more-info--background;
         opacity: 1;
         pointer-events: auto;
         transform: translateX(0);
@@ -122,6 +121,7 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &__more-info {
+    background: $more-info--background;
     border-radius: 32px 0 0 32px;
     box-shadow:
       0 0 30px rgba($more-info--box-shadow--hue, 0.11),
