@@ -19,6 +19,7 @@ $torrent--background--hover: #f6f8fa;
 $torrent--background--selected: $blue;
 $torrent--background--error: #e95779;
 
+$more-info--background: #fff;
 $more-info--box-shadow--hue: #1a2f3d;
 $more-info--border: $textbox-repeater--button--border;
 
@@ -104,6 +105,7 @@ $more-info--border: $textbox-repeater--button--border;
     .torrent {
 
       &__more-info {
+        background: $more-info--background;
         opacity: 1;
         pointer-events: auto;
         transform: translateX(0);

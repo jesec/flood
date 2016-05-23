@@ -1,15 +1,15 @@
-$dropzone--background: #e9eff5;
-$dropzone--foreground: #53718a;
-$dropzone--foreground--hover: darken($dropzone--foreground, 20%);
+$dropzone--background: #0f151a;
+$dropzone--foreground: #3f5465;
 $dropzone--foreground--dragging: $blue;
-$dropzone--border: #d6e2ea;
+$dropzone--border: #0c0f12;
 $dropzone--border--hover: darken($dropzone--border, 20%);
 $dropzone--border--dragging: $blue;
 $dropzone--browse--foreground: $blue;
-$dropzone--icon--fill: #c7d3df;
-$dropzone--icon--fill--hover: darken($dropzone--icon--fill, 15%);
+$dropzone--icon--fill: #3f5465;
+$dropzone--icon--fill--hover: $blue;
 $dropzone--icon--fill--dragging: $blue;
-$dropzone--file--icon--fill: #adbfce;
+$dropzone--file--icon--fill: rgba(#3f5465, 0.5);
+$dropzone--file--icon--fill--hover: rgba(lighten(#3f5465, 10%), 0.5);
 
 .dropzone {
   align-items: center;
@@ -19,9 +19,11 @@ $dropzone--file--icon--fill: #adbfce;
   color: $dropzone--foreground;
   display: flex;
   flex-direction: column;
+  position: relative;
   text-align: center;
   transition: border 0.25s, color 0.25s;
   width: 100%;
+  z-index: 1;
 
   &:hover {
     border-color: $dropzone--border--hover;
@@ -87,14 +89,17 @@ $dropzone--file--icon--fill: #adbfce;
   &__selected-files {
     @extend .textbox;
     @extend .textbox.is-fulfilled;
-    border-radius: 4px 4px 0 0 ;
+    border-radius: 4px 4px 0 0;
+    color: #3f5465;
     font-size: 0.8em;
+    margin-bottom: -1px;
     padding: $spacing-unit * 1/2;
+    position: relative;
     width: 100%;
+    z-index: 2;
 
     & + .dropzone {
       border-radius: 0 0 4px 4px;
-      border-top: none;
     }
 
     &__file {
@@ -106,16 +111,18 @@ $dropzone--file--icon--fill: #adbfce;
         fill: $dropzone--file--icon--fill;
         height: 12px;
         margin-right: 4px;
-        vertical-align: baseline;
-        width: 12px;
-      }
-
-      .icon--close {
-        height: 8px;
-        margin-left: 4px;
-        margin-right: 0;
+        margin-top: -1px;
+        transition: fill 0.25s;
         vertical-align: middle;
-        width: 8px;
+        width: 12px;
+
+        &--close {
+          height: 8px;
+          margin-left: 4px;
+          margin-right: 0;
+          vertical-align: middle;
+          width: 8px;
+        }
       }
     }
   }
@@ -140,10 +147,16 @@ $dropzone--file--icon--fill: #adbfce;
       &--remove-icon {
         cursor: pointer;
       }
-    }
 
-    .icon {
+      &--remove-icon {
 
+        &:hover {
+
+          .icon {
+            fill: $dropzone--file--icon--fill--hover;
+          }
+        }
+      }
     }
   }
 }

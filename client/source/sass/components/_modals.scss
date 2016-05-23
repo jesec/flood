@@ -1,19 +1,22 @@
-$modal--background: #f7fafc;
-$modal--heading--background: $white;
-$modal--heading--foreground: #5c6e80;
-$modal--heading--border: #dde7ed;
+$modal--background: #12191f;
+$modal--heading--background: #161c24;
+$modal--heading--foreground: #7d95ab;
+$modal--heading--border: #0f151b;
 
-$modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
+$modal--transition--duration: 0.5s;
+$modal--transition--scale: 0.85;
 
-$modal--tab--foreground: #abbac7;
+$modal--body--foreground: #3f5465;
+
+$modal--tab--foreground: #3f5465;
 $modal--tab--foreground--active: $blue;
 $modal--tab--border--active: $blue;
 
-$modal--overlay--base: darken($background, 5%);
-$modal--overlay: rgba($modal--overlay--base, 0.8);
+$modal--overlay--base: desaturate(darken($background, 3%), 5%);
+$modal--overlay: rgba($modal--overlay--base, 0.9);
 
-$modal--content--border: rgba($modal--overlay--base, 0.1);
-$modal--content--shadow: rgba($modal--overlay--base, 0.3);
+$modal--content--border: rgba($modal--overlay--base, 0.5);
+$modal--content--shadow: rgba($modal--overlay--base, 1);
 
 $modal--border-radius: 3px;
 $modal--padding--horizontal: $spacing-unit;
@@ -41,7 +44,7 @@ $modal--tabs--padding--vertical--right: $spacing-unit * 2/5;
 $modal--tabs--padding--vertical--bottom: $spacing-unit * 1/5;
 $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 
-$modal--tabs--in-body--background: rgba($white, 0.55);
+$modal--tabs--in-body--background: #11171d;
 
 .modal {
   background: $modal--overlay;
@@ -49,7 +52,7 @@ $modal--tabs--in-body--background: rgba($white, 0.55);
   left: 0;
   position: fixed;
   top: 0;
-  transition: opacity 0.5s;
+  transition: opacity $modal--transition--duration;
   width: 100%;
   z-index: 100;
 
@@ -75,7 +78,7 @@ $modal--tabs--in-body--background: rgba($white, 0.55);
         &:after {
           bottom: 0;
           content: '';
-          height: 2px;
+          height: 1px;
           left: 0;
           position: absolute;
           right: 0;
@@ -114,7 +117,7 @@ $modal--tabs--in-body--background: rgba($white, 0.55);
     color: $modal--heading--foreground;
     flex: 0 0 auto;
     font-size: 1.25em;
-    font-weight: 300;
+    font-weight: 400;
     line-height: 1;
     overflow: hidden;
     padding: $modal--padding--vertical $modal--padding--horizontal;
@@ -146,7 +149,9 @@ $modal--tabs--in-body--background: rgba($white, 0.55);
       overflow: hidden;
       position: absolute;
       top: 10%;
+      transition: transform $modal--transition--duration;
       transform: translate(-50%, 0);
+      transform-origin: 50% 50%;
       width: 500px;
     }
   }
@@ -199,19 +204,59 @@ $modal--tabs--in-body--background: rgba($white, 0.55);
 
   &__animation-enter {
     opacity: 0;
+
+    .modal {
+
+      &__content {
+
+        &__wrapper {
+          transform: translate(-50%, 0) scale($modal--transition--scale);
+        }
+      }
+    }
   }
 
   &__animation-enter-active {
     opacity: 1;
+
+    .modal {
+
+      &__content {
+
+        &__wrapper {
+          transform: translate(-50%, 0) scale(1, 1);
+        }
+      }
+    }
   }
 
   &__animation-leave {
     opacity: 1;
     pointer-events: none;
+
+    .modal {
+
+      &__content {
+
+        &__wrapper {
+          transform: translate(-50%, 0) scale(1, 1);
+        }
+      }
+    }
   }
 
   &__animation-leave-active {
     opacity: 0;
+
+    .modal {
+
+      &__content {
+
+        &__wrapper {
+          transform: translate(-50%, 0) scale($modal--transition--scale);
+        }
+      }
+    }
   }
 
   &--vertical {
@@ -285,7 +330,7 @@ $modal--tabs--in-body--background: rgba($white, 0.55);
               right: 0;
               top: 0;
               transition: background 0.25s;
-              width: 2px;
+              width: 1px;
             }
           }
         }

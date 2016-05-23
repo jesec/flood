@@ -1,34 +1,32 @@
-$form--label--foreground: #abbac7;
+$form--label--foreground: #3f5465;
 
-$textbox--background: #e9eff5;
-$textbox--foreground: #53718a;
-$textbox--placeholder: #abbac7;
-$textbox--border: #d6e2ea;
-$textbox--fulfilled--background: #fdfefe;
-$textbox--active--background: #fdfefe;
-$textbox--active--border: desaturate(darken($textbox--border, 5%), 5%);
+$textbox--background: #0f151a;
+$textbox--foreground: #5e7182;
+$textbox--placeholder: #2b3946;
+$textbox--border: #0c0f12;
+$textbox--fulfilled--background: #0f151a;
+$textbox--active--background: #0f151a;
+$textbox--active--border: $blue;
 $textbox--active--foreground: $blue;
 $textbox--active--placeholder: $textbox--placeholder;
 
-$textbox-repeater--button--background: #fff;
-$textbox-repeater--button--background--hover: $main-content--background;
-$textbox-repeater--button--border: rgba($background, 0.1);
-$textbox-repeater--button--border--hover: rgba($background, 0.2);
-$textbox-repeater--button--foreground: rgba($background, 0.3);
-$textbox-repeater--button--foreground--hover: rgba($background, 0.5);
-
 $button--primary--foreground: #fff;
 $button--primary--background: $blue;
-$button--primary--background--hover: darken($button--primary--background, 5%);
-$button--primary--border: darken($button--primary--background, 5%);
-$button--primary--border--hover: darken($button--primary--border, 5%);
+$button--primary--background--hover: lighten($button--primary--background, 4%);
+$button--primary--border: darken(#212a38, 10%);
+$button--primary--border--hover: $button--primary--border;
 
-$button--deemphasized--foreground: #66717a;
-$button--deemphasized--background: $main-content--background;
-$button--deemphasized--foreground--hover: darken($button--deemphasized--foreground, 5%);
-$button--deemphasized--background--hover: darken($button--deemphasized--background, 5%);
-$button--deemphasized--border: darken($button--deemphasized--background, 5%);
-$button--deemphasized--border--hover: darken($button--deemphasized--border, 5%);
+$button--deemphasized--foreground: #677c9e;
+$button--deemphasized--background: #212a38;
+$button--deemphasized--foreground--hover: lighten(#677c9e, 10%);
+$button--deemphasized--background--hover: lighten(#212a38, 2.5%);
+$button--deemphasized--border: darken($button--deemphasized--background, 10%);
+$button--deemphasized--border--hover: $button--deemphasized--border;
+
+$checkbox--background: #212a38;
+$checkbox--background--hover: lighten($checkbox--background, 5%);
+$checkbox--border: darken($button--deemphasized--background, 10%);
+$checkbox--border--hover: $checkbox--border;
 
 $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 
@@ -84,7 +82,7 @@ $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
   cursor: pointer;
   font-weight: 500;
   padding: 8px 22px;
-  transition: background 0.25s;
+  transition: background 0.25s, color 0.25s;
   user-select: none;
 
   &.has-icon {
@@ -131,6 +129,7 @@ $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 }
 
 .checkbox {
+  cursor: pointer;
   line-height: 1;
   position: relative;
 
@@ -139,7 +138,8 @@ $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
     .checkbox {
 
       &__decoy {
-        border-color: $blue;
+        background: $checkbox--background--hover;
+        border-color: $checkbox--border--hover;
       }
     }
   }
@@ -168,16 +168,17 @@ $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 
   &__decoy {
     @extend .textbox;
-    background: $white;
-    border-radius: 3px;
+    background: $checkbox--background;
+    border: 1px solid $checkbox--border;
+    border-radius: 2px;
     display: inline-block;
-    height: $spacing-unit * 3/5;
+    height: $spacing-unit * 8/10;
     margin-right: $spacing-unit * 3/10;
     margin-top: -2px;
     padding: 0;
     position: relative;
     vertical-align: middle;
-    width: $spacing-unit * 3/5;
+    width: $spacing-unit * 8/10;
 
     .icon {
       fill: transparent;

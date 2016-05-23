@@ -1,3 +1,10 @@
+$textbox-repeater--button--background: #303d52;
+$textbox-repeater--button--background--hover: lighten($textbox-repeater--button--background, 7%);
+$textbox-repeater--button--border: rgba(#0f151b, 0.2);
+$textbox-repeater--button--border--hover: rgba(#0f151b, 0.4);
+$textbox-repeater--button--foreground: rgba(#12191f, 0.7);
+$textbox-repeater--button--foreground--hover: #12191f;
+
 .floating-action {
 
   &__button {
