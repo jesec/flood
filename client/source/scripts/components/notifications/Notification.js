@@ -20,7 +20,7 @@ export default class Notification extends React.Component {
       icon = <CircleExclamationIcon />;
     }
 
-    if (this.props.count !== 1) {
+    if (!!this.props.accumulation && this.props.count !== 1) {
       countText = (
         <span className="notification__count">
           {this.props.count}

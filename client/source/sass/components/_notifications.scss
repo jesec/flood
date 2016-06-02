@@ -65,6 +65,10 @@ $notification--foreground: #8fa2b2;
     }
   }
 
+  & + .notification {
+    margin-top: $spacing-unit * 2/5;
+  }
+
   &__content {
     flex: 1 1 auto;
   }

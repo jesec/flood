@@ -5,6 +5,7 @@ import Add from '../icons/Add';
 import EventTypes from '../../constants/EventTypes';
 import PauseIcon from '../icons/PauseIcon';
 import Remove from '../icons/Remove';
+import SettingsStore from '../../stores/SettingsStore';
 import SortDropdown from './SortDropdown';
 import StartIcon from '../icons/StartIcon';
 import StopIcon from '../icons/StopIcon';
@@ -28,7 +29,7 @@ export default class ActionBar extends React.Component {
     super();
 
     this.state = {
-      sortBy: TorrentFilterStore.getTorrentsSort()
+      sortBy: SettingsStore.getSettings('sortTorrents')
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -37,12 +38,13 @@ export default class ActionBar extends React.Component {
   }
 
   componentDidMount() {
-    TorrentFilterStore.fetchSortProps();
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_SORT_CHANGE, this.onSortChange);
+    this.onSortChange();
+    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.onSortChange);
+    SettingsStore.fetchSettings('sortTorrents');
   }
 
   componentWillUnmount() {
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_SORT_CHANGE, this.onSortChange);
+    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.onSortChange);
   }
 
   handleAddTorrents() {
@@ -97,6 +99,7 @@ export default class ActionBar extends React.Component {
   }
 
   handleSortChange(sortBy) {
+    SettingsStore.saveSettings({id: 'sortTorrents', data: sortBy});
     UIActions.setTorrentsSort(sortBy);
   }
 
@@ -109,9 +112,9 @@ export default class ActionBar extends React.Component {
   }
 
   onSortChange() {
-    this.setState({
-      sortBy: TorrentFilterStore.getTorrentsSort()
-    });
+    let sortBy = SettingsStore.getSettings('sortTorrents');
+    TorrentFilterStore.setTorrentsSort(sortBy);
+    this.setState({sortBy});
   }
 
   render() {

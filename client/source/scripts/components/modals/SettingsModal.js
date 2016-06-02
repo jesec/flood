@@ -2,14 +2,16 @@ import classnames from 'classnames';
 import React from 'react';
 
 import EventTypes from '../../constants/EventTypes';
+import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import Modal from './Modal';
 import SettingsSpeedLimit from './SettingsSpeedLimit';
 import SettingsStore from '../../stores/SettingsStore';
 
 const METHODS_TO_BIND = [
-  'handleSettingsChange',
   'handleSaveSettingsClick',
-  'handleSettingsFetchRequestSuccess'
+  'handleSaveSettingsError',
+  'handleSettingsChange',
+  'handleSettingsStoreChange'
 ];
 
 export default class SettingsModal extends React.Component {
@@ -17,12 +19,8 @@ export default class SettingsModal extends React.Component {
     super();
 
     this.state = {
-      settings: {
-        speedLimits: {
-          download: null,
-          upload: null
-        }
-      }
+      isSavingSettings: false,
+      settings: SettingsStore.getSettings()
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -31,21 +29,25 @@ export default class SettingsModal extends React.Component {
   }
 
   componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS, this.handleSettingsFetchRequestSuccess);
+    SettingsStore.listen(EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsStoreChange);
+    SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
+      this.handleSaveSettingsError);
     SettingsStore.fetchSettings('speedLimits');
   }
 
   componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS, this.handleSettingsFetchRequestSuccess);
+    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsStoreChange);
   }
 
   getActions() {
     let icon = null;
-    let primaryButtonText = 'Add Torrent';
+    let primaryButtonText = 'Save Settings';
 
-    if (this.state.isAddingTorrents) {
+    if (this.state.isSavingSettings) {
       icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Adding...';
+      primaryButtonText = 'Saving...';
     }
 
     return [
@@ -57,7 +59,13 @@ export default class SettingsModal extends React.Component {
       },
       {
         clickHandler: this.handleSaveSettingsClick,
-        content: 'Save Settings',
+        content: (
+          <span>
+            {icon}
+            {primaryButtonText}
+          </span>
+        ),
+        supplementalClassName: icon != null ? 'has-icon' : '',
         triggerDismiss: false,
         type: 'primary'
       }
@@ -65,6 +73,8 @@ export default class SettingsModal extends React.Component {
   }
 
   handleSaveSettingsClick() {
+    this.setState({isSavingSettings: true});
+
     let settingsToSave = Object.keys(this.state.settings).map((settingsKey) =>  {
       return {
         id: settingsKey,
@@ -72,14 +82,18 @@ export default class SettingsModal extends React.Component {
       };
     });
 
-    SettingsStore.saveSettings(settingsToSave);
+    SettingsStore.saveSettings(settingsToSave, {dismissModal: true, notify: true});
+  }
+
+  handleSaveSettingsError() {
+    this.setState({isSavingSettings: false});
   }
 
   handleSettingsFetchRequestError(error) {
     console.log(error);
   }
 
-  handleSettingsFetchRequestSuccess() {
+  handleSettingsStoreChange() {
     this.setState({
       settings: SettingsStore.getSettings()
     });

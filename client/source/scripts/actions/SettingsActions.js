@@ -24,7 +24,7 @@ const SettingsActions = {
       });
   },
 
-  saveSettings: (settings) => {
+  saveSettings: (settings, options = {}) => {
     return axios.patch('/client/settings', settings)
       .then((json = {}) => {
         return json.data;
@@ -32,11 +32,12 @@ const SettingsActions = {
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_SAVE_REQUEST_SUCCESS,
-          data
+          data,
+          options
         });
       })
       .catch((error) => {
-        console.error(error);
+        console.trace(error);
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_SAVE_REQUEST_ERROR,
           error

@@ -3,7 +3,6 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import Dropdown from '../forms/Dropdown';
-import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [
   'getDropdownHeader',
@@ -105,6 +104,10 @@ export default class SortDropdown extends React.Component {
   }
 
   render() {
+    if (this.props.selectedItem == null) {
+      return null;
+    }
+
     return (
       <Dropdown
         handleItemSelect={this.handleItemSelect}

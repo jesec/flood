@@ -55,7 +55,7 @@ export default class SettingsSpeedLimit extends React.Component {
   getDownloadValue() {
     let displayedValue = this.state.downloadValue;
 
-    if (displayedValue == null) {
+    if (displayedValue == null && this.props.settings.speedLimits != null) {
       displayedValue = this.processSpeedsForDisplay(this.props.settings.speedLimits.download);
     }
 
@@ -65,7 +65,7 @@ export default class SettingsSpeedLimit extends React.Component {
   getUploadValue() {
     let displayedValue = this.state.uploadValue;
 
-    if (displayedValue == null) {
+    if (displayedValue == null && this.props.settings.speedLimits != null) {
       displayedValue = this.processSpeedsForDisplay(this.props.settings.speedLimits.upload);
     }
 

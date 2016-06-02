@@ -17,6 +17,10 @@ class UIStoreClass extends BaseStore {
     this.torrentDetailsHash = null;
   }
 
+  dismissModal() {
+    this.setActiveModal(null);
+  }
+
   getActiveContextMenu() {
     return this.activeContextMenu;
   }
@@ -93,9 +97,9 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.UI_DISPLAY_MODAL:
       UIStore.setActiveModal(action.data);
       break;
-    case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
     case ActionTypes.CLIENT_ADD_TORRENT_SUCCESS:
-      UIStore.setActiveModal(null);
+    case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
+      UIStore.dismissModal();
       break;
     case ActionTypes.UI_DISPLAY_CONTEXT_MENU:
       UIStore.setActiveContextMenu(action.data);

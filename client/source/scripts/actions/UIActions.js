@@ -27,34 +27,10 @@ const UIActions = {
   },
 
   dismissModal: () => {
-    // TODO: Remove this try..catch.
-    try {
-      AppDispatcher.dispatchUIAction({
-        type: ActionTypes.UI_DISPLAY_MODAL,
-        data: null
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  },
-
-  fetchSortProps: () => {
-    return axios.get('/ui/sort-props')
-      .then((json = {}) => {
-        return json.data;
-      })
-      .then((data) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.UI_SORT_PROPS_REQUEST_SUCCESS,
-          data
-        });
-      })
-      .catch((error) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.UI_SORT_PROPS_REQUEST_ERROR,
-          error
-        });
-      });
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_DISPLAY_MODAL,
+      data: null
+    });
   },
 
   handleDetailsClick: (data) => {
@@ -93,12 +69,6 @@ const UIActions = {
   },
 
   setTorrentsSort: (data) => {
-    axios
-      .post('/ui/sort-props', data)
-      .catch(() => {
-        console.log(error);
-      });
-
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_SORT,
       data

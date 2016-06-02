@@ -10,14 +10,13 @@ import SettingsStore from '../../stores/SettingsStore';
 import TransferDataStore from '../../stores/TransferDataStore';
 
 const METHODS_TO_BIND = ['handleSettingsFetchRequestSuccess', 'onTransferDataRequestSuccess'];
-const DEFAULT_SPEEDS = [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0];
 
 class SpeedLimitDropdown extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      speedLimits: {},
+      speedLimits: SettingsStore.getSettings('speedLimits'),
       throttle: null
     };
 
@@ -27,27 +26,23 @@ class SpeedLimitDropdown extends React.Component {
   }
 
   componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS, this.handleSettingsFetchRequestSuccess);
+    SettingsStore.listen(EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsFetchRequestSuccess);
+    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
+      this.onTransferDataRequestSuccess);
     SettingsStore.fetchSettings('speedLimits');
-    TransferDataStore.listen(
-      EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
-      this.onTransferDataRequestSuccess
-    );
     TransferDataStore.fetchTransferData();
   }
 
   componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS, this.handleSettingsFetchRequestSuccess);
-    TransferDataStore.unlisten(
-      EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
-      this.onTransferDataRequestSuccess
-    );
+    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsFetchRequestSuccess);
+    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
+      this.onTransferDataRequestSuccess);
   }
 
   onTransferDataRequestSuccess() {
-    this.setState({
-      throttle: TransferDataStore.getThrottles({latest: true})
-    });
+    this.setState({throttle: TransferDataStore.getThrottles({latest: true})});
   }
 
   getDropdownHeader() {
@@ -82,7 +77,7 @@ class SpeedLimitDropdown extends React.Component {
 
     let insertCurrentThrottle = true;
     let currentThrottle = this.state.throttle;
-    let speeds = this.state.speedLimits[property] || DEFAULT_SPEEDS;
+    let speeds = this.state.speedLimits[property];
 
     let items = speeds.map((bytes) => {
       let selected = false;

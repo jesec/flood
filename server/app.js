@@ -9,8 +9,7 @@ var logger = require('morgan');
 var path = require('path');
 
 var clientRoutes = require('./routes/client');
-var uiRoutes = require('./routes/ui');
-var routes = require('./routes/index');
+var mainRoutes = require('./routes/index');
 
 var app = express();
 
@@ -36,9 +35,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', routes);
+app.use('/', mainRoutes);
 app.use('/client', clientRoutes);
-app.use('/ui', uiRoutes);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

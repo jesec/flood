@@ -2,6 +2,7 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
+import SettingsStore from './SettingsStore';
 import TorrentActions from '../actions/TorrentActions';
 import UIActions from '../actions/UIActions';
 
@@ -12,16 +13,7 @@ class TorrentFilterStoreClass extends BaseStore {
     this.searchFilter = null;
     this.statusFilter = 'all';
     this.trackerFilter = 'all';
-    this.sortTorrentsBy = {
-      direction: 'desc',
-      displayName: 'Date Added',
-      property: 'sortBy',
-      value: 'added'
-    };
-  }
-
-  fetchSortProps() {
-    UIActions.fetchSortProps();
+    this.sortTorrentsBy = SettingsStore.getSettings('sortTorrents');
   }
 
   fetchTorrentStatusCount() {

@@ -104,7 +104,10 @@ class TorrentStoreClass extends BaseStore {
   handleAddTorrentSuccess(response) {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_SUCCESS);
 
-    SettingsStore.saveSettings({id: 'torrentDestination', data: response.destination});
+    SettingsStore.saveSettings({
+      id: 'torrentDestination',
+      data: response.destination
+    });
 
     NotificationStore.add({
       adverb: 'Successfully',
