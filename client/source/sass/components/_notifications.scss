@@ -14,7 +14,7 @@ $notification--foreground: #8fa2b2;
     right: $spacing-unit * 1/5;
     transition: opacity 0.25s;
     width: 250px;
-    z-index: 1000;
+    z-index: 99;
 
     &-leave {
       opacity: 1;
