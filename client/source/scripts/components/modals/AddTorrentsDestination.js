@@ -44,14 +44,16 @@ export default class AddTorrentsDestination extends React.Component {
 
     return (
       <div className="form__row">
-        <label className="form__label">
-          Destination
-        </label>
-        <input className={textboxClasses}
-          onChange={this.handleDestinationChange}
-          placeholder="Destination"
-          value={this.state.destination}
-          type="text" />
+        <div className="form__column">
+          <label className="form__label">
+            Destination
+          </label>
+          <input className={textboxClasses}
+            onChange={this.handleDestinationChange}
+            placeholder="Destination"
+            value={this.state.destination}
+            type="text" />
+        </div>
       </div>
     );
   }

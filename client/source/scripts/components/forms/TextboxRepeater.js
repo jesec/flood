@@ -43,18 +43,21 @@ export default class TextboxRepeater extends React.Component {
 
       return (
         <div className="textbox__wrapper form__row" key={index}>
-          <input className={inputClasses}
-            onChange={this.handleTextboxChange.bind(textbox, index)}
-            placeholder={this.props.placeholder}
-            value={textbox.value}
-            type="text" />
-          <div className="floating-action__group">
-            {removeButton}
-            {addButton}
+          <div className="form__column">
+            <input className={inputClasses}
+              onChange={this.handleTextboxChange.bind(textbox, index)}
+              placeholder={this.props.placeholder}
+              value={textbox.value}
+              type="text" />
+            <div className="floating-action__group">
+              {removeButton}
+              {addButton}
+            </div>
           </div>
         </div>
       );
     });
+
     return textboxes;
   }
 

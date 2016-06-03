@@ -2,7 +2,7 @@ import React from 'react';
 
 const METHODS_TO_BIND = ['handleDownloadTextChange', 'handleUploadTextChange'];
 
-export default class SettingsSpeedLimit extends React.Component {
+export default class SpeedLimitTab extends React.Component {
   constructor() {
     super();
 
@@ -107,20 +107,24 @@ export default class SettingsSpeedLimit extends React.Component {
         </p>
         <div className="form">
           <div className="form__row">
-            <label className="form__label">
-              Download Presets
-            </label>
-            <input className="textbox" type="text"
-              onChange={this.handleDownloadTextChange}
-              value={downloadValue} />
+            <div className="form__column">
+              <label className="form__label">
+                Download Presets
+              </label>
+              <input className="textbox" type="text"
+                onChange={this.handleDownloadTextChange}
+                value={downloadValue} />
+            </div>
           </div>
           <div className="form__row">
-            <label className="form__label">
-              Upload Presets
-            </label>
-            <input className="textbox" type="text"
-              onChange={this.handleUploadTextChange}
-              value={uploadValue} />
+            <div className="form__column">
+              <label className="form__label">
+                Upload Presets
+              </label>
+              <input className="textbox" type="text"
+                onChange={this.handleUploadTextChange}
+                value={uploadValue} />
+            </div>
           </div>
         </div>
       </div>

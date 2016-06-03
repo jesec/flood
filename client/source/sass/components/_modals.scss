@@ -29,10 +29,15 @@ $modal--content--padding--left: $spacing-unit;
 
 $modal--actions--margin--top: $spacing-unit;
 
-$modal--tabs--margin--top: $spacing-unit * 2/5;
+$modal--tabs--margin--top: $spacing-unit * 1/5;
 $modal--tabs--margin--right: $spacing-unit * -1/5;
 $modal--tabs--margin--bottom: 0;
 $modal--tabs--margin--left: $spacing-unit * -1/5;
+
+$modal--vertical--tabs--margin--top: $spacing-unit * 1/5;
+$modal--vertical--tabs--margin--right: 0;
+$modal--vertical--tabs--margin--bottom: 0;
+$modal--vertical--tabs--margin--left: $modal--padding--horizontal * -1;
 
 $modal--tabs--padding--top: $spacing-unit * 1/5;
 $modal--tabs--padding--right: $spacing-unit * 1/5;
@@ -118,7 +123,6 @@ $modal--tabs--in-body--background: #11171d;
     flex: 0 0 auto;
     font-size: 1.25em;
     font-weight: 400;
-    line-height: 1;
     overflow: hidden;
     padding: $modal--padding--vertical $modal--padding--horizontal;
 
@@ -312,7 +316,7 @@ $modal--tabs--in-body--background: #11171d;
     .modal {
 
       &__tabs {
-        margin: $modal--padding--vertical 0 0 $modal--padding--horizontal * -1;
+        margin: $modal--vertical--tabs--margin--top $modal--vertical--tabs--margin--right $modal--vertical--tabs--margin--bottom $modal--vertical--tabs--margin--left;
 
         .modal {
 

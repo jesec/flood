@@ -130,10 +130,12 @@ export default class AddTorrentsByFile extends React.Component {
     return (
       <div className="form">
         <div className="form__row">
-          <label className="form__label">
-            Torrents
-          </label>
-          {this.getModalContent()}
+          <div className="form__column">
+            <label className="form__label">
+              Torrents
+            </label>
+            {this.getModalContent()}
+          </div>
         </div>
         <AddTorrentsDestination onChange={this.handleDestinationChange} />
         <AddTorrentsActions dismiss={this.props.dismissModal}

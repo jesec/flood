@@ -125,7 +125,9 @@ export default class MoveTorrents extends React.Component {
         <AddTorrentsDestination onChange={this.handleDestinationChange}
           suggested={this.state.originalSource} />
         <div className="form__row">
-          <Checkbox onChange={this.handleCheckboxChange}>Move data</Checkbox>
+          <div className="form__column">
+            <Checkbox onChange={this.handleCheckboxChange}>Move data</Checkbox>
+          </div>
         </div>
       </div>
     );

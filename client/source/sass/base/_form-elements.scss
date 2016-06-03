@@ -191,18 +191,32 @@ $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 
 .form {
 
+  &__row {
+    display: flex;
+
+    & + .form__row {
+      margin-top: $spacing-unit;
+    }
+  }
+
+  &__column {
+    flex: 1;
+    padding: 0 $spacing-unit * 2/5;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+  }
+
   &__label {
     color: $form--label--foreground;
     display: block;
     font-size: 0.8em;
     line-height: 1;
     margin-bottom: 0.35em;
-  }
-
-  &__row {
-
-    & + .form__row {
-      margin-top: $spacing-unit;
-    }
   }
 }
