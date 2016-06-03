@@ -34,9 +34,7 @@ var client = {
 
       // Set the callback for only the last request.
       if (index === files.length - 1) {
-        fileRequest.onComplete((data) => {
-          callback(data);
-        });
+        fileRequest.onComplete(callback);
       }
 
       fileRequest.send();

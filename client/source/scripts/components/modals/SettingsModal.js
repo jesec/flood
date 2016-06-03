@@ -4,8 +4,8 @@ import React from 'react';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import Modal from './Modal';
-import SettingsSpeedLimit from './SettingsSpeedLimit';
 import SettingsStore from '../../stores/SettingsStore';
+import SpeedLimitTab from '../settings/SpeedLimitTab';
 
 const METHODS_TO_BIND = [
   'handleSaveSettingsClick',
@@ -124,7 +124,7 @@ export default class SettingsModal extends React.Component {
   render() {
     let tabs = {
       'speed-limit': {
-        content: SettingsSpeedLimit,
+        content: SpeedLimitTab,
         props: {
           onSettingsChange: this.handleSettingsChange,
           settings: this.state.settings

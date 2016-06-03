@@ -73,7 +73,9 @@ export default class AddTorrentsByURL extends React.Component {
     if (this.state.addTorrentsError) {
       error = (
         <div className="form__row">
-          {this.state.addTorrentsError}
+          <div className="form__column">
+            {this.state.addTorrentsError}
+          </div>
         </div>
       );
     }
@@ -82,14 +84,16 @@ export default class AddTorrentsByURL extends React.Component {
       <div className="form">
         {error}
         <div className="form__row">
-          <label className="form__label">
-            Torrents
-          </label>
-          <TextboxRepeater placeholder="Torrent URL"
-            handleTextboxAdd={this.handleUrlAdd}
-            handleTextboxChange={this.handleUrlChange}
-            handleTextboxRemove={this.handleUrlRemove}
-            textboxes={this.state.urlTextboxes} />
+          <div className="form__column">
+            <label className="form__label">
+              Torrents
+            </label>
+            <TextboxRepeater placeholder="Torrent URL"
+              handleTextboxAdd={this.handleUrlAdd}
+              handleTextboxChange={this.handleUrlChange}
+              handleTextboxRemove={this.handleUrlRemove}
+              textboxes={this.state.urlTextboxes} />
+          </div>
         </div>
         <AddTorrentsDestination onChange={this.handleDestinationChange} />
         <AddTorrentsActions dismiss={this.props.dismissModal}

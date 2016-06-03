@@ -30,7 +30,7 @@ export default class ModalActions extends React.Component {
     });
 
     return (
-      <div className="modal__button-group form__row">
+      <div className="modal__button-group">
         {buttons}
       </div>
     );
