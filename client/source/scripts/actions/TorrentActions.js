@@ -93,7 +93,7 @@ const TorrentActions = {
         });
       })
       .catch((error) => {
-        console.log(error);
+        console.trace(error);
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_FETCH_TORRENTS_ERROR,
           data: {

@@ -91,6 +91,10 @@ var client = {
     request.add('getTorrentList',
       {props: clientUtil.defaults.torrentPropertyMethods});
     request.postProcess((data) => {
+      if (!data || data[0][0].length === 0) {
+        return null;
+      }
+
       // TODO: Remove this nasty nested array business.
       _torrentCollection.updateTorrents(data[0][0]);
       _statusCount = _torrentCollection.statusCount;

@@ -19,17 +19,18 @@ import UIStore from '../../stores/UIStore';
 
 const METHODS_TO_BIND = [
   'bindExternalPriorityChangeHandler',
-  'onReceiveTorrentsError',
-  'onReceiveTorrentsSuccess',
+  'getListPadding',
+  'getViewportLimits',
   'handleContextMenuItemClick',
   'handleDetailsClick',
   'handleRightClick',
   'handleTorrentClick',
   'onContextMenuChange',
+  'onEmptyTorrentResponse',
+  'onReceiveTorrentsError',
+  'onReceiveTorrentsSuccess',
   'onTorrentFilterChange',
   'onTorrentSelectionChange',
-  'getListPadding',
-  'getViewportLimits',
   'setScrollPosition',
   'setViewportHeight'
 ];
@@ -39,6 +40,7 @@ export default class TorrentListContainer extends React.Component {
     super();
 
     this.state = {
+      emptyTorrentList: false,
       handleTorrentPriorityChange: null,
       contextMenu: null,
       maxTorrentIndex: 10,
@@ -46,7 +48,7 @@ export default class TorrentListContainer extends React.Component {
       scrollPosition: 0,
       torrentCount: 0,
       torrentHeight: 72,
-      torrents: null,
+      torrents: [],
       torrentRequestError: false,
       torrentRequestSuccess: false,
       viewportHeight: 0
@@ -72,6 +74,7 @@ export default class TorrentListContainer extends React.Component {
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
+    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_EMPTY, this.onEmptyTorrentResponse);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     UIStore.listen(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
     TorrentStore.fetchTorrents();
@@ -84,6 +87,7 @@ export default class TorrentListContainer extends React.Component {
     TorrentStore.unlisten(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
+    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_EMPTY, this.onEmptyTorrentResponse);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     UIStore.unlisten(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
   }
@@ -194,6 +198,18 @@ export default class TorrentListContainer extends React.Component {
     this.setState({contextMenu: UIStore.getActiveContextMenu()});
   }
 
+  onEmptyTorrentResponse() {
+    this.setState({
+      emptyTorrentList: true,
+      torrentRequestError: false,
+      torrentRequestSuccess: true
+    });
+
+    if (!UIStore.hasSatisfiedDependencies()) {
+      UIStore.satisfyDependency('torrent-list');
+    }
+  }
+
   onReceiveTorrentsError() {
     this.setState({torrentRequestError: true, torrentRequestSuccess: false});
   }
@@ -219,6 +235,16 @@ export default class TorrentListContainer extends React.Component {
 
   onTorrentSelectionChange() {
     this.forceUpdate();
+  }
+
+  getEmptyTorrentListNotification() {
+    return (
+      <div className="torrents__notification__wrapper">
+        <div className="torrents__notification">
+          No torrents to display.
+        </div>
+      </div>
+    );
   }
 
   getListPadding(minTorrentIndex, maxTorrentIndex, torrentCount) {
@@ -343,6 +369,10 @@ export default class TorrentListContainer extends React.Component {
             style={{height: `${listPadding.bottom}px`}}></li>
         </ul>
       );
+    }
+
+    if (this.state.emptyTorrentList) {
+      content = this.getEmptyTorrentListNotification();
     }
 
     return (

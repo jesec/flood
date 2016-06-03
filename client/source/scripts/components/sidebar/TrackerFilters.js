@@ -114,6 +114,10 @@ export default class TrackerFilters extends React.Component {
   render() {
     let filters = this.getFilters();
 
+    if (filters.length === 0) {
+      return null;
+    }
+
     return (
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
