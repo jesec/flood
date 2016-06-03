@@ -178,15 +178,21 @@ class TorrentStoreClass extends BaseStore {
   }
 
   handleFetchTorrentsError(error) {
-    console.log(error);
+    console.trace(error);
   }
 
   handleFetchTorrentsSuccess(torrents) {
+    this.resolveRequest('fetch-torrents');
+
+    if (torrents == null) {
+      this.emit(EventTypes.CLIENT_TORRENTS_EMPTY);
+      return;
+    }
+
     this.sortTorrents(torrents);
     this.filterTorrents();
 
     this.emit(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS);
-    this.resolveRequest('fetch-torrents');
   }
 
   handleRemoveTorrentsSuccess(response) {

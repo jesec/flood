@@ -220,7 +220,7 @@ var clientUtil = {
   },
 
   // TODO clean this up, write comments...
-  mapClientProps: (props, data, includeIndex) => {
+  mapClientProps: (props, data) => {
     var index = 0;
     var mappedObject = [];
 

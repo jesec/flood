@@ -1,5 +1,6 @@
 $torrent-list--background: #fff;
 $torrent-list--border: rgba($background, 0.15);
+$torrent-list--offset: 10px;
 
 $torrent--primary--foreground: #5b6d7c;
 $torrent--primary--foreground--error: #e95779;
@@ -14,6 +15,7 @@ $torrent--tertiary--foreground: #8899a8;
 $torrent--tertiary--foreground--stopped: rgba(#8899a8, 0.5);
 $torrent--tertiary--foreground--selected: rgba(#fff, 0.9);
 $torrent--tertiary--foreground--selected--stopped: rgba(#fff, 0.5);
+$torrent--notification--foreground: $torrent--tertiary--foreground--stopped;
 
 $torrent--background--hover: #f6f8fa;
 $torrent--background--selected: $blue;
@@ -34,7 +36,7 @@ $more-info--border: $textbox-repeater--button--border;
     box-shadow: -1px 0 0 0 $torrent-list--border;
     content: '';
     height: auto;
-    left: 10px;
+    left: $torrent-list--offset;
     position: absolute;
     right: 0;
     top: 0;
@@ -45,6 +47,22 @@ $more-info--border: $textbox-repeater--button--border;
     position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
+  }
+
+  &__notification {
+    color: $torrent--notification--foreground;
+    text-align: center;
+
+    &__wrapper {
+      justify-content: center;
+      align-items: center;
+      bottom: 0;
+      display: flex;
+      left: $torrent-list--offset;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
   }
 }
 
