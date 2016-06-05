@@ -5,7 +5,7 @@ import ActionTypes from '../constants/ActionTypes';
 
 const ClientActions = {
   fetchTransferData: () => {
-    return axios.get('/client/stats')
+    return axios.get('/stats')
       .then((json = {}) => {
         return json.data;
       })
@@ -28,7 +28,7 @@ const ClientActions = {
   },
 
   fetchTransferHistory: (opts) => {
-    return axios.get('/client/history', {
+    return axios.get('/history', {
       params: opts
     })
     .then((json = {}) => {

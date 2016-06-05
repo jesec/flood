@@ -24,18 +24,6 @@ router.post('/add-files', upload.array('torrents'), function(req, res, next) {
   client.addFiles(req, ajaxUtil.getResponseFn(res));
 });
 
-router.get('/history', function(req, res, next) {
-  history.get(req.query, ajaxUtil.getResponseFn(res));
-});
-
-router.get('/settings', function(req, res, next) {
-  settings.get(req.query, ajaxUtil.getResponseFn(res));
-});
-
-router.patch('/settings', function(req, res, next) {
-  settings.set(req.body, ajaxUtil.getResponseFn(res));
-});
-
 router.put('/settings/speed-limits', function(req, res, next) {
   client.setSpeedLimits(req.body, ajaxUtil.getResponseFn(res));
 });
@@ -43,10 +31,6 @@ router.put('/settings/speed-limits', function(req, res, next) {
 router.post('/start', function(req, res, next) {
   var hashes = req.body.hashes;
   client.startTorrent(hashes, ajaxUtil.getResponseFn(res));
-});
-
-router.get('/stats', function(req, res, next) {
-  client.getTransferStats(ajaxUtil.getResponseFn(res));
 });
 
 router.post('/stop', function(req, res, next) {
