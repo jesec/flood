@@ -1,9 +1,9 @@
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import ClientActions from '../actions/ClientActions';
 import config from '../../../../config';
 import EventTypes from '../constants/EventTypes';
+import FloodActions from '../actions/FloodActions';
 
 class TransferDataStoreClass extends BaseStore {
   constructor() {
@@ -18,14 +18,14 @@ class TransferDataStoreClass extends BaseStore {
   fetchTransferData() {
     if (!this.isRequestPending('fetch-transfer-history')) {
       this.beginRequest('fetch-transfer-history');
-      ClientActions.fetchTransferHistory({
+      FloodActions.fetchTransferHistory({
         snapshot: 'fiveMin'
       });
     }
 
     if (!this.isRequestPending('fetch-transfer-data')) {
       this.beginRequest('fetch-transfer-data');
-      ClientActions.fetchTransferData();
+      FloodActions.fetchTransferData();
     }
 
     if (this.pollTransferDataID === null) {
