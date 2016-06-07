@@ -41,7 +41,10 @@ if (development) {
 
 var webpackConfig = {
   devtool: webpackDevtool,
-  entry: './' + dirs.src + '/' + dirs.js + '/' + files.mainJs + '.js',
+  entry: [
+    'babel-polyfill',
+    './' + dirs.src + '/' + dirs.js + '/' + files.mainJs + '.js'
+  ],
   output: {
     filename: './' + dirs.dist + '/' + dirs.jsDist + '/' + files.mainJsDist + '.js'
   },
