@@ -30,7 +30,6 @@ It's a work-in-progress, and it might not have all of the features you want (yet
 * I run the web server with `screen` to keep the web server running independently of the terminal session.
 
 # Screenshots
-#### Torrent List View
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-a-0606.png)
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-b-0606.png)
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-c-0606.png)
