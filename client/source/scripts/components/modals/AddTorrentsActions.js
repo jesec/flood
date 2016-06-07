@@ -20,7 +20,8 @@ export default class AddTorrentsActions extends React.Component {
   }
 
   componentWillMount() {
-    let startTorrentsOnLoad = SettingsStore.getSettings('startTorrentsOnLoad');
+    let startTorrentsOnLoad = SettingsStore.getFloodSettings(
+      'startTorrentsOnLoad');
     if (startTorrentsOnLoad !== true) {
       this.setState({startTorrentsOnLoad: false});
     }
@@ -65,7 +66,7 @@ export default class AddTorrentsActions extends React.Component {
   }
 
   handleStartTorrentsToggle(value) {
-    SettingsStore.saveSettings({id: 'startTorrentsOnLoad', data: value});
+    SettingsStore.saveFloodSettings({id: 'startTorrentsOnLoad', data: value});
     if (!!this.props.onStartTorrentsToggle) {
       this.props.onStartTorrentsToggle(value);
     }

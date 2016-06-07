@@ -1,6 +1,7 @@
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
+import ClientActions from '../actions/ClientActions';
 import EventTypes from '../constants/EventTypes';
 import NotificationStore from './NotificationStore';
 import SettingsActions from '../actions/SettingsActions';
@@ -10,8 +11,15 @@ class SettingsStoreClass extends BaseStore {
   constructor() {
     super();
 
+    this.fetchStatus = {
+      clientSettingsFetched: false,
+      floodSettingsFetched: false
+    };
+
+    this.clientSettings = {};
+
     // Default settings are overridden by settings stored in database.
-    this.settings = {
+    this.floodSettings = {
       sortTorrents: {
         direction: 'desc',
         displayName: 'Date Added',
@@ -25,16 +33,61 @@ class SettingsStoreClass extends BaseStore {
     };
   }
 
-  fetchSettings(property) {
+  fetchClientSettings(property) {
+    ClientActions.fetchSettings(property);
+  }
+
+  fetchFloodSettings(property) {
     SettingsActions.fetchSettings(property);
   }
 
-  getSettings(property) {
+  getClientSettings(property) {
     if (property) {
-      return this.settings[property];
+      return this.clientSettings[property];
     }
 
-    return this.settings;
+    return Object.assign({}, this.clientSettings);
+  }
+
+  getFloodSettings(property) {
+    if (property) {
+      return this.floodSettings[property];
+    }
+
+    return Object.assign({}, this.floodSettings);
+  }
+
+  handleClientSettingsFetchSuccess(settings) {
+    this.fetchStatus.clientSettingsFetched = true;
+    this.clientSettings = settings;
+
+    this.emit(EventTypes.CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS);
+    this.processSettingsState();
+  }
+
+  handleClientSettingsFetchError(error) {
+    this.emit(EventTypes.CLIENT_SETTINGS_FETCH_REQUEST_ERROR);
+  }
+
+  handleClientSettingsSaveRequestError() {
+    this.emit(EventTypes.CLIENT_SETTINGS_SAVE_REQUEST_ERROR);
+  }
+
+  handleClientSettingsSaveRequestSuccess(data, options) {
+    this.emit(EventTypes.CLIENT_SETTINGS_SAVE_REQUEST_SUCCESS);
+
+    if (options.notify) {
+      NotificationStore.add({
+        adverb: 'Successfully',
+        action: 'saved',
+        subject: 'settings',
+        id: 'save-settings-success'
+      });
+    }
+
+    if (options.dismissModal) {
+      UIStore.dismissModal();
+    }
   }
 
   handleSettingsFetchError(error) {
@@ -42,12 +95,14 @@ class SettingsStoreClass extends BaseStore {
   }
 
   handleSettingsFetchSuccess(settings) {
+    this.fetchStatus.floodSettingsFetched = true;
+
     Object.keys(settings).forEach((property) => {
-      this.settings[property] = settings[property];
+      this.floodSettings[property] = settings[property];
     });
 
-    this.emit(EventTypes.SETTINGS_CHANGE);
     this.emit(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS);
+    this.processSettingsState();
   }
 
   handleSettingsSaveRequestError() {
@@ -62,7 +117,7 @@ class SettingsStoreClass extends BaseStore {
         adverb: 'Successfully',
         action: 'saved',
         subject: 'settings',
-        id: 'save-torrents-success'
+        id: 'save-settings-success'
       });
     }
 
@@ -71,10 +126,37 @@ class SettingsStoreClass extends BaseStore {
     }
   }
 
-  saveSettings(settings, options) {
-    this.settings[settings.id] = settings.data;
+  processSettingsState() {
+    if (this.fetchStatus.clientSettingsFetched
+      && this.fetchStatus.floodSettingsFetched) {
+      this.emit(EventTypes.SETTINGS_CHANGE);
+    }
+  }
+
+  saveFloodSettings(settings, options) {
+    if (!Array.isArray(settings)) {
+      settings = [settings];
+    }
+
     SettingsActions.saveSettings(settings, options);
+    this.updateLocalSettings(settings, 'floodSettings');
     this.emit(EventTypes.SETTINGS_CHANGE);
+  }
+
+  saveClientSettings(settings, options) {
+    if (!Array.isArray(settings)) {
+      settings = [settings];
+    }
+
+    ClientActions.saveSettings(settings, options);
+    this.updateLocalSettings(settings, 'clientSettings');
+    this.emit(EventTypes.SETTINGS_CHANGE);
+  }
+
+  updateLocalSettings(settings, settingsType) {
+    settings.forEach((setting) => {
+      this[settingsType][setting.id] = setting.data;
+    });
   }
 }
 
@@ -84,17 +166,29 @@ SettingsStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action, source} = payload;
 
   switch (action.type) {
-    case ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS:
-      SettingsStore.handleSettingsFetchSuccess(action.data);
+    case ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_ERROR:
+      SettingsStore.handleClientSettingsFetchError(action.error);
+      break;
+    case ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS:
+      SettingsStore.handleClientSettingsFetchSuccess(action.data);
       break;
     case ActionTypes.SETTINGS_FETCH_REQUEST_ERROR:
       SettingsStore.handleSettingsFetchError(action.error);
+      break;
+    case ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS:
+      SettingsStore.handleSettingsFetchSuccess(action.data);
       break;
     case ActionTypes.SETTINGS_SAVE_REQUEST_ERROR:
       SettingsStore.handleSettingsSaveRequestError(action.error);
       break;
     case ActionTypes.SETTINGS_SAVE_REQUEST_SUCCESS:
       SettingsStore.handleSettingsSaveRequestSuccess(action.data, action.options);
+      break;
+    case ActionTypes.CLIENT_SETTINGS_SAVE_ERROR:
+      SettingsStore.handleClientSettingsSaveRequestError(action.error);
+      break;
+    case ActionTypes.CLIENT_SETTINGS_SAVE_SUCCESS:
+      SettingsStore.handleClientSettingsSaveRequestSuccess(action.data, action.options);
       break;
   }
 });

@@ -30,6 +30,11 @@ $checkbox--border--hover: $checkbox--border;
 
 $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 
+$form--section--heading--margin: $spacing-unit * 2/5;
+$form--section--margin: $spacing-unit;
+$form--row--margin: $spacing-unit * 3/5;
+$form--column--padding: $spacing-unit * 2/5;
+
 .textbox,
 .button,
 .checkbox {
@@ -191,17 +196,36 @@ $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 
 .form {
 
+  &__section {
+
+    &__heading {
+      margin-bottom: $form--section--heading--margin;
+
+      & + .form__section__sub-heading {
+        margin-bottom: $form--section--heading--margin;
+        margin-top: $form--section--heading--margin * -1;
+      }
+    }
+
+    & + .form__section {
+      margin-top: $form--section--margin;
+    }
+  }
+
   &__row {
     display: flex;
 
     & + .form__row {
-      margin-top: $spacing-unit;
+      margin-top: $form--row--margin;
     }
   }
 
   &__column {
+    display: flex;
     flex: 1;
-    padding: 0 $spacing-unit * 2/5;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 $form--column--padding;
 
     &:first-child {
       padding-left: 0;
@@ -209,6 +233,38 @@ $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 
     &:last-child {
       padding-right: 0;
+    }
+
+    &--auto {
+      flex-grow: 0;
+      flex-shrink: 1;
+      flex-basis: auto;
+    }
+
+    &--half {
+      max-width: 50%;
+
+      &:last-child {
+        padding-right: $form--column--padding;
+      }
+    }
+
+    &--small {
+      max-width: 125px;
+
+      // For small columns which are the only column in the row, keep the
+      // column's padding.
+      &:first-child {
+
+        &:last-child {
+          padding-right: $form--column--padding;
+        }
+      }
+    }
+
+    &--unlabled {
+      justify-content: center;
+      padding-top: $spacing-unit * 3/5;
     }
   }
 

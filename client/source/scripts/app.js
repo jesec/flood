@@ -13,7 +13,8 @@ import TorrentListView from './components/panels/TorrentListView';
 
 class FloodApp extends React.Component {
   componentDidMount() {
-    SettingsStore.fetchSettings();
+    SettingsStore.fetchClientSettings();
+    SettingsStore.fetchFloodSettings();
   }
 
   render() {

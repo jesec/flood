@@ -369,7 +369,7 @@ $more-info--border: $textbox-repeater--button--border;
 
     &--eta {
       opacity: 0;
-      transition: opacity 1s, visibility 1s;
+      transition: color 0.25s, opacity 1s, visibility 1s;
       visibility: hidden;
 
       .torrent__details--segment {

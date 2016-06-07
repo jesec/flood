@@ -1,7 +1,10 @@
 $modal--background: #12191f;
+
 $modal--heading--background: #161c24;
 $modal--heading--foreground: #7d95ab;
 $modal--heading--border: #0f151b;
+
+$modal--sub-heading--foreground: desaturate(darken($modal--heading--foreground, 23%), 2%);
 
 $modal--transition--duration: 0.5s;
 $modal--transition--scale: 0.85;
@@ -106,15 +109,6 @@ $modal--tabs--in-body--background: #11171d;
     }
   }
 
-  &__tab {
-
-    &__introduction {
-      color: $modal--heading--foreground;
-      font-size: 0.9em;
-      margin-bottom: $spacing-unit * 3/4;
-    }
-  }
-
   &__header {
     background: $modal--heading--background;
     border-radius: $modal--border-radius $modal--border-radius 0 0;
@@ -173,6 +167,7 @@ $modal--tabs--in-body--background: #11171d;
   }
 
   &__footer {
+    flex: 0 0 auto;
     padding: 0 $modal--padding--horizontal $modal--padding--vertical $modal--padding--horizontal;
 
     .modal {
@@ -283,6 +278,10 @@ $modal--tabs--in-body--background: #11171d;
 
           &__content {
             flex: 1 0 auto;
+
+            & + .modal__footer {
+              margin-top: $spacing-unit * 3/5;
+            }
           }
         }
       }
@@ -369,6 +368,23 @@ $modal--tabs--in-body--background: #11171d;
             bottom: 10%;
           }
         }
+      }
+    }
+  }
+
+  .form {
+
+    &__section {
+
+      &__heading {
+        color: $modal--heading--foreground;
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
+      &__sub-heading {
+        color: $modal--sub-heading--foreground;
+        font-size: 0.8em;
       }
     }
   }
