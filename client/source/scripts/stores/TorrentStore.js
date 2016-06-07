@@ -104,7 +104,7 @@ class TorrentStoreClass extends BaseStore {
   handleAddTorrentSuccess(response) {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_SUCCESS);
 
-    SettingsStore.saveSettings({
+    SettingsStore.saveFloodSettings({
       id: 'torrentDestination',
       data: response.destination
     });

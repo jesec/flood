@@ -1,11 +1,12 @@
 'use strict';
 
-let util = require('util');
-
-let clientUtil = require('../util/clientUtil');
 let fs = require('fs');
 let mv = require('mv');
 let path = require('path');
+let util = require('util');
+
+let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
+let clientUtil = require('../util/clientUtil');
 let rTorrentPropMap = require('../util/rTorrentPropMap');
 let scgi = require('../util/scgi');
 let stringUtil = require('../../shared/util/stringUtil');
@@ -163,6 +164,27 @@ class ClientRequest {
     );
   }
 
+  fetchSettingsMethodCall(options) {
+    let requestedSettings = [];
+
+    if (options.requestedSettings) {
+      requestedSettings = options.requestedSettings;
+    } else {
+      requestedSettings = clientSettingsMap.defaults.map((settingsKey) => {
+        return clientSettingsMap[settingsKey];
+      });
+    }
+
+    // Ensure client's response gets mapped to the correct requested property.
+    if (options.setPropertiesArr) {
+      options.setPropertiesArr(requestedSettings);
+    }
+
+    requestedSettings.forEach((settingsKey) => {
+      this.requests.push(this.getMethodCall(settingsKey));
+    });
+  }
+
   getTorrentDetailsMethodCall(options) {
     var peerParams = [options.hash, ''].concat(options.peerProps);
     var fileParams = [options.hash, ''].concat(options.fileProps);
@@ -248,6 +270,16 @@ class ClientRequest {
         [hash, options.priority]));
       this.requests.push(this.getMethodCall('d.update_priorities',
         [hash]));
+    });
+  }
+
+  setSettingsMethodCall(options) {
+    console.log(options);
+    let settings = this.getEnsuredArray(options.settings);
+
+    settings.forEach((setting) => {
+      this.requests.push(this.getMethodCall(`${clientSettingsMap[setting.id]}.set`,
+        ['', setting.data]));
     });
   }
 

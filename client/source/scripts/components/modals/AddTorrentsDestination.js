@@ -20,7 +20,8 @@ export default class AddTorrentsDestination extends React.Component {
   }
 
   componentWillMount() {
-    let destination = SettingsStore.getSettings('torrentDestination') || '';
+    let destination = SettingsStore.getFloodSettings('torrentDestination')
+      || '';
     if (this.props.suggested) {
       destination = this.props.suggested;
     }

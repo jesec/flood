@@ -29,7 +29,7 @@ export default class ActionBar extends React.Component {
     super();
 
     this.state = {
-      sortBy: SettingsStore.getSettings('sortTorrents')
+      sortBy: SettingsStore.getFloodSettings('sortTorrents')
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -40,7 +40,7 @@ export default class ActionBar extends React.Component {
   componentDidMount() {
     this.onSortChange();
     SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.onSortChange);
-    SettingsStore.fetchSettings('sortTorrents');
+    SettingsStore.fetchFloodSettings('sortTorrents');
   }
 
   componentWillUnmount() {
@@ -99,7 +99,7 @@ export default class ActionBar extends React.Component {
   }
 
   handleSortChange(sortBy) {
-    SettingsStore.saveSettings({id: 'sortTorrents', data: sortBy});
+    SettingsStore.saveFloodSettings({id: 'sortTorrents', data: sortBy});
     UIActions.setTorrentsSort(sortBy);
   }
 
@@ -112,7 +112,7 @@ export default class ActionBar extends React.Component {
   }
 
   onSortChange() {
-    let sortBy = SettingsStore.getSettings('sortTorrents');
+    let sortBy = SettingsStore.getFloodSettings('sortTorrents');
     TorrentFilterStore.setTorrentsSort(sortBy);
     this.setState({sortBy});
   }

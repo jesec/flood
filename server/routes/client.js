@@ -24,23 +24,28 @@ router.post('/add-files', upload.array('torrents'), function(req, res, next) {
   client.addFiles(req, ajaxUtil.getResponseFn(res));
 });
 
+router.get('/settings', function(req, res, next) {
+  client.getSettings(req.query, ajaxUtil.getResponseFn(res));
+});
+
+router.patch('/settings', function(req, res, next) {
+  client.setSettings(req.body, ajaxUtil.getResponseFn(res));
+});
+
 router.put('/settings/speed-limits', function(req, res, next) {
   client.setSpeedLimits(req.body, ajaxUtil.getResponseFn(res));
 });
 
 router.post('/start', function(req, res, next) {
-  var hashes = req.body.hashes;
-  client.startTorrent(hashes, ajaxUtil.getResponseFn(res));
+  client.startTorrent(req.body.hashes, ajaxUtil.getResponseFn(res));
 });
 
 router.post('/stop', function(req, res, next) {
-  var hashes = req.body.hashes;
-  client.stopTorrent(hashes, ajaxUtil.getResponseFn(res));
+  client.stopTorrent(req.body.hashes, ajaxUtil.getResponseFn(res));
 });
 
 router.post('/torrent-details', function(req, res, next) {
-  var hash = req.body.hash;
-  client.getTorrentDetails(hash, ajaxUtil.getResponseFn(res));
+  client.getTorrentDetails(req.body.hash, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/torrents', function(req, res, next) {
@@ -59,17 +64,16 @@ router.post('/torrents/move', function(req, res, next) {
   client.moveTorrents(req.body, ajaxUtil.getResponseFn(res));
 });
 
+router.post('/torrents/delete', function(req, res, next) {
+  client.deleteTorrents(req.body.hash, ajaxUtil.getResponseFn(res));
+});
+
 router.get('/torrents/status-count', function(req, res, next) {
   client.getTorrentStatusCount(ajaxUtil.getResponseFn(res));
 });
 
 router.get('/torrents/tracker-count', function(req, res, next) {
   client.getTorrentTrackerCount(ajaxUtil.getResponseFn(res));
-});
-
-router.post('/torrents/delete', function(req, res, next) {
-  var hash = req.body.hash;
-  client.deleteTorrents(hash, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/methods.json', function(req, res, next) {

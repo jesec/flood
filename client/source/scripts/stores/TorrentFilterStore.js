@@ -13,7 +13,7 @@ class TorrentFilterStoreClass extends BaseStore {
     this.searchFilter = null;
     this.statusFilter = 'all';
     this.trackerFilter = 'all';
-    this.sortTorrentsBy = SettingsStore.getSettings('sortTorrents');
+    this.sortTorrentsBy = SettingsStore.getFloodSettings('sortTorrents');
   }
 
   fetchTorrentStatusCount() {

@@ -16,7 +16,6 @@ const SettingsActions = {
         });
       })
       .catch((error) => {
-        console.trace(error);
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FETCH_REQUEST_ERROR,
           error
@@ -37,7 +36,6 @@ const SettingsActions = {
         });
       })
       .catch((error) => {
-        console.trace(error);
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_SAVE_REQUEST_ERROR,
           error

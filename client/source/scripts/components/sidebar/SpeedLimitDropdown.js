@@ -16,7 +16,7 @@ class SpeedLimitDropdown extends React.Component {
     super();
 
     this.state = {
-      speedLimits: SettingsStore.getSettings('speedLimits'),
+      speedLimits: SettingsStore.getFloodSettings('speedLimits'),
       throttle: null
     };
 
@@ -30,7 +30,7 @@ class SpeedLimitDropdown extends React.Component {
       this.handleSettingsFetchRequestSuccess);
     TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
       this.onTransferDataRequestSuccess);
-    SettingsStore.fetchSettings('speedLimits');
+    SettingsStore.fetchFloodSettings('speedLimits');
     TransferDataStore.fetchTransferData();
   }
 
@@ -129,7 +129,7 @@ class SpeedLimitDropdown extends React.Component {
   }
 
   handleSettingsFetchRequestSuccess() {
-    let speedLimits = SettingsStore.getSettings('speedLimits');
+    let speedLimits = SettingsStore.getFloodSettings('speedLimits');
 
     if (!!speedLimits) {
       this.setState({speedLimits});

@@ -4,6 +4,7 @@ let fs = require('fs');
 let util = require('util');
 
 let clientResponseUtil = require('../util/clientResponseUtil');
+let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 let ClientRequest = require('./ClientRequest');
 let clientUtil = require('../util/clientUtil');
 let propsMap = require('../../shared/constants/propsMap');
@@ -57,6 +58,33 @@ var client = {
     let request = new ClientRequest();
 
     request.add('removeTorrents', {hashes});
+    request.onComplete(callback);
+    request.send();
+  },
+
+  getSettings: (options, callback) => {
+    let properties = [];
+    let request = new ClientRequest();
+    let response = {};
+
+    request.add('fetchSettings', {
+      options,
+      setPropertiesArr: (propertiesArr) => {
+        properties = propertiesArr;
+      }
+    });
+
+    request.postProcess((data) => {
+      if (!data) {
+        return null;
+      }
+
+      data.forEach((datum, index) => {
+        response[clientSettingsMap[properties[index]]] = datum[0];
+      });
+
+      return response;
+    });
     request.onComplete(callback);
     request.send();
   },
@@ -154,7 +182,7 @@ var client = {
     mainRequest.send();
   },
 
-  setFilePriority:  (hashes, data, callback) => {
+  setFilePriority: (hashes, data, callback) => {
     // TODO Add support for multiple hashes.
     let fileIndex = data.fileIndices[0];
     let request = new ClientRequest();
@@ -164,10 +192,23 @@ var client = {
     request.send();
   },
 
-  setPriority:  (hashes, data, callback) => {
+  setPriority: (hashes, data, callback) => {
     let request = new ClientRequest();
 
     request.add('setPriority', {hashes, priority: data.priority});
+    request.onComplete(callback);
+    request.send();
+  },
+
+  setSettings: (payloads, callback) => {
+    let request = new ClientRequest();
+
+    if (payloads.length === 0) {
+      callback({});
+      return;
+    }
+
+    request.add('setSettings', {settings: payloads});
     request.onComplete(callback);
     request.send();
   },

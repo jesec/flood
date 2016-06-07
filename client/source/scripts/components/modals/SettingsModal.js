@@ -1,16 +1,19 @@
 import classnames from 'classnames';
 import React from 'react';
 
+import BandwidthTab from '../settings/BandwidthTab';
+import ConnectivityTab from '../settings/ConnectivityTab';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import Modal from './Modal';
 import SettingsStore from '../../stores/SettingsStore';
-import SpeedLimitTab from '../settings/SpeedLimitTab';
+import StorageTab from '../settings/StorageTab';
 
 const METHODS_TO_BIND = [
   'handleSaveSettingsClick',
   'handleSaveSettingsError',
-  'handleSettingsChange',
+  'handleClientSettingsChange',
+  'handleFloodSettingsChange',
   'handleSettingsStoreChange'
 ];
 
@@ -20,7 +23,10 @@ export default class SettingsModal extends React.Component {
 
     this.state = {
       isSavingSettings: false,
-      settings: SettingsStore.getSettings()
+      changedClientSettings: {},
+      changedFloodSettings: {},
+      clientSettings: SettingsStore.getClientSettings(),
+      floodSettings: SettingsStore.getFloodSettings()
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -33,12 +39,14 @@ export default class SettingsModal extends React.Component {
       this.handleSettingsStoreChange);
     SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
       this.handleSaveSettingsError);
-    SettingsStore.fetchSettings('speedLimits');
+    SettingsStore.fetchFloodSettings('speedLimits');
   }
 
   componentWillUnmount() {
     SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE,
       this.handleSettingsStoreChange);
+    SettingsStore.unlisten(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
+      this.handleSaveSettingsError);
   }
 
   getActions() {
@@ -75,14 +83,22 @@ export default class SettingsModal extends React.Component {
   handleSaveSettingsClick() {
     this.setState({isSavingSettings: true});
 
-    let settingsToSave = Object.keys(this.state.settings).map((settingsKey) =>  {
+    let floodSettings = Object.keys(this.state.changedFloodSettings).map((settingsKey) =>  {
       return {
         id: settingsKey,
-        data: this.state.settings[settingsKey]
+        data: this.state.changedFloodSettings[settingsKey]
       };
     });
 
-    SettingsStore.saveSettings(settingsToSave, {dismissModal: true, notify: true});
+    let clientSettings = Object.keys(this.state.changedClientSettings).map((settingsKey) =>  {
+      return {
+        id: settingsKey,
+        data: this.state.changedClientSettings[settingsKey]
+      };
+    });
+
+    SettingsStore.saveFloodSettings(floodSettings, {dismissModal: true, notify: true});
+    SettingsStore.saveClientSettings(clientSettings, {dismissModal: true, notify: true});
   }
 
   handleSaveSettingsError() {
@@ -95,13 +111,23 @@ export default class SettingsModal extends React.Component {
 
   handleSettingsStoreChange() {
     this.setState({
-      settings: SettingsStore.getSettings()
+      clientSettings: SettingsStore.getClientSettings(),
+      floodSettings: SettingsStore.getFloodSettings()
     });
   }
 
-  handleSettingsChange(changedSettings) {
-    let settings = this.mergeObjects(this.state.settings, changedSettings);
-    this.setState({settings});
+  handleFloodSettingsChange(changedSettings) {
+    let floodSettings = this.mergeObjects(this.state.floodSettings, changedSettings);
+    let changedFloodSettings = this.mergeObjects(this.state.changedFloodSettings, changedSettings);
+
+    this.setState({floodSettings, changedFloodSettings});
+  }
+
+  handleClientSettingsChange(changedSettings) {
+    let clientSettings = this.mergeObjects(this.state.clientSettings, changedSettings);
+    let changedClientSettings = this.mergeObjects(this.state.changedClientSettings, changedSettings);
+
+    this.setState({clientSettings, changedClientSettings});
   }
 
   mergeObjects(objA, objB) {
@@ -123,13 +149,30 @@ export default class SettingsModal extends React.Component {
 
   render() {
     let tabs = {
-      'speed-limit': {
-        content: SpeedLimitTab,
+      bandwidth: {
+        content: BandwidthTab,
         props: {
-          onSettingsChange: this.handleSettingsChange,
-          settings: this.state.settings
+          onClientSettingsChange: this.handleClientSettingsChange,
+          onSettingsChange: this.handleFloodSettingsChange,
+          settings: this.mergeObjects(this.state.floodSettings, this.state.clientSettings)
         },
-        label: 'Speed Limits'
+        label: 'Bandwidth'
+      },
+      connectivity: {
+        content: ConnectivityTab,
+        props: {
+          onClientSettingsChange: this.handleClientSettingsChange,
+          settings: this.state.clientSettings
+        },
+        label: 'Connectivity'
+      },
+      storage: {
+        content: StorageTab,
+        props: {
+          onClientSettingsChange: this.handleClientSettingsChange,
+          settings: this.state.clientSettings
+        },
+        label: 'Storage'
       }
     };
 
