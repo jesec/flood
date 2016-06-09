@@ -87,7 +87,7 @@ export default class ConnectivityTab extends SettingsTab {
               <Checkbox
                 checked={this.getDHTEnabledValue()}
                 onChange={this.handleDHTToggle}>
-                Enabled
+                Enable
               </Checkbox>
             </div>
           </div>
@@ -133,13 +133,20 @@ export default class ConnectivityTab extends SettingsTab {
             </div>
           </div>
           <div className="form__row">
-            <div className="form__column form__column--half">
+            <div className="form__column">
               <label className="form__label">
                 Amount Desired
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'trackersNumWant')}
                 value={this.getFieldValue('trackersNumWant')} />
+            </div>
+            <div className="form__column form__column--unlabled">
+              <Checkbox
+                checked={this.getFieldValue('protocolPex') === '1'}
+                onChange={this.handleClientSettingCheckboxChange.bind(this, 'protocolPex')}>
+                Enable Peer Exchange
+              </Checkbox>
             </div>
           </div>
         </div>
