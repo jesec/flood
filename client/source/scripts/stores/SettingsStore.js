@@ -155,7 +155,11 @@ class SettingsStoreClass extends BaseStore {
 
   updateLocalSettings(settings, settingsType) {
     settings.forEach((setting) => {
-      this[settingsType][setting.id] = setting.data;
+      if (setting.overrideLocalSetting) {
+        this[settingsType][setting.overrideID] = setting.overrideData;
+      } else {
+        this[settingsType][setting.id] = setting.data;
+      }
     });
   }
 }

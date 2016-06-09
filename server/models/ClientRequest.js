@@ -126,7 +126,6 @@ class ClientRequest {
   }
 
   addURLsMethodCall(options) {
-    console.log(options);
     let path = options.path;
     let start = options.start;
     let urls = this.getEnsuredArray(options.urls);
@@ -274,12 +273,15 @@ class ClientRequest {
   }
 
   setSettingsMethodCall(options) {
-    console.log(options);
     let settings = this.getEnsuredArray(options.settings);
 
     settings.forEach((setting) => {
-      this.requests.push(this.getMethodCall(`${clientSettingsMap[setting.id]}.set`,
-        ['', setting.data]));
+      if (setting.overrideLocalSetting) {
+        this.requests.push(this.getMethodCall(setting.id, setting.data));
+      } else {
+        this.requests.push(this.getMethodCall(`${clientSettingsMap[setting.id]}.set`,
+          ['', setting.data]));
+      }
     });
   }
 

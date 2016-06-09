@@ -10,10 +10,11 @@ import SettingsStore from '../../stores/SettingsStore';
 import StorageTab from '../settings/StorageTab';
 
 const METHODS_TO_BIND = [
+  'handleClientSettingsChange',
+  'handleCustomsSettingChange',
+  'handleFloodSettingsChange',
   'handleSaveSettingsClick',
   'handleSaveSettingsError',
-  'handleClientSettingsChange',
-  'handleFloodSettingsChange',
   'handleSettingsStoreChange'
 ];
 
@@ -80,9 +81,14 @@ export default class SettingsModal extends React.Component {
     ];
   }
 
-  handleSaveSettingsClick() {
-    this.setState({isSavingSettings: true});
+  handleCustomsSettingChange(data) {
+    this.setState({
+      changedClientSettings: this.mergeObjects(this.state.changedClientSettings,
+        {[data.id]: {...data, overrideLocalSetting: true}})
+    });
+  }
 
+  handleSaveSettingsClick() {
     let floodSettings = Object.keys(this.state.changedFloodSettings).map((settingsKey) =>  {
       return {
         id: settingsKey,
@@ -91,11 +97,16 @@ export default class SettingsModal extends React.Component {
     });
 
     let clientSettings = Object.keys(this.state.changedClientSettings).map((settingsKey) =>  {
-      return {
-        id: settingsKey,
-        data: this.state.changedClientSettings[settingsKey]
-      };
+      let data = this.state.changedClientSettings[settingsKey];
+
+      if (data.overrideLocalSetting) {
+        return data;
+      }
+
+      return {id: settingsKey, data};
     });
+
+    this.setState({isSavingSettings: true});
 
     SettingsStore.saveFloodSettings(floodSettings, {dismissModal: true, notify: true});
     SettingsStore.saveClientSettings(clientSettings, {dismissModal: true, notify: true});
@@ -161,6 +172,7 @@ export default class SettingsModal extends React.Component {
       connectivity: {
         content: ConnectivityTab,
         props: {
+          onCustomSettingsChange: this.handleCustomsSettingChange,
           onClientSettingsChange: this.handleClientSettingsChange,
           settings: this.state.clientSettings
         },
