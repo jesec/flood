@@ -4,7 +4,7 @@ let objectUtil = require('../util/objectUtil');
 
 const clientSettingsMap = objectUtil.reflect({
   dhtPort: 'dht.port',
-  dhtStatus: 'dht.statistics',
+  dhtStats: 'dht.statistics',
   directoryDefault: 'directory.default',
   maxFileSize: 'system.file.max_size',
   networkBindAddress: 'network.bind_address',
@@ -55,7 +55,7 @@ const clientSettingsMap = objectUtil.reflect({
 
 clientSettingsMap.defaults = [
   'dhtPort',
-  'dhtStatus',
+  'dhtStats',
   'directoryDefault',
   'maxFileSize',
   'networkBindAddress',

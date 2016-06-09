@@ -4,11 +4,38 @@ import React from 'react';
 import Checkbox from '../forms/Checkbox';
 import SettingsTab from './SettingsTab';
 
+const METHODS_TO_BIND = ['handleDHTToggle'];
+
 export default class ConnectivityTab extends SettingsTab {
   constructor() {
     super(...arguments);
 
     this.state = {};
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  getDHTEnabledValue() {
+    if (this.state.dhtEnabled != null) {
+      return this.state.dhtEnabled;
+    }
+
+    return this.props.settings.dhtStats.dht === 'auto';
+  }
+
+  handleDHTToggle() {
+    let dhtEnabled = !this.getDHTEnabledValue();
+    let dhtEnabledString = dhtEnabled ? 'auto' : 'disable';
+
+    this.setState({dhtEnabled});
+    this.props.onCustomSettingsChange({
+      id: 'dht',
+      data: [dhtEnabledString],
+      overrideID: 'dhtStats',
+      overrideData: {dht: dhtEnabledString}
+    });
   }
 
   render() {
@@ -55,6 +82,13 @@ export default class ConnectivityTab extends SettingsTab {
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'dhtPort')}
                 value={this.getFieldValue('dhtPort')} />
+            </div>
+            <div className="form__column form__column--auto  form__column--unlabled">
+              <Checkbox
+                checked={this.getDHTEnabledValue()}
+                onChange={this.handleDHTToggle}>
+                Enabled
+              </Checkbox>
             </div>
           </div>
         </div>
