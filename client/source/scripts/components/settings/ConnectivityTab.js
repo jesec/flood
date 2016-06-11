@@ -43,12 +43,12 @@ export default class ConnectivityTab extends SettingsTab {
       <div className="form">
         <div className="form__section">
           <div className="form__section__heading">
-            Listening Port
+            Incoming Connections
           </div>
           <div className="form__row">
             <div className="form__column form__column--small">
               <label className="form__label">
-                Port Range
+                Listening Port Range
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'networkPortRange')}
@@ -69,15 +69,25 @@ export default class ConnectivityTab extends SettingsTab {
               </Checkbox>
             </div>
           </div>
+          <div className="form__row">
+            <div className="form__column form__column--half">
+              <label className="form__label">
+                Reported IP/Hostname
+              </label>
+              <input className="textbox" type="text"
+                onChange={this.handleClientSettingFieldChange.bind(this, 'networkLocalAddress')}
+                value={this.getFieldValue('networkLocalAddress')} />
+            </div>
+          </div>
         </div>
         <div className="form__section">
           <div className="form__section__heading">
-            DHT
+            Decentralized Peer Discovery
           </div>
           <div className="form__row">
             <div className="form__column form__column--small">
               <label className="form__label">
-                Port
+                DHT Port
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'dhtPort')}
@@ -87,7 +97,14 @@ export default class ConnectivityTab extends SettingsTab {
               <Checkbox
                 checked={this.getDHTEnabledValue()}
                 onChange={this.handleDHTToggle}>
-                Enable
+                Enable DHT
+              </Checkbox>
+            </div>
+            <div className="form__column form__column--auto form__column--unlabled">
+              <Checkbox
+                checked={this.getFieldValue('protocolPex') === '1'}
+                onChange={this.handleClientSettingCheckboxChange.bind(this, 'protocolPex')}>
+                Enable Peer Exchange
               </Checkbox>
             </div>
           </div>
@@ -133,20 +150,13 @@ export default class ConnectivityTab extends SettingsTab {
             </div>
           </div>
           <div className="form__row">
-            <div className="form__column">
+            <div className="form__column form__column--half">
               <label className="form__label">
-                Amount Desired
+                Peers Desired
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'trackersNumWant')}
                 value={this.getFieldValue('trackersNumWant')} />
-            </div>
-            <div className="form__column form__column--unlabled">
-              <Checkbox
-                checked={this.getFieldValue('protocolPex') === '1'}
-                onChange={this.handleClientSettingCheckboxChange.bind(this, 'protocolPex')}>
-                Enable Peer Exchange
-              </Checkbox>
             </div>
           </div>
         </div>
