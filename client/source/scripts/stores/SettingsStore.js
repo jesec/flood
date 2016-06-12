@@ -61,7 +61,6 @@ class SettingsStoreClass extends BaseStore {
     this.fetchStatus.clientSettingsFetched = true;
     this.clientSettings = settings;
 
-    this.emit(EventTypes.CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS);
     this.processSettingsState();
   }
 

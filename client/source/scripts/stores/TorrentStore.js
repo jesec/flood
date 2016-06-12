@@ -229,7 +229,7 @@ class TorrentStoreClass extends BaseStore {
 
   sortTorrents(torrents) {
     let torrentsSort = TorrentFilterStore.getTorrentsSort();
-    this.torrents = torrents;
+    this.torrents = torrents || this.torrents;
 
     // Convert torrents hash to array and sort it.
     this.sortedTorrents = sortTorrents(this.torrents,

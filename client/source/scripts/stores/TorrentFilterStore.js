@@ -48,6 +48,10 @@ class TorrentFilterStoreClass extends BaseStore {
     return this.torrentTrackerCount;
   }
 
+  handleFetchSettingsRequest() {
+    this.setTorrentsSort(SettingsStore.getFloodSettings('sortTorrents'));
+  }
+
   handleSortPropsRequestSuccess(sortBy) {
     this.setTorrentsSort(sortBy);
   }
@@ -130,6 +134,10 @@ TorrentFilterStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_ERROR:
       TorrentFilterStore.handleTorrentTrackerCountRequestError(action.error);
+      break;
+    case ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS:
+      AppDispatcher.waitFor([SettingsStore.dispatcherID]);
+      TorrentFilterStore.handleFetchSettingsRequest();
       break;
   }
 });

@@ -40,7 +40,6 @@ export default class SettingsModal extends React.Component {
       this.handleSettingsStoreChange);
     SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
       this.handleSaveSettingsError);
-    SettingsStore.fetchFloodSettings('speedLimits');
   }
 
   componentWillUnmount() {
