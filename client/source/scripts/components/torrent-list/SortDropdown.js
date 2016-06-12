@@ -112,8 +112,7 @@ export default class SortDropdown extends React.Component {
       <Dropdown
         handleItemSelect={this.handleItemSelect}
         header={this.getDropdownHeader()}
-        menuItems={this.getDropdownMenus()}
-        />
+        menuItems={this.getDropdownMenus()} />
     );
   }
 }

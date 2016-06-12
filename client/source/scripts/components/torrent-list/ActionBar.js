@@ -40,7 +40,6 @@ export default class ActionBar extends React.Component {
   componentDidMount() {
     this.onSortChange();
     SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.onSortChange);
-    SettingsStore.fetchFloodSettings('sortTorrents');
   }
 
   componentWillUnmount() {

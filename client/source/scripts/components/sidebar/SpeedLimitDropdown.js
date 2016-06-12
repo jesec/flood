@@ -30,7 +30,6 @@ class SpeedLimitDropdown extends React.Component {
       this.handleSettingsFetchRequestSuccess);
     TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
       this.onTransferDataRequestSuccess);
-    SettingsStore.fetchFloodSettings('speedLimits');
     TransferDataStore.fetchTransferData();
   }
 
