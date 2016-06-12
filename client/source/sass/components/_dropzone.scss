@@ -1,15 +1,17 @@
-$dropzone--background: #0f151a;
-$dropzone--foreground: #3f5465;
+$dropzone--background: $textbox--background;
+$dropzone--foreground: $textbox--foreground;
 $dropzone--foreground--dragging: $blue;
-$dropzone--border: #0c0f12;
+$dropzone--border: $textbox--border;
 $dropzone--border--hover: darken($dropzone--border, 20%);
 $dropzone--border--dragging: $blue;
 $dropzone--browse--foreground: $blue;
-$dropzone--icon--fill: #3f5465;
+$dropzone--icon--fill: rgba($dropzone--foreground, 0.5);
 $dropzone--icon--fill--hover: $blue;
 $dropzone--icon--fill--dragging: $blue;
-$dropzone--file--icon--fill: rgba(#3f5465, 0.5);
-$dropzone--file--icon--fill--hover: rgba(lighten(#3f5465, 10%), 0.5);
+
+$dropzone--file--foreground: $dropzone--foreground;
+$dropzone--file--icon--fill: rgba($dropzone--file--foreground, 0.5);
+$dropzone--file--icon--fill--hover: rgba(lighten($dropzone--file--foreground, 20%), 0.5);
 
 .dropzone {
   align-items: center;
@@ -90,7 +92,7 @@ $dropzone--file--icon--fill--hover: rgba(lighten(#3f5465, 10%), 0.5);
     @extend .textbox;
     @extend .textbox.is-fulfilled;
     border-radius: 4px 4px 0 0;
-    color: #3f5465;
+    color: $dropzone--file--foreground;
     font-size: 0.8em;
     margin-bottom: -1px;
     padding: $spacing-unit * 1/2;

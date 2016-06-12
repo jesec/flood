@@ -1,31 +1,33 @@
-$form--label--foreground: #3f5465;
+$form--label--foreground: #5c7087;
 
-$textbox--background: #0f151a;
-$textbox--foreground: #5e7182;
-$textbox--placeholder: #2b3946;
-$textbox--border: #0c0f12;
-$textbox--fulfilled--background: #0f151a;
-$textbox--active--background: #0f151a;
+$textbox--background: #242b36;
+$textbox--foreground: #5e728c;
+$textbox--placeholder: #424d5e;
+$textbox--border: #1a2028;
+$textbox--fulfilled--background: $textbox--background;
+$textbox--active--background: $textbox--background;
 $textbox--active--border: $blue;
 $textbox--active--foreground: $blue;
 $textbox--active--placeholder: $textbox--placeholder;
+$textbox--selection--foreground: #1a2028;
+$textbox--selection--background: $blue--lighter;
 
 $button--primary--foreground: #fff;
 $button--primary--background: $blue;
 $button--primary--background--hover: lighten($button--primary--background, 4%);
-$button--primary--border: darken(#212a38, 10%);
+$button--primary--border: $textbox--border;
 $button--primary--border--hover: $button--primary--border;
 
-$button--deemphasized--foreground: #677c9e;
-$button--deemphasized--background: #212a38;
-$button--deemphasized--foreground--hover: lighten(#677c9e, 10%);
-$button--deemphasized--background--hover: lighten(#212a38, 2.5%);
-$button--deemphasized--border: darken($button--deemphasized--background, 10%);
+$button--deemphasized--foreground: #6e8199;
+$button--deemphasized--background: #343e4c;
+$button--deemphasized--foreground--hover: lighten($button--deemphasized--foreground, 10%);
+$button--deemphasized--background--hover: lighten($button--deemphasized--background, 2.5%);
+$button--deemphasized--border: $textbox--border;
 $button--deemphasized--border--hover: $button--deemphasized--border;
 
-$checkbox--background: #212a38;
+$checkbox--background: $button--deemphasized--background;
 $checkbox--background--hover: lighten($checkbox--background, 5%);
-$checkbox--border: darken($button--deemphasized--background, 10%);
+$checkbox--border: $textbox--border;
 $checkbox--border--hover: $checkbox--border;
 
 $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
@@ -63,6 +65,11 @@ $form--column--padding: $spacing-unit * 2/5;
     color: $textbox--placeholder;
     font-style: italic;
     transition: color 0.25s;
+  }
+
+  &::selection {
+    color: $textbox--selection--foreground;
+    background: $textbox--selection--background;
   }
 
   &:focus {

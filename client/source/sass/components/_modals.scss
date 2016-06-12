@@ -1,25 +1,24 @@
-$modal--background: #12191f;
+$modal--background: #28303b;
 
-$modal--heading--background: #161c24;
-$modal--heading--foreground: #7d95ab;
-$modal--heading--border: #0f151b;
+$modal--heading--background: #303845;
+$modal--heading--foreground: #a3bad4;
+$modal--heading--border: #1a232c;
 
-$modal--sub-heading--foreground: desaturate(darken($modal--heading--foreground, 23%), 2%);
+$modal--sub-heading--foreground: desaturate(darken($modal--heading--foreground, 15%), 10%);
 
 $modal--transition--duration: 0.5s;
 $modal--transition--scale: 0.85;
 
-$modal--body--foreground: #3f5465;
+$modal--body--foreground: lighten(#6c7e92, 6%);
 
-$modal--tab--foreground: #3f5465;
-$modal--tab--foreground--active: $blue;
-$modal--tab--border--active: $blue;
+$modal--tab--foreground: #6f839e;
+$modal--tab--foreground--active: $blue--lighter;
+$modal--tab--border--active: $blue--lighter;
 
-$modal--overlay--base: desaturate(darken($background, 3%), 5%);
-$modal--overlay: rgba($modal--overlay--base, 0.9);
+$modal--overlay--base: #0b1014;
+$modal--overlay: rgba($modal--overlay--base, 0.95);
 
-$modal--content--border: rgba($modal--overlay--base, 0.5);
-$modal--content--shadow: rgba($modal--overlay--base, 1);
+$modal--content--shadow: #05080a;
 
 $modal--border-radius: 3px;
 $modal--padding--horizontal: $spacing-unit;
@@ -52,7 +51,7 @@ $modal--tabs--padding--vertical--right: $spacing-unit * 2/5;
 $modal--tabs--padding--vertical--bottom: $spacing-unit * 1/5;
 $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 
-$modal--tabs--in-body--background: #11171d;
+$modal--tabs--in-body--background: #2a323e;
 
 .modal {
   background: $modal--overlay;
@@ -136,8 +135,10 @@ $modal--tabs--in-body--background: #11171d;
       background: $modal--background;
       border-radius: $modal--border-radius;
       box-shadow:
-        0 0 0 1px $modal--content--border,
-        0 0 35px $modal--content--shadow;
+        0 0 256px rgba($modal--content--shadow, 0.1),
+        0 2px 4px rgba($modal--content--shadow, 0.5),
+        0 2px 8px rgba($modal--content--shadow, 0.1),
+        0 4px 32px rgba($modal--content--shadow, 0.3);
       display: flex;
       flex-direction: column;
       height: auto;

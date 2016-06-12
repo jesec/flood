@@ -1,4 +1,5 @@
 $blue: #258de5;
+$blue--lighter: saturate(lighten($blue, 10%), 100%);
 $green: #39ce83;
 $red: #e95779;
 $white: #fff;
