@@ -105,19 +105,28 @@ class ClientRequest {
   // rTorrent method calls.
   addFilesMethodCall(options) {
     let files = this.getEnsuredArray(options.files);
+    let path = options.path;
+    let start = options.start;
 
     files.forEach((file) => {
+      let methodCall = 'load.raw_start';
       let parameters = ['', file.buffer];
       let timeAdded = Math.floor(Date.now() / 1000);
 
-      if (options.path && options.path !== '') {
-        parameters.push(`d.directory.set="${options.path}"`);
+      if (path && path !== '') {
+        parameters.push(`d.directory.set="${path}"`);
       }
 
       parameters.push(`d.custom.set=x-filename,${file.filename}`);
       parameters.push(`d.custom.set=addtime,${timeAdded}`);
 
-      this.requests.push(this.getMethodCall('load.raw_start', parameters));
+      // The start value is a string because it was appended to a FormData
+      // object.
+      if (start === 'false') {
+        methodCall = 'load.raw';
+      }
+
+      this.requests.push(this.getMethodCall(methodCall, parameters));
     });
   }
 

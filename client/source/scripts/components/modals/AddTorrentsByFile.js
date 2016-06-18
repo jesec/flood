@@ -26,7 +26,8 @@ export default class AddTorrentsByFile extends React.Component {
     this.state = {
       destination: SettingsStore.getFloodSettings('torrentDestination'),
       isAddingTorrents: false,
-      files: null
+      files: null,
+      startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad')
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -116,6 +117,7 @@ export default class AddTorrentsByFile extends React.Component {
     });
 
     fileData.append('destination', this.state.destination);
+    fileData.append('start', this.state.startTorrents);
 
     TorrentActions.addTorrentsByFiles(fileData, this.state.destination);
   }

@@ -22,6 +22,7 @@ var client = {
     let files = req.files;
     let path = req.body.destination;
     let request = new ClientRequest();
+    let start = req.body.start;
 
     request.add('createDirectory', {path});
     request.send();
@@ -31,7 +32,7 @@ var client = {
     // torrent files reliably.
     files.forEach((file, index) => {
       let fileRequest = new ClientRequest();
-      fileRequest.add('addFiles', {files: file, path});
+      fileRequest.add('addFiles', {files: file, path, start});
 
       // Set the callback for only the last request.
       if (index === files.length - 1) {

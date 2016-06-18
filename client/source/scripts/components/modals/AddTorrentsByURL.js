@@ -24,7 +24,7 @@ export default class AddTorrentsByURL extends React.Component {
       destination: SettingsStore.getFloodSettings('torrentDestination'),
       isAddingTorrents: false,
       urlTextboxes: [{value: ''}],
-      startTorrents: true
+      startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad')
     };
 
     METHODS_TO_BIND.forEach((method) => {
