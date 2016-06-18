@@ -142,9 +142,15 @@ export default class ContextMenu extends React.Component {
   }
 
   handleMenuItemClick(item, event) {
+    if (item.dismissMenu === false) {
+      event.nativeEvent.stopImmediatePropagation();
+    }
+
     if (item.clickHandler) {
       item.clickHandler(item.action, event);
     }
+
+    return false;
   }
 
   render() {

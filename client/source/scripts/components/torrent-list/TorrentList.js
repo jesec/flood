@@ -128,6 +128,7 @@ export default class TorrentListContainer extends React.Component {
     }, {
       action: 'set-priority',
       clickHandler,
+      dismissMenu: false,
       label: 'Priority',
       labelAction: (
         <PriorityMeter id={torrent.hash} key={torrent.hash}

@@ -45,8 +45,6 @@ export default class PriorityMeter extends React.Component {
   }
 
   handleClick(event) {
-    event.stopPropagation();
-
     let level = this.getPriorityLevel();
 
     if (level++ >= this.props.maxLevel) {
