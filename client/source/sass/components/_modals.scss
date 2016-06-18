@@ -4,7 +4,7 @@ $modal--heading--background: #303845;
 $modal--heading--foreground: #a3bad4;
 $modal--heading--border: #1a232c;
 
-$modal--sub-heading--foreground: desaturate(darken($modal--heading--foreground, 15%), 10%);
+$modal--sub-heading--foreground: desaturate(darken($modal--heading--foreground, 15%), 15%);
 
 $modal--transition--duration: 0.5s;
 $modal--transition--scale: 0.85;
@@ -379,13 +379,13 @@ $modal--tabs--in-body--background: #2a323e;
 
       &__heading {
         color: $modal--heading--foreground;
-        font-size: 0.9em;
+        font-size: 0.925em;
         font-weight: 500;
       }
 
       &__sub-heading {
         color: $modal--sub-heading--foreground;
-        font-size: 0.8em;
+        font-size: 0.875em;
       }
     }
   }

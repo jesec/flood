@@ -108,27 +108,44 @@ export default class BandwidthTab extends SettingsTab {
       <div className="form">
         <div className="form__section">
           <p className="form__section__heading">
-            Speed Limit Dropdown Presets
-          </p>
-          <p className="form__section__sub-heading">
-            Enter a comma-separated list of speeds in kB. 0 represents unlimited.
+            Transfer Rate Throttles
           </p>
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Download Presets
+                Dropdown Presets: Download
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleDownloadTextChange}
                 value={downloadValue} />
             </div>
+          </div>
+          <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Upload Presets
+                Dropdown Presets: Upload
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleUploadTextChange}
                 value={uploadValue} />
+            </div>
+          </div>
+          <div className="form__row">
+            <div className="form__column">
+              <label className="form__label">
+                Global Download Rate Throttle
+              </label>
+              <input className="textbox" type="text"
+                onChange={this.handleClientSettingFieldChange.bind(this, 'throttleGlobalDownMax')}
+                value={this.getFieldValue('throttleGlobalDownMax')} />
+            </div>
+            <div className="form__column">
+              <label className="form__label">
+                Global Upload Rate Throttle
+              </label>
+              <input className="textbox" type="text"
+                onChange={this.handleClientSettingFieldChange.bind(this, 'throttleGlobalUpMax')}
+                value={this.getFieldValue('throttleGlobalUpMax')} />
             </div>
           </div>
         </div>

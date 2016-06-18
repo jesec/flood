@@ -93,10 +93,6 @@ class ClientRequest {
   }
 
   send() {
-    // TODO: Remove this.
-    if (!this) {
-      console.log('\n\n\n\n\n\n\nthis is null\n\n\n\n\n\n');
-    }
     let handleSuccess = this.handleSuccess.bind(this);
     let handleError = this.handleError.bind(this);
 
@@ -174,9 +170,9 @@ class ClientRequest {
       });
     }
 
-    // Ensure client's response gets mapped to the correct requested property.
-    if (options.setPropertiesArr) {
-      options.setPropertiesArr(requestedSettings);
+    // Ensure client's response gets mapped to the correct requested keys.
+    if (options.setRequestedKeysArr) {
+      options.setRequestedKeysArr(requestedSettings);
     }
 
     requestedSettings.forEach((settingsKey) => {

@@ -71,14 +71,26 @@ var client = {
   },
 
   getSettings: (options, callback) => {
-    let properties = [];
+    let requestedSettingsKeys = [];
     let request = new ClientRequest();
     let response = {};
 
+    let outboundTransformation = {
+      throttleGlobalDownMax: (apiResponse) => {
+        return Number(apiResponse) / 1024;
+      },
+      throttleGlobalUpMax: (apiResponse) => {
+        return Number(apiResponse) / 1024;
+      },
+      piecesMemoryMax: (apiResponse) => {
+        return Number(apiResponse) / (1024 * 1024);
+      }
+    };
+
     request.add('fetchSettings', {
       options,
-      setPropertiesArr: (propertiesArr) => {
-        properties = propertiesArr;
+      setRequestedKeysArr: (requestedSettingsKeysArr) => {
+        requestedSettingsKeys = requestedSettingsKeysArr;
       }
     });
 
@@ -88,7 +100,14 @@ var client = {
       }
 
       data.forEach((datum, index) => {
-        response[clientSettingsMap[properties[index]]] = datum[0];
+        let value = datum[0];
+        let settingsKey = clientSettingsMap[requestedSettingsKeys[index]];
+
+        if (!!outboundTransformation[settingsKey]) {
+          value = outboundTransformation[settingsKey](value);
+        }
+
+        response[settingsKey] = value;
       });
 
       return response;
@@ -216,7 +235,36 @@ var client = {
       return;
     }
 
-    request.add('setSettings', {settings: payloads});
+    let inboundTransformation = {
+      throttleGlobalDownMax: (userInput) => {
+        return {
+          id: userInput.id,
+          data: Number(userInput.data) * 1024
+        };
+      },
+      throttleGlobalUpMax: (userInput) => {
+        return {
+          id: userInput.id,
+          data: Number(userInput.data) * 1024
+        };
+      },
+      piecesMemoryMax: (userInput) => {
+        return {
+          id: userInput.id,
+          data: Number(userInput.data) * 1024 * 1024
+        };
+      }
+    };
+
+    let transformedPayloads = payloads.map((payload) => {
+      if (!!inboundTransformation[payload.id]) {
+        return inboundTransformation[payload.id](payload);
+      }
+
+      return payload;
+    });
+
+    request.add('setSettings', {settings: transformedPayloads});
     request.onComplete(callback);
     request.send();
   },
