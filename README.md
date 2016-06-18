@@ -29,6 +29,7 @@ It's a work-in-progress, and it might not have all of the features you want (yet
 
 #### Tips
 * I run the web server with `screen` to keep the web server running independently of the terminal session.
+* Ubuntu users will need to install `nodejs-legacy` (`sudo apt-get install nodejs-legacy`) for dependencies to install successfully. You can read more on [this Stack Overflow post](http://stackoverflow.com/questions/21168141/cannot-install-packages-using-node-package-manager-in-ubuntu).
 
 # Screenshots
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-a-0606.png)
