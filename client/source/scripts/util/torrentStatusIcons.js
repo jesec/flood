@@ -3,11 +3,13 @@ import React from 'react';
 import ErrorIcon from '../components/icons/ErrorIcon';
 import PauseIcon from '../components/icons/PauseIcon';
 import propsMap from '../../../../shared/constants/propsMap';
+import SpinnerIcon from '../components/icons/SpinnerIcon';
 import StartIcon from '../components/icons/StartIcon';
 import StopIcon from '../components/icons/StopIcon';
 
 const STATUS_ICON_MAP = {
   error: <ErrorIcon />,
+  hashChecking: <SpinnerIcon />,
   stopped: <StopIcon />,
   paused: <PauseIcon />,
   running: <StartIcon />
@@ -33,6 +35,7 @@ export function torrentStatusIcons(status) {
       if (condition) {
         statusString = status;
       }
+
       return condition;
     });
 

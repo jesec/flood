@@ -79,6 +79,31 @@ const TorrentActions = {
       });
   },
 
+  checkHash: (hash) => {
+    return axios.post('/client/torrents/check-hash', {hash})
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_CHECK_HASH_SUCCESS,
+          data: {
+            data,
+            count: hash.length
+          }
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_CHECK_HASH_ERROR,
+          error: {
+            error,
+            count: hash.length
+          }
+        });
+      });
+  },
+
   fetchTorrents: () => {
     return axios.get('/client/torrents')
       .then((json = {}) => {

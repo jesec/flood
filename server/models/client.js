@@ -54,6 +54,14 @@ var client = {
     request.send();
   },
 
+  checkHash: (hashes, callback) => {
+    let request = new ClientRequest();
+
+    request.add('checkHash', {hashes});
+    request.onComplete(callback);
+    request.send();
+  },
+
   deleteTorrents: (hashes, callback) => {
     let request = new ClientRequest();
 

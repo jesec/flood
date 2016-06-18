@@ -1,12 +1,25 @@
+@keyframes candy-stripe {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 4px 0;
+  }
+}
+
+$progress-bar--height: 3px;
+
 $progress-bar--background: #e3e5e5;
 $progress-bar--background--selected: rgba(#fff, 0.5);
 $progress-bar--background--selected--stopped: rgba(#fff, 0.5);
 $progress-bar--fill: $green;
 
-$progress-bar--fill--stopped: #e3e5e5;
+$progress-bar--fill--checking: #8899a8;
 $progress-bar--fill--completed: $blue;
-$progress-bar--fill--selected: #fff;
 $progress-bar--fill--error: #e95779;
+$progress-bar--fill--selected: #fff;
+$progress-bar--fill--stopped: #e3e5e5;
 
 .progress-bar {
   display: flex;
@@ -42,6 +55,10 @@ $progress-bar--fill--error: #e95779;
         fill: $progress-bar--fill--error;
       }
 
+      .is-checking & {
+        fill: $progress-bar--fill--checking;
+      }
+
       .is-selected & {
         fill: $progress-bar--fill--selected;
       }
@@ -52,7 +69,7 @@ $progress-bar--fill--error: #e95779;
     align-items: center;
     background: $progress-bar--fill;
     bottom: 0;
-    height: 3px;
+    height: $progress-bar--height;
     left: 0;
     position: absolute;
     top: 50%;
@@ -71,6 +88,10 @@ $progress-bar--fill--error: #e95779;
 
     .has-error & {
       background: $progress-bar--fill--error;
+    }
+
+    .is-checking & {
+      background: $progress-bar--fill--checking;
     }
 
     .is-selected & {
@@ -109,6 +130,26 @@ $progress-bar--fill--error: #e95779;
         .is-selected.is-stopped & {
           background: $progress-bar--background--selected--stopped;
           opacity: 1;
+        }
+
+        .is-checking & {
+          animation: candy-stripe 0.25s linear infinite;
+          background-color: transparent;
+          background-image: linear-gradient(-45deg, rgba($progress-bar--fill--checking, 0) 0,
+            rgba($progress-bar--fill--checking, 0) 25%, rgba($progress-bar--fill--checking, 0.5) 25%,
+            rgba($progress-bar--fill--checking, 0.5) 50%, rgba($progress-bar--fill--checking, 0) 50%,
+            rgba($progress-bar--fill--checking, 0) 75%, rgba($progress-bar--fill--checking, 0.5) 75%,
+            rgba($progress-bar--fill--checking, 0.5) 100%);
+          background-size: 4px 4px;
+          height: $progress-bar--height;
+        }
+
+        .is-selected.is-checking & {
+          background-image: linear-gradient(-45deg, rgba(#fff, 0) 0,
+            rgba(#fff, 0) 25%, rgba(#fff, 0.5) 25%,
+            rgba(#fff, 0.5) 50%, rgba(#fff, 0) 50%,
+            rgba(#fff, 0) 75%, rgba(#fff, 0.5) 75%,
+            rgba(#fff, 0.5) 100%);
         }
       }
     }

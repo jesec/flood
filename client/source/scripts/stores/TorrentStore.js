@@ -282,6 +282,7 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       TorrentStore.handleAddTorrentError(action.error);
       break;
     case ActionTypes.CLIENT_ADD_TORRENT_SUCCESS:
+      TorrentStore.fetchTorrents();
       TorrentStore.handleAddTorrentSuccess(action.data);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENTS_SUCCESS:
@@ -313,9 +314,9 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.UI_SET_TORRENT_SORT:
       TorrentStore.triggerTorrentsFilter();
       break;
-    case ActionTypes.CLIENT_ADD_TORRENT_SUCCESS:
     case ActionTypes.CLIENT_START_TORRENT_SUCCESS:
     case ActionTypes.CLIENT_STOP_TORRENT_SUCCESS:
+    case ActionTypes.CLIENT_CHECK_HASH_SUCCESS:
       TorrentStore.fetchTorrents();
       break;
   }

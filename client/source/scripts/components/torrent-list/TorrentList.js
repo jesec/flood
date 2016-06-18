@@ -116,6 +116,10 @@ export default class TorrentListContainer extends React.Component {
       clickHandler,
       label: 'Remove'
     }, {
+      action: 'check-hash',
+      clickHandler,
+      label: 'Check Hash'
+    }, {
       type: 'separator'
     }, {
       action: 'move',
@@ -137,6 +141,9 @@ export default class TorrentListContainer extends React.Component {
   handleContextMenuItemClick(action, event) {
     let selectedTorrents = TorrentStore.getSelectedTorrents();
     switch (action) {
+      case 'check-hash':
+        TorrentActions.checkHash(selectedTorrents);
+        break;
       case 'start':
         TorrentActions.startTorrents(selectedTorrents);
         break;
