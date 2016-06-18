@@ -1,4 +1,4 @@
-$form--label--foreground: #5c7087;
+$form--label--foreground: desaturate(lighten(#5c7087, 3%), 3%);
 
 $textbox--background: #242b36;
 $textbox--foreground: #5e728c;

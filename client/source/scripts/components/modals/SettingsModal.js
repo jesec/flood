@@ -6,8 +6,8 @@ import ConnectivityTab from '../settings/ConnectivityTab';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import Modal from './Modal';
+import ResourcesTab from '../settings/ResourcesTab';
 import SettingsStore from '../../stores/SettingsStore';
-import StorageTab from '../settings/StorageTab';
 
 const METHODS_TO_BIND = [
   'handleClientSettingsChange',
@@ -177,13 +177,13 @@ export default class SettingsModal extends React.Component {
         },
         label: 'Connectivity'
       },
-      storage: {
-        content: StorageTab,
+      resources: {
+        content: ResourcesTab,
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
           settings: this.state.clientSettings
         },
-        label: 'Storage'
+        label: 'Resources'
       }
     };
 
