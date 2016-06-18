@@ -9,11 +9,14 @@ let config = require('../../config');
 
 let scgi = {
   methodCall: (methodName, parameters) => {
+    let connectMethod = config.scgi.socket
+      ? {path: config.scgi.socketPath}
+      : {port: config.scgi.port, host: config.scgi.host};
     let deferred = Q.defer();
     let deserializer = new Deserializer('utf8');
     let headerLength = 0;
     let nullChar = String.fromCharCode(0);
-    let stream = net.connect({port: config.scgiHostPort, host: config.scgiHost});
+    let stream = net.connect(connectMethod);
     let xml = Serializer.serializeMethodCall(methodName, parameters);
 
     stream.setEncoding('UTF8');
