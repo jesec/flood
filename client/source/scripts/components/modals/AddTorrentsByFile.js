@@ -8,6 +8,7 @@ import Close from '../icons/Close';
 import File from '../icons/File';
 import Files from '../icons/Files';
 import ModalActions from './ModalActions';
+import SettingsStore from '../../stores/SettingsStore';
 import TorrentActions from '../../actions/TorrentActions';
 
 const METHODS_TO_BIND = [
@@ -23,6 +24,7 @@ export default class AddTorrentsByFile extends React.Component {
     super();
 
     this.state = {
+      destination: SettingsStore.getFloodSettings('torrentDestination'),
       isAddingTorrents: false,
       files: null
     };
