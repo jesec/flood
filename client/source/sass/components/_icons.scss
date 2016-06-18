@@ -8,6 +8,16 @@
   }
 }
 
+@keyframes spinner-spin {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .icon {
 
   &--eta {
@@ -68,5 +78,9 @@
         }
       }
     }
+  }
+
+  &--spinner {
+    animation: spinner-spin 1.25s linear infinite;
   }
 }
