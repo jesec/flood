@@ -20,6 +20,7 @@ class SettingsStoreClass extends BaseStore {
 
     // Default settings are overridden by settings stored in database.
     this.floodSettings = {
+      language: 'nl',
       sortTorrents: {
         direction: 'desc',
         property: 'added'
