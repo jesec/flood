@@ -1,5 +1,6 @@
-import classnames from'classnames';
+import classnames from 'classnames';
 import React from'react';
+import { injectIntl, formatMessage } from 'react-intl';
 
 import Close from '../../Icons/Close';
 import Search from '../../Icons/Search';
@@ -10,7 +11,7 @@ const METHODS_TO_BIND = [
   'resetSearch'
 ];
 
-export default class SearchBox extends React.Component {
+class SearchBox extends React.Component {
   constructor() {
     super();
 
@@ -60,10 +61,15 @@ export default class SearchBox extends React.Component {
         <Search />
         <input className="textbox"
           type="text"
-          placeholder="Search Torrents"
+          placeholder={this.props.intl.formatMessage({
+            id: 'searchbox.placeholder',
+            defaultMessage: 'Search torrents'
+          })}
           onChange={this.handleSearchChange}
           value={this.state.searchValue} />
       </div>
     );
   }
 }
+
+export default injectIntl(SearchBox);

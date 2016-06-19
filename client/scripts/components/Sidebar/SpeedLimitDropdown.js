@@ -1,4 +1,5 @@
 import React from 'react';
+import { injectIntl, formatMessage, FormattedMessage } from 'react-intl';
 
 import ClientActions from '../../actions/ClientActions';
 import Dropdown from '../General/FormElements/Dropdown';
@@ -47,14 +48,20 @@ class SpeedLimitDropdown extends React.Component {
   getDropdownHeader() {
     return (
       <a className="sidebar__icon-button sidebar__icon-button--limits">
-        <LimitsIcon /> Speed Limits
+        <LimitsIcon /> <FormattedMessage
+          id="sidebar.speedlimits_button"
+          defaultMessage="Speed Limits"
+        />
       </a>
     );
   }
 
   getHumanReadableSpeed(bytes) {
     if (bytes === 0) {
-      return 'Unlimited';
+      return this.props.intl.formatMessage({
+        id: 'speed.unlimited',
+        defaultMessage: 'Unlimited'
+      });
     } else {
       let formattedData = format.data(bytes, '/s', 1, {padded: false});
       return (
@@ -148,4 +155,4 @@ class SpeedLimitDropdown extends React.Component {
   }
 }
 
-export default SpeedLimitDropdown;
+export default injectIntl(SpeedLimitDropdown);
