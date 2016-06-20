@@ -63,9 +63,9 @@ class SettingsModal extends React.Component {
     if (this.state.isSavingSettings) {
       icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
       primaryButtonText = this.props.intl.formatMessage({
-      id: 'settings.button.state.saving',
-      defaultMessage: 'Saving...'
-    });
+        id: 'settings.button.state.saving',
+        defaultMessage: 'Saving...'
+      });
     }
 
     return [
