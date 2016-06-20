@@ -1,3 +1,4 @@
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
@@ -9,7 +10,7 @@ const METHODS_TO_BIND = ['getDropdownHeader', 'handleItemSelect'];
 const SORT_PROPERTIES = ['name', 'eta', 'downloadRate', 'uploadRate', 'ratio',
   'percentComplete', 'downloadTotal', 'uploadTotal', 'sizeBytes', 'added'];
 
-export default class SortDropdown extends React.Component {
+class SortDropdown extends React.Component {
   constructor() {
     super();
 
@@ -21,7 +22,12 @@ export default class SortDropdown extends React.Component {
   getDropdownHeader() {
     return (
       <a className="dropdown__button">
-        <label className="dropdown__label">Sort By</label>
+        <label className="dropdown__label">
+          <FormattedMessage
+            id="sort.torrents.title"
+            defaultMessage="Sort By"
+          />
+        </label>
         <span className="dropdown__value">{SortProperties[this.props.selectedProperty]}</span>
       </a>
     );
@@ -66,3 +72,5 @@ export default class SortDropdown extends React.Component {
     );
   }
 }
+
+export default injectIntl(SortDropdown);

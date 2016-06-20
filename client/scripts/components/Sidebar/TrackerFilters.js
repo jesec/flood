@@ -1,6 +1,6 @@
+import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
 
 import EventTypes from '../../constants/EventTypes';
 import propsMap from '../../../../shared/constants/propsMap';
@@ -99,7 +99,7 @@ export default class TrackerFilters extends React.Component {
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
           <FormattedMessage
-            id="statusfilter.title"
+            id="filter.tracker.title"
             defaultMessage="Filter by Status"
           />
         </li>

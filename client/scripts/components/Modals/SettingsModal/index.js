@@ -1,3 +1,4 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -20,7 +21,7 @@ const METHODS_TO_BIND = [
   'handleSettingsStoreChange'
 ];
 
-export default class SettingsModal extends React.Component {
+class SettingsModal extends React.Component {
   constructor() {
     super();
 
@@ -54,17 +55,26 @@ export default class SettingsModal extends React.Component {
 
   getActions() {
     let icon = null;
-    let primaryButtonText = 'Save Settings';
+    let primaryButtonText = this.props.intl.formatMessage({
+      id: 'settings.button.save',
+      defaultMessage: 'Save Settings'
+    });
 
     if (this.state.isSavingSettings) {
       icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Saving...';
+      primaryButtonText = this.props.intl.formatMessage({
+      id: 'settings.button.state.saving',
+      defaultMessage: 'Saving...'
+    });
     }
 
     return [
       {
         clickHandler: null,
-        content: 'Cancel',
+        content: this.props.intl.formatMessage({
+          id: 'settings.button.cancel',
+          defaultMessage: 'Cancel'
+        }),
         triggerDismiss: true,
         type: 'secondary'
       },
@@ -169,7 +179,10 @@ export default class SettingsModal extends React.Component {
           onSettingsChange: this.handleFloodSettingsChange,
           settings: this.mergeObjects(this.state.floodSettings, this.state.clientSettings)
         },
-        label: 'Bandwidth'
+        label: this.props.intl.formatMessage({
+          id: 'settings.tabs.bandwith',
+          defaultMessage: 'Bandwith'
+        })
       },
       connectivity: {
         content: ConnectivityTab,
@@ -178,7 +191,10 @@ export default class SettingsModal extends React.Component {
           onClientSettingsChange: this.handleClientSettingsChange,
           settings: this.state.clientSettings
         },
-        label: 'Connectivity'
+        label: this.props.intl.formatMessage({
+          id: 'settings.tabs.connectivity',
+          defaultMessage: 'Connectivity'
+        })
       },
       resources: {
         content: ResourcesTab,
@@ -186,7 +202,10 @@ export default class SettingsModal extends React.Component {
           onClientSettingsChange: this.handleClientSettingsChange,
           settings: this.state.clientSettings
         },
-        label: 'Resources'
+        label: this.props.intl.formatMessage({
+          id: 'settings.tabs.resources',
+          defaultMessage: 'Resources'
+        })
       },
       authentication: {
         content: AuthTab,
@@ -196,8 +215,13 @@ export default class SettingsModal extends React.Component {
 
     return (
       <Modal actions={this.getActions()} size="large"
-        heading="Settings" orientation="vertical" dismiss={this.props.dismiss}
+        heading={this.props.intl.formatMessage({
+          id: 'settings.tabs.heading',
+          defaultMessage: 'Settings'
+        })} orientation="vertical" dismiss={this.props.dismiss}
         tabs={tabs} />
     );
   }
 }
+
+export default injectIntl(SettingsModal);

@@ -1,5 +1,5 @@
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
-import { injectIntl, formatMessage, FormattedMessage } from 'react-intl';
 
 import ClientActions from '../../actions/ClientActions';
 import Dropdown from '../General/FormElements/Dropdown';
@@ -49,7 +49,7 @@ class SpeedLimitDropdown extends React.Component {
     return (
       <a className="sidebar__icon-button sidebar__icon-button--limits">
         <LimitsIcon /> <FormattedMessage
-          id="sidebar.speedlimits_button"
+          id="sidebar.button.speedlimits"
           defaultMessage="Speed Limits"
         />
       </a>

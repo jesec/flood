@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
@@ -119,7 +120,10 @@ class TransferData extends React.Component {
               </div>
               <div className="client-stat__data--secondary">
                 {downloadTotal.value}
-                <em className="unit">{downloadTotal.unit}</em> Downloaded
+                <em className="unit">{downloadTotal.unit}</em> <FormattedMessage
+                  id="sidebar.transferdata.downloaded"
+                  defaultMessage="Downloaded"
+                />
               </div>
             </div>
             <LineChart
@@ -141,7 +145,10 @@ class TransferData extends React.Component {
               </div>
               <div className="client-stat__data--secondary">
                 {uploadTotal.value}
-                <em className="unit">{uploadTotal.unit}</em> Uploaded
+                <em className="unit">{uploadTotal.unit}</em> <FormattedMessage
+                  id="sidebar.transferdata.uploaded"
+                  defaultMessage="Uploaded"
+                />
               </div>
             </div>
             <LineChart

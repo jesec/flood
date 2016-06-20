@@ -1,6 +1,6 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
-import { injectIntl, formatMessage } from 'react-intl';
 
 import Badge from '../General/Badge';
 import EventTypes from '../../constants/EventTypes';
