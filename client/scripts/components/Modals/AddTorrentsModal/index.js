@@ -1,3 +1,4 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import AddTorrentsByFile from './AddTorrentsByFile';
@@ -5,7 +6,7 @@ import AddTorrentsByURL from './AddTorrentsByURL';
 import Modal from '../Modal';
 import UIActions from '../../../actions/UIActions';
 
-export default class AddTorrents extends React.Component {
+class AddTorrents extends React.Component {
   dismissModal() {
     UIActions.dismissModal();
   }
@@ -14,16 +15,27 @@ export default class AddTorrents extends React.Component {
     let tabs = {
       'by-url': {
         content: AddTorrentsByURL,
-        label: 'By URL'
+        label: this.props.intl.formatMessage({
+          id: 'torrents.add.tab.url.title',
+          defaultMessage: 'By URL'
+        })
       },
       'by-file': {
         content: AddTorrentsByFile,
-        label: 'By File'
+        label: this.props.intl.formatMessage({
+          id: 'torrents.add.tab.file.title',
+          defaultMessage: 'By File'
+        })
       }
     };
 
     return (
-      <Modal heading="Add Torrents" dismiss={this.dismissModal} tabs={tabs} />
+      <Modal heading={this.props.intl.formatMessage({
+        id: 'torrents.add.heading',
+        defaultMessage: 'Add Torrents'
+      })} dismiss={this.dismissModal} tabs={tabs} />
     );
   }
 }
+
+export default injectIntl(AddTorrents);

@@ -1,3 +1,4 @@
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -6,7 +7,7 @@ import SettingsStore from '../../../stores/SettingsStore';
 
 const METHODS_TO_BIND = ['handleDestinationChange'];
 
-export default class AddTorrentsDestination extends React.Component {
+class AddTorrentsDestination extends React.Component {
   constructor() {
     super();
 
@@ -47,11 +48,17 @@ export default class AddTorrentsDestination extends React.Component {
       <div className="form__row">
         <div className="form__column">
           <label className="form__label">
-            Destination
+            <FormattedMessage
+              id="torrents.add.destination.label"
+              defaultMessage="Destination"
+            />
           </label>
           <input className={textboxClasses}
             onChange={this.handleDestinationChange}
-            placeholder="Destination"
+            placeholder={this.props.intl.formatMessage({
+              id: 'torrents.add.destination.placeholder',
+              defaultMessage: 'Destination'
+            })}
             value={this.state.destination}
             type="text" />
         </div>
@@ -59,3 +66,5 @@ export default class AddTorrentsDestination extends React.Component {
     );
   }
 }
+
+export default injectIntl(AddTorrentsDestination);

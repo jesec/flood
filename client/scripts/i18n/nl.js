@@ -79,4 +79,16 @@ export default {
 
   "filter.tracker.title": "Filter op Tracker",
 
+  "torrents.add.button.add": "Torrent toevoegen",
+  "torrents.add.button.cancel": "Annuleren",
+  "torrents.add.destination.label": "Downloadlocatie",
+  "torrents.add.destination.placeholder": "Downloadlocatie",
+  "torrents.add.heading": "Torrents toevoegen",
+  "torrents.add.start.label": "Start Torrent",
+  "torrents.add.tab.file.browse": "of klik om te bladeren.",
+  "torrents.add.tab.file.drop": "Sleep bestanden hierheen,",
+  "torrents.add.tab.file.title": "Via bestand",
+  "torrents.add.tab.url.input.placeholder": "Torrent URL",
+  "torrents.add.tab.url.title": "Via URL",
+  "torrents.add.torrents.label": "Torrents"
 };

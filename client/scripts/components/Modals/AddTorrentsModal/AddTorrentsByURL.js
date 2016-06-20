@@ -1,3 +1,4 @@
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
@@ -15,7 +16,7 @@ const METHODS_TO_BIND = [
   'handleUrlRemove'
 ];
 
-export default class AddTorrentsByURL extends React.Component {
+class AddTorrentsByURL extends React.Component {
   constructor() {
     super();
 
@@ -88,9 +89,15 @@ export default class AddTorrentsByURL extends React.Component {
         <div className="form__row">
           <div className="form__column">
             <label className="form__label">
-              Torrents
+              <FormattedMessage
+                id="torrents.add.torrents.label"
+                defaultMessage="Torrents"
+              />
             </label>
-            <TextboxRepeater placeholder="Torrent URL"
+            <TextboxRepeater placeholder={this.props.intl.formatMessage({
+                id: 'torrents.add.tab.url.input.placeholder',
+                defaultMessage: 'Torrent URL'
+              })}
               handleTextboxAdd={this.handleUrlAdd}
               handleTextboxChange={this.handleUrlChange}
               handleTextboxRemove={this.handleUrlRemove}
@@ -106,3 +113,5 @@ export default class AddTorrentsByURL extends React.Component {
     );
   }
 }
+
+export default injectIntl(AddTorrentsByURL);
