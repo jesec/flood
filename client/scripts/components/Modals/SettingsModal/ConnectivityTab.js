@@ -85,7 +85,10 @@ export default class ConnectivityTab extends SettingsTab {
           <div className="form__row">
             <div className="form__column form__column--half">
               <label className="form__label">
-                Reported IP/Hostname
+                <FormattedMessage
+                  id="settings.connectivity.ip.hostname.label"
+                  defaultMessage="Reported IP/Hostname"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'networkLocalAddress')}
@@ -104,7 +107,7 @@ export default class ConnectivityTab extends SettingsTab {
         <div className="form__section">
           <div className="form__section__heading">
             <FormattedMessage
-              id="settings.connectivity.ddd.heading"
+              id="settings.connectivity.dpd.heading"
               defaultMessage="Decentralized Peer Discovery"
             />
           </div>

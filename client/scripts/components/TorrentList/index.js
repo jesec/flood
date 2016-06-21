@@ -1,3 +1,4 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
 import classNames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
@@ -34,7 +35,7 @@ const METHODS_TO_BIND = [
   'setViewportHeight'
 ];
 
-export default class TorrentListContainer extends React.Component {
+class TorrentListContainer extends React.Component {
   constructor() {
     super();
 
@@ -99,34 +100,55 @@ export default class TorrentListContainer extends React.Component {
     return [{
       action: 'start',
       clickHandler,
-      label: 'Start'
+      label: this.props.intl.formatMessage({
+        id: 'torrent.list.context.start',
+        defaultMessage: 'Start'
+      })
     }, {
       action: 'stop',
       clickHandler,
-      label: 'Stop'
+      label: this.props.intl.formatMessage({
+        id: 'torrent.list.context.stop',
+        defaultMessage: 'Stop'
+      })
     }, {
       action: 'pause',
       clickHandler,
-      label: 'Pause'
+      label: this.props.intl.formatMessage({
+        id: 'torrent.list.context.pause',
+        defaultMessage: 'Pause'
+      })
     }, {
       action: 'remove',
       clickHandler,
-      label: 'Remove'
+      label: this.props.intl.formatMessage({
+        id: 'torrent.list.context.remove',
+        defaultMessage: 'Remove'
+      })
     }, {
       action: 'check-hash',
       clickHandler,
-      label: 'Check Hash'
+      label: this.props.intl.formatMessage({
+        id: 'torrent.list.context.check.hash',
+        defaultMessage: 'Check Hash'
+      })
     }, {
       type: 'separator'
     }, {
       action: 'move',
       clickHandler,
-      label: 'Download Location...'
+      label: this.props.intl.formatMessage({
+        id: 'torrent.list.context.move',
+        defaultMessage: 'Download Location...'
+      })
     }, {
       action: 'set-priority',
       clickHandler,
       dismissMenu: false,
-      label: 'Priority',
+      label: this.props.intl.formatMessage({
+        id: 'torrent.list.context.priority',
+        defaultMessage: 'Priority'
+      }),
       labelAction: (
         <PriorityMeter id={torrent.hash} key={torrent.hash}
           bindExternalChangeHandler={this.bindExternalPriorityChangeHandler}
@@ -380,3 +402,5 @@ export default class TorrentListContainer extends React.Component {
   }
 
 }
+
+export default injectIntl(TorrentListContainer);

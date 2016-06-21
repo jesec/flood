@@ -73,7 +73,7 @@ class StatusFilters extends React.Component {
     let filters = [
       {
         label: this.props.intl.formatMessage({
-          id: 'filter.status.all',
+          id: 'filter.all',
           defaultMessage: 'All'
         }),
         slug: 'all',

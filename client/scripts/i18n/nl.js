@@ -1,53 +1,61 @@
 export default {
+  "button.cancel": "Annuleren",
+  "button.save": "Instellingen opslaan",
+  "button.state.saving": "Opslaan...",
+  "button.state.adding": "Toevoegen...",
+
   "filter.all": "Alles",
+
+  "filter.status.title": "Filter op Status",
+  "filter.status.downloading": "Downloaden",
+  "filter.status.completed": "Klaar",
+  "filter.status.active": "Actief",
+  "filter.status.inactive": "Inactief",
+  "filter.status.error": "Fout",
+
+  "filter.tracker.title": "Filter op Tracker",
 
   "searchbox.placeholder": "Zoek torrents",
 
-  "settings.tabs.heading": "Instellingen",
-  "settings.tabs.bandwith": "Bandbreedte",
-  "settings.tabs.connectivity": "Connectiviteit",
-  "settings.tabs.resources": "Resources",
-
-  "settings.bandwith.slots.heading": "Slots beschikbaar",
-  "settings.bandwith.slots.upload.label": "Upload slots per torrent",
-  "settings.bandwith.slots.upload.divider.label": "Upload slots divider",
-  "settings.bandwith.slots.upload.global.label": "Upload slots globaal",
-  "settings.bandwith.slots.download.label": "Download slots per torrent",
   "settings.bandwith.slots.download.divider.label": "Download slots divider",
   "settings.bandwith.slots.download.global.label": "Download slots globaal",
-
-  "settings.bandwith.transferrate.heading": "Sneldheidsbeperkingen",
-  "settings.bandwith.transferrate.dropdown.preset.download.label": "Dropdown Presets: Dwonload",
-  "settings.bandwith.transferrate.dropdown.preset.upload.label": "Dropdown Presets: Upload",
+  "settings.bandwith.slots.download.label": "Download slots per torrent",
+  "settings.bandwith.slots.heading": "Slots",
+  "settings.bandwith.slots.upload.divider.label": "Upload slots divider",
+  "settings.bandwith.slots.upload.global.label": "Upload slots globaal",
+  "settings.bandwith.slots.upload.label": "Upload slots per torrent",
+  "settings.bandwith.transferrate.dropdown.preset.download.label": "Dropdown dwonloadbeperking items",
+  "settings.bandwith.transferrate.dropdown.preset.upload.label": "Dropdown uploadbeperking items",
   "settings.bandwith.transferrate.global.throttle.download": "Globale downloadbeperking",
   "settings.bandwith.transferrate.global.throttle.upload": "Gobale uploadbeperking",
+  "settings.bandwith.transferrate.heading": "Sneldheidsbeperkingen",
 
-  "settings.button.cancel": "Annuleren",
-  "settings.button.save": "Instellingen opslaan",
-  "settings.button.state.saving": "Opslaan...",
-
-  "settings.connectivity.incoming.heading": "Inkomende connecties",
-  "settings.connectivity.port.range.label": "Poortbereik",
-  "settings.connectivity.port.randomize.label": "Willekeurige poort",
-  "settings.connectivity.port.open.label": "Open poort",
-
-  "settings.connectivity.ddd.heading": "Decentralized Peer Discovery",
-  "settings.connectivity.dht.port.label": "DHT Poort",
   "settings.connectivity.dht.label": "Gebruik DHT",
+  "settings.connectivity.dht.port.label": "DHT Poort",
+  "settings.connectivity.dpd.heading": "Decentralized Peer Discovery",
+  "settings.connectivity.incoming.heading": "Inkomende connecties",
+  "settings.connectivity.ip.hostname.label": "Vermeld IP/Hostnaam",
   "settings.connectivity.peer.exchange.label": "Gebruik Peer Exchange",
-
-  "settings.connectivity.peers.heading": "Peers",
-  "settings.connectivity.peers.min.label": "Minimaal aantal peers",
-  "settings.connectivity.peers.max.label": "Maximaal aantal peers",
-  "settings.connectivity.peers.seeding.min.label": "Minimaal aantal peers seeding",
-  "settings.connectivity.peers.seeding.max.label": "Maximaal aantal peers seeding",
   "settings.connectivity.peers.desired.label": "Gewenst aantal peers",
+  "settings.connectivity.peers.heading": "Peers",
+  "settings.connectivity.peers.max.label": "Maximaal aantal peers",
+  "settings.connectivity.peers.min.label": "Minimaal aantal peers",
+  "settings.connectivity.peers.seeding.max.label": "Maximaal aantal peers seeding",
+  "settings.connectivity.peers.seeding.min.label": "Minimaal aantal peers seeding",
+  "settings.connectivity.port.open.label": "Open poort",
+  "settings.connectivity.port.randomize.label": "Willekeurige poort",
+  "settings.connectivity.port.range.label": "Poortbereik",
 
-  "settings.resources.disk.heading": "Disk",
-  "settings.resources.disk.download.location.label": "Standaard downloadlocatie",
   "settings.resources.disk.check.hash.label": "Controleer hash na downloaden",
+  "settings.resources.disk.download.location.label": "Standaard downloadlocatie",
+  "settings.resources.disk.heading": "Disk",
   "settings.resources.memory.heading": "Geheugen",
-  "settings.resources.memory.max.label": "Maximaal geheugengebruik (MB)",
+  "settings.resources.memory.max.label": "Maximaal geheugengebruik",
+
+  "settings.tabs.bandwith": "Bandbreedte",
+  "settings.tabs.connectivity": "Connectiviteit",
+  "settings.tabs.heading": "Instellingen",
+  "settings.tabs.resources": "Resources",
 
   "sidebar.button.settings": "Instellingen",
   "sidebar.button.speedlimits": "Sneldheidsbeperkingen",
@@ -69,18 +77,7 @@ export default {
 
   "speed.unlimited": "Ongelimiteerd",
 
-  "filter.status.title": "Filter op Status",
-  "filter.status.all": "Alles",
-  "filter.status.downloading": "Downloaden",
-  "filter.status.completed": "Klaar",
-  "filter.status.active": "Actief",
-  "filter.status.inactive": "Inactief",
-  "filter.status.error": "Fout",
-
-  "filter.tracker.title": "Filter op Tracker",
-
   "torrents.add.button.add": "Torrent toevoegen",
-  "torrents.add.button.cancel": "Annuleren",
   "torrents.add.destination.label": "Downloadlocatie",
   "torrents.add.destination.placeholder": "Downloadlocatie",
   "torrents.add.heading": "Torrents toevoegen",
@@ -90,5 +87,13 @@ export default {
   "torrents.add.tab.file.title": "Via bestand",
   "torrents.add.tab.url.input.placeholder": "Torrent URL",
   "torrents.add.tab.url.title": "Via URL",
-  "torrents.add.torrents.label": "Torrents"
+  "torrents.add.torrents.label": "Torrents",
+
+  "torrent.list.context.start": "Start",
+  "torrent.list.context.stop": "Stop",
+  "torrent.list.context.pause": "Pauzeer",
+  "torrent.list.context.remove": "Verwijder",
+  "torrent.list.context.check.hash": "Controleer hash",
+  "torrent.list.context.move": "Downloadlocatie...",
+  "torrent.list.context.priority": "Prioriteit"
 };

@@ -37,7 +37,10 @@ class AddTorrentsActions extends React.Component {
 
     if (this.props.isAddingTorrents) {
       icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Adding...';
+      primaryButtonText = this.props.intl.formatMessage({
+        id: 'button.state.adding',
+        defaultMessage: 'Adding...'
+      });
     }
 
     return [
@@ -54,7 +57,7 @@ class AddTorrentsActions extends React.Component {
       {
         clickHandler: null,
         content: this.props.intl.formatMessage({
-          id: 'torrents.add.button.cancel',
+          id: 'button.cancel',
           defaultMessage: 'Cancel'
         }),
         triggerDismiss: true,
