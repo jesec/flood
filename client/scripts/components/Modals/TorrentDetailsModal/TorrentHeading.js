@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -82,7 +83,10 @@ export default class TorrentHeading extends React.Component {
         <li className={classes} key={index}
           onClick={this[`handle${capitalizedAction}`]}>
           {statusIcons[torrentAction]}
-          {capitalizedAction}
+          <FormattedMessage
+            id={`torrents.details.actions.${torrentAction}`}
+            defaultMessage={capitalizedAction}
+          />
         </li>
       );
     });

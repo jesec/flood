@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import Badge from '../../General/Badge';
@@ -35,7 +36,10 @@ export default class TorrentPeers extends React.Component {
             <thead className="torrent-details__table__heading">
               <tr>
                 <th className="torrent-details__table__heading--primary">
-                  Peers
+                  <FormattedMessage
+                    id="torrents.details.peers"
+                    defaultMessage="Peers"
+                  />
                   <Badge>
                     {peers.length}
                   </Badge>
@@ -57,7 +61,10 @@ export default class TorrentPeers extends React.Component {
     } else {
       return (
         <span className="torrent-details__section__null-data">
-          There is no peer data for this torrent.
+          <FormattedMessage
+            id="torrents.details.peers.no.data"
+            defaultMessage="There is no peer data for this torrent."
+          />
         </span>
       );
     }
