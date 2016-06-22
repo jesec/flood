@@ -1,3 +1,4 @@
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
 import classnames from 'classnames';
 import React from 'react';
@@ -20,7 +21,7 @@ const METHODS_TO_BIND = [
   'onMoveError'
 ];
 
-export default class MoveTorrents extends React.Component {
+class MoveTorrents extends React.Component {
   constructor() {
     super();
 
@@ -77,17 +78,26 @@ export default class MoveTorrents extends React.Component {
 
   getActions() {
     let icon = null;
-    let primaryButtonText = 'Set Location';
+    let primaryButtonText = this.props.intl.formatMessage({
+      id: 'torrents.move.button.set.location',
+      defaultMessage: 'Set Location'
+    });
 
     if (this.state.isSettingDownloadPath) {
       icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Setting...';
+      primaryButtonText = this.props.intl.formatMessage({
+        id: 'torrents.move.button.state.setting',
+        defaultMessage: 'Setting...'
+      });
     }
 
     return [
       {
         clickHandler: null,
-        content: 'Cancel',
+        content: this.props.intl.formatMessage({
+          id: 'button.cancel',
+          defaultMessage: 'Cancel'
+        }),
         triggerDismiss: true,
         type: 'secondary'
       },
@@ -126,7 +136,10 @@ export default class MoveTorrents extends React.Component {
           suggested={this.state.originalSource} />
         <div className="form__row">
           <div className="form__column">
-            <Checkbox onChange={this.handleCheckboxChange}>Move data</Checkbox>
+            <Checkbox onChange={this.handleCheckboxChange}><FormattedMessage
+              id="torrents.move.data.label"
+              defaultMessage="Move data"
+            /></Checkbox>
           </div>
         </div>
       </div>
@@ -148,7 +161,12 @@ export default class MoveTorrents extends React.Component {
       <Modal actions={this.getActions()}
         content={this.getContent()}
         dismiss={this.props.dismiss}
-        heading="Set Download Location" />
+        heading={this.props.intl.formatMessage({
+          id: 'torrents.move.heading',
+          defaultMessage: 'Set Download Location'
+        })} />
     );
   }
 }
+
+export default injectIntl(MoveTorrents);

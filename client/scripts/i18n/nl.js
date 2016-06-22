@@ -63,18 +63,6 @@ export default {
   "sidebar.transferdata.downloaded": "Gedownload",
   "sidebar.transferdata.uploaded": "Geupload",
 
-  "sort.torrents.added": "Datum toegevoegd",
-  "sort.torrents.download.speed": "Download snelheid",
-  "sort.torrents.download.total": "Gedownload",
-  "sort.torrents.eta": "ETA",
-  "sort.torrents.name": "Naam",
-  "sort.torrents.percentage": "Percentage compleet",
-  "sort.torrents.ratio": "Ratio",
-  "sort.torrents.size": "Bestandsgrootte",
-  "sort.torrents.title": "Sorteer op",
-  "sort.torrents.upload.speed": "Upload snelheid",
-  "sort.torrents.upload.total": "Geupload",
-
   "speed.unlimited": "Ongelimiteerd",
 
   "torrents.add.button.add": "Torrent toevoegen",
@@ -89,11 +77,28 @@ export default {
   "torrents.add.tab.url.title": "Via URL",
   "torrents.add.torrents.label": "Torrents",
 
-  "torrent.list.context.start": "Start",
-  "torrent.list.context.stop": "Stop",
-  "torrent.list.context.pause": "Pauzeer",
-  "torrent.list.context.remove": "Verwijder",
-  "torrent.list.context.check.hash": "Controleer hash",
-  "torrent.list.context.move": "Downloadlocatie...",
-  "torrent.list.context.priority": "Prioriteit"
+  "torrents.list.context.start": "Start",
+  "torrents.list.context.stop": "Stop",
+  "torrents.list.context.pause": "Pauzeer",
+  "torrents.list.context.remove": "Verwijder",
+  "torrents.list.context.check.hash": "Controleer hash",
+  "torrents.list.context.move": "Downloadlocatie...",
+  "torrents.list.context.priority": "Prioriteit",
+
+  "torrents.sort.added": "Datum toegevoegd",
+  "torrents.sort.download.speed": "Download snelheid",
+  "torrents.sort.download.total": "Gedownload",
+  "torrents.sort.eta": "ETA",
+  "torrents.sort.name": "Naam",
+  "torrents.sort.percentage": "Percentage compleet",
+  "torrents.sort.ratio": "Ratio",
+  "torrents.sort.size": "Bestandsgrootte",
+  "torrents.sort.title": "Sorteer op",
+  "torrents.sort.upload.speed": "Upload snelheid",
+  "torrents.sort.upload.total": "Geupload",
+
+  "torrents.move.button.set.location": "Wijzig downloadlocatie",
+  "torrents.move.button.state.setting": "Wijzigen...",
+  "torrents.move.data.label": "Verplaats bestanden",
+  "torrents.move.heading": "Wijzig downloadlocatie"
 };

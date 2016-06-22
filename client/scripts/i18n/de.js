@@ -1,3 +1,3 @@
 export default {
-  "sidebar.settings_button": "Einstellungen"
+  "sidebar.button.settings": "Einstellungen"
 };

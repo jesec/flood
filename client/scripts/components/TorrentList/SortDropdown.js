@@ -24,7 +24,7 @@ class SortDropdown extends React.Component {
       <a className="dropdown__button">
         <label className="dropdown__label">
           <FormattedMessage
-            id="sort.torrents.title"
+            id="torrents.sort.title"
             defaultMessage="Sort By"
           />
         </label>

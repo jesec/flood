@@ -101,35 +101,35 @@ class TorrentListContainer extends React.Component {
       action: 'start',
       clickHandler,
       label: this.props.intl.formatMessage({
-        id: 'torrent.list.context.start',
+        id: 'torrents.list.context.start',
         defaultMessage: 'Start'
       })
     }, {
       action: 'stop',
       clickHandler,
       label: this.props.intl.formatMessage({
-        id: 'torrent.list.context.stop',
+        id: 'torrents.list.context.stop',
         defaultMessage: 'Stop'
       })
     }, {
       action: 'pause',
       clickHandler,
       label: this.props.intl.formatMessage({
-        id: 'torrent.list.context.pause',
+        id: 'torrents.list.context.pause',
         defaultMessage: 'Pause'
       })
     }, {
       action: 'remove',
       clickHandler,
       label: this.props.intl.formatMessage({
-        id: 'torrent.list.context.remove',
+        id: 'torrents.list.context.remove',
         defaultMessage: 'Remove'
       })
     }, {
       action: 'check-hash',
       clickHandler,
       label: this.props.intl.formatMessage({
-        id: 'torrent.list.context.check.hash',
+        id: 'torrents.list.context.check.hash',
         defaultMessage: 'Check Hash'
       })
     }, {
@@ -138,7 +138,7 @@ class TorrentListContainer extends React.Component {
       action: 'move',
       clickHandler,
       label: this.props.intl.formatMessage({
-        id: 'torrent.list.context.move',
+        id: 'torrents.list.context.move',
         defaultMessage: 'Download Location...'
       })
     }, {
@@ -146,7 +146,7 @@ class TorrentListContainer extends React.Component {
       clickHandler,
       dismissMenu: false,
       label: this.props.intl.formatMessage({
-        id: 'torrent.list.context.priority',
+        id: 'torrents.list.context.priority',
         defaultMessage: 'Priority'
       }),
       labelAction: (
