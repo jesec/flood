@@ -88,7 +88,7 @@ export default {
   "torrents.details.details": "Details",
   "torrents.details.files": "Bestanden",
   "torrents.details.general.added": "Datum van toevoegen",
-  "torrents.details.general.comment": "Opermking",
+  "torrents.details.general.comment": "Opmerking",
   "torrents.details.general.creation.date": "Datum van aanmaken",
   "torrents.details.general.downloaded": "Gedownload",
   "torrents.details.general.free.disk.space": "Vrije schijfruimte",
@@ -107,6 +107,7 @@ export default {
   "torrents.details.peers.no.data": "Er zijn geen peer-gegevens voor deze torrent.",
   "torrents.details.peers": "Peers",
   "torrents.details.trackers.no.data": "Er zijn geen tracker-gegevens voor deze torrent.",
+  "torrents.details.trackers.type": "Type",
   "torrents.details.trackers": "Trackers",
 
   "torrents.list.context.start": "Start",
