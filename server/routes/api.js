@@ -1,34 +1,24 @@
 'use strict';
 
-var express = require('express');
-var passport = require('passport');
-var router = express.Router();
-var Strategy = require('passport-http').BasicStrategy;
+let express = require('express');
 
 let ajaxUtil = require('../util/ajaxUtil');
 let client = require('../models/client');
+let clientRoutes = require('./client');
 let history = require('../models/history');
+let passport = require('passport');
+let router = express.Router();
 let settings = require('../models/settings');
-var users = require('../db/users');
 
 history.startPolling();
 
-passport.use(new Strategy(
-  (username, password, callback) => {
-    users.findByUsername(username, (err, user) => {
-      if (err) { return callback(err); }
-      if (!user) { return callback(null, false); }
-      if (user.password != password) { return callback(null, false); }
-      return callback(null, user);
-    });
-  }
-));
+router.use(passport.authenticate('jwt', {session: false}));
 
-router.get('/', passport.authenticate('basic', { session: false }),
-  (req, res) => {
-    res.render('index', { title: 'Flood' });
-  }
-);
+router.use('/client', clientRoutes);
+
+router.get('/', (req, res) => {
+  res.render('index', {title: 'Flood'});
+});
 
 router.get('/history', function(req, res, next) {
   history.get(req.query, ajaxUtil.getResponseFn(res));

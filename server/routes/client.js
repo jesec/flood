@@ -2,12 +2,12 @@
 
 let express = require('express');
 let multer = require('multer');
-let router = express.Router();
 
 let ajaxUtil = require('../util/ajaxUtil');
 let client = require('../models/client');
 let clientUtil = require('../util/clientUtil');
 let history = require('../models/history');
+let router = express.Router();
 let settings = require('../models/settings');
 
 let upload = multer({

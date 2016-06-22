@@ -3,6 +3,7 @@ const config = {
   dbPath: './server/db/',
   maxHistoryStates: 30,
   pollInterval: 1000 * 5,
+  secret: 'flood',
   scgi: {
     host: 'localhost',
     port: 5000,

@@ -10,6 +10,13 @@ export default class BaseStore extends EventEmitter {
     this.setMaxListeners(20);
   }
 
+  emit(eventName) {
+    super.emit(...arguments);
+    if (eventName == null) {
+      console.warn('Event is undefined!');
+    }
+  }
+
   beginRequest(id) {
     this.requests[id] = true;
   }
@@ -19,7 +26,7 @@ export default class BaseStore extends EventEmitter {
   }
 
   isRequestPending(id) {
-    if (this.requests[id] == null || this.requests[id] === false) {
+    if (this.requests[id] == null) {
       return false;
     }
 
@@ -31,7 +38,7 @@ export default class BaseStore extends EventEmitter {
   }
 
   resolveRequest(id) {
-    this.requests[id] = false;
+    delete this.requests[id];
   }
 
   unlisten(event, callback) {

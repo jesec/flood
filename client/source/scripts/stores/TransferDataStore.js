@@ -59,11 +59,11 @@ class TransferDataStoreClass extends BaseStore {
 
   handleSetThrottleSuccess(data) {
     this.fetchTransferData();
-    this.emit(EventTypes.CLIENT_SET_THROTTLE_SUCCESS);
+    // this.emit(EventTypes.CLIENT_SET_THROTTLE_SUCCESS);
   }
 
   handleSetThrottleError(error) {
-    this.emit(EventTypes.CLIENT_SET_THROTTLE_ERROR);
+    // this.emit(EventTypes.CLIENT_SET_THROTTLE_ERROR);
   }
 
   handleTransferDataSuccess(transferData) {
