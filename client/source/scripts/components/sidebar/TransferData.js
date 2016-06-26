@@ -47,10 +47,10 @@ class TransferData extends React.Component {
   }
 
   componentWillUnmount() {
-    TransferDataStore.unlisten(
-      EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
-      this.onTransferDataRequestSuccess
-    );
+    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
+      this.onTransferDataRequestSuccess);
+    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
+      this.onTransferHistoryRequestSuccess);
   }
 
   isLoading() {
