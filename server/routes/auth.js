@@ -18,7 +18,7 @@ router.post('/authenticate', (req, res) => {
 
   Users.comparePassword(credentials, function(isMatch, err) {
     if (isMatch == null) {
-      return res.status(401).json({message: 'Username not found.'});
+      return res.status(401).json({message: 'You entered an incorrect username.'});
     }
 
     if (isMatch && !err) {
@@ -33,7 +33,7 @@ router.post('/authenticate', (req, res) => {
       res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true});
       return res.json({success: true, token: `JWT ${token}`});
     } else {
-      return res.status(401).json({message: 'Passwords did not match.'});
+      return res.status(401).json({message: 'You entered an incorrect password.'});
     }
   });
 });
