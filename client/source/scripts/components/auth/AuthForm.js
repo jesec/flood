@@ -11,7 +11,7 @@ export default class AuthForm extends React.Component {
   constructor() {
     super();
 
-    this.state = {error: null}
+    this.state = {error: null};
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);

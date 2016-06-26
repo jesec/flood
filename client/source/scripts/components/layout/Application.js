@@ -1,4 +1,4 @@
-import {browserHistory} from 'react-router'
+import {browserHistory} from 'react-router';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
