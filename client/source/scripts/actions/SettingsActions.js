@@ -5,7 +5,7 @@ import ActionTypes from '../constants/ActionTypes';
 
 const SettingsActions = {
   fetchSettings: (property) => {
-    return axios.get('/settings', {params: {property}})
+    return axios.get('/api/settings', {params: {property}})
       .then((json = {}) => {
         return json.data;
       })
@@ -24,7 +24,7 @@ const SettingsActions = {
   },
 
   saveSettings: (settings, options = {}) => {
-    return axios.patch('/settings', settings)
+    return axios.patch('/api/settings', settings)
       .then((json = {}) => {
         return json.data;
       })

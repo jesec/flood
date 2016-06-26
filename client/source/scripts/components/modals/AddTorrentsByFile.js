@@ -72,14 +72,16 @@ export default class AddTorrentsByFile extends React.Component {
     if (this.state.files && this.state.files.length > 0) {
       let files = this.state.files.map((file, index) => {
         return (
-          <li className="dropzone__selected-files__file dropzone__file" key={index}>
-            <span className="dropzone__file__item dropzone__file__item--icon">
+          <li className="dropzone__selected-files__file interactive-list__item"
+            key={index} title={file.name}>
+            <span className="interactive-list__icon">
               <File />
             </span>
-            <span className="dropzone__file__item dropzone__file__item--file-name">
+            <span className="interactive-list__label">
               {file.name}
             </span>
-            <span className="dropzone__file__item dropzone__file__item--icon dropzone__file__item--remove-icon" onClick={this.handleFileRemove.bind(this, index)}>
+            <span className="interactive-list__icon interactive-list__icon--action"
+              onClick={this.handleFileRemove.bind(this, index)}>
               <Close />
             </span>
           </li>
@@ -87,7 +89,8 @@ export default class AddTorrentsByFile extends React.Component {
       });
 
       fileContent = (
-        <ul className="dropzone__selected-files" onClick={this.handleFilesClick}>
+        <ul className="dropzone__selected-files interactive-list"
+          onClick={this.handleFilesClick}>
           {files}
         </ul>
       );

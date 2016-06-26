@@ -12,27 +12,23 @@ let settings = require('../models/settings');
 
 history.startPolling();
 
-router.use(passport.authenticate('jwt', {session: false}));
+router.use('/', passport.authenticate('jwt', {session: false}));
 
 router.use('/client', clientRoutes);
 
-router.get('/', (req, res) => {
-  res.render('index', {title: 'Flood'});
-});
-
-router.get('/history', function(req, res, next) {
+router.get('/history', (req, res, next) => {
   history.get(req.query, ajaxUtil.getResponseFn(res));
 });
 
-router.get('/settings', function(req, res, next) {
+router.get('/settings', (req, res, next) => {
   settings.get(req.query, ajaxUtil.getResponseFn(res));
 });
 
-router.patch('/settings', function(req, res, next) {
+router.patch('/settings', (req, res, next) => {
   settings.set(req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.get('/stats', function(req, res, next) {
+router.get('/stats', (req, res, next) => {
   client.getTransferStats(ajaxUtil.getResponseFn(res));
 });
 

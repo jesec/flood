@@ -5,7 +5,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 
 const ClientActions = {
   fetchSettings: (property) => {
-    return axios.get('/client/settings', {params: {property}})
+    return axios.get('/api/client/settings', {params: {property}})
       .then((json = {}) => {
         return json.data;
       })
@@ -24,7 +24,7 @@ const ClientActions = {
   },
 
   saveSettings: (settings, options) => {
-    return axios.patch('/client/settings', settings)
+    return axios.patch('/api/client/settings', settings)
       .then((json = {}) => {
         return json.data;
       })
@@ -45,7 +45,7 @@ const ClientActions = {
   },
 
   setThrottle: (direction, throttle) => {
-    return axios.put('/client/settings/speed-limits', {
+    return axios.put('/api/client/settings/speed-limits', {
         direction,
         throttle
       })

@@ -49,6 +49,7 @@
     "react-custom-scrollbars": "^4.0.0-beta.1",
     "react-dom": "^15.0.2",
     "react-dropzone": "^3.4.0",
+    "react-router": "^2.5.0",
     "sax": "^0.6.1",
     "serve-favicon": "~2.2.0",
     "webpack": "^1.13.1",

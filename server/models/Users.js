@@ -14,7 +14,7 @@ class Users {
   comparePassword(credentials, callback) {
     this.db.findOne({username: credentials.username}).exec((err, user) => {
       if (err) {
-        return callback(err);
+        return callback(null, err);
       }
 
       // Username not found.
@@ -24,42 +24,57 @@ class Users {
 
       bcrypt.compare(credentials.password, user.password, (err, isMatch) => {
         if (err) {
-          return callback(err);
+          return callback(null, err);
         }
 
-        return callback(null, isMatch);
+        return callback(isMatch);
       });
     });
   }
 
   createUser(credentials, callback) {
     if (!this.ready) {
-      callback({message: 'Users database is not ready.'});
+      return callback(null, 'Users database is not ready.');
+    }
+
+    if (credentials.username === '' || credentials.username == null) {
+      return callback(null, 'Username cannot be empty.');
     }
 
     bcrypt.genSalt(10, (err, salt) => {
       if (err) {
-        callback(err);
-        return;
+        return callback(null, err);
       }
 
       let username = credentials.username;
 
       bcrypt.hash(credentials.password, salt, null, (err, hash) => {
         if (err) {
-          callback(err);
-          return;
+          return callback(null, err);
         }
 
         this.db.insert({username: username, password: hash}, (err, user) => {
           if (err) {
-            callback(err);
-            return;
+            if (err.errorType = 'uniqueViolated') {
+              err = 'Username already exists.';
+            }
+
+            return callback(null, err);
           }
 
-          callback(null, {username: credentials.username});
+          return callback({username: credentials.username});
         });
       });
+    });
+  }
+
+  removeUser(username, callback) {
+    this.db.remove({username: username}, {}, (err, numRemoved) => {
+      if (err) {
+        return callback(null, err);
+      }
+
+      return callback({username: username});
     });
   }
 
@@ -76,7 +91,7 @@ class Users {
   loadDatabase() {
     let db = new Datastore({
       autoload: true,
-      filename: `${config.dbPath}authUsers.db`
+      filename: `${config.dbPath}users.db`
     });
 
     db.ensureIndex({fieldName: 'username', unique: true});
@@ -92,6 +107,18 @@ class Users {
       }
 
       return callback(null, user);
+    });
+  }
+
+  listUsers(callback) {
+    this.db.find({}, (err, users) => {
+      if (err) {
+        return callback(null, err);
+      }
+
+      return callback(users.map((user) => {
+        return {username: user.username};
+      }));
     });
   }
 }

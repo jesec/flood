@@ -6,10 +6,18 @@ let jwtStrategy = require('passport-jwt').Strategy;
 let config = require('../../config');
 let Users = require('../models/Users');
 
-// Setup work and export for the JWT passport strategy
+// Setup work and export for the JWT passport strategy.
 module.exports = (passport) => {
   let options = {
-    jwtFromRequest: extractJWT.fromAuthHeader(),
+    jwtFromRequest: (req) => {
+      let token = null;
+
+      if (req && req.cookies) {
+        token = req.cookies['jwt'];
+      }
+
+      return token;
+    },
     secretOrKey: config.secret
   };
 
