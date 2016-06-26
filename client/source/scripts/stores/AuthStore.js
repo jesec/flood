@@ -125,8 +125,6 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.AUTH_REGISTER_SUCCESS:
       AuthStore.handleRegisterSuccess(action.data);
-      AuthStore.emit(EventTypes.AUTH_REGISTER_SUCCESS,
-        action.data);
       break;
     case ActionTypes.AUTH_REGISTER_ERROR:
       AuthStore.handleRegisterError(action.error.data);
