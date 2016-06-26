@@ -17,23 +17,23 @@ router.post('/authenticate', (req, res) => {
   };
 
   Users.comparePassword(credentials, function(isMatch, err) {
-    console.log(credentials);
     if (isMatch == null) {
       return res.status(401).json({message: 'Username not found.'});
     }
 
     if (isMatch && !err) {
+      let expirationSeconds = 60 * 60 * 24 * 7; // one week
+      let cookieExpiration = Date.now() + expirationSeconds * 1000;
+
       // Create token if the password matched and no error was thrown.
       let token = jwt.sign(credentials, config.secret, {
-        expiresIn: 60 * 60 * 24 * 7 // one week
+        expiresIn: expirationSeconds
       });
 
-      res.append('Set-Cookie', `jwt=${token}; Path=/; HttpOnly`);
+      res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true});
       return res.json({success: true, token: `JWT ${token}`});
     } else {
-      return res.status(401).json({
-        message: 'Passwords did not match.'
-      });
+      return res.status(401).json({message: 'Passwords did not match.'});
     }
   });
 });
