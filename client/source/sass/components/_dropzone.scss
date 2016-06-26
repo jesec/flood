@@ -10,8 +10,6 @@ $dropzone--icon--fill--hover: $blue;
 $dropzone--icon--fill--dragging: $blue;
 
 $dropzone--file--foreground: $dropzone--foreground;
-$dropzone--file--icon--fill: rgba($dropzone--file--foreground, 0.5);
-$dropzone--file--icon--fill--hover: rgba(lighten($dropzone--file--foreground, 20%), 0.5);
 
 .dropzone {
   align-items: center;
@@ -89,13 +87,10 @@ $dropzone--file--icon--fill--hover: rgba(lighten($dropzone--file--foreground, 20
   }
 
   &__selected-files {
-    @extend .textbox;
-    @extend .textbox.is-fulfilled;
     border-radius: 4px 4px 0 0;
     color: $dropzone--file--foreground;
     font-size: 0.8em;
     margin-bottom: -1px;
-    padding: $spacing-unit * 1/2;
     position: relative;
     width: 100%;
     z-index: 2;
@@ -105,58 +100,15 @@ $dropzone--file--icon--fill--hover: rgba(lighten($dropzone--file--foreground, 20
     }
 
     &__file {
-      text-align: left;
-      white-space: nowrap;
 
       .icon {
-        display: inline-block;
-        fill: $dropzone--file--icon--fill;
-        height: 12px;
-        margin-right: 4px;
-        margin-top: -1px;
-        transition: fill 0.25s;
-        vertical-align: middle;
-        width: 12px;
 
-        &--close {
-          height: 8px;
-          margin-left: 4px;
-          margin-right: 0;
-          vertical-align: middle;
-          width: 8px;
-        }
-      }
-    }
-  }
-
-  &__file {
-    display: flex;
-    width: 100%;
-
-    &__item {
-      flex: 1 0 auto;
-
-      &--icon {
-        flex: 0 0 auto;
-      }
-
-      &--file-name {
-        flex: 1 1 auto;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      &--remove-icon {
-        cursor: pointer;
-      }
-
-      &--remove-icon {
-
-        &:hover {
-
-          .icon {
-            fill: $dropzone--file--icon--fill--hover;
-          }
+        &--file {
+          display: inline-block;
+          height: 12px;
+          margin-right: 4px;
+          margin-top: -1px;
+          width: 12px;
         }
       }
     }
