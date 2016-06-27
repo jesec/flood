@@ -5,7 +5,7 @@ import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
 import FloodActions from '../../actions/FloodActions';
 
-const METHODS_TO_BIND = ['handleAuthError', 'handleSubmitClick'];
+const METHODS_TO_BIND = ['handleAuthError', 'handleFormSubmit'];
 
 export default class AuthForm extends React.Component {
   constructor() {
@@ -32,7 +32,13 @@ export default class AuthForm extends React.Component {
     return this.state[fieldName];
   }
 
-  handleSubmitClick() {
+  handleAuthError(error) {
+    this.setState({error});
+  }
+
+  handleFormSubmit(event) {
+    event.preventDefault();
+
     if (this.props.mode === 'login') {
       AuthStore.authenticate({
         username: this.refs.username.value,
@@ -44,10 +50,6 @@ export default class AuthForm extends React.Component {
         password: this.refs.password.value
       });
     }
-  }
-
-  handleAuthError(error) {
-    this.setState({error});
   }
 
   render() {
@@ -74,7 +76,8 @@ export default class AuthForm extends React.Component {
     }
 
     return (
-      <div className="form form--authentication">
+      <form className="form form--authentication"
+        onSubmit={this.handleFormSubmit}>
         <div className="form__wrapper">
           <div className="form__row form__header">
             <h1>{headerText}</h1>
@@ -94,12 +97,11 @@ export default class AuthForm extends React.Component {
           {error}
         </div>
         <div className="form__actions">
-          <button className="button button--primary"
-            onClick={this.handleSubmitClick}>
+          <button className="button button--primary" type="submit">
             {actionText}
           </button>
         </div>
-      </div>
+      </form>
     );
   }
 }
