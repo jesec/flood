@@ -7,7 +7,7 @@ $action--foreground--hover: $blue;
 $action--background--hover: rgba(#333e4a, 0.05);
 $action--border--hover: rgba(#333e4a, 0.15);
 
-$torrent-list--border: rgba($background, 0.15);
+$torrent-list--border: rgba($sidebar--background, 0.15);
 
 .action-bar {
   background: $action-bar--background;

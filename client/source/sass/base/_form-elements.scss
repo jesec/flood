@@ -5,6 +5,8 @@ $textbox--foreground: #5e728c;
 $textbox--placeholder: #424d5e;
 $textbox--border: #1a2028;
 $textbox--fulfilled--background: $textbox--background;
+$textbox--padding--vertical: 10px;
+$textbox--padding--horizontal: 15px;
 $textbox--active--background: $textbox--background;
 $textbox--active--border: $blue;
 $textbox--active--foreground: $blue;
@@ -37,6 +39,20 @@ $form--section--margin: $spacing-unit;
 $form--row--margin: $spacing-unit * 3/5;
 $form--column--padding: $spacing-unit * 2/5;
 
+$authentication--form--border: #d4dbe0;
+$authentication--form--padding: $spacing-unit * 1.25;
+
+$authentication--textbox--background: #122430;
+$authentication--textbox--border: #e9edef;
+$authentication--textbox--placeholder: #c1c9cf;
+
+$authentication--header--foreground: $white;
+$authentication--label--foreground: #3a5567;
+
+$interacative-list--item--foreground: $textbox--foreground;
+$interacative-list--item--icon--fill: rgba($interacative-list--item--foreground, 0.5);
+$interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--item--foreground, 20%), 0.5);
+
 .textbox,
 .button,
 .checkbox {
@@ -57,7 +73,7 @@ $form--column--padding: $spacing-unit * 2/5;
   border: 1px solid $textbox--border;
   color: $textbox--foreground;
   display: block;
-  padding: 10px 15px;
+  padding: $textbox--padding--vertical $textbox--padding--horizontal;
   transition: background 0.25s, border 0.25s, color 0.25s;
   width: 100%;
 
@@ -80,6 +96,12 @@ $form--column--padding: $spacing-unit * 2/5;
     &::placeholder {
       color: $textbox--active--placeholder;
     }
+  }
+
+  &--open {
+    border: none;
+    border-radius: 0;
+    padding: $textbox--padding--vertical 0;
   }
 
   &.is-fulfilled {
@@ -201,7 +223,68 @@ $form--column--padding: $spacing-unit * 2/5;
   }
 }
 
+.interactive-list {
+  @extend .textbox;
+  @extend .textbox.is-fulfilled;
+  border-radius: 4px;
+  color: $interacative-list--item--foreground;
+  padding: $spacing-unit * 1/2;
+
+  &__item {
+    display: flex;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+  }
+
+  &__label {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+  }
+
+  &__icon {
+    flex: 0 0 auto;
+
+    .icon {
+      fill: $interacative-list--item--icon--fill;
+      transition: fill 0.25s;
+
+      &--close {
+        cursor: pointer;
+        height: 8px;
+        margin-left: 4px;
+        margin-right: 0;
+        vertical-align: middle;
+        width: 8px;
+      }
+    }
+
+    &--action {
+      cursor: pointer;
+
+      &:hover {
+
+        .icon {
+          fill: $interacative-list--item--icon--fill--hover;
+        }
+      }
+    }
+  }
+}
+
 .form {
+  position: relative;
+
+  &__label {
+    color: $form--label--foreground;
+    display: block;
+    font-size: 0.8em;
+    line-height: 1;
+    margin-bottom: 0.35em;
+  }
 
   &__section {
 
@@ -232,6 +315,7 @@ $form--column--padding: $spacing-unit * 2/5;
     flex: 1;
     flex-direction: column;
     justify-content: flex-end;
+    max-width: 100%;
     padding: 0 $form--column--padding;
 
     &:first-child {
@@ -275,11 +359,77 @@ $form--column--padding: $spacing-unit * 2/5;
     }
   }
 
-  &__label {
-    color: $form--label--foreground;
-    display: block;
-    font-size: 0.8em;
-    line-height: 1;
-    margin-bottom: 0.35em;
+  &__actions {
+    margin-top: $spacing-unit;
+  }
+
+  &--authentication {
+    max-width: 350px;
+    width: 100%;
+
+    .form {
+
+      &__wrapper {
+        background: $white;
+        border: 1px solid $authentication--form--border;
+        padding: $authentication--form--padding;
+      }
+
+      &__header {
+        background: $blue;
+        margin: $authentication--form--padding * -1 $authentication--form--padding * -1 0 $authentication--form--padding * -1;
+        padding: $authentication--form--padding * 0.75 $authentication--form--padding;
+
+        h1 {
+          color: $authentication--header--foreground;
+          font-size: 1.4em;
+          font-weight: normal;
+          line-height: 1;
+        }
+
+        & + .form__row {
+          margin-top: $authentication--form--padding;
+        }
+      }
+
+      &--header {
+
+      }
+
+      &__label {
+        color: $authentication--label--foreground;
+      }
+
+      &__row {
+
+        &--error {
+          color: $red;
+          font-size: 0.75em;
+        }
+      }
+
+      &__actions {
+        text-align: right;
+
+        .button {
+          box-shadow: none;
+        }
+      }
+    }
+
+    .textbox {
+      background: transparent;
+      border-bottom: 1px solid $authentication--textbox--border;
+
+      &:active,
+      &:focus {
+        border-bottom: 1px solid $blue;
+      }
+
+      &::placeholder {
+        color: $authentication--textbox--placeholder;
+        font-style: normal;
+      }
+    }
   }
 }

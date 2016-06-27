@@ -1,6 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 
+import AuthStore from '../../stores/AuthStore';
+import AuthTab from '../settings/AuthTab';
 import BandwidthTab from '../settings/BandwidthTab';
 import ConnectivityTab from '../settings/ConnectivityTab';
 import EventTypes from '../../constants/EventTypes';
@@ -15,7 +17,8 @@ const METHODS_TO_BIND = [
   'handleFloodSettingsChange',
   'handleSaveSettingsClick',
   'handleSaveSettingsError',
-  'handleSettingsStoreChange'
+  'handleSettingsStoreChange',
+  'handleUserListChange'
 ];
 
 export default class SettingsModal extends React.Component {
@@ -40,6 +43,7 @@ export default class SettingsModal extends React.Component {
       this.handleSettingsStoreChange);
     SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
       this.handleSaveSettingsError);
+    AuthStore.fetchUserList();
   }
 
   componentWillUnmount() {
@@ -140,6 +144,11 @@ export default class SettingsModal extends React.Component {
     this.setState({clientSettings, changedClientSettings});
   }
 
+  handleUserListChange() {
+    console.log('list change');
+    this.forceUpdate();
+  }
+
   mergeObjects(objA, objB) {
     Object.keys(objB).forEach((key) => {
       if (!objB.hasOwnProperty(key) || objB[key] == null) {
@@ -184,6 +193,10 @@ export default class SettingsModal extends React.Component {
           settings: this.state.clientSettings
         },
         label: 'Resources'
+      },
+      authentication: {
+        content: AuthTab,
+        label: 'Authentication'
       }
     };
 

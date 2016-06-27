@@ -14,6 +14,7 @@ $sidebar--icon-button--foreground--hover: $blue;
 .application {
 
   &__sidebar {
+    background: $sidebar--background;
     box-shadow: 1px 0 $sidebar--border;
     color: $sidebar--foreground;
     flex: 1;

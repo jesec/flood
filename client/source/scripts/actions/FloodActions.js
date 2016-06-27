@@ -2,10 +2,11 @@ import axios from 'axios';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import AuthStore from '../stores/AuthStore';
 
 const FloodActions = {
   fetchTransferData: () => {
-    return axios.get('/stats')
+    return axios.get('/api/stats')
       .then((json = {}) => {
         return json.data;
       })
@@ -28,7 +29,7 @@ const FloodActions = {
   },
 
   fetchTransferHistory: (opts) => {
-    return axios.get('/history', {
+    return axios.get('/api/history', {
       params: opts
     })
     .then((json = {}) => {
