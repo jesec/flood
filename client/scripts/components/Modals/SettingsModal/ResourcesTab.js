@@ -29,7 +29,16 @@ export default class ResourcesTab extends SettingsTab {
             </div>
           </div>
           <div className="form__row">
-            <div className="form__column form__column--auto">
+            <div className="form__column form__column--half">
+              <label className="form__label">
+                Maximum Open Files
+              </label>
+              <input className="textbox" type="text"
+                onChange={this.handleClientSettingFieldChange.bind(this, 'networkMaxOpenFiles')}
+                value={this.getFieldValue('networkMaxOpenFiles')} />
+            </div>
+            <div className="form__column form__column--auto
+              form__column--unlabled">
               <Checkbox
                 checked={this.getFieldValue('piecesHashOnCompletion') === '1'}
                 onChange={this.handleClientSettingCheckboxChange.bind(this, 'piecesHashOnCompletion')}>
@@ -43,7 +52,7 @@ export default class ResourcesTab extends SettingsTab {
             Memory
           </div>
           <div className="form__row">
-            <div className="form__column">
+            <div className="form__column form__column--half">
               <label className="form__label">
                 Max Memory Usage <em className="unit">(MB)</em>
               </label>
