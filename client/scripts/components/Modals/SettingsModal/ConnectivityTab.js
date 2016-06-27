@@ -78,6 +78,14 @@ export default class ConnectivityTab extends SettingsTab {
                 onChange={this.handleClientSettingFieldChange.bind(this, 'networkLocalAddress')}
                 value={this.getFieldValue('networkLocalAddress')} />
             </div>
+            <div className="form__column form__column--half">
+              <label className="form__label">
+                Maximum HTTP Connections
+              </label>
+              <input className="textbox" type="text"
+                onChange={this.handleClientSettingFieldChange.bind(this, 'networkHttpMaxOpen')}
+                value={this.getFieldValue('networkHttpMaxOpen')} />
+            </div>
           </div>
         </div>
         <div className="form__section">
