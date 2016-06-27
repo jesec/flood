@@ -3,7 +3,7 @@ import _ from 'lodash';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import config from '../../../../config';
+import config from '../../../config';
 import EventTypes from '../constants/EventTypes';
 import {filterTorrents} from '../util/filterTorrents';
 import NotificationStore from './NotificationStore';

@@ -1,4 +1,4 @@
-import propsMaps from '../../../../shared/constants/propsMap';
+import propsMaps from '../../../shared/constants/propsMap';
 
 export function filterTorrents(torrentList, opts) {
   let statusMap = propsMaps.clientStatus;

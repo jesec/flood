@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import React from 'react';
 
 import EventTypes from '../../constants/EventTypes';
-import propsMap from '../../../../../shared/constants/propsMap';
+import propsMap from '../../../../shared/constants/propsMap';
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';

@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 
-import propsMap from '../../../../shared/constants/propsMap';
+import propsMap from '../../../shared/constants/propsMap';
 
 export function torrentStatusClasses(torrent, ...classes) {
   let additionalClasses = [];

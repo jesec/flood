@@ -1,7 +1,7 @@
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import config from '../../../../config';
+import config from '../../../config';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
 

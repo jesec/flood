@@ -2,7 +2,7 @@ import React from 'react';
 
 import ErrorIcon from '../components/icons/ErrorIcon';
 import PauseIcon from '../components/icons/PauseIcon';
-import propsMap from '../../../../shared/constants/propsMap';
+import propsMap from '../../../shared/constants/propsMap';
 import SpinnerIcon from '../components/icons/SpinnerIcon';
 import StartIcon from '../components/icons/StartIcon';
 import StopIcon from '../components/icons/StopIcon';
