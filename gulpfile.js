@@ -15,7 +15,7 @@ var packageInfo = require('./package');
 var development = process.env.NODE_ENV === 'development';
 
 var dirs = {
-  src: 'client/source',
+  src: 'client',
   dist: 'server/assets',
   js: 'scripts',
   jsDist: '',
