@@ -1,15 +1,15 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import AuthStore from '../../stores/AuthStore';
-import AuthTab from '../settings/AuthTab';
-import BandwidthTab from '../settings/BandwidthTab';
-import ConnectivityTab from '../settings/ConnectivityTab';
-import EventTypes from '../../constants/EventTypes';
-import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
-import Modal from './Modal';
-import ResourcesTab from '../settings/ResourcesTab';
-import SettingsStore from '../../stores/SettingsStore';
+import AuthStore from '../../../stores/AuthStore';
+import AuthTab from './AuthTab';
+import BandwidthTab from './BandwidthTab';
+import ConnectivityTab from './ConnectivityTab';
+import EventTypes from '../../../constants/EventTypes';
+import LoadingIndicatorDots from '../../Icons/LoadingIndicatorDots';
+import Modal from '../Modal';
+import ResourcesTab from './ResourcesTab';
+import SettingsStore from '../../../stores/SettingsStore';
 
 const METHODS_TO_BIND = [
   'handleClientSettingsChange',

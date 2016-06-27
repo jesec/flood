@@ -1,16 +1,16 @@
 import classnames from 'classnames';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import CSSTransitionGroup from 'react-addons-css-transition-group';
-import Download from '../icons/Download';
+import Download from '../Icons/Download';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
-import LineChart from '../ui/LineChart';
-import LoadingIndicator from '../ui/LoadingIndicator';
+import LineChart from '../General/LineChart';
+import LoadingIndicator from '../General/LoadingIndicator';
 import TransferDataStore from '../../stores/TransferDataStore';
 import UIStore from '../../stores/UIStore';
-import Upload from '../icons/Upload';
+import Upload from '../Icons/Upload';
 
 const METHODS_TO_BIND = [
   'onTransferDataRequestError',

@@ -1,11 +1,11 @@
 import React from 'react';
 
-import ErrorIcon from '../components/icons/ErrorIcon';
-import PauseIcon from '../components/icons/PauseIcon';
+import ErrorIcon from '../components/Icons/ErrorIcon';
+import PauseIcon from '../components/Icons/PauseIcon';
 import propsMap from '../../../shared/constants/propsMap';
-import SpinnerIcon from '../components/icons/SpinnerIcon';
-import StartIcon from '../components/icons/StartIcon';
-import StopIcon from '../components/icons/StopIcon';
+import SpinnerIcon from '../components/Icons/SpinnerIcon';
+import StartIcon from '../components/Icons/StartIcon';
+import StopIcon from '../components/Icons/StopIcon';
 
 const STATUS_ICON_MAP = {
   error: <ErrorIcon />,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Badge from '../ui/Badge';
+import Badge from '../../General/Badge';
 
 export default class TorrentTrackrs extends React.Component {
   render() {

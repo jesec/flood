@@ -1,11 +1,11 @@
 import React from 'react';
 
 import ClientActions from '../../actions/ClientActions';
-import Dropdown from '../forms/Dropdown';
+import Dropdown from '../General/FormElements/Dropdown';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
-import LimitsIcon from '../icons/Limits';
-import SidebarItem from '../sidebar/SidebarItem';
+import LimitsIcon from '../Icons/Limits';
+import SidebarItem from '../Sidebar/SidebarItem';
 import SettingsStore from '../../stores/SettingsStore';
 import TransferDataStore from '../../stores/TransferDataStore';
 

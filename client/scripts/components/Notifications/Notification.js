@@ -2,8 +2,8 @@ import classnames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
-import CircleExclamationIcon from '../icons/CircleExclamationIcon';
+import CircleCheckmarkIcon from '../Icons/CircleCheckmarkIcon';
+import CircleExclamationIcon from '../Icons/CircleExclamationIcon';
 import stringUtil from '../../../../shared/util/stringUtil';
 
 export default class Notification extends React.Component {

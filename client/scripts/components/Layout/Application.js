@@ -4,7 +4,7 @@ import React from 'react';
 
 import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
-import LoadingIndicator from '../ui/LoadingIndicator';
+import LoadingIndicator from '../General/LoadingIndicator';
 import UIStore from '../../stores/UIStore';
 
 const METHODS_TO_BIND = [

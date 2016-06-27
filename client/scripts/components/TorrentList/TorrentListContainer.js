@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TorrentList from './TorrentList';
+import TorrentList from './index';
 
 export default class TorrentListContainer extends React.Component {
   render() {

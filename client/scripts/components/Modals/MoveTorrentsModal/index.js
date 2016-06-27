@@ -2,15 +2,15 @@ import _ from 'lodash';
 import classnames from 'classnames';
 import React from 'react';
 
-import AddTorrentsDestination from './AddTorrentsDestination';
-import AppDispatcher from '../../dispatcher/AppDispatcher';
-import Checkbox from '../forms/Checkbox';
-import EventTypes from '../../constants/EventTypes';
-import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
-import Modal from './Modal';
-import ModalActions from './ModalActions';
-import TorrentActions from '../../actions/TorrentActions';
-import TorrentStore from '../../stores/TorrentStore';
+import AddTorrentsDestination from '../AddTorrentsModal/AddTorrentsDestination';
+import AppDispatcher from '../../../dispatcher/AppDispatcher';
+import Checkbox from '../../General/FormElements/Checkbox';
+import EventTypes from '../../../constants/EventTypes';
+import LoadingIndicatorDots from '../../Icons/LoadingIndicatorDots';
+import Modal from '../Modal';
+import ModalActions from '../ModalActions';
+import TorrentActions from '../../../actions/TorrentActions';
+import TorrentStore from '../../../stores/TorrentStore';
 
 const METHODS_TO_BIND = [
   'confirmMoveTorrents',

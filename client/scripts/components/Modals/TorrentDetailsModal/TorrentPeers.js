@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Badge from '../ui/Badge';
-import DirectoryTree from '../filesystem/DirectoryTree';
-import File from '../icons/File';
-import FolderOpenSolid from '../icons/FolderOpenSolid';
-import format from '../../util/formatData';
+import Badge from '../../General/Badge';
+import DirectoryTree from '../../General/Filesystem/DirectoryTree';
+import File from '../../Icons/File';
+import FolderOpenSolid from '../../Icons/FolderOpenSolid';
+import format from '../../../util/formatData';
 
 export default class TorrentPeers extends React.Component {
   render() {

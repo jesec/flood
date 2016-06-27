@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import FolderClosedSolid from '../icons/FolderClosedSolid';
-import FolderOpenSolid from '../icons/FolderOpenSolid';
+import FolderClosedSolid from '../../Icons/FolderClosedSolid';
+import FolderOpenSolid from '../../Icons/FolderOpenSolid';
 import DirectoryTree from './DirectoryTree';
 
 const METHODS_TO_BIND = ['handleDirectoryClick'];

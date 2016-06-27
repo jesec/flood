@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Disk from '../icons/Disk';
-import DirectoryTree from '../filesystem/DirectoryTree';
-import File from '../icons/File';
+import Disk from '../../Icons/Disk';
+import DirectoryTree from '../../General/Filesystem/DirectoryTree';
+import File from '../../Icons/File';
 
 export default class TorrentFiles extends React.Component {
   constructDirectoryTree(tree = {}, directory, file, depth = 0) {

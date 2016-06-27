@@ -2,9 +2,9 @@ import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import AddTorrentsDestination from './AddTorrentsDestination';
-import SettingsStore from '../../stores/SettingsStore';
-import TextboxRepeater from '../forms/TextboxRepeater';
-import TorrentActions from '../../actions/TorrentActions';
+import SettingsStore from '../../../stores/SettingsStore';
+import TextboxRepeater from '../../General/FormElements/TextboxRepeater';
+import TorrentActions from '../../../actions/TorrentActions';
 
 const METHODS_TO_BIND = [
   'handleAddTorrents',

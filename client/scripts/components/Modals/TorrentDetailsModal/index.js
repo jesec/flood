@@ -1,15 +1,15 @@
 import React from 'react';
 
-import Modal from './Modal';
-import EventTypes from '../../constants/EventTypes';
-import TorrentFiles from '../torrent-details/TorrentFiles';
-import TorrentGeneralInfo from '../torrent-details/TorrentGeneralInfo';
-import TorrentHeading from '../torrent-details/TorrentHeading';
-import TorrentPeers from '../torrent-details/TorrentPeers';
-import TorrentStore from '../../stores/TorrentStore';
-import TorrentTrackers from '../torrent-details/TorrentTrackers';
-import UIActions from '../../actions/UIActions';
-import UIStore from '../../stores/UIStore';
+import Modal from '../Modal';
+import EventTypes from '../../../constants/EventTypes';
+import TorrentFiles from './TorrentFiles';
+import TorrentGeneralInfo from './TorrentGeneralInfo';
+import TorrentHeading from './TorrentHeading';
+import TorrentPeers from './TorrentPeers';
+import TorrentStore from '../../../stores/TorrentStore';
+import TorrentTrackers from './TorrentTrackers';
+import UIActions from '../../../actions/UIActions';
+import UIStore from '../../../stores/UIStore';
 
 const METHODS_TO_BIND = ['onTorrentDetailsChange', 'onReceiveTorrentsSuccess'];
 

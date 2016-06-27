@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React from 'react';
 
-import Checkbox from '../forms/Checkbox';
+import Checkbox from '../../General/FormElements/Checkbox';
 import SettingsTab from './SettingsTab';
 
 export default class ResourcesTab extends SettingsTab {

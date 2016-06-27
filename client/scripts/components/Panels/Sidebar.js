@@ -1,12 +1,12 @@
 import React from 'react';
 
-import ClientStats from '../sidebar/TransferData';
-import CustomScrollbars from '../ui/CustomScrollbars';
-import SearchBox from '../forms/SearchBox';
-import SettingsButton from '../sidebar/SettingsButton';
-import SpeedLimitDropdown from '../sidebar/SpeedLimitDropdown';
-import StatusFilters from '../sidebar/StatusFilters';
-import TrackerFilters from '../sidebar/TrackerFilters';
+import ClientStats from '../Sidebar/TransferData';
+import CustomScrollbars from '../General/CustomScrollbars';
+import SearchBox from '../General/FormElements/SearchBox';
+import SettingsButton from '../Sidebar/SettingsButton';
+import SpeedLimitDropdown from '../Sidebar/SpeedLimitDropdown';
+import StatusFilters from '../Sidebar/StatusFilters';
+import TrackerFilters from '../Sidebar/TrackerFilters';
 
 class Sidebar extends React.Component {
   render() {

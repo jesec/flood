@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React from 'react';
 
-import format from '../../util/formatData';
+import format from '../../../util/formatData';
 
 export default class TorrentGeneralInfo extends React.Component {
   render() {

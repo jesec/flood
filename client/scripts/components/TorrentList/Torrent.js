@@ -1,20 +1,20 @@
 import classNames from 'classnames';
 import React from 'react';
 
-import CalendarIcon from '../icons/CalendarIcon';
-import ClockIcon from '../icons/ClockIcon';
-import DiskIcon from '../icons/DiskIcon';
-import DownloadThickIcon from '../icons/DownloadThickIcon';
+import CalendarIcon from '../Icons/CalendarIcon';
+import ClockIcon from '../Icons/ClockIcon';
+import DiskIcon from '../Icons/DiskIcon';
+import DownloadThickIcon from '../Icons/DownloadThickIcon';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
-import InformationIcon from '../icons/InformationIcon';
-import PeersIcon from '../icons/PeersIcon';
-import ProgressBar from '../ui/ProgressBar';
-import RatioIcon from '../icons/RatioIcon';
-import SeedsIcon from '../icons/SeedsIcon';
+import InformationIcon from '../Icons/InformationIcon';
+import PeersIcon from '../Icons/PeersIcon';
+import ProgressBar from '../General/ProgressBar';
+import RatioIcon from '../Icons/RatioIcon';
+import SeedsIcon from '../Icons/SeedsIcon';
 import {torrentStatusIcons} from '../../util/torrentStatusIcons';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
-import UploadThickIcon from '../icons/UploadThickIcon';
+import UploadThickIcon from '../Icons/UploadThickIcon';
 
 const METHODS_TO_BIND = [
   'handleClick',

@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import EventTypes from '../../constants/EventTypes';
-import SettingsStore from '../../stores/SettingsStore';
+import EventTypes from '../../../constants/EventTypes';
+import SettingsStore from '../../../stores/SettingsStore';
 
 const METHODS_TO_BIND = ['handleDestinationChange'];
 

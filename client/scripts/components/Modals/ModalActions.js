@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import Checkbox from '../forms/Checkbox';
+import Checkbox from '../General/FormElements/Checkbox';
 import UIActions from '../../actions/UIActions';
 
 export default class ModalActions extends React.Component {

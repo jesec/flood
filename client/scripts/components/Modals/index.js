@@ -2,11 +2,11 @@ import _ from 'lodash';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
-import AddTorrents from './AddTorrents';
+import AddTorrentsModal from './AddTorrentsModal';
 import ConfirmModal from './ConfirmModal';
 import EventTypes from '../../constants/EventTypes';
 import Modal from './Modal';
-import MoveTorrents from './MoveTorrents';
+import MoveTorrentsModal from './MoveTorrentsModal';
 import SettingsModal from './SettingsModal';
 import TorrentDetailsModal from './TorrentDetailsModal';
 import UIActions from '../../actions/UIActions';
@@ -24,8 +24,8 @@ export default class Modals extends React.Component {
 
     this.modals = {
       confirm: ConfirmModal,
-      'move-torrents': MoveTorrents,
-      'add-torrents': AddTorrents,
+      'move-torrents': MoveTorrentsModal,
+      'add-torrents': AddTorrentsModal,
       'torrent-details': TorrentDetailsModal,
       'settings': SettingsModal
     };

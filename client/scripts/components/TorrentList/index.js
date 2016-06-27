@@ -4,12 +4,12 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ContextMenu from '../ui/ContextMenu';
-import CustomScrollbars from '../ui/CustomScrollbars';
+import ContextMenu from '../General/ContextMenu';
+import CustomScrollbars from '../General/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
-import LoadingIndicator from '../ui/LoadingIndicator';
+import LoadingIndicator from '../General/LoadingIndicator';
 import PriorityLevels from '../../constants/PriorityLevels';
-import PriorityMeter from '../filesystem/PriorityMeter';
+import PriorityMeter from '../General/Filesystem/PriorityMeter';
 import Torrent from './Torrent';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';

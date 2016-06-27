@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import Badge from '../ui/Badge';
+import Badge from '../General/Badge';
 import EventTypes from '../../constants/EventTypes';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
-import ModalActions from './ModalActions';
-import SettingsStore from '../../stores/SettingsStore';
+import LoadingIndicatorDots from '../../Icons/LoadingIndicatorDots';
+import ModalActions from '../ModalActions';
+import SettingsStore from '../../../stores/SettingsStore';
 
 const METHODS_TO_BIND = ['handleStartTorrentsToggle'];
 

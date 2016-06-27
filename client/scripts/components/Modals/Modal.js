@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import createFragment from 'react-addons-create-fragment';
 import React from 'react';
 
-import CustomScrollbars from '../ui/CustomScrollbars';
 import ModalActions from './ModalActions';
 import ModalTabs from './ModalTabs';
 

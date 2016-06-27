@@ -2,7 +2,7 @@ import {IndexRoute, Router, Route, Link, browserHistory} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Application from './components/layout/Application';
+import Application from './components/Layout/Application';
 import Login from './views/Login';
 import Register from './views/Register';
 import TorrentList from './views/TorrentList';

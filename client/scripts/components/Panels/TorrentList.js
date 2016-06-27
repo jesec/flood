@@ -1,8 +1,8 @@
 import React from 'react';
 
-import ActionBar from '../torrent-list/ActionBar';
-import ApplicationPanel from '../layout/ApplicationPanel';
-import TorrentListContainer from '../torrent-list/TorrentListContainer';
+import ActionBar from '../TorrentList/ActionBar';
+import ApplicationPanel from '../Layout/ApplicationPanel';
+import TorrentListContainer from '../TorrentList/TorrentListContainer';
 
 class TorrentList extends React.Component {
   render() {

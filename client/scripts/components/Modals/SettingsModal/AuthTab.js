@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import React from 'react';
 
-import AuthStore from '../../stores/AuthStore';
-import Checkbox from '../forms/Checkbox';
-import Close from '../icons/Close';
-import EventTypes from '../../constants/EventTypes';
+import AuthStore from '../../../stores/AuthStore';
+import Checkbox from '../../General/FormElements/Checkbox';
+import Close from '../../Icons/Close';
+import EventTypes from '../../../constants/EventTypes';
 import SettingsTab from './SettingsTab';
 
 const METHODS_TO_BIND = [

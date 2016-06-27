@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import AddMini from '../icons/AddMini';
-import RemoveMini from '../icons/RemoveMini';
+import AddMini from '../../Icons/AddMini';
+import RemoveMini from '../../Icons/RemoveMini';
 
 const METHODS_TO_BIND = [
   'getTextboxes',

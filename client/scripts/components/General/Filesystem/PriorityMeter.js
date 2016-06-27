@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import PiorityLevels from '../../constants/PriorityLevels';
+import PiorityLevels from '../../../constants/PriorityLevels';
 
 const METHODS_TO_BIND = ['handleClick'];
 

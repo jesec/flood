@@ -2,8 +2,8 @@ import React from 'react';
 
 import AddTorrentsByFile from './AddTorrentsByFile';
 import AddTorrentsByURL from './AddTorrentsByURL';
-import Modal from './Modal';
-import UIActions from '../../actions/UIActions';
+import Modal from '../Modal';
+import UIActions from '../../../actions/UIActions';
 
 export default class AddTorrents extends React.Component {
   dismissModal() {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Modal from './Modal';
+import Modal from '../Modal';
 
 export default class ConfirmModal extends React.Component {
   constructor() {

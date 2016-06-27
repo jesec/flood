@@ -1,9 +1,9 @@
 import React from 'react';
 
-import File from '../icons/File';
-import format from '../../util/formatData';
+import File from '../../Icons/File';
+import format from '../../../util/formatData';
 import PriorityMeter from './PriorityMeter';
-import TorrentActions from '../../actions/TorrentActions';
+import TorrentActions from '../../../actions/TorrentActions';
 
 const METHODS_TO_BIND = ['handlePriorityChange'];
 

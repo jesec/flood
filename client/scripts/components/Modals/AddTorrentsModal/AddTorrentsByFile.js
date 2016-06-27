@@ -4,12 +4,12 @@ import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import AddTorrentsDestination from './AddTorrentsDestination';
-import Close from '../icons/Close';
-import File from '../icons/File';
-import Files from '../icons/Files';
-import ModalActions from './ModalActions';
-import SettingsStore from '../../stores/SettingsStore';
-import TorrentActions from '../../actions/TorrentActions';
+import Close from '../../Icons/Close';
+import File from '../../Icons/File';
+import Files from '../../Icons/Files';
+import ModalActions from '../ModalActions';
+import SettingsStore from '../../../stores/SettingsStore';
+import TorrentActions from '../../../actions/TorrentActions';
 
 const METHODS_TO_BIND = [
   'handleAddTorrents',

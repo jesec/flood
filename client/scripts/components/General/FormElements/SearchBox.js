@@ -1,9 +1,9 @@
 import classnames from'classnames';
 import React from'react';
 
-import Close from '../icons/Close';
-import Search from '../icons/Search';
-import UIActions from '../../actions/UIActions';
+import Close from '../../Icons/Close';
+import Search from '../../Icons/Search';
+import UIActions from '../../../actions/UIActions';
 
 const METHODS_TO_BIND = [
   'handleSearchChange',

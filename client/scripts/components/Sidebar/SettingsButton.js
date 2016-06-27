@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SettingsIcon from '../icons/SettingsIcon';
+import SettingsIcon from '../Icons/SettingsIcon';
 import UIActions from '../../actions/UIActions';
 
 class SettingsButton extends React.Component {

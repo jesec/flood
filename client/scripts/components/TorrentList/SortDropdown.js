@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
-import Dropdown from '../forms/Dropdown';
+import Dropdown from '../General/FormElements/Dropdown';
 
 const METHODS_TO_BIND = [
   'getDropdownHeader',

@@ -1,21 +1,21 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import ClockIcon from '../icons/ClockIcon';
-import DownloadThickIcon from '../icons/DownloadThickIcon';
-import format from '../../util/formatData';
-import PauseIcon from '../../components/icons/PauseIcon';
-import PriorityMeter from '../filesystem/PriorityMeter';
-import ProgressBar from '../ui/ProgressBar';
-import propsMap from '../../../../shared/constants/propsMap';
-import RatioIcon from '../../components/icons/RatioIcon';
-import StartIcon from '../../components/icons/StartIcon';
-import StopIcon from '../../components/icons/StopIcon';
-import stringUtil from '../../../../shared/util/stringUtil';
-import TorrentActions from '../../actions/TorrentActions';
-import {torrentStatusClasses} from '../../util/torrentStatusClasses';
-import {torrentStatusIcons} from '../../util/torrentStatusIcons';
-import UploadThickIcon from '../icons/UploadThickIcon';
+import ClockIcon from '../../Icons/ClockIcon';
+import DownloadThickIcon from '../../Icons/DownloadThickIcon';
+import format from '../../../util/formatData';
+import PauseIcon from '../../Icons/PauseIcon';
+import PriorityMeter from '../../General/Filesystem/PriorityMeter';
+import ProgressBar from '../../General/ProgressBar';
+import propsMap from '../../../../../shared/constants/propsMap';
+import RatioIcon from '../../Icons/RatioIcon';
+import StartIcon from '../../Icons/StartIcon';
+import StopIcon from '../../Icons/StopIcon';
+import stringUtil from '../../../../../shared/util/stringUtil';
+import TorrentActions from '../../../actions/TorrentActions';
+import {torrentStatusClasses} from '../../../util/torrentStatusClasses';
+import {torrentStatusIcons} from '../../../util/torrentStatusIcons';
+import UploadThickIcon from '../../Icons/UploadThickIcon';
 
 const METHODS_TO_BIND = [
   'getCurrentStatus',

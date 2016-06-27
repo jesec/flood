@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import React from 'react';
 
-import Checkmark from '../icons/Checkmark';
+import Checkmark from '../../Icons/Checkmark';
 
 const METHODS_TO_BIND = ['handleCheckboxChange'];
 
