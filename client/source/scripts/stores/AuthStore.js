@@ -1,6 +1,6 @@
-import AuthActions from '../actions/AuthActions';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
+import AuthActions from '../actions/AuthActions';
 import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
 

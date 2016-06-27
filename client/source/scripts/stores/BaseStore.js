@@ -10,13 +10,6 @@ export default class BaseStore extends EventEmitter {
     this.setMaxListeners(20);
   }
 
-  emit(eventName) {
-    super.emit(...arguments);
-    if (eventName == null) {
-      console.warn('Event is undefined!');
-    }
-  }
-
   beginRequest(id) {
     this.requests[id] = true;
   }

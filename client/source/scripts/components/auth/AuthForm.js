@@ -1,9 +1,9 @@
 import classnames from'classnames';
 import React from'react';
 
+import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
 import FloodActions from '../../actions/FloodActions';
-import AuthStore from '../../stores/AuthStore';
 
 const METHODS_TO_BIND = ['handleAuthError', 'handleSubmitClick'];
 
