@@ -252,7 +252,7 @@ var client = {
       piecesMemoryMax: (userInput) => {
         return {
           id: userInput.id,
-          data: Number(userInput.data) * 1024 * 1024
+          data: (Number(userInput.data) * 1024 * 1024).toString()
         };
       }
     };
