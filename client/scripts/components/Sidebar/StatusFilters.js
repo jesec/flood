@@ -19,7 +19,6 @@ const METHODS_TO_BIND = [
   'handleClick',
   'onStatusFilterChange',
   'onTorrentStatusCountChange',
-  'onTrackerFilterChange',
   'updateStatusCount'
 ];
 
@@ -42,14 +41,13 @@ export default class StatusFilters extends React.Component {
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onTorrentRequestSuccess);
     TorrentFilterStore.listen(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE, this.onTrackerFilterChange);
     TorrentFilterStore.fetchTorrentStatusCount();
   }
 
   componentWillUnmount() {
+    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onTorrentRequestSuccess);
     TorrentFilterStore.unlisten(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE, this.onTrackerFilterChange);
   }
 
   handleClick(filter) {
@@ -67,10 +65,6 @@ export default class StatusFilters extends React.Component {
   }
 
   onTorrentStatusCountChange() {
-    this.updateStatusCount();
-  }
-
-  onTrackerFilterChange() {
     this.updateStatusCount();
   }
 
@@ -125,30 +119,6 @@ export default class StatusFilters extends React.Component {
 
   updateStatusCount() {
     let statusCount = TorrentFilterStore.getTorrentStatusCount();
-    let trackerFilter = TorrentFilterStore.getTrackerFilter();
-
-    if (TorrentFilterStore.getTrackerFilter() !== 'all') {
-      let totalStatusCount = 0;
-      let torrents = TorrentStore.getAllTorrents();
-
-      Object.keys(statusCount).forEach((key) => {
-        statusCount[key] = 0;
-      });
-
-      Object.keys(torrents).forEach((hash) => {
-        let torrent = torrents[hash];
-
-        if (torrent.trackers.indexOf(trackerFilter) > -1) {
-          totalStatusCount++;
-          torrent.status.forEach((status) => {
-            statusCount[propsMap.serverStatus[status]]++;
-          });
-        }
-      });
-
-      statusCount.all = totalStatusCount;
-    }
-
     this.setState({statusCount});
   }
 
