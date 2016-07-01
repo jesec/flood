@@ -1,17 +1,14 @@
 import {IndexRoute, Router, Route, Link, browserHistory} from 'react-router';
+import {IntlProvider} from 'react-intl';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { IntlProvider, addLocaleData } from 'react-intl';
-import nl from 'react-intl/locale-data/nl';
 import * as i18n from './i18n';
-
 import Application from './components/Layout/Application';
 import Login from './views/Login';
 import Register from './views/Register';
+import SettingsStore from './stores/SettingsStore';
 import TorrentList from './views/TorrentList';
-
-addLocaleData(nl);
 
 class FloodApp extends React.Component {
   render() {
