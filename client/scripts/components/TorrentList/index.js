@@ -26,7 +26,6 @@ const METHODS_TO_BIND = [
   'handleRightClick',
   'handleTorrentClick',
   'onContextMenuChange',
-  'onEmptyTorrentResponse',
   'onReceiveTorrentsError',
   'onReceiveTorrentsSuccess',
   'onTorrentFilterChange',
@@ -74,7 +73,6 @@ export default class TorrentListContainer extends React.Component {
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
-    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_EMPTY, this.onEmptyTorrentResponse);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     UIStore.listen(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
     TorrentStore.fetchTorrents();
@@ -87,7 +85,6 @@ export default class TorrentListContainer extends React.Component {
     TorrentStore.unlisten(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
-    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_EMPTY, this.onEmptyTorrentResponse);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     UIStore.unlisten(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
   }
@@ -204,14 +201,6 @@ export default class TorrentListContainer extends React.Component {
 
   onContextMenuChange() {
     this.setState({contextMenu: UIStore.getActiveContextMenu()});
-  }
-
-  onEmptyTorrentResponse() {
-    this.setState({
-      emptyTorrentList: true,
-      torrentRequestError: false,
-      torrentRequestSuccess: true
-    });
   }
 
   onReceiveTorrentsError() {
