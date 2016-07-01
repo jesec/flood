@@ -299,6 +299,7 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       TorrentStore.handleMoveTorrentsError(action.error);
       break;
     case ActionTypes.CLIENT_REMOVE_TORRENT_SUCCESS:
+      TorrentStore.fetchTorrents();
       TorrentStore.handleRemoveTorrentsSuccess(action.data);
       break;
     case ActionTypes.CLIENT_REMOVE_TORRENT_ERROR:
