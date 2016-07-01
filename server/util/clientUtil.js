@@ -221,6 +221,10 @@ var clientUtil = {
 
   // TODO clean this up, write comments...
   mapClientProps: (props, data) => {
+    if (data.length === 0) {
+      return [];
+    }
+
     var index = 0;
     var mappedObject = [];
 

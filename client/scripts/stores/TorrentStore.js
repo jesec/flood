@@ -184,11 +184,6 @@ class TorrentStoreClass extends BaseStore {
   handleFetchTorrentsSuccess(torrents) {
     this.resolveRequest('fetch-torrents');
 
-    if (torrents == null) {
-      this.emit(EventTypes.CLIENT_TORRENTS_EMPTY);
-      return;
-    }
-
     this.sortTorrents(torrents);
     this.filterTorrents();
 
@@ -298,6 +293,7 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       TorrentStore.handleMoveTorrentsError(action.error);
       break;
     case ActionTypes.CLIENT_REMOVE_TORRENT_SUCCESS:
+      TorrentStore.fetchTorrents();
       TorrentStore.handleRemoveTorrentsSuccess(action.data);
       break;
     case ActionTypes.CLIENT_REMOVE_TORRENT_ERROR:
