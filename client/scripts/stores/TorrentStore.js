@@ -185,6 +185,7 @@ class TorrentStoreClass extends BaseStore {
     this.resolveRequest('fetch-torrents');
 
     if (torrents == null) {
+      this.emit(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS);
       this.emit(EventTypes.CLIENT_TORRENTS_EMPTY);
       return;
     }

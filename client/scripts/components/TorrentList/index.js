@@ -212,10 +212,6 @@ export default class TorrentListContainer extends React.Component {
       torrentRequestError: false,
       torrentRequestSuccess: true
     });
-
-    if (!UIStore.hasSatisfiedDependencies()) {
-      UIStore.satisfyDependency('torrent-list');
-    }
   }
 
   onReceiveTorrentsError() {
@@ -226,6 +222,7 @@ export default class TorrentListContainer extends React.Component {
     let torrents = TorrentStore.getTorrents();
 
     this.setState({
+      emptyTorrentList: torrents.length === 0,
       torrents,
       torrentCount: torrents.length,
       torrentRequestError: false,
