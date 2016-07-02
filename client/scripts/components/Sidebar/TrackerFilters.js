@@ -13,8 +13,7 @@ const METHODS_TO_BIND = [
   'getFilters',
   'handleClick',
   'onTrackerFilterChange',
-  'onTorrentTrackerCountChange',
-  'updateTrackerCount'
+  'onTorrentTaxonomyChange'
 ];
 
 export default class TrackerFilters extends React.Component {
@@ -32,42 +31,29 @@ export default class TrackerFilters extends React.Component {
   }
 
   componentDidMount() {
-    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
-      this.onTorrentRequestSuccess);
-    TorrentFilterStore.listen(EventTypes.CLIENT_TORRENT_TRACKER_COUNT_CHANGE,
-      this.onTorrentTrackerCountChange);
+    TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+      this.onTorrentTaxonomyChange);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE,
       this.onTrackerFilterChange);
   }
 
   componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
-      this.onTorrentRequestSuccess);
-    TorrentFilterStore.unlisten(EventTypes.CLIENT_TORRENT_TRACKER_COUNT_CHANGE,
-      this.onTorrentTrackerCountChange);
+    TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+      this.onTorrentTaxonomyChange);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE,
       this.onTrackerFilterChange);
-    TorrentFilterStore.fetchTorrentTrackerCount();
-  }
-
-  handleClick(filter) {
-    UIActions.setTorrentTrackerFilter(filter);
-  }
-
-  onTrackerFilterChange() {
-    this.setState({trackerFilter: TorrentFilterStore.getTrackerFilter()});
-  }
-
-  onTorrentRequestSuccess() {
-    TorrentFilterStore.fetchTorrentTrackerCount();
-  }
-
-  onTorrentTrackerCountChange() {
-    this.updateTrackerCount();
   }
 
   getFilters() {
-    let filterItems = Object.keys(this.state.trackerCount);
+    let filterItems = Object.keys(this.state.trackerCount).sort((a, b) => {
+      if (a === 'all') {
+        return -1;
+      } else if (b === 'all') {
+        return 1;
+      }
+
+      return a.localeCompare(b);
+    });
 
     let filterElements = filterItems.map((filter, index) => {
       return (
@@ -83,7 +69,15 @@ export default class TrackerFilters extends React.Component {
     return filterElements;
   }
 
-  updateTrackerCount() {
+  handleClick(filter) {
+    UIActions.setTorrentTrackerFilter(filter);
+  }
+
+  onTrackerFilterChange() {
+    this.setState({trackerFilter: TorrentFilterStore.getTrackerFilter()});
+  }
+
+  onTorrentTaxonomyChange() {
     let trackerCount = TorrentFilterStore.getTorrentTrackerCount();
     this.setState({trackerCount});
   }

@@ -19,8 +19,7 @@ const METHODS_TO_BIND = [
   'getFilters',
   'handleClick',
   'onStatusFilterChange',
-  'onTorrentStatusCountChange',
-  'updateStatusCount'
+  'onTorrentTaxonomyChange'
 ];
 
 class StatusFilters extends React.Component {
@@ -39,34 +38,21 @@ class StatusFilters extends React.Component {
   }
 
   componentDidMount() {
-    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onTorrentRequestSuccess);
-    TorrentFilterStore.listen(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
-    TorrentFilterStore.fetchTorrentStatusCount();
+    TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+      this.onTorrentTaxonomyChange);
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE,
+      this.onStatusFilterChange);
   }
 
   componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onTorrentRequestSuccess);
-    TorrentFilterStore.unlisten(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE, this.onTorrentStatusCountChange);
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
+    TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+      this.onTorrentTaxonomyChange);
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE,
+      this.onStatusFilterChange);
   }
 
   handleClick(filter) {
     UIActions.setTorrentStatusFilter(filter);
-  }
-
-  onStatusFilterChange() {
-    this.setState({
-      statusFilter: TorrentFilterStore.getStatusFilter()
-    });
-  }
-
-  onTorrentRequestSuccess() {
-    TorrentFilterStore.fetchTorrentStatusCount();
-  }
-
-  onTorrentStatusCountChange() {
-    this.updateStatusCount();
   }
 
   getFilters() {
@@ -136,7 +122,13 @@ class StatusFilters extends React.Component {
     return filterElements;
   }
 
-  updateStatusCount() {
+  onStatusFilterChange() {
+    this.setState({
+      statusFilter: TorrentFilterStore.getStatusFilter()
+    });
+  }
+
+  onTorrentTaxonomyChange() {
     let statusCount = TorrentFilterStore.getTorrentStatusCount();
     this.setState({statusCount});
   }
