@@ -7,66 +7,89 @@ let propsMap = require('../../shared/constants/propsMap');
 let stringUtil = require('../../shared/util/stringUtil');
 let Torrent = require('./Torrent');
 
+const DEFAULT_TAG = 'unlabeled';
+
 class TorrentCollection {
   constructor() {
-    this._removedHashes = [];
-    this._statusCount = {all: 0};
-    this._torrents = {};
-    this._torrentData = {};
-    this._trackerCount = {all: 0};
+    this.tagCount = {all: 0, [DEFAULT_TAG]: 0};
+    this.statusCount = {all: 0};
+    this.torrents = {};
+    this.trackerCount = {all: 0};
   }
 
-  get statusCount() {
-    return Object.assign({}, this._statusCount);
-  }
-
-  get torrents() {
+  getTorrents() {
     let currentTorrents = {};
 
-    Object.keys(this._torrents).forEach((hash) => {
-      currentTorrents[hash] = this._torrents[hash].data;
+    Object.keys(this.torrents).forEach((hash) => {
+      currentTorrents[hash] = this.torrents[hash].data;
     });
 
     return currentTorrents;
   }
 
-  get trackerCount() {
-    return Object.assign({}, this._trackerCount);
+  getStatusCount() {
+    return Object.assign({}, this.statusCount);
   }
 
-  incrementTrackerCount(trackers) {
-    trackers.forEach((tracker) => {
-      if (typeof this._trackerCount[tracker] === 'number') {
-        this._trackerCount[tracker]++;
+  setStatusCount(statusData) {
+    statusData.forEach((status) => {
+      this.statusCount[propsMap.serverStatus[status]]++;
+    });
+  }
+
+  getTagCount() {
+    return Object.assign({}, this.tagCount);
+  }
+
+  setTagCount(tags) {
+    tags.forEach((tag) => {
+      if (tag === '' || tag == null) {
+        tag = [DEFAULT_TAG];
+      }
+
+      if (this.tagCount[tag] != null) {
+        this.tagCount[tag]++;
       } else {
-        this._trackerCount[tracker] = 1;
+        this.tagCount[tag] = 1;
       }
     });
   }
 
-  incrementStatusCount(statusData) {
-    statusData.forEach((status) => {
-      this._statusCount[propsMap.serverStatus[status]]++;
+  getTrackerCount() {
+    return Object.assign({}, this.trackerCount);
+  }
+
+  setTrackerCount(trackers) {
+    trackers.forEach((tracker) => {
+      if (this.trackerCount[tracker] != null) {
+        this.trackerCount[tracker]++;
+      } else {
+        this.trackerCount[tracker] = 1;
+      }
     });
   }
 
   removeOutdatedTorrents(newHashes) {
-    let currentHashes = Object.keys(this._torrents);
+    let currentHashes = Object.keys(this.torrents);
     let removedHashes = _.difference(currentHashes, newHashes);
 
     removedHashes.forEach((hash) => {
-      delete this._torrents[hash];
+      delete this.torrents[hash];
     });
   }
 
   resetStatusCount() {
     Object.keys(propsMap.serverStatus).forEach((key) => {
-      this._statusCount[propsMap.serverStatus[key]] = 0;
+      this.statusCount[propsMap.serverStatus[key]] = 0;
     });
   }
 
+  resetTagCount() {
+    this.tagCount = {all: 0};
+  }
+
   resetTrackerCount() {
-    this._trackerCount = {all: 0};
+    this.trackerCount = {all: 0};
   }
 
   updateTorrents(clientData) {
@@ -77,6 +100,7 @@ class TorrentCollection {
     );
 
     this.resetStatusCount();
+    this.resetTagCount();
     this.resetTrackerCount();
 
     // Create Torrent instances with additonal calculated properties.
@@ -86,21 +110,23 @@ class TorrentCollection {
 
       // If we already know about the torrent, then just update its data. Create
       // new torrent otherwise.
-      if (this._torrents[hash]) {
-        this._torrents[hash].updateData(torrent, {currentTime: currentTime});
+      if (this.torrents[hash]) {
+        this.torrents[hash].updateData(torrent, {currentTime: currentTime});
       } else {
-        this._torrents[hash] = new Torrent(torrent, {currentTime: currentTime});
+        this.torrents[hash] = new Torrent(torrent, {currentTime: currentTime});
       }
 
       // Update the status count with this torrent's status.
-      this.incrementStatusCount(this._torrents[hash].status);
-      this.incrementTrackerCount(this._torrents[hash].trackers);
+      this.setStatusCount(this.torrents[hash].status);
+      this.setTagCount(this.torrents[hash].tags);
+      this.setTrackerCount(this.torrents[hash].trackers);
     });
 
     this.removeOutdatedTorrents(knownHashes);
 
-    this._statusCount.all = torrentData.length || 0;
-    this._trackerCount.all = torrentData.length || 0;
+    this.statusCount.all = torrentData.length || 0;
+    this.tagCount.all = torrentData.length || 0;
+    this.trackerCount.all = torrentData.length || 0;
   }
 }
 
