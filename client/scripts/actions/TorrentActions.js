@@ -153,6 +153,25 @@ const TorrentActions = {
       });
   },
 
+  fetchTorrentTaxonomy: () => {
+    return axios.get('/api/client/torrents/taxonomy')
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+          data
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_FETCH_TORRENT_TAXONOMY_ERROR,
+          error
+        });
+      });
+  },
+
   fetchTorrentStatusCount: () => {
     return axios.get('/api/client/torrents/status-count')
       .then((json = {}) => {
@@ -334,7 +353,30 @@ const TorrentActions = {
           error
         });
       });
-  }
+  },
+
+  setTaxonomy: (hashes, tags, options = {}) => {
+    return axios.patch(`/api/client/torrents/taxonomy`, {
+        hashes,
+        tags,
+        options
+      })
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_SET_TAXONOMY_SUCCESS,
+          data
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_SET_TAXONOMY_ERROR,
+          error
+        });
+      });
+  },
 };
 
 export default TorrentActions;
