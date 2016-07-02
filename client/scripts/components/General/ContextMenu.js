@@ -15,7 +15,8 @@ export default class ContextMenu extends React.Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', UIActions.dismissContextMenu);
+    window.addEventListener('keydown', this.handleKeyPress);
+    window.addEventListener('click', UIActions.dismissContextMenu);
 
     if (this.props.onMenuOpen) {
       this.props.onMenuOpen();
@@ -29,7 +30,8 @@ export default class ContextMenu extends React.Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', UIActions.dismissContextMenu);
+    window.addEventListener('keydown', this.handleKeyPress);
+    window.removeEventListener('click', UIActions.dismissContextMenu);
 
     if (this.props.onMenuClose) {
       this.props.onMenuClose();
@@ -139,6 +141,12 @@ export default class ContextMenu extends React.Component {
         </li>
       );
     });
+  }
+
+  handleKeyPress(event) {
+    if (event.keyCode === 27) {
+      UIActions.dismissContextMenu();
+    }
   }
 
   handleMenuItemClick(item, event) {
