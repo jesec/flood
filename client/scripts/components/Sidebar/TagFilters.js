@@ -72,6 +72,13 @@ export default class TagFilters extends React.Component {
     UIActions.setTorrentTagFilter(filter);
   }
 
+  hasTags() {
+    let tags = Object.keys(this.state.tagCount);
+
+    return !((tags.length === 1 && tags[0] === 'all')
+      || (tags.length === 2 && tags[1] === 'unlabeled'));
+  }
+
   onTagFilterChange() {
     this.setState({tagFilter: TorrentFilterStore.getTagFilter()});
   }
@@ -82,9 +89,7 @@ export default class TagFilters extends React.Component {
   }
 
   render() {
-    let filters = this.getFilters();
-
-    if (filters.length === 0) {
+    if (!this.hasTags()) {
       return null;
     }
 
@@ -93,7 +98,7 @@ export default class TagFilters extends React.Component {
         <li className="sidebar-filter__item sidebar-filter__item--heading">
           Filter by Tag
         </li>
-        {filters}
+        {this.getFilters()}
       </ul>
     );
   }

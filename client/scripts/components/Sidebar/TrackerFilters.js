@@ -73,6 +73,12 @@ export default class TrackerFilters extends React.Component {
     UIActions.setTorrentTrackerFilter(filter);
   }
 
+  hasTrackers() {
+    let trackers = Object.keys(this.state.trackerCount);
+
+    return !(trackers.length === 1 && trackers[0] === 'all');
+  }
+
   onTrackerFilterChange() {
     this.setState({trackerFilter: TorrentFilterStore.getTrackerFilter()});
   }
@@ -85,7 +91,7 @@ export default class TrackerFilters extends React.Component {
   render() {
     let filters = this.getFilters();
 
-    if (filters.length === 0) {
+    if (!this.hasTrackers()) {
       return null;
     }
 
