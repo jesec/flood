@@ -18,7 +18,7 @@ export function torrentStatusClasses(torrent, ...classes) {
     'has-error': torrent.status.indexOf(propsMap.clientStatus.error) > -1,
     'is-stopped': torrent.status.indexOf(propsMap.clientStatus.stopped) > -1,
     'is-paused': torrent.status.indexOf(propsMap.clientStatus.paused) > -1,
-    'is-actively-downloading': torrent.downloadRate > 0,
+    'is-active': torrent.downloadRate > 0 || torrent.uploadRate > 0,
     'is-downloading': torrent.status.indexOf(propsMap.clientStatus.downloading) > -1,
     'is-seeding': torrent.status.indexOf(propsMap.clientStatus.seeding) > -1,
     'is-completed': torrent.status.indexOf(propsMap.clientStatus.complete) > -1,
