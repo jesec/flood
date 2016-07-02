@@ -3,6 +3,7 @@ import React from 'react';
 import ClientStats from '../Sidebar/TransferData';
 import CustomScrollbars from '../General/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
+import FeedsButton from '../Sidebar/FeedsButton';
 import SearchTorrents from '../Sidebar/SearchTorrents';
 import SettingsButton from '../Sidebar/SettingsButton';
 import SidebarActions from '../Sidebar/SidebarActions';
@@ -46,6 +47,7 @@ class Sidebar extends React.Component {
         <SidebarActions>
           <SpeedLimitDropdown />
           <SettingsButton />
+          <FeedsButton />
         </SidebarActions>
         <ClientStats />
         <SearchTorrents />
