@@ -8,15 +8,19 @@ export function filterTorrents(torrentList, opts) {
     if (type === 'status') {
       let statusFilter = statusMap[filter];
       return torrentList.filter((torrent) => {
-        if (torrent.status.indexOf(statusFilter) > -1) {
-          return torrent;
-        }
+        return torrent.status.indexOf(statusFilter) > -1;
       });
     } else if (type === 'tracker') {
       return torrentList.filter((torrent) => {
-        if (torrent.trackers.indexOf(filter) > -1) {
-          return torrent;
+        return torrent.trackers.indexOf(filter) > -1;
+      });
+    } else if (type === 'tag') {
+      return torrentList.filter((torrent) => {
+        if (filter === 'unlabeled') {
+          return torrent.tags.length === 1 && torrent.tags[0] === '';
         }
+
+        return torrent.tags.indexOf(filter) > -1;
       });
     }
   }
