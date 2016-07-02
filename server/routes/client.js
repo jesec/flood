@@ -72,8 +72,20 @@ router.post('/torrents/delete', function(req, res, next) {
   client.deleteTorrents(req.body.hash, ajaxUtil.getResponseFn(res));
 });
 
+router.get('/torrents/taxonomy', function(req, res, next) {
+  client.getTorrentTaxonomy(ajaxUtil.getResponseFn(res));
+});
+
+router.patch('/torrents/taxonomy', function(req, res, next) {
+  client.setTaxonomy(req.body, ajaxUtil.getResponseFn(res));
+});
+
 router.get('/torrents/status-count', function(req, res, next) {
   client.getTorrentStatusCount(ajaxUtil.getResponseFn(res));
+});
+
+router.get('/torrents/tag-count', function(req, res, next) {
+  client.getTorrentTagCount(ajaxUtil.getResponseFn(res));
 });
 
 router.get('/torrents/tracker-count', function(req, res, next) {
