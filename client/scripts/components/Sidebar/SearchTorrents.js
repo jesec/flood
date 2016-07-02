@@ -2,11 +2,14 @@ import {formatMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import React from'react';
 
-import Close from '../../Icons/Close';
-import Search from '../../Icons/Search';
-import UIActions from '../../../actions/UIActions';
+import Close from '../Icons/Close';
+import EventTypes from '../../constants/EventTypes';
+import Search from '../Icons/Search';
+import TorrentFilterStore from '../../stores/TorrentFilterStore';
+import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [
+  'handleExternalSearchChange',
   'handleSearchChange',
   'resetSearch'
 ];
@@ -22,6 +25,20 @@ class SearchBox extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+  }
+
+  componentDidMount() {
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_SEARCH_CHANGE,
+      this.handleExternalSearchChange);
+  }
+
+  componentWillUnmount() {
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_SEARCH_CHANGE,
+      this.handleExternalSearchChange);
+  }
+
+  handleExternalSearchChange() {
+    this.setState({searchValue: TorrentFilterStore.getSearchFilter()});
   }
 
   handleSearchChange(event) {
