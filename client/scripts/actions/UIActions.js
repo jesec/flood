@@ -54,6 +54,13 @@ const UIActions = {
     });
   },
 
+  setTorrentTagFilter: (data) => {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_SET_TORRENT_TAG_FILTER,
+      data
+    });
+  },
+
   setTorrentTrackerFilter: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_TRACKER_FILTER,
