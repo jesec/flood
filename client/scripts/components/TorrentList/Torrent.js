@@ -30,6 +30,14 @@ export default class Torrent extends React.Component {
     });
   }
 
+  getTags(tags) {
+    return tags.map((tag, index) => {
+      return (
+        <li className="torrent__tag" key={index}>{tag}</li>
+      );
+    });
+  }
+
   handleClick(event) {
     this.props.handleClick(this.props.torrent.hash, event);
   }
@@ -59,8 +67,8 @@ export default class Torrent extends React.Component {
     let torrentClasses = torrentStatusClasses(torrent, this.props.selected ? 'is-selected' : null, 'torrent');
     let torrentStatusIcon = torrentStatusIcons(torrent.status);
 
-    let isActivelyDownloading = downloadRate.value > 0 || uploadRate.value > 0;
-    let wasAddedRecently = (Date.now() - added.getTime()) < 1000 * 60 * 10; // Was added in the last 10 minutes.
+    let isActive = downloadRate.value > 0 || uploadRate.value > 0;
+    let isDownloading = downloadRate.value > 0;
 
     let secondaryDetails = [
       <li className="torrent__details--secondary torrent__details--speed
@@ -77,19 +85,13 @@ export default class Torrent extends React.Component {
       </li>
     ];
 
-    if (isActivelyDownloading) {
+    if (isDownloading) {
       secondaryDetails.unshift(
         <li className="torrent__details--secondary torrent__details--eta"
           key="eta">
           <span className="torrent__details__icon"><ClockIcon /></span>
           {eta}
         </li>
-      );
-    }
-
-    if (isActivelyDownloading || wasAddedRecently) {
-      secondaryDetails.push(
-
       );
     }
 
@@ -102,45 +104,51 @@ export default class Torrent extends React.Component {
           </li>
           {secondaryDetails}
         </ul>
-        <ul className="torrent__details torrent__details--tertiary">
-          <li className="torrent__details--completed">
-            <span className="torrent__details__icon"><DownloadThickIcon /></span>
-            {torrent.percentComplete}
-            <em className="unit">%</em>
-            &nbsp;&mdash;&nbsp;
-            {completed.value}
-            <em className="unit">{completed.unit}</em>
-          </li>
-          <li className="torrent__details--uploaded">
-            <span className="torrent__details__icon"><UploadThickIcon /></span>
-            {uploadTotal.value}
-            <em className="unit">{uploadTotal.unit}</em>
-          </li>
-          <li className="torrent__details--ratio">
-            <span className="torrent__details__icon"><RatioIcon /></span>
-            {ratio}
-          </li>
-          <li className="torrent__details--size">
-            <span className="torrent__details__icon"><DiskIcon /></span>
-            {totalSize.value}
-            <em className="unit">{totalSize.unit}</em>
-          </li>
-          <li className="torrent__details--added">
-            <span className="torrent__details__icon"><CalendarIcon /></span>
-            {addedString}
-          </li>
-          <li className="torrent__details--peers">
-            <span className="torrent__details__icon"><PeersIcon /></span>
-            {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
-          </li>
-          <li className="torrent__details--seeds">
-            <span className="torrent__details__icon"><SeedsIcon /></span>
-            {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
-          </li>
-        </ul>
+        <div className="torrent__details torrent__details--tertiary">
+          <ul className="torrent__details torrent__details--tertiary--stats">
+            <li className="torrent__details--completed">
+              <span className="torrent__details__icon"><DownloadThickIcon /></span>
+              {torrent.percentComplete}
+              <em className="unit">%</em>
+              &nbsp;&mdash;&nbsp;
+              {completed.value}
+              <em className="unit">{completed.unit}</em>
+            </li>
+            <li className="torrent__details--uploaded">
+              <span className="torrent__details__icon"><UploadThickIcon /></span>
+              {uploadTotal.value}
+              <em className="unit">{uploadTotal.unit}</em>
+            </li>
+            <li className="torrent__details--ratio">
+              <span className="torrent__details__icon"><RatioIcon /></span>
+              {ratio}
+            </li>
+            <li className="torrent__details--size">
+              <span className="torrent__details__icon"><DiskIcon /></span>
+              {totalSize.value}
+              <em className="unit">{totalSize.unit}</em>
+            </li>
+            <li className="torrent__details--added">
+              <span className="torrent__details__icon"><CalendarIcon /></span>
+              {addedString}
+            </li>
+            <li className="torrent__details--peers">
+              <span className="torrent__details__icon"><PeersIcon /></span>
+              {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
+            </li>
+            <li className="torrent__details--seeds">
+              <span className="torrent__details__icon"><SeedsIcon /></span>
+              {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
+            </li>
+          </ul>
+          <ul className="torrent__details torrent__details--tertiary--tags torrent__tags">
+            {this.getTags(torrent.tags)}
+          </ul>
+        </div>
         <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcon} />
         <button className="torrent__more-info floating-action__button"
-          onClick={this.props.handleDetailsClick.bind(this, torrent)}>
+          onClick={this.props.handleDetailsClick.bind(this, torrent)}
+          tabIndex="-1">
           <InformationIcon />
         </button>
       </li>
