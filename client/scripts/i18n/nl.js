@@ -40,6 +40,7 @@ export default {
   "settings.connectivity.dpd.heading": "Decentralized Peer Discovery",
   "settings.connectivity.incoming.heading": "Inkomende connecties",
   "settings.connectivity.ip.hostname.label": "Vermeld IP/Hostnaam",
+  "settings.connectivity.max.http.connections": "Maximaal aantal HTTP connecties",
   "settings.connectivity.peer.exchange.label": "Gebruik Peer Exchange",
   "settings.connectivity.peers.desired.label": "Gewenst aantal peers",
   "settings.connectivity.peers.heading": "Peers",
@@ -54,6 +55,7 @@ export default {
   "settings.resources.disk.check.hash.label": "Controleer hash na downloaden",
   "settings.resources.disk.download.location.label": "Standaard downloadlocatie",
   "settings.resources.disk.heading": "Disk",
+  "settings.resources.max.open.files": "Maximaal aantal open bestanden",
   "settings.resources.memory.heading": "Geheugen",
   "settings.resources.memory.max.label": "Maximaal geheugengebruik",
 

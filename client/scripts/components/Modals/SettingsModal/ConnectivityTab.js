@@ -96,7 +96,10 @@ export default class ConnectivityTab extends SettingsTab {
             </div>
             <div className="form__column form__column--half">
               <label className="form__label">
-                Maximum HTTP Connections
+                <FormattedMessage
+                  id="settings.connectivity.max.http.connections"
+                  defaultMessage="Maximum HTTP Connections"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'networkHttpMaxOpen')}

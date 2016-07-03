@@ -38,7 +38,10 @@ export default class ResourcesTab extends SettingsTab {
           <div className="form__row">
             <div className="form__column form__column--half">
               <label className="form__label">
-                Maximum Open Files
+                <FormattedMessage
+                  id="settings.resources.max.open.files"
+                  defaultMessage="Maximum Open Files"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'networkMaxOpenFiles')}
