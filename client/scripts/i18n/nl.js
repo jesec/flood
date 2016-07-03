@@ -112,6 +112,7 @@ export default {
   "torrents.details.trackers.type": "Type",
   "torrents.details.trackers": "Trackers",
 
+  "torrents.list.no.torrents": "Geen torrents om te laten zien.",
   "torrents.list.context.start": "Start",
   "torrents.list.context.stop": "Stop",
   "torrents.list.context.pause": "Pauzeer",

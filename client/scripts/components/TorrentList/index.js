@@ -1,4 +1,4 @@
-import {formatMessage, injectIntl} from 'react-intl';
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
 import classNames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
@@ -257,7 +257,10 @@ class TorrentListContainer extends React.Component {
     return (
       <div className="torrents__notification__wrapper">
         <div className="torrents__notification">
-          No torrents to display.
+          <FormattedMessage
+            id="torrents.list.no.torrents"
+            defaultMessage="No torrents to display."
+          />
         </div>
       </div>
     );
