@@ -294,7 +294,7 @@ class ClientRequest {
     let methodName = 'd.custom1.set';
 
     let tags = options.tags.reduce((memo, currentTag) => {
-      let tag = currentTag.trim();
+      let tag = encodeURIComponent(currentTag.trim());
 
       if (tag !== '' && memo.indexOf(tag) === -1) {
         memo.push(tag);
