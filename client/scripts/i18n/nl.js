@@ -1,4 +1,15 @@
 export default {
+  "auth.add.user": "Gebruiker toevoegen",
+  "auth.create.account": "Maak account",
+  "auth.create.an.account": "Maak een account",
+  "auth.error.username.empty": "Gebruikersnaam mag niet leeg zijn.",
+  "auth.log.in": "Log in",
+  "auth.login": "Login",
+  "auth.password": "Wachtwoord",
+  "auth.user.accounts": "Accounts",
+  "auth.username": "Gebruikersnaam",
+
+  "button.add": "Toevoegen",
   "button.cancel": "Annuleren",
   "button.save": "Instellingen opslaan",
   "button.state.saving": "Opslaan...",
@@ -63,6 +74,7 @@ export default {
   "settings.tabs.connectivity": "Connectiviteit",
   "settings.tabs.heading": "Instellingen",
   "settings.tabs.resources": "Resources",
+  "settings.tabs.authentication": "Authenticatie",
 
   "sidebar.button.settings": "Instellingen",
   "sidebar.button.speedlimits": "Sneldheidsbeperkingen",

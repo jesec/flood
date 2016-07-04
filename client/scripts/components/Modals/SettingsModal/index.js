@@ -209,7 +209,10 @@ class SettingsModal extends React.Component {
       },
       authentication: {
         content: AuthTab,
-        label: 'Authentication'
+        label: this.props.intl.formatMessage({
+          id: 'settings.tabs.authentication',
+          defaultMessage: 'Authentication'
+        })
       }
     };
 
