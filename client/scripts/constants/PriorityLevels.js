@@ -1,14 +1,14 @@
 const PriorityLevels = {
   file: {
-    0: 'Don\'t Download',
-    1: 'Normal',
-    2: 'High'
+    0: 'priority.dont.download',
+    1: 'priority.normal',
+    2: 'priority.high'
   },
   torrent: {
-    0: 'Don\'t Download',
-    1: 'Low',
-    2: 'Normal',
-    3: 'High'
+    0: 'priority.dont.download',
+    1: 'priority.low',
+    2: 'priority.normal',
+    3: 'priority.high'
   }
 };
 

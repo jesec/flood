@@ -1,4 +1,4 @@
-import {formatMessage, formatPlural, FormattedMessage, injectIntl} from 'react-intl';
+import {formatMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Action from './Action';

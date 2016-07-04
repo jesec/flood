@@ -1,3 +1,4 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -5,7 +6,7 @@ import PiorityLevels from '../../../constants/PriorityLevels';
 
 const METHODS_TO_BIND = ['handleClick'];
 
-export default class PriorityMeter extends React.Component {
+class PriorityMeter extends React.Component {
   constructor() {
     super();
 
@@ -33,7 +34,9 @@ export default class PriorityMeter extends React.Component {
   }
 
   getPriorityLabel() {
-    return PiorityLevels[this.props.priorityType][this.getPriorityLevel()];
+    return this.props.intl.formatMessage({
+      id: PiorityLevels[this.props.priorityType][this.getPriorityLevel()]
+    });
   }
 
   getPriorityLevel() {
@@ -76,3 +79,5 @@ export default class PriorityMeter extends React.Component {
     );
   }
 }
+
+export default injectIntl(PriorityMeter);
