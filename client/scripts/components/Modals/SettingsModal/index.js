@@ -17,8 +17,7 @@ const METHODS_TO_BIND = [
   'handleFloodSettingsChange',
   'handleSaveSettingsClick',
   'handleSaveSettingsError',
-  'handleSettingsStoreChange',
-  'handleUserListChange'
+  'handleSettingsStoreChange'
 ];
 
 export default class SettingsModal extends React.Component {
@@ -142,11 +141,6 @@ export default class SettingsModal extends React.Component {
     let changedClientSettings = this.mergeObjects(this.state.changedClientSettings, changedSettings);
 
     this.setState({clientSettings, changedClientSettings});
-  }
-
-  handleUserListChange() {
-    console.log('list change');
-    this.forceUpdate();
   }
 
   mergeObjects(objA, objB) {
