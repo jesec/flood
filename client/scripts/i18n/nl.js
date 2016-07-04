@@ -11,9 +11,11 @@ export default {
 
   "button.add": "Toevoegen",
   "button.cancel": "Annuleren",
+  "button.no": "Nee",
   "button.save": "Instellingen opslaan",
-  "button.state.saving": "Opslaan...",
   "button.state.adding": "Toevoegen...",
+  "button.state.saving": "Opslaan...",
+  "button.yes": "Ja",
 
   "filter.all": "Alles",
 
@@ -148,5 +150,13 @@ export default {
   "torrents.move.button.set.location": "Wijzig downloadlocatie",
   "torrents.move.button.state.setting": "Wijzigen...",
   "torrents.move.data.label": "Verplaats bestanden",
-  "torrents.move.heading": "Wijzig downloadlocatie"
+  "torrents.move.heading": "Wijzig downloadlocatie",
+
+  "torrents.remove.are.you.sure": `Weet je zeker dat je {count, plural,
+                              =0 {geen torrents}
+                              =1 {één torrent}
+                              other {# torrents}
+                            } wilt verwijderen?`,
+  "torrents.remove.error.no.torrents.selected": "Je hebt geen torrents geselecteerd.",
+  "torrents.remove": "Torrents verwijderen"
 };

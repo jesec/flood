@@ -1,3 +1,4 @@
+import {formatMessage, formatPlural, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Action from './Action';
@@ -24,7 +25,7 @@ const METHODS_TO_BIND = [
   'handleSettingsChange'
 ];
 
-export default class ActionBar extends React.Component {
+class ActionBar extends React.Component {
   constructor() {
     super();
 
@@ -61,19 +62,34 @@ export default class ActionBar extends React.Component {
     let actions = [
       {
         clickHandler: this.handleRemoveTorrentDecline,
-        content: 'No',
+        content: this.props.intl.formatMessage({
+          id: 'button.no',
+          defaultMessage: 'No'
+        }),
         triggerDismiss: true,
         type: 'secondary'
       },
       {
         clickHandler: this.handleRemoveTorrentConfirm.bind(this, selectedTorrents),
-        content: 'Yes',
+        content: this.props.intl.formatMessage({
+          id: 'button.yes',
+          defaultMessage: 'Yes'
+        }),
         triggerDismiss: true,
         type: 'primary'
       }
     ];
-    let torrentText = stringUtil.pluralize('torrent', selectedTorrentCount);
-    let content = `Are you sure you want to remove ${selectedTorrentCount} ${torrentText}?`;
+
+    let content = this.props.intl.formatMessage({
+      id: 'torrents.remove.are.you.sure',
+      defaultMessage: `Are you sure you want to remove {count, plural,
+        =0 {no torrents}
+        =1 {one torrent}
+        other {# torrents}
+      }?`
+    }, {
+      count: selectedTorrentCount
+    });
 
     if (selectedTorrentCount === 0) {
       actions = [
@@ -84,7 +100,10 @@ export default class ActionBar extends React.Component {
           type: 'primary'
         }
       ];
-      content = 'You haven\'t selected any torrents.';
+      content = this.props.intl.formatMessage({
+        id: 'torrents.remove.error.no.torrents.selected',
+        defaultMessage: 'You haven\'t selected any torrents.'
+      });
     }
 
     UIActions.displayModal({
@@ -92,7 +111,10 @@ export default class ActionBar extends React.Component {
       options: {
         actions,
         content,
-        heading: 'Remove Torrents'
+        heading: this.props.intl.formatMessage({
+          id: 'torrents.remove',
+          defaultMessage: 'Remove Torrents'
+        })
       }
     });
   }
@@ -145,3 +167,5 @@ export default class ActionBar extends React.Component {
   }
 
 }
+
+export default injectIntl(ActionBar);
