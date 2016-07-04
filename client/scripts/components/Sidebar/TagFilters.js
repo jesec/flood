@@ -45,9 +45,9 @@ export default class TagFilters extends React.Component {
 
   getFilters() {
     let filterItems = Object.keys(this.state.tagCount).sort((a, b) => {
-      if (a === 'all') {
+      if (a === 'all' || a === 'unlabeled') {
         return -1;
-      } else if (b === 'all') {
+      } else if (b === 'all' || b === 'unlabeled') {
         return 1;
       }
 
