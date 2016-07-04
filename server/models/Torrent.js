@@ -135,7 +135,7 @@ class Torrent {
       } else if (minutes > 0) {
         timeRemaining = {minutes, seconds, cumSeconds};
       } else {
-        timeRemaining = {cumSeconds};
+        timeRemaining = {seconds, cumSeconds};
       }
 
       return timeRemaining;
