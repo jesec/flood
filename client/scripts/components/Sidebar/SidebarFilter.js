@@ -37,6 +37,11 @@ class SidebarFilter extends React.Component {
         id: 'filter.all',
         defaultMessage: 'All'
       });
+    } else if (this.props.name === 'unlabeled') {
+      name = this.props.intl.formatMessage({
+        id: 'filter.unlabeled',
+        defaultMessage: 'Unlabeled'
+      });
     }
 
     return (
