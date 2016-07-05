@@ -34,9 +34,30 @@ class PriorityMeter extends React.Component {
   }
 
   getPriorityLabel() {
-    return this.props.intl.formatMessage({
-      id: PiorityLevels[this.props.priorityType][this.getPriorityLevel()]
-    });
+    switch (PiorityLevels[this.props.priorityType][this.getPriorityLevel()]) {
+      case 'DONT_DOWNLOAD':
+        return this.props.intl.formatMessage({
+          id: 'priority.dont.download',
+          defaultMessage: 'Don\'t Download'
+        });
+      case 'HIGH':
+        return this.props.intl.formatMessage({
+          id: 'priority.high',
+          defaultMessage: 'High'
+        });
+      case 'LOW':
+        return this.props.intl.formatMessage({
+          id: 'priority.low',
+          defaultMessage: 'Low'
+        });
+      case 'NORMAL':
+        return this.props.intl.formatMessage({
+          id: 'priority.normal',
+          defaultMessage: 'Normal'
+        });
+      default:
+        return '';
+    }
   }
 
   getPriorityLevel() {
