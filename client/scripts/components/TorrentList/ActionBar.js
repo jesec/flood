@@ -51,71 +51,9 @@ class ActionBar extends React.Component {
     UIActions.displayModal({id: 'add-torrents'});
   }
 
-  handleRemoveTorrentConfirm(torrents) {
-    TorrentActions.deleteTorrents(torrents);
-  }
-
   handleRemoveTorrents() {
-    let selectedTorrents = TorrentStore.getSelectedTorrents() || [];
-    let selectedTorrentCount = selectedTorrents.length;
-
-    let actions = [
-      {
-        clickHandler: this.handleRemoveTorrentDecline,
-        content: this.props.intl.formatMessage({
-          id: 'button.no',
-          defaultMessage: 'No'
-        }),
-        triggerDismiss: true,
-        type: 'secondary'
-      },
-      {
-        clickHandler: this.handleRemoveTorrentConfirm.bind(this, selectedTorrents),
-        content: this.props.intl.formatMessage({
-          id: 'button.yes',
-          defaultMessage: 'Yes'
-        }),
-        triggerDismiss: true,
-        type: 'primary'
-      }
-    ];
-
-    let content = this.props.intl.formatMessage({
-      id: 'torrents.remove.are.you.sure',
-      defaultMessage: `Are you sure you want to remove {count, plural,
-        =0 {no torrents}
-        =1 {one torrent}
-        other {# torrents}
-      }?`
-    }, {
-      count: selectedTorrentCount
-    });
-
-    if (selectedTorrentCount === 0) {
-      actions = [
-        {
-          clickHandler: null,
-          content: 'OK',
-          triggerDismiss: true,
-          type: 'primary'
-        }
-      ];
-      content = this.props.intl.formatMessage({
-        id: 'torrents.remove.error.no.torrents.selected',
-        defaultMessage: 'You haven\'t selected any torrents.'
-      });
-    }
-
     UIActions.displayModal({
-      id: 'confirm',
-      options: {
-        actions,
-        content,
-        heading: this.props.intl.formatMessage({
-          id: 'torrents.remove',
-          defaultMessage: 'Remove Torrents'
-        })
-      }
+      id: 'remove-torrents'
     });
   }
 
@@ -165,7 +103,6 @@ class ActionBar extends React.Component {
       </nav>
     );
   }
-
 }
 
 export default injectIntl(ActionBar);

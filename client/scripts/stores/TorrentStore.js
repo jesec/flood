@@ -198,6 +198,11 @@ class TorrentStoreClass extends BaseStore {
   }
 
   handleRemoveTorrentsSuccess(response) {
+    SettingsStore.saveFloodSettings({
+      id: 'deleteTorrentData',
+      data: response.deleteData
+    });
+
     NotificationStore.add({
       accumulation: {
         id: 'notification.torrent.remove',

@@ -69,7 +69,10 @@ router.post('/torrents/move', function(req, res, next) {
 });
 
 router.post('/torrents/delete', function(req, res, next) {
-  client.deleteTorrents(req.body.hash, ajaxUtil.getResponseFn(res));
+  let deleteData = req.body.deleteData;
+  let hashes = req.body.hash;
+
+  client.deleteTorrents({hashes, deleteData}, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/torrents/taxonomy', function(req, res, next) {

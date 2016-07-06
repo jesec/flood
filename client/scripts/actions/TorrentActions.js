@@ -54,8 +54,8 @@ const TorrentActions = {
       });
   },
 
-  deleteTorrents: (hash) => {
-    return axios.post('/api/client/torrents/delete', {hash})
+  deleteTorrents: (hash, deleteData) => {
+    return axios.post('/api/client/torrents/delete', {hash, deleteData})
       .then((json = {}) => {
         return json.data;
       })
@@ -64,7 +64,8 @@ const TorrentActions = {
           type: ActionTypes.CLIENT_REMOVE_TORRENT_SUCCESS,
           data: {
             data,
-            count: hash.length
+            count: hash.length,
+            deleteData
           }
         });
       })
