@@ -4,6 +4,7 @@ import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
 import SettingsStore from './SettingsStore';
 import TorrentActions from '../actions/TorrentActions';
+import TorrentStore from './TorrentStore';
 import UIActions from '../actions/UIActions';
 
 class TorrentFilterStoreClass extends BaseStore {
@@ -52,10 +53,6 @@ class TorrentFilterStoreClass extends BaseStore {
     this.setTorrentsSort(SettingsStore.getFloodSettings('sortTorrents'));
   }
 
-  handleSortPropsRequestSuccess(sortBy) {
-    this.setTorrentsSort(sortBy);
-  }
-
   handleTorrentTrackerCountRequestError(error) {
     this.emit(EventTypes.CLIENT_TORRENT_TRACKER_COUNT_REQUEST_ERROR);
   }
@@ -88,6 +85,7 @@ class TorrentFilterStoreClass extends BaseStore {
 
   setTorrentsSort(sortBy) {
     this.sortTorrentsBy = sortBy;
+    TorrentStore.triggerTorrentsSort();
     this.emit(EventTypes.UI_TORRENTS_SORT_CHANGE);
   }
 
@@ -119,9 +117,6 @@ TorrentFilterStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_SET_TORRENT_SORT:
       TorrentFilterStore.setTorrentsSort(action.data);
-      break;
-    case ActionTypes.UI_SORT_PROPS_REQUEST_SUCCESS:
-      TorrentFilterStore.handleSortPropsRequestSuccess(action.data);
       break;
     case ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_SUCCESS:
       TorrentFilterStore.setTorrentStatusCount(action.data);

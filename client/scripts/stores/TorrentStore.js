@@ -130,6 +130,7 @@ class TorrentStoreClass extends BaseStore {
   }
 
   getTorrents() {
+    // TODO: Audit this filteredTorrents vs sortedTorrents concept.
     if (TorrentFilterStore.isFilterActive()) {
       return this.filteredTorrents;
     }
@@ -182,10 +183,11 @@ class TorrentStoreClass extends BaseStore {
   }
 
   handleFetchTorrentsSuccess(torrents) {
-    this.resolveRequest('fetch-torrents');
+    this.torrents = torrents;
 
-    this.sortTorrents(torrents);
+    this.sortTorrents();
     this.filterTorrents();
+    this.resolveRequest('fetch-torrents');
 
     this.emit(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS);
   }
@@ -222,13 +224,11 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE);
   }
 
-  sortTorrents(torrents) {
-    let torrentsSort = TorrentFilterStore.getTorrentsSort();
-    this.torrents = torrents || this.torrents;
+  sortTorrents() {
+    let sortBy = TorrentFilterStore.getTorrentsSort();
 
     // Convert torrents hash to array and sort it.
-    this.sortedTorrents = sortTorrents(this.torrents,
-      {direction: torrentsSort.direction, property: torrentsSort.value});
+    this.sortedTorrents = sortTorrents(this.torrents, sortBy);
   }
 
   startPollingTorrentDetails() {
@@ -260,7 +260,8 @@ class TorrentStoreClass extends BaseStore {
   }
 
   triggerTorrentsSort() {
-    this.sortTorrents(this.torrents);
+    this.sortTorrents();
+    this.triggerTorrentsFilter();
   }
 }
 
@@ -302,12 +303,9 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.UI_CLICK_TORRENT:
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);
       break;
-    case ActionTypes.UI_SET_TORRENT_SORT:
-      TorrentStore.triggerTorrentsSort();
     case ActionTypes.UI_SET_TORRENT_STATUS_FILTER:
     case ActionTypes.UI_SET_TORRENT_TRACKER_FILTER:
     case ActionTypes.UI_SET_TORRENT_SEARCH_FILTER:
-    case ActionTypes.UI_SET_TORRENT_SORT:
       TorrentStore.triggerTorrentsFilter();
       break;
     case ActionTypes.CLIENT_START_TORRENT_SUCCESS:
