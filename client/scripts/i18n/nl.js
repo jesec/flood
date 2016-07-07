@@ -18,15 +18,39 @@ export default {
   "button.yes": "Ja",
 
   "filter.all": "Alles",
-
   "filter.status.title": "Filter op Status",
   "filter.status.downloading": "Downloaden",
   "filter.status.completed": "Klaar",
   "filter.status.active": "Actief",
   "filter.status.inactive": "Inactief",
   "filter.status.error": "Fout",
-
   "filter.tracker.title": "Filter op Tracker",
+
+  'notification.torrent.add': `Het toevoegen van {countElement} {count, plural,
+    =1 {torrent}
+    other {torrents}
+  } is klaar.`,
+  'notification.torrent.add.failed': `Het toevoegen van {countElement} {count, plural,
+    =1 {torrent}
+    other {torrents}
+  } is mislukt.`,
+  'notification.torrent.move': `Het verplaatsen van {countElement} {count, plural,
+    =1 {torrent}
+    other {torrents}
+  } is klaar.`,
+  'notification.torrent.move.failed': `Het verplaatsen van {countElement} {count, plural,
+    =1 {torrent}
+    other {torrents}
+  } is mislukt.`,
+  'notification.torrent.remove': `Het verwijderen van {countElement} {count, plural,
+    =1 {torrent}
+    other {torrents}
+  } is klaar.`,
+  'notification.torrent.remove.failed': `Het verwijderen van {countElement} {count, plural,
+    =1 {torrent}
+    other {torrents}
+  } is mislukt.`,
+  'notification.settings.saved': 'Instellingen zijn opgeslagen.',
 
   "priority.dont.download": "Niet downloaden",
   "priority.high": "Hoog",
@@ -153,10 +177,10 @@ export default {
   "torrents.move.heading": "Wijzig downloadlocatie",
 
   "torrents.remove.are.you.sure": `Weet je zeker dat je {count, plural,
-                              =0 {geen torrents}
-                              =1 {één torrent}
-                              other {# torrents}
-                            } wilt verwijderen?`,
+    =0 {geen torrents}
+    =1 {één torrent}
+    other {# torrents}
+  } wilt verwijderen?`,
   "torrents.remove.error.no.torrents.selected": "Je hebt geen torrents geselecteerd.",
   "torrents.remove": "Torrents verwijderen"
 };

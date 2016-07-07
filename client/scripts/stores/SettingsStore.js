@@ -76,10 +76,7 @@ class SettingsStoreClass extends BaseStore {
 
     if (options.notify) {
       NotificationStore.add({
-        adverb: 'Successfully',
-        action: 'saved',
-        subject: 'settings',
-        id: 'save-settings-success'
+        id: 'notification.settings.saved'
       });
     }
 
@@ -112,10 +109,7 @@ class SettingsStoreClass extends BaseStore {
 
     if (options.notify) {
       NotificationStore.add({
-        adverb: 'Successfully',
-        action: 'saved',
-        subject: 'settings',
-        id: 'save-settings-success'
+        id: 'notification.settings.saved'
       });
     }
 
