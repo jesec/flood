@@ -28,7 +28,12 @@ class SortDropdown extends React.Component {
             defaultMessage="Sort By"
           />
         </label>
-        <span className="dropdown__value">{SortProperties[this.props.selectedProperty]}</span>
+        <span className="dropdown__value">
+          <FormattedMessage
+            id={SortProperties[this.props.selectedProperty].id}
+            defaultMessage={SortProperties[this.props.selectedProperty].defaultMessage}
+          />
+        </span>
       </a>
     );
   }
@@ -36,7 +41,9 @@ class SortDropdown extends React.Component {
   getDropdownMenus() {
     let items = SORT_PROPERTIES.map((sortProp) => {
       return {
-        displayName: SortProperties[sortProp],
+        displayName: this.props.intl.formatMessage(
+          SortProperties[sortProp]
+        ),
         selected: this.props.selectedProperty === sortProp,
         property: sortProp
       };
