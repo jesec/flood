@@ -21,7 +21,7 @@ const METHODS_TO_BIND = [
   'handleSortChange',
   'handleStart',
   'handleStop',
-  'onSortChange'
+  'handleSettingsChange'
 ];
 
 export default class ActionBar extends React.Component {
@@ -38,12 +38,12 @@ export default class ActionBar extends React.Component {
   }
 
   componentDidMount() {
-    this.onSortChange();
-    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.onSortChange);
+    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsChange);
   }
 
   componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.onSortChange);
+    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsChange);
   }
 
   handleAddTorrents() {
@@ -98,6 +98,7 @@ export default class ActionBar extends React.Component {
   }
 
   handleSortChange(sortBy) {
+    this.setState({sortBy});
     SettingsStore.saveFloodSettings({id: 'sortTorrents', data: sortBy});
     UIActions.setTorrentsSort(sortBy);
   }
@@ -110,9 +111,8 @@ export default class ActionBar extends React.Component {
     TorrentActions.stopTorrents(TorrentStore.getSelectedTorrents());
   }
 
-  onSortChange() {
+  handleSettingsChange() {
     let sortBy = SettingsStore.getFloodSettings('sortTorrents');
-    TorrentFilterStore.setTorrentsSort(sortBy);
     this.setState({sortBy});
   }
 
@@ -120,8 +120,9 @@ export default class ActionBar extends React.Component {
     return (
       <nav className="action-bar">
         <div className="actions action-bar__item action-bar__item--sort-torrents">
-          <SortDropdown onSortChange={this.handleSortChange}
-            selectedItem={this.state.sortBy} />
+          <SortDropdown direction={this.state.sortBy.direction}
+            onSortChange={this.handleSortChange}
+            selectedProperty={this.state.sortBy.property} />
         </div>
         <div className="actions action-bar__item action-bar__item--torrent-operations">
           <div className="action-bar__group">
