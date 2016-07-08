@@ -1,3 +1,4 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import LoadingIndicatorDots from '../../Icons/LoadingIndicatorDots';
@@ -6,7 +7,7 @@ import SettingsStore from '../../../stores/SettingsStore';
 
 const METHODS_TO_BIND = ['handleStartTorrentsToggle'];
 
-export default class AddTorrentsActions extends React.Component {
+class AddTorrentsActions extends React.Component {
   constructor() {
     super();
 
@@ -29,24 +30,36 @@ export default class AddTorrentsActions extends React.Component {
 
   getActions() {
     let icon = null;
-    let primaryButtonText = 'Add Torrent';
+    let primaryButtonText = this.props.intl.formatMessage({
+      id: 'torrents.add.button.add',
+      defaultMessage: 'Add Torrent'
+    });
 
     if (this.props.isAddingTorrents) {
       icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Adding...';
+      primaryButtonText = this.props.intl.formatMessage({
+        id: 'button.state.adding',
+        defaultMessage: 'Adding...'
+      });
     }
 
     return [
       {
         checked: this.state.startTorrentsOnLoad,
         clickHandler: this.handleStartTorrentsToggle,
-        content: 'Start Torrent',
+        content: this.props.intl.formatMessage({
+          id: 'torrents.add.start.label',
+          defaultMessage: 'Start Torrent'
+        }),
         triggerDismiss: false,
         type: 'checkbox'
       },
       {
         clickHandler: null,
-        content: 'Cancel',
+        content: this.props.intl.formatMessage({
+          id: 'button.cancel',
+          defaultMessage: 'Cancel'
+        }),
         triggerDismiss: true,
         type: 'secondary'
       },
@@ -78,3 +91,5 @@ export default class AddTorrentsActions extends React.Component {
     );
   }
 }
+
+export default injectIntl(AddTorrentsActions);

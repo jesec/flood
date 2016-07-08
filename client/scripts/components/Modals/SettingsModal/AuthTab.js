@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import AuthStore from '../../../stores/AuthStore';
@@ -14,7 +15,7 @@ const METHODS_TO_BIND = [
   'handleUserListChange'
 ];
 
-export default class AuthTab extends SettingsTab {
+class AuthTab extends SettingsTab {
   constructor() {
     super(...arguments);
 
@@ -77,7 +78,12 @@ export default class AuthTab extends SettingsTab {
 
   handleAddUserClick() {
     if (this.refs.username.value === '') {
-      this.setState({addUserError: 'Username cannot be empty.'});
+      this.setState({
+        addUserError: this.props.intl.formatMessage({
+          id: 'auth.error.username.empty',
+          defaultMessage: 'Username cannot be empty.'
+        })
+      });
     } else {
       AuthStore.createUser({
         username: this.refs.username.value,
@@ -128,7 +134,10 @@ export default class AuthTab extends SettingsTab {
       <div className="form">
         <div className="form__section">
           <div className="form__section__heading">
-            User Accounts
+            <FormattedMessage
+              id="auth.user.accounts"
+              defaultMessage="User Accounts"
+            />
           </div>
           <div className="form__row">
             <div className="form__column">
@@ -140,25 +149,45 @@ export default class AuthTab extends SettingsTab {
         </div>
         <div className="form__section">
           <div className="form__section__heading">
-            Add User
+            <FormattedMessage
+              id="auth.add.user"
+              defaultMessage="Add User"
+            />
           </div>
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Username
+                <FormattedMessage
+                  id="auth.username"
+                  defaultMessage="Username"
+                />
               </label>
-              <input className="textbox" placeholder="Username" ref="username" type="text" />
+              <input className="textbox"
+                placeholder={this.props.intl.formatMessage({
+                  id: 'auth.username',
+                  defaultMessage: 'Username'
+                })} ref="username" type="text" />
             </div>
             <div className="form__column">
               <label className="form__label">
-                Username
+                <FormattedMessage
+                  id="auth.password"
+                  defaultMessage="Password"
+                />
               </label>
-              <input className="textbox" placeholder="Password" ref="password" type="password" />
+              <input className="textbox"
+                placeholder={this.props.intl.formatMessage({
+                  id: 'auth.password',
+                  defaultMessage: 'Password'
+                })} ref="password" type="password" />
             </div>
             <div className="form__column form__column--auto form__column--unlabled">
               <button className="button button--primary"
                 onClick={this.handleAddUserClick}>
-                Add
+                <FormattedMessage
+                  id="button.add"
+                  defaultMessage="Add"
+                />
               </button>
             </div>
           </div>
@@ -168,3 +197,5 @@ export default class AuthTab extends SettingsTab {
     );
   }
 }
+
+export default injectIntl(AuthTab);

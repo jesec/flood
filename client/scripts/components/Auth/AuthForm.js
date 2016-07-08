@@ -1,5 +1,6 @@
-import classnames from'classnames';
-import React from'react';
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import classnames from 'classnames';
+import React from 'react';
 
 import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
@@ -7,7 +8,7 @@ import FloodActions from '../../actions/FloodActions';
 
 const METHODS_TO_BIND = ['handleAuthError', 'handleFormSubmit'];
 
-export default class AuthForm extends React.Component {
+class AuthForm extends React.Component {
   constructor() {
     super();
 
@@ -58,11 +59,23 @@ export default class AuthForm extends React.Component {
     let headerText = null;
 
     if (this.props.mode === 'login') {
-      actionText = 'Log In';
-      headerText = 'Login';
+      actionText = this.props.intl.formatMessage({
+        id: 'auth.log.in',
+        defaultMessage: 'Log In'
+      });
+      headerText = this.props.intl.formatMessage({
+        id: 'auth.login',
+        defaultMessage: 'Login'
+      });
     } else {
-      actionText = 'Create Account';
-      headerText = 'Create an Account';
+      actionText = this.props.intl.formatMessage({
+        id: 'auth.create.account',
+        defaultMessage: 'Create Account'
+      });
+      headerText = this.props.intl.formatMessage({
+        id: 'auth.create.an.account',
+        defaultMessage: 'Create an Account'
+      });
     }
 
     if (!!this.state.error) {
@@ -84,14 +97,20 @@ export default class AuthForm extends React.Component {
           </div>
           <div className="form__row">
             <div className="form__column">
-              <input className="textbox textbox--open" placeholder="Username"
-                ref="username" type="text" />
+              <input className="textbox textbox--open"
+                placeholder={this.props.intl.formatMessage({
+                  id: 'auth.username',
+                  defaultMessage: 'Username'
+                })} ref="username" type="text" />
             </div>
           </div>
           <div className="form__row">
             <div className="form__column">
-              <input className="textbox textbox--open" placeholder="Password"
-                ref="password" type="password" />
+              <input className="textbox textbox--open"
+                placeholder={this.props.intl.formatMessage({
+                  id: 'auth.password',
+                  defaultMessage: 'Password'
+                })} ref="password" type="password" />
             </div>
           </div>
           {error}
@@ -105,3 +124,5 @@ export default class AuthForm extends React.Component {
     );
   }
 }
+
+export default injectIntl(AuthForm);

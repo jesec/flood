@@ -1,3 +1,4 @@
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
@@ -9,7 +10,7 @@ const METHODS_TO_BIND = ['getDropdownHeader', 'handleItemSelect'];
 const SORT_PROPERTIES = ['name', 'eta', 'downloadRate', 'uploadRate', 'ratio',
   'percentComplete', 'downloadTotal', 'uploadTotal', 'sizeBytes', 'added'];
 
-export default class SortDropdown extends React.Component {
+class SortDropdown extends React.Component {
   constructor() {
     super();
 
@@ -21,8 +22,18 @@ export default class SortDropdown extends React.Component {
   getDropdownHeader() {
     return (
       <a className="dropdown__button">
-        <label className="dropdown__label">Sort By</label>
-        <span className="dropdown__value">{SortProperties[this.props.selectedProperty]}</span>
+        <label className="dropdown__label">
+          <FormattedMessage
+            id="torrents.sort.title"
+            defaultMessage="Sort By"
+          />
+        </label>
+        <span className="dropdown__value">
+          <FormattedMessage
+            id={SortProperties[this.props.selectedProperty].id}
+            defaultMessage={SortProperties[this.props.selectedProperty].defaultMessage}
+          />
+        </span>
       </a>
     );
   }
@@ -30,7 +41,9 @@ export default class SortDropdown extends React.Component {
   getDropdownMenus() {
     let items = SORT_PROPERTIES.map((sortProp) => {
       return {
-        displayName: SortProperties[sortProp],
+        displayName: this.props.intl.formatMessage(
+          SortProperties[sortProp]
+        ),
         selected: this.props.selectedProperty === sortProp,
         property: sortProp
       };
@@ -66,3 +79,5 @@ export default class SortDropdown extends React.Component {
     );
   }
 }
+
+export default injectIntl(SortDropdown);

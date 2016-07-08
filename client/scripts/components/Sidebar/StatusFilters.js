@@ -1,3 +1,4 @@
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -22,7 +23,7 @@ const METHODS_TO_BIND = [
   'updateStatusCount'
 ];
 
-export default class StatusFilters extends React.Component {
+class StatusFilters extends React.Component {
   constructor() {
     super();
 
@@ -71,32 +72,50 @@ export default class StatusFilters extends React.Component {
   getFilters() {
     let filters = [
       {
-        label: 'All',
+        label: this.props.intl.formatMessage({
+          id: 'filter.all',
+          defaultMessage: 'All'
+        }),
         slug: 'all',
         icon: <All />
       },
       {
-        label: 'Downloading',
+        label: this.props.intl.formatMessage({
+          id: 'filter.status.downloading',
+          defaultMessage: 'Downloading'
+        }),
         slug: 'downloading',
         icon: <DownloadSmall />
       },
       {
-        label: 'Completed',
+        label: this.props.intl.formatMessage({
+          id: 'filter.status.completed',
+          defaultMessage: 'Completed'
+        }),
         slug: 'completed',
         icon: <Completed />
       },
       {
-        label: 'Active',
+        label: this.props.intl.formatMessage({
+          id: 'filter.status.active',
+          defaultMessage: 'All'
+        }),
         slug: 'active',
         icon: <Active />
       },
       {
-        label: 'Inactive',
+        label: this.props.intl.formatMessage({
+          id: 'filter.status.inactive',
+          defaultMessage: 'Inactive'
+        }),
         slug: 'inactive',
         icon: <Inactive />
       },
       {
-        label: 'Error',
+        label: this.props.intl.formatMessage({
+          id: 'filter.status.error',
+          defaultMessage: 'Error'
+        }),
         slug: 'error',
         icon: <ErrorIcon />
       }
@@ -128,10 +147,15 @@ export default class StatusFilters extends React.Component {
     return (
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
-          Filter by Status
+          <FormattedMessage
+            id="filter.status.title"
+            defaultMessage="Filter by Status"
+          />
         </li>
         {filters}
       </ul>
     );
   }
 }
+
+export default injectIntl(StatusFilters);

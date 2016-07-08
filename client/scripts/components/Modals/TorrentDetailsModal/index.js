@@ -1,3 +1,4 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Modal from '../Modal';
@@ -13,7 +14,7 @@ import UIStore from '../../../stores/UIStore';
 
 const METHODS_TO_BIND = ['onTorrentDetailsChange', 'onReceiveTorrentsSuccess'];
 
-export default class TorrentDetailsModal extends React.Component {
+class TorrentDetailsModal extends React.Component {
   constructor() {
     super(...arguments);
 
@@ -78,22 +79,34 @@ export default class TorrentDetailsModal extends React.Component {
     let tabs = {
       'torrent-details': {
         content: TorrentGeneralInfo,
-        label: 'Details',
+        label: this.props.intl.formatMessage({
+          id: 'torrents.details.details',
+          defaultMessage: 'Details'
+        }),
         props
       },
       'torrent-files': {
         content: TorrentFiles,
-        label: 'Files',
+        label: this.props.intl.formatMessage({
+          id: 'torrents.details.files',
+          defaultMessage: 'Files'
+        }),
         props
       },
       'torrent-peers': {
         content: TorrentPeers,
-        label: 'Peers',
+        label: this.props.intl.formatMessage({
+          id: 'torrents.details.peers',
+          defaultMessage: 'Peers'
+        }),
         props
       },
       'torrent-trackers': {
         content: TorrentTrackers,
-        label: 'Trackers',
+        label: this.props.intl.formatMessage({
+          id: 'torrents.details.trackers',
+          defaultMessage: 'Trackers'
+        }),
         props
       }
     };
@@ -104,3 +117,5 @@ export default class TorrentDetailsModal extends React.Component {
     );
   }
 }
+
+export default injectIntl(TorrentDetailsModal);

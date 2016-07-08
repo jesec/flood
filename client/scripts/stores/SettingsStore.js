@@ -20,6 +20,7 @@ class SettingsStoreClass extends BaseStore {
 
     // Default settings are overridden by settings stored in database.
     this.floodSettings = {
+      language: 'en',
       sortTorrents: {
         direction: 'desc',
         property: 'added'
@@ -75,10 +76,7 @@ class SettingsStoreClass extends BaseStore {
 
     if (options.notify) {
       NotificationStore.add({
-        adverb: 'Successfully',
-        action: 'saved',
-        subject: 'settings',
-        id: 'save-settings-success'
+        id: 'notification.settings.saved'
       });
     }
 
@@ -111,10 +109,7 @@ class SettingsStoreClass extends BaseStore {
 
     if (options.notify) {
       NotificationStore.add({
-        adverb: 'Successfully',
-        action: 'saved',
-        subject: 'settings',
-        id: 'save-settings-success'
+        id: 'notification.settings.saved'
       });
     }
 

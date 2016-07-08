@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import _ from 'lodash';
 import React from 'react';
 
@@ -43,12 +44,18 @@ export default class ConnectivityTab extends SettingsTab {
       <div className="form">
         <div className="form__section">
           <div className="form__section__heading">
-            Incoming Connections
+            <FormattedMessage
+              id="settings.connectivity.incoming.heading"
+              defaultMessage="Incoming Connections"
+            />
           </div>
           <div className="form__row">
             <div className="form__column form__column--small">
               <label className="form__label">
-                Listening Port Range
+                <FormattedMessage
+                  id="settings.connectivity.port.range.label"
+                  defaultMessage="Listening Port Range"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'networkPortRange')}
@@ -58,21 +65,30 @@ export default class ConnectivityTab extends SettingsTab {
               <Checkbox
                 checked={this.getFieldValue('networkPortRandom') === '1'}
                 onChange={this.handleClientSettingCheckboxChange.bind(this, 'networkPortRandom')}>
-                Randomize Port
+                <FormattedMessage
+                  id="settings.connectivity.port.randomize.label"
+                  defaultMessage="Randomize Port"
+                />
               </Checkbox>
             </div>
             <div className="form__column form__column--auto form__column--unlabled">
               <Checkbox
                 checked={this.getFieldValue('networkPortOpen') === '1'}
                 onChange={this.handleClientSettingCheckboxChange.bind(this, 'networkPortOpen')}>
-                Open Port
+                <FormattedMessage
+                  id="settings.connectivity.port.open.label"
+                  defaultMessage="Open Port"
+                />
               </Checkbox>
             </div>
           </div>
           <div className="form__row">
             <div className="form__column form__column--half">
               <label className="form__label">
-                Reported IP/Hostname
+                <FormattedMessage
+                  id="settings.connectivity.ip.hostname.label"
+                  defaultMessage="Reported IP/Hostname"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'networkLocalAddress')}
@@ -80,7 +96,10 @@ export default class ConnectivityTab extends SettingsTab {
             </div>
             <div className="form__column form__column--half">
               <label className="form__label">
-                Maximum HTTP Connections
+                <FormattedMessage
+                  id="settings.connectivity.max.http.connections"
+                  defaultMessage="Maximum HTTP Connections"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'networkHttpMaxOpen')}
@@ -90,12 +109,18 @@ export default class ConnectivityTab extends SettingsTab {
         </div>
         <div className="form__section">
           <div className="form__section__heading">
-            Decentralized Peer Discovery
+            <FormattedMessage
+              id="settings.connectivity.dpd.heading"
+              defaultMessage="Decentralized Peer Discovery"
+            />
           </div>
           <div className="form__row">
             <div className="form__column form__column--small">
               <label className="form__label">
-                DHT Port
+                <FormattedMessage
+                  id="settings.connectivity.dht.port.label"
+                  defaultMessage="DHT Port"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'dhtPort')}
@@ -105,14 +130,20 @@ export default class ConnectivityTab extends SettingsTab {
               <Checkbox
                 checked={this.getDHTEnabledValue()}
                 onChange={this.handleDHTToggle}>
-                Enable DHT
+                <FormattedMessage
+                  id="settings.connectivity.dht.label"
+                  defaultMessage="Enable DHT"
+                />
               </Checkbox>
             </div>
             <div className="form__column form__column--auto form__column--unlabled">
               <Checkbox
                 checked={this.getFieldValue('protocolPex') === '1'}
                 onChange={this.handleClientSettingCheckboxChange.bind(this, 'protocolPex')}>
-                Enable Peer Exchange
+                <FormattedMessage
+                  id="settings.connectivity.peer.exchange.label"
+                  defaultMessage="Enable Peer Exchange"
+                />
               </Checkbox>
             </div>
           </div>
@@ -124,7 +155,10 @@ export default class ConnectivityTab extends SettingsTab {
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Minimum Peers
+                <FormattedMessage
+                  id="settings.connectivity.peers.min.label"
+                  defaultMessage="Minimum Peers"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMinPeersNormal')}
@@ -132,7 +166,10 @@ export default class ConnectivityTab extends SettingsTab {
             </div>
             <div className="form__column">
               <label className="form__label">
-                Maximum Peers
+                <FormattedMessage
+                  id="settings.connectivity.peers.max.label"
+                  defaultMessage="Maxmimum Peers"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMaxPeersNormal')}
@@ -142,7 +179,10 @@ export default class ConnectivityTab extends SettingsTab {
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Minimum Peers Seeding
+                <FormattedMessage
+                  id="settings.connectivity.peers.seeding.min.label"
+                  defaultMessage="Minimum Peers Seeding"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMinPeersSeed')}
@@ -150,7 +190,10 @@ export default class ConnectivityTab extends SettingsTab {
             </div>
             <div className="form__column">
               <label className="form__label">
-                Maximum Peers Seeding
+                <FormattedMessage
+                  id="settings.connectivity.peers.seeding.max.label"
+                  defaultMessage="Maxmimum Peers Seeding"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMaxPeersSeed')}
@@ -160,7 +203,10 @@ export default class ConnectivityTab extends SettingsTab {
           <div className="form__row">
             <div className="form__column form__column--half">
               <label className="form__label">
-                Peers Desired
+                <FormattedMessage
+                  id="settings.connectivity.peers.desired.label"
+                  defaultMessage="Peers Desired"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'trackersNumWant')}

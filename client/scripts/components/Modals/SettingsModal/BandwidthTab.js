@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import SettingsTab from './SettingsTab';
@@ -108,12 +109,18 @@ export default class BandwidthTab extends SettingsTab {
       <div className="form">
         <div className="form__section">
           <p className="form__section__heading">
-            Transfer Rate Throttles
+            <FormattedMessage
+              id="settings.bandwith.transferrate.heading"
+              defaultMessage="Transfer Rate Throttles"
+            />
           </p>
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Dropdown Presets: Download
+                <FormattedMessage
+                  id="settings.bandwith.transferrate.dropdown.preset.download.label"
+                  defaultMessage="Dropdown Presets: Download"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleDownloadTextChange}
@@ -123,7 +130,10 @@ export default class BandwidthTab extends SettingsTab {
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Dropdown Presets: Upload
+                <FormattedMessage
+                  id="settings.bandwith.transferrate.dropdown.preset.upload.label"
+                  defaultMessage="Dropdown Presets: Upload"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleUploadTextChange}
@@ -133,7 +143,10 @@ export default class BandwidthTab extends SettingsTab {
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Global Download Rate Throttle
+                <FormattedMessage
+                  id="settings.bandwith.transferrate.global.throttle.download"
+                  defaultMessage="Global Download Rate Throttle"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleGlobalDownMax')}
@@ -141,7 +154,10 @@ export default class BandwidthTab extends SettingsTab {
             </div>
             <div className="form__column">
               <label className="form__label">
-                Global Upload Rate Throttle
+                <FormattedMessage
+                  id="settings.bandwith.transferrate.global.throttle.upload"
+                  defaultMessage="Global Upload Rate Throttle"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleGlobalUpMax')}
@@ -151,12 +167,18 @@ export default class BandwidthTab extends SettingsTab {
         </div>
         <div className="form__section">
           <div className="form__section__heading">
-            Slot Availability
+            <FormattedMessage
+              id="settings.bandwith.slots.heading"
+              defaultMessage="Slot Availability"
+            />
           </div>
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Upload Slots Per Torrent
+                <FormattedMessage
+                  id="settings.bandwith.slots.upload.label"
+                  defaultMessage="Upload Slots Per Torrent"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMaxUploads')}
@@ -164,7 +186,10 @@ export default class BandwidthTab extends SettingsTab {
             </div>
             <div className="form__column">
               <label className="form__label">
-                Upload Slots Divider
+                <FormattedMessage
+                  id="settings.bandwith.slots.upload.divider.label"
+                  defaultMessage="Upload Slots Divider"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMaxUploadsDiv')}
@@ -172,7 +197,10 @@ export default class BandwidthTab extends SettingsTab {
             </div>
             <div className="form__column">
               <label className="form__label">
-                Upload Slots Global
+                <FormattedMessage
+                  id="settings.bandwith.slots.upload.global.label"
+                  defaultMessage="Upload Slots Global"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMaxUploadsGlobal')}
@@ -182,7 +210,10 @@ export default class BandwidthTab extends SettingsTab {
           <div className="form__row">
             <div className="form__column">
               <label className="form__label">
-                Download Slots Per Torrent
+                <FormattedMessage
+                  id="settings.bandwith.slots.download.label"
+                  defaultMessage="Download Slots Per Torrent"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMaxDownloads')}
@@ -190,7 +221,10 @@ export default class BandwidthTab extends SettingsTab {
             </div>
             <div className="form__column">
               <label className="form__label">
-                Download Slots Divider
+                <FormattedMessage
+                  id="settings.bandwith.slots.download.divider.label"
+                  defaultMessage="Download Slots Divider"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMaxDownloadsDiv')}
@@ -198,7 +232,10 @@ export default class BandwidthTab extends SettingsTab {
             </div>
             <div className="form__column">
               <label className="form__label">
-                Download Slots Global
+                <FormattedMessage
+                  id="settings.bandwith.slots.download.global.label"
+                  defaultMessage="Download Slots Global"
+                />
               </label>
               <input className="textbox" type="text"
                 onChange={this.handleClientSettingFieldChange.bind(this, 'throttleMaxDownloadsGlobal')}

@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import SettingsIcon from '../Icons/SettingsIcon';
@@ -16,7 +17,10 @@ class SettingsButton extends React.Component {
     return (
       <a className="sidebar__icon-button sidebar__icon-button--settings"
         onClick={this.handleSettingsButtonClick}>
-        Settings <SettingsIcon />
+        <FormattedMessage
+          id="sidebar.button.settings"
+          defaultMessage="Settings"
+        /> <SettingsIcon />
       </a>
     );
   }

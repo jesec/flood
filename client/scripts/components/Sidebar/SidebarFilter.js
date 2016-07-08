@@ -1,3 +1,4 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -9,7 +10,7 @@ const METHODS_TO_BIND = [
   'handleClick'
 ];
 
-export default class SidebarFilter extends React.Component {
+class SidebarFilter extends React.Component {
   constructor() {
     super();
 
@@ -32,7 +33,10 @@ export default class SidebarFilter extends React.Component {
     let name = this.props.name;
 
     if (this.props.name === 'all') {
-      name = 'All';
+      name = this.props.intl.formatMessage({
+        id: 'filter.all',
+        defaultMessage: 'All'
+      });
     }
 
     return (
@@ -46,3 +50,5 @@ export default class SidebarFilter extends React.Component {
     );
   }
 }
+
+export default injectIntl(SidebarFilter);

@@ -110,14 +110,11 @@ class TorrentStoreClass extends BaseStore {
     });
 
     NotificationStore.add({
-      adverb: 'Successfully',
-      action: 'added',
-      subject: 'torrent',
       accumulation: {
-        id: 'add-torrents-success',
+        id: 'notification.torrent.add',
         value: response.count || 1
       },
-      id: 'add-torrents-success'
+      id: 'notification.torrent.add'
     });
   }
 
@@ -142,14 +139,11 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.CLIENT_MOVE_TORRENTS_SUCCESS);
 
     NotificationStore.add({
-      adverb: 'Successfully',
-      action: 'moved',
       accumulation: {
-        id: 'move-torrents-success',
+        id: 'notification.torrent.move',
         value: response.count
       },
-      id: 'move-torrents-success',
-      subject: 'torrent'
+      id: 'notification.torrent.move',
     });
   }
 
@@ -157,14 +151,11 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.CLIENT_MOVE_TORRENTS_REQUEST_ERROR);
 
     NotificationStore.add({
-      adverb: 'Failed to',
-      action: 'move',
-      subject: 'torrent',
       accumulation: {
-        id: 'move-torrents-error',
+        id: 'notification.torrent.move.failed',
         value: error.count
       },
-      id: 'move-torrents-error'
+      id: 'notification.torrent.move.failed'
     });
   }
 
@@ -194,27 +185,21 @@ class TorrentStoreClass extends BaseStore {
 
   handleRemoveTorrentsSuccess(response) {
     NotificationStore.add({
-      adverb: 'Successfully',
-      action: 'removed',
-      subject: 'torrent',
       accumulation: {
-        id: 'remove-torrents-error',
+        id: 'notification.torrent.remove',
         value: response.count
       },
-      id: 'remove-torrents-error'
+      id: 'notification.torrent.remove'
     });
   }
 
   handleRemoveTorrentsError(error) {
     NotificationStore.add({
-      adverb: 'Failed to',
-      action: 'remove',
-      subject: 'torrent',
       accumulation: {
-        id: 'remove-torrents-error',
+        id: 'notification.torrent.remove.failed',
         value: error.count
       },
-      id: 'remove-torrents-error'
+      id: 'notification.torrent.remove.failed'
     });
   }
 

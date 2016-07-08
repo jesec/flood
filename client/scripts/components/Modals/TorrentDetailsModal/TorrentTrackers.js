@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import Badge from '../../General/Badge';
@@ -29,13 +30,19 @@ export default class TorrentTrackrs extends React.Component {
             <thead className="torrent-details__table__heading">
               <tr>
                 <th className="torrent-details__table__heading--primary">
-                  Trackers
+                  <FormattedMessage
+                    id="torrents.details.trackers"
+                    defaultMessage="Trackers"
+                  />
                   <Badge>
                     {trackerCount}
                   </Badge>
                 </th>
                 <th className="torrent-details__table__heading--secondary">
-                  Type
+                <FormattedMessage
+                  id="torrents.details.trackers.type"
+                  defaultMessage="Type"
+                />
                 </th>
               </tr>
             </thead>
@@ -48,7 +55,10 @@ export default class TorrentTrackrs extends React.Component {
     } else {
       return (
         <span className="torrent-details__section__null-data">
-          There is no tracker data for this torrent.
+          <FormattedMessage
+            id="torrents.details.trackers.no.data"
+            defaultMessage="There is no tracker data for this torrent."
+          />
         </span>
       );
     }

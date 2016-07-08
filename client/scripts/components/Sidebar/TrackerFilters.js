@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -97,7 +98,10 @@ export default class TrackerFilters extends React.Component {
     return (
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
-          Filter by Tracker
+          <FormattedMessage
+            id="filter.tracker.title"
+            defaultMessage="Filter by Status"
+          />
         </li>
         {filters}
       </ul>

@@ -1,3 +1,4 @@
+import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import Dropzone from 'react-dropzone';
 import React from 'react';
@@ -62,8 +63,14 @@ export default class AddTorrentsByFile extends React.Component {
           <div className="dropzone__icon">
             <Files />
           </div>
-          Drop some files here, <span className="dropzone__browse-button">
-          or click to browse</span>.
+          <FormattedMessage
+            id="torrents.add.tab.file.drop"
+            defaultMessage="Drop some files here,"
+          /> <span className="dropzone__browse-button">
+          <FormattedMessage
+            id="torrents.add.tab.file.browse"
+            defaultMessage="or click to browse"
+          /></span>.
         </div>
       </Dropzone>
     );
@@ -139,7 +146,10 @@ export default class AddTorrentsByFile extends React.Component {
         <div className="form__row">
           <div className="form__column">
             <label className="form__label">
-              Torrents
+              <FormattedMessage
+                id="torrents.add.torrents.label"
+                defaultMessage="Torrents"
+              />
             </label>
             {this.getModalContent()}
           </div>
