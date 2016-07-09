@@ -97,7 +97,8 @@ gulp.task('browsersync', () => {
     online: true,
     open: false,
     port: 4200,
-    proxy: proxyPath
+    proxy: proxyPath,
+    serveStatic: ['.', './server/assets']
   });
 });
 
