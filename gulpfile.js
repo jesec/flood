@@ -12,6 +12,16 @@ let sourcemaps = require('gulp-sourcemaps');
 let uglify = require('gulp-uglify');
 let webpack = require('webpack');
 
+// Ensure we have a user-defined config.js for use throughout the app.
+try {
+  let fs = require('fs');
+  fs.accessSync('./config.js', fs.F_OK);
+} catch (e) {
+  console.error('Cannot start Flood server, config.js is missing. Copy ' +
+    'config.template.js to config.js.');
+  return;
+}
+
 let config = require('./config');
 let packageInfo = require('./package');
 
