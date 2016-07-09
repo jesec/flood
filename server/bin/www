@@ -1,10 +1,19 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
+'use strict';
+
+// Ensure we have a user-defined config.js for use throughout the app.
+try {
+  let fs = require('fs');
+  fs.accessSync('./config.js', fs.F_OK);
+} catch (e) {
+  console.error('Cannot start Flood server, config.js is missing. Copy ' +
+    'config.template.js to config.js.');
+  return;
+}
 
 var app = require('../app');
+let config = require('../../config');
 var debug = require('debug')('flood:server');
 var http = require('http');
 
@@ -12,7 +21,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(config.floodServerPort);
 app.set('port', port);
 
 /**

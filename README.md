@@ -13,18 +13,22 @@ It's a work-in-progress, and it might not have all of the features you want (yet
   * I recommend managing different Node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n).
 
 #### Configuration
-1. Set your rTorrent SCGI hostname and port in `config.js`. Defaults are `localhost` and `5000`.
-  * If you want to use a socket, change `socket` to true and set `socketPath` to the absolute file path of your rTorrent socket, make sure Flood has read/write access.
-2. Create a long, unique secret (used by bcrypt to hash passwords) in `config.js`.
+1. Copy `config.template.js` to `config.js`. This is required.
+2. Set your rTorrent SCGI hostname and port in `config.js`. Defaults are `localhost` and `5000`.
+  * If you want to use a socket, change `socket` to true and set `socketPath` to the absolute file path of your rTorrent socket. Make sure Flood has read/write access.
+3. Create a long, unique secret (used by bcrypt to hash passwords) in `config.js`.
 
 #### Start It
 1. Run `npm start` in your terminal at this repo's root.
   * On first run, this may take a few minutes while it installs dependencies and transpiles JavaScript & CSS assets.
-2. Access the UI in your browser at `localhost:3000`.
-  * To change the default port, run `npm start localhost {port}`.
+2. Access the UI in your browser. Defaults to `localhost:3000`.
+  * You may change the default port in `config.js`.
+3. Upon loading the UI the first time, you will be prompted to create a user account.
 
 #### Updating
-1. To update, simply `git pull` in this repository's directory, then kill the running server (generally `ctrl+c`) and restart it with `npm start`.
+1. To update, run `git pull` in this repository's directory.
+2. Check `config.template.js` for configuration changes that you may wish to incoporate in your `config.js`.
+3. Kill the running Node server and restart it with `npm start`.
   * The `start` script removes old dependencies, installs new ones, transpiles JavaScript and CSS, and starts the web server.
 
 #### Tips
