@@ -93,7 +93,9 @@ class SettingsStoreClass extends BaseStore {
     this.fetchStatus.floodSettingsFetched = true;
 
     Object.keys(settings).forEach((property) => {
-      this.floodSettings[property] = settings[property];
+      if (settings[property] != null) {
+        this.floodSettings[property] = settings[property];
+      }
     });
 
     this.emit(EventTypes.SETTINGS_FETCH_REQUEST_SUCCESS);

@@ -5,32 +5,74 @@ import ReactDOM from 'react-dom';
 
 import * as i18n from './i18n';
 import Application from './components/Layout/Application';
+import EventTypes from './constants/EventTypes';
 import Login from './views/Login';
 import Register from './views/Register';
 import SettingsStore from './stores/SettingsStore';
 import TorrentList from './views/TorrentList';
+import UIStore from './stores/UIStore';
+
+let appRoutes = (
+  <Router history={browserHistory}>
+    <Route path="/" component={Application}>
+      <IndexRoute component={Login} />
+      <Route path="login" component={Login} />
+      <Route path="register" component={Register} />
+      <Route path="list" component={TorrentList} />
+      <Route path="*" component={Login} />
+    </Route>
+  </Router>
+);
+
+const METHODS_TO_BIND = ['handleSettingsChange'];
 
 class FloodApp extends React.Component {
+  constructor() {
+    super();
+
+    this.state = {
+      locale: SettingsStore.getFloodSettings('language')
+    };
+
+    METHODS_TO_BIND.forEach((method) => {
+      this[method] = this[method].bind(this);
+    });
+  }
+
+  componentWillMount() {
+    UIStore.registerDependency('flood-settings');
+  }
+
+  componentDidMount() {
+    SettingsStore.listen(EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsChange);
+  }
+
+  componentWillUnmount() {
+    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsChange);
+  }
+
+  handleSettingsChange() {
+    if (SettingsStore.getFloodSettings('language') !== this.state.language) {
+      this.setState({locale: SettingsStore.getFloodSettings('language')});
+    }
+
+    UIStore.satisfyDependency('flood-settings');
+  }
+
   render() {
+    let {locale} = this.state;
+
     return (
-      <Router history={browserHistory}>
-        <Route path="/" component={Application}>
-          <IndexRoute component={Login} />
-          <Route path="login" component={Login} />
-          <Route path="register" component={Register} />
-          <Route path="list" component={TorrentList} />
-          <Route path="*" component={Login} />
-        </Route>
-      </Router>
+      <IntlProvider locale={locale} messages={i18n[locale]}>
+        {appRoutes}
+      </IntlProvider>
     );
   }
 }
 
-let locale = SettingsStore.getFloodSettings('language');
-
 ReactDOM.render(
-  <IntlProvider locale={locale} messages={i18n[locale]}>
-    <FloodApp />
-  </IntlProvider>,
+  <FloodApp />,
   document.getElementById('app')
 );

@@ -1,5 +1,7 @@
 $form--label--foreground: desaturate(lighten(#5c7087, 3%), 3%);
 
+$form--element--border-radius: 4px;
+
 $textbox--background: #242b36;
 $textbox--foreground: #5e728c;
 $textbox--placeholder: #424d5e;
@@ -76,7 +78,7 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
 
 .textbox {
   background: $textbox--background;
-  border-radius: 4px;
+  border-radius: $form--element--border-radius;
   border: 1px solid $textbox--border;
   color: $textbox--foreground;
   display: block;
@@ -119,7 +121,7 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
 .button {
   background: transparent;
   border: none;
-  border-radius: 4px;
+  border-radius: $form--element--border-radius;
   cursor: pointer;
   font-weight: 500;
   padding: 8px 22px;
@@ -253,7 +255,7 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
 .interactive-list {
   @extend .textbox;
   @extend .textbox.is-fulfilled;
-  border-radius: 4px;
+  border-radius: $form--element--border-radius;
   color: $interacative-list--item--foreground;
   padding: $spacing-unit * 1/2;
 
@@ -383,6 +385,31 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
     &--unlabled {
       justify-content: center;
       padding-top: $spacing-unit * 3/5;
+    }
+
+    & > .dropdown {
+
+      & > .dropdown {
+
+        &__trigger {
+
+          .dropdown {
+
+            &__button {
+              @extend .button--deemphasize;
+              border-radius: $form--element--border-radius;
+              transition: background 0.25s, color 0.25s;
+            }
+          }
+        }
+      }
+    }
+
+    .dropdown {
+
+      &__button {
+        padding-top: 7px;
+      }
     }
   }
 
