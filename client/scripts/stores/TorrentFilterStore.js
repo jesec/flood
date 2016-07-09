@@ -71,22 +71,9 @@ class TorrentFilterStoreClass extends BaseStore {
     this.setTorrentsSort(SettingsStore.getFloodSettings('sortTorrents'));
   }
 
-<<<<<<< af641a4105b973271133bfe56437785e32a37b5a
-  handleTorrentTrackerCountRequestError(error) {
-    this.emit(EventTypes.CLIENT_TORRENT_TRACKER_COUNT_REQUEST_ERROR);
-=======
   handleSetTaxonomySuccess(data) {
     TorrentStore.fetchTorrents();
     this.fetchTorrentTaxonomy();
-  }
-
-  handleSortPropsRequestSuccess(sortBy) {
-    this.setTorrentsSort(sortBy);
->>>>>>> Add taxonomy related methods, simplify others
-  }
-
-  handleTorrentStatusCountRequestError(error) {
-    this.emit(EventTypes.CLIENT_TORRENT_STATUS_COUNT_REQUEST_ERROR);
   }
 
   handleTorrentTaxonomyRequestSuccess(taxonomy) {
