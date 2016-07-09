@@ -139,7 +139,10 @@ class TorrentListContainer extends React.Component {
     }, {
       action: 'set-taxonomy',
       clickHandler,
-      label: 'Set Tags'
+      label: this.props.intl.formatMessage({
+        id: 'torrents.list.context.set.tags',
+        defaultMessage: 'Set Tags'
+      })
     }, {
       action: 'move',
       clickHandler,

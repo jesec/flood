@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import classnames from 'classnames';
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import AddTorrentsDestination from '../AddTorrentsModal/AddTorrentsDestination';
@@ -18,7 +19,7 @@ const METHODS_TO_BIND = [
   'onSetTagsError'
 ];
 
-export default class MoveTorrents extends React.Component {
+class SetTagsModal extends React.Component {
   constructor() {
     super();
 
@@ -65,17 +66,26 @@ export default class MoveTorrents extends React.Component {
 
   getActions() {
     let icon = null;
-    let primaryButtonText = 'Set Tags';
+    let primaryButtonText = this.props.intl.formatMessage({
+      id: 'torrents.set.tags.button.set.location',
+      defaultMessage: 'Set Tags'
+    });
 
     if (this.state.isSettingTags) {
       icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = 'Setting...';
+      primaryButtonText = this.props.intl.formatMessage({
+        id: 'torrents.set.tags.button.state.setting',
+        defaultMessage: 'Setting...'
+      });
     }
 
     return [
       {
         clickHandler: null,
-        content: 'Cancel',
+        content: this.props.intl.formatMessage({
+          id: 'button.cancel',
+          defaultMessage: 'Cancel'
+        }),
         triggerDismiss: true,
         type: 'secondary'
       },
@@ -116,7 +126,12 @@ export default class MoveTorrents extends React.Component {
       <Modal actions={this.getActions()}
         content={this.getContent()}
         dismiss={this.props.dismiss}
-        heading="Set Tags" />
+        heading={this.props.intl.formatMessage({
+          id: 'torrents.set.tags.heading',
+          defaultMessage: 'Set Tags'
+        })} />
     );
   }
 }
+
+export default injectIntl(SetTagsModal);

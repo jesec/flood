@@ -100,7 +100,7 @@ export default class TrackerFilters extends React.Component {
         <li className="sidebar-filter__item sidebar-filter__item--heading">
           <FormattedMessage
             id="filter.tracker.title"
-            defaultMessage="Filter by Status"
+            defaultMessage="Filter by Tracker"
           />
         </li>
         {filters}

@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import EventTypes from '../../constants/EventTypes';
@@ -96,7 +97,10 @@ export default class TagFilters extends React.Component {
     return (
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
-          Filter by Tag
+          <FormattedMessage
+            id="filter.tag.title"
+            defaultMessage="Filter by Tag"
+          />
         </li>
         {this.getFilters()}
       </ul>
