@@ -72,7 +72,7 @@ class TorrentGeneralInfo extends React.Component {
         </li>
         <li className="torrent-details__detail--seeds">
           <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.size"
+            id="torrents.details.general.creation.date"
             defaultMessage="Creation Date"
           /></span>
           {creationString}
