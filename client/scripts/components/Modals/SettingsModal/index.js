@@ -11,6 +11,7 @@ import LoadingIndicatorDots from '../../Icons/LoadingIndicatorDots';
 import Modal from '../Modal';
 import ResourcesTab from './ResourcesTab';
 import SettingsStore from '../../../stores/SettingsStore';
+import UITab from './UITab';
 
 const METHODS_TO_BIND = [
   'handleClientSettingsChange',
@@ -213,6 +214,16 @@ class SettingsModal extends React.Component {
           id: 'settings.tabs.authentication',
           defaultMessage: 'Authentication'
         })
+      },
+      ui: {
+        content: UITab,
+        label: this.props.intl.formatMessage({
+          id: 'settings.tabs.userinterface',
+          defaultMessage: 'User Interface'
+        }),
+        props: {
+          onSettingsChange: this.handleFloodSettingsChange
+        }
       }
     };
 
