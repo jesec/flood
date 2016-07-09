@@ -1,20 +1,27 @@
-var autoprefixer = require('gulp-autoprefixer');
-var browserSync = require('browser-sync');
-var cssnano = require('gulp-cssnano');
-var eslint = require('gulp-eslint');
-var gulp = require('gulp');
-var gulpif = require('gulp-if');
-var gutil = require('gulp-util');
-var sass = require('gulp-sass');
-var sourcemaps = require('gulp-sourcemaps');
-var uglify = require('gulp-uglify');
-var webpack = require('webpack');
+'use strict';
 
-var packageInfo = require('./package');
+let autoprefixer = require('gulp-autoprefixer');
+let browserSync = require('browser-sync');
+let cssnano = require('gulp-cssnano');
+let eslint = require('gulp-eslint');
+let gulp = require('gulp');
+let gulpif = require('gulp-if');
+let gutil = require('gulp-util');
+let sass = require('gulp-sass');
+let sourcemaps = require('gulp-sourcemaps');
+let uglify = require('gulp-uglify');
+let webpack = require('webpack');
 
-var development = process.env.NODE_ENV === 'development';
+let config = require('./config');
+let packageInfo = require('./package');
 
-var dirs = {
+let development = process.env.NODE_ENV === 'development';
+
+// Allow custom Flood proxy.
+let floodServerHost = config.floodServerHost || 'localhost';
+let proxyPath = `${floodServerHost}:${config.floodServerPort}`;
+
+let dirs = {
   src: 'client',
   dist: 'server/assets',
   js: 'scripts',
@@ -25,21 +32,21 @@ var dirs = {
   imgDist: 'images'
 };
 
-var files = {
+let files = {
   mainJs: 'app',
   mainJsDist: 'app',
   mainStyles: 'style',
   mainStylesDist: 'style'
 };
 
-var webpackDevtool = 'source-map';
-var webpackWatch = false;
+let webpackDevtool = 'source-map';
+let webpackWatch = false;
 if (development) {
   webpackDevtool = 'eval-source-map';
   webpackWatch = true;
 }
 
-var webpackConfig = {
+let webpackConfig = {
   devtool: webpackDevtool,
   entry: [
     'babel-polyfill',
@@ -80,7 +87,7 @@ gulp.task('browsersync', () => {
     online: true,
     open: false,
     port: 4200,
-    proxy: '127.0.0.1:3000'
+    proxy: proxyPath
   });
 });
 
@@ -133,7 +140,7 @@ gulp.task('watch', () => {
 });
 
 gulp.task('webpack', (callback) => {
-  var isFirstRun = true;
+  let isFirstRun = true;
 
   webpack(webpackConfig, (err, stats) => {
     if (err) {
