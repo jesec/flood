@@ -269,7 +269,10 @@ class TorrentListContainer extends React.Component {
         <div className="torrents__notification__action">
           <button className="button button--small button--deemphasize
             button--inverse" onClick={this.handleClearFiltersClick}>
-            Clear Filters
+            <FormattedMessage
+              id="torrents.list.clear.filters"
+              defaultMessage="Clear Filters"
+            />
           </button>
         </div>
       );

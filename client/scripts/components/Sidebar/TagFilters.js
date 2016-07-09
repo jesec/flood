@@ -46,9 +46,9 @@ export default class TagFilters extends React.Component {
 
   getFilters() {
     let filterItems = Object.keys(this.state.tagCount).sort((a, b) => {
-      if (a === 'all' || a === 'unlabeled') {
+      if (a === 'all' || a === 'untagged') {
         return -1;
-      } else if (b === 'all' || b === 'unlabeled') {
+      } else if (b === 'all' || b === 'untagged') {
         return 1;
       }
 
@@ -77,7 +77,7 @@ export default class TagFilters extends React.Component {
     let tags = Object.keys(this.state.tagCount);
 
     return !((tags.length === 1 && tags[0] === 'all')
-      || (tags.length === 2 && tags[1] === 'unlabeled'));
+      || (tags.length === 2 && tags[1] === 'untagged'));
   }
 
   onTagFilterChange() {

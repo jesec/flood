@@ -7,7 +7,7 @@ let propsMap = require('../../shared/constants/propsMap');
 let stringUtil = require('../../shared/util/stringUtil');
 let Torrent = require('./Torrent');
 
-const DEFAULT_TAG = 'unlabeled';
+const DEFAULT_TAG = 'untagged';
 
 class TorrentCollection {
   constructor() {
