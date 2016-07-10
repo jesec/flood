@@ -1,4 +1,4 @@
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {formatMessage, FormattedDate, FormattedMessage, FormattedTime, injectIntl} from 'react-intl';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -9,11 +9,7 @@ class TorrentGeneralInfo extends React.Component {
     let torrent = this.props.torrent;
 
     let added = new Date(torrent.added * 1000);
-    let addedString = `${added.getHours() + 1}:${added.getMinutes() + 1}:${added.getSeconds() + 1}, ${added.getMonth() + 1}/${added.getDate()}/` +
-      `${added.getFullYear()}`;
     let creation = new Date(torrent.creationDate * 1000);
-    let creationString = `${creation.getHours() + 1}:${creation.getMinutes() + 1}:${creation.getSeconds() + 1}, ${creation.getMonth() + 1}/${creation.getDate()}/` +
-      `${creation.getFullYear()}`;
     let totalSize = format.data(torrent.sizeBytes);
     let freeDiskSpace = format.data(torrent.freeDiskSpace);
 
@@ -40,7 +36,13 @@ class TorrentGeneralInfo extends React.Component {
             id="torrents.details.general.added"
             defaultMessage="Added"
           /></span>
-          {addedString}
+          <FormattedDate
+            value={added}
+            year="numeric"
+            month="long"
+            day="2-digit"
+          /> <FormattedTime
+            value={added} />
         </li>
         <li className="torrent-details__detail--peers">
           <span className="torrent-details__detail__label"><FormattedMessage
@@ -75,7 +77,13 @@ class TorrentGeneralInfo extends React.Component {
             id="torrents.details.general.creation.date"
             defaultMessage="Creation Date"
           /></span>
-          {creationString}
+          <FormattedDate
+            value={creation}
+            year="numeric"
+            month="long"
+            day="2-digit"
+          /> <FormattedTime
+            value={creation} />
         </li>
         <li className="torrent-details__detail--seeds">
           <span className="torrent-details__detail__label"><FormattedMessage
