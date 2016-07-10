@@ -73,21 +73,23 @@ class TorrentListContainer extends React.Component {
     UIStore.registerDependency('torrent-list');
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
+    TorrentStore.listen(EventTypes.UI_TORRENTS_LIST_FILTERED, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     UIStore.listen(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
-    TorrentStore.fetchTorrents();
     window.addEventListener('resize', this.handleWindowResize);
+    TorrentStore.fetchTorrents();
     this.setViewportHeight();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.handleWindowResize);
     TorrentStore.unlisten(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
+    TorrentStore.unlisten(EventTypes.UI_TORRENTS_LIST_FILTERED, this.onReceiveTorrentsSuccess);
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     UIStore.unlisten(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
+    window.removeEventListener('resize', this.handleWindowResize);
   }
 
   bindExternalPriorityChangeHandler(eventHandler) {
@@ -135,6 +137,13 @@ class TorrentListContainer extends React.Component {
     }, {
       type: 'separator'
     }, {
+      action: 'set-taxonomy',
+      clickHandler,
+      label: this.props.intl.formatMessage({
+        id: 'torrents.list.context.set.tags',
+        defaultMessage: 'Set Tags'
+      })
+    }, {
       action: 'move',
       clickHandler,
       label: this.props.intl.formatMessage({
@@ -164,6 +173,9 @@ class TorrentListContainer extends React.Component {
       case 'check-hash':
         TorrentActions.checkHash(selectedTorrents);
         break;
+      case 'set-taxonomy':
+        UIActions.displayModal({id: 'set-taxonomy'});
+        break;
       case 'start':
         TorrentActions.startTorrents(selectedTorrents);
         break;
@@ -177,16 +189,12 @@ class TorrentListContainer extends React.Component {
         TorrentActions.deleteTorrents(selectedTorrents);
         break;
       case 'move':
-        this.handleContextMenuMoveClick(selectedTorrents);
+        UIActions.displayModal({id: 'move-torrents'});
         break;
       case 'set-priority':
         this.state.handleTorrentPriorityChange(event);
         break;
     }
-  }
-
-  handleContextMenuMoveClick(hashes) {
-    UIActions.displayModal({id: 'move-torrents'});
   }
 
   handleDetailsClick(torrent, event) {
@@ -254,6 +262,22 @@ class TorrentListContainer extends React.Component {
   }
 
   getEmptyTorrentListNotification() {
+    let clearFilters = null;
+
+    if (TorrentFilterStore.isFilterActive()) {
+      clearFilters = (
+        <div className="torrents__notification__action">
+          <button className="button button--small button--deemphasize
+            button--inverse" onClick={this.handleClearFiltersClick}>
+            <FormattedMessage
+              id="torrents.list.clear.filters"
+              defaultMessage="Clear Filters"
+            />
+          </button>
+        </div>
+      );
+    }
+
     return (
       <div className="torrents__notification__wrapper">
         <div className="torrents__notification">
@@ -262,6 +286,7 @@ class TorrentListContainer extends React.Component {
             defaultMessage="No torrents to display."
           />
         </div>
+        {clearFilters}
       </div>
     );
   }
@@ -314,6 +339,10 @@ class TorrentListContainer extends React.Component {
     return {minTorrentIndex, maxTorrentIndex};
   }
 
+  handleClearFiltersClick() {
+    TorrentFilterStore.clearAllFilters();
+  }
+
   setScrollPosition(scrollValues) {
     this.setState({scrollPosition: scrollValues.scrollTop});
   }
@@ -327,9 +356,11 @@ class TorrentListContainer extends React.Component {
   }
 
   render() {
-    let content = this.getLoadingIndicator();
+    let content = null;
 
-    if (this.state.torrentRequestSuccess) {
+    if (this.state.emptyTorrentList || this.state.torrents.length === 0) {
+      content = this.getEmptyTorrentListNotification();
+    } else if (this.state.torrentRequestSuccess) {
       let contextMenu = null;
       let selectedTorrents = TorrentStore.getSelectedTorrents();
       let torrents = this.state.torrents;
@@ -388,10 +419,8 @@ class TorrentListContainer extends React.Component {
             style={{height: `${listPadding.bottom}px`}}></li>
         </ul>
       );
-    }
-
-    if (this.state.emptyTorrentList) {
-      content = this.getEmptyTorrentListNotification();
+    } else {
+      content = this.getLoadingIndicator();
     }
 
     return (

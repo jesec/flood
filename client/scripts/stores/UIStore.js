@@ -37,6 +37,12 @@ class UIStoreClass extends BaseStore {
     return this.torrentDetailsHash;
   }
 
+  handleSetTaxonomySuccess() {
+    if (this.activeModal.id === 'set-taxonomy') {
+      this.dismissModal();
+    }
+  }
+
   handleTorrentClick(hash) {
     this.torrentDetailsHash = hash;
     this.emit(EventTypes.UI_TORRENT_DETAILS_HASH_CHANGE);
@@ -96,6 +102,9 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_DISPLAY_MODAL:
       UIStore.setActiveModal(action.data);
+      break;
+    case ActionTypes.CLIENT_SET_TAXONOMY_SUCCESS:
+      UIStore.handleSetTaxonomySuccess();
       break;
     case ActionTypes.CLIENT_ADD_TORRENT_SUCCESS:
     case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:

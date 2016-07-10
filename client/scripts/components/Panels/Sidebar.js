@@ -2,21 +2,52 @@ import React from 'react';
 
 import ClientStats from '../Sidebar/TransferData';
 import CustomScrollbars from '../General/CustomScrollbars';
-import SearchBox from '../General/FormElements/SearchBox';
+import EventTypes from '../../constants/EventTypes';
+import SearchTorrents from '../Sidebar/SearchTorrents';
 import SettingsButton from '../Sidebar/SettingsButton';
 import SpeedLimitDropdown from '../Sidebar/SpeedLimitDropdown';
 import StatusFilters from '../Sidebar/StatusFilters';
+import TagFilters from '../Sidebar/TagFilters';
+import TorrentFilterStore from '../../stores/TorrentFilterStore';
+import TorrentStore from '../../stores/TorrentStore';
 import TrackerFilters from '../Sidebar/TrackerFilters';
+import UIStore from '../../stores/UIStore';
 
 class Sidebar extends React.Component {
+  componentDidMount() {
+    UIStore.registerDependency('torrent-taxonomy');
+    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
+      this.onTorrentRequestSuccess);
+    TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+      this.onTorrentTaxonomyRequestSuccess);
+  }
+
+  componentWillUnmount() {
+    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
+      this.onTorrentRequestSuccess);
+    TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+      this.onTorrentTaxonomyRequestSuccess);
+  }
+
+  onTorrentTaxonomyRequestSuccess() {
+    if (!UIStore.hasSatisfiedDependencies()) {
+      UIStore.satisfyDependency('torrent-taxonomy');
+    }
+  }
+
+  onTorrentRequestSuccess() {
+    TorrentFilterStore.fetchTorrentTaxonomy();
+  }
+
   render() {
     return (
       <CustomScrollbars className="application__sidebar" inverted={true}>
         <SettingsButton />
         <SpeedLimitDropdown />
         <ClientStats />
-        <SearchBox />
+        <SearchTorrents />
         <StatusFilters />
+        <TagFilters />
         <TrackerFilters />
       </CustomScrollbars>
     );

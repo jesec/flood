@@ -46,7 +46,8 @@ const REQUESTED_DATA = [
   'isPrivate',
   'directory',
   'filename',
-  'isMultiFile'
+  'isMultiFile',
+  'tags'
 ];
 
 class Torrent {
@@ -69,6 +70,10 @@ class Torrent {
 
   get status() {
     return this._torrentData.status || [];
+  }
+
+  get tags() {
+    return this._torrentData.tags || [];
   }
 
   get trackers() {
@@ -195,6 +200,12 @@ class Torrent {
     }
 
     return torrentStatus;
+  }
+
+  getCalculatedTags(clientData) {
+    return clientData.tags.split(',').sort().map((tag) => {
+      return decodeURIComponent(tag);
+    });
   }
 
   getCalculatedTotalPeers(clientData) {

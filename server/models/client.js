@@ -13,9 +13,10 @@ let scgi = require('../util/scgi');
 let Torrent = require('./Torrent');
 let TorrentCollection = require('./TorrentCollection');
 
-let _statusCount = {};
-let _torrentCollection = new TorrentCollection();
-let _trackerCount = {};
+let statusCount = {};
+let tagCount = {};
+let torrentCollection = new TorrentCollection();
+let trackerCount = {};
 
 var client = {
   addFiles: (req, callback) => {
@@ -118,11 +119,23 @@ var client = {
   },
 
   getTorrentStatusCount: (callback) => {
-    callback(_statusCount);
+    callback(statusCount);
+  },
+
+  getTorrentTagCount: (callback) => {
+    callback(tagCount);
+  },
+
+  getTorrentTaxonomy: (callback) => {
+    callback({
+      status: statusCount,
+      tags: tagCount,
+      trackers: trackerCount
+    });
   },
 
   getTorrentTrackerCount: (callback) => {
-    callback(_trackerCount);
+    callback(trackerCount);
   },
 
   getTorrentDetails: (hash, callback) => {
@@ -152,11 +165,13 @@ var client = {
         torrentList = data[0][0];
       }
 
-      _torrentCollection.updateTorrents(torrentList);
-      _statusCount = _torrentCollection.statusCount;
-      _trackerCount = _torrentCollection.trackerCount;
+      torrentCollection.updateTorrents(torrentList);
 
-      return _torrentCollection.torrents;
+      statusCount = torrentCollection.getStatusCount();
+      tagCount = torrentCollection.getTagCount();
+      trackerCount = torrentCollection.getTrackerCount();
+
+      return torrentCollection.getTorrents();
     });
     request.onComplete(callback);
     request.send();
@@ -278,6 +293,18 @@ var client = {
     request.add('setThrottle',
       {direction: data.direction, throttle: data.throttle});
     request.onComplete(callback);
+    request.send();
+  },
+
+  setTaxonomy: (data, callback) => {
+    let request = new ClientRequest();
+
+    request.add('setTaxonomy', data);
+    request.onComplete((response, error) => {
+      // Fetch the latest torrent list to re-index the taxonomy.
+      client.getTorrentList(() => {});
+      callback(response, error);
+    });
     request.send();
   },
 

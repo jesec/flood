@@ -7,19 +7,29 @@ $torrent--primary--foreground--error: #e95779;
 $torrent--primary--foreground--stopped: rgba(#333332, 0.5);
 $torrent--primary--foreground--selected: #fff;
 $torrent--primary--foreground--selected--stopped: rgba($torrent--primary--foreground--selected, 0.6);
+
 $torrent--secondary--foreground: #8899a8;
 $torrent--secondary--foreground--stopped: rgba(#8899a8, 0.5);
 $torrent--secondary--foreground--selected: #fff;
 $torrent--secondary--foreground--selected--stopped: rgba(#fff, 0.6);
+
 $torrent--tertiary--foreground: #8899a8;
 $torrent--tertiary--foreground--stopped: rgba(#8899a8, 0.5);
 $torrent--tertiary--foreground--selected: rgba(#fff, 0.9);
 $torrent--tertiary--foreground--selected--stopped: rgba(#fff, 0.5);
+
 $torrent--notification--foreground: $torrent--tertiary--foreground--stopped;
 
 $torrent--background--hover: #f6f8fa;
 $torrent--background--selected: $blue;
 $torrent--background--error: #e95779;
+
+$torrent--tags--background: #dce2e6;
+$torrent--tags--foreground: #6f7d87;
+$torrent--tags--background--selected: #4ea3ea;
+$torrent--tags--background--selected--has-error: #ed7994;
+$torrent--tags--foreground--selected: #fff;
+$torrent--tags--foreground--has-error: #fbe8ec;
 
 $more-info--background: #fff;
 $more-info--box-shadow--hue: #1a2f3d;
@@ -58,10 +68,15 @@ $more-info--border: $textbox-repeater--button--border;
       align-items: center;
       bottom: 0;
       display: flex;
+      flex-direction: column;
       left: $torrent-list--offset;
       position: absolute;
       right: 0;
       top: 0;
+    }
+
+    &__action {
+      margin-top: $spacing-unit * 1/5;
     }
   }
 }
@@ -248,13 +263,13 @@ $more-info--border: $textbox-repeater--button--border;
 
     &--tertiary {
       color: $torrent--tertiary--foreground;
-      display: block;
+      display: flex;
       font-size: 0.7em;
       margin: 1px 0;
 
       li {
         display: inline-block;
-        margin-right: 15px;
+        margin-right: $spacing-unit * 2/5;
         white-space: nowrap;
 
         &:last-child {
@@ -277,6 +292,44 @@ $more-info--border: $textbox-repeater--button--border;
       .is-selected.is-stopped & {
         color: $torrent--tertiary--foreground--selected--stopped;
       }
+
+      &--stats {
+        flex: 1 0 auto;
+      }
+
+      &--tags {
+        background: $torrent--tags--background;
+        border-radius: 30px;
+        color: $torrent--tags--foreground;
+        flex: 0 1 auto;
+        font-size: 0.9em;
+        margin-left: auto;
+        padding: 0 $spacing-unit * 2/5;
+        transition: background 0.25s, color 0.25s, opacity 0.25s;
+        white-space: nowrap;
+
+        .is-stopped & {
+          opacity: 0.5;
+        }
+
+        .is-selected & {
+          background: $torrent--tags--background--selected;
+          color: $torrent--tags--foreground--selected;
+        }
+
+        .is-selected.has-error & {
+          background: $torrent--tags--background--selected--has-error;
+          color: $torrent--tags--foreground--has-error;
+        }
+
+        .is-selected.is-stopped & {
+          opacity: 0.6;
+        }
+
+        li {
+          margin-right: $spacing-unit * 3/10;
+        }
+      }
     }
 
     &__label {
@@ -296,6 +349,25 @@ $more-info--border: $textbox-repeater--button--border;
         height: 12px;
         opacity: 0.66;
         width: 12px;
+      }
+    }
+
+    &--eta {
+      opacity: 0;
+      transition: color 0.25s, opacity 1s, visibility 1s;
+      visibility: hidden;
+
+      .torrent__details--segment {
+        margin-right: 0.25em;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+
+      .is-active & {
+        opacity: 1;
+        visibility: visible;
       }
     }
 
@@ -331,14 +403,14 @@ $more-info--border: $textbox-repeater--button--border;
 
       &--download {
 
-        .is-actively-downloading & {
+        .is-active & {
           color: $green;
         }
       }
 
       &--upload {
 
-        .is-actively-downloading & {
+        .is-active & {
           color: $blue;
         }
       }
@@ -358,31 +430,6 @@ $more-info--border: $textbox-repeater--button--border;
         .is-selected.is-stopped & {
           color: $torrent--tertiary--foreground--selected--stopped !important;
         }
-      }
-    }
-  }
-}
-
-.torrent {
-
-  &__details {
-
-    &--eta {
-      opacity: 0;
-      transition: color 0.25s, opacity 1s, visibility 1s;
-      visibility: hidden;
-
-      .torrent__details--segment {
-        margin-right: 0.25em;
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
-
-      .is-actively-downloading & {
-        opacity: 1;
-        visibility: visible;
       }
     }
   }

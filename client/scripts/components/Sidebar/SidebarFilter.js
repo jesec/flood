@@ -37,6 +37,11 @@ class SidebarFilter extends React.Component {
         id: 'filter.all',
         defaultMessage: 'All'
       });
+    } else if (this.props.name === 'untagged') {
+      name = this.props.intl.formatMessage({
+        id: 'filter.untagged',
+        defaultMessage: 'Untagged'
+      });
     }
 
     return (

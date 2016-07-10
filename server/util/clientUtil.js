@@ -60,6 +60,7 @@ var clientUtil = {
       // 'isPexActive',
       'isPrivate',
 
+      'tags',
       'comment',
       'ignoreScheduler',
       'trackers',
@@ -130,6 +131,7 @@ var clientUtil = {
       // 'd.is_pex_active=',
       'd.is_private=',
 
+      'd.custom1=',
       'd.custom2=',
       'd.custom=sch_ignore', // ignore scheduler
       'cat="$t.multicall=d.hash=,t.get_url=,cat={@!@}"',
@@ -247,6 +249,7 @@ var clientUtil = {
     return mappedObject;
   },
 
+  // TODO remove this method
   createMulticallRequest: (methodCalls, params) => {
     params = params || [];
     var methodCall = [];

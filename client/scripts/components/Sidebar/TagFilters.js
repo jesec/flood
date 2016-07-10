@@ -1,5 +1,5 @@
-import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import EventTypes from '../../constants/EventTypes';
@@ -12,17 +12,17 @@ import UIActions from '../../actions/UIActions';
 const METHODS_TO_BIND = [
   'getFilters',
   'handleClick',
-  'onTrackerFilterChange',
+  'onTagFilterChange',
   'onTorrentTaxonomyChange'
 ];
 
-export default class TrackerFilters extends React.Component {
+export default class TagFilters extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      trackerCount: {},
-      trackerFilter: TorrentFilterStore.getTrackerFilter()
+      tagCount: {},
+      tagFilter: TorrentFilterStore.getTagFilter()
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -33,22 +33,22 @@ export default class TrackerFilters extends React.Component {
   componentDidMount() {
     TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
       this.onTorrentTaxonomyChange);
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE,
-      this.onTrackerFilterChange);
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_TAG_CHANGE,
+      this.onTagFilterChange);
   }
 
   componentWillUnmount() {
     TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
       this.onTorrentTaxonomyChange);
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE,
-      this.onTrackerFilterChange);
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_TAG_CHANGE,
+      this.onTagFilterChange);
   }
 
   getFilters() {
-    let filterItems = Object.keys(this.state.trackerCount).sort((a, b) => {
-      if (a === 'all') {
+    let filterItems = Object.keys(this.state.tagCount).sort((a, b) => {
+      if (a === 'all' || a === 'untagged') {
         return -1;
-      } else if (b === 'all') {
+      } else if (b === 'all' || b === 'untagged') {
         return 1;
       }
 
@@ -58,9 +58,9 @@ export default class TrackerFilters extends React.Component {
     let filterElements = filterItems.map((filter, index) => {
       return (
         <SidebarFilter handleClick={this.handleClick}
-          count={this.state.trackerCount[filter] || 0}
+          count={this.state.tagCount[filter] || 0}
           key={filter}
-          isActive={filter === this.state.trackerFilter}
+          isActive={filter === this.state.tagFilter}
           name={filter}
           slug={filter} />
       );
@@ -70,28 +70,27 @@ export default class TrackerFilters extends React.Component {
   }
 
   handleClick(filter) {
-    UIActions.setTorrentTrackerFilter(filter);
+    UIActions.setTorrentTagFilter(filter);
   }
 
-  hasTrackers() {
-    let trackers = Object.keys(this.state.trackerCount);
+  hasTags() {
+    let tags = Object.keys(this.state.tagCount);
 
-    return !(trackers.length === 1 && trackers[0] === 'all');
+    return !((tags.length === 1 && tags[0] === 'all')
+      || (tags.length === 2 && tags[1] === 'untagged'));
   }
 
-  onTrackerFilterChange() {
-    this.setState({trackerFilter: TorrentFilterStore.getTrackerFilter()});
+  onTagFilterChange() {
+    this.setState({tagFilter: TorrentFilterStore.getTagFilter()});
   }
 
   onTorrentTaxonomyChange() {
-    let trackerCount = TorrentFilterStore.getTorrentTrackerCount();
-    this.setState({trackerCount});
+    let tagCount = TorrentFilterStore.getTorrentTagCount();
+    this.setState({tagCount});
   }
 
   render() {
-    let filters = this.getFilters();
-
-    if (!this.hasTrackers()) {
+    if (!this.hasTags()) {
       return null;
     }
 
@@ -99,11 +98,11 @@ export default class TrackerFilters extends React.Component {
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
           <FormattedMessage
-            id="filter.tracker.title"
-            defaultMessage="Filter by Tracker"
+            id="filter.tag.title"
+            defaultMessage="Filter by Tag"
           />
         </li>
-        {filters}
+        {this.getFilters()}
       </ul>
     );
   }

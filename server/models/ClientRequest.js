@@ -290,6 +290,24 @@ class ClientRequest {
     });
   }
 
+  setTaxonomyMethodCall(options) {
+    let methodName = 'd.custom1.set';
+
+    let tags = options.tags.reduce((memo, currentTag) => {
+      let tag = encodeURIComponent(currentTag.trim());
+
+      if (tag !== '' && memo.indexOf(tag) === -1) {
+        memo.push(tag);
+      }
+
+      return memo;
+    }, []).join(',');
+
+    this.getEnsuredArray(options.hashes).forEach((hash) => {
+      this.requests.push(this.getMethodCall(methodName, [hash, tags]));
+    });
+  }
+
   setThrottleMethodCall(options) {
     let methodName = 'throttle.global_down.max_rate.set';
     if (options.direction === 'upload') {
