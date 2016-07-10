@@ -246,11 +246,7 @@ class TorrentListContainer extends React.Component {
       torrentCount: torrents.length,
       torrentRequestError: false,
       torrentRequestSuccess: true
-    });
-
-    if (!UIStore.hasSatisfiedDependencies()) {
-      UIStore.satisfyDependency('torrent-list');
-    }
+    }, UIStore.satisfyDependency('torrent-list'));
   }
 
   onTorrentFilterChange() {
