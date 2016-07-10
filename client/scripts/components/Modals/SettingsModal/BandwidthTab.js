@@ -110,7 +110,7 @@ export default class BandwidthTab extends SettingsTab {
         <div className="form__section">
           <p className="form__section__heading">
             <FormattedMessage
-              id="settings.bandwith.transferrate.heading"
+              id="settings.bandwidth.transferrate.heading"
               defaultMessage="Transfer Rate Throttles"
             />
           </p>
@@ -118,7 +118,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.transferrate.dropdown.preset.download.label"
+                  id="settings.bandwidth.transferrate.dropdown.preset.download.label"
                   defaultMessage="Dropdown Presets: Download"
                 />
               </label>
@@ -131,7 +131,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.transferrate.dropdown.preset.upload.label"
+                  id="settings.bandwidth.transferrate.dropdown.preset.upload.label"
                   defaultMessage="Dropdown Presets: Upload"
                 />
               </label>
@@ -144,7 +144,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.transferrate.global.throttle.download"
+                  id="settings.bandwidth.transferrate.global.throttle.download"
                   defaultMessage="Global Download Rate Throttle"
                 />
               </label>
@@ -155,7 +155,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.transferrate.global.throttle.upload"
+                  id="settings.bandwidth.transferrate.global.throttle.upload"
                   defaultMessage="Global Upload Rate Throttle"
                 />
               </label>
@@ -168,7 +168,7 @@ export default class BandwidthTab extends SettingsTab {
         <div className="form__section">
           <div className="form__section__heading">
             <FormattedMessage
-              id="settings.bandwith.slots.heading"
+              id="settings.bandwidth.slots.heading"
               defaultMessage="Slot Availability"
             />
           </div>
@@ -176,7 +176,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.slots.upload.label"
+                  id="settings.bandwidth.slots.upload.label"
                   defaultMessage="Upload Slots Per Torrent"
                 />
               </label>
@@ -187,7 +187,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.slots.upload.divider.label"
+                  id="settings.bandwidth.slots.upload.divider.label"
                   defaultMessage="Upload Slots Divider"
                 />
               </label>
@@ -198,7 +198,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.slots.upload.global.label"
+                  id="settings.bandwidth.slots.upload.global.label"
                   defaultMessage="Upload Slots Global"
                 />
               </label>
@@ -211,7 +211,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.slots.download.label"
+                  id="settings.bandwidth.slots.download.label"
                   defaultMessage="Download Slots Per Torrent"
                 />
               </label>
@@ -222,7 +222,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.slots.download.divider.label"
+                  id="settings.bandwidth.slots.download.divider.label"
                   defaultMessage="Download Slots Divider"
                 />
               </label>
@@ -233,7 +233,7 @@ export default class BandwidthTab extends SettingsTab {
             <div className="form__column">
               <label className="form__label">
                 <FormattedMessage
-                  id="settings.bandwith.slots.download.global.label"
+                  id="settings.bandwidth.slots.download.global.label"
                   defaultMessage="Download Slots Global"
                 />
               </label>

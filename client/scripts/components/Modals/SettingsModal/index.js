@@ -181,8 +181,8 @@ class SettingsModal extends React.Component {
           settings: this.mergeObjects(this.state.floodSettings, this.state.clientSettings)
         },
         label: this.props.intl.formatMessage({
-          id: 'settings.tabs.bandwith',
-          defaultMessage: 'Bandwith'
+          id: 'settings.tabs.bandwidth',
+          defaultMessage: 'Bandwidth'
         })
       },
       connectivity: {

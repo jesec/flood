@@ -150,7 +150,9 @@ export default class ConnectivityTab extends SettingsTab {
         </div>
         <div className="form__section">
           <div className="form__section__heading">
-            Peers
+            <FormattedMessage
+              id="settings.connectivity.peers.heading"
+              defaultMessage="Peers" />
           </div>
           <div className="form__row">
             <div className="form__column">
