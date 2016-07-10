@@ -159,6 +159,7 @@ export default {
   'torrents.details.trackers.type': 'Type',
   'torrents.details.trackers': 'Trackers',
 
+  'torrents.list.clear.filters': 'Clear Filters',
   'torrents.list.context.check.hash': 'Check Hash',
   'torrents.list.context.move': 'Download Location...',
   'torrents.list.context.pause': 'Pause',

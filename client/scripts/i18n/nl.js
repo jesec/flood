@@ -159,6 +159,7 @@ export default {
   'torrents.details.trackers.type': 'Type',
   'torrents.details.trackers': 'Trackers',
 
+  'torrents.list.clear.filters': 'Herstel filters',
   'torrents.list.context.check.hash': 'Controleer hash',
   'torrents.list.context.move': 'Downloadlocatie...',
   'torrents.list.context.pause': 'Pauzeer',
