@@ -197,8 +197,8 @@ $more-info--border: $textbox-repeater--button--border;
   &__details {
     align-items: center;
     display: flex;
-    flex: 1;
-    flex-flow: row wrap;
+    flex: 1 1 auto;
+    flex-flow: row;
     list-style: none;
 
     &--primary,

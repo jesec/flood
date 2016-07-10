@@ -16,9 +16,35 @@ import {torrentStatusIcons} from '../../util/torrentStatusIcons';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
 import UploadThickIcon from '../Icons/UploadThickIcon';
 
+const ICONS = {
+  clock: <ClockIcon />,
+  disk: <DiskIcon />,
+  downloadThick: <DownloadThickIcon />,
+  information: <InformationIcon />,
+  peers: <PeersIcon />,
+  ratio: <RatioIcon />,
+  seeds: <SeedsIcon />,
+  uploadThick: <UploadThickIcon />
+};
+
 const METHODS_TO_BIND = [
   'handleClick',
   'handleRightClick'
+];
+
+const TORRENT_PRIMITIVES_TO_OBSERVE = [
+  'bytesDone',
+  'downloadRate',
+  'status',
+  'tags',
+  'totalPeers',
+  'totalSeeds',
+  'uploadRate'
+];
+
+const TORRENT_ARRAYS_TO_OBSERVE = [
+  'status',
+  'tags'
 ];
 
 export default class Torrent extends React.Component {
@@ -28,6 +54,33 @@ export default class Torrent extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.selected !== this.props.selected) {
+      return true;
+    }
+
+    let nextTorrent = nextProps.torrent;
+    let {torrent} = this.props;
+
+    let shouldUpdate = TORRENT_ARRAYS_TO_OBSERVE.some((key) => {
+      let nextArr = nextTorrent[key];
+      let currentArr = this.props.torrent[key];
+
+      return nextArr.length !== currentArr.length ||
+        nextArr.some((nextValue, index) => {
+          return nextValue !== currentArr[index];
+        });
+    });
+
+    if (!shouldUpdate) {
+      return TORRENT_PRIMITIVES_TO_OBSERVE.some((key) => {
+        return nextTorrent[key] !== torrent[key];
+      });
+    }
+
+    return shouldUpdate;
   }
 
   getTags(tags) {
@@ -65,7 +118,6 @@ export default class Torrent extends React.Component {
     let uploadTotal = format.data(torrent.uploadTotal);
 
     let torrentClasses = torrentStatusClasses(torrent, this.props.selected ? 'is-selected' : null, 'torrent');
-    let torrentStatusIcon = torrentStatusIcons(torrent.status);
 
     let isActive = downloadRate.value > 0 || uploadRate.value > 0;
     let isDownloading = downloadRate.value > 0;
@@ -73,13 +125,13 @@ export default class Torrent extends React.Component {
     let secondaryDetails = [
       <li className="torrent__details--secondary torrent__details--speed
         torrent__details--speed--download" key="download-rate">
-        <span className="torrent__details__icon"><DownloadThickIcon /></span>
+        <span className="torrent__details__icon">{ICONS.downloadThick}</span>
         {downloadRate.value}
         <em className="unit">{downloadRate.unit}</em>
       </li>,
       <li className="torrent__details--secondary torrent__details--speed
         torrent__details--speed--upload" key="upload-rate">
-        <span className="torrent__details__icon"><UploadThickIcon /></span>
+        <span className="torrent__details__icon">{ICONS.uploadThick}</span>
         {uploadRate.value}
         <em className="unit">{uploadRate.unit}</em>
       </li>
@@ -89,7 +141,7 @@ export default class Torrent extends React.Component {
       secondaryDetails.unshift(
         <li className="torrent__details--secondary torrent__details--eta"
           key="eta">
-          <span className="torrent__details__icon"><ClockIcon /></span>
+          <span className="torrent__details__icon">{ICONS.clock}</span>
           {eta}
         </li>
       );
@@ -107,7 +159,7 @@ export default class Torrent extends React.Component {
         <div className="torrent__details torrent__details--tertiary">
           <ul className="torrent__details torrent__details--tertiary--stats">
             <li className="torrent__details--completed">
-              <span className="torrent__details__icon"><DownloadThickIcon /></span>
+              <span className="torrent__details__icon">{ICONS.downloadThick}</span>
               {torrent.percentComplete}
               <em className="unit">%</em>
               &nbsp;&mdash;&nbsp;
@@ -115,29 +167,29 @@ export default class Torrent extends React.Component {
               <em className="unit">{completed.unit}</em>
             </li>
             <li className="torrent__details--uploaded">
-              <span className="torrent__details__icon"><UploadThickIcon /></span>
+              <span className="torrent__details__icon">{ICONS.uploadThick}</span>
               {uploadTotal.value}
               <em className="unit">{uploadTotal.unit}</em>
             </li>
             <li className="torrent__details--ratio">
-              <span className="torrent__details__icon"><RatioIcon /></span>
+              <span className="torrent__details__icon">{ICONS.ratio}</span>
               {ratio}
             </li>
             <li className="torrent__details--size">
-              <span className="torrent__details__icon"><DiskIcon /></span>
+              <span className="torrent__details__icon">{ICONS.disk}</span>
               {totalSize.value}
               <em className="unit">{totalSize.unit}</em>
             </li>
             <li className="torrent__details--added">
-              <span className="torrent__details__icon"><CalendarIcon /></span>
+              <span className="torrent__details__icon">{ICONS.calendar}</span>
               {addedString}
             </li>
             <li className="torrent__details--peers">
-              <span className="torrent__details__icon"><PeersIcon /></span>
+              <span className="torrent__details__icon">{ICONS.peers}</span>
               {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
             </li>
             <li className="torrent__details--seeds">
-              <span className="torrent__details__icon"><SeedsIcon /></span>
+              <span className="torrent__details__icon">{ICONS.seeds}</span>
               {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
             </li>
           </ul>
@@ -145,11 +197,11 @@ export default class Torrent extends React.Component {
             {this.getTags(torrent.tags)}
           </ul>
         </div>
-        <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcon} />
+        <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
         <button className="torrent__more-info floating-action__button"
           onClick={this.props.handleDetailsClick.bind(this, torrent)}
           tabIndex="-1">
-          <InformationIcon />
+          {ICONS.information}
         </button>
       </li>
     );

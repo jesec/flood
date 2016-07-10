@@ -32,13 +32,18 @@ const METHODS_TO_BIND = [
   'onTorrentFilterChange',
   'onTorrentSelectionChange',
   'setScrollPosition',
-  'setViewportHeight'
+  'setViewportHeight',
+  'rerender'
 ];
+
+let cachedTorrents = {};
 
 class TorrentListContainer extends React.Component {
   constructor() {
     super();
 
+    this.lastScrollPosition = 0;
+    this.rerenderTimeout = null;
     this.state = {
       emptyTorrentList: false,
       handleTorrentPriorityChange: null,
@@ -47,7 +52,7 @@ class TorrentListContainer extends React.Component {
       minTorrentIndex: 0,
       scrollPosition: 0,
       torrentCount: 0,
-      torrentHeight: 72,
+      torrentHeight: 71,
       torrents: [],
       torrentRequestError: false,
       torrentRequestSuccess: false,
@@ -58,15 +63,11 @@ class TorrentListContainer extends React.Component {
       this[method] = this[method].bind(this);
     });
 
-    this.setScrollPosition = _.throttle(this.setScrollPosition, 100, {
-      leading: true,
+    this.setScrollPosition = _.throttle(this.setScrollPosition, 300, {
       trailing: true
     });
 
-    this.handleWindowResize = _.throttle(this.setViewportHeight, 350, {
-      leading: true,
-      trailing: true
-    });
+    this.handleWindowResize = _.debounce(this.setViewportHeight, 250);
   }
 
   componentDidMount() {
@@ -316,7 +317,7 @@ class TorrentListContainer extends React.Component {
     // Calculate the number of items that should be rendered based on the height
     // of the viewport. We offset this to render a few more outide of the
     // container's dimensions, which looks nicer when the user scrolls.
-    let offset = 10;
+    let offset = this.rerenderTimeout == null ? 20 : 0;
 
     // The number of elements in view is the height of the viewport divided
     // by the height of the elements.
@@ -340,7 +341,11 @@ class TorrentListContainer extends React.Component {
   }
 
   setScrollPosition(scrollValues) {
-    this.setState({scrollPosition: scrollValues.scrollTop});
+    global.requestAnimationFrame(() => {
+      let {scrollTop} = scrollValues;
+      this.setState({scrollPosition: scrollTop});
+      this.lastScrollPosition = scrollTop;
+    });
   }
 
   setViewportHeight() {
@@ -351,70 +356,88 @@ class TorrentListContainer extends React.Component {
     }
   }
 
+  rerender() {
+    global.requestAnimationFrame(() => {
+      this.rerenderTimeout = null;
+      this.forceUpdate();
+    });
+  }
+
   render() {
     let content = null;
 
     if (this.state.emptyTorrentList || this.state.torrents.length === 0) {
       content = this.getEmptyTorrentListNotification();
     } else if (this.state.torrentRequestSuccess) {
-      let contextMenu = null;
-      let selectedTorrents = TorrentStore.getSelectedTorrents();
-      let torrents = this.state.torrents;
-      let viewportLimits = this.getViewportLimits();
+      let scrollDelta = this.state.scrollPosition - this.lastScrollPosition;
 
-      let listPadding = this.getListPadding(
-        viewportLimits.minTorrentIndex,
-        viewportLimits.maxTorrentIndex,
-        torrents.length
-      );
+      if (this.lastContent != null
+        && (scrollDelta > 600 || scrollDelta < -600)) {
+        content = this.lastContent;
 
-      let maxTorrentIndex = viewportLimits.maxTorrentIndex;
-      let minTorrentIndex = viewportLimits.minTorrentIndex;
+        global.requestAnimationFrame(() => {
+          if (this.rerenderTimeout != null) {
+            global.clearTimeout(this.rerenderTimeout);
+          }
+          this.rerenderTimeout = global.setTimeout(this.rerender, 500);
+        });
+      } else {
+        let contextMenu = null;
+        let selectedTorrents = TorrentStore.getSelectedTorrents();
+        let torrents = this.state.torrents;
+        let viewportLimits = this.getViewportLimits();
 
-      if (minTorrentIndex < 0) {
-        minTorrentIndex = 0;
-      }
-
-      if (this.state.contextMenu != null) {
-        contextMenu = (
-          <ContextMenu clickPosition={this.state.contextMenu.clickPosition}
-            items={this.state.contextMenu.items} />
+        let listPadding = this.getListPadding(
+          viewportLimits.minTorrentIndex,
+          viewportLimits.maxTorrentIndex,
+          torrents.length
         );
-      }
 
-      let visibleTorrents = torrents.slice(minTorrentIndex, maxTorrentIndex);
+        let maxTorrentIndex = viewportLimits.maxTorrentIndex;
+        let minTorrentIndex = viewportLimits.minTorrentIndex;
 
-      let torrentList = visibleTorrents.map((torrent, index) => {
-        let isSelected = false;
-        let hash = torrent.hash;
-
-        if (selectedTorrents.indexOf(hash) > -1) {
-          isSelected = true;
+        if (minTorrentIndex < 0) {
+          minTorrentIndex = 0;
         }
 
-        return (
-          <Torrent key={hash} torrent={torrent} selected={isSelected}
-            handleClick={this.handleTorrentClick}
-            handleRightClick={this.handleRightClick}
-            handleDetailsClick={this.handleDetailsClick} />
-        );
-      });
+        if (this.state.contextMenu != null) {
+          contextMenu = (
+            <ContextMenu clickPosition={this.state.contextMenu.clickPosition}
+              items={this.state.contextMenu.items} />
+          );
+        }
 
-      content = (
-        <ul className="torrent__list" key="torrent__list">
-          <CSSTransitionGroup
-            transitionName="menu"
-            transitionEnterTimeout={250}
-            transitionLeaveTimeout={250}>
-            {contextMenu}
-          </CSSTransitionGroup>
-          <li className="torrent__spacer torrent__spacer--top"
-            style={{height: `${listPadding.top}px`}}></li>
-          {torrentList}
-          <li className="torrent__spacer torrent__spacer--bottom"
-            style={{height: `${listPadding.bottom}px`}}></li>
-        </ul>
-      );
+        let visibleTorrents = torrents.slice(minTorrentIndex, maxTorrentIndex);
+
+        let torrentList = visibleTorrents.map((torrent, index) => {
+          let {hash} = torrent;
+
+          return (
+            <Torrent key={hash} torrent={torrent} selected={selectedTorrents.indexOf(hash) > -1}
+              handleClick={this.handleTorrentClick}
+              handleRightClick={this.handleRightClick}
+              handleDetailsClick={this.handleDetailsClick} />
+          );
+        });
+
+        content = (
+          <ul className="torrent__list" key="torrent__list">
+            <CSSTransitionGroup
+              transitionName="menu"
+              transitionEnterTimeout={250}
+              transitionLeaveTimeout={250}>
+              {contextMenu}
+            </CSSTransitionGroup>
+            <li className="torrent__spacer torrent__spacer--top"
+              style={{height: `${listPadding.top}px`}}></li>
+            {torrentList}
+            <li className="torrent__spacer torrent__spacer--bottom"
+              style={{height: `${listPadding.bottom}px`}}></li>
+          </ul>
+        );
+
+        this.lastContent = content;
+      }
     } else {
       content = this.getLoadingIndicator();
     }
