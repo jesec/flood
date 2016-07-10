@@ -307,10 +307,17 @@ $torrent-details--directory-tree--parent-directory--icon--fill: rgba($modal--bod
 
   &__detail {
 
+    & + .torrent-details__section__heading {
+      margin-top: 10px;
+    }
+
     &__label {
       color: $torrent-details--detail--label--foreground;
+      display: inline-block;
       font-weight: 500;
       margin-right: $spacing-unit * 3/5;
+      text-align: right;
+      width: 30%;
     }
   }
 }

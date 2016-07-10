@@ -5,6 +5,14 @@ import React from 'react';
 import format from '../../../util/formatData';
 
 class TorrentGeneralInfo extends React.Component {
+  getTags(tags) {
+    return tags.map((tag, index) => {
+      return (
+        <span>{tag}</span>
+      );
+    });
+  }
+
   render() {
     let torrent = this.props.torrent;
 
@@ -15,23 +23,10 @@ class TorrentGeneralInfo extends React.Component {
 
     return (
       <ul className="torrent-details__section">
-        <li className="torrent-details__detail--size">
-          <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.size"
-            defaultMessage="Size"
-          /></span>
-          {totalSize.value}
-          <em className="unit">{totalSize.unit}</em>
+        <li className="torrent-details__section__heading">
+          General
         </li>
-        <li className="torrent-details__detail--completed">
-          <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.downloaded"
-            defaultMessage="Downloaded"
-          /></span>
-          {torrent.percentComplete}
-          <em className="unit">%</em>
-        </li>
-        <li className="torrent-details__detail--added">
+        <li className="torrent-details__detail  torrent-details__detail--size">
           <span className="torrent-details__detail__label"><FormattedMessage
             id="torrents.details.general.added"
             defaultMessage="Added"
@@ -44,55 +39,14 @@ class TorrentGeneralInfo extends React.Component {
           /> <FormattedTime
             value={added} />
         </li>
-        <li className="torrent-details__detail--peers">
-          <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.peers"
-            defaultMessage="Peers"
-          /></span>
-          {torrent.connectedPeers} of {torrent.totalPeers}
-        </li>
-        <li className="torrent-details__detail--seeds">
-          <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.seeds"
-            defaultMessage="Seeds"
-          /></span>
-          {torrent.connectedSeeds} of {torrent.totalSeeds}
-        </li>
-        <li className="torrent-details__detail--seeds">
-          <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.hash"
-            defaultMessage="Hash"
-          /></span>
-          {torrent.hash}
-        </li>
-        <li className="torrent-details__detail--seeds">
-          <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.tracker.message"
-            defaultMessage="Tracker Message"
-          /></span>
-          {torrent.message}
-        </li>
-        <li className="torrent-details__detail--seeds">
-          <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.creation.date"
-            defaultMessage="Creation Date"
-          /></span>
-          <FormattedDate
-            value={creation}
-            year="numeric"
-            month="long"
-            day="2-digit"
-          /> <FormattedTime
-            value={creation} />
-        </li>
-        <li className="torrent-details__detail--seeds">
+        <li className="torrent-details__detail  torrent-details__detail--seeds">
           <span className="torrent-details__detail__label"><FormattedMessage
             id="torrents.details.general.location"
             defaultMessage="Location"
           /></span>
           {torrent.basePath}
         </li>
-        <li className="torrent-details__detail--seeds">
+        <li className="torrent-details__detail  torrent-details__detail--seeds">
           <span className="torrent-details__detail__label"><FormattedMessage
             id="torrents.details.general.scheduler"
             defaultMessage="Scheduler"
@@ -105,14 +59,74 @@ class TorrentGeneralInfo extends React.Component {
             defaultMessage: 'Obeyed'
           })}
         </li>
-        <li className="torrent-details__detail--seeds">
+        <li className="torrent-details__detail  torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label">Tags</span>
+          {this.getTags(torrent.tags)}
+        </li>
+        <li className="torrent-details__section__heading">
+          Transfer
+        </li>
+        <li className="torrent-details__detail  torrent-details__detail--completed">
+          <span className="torrent-details__detail__label"><FormattedMessage
+            id="torrents.details.general.downloaded"
+            defaultMessage="Downloaded"
+          /></span>
+          {torrent.percentComplete}
+          <em className="unit">%</em>
+        </li>
+        <li className="torrent-details__detail  torrent-details__detail--peers">
+          <span className="torrent-details__detail__label"><FormattedMessage
+            id="torrents.details.general.peers"
+            defaultMessage="Peers"
+          /></span>
+          {torrent.connectedPeers} of {torrent.totalPeers} connected
+        </li>
+        <li className="torrent-details__detail  torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label"><FormattedMessage
+            id="torrents.details.general.seeds"
+            defaultMessage="Seeds"
+          /></span>
+          {torrent.connectedSeeds} of {torrent.totalSeeds} connected
+        </li>
+        <li className="torrent-details__section__heading">
+          Torrent
+        </li>
+        <li className="torrent-details__detail  torrent-details__detail--seeds">
           <span className="torrent-details__detail__label"><FormattedMessage
             id="torrents.details.general.comment"
             defaultMessage="Comment"
           /></span>
           {torrent.comment.substr(10)}
         </li>
-        <li className="torrent-details__detail--seeds">
+        <li className="torrent-details__detail  torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label"><FormattedMessage
+            id="torrents.details.general.creation.date"
+            defaultMessage="Creation Date"
+          /></span>
+          <FormattedDate
+            value={creation}
+            year="numeric"
+            month="long"
+            day="2-digit"
+          /> <FormattedTime
+            value={creation} />
+        </li>
+        <li className="torrent-details__detail  torrent-details__detail--seeds">
+          <span className="torrent-details__detail__label"><FormattedMessage
+            id="torrents.details.general.hash"
+            defaultMessage="Hash"
+          /></span>
+          {torrent.hash}
+        </li>
+        <li className="torrent-details__detail  torrent-details__detail--size">
+          <span className="torrent-details__detail__label"><FormattedMessage
+            id="torrents.details.general.size"
+            defaultMessage="Size"
+          /></span>
+          {totalSize.value}
+          <em className="unit">{totalSize.unit}</em>
+        </li>
+        <li className="torrent-details__detail  torrent-details__detail--seeds">
           <span className="torrent-details__detail__label"><FormattedMessage
             id="torrents.details.general.type"
             defaultMessage="Type"
@@ -124,14 +138,6 @@ class TorrentGeneralInfo extends React.Component {
             id: 'torrents.details.general.type.private',
             defaultMessage: 'Private'
           })}
-        </li>
-        <li className="torrent-details__detail--seeds">
-          <span className="torrent-details__detail__label"><FormattedMessage
-            id="torrents.details.general.free.disk.space"
-            defaultMessage="Free Disk Space"
-          /></span>
-          {freeDiskSpace.value}
-          <em className="unit">{freeDiskSpace.unit}</em>
         </li>
       </ul>
     );
