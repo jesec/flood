@@ -82,7 +82,7 @@ class TorrentGeneralInfo extends React.Component {
         <li className="torrent-details__detail torrent-details__detail--tags">
           <span className="torrent-details__detail__label">Tags</span>
           <span className="torrent-details__detail__value">
-            {(torrent.tags.length == 0 ? this.getTags(torrent.tags) : <ValueNotAvailable />)}
+            {(torrent.tags.length ? this.getTags(torrent.tags) : <ValueNotAvailable />)}
           </span>
         </li>
         <li className="torrent-details__section__sub-heading">
