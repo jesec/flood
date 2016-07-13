@@ -28,7 +28,8 @@ class SettingsStoreClass extends BaseStore {
       speedLimits: {
         download: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
         upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0]
-      }
+      },
+      startTorrentsOnLoad: false
     };
   }
 
