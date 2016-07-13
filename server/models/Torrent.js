@@ -203,7 +203,13 @@ class Torrent {
   }
 
   getCalculatedTags(clientData) {
-    return clientData.tags.split(',').sort().map((tag) => {
+    let tags = clientData.tags;
+
+    if (tags === '') {
+      return [];
+    }
+
+    return tags.split(',').sort().map((tag) => {
       return decodeURIComponent(tag);
     });
   }
