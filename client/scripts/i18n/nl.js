@@ -155,6 +155,7 @@ export default {
   'torrents.details.general.scheduler': 'Scheduler',
   'torrents.details.general.seeds': 'Seeds',
   'torrents.details.general.size': 'Grootte',
+  'torrents.details.general.tags': 'Tags',
   'torrents.details.general.tracker.message': 'Bericht van tracker',
   'torrents.details.general.type.private': 'Privé',
   'torrents.details.general.type.public': 'Publiek',

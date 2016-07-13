@@ -316,24 +316,23 @@ $torrent--tags--foreground: #1a2028;
   }
 
   &__detail {
-    display: flex;
 
-    & + .torrent-details__section__sub-heading {
-      margin-top: 10px;
+    td {
+      vertical-align: top;
+    }
+
+    & + .torrent-details__section__sub-heading td {
+      padding-top: 10px;
     }
 
     &__label {
       color: $torrent-details--detail--label--foreground;
-      flex: 0 0 30%;
       font-weight: 500;
-      overflow: hidden;
       padding-right: $spacing-unit * 3/5;
-      text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     &__value {
-      flex: 1 1 70%;
 
       &--not-available {
         color: $torrent-details--detail--disabled--foreground;
@@ -343,8 +342,7 @@ $torrent--tags--foreground: #1a2028;
     &--hash {
       
       .torrent-details__detail__value {
-        word-wrap: break-word;
-        min-width: 1px;
+        word-break: break-all;
       }
     }
 
