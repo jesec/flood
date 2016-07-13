@@ -32,8 +32,8 @@ $torrent-details--directory-tree--file--hover--border: #515f6f;
 $torrent-details--directory-tree--parent-directory--foreground: rgba($modal--body--foreground, 0.6);
 $torrent-details--directory-tree--parent-directory--icon--fill: rgba($modal--body--foreground, 0.5);
 
-$torrent--tags--background: #515f6f;
-$torrent--tags--foreground: #1a2028;
+$torrent-details--tags--background: #515f6f;
+$torrent-details--tags--foreground: #1a2028;
 
 .torrent-details {
 
@@ -185,6 +185,11 @@ $torrent--tags--foreground: #1a2028;
         letter-spacing: 0.1em;
         text-transform: uppercase;
       }
+
+      &--tertiary {
+        color: $torrent-details--detail--heading--foreground;
+        font-weight: 700;
+      }
     }
   }
 
@@ -196,11 +201,6 @@ $torrent--tags--foreground: #1a2028;
       color: $torrent-details--directory-tree--parent-directory--foreground;
       font-size: 1.15em;
       margin-bottom: $spacing-unit * 1/10;
-    }
-
-    &__sub-heading {
-      color: $torrent-details--detail--heading--foreground;
-      font-weight: 700;
     }
 
     &--file-tree {
@@ -317,28 +317,6 @@ $torrent--tags--foreground: #1a2028;
 
   &__detail {
 
-    td {
-      vertical-align: top;
-    }
-
-    & + .torrent-details__section__sub-heading td {
-      padding-top: 10px;
-    }
-
-    &__label {
-      color: $torrent-details--detail--label--foreground;
-      font-weight: 500;
-      padding-right: $spacing-unit * 3/5;
-      white-space: nowrap;
-    }
-
-    &__value {
-
-      &--not-available {
-        color: $torrent-details--detail--disabled--foreground;
-      }
-    }
-
     &--hash {
       
       .torrent-details__detail__value {
@@ -349,15 +327,38 @@ $torrent--tags--foreground: #1a2028;
     &--tags {
 
       .tag {
-        background: $torrent--tags--background;
+        background: $torrent-details--tags--background;
         border-radius: 30px;
-        color: $torrent--tags--foreground;
+        color: $torrent-details--tags--foreground;
         display: inline-block;
         font-size: 0.9em;
         margin-right: $spacing-unit * 1/5;
         padding: 0 $spacing-unit * 2/5;
         white-space: nowrap;
       }
+    }
+
+    & + .torrent-details__table__heading {
+
+      .torrent-details__table__heading--tertiary {
+        padding-top: 10px;
+      }
+    }
+
+    &__label,
+    &__value {
+      vertical-align: top;
+
+      .not-available {
+        color: $torrent-details--detail--disabled--foreground;
+      }
+    }
+
+    &__label {
+      color: $torrent-details--detail--label--foreground;
+      font-weight: 500;
+      padding-right: $spacing-unit * 3/5;
+      white-space: nowrap;
     }
   }
 }

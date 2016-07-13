@@ -22,7 +22,7 @@ class TorrentGeneralInfo extends React.Component {
     let freeDiskSpace = format.data(torrent.freeDiskSpace);
 
     const valueNotAvailable =
-      <span className="torrent-details__detail__value--not-available">
+      <span className="not-available">
         <FormattedMessage
           id="torrents.details.general.none"
           defaultMessage="None"
@@ -33,8 +33,8 @@ class TorrentGeneralInfo extends React.Component {
       <div className="torrent-details__section torrent-details__section--general">
         <table className="torrent-details__table table">
           <tbody>
-            <tr className="torrent-details__section__sub-heading">
-              <td colSpan="2">
+            <tr className="torrent-details__table__heading">
+              <td className="torrent-details__table__heading--tertiary" colSpan="2">
                 <FormattedMessage
                   id="torrents.details.general.heading.general"
                   defaultMessage="General"
@@ -48,7 +48,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Added"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 <FormattedDate
                   value={added}
                   year="numeric"
@@ -65,7 +65,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Free Disk Space"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {freeDiskSpace.value}
                 <em className="unit">{freeDiskSpace.unit}</em>
               </td>
@@ -77,7 +77,9 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Location"
                 />
               </td>
-              <td>{torrent.basePath}</td>
+              <td className="torrent-details__detail__value">
+                {torrent.basePath}
+              </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--scheduler">
               <td className="torrent-details__detail__label">
@@ -86,7 +88,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Scheduler"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {torrent.ignoreScheduler === '1'
                   ? this.props.intl.formatMessage({
                     id: 'torrents.details.general.scheduler.ignored',
@@ -103,14 +105,14 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Tags"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {(torrent.tags.length
                   ? this.getTags(torrent.tags)
                   : valueNotAvailable)}
               </td>
             </tr>
-            <tr className="torrent-details__section__sub-heading">
-              <td colSpan="2">
+            <tr className="torrent-details__table__heading">
+              <td className="torrent-details__table__heading--tertiary" colSpan="2">
                 <FormattedMessage
                   id="torrents.details.general.heading.transfer"
                   defaultMessage="Transfer"
@@ -124,7 +126,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Downloaded"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {torrent.percentComplete}
                 <em className="unit">%</em>
               </td>
@@ -136,7 +138,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Peers"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {torrent.connectedPeers} of {torrent.totalPeers} <FormattedMessage
                   id="torrents.details.general.connected"
                   defaultMessage="connected"
@@ -150,15 +152,15 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Seeds"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {torrent.connectedSeeds} of {torrent.totalSeeds} <FormattedMessage
                   id="torrents.details.general.connected"
                   defaultMessage="connected"
                 />
               </td>
             </tr>
-            <tr className="torrent-details__section__sub-heading">
-              <td colSpan="2">
+            <tr className="torrent-details__table__heading">
+              <td className="torrent-details__table__heading--tertiary" colSpan="2">
                 <FormattedMessage
                   id="torrents.details.general.heading.torrent"
                   defaultMessage="Torrent"
@@ -172,7 +174,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Comment"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {(torrent.comment.substr(10)
                   ? torrent.comment.substr(10)
                   : valueNotAvailable)}
@@ -185,7 +187,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Creation Date"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 <FormattedDate
                   value={creation}
                   year="numeric"
@@ -214,7 +216,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Size"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {totalSize.value}
                 <em className="unit">{totalSize.unit}</em>
               </td>
@@ -226,7 +228,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Type"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {torrent.isPrivate === '0'
                   ? this.props.intl.formatMessage({
                     id: 'torrents.details.general.type.public',
@@ -236,8 +238,8 @@ class TorrentGeneralInfo extends React.Component {
                     defaultMessage: 'Private'})}
               </td>
             </tr>
-            <tr className="torrent-details__section__sub-heading">
-              <td colSpan="2">
+            <tr className="torrent-details__table__heading">
+              <td className="torrent-details__table__heading--tertiary" colSpan="2">
                 <FormattedMessage
                   id="torrents.details.general.heading.tracker"
                   defaultMessage="Tracker"
@@ -251,7 +253,7 @@ class TorrentGeneralInfo extends React.Component {
                   defaultMessage="Tracker Message"
                 />
               </td>
-              <td>
+              <td className="torrent-details__detail__value">
                 {(torrent.message ? torrent.message : valueNotAvailable)}
               </td>
             </tr>
