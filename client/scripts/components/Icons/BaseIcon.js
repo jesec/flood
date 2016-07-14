@@ -10,10 +10,6 @@ export default class BaseIcon extends React.Component {
 
     return viewBox;
   }
-
-  getXmlns() {
-    return 'http://www.w3.org/2000/svg';
-  }
 }
 
 BaseIcon.defaultProps = {
