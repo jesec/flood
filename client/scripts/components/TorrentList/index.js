@@ -186,7 +186,7 @@ class TorrentListContainer extends React.Component {
         TorrentActions.pauseTorrents(selectedTorrents);
         break;
       case 'remove':
-        TorrentActions.deleteTorrents(selectedTorrents);
+        UIActions.displayModal({id: 'remove-torrents'});
         break;
       case 'move':
         UIActions.displayModal({id: 'move-torrents'});
