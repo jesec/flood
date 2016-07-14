@@ -164,7 +164,7 @@ class ClientRequest {
 
   createDirectoryMethodCall(options) {
     this.requests.push(
-      this.getMethodCall('execute', ['mkdir', '-p', options.path])
+      this.getMethodCall('execute2', ['mkdir', '-p', options.path])
     );
   }
 
@@ -270,7 +270,7 @@ class ClientRequest {
     let hashes = this.getEnsuredArray(options.hashes);
 
     hashes.forEach((hash) => {
-      this.requests.push(this.getMethodCall('d.set_priority',
+      this.requests.push(this.getMethodCall('d.priority.set',
         [hash, options.priority]));
       this.requests.push(this.getMethodCall('d.update_priorities',
         [hash]));
