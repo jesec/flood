@@ -1,10 +1,10 @@
 const rTorrentPropMap = {
   transferData: {
-    uploadRate: 'get_up_rate',
-    uploadTotal: 'get_up_total',
+    uploadRate: 'throttle.global_up.rate',
+    uploadTotal: 'throttle.global_up.total',
     uploadThrottle: 'throttle.global_up.max_rate',
-    downloadRate: 'get_down_rate',
-    downloadTotal: 'get_down_total',
+    downloadRate: 'throttle.global_down.rate',
+    downloadTotal: 'throttle.global_down.total',
     downloadThrottle: 'throttle.global_down.max_rate'
   }
 };

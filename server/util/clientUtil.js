@@ -134,7 +134,7 @@ var clientUtil = {
       'd.custom1=',
       'd.custom2=',
       'd.custom=sch_ignore', // ignore scheduler
-      'cat="$t.multicall=d.hash=,t.get_url=,cat={@!@}"',
+      'cat="$t.multicall=d.hash=,t.url=,cat={@!@}"',
       'cat="$t.multicall=d.hash=,t.scrape_complete=,cat={@!@}"', // total seeds
       'cat="$t.multicall=d.hash=,t.scrape_incomplete=,cat={@!@}"', // total peers
       // 'cat=$d.views=',
@@ -150,11 +150,11 @@ var clientUtil = {
       'completedChunks'
     ],
     filePropertyMethods: [
-      'f.get_path=',
-      'f.get_path_components=',
-      'f.get_priority=',
-      'f.get_size_bytes=',
-      'f.get_size_chunks=',
+      'f.path=',
+      'f.path_components=',
+      'f.priority=',
+      'f.size_bytes=',
+      'f.size_chunks=',
       'f.completed_chunks='
     ],
     trackerProperties: [
@@ -166,12 +166,12 @@ var clientUtil = {
       'type'
     ],
     trackerPropertyMethods: [
-      't.get_group=',
-      't.get_url=',
-      't.get_id=',
-      't.get_min_interval=',
-      't.get_normal_interval=',
-      't.get_type='
+      't.group=',
+      't.url=',
+      't.id=',
+      't.min_interval=',
+      't.normal_interval=',
+      't.type='
     ],
     clientProperties: [
       'uploadRate',
@@ -183,12 +183,12 @@ var clientUtil = {
       'downloadThrottle'
     ],
     clientPropertyMethods: [
-      'get_up_rate',
-      'get_up_total',
+      'throttle.global_up.rate',
+      'throttle.global_up.total',
       'throttle.global_up.max_rate',
 
-      'get_down_rate',
-      'get_down_total',
+      'throttle.global_down.rate',
+      'throttle.global_down.total',
       'throttle.global_down.max_rate'
     ],
     peerProperties: [
@@ -206,16 +206,16 @@ var clientUtil = {
       'isIncoming'
     ],
     peerPropertyMethods: [
-      'p.get_address=',
-      'p.get_completed_percent=',
-      'p.get_client_version=',
-      'p.get_down_rate=',
-      'p.get_down_total=',
-      'p.get_up_rate=',
-      'p.get_up_total=',
-      'p.get_id=',
-      'p.get_peer_rate=',
-      'p.get_peer_total=',
+      'p.address=',
+      'p.completed_percent=',
+      'p.client_version=',
+      'p.down_rate=',
+      'p.down_total=',
+      'p.up_rate=',
+      'p.up_total=',
+      'p.id=',
+      'p.peer_rate=',
+      'p.peer_total=',
       'p.is_encrypted=',
       'p.is_incoming='
     ]
