@@ -22,6 +22,7 @@ $progress-bar--fill--selected: #fff;
 $progress-bar--fill--stopped: #e3e5e5;
 
 .progress-bar {
+  align-items: center;
   display: flex;
   transition: opacity 0.25s;
   width: 100%;
@@ -66,15 +67,13 @@ $progress-bar--fill--stopped: #e3e5e5;
   }
 
   &__fill {
-    align-items: center;
     background: $progress-bar--fill;
-    bottom: 0;
+    display: block;
     height: $progress-bar--height;
-    left: 0;
-    position: absolute;
     top: 50%;
-    transform: translateY(-50%);
+    transform-origin: 0 50%;
     transition: background 0.25s, width 0.25s;
+    width: 100%;
     z-index: 1;
 
     .is-seeding & {
@@ -101,6 +100,7 @@ $progress-bar--fill--stopped: #e3e5e5;
     &__wrapper {
       flex: 1 1 auto;
       position: relative;
+      height: 3px;
 
       &:after {
         background: $progress-bar--fill;
@@ -110,8 +110,7 @@ $progress-bar--fill--stopped: #e3e5e5;
         opacity: 0.5;
         position: absolute;
         z-index: 0;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 1px;
         transition: background 0.25s, opacity 0.25s;
         width: 100%;
 
