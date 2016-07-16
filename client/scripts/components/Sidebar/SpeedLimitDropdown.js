@@ -7,6 +7,7 @@ import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import LimitsIcon from '../Icons/Limits';
 import SettingsStore from '../../stores/SettingsStore';
+import Tooltip from '../General/Tooltip';
 import TransferDataStore from '../../stores/TransferDataStore';
 
 const messages = defineMessages({
@@ -68,11 +69,18 @@ class SpeedLimitDropdown extends React.Component {
   }
 
   getDropdownTrigger() {
+    let label = this.props.intl.formatMessage(messages.speedLimits);
+
     return (
-      <a className="sidebar__icon-button sidebar__icon-button--limits"
-        title={this.props.intl.formatMessage(messages.speedLimits)}>
+      <Tooltip
+        anchor="start"
+        content={label}
+        offset={-5}
+        position="bottom"
+        wrapperClassName="sidebar__icon-button sidebar__icon-button--limits
+          tooltip__wrapper">
         <LimitsIcon />
-      </a>
+      </Tooltip>
     );
   }
 
