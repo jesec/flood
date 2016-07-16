@@ -1,6 +1,5 @@
 'use strict';
 
-let fs = require('fs');
 let mv = require('mv');
 let path = require('path');
 let util = require('util');

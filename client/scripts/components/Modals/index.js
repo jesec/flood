@@ -7,6 +7,7 @@ import ConfirmModal from './ConfirmModal';
 import EventTypes from '../../constants/EventTypes';
 import Modal from './Modal';
 import MoveTorrentsModal from './MoveTorrentsModal';
+import RemoveTorrentsModal from './RemoveTorrentsModal';
 import SetTagsModal from './SetTagsModal';
 import SettingsModal from './SettingsModal';
 import TorrentDetailsModal from './TorrentDetailsModal';
@@ -27,6 +28,7 @@ export default class Modals extends React.Component {
       'add-torrents': AddTorrentsModal,
       confirm: ConfirmModal,
       'move-torrents': MoveTorrentsModal,
+      'remove-torrents': RemoveTorrentsModal,
       'set-taxonomy': SetTagsModal,
       settings: SettingsModal,
       'torrent-details': TorrentDetailsModal

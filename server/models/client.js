@@ -1,6 +1,6 @@
 'use strict';
 
-let fs = require('fs');
+let del = require('del');
 let util = require('util');
 
 let clientResponseUtil = require('../util/clientResponseUtil');
@@ -64,11 +64,34 @@ var client = {
     request.send();
   },
 
-  deleteTorrents: (hashes, callback) => {
+  deleteTorrents: (options, callback) => {
+    let files = [];
     let request = new ClientRequest();
 
-    request.add('removeTorrents', {hashes});
-    request.onComplete(callback);
+    if (options.deleteData) {
+      let torrents = torrentCollection.torrents;
+
+      files = options.hashes.reduce((memo, hash) => {
+        let filePath = torrents[hash].basePath;
+
+        // Let's not try to delete these files.
+        if (filePath != null && filePath !== '/' && filePath !== ''
+          && filePath !== '.') {
+          memo.push(filePath);
+        }
+
+        return memo;
+      }, []);
+    }
+
+    request.add('removeTorrents', {hashes: options.hashes});
+    request.onComplete((response, error) => {
+      if (options.deleteData && files.length > 0) {
+        del(files, {force: true});
+      }
+
+      callback(response, error);
+    });
     request.send();
   },
 

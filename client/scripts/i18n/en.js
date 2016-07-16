@@ -203,6 +203,7 @@ export default {
       =1 {one torrent}
       other {# torrents}
     }?`,
+  'torrents.remove.delete.data': 'Delete data',
   'torrents.remove.error.no.torrents.selected': 'You haven\'t selected any torrents.',
   'torrents.remove': 'Remove Torrents'
 };

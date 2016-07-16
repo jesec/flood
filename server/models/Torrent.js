@@ -61,6 +61,10 @@ class Torrent {
     this._torrentData = this.getCalculatedClientData(clientData, opts);
   }
 
+  get basePath() {
+    return this._torrentData.basePath;
+  }
+
   get data() {
     // TODO: Only return the properties that are different than the last time
     // get was called. Perhaps identify the last time it was called by ID so
