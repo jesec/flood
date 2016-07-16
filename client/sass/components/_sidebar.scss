@@ -1,4 +1,4 @@
-$sidebar--foreground: #53718a;
+$sidebar--foreground: #526780;
 $sidebar--border: rgba(darken($sidebar--foreground, 40%), 0.3);
 
 $sidebar-filter--foreground: $sidebar--foreground;
@@ -6,7 +6,7 @@ $sidebar-filter--foreground--header: rgba($sidebar-filter--foreground, 0.5);
 $sidebar-filter--foreground--active: $blue;
 $sidebar-filter--foreground--hover: lighten($sidebar-filter--foreground, 15%);
 
-$sidebar--icon-button--fill: rgba($sidebar--foreground, 0.7);
+$sidebar--icon-button--fill: $sidebar--foreground;
 $sidebar--icon-button--fill--hover: $blue;
 $sidebar--icon-button--foreground: rgba($sidebar--foreground, 0.7);
 $sidebar--icon-button--foreground--hover: $blue;
@@ -28,32 +28,13 @@ $sidebar--icon-button--foreground--hover: $blue;
 
 .sidebar {
 
-  &__item {
-
-    &--speed-limit {
-      padding-left: 5px;
-      padding-top: 5px;
-
-      .dropdown {
-
-        &__content {
-          min-width: 180px;
-        }
-
-        &__items {
-          font-size: 0.9em;
-        }
-      }
-    }
-  }
-
   &__icon-button {
     color: $sidebar--icon-button--foreground;
     cursor: pointer;
     display: block;
     font-size: 0.8em;
     line-height: 1;
-    padding: 10px;
+    padding: $spacing-unit * 3/5;
     transition: color 0.25s;
 
     &:hover {
@@ -73,11 +54,40 @@ $sidebar--icon-button--foreground--hover: $blue;
       vertical-align: middle;
       width: 13px;
     }
+  }
 
-    &--settings {
-      position: absolute;
-      right: $spacing-unit * 1/5;
-      top: $spacing-unit * 1/5;
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.dropdown {
+
+  &--speed-limits {
+
+    .dropdown {
+
+      &__content {
+        left: $spacing-unit * 1/5;
+        min-width: 180px;
+        top: $spacing-unit * 1/5;
+
+        .sidebar {
+
+          &__icon-button {
+            padding: $spacing-unit * 2/5;
+
+            .icon {
+              margin-right: $spacing-unit * 1/5;
+            }
+          }
+        }
+      }
+
+      &__items {
+        font-size: 0.9em;
+      }
     }
   }
 }
