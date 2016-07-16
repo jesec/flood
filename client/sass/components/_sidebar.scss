@@ -70,9 +70,7 @@ $sidebar--icon-button--foreground--hover: $blue;
     .dropdown {
 
       &__content {
-        left: $spacing-unit * 1/5;
         min-width: 180px;
-        top: $spacing-unit * 1/5;
 
         .sidebar {
 

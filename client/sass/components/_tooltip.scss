@@ -7,7 +7,7 @@ $tooltip-font-size: 0.8rem;
 $tooltip-line-height: 1rem;
 
 $tooltip-padding-vertical: $spacing-unit * 3/10;
-$tooltip-padding-horizontal: $spacing-unit * 5/10;
+$tooltip-padding-horizontal: $spacing-unit * 1/2;
 
 $tooltip-arrow-border-width: 7px;
 $tooltip-arrow-offset: 8px;
@@ -21,7 +21,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
   position: fixed;
   transition: opacity 0.3s, visibility 0.3s;
   visibility: hidden;
-  z-index: 9999;
+  z-index: 1000;
 
   &__wrapper {
     display: inline-block;
@@ -59,135 +59,180 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
     white-space: nowrap;
   }
 
-  &--position--bottom,
-  &--position--top {
+  &--position {
 
-    &.tooltip--anchor--center {
-      transform: translateX(-50%);
+    &--bottom,
+    &--top {
 
-      .tooltip__content {
+      &.tooltip {
 
-        &:after {
-          left: 50%;
-          transform: translateX(-50%);
+        &--anchor {
+
+          &--center {
+            transform: translateX(-50%);
+
+            .tooltip {
+
+              &__content {
+
+                &:after {
+                  left: 50%;
+                  transform: translateX(-50%);
+                }
+              }
+            }
+          }
+
+          &--start {
+            transform: translateX($tooltip-anchor-offset * -1);
+
+            .tooltip {
+
+              &__content {
+
+                &:after {
+                  left: $tooltip-arrow-offset;
+                }
+              }
+            }
+          }
+
+          &--end {
+            transform: translateX(calc(-100% + #{$tooltip-anchor-offset}));
+
+            .tooltip {
+
+              &__content {
+
+                &:after {
+                  right: $tooltip-arrow-offset;
+                }
+              }
+            }
+          }
         }
       }
     }
 
-    &.tooltip--anchor--start {
-      transform: translateX($tooltip-anchor-offset * -1);
+    &--bottom {
+      padding-top: $tooltip-arrow-border-width;
 
-      .tooltip__content {
+      .tooltip {
 
-        &:after {
-          left: $tooltip-arrow-offset;
+        &__content {
+
+          &:after {
+            border-left-color: transparent;
+            border-right-color: transparent;
+            border-top: none;
+            bottom: 100%;
+          }
         }
       }
     }
 
-    &.tooltip--anchor--end {
-      transform: translateX(calc(-100% + #{$tooltip-anchor-offset}));
+    &--top {
+      padding-bottom: $tooltip-arrow-border-width;
 
-      .tooltip__content {
+      .tooltip {
 
-        &:after {
-          right: $tooltip-arrow-offset;
-        }
-      }
-    }
-  }
+        &__content {
 
-  &--position--bottom {
-    padding-top: $tooltip-arrow-border-width;
-
-    .tooltip__content {
-
-      &:after {
-        border-left-color: transparent;
-        border-right-color: transparent;
-        border-top: none;
-        bottom: 100%;
-      }
-    }
-  }
-
-  &--position--top {
-    padding-bottom: $tooltip-arrow-border-width;
-
-    .tooltip__content {
-
-      &:after {
-        border-bottom: none;
-        border-left-color: transparent;
-        border-right-color: transparent;
-        top: 100%;
-      }
-    }
-  }
-
-  &--position--left,
-  &--position--right {
-
-    &.tooltip--anchor--center {
-      top: 50%;
-      transform: translateY(-50%);
-
-      .tooltip__content {
-
-        &:after {
-          top: 50%;
-          transform: translateY(-50%);
+          &:after {
+            border-bottom: none;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            top: 100%;
+          }
         }
       }
     }
 
-    &.tooltip--anchor--start {
-      transform: translateY($tooltip-anchor-offset * -1);
+    &--left,
+    &--right {
 
-      .tooltip__content {
+      &.tooltip {
 
-        &:after {
-          top: $tooltip-arrow-offset;
+        &--anchor {
+
+          &--center {
+            top: 50%;
+            transform: translateY(-50%);
+
+            .tooltip {
+
+              &__content {
+
+                &:after {
+                  top: 50%;
+                  transform: translateY(-50%);
+                }
+              }
+            }
+          }
+
+          &--start {
+            transform: translateY($tooltip-anchor-offset * -1);
+
+            .tooltip {
+
+              &__content {
+
+                &:after {
+                  top: $tooltip-arrow-offset;
+                }
+              }
+            }
+          }
+
+          &--end {
+            transform: translateY(calc(-100% + #{$tooltip-anchor-offset}));
+
+            .tooltip {
+
+              &__content {
+
+                &:after {
+                  bottom: $tooltip-arrow-offset;
+                }
+              }
+            }
+          }
         }
       }
     }
 
-    &.tooltip--anchor--end {
-      transform: translateY(calc(-100% + #{$tooltip-anchor-offset}));
+    &--left {
+      padding-right: $tooltip-arrow-border-width;
 
-      .tooltip__content {
+      .tooltip {
 
-        &:after {
-          bottom: $tooltip-arrow-offset;
+        &__content {
+
+          &:after {
+            border-bottom-color: transparent;
+            border-right: none;
+            border-top-color: transparent;
+            left: 100%;
+          }
         }
       }
     }
-  }
 
-  &.tooltip--position--left {
-    padding-right: $tooltip-arrow-border-width;
+    &--right {
+      padding-left: $tooltip-arrow-border-width;
 
-    .tooltip__content {
+      .tooltip {
 
-      &:after {
-        border-bottom-color: transparent;
-        border-right: none;
-        border-top-color: transparent;
-        left: 100%;
-      }
-    }
-  }
+        &__content {
 
-  &.tooltip--position--right {
-    padding-left: $tooltip-arrow-border-width;
-
-    .tooltip__content {
-
-      &:after {
-        border-bottom-color: transparent;
-        border-left: none;
-        border-top-color: transparent;
-        right: 100%;
+          &:after {
+            border-bottom-color: transparent;
+            border-left: none;
+            border-top-color: transparent;
+            right: 100%;
+          }
+        }
       }
     }
   }

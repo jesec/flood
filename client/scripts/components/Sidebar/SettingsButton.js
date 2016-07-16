@@ -37,14 +37,13 @@ class SettingsButton extends React.Component {
 
     return (
       <Tooltip
-        anchor="end"
         content={label}
         onClick={this.handleSettingsButtonClick}
-        offset={-5}
-        ref={(ref) => {this.tooltipRef = ref;}}
-        position="bottom"
+        offset={5}
+        ref={(ref) => this.tooltipRef = ref}
+        position="left"
         wrapperClassName="sidebar__action sidebar__icon-button
-          sidebar__icon-button--settings tooltip__wrapper">
+          tooltip__wrapper">
         <SettingsIcon />
       </Tooltip>
     );
