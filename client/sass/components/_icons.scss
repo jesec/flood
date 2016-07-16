@@ -51,8 +51,12 @@
           fill-opacity: 0.4;
         }
 
+        &--middle {
+          fill-opacity: 1;
+        }
+
         &--bottom {
-          fill-opacity: 0.6;
+          fill-opacity: 1;
         }
       }
     }

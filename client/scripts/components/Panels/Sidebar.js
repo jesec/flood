@@ -5,6 +5,7 @@ import CustomScrollbars from '../General/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import SearchTorrents from '../Sidebar/SearchTorrents';
 import SettingsButton from '../Sidebar/SettingsButton';
+import SidebarActions from '../Sidebar/SidebarActions';
 import SpeedLimitDropdown from '../Sidebar/SpeedLimitDropdown';
 import StatusFilters from '../Sidebar/StatusFilters';
 import TagFilters from '../Sidebar/TagFilters';
@@ -42,8 +43,10 @@ class Sidebar extends React.Component {
   render() {
     return (
       <CustomScrollbars className="application__sidebar" inverted={true}>
-        <SettingsButton />
-        <SpeedLimitDropdown />
+        <SidebarActions>
+          <SpeedLimitDropdown />
+          <SettingsButton />
+        </SidebarActions>
         <ClientStats />
         <SearchTorrents />
         <StatusFilters />

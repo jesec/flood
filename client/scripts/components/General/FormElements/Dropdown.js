@@ -72,10 +72,16 @@ export default class Dropdown extends React.Component {
     }
   }
 
-  getDropdownButton() {
+  getDropdownButton(options = {}) {
+    let label = this.props.header;
+
+    if (options.trigger && !!this.props.trigger) {
+      label = this.props.trigger;
+    }
+
     return (
       <div className={this.props.dropdownButtonClass} onClick={this.handleDropdownClick}>
-        {this.props.header}
+        {label}
       </div>
     );
   }
@@ -135,7 +141,7 @@ export default class Dropdown extends React.Component {
 
     return (
       <div className={dropdownWrapperClass} onFocus={this.handleDropdownFocus} onBlur={this.handleDropdownBlur} ref="dropdown" tabIndex="0">
-        {this.getDropdownButton()}
+        {this.getDropdownButton({trigger: true})}
         <CSSTransitionGroup
           transitionName="menu"
           transitionEnterTimeout={250}

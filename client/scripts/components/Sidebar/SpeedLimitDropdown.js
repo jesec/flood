@@ -1,4 +1,4 @@
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import ClientActions from '../../actions/ClientActions';
@@ -6,11 +6,23 @@ import Dropdown from '../General/FormElements/Dropdown';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import LimitsIcon from '../Icons/Limits';
-import SidebarItem from '../Sidebar/SidebarItem';
 import SettingsStore from '../../stores/SettingsStore';
 import TransferDataStore from '../../stores/TransferDataStore';
 
-const METHODS_TO_BIND = ['handleSettingsFetchRequestSuccess', 'onTransferDataRequestSuccess'];
+const messages = defineMessages({
+  speedLimits: {
+    defaultMessage: 'Speed Limits',
+    id: 'sidebar.button.speedlimits'
+  },
+  unlimited: {
+    defaultMessage: 'Unlimited',
+    id: 'speed.unlimited'
+  }
+});
+const METHODS_TO_BIND = [
+  'handleSettingsFetchRequestSuccess',
+  'onTransferDataRequestSuccess'
+];
 
 class SpeedLimitDropdown extends React.Component {
   constructor() {
@@ -47,21 +59,26 @@ class SpeedLimitDropdown extends React.Component {
 
   getDropdownHeader() {
     return (
-      <a className="sidebar__icon-button sidebar__icon-button--limits">
-        <LimitsIcon /> <FormattedMessage
-          id="sidebar.button.speedlimits"
-          defaultMessage="Speed Limits"
-        />
+      <a className="sidebar__icon-button sidebar__icon-button--limits"
+        title={this.props.intl.formatMessage(messages.speedLimits)}>
+        <LimitsIcon />
+        <FormattedMessage {...messages.speedLimits} />
+      </a>
+    );
+  }
+
+  getDropdownTrigger() {
+    return (
+      <a className="sidebar__icon-button sidebar__icon-button--limits"
+        title={this.props.intl.formatMessage(messages.speedLimits)}>
+        <LimitsIcon />
       </a>
     );
   }
 
   getHumanReadableSpeed(bytes) {
     if (bytes === 0) {
-      return this.props.intl.formatMessage({
-        id: 'speed.unlimited',
-        defaultMessage: 'Unlimited'
-      });
+      return this.props.intl.formatMessage(messages.unlimited);
     } else {
       let formattedData = format.data(bytes, '/s', 1, {padded: false});
       return (
@@ -144,13 +161,12 @@ class SpeedLimitDropdown extends React.Component {
 
   render() {
     return (
-      <SidebarItem modifier="speed-limit">
-        <Dropdown
-          handleItemSelect={this.handleItemSelect}
-          header={this.getDropdownHeader()}
-          menuItems={this.getDropdownMenus()}
-          />
-      </SidebarItem>
+      <Dropdown
+        dropdownWrapperClass="dropdown dropdown--speed-limits sidebar__action"
+        handleItemSelect={this.handleItemSelect}
+        header={this.getDropdownHeader()}
+        menuItems={this.getDropdownMenus()}
+        trigger={this.getDropdownTrigger()} />
     );
   }
 }
