@@ -34,7 +34,7 @@ $sidebar--icon-button--foreground--hover: $blue;
     display: block;
     font-size: 0.8em;
     line-height: 1;
-    padding: $spacing-unit * 3/5;
+    padding: $spacing-unit * 2/5;
     transition: color 0.25s;
 
     &:hover {
@@ -58,6 +58,7 @@ $sidebar--icon-button--foreground--hover: $blue;
 
   &__actions {
     display: flex;
+    padding: $spacing-unit * 1/5;
     justify-content: space-between;
   }
 }
@@ -69,9 +70,7 @@ $sidebar--icon-button--foreground--hover: $blue;
     .dropdown {
 
       &__content {
-        left: $spacing-unit * 1/5;
         min-width: 180px;
-        top: $spacing-unit * 1/5;
 
         .sidebar {
 
