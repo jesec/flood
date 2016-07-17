@@ -21,6 +21,8 @@ $button--primary--background: $blue;
 $button--primary--background--hover: lighten($button--primary--background, 4%);
 $button--primary--border: $textbox--border;
 $button--primary--border--hover: $button--primary--border;
+$button--primary--inverse--border: darken($blue, 8%);
+$button--primary--inverse--border--hover: darken($blue, 6%);
 
 $button--deemphasized--foreground: #6e8199;
 $button--deemphasized--background: #343e4c;
@@ -36,6 +38,9 @@ $button--deemphasized--inverse--background--hover: #e4e9ed;
 $button--deemphasized--inverse--border--hover: #d8e0e5;
 $button--deemphasized--inverse--foreground--color: #7b8b97;
 
+$button--padding--vertical: $textbox--padding--vertical;
+$button--padding--horizontal: $spacing-unit;
+
 $checkbox--background: $button--deemphasized--background;
 $checkbox--background--hover: lighten($checkbox--background, 5%);
 $checkbox--border: $textbox--border;
@@ -46,7 +51,7 @@ $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 $form--section--heading--margin: $spacing-unit * 2/5;
 $form--section--margin: $spacing-unit;
 $form--row--margin: $spacing-unit * 3/5;
-$form--column--padding: $spacing-unit * 2/5;
+$form--column--padding: $spacing-unit * 3/10;
 
 $authentication--form--border: #d4dbe0;
 $authentication--form--padding: $spacing-unit * 1.25;
@@ -123,9 +128,11 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
   border: none;
   border-radius: $form--element--border-radius;
   cursor: pointer;
+  display: inline-block;
   font-weight: 500;
-  padding: 8px 22px;
-  transition: background 0.25s, color 0.25s;
+  line-height: normal;
+  padding: $button--padding--vertical $button--padding--horizontal;
+  transition: background 0.25s, border 0.25s, color 0.25s;
   user-select: none;
 
   &.has-icon {
@@ -140,12 +147,12 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
 
   &--deemphasize {
     background: $button--deemphasized--background;
-    box-shadow: inset 0 0 0 1px $button--deemphasized--border;
+    border: 1px solid $button--deemphasized--border;
     color: $button--deemphasized--foreground;
 
     &:hover {
       background: $button--deemphasized--background--hover;
-      box-shadow: inset 0 0 0 1px $button--deemphasized--border--hover;
+      border-color: $button--deemphasized--border;
       color: $button--deemphasized--foreground--hover;
     }
 
@@ -153,12 +160,12 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
 
       &--inverse {
         background: $button--deemphasized--inverse--background;
-        box-shadow: inset 0 0 0 1px $button--deemphasized--inverse--border;
+        border-color: $button--deemphasized--inverse--border;
         color: $button--deemphasized--inverse--foreground;
 
         &:hover {
           background: $button--deemphasized--inverse--background--hover;
-          box-shadow: inset 0 0 0 1px $button--deemphasized--inverse--border--hover;
+          border-color: $button--deemphasized--inverse--border--hover;
           color: $button--deemphasized--inverse--foreground--color;
         }
       }
@@ -167,13 +174,24 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
 
   &--primary {
     background: $button--primary--background;
-    box-shadow: inset 0 0 0 1px $button--primary--border;
+    border: 1px solid $button--primary--border;
     color: $button--primary--foreground;
     white-space: nowrap;
 
     &:hover {
       background: $button--primary--background--hover;
-      box-shadow: inset 0 0 0 1px $button--primary--border--hover;
+      border-color: $button--primary--border--hover;
+    }
+
+    &.button {
+
+      &--inverse {
+        border-color: $button--primary--inverse--border;
+
+        &:hover {
+          border-color: $button--primary--inverse--border--hover;
+        }
+      }
     }
   }
 
@@ -410,6 +428,11 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
       &__button {
         padding-top: 7px;
       }
+    }
+
+    .checkbox {
+      display: inline-block;
+      flex: 0 0 auto;
     }
   }
 
