@@ -116,7 +116,8 @@ class AuthForm extends React.Component {
           {error}
         </div>
         <div className="form__actions">
-          <button className="button button--primary" type="submit">
+          <button className="button button--inverse button--primary"
+            type="submit">
             {actionText}
           </button>
         </div>
