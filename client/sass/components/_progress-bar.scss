@@ -109,7 +109,7 @@ $progress-bar--fill--stopped: #e3e5e5;
         left: 0;
         opacity: 0.5;
         position: absolute;
-        z-index: 0;
+        z-index: -1;
         top: 1px;
         transition: background 0.25s, opacity 0.25s;
         width: 100%;
