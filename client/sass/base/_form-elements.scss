@@ -140,6 +140,8 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
     .icon {
       height: 16px;
       margin: 0 $spacing-unit * 1/3 0 0;
+      max-height: 1em;
+      max-width: 1em;
       vertical-align: middle;
       width: 16px;
     }
