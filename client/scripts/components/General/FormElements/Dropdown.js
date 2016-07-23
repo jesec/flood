@@ -36,24 +36,20 @@ class Dropdown extends React.Component {
     this.handleKeyPress = _.throttle(this.handleKeyPress, 200);
   }
 
-  componentDidMount() {
-    UIStore.listen(EventTypes.UI_DROPDOWN_MENU_CHANGE,
-      this.handleActiveDropdownChange);
-  }
-
-  componentWillUnmount() {
-    UIStore.unlisten(EventTypes.UI_DROPDOWN_MENU_CHANGE,
-      this.handleActiveDropdownChange);
-  }
-
   closeDropdown() {
     global.removeEventListener('keydown', this.handleKeyPress);
+    global.removeEventListener('click', this.closeDropdown);
+    UIStore.unlisten(EventTypes.UI_DROPDOWN_MENU_CHANGE,
+      this.handleActiveDropdownChange);
 
     this.setState({isOpen: false});
   }
 
   openDropdown() {
     global.addEventListener('keydown', this.handleKeyPress);
+    global.addEventListener('click', this.closeDropdown);
+    UIStore.listen(EventTypes.UI_DROPDOWN_MENU_CHANGE,
+      this.handleActiveDropdownChange);
 
     this.setState({isOpen: true});
 
@@ -65,6 +61,8 @@ class Dropdown extends React.Component {
   }
 
   handleDropdownClick(event) {
+    event.stopPropagation();
+
     if (this.state.isOpen) {
       this.closeDropdown();
     } else {
