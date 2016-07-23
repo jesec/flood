@@ -11,6 +11,7 @@ class UIStoreClass extends BaseStore {
     super(...arguments);
 
     this.activeContextMenu = null;
+    this.activeDropdownMenu = null;
     this.activeModal = null;
     this.dependencies = [];
     this.latestTorrentLocation = null;
@@ -27,6 +28,10 @@ class UIStoreClass extends BaseStore {
 
   getActiveModal() {
     return this.activeModal;
+  }
+
+  getActiveDropdownMenu() {
+    return this.activeDropdownMenu;
   }
 
   getLatestTorrentLocation() {
@@ -79,6 +84,11 @@ class UIStoreClass extends BaseStore {
     this.emit(EventTypes.UI_CONTEXT_MENU_CHANGE);
   }
 
+  setActiveDropdownMenu(dropdownMenu = {}) {
+    this.activeDropdownMenu = dropdownMenu;
+    this.emit(EventTypes.UI_DROPDOWN_MENU_CHANGE);
+  }
+
   setActiveModal(modal = {}) {
     this.activeModal = modal;
     this.emit(EventTypes.UI_MODAL_CHANGE);
@@ -100,6 +110,8 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.UI_CLICK_TORRENT:
       UIStore.handleTorrentClick(action.data.hash);
       break;
+    case ActionTypes.UI_DISPLAY_DROPDOWN_MENU:
+      UIStore.setActiveDropdownMenu(action.data);
     case ActionTypes.UI_DISPLAY_MODAL:
       UIStore.setActiveModal(action.data);
       break;

@@ -12,6 +12,13 @@ const UIActions = {
     });
   },
 
+  displayDropdownMenu: (data) => {
+    AppDispatcher.dispatchUIAction({
+      type: ActionTypes.UI_DISPLAY_DROPDOWN_MENU,
+      data
+    });
+  },
+
   displayModal: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_MODAL,
