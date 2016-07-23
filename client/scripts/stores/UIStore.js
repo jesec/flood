@@ -112,6 +112,7 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_DISPLAY_DROPDOWN_MENU:
       UIStore.setActiveDropdownMenu(action.data);
+      break;
     case ActionTypes.UI_DISPLAY_MODAL:
       UIStore.setActiveModal(action.data);
       break;

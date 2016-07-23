@@ -4,6 +4,7 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import EventTypes from '../../../constants/EventTypes';
+import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
 
 const METHODS_TO_BIND = [
@@ -60,7 +61,7 @@ class Dropdown extends React.Component {
       this.props.onOpen();
     }
 
-    UIStore.setActiveDropdownMenu(this.id);
+    UIActions.displayDropdownMenu(this.id);
   }
 
   handleDropdownClick(event) {
