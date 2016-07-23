@@ -78,6 +78,7 @@ class Dropdown extends React.Component {
   }
 
   handleItemSelect(item) {
+    this.closeDropdown();
     this.props.handleItemSelect(item);
   }
 
