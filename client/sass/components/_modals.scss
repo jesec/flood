@@ -54,7 +54,6 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 $modal--tabs--in-body--background: #2a323e;
 
 .modal {
-  background: $modal--overlay;
   height: 100%;
   left: 0;
   position: fixed;
@@ -62,6 +61,12 @@ $modal--tabs--in-body--background: #2a323e;
   transition: opacity $modal--transition--duration;
   width: 100%;
   z-index: 100;
+
+  &__overlay {
+    background: $modal--overlay;
+    height: 100%;
+    width: 100%;
+  }
 
   &--align-center {
     text-align: center;
