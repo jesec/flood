@@ -3,62 +3,77 @@ import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
+import EventTypes from '../../../constants/EventTypes';
+import UIActions from '../../../actions/UIActions';
+import UIStore from '../../../stores/UIStore';
+
 const METHODS_TO_BIND = [
+  'closeDropdown',
+  'openDropdown',
   'getDropdownButton',
   'getDropdownMenu',
   'getDropdownMenuItems',
-  'handleDropdownBlur',
+  'handleActiveDropdownChange',
   'handleDropdownClick',
-  'handleDropdownFocus',
   'handleItemSelect',
   'handleKeyPress'
 ];
 
-export default class Dropdown extends React.Component {
+class Dropdown extends React.Component {
   constructor() {
     super();
 
+    this.id = _.uniqueId('dropdown_');
+
     this.state = {
-      isExpanded: false
+      isOpen: false
     };
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
 
-    this.handleKeyPress = _.throttle(this.handleKeyPress, 1000);
-  }
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyPress);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyPress);
+    this.handleKeyPress = _.throttle(this.handleKeyPress, 200);
   }
 
   closeDropdown() {
-    this.refs.dropdown.blur();
+    global.removeEventListener('keydown', this.handleKeyPress);
+    global.removeEventListener('click', this.closeDropdown);
+    UIStore.unlisten(EventTypes.UI_DROPDOWN_MENU_CHANGE,
+      this.handleActiveDropdownChange);
+
+    this.setState({isOpen: false});
   }
 
-  handleDropdownBlur() {
-    this.setState({
-      isExpanded: false
-    });
+  openDropdown() {
+    global.addEventListener('keydown', this.handleKeyPress);
+    global.addEventListener('click', this.closeDropdown);
+    UIStore.listen(EventTypes.UI_DROPDOWN_MENU_CHANGE,
+      this.handleActiveDropdownChange);
+
+    this.setState({isOpen: true});
+
+    if (!!this.props.onOpen) {
+      this.props.onOpen();
+    }
+
+    UIActions.displayDropdownMenu(this.id);
   }
 
-  handleDropdownClick() {
-    if (this.state.isExpanded) {
+  handleDropdownClick(event) {
+    event.stopPropagation();
+
+    if (this.state.isOpen) {
       this.closeDropdown();
     } else {
-      this.refs.dropdown.focus();
+      this.openDropdown();
     }
   }
 
-  handleDropdownFocus(event) {
-    this.setState({
-      isExpanded: true
-    });
+  handleActiveDropdownChange() {
+    if (this.state.isOpen && UIStore.getActiveDropdownMenu() !== this.id) {
+      this.closeDropdown();
+    }
   }
 
   handleItemSelect(item) {
@@ -67,7 +82,7 @@ export default class Dropdown extends React.Component {
   }
 
   handleKeyPress(event) {
-    if (this.state.isExpanded && event.keyCode === 27) {
+    if (this.state.isOpen && event.keyCode === 27) {
       this.closeDropdown();
     }
   }
@@ -80,7 +95,8 @@ export default class Dropdown extends React.Component {
     }
 
     return (
-      <div className={this.props.dropdownButtonClass} onClick={this.handleDropdownClick}>
+      <div className={this.props.dropdownButtonClass}
+        onClick={this.handleDropdownClick}>
         {label}
       </div>
     );
@@ -93,12 +109,12 @@ export default class Dropdown extends React.Component {
           {this.getDropdownMenuItems(itemList)}
         </div>
       );
-    }, this);
+    });
 
     return (
       <div className="dropdown__content menu">
         <div className="dropdown__header">
-          {this.getDropdownButton()}
+          {this.getDropdownButton({header: true, trigger: false})}
         </div>
         <ul className="dropdown__items">
           {dropdownLists}
@@ -120,28 +136,29 @@ export default class Dropdown extends React.Component {
       }
 
       return (
-        <li className={classes} key={index} onClick={clickHandler}>
+        <li className={classes}
+          key={index}
+          onClick={clickHandler}>
           {property.displayName}
         </li>
       );
-    }, this);
+    });
   }
 
   render() {
-    let dropdownWrapperClass = classnames({
-      [this.props.dropdownWrapperClass]: true,
-      'is-expanded': this.state.isExpanded
+    let dropdownWrapperClass = classnames(this.props.dropdownWrapperClass, {
+      'is-expanded': this.state.isOpen
     });
 
     let menu = null;
 
-    if (this.state.isExpanded) {
+    if (this.state.isOpen) {
       menu = this.getDropdownMenu(this.props.menuItems);
     }
 
     return (
-      <div className={dropdownWrapperClass} onFocus={this.handleDropdownFocus} onBlur={this.handleDropdownBlur} ref="dropdown" tabIndex="0">
-        {this.getDropdownButton({trigger: true})}
+      <div className={dropdownWrapperClass}>
+        {this.getDropdownButton({header: false, trigger: true})}
         <CSSTransitionGroup
           transitionName="menu"
           transitionEnterTimeout={250}
@@ -159,5 +176,10 @@ Dropdown.defaultProps = {
 };
 
 Dropdown.propTypes = {
-  menuItems: React.PropTypes.arrayOf(React.PropTypes.arrayOf(React.PropTypes.object)).isRequired
+  header: React.PropTypes.node,
+  trigger: React.PropTypes.node,
+  menuItems: React.PropTypes.arrayOf(React.PropTypes.arrayOf(React.PropTypes.object)).isRequired,
+  onOpen: React.PropTypes.func
 };
+
+export default Dropdown;

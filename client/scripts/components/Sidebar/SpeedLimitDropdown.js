@@ -21,6 +21,7 @@ const messages = defineMessages({
   }
 });
 const METHODS_TO_BIND = [
+  'handleDropdownOpen',
   'handleSettingsFetchRequestSuccess',
   'onTransferDataRequestSuccess'
 ];
@@ -33,6 +34,7 @@ class SpeedLimitDropdown extends React.Component {
       speedLimits: SettingsStore.getFloodSettings('speedLimits'),
       throttle: null
     };
+    this.tooltip = null;
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
@@ -76,6 +78,7 @@ class SpeedLimitDropdown extends React.Component {
         content={label}
         offset={-5}
         position="right"
+        ref={(node) => {this.tooltip = node;}}
         wrapperClassName="sidebar__icon-button tooltip__wrapper">
         <LimitsIcon />
       </Tooltip>
@@ -153,6 +156,10 @@ class SpeedLimitDropdown extends React.Component {
     return [this.getSpeedList('download'), this.getSpeedList('upload')];
   }
 
+  handleDropdownOpen() {
+    this.tooltip.dismissTooltip();
+  }
+
   handleItemSelect(data) {
     ClientActions.setThrottle(data.property, data.value);
   }
@@ -172,6 +179,7 @@ class SpeedLimitDropdown extends React.Component {
         handleItemSelect={this.handleItemSelect}
         header={this.getDropdownHeader()}
         menuItems={this.getDropdownMenus()}
+        onOpen={this.handleDropdownOpen}
         trigger={this.getDropdownTrigger()} />
     );
   }
