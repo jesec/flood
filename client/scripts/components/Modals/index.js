@@ -91,8 +91,8 @@ export default class Modals extends React.Component {
 
     if (this.state.activeModal != null) {
       modal = (
-        <div key={this.state.activeModal.id} className="modal modal-overlay"
-          onClick={this.handleOverlayClick}>
+        <div key={this.state.activeModal.id} className="modal">
+          <div className="modal__overlay" onClick={this.handleOverlayClick} />
           {this.getModal()}
         </div>
       );

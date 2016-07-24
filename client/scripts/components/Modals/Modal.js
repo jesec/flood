@@ -33,10 +33,6 @@ export default class Modal extends React.Component {
     this.setState({activeTabId: tab.id});
   }
 
-  handleMenuWrapperClick(event) {
-    event.stopPropagation();
-  }
-
   render() {
     let footer = null;
     let contentClasses = classnames('modal__content__wrapper',
@@ -88,7 +84,7 @@ export default class Modal extends React.Component {
     }
 
     return (
-      <div className={contentClasses} onClick={this.handleMenuWrapperClick}>
+      <div className={contentClasses}>
         <div className={headerClasses}>
           {modalHeader}
         </div>
