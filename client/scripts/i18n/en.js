@@ -24,8 +24,8 @@ export default {
   'filter.status.active': 'Active',
   'filter.status.inactive': 'Inactive',
   'filter.status.error': 'Error',
-  'filter.tracker.title': 'Fitler by Tracker',
-  'filter.tag.title': 'Fitler by Tag',
+  'filter.tracker.title': 'Filter by Tracker',
+  'filter.tag.title': 'Filter by Tag',
   'filter.untagged': 'Untagged',
 
   'locale.language.en': 'English',
