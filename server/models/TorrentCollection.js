@@ -11,7 +11,7 @@ const DEFAULT_TAG = 'untagged';
 
 class TorrentCollection {
   constructor() {
-    this.tagCount = {all: 0, [DEFAULT_TAG]: 0};
+    this.tagCount = {all: 0};
     this.statusCount = {all: 0};
     this.torrents = {};
     this.trackerCount = {all: 0};
@@ -42,11 +42,11 @@ class TorrentCollection {
   }
 
   setTagCount(tags) {
-    tags.forEach((tag) => {
-      if (tag === '' || tag == null) {
-        tag = [DEFAULT_TAG];
-      }
+    if (tags.length === 0) {
+      tags = [DEFAULT_TAG];
+    }
 
+    tags.forEach((tag) => {
       if (this.tagCount[tag] != null) {
         this.tagCount[tag]++;
       } else {

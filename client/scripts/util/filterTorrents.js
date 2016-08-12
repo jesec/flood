@@ -17,7 +17,7 @@ export function filterTorrents(torrentList, opts) {
     } else if (type === 'tag') {
       return torrentList.filter((torrent) => {
         if (filter === 'untagged') {
-          return torrent.tags.length === 1 && torrent.tags[0] === '';
+          return torrent.tags.length === 0;
         }
 
         return torrent.tags.indexOf(filter) > -1;
