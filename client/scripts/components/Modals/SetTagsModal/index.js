@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-import AddTorrentsDestination from '../AddTorrentsModal/AddTorrentsDestination';
 import AppDispatcher from '../../../dispatcher/AppDispatcher';
 import Checkbox from '../../General/FormElements/Checkbox';
 import EventTypes from '../../../constants/EventTypes';

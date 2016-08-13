@@ -2,10 +2,10 @@ import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
-import AddTorrentsDestination from './AddTorrentsDestination';
 import SettingsStore from '../../../stores/SettingsStore';
 import TextboxRepeater from '../../General/FormElements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
+import TorrentDestination from '../../General/Filesystem/TorrentDestination';
 
 const METHODS_TO_BIND = [
   'handleAddTorrents',
@@ -104,7 +104,17 @@ class AddTorrentsByURL extends React.Component {
               textboxes={this.state.urlTextboxes} />
           </div>
         </div>
-        <AddTorrentsDestination onChange={this.handleDestinationChange} />
+        <div className="form__row">
+          <div className="form__column">
+            <label className="form__label">
+              <FormattedMessage
+                id="torrents.add.destination.label"
+                defaultMessage="Destination"
+              />
+            </label>
+            <TorrentDestination onChange={this.handleDestinationChange} />
+          </div>
+        </div>
         <AddTorrentsActions dismiss={this.props.dismissModal}
           onAddTorrentsClick={this.handleAddTorrents}
           onStartTorrentsToggle={this.handleStartTorrentsToggle}

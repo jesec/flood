@@ -7,7 +7,7 @@ import SettingsStore from '../../../stores/SettingsStore';
 
 const METHODS_TO_BIND = ['handleDestinationChange'];
 
-class AddTorrentsDestination extends React.Component {
+class TorrentDestination extends React.Component {
   constructor() {
     super();
 
@@ -29,6 +29,10 @@ class AddTorrentsDestination extends React.Component {
     this.setState({destination});
   }
 
+  getValue() {
+    return this.state.destination;
+  }
+
   handleDestinationChange(event) {
     let destination = event.target.value;
 
@@ -45,26 +49,16 @@ class AddTorrentsDestination extends React.Component {
     });
 
     return (
-      <div className="form__row">
-        <div className="form__column">
-          <label className="form__label">
-            <FormattedMessage
-              id="torrents.add.destination.label"
-              defaultMessage="Destination"
-            />
-          </label>
-          <input className={textboxClasses}
-            onChange={this.handleDestinationChange}
-            placeholder={this.props.intl.formatMessage({
-              id: 'torrents.add.destination.placeholder',
-              defaultMessage: 'Destination'
-            })}
-            value={this.state.destination}
-            type="text" />
-        </div>
-      </div>
+      <input className={textboxClasses}
+        onChange={this.handleDestinationChange}
+        placeholder={this.props.intl.formatMessage({
+          id: 'torrents.add.destination.placeholder',
+          defaultMessage: 'Destination'
+        })}
+        value={this.state.destination}
+        type="text" />
     );
   }
 }
 
-export default injectIntl(AddTorrentsDestination);
+export default injectIntl(TorrentDestination, {withRef: true});

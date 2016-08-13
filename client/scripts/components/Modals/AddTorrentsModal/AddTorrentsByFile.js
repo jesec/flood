@@ -4,13 +4,13 @@ import Dropzone from 'react-dropzone';
 import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
-import AddTorrentsDestination from './AddTorrentsDestination';
 import Close from '../../Icons/Close';
 import File from '../../Icons/File';
 import Files from '../../Icons/Files';
 import ModalActions from '../ModalActions';
 import SettingsStore from '../../../stores/SettingsStore';
 import TorrentActions from '../../../actions/TorrentActions';
+import TorrentDestination from '../../General/Filesystem/TorrentDestination';
 
 const METHODS_TO_BIND = [
   'handleAddTorrents',
@@ -154,7 +154,17 @@ export default class AddTorrentsByFile extends React.Component {
             {this.getModalContent()}
           </div>
         </div>
-        <AddTorrentsDestination onChange={this.handleDestinationChange} />
+        <div className="form__row">
+          <div className="form__column">
+            <label className="form__label">
+              <FormattedMessage
+                id="torrents.add.destination.label"
+                defaultMessage="Destination"
+              />
+            </label>
+            <TorrentDestination onChange={this.handleDestinationChange} />
+          </div>
+        </div>
         <AddTorrentsActions dismiss={this.props.dismissModal}
           onAddTorrentsClick={this.handleAddTorrents}
           onStartTorrentsToggle={this.handleStartTorrentsToggle}
