@@ -8,7 +8,7 @@ let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 let ClientRequest = require('./ClientRequest');
 let clientUtil = require('../util/clientUtil');
 let propsMap = require('../../shared/constants/propsMap');
-let formatUtil = require('../util/formatUtil');
+let formatUtil = require('../../shared/util/formatUtil');
 let scgi = require('../util/scgi');
 let Torrent = require('./Torrent');
 let TorrentCollection = require('./TorrentCollection');
@@ -48,10 +48,11 @@ var client = {
     let urls = data.urls;
     let path = data.destination;
     let start = data.start;
+    let tags = data.tags;
     let request = new ClientRequest();
 
     request.add('createDirectory', {path});
-    request.add('addURLs', {urls, path, start});
+    request.add('addURLs', {urls, path, start, tags});
     request.onComplete(callback);
     request.send();
   },
