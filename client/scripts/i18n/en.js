@@ -18,14 +18,14 @@ export default {
   'button.yes': 'Yes',
 
   'filter.all': 'All',
-  'filter.status.title': 'Filter by Title',
+  'filter.status.title': 'Filter by Status',
   'filter.status.downloading': 'Downloading',
   'filter.status.completed': 'Completed',
   'filter.status.active': 'Active',
   'filter.status.inactive': 'Inactive',
   'filter.status.error': 'Error',
-  'filter.tracker.title': 'Fitler by Tracker',
-  'filter.tag.title': 'Fitler by Tag',
+  'filter.tracker.title': 'Filter by Tracker',
+  'filter.tag.title': 'Filter by Tag',
   'filter.untagged': 'Untagged',
 
   'locale.language.en': 'English',
