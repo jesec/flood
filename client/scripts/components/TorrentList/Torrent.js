@@ -193,7 +193,7 @@ export default class Torrent extends React.Component {
               {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
             </li>
           </ul>
-          <ul className="torrent__details torrent__details--tertiary--tags torrent__tags">
+          <ul className="torrent__details torrent__details--tertiary--tags torrent__tags tag">
             {this.getTags(torrent.tags)}
           </ul>
         </div>

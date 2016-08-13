@@ -299,14 +299,11 @@ $more-info--border: $textbox-repeater--button--border;
 
       &--tags {
         background: $torrent--tags--background;
-        border-radius: 30px;
         color: $torrent--tags--foreground;
         flex: 0 1 auto;
-        font-size: 0.9em;
         margin-left: auto;
-        padding: 0 $spacing-unit * 2/5;
+        margin-right: 0;
         transition: background 0.25s, color 0.25s, opacity 0.25s;
-        white-space: nowrap;
 
         .is-stopped & {
           opacity: 0.5;

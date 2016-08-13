@@ -318,7 +318,7 @@ $torrent-details--tags--foreground: #1a2028;
   &__detail {
 
     &--hash {
-      
+
       .torrent-details__detail__value {
         word-break: break-all;
       }
@@ -328,13 +328,7 @@ $torrent-details--tags--foreground: #1a2028;
 
       .tag {
         background: $torrent-details--tags--background;
-        border-radius: 30px;
         color: $torrent-details--tags--foreground;
-        display: inline-block;
-        font-size: 0.9em;
-        margin-right: $spacing-unit * 1/5;
-        padding: 0 $spacing-unit * 2/5;
-        white-space: nowrap;
       }
     }
 

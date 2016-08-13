@@ -1,0 +1,13 @@
+$tag--background: rgba(#4a596d, 0.75);
+$tag--foreground: #1a2028;
+
+.tag {
+  background: $tag--background;
+  border-radius: 30px;
+  color: $tag--foreground;
+  display: inline-block;
+  font-size: 0.9em;
+  margin-right: $spacing-unit * 1/5;
+  padding: 0 $spacing-unit * 2/5;
+  white-space: nowrap;
+}
