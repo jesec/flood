@@ -1,12 +1,9 @@
-var util = require('util');
+'use strict';
+let moment = require('moment');
 
 var FormatUtil = {
-  percentComplete: (numerator, denominator) => {
-    
-  },
-
-  eta: (rate, completed, total) => {
-
+  minToHumanReadable: min => {
+    return moment.duration(min * 60 * 1000).humanize();
   },
 
   parsePeers: (string) => {
