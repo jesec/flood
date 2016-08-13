@@ -18,7 +18,7 @@ export default {
   'button.yes': 'Yes',
 
   'filter.all': 'All',
-  'filter.status.title': 'Filter by Title',
+  'filter.status.title': 'Filter by Status',
   'filter.status.downloading': 'Downloading',
   'filter.status.completed': 'Completed',
   'filter.status.active': 'Active',
