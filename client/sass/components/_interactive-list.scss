@@ -1,0 +1,104 @@
+$interacative-list--item--foreground: $textbox--foreground;
+
+$interacative-list--item--detail--primary--foreground: lighten($interacative-list--item--foreground, 10%);
+$interacative-list--item--detail--tertiary--foreground: darken($interacative-list--item--foreground, 10%);
+
+$interacative-list--item--icon--fill: rgba($interacative-list--item--foreground, 0.5);
+$interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--item--foreground, 20%), 0.5);
+
+$interactive-list--item--padding--bottom: $spacing-unit * 1/5;
+
+$interactive-list--detail-list--item--padding--horizontal: $spacing-unit * 1/5;
+$interactive-list--detail-list--item--padding--vertical: 0;
+
+.interactive-list {
+  @extend .textbox;
+  @extend .textbox.is-fulfilled;
+
+  &__item {
+    display: flex;
+    overflow: hidden;
+    padding-bottom: $interactive-list--item--padding--bottom;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+
+    &:last-child {
+      padding-bottom: 0;
+    }
+  }
+
+  &__label {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+  }
+
+  &__icon {
+    flex: 0 0 auto;
+
+    .icon {
+      fill: $interacative-list--item--icon--fill;
+      transition: fill 0.25s;
+
+      &--close {
+        cursor: pointer;
+        height: 8px;
+        margin-left: 4px;
+        margin-right: 0;
+        vertical-align: middle;
+        width: 8px;
+      }
+    }
+
+    &--action {
+      cursor: pointer;
+
+      &:hover {
+
+        .icon {
+          fill: $interacative-list--item--icon--fill--hover;
+        }
+      }
+    }
+  }
+
+  &__detail {
+
+    &--primary {
+      color: $interacative-list--item--detail--primary--foreground;
+      font-weight: 700;
+    }
+
+    &--tertiary {
+      color: $interacative-list--item--detail--tertiary--foreground;
+    }
+  }
+
+  &__detail-list {
+    display: flex;
+
+    &__item {
+      flex: 0 0 auto;
+      max-width: 100%;
+      overflow: hidden;
+      padding: $interactive-list--detail-list--item--padding--vertical $interactive-list--detail-list--item--padding--horizontal;
+      text-overflow: ellipsis;
+
+      &:first-child {
+        padding-left: 0;
+      }
+
+      &:last-child {
+        padding-right: 0;
+      }
+
+      &--overflow {
+        flex: 0 1 auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}

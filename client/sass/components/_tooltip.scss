@@ -1,5 +1,7 @@
 $tooltip-background: #0f151c;
+$tooltip-background--error: $red;
 $tooltip-foreground: #7189a8;
+$tooltip-foreground--error: #fff;
 $tooltip-link-foreground: #92aac9;
 
 $tooltip-border-radius: 3px;
@@ -22,6 +24,21 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
   transition: opacity 0.3s, visibility 0.3s;
   visibility: hidden;
   z-index: 1000;
+
+  &--is-error {
+
+    .tooltip {
+
+      &__content {
+        background: $tooltip-background--error;
+        color: $tooltip-foreground--error;
+
+        &:after {
+          border-color: $tooltip-background--error;
+        }
+      }
+    }
+  }
 
   &__wrapper {
     display: inline-block;
@@ -84,7 +101,16 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
           }
 
           &--start {
-            transform: translateX($tooltip-anchor-offset * -1);
+
+            &.tooltip {
+
+              &--align {
+
+                &--center {
+                  transform: translateX($tooltip-anchor-offset * -1);
+                }
+              }
+            }
 
             .tooltip {
 

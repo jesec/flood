@@ -23,6 +23,7 @@ $menu--item--separator--background: $menu--container--border;
   text-align: left;
 
   &__item {
+    font-size: 0.9em;
     padding: 5px 15px;
 
     &__label {
@@ -65,7 +66,6 @@ $menu--item--separator--background: $menu--container--border;
     &.is-selectable {
       cursor: pointer;
       display: block;
-      font-size: 0.9em;
       transition: background 0.25s, color 0.25s;
 
       &:hover {

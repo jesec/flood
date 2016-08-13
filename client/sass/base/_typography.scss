@@ -9,6 +9,10 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+a {
+  color: inherit;
+}
+
 .unit {
   display: inline-block;
   font-size: 0.8em;
