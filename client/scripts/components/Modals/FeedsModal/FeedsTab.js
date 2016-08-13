@@ -92,7 +92,7 @@ class FeedsTab extends React.Component {
     this.checkFieldValidity = _.throttle(this.checkFieldValidity, 150);
 
     this.validatedFields = {
-      mustSpecifyURL: {
+      url: {
         isValid: Validator.isURLValid,
         error: this.props.intl.formatMessage(messages.mustSpecifyURL)
       },
