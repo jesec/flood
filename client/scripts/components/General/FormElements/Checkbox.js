@@ -23,6 +23,10 @@ export default class Checkbox extends React.Component {
     }
   }
 
+  getValue() {
+    return this.state.checked;
+  }
+
   handleCheckboxChange() {
     let currentCheckedState = this.state.checked;
     let newCheckedState = !currentCheckedState;

@@ -147,6 +147,11 @@ class Dropdown extends React.Component {
 
   render() {
     let dropdownWrapperClass = classnames(this.props.dropdownWrapperClass, {
+      [`${this.props.dropdownWrapperClass}--match-button-width`]:
+        this.props.matchButtonWidth,
+      [`${this.props.dropdownWrapperClass}--width-${this.props.width}`]:
+        this.props.width != null,
+      [`${this.props.dropdownWrapperClass}--no-wrap`]: this.props.nowrap,
       'is-expanded': this.state.isOpen
     });
 
@@ -172,14 +177,19 @@ class Dropdown extends React.Component {
 
 Dropdown.defaultProps = {
   dropdownWrapperClass: 'dropdown',
-  dropdownButtonClass: 'dropdown__trigger'
+  dropdownButtonClass: 'dropdown__trigger',
+  matchButtonWidth: false,
+  noWrap: false
 };
 
 Dropdown.propTypes = {
   header: React.PropTypes.node,
   trigger: React.PropTypes.node,
+  matchButtonWidth: React.PropTypes.bool,
   menuItems: React.PropTypes.arrayOf(React.PropTypes.arrayOf(React.PropTypes.object)).isRequired,
-  onOpen: React.PropTypes.func
+  noWrap: React.PropTypes.bool,
+  onOpen: React.PropTypes.func,
+  width: React.PropTypes.oneOf(['small', 'medium', 'large'])
 };
 
 export default Dropdown;
