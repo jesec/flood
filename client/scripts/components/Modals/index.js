@@ -5,6 +5,7 @@ import React from 'react';
 import AddTorrentsModal from './AddTorrentsModal';
 import ConfirmModal from './ConfirmModal';
 import EventTypes from '../../constants/EventTypes';
+import FeedsModal from './FeedsModal';
 import Modal from './Modal';
 import MoveTorrentsModal from './MoveTorrentsModal';
 import RemoveTorrentsModal from './RemoveTorrentsModal';
@@ -27,6 +28,7 @@ export default class Modals extends React.Component {
     this.modals = {
       'add-torrents': AddTorrentsModal,
       confirm: ConfirmModal,
+      feeds: FeedsModal,
       'move-torrents': MoveTorrentsModal,
       'remove-torrents': RemoveTorrentsModal,
       'set-taxonomy': SetTagsModal,

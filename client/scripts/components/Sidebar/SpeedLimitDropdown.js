@@ -76,8 +76,7 @@ class SpeedLimitDropdown extends React.Component {
     return (
       <Tooltip
         content={label}
-        offset={-5}
-        position="right"
+        position="bottom"
         ref={(node) => {this.tooltip = node;}}
         wrapperClassName="sidebar__icon-button tooltip__wrapper">
         <LimitsIcon />

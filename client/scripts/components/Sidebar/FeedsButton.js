@@ -1,19 +1,20 @@
 import {defineMessages, injectIntl} from 'react-intl';
 import React from 'react';
 
-import SettingsIcon from '../Icons/SettingsIcon';
+import FeedIcon from '../Icons/FeedIcon';
 import Tooltip from '../General/Tooltip';
 import UIActions from '../../actions/UIActions';
 
 const messages = defineMessages({
-  settings: {
-    id: 'sidebar.button.settings',
-    defaultMessage: 'Settings'
+  feeds: {
+    id: 'sidebar.button.feeds',
+    defaultMessage: 'Feeds'
   }
 });
-const METHODS_TO_BIND = ['handleSettingsButtonClick'];
 
-class SettingsButton extends React.Component {
+const METHODS_TO_BIND = ['handleFeedsButtonClick'];
+
+class FeedsButton extends React.Component {
   constructor() {
     super();
 
@@ -24,29 +25,29 @@ class SettingsButton extends React.Component {
     });
   }
 
-  handleSettingsButtonClick() {
+  handleFeedsButtonClick() {
     if (this.tooltipRef != null) {
       this.tooltipRef.dismissTooltip();
     }
 
-    UIActions.displayModal({id: 'settings'});
+    UIActions.displayModal({id: 'feeds'});
   }
 
   render() {
-    let label = this.props.intl.formatMessage(messages.settings);
+    let label = this.props.intl.formatMessage(messages.feeds);
 
     return (
       <Tooltip
         content={label}
-        onClick={this.handleSettingsButtonClick}
+        onClick={this.handleFeedsButtonClick}
         ref={(ref) => this.tooltipRef = ref}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           tooltip__wrapper">
-        <SettingsIcon />
+        <FeedIcon />
       </Tooltip>
     );
   }
 }
 
-export default injectIntl(SettingsButton);
+export default injectIntl(FeedsButton);

@@ -24,10 +24,7 @@ class SidebarFilter extends React.Component {
   }
 
   render() {
-    let itemClass = 'sidebar-filter__item--' + this.props.slug;
-    let classNames = classnames({
-      'sidebar-filter__item': true,
-      [itemClass]: true,
+    let classNames = classnames('sidebar-filter__item', {
       'is-active': this.props.isActive
     });
     let name = this.props.name;
