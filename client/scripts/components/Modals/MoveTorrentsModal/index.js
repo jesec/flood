@@ -3,7 +3,6 @@ import _ from 'lodash';
 import classnames from 'classnames';
 import React from 'react';
 
-import AddTorrentsDestination from '../AddTorrentsModal/AddTorrentsDestination';
 import AppDispatcher from '../../../dispatcher/AppDispatcher';
 import Checkbox from '../../General/FormElements/Checkbox';
 import EventTypes from '../../../constants/EventTypes';
@@ -11,6 +10,7 @@ import LoadingIndicatorDots from '../../Icons/LoadingIndicatorDots';
 import Modal from '../Modal';
 import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
+import TorrentDestination from '../../General/Filesystem/TorrentDestination';
 import TorrentStore from '../../../stores/TorrentStore';
 
 const METHODS_TO_BIND = [
@@ -132,8 +132,18 @@ class MoveTorrents extends React.Component {
   getContent() {
     return (
       <div className="form modal__content">
-        <AddTorrentsDestination onChange={this.handleDestinationChange}
-          suggested={this.state.originalSource} />
+        <div className="form__row">
+          <div className="form__column">
+            <label className="form__label">
+              <FormattedMessage
+                id="torrents.add.destination.label"
+                defaultMessage="Destination"
+              />
+            </label>
+            <TorrentDestination onChange={this.handleDestinationChange}
+              suggested={this.state.originalSource} />
+          </div>
+        </div>
         <div className="form__row">
           <div className="form__column">
             <Checkbox onChange={this.handleCheckboxChange}><FormattedMessage
