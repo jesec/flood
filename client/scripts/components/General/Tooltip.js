@@ -96,29 +96,33 @@ class Tooltip extends React.Component {
   }
 
   getCoordinates(position, clearance, tooltipWidth, tooltipHeight) {
-    let {offset} = this.props;
-    // Calculate the coordinates of the tooltip content.
-    if (position === 'top') {
-      return {
-        left: clearance.boundingRect.left + clearance.boundingRect.width / 2,
-        top: clearance.boundingRect.top - tooltipHeight + ARROW_SIZE + offset
-      };
-    } else if (position === 'right') {
-      return {
-        left: clearance.boundingRect.right + offset,
-        top: clearance.boundingRect.top + clearance.boundingRect.height / 2
-      };
-    } else if (position === 'bottom') {
-      return {
-        left: clearance.boundingRect.left + clearance.boundingRect.width / 2,
-        top: clearance.boundingRect.bottom + offset
-      };
+    let {align, offset} = this.props;
+    let left = null;
+    let top = null;
+
+    if (position === 'top' || position === 'bottom') {
+      if (align === 'center') {
+        left = clearance.boundingRect.left + clearance.boundingRect.width / 2;
+      } else if (align === 'start') {
+        left = clearance.boundingRect.left;
+      } else if (align === 'end') {
+        left = clearance.boundingRect.left + clearance.boundingRect.width - tooltipWidth;
+      }
+    } else {
+      top = clearance.boundingRect.top + clearance.boundingRect.height / 2;
     }
 
-    return {
-      left: clearance.boundingRect.left - tooltipWidth + ARROW_SIZE + offset,
-      top: clearance.boundingRect.top + clearance.boundingRect.height / 2
-    };
+    if (position === 'top') {
+      top = clearance.boundingRect.top - tooltipHeight + ARROW_SIZE + offset;
+    } else if (position === 'right') {
+      left = clearance.boundingRect.right + offset;
+    } else if (position === 'bottom') {
+      top = clearance.boundingRect.bottom + offset;
+    } else {
+      left = clearance.boundingRect.left - tooltipWidth + ARROW_SIZE + offset;
+    }
+
+    return {left, top};
   }
 
   isVertical(position) {
@@ -221,6 +225,7 @@ class Tooltip extends React.Component {
     let {props, state} = this;
     let tooltipStyle = {};
 
+    let align = props.align;
     // Get the anchor and position from state if possible. If not, get it from
     // the props.
     let anchor = state.anchor || props.anchor;
@@ -229,7 +234,8 @@ class Tooltip extends React.Component {
     let elementProps = _.omit(props, Object.keys(Tooltip.propTypes));
 
     let tooltipClasses = classnames(props.className,
-      `tooltip--anchor--${anchor}`, `tooltip--position--${position}`, {
+      `tooltip--anchor--${anchor}`, `tooltip--position--${position}`,
+      `tooltip--align--${align}`, {
         'is-interactive': props.interactive,
         'is-open': state.isOpen,
         'tooltip--no-wrap': !props.wrapText
@@ -272,6 +278,7 @@ class Tooltip extends React.Component {
 }
 
 Tooltip.defaultProps = {
+  align: 'center',
   anchor: 'center',
   className: 'tooltip',
   contentClassName: 'tooltip__content',
@@ -287,8 +294,9 @@ Tooltip.defaultProps = {
 };
 
 Tooltip.propTypes = {
+  align: React.PropTypes.oneOf(['start', 'center', 'end']),
   anchor: React.PropTypes.oneOf(['start', 'center', 'end']),
-  children: React.PropTypes.node.isRequired,
+  children: React.PropTypes.node,
   className: React.PropTypes.string,
   contentClassName: React.PropTypes.string,
   content: React.PropTypes.node.isRequired,
