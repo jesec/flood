@@ -1,9 +1,11 @@
 $form--label--foreground: desaturate(lighten(#5c7087, 3%), 3%);
+$form--label--error--foreground: $red;
 
 $form--element--border-radius: 4px;
 
 $textbox--background: #242b36;
 $textbox--foreground: #5e728c;
+$textbox--error--foreground: $red;
 $textbox--placeholder: #424d5e;
 $textbox--border: #1a2028;
 $textbox--fulfilled--background: $textbox--background;
@@ -13,6 +15,8 @@ $textbox--active--background: $textbox--background;
 $textbox--active--border: $blue;
 $textbox--active--foreground: $blue;
 $textbox--active--placeholder: $textbox--placeholder;
+$textbox--error--border: $red;
+$textbox--error--placeholder: rgba($red, 0.5);
 $textbox--selection--foreground: #1a2028;
 $textbox--selection--background: $blue--lighter;
 
@@ -46,12 +50,16 @@ $checkbox--background--hover: lighten($checkbox--background, 5%);
 $checkbox--border: $textbox--border;
 $checkbox--border--hover: $checkbox--border;
 
+$dropdown--error--border: $textbox--error--border;
+$dropdown--error--border--hover: $textbox--error--border;
+$dropdown--error--foreground: $textbox--error--border;
+
 $modal--body--foreground: desaturate(lighten($foreground, 20%), 10%);
 
 $form--section--heading--margin: $spacing-unit * 2/5;
 $form--section--margin: $spacing-unit;
 $form--row--margin: $spacing-unit * 3/5;
-$form--column--padding: $spacing-unit * 3/10;
+$form--column--margin: $spacing-unit * 3/10;
 
 $authentication--form--border: #d4dbe0;
 $authentication--form--padding: $spacing-unit * 1.25;
@@ -62,10 +70,6 @@ $authentication--textbox--placeholder: #c1c9cf;
 
 $authentication--header--foreground: $white;
 $authentication--label--foreground: #3a5567;
-
-$interacative-list--item--foreground: $textbox--foreground;
-$interacative-list--item--icon--fill: rgba($interacative-list--item--foreground, 0.5);
-$interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--item--foreground, 20%), 0.5);
 
 .textbox,
 .button,
@@ -79,6 +83,7 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
   -moz-appearance: none;
   -webkit-appearance: none;
   outline: none;
+  transition: background 0.25s, border 0.25s, color 0.25s;
 }
 
 .textbox {
@@ -88,7 +93,6 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
   color: $textbox--foreground;
   display: block;
   padding: $textbox--padding--vertical $textbox--padding--horizontal;
-  transition: background 0.25s, border 0.25s, color 0.25s;
   width: 100%;
 
   &::placeholder {
@@ -132,7 +136,6 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
   font-weight: 500;
   line-height: normal;
   padding: $button--padding--vertical $button--padding--horizontal;
-  transition: background 0.25s, border 0.25s, color 0.25s;
   user-select: none;
 
   &.has-icon {
@@ -272,58 +275,6 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
   }
 }
 
-.interactive-list {
-  @extend .textbox;
-  @extend .textbox.is-fulfilled;
-  border-radius: $form--element--border-radius;
-  color: $interacative-list--item--foreground;
-  padding: $spacing-unit * 1/2;
-
-  &__item {
-    display: flex;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: 100%;
-  }
-
-  &__label {
-    flex: 1 1 auto;
-    overflow: hidden;
-    text-align: left;
-    text-overflow: ellipsis;
-  }
-
-  &__icon {
-    flex: 0 0 auto;
-
-    .icon {
-      fill: $interacative-list--item--icon--fill;
-      transition: fill 0.25s;
-
-      &--close {
-        cursor: pointer;
-        height: 8px;
-        margin-left: 4px;
-        margin-right: 0;
-        vertical-align: middle;
-        width: 8px;
-      }
-    }
-
-    &--action {
-      cursor: pointer;
-
-      &:hover {
-
-        .icon {
-          fill: $interacative-list--item--icon--fill--hover;
-        }
-      }
-    }
-  }
-}
-
 .form {
   position: relative;
 
@@ -331,8 +282,28 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
     color: $form--label--foreground;
     display: block;
     font-size: 0.8em;
+    height: 1em;
     line-height: 1;
     margin-bottom: 0.35em;
+    position: relative;
+    transition: color 0.25s;
+
+    .tooltip {
+
+      &__wrapper {
+        height: 1em;
+        margin-left: $spacing-unit * 1/10;
+        margin-top: -2px;
+        line-height: inherit;
+        vertical-align: middle;
+      }
+    }
+
+    .icon {
+      fill: currentColor;
+      height: 1em;
+      width: 1em;
+    }
   }
 
   &__section {
@@ -365,46 +336,106 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
     flex-direction: column;
     justify-content: flex-end;
     max-width: 100%;
-    padding: 0 $form--column--padding;
+    margin: 0 $form--column--margin;
 
     &:first-child {
-      padding-left: 0;
+      margin-left: 0;
     }
 
     &:last-child {
-      padding-right: 0;
+      margin-right: 0;
     }
 
     &--auto {
       flex-grow: 0;
       flex-shrink: 1;
       flex-basis: auto;
+      max-width: 50%;
+    }
+
+    &--half,
+    &--small {
+
+      // For small columns which are the only column in the row, keep the
+      // column's margin.
+      &:first-child {
+
+        &:last-child {
+          margin-right: $form--column--margin;
+        }
+      }
     }
 
     &--half {
       max-width: 50%;
+    }
 
-      &:last-child {
-        padding-right: $form--column--padding;
-      }
+    &--fourth {
+      flex-basis: 25%;
+      max-width: 25%;
+      min-width: 25%;
     }
 
     &--small {
       max-width: 125px;
-
-      // For small columns which are the only column in the row, keep the
-      // column's padding.
-      &:first-child {
-
-        &:last-child {
-          padding-right: $form--column--padding;
-        }
-      }
     }
 
     &--unlabled {
       justify-content: center;
       padding-top: $spacing-unit * 3/5;
+    }
+
+    &--has-error {
+
+      .form {
+
+        &__label {
+          color: $form--label--error--foreground;
+        }
+      }
+
+      .textbox {
+        border-color: $textbox--error--border;
+        color: $textbox--error--foreground;
+
+        &::placeholder {
+          color: $textbox--error--placeholder;
+        }
+      }
+
+      & > .dropdown {
+
+        .dropdown {
+
+          &__trigger {
+
+            .dropdown {
+
+              &__button {
+                border-color: $dropdown--error--border;
+
+                &:hover {
+                  border-color: $dropdown--error--border--hover;
+                }
+
+                .dropdown {
+
+                  &__value {
+                    color: $dropdown--error--foreground;
+                  }
+                }
+              }
+            }
+          }
+
+          &__value {
+
+            &:after {
+              border-top-color: $dropdown--error--foreground;
+            }
+          }
+        }
+      }
     }
 
     & > .dropdown {
@@ -418,7 +449,6 @@ $interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--it
             &__button {
               @extend .button--deemphasize;
               border-radius: $form--element--border-radius;
-              transition: background 0.25s, color 0.25s;
             }
           }
         }
