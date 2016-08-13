@@ -132,6 +132,7 @@ class ClientRequest {
   addURLsMethodCall(options) {
     let path = options.path;
     let start = options.start;
+    let tagsArr = options.tags;
     let urls = this.getEnsuredArray(options.urls);
 
     urls.forEach((url) => {
@@ -139,8 +140,22 @@ class ClientRequest {
       let parameters = ['', url];
       let timeAdded = Math.floor(Date.now() / 1000);
 
-      if (path && path !== '') {
+      if (path) {
         parameters.push(`d.directory.set="${path}"`);
+      }
+
+      if (tagsArr) {
+        let tags = tagsArr.reduce((memo, currentTag) => {
+          let tag = encodeURIComponent(currentTag.trim());
+
+          if (tag !== '' && memo.indexOf(tag) === -1) {
+            memo.push(tag);
+          }
+
+          return memo;
+        }, []).join(',');
+
+        parameters.push(`d.custom1.set="${tags}"`);
       }
 
       parameters.push(`d.custom.set=addtime,${timeAdded}`);
@@ -162,9 +177,11 @@ class ClientRequest {
   }
 
   createDirectoryMethodCall(options) {
-    this.requests.push(
-      this.getMethodCall('execute2', ['mkdir', '-p', options.path])
-    );
+    if (options.path) {
+      this.requests.push(
+        this.getMethodCall('execute2', ['mkdir', '-p', options.path])
+      );
+    }
   }
 
   fetchSettingsMethodCall(options) {
