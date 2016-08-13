@@ -21,9 +21,9 @@ const messages = defineMessages({
     id: 'settings.feeds.validation.must.specify.destination',
     defaultMessage: 'You must specify a destination.'
   },
-  mustSelectField: {
-    id: 'settings.feeds.validation.must.specify.field',
-    defaultMessage: 'You must select a field.'
+  mustSelectFeed: {
+    id: 'settings.feeds.validation.must.select.feed',
+    defaultMessage: 'You must select a feed.'
   },
   mustSpecifyLabel: {
     id: 'settings.feeds.validation.must.specify.label',
@@ -82,7 +82,7 @@ class DownloadRulesTab extends React.Component {
       },
       feedID: {
         isValid: Validator.isNotEmpty,
-        error: this.props.intl.formatMessage(messages.mustSelectField)
+        error: this.props.intl.formatMessage(messages.mustSelectFeed)
       },
       label: {
         isValid: Validator.isNotEmpty,
