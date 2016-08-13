@@ -26,10 +26,9 @@ class FeedCollection {
   }
 
   addFeed(feed, callback) {
-    this.addItem('feed', feed, (newDoc) => {
-      newDoc.onNewItem = this.handleNewItem.bind(this);
-      this.feeds.push(new Feed(newDoc));
-      callback(newDoc);
+    this.addItem('feed', feed, (newFeed) => {
+      this.startNewFeed(newFeed);
+      callback(newFeed);
     });
   }
 
@@ -162,8 +161,7 @@ class FeedCollection {
 
       docs.forEach((doc) => {
         if (doc.type === 'feed') {
-          doc.onNewItem = newItemHandler;
-          this.feeds.push(new Feed(doc));
+          this.startNewFeed(doc);
         } else if (doc.type === 'rule') {
           if (this.rules[doc.feedID] == null) {
             this.rules[doc.feedID] = [];
@@ -221,6 +219,11 @@ class FeedCollection {
     }
 
     return isAlreadyDownloaded;
+  }
+
+  startNewFeed(feedConfig) {
+    feedConfig.onNewItem = this.handleNewItem.bind(this);
+    this.feeds.push(new Feed(feedConfig));
   }
 }
 

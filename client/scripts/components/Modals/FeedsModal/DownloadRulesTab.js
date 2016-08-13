@@ -359,6 +359,7 @@ class DownloadRulesTab extends React.Component {
       this.setState({errors});
     } else {
       FeedMonitorStore.addRule(formData);
+      this.resetFormFields();
     }
   }
 
@@ -384,6 +385,14 @@ class DownloadRulesTab extends React.Component {
 
   handleRemoveRuleClick(rule) {
     FeedMonitorStore.removeRule(rule._id);
+  }
+
+  resetFormFields() {
+    let {inputRefs = {}} = this;
+
+    Object.keys(inputRefs).forEach((fieldName) => {
+      this.inputRefs[fieldName].value = '';
+    });
   }
 
   validateForm() {
