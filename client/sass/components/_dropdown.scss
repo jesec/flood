@@ -1,10 +1,23 @@
 $dropdown--background: $menu--background;
+
+$dropdown--button--padding--bottom: 7px;
+$dropdown--button--padding--left: 15px;
+$dropdown--button--padding--right: 15px;
+$dropdown--button--padding--top: 12px;
+
+$dropdown--arrow--margin: 8px;
+$dropdown--arrow--width: 8px;
+
 $dropdown--container--border: $menu--container--border;
 $dropdown--container--shadow: $menu--container--shadow;
+
 $dropdown--label: $menu--label;
+
 $dropdown--value: $menu--value;
 $dropdown--value--active: $menu--value--active;
+
 $dropdown--header--border: $menu--header--border;
+
 $dropdown--item--foreground: $menu--item--foreground;
 $dropdown--item--background--hover: $menu--item--background--hover;
 $dropdown--item--foreground--hover: $menu--item--foreground--hover;
@@ -14,41 +27,35 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
   display: inline-block;
   outline: none;
   position: relative;
+  transition: z-index 0.25s;
   z-index: 2;
 
   &__button,
   &__trigger {
     cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background 0.25s, border 0.25s, color 0.25s;
+    white-space: nowrap;
   }
 
   &__button {
     display: block;
-    padding: 12px 15px 7px 15px;
+    padding: $dropdown--button--padding--top $dropdown--button--padding--right + $dropdown--arrow--width + $dropdown--arrow--margin $dropdown--button--padding--bottom $dropdown--button--padding--left;
     text-align: left;
     width: auto;
-    word-wrap: none;
   }
 
   &__content {
     left: 0;
+    min-width: 100%;
     position: absolute;
     top: 0;
+    white-space: nowrap;
     z-index: 2;
-  }
 
-  &.is-expanded {
-
-    .dropdown {
-
-      &__header {
-
-        .dropdown {
-
-          &__value {
-            color: $dropdown--value--active;
-          }
-        }
-      }
+    &__container {
+      padding: 25px 30px;
     }
   }
 
@@ -72,11 +79,13 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
 
     &:after {
       border-top: 5px solid $dropdown--value;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
+      border-left: $dropdown--arrow--width / 2 solid transparent;
+      border-right: $dropdown--arrow--width / 2 solid transparent;
       content: '';
-      display: inline-block;
-      margin-left: 10px;
+      right: $dropdown--button--padding--right;
+      position: absolute;
+      transform: translateY(-50%);
+      top: 50%;
       vertical-align: middle;
     }
   }
@@ -101,22 +110,49 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
     padding: 10px 0;
   }
 
+  &__item {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   &__list {
     flex: 1;
+    max-width: 100%;
   }
 
   &--align-right & {
     left: auto;
     right: 0;
   }
-}
 
-.dropdown {
+  &--match-button-width {
 
-  &__content {
+    .dropdown {
 
-    &__container {
-      padding: 25px 30px;
+      &__content {
+        max-width: 100%;
+      }
+    }
+  }
+
+  &--width-small {
+    min-width: $spacing-unit * 5;
+  }
+
+  &.is-expanded {
+    z-index: 10;
+
+    .dropdown {
+
+      &__header {
+
+        .dropdown {
+
+          &__value {
+            color: $dropdown--value--active;
+          }
+        }
+      }
     }
   }
 }
