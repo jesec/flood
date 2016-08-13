@@ -1,5 +1,6 @@
 'use strict';
 
+let mkdirp = require('mkdirp');
 let mv = require('mv');
 let path = require('path');
 let util = require('util');
@@ -178,9 +179,11 @@ class ClientRequest {
 
   createDirectoryMethodCall(options) {
     if (options.path) {
-      this.requests.push(
-        this.getMethodCall('execute2', ['mkdir', '-p', options.path])
-      );
+      mkdirp(options.path, (error) => {
+        if (error) {
+          console.trace('Error creating directory.', error);
+        }
+      });
     }
   }
 
