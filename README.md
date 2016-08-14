@@ -21,7 +21,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 1. Copy `config.template.js` to `config.js`. This is required.
 2. Set your rTorrent SCGI hostname and port in `config.js`. Defaults are `localhost` and `5000`.
   * If you want to use a socket, change `socket` to true and set `socketPath` to the absolute file path of your rTorrent socket. Make sure Flood has read/write access.
-3. Create a long, unique secret (used by bcrypt to hash passwords) in `config.js`.
+3. Create a long, unique secret (used to sign [JWT auth tokens](https://github.com/auth0/node-jsonwebtoken)) in `config.js`.
 
 #### Starting the Server
 1. Run `npm start` in your terminal at this repo's root.
