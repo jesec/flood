@@ -21,6 +21,7 @@ const ICONS = {
   disk: <DiskIcon />,
   downloadThick: <DownloadThickIcon />,
   information: <InformationIcon />,
+  calendar: <CalendarIcon />,
   peers: <PeersIcon />,
   ratio: <RatioIcon />,
   seeds: <SeedsIcon />,
