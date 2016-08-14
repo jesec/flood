@@ -134,9 +134,9 @@ var clientUtil = {
       'd.custom1=',
       'd.custom2=',
       'd.custom=sch_ignore', // ignore scheduler
-      'cat="$t.multicall=d.hash=,t.url=,cat={@!@}"',
-      'cat="$t.multicall=d.hash=,t.scrape_complete=,cat={@!@}"', // total seeds
-      'cat="$t.multicall=d.hash=,t.scrape_incomplete=,cat={@!@}"', // total peers
+      'cat="$t.multicall=d.hash=,t.url=,cat={@!@}"', // trackers
+      'cat="$t.multicall=d.hash=,t.scrape_complete=,cat={@!@}"', // seeds
+      'cat="$t.multicall=d.hash=,t.scrape_incomplete=,cat={@!@}"', // peers
       // 'cat=$d.views=',
 
       // 'd.mode='

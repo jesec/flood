@@ -3,18 +3,10 @@
 let _ = require('lodash');
 
 let regEx = require('../../shared/util/regEx');
+let propsMap = require('../../shared/constants/propsMap');
 let stringUtil = require('../../shared/util/stringUtil');
 
-let calculatedData = [
-  'eta',
-  'percentComplete',
-  'status',
-  'trackers',
-  'totalPeers',
-  'totalSeeds'
-];
-
-let requestedData = [
+const DEFAULT_DATA_KEYS = [
   // Torrent List data
   'hash',
   'added',
@@ -57,51 +49,51 @@ class Torrent {
     }
 
     opts = opts || {};
-    this._lastUpdated = opts.currentTime || Date.now();
-    this._torrentData = this.getCalculatedClientData(clientData, opts);
+    this.lastUpdated = opts.currentTime || Date.now();
+    this.torrentData = this.getClientData(clientData, opts);
   }
 
   get basePath() {
-    return this._torrentData.basePath;
+    return this.torrentData.basePath;
   }
 
   get data() {
     // TODO: Only return the properties that are different than the last time
     // get was called. Perhaps identify the last time it was called by ID so
     // different consumers can use it. And/or allow users to get everything.
-    return Object.assign({}, this._torrentData);
+    return Object.assign({}, this.torrentData);
   }
 
   get status() {
-    return this._torrentData.status || [];
+    return this.torrentData.status || [];
   }
 
   get tags() {
-    return this._torrentData.tags || [];
+    return this.torrentData.tags || [];
   }
 
   get trackers() {
-    return this._torrentData.trackers || [];
+    return this.torrentData.trackers || [];
   }
 
-  getCalculatedClientData(clientData, opts) {
-    let keysToProcess = calculatedData;
-
+  getClientData(clientData, opts) {
+    let keysToProcess = DEFAULT_DATA_KEYS;
     let torrentData = {};
 
+    // If specific data keys were requested, use them. Otherwise, use defaults.
     if (opts.requestedData && _.isArray(opts.requestedData)) {
       keysToProcess = opts.requestedData;
     } else if (opts.requestedData) {
       console.warn('Torrent: requestedData mut be an array, using defaults.');
     }
 
-    keysToProcess = keysToProcess.concat(requestedData);
-
     keysToProcess.forEach((key) => {
-      let getCalculatedFnName = `getCalculated${stringUtil.capitalize(key)}`;
+      let fnName = `get${stringUtil.capitalize(key)}`;
 
-      if (typeof this[getCalculatedFnName] === 'function') {
-        torrentData[key] = this[getCalculatedFnName](clientData);
+      // Some data needs transformation, so we check if there's a transformation
+      // method on the Torrent class first. If not, we assume no transformation.
+      if (typeof this[fnName] === 'function') {
+        torrentData[key] = this[fnName](clientData);
       } else {
         torrentData[key] = clientData[key];
       }
@@ -111,11 +103,12 @@ class Torrent {
   }
 
   getPeerCount(string) {
-    var markerPosition = string.indexOf('@!@');
+    // This lovely delimiter is defined in clientUtil.
+    let markerPosition = string.indexOf('@!@');
     return string.substr(0, markerPosition);
   }
 
-  getCalculatedEta(clientData) {
+  getEta(clientData) {
     let rate = clientData.downloadRate;
     let completed = clientData.bytesDone;
     let total = clientData.sizeBytes;
@@ -152,7 +145,7 @@ class Torrent {
     }
   }
 
-  getCalculatedPercentComplete(clientData) {
+  getPercentComplete(clientData) {
     let percentComplete = clientData.bytesDone / clientData.sizeBytes * 100;
 
     if (percentComplete > 0 && percentComplete < 10) {
@@ -164,7 +157,7 @@ class Torrent {
     }
   }
 
-  getCalculatedStatus(clientData) {
+  getStatus(clientData) {
     let isHashChecking = clientData.isHashChecking;
     let isComplete = clientData.isComplete;
     let isOpen = clientData.isOpen;
@@ -176,36 +169,36 @@ class Torrent {
     let torrentStatus = [];
 
     if (isHashChecking === '1') {
-      torrentStatus.push('ch'); // checking
+      torrentStatus.push(propsMap.clientStatus.checking);
     } else if (isComplete === '1' && isOpen === '1' && state === '1') {
-      torrentStatus.push('sd'); // seeding
+      torrentStatus.push(propsMap.clientStatus.seeding);
   	} else if (isComplete === '1' && isOpen === '1' && state === '0') {
-      torrentStatus.push('p'); // paused
+      torrentStatus.push(propsMap.clientStatus.paused);
   	} else if (isComplete === '1' && isOpen === '0') {
-      torrentStatus.push('s'); // stopped
-      torrentStatus.push('c'); // complete
+      torrentStatus.push(propsMap.clientStatus.stopped);
+      torrentStatus.push(propsMap.clientStatus.complete);
   	} else if (isComplete === '0' && isOpen === '1' && state === '1') {
-      torrentStatus.push('d'); // downloading
+      torrentStatus.push(propsMap.clientStatus.downloading);
   	} else if (isComplete === '0' && isOpen === '1' && state === '0') {
-      torrentStatus.push('p'); // paused
+      torrentStatus.push(propsMap.clientStatus.paused);
   	} else if (isComplete === '0' && isOpen === '0') {
-      torrentStatus.push('s'); // stopped
+      torrentStatus.push(propsMap.clientStatus.stopped);
   	}
 
     if (message.length) {
-      torrentStatus.push('e'); // error
+      torrentStatus.push(propsMap.clientStatus.error);
     }
 
     if (uploadRate === '0' && downloadRate === '0') {
-      torrentStatus.push('i');
+      torrentStatus.push(propsMap.clientStatus.inactive);
     } else {
-      torrentStatus.push('a');
+      torrentStatus.push(propsMap.clientStatus.active);
     }
 
     return torrentStatus;
   }
 
-  getCalculatedTags(clientData) {
+  getTags(clientData) {
     let tags = clientData.tags;
 
     if (tags === '') {
@@ -217,15 +210,16 @@ class Torrent {
     });
   }
 
-  getCalculatedTotalPeers(clientData) {
+  getTotalPeers(clientData) {
     return this.getPeerCount(clientData.totalPeers);
   }
 
-  getCalculatedTotalSeeds(clientData) {
+  getTotalSeeds(clientData) {
     return this.getPeerCount(clientData.totalSeeds);
   }
 
-  getCalculatedTrackers(clientData) {
+  getTrackers(clientData) {
+    // This lovely delimiter is defined in clientUtil.
     let trackers = clientData.trackers.split('@!@');
     let trackerDomains = [];
 
@@ -256,9 +250,9 @@ class Torrent {
   }
 
   updateData(clientData, opts) {
-    // TODO somehow communicate that only some props were updated
-    this._lastUpdated = opts.currentTime || Date.now();
-    this._torrentData = this.getCalculatedClientData(clientData, opts);
+    // TODO: Communicate to TorrentCollection which props changed.
+    this.lastUpdated = opts.currentTime || Date.now();
+    this.torrentData = this.getClientData(clientData, opts);
   }
 }
 
