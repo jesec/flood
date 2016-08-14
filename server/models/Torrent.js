@@ -257,15 +257,25 @@ class Torrent {
   }
 
   getCalculatedAdded(clientData) {
-    return clientData.added.trim();
+    return this.cleanUpDate(clientData.added);
   }
 
   getCalculatedCreationDate(clientData) {
-    if (clientData.creationDate === '0') {
+    return this.cleanUpDate(clientData.creationDate);
+  }
+
+  cleanUpDate(dirtyDate) {
+    if (!dirtyDate) {
       return '';
     }
 
-    return clientData.creationDate;
+    let date = dirtyDate.trim();
+
+    if (date === '0') {
+      return '';
+    }
+
+    return date;
   }
 
   updateData(clientData, opts) {
