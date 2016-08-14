@@ -256,6 +256,18 @@ class Torrent {
     return trackerDomains;
   }
 
+  getCalculatedAdded(clientData) {
+    return clientData.added.trim();
+  }
+
+  getCalculatedCreationDate(clientData) {
+    if (clientData.creationDate === '0') {
+      return '';
+    }
+
+    return clientData.creationDate;
+  }
+
   updateData(clientData, opts) {
     // TODO somehow communicate that only some props were updated
     this._lastUpdated = opts.currentTime || Date.now();
