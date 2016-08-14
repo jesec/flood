@@ -105,9 +105,12 @@ export default class Torrent extends React.Component {
   render() {
     let torrent = this.props.torrent;
 
-    let added = new Date(torrent.added * 1000);
-    let addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
-      added.getFullYear();
+    let addedString = '\u2014'; // em dash
+    if (torrent.added) {
+      let added = new Date(torrent.added * 1000);
+      addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
+        added.getFullYear();
+    }
     let completed = format.data(torrent.bytesDone);
     let downloadRate = format.data(torrent.downloadRate, '/s');
     let downloadTotal = format.data(torrent.downloadTotal);
