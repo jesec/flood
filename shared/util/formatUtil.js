@@ -1,18 +1,18 @@
 'use strict';
 let moment = require('moment');
 
-var FormatUtil = {
+const FORMAT_UTIL = {
   minToHumanReadable: min => {
     return moment.duration(min * 60 * 1000).humanize();
   },
 
   parsePeers: (string) => {
-    var markerPosition = string.indexOf('@!@');
+    let markerPosition = string.indexOf('@!@');
     return string.substr(0, markerPosition);
   },
 
   status: (isHashChecking, isComplete, isOpen, uploadRate, downloadRate, state, message) => {
-    var torrentStatus = [];
+    let torrentStatus = [];
 
     if (isHashChecking === '1') {
       torrentStatus.push('ch'); // checking
@@ -44,4 +44,4 @@ var FormatUtil = {
   }
 }
 
-module.exports = FormatUtil;
+module.exports = FORMAT_UTIL;

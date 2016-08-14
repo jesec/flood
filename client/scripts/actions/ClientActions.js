@@ -3,7 +3,7 @@ import axios from 'axios';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
-const ClientActions = {
+let ClientActions = {
   fetchSettings: (property) => {
     return axios.get('/api/client/settings', {params: {property}})
       .then((json = {}) => {

@@ -1,4 +1,4 @@
-const Languages = {
+const LANGUAGES = {
   en: {
     defaultMessage: 'English',
     id: 'locale.language.en'
@@ -9,4 +9,4 @@ const Languages = {
   }
 };
 
-export default Languages;
+export default LANGUAGES;

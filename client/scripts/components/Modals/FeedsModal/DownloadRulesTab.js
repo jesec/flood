@@ -16,7 +16,7 @@ import SettingsActions from '../../../actions/SettingsActions';
 import TorrentDestination from '../../General/Filesystem/TorrentDestination';
 import Validator from '../../../util/Validator';
 
-const messages = defineMessages({
+const MESSAGES = defineMessages({
   mustSpecifyDestination: {
     id: 'settings.feeds.validation.must.specify.destination',
     defaultMessage: 'You must specify a destination.'
@@ -78,21 +78,21 @@ class DownloadRulesTab extends React.Component {
     this.validatedFields = {
       destination: {
         isValid: Validator.isNotEmpty,
-        error: this.props.intl.formatMessage(messages.mustSpecifyDestination)
+        error: this.props.intl.formatMessage(MESSAGES.mustSpecifyDestination)
       },
       feedID: {
         isValid: Validator.isNotEmpty,
-        error: this.props.intl.formatMessage(messages.mustSelectFeed)
+        error: this.props.intl.formatMessage(MESSAGES.mustSelectFeed)
       },
       label: {
         isValid: Validator.isNotEmpty,
-        error: this.props.intl.formatMessage(messages.mustSpecifyLabel)
+        error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel)
       },
       match: {
         isValid: (value) => {
           return Validator.isNotEmpty(value) && Validator.isRegExValid(value);
         },
-        error: this.props.intl.formatMessage(messages.invalidRegularExpression)
+        error: this.props.intl.formatMessage(MESSAGES.invalidRegularExpression)
       },
       exclude: {
         isValid: (value) => {
@@ -102,7 +102,7 @@ class DownloadRulesTab extends React.Component {
 
           return true;
         },
-        error: this.props.intl.formatMessage(messages.invalidRegularExpression)
+        error: this.props.intl.formatMessage(MESSAGES.invalidRegularExpression)
       }
     };
   }
@@ -139,7 +139,7 @@ class DownloadRulesTab extends React.Component {
           </FormLabel>
           <input className="textbox"
             onChange={this.handleFieldInput.bind(this, 'label')}
-            placeholder={this.props.intl.formatMessage(messages.label)}
+            placeholder={this.props.intl.formatMessage(MESSAGES.label)}
             ref={ref => this.inputRefs.ruleLabel = ref}
             type="text" />
         </FormColumn>
@@ -159,7 +159,7 @@ class DownloadRulesTab extends React.Component {
           </FormLabel>
           <input className="textbox"
             onChange={this.handleFieldInput.bind(this, 'match')}
-            placeholder={this.props.intl.formatMessage(messages.regEx)}
+            placeholder={this.props.intl.formatMessage(MESSAGES.regEx)}
             ref={ref => this.inputRefs.ruleMatch = ref} type="text" />
         </FormColumn>
         <FormColumn error={errors.exclude}>
@@ -169,7 +169,7 @@ class DownloadRulesTab extends React.Component {
           </FormLabel>
           <input className="textbox"
             onChange={this.handleFieldInput.bind(this, 'exclude')}
-            placeholder={this.props.intl.formatMessage(messages.regEx)}
+            placeholder={this.props.intl.formatMessage(MESSAGES.regEx)}
             ref={ref => this.inputRefs.ruleExclude = ref} type="text" />
         </FormColumn>
         <FormColumn>
@@ -178,7 +178,7 @@ class DownloadRulesTab extends React.Component {
               defaultMessage="Apply Tags" />
           </FormLabel>
           <input className="textbox"
-            placeholder={this.props.intl.formatMessage(messages.tags)}
+            placeholder={this.props.intl.formatMessage(MESSAGES.tags)}
             ref={ref => this.inputRefs.tags = ref} type="text" />
         </FormColumn>
       </div>,

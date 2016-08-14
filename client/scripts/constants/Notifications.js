@@ -1,4 +1,4 @@
-const Notifications = {
+const NOTIFICATIONS = {
   'notification.torrent.add': `Successfully added {countElement} {count, plural,
     =1 {torrent}
     other {torrents}
@@ -26,4 +26,4 @@ const Notifications = {
   'notification.settings.saved': 'Successfully saved settings.'
 };
 
-export default Notifications;
+export default NOTIFICATIONS;

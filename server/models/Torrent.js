@@ -5,7 +5,7 @@ let _ = require('lodash');
 let regEx = require('../../shared/util/regEx');
 let stringUtil = require('../../shared/util/stringUtil');
 
-const CALCULATED_DATA = [
+let calculatedData = [
   'eta',
   'percentComplete',
   'status',
@@ -14,7 +14,7 @@ const CALCULATED_DATA = [
   'totalSeeds'
 ];
 
-const REQUESTED_DATA = [
+let requestedData = [
   // Torrent List data
   'hash',
   'added',
@@ -85,8 +85,7 @@ class Torrent {
   }
 
   getCalculatedClientData(clientData, opts) {
-    let keysToProcess = CALCULATED_DATA;
-    let requestedData = REQUESTED_DATA;
+    let keysToProcess = calculatedData;
 
     let torrentData = {};
 

@@ -5,7 +5,7 @@ import FeedIcon from '../Icons/FeedIcon';
 import Tooltip from '../General/Tooltip';
 import UIActions from '../../actions/UIActions';
 
-const messages = defineMessages({
+const MESSAGES = defineMessages({
   feeds: {
     id: 'sidebar.button.feeds',
     defaultMessage: 'Feeds'
@@ -34,7 +34,7 @@ class FeedsButton extends React.Component {
   }
 
   render() {
-    let label = this.props.intl.formatMessage(messages.feeds);
+    let label = this.props.intl.formatMessage(MESSAGES.feeds);
 
     return (
       <Tooltip

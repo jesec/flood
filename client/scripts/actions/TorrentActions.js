@@ -3,7 +3,7 @@ import axios from 'axios';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
-const TorrentActions = {
+let TorrentActions = {
   addTorrentsByUrls: (options) => {
     return axios.post('/api/client/add', options)
       .then((json = {}) => {

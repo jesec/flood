@@ -5,7 +5,7 @@ import SettingsIcon from '../Icons/SettingsIcon';
 import Tooltip from '../General/Tooltip';
 import UIActions from '../../actions/UIActions';
 
-const messages = defineMessages({
+const MESSAGES = defineMessages({
   settings: {
     id: 'sidebar.button.settings',
     defaultMessage: 'Settings'
@@ -33,7 +33,7 @@ class SettingsButton extends React.Component {
   }
 
   render() {
-    let label = this.props.intl.formatMessage(messages.settings);
+    let label = this.props.intl.formatMessage(MESSAGES.settings);
 
     return (
       <Tooltip
