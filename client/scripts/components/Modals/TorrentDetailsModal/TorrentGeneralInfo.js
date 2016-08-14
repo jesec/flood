@@ -16,8 +16,16 @@ class TorrentGeneralInfo extends React.Component {
   render() {
     let torrent = this.props.torrent;
 
-    let added = new Date(torrent.added * 1000);
-    let creation = new Date(torrent.creationDate * 1000);
+    let added = null;
+    if (torrent.added) {
+      added = new Date(torrent.added * 1000);
+    }
+
+    let creation = null;
+    if (torrent.creationDate) {
+      creation = new Date(torrent.creationDate * 1000);
+    }
+
     let totalSize = format.data(torrent.sizeBytes);
     let freeDiskSpace = format.data(torrent.freeDiskSpace);
 
@@ -49,13 +57,13 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                <FormattedDate
-                  value={added}
-                  year="numeric"
-                  month="long"
-                  day="2-digit"
-                /> <FormattedTime
-                  value={added} />
+                {added
+                  ? this.props.intl.formatDate(added, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit'}) + ' ' +
+                    this.props.intl.formatTime(added)
+                  : valueNotAvailable}
               </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--free-disk-space">
@@ -188,14 +196,13 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                <FormattedDate
-                  value={creation}
-                  year="numeric"
-                  month="long"
-                  day="2-digit"
-                /> <FormattedTime
-                  value={creation}
-                />
+                {creation
+                  ? this.props.intl.formatDate(creation, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: '2-digit'}) + ' ' +
+                    this.props.intl.formatTime(creation)
+                  : valueNotAvailable}
               </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--hash">
