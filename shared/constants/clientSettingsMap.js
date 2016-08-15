@@ -2,7 +2,7 @@
 
 let objectUtil = require('../util/objectUtil');
 
-const clientSettingsMap = objectUtil.reflect({
+let clientSettingsMap = objectUtil.reflect({
   dhtPort: 'dht.port',
   dhtStats: 'dht.statistics',
   directoryDefault: 'directory.default',

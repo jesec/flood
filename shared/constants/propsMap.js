@@ -1,6 +1,6 @@
 'use strict';
 
-const propsMap = {
+const PROPS_MAP = {
   serverStatus: {
     ch: 'checking',
     sd: 'seeding',
@@ -26,4 +26,4 @@ const propsMap = {
   }
 };
 
-module.exports = propsMap;
+module.exports = PROPS_MAP;

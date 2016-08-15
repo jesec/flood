@@ -21,13 +21,12 @@ class TorrentGeneralInfo extends React.Component {
     let totalSize = format.data(torrent.sizeBytes);
     let freeDiskSpace = format.data(torrent.freeDiskSpace);
 
-    const valueNotAvailable =
+    const VALUE_NOT_AVAILABLE = (
       <span className="not-available">
-        <FormattedMessage
-          id="torrents.details.general.none"
-          defaultMessage="None"
-        />
-      </span>;
+        <FormattedMessage id="torrents.details.general.none"
+          defaultMessage="None" />
+      </span>
+    );
 
     return (
       <div className="torrent-details__section torrent-details__section--general">
@@ -108,7 +107,7 @@ class TorrentGeneralInfo extends React.Component {
               <td className="torrent-details__detail__value">
                 {(torrent.tags.length
                   ? this.getTags(torrent.tags)
-                  : valueNotAvailable)}
+                  : VALUE_NOT_AVAILABLE)}
               </td>
             </tr>
             <tr className="torrent-details__table__heading">
@@ -177,7 +176,7 @@ class TorrentGeneralInfo extends React.Component {
               <td className="torrent-details__detail__value">
                 {(torrent.comment.substr(10)
                   ? torrent.comment.substr(10)
-                  : valueNotAvailable)}
+                  : VALUE_NOT_AVAILABLE)}
               </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--created">
@@ -254,7 +253,7 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {(torrent.message ? torrent.message : valueNotAvailable)}
+                {(torrent.message ? torrent.message : VALUE_NOT_AVAILABLE)}
               </td>
             </tr>
           </tbody>

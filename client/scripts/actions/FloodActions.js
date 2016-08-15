@@ -4,7 +4,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AuthStore from '../stores/AuthStore';
 
-const FloodActions = {
+let FloodActions = {
   fetchTransferData: () => {
     return axios.get('/api/stats')
       .then((json = {}) => {

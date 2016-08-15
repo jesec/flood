@@ -24,7 +24,7 @@ const METHODS_TO_BIND = [
   'handleRemoveFeedClick'
 ];
 
-const messages = defineMessages({
+const MESSAGES = defineMessages({
   mustSpecifyURL: {
     id: 'settings.feeds.validation.must.specify.valid.feed.url',
     defaultMessage: 'You must specify a valid feed URL.'
@@ -61,22 +61,22 @@ class FeedsTab extends React.Component {
       errors: {},
       intervals: [
         {
-          displayName: `5 ${this.props.intl.formatMessage(messages.min)}`,
+          displayName: `5 ${this.props.intl.formatMessage(MESSAGES.min)}`,
           selected: true,
           value: 5
         },
         {
-          displayName: `15 ${this.props.intl.formatMessage(messages.min)}`,
+          displayName: `15 ${this.props.intl.formatMessage(MESSAGES.min)}`,
           selected: false,
           value: 15
         },
         {
-          displayName: `30 ${this.props.intl.formatMessage(messages.min)}`,
+          displayName: `30 ${this.props.intl.formatMessage(MESSAGES.min)}`,
           selected: false,
           value: 30
         },
         {
-          displayName: `5 ${this.props.intl.formatMessage(messages.hr)}`,
+          displayName: `5 ${this.props.intl.formatMessage(MESSAGES.hr)}`,
           selected: false,
           value: 60
         }
@@ -94,11 +94,11 @@ class FeedsTab extends React.Component {
     this.validatedFields = {
       url: {
         isValid: Validator.isURLValid,
-        error: this.props.intl.formatMessage(messages.mustSpecifyURL)
+        error: this.props.intl.formatMessage(MESSAGES.mustSpecifyURL)
       },
       label: {
         isValid: Validator.isNotEmpty,
-        error: this.props.intl.formatMessage(messages.mustSpecifyLabel)
+        error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel)
       }
     };
   }
@@ -155,7 +155,7 @@ class FeedsTab extends React.Component {
           </FormLabel>
           <input className="textbox"
             onChange={this.handleFieldInput.bind(this, 'url')}
-            placeholder={this.props.intl.formatMessage(messages.url)}
+            placeholder={this.props.intl.formatMessage(MESSAGES.url)}
             ref={ref => this.inputRefs.feedURL = ref} type="text" />
         </FormColumn>
         <FormColumn modifiers={['auto']}>
@@ -178,7 +178,7 @@ class FeedsTab extends React.Component {
           </FormLabel>
           <input className="textbox"
             onChange={this.handleFieldInput.bind(this, 'label')}
-            placeholder={this.props.intl.formatMessage(messages.label)}
+            placeholder={this.props.intl.formatMessage(MESSAGES.label)}
             ref={ref => this.inputRefs.feedLabel = ref}
             type="text" />
         </FormColumn>

@@ -1,6 +1,6 @@
 'use strict';
 
-let stringUtil = {
+const STRING_UTIL = {
   capitalize: (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   },
@@ -18,4 +18,4 @@ let stringUtil = {
   }
 }
 
-module.exports = stringUtil;
+module.exports = STRING_UTIL;

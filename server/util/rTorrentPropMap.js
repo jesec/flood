@@ -1,4 +1,4 @@
-const rTorrentPropMap = {
+const RTORRENT_PROPS_MAP = {
   transferData: {
     uploadRate: 'throttle.global_up.rate',
     uploadTotal: 'throttle.global_up.total',
@@ -9,4 +9,4 @@ const rTorrentPropMap = {
   }
 };
 
-module.exports = rTorrentPropMap;
+module.exports = RTORRENT_PROPS_MAP;

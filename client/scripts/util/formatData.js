@@ -1,6 +1,6 @@
 import React from 'react';
 
-const format = {
+const FORMAT_DATA_UTIL = {
   eta: (eta) => {
     if (eta === 'Infinity') {
       return '∞';
@@ -136,4 +136,4 @@ const format = {
   }
 };
 
-export default format;
+export default FORMAT_DATA_UTIL;

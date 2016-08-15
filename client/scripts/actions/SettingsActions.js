@@ -3,7 +3,7 @@ import axios from 'axios';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
-const SettingsActions = {
+let SettingsActions = {
   addFeed: (feed) => {
     return axios.put('/api/feed-monitor/feeds', feed)
       .then((json = {}) => {

@@ -3,7 +3,7 @@ import axios from 'axios';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
-const AuthActions = {
+let AuthActions = {
   authenticate: (credentials) => {
     return axios.post('/auth/authenticate', credentials)
       .then((json = {}) => {

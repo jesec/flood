@@ -10,7 +10,7 @@ import SettingsStore from '../../stores/SettingsStore';
 import Tooltip from '../General/Tooltip';
 import TransferDataStore from '../../stores/TransferDataStore';
 
-const messages = defineMessages({
+const MESSAGES = defineMessages({
   speedLimits: {
     defaultMessage: 'Speed Limits',
     id: 'sidebar.button.speedlimits'
@@ -63,15 +63,15 @@ class SpeedLimitDropdown extends React.Component {
   getDropdownHeader() {
     return (
       <a className="sidebar__icon-button sidebar__icon-button--limits"
-        title={this.props.intl.formatMessage(messages.speedLimits)}>
+        title={this.props.intl.formatMessage(MESSAGES.speedLimits)}>
         <LimitsIcon />
-        <FormattedMessage {...messages.speedLimits} />
+        <FormattedMessage {...MESSAGES.speedLimits} />
       </a>
     );
   }
 
   getDropdownTrigger() {
-    let label = this.props.intl.formatMessage(messages.speedLimits);
+    let label = this.props.intl.formatMessage(MESSAGES.speedLimits);
 
     return (
       <Tooltip
@@ -86,7 +86,7 @@ class SpeedLimitDropdown extends React.Component {
 
   getHumanReadableSpeed(bytes) {
     if (bytes === 0) {
-      return this.props.intl.formatMessage(messages.unlimited);
+      return this.props.intl.formatMessage(MESSAGES.unlimited);
     } else {
       let formattedData = format.data(bytes, '/s', 1, {padded: false});
       return (

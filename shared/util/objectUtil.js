@@ -1,6 +1,6 @@
 'use strict';
 
-let objectUtil = {
+const OBJECT_UTIL = {
   reflect: (hash) => {
     return Object.keys(hash).reduce((memo, key) => {
       memo[key] = hash[key];
@@ -10,4 +10,4 @@ let objectUtil = {
   }
 }
 
-module.exports = objectUtil;
+module.exports = OBJECT_UTIL;

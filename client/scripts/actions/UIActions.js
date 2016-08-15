@@ -4,7 +4,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import TorrentStore from '../stores/TorrentStore';
 
-const UIActions = {
+let UIActions = {
   displayContextMenu: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,

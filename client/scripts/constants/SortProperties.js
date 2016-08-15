@@ -1,4 +1,4 @@
-const SortProperties = {
+const SORT_PROPERTIES = {
   added: {
     id: 'torrents.sort.added',
     defaultMessage: 'Date Added'
@@ -41,4 +41,4 @@ const SortProperties = {
   }
 };
 
-export default SortProperties;
+export default SORT_PROPERTIES;
