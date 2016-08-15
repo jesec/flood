@@ -106,12 +106,6 @@ export default class Torrent extends React.Component {
   render() {
     let torrent = this.props.torrent;
 
-    let addedString = '\u2014'; // em dash
-    if (torrent.added) {
-      let added = new Date(torrent.added * 1000);
-      addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' +
-        added.getFullYear();
-    }
     let completed = format.data(torrent.bytesDone);
     let downloadRate = format.data(torrent.downloadRate, '/s');
     let downloadTotal = format.data(torrent.downloadTotal);
@@ -151,6 +145,51 @@ export default class Torrent extends React.Component {
       );
     }
 
+    let tertiaryDetails = [
+      <li className="torrent__details--completed">
+        <span className="torrent__details__icon">{ICONS.downloadThick}</span>
+        {torrent.percentComplete}
+        <em className="unit">%</em>
+        &nbsp;&mdash;&nbsp;
+        {completed.value}
+        <em className="unit">{completed.unit}</em>
+      </li>,
+      <li className="torrent__details--uploaded">
+        <span className="torrent__details__icon">{ICONS.uploadThick}</span>
+        {uploadTotal.value}
+        <em className="unit">{uploadTotal.unit}</em>
+      </li>,
+      <li className="torrent__details--ratio">
+        <span className="torrent__details__icon">{ICONS.ratio}</span>
+        {ratio}
+      </li>,
+      <li className="torrent__details--size">
+        <span className="torrent__details__icon">{ICONS.disk}</span>
+        {totalSize.value}
+        <em className="unit">{totalSize.unit}</em>
+      </li>,
+      <li className="torrent__details--peers">
+        <span className="torrent__details__icon">{ICONS.peers}</span>
+        {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
+      </li>,
+      <li className="torrent__details--seeds">
+        <span className="torrent__details__icon">{ICONS.seeds}</span>
+        {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
+      </li>
+    ];
+
+    if (torrent.added) {
+      let added = new Date(torrent.added * 1000);
+      let addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' + added.getFullYear();
+
+      tertiaryDetails.push(
+        <li className="torrent__details--added">
+          <span className="torrent__details__icon">{ICONS.calendar}</span>
+          {addedString}
+        </li>
+      )
+    }
+
     return (
       <li className={torrentClasses} onClick={this.handleClick}
         onContextMenu={this.handleRightClick}>
@@ -162,40 +201,7 @@ export default class Torrent extends React.Component {
         </ul>
         <div className="torrent__details torrent__details--tertiary">
           <ul className="torrent__details torrent__details--tertiary--stats">
-            <li className="torrent__details--completed">
-              <span className="torrent__details__icon">{ICONS.downloadThick}</span>
-              {torrent.percentComplete}
-              <em className="unit">%</em>
-              &nbsp;&mdash;&nbsp;
-              {completed.value}
-              <em className="unit">{completed.unit}</em>
-            </li>
-            <li className="torrent__details--uploaded">
-              <span className="torrent__details__icon">{ICONS.uploadThick}</span>
-              {uploadTotal.value}
-              <em className="unit">{uploadTotal.unit}</em>
-            </li>
-            <li className="torrent__details--ratio">
-              <span className="torrent__details__icon">{ICONS.ratio}</span>
-              {ratio}
-            </li>
-            <li className="torrent__details--size">
-              <span className="torrent__details__icon">{ICONS.disk}</span>
-              {totalSize.value}
-              <em className="unit">{totalSize.unit}</em>
-            </li>
-            <li className="torrent__details--added">
-              <span className="torrent__details__icon">{ICONS.calendar}</span>
-              {addedString}
-            </li>
-            <li className="torrent__details--peers">
-              <span className="torrent__details__icon">{ICONS.peers}</span>
-              {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
-            </li>
-            <li className="torrent__details--seeds">
-              <span className="torrent__details__icon">{ICONS.seeds}</span>
-              {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
-            </li>
+            {tertiaryDetails}
           </ul>
           <ul className="torrent__details torrent__details--tertiary--tags torrent__tags tag">
             {this.getTags(torrent.tags)}
