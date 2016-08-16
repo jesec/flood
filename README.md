@@ -33,8 +33,10 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 #### Updating
 1. To update, run `git pull` in this repository's directory.
 2. Check `config.template.js` for configuration changes that you may wish to incoporate in your `config.js`.
-3. Kill the running Node server and restart it with `npm start`.
-  * The `start` script removes old dependencies, installs new ones, transpiles JavaScript and CSS, and starts the web server.
+3. Kill the running Node server.
+4. Run `npm install` to update dependencies.
+5. Restart it with `npm start`.
+  * Static frontend assets are transpiled and compressed before starting the server.
 
 #### Tips
 * I run the web server with `screen` to keep the web server running independently of the terminal session.
