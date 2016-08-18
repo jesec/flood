@@ -146,7 +146,7 @@ export default class Torrent extends React.Component {
     }
 
     let tertiaryDetails = [
-      <li className="torrent__details--completed">
+      <li className="torrent__details--completed" key="downloaded">
         <span className="torrent__details__icon">{ICONS.downloadThick}</span>
         {torrent.percentComplete}
         <em className="unit">%</em>
@@ -154,25 +154,25 @@ export default class Torrent extends React.Component {
         {completed.value}
         <em className="unit">{completed.unit}</em>
       </li>,
-      <li className="torrent__details--uploaded">
+      <li className="torrent__details--uploaded" key="uploaded">
         <span className="torrent__details__icon">{ICONS.uploadThick}</span>
         {uploadTotal.value}
         <em className="unit">{uploadTotal.unit}</em>
       </li>,
-      <li className="torrent__details--ratio">
+      <li className="torrent__details--ratio" key="ratio">
         <span className="torrent__details__icon">{ICONS.ratio}</span>
         {ratio}
       </li>,
-      <li className="torrent__details--size">
+      <li className="torrent__details--size" key="size">
         <span className="torrent__details__icon">{ICONS.disk}</span>
         {totalSize.value}
         <em className="unit">{totalSize.unit}</em>
       </li>,
-      <li className="torrent__details--peers">
+      <li className="torrent__details--peers" key="peers">
         <span className="torrent__details__icon">{ICONS.peers}</span>
         {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
       </li>,
-      <li className="torrent__details--seeds">
+      <li className="torrent__details--seeds" key="seeds">
         <span className="torrent__details__icon">{ICONS.seeds}</span>
         {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
       </li>
@@ -183,7 +183,7 @@ export default class Torrent extends React.Component {
       let addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' + added.getFullYear();
 
       tertiaryDetails.push(
-        <li className="torrent__details--added">
+        <li className="torrent__details--added" key="added">
           <span className="torrent__details__icon">{ICONS.calendar}</span>
           {addedString}
         </li>
