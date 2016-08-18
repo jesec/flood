@@ -187,7 +187,7 @@ export default class Torrent extends React.Component {
           <span className="torrent__details__icon">{ICONS.calendar}</span>
           {addedString}
         </li>
-      )
+      );
     }
 
     return (
