@@ -117,7 +117,7 @@ class ClientRequest {
         parameters.push(`d.directory.set="${path}"`);
       }
 
-      parameters.push(`d.custom.set=x-filename,${file.filename}`);
+      parameters.push(`d.custom.set=x-filename,${file.originalname}`);
       parameters.push(`d.custom.set=addtime,${timeAdded}`);
 
       // The start value is a string because it was appended to a FormData
