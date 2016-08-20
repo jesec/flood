@@ -249,6 +249,28 @@ class Torrent {
     return trackerDomains;
   }
 
+  getCalculatedAdded(clientData) {
+    return this.cleanUpDate(clientData.added);
+  }
+
+  getCalculatedCreationDate(clientData) {
+    return this.cleanUpDate(clientData.creationDate);
+  }
+
+  cleanUpDate(dirtyDate) {
+    if (!dirtyDate) {
+      return '';
+    }
+
+    let date = dirtyDate.trim();
+
+    if (date === '0') {
+      return '';
+    }
+
+    return date;
+  }
+
   updateData(clientData, opts) {
     // TODO: Communicate to TorrentCollection which props changed.
     this.lastUpdated = opts.currentTime || Date.now();
