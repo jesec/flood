@@ -88,6 +88,7 @@ class Torrent {
     }
 
     keysToProcess.forEach((key) => {
+      // TODO: Use setters instead of constructing this transformation method.
       let fnName = `get${stringUtil.capitalize(key)}`;
 
       // Some data needs transformation, so we check if there's a transformation
@@ -249,11 +250,11 @@ class Torrent {
     return trackerDomains;
   }
 
-  getCalculatedAdded(clientData) {
+  getAdded(clientData) {
     return this.cleanUpDate(clientData.added);
   }
 
-  getCalculatedCreationDate(clientData) {
+  getCreationDate(clientData) {
     return this.cleanUpDate(clientData.creationDate);
   }
 
