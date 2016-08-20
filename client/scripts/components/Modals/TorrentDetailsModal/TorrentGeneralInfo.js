@@ -62,7 +62,7 @@ class TorrentGeneralInfo extends React.Component {
                     month: 'long',
                     day: '2-digit'}) + ' ' +
                     this.props.intl.formatTime(added)
-                  : valueNotAvailable}
+                  : VALUE_NOT_AVAILABLE}
               </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--free-disk-space">
@@ -201,7 +201,7 @@ class TorrentGeneralInfo extends React.Component {
                     month: 'long',
                     day: '2-digit'}) + ' ' +
                     this.props.intl.formatTime(creation)
-                  : valueNotAvailable}
+                  : VALUE_NOT_AVAILABLE}
               </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--hash">
