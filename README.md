@@ -26,7 +26,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 
 #### Starting the Server
 1. Run `npm install --production`.
-2. Run `npm start:production`.
+2. Run `npm run start:production`.
 3. Access the UI in your browser. Defaults to `localhost:3000`.
   * You may change the default port in `config.js`.
 4. Upon loading the UI the first time, you will be prompted to create a user account.
@@ -36,7 +36,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 2. Check `config.template.js` for configuration changes that you may wish to incoporate in your `config.js`.
 3. Kill the running Node server.
 4. Run `npm install --production` to update dependencies.
-5. Restart it with `npm start:production`.
+5. Restart it with `npm run start:production`.
   * Static client-side assets are transpiled and compressed before starting the server.
 
 #### Tips
@@ -48,7 +48,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 2. Run `npm start` and `npm run start:watch` in separate terminal instances.
 3. Access the UI through the [browser-sync](https://www.browsersync.io/) proxy at [localhost:4200](http://localhost:4200).
   * `npm start` uses [nodemon](https://github.com/remy/nodemon) to watch for changes to the server-side JavaScript.
-  * `npm start:watch` watches for changes in the client-side source..
+  * `npm run start:watch` watches for changes in the client-side source..
 
 # Screenshots
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-a-0606.png)
