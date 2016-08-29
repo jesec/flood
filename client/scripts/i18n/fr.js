@@ -1,12 +1,12 @@
 export default {
-  'auth.add.user': 'Ajouter un utilisateur',
-  'auth.create.account': 'Créer un compte',
-  'auth.create.an.account': 'Créer un compte',
+  'auth.add.user': 'Ajouter un Utilisateur',
+  'auth.create.account': 'Créer un Compte',
+  'auth.create.an.account': 'Créer un Compte',
   'auth.error.username.empty': 'Le nom d\'utilisateur ne peut être vide.',
-  'auth.log.in': 'Se connecter',
+  'auth.log.in': 'Se Connecter',
   'auth.login': 'Identifiant',
   'auth.password': 'Mot de passe',
-  'auth.user.accounts': 'Comptes utilisateurs',
+  'auth.user.accounts': 'Comptes Utilisateurs',
   'auth.username': 'Identifiant',
 
   'button.add': 'Ajouter',
@@ -19,7 +19,7 @@ export default {
 
   'filter.all': 'Tout',
   'filter.status.title': 'Filtrer par Status',
-  'filter.status.downloading': 'En téléchargement',
+  'filter.status.downloading': 'En Téléchargement',
   'filter.status.completed': 'Terminé',
   'filter.status.active': 'Actif',
   'filter.status.inactive': 'Inactif',
@@ -43,7 +43,7 @@ export default {
   'notification.torrent.move': `La modification de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
-    } est réussite.`,
+    } a réussi.`,
   'notification.torrent.move.failed': `La modification de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
@@ -51,17 +51,17 @@ export default {
   'notification.torrent.remove': `La suppression de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
-    } est réussite.`,
+    } a réussi.`,
   'notification.torrent.remove.failed': `La suppression de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
     } a échoué.`,
   'notification.settings.saved': 'Paramètres modifiés.',
 
-  'priority.dont.download': 'Ne pas télécharger',
-  'priority.high': 'Haute',
-  'priority.low': 'Basse',
-  'priority.normal': 'Normale',
+  'priority.dont.download': 'Arrêt',
+  'priority.high': 'Haut',
+  'priority.low': 'Bas',
+  'priority.normal': 'Normal',
 
   'searchbox.placeholder': 'Rechercher des Torrents',
 
@@ -82,20 +82,20 @@ export default {
   'settings.connectivity.dht.port.label': 'Port DHT',
   'settings.connectivity.dpd.heading': 'Découverte de Pairs Décentralisée',
   'settings.connectivity.incoming.heading': 'Connexions Entrantes',
-  'settings.connectivity.ip.hostname.label': 'Reported IP/Hostname',
+  'settings.connectivity.ip.hostname.label': 'Adresse IP/Nom d\'Hôte',
   'settings.connectivity.max.http.connections': 'Connexions HTTP Maximum',
   'settings.connectivity.peer.exchange.label': 'Activer l\'échange de Pairs',
   'settings.connectivity.peers.desired.label': 'Pairs voulus',
   'settings.connectivity.peers.heading': 'Pairs',
-  'settings.connectivity.peers.max.label': 'Pairs Maximum',
-  'settings.connectivity.peers.min.label': 'Pairs Minimum',
-  'settings.connectivity.peers.seeding.max.label': 'Maxmimum Peers Seeding',
-  'settings.connectivity.peers.seeding.min.label': 'Minimum Peers Seeding',
+  'settings.connectivity.peers.max.label': 'Pairs Maximum (Téléchargement)',
+  'settings.connectivity.peers.min.label': 'Pairs Minimum (Téléchargement)',
+  'settings.connectivity.peers.seeding.max.label': 'Pairs Maximum (Envoi)',
+  'settings.connectivity.peers.seeding.min.label': 'Pairs Minimum (Envoi)',
   'settings.connectivity.port.open.label': 'Port Ouvert',
   'settings.connectivity.port.randomize.label': 'Port Aléatoire',
   'settings.connectivity.port.range.label': 'Plage de Ports',
 
-  'settings.resources.disk.check.hash.label': 'Vérifier le Hash à la fin',
+  'settings.resources.disk.check.hash.label': 'Vérifier le Hash',
   'settings.resources.disk.download.location.label': 'Répertoire de Téléchargement par Défaut',
   'settings.resources.disk.heading': 'Disque',
   'settings.resources.max.open.files': 'Fichiers Ouverts Maximum',
@@ -107,7 +107,7 @@ export default {
   'settings.tabs.heading': 'Réglages',
   'settings.tabs.resources': 'Ressources',
   'settings.tabs.authentication': 'Authentification',
-  'settings.tabs.userinterface': 'Interface Utilisateur',
+  'settings.tabs.userinterface': 'Interface',
 
   'settings.ui.locale': 'Localisation',
   'settings.ui.language': 'Langue',
@@ -139,7 +139,7 @@ export default {
   'torrents.details.files': 'Fichiers',
   'torrents.details.general.added': 'Ajouté',
   'torrents.details.general.comment': 'Commentaires',
-  'torrents.details.general.connected': 'connectés',
+  'torrents.details.general.connected': 'Connectés',
   'torrents.details.general.creation.date': 'Date de Création',
   'torrents.details.general.downloaded': 'Téléchargé',
   'torrents.details.general.free.disk.space': 'Espace Libre',
@@ -182,22 +182,22 @@ export default {
   'torrents.set.tags.button.state.setting': 'Paramètres...',
   'torrents.set.tags.heading': 'Définir les Tags',
 
-  'torrents.sort.added': 'Ajouté',
+  'torrents.sort.added': 'Date d\'Ajout',
   'torrents.sort.download.speed': 'Vitesse de Téléchargement',
-  'torrents.sort.download.total': 'Téléchargé',
+  'torrents.sort.download.total': 'Données Téléchargées',
   'torrents.sort.eta': 'ETA',
-  'torrents.sort.name': 'Nom',
+  'torrents.sort.name': 'Nom de Torrent',
   'torrents.sort.percentage': 'Pourcentage Complété',
   'torrents.sort.ratio': 'Ratio',
   'torrents.sort.size': 'Taille de Fichiers',
   'torrents.sort.title': 'Trier par',
   'torrents.sort.upload.speed': 'Vitesse d\'Envoi',
-  'torrents.sort.upload.total': 'Envoyé',
+  'torrents.sort.upload.total': 'Données Envoyées',
 
-  'torrents.move.button.set.location': 'Définir l\'emplacement',
+  'torrents.move.button.set.location': 'Définir l\'Emplacement',
   'torrents.move.button.state.setting': 'Paramètres...',
   'torrents.move.data.label': 'Déplacer les données',
-  'torrents.move.heading': 'Définir le répertoire de téléchargement',
+  'torrents.move.heading': 'Définir le Répertoire de Téléchargement',
 
   'torrents.remove.are.you.sure': `Êtes-vous certains de vouloir supprimer {count, plural,
       =0 {aucun torrent}
