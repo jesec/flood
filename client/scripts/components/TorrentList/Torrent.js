@@ -1,3 +1,4 @@
+import {FormattedDate} from 'react-intl';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -180,12 +181,11 @@ export default class Torrent extends React.Component {
 
     if (torrent.added) {
       let added = new Date(torrent.added * 1000);
-      let addedString = (added.getMonth() + 1) + '/' + added.getDate() + '/' + added.getFullYear();
 
       tertiaryDetails.push(
         <li className="torrent__details--added" key="added">
           <span className="torrent__details__icon">{ICONS.calendar}</span>
-          {addedString}
+          <FormattedDate value={added} />
         </li>
       );
     }
