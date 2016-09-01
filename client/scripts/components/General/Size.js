@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default class Size extends React.Component {
-  compute(bytes, extraUnits, precision, padded) {
+  compute(bytes, extraUnits, precision) {
     let kilobyte = 1024,
       megabyte = kilobyte * 1024,
       gigabyte = megabyte * 1024,
@@ -38,13 +38,6 @@ export default class Size extends React.Component {
       value = Math.floor(value);
     }
 
-    if (padded === false) {
-      let decimal = value % 1;
-      if ((decimal < 0.1 && decimal >= 0) || (decimal > -0.1 && decimal <= 0)) {
-        value = value.toFixed(0);
-      }
-    }
-
     if (extraUnits) {
       unit += extraUnits;
     }
@@ -56,7 +49,7 @@ export default class Size extends React.Component {
   }
 
   render() {
-    let {value, unit} = this.compute(this.props.value, this.props.extraUnits, this.props.precision, this.props.padded);
+    let {value, unit} = this.compute(this.props.value, this.props.extraUnits, this.props.precision);
 
     return (
       <span>
@@ -69,6 +62,5 @@ export default class Size extends React.Component {
 
 Size.defaultProps = {
   extraUnits: '',
-  precision: 2,
-  padded: true
+  precision: 2
 };
