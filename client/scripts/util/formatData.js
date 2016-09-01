@@ -69,32 +69,32 @@ const FORMAT_DATA_UTIL = {
   },
 
   data: (bytes, extraUnits, precision = 2, options = {}) => {
-  	let kilobyte = 1024,
-  		megabyte = kilobyte * 1024,
-  		gigabyte = megabyte * 1024,
-  		terabyte = gigabyte * 1024,
-  		value = 0,
-  		unit = '';
+    let kilobyte = 1024,
+      megabyte = kilobyte * 1024,
+      gigabyte = megabyte * 1024,
+      terabyte = gigabyte * 1024,
+      value = 0,
+      unit = '';
 
-  	if ((bytes >= 0) && (bytes < kilobyte)) {
-  		value = bytes;
-  		unit = 'B';
-  	} else if ((bytes >= kilobyte) && (bytes < megabyte)) {
-  		value = (bytes / kilobyte);
-  		unit = 'KB';
-  	} else if ((bytes >= megabyte) && (bytes < gigabyte)) {
-  		value = (bytes / megabyte);
-  		unit = 'MB';
-  	} else if ((bytes >= gigabyte) && (bytes < terabyte)) {
-  		value = (bytes / gigabyte);
-  		unit = 'GB';
-  	} else if (bytes >= terabyte) {
-  		value = (bytes / terabyte);
-  		unit = 'TB';
-  	} else {
-  		value = bytes;
-  		unit = 'B';
-  	}
+    if ((bytes >= 0) && (bytes < kilobyte)) {
+      value = bytes;
+      unit = 'B';
+    } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+      value = (bytes / kilobyte);
+      unit = 'KB';
+    } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+      value = (bytes / megabyte);
+      unit = 'MB';
+    } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+      value = (bytes / gigabyte);
+      unit = 'GB';
+    } else if (bytes >= terabyte) {
+      value = (bytes / terabyte);
+      unit = 'TB';
+    } else {
+      value = bytes;
+      unit = 'B';
+    }
 
     value = Number(value);
     if (!!value && value < 10) {
@@ -116,10 +116,10 @@ const FORMAT_DATA_UTIL = {
       unit += extraUnits;
     }
 
-  	return {
-  		value,
-  		unit
-  	};
+    return {
+      value,
+      unit
+    };
   },
 
   ratio: (ratio) => {
