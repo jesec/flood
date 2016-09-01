@@ -27,8 +27,9 @@ class TorrentStoreClass extends BaseStore {
     this.torrents = {};
   }
 
-  fetchTorrentDetails() {
-    if (!this.isRequestPending('fetch-torrent-details')) {
+  fetchTorrentDetails(options = {}) {
+    if (!this.isRequestPending('fetch-torrent-details')
+      || options.forceUpdate) {
       this.beginRequest('fetch-torrent-details');
       TorrentActions.fetchTorrentDetails(UIStore.getTorrentDetailsHash());
     }
@@ -222,6 +223,15 @@ class TorrentStoreClass extends BaseStore {
     });
   }
 
+  handleSetFilePrioritySuccess() {
+    this.emit(EventTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS);
+    this.fetchTorrentDetails({forceUpdate: true});
+  }
+
+  setFilePriority(hash, fileIndices, priority) {
+    TorrentActions.setFilePriority(hash, fileIndices, priority);
+  }
+
   setTorrentDetails(hash, torrentDetails) {
     this.torrents[hash].details = torrentDetails;
     this.resolveRequest('fetch-torrent-details');
@@ -303,6 +313,9 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_REMOVE_TORRENT_ERROR:
       TorrentStore.handleRemoveTorrentsError(action.error);
+      break;
+    case ActionTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS:
+      TorrentStore.handleSetFilePrioritySuccess(action.data);
       break;
     case ActionTypes.UI_CLICK_TORRENT:
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);
