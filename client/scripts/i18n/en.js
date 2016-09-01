@@ -29,6 +29,7 @@ export default {
   'filter.untagged': 'Untagged',
 
   'locale.language.en': 'English',
+  'locale.language.fr': 'French',
   'locale.language.nl': 'Nederlands',
 
   'notification.torrent.add': `Successfully added {countElement} {count, plural,
