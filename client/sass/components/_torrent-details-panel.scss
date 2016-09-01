@@ -29,6 +29,12 @@ $torrent-details--directory-tree--file--hover--background: #2f3844;
 $torrent-details--directory-tree--file--hover--foreground: #8799ad;
 $torrent-details--directory-tree--file--hover--border: #515f6f;
 
+$torrent-details--directory-tree--file--selected--background: rgba($blue, 0.1);
+$torrent-details--directory-tree--file--selected--foreground: rgba(lighten($blue, 5), 0.9);
+$torrent-details--directory-tree--file--selected--hover--background: rgba($blue, 0.2);
+$torrent-details--directory-tree--file--selected--hover--foreground: $blue;
+$torrent-details--directory-tree--file--selected--border: rgba($blue, 0.25);
+
 $torrent-details--directory-tree--parent-directory--foreground: rgba($modal--body--foreground, 0.6);
 $torrent-details--directory-tree--parent-directory--icon--fill: rgba($modal--body--foreground, 0.5);
 
@@ -210,6 +216,8 @@ $torrent-details--tags--foreground: #1a2028;
 
         &__node {
           color: $directory-tree--foreground;
+          position: relative;
+          transition: background 0.25s, border 0.25s, color 0.25s;
 
           &--group {
 
@@ -226,12 +234,62 @@ $torrent-details--tags--foreground: #1a2028;
               font-weight: 500;
 
               .icon {
-                fill: $directory-tree--icon--folder--open;
+
+                &--folder {
+                  fill: $directory-tree--icon--folder--open;
+                }
               }
             }
 
             .icon {
-              fill: $directory-tree--icon--folder;
+
+              &--folder {
+                fill: $directory-tree--icon--folder;
+              }
+            }
+          }
+
+          &--selectable {
+            position: relative;
+
+            &:after {
+              background: $torrent-details--directory-tree--file--hover--border;
+              bottom: 0;
+              content: '';
+              height: auto;
+              left: -2px;
+              opacity: 0;
+              position: absolute;
+              top: 0;
+              transition: opacity 0.25s;
+              width: 2px;
+            }
+
+            &:hover {
+              background: $torrent-details--directory-tree--file--hover--background;
+              color: $torrent-details--directory-tree--file--hover--foreground;
+
+              &:after {
+                opacity: 0.6;
+              }
+
+              .file {
+
+                &__detail {
+
+                  &--size,
+                  &--priority {
+                    color: $directory-tree--file-details--hover--foreground;
+                  }
+                }
+              }
+
+              .icon {
+
+                &--file {
+                  fill: $torrent-details--directory-tree--file--hover--foreground;
+                }
+              }
             }
           }
 
@@ -242,70 +300,33 @@ $torrent-details--tags--foreground: #1a2028;
 
               &--size,
               &--priority {
-                color: $directory-tree--file-details--foreground;
+                color: currentColor;
               }
-            }
-
-            .icon {
-              fill: $directory-tree--icon--file;
             }
           }
         }
 
-        &__selectable {
-          position: relative;
-          transition: background 0.25s, border 0.25s, color 0.25s;
-
-          &:after {
-            background: $torrent-details--directory-tree--file--hover--border;
-            bottom: 0;
-            content: '';
-            height: auto;
-            left: -2px;
-            opacity: 0;
-            position: absolute;
-            top: 0;
-            transition: opacity 0.25s;
-            width: 2px;
-          }
-
-          &:hover {
-            background: $torrent-details--directory-tree--file--hover--background;
-            color: $torrent-details--directory-tree--file--hover--foreground;
-
-            &:after {
-              opacity: 1;
-            }
-
-            .file {
-
-              &__detail {
-
-                &--size,
-                &--priority {
-                  color: $directory-tree--file-details--hover--foreground;
-                }
-              }
-            }
-
-            .icon {
-              fill: $torrent-details--directory-tree--file--hover--foreground;
-            }
-
-          }
+        .icon {
+          fill: $directory-tree--icon--file;
         }
 
         &__parent-directory {
           color: $torrent-details--directory-tree--parent-directory--foreground;
 
           .icon {
-            fill: $torrent-details--directory-tree--parent-directory--icon--fill;
+
+            &--disk {
+              fill: $torrent-details--directory-tree--parent-directory--icon--fill;
+            }
           }
         }
       }
 
       .icon {
-        fill: $directory-tree--icon--file;
+
+        &--file {
+          fill: $directory-tree--icon--file;
+        }
       }
     }
 

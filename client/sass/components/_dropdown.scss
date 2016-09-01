@@ -44,6 +44,11 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
     padding: $dropdown--button--padding--top $dropdown--button--padding--right + $dropdown--arrow--width + $dropdown--arrow--margin $dropdown--button--padding--bottom $dropdown--button--padding--left;
     text-align: left;
     width: auto;
+
+    .dropdown--direction-up & {
+      padding-bottom: $dropdown--button--padding--bottom;
+      padding-top: $dropdown--button--padding--bottom;
+    }
   }
 
   &__content {
@@ -56,6 +61,11 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
 
     &__container {
       padding: 25px 30px;
+    }
+
+    .dropdown--direction-up & {
+      bottom: 0;
+      top: auto;
     }
   }
 

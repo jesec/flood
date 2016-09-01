@@ -135,6 +135,7 @@ $modal--tabs--in-body--background: #2a323e;
   &__content {
     flex: 1 1 auto;
     padding: $modal--content--padding--top $modal--content--padding--right $modal--content--padding--bottom $modal--content--padding--left;
+    position: relative;
 
     &__wrapper {
       background: $modal--background;
@@ -157,6 +158,21 @@ $modal--tabs--in-body--background: #2a323e;
       transform: translate(-50%, 0);
       transform-origin: 50% 50%;
       width: 500px;
+    }
+
+    &--nested-scroll {
+      overflow: hidden !important;
+      padding: 0;
+      position: relative;
+
+      &__header {
+        padding-left: $modal--content--padding--left;
+        padding-right: $modal--content--padding--right;
+      }
+
+      &__content {
+        padding: $modal--content--padding--top $modal--content--padding--right $modal--content--padding--bottom $modal--content--padding--left;
+      }
     }
   }
 
