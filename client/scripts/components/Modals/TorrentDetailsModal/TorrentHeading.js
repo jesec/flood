@@ -135,9 +135,9 @@ export default class TorrentHeading extends React.Component {
               <DownloadThickIcon />
               {downloadRate.value}
               <em className="unit">{downloadRate.unit}</em>
-                &nbsp;&mdash;&nbsp;
-                {completed.value}
-                <em className="unit">{completed.unit}</em>
+              &nbsp;&mdash;&nbsp;
+              {completed.value}
+              <em className="unit">{completed.unit}</em>
             </li>
             <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--upload">
               <UploadThickIcon />
