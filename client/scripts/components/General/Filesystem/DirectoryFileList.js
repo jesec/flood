@@ -1,8 +1,8 @@
 import React from 'react';
 
 import File from '../../Icons/File';
-import format from '../../../util/formatData';
 import PriorityMeter from './PriorityMeter';
+import Size from '../Size';
 import TorrentActions from '../../../actions/TorrentActions';
 
 const METHODS_TO_BIND = ['handlePriorityChange'];
@@ -33,7 +33,6 @@ export default class DirectoryFiles extends React.Component {
     });
 
     let files = branch.map((file, index) => {
-      let fileSize = format.data(file.sizeBytes, '', 1);
 
       return (
         <div className="directory-tree__node directory-tree__selectable directory-tree__node--file file"
@@ -43,8 +42,7 @@ export default class DirectoryFiles extends React.Component {
             {file.filename}
           </div>
           <div className="file__detail file__detail--size">
-            {fileSize.value}
-            <em className="unit">{fileSize.unit}</em>
+            <Size value={file.sizeBytes} precision={1} />
           </div>
           <div className="file__detail file__detail--size">
             {file.percentComplete}%
