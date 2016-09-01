@@ -13,6 +13,7 @@ import PeersIcon from '../Icons/PeersIcon';
 import ProgressBar from '../General/ProgressBar';
 import RatioIcon from '../Icons/RatioIcon';
 import SeedsIcon from '../Icons/SeedsIcon';
+import Size from '../General/Size';
 import {torrentStatusIcons} from '../../util/torrentStatusIcons';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
 import UploadThickIcon from '../Icons/UploadThickIcon';
@@ -107,32 +108,24 @@ export default class Torrent extends React.Component {
   render() {
     let torrent = this.props.torrent;
 
-    let completed = format.data(torrent.bytesDone);
-    let downloadRate = format.data(torrent.downloadRate, '/s');
-    let downloadTotal = format.data(torrent.downloadTotal);
     let eta = format.eta(torrent.eta);
     let ratio = format.ratio(torrent.ratio);
-    let totalSize = format.data(torrent.sizeBytes);
-    let uploadRate = format.data(torrent.uploadRate, '/s');
-    let uploadTotal = format.data(torrent.uploadTotal);
 
     let torrentClasses = torrentStatusClasses(torrent, this.props.selected ? 'is-selected' : null, 'torrent');
 
-    let isActive = downloadRate.value > 0 || uploadRate.value > 0;
-    let isDownloading = downloadRate.value > 0;
+    let isActive = torrent.downloadRate > 0 || torrent.uploadRate > 0;
+    let isDownloading = torrent.downloadRate > 0;
 
     let secondaryDetails = [
       <li className="torrent__details--secondary torrent__details--speed
         torrent__details--speed--download" key="download-rate">
         <span className="torrent__details__icon">{ICONS.downloadThick}</span>
-        {downloadRate.value}
-        <em className="unit">{downloadRate.unit}</em>
+        <Size value={torrent.downloadRate} extraUnits='/s' />
       </li>,
       <li className="torrent__details--secondary torrent__details--speed
         torrent__details--speed--upload" key="upload-rate">
         <span className="torrent__details__icon">{ICONS.uploadThick}</span>
-        {uploadRate.value}
-        <em className="unit">{uploadRate.unit}</em>
+        <Size value={torrent.uploadRate} extraUnits='/s' />
       </li>
     ];
 
@@ -152,13 +145,11 @@ export default class Torrent extends React.Component {
         {torrent.percentComplete}
         <em className="unit">%</em>
         &nbsp;&mdash;&nbsp;
-        {completed.value}
-        <em className="unit">{completed.unit}</em>
+        <Size value={torrent.bytesDone} />
       </li>,
       <li className="torrent__details--uploaded" key="uploaded">
         <span className="torrent__details__icon">{ICONS.uploadThick}</span>
-        {uploadTotal.value}
-        <em className="unit">{uploadTotal.unit}</em>
+        <Size value={torrent.uploadTotal} />
       </li>,
       <li className="torrent__details--ratio" key="ratio">
         <span className="torrent__details__icon">{ICONS.ratio}</span>
@@ -166,8 +157,7 @@ export default class Torrent extends React.Component {
       </li>,
       <li className="torrent__details--size" key="size">
         <span className="torrent__details__icon">{ICONS.disk}</span>
-        {totalSize.value}
-        <em className="unit">{totalSize.unit}</em>
+        <Size value={torrent.sizeBytes} />
       </li>,
       <li className="torrent__details--peers" key="peers">
         <span className="torrent__details__icon">{ICONS.peers}</span>
