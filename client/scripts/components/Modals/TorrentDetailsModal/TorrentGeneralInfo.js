@@ -1,4 +1,4 @@
-import {formatMessage, FormattedDate, FormattedMessage, FormattedTime, injectIntl} from 'react-intl';
+import {formatMessage, FormattedDate, FormattedMessage, FormattedNumber, FormattedTime, injectIntl} from 'react-intl';
 import classNames from 'classnames';
 import React from 'react';
 
@@ -142,9 +142,14 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {torrent.connectedPeers} of {torrent.totalPeers} <FormattedMessage
+                <FormattedMessage
                   id="torrents.details.general.connected"
-                  defaultMessage="connected"
+                  defaultMessage="{connected} connected of {total}"
+                  values={{
+                    connectedCount: torrent.connectedPeers,
+                    connected: <FormattedNumber value={torrent.connectedPeers} />,
+                    total: <FormattedNumber value={torrent.totalPeers} />
+                  }}
                 />
               </td>
             </tr>
@@ -156,9 +161,14 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {torrent.connectedSeeds} of {torrent.totalSeeds} <FormattedMessage
+                <FormattedMessage
                   id="torrents.details.general.connected"
-                  defaultMessage="connected"
+                  defaultMessage="{connected} connected of {total}"
+                  values={{
+                    connectedCount: torrent.connectedSeeds,
+                    connected: <FormattedNumber value={torrent.connectedSeeds} />,
+                    total: <FormattedNumber value={torrent.totalSeeds} />
+                  }}
                 />
               </td>
             </tr>

@@ -146,7 +146,11 @@ export default {
   'torrents.details.files': 'Fichiers',
   'torrents.details.general.added': 'Ajouté',
   'torrents.details.general.comment': 'Commentaires',
-  'torrents.details.general.connected': 'Connectés',
+  'torrents.details.general.connected': `{connected} {connectedCount, plural,
+      =0 {connecté}
+      one {connecté}
+      other {connectés}
+  } sur {total}`,
   'torrents.details.general.creation.date': 'Date de Création',
   'torrents.details.general.downloaded': 'Téléchargé',
   'torrents.details.general.free.disk.space': 'Espace Libre',

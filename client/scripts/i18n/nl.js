@@ -146,7 +146,7 @@ export default {
   'torrents.details.files': 'Bestanden',
   'torrents.details.general.added': 'Toegevoegd op',
   'torrents.details.general.comment': 'Opmerking',
-  'torrents.details.general.connected': 'verbonden',
+  'torrents.details.general.connected': '{connected} verbonden van {total}',
   'torrents.details.general.creation.date': 'Aangemaakt op',
   'torrents.details.general.downloaded': 'Gedownload',
   'torrents.details.general.free.disk.space': 'Vrije schijfruimte',
