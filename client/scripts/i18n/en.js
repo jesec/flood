@@ -120,6 +120,12 @@ export default {
 
   'speed.unlimited': 'Unlimited',
 
+  'unit.byte': 'B',
+  'unit.kilobyte': 'kB',
+  'unit.megabyte': 'MB',
+  'unit.gigabyte': 'GB',
+  'unit.terabyte': 'TB',
+
   'torrents.add.button.add': 'Add Torrent',
   'torrents.add.destination.label': 'Destination',
   'torrents.add.destination.placeholder': 'Destination',

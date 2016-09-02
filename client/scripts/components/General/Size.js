@@ -1,6 +1,7 @@
+import {formatMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-export default class Size extends React.Component {
+class Size extends React.Component {
   compute(bytes, extraUnits, precision) {
     let kilobyte = 1024,
       megabyte = kilobyte * 1024,
@@ -11,22 +12,22 @@ export default class Size extends React.Component {
 
     if ((bytes >= 0) && (bytes < kilobyte)) {
       value = bytes;
-      unit = 'B';
+      unit = this.props.intl.formatMessage({id: 'unit.byte', defaultMessage: 'B'});
     } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
       value = (bytes / kilobyte);
-      unit = 'KB';
+      unit = this.props.intl.formatMessage({id: 'unit.kilobyte', defaultMessage: 'kB'});
     } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
       value = (bytes / megabyte);
-      unit = 'MB';
+      unit = this.props.intl.formatMessage({id: 'unit.megabyte', defaultMessage: 'MB'});
     } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
       value = (bytes / gigabyte);
-      unit = 'GB';
+      unit = this.props.intl.formatMessage({id: 'unit.gigabyte', defaultMessage: 'GB'});
     } else if (bytes >= terabyte) {
       value = (bytes / terabyte);
-      unit = 'TB';
+      unit = this.props.intl.formatMessage({id: 'unit.terabyte', defaultMessage: 'TB'});
     } else {
       value = bytes;
-      unit = 'B';
+      unit = this.props.intl.formatMessage({id: 'unit.byte', defaultMessage: 'B'});
     }
 
     value = Number(value);
@@ -64,3 +65,5 @@ Size.defaultProps = {
   extraUnits: '',
   precision: 2
 };
+
+export default injectIntl(Size);
