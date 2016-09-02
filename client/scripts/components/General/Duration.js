@@ -1,7 +1,7 @@
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
-class Duration extends React.Component {
+export default class Duration extends React.Component {
   render() {
     let duration = this.props.value;
 
@@ -73,5 +73,3 @@ class Duration extends React.Component {
     }
   }
 }
-
-export default injectIntl(Duration);
