@@ -1,4 +1,4 @@
-import {formatMessage, injectIntl} from 'react-intl';
+import {formatMessage, FormattedNumber, injectIntl} from 'react-intl';
 import React from 'react';
 
 class Size extends React.Component {
@@ -59,7 +59,7 @@ class Size extends React.Component {
 
     return (
       <span>
-        {value}
+        <FormattedNumber value={value} />
         <em className="unit">{unit}</em>
       </span>
     );
