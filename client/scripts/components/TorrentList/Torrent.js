@@ -1,5 +1,5 @@
-import {FormattedDate} from 'react-intl';
 import classNames from 'classnames';
+import {FormattedDate} from 'react-intl';
 import React from 'react';
 
 import CalendarIcon from '../Icons/CalendarIcon';
