@@ -120,11 +120,11 @@ export default {
 
   'speed.unlimited': 'Illimité',
 
-  'unit.byte': 'o',
-  'unit.kilobyte': 'ko',
-  'unit.megabyte': 'Mo',
-  'unit.gigabyte': 'Go',
-  'unit.terabyte': 'To',
+  'unit.size.byte': 'o',
+  'unit.size.kilobyte': 'ko',
+  'unit.size.megabyte': 'Mo',
+  'unit.size.gigabyte': 'Go',
+  'unit.size.terabyte': 'To',
   'unit.speed': '{baseUnit}/s',
 
   'torrents.add.button.add': 'Ajouter un Torrent',

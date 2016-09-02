@@ -12,22 +12,22 @@ class Size extends React.Component {
 
     if ((bytes >= 0) && (bytes < kilobyte)) {
       value = bytes;
-      unit = this.props.intl.formatMessage({id: 'unit.byte', defaultMessage: 'B'});
+      unit = this.props.intl.formatMessage({id: 'unit.size.byte', defaultMessage: 'B'});
     } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
       value = (bytes / kilobyte);
-      unit = this.props.intl.formatMessage({id: 'unit.kilobyte', defaultMessage: 'kB'});
+      unit = this.props.intl.formatMessage({id: 'unit.size.kilobyte', defaultMessage: 'kB'});
     } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
       value = (bytes / megabyte);
-      unit = this.props.intl.formatMessage({id: 'unit.megabyte', defaultMessage: 'MB'});
+      unit = this.props.intl.formatMessage({id: 'unit.size.megabyte', defaultMessage: 'MB'});
     } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
       value = (bytes / gigabyte);
-      unit = this.props.intl.formatMessage({id: 'unit.gigabyte', defaultMessage: 'GB'});
+      unit = this.props.intl.formatMessage({id: 'unit.size.gigabyte', defaultMessage: 'GB'});
     } else if (bytes >= terabyte) {
       value = (bytes / terabyte);
-      unit = this.props.intl.formatMessage({id: 'unit.terabyte', defaultMessage: 'TB'});
+      unit = this.props.intl.formatMessage({id: 'unit.size.terabyte', defaultMessage: 'TB'});
     } else {
       value = bytes;
-      unit = this.props.intl.formatMessage({id: 'unit.byte', defaultMessage: 'B'});
+      unit = this.props.intl.formatMessage({id: 'unit.size.byte', defaultMessage: 'B'});
     }
 
     value = Number(value);
