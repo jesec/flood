@@ -6,6 +6,7 @@ import CalendarIcon from '../Icons/CalendarIcon';
 import ClockIcon from '../Icons/ClockIcon';
 import DiskIcon from '../Icons/DiskIcon';
 import DownloadThickIcon from '../Icons/DownloadThickIcon';
+import Duration from '../General/Duration';
 import EventTypes from '../../constants/EventTypes';
 import format from '../../util/formatData';
 import InformationIcon from '../Icons/InformationIcon';
@@ -108,7 +109,6 @@ export default class Torrent extends React.Component {
   render() {
     let torrent = this.props.torrent;
 
-    let eta = format.eta(torrent.eta);
     let ratio = format.ratio(torrent.ratio);
 
     let torrentClasses = torrentStatusClasses(torrent, this.props.selected ? 'is-selected' : null, 'torrent');
@@ -134,7 +134,7 @@ export default class Torrent extends React.Component {
         <li className="torrent__details--secondary torrent__details--eta"
           key="eta">
           <span className="torrent__details__icon">{ICONS.clock}</span>
-          {eta}
+          <Duration value={torrent.eta} />
         </li>
       );
     }
