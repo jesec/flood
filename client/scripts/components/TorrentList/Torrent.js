@@ -142,7 +142,7 @@ export default class Torrent extends React.Component {
     let tertiaryDetails = [
       <li className="torrent__details--completed" key="downloaded">
         <span className="torrent__details__icon">{ICONS.downloadThick}</span>
-        {torrent.percentComplete}
+        <FormattedNumber value={torrent.percentComplete} />
         <em className="unit">%</em>
         &nbsp;&mdash;&nbsp;
         <Size value={torrent.bytesDone} />

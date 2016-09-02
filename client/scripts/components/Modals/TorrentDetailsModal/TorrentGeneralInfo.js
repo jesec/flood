@@ -130,7 +130,7 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {torrent.percentComplete}
+                <FormattedNumber value={torrent.percentComplete} />
                 <em className="unit">%</em>
               </td>
             </tr>
