@@ -126,6 +126,13 @@ export default {
   'unit.size.gigabyte': 'GB',
   'unit.size.terabyte': 'TB',
   'unit.speed': '{baseUnit}/s',
+  'unit.time.year': 'j',
+  'unit.time.week': 'w',
+  'unit.time.day': 'd',
+  'unit.time.hour': 't',
+  'unit.time.minute': 'm',
+  'unit.time.second': 'tw',
+  'unit.time.infinity': '∞',
 
   'torrents.add.button.add': 'Torrent toevoegen',
   'torrents.add.destination.label': 'Downloadlocatie',

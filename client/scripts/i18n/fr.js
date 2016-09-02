@@ -126,6 +126,13 @@ export default {
   'unit.size.gigabyte': 'Go',
   'unit.size.terabyte': 'To',
   'unit.speed': '{baseUnit}/s',
+  'unit.time.year': 'a',
+  'unit.time.week': 'sem',
+  'unit.time.day': 'j',
+  'unit.time.hour': 'h',
+  'unit.time.minute': 'm',
+  'unit.time.second': 'sec',
+  'unit.time.infinity': '∞',
 
   'torrents.add.button.add': 'Ajouter un Torrent',
   'torrents.add.destination.label': 'Destination',
