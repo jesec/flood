@@ -1,4 +1,4 @@
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, FormattedNumber} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
@@ -141,7 +141,7 @@ export default class TorrentHeading extends React.Component {
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <RatioIcon />
-              {ratio}
+              <FormattedNumber value={ratio} />
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <ClockIcon />

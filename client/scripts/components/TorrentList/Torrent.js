@@ -153,7 +153,7 @@ export default class Torrent extends React.Component {
       </li>,
       <li className="torrent__details--ratio" key="ratio">
         <span className="torrent__details__icon">{ICONS.ratio}</span>
-        {ratio}
+        <FormattedNumber value={ratio} />
       </li>,
       <li className="torrent__details--size" key="size">
         <span className="torrent__details__icon">{ICONS.disk}</span>
