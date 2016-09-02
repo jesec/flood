@@ -4,6 +4,7 @@ import React from 'react';
 
 import ClockIcon from '../../Icons/ClockIcon';
 import DownloadThickIcon from '../../Icons/DownloadThickIcon';
+import Duration from '../../General/Duration';
 import format from '../../../util/formatData';
 import PauseIcon from '../../Icons/PauseIcon';
 import PriorityMeter from '../../General/Filesystem/PriorityMeter';
@@ -116,7 +117,6 @@ export default class TorrentHeading extends React.Component {
 
   render() {
     let torrent = this.props.torrent;
-    let eta = format.eta(torrent.eta);
     let ratio = format.ratio(torrent.ratio);
 
     let torrentClasses = torrentStatusClasses(torrent, 'torrent-details__header');
@@ -145,7 +145,7 @@ export default class TorrentHeading extends React.Component {
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <ClockIcon />
-              {eta}
+              <Duration value={torrent.eta} />
             </li>
           </ul>
           <ul className="torrent-details__sub-heading__secondary">
