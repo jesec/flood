@@ -2,7 +2,7 @@ import {formatMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 class Size extends React.Component {
-  compute(bytes, extraUnits, precision) {
+  compute(bytes, isSpeed, precision) {
     let kilobyte = 1024,
       megabyte = kilobyte * 1024,
       gigabyte = megabyte * 1024,
@@ -39,8 +39,13 @@ class Size extends React.Component {
       value = Math.floor(value);
     }
 
-    if (extraUnits) {
-      unit += extraUnits;
+    if (isSpeed) {
+      unit = this.props.intl.formatMessage({
+        id: 'unit.speed',
+        defaultMessage: '{baseUnit}/s'
+      }, {
+        baseUnit: unit
+      });
     }
 
     return {
@@ -50,7 +55,7 @@ class Size extends React.Component {
   }
 
   render() {
-    let {value, unit} = this.compute(this.props.value, this.props.extraUnits, this.props.precision);
+    let {value, unit} = this.compute(this.props.value, this.props.isSpeed, this.props.precision);
 
     return (
       <span>
@@ -62,7 +67,7 @@ class Size extends React.Component {
 }
 
 Size.defaultProps = {
-  extraUnits: '',
+  isSpeed: false,
   precision: 2
 };
 

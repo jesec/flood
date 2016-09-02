@@ -120,12 +120,12 @@ export default class Torrent extends React.Component {
       <li className="torrent__details--secondary torrent__details--speed
         torrent__details--speed--download" key="download-rate">
         <span className="torrent__details__icon">{ICONS.downloadThick}</span>
-        <Size value={torrent.downloadRate} extraUnits='/s' />
+        <Size value={torrent.downloadRate} isSpeed={true} />
       </li>,
       <li className="torrent__details--secondary torrent__details--speed
         torrent__details--speed--upload" key="upload-rate">
         <span className="torrent__details__icon">{ICONS.uploadThick}</span>
-        <Size value={torrent.uploadRate} extraUnits='/s' />
+        <Size value={torrent.uploadRate} isSpeed={true} />
       </li>
     ];
 

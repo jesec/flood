@@ -125,6 +125,7 @@ export default {
   'unit.megabyte': 'Mo',
   'unit.gigabyte': 'Go',
   'unit.terabyte': 'To',
+  'unit.speed': '{baseUnit}/s',
 
   'torrents.add.button.add': 'Ajouter un Torrent',
   'torrents.add.destination.label': 'Destination',

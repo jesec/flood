@@ -110,7 +110,7 @@ class TransferData extends React.Component {
             </span>
             <div className="client-stat__data">
               <div className="client-stat__data--primary">
-                <Size value={transferRate.download} extraUnits='/s' />
+                <Size value={transferRate.download} isSpeed={true} />
               </div>
               <div className="client-stat__data--secondary">
                 <Size value={transferTotals.download} /> <FormattedMessage
@@ -133,7 +133,7 @@ class TransferData extends React.Component {
             </span>
             <div className="client-stat__data">
               <div className="client-stat__data--primary">
-                <Size value={transferRate.upload} extraUnits='/s' />
+                <Size value={transferRate.upload} isSpeed={true} />
               </div>
               <div className="client-stat__data--secondary">
                 <Size value={transferTotals.upload} /> <FormattedMessage

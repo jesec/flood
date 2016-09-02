@@ -89,7 +89,7 @@ class SpeedLimitDropdown extends React.Component {
       return this.props.intl.formatMessage(MESSAGES.unlimited);
     } else {
       return (
-        <Size value={bytes} extraUnits='/s' precision={1} />
+        <Size value={bytes} isSpeed={true} precision={1} />
       );
     }
   }

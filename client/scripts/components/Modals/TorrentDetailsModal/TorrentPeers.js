@@ -17,10 +17,10 @@ export default class TorrentPeers extends React.Component {
           <tr key={index}>
             <td>{peer.address}</td>
             <td>
-              <Size value={peer.downloadRate} extraUnits='/s' />
+              <Size value={peer.downloadRate} isSpeed={true} />
             </td>
             <td>
-              <Size value={peer.uploadRate} extraUnits='/s' />
+              <Size value={peer.uploadRate} isSpeed={true} />
             </td>
           </tr>
         );
