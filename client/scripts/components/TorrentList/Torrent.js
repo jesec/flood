@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import {FormattedDate} from 'react-intl';
+import {FormattedDate, FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import CalendarIcon from '../Icons/CalendarIcon';
@@ -161,11 +161,27 @@ export default class Torrent extends React.Component {
       </li>,
       <li className="torrent__details--peers" key="peers">
         <span className="torrent__details__icon">{ICONS.peers}</span>
-        {torrent.connectedPeers} <em className="unit">of</em> {torrent.totalPeers}
+        <FormattedMessage
+          id="torrent.list.peers"
+          defaultMessage="{connected} {of} {total}"
+          values={{
+            connected: torrent.connectedPeers,
+            of: <em className="unit"><FormattedMessage id="torrent.list.peers.of" defaultMessage="of" /></em>,
+            total: torrent.totalPeers
+          }}
+        />
       </li>,
       <li className="torrent__details--seeds" key="seeds">
         <span className="torrent__details__icon">{ICONS.seeds}</span>
-        {torrent.connectedSeeds} <em className="unit">of</em> {torrent.totalSeeds}
+        <FormattedMessage
+          id="torrent.list.peers"
+          defaultMessage="{connected} {of} {total}"
+          values={{
+            connected: torrent.connectedSeeds,
+            of: <em className="unit"><FormattedMessage id="torrent.list.peers.of" defaultMessage="of" /></em>,
+            total: torrent.totalSeeds
+          }}
+        />
       </li>
     ];
 

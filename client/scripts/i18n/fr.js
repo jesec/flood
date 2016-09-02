@@ -184,6 +184,8 @@ export default {
   'torrents.list.context.start': 'Démarrer',
   'torrents.list.context.stop': 'Arrêter',
   'torrents.list.no.torrents': 'Aucun Torrent à afficher.',
+  'torrent.list.peers': '{connected} {of} {total}',
+  'torrent.list.peers.of': 'sur',
 
   'torrents.set.tags.button.set': 'Définir les Tags',
   'torrents.set.tags.button.state.setting': 'Paramètres...',
