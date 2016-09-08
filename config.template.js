@@ -11,6 +11,9 @@ const CONFIG = {
     socket: false,
     socketPath: '/tmp/rtorrent.sock'
   }
+  ssl: false,
+  sslKey: '/etc/letsencrypt/live/my.awesome.domain.com/fullchain.pem',
+  sslCert: '/etc/letsencrypt/live/my.awesome.domain.com/privkey.pem'
 };
 
 module.exports = CONFIG;
