@@ -1,7 +1,7 @@
 'use strict';
 
 let autoprefixer = require('gulp-autoprefixer');
-let browserSync = require('browser-sync');
+let browserSync = null;
 let cssnano = require('gulp-cssnano');
 let eslint = require('gulp-eslint');
 let gulp = require('gulp');
@@ -11,6 +11,12 @@ let sass = require('gulp-sass');
 let sourcemaps = require('gulp-sourcemaps');
 let uglify = require('gulp-uglify');
 let webpack = require('webpack');
+
+let development = process.env.NODE_ENV === 'development';
+
+if (development) {
+  browserSync = require('browser-sync');
+}
 
 // Ensure we have a user-defined config.js for use throughout the app.
 try {
@@ -25,8 +31,6 @@ try {
 let config = require('./config');
 let packageInfo = require('./package');
 
-let development = process.env.NODE_ENV === 'development';
-
 // Allow custom Flood proxy.
 let floodServerHost = config.floodServerHost || 'localhost';
 let proxyPath = `${floodServerHost}:${config.floodServerPort}`;
@@ -37,9 +41,7 @@ let dirs = {
   js: 'scripts',
   jsDist: '',
   styles: 'sass',
-  stylesDist: '',
-  img: 'images',
-  imgDist: 'images'
+  stylesDist: ''
 };
 
 let files = {
@@ -51,6 +53,7 @@ let files = {
 
 let webpackDevtool = 'source-map';
 let webpackWatch = false;
+
 if (development) {
   webpackDevtool = 'eval-source-map';
   webpackWatch = true;
@@ -108,17 +111,19 @@ gulp.task('eslint', () => {
     .pipe(eslint.format());
 });
 
-gulp.task('images', () => {
-  return gulp.src(dirs.src + '/' + dirs.img + '/**/*.*')
-    .pipe(gulp.dest(dirs.dist + '/' + dirs.imgDist));
-});
-
 gulp.task('sass', () => {
   return gulp.src(dirs.src + '/' + dirs.styles + '/' + files.mainStyles + '.scss')
-    .pipe(gulpif(development, sourcemaps.init()))
+    .pipe(sass())
+    .pipe(autoprefixer())
+    .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist));
+});
+
+gulp.task('sass:development', () => {
+  return gulp.src(dirs.src + '/' + dirs.styles + '/' + files.mainStyles + '.scss')
+    .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer())
-    .pipe(gulpif(development, sourcemaps.write('.')))
+    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist))
     .pipe(browserSync.stream({match: "**/*.css"}));
 });
@@ -145,8 +150,7 @@ gulp.task('reload', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch(dirs.src + '/' + dirs.styles + '/**/*.scss', ['sass']);
-  gulp.watch(dirs.src + '/' + dirs.img + '/**/*', ['images']);
+  gulp.watch(dirs.src + '/' + dirs.styles + '/**/*.scss', ['sass:development']);
   gulp.watch(dirs.src + '/' + dirs.js + '/**/*', ['eslint']);
 });
 
@@ -177,8 +181,8 @@ gulp.task('webpack', (callback) => {
   });
 });
 
-gulp.task('default', ['webpack', 'sass', 'images', 'reload']);
+gulp.task('default', ['webpack', 'sass']);
 
 gulp.task('dist', ['default', 'minify-css', 'minify-js']);
 
-gulp.task('livereload', ['default', 'browsersync', 'watch']);
+gulp.task('livereload', ['webpack', 'sass:development', 'browsersync', 'watch']);

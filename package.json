@@ -6,7 +6,7 @@
     "preinstall": "npm prune",
     "prestart": "./node_modules/.bin/gulp dist",
     "start": "./node_modules/.bin/nodemon ./server/bin/www",
-    "start:production": "node ./server/bin/www",
+    "start:production": "npm run prestart; node ./server/bin/www",
     "start:watch": "NODE_ENV='development' ./node_modules/.bin/gulp livereload"
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "d3": "^3.5.6",
     "debug": "^2.2.0",
     "del": "^2.2.1",
+    "envify": "^3.4.0",
     "es6-promise": "^3.2.1",
     "events": "^1.1.0",
     "express": "^4.14.0",
@@ -75,7 +76,6 @@
   },
   "devDependencies": {
     "browser-sync": "^2.13.0",
-    "envify": "^3.4.0",
     "eslint": "^2.8.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-plugin-import": "^1.5.0",
