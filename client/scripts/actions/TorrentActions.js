@@ -321,13 +321,13 @@ let TorrentActions = {
       })
       .then((data) => {
         AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS,
+          type: ActionTypes.CLIENT_SET_TORRENT_PRIORITY_SUCCESS,
           data
         });
       })
       .catch((error) => {
         AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_SET_FILE_PRIORITY_ERROR,
+          type: ActionTypes.CLIENT_SET_TORRENT_PRIORITY_ERROR,
           error
         });
       });
@@ -345,7 +345,12 @@ let TorrentActions = {
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS,
-          data
+          data: {
+            ...data,
+            hash,
+            fileIndices,
+            priority
+          }
         });
       })
       .catch((error) => {

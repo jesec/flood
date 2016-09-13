@@ -3,7 +3,7 @@ import React from 'react';
 
 import Checkmark from '../../Icons/Checkmark';
 
-const METHODS_TO_BIND = ['handleCheckboxChange'];
+const METHODS_TO_BIND = ['handleCheckboxChange', 'syncStateWithProps'];
 
 export default class Checkbox extends React.Component {
   constructor() {
@@ -16,36 +16,41 @@ export default class Checkbox extends React.Component {
     });
   }
 
-  componentDidMount() {
-    if (this.props.checked != null
-      && this.state.checked !== this.props.checked) {
-      this.setState({checked: this.props.checked});
-    }
-  }
-
   getValue() {
     return this.state.checked;
   }
 
-  handleCheckboxChange() {
+  handleCheckboxChange(event) {
     let currentCheckedState = this.state.checked;
     let newCheckedState = !currentCheckedState;
 
-    this.setState({checked: newCheckedState});
+    if (!this.props.useProps) {
+      this.setState({checked: newCheckedState});
+    }
 
     if (this.props.onChange) {
-      this.props.onChange(newCheckedState);
+      this.props.onChange(newCheckedState, event.nativeEvent);
+    }
+  }
+
+  handleClick(event) {
+    event.stopPropagation();
+  }
+
+  syncStateWithProps(props, state) {
+    if (props.checked != null && state.checked !== props.checked) {
+      console.log('set state');
+      this.setState({checked: props.checked});
     }
   }
 
   render() {
-    let classes = classnames('checkbox', {
-      'is-checked': this.state.checked
-    });
+    let checked = this.props.useProps ? this.props.checked : this.state.checked;
+    let classes = classnames('checkbox', {'is-checked': checked});
 
     return (
-      <label className={classes}>
-        <input type="checkbox" checked={this.state.checked}
+      <label className={classes} onClick={this.handleClick}>
+        <input type="checkbox" checked={checked}
           onChange={this.handleCheckboxChange} />
         <span className="checkbox__decoy">
           <Checkmark />
@@ -59,5 +64,7 @@ export default class Checkbox extends React.Component {
 }
 
 Checkbox.defaultProps = {
-  checked: false
+  checked: false,
+  children: null,
+  useProps: false
 };

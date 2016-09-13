@@ -12,13 +12,17 @@ import TorrentTrackers from './TorrentTrackers';
 import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
 
-const METHODS_TO_BIND = ['onTorrentDetailsChange', 'onReceiveTorrentsSuccess'];
+const METHODS_TO_BIND = [
+  'onTorrentDetailsChange',
+  'onReceiveTorrentsSuccess'
+];
 
 class TorrentDetailsModal extends React.Component {
   constructor() {
-    super(...arguments);
+    super();
 
     this.state = {
+      torrent: null,
       torrentDetails: null
     };
 
@@ -30,19 +34,24 @@ class TorrentDetailsModal extends React.Component {
   componentWillMount() {
     this.setState({
       torrent: TorrentStore.getTorrent(UIStore.getTorrentDetailsHash()),
-      torrentDetails: TorrentStore.getTorrentDetails(UIStore.getTorrentDetailsHash())
+      torrentDetails: TorrentStore.getTorrentDetails(
+        UIStore.getTorrentDetailsHash())
     });
   }
 
   componentDidMount() {
-    TorrentStore.listen(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
-    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
+    TorrentStore.listen(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE,
+      this.onTorrentDetailsChange);
+    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
+      this.onReceiveTorrentsSuccess);
     TorrentStore.fetchTorrentDetails();
   }
 
   componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
-    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
+    TorrentStore.unlisten(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE,
+      this.onTorrentDetailsChange);
+    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
+      this.onReceiveTorrentsSuccess);
     TorrentStore.stopPollingTorrentDetails();
   }
 
@@ -54,7 +63,8 @@ class TorrentDetailsModal extends React.Component {
 
   onTorrentDetailsChange() {
     this.setState({
-      torrentDetails: TorrentStore.getTorrentDetails(UIStore.getTorrentDetailsHash())
+      torrentDetails: TorrentStore.getTorrentDetails(
+        UIStore.getTorrentDetailsHash())
     });
   }
 
@@ -91,6 +101,7 @@ class TorrentDetailsModal extends React.Component {
           id: 'torrents.details.files',
           defaultMessage: 'Files'
         }),
+        modalContentClasses: 'modal__content--nested-scroll',
         props
       },
       'torrent-peers': {

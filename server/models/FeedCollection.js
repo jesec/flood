@@ -154,7 +154,7 @@ class FeedCollection {
   init() {
     this.db.find({}, (err, docs) => {
       if (err) {
-        return ;
+        return;
       }
 
       let newItemHandler = this.handleNewItem.bind(this);
