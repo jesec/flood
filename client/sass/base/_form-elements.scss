@@ -216,8 +216,11 @@ $authentication--label--foreground: #3a5567;
     .checkbox {
 
       &__decoy {
-        background: $checkbox--background--hover;
-        border-color: $checkbox--border--hover;
+
+        &:after {
+          background: $checkbox--background--hover;
+          border-color: $checkbox--border--hover;
+        }
       }
     }
   }
@@ -245,18 +248,25 @@ $authentication--label--foreground: #3a5567;
   }
 
   &__decoy {
-    @extend .textbox;
-    background: $checkbox--background;
-    border: 1px solid $checkbox--border;
-    border-radius: 2px;
     display: inline-block;
     height: $spacing-unit * 8/10;
     margin-right: $spacing-unit * 3/10;
     margin-top: -2px;
-    padding: 0;
     position: relative;
     vertical-align: middle;
     width: $spacing-unit * 8/10;
+
+    &:after {
+      @extend .textbox;
+      background: $checkbox--background;
+      border: 1px solid $checkbox--border;
+      border-radius: 2px;
+      content: '';
+      display: block;
+      height: inherit;
+      padding: 0;
+      width: inherit;
+    }
 
     .icon {
       fill: transparent;
@@ -267,6 +277,7 @@ $authentication--label--foreground: #3a5567;
       transition: fill 0.25s;
       transform: translate(-50%, -50%);
       width: $spacing-unit * 2/5;
+      z-index: 1;
     }
   }
 

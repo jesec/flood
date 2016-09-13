@@ -253,10 +253,10 @@ var client = {
 
   setFilePriority: (hashes, data, callback) => {
     // TODO Add support for multiple hashes.
-    let fileIndex = data.fileIndices[0];
+    let fileIndices = data.fileIndices;
     let request = new ClientRequest();
 
-    request.add('setFilePriority', {hashes, fileIndex, priority: data.priority});
+    request.add('setFilePriority', {hashes, fileIndices, priority: data.priority});
     request.onComplete(callback);
     request.send();
   },

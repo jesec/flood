@@ -3,57 +3,96 @@ import React from 'react';
 import DirectoryFileList from './DirectoryFileList';
 import DirectoryTreeNode from './DirectoryTreeNode';
 
-const METHODS_TO_BIND = ['getDirectoryTreeDomNodes'];
+const METHODS_TO_BIND = [
+  'getDirectoryTreeDomNodes'
+];
 
-export default class DirectoryTree extends React.Component {
+class DirectoryTree extends React.Component {
   constructor() {
     super();
+
+    this.state = {
+      selectedDirectories: [],
+      selectedNodes: []
+    };
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  getDirectoryTreeDomNodes(tree, depth = 0) {
-    let index = 0;
-    let hash = this.props.hash;
+  getDirectoryTreeDomNodes(tree = {}, depth = 0) {
+    let {directories = {}, files = []} = tree;
+    let {hash} = this.props;
+    let fileList = null;
     depth++;
 
-    let directories = Object.keys(tree).sort((a, b) => {
-      if (a === 'files') {
-        return 1;
-      }
+    directories = Object.keys(directories).sort(this.sortDirectories)
+      .map((directoryName, index) => {
+        let subSelectedItems = {};
 
-      if (b === 'files') {
-        return -1;
-      }
+        if (this.props.selectedItems.directories) {
+          subSelectedItems = this.props.selectedItems.directories[directoryName];
+        }
 
-      return a.localeCompare(b);
-    });
+        let subTree = directories[directoryName];
+        let id = `${index}${depth}${directoryName}`;
+        let isSelected = subSelectedItems && subSelectedItems.isSelected;
 
-    return directories.map((branchName) => {
-      let branch = tree[branchName];
-      index++;
-
-      if (branchName === 'files') {
         return (
-          <DirectoryFileList branch={branch} hash={hash}
-            key={`${index}${depth}${branchName}`} />
+          <DirectoryTreeNode depth={depth} directoryName={directoryName}
+            hash={hash} id={id} isSelected={isSelected}
+            isParentSelected={this.props.isParentSelected} key={id}
+            selectedItems={subSelectedItems}
+            onItemSelect={this.props.onItemSelect}
+            onPriorityChange={this.props.onPriorityChange}
+            path={this.props.path}
+            subTree={subTree} />
         );
-      } else {
-        return (
-          <DirectoryTreeNode depth={depth} directoryName={branchName}
-            hash={hash} subTree={branch} key={`${index}${depth}${branchName}`} />
-        );
-      }
-    });
+      });
+
+    if (files.length) {
+      let subSelectedItems = this.props.selectedItems.files;
+
+      fileList = (
+        <DirectoryFileList depth={depth} fileList={files} hash={hash}
+          key={`files-${depth}`} isParentSelected={this.props.isParentSelected}
+          onItemSelect={this.props.onItemSelect}
+          onPriorityChange={this.props.onPriorityChange} path={this.props.path}
+          selectedItems={subSelectedItems} />
+      );
+    }
+
+    return directories.concat([fileList]);
+  }
+
+  sortDirectories(a, b) {
+    return a.localeCompare(b);
   }
 
   render() {
+    try {
     return (
       <div className="directory-tree__tree">
         {this.getDirectoryTreeDomNodes(this.props.tree, this.props.depth)}
       </div>
     );
+    } catch (err) {
+      console.trace(err);
+    }
   }
 }
+
+DirectoryTree.defaultProps = {
+  isParentSelected: false,
+  path: [],
+  selectedItems: {}
+};
+
+DirectoryTree.propTypes = {
+  isParentSelected: React.PropTypes.bool,
+  path: React.PropTypes.array,
+  selectedItems: React.PropTypes.object
+};
+
+export default DirectoryTree;

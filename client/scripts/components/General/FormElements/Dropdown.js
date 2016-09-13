@@ -103,6 +103,12 @@ class Dropdown extends React.Component {
   }
 
   getDropdownMenu(items) {
+    let arrayMethod = this.props.direction === 'up' ? 'unshift' : 'push';
+    let content = [
+      <div className="dropdown__header" key="dropdown-header">
+        {this.getDropdownButton({header: true, trigger: false})}
+      </div>
+    ];
     let dropdownLists = items.map((itemList, index) => {
       return (
         <div className="dropdown__list" key={index}>
@@ -111,14 +117,15 @@ class Dropdown extends React.Component {
       );
     });
 
+    content[arrayMethod](
+      <ul className="dropdown__items" key="dropdown-items">
+        {dropdownLists}
+      </ul>
+    );
+
     return (
       <div className="dropdown__content menu">
-        <div className="dropdown__header">
-          {this.getDropdownButton({header: true, trigger: false})}
-        </div>
-        <ul className="dropdown__items">
-          {dropdownLists}
-        </ul>
+        {content}
       </div>
     );
   }
@@ -146,14 +153,16 @@ class Dropdown extends React.Component {
   }
 
   render() {
-    let dropdownWrapperClass = classnames(this.props.dropdownWrapperClass, {
-      [`${this.props.dropdownWrapperClass}--match-button-width`]:
-        this.props.matchButtonWidth,
-      [`${this.props.dropdownWrapperClass}--width-${this.props.width}`]:
-        this.props.width != null,
-      [`${this.props.dropdownWrapperClass}--no-wrap`]: this.props.nowrap,
-      'is-expanded': this.state.isOpen
-    });
+    let dropdownWrapperClass = classnames(this.props.dropdownWrapperClass,
+      `${this.props.dropdownWrapperClass}--direction-${this.props.direction}`,
+      {
+        [`${this.props.dropdownWrapperClass}--match-button-width`]:
+          this.props.matchButtonWidth,
+        [`${this.props.dropdownWrapperClass}--width-${this.props.width}`]:
+          this.props.width != null,
+        [`${this.props.dropdownWrapperClass}--no-wrap`]: this.props.nowrap,
+        'is-expanded': this.state.isOpen
+      });
 
     let menu = null;
 
@@ -176,6 +185,7 @@ class Dropdown extends React.Component {
 }
 
 Dropdown.defaultProps = {
+  direction: 'down',
   dropdownWrapperClass: 'dropdown',
   dropdownButtonClass: 'dropdown__trigger',
   matchButtonWidth: false,
@@ -183,6 +193,7 @@ Dropdown.defaultProps = {
 };
 
 Dropdown.propTypes = {
+  direction: React.PropTypes.oneOf(['down', 'up']),
   header: React.PropTypes.node,
   trigger: React.PropTypes.node,
   matchButtonWidth: React.PropTypes.bool,

@@ -52,6 +52,8 @@ export default class Modal extends React.Component {
     if (this.props.tabs) {
       let activeTabId = this.getActiveTabId();
       let activeTab = this.props.tabs[activeTabId];
+      let contentClasses = classnames('modal__content',
+        activeTab.modalContentClasses);
 
       let ModalContentComponent = activeTab.content;
       let modalContentData = activeTab.props;
@@ -68,7 +70,7 @@ export default class Modal extends React.Component {
       }
 
       modalBody.push(
-        <div className="modal__content" key="modal-content">
+        <div className={contentClasses} key="modal-content">
           <ModalContentComponent {...modalContentData} />
         </div>
       );
