@@ -11,8 +11,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 # Usage
 #### Pre-Requisites
 1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed __with XMLRPC__ configuration. _If you are currently using a web UI for rTorrent, you've already done this._
-  * On OS X, [brew](http://brew.sh/) makes it simple. After [installing brew](http://brew.sh/), just run `brew install rtorrent --with-xmlrpc-c`.
-  * For Linux, there are plenty of guides available. [Here's one](https://terminal28.com/how-to-install-and-configure-rutorrent-rtorrent-libtorrent-xmlrpc-screen-debian-7-wheezy/#4_Install_XMLRPC).
+  * For Linux & OS X, check out [rTorrent's installation wiki](https://github.com/rakshasa/rtorrent/wiki/Installing#compilation-help) and/or [this third-party tutorial](https://jes.sc/kb/rTorrent+ruTorrent-Seedbox-Guide.php#Install-Dependencies). When you run `./configure`, be sure to run with the `--with-xmlrpc-c` flag.
   * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows) (I haven't tested this, let me know if you have problems).
 2. Install NodeJS version `4.x`:
   * I recommend managing different Node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n).
