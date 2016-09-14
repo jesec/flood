@@ -3,8 +3,8 @@ import React from 'react';
 
 import Checkbox from '../FormElements/Checkbox';
 import File from '../../Icons/File';
-import format from '../../../util/formatData';
 import PriorityMeter from './PriorityMeter';
+import Size from '../Size';
 import TorrentActions from '../../../actions/TorrentActions';
 
 const ICONS = {file: <File />};
@@ -78,7 +78,6 @@ class DirectoryFiles extends React.Component {
         'directory-tree__node--file directory-tree__node--selectable', {
           'directory-tree__node--selected': isSelected
         });
-      let fileSize = format.data(file.sizeBytes, '', 1);
 
       return (
         <div className={classes} key={`${index}-${file.filename}`}
@@ -88,8 +87,7 @@ class DirectoryFiles extends React.Component {
             {file.filename}
           </div>
           <div className="file__detail file__detail--secondary">
-            {fileSize.value}
-            <em className="unit">{fileSize.unit}</em>
+            <Size value={file.sizeBytes} precision={1} />
           </div>
           <div className="file__detail file__detail--secondary">
             {file.percentComplete}%

@@ -6,9 +6,9 @@ import ReactDOM from 'react-dom';
 
 import Download from '../Icons/Download';
 import EventTypes from '../../constants/EventTypes';
-import format from '../../util/formatData';
 import LineChart from '../General/LineChart';
 import LoadingIndicator from '../General/LoadingIndicator';
+import Size from '../General/Size';
 import TransferDataStore from '../../stores/TransferDataStore';
 import UIStore from '../../stores/UIStore';
 import Upload from '../Icons/Upload';
@@ -102,11 +102,6 @@ class TransferData extends React.Component {
       let transferRates = TransferDataStore.getTransferRates();
       let transferTotals = TransferDataStore.getTransferTotals();
 
-      let downloadRate = format.data(transferRate.download, '/s');
-      let downloadTotal = format.data(transferTotals.download);
-      let uploadRate = format.data(transferRate.upload, '/s');
-      let uploadTotal = format.data(transferTotals.upload);
-
       content = (
         <div key="loaded">
           <div className="client-stat client-stat--download">
@@ -115,12 +110,10 @@ class TransferData extends React.Component {
             </span>
             <div className="client-stat__data">
               <div className="client-stat__data--primary">
-                {downloadRate.value}
-                <em className="unit">{downloadRate.unit}</em>
+                <Size value={transferRate.download} isSpeed={true} />
               </div>
               <div className="client-stat__data--secondary">
-                {downloadTotal.value}
-                <em className="unit">{downloadTotal.unit}</em> <FormattedMessage
+                <Size value={transferTotals.download} /> <FormattedMessage
                   id="sidebar.transferdata.downloaded"
                   defaultMessage="Downloaded"
                 />
@@ -140,12 +133,10 @@ class TransferData extends React.Component {
             </span>
             <div className="client-stat__data">
               <div className="client-stat__data--primary">
-                {uploadRate.value}
-                <em className="unit">{uploadRate.unit}</em>
+                <Size value={transferRate.upload} isSpeed={true} />
               </div>
               <div className="client-stat__data--secondary">
-                {uploadTotal.value}
-                <em className="unit">{uploadTotal.unit}</em> <FormattedMessage
+                <Size value={transferTotals.upload} /> <FormattedMessage
                   id="sidebar.transferdata.uploaded"
                   defaultMessage="Uploaded"
                 />

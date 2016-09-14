@@ -120,6 +120,20 @@ export default {
 
   'speed.unlimited': 'Illimité',
 
+  'unit.size.byte': 'o',
+  'unit.size.kilobyte': 'ko',
+  'unit.size.megabyte': 'Mo',
+  'unit.size.gigabyte': 'Go',
+  'unit.size.terabyte': 'To',
+  'unit.speed': '{baseUnit}/s',
+  'unit.time.year': 'a',
+  'unit.time.week': 'sem',
+  'unit.time.day': 'j',
+  'unit.time.hour': 'h',
+  'unit.time.minute': 'm',
+  'unit.time.second': 'sec',
+  'unit.time.infinity': '∞',
+
   'torrents.add.button.add': 'Ajouter un Torrent',
   'torrents.add.destination.label': 'Destination',
   'torrents.add.destination.placeholder': 'Destination',
@@ -139,7 +153,11 @@ export default {
   'torrents.details.files': 'Fichiers',
   'torrents.details.general.added': 'Ajouté',
   'torrents.details.general.comment': 'Commentaires',
-  'torrents.details.general.connected': 'Connectés',
+  'torrents.details.general.connected': `{connected} {connectedCount, plural,
+      =0 {connecté}
+      one {connecté}
+      other {connectés}
+  } sur {total}`,
   'torrents.details.general.creation.date': 'Date de Création',
   'torrents.details.general.downloaded': 'Téléchargé',
   'torrents.details.general.free.disk.space': 'Espace Libre',
@@ -177,6 +195,8 @@ export default {
   'torrents.list.context.start': 'Démarrer',
   'torrents.list.context.stop': 'Arrêter',
   'torrents.list.no.torrents': 'Aucun Torrent à afficher.',
+  'torrent.list.peers': '{connected} {of} {total}',
+  'torrent.list.peers.of': 'sur',
 
   'torrents.set.tags.button.set': 'Définir les Tags',
   'torrents.set.tags.button.state.setting': 'Paramètres...',

@@ -1,8 +1,8 @@
-import {formatMessage, FormattedDate, FormattedMessage, FormattedTime, injectIntl} from 'react-intl';
+import {formatMessage, FormattedDate, FormattedMessage, FormattedNumber, FormattedTime, injectIntl} from 'react-intl';
 import classNames from 'classnames';
 import React from 'react';
 
-import format from '../../../util/formatData';
+import Size from '../../General/Size';
 
 class TorrentGeneralInfo extends React.Component {
   getTags(tags) {
@@ -25,9 +25,6 @@ class TorrentGeneralInfo extends React.Component {
     if (torrent.creationDate) {
       creation = new Date(torrent.creationDate * 1000);
     }
-
-    let totalSize = format.data(torrent.sizeBytes);
-    let freeDiskSpace = format.data(torrent.freeDiskSpace);
 
     const VALUE_NOT_AVAILABLE = (
       <span className="not-available">
@@ -73,8 +70,7 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {freeDiskSpace.value}
-                <em className="unit">{freeDiskSpace.unit}</em>
+                <Size value={torrent.freeDiskSpace} />
               </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--location">
@@ -134,7 +130,7 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {torrent.percentComplete}
+                <FormattedNumber value={torrent.percentComplete} />
                 <em className="unit">%</em>
               </td>
             </tr>
@@ -146,9 +142,14 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {torrent.connectedPeers} of {torrent.totalPeers} <FormattedMessage
+                <FormattedMessage
                   id="torrents.details.general.connected"
-                  defaultMessage="connected"
+                  defaultMessage="{connected} connected of {total}"
+                  values={{
+                    connectedCount: torrent.connectedPeers,
+                    connected: <FormattedNumber value={torrent.connectedPeers} />,
+                    total: <FormattedNumber value={torrent.totalPeers} />
+                  }}
                 />
               </td>
             </tr>
@@ -160,9 +161,14 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {torrent.connectedSeeds} of {torrent.totalSeeds} <FormattedMessage
+                <FormattedMessage
                   id="torrents.details.general.connected"
-                  defaultMessage="connected"
+                  defaultMessage="{connected} connected of {total}"
+                  values={{
+                    connectedCount: torrent.connectedSeeds,
+                    connected: <FormattedNumber value={torrent.connectedSeeds} />,
+                    total: <FormattedNumber value={torrent.totalSeeds} />
+                  }}
                 />
               </td>
             </tr>
@@ -223,8 +229,7 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {totalSize.value}
-                <em className="unit">{totalSize.unit}</em>
+                <Size value={torrent.sizeBytes} />
               </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--type">

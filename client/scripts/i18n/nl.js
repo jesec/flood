@@ -120,6 +120,20 @@ export default {
 
   'speed.unlimited': 'Ongelimiteerd',
 
+  'unit.size.byte': 'B',
+  'unit.size.kilobyte': 'kB',
+  'unit.size.megabyte': 'MB',
+  'unit.size.gigabyte': 'GB',
+  'unit.size.terabyte': 'TB',
+  'unit.speed': '{baseUnit}/s',
+  'unit.time.year': 'j',
+  'unit.time.week': 'w',
+  'unit.time.day': 'd',
+  'unit.time.hour': 't',
+  'unit.time.minute': 'm',
+  'unit.time.second': 'tw',
+  'unit.time.infinity': '∞',
+
   'torrents.add.button.add': 'Torrent toevoegen',
   'torrents.add.destination.label': 'Downloadlocatie',
   'torrents.add.destination.placeholder': 'Downloadlocatie',
@@ -139,7 +153,7 @@ export default {
   'torrents.details.files': 'Bestanden',
   'torrents.details.general.added': 'Toegevoegd op',
   'torrents.details.general.comment': 'Opmerking',
-  'torrents.details.general.connected': 'verbonden',
+  'torrents.details.general.connected': '{connected} verbonden van {total}',
   'torrents.details.general.creation.date': 'Aangemaakt op',
   'torrents.details.general.downloaded': 'Gedownload',
   'torrents.details.general.free.disk.space': 'Vrije schijfruimte',
@@ -177,6 +191,8 @@ export default {
   'torrents.list.context.start': 'Start',
   'torrents.list.context.stop': 'Stop',
   'torrents.list.no.torrents': 'Geen torrents om te laten zien.',
+  'torrent.list.peers': '{connected} {of} {total}',
+  'torrent.list.peers.of': 'van',
 
   'torrents.set.tags.button.set': 'Tags instellen',
   'torrents.set.tags.button.state.setting': 'Instellen...',

@@ -1,15 +1,17 @@
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, FormattedNumber} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 
 import ClockIcon from '../../Icons/ClockIcon';
 import DownloadThickIcon from '../../Icons/DownloadThickIcon';
+import Duration from '../../General/Duration';
 import format from '../../../util/formatData';
 import PauseIcon from '../../Icons/PauseIcon';
 import PriorityMeter from '../../General/Filesystem/PriorityMeter';
 import ProgressBar from '../../General/ProgressBar';
 import propsMap from '../../../../../shared/constants/propsMap';
 import RatioIcon from '../../Icons/RatioIcon';
+import Size from '../../General/Size';
 import StartIcon from '../../Icons/StartIcon';
 import StopIcon from '../../Icons/StopIcon';
 import stringUtil from '../../../../../shared/util/stringUtil';
@@ -115,13 +117,7 @@ export default class TorrentHeading extends React.Component {
 
   render() {
     let torrent = this.props.torrent;
-    let completed = format.data(torrent.bytesDone);
-    let downloadRate = format.data(torrent.downloadRate, '/s');
-    let downloadTotal = format.data(torrent.downloadTotal);
-    let eta = format.eta(torrent.eta);
     let ratio = format.ratio(torrent.ratio);
-    let uploadRate = format.data(torrent.uploadRate, '/s');
-    let uploadTotal = format.data(torrent.uploadTotal);
 
     let torrentClasses = torrentStatusClasses(torrent, 'torrent-details__header');
     let torrentStatusIcon = torrentStatusIcons(torrent.status);
@@ -133,27 +129,23 @@ export default class TorrentHeading extends React.Component {
           <ul className="torrent-details__sub-heading__secondary">
             <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--download">
               <DownloadThickIcon />
-              {downloadRate.value}
-              <em className="unit">{downloadRate.unit}</em>
-                &nbsp;&mdash;&nbsp;
-                {completed.value}
-                <em className="unit">{completed.unit}</em>
+              <Size value={torrent.downloadRate} isSpeed={true} />
+              &nbsp;&mdash;&nbsp;
+              <Size value={torrent.bytesDone} />
             </li>
             <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--upload">
               <UploadThickIcon />
-              {uploadRate.value}
-              <em className="unit">{uploadRate.unit}</em>
+              <Size value={torrent.uploadRate} isSpeed={true} />
               &nbsp;&mdash;&nbsp;
-              {uploadTotal.value}
-              <em className="unit">{uploadTotal.unit}</em>
+              <Size value={torrent.uploadTotal} />
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <RatioIcon />
-              {ratio}
+              <FormattedNumber value={ratio} />
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <ClockIcon />
-              {eta}
+              <Duration value={torrent.eta} />
             </li>
           </ul>
           <ul className="torrent-details__sub-heading__secondary">

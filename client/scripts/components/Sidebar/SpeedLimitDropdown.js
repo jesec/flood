@@ -4,9 +4,9 @@ import React from 'react';
 import ClientActions from '../../actions/ClientActions';
 import Dropdown from '../General/FormElements/Dropdown';
 import EventTypes from '../../constants/EventTypes';
-import format from '../../util/formatData';
 import LimitsIcon from '../Icons/Limits';
 import SettingsStore from '../../stores/SettingsStore';
+import Size from '../General/Size';
 import Tooltip from '../General/Tooltip';
 import TransferDataStore from '../../stores/TransferDataStore';
 
@@ -88,12 +88,8 @@ class SpeedLimitDropdown extends React.Component {
     if (bytes === 0) {
       return this.props.intl.formatMessage(MESSAGES.unlimited);
     } else {
-      let formattedData = format.data(bytes, '/s', 1, {padded: false});
       return (
-        <span>
-          {formattedData.value}
-          <em className="unit">{formattedData.unit}</em>
-        </span>
+        <Size value={bytes} isSpeed={true} precision={1} />
       );
     }
   }

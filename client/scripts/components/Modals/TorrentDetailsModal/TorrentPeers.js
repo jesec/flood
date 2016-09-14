@@ -5,7 +5,7 @@ import Badge from '../../General/Badge';
 import DirectoryTree from '../../General/Filesystem/DirectoryTree';
 import File from '../../Icons/File';
 import FolderOpenSolid from '../../Icons/FolderOpenSolid';
-import format from '../../../util/formatData';
+import Size from '../../General/Size';
 
 export default class TorrentPeers extends React.Component {
   render() {
@@ -13,18 +13,14 @@ export default class TorrentPeers extends React.Component {
 
     if (peers) {
       let peerList = peers.map((peer, index) => {
-        let downloadRate = format.data(peer.downloadRate, '/s');
-        let uploadRate = format.data(peer.uploadRate, '/s');
         return (
           <tr key={index}>
             <td>{peer.address}</td>
             <td>
-              {downloadRate.value}
-              <em className="unit">{downloadRate.unit}</em>
+              <Size value={peer.downloadRate} isSpeed={true} />
             </td>
             <td>
-              {uploadRate.value}
-              <em className="unit">{uploadRate.unit}</em>
+              <Size value={peer.uploadRate} isSpeed={true} />
             </td>
           </tr>
         );
