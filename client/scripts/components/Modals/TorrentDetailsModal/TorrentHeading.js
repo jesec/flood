@@ -5,11 +5,11 @@ import React from 'react';
 import ClockIcon from '../../Icons/ClockIcon';
 import DownloadThickIcon from '../../Icons/DownloadThickIcon';
 import Duration from '../../General/Duration';
-import format from '../../../util/formatData';
 import PauseIcon from '../../Icons/PauseIcon';
 import PriorityMeter from '../../General/Filesystem/PriorityMeter';
 import ProgressBar from '../../General/ProgressBar';
 import propsMap from '../../../../../shared/constants/propsMap';
+import Ratio from '../../General/Ratio';
 import RatioIcon from '../../Icons/RatioIcon';
 import Size from '../../General/Size';
 import StartIcon from '../../Icons/StartIcon';
@@ -117,7 +117,6 @@ export default class TorrentHeading extends React.Component {
 
   render() {
     let torrent = this.props.torrent;
-    let ratio = format.ratio(torrent.ratio);
 
     let torrentClasses = torrentStatusClasses(torrent, 'torrent-details__header');
     let torrentStatusIcon = torrentStatusIcons(torrent.status);
@@ -141,7 +140,7 @@ export default class TorrentHeading extends React.Component {
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <RatioIcon />
-              <FormattedNumber value={ratio} />
+              <Ratio value={torrent.ratio} />
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <ClockIcon />
