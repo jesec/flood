@@ -8,10 +8,10 @@ import DiskIcon from '../Icons/DiskIcon';
 import DownloadThickIcon from '../Icons/DownloadThickIcon';
 import Duration from '../General/Duration';
 import EventTypes from '../../constants/EventTypes';
-import format from '../../util/formatData';
 import InformationIcon from '../Icons/InformationIcon';
 import PeersIcon from '../Icons/PeersIcon';
 import ProgressBar from '../General/ProgressBar';
+import Ratio from '../General/Ratio';
 import RatioIcon from '../Icons/RatioIcon';
 import SeedsIcon from '../Icons/SeedsIcon';
 import Size from '../General/Size';
@@ -109,8 +109,6 @@ export default class Torrent extends React.Component {
   render() {
     let torrent = this.props.torrent;
 
-    let ratio = format.ratio(torrent.ratio);
-
     let torrentClasses = torrentStatusClasses(torrent, this.props.selected ? 'is-selected' : null, 'torrent');
 
     let isActive = torrent.downloadRate > 0 || torrent.uploadRate > 0;
@@ -153,7 +151,7 @@ export default class Torrent extends React.Component {
       </li>,
       <li className="torrent__details--ratio" key="ratio">
         <span className="torrent__details__icon">{ICONS.ratio}</span>
-        <FormattedNumber value={ratio} />
+        <Ratio value={torrent.ratio} />
       </li>,
       <li className="torrent__details--size" key="size">
         <span className="torrent__details__icon">{ICONS.disk}</span>
