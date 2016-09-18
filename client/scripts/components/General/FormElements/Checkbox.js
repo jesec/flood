@@ -39,7 +39,6 @@ export default class Checkbox extends React.Component {
 
   syncStateWithProps(props, state) {
     if (props.checked != null && state.checked !== props.checked) {
-      console.log('set state');
       this.setState({checked: props.checked});
     }
   }
