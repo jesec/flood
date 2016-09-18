@@ -1,11 +1,13 @@
+$dark-blue: #1d2938;
 $blue: #258de5;
 $blue--lighter: saturate(lighten($blue, 10%), 100%);
 $green: #39ce83;
+$light-blue: #e9eef2;
 $red: #e95779;
 $white: #fff;
 
-$background: #e9eef2;
+$background: $dark-blue;
 $foreground: #53718a;
 
-$sidebar--background: #1d2938;
-$main-content--background: #e9eef2;
+$sidebar--background: $dark-blue;
+$main-content--background: $light-blue;
