@@ -10,7 +10,7 @@ export default class Ratio extends React.Component {
 
     if (ratio < 10) {
       precision = 2;
-    } else if (ratio < 100) {
+    } else if (ratio >= 100) {
       precision = 0;
     }
 
