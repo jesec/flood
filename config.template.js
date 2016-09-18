@@ -10,10 +10,10 @@ const CONFIG = {
     port: 5000,
     socket: false,
     socketPath: '/tmp/rtorrent.sock'
-  }
+  },
   ssl: false,
-  sslKey: '/etc/letsencrypt/live/my.awesome.domain.com/fullchain.pem',
-  sslCert: '/etc/letsencrypt/live/my.awesome.domain.com/privkey.pem'
+  sslKey: '/absolute/path/to/key/',
+  sslCert: '/absolute/path/to/certificate/'
 };
 
 module.exports = CONFIG;
