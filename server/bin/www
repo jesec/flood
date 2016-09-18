@@ -27,23 +27,22 @@ app.set('port', port);
  * Create HTTP or HTTPS server.
  */
  
-var ssl = Boolean(config.ssl);
-var server;
+let server;
 
-if (ssl) {
-	if (!config.sslKey || ! config.sslCert){
-		console.error('Cannot start Flood server in secure mode, `sslKey` or `sslCert` is missing in config.js.');
-		return;
-	}
-	
-	var options = {
-		key: fs.readFileSync(config.sslKey),
-		cert: fs.readFileSync(config.sslCert)
-	};
-	server = require('https').createServer(options, app);
-	
+if (config.ssl) {
+  if (!config.sslKey || ! config.sslCert){
+    console.error('Cannot start Flood server in secure mode, `sslKey` or `sslCert` is missing in config.js.');
+    return;
+  }
+  
+  var options = {
+    key: fs.readFileSync(config.sslKey),
+    cert: fs.readFileSync(config.sslCert)
+  };
+  server = require('https').createServer(options, app);
+  
 } else {
-	server = require('http').createServer(app);
+  server = require('http').createServer(app);
 }
 
 /**
