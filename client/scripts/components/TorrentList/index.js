@@ -72,7 +72,7 @@ class TorrentListContainer extends React.Component {
   }
 
   componentDidMount() {
-    UIStore.registerDependency('torrent-list');
+    UIStore.registerDependency({id: 'torrent-list', message: 'Torrent List'});
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.UI_TORRENTS_LIST_FILTERED, this.onReceiveTorrentsSuccess);

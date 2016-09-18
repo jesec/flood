@@ -40,7 +40,7 @@ class FloodApp extends React.Component {
   }
 
   componentWillMount() {
-    UIStore.registerDependency('flood-settings');
+    UIStore.registerDependency({id: 'flood-settings', message: 'Flood Settings'});
   }
 
   componentDidMount() {

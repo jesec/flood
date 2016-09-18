@@ -1,11 +1,20 @@
 import {browserHistory} from 'react-router';
+import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import AuthStore from '../../stores/AuthStore';
+import Checkmark from '../Icons/Checkmark';
+import Close from '../Icons/Close';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicator from '../General/LoadingIndicator';
 import UIStore from '../../stores/UIStore';
+
+const AUTHENTICATION_DEPENDENCY_MESSAGE = 'Authentication Status';
+
+const ICONS = {
+  satisfied: <Checkmark />
+};
 
 const METHODS_TO_BIND = [
   'handleVerifyError',
@@ -13,6 +22,7 @@ const METHODS_TO_BIND = [
   'handleLoginError',
   'handleLoginSuccess',
   'handleRegisterSuccess',
+  'handleUIDependenciesChange',
   'handleUIDependenciesLoaded'
 ];
 
@@ -22,6 +32,12 @@ class Application extends React.Component {
 
     this.state = {
       authStatusDetermined: false,
+      dependencies: {
+        authentication: {
+          message: AUTHENTICATION_DEPENDENCY_MESSAGE,
+          satisfied: false
+        }
+      },
       isAuthenticated: false,
       dependenciesLoaded: false
     };
@@ -44,6 +60,8 @@ class Application extends React.Component {
       this.handleVerifySuccess);
     UIStore.listen(EventTypes.UI_DEPENDENCIES_LOADED,
       this.handleUIDependenciesLoaded);
+    UIStore.listen(EventTypes.UI_DEPENDENCIES_CHANGE,
+      this.handleUIDependenciesChange);
     AuthStore.verify();
   }
 
@@ -92,6 +110,42 @@ class Application extends React.Component {
     browserHistory.push('list');
   }
 
+  getDependencyList() {
+    let {dependencies} = this.state;
+
+    return Object.keys(dependencies).map((id, index) => {
+      let {message, satisfied} = dependencies[id];
+      let statusIcon = ICONS.satisfied;
+
+      let classes = classnames('dependency-list__dependency', {
+        'dependency-list__dependency--satisfied': satisfied
+      });
+
+      return (
+        <li className={classes} key={id}>
+          <span className="dependency-list__dependency__icon">
+            {statusIcon}
+          </span>
+          <span className="dependency-list__dependency__message">
+            {message}
+          </span>
+        </li>
+      );
+    });
+  }
+
+  handleUIDependenciesChange() {
+    this.setState({
+      dependencies: {
+        authentication: {
+          message: AUTHENTICATION_DEPENDENCY_MESSAGE,
+          satisfied: this.state.authStatusDetermined
+        },
+        ...UIStore.getDependencies()
+      }
+    });
+  }
+
   handleUIDependenciesLoaded() {
     this.setState({dependenciesLoaded: true});
   }
@@ -113,12 +167,15 @@ class Application extends React.Component {
   }
 
   render() {
-    let loadingIndicator;
+    let loadingIndicator = null;
 
     if (this.isLoading()) {
       loadingIndicator = (
-        <div className="application__loading-indicator">
+        <div className="application__dependency-list">
           <LoadingIndicator inverse={true} />
+          <ul className="dependency-list">
+            {this.getDependencyList()}
+          </ul>
         </div>
       );
     }
@@ -126,10 +183,9 @@ class Application extends React.Component {
     return (
       <div className="application">
         <CSSTransitionGroup
-          className="application__loading-indicator__wrapper"
           transitionEnterTimeout={1000}
           transitionLeaveTimeout={1000}
-          transitionName="application__loading-indicator">
+          transitionName="application__dependency-list">
           {loadingIndicator}
         </CSSTransitionGroup>
         {this.props.children}

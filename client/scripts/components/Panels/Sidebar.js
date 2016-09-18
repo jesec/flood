@@ -17,7 +17,7 @@ import UIStore from '../../stores/UIStore';
 
 class Sidebar extends React.Component {
   componentDidMount() {
-    UIStore.registerDependency('torrent-taxonomy');
+    UIStore.registerDependency({id: 'torrent-taxonomy', message: 'Torrent Taxonomy'});
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
       this.onTorrentRequestSuccess);
     TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
@@ -32,9 +32,7 @@ class Sidebar extends React.Component {
   }
 
   onTorrentTaxonomyRequestSuccess() {
-    if (!UIStore.hasSatisfiedDependencies()) {
-      UIStore.satisfyDependency('torrent-taxonomy');
-    }
+    UIStore.satisfyDependency('torrent-taxonomy');
   }
 
   onTorrentRequestSuccess() {

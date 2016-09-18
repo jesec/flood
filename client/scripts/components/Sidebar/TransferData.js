@@ -36,7 +36,10 @@ class TransferData extends React.Component {
   }
 
   componentDidMount() {
-    UIStore.registerDependency(['transfer-data', 'transfer-history']);
+    UIStore.registerDependency([
+      {id: 'transfer-data', message: 'Data Transfer Rate Details'},
+      {id: 'transfer-history', message: 'Data Transfer History'}
+    ]);
     this.setState({
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
@@ -76,9 +79,7 @@ class TransferData extends React.Component {
       transferDataRequestSuccess: true
     });
 
-    if (!UIStore.hasSatisfiedDependencies()) {
-      UIStore.satisfyDependency('transfer-data');
-    }
+    UIStore.satisfyDependency('transfer-data');
   }
 
   onTransferHistoryRequestSuccess() {
@@ -88,9 +89,7 @@ class TransferData extends React.Component {
       });
     }
 
-    if (!UIStore.hasSatisfiedDependencies()) {
-      UIStore.satisfyDependency('transfer-history');
-    }
+    UIStore.satisfyDependency('transfer-history');
   }
 
   render() {

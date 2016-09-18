@@ -7,7 +7,7 @@ import LoginForm from '../components/Auth/LoginForm';
 export default class LoginView extends React.Component {
   render() {
     return (
-      <ApplicationView>
+      <ApplicationView modifier="login">
         <LoginForm />
       </ApplicationView>
     );
