@@ -20,6 +20,7 @@
 @import "components/base-menu";
 @import "components/client-stats";
 @import "components/context-menu";
+@import "components/dependency-list";
 @import "components/directory-tree";
 @import "components/dropdown";
 @import "components/dropzone";
@@ -41,3 +42,5 @@
 @import "components/torrent-details-panel";
 @import "components/torrents";
 @import "components/transfer-data";
+
+@import "views/login";
