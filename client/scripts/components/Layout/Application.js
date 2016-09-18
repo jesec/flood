@@ -1,6 +1,7 @@
 import {browserHistory} from 'react-router';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import AuthStore from '../../stores/AuthStore';
@@ -9,8 +10,6 @@ import Close from '../Icons/Close';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicator from '../General/LoadingIndicator';
 import UIStore from '../../stores/UIStore';
-
-const AUTHENTICATION_DEPENDENCY_MESSAGE = 'Authentication Status';
 
 const ICONS = {
   satisfied: <Checkmark />
@@ -34,7 +33,10 @@ class Application extends React.Component {
       authStatusDetermined: false,
       dependencies: {
         authentication: {
-          message: AUTHENTICATION_DEPENDENCY_MESSAGE,
+          message: (
+            <FormattedMessage id="dependency.loading.authentication.status"
+              defaultMessage="Authentication Status" />
+          ),
           satisfied: false
         }
       },
@@ -138,7 +140,10 @@ class Application extends React.Component {
     this.setState({
       dependencies: {
         authentication: {
-          message: AUTHENTICATION_DEPENDENCY_MESSAGE,
+          message: (
+            <FormattedMessage id="dependency.loading.authentication.status"
+              defaultMessage="Authentication Status" />
+          ),
           satisfied: this.state.authStatusDetermined
         },
         ...UIStore.getDependencies()

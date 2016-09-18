@@ -1,6 +1,6 @@
-import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -37,8 +37,20 @@ class TransferData extends React.Component {
 
   componentDidMount() {
     UIStore.registerDependency([
-      {id: 'transfer-data', message: 'Data Transfer Rate Details'},
-      {id: 'transfer-history', message: 'Data Transfer History'}
+      {
+        id: 'transfer-data',
+        message: (
+          <FormattedMessage id="dependency.loading.transfer.rate.details"
+            defaultMessage="Data Transfer Rate Details" />
+        )
+      },
+      {
+        id: 'transfer-history',
+        message: (
+          <FormattedMessage id="dependency.loading.transfer.history"
+            defaultMessage="Data Transfer History" />
+        )
+      }
     ]);
     this.setState({
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth

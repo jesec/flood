@@ -1,4 +1,4 @@
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
 import classNames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
@@ -17,6 +17,13 @@ import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
+
+const MESSAGES = defineMessages({
+  torrentListDependency: {
+    id: 'dependency.loading.torrent.list',
+    defaultMessage: 'Torrent List'
+  }
+});
 
 const METHODS_TO_BIND = [
   'bindExternalPriorityChangeHandler',
@@ -72,7 +79,10 @@ class TorrentListContainer extends React.Component {
   }
 
   componentDidMount() {
-    UIStore.registerDependency({id: 'torrent-list', message: 'Torrent List'});
+    UIStore.registerDependency({
+      id: 'torrent-list',
+      message: this.props.intl.formatMessage(MESSAGES.torrentListDependency)
+    });
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.UI_TORRENTS_LIST_FILTERED, this.onReceiveTorrentsSuccess);
