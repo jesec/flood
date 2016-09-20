@@ -95,8 +95,6 @@ export default {
   'priority.low': 'Low',
   'priority.normal': 'Normal',
 
-  'searchbox.placeholder': 'Search torrents',
-
   'settings.bandwidth.slots.download.divider.label': 'Download Slots Divider',
   'settings.bandwidth.slots.download.global.label': 'Download Slots Global',
   'settings.bandwidth.slots.download.label': 'Download Slots Per Torrent',
@@ -147,6 +145,8 @@ export default {
   'sidebar.button.feeds': 'Feeds',
   'sidebar.button.settings': 'Settings',
   'sidebar.button.speedlimits': 'Speed Limits',
+
+  'sidebar.search.placeholder': 'Search torrents',
 
   'sidebar.transferdata.downloaded': 'Downloaded',
   'sidebar.transferdata.uploaded': 'Uploaded',

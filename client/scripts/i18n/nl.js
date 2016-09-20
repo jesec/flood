@@ -50,14 +50,14 @@ export default {
   'feeds.validation.must.specify.valid.feed.url': 'Je moet een geldige feed URL opgeven.',
 
   'filter.all': 'Alles',
-  'filter.status.title': 'Filter op Status',
+  'filter.status.title': 'Filter op status',
   'filter.status.downloading': 'Downloaden',
   'filter.status.completed': 'Klaar',
   'filter.status.active': 'Actief',
   'filter.status.inactive': 'Inactief',
   'filter.status.error': 'Fout',
-  'filter.tracker.title': 'Filter op Tracker',
-  'filter.tag.title': 'Filter op Tag',
+  'filter.tracker.title': 'Filter op tracker',
+  'filter.tag.title': 'Filter op tag',
   'filter.untagged': 'Niet getagd',
 
   'locale.language.en': 'English',
@@ -94,8 +94,6 @@ export default {
   'priority.high': 'Hoog',
   'priority.low': 'Laag',
   'priority.normal': 'Normaal',
-
-  'searchbox.placeholder': 'Zoek torrents',
 
   'settings.bandwidth.slots.download.divider.label': 'Download slots divider',
   'settings.bandwidth.slots.download.global.label': 'Download slots globaal',
@@ -148,6 +146,8 @@ export default {
   'sidebar.button.settings': 'Instellingen',
   'sidebar.button.speedlimits': 'Sneldheidsbeperkingen',
 
+  'sidebar.search.placeholder': 'Zoek torrents',
+
   'sidebar.transferdata.downloaded': 'Gedownload',
   'sidebar.transferdata.uploaded': 'Geupload',
 
@@ -171,7 +171,7 @@ export default {
   'torrents.add.destination.label': 'Downloadlocatie',
   'torrents.add.destination.placeholder': 'Downloadlocatie',
   'torrents.add.heading': 'Torrents toevoegen',
-  'torrents.add.start.label': 'Start Torrent',
+  'torrents.add.start.label': 'Start torrent',
   'torrents.add.tab.file.browse': 'of klik om te bladeren.',
   'torrents.add.tab.file.drop': 'Sleep bestanden hierheen,',
   'torrents.add.tab.file.title': 'Via bestand',
