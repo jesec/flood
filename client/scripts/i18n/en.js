@@ -23,6 +23,7 @@ export default {
   'feeds.apply.tags': 'Apply Tags',
   'feeds.exclude.pattern': 'Exclude Pattern',
   'feeds.existing.feeds': 'Existing Feeds',
+  'feeds.existing.rules': 'Existing Rules',
   'feeds.label': 'Label',
   'feeds.match.count': `{count, plural, =1 {# match} other {# matches}}`,
   'feeds.match.pattern': 'Match Pattern',
@@ -143,6 +144,7 @@ export default {
   'settings.ui.locale': 'Locale',
   'settings.ui.language': 'Language',
 
+  'sidebar.button.feeds': 'Feeds',
   'sidebar.button.settings': 'Settings',
   'sidebar.button.speedlimits': 'Speed Limits',
 
