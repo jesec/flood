@@ -16,14 +16,14 @@ class FeedsModal extends React.Component {
       feeds: {
         content: FeedsTab,
         label: this.props.intl.formatMessage({
-          id: 'torrent.feeds.feeds.tabs.feeds',
+          id: 'feeds.tabs.feeds',
           defaultMessage: 'Feeds'
         })
       },
       downloadRules: {
         content: DownloadRulesTab,
         label: this.props.intl.formatMessage({
-          id: 'torrent.feeds.feeds.tabs.download.rules',
+          id: 'feeds.tabs.download.rules',
           defaultMessage: 'Download Rules'
         })
       }
@@ -32,7 +32,7 @@ class FeedsModal extends React.Component {
     return (
       <Modal dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
-          id: 'torrent.feeds.tabs.heading',
+          id: 'feeds.tabs.heading',
           defaultMessage: 'Torrent Feeds'
         })} orientation="horizontal" size="large" tabs={tabs} />
     );

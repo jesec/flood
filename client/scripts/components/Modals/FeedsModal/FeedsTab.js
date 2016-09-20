@@ -26,27 +26,27 @@ const METHODS_TO_BIND = [
 
 const MESSAGES = defineMessages({
   mustSpecifyURL: {
-    id: 'settings.feeds.validation.must.specify.valid.feed.url',
+    id: 'feeds.validation.must.specify.valid.feed.url',
     defaultMessage: 'You must specify a valid feed URL.'
   },
   mustSpecifyLabel: {
-    id: 'settings.feeds.validation.must.specify.label',
+    id: 'feeds.validation.must.specify.label',
     defaultMessage: 'You must specify a label.'
   },
   min: {
-    id: 'settings.feeds.time.min',
+    id: 'feeds.time.min',
     defaultMessage: 'min'
   },
   hr: {
-    id: 'settings.feeds.time.hr',
+    id: 'feeds.time.hr',
     defaultMessage: 'hr'
   },
   url: {
-    id: 'settings.feeds.url',
+    id: 'feeds.url',
     defaultMessage: 'URL'
   },
   label: {
-    id: 'settings.feeds.label',
+    id: 'feeds.label',
     defaultMessage: 'Label'
   }
 });
@@ -131,7 +131,7 @@ class FeedsTab extends React.Component {
       dropdownText = selectedInterval.displayName;
     } else {
       dropdownText = this.props.intl.formatMessage({
-        id: 'settings.feeds.select.interval',
+        id: 'feeds.select.interval',
         defaultMessage: 'Select Interval'
       });
     }
@@ -150,7 +150,7 @@ class FeedsTab extends React.Component {
       <div className="form__row" key="feed-row-1">
         <FormColumn error={errors.url}>
           <FormLabel error={errors.url}>
-            <FormattedMessage id="settings.feeds.url"
+            <FormattedMessage id="feeds.url"
               defaultMessage="URL" />
           </FormLabel>
           <input className="textbox"
@@ -160,7 +160,7 @@ class FeedsTab extends React.Component {
         </FormColumn>
         <FormColumn modifiers={['auto']}>
           <FormLabel>
-            <FormattedMessage id="settings.feeds.interval"
+            <FormattedMessage id="feeds.interval"
               defaultMessage="Interval" />
           </FormLabel>
           <Dropdown
@@ -173,7 +173,7 @@ class FeedsTab extends React.Component {
       <div className="form__row" key="feed-row-2">
         <FormColumn error={errors.label}>
           <FormLabel error={errors.label}>
-            <FormattedMessage id="settings.feeds.label"
+            <FormattedMessage id="feeds.label"
               defaultMessage="Label" />
           </FormLabel>
           <input className="textbox"
@@ -185,7 +185,7 @@ class FeedsTab extends React.Component {
         <FormColumn modifiers={['auto']}>
           <button className="button button--primary"
             onClick={this.handleAddFeedClick}>
-            <FormattedMessage id="settings.feeds.add"
+            <FormattedMessage id="button.add"
               defaultMessage="Add" />
           </button>
         </FormColumn>
@@ -195,7 +195,8 @@ class FeedsTab extends React.Component {
 
   getFeedsList() {
     if (this.state.feeds.length === 0) {
-      return <em>No feeds defined.</em>;
+      return <em><FormattedMessage id="feeds.no.feeds.defined"
+                  defaultMessage="No feeds defined." /></em>;
     }
 
     let feedsList = this.state.feeds.map((feed, index) => {
@@ -212,7 +213,7 @@ class FeedsTab extends React.Component {
               <li className="interactive-list__detail-list__item
                 interactive-list__detail-list__item--overflow
                 interactive-list__detail interactive-list__detail--secondary">
-                <FormattedMessage id="feeds.feed.downloads"
+                <FormattedMessage id="feeds.match.count"
                   defaultMessage="{count, plural, =1 {# match} other
                     {# matches}}" values={{count: matchedCount}} />
               </li>
@@ -337,7 +338,7 @@ class FeedsTab extends React.Component {
       <div className="form">
         <div className="form__section">
           <div className="form__section__heading">
-            <FormattedMessage id="settings.feeds.existing.feeds"
+            <FormattedMessage id="feeds.existing.feeds"
               defaultMessage="Existing Feeds" />
           </div>
           <div className="form__row">
