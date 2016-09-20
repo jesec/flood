@@ -210,6 +210,11 @@ export default {
   'torrents.details.general.type': 'Type',
   'torrents.details.peers.no.data': 'Er zijn geen peer-gegevens voor deze torrent.',
   'torrents.details.peers': 'Peers',
+  'torrents.details.selected.files': `{count, plural,
+    =1 {{countElement} bestand geselecteerd}
+    other {{countElement} bestanden geselecteerd}
+  }`,
+  'torrents.details.selected.files.set.priority': 'Wijzig prioriteit',
   'torrents.details.trackers.no.data': 'Er zijn geen tracker-gegevens voor deze torrent.',
   'torrents.details.trackers.type': 'Type',
   'torrents.details.trackers': 'Trackers',

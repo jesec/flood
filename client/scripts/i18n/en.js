@@ -210,6 +210,11 @@ export default {
   'torrents.details.general.type': 'Type',
   'torrents.details.peers.no.data': 'There is no peer data for this torrent.',
   'torrents.details.peers': 'Peers',
+  'torrents.details.selected.files': `{count, plural,
+    =1 {{countElement} selected file}
+    other {{countElement} selected files}
+  }`,
+  'torrents.details.selected.files.set.priority': 'Set Priority',
   'torrents.details.trackers.no.data': 'There is no tracker data for this torrent.',
   'torrents.details.trackers.type': 'Type',
   'torrents.details.trackers': 'Trackers',

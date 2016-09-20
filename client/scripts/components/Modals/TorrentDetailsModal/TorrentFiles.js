@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import classnames from 'classnames';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Checkbox from '../../General/FormElements/Checkbox';
@@ -75,7 +75,10 @@ class TorrentFiles extends React.Component {
   getPriorityDropdownHeader() {
     return (
       <a className="dropdown__button">
-        <span className="dropdown__value">Set Priority</span>
+        <span className="dropdown__value">
+          <FormattedMessage id="torrents.details.selected.files.set.priority"
+            defaultMessage="Set Priority" />
+        </span>
       </a>
     );
   }
@@ -84,17 +87,26 @@ class TorrentFiles extends React.Component {
     return [
       [
         {
-          displayName: 'Don\'t Download',
+          displayName: this.props.intl.formatMessage({
+            id: 'priority.dont.download',
+            defaultMessage: 'Don\'t Download'
+          }),
           selected: false,
           value: 0
         },
         {
-          displayName: 'Normal',
+          displayName: this.props.intl.formatMessage({
+            id: 'priority.normal',
+            defaultMessage: 'Normal'
+          }),
           selected: false,
           value: 1
         },
         {
-          displayName: 'High',
+          displayName: this.props.intl.formatMessage({
+            id: 'priority.high',
+            defaultMessage: 'High'
+          }),
           selected: false,
           value: 2
         }
@@ -297,7 +309,7 @@ class TorrentFiles extends React.Component {
       <div className={wrapperClasses}>
         <div className="directory-tree__selection-toolbar
           modal__content--nested-scroll__header">
-          <FormattedMessage id="torrent.details.selected.files"
+          <FormattedMessage id="torrents.details.selected.files"
             defaultMessage="{count, plural, =1 {{countElement} selected file} other
               {{countElement} selected files}}"
             values={{
