@@ -9,6 +9,7 @@ let ClientRequest = require('./ClientRequest');
 let formatUtil = require('../../shared/util/formatUtil');
 let scgi = require('../util/scgi');
 let Torrent = require('./Torrent');
+let NotificationCollection = require('./NotificationCollection');
 let TorrentCollection = require('./TorrentCollection');
 let torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 let torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
@@ -198,6 +199,8 @@ var client = {
       statusCount = torrentCollection.getStatusCount();
       tagCount = torrentCollection.getTagCount();
       trackerCount = torrentCollection.getTrackerCount();
+
+      NotificationCollection.addNotification({id: 'torrent-list-update', message: 'Torrent List Updated'});
 
       return torrentCollection.getTorrents();
     });

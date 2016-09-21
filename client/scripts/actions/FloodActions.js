@@ -5,6 +5,29 @@ import ActionTypes from '../constants/ActionTypes';
 import AuthStore from '../stores/AuthStore';
 
 let FloodActions = {
+  fetchNotifications: () => {
+    return axios.get('/api/notifications')
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((notifications) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.FLOOD_FETCH_NOTIFICATIONS_SUCCESS,
+          data: {
+            notifications
+          }
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.FLOOD_FETCH_NOTIFICATIONS_ERROR,
+          data: {
+            error
+          }
+        });
+      });
+  },
+
   fetchTransferData: () => {
     return axios.get('/api/stats')
       .then((json = {}) => {
