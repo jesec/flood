@@ -1,92 +1,73 @@
 #!/usr/bin/env node
-
 'use strict';
 
 let fs = require('fs');
+
 // Ensure we have a user-defined config.js for use throughout the app.
 try {
   fs.accessSync('./config.js', fs.F_OK);
-} catch (e) {
+} catch (error) {
   console.error('Cannot start Flood server, config.js is missing. Copy ' +
     'config.template.js to config.js.');
   return;
 }
 
-var app = require('../app');
+let app = require('../app');
 let config = require('../../config');
-var debug = require('debug')('flood:server');
+let debug = require('debug')('flood:server');
 
-/**
- * Get port from environment and store in Express.
- */
-
-var port = normalizePort(config.floodServerPort);
+// Get port from environment and store in Express.
+let port = normalizePort(config.floodServerPort);
 app.set('port', port);
 
-/**
- * Create HTTP or HTTPS server.
- */
- 
+// Create HTTP or HTTPS server.
 let server;
 
 if (config.ssl) {
-  if (!config.sslKey || ! config.sslCert){
-    console.error('Cannot start Flood server in secure mode, `sslKey` or `sslCert` is missing in config.js.');
+  if (!config.sslKey || !config.sslCert){
+    console.error('Cannot start HTTPS server, `sslKey` or `sslCert`' +
+      ' is missing in config.js.');
     return;
   }
-  
-  var options = {
+
+  server = require('https').createServer({
     key: fs.readFileSync(config.sslKey),
     cert: fs.readFileSync(config.sslCert)
-  };
-  server = require('https').createServer(options, app);
-  
+  }, app);
 } else {
   server = require('http').createServer(app);
 }
 
-/**
- * Listen on provided port, on all network interfaces.
- */
-
+// Listen on provided port, on all network interfaces.
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
 
-/**
- * Normalize a port into a number, string, or false.
- */
-
+// Normalize a port into a number, string, or false.
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+  let port = parseInt(val, 10);
 
+  // Named pipe.
   if (isNaN(port)) {
-    // named pipe
     return val;
   }
 
+  // Port number.
   if (port >= 0) {
-    // port number
     return port;
   }
 
   return false;
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
-
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  let bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
+  // Handle specific listen errors with friendly messages.
   switch (error.code) {
     case 'EACCES':
       console.error(bind + ' requires elevated privileges');
@@ -101,14 +82,9 @@ function onError(error) {
   }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
+// Event listener for HTTP server "listening" event.
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  let addr = server.address();
+  let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
