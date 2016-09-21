@@ -79,7 +79,7 @@ class SearchBox extends React.Component {
         <input className="textbox"
           type="text"
           placeholder={this.props.intl.formatMessage({
-            id: 'searchbox.placeholder',
+            id: 'sidebar.search.placeholder',
             defaultMessage: 'Search torrents'
           })}
           onChange={this.handleSearchChange}

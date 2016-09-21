@@ -18,35 +18,35 @@ import Validator from '../../../util/Validator';
 
 const MESSAGES = defineMessages({
   mustSpecifyDestination: {
-    id: 'settings.feeds.validation.must.specify.destination',
+    id: 'feeds.validation.must.specify.destination',
     defaultMessage: 'You must specify a destination.'
   },
   mustSelectFeed: {
-    id: 'settings.feeds.validation.must.select.feed',
+    id: 'feeds.validation.must.select.feed',
     defaultMessage: 'You must select a feed.'
   },
   mustSpecifyLabel: {
-    id: 'settings.feeds.validation.must.specify.label',
+    id: 'feeds.validation.must.specify.label',
     defaultMessage: 'You must specify a label.'
   },
   invalidRegularExpression: {
-    id: 'settings.feeds.validation.invalid.regular.expression',
+    id: 'feeds.validation.invalid.regular.expression',
     defaultMessage: 'Invalid regular expression.'
   },
   url: {
-    id: 'settings.feeds.url',
+    id: 'feeds.url',
     defaultMessage: 'URL'
   },
   label: {
-    id: 'settings.feeds.label',
+    id: 'feeds.label',
     defaultMessage: 'Label'
   },
   regEx: {
-    id: 'settings.feeds.regEx',
+    id: 'feeds.regEx',
     defaultMessage: 'RegEx'
   },
   tags: {
-    id: 'settings.feeds.tags',
+    id: 'feeds.tags',
     defaultMessage: 'Tags'
   }
 });
@@ -134,7 +134,7 @@ class DownloadRulesTab extends React.Component {
       <div className="form__row" key="rule-row-1">
         <FormColumn error={errors.label}>
           <FormLabel error={errors.label}>
-            <FormattedMessage id="settings.feeds.label"
+            <FormattedMessage id="feeds.label"
               defaultMessage="Label" />
           </FormLabel>
           <input className="textbox"
@@ -145,7 +145,7 @@ class DownloadRulesTab extends React.Component {
         </FormColumn>
         <FormColumn error={errors.feedID} modifiers={['fourth']}>
           <FormLabel error={errors.feedID}>
-            <FormattedMessage id="settings.feeds.applicable.feed"
+            <FormattedMessage id="feeds.applicable.feed"
               defaultMessage="Applicable Feed" />
           </FormLabel>
           {this.getAvailableFeedsDropdown()}
@@ -154,7 +154,7 @@ class DownloadRulesTab extends React.Component {
       <div className="form__row" key="rule-row-2">
         <FormColumn error={errors.match}>
           <FormLabel error={errors.match}>
-            <FormattedMessage id="settings.feeds.match.pattern"
+            <FormattedMessage id="feeds.match.pattern"
               defaultMessage="Match Pattern" />
           </FormLabel>
           <input className="textbox"
@@ -164,7 +164,7 @@ class DownloadRulesTab extends React.Component {
         </FormColumn>
         <FormColumn error={errors.exclude}>
           <FormLabel error={errors.exclude}>
-            <FormattedMessage id="settings.feeds.exclude.pattern"
+            <FormattedMessage id="feeds.exclude.pattern"
               defaultMessage="Exclude Pattern" />
           </FormLabel>
           <input className="textbox"
@@ -174,7 +174,7 @@ class DownloadRulesTab extends React.Component {
         </FormColumn>
         <FormColumn>
           <FormLabel>
-            <FormattedMessage id="settings.feeds.apply.tags"
+            <FormattedMessage id="feeds.apply.tags"
               defaultMessage="Apply Tags" />
           </FormLabel>
           <input className="textbox"
@@ -185,7 +185,7 @@ class DownloadRulesTab extends React.Component {
       <div className="form__row" key="rule-row-3">
         <FormColumn error={errors.destination}>
           <FormLabel error={errors.destination}>
-            <FormattedMessage id="settings.feeds.torrent.destination"
+            <FormattedMessage id="feeds.torrent.destination"
               defaultMessage="Torrent Destination" />
           </FormLabel>
           <TorrentDestination
@@ -194,14 +194,14 @@ class DownloadRulesTab extends React.Component {
         </FormColumn>
         <FormColumn modifiers={['auto', 'unlabled']}>
           <Checkbox ref={ref => this.inputRefs.startOnLoad = ref}>
-            <FormattedMessage id="settings.feeds.start.on.load"
-              defaultMessage="Start on Load" />
+            <FormattedMessage id="feeds.start.on.load"
+              defaultMessage="Start on load" />
           </Checkbox>
         </FormColumn>
         <FormColumn modifiers={['auto', 'unlabled']}>
           <button className="button button--primary"
             onClick={this.handleAddRuleClick}>
-            <FormattedMessage id="settings.feeds.add"
+            <FormattedMessage id="button.add"
               defaultMessage="Add" />
           </button>
         </FormColumn>
@@ -221,7 +221,7 @@ class DownloadRulesTab extends React.Component {
       dropdownItems = [{
         displayName: (
           <em>
-            <FormattedMessage id="settings.feeds.no.feeds.available"
+            <FormattedMessage id="feeds.no.feeds.available"
               defaultMessage="No feeds available." />
           </em>
         ),
@@ -246,7 +246,7 @@ class DownloadRulesTab extends React.Component {
       dropdownText = selectedFeed.label;
     } else {
       dropdownText = this.props.intl.formatMessage({
-        id: 'settings.feeds.all.feeds',
+        id: 'feeds.select.feed',
         defaultMessage: 'Select Feed'
       });
     }
@@ -270,7 +270,7 @@ class DownloadRulesTab extends React.Component {
     if (this.state.rules.length === 0) {
       return (
         <em>
-          <FormattedMessage id="settings.feeds.no.rules.defined"
+          <FormattedMessage id="feeds.no.rules.defined"
             defaultMessage="No rules defined." />
         </em>
       );
@@ -298,7 +298,7 @@ class DownloadRulesTab extends React.Component {
         tags = (
           <li className="interactive-list__detail-list__item
             interactive-list__detail interactive-list__detail--tertiary">
-            <FormattedMessage id="settings.feeds.tags"
+            <FormattedMessage id="feeds.tags"
               defaultMessage="Tags" /> {tagNodes}
           </li>
         );
@@ -315,7 +315,7 @@ class DownloadRulesTab extends React.Component {
               <li className="interactive-list__detail-list__item
                 interactive-list__detail-list__item--overflow
                 interactive-list__detail interactive-list__detail--secondary">
-                <FormattedMessage id="download.rules.rule.downloads"
+                <FormattedMessage id="feeds.match.count"
                   defaultMessage="{count, plural, =1 {# match} other
                     {# matches}}" values={{count: matchedCount}} />
               </li>
@@ -323,7 +323,7 @@ class DownloadRulesTab extends React.Component {
             <ul className="interactive-list__detail-list">
               <li className="interactive-list__detail-list__item
                 interactive-list__detail interactive-list__detail--tertiary">
-                <FormattedMessage id="settings.feeds.match"
+                <FormattedMessage id="feeds.match"
                   defaultMessage="Match" /> {rule.match}
               </li>
               {excludeNode}
@@ -447,7 +447,7 @@ class DownloadRulesTab extends React.Component {
       <div className="form">
         <div className="form__section">
           <div className="form__section__heading">
-            <FormattedMessage id="settings.feeds.existing.rules"
+            <FormattedMessage id="feeds.existing.rules"
               defaultMessage="Existing Rules" />
           </div>
           <div className="form__row">
@@ -458,7 +458,7 @@ class DownloadRulesTab extends React.Component {
         </div>
         <div className="form__section">
           <div className="form__section__heading">
-            <FormattedMessage id="settings.feeds.add.automatic.download.rule"
+            <FormattedMessage id="feeds.add.automatic.download.rule"
               defaultMessage="Add Download Rule" />
           </div>
           {this.getRuleFields()}
