@@ -10,7 +10,10 @@ const CONFIG = {
     port: 5000,
     socket: false,
     socketPath: '/tmp/rtorrent.sock'
-  }
+  },
+  ssl: false,
+  sslKey: '/absolute/path/to/key/',
+  sslCert: '/absolute/path/to/certificate/'
 };
 
 module.exports = CONFIG;

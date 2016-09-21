@@ -2,9 +2,9 @@
 
 'use strict';
 
+let fs = require('fs');
 // Ensure we have a user-defined config.js for use throughout the app.
 try {
-  let fs = require('fs');
   fs.accessSync('./config.js', fs.F_OK);
 } catch (e) {
   console.error('Cannot start Flood server, config.js is missing. Copy ' +
@@ -15,7 +15,6 @@ try {
 var app = require('../app');
 let config = require('../../config');
 var debug = require('debug')('flood:server');
-var http = require('http');
 
 /**
  * Get port from environment and store in Express.
@@ -25,10 +24,26 @@ var port = normalizePort(config.floodServerPort);
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTP or HTTPS server.
  */
+ 
+let server;
 
-var server = http.createServer(app);
+if (config.ssl) {
+  if (!config.sslKey || ! config.sslCert){
+    console.error('Cannot start Flood server in secure mode, `sslKey` or `sslCert` is missing in config.js.');
+    return;
+  }
+  
+  var options = {
+    key: fs.readFileSync(config.sslKey),
+    cert: fs.readFileSync(config.sslCert)
+  };
+  server = require('https').createServer(options, app);
+  
+} else {
+  server = require('http').createServer(app);
+}
 
 /**
  * Listen on provided port, on all network interfaces.
