@@ -13,7 +13,7 @@ class UIStoreClass extends BaseStore {
     this.activeContextMenu = null;
     this.activeDropdownMenu = null;
     this.activeModal = null;
-    this.dependencies = [];
+    this.dependencies = {};
     this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
   }
@@ -32,6 +32,10 @@ class UIStoreClass extends BaseStore {
 
   getActiveDropdownMenu() {
     return this.activeDropdownMenu;
+  }
+
+  getDependencies() {
+    return this.dependencies;
   }
 
   getLatestTorrentLocation() {
@@ -54,29 +58,32 @@ class UIStoreClass extends BaseStore {
   }
 
   hasSatisfiedDependencies() {
-    return this.dependencies.length === 0;
+    return Object.keys(this.dependencies).length === 0;
   }
 
-  registerDependency(ids) {
-    if (!Array.isArray(ids)) {
-      ids = [ids];
+  registerDependency(dependencies) {
+    if (!Array.isArray(dependencies)) {
+      dependencies = [dependencies];
     }
 
-    ids.forEach((id) => {
-      if (this.dependencies.indexOf(id) === -1) {
-        this.dependencies.push(id);
+    dependencies.forEach((dependency) => {
+      let {id} = dependency;
+
+      if (!this.dependencies[id]) {
+        this.dependencies[id] = {...dependency, satisfied: false};
       }
     });
+
+    this.emit(EventTypes.UI_DEPENDENCIES_CHANGE);
   }
 
-  satisfyDependency(id) {
-    let dependencyIndex = this.dependencies.indexOf(id);
-
-    if (dependencyIndex > -1) {
-      this.dependencies.splice(dependencyIndex, 1);
+  satisfyDependency(dependencyID) {
+    if (this.dependencies[dependencyID]
+      && !this.dependencies[dependencyID].satisfied) {
+      this.dependencies[dependencyID].satisfied = true;
+      this.emit(EventTypes.UI_DEPENDENCIES_CHANGE);
+      this.verifyDependencies();
     }
-
-    this.verifyDependencies();
   }
 
   setActiveContextMenu(contextMenu = {}) {
@@ -95,7 +102,11 @@ class UIStoreClass extends BaseStore {
   }
 
   verifyDependencies() {
-    if (this.dependencies.length === 0) {
+    let isDependencyLoading = Object.keys(this.dependencies).some((id) => {
+      return this.dependencies[id].satisfied === false;
+    });
+
+    if (!isDependencyLoading) {
       this.emit(EventTypes.UI_DEPENDENCIES_LOADED);
     }
   }

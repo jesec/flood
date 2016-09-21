@@ -1,5 +1,5 @@
+import {FormattedMessage, IntlProvider} from 'react-intl';
 import {IndexRoute, Router, Route, Link, browserHistory} from 'react-router';
-import {IntlProvider} from 'react-intl';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -40,7 +40,13 @@ class FloodApp extends React.Component {
   }
 
   componentWillMount() {
-    UIStore.registerDependency('flood-settings');
+    UIStore.registerDependency({
+      id: 'flood-settings',
+      message: (
+        <FormattedMessage id="dependency.loading.flood.settings"
+          defaultMessage="Flood Settings" />
+      )
+    });
   }
 
   componentDidMount() {
@@ -72,7 +78,4 @@ class FloodApp extends React.Component {
   }
 }
 
-ReactDOM.render(
-  <FloodApp />,
-  document.getElementById('app')
-);
+ReactDOM.render(<FloodApp />, document.getElementById('app'));

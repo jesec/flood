@@ -1,0 +1,62 @@
+.application {
+
+  &__dependency-list {
+    align-items: center;
+    background: $dark-blue;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8em;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+
+    &-leave {
+      opacity: 1;
+      transition: opacity 1s;
+
+      &-active {
+        opacity: 0;
+      }
+    }
+  }
+}
+
+.dependency-list {
+  margin-top: $spacing-unit;
+  width: auto;
+
+  &__dependency {
+    color: $foreground;
+    display: flex;
+    opacity: 0.5;
+    transition: opacity 0.25s;
+    white-space: nowrap;
+
+    &__icon {
+      fill: $green;
+      flex: 0 0 $spacing-unit * 2/5;
+      margin-right: $spacing-unit * 1/5;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    &--satisfied {
+      opacity: 1;
+
+      .dependency-list {
+
+        &__dependency {
+
+          &__icon {
+            opacity: 1;
+          }
+        }
+      }
+    }
+  }
+}

@@ -32,30 +32,6 @@ body {
     position: relative;
   }
 
-  &__loading-indicator {
-    align-items: center;
-    background: $sidebar__background;
-    display: flex;
-    height: 100%;
-    justify-content: center;
-    left: 0;
-    opacity: 1;
-    position: fixed;
-    pointer-events: none;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-
-    &-leave {
-      opacity: 1;
-      transition: opacity 1s;
-
-      &-active {
-        opacity: 0;
-      }
-    }
-  }
-
   &__panel {
     display: flex;
     bottom: 0;
