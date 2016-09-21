@@ -1,13 +1,13 @@
-$notification--background: rgba($sidebar--background, 0.95);
-$notification--foreground: #8fa2b2;
+$alert--background: rgba($sidebar--background, 0.95);
+$alert--foreground: #8fa2b2;
 
-.notifications {
+.alerts {
 
   &__list {
-    background: $notification--background;
+    background: $alert--background;
     border-radius: 3px;
     bottom: $spacing-unit * 1/5;
-    color: $notification--foreground;
+    color: $alert--foreground;
     font-size: 0.85rem;
     padding: $spacing-unit * 2/5 $spacing-unit * 3/5;
     position: fixed;
@@ -34,7 +34,7 @@ $notification--foreground: #8fa2b2;
   }
 }
 
-.notification {
+.alert {
   display: flex;
 
   &.is-success {
@@ -43,7 +43,7 @@ $notification--foreground: #8fa2b2;
       fill: $green;
     }
 
-    .notification {
+    .alert {
 
       &__count {
         color: $green;
@@ -57,7 +57,7 @@ $notification--foreground: #8fa2b2;
       fill: $red;
     }
 
-    .notification {
+    .alert {
 
       &__count {
         color: $red;
@@ -65,7 +65,7 @@ $notification--foreground: #8fa2b2;
     }
   }
 
-  & + .notification {
+  & + .alert {
     margin-top: $spacing-unit * 2/5;
   }
 

@@ -64,31 +64,31 @@ export default {
   'locale.language.fr': 'Frans',
   'locale.language.nl': 'Nederlands',
 
-  'notification.torrent.add': `Het toevoegen van {countElement} {count, plural,
+  'alert.torrent.add': `Het toevoegen van {countElement} {count, plural,
     =1 {torrent}
     other {torrents}
   } is klaar.`,
-  'notification.torrent.add.failed': `Het toevoegen van {countElement} {count, plural,
+  'alert.torrent.add.failed': `Het toevoegen van {countElement} {count, plural,
     =1 {torrent}
     other {torrents}
   } is mislukt.`,
-  'notification.torrent.move': `Het verplaatsen van {countElement} {count, plural,
+  'alert.torrent.move': `Het verplaatsen van {countElement} {count, plural,
     =1 {torrent}
     other {torrents}
   } is klaar.`,
-  'notification.torrent.move.failed': `Het verplaatsen van {countElement} {count, plural,
+  'alert.torrent.move.failed': `Het verplaatsen van {countElement} {count, plural,
     =1 {torrent}
     other {torrents}
   } is mislukt.`,
-  'notification.torrent.remove': `Het verwijderen van {countElement} {count, plural,
+  'alert.torrent.remove': `Het verwijderen van {countElement} {count, plural,
     =1 {torrent}
     other {torrents}
   } is klaar.`,
-  'notification.torrent.remove.failed': `Het verwijderen van {countElement} {count, plural,
+  'alert.torrent.remove.failed': `Het verwijderen van {countElement} {count, plural,
     =1 {torrent}
     other {torrents}
   } is mislukt.`,
-  'notification.settings.saved': 'Instellingen zijn opgeslagen.',
+  'alert.settings.saved': 'Instellingen zijn opgeslagen.',
 
   'priority.dont.download': 'Niet downloaden',
   'priority.high': 'Hoog',

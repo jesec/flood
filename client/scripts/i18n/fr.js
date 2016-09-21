@@ -32,31 +32,31 @@ export default {
   'locale.language.nl': 'Néerlandais',
   'locale.language.fr': 'Français',
 
-  'notification.torrent.add': `L'ajout de {countElement} {count, plural,
+  'alert.torrent.add': `L'ajout de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
     } a réussi.`,
-  'notification.torrent.add.failed': `L'ajout de {countElement} {count, plural,
+  'alert.torrent.add.failed': `L'ajout de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
     } a échoué.`,
-  'notification.torrent.move': `La modification de {countElement} {count, plural,
+  'alert.torrent.move': `La modification de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
     } a réussi.`,
-  'notification.torrent.move.failed': `La modification de {countElement} {count, plural,
+  'alert.torrent.move.failed': `La modification de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
     } a échoué.`,
-  'notification.torrent.remove': `La suppression de {countElement} {count, plural,
+  'alert.torrent.remove': `La suppression de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
     } a réussi.`,
-  'notification.torrent.remove.failed': `La suppression de {countElement} {count, plural,
+  'alert.torrent.remove.failed': `La suppression de {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
     } a échoué.`,
-  'notification.settings.saved': 'Paramètres modifiés.',
+  'alert.settings.saved': 'Paramètres modifiés.',
 
   'priority.dont.download': 'Arrêt',
   'priority.high': 'Haut',

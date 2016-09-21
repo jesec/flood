@@ -121,8 +121,15 @@ class SettingsModal extends React.Component {
 
     this.setState({isSavingSettings: true});
 
-    SettingsStore.saveFloodSettings(floodSettings, {dismissModal: true, notify: true});
-    SettingsStore.saveClientSettings(clientSettings, {dismissModal: true, notify: true});
+    SettingsStore.saveFloodSettings(floodSettings, {
+      dismissModal: true,
+      alert: true
+    });
+
+    SettingsStore.saveClientSettings(clientSettings, {
+      dismissModal: true,
+      alert: true
+    });
   }
 
   handleSaveSettingsError() {
