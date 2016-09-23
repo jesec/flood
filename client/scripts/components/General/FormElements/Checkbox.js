@@ -16,6 +16,10 @@ export default class Checkbox extends React.Component {
     });
   }
 
+  componentWillMount() {
+    this.syncStateWithProps(this.props, this.state);
+  }
+
   getValue() {
     return this.state.checked;
   }
