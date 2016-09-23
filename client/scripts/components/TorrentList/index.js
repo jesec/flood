@@ -274,7 +274,7 @@ class TorrentListContainer extends React.Component {
 
     if (TorrentFilterStore.isFilterActive()) {
       clearFilters = (
-        <div className="torrents__notification__action">
+        <div className="torrents__alert__action">
           <button className="button button--small button--deemphasize
             button--inverse" onClick={this.handleClearFiltersClick}>
             <FormattedMessage
@@ -287,8 +287,8 @@ class TorrentListContainer extends React.Component {
     }
 
     return (
-      <div className="torrents__notification__wrapper">
-        <div className="torrents__notification">
+      <div className="torrents__alert__wrapper">
+        <div className="torrents__alert">
           <FormattedMessage
             id="torrents.list.no.torrents"
             defaultMessage="No torrents to display."

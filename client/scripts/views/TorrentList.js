@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Alerts from '../components/Alerts';
 import ApplicationView from '../components/Layout/ApplicationView';
 import ApplicationContent from '../components/Layout/ApplicationContent';
 import Modals from '../components/Modals';
-import Notifications from '../components/Notifications';
 import Sidebar from '../components/Panels/Sidebar';
 import SettingsStore from '../stores/SettingsStore';
 import TorrentActions from '../actions/TorrentActions';
@@ -23,7 +23,7 @@ export default class TorrentListView extends React.Component {
         <ApplicationContent>
           <TorrentList />
           <Modals />
-          <Notifications />
+          <Alerts />
         </ApplicationContent>
       </ApplicationView>
     );

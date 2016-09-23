@@ -1,9 +1,9 @@
 import ActionTypes from '../constants/ActionTypes';
+import AlertStore from './AlertStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import ClientActions from '../actions/ClientActions';
 import EventTypes from '../constants/EventTypes';
-import NotificationStore from './NotificationStore';
 import SettingsActions from '../actions/SettingsActions';
 import UIStore from './UIStore';
 
@@ -75,9 +75,9 @@ class SettingsStoreClass extends BaseStore {
   handleClientSettingsSaveRequestSuccess(data, options) {
     this.emit(EventTypes.CLIENT_SETTINGS_SAVE_REQUEST_SUCCESS);
 
-    if (options.notify) {
-      NotificationStore.add({
-        id: 'notification.settings.saved'
+    if (options.alert) {
+      AlertStore.add({
+        id: 'alert.settings.saved'
       });
     }
 
@@ -110,9 +110,9 @@ class SettingsStoreClass extends BaseStore {
   handleSettingsSaveRequestSuccess(data, options = {}) {
     this.emit(EventTypes.SETTINGS_SAVE_REQUEST_SUCCESS);
 
-    if (options.notify) {
-      NotificationStore.add({
-        id: 'notification.settings.saved'
+    if (options.alert) {
+      AlertStore.add({
+        id: 'alert.settings.saved'
       });
     }
 

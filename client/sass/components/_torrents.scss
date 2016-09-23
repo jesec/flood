@@ -18,7 +18,7 @@ $torrent--tertiary--foreground--stopped: rgba(#8899a8, 0.5);
 $torrent--tertiary--foreground--selected: rgba(#fff, 0.9);
 $torrent--tertiary--foreground--selected--stopped: rgba(#fff, 0.5);
 
-$torrent--notification--foreground: $torrent--tertiary--foreground--stopped;
+$torrent--alert--foreground: $torrent--tertiary--foreground--stopped;
 
 $torrent--background--hover: #f6f8fa;
 $torrent--background--selected: $blue;
@@ -59,8 +59,8 @@ $more-info--border: $textbox-repeater--button--border;
     transform: translate(-50%, -50%);
   }
 
-  &__notification {
-    color: $torrent--notification--foreground;
+  &__alert {
+    color: $torrent--alert--foreground;
     text-align: center;
 
     &__wrapper {

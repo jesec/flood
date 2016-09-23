@@ -3,15 +3,15 @@ import classnames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Alerts from '../../constants/Alerts';
 import CircleCheckmarkIcon from '../Icons/CircleCheckmarkIcon';
 import CircleExclamationIcon from '../Icons/CircleExclamationIcon';
-import Notifications from '../../constants/Notifications';
 import stringUtil from '../../../../shared/util/stringUtil';
 
-export default class Notification extends React.Component {
+export default class Alert extends React.Component {
   render() {
     let icon = <CircleCheckmarkIcon />;
-    let notificationClasses = classnames('notification', {
+    let alertClasses = classnames('alert', {
       'is-success': this.props.type === 'success',
       'is-error': this.props.type === 'error'
     });
@@ -21,15 +21,15 @@ export default class Notification extends React.Component {
     }
 
     return (
-      <li className={notificationClasses}>
+      <li className={alertClasses}>
         {icon}
-        <span className="notification__content">
+        <span className="alert__content">
           <FormattedMessage
             id={this.props.id}
-            defaultMessage={Notifications[this.props.id]}
+            defaultMessage={Alerts[this.props.id]}
             values={{
               count: this.props.count,
-              countElement: <span className="notification__count">{this.props.count}</span>
+              countElement: <span className="alert__count">{this.props.count}</span>
             }}
           />
         </span>
@@ -38,12 +38,12 @@ export default class Notification extends React.Component {
   }
 }
 
-Notification.defaultProps = {
+Alert.defaultProps = {
   count: 0,
   type: 'success'
 };
 
-Notification.propTypes = {
+Alert.propTypes = {
   count: React.PropTypes.number,
   id: React.PropTypes.string
 };
