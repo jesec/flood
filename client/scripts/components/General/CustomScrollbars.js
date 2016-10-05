@@ -38,9 +38,10 @@ export default class CustomScrollbar extends React.Component {
   }
 
   render() {
-    let classes = classnames('scrollbars', {
-      [this.props.className]: this.props.className,
-      'is-inverted': this.props.inverted
+    let {children, className, inverted, nativeScrollHandler, scrollHandler,
+      ...otherProps} = this.props;
+    let classes = classnames('scrollbars', className, {
+      'is-inverted': inverted
     });
 
     return (
@@ -50,11 +51,10 @@ export default class CustomScrollbar extends React.Component {
         renderView={this.renderView}
         renderThumbHorizontal={this.getHorizontalThumb}
         renderThumbVertical={this.getVerticalThumb}
-        onScroll={this.props.nativeScrollHandler}
-        onScrollStart={this.props.onScrollStart}
-        onScrollStop={this.props.onScrollStop}
-        onScrollFrame={this.props.scrollHandler}>
-        {this.props.children}
+        onScroll={nativeScrollHandler}
+        onScrollFrame={scrollHandler}
+        {...otherProps}>
+        {children}
       </Scrollbars>
     );
   }
