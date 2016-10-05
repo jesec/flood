@@ -35,6 +35,7 @@ $sidebar--icon-button--foreground--hover: $blue;
     font-size: 0.8em;
     line-height: 1;
     padding: $spacing-unit * 2/5;
+    position: relative;
     transition: color 0.25s;
 
     &:hover {

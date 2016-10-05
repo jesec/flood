@@ -200,7 +200,11 @@ var client = {
       tagCount = torrentCollection.getTagCount();
       trackerCount = torrentCollection.getTrackerCount();
 
-      NotificationCollection.addNotification({id: 'torrent-list-update', message: 'Torrent List Updated'});
+      NotificationCollection.addNotification({
+        heading: 'Updated Data',
+        id: 'torrent-list-update',
+        message: 'Torrent List Updated'
+      });
 
       return torrentCollection.getTorrents();
     });

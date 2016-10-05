@@ -1,0 +1,104 @@
+.toolbar {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  width: 100%;
+
+  &--dark {
+
+    &.toolbar {
+
+      &--bottom {
+        border-top: 1px solid $dark-blue;
+      }
+
+      &--top {
+        border-bottom: 1px solid $dark-blue;
+      }
+    }
+
+    .toolbar {
+
+      &__item {
+
+        &--button {
+          color: darken($foreground, 10%);
+
+          &:hover {
+            color: lighten($foreground, 10%);
+
+            .icon {
+              fill: lighten($foreground, 10%);
+            }
+          }
+        }
+
+        .icon {
+          display: inline-block;
+          fill: darken($foreground, 15%);
+          height: 10px;
+          transition: fill 0.25s;
+          vertical-align: middle;
+          width: 10px;
+        }
+      }
+    }
+  }
+
+  &__item {
+    user-select: none;
+
+    &--button {
+      cursor: pointer;
+      flex: 1 1 auto;
+      font-size: 0.65rem;
+      opacity: 1;
+      position: relative;
+      text-align: center;
+      transition: color 0.25s, opacity 0.25s, visibility 0.25s;
+      visibility: visible;
+      z-index: 1;
+
+      &.is-disabled {
+        cursor: default;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      &:first-child {
+        text-align: left;
+      }
+
+      &:last-child {
+        text-align: right;
+
+        .icon {
+          margin-left: $spacing-unit * 1/5;
+          margin-right: 0;
+        }
+      }
+
+      .icon {
+        margin-right: $spacing-unit * 1/5;
+      }
+    }
+
+    &--centered {
+      display: inline-block;
+      left: 50%;
+      padding: inherit;
+      position: absolute;
+      text-align: center;
+      top: 0;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      width: auto;
+      z-index: 2;
+    }
+
+    &--label {
+      flex: 1 1 auto;
+      text-align: center;
+    }
+  }
+}

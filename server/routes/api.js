@@ -50,6 +50,10 @@ router.get('/notifications', (req, res, next) => {
   NotificationCollection.getNotifications(req.query, ajaxUtil.getResponseFn(res));
 });
 
+router.delete('/notifications', (req, res, next) => {
+  NotificationCollection.clearNotifications(req.query, ajaxUtil.getResponseFn(res));
+});
+
 router.get('/settings', (req, res, next) => {
   settings.get(req.query, ajaxUtil.getResponseFn(res));
 });
