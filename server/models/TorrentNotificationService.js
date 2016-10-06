@@ -9,7 +9,8 @@ class NotificationService {
   }
 
   hasErrored(prevData, nextData) {
-    return !this.hasError(prevData) && this.hasError(nextData);
+    return prevData && prevData.status && !this.hasError(prevData)
+      && this.hasError(nextData);
   }
 
   hasFinished(prevData, nextData) {
