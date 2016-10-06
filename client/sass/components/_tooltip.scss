@@ -71,13 +71,13 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
     }
   }
 
-  &.is-interactive {
-    pointer-events: auto;
-  }
-
   &.is-open {
     opacity: 1;
     visibility: visible;
+
+    &.is-interactive {
+      pointer-events: auto;
+    }
   }
 
   &--no-wrap {

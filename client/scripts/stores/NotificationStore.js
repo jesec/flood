@@ -36,7 +36,6 @@ class NotificationStoreClass extends BaseStore {
   }
 
   handleNotificationsClearSuccess(options) {
-    console.log(options);
     this.fetchNotifications({
       ...options,
       start: 0
@@ -93,8 +92,7 @@ NotificationStore.dispatcherID = AppDispatcher.register((payload) => {
       NotificationStore.handleNotificationsFetchError(action.error);
       break;
     case ActionTypes.FLOOD_FETCH_NOTIFICATIONS_SUCCESS:
-      NotificationStore.handleNotificationsFetchSuccess(
-        action.data);
+      NotificationStore.handleNotificationsFetchSuccess(action.data);
       break;
   }
 });

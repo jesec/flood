@@ -18,6 +18,42 @@ const MESSAGES = defineMessages({
   notifications: {
     id: 'sidebar.button.notifications',
     defaultMessage: 'Notifications'
+  },
+  'notification.torrent.finished.heading': {
+    id: 'notification.torrent.finished.heading',
+    defaultMessage: 'Finished Downloading'
+  },
+  'notification.torrent.finished.body': {
+    id: 'notification.torrent.finished.body',
+    defaultMessage: '{name} finished downloading.'
+  },
+  'notification.torrent.errored.heading': {
+    id: 'notification.torrent.errored.heading',
+    defaultMessage: 'Torrent Errored'
+  },
+  'notification.torrent.errored.body': {
+    id: 'notification.torrent.errored.body',
+    defaultMessage: '{name} reported an error.'
+  },
+  clearAll: {
+    id: 'notification.clear.all',
+    defaultMessage: 'Clear All'
+  },
+  showing: {
+    id: 'notification.showing',
+    defaultMessage: 'Showing'
+  },
+  at: {
+    id: 'general.at',
+    defaultMessage: 'at'
+  },
+  to: {
+    id: 'general.to',
+    defaultMessage: 'to'
+  },
+  of: {
+    id: 'general.of',
+    defaultMessage: 'of'
   }
 });
 
@@ -123,7 +159,7 @@ class NotificationsButton extends React.Component {
           <li className="toolbar__item toolbar__item--button
             tooltip__content--padding-surrogate"
             onClick={this.handleClearNotificationsClick}>
-            Clear All
+            {this.props.intl.formatMessage(MESSAGES.clearAll)}
           </li>
           <li className={olderButtonClass}
             onClick={this.handleOlderNotificationsClick}>
@@ -144,12 +180,18 @@ class NotificationsButton extends React.Component {
     return (
       <li className="notifications__list__item" key={index}>
         <div className="notification__heading">
-          <span className="notification__category">{notification.heading}</span>
+          <span className="notification__category">
+            {this.props.intl.formatMessage(
+              MESSAGES[`${notification.id}.heading`])}
+          </span>
           {` — `}
-          <span className="notification__timestamp">{date} at {time}</span>
+          <span className="notification__timestamp">
+            {date} {this.props.intl.formatMessage(MESSAGES.at)} {time}
+          </span>
         </div>
         <div className="notification__message">
-          {notification.message}
+          {this.props.intl.formatMessage(MESSAGES[`${notification.id}.body`],
+            notification.data)}
         </div>
       </li>
     );
@@ -171,7 +213,14 @@ class NotificationsButton extends React.Component {
       return (
         <div className="toolbar toolbar--dark toolbar--top tooltip__toolbar tooltip__content--padding-surrogate">
           <span className="toolbar__item toolbar__item--label">
-            Showing <strong>{countStart} to {countEnd}</strong> of <strong>{this.state.count.total}</strong>
+            {`${this.props.intl.formatMessage(MESSAGES.showing)} `}
+            <strong>
+              {countStart}
+              {` ${this.props.intl.formatMessage(MESSAGES.to)} `}
+              {countEnd}
+            </strong>
+            {` ${this.props.intl.formatMessage(MESSAGES.of)} `}
+            <strong>{this.state.count.total}</strong>
           </span>
         </div>
       );
@@ -183,8 +232,9 @@ class NotificationsButton extends React.Component {
   getTooltipContent() {
     if (this.state.count.total === 0) {
       return (
-        <div className="notifications--empty tooltip__content--padding-surrogate">
-          <em>No notifications.</em>
+        <div className="notifications--empty
+          tooltip__content--padding-surrogate">
+          {this.props.intl.formatMessage(MESSAGES.notifications)}
         </div>
       );
     }
@@ -195,9 +245,15 @@ class NotificationsButton extends React.Component {
     return (
       <div>
         {topToolbar}
-        <ul className="notifications__list tooltip__content--padding-surrogate">
-          {this.state.notifications.map(this.getNotification)}
-        </ul>
+        <CustomScrollbars
+          autoHeight={true}
+          autoHeightMin={0}
+          autoHeightMax={300}>
+          <ul className="notifications__list
+            tooltip__content--padding-surrogate">
+            {this.state.notifications.map(this.getNotification)}
+          </ul>
+        </CustomScrollbars>
         {bottomToolbar}
       </div>
     );
@@ -262,8 +318,6 @@ class NotificationsButton extends React.Component {
   }
 
   render() {
-    let label = this.props.intl.formatMessage(MESSAGES.notifications);
-
     return (
       <Tooltip
         contentClassName="tooltip__content tooltip__content--no-padding"
@@ -271,7 +325,7 @@ class NotificationsButton extends React.Component {
         interactive={true}
         onClick={this.handleNotificationsButtonClick}
         ref={ref => this.tooltipRef = ref}
-        width={320}
+        width={this.state.count.total === 0 ? null : 320}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           tooltip__wrapper">

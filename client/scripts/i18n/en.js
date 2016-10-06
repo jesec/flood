@@ -60,6 +60,10 @@ export default {
   'filter.tag.title': 'Filter by Tag',
   'filter.untagged': 'Untagged',
 
+  'general.at': 'at',
+  'general.to': 'to',
+  'general.of': 'of',
+
   'locale.language.en': 'English',
   'locale.language.fr': 'French',
   'locale.language.nl': 'Nederlands',
@@ -89,6 +93,14 @@ export default {
       other {torrents}
     }.`,
   'alert.settings.saved': 'Successfully saved settings.',
+
+  'sidebar.button.notifications': 'Notifications',
+  'notification.torrent.finished.heading': 'Finished Downloading',
+  'notification.torrent.finished.body': '{name} finished downloading.',
+  'notification.torrent.errored.heading': 'Torrent Errored',
+  'notification.torrent.errored.body': '{name} reported an error.',
+  'notification.clear.all': 'Clear All',
+  'notification.showing': 'Showing',
 
   'priority.dont.download': 'Don\'t Download',
   'priority.high': 'High',

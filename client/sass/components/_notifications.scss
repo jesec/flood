@@ -19,6 +19,8 @@
   }
 
   &__list {
+    white-space: normal;
+    word-wrap: break-word;
 
     &__item {
       margin-bottom: $spacing-unit * 3/10;
