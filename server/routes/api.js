@@ -12,8 +12,6 @@ let passport = require('passport');
 let router = express.Router();
 let settings = require('../models/settings');
 
-history.startPolling();
-
 router.use('/', passport.authenticate('jwt', {session: false}));
 
 router.use('/client', clientRoutes);

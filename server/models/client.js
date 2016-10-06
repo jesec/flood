@@ -16,6 +16,7 @@ let torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralProps
 let torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
 let torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
+let pollInterval = null;
 let statusCount = {};
 let tagCount = {};
 let torrentCollection = new TorrentCollection();
@@ -155,18 +156,6 @@ var client = {
     callback(tagCount);
   },
 
-  getTorrentTaxonomy: (callback) => {
-    callback({
-      status: statusCount,
-      tags: tagCount,
-      trackers: trackerCount
-    });
-  },
-
-  getTorrentTrackerCount: (callback) => {
-    callback(trackerCount);
-  },
-
   getTorrentDetails: (hash, callback) => {
     let request = new ClientRequest();
 
@@ -182,32 +171,26 @@ var client = {
   },
 
   getTorrentList: (callback) => {
+    callback(torrentCollection.getTorrents());
+  },
+
+  getTorrentTaxonomy: (callback) => {
+    callback({
+      status: statusCount,
+      tags: tagCount,
+      trackers: trackerCount
+    });
+  },
+
+  getTorrentTrackerCount: (callback) => {
+    callback(trackerCount);
+  },
+
+  getTransferStats: (callback) => {
     let request = new ClientRequest();
 
-    request.add('getTorrentList',
-      {props: torrentGeneralPropsMap.methods});
-    request.postProcess((data) => {
-      let torrentList = [];
-
-      // TODO: Remove this nasty nested array business.
-      if (!!data && !!data[0] && data[0][0].length > 0) {
-        torrentList = data[0][0];
-      }
-
-      torrentCollection.updateTorrents(torrentList);
-
-      statusCount = torrentCollection.getStatusCount();
-      tagCount = torrentCollection.getTagCount();
-      trackerCount = torrentCollection.getTrackerCount();
-
-      NotificationCollection.addNotification({
-        heading: 'Updated Data',
-        id: 'torrent-list-update',
-        message: 'Torrent List Updated'
-      });
-
-      return torrentCollection.getTorrents();
-    });
+    request.add('getTransferData');
+    request.postProcess(clientResponseUtil.processTransferStats);
     request.onComplete(callback);
     request.send();
   },
@@ -337,7 +320,7 @@ var client = {
     request.add('setTaxonomy', data);
     request.onComplete((response, error) => {
       // Fetch the latest torrent list to re-index the taxonomy.
-      client.getTorrentList(() => {});
+      client.updateTorrentList();
       callback(response, error);
     });
     request.send();
@@ -351,6 +334,12 @@ var client = {
     request.send();
   },
 
+  startPollingTorrents: () => {
+    pollInterval = setInterval(() => {
+      client.updateTorrentList();
+    }, 1000 * 5);
+  },
+
   startTorrent: (hashes, callback) => {
     let request = new ClientRequest();
 
@@ -359,11 +348,30 @@ var client = {
     request.send();
   },
 
-  getTransferStats: (callback) => {
+  stopPollingTorrents: () => {
+    clearInterval(pollInterval);
+    pollInterval = null;
+  },
+
+  updateTorrentList: (callback) => {
     let request = new ClientRequest();
 
-    request.add('getTransferData');
-    request.postProcess(clientResponseUtil.processTransferStats);
+    request.add('getTorrentList',
+      {props: clientUtil.defaults.torrentPropertyMethods});
+    request.postProcess((data) => {
+      let torrentList = [];
+
+      // TODO: Remove this nasty nested array business.
+      if (!!data && !!data[0] && data[0][0].length > 0) {
+        torrentList = data[0][0];
+      }
+
+      torrentCollection.updateTorrents(torrentList);
+
+      statusCount = torrentCollection.getStatusCount();
+      tagCount = torrentCollection.getTagCount();
+      trackerCount = torrentCollection.getTrackerCount();
+    });
     request.onComplete(callback);
     request.send();
   }
