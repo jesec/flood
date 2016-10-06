@@ -23,9 +23,8 @@ class NotificationCollection {
 
     this.db.insert({
       ts: Date.now(),
-      heading: notification.heading,
+      data: notification.data,
       id: notification.id,
-      message: notification.message,
       read: false
     });
   }
