@@ -32,6 +32,8 @@ var client = {
     // filesize of 524 kilobytes or less. This allows the user to send many
     // torrent files reliably.
     files.forEach((file, index) => {
+      file.originalname = file.originalname.replace(/\s+/g, '.');
+      
       let fileRequest = new ClientRequest();
       fileRequest.add('addFiles', {files: file, path, start});
 
