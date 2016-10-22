@@ -63,7 +63,6 @@ const METHODS_TO_BIND = [
   'getTooltipContent',
   'handleClearNotificationsClick',
   'handleNotificationFetchSuccess',
-  'handleNotificationsButtonClick',
   'handleNewerNotificationsClick',
   'handleOlderNotificationsClick'
 ];
@@ -77,8 +76,7 @@ class NotificationsButton extends React.Component {
     this.state = {
       paginationStart: 0,
       count: INTIAL_COUNT_STATE,
-      notifications: [],
-      isOpen: false
+      notifications: []
     };
     this.tooltipRef = null;
 
@@ -269,6 +267,10 @@ class NotificationsButton extends React.Component {
       id: 'notification-tooltip',
       limit: NOTIFICATIONS_PER_PAGE
     });
+
+    if (this.tooltipRef != null) {
+      this.tooltipRef.dismissTooltip();
+    }
   }
 
   handleNotificationFetchSuccess() {
@@ -310,21 +312,12 @@ class NotificationsButton extends React.Component {
     }
   }
 
-  handleNotificationsButtonClick() {
-    if (this.tooltipRef != null) {
-      this.tooltipRef.dismissTooltip();
-    }
-
-    this.setState({isOpen: true});
-  }
-
   render() {
     return (
       <Tooltip
         contentClassName="tooltip__content tooltip__content--no-padding"
         content={this.getTooltipContent()}
         interactive={true}
-        onClick={this.handleNotificationsButtonClick}
         ref={ref => this.tooltipRef = ref}
         width={this.state.count.total === 0 ? null : 320}
         position="bottom"
