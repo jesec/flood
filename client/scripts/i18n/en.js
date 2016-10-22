@@ -96,9 +96,9 @@ export default {
 
   'sidebar.button.notifications': 'Notifications',
   'notification.torrent.finished.heading': 'Finished Downloading',
-  'notification.torrent.finished.body': '{name} finished downloading.',
-  'notification.torrent.errored.heading': 'Torrent Errored',
-  'notification.torrent.errored.body': '{name} reported an error.',
+  'notification.torrent.finished.body': '{name}',
+  'notification.torrent.errored.heading': 'Error Reported',
+  'notification.torrent.errored.body': '{name}',
   'notification.clear.all': 'Clear All',
   'notification.showing': 'Showing',
 

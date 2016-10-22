@@ -25,15 +25,15 @@ const MESSAGES = defineMessages({
   },
   'notification.torrent.finished.body': {
     id: 'notification.torrent.finished.body',
-    defaultMessage: '{name} finished downloading.'
+    defaultMessage: '{name}'
   },
   'notification.torrent.errored.heading': {
     id: 'notification.torrent.errored.heading',
-    defaultMessage: 'Torrent Errored'
+    defaultMessage: 'Error Reported'
   },
   'notification.torrent.errored.body': {
     id: 'notification.torrent.errored.body',
-    defaultMessage: '{name} reported an error.'
+    defaultMessage: '{name}'
   },
   clearAll: {
     id: 'notification.clear.all',
