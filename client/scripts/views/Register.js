@@ -7,7 +7,7 @@ import RegistrationForm from '../components/Auth/RegistrationForm';
 export default class LoginView extends React.Component {
   render() {
     return (
-      <ApplicationView>
+      <ApplicationView modifier="auth-form">
         <RegistrationForm />
       </ApplicationView>
     );
