@@ -248,7 +248,8 @@ class NotificationsButton extends React.Component {
         <CustomScrollbars
           autoHeight={true}
           autoHeightMin={0}
-          autoHeightMax={300}>
+          autoHeightMax={300}
+          inverted={true}>
           <ul className="notifications__list
             tooltip__content--padding-surrogate">
             {this.state.notifications.map(this.getNotification)}
