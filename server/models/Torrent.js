@@ -157,9 +157,9 @@ class Torrent {
     let percentComplete = clientData.bytesDone / clientData.sizeBytes * 100;
 
     if (percentComplete > 0 && percentComplete < 10) {
-      return percentComplete.toFixed(2);
+      return Number(percentComplete.toFixed(2));
     } else if (percentComplete > 10 && percentComplete < 100) {
-      return percentComplete.toFixed(1);
+      return Number(percentComplete.toFixed(1));
     } else {
       return percentComplete;
     }
