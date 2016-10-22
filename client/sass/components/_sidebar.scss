@@ -30,7 +30,6 @@ $sidebar--icon-button--foreground--hover: $blue;
 
   &__icon-button {
     color: $sidebar--icon-button--foreground;
-    cursor: pointer;
     display: block;
     font-size: 0.8em;
     line-height: 1;
@@ -44,6 +43,10 @@ $sidebar--icon-button--foreground--hover: $blue;
       .icon {
         fill: $sidebar--icon-button--fill--hover;
       }
+    }
+
+    &--interactive {
+      cursor: pointer;
     }
 
     .icon {
