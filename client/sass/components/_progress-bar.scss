@@ -18,6 +18,7 @@ $progress-bar--fill: $green;
 $progress-bar--fill--checking: #8899a8;
 $progress-bar--fill--completed: $blue;
 $progress-bar--fill--error: #e95779;
+$progress-bar--fill--error--stopped: #f2acbc;
 $progress-bar--fill--selected: #fff;
 $progress-bar--fill--stopped: #e3e5e5;
 
@@ -63,6 +64,10 @@ $progress-bar--fill--stopped: #e3e5e5;
       .is-selected & {
         fill: $progress-bar--fill--selected;
       }
+
+      .has-error.is-stopped & {
+        fill: $progress-bar--fill--error--stopped;
+      }
     }
   }
 
@@ -97,6 +102,10 @@ $progress-bar--fill--stopped: #e3e5e5;
       background: $progress-bar--fill--selected;
     }
 
+    .has-error.is-stopped & {
+      background: $progress-bar--fill--error--stopped;
+    }
+
     &__wrapper {
       flex: 1 1 auto;
       position: relative;
@@ -126,6 +135,10 @@ $progress-bar--fill--stopped: #e3e5e5;
           background: $progress-bar--background--selected;
         }
 
+        .has-error.is-stopped & {
+          background: $progress-bar--fill--error--stopped;
+        }
+
         .is-selected.is-stopped & {
           background: $progress-bar--background--selected--stopped;
           opacity: 1;
@@ -141,6 +154,7 @@ $progress-bar--fill--stopped: #e3e5e5;
             rgba($progress-bar--fill--checking, 0.5) 100%);
           background-size: 4px 4px;
           height: $progress-bar--height;
+          top: 0;
         }
 
         .is-selected.is-checking & {
