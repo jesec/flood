@@ -4,6 +4,7 @@ $torrent-list--offset: 10px;
 
 $torrent--primary--foreground: #5b6d7c;
 $torrent--primary--foreground--error: #e95779;
+$torrent--primary--foreground--error--stopped: rgba($torrent--primary--foreground--error, 0.6);
 $torrent--primary--foreground--stopped: rgba(#333332, 0.5);
 $torrent--primary--foreground--selected: #fff;
 $torrent--primary--foreground--selected--stopped: rgba($torrent--primary--foreground--selected, 0.6);
@@ -223,6 +224,10 @@ $more-info--border: $textbox-repeater--button--border;
 
       .is-selected & {
         color: $torrent--primary--foreground--selected;
+      }
+
+      .has-error.is-stopped & {
+        color: $torrent--primary--foreground--error--stopped;
       }
 
       .is-selected.is-stopped & {
