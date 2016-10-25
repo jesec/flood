@@ -29,7 +29,7 @@ var client = {
     let request = new ClientRequest();
     let start = req.body.start;
 
-    request.add('createDirectory', {path});
+    request.createDirectory({path});
     request.send();
 
     // Each torrent is sent individually because rTorrent accepts a total
@@ -39,7 +39,7 @@ var client = {
       file.originalname = file.originalname.replace(/\s+/g, '.');
 
       let fileRequest = new ClientRequest();
-      fileRequest.add('addFiles', {files: file, path, start});
+      fileRequest.addFiles({files: file, path, start});
 
       // Set the callback for only the last request.
       if (index === files.length - 1) {
@@ -60,8 +60,8 @@ var client = {
     let tags = data.tags;
     let request = new ClientRequest();
 
-    request.add('createDirectory', {path});
-    request.add('addURLs', {urls, path, start, tags});
+    request.createDirectory({path});
+    request.addURLs({urls, path, start, tags});
     request.onComplete(callback);
     request.send();
   },
@@ -69,7 +69,7 @@ var client = {
   checkHash: (hashes, callback) => {
     let request = new ClientRequest();
 
-    request.add('checkHash', {hashes});
+    request.checkHash({hashes});
     request.onComplete((response, error) => {
       client.updateTorrentList();
       callback(response, error);
@@ -97,7 +97,7 @@ var client = {
       }, []);
     }
 
-    request.add('removeTorrents', {hashes: options.hashes});
+    request.removeTorrents({hashes: options.hashes});
     request.onComplete((response, error) => {
       if (options.deleteData && files.length > 0) {
         del(files, {force: true});
@@ -127,7 +127,7 @@ var client = {
       }
     };
 
-    request.add('fetchSettings', {
+    request.fetchSettings({
       options,
       setRequestedKeysArr: (requestedSettingsKeysArr) => {
         requestedSettingsKeys = requestedSettingsKeysArr;
@@ -167,7 +167,7 @@ var client = {
   getTorrentDetails: (hash, callback) => {
     let request = new ClientRequest();
 
-    request.add('getTorrentDetails', {
+    request.getTorrentDetails({
       hash,
       fileProps: torrentFilePropsMap.methods,
       peerProps: torrentPeerPropsMap.methods,
@@ -197,7 +197,7 @@ var client = {
   getTransferStats: (callback) => {
     let request = new ClientRequest();
 
-    request.add('getTransferData');
+    request.getTransferData();
     request.postProcess(clientResponseUtil.processTransferStats);
     request.onComplete(callback);
     request.send();
@@ -206,7 +206,7 @@ var client = {
   listMethods: (method, args, callback) => {
     let request = new ClientRequest();
 
-    request.add('listMethods', {method, args});
+    request.listMethods({method, args});
     request.onComplete(callback);
     request.send();
   },
@@ -221,14 +221,14 @@ var client = {
 
     let startTorrents = () => {
       let startTorrentsRequest = new ClientRequest();
-      startTorrentsRequest.add('startTorrents', {hashes});
+      startTorrentsRequest.startTorrents({hashes});
       startTorrentsRequest.onComplete(callback);
       startTorrentsRequest.send();
     };
 
     let checkHash = () => {
       let checkHashRequest = new ClientRequest();
-      checkHashRequest.add('checkHash', {hashes});
+      checkHashRequest.checkHash({hashes});
       checkHashRequest.onComplete(afterCheckHash);
       checkHashRequest.send();
     }
@@ -236,8 +236,9 @@ var client = {
     let moveTorrents = () => {
       let moveTorrentsRequest = new ClientRequest();
       moveTorrentsRequest.onComplete(checkHash);
-      moveTorrentsRequest.add('moveTorrents',
-        {filenames, sourcePaths, destinationPath});
+      moveTorrentsRequest.moveTorrents({
+        filenames, sourcePaths, destinationPath
+      });
     };
 
     let afterCheckHash = startTorrents;
@@ -247,8 +248,8 @@ var client = {
       afterSetPath = moveTorrents;
     }
 
-    mainRequest.add('stopTorrents', {hashes});
-    mainRequest.add('setDownloadPath', {hashes, path: destinationPath});
+    mainRequest.stopTorrents({hashes});
+    mainRequest.setDownloadPath({hashes, path: destinationPath});
     mainRequest.onComplete(afterSetPath);
     mainRequest.send();
   },
@@ -258,7 +259,7 @@ var client = {
     let fileIndices = data.fileIndices;
     let request = new ClientRequest();
 
-    request.add('setFilePriority', {hashes, fileIndices, priority: data.priority});
+    request.setFilePriority({hashes, fileIndices, priority: data.priority});
     request.onComplete((response, error) => {
       client.updateTorrentList();
       callback(response, error);
@@ -269,7 +270,7 @@ var client = {
   setPriority: (hashes, data, callback) => {
     let request = new ClientRequest();
 
-    request.add('setPriority', {hashes, priority: data.priority});
+    request.setPriority({hashes, priority: data.priority});
     request.onComplete((response, error) => {
       client.updateTorrentList();
       callback(response, error);
@@ -314,7 +315,7 @@ var client = {
       return payload;
     });
 
-    request.add('setSettings', {settings: transformedPayloads});
+    request.setSettings({settings: transformedPayloads});
     request.onComplete(callback);
     request.send();
   },
@@ -322,8 +323,10 @@ var client = {
   setSpeedLimits: (data, callback) => {
     let request = new ClientRequest();
 
-    request.add('setThrottle',
-      {direction: data.direction, throttle: data.throttle});
+    request.setThrottle({
+      direction: data.direction,
+      throttle: data.throttle
+    });
     request.onComplete(callback);
     request.send();
   },
@@ -331,7 +334,7 @@ var client = {
   setTaxonomy: (data, callback) => {
     let request = new ClientRequest();
 
-    request.add('setTaxonomy', data);
+    request.setTaxonomy(data);
     request.onComplete((response, error) => {
       // Fetch the latest torrent list to re-index the taxonomy.
       client.updateTorrentList();
@@ -343,7 +346,7 @@ var client = {
   stopTorrent: (hashes, callback) => {
     let request = new ClientRequest();
 
-    request.add('stopTorrents', {hashes});
+    request.stopTorrents({hashes});
     request.onComplete((response, error) => {
       client.updateTorrentList();
       callback(response, error);
@@ -360,7 +363,7 @@ var client = {
   startTorrent: (hashes, callback) => {
     let request = new ClientRequest();
 
-    request.add('startTorrents', {hashes});
+    request.startTorrents({hashes});
     request.onComplete((response, error) => {
       client.updateTorrentList();
       callback(response, error);
@@ -376,8 +379,7 @@ var client = {
   updateTorrentList: (callback) => {
     let request = new ClientRequest();
 
-    request.add('getTorrentList',
-      {props: torrentGeneralPropsMap.methods});
+    request.getTorrentList({props: torrentGeneralPropsMap.methods});
     request.postProcess((data) => {
       let torrentList = [];
 

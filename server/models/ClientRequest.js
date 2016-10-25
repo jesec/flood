@@ -31,13 +31,8 @@ class ClientRequest {
     }
   }
 
-  add(request, options) {
-    let method = `${request}MethodCall`;
-    if (this[method] == null) {
-      console.error(`${request} method call is undefined.`);
-      return;
-    }
-    this[method](options);
+  clearRequestQueue() {
+    this.requests = [];
   }
 
   getEnsuredArray(item) {
@@ -45,10 +40,6 @@ class ClientRequest {
       return [item];
     }
     return item;
-  }
-
-  clearRequestQueue() {
-    this.requests = [];
   }
 
   getMethodCall(methodName, params) {
@@ -102,7 +93,7 @@ class ClientRequest {
 
   // TODO: Separate these and add support for additional clients.
   // rTorrent method calls.
-  addFilesMethodCall(options) {
+  addFiles(options) {
     let files = this.getEnsuredArray(options.files);
     let path = options.path;
     let start = options.start;
@@ -129,7 +120,7 @@ class ClientRequest {
     });
   }
 
-  addURLsMethodCall(options) {
+  addURLs(options) {
     let path = options.path;
     let start = options.start;
     let tagsArr = options.tags;
@@ -168,7 +159,7 @@ class ClientRequest {
     });
   }
 
-  checkHashMethodCall(options) {
+  checkHash(options) {
     let hashes = this.getEnsuredArray(options.hashes);
 
     hashes.forEach((hash) => {
@@ -176,7 +167,7 @@ class ClientRequest {
     })
   }
 
-  createDirectoryMethodCall(options) {
+  createDirectory(options) {
     if (options.path) {
       mkdirp(options.path, (error) => {
         if (error) {
@@ -186,7 +177,7 @@ class ClientRequest {
     }
   }
 
-  fetchSettingsMethodCall(options) {
+  fetchSettings(options) {
     let requestedSettings = [];
 
     if (options.requestedSettings) {
@@ -207,7 +198,7 @@ class ClientRequest {
     });
   }
 
-  getTorrentDetailsMethodCall(options) {
+  getTorrentDetails(options) {
     var peerParams = [options.hash, ''].concat(options.peerProps);
     var fileParams = [options.hash, ''].concat(options.fileProps);
     var trackerParams = [options.hash, ''].concat(options.trackerProps);
@@ -217,22 +208,22 @@ class ClientRequest {
     this.requests.push(this.getMethodCall('t.multicall', trackerParams));
   }
 
-  getTorrentListMethodCall(options) {
+  getTorrentList(options) {
     this.requests.push(this.getMethodCall('d.multicall2', options.props));
   }
 
-  getTransferDataMethodCall(options) {
+  getTransferData(options) {
     Object.keys(rTorrentPropMap.transferData).forEach((key) => {
       this.requests.push(this.getMethodCall(rTorrentPropMap.transferData[key]));
     });
   }
 
-  listMethodsMethodCall(options) {
+  listMethods(options) {
     let args = this.getEnsuredArray(options.args);
     this.requests.push(this.getMethodCall(options.method, [args]));
   }
 
-  moveTorrentsMethodCall(options) {
+  moveTorrents(options) {
     let hashes = this.getEnsuredArray(options.hashes);
     let destinationPath = options.destinationPath;
     let filenames = this.getEnsuredArray(options.filenames);
@@ -255,7 +246,7 @@ class ClientRequest {
     });
   }
 
-  removeTorrentsMethodCall(options) {
+  removeTorrents(options) {
     let hashes = this.getEnsuredArray(options.hashes);
 
     hashes.forEach((hash) => {
@@ -263,7 +254,7 @@ class ClientRequest {
     });
   }
 
-  setDownloadPathMethodCall(options) {
+  setDownloadPath(options) {
     let hashes = this.getEnsuredArray(options.hashes);
 
     hashes.forEach((hash) => {
@@ -274,7 +265,7 @@ class ClientRequest {
     });
   }
 
-  setFilePriorityMethodCall(options) {
+  setFilePriority(options) {
     let fileIndices = this.getEnsuredArray(options.fileIndices);
     let hashes = this.getEnsuredArray(options.hashes);
 
@@ -287,7 +278,7 @@ class ClientRequest {
     });
   }
 
-  setPriorityMethodCall(options) {
+  setPriority(options) {
     let hashes = this.getEnsuredArray(options.hashes);
 
     hashes.forEach((hash) => {
@@ -298,7 +289,7 @@ class ClientRequest {
     });
   }
 
-  setSettingsMethodCall(options) {
+  setSettings(options) {
     let settings = this.getEnsuredArray(options.settings);
 
     settings.forEach((setting) => {
@@ -311,7 +302,7 @@ class ClientRequest {
     });
   }
 
-  setTaxonomyMethodCall(options) {
+  setTaxonomy(options) {
     let methodName = 'd.custom1.set';
 
     let tags = options.tags.reduce((memo, currentTag) => {
@@ -329,7 +320,7 @@ class ClientRequest {
     });
   }
 
-  setThrottleMethodCall(options) {
+  setThrottle(options) {
     let methodName = 'throttle.global_down.max_rate.set';
     if (options.direction === 'upload') {
       methodName = 'throttle.global_up.max_rate.set';
@@ -337,7 +328,7 @@ class ClientRequest {
     this.requests.push(this.getMethodCall(methodName, ['', options.throttle]));
   }
 
-  startTorrentsMethodCall(options) {
+  startTorrents(options) {
     if (!options.hashes) {
       console.error('startTorrents requires key \'hashes\'.');
       return;
@@ -349,7 +340,7 @@ class ClientRequest {
     });
   }
 
-  stopTorrentsMethodCall(options) {
+  stopTorrents(options) {
     if (!options.hashes) {
       console.error('stopTorrents requires key \'hashes\'.');
       return;
