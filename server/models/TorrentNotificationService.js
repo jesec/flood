@@ -5,7 +5,8 @@ let propsMap = require('../../shared/constants/propsMap');
 
 class NotificationService {
   hasFinished(prevData, nextData) {
-    return prevData.percentComplete < 100 && nextData.percentComplete === 100;
+    return !prevData.includes(propsMap.clientStatus.checking)
+      && prevData.percentComplete < 100 && nextData.percentComplete === 100;
   }
 
   compareNewTorrentData(prevData, nextData) {
