@@ -9,7 +9,6 @@ import DownloadSmall from '../Icons/DownloadSmall';
 import ErrorIcon from '../Icons/ErrorIcon';
 import EventTypes from '../../constants/EventTypes';
 import Inactive from '../Icons/Inactive';
-import propsMap from '../../../../shared/constants/propsMap';
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';

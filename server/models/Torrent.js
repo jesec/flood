@@ -3,7 +3,7 @@
 let _ = require('lodash');
 
 let regEx = require('../../shared/util/regEx');
-let propsMap = require('../../shared/constants/propsMap');
+let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 let stringUtil = require('../../shared/util/stringUtil');
 
 const DEFAULT_DATA_KEYS = [
@@ -170,30 +170,30 @@ class Torrent {
     let torrentStatus = [];
 
     if (isHashChecking === '1') {
-      torrentStatus.push(propsMap.clientStatus.checking);
+      torrentStatus.push(torrentStatusMap.checking);
     } else if (isComplete === '1' && isOpen === '1' && state === '1') {
-      torrentStatus.push(propsMap.clientStatus.seeding);
+      torrentStatus.push(torrentStatusMap.seeding);
   	} else if (isComplete === '1' && isOpen === '1' && state === '0') {
-      torrentStatus.push(propsMap.clientStatus.paused);
+      torrentStatus.push(torrentStatusMap.paused);
   	} else if (isComplete === '1' && isOpen === '0') {
-      torrentStatus.push(propsMap.clientStatus.stopped);
-      torrentStatus.push(propsMap.clientStatus.complete);
+      torrentStatus.push(torrentStatusMap.stopped);
+      torrentStatus.push(torrentStatusMap.complete);
   	} else if (isComplete === '0' && isOpen === '1' && state === '1') {
-      torrentStatus.push(propsMap.clientStatus.downloading);
+      torrentStatus.push(torrentStatusMap.downloading);
   	} else if (isComplete === '0' && isOpen === '1' && state === '0') {
-      torrentStatus.push(propsMap.clientStatus.paused);
+      torrentStatus.push(torrentStatusMap.paused);
   	} else if (isComplete === '0' && isOpen === '0') {
-      torrentStatus.push(propsMap.clientStatus.stopped);
+      torrentStatus.push(torrentStatusMap.stopped);
   	}
 
     if (message.length) {
-      torrentStatus.push(propsMap.clientStatus.error);
+      torrentStatus.push(torrentStatusMap.error);
     }
 
     if (uploadRate === '0' && downloadRate === '0') {
-      torrentStatus.push(propsMap.clientStatus.inactive);
+      torrentStatus.push(torrentStatusMap.inactive);
     } else {
-      torrentStatus.push(propsMap.clientStatus.active);
+      torrentStatus.push(torrentStatusMap.active);
     }
 
     return torrentStatus;

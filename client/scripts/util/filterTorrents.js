@@ -1,18 +1,17 @@
-import propsMaps from '../../../shared/constants/propsMap';
+import torrentStatusMap from '../../../shared/constants/torrentStatusMap';
 
 export function filterTorrents(torrentList, opts) {
-  let statusMap = propsMaps.clientStatus;
   let {type, filter} = opts;
 
   if (filter !== 'all') {
     if (type === 'status') {
-      let statusFilter = statusMap[filter];
+      let statusFilter = torrentStatusMap[filter];
       return torrentList.filter((torrent) => {
-        return torrent.status.indexOf(statusFilter) > -1;
+        return torrent.status.includes(statusFilter);
       });
     } else if (type === 'tracker') {
       return torrentList.filter((torrent) => {
-        return torrent.trackers.indexOf(filter) > -1;
+        return torrent.trackers.includes(filter);
       });
     } else if (type === 'tag') {
       return torrentList.filter((torrent) => {
@@ -20,7 +19,7 @@ export function filterTorrents(torrentList, opts) {
           return torrent.tags.length === 0;
         }
 
-        return torrent.tags.indexOf(filter) > -1;
+        return torrent.tags.includes(filter);
       });
     }
   }
