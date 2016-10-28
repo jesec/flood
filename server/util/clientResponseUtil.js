@@ -42,14 +42,14 @@ let clientResponseUtil = {
     let fileTree = {};
 
     if (peersData && peersData.length) {
-      peers = clientUtil.mapClientProps(
+      peers = clientUtil.mapClientResponse(
         clientUtil.defaults.peerProperties,
         peersData
       );
     }
 
     if (filesData && filesData.length) {
-      files = clientUtil.mapClientProps(
+      files = clientUtil.mapClientResponse(
         clientUtil.defaults.fileProperties,
         filesData
       );
@@ -60,7 +60,7 @@ let clientResponseUtil = {
     }
 
     if (trackerData && trackerData.length) {
-      trackers = clientUtil.mapClientProps(
+      trackers = clientUtil.mapClientResponse(
         clientUtil.defaults.trackerProperties,
         trackerData
       );
@@ -81,7 +81,7 @@ let clientResponseUtil = {
   },
 
   processTransferStats(data) {
-    return clientUtil.mapClientProps(clientUtil.defaults.clientProperties,
+    return clientUtil.mapClientResponse(clientUtil.defaults.clientProperties,
       data);
   }
 }
