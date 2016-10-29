@@ -54,6 +54,14 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
     padding: $tooltip-padding-vertical $tooltip-padding-horizontal;
     position: relative;
 
+    &--no-padding {
+      padding: 0;
+    }
+
+    &--padding-surrogate {
+      padding: $tooltip-padding-vertical $tooltip-padding-horizontal;
+    }
+
     &:after {
       border-color: $tooltip-background;
       border-style: solid;
@@ -63,13 +71,13 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
     }
   }
 
-  &.is-interactive {
-    pointer-events: auto;
-  }
-
   &.is-open {
     opacity: 1;
     visibility: visible;
+
+    &.is-interactive {
+      pointer-events: auto;
+    }
   }
 
   &--no-wrap {

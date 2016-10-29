@@ -43,7 +43,7 @@ class FeedsButton extends React.Component {
         ref={(ref) => this.tooltipRef = ref}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
-          tooltip__wrapper">
+          sidebar__icon-button--interactive tooltip__wrapper">
         <FeedIcon />
       </Tooltip>
     );

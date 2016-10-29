@@ -3,7 +3,4 @@ config.js
 node_modules
 npm-debug.log
 server/assets
-server/db/uiSettings.db
-server/db/users.db
-server/db/history
-server/db/settings
+server/db

@@ -6,12 +6,11 @@ let ajaxUtil = require('../util/ajaxUtil');
 let client = require('../models/client');
 let clientRoutes = require('./client');
 let FeedCollection = require('../models/FeedCollection');
+let NotificationCollection = require('../models/NotificationCollection');
 let history = require('../models/history');
 let passport = require('passport');
 let router = express.Router();
 let settings = require('../models/settings');
-
-history.startPolling();
 
 router.use('/', passport.authenticate('jwt', {session: false}));
 
@@ -43,6 +42,14 @@ router.put('/feed-monitor/rules', (req, res, next) => {
 
 router.get('/history', (req, res, next) => {
   history.get(req.query, ajaxUtil.getResponseFn(res));
+});
+
+router.get('/notifications', (req, res, next) => {
+  NotificationCollection.getNotifications(req.query, ajaxUtil.getResponseFn(res));
+});
+
+router.delete('/notifications', (req, res, next) => {
+  NotificationCollection.clearNotifications(req.query, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/settings', (req, res, next) => {

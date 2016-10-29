@@ -3,8 +3,9 @@
 let _ = require('lodash');
 
 let regEx = require('../../shared/util/regEx');
-let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 let stringUtil = require('../../shared/util/stringUtil');
+let TorrentNotificationService = require('./TorrentNotificationService');
+let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
 const DEFAULT_DATA_KEYS = [
   // Torrent List data
@@ -90,15 +91,20 @@ class Torrent {
     keysToProcess.forEach((key) => {
       // TODO: Use setters instead of constructing this transformation method.
       let fnName = `get${stringUtil.capitalize(key)}`;
+      let keyData = null;
 
       // Some data needs transformation, so we check if there's a transformation
       // method on the Torrent class first. If not, we assume no transformation.
       if (typeof this[fnName] === 'function') {
-        torrentData[key] = this[fnName](clientData);
+        keyData = this[fnName](clientData);
       } else {
-        torrentData[key] = clientData[key];
+        keyData = clientData[key];
       }
+
+      torrentData[key] = keyData;
     });
+
+    TorrentNotificationService.compareNewTorrentData(this.data, torrentData);
 
     return torrentData;
   }
@@ -150,9 +156,9 @@ class Torrent {
     let percentComplete = clientData.bytesDone / clientData.sizeBytes * 100;
 
     if (percentComplete > 0 && percentComplete < 10) {
-      return percentComplete.toFixed(2);
+      return Number(percentComplete.toFixed(2));
     } else if (percentComplete > 10 && percentComplete < 100) {
-      return percentComplete.toFixed(1);
+      return Number(percentComplete.toFixed(1));
     } else {
       return percentComplete;
     }

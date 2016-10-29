@@ -1,0 +1,59 @@
+.notifications {
+
+  &--empty {
+    text-align: center;
+  }
+
+  &__badge {
+    background: $blue;
+    border-radius: 30px;
+    color: $dark-blue;
+    font-size: 0.5rem;
+    font-weight: 700;
+    left: 18px;
+    line-height: 9px;
+    padding: 0 $spacing-unit * 1/10;
+    position: absolute;
+    top: 6px;
+    vertical-align: baseline;
+  }
+
+  &__list {
+    white-space: normal;
+    word-wrap: break-word;
+
+    &__item {
+      margin-bottom: $spacing-unit * 3/10;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__toolbar {
+
+    .toolbar {
+
+      &__item {
+
+        &--button {
+          flex-basis: 33.33%;
+        }
+      }
+    }
+  }
+}
+
+.notification {
+
+  &__heading {
+    color: #495d76;
+    font-size: 0.75rem;
+  }
+
+  &__category {
+    color: $blue;
+    font-weight: 600;
+  }
+}

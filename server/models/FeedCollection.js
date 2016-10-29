@@ -6,6 +6,7 @@ let Datastore = require('nedb');
 let client = require('./client');
 let config = require('../../config');
 let Feed = require('./Feed');
+let NotificationCollection = require('./NotificationCollection');
 
 class FeedCollection {
   constructor(opts) {
@@ -75,6 +76,11 @@ class FeedCollection {
 
           this.db.update({_id: matchedTorrent.feed._id}, {$inc: {count: 1}},
             {upsert: true});
+
+          NotificationCollection.addNotification({
+            id: 'notification.feed.downloaded.torrent',
+            data: {matchedTorrent, downloadRule}
+          });
         });
       }
     });
