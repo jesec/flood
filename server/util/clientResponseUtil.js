@@ -1,6 +1,10 @@
 'use strict';
 
 let clientUtil = require('./clientUtil');
+let clientGeneralPropsMap = require('../../shared/constants/clientGeneralPropsMap');
+let torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
+let torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
+let torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 let util = require('util');
 
 let getFileTreeFromPathsArr = (tree, directory, file, depth) => {
@@ -43,14 +47,14 @@ let clientResponseUtil = {
 
     if (peersData && peersData.length) {
       peers = clientUtil.mapClientResponse(
-        clientUtil.defaults.peerProperties,
+        torrentPeerPropsMap.props,
         peersData
       );
     }
 
     if (filesData && filesData.length) {
       files = clientUtil.mapClientResponse(
-        clientUtil.defaults.fileProperties,
+        torrentFilePropsMap.props,
         filesData
       );
 
@@ -61,7 +65,7 @@ let clientResponseUtil = {
 
     if (trackerData && trackerData.length) {
       trackers = clientUtil.mapClientResponse(
-        clientUtil.defaults.trackerProperties,
+        torrentTrackerPropsMap.props,
         trackerData
       );
     }
@@ -81,8 +85,10 @@ let clientResponseUtil = {
   },
 
   processTransferStats(data) {
-    return clientUtil.mapClientResponse(clientUtil.defaults.clientProperties,
-      data);
+    return clientUtil.mapClientResponse(
+      clientGeneralPropsMap.props,
+      data
+    );
   }
 }
 

@@ -6,11 +6,14 @@ let util = require('util');
 let clientResponseUtil = require('../util/clientResponseUtil');
 let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 let ClientRequest = require('./ClientRequest');
-let clientUtil = require('../util/clientUtil');
 let formatUtil = require('../../shared/util/formatUtil');
 let scgi = require('../util/scgi');
 let Torrent = require('./Torrent');
 let TorrentCollection = require('./TorrentCollection');
+let torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
+let torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
+let torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
+let torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
 let statusCount = {};
 let tagCount = {};
@@ -168,9 +171,9 @@ var client = {
 
     request.add('getTorrentDetails', {
       hash,
-      fileProps: clientUtil.defaults.filePropertyMethods,
-      peerProps: clientUtil.defaults.peerPropertyMethods,
-      trackerProps: clientUtil.defaults.trackerPropertyMethods
+      fileProps: torrentFilePropsMap.methods,
+      peerProps: torrentPeerPropsMap.methods,
+      trackerProps: torrentTrackerPropsMap.methods
     });
     request.postProcess(clientResponseUtil.processTorrentDetails);
     request.onComplete(callback);
@@ -181,7 +184,7 @@ var client = {
     let request = new ClientRequest();
 
     request.add('getTorrentList',
-      {props: clientUtil.defaults.torrentPropertyMethods});
+      {props: torrentGeneralPropsMap.methods});
     request.postProcess((data) => {
       let torrentList = [];
 
