@@ -95,7 +95,7 @@ class TorrentCollection {
   updateTorrents(clientData) {
     let currentTime = Date.now();
     let knownHashes = [];
-    let torrentData = clientUtil.mapClientProps(
+    let torrentData = clientUtil.mapClientResponse(
       clientUtil.defaults.torrentProperties, clientData
     );
 
