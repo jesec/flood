@@ -2,7 +2,7 @@
 
 let _ = require('lodash');
 
-let clientUtil = require('../util/clientUtil');
+let clientResponseUtil = require('../util/clientResponseUtil');
 let stringUtil = require('../../shared/util/stringUtil');
 let torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
 let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
@@ -96,7 +96,7 @@ class TorrentCollection {
   updateTorrents(clientData) {
     let currentTime = Date.now();
     let knownHashes = [];
-    let torrentData = clientUtil.mapClientResponse(
+    let torrentData = clientResponseUtil.mapPropsToResponse(
       torrentGeneralPropsMap.props, clientData
     );
 

@@ -5,7 +5,6 @@ let multer = require('multer');
 
 let ajaxUtil = require('../util/ajaxUtil');
 let client = require('../models/client');
-let clientUtil = require('../util/clientUtil');
 let history = require('../models/history');
 let router = express.Router();
 let settings = require('../models/settings');

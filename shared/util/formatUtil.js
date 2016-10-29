@@ -7,7 +7,7 @@ const FORMAT_UTIL = {
   },
 
   parsePeers: (string) => {
-    // This lovely delimiter is defined in clientUtil.
+    // This lovely delimiter is defined in clientResponseUtil.
     let markerPosition = string.indexOf('@!@');
     return string.substr(0, markerPosition);
   },
