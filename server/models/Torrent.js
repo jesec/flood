@@ -104,7 +104,7 @@ class Torrent {
   }
 
   getPeerCount(string) {
-    // This lovely delimiter is defined in clientUtil.
+    // This lovely delimiter is defined in clientResponseUtil.
     let markerPosition = string.indexOf('@!@');
     return string.substr(0, markerPosition);
   }
@@ -220,7 +220,7 @@ class Torrent {
   }
 
   getTrackers(clientData) {
-    // This lovely delimiter is defined in clientUtil.
+    // This lovely delimiter is defined in clientResponseUtil.
     let trackers = clientData.trackers.split('@!@');
     let trackerDomains = [];
 

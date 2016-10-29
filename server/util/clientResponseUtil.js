@@ -1,6 +1,9 @@
 'use strict';
 
-let clientUtil = require('./clientUtil');
+let clientGeneralPropsMap = require('../../shared/constants/clientGeneralPropsMap');
+let torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
+let torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
+let torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 let util = require('util');
 
 let getFileTreeFromPathsArr = (tree, directory, file, depth) => {
@@ -31,42 +34,36 @@ let getFileTreeFromPathsArr = (tree, directory, file, depth) => {
 };
 
 let clientResponseUtil = {
-  processTorrentDetails(data) {
-    // TODO: This is ugly.
-    let peersData = data[0][0] || null;
-    let filesData = data[1][0] || null;
-    let trackerData = data[2][0] || null;
-    let peers = null;
-    let files = null;
-    let trackers = null;
-    let fileTree = {};
-
-    if (peersData && peersData.length) {
-      peers = clientUtil.mapClientResponse(
-        clientUtil.defaults.peerProperties,
-        peersData
-      );
+  mapPropsToResponse: (requestedKeys, clientResponse) => {
+    if (clientResponse.length === 0) {
+      return [];
     }
 
-    if (filesData && filesData.length) {
-      files = clientUtil.mapClientResponse(
-        clientUtil.defaults.fileProperties,
-        filesData
-      );
+    // clientResponse is always an array of arrays.
+    if (clientResponse[0].length === 1) {
+      // When the length of the nested arrays is 1, the nested arrays represent a
+      // singular requested value (e.g. total data transferred or current upload
+      // speed). Therefore we construct an object where the requested keys map to
+      // their values.
+      return clientResponse.reduce((memo, value, index) => {
+        memo[requestedKeys[index]] = value[0];
 
-      fileTree = files.reduce((memo, file) => {
-        return getFileTreeFromPathsArr(memo, file.pathComponents[0], file);
+        return memo;
       }, {});
-    }
+    } else {
+      // When the length of the nested arrays is more than 1, the nested arrays
+      // represent one of many items of the same type (e.g. a list of torrents,
+      // peers, files, etc). Therefore we construct an array of objects, where each
+      // object contains all of the requested keys and its value. We add an index
+      // for each item, a requirement for file lists.
+      return clientResponse.map((listItem, index) => {
+        return listItem.reduce((nestedMemo, value, nestedIndex) => {
+          nestedMemo[requestedKeys[nestedIndex]] = value;
 
-    if (trackerData && trackerData.length) {
-      trackers = clientUtil.mapClientResponse(
-        clientUtil.defaults.trackerProperties,
-        trackerData
-      );
+          return nestedMemo;
+        }, {index});
+      }, []);
     }
-
-    return {peers, trackers, fileTree};
   },
 
   processFile(file) {
@@ -80,9 +77,49 @@ let clientResponseUtil = {
     return file;
   },
 
+  processTorrentDetails(data) {
+    // TODO: This is ugly.
+    let peersData = data[0][0] || null;
+    let filesData = data[1][0] || null;
+    let trackerData = data[2][0] || null;
+    let peers = null;
+    let files = null;
+    let trackers = null;
+    let fileTree = {};
+
+    if (peersData && peersData.length) {
+      peers = clientResponseUtil.mapPropsToResponse(
+        torrentPeerPropsMap.props,
+        peersData
+      );
+    }
+
+    if (filesData && filesData.length) {
+      files = clientResponseUtil.mapPropsToResponse(
+        torrentFilePropsMap.props,
+        filesData
+      );
+
+      fileTree = files.reduce((memo, file) => {
+        return getFileTreeFromPathsArr(memo, file.pathComponents[0], file);
+      }, {});
+    }
+
+    if (trackerData && trackerData.length) {
+      trackers = clientResponseUtil.mapPropsToResponse(
+        torrentTrackerPropsMap.props,
+        trackerData
+      );
+    }
+
+    return {peers, trackers, fileTree};
+  },
+
   processTransferStats(data) {
-    return clientUtil.mapClientResponse(clientUtil.defaults.clientProperties,
-      data);
+    return clientResponseUtil.mapPropsToResponse(
+      clientGeneralPropsMap.props,
+      data
+    );
   }
 }
 

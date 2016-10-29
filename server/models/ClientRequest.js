@@ -6,7 +6,6 @@ let path = require('path');
 let util = require('util');
 
 let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
-let clientUtil = require('../util/clientUtil');
 let rTorrentPropMap = require('../util/rTorrentPropMap');
 let scgi = require('../util/scgi');
 let stringUtil = require('../../shared/util/stringUtil');

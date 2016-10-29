@@ -2,9 +2,10 @@
 
 let _ = require('lodash');
 
-let clientUtil = require('../util/clientUtil');
-let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
+let clientResponseUtil = require('../util/clientResponseUtil');
 let stringUtil = require('../../shared/util/stringUtil');
+let torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
+let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 let Torrent = require('./Torrent');
 
 const DEFAULT_TAG = 'untagged';
@@ -95,8 +96,8 @@ class TorrentCollection {
   updateTorrents(clientData) {
     let currentTime = Date.now();
     let knownHashes = [];
-    let torrentData = clientUtil.mapClientResponse(
-      clientUtil.defaults.torrentProperties, clientData
+    let torrentData = clientResponseUtil.mapPropsToResponse(
+      torrentGeneralPropsMap.props, clientData
     );
 
     this.resetStatusCount();
