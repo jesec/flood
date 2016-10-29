@@ -7,7 +7,6 @@ let clientResponseUtil = require('../util/clientResponseUtil');
 let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 let ClientRequest = require('./ClientRequest');
 let clientUtil = require('../util/clientUtil');
-let propsMap = require('../../shared/constants/propsMap');
 let formatUtil = require('../../shared/util/formatUtil');
 let scgi = require('../util/scgi');
 let Torrent = require('./Torrent');
@@ -33,7 +32,7 @@ var client = {
     // torrent files reliably.
     files.forEach((file, index) => {
       file.originalname = file.originalname.replace(/\s+/g, '.');
-      
+
       let fileRequest = new ClientRequest();
       fileRequest.add('addFiles', {files: file, path, start});
 

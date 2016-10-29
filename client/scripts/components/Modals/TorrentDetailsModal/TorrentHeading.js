@@ -8,7 +8,6 @@ import Duration from '../../General/Duration';
 import PauseIcon from '../../Icons/PauseIcon';
 import PriorityMeter from '../../General/Filesystem/PriorityMeter';
 import ProgressBar from '../../General/ProgressBar';
-import propsMap from '../../../../../shared/constants/propsMap';
 import Ratio from '../../General/Ratio';
 import RatioIcon from '../../Icons/RatioIcon';
 import Size from '../../General/Size';
@@ -18,6 +17,7 @@ import stringUtil from '../../../../../shared/util/stringUtil';
 import TorrentActions from '../../../actions/TorrentActions';
 import {torrentStatusClasses} from '../../../util/torrentStatusClasses';
 import {torrentStatusIcons} from '../../../util/torrentStatusIcons';
+import torrentStatusMap from '../../../../../shared/constants/torrentStatusMap';
 import UploadThickIcon from '../../Icons/UploadThickIcon';
 
 const METHODS_TO_BIND = [
@@ -47,9 +47,9 @@ export default class TorrentHeading extends React.Component {
   }
 
   getCurrentStatus(torrentStatus) {
-    if (torrentStatus.indexOf(propsMap.clientStatus.paused) > -1) {
+    if (torrentStatus.includes(torrentStatusMap.paused)) {
       return 'pause';
-    } else if (torrentStatus.indexOf(propsMap.clientStatus.stopped) > -1) {
+    } else if (torrentStatus.includes(torrentStatusMap.stopped)) {
       return 'stop';
     } else {
       return 'start';

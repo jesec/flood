@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 
-import propsMap from '../../../shared/constants/propsMap';
+import torrentStatusMap from '../../../shared/constants/torrentStatusMap';
 
 export function torrentStatusClasses(torrent, ...classes) {
   let additionalClasses = [];
@@ -13,17 +13,16 @@ export function torrentStatusClasses(torrent, ...classes) {
 
   additionalClasses = additionalClasses.join(' ');
 
-  return classnames({
-    [additionalClasses]: additionalClasses,
-    'has-error': torrent.status.indexOf(propsMap.clientStatus.error) > -1,
-    'is-stopped': torrent.status.indexOf(propsMap.clientStatus.stopped) > -1,
-    'is-paused': torrent.status.indexOf(propsMap.clientStatus.paused) > -1,
+  return classnames(additionalClasses, {
+    'has-error': torrent.status.includes(torrentStatusMap.error),
+    'is-stopped': torrent.status.includes(torrentStatusMap.stopped),
+    'is-paused': torrent.status.includes(torrentStatusMap.paused),
     'is-active': torrent.downloadRate > 0 || torrent.uploadRate > 0,
-    'is-downloading': torrent.status.indexOf(propsMap.clientStatus.downloading) > -1,
-    'is-seeding': torrent.status.indexOf(propsMap.clientStatus.seeding) > -1,
-    'is-completed': torrent.status.indexOf(propsMap.clientStatus.complete) > -1,
-    'is-checking': torrent.status.indexOf(propsMap.clientStatus.checking) > -1,
-    'is-active': torrent.status.indexOf(propsMap.clientStatus.active) > -1,
-    'is-inactive': torrent.status.indexOf(propsMap.clientStatus.inactive) > -1
+    'is-downloading': torrent.status.includes(torrentStatusMap.downloading),
+    'is-seeding': torrent.status.includes(torrentStatusMap.seeding),
+    'is-completed': torrent.status.includes(torrentStatusMap.complete),
+    'is-checking': torrent.status.includes(torrentStatusMap.checking),
+    'is-active': torrent.status.includes(torrentStatusMap.active),
+    'is-inactive': torrent.status.includes(torrentStatusMap.inactive)
   });
 }

@@ -3,7 +3,7 @@
 let _ = require('lodash');
 
 let clientUtil = require('../util/clientUtil');
-let propsMap = require('../../shared/constants/propsMap');
+let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 let stringUtil = require('../../shared/util/stringUtil');
 let Torrent = require('./Torrent');
 
@@ -33,7 +33,7 @@ class TorrentCollection {
 
   setStatusCount(statusData) {
     statusData.forEach((status) => {
-      this.statusCount[propsMap.serverStatus[status]]++;
+      this.statusCount[torrentStatusMap[status]]++;
     });
   }
 
@@ -79,8 +79,8 @@ class TorrentCollection {
   }
 
   resetStatusCount() {
-    Object.keys(propsMap.serverStatus).forEach((key) => {
-      this.statusCount[propsMap.serverStatus[key]] = 0;
+    torrentStatusMap.statusShorthand.forEach((shorthand) => {
+      this.statusCount[torrentStatusMap[shorthand]] = 0;
     });
   }
 
