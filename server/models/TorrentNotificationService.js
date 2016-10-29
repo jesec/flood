@@ -1,11 +1,14 @@
 'use strict';
 
 let NotificationCollection = require('./NotificationCollection');
-let propsMap = require('../../shared/constants/propsMap');
+let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
 class NotificationService {
   hasFinished(prevData, nextData) {
-    return !prevData.includes(propsMap.clientStatus.checking)
+    prevData = prevData || {};
+    let status = prevData.status || [];
+
+    return !(status.indexOf(torrentStatusMap.checking) > -1)
       && prevData.percentComplete < 100 && nextData.percentComplete === 100;
   }
 

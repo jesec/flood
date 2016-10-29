@@ -2,7 +2,6 @@
 
 let _ = require('lodash');
 
-let propsMap = require('../../shared/constants/propsMap');
 let regEx = require('../../shared/util/regEx');
 let stringUtil = require('../../shared/util/stringUtil');
 let TorrentNotificationService = require('./TorrentNotificationService');
