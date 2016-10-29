@@ -43,7 +43,10 @@ var client = {
 
       // Set the callback for only the last request.
       if (index === files.length - 1) {
-        fileRequest.onComplete(callback);
+        fileRequest.onComplete((response, error) => {
+          client.updateTorrentList();
+          callback(response, error);
+        });
       }
 
       fileRequest.send();
@@ -67,7 +70,10 @@ var client = {
     let request = new ClientRequest();
 
     request.add('checkHash', {hashes});
-    request.onComplete(callback);
+    request.onComplete((response, error) => {
+      client.updateTorrentList();
+      callback(response, error);
+    });
     request.send();
   },
 
@@ -96,6 +102,8 @@ var client = {
       if (options.deleteData && files.length > 0) {
         del(files, {force: true});
       }
+
+      client.updateTorrentList();
 
       callback(response, error);
     });
@@ -251,7 +259,10 @@ var client = {
     let request = new ClientRequest();
 
     request.add('setFilePriority', {hashes, fileIndices, priority: data.priority});
-    request.onComplete(callback);
+    request.onComplete((response, error) => {
+      client.updateTorrentList();
+      callback(response, error);
+    });
     request.send();
   },
 
@@ -259,7 +270,10 @@ var client = {
     let request = new ClientRequest();
 
     request.add('setPriority', {hashes, priority: data.priority});
-    request.onComplete(callback);
+    request.onComplete((response, error) => {
+      client.updateTorrentList();
+      callback(response, error);
+    });
     request.send();
   },
 
@@ -330,7 +344,10 @@ var client = {
     let request = new ClientRequest();
 
     request.add('stopTorrents', {hashes});
-    request.onComplete(callback);
+    request.onComplete((response, error) => {
+      client.updateTorrentList();
+      callback(response, error);
+    });
     request.send();
   },
 
@@ -344,7 +361,10 @@ var client = {
     let request = new ClientRequest();
 
     request.add('startTorrents', {hashes});
-    request.onComplete(callback);
+    request.onComplete((response, error) => {
+      client.updateTorrentList();
+      callback(response, error);
+    });
     request.send();
   },
 
@@ -357,7 +377,7 @@ var client = {
     let request = new ClientRequest();
 
     request.add('getTorrentList',
-      {props: clientUtil.defaults.torrentPropertyMethods});
+      {props: torrentGeneralPropsMap.methods});
     request.postProcess((data) => {
       let torrentList = [];
 
