@@ -5,6 +5,7 @@ $torrent-list--offset: 10px;
 $torrent--primary--foreground: #5b6d7c;
 $torrent--primary--foreground--error: #e95779;
 $torrent--primary--foreground--error--stopped: rgba($torrent--primary--foreground--error, 0.6);
+$torrent--primary--foreground--error--stopped--selected: rgba(#fff, 0.6);
 $torrent--primary--foreground--stopped: rgba(#333332, 0.5);
 $torrent--primary--foreground--selected: #fff;
 $torrent--primary--foreground--selected--stopped: rgba($torrent--primary--foreground--selected, 0.6);
@@ -146,11 +147,191 @@ $more-info--border: $textbox-repeater--button--border;
     }
   }
 
+  &.is-active {
+
+    .torrent {
+
+      &__details {
+
+        &--eta {
+          opacity: 1;
+          visibility: visible;
+        }
+
+        &--speed {
+
+          &--download {
+            color: $green;
+          }
+
+          &--upload {
+            color: $blue;
+          }
+        }
+      }
+    }
+  }
+
   &.is-selected {
     background: $torrent--background--selected;
 
     &.has-error {
       background: $torrent--background--error;
+
+      .torrent {
+
+        &__details {
+
+          &--primary {
+            color: #fff;
+          }
+
+          &--tertiary {
+
+            &--tags {
+              background: $torrent--tags--background--selected--has-error;
+              color: $torrent--tags--foreground--has-error;
+            }
+          }
+        }
+      }
+    }
+
+    &.is-stopped {
+
+      .torrent {
+
+        &__details {
+
+          &--primary {
+            color: $torrent--primary--foreground--selected--stopped;
+          }
+
+          &--secondary {
+            color: $torrent--secondary--foreground--selected--stopped;
+          }
+
+          &--tertiary {
+            color: $torrent--tertiary--foreground--selected--stopped;
+
+            &--tags {
+              opacity: 0.6;
+            }
+          }
+
+          &--speed {
+
+            &--download,
+            &--upload {
+              color: $torrent--tertiary--foreground--selected--stopped !important;
+            }
+          }
+        }
+      }
+
+      &.has-error {
+        background: $torrent--background--error;
+
+        .torrent {
+
+          &__details {
+
+            &--primary {
+              color: $torrent--primary--foreground--error--stopped--selected;
+            }
+          }
+        }
+      }
+    }
+
+    .torrent {
+
+      &__details {
+
+        &--primary {
+          color: $torrent--primary--foreground--selected;
+        }
+
+        &--secondary {
+          color: $torrent--secondary--foreground--selected;
+        }
+
+        &--tertiary {
+          color: $torrent--tertiary--foreground--selected;
+
+          &--tags {
+            background: $torrent--tags--background--selected;
+            color: $torrent--tags--foreground--selected;
+          }
+        }
+
+        &--speed {
+
+          &--download,
+          &--upload {
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+
+  &.is-stopped {
+
+    .torrent {
+
+      &__details {
+
+        &--primary {
+          color: $torrent--primary--foreground--stopped;
+        }
+
+        &--secondary {
+          color: $torrent--secondary--foreground--stopped;
+        }
+
+        &--tertiary {
+          color: $torrent--tertiary--foreground--stopped;
+
+          &--tags {
+            opacity: 0.5;
+          }
+        }
+
+        &--speed {
+
+          &--download,
+          &--upload {
+            color: $torrent--tertiary--foreground--stopped;
+          }
+        }
+      }
+    }
+  }
+
+  &.has-error {
+
+    &.is-stopped {
+
+      .torrent {
+
+        &__details {
+
+          &--primary {
+            color: $torrent--primary--foreground--error--stopped;
+          }
+        }
+      }
+    }
+
+    .torrent {
+
+      &__details {
+
+        &--primary {
+          color: $torrent--primary--foreground--error;
+        }
+      }
     }
   }
 
@@ -213,26 +394,6 @@ $more-info--border: $textbox-repeater--button--border;
       flex: 1 1 auto;
       line-height: 1.3;
       white-space: nowrap;
-
-      .is-stopped & {
-        color: $torrent--primary--foreground--stopped;
-      }
-
-      .has-error & {
-        color: $torrent--primary--foreground--error;
-      }
-
-      .is-selected & {
-        color: $torrent--primary--foreground--selected;
-      }
-
-      .has-error.is-stopped & {
-        color: $torrent--primary--foreground--error--stopped;
-      }
-
-      .is-selected.is-stopped & {
-        color: $torrent--primary--foreground--selected--stopped;
-      }
     }
 
     &--secondary {
@@ -251,18 +412,6 @@ $more-info--border: $textbox-repeater--button--border;
 
       .unit {
         font-weight: 400;
-      }
-
-      .is-stopped & {
-        color: $torrent--secondary--foreground--stopped;
-      }
-
-      .is-selected & {
-        color: $torrent--secondary--foreground--selected;
-      }
-
-      .is-selected.is-stopped & {
-        color: $torrent--secondary--foreground--selected--stopped;
       }
     }
 
@@ -286,18 +435,6 @@ $more-info--border: $textbox-repeater--button--border;
         }
       }
 
-      .is-stopped & {
-        color: $torrent--tertiary--foreground--stopped;
-      }
-
-      .is-selected & {
-        color: $torrent--tertiary--foreground--selected;
-      }
-
-      .is-selected.is-stopped & {
-        color: $torrent--tertiary--foreground--selected--stopped;
-      }
-
       &--stats {
         flex: 1 0 auto;
       }
@@ -309,24 +446,6 @@ $more-info--border: $textbox-repeater--button--border;
         margin-left: auto;
         margin-right: 0;
         transition: background 0.25s, color 0.25s, opacity 0.25s;
-
-        .is-stopped & {
-          opacity: 0.5;
-        }
-
-        .is-selected & {
-          background: $torrent--tags--background--selected;
-          color: $torrent--tags--foreground--selected;
-        }
-
-        .is-selected.has-error & {
-          background: $torrent--tags--background--selected--has-error;
-          color: $torrent--tags--foreground--has-error;
-        }
-
-        .is-selected.is-stopped & {
-          opacity: 0.6;
-        }
 
         li {
           margin-right: $spacing-unit * 3/10;
@@ -359,17 +478,18 @@ $more-info--border: $textbox-repeater--button--border;
       transition: color 0.25s, opacity 1s, visibility 1s;
       visibility: hidden;
 
-      .torrent__details--segment {
-        margin-right: 0.25em;
+      .torrent {
 
-        &:last-child {
-          margin-right: 0;
+        &__details {
+
+          &--segment {
+            margin-right: 0.25em;
+
+            &:last-child {
+              margin-right: 0;
+            }
+          }
         }
-      }
-
-      .is-active & {
-        opacity: 1;
-        visibility: visible;
       }
     }
 
@@ -403,35 +523,9 @@ $more-info--border: $textbox-repeater--button--border;
 
     &--speed {
 
-      &--download {
-
-        .is-active & {
-          color: $green;
-        }
-      }
-
-      &--upload {
-
-        .is-active & {
-          color: $blue;
-        }
-      }
-
       &--download,
       &--upload {
         transition: color 0.25s;
-
-        .is-selected & {
-          color: #fff;
-        }
-
-        .is-stopped & {
-          color: $torrent--tertiary--foreground--stopped;
-        }
-
-        .is-selected.is-stopped & {
-          color: $torrent--tertiary--foreground--selected--stopped !important;
-        }
       }
     }
   }
