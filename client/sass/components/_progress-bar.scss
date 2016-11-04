@@ -20,18 +20,14 @@ $progress-bar--fill--completed: $blue;
 $progress-bar--fill--error: #e95779;
 $progress-bar--fill--error--stopped: #f2acbc;
 $progress-bar--fill--selected: #fff;
+$progress-bar--fill--selected--stopped: #96c7f1;
 $progress-bar--fill--stopped: #e3e5e5;
 
 .progress-bar {
   align-items: center;
   display: flex;
-  transition: opacity 0.25s;
   width: 100%;
   z-index: 1;
-
-  .is-selected.is-stopped & {
-    opacity: 0.5;
-  }
 
   &__icon {
     flex: 0 0 auto;
@@ -65,6 +61,10 @@ $progress-bar--fill--stopped: #e3e5e5;
         fill: $progress-bar--fill--selected;
       }
 
+      .is-selected.is-stopped & {
+        fill: $progress-bar--fill--selected--stopped;
+      }
+
       .has-error.is-stopped & {
         fill: $progress-bar--fill--error--stopped;
       }
@@ -76,7 +76,7 @@ $progress-bar--fill--stopped: #e3e5e5;
     display: block;
     height: $progress-bar--height;
     position: relative;
-    transform-origin: 0 50%;
+    transform-origin: 0 0;
     transition: background 0.25s, width 0.25s;
     width: 100%;
     z-index: 1;
@@ -100,6 +100,10 @@ $progress-bar--fill--stopped: #e3e5e5;
 
     .is-selected & {
       background: $progress-bar--fill--selected;
+    }
+
+    .is-selected.is-stopped & {
+      background: $progress-bar--fill--selected--stopped;
     }
 
     .has-error.is-stopped & {
