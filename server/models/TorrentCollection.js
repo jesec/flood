@@ -18,6 +18,10 @@ class TorrentCollection {
     this.trackerCount = {all: 0};
   }
 
+  getTorrent(hash) {
+    return this.torrents[hash].data;
+  }
+
   getTorrents() {
     let currentTorrents = {};
 
