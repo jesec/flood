@@ -1,4 +1,30 @@
 export default {
+  'alert.torrent.add': `Successfully added {countElement} {count, plural,
+      =1 {torrent}
+      other {torrents}
+    }.`,
+  'alert.torrent.add.failed': `Failed to add {countElement} {count, plural,
+      =1 {torrent}
+      other {torrents}
+    }.`,
+  'alert.torrent.move': `Successfully moved {countElement} {count, plural,
+      =1 {torrent}
+      other {torrents}
+    }.`,
+  'alert.torrent.move.failed': `Failed to move {countElement} {count, plural,
+      =1 {torrent}
+      other {torrents}
+    }.`,
+  'alert.torrent.remove': `Successfully removed {countElement} {count, plural,
+      =1 {torrent}
+      other {torrents}
+    }.`,
+  'alert.torrent.remove.failed': `Failed to remove {countElement} {count, plural,
+      =1 {torrent}
+      other {torrents}
+    }.`,
+  'alert.settings.saved': 'Successfully saved settings.',
+
   'auth.add.user': 'Add User',
   'auth.create.account': 'Create Account',
   'auth.create.an.account': 'Create an Account',
@@ -64,37 +90,17 @@ export default {
   'general.to': 'to',
   'general.of': 'of',
 
+  'general.clipboard.copy': 'Copy',
+  'general.clipboard.copied': 'Copied',
+
   'locale.language.en': 'English',
   'locale.language.fr': 'French',
   'locale.language.nl': 'Nederlands',
 
-  'alert.torrent.add': `Successfully added {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.add.failed': `Failed to add {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.move': `Successfully moved {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.move.failed': `Failed to move {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.remove': `Successfully removed {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.remove.failed': `Failed to remove {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.settings.saved': 'Successfully saved settings.',
+  'mediainfo.execError': 'An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood.',
+  'mediainfo.fetching': 'Fetching...',
+  'mediainfo.heading': 'Mediainfo Output',
 
-  'sidebar.button.notifications': 'Notifications',
   'notification.torrent.finished.heading': 'Finished Downloading',
   'notification.torrent.finished.body': '{name}',
   'notification.torrent.errored.heading': 'Error Reported',
@@ -155,6 +161,7 @@ export default {
   'settings.ui.language': 'Language',
 
   'sidebar.button.feeds': 'Feeds',
+  'sidebar.button.notifications': 'Notifications',
   'sidebar.button.settings': 'Settings',
   'sidebar.button.speedlimits': 'Speed Limits',
 
@@ -220,6 +227,7 @@ export default {
   'torrents.details.general.type.private': 'Private',
   'torrents.details.general.type.public': 'Public',
   'torrents.details.general.type': 'Type',
+  'torrents.details.mediainfo': 'Mediainfo',
   'torrents.details.peers.no.data': 'There is no peer data for this torrent.',
   'torrents.details.peers': 'Peers',
   'torrents.details.selected.files': `{count, plural,

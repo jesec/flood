@@ -7,6 +7,7 @@ import BaseStore from './BaseStore';
 import config from '../../../config';
 import EventTypes from '../constants/EventTypes';
 import {filterTorrents} from '../util/filterTorrents';
+import FloodActions from '../actions/FloodActions';
 import {searchTorrents} from '../util/searchTorrents';
 import {selectTorrents} from '../util/selectTorrents';
 import SettingsStore from './SettingsStore';
@@ -20,11 +21,16 @@ class TorrentStoreClass extends BaseStore {
     super();
 
     this.filteredTorrents = {};
+    this.mediainfo = {};
     this.pollTorrentDetailsIntervalID = null;
     this.pollTorrentsIntervalID = null;
     this.selectedTorrents = [];
     this.sortedTorrents = [];
     this.torrents = {};
+  }
+
+  fetchMediainfo(hash) {
+    FloodActions.fetchMediainfo({hash});
   }
 
   fetchTorrentDetails(options = {}) {
@@ -133,12 +139,25 @@ class TorrentStoreClass extends BaseStore {
     });
   }
 
+  handleFetchMediainfoError(error) {
+    this.emit(EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR, error);
+  }
+
+  handleFetchMediainfoSuccess(response) {
+    this.mediainfo[response.hash] = response.output;
+    this.emit(EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS);
+  }
+
   getTorrent(hash) {
     return this.torrents[hash];
   }
 
   getAllTorrents() {
     return this.torrents;
+  }
+
+  getMediainfo(hash) {
+    return this.mediainfo[hash];
   }
 
   getTorrents() {
@@ -316,6 +335,12 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS:
       TorrentStore.handleSetFilePrioritySuccess(action.data);
+      break;
+    case ActionTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS:
+      TorrentStore.handleFetchMediainfoSuccess(action.data);
+      break;
+    case ActionTypes.FLOOD_FETCH_MEDIAINFO_ERROR:
+      TorrentStore.handleFetchMediainfoError(action.error);
       break;
     case ActionTypes.UI_CLICK_TORRENT:
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);

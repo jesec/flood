@@ -3,6 +3,7 @@ import React from 'react';
 
 import Modal from '../Modal';
 import EventTypes from '../../../constants/EventTypes';
+import TorrentMediainfo from './TorrentMediainfo';
 import TorrentFiles from './TorrentFiles';
 import TorrentGeneralInfo from './TorrentGeneralInfo';
 import TorrentHeading from './TorrentHeading';
@@ -117,6 +118,14 @@ class TorrentDetailsModal extends React.Component {
         label: this.props.intl.formatMessage({
           id: 'torrents.details.trackers',
           defaultMessage: 'Trackers'
+        }),
+        props
+      },
+      'torrent-mediainfo': {
+        content: TorrentMediainfo,
+        label: this.props.intl.formatMessage({
+          id: 'torrents.details.mediainfo',
+          defaultMessage: 'Mediainfo'
         }),
         props
       }

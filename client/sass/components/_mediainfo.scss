@@ -1,0 +1,41 @@
+.mediainfo {
+  display: flex;
+  flex-direction: column;
+
+  &__toolbar {
+    display: flex;
+    flex: 0 0 auto;
+    justify-content: space-between;
+    padding-bottom: $spacing-unit * 2/5;
+    position: relative;
+
+    .tooltip__wrapper {
+      bottom: 0;
+      position: absolute;
+      right: 0;
+    }
+  }
+
+  &__copy-button {
+
+    &.tooltip {
+
+      &__wrapper {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    }
+
+    .icon {
+      fill: currentColor;
+      height: 16px;
+      width: 16px;
+    }
+  }
+
+  &__output {
+    flex: 1 1 auto;
+    overflow: auto;
+  }
+}

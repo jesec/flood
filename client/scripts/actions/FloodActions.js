@@ -29,6 +29,32 @@ let FloodActions = {
       });
   },
 
+  fetchMediainfo: (options) => {
+    return axios.get('/api/mediainfo', {
+        params: {
+          hash: options.hash
+        }
+      })
+      .then((json = {}) => {
+        return json.data;
+      })
+      .then((response) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
+          data: {
+            ...response,
+            ...options
+          }
+        });
+      })
+      .catch((error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.FLOOD_FETCH_MEDIAINFO_ERROR,
+          error
+        });
+      });
+  },
+
   fetchNotifications: (options) => {
     return axios.get('/api/notifications', {
         params: {

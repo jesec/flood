@@ -18,6 +18,7 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.12.4",
     "classnames": "^2.1.5",
+    "clipboard": "^1.5.15",
     "compression": "^1.6.1",
     "cookie-parser": "^1.4.3",
     "d3": "^3.5.6",
