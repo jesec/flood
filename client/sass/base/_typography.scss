@@ -26,3 +26,7 @@ a {
   position: relative;
   text-overflow: ellipsis;
 }
+
+p {
+  margin-bottom: $spacing-unit * 3/5;
+}
