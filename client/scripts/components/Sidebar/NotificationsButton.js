@@ -319,7 +319,7 @@ class NotificationsButton extends React.Component {
         content={this.getTooltipContent()}
         interactive={true}
         ref={ref => this.tooltipRef = ref}
-        width={this.state.count.total === 0 ? null : 320}
+        width={this.state.count.total === 0 ? null : 340}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           tooltip__wrapper">
