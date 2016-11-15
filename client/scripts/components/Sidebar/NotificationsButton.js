@@ -83,9 +83,7 @@ class NotificationsButton extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
 
-  componentWillMount() {
     UIStore.registerDependency({
       id: 'notifications',
       message: (

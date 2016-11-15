@@ -33,9 +33,7 @@ class TransferData extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
 
-  componentDidMount() {
     UIStore.registerDependency([
       {
         id: 'transfer-data',
@@ -52,6 +50,9 @@ class TransferData extends React.Component {
         )
       }
     ]);
+  }
+
+  componentDidMount() {
     this.setState({
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });

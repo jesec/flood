@@ -47,7 +47,7 @@ const METHODS_TO_BIND = [
 let cachedTorrentList = null;
 
 class TorrentListContainer extends React.Component {
-  constructor() {
+  constructor(props) {
     super();
 
     this.lastScrollPosition = 0;
@@ -76,13 +76,14 @@ class TorrentListContainer extends React.Component {
     this.setScrollPosition = _.throttle(this.setScrollPosition, 250, {
       trailing: true
     });
+
+    UIStore.registerDependency({
+      id: 'torrent-list',
+      message: props.intl.formatMessage(MESSAGES.torrentListDependency)
+    });
   }
 
   componentDidMount() {
-    UIStore.registerDependency({
-      id: 'torrent-list',
-      message: this.props.intl.formatMessage(MESSAGES.torrentListDependency)
-    });
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.onTorrentSelectionChange);
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.listen(EventTypes.UI_TORRENTS_LIST_FILTERED, this.onReceiveTorrentsSuccess);
