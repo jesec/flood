@@ -56,6 +56,10 @@ class Tooltip extends React.Component {
 
   handleMouseLeave() {
     this.dismissTooltip();
+
+    if (this.props.onMouseLeave) {
+      this.props.onMouseLeave();
+    }
   }
 
   handleTooltipMouseEnter() {
@@ -304,6 +308,7 @@ Tooltip.propTypes = {
   interactive: React.PropTypes.bool,
   maxWidth: React.PropTypes.oneOfType([React.PropTypes.number,
     React.PropTypes.string]),
+  onMouseLeave: React.PropTypes.func,
   offset: React.PropTypes.number,
   position: React.PropTypes.oneOf(['top', 'bottom', 'right', 'left']),
   scrollContainer: React.PropTypes.oneOfType([React.PropTypes.object,

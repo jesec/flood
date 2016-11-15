@@ -156,6 +156,10 @@ var client = {
     request.send();
   },
 
+  getTorrent: (options, callback) => {
+    callback(torrentCollection.getTorrent(options.hash));
+  },
+
   getTorrentStatusCount: (callback) => {
     callback(statusCount);
   },
