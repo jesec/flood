@@ -1,0 +1,33 @@
+.peers-list {
+
+  &__flag {
+    display: inline-block;
+    height: 10px;
+    overflow: hidden;
+    margin-right: $spacing-unit * 3/10;
+    position: relative;
+    width: 15px;
+    vertical-align: baseline;
+
+    &__image {
+      height: 10px;
+      left: 50%;
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+      width: auto;
+      z-index: 2;
+    }
+
+    &__text {
+      font-size: 0.8em;
+      font-weight: bold;
+      left: 50%;
+      margin-top: 1px;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+    }
+  }
+}
