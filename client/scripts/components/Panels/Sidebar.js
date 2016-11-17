@@ -18,7 +18,9 @@ import TrackerFilters from '../Sidebar/TrackerFilters';
 import UIStore from '../../stores/UIStore';
 
 class Sidebar extends React.Component {
-  componentDidMount() {
+  constructor() {
+    super();
+
     UIStore.registerDependency({
       id: 'torrent-taxonomy',
       message: (
@@ -26,6 +28,9 @@ class Sidebar extends React.Component {
           defaultMessage="Torrent Taxonomy" />
       ),
     });
+  }
+
+  componentDidMount() {
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
       this.onTorrentRequestSuccess);
     TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,

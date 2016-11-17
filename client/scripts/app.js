@@ -37,9 +37,7 @@ class FloodApp extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
 
-  componentWillMount() {
     UIStore.registerDependency({
       id: 'flood-settings',
       message: (
