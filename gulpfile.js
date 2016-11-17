@@ -38,6 +38,8 @@ let proxyPath = `${floodServerHost}:${config.floodServerPort}`;
 let dirs = {
   src: 'client',
   dist: 'server/assets',
+  images: 'images',
+  imagesDist: 'images',
   js: 'scripts',
   jsDist: '',
   styles: 'sass',
@@ -111,6 +113,11 @@ gulp.task('eslint', () => {
     .pipe(eslint.format());
 });
 
+gulp.task('images', () => {
+  return gulp.src(dirs.src + '/' + dirs.images + '/**/*')
+    .pipe(gulp.dest(dirs.dist + '/' + dirs.imagesDist));
+});
+
 gulp.task('sass', () => {
   return gulp.src(dirs.src + '/' + dirs.styles + '/' + files.mainStyles + '.scss')
     .pipe(sass())
@@ -181,8 +188,8 @@ gulp.task('webpack', (callback) => {
   });
 });
 
-gulp.task('default', ['webpack', 'sass']);
+gulp.task('default', ['webpack', 'sass', 'images']);
 
 gulp.task('dist', ['default', 'minify-css', 'minify-js']);
 
-gulp.task('livereload', ['webpack', 'sass:development', 'browsersync', 'watch']);
+gulp.task('livereload', ['webpack', 'images', 'sass:development', 'browsersync', 'watch']);
