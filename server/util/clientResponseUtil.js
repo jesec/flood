@@ -1,6 +1,7 @@
 'use strict';
 
 let clientGeneralPropsMap = require('../../shared/constants/clientGeneralPropsMap');
+let geoip = require('geoip-country-only');
 let torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 let torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
 let torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
@@ -91,7 +92,11 @@ let clientResponseUtil = {
       peers = clientResponseUtil.mapPropsToResponse(
         torrentPeerPropsMap.props,
         peersData
-      );
+      ).map((peer) => {
+        let geoData = geoip.lookup(peer.address) || {};
+        peer.country = geoData.country;
+        return peer;
+      });
     }
 
     if (filesData && filesData.length) {
