@@ -229,7 +229,7 @@ class TorrentDestination extends React.Component {
     this.setState({baseDestination: destination, destination});
 
     if (this.state.isDirectoryListOpen) {
-      UIStore.fetchDirectoryList({isFetching: true, path: destination});
+      UIStore.fetchDirectoryList({path: destination});
     }
   }
 
