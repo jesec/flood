@@ -1,0 +1,55 @@
+$filesystem--directory-list--foreground: #5e728c;
+$filesystem--directory-list--foreground--hover: saturate(lighten($filesystem--directory-list--foreground, 15%), 10%);
+
+.filesystem {
+
+  &__error,
+  &__directory-list {
+    font-size: 0.85em;
+  }
+
+  &__directory-list {
+    color: $filesystem--directory-list--foreground;
+    list-style: none;
+
+    &__item {
+      transition: color 0.25s;
+
+      &--parent,
+      &--directory {
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+          color: $filesystem--directory-list--foreground--hover;
+        }
+      }
+
+      &--parent {
+        margin-bottom: $spacing-unit * 1/5;
+        opacity: 0.75;
+
+        .icon {
+          transform: scale(0.75) rotate(180deg);
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      &--file {
+        opacity: 0.5;
+      }
+    }
+
+    .icon {
+      fill: currentColor;
+      height: 14px;
+      width: 14px;
+      margin-right: $spacing-unit * 1/5;
+      margin-top: -3px;
+      vertical-align: middle;
+    }
+  }
+}
