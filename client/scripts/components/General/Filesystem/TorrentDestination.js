@@ -153,7 +153,7 @@ class TorrentDestination extends React.Component {
       parentDirectory = (
         <li className="filesystem__directory-list__item
           filesystem__directory-list__item--parent"
-          onClick={() => {this.handleParentDirectoryClick()}}>
+          onClick={() => {this.handleParentDirectoryClick();}}>
           <ArrowIcon />
           {this.props.intl.formatMessage({
             id: 'filesystem.parent.directory',
