@@ -73,7 +73,7 @@ $form--column--margin: $spacing-unit * 3/10;
   -moz-appearance: none;
   -webkit-appearance: none;
   outline: none;
-  transition: background 0.25s, border 0.25s, color 0.25s;
+  transition: background 0.25s, border 0.25s, border-radius 0.25s, color 0.25s;
 }
 
 .textbox {
@@ -106,14 +106,18 @@ $form--column--margin: $spacing-unit * 3/10;
     }
   }
 
+  &.is-fulfilled {
+    background: $textbox--fulfilled--background;
+  }
+
   &--open {
     border: none;
     border-radius: 0;
     padding: $textbox--padding--vertical 0;
   }
 
-  &.is-fulfilled {
-    background: $textbox--fulfilled--background;
+  &__wrapper {
+    position: relative;
   }
 }
 
