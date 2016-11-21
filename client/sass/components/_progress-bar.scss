@@ -44,7 +44,6 @@ $progress-bar--fill--stopped: #e3e5e5;
         fill: $progress-bar--fill--completed;
       }
 
-      .is-completed &,
       .is-stopped & {
         fill: $progress-bar--fill--stopped;
       }
@@ -85,7 +84,6 @@ $progress-bar--fill--stopped: #e3e5e5;
       background: $progress-bar--fill--completed;
     }
 
-    .is-completed &,
     .is-stopped & {
       background: $progress-bar--fill--stopped;
     }

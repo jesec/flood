@@ -178,6 +178,7 @@ class Torrent {
     if (isHashChecking === '1') {
       torrentStatus.push(torrentStatusMap.checking);
     } else if (isComplete === '1' && isOpen === '1' && state === '1') {
+      torrentStatus.push(torrentStatusMap.complete);
       torrentStatus.push(torrentStatusMap.seeding);
   	} else if (isComplete === '1' && isOpen === '1' && state === '0') {
       torrentStatus.push(torrentStatusMap.paused);
