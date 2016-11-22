@@ -75,9 +75,9 @@ class StatusFilters extends React.Component {
       {
         label: this.props.intl.formatMessage({
           id: 'filter.status.completed',
-          defaultMessage: 'Completed'
+          defaultMessage: 'Complete'
         }),
-        slug: 'completed',
+        slug: 'complete',
         icon: <Completed />
       },
       {

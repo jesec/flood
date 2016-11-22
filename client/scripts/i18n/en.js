@@ -83,7 +83,7 @@ export default {
   'filter.all': 'All',
   'filter.status.title': 'Filter by Status',
   'filter.status.downloading': 'Downloading',
-  'filter.status.completed': 'Completed',
+  'filter.status.completed': 'Complete',
   'filter.status.active': 'Active',
   'filter.status.inactive': 'Inactive',
   'filter.status.error': 'Error',
