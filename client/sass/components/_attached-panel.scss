@@ -1,0 +1,56 @@
+$attached-panel--background: #242b36;
+$attached-panel--foreground: #5e728c;
+
+$attached-panel--border: #1a2028;
+$attached-panel--border-radius: 4px;
+
+$attached-panel--padding--vertical: 10px;
+$attached-panel--padding--horizontal: 15px;
+
+$attached-panel--shadow: #05080a;
+
+.attached-panel {
+  background: $attached-panel--background;
+  border: 1px solid $attached-panel--border;
+  border-radius: 0 0 $attached-panel--border-radius $attached-panel--border-radius;
+  border-top-width: 0;
+  color: $attached-panel--foreground;
+  position: fixed;
+  transition: opacity 0.25s;
+  z-index: 100;
+
+  &__content {
+    padding: $attached-panel--padding--vertical $attached-panel--padding--horizontal;
+  }
+
+  &__wrapper {
+    position: relative;
+  }
+
+  &-enter {
+    opacity: 0;
+
+    &-active {
+      opacity: 1;
+    }
+  }
+
+  &-leave {
+    opacity: 1;
+
+    &-active {
+      opacity: 0;
+    }
+  }
+}
+
+.textbox {
+
+  &--has-attached-panel {
+
+    &--is-open {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+}

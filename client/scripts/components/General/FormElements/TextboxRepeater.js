@@ -49,7 +49,7 @@ export default class TextboxRepeater extends React.Component {
               placeholder={this.props.placeholder}
               value={textbox.value}
               type="text" />
-            <div className="floating-action__group">
+            <div className="floating-action__group floating-action__group--on-textbox">
               {removeButton}
               {addButton}
             </div>

@@ -2,6 +2,7 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
+import FloodActions from '../actions/FloodActions';
 import {selectTorrents} from '../util/selectTorrents';
 import TorrentActions from '../actions/TorrentActions';
 import TorrentStore from './TorrentStore';
@@ -20,6 +21,10 @@ class UIStoreClass extends BaseStore {
 
   dismissModal() {
     this.setActiveModal(null);
+  }
+
+  fetchDirectoryList(options) {
+    FloodActions.fetchDirectoryList(options);
   }
 
   getActiveContextMenu() {
@@ -44,6 +49,14 @@ class UIStoreClass extends BaseStore {
 
   getTorrentDetailsHash() {
     return this.torrentDetailsHash;
+  }
+
+  handleFetchDirectoryListError(error) {
+    this.emit(EventTypes.FLOOD_FETCH_DIRECTORY_LIST_ERROR, error);
+  }
+
+  handleFetchDirectoryListSuccess(response) {
+    this.emit(EventTypes.FLOOD_FETCH_DIRECTORY_LIST_SUCCESS, response);
   }
 
   handleSetTaxonomySuccess() {
@@ -97,6 +110,10 @@ class UIStoreClass extends BaseStore {
   }
 
   setActiveModal(modal = {}) {
+    if (modal == null) {
+      this.emit(EventTypes.UI_MODAL_DISMISSED);
+    }
+
     this.activeModal = modal;
     this.emit(EventTypes.UI_MODAL_CHANGE);
   }
@@ -118,6 +135,12 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action, source} = payload;
 
   switch (action.type) {
+    case ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_ERROR:
+      UIStore.handleFetchDirectoryListError(action.error);
+      break;
+    case ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_SUCCESS:
+      UIStore.handleFetchDirectoryListSuccess(action.data);
+      break;
     case ActionTypes.UI_CLICK_TORRENT:
       UIStore.handleTorrentClick(action.data.hash);
       break;

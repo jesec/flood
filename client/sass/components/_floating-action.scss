@@ -44,5 +44,23 @@ $textbox-repeater--button--foreground--hover: #12191f;
       transform: translate(-50%, -50%);
       width: 8px;
     }
+
+    &--search {
+
+      .icon {
+        height: 15px;
+        width: 15px;
+      }
+    }
+  }
+
+  &__group {
+
+    &--on-textbox {
+      margin-top: -8px;
+      position: absolute;
+      right: -8px;
+      top: 50%;
+    }
   }
 }

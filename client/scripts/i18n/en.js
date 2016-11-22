@@ -75,6 +75,11 @@ export default {
   'feeds.validation.must.specify.label': 'You must specify a label.',
   'feeds.validation.must.specify.valid.feed.url': 'You must specify a valid feed URL.',
 
+  'filesystem.empty.directory': 'Empty directory.',
+  'filesystem.error.eacces': 'Flood does not have permission to read this directory.',
+  'filesystem.error.enoent': 'This path does not exist. It will be created.',
+  'filesystem.fetching': 'Fetching directory structure...',
+
   'filter.all': 'All',
   'filter.status.title': 'Filter by Status',
   'filter.status.downloading': 'Downloading',
