@@ -1,5 +1,9 @@
+import {IntlProvider} from 'react-intl';
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
+
+import * as i18n from '../../i18n';
+import SettingsStore from '../../stores/SettingsStore';
 
 class Portal extends React.Component {
   componentDidMount() {
@@ -19,7 +23,13 @@ class Portal extends React.Component {
 
   renderChildren(props) {
     if (props.children) {
-      ReactDOM.render(props.children, this.nodeEl);
+      const locale = SettingsStore.getFloodSettings('language');
+
+      ReactDOM.render((
+        <IntlProvider locale={locale} messages={i18n[locale]}>
+          {props.children}
+        </IntlProvider>
+      ), this.nodeEl);
     }
   }
 
