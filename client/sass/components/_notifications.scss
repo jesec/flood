@@ -1,3 +1,5 @@
+$notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
+
 .notifications {
 
   &--empty {
@@ -55,5 +57,13 @@
   &__category {
     color: $blue;
     font-weight: 600;
+  }
+
+  &__message {
+
+    &__sub-heading {
+      color: $notification--sub-heading--color;
+      font-style: italic;
+    }
   }
 }

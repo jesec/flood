@@ -79,8 +79,6 @@ class FeedCollection {
 
           let title = null;
 
-          console.log(matchedTorrent);
-
           if (matchedTorrent.torrent.title) {
             title = matchedTorrent.torrent.title;
           } else if (matchedTorrent.torrent.name) {
