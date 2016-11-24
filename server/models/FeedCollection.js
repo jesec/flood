@@ -77,9 +77,27 @@ class FeedCollection {
           this.db.update({_id: matchedTorrent.feed._id}, {$inc: {count: 1}},
             {upsert: true});
 
+          let title = null;
+
+          console.log(matchedTorrent);
+
+          if (matchedTorrent.torrent.title) {
+            title = matchedTorrent.torrent.title;
+          } else if (matchedTorrent.torrent.name) {
+            title = matchedTorrent.torrent.name;
+          } else if (matchedTorrent.torrent.description) {
+            title = matchedTorrent.torrent.description;
+          } else {
+            title = 'N/A';
+          }
+
           NotificationCollection.addNotification({
             id: 'notification.feed.downloaded.torrent',
-            data: {matchedTorrent, downloadRule}
+            data: {
+              feedLabel: matchedTorrent.feed.label,
+              ruleLabel: downloadRule.label,
+              title
+            }
           });
         });
       }
@@ -162,8 +180,6 @@ class FeedCollection {
       if (err) {
         return;
       }
-
-      let newItemHandler = this.handleNewItem.bind(this);
 
       docs.forEach((doc) => {
         if (doc.type === 'feed') {
