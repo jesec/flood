@@ -21,7 +21,7 @@ module.exports = {
 
       try {
         child_process.execFile(
-          'mediainfo', [details.directory], function(error, stdout, stderr) {
+          'mediainfo', [details.basePath], function(error, stdout, stderr) {
             if (error) {
               callback(null, {error});
               return;
