@@ -44,6 +44,8 @@ class NotificationStoreClass extends BaseStore {
 
   handleNotificationsFetchError(error) {
     this.resolveRequest('fetch-notifications');
+
+    this.emit(EventTypes.NOTIFICATIONS_FETCH_ERROR);
   }
 
   handleNotificationsFetchSuccess(response) {

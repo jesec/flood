@@ -80,6 +80,8 @@ class Application extends React.Component {
       this.handleVerifySuccess);
     UIStore.unlisten(EventTypes.UI_DEPENDENCIES_LOADED,
       this.handleUIDependenciesLoaded);
+    UIStore.unlisten(EventTypes.UI_DEPENDENCIES_CHANGE,
+      this.handleUIDependenciesChange);
   }
 
   handleVerifySuccess(data) {
@@ -156,19 +158,30 @@ class Application extends React.Component {
   }
 
   isLoading() {
+    // If the auth status is undetermined, show the loading indicator.
     if (!this.state.authStatusDetermined) {
       return true;
     }
 
-    if (this.state.authStatusDetermined && !this.state.isAuthenticated) {
+    // Allow the UI to load if the user is not authenticated.
+    if (!this.state.isAuthenticated) {
       return false;
     }
 
-    if (this.state.authStatusDetermined && this.state.isAuthenticated && !this.state.dependenciesLoaded) {
+    // Iterate over current dependencies looking for unsatisified dependencies.
+    const isDependencyActive = Object.keys(this.state.dependencies)
+      .some((dependencyKey) => {
+        return !this.state.dependencies[dependencyKey].satisfied;
+      });
+
+    // If any dependency is unsatisfied, show the loading indicator.
+    if (isDependencyActive) {
       return true;
     }
 
-    return false;
+    // Dismiss the loading indicator if the UI store thinks all dependencies
+    // are loaded.
+    return !this.state.dependenciesLoaded;
   }
 
   render() {

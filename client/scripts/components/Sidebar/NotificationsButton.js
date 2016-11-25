@@ -35,6 +35,10 @@ const MESSAGES = defineMessages({
     id: 'notification.torrent.errored.body',
     defaultMessage: '{name}'
   },
+  'notification.feed.downloaded.torrent.heading': {
+    id: 'notification.feed.downloaded.torrent.heading',
+    defaultMessage: 'Matched Feed Rule'
+  },
   clearAll: {
     id: 'notification.clear.all',
     defaultMessage: 'Clear All'
@@ -96,6 +100,8 @@ class NotificationsButton extends React.Component {
   componentDidMount() {
     NotificationStore.listen(EventTypes.NOTIFICATIONS_FETCH_SUCCESS,
       this.handleNotificationFetchSuccess);
+    NotificationStore.listen(EventTypes.NOTIFICATIONS_FETCH_ERROR,
+      this.handleNotificationFetchError);
     NotificationStore.fetchNotifications({
       id: 'notification-tooltip',
       limit: NOTIFICATIONS_PER_PAGE,
@@ -106,6 +112,8 @@ class NotificationsButton extends React.Component {
   componentWillUnmount() {
     NotificationStore.unlisten(EventTypes.NOTIFICATIONS_FETCH_SUCCESS,
       this.handleNotificationFetchSuccess);
+    NotificationStore.unlisten(EventTypes.NOTIFICATIONS_FETCH_ERROR,
+      this.handleNotificationFetchError);
   }
 
   getBadge() {
@@ -173,12 +181,35 @@ class NotificationsButton extends React.Component {
       {year: 'numeric', month: 'long', day: '2-digit'});
     let time = this.props.intl.formatTime(notification.ts);
 
+    let notificationBody = null;
+
+    if (notification.id === 'notification.feed.downloaded.torrent') {
+      notificationBody = (
+        <FormattedMessage id={`${notification.id}.body`}
+          defaultMessage="{matchedDetails} — {title}"
+          values = {{
+            matchedDetails: (
+              <strong className="notification__message__sub-heading">
+                {notification.data.ruleLabel}{' / '}
+                {notification.data.feedLabel}
+              </strong>
+            ),
+            title: notification.data.title
+          }} />
+      );
+    } else {
+      notificationBody = this.props.intl.formatMessage(
+        MESSAGES[`${notification.id}.body`], notification.data
+      );
+    }
+
     return (
       <li className="notifications__list__item" key={index}>
         <div className="notification__heading">
           <span className="notification__category">
             {this.props.intl.formatMessage(
-              MESSAGES[`${notification.id}.heading`])}
+              MESSAGES[`${notification.id}.heading`]
+            )}
           </span>
           {` — `}
           <span className="notification__timestamp">
@@ -186,8 +217,7 @@ class NotificationsButton extends React.Component {
           </span>
         </div>
         <div className="notification__message">
-          {this.props.intl.formatMessage(MESSAGES[`${notification.id}.body`],
-            notification.data)}
+          {notificationBody}
         </div>
       </li>
     );
@@ -271,7 +301,13 @@ class NotificationsButton extends React.Component {
     }
   }
 
+  handleNotificationFetchError() {
+    UIStore.satisfyDependency('notifications');
+  }
+
   handleNotificationFetchSuccess() {
+    UIStore.satisfyDependency('notifications');
+
     let notificationState = NotificationStore.getNotifications('notification-tooltip');
 
     if (!notificationState) {
@@ -279,7 +315,6 @@ class NotificationsButton extends React.Component {
     }
 
     this.setState(notificationState);
-    UIStore.satisfyDependency('notifications');
   }
 
   handleNewerNotificationsClick() {
