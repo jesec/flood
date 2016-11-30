@@ -21,7 +21,7 @@ module.exports = {
 
       try {
         child_process.execFile(
-          'mediainfo', [details.basePath], function(error, stdout, stderr) {
+          'mediainfo', [details.basePath], {maxBuffer: 1024 * 2000}, function(error, stdout, stderr) {
             if (error) {
               callback(null, {error});
               return;
