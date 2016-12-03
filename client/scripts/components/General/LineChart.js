@@ -96,6 +96,7 @@ export default class LineChart extends React.Component {
       .append('g')
       .append('svg:path')
       .attr('class', 'graph__area')
+      .attr('fill', `url('#${this.props.slug}--gradient')`)
       .attr('d', transferDataAreaPoints);
 
     graph
