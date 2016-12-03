@@ -28,7 +28,6 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   }
 
   &__item {
-    flex: 3;
 
     &:first-child {
       text-align: left;
@@ -39,7 +38,7 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
     }
 
     &--sort-torrents {
-      max-width: 225px;
+      flex: 1 0 auto;
 
       .dropdown {
         margin: 5px 0 0 15px;
@@ -51,9 +50,12 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
     }
 
     &--torrent-operations {
+      display: flex;
+      flex: 0 0 auto;
+      flex-direction: row;
 
       .dropdown {
-        display: inline-block;
+        display: flex;
         height: 60px;
 
         &__content {
@@ -65,7 +67,7 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   }
 
   &__group {
-    display: inline-block;
+    display: flex;
     font-size: 0;
     padding: 0 15px;
 

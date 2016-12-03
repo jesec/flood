@@ -5,17 +5,17 @@ $client-stats--speed--stroke--opacity: 0.4;
 
 $client-stats--download--primary--foreground: #2bae6c;
 $client-stats--download--secondary--foreground: rgba($client-stats--download--primary--foreground, 0.75);
-$client-stats--download--graph--stroke: rgba(#2bae6c, $client-stats--speed--stroke--opacity);
-$client-stats--download--graph--fill--top: rgba(#2bae6c, $client-stats--speed--fill--top--opacity);
-$client-stats--download--graph--fill--bottom: rgba(#2bae6c, $client-stats--speed--fill--bottom--opacity);
-$client-stats--download--limits--line: rgba(lighten($client-stats--download--primary--foreground, 20%), $client-stats--limits--opacity);
+$client-stats--download--graph--stroke: #2bae6c;
+$client-stats--download--graph--fill--top: #2bae6c;
+$client-stats--download--graph--fill--bottom: #2bae6c;
+$client-stats--download--limits--line: lighten($client-stats--download--primary--foreground, 20%);
 
 $client-stats--upload--primary--foreground: #2387d9;
 $client-stats--upload--secondary--foreground: rgba($client-stats--upload--primary--foreground, 0.75);
-$client-stats--upload--graph--stroke: rgba(#2387d9, $client-stats--speed--stroke--opacity);
-$client-stats--upload--graph--fill--top: rgba(#2387d9, $client-stats--speed--fill--top--opacity);
-$client-stats--upload--graph--fill--bottom: rgba(#2387d9, $client-stats--speed--fill--bottom--opacity);
-$client-stats--upload--limits--line: rgba(lighten($client-stats--upload--primary--foreground, 20%), $client-stats--limits--opacity);
+$client-stats--upload--graph--stroke: #2387d9;
+$client-stats--upload--graph--fill--top: #2387d9;
+$client-stats--upload--graph--fill--bottom: #2387d9;
+$client-stats--upload--limits--line: lighten($client-stats--upload--primary--foreground, 20%);
 
 $client-stats--limits--foreground: $foreground;
 $client-stats--limits--icon--hover: $blue;
@@ -160,31 +160,35 @@ $client-stats--limits--icon--hover: $blue;
 
     .graph {
 
-      .graph--download--gradient--top {
-        stop-color: $client-stats--download--graph--fill--top;
-      }
+      &--download {
 
-      .graph--download--gradient--bottom {
-        stop-color: $client-stats--download--graph--fill--bottom;
-      }
+        &--gradient {
 
-      &__area {
-        fill: url('#graph--download--gradient')
+          &--bottom {
+            stop-color: $client-stats--download--graph--fill--bottom;
+            stop-opacity:  $client-stats--speed--fill--bottom--opacity;
+          }
+
+          &--top {
+            stop-color: $client-stats--download--graph--fill--top;
+            stop-opacity:  $client-stats--speed--fill--top--opacity;
+          }
+        }
       }
 
       &__line {
 
         &--limit {
+          opacity: $client-stats--limits--opacity;
           stroke: $client-stats--download--limits--line;
         }
 
         &--rate {
+          opacity: $client-stats--speed--stroke--opacity;
           stroke: $client-stats--download--graph--stroke;
         }
       }
-
     }
-
   }
 
   &--upload {
@@ -211,31 +215,34 @@ $client-stats--limits--icon--hover: $blue;
 
     .graph {
 
-      .graph--upload--gradient--top {
-        stop-color: $client-stats--upload--graph--fill--top;
-      }
+      &--upload {
 
-      .graph--upload--gradient--bottom {
-        stop-color: $client-stats--upload--graph--fill--bottom;
-      }
+        &--gradient {
 
-      &__area {
-        fill: url('#graph--upload--gradient')
+          &--bottom {
+            stop-color: $client-stats--upload--graph--fill--bottom;
+            stop-opacity: $client-stats--speed--fill--bottom--opacity;
+          }
+
+          &--top {
+            stop-color: $client-stats--upload--graph--fill--top;
+            stop-opacity: $client-stats--speed--fill--top--opacity;
+          }
+        }
       }
 
       &__line {
 
         &--limit {
+          opacity: $client-stats--limits--opacity;
           stroke: $client-stats--upload--limits--line;
         }
 
         &--rate {
+          opacity: $client-stats--speed--stroke--opacity;
           stroke: $client-stats--upload--graph--stroke;
         }
       }
-
     }
-
   }
-
 }

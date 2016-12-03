@@ -57,6 +57,7 @@ $textbox-repeater--button--foreground--hover: #12191f;
   &__group {
 
     &--on-textbox {
+      display: flex;
       margin-top: -8px;
       position: absolute;
       right: -8px;

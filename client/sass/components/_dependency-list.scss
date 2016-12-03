@@ -40,9 +40,11 @@
     &__icon {
       fill: $green;
       flex: 0 0 $spacing-unit * 2/5;
+      height: $spacing-unit * 2/5;
       margin-right: $spacing-unit * 1/5;
       opacity: 0;
       transition: opacity 0.25s;
+      width: $spacing-unit * 2/5;
     }
 
     &--satisfied {
