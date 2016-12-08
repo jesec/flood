@@ -10,6 +10,7 @@ import ErrorIcon from '../Icons/ErrorIcon';
 import EventTypes from '../../constants/EventTypes';
 import Inactive from '../Icons/Inactive';
 import SidebarFilter from './SidebarFilter';
+import StopIcon from '../Icons/StopIcon';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
@@ -82,6 +83,14 @@ class StatusFilters extends React.Component {
       },
       {
         label: this.props.intl.formatMessage({
+          id: 'filter.status.stopped',
+          defaultMessage: 'Stopped'
+        }),
+        slug: 'stopped',
+        icon: <StopIcon />
+      },
+      {
+        label: this.props.intl.formatMessage({     
           id: 'filter.status.active',
           defaultMessage: 'All'
         }),
