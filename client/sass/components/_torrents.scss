@@ -479,20 +479,6 @@ $more-info--border: $textbox-repeater--button--border;
       opacity: 0;
       transition: color 0.25s, opacity 1s, visibility 1s;
       visibility: hidden;
-
-      .torrent {
-
-        &__details {
-
-          &--segment {
-            margin-right: 0.25em;
-
-            &:last-child {
-              margin-right: 0;
-            }
-          }
-        }
-      }
     }
 
     &--completed {

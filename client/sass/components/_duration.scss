@@ -1,0 +1,10 @@
+.duration {
+
+  &--segment {
+    margin-right: 0.25em;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

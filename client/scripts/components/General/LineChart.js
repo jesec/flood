@@ -1,7 +1,15 @@
+import _ from 'underscore';
 import d3 from 'd3';
 import React from 'react';
 
-const METHODS_TO_BIND = ['renderGraphData'];
+const METHODS_TO_BIND = [
+  'handleMouseLeave',
+  'handleMouseOver',
+  'handleMouseMove',
+  'renderGraphData'
+];
+
+const bisector = d3.bisector(function(d) { return d; }).left;
 
 export default class LineChart extends React.Component {
   constructor() {
@@ -10,111 +18,205 @@ export default class LineChart extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
 
-  componentDidMount() {
-    this.renderGraphData();
+    this.graphRefs = {areDefined: false, isHovered: false};
+    this.isInitialRender = true;
+    this.lastMouseX = null;
+    this.shouldUpdateGraph = true;
+    this.xScale = {};
+    this.yScale = {};
   }
 
   componentDidUpdate() {
-    this.renderGraphData();
+    this.renderGraphData(this.props);
+
+    if (this.graphRefs.isHovered) {
+      try {
+        this.renderPrecisePointInspector();
+      } catch (err) {
+        console.trace(err);
+      }
+    }
   }
 
-  renderGraphData() {
-    let graph = d3.select('#' + this.props.id);
-    let transferData = this.props.data;
-    let transferLimit = this.props.limit;
-    let margin = {
-      bottom: 10,
-      top: 10
-    };
-    let width = this.props.width;
-    let height = this.props.height;
+  shouldComponentUpdate({data: nextData, limit: nextLimit}) {
+    const {props: {data, limit: limits}} = this;
 
-    let xRange = d3
-      .scale
-      .linear()
-      .range([0, width])
-      .domain([
-        d3.min(transferData, (dataPoint, index) => {
-          return index;
-        }),
-        d3.max(transferData, (dataPoint, index) => {
-          return index;
-        })
-      ]);
+    if (data == null && nextData != null) {
+      return true;
+    }
 
-    let yRange = d3
-      .scale
+    if (this.isInitialRender) {
+      this.isInitialRender = false;
+      return true;
+    }
+
+    return data.some((item, index) => {
+      return item.speed !== nextData[index].speed;
+    }) || limits.some((limit, index) => {
+      return limit !== nextLimit[index];
+    });
+  }
+
+  handleMouseLeave() {
+    if (this.graphRefs.areDefined) {
+      this.graphRefs.isHovered = false;
+      this.graphRefs.inspectPoint.style('opacity', 0);
+    }
+
+    if (this.props.onGraphMouseLeave) {
+      this.props.onGraphMouseLeave();
+    }
+  }
+
+  handleMouseMove(event) {
+    let mouseX = null;
+
+    if (event && event.nativeEvent && event.nativeEvent.clientX != null) {
+      mouseX = event.nativeEvent.clientX;
+      this.lastMouseX = mouseX;
+    } else {
+      mouseX = this.lastMouseX;
+    }
+
+    this.renderPrecisePointInspector();
+  }
+
+  handleMouseOver() {
+    this.graphRefs.isHovered = true;
+    this.graphRefs.inspectPoint.style('opacity', 1);
+  }
+
+  renderGraphData({id, data, limit, width, height, slug}) {
+    let speeds = data.map(snapshot => snapshot.speed);
+    let graph = d3.select(`#${id}`);
+    let margin = {bottom: 10, top: 10};
+
+    this.xScale = d3.scale
       .linear()
-      .range([height - margin.top, margin.bottom])
+      .domain([0, speeds.length - 1])
+      .range([0, width]);
+
+    this.yScale = d3.scale
+      .linear()
       .domain([
         0,
-        d3.max(transferData, (dataPoint, index) => {
-          if (dataPoint >= transferLimit[index]) {
+        d3.max(speeds, (dataPoint, index) => {
+          if (dataPoint >= limit[index]) {
             return dataPoint;
-          } else {
-            return transferLimit[index];
           }
+
+          return limit[index];
         })
-      ]);
+      ])
+      .range([height - margin.top, margin.bottom]);
 
     let lineFunc = (interpolation) => {
       return d3
         .svg
         .line()
-        .x((dataPoint, index) => {
-          return xRange(index);
-        })
-        .y((dataPoint) => {
-          return yRange(dataPoint);
-        })
+        .x((dataPoint, index) => this.xScale(index))
+        .y(dataPoint => this.yScale(dataPoint))
         .interpolate(interpolation);
     };
 
-    let areaFunc = d3
+    let areaFunc = (interpolation) => {
+      return d3
       .svg
       .area()
-      .x((dataPoint, index) => {
-        return xRange(index);
-      })
+      .x((dataPoint, index) => this.xScale(index))
       .y0(height)
-      .y1((dataPoint) => {
-        return yRange(dataPoint);
-      })
-      .interpolate('basis');
+      .y1(dataPoint => this.yScale(dataPoint))
+      .interpolate(interpolation);
+    };
 
-    let transferDataLinePoints = lineFunc('basis')(transferData);
-    let transferLimitLinePoints = lineFunc('step-after')(transferLimit);
-    let transferDataAreaPoints = areaFunc(transferData);
+    let transferDataLinePoints = lineFunc('cardinal')(speeds);
+    let transferLimitLinePoints = lineFunc('step-after')(limit);
+    let transferDataAreaPoints = areaFunc('cardinal')(speeds);
 
-    graph
-      .select('g')
-      .remove();
+    if (!this.graphRefs.areDefined) {
+      this.graphRefs.area = graph
+        .append('path')
+        .attr('class', 'graph__area')
+        .attr('fill', `url('#${slug}--gradient')`);
+      this.graphRefs.limitLine = graph
+        .append('path')
+        .attr('class', 'graph__line graph__line--limit');
+      this.graphRefs.rateLine = graph
+        .append('path')
+        .attr('class', 'graph__line graph__line--rate');
+      this.graphRefs.inspectPoint = graph
+        .append('circle')
+        .attr('class', 'graph__circle graph__circle--inspect')
+        .attr('r', 2.5);
 
-    graph
-      .append('g')
-      .append('svg:path')
-      .attr('class', 'graph__area')
-      .attr('fill', `url('#${this.props.slug}--gradient')`)
-      .attr('d', transferDataAreaPoints);
+      this.graphRefs.areDefined = true;
+    }
 
-    graph
-      .select('g')
-      .append('svg:path')
-      .attr('class', 'graph__line graph__line--limit')
-      .attr('d', transferLimitLinePoints);
+    this.graphRefs.area.attr('d', transferDataAreaPoints);
+    this.graphRefs.limitLine.attr('d', transferLimitLinePoints);
+    this.graphRefs.rateLine.attr('d', transferDataLinePoints);
+  }
 
-    graph
-      .select('g')
-      .append('svg:path')
-      .attr('class', 'graph__line graph__line--rate')
-      .attr('d', transferDataLinePoints);
+  // renderPointInspector() {
+  //   const {
+  //     graphRefs: {inspectPoint},
+  //     props: {data, onGraphHover},
+  //     xScale,
+  //     yScale,
+  //   } = this;
+
+  //   const interval = Math.round(xScale.invert(this.lastMouseX));
+  //   const pointValue = data[interval].speed;
+  //   const coordinates = {x: xScale(interval), y: yScale(pointValue)};
+
+  //   inspectPoint.attr(
+  //     'transform', 'translate(' + coordinates.x + ',' + coordinates.y + ')'
+  //   );
+
+  //   if (onGraphHover) {
+  //     onGraphHover(pointValue);
+  //   }
+  // }
+
+  renderPrecisePointInspector() {
+    const {
+      graphRefs: {inspectPoint},
+      props: {data, onGraphHover},
+      xScale,
+      yScale,
+    } = this;
+
+    const hoverPoint = xScale.invert(this.lastMouseX);
+    const upperSpeed = data[Math.ceil(hoverPoint)].speed;
+    const lowerSpeed = data[Math.floor(hoverPoint)].speed;
+
+    const delta = upperSpeed - lowerSpeed;
+    const speedAtHoverPoint = lowerSpeed + (delta * (hoverPoint % 1));
+
+    const coordinates = {x: xScale(hoverPoint), y: yScale(speedAtHoverPoint)};
+
+    inspectPoint.attr(
+      'transform', 'translate(' + coordinates.x + ',' + coordinates.y + ')'
+    );
+
+    const nearestTimestamp = data[Math.round(hoverPoint)].time;
+
+    if (onGraphHover) {
+      onGraphHover({
+        speed: speedAtHoverPoint,
+        time: nearestTimestamp
+      });
+    }
   }
 
   render() {
     return (
-      <svg className="graph" id={this.props.id}>
+      <svg className="graph" id={this.props.id}
+        onMouseMove={this.handleMouseMove}
+        onMouseOut={this.handleMouseLeave}
+        onMouseOver={this.handleMouseOver}
+        ref={(ref) => this.graphRefs.graph = ref}>
         <defs>
           <linearGradient id={`${this.props.slug}--gradient`} x1="0%" y1="0%"
             x2="0%" y2="100%">

@@ -1,19 +1,29 @@
+import _ from 'lodash';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import {FormattedMessage} from 'react-intl';
+import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import Download from '../Icons/Download';
+import Duration from '../General/Duration';
 import EventTypes from '../../constants/EventTypes';
 import LineChart from '../General/LineChart';
 import LoadingIndicator from '../General/LoadingIndicator';
 import Size from '../General/Size';
 import TransferDataStore from '../../stores/TransferDataStore';
+import TransferRateDetails from './TransferRateDetails';
+import TransferRateGraph from './TransferRateGraph';
 import UIStore from '../../stores/UIStore';
 import Upload from '../Icons/Upload';
 
 const METHODS_TO_BIND = [
+  'handleGraphHover',
+  'handleGraphMouseLeave',
+  'handleMouseMove',
+  'handleMouseOut',
+  'handleMouseOver',
   'onTransferDataRequestError',
   'onTransferDataRequestSuccess',
   'onTransferHistoryRequestSuccess'
@@ -24,6 +34,7 @@ class TransferData extends React.Component {
     super();
 
     this.state = {
+      graphInspectorPoint: null,
       sidebarWidth: 0,
       transferHistoryRequestSuccess: false,
       transferDataRequestError: false,
@@ -56,6 +67,7 @@ class TransferData extends React.Component {
     this.setState({
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
+
     TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
       this.onTransferDataRequestSuccess);
     TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
@@ -68,6 +80,28 @@ class TransferData extends React.Component {
       this.onTransferDataRequestSuccess);
     TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
       this.onTransferHistoryRequestSuccess);
+  }
+
+  handleGraphHover(graphInspectorPoint) {
+    this.setState({graphInspectorPoint});
+  }
+
+  handleGraphMouseLeave() {
+    this.setState({graphInspectorPoint: null});
+  }
+
+  handleMouseMove(event) {
+    if (event && event.nativeEvent && event.nativeEvent.clientX != null) {
+      this.rateGraphRef.handleMouseMove(event.nativeEvent.clientX);
+    }
+  }
+
+  handleMouseOut() {
+    this.rateGraphRef.handleMouseOut();
+  }
+
+  handleMouseOver() {
+    this.rateGraphRef.handleMouseOver();
   }
 
   isLoading() {
@@ -106,73 +140,44 @@ class TransferData extends React.Component {
   }
 
   render() {
-    let content = <LoadingIndicator inverse={true} />;
+    let content = null;
 
     if (!this.isLoading()) {
-      let throttles = TransferDataStore.getThrottles();
-      let transferRate = TransferDataStore.getTransferRate();
-      let transferRates = TransferDataStore.getTransferRates();
-      let transferTotals = TransferDataStore.getTransferTotals();
+      const throttles = TransferDataStore.getThrottles({latest: true});
+      const transferRate = TransferDataStore.getTransferRate();
+      const transferRates = TransferDataStore.getTransferRates();
+      const transferTotals = TransferDataStore.getTransferTotals();
 
       content = (
-        <div key="loaded">
-          <div className="client-stat client-stat--download">
-            <span className="client-stat__icon">
-              <Download />
-            </span>
-            <div className="client-stat__data">
-              <div className="client-stat__data--primary">
-                <Size value={transferRate.download} isSpeed={true} />
-              </div>
-              <div className="client-stat__data--secondary">
-                <Size value={transferTotals.download} /> <FormattedMessage
-                  id="sidebar.transferdata.downloaded"
-                  defaultMessage="Downloaded"
-                />
-              </div>
-            </div>
-            <LineChart
-              data={transferRates.download}
-              height={100}
-              id="graph--download"
-              limit={throttles.download}
-              slug="graph--download"
-              width={this.state.sidebarWidth} />
-          </div>
-          <div className="client-stat client-stat--upload">
-            <span className="client-stat__icon">
-              <Upload />
-            </span>
-            <div className="client-stat__data">
-              <div className="client-stat__data--primary">
-                <Size value={transferRate.upload} isSpeed={true} />
-              </div>
-              <div className="client-stat__data--secondary">
-                <Size value={transferTotals.upload} /> <FormattedMessage
-                  id="sidebar.transferdata.uploaded"
-                  defaultMessage="Uploaded"
-                />
-              </div>
-            </div>
-            <LineChart
-              data={transferRates.upload}
-              height={100}
-              id="graph--upload"
-              limit={throttles.upload}
-              slug="graph--upload"
-              width={this.state.sidebarWidth} />
-          </div>
+        <div className="client-stats"
+          onMouseMove={this.handleMouseMove}
+          onMouseOut={this.handleMouseOut}
+          onMouseOver={this.handleMouseOver}>
+          <TransferRateDetails
+            inspectorPoint={this.state.graphInspectorPoint}
+            throttles={throttles}
+            transferRate={transferRate}
+            transferTotals={transferTotals} />
+          <TransferRateGraph
+            height={150}
+            historicalData={transferRates}
+            id="transfer-rate-graph"
+            onGraphMouseLeave={this.handleGraphMouseLeave}
+            onHover={this.handleGraphHover}
+            ref={ref => this.rateGraphRef = ref}
+            width={this.state.sidebarWidth} />
         </div>
       );
+    } else {
+      content = <LoadingIndicator inverse={true} />;
     }
 
     return (
-      <div className="client-stats sidebar__item">
+      <div className="client-stats__wrapper sidebar__item">
         {content}
       </div>
     );
   }
-
 }
 
 TransferData.defaultProps = {

@@ -1,8 +1,10 @@
 'use strict';
+const formatUtil = require('../../shared/util/formatUtil');
+const moment = require('moment');
 
-var client = require('./client');
-var config = require('../../config');
-var HistoryEra = require('./HistoryEra');
+let client = require('./client');
+let config = require('../../config');
+let HistoryEra = require('./HistoryEra');
 
 let pollInterval = null;
 
@@ -66,40 +68,44 @@ let processData = (opts, callback, data, error) => {
     return;
   }
 
+  const currentTime = moment(Date.now());
   data = data.slice(data.length - config.maxHistoryStates);
 
-  let downloadRateHistory = [];
-  let uploadRateHistory = [];
+  callback(data.reduce((accumulator, snapshot, index) => {
+    const time = formatUtil.secondsToDuration(
+      moment.duration(currentTime.diff(moment(snapshot.ts))).asSeconds()
+    );
 
-  data.forEach((snapshot) => {
-    downloadRateHistory.push(snapshot.dn);
-    uploadRateHistory.push(snapshot.up);
-  });
+    time.ts = snapshot.ts;
 
-  callback({
-    download: downloadRateHistory,
-    upload: uploadRateHistory
-  });
+    accumulator.download.push(snapshot.dn);
+    accumulator.upload.push(snapshot.up);
+    accumulator.timestamps.push(time);
+
+    return accumulator;
+  }, {upload: [], download: [], timestamps: []}));
 };
 
 let history = {
   get: (opts, callback) => {
     opts = opts || {};
 
+    let historyCallback = processData.bind(this, opts, callback);
+
     if (opts.snapshot === 'fiveMin') {
-      fiveMinSnapshot.getData(opts, processData.bind(this, opts, callback));
+      fiveMinSnapshot.getData(opts, historyCallback);
     } else if (opts.snapshot === 'thirtyMin') {
-      thirtyMinSnapshot.getData(opts, processData.bind(this, opts, callback));
+      thirtyMinSnapshot.getData(opts, historyCallback);
     } else if (opts.snapshot === 'hour') {
-      hourSnapshot.getData(opts, processData.bind(this, opts, callback));
+      hourSnapshot.getData(opts, historyCallback);
     } else if (opts.snapshot === 'day') {
-      daySnapshot.getData(opts, processData.bind(this, opts, callback));
+      daySnapshot.getData(opts, historyCallback);
     } else if (opts.snapshot === 'week') {
-      weekSnapshot.getData(opts, processData.bind(this, opts, callback));
+      weekSnapshot.getData(opts, historyCallback);
     } else if (opts.snapshot === 'month') {
-      monthSnapshot.getData(opts, processData.bind(this, opts, callback));
+      monthSnapshot.getData(opts, historyCallback);
     } else if (opts.snapshot === 'year') {
-      yearSnapshot.getData(opts, processData.bind(this, opts, callback));
+      yearSnapshot.getData(opts, historyCallback);
     }
   },
 
