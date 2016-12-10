@@ -205,7 +205,7 @@ $client-stats--timestamp--foreground: #526780;
   &__line {
     fill: none;
     opacity: $client-stats--speed--stroke--opacity;
-    stroke-width: 1.8px;
+    stroke-width: 2px;
 
     &--upload {
       stroke: $client-stats--upload--graph--stroke;
