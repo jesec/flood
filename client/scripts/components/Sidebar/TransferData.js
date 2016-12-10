@@ -20,7 +20,7 @@ import Upload from '../Icons/Upload';
 
 const METHODS_TO_BIND = [
   'handleGraphHover',
-  'handleGraphMouseLeave',
+  'handleGraphMouseOut',
   'handleMouseMove',
   'handleMouseOut',
   'handleMouseOver',
@@ -86,7 +86,7 @@ class TransferData extends React.Component {
     this.setState({graphInspectorPoint});
   }
 
-  handleGraphMouseLeave() {
+  handleGraphMouseOut() {
     this.setState({graphInspectorPoint: null});
   }
 
@@ -162,7 +162,7 @@ class TransferData extends React.Component {
             height={150}
             historicalData={transferRates}
             id="transfer-rate-graph"
-            onGraphMouseLeave={this.handleGraphMouseLeave}
+            onMouseOut={this.handleGraphMouseOut}
             onHover={this.handleGraphHover}
             ref={ref => this.rateGraphRef = ref}
             width={this.state.sidebarWidth} />

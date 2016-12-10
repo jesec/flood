@@ -1,6 +1,8 @@
+import classnames from 'classnames';
 import React from 'react';
 
 import Download from '../Icons/Download';
+import Duration from '../General/Duration';
 import Size from '../General/Size';
 import Upload from '../Icons/Upload';
 
@@ -10,14 +12,54 @@ const icons = {
 };
 
 class TransferRateDetails extends React.Component {
-  getCurrentTansferRate(slug) {
-    let {props: {throttles, transferRate, transferTotals}} = this;
+  constructor() {
+    super();
 
-    if (this.props.inspectorPoint != null) {
+    this.state = {inspectorPoint: null};
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.inspectorPoint != null) {
+      this.setState({timestamp: nextProps.inspectorPoint.nearestTimestamp});
+    }
+  }
+
+  getCurrentTansferRate(slug, options = {}) {
+    let {
+      props: {
+        inspectorPoint,
+        throttles,
+        transferRate,
+        transferTotals
+      }
+    } = this;
+
+    let timestamp = null;
+
+    const secondaryDataClasses = classnames(
+      'client-stats__rate__data--secondary',
+      {'is-visible': inspectorPoint == null}
+    );
+
+    const timestampClasses = classnames(
+      'client-stats__rate__data--timestamp',
+      {'is-visible': inspectorPoint != null && options.showHoverDuration}
+    );
+
+    if (inspectorPoint != null) {
       transferRate = {
-        upload: this.props.inspectorPoint.uploadSpeed,
-        download: this.props.inspectorPoint.downloadSpeed
+        upload: inspectorPoint.uploadSpeed,
+        download: inspectorPoint.downloadSpeed
       };
+    }
+
+    if (this.state.timestamp != null) {
+      timestamp = (
+        <div className={timestampClasses}>
+          <Duration suffix="ago"
+            value={this.state.timestamp} />
+        </div>
+      );
     }
 
     return (
@@ -29,7 +71,8 @@ class TransferRateDetails extends React.Component {
           <div className="client-stats__rate__data--primary">
             <Size value={transferRate[slug]} isSpeed={true} />
           </div>
-          <div className="client-stats__rate__data--secondary">
+          {timestamp}
+          <div className={secondaryDataClasses}>
             <div className="client-stats__rate__data--total">
               <Size value={transferTotals[slug]} />
             </div>
@@ -45,7 +88,7 @@ class TransferRateDetails extends React.Component {
   render() {
     return (
       <div className="client-stats__rates">
-        {this.getCurrentTansferRate('upload')}
+        {this.getCurrentTansferRate('upload', {showHoverDuration: true})}
         {this.getCurrentTansferRate('download')}
       </div>
     );

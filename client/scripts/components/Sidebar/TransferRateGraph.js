@@ -35,12 +35,13 @@ class LineChart extends React.Component {
       return true;
     }
 
+    const {props: {historicalData}} = this;
     const {historicalData: {upload, download}} = nextProps;
 
     return upload.some((item, index) => {
-      return item !== this.props.historicalData.upload[index];
+      return item !== historicalData.upload[index];
     }) || download.some((item, index) => {
-      return item !== this.props.historicalData.download[index];
+      return item !== historicalData.download[index];
     });
   }
 
@@ -53,14 +54,16 @@ class LineChart extends React.Component {
   }
 
   handleMouseOut() {
-    if (this.graphRefs.areDefined) {
-      this.graphRefs.isHovered = false;
-      this.graphRefs.upload.inspectPoint.style('opacity', 0);
-      this.graphRefs.download.inspectPoint.style('opacity', 0);
+    const {graphRefs, props} = this;
+
+    if (graphRefs.areDefined) {
+      graphRefs.isHovered = false;
+      graphRefs.upload.inspectPoint.style('opacity', 0);
+      graphRefs.download.inspectPoint.style('opacity', 0);
     }
 
-    if (this.props.onGraphMouseLeave) {
-      this.props.onGraphMouseLeave();
+    if (props.onMouseOut) {
+      props.onMouseOut();
     }
   }
 
@@ -91,6 +94,9 @@ class LineChart extends React.Component {
       .append('path')
       .attr('class', 'graph__area')
       .attr('fill', `url('#graph__gradient--${slug}')`);
+  }
+
+  appendEmptyGraphLines(graph, slug) {
     this.graphRefs[slug].rateLine = graph
       .append('path')
       .attr('class', `graph__line graph__line--${slug}`);
@@ -143,6 +149,8 @@ class LineChart extends React.Component {
     if (!this.graphRefs.areDefined) {
       this.appendEmptyGraphShapes(graph, 'download');
       this.appendEmptyGraphShapes(graph, 'upload');
+      this.appendEmptyGraphLines(graph, 'download');
+      this.appendEmptyGraphLines(graph, 'upload');
       this.appendGraphCircles(graph, 'download');
       this.appendGraphCircles(graph, 'upload');
 
