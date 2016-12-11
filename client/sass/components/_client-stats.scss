@@ -207,7 +207,7 @@ $client-stats--timestamp--foreground: #526780;
   }
 
   &__area {
-    transform: translateY($client-stats--speed--stroke--width / 2);
+    transform: translateY($client-stats--speed--stroke--width / -2);
   }
 
   &__line {
