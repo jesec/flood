@@ -1,7 +1,7 @@
-$client-stats--limits--opacity: 0.15;
-$client-stats--speed--fill--top--opacity: 0.3;
+$client-stats--speed--fill--top--opacity: 0.2;
 $client-stats--speed--fill--bottom--opacity: 0;
 $client-stats--speed--stroke--opacity: 0.5;
+$client-stats--speed--stroke--width: 2px;
 
 $client-stats--download--primary--foreground: #39ce83;
 $client-stats--download--secondary--foreground: rgba($client-stats--download--primary--foreground, 0.75);
@@ -139,6 +139,11 @@ $client-stats--timestamp--foreground: #526780;
         margin-left: $spacing-unit * 1/5;
         padding: $spacing-unit * 1/6;
 
+        .icon {
+          fill: currentColor;
+          height: 12px;
+        }
+
         .unit {
           font-weight: 400;
         }
@@ -201,10 +206,14 @@ $client-stats--timestamp--foreground: #526780;
     }
   }
 
+  &__area {
+    transform: translateY($client-stats--speed--stroke--width / 2);
+  }
+
   &__line {
     fill: none;
     opacity: $client-stats--speed--stroke--opacity;
-    stroke-width: 2px;
+    stroke-width: $client-stats--speed--stroke--width;
 
     &--upload {
       stroke: $client-stats--upload--graph--stroke;
