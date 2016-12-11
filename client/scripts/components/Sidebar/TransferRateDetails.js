@@ -98,8 +98,8 @@ class TransferRateDetails extends React.Component {
   render() {
     return (
       <div className="client-stats__rates">
-        {this.getCurrentTansferRate('upload', {showHoverDuration: true})}
-        {this.getCurrentTansferRate('download')}
+        {this.getCurrentTansferRate('download', {showHoverDuration: true})}
+        {this.getCurrentTansferRate('upload')}
       </div>
     );
   }
