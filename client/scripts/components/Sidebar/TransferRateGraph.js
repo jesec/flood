@@ -48,37 +48,12 @@ class LineChart extends React.Component {
     });
   }
 
+  componentDidMount() {
+    this.updateGraph();
+  }
+
   componentDidUpdate() {
-    this.renderGraphData(this.props);
-
-    if (this.graphRefs.isHovered) {
-      this.renderPrecisePointInspectors();
-    }
-  }
-
-  handleMouseOut() {
-    const {graphRefs, props} = this;
-
-    if (graphRefs.areDefined) {
-      graphRefs.isHovered = false;
-      graphRefs.upload.inspectPoint.style('opacity', 0);
-      graphRefs.download.inspectPoint.style('opacity', 0);
-    }
-
-    if (props.onMouseOut) {
-      props.onMouseOut();
-    }
-  }
-
-  handleMouseMove(mouseX) {
-    this.lastMouseX = mouseX;
-    this.renderPrecisePointInspectors();
-  }
-
-  handleMouseOver() {
-    this.graphRefs.isHovered = true;
-    this.graphRefs.upload.inspectPoint.style('opacity', 1);
-    this.graphRefs.download.inspectPoint.style('opacity', 1);
+    this.updateGraph();
   }
 
   appendGraphCircles(graph, slug) {
@@ -103,6 +78,41 @@ class LineChart extends React.Component {
     this.graphRefs[slug].rateLine = graph
       .append('path')
       .attr('class', `graph__line graph__line--${slug}`);
+  }
+
+  getGradient(slug) {
+    return (
+      <linearGradient id={`graph__gradient--${slug}`} x1="0%" y1="0%"
+        x2="0%" y2="100%">
+        <stop className={`graph__gradient--top graph__gradient--top--${slug}`} offset="0%"/>
+        <stop className={`graph__gradient--bottom graph__gradient--bottom--${slug}`} offset="100%"/>
+      </linearGradient>
+    );
+  }
+
+  handleMouseMove(mouseX) {
+    this.lastMouseX = mouseX;
+    this.renderPrecisePointInspectors();
+  }
+
+  handleMouseOut() {
+    const {graphRefs, props} = this;
+
+    if (graphRefs.areDefined) {
+      graphRefs.isHovered = false;
+      graphRefs.upload.inspectPoint.style('opacity', 0);
+      graphRefs.download.inspectPoint.style('opacity', 0);
+    }
+
+    if (props.onMouseOut) {
+      props.onMouseOut();
+    }
+  }
+
+  handleMouseOver() {
+    this.graphRefs.isHovered = true;
+    this.graphRefs.upload.inspectPoint.style('opacity', 1);
+    this.graphRefs.download.inspectPoint.style('opacity', 1);
   }
 
   renderGraphData(props) {
@@ -166,6 +176,27 @@ class LineChart extends React.Component {
     this.graphRefs.upload.rateLine.attr('d', uploadLinePath);
   }
 
+  renderPrecisePointInspectors() {
+    const {
+      lastMouseX,
+      props: {historicalData, onHover},
+      xScale
+    } = this;
+
+    const hoverPoint = xScale.invert(lastMouseX);
+    const uploadSpeed = this.setInspectorCoordinates('upload', hoverPoint);
+    const downloadSpeed = this.setInspectorCoordinates('download', hoverPoint);
+    const nearestTimestamp = historicalData.timestamps[Math.round(hoverPoint)];
+
+    if (onHover) {
+      onHover({
+        uploadSpeed,
+        downloadSpeed,
+        nearestTimestamp
+      });
+    }
+  }
+
   setInspectorCoordinates(slug, hoverPoint) {
     const {
       graphRefs: {[slug]: {inspectPoint}},
@@ -189,35 +220,12 @@ class LineChart extends React.Component {
     return speedAtHoverPoint;
   }
 
-  renderPrecisePointInspectors() {
-    const {
-      lastMouseX,
-      props: {historicalData, onHover},
-      xScale
-    } = this;
+  updateGraph() {
+    this.renderGraphData(this.props);
 
-    const hoverPoint = xScale.invert(lastMouseX);
-    const uploadSpeed = this.setInspectorCoordinates('upload', hoverPoint);
-    const downloadSpeed = this.setInspectorCoordinates('download', hoverPoint);
-    const nearestTimestamp = historicalData.timestamps[Math.round(hoverPoint)];
-
-    if (onHover) {
-      onHover({
-        uploadSpeed,
-        downloadSpeed,
-        nearestTimestamp
-      });
+    if (this.graphRefs.isHovered) {
+      this.renderPrecisePointInspectors();
     }
-  }
-
-  getGradient(slug) {
-    return (
-      <linearGradient id={`graph__gradient--${slug}`} x1="0%" y1="0%"
-        x2="0%" y2="100%">
-        <stop className={`graph__gradient--top graph__gradient--top--${slug}`} offset="0%"/>
-        <stop className={`graph__gradient--bottom graph__gradient--bottom--${slug}`} offset="100%"/>
-      </linearGradient>
-    );
   }
 
   render() {
