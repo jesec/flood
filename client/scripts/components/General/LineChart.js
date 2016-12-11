@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import d3 from 'd3';
 import React from 'react';
 
