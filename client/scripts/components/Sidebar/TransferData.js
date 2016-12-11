@@ -9,7 +9,6 @@ import ReactDOM from 'react-dom';
 import Download from '../Icons/Download';
 import Duration from '../General/Duration';
 import EventTypes from '../../constants/EventTypes';
-import LineChart from '../General/LineChart';
 import LoadingIndicator from '../General/LoadingIndicator';
 import Size from '../General/Size';
 import TransferDataStore from '../../stores/TransferDataStore';
