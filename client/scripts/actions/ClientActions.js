@@ -14,8 +14,7 @@ let ClientActions = {
           type: ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_ERROR,
           error
@@ -34,8 +33,7 @@ let ClientActions = {
           data,
           options
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SETTINGS_SAVE_ERROR,
           error,
@@ -59,8 +57,7 @@ let ClientActions = {
             transferData
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SET_THROTTLE_ERROR,
           data: {

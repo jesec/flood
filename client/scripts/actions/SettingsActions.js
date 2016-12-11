@@ -14,8 +14,7 @@ let SettingsActions = {
           type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_ADD_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_ADD_ERROR,
           error
@@ -33,8 +32,7 @@ let SettingsActions = {
           type: ActionTypes.SETTINGS_FEED_MONITOR_RULE_ADD_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_RULE_ADD_ERROR,
           error
@@ -52,8 +50,7 @@ let SettingsActions = {
           type: ActionTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITORS_FETCH_ERROR,
           error
@@ -71,8 +68,7 @@ let SettingsActions = {
           type: ActionTypes.SETTINGS_FEED_MONITOR_FEEDS_FETCH_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_FEEDS_FETCH_ERROR,
           error
@@ -90,8 +86,7 @@ let SettingsActions = {
           type: ActionTypes.SETTINGS_FEED_MONITOR_RULES_FETCH_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_RULES_FETCH_ERROR,
           error
@@ -109,8 +104,7 @@ let SettingsActions = {
           type: ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FETCH_REQUEST_ERROR,
           error
@@ -131,8 +125,7 @@ let SettingsActions = {
             id
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_REMOVE_ERROR,
           error: {
@@ -154,8 +147,7 @@ let SettingsActions = {
           data,
           options
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_SAVE_REQUEST_ERROR,
           error
