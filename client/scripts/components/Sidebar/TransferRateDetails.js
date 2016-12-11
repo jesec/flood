@@ -1,14 +1,15 @@
 import classnames from 'classnames';
-import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import Download from '../Icons/Download';
 import Duration from '../General/Duration';
+import InfinityIcon from '../Icons/InfinityIcon';
 import Size from '../General/Size';
 import Upload from '../Icons/Upload';
 
 const icons = {
   download: <Download />,
+  infinity: <InfinityIcon />,
   upload: <Upload />
 };
 
@@ -65,12 +66,9 @@ class TransferRateDetails extends React.Component {
 
     let limit = null;
 
-    console.log(throttles[slug]);
     if (throttles[slug] === 0) {
-      console.log('zero')
-      limit = <FormattedMessage id="unit.time.infinity" defaultMessage="∞" />;
+      limit = icons.infinity;
     } else {
-      console.log('not zero')
       limit = <Size value={throttles[slug]} isSpeed={true} />;
     }
 

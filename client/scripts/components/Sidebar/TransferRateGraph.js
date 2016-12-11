@@ -30,13 +30,16 @@ class LineChart extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    const {props: {historicalData = {}}} = this;
+    const {historicalData: {upload = [], download = []}} = nextProps;
+
     if (this.isInitialRender) {
-      this.isInitialRender = false;
+      if (upload != null && upload.length > 0) {
+        this.isInitialRender = false;
+      }
+
       return true;
     }
-
-    const {props: {historicalData}} = this;
-    const {historicalData: {upload, download}} = nextProps;
 
     return upload.some((item, index) => {
       return item !== historicalData.upload[index];
