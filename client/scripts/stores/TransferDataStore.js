@@ -121,10 +121,7 @@ class TransferDataStoreClass extends BaseStore {
   }
 
   handleTransferHistorySuccess(transferData) {
-    this.transferRates = {
-      download: transferData.download,
-      upload: transferData.upload
-    };
+    this.transferRates = transferData;
 
     this.emit(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS);
     this.resolveRequest('fetch-transfer-history');

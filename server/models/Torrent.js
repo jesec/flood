@@ -2,6 +2,7 @@
 
 let _ = require('lodash');
 
+let formatUtil = require('../../shared/util/formatUtil');
 let regEx = require('../../shared/util/regEx');
 let stringUtil = require('../../shared/util/stringUtil');
 let TorrentNotificationService = require('./TorrentNotificationService');
@@ -123,30 +124,9 @@ class Torrent {
     if (rate > 0) {
       let cumSeconds = (total - completed) / rate;
 
-      let years = Math.floor(cumSeconds / 31536000);
-      let weeks = Math.floor((cumSeconds % 31536000) / 604800);
-      let days = Math.floor(((cumSeconds % 31536000) % 604800) / 86400);
-      let hours = Math.floor((((cumSeconds % 31536000) % 604800) % 86400) / 3600);
-      let minutes = Math.floor(((((cumSeconds % 31536000) % 604800) % 86400) % 3600) / 60);
-      let seconds = Math.floor(cumSeconds - (minutes * 60));
 
-      let timeRemaining = {};
 
-      if (years > 0) {
-        timeRemaining = {years, weeks, cumSeconds};
-      } else if (weeks > 0) {
-        timeRemaining = {weeks, days, cumSeconds};
-      } else if (days > 0) {
-        timeRemaining = {days, hours, cumSeconds};
-      } else if (hours > 0) {
-        timeRemaining = {hours, minutes, cumSeconds};
-      } else if (minutes > 0) {
-        timeRemaining = {minutes, seconds, cumSeconds};
-      } else {
-        timeRemaining = {seconds, cumSeconds};
-      }
-
-      return timeRemaining;
+      return formatUtil.secondsToDuration(cumSeconds);;
     } else {
       return 'Infinity';
     }

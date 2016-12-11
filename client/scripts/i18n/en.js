@@ -91,6 +91,7 @@ export default {
   'filter.tag.title': 'Filter by Tag',
   'filter.untagged': 'Untagged',
 
+  'general.ago': 'ago',
   'general.at': 'at',
   'general.to': 'to',
   'general.of': 'of',
