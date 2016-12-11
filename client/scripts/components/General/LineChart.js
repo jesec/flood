@@ -158,27 +158,6 @@ export default class LineChart extends React.Component {
     this.graphRefs.rateLine.attr('d', transferDataLinePoints);
   }
 
-  // renderPointInspector() {
-  //   const {
-  //     graphRefs: {inspectPoint},
-  //     props: {data, onGraphHover},
-  //     xScale,
-  //     yScale,
-  //   } = this;
-
-  //   const interval = Math.round(xScale.invert(this.lastMouseX));
-  //   const pointValue = data[interval].speed;
-  //   const coordinates = {x: xScale(interval), y: yScale(pointValue)};
-
-  //   inspectPoint.attr(
-  //     'transform', 'translate(' + coordinates.x + ',' + coordinates.y + ')'
-  //   );
-
-  //   if (onGraphHover) {
-  //     onGraphHover(pointValue);
-  //   }
-  // }
-
   renderPrecisePointInspector() {
     const {
       graphRefs: {inspectPoint},
