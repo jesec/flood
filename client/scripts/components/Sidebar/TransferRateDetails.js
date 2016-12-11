@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Download from '../Icons/Download';
@@ -6,6 +7,13 @@ import Duration from '../General/Duration';
 import InfinityIcon from '../Icons/InfinityIcon';
 import Size from '../General/Size';
 import Upload from '../Icons/Upload';
+
+const messages = defineMessages({
+  ago: {
+    id: 'general.ago',
+    defaultMessage: 'ago'
+  }
+});
 
 const icons = {
   download: <Download />,
@@ -58,7 +66,7 @@ class TransferRateDetails extends React.Component {
     if (this.state.timestamp != null) {
       timestamp = (
         <div className={timestampClasses}>
-          <Duration suffix="ago"
+          <Duration suffix={this.props.intl.formatMessage(messages.ago)}
             value={this.state.timestamp} />
         </div>
       );
@@ -105,4 +113,4 @@ class TransferRateDetails extends React.Component {
   }
 }
 
-export default TransferRateDetails;
+export default injectIntl(TransferRateDetails);
