@@ -14,8 +14,7 @@ let AuthActions = {
           type: ActionTypes.AUTH_LOGIN_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LOGIN_ERROR,
           error: error.data.message
@@ -33,8 +32,7 @@ let AuthActions = {
           type: ActionTypes.AUTH_CREATE_USER_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_CREATE_USER_ERROR,
           error
@@ -55,8 +53,7 @@ let AuthActions = {
             ...data
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_DELETE_USER_ERROR,
           error: {
@@ -77,8 +74,7 @@ let AuthActions = {
           type: ActionTypes.AUTH_LIST_USERS_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LIST_USERS_ERROR,
           error
@@ -96,8 +92,7 @@ let AuthActions = {
           type: ActionTypes.AUTH_REGISTER_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_REGISTER_ERROR,
           error
@@ -116,8 +111,7 @@ let AuthActions = {
           type: ActionTypes.AUTH_VERIFY_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_VERIFY_ERROR,
           error

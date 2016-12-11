@@ -18,8 +18,7 @@ let TorrentActions = {
             response
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_ADD_TORRENT_ERROR,
           data: {
@@ -43,8 +42,7 @@ let TorrentActions = {
             response
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_ADD_TORRENT_ERROR,
           data: {
@@ -68,8 +66,7 @@ let TorrentActions = {
             deleteData
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_REMOVE_TORRENT_ERROR,
           error: {
@@ -93,8 +90,7 @@ let TorrentActions = {
             count: hash.length
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_CHECK_HASH_ERROR,
           error: {
@@ -117,8 +113,7 @@ let TorrentActions = {
             torrents
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_FETCH_TORRENTS_ERROR,
           data: {
@@ -143,8 +138,7 @@ let TorrentActions = {
             torrentDetails
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_FETCH_TORRENT_DETAILS_ERROR,
           data: {
@@ -164,8 +158,7 @@ let TorrentActions = {
           type: ActionTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_FETCH_TORRENT_TAXONOMY_ERROR,
           error
@@ -183,8 +176,7 @@ let TorrentActions = {
           type: ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_ERROR,
           error
@@ -202,8 +194,7 @@ let TorrentActions = {
           type: ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_ERROR,
           error
@@ -227,8 +218,7 @@ let TorrentActions = {
             count: hashes.length
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_MOVE_TORRENTS_ERROR,
           error
@@ -250,8 +240,7 @@ let TorrentActions = {
             response
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_START_TORRENT_ERROR,
           data: {
@@ -275,8 +264,7 @@ let TorrentActions = {
             response
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_START_TORRENT_ERROR,
           data: {
@@ -300,8 +288,7 @@ let TorrentActions = {
             response
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_STOP_TORRENT_ERROR,
           data: {
@@ -324,8 +311,7 @@ let TorrentActions = {
           type: ActionTypes.CLIENT_SET_TORRENT_PRIORITY_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SET_TORRENT_PRIORITY_ERROR,
           error
@@ -352,8 +338,7 @@ let TorrentActions = {
             priority
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SET_FILE_PRIORITY_ERROR,
           error
@@ -375,8 +360,7 @@ let TorrentActions = {
           type: ActionTypes.CLIENT_SET_TAXONOMY_SUCCESS,
           data
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SET_TAXONOMY_ERROR,
           error

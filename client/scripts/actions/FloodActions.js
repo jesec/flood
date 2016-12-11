@@ -18,8 +18,7 @@ let FloodActions = {
             ...options
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_CLEAR_NOTIFICATIONS_ERROR,
           data: {
@@ -44,8 +43,7 @@ let FloodActions = {
             ...response
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_ERROR,
           error
@@ -70,8 +68,7 @@ let FloodActions = {
             ...options
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_FETCH_MEDIAINFO_ERROR,
           error
@@ -97,8 +94,7 @@ let FloodActions = {
             ...options
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_FETCH_NOTIFICATIONS_ERROR,
           data: {
@@ -120,8 +116,8 @@ let FloodActions = {
             transferData
           }
         });
-      })
-      .catch((error) => {
+      }, (error) => {
+        console.log(error);
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_FETCH_TRANSFER_DATA_ERROR,
           data: {
@@ -143,8 +139,7 @@ let FloodActions = {
         type: ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_SUCCESS,
         data
       });
-    })
-    .catch((error) => {
+    }, (error) => {
       AppDispatcher.dispatchServerAction({
         type: ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_ERROR,
         error
