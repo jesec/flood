@@ -12,7 +12,7 @@ const METHODS_TO_BIND = [
 
 const bisector = d3.bisector(function(d) { return d; }).left;
 
-class LineChart extends React.Component {
+class TransferRateGraph extends React.Component {
   constructor() {
     super();
 
@@ -240,12 +240,12 @@ class LineChart extends React.Component {
   }
 }
 
-LineChart.defaultProps = {
+TransferRateGraph.defaultProps = {
   width: 240
 };
 
-LineChart.propTypes = {
+TransferRateGraph.propTypes = {
   width: React.PropTypes.number
 };
 
-export default LineChart;
+export default TransferRateGraph;
