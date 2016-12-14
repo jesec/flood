@@ -74,7 +74,11 @@ let webpackConfig = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel-loader?cacheDirectory',
+        loader: 'babel-loader',
+        query: {
+          presets: ['stage-2', 'es2015'],
+          plugins: ['transform-react-jsx', 'transform-runtime']
+        },
         exclude: /node_modules/
       }
     ],
