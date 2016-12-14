@@ -145,7 +145,7 @@ gulp.task('minify-css', ['sass'], () => {
     .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist));
 });
 
-gulp.task('minify-js', () => {
+gulp.task('minify-js', ['webpack'], () => {
   return gulp.src(dirs.dist + '/' + dirs.jsDist + '/' + files.mainJs + '.js')
     .pipe(uglify({
       mangle: true,
