@@ -29,7 +29,7 @@
     "events": "^1.1.0",
     "express": "^4.14.0",
     "feedsub": "^0.3.0",
-    "flux": "^2.1.1",
+    "flux": "^3.1.0",
     "geoip-country-only": "^1.1.8",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "^3.0.2",
