@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "preinstall": "npm prune",
-    "prestart": "gulp dist",
+    "prestart": "NODE_ENV=production gulp dist",
     "start": "nodemon ./server/bin/www",
     "start:production": "npm run prestart; node ./server/bin/www",
-    "start:watch": "NODE_ENV='development' gulp livereload"
+    "start:watch": "NODE_ENV=development gulp livereload"
   },
   "dependencies": {
     "axios": "^0.15.3",
