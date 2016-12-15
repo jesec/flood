@@ -36,7 +36,7 @@
     "feedsub": "^0.3.0",
     "flux": "^3.1.0",
     "geoip-country-only": "^1.1.8",
-    "gulp": "^3.9.0",
+    "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.0.2",
     "gulp-cssnano": "^2.1.1",
     "gulp-eslint": "^3.0.1",
@@ -86,7 +86,7 @@
     "eslint": "^3.12.1",
     "eslint-config-airbnb": "^13.0.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^3.0.1",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.8.0"
   }
 }
