@@ -43,10 +43,12 @@ let FloodActions = {
             ...response
           }
         });
-      }, (error) => {
+      }, (error = {}) => {
+        const {response: errorData} = error;
+
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_ERROR,
-          error
+          error: errorData
         });
       });
   },
@@ -117,7 +119,6 @@ let FloodActions = {
           }
         });
       }, (error) => {
-        console.log(error);
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_FETCH_TRANSFER_DATA_ERROR,
           data: {

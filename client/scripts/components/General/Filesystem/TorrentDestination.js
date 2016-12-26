@@ -135,7 +135,7 @@ class TorrentDestination extends React.Component {
       );
     }
 
-    if (error && error.data.code && MESSAGES[error.data.code]) {
+    if (error && error.data && error.data.code && MESSAGES[error.data.code]) {
       shouldShowDirectoryList = false;
 
       if (error.data.code === 'EACCES') {
