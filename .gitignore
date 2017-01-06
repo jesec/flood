@@ -2,5 +2,5 @@
 config.js
 node_modules
 npm-debug.log
-server/assets
 server/db
+server/assets/*.map
