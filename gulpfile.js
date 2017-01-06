@@ -141,7 +141,11 @@ gulp.task('sass:development', () => {
 
 gulp.task('minify-css', ['sass'], () => {
   return gulp.src(dirs.dist + '/' + dirs.stylesDist + '/' + files.mainStylesDist + '.css')
-    .pipe(cssnano())
+    .pipe(cssnano({
+      discardComments: {
+        removeAll: true
+      }
+    }))
     .pipe(gulp.dest(dirs.dist + '/' + dirs.stylesDist));
 });
 
