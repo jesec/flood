@@ -2,21 +2,21 @@ import React from 'react';
 
 import ActionBar from '../TorrentList/ActionBar';
 import ApplicationPanel from '../Layout/ApplicationPanel';
-import TorrentListContainer from '../TorrentList/TorrentListContainer';
+import TorrentList from '../TorrentList';
 
-class TorrentList extends React.Component {
+class TorrentListPanel extends React.Component {
   render() {
     return (
       <ApplicationPanel modifier="torrent-list" className="view--torrent-list">
         <ActionBar />
-        <TorrentListContainer />
+        <TorrentList />
       </ApplicationPanel>
     );
   }
 }
 
-TorrentList.propTypes = {
+TorrentListPanel.propTypes = {
   children: React.PropTypes.node
 };
 
-export default TorrentList;
+export default TorrentListPanel;
