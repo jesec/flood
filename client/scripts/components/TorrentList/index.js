@@ -73,9 +73,7 @@ class TorrentListContainer extends React.Component {
     TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     UIStore.listen(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
-    // window.addEventListener('resize', this.handleWindowResize);
     TorrentStore.fetchTorrents();
-    // this.setViewportHeight();
   }
 
   componentWillUnmount() {
@@ -85,7 +83,6 @@ class TorrentListContainer extends React.Component {
     TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_ERROR, this.onReceiveTorrentsError);
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.onTorrentFilterChange);
     UIStore.unlisten(EventTypes.UI_CONTEXT_MENU_CHANGE, this.onContextMenuChange);
-    // window.removeEventListener('resize', this.handleWindowResize);
   }
 
   bindExternalPriorityChangeHandler(eventHandler) {
