@@ -86,6 +86,146 @@ $more-info--border: $textbox-repeater--button--border;
 
 .torrent {
 
+  &__details {
+    align-items: center;
+    display: flex;
+    flex: 1 1 auto;
+    flex-flow: row;
+    list-style: none;
+
+    &--primary,
+    &--secondary,
+    &--tertiary {
+      transition: color 0.25s;
+    }
+
+    &--primary {
+      color: $torrent--primary--foreground;
+      flex: 1 1 auto;
+      line-height: 1.3;
+      white-space: nowrap;
+    }
+
+    &--secondary {
+      color: $torrent--secondary--foreground;
+      flex: 0 0 auto;
+      font-size: 0.75em;
+      font-weight: 500;
+      margin-right: $spacing-unit * 2/5;
+      text-align: right;
+      white-space: nowrap;
+      vertical-align: baseline;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      .unit {
+        font-weight: 400;
+      }
+    }
+
+    &--tertiary {
+      color: $torrent--tertiary--foreground;
+      display: flex;
+      font-size: 0.7em;
+      margin: 1px 0;
+
+      li {
+        display: inline-block;
+        margin-right: $spacing-unit * 2/5;
+        white-space: nowrap;
+
+        &:last-child {
+          margin-right: 0;
+        }
+
+        .icon {
+          fill-opacity: 0.75;
+        }
+      }
+
+      &--stats {
+        flex: 1 0 auto;
+      }
+
+      &--tags {
+        background: $torrent--tags--background;
+        color: $torrent--tags--foreground;
+        flex: 0 1 auto;
+        margin-left: auto;
+        margin-right: 0;
+        transition: background 0.25s, color 0.25s, opacity 0.25s;
+
+        li {
+          margin-right: $spacing-unit * 3/10;
+        }
+      }
+    }
+
+    &__label {
+      margin-right: 0.5em;
+      opacity: 0.5;
+    }
+
+    &__icon {
+      display: inline-block;
+      padding-right: 5px;
+      transform: translateY(1px);
+      vertical-align: baseline;
+
+      .icon {
+        display: block;
+        fill: currentColor;
+        height: 12px;
+        opacity: 0.66;
+        width: 12px;
+      }
+    }
+
+    &--eta {
+      opacity: 0;
+      transition: color 0.25s, opacity 1s, visibility 1s;
+      visibility: hidden;
+    }
+
+    &--completed {
+      width: 90px;
+    }
+
+    &--uploaded {
+      width: 55px;
+    }
+
+    &--size {
+      width: 55px;
+    }
+
+    &--added {
+      width: 80px;
+    }
+
+    &--peers {
+      width: 70px;
+    }
+
+    &--ratio {
+      width: 50px;
+    }
+
+    &--seeds {
+      width: 70px;
+    }
+
+    &--speed {
+
+      &--download,
+      &--upload {
+        transition: color 0.25s;
+      }
+    }
+  }
+
   &__list {
     margin: 0 0 0 10px;
     padding: 10px 0;
@@ -371,149 +511,6 @@ $more-info--border: $textbox-repeater--button--border;
 
       .icon {
         fill: $blue;
-      }
-    }
-  }
-}
-
-.torrent {
-
-  &__details {
-    align-items: center;
-    display: flex;
-    flex: 1 1 auto;
-    flex-flow: row;
-    list-style: none;
-
-    &--primary,
-    &--secondary,
-    &--tertiary {
-      transition: color 0.25s;
-    }
-
-    &--primary {
-      color: $torrent--primary--foreground;
-      flex: 1 1 auto;
-      line-height: 1.3;
-      white-space: nowrap;
-    }
-
-    &--secondary {
-      color: $torrent--secondary--foreground;
-      flex: 0 0 auto;
-      font-size: 0.75em;
-      font-weight: 500;
-      margin-right: $spacing-unit * 2/5;
-      text-align: right;
-      white-space: nowrap;
-      vertical-align: baseline;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      .unit {
-        font-weight: 400;
-      }
-    }
-
-    &--tertiary {
-      color: $torrent--tertiary--foreground;
-      display: flex;
-      font-size: 0.7em;
-      margin: 1px 0;
-
-      li {
-        display: inline-block;
-        margin-right: $spacing-unit * 2/5;
-        white-space: nowrap;
-
-        &:last-child {
-          margin-right: 0;
-        }
-
-        .icon {
-          fill-opacity: 0.75;
-        }
-      }
-
-      &--stats {
-        flex: 1 0 auto;
-      }
-
-      &--tags {
-        background: $torrent--tags--background;
-        color: $torrent--tags--foreground;
-        flex: 0 1 auto;
-        margin-left: auto;
-        margin-right: 0;
-        transition: background 0.25s, color 0.25s, opacity 0.25s;
-
-        li {
-          margin-right: $spacing-unit * 3/10;
-        }
-      }
-    }
-
-    &__label {
-      margin-right: 0.5em;
-      opacity: 0.5;
-    }
-
-    &__icon {
-      display: inline-block;
-      padding-right: 5px;
-      transform: translateY(1px);
-      vertical-align: baseline;
-
-      .icon {
-        display: block;
-        fill: currentColor;
-        height: 12px;
-        opacity: 0.66;
-        width: 12px;
-      }
-    }
-
-    &--eta {
-      opacity: 0;
-      transition: color 0.25s, opacity 1s, visibility 1s;
-      visibility: hidden;
-    }
-
-    &--completed {
-      width: 90px;
-    }
-
-    &--uploaded {
-      width: 55px;
-    }
-
-    &--size {
-      width: 55px;
-    }
-
-    &--added {
-      width: 80px;
-    }
-
-    &--peers {
-      width: 70px;
-    }
-
-    &--ratio {
-      width: 50px;
-    }
-
-    &--seeds {
-      width: 70px;
-    }
-
-    &--speed {
-
-      &--download,
-      &--upload {
-        transition: color 0.25s;
       }
     }
   }
