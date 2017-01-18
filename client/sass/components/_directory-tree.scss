@@ -11,6 +11,7 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     display: flex;
     flex: 1;
     flex-direction: column;
+    min-height: 0;
 
     &--toolbar-visible {
 
