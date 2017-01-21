@@ -232,26 +232,21 @@ export default {
   'torrent.list.peers': '{connected} {of} {total}',
   'torrent.list.peers.of': 'sur',
 
-  'torrents.set.tags.button.set': 'Définir un Tag',
-  'torrents.set.tags.button.state.setting': 'Réglages...',
-  'torrents.set.tags.heading': 'Définir un Tag',
-
-  'torrents.sort.added': 'Date d\'Ajout',
-  'torrents.sort.download.speed': 'Vitesse de Téléchargement',
-  'torrents.sort.download.total': 'Données Téléchargées',
-  'torrents.sort.eta': 'ETA',
-  'torrents.sort.name': 'Nom des Fichiers',
-  'torrents.sort.percentage': 'Pourcentage Complété',
-  'torrents.sort.ratio': 'Ratio',
-  'torrents.sort.size': 'Taille des Fichiers',
-  'torrents.sort.title': 'Trier par',
-  'torrents.sort.upload.speed': 'Vitesse d\'Emission',
-  'torrents.sort.upload.total': 'Données Envoyées',
-
   'torrents.move.button.set.location': 'Emplacement',
   'torrents.move.button.state.setting': 'Réglages...',
   'torrents.move.data.label': 'Déplacer les Données',
   'torrents.move.heading': 'Définir l\'Emplacement de Téléchargement',
+
+  'torrents.properties.added': 'Date d\'Ajout',
+  'torrents.properties.download.speed': 'Vitesse de Téléchargement',
+  'torrents.properties.download.total': 'Données Téléchargées',
+  'torrents.properties.eta': 'ETA',
+  'torrents.properties.name': 'Nom des Fichiers',
+  'torrents.properties.percentage': 'Pourcentage Complété',
+  'torrents.properties.ratio': 'Ratio',
+  'torrents.properties.size': 'Taille des Fichiers',
+  'torrents.properties.upload.speed': 'Vitesse d\'Emission',
+  'torrents.properties.upload.total': 'Données Envoyées',
 
   'torrents.remove.are.you.sure': `Êtes-vous certains de vouloir supprimer {count, plural,
       =0 {aucun torrent}
@@ -260,5 +255,11 @@ export default {
     } ?`,
   'torrents.remove.delete.data': 'Supprimer les Données',
   'torrents.remove.error.no.torrents.selected': 'Vous n\'avez sélectionné aucun torrent.',
-  'torrents.remove': 'Supprimer les Torrents'
+  'torrents.remove': 'Supprimer les Torrents',
+
+  'torrents.set.tags.button.set': 'Définir un Tag',
+  'torrents.set.tags.button.state.setting': 'Réglages...',
+  'torrents.set.tags.heading': 'Définir un Tag',
+
+  'torrents.sort.title': 'Trier par'
 };

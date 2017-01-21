@@ -4,7 +4,7 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
 import Dropdown from '../General/FormElements/Dropdown';
-import SortProperties from '../../constants/SortProperties';
+import TorrentProperties from '../../constants/TorrentProperties';
 
 const METHODS_TO_BIND = ['getDropdownHeader', 'handleItemSelect'];
 const SORT_PROPERTIES = ['name', 'eta', 'downloadRate', 'uploadRate', 'ratio',
@@ -30,8 +30,8 @@ class SortDropdown extends React.Component {
         </label>
         <span className="dropdown__value">
           <FormattedMessage
-            id={SortProperties[this.props.selectedProperty].id}
-            defaultMessage={SortProperties[this.props.selectedProperty].defaultMessage}
+            id={TorrentProperties[this.props.selectedProperty].id}
+            defaultMessage={TorrentProperties[this.props.selectedProperty].defaultMessage}
           />
         </span>
       </a>
@@ -42,7 +42,7 @@ class SortDropdown extends React.Component {
     let items = SORT_PROPERTIES.map((sortProp) => {
       return {
         displayName: this.props.intl.formatMessage(
-          SortProperties[sortProp]
+          TorrentProperties[sortProp]
         ),
         selected: this.props.selectedProperty === sortProp,
         property: sortProp

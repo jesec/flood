@@ -232,26 +232,21 @@ export default {
   'torrent.list.peers': '{connected} {of} {total}',
   'torrent.list.peers.of': 'van',
 
-  'torrents.set.tags.button.set': 'Tags instellen',
-  'torrents.set.tags.button.state.setting': 'Instellen...',
-  'torrents.set.tags.heading': 'Tags instellen',
-
-  'torrents.sort.added': 'Datum toegevoegd',
-  'torrents.sort.download.speed': 'Downloadsnelheid',
-  'torrents.sort.download.total': 'Gedownload',
-  'torrents.sort.eta': 'ETA',
-  'torrents.sort.name': 'Naam',
-  'torrents.sort.percentage': 'Percentage compleet',
-  'torrents.sort.ratio': 'Ratio',
-  'torrents.sort.size': 'Bestandsgrootte',
-  'torrents.sort.title': 'Sorteer op',
-  'torrents.sort.upload.speed': 'Uploadsnelheid',
-  'torrents.sort.upload.total': 'Geupload',
-
   'torrents.move.button.set.location': 'Wijzig downloadlocatie',
   'torrents.move.button.state.setting': 'Wijzigen...',
   'torrents.move.data.label': 'Verplaats bestanden',
   'torrents.move.heading': 'Wijzig downloadlocatie',
+
+  'torrents.properties.added': 'Datum toegevoegd',
+  'torrents.properties.download.speed': 'Downloadsnelheid',
+  'torrents.properties.download.total': 'Gedownload',
+  'torrents.properties.eta': 'ETA',
+  'torrents.properties.name': 'Naam',
+  'torrents.properties.percentage': 'Percentage compleet',
+  'torrents.properties.ratio': 'Ratio',
+  'torrents.properties.size': 'Bestandsgrootte',
+  'torrents.properties.upload.speed': 'Uploadsnelheid',
+  'torrents.properties.upload.total': 'Geupload',
 
   'torrents.remove.are.you.sure': `Weet je zeker dat je {count, plural,
     =0 {geen torrents}
@@ -259,5 +254,11 @@ export default {
     other {# torrents}
   } wilt verwijderen?`,
   'torrents.remove.error.no.torrents.selected': 'Je hebt geen torrents geselecteerd.',
-  'torrents.remove': 'Torrents verwijderen'
+  'torrents.remove': 'Torrents verwijderen',
+
+  'torrents.set.tags.button.set': 'Tags instellen',
+  'torrents.set.tags.button.state.setting': 'Instellen...',
+  'torrents.set.tags.heading': 'Tags instellen',
+
+  'torrents.sort.title': 'Sorteer op'
 };

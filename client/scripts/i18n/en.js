@@ -258,26 +258,21 @@ export default {
   'torrent.list.peers': '{connected} {of} {total}',
   'torrent.list.peers.of': 'of',
 
-  'torrents.set.tags.button.set': 'Set Tags',
-  'torrents.set.tags.button.state.setting': 'Setting...',
-  'torrents.set.tags.heading': 'Set Tags',
-
-  'torrents.sort.added': 'Added',
-  'torrents.sort.download.speed': 'Download Speed',
-  'torrents.sort.download.total': 'Downloaded',
-  'torrents.sort.eta': 'ETA',
-  'torrents.sort.name': 'Name',
-  'torrents.sort.percentage': 'Percent Complete',
-  'torrents.sort.ratio': 'Ratio',
-  'torrents.sort.size': 'File Size',
-  'torrents.sort.title': 'Sort By',
-  'torrents.sort.upload.speed': 'Upload Speed',
-  'torrents.sort.upload.total': 'Uploaded',
-
   'torrents.move.button.set.location': 'Set Location',
   'torrents.move.button.state.setting': 'Setting...',
   'torrents.move.data.label': 'Move data',
   'torrents.move.heading': 'Set Download Location',
+
+  'torrents.properties.added': 'Added',
+  'torrents.properties.download.speed': 'Download Speed',
+  'torrents.properties.download.total': 'Downloaded',
+  'torrents.properties.eta': 'ETA',
+  'torrents.properties.name': 'Name',
+  'torrents.properties.percentage': 'Percent Complete',
+  'torrents.properties.ratio': 'Ratio',
+  'torrents.properties.size': 'File Size',
+  'torrents.properties.upload.speed': 'Upload Speed',
+  'torrents.properties.upload.total': 'Uploaded',
 
   'torrents.remove.are.you.sure': `Are you sure you want to remove {count, plural,
       =0 {no torrents}
@@ -286,5 +281,11 @@ export default {
     }?`,
   'torrents.remove.delete.data': 'Delete data',
   'torrents.remove.error.no.torrents.selected': 'You haven\'t selected any torrents.',
-  'torrents.remove': 'Remove Torrents'
+  'torrents.remove': 'Remove Torrents',
+
+  'torrents.set.tags.button.set': 'Set Tags',
+  'torrents.set.tags.button.state.setting': 'Setting...',
+  'torrents.set.tags.heading': 'Set Tags',
+
+  'torrents.sort.title': 'Sort By'
 };
