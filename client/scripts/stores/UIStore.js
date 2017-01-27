@@ -15,8 +15,43 @@ class UIStoreClass extends BaseStore {
     this.activeDropdownMenu = null;
     this.activeModal = null;
     this.dependencies = {};
+    this.globalStyles = [];
     this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
+    this.createStyleElement();
+  }
+
+  addGlobalStyle(cssString) {
+    this.globalStyles.push(cssString);
+    this.applyStyles();
+  }
+
+  applyStyles() {
+    const {globalStyles, styleElement} = this;
+    const nextStyleString = globalStyles.join('');
+
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild);
+    }
+
+    if (styleElement.styleSheet) {
+      styleElement.styleSheet.cssText = nextStyleString;
+    } else {
+      styleElement.appendChild(
+        global.document.createTextNode(nextStyleString)
+      );
+    }
+  }
+
+  createStyleElement() {
+    if (this.styleElement == null) {
+      const stylesheetRef = global.document.createElement('style');
+      stylesheetRef.type = 'text/css';
+
+      global.document.head.appendChild(stylesheetRef);
+
+      this.styleElement = stylesheetRef;
+    }
   }
 
   dismissModal() {
@@ -72,6 +107,14 @@ class UIStoreClass extends BaseStore {
 
   hasSatisfiedDependencies() {
     return Object.keys(this.dependencies).length === 0;
+  }
+
+  removeGlobalStyle(cssString) {
+    this.globalStyles = this.globalStyles.filter(
+      style => style !== cssString
+    );
+
+    this.applyStyles();
   }
 
   registerDependency(dependencies) {
