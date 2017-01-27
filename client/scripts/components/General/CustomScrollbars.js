@@ -14,6 +14,10 @@ export default class CustomScrollbar extends React.Component {
   }
 
   getHorizontalThumb(props) {
+    if (this.props.getHorizontalThumb) {
+      return this.props.getHorizontalThumb(props, this.props.onThumbMouseUp);
+    }
+
     return (
       <div {...props}
         className="scrollbars__thumb scrollbars__thumb--horizontal"
@@ -22,6 +26,10 @@ export default class CustomScrollbar extends React.Component {
   }
 
   getVerticalThumb(props) {
+    if (this.props.getVerticalThumb) {
+      return this.props.getVerticalThumb(props, this.props.onThumbMouseUp);
+    }
+
     return (
       <div {...props}
         className="scrollbars__thumb scrollbars__thumb--vertical"
@@ -38,8 +46,16 @@ export default class CustomScrollbar extends React.Component {
   }
 
   render() {
-    let {children, className, inverted, nativeScrollHandler, scrollHandler,
-      ...otherProps} = this.props;
+    let {
+      children,
+      className,
+      inverted,
+      getHorizontalThumb,
+      getVerticalThumb,
+      nativeScrollHandler,
+      scrollHandler,
+      ...otherProps
+    } = this.props;
     let classes = classnames('scrollbars', className, {
       'is-inverted': inverted
     });
