@@ -1,0 +1,136 @@
+$table--heading--background: rgba(#f6f8fA, 0.6);
+$table--heading--border: rgba(#1d2938, 0.1);
+$table--heading--border--horizontal: rgba(#1d2938, 0.08);
+
+$table--heading--color: #abbac7;
+$table--heading--color--hover: darken($table--heading--color, 10%);
+$table--heading--color--active: darken($table--heading--color, 30%);
+$table--heading--color--active--hover: darken($table--heading--color, 40%);
+
+$table--heading--resize--handle--width: 9px;
+$table--heading--resize--indicator--width: 1px;
+$table--heading--resize--indicator--background: rgba(darken(#f6f8fA, 10%), 0.75);
+
+.table {
+
+  &__row {
+
+    &--heading {
+      background: $table--heading--background;
+      box-shadow: 0 1px 0 $table--heading--border;
+      color: $table--heading--color;
+      display: flex;
+      height: 24px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 1;
+    }
+  }
+
+  &__heading {
+    align-items: center;
+    border-right: 1px solid $table--heading--border--horizontal;
+    cursor: pointer;
+    display: flex;
+    flex: 0 0 auto;
+    position: relative;
+    transition: color 0.15s;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      color: $table--heading--color--hover;
+    }
+
+    &:after {
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid currentColor;
+      content: '';
+      margin-top: -3px;
+      opacity: 0;
+      position: absolute;
+      right: 3px;
+      top: 50%;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    &--is-sorted {
+      color: $table--heading--color--active;
+      font-weight: 700;
+
+      &:hover {
+        color: $table--heading--color--active--hover;
+      }
+
+      &:after {
+        opacity: 0.5;
+      }
+    }
+
+    &--direction {
+
+      &--asc {
+
+        &:after {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    &__handle {
+      bottom: 0;
+      cursor: col-resize;
+      opacity: 0;
+      position: absolute;
+      right: $table--heading--resize--handle--width / -2;
+      top: 0;
+      transition: opacity 0.125s;
+      width: $table--heading--resize--handle--width;
+      z-index: 2;
+
+      &:after {
+        background: $table--heading--resize--indicator--background;
+        bottom: 0;
+        content: '';
+        left: ($table--heading--resize--handle--width - $table--heading--resize--indicator--width) / 2;
+        cursor: col-resize;
+        position: absolute;
+        top: 0;
+        transition: opacity 0.125s;
+        width: $table--heading--resize--indicator--width;
+        z-index: 10;
+      }
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &__label {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    &__resize-line {
+      background: $table--heading--resize--indicator--background;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      // transform: translateX(20px) !important;
+      transition: opacity 0.125s;
+      will-change: opacity, transform;
+      width: $table--heading--resize--indicator--width;
+    }
+  }
+
+  &__cell {
+    padding: 0 8px;
+  }
+}
