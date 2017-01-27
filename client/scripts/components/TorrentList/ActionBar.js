@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import {formatMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
@@ -30,7 +31,8 @@ class ActionBar extends React.Component {
     super();
 
     this.state = {
-      sortBy: SettingsStore.getFloodSettings('sortTorrents')
+      sortBy: SettingsStore.getFloodSettings('sortTorrents'),
+      torrentListViewSize: SettingsStore.getFloodSettings('torrentListViewSize')
     };
 
     METHODS_TO_BIND.forEach((method) => {
@@ -72,13 +74,23 @@ class ActionBar extends React.Component {
   }
 
   handleSettingsChange() {
-    let sortBy = SettingsStore.getFloodSettings('sortTorrents');
-    this.setState({sortBy});
+    this.setState({
+      sortBy: SettingsStore.getFloodSettings('sortTorrents'),
+      torrentListViewSize: SettingsStore.getFloodSettings('torrentListViewSize')
+    });
   }
 
   render() {
+    const classes = classnames(
+      'action-bar',
+      {
+        'action-bar--is-condensed':
+          this.state.torrentListViewSize === 'condensed'
+      }
+    );
+
     return (
-      <nav className="action-bar">
+      <nav className={classes}>
         <div className="actions action-bar__item action-bar__item--sort-torrents">
           <SortDropdown direction={this.state.sortBy.direction}
             onSortChange={this.handleSortChange}

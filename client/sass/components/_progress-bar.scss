@@ -20,8 +20,8 @@ $progress-bar--fill--completed: $blue;
 $progress-bar--fill--error: #e95779;
 $progress-bar--fill--error--stopped: #f2acbc;
 $progress-bar--fill--selected: #fff;
-$progress-bar--fill--selected--stopped: #96c7f1;
-$progress-bar--fill--stopped: #e3e5e5;
+$progress-bar--fill--selected--stopped: #5daaeb;
+$progress-bar--fill--stopped: #e7ebee;
 
 .progress-bar {
   align-items: center;
@@ -37,34 +37,34 @@ $progress-bar--fill--stopped: #e3e5e5;
       display: block;
       fill: $green;
       height: 12px;
-      transition: fill 0.25s, opacity 0.25s;
+      transition: opacity 0.15s;
       width: 12px;
 
-      .is-seeding & {
+      .torrent--is-seeding & {
         fill: $progress-bar--fill--completed;
       }
 
-      .is-stopped & {
+      .torrent--is-stopped & {
         fill: $progress-bar--fill--stopped;
       }
 
-      .has-error & {
+      .torrent--has-error & {
         fill: $progress-bar--fill--error;
       }
 
-      .is-checking & {
+      .torrent--is-checking & {
         fill: $progress-bar--fill--checking;
       }
 
-      .is-selected & {
+      .torrent--is-selected & {
         fill: $progress-bar--fill--selected;
       }
 
-      .is-selected.is-stopped & {
+      .torrent--is-selected.torrent--is-stopped & {
         fill: $progress-bar--fill--selected--stopped;
       }
 
-      .has-error.is-stopped & {
+      .torrent--has-error.torrent--is-stopped & {
         fill: $progress-bar--fill--error--stopped;
       }
     }
@@ -76,35 +76,35 @@ $progress-bar--fill--stopped: #e3e5e5;
     height: $progress-bar--height;
     position: relative;
     transform-origin: 0 0;
-    transition: background 0.25s, width 0.25s;
+    transition: background 0s, width 0.25s;
     width: 100%;
     z-index: 1;
 
-    .is-seeding & {
+    .torrent--is-seeding & {
       background: $progress-bar--fill--completed;
     }
 
-    .is-stopped & {
+    .torrent--is-stopped & {
       background: $progress-bar--fill--stopped;
     }
 
-    .has-error & {
+    .torrent--has-error & {
       background: $progress-bar--fill--error;
     }
 
-    .is-checking & {
+    .torrent--is-checking & {
       background: $progress-bar--fill--checking;
     }
 
-    .is-selected & {
+    .torrent--is-selected & {
       background: $progress-bar--fill--selected;
     }
 
-    .is-selected.is-stopped & {
+    .torrent--is-selected.torrent--is-stopped & {
       background: $progress-bar--fill--selected--stopped;
     }
 
-    .has-error.is-stopped & {
+    .torrent--has-error.torrent--is-stopped & {
       background: $progress-bar--fill--error--stopped;
     }
 
@@ -125,28 +125,28 @@ $progress-bar--fill--stopped: #e3e5e5;
         transition: background 0.25s, opacity 0.25s;
         width: 100%;
 
-        .is-stopped & {
+        .torrent--is-stopped & {
           background: $progress-bar--fill--stopped;
         }
 
-        .has-error & {
+        .torrent--has-error & {
           background: $progress-bar--fill--error;
         }
 
-        .is-selected & {
+        .torrent--is-selected & {
           background: $progress-bar--background--selected;
         }
 
-        .has-error.is-stopped & {
+        .torrent--has-error.torrent--is-stopped & {
           background: $progress-bar--fill--error--stopped;
         }
 
-        .is-selected.is-stopped & {
+        .torrent--is-selected.torrent--is-stopped & {
           background: $progress-bar--background--selected--stopped;
           opacity: 1;
         }
 
-        .is-checking & {
+        .torrent--is-checking & {
           animation: candy-stripe 0.25s linear infinite;
           background-color: transparent;
           background-image: linear-gradient(-45deg, rgba($progress-bar--fill--checking, 0) 0,
@@ -159,7 +159,7 @@ $progress-bar--fill--stopped: #e3e5e5;
           top: 0;
         }
 
-        .is-selected.is-checking & {
+        .torrent--is-selected.torrent--is-checking & {
           background-image: linear-gradient(-45deg, rgba(#fff, 0) 0,
             rgba(#fff, 0) 25%, rgba(#fff, 0.5) 25%,
             rgba(#fff, 0.5) 50%, rgba(#fff, 0) 50%,

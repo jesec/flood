@@ -73,7 +73,8 @@ class ListViewport extends React.Component {
     const scrollDelta = nextState.scrollTop - this.lastScrollTop;
     const {outerScrollbar} = this.nodeRefs;
 
-    if ((nextState.isScrolling && (scrollDelta > 1000 || scrollDelta < -1000))
+    if ((nextState.isScrolling && (scrollDelta > this.state.viewportHeight
+      || scrollDelta < this.state.viewportHeight * -1))
       || (outerScrollbar != null && outerScrollbar.refs.scrollbar.dragging)) {
       return false;
     }

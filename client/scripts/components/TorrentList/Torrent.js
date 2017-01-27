@@ -17,6 +17,7 @@ import SeedsIcon from '../Icons/SeedsIcon';
 import Size from '../General/Size';
 import {torrentStatusIcons} from '../../util/torrentStatusIcons';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
+import TorrentDetail from './TorrentDetail';
 import UploadThickIcon from '../Icons/UploadThickIcon';
 
 const ICONS = {
@@ -51,17 +52,29 @@ const TORRENT_ARRAYS_TO_OBSERVE = [
   'tags'
 ];
 
-export default class Torrent extends React.Component {
-  constructor() {
+class Torrent extends React.Component {
+  constructor(props) {
     super();
+
+    this.state = {
+      isSelected: props.selected
+    };
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
 
-  shouldComponentUpdate(nextProps) {
+  componentWillUpdate(nextProps) {
     if (nextProps.selected !== this.props.selected) {
+      this.setState({isSelected: nextProps.selected});
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.selected !== this.props.selected
+      || nextState.isSelected !== this.state.isSelected
+      || nextProps.isCondensed !== this.props.isCondensed) {
       return true;
     }
 
@@ -79,8 +92,14 @@ export default class Torrent extends React.Component {
     });
 
     if (!shouldUpdate) {
-      return TORRENT_PRIMITIVES_TO_OBSERVE.some((key) => {
+      shouldUpdate = TORRENT_PRIMITIVES_TO_OBSERVE.some((key) => {
         return nextTorrent[key] !== torrent[key];
+      });
+    }
+
+    if (!shouldUpdate) {
+      return Object.keys(nextProps.propWidths).some((key) => {
+        return nextProps.propWidths[key] !== this.props.propWidths[key];
       });
     }
 
@@ -96,100 +115,98 @@ export default class Torrent extends React.Component {
   }
 
   handleClick(event) {
+    this.setState({isSelected: true});
     this.props.handleClick(this.props.torrent.hash, event);
   }
 
   handleRightClick(event) {
-    if (!this.props.selected) {
+    if (!this.state.isSelected) {
       this.handleClick(event);
     }
+
     this.props.handleRightClick(this.props.torrent, event);
   }
 
+  handleSettingsChange() {
+    console.log('settings change');
+  }
+
+  getWidth(slug) {
+    const {defaultWidth, defaultPropWidths, propWidths} = this.props;
+
+    return propWidths[slug] || defaultPropWidths[slug] || defaultWidth;
+  }
+
   render() {
-    let torrent = this.props.torrent;
+    const {isSelected} = this.state;
+    const {isCondensed, torrent} = this.props;
+    const torrentClasses = torrentStatusClasses(
+      torrent,
+      {
+        'torrent--is-selected': isSelected,
+        'torrent--is-condensed': isCondensed,
+        'torrent--is-expanded': !isCondensed
+      },
+      'torrent'
+    );
 
-    let torrentClasses = torrentStatusClasses(torrent, this.props.selected ? 'is-selected' : null, 'torrent');
-
-    let isActive = torrent.downloadRate > 0 || torrent.uploadRate > 0;
-    let isDownloading = torrent.downloadRate > 0;
-
-    let secondaryDetails = [
-      <li className="torrent__details--secondary torrent__details--speed
-        torrent__details--speed--download" key="download-rate">
-        <span className="torrent__details__icon">{ICONS.downloadThick}</span>
-        <Size value={torrent.downloadRate} isSpeed={true} />
-      </li>,
-      <li className="torrent__details--secondary torrent__details--speed
-        torrent__details--speed--upload" key="upload-rate">
-        <span className="torrent__details__icon">{ICONS.uploadThick}</span>
-        <Size value={torrent.uploadRate} isSpeed={true} />
-      </li>
-    ];
-
-    if (isDownloading) {
-      secondaryDetails.unshift(
-        <li className="torrent__details--secondary torrent__details--eta"
-          key="eta">
-          <span className="torrent__details__icon">{ICONS.clock}</span>
-          <Duration value={torrent.eta} />
-        </li>
-      );
-    }
-
-    let tertiaryDetails = [
-      <li className="torrent__details--completed" key="downloaded">
-        <span className="torrent__details__icon">{ICONS.downloadThick}</span>
-        <FormattedNumber value={torrent.percentComplete} />
-        <em className="unit">%</em>
-        &nbsp;&mdash;&nbsp;
-        <Size value={torrent.bytesDone} />
-      </li>,
-      <li className="torrent__details--uploaded" key="uploaded">
-        <span className="torrent__details__icon">{ICONS.uploadThick}</span>
-        <Size value={torrent.uploadTotal} />
-      </li>,
-      <li className="torrent__details--ratio" key="ratio">
-        <span className="torrent__details__icon">{ICONS.ratio}</span>
-        <Ratio value={torrent.ratio} />
-      </li>,
-      <li className="torrent__details--size" key="size">
-        <span className="torrent__details__icon">{ICONS.disk}</span>
-        <Size value={torrent.sizeBytes} />
-      </li>,
-      <li className="torrent__details--peers" key="peers">
-        <span className="torrent__details__icon">{ICONS.peers}</span>
-        <FormattedMessage
-          id="torrent.list.peers"
-          defaultMessage="{connected} {of} {total}"
-          values={{
-            connected: <FormattedNumber value={torrent.connectedPeers} />,
-            of: <em className="unit"><FormattedMessage id="torrent.list.peers.of" defaultMessage="of" /></em>,
-            total: <FormattedNumber value={torrent.totalPeers} />
-          }}
-        />
-      </li>,
-      <li className="torrent__details--seeds" key="seeds">
-        <span className="torrent__details__icon">{ICONS.seeds}</span>
-        <FormattedMessage
-          id="torrent.list.peers"
-          defaultMessage="{connected} {of} {total}"
-          values={{
-            connected: <FormattedNumber value={torrent.connectedSeeds} />,
-            of: <em className="unit"><FormattedMessage id="torrent.list.peers.of" defaultMessage="of" /></em>,
-            total: <FormattedNumber value={torrent.totalSeeds} />
-          }}
-        />
-      </li>
-    ];
-
-    if (torrent.added) {
-      let added = new Date(torrent.added * 1000);
-
-      tertiaryDetails.push(
-        <li className="torrent__details--added" key="added">
-          <span className="torrent__details__icon">{ICONS.calendar}</span>
-          <FormattedDate value={added} />
+    if (isCondensed) {
+      return (
+        <li className={torrentClasses} onClick={this.handleClick}
+          onContextMenu={this.handleRightClick}>
+          <TorrentDetail className="table__cell"
+            slug="name"
+            value={torrent.name}
+            width={this.getWidth('name')} />
+          <TorrentDetail className="table__cell"
+            slug="progress-bar"
+            value={(
+              <ProgressBar percent={torrent.percentComplete}
+                icon={torrentStatusIcons(torrent.status)} />
+            )}
+            width={this.getWidth('percentComplete')} />
+          <TorrentDetail className="table__cell"
+            slug="downloadTotal"
+            value={torrent.downloadTotal}
+            width={this.getWidth('downloadTotal')} />
+          <TorrentDetail className="table__cell"
+            slug="downloadRate"
+            value={torrent.downloadRate}
+            width={this.getWidth('downloadRate')} />
+          <TorrentDetail className="table__cell"
+            slug="uploadTotal"
+            value={torrent.uploadTotal}
+            width={this.getWidth('uploadTotal')} />
+          <TorrentDetail className="table__cell"
+            slug="uploadRate"
+            value={torrent.uploadRate}
+            width={this.getWidth('uploadRate')} />
+          <TorrentDetail className="table__cell"
+            slug="eta"
+            value={torrent.eta}
+            width={this.getWidth('eta')} />
+          <TorrentDetail className="table__cell"
+            slug="ratio"
+            value={torrent.ratio}
+            width={this.getWidth('ratio')} />
+          <TorrentDetail className="table__cell"
+            slug="sizeBytes"
+            value={torrent.sizeBytes}
+            width={this.getWidth('sizeBytes')} />
+          <TorrentDetail className="table__cell"
+            slug="peers"
+            secondaryValue={torrent.connectedPeers}
+            value={torrent.totalPeers}
+            width={this.getWidth('peers')} />
+          <TorrentDetail className="table__cell"
+            slug="seeds"
+            secondaryValue={torrent.connectedSeeds}
+            value={torrent.totalSeeds}
+            width={this.getWidth('seeds')} />
+          <TorrentDetail className="table__cell"
+            slug="added"
+            value={torrent.added}
+            width={this.getWidth('added')} />
         </li>
       );
     }
@@ -197,21 +214,43 @@ export default class Torrent extends React.Component {
     return (
       <li className={torrentClasses} onClick={this.handleClick}
         onContextMenu={this.handleRightClick}>
-        <ul className="torrent__details">
-          <li className="torrent__details--primary text-overflow">
-            {torrent.name}
-          </li>
-          {secondaryDetails}
-        </ul>
-        <div className="torrent__details torrent__details--tertiary">
-          <ul className="torrent__details torrent__details--tertiary--stats">
-            {tertiaryDetails}
-          </ul>
-          <ul className="torrent__details torrent__details--tertiary--tags torrent__tags tag">
-            {this.getTags(torrent.tags)}
-          </ul>
+        <div className="torrent__details__section__wrapper">
+          <TorrentDetail
+            className="torrent__details__section torrent__details__section--primary"
+            slug="name"
+            value={torrent.name} />
+          <div className="torrent__details__section torrent__details__section--secondary">
+            <TorrentDetail icon slug="eta" value={torrent.eta} />
+            <TorrentDetail icon
+              slug="downloadRate"
+              value={torrent.downloadRate} />
+            <TorrentDetail icon slug="uploadRate" value={torrent.uploadRate} />
+          </div>
         </div>
-        <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
+        <div className="torrent__details__section torrent__details__section--tertiary">
+          <TorrentDetail icon
+            slug="completed"
+            secondaryValue={torrent.bytesDone}
+            value={torrent.percentComplete} />
+          <TorrentDetail icon slug="uploadTotal" value={torrent.uploadTotal} />
+          <TorrentDetail icon slug="ratio" value={torrent.ratio} />
+          <TorrentDetail icon slug="sizeBytes" value={torrent.sizeBytes} />
+          <TorrentDetail icon slug="ratio" value={torrent.ratio} />
+          <TorrentDetail icon
+            slug="peers"
+            secondaryValue={torrent.connectedPeers}
+            value={torrent.totalPeers} />
+          <TorrentDetail icon
+            slug="seeds"
+            secondaryValue={torrent.connectedSeeds}
+            value={torrent.totalSeeds} />
+          <TorrentDetail icon slug="added" value={torrent.added} />
+          <TorrentDetail icon slug="tags" value={torrent.tags} />
+        </div>
+        <div className="torrent__details__section torrent__details__section--quaternary">
+          <ProgressBar percent={torrent.percentComplete}
+            icon={torrentStatusIcons(torrent.status)} />
+        </div>
         <button className="torrent__more-info floating-action__button"
           onClick={this.props.handleDetailsClick.bind(this, torrent)}
           tabIndex="-1">
@@ -221,3 +260,9 @@ export default class Torrent extends React.Component {
     );
   }
 }
+
+Torrent.defaultProps = {
+  isCondensed: false
+};
+
+export default Torrent;

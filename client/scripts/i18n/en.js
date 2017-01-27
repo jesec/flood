@@ -165,6 +165,10 @@ export default {
 
   'settings.ui.locale': 'Locale',
   'settings.ui.language': 'Language',
+  'settings.ui.torrent.list': 'Torrent List',
+  'settings.ui.torrent.size': 'Torrent Size',
+  'settings.ui.torrent.size.expanded': 'Expanded',
+  'settings.ui.torrent.size.condensed': 'Condensed',
 
   'sidebar.button.feeds': 'Feeds',
   'sidebar.button.notifications': 'Notifications',
@@ -247,7 +251,8 @@ export default {
 
   'torrents.list.clear.filters': 'Clear Filters',
   'torrents.list.context.check.hash': 'Check Hash',
-  'torrents.list.context.move': 'Download Location...',
+  'torrents.list.context.details': 'Torrent Details',
+  'torrents.list.context.move': 'Set Download Location',
   'torrents.list.context.pause': 'Pause',
   'torrents.list.context.priority': 'Priority',
   'torrents.list.context.remove': 'Remove',
