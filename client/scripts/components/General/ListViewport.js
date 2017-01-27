@@ -6,8 +6,10 @@ import CustomScrollbars from './CustomScrollbars';
 const methodsToBind = [
   'getListPadding',
   'getViewportLimits',
+  'handleScroll',
+  'handleScrollStart',
   'handleScrollStop',
-  'postponeRerender',
+  'measureItemHeight',
   'setScrollPosition',
   'setViewportHeight'
 ];
@@ -18,12 +20,14 @@ class ListViewport extends React.Component {
   constructor() {
     super();
 
-    this.lastScrollPosition = 0;
-    this.postponedRerender = false;
+    this.lastScrollTop = 0;
     this.nodeRefs = {};
     this.state = {
+      isScrolling: false,
       itemHeight: null,
-      scrollPosition: 0
+      listVerticalPadding: null,
+      scrollTop: 0,
+      viewportHeight: null
     };
 
     methodsToBind.forEach((method) => {
@@ -31,168 +35,210 @@ class ListViewport extends React.Component {
     });
 
     this.setViewportHeight = _.debounce(this.setViewportHeight, 250);
-    this.postponeRerender = _.debounce(this.postponeRerender, 500);
-    this.setScrollPosition = _.throttle(this.setScrollPosition, 250, {
+    this.setScrollPosition = _.throttle(this.setScrollPosition, 100, {
       trailing: true
     });
   }
 
   componentDidMount() {
-    window.addEventListener('resize', this.setViewportHeight);
+    global.addEventListener('resize', this.setViewportHeight);
     this.setViewportHeight();
   }
 
   componentDidUpdate() {
-    if (this.state.itemHeight == null && this.nodeRefs.topSpacer != null) {
+    const {nodeRefs, state} = this;
+
+    if (state.itemHeight == null && nodeRefs.topSpacer != null) {
       this.setState({
-        itemHeight: this.nodeRefs.topSpacer.nextSibling.offsetHeight
+        itemHeight: nodeRefs.topSpacer.nextSibling.offsetHeight
+      });
+    }
+
+    if (state.listVerticalPadding == null && nodeRefs.list != null) {
+      const listStyle = global.getComputedStyle(nodeRefs.list);
+      const paddingBottom = Number(listStyle['padding-bottom'].replace('px', ''));
+      const paddingTop = Number(listStyle['padding-top'].replace('px', ''));
+
+      this.setState({
+        listVerticalPadding: paddingBottom + paddingTop
       });
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.setViewportHeight);
+    global.removeEventListener('resize', this.setViewportHeight);
   }
 
-  getViewportLimits() {
+  shouldComponentUpdate(nextProps, nextState) {
+    const scrollDelta = nextState.scrollTop - this.lastScrollTop;
+    const {outerScrollbar} = this.nodeRefs;
+
+    if ((nextState.isScrolling && (scrollDelta > 1000 || scrollDelta < -1000))
+      || (outerScrollbar != null && outerScrollbar.refs.scrollbar.dragging)) {
+      return false;
+    }
+
+    return true;
+  }
+
+  getViewportLimits(scrollDelta) {
     if (this.state.itemHeight == null) {
-      return {minItemIndex: 0, maxItemIndex: 1};
+      return {minItemIndex: 0, maxItemIndex: 50};
     }
 
     // Calculate the number of items that should be rendered based on the height
     // of the viewport. We offset this to render a few more outide of the
     // container's dimensions, which looks nicer when the user scrolls.
-    let offset = 0;
+    let offsetBottom = 1;
+    let offsetTop = 1;
 
-    if (this.postponedRerender === false
-      && !this.nodeRefs.list.refs.scrollbar.dragging) {
-      offset = 20;
+    if (!this.nodeRefs.outerScrollbar.refs.scrollbar.dragging) {
+      if (scrollDelta < 0) {
+        offsetTop = 18;
+      } else if (scrollDelta > 0) {
+        offsetBottom = 18;
+      } else {
+        offsetBottom = 10;
+        offsetTop = 10;
+      }
+    }
+
+    let {
+      itemHeight,
+      listVerticalPadding,
+      scrollTop,
+      viewportHeight
+    } = this.state;
+
+    if (listVerticalPadding) {
+      viewportHeight = viewportHeight - listVerticalPadding;
     }
 
     // The number of elements in view is the height of the viewport divided
     // by the height of the elements.
-    let elementsInView = Math.ceil(this.state.viewportHeight /
-      this.state.itemHeight);
+    const elementsInView = Math.ceil(viewportHeight / itemHeight);
 
     // The minimum item index to render is the number of items above the
     // viewport's current scroll position, minus the offset.
-    let minItemIndex = Math.max(
-      0, Math.floor(this.state.scrollPosition / this.state.itemHeight) - offset
+    const minItemIndex = Math.max(
+      0, Math.floor(scrollTop / itemHeight) - offsetTop
     );
 
     // The maximum item index to render is the minimum item rendered, plus the
     // number of items in view, plus double the offset.
     let maxItemIndex = Math.min(
-      this.props.listLength, minItemIndex + elementsInView + offset * 2
+      this.props.listLength,
+      minItemIndex + elementsInView + offsetBottom + offsetTop
     );
 
     return {minItemIndex, maxItemIndex};
   }
 
-  handleScrollStop() {
-    // Force update as soon as scrolling stops.
-    this.postponedRerender = false;
-    this.forceUpdate();
+  handleScroll(scrollValues) {
+    this.setScrollPosition(scrollValues);
   }
 
-  postponeRerender() {
-    global.requestAnimationFrame(() => {
-      this.postponedRerender = false;
-      this.forceUpdate();
+  handleScrollStart() {
+    this.setState({isScrolling: true});
+  }
+
+  handleScrollStop() {
+    this.setState({isScrolling: false});
+  }
+
+  measureItemHeight() {
+    this.lastScrollTop = 0;
+
+    this.setState({
+      scrollTop: 0,
+      itemHeight: null
+    }, () => {
+      this.nodeRefs.outerScrollbar.refs.scrollbar.scrollTop(0);
     });
   }
 
   getListPadding(minItemIndex, maxItemIndex, itemCount) {
-    if (this.state.itemHeight == null) {
+    const {itemHeight} = this.state;
+
+    if (itemHeight == null) {
       return {bottom: 0, top: 0};
     }
 
     // Calculate the number of pixels to pad the visible item list.
     // If the minimum item index is less than 0, then we're already at the top
-    // of the list and don't need to render any padding there.
+    // of the list and don't need to render any padding.
     if (minItemIndex < 0) {
       minItemIndex = 0;
     }
 
+    // If the max item index is larger than the item count, then we're at the
+    // bottom of the list and don't need to render any padding.
     if (maxItemIndex > itemCount) {
       maxItemIndex = itemCount;
     }
 
-    let hiddenBottom = itemCount - maxItemIndex;
-    let hiddenTop = minItemIndex;
-
-    let bottom = hiddenBottom * this.state.itemHeight;
-    let top = hiddenTop * this.state.itemHeight;
+    const bottom = (itemCount - maxItemIndex) * itemHeight;
+    const top = minItemIndex * itemHeight;
 
     return {bottom, top};
   }
 
   setScrollPosition(scrollValues) {
-    global.requestAnimationFrame(() => {
-      const {scrollTop} = scrollValues;
-      this.setState({scrollPosition: scrollTop});
-      this.lastScrollPosition = scrollTop;
-    });
+    this.lastScrollTop = this.state.scrollTop;
+    this.setState({scrollTop: scrollValues.scrollTop});
   }
 
   setViewportHeight() {
     const {nodeRefs} = this;
 
-    if (nodeRefs.list) {
+    if (nodeRefs.outerScrollbar) {
       this.setState({
-        viewportHeight: nodeRefs.list.refs.scrollbar.getClientHeight()
+        viewportHeight: nodeRefs.outerScrollbar.refs.scrollbar.getClientHeight()
       });
     }
   }
 
   render() {
-    const {lastScrollPosition, nodeRefs, props, state} = this;
-    const scrollDelta = Math.abs(state.scrollPosition - lastScrollPosition);
+    const {lastScrollTop, nodeRefs, props, state} = this;
+    const {minItemIndex, maxItemIndex} = this.getViewportLimits(
+      state.scrollTop - lastScrollTop
+    );
+    const listPadding = this.getListPadding(
+      minItemIndex, maxItemIndex, props.listLength
+    );
+    const list = [];
 
-    let listContent = null;
+    // For loops are fast, and performance matters here.
+    for (let index = minItemIndex; index < maxItemIndex; index++) {
+      list.push(props.itemRenderer(index, props.itemRendererProps));
+    }
 
-    if (nodeRefs.list != null) {
-      // If the list is cached and the user is scrolling a large amount,
-      // or the user is dragging the scroll handle, then we postpone the list's
-      // rerender for better FPS.
-      if ((cachedList != null && scrollDelta > 1000)
-        || nodeRefs.list.refs.scrollbar.dragging === true) {
-        this.postponedRerender = true;
-        listContent = cachedList;
+    const listContent = (
+      <ul className={props.listClass} ref={ref => nodeRefs.list = ref}>
+        <li className={props.topSpacerClass}
+          ref={ref => nodeRefs.topSpacer = ref}
+          style={{height: `${listPadding.top}px`}}></li>
+        {list}
+        <li className={props.bottomSpacerClass}
+          style={{height: `${listPadding.bottom}px`}}></li>
+      </ul>
+    );
 
-        global.requestAnimationFrame(() => this.postponeRerender());
-      } else {
-        const {minItemIndex, maxItemIndex} = this.getViewportLimits();
-        const listPadding = this.getListPadding(
-          minItemIndex, maxItemIndex, props.listLength
-        );
+    const scrollbarStyle = {};
 
-        let list = [];
-
-        for (let index = minItemIndex; index < maxItemIndex; index++) {
-          list.push(props.itemRenderer(index));
-        }
-
-        listContent = (
-          <ul className={props.listClass}>
-            <li className={props.topSpacerClass}
-              ref={(ref) => nodeRefs.topSpacer = ref}
-              style={{height: `${listPadding.top}px`}}></li>
-            {list}
-            <li className={props.bottomSpacerClass}
-              style={{height: `${listPadding.bottom}px`}}></li>
-          </ul>
-        );
-
-        cachedList = listContent;
-      }
+    if (props.width != null) {
+      scrollbarStyle.width = props.width;
     }
 
     return (
       <CustomScrollbars className={props.scrollContainerClass}
+        getVerticalThumb={props.getVerticalThumb}
+        onScrollStart={this.handleScrollStart}
         onScrollStop={this.handleScrollStop}
-        ref={(ref) => this.nodeRefs.list = ref}
-        scrollHandler={this.setScrollPosition}>
+        ref={ref => this.nodeRefs.outerScrollbar = ref}
+        scrollHandler={this.handleScroll}
+        style={scrollbarStyle}>
+        {props.children}
         {listContent}
       </CustomScrollbars>
     );
