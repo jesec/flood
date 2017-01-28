@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import classnames from 'classnames';
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import TorrentProperties from '../../constants/TorrentProperties';
@@ -137,7 +137,11 @@ class TableHeading extends React.Component {
           key={slug}
           onClick={event => this.handleCellClick(slug, event)}
           style={{width: `${width}px`}}>
-          <span className="table__heading__label" title={label}>
+          <span className="table__heading__label"
+            title={this.props.intl.formatMessage({
+              id: TorrentProperties[slug].id,
+              defaultMessage: TorrentProperties[slug].defaultMessage
+            })}>
             {label}
           </span>
           {handle}
@@ -161,4 +165,4 @@ class TableHeading extends React.Component {
   }
 }
 
-export default TableHeading;
+export default injectIntl(TableHeading);
