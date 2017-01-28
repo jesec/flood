@@ -167,7 +167,7 @@ class Torrent extends React.Component {
             width={this.getWidth('percentComplete')} />
           <TorrentDetail className="table__cell"
             slug="downloadTotal"
-            value={torrent.downloadTotal}
+            value={torrent.bytesDone}
             width={this.getWidth('downloadTotal')} />
           <TorrentDetail className="table__cell"
             slug="downloadRate"
