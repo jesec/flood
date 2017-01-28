@@ -572,6 +572,16 @@ $more-info--border: $textbox-repeater--button--border;
       margin-right: 5px;
       width: 12px;
     }
+
+    .progress-bar {
+
+      &__icon {
+
+        .icon {
+          margin-right: 0;
+        }
+      }
+    }
   }
 
   &__more-info {

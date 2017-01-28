@@ -23,6 +23,19 @@ $progress-bar--fill--selected: #fff;
 $progress-bar--fill--selected--stopped: #5daaeb;
 $progress-bar--fill--stopped: #e7ebee;
 
+$progress-bar--track--fill: $green;
+
+$progress-bar--track--fill--checking: rgba(#8899a8, 0.25);
+$progress-bar--track--fill--completed: rgba($blue, 0.25);
+$progress-bar--track--fill--error: rgba(#e95779, 0.25);
+$progress-bar--track--fill--error--stopped: rgba(#f2acbc, 0.25);
+$progress-bar--track--fill--selected: rgba(#fff, 0.25);
+$progress-bar--track--fill--selected--stopped: rgba(#5daaeb, 0.25);
+$progress-bar--track--fill--stopped: rgba(#e7ebee, 0.25);
+
+$progress-bar--track--background--selected: rgba(#fff, 0.15);
+$progress-bar--track--background--selected--stopped: rgba(#fff, 0.15);
+
 .progress-bar {
   align-items: center;
   display: flex;
@@ -74,11 +87,9 @@ $progress-bar--fill--stopped: #e7ebee;
     background: $progress-bar--fill;
     display: block;
     height: $progress-bar--height;
-    position: relative;
     transform-origin: 0 0;
-    transition: background 0s, width 0.25s;
+    transition: transform 0.25s;
     width: 100%;
-    z-index: 1;
 
     .torrent--is-seeding & {
       background: $progress-bar--fill--completed;
@@ -113,58 +124,107 @@ $progress-bar--fill--stopped: #e7ebee;
       position: relative;
       height: 3px;
 
-      &:after {
-        background: $progress-bar--fill;
-        content: '';
-        height: 1px;
-        left: 0;
-        opacity: 0.5;
-        position: absolute;
-        z-index: 0;
-        top: 1px;
-        transition: background 0.25s, opacity 0.25s;
-        width: 100%;
+      .torrent--is-condensed & {
+        background: $progress-bar--track--fill;
+      }
 
-        .torrent--is-stopped & {
-          background: $progress-bar--fill--stopped;
-        }
+      .torrent--is-condensed.torrent--is-stopped & {
+        background: $progress-bar--track--fill--stopped;
+      }
 
-        .torrent--has-error & {
-          background: $progress-bar--fill--error;
-        }
+      .torrent--is-condensed.torrent--has-error & {
+        background: $progress-bar--track--fill--error;
+      }
 
-        .torrent--is-selected & {
-          background: $progress-bar--background--selected;
-        }
+      .torrent--is-condensed.torrent--is-selected & {
+        background: $progress-bar--track--background--selected;
+      }
 
-        .torrent--has-error.torrent--is-stopped & {
-          background: $progress-bar--fill--error--stopped;
-        }
+      .torrent--is-condensed.torrent--has-error.torrent--is-stopped & {
+        background: $progress-bar--track--fill--error--stopped;
+      }
 
-        .torrent--is-selected.torrent--is-stopped & {
-          background: $progress-bar--background--selected--stopped;
-          opacity: 1;
-        }
+      .torrent--is-condensed.torrent--is-selected.torrent--is-stopped & {
+        background: $progress-bar--track--background--selected--stopped;
+        opacity: 1;
+      }
 
-        .torrent--is-checking & {
-          animation: candy-stripe 0.25s linear infinite;
-          background-color: transparent;
-          background-image: linear-gradient(-45deg, rgba($progress-bar--fill--checking, 0) 0,
-            rgba($progress-bar--fill--checking, 0) 25%, rgba($progress-bar--fill--checking, 0.5) 25%,
-            rgba($progress-bar--fill--checking, 0.5) 50%, rgba($progress-bar--fill--checking, 0) 50%,
-            rgba($progress-bar--fill--checking, 0) 75%, rgba($progress-bar--fill--checking, 0.5) 75%,
-            rgba($progress-bar--fill--checking, 0.5) 100%);
-          background-size: 4px 4px;
-          height: $progress-bar--height;
-          top: 0;
-        }
+      .torrent--is-condensed.torrent--is-checking & {
+        animation: candy-stripe 0.25s linear infinite;
+        background-color: transparent;
+        background-image: linear-gradient(-45deg, rgba($progress-bar--track--fill--checking, 0) 0,
+          rgba($progress-bar--track--fill--checking, 0) 25%, rgba($progress-bar--track--fill--checking, 0.5) 25%,
+          rgba($progress-bar--track--fill--checking, 0.5) 50%, rgba($progress-bar--track--fill--checking, 0) 50%,
+          rgba($progress-bar--track--fill--checking, 0) 75%, rgba($progress-bar--track--fill--checking, 0.5) 75%,
+          rgba($progress-bar--track--fill--checking, 0.5) 100%);
+        background-size: 4px 4px;
+        height: $progress-bar--height;
+        top: 0;
+      }
 
-        .torrent--is-selected.torrent--is-checking & {
-          background-image: linear-gradient(-45deg, rgba(#fff, 0) 0,
-            rgba(#fff, 0) 25%, rgba(#fff, 0.5) 25%,
-            rgba(#fff, 0.5) 50%, rgba(#fff, 0) 50%,
-            rgba(#fff, 0) 75%, rgba(#fff, 0.5) 75%,
-            rgba(#fff, 0.5) 100%);
+      .torrent--is-condensed.torrent--is-selected.torrent--is-checking & {
+        background-image: linear-gradient(-45deg, rgba(#fff, 0) 0,
+          rgba(#fff, 0) 25%, rgba(#fff, 0.5) 25%,
+          rgba(#fff, 0.5) 50%, rgba(#fff, 0) 50%,
+          rgba(#fff, 0) 75%, rgba(#fff, 0.5) 75%,
+          rgba(#fff, 0.5) 100%);
+      }
+
+      .torrent--is-expanded & {
+
+        &:after {
+          background: $progress-bar--track--fill;
+          content: '';
+          height: 1px;
+          left: 0;
+          opacity: 0.5;
+          position: absolute;
+          z-index: 0;
+          top: 1px;
+          transition: background 0.25s, opacity 0.25s;
+          width: 100%;
+
+          .torrent--is-stopped & {
+            background: $progress-bar--track--fill--stopped;
+          }
+
+          .torrent--has-error & {
+            background: $progress-bar--track--fill--error;
+          }
+
+          .torrent--is-selected & {
+            background: $progress-bar--track--background--selected;
+          }
+
+          .torrent--has-error.torrent--is-stopped & {
+            background: $progress-bar--track--fill--error--stopped;
+          }
+
+          .torrent--is-selected.torrent--is-stopped & {
+            background: $progress-bar--track--background--selected--stopped;
+            opacity: 1;
+          }
+
+          .torrent--is-checking & {
+            animation: candy-stripe 0.25s linear infinite;
+            background-color: transparent;
+            background-image: linear-gradient(-45deg, rgba($progress-bar--track--fill--checking, 0) 0,
+              rgba($progress-bar--track--fill--checking, 0) 25%, rgba($progress-bar--track--fill--checking, 0.5) 25%,
+              rgba($progress-bar--track--fill--checking, 0.5) 50%, rgba($progress-bar--track--fill--checking, 0) 50%,
+              rgba($progress-bar--track--fill--checking, 0) 75%, rgba($progress-bar--track--fill--checking, 0.5) 75%,
+              rgba($progress-bar--track--fill--checking, 0.5) 100%);
+            background-size: 4px 4px;
+            height: $progress-bar--height;
+            top: 0;
+          }
+
+          .torrent--is-selected.torrent--is-checking & {
+            background-image: linear-gradient(-45deg, rgba(#fff, 0) 0,
+              rgba(#fff, 0) 25%, rgba(#fff, 0.5) 25%,
+              rgba(#fff, 0.5) 50%, rgba(#fff, 0) 50%,
+              rgba(#fff, 0) 75%, rgba(#fff, 0.5) 75%,
+              rgba(#fff, 0.5) 100%);
+          }
         }
       }
     }
