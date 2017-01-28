@@ -509,8 +509,10 @@ class TorrentListContainer extends React.Component {
     let listWrapperStyle = null;
     let torrentListHeading = null;
     const isCondensed = this.state.torrentListViewSize === 'condensed';
+    const isListEmpty = this.state.emptyTorrentList
+      || this.state.torrents.length === 0;
 
-    if (this.state.emptyTorrentList || this.state.torrents.length === 0) {
+    if (isListEmpty) {
       content = this.getEmptyTorrentListNotification();
     } else if (this.state.torrentRequestSuccess) {
       content = (
@@ -546,7 +548,7 @@ class TorrentListContainer extends React.Component {
       );
     }
 
-    if (this.state.torrentListViewSize === 'condensed') {
+    if (this.state.torrentListViewSize === 'condensed' && !isListEmpty) {
       listWrapperStyle = {width: `${this.getTotalCellWidth()}px`};
     }
 
