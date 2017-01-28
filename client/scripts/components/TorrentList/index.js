@@ -496,7 +496,7 @@ class TorrentListContainer extends React.Component {
   }
 
   updateVerticalThumbPosition(offset) {
-    this.verticalScrollbarThumb.style.transform = `translateX(${offset}px)`
+    this.verticalScrollbarThumb.style.transform = `translateX(${offset}px)`;
   }
 
   render() {
