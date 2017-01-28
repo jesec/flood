@@ -84,7 +84,10 @@ class ListViewport extends React.Component {
 
   getViewportLimits(scrollDelta) {
     if (this.state.itemHeight == null) {
-      return {minItemIndex: 0, maxItemIndex: 50};
+      return {
+        minItemIndex: 0,
+        maxItemIndex: Math.min(50, this.props.listLength)
+      };
     }
 
     // Calculate the number of items that should be rendered based on the height
