@@ -80,6 +80,20 @@ $table--heading--resize--indicator--background: rgba(darken(#f6f8fA, 10%), 0.75)
       }
     }
 
+    &--fill {
+      flex: 1 1 auto;
+      min-width: 0;
+
+      &.table {
+
+        &__heading {
+          border: none;
+          margin: 0;
+          padding: 0;
+        }
+      }
+    }
+
     &__handle {
       bottom: 0;
       cursor: col-resize;

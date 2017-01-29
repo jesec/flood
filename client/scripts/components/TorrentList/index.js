@@ -45,7 +45,8 @@ const METHODS_TO_BIND = [
   'onTorrentFilterChange',
   'onTorrentSelectionChange',
   'updateVerticalThumbPosition',
-  'renderListItem'
+  'renderListItem',
+  'updateTorrentListViewWidth'
 ];
 
 const defaultWidth = 100;
@@ -72,6 +73,7 @@ class TorrentListContainer extends React.Component {
         SettingsStore.getFloodSettings('torrentListColumnWidths'),
       torrentListViewSize:
         SettingsStore.getFloodSettings('torrentListViewSize'),
+      torrentListViewportSize: null,
       torrents: [],
       torrentRequestError: false,
       torrentRequestSuccess: false,
@@ -86,6 +88,12 @@ class TorrentListContainer extends React.Component {
       id: 'torrent-list',
       message: props.intl.formatMessage(MESSAGES.torrentListDependency)
     });
+
+    this.updateTorrentListViewWidth = _.debounce(
+      this.updateTorrentListViewWidth,
+      100,
+      {trailing: true}
+    );
   }
 
   componentDidMount() {
@@ -118,6 +126,7 @@ class TorrentListContainer extends React.Component {
       this.onContextMenuChange
     );
     TorrentStore.fetchTorrents();
+    global.addEventListener('resize', this.updateTorrentListViewWidth);
   }
 
   componentWillUnmount() {
@@ -149,6 +158,7 @@ class TorrentListContainer extends React.Component {
       EventTypes.UI_CONTEXT_MENU_CHANGE,
       this.onContextMenuChange
     );
+    global.removeEventListener('resize', this.updateTorrentListViewWidth);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -162,6 +172,11 @@ class TorrentListContainer extends React.Component {
     const {torrentListViewSize} = this.state;
     const isCondensed = torrentListViewSize === 'condensed';
     const wasCondensed = prevState.torrentListViewSize === 'condensed';
+
+    if (this.horizontalScrollRef != null
+      && this.state.torrentListViewportSize == null) {
+      this.updateTorrentListViewWidth();
+    }
 
     if (this.verticalScrollbarThumb != null) {
       if (!isCondensed && wasCondensed) {
@@ -421,6 +436,18 @@ class TorrentListContainer extends React.Component {
     return value;
   }
 
+  getListWrapperStyle(options = {}) {
+    if (options.isCondensed && !options.isListEmpty) {
+      const totalCellWidth = this.getTotalCellWidth();
+
+      if (totalCellWidth >= this.state.torrentListViewportSize) {
+        return {width: `${totalCellWidth}px`};
+      }
+    }
+
+    return null;
+  }
+
   getLoadingIndicator() {
     return <LoadingIndicator />;
   }
@@ -495,6 +522,15 @@ class TorrentListContainer extends React.Component {
     );
   }
 
+  updateTorrentListViewWidth() {
+    if (this.horizontalScrollRef != null) {
+      this.setState({
+        torrentListViewportSize:
+          this.horizontalScrollRef.refs.scrollbar.getClientWidth()
+      });
+    }
+  }
+
   updateVerticalThumbPosition(offset) {
     this.verticalScrollbarThumb.style.transform = `translateX(${offset}px)`;
   }
@@ -506,11 +542,14 @@ class TorrentListContainer extends React.Component {
 
     let content = null;
     let contextMenu = null;
-    let listWrapperStyle = null;
     let torrentListHeading = null;
     const isCondensed = this.state.torrentListViewSize === 'condensed';
     const isListEmpty = this.state.emptyTorrentList
       || this.state.torrents.length === 0;
+    const listWrapperStyle = this.getListWrapperStyle({
+      isCondensed,
+      isListEmpty
+    });
 
     if (isListEmpty) {
       content = this.getEmptyTorrentListNotification();
@@ -548,15 +587,12 @@ class TorrentListContainer extends React.Component {
       );
     }
 
-    if (this.state.torrentListViewSize === 'condensed' && !isListEmpty) {
-      listWrapperStyle = {width: `${this.getTotalCellWidth()}px`};
-    }
-
     return (
       <div className="torrents" ref={ref => this.listContainer = ref}>
         <CustomScrollbars className="torrent__list__scrollbars--horizontal"
           onScrollStop={this.handleHorizontalScrollStop}
-          nativeScrollHandler={this.handleHorizontalScroll}>
+          nativeScrollHandler={this.handleHorizontalScroll}
+          ref={ref => this.horizontalScrollRef = ref}>
           <div className="torrent__list__wrapper"
             style={listWrapperStyle}>
             <CSSTransitionGroup

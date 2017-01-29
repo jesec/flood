@@ -157,6 +157,7 @@ class TableHeading extends React.Component {
       <div className="table__row table__row--heading"
         ref={ref => this.tableHeading = ref}>
         {this.getHeadingElements()}
+        <div className="table__cell table__heading table__heading--fill" />
         <div className="table__heading__resize-line"
           ref={ref => this.resizeLine = ref}
           style={dragIndicatorStyle} />
