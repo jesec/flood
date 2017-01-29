@@ -56,25 +56,3 @@ body {
     }
   }
 }
-
-.torrent {
-
-  &__header {
-    flex: 1;
-    min-height: 35px;
-    max-height: 35px;
-  }
-
-  &__list {
-
-    &__wrapper {
-      display: flex;
-      flex: 1;
-
-      &--custom-scroll {
-        flex: 1;
-        height: auto !important;
-      }
-    }
-  }
-}

@@ -11,20 +11,16 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
 
 .action-bar {
   background: $action-bar--background;
+  border-bottom: 1px solid $torrent-list--border;
   color: $action-bar--foreground;
   display: flex;
   flex: 0 0 60px;
+  height: 60px;
   position: relative;
 
-  &:after {
-    background: $torrent-list--border;
-    bottom: 0;
-    content: '';
-    height: 1px;
-    left: 9px;
-    position: absolute;
-    right: 0;
-    width: auto;
+  &--is-condensed {
+    flex-basis: 30px;
+    height: 30px;
   }
 
   &__item {
@@ -47,12 +43,17 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
           min-width: 250px;
         }
       }
+
+      .action-bar--is-condensed & {
+        display: none;
+      }
     }
 
     &--torrent-operations {
       display: flex;
       flex: 0 0 auto;
       flex-direction: row;
+      margin-left: auto;
 
       .dropdown {
         display: flex;
@@ -70,6 +71,10 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
     display: flex;
     font-size: 0;
     padding: 0 15px;
+
+    .action-bar--is-condensed & {
+      padding: 0 10px;
+    }
 
     &--has-divider {
       position: relative;
@@ -114,6 +119,16 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
     }
   }
 
+  .action-bar--is-condensed & {
+    height: 30px;
+    width: 46px;
+
+    .icon {
+      height: 18px;
+      width: 18px;
+    }
+  }
+
   &__label {
     display: block;
     position: absolute;
@@ -129,6 +144,6 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
     top: 50%;
     transition: fill 0.25s;
     transform: translateX(-50%) translateY(-50%);
-    width: 30px;
+    width: 25px;
   }
 }
