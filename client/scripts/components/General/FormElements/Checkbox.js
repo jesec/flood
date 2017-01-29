@@ -3,9 +3,9 @@ import React from 'react';
 
 import Checkmark from '../../Icons/Checkmark';
 
-const METHODS_TO_BIND = ['handleCheckboxChange', 'syncStateWithProps'];
+const METHODS_TO_BIND = ['handleChange', 'syncStateWithProps'];
 
-export default class Checkbox extends React.Component {
+class Checkbox extends React.Component {
   constructor() {
     super();
 
@@ -24,7 +24,7 @@ export default class Checkbox extends React.Component {
     return this.state.checked;
   }
 
-  handleCheckboxChange(event) {
+  handleChange(event) {
     let currentCheckedState = this.state.checked;
     let newCheckedState = !currentCheckedState;
 
@@ -54,7 +54,7 @@ export default class Checkbox extends React.Component {
     return (
       <label className={classes} onClick={this.handleClick}>
         <input type="checkbox" checked={checked}
-          onChange={this.handleCheckboxChange} />
+          onChange={this.handleChange} />
         <span className="checkbox__decoy">
           <Checkmark />
         </span>
@@ -71,3 +71,5 @@ Checkbox.defaultProps = {
   children: null,
   useProps: false
 };
+
+export default Checkbox;
