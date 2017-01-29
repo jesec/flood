@@ -78,6 +78,7 @@ $more-info--border: $textbox-repeater--button--border;
 
     &--name {
       color: $torrent--primary--foreground;
+      font-weight: 500;
     }
 
     &--downloadRate,
@@ -131,6 +132,7 @@ $more-info--border: $textbox-repeater--button--border;
 
         &--name {
           color: $torrent--primary--foreground--stopped;
+          font-weight: 400;
         }
 
         &--tags {
@@ -173,18 +175,35 @@ $more-info--border: $textbox-repeater--button--border;
     }
   }
 
-  &--is-active {
+  &--is-downloading {
 
-    .torrent {
+    &--actively {
 
-      &__detail {
+      .torrent {
 
-        &--downloadRate {
-          color: $green;
+        &__detail {
+
+          &--downloadRate {
+            color: $green;
+            font-weight: 500;
+          }
         }
+      }
+    }
+  }
 
-        &--uploadRate {
-          color: $blue;
+  &--is-uploading {
+
+    &--actively {
+
+      .torrent {
+
+        &__detail {
+
+          &--uploadRate {
+            color: $blue;
+            font-weight: 500;
+          }
         }
       }
     }

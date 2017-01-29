@@ -177,10 +177,12 @@ class Torrent {
       torrentStatus.push(torrentStatusMap.error);
     }
 
-    if (uploadRate === '0' && downloadRate === '0') {
-      torrentStatus.push(torrentStatusMap.inactive);
-    } else {
-      torrentStatus.push(torrentStatusMap.active);
+    if (uploadRate !== '0') {
+      torrentStatus.push(torrentStatusMap.activelyUploading);
+    }
+
+    if (downloadRate !== '0') {
+      torrentStatus.push(torrentStatusMap.activelyDownloading);
     }
 
     return torrentStatus;
