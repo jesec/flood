@@ -19,6 +19,12 @@ class UIStoreClass extends BaseStore {
     this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
     this.createStyleElement();
+
+    this.fetchDirectoryList = _.debounce(
+      this.fetchDirectoryList,
+      100,
+      {leading: true}
+    );
   }
 
   addGlobalStyle(cssString) {
