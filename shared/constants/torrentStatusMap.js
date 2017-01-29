@@ -8,6 +8,8 @@ let torrentStatusMap = objectUtil.reflect({
   p: 'paused',
   c: 'complete',
   d: 'downloading',
+  ad: 'activelyDownloading',
+  au: 'activelyUploading',
   s: 'stopped',
   e: 'error',
   i: 'inactive',
@@ -15,7 +17,7 @@ let torrentStatusMap = objectUtil.reflect({
 });
 
 torrentStatusMap.statusShorthand = [
-  'ch', 'sd', 'p', 'c', 'd', 's', 'e', 'i', 'a'
+  'ch', 'sd', 'p', 'c', 'd', 'ad', 'au', 's', 'e', 'i', 'a'
 ];
 
 module.exports = torrentStatusMap;
