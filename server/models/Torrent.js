@@ -145,6 +145,7 @@ class Torrent {
   }
 
   getStatus(clientData) {
+    let isActive = false;
     let isHashChecking = clientData.isHashChecking;
     let isComplete = clientData.isComplete;
     let isOpen = clientData.isOpen;
@@ -178,11 +179,19 @@ class Torrent {
     }
 
     if (uploadRate !== '0') {
+      isActive = true;
       torrentStatus.push(torrentStatusMap.activelyUploading);
     }
 
     if (downloadRate !== '0') {
+      isActive = true;
       torrentStatus.push(torrentStatusMap.activelyDownloading);
+    }
+
+    if (isActive) {
+      torrentStatus.push(torrentStatusMap.active);
+    } else {
+      torrentStatus.push(torrentStatusMap.inactive);
     }
 
     return torrentStatus;
