@@ -4,7 +4,7 @@ import ActionTypes from '../constants/ActionTypes';
 import AlertStore from './AlertStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import config from '../../../config';
+import ConfigStore from './ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import {filterTorrents} from '../util/filterTorrents';
 import FloodActions from '../actions/FloodActions';
@@ -15,6 +15,8 @@ import {sortTorrents} from '../util/sortTorrents';
 import TorrentActions from '../actions/TorrentActions';
 import TorrentFilterStore from './TorrentFilterStore';
 import UIStore from './UIStore';
+
+const pollInterval = ConfigStore.getPollInterval();
 
 class TorrentStoreClass extends BaseStore {
   constructor() {
@@ -267,13 +269,14 @@ class TorrentStoreClass extends BaseStore {
   startPollingTorrentDetails() {
     this.pollTorrentDetailsIntervalID = setInterval(
       this.fetchTorrentDetails.bind(this),
-      config.pollInterval
+      pollInterval
     );
   }
 
   startPollingTorrents() {
     this.pollTorrentsIntervalID = setInterval(
-      this.fetchTorrents.bind(this), config.pollInterval
+      this.fetchTorrents.bind(this),
+      pollInterval
     );
   }
 

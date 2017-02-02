@@ -2,10 +2,13 @@ import axios from 'axios';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import ConfigStore from '../stores/ConfigStore';
+
+const baseURI = ConfigStore.getBaseURI();
 
 let TorrentActions = {
   addTorrentsByUrls: (options) => {
-    return axios.post('/api/client/add', options)
+    return axios.post(`${baseURI}api/client/add`, options)
       .then((json = {}) => {
         return json.data;
       })
@@ -29,7 +32,7 @@ let TorrentActions = {
   },
 
   addTorrentsByFiles: (filesData, destination) => {
-    return axios.post('/api/client/add-files', filesData)
+    return axios.post(`${baseURI}api/client/add-files`, filesData)
       .then((json = {}) => {
         return json.data;
       })
@@ -53,7 +56,7 @@ let TorrentActions = {
   },
 
   deleteTorrents: (hash, deleteData) => {
-    return axios.post('/api/client/torrents/delete', {hash, deleteData})
+    return axios.post(`${baseURI}api/client/torrents/delete`, {hash, deleteData})
       .then((json = {}) => {
         return json.data;
       })
@@ -78,7 +81,7 @@ let TorrentActions = {
   },
 
   checkHash: (hash) => {
-    return axios.post('/api/client/torrents/check-hash', {hash})
+    return axios.post(`${baseURI}api/client/torrents/check-hash`, {hash})
       .then((json = {}) => {
         return json.data;
       })
@@ -102,7 +105,7 @@ let TorrentActions = {
   },
 
   fetchTorrents: () => {
-    return axios.get('/api/client/torrents')
+    return axios.get(`${baseURI}api/client/torrents`)
       .then((json = {}) => {
         return json.data;
       })
@@ -124,7 +127,7 @@ let TorrentActions = {
   },
 
   fetchTorrentDetails: (hash) => {
-    return axios.post('/api/client/torrent-details', {
+    return axios.post(`${baseURI}api/client/torrent-details`, {
         hash
       })
       .then((json = {}) => {
@@ -149,7 +152,7 @@ let TorrentActions = {
   },
 
   fetchTorrentTaxonomy: () => {
-    return axios.get('/api/client/torrents/taxonomy')
+    return axios.get(`${baseURI}api/client/torrents/taxonomy`)
       .then((json = {}) => {
         return json.data;
       })
@@ -167,7 +170,7 @@ let TorrentActions = {
   },
 
   fetchTorrentStatusCount: () => {
-    return axios.get('/api/client/torrents/status-count')
+    return axios.get(`${baseURI}api/client/torrents/status-count`)
       .then((json = {}) => {
         return json.data;
       })
@@ -185,7 +188,7 @@ let TorrentActions = {
   },
 
   fetchTorrentTrackerCount: () => {
-    return axios.get('/api/client/torrents/tracker-count')
+    return axios.get(`${baseURI}api/client/torrents/tracker-count`)
       .then((json = {}) => {
         return json.data;
       })
@@ -205,7 +208,7 @@ let TorrentActions = {
   moveTorrents: (hashes, options) => {
     let {destination, filenames, sources, moveFiles} = options;
 
-    return axios.post('/api/client/torrents/move',
+    return axios.post(`${baseURI}api/client/torrents/move`,
       {hashes, destination, filenames, sources, moveFiles})
       .then((json = {}) => {
         return json.data;
@@ -227,7 +230,7 @@ let TorrentActions = {
   },
 
   pauseTorrents: (hashes) => {
-    return axios.post('/api/client/pause', {
+    return axios.post(`${baseURI}api/client/pause`, {
         hashes
       })
       .then((json = {}) => {
@@ -251,7 +254,7 @@ let TorrentActions = {
   },
 
   startTorrents: (hashes) => {
-    return axios.post('/api/client/start', {
+    return axios.post(`${baseURI}api/client/start`, {
         hashes
       })
       .then((json = {}) => {
@@ -275,7 +278,7 @@ let TorrentActions = {
   },
 
   stopTorrents: (hashes) => {
-    return axios.post('/api/client/stop', {
+    return axios.post(`${baseURI}api/client/stop`, {
         hashes
       })
       .then((json = {}) => {
@@ -299,7 +302,7 @@ let TorrentActions = {
   },
 
   setPriority: (hash, priority) => {
-    return axios.patch(`/api/client/torrents/${hash}/priority`, {
+    return axios.patch(`${baseURI}api/client/torrents/${hash}/priority`, {
         hash,
         priority
       })
@@ -320,7 +323,7 @@ let TorrentActions = {
   },
 
   setFilePriority: (hash, fileIndices, priority) => {
-    return axios.patch(`/api/client/torrents/${hash}/file-priority`, {
+    return axios.patch(`${baseURI}api/client/torrents/${hash}/file-priority`, {
         hash,
         fileIndices,
         priority
@@ -347,7 +350,7 @@ let TorrentActions = {
   },
 
   setTaxonomy: (hashes, tags, options = {}) => {
-    return axios.patch(`/api/client/torrents/taxonomy`, {
+    return axios.patch(`${baseURI}api/client/torrents/taxonomy`, {
         hashes,
         tags,
         options

@@ -2,10 +2,13 @@ import axios from 'axios';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
+import ConfigStore from '../stores/ConfigStore';
+
+const baseURI = ConfigStore.getBaseURI();
 
 let SettingsActions = {
   addFeed: (feed) => {
-    return axios.put('/api/feed-monitor/feeds', feed)
+    return axios.put(`${baseURI}api/feed-monitor/feeds`, feed)
       .then((json = {}) => {
         return json.data;
       })
@@ -23,7 +26,7 @@ let SettingsActions = {
   },
 
   addRule: (rule) => {
-    return axios.put('/api/feed-monitor/rules', rule)
+    return axios.put(`${baseURI}api/feed-monitor/rules`, rule)
       .then((json = {}) => {
         return json.data;
       })
@@ -41,7 +44,7 @@ let SettingsActions = {
   },
 
   fetchFeedMonitors: (query) => {
-    return axios.get('/api/feed-monitor', query)
+    return axios.get(`${baseURI}api/feed-monitor`, query)
       .then((json = {}) => {
         return json.data;
       })
@@ -59,7 +62,7 @@ let SettingsActions = {
   },
 
   fetchFeeds: (query) => {
-    return axios.get('/api/feed-monitor/feeds', query)
+    return axios.get(`${baseURI}api/feed-monitor/feeds`, query)
       .then((json = {}) => {
         return json.data;
       })
@@ -77,7 +80,7 @@ let SettingsActions = {
   },
 
   fetchRules: (query) => {
-    return axios.get('/api/feed-monitor/rules', query)
+    return axios.get(`${baseURI}api/feed-monitor/rules`, query)
       .then((json = {}) => {
         return json.data;
       })
@@ -95,7 +98,7 @@ let SettingsActions = {
   },
 
   fetchSettings: (property) => {
-    return axios.get('/api/settings', {params: {property}})
+    return axios.get(`${baseURI}api/settings`, {params: {property}})
       .then((json = {}) => {
         return json.data;
       })
@@ -113,7 +116,7 @@ let SettingsActions = {
   },
 
   removeFeedMonitor: (id) => {
-    return axios.delete(`/api/feed-monitor/${id}`)
+    return axios.delete(`${baseURI}api/feed-monitor/${id}`)
       .then((json = {}) => {
         return json.data;
       })
@@ -137,7 +140,7 @@ let SettingsActions = {
   },
 
   saveSettings: (settings, options = {}) => {
-    return axios.patch('/api/settings', settings)
+    return axios.patch(`${baseURI}api/settings`, settings)
       .then((json = {}) => {
         return json.data;
       })

@@ -6,7 +6,7 @@ let client = require('./client');
 let config = require('../../config');
 let HistoryEra = require('./HistoryEra');
 
-let pollInterval = null;
+let pollIntervalID = null;
 
 let yearSnapshot = new HistoryEra({
   interval: 1000 * 60 * 60 * 24 * 7, // 7 days
@@ -110,7 +110,7 @@ let history = {
   },
 
   startPolling: () => {
-    pollInterval = setInterval(() => {
+    pollIntervalID = setInterval(() => {
       client.getTransferStats((data, err) => {
         if (err) {
           return;
@@ -125,8 +125,8 @@ let history = {
   },
 
   stopPolling: () => {
-    clearInterval(pollInterval);
-    pollInterval = null;
+    clearInterval(pollIntervalID);
+    pollIntervalID = null;
   }
 }
 

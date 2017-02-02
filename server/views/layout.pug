@@ -2,7 +2,9 @@ doctype html
 html
   head
     title= title
-    link(rel='stylesheet' href='/style.css')
+    link(rel='stylesheet' href='./style.css')
+    script.
+      window.floodConfig = {baseURI: '!{baseURI}', maxHistoryStates: !{maxHistoryStates}, pollInterval: !{pollInterval}};
   body
     block content
-    script(src='/app.js')
+    script(src='./app.js')
