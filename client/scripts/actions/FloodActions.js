@@ -3,10 +3,13 @@ import axios from 'axios';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AuthStore from '../stores/AuthStore';
+import ConfigStore from '../stores/ConfigStore';
+
+const baseURI = ConfigStore.getBaseURI();
 
 let FloodActions = {
   clearNotifications: (options) => {
-    return axios.delete('/api/notifications')
+    return axios.delete(`${baseURI}api/notifications`)
       .then((json = {}) => {
         return json.data;
       })
@@ -29,7 +32,7 @@ let FloodActions = {
   },
 
   fetchDirectoryList: (options = {}) => {
-    return axios.get('/api/directory-list', {
+    return axios.get(`${baseURI}api/directory-list`, {
         params: options
       })
       .then((json = {}) => {
@@ -54,7 +57,7 @@ let FloodActions = {
   },
 
   fetchMediainfo: (options) => {
-    return axios.get('/api/mediainfo', {
+    return axios.get(`${baseURI}api/mediainfo`, {
         params: {
           hash: options.hash
         }
@@ -79,7 +82,7 @@ let FloodActions = {
   },
 
   fetchNotifications: (options) => {
-    return axios.get('/api/notifications', {
+    return axios.get(`${baseURI}api/notifications`, {
         params: {
           limit: options.limit,
           start: options.start
@@ -107,7 +110,7 @@ let FloodActions = {
   },
 
   fetchTransferData: () => {
-    return axios.get('/api/stats')
+    return axios.get(`${baseURI}api/stats`)
       .then((json = {}) => {
         return json.data;
       })
@@ -129,7 +132,7 @@ let FloodActions = {
   },
 
   fetchTransferHistory: (opts) => {
-    return axios.get('/api/history', {
+    return axios.get(`${baseURI}api/history`, {
       params: opts
     })
     .then((json = {}) => {

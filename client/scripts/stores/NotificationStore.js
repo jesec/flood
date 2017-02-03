@@ -1,9 +1,11 @@
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import config from '../../../config';
+import ConfigStore from './ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
+
+const pollInterval = ConfigStore.getPollInterval();
 
 class NotificationStoreClass extends BaseStore {
   constructor() {
@@ -61,7 +63,7 @@ class NotificationStoreClass extends BaseStore {
       ...options,
       intervalID: setInterval(
         this.fetchNotifications.bind(this, options),
-        config.pollInterval
+        pollInterval
       )
     };
   }

@@ -1,9 +1,12 @@
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import config from '../../../config';
+import ConfigStore from './ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
+
+const pollInterval = ConfigStore.getPollInterval();
+const maxHistoryStates = ConfigStore.getMaxHistoryStates();
 
 class TransferDataStoreClass extends BaseStore {
   constructor() {
@@ -84,7 +87,7 @@ class TransferDataStoreClass extends BaseStore {
     let downloadRateThrottleHistory = Object.assign([], this.throttles.download);
     let uploadRateThrottleHistory = Object.assign([], this.throttles.upload);
 
-    if (downloadRateThrottleHistory.length === config.maxHistoryStates) {
+    if (downloadRateThrottleHistory.length === maxHistoryStates) {
 
       downloadRateThrottleHistory.shift();
       uploadRateThrottleHistory.shift();
@@ -92,7 +95,7 @@ class TransferDataStoreClass extends BaseStore {
       downloadRateThrottleHistory.push(parseInt(transferData.downloadThrottle));
       uploadRateThrottleHistory.push(parseInt(transferData.uploadThrottle));
     } else {
-      while (index < config.maxHistoryStates) {
+      while (index < maxHistoryStates) {
         // we assume the throttle history has been the same for all previous
         // history states.
         uploadRateThrottleHistory[index] = parseInt(transferData.uploadThrottle);
@@ -130,7 +133,7 @@ class TransferDataStoreClass extends BaseStore {
   startPollingTransferData() {
     this.pollTransferDataID = setInterval(
       this.fetchTransferData.bind(this),
-      config.pollInterval
+      pollInterval
     );
   }
 }

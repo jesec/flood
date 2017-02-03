@@ -16,7 +16,7 @@ let torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralProps
 let torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
 let torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
-let pollInterval = null;
+let pollIntervalID = null;
 let statusCount = {};
 let tagCount = {};
 let torrentCollection = new TorrentCollection();
@@ -359,7 +359,7 @@ var client = {
   },
 
   startPollingTorrents: () => {
-    pollInterval = setInterval(() => {
+    pollIntervalID = setInterval(() => {
       client.updateTorrentList();
     }, 1000 * 5);
   },
@@ -376,8 +376,8 @@ var client = {
   },
 
   stopPollingTorrents: () => {
-    clearInterval(pollInterval);
-    pollInterval = null;
+    clearInterval(pollIntervalID);
+    pollIntervalID = null;
   },
 
   updateTorrentList: (callback) => {
