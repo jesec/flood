@@ -16,7 +16,7 @@ router.post('/authenticate', (req, res) => {
     username: req.body.username
   };
 
-  Users.comparePassword(credentials, function(isMatch, err) {
+  Users.comparePassword(credentials, (isMatch, err) => {
     if (isMatch == null) {
       return res.status(401).json({message: 'You entered an incorrect username.'});
     }
