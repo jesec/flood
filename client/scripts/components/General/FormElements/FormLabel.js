@@ -30,13 +30,15 @@ class FormLabel extends React.Component {
 
 FormLabel.defaultProps = {
   baseClass: 'form__label',
-  className: null
+  className: null,
+  error: ''
 };
 
 FormLabel.propTypes = {
   baseClass: React.PropTypes.string,
   className: React.PropTypes.oneOfType([React.PropTypes.string,
-    React.PropTypes.array, React.PropTypes.object])
+    React.PropTypes.array, React.PropTypes.object]),
+  error: React.PropTypes.string
 };
 
 export default FormLabel;

@@ -417,12 +417,44 @@ $form--column--margin: $spacing-unit * 3/10;
         }
       }
 
-      .textbox {
+      .textbox,
+      .dropzone {
         border-color: $textbox--error--border;
         color: $textbox--error--foreground;
 
         &::placeholder {
           color: $textbox--error--placeholder;
+        }
+      }
+
+      .dropzone {
+
+        &:hover {
+          border-color: $textbox--active--border;
+          color: $textbox--active--foreground;
+
+          .dropzone {
+
+            &__icon {
+
+              .icon {
+                opacity: 1;
+              }
+            }
+          }
+        }
+
+        &__browse-button {
+          color: inherit;
+        }
+
+        &__icon {
+
+          .icon {
+            fill: $textbox--error--foreground;
+            opacity: 0.4;
+            transition: all 0.25s;
+          }
         }
       }
 

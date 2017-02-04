@@ -52,6 +52,7 @@ class TorrentDestination extends React.Component {
     super();
 
     let baseDestination = SettingsStore.getFloodSettings('torrentDestination')
+      || SettingsStore.getClientSettings('directoryDefault')
       || '';
 
     if (props.suggested) {

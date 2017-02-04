@@ -2,7 +2,7 @@ import BaseStore from './BaseStore';
 
 const transformConfig = {
   baseURI: baseURI => baseURI.replace(/\/$/, '')
-}
+};
 
 class ConfigStoreClass extends BaseStore {
   constructor() {
