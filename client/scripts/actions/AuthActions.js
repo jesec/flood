@@ -9,18 +9,25 @@ const baseURI = ConfigStore.getBaseURI();
 let AuthActions = {
   authenticate: (credentials) => {
     return axios.post(`${baseURI}auth/authenticate`, credentials)
-      .then((json = {}) => {
-        return json.data;
-      })
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LOGIN_SUCCESS,
           data
         });
       }, (error) => {
+        let errorMessage;
+
+        if (error.response) {
+          errorMessage = error.response.data.message;
+        } else if (error.message) {
+          errorMessage = error.message;
+        } else {
+          errorMessage = 'An unknown error occurred.';
+        }
+
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LOGIN_ERROR,
-          error: error.data.message
+          error: errorMessage
         });
       });
   },
