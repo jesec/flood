@@ -321,6 +321,10 @@ class TorrentListContainer extends React.Component {
     });
   }
 
+  handleDoubleClick(torrent, event) {
+    this.handleDetailsClick(torrent, event);
+  }
+
   handleContextMenuClick(torrent, event) {
     event.preventDefault();
 
@@ -511,6 +515,7 @@ class TorrentListContainer extends React.Component {
         defaultWidth={defaultWidth}
         handleClick={this.handleTorrentClick}
         handleDetailsClick={this.handleDetailsClick}
+        handleDoubleClick={this.handleDoubleClick}
         handleRightClick={this.handleContextMenuClick}
         index={index}
         isCondensed={options.isCondensed}

@@ -34,6 +34,7 @@ const ICONS = {
 
 const METHODS_TO_BIND = [
   'handleClick',
+  'handleDoubleClick',
   'handleRightClick'
 ];
 
@@ -114,9 +115,19 @@ class Torrent extends React.Component {
     });
   }
 
+  getWidth(slug) {
+    const {defaultWidth, defaultPropWidths, propWidths} = this.props;
+
+    return propWidths[slug] || defaultPropWidths[slug] || defaultWidth;
+  }
+
   handleClick(event) {
     this.setState({isSelected: true});
     this.props.handleClick(this.props.torrent.hash, event);
+  }
+
+  handleDoubleClick(event) {
+    this.props.handleDoubleClick(this.props.torrent, event);
   }
 
   handleRightClick(event) {
@@ -125,16 +136,6 @@ class Torrent extends React.Component {
     }
 
     this.props.handleRightClick(this.props.torrent, event);
-  }
-
-  handleSettingsChange() {
-    console.log('settings change');
-  }
-
-  getWidth(slug) {
-    const {defaultWidth, defaultPropWidths, propWidths} = this.props;
-
-    return propWidths[slug] || defaultPropWidths[slug] || defaultWidth;
   }
 
   render() {
@@ -153,6 +154,7 @@ class Torrent extends React.Component {
     if (isCondensed) {
       return (
         <li className={torrentClasses} onClick={this.handleClick}
+          onDoubleClick={this.handleDoubleClick}
           onContextMenu={this.handleRightClick}>
           <TorrentDetail className="table__cell"
             slug="name"
