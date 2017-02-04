@@ -24,7 +24,7 @@ FormColumn.defaultProps = {
   baseClass: 'form__column',
   errorModifier: 'has-error',
   className: null,
-  errors: {},
+  error: '',
   modifiers: []
 };
 
@@ -33,7 +33,7 @@ FormColumn.propTypes = {
   className: React.PropTypes.oneOfType([React.PropTypes.string,
     React.PropTypes.array, React.PropTypes.object]),
   errorModifier: React.PropTypes.string,
-  errors: React.PropTypes.object,
+  error: React.PropTypes.string,
   modifiers: React.PropTypes.arrayOf(React.PropTypes.string)
 };
 

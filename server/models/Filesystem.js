@@ -1,11 +1,12 @@
 'use strict';
 
 let fs = require('fs');
+let ospath = require('ospath');
 let path = require('path');
 
 class Filesystem {
   getDirectoryList(options, callback) {
-    let sourcePath = options.path || '/';
+    let sourcePath = (options.path || '/').replace(/^~/, ospath.home());
 
     try {
       let directories = [];

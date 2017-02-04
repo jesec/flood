@@ -16,6 +16,6 @@ export default class Validator {
   }
 
   static isURLValid(url) {
-    return url != null && url.match(regEx.url) !== null;
+    return url != null && url !== '' && url.match(regEx.url) !== null;
   }
 }
