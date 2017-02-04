@@ -31,8 +31,8 @@ let TorrentActions = {
       });
   },
 
-  addTorrentsByFiles: (filesData, destination) => {
-    return axios.post(`${baseURI}api/client/add-files`, filesData)
+  addTorrentsByFiles: (formData, destination) => {
+    return axios.post(`${baseURI}api/client/add-files`, formData)
       .then((json = {}) => {
         return json.data;
       })
@@ -40,7 +40,7 @@ let TorrentActions = {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_ADD_TORRENT_SUCCESS,
           data: {
-            count: filesData.getAll('torrents').length,
+            count: formData.getAll('torrents').length,
             destination,
             response
           }

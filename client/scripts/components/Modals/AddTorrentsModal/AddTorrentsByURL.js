@@ -25,6 +25,7 @@ const METHODS_TO_BIND = [
   'handleAddTorrents',
   'handleDestinationChange',
   'handleStartTorrentsToggle',
+  'handleTagsChange',
   'handleUrlAdd',
   'handleUrlChange',
   'handleUrlRemove'
@@ -39,6 +40,7 @@ class AddTorrentsByURL extends React.Component {
       destination: SettingsStore.getFloodSettings('torrentDestination'),
       errors: {},
       isAddingTorrents: false,
+      tags: '',
       urlTextboxes: [{value: ''}],
       startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad')
     };
@@ -67,7 +69,8 @@ class AddTorrentsByURL extends React.Component {
       TorrentActions.addTorrentsByUrls({
         urls: torrentURLs,
         destination: this.state.destination,
-        start: this.state.startTorrents
+        start: this.state.startTorrents,
+        tags: this.state.tags.split(',')
       });
     }
   }
@@ -78,6 +81,10 @@ class AddTorrentsByURL extends React.Component {
 
   handleStartTorrentsToggle(value) {
     this.setState({startTorrents: value});
+  }
+
+  handleTagsChange(event) {
+    this.setState({tags: event.target.value});
   }
 
   handleUrlRemove(index) {
@@ -164,6 +171,19 @@ class AddTorrentsByURL extends React.Component {
               />
             </FormLabel>
             <TorrentDestination onChange={this.handleDestinationChange} />
+          </FormColumn>
+        </div>
+        <div className="form__row">
+          <FormColumn>
+            <FormLabel>
+              <FormattedMessage
+                id="torrents.add.tags"
+                defaultMessage="Tags"
+              />
+            </FormLabel>
+            <input className="textbox"
+              onChange={this.handleTagsChange}
+              value={this.state.tags} />
           </FormColumn>
         </div>
         <AddTorrentsActions dismiss={this.props.dismissModal}
