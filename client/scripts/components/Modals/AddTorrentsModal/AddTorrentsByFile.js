@@ -31,7 +31,8 @@ const METHODS_TO_BIND = [
   'handleDestinationChange',
   'handleFileDrop',
   'handleFileRemove',
-  'handleStartTorrentsToggle'
+  'handleStartTorrentsToggle',
+  'handleTagsChange'
 ];
 
 class AddTorrentsByFile extends React.Component {
@@ -43,6 +44,7 @@ class AddTorrentsByFile extends React.Component {
       errors: {},
       isAddingTorrents: false,
       files: null,
+      tags: '',
       startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad')
     };
 
@@ -153,8 +155,12 @@ class AddTorrentsByFile extends React.Component {
 
       let fileData = new FormData();
 
-      this.state.files.forEach((file) => {
+      this.state.files.forEach(file => {
         fileData.append('torrents', file);
+      });
+
+      this.state.tags.split(',').forEach(tag => {
+        fileData.append('tags', tag);
       });
 
       fileData.append('destination', this.state.destination);
@@ -164,12 +170,16 @@ class AddTorrentsByFile extends React.Component {
     }
   }
 
+  handleDestinationChange(destination) {
+    this.setState({destination});
+  }
+
   handleStartTorrentsToggle(value) {
     this.setState({startTorrents: value});
   }
 
-  handleDestinationChange(destination) {
-    this.setState({destination});
+  handleTagsChange(event) {
+    this.setState({tags: event.target.value});
   }
 
   isFormValid() {
@@ -222,6 +232,19 @@ class AddTorrentsByFile extends React.Component {
               />
             </FormLabel>
             <TorrentDestination onChange={this.handleDestinationChange} />
+          </FormColumn>
+        </div>
+        <div className="form__row">
+          <FormColumn>
+            <FormLabel>
+              <FormattedMessage
+                id="torrents.add.tags"
+                defaultMessage="Tags"
+              />
+            </FormLabel>
+            <input className="textbox"
+              onChange={this.handleTagsChange}
+              value={this.state.tags} />
           </FormColumn>
         </div>
         <AddTorrentsActions dismiss={this.props.dismissModal}

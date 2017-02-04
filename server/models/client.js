@@ -28,6 +28,11 @@ var client = {
     let path = req.body.destination;
     let request = new ClientRequest();
     let start = req.body.start;
+    let tags = req.body.tags;
+
+    if (!Array.isArray(tags)) {
+      tags = tags.split(',');
+    }
 
     request.createDirectory({path});
     request.send();
@@ -39,7 +44,7 @@ var client = {
       file.originalname = encodeURIComponent(file.originalname);
 
       let fileRequest = new ClientRequest();
-      fileRequest.addFiles({files: file, path, start});
+      fileRequest.addFiles({files: file, path, start, tags});
 
       // Set the callback for only the last request.
       if (index === files.length - 1) {

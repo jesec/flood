@@ -88,6 +88,18 @@ $more-info--border: $textbox-repeater--button--border;
 
     &--tags {
 
+      .torrent {
+
+        &__tag {
+          display: inline-block;
+          margin-right: $spacing-unit * 3/10;
+
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+
       .tag {
         background: $torrent--tags--background;
         color: $torrent--tags--foreground;
