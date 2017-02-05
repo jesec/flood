@@ -23,7 +23,6 @@ const messages = defineMessages({
 
 const METHODS_TO_BIND = [
   'handleAddTorrents',
-  'handleDestinationChange',
   'handleStartTorrentsToggle',
   'handleTagsChange',
   'handleUrlAdd',
@@ -37,7 +36,6 @@ class AddTorrentsByURL extends React.Component {
 
     this.state = {
       addTorrentsError: null,
-      destination: SettingsStore.getFloodSettings('torrentDestination'),
       errors: {},
       isAddingTorrents: false,
       tags: '',
@@ -68,15 +66,11 @@ class AddTorrentsByURL extends React.Component {
 
       TorrentActions.addTorrentsByUrls({
         urls: torrentURLs,
-        destination: this.state.destination,
+        destination: this.torrentDestinationRef.getWrappedInstance().getValue(),
         start: this.state.startTorrents,
         tags: this.state.tags.split(',')
       });
     }
-  }
-
-  handleDestinationChange(destination) {
-    this.setState({destination});
   }
 
   handleStartTorrentsToggle(value) {
@@ -110,7 +104,7 @@ class AddTorrentsByURL extends React.Component {
       return this.validatedFields.urls.isValid(value);
     });
     const isDestinationValid = this.validatedFields.destination
-      .isValid(this.state.destination);
+      .isValid(this.torrentDestinationRef.getWrappedInstance().getValue());
     const nextErrorsState = {};
 
     if (!areURLsDefined) {
@@ -170,7 +164,7 @@ class AddTorrentsByURL extends React.Component {
                 defaultMessage="Destination"
               />
             </FormLabel>
-            <TorrentDestination onChange={this.handleDestinationChange} />
+            <TorrentDestination ref={ref => this.torrentDestinationRef = ref} />
           </FormColumn>
         </div>
         <div className="form__row">
@@ -195,4 +189,4 @@ class AddTorrentsByURL extends React.Component {
   }
 }
 
-export default injectIntl(AddTorrentsByURL);
+export default injectIntl(AddTorrentsByURL, {withRef: true});

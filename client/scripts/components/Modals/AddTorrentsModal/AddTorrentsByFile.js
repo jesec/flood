@@ -28,7 +28,6 @@ const messages = defineMessages({
 
 const METHODS_TO_BIND = [
   'handleAddTorrents',
-  'handleDestinationChange',
   'handleFileDrop',
   'handleFileRemove',
   'handleStartTorrentsToggle',
@@ -40,7 +39,6 @@ class AddTorrentsByFile extends React.Component {
     super();
 
     this.state = {
-      destination: SettingsStore.getFloodSettings('torrentDestination'),
       errors: {},
       isAddingTorrents: false,
       files: null,
@@ -153,7 +151,9 @@ class AddTorrentsByFile extends React.Component {
     if (this.isFormValid()) {
       this.setState({isAddingTorrents: true});
 
-      let fileData = new FormData();
+      const destination = this.torrentDestinationRef.getWrappedInstance()
+        .getValue();
+      const fileData = new FormData();
 
       this.state.files.forEach(file => {
         fileData.append('torrents', file);
@@ -163,15 +163,11 @@ class AddTorrentsByFile extends React.Component {
         fileData.append('tags', tag);
       });
 
-      fileData.append('destination', this.state.destination);
+      fileData.append('destination', destination);
       fileData.append('start', this.state.startTorrents);
 
-      TorrentActions.addTorrentsByFiles(fileData, this.state.destination);
+      TorrentActions.addTorrentsByFiles(fileData, destination);
     }
-  }
-
-  handleDestinationChange(destination) {
-    this.setState({destination});
   }
 
   handleStartTorrentsToggle(value) {
@@ -183,7 +179,7 @@ class AddTorrentsByFile extends React.Component {
   }
 
   isFormValid() {
-    const {destination, files} = this.state;
+    const {files} = this.state;
     const nextErrorsState = {};
 
     const areFilesSelected = files != null
@@ -192,7 +188,7 @@ class AddTorrentsByFile extends React.Component {
         return this.validatedFields.files.isValid(file);
       });
     const isDestinationValid = this.validatedFields.destination
-      .isValid(destination);
+      .isValid(this.torrentDestinationRef.getWrappedInstance().getValue());
 
     if (!areFilesSelected) {
       nextErrorsState.files = this.validatedFields.files.error;
@@ -231,7 +227,7 @@ class AddTorrentsByFile extends React.Component {
                 defaultMessage="Destination"
               />
             </FormLabel>
-            <TorrentDestination onChange={this.handleDestinationChange} />
+            <TorrentDestination ref={ref => this.torrentDestinationRef = ref} />
           </FormColumn>
         </div>
         <div className="form__row">
@@ -256,4 +252,4 @@ class AddTorrentsByFile extends React.Component {
   }
 }
 
-export default injectIntl(AddTorrentsByFile);
+export default injectIntl(AddTorrentsByFile, {withRef: true});
