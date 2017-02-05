@@ -154,8 +154,8 @@ class Torrent extends React.Component {
     if (isCondensed) {
       return (
         <li className={torrentClasses} onClick={this.handleClick}
-          onDoubleClick={this.handleDoubleClick}
-          onContextMenu={this.handleRightClick}>
+          onContextMenu={this.handleRightClick}
+          onDoubleClick={this.handleDoubleClick}>
           <TorrentDetail className="table__cell"
             slug="name"
             value={torrent.name}
@@ -215,7 +215,8 @@ class Torrent extends React.Component {
 
     return (
       <li className={torrentClasses} onClick={this.handleClick}
-        onContextMenu={this.handleRightClick}>
+        onContextMenu={this.handleRightClick}
+        onDoubleClick={this.handleDoubleClick}>
         <div className="torrent__details__section__wrapper">
           <TorrentDetail
             className="torrent__details__section torrent__details__section--primary"
