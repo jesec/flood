@@ -204,7 +204,7 @@ export default {
   'torrents.add.tab.file.browse': 'or click to browse',
   'torrents.add.tab.file.drop': 'Drop some files here,',
   'torrents.add.tab.file.title': 'By File',
-  'torrents.add.tab.url.input.placeholder': 'Torrent URL',
+  'torrents.add.tab.url.input.placeholder': 'Torrent URL or Magnet Link',
   'torrents.add.tab.url.title': 'By URL',
   'torrents.add.torrents.label': 'Torrents',
 

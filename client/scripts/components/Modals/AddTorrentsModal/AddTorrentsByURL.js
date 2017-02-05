@@ -17,7 +17,7 @@ const messages = defineMessages({
   },
   mustSpecifyURLs: {
     id: 'torrents.add.tab.urls.empty',
-    defaultMessage: 'You must specify at least one URL.'
+    defaultMessage: 'You must specify at least one torrent.'
   }
 });
 
@@ -53,7 +53,7 @@ class AddTorrentsByURL extends React.Component {
         error: props.intl.formatMessage(messages.mustSpecifyDestination)
       },
       urls: {
-        isValid: Validator.isURLValid,
+        isValid: value => value !== '' && value != null,
         error: props.intl.formatMessage(messages.mustSpecifyURLs)
       }
     };
@@ -148,7 +148,7 @@ class AddTorrentsByURL extends React.Component {
             </FormLabel>
             <TextboxRepeater placeholder={this.props.intl.formatMessage({
                 id: 'torrents.add.tab.url.input.placeholder',
-                defaultMessage: 'Torrent URL'
+                defaultMessage: 'Torrent URL or Magnet Link'
               })}
               handleTextboxAdd={this.handleUrlAdd}
               handleTextboxChange={this.handleUrlChange}
