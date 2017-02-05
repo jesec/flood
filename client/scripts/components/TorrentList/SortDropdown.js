@@ -39,12 +39,21 @@ class SortDropdown extends React.Component {
   }
 
   getDropdownMenus() {
+    const {direction, selectedProperty} = this.props;
     let items = SORT_PROPERTIES.map((sortProp) => {
+      const isSelected = sortProp === this.props.selectedProperty;
+      const directionIndicator = isSelected ? (
+          <span className={`sort-dropdown__indicator sort-dropdown__indicator--${direction}`} />
+        ) : null;
+
       return {
-        displayName: this.props.intl.formatMessage(
-          TorrentProperties[sortProp]
+        displayName: (
+          <div className="sort-dropdown__item">
+            {this.props.intl.formatMessage(TorrentProperties[sortProp])}
+            {directionIndicator}
+          </div>
         ),
-        selected: this.props.selectedProperty === sortProp,
+        selected: isSelected,
         property: sortProp
       };
     });
