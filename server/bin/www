@@ -5,7 +5,7 @@ let fs = require('fs');
 
 // Ensure we have a user-defined config.js for use throughout the app.
 try {
-  fs.accessSync('./config.js', fs.F_OK);
+  fs.accessSync(__dirname + '/../../config.js', fs.F_OK);
 } catch (error) {
   console.error('Cannot start Flood server, config.js is missing. Copy ' +
     'config.template.js to config.js.');
