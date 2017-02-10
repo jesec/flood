@@ -4,6 +4,9 @@ let ajaxUtil = {
   getResponseFn: (res) => {
     return (data, error) => {
       if (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.trace(error);
+        }
         res.status(500).json(error);
         return;
       } else {
