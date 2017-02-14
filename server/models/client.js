@@ -1,20 +1,24 @@
 'use strict';
 
-let del = require('del');
-let util = require('util');
+const archiver = require('archiver');
+const del = require('del');
+const fs = require('fs');
+const path = require('path');
+const util = require('util');
 
-let clientResponseUtil = require('../util/clientResponseUtil');
-let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
-let ClientRequest = require('./ClientRequest');
-let formatUtil = require('../../shared/util/formatUtil');
-let scgi = require('../util/scgi');
-let Torrent = require('./Torrent');
-let NotificationCollection = require('./NotificationCollection');
-let TorrentCollection = require('./TorrentCollection');
-let torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
-let torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
-let torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
-let torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
+const clientResponseUtil = require('../util/clientResponseUtil');
+const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
+const ClientRequest = require('./ClientRequest');
+const formatUtil = require('../../shared/util/formatUtil');
+const NotificationCollection = require('./NotificationCollection');
+const scgi = require('../util/scgi');
+const Torrent = require('./Torrent');
+const TemporaryStorage = require('./TemporaryStorage');
+const TorrentCollection = require('./TorrentCollection');
+const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
+const torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
+const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
+const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
 let pollIntervalID = null;
 let statusCount = {};
@@ -113,6 +117,86 @@ var client = {
       callback(response, error);
     });
     request.send();
+  },
+
+  downloadFiles(hash, files, res) {
+    try {
+      let selectedTorrent = null;
+
+      this.getTorrent({hash}, (torrent) => {
+        selectedTorrent = torrent;
+      });
+
+      this.getTorrentDetails(hash, (torrentDetails) => {
+        const filePathsToDownload = this.findFilesByIndicies(
+          files.split(','),
+          torrentDetails.fileTree
+        ).map((file) => {
+          return path.join(selectedTorrent.directory, file.path);
+        });
+
+        if (filePathsToDownload.length === 1) {
+          const file = filePathsToDownload[0];
+
+          if (fs.existsSync(file)) {
+            res.attachment(path.basename(file));
+            res.download(file);
+          } else {
+            res.status(404).json({error: 'File not found.'});
+          }
+        } else {
+          const tempFilename = `${hash}-${Date.now()}.tar`;
+          const tempFilePath = TemporaryStorage.getTempPath(tempFilename);
+          const archive = archiver('tar', {store: true});
+          const output = fs.createWriteStream(tempFilePath);
+
+          output.on('close', () => {
+            const filename = `${selectedTorrent.name}.tar`;
+
+            res.attachment(path.basename(filename));
+            res.download(tempFilePath, filename, () => {
+              TemporaryStorage.deleteFile(tempFilename);
+            });
+          });
+
+          archive.on('error', (error) => {
+            throw error;
+          });
+
+          archive.pipe(output);
+
+          filePathsToDownload.forEach((filePath) => {
+            const filename = path.basename(filePath);
+            archive.append(fs.createReadStream(filePath), {name: filename});
+          });
+
+          archive.finalize();
+        }
+      });
+    } catch (error) {
+      res.status(500).json(error);
+    }
+  },
+
+  findFilesByIndicies(indices, fileTree = {}) {
+    const {directories, files = []} = fileTree;
+
+    let selectedFiles = files.filter(file => {
+      return indices.includes(`${file.index}`);
+    });
+
+    if (directories != null) {
+      selectedFiles = selectedFiles.concat(Object.keys(directories).reduce(
+        (accumulator, directory) => {
+          return accumulator.concat(
+            this.findFilesByIndicies(indices, directories[directory])
+          );
+        },
+        []
+      ));
+    }
+
+    return selectedFiles;
   },
 
   getSettings: (options, callback) => {

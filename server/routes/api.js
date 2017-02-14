@@ -1,22 +1,26 @@
 'use strict';
 
-let express = require('express');
+const express = require('express');
+const passport = require('passport');
+const router = express.Router();
 
-let ajaxUtil = require('../util/ajaxUtil');
-let client = require('../models/client');
-let clientRoutes = require('./client');
-let FeedCollection = require('../models/FeedCollection');
-let Filesystem = require('../models/Filesystem');
-let mediainfo = require('../util/mediainfo');
-let NotificationCollection = require('../models/NotificationCollection');
-let history = require('../models/history');
-let passport = require('passport');
-let router = express.Router();
-let settings = require('../models/settings');
+const ajaxUtil = require('../util/ajaxUtil');
+const client = require('../models/client');
+const clientRoutes = require('./client');
+const FeedCollection = require('../models/FeedCollection');
+const Filesystem = require('../models/Filesystem');
+const mediainfo = require('../util/mediainfo');
+const NotificationCollection = require('../models/NotificationCollection');
+const history = require('../models/history');
+const settings = require('../models/settings');
 
 router.use('/', passport.authenticate('jwt', {session: false}));
 
 router.use('/client', clientRoutes);
+
+router.get('/download', (req, res, next) => {
+  client.downloadFiles(req.query.hash, req.query.files, res);
+});
 
 router.delete('/feed-monitor/:id', (req, res, next) => {
   FeedCollection.removeItem(req.params.id, ajaxUtil.getResponseFn(res));

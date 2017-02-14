@@ -4,11 +4,14 @@ import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Checkbox from '../../General/FormElements/Checkbox';
+import ConfigStore from '../../../stores/ConfigStore';
 import Disk from '../../Icons/Disk';
 import DirectoryTree from '../../General/Filesystem/DirectoryTree';
 import Dropdown from '../../General/FormElements/Dropdown';
 import File from '../../Icons/File';
 import TorrentStore from '../../../stores/TorrentStore';
+
+const baseURI = ConfigStore.getBaseURI();
 
 const TORRENT_PROPS_TO_CHECK = ['bytesDone'];
 const METHODS_TO_BIND = [
@@ -72,10 +75,25 @@ class TorrentFiles extends React.Component {
     return true;
   }
 
+  getDownloadButton() {
+    return (
+      <a className="button button--download button--primary button--link"
+        download
+        href={`${baseURI}api/download?hash=${this.props.torrent.hash}&files=${this.state.selectedFiles.join(',')}`}>
+        <FormattedMessage id="torrents.details.files.download.file"
+          defaultMessage="{count, plural, =1 {Download File} other
+            {Download Files}}"
+          values={{
+            count: this.state.selectedFiles.length
+          }}/>
+      </a>
+    );
+  }
+
   getPriorityDropdownHeader() {
     return (
       <a className="dropdown__button">
-        <span className="dropdown__value">
+        <span className="dropdown__value button button--link button--primary">
           <FormattedMessage id="torrents.details.selected.files.set.priority"
             defaultMessage="Set Priority" />
         </span>
@@ -316,6 +334,7 @@ class TorrentFiles extends React.Component {
               count: this.state.selectedFiles.length,
               countElement: <span className="directory-tree__selection-toolbar__item-count">{this.state.selectedFiles.length}</span>
             }}/>
+          {this.getDownloadButton()}
           <Dropdown
             direction="up"
             handleItemSelect={this.handlePriorityDropdownSelect}
