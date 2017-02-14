@@ -1,7 +1,20 @@
 import BaseStore from './BaseStore';
 
 const transformConfig = {
-  baseURI: baseURI => baseURI.replace(/\/$/, '')
+  baseURI: baseURI => {
+    const shouldAddSlashEnd = !baseURI.endsWith('/');
+    const shouldAddSlashStart = !baseURI.startsWith('/');
+
+    if (shouldAddSlashEnd) {
+      baseURI = `${baseURI}/`;
+    }
+
+    if (shouldAddSlashStart) {
+      baseURI = `/${baseURI}`;
+    }
+
+    return baseURI;
+  }
 };
 
 class ConfigStoreClass extends BaseStore {
