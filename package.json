@@ -5,9 +5,9 @@
   "scripts": {
     "preinstall": "npm prune",
     "build-assets": "NODE_ENV=production gulp dist",
-    "start:development": "nodemon ./server/bin/www",
+    "start:development": "nodemon server/bin/www",
     "start:production": "npm start",
-    "start": "node ./server/bin/www",
+    "start": "node server/bin/www",
     "start:watch": "NODE_ENV=development gulp livereload"
   },
   "dependencies": {
