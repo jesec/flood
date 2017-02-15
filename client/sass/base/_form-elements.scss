@@ -28,6 +28,8 @@ $button--primary--border--hover: $button--primary--border;
 $button--primary--inverse--border: darken($blue, 8%);
 $button--primary--inverse--border--hover: darken($blue, 6%);
 
+$button--link--primary--foreground: $blue;
+
 $button--deemphasized--foreground: #6e8199;
 $button--deemphasized--background: #343e4c;
 $button--deemphasized--foreground--hover: lighten($button--deemphasized--foreground, 10%);
@@ -198,6 +200,24 @@ $form--column--margin: $spacing-unit * 3/10;
   &--small {
     padding: 7.5px 15px;
     font-size: 0.75em;
+  }
+
+  &--link {
+    font-size: inherit;
+    text-decoration: none;
+
+    &,
+    &:hover {
+      background: transparent;
+    }
+
+    &.button {
+
+      &--primary {
+        border: none;
+        color: $button--link--primary--foreground;
+      }
+    }
   }
 }
 

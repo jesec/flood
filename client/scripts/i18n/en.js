@@ -213,6 +213,10 @@ export default {
   'torrents.details.actions.stop': 'Stop',
   'torrents.details.details': 'Details',
   'torrents.details.files': 'Files',
+  'torrents.details.files.download.file': `{count, plural,
+    =1 {Download File}
+    other {Download Files}
+  }`,
   'torrents.details.general.added': 'Added',
   'torrents.details.general.comment': 'Comment',
   'torrents.details.general.connected': '{connected} connected of {total}',

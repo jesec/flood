@@ -1,12 +1,13 @@
 'use strict';
 
-let _ = require('lodash');
+const _ = require('lodash');
 
-let clientResponseUtil = require('../util/clientResponseUtil');
-let stringUtil = require('../../shared/util/stringUtil');
-let torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
-let torrentStatusMap = require('../../shared/constants/torrentStatusMap');
-let Torrent = require('./Torrent');
+const client = require('./client');
+const clientResponseUtil = require('../util/clientResponseUtil');
+const stringUtil = require('../../shared/util/stringUtil');
+const torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
+const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
+const Torrent = require('./Torrent');
 
 const DEFAULT_TAG = 'untagged';
 
