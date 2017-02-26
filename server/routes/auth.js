@@ -10,6 +10,8 @@ let config = require('../../config');
 let router = express.Router();
 let Users = require('../models/Users');
 
+const failedLoginResponse = 'Failed login.';
+
 router.post('/authenticate', (req, res) => {
   let credentials = {
     password: req.body.password,
@@ -18,7 +20,8 @@ router.post('/authenticate', (req, res) => {
 
   Users.comparePassword(credentials, (isMatch, err) => {
     if (isMatch == null) {
-      return res.status(401).json({message: 'You entered an incorrect username.'});
+      // Incorrect username.
+      return res.status(401).json({message: failedLoginResponse});
     }
 
     if (isMatch && !err) {
@@ -26,14 +29,20 @@ router.post('/authenticate', (req, res) => {
       let cookieExpiration = Date.now() + expirationSeconds * 1000;
 
       // Create token if the password matched and no error was thrown.
-      let token = jwt.sign(credentials, config.secret, {
+      let token = jwt.sign({username: credentials.username}, config.secret, {
         expiresIn: expirationSeconds
       });
 
-      res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true});
+      res.cookie(
+        'jwt',
+        token,
+        {expires: new Date(cookieExpiration), httpOnly: true}
+      );
+
       return res.json({success: true, token: `JWT ${token}`});
     } else {
-      return res.status(401).json({message: 'You entered an incorrect password.'});
+      // Incorrect password.
+      return res.status(401).json({message: failedLoginResponse});
     }
   });
 });
@@ -42,7 +51,10 @@ router.post('/authenticate', (req, res) => {
 router.use('/register', (req, res, next) => {
   Users.initialUserGate({
     handleInitialUser: next.bind(this),
-    handleSubsequentUser: passport.authenticate('jwt', {session: false}).bind(this, req, res, next)
+    handleSubsequentUser: passport.authenticate(
+      'jwt',
+      {session: false}
+    ).bind(this, req, res, next)
   });
 });
 
@@ -63,7 +75,10 @@ router.use('/verify', (req, res, next) => {
     },
     handleSubsequentUser: () => {
       req.initialUser = false;
-      passport.authenticate('jwt', {session: false}).call(this, req, res, next);
+      passport.authenticate(
+        'jwt',
+        {session: false}
+      ).call(this, req, res, next);
     }
   });
 });
@@ -73,7 +88,10 @@ router.get('/verify', (req, res, next) => {
 });
 
 // All subsequent routes are protected.
-router.use('/', passport.authenticate('jwt', {session: false}));
+router.use(
+  '/',
+  passport.authenticate('jwt', {session: false})
+);
 
 router.get('/users', (req, res, next) => {
   Users.listUsers(ajaxUtil.getResponseFn(res));
