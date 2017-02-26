@@ -12,6 +12,7 @@ export default class Modal extends React.Component {
   constructor() {
     super();
 
+    this.domRefs = {};
     this.state = {
       activeTabId: null
     };
@@ -31,6 +32,14 @@ export default class Modal extends React.Component {
 
   handleTabChange(tab) {
     this.setState({activeTabId: tab.id});
+  }
+
+  setRef(id, ref) {
+    this.domRefs[id] = ref;
+
+    if (this.props.onSetRef) {
+      this.props.onSetRef(id, ref);
+    }
   }
 
   render() {
@@ -90,7 +99,8 @@ export default class Modal extends React.Component {
         <div className={headerClasses}>
           {modalHeader}
         </div>
-        <div className="modal__body">
+        <div className="modal__body"
+          ref={ref => this.setRef('modal-body', ref)}>
           {modalBody}
           {footer}
         </div>
