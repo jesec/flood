@@ -83,6 +83,8 @@
     "react-addons-create-fragment": "^15.0.2",
     "react-addons-css-transition-group": "^15.0.2",
     "react-custom-scrollbars": "^4.0.0",
+    "react-dnd": "^2.2.3",
+    "react-dnd-html5-backend": "^2.2.3",
     "react-dom": "^15.0.2",
     "react-dropzone": "^3.4.0",
     "react-intl": "^2.1.3",
