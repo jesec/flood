@@ -1,3 +1,4 @@
+// TODO: Split up this garbage.
 export function sortTorrents(torrentsHash, sortBy) {
   let torrents = Object.keys(torrentsHash).map((hash) => {
     return {hash, ...torrentsHash[hash]};
@@ -28,11 +29,16 @@ export function sortTorrents(torrentsHash, sortBy) {
       } else if (property === 'name') {
         valA = valA.toLowerCase();
         valB = valB.toLowerCase();
+      } else if (property === 'tags') {
+        // TODO: Find a better way to sort tags.
+        valA = valA.join(',').toLowerCase();
+        valB = valB.join(',').toLowerCase();
       } else {
         valA = Number(valA);
         valB = Number(valB);
       }
 
+      // TODO: Use locale compare for sorting strings.
       if (direction === 'asc') {
         if (valA > valB) {
           return 1;
