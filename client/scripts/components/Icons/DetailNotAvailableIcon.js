@@ -2,7 +2,7 @@ import React from 'react';
 
 import BaseIcon from './BaseIcon';
 
-export default class HashIcon extends BaseIcon {
+export default class DetailNotAvailableIcon extends BaseIcon {
   render() {
     return (
       <svg className={`icon icon--clock ${this.props.className}`}

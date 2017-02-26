@@ -110,6 +110,16 @@ class Torrent {
     return torrentData;
   }
 
+  getComment({comment = ''}) {
+    comment = decodeURIComponent(comment);
+
+    if (comment.match(/^VRS24mrker/)) {
+      comment = comment.substr(10);
+    }
+
+    return comment;
+  }
+
   getPeerCount(string) {
     // This lovely delimiter is defined in clientResponseUtil.
     let markerPosition = string.indexOf('@!@');
@@ -122,14 +132,10 @@ class Torrent {
     let total = clientData.sizeBytes;
 
     if (rate > 0) {
-      let cumSeconds = (total - completed) / rate;
-
-
-
-      return formatUtil.secondsToDuration(cumSeconds);;
-    } else {
-      return 'Infinity';
+      return formatUtil.secondsToDuration((total - completed) / rate);
     }
+
+    return 'Infinity';
   }
 
   getPercentComplete(clientData) {
@@ -139,9 +145,9 @@ class Torrent {
       return Number(percentComplete.toFixed(2));
     } else if (percentComplete > 10 && percentComplete < 100) {
       return Number(percentComplete.toFixed(1));
-    } else {
-      return percentComplete;
     }
+
+    return percentComplete;
   }
 
   getStatus(clientData) {

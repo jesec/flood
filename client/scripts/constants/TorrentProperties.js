@@ -39,6 +39,10 @@ const torrentProperties = {
     id: 'torrents.properties.size',
     defaultMessage: 'File Size'
   },
+  tags: {
+    id: 'torrents.properties.tags',
+    defaultMessage: 'Tags'
+  },
   uploadRate: {
     id: 'torrents.properties.upload.speed',
     defaultMessage: 'Upload Speed'
@@ -46,6 +50,42 @@ const torrentProperties = {
   uploadTotal: {
     id: 'torrents.properties.upload.total',
     defaultMessage: 'Uploaded'
+  },
+  creationDate: {
+    id: 'torrents.properties.creation.date',
+    defaultMessage: 'Creation Date'
+  },
+  freeDiskSpace: {
+    id: 'torrents.properties.free.disk.space',
+    defaultMessage: 'Free Disk Space'
+  },
+  basePath: {
+    id: 'torrents.properties.base.path',
+    defaultMessage: 'Base Path'
+  },
+  ignoreScheduler: {
+    id: 'torrents.properties.ignore.schedule',
+    defaultMessage: 'Ignore Scheduler'
+  },
+  comment: {
+    id: 'torrents.properties.comment',
+    defaultMessage: 'Comment'
+  },
+  hash: {
+    id: 'torrents.properties.hash',
+    defaultMessage: 'Hash'
+  },
+  isPrivate: {
+    id: 'torrents.properties.is.private',
+    defaultMessage: 'Private'
+  },
+  message: {
+    id: 'torrents.properties.tracker.message',
+    defaultMessage: 'Tracker Message'
+  },
+  trackers: {
+    id: 'torrents.properties.trackers',
+    defaultMessage: 'Trackers'
   }
 };
 

@@ -188,9 +188,7 @@ class TorrentGeneralInfo extends React.Component {
                 />
               </td>
               <td className="torrent-details__detail__value">
-                {(torrent.comment.substr(10)
-                  ? torrent.comment.substr(10)
-                  : VALUE_NOT_AVAILABLE)}
+                {torrent.comment || VALUE_NOT_AVAILABLE}
               </td>
             </tr>
             <tr className="torrent-details__detail torrent-details__detail--created">

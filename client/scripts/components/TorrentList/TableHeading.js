@@ -11,7 +11,7 @@ const methodsToBind = [
   'handleCellMouseDown',
   'handleMouseUp',
   'handleMouseMove',
-  'handleWidthChange'
+  'updateCellWidth'
 ];
 
 const mouseDownStyles = `
@@ -29,8 +29,6 @@ class TableHeading extends React.Component {
     this.lastMouseX = null;
 
     methodsToBind.forEach(method => this[method] = this[method].bind(this));
-
-    this.handleWidthChange = _.debounce(this.handleWidthChange, 500);
   }
 
   componentDidMount() {
@@ -51,8 +49,6 @@ class TableHeading extends React.Component {
       this.lastMouseX = event.clientX;
       this.resizeLine.style.transform
         = `translateX(${Math.max(0, event.clientX - this.tableHeadingX + this.props.scrollOffset)}px)`;
-
-      this.handleWidthChange(this.focusedCell, nextCellWidth);
     }
   }
 
@@ -61,13 +57,14 @@ class TableHeading extends React.Component {
     global.document.removeEventListener('mouseup', this.handleMouseUp);
     global.document.removeEventListener('mousemove', this.handleMouseMove);
 
-    this.focusedCell = null;
-    this.focusedCellWidth = null;
     this.isMouseDown = false;
     this.lastMouseX = null;
     this.resizeLine.style.opacity = 0;
 
-    this.handleWidthChange.flush();
+    this.updateCellWidth(this.focusedCell, this.focusedCellWidth);
+
+    this.focusedCell = null;
+    this.focusedCellWidth = null;
   }
 
   handleCellClick(slug, event) {
@@ -89,7 +86,7 @@ class TableHeading extends React.Component {
     }
   }
 
-  handleWidthChange(cell, width) {
+  updateCellWidth(cell, width) {
     this.props.onWidthsChange({[cell]: width});
   }
 
@@ -97,27 +94,29 @@ class TableHeading extends React.Component {
     const {
       defaultWidth,
       defaultPropWidths,
-      properties,
+      columns,
       propWidths,
       sortProp
     } = this.props;
-    const propertiesCount = properties.length;
 
-    return properties.map(property => {
-      const slug = property;
+    return columns.reduce((accumulator, {id, visible}) => {
+      if (!visible) {
+        return accumulator;
+      }
+
       let handle = null;
-      const width = propWidths[slug] || defaultPropWidths[slug] || defaultWidth;
+      const width = propWidths[id] || defaultPropWidths[id] || defaultWidth;
 
       if (!this.isMouseDown) {
         handle = (
           <span className="table__heading__handle"
             onMouseDown={event => {
-              this.handleCellMouseDown(event, slug, width);
+              this.handleCellMouseDown(event, id, width);
             }} />
         );
       }
 
-      const isSortActive = slug === sortProp.property;
+      const isSortActive = id === sortProp.property;
       const classes = classnames(
         'table__cell table__heading',
         {
@@ -128,26 +127,28 @@ class TableHeading extends React.Component {
 
       const label = (
         <FormattedMessage
-          id={TorrentProperties[slug].id}
-          defaultMessage={TorrentProperties[slug].defaultMessage} />
+          id={TorrentProperties[id].id}
+          defaultMessage={TorrentProperties[id].defaultMessage} />
       );
 
-      return (
+      accumulator.push(
         <div className={classes}
-          key={slug}
-          onClick={event => this.handleCellClick(slug, event)}
+          key={id}
+          onClick={event => this.handleCellClick(id, event)}
           style={{width: `${width}px`}}>
           <span className="table__heading__label"
             title={this.props.intl.formatMessage({
-              id: TorrentProperties[slug].id,
-              defaultMessage: TorrentProperties[slug].defaultMessage
+              id: TorrentProperties[id].id,
+              defaultMessage: TorrentProperties[id].defaultMessage
             })}>
             {label}
           </span>
           {handle}
         </div>
       );
-    });
+
+      return accumulator;
+    }, []);
   }
 
   render() {
@@ -159,8 +160,7 @@ class TableHeading extends React.Component {
         {this.getHeadingElements()}
         <div className="table__cell table__heading table__heading--fill" />
         <div className="table__heading__resize-line"
-          ref={ref => this.resizeLine = ref}
-          style={dragIndicatorStyle} />
+          ref={ref => this.resizeLine = ref} />
       </div>
     );
   }
