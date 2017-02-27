@@ -1,16 +1,23 @@
+import classnames from 'classnames';
 import React from 'react';
 
-import StopIcon from '../Icons/StopIcon';
+import Tooltip from '../General/Tooltip';
 
 export default class Action extends React.Component {
   render() {
-    let classString = 'action action--' + this.props.slug;
+    const {clickHandler, icon, label, slug} = this.props;
+    const classes = classnames('action tooltip__wrapper', {
+      [`action--${slug}`]: slug != null
+    });
 
     return (
-      <div className={classString} onClick={this.props.clickHandler}>
-        {this.props.icon}
-        <span className="action__label">{this.props.label}</span>
-      </div>
+      <Tooltip content={label}
+        onClick={clickHandler}
+        position="bottom"
+        wrapperClassName={classes}>
+        {icon}
+        <span className="action__label">{label}</span>
+      </Tooltip>
     );
   }
 }
