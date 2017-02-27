@@ -1,6 +1,6 @@
 $tooltip-background: #0f151c;
 $tooltip-background--error: $red;
-$tooltip-foreground: #7189a8;
+$tooltip-foreground: lighten(#7189a8, 3%);
 $tooltip-foreground--error: #fff;
 $tooltip-link-foreground: #92aac9;
 
