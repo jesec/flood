@@ -458,8 +458,12 @@ class TorrentListContainer extends React.Component {
 
   getTotalCellWidth() {
     return this.state.displayedProperties.reduce(
-      (accumulator, slug) => {
-        return accumulator + this.getCellWidth(slug);
+      (accumulator, {id, visible}) => {
+        if (!visible) {
+          return accumulator;
+        }
+
+        return accumulator + this.getCellWidth(id);
       },
       0
     );
@@ -520,7 +524,7 @@ class TorrentListContainer extends React.Component {
         index={index}
         isCondensed={options.isCondensed}
         key={hash}
-        properties={this.state.displayedProperties}
+        columns={this.state.displayedProperties}
         propWidths={this.state.torrentListColumnWidths}
         selected={selectedTorrents.includes(hash)}
         torrent={torrent} />
@@ -571,14 +575,14 @@ class TorrentListContainer extends React.Component {
 
       if (isCondensed) {
         torrentListHeading = (
-          <TableHeading sortProp={TorrentFilterStore.getTorrentsSort()}
+          <TableHeading columns={this.state.displayedProperties}
             defaultWidth={defaultWidth}
             defaultPropWidths={defaultPropWidths}
-            scrollOffset={this.state.tableScrollLeft}
             onCellClick={this.handleTableHeadingCellClick}
             onWidthsChange={this.handlePropWidthChange}
-            properties={this.state.displayedProperties}
-            propWidths={this.state.torrentListColumnWidths} />
+            propWidths={this.state.torrentListColumnWidths}
+            scrollOffset={this.state.tableScrollLeft}
+            sortProp={TorrentFilterStore.getTorrentsSort()} />
         );
       }
     } else {

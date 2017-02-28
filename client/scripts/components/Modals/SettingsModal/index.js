@@ -17,6 +17,7 @@ const METHODS_TO_BIND = [
   'handleClientSettingsChange',
   'handleCustomsSettingChange',
   'handleFloodSettingsChange',
+  'handleModalRefSet',
   'handleSaveSettingsClick',
   'handleSaveSettingsError',
   'handleSettingsStoreChange'
@@ -26,6 +27,7 @@ class SettingsModal extends React.Component {
   constructor() {
     super();
 
+    this.modalBodyRef = null;
     this.state = {
       isSavingSettings: false,
       changedClientSettings: {},
@@ -161,6 +163,12 @@ class SettingsModal extends React.Component {
     this.setState({clientSettings, changedClientSettings});
   }
 
+  handleModalRefSet(id, ref) {
+    if (id === 'modal-body') {
+      this.modalBodyRef = ref;
+    }
+  }
+
   mergeObjects(objA, objB) {
     Object.keys(objB).forEach((key) => {
       if (!objB.hasOwnProperty(key) || objB[key] == null) {
@@ -229,17 +237,22 @@ class SettingsModal extends React.Component {
           defaultMessage: 'User Interface'
         }),
         props: {
-          onSettingsChange: this.handleFloodSettingsChange
+          onSettingsChange: this.handleFloodSettingsChange,
+          scrollContainer: this.modalBodyRef
         }
       }
     };
 
     return (
-      <Modal actions={this.getActions()} size="large"
+      <Modal actions={this.getActions()}
+        size="large"
         heading={this.props.intl.formatMessage({
           id: 'settings.tabs.heading',
           defaultMessage: 'Settings'
-        })} orientation="vertical" dismiss={this.props.dismiss}
+        })}
+        onSetRef={this.handleModalRefSet}
+        orientation="vertical"
+        dismiss={this.props.dismiss}
         tabs={tabs} />
     );
   }

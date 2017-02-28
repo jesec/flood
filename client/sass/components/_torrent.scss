@@ -81,11 +81,6 @@ $more-info--border: $textbox-repeater--button--border;
       font-weight: 500;
     }
 
-    &--downloadRate,
-    &--uploadRate {
-      transition: color 0.15s;
-    }
-
     &--tags {
 
       .torrent {
@@ -104,6 +99,23 @@ $more-info--border: $textbox-repeater--button--border;
         background: $torrent--tags--background;
         color: $torrent--tags--foreground;
       }
+    }
+
+    &__icon {
+
+      &--checkmark {
+
+        &.icon {
+          opacity: 1;
+        }
+      }
+    }
+
+    .icon {
+      fill: currentColor;
+      height: 12px;
+      margin-right: 5px;
+      width: 12px;
     }
   }
 
@@ -422,6 +434,13 @@ $more-info--border: $textbox-repeater--button--border;
               height: 12px;
               width: 12px;
             }
+
+            .torrent {
+
+              &__detail {
+                width: auto;
+              }
+            }
           }
 
           &__wrapper {
@@ -434,7 +453,10 @@ $more-info--border: $textbox-repeater--button--border;
       &__detail {
         flex: 0 0 auto;
         margin-right: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
         white-space: nowrap;
+        width: 100px;
 
         &:last-child {
           margin-right: 0;
@@ -453,7 +475,7 @@ $more-info--border: $textbox-repeater--button--border;
           width: 0;
         }
 
-        &--completed {
+        &--percentComplete {
           width: 90px;
         }
 
@@ -461,12 +483,18 @@ $more-info--border: $textbox-repeater--button--border;
           width: 55px;
         }
 
-        &--sizeBytes {
+        &--sizeBytes,
+        &--freeDiskSpace {
           width: 55px;
         }
 
-        &--added {
+        &--added,
+        &--creationDate {
           width: 80px;
+        }
+
+        &--isPrivate {
+          width: 25px;
         }
 
         &--peers {
@@ -482,7 +510,11 @@ $more-info--border: $textbox-repeater--button--border;
         }
 
         &--tags {
-          margin-left: auto;
+
+          &:last-child {
+            margin-left: auto;
+            width: auto;
+          }
 
           .torrent {
 
@@ -501,11 +533,10 @@ $more-info--border: $textbox-repeater--button--border;
 
         .icon {
           display: inline-block;
-          fill: currentColor;
-          fill-opacity: 0.5;
           height: 10px;
           margin-bottom: -1px;
           margin-right: 3px;
+          opacity: 0.3;
           width: 10px;
           vertical-align: baseline;
         }
@@ -587,20 +618,13 @@ $more-info--border: $textbox-repeater--button--border;
           font-size: 0.9em;
         }
 
-        &--progress-bar {
+        &--percentComplete {
 
           .icon {
             opacity: 1;
           }
         }
       }
-    }
-
-    .icon {
-      opacity: 0.3;
-      height: 12px;
-      margin-right: 5px;
-      width: 12px;
     }
 
     .progress-bar {

@@ -26,18 +26,27 @@ class SettingsStoreClass extends BaseStore {
         property: 'added'
       },
       torrentDetails: [
-        'name',
-        'percentComplete',
-        'downloadTotal',
-        'downloadRate',
-        'uploadTotal',
-        'uploadRate',
-        'eta',
-        'ratio',
-        'sizeBytes',
-        'peers',
-        'seeds',
-        'added'
+        {id: 'name', visible: true},
+        {id: 'percentComplete', visible: true},
+        {id: 'downloadTotal', visible: true},
+        {id: 'downloadRate', visible: true},
+        {id: 'uploadTotal', visible: true},
+        {id: 'uploadRate', visible: true},
+        {id: 'eta', visible: true},
+        {id: 'ratio', visible: true},
+        {id: 'sizeBytes', visible: true},
+        {id: 'peers', visible: true},
+        {id: 'seeds', visible: true},
+        {id: 'added', visible: true},
+        {id: 'creationDate', visible: false},
+        {id: 'freeDiskSpace', visible: false},
+        {id: 'basePath', visible: false},
+        {id: 'comment', visible: false},
+        {id: 'hash', visible: false},
+        {id: 'isPrivate', visible: false},
+        {id: 'message', visible: false},
+        {id: 'trackers', visible: false},
+        {id: 'tags', visible: true}
       ],
       torrentListColumnWidths: {},
       torrentListViewSize: 'condensed',
@@ -110,8 +119,10 @@ class SettingsStoreClass extends BaseStore {
     this.fetchStatus.floodSettingsFetched = true;
 
     Object.keys(settings).forEach((property) => {
-      if (settings[property] != null) {
-        this.floodSettings[property] = settings[property];
+      const incomingSettingsValue = settings[property];
+
+      if (incomingSettingsValue != null) {
+        this.floodSettings[property] = incomingSettingsValue;
       }
     });
 

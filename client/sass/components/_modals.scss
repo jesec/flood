@@ -6,7 +6,7 @@ $modal--heading--border: #1a232c;
 
 $modal--sub-heading--foreground: desaturate(darken($modal--heading--foreground, 15%), 15%);
 
-$modal--transition--duration: 0.5s;
+$modal--transition--duration: 0.2s;
 $modal--transition--scale: 0.85;
 
 $modal--body--foreground: lighten(#6c7e92, 6%);

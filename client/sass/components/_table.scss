@@ -137,10 +137,21 @@ $table--heading--resize--indicator--background: rgba(darken(#f6f8fA, 10%), 0.75)
       opacity: 0;
       position: absolute;
       top: 0;
-      // transform: translateX(20px) !important;
       transition: opacity 0.125s;
       will-change: opacity, transform;
       width: $table--heading--resize--indicator--width;
+    }
+
+    &__column-fill {
+      background: $table--heading--resize--indicator--background;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      position: absolute;
+      top: 0;
+      transition: opacity 0.125s;
+      will-change: opacity, transform;
+      width: 30px;
     }
   }
 
