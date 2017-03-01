@@ -1,6 +1,12 @@
 .context-menu {
   font-size: 0.9em;
   padding: $spacing-unit * 2/5 0;
+  opacity: 0;
   position: fixed;
+  transition: opacity 0.25s, visibility 0.25s;
   z-index: 10;
+
+  &--is-open {
+    opacity: 1;
+  }
 }
