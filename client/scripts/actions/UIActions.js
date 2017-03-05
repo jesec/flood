@@ -26,10 +26,10 @@ let UIActions = {
     });
   },
 
-  dismissContextMenu: () => {
+  dismissContextMenu: (contextMenuID) => {
     AppDispatcher.dispatchUIAction({
-      type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,
-      data: null
+      type: ActionTypes.UI_DISMISS_CONTEXT_MENU,
+      data: contextMenuID
     });
   },
 

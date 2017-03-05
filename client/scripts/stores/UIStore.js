@@ -60,6 +60,14 @@ class UIStoreClass extends BaseStore {
     }
   }
 
+  dismissContextMenu(menuID) {
+    if (this.activeContextMenu.id === menuID) {
+      this.activeContextMenu = null;
+
+      this.emit(EventTypes.UI_CONTEXT_MENU_CHANGE);
+    }
+  }
+
   dismissModal() {
     this.setActiveModal(null);
   }
@@ -148,7 +156,7 @@ class UIStoreClass extends BaseStore {
     }
   }
 
-  setActiveContextMenu(contextMenu = {}) {
+  setActiveContextMenu(contextMenu) {
     this.activeContextMenu = contextMenu;
     this.emit(EventTypes.UI_CONTEXT_MENU_CHANGE);
   }
@@ -205,6 +213,9 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.CLIENT_ADD_TORRENT_SUCCESS:
     case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
       UIStore.dismissModal();
+      break;
+    case ActionTypes.UI_DISMISS_CONTEXT_MENU:
+      UIStore.dismissContextMenu(action.data);
       break;
     case ActionTypes.UI_DISPLAY_CONTEXT_MENU:
       UIStore.setActiveContextMenu(action.data);

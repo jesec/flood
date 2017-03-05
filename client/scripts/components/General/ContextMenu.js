@@ -2,76 +2,124 @@ import classnames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import EventTypes from '../../constants/EventTypes';
 import UIActions from '../../actions/UIActions';
+import UIStore from '../../stores/UIStore';
 
-export default class ContextMenu extends React.Component {
+const methodsToBind = [
+  'handleContextMenuChange',
+  'handleClick',
+  'handleKeyPress'
+];
+
+class ContextMenu extends React.Component {
   constructor() {
     super();
 
     this.state = {
-      menuPosition: {},
-      isMenuPositionIdeal: false
+      clickPosition: {},
+      isMenuPositionIdeal: false,
+      isOpen: false,
+      items: [],
+      menuPosition: {}
     };
+
+    methodsToBind.forEach(method => this[method] = this[method].bind(this));
   }
 
   componentDidMount() {
-    global.document.addEventListener('keydown', this.handleKeyPress);
-    global.document.addEventListener('click', this.handleClick);
-
-    if (this.props.onMenuOpen) {
-      this.props.onMenuOpen();
-    }
-
-    this.checkMenuPosition();
-  }
-
-  componentDidUpdate() {
-    this.checkMenuPosition();
+    UIStore.listen(
+      EventTypes.UI_CONTEXT_MENU_CHANGE,
+      this.handleContextMenuChange
+    );
   }
 
   componentWillUnmount() {
-    global.document.addEventListener('keydown', this.handleKeyPress);
-    global.document.removeEventListener('click', this.handleClick);
-
-    if (this.props.onMenuClose) {
-      this.props.onMenuClose();
-    }
+    UIStore.unlisten(
+      EventTypes.UI_CONTEXT_MENU_CHANGE,
+      this.handleContextMenuChange
+    );
   }
 
-  componentWillUpdate(nextProps) {
-    if (nextProps.clickPosition.x !== this.props.clickPosition.x
-      || nextProps.clickPosition.y !== this.props.clickPosition.y) {
-      this.setState({
-        isMenuPositionIdeal: false,
-        menuPosition: this.getMenuPosition()
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!this.state.isOpen && !nextState.isOpen) {
+      return false;
+    }
+
+    if (this.state.isOpen !== nextState.isOpen
+      || !this.state.isMenuPositionIdeal && nextState.isMenuPositionIdeal) {
+      return true;
+    }
+
+    let shouldUpdate = true;
+
+    if (this.state.clickPosition.x === nextState.clickPosition.x
+      && this.state.clickPosition.y === nextState.clickPosition.y) {
+      shouldUpdate = false;
+    }
+
+    if (!shouldUpdate) {
+      shouldUpdate = this.state.items.some((item, index) => {
+        return item !== nextState.items[index];
       });
+    }
+
+    return shouldUpdate;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (!this.state.isOpen && nextState.isOpen) {
+      global.document.addEventListener('keydown', this.handleKeyPress);
+      global.document.addEventListener('click', this.handleClick);
+
+      if (this.props.onMenuOpen) {
+        this.props.onMenuOpen();
+      }
+    } else if (this.state.isOpen && !nextState.isOpen) {
+      global.document.removeEventListener('keydown', this.handleKeyPress);
+      global.document.removeEventListener('click', this.handleClick);
+
+      if (this.props.onMenuClose) {
+        this.props.onMenuClose();
+      }
     }
   }
 
   checkMenuPosition() {
-    if (!this.state.isMenuPositionIdeal) {
-      this.setState({
-        isMenuPositionIdeal: true,
-        menuPosition: this.getMenuPosition()
-      });
-    }
+    this.setState({
+      isMenuPositionIdeal: true,
+      menuPosition: this.getMenuPosition()
+    });
   }
 
   getMenuPosition() {
-    let menuBorderBox = this.getRenderedMenuBorderBox();
-    let viewportDimensions = this.getViewportDimensions();
-    let menuPosition = {};
+    const {clickPosition} = this.state;
+    const menuBorderBox = this.getRenderedMenuBorderBox();
+    const viewportDimensions = this.getViewportDimensions();
+    const menuPosition = {};
+
+    let shouldRenderRight = true;
+    let shouldRenderDown = true;
 
     if (menuBorderBox.left + menuBorderBox.width > viewportDimensions.width) {
-      menuPosition.right = viewportDimensions.width - this.props.clickPosition.x;
-    } else {
-      menuPosition.left = menuBorderBox.left;
+      shouldRenderRight = false;
     }
 
-    if (menuBorderBox.height + this.props.clickPosition.y > viewportDimensions.height) {
-      menuPosition.bottom = viewportDimensions.height - this.props.clickPosition.y;
-    } else {
+    if (menuBorderBox.height + clickPosition.y > viewportDimensions.height
+      && clickPosition.y > viewportDimensions.height / 2) {
+      shouldRenderDown = false;
+    }
+
+    if (shouldRenderDown) {
       menuPosition.top = menuBorderBox.top;
+    } else {
+      menuPosition.bottom = viewportDimensions.height - clickPosition.y;
+    }
+
+    if (shouldRenderRight) {
+      menuPosition.left = menuBorderBox.left;
+    } else {
+      menuPosition.right = viewportDimensions.width - clickPosition.x;
     }
 
     return menuPosition;
@@ -85,7 +133,7 @@ export default class ContextMenu extends React.Component {
   }
 
   getRenderedMenuBorderBox() {
-    let menuDOMNode = ReactDOM.findDOMNode(this);
+    const menuDOMNode = ReactDOM.findDOMNode(this);
 
     if (menuDOMNode) {
       return menuDOMNode.getBoundingClientRect();
@@ -94,8 +142,8 @@ export default class ContextMenu extends React.Component {
     return null;
   }
 
-  getMenuItems(items) {
-    return items.map((item, index) => {
+  getMenuItems() {
+    return this.state.items.map((item, index) => {
       let labelAction, labelSecondary, menuItemContent;
       let menuItemClasses = classnames('menu__item', {
         'is-selectable': item.clickHandler,
@@ -145,13 +193,33 @@ export default class ContextMenu extends React.Component {
 
   handleClick(event) {
     if (event.which === 1) {
-      UIActions.dismissContextMenu();
+      UIActions.dismissContextMenu(this.props.id);
+    }
+  }
+
+  handleContextMenuChange() {
+    const activeContextMenu = UIStore.getActiveContextMenu();
+
+    if (activeContextMenu != null && activeContextMenu.id === this.props.id) {
+      this.setState({
+        isOpen: true,
+        clickPosition: {
+          x: activeContextMenu.clickPosition.x,
+          y: activeContextMenu.clickPosition.y
+        },
+        isMenuPositionIdeal: false,
+        items: activeContextMenu.items
+      }, this.checkMenuPosition);
+    } else if (this.state.isOpen) {
+      this.setState({
+        isOpen: false
+      });
     }
   }
 
   handleKeyPress(event) {
     if (event.keyCode === 27) {
-      UIActions.dismissContextMenu();
+      UIActions.dismissContextMenu(this.props.id);
     }
   }
 
@@ -168,27 +236,37 @@ export default class ContextMenu extends React.Component {
   }
 
   render() {
-    let className = 'context-menu menu';
-    let menuPosition = {
-      left: this.props.clickPosition.x,
-      top: this.props.clickPosition.y
+    console.log('context menu render');
+    const {props, state} = this;
+    const classes = classnames('context-menu menu', {
+      'context-menu--is-open': state.isOpen && state.isMenuPositionIdeal
+    });
+    let menuPositionStyles = {
+      left: state.clickPosition.x || 0,
+      top: state.clickPosition.y || 0
     };
+    let pointerEventsStyles = {pointerEvents: 'none'};
     let visibility = 'hidden';
 
-    if (this.state.isMenuPositionIdeal) {
+    if (state.isMenuPositionIdeal) {
       visibility = 'visible';
-      menuPosition = this.state.menuPosition;
+      menuPositionStyles = state.menuPosition;
     }
 
-    let styles = {
-      width: `${this.props.width}px`,
-      ...menuPosition,
+    if (state.isOpen) {
+      pointerEventsStyles = {};
+    }
+
+    const styles = {
+      width: `${props.width}px`,
+      ...menuPositionStyles,
+      ...pointerEventsStyles,
       visibility
     };
 
     return (
-      <div className={className} style={styles}>
-        {this.getMenuItems(this.props.items)}
+      <div className={classes} style={styles}>
+        {this.getMenuItems()}
       </div>
     );
   }
@@ -199,9 +277,10 @@ ContextMenu.defaultProps = {
 };
 
 ContextMenu.propTypes = {
-  clickPosition: React.PropTypes.object,
   onMenuClose: React.PropTypes.func,
   onMenuOpen: React.PropTypes.func,
-  items: React.PropTypes.array,
+  id: React.PropTypes.string.isRequired,
   width: React.PropTypes.number
 };
+
+export default ContextMenu;

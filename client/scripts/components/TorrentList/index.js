@@ -39,7 +39,6 @@ const METHODS_TO_BIND = [
   'handleContextMenuClick',
   'handleSettingsChange',
   'handleTorrentClick',
-  'onContextMenuChange',
   'onReceiveTorrentsError',
   'onReceiveTorrentsSuccess',
   'onTorrentFilterChange',
@@ -65,7 +64,6 @@ class TorrentListContainer extends React.Component {
       emptyTorrentList: false,
       floodSettingsFetched: false,
       handleTorrentPriorityChange: null,
-      contextMenu: null,
       tableScrollLeft: 0,
       torrentCount: 0,
       torrentHeight: null,
@@ -121,10 +119,6 @@ class TorrentListContainer extends React.Component {
       EventTypes.UI_TORRENTS_FILTER_CHANGE,
       this.onTorrentFilterChange
     );
-    UIStore.listen(
-      EventTypes.UI_CONTEXT_MENU_CHANGE,
-      this.onContextMenuChange
-    );
     TorrentStore.fetchTorrents();
     global.addEventListener('resize', this.updateTorrentListViewWidth);
   }
@@ -153,10 +147,6 @@ class TorrentListContainer extends React.Component {
     TorrentFilterStore.unlisten(
       EventTypes.UI_TORRENTS_FILTER_CHANGE,
       this.onTorrentFilterChange
-    );
-    UIStore.unlisten(
-      EventTypes.UI_CONTEXT_MENU_CHANGE,
-      this.onContextMenuChange
     );
     global.removeEventListener('resize', this.updateTorrentListViewWidth);
   }
@@ -328,7 +318,8 @@ class TorrentListContainer extends React.Component {
   handleContextMenuClick(torrent, event) {
     event.preventDefault();
 
-    UIStore.setActiveContextMenu({
+    UIActions.displayContextMenu({
+      id: 'torrent-list-item',
       clickPosition: {
         x: event.clientX,
         y: event.clientY
@@ -372,10 +363,6 @@ class TorrentListContainer extends React.Component {
 
   handleTorrentPriorityChange(hash, level) {
     TorrentActions.setPriority(hash, level);
-  }
-
-  onContextMenuChange() {
-    this.setState({contextMenu: UIStore.getActiveContextMenu()});
   }
 
   onReceiveTorrentsError() {
@@ -550,7 +537,6 @@ class TorrentListContainer extends React.Component {
     }
 
     let content = null;
-    let contextMenu = null;
     let torrentListHeading = null;
     const isCondensed = this.state.torrentListViewSize === 'condensed';
     const isListEmpty = this.state.emptyTorrentList
@@ -589,13 +575,6 @@ class TorrentListContainer extends React.Component {
       content = this.getLoadingIndicator();
     }
 
-    if (this.state.contextMenu != null) {
-      contextMenu = (
-        <ContextMenu clickPosition={this.state.contextMenu.clickPosition}
-          items={this.state.contextMenu.items} />
-      );
-    }
-
     return (
       <div className="torrents" ref={ref => this.listContainer = ref}>
         <CustomScrollbars className="torrent__list__scrollbars--horizontal"
@@ -604,12 +583,7 @@ class TorrentListContainer extends React.Component {
           ref={ref => this.horizontalScrollRef = ref}>
           <div className="torrent__list__wrapper"
             style={listWrapperStyle}>
-            <CSSTransitionGroup
-              transitionName="menu"
-              transitionEnterTimeout={250}
-              transitionLeaveTimeout={250}>
-              {contextMenu}
-            </CSSTransitionGroup>
+            <ContextMenu id="torrent-list-item" />
             {torrentListHeading}
             {content}
           </div>
