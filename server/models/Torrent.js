@@ -66,6 +66,18 @@ class Torrent {
     return Object.assign({}, this.torrentData);
   }
 
+  get directory() {
+    return this.torrentData.directory;
+  }
+
+  get name() {
+    return this.torrentData.name;
+  }
+
+  get isMultiFile() {
+    return this.torrentData.isMultiFile === '1';
+  }
+
   get status() {
     return this.torrentData.status || [];
   }

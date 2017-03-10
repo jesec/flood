@@ -87,36 +87,37 @@ var client = {
   },
 
   deleteTorrents: (options, callback) => {
-    let files = [];
-    let request = new ClientRequest();
+    let filesToDelete = null;
+    let eraseTorrentsRequest = new ClientRequest();
 
     if (options.deleteData) {
-      let torrents = torrentCollection.torrents;
+      const torrents = torrentCollection.torrents;
 
-      files = options.hashes.reduce((memo, hash) => {
-        let filePath = torrents[hash].basePath;
+      filesToDelete = options.hashes.reduce((accumulator, hash) => {
+        const torrent = torrents[hash];
 
-        // Let's not try to delete these files.
-        if (filePath != null && filePath !== '/' && filePath !== ''
-          && filePath !== '.') {
-          memo.push(filePath);
+        if (torrent.isMultiFile && torrent.directory != null) {
+          accumulator.push(torrent.directory);
+        } else if (torrent.directory != null && torrent.name != null) {
+          accumulator.push(path.join(torrent.directory, torrent.name));
         }
 
-        return memo;
+        return accumulator;
       }, []);
     }
 
-    request.removeTorrents({hashes: options.hashes});
-    request.onComplete((response, error) => {
-      if (options.deleteData && files.length > 0) {
-        del(files, {force: true});
+    eraseTorrentsRequest.removeTorrents({hashes: options.hashes});
+    eraseTorrentsRequest.onComplete((response, error) => {
+      if (options.deleteData && filesToDelete.length > 0) {
+        del(filesToDelete, {force: true});
       }
 
       client.updateTorrentList();
 
       callback(response, error);
     });
-    request.send();
+
+    eraseTorrentsRequest.send();
   },
 
   downloadFiles(hash, files, res) {
