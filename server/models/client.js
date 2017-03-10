@@ -1,9 +1,9 @@
 'use strict';
 
 const archiver = require('archiver');
-const del = require('del');
 const fs = require('fs');
 const path = require('path');
+const rimraf = require('rimraf');
 const util = require('util');
 
 const clientResponseUtil = require('../util/clientResponseUtil');
@@ -90,26 +90,29 @@ var client = {
     let filesToDelete = null;
     let eraseTorrentsRequest = new ClientRequest();
 
-    if (options.deleteData) {
-      const torrents = torrentCollection.torrents;
-
-      filesToDelete = options.hashes.reduce((accumulator, hash) => {
-        const torrent = torrents[hash];
-
-        if (torrent.isMultiFile && torrent.directory != null) {
-          accumulator.push(torrent.directory);
-        } else if (torrent.directory != null && torrent.name != null) {
-          accumulator.push(path.join(torrent.directory, torrent.name));
-        }
-
-        return accumulator;
-      }, []);
-    }
-
     eraseTorrentsRequest.removeTorrents({hashes: options.hashes});
     eraseTorrentsRequest.onComplete((response, error) => {
-      if (options.deleteData && filesToDelete.length > 0) {
-        del(filesToDelete, {force: true});
+      if (options.deleteData) {
+        const torrents = torrentCollection.torrents;
+
+        options.hashes.forEach(hash => {
+          let fileToDelete = null;
+          const torrent = torrents[hash];
+
+          if (torrent.isMultiFile && torrent.directory != null) {
+            fileToDelete = torrent.directory;
+          } else if (torrent.directory != null && torrent.name != null) {
+            fileToDelete = path.join(torrent.directory, torrent.name);
+          }
+
+          if (fileToDelete != null) {
+            rimraf(fileToDelete, {disableGlob: true}, error => {
+              if (error) {
+                console.error(`Error deleting file: ${fileToDelete}\n${error}`);
+              }
+            });
+          }
+        });
       }
 
       client.updateTorrentList();
