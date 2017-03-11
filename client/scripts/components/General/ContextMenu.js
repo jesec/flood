@@ -236,7 +236,6 @@ class ContextMenu extends React.Component {
   }
 
   render() {
-    console.log('context menu render');
     const {props, state} = this;
     const classes = classnames('context-menu menu', {
       'context-menu--is-open': state.isOpen && state.isMenuPositionIdeal
