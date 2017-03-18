@@ -41,38 +41,39 @@ $progress-bar--track--background--selected: rgba(#fff, 0.15);
     padding-right: 5px;
 
     .icon {
+      color: $green;
       display: block;
-      fill: $green;
+      fill: currentColor;
       height: 12px;
       transition: opacity 0.15s;
       width: 12px;
 
       .torrent--is-seeding & {
-        fill: $progress-bar--fill--completed;
+        color: $progress-bar--fill--completed;
       }
 
       .torrent--is-stopped & {
-        fill: $progress-bar--fill--stopped;
+        color: $progress-bar--fill--stopped;
       }
 
       .torrent--has-error & {
-        fill: $progress-bar--fill--error;
+        color: $progress-bar--fill--error;
       }
 
       .torrent--is-checking & {
-        fill: $progress-bar--fill--checking;
+        color: $progress-bar--fill--checking;
       }
 
       .torrent--is-selected & {
-        fill: $progress-bar--fill--selected;
+        color: $progress-bar--fill--selected;
       }
 
       .torrent--is-selected.torrent--is-stopped & {
-        fill: $progress-bar--fill--selected--stopped;
+        color: $progress-bar--fill--selected--stopped;
       }
 
       .torrent--has-error.torrent--is-stopped & {
-        fill: $progress-bar--fill--error--stopped;
+        color: $progress-bar--fill--error--stopped;
       }
     }
   }
