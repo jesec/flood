@@ -10,20 +10,19 @@ const methodsToBind = [
   'handleScrollStart',
   'handleScrollStop',
   'measureItemHeight',
+  'scrollToTop',
   'setScrollPosition',
   'setViewportHeight'
 ];
-
-let cachedList = null;
 
 class ListViewport extends React.Component {
   constructor() {
     super();
 
+    this.isScrolling = false;
     this.lastScrollTop = 0;
     this.nodeRefs = {};
     this.state = {
-      isScrolling: false,
       itemHeight: null,
       listVerticalPadding: null,
       scrollTop: 0,
@@ -35,9 +34,11 @@ class ListViewport extends React.Component {
     });
 
     this.setViewportHeight = _.debounce(this.setViewportHeight, 250);
-    this.setScrollPosition = _.throttle(this.setScrollPosition, 100, {
+    this.updateAfterScrolling = _.debounce(this.updateAfterScrolling, 500, {
+      leading: true,
       trailing: true
     });
+    this.setScrollPosition = _.throttle(this.setScrollPosition, 100);
   }
 
   componentDidMount() {
@@ -70,12 +71,10 @@ class ListViewport extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const scrollDelta = nextState.scrollTop - this.lastScrollTop;
+    const scrollDelta = Math.abs(this.state.scrollTop - nextState.scrollTop);
     const {outerScrollbar} = this.nodeRefs;
 
-    if ((nextState.isScrolling && (scrollDelta > this.state.viewportHeight
-      || scrollDelta < this.state.viewportHeight * -1))
-      || (outerScrollbar != null && outerScrollbar.refs.scrollbar.dragging)) {
+    if (this.isScrolling && scrollDelta > 20) {
       return false;
     }
 
@@ -93,19 +92,13 @@ class ListViewport extends React.Component {
     // Calculate the number of items that should be rendered based on the height
     // of the viewport. We offset this to render a few more outide of the
     // container's dimensions, which looks nicer when the user scrolls.
-    let offsetBottom = 1;
-    let offsetTop = 1;
-
-    if (!this.nodeRefs.outerScrollbar.refs.scrollbar.dragging) {
-      if (scrollDelta < 0) {
-        offsetTop = 18;
-      } else if (scrollDelta > 0) {
-        offsetBottom = 18;
-      } else {
-        offsetBottom = 10;
-        offsetTop = 10;
-      }
-    }
+    const {itemScrollOffset} = this.props;
+    const offsetBottom = scrollDelta > 0
+      ? itemScrollOffset * 2
+      : itemScrollOffset / 2;
+    const offsetTop = scrollDelta < 0
+      ? itemScrollOffset * 2
+      : itemScrollOffset / 2;
 
     let {
       itemHeight,
@@ -143,11 +136,12 @@ class ListViewport extends React.Component {
   }
 
   handleScrollStart() {
-    this.setState({isScrolling: true});
+    this.isScrolling = true;
   }
 
   handleScrollStop() {
-    this.setState({isScrolling: false});
+    this.isScrolling = false;
+    this.updateAfterScrolling();
   }
 
   measureItemHeight() {
@@ -187,6 +181,17 @@ class ListViewport extends React.Component {
     return {bottom, top};
   }
 
+  scrollToTop() {
+    if (this.state.scrollTop !== 0) {
+      if (this.nodeRefs.outerScrollbar != null) {
+        this.nodeRefs.outerScrollbar.refs.scrollbar.scrollToTop();
+      }
+
+      this.lastScrollTop = 0;
+      this.setState({scrollTop: 0});
+    }
+  }
+
   setScrollPosition(scrollValues) {
     this.lastScrollTop = this.state.scrollTop;
     this.setState({scrollTop: scrollValues.scrollTop});
@@ -202,6 +207,10 @@ class ListViewport extends React.Component {
     }
   }
 
+  updateAfterScrolling() {
+    this.forceUpdate();
+  }
+
   render() {
     const {lastScrollTop, nodeRefs, props, state} = this;
     const {minItemIndex, maxItemIndex} = this.getViewportLimits(
@@ -214,7 +223,7 @@ class ListViewport extends React.Component {
 
     // For loops are fast, and performance matters here.
     for (let index = minItemIndex; index < maxItemIndex; index++) {
-      list.push(props.itemRenderer(index, props.itemRendererProps));
+      list.push(props.itemRenderer(index));
     }
 
     const listContent = (
@@ -251,12 +260,14 @@ class ListViewport extends React.Component {
 
 ListViewport.defaultProps = {
   bottomSpacerClass: 'list__spacer list__spacer--bottom',
+  itemScrollOffset: 10,
   topSpacerClass: 'list__spacer list__spacer--top'
 };
 
 ListViewport.propTypes = {
   bottomSpacerClass: React.PropTypes.string,
   itemRenderer: React.PropTypes.func.isRequired,
+  itemScrollOffset: React.PropTypes.number,
   listClass: React.PropTypes.string,
   listLength: React.PropTypes.number.isRequired,
   scrollContainerClass: React.PropTypes.string,

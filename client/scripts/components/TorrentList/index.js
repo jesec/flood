@@ -382,7 +382,9 @@ class TorrentListContainer extends React.Component {
   }
 
   onTorrentFilterChange() {
-    this.forceUpdate();
+    if (this.listViewportRef != null) {
+      this.listViewportRef.scrollToTop();
+    }
   }
 
   onTorrentSelectionChange() {
@@ -495,9 +497,9 @@ class TorrentListContainer extends React.Component {
     this.setState({torrentListColumnWidths: nextPropWidths});
   }
 
-  renderListItem(index, options) {
+  renderListItem(index) {
     const selectedTorrents = TorrentStore.getSelectedTorrents();
-    const {displayedProperties, torrents} = this.state;
+    const {displayedProperties, torrentListViewSize, torrents} = this.state;
     const torrent = torrents[index];
     const {hash} = torrent;
 
@@ -509,7 +511,7 @@ class TorrentListContainer extends React.Component {
         handleDoubleClick={this.handleDoubleClick}
         handleRightClick={this.handleContextMenuClick}
         index={index}
-        isCondensed={options.isCondensed}
+        isCondensed={torrentListViewSize === 'condensed'}
         key={hash}
         columns={this.state.displayedProperties}
         propWidths={this.state.torrentListColumnWidths}
@@ -552,7 +554,6 @@ class TorrentListContainer extends React.Component {
       content = (
         <ListViewport getVerticalThumb={this.getVerticalScrollbarThumb}
           itemRenderer={this.renderListItem}
-          itemRendererProps={{isCondensed}}
           listClass="torrent__list"
           listLength={this.state.torrentCount}
           ref={ref => this.listViewportRef = ref}
