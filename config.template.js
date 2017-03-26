@@ -2,6 +2,7 @@ const CONFIG = {
   baseURI: '/',
   dbCleanInterval: 1000 * 60 * 60,
   dbPath: './server/db/',
+  floodServerHost: '127.0.0.1',
   floodServerPort: 3000,
   maxHistoryStates: 30,
   pollInterval: 1000 * 5,

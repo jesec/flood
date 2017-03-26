@@ -18,7 +18,9 @@ let debug = require('debug')('flood:server');
 
 // Get port from environment and store in Express.
 let port = normalizePort(config.floodServerPort);
+let host = config.floodServerHost;
 app.set('port', port);
+app.set('host', host);
 
 // Create HTTP or HTTPS server.
 let server;
@@ -39,7 +41,7 @@ if (config.ssl) {
 }
 
 // Listen on provided port, on all network interfaces.
-server.listen(port);
+server.listen(port, host);
 server.on('error', onError);
 server.on('listening', onListening);
 
