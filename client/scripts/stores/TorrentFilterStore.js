@@ -97,6 +97,7 @@ class TorrentFilterStoreClass extends BaseStore {
 
   setSearchFilter(filter) {
     this.searchFilter = filter;
+    this.emit(EventTypes.UI_TORRENTS_FILTER_CHANGE);
     this.emit(EventTypes.UI_TORRENTS_FILTER_SEARCH_CHANGE);
   }
 

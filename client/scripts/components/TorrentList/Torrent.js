@@ -22,19 +22,19 @@ import UploadThickIcon from '../Icons/UploadThickIcon';
 
 const condensedValueTransformers = {
   downloadTotal: torrent => torrent.bytesDone,
-  peers: torrent => torrent.totalPeers,
+  peers: torrent => torrent.connectedPeers,
   percentComplete: torrent => {
     return (
       <ProgressBar percent={torrent.percentComplete}
         icon={torrentStatusIcons(torrent.status)} />
     );
   },
-  seeds: torrent => torrent.totalSeeds
+  seeds: torrent => torrent.connectedSeeds
 };
 
 const condensedSecondaryValueTransformers = {
-  peers: torrent => torrent.connectedPeers,
-  seeds: torrent => torrent.connectedSeeds
+  peers: torrent => torrent.totalPeers,
+  seeds: torrent => torrent.totalSeeds
 };
 
 const expandedTorrentSectionContent = {
@@ -46,14 +46,14 @@ const expandedTorrentSectionContent = {
 const expandedTorrentDetailsToHide = ['downloadTotal'];
 
 const expandedValueTransformers = {
-  peers: torrent => torrent.totalPeers,
-  seeds: torrent => torrent.totalSeeds
+  peers: torrent => torrent.connectedPeers,
+  seeds: torrent => torrent.connectedSeeds
 };
 
 const expandedSecondaryValueTransformers = {
-  peers: torrent => torrent.connectedPeers,
-  percentComplete: torrent => torrent.bytesDone,
-  seeds: torrent => torrent.connectedSeeds
+  peers: torrent => torrent.totalPeers,
+  seeds: torrent => torrent.totalSeeds,
+  percentComplete: torrent => torrent.bytesDone
 };
 
 const ICONS = {
