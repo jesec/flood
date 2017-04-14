@@ -50,6 +50,19 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
   * `npm run start:watch` watches for changes in the client-side source.
 3. Access the UI through the [browser-sync](https://www.browsersync.io/) proxy at [localhost:4200](http://localhost:4200).
 
+#### Running with Docker
+1. `docker build -t rtorrent-flood .`
+2. `docker run --name rtorrent-flood -e RTORRENT_SCGI_HOST=w.x.y.z -p 3000:3000 rtorrent-flood`
+3. Other supported environment variables:
+  * `FLOOD_BASE_URI`
+  * `FLOOD_SECRET`
+  * `RTORRENT_SCGI_HOST`
+  * `RTORRENT_SCGI_PORT`
+  * `RTORRENT_SOCK`
+  * `FLOOD_ENABLE_SSL`
+
+The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`.
+
 # Screenshots
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-a-0606.png)
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-b-0606.png)
