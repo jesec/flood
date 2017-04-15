@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as i18n from './i18n';
-import Application from './components/Layout/Application';
+import Application from './components/layout/Application';
 import EventTypes from './constants/EventTypes';
 import Login from './views/Login';
 import Register from './views/Register';

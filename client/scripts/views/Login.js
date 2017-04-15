@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ApplicationView from '../components/Layout/ApplicationView';
-import LoginForm from '../components/Auth/LoginForm';
+import ApplicationView from '../components/layout/ApplicationView';
+import LoginForm from '../components/auth/LoginForm';
 
 export default class LoginView extends React.Component {
   render() {
