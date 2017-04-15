@@ -40,7 +40,7 @@ let dirs = {
   dist: 'server/assets',
   images: 'images',
   imagesDist: 'images',
-  js: 'scripts',
+  js: 'javascript',
   jsDist: '',
   styles: 'sass',
   stylesDist: ''
