@@ -2,16 +2,16 @@ import _ from 'lodash';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
 
-import AddTorrentsModal from './add-torrents-modal';
-import ConfirmModal from './confirm-modal';
+import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
+import ConfirmModal from './confirm-modal/ConfirmModal';
 import EventTypes from '../../constants/EventTypes';
-import FeedsModal from './feeds-modal';
+import FeedsModal from './feeds-modal/FeedsModal';
 import Modal from './Modal';
-import MoveTorrentsModal from './move-torrents-modal';
-import RemoveTorrentsModal from './remove-torrents-modal';
-import SetTagsModal from './set-tags-modal';
-import SettingsModal from './settings-modal';
-import TorrentDetailsModal from './torrent-details-modal';
+import MoveTorrentsModal from './move-torrents-modal/MoveTorrentsModal';
+import RemoveTorrentsModal from './remove-torrents-modal/RemoveTorrentsModal';
+import SetTagsModal from './set-tags-modal/SetTagsModal';
+import SettingsModal from './settings-modal/SettingsModal';
+import TorrentDetailsModal from './torrent-details-modal/TorrentDetailsModal';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 

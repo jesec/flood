@@ -9,7 +9,7 @@ import EventTypes from '../../constants/EventTypes';
 
 const METHODS_TO_BIND = ['handleAlertChange'];
 
-export default class AlertList extends React.Component {
+export default class Alerts extends React.Component {
   constructor() {
     super(...arguments);
 

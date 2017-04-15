@@ -3,7 +3,7 @@ import {IndexRoute, Router, Route, Link, browserHistory} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import * as i18n from './i18n';
+import * as i18n from './i18n/languages';
 import Application from './components/layout/Application';
 import EventTypes from './constants/EventTypes';
 import Login from './views/Login';

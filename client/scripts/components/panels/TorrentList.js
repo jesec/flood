@@ -2,7 +2,7 @@ import React from 'react';
 
 import ActionBar from '../torrent-list/ActionBar';
 import ApplicationPanel from '../layout/ApplicationPanel';
-import TorrentList from '../torrent-list';
+import TorrentList from '../torrent-list/TorrentList';
 
 class TorrentListPanel extends React.Component {
   render() {

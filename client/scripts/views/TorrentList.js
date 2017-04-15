@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Alerts from '../components/alerts';
+import Alerts from '../components/alerts/Alerts';
 import ApplicationView from '../components/layout/ApplicationView';
 import ApplicationContent from '../components/layout/ApplicationContent';
-import Modals from '../components/modals';
+import Modals from '../components/modals/Modals';
 import Sidebar from '../components/panels/Sidebar';
 import SettingsStore from '../stores/SettingsStore';
 import TorrentActions from '../actions/TorrentActions';

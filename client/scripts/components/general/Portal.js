@@ -2,7 +2,7 @@ import {IntlProvider} from 'react-intl';
 import React, {PropTypes} from 'react';
 import ReactDOM from 'react-dom';
 
-import * as i18n from '../../i18n';
+import * as i18n from '../../i18n/languages';
 import SettingsStore from '../../stores/SettingsStore';
 
 class Portal extends React.Component {
