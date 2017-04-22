@@ -1,3 +1,7 @@
+# Change Log
+
+## [Unreleased]
+
 ## [1.0.0] (April 21, 2017)
 * First "official" release
 * Change log and semver versioning (finally)
@@ -14,3 +18,6 @@
   * Customizable torrent detail columns
 * Basic torrent list filtering (by status, tag, and tracker)
 * Auto-download torrents from RSS feeds
+
+[Unreleased]:https://github.com/jfurrow/flood/compare/v1.0.0...HEAD
+[1.0.0]:https://github.com/jfurrow/flood/compare/ae520c0a33ffb4ae6f21e47bc6f7e6007dd1e6dc...v1.0.0
