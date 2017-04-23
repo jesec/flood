@@ -64,9 +64,9 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`.
 
 # Screenshots
-![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-a-0606.png)
-![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-b-0606.png)
-![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-c-0606.png)
-![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-d-0606.png)
-![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-e-0606.png)
-![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshot-f-0606.png)
+![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-a.png)
+![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-b.png)
+![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-c.png)
+![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-d.png)
+![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-e.png)
+![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-f.png)
