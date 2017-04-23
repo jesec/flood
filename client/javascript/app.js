@@ -18,7 +18,7 @@ let appRoutes = (
       <IndexRoute component={Login} />
       <Route path="login" component={Login} />
       <Route path="register" component={Register} />
-      <Route path="list" component={TorrentClientOverview} />
+      <Route path="overview" component={TorrentClientOverview} />
       <Route path="*" component={Login} />
     </Route>
   </Router>
