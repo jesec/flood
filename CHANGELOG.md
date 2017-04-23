@@ -3,6 +3,7 @@
 ## [Unreleased]
 * Changed `/list/` route to `/overview/`
 * Reorganized and renamed component source files
+* Removed verbose logging from `HistoryEra`
 
 ## [1.0.0] (April 21, 2017)
 * First "official" release
