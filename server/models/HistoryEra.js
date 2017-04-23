@@ -134,9 +134,7 @@ class HistoryEra {
   removeOutdatedData(db) {
     if (this.opts.maxTime > 0) {
       let minTimestamp = Date.now() - this.opts.maxTime;
-      db.remove({ts: {$lt: minTimestamp}}, {multi: true}, (err, numRemoved) => {
-        console.error(`removed ${numRemoved} entries from ${this.opts.name}`)
-      });
+      db.remove({ts: {$lt: minTimestamp}}, {multi: true});
     }
   }
 
