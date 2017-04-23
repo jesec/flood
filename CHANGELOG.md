@@ -1,6 +1,8 @@
 # Change Log
 
 ## [Unreleased]
+* Changed `/list/` route to `/overview/`
+* Reorganized and renamed component source files
 
 ## [1.0.0] (April 21, 2017)
 * First "official" release
