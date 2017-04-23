@@ -6,10 +6,10 @@ import ReactDOM from 'react-dom';
 import * as i18n from './i18n/languages';
 import Application from './components/layout/Application';
 import EventTypes from './constants/EventTypes';
-import Login from './views/Login';
-import Register from './views/Register';
+import Login from './components/views/Login';
+import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
-import TorrentList from './views/TorrentList';
+import TorrentList from './components/views/TorrentList';
 import UIStore from './stores/UIStore';
 
 let appRoutes = (
