@@ -1,20 +1,20 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
-import ClientStats from '../sidebar/TransferData';
+import ClientStats from './TransferData';
 import CustomScrollbars from '../general/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
-import FeedsButton from '../sidebar/FeedsButton';
-import NotificationsButton from '../sidebar/NotificationsButton';
-import SearchTorrents from '../sidebar/SearchTorrents';
-import SettingsButton from '../sidebar/SettingsButton';
-import SidebarActions from '../sidebar/SidebarActions';
-import SpeedLimitDropdown from '../sidebar/SpeedLimitDropdown';
-import StatusFilters from '../sidebar/StatusFilters';
-import TagFilters from '../sidebar/TagFilters';
+import FeedsButton from './FeedsButton';
+import NotificationsButton from './NotificationsButton';
+import SearchTorrents from './SearchTorrents';
+import SettingsButton from './SettingsButton';
+import SidebarActions from './SidebarActions';
+import SpeedLimitDropdown from './SpeedLimitDropdown';
+import StatusFilters from './StatusFilters';
+import TagFilters from './TagFilters';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
-import TrackerFilters from '../sidebar/TrackerFilters';
+import TrackerFilters from './TrackerFilters';
 import UIStore from '../../stores/UIStore';
 
 class Sidebar extends React.Component {

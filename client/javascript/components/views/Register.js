@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import ApplicationView from '../components/layout/ApplicationView';
-import LoginForm from '../components/auth/LoginForm';
+import ApplicationView from '../layout/ApplicationView';
+import AuthForm from '../auth/AuthForm';
 
 export default class LoginView extends React.Component {
   render() {
     return (
       <ApplicationView modifier="auth-form">
-        <LoginForm />
+        <AuthForm mode="register" />
       </ApplicationView>
     );
   }

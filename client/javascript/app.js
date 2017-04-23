@@ -4,21 +4,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as i18n from './i18n/languages';
-import Application from './components/layout/Application';
+import AuthEnforcer from './components/auth/AuthEnforcer';
 import EventTypes from './constants/EventTypes';
-import Login from './views/Login';
-import Register from './views/Register';
+import Login from './components/views/Login';
+import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
-import TorrentList from './views/TorrentList';
+import TorrentClientOverview from './components/views/TorrentClientOverview';
 import UIStore from './stores/UIStore';
 
 let appRoutes = (
   <Router history={browserHistory}>
-    <Route path="/" component={Application}>
+    <Route path="/" component={AuthEnforcer}>
       <IndexRoute component={Login} />
       <Route path="login" component={Login} />
       <Route path="register" component={Register} />
-      <Route path="list" component={TorrentList} />
+      <Route path="overview" component={TorrentClientOverview} />
       <Route path="*" component={Login} />
     </Route>
   </Router>

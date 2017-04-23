@@ -25,7 +25,7 @@ const METHODS_TO_BIND = [
   'handleUIDependenciesLoaded'
 ];
 
-class Application extends React.Component {
+class AuthEnforcer extends React.Component {
   constructor() {
     super();
 
@@ -90,7 +90,7 @@ class Application extends React.Component {
       browserHistory.push('register');
     } else {
       this.setState({authStatusDetermined: true, isAuthenticated: true});
-      browserHistory.push('list');
+      browserHistory.push('overview');
     }
   }
 
@@ -106,12 +106,12 @@ class Application extends React.Component {
 
   handleLoginSuccess() {
     this.setState({authStatusDetermined: true, isAuthenticated: true});
-    browserHistory.push('list');
+    browserHistory.push('overview');
   }
 
   handleRegisterSuccess() {
     this.setState({authStatusDetermined: true, isAuthenticated: true});
-    browserHistory.push('list');
+    browserHistory.push('overview');
   }
 
   getDependencyList() {
@@ -212,8 +212,8 @@ class Application extends React.Component {
   }
 }
 
-Application.propTypes = {
+AuthEnforcer.propTypes = {
   children: React.PropTypes.node
 };
 
-export default Application;
+export default AuthEnforcer;
