@@ -9,7 +9,7 @@ import EventTypes from './constants/EventTypes';
 import Login from './components/views/Login';
 import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
-import TorrentList from './components/views/TorrentList';
+import TorrentClientOverview from './components/views/TorrentClientOverview';
 import UIStore from './stores/UIStore';
 
 let appRoutes = (
@@ -18,7 +18,7 @@ let appRoutes = (
       <IndexRoute component={Login} />
       <Route path="login" component={Login} />
       <Route path="register" component={Register} />
-      <Route path="list" component={TorrentList} />
+      <Route path="list" component={TorrentClientOverview} />
       <Route path="*" component={Login} />
     </Route>
   </Router>

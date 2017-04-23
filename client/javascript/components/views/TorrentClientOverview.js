@@ -12,7 +12,7 @@ import Sidebar from '../sidebar/Sidebar';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentList from '../torrent-list/TorrentList';
 
-export default class TorrentListView extends React.Component {
+export default class TorrentCLientOverview extends React.Component {
   componentDidMount() {
     SettingsStore.fetchClientSettings();
     SettingsStore.fetchFloodSettings();
