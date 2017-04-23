@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as i18n from './i18n/languages';
-import Application from './components/layout/Application';
+import AuthEnforcer from './components/auth/AuthEnforcer';
 import EventTypes from './constants/EventTypes';
 import Login from './components/views/Login';
 import Register from './components/views/Register';
@@ -14,7 +14,7 @@ import UIStore from './stores/UIStore';
 
 let appRoutes = (
   <Router history={browserHistory}>
-    <Route path="/" component={Application}>
+    <Route path="/" component={AuthEnforcer}>
       <IndexRoute component={Login} />
       <Route path="login" component={Login} />
       <Route path="register" component={Register} />
