@@ -114,6 +114,7 @@ class ClientRequest {
   addFiles(options) {
     let files = this.getEnsuredArray(options.files);
     let path = options.path;
+    let useBasePath = options.useBasePath;
     let start = options.start;
     let tagsArr = options.tags;
 
@@ -123,7 +124,11 @@ class ClientRequest {
       let timeAdded = Math.floor(Date.now() / 1000);
 
       if (path && path !== '') {
-        parameters.push(`d.directory.set="${path}"`);
+        if (useBasePath) {
+          parameters.push(`d.directory_base.set="${path}"`);
+        } else {
+          parameters.push(`d.directory.set="${path}"`);
+        }
       }
 
       parameters = this.addTagsToRequest(tagsArr, parameters);
