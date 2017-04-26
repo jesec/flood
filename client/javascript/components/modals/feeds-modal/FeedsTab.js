@@ -148,15 +148,16 @@ class FeedsTab extends React.Component {
 
     return [
       <div className="form__row" key="feed-row-1">
-        <FormColumn error={errors.url}>
-          <FormLabel error={errors.url}>
-            <FormattedMessage id="feeds.url"
-              defaultMessage="URL" />
+        <FormColumn error={errors.label}>
+          <FormLabel error={errors.label}>
+            <FormattedMessage id="feeds.label"
+              defaultMessage="Label" />
           </FormLabel>
           <input className="textbox"
-            onChange={this.handleFieldInput.bind(this, 'url')}
-            placeholder={this.props.intl.formatMessage(MESSAGES.url)}
-            ref={ref => this.inputRefs.feedURL = ref} type="text" />
+            onChange={this.handleFieldInput.bind(this, 'label')}
+            placeholder={this.props.intl.formatMessage(MESSAGES.label)}
+            ref={ref => this.inputRefs.feedLabel = ref}
+            type="text" />
         </FormColumn>
         <FormColumn modifiers={['auto']}>
           <FormLabel>
@@ -171,16 +172,15 @@ class FeedsTab extends React.Component {
         </FormColumn>
       </div>,
       <div className="form__row" key="feed-row-2">
-        <FormColumn error={errors.label}>
-          <FormLabel error={errors.label}>
-            <FormattedMessage id="feeds.label"
-              defaultMessage="Label" />
+        <FormColumn error={errors.url}>
+          <FormLabel error={errors.url}>
+            <FormattedMessage id="feeds.url"
+              defaultMessage="URL" />
           </FormLabel>
           <input className="textbox"
-            onChange={this.handleFieldInput.bind(this, 'label')}
-            placeholder={this.props.intl.formatMessage(MESSAGES.label)}
-            ref={ref => this.inputRefs.feedLabel = ref}
-            type="text" />
+            onChange={this.handleFieldInput.bind(this, 'url')}
+            placeholder={this.props.intl.formatMessage(MESSAGES.url)}
+            ref={ref => this.inputRefs.feedURL = ref} type="text" />
         </FormColumn>
         <FormColumn modifiers={['auto']}>
           <button className="button button--primary"
