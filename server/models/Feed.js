@@ -12,7 +12,7 @@ class Feed {
     }
 
     this.items = [];
-    this.maxItemHistory = options.maxItemHistory || 10;
+    this.maxItemHistory = options.maxItemHistory || 100;
     this.reader = new FeedSub(options.url, {
       autoStart: true,
       emitOnStart: true,
@@ -22,7 +22,7 @@ class Feed {
     this.initReader();
   }
 
-  getRecentItems() {
+  getItems() {
     return this.items;
   }
 
@@ -46,7 +46,7 @@ class Feed {
     this.reader.start();
   }
 
-  stop() {
+  stopReader() {
     this.reader.stop();
   }
 }

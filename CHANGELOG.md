@@ -4,6 +4,8 @@
 * Changed `/list/` route to `/overview/`
 * Reorganized and renamed component source files
 * Removed verbose logging from `HistoryEra`
+* Check existing feed items against new download rules
+* Switch URL and Label textboxes in Add Feed form to match the Download Rules form
 
 ## [1.0.0] (April 21, 2017)
 * First "official" release
