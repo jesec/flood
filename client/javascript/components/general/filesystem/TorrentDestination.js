@@ -7,6 +7,7 @@ import AddMini from '../../../components/icons/AddMini';
 import ArrowIcon from '../../../components/icons/ArrowIcon';
 import File from '../../../components/icons/File';
 import FolderClosedSolid from '../../../components/icons/FolderClosedSolid';
+import Checkbox from '../../general/form-elements/Checkbox';
 import CustomScrollbars from '../../../components/general/CustomScrollbars';
 import EventTypes from '../../../constants/EventTypes';
 import Portal from '../../../components/general/Portal';
@@ -36,6 +37,7 @@ const MESSAGES = defineMessages({
 });
 
 const METHODS_TO_BIND = [
+  'handleBasePathCheckBoxCheck',
   'handleDestinationChange',
   'handleDirectoryClick',
   'handleDirectoryListButtonClick',
@@ -63,6 +65,7 @@ class TorrentDestination extends React.Component {
       attachedPanelMaxHeight: MAX_PANEL_HEIGHT,
       baseDestination,
       destination: baseDestination,
+      isBasePath: false,
       error: null,
       directories: null,
       files: null,
@@ -217,7 +220,19 @@ class TorrentDestination extends React.Component {
   }
 
   getValue() {
+    return this.getDestination();
+  }
+
+  getDestination() {
     return this.state.destination;
+  }
+
+  isBasePath() {
+    return this.state.isBasePath;
+  }
+
+  handleBasePathCheckBoxCheck(value) {
+    this.setState({isBasePath: value});
   }
 
   handleDestinationChange(event) {
@@ -371,31 +386,42 @@ class TorrentDestination extends React.Component {
 
     return (
       <div className="attached-panel__wrapper form__row">
-        <input className={textboxClasses}
-          onChange={this.handleDestinationChange}
-          onClick={this.handleTextboxClick}
-          placeholder={this.props.intl.formatMessage({
-            id: 'torrents.add.destination.placeholder',
-            defaultMessage: 'Destination'
-          })}
-          ref={(ref) => {this.textboxRef = ref;}}
-          value={this.state.destination}
-          type="text" />
-        <div className="floating-action__group
-          floating-action__group--on-textbox">
-          <button className="floating-action__button
-            floating-action__button--search"
-            onClick={this.handleDirectoryListButtonClick}>
-            <Search />
-          </button>
+        <div className="form__column form__column--large" style={{position: 'relative'}}>
+          <input className={textboxClasses}
+            onChange={this.handleDestinationChange}
+            onClick={this.handleTextboxClick}
+            placeholder={this.props.intl.formatMessage({
+              id: 'torrents.add.destination.placeholder',
+              defaultMessage: 'Destination'
+            })}
+            ref={(ref) => {this.textboxRef = ref;}}
+            value={this.state.destination}
+            type="text" />
+          <div className="floating-action__group
+            floating-action__group--on-textbox">
+            <button className="floating-action__button
+              floating-action__button--search"
+              onClick={this.handleDirectoryListButtonClick}>
+              <Search />
+            </button>
+          </div>
+          <Portal>
+            <CSSTransitionGroup transitionName="attached-panel"
+              transitionEnterTimeout={250}
+              transitionLeaveTimeout={250}>
+              {directoryList}
+            </CSSTransitionGroup>
+          </Portal>
         </div>
-        <Portal>
-          <CSSTransitionGroup transitionName="attached-panel"
-            transitionEnterTimeout={250}
-            transitionLeaveTimeout={250}>
-            {directoryList}
-          </CSSTransitionGroup>
-        </Portal>
+        <div className="form__column form__column--auto">
+          <Checkbox
+            onChange={this.handleBasePathCheckBoxCheck}>
+            <FormattedMessage
+              id="torrents.destination.base_path"
+              defaultMessage="Use as Base Path"
+            />
+          </Checkbox>
+        </div>
       </div>
     );
   }
