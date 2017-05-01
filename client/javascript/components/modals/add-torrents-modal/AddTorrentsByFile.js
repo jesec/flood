@@ -153,6 +153,10 @@ class AddTorrentsByFile extends React.Component {
 
       const destination = this.torrentDestinationRef.getWrappedInstance()
         .getValue();
+
+      const isBasePath = this.torrentDestinationRef.getWrappedInstance()
+        .isBasePath();
+
       const fileData = new FormData();
 
       this.state.files.forEach(file => {
@@ -164,6 +168,7 @@ class AddTorrentsByFile extends React.Component {
       });
 
       fileData.append('destination', destination);
+      fileData.append('isBasePath', isBasePath);
       fileData.append('start', this.state.startTorrents);
 
       TorrentActions.addTorrentsByFiles(fileData, destination);
