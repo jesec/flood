@@ -152,6 +152,7 @@ class ClientRequest {
 
   addURLs(options) {
     let path = options.path;
+    let isBasePath = options.isBasePath;
     let start = options.start;
     let tagsArr = options.tags;
     let urls = this.getEnsuredArray(options.urls);
@@ -162,7 +163,11 @@ class ClientRequest {
       let timeAdded = Math.floor(Date.now() / 1000);
 
       if (path) {
-        parameters.push(`d.directory.set="${path}"`);
+        if (isBasePath) {
+          parameters.push(`d.directory_base.set="${path}"`);
+        } else {
+          parameters.push(`d.directory.set="${path}"`);
+        }
       }
 
       parameters = this.addTagsToRequest(tagsArr, parameters);
