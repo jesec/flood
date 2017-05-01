@@ -272,8 +272,15 @@ class ClientRequest {
   setDownloadPath(options) {
     let hashes = this.getEnsuredArray(options.hashes);
 
+    let pathMethod;
+    if (options.isBasePath) {
+      pathMethod = 'd.directory_base.set';
+    } else {
+      pathMethod = 'd.directory.set'
+    }
+
     hashes.forEach((hash) => {
-      this.requests.push(this.getMethodCall('d.directory.set',
+      this.requests.push(this.getMethodCall(pathMethod,
         [hash, options.path]));
       this.requests.push(this.getMethodCall('d.open', [hash]));
       this.requests.push(this.getMethodCall('d.close', [hash]));

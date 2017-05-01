@@ -228,6 +228,7 @@ var client = {
 
   moveTorrents: (data, callback) => {
     let destinationPath = data.destination;
+    let isBasePath = data.isBasePath;
     let hashes = data.hashes;
     let filenames = data.filenames;
     let moveFiles = data.moveFiles;
@@ -264,7 +265,7 @@ var client = {
     }
 
     mainRequest.stopTorrents({hashes});
-    mainRequest.setDownloadPath({hashes, path: destinationPath});
+    mainRequest.setDownloadPath({hashes, path: destinationPath, isBasePath});
     mainRequest.onComplete(afterSetPath);
     mainRequest.send();
   },
