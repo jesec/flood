@@ -118,7 +118,7 @@ class ClientRequest {
   addFiles(options) {
     let files = this.getEnsuredArray(options.files);
     let path = options.path;
-    let useBasePath = options.useBasePath;
+    let isBasePath = options.isBasePath;
     let start = options.start;
     let tagsArr = options.tags;
 
@@ -128,7 +128,7 @@ class ClientRequest {
       let timeAdded = Math.floor(Date.now() / 1000);
 
       if (path && path !== '') {
-        if (useBasePath) {
+        if (isBasePath) {
           parameters.push(`d.directory_base.set="${path}"`);
         } else {
           parameters.push(`d.directory.set="${path}"`);

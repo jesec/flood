@@ -20,7 +20,7 @@ var client = {
   addFiles: (req, callback) => {
     let files = req.files;
     let path = req.body.destination;
-    let useBasePath = req.body.useBasePath || false;
+    let isBasePath = req.body.isBasePath || false;
     let request = new ClientRequest();
     let start = req.body.start;
     let tags = req.body.tags;
@@ -39,7 +39,7 @@ var client = {
       file.originalname = encodeURIComponent(file.originalname);
 
       let fileRequest = new ClientRequest();
-      fileRequest.addFiles({files: file, path, useBasePath, start, tags});
+      fileRequest.addFiles({files: file, path, isBasePath, start, tags});
 
       // Set the callback for only the last request.
       if (index === files.length - 1) {
