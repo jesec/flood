@@ -385,8 +385,8 @@ class TorrentDestination extends React.Component {
     }
 
     return (
-      <div className="attached-panel__wrapper form__row">
-        <div className="form__column form__column--large" style={{position: 'relative'}}>
+      <div className="form__row">
+        <div className="form__column form__column--large form__column--relative">
           <input className={textboxClasses}
             onChange={this.handleDestinationChange}
             onClick={this.handleTextboxClick}
@@ -413,7 +413,7 @@ class TorrentDestination extends React.Component {
             </CSSTransitionGroup>
           </Portal>
         </div>
-        <div className="form__column form__column--auto">
+        <div className="form__column form__column--auto form__column--unlabled-nopadding">
           <Checkbox
             onChange={this.handleBasePathCheckBoxCheck}>
             <FormattedMessage
