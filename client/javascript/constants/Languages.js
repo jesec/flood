@@ -3,6 +3,10 @@ const LANGUAGES = {
     defaultMessage: 'English',
     id: 'locale.language.en'
   },
+  es: {
+    defaultMessage: 'Spanish',
+    id: 'locale.language.es'
+  },
   fr: {
     defaultMessage: 'French',
     id: 'locale.language.fr'
