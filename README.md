@@ -45,8 +45,8 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 
 #### Local Development
 1. Run `npm install`.
-2. Run `npm start:development` and `npm run start:watch` in separate terminal instances.
-  * `npm start:development` uses [nodemon](https://github.com/remy/nodemon) to watch for changes to the server-side JavaScript.
+2. Run `npm run start:development` and `npm run start:watch` in separate terminal instances.
+  * `npm run start:development` uses [nodemon](https://github.com/remy/nodemon) to watch for changes to the server-side JavaScript.
   * `npm run start:watch` watches for changes in the client-side source.
 3. Access the UI through the [browser-sync](https://www.browsersync.io/) proxy at [localhost:4200](http://localhost:4200).
 
