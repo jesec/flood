@@ -233,6 +233,12 @@ class TorrentStoreClass extends BaseStore {
           this.torrents[torrentHash] = data;
           break;
         case serverEventTypes.TORRENT_LIST_ACTION_TORRENT_DELETED:
+          if (this.selectedTorrents.includes(torrentHash)) {
+            this.selectedTorrents = this.selectedTorrents.filter(
+              hash => hash !== torrentHash
+            );
+          }
+
           delete this.torrents[torrentHash];
           break;
         case serverEventTypes.TORRENT_LIST_ACTION_TORRENT_DETAIL_UPDATED:
