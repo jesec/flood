@@ -105,7 +105,9 @@ class TorrentService extends EventEmitter {
     }
   }
 
-  deferFetchTorrentList(interval = config.torrentClientPollInterval) {
+  deferFetchTorrentList(
+    interval = (config.torrentClientPollInterval || 2000)
+  ) {
     this.pollTimeout = setTimeout(this.fetchTorrentList, interval);
   }
 
@@ -259,15 +261,13 @@ class TorrentService extends EventEmitter {
   }
 
   handleFetchTorrentListError() {
-    let nextInterval = config.torrentClientPollInterval;
+    let nextInterval = config.torrentClientPollInterval || 2000;
 
     // If more than consecutive errors have occurred, then we delay the next
     // request.
     if (++this.errorCount >= 3) {
       nextInterval = Math.max(
-        config.torrentClientPollInterval
-          + this.errorCount
-          * config.torrentClientPollInterval / 4,
+        nextInterval + this.errorCount * nextInterval / 4,
         1000 * 60
       );
     }

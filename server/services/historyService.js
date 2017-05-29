@@ -45,7 +45,7 @@ const processData = (opts, callback, data, error) => {
   }, {upload: [], download: [], timestamps: []}));
 };
 
-class historyService extends EventEmitter {
+class HistoryService extends EventEmitter {
   constructor() {
     super(...arguments);
 
@@ -147,7 +147,9 @@ class historyService extends EventEmitter {
     });
   }
 
-  deferFetchTransferSummary(interval = config.torrentClientPollInterval) {
+  deferFetchTransferSummary(
+    interval = (config.torrentClientPollInterval || 2000)
+  ) {
     this.pollTimeout = setTimeout(this.fetchCurrentTransferSummary, interval);
   }
 
@@ -219,15 +221,13 @@ class historyService extends EventEmitter {
   }
 
   handleFetchTransferSummaryError() {
-    let nextInterval = config.torrentClientPollInterval;
+    let nextInterval = config.torrentClientPollInterval || 2000;
 
     // If more than consecutive errors have occurred, then we delay the next
     // request.
     if (++this.errorCount >= 3) {
       nextInterval = Math.max(
-        config.torrentClientPollInterval
-          + this.errorCount
-          * config.torrentClientPollInterval / 4,
+        nextInterval + this.errorCount * nextInterval / 4,
         1000 * 60
       );
     }
@@ -238,4 +238,4 @@ class historyService extends EventEmitter {
   }
 }
 
-module.exports = new historyService();
+module.exports = new HistoryService();
