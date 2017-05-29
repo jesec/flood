@@ -9,10 +9,75 @@ let settingsDB = new Datastore({
   filename: `${config.dbPath}settings/settings.db`
 });
 
+const changedKeys = {
+  downloadRate: 'downRate',
+  downloadTotal: 'downTotal',
+  uploadRate: 'upRate',
+  uploadTotal: 'upTotal',
+  connectedPeers: 'peersConnected',
+  totalPeers: 'peersTotal',
+  connectedSeeds: 'seedsConnected',
+  totalSeeds: 'seedsTotal',
+  added: 'dateAdded',
+  creationDate: 'dateCreated',
+  trackers: 'trackerURIs'
+};
+
+/**
+ * Check settings for old torrent propery keys. If the old keys exist and have
+ * been assigned values, then check that the new key doesn't also exist. When
+ * the new key does not exist, add the new key and assign it the old key's
+ * value.
+ *
+ * @param  {Object} settings - the stored settings object.
+ * @return {Object} - the settings object, altered if legacy keys exist.
+ */
+const transformLegacyKeys = settings => {
+  if (
+    settings.sortTorrents
+    && settings.sortTorrents.property in changedKeys
+  ) {
+    settings.sortTorrents.property = changedKeys[
+      settings.sortTorrents.property
+    ];
+  }
+
+  if (settings.torrentDetails) {
+    settings.torrentDetails = settings.torrentDetails.map(
+      (detailItem, index) => {
+        if (
+          detailItem.id in changedKeys
+          && !(settings.torrentDetails.some(subDetailItem => {
+            return subDetailItem.id === changedKeys[detailItem.id];
+          }))
+        ) {
+          detailItem.id = changedKeys[detailItem.id];
+        }
+
+        return detailItem;
+      }
+    );
+  }
+
+  if (settings.torrentListColumnWidths) {
+    Object.keys(settings.torrentListColumnWidths).forEach(columnID => {
+      if (
+        columnID in changedKeys
+        && !(changedKeys[columnID] in settings.torrentListColumnWidths)
+      ) {
+        settings.torrentListColumnWidths[changedKeys[columnID]]
+          = settings.torrentListColumnWidths[columnID];
+      }
+    });
+  }
+
+  return settings;
+};
+
 let settings = {
   get: (opts, callback) => {
     let query = {};
-    let foundSettings = {};
+    let settings = {};
 
     if (opts.property) {
       query.id = opts.property;
@@ -25,15 +90,10 @@ let settings = {
       }
 
       docs.forEach((doc) => {
-        foundSettings[doc.id] = doc.data;
+        settings[doc.id] = doc.data;
       });
 
-      if (foundSettings.sortTorrents &&
-        foundSettings.sortTorrents.property === 'added') {
-        foundSettings.sortTorrents.property = 'dateAdded';
-      }
-
-      callback(foundSettings);
+      callback(transformLegacyKeys(settings));
     });
   },
 
