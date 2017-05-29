@@ -27,6 +27,12 @@ let settings = {
       docs.forEach((doc) => {
         foundSettings[doc.id] = doc.data;
       });
+
+      if (foundSettings.sortTorrents &&
+        foundSettings.sortTorrents.property === 'added') {
+        foundSettings.sortTorrents.property = 'dateAdded';
+      }
+
       callback(foundSettings);
     });
   },
@@ -52,6 +58,6 @@ let settings = {
       });
     });
   }
-}
+};
 
 module.exports = settings;

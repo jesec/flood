@@ -178,7 +178,7 @@ class ClientRequest {
 
     hashes.forEach((hash) => {
       this.requests.push(this.getMethodCall('d.check_hash', [hash]));
-    })
+    });
   }
 
   createDirectory(options) {

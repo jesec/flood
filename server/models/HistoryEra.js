@@ -6,7 +6,7 @@ let config = require('../../config');
 let stringUtil = require('../../shared/util/stringUtil');
 
 const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
-const CUMULATIVE_DATA_BUFFER = 1000 * 2; // 2 seconds
+const CUMULATIVE_DATA_BUFFER_DIFF = 500; // 500 miliseconds
 const REQUIRED_FIELDS = ['interval', 'maxTime', 'name'];
 
 class HistoryEra {
@@ -53,7 +53,7 @@ class HistoryEra {
 
     let currentTime = Date.now();
 
-    if (currentTime - this.lastUpdate >= this.opts.interval - CUMULATIVE_DATA_BUFFER) {
+    if (currentTime - this.lastUpdate >= this.opts.interval - CUMULATIVE_DATA_BUFFER_DIFF) {
       this.lastUpdate = currentTime;
 
       this.db.insert({
@@ -81,7 +81,17 @@ class HistoryEra {
             console.error('\n\n');
           }
 
-          this.db.update({ts: this.lastUpdate}, {ts: this.lastUpdate, up: Number(upAvg), dn: Number(downAvg), num: numUpdates + 1});
+          this.db.update(
+            {
+              ts: this.lastUpdate
+            },
+            {
+              ts: this.lastUpdate,
+              up: Number(upAvg),
+              dn: Number(downAvg),
+              num: numUpdates + 1
+            }
+          );
         }
       });
     }

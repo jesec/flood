@@ -1,15 +1,12 @@
 'use strict';
+const express = require('express');
+const multer = require('multer');
 
-let express = require('express');
-let multer = require('multer');
+const ajaxUtil = require('../util/ajaxUtil');
+const client = require('../models/client');
+const router = express.Router();
 
-let ajaxUtil = require('../util/ajaxUtil');
-let client = require('../models/client');
-let history = require('../models/history');
-let router = express.Router();
-let settings = require('../models/settings');
-
-let upload = multer({
+const upload = multer({
   dest: 'uploads/',
   limits: {fileSize: 10000000},
   storage: multer.memoryStorage()

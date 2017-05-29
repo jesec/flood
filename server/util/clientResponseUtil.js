@@ -1,13 +1,12 @@
 'use strict';
+const geoip = require('geoip-country-only');
+const util = require('util');
 
-let clientGeneralPropsMap = require('../../shared/constants/clientGeneralPropsMap');
-let geoip = require('geoip-country-only');
-let torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
-let torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
-let torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
-let util = require('util');
+const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
+const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
+const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
-let getFileTreeFromPathsArr = (tree, directory, file, depth) => {
+const getFileTreeFromPathsArr = (tree, directory, file, depth) => {
   if (depth == null) {
     depth = 0;
   }
@@ -118,14 +117,7 @@ let clientResponseUtil = {
     }
 
     return {peers, trackers, fileTree};
-  },
-
-  processTransferStats(data) {
-    return clientResponseUtil.mapPropsToResponse(
-      clientGeneralPropsMap.props,
-      data
-    );
   }
-}
+};
 
 module.exports = clientResponseUtil;

@@ -1,9 +1,8 @@
 'use strict';
+const bcrypt = require('bcrypt-nodejs');
+const Datastore = require('nedb');
 
-let Datastore = require('nedb');
-
-let bcrypt = require('bcrypt-nodejs');
-let config = require('../../config');
+const config = require('../../config');
 
 class Users {
   constructor() {

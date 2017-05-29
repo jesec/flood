@@ -10,21 +10,12 @@ const clientResponseUtil = require('../util/clientResponseUtil');
 const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 const ClientRequest = require('./ClientRequest');
 const formatUtil = require('../../shared/util/formatUtil');
-const NotificationCollection = require('./NotificationCollection');
 const scgi = require('../util/scgi');
-const Torrent = require('./Torrent');
 const TemporaryStorage = require('./TemporaryStorage');
-const TorrentCollection = require('./TorrentCollection');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
-const torrentGeneralPropsMap = require('../../shared/constants/torrentGeneralPropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
+const torrentService = require('../services/torrentService');
 const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
-
-let pollIntervalID = null;
-let statusCount = {};
-let tagCount = {};
-let torrentCollection = new TorrentCollection();
-let trackerCount = {};
 
 var client = {
   addFiles: (req, callback) => {
@@ -54,7 +45,7 @@ var client = {
       // Set the callback for only the last request.
       if (index === files.length - 1) {
         fileRequest.onComplete((response, error) => {
-          client.updateTorrentList();
+          torrentService.fetchTorrentList();
           callback(response, error);
         });
       }
@@ -81,7 +72,7 @@ var client = {
 
     request.checkHash({hashes});
     request.onComplete((response, error) => {
-      client.updateTorrentList();
+      torrentService.fetchTorrentList();
       callback(response, error);
     });
     request.send();
@@ -116,7 +107,7 @@ var client = {
         });
       }
 
-      client.updateTorrentList();
+      torrentService.fetchTorrentList();
 
       callback(response, error);
     });
@@ -250,18 +241,6 @@ var client = {
     request.send();
   },
 
-  getTorrent: (options, callback) => {
-    callback(torrentCollection.getTorrent(options.hash));
-  },
-
-  getTorrentStatusCount: (callback) => {
-    callback(statusCount);
-  },
-
-  getTorrentTagCount: (callback) => {
-    callback(tagCount);
-  },
-
   getTorrentDetails: (hash, callback) => {
     let request = new ClientRequest();
 
@@ -272,31 +251,6 @@ var client = {
       trackerProps: torrentTrackerPropsMap.methods
     });
     request.postProcess(clientResponseUtil.processTorrentDetails);
-    request.onComplete(callback);
-    request.send();
-  },
-
-  getTorrentList: (callback) => {
-    callback(torrentCollection.getTorrents());
-  },
-
-  getTorrentTaxonomy: (callback) => {
-    callback({
-      status: statusCount,
-      tags: tagCount,
-      trackers: trackerCount
-    });
-  },
-
-  getTorrentTrackerCount: (callback) => {
-    callback(trackerCount);
-  },
-
-  getTransferStats: (callback) => {
-    let request = new ClientRequest();
-
-    request.getTransferData();
-    request.postProcess(clientResponseUtil.processTransferStats);
     request.onComplete(callback);
     request.send();
   },
@@ -329,7 +283,7 @@ var client = {
       checkHashRequest.checkHash({hashes});
       checkHashRequest.onComplete(afterCheckHash);
       checkHashRequest.send();
-    }
+    };
 
     let moveTorrents = () => {
       let moveTorrentsRequest = new ClientRequest();
@@ -359,7 +313,7 @@ var client = {
 
     request.setFilePriority({hashes, fileIndices, priority: data.priority});
     request.onComplete((response, error) => {
-      client.updateTorrentList();
+      torrentService.fetchTorrentList();
       callback(response, error);
     });
     request.send();
@@ -370,7 +324,7 @@ var client = {
 
     request.setPriority({hashes, priority: data.priority});
     request.onComplete((response, error) => {
-      client.updateTorrentList();
+      torrentService.fetchTorrentList();
       callback(response, error);
     });
     request.send();
@@ -435,7 +389,7 @@ var client = {
     request.setTaxonomy(data);
     request.onComplete((response, error) => {
       // Fetch the latest torrent list to re-index the taxonomy.
-      client.updateTorrentList();
+      torrentService.fetchTorrentList();
       callback(response, error);
     });
     request.send();
@@ -446,16 +400,10 @@ var client = {
 
     request.stopTorrents({hashes});
     request.onComplete((response, error) => {
-      client.updateTorrentList();
+      torrentService.fetchTorrentList();
       callback(response, error);
     });
     request.send();
-  },
-
-  startPollingTorrents: () => {
-    pollIntervalID = setInterval(() => {
-      client.updateTorrentList();
-    }, 1000 * 5);
   },
 
   startTorrent: (hashes, callback) => {
@@ -463,36 +411,9 @@ var client = {
 
     request.startTorrents({hashes});
     request.onComplete((response, error) => {
-      client.updateTorrentList();
+      torrentService.fetchTorrentList();
       callback(response, error);
     });
-    request.send();
-  },
-
-  stopPollingTorrents: () => {
-    clearInterval(pollIntervalID);
-    pollIntervalID = null;
-  },
-
-  updateTorrentList: (callback) => {
-    let request = new ClientRequest();
-
-    request.getTorrentList({props: torrentGeneralPropsMap.methods});
-    request.postProcess((data) => {
-      let torrentList = [];
-
-      // TODO: Remove this nasty nested array business.
-      if (!!data && !!data[0] && data[0][0].length > 0) {
-        torrentList = data[0][0];
-      }
-
-      torrentCollection.updateTorrents(torrentList);
-
-      statusCount = torrentCollection.getStatusCount();
-      tagCount = torrentCollection.getTagCount();
-      trackerCount = torrentCollection.getTrackerCount();
-    });
-    request.onComplete(callback);
     request.send();
   }
 };
