@@ -50,10 +50,10 @@ class AuthEnforcer extends React.Component {
       this[method] = this[method].bind(this);
     });
 
-    this.handleUIDependenciesChange = _.debounce(
-      this.handleUIDependenciesChange,
-      100
-    );
+    // this.handleUIDependenciesChange = _.debounce(
+    //   this.handleUIDependenciesChange,
+    //   100
+    // );
   }
 
   componentDidMount() {
@@ -140,13 +140,13 @@ class AuthEnforcer extends React.Component {
   }
 
   handleLoginSuccess() {
-    FloodActions.restartTorrentListTream();
+    FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.push('overview');
   }
 
   handleRegisterSuccess() {
-    FloodActions.restartTorrentListTream();
+    FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.push('overview');
   }

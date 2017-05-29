@@ -30,9 +30,6 @@ class TorrentStoreClass extends BaseStore {
     this.selectedTorrents = [];
     this.sortedTorrents = [];
     this.torrents = {};
-
-    // TODO: Move this somewhere more appropriate.
-    FloodActions.startTorrentListStream();
   }
 
   fetchMediainfo(hash) {

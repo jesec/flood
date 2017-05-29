@@ -42,6 +42,7 @@ const METHODS_TO_BIND = [
   'onReceiveTorrentsError',
   'onReceiveTorrentsSuccess',
   'onTorrentFilterChange',
+  'onTorrentListChange',
   'onTorrentSelectionChange',
   'updateVerticalThumbPosition',
   'renderListItem',
@@ -109,7 +110,7 @@ class TorrentListContainer extends React.Component {
     );
     TorrentStore.listen(
       EventTypes.UI_TORRENTS_LIST_FILTERED,
-      this.onReceiveTorrentsSuccess
+      this.onTorrentListChange
     );
     TorrentStore.listen(
       EventTypes.CLIENT_TORRENTS_REQUEST_ERROR,
@@ -137,7 +138,7 @@ class TorrentListContainer extends React.Component {
     );
     TorrentStore.unlisten(
       EventTypes.UI_TORRENTS_LIST_FILTERED,
-      this.onReceiveTorrentsSuccess
+      this.onTorrentListChange
     );
     TorrentStore.unlisten(
       EventTypes.CLIENT_TORRENTS_REQUEST_ERROR,
@@ -369,6 +370,10 @@ class TorrentListContainer extends React.Component {
   }
 
   onReceiveTorrentsSuccess() {
+    this.onTorrentListChange(() => UIStore.satisfyDependency('torrent-list'));
+  }
+
+  onTorrentListChange(setStateCallback) {
     let torrents = TorrentStore.getTorrents();
 
     this.setState({
@@ -377,7 +382,7 @@ class TorrentListContainer extends React.Component {
       torrentCount: torrents.length,
       torrentRequestError: false,
       torrentRequestSuccess: true
-    }, () => UIStore.satisfyDependency('torrent-list'));
+    }, setStateCallback);
   }
 
   onTorrentFilterChange() {

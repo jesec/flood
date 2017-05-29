@@ -36,6 +36,52 @@ const FloodActions = {
       });
   },
 
+  closeActivityStream() {
+    activityStreamEventSource.close();
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.NOTIFICATION_COUNT_CHANGE,
+      this.handleNotificationCountChange
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TAXONOMY_DIFF_CHANGE,
+      this.handleTaxonomyDiffChange
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TAXONOMY_FULL_UPDATE,
+      this.handleTaxonomyFullUpdate
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TORRENT_LIST_DIFF_CHANGE,
+      this.handleTorrentListDiffChange
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TORRENT_LIST_FULL_UPDATE,
+      this.handleTorrentListFullUpdate
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TRANSFER_SUMMARY_DIFF_CHANGE,
+      this.handleTransferSummaryDiffChange
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TRANSFER_SUMMARY_FULL_UPDATE,
+      this.handleTransferSummaryFullUpdate
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TRANSFER_HISTORY_FULL_UPDATE,
+      this.handleTransferHistoryFullUpdate
+    );
+
+    activityStreamEventSource = null;
+  },
+
   fetchDirectoryList: (options = {}) => {
     return axios.get(`${baseURI}api/directory-list`, {
         params: options
@@ -170,59 +216,12 @@ const FloodActions = {
     });
   },
 
-  closeTorrentListStream() {
-    console.log('closing stream');
-    activityStreamEventSource.close();
-
-    activityStreamEventSource.removeEventListener(
-      serverEventTypes.NOTIFICATION_COUNT_CHANGE,
-      this.handleNotificationCountChange
-    );
-
-    activityStreamEventSource.removeEventListener(
-      serverEventTypes.TAXONOMY_DIFF_CHANGE,
-      this.handleTaxonomyDiffChange
-    );
-
-    activityStreamEventSource.removeEventListener(
-      serverEventTypes.TAXONOMY_FULL_UPDATE,
-      this.handleTaxonomyFullUpdate
-    );
-
-    activityStreamEventSource.removeEventListener(
-      serverEventTypes.TORRENT_LIST_DIFF_CHANGE,
-      this.handleTorrentListDiffChange
-    );
-
-    activityStreamEventSource.removeEventListener(
-      serverEventTypes.TORRENT_LIST_FULL_UPDATE,
-      this.handleTorrentListFullUpdate
-    );
-
-    activityStreamEventSource.removeEventListener(
-      serverEventTypes.TRANSFER_SUMMARY_DIFF_CHANGE,
-      this.handleTransferSummaryDiffChange
-    );
-
-    activityStreamEventSource.removeEventListener(
-      serverEventTypes.TRANSFER_SUMMARY_FULL_UPDATE,
-      this.handleTransferSummaryFullUpdate
-    );
-
-    activityStreamEventSource.removeEventListener(
-      serverEventTypes.TRANSFER_HISTORY_FULL_UPDATE,
-      this.handleTransferHistoryFullUpdate
-    );
-
-    activityStreamEventSource = null;
+  restartActivityStream(options) {
+    this.closeActivityStream();
+    this.startActivityStream(options);
   },
 
-  restartTorrentListTream(options) {
-    this.closeTorrentListStream();
-    this.startTorrentListStream(options);
-  },
-
-  startTorrentListStream(options = {}) {
+  startActivityStream(options = {}) {
     const {historySnapshot = historySnapshotTypes.FIVE_MINUTE} = options;
     const didHistorySnapshotChange = lastHistorySnapshot !== historySnapshot;
 
@@ -231,7 +230,7 @@ const FloodActions = {
     // When the user requests a new history snapshot during an open session,
     // we need to close and re-open the event stream.
     if (didHistorySnapshotChange && activityStreamEventSource !== null) {
-      this.closeTorrentListStream();
+      this.closeActivityStream();
     }
 
     // If the user requested a new history snapshot, or the event source has not
