@@ -26,7 +26,6 @@ class TorrentStoreClass extends BaseStore {
     this.filteredTorrents = {};
     this.mediainfo = {};
     this.pollTorrentDetailsIntervalID = null;
-    this.pollTorrentsIntervalID = null;
     this.selectedTorrents = [];
     this.sortedTorrents = [];
     this.torrents = {};
@@ -286,11 +285,6 @@ class TorrentStoreClass extends BaseStore {
   stopPollingTorrentDetails() {
     clearInterval(this.pollTorrentDetailsIntervalID);
     this.pollTorrentDetailsIntervalID = null;
-  }
-
-  stopPollingTorrents() {
-    clearInterval(this.pollTorrentsIntervalID);
-    this.pollTorrentsIntervalID = null;
   }
 
   triggerTorrentsFilter() {
