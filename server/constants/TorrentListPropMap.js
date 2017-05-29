@@ -2,7 +2,8 @@ const regEx = require('../../shared/util/regEx');
 
 const torrentListPropMap = new Map();
 
-const cleanUpDate = dirtyDate => {
+const booleanTransformer = value => value === '1';
+const dateTransformer = dirtyDate => {
   if (!dirtyDate) {
     return '';
   }
@@ -15,12 +16,13 @@ const cleanUpDate = dirtyDate => {
 
   return date;
 };
+const defaultTransformer = value => value;
 
 torrentListPropMap.set(
   'hash',
   {
     methodCall: 'd.hash=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -28,7 +30,7 @@ torrentListPropMap.set(
   'name',
   {
     methodCall: 'd.name=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -36,7 +38,7 @@ torrentListPropMap.set(
   'message',
   {
     methodCall: 'd.message=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -44,7 +46,7 @@ torrentListPropMap.set(
   'state',
   {
     methodCall: 'd.state=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -52,7 +54,7 @@ torrentListPropMap.set(
   'isStateChanged',
   {
     methodCall: 'd.state_changed=',
-    transformValue: value => value === '1'
+    transformValue: booleanTransformer
   }
 );
 
@@ -60,7 +62,7 @@ torrentListPropMap.set(
   'isActive',
   {
     methodCall: 'd.is_active=',
-    transformValue: value => value === '1'
+    transformValue: booleanTransformer
   }
 );
 
@@ -68,7 +70,7 @@ torrentListPropMap.set(
   'isComplete',
   {
     methodCall: 'd.complete=',
-    transformValue: value => value === '1'
+    transformValue: booleanTransformer
   }
 );
 
@@ -76,7 +78,7 @@ torrentListPropMap.set(
   'isHashChecking',
   {
     methodCall: 'd.is_hash_checking=',
-    transformValue: value => value === '1'
+    transformValue: booleanTransformer
   }
 );
 
@@ -84,7 +86,7 @@ torrentListPropMap.set(
   'isOpen',
   {
     methodCall: 'd.is_open=',
-    transformValue: value => value === '1'
+    transformValue: booleanTransformer
   }
 );
 
@@ -92,7 +94,7 @@ torrentListPropMap.set(
   'priority',
   {
     methodCall: 'd.priority=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -100,7 +102,7 @@ torrentListPropMap.set(
   'upRate',
   {
     methodCall: 'd.up.rate=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -108,7 +110,7 @@ torrentListPropMap.set(
   'upTotal',
   {
     methodCall: 'd.up.total=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -116,7 +118,7 @@ torrentListPropMap.set(
   'downRate',
   {
     methodCall: 'd.down.rate=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -124,7 +126,7 @@ torrentListPropMap.set(
   'downTotal',
   {
     methodCall: 'd.down.total=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -132,7 +134,7 @@ torrentListPropMap.set(
   'ratio',
   {
     methodCall: 'd.ratio=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -140,7 +142,7 @@ torrentListPropMap.set(
   'bytesDone',
   {
     methodCall: 'd.bytes_done=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -148,7 +150,7 @@ torrentListPropMap.set(
   'sizeBytes',
   {
     methodCall: 'd.size_bytes=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -156,7 +158,7 @@ torrentListPropMap.set(
   'peersConnected',
   {
     methodCall: 'd.peers_connected=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -164,7 +166,7 @@ torrentListPropMap.set(
   'directory',
   {
     methodCall: 'd.directory=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -172,7 +174,7 @@ torrentListPropMap.set(
   'basePath',
   {
     methodCall: 'd.base_path=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -180,7 +182,7 @@ torrentListPropMap.set(
   'baseFilename',
   {
     methodCall: 'd.base_filename=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -188,7 +190,7 @@ torrentListPropMap.set(
   'baseDirectory',
   {
     methodCall: 'd.directory_base=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -196,7 +198,7 @@ torrentListPropMap.set(
   'seedingTime',
   {
     methodCall: 'd.custom=seedingtime',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -204,7 +206,7 @@ torrentListPropMap.set(
   'dateAdded',
   {
     methodCall: 'd.custom=addtime',
-    transformValue: value => cleanUpDate(value)
+    transformValue: dateTransformer
   }
 );
 
@@ -212,7 +214,7 @@ torrentListPropMap.set(
   'dateCreated',
   {
     methodCall: 'd.creation_date=',
-    transformValue: value => cleanUpDate(value)
+    transformValue: dateTransformer
   }
 );
 
@@ -220,7 +222,7 @@ torrentListPropMap.set(
   'throttleName',
   {
     methodCall: 'd.throttle_name=',
-    transformValue: value => value
+    transformValue: defaultTransformer
   }
 );
 
@@ -228,7 +230,7 @@ torrentListPropMap.set(
   'isMultiFile',
   {
     methodCall: 'd.is_multi_file=',
-    transformValue: value => value === '1'
+    transformValue: booleanTransformer
   }
 );
 
@@ -236,7 +238,7 @@ torrentListPropMap.set(
   'isPrivate',
   {
     methodCall: 'd.is_private=',
-    transformValue: value => value === '1'
+    transformValue: booleanTransformer
   }
 );
 
@@ -276,7 +278,7 @@ torrentListPropMap.set(
   'ignoreScheduler',
   {
     methodCall: 'd.custom=sch_ignore',
-    transformValue: value => value === '1'
+    transformValue: booleanTransformer
   }
 );
 
@@ -320,7 +322,7 @@ torrentListPropMap.set(
   'seedsConnected',
   {
     methodCall: 'd.peers_complete=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
@@ -338,7 +340,7 @@ torrentListPropMap.set(
   'peersConnected',
   {
     methodCall: 'd.peers_accounted=',
-    transformValue: value => Number(value)
+    transformValue: Number
   }
 );
 
