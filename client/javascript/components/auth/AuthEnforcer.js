@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {browserHistory} from 'react-router';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
@@ -47,41 +48,74 @@ class AuthEnforcer extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
+
+    this.handleUIDependenciesChange = _.debounce(
+      this.handleUIDependenciesChange,
+      100
+    );
   }
 
   componentDidMount() {
-    AuthStore.listen(EventTypes.AUTH_REGISTER_SUCCESS,
-      this.handleRegisterSuccess);
-    AuthStore.listen(EventTypes.AUTH_LOGIN_ERROR,
-      this.handleLoginError);
-    AuthStore.listen(EventTypes.AUTH_LOGIN_SUCCESS,
-      this.handleLoginSuccess);
-    AuthStore.listen(EventTypes.AUTH_VERIFY_ERROR,
-      this.handleVerifyError);
-    AuthStore.listen(EventTypes.AUTH_VERIFY_SUCCESS,
-      this.handleVerifySuccess);
-    UIStore.listen(EventTypes.UI_DEPENDENCIES_LOADED,
-      this.handleUIDependenciesLoaded);
-    UIStore.listen(EventTypes.UI_DEPENDENCIES_CHANGE,
-      this.handleUIDependenciesChange);
+    AuthStore.listen(
+      EventTypes.AUTH_REGISTER_SUCCESS,
+      this.handleRegisterSuccess
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_LOGIN_ERROR,
+      this.handleLoginError
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_LOGIN_SUCCESS,
+      this.handleLoginSuccess
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_VERIFY_ERROR,
+      this.handleVerifyError
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_VERIFY_SUCCESS,
+      this.handleVerifySuccess
+    );
+    UIStore.listen(
+      EventTypes.UI_DEPENDENCIES_LOADED,
+      this.handleUIDependenciesLoaded
+    );
+    UIStore.listen(
+      EventTypes.UI_DEPENDENCIES_CHANGE,
+      this.handleUIDependenciesChange
+    );
     AuthStore.verify();
   }
 
   componentWillUnmount() {
-    AuthStore.unlisten(EventTypes.AUTH_REGISTER_SUCCESS,
-      this.handleRegisterSuccess);
-    AuthStore.unlisten(EventTypes.AUTH_LOGIN_ERROR,
-      this.handleLoginError);
-    AuthStore.unlisten(EventTypes.AUTH_LOGIN_SUCCESS,
-      this.handleLoginSuccess);
-    AuthStore.unlisten(EventTypes.AUTH_VERIFY_ERROR,
-      this.handleVerifyError);
-    AuthStore.unlisten(EventTypes.AUTH_VERIFY_SUCCESS,
-      this.handleVerifySuccess);
-    UIStore.unlisten(EventTypes.UI_DEPENDENCIES_LOADED,
-      this.handleUIDependenciesLoaded);
-    UIStore.unlisten(EventTypes.UI_DEPENDENCIES_CHANGE,
-      this.handleUIDependenciesChange);
+    AuthStore.unlisten(
+      EventTypes.AUTH_REGISTER_SUCCESS,
+      this.handleRegisterSuccess
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_LOGIN_ERROR,
+      this.handleLoginError
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_LOGIN_SUCCESS,
+      this.handleLoginSuccess
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_VERIFY_ERROR,
+      this.handleVerifyError
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_VERIFY_SUCCESS,
+      this.handleVerifySuccess
+    );
+    UIStore.unlisten(
+      EventTypes.UI_DEPENDENCIES_LOADED,
+      this.handleUIDependenciesLoaded
+    );
+    UIStore.unlisten(
+      EventTypes.UI_DEPENDENCIES_CHANGE,
+      this.handleUIDependenciesChange
+    );
   }
 
   handleVerifySuccess(data) {
