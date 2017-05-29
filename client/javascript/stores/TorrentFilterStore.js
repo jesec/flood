@@ -1,6 +1,7 @@
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
+import diffActionTypes from '../../../shared/constants/diffActionTypes';
 import EventTypes from '../constants/EventTypes';
 import SettingsStore from './SettingsStore';
 import TorrentActions from '../actions/TorrentActions';
@@ -31,10 +32,6 @@ class TorrentFilterStoreClass extends BaseStore {
     this.emit(EventTypes.UI_TORRENTS_FILTER_TAG_CHANGE);
   }
 
-  fetchTorrentTaxonomy() {
-    TorrentActions.fetchTorrentTaxonomy();
-  }
-
   getSearchFilter() {
     return this.searchFilter;
   }
@@ -56,24 +53,19 @@ class TorrentFilterStoreClass extends BaseStore {
   }
 
   getTorrentStatusCount() {
-    return this.taxonomy.status;
+    return this.taxonomy.statusCounts;
   }
 
   getTorrentTagCount() {
-    return this.taxonomy.tags;
+    return this.taxonomy.tagCounts;
   }
 
   getTorrentTrackerCount() {
-    return this.taxonomy.trackers;
+    return this.taxonomy.trackerCounts;
   }
 
   handleFetchSettingsRequest() {
     this.setTorrentsSort(SettingsStore.getFloodSettings('sortTorrents'));
-  }
-
-  handleSetTaxonomySuccess(data) {
-    TorrentStore.fetchTorrents();
-    this.fetchTorrentTaxonomy();
   }
 
   handleTorrentTaxonomyRequestSuccess(taxonomy) {
@@ -86,8 +78,47 @@ class TorrentFilterStoreClass extends BaseStore {
     this.emit(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS);
   }
 
-  handleTorrentTaxonomyRequestError(error) {
-    this.emit(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_ERROR);
+  handleTorrentTaxonomyDiffChange(diff) {
+    Object.keys(diff).forEach(taxonomyKey => {
+      const changes = diff[taxonomyKey];
+
+      changes.forEach(change => {
+        if (change.action === diffActionTypes.ITEM_REMOVED) {
+          delete this.taxonomy[taxonomyKey][change.data];
+        } else {
+          this.taxonomy[taxonomyKey] = {
+            ...this.taxonomy[taxonomyKey],
+            ...change.data
+          };
+        }
+      });
+    });
+
+    // TODO: This logic is duplicated. Also update it to check for changed
+    // trackers.
+    if (
+      this.tagFilter !== 'all'
+      && !Object.keys(this.taxonomy.tagCounts).includes(this.tagFilter)
+    ) {
+      this.setTagFilter('all');
+    }
+
+    this.emit(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS);
+  }
+
+  handleTorrentTaxonomyFullUpdate(taxonomy) {
+    this.taxonomy = taxonomy;
+
+    // TODO: This logic is duplicated. Also update it to check for changed
+    // trackers.
+    if (
+      this.tagFilter !== 'all'
+      && !Object.keys(taxonomy.tags).includes(this.tagFilter)
+    ) {
+      this.setTagFilter('all');
+    }
+
+    this.emit(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS);
   }
 
   isFilterActive() {
@@ -152,14 +183,11 @@ TorrentFilterStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.UI_SET_TORRENT_SORT:
       TorrentFilterStore.setTorrentsSort(action.data);
       break;
-    case ActionTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS:
-      TorrentFilterStore.handleTorrentTaxonomyRequestSuccess(action.data);
+    case ActionTypes.TAXONOMY_FULL_UPDATE:
+      TorrentFilterStore.handleTorrentTaxonomyFullUpdate(action.data);
       break;
-    case ActionTypes.CLIENT_FETCH_TORRENT_TAXONOMY_ERROR:
-      TorrentFilterStore.handleTorrentTaxonomyRequestError(action.error);
-      break;
-    case ActionTypes.CLIENT_SET_TAXONOMY_SUCCESS:
-      TorrentFilterStore.handleSetTaxonomySuccess(action.data);
+    case ActionTypes.TAXONOMY_DIFF_CHANGE:
+      TorrentFilterStore.handleTorrentTaxonomyDiffChange(action.data);
       break;
     case ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS:
       AppDispatcher.waitFor([SettingsStore.dispatcherID]);

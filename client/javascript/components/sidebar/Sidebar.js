@@ -31,25 +31,17 @@ class Sidebar extends React.Component {
   }
 
   componentDidMount() {
-    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
-      this.onTorrentRequestSuccess);
     TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
       this.onTorrentTaxonomyRequestSuccess);
   }
 
   componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
-      this.onTorrentRequestSuccess);
     TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
       this.onTorrentTaxonomyRequestSuccess);
   }
 
   onTorrentTaxonomyRequestSuccess() {
     UIStore.satisfyDependency('torrent-taxonomy');
-  }
-
-  onTorrentRequestSuccess() {
-    TorrentFilterStore.fetchTorrentTaxonomy();
   }
 
   render() {

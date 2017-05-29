@@ -1,13 +1,13 @@
 const torrentProperties = {
-  added: {
-    id: 'torrents.properties.added',
+  dateAdded: {
+    id: 'torrents.properties.date.added',
     defaultMessage: 'Date Added'
   },
-  downloadRate: {
+  downRate: {
     id: 'torrents.properties.download.speed',
     defaultMessage: 'Download Speed'
   },
-  downloadTotal: {
+  downTotal: {
     id: 'torrents.properties.download.total',
     defaultMessage: 'Downloaded'
   },
@@ -43,15 +43,15 @@ const torrentProperties = {
     id: 'torrents.properties.tags',
     defaultMessage: 'Tags'
   },
-  uploadRate: {
+  upRate: {
     id: 'torrents.properties.upload.speed',
     defaultMessage: 'Upload Speed'
   },
-  uploadTotal: {
+  upTotal: {
     id: 'torrents.properties.upload.total',
     defaultMessage: 'Uploaded'
   },
-  creationDate: {
+  dateCreated: {
     id: 'torrents.properties.creation.date',
     defaultMessage: 'Creation Date'
   },
@@ -83,7 +83,7 @@ const torrentProperties = {
     id: 'torrents.properties.tracker.message',
     defaultMessage: 'Tracker Message'
   },
-  trackers: {
+  trackerURIs: {
     id: 'torrents.properties.trackers',
     defaultMessage: 'Trackers'
   }

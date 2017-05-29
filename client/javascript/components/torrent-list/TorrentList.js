@@ -119,7 +119,6 @@ class TorrentListContainer extends React.Component {
       EventTypes.UI_TORRENTS_FILTER_CHANGE,
       this.onTorrentFilterChange
     );
-    TorrentStore.fetchTorrents();
     global.addEventListener('resize', this.updateTorrentListViewWidth);
   }
 

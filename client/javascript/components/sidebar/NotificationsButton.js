@@ -6,11 +6,14 @@ import ChevronLeftIcon from '../icons/ChevronLeftIcon';
 import ChevronRightIcon from '../icons/ChevronRightIcon';
 import CustomScrollbars from '../general/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
+import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import NotificationIcon from '../icons/NotificationIcon';
 import NotificationStore from '../../stores/NotificationStore';
 import Tooltip from '../general/Tooltip';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
+
+const loadingIndicatorIcon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
 
 const INTIAL_COUNT_STATE = {total: 0, unread: 0, read: 0};
 
@@ -67,8 +70,10 @@ const METHODS_TO_BIND = [
   'getTooltipContent',
   'handleClearNotificationsClick',
   'handleNotificationFetchSuccess',
+  'handleNotificationCountChange',
   'handleNewerNotificationsClick',
-  'handleOlderNotificationsClick'
+  'handleOlderNotificationsClick',
+  'handleTooltipOpen'
 ];
 
 const NOTIFICATIONS_PER_PAGE = 10;
@@ -98,22 +103,33 @@ class NotificationsButton extends React.Component {
   }
 
   componentDidMount() {
-    NotificationStore.listen(EventTypes.NOTIFICATIONS_FETCH_SUCCESS,
-      this.handleNotificationFetchSuccess);
-    NotificationStore.listen(EventTypes.NOTIFICATIONS_FETCH_ERROR,
-      this.handleNotificationFetchError);
-    NotificationStore.fetchNotifications({
-      id: 'notification-tooltip',
-      limit: NOTIFICATIONS_PER_PAGE,
-      start: this.state.paginationStart
-    });
+    NotificationStore.listen(
+      EventTypes.NOTIFICATIONS_FETCH_SUCCESS,
+      this.handleNotificationFetchSuccess
+    );
+    NotificationStore.listen(
+      EventTypes.NOTIFICATIONS_FETCH_ERROR,
+      this.handleNotificationFetchError
+    );
+    NotificationStore.listen(
+      EventTypes.NOTIFICATIONS_COUNT_CHANGE,
+      this.handleNotificationCountChange
+    );
   }
 
   componentWillUnmount() {
-    NotificationStore.unlisten(EventTypes.NOTIFICATIONS_FETCH_SUCCESS,
-      this.handleNotificationFetchSuccess);
-    NotificationStore.unlisten(EventTypes.NOTIFICATIONS_FETCH_ERROR,
-      this.handleNotificationFetchError);
+    NotificationStore.unlisten(
+      EventTypes.NOTIFICATIONS_FETCH_SUCCESS,
+      this.handleNotificationFetchSuccess
+    );
+    NotificationStore.unlisten(
+      EventTypes.NOTIFICATIONS_FETCH_ERROR,
+      this.handleNotificationFetchError
+    );
+    NotificationStore.unlisten(
+      EventTypes.NOTIFICATIONS_COUNT_CHANGE,
+      this.handleNotificationCountChange
+    );
   }
 
   getBadge() {
@@ -258,30 +274,38 @@ class NotificationsButton extends React.Component {
   getTooltipContent() {
     if (this.state.count.total === 0) {
       return (
-        <div className="notifications--empty
+        <div className="notifications notifications--empty
           tooltip__content--padding-surrogate">
           {this.props.intl.formatMessage(MESSAGES.notifications)}
         </div>
       );
     }
 
-    let bottomToolbar = this.getBottomToolbar();
-    let topToolbar = this.getTopToolbar();
+    const {isLoading, notifications = []} = this.state;
+
+    const notificationsWrapperClasses = classnames(
+      'notifications',
+      {
+        'notifications--is-loading': isLoading
+      }
+    );
 
     return (
-      <div>
-        {topToolbar}
+      <div className={notificationsWrapperClasses}>
+        {this.getTopToolbar()}
+        <div className="notifications__loading-indicator">
+          {loadingIndicatorIcon}
+        </div>
         <CustomScrollbars
           autoHeight={true}
           autoHeightMin={0}
           autoHeightMax={300}
           inverted={true}>
-          <ul className="notifications__list
-            tooltip__content--padding-surrogate">
-            {this.state.notifications.map(this.getNotification)}
+          <ul className="notifications__list tooltip__content--padding-surrogate">
+            {notifications.map(this.getNotification)}
           </ul>
         </CustomScrollbars>
-        {bottomToolbar}
+        {this.getBottomToolbar()}
       </div>
     );
   }
@@ -301,6 +325,21 @@ class NotificationsButton extends React.Component {
     }
   }
 
+  handleNotificationCountChange(notificationCount) {
+    UIStore.satisfyDependency('notifications');
+    this.setState({count: notificationCount});
+
+    if (this.tooltipRef != null && this.tooltipRef.isOpen()) {
+      this.setState({isLoading: true});
+
+      NotificationStore.fetchNotifications({
+        id: 'notification-tooltip',
+        limit: NOTIFICATIONS_PER_PAGE,
+        start: this.state.paginationStart
+      });
+    }
+  }
+
   handleNotificationFetchError() {
     UIStore.satisfyDependency('notifications');
   }
@@ -308,11 +347,10 @@ class NotificationsButton extends React.Component {
   handleNotificationFetchSuccess() {
     UIStore.satisfyDependency('notifications');
 
-    let notificationState = NotificationStore.getNotifications('notification-tooltip');
-
-    if (!notificationState) {
-      notificationState = {count: INTIAL_COUNT_STATE, notifications: []};
-    }
+    let notificationState = {
+      ...NotificationStore.getNotifications('notification-tooltip'),
+      isLoading: false
+    };
 
     this.setState(notificationState);
   }
@@ -320,6 +358,7 @@ class NotificationsButton extends React.Component {
   handleNewerNotificationsClick() {
     if (this.state.paginationStart - NOTIFICATIONS_PER_PAGE >= 0) {
       this.setState({
+        isLoading: true,
         paginationStart: this.state.paginationStart - NOTIFICATIONS_PER_PAGE
       });
 
@@ -334,6 +373,7 @@ class NotificationsButton extends React.Component {
   handleOlderNotificationsClick() {
     if (this.state.count.total > this.state.paginationStart + NOTIFICATIONS_PER_PAGE) {
       this.setState({
+        isLoading: true,
         paginationStart: this.state.paginationStart + NOTIFICATIONS_PER_PAGE
       });
 
@@ -345,12 +385,24 @@ class NotificationsButton extends React.Component {
     }
   }
 
+  handleTooltipOpen() {
+    this.setState({isLoading: true});
+
+    NotificationStore.fetchNotifications({
+      id: 'notification-tooltip',
+      limit: NOTIFICATIONS_PER_PAGE,
+      start: this.state.paginationStart
+    });
+  }
+
   render() {
     return (
       <Tooltip
         contentClassName="tooltip__content tooltip__content--no-padding"
         content={this.getTooltipContent()}
-        interactive={true}
+        interactive={this.state.count.total !== 0}
+        onClose={this.handleTooltipClose}
+        onOpen={this.handleTooltipOpen}
         ref={ref => this.tooltipRef = ref}
         width={this.state.count.total === 0 ? null : 340}
         position="bottom"

@@ -6,6 +6,20 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
     text-align: center;
   }
 
+  &--is-loading {
+
+    .notifications {
+
+      &__list {
+        opacity: 0.25;
+      }
+
+      &__loading-indicator {
+        opacity: 1;
+      }
+    }
+  }
+
   &__badge {
     background: $blue;
     border-radius: 30px;
@@ -21,6 +35,10 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
   }
 
   &__list {
+    min-height: 30px;
+    opacity: 1;
+    position: relative;
+    transition: opacity 0.25s;
     white-space: normal;
     word-wrap: break-word;
 
@@ -29,6 +47,30 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
 
       &:last-child {
         margin-bottom: 0;
+      }
+    }
+  }
+
+  &__loading-indicator {
+    left: 50%;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.5s;
+
+    .icon {
+      height: 24px;
+      width: 24px;
+
+      .loading-indicator {
+
+        &--dots {
+
+          &__dot {
+            fill: currentColor;
+          }
+        }
       }
     }
   }

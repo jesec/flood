@@ -4,10 +4,15 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AuthStore from '../stores/AuthStore';
 import ConfigStore from '../stores/ConfigStore';
+import historySnapshotTypes from '../../../shared/constants/historySnapshotTypes';
+import serverEventTypes from '../../../shared/constants/serverEventTypes';
 
 const baseURI = ConfigStore.getBaseURI();
 
-let FloodActions = {
+let activityStreamEventSource = null;
+let lastHistorySnapshot = null;
+
+const FloodActions = {
   clearNotifications: (options) => {
     return axios.delete(`${baseURI}api/notifications`)
       .then((json = {}) => {
@@ -109,47 +114,174 @@ let FloodActions = {
       });
   },
 
-  fetchTransferData: () => {
-    return axios.get(`${baseURI}api/stats`)
-      .then((json = {}) => {
-        return json.data;
-      })
-      .then((transferData) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TRANSFER_DATA_SUCCESS,
-          data: {
-            transferData
-          }
-        });
-      }, (error) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TRANSFER_DATA_ERROR,
-          data: {
-            error
-          }
-        });
-      });
+  handleNotificationCountChange(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.NOTIFICATION_COUNT_CHANGE,
+      data: JSON.parse(event.data)
+    });
   },
 
-  fetchTransferHistory: (opts) => {
-    return axios.get(`${baseURI}api/history`, {
-      params: opts
-    })
-    .then((json = {}) => {
-      return json.data;
-    })
-    .then((data) => {
-      AppDispatcher.dispatchServerAction({
-        type: ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_SUCCESS,
-        data
-      });
-    }, (error) => {
-      AppDispatcher.dispatchServerAction({
-        type: ActionTypes.CLIENT_FETCH_TRANSFER_HISTORY_ERROR,
-        error
-      });
+  handleTorrentListDiffChange(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.TORRENT_LIST_DIFF_CHANGE,
+      data: JSON.parse(event.data)
     });
-  }
+  },
+
+  handleTorrentListFullUpdate(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.TORRENT_LIST_FULL_UPDATE,
+      data: JSON.parse(event.data)
+    });
+  },
+
+  handleTaxonomyDiffChange(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.TAXONOMY_DIFF_CHANGE,
+      data: JSON.parse(event.data)
+    });
+  },
+
+  handleTaxonomyFullUpdate(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.TAXONOMY_FULL_UPDATE,
+      data: JSON.parse(event.data)
+    });
+  },
+
+  handleTransferSummaryDiffChange(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.TRANSFER_SUMMARY_DIFF_CHANGE,
+      data: JSON.parse(event.data)
+    });
+  },
+
+  handleTransferSummaryFullUpdate(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.TRANSFER_SUMMARY_FULL_UPDATE,
+      data: JSON.parse(event.data)
+    });
+  },
+
+  handleTransferHistoryFullUpdate(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.TRANSFER_HISTORY_FULL_UPDATE,
+      data: JSON.parse(event.data)
+    });
+  },
+
+  closeTorrentListStream() {
+    console.log('closing stream');
+    activityStreamEventSource.close();
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.NOTIFICATION_COUNT_CHANGE,
+      this.handleNotificationCountChange
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TAXONOMY_DIFF_CHANGE,
+      this.handleTaxonomyDiffChange
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TAXONOMY_FULL_UPDATE,
+      this.handleTaxonomyFullUpdate
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TORRENT_LIST_DIFF_CHANGE,
+      this.handleTorrentListDiffChange
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TORRENT_LIST_FULL_UPDATE,
+      this.handleTorrentListFullUpdate
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TRANSFER_SUMMARY_DIFF_CHANGE,
+      this.handleTransferSummaryDiffChange
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TRANSFER_SUMMARY_FULL_UPDATE,
+      this.handleTransferSummaryFullUpdate
+    );
+
+    activityStreamEventSource.removeEventListener(
+      serverEventTypes.TRANSFER_HISTORY_FULL_UPDATE,
+      this.handleTransferHistoryFullUpdate
+    );
+
+    activityStreamEventSource = null;
+  },
+
+  restartTorrentListTream(options) {
+    this.closeTorrentListStream();
+    this.startTorrentListStream(options);
+  },
+
+  startTorrentListStream(options = {}) {
+    const {historySnapshot = historySnapshotTypes.FIVE_MINUTE} = options;
+    const didHistorySnapshotChange = lastHistorySnapshot !== historySnapshot;
+
+    lastHistorySnapshot = historySnapshot;
+
+    // When the user requests a new history snapshot during an open session,
+    // we need to close and re-open the event stream.
+    if (didHistorySnapshotChange && activityStreamEventSource !== null) {
+      this.closeTorrentListStream();
+    }
+
+    // If the user requested a new history snapshot, or the event source has not
+    // alraedy been created, we open the event stream.
+    if (didHistorySnapshotChange || activityStreamEventSource == null) {
+      activityStreamEventSource = new EventSource(
+        `${baseURI}api/activity-stream?historySnapshot=${historySnapshot}`
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.NOTIFICATION_COUNT_CHANGE,
+        this.handleNotificationCountChange
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.TAXONOMY_DIFF_CHANGE,
+        this.handleTaxonomyDiffChange
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.TAXONOMY_FULL_UPDATE,
+        this.handleTaxonomyFullUpdate
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.TORRENT_LIST_DIFF_CHANGE,
+        this.handleTorrentListDiffChange
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.TORRENT_LIST_FULL_UPDATE,
+        this.handleTorrentListFullUpdate
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.TRANSFER_SUMMARY_DIFF_CHANGE,
+        this.handleTransferSummaryDiffChange
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.TRANSFER_SUMMARY_FULL_UPDATE,
+        this.handleTransferSummaryFullUpdate
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.TRANSFER_HISTORY_FULL_UPDATE,
+        this.handleTransferHistoryFullUpdate
+      );
+    }
+  },
 };
 
 export default FloodActions;

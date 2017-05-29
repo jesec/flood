@@ -218,10 +218,10 @@ export default {
     =1 {Download File}
     other {Download Files}
   }`,
-  'torrents.details.general.added': 'Added',
   'torrents.details.general.comment': 'Comment',
   'torrents.details.general.connected': '{connected} connected of {total}',
-  'torrents.details.general.creation.date': 'Creation Date',
+  'torrents.details.general.date.added': 'Added',
+  'torrents.details.general.date.created': 'Creation Date',
   'torrents.details.general.downloaded': 'Downloaded',
   'torrents.details.general.free.disk.space': 'Free Disk Space',
   'torrents.details.general.hash': 'Hash',
@@ -273,7 +273,7 @@ export default {
   'torrents.move.data.label': 'Move data',
   'torrents.move.heading': 'Set Download Location',
 
-  'torrents.properties.added': 'Added',
+  'torrents.properties.date.added': 'Added',
   'torrents.properties.base.path': 'Base Path',
   'torrents.properties.comment': 'Comment',
   'torrents.properties.creation.date': 'Creation Date',

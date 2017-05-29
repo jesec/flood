@@ -9,6 +9,7 @@ import AuthStore from '../../stores/AuthStore';
 import Checkmark from '../icons/Checkmark';
 import Close from '../icons/Close';
 import EventTypes from '../../constants/EventTypes';
+import FloodActions from '../../actions/FloodActions';
 import LoadingIndicator from '../general/LoadingIndicator';
 import UIStore from '../../stores/UIStore';
 
@@ -139,11 +140,13 @@ class AuthEnforcer extends React.Component {
   }
 
   handleLoginSuccess() {
+    FloodActions.restartTorrentListTream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.push('overview');
   }
 
   handleRegisterSuccess() {
+    FloodActions.restartTorrentListTream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.push('overview');
   }

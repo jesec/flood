@@ -219,10 +219,10 @@ export default {
     =1 {Archivo}
     other {Archivos}
   }`,
-  'torrents.details.general.added': 'Agregado en',
   'torrents.details.general.comment': 'Comentario',
   'torrents.details.general.connected': '{connected} conectados de {total}',
-  'torrents.details.general.creation.date': 'Creado en',
+  'torrents.details.general.date.added': 'Agregado en',
+  'torrents.details.general.date.created': 'Creado en',
   'torrents.details.general.downloaded': 'Descargado',
   'torrents.details.general.free.disk.space': 'Espacio de Disco Libre',
   'torrents.details.general.hash': 'Hash',
@@ -274,7 +274,7 @@ export default {
   'torrents.move.data.label': 'Mover archivos',
   'torrents.move.heading': 'Configurar Carpeta de Descarga',
 
-  'torrents.properties.added': 'Agregado en',
+  'torrents.properties.date.added': 'Agregado en',
   'torrents.properties.base.path': 'Carpeta Base',
   'torrents.properties.comment': 'Comentario',
   'torrents.properties.creation.date': 'Creado en',
