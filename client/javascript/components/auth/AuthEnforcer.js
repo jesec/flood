@@ -49,11 +49,6 @@ class AuthEnforcer extends React.Component {
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-
-    // this.handleUIDependenciesChange = _.debounce(
-    //   this.handleUIDependenciesChange,
-    //   100
-    // );
   }
 
   componentDidMount() {
