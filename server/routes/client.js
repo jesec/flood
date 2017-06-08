@@ -4,6 +4,7 @@ const multer = require('multer');
 
 const ajaxUtil = require('../util/ajaxUtil');
 const client = require('../models/client');
+const clientRequestService = require('../services/clientRequestService');
 const router = express.Router();
 
 const upload = multer({
@@ -65,10 +66,15 @@ router.post('/torrents/move', function(req, res, next) {
 });
 
 router.post('/torrents/delete', function(req, res, next) {
-  let deleteData = req.body.deleteData;
-  let hashes = req.body.hash;
+  const {deleteData, hash: hashes} = req.body;
+  const callback = ajaxUtil.getResponseFn(res);
 
-  client.deleteTorrents({hashes, deleteData}, ajaxUtil.getResponseFn(res));
+  clientRequestService
+    .removeTorrents({hashes, deleteData})
+    .then(callback)
+    .catch((err) => {
+      callback(null, response);
+    });
 });
 
 router.get('/torrents/taxonomy', function(req, res, next) {

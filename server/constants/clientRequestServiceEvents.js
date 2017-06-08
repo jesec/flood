@@ -7,6 +7,7 @@ const clientRequestServiceEvents = [
   'PROCESS_TORRENT_LIST_END',
   'PROCESS_TORRENT_LIST_START',
   'PROCESS_TRANSFER_RATE_START',
+  'TORRENTS_REMOVED'
 ];
 
 module.exports = objectUtil.createSymbolMapFromArray(

@@ -260,14 +260,6 @@ class ClientRequest {
     });
   }
 
-  removeTorrents(options) {
-    let hashes = this.getEnsuredArray(options.hashes);
-
-    hashes.forEach((hash) => {
-      this.requests.push(this.getMethodCall('d.erase', [hash]));
-    });
-  }
-
   setDownloadPath(options) {
     let hashes = this.getEnsuredArray(options.hashes);
 

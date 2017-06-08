@@ -1,8 +1,18 @@
 'use strict';
 const EventEmitter = require('events');
+const path = require('path');
+const rimraf = require('rimraf');
 
 const clientRequestServiceEvents = require('../constants/clientRequestServiceEvents');
+const fileListPropMap = require('../constants/fileListPropMap');
+const methodCallUtil = require('../util/methodCallUtil');
 const scgi = require('../util/scgi');
+const torrentListPropMap = require('../constants/torrentListPropMap');
+
+const fileListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(
+  fileListPropMap,
+  ['pathComponents']
+);
 
 class ClientRequestService extends EventEmitter {
   constructor() {
@@ -33,6 +43,89 @@ class ClientRequestService extends EventEmitter {
     this.torrentListReducers.push(reducer);
   }
 
+  removeTorrents(options = {hashes: [], deleteData: false}) {
+    const methodCalls = options.hashes.reduce(
+      (accumulator, hash, index) => {
+        let eraseFileMethodCallIndex = index;
+
+        // If we're deleting files, we grab each torrents' file list before we
+        // remove them.
+        if (options.deleteData) {
+          // We offset the indices of these method calls so that we know exactly
+          // where to retrieve them in the future.
+          const directoryBaseMethodCallIndex = index + options.hashes.length;
+          eraseFileMethodCallIndex = index + options.hashes.length * 2;
+
+          accumulator[index] = {
+            methodName: 'f.multicall',
+            params: [hash, ''].concat(fileListMethodCallConfig.methodCalls)
+          };
+
+          accumulator[directoryBaseMethodCallIndex] = {
+            methodName: 'd.directory_base',
+            params: [hash]
+          };
+        }
+
+        accumulator[eraseFileMethodCallIndex] = {
+          methodName: 'd.erase',
+          params: [hash]
+        };
+
+        return accumulator;
+      },
+      []
+    );
+
+    return scgi
+      .methodCall('system.multicall', [methodCalls])
+      .then((response) => {
+        if (options.deleteData) {
+          const torrentCount = options.hashes.length;
+          const filesToDelete = options.hashes.reduce(
+            (accumulator, hash, hashIndex) => {
+              const fileList = response[hashIndex][0];
+              const directoryBase = response[hashIndex + torrentCount][0];
+
+              const filesToDelete = fileList.reduce(
+                (fileListAccumulator, file) => {
+                  // We only look at the first path component returned because
+                  // if it's a directory within the torrent, then we'll remove
+                  // the entire directory.
+                  const filePath = path.join(directoryBase, file[0][0]);
+
+                  // filePath might be a directory, so it may have already been
+                  // added. If not, we add it.
+                  if (!fileListAccumulator.includes(filePath)) {
+                    fileListAccumulator.push(filePath);
+                  }
+
+                  return fileListAccumulator;
+                },
+                []
+              );
+
+              return accumulator.concat(filesToDelete);
+            },
+            []
+          );
+
+          filesToDelete.forEach(file => {
+            rimraf(file, {disableGlob: true}, error => {
+              if (error) {
+                console.error(`Error deleting file: ${file}\n${error}`);
+              }
+            });
+          });
+        }
+
+        this.emit(clientRequestServiceEvents.TORRENTS_REMOVED, options);
+
+        return response;
+      })
+      .catch(clientError => this.processClientError(clientError));
+  }
+
   /**
    * Sends a multicall request to rTorrent with the requested method calls.
    *
@@ -48,15 +141,10 @@ class ClientRequestService extends EventEmitter {
    *   with the processed client error.
    */
   fetchTorrentList(options) {
-    return new Promise((resolve, reject) => {
-      scgi.methodCall('d.multicall2', ['', 'main'].concat(options.methodCalls))
-      .then((torrentList) => {
-        resolve(this.processTorrentListResponse(torrentList, options));
-      })
-      .catch((clientError) => {
-        reject(this.processClientError(clientError));
-      });
-    });
+    return scgi
+      .methodCall('d.multicall2', ['', 'main'].concat(options.methodCalls))
+      .then(torrents => this.processTorrentListResponse(torrents, options))
+      .catch(clientError => this.processClientError(clientError));
   }
 
   fetchTransferSummary(options) {
@@ -64,15 +152,14 @@ class ClientRequestService extends EventEmitter {
       return {methodName, params: []};
     });
 
-    return new Promise((resolve, reject) => {
-      scgi.methodCall('system.multicall', [methodCalls])
-      .then((transferRate) => {
-        resolve(this.processTransferRateResponse(transferRate, options));
+    return scgi
+      .methodCall('system.multicall', [methodCalls])
+      .then(transferRate => {
+        return this.processTransferRateResponse(transferRate, options);
       })
-      .catch((clientError) => {
-        reject(this.processClientError(clientError));
+      .catch(clientError => {
+        return this.processClientError(clientError);
       });
-    });
   }
 
   processClientError(error) {
