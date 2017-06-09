@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * This file is deprecated in favor of clientRequestService.
+ */
+
 let mkdirp = require('mkdirp');
 let mv = require('mv');
 let path = require('path');
