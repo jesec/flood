@@ -24,7 +24,7 @@ const METHODS_TO_BIND = [
   'handleMouseOut',
   'handleMouseOver',
   'onTransferDataRequestError',
-  'onTransferDataRequestSuccess',
+  'onTransferSummaryChange',
   'onTransferHistoryRequestSuccess'
 ];
 
@@ -67,18 +67,25 @@ class TransferData extends React.Component {
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
 
-    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
-      this.onTransferDataRequestSuccess);
-    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
-      this.onTransferHistoryRequestSuccess);
-    TransferDataStore.fetchTransferData();
+    TransferDataStore.listen(
+      EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
+      this.onTransferSummaryChange
+    );
+    TransferDataStore.listen(
+      EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
+      this.onTransferHistoryRequestSuccess
+    );
   }
 
   componentWillUnmount() {
-    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
-      this.onTransferDataRequestSuccess);
-    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
-      this.onTransferHistoryRequestSuccess);
+    TransferDataStore.unlisten(
+      EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
+      this.onTransferSummaryChange
+    );
+    TransferDataStore.unlisten(
+      EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
+      this.onTransferHistoryRequestSuccess
+    );
   }
 
   handleGraphHover(graphInspectorPoint) {
@@ -119,7 +126,7 @@ class TransferData extends React.Component {
     });
   }
 
-  onTransferDataRequestSuccess() {
+  onTransferSummaryChange() {
     this.setState({
       transferDataRequestError: false,
       transferDataRequestSuccess: true
@@ -142,10 +149,7 @@ class TransferData extends React.Component {
     let content = null;
 
     if (!this.isLoading()) {
-      const throttles = TransferDataStore.getThrottles({latest: true});
-      const transferRate = TransferDataStore.getTransferRate();
-      const transferRates = TransferDataStore.getTransferRates();
-      const transferTotals = TransferDataStore.getTransferTotals();
+      const transferSummary = TransferDataStore.getTransferSummary();
 
       content = (
         <div className="client-stats"
@@ -154,12 +158,9 @@ class TransferData extends React.Component {
           onMouseOver={this.handleMouseOver}>
           <TransferRateDetails
             inspectorPoint={this.state.graphInspectorPoint}
-            throttles={throttles}
-            transferRate={transferRate}
-            transferTotals={transferTotals} />
+            transferSummary={transferSummary}/>
           <TransferRateGraph
             height={150}
-            historicalData={transferRates}
             id="transfer-rate-graph"
             onMouseOut={this.handleGraphMouseOut}
             onHover={this.handleGraphHover}

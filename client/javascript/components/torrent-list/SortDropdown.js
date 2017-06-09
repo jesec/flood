@@ -7,8 +7,18 @@ import Dropdown from '../general/form-elements/Dropdown';
 import TorrentProperties from '../../constants/TorrentProperties';
 
 const METHODS_TO_BIND = ['getDropdownHeader', 'handleItemSelect'];
-const SORT_PROPERTIES = ['name', 'eta', 'downloadRate', 'uploadRate', 'ratio',
-  'percentComplete', 'downloadTotal', 'uploadTotal', 'sizeBytes', 'added'];
+const SORT_PROPERTIES = [
+  'name',
+  'eta',
+  'downRate',
+  'upRate',
+  'ratio',
+  'percentComplete',
+  'downTotal',
+  'upTotal',
+  'sizeBytes',
+  'dateAdded'
+];
 
 class SortDropdown extends React.Component {
   constructor() {
@@ -20,6 +30,13 @@ class SortDropdown extends React.Component {
   }
 
   getDropdownHeader() {
+    const {selectedProperty} = this.props;
+    let propertyMessageConfig = TorrentProperties[selectedProperty];
+
+    if (propertyMessageConfig == null) {
+      propertyMessageConfig = TorrentProperties.dateAdded;
+    }
+
     return (
       <a className="dropdown__button">
         <label className="dropdown__label">
@@ -30,8 +47,8 @@ class SortDropdown extends React.Component {
         </label>
         <span className="dropdown__value">
           <FormattedMessage
-            id={TorrentProperties[this.props.selectedProperty].id}
-            defaultMessage={TorrentProperties[this.props.selectedProperty].defaultMessage}
+            id={propertyMessageConfig.id}
+            defaultMessage={propertyMessageConfig.defaultMessage}
           />
         </span>
       </a>

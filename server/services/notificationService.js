@@ -1,19 +1,24 @@
 'use strict';
+const _ = require('lodash');
+const Datastore = require('nedb');
+const EventEmitter = require('events');
 
-let Datastore = require('nedb');
-
-let config = require('../../config');
+const config = require('../../config');
+const notificationServiceEvents = require('../constants/notificationServiceEvents');
 
 const DEFAULT_QUERY_LIMIT = 20;
 const INITIAL_COUNT_VALUE = {read: 0, total: 0, unread: 0};
 
-class NotificationCollection {
+class NotificationService extends EventEmitter {
   constructor() {
+    super(...arguments);
+
     this.count = Object.assign({}, INITIAL_COUNT_VALUE);
     this.ready = false;
 
     this.db = this.loadDatabase();
 
+    this.emitUpdate = _.debounce(this.emitUpdate.bind(this), 100);
     this.countNotifications();
   }
 
@@ -27,10 +32,12 @@ class NotificationCollection {
       id: notification.id,
       read: false
     });
+
+    this.emitUpdate();
   }
 
   clearNotifications(options, callback) {
-    this.db.remove({}, {multi: true}, (err, docs) => {
+    this.db.remove({}, {multi: true}, (err) => {
       if (err) {
         callback(null, err);
         return;
@@ -40,6 +47,8 @@ class NotificationCollection {
 
       callback();
     });
+
+    this.emitUpdate();
   }
 
   countNotifications() {
@@ -57,7 +66,23 @@ class NotificationCollection {
           this.count.total++;
         });
       }
+
+      this.emitUpdate();
     });
+  }
+
+  emitUpdate() {
+    this.emit(
+      notificationServiceEvents.NOTIFICATION_COUNT_CHANGE,
+      {
+        id: Date.now(),
+        data: this.count
+      }
+    );
+  }
+
+  getNotificationCount() {
+    return this.count;
   }
 
   getNotifications(query, callback) {
@@ -96,4 +121,4 @@ class NotificationCollection {
   }
 }
 
-module.exports = new NotificationCollection();
+module.exports = new NotificationService();

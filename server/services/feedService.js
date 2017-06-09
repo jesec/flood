@@ -1,14 +1,12 @@
 'use strict';
+const Datastore = require('nedb');
 
-let _ = require('lodash');
-let Datastore = require('nedb');
+const client = require('../models/client');
+const config = require('../../config');
+const Feed = require('../models/Feed');
+const notificationService = require('./notificationService');
 
-let client = require('./client');
-let config = require('../../config');
-let Feed = require('./Feed');
-let NotificationCollection = require('./NotificationCollection');
-
-class FeedCollection {
+class FeedService {
   constructor() {
     this.feeds = [];
     this.isDBReady = false;
@@ -144,7 +142,7 @@ class FeedCollection {
                 {upsert: true}
               );
 
-              NotificationCollection.addNotification({
+              notificationService.addNotification({
                 id: 'notification.feed.downloaded.torrent',
                 data: {
                   feedLabel: feed.options && feed.options.label,
@@ -299,4 +297,4 @@ class FeedCollection {
   }
 }
 
-module.exports = new FeedCollection();
+module.exports = new FeedService();

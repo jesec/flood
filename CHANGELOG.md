@@ -6,6 +6,15 @@
 * Removed verbose logging from `HistoryEra`
 * Check existing feed items against new download rules
 * Switch URL and Label textboxes in Add Feed form to match the Download Rules form
+* Rate-limit the SCGI calls to rTorrent
+  * Sends only one call at a time
+  * Sends at most one call every 250 miliseconds
+* Implement "actity stream"
+  * The Flood client no longer polls the Flood server on an interval. Instead,
+  the Flood server polls rTorrent on a more regular interval and emits changes
+  via an event-stream. This significantly reduces data usage on the Flood client
+  * Stream covers torrent list, transfer rate summary & history,
+  torrent taxonomy, and notification count.
 
 ## [1.0.0] (April 21, 2017)
 * First "official" release

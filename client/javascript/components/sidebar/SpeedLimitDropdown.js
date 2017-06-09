@@ -23,7 +23,7 @@ const MESSAGES = defineMessages({
 const METHODS_TO_BIND = [
   'handleDropdownOpen',
   'handleSettingsFetchRequestSuccess',
-  'onTransferDataRequestSuccess'
+  'onTransferSummaryChange'
 ];
 
 class SpeedLimitDropdown extends React.Component {
@@ -32,7 +32,10 @@ class SpeedLimitDropdown extends React.Component {
 
     this.state = {
       speedLimits: SettingsStore.getFloodSettings('speedLimits'),
-      throttle: null
+      currentThrottles: {
+        download: null,
+        upload: null
+      }
     };
     this.tooltip = null;
 
@@ -42,22 +45,41 @@ class SpeedLimitDropdown extends React.Component {
   }
 
   componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsFetchRequestSuccess);
-    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
-      this.onTransferDataRequestSuccess);
-    TransferDataStore.fetchTransferData();
+    SettingsStore.listen(
+      EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsFetchRequestSuccess
+    );
+    TransferDataStore.listen(
+      EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
+      this.onTransferSummaryChange
+    );
   }
 
   componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsFetchRequestSuccess);
-    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_DATA_REQUEST_SUCCESS,
-      this.onTransferDataRequestSuccess);
+    SettingsStore.unlisten(
+      EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsFetchRequestSuccess
+    );
+    TransferDataStore.unlisten(
+      EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
+      this.onTransferSummaryChange
+    );
   }
 
-  onTransferDataRequestSuccess() {
-    this.setState({throttle: TransferDataStore.getThrottles({latest: true})});
+  onTransferSummaryChange() {
+    const transferSummary = TransferDataStore.getTransferSummary();
+
+    if (
+      this.state.currentThrottles.upload !== transferSummary.upThrottle
+      || this.state.currentThrottles.download !== transferSummary.downThrottle
+    ) {
+      this.setState({
+        currentThrottles: {
+          upload: transferSummary.upThrottle,
+          download: transferSummary.downThrottle
+        }
+      });
+    }
   }
 
   getDropdownHeader() {
@@ -104,7 +126,7 @@ class SpeedLimitDropdown extends React.Component {
     };
 
     let insertCurrentThrottle = true;
-    let currentThrottle = this.state.throttle;
+    let currentThrottle = this.state.currentThrottles;
     let speeds = this.state.speedLimits[property];
 
     let items = speeds.map((bytes) => {

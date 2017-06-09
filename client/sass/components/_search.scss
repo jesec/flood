@@ -21,6 +21,7 @@ $search-torrents--icon--foreground--active: $blue;
     height: 22px;
     left: 17px;
     opacity: 0.5;
+    pointer-events: none;
     position: absolute;
     top: 50%;
     transition: fill 0.25s, opacity 0.25s;

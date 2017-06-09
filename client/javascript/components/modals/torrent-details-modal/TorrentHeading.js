@@ -128,15 +128,15 @@ export default class TorrentHeading extends React.Component {
           <ul className="torrent-details__sub-heading__secondary">
             <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--download">
               <DownloadThickIcon />
-              <Size value={torrent.downloadRate} isSpeed={true} />
+              <Size value={torrent.downRate} isSpeed={true} />
               &nbsp;&mdash;&nbsp;
               <Size value={torrent.bytesDone} />
             </li>
             <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--upload">
               <UploadThickIcon />
-              <Size value={torrent.uploadRate} isSpeed={true} />
+              <Size value={torrent.upRate} isSpeed={true} />
               &nbsp;&mdash;&nbsp;
-              <Size value={torrent.uploadTotal} />
+              <Size value={torrent.upTotal} />
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <RatioIcon />

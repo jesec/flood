@@ -1,9 +1,11 @@
 import classnames from 'classnames';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
+import moment from 'moment';
 import React from 'react';
 
 import Download from '../icons/Download';
 import Duration from '../general/Duration';
+import formatUtil from '../../../../shared/util/formatUtil';
 import InfinityIcon from '../icons/InfinityIcon';
 import Size from '../general/Size';
 import Upload from '../icons/Upload';
@@ -38,13 +40,23 @@ class TransferRateDetails extends React.Component {
     let {
       props: {
         inspectorPoint,
-        throttles,
-        transferRate,
-        transferTotals
+        transferSummary
       }
     } = this;
 
+    const throttles = {
+      download: transferSummary.downThrottle,
+      upload: transferSummary.upThrottle
+    };
     let timestamp = null;
+    let transferRates = {
+      download: transferSummary.downRate,
+      upload: transferSummary.upRate
+    };
+    let transferTotals = {
+      download: transferSummary.downTotal,
+      upload: transferSummary.upTotal
+    };
 
     const secondaryDataClasses = classnames(
       'client-stats__rate__data--secondary',
@@ -57,17 +69,25 @@ class TransferRateDetails extends React.Component {
     );
 
     if (inspectorPoint != null) {
-      transferRate = {
+      transferRates = {
         upload: inspectorPoint.uploadSpeed,
         download: inspectorPoint.downloadSpeed
       };
     }
 
     if (this.state.timestamp != null) {
+      const currentTime = moment(Date.now());
+      const durationSummary = formatUtil.secondsToDuration(
+        moment
+          .duration(currentTime.diff(moment(this.state.timestamp)))
+          .asSeconds()
+      );
+
       timestamp = (
         <div className={timestampClasses}>
-          <Duration suffix={this.props.intl.formatMessage(messages.ago)}
-            value={this.state.timestamp} />
+          <Duration
+            suffix={this.props.intl.formatMessage(messages.ago)}
+            value={durationSummary} />
         </div>
       );
     }
@@ -87,7 +107,7 @@ class TransferRateDetails extends React.Component {
         </div>
         <div className="client-stats__rate__data">
           <div className="client-stats__rate__data--primary">
-            <Size value={transferRate[slug]} isSpeed={true} />
+            <Size value={transferRates[slug]} isSpeed={true} />
           </div>
           {timestamp}
           <div className={secondaryDataClasses}>

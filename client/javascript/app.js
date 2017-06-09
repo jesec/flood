@@ -6,13 +6,14 @@ import ReactDOM from 'react-dom';
 import * as i18n from './i18n/languages';
 import AuthEnforcer from './components/auth/AuthEnforcer';
 import EventTypes from './constants/EventTypes';
+import FloodActions from './actions/FloodActions';
 import Login from './components/views/Login';
 import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
 import TorrentClientOverview from './components/views/TorrentClientOverview';
 import UIStore from './stores/UIStore';
 
-let appRoutes = (
+const appRoutes = (
   <Router history={browserHistory}>
     <Route path="/" component={AuthEnforcer}>
       <IndexRoute component={Login} />
@@ -23,7 +24,6 @@ let appRoutes = (
     </Route>
   </Router>
 );
-
 const METHODS_TO_BIND = ['handleSettingsChange'];
 
 class FloodApp extends React.Component {
@@ -45,16 +45,22 @@ class FloodApp extends React.Component {
           defaultMessage="Flood Settings" />
       )
     });
+
+    FloodActions.startActivityStream();
   }
 
   componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsChange);
+    SettingsStore.listen(
+      EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsChange
+    );
   }
 
   componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsChange);
+    SettingsStore.unlisten(
+      EventTypes.SETTINGS_CHANGE,
+      this.handleSettingsChange
+    );
   }
 
   handleSettingsChange() {

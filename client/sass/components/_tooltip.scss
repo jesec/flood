@@ -25,21 +25,6 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
   visibility: hidden;
   z-index: 1000;
 
-  &--is-error {
-
-    .tooltip {
-
-      &__content {
-        background: $tooltip-background--error;
-        color: $tooltip-foreground--error;
-
-        &:after {
-          border-color: $tooltip-background--error;
-        }
-      }
-    }
-  }
-
   &__wrapper {
     display: inline-block;
     position: relative;
@@ -266,6 +251,21 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
             border-top-color: transparent;
             right: 100%;
           }
+        }
+      }
+    }
+  }
+
+  &--is-error {
+
+    .tooltip {
+
+      &__content {
+        background: $tooltip-background--error;
+        color: $tooltip-foreground--error;
+
+        &:after {
+          border-color: $tooltip-background--error;
         }
       }
     }

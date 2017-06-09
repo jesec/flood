@@ -1,9 +1,13 @@
 import d3 from 'd3';
 import React from 'react';
 
+import EventTypes from '../../constants/EventTypes';
+import TransferDataStore from '../../stores/TransferDataStore';
+
 const METHODS_TO_BIND = [
   'appendGraphCircles',
   'appendEmptyGraphShapes',
+  'handleTransferHistoryChange',
   'handleMouseOut',
   'handleMouseOver',
   'handleMouseMove',
@@ -28,31 +32,24 @@ class TransferRateGraph extends React.Component {
     this.yScale = {};
   }
 
-  shouldComponentUpdate(nextProps) {
-    const {props: {historicalData = {}}} = this;
-    const {historicalData: {upload = [], download = []}} = nextProps;
-
-    if (this.isInitialRender) {
-      if (upload != null && upload.length > 0) {
-        this.isInitialRender = false;
-      }
-
-      return true;
-    }
-
-    return upload.some((item, index) => {
-      return item !== historicalData.upload[index];
-    }) || download.some((item, index) => {
-      return item !== historicalData.download[index];
-    });
-  }
-
   componentDidMount() {
-    this.updateGraph();
+    TransferDataStore.listen(
+      EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
+      this.handleTransferHistoryChange
+    );
+
+    this.renderGraphData();
   }
 
   componentDidUpdate() {
-    this.updateGraph();
+    this.renderGraphData();
+  }
+
+  componentWillUnmount() {
+    TransferDataStore.unlisten(
+      EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
+      this.handleTransferHistoryChange
+    );
   }
 
   appendGraphCircles(graph, slug) {
@@ -89,6 +86,10 @@ class TransferRateGraph extends React.Component {
     );
   }
 
+  handleTransferHistoryChange() {
+    this.updateGraph();
+  }
+
   handleMouseMove(mouseX) {
     this.lastMouseX = mouseX;
     this.renderPrecisePointInspectors();
@@ -114,8 +115,9 @@ class TransferRateGraph extends React.Component {
     this.graphRefs.download.inspectPoint.style('opacity', 1);
   }
 
-  renderGraphData(props) {
-    const {height, historicalData, id, width} = props;
+  renderGraphData() {
+    const historicalData = TransferDataStore.getTransferRates();
+    const {height, id, width} = this.props;
     const graph = d3.select(`#${id}`);
     const margin = {bottom: 10, top: 10};
 
@@ -178,10 +180,11 @@ class TransferRateGraph extends React.Component {
   renderPrecisePointInspectors() {
     const {
       lastMouseX,
-      props: {historicalData, onHover},
+      props: {onHover},
       xScale
     } = this;
 
+    const historicalData = TransferDataStore.getTransferRates();
     const hoverPoint = xScale.invert(lastMouseX);
     const uploadSpeed = this.setInspectorCoordinates('upload', hoverPoint);
     const downloadSpeed = this.setInspectorCoordinates('download', hoverPoint);
@@ -199,11 +202,11 @@ class TransferRateGraph extends React.Component {
   setInspectorCoordinates(slug, hoverPoint) {
     const {
       graphRefs: {[slug]: {inspectPoint}},
-      props: {historicalData},
       xScale,
       yScale,
     } = this;
 
+    const historicalData = TransferDataStore.getTransferRates();
     const upperSpeed = historicalData[slug][Math.ceil(hoverPoint)];
     const lowerSpeed = historicalData[slug][Math.floor(hoverPoint)];
 
@@ -220,7 +223,7 @@ class TransferRateGraph extends React.Component {
   }
 
   updateGraph() {
-    this.renderGraphData(this.props);
+    this.renderGraphData();
 
     if (this.graphRefs.isHovered) {
       this.renderPrecisePointInspectors();

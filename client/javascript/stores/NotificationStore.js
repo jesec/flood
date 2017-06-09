@@ -12,6 +12,7 @@ class NotificationStoreClass extends BaseStore {
     super();
 
     this.notifications = {};
+    this.notificationCount = {};
     this.ongoingPolls = {};
   }
 
@@ -21,20 +22,16 @@ class NotificationStoreClass extends BaseStore {
   }
 
   fetchNotifications(options = {}) {
-    if (!this.isRequestPending('fetch-notifications') || options.forceUpdate) {
-      this.beginRequest('fetch-notifications');
-      FloodActions.fetchNotifications(options);
-    }
-
-    if (this.ongoingPolls[options.id] == null) {
-      this.startPollingNotifications(options);
-    } else {
-      this.updateOngingNotificationsPoll(options);
-    }
+    FloodActions.fetchNotifications(options);
   }
 
   getNotifications(id) {
     return this.notifications[id];
+  }
+
+  handleNotificationCountChange(notificationCount) {
+    this.notificationCount = notificationCount;
+    this.emit(EventTypes.NOTIFICATIONS_COUNT_CHANGE, notificationCount);
   }
 
   handleNotificationsClearSuccess(options) {
@@ -45,14 +42,10 @@ class NotificationStoreClass extends BaseStore {
   }
 
   handleNotificationsFetchError(error) {
-    this.resolveRequest('fetch-notifications');
-
     this.emit(EventTypes.NOTIFICATIONS_FETCH_ERROR);
   }
 
   handleNotificationsFetchSuccess(response) {
-    this.resolveRequest('fetch-notifications');
-
     this.notifications[response.id] = response;
 
     this.emit(EventTypes.NOTIFICATIONS_FETCH_SUCCESS);
@@ -97,6 +90,9 @@ NotificationStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.FLOOD_FETCH_NOTIFICATIONS_SUCCESS:
       NotificationStore.handleNotificationsFetchSuccess(action.data);
+      break;
+    case ActionTypes.NOTIFICATION_COUNT_CHANGE:
+      NotificationStore.handleNotificationCountChange(action.data);
       break;
   }
 });

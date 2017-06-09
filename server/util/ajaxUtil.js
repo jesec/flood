@@ -12,7 +12,7 @@ let ajaxUtil = {
       } else {
         res.json(data);
       }
-    }
+    };
   }
 };
 

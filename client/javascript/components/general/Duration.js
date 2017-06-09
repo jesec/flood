@@ -4,6 +4,11 @@ import React from 'react';
 export default class Duration extends React.Component {
   render() {
     let {value: duration, suffix = null} = this.props;
+
+    if (duration == null) {
+      return null;
+    }
+
     let content = null;
 
     if (suffix) {

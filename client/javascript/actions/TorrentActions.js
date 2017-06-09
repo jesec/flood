@@ -104,28 +104,6 @@ let TorrentActions = {
       });
   },
 
-  fetchTorrents: () => {
-    return axios.get(`${baseURI}api/client/torrents`)
-      .then((json = {}) => {
-        return json.data;
-      })
-      .then((torrents) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TORRENTS_SUCCESS,
-          data: {
-            torrents
-          }
-        });
-      }, (error) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TORRENTS_ERROR,
-          data: {
-            error
-          }
-        });
-      });
-  },
-
   fetchTorrentDetails: (hash) => {
     return axios.post(`${baseURI}api/client/torrent-details`, {
         hash
@@ -147,60 +125,6 @@ let TorrentActions = {
           data: {
             hash
           }
-        });
-      });
-  },
-
-  fetchTorrentTaxonomy: () => {
-    return axios.get(`${baseURI}api/client/torrents/taxonomy`)
-      .then((json = {}) => {
-        return json.data;
-      })
-      .then((data) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
-          data
-        });
-      }, (error) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TORRENT_TAXONOMY_ERROR,
-          error
-        });
-      });
-  },
-
-  fetchTorrentStatusCount: () => {
-    return axios.get(`${baseURI}api/client/torrents/status-count`)
-      .then((json = {}) => {
-        return json.data;
-      })
-      .then((data) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_SUCCESS,
-          data
-        });
-      }, (error) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TORRENT_STATUS_COUNT_REQUEST_ERROR,
-          error
-        });
-      });
-  },
-
-  fetchTorrentTrackerCount: () => {
-    return axios.get(`${baseURI}api/client/torrents/tracker-count`)
-      .then((json = {}) => {
-        return json.data;
-      })
-      .then((data) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_SUCCESS,
-          data
-        });
-      }, (error) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_FETCH_TORRENT_TRACKER_COUNT_REQUEST_ERROR,
-          error
         });
       });
   },

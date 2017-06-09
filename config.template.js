@@ -15,7 +15,8 @@ const CONFIG = {
   },
   ssl: false,
   sslKey: '/absolute/path/to/key/',
-  sslCert: '/absolute/path/to/certificate/'
+  sslCert: '/absolute/path/to/certificate/',
+  torrentClientPollInterval: 1000 * 2
 };
 
 module.exports = CONFIG;

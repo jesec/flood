@@ -13,6 +13,7 @@ const METHODS_TO_BIND = [
   'handleMouseLeave',
   'handleTooltipMouseEnter',
   'handleTooltipMouseLeave',
+  'isOpen',
   'triggerClose'
 ];
 
@@ -52,6 +53,10 @@ class Tooltip extends React.Component {
       wasTriggeredClose: false
     });
     this.addScrollListener();
+
+    if (props.onOpen) {
+      props.onOpen();
+    }
   }
 
   handleMouseLeave() {
@@ -85,6 +90,10 @@ class Tooltip extends React.Component {
     if ((!this.props.stayOpen || options.forceClose) && this.state.isOpen) {
       this.setState({isOpen: false});
       this.removeScrollListener();
+
+      if (this.props.onClose) {
+        this.props.onClose();
+      }
     }
   }
 
@@ -143,7 +152,11 @@ class Tooltip extends React.Component {
 
     if (position === 'top' && clearance.top < tooltipHeight) {
       position = 'bottom';
-    } else if (position === 'bottom' && clearance.bottom < tooltipHeight) {
+    } else if (
+      position === 'bottom'
+      && clearance.bottom < tooltipHeight
+      && clearance.top > clearance.bottom
+    ) {
       position = 'top';
     }
 
@@ -182,6 +195,10 @@ class Tooltip extends React.Component {
       top: boundingRect.top,
       boundingRect
     };
+  }
+
+  isOpen() {
+    return this.state.isOpen;
   }
 
   removeScrollListener() {
@@ -310,6 +327,8 @@ Tooltip.propTypes = {
     React.PropTypes.string]),
   onMouseLeave: React.PropTypes.func,
   offset: React.PropTypes.number,
+  onClose: React.PropTypes.func,
+  onOpen: React.PropTypes.func,
   position: React.PropTypes.oneOf(['top', 'bottom', 'right', 'left']),
   scrollContainer: React.PropTypes.oneOfType([React.PropTypes.object,
     React.PropTypes.string]),

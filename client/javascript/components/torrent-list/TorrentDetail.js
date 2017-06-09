@@ -22,17 +22,17 @@ import Size from '../general/Size';
 import TrackerMessageIcon from '../icons/TrackerMessageIcon';
 import UploadThickIcon from '../icons/UploadThickIcon';
 
-const booleanRenderer = (value = '') => {
-  return Number(value) === 1 ? icons.checkmark : null;
+const booleanRenderer = (value) => {
+  return value ? icons.checkmark : null;
 };
 const dateRenderer = date => <FormattedDate value={date * 1000} />;
-const peersRenderer = (connectedPeers, totalPeers) => {
+const peersRenderer = (peersConnected, totalPeers) => {
   return (
     <FormattedMessage
       id="torrent.list.peers"
       defaultMessage="{connected} {of} {total}"
       values={{
-        connected: <FormattedNumber value={connectedPeers} />,
+        connected: <FormattedNumber value={peersConnected} />,
         of: (
           <em className="unit">
             <FormattedMessage id="torrent.list.peers.of"
@@ -52,11 +52,11 @@ const icons = {
   eta: <ClockIcon />,
   sizeBytes: <DiskIcon />,
   freeDiskSpace: <DiskIcon />,
-  downloadRate: <DownloadThickIcon />,
+  downRate: <DownloadThickIcon />,
   basePath: <FolderClosedSolid />,
   hash: <HashIcon />,
-  added: <CalendarIcon />,
-  creationDate: <CalendarCreatedIcon />,
+  dateAdded: <CalendarIcon />,
+  dateCreated: <CalendarCreatedIcon />,
   isPrivate: <LockIcon />,
   message: <TrackerMessageIcon />,
   percentComplete: <DownloadThickIcon />,
@@ -69,10 +69,10 @@ const icons = {
 };
 
 const transformers = {
-  added: dateRenderer,
-  creationDate: dateRenderer,
-  downloadRate: speedRenderer,
-  downloadTotal: sizeRenderer,
+  dateAdded: dateRenderer,
+  dateCreated: dateRenderer,
+  downRate: speedRenderer,
+  downTotal: sizeRenderer,
   freeDiskSpace: sizeRenderer,
   ignoreScheduler: booleanRenderer,
   isPrivate: booleanRenderer,
@@ -101,9 +101,9 @@ const transformers = {
   },
   ratio: ratio => <Ratio value={ratio} />,
   sizeBytes: sizeRenderer,
-  trackers: trackers => trackers.join(', '),
-  uploadRate: speedRenderer,
-  uploadTotal: sizeRenderer,
+  trackerURIs: trackers => trackers.join(', '),
+  upRate: speedRenderer,
+  upTotal: sizeRenderer,
   eta: eta => {
     if (!eta) {
       return null;

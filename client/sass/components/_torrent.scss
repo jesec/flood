@@ -207,7 +207,7 @@ $more-info--border: $textbox-repeater--button--border;
 
         &__detail {
 
-          &--downloadRate {
+          &--downRate {
             color: $green;
             font-weight: 500;
           }
@@ -224,7 +224,7 @@ $more-info--border: $textbox-repeater--button--border;
 
         &__detail {
 
-          &--uploadRate {
+          &--upRate {
             color: $blue;
             font-weight: 500;
           }
@@ -255,8 +255,8 @@ $more-info--border: $textbox-repeater--button--border;
               }
             }
 
-            &--downloadRate,
-            &--uploadRate {
+            &--downRate,
+            &--upRate {
               color: $torrent--speed--foreground--selected--has-error;
             }
           }
@@ -298,8 +298,8 @@ $more-info--border: $textbox-repeater--button--border;
               color: $torrent--primary--foreground--selected--stopped;
             }
 
-            &--downloadRate,
-            &--uploadRate {
+            &--downRate,
+            &--upRate {
               color: $torrent--tertiary--foreground--selected--stopped;
             }
 
@@ -343,8 +343,8 @@ $more-info--border: $textbox-repeater--button--border;
           color: $torrent--primary--foreground--selected;
         }
 
-        &--downloadRate,
-        &--uploadRate {
+        &--downRate,
+        &--upRate {
           color: $torrent--speed--foreground--selected;
         }
 
@@ -479,7 +479,7 @@ $more-info--border: $textbox-repeater--button--border;
           width: 90px;
         }
 
-        &--uploadTotal {
+        &--upTotal {
           width: 55px;
         }
 

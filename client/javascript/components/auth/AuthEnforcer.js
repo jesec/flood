@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {browserHistory} from 'react-router';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
@@ -8,6 +9,7 @@ import AuthStore from '../../stores/AuthStore';
 import Checkmark from '../icons/Checkmark';
 import Close from '../icons/Close';
 import EventTypes from '../../constants/EventTypes';
+import FloodActions from '../../actions/FloodActions';
 import LoadingIndicator from '../general/LoadingIndicator';
 import UIStore from '../../stores/UIStore';
 
@@ -50,38 +52,66 @@ class AuthEnforcer extends React.Component {
   }
 
   componentDidMount() {
-    AuthStore.listen(EventTypes.AUTH_REGISTER_SUCCESS,
-      this.handleRegisterSuccess);
-    AuthStore.listen(EventTypes.AUTH_LOGIN_ERROR,
-      this.handleLoginError);
-    AuthStore.listen(EventTypes.AUTH_LOGIN_SUCCESS,
-      this.handleLoginSuccess);
-    AuthStore.listen(EventTypes.AUTH_VERIFY_ERROR,
-      this.handleVerifyError);
-    AuthStore.listen(EventTypes.AUTH_VERIFY_SUCCESS,
-      this.handleVerifySuccess);
-    UIStore.listen(EventTypes.UI_DEPENDENCIES_LOADED,
-      this.handleUIDependenciesLoaded);
-    UIStore.listen(EventTypes.UI_DEPENDENCIES_CHANGE,
-      this.handleUIDependenciesChange);
+    AuthStore.listen(
+      EventTypes.AUTH_REGISTER_SUCCESS,
+      this.handleRegisterSuccess
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_LOGIN_ERROR,
+      this.handleLoginError
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_LOGIN_SUCCESS,
+      this.handleLoginSuccess
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_VERIFY_ERROR,
+      this.handleVerifyError
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_VERIFY_SUCCESS,
+      this.handleVerifySuccess
+    );
+    UIStore.listen(
+      EventTypes.UI_DEPENDENCIES_LOADED,
+      this.handleUIDependenciesLoaded
+    );
+    UIStore.listen(
+      EventTypes.UI_DEPENDENCIES_CHANGE,
+      this.handleUIDependenciesChange
+    );
     AuthStore.verify();
   }
 
   componentWillUnmount() {
-    AuthStore.unlisten(EventTypes.AUTH_REGISTER_SUCCESS,
-      this.handleRegisterSuccess);
-    AuthStore.unlisten(EventTypes.AUTH_LOGIN_ERROR,
-      this.handleLoginError);
-    AuthStore.unlisten(EventTypes.AUTH_LOGIN_SUCCESS,
-      this.handleLoginSuccess);
-    AuthStore.unlisten(EventTypes.AUTH_VERIFY_ERROR,
-      this.handleVerifyError);
-    AuthStore.unlisten(EventTypes.AUTH_VERIFY_SUCCESS,
-      this.handleVerifySuccess);
-    UIStore.unlisten(EventTypes.UI_DEPENDENCIES_LOADED,
-      this.handleUIDependenciesLoaded);
-    UIStore.unlisten(EventTypes.UI_DEPENDENCIES_CHANGE,
-      this.handleUIDependenciesChange);
+    AuthStore.unlisten(
+      EventTypes.AUTH_REGISTER_SUCCESS,
+      this.handleRegisterSuccess
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_LOGIN_ERROR,
+      this.handleLoginError
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_LOGIN_SUCCESS,
+      this.handleLoginSuccess
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_VERIFY_ERROR,
+      this.handleVerifyError
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_VERIFY_SUCCESS,
+      this.handleVerifySuccess
+    );
+    UIStore.unlisten(
+      EventTypes.UI_DEPENDENCIES_LOADED,
+      this.handleUIDependenciesLoaded
+    );
+    UIStore.unlisten(
+      EventTypes.UI_DEPENDENCIES_CHANGE,
+      this.handleUIDependenciesChange
+    );
   }
 
   handleVerifySuccess(data) {
@@ -105,11 +135,13 @@ class AuthEnforcer extends React.Component {
   }
 
   handleLoginSuccess() {
+    FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.push('overview');
   }
 
   handleRegisterSuccess() {
+    FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.push('overview');
   }

@@ -22,28 +22,28 @@ import UploadThickIcon from '../icons/UploadThickIcon';
 
 const condensedValueTransformers = {
   downloadTotal: torrent => torrent.bytesDone,
-  peers: torrent => torrent.connectedPeers,
+  peers: torrent => torrent.peersConnected,
   percentComplete: torrent => {
     return (
       <ProgressBar percent={torrent.percentComplete}
         icon={torrentStatusIcons(torrent.status)} />
     );
   },
-  seeds: torrent => torrent.connectedSeeds
+  seeds: torrent => torrent.seedsConnected
 };
 
 const condensedSecondaryValueTransformers = {
-  peers: torrent => torrent.totalPeers,
-  seeds: torrent => torrent.totalSeeds
+  peers: torrent => torrent.peersTotal,
+  seeds: torrent => torrent.seedsTotal
 };
 
 const expandedTorrentSectionContent = {
   primary: ['name'],
-  secondary: ['eta', 'downloadRate', 'uploadRate'],
+  secondary: ['eta', 'downRate', 'upRate'],
   tertiary: ['*']
 };
 
-const expandedTorrentDetailsToHide = ['downloadTotal'];
+const expandedTorrentDetailsToHide = ['downTotal'];
 
 const expandedValueTransformers = {
   peers: torrent => torrent.connectedPeers,
@@ -76,10 +76,10 @@ const METHODS_TO_BIND = [
 
 const TORRENT_PRIMITIVES_TO_OBSERVE = [
   'bytesDone',
-  'downloadRate',
-  'totalPeers',
-  'totalSeeds',
-  'uploadRate'
+  'downRate',
+  'peersTotal',
+  'seedsTotal',
+  'upRate'
 ];
 
 const TORRENT_ARRAYS_TO_OBSERVE = [
