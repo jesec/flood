@@ -52,8 +52,10 @@ class ClientRequestService extends EventEmitter {
         // remove them.
         if (options.deleteData) {
           // We offset the indices of these method calls so that we know exactly
-          // where to retrieve them in the future.
+          // where to retrieve the responses in the future.
           const directoryBaseMethodCallIndex = index + options.hashes.length;
+          // We also need to ensure that the erase method call occurs after
+          // our request for information.
           eraseFileMethodCallIndex = index + options.hashes.length * 2;
 
           accumulator[index] = {
