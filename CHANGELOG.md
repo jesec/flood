@@ -15,6 +15,7 @@
   via an event-stream. This significantly reduces data usage on the Flood client
   * Stream covers torrent list, transfer rate summary & history,
   torrent taxonomy, and notification count.
+* Close event stream after the window/tab has been inactive for 30 seconds
 
 ## [1.0.0] (April 21, 2017)
 * First "official" release

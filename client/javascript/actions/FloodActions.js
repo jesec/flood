@@ -10,7 +10,33 @@ import serverEventTypes from '../../../shared/constants/serverEventTypes';
 const baseURI = ConfigStore.getBaseURI();
 
 let activityStreamEventSource = null;
-let lastHistorySnapshot = null;
+let lastActivityStreamOptions = undefined;
+let visibilityChangeTimeout = null;
+
+const handleProlongedInactivity = () => {
+  FloodActions.closeActivityStream();
+};
+
+const handleWindowVisibilityChange = () => {
+  if (global.document.hidden) {
+    // After 30 seconds of inactivity, we stop the event stream.
+    visibilityChangeTimeout = global.setTimeout(
+      handleProlongedInactivity,
+      1000 * 30
+    );
+  } else {
+    global.clearTimeout(visibilityChangeTimeout);
+
+    if (activityStreamEventSource == null) {
+      FloodActions.startActivityStream(lastActivityStreamOptions);
+    }
+  }
+};
+
+global.document.addEventListener(
+  'visibilitychange',
+  handleWindowVisibilityChange
+);
 
 const FloodActions = {
   clearNotifications: (options) => {
@@ -216,16 +242,19 @@ const FloodActions = {
     });
   },
 
-  restartActivityStream(options) {
+  restartActivityStream() {
     this.closeActivityStream();
-    this.startActivityStream(options);
+    this.startActivityStream(lastActivityStreamOptions);
   },
 
   startActivityStream(options = {}) {
     const {historySnapshot = historySnapshotTypes.FIVE_MINUTE} = options;
-    const didHistorySnapshotChange = lastHistorySnapshot !== historySnapshot;
+    const didHistorySnapshotChange = (
+      lastActivityStreamOptions
+      && lastActivityStreamOptions.historySnapshot !== historySnapshot
+    );
 
-    lastHistorySnapshot = historySnapshot;
+    lastActivityStreamOptions = options;
 
     // When the user requests a new history snapshot during an open session,
     // we need to close and re-open the event stream.
@@ -235,7 +264,7 @@ const FloodActions = {
 
     // If the user requested a new history snapshot, or the event source has not
     // alraedy been created, we open the event stream.
-    if (didHistorySnapshotChange || activityStreamEventSource == null) {
+    if (didHistorySnapshotChange || activityStreamEventSource === null) {
       activityStreamEventSource = new EventSource(
         `${baseURI}api/activity-stream?historySnapshot=${historySnapshot}`
       );
