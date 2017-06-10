@@ -1,5 +1,9 @@
 'use strict';
 
+/**
+ * This file is deprecated in favor of clientRequestService.
+ */
+
 let mkdirp = require('mkdirp');
 let mv = require('mv');
 let path = require('path');
@@ -257,14 +261,6 @@ class ClientRequest {
       } else if (isLastRequest) {
         callback();
       }
-    });
-  }
-
-  removeTorrents(options) {
-    let hashes = this.getEnsuredArray(options.hashes);
-
-    hashes.forEach((hash) => {
-      this.requests.push(this.getMethodCall('d.erase', [hash]));
     });
   }
 

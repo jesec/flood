@@ -10,7 +10,6 @@ const clientResponseUtil = require('../util/clientResponseUtil');
 const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 const ClientRequest = require('./ClientRequest');
 const formatUtil = require('../../shared/util/formatUtil');
-const scgi = require('../util/scgi');
 const TemporaryStorage = require('./TemporaryStorage');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
@@ -76,43 +75,6 @@ var client = {
       callback(response, error);
     });
     request.send();
-  },
-
-  deleteTorrents: (options, callback) => {
-    let filesToDelete = null;
-    let eraseTorrentsRequest = new ClientRequest();
-
-    eraseTorrentsRequest.removeTorrents({hashes: options.hashes});
-    eraseTorrentsRequest.onComplete((response, error) => {
-      if (options.deleteData) {
-        const torrents = torrentCollection.torrents;
-
-        options.hashes.forEach(hash => {
-          let fileToDelete = null;
-          const torrent = torrents[hash];
-
-          if (torrent.isMultiFile && torrent.directory != null) {
-            fileToDelete = torrent.directory;
-          } else if (torrent.directory != null && torrent.name != null) {
-            fileToDelete = path.join(torrent.directory, torrent.name);
-          }
-
-          if (fileToDelete != null) {
-            rimraf(fileToDelete, {disableGlob: true}, error => {
-              if (error) {
-                console.error(`Error deleting file: ${fileToDelete}\n${error}`);
-              }
-            });
-          }
-        });
-      }
-
-      torrentService.fetchTorrentList();
-
-      callback(response, error);
-    });
-
-    eraseTorrentsRequest.send();
   },
 
   downloadFiles(hash, files, res) {

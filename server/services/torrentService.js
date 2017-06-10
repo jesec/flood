@@ -5,30 +5,15 @@ const config = require('../../config.js');
 const clientRequestService = require('./clientRequestService.js');
 const clientRequestServiceEvents = require('../constants/clientRequestServiceEvents');
 const formatUtil = require('../../shared/util/formatUtil');
+const methodCallUtil = require('../util/methodCallUtil');
 const notificationService = require('./notificationService.js');
 const serverEventTypes = require('../../shared/constants/serverEventTypes');
 const torrentListPropMap = require('../constants/torrentListPropMap');
 const torrentServiceEvents = require('../constants/torrentServiceEvents.js');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
-const torrentListFetchOptions = Array
-  .from(torrentListPropMap.keys())
-  .reduce(
-    (accumulator, key) => {
-      const {methodCall, transformValue} = torrentListPropMap.get(key);
-
-      accumulator.methodCalls.push(methodCall);
-      accumulator.propLabels.push(key);
-      accumulator.valueTransformations.push(transformValue);
-
-      return accumulator;
-    },
-    {
-      methodCalls: [],
-      propLabels: [],
-      valueTransformations: []
-    }
-  );
+const torrentListMethodCallConfig = methodCallUtil
+  .getMethodCallConfigFromPropMap(torrentListPropMap);
 
 class TorrentService extends EventEmitter {
   constructor() {
@@ -40,6 +25,7 @@ class TorrentService extends EventEmitter {
 
     this.fetchTorrentList = this.fetchTorrentList.bind(this);
     this.handleTorrentProcessed = this.handleTorrentProcessed.bind(this);
+    this.handleTorrentsRemoved = this.handleTorrentsRemoved.bind(this);
 
     clientRequestService.addTorrentListReducer({
       key: 'status',
@@ -59,6 +45,11 @@ class TorrentService extends EventEmitter {
     clientRequestService.on(
       clientRequestServiceEvents.PROCESS_TORRENT,
       this.handleTorrentProcessed
+    );
+
+    clientRequestService.on(
+      clientRequestServiceEvents.TORRENTS_REMOVED,
+      this.handleTorrentsRemoved
     );
 
     this.fetchTorrentList();
@@ -117,7 +108,7 @@ class TorrentService extends EventEmitter {
     }
 
     clientRequestService
-      .fetchTorrentList(torrentListFetchOptions)
+      .fetchTorrentList(torrentListMethodCallConfig)
       .then(this.handleFetchTorrentListSuccess.bind(this))
       .catch(this.handleFetchTorrentListError.bind(this));
   }
@@ -320,6 +311,10 @@ class TorrentService extends EventEmitter {
       && prevData.percentComplete < 100
       && nextData.percentComplete === 100
     );
+  }
+
+  handleTorrentsRemoved() {
+    this.fetchTorrentList();
   }
 }
 

@@ -6,27 +6,12 @@ const config = require('../../config');
 const HistoryEra = require('../models/HistoryEra');
 const historyServiceEvents = require('../constants/historyServiceEvents');
 const historySnapshotTypes = require('../../shared/constants/historySnapshotTypes');
+const methodCallUtil = require('../util/methodCallUtil');
 const objectUtil = require('../../shared/util/objectUtil');
 const transferSummaryPropMap = require('../constants/transferSummaryPropMap');
 
-const transferSummaryFetchOptions = Array
-  .from(transferSummaryPropMap.keys())
-  .reduce(
-    (accumulator, key) => {
-      const {methodCall, transformValue} = transferSummaryPropMap.get(key);
-
-      accumulator.methodCalls.push(methodCall);
-      accumulator.propLabels.push(key);
-      accumulator.valueTransformations.push(transformValue);
-
-      return accumulator;
-    },
-    {
-      methodCalls: [],
-      propLabels: [],
-      valueTransformations: []
-    }
-  );
+const transferSummaryMethodCallConfig = methodCallUtil
+  .getMethodCallConfigFromPropMap(transferSummaryPropMap);
 
 const processData = (opts, callback, data, error) => {
   if (error) {
@@ -159,7 +144,7 @@ class HistoryService extends EventEmitter {
     }
 
     clientRequestService
-      .fetchTransferSummary(transferSummaryFetchOptions)
+      .fetchTransferSummary(transferSummaryMethodCallConfig)
       .then(this.handleFetchTransferSummarySuccess.bind(this))
       .catch(this.handleFetchTransferSummaryError.bind(this));
   }
