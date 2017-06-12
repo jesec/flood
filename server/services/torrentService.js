@@ -189,6 +189,10 @@ class TorrentService extends EventEmitter {
     return torrentStatus;
   }
 
+  getTorrent(hash) {
+    return this.torrentListSummary.torrents[hash];
+  }
+
   getTorrentList() {
     return this.torrentListSummary;
   }

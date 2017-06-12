@@ -80,11 +80,7 @@ var client = {
 
   downloadFiles(hash, files, res) {
     try {
-      let selectedTorrent = null;
-
-      this.getTorrent({hash}, (torrent) => {
-        selectedTorrent = torrent;
-      });
+      const selectedTorrent = torrentService.getTorrent(hash);
 
       this.getTorrentDetails(hash, (torrentDetails) => {
         const filePathsToDownload = this.findFilesByIndicies(
