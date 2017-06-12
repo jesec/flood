@@ -20,7 +20,7 @@ var client = {
   addFiles: (req, callback) => {
     let files = req.files;
     let path = req.body.destination;
-    let useBasePath = req.body.useBasePath || false;
+    let isBasePath = req.body.isBasePath || false;
     let request = new ClientRequest();
     let start = req.body.start;
     let tags = req.body.tags;
@@ -39,7 +39,7 @@ var client = {
       file.originalname = encodeURIComponent(file.originalname);
 
       let fileRequest = new ClientRequest();
-      fileRequest.addFiles({files: file, path, useBasePath, start, tags});
+      fileRequest.addFiles({files: file, path, isBasePath, start, tags});
 
       // Set the callback for only the last request.
       if (index === files.length - 1) {
@@ -56,12 +56,13 @@ var client = {
   addUrls: (data, callback) => {
     let urls = data.urls;
     let path = data.destination;
+    let isBasePath = data.isBasePath || false;
     let start = data.start;
     let tags = data.tags;
     let request = new ClientRequest();
 
     request.createDirectory({path});
-    request.addURLs({urls, path, start, tags});
+    request.addURLs({urls, path, isBasePath, start, tags});
     request.onComplete(callback);
     request.send();
   },
@@ -227,6 +228,7 @@ var client = {
 
   moveTorrents: (data, callback) => {
     let destinationPath = data.destination;
+    let isBasePath = data.isBasePath;
     let hashes = data.hashes;
     let filenames = data.filenames;
     let moveFiles = data.moveFiles;
@@ -263,7 +265,7 @@ var client = {
     }
 
     mainRequest.stopTorrents({hashes});
-    mainRequest.setDownloadPath({hashes, path: destinationPath});
+    mainRequest.setDownloadPath({hashes, path: destinationPath, isBasePath});
     mainRequest.onComplete(afterSetPath);
     mainRequest.send();
   },

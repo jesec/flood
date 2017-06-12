@@ -66,7 +66,8 @@ class AddTorrentsByURL extends React.Component {
 
       TorrentActions.addTorrentsByUrls({
         urls: torrentURLs,
-        destination: this.torrentDestinationRef.getWrappedInstance().getValue(),
+        destination: this.torrentDestinationRef.getWrappedInstance().getDestination(),
+        isBasePath: this.torrentDestinationRef.getWrappedInstance().isBasePath(),
         start: this.state.startTorrents,
         tags: this.state.tags.split(',')
       });
@@ -104,7 +105,7 @@ class AddTorrentsByURL extends React.Component {
       return this.validatedFields.urls.isValid(value);
     });
     const isDestinationValid = this.validatedFields.destination
-      .isValid(this.torrentDestinationRef.getWrappedInstance().getValue());
+      .isValid(this.torrentDestinationRef.getWrappedInstance().getDestination());
     const nextErrorsState = {};
 
     if (!areURLsDefined) {

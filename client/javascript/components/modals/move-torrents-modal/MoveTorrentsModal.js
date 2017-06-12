@@ -16,8 +16,6 @@ import TorrentStore from '../../../stores/TorrentStore';
 const METHODS_TO_BIND = [
   'confirmMoveTorrents',
   'handleCheckboxChange',
-  'handleDestinationChange',
-  'handleTextboxChange',
   'onMoveError'
 ];
 
@@ -27,7 +25,6 @@ class MoveTorrents extends React.Component {
 
     this.state = {
       moveTorrentsError: null,
-      destination: null,
       isExpanded: false,
       isSettingDownloadPath: false,
       moveTorrents: false,
@@ -45,7 +42,7 @@ class MoveTorrents extends React.Component {
 
     if (sources.length === 1) {
       let originalSource = this.removeTrailingFilename(sources[0], filenames[0]);
-      this.setState({originalSource, destination: originalSource});
+      this.setState({originalSource});
     }
   }
 
@@ -68,7 +65,8 @@ class MoveTorrents extends React.Component {
     if (sources.length) {
       this.setState({isSettingDownloadPath: true});
       TorrentActions.moveTorrents(TorrentStore.getSelectedTorrents(), {
-        destination: this.state.destination,
+        destination: this.torrentDestinationRef.getWrappedInstance().getDestination(),
+        isBasePath: this.torrentDestinationRef.getWrappedInstance().isBasePath(),
         filenames,
         moveFiles: this.state.moveTorrents,
         sources
@@ -120,15 +118,6 @@ class MoveTorrents extends React.Component {
     this.setState({moveTorrents: checkboxState});
   }
 
-  handleDestinationChange(destination) {
-    this.setState({destination});
-  }
-
-  handleTextboxChange(event) {
-    let destination = event.target.value;
-    this.setState({destination});
-  }
-
   getContent() {
     return (
       <div className="form modal__content">
@@ -140,7 +129,7 @@ class MoveTorrents extends React.Component {
                 defaultMessage="Destination"
               />
             </label>
-            <TorrentDestination onChange={this.handleDestinationChange}
+            <TorrentDestination ref={ref => this.torrentDestinationRef = ref}
               suggested={this.state.originalSource} />
           </div>
         </div>

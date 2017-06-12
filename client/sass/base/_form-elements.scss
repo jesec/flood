@@ -378,6 +378,10 @@ $form--column--margin: $spacing-unit * 3/10;
     & + .form__row {
       margin-top: $form--row--margin;
     }
+
+    &--relative {
+      position: relative;
+    }
   }
 
   &__column {
@@ -401,6 +405,10 @@ $form--column--margin: $spacing-unit * 3/10;
       flex-shrink: 1;
       flex-basis: auto;
       max-width: 50%;
+    }
+
+    &--relative {
+      position: relative;
     }
 
     &--half,
@@ -428,6 +436,14 @@ $form--column--margin: $spacing-unit * 3/10;
 
     &--small {
       max-width: 125px;
+    }
+
+    &--large {
+      width: 300px;
+    }
+
+    &--unlabled-nopadding {
+      justify-content: center;
     }
 
     &--unlabled {

@@ -118,7 +118,7 @@ class ClientRequest {
   addFiles(options) {
     let files = this.getEnsuredArray(options.files);
     let path = options.path;
-    let useBasePath = options.useBasePath;
+    let isBasePath = options.isBasePath;
     let start = options.start;
     let tagsArr = options.tags;
 
@@ -128,7 +128,7 @@ class ClientRequest {
       let timeAdded = Math.floor(Date.now() / 1000);
 
       if (path && path !== '') {
-        if (useBasePath) {
+        if (isBasePath) {
           parameters.push(`d.directory_base.set="${path}"`);
         } else {
           parameters.push(`d.directory.set="${path}"`);
@@ -152,6 +152,7 @@ class ClientRequest {
 
   addURLs(options) {
     let path = options.path;
+    let isBasePath = options.isBasePath;
     let start = options.start;
     let tagsArr = options.tags;
     let urls = this.getEnsuredArray(options.urls);
@@ -162,7 +163,11 @@ class ClientRequest {
       let timeAdded = Math.floor(Date.now() / 1000);
 
       if (path) {
-        parameters.push(`d.directory.set="${path}"`);
+        if (isBasePath) {
+          parameters.push(`d.directory_base.set="${path}"`);
+        } else {
+          parameters.push(`d.directory.set="${path}"`);
+        }
       }
 
       parameters = this.addTagsToRequest(tagsArr, parameters);
@@ -267,8 +272,15 @@ class ClientRequest {
   setDownloadPath(options) {
     let hashes = this.getEnsuredArray(options.hashes);
 
+    let pathMethod;
+    if (options.isBasePath) {
+      pathMethod = 'd.directory_base.set';
+    } else {
+      pathMethod = 'd.directory.set'
+    }
+
     hashes.forEach((hash) => {
-      this.requests.push(this.getMethodCall('d.directory.set',
+      this.requests.push(this.getMethodCall(pathMethod,
         [hash, options.path]));
       this.requests.push(this.getMethodCall('d.open', [hash]));
       this.requests.push(this.getMethodCall('d.close', [hash]));

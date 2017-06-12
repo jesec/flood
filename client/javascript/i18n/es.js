@@ -210,6 +210,8 @@ export default {
   'torrents.add.tab.url.title': 'Con URL',
   'torrents.add.torrents.label': 'Torrents',
 
+  'torrents.destination.base_path': 'Usar como Base Path',
+
   'torrents.details.actions.pause': 'Pausar',
   'torrents.details.actions.start': 'Comenzar',
   'torrents.details.actions.stop': 'Parar',
