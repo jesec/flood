@@ -11,7 +11,7 @@ export function filterTorrents(torrentList, opts) {
       });
     } else if (type === 'tracker') {
       return torrentList.filter((torrent) => {
-        return torrent.trackers.includes(filter);
+        return torrent.trackerURIs.includes(filter);
       });
     } else if (type === 'tag') {
       return torrentList.filter((torrent) => {
