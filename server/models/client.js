@@ -20,7 +20,7 @@ var client = {
   addFiles: (req, callback) => {
     let files = req.files;
     let path = req.body.destination;
-    let isBasePath = req.body.isBasePath || false;
+    let isBasePath = req.body.isBasePath === 'true';
     let request = new ClientRequest();
     let start = req.body.start;
     let tags = req.body.tags;
@@ -56,7 +56,7 @@ var client = {
   addUrls: (data, callback) => {
     let urls = data.urls;
     let path = data.destination;
-    let isBasePath = data.isBasePath || false;
+    let isBasePath = data.isBasePath === 'true';
     let start = data.start;
     let tags = data.tags;
     let request = new ClientRequest();
@@ -224,7 +224,7 @@ var client = {
 
   moveTorrents: (data, callback) => {
     let destinationPath = data.destination;
-    let isBasePath = data.isBasePath;
+    let isBasePath = data.isBasePath === 'true';
     let hashes = data.hashes;
     let filenames = data.filenames;
     let moveFiles = data.moveFiles;
