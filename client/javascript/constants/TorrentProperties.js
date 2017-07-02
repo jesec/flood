@@ -55,10 +55,6 @@ const torrentProperties = {
     id: 'torrents.properties.creation.date',
     defaultMessage: 'Creation Date'
   },
-  freeDiskSpace: {
-    id: 'torrents.properties.free.disk.space',
-    defaultMessage: 'Free Disk Space'
-  },
   basePath: {
     id: 'torrents.properties.base.path',
     defaultMessage: 'Base Path'

@@ -51,7 +51,6 @@ const icons = {
   comment: <CommentIcon />,
   eta: <ClockIcon />,
   sizeBytes: <DiskIcon />,
-  freeDiskSpace: <DiskIcon />,
   downRate: <DownloadThickIcon />,
   basePath: <FolderClosedSolid />,
   hash: <HashIcon />,
@@ -63,9 +62,9 @@ const icons = {
   peers: <PeersIcon />,
   ratio: <RatioIcon />,
   seeds: <SeedsIcon />,
-  trackers: <RadarIcon />,
-  uploadRate: <UploadThickIcon />,
-  uploadTotal: <UploadThickIcon />
+  trackerURIs: <RadarIcon />,
+  upRate: <UploadThickIcon />,
+  upTotal: <UploadThickIcon />
 };
 
 const transformers = {
@@ -73,7 +72,6 @@ const transformers = {
   dateCreated: dateRenderer,
   downRate: speedRenderer,
   downTotal: sizeRenderer,
-  freeDiskSpace: sizeRenderer,
   ignoreScheduler: booleanRenderer,
   isPrivate: booleanRenderer,
   percentComplete: (percent, size) => {

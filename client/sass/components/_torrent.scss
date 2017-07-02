@@ -213,6 +213,23 @@ $more-info--border: $textbox-repeater--button--border;
           }
         }
       }
+
+      .torrent-details {
+
+        &__sub-heading {
+
+          &__tertiary {
+
+            &--download {
+              color: $blue;
+
+              .icon {
+                fill: $blue;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
@@ -227,6 +244,23 @@ $more-info--border: $textbox-repeater--button--border;
           &--upRate {
             color: $blue;
             font-weight: 500;
+          }
+        }
+      }
+
+      .torrent-details {
+
+        &__sub-heading {
+
+          &__tertiary {
+
+            &--upload {
+              color: $green;
+
+              .icon {
+                fill: $green;
+              }
+            }
           }
         }
       }
@@ -385,19 +419,16 @@ $more-info--border: $textbox-repeater--button--border;
 
       &--is-downloading {
 
-        &.torrent {
+        &--actively {
 
-          &--is-active {
+          .torrent {
 
-            .torrent {
+            &__detail {
 
-              &__detail {
-
-                &--eta {
-                  margin-right: 10px;
-                  opacity: 1;
-                  width: auto;
-                }
+              &--eta {
+                margin-right: 10px;
+                opacity: 1;
+                width: auto;
               }
             }
           }

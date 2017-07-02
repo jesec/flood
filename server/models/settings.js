@@ -23,6 +23,8 @@ const changedKeys = {
   trackers: 'trackerURIs'
 };
 
+const removedKeys = ['freeDiskSpace'];
+
 /**
  * Check settings for old torrent propery keys. If the old keys exist and have
  * been assigned values, then check that the new key doesn't also exist. When
@@ -43,8 +45,8 @@ const transformLegacyKeys = settings => {
   }
 
   if (settings.torrentDetails) {
-    settings.torrentDetails = settings.torrentDetails.map(
-      (detailItem, index) => {
+    settings.torrentDetails = settings.torrentDetails.reduce(
+      (accumulator, detailItem, index) => {
         if (
           detailItem.id in changedKeys
           && !(settings.torrentDetails.some(subDetailItem => {
@@ -54,8 +56,13 @@ const transformLegacyKeys = settings => {
           detailItem.id = changedKeys[detailItem.id];
         }
 
-        return detailItem;
-      }
+        if (!removedKeys.includes(detailItem.id)) {
+          accumulator.push(detailItem);
+        }
+
+        return accumulator;
+      },
+      []
     );
   }
 
