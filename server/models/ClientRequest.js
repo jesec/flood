@@ -127,7 +127,7 @@ class ClientRequest {
       let parameters = ['', file.buffer];
       let timeAdded = Math.floor(Date.now() / 1000);
 
-      if (path && path !== '') {
+      if (path) {
         if (isBasePath) {
           parameters.push(`d.directory_base.set="${path}"`);
         } else {
