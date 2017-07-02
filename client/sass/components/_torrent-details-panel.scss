@@ -99,34 +99,6 @@ $torrent-details--tags--foreground: #1a2028;
         margin-right: 0;
       }
     }
-
-    .is-actively-downloading & {
-
-      .torrent-details {
-
-        &__sub-heading {
-
-          &__tertiary {
-
-            &--download {
-              color: $blue;
-
-              .icon {
-                fill: $blue;
-              }
-            }
-
-            &--upload {
-              color: $green;
-
-              .icon {
-                fill: $green;
-              }
-            }
-          }
-        }
-      }
-    }
   }
 
   &__header {

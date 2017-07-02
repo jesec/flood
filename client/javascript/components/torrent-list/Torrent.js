@@ -46,13 +46,13 @@ const expandedTorrentSectionContent = {
 const expandedTorrentDetailsToHide = ['downTotal'];
 
 const expandedValueTransformers = {
-  peers: torrent => torrent.connectedPeers,
-  seeds: torrent => torrent.connectedSeeds
+  peers: torrent => torrent.peersConnected,
+  seeds: torrent => torrent.seedsConnected
 };
 
 const expandedSecondaryValueTransformers = {
-  peers: torrent => torrent.totalPeers,
-  seeds: torrent => torrent.totalSeeds,
+  peers: torrent => torrent.peersTotal,
+  seeds: torrent => torrent.seedsTotal,
   percentComplete: torrent => torrent.bytesDone
 };
 
