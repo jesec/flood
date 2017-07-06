@@ -8,7 +8,8 @@ module.exports = (req, res, next) => {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
     'Connection': 'keep-alive',
-    'Access-Control-Allow-Origin': '*'
+    'Access-Control-Allow-Origin': '*',
+    'X-Accel-Buffering': 'no'
   });
   res.status(200);
   res.write("retry: 500\n\n");
