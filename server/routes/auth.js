@@ -10,6 +10,26 @@ const Users = require('../models/Users');
 
 const failedLoginResponse = 'Failed login.';
 
+const setAuthToken = (res, username) => {
+  let expirationSeconds = 60 * 60 * 24 * 7; // one week
+  let cookieExpiration = Date.now() + expirationSeconds * 1000;
+
+  // Create token if the password matched and no error was thrown.
+  let token = jwt.sign(
+    {username},
+    config.secret, {
+    expiresIn: expirationSeconds
+  });
+
+  res.cookie(
+    'jwt',
+    token,
+    {expires: new Date(cookieExpiration), httpOnly: true}
+  );
+
+  return res.json({success: true, token: `JWT ${token}`});
+};
+
 router.post('/authenticate', (req, res) => {
   const credentials = {
     password: req.body.password,
@@ -23,21 +43,7 @@ router.post('/authenticate', (req, res) => {
     }
 
     if (isMatch && !err) {
-      let expirationSeconds = 60 * 60 * 24 * 7; // one week
-      let cookieExpiration = Date.now() + expirationSeconds * 1000;
-
-      // Create token if the password matched and no error was thrown.
-      let token = jwt.sign({username: credentials.username}, config.secret, {
-        expiresIn: expirationSeconds
-      });
-
-      res.cookie(
-        'jwt',
-        token,
-        {expires: new Date(cookieExpiration), httpOnly: true}
-      );
-
-      return res.json({success: true, token: `JWT ${token}`});
+      return setAuthToken(res, credentials.username);
     } else {
       // Incorrect password.
       return res.status(401).json({message: failedLoginResponse});
@@ -48,20 +54,28 @@ router.post('/authenticate', (req, res) => {
 // Allow unauthenticated registration if no users are currently registered.
 router.use('/register', (req, res, next) => {
   Users.initialUserGate({
-    handleInitialUser: next.bind(this),
-    handleSubsequentUser: passport.authenticate(
-      'jwt',
-      {session: false}
-    ).bind(this, req, res, next)
+    handleInitialUser: () => {
+      next();
+    },
+    handleSubsequentUser: () => {
+      passport.authenticate('jwt', {session: false})(req, res, next);
+    }
   });
 });
 
 router.post('/register', (req, res) => {
   // Attempt to save the user
-  Users.createUser({
-    username: req.body.username,
-    password: req.body.password
-  }, ajaxUtil.getResponseFn(res));
+  Users.createUser(
+    {username: req.body.username, password: req.body.password},
+    (createUserResponse, createUserError) => {
+      if (createUserError) {
+        ajaxUtil.getResponseFn(res)(createUserResponse, createUserError);
+        return;
+      }
+
+      setAuthToken(res, req.body.username);
+    }
+  );
 });
 
 // Allow unauthenticated verification if no users are currently registered.
@@ -73,10 +87,7 @@ router.use('/verify', (req, res, next) => {
     },
     handleSubsequentUser: () => {
       req.initialUser = false;
-      passport.authenticate(
-        'jwt',
-        {session: false}
-      ).call(this, req, res, next);
+      passport.authenticate('jwt', {session: false})(req, res, next);
     }
   });
 });
