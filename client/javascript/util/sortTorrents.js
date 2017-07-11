@@ -12,17 +12,29 @@ export function sortTorrents(torrentsHash, sortBy) {
       let valA = a[property];
       let valB = b[property];
 
-      if (property === 'eta') {
-        // keep infinity at bottom of array when sorting by eta
-        if (valA === 'Infinity' && valB !== 'Infinity') {
-          return 1;
-        } else if (valA !== 'Infinity' && valB === 'Infinity') {
-          return -1;
+      if (property === 'peers' || property === 'seeds') {
+        valA = a[`${property}Connected`];
+        valB = b[`${property}Connected`];
+
+        if (valA === valB) {
+          valA = a[`${property}Total`];
+          valB = b[`${property}Total`];
         }
-        // if it's not infinity, compare the second as numbers
+      } else if (property === 'eta') {
+        // Keep Infinity and null values at bottom of array.
+        if ((valA === 'Infinity' && valB !== 'Infinity') || (valA == null && valB != null)) {
+          return 1;
+        } else if ((valA !== 'Infinity' && valB === 'Infinity') || (valA != null && valB == null)) {
+          return -1;
+        } else if (valA == null && valB == null) {
+          return 0;
+        }
+
+        // If it's not infinity, compare the cumulative seconds as regular numbers.
         if (valA !== 'Infinity') {
           valA = Number(valA.cumSeconds);
         }
+
         if (valB !== 'Infinity') {
           valB = Number(valB.cumSeconds);
         }
