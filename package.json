@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "new:start": "node scripts/start.js",
-    "new:build": "node scripts/build.js",
-    "new:test": "node scripts/test.js --env=jsdom",
+    "new:start": "node client/scripts/start.js",
+    "new:build": "node client/scripts/build.js",
+    "new:test": "node client/scripts/test.js --env=jsdom",
     "preinstall": "npm prune",
     "build-assets": "NODE_ENV=production gulp dist",
     "start:development": "NODE_ENV=development nodemon server/bin/www",
