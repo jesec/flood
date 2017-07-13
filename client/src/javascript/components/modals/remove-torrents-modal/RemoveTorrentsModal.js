@@ -6,7 +6,7 @@ import React from 'react';
 import Checkbox from '../../general/form-elements/Checkbox';
 import Modal from '../Modal';
 import SettingsStore from '../../../stores/SettingsStore';
-import stringUtil from '../../../../../shared/util/stringUtil';
+import stringUtil from '../../../../../../shared/util/stringUtil';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 

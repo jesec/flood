@@ -4,8 +4,8 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AuthStore from '../stores/AuthStore';
 import ConfigStore from '../stores/ConfigStore';
-import historySnapshotTypes from '../../../shared/constants/historySnapshotTypes';
-import serverEventTypes from '../../../shared/constants/serverEventTypes';
+import historySnapshotTypes from '../../../../shared/constants/historySnapshotTypes';
+import serverEventTypes from '../../../../shared/constants/serverEventTypes';
 
 const baseURI = ConfigStore.getBaseURI();
 

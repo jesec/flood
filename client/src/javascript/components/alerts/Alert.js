@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import Alerts from '../../constants/Alerts';
 import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
 import CircleExclamationIcon from '../icons/CircleExclamationIcon';
-import stringUtil from '../../../../shared/util/stringUtil';
+import stringUtil from '../../../../../shared/util/stringUtil';
 
 export default class Alert extends React.Component {
   render() {

@@ -11,7 +11,7 @@ import SettingsStore from '../../stores/SettingsStore';
 import SortDropdown from './SortDropdown';
 import StartIcon from '../icons/StartIcon';
 import StopIcon from '../icons/StopIcon';
-import stringUtil from '../../../../shared/util/stringUtil';
+import stringUtil from '../../../../../shared/util/stringUtil';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';

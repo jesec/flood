@@ -2,7 +2,7 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import ConfigStore from './ConfigStore';
-import diffActionTypes from '../../../shared/constants/diffActionTypes';
+import diffActionTypes from '../../../../shared/constants/diffActionTypes';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
 

@@ -5,7 +5,7 @@ import React from 'react';
 
 import Download from '../icons/Download';
 import Duration from '../general/Duration';
-import formatUtil from '../../../../shared/util/formatUtil';
+import formatUtil from '../../../../../shared/util/formatUtil';
 import InfinityIcon from '../icons/InfinityIcon';
 import Size from '../general/Size';
 import Upload from '../icons/Upload';

@@ -1,4 +1,4 @@
-import regEx from '../../../shared/util/regEx';
+import regEx from '../../../../shared/util/regEx';
 
 export default class Validator {
   static isNotEmpty(value) {

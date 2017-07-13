@@ -1,4 +1,4 @@
-import objectUtil from '../../../shared/util/objectUtil';
+import objectUtil from '../../../../shared/util/objectUtil';
 
 const eventTypes = [
   'ALERTS_CHANGE',
