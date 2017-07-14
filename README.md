@@ -1,4 +1,4 @@
-# Flood 
+# Flood
 
 ![Flood logo](server/assets/mstile-70x70.png)
 
@@ -53,11 +53,17 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
   * `npm run start:watch` watches for changes in the client-side source.
 3. Access the UI through the [browser-sync](https://www.browsersync.io/) proxy at [localhost:4200](http://localhost:4200).
 
+#### Environment Variables
+
+1. `DEV_SERVER_PORT`: webpackDevServer's port, used when developing Flood. Defaults to `4200`.
+1. `DEV_SERVER_HOST`: webpackDevServer's host, used when developing Flood. Defaults to `0.0.0.0`.
+1. `DEV_SERVER_HTTPS`: webpackDevServer's protocol, used when developing Flood. Defaults to `http`.
+
 #### Running with Docker
 1. `docker build -t rtorrent-flood .`
 2. `docker run --name rtorrent-flood -e RTORRENT_SCGI_HOST=w.x.y.z -p 3000:3000 rtorrent-flood`
 3. Other supported environment variables:
-  * `FLOOD_BASE_URI`
+  * `FLOOD_BASE_PATH`
   * `FLOOD_SECRET`
   * `RTORRENT_SCGI_HOST`
   * `RTORRENT_SCGI_PORT`
@@ -65,6 +71,10 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
   * `FLOOD_ENABLE_SSL`
 
 The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`.
+
+## Notes
+
+This project's client-side build tooling is based on the wonderful [create-react-app](https://github.com/facebookincubator/create-react-app).
 
 # Screenshots
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-a.png)
