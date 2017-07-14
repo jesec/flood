@@ -9,7 +9,7 @@ router.get('*', (req, res) => {
     'index',
     {
       title: 'Flood',
-      baseURI: config.baseURI || '/',
+      basePath: config.basePath || '/',
       maxHistoryStates: config.maxHistoryStates || 30,
       pollInterval: config.pollInterval || 1000 * 5
     }

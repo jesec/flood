@@ -9,6 +9,13 @@ body {
   width: 100%;
 }
 
+#app,
+.application,
+.application__view {
+  height: 100%;
+  width: 100%;
+}
+
 .application {
 
   &,

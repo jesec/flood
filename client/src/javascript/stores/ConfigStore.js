@@ -1,19 +1,20 @@
 import BaseStore from './BaseStore';
+import userConfig from '../../../../config';
 
 const transformConfig = {
-  baseURI: baseURI => {
-    const shouldAddSlashEnd = !baseURI.endsWith('/');
-    const shouldAddSlashStart = !baseURI.startsWith('/');
+  basePath: basePath => {
+    const shouldAddSlashEnd = !basePath.endsWith('/');
+    const shouldAddSlashStart = !basePath.startsWith('/');
 
     if (shouldAddSlashEnd) {
-      baseURI = `${baseURI}/`;
+      basePath = `${basePath}/`;
     }
 
     if (shouldAddSlashStart) {
-      baseURI = `/${baseURI}`;
+      basePath = `/${basePath}`;
     }
 
-    return baseURI;
+    return basePath;
   }
 };
 
@@ -21,11 +22,11 @@ class ConfigStoreClass extends BaseStore {
   constructor() {
     super();
 
-    this.storeServerConfig();
+    this.storeUserConfig();
   }
 
   getBaseURI() {
-    return this.userConfig.baseURI;
+    return this.userConfig.basePath;
   }
 
   getMaxHistoryStates() {
@@ -36,12 +37,11 @@ class ConfigStoreClass extends BaseStore {
     return this.userConfig.pollInterval;
   }
 
-  storeServerConfig() {
-    const serverConfig = global.floodConfig;
-
-    this.userConfig = Object.keys(serverConfig).reduce((accumulator, key) => {
+  storeUserConfig() {
+    console.log(userConfig);
+    this.userConfig = Object.keys(userConfig).reduce((accumulator, key) => {
       const transformer = transformConfig[key];
-      const value = serverConfig[key];
+      const value = userConfig[key];
 
       if (transformer) {
         accumulator[key] = transformer(value);

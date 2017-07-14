@@ -11,7 +11,7 @@ import Dropdown from '../../general/form-elements/Dropdown';
 import File from '../../icons/File';
 import TorrentStore from '../../../stores/TorrentStore';
 
-const baseURI = ConfigStore.getBaseURI();
+const basePath = ConfigStore.getBaseURI();
 
 const TORRENT_PROPS_TO_CHECK = ['bytesDone'];
 const METHODS_TO_BIND = [
@@ -79,7 +79,7 @@ class TorrentFiles extends React.Component {
     return (
       <a className="button button--download button--primary button--link"
         download
-        href={`${baseURI}api/download?hash=${this.props.torrent.hash}&files=${this.state.selectedFiles.join(',')}`}>
+        href={`${basePath}api/download?hash=${this.props.torrent.hash}&files=${this.state.selectedFiles.join(',')}`}>
         <FormattedMessage id="torrents.details.files.download.file"
           defaultMessage="{count, plural, =1 {Download File} other
             {Download Files}}"

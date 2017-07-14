@@ -1,10 +1,10 @@
-@import "../../node_modules/inuit-defaults/settings.defaults";
-@import "../../node_modules/inuit-functions/tools.functions";
-@import "../../node_modules/inuit-mixins/tools.mixins";
-@import "../../node_modules/inuit-normalize/generic.normalize";
-@import "../../node_modules/inuit-reset/generic.reset";
-@import "../../node_modules/inuit-box-sizing/generic.box-sizing";
-@import "../../node_modules/inuit-page/base.page";
+@import "~inuit-defaults/settings.defaults";
+@import "~inuit-functions/tools.functions";
+@import "~inuit-mixins/tools.mixins";
+@import "~inuit-normalize/generic.normalize";
+@import "~inuit-reset/generic.reset";
+@import "~inuit-box-sizing/generic.box-sizing";
+@import "~inuit-page/base.page";
 
 @import "tools/variables";
 @import "tools/reset";

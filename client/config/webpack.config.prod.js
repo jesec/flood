@@ -190,9 +190,6 @@ module.exports = {
               fallback: require.resolve('style-loader'),
               use: [
                 {
-                  loader: require.resolve('sass-loader'),
-                },
-                {
                   loader: require.resolve('css-loader'),
                   options: {
                     importLoaders: 1,
@@ -219,6 +216,9 @@ module.exports = {
                       }),
                     ],
                   },
+                },
+                {
+                  loader: require.resolve('sass-loader'),
                 },
               ],
             },

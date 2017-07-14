@@ -25,8 +25,8 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
   * If you want to use a socket, change `socket` to true and set `socketPath` to the absolute file path of your rTorrent socket. Make sure Flood has read/write access. Specify the socket path in `.rtorrent.rc`. Example: `scgi_local = /Users/flood/rtorrent.sock`
   * If you wish to access an rTorrent instance running on a separate host from Flood (or in a Docker container), allow for incoming connections from external IPs by setting the host in `scgi_port` to `0.0.0.0` in `.rtorrent.rc`. Example: `scgi_port = 0.0.0.0:5000`
 3. Create a long, unique secret (used to sign [JWT auth tokens](https://github.com/auth0/node-jsonwebtoken)) in `config.js`.
-4. If you're proxying Flood to a path other than the root of the host, you must specify the `baseURI` in `config.js`. All request URIs will be prefixed with this value.
-  * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `baseURI`.
+4. If you're proxying Flood to a path other than the root of the host, you must specify the `basePath` in `config.js`. All request URIs will be prefixed with this value.
+  * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `basePath` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `basePath`.
 
 #### Starting the Server
 1. Run `npm install --production`.

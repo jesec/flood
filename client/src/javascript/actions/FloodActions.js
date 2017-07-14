@@ -7,7 +7,7 @@ import ConfigStore from '../stores/ConfigStore';
 import historySnapshotTypes from '../../../../shared/constants/historySnapshotTypes';
 import serverEventTypes from '../../../../shared/constants/serverEventTypes';
 
-const baseURI = ConfigStore.getBaseURI();
+const basePath = ConfigStore.getBaseURI();
 
 let activityStreamEventSource = null;
 let lastActivityStreamOptions = undefined;
@@ -40,7 +40,7 @@ global.document.addEventListener(
 
 const FloodActions = {
   clearNotifications: (options) => {
-    return axios.delete(`${baseURI}api/notifications`)
+    return axios.delete(`${basePath}api/notifications`)
       .then((json = {}) => {
         return json.data;
       })
@@ -109,7 +109,7 @@ const FloodActions = {
   },
 
   fetchDirectoryList: (options = {}) => {
-    return axios.get(`${baseURI}api/directory-list`, {
+    return axios.get(`${basePath}api/directory-list`, {
         params: options
       })
       .then((json = {}) => {
@@ -134,7 +134,7 @@ const FloodActions = {
   },
 
   fetchMediainfo: (options) => {
-    return axios.get(`${baseURI}api/mediainfo`, {
+    return axios.get(`${basePath}api/mediainfo`, {
         params: {
           hash: options.hash
         }
@@ -159,7 +159,7 @@ const FloodActions = {
   },
 
   fetchNotifications: (options) => {
-    return axios.get(`${baseURI}api/notifications`, {
+    return axios.get(`${basePath}api/notifications`, {
         params: {
           limit: options.limit,
           start: options.start
@@ -266,7 +266,7 @@ const FloodActions = {
     // alraedy been created, we open the event stream.
     if (didHistorySnapshotChange || activityStreamEventSource === null) {
       activityStreamEventSource = new EventSource(
-        `${baseURI}api/activity-stream?historySnapshot=${historySnapshot}`
+        `${basePath}api/activity-stream?historySnapshot=${historySnapshot}`
       );
 
       activityStreamEventSource.addEventListener(

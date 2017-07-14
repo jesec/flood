@@ -4,11 +4,11 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import ConfigStore from '../stores/ConfigStore';
 
-const baseURI = ConfigStore.getBaseURI();
+const basePath = ConfigStore.getBaseURI();
 
 let TorrentActions = {
   addTorrentsByUrls: (options) => {
-    return axios.post(`${baseURI}api/client/add`, options)
+    return axios.post(`${basePath}api/client/add`, options)
       .then((json = {}) => {
         return json.data;
       })
@@ -32,7 +32,7 @@ let TorrentActions = {
   },
 
   addTorrentsByFiles: (formData, destination) => {
-    return axios.post(`${baseURI}api/client/add-files`, formData)
+    return axios.post(`${basePath}api/client/add-files`, formData)
       .then((json = {}) => {
         return json.data;
       })
@@ -56,7 +56,7 @@ let TorrentActions = {
   },
 
   deleteTorrents: (hash, deleteData) => {
-    return axios.post(`${baseURI}api/client/torrents/delete`, {hash, deleteData})
+    return axios.post(`${basePath}api/client/torrents/delete`, {hash, deleteData})
       .then((json = {}) => {
         return json.data;
       })
@@ -81,7 +81,7 @@ let TorrentActions = {
   },
 
   checkHash: (hash) => {
-    return axios.post(`${baseURI}api/client/torrents/check-hash`, {hash})
+    return axios.post(`${basePath}api/client/torrents/check-hash`, {hash})
       .then((json = {}) => {
         return json.data;
       })
@@ -105,7 +105,7 @@ let TorrentActions = {
   },
 
   fetchTorrentDetails: (hash) => {
-    return axios.post(`${baseURI}api/client/torrent-details`, {
+    return axios.post(`${basePath}api/client/torrent-details`, {
         hash
       })
       .then((json = {}) => {
@@ -132,7 +132,7 @@ let TorrentActions = {
   moveTorrents: (hashes, options) => {
     let {destination, isBasePath, filenames, sources, moveFiles} = options;
 
-    return axios.post(`${baseURI}api/client/torrents/move`,
+    return axios.post(`${basePath}api/client/torrents/move`,
       {hashes, destination, isBasePath, filenames, sources, moveFiles})
       .then((json = {}) => {
         return json.data;
@@ -154,7 +154,7 @@ let TorrentActions = {
   },
 
   pauseTorrents: (hashes) => {
-    return axios.post(`${baseURI}api/client/pause`, {
+    return axios.post(`${basePath}api/client/pause`, {
         hashes
       })
       .then((json = {}) => {
@@ -178,7 +178,7 @@ let TorrentActions = {
   },
 
   startTorrents: (hashes) => {
-    return axios.post(`${baseURI}api/client/start`, {
+    return axios.post(`${basePath}api/client/start`, {
         hashes
       })
       .then((json = {}) => {
@@ -202,7 +202,7 @@ let TorrentActions = {
   },
 
   stopTorrents: (hashes) => {
-    return axios.post(`${baseURI}api/client/stop`, {
+    return axios.post(`${basePath}api/client/stop`, {
         hashes
       })
       .then((json = {}) => {
@@ -226,7 +226,7 @@ let TorrentActions = {
   },
 
   setPriority: (hash, priority) => {
-    return axios.patch(`${baseURI}api/client/torrents/${hash}/priority`, {
+    return axios.patch(`${basePath}api/client/torrents/${hash}/priority`, {
         hash,
         priority
       })
@@ -247,7 +247,7 @@ let TorrentActions = {
   },
 
   setFilePriority: (hash, fileIndices, priority) => {
-    return axios.patch(`${baseURI}api/client/torrents/${hash}/file-priority`, {
+    return axios.patch(`${basePath}api/client/torrents/${hash}/file-priority`, {
         hash,
         fileIndices,
         priority
@@ -274,7 +274,7 @@ let TorrentActions = {
   },
 
   setTaxonomy: (hashes, tags, options = {}) => {
-    return axios.patch(`${baseURI}api/client/torrents/taxonomy`, {
+    return axios.patch(`${basePath}api/client/torrents/taxonomy`, {
         hashes,
         tags,
         options

@@ -13,6 +13,8 @@ import SettingsStore from './stores/SettingsStore';
 import TorrentClientOverview from './components/views/TorrentClientOverview';
 import UIStore from './stores/UIStore';
 
+import '../sass/style.scss';
+
 const appRoutes = (
   <Router history={browserHistory}>
     <Route path="/" component={AuthEnforcer}>

@@ -4,11 +4,11 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ConfigStore from '../stores/ConfigStore';
 
-const baseURI = ConfigStore.getBaseURI();
+const basePath = ConfigStore.getBaseURI();
 
 let ClientActions = {
   fetchSettings: (property) => {
-    return axios.get(`${baseURI}api/client/settings`, {params: {property}})
+    return axios.get(`${basePath}api/client/settings`, {params: {property}})
       .then((json = {}) => {
         return json.data;
       })
@@ -26,7 +26,7 @@ let ClientActions = {
   },
 
   saveSettings: (settings, options) => {
-    return axios.patch(`${baseURI}api/client/settings`, settings)
+    return axios.patch(`${basePath}api/client/settings`, settings)
       .then((json = {}) => {
         return json.data;
       })
@@ -46,7 +46,7 @@ let ClientActions = {
   },
 
   setThrottle: (direction, throttle) => {
-    return axios.put(`${baseURI}api/client/settings/speed-limits`, {
+    return axios.put(`${basePath}api/client/settings/speed-limits`, {
         direction,
         throttle
       })
