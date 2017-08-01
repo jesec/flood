@@ -69,6 +69,6 @@ const formatUtil = {
 
     return torrentStatus;
   }
-}
+};
 
 module.exports = formatUtil;

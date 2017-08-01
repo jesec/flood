@@ -6,9 +6,9 @@ const path = require('path');
 const rimraf = require('rimraf');
 const util = require('util');
 
+const ClientRequest = require('./ClientRequest');
 const clientResponseUtil = require('../util/clientResponseUtil');
 const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
-const ClientRequest = require('./ClientRequest');
 const formatUtil = require('../../shared/util/formatUtil');
 const TemporaryStorage = require('./TemporaryStorage');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');

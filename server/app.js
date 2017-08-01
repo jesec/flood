@@ -4,29 +4,28 @@ require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 const torrentService = require('./services/torrentService');
 
-let bodyParser = require('body-parser');
-let compression = require('compression');
-let cookieParser = require('cookie-parser');
-let express = require('express');
-let favicon = require('serve-favicon');
-let morgan = require('morgan');
-let passport = require('passport');
-let path = require('path');
+const bodyParser = require('body-parser');
+const compression = require('compression');
+const cookieParser = require('cookie-parser');
+const express = require('express');
+const favicon = require('serve-favicon');
+const morgan = require('morgan');
+const passport = require('passport');
+const path = require('path');
 
-let app = express();
-let apiRoutes = require('./routes/api');
-let authRoutes = require('./routes/auth');
-let mainRoutes = require('./routes/main');
-let Users = require('./models/Users');
+const app = express();
+const apiRoutes = require('./routes/api');
+const authRoutes = require('./routes/auth');
+const paths = require('../client/config/paths');
+const Users = require('./models/Users');
 
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
 
 // Remove Express header
-if(process.env.NODE_ENV !== 'development') app.disable('x-powered-by');
+if(process.env.NODE_ENV !== 'development') {
+  app.disable('x-powered-by');
+}
 
-// TODO: Add favicon...
-// app.use(favicon(__dirname + '/assets/favicon.ico'));
 app.use(morgan('dev'));
 app.use(passport.initialize());
 app.use(compression());
@@ -39,7 +38,12 @@ require('./config/passport')(passport);
 
 app.use('/api', apiRoutes);
 app.use('/auth', authRoutes);
-app.use('/', mainRoutes);
+// Serve static assets from build path.
+app.use(express.static(paths.appBuild));
+// Serve the built index.html file regardless of request, if it didn't match yet.
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(paths.appBuild, 'index.html'));
+});
 
 // Catch 404 and forward to error handler.
 app.use((req, res, next) => {

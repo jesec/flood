@@ -1,6 +1,8 @@
 import {FormattedMessage, FormattedNumber} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
+import stringUtil from 'universally-shared-code/util/stringUtil';
+import torrentStatusMap from 'universally-shared-code/constants/torrentStatusMap';
 
 import ClockIcon from '../../icons/ClockIcon';
 import DownloadThickIcon from '../../icons/DownloadThickIcon';
@@ -13,11 +15,9 @@ import RatioIcon from '../../icons/RatioIcon';
 import Size from '../../general/Size';
 import StartIcon from '../../icons/StartIcon';
 import StopIcon from '../../icons/StopIcon';
-import stringUtil from '../../../../../../shared/util/stringUtil';
 import TorrentActions from '../../../actions/TorrentActions';
 import {torrentStatusClasses} from '../../../util/torrentStatusClasses';
 import {torrentStatusIcons} from '../../../util/torrentStatusIcons';
-import torrentStatusMap from '../../../../../../shared/constants/torrentStatusMap';
 import UploadThickIcon from '../../icons/UploadThickIcon';
 
 const METHODS_TO_BIND = [

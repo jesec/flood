@@ -118,33 +118,33 @@ class AuthEnforcer extends React.Component {
   handleVerifySuccess(data) {
     if (data.initialUser) {
       this.setState({authStatusDetermined: true, isAuthenticated: false});
-      browserHistory.push('register');
+      browserHistory.replace('register');
     } else {
       this.setState({authStatusDetermined: true, isAuthenticated: true});
-      browserHistory.push('overview');
+      browserHistory.replace('overview');
     }
   }
 
   handleVerifyError(error) {
     this.setState({authStatusDetermined: true, isAuthenticated: false});
-    browserHistory.push('login');
+    browserHistory.replace('login');
   }
 
   handleLoginError() {
     this.setState({authStatusDetermined: true, isAuthenticated: false});
-    browserHistory.push('login');
+    browserHistory.replace('login');
   }
 
   handleLoginSuccess() {
     FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
-    browserHistory.push('overview');
+    browserHistory.replace('overview');
   }
 
   handleRegisterSuccess() {
     FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
-    browserHistory.push('overview');
+    browserHistory.replace('overview');
   }
 
   getDependencyList() {

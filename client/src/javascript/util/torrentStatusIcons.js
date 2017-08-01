@@ -1,8 +1,8 @@
 import React from 'react';
+import torrentStatusMap from 'universally-shared-code/constants/torrentStatusMap';
 
 import ErrorIcon from '../components/icons/ErrorIcon';
 import PauseIcon from '../components/icons/PauseIcon';
-import torrentStatusMap from '../../../../shared/constants/torrentStatusMap';
 import SpinnerIcon from '../components/icons/SpinnerIcon';
 import StartIcon from '../components/icons/StartIcon';
 import StopIcon from '../components/icons/StopIcon';

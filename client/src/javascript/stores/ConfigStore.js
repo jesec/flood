@@ -1,5 +1,4 @@
 import BaseStore from './BaseStore';
-import userConfig from '../../../../config';
 
 const transformConfig = {
   basePath: basePath => {
@@ -38,7 +37,12 @@ class ConfigStoreClass extends BaseStore {
   }
 
   storeUserConfig() {
-    console.log(userConfig);
+    const userConfig = global.floodConfig;
+
+    if (!global.floodConfig || Object.keys(userConfig).length === 0) {
+      throw new Error('Global Flood config was not found.');
+    }
+
     this.userConfig = Object.keys(userConfig).reduce((accumulator, key) => {
       const transformer = transformConfig[key];
       const value = userConfig[key];

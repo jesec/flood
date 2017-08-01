@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import serverEventTypes from 'universally-shared-code/constants/serverEventTypes';
 
 import ActionTypes from '../constants/ActionTypes';
 import AlertStore from './AlertStore';
@@ -14,7 +15,6 @@ import SettingsStore from './SettingsStore';
 import {sortTorrents} from '../util/sortTorrents';
 import TorrentActions from '../actions/TorrentActions';
 import TorrentFilterStore from './TorrentFilterStore';
-import serverEventTypes from '../../../../shared/constants/serverEventTypes';
 import UIStore from './UIStore';
 
 const pollInterval = ConfigStore.getPollInterval();

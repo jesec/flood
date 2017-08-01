@@ -1,6 +1,6 @@
 'use strict';
 
-const STRING_UTIL = {
+module.exports = {
   capitalize: (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   },
@@ -16,6 +16,4 @@ const STRING_UTIL = {
 
     return string;
   }
-}
-
-module.exports = STRING_UTIL;
+};

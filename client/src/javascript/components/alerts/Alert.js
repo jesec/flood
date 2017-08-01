@@ -2,11 +2,11 @@ import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import stringUtil from 'universally-shared-code/util/stringUtil';
 
 import Alerts from '../../constants/Alerts';
 import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
 import CircleExclamationIcon from '../icons/CircleExclamationIcon';
-import stringUtil from '../../../../../shared/util/stringUtil';
 
 export default class Alert extends React.Component {
   render() {

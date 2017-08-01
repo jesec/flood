@@ -1,6 +1,5 @@
 import classnames from 'classnames';
-
-import torrentStatusMap from '../../../../shared/constants/torrentStatusMap';
+import torrentStatusMap from 'universally-shared-code/constants/torrentStatusMap';
 
 export function torrentStatusClasses(torrent, ...classes) {
   return classnames(classes, {

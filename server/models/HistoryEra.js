@@ -1,9 +1,9 @@
 'use strict';
 
 let Datastore = require('nedb');
+let stringUtil = require('../../shared/util/stringUtil');
 
 let config = require('../../config');
-let stringUtil = require('../../shared/util/stringUtil');
 
 const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
 const CUMULATIVE_DATA_BUFFER_DIFF = 500; // 500 miliseconds

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import formatUtil from 'universally-shared-code/util/formatUtil';
 import React from 'react';
 
 import AddMini from '../../icons/AddMini';
@@ -10,7 +11,6 @@ import Dropdown from '../../general/form-elements/Dropdown';
 import FeedMonitorStore from '../../../stores/FeedMonitorStore';
 import FormColumn from '../../general/form-elements/FormColumn';
 import FormLabel from '../../general/form-elements/FormLabel';
-import formatUtil from '../../../../../../shared/util/formatUtil';
 import EventTypes from '../../../constants/EventTypes';
 import RemoveMini from '../../icons/RemoveMini';
 import SettingsActions from '../../../actions/SettingsActions';

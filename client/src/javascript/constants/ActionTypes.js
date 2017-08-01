@@ -1,4 +1,4 @@
-import objectUtil from '../../../../shared/util/objectUtil';
+import objectUtil from 'universally-shared-code/util/objectUtil';
 
 const actionTypes = [
   'AUTH_CREATE_USER_ERROR',

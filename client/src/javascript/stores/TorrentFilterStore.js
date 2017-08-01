@@ -1,7 +1,8 @@
+import diffActionTypes from 'universally-shared-code/constants/diffActionTypes';
+
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import diffActionTypes from '../../../../shared/constants/diffActionTypes';
 import EventTypes from '../constants/EventTypes';
 import SettingsStore from './SettingsStore';
 import TorrentActions from '../actions/TorrentActions';

@@ -22,6 +22,8 @@ let host = config.floodServerHost;
 app.set('port', port);
 app.set('host', host);
 
+console.log(`Starting server on ${host}:${port}.`);
+
 // Create HTTP or HTTPS server.
 let server;
 
@@ -29,7 +31,7 @@ if (config.ssl) {
   if (!config.sslKey || !config.sslCert){
     console.error('Cannot start HTTPS server, `sslKey` or `sslCert`' +
       ' is missing in config.js.');
-      process.exit(1);
+    process.exit(1);
   }
 
   server = require('spdy').createServer({

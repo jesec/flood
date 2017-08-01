@@ -1,11 +1,11 @@
 import axios from 'axios';
+import historySnapshotTypes from 'universally-shared-code/constants/historySnapshotTypes';
+import serverEventTypes from 'universally-shared-code/constants/serverEventTypes';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 import AuthStore from '../stores/AuthStore';
 import ConfigStore from '../stores/ConfigStore';
-import historySnapshotTypes from '../../../../shared/constants/historySnapshotTypes';
-import serverEventTypes from '../../../../shared/constants/serverEventTypes';
 
 const basePath = ConfigStore.getBaseURI();
 
