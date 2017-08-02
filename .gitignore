@@ -3,5 +3,5 @@
 /node_modules
 /npm-debug.log
 /server/db
-/server/assets/*.map
+/server/assets
 /server/temp
