@@ -67,7 +67,6 @@
     "clipboard": "^1.5.15",
     "css-loader": "0.28.4",
     "d3": "^3.5.6",
-    "dotenv": "4.0.0",
     "envify": "^4.0.0",
     "eslint": "3.19.0",
     "eslint-config-airbnb": "^14.1.0",
