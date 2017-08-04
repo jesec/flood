@@ -29,5 +29,5 @@ module.exports = {
   appSrc: resolveApp('./'),
   testsSetup: resolveApp('tests/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
-  servedPath: ensureSlash(userConfig.baseURI, true)
+  servedPath: ensureSlash(userConfig.baseURI || '/', true)
 };
