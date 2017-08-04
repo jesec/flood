@@ -65,7 +65,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 1. `docker build -t rtorrent-flood .`
 2. `docker run --name rtorrent-flood -e RTORRENT_SCGI_HOST=w.x.y.z -p 3000:3000 rtorrent-flood`
 3. Other supported environment variables:
-  * `FLOOD_BASE_PATH`
+  * `FLOOD_BASE_URI`
   * `FLOOD_SECRET`
   * `RTORRENT_SCGI_HOST`
   * `RTORRENT_SCGI_PORT`
