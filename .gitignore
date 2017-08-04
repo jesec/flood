@@ -1,7 +1,7 @@
 .DS_Store
-config.js
-node_modules
-npm-debug.log
-server/db
-server/assets/*.map
-server/temp
+/config.js
+/node_modules
+/npm-debug.log
+/server/db
+/server/assets/*.map
+/server/temp
