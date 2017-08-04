@@ -1,19 +1,20 @@
 import BaseStore from './BaseStore';
+import userConfig from '../../../../config';
 
 const transformConfig = {
-  basePath: basePath => {
-    const shouldAddSlashEnd = !basePath.endsWith('/');
-    const shouldAddSlashStart = !basePath.startsWith('/');
+  baseURI: baseURI => {
+    const shouldAddSlashEnd = !baseURI.endsWith('/');
+    const shouldAddSlashStart = !baseURI.startsWith('/');
 
     if (shouldAddSlashEnd) {
-      basePath = `${basePath}/`;
+      baseURI = `${baseURI}/`;
     }
 
     if (shouldAddSlashStart) {
-      basePath = `/${basePath}`;
+      baseURI = `/${baseURI}`;
     }
 
-    return basePath;
+    return baseURI;
   }
 };
 
@@ -25,11 +26,7 @@ class ConfigStoreClass extends BaseStore {
   }
 
   getBaseURI() {
-    return this.userConfig.basePath;
-  }
-
-  getMaxHistoryStates() {
-    return this.userConfig.maxHistoryStates;
+    return this.userConfig.baseURI;
   }
 
   getPollInterval() {
@@ -37,9 +34,7 @@ class ConfigStoreClass extends BaseStore {
   }
 
   storeUserConfig() {
-    const userConfig = global.floodConfig;
-
-    if (!global.floodConfig || Object.keys(userConfig).length === 0) {
+    if (!userConfig) {
       throw new Error('Global Flood config was not found.');
     }
 

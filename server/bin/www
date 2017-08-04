@@ -1,33 +1,32 @@
 #!/usr/bin/env node
 'use strict';
 
-let fs = require('fs');
+const fs = require('fs');
 
 // Ensure we have a user-defined config.js for use throughout the app.
 try {
   fs.accessSync(__dirname + '/../../config.js', fs.F_OK);
 } catch (error) {
-  console.error('Cannot start Flood server, config.js is missing. Copy ' +
+  throw new Error('Cannot start Flood server, config.js is missing. Copy ' +
     'config.template.js to config.js.');
   process.exit(1);
 }
 
-let app = require('../app');
-let config = require('../../config');
-let debug = require('debug')('flood:server');
+const app = require('../app');
+const config = require('../../config');
+const debug = require('debug')('flood:server');
 
-// Get port from environment and store in Express.
-let port = normalizePort(config.floodServerPort);
-let host = config.floodServerHost;
+const port = normalizePort(config.floodServerPort);
+const host = config.floodServerHost;
+const useSSL = config.ssl;
+
 app.set('port', port);
 app.set('host', host);
-
-console.log(`Starting server on ${host}:${port}.`);
 
 // Create HTTP or HTTPS server.
 let server;
 
-if (config.ssl) {
+if (useSSL) {
   if (!config.sslKey || !config.sslCert){
     console.error('Cannot start HTTPS server, `sslKey` or `sslCert`' +
       ' is missing in config.js.');
@@ -92,3 +91,5 @@ function onListening() {
   let bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+console.log(`\nFlood server starting on ${useSSL ? 'https' : 'http'}://${host}:${port}.\n`);

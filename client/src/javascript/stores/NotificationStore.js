@@ -1,11 +1,8 @@
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import ConfigStore from './ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
-
-const pollInterval = ConfigStore.getPollInterval();
 
 class NotificationStoreClass extends BaseStore {
   constructor() {
@@ -49,30 +46,6 @@ class NotificationStoreClass extends BaseStore {
     this.notifications[response.id] = response;
 
     this.emit(EventTypes.NOTIFICATIONS_FETCH_SUCCESS);
-  }
-
-  startPollingNotifications(options) {
-    this.ongoingPolls[options.id] = {
-      ...options,
-      intervalID: setInterval(
-        this.fetchNotifications.bind(this, options),
-        pollInterval
-      )
-    };
-  }
-
-  stopPollingNotifications(options = {}) {
-    if (this.ongoingPolls[options.id]) {
-      clearInterval(this.ongoingPolls[options.id].intervalID);
-      delete this.ongoingPolls[options.id];
-    }
-  }
-
-  updateOngingNotificationsPoll(options = {}) {
-    if (this.ongoingPolls[options.id]) {
-      clearInterval(this.ongoingPolls[options.id].intervalID);
-      this.startPollingNotifications(options);
-    }
   }
 }
 

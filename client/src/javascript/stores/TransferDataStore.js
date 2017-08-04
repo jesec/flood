@@ -7,9 +7,6 @@ import ConfigStore from './ConfigStore';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
 
-const pollInterval = ConfigStore.getPollInterval();
-const maxHistoryStates = ConfigStore.getMaxHistoryStates();
-
 class TransferDataStoreClass extends BaseStore {
   constructor() {
     super();

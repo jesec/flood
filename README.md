@@ -16,7 +16,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed __with XMLRPC__ configuration. _If you are currently using a web UI for rTorrent, you've already done this._
   * For Linux & OS X, check out [rTorrent's installation wiki](https://github.com/rakshasa/rtorrent/wiki/Installing#compilation-help) and/or [this third-party tutorial](https://jes.sc/kb/rTorrent+ruTorrent-Seedbox-Guide.php#Install-Dependencies). When you run `./configure`, be sure to run with the `--with-xmlrpc-c` flag.
   * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows) (I haven't tested this, let me know if you have problems).
-2. Install NodeJS version `6.9.x`:
+2. Install NodeJS version `7.x.x` or higher:
   * I recommend managing different Node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n).
 
 #### Configuring
@@ -25,33 +25,35 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
   * If you want to use a socket, change `socket` to true and set `socketPath` to the absolute file path of your rTorrent socket. Make sure Flood has read/write access. Specify the socket path in `.rtorrent.rc`. Example: `scgi_local = /Users/flood/rtorrent.sock`
   * If you wish to access an rTorrent instance running on a separate host from Flood (or in a Docker container), allow for incoming connections from external IPs by setting the host in `scgi_port` to `0.0.0.0` in `.rtorrent.rc`. Example: `scgi_port = 0.0.0.0:5000`
 3. Create a long, unique secret (used to sign [JWT auth tokens](https://github.com/auth0/node-jsonwebtoken)) in `config.js`.
-4. If you're proxying Flood to a path other than the root of the host, you must specify the `basePath` in `config.js`. All request URIs will be prefixed with this value.
-  * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `basePath` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `basePath`.
+4. If you're proxying Flood to a path other than the root of the host, you must specify the `baseURI` in `config.js`. All request URIs will be prefixed with this value.
+  * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `baseURI`.
 
 #### Starting the Server
-1. Run `npm install --production`.
-2. Run `npm start`.
-3. Access the UI in your browser. Defaults to `localhost:3000`.
+1. Run `npm install`.
+1. Run `npm run build`.
+1. Run `npm start`.
+1. Access the UI in your browser. Defaults to `localhost:3000`.
   * You may change the default port in `config.js`.
-4. Upon loading the UI the first time, you will be prompted to create a user account.
+1. Upon loading the UI the first time, you will be prompted to create a user account.
 
 #### Updating
 1. To update, run `git pull` in this repository's directory.
-2. Check `config.template.js` for configuration changes that you may wish to incoporate in your `config.js`.
-3. Kill the running Node server.
-4. Run `npm install --production` to update dependencies.
-5. Restart it with `npm start`.
+1. Check `config.template.js` for configuration changes that you may wish to incoporate in your `config.js`.
+1. Kill the running Node server.
+1. Run `npm install` to update dependencies.
+1. Run `npm run build` to transpile and bundle static assets.
+1. Restart it with `npm start`.
 
 #### Tips
 * I run the web server with `screen` to keep the web server running independently of the terminal session.
-* Ubuntu users will need to install `nodejs-legacy` (`sudo apt-get install nodejs-legacy`) for dependencies to install successfully. You can read more on [this Stack Overflow post](http://stackoverflow.com/questions/21168141/cannot-install-packages-using-node-package-manager-in-ubuntu).
+* Ubuntu users may need to install `nodejs-legacy` (`sudo apt-get install nodejs-legacy`) for dependencies to install successfully. You can read more on [this Stack Overflow post](http://stackoverflow.com/questions/21168141/cannot-install-packages-using-node-package-manager-in-ubuntu).
 
 #### Local Development
 1. Run `npm install`.
-2. Run `npm run start:development` and `npm run start:watch` in separate terminal instances.
-  * `npm run start:development` uses [nodemon](https://github.com/remy/nodemon) to watch for changes to the server-side JavaScript.
-  * `npm run start:watch` watches for changes in the client-side source.
-3. Access the UI through the [browser-sync](https://www.browsersync.io/) proxy at [localhost:4200](http://localhost:4200).
+2. Run `npm run start:development:server` and `npm run start:development:client` in separate terminal instances.
+  * `npm run start:development:server` uses [nodemon](https://github.com/remy/nodemon) to watch for changes to the server-side JavaScript.
+  * `npm run start:development:client` watches for changes in the client-side source.
+3. Access the UI through the [WebpackDevServer](https://webpack.js.org/configuration/dev-server/). It expects to proxy requests to the Flood server you have running, defined in `config.js` as `floodServerProxy`.
 
 #### Environment Variables
 

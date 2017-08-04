@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 
 const paths = require('./paths');
-const userConfig = require('../../config');
 
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
@@ -43,12 +42,6 @@ function getClientEnvironment(publicUrl) {
         return env;
       },
       {
-        // Provide the user's global configuration for the rest of the build process.
-        FLOOD_BASE_PATH: userConfig.basePath || '/',
-        FLOOD_MAX_HISTORY_STATES: userConfig.maxHistoryStates || 30,
-        FLOOD_POLL_INTERVAL: userConfig.pollInterval || 1000 * 5,
-        // Useful for determining whether we’re running in production mode.
-        // Most importantly, it switches React into the correct mode.
         NODE_ENV: process.env.NODE_ENV || 'development',
         // Useful for resolving the correct path to static assets in `public`.
         // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.

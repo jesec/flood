@@ -8,7 +8,6 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
-const favicon = require('serve-favicon');
 const morgan = require('morgan');
 const passport = require('passport');
 const path = require('path');
@@ -18,8 +17,6 @@ const apiRoutes = require('./routes/api');
 const authRoutes = require('./routes/auth');
 const paths = require('../client/config/paths');
 const Users = require('./models/Users');
-
-app.set('views', path.join(__dirname, 'views'));
 
 // Remove Express header
 if(process.env.NODE_ENV !== 'development') {
@@ -32,18 +29,16 @@ app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'assets')));
 
 require('./config/passport')(passport);
 
 app.use('/api', apiRoutes);
 app.use('/auth', authRoutes);
-// Serve static assets from build path.
+
+// After routes, look for static assets.
 app.use(express.static(paths.appBuild));
-// Serve the built index.html file regardless of request, if it didn't match yet.
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(paths.appBuild, 'index.html'));
-});
+// After static assets, always return index.html
+app.use((req, res) => res.sendFile(path.join(paths.appBuild, 'index.html')));
 
 // Catch 404 and forward to error handler.
 app.use((req, res, next) => {

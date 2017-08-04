@@ -4,11 +4,11 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ConfigStore from '../stores/ConfigStore';
 
-const basePath = ConfigStore.getBaseURI();
+const baseURI = ConfigStore.getBaseURI();
 
 let AuthActions = {
   authenticate: (credentials) => {
-    return axios.post(`${basePath}auth/authenticate`, credentials)
+    return axios.post(`${baseURI}auth/authenticate`, credentials)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LOGIN_SUCCESS,
@@ -33,7 +33,7 @@ let AuthActions = {
   },
 
   createUser: (credentials) => {
-    return axios.put(`${basePath}auth/users`, credentials)
+    return axios.put(`${baseURI}auth/users`, credentials)
       .then((json = {}) => {
         return json.data;
       })
@@ -51,7 +51,7 @@ let AuthActions = {
   },
 
   deleteUser: (username) => {
-    return axios.delete(`${basePath}auth/users/${username}`)
+    return axios.delete(`${baseURI}auth/users/${username}`)
       .then((json = {}) => {
         return json.data;
       })
@@ -75,7 +75,7 @@ let AuthActions = {
   },
 
   fetchUsers: () => {
-    return axios.get(`${basePath}auth/users`)
+    return axios.get(`${baseURI}auth/users`)
       .then((json = {}) => {
         return json.data;
       })
@@ -93,7 +93,7 @@ let AuthActions = {
   },
 
   register: (credentials) => {
-    return axios.post(`${basePath}auth/register`, credentials)
+    return axios.post(`${baseURI}auth/register`, credentials)
       .then((json = {}) => {
         return json.data;
       })
@@ -112,7 +112,7 @@ let AuthActions = {
 
   verify: () => {
     // We need to prevent caching this endpoint.
-    return axios.get(`${basePath}auth/verify?${Date.now()}`)
+    return axios.get(`${baseURI}auth/verify?${Date.now()}`)
       .then((json = {}) => {
         return json.data;
       })
