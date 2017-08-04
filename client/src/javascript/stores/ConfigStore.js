@@ -26,11 +26,11 @@ class ConfigStoreClass extends BaseStore {
   }
 
   getBaseURI() {
-    return this.userConfig.baseURI;
+    return this.userConfig.baseURI || '/';
   }
 
   getPollInterval() {
-    return this.userConfig.pollInterval;
+    return this.userConfig.pollInterval || 5000;
   }
 
   storeUserConfig() {
