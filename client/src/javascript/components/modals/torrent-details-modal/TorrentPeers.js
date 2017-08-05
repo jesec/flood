@@ -37,10 +37,12 @@ export default class TorrentPeers extends React.Component {
           let image = null;
 
           if (!erroredCountryImages.includes(countryCode)) {
+            const flagImageSrc = require('../../../../images/flags/'  + `${countryCode.toLowerCase()}.png`);
+
             image = (
               <img className="peers-list__flag__image"
                 onError={this.getImageErrorHandlerFn(countryCode)}
-                src={`images/flags/${countryCode.toLowerCase()}.png`} />
+                src={flagImageSrc} />
             );
           }
 

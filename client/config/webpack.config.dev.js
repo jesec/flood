@@ -90,7 +90,7 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
-      'universally-shared-code': path.resolve('./shared'),
+      'universally-shared-code': path.resolve('./shared')
     },
   },
   module: {

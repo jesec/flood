@@ -23,7 +23,7 @@ const ensureSlash = (path, needsSlash) => {
 module.exports = {
   appBuild: resolveApp('server/assets'),
   appPublic: resolveApp('client/src/public/'),
-  appHtml: resolveApp('client/src/public/index.html'),
+  appHtml: resolveApp('client/src/index.html'),
   appIndexJs: resolveApp('client/src/javascript/app.js'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('./'),
