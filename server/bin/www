@@ -32,7 +32,7 @@ if (config.ssl) {
     return;
   }
 
-  server = require('https').createServer({
+  server = require('spdy').createServer({
     key: fs.readFileSync(config.sslKey),
     cert: fs.readFileSync(config.sslCert)
   }, app);
