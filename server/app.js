@@ -1,5 +1,3 @@
-'use strict';
-
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 
 const torrentService = require('./services/torrentService');
@@ -22,6 +20,9 @@ const Users = require('./models/Users');
 if(process.env.NODE_ENV !== 'development') {
   app.disable('x-powered-by');
 }
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 app.use(morgan('dev'));
 app.use(passport.initialize());
@@ -53,7 +54,8 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
+      title: 'Flood Error'
     });
   });
 } else {
@@ -62,7 +64,8 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: {}
+      error: {},
+      title: 'Flood Error'
     });
   });
 }

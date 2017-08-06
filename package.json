@@ -6,6 +6,7 @@
     "build": "node client/scripts/build.js",
     "test": "node client/scripts/test.js --env=jsdom",
     "build-assets": "UPDATED_SCRIPT=build npm run deprecated-warning && npm run build",
+    "lint": "eslint .",
     "deprecated-warning": "node client/scripts/deprecated-warning.js && sleep 10",
     "start:development:server": "NODE_ENV=development nodemon server/bin/www",
     "start:development": "UPDATED_SCRIPT=start:development:server npm run deprecated-warning && npm run start:development:server",
@@ -76,6 +77,7 @@
     "postcss-flexbugs-fixes": "^3.2.0",
     "postcss-loader": "2.0.6",
     "promise": "^8.0.1",
+    "pug": "^2.0.0-rc.3",
     "react": "^15.6.1",
     "react-addons-create-fragment": "^15.6.0",
     "react-addons-css-transition-group": "^15.6.0",
@@ -117,9 +119,6 @@
     "presets": [
       "react-app"
     ]
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "engines": {
     "node": ">=7.0.0",
