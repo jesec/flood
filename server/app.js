@@ -22,6 +22,9 @@ let Users = require('./models/Users');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// Remove Express header
+app.disable('x-powered-by');
+
 // TODO: Add favicon...
 // app.use(favicon(__dirname + '/assets/favicon.ico'));
 app.use(morgan('dev'));
