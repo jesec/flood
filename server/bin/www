@@ -9,7 +9,7 @@ try {
 } catch (error) {
   console.error('Cannot start Flood server, config.js is missing. Copy ' +
     'config.template.js to config.js.');
-  return;
+  proccess.exit(1);
 }
 
 let app = require('../app');
@@ -29,7 +29,7 @@ if (config.ssl) {
   if (!config.sslKey || !config.sslCert){
     console.error('Cannot start HTTPS server, `sslKey` or `sslCert`' +
       ' is missing in config.js.');
-    return;
+      proccess.exit(1);
   }
 
   server = require('spdy').createServer({
