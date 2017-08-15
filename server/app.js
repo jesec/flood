@@ -23,7 +23,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 // Remove Express header
-if(process.env.NODE_ENV !== 'development') app.disable('x-powered-by');
+if(process.env.NODE_ENV === 'production') app.disable('x-powered-by');
 
 // TODO: Add favicon...
 // app.use(favicon(__dirname + '/assets/favicon.ico'));
