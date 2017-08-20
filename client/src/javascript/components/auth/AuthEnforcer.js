@@ -1,13 +1,12 @@
-import _ from 'lodash';
 import {browserHistory} from 'react-router';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import {FormattedMessage} from 'react-intl';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import AuthStore from '../../stores/AuthStore';
 import Checkmark from '../icons/Checkmark';
-import Close from '../icons/Close';
 import EventTypes from '../../constants/EventTypes';
 import FloodActions from '../../actions/FloodActions';
 import LoadingIndicator from '../general/LoadingIndicator';
@@ -29,6 +28,10 @@ const METHODS_TO_BIND = [
 ];
 
 class AuthEnforcer extends React.Component {
+  static propTypes = {
+    children: PropTypes.node
+  };
+
   constructor() {
     super();
 
@@ -245,9 +248,5 @@ class AuthEnforcer extends React.Component {
     );
   }
 }
-
-AuthEnforcer.propTypes = {
-  children: React.PropTypes.node
-};
 
 export default AuthEnforcer;

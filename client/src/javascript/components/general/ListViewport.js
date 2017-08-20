@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import CustomScrollbars from './CustomScrollbars';
@@ -16,6 +17,22 @@ const methodsToBind = [
 ];
 
 class ListViewport extends React.Component {
+  static defaultProps = {
+    bottomSpacerClass: 'list__spacer list__spacer--bottom',
+    itemScrollOffset: 10,
+    topSpacerClass: 'list__spacer list__spacer--top'
+  };
+
+  static propTypes = {
+    bottomSpacerClass: PropTypes.string,
+    itemRenderer: PropTypes.func.isRequired,
+    itemScrollOffset: PropTypes.number,
+    listClass: PropTypes.string,
+    listLength: PropTypes.number.isRequired,
+    scrollContainerClass: PropTypes.string,
+    topSpacerClass: PropTypes.string
+  };
+
   constructor() {
     super();
 
@@ -257,21 +274,5 @@ class ListViewport extends React.Component {
     );
   }
 }
-
-ListViewport.defaultProps = {
-  bottomSpacerClass: 'list__spacer list__spacer--bottom',
-  itemScrollOffset: 10,
-  topSpacerClass: 'list__spacer list__spacer--top'
-};
-
-ListViewport.propTypes = {
-  bottomSpacerClass: React.PropTypes.string,
-  itemRenderer: React.PropTypes.func.isRequired,
-  itemScrollOffset: React.PropTypes.number,
-  listClass: React.PropTypes.string,
-  listLength: React.PropTypes.number.isRequired,
-  scrollContainerClass: React.PropTypes.string,
-  topSpacerClass: React.PropTypes.string
-};
 
 export default ListViewport;

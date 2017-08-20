@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import Portal from './Portal';
 
@@ -18,6 +18,47 @@ const METHODS_TO_BIND = [
 ];
 
 class Tooltip extends React.Component {
+  static propTypes = {
+    align: PropTypes.oneOf(['start', 'center', 'end']),
+    anchor: PropTypes.oneOf(['start', 'center', 'end']),
+    children: PropTypes.node,
+    className: PropTypes.string,
+    contentClassName: PropTypes.string,
+    content: PropTypes.node.isRequired,
+    elementTag: PropTypes.string,
+    interactive: PropTypes.bool,
+    maxWidth: PropTypes.oneOfType([PropTypes.number,
+      PropTypes.string]),
+    onMouseLeave: PropTypes.func,
+    offset: PropTypes.number,
+    onClose: PropTypes.func,
+    onOpen: PropTypes.func,
+    position: PropTypes.oneOf(['top', 'bottom', 'right', 'left']),
+    scrollContainer: PropTypes.oneOfType([PropTypes.object,
+      PropTypes.string]),
+    stayOpen: PropTypes.bool,
+    suppress: PropTypes.bool,
+    width: PropTypes.number,
+    wrapperClassName: PropTypes.string,
+    wrapText: PropTypes.bool
+  };
+
+  static defaultProps = {
+    align: 'center',
+    anchor: 'center',
+    className: 'tooltip',
+    contentClassName: 'tooltip__content',
+    elementTag: 'div',
+    interactive: false,
+    offset: 0,
+    position: 'top',
+    scrollContainer: window,
+    stayOpen: false,
+    suppress: false,
+    wrapperClassName: 'tooltip__wrapper',
+    wrapText: false
+  };
+
   constructor() {
     super();
 
@@ -297,46 +338,5 @@ class Tooltip extends React.Component {
     );
   }
 }
-
-Tooltip.defaultProps = {
-  align: 'center',
-  anchor: 'center',
-  className: 'tooltip',
-  contentClassName: 'tooltip__content',
-  elementTag: 'div',
-  interactive: false,
-  offset: 0,
-  position: 'top',
-  scrollContainer: window,
-  stayOpen: false,
-  suppress: false,
-  wrapperClassName: 'tooltip__wrapper',
-  wrapText: false
-};
-
-Tooltip.propTypes = {
-  align: React.PropTypes.oneOf(['start', 'center', 'end']),
-  anchor: React.PropTypes.oneOf(['start', 'center', 'end']),
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  contentClassName: React.PropTypes.string,
-  content: React.PropTypes.node.isRequired,
-  elementTag: React.PropTypes.string,
-  interactive: React.PropTypes.bool,
-  maxWidth: React.PropTypes.oneOfType([React.PropTypes.number,
-    React.PropTypes.string]),
-  onMouseLeave: React.PropTypes.func,
-  offset: React.PropTypes.number,
-  onClose: React.PropTypes.func,
-  onOpen: React.PropTypes.func,
-  position: React.PropTypes.oneOf(['top', 'bottom', 'right', 'left']),
-  scrollContainer: React.PropTypes.oneOfType([React.PropTypes.object,
-    React.PropTypes.string]),
-  stayOpen: React.PropTypes.bool,
-  suppress: React.PropTypes.bool,
-  width: React.PropTypes.number,
-  wrapperClassName: React.PropTypes.string,
-  wrapText: React.PropTypes.bool
-};
 
 export default Tooltip;

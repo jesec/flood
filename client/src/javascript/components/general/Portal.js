@@ -1,11 +1,20 @@
 import {IntlProvider} from 'react-intl';
-import React, {PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as i18n from '../../i18n/languages';
 import SettingsStore from '../../stores/SettingsStore';
 
 class Portal extends React.Component {
+  static propTypes = {
+    children: PropTypes.node
+  };
+
+  static defaultProps = {
+    children: <div />
+  };
+
   componentDidMount() {
     this.nodeEl = document.createElement('div');
     document.body.appendChild(this.nodeEl);
@@ -37,13 +46,5 @@ class Portal extends React.Component {
     return null;
   }
 }
-
-Portal.defaultProps = {
-  children: <div />
-};
-
-Portal.propTypes = {
-  children: PropTypes.node
-};
 
 export default Portal;

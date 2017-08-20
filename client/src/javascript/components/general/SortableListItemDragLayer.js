@@ -1,6 +1,7 @@
 import {DragLayer} from 'react-dnd';
 import {FormattedMessage, injectIntl} from 'react-intl';
-import React, {Component, PropTypes} from 'react';
+import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 
 import Checkbox from '../../components/general/form-elements/Checkbox';
 import TorrentProperties from '../../constants/TorrentProperties';
@@ -29,6 +30,14 @@ function getItemStyles(props) {
 }
 
 class SortableListItemDragLayer extends Component {
+  static propTypes = {
+    clientOffset: PropTypes.object,
+    differenceFromInitialOffset: PropTypes.object,
+    isDragging: PropTypes.bool.isRequired,
+    item: PropTypes.object,
+    itemType: PropTypes.string
+  };
+
   renderItem(type, item) {
     switch (type) {
       case 'globally-draggable-item':
@@ -68,14 +77,6 @@ class SortableListItemDragLayer extends Component {
     );
   }
 }
-
-SortableListItemDragLayer.propTypes = {
-  clientOffset: PropTypes.object,
-  differenceFromInitialOffset: PropTypes.object,
-  isDragging: PropTypes.bool.isRequired,
-  item: PropTypes.object,
-  itemType: PropTypes.string
-};
 
 export default DragLayer(monitor => ({
   clientOffset: monitor.getClientOffset(),

@@ -1,6 +1,18 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class BaseIcon extends React.Component {
+  static propTypes = {
+    className: PropTypes.string,
+    size: PropTypes.string,
+    viewBox: PropTypes.string
+  };
+
+  static defaultProps = {
+    className: '',
+    viewBox: '0 0 60 60'
+  };
+
   getViewBox() {
     let viewBox = this.props.viewBox;
 
@@ -11,14 +23,3 @@ export default class BaseIcon extends React.Component {
     return viewBox;
   }
 }
-
-BaseIcon.defaultProps = {
-  className: '',
-  viewBox: '0 0 60 60'
-};
-
-BaseIcon.propTypes = {
-  className: React.PropTypes.string,
-  size: React.PropTypes.string,
-  viewBox: React.PropTypes.string
-};

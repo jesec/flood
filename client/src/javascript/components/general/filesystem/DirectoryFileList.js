@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Checkbox from '../form-elements/Checkbox';
@@ -11,6 +12,18 @@ const ICONS = {file: <File />};
 const METHODS_TO_BIND = ['handlePriorityChange'];
 
 class DirectoryFiles extends React.Component {
+  static propTypes = {
+    isParentSelected: PropTypes.bool,
+    path: PropTypes.array,
+    selectedItems: PropTypes.object
+  };
+
+  static defaultProps = {
+    isParentSelected: false,
+    path: [],
+    selectedItems: {}
+  };
+
   constructor() {
     super();
 
@@ -109,17 +122,5 @@ class DirectoryFiles extends React.Component {
     );
   }
 }
-
-DirectoryFiles.defaultProps = {
-  isParentSelected: false,
-  path: [],
-  selectedItems: {}
-};
-
-DirectoryFiles.propTypes = {
-  isParentSelected: React.PropTypes.bool,
-  path: React.PropTypes.array,
-  selectedItems: React.PropTypes.object
-};
 
 export default DirectoryFiles;

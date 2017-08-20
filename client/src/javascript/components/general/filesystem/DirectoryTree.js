@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import DirectoryFileList from './DirectoryFileList';
@@ -8,6 +9,18 @@ const METHODS_TO_BIND = [
 ];
 
 class DirectoryTree extends React.Component {
+  static propTypes = {
+    isParentSelected: PropTypes.bool,
+    path: PropTypes.array,
+    selectedItems: PropTypes.object
+  };
+
+  static defaultProps = {
+    isParentSelected: false,
+    path: [],
+    selectedItems: {}
+  };
+
   constructor() {
     super();
 
@@ -82,17 +95,5 @@ class DirectoryTree extends React.Component {
     }
   }
 }
-
-DirectoryTree.defaultProps = {
-  isParentSelected: false,
-  path: [],
-  selectedItems: {}
-};
-
-DirectoryTree.propTypes = {
-  isParentSelected: React.PropTypes.bool,
-  path: React.PropTypes.array,
-  selectedItems: React.PropTypes.object
-};
 
 export default DirectoryTree;

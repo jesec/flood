@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -13,6 +14,17 @@ const methodsToBind = [
 ];
 
 class ContextMenu extends React.Component {
+  static propTypes = {
+    onMenuClose: PropTypes.func,
+    onMenuOpen: PropTypes.func,
+    id: PropTypes.string.isRequired,
+    width: PropTypes.number
+  };
+
+  static defaultProps = {
+    width: 200
+  };
+
   constructor() {
     super();
 
@@ -270,16 +282,5 @@ class ContextMenu extends React.Component {
     );
   }
 }
-
-ContextMenu.defaultProps = {
-  width: 200
-};
-
-ContextMenu.propTypes = {
-  onMenuClose: React.PropTypes.func,
-  onMenuOpen: React.PropTypes.func,
-  id: React.PropTypes.string.isRequired,
-  width: React.PropTypes.number
-};
 
 export default ContextMenu;

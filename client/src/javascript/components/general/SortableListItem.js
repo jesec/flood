@@ -2,6 +2,7 @@ import _ from 'lodash';
 import classnames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
 import {getEmptyImage} from 'react-dnd-html5-backend';
+import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -62,6 +63,10 @@ const itemTarget = {
 };
 
 class SortableListItem extends React.Component {
+  static propTypes = {
+    id: PropTypes.string
+  };
+
   componentDidMount() {
     // Replace the native drag preview with an empty image.
     this.props.connectDragPreview(getEmptyImage(), {
@@ -101,10 +106,6 @@ class SortableListItem extends React.Component {
     );
   }
 }
-
-SortableListItem.propTypes = {
-  id: React.PropTypes.string
-};
 
 export default _.flow([
   DragSource('globally-draggable-item', itemSource, (connect, monitor) => {

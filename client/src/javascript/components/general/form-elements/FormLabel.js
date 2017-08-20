@@ -1,10 +1,24 @@
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import ErrorIcon from '../../icons/ErrorIcon';
 import Tooltip from '../Tooltip';
 
 class FormLabel extends React.Component {
+  static propTypes = {
+    baseClass: PropTypes.string,
+    className: PropTypes.oneOfType([PropTypes.string,
+      PropTypes.array, PropTypes.object]),
+    error: PropTypes.string
+  };
+
+  static defaultProps = {
+    baseClass: 'form__label',
+    className: null,
+    error: ''
+  };
+
   render() {
     let {baseClass, className, error} = this.props;
     let classes = classnames(baseClass, className);
@@ -27,18 +41,5 @@ class FormLabel extends React.Component {
     );
   }
 }
-
-FormLabel.defaultProps = {
-  baseClass: 'form__label',
-  className: null,
-  error: ''
-};
-
-FormLabel.propTypes = {
-  baseClass: React.PropTypes.string,
-  className: React.PropTypes.oneOfType([React.PropTypes.string,
-    React.PropTypes.array, React.PropTypes.object]),
-  error: React.PropTypes.string
-};
 
 export default FormLabel;

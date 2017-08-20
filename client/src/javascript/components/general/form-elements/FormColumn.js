@@ -1,7 +1,25 @@
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class FormColumn extends React.Component {
+  static propTypes = {
+    baseClass: PropTypes.string,
+    className: PropTypes.oneOfType([PropTypes.string,
+      PropTypes.array, PropTypes.object]),
+    errorModifier: PropTypes.string,
+    error: PropTypes.string,
+    modifiers: PropTypes.arrayOf(PropTypes.string)
+  };
+
+  static defaultProps = {
+    baseClass: 'form__column',
+    errorModifier: 'has-error',
+    className: null,
+    error: '',
+    modifiers: []
+  };
+
   render() {
     let {baseClass, children, classNames, error, errorModifier, modifiers}
       = this.props;
@@ -19,22 +37,5 @@ class FormColumn extends React.Component {
     );
   }
 }
-
-FormColumn.defaultProps = {
-  baseClass: 'form__column',
-  errorModifier: 'has-error',
-  className: null,
-  error: '',
-  modifiers: []
-};
-
-FormColumn.propTypes = {
-  baseClass: React.PropTypes.string,
-  className: React.PropTypes.oneOfType([React.PropTypes.string,
-    React.PropTypes.array, React.PropTypes.object]),
-  errorModifier: React.PropTypes.string,
-  error: React.PropTypes.string,
-  modifiers: React.PropTypes.arrayOf(React.PropTypes.string)
-};
 
 export default FormColumn;

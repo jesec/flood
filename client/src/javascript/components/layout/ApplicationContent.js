@@ -1,6 +1,11 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class ApplicationContent extends React.Component {
+  static propTypes = {
+    children: PropTypes.node
+  };
+
   render() {
     return (
       <div className="application__content">
@@ -9,9 +14,5 @@ class ApplicationContent extends React.Component {
     );
   }
 }
-
-ApplicationContent.propTypes = {
-  children: React.PropTypes.node
-};
 
 export default ApplicationContent;

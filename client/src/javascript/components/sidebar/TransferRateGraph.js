@@ -1,4 +1,5 @@
 import d3 from 'd3';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import EventTypes from '../../constants/EventTypes';
@@ -14,9 +15,15 @@ const METHODS_TO_BIND = [
   'renderGraphData'
 ];
 
-const bisector = d3.bisector(function(d) { return d; }).left;
-
 class TransferRateGraph extends React.Component {
+  static propTypes = {
+    width: PropTypes.number
+  };
+
+  static defaultProps = {
+    width: 240
+  };
+
   constructor() {
     super();
 
@@ -242,13 +249,5 @@ class TransferRateGraph extends React.Component {
     );
   }
 }
-
-TransferRateGraph.defaultProps = {
-  width: 240
-};
-
-TransferRateGraph.propTypes = {
-  width: React.PropTypes.number
-};
 
 export default TransferRateGraph;

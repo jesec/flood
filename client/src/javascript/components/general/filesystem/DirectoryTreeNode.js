@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import Checkbox from '../form-elements/Checkbox';
@@ -9,6 +10,18 @@ import DirectoryTree from './DirectoryTree';
 const METHODS_TO_BIND = ['handleDirectoryClick', 'handleDirectorySelection'];
 
 class DirectoryTreeNode extends React.Component {
+  static propTypes = {
+    isParentSelected: PropTypes.bool,
+    path: PropTypes.array,
+    selectedItems: PropTypes.object
+  };
+
+  static defaultProps = {
+    isParentSelected: false,
+    path: [],
+    selectedItems: {}
+  };
+
   constructor() {
     super();
 
@@ -109,17 +122,5 @@ class DirectoryTreeNode extends React.Component {
     );
   }
 }
-
-DirectoryTreeNode.defaultProps = {
-  isParentSelected: false,
-  path: [],
-  selectedItems: {}
-};
-
-DirectoryTreeNode.propTypes = {
-  isParentSelected: React.PropTypes.bool,
-  path: React.PropTypes.array,
-  selectedItems: React.PropTypes.object
-};
 
 export default DirectoryTreeNode;
