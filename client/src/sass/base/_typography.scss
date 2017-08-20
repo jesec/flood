@@ -1,10 +1,84 @@
 html {
+  font-size: $base-font-size;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
   color: $foreground;
   font-family: $font-family;
-  font-size: 16px;
+  font-size: $font-size--small;
   font-smoothing: antialiased;
-  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  line-height: 1.25;
   text-rendering: optimizeLegibility;
+}
+
+input,
+.input,
+button,
+.button {
+  font-size: $font-size--small;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  color: $dark-grey;
+
+  .inverse & {
+    color: $white;
+  }
+}
+
+h1,
+.h1 {
+  font-size: $font-size--xx-large;
+  font-weight: 700;
+  margin: $spacing--x-large 0;
+}
+
+h2,
+.h2 {
+  font-size: $font-size--x-large;
+  font-weight: 500;
+  margin: $spacing--large 0;
+}
+
+h3,
+.h3 {
+  font-size: $font-size--large;
+  font-weight: 400;
+  margin: $spacing--medium 0;
+}
+
+h4,
+.h4 {
+  font-size: $font-size--small;
+  font-weight: 500;
+  margin: $spacing 0;
+}
+
+h5,
+.h5 {
+  font-size: $font-size--x-small;
+  font-weight: 400;
+  margin: $spacing--small 0;
+}
+
+h6,
+.h6 {
+  font-size: $font-size--xx-small;
+  font-weight: 400;
+  margin: $spacing--x-small 0;
 }
 
 a {
@@ -26,5 +100,5 @@ a {
 }
 
 p {
-  margin-bottom: $spacing-unit * 3/5;
+  margin-bottom: $spacing--medium;
 }

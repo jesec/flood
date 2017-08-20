@@ -3,8 +3,8 @@
 const errorOverlayMiddleware = require('react-error-overlay/middleware');
 const config = require('./webpack.config.dev');
 const paths = require('./paths');
+const userConfig = require('../../config');
 
-const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
 const host = process.env.HOST || '0.0.0.0';
 
 module.exports = function(proxy, allowedHost) {
@@ -67,7 +67,7 @@ module.exports = function(proxy, allowedHost) {
       ignored: /node_modules/,
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
-    https: protocol === 'https',
+    https: userConfig.ssl,
     host: host,
     overlay: false,
     historyApiFallback: true,

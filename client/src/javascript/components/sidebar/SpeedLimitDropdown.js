@@ -1,4 +1,5 @@
-import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import _ from 'lodash';
+import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import ClientActions from '../../actions/ClientActions';

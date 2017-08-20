@@ -1,24 +1,11 @@
 $form--label--foreground: desaturate(lighten(#5c7087, 3%), 3%);
 $form--label--error--foreground: $red;
 
-$form--element--border-radius: 4px;
-
-$textbox--background: #242b36;
-$textbox--foreground: #5e728c;
 $textbox--error--foreground: $red;
-$textbox--placeholder: #424d5e;
-$textbox--border: #1a2028;
-$textbox--fulfilled--background: $textbox--background;
-$textbox--padding--vertical: 10px;
-$textbox--padding--horizontal: 15px;
-$textbox--active--background: $textbox--background;
-$textbox--active--border: $blue;
 $textbox--active--foreground: $blue;
 $textbox--active--placeholder: $textbox--placeholder;
 $textbox--error--border: $red;
 $textbox--error--placeholder: rgba($red, 0.5);
-$textbox--selection--foreground: #1a2028;
-$textbox--selection--background: $blue--lighter;
 
 $button--primary--foreground: #fff;
 $button--primary--background: $blue;

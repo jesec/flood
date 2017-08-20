@@ -1,11 +1,10 @@
+import _ from 'lodash';
+
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
-import {selectTorrents} from '../util/selectTorrents';
-import TorrentActions from '../actions/TorrentActions';
-import TorrentStore from './TorrentStore';
 
 class UIStoreClass extends BaseStore {
   constructor() {

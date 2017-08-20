@@ -1,14 +1,9 @@
-import _ from 'lodash';
-import classnames from 'classnames';
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-import AuthStore from '../../../stores/AuthStore';
 import Checkbox from '../../general/form-elements/Checkbox';
 import ErrorIcon from '../../icons/ErrorIcon';
-import Close from '../../icons/Close';
 import Dropdown from '../../general/form-elements/Dropdown';
-import EventTypes from '../../../constants/EventTypes';
 import Languages from '../../../constants/Languages';
 import Radio from '../../general/form-elements/Radio';
 import SettingsStore from '../../../stores/SettingsStore';

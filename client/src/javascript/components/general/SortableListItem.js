@@ -26,7 +26,7 @@ const itemTarget = {
 
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().index;
-    const {index: hoverIndex, isVisible, isLocked} = props;
+    const {index: hoverIndex, isLocked} = props;
 
     // Don't replace items with themselves
     if (isLocked || dragIndex === hoverIndex) {

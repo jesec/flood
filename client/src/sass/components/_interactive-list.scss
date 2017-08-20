@@ -12,8 +12,36 @@ $interactive-list--detail-list--item--padding--horizontal: $spacing-unit * 1/5;
 $interactive-list--detail-list--item--padding--vertical: 0;
 
 .interactive-list {
-  @extend .textbox;
-  @extend .textbox.is-fulfilled;
+  background: $textbox--fulfilled--background;
+  border-radius: $form--element--border-radius;
+  border: 1px solid $textbox--border;
+  color: $textbox--foreground;
+  display: block;
+  padding: $textbox--padding--vertical $textbox--padding--horizontal;
+  width: 100%;
+
+
+  &::placeholder {
+    color: $textbox--placeholder;
+    font-style: italic;
+    transition: color 0.25s;
+  }
+
+  &::selection {
+    color: $textbox--selection--foreground;
+    background: $textbox--selection--background;
+  }
+
+  &:focus {
+    background: $textbox--active--background;
+    border-color: $textbox--active--border;
+    color: $textbox--active--foreground;
+
+    &::placeholder {
+      color: $textbox--active--placeholder;
+    }
+  }
+
 
   &__item {
     display: flex;
