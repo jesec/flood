@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import classnames from 'classnames';
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Checkbox from '../../general/form-elements/Checkbox';
@@ -8,7 +8,6 @@ import ConfigStore from '../../../stores/ConfigStore';
 import Disk from '../../icons/Disk';
 import DirectoryTree from '../../general/filesystem/DirectoryTree';
 import Dropdown from '../../general/form-elements/Dropdown';
-import File from '../../icons/File';
 import TorrentStore from '../../../stores/TorrentStore';
 
 const baseURI = ConfigStore.getBaseURI();

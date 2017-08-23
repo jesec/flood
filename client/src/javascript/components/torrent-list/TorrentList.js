@@ -298,6 +298,8 @@ class TorrentListContainer extends React.Component {
       case 'set-priority':
         this.state.handleTorrentPriorityChange(event);
         break;
+      default:
+        break;
     }
   }
 
@@ -539,7 +541,7 @@ class TorrentListContainer extends React.Component {
 
   renderListItem(index) {
     const selectedTorrents = TorrentStore.getSelectedTorrents();
-    const {torrentListViewSize, torrents} = this.state;
+    const {displayedProperties, torrentListViewSize, torrentListColumnWidths, torrents} = this.state;
     const torrent = torrents[index];
     const {hash} = torrent;
 
@@ -553,8 +555,8 @@ class TorrentListContainer extends React.Component {
         index={index}
         isCondensed={torrentListViewSize === 'condensed'}
         key={hash}
-        columns={this.state.displayedProperties}
-        propWidths={this.state.torrentListColumnWidths}
+        columns={displayedProperties}
+        propWidths={torrentListColumnWidths}
         selected={selectedTorrents.includes(hash)}
         torrent={torrent} />
     );

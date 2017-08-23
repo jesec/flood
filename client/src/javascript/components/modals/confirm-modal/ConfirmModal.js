@@ -3,10 +3,6 @@ import React from 'react';
 import Modal from '../Modal';
 
 export default class ConfirmModal extends React.Component {
-  constructor() {
-    super();
-  }
-
   getContent() {
     return (
       <div className="modal__content">

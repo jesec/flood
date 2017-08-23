@@ -1,4 +1,4 @@
-import {formatMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
 import AddTorrentsByFile from './AddTorrentsByFile';

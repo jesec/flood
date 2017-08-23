@@ -10,7 +10,6 @@ import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import NotificationIcon from '../icons/NotificationIcon';
 import NotificationStore from '../../stores/NotificationStore';
 import Tooltip from '../general/Tooltip';
-import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
 const loadingIndicatorIcon = <LoadingIndicatorDots viewBox="0 0 32 32" />;

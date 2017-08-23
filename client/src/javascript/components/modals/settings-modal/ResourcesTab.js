@@ -1,5 +1,4 @@
 import {FormattedMessage} from 'react-intl';
-import _ from 'lodash';
 import React from 'react';
 
 import Checkbox from '../../general/form-elements/Checkbox';

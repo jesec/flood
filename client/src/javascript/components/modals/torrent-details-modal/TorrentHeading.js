@@ -1,4 +1,4 @@
-import {FormattedMessage, FormattedNumber} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 import stringUtil from 'universally-shared-code/util/stringUtil';

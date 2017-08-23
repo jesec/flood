@@ -1,5 +1,5 @@
 import Clipboard from 'clipboard';
-import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import ClipboardIcon from '../../icons/ClipboardIcon';

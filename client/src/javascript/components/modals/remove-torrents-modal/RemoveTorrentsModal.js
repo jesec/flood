@@ -1,8 +1,5 @@
-import _ from 'lodash';
-import classnames from 'classnames';
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
-import stringUtil from 'universally-shared-code/util/stringUtil';
 
 import Checkbox from '../../general/form-elements/Checkbox';
 import Modal from '../Modal';
@@ -73,7 +70,6 @@ class RemoveTorrentsModal extends React.Component {
         defaultMessage: 'You haven\'t selected any torrents.'
       });
     } else {
-      let torrentText = stringUtil.pluralize('torrent', selectedTorrentCount);
       modalContent = this.props.intl.formatMessage({
         id: 'torrents.remove.are.you.sure',
         defaultMessage: `Are you sure you want to remove {count, plural,

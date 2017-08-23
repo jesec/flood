@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import ActionBar from '../torrent-list/ActionBar';
 import Alerts from '../alerts/Alerts';
@@ -9,7 +8,6 @@ import ApplicationView from '../layout/ApplicationView';
 import Modals from '../modals/Modals';
 import SettingsStore from '../../stores/SettingsStore';
 import Sidebar from '../sidebar/Sidebar';
-import TorrentActions from '../../actions/TorrentActions';
 import TorrentList from '../torrent-list/TorrentList';
 
 export default class TorrentCLientOverview extends React.Component {

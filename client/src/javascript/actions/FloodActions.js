@@ -4,7 +4,6 @@ import serverEventTypes from 'universally-shared-code/constants/serverEventTypes
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
-import AuthStore from '../stores/AuthStore';
 import ConfigStore from '../stores/ConfigStore';
 
 const baseURI = ConfigStore.getBaseURI();

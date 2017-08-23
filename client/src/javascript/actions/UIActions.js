@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
-import TorrentStore from '../stores/TorrentStore';
 
 let UIActions = {
   displayContextMenu: data => {

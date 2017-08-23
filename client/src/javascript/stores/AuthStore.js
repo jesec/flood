@@ -96,7 +96,7 @@ class AuthStoreClass extends BaseStore {
 let AuthStore = new AuthStoreClass();
 
 AuthStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.AUTH_LOGIN_SUCCESS:
@@ -136,6 +136,8 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.AUTH_VERIFY_ERROR:
       AuthStore.emit(EventTypes.AUTH_VERIFY_ERROR,
         action.error);
+      break;
+    default:
       break;
   }
 });

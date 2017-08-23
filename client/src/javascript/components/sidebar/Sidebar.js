@@ -13,7 +13,6 @@ import SpeedLimitDropdown from './SpeedLimitDropdown';
 import StatusFilters from './StatusFilters';
 import TagFilters from './TagFilters';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
-import TorrentStore from '../../stores/TorrentStore';
 import TrackerFilters from './TrackerFilters';
 import UIStore from '../../stores/UIStore';
 

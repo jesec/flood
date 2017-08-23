@@ -7,20 +7,26 @@ export function selectTorrents(options) {
       let currentHashIndex;
       let lastHashIndex;
 
+      // TODO: wtf? Let's just use findIndex or indexOf...
       // get the index of the last selected torrent.
       options.torrentList.some((torrent, index) => {
         if (torrent.hash === lastHash) {
           lastHashIndex = index;
           return true;
         }
+
+        return false;
       });
 
+      // TODO: wtf? Let's just use findIndex or indexOf...
       // get the index of the newly selected torrent.
       options.torrentList.some((torrent, index) => {
         if (torrent.hash === options.hash) {
           currentHashIndex = index;
           return true;
         }
+
+        return false;
       });
 
       // from the previously selected index to the currently selected index,

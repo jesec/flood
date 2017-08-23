@@ -1,10 +1,8 @@
-import {formatMessage, injectIntl} from 'react-intl';
 import classnames from 'classnames';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
 import Badge from '../general/Badge';
-import EventTypes from '../../constants/EventTypes';
-import TorrentFilterStore from '../../stores/TorrentFilterStore';
 
 const METHODS_TO_BIND = [
   'handleClick'

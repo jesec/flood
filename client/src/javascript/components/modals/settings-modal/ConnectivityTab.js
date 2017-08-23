@@ -1,22 +1,11 @@
 import {FormattedMessage} from 'react-intl';
-import _ from 'lodash';
 import React from 'react';
 
 import Checkbox from '../../general/form-elements/Checkbox';
 import SettingsTab from './SettingsTab';
 
-const METHODS_TO_BIND = ['handleDHTToggle'];
-
 export default class ConnectivityTab extends SettingsTab {
-  constructor() {
-    super(...arguments);
-
-    this.state = {};
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+  state = {};
 
   getDHTEnabledValue() {
     if (this.state.dhtEnabled != null) {
@@ -26,7 +15,7 @@ export default class ConnectivityTab extends SettingsTab {
     return this.props.settings.dhtStats.dht === 'auto';
   }
 
-  handleDHTToggle() {
+  handleDHTToggle = () => {
     let dhtEnabled = !this.getDHTEnabledValue();
     let dhtEnabledString = dhtEnabled ? 'auto' : 'disable';
 
@@ -37,7 +26,7 @@ export default class ConnectivityTab extends SettingsTab {
       overrideID: 'dhtStats',
       overrideData: {dht: dhtEnabledString}
     });
-  }
+  };
 
   render() {
     return (

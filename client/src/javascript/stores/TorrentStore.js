@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import serverEventTypes from 'universally-shared-code/constants/serverEventTypes';
 
 import ActionTypes from '../constants/ActionTypes';
@@ -246,6 +245,8 @@ class TorrentStoreClass extends BaseStore {
             this.torrents[torrentHash][detailKey] = data[detailKey];
           });
           break;
+        default:
+          break;
       }
     });
 
@@ -307,7 +308,7 @@ class TorrentStoreClass extends BaseStore {
 const TorrentStore = new TorrentStoreClass();
 
 TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.CLIENT_FETCH_TORRENT_DETAILS_SUCCESS:
@@ -351,11 +352,14 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_SET_TORRENT_SORT:
       TorrentStore.triggerTorrentsSort();
+      break;
     case ActionTypes.UI_SET_TORRENT_SEARCH_FILTER:
     case ActionTypes.UI_SET_TORRENT_STATUS_FILTER:
     case ActionTypes.UI_SET_TORRENT_TAG_FILTER:
     case ActionTypes.UI_SET_TORRENT_TRACKER_FILTER:
       TorrentStore.triggerTorrentsFilter();
+      break;
+    default:
       break;
   }
 });

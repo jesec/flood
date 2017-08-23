@@ -3,9 +3,7 @@ import diffActionTypes from 'universally-shared-code/constants/diffActionTypes';
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
-import ConfigStore from './ConfigStore';
 import EventTypes from '../constants/EventTypes';
-import FloodActions from '../actions/FloodActions';
 
 class TransferDataStoreClass extends BaseStore {
   constructor() {
@@ -83,7 +81,7 @@ class TransferDataStoreClass extends BaseStore {
 let TransferDataStore = new TransferDataStoreClass();
 
 TransferDataStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.TRANSFER_SUMMARY_DIFF_CHANGE:
@@ -100,6 +98,8 @@ TransferDataStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.TRANSFER_HISTORY_FULL_UPDATE:
       TransferDataStore.handleFetchTransferHistorySuccess(action.data);
+      break;
+    default:
       break;
   }
 });

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import classnames from 'classnames';
 import createFragment from 'react-addons-create-fragment';
 import React from 'react';
@@ -56,7 +55,6 @@ export default class Modal extends React.Component {
     let headerClasses = classnames('modal__header', {
       'has-tabs': this.props.tabs
     });
-    let tabs = null;
 
     if (this.props.tabs) {
       let activeTabId = this.getActiveTabId();

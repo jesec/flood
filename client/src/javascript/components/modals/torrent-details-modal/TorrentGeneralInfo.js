@@ -1,5 +1,4 @@
-import {formatMessage, FormattedDate, FormattedMessage, FormattedNumber, FormattedTime, injectIntl} from 'react-intl';
-import classNames from 'classnames';
+import {FormattedMessage, FormattedNumber, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Size from '../../general/Size';

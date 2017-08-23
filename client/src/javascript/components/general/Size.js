@@ -1,4 +1,4 @@
-import {formatMessage, FormattedNumber, injectIntl} from 'react-intl';
+import {FormattedNumber, injectIntl} from 'react-intl';
 import React from 'react';
 
 import {compute, getTranslationString} from '../../util/size';

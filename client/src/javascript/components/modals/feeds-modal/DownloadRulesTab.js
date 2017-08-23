@@ -1,9 +1,7 @@
 import _ from 'lodash';
-import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-import AddMini from '../../icons/AddMini';
-import AuthStore from '../../../stores/AuthStore';
 import Checkbox from '../../general/form-elements/Checkbox';
 import Close from '../../icons/Close';
 import Dropdown from '../../general/form-elements/Dropdown';
@@ -11,8 +9,6 @@ import EventTypes from '../../../constants/EventTypes';
 import FeedMonitorStore from '../../../stores/FeedMonitorStore';
 import FormColumn from '../../general/form-elements/FormColumn';
 import FormLabel from '../../general/form-elements/FormLabel';
-import RemoveMini from '../../icons/RemoveMini';
-import SettingsActions from '../../../actions/SettingsActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import Validator from '../../../util/Validator';
 

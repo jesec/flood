@@ -188,7 +188,7 @@ class UIStoreClass extends BaseStore {
 let UIStore = new UIStoreClass();
 
 UIStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_ERROR:
@@ -218,6 +218,8 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.UI_DISPLAY_CONTEXT_MENU:
       UIStore.setActiveContextMenu(action.data);
+      break;
+    default:
       break;
   }
 });

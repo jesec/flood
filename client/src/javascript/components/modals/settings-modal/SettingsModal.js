@@ -1,5 +1,4 @@
-import {formatMessage, injectIntl} from 'react-intl';
-import classnames from 'classnames';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
 import AuthStore from '../../../stores/AuthStore';

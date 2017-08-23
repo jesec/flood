@@ -9,7 +9,6 @@ import File from '../../icons/File';
 import Files from '../../icons/Files';
 import FormColumn from '../../general/form-elements/FormColumn';
 import FormLabel from '../../general/form-elements/FormLabel';
-import ModalActions from '../ModalActions';
 import SettingsStore from '../../../stores/SettingsStore';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';

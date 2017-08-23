@@ -1,10 +1,8 @@
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
-import classnames from 'classnames';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
 import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
-import FloodActions from '../../actions/FloodActions';
 
 import {
   Button,
@@ -99,6 +97,9 @@ class AuthForm extends React.Component {
   }
 
   render() {
+    let actionText = null;
+    let errorRow;
+
     if (this.props.mode === 'login') {
       actionText = this.props.intl.formatMessage({
         id: 'auth.log.in',
@@ -110,8 +111,6 @@ class AuthForm extends React.Component {
         defaultMessage: 'Create Account'
       });
     }
-
-    let errorRow;
 
     if (this.state.error) {
       errorRow = (
@@ -144,69 +143,13 @@ class AuthForm extends React.Component {
               <FormRow justify="right">
                 <Button children="Clear" priority="tertiary" type="reset" />
                 <Button isLoading={this.state.isAuthStatusLoading} type="submit">
-                  Log In
+                  {actionText}
                 </Button>
               </FormRow>
             </PanelFooter>
           </Form>
         </Panel>
       </div>
-    );
-
-    // TODO: Remove the following...
-
-    let actionText = null;
-    let error = null;
-    let headerText = null;
-
-
-
-    if (!!this.state.error) {
-      error = (
-        <div className="form__row form__row--error">
-          <div className="form__column">
-            {this.state.error}
-          </div>
-        </div>
-      );
-    }
-
-    return (
-      <form className="form form--authentication"
-        onSubmit={this.handleFormSubmit}>
-        <div className="form__wrapper">
-          <div className="form__row form__header">
-            <h1>{headerText}</h1>
-          </div>
-          <div className="form__row">
-            <div className="form__column">
-              <input className="textbox textbox--open"
-                placeholder={this.props.intl.formatMessage({
-                  id: 'auth.username',
-                  defaultMessage: 'Username'
-                })} ref="username" type="text" />
-            </div>
-          </div>
-          <div className="form__row">
-            <div className="form__column">
-              <input className="textbox textbox--open"
-                placeholder={this.props.intl.formatMessage({
-                  id: 'auth.password',
-                  defaultMessage: 'Password'
-                })}
-                ref="password"
-                type="password" />
-            </div>
-          </div>
-          {error}
-        </div>
-        <div className="form__actions">
-          <button className="button button--inverse button--primary"
-            type="submit">
-            {actionText}
-          </button>
-        </div>
-      </form>
     );
   }
 }

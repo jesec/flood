@@ -1,13 +1,11 @@
 import classnames from 'classnames';
 import {DragDropContext} from 'react-dnd';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import HTML5Backend from 'react-dnd-html5-backend';
 import React from 'react';
 
 import SortableListItemDragLayer from './SortableListItemDragLayer';
-import Checkbox from './form-elements/Checkbox';
 import SortableListItem from './SortableListItem';
-import TorrentProperties from '../../constants/TorrentProperties';
 
 const methodsToBind = ['handleDrop', 'handleMove', 'handleMouseDown'];
 

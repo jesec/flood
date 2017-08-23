@@ -1,13 +1,6 @@
-import _ from 'lodash';
 import {
-  Button,
   Form,
-  FormError,
   FormRow,
-  Panel,
-  PanelContent,
-  PanelHeader,
-  PanelFooter,
   Textbox
 } from 'flood-ui-kit';
 import {FormattedMessage} from 'react-intl';

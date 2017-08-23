@@ -1,14 +1,10 @@
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
-import _ from 'lodash';
-import classnames from 'classnames';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-import AppDispatcher from '../../../dispatcher/AppDispatcher';
 import Checkbox from '../../general/form-elements/Checkbox';
 import EventTypes from '../../../constants/EventTypes';
 import LoadingIndicatorDots from '../../icons/LoadingIndicatorDots';
 import Modal from '../Modal';
-import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import TorrentStore from '../../../stores/TorrentStore';

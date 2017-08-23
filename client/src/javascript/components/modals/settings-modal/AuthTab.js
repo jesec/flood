@@ -1,9 +1,7 @@
-import _ from 'lodash';
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import AuthStore from '../../../stores/AuthStore';
-import Checkbox from '../../general/form-elements/Checkbox';
 import Close from '../../icons/Close';
 import EventTypes from '../../../constants/EventTypes';
 import SettingsTab from './SettingsTab';

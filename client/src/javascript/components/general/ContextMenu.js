@@ -59,7 +59,7 @@ class ContextMenu extends React.Component {
     }
 
     if (this.state.isOpen !== nextState.isOpen
-      || !this.state.isMenuPositionIdeal && nextState.isMenuPositionIdeal) {
+      || (!this.state.isMenuPositionIdeal && nextState.isMenuPositionIdeal)) {
       return true;
     }
 

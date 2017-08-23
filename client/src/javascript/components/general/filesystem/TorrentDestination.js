@@ -1,9 +1,8 @@
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
-import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-import AddMini from '../../../components/icons/AddMini';
 import ArrowIcon from '../../../components/icons/ArrowIcon';
 import File from '../../../components/icons/File';
 import FolderClosedSolid from '../../../components/icons/FolderClosedSolid';
@@ -281,8 +280,6 @@ class TorrentDestination extends React.Component {
   }
 
   handleDirectoryListFetchError(error) {
-    let {baseDestination, destination, separator} = this.state;
-
     this.setState({
       error,
       isFetching: false
@@ -365,7 +362,7 @@ class TorrentDestination extends React.Component {
               this.setState({attachedPanelMaxHeight});
             }
           } else if (bottom + panelHeight + 10 < windowHeight
-              && this.state.attachedPanelMaxHeight != MAX_PANEL_HEIGHT) {
+              && this.state.attachedPanelMaxHeight !== MAX_PANEL_HEIGHT) {
             this.setState({attachedPanelMaxHeight: MAX_PANEL_HEIGHT});
           }
         }

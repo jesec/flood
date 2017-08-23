@@ -52,7 +52,7 @@ class NotificationStoreClass extends BaseStore {
 let NotificationStore = new NotificationStoreClass();
 
 NotificationStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.FLOOD_CLEAR_NOTIFICATIONS_SUCCESS:
@@ -66,6 +66,8 @@ NotificationStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.NOTIFICATION_COUNT_CHANGE:
       NotificationStore.handleNotificationCountChange(action.data);
+      break;
+    default:
       break;
   }
 });
