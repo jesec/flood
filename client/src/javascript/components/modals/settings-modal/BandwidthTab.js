@@ -1,11 +1,8 @@
-import {
-  Form,
-  FormRow,
-  Textbox
-} from 'flood-ui-kit';
+import {Form, FormRow, Textbox} from 'flood-ui-kit';
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
+import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import SettingsTab from './SettingsTab';
 
 export default class BandwidthTab extends SettingsTab {
@@ -62,12 +59,12 @@ export default class BandwidthTab extends SettingsTab {
   render() {
     return (
       <Form onChange={this.handleFormChange}>
-        <h1 className="h4">
+        <ModalFormSectionHeader>
           <FormattedMessage
             id="settings.bandwidth.transferrate.heading"
             defaultMessage="Transfer Rate Throttles"
           />
-        </h1>
+        </ModalFormSectionHeader>
         <FormRow>
           <Textbox
             defaultValue={this.getDownloadValue()}
@@ -114,12 +111,12 @@ export default class BandwidthTab extends SettingsTab {
             id="throttleGlobalUpMax"
           />
         </FormRow>
-        <h1 className="h4">
+        <ModalFormSectionHeader>
           <FormattedMessage
             id="settings.bandwidth.slots.heading"
             defaultMessage="Slot Availability"
           />
-        </h1>
+        </ModalFormSectionHeader>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxUploads')}

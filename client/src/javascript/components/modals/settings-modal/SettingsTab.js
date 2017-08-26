@@ -1,15 +1,7 @@
 import React from 'react';
 
-const METHODS_TO_BIND = ['handleClientSettingFieldChange'];
-
 export default class SettingsTab extends React.Component {
-  constructor() {
-    super();
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+  state = {};
 
   getFieldValue(fieldName) {
     if (this.state[fieldName] == null) {
@@ -20,17 +12,16 @@ export default class SettingsTab extends React.Component {
   }
 
   handleClientSettingFieldChange(fieldName, event) {
-    let newState = {[fieldName]: event.target.value};
+    let {value} = event.target;
 
-    this.setState(newState);
-    this.props.onClientSettingsChange(newState);
-  }
+    if (event.target.type === 'checkbox') {
+      console.log('changing value');
+      value = event.target.checked ? '1' : '0';
+    }
 
-  handleClientSettingCheckboxChange(fieldName, value) {
-    let checkedValue = value ? '1' : '0';
-    let newState = {[fieldName]: checkedValue};
+    const nextState = {[fieldName]: value};
 
-    this.setState(newState);
-    this.props.onClientSettingsChange(newState);
+    this.setState(nextState);
+    this.props.onClientSettingsChange(nextState);
   }
 }
