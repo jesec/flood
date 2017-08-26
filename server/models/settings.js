@@ -111,19 +111,23 @@ let settings = {
       payloads = [payloads];
     }
 
-    payloads.forEach((payload, index) => {
-      settingsDB.update({id: payload.id}, {$set: {data: payload.data}}, {upsert: true}, (err, docs) => {
-        docsResponse.push(docs);
-        if (index + 1 === payloads.length) {
-          if (err) {
-            callback(null, err);
+    if (payloads && payloads.length) {
+      payloads.forEach((payload, index) => {
+        settingsDB.update({id: payload.id}, {$set: {data: payload.data}}, {upsert: true}, (err, docs) => {
+          docsResponse.push(docs);
+          if (index + 1 === payloads.length) {
+            if (err) {
+              callback(null, err);
+              return;
+            }
+            callback(docsResponse);
             return;
           }
-          callback(docsResponse);
-          return;
-        }
+        });
       });
-    });
+    } else {
+      callback();
+    }
   }
 };
 

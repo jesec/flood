@@ -1,7 +1,6 @@
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
-import AuthStore from '../../../stores/AuthStore';
 import AuthTab from './AuthTab';
 import BandwidthTab from './BandwidthTab';
 import ConnectivityTab from './ConnectivityTab';
@@ -45,7 +44,6 @@ class SettingsModal extends React.Component {
       this.handleSettingsStoreChange);
     SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
       this.handleSaveSettingsError);
-    AuthStore.fetchUserList();
   }
 
   componentWillUnmount() {

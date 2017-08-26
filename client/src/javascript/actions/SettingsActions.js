@@ -9,9 +9,7 @@ const baseURI = ConfigStore.getBaseURI();
 let SettingsActions = {
   addFeed: (feed) => {
     return axios.put(`${baseURI}api/feed-monitor/feeds`, feed)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_ADD_SUCCESS,
@@ -27,9 +25,7 @@ let SettingsActions = {
 
   addRule: (rule) => {
     return axios.put(`${baseURI}api/feed-monitor/rules`, rule)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_RULE_ADD_SUCCESS,
@@ -45,9 +41,7 @@ let SettingsActions = {
 
   fetchFeedMonitors: (query) => {
     return axios.get(`${baseURI}api/feed-monitor`, query)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
@@ -63,9 +57,7 @@ let SettingsActions = {
 
   fetchFeeds: (query) => {
     return axios.get(`${baseURI}api/feed-monitor/feeds`, query)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_FEEDS_FETCH_SUCCESS,
@@ -81,9 +73,7 @@ let SettingsActions = {
 
   fetchRules: (query) => {
     return axios.get(`${baseURI}api/feed-monitor/rules`, query)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_RULES_FETCH_SUCCESS,
@@ -99,9 +89,7 @@ let SettingsActions = {
 
   fetchSettings: (property) => {
     return axios.get(`${baseURI}api/settings`, {params: {property}})
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS,
@@ -117,9 +105,7 @@ let SettingsActions = {
 
   removeFeedMonitor: (id) => {
     return axios.delete(`${baseURI}api/feed-monitor/${id}`)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_FEED_MONITOR_REMOVE_SUCCESS,
@@ -141,9 +127,7 @@ let SettingsActions = {
 
   saveSettings: (settings, options = {}) => {
     return axios.patch(`${baseURI}api/settings`, settings)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.SETTINGS_SAVE_REQUEST_SUCCESS,

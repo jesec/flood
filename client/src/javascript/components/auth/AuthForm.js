@@ -125,7 +125,7 @@ class AuthForm extends React.Component {
     return (
       <div style={{width: 500}}>
         <Panel spacing="large">
-          <Form onSubmit={this.handleFormSubmit}>
+          <Form onSubmit={this.handleFormSubmit} ref={(ref) => this.formRef = ref}>
             <PanelHeader>
               <h1>{this.getHeaderText()}</h1>
             </PanelHeader>
@@ -141,7 +141,7 @@ class AuthForm extends React.Component {
             </PanelContent>
             <PanelFooter>
               <FormRow justify="right">
-                <Button children="Clear" priority="tertiary" type="reset" />
+                <Button children="Clear" priority="tertiary" onClick={() => this.formRef.resetForm()} />
                 <Button isLoading={this.state.isAuthStatusLoading} type="submit">
                   {actionText}
                 </Button>

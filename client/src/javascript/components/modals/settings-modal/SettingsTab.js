@@ -15,7 +15,6 @@ export default class SettingsTab extends React.Component {
     let {value} = event.target;
 
     if (event.target.type === 'checkbox') {
-      console.log('changing value');
       value = event.target.checked ? '1' : '0';
     }
 

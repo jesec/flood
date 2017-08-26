@@ -9,9 +9,7 @@ const baseURI = ConfigStore.getBaseURI();
 let ClientActions = {
   fetchSettings: (property) => {
     return axios.get(`${baseURI}api/client/settings`, {params: {property}})
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS,
@@ -27,9 +25,7 @@ let ClientActions = {
 
   saveSettings: (settings, options) => {
     return axios.patch(`${baseURI}api/client/settings`, settings)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SETTINGS_SAVE_SUCCESS,
@@ -50,9 +46,7 @@ let ClientActions = {
         direction,
         throttle
       })
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((transferData) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.CLIENT_SET_THROTTLE_SUCCESS,

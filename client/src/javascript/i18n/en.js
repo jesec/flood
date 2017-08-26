@@ -29,6 +29,7 @@ export default {
   'auth.create.account': 'Create Account',
   'auth.create.an.account': 'Create an account',
   'auth.create.an.account.intro': 'Welcome to Flood!',
+  'auth.current.user': 'Current User',
   'auth.error.username.empty': 'Username cannot be empty.',
   'auth.log.in': 'Log In',
   'auth.login': 'Login',

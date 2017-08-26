@@ -40,9 +40,7 @@ global.document.addEventListener(
 const FloodActions = {
   clearNotifications: (options) => {
     return axios.delete(`${baseURI}api/notifications`)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((response = {}) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_CLEAR_NOTIFICATIONS_SUCCESS,
@@ -111,9 +109,7 @@ const FloodActions = {
     return axios.get(`${baseURI}api/directory-list`, {
         params: options
       })
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((response) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_SUCCESS,
@@ -138,9 +134,7 @@ const FloodActions = {
           hash: options.hash
         }
       })
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((response) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
@@ -164,9 +158,7 @@ const FloodActions = {
           start: options.start
         }
       })
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((response) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_FETCH_NOTIFICATIONS_SUCCESS,

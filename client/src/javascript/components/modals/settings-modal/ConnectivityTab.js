@@ -129,7 +129,7 @@ export default class ConnectivityTab extends SettingsTab {
             />
           </Checkbox>
           <Checkbox
-            checked={this.getFieldValue('protocolPex')}
+            checked={this.getFieldValue('protocolPex') === '1'}
             grow={false}
             id="protocolPex"
             labelOffset
