@@ -49,7 +49,7 @@ let AuthActions = {
   },
 
   deleteUser: (username) => {
-    return axios.delete(`${baseURI}auth/users/${username}`)
+    return axios.delete(`${baseURI}auth/users/${encodeURIComponent(username)}`)
       .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({

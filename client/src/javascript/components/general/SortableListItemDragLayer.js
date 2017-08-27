@@ -62,7 +62,7 @@ class SortableListItemDragLayer extends Component {
   }
 
   render() {
-    const {item, itemType, isDragging} = this.props;
+    const {item, isDragging} = this.props;
 
     if (!isDragging) {
       return null;
@@ -71,7 +71,7 @@ class SortableListItemDragLayer extends Component {
     return (
       <div style={layerStyles}>
         <div style={getItemStyles(this.props)}>
-          {this.renderItem(itemType, item)}
+          {this.props.renderItem(item, 0)}
         </div>
       </div>
     );

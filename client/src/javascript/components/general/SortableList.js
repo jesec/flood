@@ -93,7 +93,8 @@ class SortableList extends React.Component {
         onMouseDown={this.handleMouseDown}
         ref={ref => this.sortableListRef = ref}>
         <SortableListItemDragLayer items={this.state.items}
-          listOffset={this.state.listOffset} />
+          listOffset={this.state.listOffset}
+          renderItem={this.props.renderItem} />
         {this.getItemList()}
       </ul>
     );

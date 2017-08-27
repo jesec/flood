@@ -48,7 +48,7 @@ const transformLegacyKeys = settings => {
     settings.torrentDetails = settings.torrentDetails.reduce(
       (accumulator, detailItem, index) => {
         if (
-          detailItem.id in changedKeys
+          detailItem && detailItem.id in changedKeys
           && !(settings.torrentDetails.some(subDetailItem => {
             return subDetailItem.id === changedKeys[detailItem.id];
           }))

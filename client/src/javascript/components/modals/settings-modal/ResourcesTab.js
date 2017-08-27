@@ -50,6 +50,7 @@ export default class ResourcesTab extends SettingsTab {
             grow={false}
             id="piecesHashOnCompletion"
             labelOffset
+            matchTextboxHeight
           >
             <FormattedMessage
               id="settings.resources.disk.check.hash.label"

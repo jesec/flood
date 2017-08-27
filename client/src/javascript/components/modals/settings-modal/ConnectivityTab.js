@@ -59,6 +59,7 @@ export default class ConnectivityTab extends SettingsTab {
             grow={false}
             id="networkPortRandom"
             labelOffset
+            matchTextboxHeight
           >
             <FormattedMessage
               id="settings.connectivity.port.randomize.label"
@@ -70,6 +71,7 @@ export default class ConnectivityTab extends SettingsTab {
             grow={false}
             id="networkPortOpen"
             labelOffset
+            matchTextboxHeight
           >
             <FormattedMessage
               id="settings.connectivity.port.open.label"
@@ -122,6 +124,7 @@ export default class ConnectivityTab extends SettingsTab {
             grow={false}
             id="dhtEnabled"
             labelOffset
+            matchTextboxHeight
           >
             <FormattedMessage
               id="settings.connectivity.dht.label"
@@ -133,6 +136,7 @@ export default class ConnectivityTab extends SettingsTab {
             grow={false}
             id="protocolPex"
             labelOffset
+            matchTextboxHeight
           >
             <FormattedMessage
               id="settings.connectivity.peer.exchange.label"
