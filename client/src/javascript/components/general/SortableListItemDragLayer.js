@@ -1,10 +1,7 @@
 import {DragLayer} from 'react-dnd';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-
-import Checkbox from '../../components/general/form-elements/Checkbox';
-import TorrentProperties from '../../constants/TorrentProperties';
 
 const layerStyles = {
   position: 'absolute',
@@ -38,29 +35,6 @@ class SortableListItemDragLayer extends Component {
     itemType: PropTypes.string
   };
 
-  renderItem(type, item) {
-    switch (type) {
-      case 'globally-draggable-item':
-        return (
-          <div className="sortable-list__item sortable-list__item--is-preview">
-            <div className="sortable-list__content__wrapper">
-              <span className="sortable-list__content sortable-list__content--primary">
-                <FormattedMessage id={TorrentProperties[item.id].id}
-                  defaultMessage={TorrentProperties[item.id].defaultMessage} />
-              </span>
-              <span className="sortable-list__content sortable-list__content--secondary">
-                <Checkbox checked={item.isVisible}>
-                  Enabled
-                </Checkbox>
-              </span>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  }
-
   render() {
     const {item, isDragging} = this.props;
 
@@ -71,7 +45,7 @@ class SortableListItemDragLayer extends Component {
     return (
       <div style={layerStyles}>
         <div style={getItemStyles(this.props)}>
-          {this.props.renderItem(item, 0)}
+          {this.props.renderItem({...item, dragIndicator: true})}
         </div>
       </div>
     );

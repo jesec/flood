@@ -1,4 +1,4 @@
-import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Select, SelectItem, Radio, Textbox} from 'flood-ui-kit';
+import {Checkbox, Form, FormRow, Select, SelectItem, Radio} from 'flood-ui-kit';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
@@ -86,7 +86,7 @@ class UITab extends SettingsTab {
     let checkbox = null;
     let warning = null;
 
-    if (!this.getLockedIDs().includes(id)) {
+    if (!item.dragIndicator && !this.getLockedIDs().includes(id)) {
       checkbox = (
         <span className="sortable-list__content sortable-list__content--secondary">
           <Checkbox
@@ -124,7 +124,7 @@ class UITab extends SettingsTab {
       );
     }
 
-    return (
+    const content = (
       <div className="sortable-list__content sortable-list__content__wrapper">
         {warning}
         <span className="sortable-list__content sortable-list__content--primary">
@@ -134,6 +134,16 @@ class UITab extends SettingsTab {
         {checkbox}
       </div>
     );
+
+    if (item.dragIndicator) {
+      return (
+        <div className="sortable-list__item">
+          {content}
+        </div>
+      );
+    }
+
+    return content;
   };
 
   render() {

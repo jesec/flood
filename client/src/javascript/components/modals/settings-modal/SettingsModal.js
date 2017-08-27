@@ -54,20 +54,6 @@ class SettingsModal extends React.Component {
   }
 
   getActions() {
-    let icon = null;
-    let primaryButtonText = this.props.intl.formatMessage({
-      id: 'button.save',
-      defaultMessage: 'Save Settings'
-    });
-
-    if (this.state.isSavingSettings) {
-      icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = this.props.intl.formatMessage({
-        id: 'button.state.saving',
-        defaultMessage: 'Saving...'
-      });
-    }
-
     return [
       {
         clickHandler: null,
@@ -76,17 +62,15 @@ class SettingsModal extends React.Component {
           defaultMessage: 'Cancel'
         }),
         triggerDismiss: true,
-        type: 'secondary'
+        type: 'tertiary'
       },
       {
         clickHandler: this.handleSaveSettingsClick,
-        content: (
-          <span>
-            {icon}
-            {primaryButtonText}
-          </span>
-        ),
-        supplementalClassName: icon != null ? 'has-icon' : '',
+        isLoading: this.state.isSavingSettings,
+        content: this.props.intl.formatMessage({
+          id: 'button.save',
+          defaultMessage: 'Save Settings'
+        }),
         triggerDismiss: false,
         type: 'primary'
       }

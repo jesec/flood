@@ -76,10 +76,14 @@ $sortable-list--item--border--preview: darken($sortable-list--item--border, 3%);
     .icon {
       fill: currentColor;
 
-      &--error {
-        fill: $red;
+      &--error,
+      &--lock {
         height: 12px;
         width: 12px;
+      }
+
+      &--error {
+        fill: $red;
       }
     }
   }
