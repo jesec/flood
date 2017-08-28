@@ -78,10 +78,10 @@ class AddTorrentsActions extends React.Component {
     ];
   }
 
-  handleStartTorrentsToggle(value) {
-    SettingsStore.saveFloodSettings({id: 'startTorrentsOnLoad', data: value});
-    if (!!this.props.onStartTorrentsToggle) {
-      this.props.onStartTorrentsToggle(value);
+  handleStartTorrentsToggle(event) {
+    SettingsStore.saveFloodSettings({id: 'startTorrentsOnLoad', data: event.target.checked});
+    if (this.props.onStartTorrentsToggle) {
+      this.props.onStartTorrentsToggle(event.target.checked);
     }
   }
 

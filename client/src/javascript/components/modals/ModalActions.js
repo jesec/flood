@@ -44,9 +44,9 @@ export default class ModalActions extends React.Component {
   }
 
   getClickHandler(action) {
-    return (data) => {
+    return (event) => {
       if (action.clickHandler) {
-        action.clickHandler(data);
+        action.clickHandler(event);
       }
 
       if (action.triggerDismiss) {

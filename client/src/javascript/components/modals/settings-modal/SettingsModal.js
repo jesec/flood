@@ -5,7 +5,6 @@ import AuthTab from './AuthTab';
 import BandwidthTab from './BandwidthTab';
 import ConnectivityTab from './ConnectivityTab';
 import EventTypes from '../../../constants/EventTypes';
-import LoadingIndicatorDots from '../../icons/LoadingIndicatorDots';
 import Modal from '../Modal';
 import ResourcesTab from './ResourcesTab';
 import SettingsStore from '../../../stores/SettingsStore';
