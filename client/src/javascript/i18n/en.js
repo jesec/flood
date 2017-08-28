@@ -42,7 +42,6 @@ export default {
   'button.no': 'No',
   'button.save': 'Save Settings',
   'button.state.adding': 'Adding...',
-  'button.state.saving': 'Saving...',
   'button.yes': 'Yes',
 
   'feeds.add.automatic.download.rule': 'Add Download Rule',
@@ -308,7 +307,6 @@ export default {
   'torrents.remove': 'Remove Torrents',
 
   'torrents.set.tags.button.set': 'Set Tags',
-  'torrents.set.tags.button.state.setting': 'Setting...',
   'torrents.set.tags.heading': 'Set Tags',
   'torrents.set.tags.enter.tags': 'Enter tags',
 

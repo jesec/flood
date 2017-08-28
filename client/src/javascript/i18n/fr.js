@@ -14,7 +14,6 @@ export default {
   'button.no': 'Non',
   'button.save': 'Enregistrer',
   'button.state.adding': 'Ajout...',
-  'button.state.saving': 'Enregistrement...',
   'button.yes': 'Oui',
 
   'feeds.add.automatic.download.rule': 'Ajouter une règle de téléchargement',
@@ -258,7 +257,6 @@ export default {
   'torrents.remove': 'Supprimer les Torrents',
 
   'torrents.set.tags.button.set': 'Définir un Tag',
-  'torrents.set.tags.button.state.setting': 'Réglages...',
   'torrents.set.tags.heading': 'Définir un Tag',
 
   'torrents.sort.title': 'Trier par'

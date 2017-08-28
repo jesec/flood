@@ -14,7 +14,6 @@ export default {
   'button.no': 'Nee',
   'button.save': 'Instellingen opslaan',
   'button.state.adding': 'Toevoegen...',
-  'button.state.saving': 'Opslaan...',
   'button.yes': 'Ja',
 
   'feeds.add.automatic.download.rule': 'Regel toevoegen',
@@ -257,7 +256,6 @@ export default {
   'torrents.remove': 'Torrents verwijderen',
 
   'torrents.set.tags.button.set': 'Tags instellen',
-  'torrents.set.tags.button.state.setting': 'Instellen...',
   'torrents.set.tags.heading': 'Tags instellen',
 
   'torrents.sort.title': 'Sorteer op'

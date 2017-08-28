@@ -40,7 +40,6 @@ export default {
   'button.no': 'No',
   'button.save': 'Guardar Configuración',
   'button.state.adding': 'Agregando...',
-  'button.state.saving': 'Guardando...',
   'button.yes': 'Sí',
 
   'feeds.add.automatic.download.rule': 'Agregar Regla de Descarga',
@@ -306,7 +305,6 @@ export default {
   'torrents.remove': 'Eliminar Torrents',
 
   'torrents.set.tags.button.set': 'Configurar',
-  'torrents.set.tags.button.state.setting': 'Guardando...',
   'torrents.set.tags.heading': 'Configurar Etiquetas',
 
   'torrents.sort.title': 'Ordenar Por'
