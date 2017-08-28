@@ -310,6 +310,7 @@ export default {
   'torrents.set.tags.button.set': 'Set Tags',
   'torrents.set.tags.button.state.setting': 'Setting...',
   'torrents.set.tags.heading': 'Set Tags',
+  'torrents.set.tags.enter.tags': 'Enter tags',
 
   'torrents.sort.title': 'Sort By'
 };
