@@ -566,7 +566,7 @@ class TorrentListContainer extends React.Component {
     if (this.horizontalScrollRef != null) {
       this.setState({
         torrentListViewportSize:
-          this.horizontalScrollRef.refs.scrollbar.getClientWidth()
+          this.horizontalScrollRef.scrollbarRef.getClientWidth()
       });
     }
   }

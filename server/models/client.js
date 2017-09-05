@@ -53,7 +53,7 @@ var client = {
   addUrls (data, callback) {
     let urls = data.urls;
     let path = data.destination;
-    let isBasePath = data.isBasePath === 'true';
+    let isBasePath = data.isBasePath;
     let start = data.start;
     let tags = data.tags;
     let request = new ClientRequest();

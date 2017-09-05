@@ -15,6 +15,7 @@ export default class ModalActions extends React.Component {
         return (
           <Checkbox
             checked={action.checked}
+            id={action.id}
             key={index}
             onChange={this.getClickHandler(action)}
           >

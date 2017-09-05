@@ -51,6 +51,7 @@ class AddTorrentsActions extends React.Component {
           id: 'torrents.add.start.label',
           defaultMessage: 'Start Torrent'
         }),
+        id: 'start',
         triggerDismiss: false,
         type: 'checkbox'
       },
@@ -61,7 +62,7 @@ class AddTorrentsActions extends React.Component {
           defaultMessage: 'Cancel'
         }),
         triggerDismiss: true,
-        type: 'secondary'
+        type: 'tertiary'
       },
       {
         clickHandler: this.props.onAddTorrentsClick,

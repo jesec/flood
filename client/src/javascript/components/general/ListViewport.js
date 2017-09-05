@@ -167,7 +167,7 @@ class ListViewport extends React.Component {
       scrollTop: 0,
       itemHeight: null
     }, () => {
-      this.nodeRefs.outerScrollbar.refs.scrollbar.scrollTop(0);
+      this.nodeRefs.outerScrollbar.scrollbarRef.scrollTop(0);
     });
   }
 
@@ -200,7 +200,7 @@ class ListViewport extends React.Component {
   scrollToTop() {
     if (this.state.scrollTop !== 0) {
       if (this.nodeRefs.outerScrollbar != null) {
-        this.nodeRefs.outerScrollbar.refs.scrollbar.scrollToTop();
+        this.nodeRefs.outerScrollbar.scrollbarRef.scrollToTop();
       }
 
       this.lastScrollTop = 0;
@@ -218,7 +218,7 @@ class ListViewport extends React.Component {
 
     if (nodeRefs.outerScrollbar) {
       this.setState({
-        viewportHeight: nodeRefs.outerScrollbar.refs.scrollbar.getClientHeight()
+        viewportHeight: nodeRefs.outerScrollbar.scrollbarRef.getClientHeight()
       });
     }
   }
