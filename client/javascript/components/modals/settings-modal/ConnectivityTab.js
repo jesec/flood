@@ -170,7 +170,7 @@ export default class ConnectivityTab extends SettingsTab {
               <label className="form__label">
                 <FormattedMessage
                   id="settings.connectivity.peers.max.label"
-                  defaultMessage="Maxmimum Peers"
+                  defaultMessage="Maximum Peers"
                 />
               </label>
               <input className="textbox" type="text"
@@ -194,7 +194,7 @@ export default class ConnectivityTab extends SettingsTab {
               <label className="form__label">
                 <FormattedMessage
                   id="settings.connectivity.peers.seeding.max.label"
-                  defaultMessage="Maxmimum Peers Seeding"
+                  defaultMessage="Maximum Peers Seeding"
                 />
               </label>
               <input className="textbox" type="text"
