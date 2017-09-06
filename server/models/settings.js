@@ -1,10 +1,11 @@
 'use strict';
 
-let Datastore = require('nedb');
+const _ = require('lodash');
+const Datastore = require('nedb');
 
-let config = require('../../config');
+const config = require('../../config');
 
-let settingsDB = new Datastore({
+const settingsDB = new Datastore({
   autoload: true,
   filename: `${config.dbPath}settings/settings.db`
 });
@@ -104,7 +105,7 @@ let settings = {
     });
   },
 
-  set: (payloads, callback) => {
+  set: (payloads, callback = _.noop) => {
     let docsResponse = [];
 
     if (!Array.isArray(payloads)) {

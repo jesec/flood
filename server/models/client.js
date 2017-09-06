@@ -8,6 +8,7 @@ const tar = require('tar-stream');
 const ClientRequest = require('./ClientRequest');
 const clientResponseUtil = require('../util/clientResponseUtil');
 const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
+const settings = require('./settings');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
 const torrentService = require('../services/torrentService');
@@ -48,6 +49,8 @@ var client = {
 
       fileRequest.send();
     });
+
+    settings.set({id: 'startTorrentsOnLoad', data: start});
   },
 
   addUrls (data, callback) {
@@ -62,6 +65,8 @@ var client = {
     request.addURLs({urls, path, isBasePath, start, tags});
     request.onComplete(callback);
     request.send();
+
+    settings.set({id: 'startTorrentsOnLoad', data: start});
   },
 
   checkHash (hashes, callback) {

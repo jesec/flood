@@ -69,11 +69,6 @@ $interactive-list--detail-list--item--padding--vertical: 0;
 
     &:hover {
 
-      .icon {
-        filter: drop-shadow(0 1px 0 rgba($darkest-grey, 0.8));
-        fill: $interactive-list--item--icon--fill--hover;
-      }
-
       .interactive-list {
 
         &__icon {
@@ -83,6 +78,11 @@ $interactive-list--detail-list--item--padding--vertical: 0;
 
             &--warning {
               background: $red;
+            }
+
+            .icon {
+              filter: drop-shadow(0 1px 0 rgba($darkest-grey, 0.8));
+              fill: $interactive-list--item--icon--fill--hover;
             }
           }
         }

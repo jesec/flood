@@ -174,6 +174,14 @@ class SettingsStoreClass extends BaseStore {
     this.emit(EventTypes.SETTINGS_CHANGE);
   }
 
+  updateOptimisticallyOnly(settings, settingsType = 'floodSettings') {
+    if (!Array.isArray(settings)) {
+      settings = [settings];
+    }
+
+    this.updateLocalSettings(settings, settingsType);
+  }
+
   updateLocalSettings(settings, settingsType) {
     settings.forEach((setting) => {
       if (setting.overrideLocalSetting) {

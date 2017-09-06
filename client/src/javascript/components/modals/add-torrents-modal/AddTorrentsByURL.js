@@ -12,6 +12,7 @@ import TorrentDestination from '../../general/filesystem/TorrentDestination';
 
 class AddTorrentsByURL extends React.Component {
   _formData = {};
+  _formRef = null;
 
   state = {
     errors: {},
@@ -35,30 +36,30 @@ class AddTorrentsByURL extends React.Component {
   }
 
   handleAddTorrents = () => {
-    if (this.isFormValid()) {
-      this.setState({isAddingTorrents: true});
+    const formData = this._formRef.getFormData();
+    this.setState({isAddingTorrents: true});
 
-      TorrentActions.addTorrentsByUrls({
-        urls: this.getURLsFromForm(),
-        destination: this._formData.destination,
-        isBasePath: this._formData.useBasePath,
-        start: this._formData.start,
-        tags: this._formData.tags.split(',')
-      });
-    }
+    TorrentActions.addTorrentsByUrls({
+      urls: this.getURLsFromForm(),
+      destination: formData.destination,
+      isBasePath: formData.useBasePath,
+      start: formData.start,
+      tags: formData.tags.split(',')
+    });
+
+    SettingsStore.updateOptimisticallyOnly({
+      id: 'startTorrentsOnLoad',
+      data: formData.start
+    });
   };
 
   handleFormChange = ({event, formData}) => {
     this._formData = formData;
   };
 
-  isFormValid() {
-    return true;
-  }
-
   render() {
     return (
-      <Form className="inverse" onChange={this.handleFormChange}>
+      <Form className="inverse" onChange={this.handleFormChange} ref={ref => this._formRef = ref}>
         <ModalFormSectionHeader>
           <FormattedMessage
             id="torrents.add.torrents.label"
