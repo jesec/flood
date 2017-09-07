@@ -1,4 +1,5 @@
-$interactive-list--padding--vertical: $spacing--x-small;
+$interactive-list--padding--vertical: 0;
+$interactive-list--padding--horizontal: 0;
 
 $interactive-list--item--foreground: $textbox--foreground;
 
@@ -24,7 +25,7 @@ $interactive-list--detail-list--item--padding--vertical: 0;
   color: $input--inverse--foreground;
   display: block;
   height: auto;
-  padding: $interactive-list--padding--vertical 0;
+  padding: $interactive-list--padding--vertical $interactive-list--padding--horizontal;
   transition: all $speed--x-fast;
   width: 100%;
 
