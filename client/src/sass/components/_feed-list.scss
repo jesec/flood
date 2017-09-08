@@ -1,0 +1,14 @@
+.feed-list {
+
+  &__feed {
+    align-items: center;
+
+    .interactive-list {
+
+      &__label {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  }
+}

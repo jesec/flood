@@ -3,7 +3,6 @@ $interactive-list--padding--horizontal: 0;
 
 $interactive-list--item--foreground: $textbox--foreground;
 
-$interactive-list--item--detail--primary--foreground: lighten($interactive-list--item--foreground, 10%);
 $interactive-list--item--detail--tertiary--foreground: darken($interactive-list--item--foreground, 10%);
 
 $interactive-list--item--icon--fill: rgba($interactive-list--item--foreground, 0.5);
@@ -189,7 +188,6 @@ $interactive-list--detail-list--item--padding--vertical: 0;
   &__detail {
 
     &--primary {
-      color: $interactive-list--item--detail--primary--foreground;
       font-weight: 700;
     }
 
@@ -200,13 +198,12 @@ $interactive-list--detail-list--item--padding--vertical: 0;
 
   &__detail-list {
     display: flex;
+    max-width: 100%;
 
     &__item {
       flex: 0 0 auto;
       max-width: 100%;
-      overflow: hidden;
       padding: $interactive-list--detail-list--item--padding--vertical $interactive-list--detail-list--item--padding--horizontal;
-      text-overflow: ellipsis;
 
       &:first-child {
         padding-left: 0;
