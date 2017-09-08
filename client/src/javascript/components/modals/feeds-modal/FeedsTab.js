@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
+import {Form, FormRow, FormRowItem, Textbox} from 'flood-ui-kit';
 import formatUtil from 'universally-shared-code/util/formatUtil';
 import React from 'react';
 
 import Close from '../../icons/Close';
 import Dropdown from '../../general/form-elements/Dropdown';
 import FeedMonitorStore from '../../../stores/FeedMonitorStore';
-import FormColumn from '../../general/form-elements/FormColumn';
-import FormLabel from '../../general/form-elements/FormLabel';
+import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import EventTypes from '../../../constants/EventTypes';
 import Validator from '../../../util/Validator';
 
@@ -141,59 +141,65 @@ class FeedsTab extends React.Component {
     let {errors} = this.state;
 
     return [
-      <div className="form__row" key="feed-row-1">
-        <FormColumn error={errors.label}>
-          <FormLabel error={errors.label}>
+      <FormRow key="feed-row-1">
+        <FormRowItem error={errors.label}>
+          <div error={errors.label}>
             <FormattedMessage id="feeds.label"
               defaultMessage="Label" />
-          </FormLabel>
+          </div>
           <input className="textbox"
             onChange={this.handleFieldInput.bind(this, 'label')}
             placeholder={this.props.intl.formatMessage(MESSAGES.label)}
             ref={ref => this.inputRefs.feedLabel = ref}
             type="text" />
-        </FormColumn>
-        <FormColumn modifiers={['auto']}>
-          <FormLabel>
+        </FormRowItem>
+        <FormRowItem modifiers={['auto']}>
+          <div>
             <FormattedMessage id="feeds.interval"
               defaultMessage="Interval" />
-          </FormLabel>
+          </div>
           <Dropdown
             handleItemSelect={this.handleIntervalDropdownSelect}
             header={this.getIntervalDropdownHeader()}
             menuItems={[this.state.intervals]}
             width="small" />
-        </FormColumn>
-      </div>,
-      <div className="form__row" key="feed-row-2">
-        <FormColumn error={errors.url}>
-          <FormLabel error={errors.url}>
+        </FormRowItem>
+      </FormRow>,
+      <FormRow key="feed-row-2">
+        <FormRowItem error={errors.url}>
+          <div error={errors.url}>
             <FormattedMessage id="feeds.url"
               defaultMessage="URL" />
-          </FormLabel>
+          </div>
           <input className="textbox"
             onChange={this.handleFieldInput.bind(this, 'url')}
             placeholder={this.props.intl.formatMessage(MESSAGES.url)}
             ref={ref => this.inputRefs.feedURL = ref} type="text" />
-        </FormColumn>
-        <FormColumn modifiers={['auto']}>
+        </FormRowItem>
+        <FormRowItem modifiers={['auto']}>
           <button className="button button--primary"
             onClick={this.handleAddFeedClick}>
             <FormattedMessage id="button.add"
               defaultMessage="Add" />
           </button>
-        </FormColumn>
-      </div>
+        </FormRowItem>
+      </FormRow>
     ];
   }
 
   getFeedsList() {
     if (this.state.feeds.length === 0) {
-      return <em><FormattedMessage id="feeds.no.feeds.defined"
-                  defaultMessage="No feeds defined." /></em>;
+      return (
+        <em>
+          <FormattedMessage
+            defaultMessage="No feeds defined."
+            id="feeds.no.feeds.defined"
+          />
+        </em>
+      );
     }
 
-    let feedsList = this.state.feeds.map((feed, index) => {
+    const feedsList = this.state.feeds.map((feed, index) => {
       let matchedCount = feed.count || 0;
 
       return (
@@ -321,33 +327,51 @@ class FeedsTab extends React.Component {
     if (this.state.addFeedsError) {
       error = (
         <div className="form__row">
-          <FormColumn>
+          <FormRowItem>
             {this.state.addFeedsError}
-          </FormColumn>
+          </FormRowItem>
         </div>
       );
     }
 
     return (
+      <Form className="inverse" onChange={({formData}) => console.log(formData)}>
+        <ModalFormSectionHeader>
+          <FormattedMessage id="feeds.existing.feeds"
+            defaultMessage="Existing Feeds" />
+        </ModalFormSectionHeader>
+        <FormRow>
+          <FormRowItem>
+            {this.getFeedsList()}
+          </FormRowItem>
+        </FormRow>
+        <ModalFormSectionHeader>
+          <FormattedMessage id="feeds.add.feed"
+            defaultMessage="Add Feed" />
+        </ModalFormSectionHeader>
+        {error}
+        {this.getFeedFields()}
+      </Form>
+    );
+
+    return (
       <div className="form">
         <div className="form__section">
           <div className="form__section__heading">
-            <FormattedMessage id="feeds.existing.feeds"
-              defaultMessage="Existing Feeds" />
+            
           </div>
           <div className="form__row">
-            <FormColumn>
-              {this.getFeedsList()}
-            </FormColumn>
+            <FormRowItem>
+              
+            </FormRowItem>
           </div>
         </div>
         <div className="form__section">
           <div className="form__section__heading">
-            <FormattedMessage id="feeds.add.feed"
-              defaultMessage="Add Feed" />
+            
           </div>
-          {this.getFeedFields()}
-          {error}
+          
+          
         </div>
       </div>
     );
