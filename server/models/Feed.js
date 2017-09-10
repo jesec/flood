@@ -1,6 +1,6 @@
 'use strict';
 
-let FeedSub = require('feedsub');
+let FeedSub = require('./FeedSub');
 
 class Feed {
   constructor(options) {
@@ -13,13 +13,12 @@ class Feed {
 
     this.items = [];
     this.maxItemHistory = options.maxItemHistory || 100;
-    this.reader = new FeedSub(options.url, {
-      autoStart: true,
-      emitOnStart: true,
-      interval: options.interval || 15
-    });
+    this.reader = new FeedSub(options.url, options.interval || 15);
 
-    this.initReader();
+    this.reader.on('item', this.handleFeedItem.bind(this));
+    this.reader.on('error', error => {
+      console.log('Feed reader error:', error);
+    });
   }
 
   getItems() {
@@ -36,14 +35,6 @@ class Feed {
     this.items[arrayAction](item);
 
     this.options.onNewItem({feed: this.options, torrent: item});
-  }
-
-  initReader() {
-    this.reader.on('item', this.handleFeedItem.bind(this));
-    this.reader.on('error', error => {
-      console.log('Feed reader error:', error);
-    });
-    this.reader.start();
   }
 
   stopReader() {
