@@ -27,7 +27,7 @@ function FeedSub(url, interval) {
 
       // If status code is not 200 OKAY
       if(res.statusCode !== 200) {
-        this.emit("error", new Error(`Error downloading feed from '${url}'.`));
+        this.emit("error", new Error(`Error downloading feed from '${url}': Status code: ${res.statusCode}.`));
       } else {
         res.pipe(feedparser);
       }
