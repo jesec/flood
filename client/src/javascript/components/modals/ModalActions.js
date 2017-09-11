@@ -31,6 +31,7 @@ export default class ModalActions extends React.Component {
           onClick={this.getClickHandler(action)}
           priority={action.type}
           key={index}
+          type={action.submit ? 'submit' : 'button'}
         >
           {action.content}
         </Button>

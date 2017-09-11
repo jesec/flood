@@ -88,10 +88,6 @@ class RemoveTorrentsModal extends React.Component {
     );
   }
 
-  handleCheckboxChange(checkboxState) {
-    this.setState({deleteData: checkboxState});
-  }
-
   handleRemovalConfirmation = () => {
     const torrents = TorrentStore.getSelectedTorrents();
     const formData = this.formRef.getFormData();

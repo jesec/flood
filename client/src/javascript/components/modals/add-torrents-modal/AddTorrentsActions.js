@@ -34,6 +34,7 @@ class AddTorrentsActions extends PureComponent {
           defaultMessage: 'Add Torrent'
         }),
         isLoading: this.props.isAddingTorrents,
+        submit: true,
         triggerDismiss: false,
         type: 'primary'
       }
