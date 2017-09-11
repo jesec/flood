@@ -11,6 +11,7 @@ const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 const settings = require('./settings');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
+const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 const torrentService = require('../services/torrentService');
 const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
@@ -18,7 +19,7 @@ var client = {
   addFiles (req, callback) {
     let files = req.files;
     let path = req.body.destination;
-    let isBasePath = req.body.isBasePath === 'true';
+    let isBasePath = req.body.isBasePath;
     let request = new ClientRequest();
     let start = req.body.start;
     let tags = req.body.tags;
@@ -234,36 +235,45 @@ var client = {
 
   moveTorrents (data, callback) {
     let destinationPath = data.destination;
-    let isBasePath = data.isBasePath === 'true';
+    let isBasePath = data.isBasePath;
     let hashes = data.hashes;
     let filenames = data.filenames;
     let moveFiles = data.moveFiles;
     let sourcePaths = data.sources;
     let mainRequest = new ClientRequest();
 
-    let startTorrents = () => {
-      let startTorrentsRequest = new ClientRequest();
-      startTorrentsRequest.startTorrents({hashes});
-      startTorrentsRequest.onComplete(callback);
-      startTorrentsRequest.send();
-    };
+    const hashesToRestart = hashes.filter((hash) => {
+      return !torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped);
+    });
 
-    let checkHash = () => {
-      let checkHashRequest = new ClientRequest();
+    let afterCheckHash;
+
+    if (hashesToRestart.length) {
+      afterCheckHash = () => {
+        const startTorrentsRequest = new ClientRequest();
+        startTorrentsRequest.startTorrents({hashes: hashesToRestart});
+        startTorrentsRequest.onComplete(callback);
+        startTorrentsRequest.send();
+      };
+    } else {
+      afterCheckHash = callback;
+    }
+
+    const checkHash = () => {
+      const checkHashRequest = new ClientRequest();
       checkHashRequest.checkHash({hashes});
       checkHashRequest.onComplete(afterCheckHash);
       checkHashRequest.send();
     };
 
-    let moveTorrents = () => {
-      let moveTorrentsRequest = new ClientRequest();
+    const moveTorrents = () => {
+      const moveTorrentsRequest = new ClientRequest();
       moveTorrentsRequest.onComplete(checkHash);
       moveTorrentsRequest.moveTorrents({
         filenames, sourcePaths, destinationPath
       });
     };
 
-    let afterCheckHash = startTorrents;
     let afterSetPath = checkHash;
 
     if (moveFiles) {

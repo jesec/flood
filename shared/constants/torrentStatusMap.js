@@ -1,8 +1,8 @@
 'use strict';
 
-let objectUtil = require('../util/objectUtil');
+const objectUtil = require('../util/objectUtil');
 
-let torrentStatusMap = objectUtil.reflect({
+const torrentStatusMap = objectUtil.reflect({
   ch: 'checking',
   sd: 'seeding',
   p: 'paused',
