@@ -120,10 +120,10 @@ let TorrentActions = {
   },
 
   moveTorrents: (hashes, options) => {
-    let {destination, isbaseURI, filenames, sources, moveFiles} = options;
+    let {destination, isBasePath, filenames, sources, moveFiles} = options;
 
     return axios.post(`${baseURI}api/client/torrents/move`,
-      {hashes, destination, isbaseURI, filenames, sources, moveFiles})
+      {hashes, destination, isBasePath, filenames, sources, moveFiles})
       .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
