@@ -140,6 +140,7 @@ class NewTorrentDestination extends React.Component {
             addonPlacement="after"
             defaultValue={this.state.destination}
             id={this.props.id}
+            label={this.props.label}
             onChange={this.handleDestinationChange}
             onClick={event => event.nativeEvent.stopImmediatePropagation()}
             placeholder={this.props.intl.formatMessage({

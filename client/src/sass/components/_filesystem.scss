@@ -5,11 +5,6 @@ $filesystem--directory-list--parent--border-color: lighten($filesystem--director
 
 .filesystem {
 
-  &__error,
-  &__directory-list {
-    font-size: 0.85em;
-  }
-
   &__directory-list {
     color: $filesystem--directory-list--foreground;
     list-style: none;

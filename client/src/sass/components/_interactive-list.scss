@@ -88,6 +88,18 @@ $interactive-list--detail-list--item--padding--vertical: 0;
         }
       }
     }
+
+    &--stacked-content {
+      align-items: center;
+
+      .interactive-list {
+
+        &__label {
+          align-items: stretch;
+          flex-direction: column;
+        }
+      }
+    }
   }
 
   &__label {
@@ -198,6 +210,7 @@ $interactive-list--detail-list--item--padding--vertical: 0;
 
   &__detail-list {
     display: flex;
+    flex: 1 1 auto;
     max-width: 100%;
 
     &__item {

@@ -5,9 +5,9 @@ import formatUtil from 'universally-shared-code/util/formatUtil';
 import React from 'react';
 
 import Close from '../../icons/Close';
+import EventTypes from '../../../constants/EventTypes';
 import FeedMonitorStore from '../../../stores/FeedMonitorStore';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import EventTypes from '../../../constants/EventTypes';
 import Validator from '../../../util/Validator';
 
 const MESSAGES = defineMessages({
@@ -172,7 +172,7 @@ class FeedsTab extends React.Component {
       let matchedCount = feed.count || 0;
 
       return (
-        <li className="interactive-list__item feed-list__feed" key={feed._id}>
+        <li className="interactive-list__item interactive-list__item--stacked-content feed-list__feed" key={feed._id}>
           <div className="interactive-list__label">
             <ul className="interactive-list__detail-list">
               <li className="interactive-list__detail-list__item

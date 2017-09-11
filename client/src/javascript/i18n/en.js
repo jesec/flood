@@ -55,6 +55,7 @@ export default {
   'feeds.match.count': `{count, plural, =1 {# match} other {# matches}}`,
   'feeds.match.pattern': 'Match Pattern',
   'feeds.match': 'Match',
+  'feeds.exclude': 'Exclude',
   'feeds.no.feeds.available': 'No feeds available.',
   'feeds.no.feeds.defined': 'No feeds defined.',
   'feeds.no.rules.defined': 'No rules defined.',
