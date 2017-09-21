@@ -113,4 +113,47 @@ $dropzone--file--foreground: $dropzone--foreground;
       }
     }
   }
+
+  &--with-overlay {
+    text-align: inherit;
+    border: none;
+
+    .dropzone__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      z-index: 2;
+      text-align: center;
+
+      &__animation {
+        &-enter {
+          opacity: 0;
+        }
+
+        &-enter-active {
+          opacity: 1;
+          transition: opacity 500ms ease-in;
+        }
+
+        &-leave {
+          opacity: 1;
+        }
+
+        &-leave-active {
+          opacity: 0;
+          transition: opacity 500ms ease-in;
+        }
+      }
+    }
+
+    .dropzone__copy {
+      position: absolute;
+      top: 50%;
+      height: 150px;
+      margin-top: -75px;
+    }
+  }
 }
