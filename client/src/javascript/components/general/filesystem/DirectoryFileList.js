@@ -1,8 +1,9 @@
+import {Checkbox, FormRow} from 'flood-ui-kit';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Checkbox from '../form-elements/Checkbox';
+
 import File from '../../icons/File';
 import PriorityMeter from './PriorityMeter';
 import Size from '../Size';
@@ -46,11 +47,17 @@ class DirectoryFiles extends React.Component {
     };
 
     return (
-      <div className="directory-tree__checkbox">
+      <div className="file__checkbox directory-tree__checkbox">
         <div className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <Checkbox checked={isSelected} onChange={changeHandler}
-            useProps={true} />
+          <FormRow>
+            <Checkbox
+              checked={isSelected}
+              id={file.index}
+              onChange={changeHandler}
+              useProps={true}
+            />
+          </FormRow>
         </div>
         <div className="directory-tree__checkbox__item
           directory-tree__checkbox__item--icon">
@@ -61,6 +68,7 @@ class DirectoryFiles extends React.Component {
   }
 
   handleFileSelect(file, isSelected, event) {
+    console.log('selecting file');
     this.props.onItemSelect({
       ...file,
       depth: this.props.depth,
@@ -95,9 +103,11 @@ class DirectoryFiles extends React.Component {
       return (
         <div className={classes} key={`${index}-${file.filename}`}
           title={file.filename}>
-          <div className="file__detail file__name">
+          <div className="file__label file__detail">
             {this.getIcon(file, isSelected)}
-            {file.filename}
+            <div className="file__name">
+              {file.filename}
+            </div>
           </div>
           <div className="file__detail file__detail--secondary">
             <Size value={file.sizeBytes} precision={1} />
@@ -107,9 +117,13 @@ class DirectoryFiles extends React.Component {
           </div>
           <div className="file__detail file__detail--secondary
             file__detail--priority">
-            <PriorityMeter level={file.priority} id={file.index}
-              maxLevel={2} onChange={this.handlePriorityChange} type="file"
-              key={`${file.index}-${file.filename}`} />
+            <PriorityMeter
+              key={`${file.index}-${file.filename}`}
+              level={file.priority} id={file.index}
+              maxLevel={2}
+              onChange={this.handlePriorityChange}
+              type="file"
+            />
           </div>
         </div>
       );

@@ -138,7 +138,7 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     vertical-align: middle;
     white-space: nowrap;
 
-    &:hover > .directory-tree,
+    &:hover > .file__label .directory-tree,
     &:hover > .file__detail .directory-tree {
 
       &__checkbox {
@@ -235,9 +235,7 @@ $selection-toolbar--height: $spacing-unit * 1.5;
 
       &__detail {
         flex: 1 1 auto;
-        overflow: hidden;
         padding-right: $spacing-unit * 1/4;
-        text-overflow: ellipsis;
 
         &--secondary {
           flex: 0 0 auto;
@@ -264,11 +262,11 @@ $selection-toolbar--height: $spacing-unit * 1.5;
 
   &__checkbox {
     display: inline-block;
-    height: 16px;
+    height: 18px;
     margin-right: 6px;
     position: relative;
     vertical-align: middle;
-    width: 16px;
+    width: 18px;
 
     &__item {
       height: 100%;
@@ -279,7 +277,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
       transition: opacity 0.25s;
       width: 100%;
 
-      & > .checkbox,
       & > .icon {
         left: 50%;
         position: absolute;
@@ -341,6 +338,31 @@ $selection-toolbar--height: $spacing-unit * 1.5;
       margin-top: -3px;
       vertical-align: middle;
       width: 14px;
+    }
+  }
+}
+
+.directory-tree {
+
+  &__node {
+
+    .file {
+
+      &__label {
+        align-items: center;
+        display: flex;
+      }
+
+      &__checkbox {
+        flex: 0 0 auto;
+      }
+
+      &__name {
+        flex: 1 1 auto;
+        min-width: 1px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
   }
 }
