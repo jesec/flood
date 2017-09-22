@@ -86,9 +86,9 @@ class FeedService {
       }
 
       let isFeedExcluded = downloadRule.exclude
-      && feedItem[downloadRule.field].match(
-        new RegExp(downloadRule.exclude, 'gi')
-      );
+        && feedItem[downloadRule.field].match(
+          new RegExp(downloadRule.exclude, 'gi')
+        );
 
       if (!isFeedExcluded) {
         this.downloadTorrent({
@@ -148,9 +148,9 @@ class FeedService {
                   feedLabel: feed.options && feed.options.label,
                   ruleLabel: downloadRule.label,
                   title: matchedTorrent.title
-                  || matchedTorrent.name
-                  || matchedTorrent.description
-                  || 'N/A'
+                    || matchedTorrent.name
+                    || matchedTorrent.description
+                    || 'N/A'
                 }
               });
             }
