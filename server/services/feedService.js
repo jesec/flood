@@ -1,4 +1,5 @@
 'use strict';
+const _ = require('lodash');
 const Datastore = require('nedb');
 
 const client = require('../models/client');
@@ -58,106 +59,12 @@ class FeedService {
       });
 
       if (associatedFeed) {
-        associatedFeed.getItems().forEach((feedItem) => {
-          this.checkFeedItemAgainstDownloadRules({
-            downloadRules: this.rules[newRule.feedID],
-            feedItem: feedItem,
-            feed: associatedFeed
-          });
+        this.handleNewItems({
+          feed: associatedFeed.options,
+          items: associatedFeed.getItems()
         });
       }
     });
-  }
-
-  checkFeedItemAgainstDownloadRules(options) {
-    const {downloadRules = [], feedItem, feed} = options;
-
-    downloadRules.forEach((downloadRule) => {
-      if (!downloadRule.field || !downloadRule.match) {
-        return;
-      }
-
-      let isFeedMatched = feedItem[downloadRule.field].match(
-        new RegExp(downloadRule.match, 'gi')
-      );
-
-      if (!isFeedMatched) {
-        return;
-      }
-
-      let isFeedExcluded = downloadRule.exclude
-        && feedItem[downloadRule.field].match(
-          new RegExp(downloadRule.exclude, 'gi')
-        );
-
-      if (!isFeedExcluded) {
-        this.downloadTorrent({
-          matchedTorrent: feedItem,
-          downloadRule,
-          feed
-        });
-      }
-    });
-  }
-
-  downloadTorrent(options) {
-    const {matchedTorrent, downloadRule, feed} = options;
-
-    this.db.find(
-      {type: 'matchedTorrents'},
-      (err, previouslyMatchedTorrents) => {
-        if (err) {
-          return;
-        }
-
-        let shouldDownload = !this.isTorrentURLAlreadyDownloaded(
-          matchedTorrent.link,
-          previouslyMatchedTorrents[0] || {}
-        );
-
-        if (shouldDownload) {
-          client.addUrls(
-            {
-              urls: matchedTorrent.link,
-              destination: downloadRule.destination,
-              start: downloadRule.startOnLoad,
-              tags: downloadRule.tags
-            },
-            () => {
-              this.db.update(
-                {type: 'matchedTorrents'},
-                {$push: {urls: matchedTorrent.link}},
-                {upsert: true}
-              );
-
-              this.db.update(
-                {_id: downloadRule._id},
-                {$inc: {count: 1}},
-                {upsert: true}
-              );
-
-              this.db.update(
-                {_id: downloadRule.feedID},
-                {$inc: {count: 1}},
-                {upsert: true}
-              );
-
-              notificationService.addNotification({
-                id: 'notification.feed.downloaded.torrent',
-                data: {
-                  feedLabel: feed.options && feed.options.label,
-                  ruleLabel: downloadRule.label,
-                  title: matchedTorrent.title
-                    || matchedTorrent.name
-                    || matchedTorrent.description
-                    || 'N/A'
-                }
-              });
-            }
-          );
-        }
-      }
-    );
   }
 
   getAll(query, callback) {
@@ -184,32 +91,149 @@ class FeedService {
   }
 
   getFeeds(query, callback) {
-    this.getItem('feed', query, callback);
+    this.queryItem('feed', query, callback);
   }
 
-  getItem(type, query, callback) {
-    query = query || {};
+  getItemsMatchingRules(feedItems, rules, feed) {
+    return feedItems.reduce(
+      (matchedItems, feedItem) => {
+        rules.forEach(rule => {
+          const isMatched = (new RegExp(rule.match, 'gi')).test(feedItem[rule.field]);
+          const isExcluded = rule.exclude !== '' && (new RegExp(rule.exclude, 'gi')).test(feedItem[rule.field]);
 
-    this.db.find(Object.assign(query, {type}), (err, docs) => {
-      if (err) {
-        callback(null, err);
-        return;
-      }
+          if (isMatched && !isExcluded) {
+            const torrentUrls = this.getTorrentUrlsFromItem(feedItem);
+            const isAlreadyDownloaded = matchedItems.some(matchedItem => {
+              return torrentUrls.every(url => matchedItem.urls.includes(url));
+            });
 
-      callback(docs);
+            if (!isAlreadyDownloaded) {
+              matchedItems.push({
+                urls: torrentUrls,
+                tags: rule.tags,
+                feedID: rule.feedID,
+                feedLabel: feed.label,
+                matchTitle: feedItem.title,
+                ruleID: rule._id,
+                ruleLabel: rule.label,
+                destination: rule.destination,
+                startOnLoad: rule.startOnLoad
+              });
+            }
+          }
+        });
+
+        return matchedItems;
+      },
+      []
+    );
+  }
+
+  getPreviouslyMatchedUrls() {
+    return new Promise((resolve, reject) => {
+      this.db.find({type: 'matchedTorrents'}, (err, docs) => {
+        if (err) {
+          reject(err);
+        }
+
+        resolve(docs.reduce((matchedUrls, doc) => matchedUrls.concat(doc.urls), []));
+      });
     });
   }
 
   getRules(query, callback) {
-    this.getItem('rule', query, callback);
+    this.queryItem('rule', query, callback);
   }
 
-  handleNewItem(feedItem) {
-    this.checkFeedItemAgainstDownloadRules({
-      downloadRules: this.rules[feedItem.feed._id],
-      feedItem: feedItem.torrent,
-      feed: feedItem.feed
-    });
+  // TODO: Allow users to specify which key contains the URLs.
+  getTorrentUrlsFromItem(feedItem) {
+    if (feedItem.link) {
+      return [feedItem.link];
+    }
+
+    // If we've got an Array of enclosures, we'll iterate over the values and
+    // look for the url key.
+    if (feedItem.enclosures && Array.isArray(feedItem.enclosures)) {
+      return feedItem.enclosures.reduce(
+        (urls, enclosure) => {
+          if (enclosure.url) {
+            urls.push(enclosure.url);
+          }
+
+          return urls;
+        },
+        []
+      );
+    }
+
+    return [];
+  }
+
+  getUrlsFromItems(feedItems) {
+    return feedItems.reduce((urls, feedItem) => urls.concat(feedItem.urls), []);
+  }
+
+  handleNewItems({items: feedItems, feed}) {
+    this.getPreviouslyMatchedUrls()
+      .then(previouslyMatchedUrls => {
+        const applicableRules = this.rules[feed._id];
+        if (!applicableRules) return;
+
+        const itemsMatchingRules = this.getItemsMatchingRules(feedItems, applicableRules, feed);
+        const itemsToDownload = itemsMatchingRules.filter(item => {
+          return item.urls.some(url => !previouslyMatchedUrls.includes(url));
+        });
+
+        const lastAddUrlCallback = () => {
+          const urlsToAdd = this.getUrlsFromItems(itemsToDownload);
+
+          this.db.update(
+            {type: 'matchedTorrents'},
+            {$push: {urls: {$each: urlsToAdd}}},
+            {upsert: true}
+          );
+
+          notificationService.addNotification(itemsToDownload.map(item => {
+            return {
+              id: 'notification.feed.downloaded.torrent',
+              data: {
+                feedLabel: item.feedLabel,
+                ruleLabel: item.ruleLabel,
+                title: item.matchTitle
+              }
+            };
+          }));
+        };
+
+        itemsToDownload.forEach((item, index) => {
+          client.addUrls(
+            {
+              urls: item.urls,
+              destination: item.destination,
+              start: item.startOnLoad,
+              tags: item.tags
+            },
+            () => {
+              if (index === itemsToDownload.length - 1) {
+                lastAddUrlCallback();
+              }
+
+              this.db.update(
+                {_id: item.ruleID},
+                {$inc: {count: 1}},
+                {upsert: true}
+              );
+
+              this.db.update(
+                {_id: item.feedID},
+                {$inc: {count: 1}},
+                {upsert: true}
+              );
+            }
+          );
+        });
+      })
+      .catch(console.error);
   }
 
   init() {
@@ -243,6 +267,14 @@ class FeedService {
     });
   }
 
+  isAlreadyDownloaded(torrentURLs, downloadedTorrents) {
+    torrentURLs = _.castArray(torrentURLs);
+
+    return downloadedTorrents.urls && downloadedTorrents.urls.some(url => {
+      return torrentURLs.includes(url);
+    });
+  }
+
   loadDatabase() {
     let db = new Datastore({
       autoload: true,
@@ -251,6 +283,19 @@ class FeedService {
 
     this.isDBReady = true;
     return db;
+  }
+
+  queryItem(type, query, callback) {
+    query = query || {};
+
+    this.db.find(Object.assign(query, {type}), (err, docs) => {
+      if (err) {
+        callback(null, err);
+        return;
+      }
+
+      callback(docs);
+    });
   }
 
   removeItem(id, callback) {
@@ -275,24 +320,8 @@ class FeedService {
     });
   }
 
-  isTorrentURLAlreadyDownloaded(torrentURL, downloadedTorrents) {
-    let isAlreadyDownloaded = false;
-
-    if (!!downloadedTorrents.urls && downloadedTorrents.urls.length > 0) {
-      downloadedTorrents.urls.some(url => {
-        if (torrentURL === url) {
-          isAlreadyDownloaded = true;
-        }
-
-        return isAlreadyDownloaded;
-      });
-    }
-
-    return isAlreadyDownloaded;
-  }
-
   startNewFeed(feedConfig) {
-    feedConfig.onNewItem = this.handleNewItem.bind(this);
+    feedConfig.onNewItems = this.handleNewItems.bind(this);
     this.feeds.push(new Feed(feedConfig));
   }
 }

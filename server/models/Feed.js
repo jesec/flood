@@ -5,18 +5,20 @@ let FeedSub = require('feedsub');
 class Feed {
   constructor(options) {
     this.options = options || {};
+    this.options.maxItemHistory = options.maxItemHistory || 100;
+    this.items = [];
 
     if (!options.url) {
       console.error('Feed URL must be defined.');
       return null;
     }
 
-    this.items = [];
-    this.maxItemHistory = options.maxItemHistory || 100;
     this.reader = new FeedSub(options.url, {
       autoStart: true,
       emitOnStart: true,
-      interval: options.interval || 15
+      maxHistory: this.options.maxItemHistory,
+      interval: options.interval ? Number(options.interval) : 15,
+      readEveryItem: true
     });
 
     this.initReader();
@@ -26,20 +28,20 @@ class Feed {
     return this.items;
   }
 
-  handleFeedItem(item) {
-    let arrayAction = 'push';
-
-    if (this.items.length >= this.maxItemHistory) {
-      arrayAction = 'shift';
+  handleFeedItems(items) {
+    const nextLength = this.items.length + items.length;
+    if (nextLength >= this.options.maxItemHistory) {
+      const diff = nextLength - this.options.maxHistory;
+      this.items = this.items.splice(0, diff);
     }
 
-    this.items[arrayAction](item);
+    this.items = this.items.concat(items);
 
-    this.options.onNewItem({feed: this.options, torrent: item});
+    this.options.onNewItems({feed: this.options, items});
   }
 
   initReader() {
-    this.reader.on('item', this.handleFeedItem.bind(this));
+    this.reader.on('items', this.handleFeedItems.bind(this));
     this.reader.on('error', error => {
       console.log('Feed reader error:', error);
     });
