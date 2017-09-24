@@ -120,6 +120,7 @@ $dropzone--file--foreground: $dropzone--foreground;
 
     .dropzone__overlay {
       position: absolute;
+      visibility: hidden;
       top: 0;
       left: 0;
       width: 100%;
@@ -127,26 +128,15 @@ $dropzone--file--foreground: $dropzone--foreground;
       background: #fff;
       z-index: 2;
       text-align: center;
+      opacity: 0;
+      transition: opacity 250ms ease-in, visibility 1ms linear 250ms;
+    }
 
-      &__animation {
-        &-enter {
-          opacity: 0;
-        }
-
-        &-enter-active {
-          opacity: 1;
-          transition: opacity 500ms ease-in;
-        }
-
-        &-leave {
-          opacity: 1;
-        }
-
-        &-leave-active {
-          opacity: 0;
-          transition: opacity 500ms ease-in;
-        }
-      }
+    &.dropzone--is-dragging .dropzone__overlay {
+      top: 0;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 250ms ease-in;
     }
 
     .dropzone__copy {

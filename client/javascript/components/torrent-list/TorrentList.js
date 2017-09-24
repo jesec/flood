@@ -1,7 +1,6 @@
 import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
 import classNames from 'classnames';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -629,26 +628,17 @@ class TorrentListContainer extends React.Component {
           </div>
         </CustomScrollbars>
 
-        <CSSTransitionGroup
-          transitionName="dropzone__overlay__animation"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}>
-          {this.listContainer && this.listContainer.state.draggedFiles.length > 0 &&
-            <div
-              className="dropzone__overlay"
-              key="dropzone-overlay">
-              <div className="dropzone__copy">
-                <div className="dropzone__icon">
-                  <Files />
-                </div>
-                <FormattedMessage
-                  id="torrents.list.drop"
-                  defaultMessage="Drop files here to add them to rTorrent."
-                />
-              </div>
+        <div className="dropzone__overlay">
+          <div className="dropzone__copy">
+            <div className="dropzone__icon">
+              <Files />
             </div>
-          }
-        </CSSTransitionGroup>
+            <FormattedMessage
+              id="torrents.list.drop"
+              defaultMessage="Drop files here to add them to rTorrent."
+            />
+          </div>
+        </div>
       </Dropzone>
     );
   }
