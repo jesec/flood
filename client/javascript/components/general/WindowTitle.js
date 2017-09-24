@@ -4,22 +4,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as i18n from '../../i18n/languages';
+import {compute, getTranslationString} from '../../util/size';
 import EventTypes from '../../constants/EventTypes';
-import Size from './Size';
 import TransferDataStore from '../../stores/TransferDataStore';
 
 const METHODS_TO_BIND = ['handleTransferChange'];
-
-
-let Title = ({down, up}) => (
-  <span>
-    &darr; <Size value={down} isSpeed />{' '}
-    &uarr; <Size value={up} isSpeed /> |{' '}
-    Flood
-  </span>
-);
-
-Title = injectIntl(Title);
 
 
 class WindowTitle extends React.Component {
@@ -29,8 +18,6 @@ class WindowTitle extends React.Component {
     this.state = {
       title: 'Flood',
     };
-
-    this.title = document.createElement('span');
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
@@ -56,17 +43,37 @@ class WindowTitle extends React.Component {
 
     const summary = TransferDataStore.getTransferSummary();
 
-    ReactDOM.render((
-      <IntlProvider locale={intl.locale} messages={i18n[intl.locale]}>
-        <Title down={summary.downRate} up={summary.upRate} />
-      </IntlProvider>
-    ), this.title);
+    const down = compute(summary.downRate);
+    const up = compute(summary.upRate);
 
-    this.setState({
-      title: this.title.innerText,
+    const formattedDownSpeed = intl.formatNumber(down.value);
+    const formattedUpSpeed = intl.formatNumber(up.value);
+
+    const translatedDownUnit = intl.formatMessage({
+      id: 'unit.speed',
+      defaultMessage: '{baseUnit}/s'
+    }, {
+      baseUnit: intl.formatMessage({id: getTranslationString(down.unit)})
+    });
+    const translatedUpUnit = intl.formatMessage({
+      id: 'unit.speed',
+      defaultMessage: '{baseUnit}/s'
+    }, {
+      baseUnit: intl.formatMessage({id: getTranslationString(up.unit)})
     });
 
-    ReactDOM.unmountComponentAtNode(this.title);
+    const formattedTitle = intl.formatMessage({
+      id: 'window.title',
+      // \u2193 and \u2191 are down and up arrows, respectively
+      defaultMessage: '\u2193 {down} \u2191 {up} - Flood',
+    }, {
+      down: `${formattedDownSpeed} ${translatedDownUnit}`,
+      up: `${formattedUpSpeed} ${translatedUpUnit}`,
+    });
+
+    this.setState({
+      title: formattedTitle
+    });
   }
 
   render() {
