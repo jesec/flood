@@ -267,6 +267,7 @@ export default {
   'torrents.list.context.start': 'Start',
   'torrents.list.context.stop': 'Stop',
   'torrents.list.no.torrents': 'No torrents to display.',
+  'torrents.list.drop': 'Drop files here to add them to rTorrent.',
   'torrent.list.peers': '{connected} {of} {total}',
   'torrent.list.peers.of': 'of',
 

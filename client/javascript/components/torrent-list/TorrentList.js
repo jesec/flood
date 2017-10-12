@@ -1,13 +1,14 @@
 import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
 import classNames from 'classnames';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import Dropzone from 'react-dropzone';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ContextMenu from '../general/ContextMenu';
 import CustomScrollbars from '../general/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
+import Files from '../icons/Files';
 import ListViewport from '../general/ListViewport';
 import LoadingIndicator from '../general/LoadingIndicator';
 import PriorityLevels from '../../constants/PriorityLevels';
@@ -33,6 +34,7 @@ const METHODS_TO_BIND = [
   'getVerticalScrollbarThumb',
   'handleContextMenuItemClick',
   'handleDetailsClick',
+  'handleFileDrop',
   'handleHorizontalScroll',
   'handleHorizontalScrollStop',
   'handlePropWidthChange',
@@ -328,6 +330,31 @@ class TorrentListContainer extends React.Component {
     });
   }
 
+  handleFileDrop(files) {
+    this.setState({isAddingTorrents: true});
+
+    const destination = SettingsStore.getFloodSettings('torrentDestination')
+      || SettingsStore.getClientSettings('directoryDefault')
+      || '';
+
+    const isBasePath = false;
+
+    const start = SettingsStore.getFloodSettings('startTorrentsOnLoad');
+
+    const fileData = new FormData();
+
+    files.forEach(file => {
+      fileData.append('torrents', file);
+    });
+
+    fileData.append('destination', destination);
+    fileData.append('isBasePath', isBasePath);
+    fileData.append('start', start);
+    fileData.append('tags', '');
+
+    TorrentActions.addTorrentsByFiles(fileData, destination);
+  }
+
   handleSettingsChange() {
     this.setState({
       displayedProperties: SettingsStore.getFloodSettings('torrentDetails'),
@@ -581,7 +608,14 @@ class TorrentListContainer extends React.Component {
     }
 
     return (
-      <div className="torrents" ref={ref => this.listContainer = ref}>
+      <Dropzone
+        activeClassName="dropzone--is-dragging"
+        className="dropzone dropzone--with-overlay torrents"
+        ref={ref => this.listContainer = ref}
+        onDrop={this.handleFileDrop}
+        disableClick
+        disablePreview
+      >
         <CustomScrollbars className="torrent__list__scrollbars--horizontal"
           onScrollStop={this.handleHorizontalScrollStop}
           nativeScrollHandler={this.handleHorizontalScroll}
@@ -593,7 +627,19 @@ class TorrentListContainer extends React.Component {
             {content}
           </div>
         </CustomScrollbars>
-      </div>
+
+        <div className="dropzone__overlay">
+          <div className="dropzone__copy">
+            <div className="dropzone__icon">
+              <Files />
+            </div>
+            <FormattedMessage
+              id="torrents.list.drop"
+              defaultMessage="Drop files here to add them to rTorrent."
+            />
+          </div>
+        </div>
+      </Dropzone>
     );
   }
 }
