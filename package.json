@@ -34,6 +34,7 @@
     "passport": "^0.3.2",
     "passport-jwt": "^2.1.0",
     "pug": "^2.0.0-beta3",
+    "react-document-title": "^2.0.3",
     "rimraf": "^2.6.1",
     "serve-favicon": "^2.3.0",
     "spdy": "^3.4.7",
