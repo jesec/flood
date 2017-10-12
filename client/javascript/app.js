@@ -12,7 +12,6 @@ import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
 import TorrentClientOverview from './components/views/TorrentClientOverview';
 import UIStore from './stores/UIStore';
-import WindowTitle from './components/general/WindowTitle';
 
 const appRoutes = (
   <Router history={browserHistory}>
@@ -77,9 +76,7 @@ class FloodApp extends React.Component {
 
     return (
       <IntlProvider locale={locale} messages={i18n[locale]}>
-        <WindowTitle>
-          {appRoutes}
-        </WindowTitle>
+        {appRoutes}
       </IntlProvider>
     );
   }

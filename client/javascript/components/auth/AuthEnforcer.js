@@ -12,6 +12,7 @@ import EventTypes from '../../constants/EventTypes';
 import FloodActions from '../../actions/FloodActions';
 import LoadingIndicator from '../general/LoadingIndicator';
 import UIStore from '../../stores/UIStore';
+import WindowTitle from '../general/WindowTitle';
 
 const ICONS = {
   satisfied: <Checkmark />
@@ -232,6 +233,7 @@ class AuthEnforcer extends React.Component {
 
     return (
       <div className="application">
+        <WindowTitle />
         <CSSTransitionGroup
           transitionEnterTimeout={1000}
           transitionLeaveTimeout={1000}
