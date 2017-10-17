@@ -28,7 +28,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 4. If you're proxying Flood to a path other than the root of the host, you must specify the `baseURI` in `config.js`. All request URIs will be prefixed with this value.
   * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `baseURI`.
 
-#### Starting the Server
+#### Compiling assets and starting the server
 1. Run `npm install`.
 1. Run `npm run build`.
 1. Run `npm start`.
