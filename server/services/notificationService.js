@@ -22,18 +22,23 @@ class NotificationService extends EventEmitter {
     this.countNotifications();
   }
 
-  addNotification(notification) {
-    this.count.total++;
-    this.count.unread++;
+  addNotification(notifications) {
+    notifications = _.castArray(notifications);
 
-    this.db.insert({
-      ts: Date.now(),
-      data: notification.data,
-      id: notification.id,
-      read: false
+    this.count.total = this.count.total + notifications.length;
+    this.count.unread = this.count.unread + notifications.length;
+
+    const timestamp = Date.now();
+    const notificationsToInsert = notifications.map(notification => {
+      return {
+        ts: timestamp,
+        data: notification.data,
+        id: notification.id,
+        read: false
+      };
     });
 
-    this.emitUpdate();
+    this.db.insert(notificationsToInsert, () => this.emitUpdate());
   }
 
   clearNotifications(options, callback) {
