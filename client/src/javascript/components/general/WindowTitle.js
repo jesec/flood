@@ -1,9 +1,7 @@
-import {IntlProvider, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import DocumentTitle from 'react-document-title';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
-import * as i18n from '../../i18n/languages';
 import {compute, getTranslationString} from '../../util/size';
 import EventTypes from '../../constants/EventTypes';
 import TransferDataStore from '../../stores/TransferDataStore';
@@ -39,7 +37,7 @@ class WindowTitle extends React.Component {
   }
 
   handleTransferChange() {
-    const {children, intl} = this.props;
+    const {intl} = this.props;
 
     const summary = TransferDataStore.getTransferSummary();
 
