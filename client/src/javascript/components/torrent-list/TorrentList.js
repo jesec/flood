@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ContextMenu from '../general/ContextMenu';
+import ConfigStore from '../../stores/ConfigStore';
 import CustomScrollbars from '../general/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import Files from '../icons/Files';
@@ -252,6 +253,15 @@ class TorrentListContainer extends React.Component {
         defaultMessage: 'Torrent Details'
       })
     }, {
+      action: 'torrent-download-tar',
+      clickHandler: (action, event) => {
+        clickHandler(action, event, torrent);
+      },
+      label: this.props.intl.formatMessage({
+        id: 'torrents.list.context.download',
+        defaultMessage: 'Download .tar'
+      })
+    }, {
       action: 'set-priority',
       clickHandler,
       dismissMenu: false,
@@ -295,6 +305,9 @@ class TorrentListContainer extends React.Component {
       case 'torrent-details':
         this.handleDetailsClick(torrent, event);
         break;
+      case 'torrent-download-tar':
+        this.handleTorrentDownload(torrent, event);
+        break;
       case 'set-priority':
         this.state.handleTorrentPriorityChange(event);
         break;
@@ -311,6 +324,15 @@ class TorrentListContainer extends React.Component {
       id: 'torrent-details',
       options: {hash: torrent.hash}
     });
+  }
+
+  handleTorrentDownload(torrent, event) {
+    event.preventDefault();
+    const baseURI = ConfigStore.getBaseURI();
+    let link = document.createElement('a');
+    link.download = `${torrent.name}.tar`;
+    link.href = `${baseURI}api/download?hash=${torrent.hash}`;
+    link.click();
   }
 
   handleDoubleClick(torrent, event) {
