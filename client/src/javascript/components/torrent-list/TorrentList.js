@@ -6,6 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ContextMenu from '../general/ContextMenu';
+import ConfigStore from '../../stores/ConfigStore';
 import CustomScrollbars from '../general/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import Files from '../icons/Files';
@@ -238,7 +239,7 @@ class TorrentListContainer extends React.Component {
       clickHandler,
       label: this.props.intl.formatMessage({
         id: 'torrents.list.context.move',
-        defaultMessage: 'Set Download Location'
+        defaultMessage: 'Set Torrent Location'
       })
     }, {
       type: 'separator'
@@ -250,6 +251,15 @@ class TorrentListContainer extends React.Component {
       label: this.props.intl.formatMessage({
         id: 'torrents.list.context.details',
         defaultMessage: 'Torrent Details'
+      })
+    }, {
+      action: 'torrent-download-tar',
+      clickHandler: (action, event) => {
+        clickHandler(action, event, torrent);
+      },
+      label: this.props.intl.formatMessage({
+        id: 'torrents.list.context.download',
+        defaultMessage: 'Download'
       })
     }, {
       action: 'set-priority',
@@ -295,6 +305,9 @@ class TorrentListContainer extends React.Component {
       case 'torrent-details':
         this.handleDetailsClick(torrent, event);
         break;
+      case 'torrent-download-tar':
+        this.handleTorrentDownload(torrent, event);
+        break;
       case 'set-priority':
         this.state.handleTorrentPriorityChange(event);
         break;
@@ -311,6 +324,15 @@ class TorrentListContainer extends React.Component {
       id: 'torrent-details',
       options: {hash: torrent.hash}
     });
+  }
+
+  handleTorrentDownload(torrent, event) {
+    event.preventDefault();
+    const baseURI = ConfigStore.getBaseURI();
+    let link = document.createElement('a');
+    link.download = torrent.isMultiFile ? `${torrent.name}.tar` : torrent.name;
+    link.href = `${baseURI}api/download?hash=${torrent.hash}`;
+    link.click();
   }
 
   handleDoubleClick(torrent, event) {

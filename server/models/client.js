@@ -78,13 +78,21 @@ var client = {
     request.send();
   },
 
-  downloadFiles(hash, files, res) {
+  downloadFiles(hash, fileString, res) {
     try {
       const selectedTorrent = torrentService.getTorrent(hash);
+      if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
       this.getTorrentDetails(hash, (torrentDetails) => {
+        let files;
+        if (!fileString) {
+          files = torrentDetails.fileTree.files.map((x, i) => `${i}`);
+        } else {
+          files = fileString.split(',');
+        }
+
         const filePathsToDownload = this.findFilesByIndicies(
-          files.split(','),
+          files,
           torrentDetails.fileTree
         ).map((file) => {
           return path.join(selectedTorrent.directory, file.path);

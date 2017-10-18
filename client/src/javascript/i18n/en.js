@@ -259,7 +259,7 @@ export default {
   'torrents.list.clear.filters': 'Clear Filters',
   'torrents.list.context.check.hash': 'Check Hash',
   'torrents.list.context.details': 'Torrent Details',
-  'torrents.list.context.move': 'Set Download Location',
+  'torrents.list.context.move': 'Set Torrent Location',
   'torrents.list.context.pause': 'Pause',
   'torrents.list.context.priority': 'Priority',
   'torrents.list.context.remove': 'Remove',
@@ -274,7 +274,7 @@ export default {
   'torrents.move.button.set.location': 'Set Location',
   'torrents.move.button.state.setting': 'Setting...',
   'torrents.move.data.label': 'Move data',
-  'torrents.move.heading': 'Set Download Location',
+  'torrents.move.heading': 'Set Torrent Location',
 
   'torrents.properties.date.added': 'Added',
   'torrents.properties.base.path': 'Base Path',
