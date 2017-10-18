@@ -259,7 +259,7 @@ class TorrentListContainer extends React.Component {
       },
       label: this.props.intl.formatMessage({
         id: 'torrents.list.context.download',
-        defaultMessage: 'Download .tar'
+        defaultMessage: 'Download'
       })
     }, {
       action: 'set-priority',
