@@ -1,6 +1,6 @@
 # Flood
 
-![Flood logo](server/assets/mstile-70x70.png)
+![Flood logo](flood.png)
 
 [![Talk about Flood on Slack](https://join-flood-talk.herokuapp.com/badge.svg)](https://join-flood-talk.herokuapp.com/)
 
