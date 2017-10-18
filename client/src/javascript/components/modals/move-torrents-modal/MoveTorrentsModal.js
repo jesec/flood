@@ -162,7 +162,7 @@ class MoveTorrents extends React.Component {
         dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
           id: 'torrents.move.heading',
-          defaultMessage: 'Set Download Location'
+          defaultMessage: 'Set Torrent Location'
         })} />
     );
   }
