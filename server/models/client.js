@@ -100,7 +100,6 @@ var client = {
             res.status(404).json({error: 'File not found.'});
           }
         } else {
-          const tempFilename = `${hash}-${Date.now()}.tar`;
           const archive = archiver('tar', {store: true});
 
           archive.on('error', (error) => {
