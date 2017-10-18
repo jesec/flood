@@ -100,25 +100,14 @@ var client = {
             res.status(404).json({error: 'File not found.'});
           }
         } else {
-          const tempFilename = `${hash}-${Date.now()}.tar`;
-          const tempFilePath = TemporaryStorage.getTempPath(tempFilename);
           const archive = archiver('tar', {store: true});
-          const output = fs.createWriteStream(tempFilePath);
-
-          output.on('close', () => {
-            const filename = `${selectedTorrent.name}.tar`;
-
-            res.attachment(path.basename(filename));
-            res.download(tempFilePath, filename, () => {
-              TemporaryStorage.deleteFile(tempFilename);
-            });
-          });
 
           archive.on('error', (error) => {
             throw error;
           });
 
-          archive.pipe(output);
+          res.attachment(`${selectedTorrent.name}.tar`);
+          archive.pipe(res);
 
           filePathsToDownload.forEach((filePath) => {
             const filename = path.basename(filePath);
