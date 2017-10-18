@@ -239,7 +239,7 @@ class TorrentListContainer extends React.Component {
       clickHandler,
       label: this.props.intl.formatMessage({
         id: 'torrents.list.context.move',
-        defaultMessage: 'Set Download Location'
+        defaultMessage: 'Set Torrent Location'
       })
     }, {
       type: 'separator'
