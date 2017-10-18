@@ -1,5 +1,5 @@
 'use strict';
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt');
 const Datastore = require('nedb');
 
 const config = require('../../config');
@@ -47,7 +47,7 @@ class Users {
 
       let username = credentials.username;
 
-      bcrypt.hash(credentials.password, salt, null, (err, hash) => {
+      bcrypt.hash(credentials.password, salt, (err, hash) => {
         if (err) {
           return callback(null, err);
         }
