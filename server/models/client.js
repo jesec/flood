@@ -1,23 +1,20 @@
 'use strict';
 
-const archiver = require('archiver');
 const fs = require('fs');
 const path = require('path');
-const rimraf = require('rimraf');
-const util = require('util');
+const series = require('run-series');
+const tar = require('tar-stream');
 
 const ClientRequest = require('./ClientRequest');
 const clientResponseUtil = require('../util/clientResponseUtil');
 const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
-const formatUtil = require('../../shared/util/formatUtil');
-const TemporaryStorage = require('./TemporaryStorage');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
 const torrentService = require('../services/torrentService');
 const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
 var client = {
-  addFiles: (req, callback) => {
+  addFiles (req, callback) {
     let files = req.files;
     let path = req.body.destination;
     let isBasePath = req.body.isBasePath === 'true';
@@ -53,7 +50,7 @@ var client = {
     });
   },
 
-  addUrls: (data, callback) => {
+  addUrls (data, callback) {
     let urls = data.urls;
     let path = data.destination;
     let isBasePath = data.isBasePath === 'true';
@@ -67,7 +64,7 @@ var client = {
     request.send();
   },
 
-  checkHash: (hashes, callback) => {
+  checkHash (hashes, callback) {
     let request = new ClientRequest();
 
     request.checkHash({hashes});
@@ -78,12 +75,14 @@ var client = {
     request.send();
   },
 
-  downloadFiles(hash, fileString, res) {
+  downloadFiles (hash, fileString, res) {
     try {
       const selectedTorrent = torrentService.getTorrent(hash);
       if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
       this.getTorrentDetails(hash, (torrentDetails) => {
+        if (!torrentDetails) return res.status(404).json({error: 'Torrent details not found'});
+
         let files;
         if (!fileString) {
           files = torrentDetails.fileTree.files.map((x, i) => `${i}`);
@@ -100,37 +99,46 @@ var client = {
 
         if (filePathsToDownload.length === 1) {
           const file = filePathsToDownload[0];
+          if (!fs.existsSync(file)) return res.status(404).json({error: 'File not found.'});
 
-          if (fs.existsSync(file)) {
-            res.attachment(path.basename(file));
-            res.download(file);
-          } else {
-            res.status(404).json({error: 'File not found.'});
-          }
-        } else {
-          const archive = archiver('tar', {store: true});
-
-          archive.on('error', (error) => {
-            throw error;
-          });
-
-          res.attachment(`${selectedTorrent.name}.tar`);
-          archive.pipe(res);
-
-          filePathsToDownload.forEach((filePath) => {
-            const filename = path.basename(filePath);
-            archive.append(fs.createReadStream(filePath), {name: filename});
-          });
-
-          archive.finalize();
+          res.attachment(path.basename(file));
+          return res.download(file);
         }
+
+        res.attachment(`${selectedTorrent.name}.tar`);
+
+        const pack = tar.pack()
+        pack.pipe(res);
+
+        let tasks = filePathsToDownload.map((filePath) => {
+          const filename = path.basename(filePath);
+
+          return (next) => {
+            fs.stat(filePath, (err, stats) => {
+              if (err) return next(err);
+
+              let stream = fs.createReadStream(filePath);
+              let entry = pack.entry({
+                name: filename,
+                size: stats.size
+              }, next);
+              stream.pipe(entry);
+            });
+          }
+        });
+
+        series(tasks, (err) => {
+          if (err) return res.status(500).end(); // response in progress... can't send error, only 500
+
+          pack.finalize();
+        });
       });
     } catch (error) {
       res.status(500).json(error);
     }
   },
 
-  findFilesByIndicies(indices, fileTree = {}) {
+  findFilesByIndicies (indices, fileTree = {}) {
     const {directories, files = []} = fileTree;
 
     let selectedFiles = files.filter(file => {
@@ -151,7 +159,7 @@ var client = {
     return selectedFiles;
   },
 
-  getSettings: (options, callback) => {
+  getSettings (options, callback) {
     let requestedSettingsKeys = [];
     let request = new ClientRequest();
     let response = {};
@@ -184,7 +192,7 @@ var client = {
         let value = datum[0];
         let settingsKey = clientSettingsMap[requestedSettingsKeys[index]];
 
-        if (!!outboundTransformation[settingsKey]) {
+        if (outboundTransformation[settingsKey]) {
           value = outboundTransformation[settingsKey](value);
         }
 
@@ -197,7 +205,7 @@ var client = {
     request.send();
   },
 
-  getTorrentDetails: (hash, callback) => {
+  getTorrentDetails (hash, callback) {
     let request = new ClientRequest();
 
     request.getTorrentDetails({
@@ -211,7 +219,7 @@ var client = {
     request.send();
   },
 
-  listMethods: (method, args, callback) => {
+  listMethods (method, args, callback) {
     let request = new ClientRequest();
 
     request.listMethods({method, args});
@@ -219,7 +227,7 @@ var client = {
     request.send();
   },
 
-  moveTorrents: (data, callback) => {
+  moveTorrents (data, callback) {
     let destinationPath = data.destination;
     let isBasePath = data.isBasePath === 'true';
     let hashes = data.hashes;
@@ -263,7 +271,7 @@ var client = {
     mainRequest.send();
   },
 
-  setFilePriority: (hashes, data, callback) => {
+  setFilePriority (hashes, data, callback) {
     // TODO Add support for multiple hashes.
     let fileIndices = data.fileIndices;
     let request = new ClientRequest();
@@ -276,7 +284,7 @@ var client = {
     request.send();
   },
 
-  setPriority: (hashes, data, callback) => {
+  setPriority (hashes, data, callback) {
     let request = new ClientRequest();
 
     request.setPriority({hashes, priority: data.priority});
@@ -287,13 +295,9 @@ var client = {
     request.send();
   },
 
-  setSettings: (payloads, callback) => {
+  setSettings (payloads, callback) {
     let request = new ClientRequest();
-
-    if (payloads.length === 0) {
-      callback({});
-      return;
-    }
+    if (payloads.length === 0) return callback({});
 
     let inboundTransformation = {
       throttleGlobalDownMax: (userInput) => {
@@ -317,7 +321,7 @@ var client = {
     };
 
     let transformedPayloads = payloads.map((payload) => {
-      if (!!inboundTransformation[payload.id]) {
+      if (inboundTransformation[payload.id]) {
         return inboundTransformation[payload.id](payload);
       }
 
@@ -329,7 +333,7 @@ var client = {
     request.send();
   },
 
-  setSpeedLimits: (data, callback) => {
+  setSpeedLimits (data, callback) {
     let request = new ClientRequest();
 
     request.setThrottle({
@@ -340,7 +344,7 @@ var client = {
     request.send();
   },
 
-  setTaxonomy: (data, callback) => {
+  setTaxonomy (data, callback) {
     let request = new ClientRequest();
 
     request.setTaxonomy(data);
@@ -352,7 +356,7 @@ var client = {
     request.send();
   },
 
-  stopTorrent: (hashes, callback) => {
+  stopTorrent (hashes, callback) {
     let request = new ClientRequest();
 
     request.stopTorrents({hashes});
@@ -363,7 +367,7 @@ var client = {
     request.send();
   },
 
-  startTorrent: (hashes, callback) => {
+  startTorrent (hashes, callback) {
     let request = new ClientRequest();
 
     request.startTorrents({hashes});
