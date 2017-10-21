@@ -205,13 +205,6 @@ class TorrentListContainer extends React.Component {
         defaultMessage: 'Stop'
       })
     }, {
-      action: 'pause',
-      clickHandler,
-      label: this.props.intl.formatMessage({
-        id: 'torrents.list.context.pause',
-        defaultMessage: 'Pause'
-      })
-    }, {
       action: 'remove',
       clickHandler,
       label: this.props.intl.formatMessage({
@@ -292,9 +285,6 @@ class TorrentListContainer extends React.Component {
         break;
       case 'stop':
         TorrentActions.stopTorrents(selectedTorrents);
-        break;
-      case 'pause':
-        TorrentActions.pauseTorrents(selectedTorrents);
         break;
       case 'remove':
         UIActions.displayModal({id: 'remove-torrents'});

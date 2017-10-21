@@ -5,7 +5,6 @@ export function torrentStatusClasses(torrent, ...classes) {
   return classnames(classes, {
     'torrent--has-error': torrent.status.includes(torrentStatusMap.error),
     'torrent--is-stopped': torrent.status.includes(torrentStatusMap.stopped),
-    'torrent--is-paused': torrent.status.includes(torrentStatusMap.paused),
     'torrent--is-downloading': torrent.status.includes(torrentStatusMap.downloading),
     'torrent--is-downloading--actively': torrent.status.includes(torrentStatusMap.activelyDownloading),
     'torrent--is-uploading--actively': torrent.status.includes(torrentStatusMap.activelyUploading),

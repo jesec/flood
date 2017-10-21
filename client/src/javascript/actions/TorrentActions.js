@@ -153,30 +153,6 @@ let TorrentActions = {
       });
   },
 
-  pauseTorrents: (hashes) => {
-    return axios.post(`${baseURI}api/client/pause`, {
-        hashes
-      })
-      .then((json = {}) => {
-        return json.data;
-      })
-      .then((response) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_START_TORRENT_SUCCESS,
-          data: {
-            response
-          }
-        });
-      }, (error) => {
-        AppDispatcher.dispatchServerAction({
-          type: ActionTypes.CLIENT_START_TORRENT_ERROR,
-          data: {
-            error
-          }
-        });
-      });
-  },
-
   startTorrents: (hashes) => {
     return axios.post(`${baseURI}api/client/start`, {
         hashes
