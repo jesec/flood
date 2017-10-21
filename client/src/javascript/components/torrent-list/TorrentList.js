@@ -1,9 +1,7 @@
-import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
-import classNames from 'classnames';
 import Dropzone from 'react-dropzone';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import ContextMenu from '../general/ContextMenu';
 import ConfigStore from '../../stores/ConfigStore';
@@ -12,7 +10,6 @@ import EventTypes from '../../constants/EventTypes';
 import Files from '../icons/Files';
 import ListViewport from '../general/ListViewport';
 import LoadingIndicator from '../general/LoadingIndicator';
-import PriorityLevels from '../../constants/PriorityLevels';
 import PriorityMeter from '../general/filesystem/PriorityMeter';
 import SettingsStore from '../../stores/SettingsStore';
 import TableHeading from './TableHeading';
@@ -542,7 +539,7 @@ class TorrentListContainer extends React.Component {
 
   renderListItem(index) {
     const selectedTorrents = TorrentStore.getSelectedTorrents();
-    const {displayedProperties, torrentListViewSize, torrents} = this.state;
+    const {torrentListViewSize, torrents} = this.state;
     const torrent = torrents[index];
     const {hash} = torrent;
 

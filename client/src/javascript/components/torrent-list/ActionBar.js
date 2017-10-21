@@ -1,7 +1,6 @@
 import classnames from 'classnames';
-import {formatMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import React from 'react';
-import stringUtil from 'universally-shared-code/util/stringUtil';
 
 import Action from './Action';
 import Add from '../icons/Add';
@@ -12,7 +11,6 @@ import SortDropdown from './SortDropdown';
 import StartIcon from '../icons/StartIcon';
 import StopIcon from '../icons/StopIcon';
 import TorrentActions from '../../actions/TorrentActions';
-import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
