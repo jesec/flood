@@ -147,10 +147,6 @@ class FeedService {
 
   // TODO: Allow users to specify which key contains the URLs.
   getTorrentUrlsFromItem(feedItem) {
-    if (feedItem.link) {
-      return [feedItem.link];
-    }
-
     // If we've got an Array of enclosures, we'll iterate over the values and
     // look for the url key.
     if (feedItem.enclosures && Array.isArray(feedItem.enclosures)) {
@@ -164,6 +160,11 @@ class FeedService {
         },
         []
       );
+    }
+
+    // If there are no enclosures, then use the link tag instead
+    if (feedItem.link) {
+      return [feedItem.link];
     }
 
     return [];
