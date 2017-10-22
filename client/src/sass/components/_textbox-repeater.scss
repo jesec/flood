@@ -1,12 +1,7 @@
 .textbox-repeater {
 
-  .form {
-
-    &__row {
-
-      & + .form__row {
-        margin-top: $spacing-unit * 1/2;
-      }
-    }
+  .icon {
+    height: 12px;
+    width: 12px;
   }
 }

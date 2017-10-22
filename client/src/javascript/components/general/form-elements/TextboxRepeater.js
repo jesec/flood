@@ -34,6 +34,7 @@ export default class TextboxRepeater extends React.PureComponent {
             id={`${this.props.id}-${textbox.id}`}
             defaultValue={textbox.value}
             placeholder={this.props.placeholder}
+            wrapperClassName="textbox-repeater"
           >
             <FormElementAddon onClick={this.handleTextboxAdd.bind(textbox, index)}>
               <AddMini size="mini" />
