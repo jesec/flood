@@ -208,15 +208,6 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     .modal--align-center & {
       justify-content: center;
     }
-
-    .button,
-    .checkbox {
-
-      & + .button,
-      & + .checkbox {
-        margin-left: $spacing-unit * 3/5;
-      }
-    }
   }
 
   &__animation-enter {
