@@ -7,7 +7,6 @@ import torrentStatusMap from 'universally-shared-code/constants/torrentStatusMap
 import ClockIcon from '../../icons/ClockIcon';
 import DownloadThickIcon from '../../icons/DownloadThickIcon';
 import Duration from '../../general/Duration';
-import PauseIcon from '../../icons/PauseIcon';
 import PriorityMeter from '../../general/filesystem/PriorityMeter';
 import ProgressBar from '../../general/ProgressBar';
 import Ratio from '../../general/Ratio';
@@ -22,7 +21,6 @@ import UploadThickIcon from '../../icons/UploadThickIcon';
 
 const METHODS_TO_BIND = [
   'getCurrentStatus',
-  'handlePause',
   'handleStart',
   'handleStop'
 ];
@@ -47,9 +45,7 @@ export default class TorrentHeading extends React.Component {
   }
 
   getCurrentStatus(torrentStatus) {
-    if (torrentStatus.includes(torrentStatusMap.paused)) {
-      return 'pause';
-    } else if (torrentStatus.includes(torrentStatusMap.stopped)) {
+    if (torrentStatus.includes(torrentStatusMap.stopped)) {
       return 'stop';
     } else {
       return 'start';
@@ -60,11 +56,10 @@ export default class TorrentHeading extends React.Component {
     let currentStatus = this.state.optimisticData.currentStatus
       || this.getCurrentStatus(torrent.status);
     let statusIcons = {
-      'pause': <PauseIcon />,
       'start': <StartIcon />,
       'stop': <StopIcon />
     };
-    let torrentActions = ['start', 'pause', 'stop'];
+    let torrentActions = ['start', 'stop'];
     let torrentActionElements = [
       <li className="torrent-details__sub-heading__tertiary"
         key={torrentActions.length + 1}>
@@ -94,11 +89,6 @@ export default class TorrentHeading extends React.Component {
     });
 
     return torrentActionElements;
-  }
-
-  handlePause() {
-    this.setState({optimisticData: {currentStatus: 'pause'}});
-    TorrentActions.pauseTorrents([this.props.torrent.hash]);
   }
 
   handlePriorityChange(hash, level) {
