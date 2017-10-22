@@ -165,6 +165,10 @@ class GlobalContextMenuMountPoint extends React.Component {
       item.clickHandler(item.action, event);
     }
 
+    if (item.dismissMenu !== false) {
+      UIActions.dismissContextMenu(this.props.id);
+    }
+
     return false;
   }
 
