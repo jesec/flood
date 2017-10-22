@@ -1,8 +1,7 @@
-import {Checkbox, FormRow} from 'flood-ui-kit';
+import {Checkbox} from 'flood-ui-kit';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-
 
 import File from '../../icons/File';
 import PriorityMeter from './PriorityMeter';
@@ -42,7 +41,7 @@ class DirectoryFiles extends React.Component {
   }
 
   getIcon(file, isSelected) {
-    let changeHandler = (value, event) => {
+    const changeHandler = (value, event) => {
       this.handleFileSelect(file, isSelected, event);
     };
 
@@ -50,14 +49,12 @@ class DirectoryFiles extends React.Component {
       <div className="file__checkbox directory-tree__checkbox">
         <div className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <FormRow>
-            <Checkbox
-              checked={isSelected}
-              id={file.index}
-              onChange={changeHandler}
-              useProps={true}
-            />
-          </FormRow>
+          <Checkbox
+            checked={isSelected}
+            id={file.index}
+            onChange={changeHandler}
+            useProps={true}
+          />
         </div>
         <div className="directory-tree__checkbox__item
           directory-tree__checkbox__item--icon">
@@ -68,7 +65,6 @@ class DirectoryFiles extends React.Component {
   }
 
   handleFileSelect(file, isSelected, event) {
-    console.log('selecting file');
     this.props.onItemSelect({
       ...file,
       depth: this.props.depth,

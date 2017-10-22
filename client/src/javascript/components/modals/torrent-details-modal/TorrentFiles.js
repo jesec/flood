@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {Checkbox, Form, FormRow, Select, SelectItem} from 'flood-ui-kit';
+import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from 'flood-ui-kit';
 import classnames from 'classnames';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
@@ -8,8 +8,6 @@ import ConfigStore from '../../../stores/ConfigStore';
 import Disk from '../../icons/Disk';
 import DirectoryTree from '../../general/filesystem/DirectoryTree';
 import TorrentStore from '../../../stores/TorrentStore';
-
-const baseURI = ConfigStore.getBaseURI();
 
 const TORRENT_PROPS_TO_CHECK = ['bytesDone'];
 const METHODS_TO_BIND = [
@@ -72,21 +70,6 @@ class TorrentFiles extends React.Component {
     return true;
   }
 
-  getDownloadButton() {
-    return (
-      <a className="button button--download button--primary button--link"
-        download
-        href={`${baseURI}api/download?hash=${this.props.torrent.hash}&files=${this.state.selectedFiles.join(',')}`}>
-        <FormattedMessage id="torrents.details.files.download.file"
-          defaultMessage="{count, plural, =1 {Download File} other
-            {Download Files}}"
-          values={{
-            count: this.state.selectedFiles.length
-          }}/>
-      </a>
-    );
-  }
-
   getSelectedFiles(selectionTree, selectedFiles = []) {
     if (selectionTree.files) {
       selectedFiles = [...selectedFiles, ...Object.keys(selectionTree.files).reduce((previousValue, filename) => {
@@ -109,8 +92,16 @@ class TorrentFiles extends React.Component {
     return selectedFiles;
   }
 
+  handleDownloadButtonClick = event => {
+    event.preventDefault();
+    const baseURI = ConfigStore.getBaseURI();
+    const link = document.createElement('a');
+    link.download = `${this.props.torrent.name}.tar`;
+    link.href = `${baseURI}api/download?hash=${this.props.torrent.hash}&files=${this.state.selectedFiles.join(',')}`;
+    link.click();
+  };
+
   handleFormChange = ({event, formData}) => {
-    console.log(formData);
     if (event.target.name === 'file-priority') {
       this.handlePriorityChange();
       TorrentStore.setFilePriority(
@@ -295,46 +286,55 @@ class TorrentFiles extends React.Component {
 
     return (
       <Form className={wrapperClasses} onChange={this.handleFormChange}>
-        <div className="directory-tree__selection-toolbar
-          modal__content--nested-scroll__header">
-          <FormattedMessage id="torrents.details.selected.files"
-            defaultMessage="{count, plural, =1 {{countElement} selected file} other
-              {{countElement} selected files}}"
-            values={{
-              count: this.state.selectedFiles.length,
-              countElement: <span className="directory-tree__selection-toolbar__item-count">{this.state.selectedFiles.length}</span>
-            }}/>
-          {this.getDownloadButton()}
-          <Select id="file-priority" persistentPlaceholder>
-            <SelectItem placeholder>
+        <div className="directory-tree__selection-toolbar">
+          <FormRow align="center">
+            <FormRowItem width="one-quarter" grow={false} shrink={false}>
+              <FormattedMessage id="torrents.details.selected.files"
+                defaultMessage="{count, plural, =1 {{countElement} selected file} other
+                  {{countElement} selected files}}"
+                values={{
+                  count: this.state.selectedFiles.length,
+                  countElement: <span className="directory-tree__selection-toolbar__item-count">{this.state.selectedFiles.length}</span>
+              }}/>
+            </FormRowItem>
+            <Button onClick={this.handleDownloadButtonClick} grow={false} shrink={false}>
               <FormattedMessage
-                id="torrents.details.selected.files.set.priority"
-                defaultMessage="Set Priority"
-              />
-            </SelectItem>
-            <SelectItem id={0}>
-              {this.props.intl.formatMessage({
-                id: 'priority.dont.download',
-                defaultMessage: 'Don\'t Download'
-              })}
-            </SelectItem>
-            <SelectItem id={1}>
-              {this.props.intl.formatMessage({
-                id: 'priority.normal',
-                defaultMessage: 'Normal'
-              })}
-            </SelectItem>
-            <SelectItem id={2}>
-              {this.props.intl.formatMessage({
-                id: 'priority.high',
-                defaultMessage: 'High'
-              })}
-            </SelectItem>
-          </Select>
+                id="torrents.details.files.download.file"
+                defaultMessage="{count, plural, =1 {Download File} other
+                  {Download Files}}"
+                values={{
+                  count: this.state.selectedFiles.length
+                }}/>
+            </Button>
+            <Select id="file-priority" persistentPlaceholder shrink={false}>
+              <SelectItem placeholder>
+                <FormattedMessage
+                  id="torrents.details.selected.files.set.priority"
+                  defaultMessage="Set Priority"
+                />
+              </SelectItem>
+              <SelectItem id={0}>
+                {this.props.intl.formatMessage({
+                  id: 'priority.dont.download',
+                  defaultMessage: 'Don\'t Download'
+                })}
+              </SelectItem>
+              <SelectItem id={1}>
+                {this.props.intl.formatMessage({
+                  id: 'priority.normal',
+                  defaultMessage: 'Normal'
+                })}
+              </SelectItem>
+              <SelectItem id={2}>
+                {this.props.intl.formatMessage({
+                  id: 'priority.high',
+                  defaultMessage: 'High'
+                })}
+              </SelectItem>
+            </Select>
+          </FormRow>
         </div>
-        <div className="directory-tree torrent-details__section
-          torrent-details__section--file-tree
-          modal__content--nested-scroll__content">
+        <div className="directory-tree torrent-details__section torrent-details__section--file-tree modal__content--nested-scroll__content">
           {directoryHeading}
           {fileDetailContent}
         </div>
