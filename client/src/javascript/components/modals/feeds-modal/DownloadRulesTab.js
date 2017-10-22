@@ -133,20 +133,28 @@ class DownloadRulesTab extends React.Component {
             <FormattedMessage
               id="feeds.no.feeds.available"
               defaultMessage="No feeds available."
-              placeholder
             />
           </em>
         </SelectItem>
       ];
     }
 
-    return this.state.feeds.map((feed) => {
-      return (
+    return this.state.feeds.reduce((feedOptions, feed) => {
+      return feedOptions.concat(
         <SelectItem key={feed._id} id={feed._id}>
           {feed.label}
         </SelectItem>
       );
-    });
+    }, [
+      <SelectItem key="select-feed" id="placeholder" placeholder>
+        <em>
+          <FormattedMessage
+            id="feeds.select.feed"
+            defaultMessage="Select feed"
+          />
+        </em>
+      </SelectItem>
+    ]);
   }
 
   getRuleFields() {

@@ -46,7 +46,8 @@ export default class Modal extends React.Component {
       'modal--horizontal': this.props.orientation === 'horizontal',
       'modal--vertical': this.props.orientation === 'vertical',
       'modal--tabs-in-header': !this.props.tabsInBody,
-      'modal--tabs-in-body': this.props.tabsInBody
+      'modal--tabs-in-body': this.props.tabsInBody,
+      'inverse': this.props.inverse
     }, this.props.className);
     let modalBody = this.props.content;
     let modalHeader = this.props.heading;
@@ -118,6 +119,7 @@ export default class Modal extends React.Component {
 Modal.defaultProps = {
   alignment: 'left',
   className: null,
+  inverse: true,
   size: 'medium',
   orientation: 'horizontal',
   tabsInBody: false

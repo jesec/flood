@@ -133,7 +133,6 @@ class TorrentDetailsModal extends React.Component {
 
     return (
       <Modal
-        className="inverse"
         heading={this.getModalHeading()}
         dismiss={this.dismissModal}
         size="large"

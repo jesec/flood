@@ -13,11 +13,13 @@ export default class ConfirmModal extends React.Component {
 
   render() {
     return (
-      <Modal actions={this.props.options.actions}
+      <Modal
+        actions={this.props.options.actions}
         alignment="center"
         content={this.getContent()}
         dismiss={this.props.dismiss}
-        heading={this.props.options.heading} />
+        heading={this.props.options.heading}
+      />
     );
   }
 }

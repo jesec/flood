@@ -30,11 +30,16 @@ class FeedsModal extends React.Component {
     };
 
     return (
-      <Modal dismiss={this.props.dismiss}
+      <Modal
+        dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
           id: 'feeds.tabs.heading',
           defaultMessage: 'Torrent Feeds'
-        })} orientation="horizontal" size="large" tabs={tabs} />
+        })}
+        orientation="horizontal"
+        size="large"
+        tabs={tabs}
+      />
     );
   }
 }

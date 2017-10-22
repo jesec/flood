@@ -30,10 +30,14 @@ class AddTorrents extends React.Component {
     };
 
     return (
-      <Modal heading={this.props.intl.formatMessage({
-        id: 'torrents.add.heading',
-        defaultMessage: 'Add Torrents'
-      })} dismiss={this.dismissModal} tabs={tabs} />
+      <Modal
+        heading={this.props.intl.formatMessage({
+          id: 'torrents.add.heading',
+          defaultMessage: 'Add Torrents'
+        })}
+        dismiss={this.dismissModal}
+        tabs={tabs}
+      />
     );
   }
 }
