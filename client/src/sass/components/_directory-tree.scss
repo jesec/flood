@@ -36,14 +36,13 @@ $selection-toolbar--height: $spacing-unit * 1.5;
 
   &__selection-toolbar {
     align-items: center;
-    background: darken(saturate(#28303b, 3%), 3%);
+    background: $another-grey;
     bottom: 0;
-    box-shadow: inset 0 1px darken(saturate(#28303b, 3%), 7%);
     display: flex;
     flex: 0 0 $selection-toolbar--height;
-    font-size: 0.8em;
     justify-content: space-between;
     min-height: $selection-toolbar--height;
+    padding: $spacing--small;
     order: 2;
     position: absolute;
     transform: translateY(100%);
@@ -138,8 +137,7 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     vertical-align: middle;
     white-space: nowrap;
 
-    &:hover > .file__label .directory-tree,
-    &:hover > .file__detail .directory-tree {
+    &:hover > .file__label .directory-tree {
 
       &__checkbox {
 
@@ -187,7 +185,7 @@ $selection-toolbar--height: $spacing-unit * 1.5;
               }
 
               &--checkbox {
-                opacity: 0.95;
+                opacity: 1;
               }
             }
           }
@@ -203,15 +201,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
       margin-left: 0;
       padding-left: 12px;
       position: relative;
-
-      &:after {
-        content: '';
-        height: 100%;
-        left: 10px;
-        position: absolute;
-        top: 0;
-        width: 2px;
-      }
     }
 
     &--file-list {
@@ -227,8 +216,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
       .icon {
 
         &--file {
-          margin-top: -3px;
-          vertical-align: middle;
           transition: fill 0.25s;
         }
       }
@@ -261,12 +248,23 @@ $selection-toolbar--height: $spacing-unit * 1.5;
   }
 
   &__checkbox {
-    display: inline-block;
-    height: 18px;
     margin-right: 6px;
     position: relative;
-    vertical-align: middle;
-    width: 18px;
+
+    &,
+    .form__element,
+    .form__row__item {
+      height: 18px;
+      width: 18px;
+    }
+
+    .form__element {
+      left: 50%;
+      padding: 0;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
 
     &__item {
       height: 100%;
@@ -293,10 +291,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
             height: 16px;
             margin-right: 0;
             width: 16px;
-
-            &:after {
-              opacity: 0;
-            }
           }
         }
       }
@@ -332,11 +326,11 @@ $selection-toolbar--height: $spacing-unit * 1.5;
 
     &--file,
     &--folder {
-      display: inline-block;
       height: 14px;
-      margin-right: 6px;
-      margin-top: -3px;
-      vertical-align: middle;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
       width: 14px;
     }
   }
@@ -351,6 +345,7 @@ $selection-toolbar--height: $spacing-unit * 1.5;
       &__label {
         align-items: center;
         display: flex;
+        min-width: 1px;
       }
 
       &__checkbox {
