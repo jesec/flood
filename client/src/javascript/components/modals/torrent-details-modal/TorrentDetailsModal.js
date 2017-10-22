@@ -132,8 +132,15 @@ class TorrentDetailsModal extends React.Component {
     };
 
     return (
-      <Modal heading={this.getModalHeading()} dismiss={this.dismissModal}
-        size="large" tabs={tabs} orientation="vertical" tabsInBody={true} />
+      <Modal
+        className="inverse"
+        heading={this.getModalHeading()}
+        dismiss={this.dismissModal}
+        size="large"
+        tabs={tabs}
+        orientation="vertical"
+        tabsInBody={true}
+      />
     );
   }
 }

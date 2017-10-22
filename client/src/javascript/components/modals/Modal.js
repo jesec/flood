@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import createFragment from 'react-addons-create-fragment';
 import React from 'react';
 
 import ModalActions from './ModalActions';
@@ -42,19 +41,22 @@ export default class Modal extends React.Component {
   }
 
   render() {
-    let footer = null;
-    let contentClasses = classnames('modal__content__wrapper',
-      `modal--align-${this.props.alignment}`, `modal--size-${this.props.size}`, {
-        'modal--horizontal': this.props.orientation === 'horizontal',
-        'modal--vertical': this.props.orientation === 'vertical',
-        'modal--tabs-in-header': !this.props.tabsInBody,
-        'modal--tabs-in-body': this.props.tabsInBody
-      }, this.props.classNames);
-    let modalBody = [createFragment({'modal-body': this.props.content})];
-    let modalHeader = [createFragment({'modal-header': this.props.heading})];
+    const contentWrapperClasses = classnames('modal__content__wrapper',
+    `modal--align-${this.props.alignment}`, `modal--size-${this.props.size}`, {
+      'modal--horizontal': this.props.orientation === 'horizontal',
+      'modal--vertical': this.props.orientation === 'vertical',
+      'modal--tabs-in-header': !this.props.tabsInBody,
+      'modal--tabs-in-body': this.props.tabsInBody
+    }, this.props.className);
+    let modalBody = this.props.content;
+    let modalHeader = this.props.heading;
     let headerClasses = classnames('modal__header', {
       'has-tabs': this.props.tabs
     });
+
+    let bodyTabs;
+    let footer;
+    let headerTabs;
 
     if (this.props.tabs) {
       let activeTabId = this.getActiveTabId();
@@ -66,21 +68,26 @@ export default class Modal extends React.Component {
       let modalContentData = activeTab.props;
 
       let tabs = (
-        <ModalTabs activeTabId={activeTabId} key="modal-tabs"
-          onTabChange={this.handleTabChange} tabs={this.props.tabs} />
+        <ModalTabs
+          activeTabId={activeTabId}
+          key="modal-tabs"
+          onTabChange={this.handleTabChange}
+          tabs={this.props.tabs}
+        />
       );
 
       if (this.props.tabsInBody) {
-        modalBody = [tabs];
+        bodyTabs = tabs;
       } else {
-        modalHeader.push(tabs);
+        headerTabs = tabs;
       }
 
-      modalBody.push(
+      modalBody = [
+        bodyTabs,
         <div className={contentClasses} key="modal-content">
           <ModalContentComponent {...modalContentData} />
         </div>
-      );
+      ];
     }
 
     if (this.props.actions) {
@@ -93,9 +100,10 @@ export default class Modal extends React.Component {
     }
 
     return (
-      <div className={contentClasses}>
+      <div className={contentWrapperClasses}>
         <div className={headerClasses}>
           {modalHeader}
+          {headerTabs}
         </div>
         <div className="modal__body"
           ref={ref => this.setRef('modal-body', ref)}>
@@ -109,7 +117,7 @@ export default class Modal extends React.Component {
 
 Modal.defaultProps = {
   alignment: 'left',
-  classNames: null,
+  className: null,
   size: 'medium',
   orientation: 'horizontal',
   tabsInBody: false

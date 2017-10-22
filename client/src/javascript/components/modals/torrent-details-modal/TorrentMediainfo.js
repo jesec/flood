@@ -1,3 +1,4 @@
+import {Button} from 'flood-ui-kit';
 import Clipboard from 'clipboard';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
@@ -67,8 +68,8 @@ class TorrentMediainfo extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.refs.copyButton && this.clipboard == null) {
-      this.clipboard = new Clipboard(this.refs.copyButton, {
+    if (this.copyButtonRef && this.clipboard == null) {
+      this.clipboard = new Clipboard(this.copyButtonRef, {
         text: () => {
           return this.state.mediainfo;
         }
@@ -162,10 +163,12 @@ class TorrentMediainfo extends React.Component {
           <Tooltip content={tooltipText}
             onMouseLeave={this.handleCopyButtonMouseLeave}
             wrapperClassName="tooltip__wrapper mediainfo__toolbar__item">
-            <button className="mediainfo__copy-button button button--deemphasize button--small"
-              ref="copyButton">
+            <Button
+              priority="tertiary"
+              buttonRef={ref => this.copyButtonRef = ref}
+            >
               <ClipboardIcon />
-            </button>
+            </Button>
           </Tooltip>
         </div>
         <pre className="mediainfo__output">

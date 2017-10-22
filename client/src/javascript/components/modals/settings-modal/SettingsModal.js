@@ -225,7 +225,7 @@ class SettingsModal extends React.Component {
 
     return (
       <Modal actions={this.getActions()}
-        classNames="inverse"
+        className="inverse"
         size="large"
         heading={this.props.intl.formatMessage({
           id: 'settings.tabs.heading',
