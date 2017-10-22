@@ -1,10 +1,9 @@
 import {Form, FormRow, Textbox} from 'flood-ui-kit';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
 
-import ModalFormSectionHeader from '../../modals/ModalFormSectionHeader';
 import SettingsStore from '../../../stores/SettingsStore';
 import TextboxRepeater from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
@@ -60,25 +59,17 @@ class AddTorrentsByURL extends React.Component {
   render() {
     return (
       <Form className="inverse" onChange={this.handleFormChange} ref={ref => this._formRef = ref}>
-        <ModalFormSectionHeader>
-          <FormattedMessage
-            id="torrents.add.torrents.label"
-            defaultMessage="Torrents"
-          />
-        </ModalFormSectionHeader>
         <TextboxRepeater
           id="urls"
+          label={this.props.intl.formatMessage({
+            id: 'torrents.add.torrents.label',
+            defaultMessage: 'Torrents'
+          })}
           placeholder={this.props.intl.formatMessage({
             id: 'torrents.add.tab.url.input.placeholder',
             defaultMessage: 'Torrent URL or Magnet Link'
           })}
         />
-        <ModalFormSectionHeader>
-          <FormattedMessage
-            id="torrents.add.destination.label"
-            defaultMessage="Destination"
-          />
-        </ModalFormSectionHeader>
         <TorrentDestination
           id="destination"
           label={this.props.intl.formatMessage({
@@ -86,14 +77,15 @@ class AddTorrentsByURL extends React.Component {
             defaultMessage: 'Destination'
           })}
         />
-        <ModalFormSectionHeader>
-          <FormattedMessage
-            id="torrents.add.tags"
-            defaultMessage="Tags"
-          />
-        </ModalFormSectionHeader>
         <FormRow>
-          <Textbox id="tags" defaultValue={this.state.tags} />
+          <Textbox
+            id="tags"
+            defaultValue={this.state.tags}
+            label={this.props.intl.formatMessage({
+              id: 'torrents.add.tags',
+              defaultMessage: 'Tags'
+            })}
+          />
         </FormRow>
         <AddTorrentsActions
           dismiss={this.props.dismissModal}

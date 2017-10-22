@@ -7,7 +7,6 @@ import AddTorrentsActions from './AddTorrentsActions';
 import Close from '../../icons/Close';
 import File from '../../icons/File';
 import Files from '../../icons/Files';
-import ModalFormSectionHeader from '../../modals/ModalFormSectionHeader';
 import SettingsStore from '../../../stores/SettingsStore';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
@@ -26,27 +25,35 @@ class AddTorrentsByFile extends React.Component {
 
   getFileDropzone() {
     const dropzoneContent = (
-      <Dropzone
-        activeClassName="dropzone--is-dragging"
-        className="form__dropzone dropzone interactive-list"
-        ref="dropzone"
-        onDrop={this.handleFileDrop}
-        disablePreview
-      >
-        <div className="dropzone__copy">
-          <div className="dropzone__icon">
-            <Files />
+      <FormRowItem>
+        <label className="form__element__label">
+          <FormattedMessage
+            id="torrents.add.torrents.label"
+            defaultMessage="Torrents"
+          />
+        </label>
+        <Dropzone
+          activeClassName="dropzone--is-dragging"
+          className="form__dropzone dropzone interactive-list"
+          ref="dropzone"
+          onDrop={this.handleFileDrop}
+          disablePreview
+        >
+          <div className="dropzone__copy">
+            <div className="dropzone__icon">
+              <Files />
+            </div>
+            <FormattedMessage
+              id="torrents.add.tab.file.drop"
+              defaultMessage="Drop some files here,"
+            /> <span className="dropzone__browse-button">
+            <FormattedMessage
+              id="torrents.add.tab.file.browse"
+              defaultMessage="or click to browse"
+            /></span>.
           </div>
-          <FormattedMessage
-            id="torrents.add.tab.file.drop"
-            defaultMessage="Drop some files here,"
-          /> <span className="dropzone__browse-button">
-          <FormattedMessage
-            id="torrents.add.tab.file.browse"
-            defaultMessage="or click to browse"
-          /></span>.
-        </div>
-      </Dropzone>
+        </Dropzone>
+      </FormRowItem>
     );
     let fileContent = null;
 
@@ -145,21 +152,9 @@ class AddTorrentsByFile extends React.Component {
   render() {
     return (
       <Form className="inverse" onChange={this.handleFormChange} ref={ref => this._formRef = ref}>
-        <ModalFormSectionHeader>
-          <FormattedMessage
-            id="torrents.add.torrents.label"
-            defaultMessage="Torrents"
-          />
-        </ModalFormSectionHeader>
         <FormRow>
           {this.getFileDropzone()}
         </FormRow>
-        <ModalFormSectionHeader>
-          <FormattedMessage
-            id="torrents.add.destination.label"
-            defaultMessage="Destination"
-          />
-        </ModalFormSectionHeader>
         <TorrentDestination
           id="destination"
           label={this.props.intl.formatMessage({
@@ -167,14 +162,15 @@ class AddTorrentsByFile extends React.Component {
             defaultMessage: 'Destination'
           })}
         />
-        <ModalFormSectionHeader>
-          <FormattedMessage
-            id="torrents.add.tags"
-            defaultMessage="Tags"
-          />
-        </ModalFormSectionHeader>
         <FormRow>
-          <Textbox id="tags" defaultValue={this.state.tags} />
+          <Textbox
+            label={this.props.intl.formatMessage({
+              id: 'torrents.add.tags',
+              defaultMessage: 'Tags'
+            })}
+            defaultValue={this.state.tags}
+            id="tags"
+          />
         </FormRow>
         <AddTorrentsActions
           dismiss={this.props.dismissModal}

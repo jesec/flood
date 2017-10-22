@@ -33,6 +33,7 @@ export default class TextboxRepeater extends React.PureComponent {
             addonPlacement="after"
             id={`${this.props.id}-${textbox.id}`}
             defaultValue={textbox.value}
+            label={index === 0 && this.props.label}
             placeholder={this.props.placeholder}
             wrapperClassName="textbox-repeater"
           >
