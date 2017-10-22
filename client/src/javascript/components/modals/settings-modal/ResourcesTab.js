@@ -43,7 +43,7 @@ export default class ResourcesTab extends SettingsTab {
                 defaultMessage="Maximum Open Files"
               />
             )}
-            width="half"
+            width="one-half"
           />
           <Checkbox
             checked={this.getFieldValue('piecesHashOnCompletion') === '1'}
@@ -76,7 +76,7 @@ export default class ResourcesTab extends SettingsTab {
                 /> <em className="unit">(MB)</em>
               </div>
             )}
-            width="half"
+            width="one-half"
           />
         </FormRow>
       </Form>
