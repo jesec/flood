@@ -40,7 +40,7 @@ class SetTagsModal extends React.Component {
           defaultMessage: 'Cancel'
         }),
         triggerDismiss: true,
-        type: 'secondary'
+        type: 'tertiary'
       },
       {
         clickHandler: this.handleSetTagsClick,

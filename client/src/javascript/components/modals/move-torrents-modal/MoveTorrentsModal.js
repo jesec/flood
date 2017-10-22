@@ -77,10 +77,6 @@ class MoveTorrents extends React.Component {
         <Form className="inverse" onChange={this.handleFormChange} onSubmit={this.handleFormSubmit}>
           <TorrentDestination
             id="destination"
-            label={this.props.intl.formatMessage({
-              id: 'torrents.add.destination.label',
-              defaultMessage: 'Destination'
-            })}
             suggested={this.state.originalSource}
           />
           <ModalActions actions={this.getActions()} dismiss={this.props.dismiss} />
