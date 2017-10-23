@@ -27,6 +27,7 @@ module.exports = {
   appIndexJs: resolveApp('client/src/javascript/app.js'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('./'),
+  clientSrc: resolveApp('client/src'),
   testsSetup: resolveApp('tests/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
   servedPath: ensureSlash(userConfig.baseURI || '/', true)

@@ -9,13 +9,17 @@ class AuthStoreClass extends BaseStore {
     super();
     this.token = null;
     this.users = [];
+    this.optimisticUsers = [];
+    this.currentUser = {};
   }
 
   authenticate(credentials) {
-    AuthActions.authenticate({
-      username: credentials.username,
-      password: credentials.password
-    });
+    AuthActions.authenticate(credentials);
+  }
+
+  addOptimisticUser(credentials) {
+    this.optimisticUsers.push({username: credentials.username});
+    this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
   }
 
   createUser(credentials) {
@@ -28,6 +32,10 @@ class AuthStoreClass extends BaseStore {
 
   fetchUserList() {
     AuthActions.fetchUsers();
+  }
+
+  getCurrentUsername() {
+    return this.currentUser.username;
   }
 
   getToken() {
@@ -43,6 +51,7 @@ class AuthStoreClass extends BaseStore {
   }
 
   handleCreateUserSuccess(data) {
+    this.addOptimisticUser(data);
     this.emit(EventTypes.AUTH_CREATE_USER_SUCCESS);
   }
 
@@ -58,8 +67,13 @@ class AuthStoreClass extends BaseStore {
     this.emit(EventTypes.AUTH_LIST_USERS_ERROR);
   }
 
-  handleListUsersSuccess(data) {
-    this.users = data;
+  handleListUsersSuccess(nextUserList) {
+    this.optimisticUsers = this.optimisticUsers.filter((optimisticUser) => {
+      return !nextUserList.some((databaseUser) => {
+        return databaseUser.username === optimisticUser.username;
+      });
+    });
+    this.users = nextUserList;
     this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
   }
 
@@ -91,12 +105,21 @@ class AuthStoreClass extends BaseStore {
   verify() {
     AuthActions.verify();
   }
+
+  handleAuthVerificationSuccess(data) {
+    this.currentUser.username = data.username;
+    AuthStore.emit(EventTypes.AUTH_VERIFY_SUCCESS, data);
+  }
+
+  handleAuthVerificationError(action) {
+    AuthStore.emit(EventTypes.AUTH_VERIFY_ERROR, action.error);
+  }
 }
 
 let AuthStore = new AuthStoreClass();
 
 AuthStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.AUTH_LOGIN_SUCCESS:
@@ -115,7 +138,7 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
       AuthStore.handleCreateUserSuccess(action.data);
       break;
     case ActionTypes.AUTH_CREATE_USER_ERROR:
-      AuthStore.handleCreateUserError(action.error.data);
+      AuthStore.handleCreateUserError(action.error.response.data);
       break;
     case ActionTypes.AUTH_DELETE_USER_SUCCESS:
       AuthStore.handleDeleteUserSuccess(action.data);
@@ -130,12 +153,12 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
       AuthStore.handleRegisterError(action.error.data);
       break;
     case ActionTypes.AUTH_VERIFY_SUCCESS:
-      AuthStore.emit(EventTypes.AUTH_VERIFY_SUCCESS,
-        action.data);
+      AuthStore.handleAuthVerificationSuccess(action.data);
       break;
     case ActionTypes.AUTH_VERIFY_ERROR:
-      AuthStore.emit(EventTypes.AUTH_VERIFY_ERROR,
-        action.error);
+      AuthStore.handleAuthVerificationError(action);
+      break;
+    default:
       break;
   }
 });

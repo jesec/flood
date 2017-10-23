@@ -1,75 +1,69 @@
-import classnames from 'classnames';
+import {FormElementAddon, FormRow, FormRowGroup, Textbox} from 'flood-ui-kit';
 import React from 'react';
 
 import AddMini from '../../icons/AddMini';
 import RemoveMini from '../../icons/RemoveMini';
 
-const METHODS_TO_BIND = [
-  'getTextboxes',
-  'handleTextboxChange'
-];
+export default class TextboxRepeater extends React.PureComponent {
+  state = {
+    textboxes: [{id: 0, value: ''}]
+  };
 
-export default class TextboxRepeater extends React.Component {
-  constructor() {
-    super();
+  _idCounter = 0;
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
+  getID() {
+    return ++this._idCounter;
   }
 
-  getTextboxes() {
-    let textboxes = this.props.textboxes.map((textbox, index) => {
-      let addButton = (
-        <button className="textbox-repeater__add floating-action__button"
-          onClick={this.props.handleTextboxAdd.bind(textbox, index)}>
-          <AddMini size="mini" />
-        </button>
-      );
+  getTextboxes = () => {
+    return this.state.textboxes.map((textbox, index) => {
       let removeButton = null;
 
       if (index > 0) {
         removeButton = (
-          <button className="textbox-repeater__remove floating-action__button"
-            onClick={this.props.handleTextboxRemove.bind(textbox, index)}>
+          <FormElementAddon onClick={this.handleTextboxRemove.bind(textbox, index)}>
             <RemoveMini size="mini" />
-          </button>
+          </FormElementAddon>
         );
       }
 
-      let inputClasses = classnames('textbox', {
-        'is-fulfilled': textbox.value && textbox.value !== ''
-      });
-
       return (
-        <div className="textbox__wrapper form__row" key={index}>
-          <div className="form__column">
-            <input className={inputClasses}
-              onChange={this.handleTextboxChange.bind(textbox, index)}
-              placeholder={this.props.placeholder}
-              value={textbox.value}
-              type="text" />
-            <div className="floating-action__group floating-action__group--on-textbox">
-              {removeButton}
-              {addButton}
-            </div>
-          </div>
-        </div>
+        <FormRow key={textbox.id}>
+          <Textbox
+            addonPlacement="after"
+            id={`${this.props.id}-${textbox.id}`}
+            defaultValue={textbox.value}
+            label={index === 0 && this.props.label}
+            placeholder={this.props.placeholder}
+            wrapperClassName="textbox-repeater"
+          >
+            <FormElementAddon onClick={this.handleTextboxAdd.bind(textbox, index)}>
+              <AddMini size="mini" />
+            </FormElementAddon>
+            {removeButton}
+          </Textbox>
+        </FormRow>
       );
     });
+  };
 
-    return textboxes;
-  }
+  handleTextboxAdd = (index) => {
+    const textboxes = Object.assign([], this.state.textboxes);
+    textboxes.splice(index + 1, 0, {id: this.getID(), value: ''});
+    this.setState({textboxes});
+  };
 
-  handleTextboxChange(index, event) {
-    this.props.handleTextboxChange(index, event.target.value);
-  }
+  handleTextboxRemove = (index) => {
+    const textboxes = Object.assign([], this.state.textboxes);
+    textboxes.splice(index, 1);
+    this.setState({textboxes});
+  };
 
   render() {
     return (
-      <div className="textbox-repeater">
+      <FormRowGroup>
         {this.getTextboxes()}
-      </div>
+      </FormRowGroup>
     );
   }
 }

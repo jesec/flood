@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import DirectoryFileList from './DirectoryFileList';
@@ -8,6 +9,18 @@ const METHODS_TO_BIND = [
 ];
 
 class DirectoryTree extends React.Component {
+  static propTypes = {
+    isParentSelected: PropTypes.bool,
+    path: PropTypes.array,
+    selectedItems: PropTypes.object
+  };
+
+  static defaultProps = {
+    isParentSelected: false,
+    path: [],
+    selectedItems: {}
+  };
+
   constructor() {
     super();
 
@@ -40,14 +53,20 @@ class DirectoryTree extends React.Component {
         let isSelected = subSelectedItems && subSelectedItems.isSelected;
 
         return (
-          <DirectoryTreeNode depth={depth} directoryName={directoryName}
-            hash={hash} id={id} isSelected={isSelected}
-            isParentSelected={this.props.isParentSelected} key={id}
+          <DirectoryTreeNode
+            depth={depth}
+            directoryName={directoryName}
+            hash={hash}
+            id={id}
+            isSelected={isSelected}
+            isParentSelected={this.props.isParentSelected}
+            key={id}
             selectedItems={subSelectedItems}
             onItemSelect={this.props.onItemSelect}
             onPriorityChange={this.props.onPriorityChange}
             path={this.props.path}
-            subTree={subTree} />
+            subTree={subTree}
+          />
         );
       });
 
@@ -55,11 +74,17 @@ class DirectoryTree extends React.Component {
       let subSelectedItems = this.props.selectedItems.files;
 
       fileList = (
-        <DirectoryFileList depth={depth} fileList={files} hash={hash}
-          key={`files-${depth}`} isParentSelected={this.props.isParentSelected}
+        <DirectoryFileList
+          depth={depth}
+          fileList={files}
+          hash={hash}
+          key={`files-${depth}`}
+          isParentSelected={this.props.isParentSelected}
           onItemSelect={this.props.onItemSelect}
-          onPriorityChange={this.props.onPriorityChange} path={this.props.path}
-          selectedItems={subSelectedItems} />
+          onPriorityChange={this.props.onPriorityChange}
+          path={this.props.path}
+          selectedItems={subSelectedItems}
+        />
       );
     }
 
@@ -71,28 +96,12 @@ class DirectoryTree extends React.Component {
   }
 
   render() {
-    try {
     return (
       <div className="directory-tree__tree">
         {this.getDirectoryTreeDomNodes(this.props.tree, this.props.depth)}
       </div>
     );
-    } catch (err) {
-      console.trace(err);
-    }
   }
 }
-
-DirectoryTree.defaultProps = {
-  isParentSelected: false,
-  path: [],
-  selectedItems: {}
-};
-
-DirectoryTree.propTypes = {
-  isParentSelected: React.PropTypes.bool,
-  path: React.PropTypes.array,
-  selectedItems: React.PropTypes.object
-};
 
 export default DirectoryTree;

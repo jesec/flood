@@ -12,21 +12,14 @@ $dropzone--icon--fill--dragging: $blue;
 $dropzone--file--foreground: $dropzone--foreground;
 
 .dropzone {
-  align-items: center;
-  background: $dropzone--background;
-  border: 1px dashed $dropzone--border;
-  border-radius: 4px;
-  color: $dropzone--foreground;
-  display: flex;
-  flex-direction: column;
   position: relative;
   text-align: center;
   transition: border 0.25s, color 0.25s;
   width: 100%;
-  z-index: 1;
+  z-index: 2;
 
   &:hover {
-    border-color: $dropzone--border--hover;
+    border-color: $input--inverse--border--hover;
 
     .dropzone__icon {
 
@@ -76,7 +69,7 @@ $dropzone--file--foreground: $dropzone--foreground;
   &__copy {
     cursor: pointer;
     flex: 1;
-    font-size: 0.85em;
+    font-size: $font-size--x-small;
     padding: $spacing-unit;
     width: 100%;
   }
@@ -87,16 +80,20 @@ $dropzone--file--foreground: $dropzone--foreground;
   }
 
   &__selected-files {
-    border-radius: 4px 4px 0 0;
-    color: $dropzone--file--foreground;
-    font-size: 0.8em;
+    font-size: $font-size--small;
     margin-bottom: -1px;
     position: relative;
     width: 100%;
-    z-index: 2;
+    z-index: 1;
+
+    &.interactive-list {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
 
     & + .dropzone {
-      border-radius: 0 0 4px 4px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
     }
 
     &__file {
@@ -105,10 +102,24 @@ $dropzone--file--foreground: $dropzone--foreground;
 
         &--file {
           display: inline-block;
-          height: 12px;
+          height: 14px;
           margin-right: 4px;
-          margin-top: -1px;
-          width: 12px;
+          opacity: 0.5;
+          width: 14px;
+
+          &.icon {
+            fill: currentColor;
+          }
+        }
+      }
+
+      &:hover {
+
+        .icon {
+
+          &--file {
+            opacity: 0.5;
+          }
         }
       }
     }

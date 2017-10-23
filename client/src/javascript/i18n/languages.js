@@ -1,4 +1,4 @@
-import {addLocaleData, IntlProvider} from 'react-intl';
+import {addLocaleData} from 'react-intl';
 import deLocaleData from 'react-intl/locale-data/de';
 import enLocaleData from 'react-intl/locale-data/en';
 import esLocaleData from 'react-intl/locale-data/es';

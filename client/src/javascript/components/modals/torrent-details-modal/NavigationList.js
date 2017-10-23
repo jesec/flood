@@ -1,7 +1,22 @@
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class NavigationList extends React.Component {
+  static propTypes = {
+    defaultItem: PropTypes.string,
+    itemClassName: PropTypes.string,
+    items: PropTypes.array,
+    listClassName: PropTypes.string,
+    onChange: PropTypes.func,
+    selectedClassName: PropTypes.string
+  };
+
+  static defaultProps = {
+    itemClassName: 'navigation__item',
+    listClassName: 'navigation'
+  };
+
   constructor() {
     super();
 
@@ -41,19 +56,5 @@ class NavigationList extends React.Component {
     );
   }
 }
-
-NavigationList.defaultProps = {
-  itemClassName: 'navigation__item',
-  listClassName: 'navigation'
-};
-
-NavigationList.propTypes = {
-  defaultItem: React.PropTypes.string,
-  itemClassName: React.PropTypes.string,
-  items: React.PropTypes.array,
-  listClassName: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  selectedClassName: React.PropTypes.string
-};
 
 export default NavigationList;

@@ -3,4 +3,20 @@
 $font-family: 'Roboto', sans-srif;
 
 $spacing-unit: 25px;
+
 $torrent-details--width: 85%;
+
+$textbox--background: #242b36;
+$textbox--foreground: #5e728c;
+$textbox--border: #1a2028;
+$textbox--fulfilled--background: $textbox--background;
+$form--element--border-radius: 4px;
+$textbox--padding--vertical: 10px;
+$textbox--padding--horizontal: 15px;
+$textbox--placeholder: #424d5e;
+$textbox--selection--foreground: #1a2028;
+$textbox--selection--background: $blue--lighter;
+$textbox--active--background: $textbox--background;
+$textbox--active--border: $blue;
+$textbox--active--foreground: $blue;
+$textbox--active--placeholder: $textbox--placeholder;

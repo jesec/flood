@@ -2,9 +2,6 @@ import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import Badge from '../../general/Badge';
-import DirectoryTree from '../../general/filesystem/DirectoryTree';
-import File from '../../icons/File';
-import FolderOpenSolid from '../../icons/FolderOpenSolid';
 import Size from '../../general/Size';
 
 export default class TorrentPeers extends React.Component {
@@ -37,10 +34,12 @@ export default class TorrentPeers extends React.Component {
           let image = null;
 
           if (!erroredCountryImages.includes(countryCode)) {
-            const flagImageSrc = require('../../../../images/flags/'  + `${countryCode.toLowerCase()}.png`);
+            const flagImageSrc = require(`../../../../images/flags/${countryCode.toLowerCase()}.png`);
 
             image = (
-              <img className="peers-list__flag__image"
+              <img
+                alt={countryCode}
+                className="peers-list__flag__image"
                 onError={this.getImageErrorHandlerFn(countryCode)}
                 src={flagImageSrc} />
             );

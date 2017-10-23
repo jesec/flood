@@ -1,11 +1,9 @@
 import {FormattedMessage} from 'react-intl';
-import classnames from 'classnames';
 import React from 'react';
 
 import EventTypes from '../../constants/EventTypes';
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
-import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [

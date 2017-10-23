@@ -40,7 +40,6 @@ export default {
   'button.no': 'No',
   'button.save': 'Guardar Configuración',
   'button.state.adding': 'Agregando...',
-  'button.state.saving': 'Guardando...',
   'button.yes': 'Sí',
 
   'feeds.add.automatic.download.rule': 'Agregar Regla de Descarga',
@@ -65,8 +64,8 @@ export default {
   'feeds.tabs.feeds': 'Fuentes',
   'feeds.tabs.heading': 'Fuentes de Torrent',
   'feeds.tags': 'Etiquetas',
-  'feeds.time.hr': 'hr',
-  'feeds.time.min': 'min',
+  'feeds.time.hr': '{durationValue} hr',
+  'feeds.time.min': '{durationValue} min',
   'feeds.torrent.destination': 'Destinación de Torrent',
   'feeds.url': 'URL',
   'feeds.validation.invalid.regular.expression': 'RegEx invalida.',
@@ -306,7 +305,6 @@ export default {
   'torrents.remove': 'Eliminar Torrents',
 
   'torrents.set.tags.button.set': 'Configurar',
-  'torrents.set.tags.button.state.setting': 'Guardando...',
   'torrents.set.tags.heading': 'Configurar Etiquetas',
 
   'torrents.sort.title': 'Ordenar Por'

@@ -1,28 +1,14 @@
 import _ from 'lodash';
-import {defineMessages, formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
+import {Button, Form, FormError, FormRow, FormRowGroup, FormRowItem, Select, SelectItem, Textbox} from 'flood-ui-kit';
 import formatUtil from 'universally-shared-code/util/formatUtil';
 import React from 'react';
 
-import AddMini from '../../icons/AddMini';
-import AuthStore from '../../../stores/AuthStore';
-import Checkbox from '../../general/form-elements/Checkbox';
 import Close from '../../icons/Close';
-import Dropdown from '../../general/form-elements/Dropdown';
-import FeedMonitorStore from '../../../stores/FeedMonitorStore';
-import FormColumn from '../../general/form-elements/FormColumn';
-import FormLabel from '../../general/form-elements/FormLabel';
 import EventTypes from '../../../constants/EventTypes';
-import RemoveMini from '../../icons/RemoveMini';
-import SettingsActions from '../../../actions/SettingsActions';
-import TorrentDestination from '../../general/filesystem/TorrentDestination';
+import FeedMonitorStore from '../../../stores/FeedMonitorStore';
+import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import Validator from '../../../util/Validator';
-
-const METHODS_TO_BIND = [
-  'handleAddFeedClick',
-  'handleFeedMonitorsFetchSuccess',
-  'handleIntervalDropdownSelect',
-  'handleRemoveFeedClick'
-];
 
 const MESSAGES = defineMessages({
   mustSpecifyURL: {
@@ -35,11 +21,11 @@ const MESSAGES = defineMessages({
   },
   min: {
     id: 'feeds.time.min',
-    defaultMessage: 'min'
+    defaultMessage: '{durationValue} min'
   },
   hr: {
     id: 'feeds.time.hr',
-    defaultMessage: 'hr'
+    defaultMessage: '{durationValue} hr'
   },
   url: {
     id: 'feeds.url',
@@ -52,158 +38,141 @@ const MESSAGES = defineMessages({
 });
 
 class FeedsTab extends React.Component {
-  constructor() {
-    super(...arguments);
+  formRef;
+  validatedFields = {
+    url: {
+      isValid: Validator.isURLValid,
+      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyURL)
+    },
+    label: {
+      isValid: Validator.isNotEmpty,
+      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel)
+    }
+  };
 
-    this.inputRefs = {};
-    this.state = {
-      addFeedsError: null,
-      errors: {},
-      intervals: [
-        {
-          displayName: `5 ${this.props.intl.formatMessage(MESSAGES.min)}`,
-          selected: true,
-          value: 5
-        },
-        {
-          displayName: `15 ${this.props.intl.formatMessage(MESSAGES.min)}`,
-          selected: false,
-          value: 15
-        },
-        {
-          displayName: `30 ${this.props.intl.formatMessage(MESSAGES.min)}`,
-          selected: false,
-          value: 30
-        },
-        {
-          displayName: `5 ${this.props.intl.formatMessage(MESSAGES.hr)}`,
-          selected: false,
-          value: 60
-        }
-      ],
-      feeds: FeedMonitorStore.getFeeds(),
-      rules: FeedMonitorStore.getRules()
-    };
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-
-    this.checkFieldValidity = _.throttle(this.checkFieldValidity, 150);
-
-    this.validatedFields = {
-      url: {
-        isValid: Validator.isURLValid,
-        error: this.props.intl.formatMessage(MESSAGES.mustSpecifyURL)
+  state = {
+    errors: {},
+    intervals: [
+      {
+        displayName: this.props.intl.formatMessage(MESSAGES.min, {durationValue: 5}),
+        value: 5
       },
-      label: {
-        isValid: Validator.isNotEmpty,
-        error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel)
+      {
+        displayName: this.props.intl.formatMessage(MESSAGES.min, {durationValue: 15}),
+        value: 15
+      },
+      {
+        displayName: this.props.intl.formatMessage(MESSAGES.min, {durationValue: 30}),
+        value: 30
+      },
+      {
+        displayName: this.props.intl.formatMessage(MESSAGES.hr, {durationValue: 5}),
+        value: 60
       }
-    };
-  }
+    ],
+    feeds: FeedMonitorStore.getFeeds(),
+    rules: FeedMonitorStore.getRules()
+  };
 
   componentDidMount() {
-    FeedMonitorStore.listen(EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
-      this.handleFeedMonitorsFetchSuccess);
-  }
-
-  componentWillUnmount() {
-    FeedMonitorStore.unlisten(EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
-      this.handleFeedMonitorsFetchSuccess);
-  }
-
-  checkFieldValidity(fieldName, fieldValue) {
-    let {errors} = this.state;
-
-    if (this.state.errors[fieldName]
-      && this.validatedFields[fieldName].isValid(fieldValue)) {
-      delete errors[fieldName];
-      this.setState({errors});
-    }
-  }
-
-  getIntervalDropdownHeader() {
-    let dropdownText = null;
-    let selectedInterval = this.getSelectedDropdownItem('intervals');
-
-    if (selectedInterval) {
-      dropdownText = selectedInterval.displayName;
-    } else {
-      dropdownText = this.props.intl.formatMessage({
-        id: 'feeds.select.interval',
-        defaultMessage: 'Select Interval'
-      });
-    }
-
-    return (
-      <a className="dropdown__button">
-        <span className="dropdown__value">{dropdownText}</span>
-      </a>
+    FeedMonitorStore.listen(
+      EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
+      this.handleFeedMonitorsFetchSuccess
     );
   }
 
-  getFeedFields() {
-    let {errors} = this.state;
+  componentWillUnmount() {
+    FeedMonitorStore.unlisten(
+      EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
+      this.handleFeedMonitorsFetchSuccess
+    );
+  }
 
-    return [
-      <div className="form__row" key="feed-row-1">
-        <FormColumn error={errors.label}>
-          <FormLabel error={errors.label}>
-            <FormattedMessage id="feeds.label"
-              defaultMessage="Label" />
-          </FormLabel>
-          <input className="textbox"
-            onChange={this.handleFieldInput.bind(this, 'label')}
+  checkFieldValidity = _.throttle(
+    (fieldName, fieldValue) => {
+      const {errors} = this.state;
+
+      if (
+        this.state.errors[fieldName]
+        && this.validatedFields[fieldName].isValid(fieldValue)
+      ) {
+        delete errors[fieldName];
+        this.setState({errors});
+      }
+    },
+    150
+  );
+
+  getIntervalSelectOptions() {
+    return this.state.intervals.map((interval, index) => {
+      return (
+        <SelectItem key={index} id={interval.value}>
+          {interval.displayName}
+        </SelectItem>
+      );
+    });
+  }
+
+  getAddFeedForm() {
+    return (
+      <FormRowGroup>
+        <FormRow>
+          <Textbox
+            id="label"
+            label={this.props.intl.formatMessage(MESSAGES.label)}
             placeholder={this.props.intl.formatMessage(MESSAGES.label)}
-            ref={ref => this.inputRefs.feedLabel = ref}
-            type="text" />
-        </FormColumn>
-        <FormColumn modifiers={['auto']}>
-          <FormLabel>
-            <FormattedMessage id="feeds.interval"
-              defaultMessage="Interval" />
-          </FormLabel>
-          <Dropdown
-            handleItemSelect={this.handleIntervalDropdownSelect}
-            header={this.getIntervalDropdownHeader()}
-            menuItems={[this.state.intervals]}
-            width="small" />
-        </FormColumn>
-      </div>,
-      <div className="form__row" key="feed-row-2">
-        <FormColumn error={errors.url}>
-          <FormLabel error={errors.url}>
-            <FormattedMessage id="feeds.url"
-              defaultMessage="URL" />
-          </FormLabel>
-          <input className="textbox"
-            onChange={this.handleFieldInput.bind(this, 'url')}
+          />
+            <Select
+              defaultID={this.state.intervals[0].value}
+              label={this.props.intl.formatMessage({
+                id: 'feeds.interval',
+                defaultMessage: 'Interval'
+              })}
+              id="interval"
+              width="one-quarter"
+            >
+              {this.getIntervalSelectOptions()}
+            </Select>
+        </FormRow>
+        <FormRow>
+          <Textbox
+            id="url"
+            label={this.props.intl.formatMessage({
+              id: 'feeds.url',
+              defaultMessage: 'URL'
+            })}
             placeholder={this.props.intl.formatMessage(MESSAGES.url)}
-            ref={ref => this.inputRefs.feedURL = ref} type="text" />
-        </FormColumn>
-        <FormColumn modifiers={['auto']}>
-          <button className="button button--primary"
-            onClick={this.handleAddFeedClick}>
-            <FormattedMessage id="button.add"
-              defaultMessage="Add" />
-          </button>
-        </FormColumn>
-      </div>
-    ];
+          />
+          <Button labelOffset type="submit">
+            <FormattedMessage
+              id="button.add"
+              defaultMessage="Add"
+            />
+          </Button>
+        </FormRow>
+      </FormRowGroup>
+    );
   }
 
   getFeedsList() {
     if (this.state.feeds.length === 0) {
-      return <em><FormattedMessage id="feeds.no.feeds.defined"
-                  defaultMessage="No feeds defined." /></em>;
+      return (
+        <ul className="interactive-list">
+          <li className="interactive-list__item">
+            <FormattedMessage
+              defaultMessage="No feeds defined."
+              id="feeds.no.feeds.defined"
+            />
+          </li>
+        </ul>
+      );
     }
 
-    let feedsList = this.state.feeds.map((feed, index) => {
+    const feedsList = this.state.feeds.map((feed, index) => {
       let matchedCount = feed.count || 0;
 
       return (
-        <li className="interactive-list__item feed-list__feed" key={feed._id}>
+        <li className="interactive-list__item interactive-list__item--stacked-content feed-list__feed" key={feed._id}>
           <div className="interactive-list__label">
             <ul className="interactive-list__detail-list">
               <li className="interactive-list__detail-list__item
@@ -230,11 +199,12 @@ class FeedsTab extends React.Component {
               </li>
             </ul>
           </div>
-          <div className="interactive-list__icon
-            interactive-list__icon--action"
-            onClick={this.handleRemoveFeedClick.bind(this, feed)}>
+          <span
+            className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
+            onClick={() => this.handleRemoveFeedClick(feed)}
+          >
             <Close />
-          </div>
+          </span>
         </li>
       );
     });
@@ -252,110 +222,85 @@ class FeedsTab extends React.Component {
     });
   }
 
-  handleAddFeedClick() {
-    let {errors, formData, isValid} = this.validateForm();
+  handleFormSubmit = () => {
+    const {errors, isValid} = this.validateForm();
 
     if (!isValid) {
       this.setState({errors});
     } else {
-      FeedMonitorStore.addFeed(formData);
-      this.resetFormFields();
+      FeedMonitorStore.addFeed(this.formRef.getFormData());
+      this.formRef.resetForm();
     }
-  }
+  };
 
-  handleFieldInput(fieldName, event) {
-    this.checkFieldValidity(fieldName, event.target.value);
-  }
-
-  handleFeedMonitorsFetchSuccess() {
+  handleFeedMonitorsFetchSuccess = () => {
     this.setState({
       feeds: FeedMonitorStore.getFeeds(),
       rules: FeedMonitorStore.getRules()
     });
-  }
+  };
 
-  handleIntervalDropdownSelect(selectedInterval) {
-    this.setState({
-      intervals: this.state.intervals.map((interval) => {
-        return {
-          ...interval,
-          selected: selectedInterval.value === interval.value
-        };
-      })
-    });
-  }
+  handleFormChange = ({event, formData}) => {
+    this.checkFieldValidity(event.target.name, formData[event.target.name]);
+  };
 
-  handleRemoveFeedClick(feed) {
+  handleRemoveFeedClick = (feed) => {
     FeedMonitorStore.removeFeed(feed._id);
-  }
-
-  resetFormFields() {
-    let {inputRefs = {}} = this;
-
-    Object.keys(inputRefs).forEach((fieldName) => {
-      this.inputRefs[fieldName].value = '';
-    });
-  }
+  };
 
   validateForm() {
-    let isValid = true;
-    let selectedInterval = this.getSelectedDropdownItem('intervals');
-
-    let formData = {
-      interval: selectedInterval.value,
-      label: this.inputRefs.feedLabel.value,
-      url: this.inputRefs.feedURL.value
-    };
-
-    let errors = Object.keys(this.validatedFields).reduce((memo, fieldName) => {
+    const formData = this.formRef.getFormData();
+    const errors = Object.keys(this.validatedFields).reduce((memo, fieldName) => {
       let fieldValue = formData[fieldName];
 
       if (!this.validatedFields[fieldName].isValid(fieldValue)) {
         memo[fieldName] = this.validatedFields[fieldName].error;
-        isValid = false;
       }
 
       return memo;
     }, {});
 
-    return {errors, isValid, formData};
+    return {errors, isValid: !Object.keys(errors).length};
   }
 
   render() {
-    let error = null;
-
-    if (this.state.addFeedsError) {
-      error = (
-        <div className="form__row">
-          <FormColumn>
-            {this.state.addFeedsError}
-          </FormColumn>
-        </div>
-      );
-    }
+    const errors = Object.keys(this.state.errors).map(
+      (errorID, index) => {
+        return (
+          <FormRow key={index}>
+            <FormError>
+              {this.state.errors[errorID]}
+            </FormError>
+          </FormRow>
+        );
+      }
+    );
 
     return (
-      <div className="form">
-        <div className="form__section">
-          <div className="form__section__heading">
-            <FormattedMessage id="feeds.existing.feeds"
-              defaultMessage="Existing Feeds" />
-          </div>
-          <div className="form__row">
-            <FormColumn>
-              {this.getFeedsList()}
-            </FormColumn>
-          </div>
-        </div>
-        <div className="form__section">
-          <div className="form__section__heading">
-            <FormattedMessage id="feeds.add.feed"
-              defaultMessage="Add Feed" />
-          </div>
-          {this.getFeedFields()}
-          {error}
-        </div>
-      </div>
+      <Form
+        className="inverse"
+        onChange={this.handleFormChange}
+        onSubmit={this.handleFormSubmit}
+        ref={ref => this.formRef = ref}
+      >
+        <ModalFormSectionHeader>
+          <FormattedMessage id="feeds.existing.feeds"
+            defaultMessage="Existing Feeds" />
+        </ModalFormSectionHeader>
+        <FormRow>
+          <FormRowItem>
+            {this.getFeedsList()}
+          </FormRowItem>
+        </FormRow>
+        <ModalFormSectionHeader>
+          <FormattedMessage
+            id="feeds.add.feed"
+            defaultMessage="Add Feed"
+          />
+        </ModalFormSectionHeader>
+        {errors}
+        {this.getAddFeedForm()}
+      </Form>
     );
   }
 }

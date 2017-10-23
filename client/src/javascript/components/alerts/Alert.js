@@ -1,14 +1,23 @@
 import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
-import stringUtil from 'universally-shared-code/util/stringUtil';
 
 import Alerts from '../../constants/Alerts';
 import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
 import CircleExclamationIcon from '../icons/CircleExclamationIcon';
 
 export default class Alert extends React.Component {
+  static propTypes = {
+    count: PropTypes.number,
+    id: PropTypes.string
+  };
+
+  static defaultProps = {
+    count: 0,
+    type: 'success'
+  };
+
   render() {
     let icon = <CircleCheckmarkIcon />;
     let alertClasses = classnames('alert', {
@@ -37,13 +46,3 @@ export default class Alert extends React.Component {
     );
   }
 }
-
-Alert.defaultProps = {
-  count: 0,
-  type: 'success'
-};
-
-Alert.propTypes = {
-  count: React.PropTypes.number,
-  id: React.PropTypes.string
-};

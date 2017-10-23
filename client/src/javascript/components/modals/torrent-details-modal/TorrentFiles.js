@@ -1,23 +1,18 @@
 import _ from 'lodash';
+import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from 'flood-ui-kit';
 import classnames from 'classnames';
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-import Checkbox from '../../general/form-elements/Checkbox';
 import ConfigStore from '../../../stores/ConfigStore';
 import Disk from '../../icons/Disk';
 import DirectoryTree from '../../general/filesystem/DirectoryTree';
-import Dropdown from '../../general/form-elements/Dropdown';
-import File from '../../icons/File';
 import TorrentStore from '../../../stores/TorrentStore';
-
-const baseURI = ConfigStore.getBaseURI();
 
 const TORRENT_PROPS_TO_CHECK = ['bytesDone'];
 const METHODS_TO_BIND = [
   'handleItemSelect',
   'handlePriorityChange',
-  'handlePriorityDropdownSelect',
   'handleSelectAllClick'
 ];
 
@@ -75,63 +70,6 @@ class TorrentFiles extends React.Component {
     return true;
   }
 
-  getDownloadButton() {
-    return (
-      <a className="button button--download button--primary button--link"
-        download
-        href={`${baseURI}api/download?hash=${this.props.torrent.hash}&files=${this.state.selectedFiles.join(',')}`}>
-        <FormattedMessage id="torrents.details.files.download.file"
-          defaultMessage="{count, plural, =1 {Download File} other
-            {Download Files}}"
-          values={{
-            count: this.state.selectedFiles.length
-          }}/>
-      </a>
-    );
-  }
-
-  getPriorityDropdownHeader() {
-    return (
-      <a className="dropdown__button">
-        <span className="dropdown__value button button--link button--primary">
-          <FormattedMessage id="torrents.details.selected.files.set.priority"
-            defaultMessage="Set Priority" />
-        </span>
-      </a>
-    );
-  }
-
-  getPriorityDropdownItems() {
-    return [
-      [
-        {
-          displayName: this.props.intl.formatMessage({
-            id: 'priority.dont.download',
-            defaultMessage: 'Don\'t Download'
-          }),
-          selected: false,
-          value: 0
-        },
-        {
-          displayName: this.props.intl.formatMessage({
-            id: 'priority.normal',
-            defaultMessage: 'Normal'
-          }),
-          selected: false,
-          value: 1
-        },
-        {
-          displayName: this.props.intl.formatMessage({
-            id: 'priority.high',
-            defaultMessage: 'High'
-          }),
-          selected: false,
-          value: 2
-        }
-      ]
-    ];
-  }
-
   getSelectedFiles(selectionTree, selectedFiles = []) {
     if (selectionTree.files) {
       selectedFiles = [...selectedFiles, ...Object.keys(selectionTree.files).reduce((previousValue, filename) => {
@@ -154,11 +92,25 @@ class TorrentFiles extends React.Component {
     return selectedFiles;
   }
 
-  handlePriorityDropdownSelect(selectedPriority) {
-    this.handlePriorityChange();
-    TorrentStore.setFilePriority(this.props.hash, this.state.selectedFiles,
-      selectedPriority.value);
-  }
+  handleDownloadButtonClick = event => {
+    event.preventDefault();
+    const baseURI = ConfigStore.getBaseURI();
+    const link = document.createElement('a');
+    link.download = `${this.props.torrent.name}.tar`;
+    link.href = `${baseURI}api/download?hash=${this.props.torrent.hash}&files=${this.state.selectedFiles.join(',')}`;
+    link.click();
+  };
+
+  handleFormChange = ({event, formData}) => {
+    if (event.target.name === 'file-priority') {
+      this.handlePriorityChange();
+      TorrentStore.setFilePriority(
+        this.props.hash,
+        this.state.selectedFiles,
+        event.target.value
+      );
+    }
+  };
 
   handleItemSelect(selectedItem) {
     this.hasSelectionChanged = true;
@@ -280,11 +232,16 @@ class TorrentFiles extends React.Component {
 
     if (this.isLoaded()) {
       directoryHeadingIconContent = (
-        <div className="directory-tree__checkbox">
+        <div className="file__checkbox directory-tree__checkbox">
           <div className="directory-tree__checkbox__item
             directory-tree__checkbox__item--checkbox">
-            <Checkbox checked={this.state.allSelected}
-              onChange={this.handleSelectAllClick} useProps={true} />
+            <FormRow>
+              <Checkbox
+                checked={this.state.allSelected}
+                onChange={this.handleSelectAllClick}
+                useProps={true}
+              />
+            </FormRow>
           </div>
           <div className="directory-tree__checkbox__item
             directory-tree__checkbox__item--icon">
@@ -314,40 +271,74 @@ class TorrentFiles extends React.Component {
 
     let directoryHeading = (
       <div className={directoryHeadingClasses}>
-        {directoryHeadingIconContent}
-        {torrent.directory}
+        <div className="file__label">
+          {directoryHeadingIconContent}
+          <div className="file__name">
+            {torrent.directory}
+          </div>
+        </div>
       </div>
     );
 
-    let wrapperClasses = classnames('directory-tree__wrapper', {
+    let wrapperClasses = classnames('inverse directory-tree__wrapper', {
       'directory-tree__wrapper--toolbar-visible': this.state.selectedFiles.length > 0
     });
 
     return (
-      <div className={wrapperClasses}>
-        <div className="directory-tree__selection-toolbar
-          modal__content--nested-scroll__header">
-          <FormattedMessage id="torrents.details.selected.files"
-            defaultMessage="{count, plural, =1 {{countElement} selected file} other
-              {{countElement} selected files}}"
-            values={{
-              count: this.state.selectedFiles.length,
-              countElement: <span className="directory-tree__selection-toolbar__item-count">{this.state.selectedFiles.length}</span>
-            }}/>
-          {this.getDownloadButton()}
-          <Dropdown
-            direction="up"
-            handleItemSelect={this.handlePriorityDropdownSelect}
-            header={this.getPriorityDropdownHeader()}
-            menuItems={this.getPriorityDropdownItems()} />
+      <Form className={wrapperClasses} onChange={this.handleFormChange}>
+        <div className="directory-tree__selection-toolbar">
+          <FormRow align="center">
+            <FormRowItem width="one-quarter" grow={false} shrink={false}>
+              <FormattedMessage id="torrents.details.selected.files"
+                defaultMessage="{count, plural, =1 {{countElement} selected file} other
+                  {{countElement} selected files}}"
+                values={{
+                  count: this.state.selectedFiles.length,
+                  countElement: <span className="directory-tree__selection-toolbar__item-count">{this.state.selectedFiles.length}</span>
+              }}/>
+            </FormRowItem>
+            <Button onClick={this.handleDownloadButtonClick} grow={false} shrink={false}>
+              <FormattedMessage
+                id="torrents.details.files.download.file"
+                defaultMessage="{count, plural, =1 {Download File} other
+                  {Download Files}}"
+                values={{
+                  count: this.state.selectedFiles.length
+                }}/>
+            </Button>
+            <Select id="file-priority" persistentPlaceholder shrink={false}>
+              <SelectItem placeholder>
+                <FormattedMessage
+                  id="torrents.details.selected.files.set.priority"
+                  defaultMessage="Set Priority"
+                />
+              </SelectItem>
+              <SelectItem id={0}>
+                {this.props.intl.formatMessage({
+                  id: 'priority.dont.download',
+                  defaultMessage: 'Don\'t Download'
+                })}
+              </SelectItem>
+              <SelectItem id={1}>
+                {this.props.intl.formatMessage({
+                  id: 'priority.normal',
+                  defaultMessage: 'Normal'
+                })}
+              </SelectItem>
+              <SelectItem id={2}>
+                {this.props.intl.formatMessage({
+                  id: 'priority.high',
+                  defaultMessage: 'High'
+                })}
+              </SelectItem>
+            </Select>
+          </FormRow>
         </div>
-        <div className="directory-tree torrent-details__section
-          torrent-details__section--file-tree
-          modal__content--nested-scroll__content">
+        <div className="directory-tree torrent-details__section torrent-details__section--file-tree modal__content--nested-scroll__content">
           {directoryHeading}
           {fileDetailContent}
         </div>
-      </div>
+      </Form>
     );
   }
 }

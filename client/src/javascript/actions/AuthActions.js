@@ -34,9 +34,7 @@ let AuthActions = {
 
   createUser: (credentials) => {
     return axios.put(`${baseURI}auth/users`, credentials)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_CREATE_USER_SUCCESS,
@@ -51,10 +49,8 @@ let AuthActions = {
   },
 
   deleteUser: (username) => {
-    return axios.delete(`${baseURI}auth/users/${username}`)
-      .then((json = {}) => {
-        return json.data;
-      })
+    return axios.delete(`${baseURI}auth/users/${encodeURIComponent(username)}`)
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_DELETE_USER_SUCCESS,
@@ -76,9 +72,7 @@ let AuthActions = {
 
   fetchUsers: () => {
     return axios.get(`${baseURI}auth/users`)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LIST_USERS_SUCCESS,
@@ -94,9 +88,7 @@ let AuthActions = {
 
   register: (credentials) => {
     return axios.post(`${baseURI}auth/register`, credentials)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_REGISTER_SUCCESS,
@@ -113,9 +105,7 @@ let AuthActions = {
   verify: () => {
     // We need to prevent caching this endpoint.
     return axios.get(`${baseURI}auth/verify?${Date.now()}`)
-      .then((json = {}) => {
-        return json.data;
-      })
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_VERIFY_SUCCESS,

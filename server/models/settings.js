@@ -1,10 +1,11 @@
 'use strict';
 
-let Datastore = require('nedb');
+const _ = require('lodash');
+const Datastore = require('nedb');
 
-let config = require('../../config');
+const config = require('../../config');
 
-let settingsDB = new Datastore({
+const settingsDB = new Datastore({
   autoload: true,
   filename: `${config.dbPath}settings/settings.db`
 });
@@ -48,7 +49,7 @@ const transformLegacyKeys = settings => {
     settings.torrentDetails = settings.torrentDetails.reduce(
       (accumulator, detailItem, index) => {
         if (
-          detailItem.id in changedKeys
+          detailItem && detailItem.id in changedKeys
           && !(settings.torrentDetails.some(subDetailItem => {
             return subDetailItem.id === changedKeys[detailItem.id];
           }))
@@ -104,26 +105,30 @@ let settings = {
     });
   },
 
-  set: (payloads, callback) => {
+  set: (payloads, callback = _.noop) => {
     let docsResponse = [];
 
     if (!Array.isArray(payloads)) {
       payloads = [payloads];
     }
 
-    payloads.forEach((payload, index) => {
-      settingsDB.update({id: payload.id}, {$set: {data: payload.data}}, {upsert: true}, (err, docs) => {
-        docsResponse.push(docs);
-        if (index + 1 === payloads.length) {
-          if (err) {
-            callback(null, err);
+    if (payloads && payloads.length) {
+      payloads.forEach((payload, index) => {
+        settingsDB.update({id: payload.id}, {$set: {data: payload.data}}, {upsert: true}, (err, docs) => {
+          docsResponse.push(docs);
+          if (index + 1 === payloads.length) {
+            if (err) {
+              callback(null, err);
+              return;
+            }
+            callback(docsResponse);
             return;
           }
-          callback(docsResponse);
-          return;
-        }
+        });
       });
-    });
+    } else {
+      callback();
+    }
   }
 };
 

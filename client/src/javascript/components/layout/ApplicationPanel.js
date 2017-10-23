@@ -1,7 +1,18 @@
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 class ApplicationContent extends React.Component {
+  static propTypes = {
+    children: PropTypes.node,
+    className: PropTypes.string,
+    modifier: PropTypes.string
+  };
+
+  static defaultProps = {
+    baseClassName: 'application__panel'
+  };
+
   render() {
     let classes = classnames(this.props.baseClassName, {
       [`${this.props.baseClassName}--${this.props.modifier}`]: this.props.baseClassName,
@@ -15,15 +26,5 @@ class ApplicationContent extends React.Component {
     );
   }
 }
-
-ApplicationContent.defaultProps = {
-  baseClassName: 'application__panel'
-};
-
-ApplicationContent.propTypes = {
-  children: React.PropTypes.node,
-  className: React.PropTypes.string,
-  modifier: React.PropTypes.string
-};
 
 export default ApplicationContent;

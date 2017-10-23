@@ -45,6 +45,11 @@
       opacity: 0;
       transition: opacity 0.25s;
       width: $spacing-unit * 2/5;
+
+      .icon {
+        height: 10px;
+        width: 10px;
+      }
     }
 
     &--satisfied {

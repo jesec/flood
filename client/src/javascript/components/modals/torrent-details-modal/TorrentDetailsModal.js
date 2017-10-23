@@ -1,4 +1,4 @@
-import {formatMessage, injectIntl} from 'react-intl';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
 import Modal from '../Modal';
@@ -132,8 +132,14 @@ class TorrentDetailsModal extends React.Component {
     };
 
     return (
-      <Modal heading={this.getModalHeading()} dismiss={this.dismissModal}
-        size="large" tabs={tabs} orientation="vertical" tabsInBody={true} />
+      <Modal
+        heading={this.getModalHeading()}
+        dismiss={this.dismissModal}
+        size="large"
+        tabs={tabs}
+        orientation="vertical"
+        tabsInBody={true}
+      />
     );
   }
 }

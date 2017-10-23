@@ -10,7 +10,7 @@ $scrollbar--thumb--background--inverted--hover: rgba(#e9eef2, 0.6);
     border-radius: 10px;
     cursor: pointer;
     opacity: 0;
-    transition: background 0.25s, opacity 0.5s, transform 0.125s;
+    transition: background 0.25s, opacity 0.5s;
     z-index: 2;
 
     &:active {

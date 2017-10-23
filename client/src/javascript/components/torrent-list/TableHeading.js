@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import classnames from 'classnames';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
@@ -152,8 +151,6 @@ class TableHeading extends React.Component {
   }
 
   render() {
-    let dragIndicatorStyle = null;
-
     return (
       <div className="table__row table__row--heading"
         ref={ref => this.tableHeading = ref}>

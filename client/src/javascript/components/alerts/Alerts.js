@@ -1,7 +1,5 @@
-import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import Alert from './Alert';
 import AlertStore from '../../stores/AlertStore';

@@ -125,7 +125,7 @@ class FeedsStoreClass extends BaseStore {
 let FeedsStore = new FeedsStoreClass();
 
 FeedsStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.SETTINGS_FEED_MONITOR_FEED_ADD_ERROR:
@@ -163,6 +163,8 @@ FeedsStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS:
       FeedsStore.handleFeedMonitorsFetchSuccess(action.data);
+      break;
+    default:
       break;
   }
 });

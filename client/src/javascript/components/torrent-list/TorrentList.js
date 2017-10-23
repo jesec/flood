@@ -3,11 +3,11 @@ import _ from 'lodash';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
-import ContextMenu from '../general/ContextMenu';
 import ConfigStore from '../../stores/ConfigStore';
 import CustomScrollbars from '../general/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import Files from '../icons/Files';
+import GlobalContextMenuMountPoint from '../general/GlobalContextMenuMountPoint';
 import ListViewport from '../general/ListViewport';
 import LoadingIndicator from '../general/LoadingIndicator';
 import PriorityMeter from '../general/filesystem/PriorityMeter';
@@ -185,7 +185,7 @@ class TorrentListContainer extends React.Component {
   }
 
   getContextMenuItems(torrent) {
-    let clickHandler = this.handleContextMenuItemClick;
+    const clickHandler = this.handleContextMenuItemClick;
 
     return [{
       action: 'start',
@@ -298,6 +298,8 @@ class TorrentListContainer extends React.Component {
       case 'set-priority':
         this.state.handleTorrentPriorityChange(event);
         break;
+      default:
+        break;
     }
   }
 
@@ -316,7 +318,7 @@ class TorrentListContainer extends React.Component {
   handleTorrentDownload(torrent, event) {
     event.preventDefault();
     const baseURI = ConfigStore.getBaseURI();
-    let link = document.createElement('a');
+    const link = document.createElement('a');
     link.download = torrent.isMultiFile ? `${torrent.name}.tar` : torrent.name;
     link.href = `${baseURI}api/download?hash=${torrent.hash}`;
     link.click();
@@ -539,7 +541,7 @@ class TorrentListContainer extends React.Component {
 
   renderListItem(index) {
     const selectedTorrents = TorrentStore.getSelectedTorrents();
-    const {torrentListViewSize, torrents} = this.state;
+    const {displayedProperties, torrentListViewSize, torrentListColumnWidths, torrents} = this.state;
     const torrent = torrents[index];
     const {hash} = torrent;
 
@@ -553,8 +555,8 @@ class TorrentListContainer extends React.Component {
         index={index}
         isCondensed={torrentListViewSize === 'condensed'}
         key={hash}
-        columns={this.state.displayedProperties}
-        propWidths={this.state.torrentListColumnWidths}
+        columns={displayedProperties}
+        propWidths={torrentListColumnWidths}
         selected={selectedTorrents.includes(hash)}
         torrent={torrent} />
     );
@@ -564,7 +566,7 @@ class TorrentListContainer extends React.Component {
     if (this.horizontalScrollRef != null) {
       this.setState({
         torrentListViewportSize:
-          this.horizontalScrollRef.refs.scrollbar.getClientWidth()
+          this.horizontalScrollRef.scrollbarRef.getClientWidth()
       });
     }
   }
@@ -631,7 +633,7 @@ class TorrentListContainer extends React.Component {
           ref={ref => this.horizontalScrollRef = ref}>
           <div className="torrent__list__wrapper"
             style={listWrapperStyle}>
-            <ContextMenu id="torrent-list-item" />
+            <GlobalContextMenuMountPoint id="torrent-list-item" />
             {torrentListHeading}
             {content}
           </div>

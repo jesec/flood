@@ -7,7 +7,7 @@ export default class Close extends BaseIcon {
     return (
       <svg className={`icon icon--close ${this.props.className}`}
         viewBox={this.getViewBox()}>
-        <polygon points="59.67 9.54 50.46 0.33 30 20.8 9.54 0.33 0.33 9.54 20.8 30 0.34 50.46 9.54 59.67 30 39.21 50.46 59.67 59.67 50.46 39.21 30 59.67 9.54"/>
+        <polygon points="52.5 14.48 45.52 7.5 30 23.02 14.48 7.5 7.5 14.48 23.02 30 7.51 45.52 14.48 52.5 30 36.98 45.52 52.5 52.5 45.52 36.98 30 52.5 14.48"/>
       </svg>
     );
   }

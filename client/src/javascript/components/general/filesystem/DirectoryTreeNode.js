@@ -1,7 +1,8 @@
+import {Checkbox} from 'flood-ui-kit';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 
-import Checkbox from '../form-elements/Checkbox';
 import FolderClosedSolid from '../../icons/FolderClosedSolid';
 import FolderOpenSolid from '../../icons/FolderOpenSolid';
 import DirectoryTree from './DirectoryTree';
@@ -9,6 +10,18 @@ import DirectoryTree from './DirectoryTree';
 const METHODS_TO_BIND = ['handleDirectoryClick', 'handleDirectorySelection'];
 
 class DirectoryTreeNode extends React.Component {
+  static propTypes = {
+    isParentSelected: PropTypes.bool,
+    path: PropTypes.array,
+    selectedItems: PropTypes.object
+  };
+
+  static defaultProps = {
+    isParentSelected: false,
+    path: [],
+    selectedItems: {}
+  };
+
   constructor() {
     super();
 
@@ -35,11 +48,15 @@ class DirectoryTreeNode extends React.Component {
     }
 
     return (
-      <div className="directory-tree__checkbox">
+      <div className="file__checkbox directory-tree__checkbox">
         <div className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <Checkbox checked={this.props.isSelected}
-            onChange={this.handleDirectorySelection} useProps={true} />
+          <Checkbox
+            checked={this.props.isSelected}
+            id={this.props.id}
+            onChange={this.handleDirectorySelection}
+            useProps={true}
+          />
         </div>
         <div className="directory-tree__checkbox__item
           directory-tree__checkbox__item--icon">
@@ -74,7 +91,7 @@ class DirectoryTreeNode extends React.Component {
     });
   }
 
-  handleDirectorySelection(value, event) {
+  handleDirectorySelection(event) {
     this.props.onItemSelect({
       depth: this.props.depth,
       event,
@@ -101,25 +118,17 @@ class DirectoryTreeNode extends React.Component {
         <div className={directoryClasses}
           onClick={this.handleDirectoryClick}
           title={this.props.directoryName}>
-          {this.getIcon()}
-          {this.props.directoryName}
+          <div className="file__label">
+            {this.getIcon()}
+            <div className="file__name">
+              {this.props.directoryName}
+            </div>
+          </div>
         </div>
         {this.getSubTree()}
       </div>
     );
   }
 }
-
-DirectoryTreeNode.defaultProps = {
-  isParentSelected: false,
-  path: [],
-  selectedItems: {}
-};
-
-DirectoryTreeNode.propTypes = {
-  isParentSelected: React.PropTypes.bool,
-  path: React.PropTypes.array,
-  selectedItems: React.PropTypes.object
-};
 
 export default DirectoryTreeNode;

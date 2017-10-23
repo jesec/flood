@@ -1,5 +1,4 @@
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
-import classnames from 'classnames';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Active from '../icons/Active';
@@ -12,7 +11,6 @@ import Inactive from '../icons/Inactive';
 import SidebarFilter from './SidebarFilter';
 import StopIcon from '../icons/StopIcon';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
-import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
 const METHODS_TO_BIND = [

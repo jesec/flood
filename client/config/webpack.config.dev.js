@@ -114,7 +114,7 @@ module.exports = {
             loader: require.resolve('eslint-loader'),
           },
         ],
-        include: paths.appSrc,
+        include: paths.clientSrc,
       },
       // ** ADDING/UPDATING LOADERS **
       // The "file" loader handles all assets unless explicitly excluded.
@@ -180,6 +180,9 @@ module.exports = {
             options: {
               importLoaders: 1,
             },
+            options: {
+              sourceMap: true
+            }
           },
           {
             loader: require.resolve('postcss-loader'),
@@ -199,10 +202,14 @@ module.exports = {
                   flexbox: 'no-2009',
                 }),
               ],
+              sourceMap: true
             },
           },
           {
             loader: require.resolve('sass-loader'),
+            options: {
+              sourceMap: true
+            }
           },
         ],
       },

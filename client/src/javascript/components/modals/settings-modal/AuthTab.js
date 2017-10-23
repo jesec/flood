@@ -1,58 +1,68 @@
-import _ from 'lodash';
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {Button, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from 'flood-ui-kit';
+import classnames from 'classnames';
+import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import AuthStore from '../../../stores/AuthStore';
-import Checkbox from '../../general/form-elements/Checkbox';
 import Close from '../../icons/Close';
 import EventTypes from '../../../constants/EventTypes';
+import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import SettingsTab from './SettingsTab';
 
-const METHODS_TO_BIND = [
-  'handleAddUserClick',
-  'handleUserAddError',
-  'handleUserAddSuccess',
-  'handleUserListChange'
-];
-
 class AuthTab extends SettingsTab {
-  constructor() {
-    super(...arguments);
+  state = {
+    addUserError: null,
+    hasFetchedUserList: false,
+    isAddingUser: false,
+    users: []
+  };
 
-    this.state = {
-      addUserError: null,
-      users: []
-    };
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+  formData = {};
+  formRef = null;
 
   componentWillMount() {
     this.setState({users: AuthStore.getUsers()});
   }
 
   componentDidMount() {
-    AuthStore.listen(EventTypes.AUTH_LIST_USERS_SUCCESS,
-      this.handleUserListChange);
-    AuthStore.listen(EventTypes.AUTH_CREATE_USER_ERROR,
-      this.handleUserAddError);
-    AuthStore.listen(EventTypes.AUTH_CREATE_USER_SUCCESS,
-      this.handleUserAddSuccess);
-    AuthStore.listen(EventTypes.AUTH_DELETE_USER_SUCCESS,
-      this.handleUserDeleteSuccess);
+    AuthStore.listen(
+      EventTypes.AUTH_LIST_USERS_SUCCESS,
+      this.handleUserListChange
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_CREATE_USER_ERROR,
+      this.handleUserAddError
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_CREATE_USER_SUCCESS,
+      this.handleUserAddSuccess
+    );
+    AuthStore.listen(
+      EventTypes.AUTH_DELETE_USER_SUCCESS,
+      this.handleUserDeleteSuccess
+    );
+
+    AuthStore.fetchUserList();
   }
 
   componentWillUnmount() {
-    AuthStore.unlisten(EventTypes.AUTH_LIST_USERS_SUCCESS,
-      this.handleUserListChange);
-    AuthStore.unlisten(EventTypes.AUTH_CREATE_USER_ERROR,
-      this.handleUserAddError);
-    AuthStore.unlisten(EventTypes.AUTH_CREATE_USER_SUCCESS,
-      this.handleUserAddSuccess);
-    AuthStore.unlisten(EventTypes.AUTH_DELETE_USER_SUCCESS,
-      this.handleUserDeleteSuccess);
+    AuthStore.unlisten(
+      EventTypes.AUTH_LIST_USERS_SUCCESS,
+      this.handleUserListChange
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_CREATE_USER_ERROR,
+      this.handleUserAddError
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_CREATE_USER_SUCCESS,
+      this.handleUserAddSuccess
+    );
+    AuthStore.unlisten(
+      EventTypes.AUTH_DELETE_USER_SUCCESS,
+      this.handleUserDeleteSuccess
+    );
   }
 
   getUserList() {
@@ -60,24 +70,60 @@ class AuthTab extends SettingsTab {
       return a.username.localeCompare(b.username);
     });
 
+    const currentUsername = AuthStore.getCurrentUsername();
+
     return userList.map((user, index) => {
-      return (
-        <li className="interactive-list__item" key={index}>
-          <span className="interactive-list__label">
-            {user.username}
-          </span>
+      const isCurrentUser = user.username === currentUsername;
+      let badge = null;
+      let removeIcon = null;
+
+      if (!isCurrentUser) {
+        removeIcon = (
           <span className="interactive-list__icon
-            interactive-list__icon--action"
+            interactive-list__icon--action interactive-list__icon--action--warning"
             onClick={this.handleDeleteUserClick.bind(this, user.username)}>
             <Close />
           </span>
+        );
+      } else {
+        badge = (
+          <span className="interactive-list__label__tag tag">
+            <FormattedMessage
+              id="auth.current.user"
+              defaultMessage="Current User"
+            />
+          </span>
+        );
+      }
+
+      const classes = classnames('interactive-list__item', {
+        'interactive-list__item--disabled': isCurrentUser
+      });
+
+      return (
+        <li className={classes} key={index}>
+          <span className="interactive-list__label">
+            <div className="interactive-list__label__text">
+              {user.username}
+            </div>
+            {badge}
+          </span>
+          {removeIcon}
         </li>
       );
     });
   }
 
-  handleAddUserClick() {
-    if (this.refs.username.value === '') {
+  handleDeleteUserClick(username) {
+    AuthStore.deleteUser(username);
+  }
+
+  handleFormChange = ({event, formData}) => {
+    this.formData = formData;
+  };
+
+  handleFormSubmit = (formData) => {
+    if (this.formData.username === '') {
       this.setState({
         addUserError: this.props.intl.formatMessage({
           id: 'auth.error.username.empty',
@@ -85,115 +131,128 @@ class AuthTab extends SettingsTab {
         })
       });
     } else {
+      this.setState({isAddingUser: true});
       AuthStore.createUser({
-        username: this.refs.username.value,
-        password: this.refs.password.value
+        username: this.formData.username,
+        password: this.formData.password
       });
     }
-  }
+  };
 
-  handleDeleteUserClick(username) {
-    AuthStore.deleteUser(username);
-  }
+  handleUserListChange = () => {
+    this.setState({hasFetchedUserList: true, users: AuthStore.getUsers()});
+  };
 
-  handleUserListChange() {
-    this.setState({users: AuthStore.getUsers()});
-  }
+  handleUserAddError = (error) => {
+    this.setState({addUserError: error, isAddingUser: false});
+  };
 
-  handleUserAddError(error) {
-    this.setState({addUserError: error});
-  }
+  handleUserAddSuccess = () => {
+    this.formRef.resetForm();
 
-  handleUserAddSuccess() {
-    this.refs.username.value = '';
-    this.refs.password.value = '';
-
-    this.setState({addUserError: null});
+    this.setState({addUserError: null, isAddingUser: false});
 
     AuthStore.fetchUserList();
-  }
+  };
 
   handleUserDeleteSuccess() {
     AuthStore.fetchUserList();
   }
 
   render() {
-    let error = null;
+    const isLoading = !this.state.hasFetchedUserList && this.state.users.length === 0;
+    const interactiveListClasses = classnames('interactive-list', {
+      'interactive-list--loading': isLoading
+    });
+    let errorElement = null;
+    let loadingIndicator = null;
 
     if (this.state.addUserError) {
-      error = (
-        <div className="form__row">
-          <div className="form__column">
+      errorElement = (
+        <FormRow>
+          <FormError>
             {this.state.addUserError}
-          </div>
+          </FormError>
+        </FormRow>
+      );
+    }
+
+    if (isLoading) {
+      loadingIndicator = (
+        <div className="interactive-list__loading-indicator" key="loading-indicator">
+          <LoadingRing />
         </div>
       );
     }
 
     return (
-      <div className="form">
-        <div className="form__section">
-          <div className="form__section__heading">
+      <Form
+        onChange={this.handleFormChange}
+        onSubmit={this.handleFormSubmit}
+        ref={(ref) => this.formRef = ref}
+      >
+        <ModalFormSectionHeader>
+          <FormattedMessage
+            id="auth.user.accounts"
+            defaultMessage="User Accounts"
+          />
+        </ModalFormSectionHeader>
+        <FormRow>
+          <FormRowItem>
+            <ul className={interactiveListClasses}>
+              <CSSTransitionGroup
+                transitionName="interactive-list__loading-indicator"
+                transitionEnterTimeout={250}
+                transitionLeaveTimeout={250}
+              >
+                {loadingIndicator}
+              </CSSTransitionGroup>
+              {this.getUserList()}
+            </ul>
+          </FormRowItem>
+        </FormRow>
+        <ModalFormSectionHeader>
+          <FormattedMessage
+            id="auth.add.user"
+            defaultMessage="Add User"
+          />
+        </ModalFormSectionHeader>
+        {errorElement}
+        <FormRow>
+          <Textbox
+            id="username"
+            label={(
+              <FormattedMessage
+                id="auth.username"
+                defaultMessage="Username"
+              />
+            )}
+            placeholder={this.props.intl.formatMessage({
+              id: 'auth.username',
+              defaultMessage: 'Username'
+            })}
+          />
+          <Textbox
+            id="password"
+            label={(
+              <FormattedMessage
+                id="auth.password"
+                defaultMessage="Password"
+              />
+            )}
+            placeholder={this.props.intl.formatMessage({
+              id: 'auth.password',
+              defaultMessage: 'Password'
+            })}
+          />
+          <Button isLoading={this.state.isAddingUser} labelOffset priority="primary" type="submit" width="auto">
             <FormattedMessage
-              id="auth.user.accounts"
-              defaultMessage="User Accounts"
+              id="button.add"
+              defaultMessage="Add"
             />
-          </div>
-          <div className="form__row">
-            <div className="form__column">
-              <ul className="interactive-list">
-                {this.getUserList()}
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="form__section">
-          <div className="form__section__heading">
-            <FormattedMessage
-              id="auth.add.user"
-              defaultMessage="Add User"
-            />
-          </div>
-          <div className="form__row">
-            <div className="form__column">
-              <label className="form__label">
-                <FormattedMessage
-                  id="auth.username"
-                  defaultMessage="Username"
-                />
-              </label>
-              <input className="textbox"
-                placeholder={this.props.intl.formatMessage({
-                  id: 'auth.username',
-                  defaultMessage: 'Username'
-                })} ref="username" type="text" />
-            </div>
-            <div className="form__column">
-              <label className="form__label">
-                <FormattedMessage
-                  id="auth.password"
-                  defaultMessage="Password"
-                />
-              </label>
-              <input className="textbox"
-                placeholder={this.props.intl.formatMessage({
-                  id: 'auth.password',
-                  defaultMessage: 'Password'
-                })} ref="password" type="password" />
-            </div>
-            <div className="form__column form__column--auto form__column--unlabled">
-              <button className="button button--primary"
-                onClick={this.handleAddUserClick}>
-                <FormattedMessage
-                  id="button.add"
-                  defaultMessage="Add"
-                />
-              </button>
-            </div>
-          </div>
-          {error}
-        </div>
-      </div>
+          </Button>
+        </FormRow>
+      </Form>
     );
   }
 }

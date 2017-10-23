@@ -1,8 +1,6 @@
-$modal--background: #28303b;
+$modal--background: $another-grey;
 
-$modal--heading--background: #303845;
-$modal--heading--foreground: #a3bad4;
-$modal--heading--border: #1a232c;
+$modal--heading--foreground: #e6f0ff;
 
 $modal--sub-heading--foreground: desaturate(darken($modal--heading--foreground, 15%), 15%);
 
@@ -11,7 +9,7 @@ $modal--transition--scale: 0.85;
 
 $modal--body--foreground: lighten(#6c7e92, 6%);
 
-$modal--tab--foreground: #6f839e;
+$modal--tab--foreground: #abc2e2;
 $modal--tab--foreground--active: $blue--lighter;
 $modal--tab--border--active: $blue--lighter;
 
@@ -20,6 +18,7 @@ $modal--overlay: rgba($modal--overlay--base, 0.95);
 
 $modal--content--shadow: #05080a;
 
+$modal--border: #363e48;
 $modal--border-radius: 3px;
 $modal--padding--horizontal: $spacing-unit;
 $modal--padding--vertical: $modal--padding--horizontal * 4/5;
@@ -51,8 +50,6 @@ $modal--tabs--padding--vertical--right: $spacing-unit * 2/5;
 $modal--tabs--padding--vertical--bottom: $spacing-unit * 1/5;
 $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 
-$modal--tabs--in-body--background: #2a323e;
-
 .modal {
   height: 100%;
   left: 0;
@@ -75,7 +72,7 @@ $modal--tabs--in-body--background: #2a323e;
   &__tabs {
     color: $modal--tab--foreground;
     font-size: 0.85rem;
-    font-weight: 400;
+    font-weight: 500;
     margin: $modal--tabs--margin--top $modal--tabs--margin--right $modal--tabs--margin--bottom $modal--tabs--margin--left;
 
     .modal {
@@ -114,13 +111,12 @@ $modal--tabs--in-body--background: #2a323e;
   }
 
   &__header {
-    background: $modal--heading--background;
     border-radius: $modal--border-radius $modal--border-radius 0 0;
-    box-shadow: inset 0 -1px 0 $modal--heading--border;
     color: $modal--heading--foreground;
+    box-shadow: inset 0 -1px 0 $modal--border;
     flex: 0 0 auto;
     font-size: 1.25em;
-    font-weight: 400;
+    font-weight: 500;
     overflow: hidden;
     padding: $modal--padding--vertical $modal--padding--horizontal;
 
@@ -212,15 +208,6 @@ $modal--tabs--in-body--background: #2a323e;
     .modal--align-center & {
       justify-content: center;
     }
-
-    .button,
-    .checkbox {
-
-      & + .button,
-      & + .checkbox {
-        margin-left: $spacing-unit * 3/5;
-      }
-    }
   }
 
   &__animation-enter {
@@ -291,8 +278,8 @@ $modal--tabs--in-body--background: #2a323e;
 
           &__header {
             border-radius: $modal--border-radius 0 0 $modal--border-radius;
-            box-shadow: inset -1px 0 0 $modal--heading--border;
             flex-basis: 175px;
+            box-shadow: inset -1px 0 0 $modal--border;
             padding-bottom: $modal--padding--horizontal;
             padding-right: 0;
             max-width: 175px;
@@ -324,9 +311,8 @@ $modal--tabs--in-body--background: #2a323e;
           }
 
           &__tabs {
-            background: $modal--tabs--in-body--background;
-            box-shadow: inset -1px 0 $modal--heading--border;
             flex: 0 0 135px;
+            box-shadow: inset -1px 0 $modal--border;
             margin: 0;
             padding-top: $modal--padding--vertical;
           }

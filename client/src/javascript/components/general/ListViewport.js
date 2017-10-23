@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import CustomScrollbars from './CustomScrollbars';
@@ -16,6 +17,22 @@ const methodsToBind = [
 ];
 
 class ListViewport extends React.Component {
+  static defaultProps = {
+    bottomSpacerClass: 'list__spacer list__spacer--bottom',
+    itemScrollOffset: 10,
+    topSpacerClass: 'list__spacer list__spacer--top'
+  };
+
+  static propTypes = {
+    bottomSpacerClass: PropTypes.string,
+    itemRenderer: PropTypes.func.isRequired,
+    itemScrollOffset: PropTypes.number,
+    listClass: PropTypes.string,
+    listLength: PropTypes.number.isRequired,
+    scrollContainerClass: PropTypes.string,
+    topSpacerClass: PropTypes.string
+  };
+
   constructor() {
     super();
 
@@ -72,7 +89,6 @@ class ListViewport extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const scrollDelta = Math.abs(this.state.scrollTop - nextState.scrollTop);
-    const {outerScrollbar} = this.nodeRefs;
 
     if (this.isScrolling && scrollDelta > 20) {
       return false;
@@ -151,7 +167,7 @@ class ListViewport extends React.Component {
       scrollTop: 0,
       itemHeight: null
     }, () => {
-      this.nodeRefs.outerScrollbar.refs.scrollbar.scrollTop(0);
+      this.nodeRefs.outerScrollbar.scrollbarRef.scrollTop(0);
     });
   }
 
@@ -184,7 +200,7 @@ class ListViewport extends React.Component {
   scrollToTop() {
     if (this.state.scrollTop !== 0) {
       if (this.nodeRefs.outerScrollbar != null) {
-        this.nodeRefs.outerScrollbar.refs.scrollbar.scrollToTop();
+        this.nodeRefs.outerScrollbar.scrollbarRef.scrollToTop();
       }
 
       this.lastScrollTop = 0;
@@ -202,7 +218,7 @@ class ListViewport extends React.Component {
 
     if (nodeRefs.outerScrollbar) {
       this.setState({
-        viewportHeight: nodeRefs.outerScrollbar.refs.scrollbar.getClientHeight()
+        viewportHeight: nodeRefs.outerScrollbar.scrollbarRef.getClientHeight()
       });
     }
   }
@@ -257,21 +273,5 @@ class ListViewport extends React.Component {
     );
   }
 }
-
-ListViewport.defaultProps = {
-  bottomSpacerClass: 'list__spacer list__spacer--bottom',
-  itemScrollOffset: 10,
-  topSpacerClass: 'list__spacer list__spacer--top'
-};
-
-ListViewport.propTypes = {
-  bottomSpacerClass: React.PropTypes.string,
-  itemRenderer: React.PropTypes.func.isRequired,
-  itemScrollOffset: React.PropTypes.number,
-  listClass: React.PropTypes.string,
-  listLength: React.PropTypes.number.isRequired,
-  scrollContainerClass: React.PropTypes.string,
-  topSpacerClass: React.PropTypes.string
-};
 
 export default ListViewport;

@@ -27,7 +27,9 @@ export default {
 
   'auth.add.user': 'Add User',
   'auth.create.account': 'Create Account',
-  'auth.create.an.account': 'Create an Account',
+  'auth.create.an.account': 'Create an account',
+  'auth.create.an.account.intro': 'Welcome to Flood!',
+  'auth.current.user': 'Current User',
   'auth.error.username.empty': 'Username cannot be empty.',
   'auth.log.in': 'Log In',
   'auth.login': 'Login',
@@ -40,7 +42,6 @@ export default {
   'button.no': 'No',
   'button.save': 'Save Settings',
   'button.state.adding': 'Adding...',
-  'button.state.saving': 'Saving...',
   'button.yes': 'Yes',
 
   'feeds.add.automatic.download.rule': 'Add Download Rule',
@@ -54,6 +55,7 @@ export default {
   'feeds.match.count': `{count, plural, =1 {# match} other {# matches}}`,
   'feeds.match.pattern': 'Match Pattern',
   'feeds.match': 'Match',
+  'feeds.exclude': 'Exclude',
   'feeds.no.feeds.available': 'No feeds available.',
   'feeds.no.feeds.defined': 'No feeds defined.',
   'feeds.no.rules.defined': 'No rules defined.',
@@ -65,8 +67,8 @@ export default {
   'feeds.tabs.feeds': 'Feeds',
   'feeds.tabs.heading': 'Torrent Feeds',
   'feeds.tags': 'Tags',
-  'feeds.time.hr': 'hr',
-  'feeds.time.min': 'min',
+  'feeds.time.hr': '{durationValue} hr',
+  'feeds.time.min': '{durationValue} min',
   'feeds.torrent.destination': 'Torrent Destination',
   'feeds.url': 'URL',
   'feeds.validation.invalid.regular.expression': 'Invalid regular expression.',
@@ -306,8 +308,8 @@ export default {
   'torrents.remove': 'Remove Torrents',
 
   'torrents.set.tags.button.set': 'Set Tags',
-  'torrents.set.tags.button.state.setting': 'Setting...',
   'torrents.set.tags.heading': 'Set Tags',
+  'torrents.set.tags.enter.tags': 'Enter tags',
 
   'torrents.sort.title': 'Sort By'
 };

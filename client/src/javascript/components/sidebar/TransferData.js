@@ -1,21 +1,13 @@
-import _ from 'lodash';
-import classnames from 'classnames';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
 import {FormattedMessage} from 'react-intl';
-import moment from 'moment';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Download from '../icons/Download';
-import Duration from '../general/Duration';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicator from '../general/LoadingIndicator';
-import Size from '../general/Size';
 import TransferDataStore from '../../stores/TransferDataStore';
 import TransferRateDetails from './TransferRateDetails';
 import TransferRateGraph from './TransferRateGraph';
 import UIStore from '../../stores/UIStore';
-import Upload from '../icons/Upload';
 
 const METHODS_TO_BIND = [
   'handleGraphHover',

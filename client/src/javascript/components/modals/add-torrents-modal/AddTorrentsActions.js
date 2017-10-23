@@ -1,56 +1,20 @@
-import {formatMessage, injectIntl} from 'react-intl';
-import React from 'react';
+import {injectIntl} from 'react-intl';
+import React, {PureComponent} from 'react';
 
-import LoadingIndicatorDots from '../../icons/LoadingIndicatorDots';
 import ModalActions from '../ModalActions';
 import SettingsStore from '../../../stores/SettingsStore';
 
-const METHODS_TO_BIND = ['handleStartTorrentsToggle'];
-
-class AddTorrentsActions extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      startTorrentsOnLoad: true
-    };
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentWillMount() {
-    let startTorrentsOnLoad = SettingsStore.getFloodSettings(
-      'startTorrentsOnLoad');
-    if (startTorrentsOnLoad !== true) {
-      this.setState({startTorrentsOnLoad: false});
-    }
-  }
-
+class AddTorrentsActions extends PureComponent {
   getActions() {
-    let icon = null;
-    let primaryButtonText = this.props.intl.formatMessage({
-      id: 'torrents.add.button.add',
-      defaultMessage: 'Add Torrent'
-    });
-
-    if (this.props.isAddingTorrents) {
-      icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = this.props.intl.formatMessage({
-        id: 'button.state.adding',
-        defaultMessage: 'Adding...'
-      });
-    }
-
     return [
       {
-        checked: this.state.startTorrentsOnLoad,
+        checked: SettingsStore.getFloodSettings('startTorrentsOnLoad'),
         clickHandler: this.handleStartTorrentsToggle,
         content: this.props.intl.formatMessage({
           id: 'torrents.add.start.label',
           defaultMessage: 'Start Torrent'
         }),
+        id: 'start',
         triggerDismiss: false,
         type: 'checkbox'
       },
@@ -61,28 +25,20 @@ class AddTorrentsActions extends React.Component {
           defaultMessage: 'Cancel'
         }),
         triggerDismiss: true,
-        type: 'secondary'
+        type: 'tertiary'
       },
       {
         clickHandler: this.props.onAddTorrentsClick,
-        content: (
-          <span>
-            {icon}
-            {primaryButtonText}
-          </span>
-        ),
-        supplementalClassName: icon != null ? 'has-icon' : '',
+        content: this.props.intl.formatMessage({
+          id: 'torrents.add.button.add',
+          defaultMessage: 'Add Torrent'
+        }),
+        isLoading: this.props.isAddingTorrents,
+        submit: true,
         triggerDismiss: false,
         type: 'primary'
       }
     ];
-  }
-
-  handleStartTorrentsToggle(value) {
-    SettingsStore.saveFloodSettings({id: 'startTorrentsOnLoad', data: value});
-    if (!!this.props.onStartTorrentsToggle) {
-      this.props.onStartTorrentsToggle(value);
-    }
   }
 
   render() {

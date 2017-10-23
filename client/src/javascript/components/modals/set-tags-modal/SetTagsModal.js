@@ -1,82 +1,36 @@
-import _ from 'lodash';
-import classnames from 'classnames';
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
+import {Form, FormRow, Textbox} from 'flood-ui-kit';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
-import AppDispatcher from '../../../dispatcher/AppDispatcher';
-import Checkbox from '../../general/form-elements/Checkbox';
-import EventTypes from '../../../constants/EventTypes';
-import LoadingIndicatorDots from '../../icons/LoadingIndicatorDots';
 import Modal from '../Modal';
-import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
-const METHODS_TO_BIND = [
-  'confirmSetTags',
-  'handleTextboxChange',
-  'onSetTagsError'
-];
-
 class SetTagsModal extends React.Component {
-  constructor() {
-    super();
+  formRef = null;
 
-    this.state = {
-      isSettingTags: false,
-      setTagsError: null,
-      tags: ''
-    };
+  state = {
+    isSettingTags: false,
+    tags: ''
+  };
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentWillMount() {
-    let selectedTorrentsTags = TorrentStore.getSelectedTorrentsTags()[0];
-
-    if (selectedTorrentsTags && selectedTorrentsTags.length !== 0) {
-      this.setState({tags: selectedTorrentsTags.join(', ')});
-    }
-  }
-
-  componentDidMount() {
-    TorrentStore.listen(EventTypes.CLIENT_SET_TAGS_ERROR, this.onSetTagsError);
-  }
-
-  componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.CLIENT_SET_TAGS_ERROR,
-      this.onSetTagsError);
-  }
-
-  onSetTagsError() {
-    this.setState({isSettingTags: false});
-  }
-
-  confirmSetTags() {
-    let tags = this.state.tags.split(',');
+  handleSetTagsClick = () => {
+    const formData = this.formRef.getFormData();
+    const tags = formData.tags ? formData.tags.split(',') : [];
 
     if (tags && tags.length > 0) {
-      this.setState({isSettingTags: true});
-      TorrentActions.setTaxonomy(TorrentStore.getSelectedTorrents(), tags);
+      this.setState(
+        {isSettingTags: true},
+        () => TorrentActions.setTaxonomy(TorrentStore.getSelectedTorrents(), tags)
+      );
     }
-  }
+  };
 
   getActions() {
-    let icon = null;
     let primaryButtonText = this.props.intl.formatMessage({
       id: 'torrents.set.tags.button.set',
       defaultMessage: 'Set Tags'
     });
-
-    if (this.state.isSettingTags) {
-      icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = this.props.intl.formatMessage({
-        id: 'torrents.set.tags.button.state.setting',
-        defaultMessage: 'Setting...'
-      });
-    }
 
     return [
       {
@@ -86,36 +40,35 @@ class SetTagsModal extends React.Component {
           defaultMessage: 'Cancel'
         }),
         triggerDismiss: true,
-        type: 'secondary'
+        type: 'tertiary'
       },
       {
-        clickHandler: this.confirmSetTags,
-        content: (
-          <span>
-            {icon}
-            {primaryButtonText}
-          </span>
-        ),
-        supplementalClassName: icon != null ? 'has-icon' : '',
+        clickHandler: this.handleSetTagsClick,
+        content: primaryButtonText,
+        isLoading: this.state.isSettingTags,
         triggerDismiss: false,
         type: 'primary'
       }
     ];
   }
 
-  handleTextboxChange(event) {
-    this.setState({tags: event.target.value});
-  }
-
   getContent() {
+    const tagsValue = TorrentStore.getSelectedTorrentsTags()[0].join(', ');
+
     return (
-      <div className="form modal__content">
-        <div className="form__row">
-          <div className="form__column">
-            <input className="textbox" type="text"
-              onChange={this.handleTextboxChange} value={this.state.tags} />
-          </div>
-        </div>
+      <div className="modal__content inverse">
+        <Form ref={ref => this.formRef = ref}>
+          <FormRow>
+            <Textbox
+              defaultValue={tagsValue}
+              id="tags"
+              placeholder={this.props.intl.formatMessage({
+                id: 'torrents.set.tags.enter.tags',
+                defaultMessage: 'Enter tags'
+              })}
+            />
+          </FormRow>
+        </Form>
       </div>
     );
   }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import BaseIcon from './BaseIcon';
 
-export default class FolderClosedOutline extends BaseIcon {
+export default class LoadingIndicatorDots extends BaseIcon {
   render() {
     return (
       <svg className={`icon icon--loading-indicator loading-indicator--dots ${this.props.className}`}

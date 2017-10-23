@@ -14,7 +14,6 @@ export default {
   'button.no': 'Non',
   'button.save': 'Enregistrer',
   'button.state.adding': 'Ajout...',
-  'button.state.saving': 'Enregistrement...',
   'button.yes': 'Oui',
 
   'feeds.add.automatic.download.rule': 'Ajouter une règle de téléchargement',
@@ -39,8 +38,8 @@ export default {
   'feeds.tabs.feeds': 'Flux',
   'feeds.tabs.heading': 'Flux de Torrent',
   'feeds.tags': 'Tags',
-  'feeds.time.hr': 'h',
-  'feeds.time.min': 'min',
+  'feeds.time.hr': '{durationValue} h',
+  'feeds.time.min': '{durationValue} min',
   'feeds.torrent.destination': 'Destination du Torrent',
   'feeds.url': 'URL',
   'feeds.validation.invalid.regular.expression': 'Expression régulière invalide.',
@@ -258,7 +257,6 @@ export default {
   'torrents.remove': 'Supprimer les Torrents',
 
   'torrents.set.tags.button.set': 'Définir un Tag',
-  'torrents.set.tags.button.state.setting': 'Réglages...',
   'torrents.set.tags.heading': 'Définir un Tag',
 
   'torrents.sort.title': 'Trier par'

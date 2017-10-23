@@ -58,7 +58,12 @@ router.use('/register', (req, res, next) => {
       next();
     },
     handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false})(req, res, next);
+      // This works:
+      // passport.authenticate('jwt', {session: false})(req, res, next);
+
+      passport.authenticate('jwt', {session: false}, (req, res, next) => {
+        res.json({username: req.username});
+      });
     }
   });
 });
@@ -93,7 +98,7 @@ router.use('/verify', (req, res, next) => {
 });
 
 router.get('/verify', (req, res, next) => {
-  res.json({initialUser: req.initialUser});
+  res.json({initialUser: req.initialUser, username: req.user.username});
 });
 
 // All subsequent routes are protected.

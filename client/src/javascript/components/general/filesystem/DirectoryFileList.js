@@ -1,7 +1,8 @@
+import {Checkbox} from 'flood-ui-kit';
 import classnames from 'classnames';
+import PropTypes from 'prop-types';
 import React from 'react';
 
-import Checkbox from '../form-elements/Checkbox';
 import File from '../../icons/File';
 import PriorityMeter from './PriorityMeter';
 import Size from '../Size';
@@ -11,6 +12,18 @@ const ICONS = {file: <File />};
 const METHODS_TO_BIND = ['handlePriorityChange'];
 
 class DirectoryFiles extends React.Component {
+  static propTypes = {
+    isParentSelected: PropTypes.bool,
+    path: PropTypes.array,
+    selectedItems: PropTypes.object
+  };
+
+  static defaultProps = {
+    isParentSelected: false,
+    path: [],
+    selectedItems: {}
+  };
+
   constructor() {
     super();
 
@@ -28,16 +41,20 @@ class DirectoryFiles extends React.Component {
   }
 
   getIcon(file, isSelected) {
-    let changeHandler = (value, event) => {
+    const changeHandler = (value, event) => {
       this.handleFileSelect(file, isSelected, event);
     };
 
     return (
-      <div className="directory-tree__checkbox">
+      <div className="file__checkbox directory-tree__checkbox">
         <div className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <Checkbox checked={isSelected} onChange={changeHandler}
-            useProps={true} />
+          <Checkbox
+            checked={isSelected}
+            id={file.index}
+            onChange={changeHandler}
+            useProps={true}
+          />
         </div>
         <div className="directory-tree__checkbox__item
           directory-tree__checkbox__item--icon">
@@ -82,9 +99,11 @@ class DirectoryFiles extends React.Component {
       return (
         <div className={classes} key={`${index}-${file.filename}`}
           title={file.filename}>
-          <div className="file__detail file__name">
+          <div className="file__label file__detail">
             {this.getIcon(file, isSelected)}
-            {file.filename}
+            <div className="file__name">
+              {file.filename}
+            </div>
           </div>
           <div className="file__detail file__detail--secondary">
             <Size value={file.sizeBytes} precision={1} />
@@ -94,9 +113,13 @@ class DirectoryFiles extends React.Component {
           </div>
           <div className="file__detail file__detail--secondary
             file__detail--priority">
-            <PriorityMeter level={file.priority} id={file.index}
-              maxLevel={2} onChange={this.handlePriorityChange} type="file"
-              key={`${file.index}-${file.filename}`} />
+            <PriorityMeter
+              key={`${file.index}-${file.filename}`}
+              level={file.priority} id={file.index}
+              maxLevel={2}
+              onChange={this.handlePriorityChange}
+              type="file"
+            />
           </div>
         </div>
       );
@@ -109,17 +132,5 @@ class DirectoryFiles extends React.Component {
     );
   }
 }
-
-DirectoryFiles.defaultProps = {
-  isParentSelected: false,
-  path: [],
-  selectedItems: {}
-};
-
-DirectoryFiles.propTypes = {
-  isParentSelected: React.PropTypes.bool,
-  path: React.PropTypes.array,
-  selectedItems: React.PropTypes.object
-};
 
 export default DirectoryFiles;

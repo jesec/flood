@@ -12,7 +12,8 @@ let util = require('util');
 let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 let rTorrentPropMap = require('../util/rTorrentPropMap');
 let scgi = require('../util/scgi');
-let stringUtil = require('../../shared/util/stringUtil');
+const torrentService = require('../services/torrentService');
+const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
 class ClientRequest {
   constructor(options) {
@@ -183,11 +184,16 @@ class ClientRequest {
   }
 
   checkHash(options) {
-    let hashes = this.getEnsuredArray(options.hashes);
+    const hashes = this.getEnsuredArray(options.hashes);
+    const hashesToStop = hashes.filter(hash => {
+      return torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped);
+    });
 
-    hashes.forEach((hash) => {
+    hashes.forEach(hash => {
       this.requests.push(this.getMethodCall('d.check_hash', [hash]));
     });
+
+    this.stopTorrents({hashes: hashesToStop});
   }
 
   createDirectory(options) {
@@ -247,15 +253,14 @@ class ClientRequest {
   }
 
   moveTorrents(options) {
-    let hashes = this.getEnsuredArray(options.hashes);
-    let destinationPath = options.destinationPath;
-    let filenames = this.getEnsuredArray(options.filenames);
-    let sourcePaths = this.getEnsuredArray(options.sourcePaths);
+    const destinationPath = options.destinationPath;
+    const filenames = this.getEnsuredArray(options.filenames);
+    const sourcePaths = this.getEnsuredArray(options.sourcePaths);
 
     sourcePaths.forEach((source, index) => {
       let callback = () => {};
-      let destination = `${destinationPath}${path.sep}${filenames[index]}`;
-      let isLastRequest = index + 1 === sourcePaths.length;
+      const destination = `${destinationPath}${path.sep}${filenames[index]}`;
+      const isLastRequest = index + 1 === sourcePaths.length;
 
       if (isLastRequest) {
         callback = this.handleSuccess.bind(this);

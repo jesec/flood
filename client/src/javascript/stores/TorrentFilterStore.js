@@ -5,9 +5,7 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
 import SettingsStore from './SettingsStore';
-import TorrentActions from '../actions/TorrentActions';
 import TorrentStore from './TorrentStore';
-import UIActions from '../actions/UIActions';
 
 class TorrentFilterStoreClass extends BaseStore {
   constructor() {
@@ -166,7 +164,7 @@ class TorrentFilterStoreClass extends BaseStore {
 let TorrentFilterStore = new TorrentFilterStoreClass();
 
 TorrentFilterStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.UI_SET_TORRENT_SEARCH_FILTER:
@@ -193,6 +191,8 @@ TorrentFilterStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS:
       AppDispatcher.waitFor([SettingsStore.dispatcherID]);
       TorrentFilterStore.handleFetchSettingsRequest();
+      break;
+    default:
       break;
   }
 });

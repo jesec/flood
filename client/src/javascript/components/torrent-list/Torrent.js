@@ -1,20 +1,14 @@
-import classNames from 'classnames';
-import {FormattedDate, FormattedMessage, FormattedNumber} from 'react-intl';
 import React from 'react';
 
 import CalendarIcon from '../icons/CalendarIcon';
 import ClockIcon from '../icons/ClockIcon';
 import DiskIcon from '../icons/DiskIcon';
 import DownloadThickIcon from '../icons/DownloadThickIcon';
-import Duration from '../general/Duration';
-import EventTypes from '../../constants/EventTypes';
 import InformationIcon from '../icons/InformationIcon';
 import PeersIcon from '../icons/PeersIcon';
 import ProgressBar from '../general/ProgressBar';
-import Ratio from '../general/Ratio';
 import RatioIcon from '../icons/RatioIcon';
 import SeedsIcon from '../icons/SeedsIcon';
-import Size from '../general/Size';
 import {torrentStatusIcons} from '../../util/torrentStatusIcons';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
 import TorrentDetail from './TorrentDetail';
@@ -181,7 +175,6 @@ class Torrent extends React.Component {
   render() {
     const {isSelected} = this.state;
     const {isCondensed, columns, torrent} = this.props;
-    const columnCount = columns.length;
     const torrentClasses = torrentStatusClasses(
       torrent,
       {

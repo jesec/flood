@@ -174,6 +174,14 @@ class SettingsStoreClass extends BaseStore {
     this.emit(EventTypes.SETTINGS_CHANGE);
   }
 
+  updateOptimisticallyOnly(settings, settingsType = 'floodSettings') {
+    if (!Array.isArray(settings)) {
+      settings = [settings];
+    }
+
+    this.updateLocalSettings(settings, settingsType);
+  }
+
   updateLocalSettings(settings, settingsType) {
     settings.forEach((setting) => {
       if (setting.overrideLocalSetting) {
@@ -188,7 +196,7 @@ class SettingsStoreClass extends BaseStore {
 let SettingsStore = new SettingsStoreClass();
 
 SettingsStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action, source} = payload;
+  const {action} = payload;
 
   switch (action.type) {
     case ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_ERROR:
@@ -217,6 +225,8 @@ SettingsStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_SETTINGS_SAVE_SUCCESS:
       SettingsStore.handleClientSettingsSaveRequestSuccess(action.data, action.options);
+      break;
+    default:
       break;
   }
 });

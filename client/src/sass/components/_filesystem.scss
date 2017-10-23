@@ -1,23 +1,23 @@
 $filesystem--directory-list--foreground: #5e728c;
-$filesystem--directory-list--foreground--hover: saturate(lighten($filesystem--directory-list--foreground, 15%), 10%);
+$filesystem--directory-list--foreground--hover: saturate(darken($filesystem--directory-list--foreground, 15%), 10%);
+$filesystem--directory-list--background--hover: rgba($filesystem--directory-list--foreground, 0.1);
+$filesystem--directory-list--parent--border-color: lighten($filesystem--directory-list--foreground, 43%);
 
 .filesystem {
-
-  &__error,
-  &__directory-list {
-    font-size: 0.85em;
-  }
 
   &__directory-list {
     color: $filesystem--directory-list--foreground;
     list-style: none;
 
     &__item {
+      padding: $spacing--xx-small $spacing--small;
       transition: color 0.25s;
+      white-space: nowrap;
 
       &--parent,
       &--directory {
         cursor: pointer;
+        transition: background $speed--x-fast, color $speed--x-fast;
         user-select: none;
 
         &:hover {
@@ -25,8 +25,17 @@ $filesystem--directory-list--foreground--hover: saturate(lighten($filesystem--di
         }
       }
 
+      &--directory {
+
+        &:hover {
+          background: $filesystem--directory-list--background--hover;
+        }
+      }
+
       &--parent {
-        margin-bottom: $spacing-unit * 1/5;
+        border-bottom: 1px solid $filesystem--directory-list--parent--border-color;
+        margin-bottom: $spacing--small;
+        padding-bottom: $spacing--small;
         opacity: 0.75;
 
         .icon {

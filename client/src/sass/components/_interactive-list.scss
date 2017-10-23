@@ -1,64 +1,197 @@
-$interacative-list--item--foreground: $textbox--foreground;
+$interactive-list--padding--vertical: 0;
+$interactive-list--padding--horizontal: 0;
 
-$interacative-list--item--detail--primary--foreground: lighten($interacative-list--item--foreground, 10%);
-$interacative-list--item--detail--tertiary--foreground: darken($interacative-list--item--foreground, 10%);
+$interactive-list--item--foreground: $textbox--foreground;
 
-$interacative-list--item--icon--fill: rgba($interacative-list--item--foreground, 0.5);
-$interacative-list--item--icon--fill--hover: rgba(lighten($interacative-list--item--foreground, 20%), 0.5);
+$interactive-list--item--detail--tertiary--foreground: darken($interactive-list--item--foreground, 10%);
 
-$interactive-list--item--padding--bottom: $spacing-unit * 1/5;
+$interactive-list--item--icon--fill: rgba($interactive-list--item--foreground, 0.5);
+$interactive-list--item--icon--fill--hover: #fff;
+
+$interactive-list--item--padding--horizontal: $form--element--padding--x;
+$interactive-list--item--padding--vertical: $spacing-unit * 3/10;
 
 $interactive-list--detail-list--item--padding--horizontal: $spacing-unit * 1/5;
 $interactive-list--detail-list--item--padding--vertical: 0;
 
 .interactive-list {
-  @extend .textbox;
-  @extend .textbox.is-fulfilled;
+  appearance: none;
+  outline: none;
+  background: $input--inverse--background;
+  border: $form--element--border-width solid $input--inverse--border;
+  border-radius: $form--element--border-radius;
+  box-shadow: $form--element--inverse--box-shadow;
+  color: $input--inverse--foreground;
+  display: block;
+  height: auto;
+  padding: $interactive-list--padding--vertical $interactive-list--padding--horizontal;
+  transition: all $speed--x-fast;
+  width: 100%;
+
+  &::placeholder {
+    color: $textbox--placeholder;
+    font-style: italic;
+    transition: color 0.25s;
+  }
+
+  &::selection {
+    color: $textbox--selection--foreground;
+    background: $textbox--selection--background;
+  }
+
+  &:focus {
+    background: $textbox--active--background;
+    border-color: $textbox--active--border;
+    color: $textbox--active--foreground;
+
+    &::placeholder {
+      color: $textbox--active--placeholder;
+    }
+  }
+
+  &--loading {
+    height: 60px;
+  }
 
   &__item {
+    border-bottom: 1px solid darken($input--inverse--background, 3%);
     display: flex;
     overflow: hidden;
-    padding-bottom: $interactive-list--item--padding--bottom;
+    padding: $interactive-list--item--padding--vertical $interactive-list--item--padding--horizontal;
     text-overflow: ellipsis;
+    transition: background $speed--x-fast;
     white-space: nowrap;
     width: 100%;
 
     &:last-child {
-      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    &:hover {
+
+      .interactive-list {
+
+        &__icon {
+
+          &--action {
+            background: $grey;
+
+            &--warning {
+              background: $red;
+            }
+
+            .icon {
+              filter: drop-shadow(0 1px 0 rgba($darkest-grey, 0.8));
+              fill: $interactive-list--item--icon--fill--hover;
+            }
+          }
+        }
+      }
+    }
+
+    &--stacked-content {
+      align-items: center;
+
+      .interactive-list {
+
+        &__label {
+          align-items: stretch;
+          flex-direction: column;
+        }
+      }
     }
   }
 
   &__label {
+    align-items: center;
+    display: flex;
     flex: 1 1 auto;
     overflow: hidden;
     text-align: left;
     text-overflow: ellipsis;
+
+    &__text {
+      flex: 1 1 auto;
+    }
+
+    &__tag {
+      flex: 0 0 auto;
+
+      &.tag {
+        color: lighten($grey, 50%);
+        margin-right: 0;
+        padding-bottom: $spacing--xx-small / 2;
+        padding-top: $spacing--xx-small / 2;
+      }
+    }
+  }
+
+  &__loading-indicator {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    transition: opacity 0.25s;
+    width: 100%;
+
+    .icon {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &-enter {
+      opacity: 0;
+
+      &-active {
+        opacity: 1;
+      }
+    }
+
+    &-leave {
+      opacity: 1;
+
+      &-active {
+        opacity: 0;
+      }
+    }
   }
 
   &__icon {
+    border-radius: $border-radius--small;
     flex: 0 0 auto;
+    height: $spacing--large;
+    position: relative;
+    width: $spacing--large;
 
     .icon {
-      fill: $interacative-list--item--icon--fill;
-      transition: fill 0.25s;
+      cursor: pointer;
+      fill: $interactive-list--item--icon--fill;
+      left: 50%;
+      position: absolute;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      transition: fill $speed--x-fast;
 
       &--close {
-        cursor: pointer;
-        height: 8px;
-        margin-left: 4px;
-        margin-right: 0;
-        vertical-align: middle;
-        width: 8px;
+        height: 12px;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 12px;
       }
     }
 
     &--action {
       cursor: pointer;
+      transition: background $speed--xx-fast;
 
       &:hover {
 
         .icon {
-          fill: $interacative-list--item--icon--fill--hover;
+          fill: $interactive-list--item--icon--fill--hover;
         }
       }
     }
@@ -67,24 +200,23 @@ $interactive-list--detail-list--item--padding--vertical: 0;
   &__detail {
 
     &--primary {
-      color: $interacative-list--item--detail--primary--foreground;
       font-weight: 700;
     }
 
     &--tertiary {
-      color: $interacative-list--item--detail--tertiary--foreground;
+      color: $interactive-list--item--detail--tertiary--foreground;
     }
   }
 
   &__detail-list {
     display: flex;
+    flex: 1 1 auto;
+    max-width: 100%;
 
     &__item {
       flex: 0 0 auto;
       max-width: 100%;
-      overflow: hidden;
       padding: $interactive-list--detail-list--item--padding--vertical $interactive-list--detail-list--item--padding--horizontal;
-      text-overflow: ellipsis;
 
       &:first-child {
         padding-left: 0;

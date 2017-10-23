@@ -1,10 +1,20 @@
-import {formatMessage, FormattedMessage, injectIntl} from 'react-intl';
-import classnames from 'classnames';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
 import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
-import FloodActions from '../../actions/FloodActions';
+
+import {
+  Button,
+  Form,
+  FormError,
+  FormRow,
+  Panel,
+  PanelContent,
+  PanelHeader,
+  PanelFooter,
+  Textbox
+} from 'flood-ui-kit';
 
 const METHODS_TO_BIND = ['handleAuthError', 'handleFormSubmit'];
 
@@ -12,7 +22,10 @@ class AuthForm extends React.Component {
   constructor() {
     super();
 
-    this.state = {error: null};
+    this.state = {
+      error: null,
+      isAuthStatusLoading: false
+    };
 
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
@@ -33,95 +46,110 @@ class AuthForm extends React.Component {
     return this.state[fieldName];
   }
 
-  handleAuthError(error) {
-    this.setState({error});
+  getHeaderText() {
+    if (this.props.mode === 'login') {
+      return this.props.intl.formatMessage({
+        id: 'auth.login',
+        defaultMessage: 'Login'
+      });
+    }
+
+    return this.props.intl.formatMessage({
+      id: 'auth.create.an.account',
+      defaultMessage: 'Create an account'
+    });
   }
 
-  handleFormSubmit(event) {
-    event.preventDefault();
+  getIntroText() {
+    if (this.props.mode === 'login') {
+      return this.props.intl.formatMessage({
+        id: 'auth.login.intro',
+        defaultMessage: 'Log in to your account.'
+      });
+    }
+
+    return this.props.intl.formatMessage({
+      id: 'auth.create.an.account.intro',
+      defaultMessage: 'Welcome to Flood! Create a username and strong password.'
+    });
+  }
+
+  handleAuthError(error) {
+    this.setState({isAuthStatusLoading: false, error});
+  }
+
+  handleFormSubmit(submission) {
+    submission.event.preventDefault();
+
+    this.setState({isAuthStatusLoading: true});
 
     if (this.props.mode === 'login') {
       AuthStore.authenticate({
-        username: this.refs.username.value,
-        password: this.refs.password.value
+        username: submission.formData.username,
+        password: submission.formData.password
       });
     } else {
       AuthStore.register({
-        username: this.refs.username.value,
-        password: this.refs.password.value
+        username: submission.formData.username,
+        password: submission.formData.password
       });
     }
   }
 
   render() {
     let actionText = null;
-    let error = null;
-    let headerText = null;
+    let errorRow;
 
     if (this.props.mode === 'login') {
       actionText = this.props.intl.formatMessage({
         id: 'auth.log.in',
         defaultMessage: 'Log In'
       });
-      headerText = this.props.intl.formatMessage({
-        id: 'auth.login',
-        defaultMessage: 'Login'
-      });
     } else {
       actionText = this.props.intl.formatMessage({
         id: 'auth.create.account',
         defaultMessage: 'Create Account'
       });
-      headerText = this.props.intl.formatMessage({
-        id: 'auth.create.an.account',
-        defaultMessage: 'Create an Account'
-      });
     }
 
-    if (!!this.state.error) {
-      error = (
-        <div className="form__row form__row--error">
-          <div className="form__column">
+    if (this.state.error) {
+      errorRow = (
+        <FormRow>
+          <FormError isLoading={this.state.isAuthStatusLoading}>
             {this.state.error}
-          </div>
-        </div>
+          </FormError>
+        </FormRow>
       );
     }
 
     return (
-      <form className="form form--authentication"
-        onSubmit={this.handleFormSubmit}>
-        <div className="form__wrapper">
-          <div className="form__row form__header">
-            <h1>{headerText}</h1>
-          </div>
-          <div className="form__row">
-            <div className="form__column">
-              <input className="textbox textbox--open"
-                placeholder={this.props.intl.formatMessage({
-                  id: 'auth.username',
-                  defaultMessage: 'Username'
-                })} ref="username" type="text" />
-            </div>
-          </div>
-          <div className="form__row">
-            <div className="form__column">
-              <input className="textbox textbox--open"
-                placeholder={this.props.intl.formatMessage({
-                  id: 'auth.password',
-                  defaultMessage: 'Password'
-                })} ref="password" type="password" />
-            </div>
-          </div>
-          {error}
-        </div>
-        <div className="form__actions">
-          <button className="button button--inverse button--primary"
-            type="submit">
-            {actionText}
-          </button>
-        </div>
-      </form>
+      <div style={{width: 500}}>
+        <Panel spacing="large">
+          <Form onSubmit={this.handleFormSubmit} ref={(ref) => this.formRef = ref}>
+            <PanelHeader>
+              <h1>{this.getHeaderText()}</h1>
+            </PanelHeader>
+            <PanelContent>
+              <p>{this.getIntroText()}</p>
+              {errorRow}
+              <FormRow>
+                <Textbox placeholder="Username" id="username" />
+              </FormRow>
+              <FormRow>
+                <Textbox placeholder="Passsword" id="password" type="password" />
+              </FormRow>
+            </PanelContent>
+            <PanelFooter>
+              <FormRow justify="right">
+                <Button children="Clear" priority="tertiary" onClick={() => this.formRef.resetForm()} />
+                <Button isLoading={this.state.isAuthStatusLoading} type="submit">
+                  {actionText}
+                </Button>
+              </FormRow>
+            </PanelFooter>
+          </Form>
+        </Panel>
+      </div>
     );
   }
 }

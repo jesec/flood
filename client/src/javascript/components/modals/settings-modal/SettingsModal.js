@@ -1,13 +1,10 @@
-import {formatMessage, injectIntl} from 'react-intl';
-import classnames from 'classnames';
+import {injectIntl} from 'react-intl';
 import React from 'react';
 
-import AuthStore from '../../../stores/AuthStore';
 import AuthTab from './AuthTab';
 import BandwidthTab from './BandwidthTab';
 import ConnectivityTab from './ConnectivityTab';
 import EventTypes from '../../../constants/EventTypes';
-import LoadingIndicatorDots from '../../icons/LoadingIndicatorDots';
 import Modal from '../Modal';
 import ResourcesTab from './ResourcesTab';
 import SettingsStore from '../../../stores/SettingsStore';
@@ -46,7 +43,6 @@ class SettingsModal extends React.Component {
       this.handleSettingsStoreChange);
     SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
       this.handleSaveSettingsError);
-    AuthStore.fetchUserList();
   }
 
   componentWillUnmount() {
@@ -57,20 +53,6 @@ class SettingsModal extends React.Component {
   }
 
   getActions() {
-    let icon = null;
-    let primaryButtonText = this.props.intl.formatMessage({
-      id: 'button.save',
-      defaultMessage: 'Save Settings'
-    });
-
-    if (this.state.isSavingSettings) {
-      icon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
-      primaryButtonText = this.props.intl.formatMessage({
-        id: 'button.state.saving',
-        defaultMessage: 'Saving...'
-      });
-    }
-
     return [
       {
         clickHandler: null,
@@ -79,17 +61,15 @@ class SettingsModal extends React.Component {
           defaultMessage: 'Cancel'
         }),
         triggerDismiss: true,
-        type: 'secondary'
+        type: 'tertiary'
       },
       {
         clickHandler: this.handleSaveSettingsClick,
-        content: (
-          <span>
-            {icon}
-            {primaryButtonText}
-          </span>
-        ),
-        supplementalClassName: icon != null ? 'has-icon' : '',
+        isLoading: this.state.isSavingSettings,
+        content: this.props.intl.formatMessage({
+          id: 'button.save',
+          defaultMessage: 'Save Settings'
+        }),
         triggerDismiss: false,
         type: 'primary'
       }

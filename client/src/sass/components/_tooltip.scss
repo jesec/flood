@@ -265,7 +265,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
         color: $tooltip-foreground--error;
 
         &:after {
-          border-color: $tooltip-background--error;
+          border-top-color: $tooltip-background--error;
         }
       }
     }

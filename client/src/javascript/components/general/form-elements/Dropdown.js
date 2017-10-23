@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 import EventTypes from '../../../constants/EventTypes';
@@ -20,6 +21,26 @@ const METHODS_TO_BIND = [
 ];
 
 class Dropdown extends React.Component {
+  static propTypes = {
+    direction: PropTypes.oneOf(['down', 'up']),
+    header: PropTypes.node,
+    trigger: PropTypes.node,
+    matchButtonWidth: PropTypes.bool,
+    menuItems: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)).isRequired,
+    noWrap: PropTypes.bool,
+    onOpen: PropTypes.func,
+    width: PropTypes.oneOf(['small', 'medium', 'large'])
+  };
+
+  static defaultProps = {
+    baseClassName: 'dropdown',
+    direction: 'down',
+    dropdownWrapperClass: 'dropdown',
+    dropdownButtonClass: 'dropdown__trigger',
+    matchButtonWidth: false,
+    noWrap: false
+  };
+
   constructor() {
     super();
 
@@ -183,25 +204,5 @@ class Dropdown extends React.Component {
     );
   }
 }
-
-Dropdown.defaultProps = {
-  baseClassName: 'dropdown',
-  direction: 'down',
-  dropdownWrapperClass: 'dropdown',
-  dropdownButtonClass: 'dropdown__trigger',
-  matchButtonWidth: false,
-  noWrap: false
-};
-
-Dropdown.propTypes = {
-  direction: React.PropTypes.oneOf(['down', 'up']),
-  header: React.PropTypes.node,
-  trigger: React.PropTypes.node,
-  matchButtonWidth: React.PropTypes.bool,
-  menuItems: React.PropTypes.arrayOf(React.PropTypes.arrayOf(React.PropTypes.object)).isRequired,
-  noWrap: React.PropTypes.bool,
-  onOpen: React.PropTypes.func,
-  width: React.PropTypes.oneOf(['small', 'medium', 'large'])
-};
 
 export default Dropdown;
