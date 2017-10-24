@@ -140,7 +140,7 @@ class AuthForm extends React.Component {
               </FormRow>
             </PanelContent>
             <PanelFooter>
-              <FormRow justify="right">
+              <FormRow justify="end">
                 <Button children="Clear" priority="tertiary" onClick={() => this.formRef.resetForm()} />
                 <Button isLoading={this.state.isAuthStatusLoading} type="submit">
                   {actionText}
