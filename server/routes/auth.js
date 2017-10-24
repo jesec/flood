@@ -27,7 +27,7 @@ const setAuthToken = (res, username) => {
     {expires: new Date(cookieExpiration), httpOnly: true}
   );
 
-  return res.json({success: true, token: `JWT ${token}`});
+  return res.json({success: true, token: `JWT ${token}`, username});
 };
 
 router.post('/authenticate', (req, res) => {

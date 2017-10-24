@@ -88,6 +88,7 @@ class AuthStoreClass extends BaseStore {
   }
 
   handleRegisterSuccess(data) {
+    this.currentUser.username = data.username;
     this.emit(EventTypes.AUTH_REGISTER_SUCCESS, data);
   }
 
