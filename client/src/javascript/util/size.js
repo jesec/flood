@@ -44,7 +44,7 @@ export function getTranslationString(unit) {
     kB: 'unit.size.kilobyte',
     MB: 'unit.size.megabyte',
     GB: 'unit.size.gigabyte',
-    TB: 'unit.size.gigabyte',
+    TB: 'unit.size.terabyte',
   };
 
   return UNIT_TO_STRING_ID[unit] || 'unit.size.byte';
