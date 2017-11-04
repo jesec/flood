@@ -35,6 +35,8 @@ $search-torrents--icon--foreground--active: $blue;
   }
 
   .button {
+    border-radius: 0;
+    border: 0;
     height: 100%;
     position: absolute;
     right: 0;

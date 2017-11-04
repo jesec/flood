@@ -66,9 +66,9 @@ class SearchBox extends React.Component {
 
     if (this.isSearchActive()) {
       clearSearchButton = (
-        <div className="button search__reset-button" onClick={this.resetSearch}>
+        <button className="button search__reset-button" onClick={this.resetSearch}>
           <Close />
-        </div>
+        </button>
       );
     }
 
