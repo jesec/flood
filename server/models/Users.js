@@ -1,4 +1,5 @@
 'use strict';
+const argon2 = require('argon2');
 const bcrypt = require('bcrypt');
 const Datastore = require('nedb');
 
@@ -21,50 +22,77 @@ class Users {
         return callback(null, user);
       }
 
-      bcrypt.compare(credentials.password, user.password, (err, isMatch) => {
-        if (err) {
-          return callback(null, err);
-        }
+      argon2
+        .verify(user.password, credentials.password)
+        .then(argon2Match => {
+          if (argon2Match) {
+            return callback(argon2Match);
+          }
 
-        return callback(isMatch);
-      });
+          callback(null, argon2Match);
+        })
+        .catch(error => {
+          // Maybe the stored password was hashed with bcrypt in a previous Flood release.
+          bcrypt.compare(credentials.password, user.password, (error, bcryptMatch) => {
+            if (error) {
+              return callback(null, error);
+            }
+
+            if (bcryptMatch) {
+              // If bcrypt's compare was successful, we replace the bcrypt hash with an argon2 hash.
+              argon2
+                .hash(credentials.password)
+                .then(hash => {
+                  this.db.update(
+                    {username: credentials.username},
+                    {$set: {password: hash}},
+                    {},
+                    error => {
+                      if (error) {
+                        return callback(null, error);
+                      }
+
+                      callback(bcryptMatch);
+                    }
+                  );
+                })
+                .catch(error => callback(null, error));
+            } else {
+              // Neither argon2 nor bcrypt matched, so it's a failed login.
+              callback(null, bcryptMatch);
+            }
+          });
+        });
     });
   }
 
   createUser(credentials, callback) {
+    const {password, username} = credentials;
+
     if (!this.ready) {
       return callback(null, 'Users database is not ready.');
     }
 
-    if (credentials.username === '' || credentials.username == null) {
+    if (username === '' || username == null) {
       return callback(null, 'Username cannot be empty.');
     }
 
-    bcrypt.genSalt(10, (err, salt) => {
-      if (err) {
-        return callback(null, err);
-      }
-
-      let username = credentials.username;
-
-      bcrypt.hash(credentials.password, salt, (err, hash) => {
-        if (err) {
-          return callback(null, err);
-        }
-
-        this.db.insert({username: username, password: hash}, (err, user) => {
-          if (err) {
-            if (err.errorType = 'uniqueViolated') {
-              err = 'Username already exists.';
+    argon2
+      .hash(password)
+      .then(hash => {
+        this.db.insert({ username, password: hash }, (error, user) => {
+          if (error) {
+            if (error.errorType === 'uniqueViolated') {
+              error = 'Username already exists.';
             }
 
-            return callback(null, err);
+            return callback(null, error);
           }
 
-          return callback({username: credentials.username});
+          return callback({ username });
         });
-      });
-    });
+      })
+      .catch(error => callback(null, error));
   }
 
   removeUser(username, callback) {
