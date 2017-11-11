@@ -13,13 +13,18 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 
 # Usage
 #### Pre-Requisites
+
 1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed __with XMLRPC__ configuration. _If you are currently using a web UI for rTorrent, you've already done this._
   * For Linux & OS X, check out [rTorrent's installation wiki](https://github.com/rakshasa/rtorrent/wiki/Installing#compilation-help) and/or [this third-party tutorial](https://jes.sc/kb/rTorrent+ruTorrent-Seedbox-Guide.php#Install-Dependencies). When you run `./configure`, be sure to run with the `--with-xmlrpc-c` flag.
   * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows) (I haven't tested this, let me know if you have problems).
 2. Install NodeJS version `7.x.x` or higher:
   * I recommend managing different Node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n).
+3. Since #523 [node-gyp](https://www.npmjs.com/package/node-gyp) is needed.
+  * `sudo npm install -g node-gyp`
+  * Check you match node-gyp [dependencies](https://github.com/nodejs/node-gyp#installation) (ex: gcc, make, python2).
 
 #### Configuring
+
 1. Copy `config.template.js` to `config.js`. This is required.
 2. Set your rTorrent SCGI hostname and port in `config.js`. Defaults are `localhost` and `5000`.
   * If you want to use a socket, change `socket` to true and set `socketPath` to the absolute file path of your rTorrent socket. Make sure Flood has read/write access. Specify the socket path in `.rtorrent.rc`. Example: `scgi_local = /Users/flood/rtorrent.sock`
@@ -30,6 +35,8 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 
 #### Compiling assets and starting the server
 1. Run `npm install`.
+  * Note: Since #523 [node-gyp](https://www.npmjs.com/package/node-gyp) is needed. **IF** you need `sudo`, use `sudo npm i --unsafe-perm` (see [here](https://github.com/nodejs/node-gyp/issues/454) for why `--unsafe-perm`) else installation will fail. If you dont need sudo just use `npm i` as usual.
+  * If your system use python3 as default you will need to install python2 and use `npm i --python="/usr/bin/python2"`.
 1. Run `npm run build`.
 1. Run `npm start`.
 1. Access the UI in your browser. Defaults to `localhost:3000`.
