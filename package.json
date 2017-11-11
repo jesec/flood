@@ -16,6 +16,7 @@
     "start:development:client": "node client/scripts/start.js"
   },
   "dependencies": {
+    "argon2": "^0.16.2",
     "autoprefixer": "^7.1.2",
     "axios": "^0.16.2",
     "babel-core": "6.25.0",
