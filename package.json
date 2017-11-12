@@ -63,7 +63,7 @@
     "multer": "^1.1.0",
     "mv": "^2.1.1",
     "nedb": "^1.7.2",
-    "node-sass": "^4.5.3",
+    "node-sass": "^4.6.1",
     "object-assign": "4.1.1",
     "ospath": "^1.2.2",
     "passport": "^0.3.2",
