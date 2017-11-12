@@ -82,8 +82,6 @@ $progress-bar--track--background--selected: rgba(#fff, 0.15);
     background: $progress-bar--fill;
     display: block;
     height: $progress-bar--height;
-    transform-origin: 0 0;
-    transition: transform 0.25s;
     width: 100%;
 
     .torrent--is-seeding & {

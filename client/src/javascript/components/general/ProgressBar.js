@@ -1,26 +1,12 @@
 import React from 'react';
 
-let cachedProgressBars = {};
-
-export default class ProgressBar extends React.Component {
+export default class ProgressBar extends React.PureComponent {
   render() {
-    let {percent} = this.props;
-    let progressBar;
+    const percent = Math.round(this.props.percent);
+    const style = {};
 
-    if (cachedProgressBars[percent] != null) {
-      progressBar = cachedProgressBars[percent];
-    } else {
-      let style = {};
-
-      if (percent !== 100) {
-        style = {transform: `scaleX(${percent / 100})`};
-      }
-
-      progressBar = (
-        <div className="progress-bar__fill__wrapper">
-          <div className="progress-bar__fill" style={style} />
-        </div>
-      );
+    if (percent !== 100) {
+      style.width = `${percent}%`;
     }
 
     return (
@@ -28,7 +14,9 @@ export default class ProgressBar extends React.Component {
         <div className="progress-bar__icon">
           {this.props.icon}
         </div>
-        {progressBar}
+        <div className="progress-bar__fill__wrapper">
+          <div className="progress-bar__fill" style={style} />
+        </div>
       </div>
     );
   }
