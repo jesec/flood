@@ -51,6 +51,10 @@ router.post('/authenticate', (req, res) => {
   });
 });
 
+router.get('/logout', (req, res) => {
+  res.clearCookie('jwt').send();
+});
+
 // Allow unauthenticated registration if no users are currently registered.
 router.use('/register', (req, res, next) => {
   Users.initialUserGate({
