@@ -177,6 +177,7 @@ export default {
   'sidebar.button.notifications': 'Notifications',
   'sidebar.button.settings': 'Settings',
   'sidebar.button.speedlimits': 'Speed Limits',
+  'sidebar.button.log.out': 'Log Out',
 
   'sidebar.search.placeholder': 'Search torrents',
 

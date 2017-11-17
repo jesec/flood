@@ -60,6 +60,13 @@ $sidebar--icon-button--foreground--hover: $blue;
     }
   }
 
+  &__action {
+
+    &--last {
+      margin-left: auto;
+    }
+  }
+
   &__actions {
     display: flex;
     padding: $spacing-unit * 1/5;

@@ -5,6 +5,7 @@ import ClientStats from './TransferData';
 import CustomScrollbars from '../general/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
 import FeedsButton from './FeedsButton';
+import LogoutButton from './LogoutButton';
 import NotificationsButton from './NotificationsButton';
 import SearchTorrents from './SearchTorrents';
 import SettingsButton from './SettingsButton';
@@ -51,6 +52,7 @@ class Sidebar extends React.Component {
           <SettingsButton />
           <FeedsButton />
           <NotificationsButton />
+          <LogoutButton />
         </SidebarActions>
         <ClientStats />
         <SearchTorrents />
