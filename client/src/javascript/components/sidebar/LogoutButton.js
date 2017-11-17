@@ -1,6 +1,7 @@
 import React from 'react';
 
 import AuthActions from '../../actions/AuthActions';
+import Logout from '../icons/Logout';
 import Tooltip from '../general/Tooltip';
 
 class NotificationsButton extends React.Component {
@@ -16,9 +17,9 @@ class NotificationsButton extends React.Component {
         content="Logout"
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
-          tooltip__wrapper">
+          sidebar__icon-button--interactive tooltip__wrapper">
         <div onClick={this.handleLogoutClick}>
-          x
+          <Logout />
         </div>
       </Tooltip>
     );
