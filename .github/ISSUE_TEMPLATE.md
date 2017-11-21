@@ -27,6 +27,11 @@
 ## Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 * Version used:
+  + Version (stable release) `git --no-pager tag`
+  + Commit ID (development release) `git --no-pager log -1`
 * Environment name and version (e.g. Chrome 39, node.js 5.4):
-* Operating System and version (desktop or mobile):
-* Link to your project:
+* Operating System and version:
+
+## Note
+
+You may try to follow the update procedure described in the README and try again before opening this issue.
