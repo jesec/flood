@@ -30,4 +30,11 @@
       z-index: 1;
     }
   }
+  &__encryption {
+    fill: currentColor;
+	
+    .icon--lock {
+      fill: $green;
+    }
+  }
 }
