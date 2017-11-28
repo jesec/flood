@@ -4,7 +4,7 @@ import React from 'react';
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';
 import LockIcon from '../../icons/LockIcon';
-import UnlockIcon from '../../icons/UnlockIcon';	
+import UnlockIcon from '../../icons/UnlockIcon';
 
 export default class TorrentPeers extends React.Component {
   constructor() {
@@ -30,7 +30,7 @@ export default class TorrentPeers extends React.Component {
       let {erroredCountryImages} = this.state;
       let peerList = peers.map((peer, index) => {
         let countryCode = peer.country;
-	let isEncrypted = peer.isEncrypted==1 ? <LockIcon /> : <UnlockIcon />;
+        let isEncrypted = peer.isEncrypted === 1 ? <LockIcon /> : <UnlockIcon />;
         let peerCountry = null;
 
         if (countryCode) {
