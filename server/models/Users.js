@@ -12,7 +12,7 @@ class Users {
   }
 
   comparePassword(credentials, callback) {
-    this.db.findOne({username: credentials.username}).exec((err, user) => {
+    this.db.findOne({username: {$regex: new RegExp(credentials.username, 'i')}}).exec((err, user) => {
       if (err) {
         return callback(null, err);
       }
@@ -44,7 +44,7 @@ class Users {
                 .hash(credentials.password)
                 .then(hash => {
                   this.db.update(
-                    {username: credentials.username},
+                    {username: user.username},
                     {$set: {password: hash}},
                     {},
                     error => {
@@ -128,7 +128,7 @@ class Users {
   }
 
   lookupUser(credentials, callback) {
-    this.db.findOne({username: credentials.username}, (err, user) => {
+    this.db.findOne({username: {$regex: new RegExp(credentials.username, 'i')}}, (err, user) => {
       if (err) {
         return callback(err);
       }
