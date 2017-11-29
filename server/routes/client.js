@@ -73,7 +73,7 @@ router.post('/torrents/delete', function(req, res, next) {
     .removeTorrents({hashes, deleteData})
     .then(callback)
     .catch((err) => {
-      callback(null, response);
+      callback(null, err);
     });
 });
 
