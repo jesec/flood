@@ -185,15 +185,24 @@ class ClientRequest {
 
   checkHash(options) {
     const hashes = this.getEnsuredArray(options.hashes);
-    const hashesToStop = hashes.filter(hash => {
+    const stoppedHashes = hashes.filter(hash => {
       return torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped);
     });
+    const hashesToStart = [];
+
+    this.stopTorrents({ hashes });
 
     hashes.forEach(hash => {
       this.requests.push(this.getMethodCall('d.check_hash', [hash]));
+
+      if (!stoppedHashes.includes(hash)) {
+        hashesToStart.push(hash);
+      }
     });
 
-    this.stopTorrents({hashes: hashesToStop});
+    if (hashesToStart.length) {
+      this.startTorrents({ hashes: hashesToStart });
+    }
   }
 
   createDirectory(options) {
