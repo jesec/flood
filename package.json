@@ -47,7 +47,7 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "feedsub": "^0.4.0",
     "file-loader": "0.11.2",
-    "flood-ui-kit": "^0.1.6",
+    "flood-ui-kit": "^0.1.7",
     "flux": "^3.1.0",
     "fs-extra": "^4.0.1",
     "geoip-country-only": "^1.1.8",
