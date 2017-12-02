@@ -80,17 +80,21 @@ class Users {
     argon2
       .hash(password)
       .then(hash => {
-        this.db.insert({ username, password: hash }, (error, user) => {
-          if (error) {
-            if (error.errorType === 'uniqueViolated') {
-              error = 'Username already exists.';
-            }
+        this.db.findOne({ username: {$regex: new RegExp(credentials.username, 'i')} }, (error, user) => { // check if this username already exists with any case
 
-            return callback(null, error);
-          }
+          if(error) return callback(null, error);
 
-          return callback({ username });
-        });
+          // user already exists
+          if(user !== null) return callback(null, 'Username already exists.');
+
+          // add the user to the db
+          this.db.insert({ username, password: hash }, (error, user) => {
+            if (error) return callback(null, error);
+
+            return callback({ username });
+          });
+
+        })
       })
       .catch(error => callback(null, error));
   }
