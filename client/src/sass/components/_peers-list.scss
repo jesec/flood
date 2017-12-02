@@ -30,11 +30,13 @@
       z-index: 1;
     }
   }
+
   &__encryption {
-    fill: currentColor;
-	
-    .icon--lock {
+
+    .icon {
       fill: $green;
+      height: 12px;
+      width: 12px;
     }
   }
 }

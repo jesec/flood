@@ -3,8 +3,9 @@ import React from 'react';
 
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';
-import LockIcon from '../../icons/LockIcon';
-import UnlockIcon from '../../icons/UnlockIcon';
+import Checkmark from '../../icons/Checkmark';
+
+const checkmark = <Checkmark />;
 
 export default class TorrentPeers extends React.Component {
   constructor() {
@@ -24,13 +25,13 @@ export default class TorrentPeers extends React.Component {
   }
 
   render() {
-    let {peers} = this.props;
+    const {peers} = this.props;
 
     if (peers) {
-      let {erroredCountryImages} = this.state;
-      let peerList = peers.map((peer, index) => {
-        let countryCode = peer.country;
-        let isEncrypted = peer.isEncrypted === 1 ? <LockIcon /> : <UnlockIcon />;
+      const {erroredCountryImages} = this.state;
+      const peerList = peers.map((peer, index) => {
+        const {country: countryCode} = peer;
+        const encryptedIcon = peer.isEncrypted ? checkmark : null;
         let peerCountry = null;
 
         if (countryCode) {
@@ -76,10 +77,8 @@ export default class TorrentPeers extends React.Component {
             <td>
               {peer.clientVersion}
             </td>
-            <td>
-              <span className="peers-list__encryption">
-                {isEncrypted}
-              </span>
+            <td className="peers-list__encryption">
+              {encryptedIcon}
             </td>
           </tr>
         );
@@ -112,7 +111,7 @@ export default class TorrentPeers extends React.Component {
                   Client
                 </th>
                 <th className="torrent-details__table__heading--secondary">
-                  ENC
+                  Enc
                 </th>
               </tr>
             </thead>
