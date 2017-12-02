@@ -1,0 +1,11 @@
+dist: trusty
+language: node_js
+node_js:
+  - "node"
+  - "7"
+before_script:
+  - cp config.template.js config.js
+script:
+  - npm run lint
+  - npm run test
+  - npm run build

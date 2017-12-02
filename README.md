@@ -2,7 +2,7 @@
 
 ![Flood logo](flood.png)
 
-[![Talk about Flood on Slack](https://join-flood-talk.herokuapp.com/badge.svg)](https://join-flood-talk.herokuapp.com/)
+[![Build Status](https://travis-ci.org/jfurrow/flood.svg?branch=master)](https://travis-ci.org/jfurrow/flood) [![Talk about Flood on Slack](https://join-flood-talk.herokuapp.com/badge.svg)](https://join-flood-talk.herokuapp.com/)
 
 Flood is another web interface for [rtorrent](https://github.com/rakshasa/rtorrent). It implements a Node.js server for communicating with the rTorrent API, storing historical data, and serving the web UI.
 

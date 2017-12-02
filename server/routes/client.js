@@ -3,6 +3,7 @@ const express = require('express');
 const multer = require('multer');
 
 const ajaxUtil = require('../util/ajaxUtil');
+const booleanCoerce = require('../middleware/booleanCoerce');
 const client = require('../models/client');
 const clientRequestService = require('../services/clientRequestService');
 const router = express.Router();
@@ -17,9 +18,14 @@ router.post('/add', function(req, res, next) {
   client.addUrls(req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.post('/add-files', upload.array('torrents'), function(req, res, next) {
-  client.addFiles(req, ajaxUtil.getResponseFn(res));
-});
+router.post(
+  '/add-files',
+  upload.array('torrents'),
+  booleanCoerce('isBasePath'),
+  function(req, res, next) {
+    client.addFiles(req, ajaxUtil.getResponseFn(res));
+  }
+);
 
 router.get('/settings', function(req, res, next) {
   client.getSettings(req.query, ajaxUtil.getResponseFn(res));
@@ -73,7 +79,7 @@ router.post('/torrents/delete', function(req, res, next) {
     .removeTorrents({hashes, deleteData})
     .then(callback)
     .catch((err) => {
-      callback(null, response);
+      callback(null, err);
     });
 });
 

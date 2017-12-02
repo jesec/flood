@@ -156,14 +156,14 @@ class TorrentService extends EventEmitter {
       torrentStatus.push(torrentStatusMap.complete);
       torrentStatus.push(torrentStatusMap.seeding);
     } else if (isComplete && isOpen && state === '0') {
-      torrentStatus.push(torrentStatusMap.paused);
+      torrentStatus.push(torrentStatusMap.stopped);
     } else if (isComplete && !isOpen) {
       torrentStatus.push(torrentStatusMap.stopped);
       torrentStatus.push(torrentStatusMap.complete);
     } else if (!isComplete && isOpen && state === '1') {
       torrentStatus.push(torrentStatusMap.downloading);
     } else if (!isComplete && isOpen && state === '0') {
-      torrentStatus.push(torrentStatusMap.paused);
+      torrentStatus.push(torrentStatusMap.stopped);
     } else if (!isComplete && !isOpen) {
       torrentStatus.push(torrentStatusMap.stopped);
     }

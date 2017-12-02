@@ -3,6 +3,8 @@ import React from 'react';
 
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';
+import LockIcon from '../../icons/LockIcon';
+import UnlockIcon from '../../icons/UnlockIcon';
 
 export default class TorrentPeers extends React.Component {
   constructor() {
@@ -28,6 +30,7 @@ export default class TorrentPeers extends React.Component {
       let {erroredCountryImages} = this.state;
       let peerList = peers.map((peer, index) => {
         let countryCode = peer.country;
+        let isEncrypted = peer.isEncrypted === 1 ? <LockIcon /> : <UnlockIcon />;
         let peerCountry = null;
 
         if (countryCode) {
@@ -67,6 +70,17 @@ export default class TorrentPeers extends React.Component {
             <td>
               <Size value={peer.uploadRate} isSpeed={true} />
             </td>
+            <td>
+              {peer.completedPercent}%
+            </td>
+            <td>
+              {peer.clientVersion}
+            </td>
+            <td>
+              <span className="peers-list__encryption">
+                {isEncrypted}
+              </span>
+            </td>
           </tr>
         );
       });
@@ -90,6 +104,15 @@ export default class TorrentPeers extends React.Component {
                 </th>
                 <th className="torrent-details__table__heading--secondary">
                   UL
+                </th>
+                <th className="torrent-details__table__heading--secondary">
+                  %
+                </th>
+                <th className="torrent-details__table__heading--secondary">
+                  Client
+                </th>
+                <th className="torrent-details__table__heading--secondary">
+                  ENC
                 </th>
               </tr>
             </thead>
