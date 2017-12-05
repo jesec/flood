@@ -94,6 +94,11 @@ let clientResponseUtil = {
       ).map((peer) => {
         let geoData = geoip.lookup(peer.address) || {};
         peer.country = geoData.country;
+
+        // Strings to boolean
+        peer.isEncrypted = peer.isEncrypted === '1';
+        peer.isIncoming = peer.isIncoming === '1';
+
         return peer;
       });
     }
