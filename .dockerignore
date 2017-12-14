@@ -1,0 +1,4 @@
+# Ignore files not needed for building and running to keep image size low.
+.git/
+node_modules/
+
