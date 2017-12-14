@@ -12,7 +12,7 @@ class Users {
   }
 
   comparePassword(credentials, callback) {
-    this.db.findOne({username: credentials.username}).exec((err, user) => {
+    this.db.findOne({username: {$regex: new RegExp(credentials.username, 'i')}}).exec((err, user) => {
       if (err) {
         return callback(null, err);
       }
@@ -44,7 +44,7 @@ class Users {
                 .hash(credentials.password)
                 .then(hash => {
                   this.db.update(
-                    {username: credentials.username},
+                    {username: user.username},
                     {$set: {password: hash}},
                     {},
                     error => {
@@ -80,17 +80,21 @@ class Users {
     argon2
       .hash(password)
       .then(hash => {
-        this.db.insert({ username, password: hash }, (error, user) => {
-          if (error) {
-            if (error.errorType === 'uniqueViolated') {
-              error = 'Username already exists.';
-            }
+        this.db.findOne({ username: {$regex: new RegExp(credentials.username, 'i')} }, (error, user) => { // check if this username already exists with any case
 
-            return callback(null, error);
-          }
+          if(error) return callback(null, error);
 
-          return callback({ username });
-        });
+          // user already exists
+          if(user !== null) return callback(null, 'Username already exists.');
+
+          // add the user to the db
+          this.db.insert({ username, password: hash }, (error, user) => {
+            if (error) return callback(null, error);
+
+            return callback({ username });
+          });
+
+        })
       })
       .catch(error => callback(null, error));
   }
@@ -128,7 +132,7 @@ class Users {
   }
 
   lookupUser(credentials, callback) {
-    this.db.findOne({username: credentials.username}, (err, user) => {
+    this.db.findOne({username: {$regex: new RegExp(credentials.username, 'i')}}, (err, user) => {
       if (err) {
         return callback(err);
       }
