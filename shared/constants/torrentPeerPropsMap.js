@@ -11,7 +11,7 @@ const torrentPeerPropsMap = {
     'uploadTotal',
     'id',
     'peerRate',
-    'peerTotal',,
+    'peerTotal',
     'isEncrypted',
     'isIncoming'
   ],
