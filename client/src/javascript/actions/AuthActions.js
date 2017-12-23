@@ -43,7 +43,7 @@ let AuthActions = {
       }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_CREATE_USER_ERROR,
-          error
+          error: error.response.data.message
         });
       });
   },
@@ -111,7 +111,7 @@ let AuthActions = {
       }, (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_REGISTER_ERROR,
-          error
+          error: error.response.data.message
         });
       });
   },
