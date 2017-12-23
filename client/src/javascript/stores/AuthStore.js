@@ -140,7 +140,7 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
       AuthStore.handleCreateUserSuccess(action.data);
       break;
     case ActionTypes.AUTH_CREATE_USER_ERROR:
-      AuthStore.handleCreateUserError(action.error.response.data);
+      AuthStore.handleCreateUserError(action.error);
       break;
     case ActionTypes.AUTH_DELETE_USER_SUCCESS:
       AuthStore.handleDeleteUserSuccess(action.data);
@@ -152,7 +152,7 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
       AuthStore.handleRegisterSuccess(action.data);
       break;
     case ActionTypes.AUTH_REGISTER_ERROR:
-      AuthStore.handleRegisterError(action.error.data);
+      AuthStore.handleRegisterError(action.error);
       break;
     case ActionTypes.AUTH_VERIFY_SUCCESS:
       AuthStore.handleAuthVerificationSuccess(action.data);

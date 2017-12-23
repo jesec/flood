@@ -1,6 +1,7 @@
 'use strict';
 const ajaxUtil = require('../util/ajaxUtil');
 const express = require('express');
+const joi = require('joi');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
@@ -29,6 +30,23 @@ const setAuthToken = (res, username) => {
 
   return res.json({success: true, token: `JWT ${token}`, username});
 };
+
+const schema = joi.object().keys({
+  username: joi.string(),
+  password: joi.string()
+});
+
+router.use('/', (req, res, next) => {
+  const validation = joi.validate(req.body, schema);
+
+  if (!validation.error) {
+    next();
+  } else {
+    res.status(422).json({
+      message: 'Validation error.'
+    });
+  }
+});
 
 router.post('/authenticate', (req, res) => {
   const credentials = {
