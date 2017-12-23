@@ -9,6 +9,7 @@ const baseURI = ConfigStore.getBaseURI();
 let AuthActions = {
   authenticate: (credentials) => {
     return axios.post(`${baseURI}auth/authenticate`, credentials)
+      .then((json = {}) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LOGIN_SUCCESS,

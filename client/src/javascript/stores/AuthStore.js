@@ -79,6 +79,7 @@ class AuthStoreClass extends BaseStore {
 
   handleLoginSuccess(data) {
     this.emit(EventTypes.AUTH_LOGIN_SUCCESS);
+    this.currentUser.username = data.username;
     this.token = data.token;
   }
 
