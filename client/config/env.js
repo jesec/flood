@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const paths = require('./paths');
+const userConfig = require('../../config');
 
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
@@ -32,8 +33,9 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 // Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
 const REACT_APP = /^REACT_APP_/i;
+const environment = process.env.NODE_ENV || 'development';
 
-function getClientEnvironment(publicUrl) {
+function getClientEnvironment() {
   const raw = Object.keys(process.env)
     .filter(key => REACT_APP.test(key))
     .reduce(
@@ -42,12 +44,9 @@ function getClientEnvironment(publicUrl) {
         return env;
       },
       {
-        NODE_ENV: process.env.NODE_ENV || 'development',
-        // Useful for resolving the correct path to static assets in `public`.
-        // For example, <img src={process.env.PUBLIC_URL + '/img/logo.png'} />.
-        // This should only be used as an escape hatch. Normally you would put
-        // images into the `src` and `import` them in code to get their paths.
-        PUBLIC_URL: publicUrl,
+        NODE_ENV: environment,
+        BASE_URI: environment !== 'development' ? paths.servedPath : '',
+        POLL_INTERVAL: userConfig.torrentClientPollInterval
       }
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
