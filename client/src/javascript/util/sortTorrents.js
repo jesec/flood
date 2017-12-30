@@ -1,4 +1,7 @@
 // TODO: Split up this garbage.
+
+const stringProps = ['basePath', 'comment', 'hash', 'message', 'name'];
+
 export function sortTorrents(torrentsHash, sortBy) {
   let torrents = Object.keys(torrentsHash).map((hash) => {
     return {hash, ...torrentsHash[hash]};
@@ -38,13 +41,13 @@ export function sortTorrents(torrentsHash, sortBy) {
         if (valB !== 'Infinity') {
           valB = Number(valB.cumSeconds);
         }
-      } else if (property === 'name') {
-        valA = valA.toLowerCase();
-        valB = valB.toLowerCase();
       } else if (property === 'tags') {
         // TODO: Find a better way to sort tags.
         valA = valA.join(',').toLowerCase();
         valB = valB.join(',').toLowerCase();
+      } else if (stringProps.includes(property)) {
+        valA = valA.toLowerCase();
+        valB = valB.toLowerCase();
       } else {
         valA = Number(valA);
         valB = Number(valB);
