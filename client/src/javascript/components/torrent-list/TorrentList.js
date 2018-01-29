@@ -1,3 +1,4 @@
+import {Button} from 'flood-ui-kit';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
 import Dropzone from 'react-dropzone';
@@ -439,13 +440,15 @@ class TorrentListContainer extends React.Component {
     if (TorrentFilterStore.isFilterActive()) {
       clearFilters = (
         <div className="torrents__alert__action">
-          <button className="button button--small button--deemphasize
-            button--inverse" onClick={this.handleClearFiltersClick}>
+          <Button
+            onClick={this.handleClearFiltersClick}
+            priority="tertiary"
+          >
             <FormattedMessage
               id="torrents.list.clear.filters"
-              defaultMessage="Clear Filters"
+              defaultMessage="Clear filters"
             />
-          </button>
+          </Button>
         </div>
       );
     }
