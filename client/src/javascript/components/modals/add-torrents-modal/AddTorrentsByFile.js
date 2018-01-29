@@ -18,46 +18,15 @@ class AddTorrentsByFile extends React.Component {
   state = {
     errors: {},
     isAddingTorrents: false,
-    files: null,
+    files: [],
     tags: '',
     startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad')
   };
 
   getFileDropzone() {
-    const dropzoneContent = (
-      <FormRowItem>
-        <label className="form__element__label">
-          <FormattedMessage
-            id="torrents.add.torrents.label"
-            defaultMessage="Torrents"
-          />
-        </label>
-        <Dropzone
-          activeClassName="dropzone--is-dragging"
-          className="form__dropzone dropzone interactive-list"
-          ref="dropzone"
-          onDrop={this.handleFileDrop}
-          disablePreview
-        >
-          <div className="dropzone__copy">
-            <div className="dropzone__icon">
-              <Files />
-            </div>
-            <FormattedMessage
-              id="torrents.add.tab.file.drop"
-              defaultMessage="Drop some files here,"
-            /> <span className="dropzone__browse-button">
-            <FormattedMessage
-              id="torrents.add.tab.file.browse"
-              defaultMessage="or click to browse"
-            /></span>.
-          </div>
-        </Dropzone>
-      </FormRowItem>
-    );
     let fileContent = null;
 
-    if (this.state.files && this.state.files.length > 0) {
+    if (this.state.files.length > 0) {
       const files = this.state.files.map((file, index) => {
         return (
           <li
@@ -91,14 +60,41 @@ class AddTorrentsByFile extends React.Component {
       );
     }
 
-    let content = (
+    return (
       <FormRowItem>
+        <label className="form__element__label">
+          <FormattedMessage
+            id="torrents.add.torrents.label"
+            defaultMessage="Torrents"
+          />
+        </label>
         {fileContent}
-        {dropzoneContent}
+        <Dropzone
+          activeClassName="dropzone--is-dragging"
+          className="form__dropzone dropzone interactive-list"
+          ref="dropzone"
+          onDrop={this.handleFileDrop}
+          disablePreview
+        >
+          <div className="dropzone__copy">
+            <div className="dropzone__icon">
+              <Files />
+            </div>
+            <FormattedMessage
+              id="torrents.add.tab.file.drop"
+              defaultMessage="Drop some files here,"
+            />
+            {' '}
+            <span className="dropzone__browse-button">
+              <FormattedMessage
+                id="torrents.add.tab.file.browse"
+                defaultMessage="or click to browse"
+              />
+            </span>.
+          </div>
+        </Dropzone>
       </FormRowItem>
     );
-
-    return content;
   }
 
   handleFileDrop = files => {
@@ -108,13 +104,14 @@ class AddTorrentsByFile extends React.Component {
       delete nextErrorsState.files;
     }
 
-    this.setState({errors: nextErrorsState, files});
+    this.setState(state => {
+      return { errors: nextErrorsState, files: state.files.concat(files) };
+    });
   };
 
   handleFileRemove = fileIndex => {
-    let files = this.state.files;
+    const {files} = this.state;
     files.splice(fileIndex, 1);
-
     this.setState({files});
   };
 
