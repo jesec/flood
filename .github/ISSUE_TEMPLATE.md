@@ -1,3 +1,13 @@
+## Note
+
+- [ ] You may try to follow the update procedure described in the README and try again before opening this issue.
+- [ ] Before asking for something, please check the [F.A.Q.](https://github.com/jfurrow/flood/wiki/F.A.Q.).
+- [ ] Before opening a bug issue, please check the [Troubleshooting](https://github.com/jfurrow/flood/wiki/Troubleshooting) wiki section.
+- [ ] If you want to contribute to the project please review the [contributing guidelines](https://github.com/jfurrow/flood/blob/master/.github/CONTRIBUTING.md).
+- [ ] Keep in mind that Flood is a [FLOSS](https://en.wikipedia.org/wiki/Free_and_open-source_software#FLOSS) (Free, Libre and Open Source Software), so please try to provide a PR when opening a bug issue. Without contributions the project can't live and with your help fix and request will come faster.
+- [ ] The project is accepting issues (bugs report), feature or enhancement requests, discussions and questions but **not personal support**.
+
+## Summary
 <!--- Provide a general summary of the issue in the Title above -->
 
 ## Expected Behavior
@@ -31,7 +41,3 @@
   + Commit ID (development release) `git --no-pager log -1`
 * Environment name and version (e.g. Chrome 39, node.js 5.4):
 * Operating System and version:
-
-## Note
-
-You may try to follow the update procedure described in the README and try again before opening this issue.
