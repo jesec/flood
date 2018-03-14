@@ -44,7 +44,7 @@ const CONFIG = {
   // Configuration for SSL, if using SSL with the Flood service directly.
   ssl: false,
   sslKey: '/absolute/path/to/key/',
-  sslCert: '/absolute/path/to/certificate/',
+  sslCert: '/absolute/path/to/certificate/'
 };
 // Do not remove the below line.
 module.exports = CONFIG;
