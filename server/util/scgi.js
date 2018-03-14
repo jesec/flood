@@ -33,11 +33,12 @@ const sendMethodCall = (methodName, parameters) => {
     const deserializer = new Deserializer('utf8');
     const stream = net.connect(connectMethod);
     const xml = Serializer.serializeMethodCall(methodName, parameters);
+    const xmlLength = Buffer.byteLength(xml, 'utf8');
 
     stream.setEncoding('UTF8');
 
     const headerItems = [
-      `CONTENT_LENGTH${nullChar}${xml.length}${nullChar}`,
+      `CONTENT_LENGTH${nullChar}${xmlLength}${nullChar}`,
       `SCGI${nullChar}1${nullChar}`
     ];
 
