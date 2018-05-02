@@ -19,8 +19,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed __with XMLRPC__ configuration. _If you are currently using a web UI for rTorrent, you've already done this._
   * For Linux & OS X, check out [rTorrent's installation wiki](https://github.com/rakshasa/rtorrent/wiki/Installing#compilation-help) and/or [this third-party tutorial](https://jes.sc/kb/rTorrent+ruTorrent-Seedbox-Guide.php#Install-Dependencies). When you run `./configure`, be sure to run with the `--with-xmlrpc-c` flag.
   * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows) (I haven't tested this, let me know if you have problems).
-2. Install NodeJS version `7.x.x` or higher:
-  * I recommend managing different Node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n).
+2. Install NodeJS version `8` or higher (you might want to manage different Node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)).
 3. Since #523 [node-gyp](https://www.npmjs.com/package/node-gyp) is needed.
   * `sudo npm install -g node-gyp`
   * Check you match node-gyp [dependencies](https://github.com/nodejs/node-gyp#installation) (ex: gcc, make, python2).

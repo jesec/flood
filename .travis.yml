@@ -1,9 +1,8 @@
 dist: trusty
 language: node_js
 node_js:
-  - "node"  # current
-  - "lts/*" # LTS
-  - "7"
+  - "8"
+  - "9"
 before_script:
   - cp config.template.js config.js
 script:
