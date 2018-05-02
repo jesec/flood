@@ -9,9 +9,11 @@ Flood is another web interface for [rtorrent](https://github.com/rakshasa/rtorre
 It's a work-in-progress, and it might not have all of the features you want (yet). However, new features are added frequently. Feel free to file an issue and I'll try to prioritize your feature requests.
 
 #### Feedback
+
 If you have a specific issue or bug, please file a Github issue. If you want to participate in discussions about Flood's future, please join the [Flood Discord server](https://discord.gg/Z7yR5Uf).
 
 # Usage
+
 #### Pre-Requisites
 
 1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed __with XMLRPC__ configuration. _If you are currently using a web UI for rTorrent, you've already done this._
@@ -34,6 +36,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
   * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `baseURI`.
 
 #### Compiling assets and starting the server
+
 1. Run `npm install`.
   * Note: Since #523 [node-gyp](https://www.npmjs.com/package/node-gyp) is needed. **IF** you need `sudo`, use `sudo npm i --unsafe-perm` (see [here](https://github.com/nodejs/node-gyp/issues/454) for why `--unsafe-perm`) else installation will fail. If you dont need sudo just use `npm i` as usual.
   * If your system use python3 as default you will need to install python2 and use `npm i --python="/usr/bin/python2"`.
@@ -44,6 +47,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 1. Upon loading the UI the first time, you will be prompted to create a user account.
 
 #### Updating
+
 1. To update, run `git pull` in this repository's directory.
 1. Check `config.template.js` for configuration changes that you may wish to incoporate in your `config.js`.
 1. Kill the running Node server.
@@ -52,15 +56,18 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 1. Restart it with `npm start`.
 
 #### Tips
+
 * I run the web server with `screen` to keep the web server running independently of the terminal session.
 * Ubuntu users may need to install `nodejs-legacy` (`sudo apt-get install nodejs-legacy`) for dependencies to install successfully. You can read more on [this Stack Overflow post](http://stackoverflow.com/questions/21168141/cannot-install-packages-using-node-package-manager-in-ubuntu).
 
 #### Local Development
+
 1. Run `npm install`.
 2. Run `npm run start:development:server` and `npm run start:development:client` in separate terminal instances.
   * `npm run start:development:server` uses [nodemon](https://github.com/remy/nodemon) to watch for changes to the server-side JavaScript.
   * `npm run start:development:client` watches for changes in the client-side source.
 3. Access the UI through the [WebpackDevServer](https://webpack.js.org/configuration/dev-server/). It expects to proxy requests to the Flood server you have running, defined in `config.js` as `floodServerProxy`.
+4. Build the documentation `npm run build-docs`.
 
 #### Environment Variables
 
@@ -69,6 +76,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 1. `DEV_SERVER_HTTPS`: webpackDevServer's protocol, used when developing Flood. Defaults to `http`.
 
 #### Running with Docker
+
 1. `docker build -t rtorrent-flood .`
 2. `docker run --name rtorrent-flood -e RTORRENT_SCGI_HOST=w.x.y.z -p 3000:3000 rtorrent-flood`
 3. Other supported environment variables:
@@ -86,6 +94,7 @@ The docker container includes a volume at `/data`, which is where the database w
 This project's client-side build tooling is based on the wonderful [create-react-app](https://github.com/facebookincubator/create-react-app).
 
 # Screenshots
+
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-a.png)
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-b.png)
 ![](https://s3.amazonaws.com/johnfurrow.com/share/flood-screenshots-c.png)

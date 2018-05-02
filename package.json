@@ -4,16 +4,17 @@
   "private": true,
   "scripts": {
     "build": "node client/scripts/build.js",
-    "test": "node client/scripts/test.js --env=jsdom",
     "build-assets": "UPDATED_SCRIPT=build npm run deprecated-warning && npm run build",
-    "lint": "eslint .",
+    "build-docs": "./node_modules/.bin/jsdoc -c ./.jsdoc.json",
     "deprecated-warning": "node client/scripts/deprecated-warning.js && sleep 10",
-    "start:development:server": "NODE_ENV=development nodemon server/bin/start.js",
-    "start:development": "UPDATED_SCRIPT=start:development:server npm run deprecated-warning && npm run start:development:server",
-    "start:production": "UPDATED_SCRIPT=start npm run deprecated-warning && npm start",
+    "lint": "eslint .",
     "start": "node server/bin/start.js",
+    "start:development": "UPDATED_SCRIPT=start:development:server npm run deprecated-warning && npm run start:development:server",
+    "start:development:client": "node client/scripts/start.js",
+    "start:development:server": "NODE_ENV=development nodemon server/bin/start.js",
+    "start:production": "UPDATED_SCRIPT=start npm run deprecated-warning && npm start",
     "start:watch": "UPDATED_SCRIPT=start:development:client npm run deprecated-warning && npm run start:development:client",
-    "start:development:client": "node client/scripts/start.js"
+    "test": "node client/scripts/test.js --env=jsdom"
   },
   "dependencies": {
     "argon2": "^0.16.2",
@@ -111,6 +112,8 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "7.1.0",
     "jest": "20.0.4",
+    "jsdoc": "~3.5.5",
+    "minami": "^1.2.3",
     "nodemon": "^1.8.1",
     "source-map-loader": "^0.2.1",
     "webpack-dev-server": "^2.6.1",
