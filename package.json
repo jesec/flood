@@ -30,7 +30,6 @@
     "babel-preset-react-app": "^3.0.1",
     "babel-preset-stage-2": "^6.18.0",
     "babel-runtime": "^6.25.0",
-    "bcrypt": "^1.0.3",
     "body-parser": "^1.12.4",
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "^2.0.1",
