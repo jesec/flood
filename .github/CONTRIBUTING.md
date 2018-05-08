@@ -22,7 +22,7 @@ See [PULL_REQUEST_TEMPLATE.md](PULL_REQUEST_TEMPLATE.md).
 
 Category      | Label(s)  | Color(s)
 ---           | ---       | ---
-Platform      | ![](labels/bsd.png) ![](labels/linux.png) ![](labels/macOS.png) ![](labels/windows.png) | #BFD4F2
+Platform      | ![](labels/bsd.png) ![](labels/docker.png) ![](labels/linux.png) ![](labels/macOS.png) ![](labels/windows.png) | #BFD4F2
 Problems      | ![](labels/bug.png) ![](labels/security.png)  | #EE3F46
 Severity      | ![](labels/critical.png) | #B60205
 Type          | ![](labels/code.png) ![](labels/design.png) ![](labels/documentation.png) ![](labels/test.png)  | #FFC274

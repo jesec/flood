@@ -2,7 +2,7 @@
 
 Category      | Label(s)  | Color(s)
 ---           | ---       | ---
-Platform      | ![](bsd.png) ![](linux.png) ![](macOS.png) ![](windows.png) | #BFD4F2
+Platform      | ![](bsd.png) ![](docker.png) ![](linux.png) ![](macOS.png) ![](windows.png) | #BFD4F2
 Problems      | ![](bug.png) ![](security.png)  | #EE3F46
 Severity      | ![](critical.png) | #B60205
 Type          | ![](code.png) ![](design.png) ![](documentation.png) ![](test.png)  | #FFC274
