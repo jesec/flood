@@ -6,6 +6,7 @@
 const CONFIG = {
   // The URL that Flood will be served from. For example, if you intend to
   // serve from http://example.com/flood, set this to '/flood'.
+  // Recompiling assets with `npm run build` is needed after each `baseURI` change.
   baseURI: '/',
   // Flood uses a local nedb database to keep track of users, torrents,
   // and activity. The database is regularly purged to remove outdated data.

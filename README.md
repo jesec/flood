@@ -34,16 +34,18 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 4. If you're proxying Flood to a path other than the root of the host, you must specify the `baseURI` in `config.js`. All request URIs will be prefixed with this value.
   * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `baseURI`.
 
+**Note**: each time you modify `baseURI` in `config.js` you need to recompile assets (`npm run build`). To be sure follow the *Updating* procedure each time you modify the `config.js` file.
+
 #### Compiling assets and starting the server
 
 1. Run `npm install`.
   * Note: Since #523 [node-gyp](https://www.npmjs.com/package/node-gyp) is needed. **IF** you need `sudo`, use `sudo npm i --unsafe-perm` (see [here](https://github.com/nodejs/node-gyp/issues/454) for why `--unsafe-perm`) else installation will fail. If you dont need sudo just use `npm i` as usual.
   * If your system use python3 as default you will need to install python2 and use `npm i --python="/usr/bin/python2"`.
-1. Run `npm run build`.
-1. Run `npm start`.
-1. Access the UI in your browser. Defaults to `localhost:3000`.
+2. Run `npm run build`.
+3. Run `npm start`.
+4. Access the UI in your browser. Defaults to `localhost:3000`.
   * You may change the default port in `config.js`.
-1. Upon loading the UI the first time, you will be prompted to create a user account.
+5. Upon loading the UI the first time, you will be prompted to create a user account.
 
 #### Updating
 
