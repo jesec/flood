@@ -1,6 +1,6 @@
 'use strict';
 
-const errorOverlayMiddleware = require('react-error-overlay/middleware');
+const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const config = require('./webpack.config.dev');
 const paths = require('./paths');
 
