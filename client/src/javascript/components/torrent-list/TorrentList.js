@@ -322,6 +322,8 @@ class TorrentListContainer extends React.Component {
     const link = document.createElement('a');
     link.download = torrent.isMultiFile ? `${torrent.name}.tar` : torrent.name;
     link.href = `${baseURI}api/download?hash=${torrent.hash}`;
+    link.style.display = 'none';
+    document.body.appendChild(link);
     link.click();
   }
 
