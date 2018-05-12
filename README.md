@@ -90,6 +90,8 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
 
 The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`.
 
+Check out the [Wiki](https://github.com/jfurrow/flood/wiki/Docker) for more information.
+
 ## Notes
 
 This project's client-side build tooling is based on the wonderful [create-react-app](https://github.com/facebookincubator/create-react-app).
