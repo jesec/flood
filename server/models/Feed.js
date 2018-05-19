@@ -18,6 +18,7 @@ class Feed {
       emitOnStart: true,
       maxHistory: this.options.maxItemHistory,
       interval: options.interval ? Number(options.interval) : 15,
+      forceInterval: true,
       readEveryItem: true
     });
 
