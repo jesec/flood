@@ -32,7 +32,7 @@ If you have a specific issue or bug, please file a Github issue. If you want to 
   * If you wish to access an rTorrent instance running on a separate host from Flood (or in a Docker container), allow for incoming connections from external IPs by setting the host in `scgi_port` to `0.0.0.0` in `.rtorrent.rc`. Example: `scgi_port = 0.0.0.0:5000`
 3. Create a long, unique secret (used to sign [JWT auth tokens](https://github.com/auth0/node-jsonwebtoken)) in `config.js`.
 4. If you're proxying Flood to a path other than the root of the host, you must specify the `baseURI` in `config.js`. All request URIs will be prefixed with this value.
-  * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `baseURI`.
+  * For example, if hosting Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If hosting flood from `https://foo.bar`, you do not need to configure `baseURI`. See also [Using Flood behind a reverse proxy](https://github.com/jfurrow/flood/wiki/Using-Flood-behind-a-reverse-proxy) on the wiki.
 
 **Note**: each time you modify `baseURI` in `config.js` you need to recompile assets (`npm run build`). To be sure follow the *Updating* procedure each time you modify the `config.js` file.
 
