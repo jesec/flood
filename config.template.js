@@ -4,9 +4,14 @@
 // config.js must exist before running `npm run build`.
 
 const CONFIG = {
-  // The URL that Flood will be served from. For example, if you intend to
-  // serve from http://example.com/flood, set this to '/flood'.
+  // This URI will prefix all of Flood's HTTP requests. You _must_ have a web
+  // server, like nginx, configured to forward these requests to the Flood
+  // web server.
+  // For example, if you intend to serve from http://example.com/flood, set this to
+  // '/flood' and configure your web server to pass _all_ requests from `/flood` to
+  // the root of Flood's web server.
   // Recompiling assets with `npm run build` is needed after each `baseURI` change.
+  // See https://github.com/jfurrow/flood/wiki/Using-Flood-behind-a-reverse-proxy
   baseURI: '/',
   // Flood uses a local nedb database to keep track of users, torrents,
   // and activity. The database is regularly purged to remove outdated data.
