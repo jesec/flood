@@ -137,9 +137,12 @@ export default {
   'settings.tabs.resources': 'Ressources',
   'settings.tabs.authentication': 'Authentification',
   'settings.tabs.userinterface': 'Interface',
+  'settings.tabs.about': 'À propos',
 
   'settings.ui.locale': 'Traductions',
   'settings.ui.language': 'Langue',
+
+  'settings.about.flood': 'À propos de Flood',
 
   'sidebar.button.feeds': 'Flux',
   'sidebar.button.settings': 'Réglages',
