@@ -2,6 +2,7 @@ import {FormattedMessage} from 'react-intl';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import ClientStatusStore from '../../stores/ClientStatusStore';
 import EventTypes from '../../constants/EventTypes';
 import LoadingIndicator from '../general/LoadingIndicator';
 import TransferDataStore from '../../stores/TransferDataStore';
@@ -26,6 +27,7 @@ class TransferData extends React.Component {
 
     this.state = {
       graphInspectorPoint: null,
+      isClientConnected: false,
       sidebarWidth: 0,
       transferHistoryRequestSuccess: false,
       transferDataRequestError: false,
@@ -59,6 +61,10 @@ class TransferData extends React.Component {
       sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth
     });
 
+    ClientStatusStore.listen(
+      EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      this.handleClientStatusChange
+    );
     TransferDataStore.listen(
       EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
       this.onTransferSummaryChange
@@ -70,6 +76,10 @@ class TransferData extends React.Component {
   }
 
   componentWillUnmount() {
+    ClientStatusStore.unlisten(
+      EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      this.handleClientStatusChange
+    );
     TransferDataStore.unlisten(
       EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
       this.onTransferSummaryChange
@@ -80,6 +90,12 @@ class TransferData extends React.Component {
     );
   }
 
+  handleClientStatusChange = () => {
+    this.setState({
+      isClientConnected: ClientStatusStore.getIsConnected()
+    });
+  };
+
   handleGraphHover(graphInspectorPoint) {
     this.setState({graphInspectorPoint});
   }
@@ -89,17 +105,17 @@ class TransferData extends React.Component {
   }
 
   handleMouseMove(event) {
-    if (event && event.nativeEvent && event.nativeEvent.clientX != null) {
+    if (this.state.isClientConnected && event && event.nativeEvent && event.nativeEvent.clientX != null) {
       this.rateGraphRef.handleMouseMove(event.nativeEvent.clientX);
     }
   }
 
   handleMouseOut() {
-    this.rateGraphRef.handleMouseOut();
+    this.state.isClientConnected && this.rateGraphRef.handleMouseOut();
   }
 
   handleMouseOver() {
-    this.rateGraphRef.handleMouseOver();
+    this.state.isClientConnected && this.rateGraphRef.handleMouseOver();
   }
 
   isLoading() {
@@ -137,6 +153,20 @@ class TransferData extends React.Component {
     UIStore.satisfyDependency('transfer-history');
   }
 
+  renderTransferRateGraph() {
+    if (!this.state.isClientConnected) return null;
+
+    return (
+      <TransferRateGraph
+      height={150}
+      id="transfer-rate-graph"
+      onMouseOut={this.handleGraphMouseOut}
+      onHover={this.handleGraphHover}
+      ref={ref => this.rateGraphRef = ref}
+      width={this.state.sidebarWidth} />
+    );
+  }
+
   render() {
     let content = null;
 
@@ -149,15 +179,10 @@ class TransferData extends React.Component {
           onMouseOut={this.handleMouseOut}
           onMouseOver={this.handleMouseOver}>
           <TransferRateDetails
+            isClientConnected={this.state.isClientConnected}
             inspectorPoint={this.state.graphInspectorPoint}
             transferSummary={transferSummary}/>
-          <TransferRateGraph
-            height={150}
-            id="transfer-rate-graph"
-            onMouseOut={this.handleGraphMouseOut}
-            onHover={this.handleGraphHover}
-            ref={ref => this.rateGraphRef = ref}
-            width={this.state.sidebarWidth} />
+          {this.renderTransferRateGraph()}
         </div>
       );
     } else {

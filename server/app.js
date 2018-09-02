@@ -1,7 +1,5 @@
 require('events').EventEmitter.defaultMaxListeners = Infinity;
 
-const torrentService = require('./services/torrentService');
-
 const bodyParser = require('body-parser');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
@@ -14,7 +12,10 @@ const app = express();
 const apiRoutes = require('./routes/api');
 const authRoutes = require('./routes/auth');
 const paths = require('../client/config/paths');
+const services = require('./services');
 const Users = require('./models/Users');
+
+Users.bootstrapServicesForAllUsers();
 
 // Remove Express header
 if(process.env.NODE_ENV !== 'development') {

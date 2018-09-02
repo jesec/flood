@@ -1,10 +1,7 @@
-'use strict';
+const jwtStrategy = require('passport-jwt').Strategy;
 
-let extractJWT = require('passport-jwt').ExtractJwt;
-let jwtStrategy = require('passport-jwt').Strategy;
-
-let config = require('../../config');
-let Users = require('../models/Users');
+const config = require('../../config');
+const Users = require('../models/Users');
 
 // Setup work and export for the JWT passport strategy.
 module.exports = (passport) => {

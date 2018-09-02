@@ -1,9 +1,11 @@
 $dark-blue: #1d2938;
 $grey: #293341;
 $light-grey: #3A4553;
+$light-grey--lighter: lighten($light-grey, 40%);
 $blue: #258de5;
 $blue--lighter: saturate(lighten($blue, 10%), 100%);
 $green: #39ce83;
+$green--darker: darken(#39ce83, 4%);
 $light-blue: #e9eef2;
 $red: #e95779;
 $white: #fff;

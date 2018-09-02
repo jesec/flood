@@ -49,6 +49,19 @@ let AuthActions = {
       });
   },
 
+  updateUser: (username, connectionSettings) => {
+    const requestPayload = {};
+
+    if (connectionSettings.connectionType === 'socket') {
+      requestPayload.socketPath = connectionSettings.rtorrentSocketPath;
+    } else {
+      requestPayload.port = connectionSettings.rtorrentPort;
+      requestPayload.host = connectionSettings.rtorrentHost;
+    }
+
+    return axios.patch(`${baseURI}auth/users/${encodeURIComponent(username)}`, requestPayload).then((json = {}) => json.data);
+  },
+
   deleteUser: (username) => {
     return axios.delete(`${baseURI}auth/users/${encodeURIComponent(username)}`)
       .then((json = {}) => json.data)

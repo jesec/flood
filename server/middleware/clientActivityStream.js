@@ -1,32 +1,34 @@
-'use strict';
-
-const historyService = require('../services/historyService');
+const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
 const historyServiceEvents = require('../constants/historyServiceEvents');
 const historySnapshotTypes = require('../../shared/constants/historySnapshotTypes');
-const notificationService = require('../services/notificationService');
 const notificationServiceEvents = require('../constants/notificationServiceEvents');
 const ServerEvent = require('../models/ServerEvent');
 const serverEventTypes = require('../../shared/constants/serverEventTypes');
-const taxonomyService = require('../services/taxonomyService');
+const services = require('../services');
 const taxonomyServiceEvents = require('../constants/taxonomyServiceEvents');
-const torrentService = require('../services/torrentService');
 const torrentServiceEvents = require('../constants/torrentServiceEvents');
 
 module.exports = (req, res) => {
-  const {query: {historySnapshot = historySnapshotTypes.FIVE_MINUTE}} = req;
+  const {query: {historySnapshot = historySnapshotTypes.FIVE_MINUTE}, user} = req;
 
+  const serviceInstances = services.getAllServices(user);
   const serverEvent = new ServerEvent(res);
-  const taxonomy = taxonomyService.getTaxonomy();
-  const torrentList = torrentService.getTorrentList();
-  const transferSummary = historyService.getTransferSummary();
+  const taxonomy = serviceInstances.taxonomyService.getTaxonomy();
+  const torrentList = serviceInstances.torrentService.getTorrentList();
+  const transferSummary = serviceInstances.historyService.getTransferSummary();
 
   // Remove all previous event listeners.
-  historyService.removeAllListeners();
-  notificationService.removeAllListeners();
-  taxonomyService.removeAllListeners();
-  torrentService.removeAllListeners();
+  serviceInstances.historyService.removeAllListeners();
+  serviceInstances.notificationService.removeAllListeners();
+  serviceInstances.taxonomyService.removeAllListeners();
+  serviceInstances.torrentService.removeAllListeners();
 
-  // Emit all existing data.
+  // Emit current state immediately on connection.
+  serverEvent.setID(Date.now());
+  serverEvent.setType(serverEventTypes.CLIENT_CONNECTIVITY_STATUS_CHANGE);
+  serverEvent.addData({isConnected: !serviceInstances.clientGatewayService.hasError});
+  serverEvent.emit();
+
   serverEvent.setID(torrentList.id);
   serverEvent.setType(serverEventTypes.TORRENT_LIST_FULL_UPDATE);
   serverEvent.addData(torrentList.torrents);
@@ -42,14 +44,24 @@ module.exports = (req, res) => {
   serverEvent.addData(transferSummary.transferSummary);
   serverEvent.emit();
 
-  serverEvent.setID({id: Date.now()});
+  serverEvent.setID(Date.now());
   serverEvent.setType(serverEventTypes.NOTIFICATION_COUNT_CHANGE);
-  serverEvent.addData(notificationService.getNotificationCount());
+  serverEvent.addData(serviceInstances.notificationService.getNotificationCount());
   serverEvent.emit();
+
+  serviceInstances.clientGatewayService.on(
+    clientGatewayServiceEvents.CLIENT_CONNECTION_STATE_CHANGE,
+    () => {
+      serverEvent.setID(Date.now());
+      serverEvent.setType(serverEventTypes.CLIENT_CONNECTIVITY_STATUS_CHANGE);
+      serverEvent.addData({isConnected: !serviceInstances.clientGatewayService.hasError});
+      serverEvent.emit();
+    }
+  );
 
   // TODO: Handle empty or sub-optimal history states.
   // Get user's specified history snapshot current history.
-  historyService.getHistory({snapshot: historySnapshot}, (snapshot, error) => {
+  serviceInstances.historyService.getHistory({snapshot: historySnapshot}, (snapshot, error) => {
     const {timestamps: lastTimestamps = []} = snapshot;
     const lastTimestamp = lastTimestamps[lastTimestamps.length - 1];
 
@@ -61,9 +73,8 @@ module.exports = (req, res) => {
     }
   });
 
-
   // Add user's specified history snapshot change event listener.
-  historyService.on(
+  serviceInstances.historyService.on(
     historyServiceEvents[
       `${historySnapshotTypes[historySnapshot]}_SNAPSHOT_FULL_UPDATE`
     ],
@@ -77,7 +88,7 @@ module.exports = (req, res) => {
     }
   );
 
-  notificationService.on(
+  serviceInstances.notificationService.on(
     notificationServiceEvents.NOTIFICATION_COUNT_CHANGE,
     payload => {
       const {data, id} = payload;
@@ -90,7 +101,7 @@ module.exports = (req, res) => {
   );
 
   // Add diff event listeners.
-  historyService.on(
+  serviceInstances.historyService.on(
     historyServiceEvents.TRANSFER_SUMMARY_DIFF_CHANGE,
     (payload) => {
       const {diff, id} = payload;
@@ -102,7 +113,7 @@ module.exports = (req, res) => {
     }
   );
 
-  taxonomyService.on(
+  serviceInstances.taxonomyService.on(
     taxonomyServiceEvents.TAXONOMY_DIFF_CHANGE,
     (payload) => {
       const {diff, id} = payload;
@@ -114,7 +125,7 @@ module.exports = (req, res) => {
     }
   );
 
-  torrentService.on(
+  serviceInstances.torrentService.on(
     torrentServiceEvents.TORRENT_LIST_DIFF_CHANGE,
     (payload) => {
       const {diff, id} = payload;

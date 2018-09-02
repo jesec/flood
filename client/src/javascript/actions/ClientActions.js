@@ -62,6 +62,30 @@ let ClientActions = {
           }
         });
       });
+  },
+
+  testClientConnectionSettings: (connectionSettings) => {
+    const requestPayload = {
+      host: connectionSettings.rtorrentHost,
+      port: connectionSettings.rtorrentPort,
+      socketPath: connectionSettings.rtorrentSocketPath
+    };
+
+    return axios.post(`${baseURI}api/client/connection-test`, requestPayload).then((json = {}) => json.data);
+  },
+
+  testConnection: () => {
+    return axios.get(`${baseURI}api/client/connection-test`)
+      .then((json = {}) => json.data)
+      .then((data) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_CONNECTION_TEST_SUCCESS
+        });
+      }, (error) => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.CLIENT_CONNECTION_TEST_ERROR
+        });
+      });
   }
 };
 

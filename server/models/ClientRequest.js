@@ -1,23 +1,22 @@
-'use strict';
-
 /**
- * This file is deprecated in favor of clientRequestService.
+ * This file is deprecated in favor of clientGatewayService.
  */
+const mkdirp = require('mkdirp');
+const mv = require('mv');
+const path = require('path');
+const util = require('util');
 
-let mkdirp = require('mkdirp');
-let mv = require('mv');
-let path = require('path');
-let util = require('util');
-
-let clientSettingsMap = require('../../shared/constants/clientSettingsMap');
-let rTorrentPropMap = require('../util/rTorrentPropMap');
-let scgi = require('../util/scgi');
-const torrentService = require('../services/torrentService');
+const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
+const rTorrentPropMap = require('../util/rTorrentPropMap');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
 class ClientRequest {
-  constructor(options) {
+  constructor(user, services, options) {
     options = options || {};
+
+    this.services = services;
+    this.user = user;
+    this.clientRequestManager = this.services.clientRequestManager;
 
     this.onCompleteFn = null;
     this.postProcessFn = null;
@@ -109,7 +108,8 @@ class ClientRequest {
     let handleSuccess = this.handleSuccess.bind(this);
     let handleError = this.handleError.bind(this);
 
-    scgi.methodCall('system.multicall', [this.requests])
+    this.clientRequestManager
+      .methodCall('system.multicall', [this.requests])
       .then(handleSuccess)
       .catch(handleError);
   }
@@ -184,10 +184,12 @@ class ClientRequest {
   }
 
   checkHash(options) {
+    const torrentService = this.services.torrentService;
     const hashes = this.getEnsuredArray(options.hashes);
     const stoppedHashes = hashes.filter(hash => {
       return torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped);
     });
+
     const hashesToStart = [];
 
     this.stopTorrents({ hashes });

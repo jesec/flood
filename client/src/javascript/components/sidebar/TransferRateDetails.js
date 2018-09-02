@@ -4,8 +4,10 @@ import formatUtil from 'universally-shared-code/util/formatUtil';
 import moment from 'moment';
 import React from 'react';
 
+import ClientStatusStore from '../../stores/ClientStatusStore';
 import Download from '../icons/Download';
 import Duration from '../general/Duration';
+import EventTypes from '../../constants/EventTypes';
 import InfinityIcon from '../icons/InfinityIcon';
 import Size from '../general/Size';
 import Upload from '../icons/Upload';
@@ -27,7 +29,26 @@ class TransferRateDetails extends React.Component {
   constructor() {
     super();
 
-    this.state = {inspectorPoint: null};
+    this.state = {
+      isClientConnected: false,
+      inspectorPoint: null
+    };
+
+    this.handleClientStatusChange = this.handleClientStatusChange.bind(this);
+  }
+
+  componentDidMount() {
+    ClientStatusStore.listen(
+      EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      this.handleClientStatusChange
+    );
+  }
+
+  componentWillUnmount() {
+    ClientStatusStore.unlisten(
+      EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      this.handleClientStatusChange
+    );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -37,36 +58,28 @@ class TransferRateDetails extends React.Component {
   }
 
   getCurrentTansferRate(slug, options = {}) {
-    let {
+    const {
       props: {
         inspectorPoint,
         transferSummary
       }
     } = this;
+    const {isClientConnected} = this.state;
 
     const throttles = {
       download: transferSummary.downThrottle,
       upload: transferSummary.upThrottle
     };
     let timestamp = null;
-    let transferRates = {
-      download: transferSummary.downRate,
-      upload: transferSummary.upRate
-    };
     let transferTotals = {
       download: transferSummary.downTotal,
       upload: transferSummary.upTotal
     };
 
-    const secondaryDataClasses = classnames(
-      'client-stats__rate__data--secondary',
-      {'is-visible': inspectorPoint == null}
-    );
-
-    const timestampClasses = classnames(
-      'client-stats__rate__data--timestamp',
-      {'is-visible': inspectorPoint != null && options.showHoverDuration}
-    );
+    let transferRates = {
+      download: transferSummary.downRate,
+      upload: transferSummary.upRate
+    };
 
     if (inspectorPoint != null) {
       transferRates = {
@@ -74,6 +87,16 @@ class TransferRateDetails extends React.Component {
         download: inspectorPoint.downloadSpeed
       };
     }
+
+    const secondaryDataClasses = classnames(
+      'client-stats__rate__data--secondary',
+      {'is-visible': inspectorPoint == null && isClientConnected}
+    );
+
+    const timestampClasses = classnames(
+      'client-stats__rate__data--timestamp',
+      {'is-visible': inspectorPoint != null && options.showHoverDuration}
+    );
 
     if (this.state.timestamp != null) {
       const currentTime = moment(Date.now());
@@ -121,6 +144,12 @@ class TransferRateDetails extends React.Component {
         </div>
       </div>
     );
+  }
+
+  handleClientStatusChange() {
+    this.setState({
+      isClientConnected: ClientStatusStore.getIsConnected()
+    });
   }
 
   render() {

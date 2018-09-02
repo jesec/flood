@@ -3,6 +3,7 @@ import React from 'react';
 
 import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
+import RtorrentConnectionTypeSelection from '../general/RtorrentConnectionTypeSelection';
 
 import {
   Button,
@@ -91,7 +92,10 @@ class AuthForm extends React.Component {
     } else {
       AuthStore.register({
         username: submission.formData.username,
-        password: submission.formData.password
+        password: submission.formData.password,
+        host: submission.formData.rtorrentHost,
+        port: submission.formData.rtorrentPort,
+        socketPath: submission.formData.rtorrentSocketPath
       });
     }
   }
@@ -99,17 +103,25 @@ class AuthForm extends React.Component {
   render() {
     let actionText = null;
     let errorRow;
+    let registerFields;
 
     if (this.props.mode === 'login') {
       actionText = this.props.intl.formatMessage({
         id: 'auth.log.in',
         defaultMessage: 'Log In'
       });
+
     } else {
       actionText = this.props.intl.formatMessage({
         id: 'auth.create.account',
         defaultMessage: 'Create Account'
       });
+
+      registerFields = (
+        <PanelContent hasBorder={true}>
+          <RtorrentConnectionTypeSelection />
+        </PanelContent>
+      );
     }
 
     if (this.state.error) {
@@ -123,14 +135,14 @@ class AuthForm extends React.Component {
     }
 
     return (
-      <div style={{width: 500}}>
+      <div className="application__entry-barrier">
         <Panel spacing="large">
           <Form onSubmit={this.handleFormSubmit} ref={(ref) => this.formRef = ref}>
             <PanelHeader>
               <h1>{this.getHeaderText()}</h1>
             </PanelHeader>
             <PanelContent>
-              <p>{this.getIntroText()}</p>
+              <p className="copy--lead">{this.getIntroText()}</p>
               {errorRow}
               <FormRow>
                 <Textbox placeholder="Username" id="username" />
@@ -139,7 +151,8 @@ class AuthForm extends React.Component {
                 <Textbox placeholder="Passsword" id="password" type="password" />
               </FormRow>
             </PanelContent>
-            <PanelFooter>
+            {registerFields}
+            <PanelFooter hasBorder>
               <FormRow justify="end">
                 <Button children="Clear" priority="tertiary" onClick={() => this.formRef.resetForm()} />
                 <Button isLoading={this.state.isAuthStatusLoading} type="submit">

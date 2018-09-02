@@ -63,6 +63,11 @@ const FloodActions = {
     activityStreamEventSource.close();
 
     activityStreamEventSource.removeEventListener(
+      serverEventTypes.CLIENT_CONNECTIVITY_STATUS_CHANGE,
+      this.handleClientConnectivityStatusChange
+    );
+
+    activityStreamEventSource.removeEventListener(
       serverEventTypes.NOTIFICATION_COUNT_CHANGE,
       this.handleNotificationCountChange
     );
@@ -177,6 +182,13 @@ const FloodActions = {
       });
   },
 
+  handleClientConnectivityStatusChange(event) {
+    AppDispatcher.dispatchServerAction({
+      type: ActionTypes.CLIENT_CONNECTIVITY_STATUS_CHANGE,
+      data: JSON.parse(event.data)
+    });
+  },
+
   handleNotificationCountChange(event) {
     AppDispatcher.dispatchServerAction({
       type: ActionTypes.NOTIFICATION_COUNT_CHANGE,
@@ -258,6 +270,11 @@ const FloodActions = {
     if (didHistorySnapshotChange || activityStreamEventSource === null) {
       activityStreamEventSource = new EventSource(
         `${baseURI}api/activity-stream?historySnapshot=${historySnapshot}`
+      );
+
+      activityStreamEventSource.addEventListener(
+        serverEventTypes.CLIENT_CONNECTIVITY_STATUS_CHANGE,
+        this.handleClientConnectivityStatusChange
       );
 
       activityStreamEventSource.addEventListener(

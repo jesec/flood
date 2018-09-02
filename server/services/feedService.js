@@ -1,17 +1,17 @@
-'use strict';
 const _ = require('lodash');
+const path = require('path');
 const Datastore = require('nedb');
 
+const BaseService = require('./BaseService');
 const client = require('../models/client');
 const config = require('../../config');
 const Feed = require('../models/Feed');
-const notificationService = require('./notificationService');
 
-class FeedService {
+class FeedService extends BaseService {
   constructor() {
-    this.feeds = [];
+    super(...arguments);
+
     this.isDBReady = false;
-    this.rules = {};
     this.db = this.loadDatabase();
 
     this.init();
@@ -25,9 +25,7 @@ class FeedService {
   }
 
   addItem(type, item, callback) {
-    if (!this.isDBReady) {
-      return;
-    }
+    if (!this.isDBReady) return;
 
     this.db.insert(Object.assign(item, {type}), (err, newDoc) => {
       if (err) {
@@ -199,7 +197,7 @@ class FeedService {
             {upsert: true}
           );
 
-          notificationService.addNotification(itemsToDownload.map(item => {
+          this.services.notificationService.addNotification(itemsToDownload.map(item => {
             return {
               id: 'notification.feed.downloaded.torrent',
               data: {
@@ -209,10 +207,13 @@ class FeedService {
               }
             };
           }));
+          this.services.torrentService.fetchTorrentList();
         };
 
         itemsToDownload.forEach((item, index) => {
           client.addUrls(
+            this.user,
+            this.services,
             {
               urls: item.urls,
               destination: item.destination,
@@ -243,6 +244,8 @@ class FeedService {
   }
 
   init() {
+    this.feeds = [];
+    this.rules = {};
     this.db.find({}, (err, docs) => {
       if (err) {
         return;
@@ -282,11 +285,13 @@ class FeedService {
   }
 
   loadDatabase() {
-    let db = new Datastore({
-      autoload: true,
-      filename: `${config.dbPath}settings/feeds.db`
-    });
+    if (this.isDBReady) return;
+    const {_id: userId} = this.user;
 
+    const db = new Datastore({
+      autoload: true,
+      filename: path.join(config.dbPath, userId, 'settings', 'feeds.db')
+    });
     this.isDBReady = true;
     return db;
   }
@@ -307,8 +312,12 @@ class FeedService {
   removeItem(id, callback) {
     let indexToRemove = -1;
     let itemToRemove = this.feeds.find((feed, index) => {
-      indexToRemove = index;
-      return feed.options._id === id;
+      if (feed.options._id === id) {
+        indexToRemove = index;
+        return true;
+      }
+
+      return false;
     });
 
     if (itemToRemove != null) {
@@ -332,4 +341,4 @@ class FeedService {
   }
 }
 
-module.exports = new FeedService();
+module.exports = FeedService;

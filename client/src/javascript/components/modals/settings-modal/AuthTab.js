@@ -8,6 +8,7 @@ import AuthStore from '../../../stores/AuthStore';
 import Close from '../../icons/Close';
 import EventTypes from '../../../constants/EventTypes';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
+import RtorrentConnectionTypeSelection from '../../general/RtorrentConnectionTypeSelection';
 import SettingsTab from './SettingsTab';
 
 class AuthTab extends SettingsTab {
@@ -79,9 +80,10 @@ class AuthTab extends SettingsTab {
 
       if (!isCurrentUser) {
         removeIcon = (
-          <span className="interactive-list__icon
-            interactive-list__icon--action interactive-list__icon--action--warning"
-            onClick={this.handleDeleteUserClick.bind(this, user.username)}>
+          <span
+            className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
+            onClick={this.handleDeleteUserClick.bind(this, user.username)}
+          >
             <Close />
           </span>
         );
@@ -118,7 +120,7 @@ class AuthTab extends SettingsTab {
     AuthStore.deleteUser(username);
   }
 
-  handleFormChange = ({event, formData}) => {
+  handleFormChange = ({formData}) => {
     this.formData = formData;
   };
 
@@ -134,7 +136,10 @@ class AuthTab extends SettingsTab {
       this.setState({isAddingUser: true});
       AuthStore.createUser({
         username: this.formData.username,
-        password: this.formData.password
+        password: this.formData.password,
+        host: this.formData.rtorrentHost,
+        port: this.formData.rtorrentPort,
+        socketPath: this.formData.rtorrentSocketPath
       });
     }
   };
@@ -245,7 +250,10 @@ class AuthTab extends SettingsTab {
               defaultMessage: 'Password'
             })}
           />
-          <Button isLoading={this.state.isAddingUser} labelOffset priority="primary" type="submit" width="auto">
+        </FormRow>
+        <RtorrentConnectionTypeSelection />
+        <FormRow justify="end">
+          <Button isLoading={this.state.isAddingUser} priority="primary" type="submit" width="auto">
             <FormattedMessage
               id="button.add"
               defaultMessage="Add"

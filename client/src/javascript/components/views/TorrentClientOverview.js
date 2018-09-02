@@ -6,16 +6,10 @@ import ApplicationContent from '../layout/ApplicationContent';
 import ApplicationPanel from '../layout/ApplicationPanel';
 import ApplicationView from '../layout/ApplicationView';
 import Modals from '../modals/Modals';
-import SettingsStore from '../../stores/SettingsStore';
 import Sidebar from '../sidebar/Sidebar';
 import TorrentList from '../torrent-list/TorrentList';
 
 export default class TorrentCLientOverview extends React.Component {
-  componentDidMount() {
-    SettingsStore.fetchClientSettings();
-    SettingsStore.fetchFloodSettings();
-  }
-
   render() {
     return (
       <ApplicationView>

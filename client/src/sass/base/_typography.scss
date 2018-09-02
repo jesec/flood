@@ -102,3 +102,12 @@ a {
 p {
   margin-bottom: $spacing--medium;
 }
+
+.copy {
+
+  &--lead {
+    font-size: $font-size--medium;
+    line-height: 1.5rem;
+    font-weight: 300;
+  }
+}

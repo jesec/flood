@@ -1,7 +1,6 @@
-'use strict';
 const EventEmitter = require('events');
 
-const clientRequestService = require('./clientRequestService');
+const BaseService = require('./BaseService');
 const config = require('../../config');
 const HistoryEra = require('../models/HistoryEra');
 const historyServiceEvents = require('../constants/historyServiceEvents');
@@ -30,26 +29,26 @@ const processData = (opts, callback, data, error) => {
   }, {upload: [], download: [], timestamps: []}));
 };
 
-class HistoryService extends EventEmitter {
+class HistoryService extends BaseService {
   constructor() {
     super(...arguments);
-
-    this.fetchCurrentTransferSummary = this.fetchCurrentTransferSummary.bind(this);
-    this.handleFetchTransferSummaryError = this.handleFetchTransferSummaryError.bind(this);
-    this.handleFetchTransferSummarySuccess = this.handleFetchTransferSummarySuccess.bind(this);
 
     this.errorCount = 0;
     this.lastSnapshots = {};
     this.pollTimeout = null;
     this.transferSummary = {};
 
-    this.yearSnapshot = new HistoryEra({
+    this.fetchCurrentTransferSummary = this.fetchCurrentTransferSummary.bind(this);
+    this.handleFetchTransferSummaryError = this.handleFetchTransferSummaryError.bind(this);
+    this.handleFetchTransferSummarySuccess = this.handleFetchTransferSummarySuccess.bind(this);
+
+    this.yearSnapshot = new HistoryEra(this.user, {
       interval: 1000 * 60 * 60 * 24 * 7, // 7 days
       maxTime: 0, // infinite
       name: 'yearSnapshot'
     });
 
-    this.monthSnapshot = new HistoryEra({
+    this.monthSnapshot = new HistoryEra(this.user, {
       interval: 1000 * 60 * 60 * 12, // 12 hours
       maxTime: 1000 * 60 * 60 * 24 * 365, // 365 days
       name: 'monthSnapshot',
@@ -57,7 +56,7 @@ class HistoryService extends EventEmitter {
       nextEra: this.yearSnapshot
     });
 
-    this.weekSnapshot = new HistoryEra({
+    this.weekSnapshot = new HistoryEra(this.user, {
       interval: 1000 * 60 * 60 * 4, // 4 hours
       maxTime: 1000 * 60 * 60 * 24 * 7 * 24, // 24 weeks
       name: 'weekSnapshot',
@@ -65,7 +64,7 @@ class HistoryService extends EventEmitter {
       nextEra: this.monthSnapshot
     });
 
-    this.daySnapshot = new HistoryEra({
+    this.daySnapshot = new HistoryEra(this.user, {
       interval: 1000 * 60 * 60, // 60 minutes
       maxTime: 1000 * 60 * 60 * 24 * 30, // 30 days
       name: 'daySnapshot',
@@ -73,7 +72,7 @@ class HistoryService extends EventEmitter {
       nextEra: this.weekSnapshot
     });
 
-    this.hourSnapshot = new HistoryEra({
+    this.hourSnapshot = new HistoryEra(this.user, {
       interval: 1000 * 60 * 15, // 15 minutes
       maxTime: 1000 * 60 * 60 * 24, // 24 hours
       name: 'hourSnapshot',
@@ -81,7 +80,7 @@ class HistoryService extends EventEmitter {
       nextEra: this.daySnapshot
     });
 
-    this.thirtyMinSnapshot = new HistoryEra({
+    this.thirtyMinSnapshot = new HistoryEra(this.user, {
       interval: 1000 * 20, // 20 seconds
       maxTime: 1000 * 60 * 30, // 30 minutes
       name: 'thirtyMinSnapshot',
@@ -89,7 +88,7 @@ class HistoryService extends EventEmitter {
       nextEra: this.hourSnapshot
     });
 
-    this.fiveMinSnapshot = new HistoryEra({
+    this.fiveMinSnapshot = new HistoryEra(this.user, {
       interval: 1000 * 5, // 5 seconds
       maxTime: 1000 * 60 * 5, // 5 minutes
       name: 'fiveMinSnapshot',
@@ -98,7 +97,7 @@ class HistoryService extends EventEmitter {
     });
 
     this.fetchCurrentTransferSummary();
-  }
+ }
 
   checkSnapshotDiffs() {
     Object.keys(historySnapshotTypes).forEach(snapshotType => {
@@ -138,12 +137,16 @@ class HistoryService extends EventEmitter {
     this.pollTimeout = setTimeout(this.fetchCurrentTransferSummary, interval);
   }
 
+  destroy() {
+    clearTimeout(this.pollTimeout);
+  }
+
   fetchCurrentTransferSummary() {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
     }
 
-    clientRequestService
+    this.services.clientGatewayService
       .fetchTransferSummary(transferSummaryMethodCallConfig)
       .then(this.handleFetchTransferSummarySuccess.bind(this))
       .catch(this.handleFetchTransferSummaryError.bind(this));
@@ -223,4 +226,4 @@ class HistoryService extends EventEmitter {
   }
 }
 
-module.exports = new HistoryService();
+module.exports = HistoryService;

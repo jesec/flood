@@ -1,24 +1,27 @@
-'use strict';
 const EventEmitter = require('events');
 const path = require('path');
 const rimraf = require('rimraf');
 
-const clientRequestServiceEvents = require('../constants/clientRequestServiceEvents');
+const BaseService = require('./BaseService');
+const ClientRequestManager = require('./clientRequestManager');
+const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
 const fileListPropMap = require('../constants/fileListPropMap');
 const methodCallUtil = require('../util/methodCallUtil');
-const scgi = require('../util/scgi');
-const torrentListPropMap = require('../constants/torrentListPropMap');
+const scgiUtil = require('../util/scgiUtil');
 
 const fileListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(
   fileListPropMap,
   ['pathComponents']
 );
 
-class ClientRequestService extends EventEmitter {
+class ClientGatewayService extends BaseService {
   constructor() {
     super(...arguments);
 
+    this.hasError = null;
     this.torrentListReducers = [];
+    this.processClientRequestError = this.processClientRequestError.bind(this);
+    this.processClientRequestSuccess = this.processClientRequestSuccess.bind(this);
   }
 
   /**
@@ -79,7 +82,7 @@ class ClientRequestService extends EventEmitter {
       []
     );
 
-    return scgi
+    return this.services.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then((response) => {
         if (options.deleteData) {
@@ -121,11 +124,11 @@ class ClientRequestService extends EventEmitter {
           });
         }
 
-        this.emit(clientRequestServiceEvents.TORRENTS_REMOVED, options);
+        this.emit(clientGatewayServiceEvents.TORRENTS_REMOVED);
 
         return response;
       })
-      .catch(clientError => this.processClientError(clientError));
+      .catch(this.processClientError);
   }
 
   /**
@@ -143,10 +146,11 @@ class ClientRequestService extends EventEmitter {
    *   with the processed client error.
    */
   fetchTorrentList(options) {
-    return scgi
+    return this.services.clientRequestManager
       .methodCall('d.multicall2', ['', 'main'].concat(options.methodCalls))
+      .then(this.processClientRequestSuccess)
       .then(torrents => this.processTorrentListResponse(torrents, options))
-      .catch(clientError => this.processClientError(clientError));
+      .catch(this.processClientRequestError);
   }
 
   fetchTransferSummary(options) {
@@ -154,18 +158,28 @@ class ClientRequestService extends EventEmitter {
       return {methodName, params: []};
     });
 
-    return scgi
+    return this.services.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(transferRate => {
-        return this.processTransferRateResponse(transferRate, options);
-      })
-      .catch(clientError => {
-        return this.processClientError(clientError);
-      });
+      .then(this.processClientRequestSuccess)
+      .then(transferRate => this.processTransferRateResponse(transferRate, options))
+      .catch(this.processClientRequestError);
   }
 
-  processClientError(error) {
-    return error;
+  processClientRequestSuccess(response) {
+    if (this.hasError == null || this.hasError === true) {
+      this.hasError = false;
+      this.emit(clientGatewayServiceEvents.CLIENT_CONNECTION_STATE_CHANGE);
+    }
+
+    return response;
+  }
+
+  processClientRequestError(error) {
+    if (!this.hasError) {
+      this.hasError = true;
+      this.emit(clientGatewayServiceEvents.CLIENT_CONNECTION_STATE_CHANGE);
+    }
+    throw error;
   }
 
   /**
@@ -183,7 +197,7 @@ class ClientRequestService extends EventEmitter {
    *   keys, each value being an object of detail labels and values.
    */
   processTorrentListResponse(torrentList, options) {
-    this.emit(clientRequestServiceEvents.PROCESS_TORRENT_LIST_START);
+    this.emit(clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START);
 
     // We map the array of details to objects with sensibly named keys. We want
     // to return an object with torrent hashes as keys and an object of torrent
@@ -216,7 +230,7 @@ class ClientRequestService extends EventEmitter {
           processedTorrentDetailValues;
 
         this.emit(
-          clientRequestServiceEvents.PROCESS_TORRENT,
+          clientGatewayServiceEvents.PROCESS_TORRENT,
           processedTorrentDetailValues
         );
 
@@ -231,7 +245,7 @@ class ClientRequestService extends EventEmitter {
     processedTorrentList.id = Date.now();
 
     this.emit(
-      clientRequestServiceEvents.PROCESS_TORRENT_LIST_END,
+      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END,
       processedTorrentList
     );
 
@@ -239,7 +253,7 @@ class ClientRequestService extends EventEmitter {
   }
 
   processTransferRateResponse(transferRate = [], options) {
-    this.emit(clientRequestServiceEvents.PROCESS_TRANSFER_RATE_START);
+    this.emit(clientGatewayServiceEvents.PROCESS_TRANSFER_RATE_START);
 
     return transferRate.reduce(
       (accumulator, value, index) => {
@@ -253,6 +267,24 @@ class ClientRequestService extends EventEmitter {
       {}
     );
   }
+
+  testGateway(clientSettings) {
+    if (!clientSettings) {
+      return this.services.clientRequestManager.methodCall('system.methodExist', ['system.multicall'])
+        .then(this.processClientRequestSuccess)
+        .catch(this.processClientRequestError);
+    }
+    return scgiUtil.methodCall(
+      {
+        socket: clientSettings.socket,
+        socketPath: clientSettings.socketPath,
+        port: clientSettings.port,
+        host: clientSettings.host
+      },
+      'system.methodExist',
+      ['system.multicall']
+    );
+  }
 }
 
-module.exports = new ClientRequestService();
+module.exports = ClientGatewayService;

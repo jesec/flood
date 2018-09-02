@@ -1,0 +1,32 @@
+.application {
+
+  &__loading-overlay {
+    align-items: center;
+    background: $light-blue;
+    display: flex;
+    flex-direction: column;
+    font-size: 0.8em;
+    height: 100%;
+    justify-content: center;
+    left: 0;
+    opacity: 1;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+
+    &-leave {
+      opacity: 1;
+      transition: opacity 1s;
+
+      &-active {
+        opacity: 0;
+      }
+    }
+  }
+
+  &__entry-barrier {
+    max-width: 500px;
+    width: 100%;
+  }
+}

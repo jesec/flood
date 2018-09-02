@@ -1,7 +1,7 @@
-'use strict';
 const objectUtil = require('../util/objectUtil');
 
 const serverEventTypes = [
+  'CLIENT_CONNECTIVITY_STATUS_CHANGE',
   'NOTIFICATION_COUNT_CHANGE',
   'TAXONOMY_FULL_UPDATE',
   'TAXONOMY_DIFF_CHANGE',

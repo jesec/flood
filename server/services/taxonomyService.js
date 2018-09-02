@@ -1,12 +1,12 @@
 const EventEmitter = require('events');
 
-const clientRequestService = require('./clientRequestService.js');
-const clientRequestServiceEvents = require('../constants/clientRequestServiceEvents');
+const BaseService = require('./BaseService');
+const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
 const objectUtil = require('../../shared/util/objectUtil');
-const taxonomyServiceEvents = require('../constants/taxonomyServiceEvents.js');
+const taxonomyServiceEvents = require('../constants/taxonomyServiceEvents');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
-class TaxonomyService extends EventEmitter {
+class TaxonomyService extends BaseService {
   constructor() {
     super(...arguments);
 
@@ -22,18 +22,58 @@ class TaxonomyService extends EventEmitter {
     this.handleProcessTorrentListStart = this.handleProcessTorrentListStart.bind(this);
     this.handleProcessTorrentListEnd = this.handleProcessTorrentListEnd.bind(this);
 
-    clientRequestService.on(
-      clientRequestServiceEvents.PROCESS_TORRENT_LIST_START,
+    const clientGatewayService = this.services.clientGatewayService;
+
+    clientGatewayService.on(
+      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START,
       this.handleProcessTorrentListStart
     );
 
-    clientRequestService.on(
-      clientRequestServiceEvents.PROCESS_TORRENT_LIST_END,
+    clientGatewayService.on(
+      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END,
       this.handleProcessTorrentListEnd
     );
 
-    clientRequestService.on(
-      clientRequestServiceEvents.PROCESS_TORRENT,
+    clientGatewayService.on(
+      clientGatewayServiceEvents.PROCESS_TORRENT,
+      this.handleProcessTorrent
+    );
+  }
+
+  destroy() {
+    const clientGatewayService = this.services.clientGatewayService;
+
+    clientGatewayService.removeListener(
+      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START,
+      this.handleProcessTorrentListStart
+    );
+
+    clientGatewayService.removeListener(
+      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END,
+      this.handleProcessTorrentListEnd
+    );
+
+    clientGatewayService.removeListener(
+      clientGatewayServiceEvents.PROCESS_TORRENT,
+      this.handleProcessTorrent
+    );
+  }
+
+  destroy() {
+    const clientGatewayService = this.services.clientGatewayService;
+
+    clientGatewayService.removeListener(
+      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START,
+      this.handleProcessTorrentListStart
+    );
+
+    clientGatewayService.removeListener(
+      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END,
+      this.handleProcessTorrentListEnd
+    );
+
+    clientGatewayService.removeListener(
+      clientGatewayServiceEvents.PROCESS_TORRENT,
       this.handleProcessTorrent
     );
   }
@@ -137,4 +177,4 @@ class TaxonomyService extends EventEmitter {
   }
 }
 
-module.exports = new TaxonomyService();
+module.exports = TaxonomyService;

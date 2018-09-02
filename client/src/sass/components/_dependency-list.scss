@@ -1,31 +1,3 @@
-.application {
-
-  &__dependency-list {
-    align-items: center;
-    background: $dark-blue;
-    display: flex;
-    flex-direction: column;
-    font-size: 0.8em;
-    height: 100%;
-    justify-content: center;
-    left: 0;
-    opacity: 1;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-
-    &-leave {
-      opacity: 1;
-      transition: opacity 1s;
-
-      &-active {
-        opacity: 0;
-      }
-    }
-  }
-}
-
 .dependency-list {
   margin-top: $spacing-unit;
   width: auto;

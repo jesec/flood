@@ -100,7 +100,10 @@ class AuthStoreClass extends BaseStore {
   register(credentials) {
     AuthActions.register({
       username: credentials.username,
-      password: credentials.password
+      password: credentials.password,
+      host: credentials.host,
+      port: credentials.port,
+      socketPath: credentials.socketPath
     });
   }
 

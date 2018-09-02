@@ -1,15 +1,16 @@
-'use strict';
 const _ = require('lodash');
 const Datastore = require('nedb');
 const EventEmitter = require('events');
+const path = require('path');
 
+const BaseService = require('./BaseService');
 const config = require('../../config');
 const notificationServiceEvents = require('../constants/notificationServiceEvents');
 
 const DEFAULT_QUERY_LIMIT = 20;
 const INITIAL_COUNT_VALUE = {read: 0, total: 0, unread: 0};
 
-class NotificationService extends EventEmitter {
+class NotificationService extends BaseService {
   constructor() {
     super(...arguments);
 
@@ -116,14 +117,17 @@ class NotificationService extends EventEmitter {
   }
 
   loadDatabase() {
-    let db = new Datastore({
+    if (this.ready) return;
+
+    const db = new Datastore({
       autoload: true,
-      filename: `${config.dbPath}notifications.db`
+      filename: path.join(config.dbPath, this.user._id, 'notifications.db')
     });
 
     this.ready = true;
+
     return db;
   }
 }
 
-module.exports = new NotificationService();
+module.exports = NotificationService;

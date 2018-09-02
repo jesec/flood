@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = (req, res, next) => {
   req.socket.setKeepAlive(true);
   req.socket.setTimeout(0);

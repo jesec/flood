@@ -1,0 +1,16 @@
+.connection-status {
+  display: flex;
+  align-items: center;
+
+  &__icon {
+    fill: $green--darker;
+    height: 15px;
+    margin-right: 5px;
+    width: 15px;
+  }
+
+  &__copy {
+    color: $light-grey--lighter;
+    font-size: 14px;
+  }
+}

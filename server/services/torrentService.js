@@ -1,21 +1,20 @@
 const deepEqual = require('deep-equal');
 const EventEmitter = require('events');
 
-const clientRequestService = require('./clientRequestService.js');
-const clientRequestServiceEvents = require('../constants/clientRequestServiceEvents');
-const config = require('../../config.js');
+const BaseService = require('./BaseService');
+const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
+const config = require('../../config');
 const formatUtil = require('../../shared/util/formatUtil');
 const methodCallUtil = require('../util/methodCallUtil');
-const notificationService = require('./notificationService.js');
 const serverEventTypes = require('../../shared/constants/serverEventTypes');
 const torrentListPropMap = require('../constants/torrentListPropMap');
-const torrentServiceEvents = require('../constants/torrentServiceEvents.js');
+const torrentServiceEvents = require('../constants/torrentServiceEvents');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
 const torrentListMethodCallConfig = methodCallUtil
   .getMethodCallConfigFromPropMap(torrentListPropMap);
 
-class TorrentService extends EventEmitter {
+class TorrentService extends BaseService {
   constructor() {
     super(...arguments);
 
@@ -26,29 +25,33 @@ class TorrentService extends EventEmitter {
     this.fetchTorrentList = this.fetchTorrentList.bind(this);
     this.handleTorrentProcessed = this.handleTorrentProcessed.bind(this);
     this.handleTorrentsRemoved = this.handleTorrentsRemoved.bind(this);
+    this.handleFetchTorrentListSuccess = this.handleFetchTorrentListSuccess.bind(this);
+    this.handleFetchTorrentListError = this.handleFetchTorrentListError.bind(this);
 
-    clientRequestService.addTorrentListReducer({
+    const clientGatewayService = this.services.clientGatewayService;
+
+    clientGatewayService.addTorrentListReducer({
       key: 'status',
       reduce: this.getTorrentStatusFromDetails
     });
 
-    clientRequestService.addTorrentListReducer({
+    clientGatewayService.addTorrentListReducer({
       key: 'percentComplete',
       reduce: this.getTorrentPercentCompleteFromDetails
     });
 
-    clientRequestService.addTorrentListReducer({
+    clientGatewayService.addTorrentListReducer({
       key: 'eta',
       reduce: this.getTorrentETAFromDetails
     });
 
-    clientRequestService.on(
-      clientRequestServiceEvents.PROCESS_TORRENT,
+    clientGatewayService.on(
+      clientGatewayServiceEvents.PROCESS_TORRENT,
       this.handleTorrentProcessed
     );
 
-    clientRequestService.on(
-      clientRequestServiceEvents.TORRENTS_REMOVED,
+    clientGatewayService.on(
+      clientGatewayServiceEvents.TORRENTS_REMOVED,
       this.handleTorrentsRemoved
     );
 
@@ -102,15 +105,19 @@ class TorrentService extends EventEmitter {
     this.pollTimeout = setTimeout(this.fetchTorrentList, interval);
   }
 
+  destroy() {
+    clearTimeout(this.pollTimeout);
+  }
+
   fetchTorrentList() {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
     }
 
-    clientRequestService
+    return this.services.clientGatewayService
       .fetchTorrentList(torrentListMethodCallConfig)
-      .then(this.handleFetchTorrentListSuccess.bind(this))
-      .catch(this.handleFetchTorrentListError.bind(this));
+      .then(this.handleFetchTorrentListSuccess)
+      .catch(this.handleFetchTorrentListError);
   }
 
   getTorrentETAFromDetails(torrentDetails) {
@@ -278,7 +285,6 @@ class TorrentService extends EventEmitter {
 
   handleFetchTorrentListSuccess(nextTorrentListSummary) {
     const diff = this.getTorrentListDiff(nextTorrentListSummary);
-
     if (Object.keys(diff).length > 0) {
       this.emit(
         torrentServiceEvents.TORRENT_LIST_DIFF_CHANGE,
@@ -300,7 +306,7 @@ class TorrentService extends EventEmitter {
     );
 
     if (this.hasTorrentFinished(prevTorrentDetails, nextTorrentDetails)) {
-      notificationService.addNotification({
+      this.services.notificationService.addNotification({
         id: 'notification.torrent.finished',
         data: {name: nextTorrentDetails.name}
       });
@@ -322,4 +328,4 @@ class TorrentService extends EventEmitter {
   }
 }
 
-module.exports = new TorrentService();
+module.exports = TorrentService;

@@ -4,6 +4,7 @@ import _ from 'lodash';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
+import ClientStatusStore from '../../stores/ClientStatusStore';
 import ConfigStore from '../../stores/ConfigStore';
 import CustomScrollbars from '../general/CustomScrollbars';
 import EventTypes from '../../constants/EventTypes';
@@ -31,6 +32,7 @@ const MESSAGES = defineMessages({
 const METHODS_TO_BIND = [
   'bindExternalPriorityChangeHandler',
   'getVerticalScrollbarThumb',
+  'handleClientStatusChange',
   'handleContextMenuItemClick',
   'handleDetailsClick',
   'handleFileDrop',
@@ -64,7 +66,6 @@ class TorrentListContainer extends React.Component {
     this.state = {
       displayedProperties: SettingsStore.getFloodSettings('torrentDetails'),
       emptyTorrentList: false,
-      floodSettingsFetched: false,
       handleTorrentPriorityChange: null,
       tableScrollLeft: 0,
       torrentCount: 0,
@@ -97,6 +98,10 @@ class TorrentListContainer extends React.Component {
   }
 
   componentDidMount() {
+    ClientStatusStore.listen(
+      EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      this.handleClientStatusChange
+    );
     SettingsStore.listen(
       EventTypes.SETTINGS_CHANGE,
       this.handleSettingsChange
@@ -125,6 +130,10 @@ class TorrentListContainer extends React.Component {
   }
 
   componentWillUnmount() {
+    ClientStatusStore.unlisten(
+      EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      this.handleClientStatusChange
+    );
     SettingsStore.unlisten(
       EventTypes.SETTINGS_CHANGE,
       this.handleSettingsChange
@@ -269,6 +278,12 @@ class TorrentListContainer extends React.Component {
     }];
   }
 
+  handleClientStatusChange() {
+    this.setState({
+      isClientConnected: ClientStatusStore.getIsConnected()
+    });
+  }
+
   handleContextMenuItemClick(action, event, torrent) {
     let selectedTorrents = TorrentStore.getSelectedTorrents();
     switch (action) {
@@ -372,7 +387,6 @@ class TorrentListContainer extends React.Component {
   handleSettingsChange() {
     this.setState({
       displayedProperties: SettingsStore.getFloodSettings('torrentDetails'),
-      floodSettingsFetched: true,
       torrentListColumnWidths:
         SettingsStore.getFloodSettings('torrentListColumnWidths'),
       torrentListViewSize:
@@ -581,10 +595,6 @@ class TorrentListContainer extends React.Component {
   }
 
   render() {
-    if (!this.state.floodSettingsFetched) {
-      return null;
-    }
-
     let content = null;
     let torrentListHeading = null;
     const isCondensed = this.state.torrentListViewSize === 'condensed';
@@ -595,7 +605,18 @@ class TorrentListContainer extends React.Component {
       isListEmpty
     });
 
-    if (isListEmpty) {
+    if (!this.state.isClientConnected) {
+      content = (
+        <div className="torrents__alert__wrapper">
+          <div className="torrents__alert">
+            <FormattedMessage
+              id="torrents.list.cannot.connect"
+              defaultMessage="Cannot connect to rTorrent."
+            />
+          </div>
+        </div>
+      );
+    } else if (isListEmpty) {
       content = this.getEmptyTorrentListNotification();
     } else if (this.state.torrentRequestSuccess) {
       content = (
