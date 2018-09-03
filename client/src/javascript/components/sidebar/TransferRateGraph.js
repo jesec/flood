@@ -151,10 +151,11 @@ class TransferRateGraph extends React.Component {
         .interpolate(interpolation);
     };
 
-    const downloadLinePath = lineFunc('cardinal')(historicalData.download);
-    const downloadAreaShape = areaFunc('cardinal')(historicalData.download);
-    const uploadLinePath = lineFunc('cardinal')(historicalData.upload);
-    const uploadAreaShape = areaFunc('cardinal')(historicalData.upload);
+    const interpolation = 'monotone';
+    const downloadLinePath = lineFunc(interpolation)(historicalData.download);
+    const downloadAreaShape = areaFunc(interpolation)(historicalData.download);
+    const uploadLinePath = lineFunc(interpolation)(historicalData.upload);
+    const uploadAreaShape = areaFunc(interpolation)(historicalData.upload);
 
     if (!this.graphRefs.areDefined) {
       this.appendEmptyGraphShapes(graph, 'download');
