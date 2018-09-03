@@ -13,12 +13,7 @@ import StopIcon from '../icons/StopIcon';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
-const METHODS_TO_BIND = [
-  'getFilters',
-  'handleClick',
-  'onStatusFilterChange',
-  'onTorrentTaxonomyChange'
-];
+const METHODS_TO_BIND = ['getFilters', 'handleClick', 'onStatusFilterChange', 'onTorrentTaxonomyChange'];
 
 class StatusFilters extends React.Component {
   constructor() {
@@ -27,26 +22,22 @@ class StatusFilters extends React.Component {
     this.state = {
       statusCount: {},
       statusFilter: TorrentFilterStore.getStatusFilter(),
-      trackerFilter: TorrentFilterStore.getTrackerFilter()
+      trackerFilter: TorrentFilterStore.getTrackerFilter(),
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
 
   componentDidMount() {
-    TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
-      this.onTorrentTaxonomyChange);
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE,
-      this.onStatusFilterChange);
+    TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS, this.onTorrentTaxonomyChange);
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
   }
 
   componentWillUnmount() {
-    TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
-      this.onTorrentTaxonomyChange);
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE,
-      this.onStatusFilterChange);
+    TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS, this.onTorrentTaxonomyChange);
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
   }
 
   handleClick(filter) {
@@ -58,70 +49,72 @@ class StatusFilters extends React.Component {
       {
         label: this.props.intl.formatMessage({
           id: 'filter.all',
-          defaultMessage: 'All'
+          defaultMessage: 'All',
         }),
         slug: 'all',
-        icon: <All />
+        icon: <All />,
       },
       {
         label: this.props.intl.formatMessage({
           id: 'filter.status.downloading',
-          defaultMessage: 'Downloading'
+          defaultMessage: 'Downloading',
         }),
         slug: 'downloading',
-        icon: <DownloadSmall />
+        icon: <DownloadSmall />,
       },
       {
         label: this.props.intl.formatMessage({
           id: 'filter.status.completed',
-          defaultMessage: 'Complete'
+          defaultMessage: 'Complete',
         }),
         slug: 'complete',
-        icon: <Completed />
+        icon: <Completed />,
       },
       {
         label: this.props.intl.formatMessage({
           id: 'filter.status.stopped',
-          defaultMessage: 'Stopped'
+          defaultMessage: 'Stopped',
         }),
         slug: 'stopped',
-        icon: <StopIcon />
+        icon: <StopIcon />,
       },
       {
         label: this.props.intl.formatMessage({
           id: 'filter.status.active',
-          defaultMessage: 'All'
+          defaultMessage: 'All',
         }),
         slug: 'active',
-        icon: <Active />
+        icon: <Active />,
       },
       {
         label: this.props.intl.formatMessage({
           id: 'filter.status.inactive',
-          defaultMessage: 'Inactive'
+          defaultMessage: 'Inactive',
         }),
         slug: 'inactive',
-        icon: <Inactive />
+        icon: <Inactive />,
       },
       {
         label: this.props.intl.formatMessage({
           id: 'filter.status.error',
-          defaultMessage: 'Error'
+          defaultMessage: 'Error',
         }),
         slug: 'error',
-        icon: <ErrorIcon />
-      }
+        icon: <ErrorIcon />,
+      },
     ];
 
-    let filterElements = filters.map((filter) => {
+    let filterElements = filters.map(filter => {
       return (
-        <SidebarFilter handleClick={this.handleClick}
+        <SidebarFilter
+          handleClick={this.handleClick}
           count={this.state.statusCount[filter.slug] || 0}
           key={filter.slug}
           icon={filter.icon}
           isActive={filter.slug === this.state.statusFilter}
           name={filter.label}
-          slug={filter.slug} />
+          slug={filter.slug}
+        />
       );
     });
 
@@ -130,7 +123,7 @@ class StatusFilters extends React.Component {
 
   onStatusFilterChange() {
     this.setState({
-      statusFilter: TorrentFilterStore.getStatusFilter()
+      statusFilter: TorrentFilterStore.getStatusFilter(),
     });
   }
 
@@ -145,10 +138,7 @@ class StatusFilters extends React.Component {
     return (
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
-          <FormattedMessage
-            id="filter.status.title"
-            defaultMessage="Filter by Status"
-          />
+          <FormattedMessage id="filter.status.title" defaultMessage="Filter by Status" />
         </li>
         {filters}
       </ul>

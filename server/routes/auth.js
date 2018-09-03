@@ -16,17 +16,11 @@ const setAuthToken = (res, username) => {
   let cookieExpiration = Date.now() + expirationSeconds * 1000;
 
   // Create token if the password matched and no error was thrown.
-  let token = jwt.sign(
-    {username},
-    config.secret, {
-    expiresIn: expirationSeconds
+  let token = jwt.sign({username}, config.secret, {
+    expiresIn: expirationSeconds,
   });
 
-  res.cookie(
-    'jwt',
-    token,
-    {expires: new Date(cookieExpiration), httpOnly: true}
-  );
+  res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true});
 
   return res.json({success: true, token: `JWT ${token}`, username});
 };
@@ -36,7 +30,7 @@ const authValidation = joi.object().keys({
   password: joi.string(),
   host: joi.string(),
   port: joi.string(),
-  socketPath: joi.string()
+  socketPath: joi.string(),
 });
 
 router.use('/', (req, res, next) => {
@@ -47,7 +41,7 @@ router.use('/', (req, res, next) => {
   } else {
     res.status(422).json({
       message: 'Validation error.',
-      error: validation.error
+      error: validation.error,
     });
   }
 });
@@ -55,7 +49,7 @@ router.use('/', (req, res, next) => {
 router.post('/authenticate', (req, res) => {
   const credentials = {
     password: req.body.password,
-    username: req.body.username
+    username: req.body.username,
   };
 
   Users.comparePassword(credentials, (isMatch, err) => {
@@ -83,7 +77,7 @@ router.use('/register', (req, res, next) => {
       passport.authenticate('jwt', {session: false}, (req, res, next) => {
         res.json({username: req.username});
       });
-    }
+    },
   });
 });
 
@@ -96,7 +90,7 @@ router.post('/register', (req, res) => {
       host: req.body.host,
       port: req.body.port,
       socketPath: req.body.socketPath,
-      isAdmin: true
+      isAdmin: true,
     },
     (createUserResponse, createUserError) => {
       if (createUserError) {
@@ -119,7 +113,7 @@ router.use('/verify', (req, res, next) => {
     handleSubsequentUser: () => {
       req.initialUser = false;
       passport.authenticate('jwt', {session: false})(req, res, next);
-    }
+    },
   });
 });
 
@@ -145,9 +139,9 @@ router.delete('/users/:username', (req, res, next) => {
 
 router.patch('/users/:username', (req, res, next) => {
   const username = req.params.username;
-  Users.updateUser(username, req.body, (user) => {
-    Users.lookupUser({ username }, (err, user) => {
-      if (err) return req.status(500).json({ error: err });
+  Users.updateUser(username, req.body, user => {
+    Users.lookupUser({username}, (err, user) => {
+      if (err) return req.status(500).json({error: err});
       services.updateUserServices(user);
       res.send();
     });
@@ -155,14 +149,17 @@ router.patch('/users/:username', (req, res, next) => {
 });
 
 router.put('/users', (req, res, next) => {
-  Users.createUser({
-    username: req.body.username,
-    password: req.body.password,
-    host: req.body.host,
-    port: req.body.port,
-    socketPath: req.body.socketPath,
-    isAdmin: false
-  }, ajaxUtil.getResponseFn(res));
+  Users.createUser(
+    {
+      username: req.body.username,
+      password: req.body.password,
+      host: req.body.host,
+      port: req.body.port,
+      socketPath: req.body.socketPath,
+      isAdmin: false,
+    },
+    ajaxUtil.getResponseFn(res)
+  );
 });
 
 module.exports = router;

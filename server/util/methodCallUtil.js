@@ -21,10 +21,10 @@ const methodCallUtil = {
       {
         methodCalls: [],
         propLabels: [],
-        valueTransformations: []
+        valueTransformations: [],
       }
     );
-  }
+  },
 };
 
 module.exports = methodCallUtil;

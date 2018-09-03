@@ -15,7 +15,7 @@ class MoveTorrents extends React.Component {
     isExpanded: false,
     isSettingDownloadPath: false,
     moveTorrents: false,
-    originalSource: null
+    originalSource: null,
   };
 
   componentWillMount() {
@@ -46,28 +46,28 @@ class MoveTorrents extends React.Component {
         checked: false,
         content: this.props.intl.formatMessage({
           id: 'torrents.move.data.label',
-          defaultMessage: 'Move data'
+          defaultMessage: 'Move data',
         }),
         id: 'moveFiles',
-        type: 'checkbox'
+        type: 'checkbox',
       },
       {
         content: this.props.intl.formatMessage({
           id: 'button.cancel',
-          defaultMessage: 'Cancel'
+          defaultMessage: 'Cancel',
         }),
         triggerDismiss: true,
-        type: 'tertiary'
+        type: 'tertiary',
       },
       {
         content: this.props.intl.formatMessage({
           id: 'torrents.move.button.set.location',
-          defaultMessage: 'Set Location'
+          defaultMessage: 'Set Location',
         }),
         isLoading: this.state.isSettingDownloadPath,
         submit: true,
-        type: 'primary'
-      }
+        type: 'primary',
+      },
     ];
   }
 
@@ -75,10 +75,7 @@ class MoveTorrents extends React.Component {
     return (
       <div className="modal__content">
         <Form className="inverse" onChange={this.handleFormChange} onSubmit={this.handleFormSubmit}>
-          <TorrentDestination
-            id="destination"
-            suggested={this.state.originalSource}
-          />
+          <TorrentDestination id="destination" suggested={this.state.originalSource} />
           <ModalActions actions={this.getActions()} dismiss={this.props.dismiss} />
         </Form>
       </div>
@@ -96,7 +93,7 @@ class MoveTorrents extends React.Component {
         isBasePath: formData.useBasePath,
         filenames,
         moveFiles: formData.moveFiles,
-        sources
+        sources,
       });
     }
   };
@@ -104,7 +101,10 @@ class MoveTorrents extends React.Component {
   removeTrailingFilename(path, filename) {
     let directoryPath = path.substring(0, path.length - filename.length);
 
-    if (directoryPath.charAt(directoryPath.length - 1) === '/' || directoryPath.charAt(directoryPath.length - 1) === '\\') {
+    if (
+      directoryPath.charAt(directoryPath.length - 1) === '/' ||
+      directoryPath.charAt(directoryPath.length - 1) === '\\'
+    ) {
       directoryPath = directoryPath.substring(0, directoryPath.length - 1);
     }
 
@@ -118,8 +118,9 @@ class MoveTorrents extends React.Component {
         dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
           id: 'torrents.move.heading',
-          defaultMessage: 'Set Torrent Location'
-        })} />
+          defaultMessage: 'Set Torrent Location',
+        })}
+      />
     );
   }
 }

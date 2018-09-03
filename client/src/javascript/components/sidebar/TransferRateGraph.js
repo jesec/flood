@@ -12,22 +12,22 @@ const METHODS_TO_BIND = [
   'handleMouseOut',
   'handleMouseOver',
   'handleMouseMove',
-  'renderGraphData'
+  'renderGraphData',
 ];
 
 class TransferRateGraph extends React.Component {
   static propTypes = {
-    width: PropTypes.number
+    width: PropTypes.number,
   };
 
   static defaultProps = {
-    width: 240
+    width: 240,
   };
 
   constructor() {
     super();
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
 
@@ -40,10 +40,7 @@ class TransferRateGraph extends React.Component {
   }
 
   componentDidMount() {
-    TransferDataStore.listen(
-      EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
-      this.handleTransferHistoryChange
-    );
+    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS, this.handleTransferHistoryChange);
 
     this.renderGraphData();
   }
@@ -53,10 +50,7 @@ class TransferRateGraph extends React.Component {
   }
 
   componentWillUnmount() {
-    TransferDataStore.unlisten(
-      EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
-      this.handleTransferHistoryChange
-    );
+    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS, this.handleTransferHistoryChange);
   }
 
   appendGraphCircles(graph, slug) {
@@ -78,17 +72,14 @@ class TransferRateGraph extends React.Component {
   }
 
   appendEmptyGraphLines(graph, slug) {
-    this.graphRefs[slug].rateLine = graph
-      .append('path')
-      .attr('class', `graph__line graph__line--${slug}`);
+    this.graphRefs[slug].rateLine = graph.append('path').attr('class', `graph__line graph__line--${slug}`);
   }
 
   getGradient(slug) {
     return (
-      <linearGradient id={`graph__gradient--${slug}`} x1="0%" y1="0%"
-        x2="0%" y2="100%">
-        <stop className={`graph__gradient--top graph__gradient--top--${slug}`} offset="0%"/>
-        <stop className={`graph__gradient--bottom graph__gradient--bottom--${slug}`} offset="100%"/>
+      <linearGradient id={`graph__gradient--${slug}`} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop className={`graph__gradient--top graph__gradient--top--${slug}`} offset="0%" />
+        <stop className={`graph__gradient--bottom graph__gradient--bottom--${slug}`} offset="100%" />
       </linearGradient>
     );
   }
@@ -139,27 +130,25 @@ class TransferRateGraph extends React.Component {
         0,
         d3.max(historicalData.download, (dataPoint, index) => {
           return Math.max(dataPoint, historicalData.upload[index]);
-        })
+        }),
       ])
       .range([height - margin.top, margin.bottom]);
 
-    const lineFunc = (interpolation) => {
-      return d3
-        .svg
+    const lineFunc = interpolation => {
+      return d3.svg
         .line()
         .x((dataPoint, index) => this.xScale(index))
         .y(dataPoint => this.yScale(dataPoint))
         .interpolate(interpolation);
     };
 
-    const areaFunc = (interpolation) => {
-      return d3
-      .svg
-      .area()
-      .x((dataPoint, index) => this.xScale(index))
-      .y0(height)
-      .y1(dataPoint => this.yScale(dataPoint))
-      .interpolate(interpolation);
+    const areaFunc = interpolation => {
+      return d3.svg
+        .area()
+        .x((dataPoint, index) => this.xScale(index))
+        .y0(height)
+        .y1(dataPoint => this.yScale(dataPoint))
+        .interpolate(interpolation);
     };
 
     const downloadLinePath = lineFunc('cardinal')(historicalData.download);
@@ -188,7 +177,7 @@ class TransferRateGraph extends React.Component {
     const {
       lastMouseX,
       props: {onHover},
-      xScale
+      xScale,
     } = this;
 
     const historicalData = TransferDataStore.getTransferRates();
@@ -201,14 +190,16 @@ class TransferRateGraph extends React.Component {
       onHover({
         uploadSpeed,
         downloadSpeed,
-        nearestTimestamp
+        nearestTimestamp,
       });
     }
   }
 
   setInspectorCoordinates(slug, hoverPoint) {
     const {
-      graphRefs: {[slug]: {inspectPoint}},
+      graphRefs: {
+        [slug]: {inspectPoint},
+      },
       xScale,
       yScale,
     } = this;
@@ -218,13 +209,11 @@ class TransferRateGraph extends React.Component {
     const lowerSpeed = historicalData[slug][Math.floor(hoverPoint)];
 
     const delta = upperSpeed - lowerSpeed;
-    const speedAtHoverPoint = lowerSpeed + (delta * (hoverPoint % 1));
+    const speedAtHoverPoint = lowerSpeed + delta * (hoverPoint % 1);
 
     const coordinates = {x: xScale(hoverPoint), y: yScale(speedAtHoverPoint)};
 
-    inspectPoint.attr(
-      'transform', 'translate(' + coordinates.x + ',' + coordinates.y + ')'
-    );
+    inspectPoint.attr('transform', 'translate(' + coordinates.x + ',' + coordinates.y + ')');
 
     return speedAtHoverPoint;
   }
@@ -239,8 +228,7 @@ class TransferRateGraph extends React.Component {
 
   render() {
     return (
-      <svg className="graph" id={this.props.id}
-        ref={ref => this.graphRefs.graph = ref}>
+      <svg className="graph" id={this.props.id} ref={ref => (this.graphRefs.graph = ref)}>
         <defs>
           {this.getGradient('upload')}
           {this.getGradient('download')}

@@ -20,7 +20,7 @@ const allServiceMaps = [
   historyServices,
   notificationServices,
   taxonomyServices,
-  torrentServices
+  torrentServices,
 ];
 
 const getService = ({servicesMap, service, user}) => {
@@ -110,7 +110,7 @@ const getAllServices = user => {
 
     get torrentService() {
       return getTorrentService(user);
-    }
+    },
   };
 };
 
@@ -135,5 +135,5 @@ module.exports = {
   getNotificationService,
   getTaxonomyService,
   getTorrentService,
-  updateUserServices
+  updateUserServices,
 };

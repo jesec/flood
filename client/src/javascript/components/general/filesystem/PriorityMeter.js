@@ -11,11 +11,11 @@ class PriorityMeter extends React.Component {
 
     this.state = {
       optimisticData: {
-        level: null
-      }
+        level: null,
+      },
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
@@ -37,22 +37,22 @@ class PriorityMeter extends React.Component {
       case 'DONT_DOWNLOAD':
         return this.props.intl.formatMessage({
           id: 'priority.dont.download',
-          defaultMessage: 'Don\'t Download'
+          defaultMessage: "Don't Download",
         });
       case 'HIGH':
         return this.props.intl.formatMessage({
           id: 'priority.high',
-          defaultMessage: 'High'
+          defaultMessage: 'High',
         });
       case 'LOW':
         return this.props.intl.formatMessage({
           id: 'priority.low',
-          defaultMessage: 'Low'
+          defaultMessage: 'Low',
         });
       case 'NORMAL':
         return this.props.intl.formatMessage({
           id: 'priority.normal',
-          defaultMessage: 'Normal'
+          defaultMessage: 'Normal',
         });
       default:
         return '';
@@ -82,18 +82,18 @@ class PriorityMeter extends React.Component {
     let label = null;
 
     if (this.props.showLabel) {
-      label = (
-        <span className="priority-meter__label">
-          {this.getPriorityLabel()}
-        </span>
-      );
+      label = <span className="priority-meter__label">{this.getPriorityLabel()}</span>;
     }
 
     return (
       <div className="priority-meter__wrapper" onClick={this.handleClick}>
-        <div className={`priority-meter ` +
-          `priority-meter--max-${this.props.maxLevel} ` +
-          `priority-meter--level-${this.getPriorityLevel()}`}/>
+        <div
+          className={
+            `priority-meter ` +
+            `priority-meter--max-${this.props.maxLevel} ` +
+            `priority-meter--level-${this.getPriorityLevel()}`
+          }
+        />
         {label}
       </div>
     );

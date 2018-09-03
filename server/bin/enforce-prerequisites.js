@@ -3,13 +3,9 @@ const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const fs = require('fs');
 const path = require('path');
 
-const staticAssets = [
-  path.join(__dirname, '../assets/index.html')
-];
+const staticAssets = [path.join(__dirname, '../assets/index.html')];
 
-const configFiles = [
-  path.join(__dirname, '../../config.js')
-];
+const configFiles = [path.join(__dirname, '../../config.js')];
 
 // Taken from react-scripts/check-required-files, but without console.logs.
 const doFilesExist = files => {
@@ -33,7 +29,9 @@ const enforcePrerequisites = () => {
     }
 
     if (!doFilesExist(staticAssets)) {
-      reject(`Static assets (index.html) are missing. Please check the 'Compiling assets and starting the server' section of README.md.`);
+      reject(
+        `Static assets (index.html) are missing. Please check the 'Compiling assets and starting the server' section of README.md.`
+      );
       return;
     }
 

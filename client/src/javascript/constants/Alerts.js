@@ -23,7 +23,7 @@ const ALERTS = {
     =1 {torrent}
     other {torrents}
   }.`,
-  'alert.settings.saved': 'Successfully saved settings.'
+  'alert.settings.saved': 'Successfully saved settings.',
 };
 
 export default ALERTS;

@@ -7,8 +7,8 @@ const NULL_CHAR = String.fromCharCode(0);
 const methodCall = (connectionMethod, methodName, parameters) => {
   return new Promise((resolve, reject) => {
     const networkConfiguration = connectionMethod.socket
-      ? { path: connectionMethod.socketPath }
-      : { port: connectionMethod.port, host: connectionMethod.host };
+      ? {path: connectionMethod.socketPath}
+      : {port: connectionMethod.port, host: connectionMethod.host};
 
     const deserializer = new Deserializer('utf8');
     const stream = net.connect(networkConfiguration);
@@ -17,13 +17,10 @@ const methodCall = (connectionMethod, methodName, parameters) => {
 
     stream.setEncoding('UTF8');
 
-    const headerItems = [
-      `CONTENT_LENGTH${NULL_CHAR}${xmlLength}${NULL_CHAR}`,
-      `SCGI${NULL_CHAR}1${NULL_CHAR}`
-    ];
+    const headerItems = [`CONTENT_LENGTH${NULL_CHAR}${xmlLength}${NULL_CHAR}`, `SCGI${NULL_CHAR}1${NULL_CHAR}`];
 
     const headerLength = headerItems.reduce((accumulator, headerItem) => {
-      return accumulator += headerItem.length;
+      return (accumulator += headerItem.length);
     }, 0);
 
     stream.write(`${headerLength}:${headerItems.join('')},${xml}`);

@@ -53,7 +53,7 @@ const client = {
     settings.set(user, {id: 'startTorrentsOnLoad', data: start});
   },
 
-  addUrls (user, services, data, callback) {
+  addUrls(user, services, data, callback) {
     const urls = data.urls;
     const path = data.destination;
     const isBasePath = data.isBasePath;
@@ -69,7 +69,7 @@ const client = {
     settings.set(user, {id: 'startTorrentsOnLoad', data: start});
   },
 
-  checkHash (user, services, hashes, callback) {
+  checkHash(user, services, hashes, callback) {
     const request = new ClientRequest(user, services);
 
     request.checkHash({hashes});
@@ -80,12 +80,12 @@ const client = {
     request.send();
   },
 
-  downloadFiles (user, services, hash, fileString, res) {
+  downloadFiles(user, services, hash, fileString, res) {
     try {
       const selectedTorrent = services.torrentService.getTorrent(hash);
       if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
-      this.getTorrentDetails(user, hash, (torrentDetails) => {
+      this.getTorrentDetails(user, hash, torrentDetails => {
         if (!torrentDetails) return res.status(404).json({error: 'Torrent details not found'});
 
         let files;
@@ -95,10 +95,7 @@ const client = {
           files = fileString.split(',');
         }
 
-        const filePathsToDownload = this.findFilesByIndicies(
-          files,
-          torrentDetails.fileTree
-        ).map((file) => {
+        const filePathsToDownload = this.findFilesByIndicies(files, torrentDetails.fileTree).map(file => {
           return path.join(selectedTorrent.directory, file.path);
         });
 
@@ -112,27 +109,30 @@ const client = {
 
         res.attachment(`${selectedTorrent.name}.tar`);
 
-        const pack = tar.pack()
+        const pack = tar.pack();
         pack.pipe(res);
 
-        const tasks = filePathsToDownload.map((filePath) => {
+        const tasks = filePathsToDownload.map(filePath => {
           const filename = path.basename(filePath);
 
-          return (next) => {
+          return next => {
             fs.stat(filePath, (err, stats) => {
               if (err) return next(err);
 
               const stream = fs.createReadStream(filePath);
-              const entry = pack.entry({
-                name: filename,
-                size: stats.size
-              }, next);
+              const entry = pack.entry(
+                {
+                  name: filename,
+                  size: stats.size,
+                },
+                next
+              );
               stream.pipe(entry);
             });
-          }
+          };
         });
 
-        series(tasks, (error) => {
+        series(tasks, error => {
           if (error) return res.status(500).json(error);
 
           pack.finalize();
@@ -143,7 +143,7 @@ const client = {
     }
   },
 
-  findFilesByIndicies (indices, fileTree = {}) {
+  findFilesByIndicies(indices, fileTree = {}) {
     const {directories, files = []} = fileTree;
 
     let selectedFiles = files.filter(file => {
@@ -151,44 +151,41 @@ const client = {
     });
 
     if (directories != null) {
-      selectedFiles = selectedFiles.concat(Object.keys(directories).reduce(
-        (accumulator, directory) => {
-          return accumulator.concat(
-            this.findFilesByIndicies(indices, directories[directory])
-          );
-        },
-        []
-      ));
+      selectedFiles = selectedFiles.concat(
+        Object.keys(directories).reduce((accumulator, directory) => {
+          return accumulator.concat(this.findFilesByIndicies(indices, directories[directory]));
+        }, [])
+      );
     }
 
     return selectedFiles;
   },
 
-  getSettings (user, services, options, callback) {
+  getSettings(user, services, options, callback) {
     let requestedSettingsKeys = [];
     const request = new ClientRequest(user, services);
     const response = {};
 
     let outboundTransformation = {
-      throttleGlobalDownMax: (apiResponse) => {
+      throttleGlobalDownMax: apiResponse => {
         return Number(apiResponse) / 1024;
       },
-      throttleGlobalUpMax: (apiResponse) => {
+      throttleGlobalUpMax: apiResponse => {
         return Number(apiResponse) / 1024;
       },
-      piecesMemoryMax: (apiResponse) => {
+      piecesMemoryMax: apiResponse => {
         return Number(apiResponse) / (1024 * 1024);
-      }
+      },
     };
 
     request.fetchSettings({
       options,
-      setRequestedKeysArr: (requestedSettingsKeysArr) => {
+      setRequestedKeysArr: requestedSettingsKeysArr => {
         requestedSettingsKeys = requestedSettingsKeysArr;
-      }
+      },
     });
 
-    request.postProcess((data) => {
+    request.postProcess(data => {
       if (!data) {
         return null;
       }
@@ -210,21 +207,21 @@ const client = {
     request.send();
   },
 
-  getTorrentDetails (user, services, hash, callback) {
+  getTorrentDetails(user, services, hash, callback) {
     const request = new ClientRequest(user, services);
 
     request.getTorrentDetails({
       hash,
       fileProps: torrentFilePropsMap.methods,
       peerProps: torrentPeerPropsMap.methods,
-      trackerProps: torrentTrackerPropsMap.methods
+      trackerProps: torrentTrackerPropsMap.methods,
     });
     request.postProcess(clientResponseUtil.processTorrentDetails);
     request.onComplete(callback);
     request.send();
   },
 
-  listMethods (user, services, method, args, callback) {
+  listMethods(user, services, method, args, callback) {
     const request = new ClientRequest(user, services);
 
     request.listMethods({method, args});
@@ -232,7 +229,7 @@ const client = {
     request.send();
   },
 
-  moveTorrents (user, services, data, callback) {
+  moveTorrents(user, services, data, callback) {
     const destinationPath = data.destination;
     const isBasePath = data.isBasePath;
     const hashes = data.hashes;
@@ -241,7 +238,7 @@ const client = {
     const sourcePaths = data.sources;
     const mainRequest = new ClientRequest(user, services);
 
-    const hashesToRestart = hashes.filter((hash) => {
+    const hashesToRestart = hashes.filter(hash => {
       return !services.torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped);
     });
 
@@ -269,7 +266,9 @@ const client = {
       const moveTorrentsRequest = new ClientRequest(user, services);
       moveTorrentsRequest.onComplete(checkHash);
       moveTorrentsRequest.moveTorrents({
-        filenames, sourcePaths, destinationPath
+        filenames,
+        sourcePaths,
+        destinationPath,
       });
     };
 
@@ -285,7 +284,7 @@ const client = {
     mainRequest.send();
   },
 
-  setFilePriority (user, services, hashes, data, callback) {
+  setFilePriority(user, services, hashes, data, callback) {
     // TODO Add support for multiple hashes.
     let fileIndices = data.fileIndices;
     const request = new ClientRequest(user, services);
@@ -298,7 +297,7 @@ const client = {
     request.send();
   },
 
-  setPriority (user, services, hashes, data, callback) {
+  setPriority(user, services, hashes, data, callback) {
     const request = new ClientRequest(user, services);
 
     request.setPriority({hashes, priority: data.priority});
@@ -309,32 +308,32 @@ const client = {
     request.send();
   },
 
-  setSettings (user, services, payloads, callback) {
+  setSettings(user, services, payloads, callback) {
     const request = new ClientRequest(user, services);
     if (payloads.length === 0) return callback({});
 
     let inboundTransformation = {
-      throttleGlobalDownMax: (userInput) => {
+      throttleGlobalDownMax: userInput => {
         return {
           id: userInput.id,
-          data: Number(userInput.data) * 1024
+          data: Number(userInput.data) * 1024,
         };
       },
-      throttleGlobalUpMax: (userInput) => {
+      throttleGlobalUpMax: userInput => {
         return {
           id: userInput.id,
-          data: Number(userInput.data) * 1024
+          data: Number(userInput.data) * 1024,
         };
       },
-      piecesMemoryMax: (userInput) => {
+      piecesMemoryMax: userInput => {
         return {
           id: userInput.id,
-          data: (Number(userInput.data) * 1024 * 1024).toString()
+          data: (Number(userInput.data) * 1024 * 1024).toString(),
         };
-      }
+      },
     };
 
-    let transformedPayloads = payloads.map((payload) => {
+    let transformedPayloads = payloads.map(payload => {
       if (inboundTransformation[payload.id]) {
         return inboundTransformation[payload.id](payload);
       }
@@ -347,18 +346,18 @@ const client = {
     request.send();
   },
 
-  setSpeedLimits (user, services, data, callback) {
+  setSpeedLimits(user, services, data, callback) {
     const request = new ClientRequest(user, services);
 
     request.setThrottle({
       direction: data.direction,
-      throttle: data.throttle
+      throttle: data.throttle,
     });
     request.onComplete(callback);
     request.send();
   },
 
-  setTaxonomy (user, services, data, callback) {
+  setTaxonomy(user, services, data, callback) {
     const request = new ClientRequest(user, services);
 
     request.setTaxonomy(data);
@@ -370,7 +369,7 @@ const client = {
     request.send();
   },
 
-  stopTorrent (user, services, hashes, callback) {
+  stopTorrent(user, services, hashes, callback) {
     const request = new ClientRequest(user, services);
     request.stopTorrents({hashes});
     request.onComplete((response, error) => {
@@ -380,7 +379,7 @@ const client = {
     request.send();
   },
 
-  startTorrent (user, services, hashes, callback) {
+  startTorrent(user, services, hashes, callback) {
     const request = new ClientRequest(user, services);
 
     request.startTorrents({hashes});
@@ -389,7 +388,7 @@ const client = {
       callback(response, error);
     });
     request.send();
-  }
+  },
 };
 
 module.exports = client;

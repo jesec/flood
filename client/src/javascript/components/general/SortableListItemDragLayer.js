@@ -1,7 +1,7 @@
 import {DragLayer} from 'react-dnd';
 import {injectIntl} from 'react-intl';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 const layerStyles = {
   position: 'absolute',
@@ -32,7 +32,7 @@ class SortableListItemDragLayer extends Component {
     differenceFromInitialOffset: PropTypes.object,
     isDragging: PropTypes.bool.isRequired,
     item: PropTypes.object,
-    itemType: PropTypes.string
+    itemType: PropTypes.string,
   };
 
   render() {
@@ -44,9 +44,7 @@ class SortableListItemDragLayer extends Component {
 
     return (
       <div style={layerStyles}>
-        <div style={getItemStyles(this.props)}>
-          {this.props.renderItem({...item, dragIndicator: true})}
-        </div>
+        <div style={getItemStyles(this.props)}>{this.props.renderItem({...item, dragIndicator: true})}</div>
       </div>
     );
   }
@@ -57,5 +55,5 @@ export default DragLayer(monitor => ({
   differenceFromInitialOffset: monitor.getDifferenceFromInitialOffset(),
   isDragging: monitor.isDragging(),
   item: monitor.getItem(),
-  itemType: monitor.getItemType()
+  itemType: monitor.getItemType(),
 }))(injectIntl(SortableListItemDragLayer));

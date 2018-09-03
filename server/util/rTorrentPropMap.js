@@ -5,8 +5,8 @@ const RTORRENT_PROPS_MAP = {
     uploadThrottle: 'throttle.global_up.max_rate',
     downloadRate: 'throttle.global_down.rate',
     downloadTotal: 'throttle.global_down.total',
-    downloadThrottle: 'throttle.global_down.max_rate'
-  }
+    downloadThrottle: 'throttle.global_down.max_rate',
+  },
 };
 
 module.exports = RTORRENT_PROPS_MAP;

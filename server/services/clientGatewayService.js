@@ -9,10 +9,7 @@ const fileListPropMap = require('../constants/fileListPropMap');
 const methodCallUtil = require('../util/methodCallUtil');
 const scgiUtil = require('../util/scgiUtil');
 
-const fileListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(
-  fileListPropMap,
-  ['pathComponents']
-);
+const fileListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(fileListPropMap, ['pathComponents']);
 
 class ClientGatewayService extends BaseService {
   constructor() {
@@ -47,73 +44,64 @@ class ClientGatewayService extends BaseService {
   }
 
   removeTorrents(options = {hashes: [], deleteData: false}) {
-    const methodCalls = options.hashes.reduce(
-      (accumulator, hash, index) => {
-        let eraseFileMethodCallIndex = index;
+    const methodCalls = options.hashes.reduce((accumulator, hash, index) => {
+      let eraseFileMethodCallIndex = index;
 
-        // If we're deleting files, we grab each torrents' file list before we
-        // remove them.
-        if (options.deleteData) {
-          // We offset the indices of these method calls so that we know exactly
-          // where to retrieve the responses in the future.
-          const directoryBaseMethodCallIndex = index + options.hashes.length;
-          // We also need to ensure that the erase method call occurs after
-          // our request for information.
-          eraseFileMethodCallIndex = index + options.hashes.length * 2;
+      // If we're deleting files, we grab each torrents' file list before we
+      // remove them.
+      if (options.deleteData) {
+        // We offset the indices of these method calls so that we know exactly
+        // where to retrieve the responses in the future.
+        const directoryBaseMethodCallIndex = index + options.hashes.length;
+        // We also need to ensure that the erase method call occurs after
+        // our request for information.
+        eraseFileMethodCallIndex = index + options.hashes.length * 2;
 
-          accumulator[index] = {
-            methodName: 'f.multicall',
-            params: [hash, ''].concat(fileListMethodCallConfig.methodCalls)
-          };
-
-          accumulator[directoryBaseMethodCallIndex] = {
-            methodName: 'd.directory_base',
-            params: [hash]
-          };
-        }
-
-        accumulator[eraseFileMethodCallIndex] = {
-          methodName: 'd.erase',
-          params: [hash]
+        accumulator[index] = {
+          methodName: 'f.multicall',
+          params: [hash, ''].concat(fileListMethodCallConfig.methodCalls),
         };
 
-        return accumulator;
-      },
-      []
-    );
+        accumulator[directoryBaseMethodCallIndex] = {
+          methodName: 'd.directory_base',
+          params: [hash],
+        };
+      }
+
+      accumulator[eraseFileMethodCallIndex] = {
+        methodName: 'd.erase',
+        params: [hash],
+      };
+
+      return accumulator;
+    }, []);
 
     return this.services.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then((response) => {
+      .then(response => {
         if (options.deleteData) {
           const torrentCount = options.hashes.length;
-          const filesToDelete = options.hashes.reduce(
-            (accumulator, hash, hashIndex) => {
-              const fileList = response[hashIndex][0];
-              const directoryBase = response[hashIndex + torrentCount][0];
+          const filesToDelete = options.hashes.reduce((accumulator, hash, hashIndex) => {
+            const fileList = response[hashIndex][0];
+            const directoryBase = response[hashIndex + torrentCount][0];
 
-              const filesToDelete = fileList.reduce(
-                (fileListAccumulator, file) => {
-                  // We only look at the first path component returned because
-                  // if it's a directory within the torrent, then we'll remove
-                  // the entire directory.
-                  const filePath = path.join(directoryBase, file[0][0]);
+            const filesToDelete = fileList.reduce((fileListAccumulator, file) => {
+              // We only look at the first path component returned because
+              // if it's a directory within the torrent, then we'll remove
+              // the entire directory.
+              const filePath = path.join(directoryBase, file[0][0]);
 
-                  // filePath might be a directory, so it may have already been
-                  // added. If not, we add it.
-                  if (!fileListAccumulator.includes(filePath)) {
-                    fileListAccumulator.push(filePath);
-                  }
+              // filePath might be a directory, so it may have already been
+              // added. If not, we add it.
+              if (!fileListAccumulator.includes(filePath)) {
+                fileListAccumulator.push(filePath);
+              }
 
-                  return fileListAccumulator;
-                },
-                []
-              );
+              return fileListAccumulator;
+            }, []);
 
-              return accumulator.concat(filesToDelete);
-            },
-            []
-          );
+            return accumulator.concat(filesToDelete);
+          }, []);
 
           filesToDelete.forEach(file => {
             rimraf(file, {disableGlob: true}, error => {
@@ -206,33 +194,24 @@ class ClientGatewayService extends BaseService {
       (listAccumulator, torrentDetailValues) => {
         // Transform the array of torrent detail values to an object with
         // sensibly named keys.
-        const processedTorrentDetailValues = torrentDetailValues.reduce(
-          (valueAccumulator, value, valueIndex) => {
-            const key = options.propLabels[valueIndex];
-            const transformValue = options.valueTransformations[valueIndex];
+        const processedTorrentDetailValues = torrentDetailValues.reduce((valueAccumulator, value, valueIndex) => {
+          const key = options.propLabels[valueIndex];
+          const transformValue = options.valueTransformations[valueIndex];
 
-            valueAccumulator[key] = transformValue(value);
-            return valueAccumulator;
-          },
-          {}
-        );
+          valueAccumulator[key] = transformValue(value);
+          return valueAccumulator;
+        }, {});
 
         // Assign values from external reducers to the torrent list object.
         this.torrentListReducers.forEach(reducer => {
           const {key, reduce} = reducer;
 
-          processedTorrentDetailValues[key] = reduce(
-            processedTorrentDetailValues
-          );
+          processedTorrentDetailValues[key] = reduce(processedTorrentDetailValues);
         });
 
-        listAccumulator.torrents[processedTorrentDetailValues.hash] =
-          processedTorrentDetailValues;
+        listAccumulator.torrents[processedTorrentDetailValues.hash] = processedTorrentDetailValues;
 
-        this.emit(
-          clientGatewayServiceEvents.PROCESS_TORRENT,
-          processedTorrentDetailValues
-        );
+        this.emit(clientGatewayServiceEvents.PROCESS_TORRENT, processedTorrentDetailValues);
 
         return listAccumulator;
       },
@@ -244,10 +223,7 @@ class ClientGatewayService extends BaseService {
     // Provide a unique ID for this specific torrent list.
     processedTorrentList.id = Date.now();
 
-    this.emit(
-      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END,
-      processedTorrentList
-    );
+    this.emit(clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END, processedTorrentList);
 
     return processedTorrentList;
   }
@@ -255,22 +231,20 @@ class ClientGatewayService extends BaseService {
   processTransferRateResponse(transferRate = [], options) {
     this.emit(clientGatewayServiceEvents.PROCESS_TRANSFER_RATE_START);
 
-    return transferRate.reduce(
-      (accumulator, value, index) => {
-        const key = options.propLabels[index];
-        const transformValue = options.valueTransformations[index];
+    return transferRate.reduce((accumulator, value, index) => {
+      const key = options.propLabels[index];
+      const transformValue = options.valueTransformations[index];
 
-        accumulator[key] = transformValue(value);
+      accumulator[key] = transformValue(value);
 
-        return accumulator;
-      },
-      {}
-    );
+      return accumulator;
+    }, {});
   }
 
   testGateway(clientSettings) {
     if (!clientSettings) {
-      return this.services.clientRequestManager.methodCall('system.methodExist', ['system.multicall'])
+      return this.services.clientRequestManager
+        .methodCall('system.methodExist', ['system.multicall'])
         .then(this.processClientRequestSuccess)
         .catch(this.processClientRequestError);
     }
@@ -279,7 +253,7 @@ class ClientGatewayService extends BaseService {
         socket: clientSettings.socket,
         socketPath: clientSettings.socketPath,
         port: clientSettings.port,
-        host: clientSettings.host
+        host: clientSettings.host,
       },
       'system.methodExist',
       ['system.multicall']

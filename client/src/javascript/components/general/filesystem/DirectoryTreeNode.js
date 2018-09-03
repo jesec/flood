@@ -13,23 +13,23 @@ class DirectoryTreeNode extends React.Component {
   static propTypes = {
     isParentSelected: PropTypes.bool,
     path: PropTypes.array,
-    selectedItems: PropTypes.object
+    selectedItems: PropTypes.object,
   };
 
   static defaultProps = {
     isParentSelected: false,
     path: [],
-    selectedItems: {}
+    selectedItems: {},
   };
 
   constructor() {
     super();
 
     this.state = {
-      expanded: false
+      expanded: false,
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
@@ -49,7 +49,8 @@ class DirectoryTreeNode extends React.Component {
 
     return (
       <div className="file__checkbox directory-tree__checkbox">
-        <div className="directory-tree__checkbox__item
+        <div
+          className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
           <Checkbox
             checked={this.props.isSelected}
@@ -58,7 +59,8 @@ class DirectoryTreeNode extends React.Component {
             useProps={true}
           />
         </div>
-        <div className="directory-tree__checkbox__item
+        <div
+          className="directory-tree__checkbox__item
           directory-tree__checkbox__item--icon">
           {icon}
         </div>
@@ -70,14 +72,17 @@ class DirectoryTreeNode extends React.Component {
     if (this.state.expanded) {
       return (
         <div className="directory-tree__node directory-tree__node--group">
-          <DirectoryTree tree={this.props.subTree} depth={this.props.depth}
+          <DirectoryTree
+            tree={this.props.subTree}
+            depth={this.props.depth}
             hash={this.props.hash}
             isParentSelected={this.props.isSelected || this.props.isParentSelected}
             key={`${this.state.expanded}-${this.props.depth}`}
             onPriorityChange={this.props.onPriorityChange}
             onItemSelect={this.props.onItemSelect}
             path={this.getCurrentPath()}
-            selectedItems={this.props.selectedItems} />
+            selectedItems={this.props.selectedItems}
+          />
         </div>
       );
     }
@@ -87,7 +92,7 @@ class DirectoryTreeNode extends React.Component {
 
   handleDirectoryClick(event) {
     this.setState({
-      expanded: !this.state.expanded
+      expanded: !this.state.expanded,
     });
   }
 
@@ -99,30 +104,28 @@ class DirectoryTreeNode extends React.Component {
       isParentSelected: this.props.isParentSelected,
       isSelected: this.props.isSelected,
       path: this.getCurrentPath(),
-      type: 'directory'
+      type: 'directory',
     });
   }
 
   render() {
-    let branchClasses = classnames('directory-tree__branch',
-      `directory-tree__branch--depth-${this.props.depth}`, {
-        'directory-tree__node--selected': this.props.isSelected,
-      });
-    let directoryClasses = classnames('directory-tree__node',
-      'directory-tree__node--selectable directory-tree__node--directory', {
-        'is-expanded': this.state.expanded
-      });
+    let branchClasses = classnames('directory-tree__branch', `directory-tree__branch--depth-${this.props.depth}`, {
+      'directory-tree__node--selected': this.props.isSelected,
+    });
+    let directoryClasses = classnames(
+      'directory-tree__node',
+      'directory-tree__node--selectable directory-tree__node--directory',
+      {
+        'is-expanded': this.state.expanded,
+      }
+    );
 
     return (
       <div className={branchClasses}>
-        <div className={directoryClasses}
-          onClick={this.handleDirectoryClick}
-          title={this.props.directoryName}>
+        <div className={directoryClasses} onClick={this.handleDirectoryClick} title={this.props.directoryName}>
           <div className="file__label">
             {this.getIcon()}
-            <div className="file__name">
-              {this.props.directoryName}
-            </div>
+            <div className="file__name">{this.props.directoryName}</div>
           </div>
         </div>
         {this.getSubTree()}

@@ -12,7 +12,7 @@ class Filesystem {
       let directories = [];
       let files = [];
 
-      fs.readdirSync(sourcePath).forEach((item) => {
+      fs.readdirSync(sourcePath).forEach(item => {
         if (fs.statSync(path.join(sourcePath, item)).isDirectory()) {
           directories.push(item);
         } else {
@@ -27,7 +27,7 @@ class Filesystem {
         files,
         hasParent,
         path: sourcePath,
-        separator: path.sep
+        separator: path.sep,
       });
     } catch (error) {
       callback(null, error);

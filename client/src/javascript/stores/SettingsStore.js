@@ -13,7 +13,7 @@ class SettingsStoreClass extends BaseStore {
 
     this.fetchStatus = {
       clientSettingsFetched: false,
-      floodSettingsFetched: false
+      floodSettingsFetched: false,
     };
 
     this.clientSettings = {};
@@ -23,7 +23,7 @@ class SettingsStoreClass extends BaseStore {
       language: 'en',
       sortTorrents: {
         direction: 'desc',
-        property: 'dateAdded'
+        property: 'dateAdded',
       },
       torrentDetails: [
         {id: 'name', visible: true},
@@ -45,15 +45,15 @@ class SettingsStoreClass extends BaseStore {
         {id: 'isPrivate', visible: false},
         {id: 'message', visible: false},
         {id: 'trackerURIs', visible: false},
-        {id: 'tags', visible: true}
+        {id: 'tags', visible: true},
       ],
       torrentListColumnWidths: {},
       torrentListViewSize: 'condensed',
       speedLimits: {
         download: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
-        upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0]
+        upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
       },
-      startTorrentsOnLoad: false
+      startTorrentsOnLoad: false,
     };
   }
 
@@ -101,7 +101,7 @@ class SettingsStoreClass extends BaseStore {
 
     if (options.alert) {
       AlertStore.add({
-        id: 'alert.settings.saved'
+        id: 'alert.settings.saved',
       });
     }
 
@@ -117,7 +117,7 @@ class SettingsStoreClass extends BaseStore {
   handleSettingsFetchSuccess(settings) {
     this.fetchStatus.floodSettingsFetched = true;
 
-    Object.keys(settings).forEach((property) => {
+    Object.keys(settings).forEach(property => {
       const incomingSettingsValue = settings[property];
 
       if (incomingSettingsValue != null) {
@@ -138,7 +138,7 @@ class SettingsStoreClass extends BaseStore {
 
     if (options.alert) {
       AlertStore.add({
-        id: 'alert.settings.saved'
+        id: 'alert.settings.saved',
       });
     }
 
@@ -148,8 +148,7 @@ class SettingsStoreClass extends BaseStore {
   }
 
   processSettingsState() {
-    if (this.fetchStatus.clientSettingsFetched
-      && this.fetchStatus.floodSettingsFetched) {
+    if (this.fetchStatus.clientSettingsFetched && this.fetchStatus.floodSettingsFetched) {
       this.emit(EventTypes.SETTINGS_CHANGE);
     }
   }
@@ -183,7 +182,7 @@ class SettingsStoreClass extends BaseStore {
   }
 
   updateLocalSettings(settings, settingsType) {
-    settings.forEach((setting) => {
+    settings.forEach(setting => {
       if (setting.overrideLocalSetting) {
         this[settingsType][setting.overrideID] = setting.overrideData;
       } else {
@@ -195,7 +194,7 @@ class SettingsStoreClass extends BaseStore {
 
 let SettingsStore = new SettingsStoreClass();
 
-SettingsStore.dispatcherID = AppDispatcher.register((payload) => {
+SettingsStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;
 
   switch (action.type) {

@@ -15,14 +15,14 @@ const SORT_PROPERTIES = [
   'downTotal',
   'upTotal',
   'sizeBytes',
-  'dateAdded'
+  'dateAdded',
 ];
 
 class SortDropdown extends React.Component {
   constructor() {
     super();
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
@@ -38,16 +38,10 @@ class SortDropdown extends React.Component {
     return (
       <a className="dropdown__button">
         <label className="dropdown__label">
-          <FormattedMessage
-            id="torrents.sort.title"
-            defaultMessage="Sort By"
-          />
+          <FormattedMessage id="torrents.sort.title" defaultMessage="Sort By" />
         </label>
         <span className="dropdown__value">
-          <FormattedMessage
-            id={propertyMessageConfig.id}
-            defaultMessage={propertyMessageConfig.defaultMessage}
-          />
+          <FormattedMessage id={propertyMessageConfig.id} defaultMessage={propertyMessageConfig.defaultMessage} />
         </span>
       </a>
     );
@@ -55,11 +49,11 @@ class SortDropdown extends React.Component {
 
   getDropdownMenus() {
     const {direction, selectedProperty} = this.props;
-    let items = SORT_PROPERTIES.map((sortProp) => {
+    let items = SORT_PROPERTIES.map(sortProp => {
       const isSelected = sortProp === selectedProperty;
       const directionIndicator = isSelected ? (
-          <span className={`sort-dropdown__indicator sort-dropdown__indicator--${direction}`} />
-        ) : null;
+        <span className={`sort-dropdown__indicator sort-dropdown__indicator--${direction}`} />
+      ) : null;
 
       return {
         displayName: (
@@ -69,7 +63,7 @@ class SortDropdown extends React.Component {
           </div>
         ),
         selected: isSelected,
-        property: sortProp
+        property: sortProp,
       };
     });
 
@@ -99,7 +93,8 @@ class SortDropdown extends React.Component {
       <Dropdown
         handleItemSelect={this.handleItemSelect}
         header={this.getDropdownHeader()}
-        menuItems={this.getDropdownMenus()} />
+        menuItems={this.getDropdownMenus()}
+      />
     );
   }
 }

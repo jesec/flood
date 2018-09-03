@@ -7,7 +7,7 @@ export function searchTorrents(torrents, searchString) {
       queries.push(new RegExp(searchTerms[i], 'gi'));
     }
 
-    torrents = torrents.filter((torrent) => {
+    torrents = torrents.filter(torrent => {
       for (let i = 0, len = queries.length; i < len; i++) {
         if (!torrent.name.match(queries[i])) {
           return false;

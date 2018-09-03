@@ -12,32 +12,26 @@ class GlobalContextMenuMountPoint extends React.Component {
     onMenuClose: PropTypes.func,
     onMenuOpen: PropTypes.func,
     id: PropTypes.string.isRequired,
-    width: PropTypes.number
+    width: PropTypes.number,
   };
 
   static defaultProps = {
-    width: 200
+    width: 200,
   };
 
   state = {
     clickPosition: {},
     isOpen: false,
     items: [],
-    menuPosition: {}
+    menuPosition: {},
   };
 
   componentDidMount() {
-    UIStore.listen(
-      EventTypes.UI_CONTEXT_MENU_CHANGE,
-      this.handleContextMenuChange
-    );
+    UIStore.listen(EventTypes.UI_CONTEXT_MENU_CHANGE, this.handleContextMenuChange);
   }
 
   componentWillUnmount() {
-    UIStore.unlisten(
-      EventTypes.UI_CONTEXT_MENU_CHANGE,
-      this.handleContextMenuChange
-    );
+    UIStore.unlisten(EventTypes.UI_CONTEXT_MENU_CHANGE, this.handleContextMenuChange);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -51,8 +45,10 @@ class GlobalContextMenuMountPoint extends React.Component {
 
     let shouldUpdate = true;
 
-    if (this.state.clickPosition.x === nextState.clickPosition.x
-      && this.state.clickPosition.y === nextState.clickPosition.y) {
+    if (
+      this.state.clickPosition.x === nextState.clickPosition.x &&
+      this.state.clickPosition.y === nextState.clickPosition.y
+    ) {
       shouldUpdate = false;
     }
 
@@ -86,35 +82,25 @@ class GlobalContextMenuMountPoint extends React.Component {
       let labelAction, labelSecondary, menuItemContent;
       const menuItemClasses = classnames('menu__item', {
         'is-selectable': item.clickHandler,
-        'menu__item--separator': item.type === 'separator'
+        'menu__item--separator': item.type === 'separator',
       });
       const primaryLabelClasses = classnames('menu__item__label--primary', {
-        'has-action': item.labelAction
+        'has-action': item.labelAction,
       });
 
       if (item.labelSecondary) {
-        labelSecondary = (
-          <span className="menu__item__label--secondary">
-            {item.labelSecondary}
-          </span>
-        );
+        labelSecondary = <span className="menu__item__label--secondary">{item.labelSecondary}</span>;
       }
 
       if (item.labelAction) {
-        labelAction = (
-          <span className="menu__item__label__action">
-            {item.labelAction}
-          </span>
-        );
+        labelAction = <span className="menu__item__label__action">{item.labelAction}</span>;
       }
 
       if (item.type !== 'separator') {
         menuItemContent = (
           <span>
             <span className={primaryLabelClasses}>
-              <span className="menu__item__label">
-                {item.label}
-              </span>
+              <span className="menu__item__label">{item.label}</span>
               {labelAction}
             </span>
             {labelSecondary}
@@ -123,11 +109,7 @@ class GlobalContextMenuMountPoint extends React.Component {
       }
 
       return (
-        <li
-          className={menuItemClasses}
-          key={index}
-          onClick={this.handleMenuItemClick.bind(this, item)}
-        >
+        <li className={menuItemClasses} key={index} onClick={this.handleMenuItemClick.bind(this, item)}>
           {menuItemContent}
         </li>
       );
@@ -141,11 +123,11 @@ class GlobalContextMenuMountPoint extends React.Component {
       this.setState({
         isOpen: true,
         clickPosition: activeContextMenu.clickPosition,
-        items: activeContextMenu.items
+        items: activeContextMenu.items,
       });
     } else if (this.state.isOpen) {
       this.setState({
-        isOpen: false
+        isOpen: false,
       });
     }
   };
@@ -181,8 +163,7 @@ class GlobalContextMenuMountPoint extends React.Component {
       <ContextMenu
         triggerCoordinates={this.state.clickPosition}
         onOverlayClick={this.handleOverlayClick}
-        in={this.state.isOpen}
-      >
+        in={this.state.isOpen}>
         {this.getMenuItems()}
       </ContextMenu>
     );

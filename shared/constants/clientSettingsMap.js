@@ -50,7 +50,7 @@ let clientSettingsMap = objectUtil.reflect({
   throttleMinPeersNormal: 'throttle.min_peers.normal',
   throttleMinPeersSeed: 'throttle.min_peers.seed',
   trackersNumWant: 'trackers.numwant',
-  trackersUseUdp: 'trackers.use_udp'
+  trackersUseUdp: 'trackers.use_udp',
 });
 
 clientSettingsMap.defaults = [
@@ -99,7 +99,7 @@ clientSettingsMap.defaults = [
   'throttleMinPeersNormal',
   'throttleMinPeersSeed',
   'trackersNumWant',
-  'trackersUseUdp'
+  'trackersUseUdp',
 ];
 
 module.exports = clientSettingsMap;

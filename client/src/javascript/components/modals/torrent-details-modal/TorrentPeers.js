@@ -12,7 +12,7 @@ export default class TorrentPeers extends React.Component {
     super();
 
     this.state = {
-      erroredCountryImages: []
+      erroredCountryImages: [],
     };
   }
 
@@ -45,16 +45,15 @@ export default class TorrentPeers extends React.Component {
                 alt={countryCode}
                 className="peers-list__flag__image"
                 onError={this.getImageErrorHandlerFn(countryCode)}
-                src={flagImageSrc} />
+                src={flagImageSrc}
+              />
             );
           }
 
           peerCountry = (
             <span className="peers-list__flag">
               {image}
-              <span className="peers-list__flag__text">
-                {countryCode}
-              </span>
+              <span className="peers-list__flag__text">{countryCode}</span>
             </span>
           );
         }
@@ -71,15 +70,9 @@ export default class TorrentPeers extends React.Component {
             <td>
               <Size value={peer.uploadRate} isSpeed={true} />
             </td>
-            <td>
-              {peer.completedPercent}%
-            </td>
-            <td>
-              {peer.clientVersion}
-            </td>
-            <td className="peers-list__encryption">
-              {encryptedIcon}
-            </td>
+            <td>{peer.completedPercent}%</td>
+            <td>{peer.clientVersion}</td>
+            <td className="peers-list__encryption">{encryptedIcon}</td>
           </tr>
         );
       });
@@ -90,34 +83,17 @@ export default class TorrentPeers extends React.Component {
             <thead className="torrent-details__table__heading">
               <tr>
                 <th className="torrent-details__table__heading--primary">
-                  <FormattedMessage
-                    id="torrents.details.peers"
-                    defaultMessage="Peers"
-                  />
-                  <Badge>
-                    {peers.length}
-                  </Badge>
+                  <FormattedMessage id="torrents.details.peers" defaultMessage="Peers" />
+                  <Badge>{peers.length}</Badge>
                 </th>
-                <th className="torrent-details__table__heading--secondary">
-                  DL
-                </th>
-                <th className="torrent-details__table__heading--secondary">
-                  UL
-                </th>
-                <th className="torrent-details__table__heading--secondary">
-                  %
-                </th>
-                <th className="torrent-details__table__heading--secondary">
-                  Client
-                </th>
-                <th className="torrent-details__table__heading--secondary">
-                  Enc
-                </th>
+                <th className="torrent-details__table__heading--secondary">DL</th>
+                <th className="torrent-details__table__heading--secondary">UL</th>
+                <th className="torrent-details__table__heading--secondary">%</th>
+                <th className="torrent-details__table__heading--secondary">Client</th>
+                <th className="torrent-details__table__heading--secondary">Enc</th>
               </tr>
             </thead>
-            <tbody>
-              {peerList}
-            </tbody>
+            <tbody>{peerList}</tbody>
           </table>
         </div>
       );

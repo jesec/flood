@@ -4,21 +4,19 @@ import React from 'react';
 import DirectoryFileList from './DirectoryFileList';
 import DirectoryTreeNode from './DirectoryTreeNode';
 
-const METHODS_TO_BIND = [
-  'getDirectoryTreeDomNodes'
-];
+const METHODS_TO_BIND = ['getDirectoryTreeDomNodes'];
 
 class DirectoryTree extends React.Component {
   static propTypes = {
     isParentSelected: PropTypes.bool,
     path: PropTypes.array,
-    selectedItems: PropTypes.object
+    selectedItems: PropTypes.object,
   };
 
   static defaultProps = {
     isParentSelected: false,
     path: [],
-    selectedItems: {}
+    selectedItems: {},
   };
 
   constructor() {
@@ -26,10 +24,10 @@ class DirectoryTree extends React.Component {
 
     this.state = {
       selectedDirectories: [],
-      selectedNodes: []
+      selectedNodes: [],
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
@@ -40,7 +38,8 @@ class DirectoryTree extends React.Component {
     let fileList = null;
     depth++;
 
-    directories = Object.keys(directories).sort(this.sortDirectories)
+    directories = Object.keys(directories)
+      .sort(this.sortDirectories)
       .map((directoryName, index) => {
         let subSelectedItems = {};
 
@@ -97,9 +96,7 @@ class DirectoryTree extends React.Component {
 
   render() {
     return (
-      <div className="directory-tree__tree">
-        {this.getDirectoryTreeDomNodes(this.props.tree, this.props.depth)}
-      </div>
+      <div className="directory-tree__tree">{this.getDirectoryTreeDomNodes(this.props.tree, this.props.depth)}</div>
     );
   }
 }

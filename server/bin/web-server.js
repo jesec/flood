@@ -19,16 +19,18 @@ const startWebServer = () => {
   let server;
 
   if (useSSL) {
-    if (!config.sslKey || !config.sslCert){
-      console.error('Cannot start HTTPS server, `sslKey` or `sslCert`' +
-        ' is missing in config.js.');
+    if (!config.sslKey || !config.sslCert) {
+      console.error('Cannot start HTTPS server, `sslKey` or `sslCert`' + ' is missing in config.js.');
       process.exit(1);
     }
 
-    server = require('spdy').createServer({
-      key: fs.readFileSync(config.sslKey),
-      cert: fs.readFileSync(config.sslCert)
-    }, app);
+    server = require('spdy').createServer(
+      {
+        key: fs.readFileSync(config.sslKey),
+        cert: fs.readFileSync(config.sslCert),
+      },
+      app
+    );
   } else {
     server = require('http').createServer(app);
   }

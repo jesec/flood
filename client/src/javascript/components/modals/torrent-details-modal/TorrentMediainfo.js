@@ -11,31 +11,32 @@ import TorrentStore from '../../../stores/TorrentStore';
 const MESSAGES = defineMessages({
   copy: {
     id: 'general.clipboard.copy',
-    defaultMessage: 'Copy'
+    defaultMessage: 'Copy',
   },
   copied: {
     id: 'general.clipboard.copied',
-    defaultMessage: 'Copied'
+    defaultMessage: 'Copied',
   },
   execError: {
     id: 'mediainfo.execError',
-    defaultMessage: 'An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood.'
+    defaultMessage:
+      'An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood.',
   },
   fetching: {
     id: 'mediainfo.fetching',
-    defaultMessage: 'Fetching...'
+    defaultMessage: 'Fetching...',
   },
   heading: {
     id: 'mediainfo.heading',
-    defaultMessage: 'Mediainfo Output'
-  }
+    defaultMessage: 'Mediainfo Output',
+  },
 });
 
 const METHODS_TO_BIND = [
   'handleCopyButtonMouseLeave',
   'handleCopySuccess',
   'handleFetchMediainfoError',
-  'handleFetchMediainfoSuccess'
+  'handleFetchMediainfoSuccess',
 ];
 
 class TorrentMediainfo extends React.Component {
@@ -47,23 +48,17 @@ class TorrentMediainfo extends React.Component {
       copiedToClipboard: false,
       isFetchingMediainfo: true,
       mediainfo: null,
-      fetchMediainfoError: null
+      fetchMediainfoError: null,
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
 
   componentDidMount() {
-    TorrentStore.listen(
-      EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
-      this.handleFetchMediainfoSuccess
-    );
-    TorrentStore.listen(
-      EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR,
-      this.handleFetchMediainfoError
-    );
+    TorrentStore.listen(EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS, this.handleFetchMediainfoSuccess);
+    TorrentStore.listen(EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR, this.handleFetchMediainfoError);
     TorrentStore.fetchMediainfo(this.props.hash);
   }
 
@@ -72,7 +67,7 @@ class TorrentMediainfo extends React.Component {
       this.clipboard = new Clipboard(this.copyButtonRef, {
         text: () => {
           return this.state.mediainfo;
-        }
+        },
       });
 
       this.clipboard.on('success', this.handleCopySuccess);
@@ -80,34 +75,28 @@ class TorrentMediainfo extends React.Component {
   }
 
   componentWillUnmount() {
-    TorrentStore.unlisten(
-      EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
-      this.handleFetchMediainfoSuccess
-    );
-    TorrentStore.unlisten(
-      EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR,
-      this.handleFetchMediainfoError
-    );
+    TorrentStore.unlisten(EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS, this.handleFetchMediainfoSuccess);
+    TorrentStore.unlisten(EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR, this.handleFetchMediainfoError);
   }
 
   handleCopyButtonMouseLeave() {
     global.setTimeout(() => {
       this.setState({
-        copiedToClipboard: false
+        copiedToClipboard: false,
       });
     }, 500);
   }
 
   handleCopySuccess() {
     this.setState({
-      copiedToClipboard: true
+      copiedToClipboard: true,
     });
   }
 
   handleFetchMediainfoError(error) {
     this.setState({
       isFetchingMediainfo: false,
-      fetchMediainfoError: error
+      fetchMediainfoError: error,
     });
   }
 
@@ -115,7 +104,7 @@ class TorrentMediainfo extends React.Component {
     this.setState({
       mediainfo: TorrentStore.getMediainfo(this.props.hash),
       isFetchingMediainfo: false,
-      fetchMediainfoError: null
+      fetchMediainfoError: null,
     });
   }
 
@@ -123,8 +112,7 @@ class TorrentMediainfo extends React.Component {
     if (this.state.isFetchingMediainfo) {
       return (
         <div className="torrent-details__section mediainfo">
-          <FormattedMessage id={MESSAGES.fetching.id}
-            defaultMessage={MESSAGES.fetching.defaultMessage} />
+          <FormattedMessage id={MESSAGES.fetching.id} defaultMessage={MESSAGES.fetching.defaultMessage} />
         </div>
       );
     }
@@ -135,12 +123,9 @@ class TorrentMediainfo extends React.Component {
       return (
         <div className="torrent-details__section mediainfo">
           <p>
-            <FormattedMessage id={MESSAGES.execError.id}
-              defaultMessage={MESSAGES.execError.defaultMessage} />
+            <FormattedMessage id={MESSAGES.execError.id} defaultMessage={MESSAGES.execError.defaultMessage} />
           </p>
-          <pre className="mediainfo__output mediainfo__output--error">
-            {JSON.stringify(errorData.error, null, 2)}
-          </pre>
+          <pre className="mediainfo__output mediainfo__output--error">{JSON.stringify(errorData.error, null, 2)}</pre>
         </div>
       );
     }
@@ -156,24 +141,19 @@ class TorrentMediainfo extends React.Component {
         <div className="mediainfo__toolbar">
           <div className="mediainfo__toolbar__item">
             <span className="torrent-details__table__heading--tertiary">
-              <FormattedMessage id={MESSAGES.heading.id}
-                defaultMessage={MESSAGES.heading.defaultMessage} />
+              <FormattedMessage id={MESSAGES.heading.id} defaultMessage={MESSAGES.heading.defaultMessage} />
             </span>
           </div>
-          <Tooltip content={tooltipText}
+          <Tooltip
+            content={tooltipText}
             onMouseLeave={this.handleCopyButtonMouseLeave}
             wrapperClassName="tooltip__wrapper mediainfo__toolbar__item">
-            <Button
-              priority="tertiary"
-              buttonRef={ref => this.copyButtonRef = ref}
-            >
+            <Button priority="tertiary" buttonRef={ref => (this.copyButtonRef = ref)}>
               <ClipboardIcon />
             </Button>
           </Tooltip>
         </div>
-        <pre className="mediainfo__output">
-          {this.state.mediainfo}
-        </pre>
+        <pre className="mediainfo__output">{this.state.mediainfo}</pre>
       </div>
     );
   }

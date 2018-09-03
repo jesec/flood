@@ -5,17 +5,7 @@ import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
 import RtorrentConnectionTypeSelection from '../general/RtorrentConnectionTypeSelection';
 
-import {
-  Button,
-  Form,
-  FormError,
-  FormRow,
-  Panel,
-  PanelContent,
-  PanelHeader,
-  PanelFooter,
-  Textbox
-} from 'flood-ui-kit';
+import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from 'flood-ui-kit';
 
 const METHODS_TO_BIND = ['handleAuthError', 'handleFormSubmit'];
 
@@ -25,10 +15,10 @@ class AuthForm extends React.Component {
 
     this.state = {
       error: null,
-      isAuthStatusLoading: false
+      isAuthStatusLoading: false,
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
@@ -51,13 +41,13 @@ class AuthForm extends React.Component {
     if (this.props.mode === 'login') {
       return this.props.intl.formatMessage({
         id: 'auth.login',
-        defaultMessage: 'Login'
+        defaultMessage: 'Login',
       });
     }
 
     return this.props.intl.formatMessage({
       id: 'auth.create.an.account',
-      defaultMessage: 'Create an account'
+      defaultMessage: 'Create an account',
     });
   }
 
@@ -65,13 +55,13 @@ class AuthForm extends React.Component {
     if (this.props.mode === 'login') {
       return this.props.intl.formatMessage({
         id: 'auth.login.intro',
-        defaultMessage: 'Log in to your account.'
+        defaultMessage: 'Log in to your account.',
       });
     }
 
     return this.props.intl.formatMessage({
       id: 'auth.create.an.account.intro',
-      defaultMessage: 'Welcome to Flood! Create a username and strong password.'
+      defaultMessage: 'Welcome to Flood! Create a username and strong password.',
     });
   }
 
@@ -87,7 +77,7 @@ class AuthForm extends React.Component {
     if (this.props.mode === 'login') {
       AuthStore.authenticate({
         username: submission.formData.username,
-        password: submission.formData.password
+        password: submission.formData.password,
       });
     } else {
       AuthStore.register({
@@ -95,7 +85,7 @@ class AuthForm extends React.Component {
         password: submission.formData.password,
         host: submission.formData.rtorrentHost,
         port: submission.formData.rtorrentPort,
-        socketPath: submission.formData.rtorrentSocketPath
+        socketPath: submission.formData.rtorrentSocketPath,
       });
     }
   }
@@ -108,13 +98,12 @@ class AuthForm extends React.Component {
     if (this.props.mode === 'login') {
       actionText = this.props.intl.formatMessage({
         id: 'auth.log.in',
-        defaultMessage: 'Log In'
+        defaultMessage: 'Log In',
       });
-
     } else {
       actionText = this.props.intl.formatMessage({
         id: 'auth.create.account',
-        defaultMessage: 'Create Account'
+        defaultMessage: 'Create Account',
       });
 
       registerFields = (
@@ -127,9 +116,7 @@ class AuthForm extends React.Component {
     if (this.state.error) {
       errorRow = (
         <FormRow>
-          <FormError isLoading={this.state.isAuthStatusLoading}>
-            {this.state.error}
-          </FormError>
+          <FormError isLoading={this.state.isAuthStatusLoading}>{this.state.error}</FormError>
         </FormRow>
       );
     }
@@ -137,7 +124,7 @@ class AuthForm extends React.Component {
     return (
       <div className="application__entry-barrier">
         <Panel spacing="large">
-          <Form onSubmit={this.handleFormSubmit} ref={(ref) => this.formRef = ref}>
+          <Form onSubmit={this.handleFormSubmit} ref={ref => (this.formRef = ref)}>
             <PanelHeader>
               <h1>{this.getHeaderText()}</h1>
             </PanelHeader>

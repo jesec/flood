@@ -7,7 +7,7 @@ import {
   Panel,
   PanelContent,
   PanelHeader,
-  PanelFooter
+  PanelFooter,
 } from 'flood-ui-kit';
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
@@ -23,54 +23,61 @@ export default class ClientConnectionInterruption extends React.Component {
   state = {
     hasTestedConnection: false,
     isConnectionVerified: false,
-    isTestingConnection: false
+    isTestingConnection: false,
   };
 
   handleFormChange = () => {
     if (this.state.hasTestedConnection) {
       this.setState({
         isConnectionVerified: false,
-        hasTestedConnection: false
+        hasTestedConnection: false,
       });
     }
   };
 
   handleFormSubmit = ({formData}) => {
     this.setState({
-      isSavingSettings: true
+      isSavingSettings: true,
     });
 
-    AuthActions.updateUser(AuthStore.getCurrentUsername(), formData).then(() => {
-      FloodActions.restartActivityStream();
-    }).catch((error) => {
-      this.setState({
-        isSavingSettings: false
+    AuthActions.updateUser(AuthStore.getCurrentUsername(), formData)
+      .then(() => {
+        FloodActions.restartActivityStream();
+      })
+      .catch(error => {
+        this.setState({
+          isSavingSettings: false,
+        });
       });
-    });
-  }
+  };
 
   handleTestButtonClick = () => {
     if (this.state.isTestingConnection) return;
     const formData = this.formRef.getFormData();
 
-    this.setState({
-      isTestingConnection: true
-    }, () => {
-      ClientActions.testClientConnectionSettings(formData).then(() => {
-        this.setState({
-          hasTestedConnection: true,
-          isConnectionVerified: true,
-          isTestingConnection: false
-        });
-      }).catch(() => {
-        this.setState({
-          hasTestedConnection: true,
-          isConnectionVerified: false,
-          isTestingConnection: false
-        });
-      });
-    });
-  }
+    this.setState(
+      {
+        isTestingConnection: true,
+      },
+      () => {
+        ClientActions.testClientConnectionSettings(formData)
+          .then(() => {
+            this.setState({
+              hasTestedConnection: true,
+              isConnectionVerified: true,
+              isTestingConnection: false,
+            });
+          })
+          .catch(() => {
+            this.setState({
+              hasTestedConnection: true,
+              isConnectionVerified: false,
+              isTestingConnection: false,
+            });
+          });
+      }
+    );
+  };
 
   renderConnectionTestResult() {
     const {hasTestedConnection, isConnectionVerified} = this.state;
@@ -91,7 +98,10 @@ export default class ClientConnectionInterruption extends React.Component {
       return (
         <FormRow>
           <FormError isLoading={isTestingConnection}>
-            <FormattedMessage id="connection-interruption.verification-error" defaultMessage="Connection could not be verified." />
+            <FormattedMessage
+              id="connection-interruption.verification-error"
+              defaultMessage="Connection could not be verified."
+            />
           </FormError>
         </FormRow>
       );
@@ -103,16 +113,18 @@ export default class ClientConnectionInterruption extends React.Component {
 
     return (
       <Panel spacing="large">
-        <Form onChange={this.handleFormChange} onSubmit={this.handleFormSubmit} ref={(ref) => this.formRef = ref}>
+        <Form onChange={this.handleFormChange} onSubmit={this.handleFormSubmit} ref={ref => (this.formRef = ref)}>
           <PanelHeader>
             <h1>
-              <FormattedMessage id="connection-interruption.heading"
-                defaultMessage="Cannot connect to rTorrent" />
+              <FormattedMessage id="connection-interruption.heading" defaultMessage="Cannot connect to rTorrent" />
             </h1>
           </PanelHeader>
           <PanelContent>
             <p className="copy--lead">
-              <FormattedMessage id="connection-interruption.verify-settings-prompt" defaultMessage="Let's verify your connection settings." />
+              <FormattedMessage
+                id="connection-interruption.verify-settings-prompt"
+                defaultMessage="Let's verify your connection settings."
+              />
             </p>
             {this.renderFormError()}
             <RtorrentConnectionTypeSelection isDisabled={isTestingConnection} />
@@ -130,6 +142,6 @@ export default class ClientConnectionInterruption extends React.Component {
           </PanelFooter>
         </Form>
       </Panel>
-    )
+    );
   }
 }

@@ -1,4 +1,4 @@
-export function compute(bytes, precision=2) {
+export function compute(bytes, precision = 2) {
   const kilobyte = 1024,
     megabyte = kilobyte * 1024,
     gigabyte = megabyte * 1024,
@@ -7,16 +7,16 @@ export function compute(bytes, precision=2) {
     unit = '';
 
   if (bytes >= terabyte) {
-    value = (bytes / terabyte);
+    value = bytes / terabyte;
     unit = 'TB';
   } else if (bytes >= gigabyte) {
-    value = (bytes / gigabyte);
+    value = bytes / gigabyte;
     unit = 'GB';
   } else if (bytes >= megabyte) {
-    value = (bytes / megabyte);
+    value = bytes / megabyte;
     unit = 'MB';
   } else if (bytes >= kilobyte) {
-    value = (bytes / kilobyte);
+    value = bytes / kilobyte;
     unit = 'kB';
   } else {
     value = bytes;
@@ -34,9 +34,9 @@ export function compute(bytes, precision=2) {
 
   return {
     value,
-    unit
+    unit,
   };
-};
+}
 
 export function getTranslationString(unit) {
   const UNIT_TO_STRING_ID = {
@@ -48,4 +48,4 @@ export function getTranslationString(unit) {
   };
 
   return UNIT_TO_STRING_ID[unit] || 'unit.size.byte';
-};
+}

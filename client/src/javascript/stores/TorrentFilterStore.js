@@ -87,7 +87,7 @@ class TorrentFilterStoreClass extends BaseStore {
         } else {
           this.taxonomy[taxonomyKey] = {
             ...this.taxonomy[taxonomyKey],
-            ...change.data
+            ...change.data,
           };
         }
       });
@@ -95,10 +95,7 @@ class TorrentFilterStoreClass extends BaseStore {
 
     // TODO: This logic is duplicated. Also update it to check for changed
     // trackers.
-    if (
-      this.tagFilter !== 'all'
-      && !Object.keys(this.taxonomy.tagCounts).includes(this.tagFilter)
-    ) {
+    if (this.tagFilter !== 'all' && !Object.keys(this.taxonomy.tagCounts).includes(this.tagFilter)) {
       this.setTagFilter('all');
     }
 
@@ -110,10 +107,7 @@ class TorrentFilterStoreClass extends BaseStore {
 
     // TODO: This logic is duplicated. Also update it to check for changed
     // trackers.
-    if (
-      this.tagFilter !== 'all'
-      && !Object.keys(taxonomy.tags).includes(this.tagFilter)
-    ) {
+    if (this.tagFilter !== 'all' && !Object.keys(taxonomy.tags).includes(this.tagFilter)) {
       this.setTagFilter('all');
     }
 
@@ -121,8 +115,12 @@ class TorrentFilterStoreClass extends BaseStore {
   }
 
   isFilterActive() {
-    return this.getStatusFilter() !== 'all' || this.getSearchFilter() !== ''
-      || this.getTagFilter() !== 'all' || this.getTrackerFilter() !== 'all';
+    return (
+      this.getStatusFilter() !== 'all' ||
+      this.getSearchFilter() !== '' ||
+      this.getTagFilter() !== 'all' ||
+      this.getTrackerFilter() !== 'all'
+    );
   }
 
   setSearchFilter(filter) {
@@ -163,7 +161,7 @@ class TorrentFilterStoreClass extends BaseStore {
 
 let TorrentFilterStore = new TorrentFilterStoreClass();
 
-TorrentFilterStore.dispatcherID = AppDispatcher.register((payload) => {
+TorrentFilterStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;
 
   switch (action.type) {

@@ -1,88 +1,88 @@
 const torrentProperties = {
   dateAdded: {
     id: 'torrents.properties.date.added',
-    defaultMessage: 'Date Added'
+    defaultMessage: 'Date Added',
   },
   downRate: {
     id: 'torrents.properties.download.speed',
-    defaultMessage: 'Download Speed'
+    defaultMessage: 'Download Speed',
   },
   downTotal: {
     id: 'torrents.properties.download.total',
-    defaultMessage: 'Downloaded'
+    defaultMessage: 'Downloaded',
   },
   eta: {
     id: 'torrents.properties.eta',
-    defaultMessage: 'ETA'
+    defaultMessage: 'ETA',
   },
   name: {
     id: 'torrents.properties.name',
-    defaultMessage: 'Name'
+    defaultMessage: 'Name',
   },
   peers: {
     id: 'torrents.properties.peers',
-    defaultMessage: 'Peers'
+    defaultMessage: 'Peers',
   },
   percentComplete: {
     id: 'torrents.properties.percentage',
-    defaultMessage: 'Percent Complete'
+    defaultMessage: 'Percent Complete',
   },
   ratio: {
     id: 'torrents.properties.ratio',
-    defaultMessage: 'Ratio'
+    defaultMessage: 'Ratio',
   },
   seeds: {
     id: 'torrents.properties.seeds',
-    defaultMessage: 'Seeds'
+    defaultMessage: 'Seeds',
   },
   sizeBytes: {
     id: 'torrents.properties.size',
-    defaultMessage: 'File Size'
+    defaultMessage: 'File Size',
   },
   tags: {
     id: 'torrents.properties.tags',
-    defaultMessage: 'Tags'
+    defaultMessage: 'Tags',
   },
   upRate: {
     id: 'torrents.properties.upload.speed',
-    defaultMessage: 'Upload Speed'
+    defaultMessage: 'Upload Speed',
   },
   upTotal: {
     id: 'torrents.properties.upload.total',
-    defaultMessage: 'Uploaded'
+    defaultMessage: 'Uploaded',
   },
   dateCreated: {
     id: 'torrents.properties.creation.date',
-    defaultMessage: 'Creation Date'
+    defaultMessage: 'Creation Date',
   },
   basePath: {
     id: 'torrents.properties.base.path',
-    defaultMessage: 'Base Path'
+    defaultMessage: 'Base Path',
   },
   ignoreScheduler: {
     id: 'torrents.properties.ignore.schedule',
-    defaultMessage: 'Ignore Scheduler'
+    defaultMessage: 'Ignore Scheduler',
   },
   comment: {
     id: 'torrents.properties.comment',
-    defaultMessage: 'Comment'
+    defaultMessage: 'Comment',
   },
   hash: {
     id: 'torrents.properties.hash',
-    defaultMessage: 'Hash'
+    defaultMessage: 'Hash',
   },
   isPrivate: {
     id: 'torrents.properties.is.private',
-    defaultMessage: 'Private'
+    defaultMessage: 'Private',
   },
   message: {
     id: 'torrents.properties.tracker.message',
-    defaultMessage: 'Tracker Message'
+    defaultMessage: 'Tracker Message',
   },
   trackerURIs: {
     id: 'torrents.properties.trackers',
-    defaultMessage: 'Trackers'
-  }
+    defaultMessage: 'Trackers',
+  },
 };
 
 export default torrentProperties;

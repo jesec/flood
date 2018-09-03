@@ -5,12 +5,12 @@ export default class BaseIcon extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     size: PropTypes.string,
-    viewBox: PropTypes.string
+    viewBox: PropTypes.string,
   };
 
   static defaultProps = {
     className: '',
-    viewBox: '0 0 60 60'
+    viewBox: '0 0 60 60',
   };
 
   getViewBox() {

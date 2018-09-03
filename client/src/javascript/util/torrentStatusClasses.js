@@ -11,6 +11,6 @@ export function torrentStatusClasses(torrent, ...classes) {
     'torrent--is-seeding': torrent.status.includes(torrentStatusMap.seeding),
     'torrent--is-completed': torrent.status.includes(torrentStatusMap.complete),
     'torrent--is-checking': torrent.status.includes(torrentStatusMap.checking),
-    'torrent--is-inactive': torrent.status.includes(torrentStatusMap.inactive)
+    'torrent--is-inactive': torrent.status.includes(torrentStatusMap.inactive),
   });
 }

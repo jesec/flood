@@ -8,17 +8,12 @@ export default class ModalActions extends React.Component {
   getModalButtons(actions) {
     let buttons = actions.map((action, index) => {
       let classes = classnames('button', {
-        [action.supplementalClassName]: action.supplementalClassName
+        [action.supplementalClassName]: action.supplementalClassName,
       });
 
       if (action.type === 'checkbox') {
         return (
-          <Checkbox
-            checked={action.checked}
-            id={action.id}
-            key={index}
-            onChange={this.getClickHandler(action)}
-          >
+          <Checkbox checked={action.checked} id={action.id} key={index} onChange={this.getClickHandler(action)}>
             {action.content}
           </Checkbox>
         );
@@ -31,22 +26,17 @@ export default class ModalActions extends React.Component {
           onClick={this.getClickHandler(action)}
           priority={action.type}
           key={index}
-          type={action.submit ? 'submit' : 'button'}
-        >
+          type={action.submit ? 'submit' : 'button'}>
           {action.content}
         </Button>
       );
     });
 
-    return (
-      <div className="modal__button-group">
-        {buttons}
-      </div>
-    );
+    return <div className="modal__button-group">{buttons}</div>;
   }
 
   getClickHandler(action) {
-    return (event) => {
+    return event => {
       if (action.clickHandler) {
         action.clickHandler(event);
       }
@@ -58,14 +48,10 @@ export default class ModalActions extends React.Component {
   }
 
   render() {
-    return (
-      <div className="modal__actions">
-        {this.getModalButtons(this.props.actions)}
-      </div>
-    );
+    return <div className="modal__actions">{this.getModalButtons(this.props.actions)}</div>;
   }
 }
 
 ModalActions.defaultProps = {
-  alignment: 'left'
+  alignment: 'left',
 };

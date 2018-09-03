@@ -17,23 +17,23 @@ class AddTorrents extends React.Component {
         content: AddTorrentsByURL,
         label: this.props.intl.formatMessage({
           id: 'torrents.add.tab.url.title',
-          defaultMessage: 'By URL'
-        })
+          defaultMessage: 'By URL',
+        }),
       },
       'by-file': {
         content: AddTorrentsByFile,
         label: this.props.intl.formatMessage({
           id: 'torrents.add.tab.file.title',
-          defaultMessage: 'By File'
-        })
-      }
+          defaultMessage: 'By File',
+        }),
+      },
     };
 
     return (
       <Modal
         heading={this.props.intl.formatMessage({
           id: 'torrents.add.heading',
-          defaultMessage: 'Add Torrents'
+          defaultMessage: 'Add Torrents',
         })}
         dismiss={this.dismissModal}
         tabs={tabs}

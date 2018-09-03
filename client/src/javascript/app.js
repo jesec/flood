@@ -32,10 +32,10 @@ class FloodApp extends React.Component {
     super();
 
     this.state = {
-      locale: SettingsStore.getFloodSettings('language')
+      locale: SettingsStore.getFloodSettings('language'),
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
 
@@ -43,20 +43,14 @@ class FloodApp extends React.Component {
   }
 
   componentDidMount() {
-    SettingsStore.listen(
-      EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsChange
-    ); 
+    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsChange);
 
     SettingsStore.fetchClientSettings();
     SettingsStore.fetchFloodSettings();
   }
 
   componentWillUnmount() {
-    SettingsStore.unlisten(
-      EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsChange
-    );
+    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.handleSettingsChange);
   }
 
   handleSettingsChange() {

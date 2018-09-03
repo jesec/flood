@@ -9,23 +9,27 @@ const router = express.Router();
 const upload = multer({
   dest: 'uploads/',
   limits: {fileSize: 10000000},
-  storage: multer.memoryStorage()
+  storage: multer.memoryStorage(),
 });
 
 router.get('/connection-test', function(req, res, next) {
-  req.services.clientGatewayService.testGateway()
-    .then((response) => {
+  req.services.clientGatewayService
+    .testGateway()
+    .then(response => {
       res.status(200).json({isConnected: true});
-    }).catch(error => {
+    })
+    .catch(error => {
       res.status(500).json({isConnected: false});
     });
 });
 
 router.post('/connection-test', function(req, res, next) {
-  req.services.clientGatewayService.testGateway(req.body)
-    .then((response) => {
+  req.services.clientGatewayService
+    .testGateway(req.body)
+    .then(response => {
       res.status(200).json({isConnected: true});
-    }).catch(error => {
+    })
+    .catch(error => {
       res.status(500).json({isConnected: false});
     });
 });
@@ -34,14 +38,9 @@ router.post('/add', function(req, res, next) {
   client.addUrls(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.post(
-  '/add-files',
-  upload.array('torrents'),
-  booleanCoerce('isBasePath'),
-  function(req, res, next) {
-    client.addFiles(req.user, req.services, req, ajaxUtil.getResponseFn(res));
-  }
-);
+router.post('/add-files', upload.array('torrents'), booleanCoerce('isBasePath'), function(req, res, next) {
+  client.addFiles(req.user, req.services, req, ajaxUtil.getResponseFn(res));
+});
 
 router.get('/settings', function(req, res, next) {
   client.getSettings(req.user, req.services, req.query, ajaxUtil.getResponseFn(res));
@@ -90,7 +89,7 @@ router.post('/torrents/delete', function(req, res, next) {
   req.services.clientGatewayService
     .removeTorrents({hashes, deleteData})
     .then(callback)
-    .catch((err) => {
+    .catch(err => {
       callback(null, err);
     });
 });

@@ -78,7 +78,7 @@ const eventTypes = [
   'UI_TORRENTS_FILTER_TRACKER_CHANGE',
   'UI_TORRENTS_FILTER_SEARCH_CHANGE',
   'UI_TORRENTS_LIST_FILTERED',
-  'UI_TORRENTS_SORT_CHANGE'
+  'UI_TORRENTS_SORT_CHANGE',
 ];
 
 export default objectUtil.createStringMapFromArray(eventTypes);

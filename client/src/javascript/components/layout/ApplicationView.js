@@ -5,19 +5,15 @@ import React from 'react';
 class ApplicationView extends React.Component {
   static propTypes = {
     children: PropTypes.node,
-    modifier: PropTypes.string
+    modifier: PropTypes.string,
   };
 
   render() {
     let classes = classnames('application__view', {
-      [`application__view--${this.props.modifier}`]: this.props.modifier != null
+      [`application__view--${this.props.modifier}`]: this.props.modifier != null,
     });
 
-    return (
-      <div className={classes}>
-        {this.props.children}
-      </div>
-    );
+    return <div className={classes}>{this.props.children}</div>;
   }
 }
 

@@ -4,11 +4,7 @@ import Modal from '../Modal';
 
 export default class ConfirmModal extends React.Component {
   getContent() {
-    return (
-      <div className="modal__content">
-        {this.props.options.content}
-      </div>
-    );
+    return <div className="modal__content">{this.props.options.content}</div>;
   }
 
   render() {

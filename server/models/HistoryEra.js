@@ -46,7 +46,7 @@ class HistoryEra {
   loadDatabase(dbName) {
     const db = new Datastore({
       autoload: true,
-      filename: path.join(config.dbPath, this.user._id, 'history', `${dbName}.db`)
+      filename: path.join(config.dbPath, this.user._id, 'history', `${dbName}.db`),
     });
 
     this.ready = true;
@@ -67,7 +67,7 @@ class HistoryEra {
       this.db.insert({
         ts: currentTime,
         up: Number(data.upload),
-        dn: Number(data.download)
+        dn: Number(data.download),
       });
     } else {
       this.db.find({ts: this.lastUpdate}, (err, docs) => {
@@ -85,19 +85,21 @@ class HistoryEra {
             console.error('\n\n');
             console.error('Warning: null values set in database!');
             console.error(`DB: ${this.opts.name}`);
-            console.error(`numUpdates: ${numUpdates}\ncurrentDownAvg: ${currentDownAvg}\ncurrentUpAvg: ${currentUpAvg}\ndownAvg: ${downAvg}\nupAvg: ${upAvg}`);
+            console.error(
+              `numUpdates: ${numUpdates}\ncurrentDownAvg: ${currentDownAvg}\ncurrentUpAvg: ${currentUpAvg}\ndownAvg: ${downAvg}\nupAvg: ${upAvg}`
+            );
             console.error('\n\n');
           }
 
           this.db.update(
             {
-              ts: this.lastUpdate
+              ts: this.lastUpdate,
             },
             {
               ts: this.lastUpdate,
               up: Number(upAvg),
               dn: Number(downAvg),
-              num: numUpdates + 1
+              num: numUpdates + 1,
             }
           );
         }
@@ -113,7 +115,8 @@ class HistoryEra {
   getData(opts, callback) {
     let minTimestamp = Date.now() - this.opts.maxTime;
 
-    this.db.find({ts: {$gte: minTimestamp}})
+    this.db
+      .find({ts: {$gte: minTimestamp}})
       .sort({ts: 1})
       .exec((err, docs) => {
         if (err) {
@@ -122,14 +125,13 @@ class HistoryEra {
         }
 
         callback(docs);
-      }
-    );
+      });
   }
 
   hasRequiredFields(opts) {
     let requirementsMet = true;
 
-    REQUIRED_FIELDS.forEach((field) => {
+    REQUIRED_FIELDS.forEach(field => {
       if (opts[field] == null) {
         console.error(`HistoryEra requires ${field}`);
         requirementsMet = false;
@@ -150,7 +152,7 @@ class HistoryEra {
     let lastUpdate = 0;
 
     db.find({}, (err, docs) => {
-      docs.forEach((doc) => {
+      docs.forEach(doc => {
         if (doc.ts > lastUpdate) {
           lastUpdate = doc.ts;
         }
@@ -160,15 +162,11 @@ class HistoryEra {
   }
 
   startAutoCleanup(interval, db) {
-    this.autoCleanupInterval = setInterval(
-      this.cleanup.bind(this, db), interval
-    );
+    this.autoCleanupInterval = setInterval(this.cleanup.bind(this, db), interval);
   }
 
   startNextEraUpdate(interval, currentDB, nextDB) {
-    this.nextEraUpdateInterval = setInterval(
-      this.updateNextEra.bind(this, currentDB, nextDB), interval
-    );
+    this.nextEraUpdateInterval = setInterval(this.updateNextEra.bind(this, currentDB, nextDB), interval);
   }
 
   stopAutoCleanup() {
@@ -187,14 +185,14 @@ class HistoryEra {
       let downTotal = 0;
       let upTotal = 0;
 
-      docs.forEach((doc) => {
+      docs.forEach(doc => {
         downTotal += Number(doc.dn);
         upTotal += Number(doc.up);
       });
 
       this.opts.nextEra.addData({
         download: Number(downTotal / docs.length).toFixed(1),
-        upload: Number(upTotal / docs.length).toFixed(1)
+        upload: Number(upTotal / docs.length).toFixed(1),
       });
     });
   }

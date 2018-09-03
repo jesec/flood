@@ -16,10 +16,10 @@ class SortableList extends React.Component {
     this.sortableListRef = null;
     this.state = {
       listOffset: null,
-      items: props.items
+      items: props.items,
     };
 
-    methodsToBind.forEach(method => this[method] = this[method].bind(this));
+    methodsToBind.forEach(method => (this[method] = this[method].bind(this)));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -35,7 +35,7 @@ class SortableList extends React.Component {
   handleMouseDown(event) {
     if (this.sortableListRef != null) {
       this.setState({
-        listOffset: this.sortableListRef.getBoundingClientRect()
+        listOffset: this.sortableListRef.getBoundingClientRect(),
       });
     }
 
@@ -65,14 +65,15 @@ class SortableList extends React.Component {
       handleDrop,
       handleMove,
       state: {items},
-      props: {lockedIDs, renderItem}
+      props: {lockedIDs, renderItem},
     } = this;
 
     return items.map((item, index) => {
       const {id, visible} = item;
 
       return (
-        <SortableListItem id={id}
+        <SortableListItem
+          id={id}
           index={index}
           isLocked={lockedIDs.includes(id)}
           isVisible={visible}
@@ -89,12 +90,12 @@ class SortableList extends React.Component {
     const classes = classnames('sortable-list', this.props.className);
 
     return (
-      <ul className={classes}
-        onMouseDown={this.handleMouseDown}
-        ref={ref => this.sortableListRef = ref}>
-        <SortableListItemDragLayer items={this.state.items}
+      <ul className={classes} onMouseDown={this.handleMouseDown} ref={ref => (this.sortableListRef = ref)}>
+        <SortableListItemDragLayer
+          items={this.state.items}
           listOffset={this.state.listOffset}
-          renderItem={this.props.renderItem} />
+          renderItem={this.props.renderItem}
+        />
         {this.getItemList()}
       </ul>
     );

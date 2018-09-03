@@ -1,7 +1,7 @@
 'use strict';
 
 let ajaxUtil = {
-  getResponseFn: (res) => {
+  getResponseFn: res => {
     return (data, error) => {
       if (error) {
         if (process.env.NODE_ENV === 'development') {
@@ -10,7 +10,7 @@ let ajaxUtil = {
 
         if (typeof error === 'string') {
           error = {
-            message: error
+            message: error,
           };
         }
 
@@ -20,7 +20,7 @@ let ajaxUtil = {
         res.json(data);
       }
     };
-  }
+  },
 };
 
 module.exports = ajaxUtil;

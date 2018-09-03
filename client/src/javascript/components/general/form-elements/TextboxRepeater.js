@@ -6,7 +6,7 @@ import RemoveMini from '../../icons/RemoveMini';
 
 export default class TextboxRepeater extends React.PureComponent {
   state = {
-    textboxes: [{id: 0, value: ''}]
+    textboxes: [{id: 0, value: ''}],
   };
 
   _idCounter = 0;
@@ -35,8 +35,7 @@ export default class TextboxRepeater extends React.PureComponent {
             defaultValue={textbox.value}
             label={index === 0 && this.props.label}
             placeholder={this.props.placeholder}
-            wrapperClassName="textbox-repeater"
-          >
+            wrapperClassName="textbox-repeater">
             <FormElementAddon onClick={this.handleTextboxAdd.bind(textbox, index)}>
               <AddMini size="mini" />
             </FormElementAddon>
@@ -47,23 +46,19 @@ export default class TextboxRepeater extends React.PureComponent {
     });
   };
 
-  handleTextboxAdd = (index) => {
+  handleTextboxAdd = index => {
     const textboxes = Object.assign([], this.state.textboxes);
     textboxes.splice(index + 1, 0, {id: this.getID(), value: ''});
     this.setState({textboxes});
   };
 
-  handleTextboxRemove = (index) => {
+  handleTextboxRemove = index => {
     const textboxes = Object.assign([], this.state.textboxes);
     textboxes.splice(index, 1);
     this.setState({textboxes});
   };
 
   render() {
-    return (
-      <FormRowGroup>
-        {this.getTextboxes()}
-      </FormRowGroup>
-    );
+    return <FormRowGroup>{this.getTextboxes()}</FormRowGroup>;
   }
 }

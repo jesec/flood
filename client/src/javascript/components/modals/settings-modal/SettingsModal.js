@@ -17,7 +17,7 @@ const METHODS_TO_BIND = [
   'handleModalRefSet',
   'handleSaveSettingsClick',
   'handleSaveSettingsError',
-  'handleSettingsStoreChange'
+  'handleSettingsStoreChange',
 ];
 
 class SettingsModal extends React.Component {
@@ -30,26 +30,22 @@ class SettingsModal extends React.Component {
       changedClientSettings: {},
       changedFloodSettings: {},
       clientSettings: SettingsStore.getClientSettings(),
-      floodSettings: SettingsStore.getFloodSettings()
+      floodSettings: SettingsStore.getFloodSettings(),
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
 
   componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsStoreChange);
-    SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
-      this.handleSaveSettingsError);
+    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsStoreChange);
+    SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR, this.handleSaveSettingsError);
   }
 
   componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsStoreChange);
-    SettingsStore.unlisten(EventTypes.SETTINGS_SAVE_REQUEST_ERROR,
-      this.handleSaveSettingsError);
+    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.handleSettingsStoreChange);
+    SettingsStore.unlisten(EventTypes.SETTINGS_SAVE_REQUEST_ERROR, this.handleSaveSettingsError);
   }
 
   getActions() {
@@ -58,40 +54,41 @@ class SettingsModal extends React.Component {
         clickHandler: null,
         content: this.props.intl.formatMessage({
           id: 'button.cancel',
-          defaultMessage: 'Cancel'
+          defaultMessage: 'Cancel',
         }),
         triggerDismiss: true,
-        type: 'tertiary'
+        type: 'tertiary',
       },
       {
         clickHandler: this.handleSaveSettingsClick,
         isLoading: this.state.isSavingSettings,
         content: this.props.intl.formatMessage({
           id: 'button.save',
-          defaultMessage: 'Save Settings'
+          defaultMessage: 'Save Settings',
         }),
         triggerDismiss: false,
-        type: 'primary'
-      }
+        type: 'primary',
+      },
     ];
   }
 
   handleCustomsSettingChange(data) {
     this.setState({
-      changedClientSettings: this.mergeObjects(this.state.changedClientSettings,
-        {[data.id]: {...data, overrideLocalSetting: true}})
+      changedClientSettings: this.mergeObjects(this.state.changedClientSettings, {
+        [data.id]: {...data, overrideLocalSetting: true},
+      }),
     });
   }
 
   handleSaveSettingsClick() {
-    let floodSettings = Object.keys(this.state.changedFloodSettings).map((settingsKey) =>  {
+    let floodSettings = Object.keys(this.state.changedFloodSettings).map(settingsKey => {
       return {
         id: settingsKey,
-        data: this.state.changedFloodSettings[settingsKey]
+        data: this.state.changedFloodSettings[settingsKey],
       };
     });
 
-    let clientSettings = Object.keys(this.state.changedClientSettings).map((settingsKey) =>  {
+    let clientSettings = Object.keys(this.state.changedClientSettings).map(settingsKey => {
       let data = this.state.changedClientSettings[settingsKey];
 
       if (data.overrideLocalSetting) {
@@ -105,12 +102,12 @@ class SettingsModal extends React.Component {
 
     SettingsStore.saveFloodSettings(floodSettings, {
       dismissModal: true,
-      alert: true
+      alert: true,
     });
 
     SettingsStore.saveClientSettings(clientSettings, {
       dismissModal: true,
-      alert: true
+      alert: true,
     });
   }
 
@@ -125,7 +122,7 @@ class SettingsModal extends React.Component {
   handleSettingsStoreChange() {
     this.setState({
       clientSettings: SettingsStore.getClientSettings(),
-      floodSettings: SettingsStore.getFloodSettings()
+      floodSettings: SettingsStore.getFloodSettings(),
     });
   }
 
@@ -150,13 +147,18 @@ class SettingsModal extends React.Component {
   }
 
   mergeObjects(objA, objB) {
-    Object.keys(objB).forEach((key) => {
+    Object.keys(objB).forEach(key => {
       if (!objB.hasOwnProperty(key) || objB[key] == null) {
         return;
       }
 
       // If it's an object, then recursive merge.
-      if (!Array.isArray(objB[key]) && !Array.isArray(objB[key]) && typeof objA[key] === 'object' && typeof objB[key] === 'object') {
+      if (
+        !Array.isArray(objB[key]) &&
+        !Array.isArray(objB[key]) &&
+        typeof objA[key] === 'object' &&
+        typeof objB[key] === 'object'
+      ) {
         objA[key] = this.mergeObjects(objA[key], objB[key]);
       } else {
         objA[key] = objB[key];
@@ -173,67 +175,69 @@ class SettingsModal extends React.Component {
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
           onSettingsChange: this.handleFloodSettingsChange,
-          settings: this.mergeObjects(this.state.floodSettings, this.state.clientSettings)
+          settings: this.mergeObjects(this.state.floodSettings, this.state.clientSettings),
         },
         label: this.props.intl.formatMessage({
           id: 'settings.tabs.bandwidth',
-          defaultMessage: 'Bandwidth'
-        })
+          defaultMessage: 'Bandwidth',
+        }),
       },
       connectivity: {
         content: ConnectivityTab,
         props: {
           onCustomSettingsChange: this.handleCustomsSettingChange,
           onClientSettingsChange: this.handleClientSettingsChange,
-          settings: this.state.clientSettings
+          settings: this.state.clientSettings,
         },
         label: this.props.intl.formatMessage({
           id: 'settings.tabs.connectivity',
-          defaultMessage: 'Connectivity'
-        })
+          defaultMessage: 'Connectivity',
+        }),
       },
       resources: {
         content: ResourcesTab,
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
-          settings: this.state.clientSettings
+          settings: this.state.clientSettings,
         },
         label: this.props.intl.formatMessage({
           id: 'settings.tabs.resources',
-          defaultMessage: 'Resources'
-        })
+          defaultMessage: 'Resources',
+        }),
       },
       authentication: {
         content: AuthTab,
         label: this.props.intl.formatMessage({
           id: 'settings.tabs.authentication',
-          defaultMessage: 'Authentication'
-        })
+          defaultMessage: 'Authentication',
+        }),
       },
       ui: {
         content: UITab,
         label: this.props.intl.formatMessage({
           id: 'settings.tabs.userinterface',
-          defaultMessage: 'User Interface'
+          defaultMessage: 'User Interface',
         }),
         props: {
           onSettingsChange: this.handleFloodSettingsChange,
-          scrollContainer: this.modalBodyRef
-        }
-      }
+          scrollContainer: this.modalBodyRef,
+        },
+      },
     };
 
     return (
-      <Modal actions={this.getActions()}
+      <Modal
+        actions={this.getActions()}
         size="large"
         heading={this.props.intl.formatMessage({
           id: 'settings.tabs.heading',
-          defaultMessage: 'Settings'
+          defaultMessage: 'Settings',
         })}
         onSetRef={this.handleModalRefSet}
         orientation="vertical"
         dismiss={this.props.dismiss}
-        tabs={tabs} />
+        tabs={tabs}
+      />
     );
   }
 }

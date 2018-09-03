@@ -109,7 +109,8 @@ export default {
   'locale.language.fr': 'French',
   'locale.language.nl': 'Nederlands',
 
-  'mediainfo.execError': 'An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood.',
+  'mediainfo.execError':
+    'An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood.',
   'mediainfo.fetching': 'Fetching...',
   'mediainfo.heading': 'Mediainfo Output',
 
@@ -120,7 +121,7 @@ export default {
   'notification.clear.all': 'Clear All',
   'notification.showing': 'Showing',
 
-  'priority.dont.download': 'Don\'t Download',
+  'priority.dont.download': "Don't Download",
   'priority.high': 'High',
   'priority.low': 'Low',
   'priority.normal': 'Normal',
@@ -310,7 +311,7 @@ export default {
       other {# torrents}
     }?`,
   'torrents.remove.delete.data': 'Delete data',
-  'torrents.remove.error.no.torrents.selected': 'You haven\'t selected any torrents.',
+  'torrents.remove.error.no.torrents.selected': "You haven't selected any torrents.",
   'torrents.remove': 'Remove Torrents',
 
   'torrents.set.tags.button.set': 'Set Tags',
@@ -322,5 +323,5 @@ export default {
   'connection-interruption.heading': 'Cannot connect to rTorrent',
   'connection-interruption.verify-settings-prompt': `Let's verify your connection settings.`,
   'connection-interruption.verification-error': `Connection could not be verified.`,
-  'connection-interruption.verification-success': `Connection successful`
+  'connection-interruption.verification-success': `Connection successful`,
 };

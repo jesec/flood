@@ -7,70 +7,70 @@ let UIActions = {
   displayContextMenu: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,
-      data
+      data,
     });
   },
 
   displayDropdownMenu: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_DROPDOWN_MENU,
-      data
+      data,
     });
   },
 
   displayModal: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_MODAL,
-      data
+      data,
     });
   },
 
-  dismissContextMenu: (contextMenuID) => {
+  dismissContextMenu: contextMenuID => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISMISS_CONTEXT_MENU,
-      data: contextMenuID
+      data: contextMenuID,
     });
   },
 
   dismissModal: () => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_MODAL,
-      data: null
+      data: null,
     });
   },
 
   handleDetailsClick: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_CLICK_TORRENT_DETAILS,
-      data
+      data,
     });
   },
 
   handleTorrentClick: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_CLICK_TORRENT,
-      data
+      data,
     });
   },
 
   setTorrentStatusFilter: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_STATUS_FILTER,
-      data
+      data,
     });
   },
 
   setTorrentTagFilter: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_TAG_FILTER,
-      data
+      data,
     });
   },
 
   setTorrentTrackerFilter: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_TRACKER_FILTER,
-      data
+      data,
     });
   },
 
@@ -78,7 +78,7 @@ let UIActions = {
     data => {
       AppDispatcher.dispatchUIAction({
         type: ActionTypes.UI_SET_TORRENT_SEARCH_FILTER,
-        data
+        data,
       });
     },
     250,
@@ -88,9 +88,9 @@ let UIActions = {
   setTorrentsSort: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_SORT,
-      data
+      data,
     });
-  }
+  },
 };
 
 export default UIActions;

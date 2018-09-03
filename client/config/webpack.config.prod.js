@@ -55,10 +55,7 @@ module.exports = {
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
-    devtoolModuleFilenameTemplate: info =>
-      path
-        .relative(paths.appSrc, info.absoluteResourcePath)
-        .replace(/\\/g, '/'),
+    devtoolModuleFilenameTemplate: info => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -80,7 +77,7 @@ module.exports = {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
-      'universally-shared-code': path.resolve('./shared')
+      'universally-shared-code': path.resolve('./shared'),
     },
     plugins: [
       // Prevents users from importing files from outside of src/ (or node_modules/).
@@ -107,7 +104,6 @@ module.exports = {
           {
             options: {
               formatter: eslintFormatter,
-
             },
             loader: require.resolve('eslint-loader'),
           },
@@ -123,17 +119,7 @@ module.exports = {
       // "file" loader makes sure those assets end up in the `build` folder.
       // When you `import` an asset, you get its filename.
       {
-        exclude: [
-          /\.html$/,
-          /\.(js|jsx)$/,
-          /\.scss$/,
-          /\.css$/,
-          /\.json$/,
-          /\.bmp$/,
-          /\.gif$/,
-          /\.jpe?g$/,
-          /\.png$/,
-        ],
+        exclude: [/\.html$/, /\.(js|jsx)$/, /\.scss$/, /\.css$/, /\.json$/, /\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
         loader: require.resolve('file-loader'),
         options: {
           name: 'static/media/[name].[hash:8].[ext]',

@@ -44,7 +44,7 @@ class AlertStoreClass extends BaseStore {
   getAlerts() {
     let alertIDs = Object.keys(this.alerts).sort();
 
-    return alertIDs.map((id) => {
+    return alertIDs.map(id => {
       let alert = this.alerts[id];
 
       if (!!alert.accumulation) {
@@ -87,16 +87,14 @@ class AlertStoreClass extends BaseStore {
   }
 
   scheduleCleanse(alert) {
-    setTimeout(this.removeExpired.bind(this, alert),
-      alert.duration);
+    setTimeout(this.removeExpired.bind(this, alert), alert.duration);
   }
 }
 
 let AlertStore = new AlertStoreClass();
 
-AlertStore.dispatcherID = AppDispatcher.register((payload) => {
+AlertStore.dispatcherID = AppDispatcher.register(payload => {
   // const {action, source} = payload;
-
   // switch (action.type) {
   // }
 });

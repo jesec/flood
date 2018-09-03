@@ -16,7 +16,7 @@ class AuthTab extends SettingsTab {
     addUserError: null,
     hasFetchedUserList: false,
     isAddingUser: false,
-    users: []
+    users: [],
   };
 
   formData = {};
@@ -27,43 +27,19 @@ class AuthTab extends SettingsTab {
   }
 
   componentDidMount() {
-    AuthStore.listen(
-      EventTypes.AUTH_LIST_USERS_SUCCESS,
-      this.handleUserListChange
-    );
-    AuthStore.listen(
-      EventTypes.AUTH_CREATE_USER_ERROR,
-      this.handleUserAddError
-    );
-    AuthStore.listen(
-      EventTypes.AUTH_CREATE_USER_SUCCESS,
-      this.handleUserAddSuccess
-    );
-    AuthStore.listen(
-      EventTypes.AUTH_DELETE_USER_SUCCESS,
-      this.handleUserDeleteSuccess
-    );
+    AuthStore.listen(EventTypes.AUTH_LIST_USERS_SUCCESS, this.handleUserListChange);
+    AuthStore.listen(EventTypes.AUTH_CREATE_USER_ERROR, this.handleUserAddError);
+    AuthStore.listen(EventTypes.AUTH_CREATE_USER_SUCCESS, this.handleUserAddSuccess);
+    AuthStore.listen(EventTypes.AUTH_DELETE_USER_SUCCESS, this.handleUserDeleteSuccess);
 
     AuthStore.fetchUserList();
   }
 
   componentWillUnmount() {
-    AuthStore.unlisten(
-      EventTypes.AUTH_LIST_USERS_SUCCESS,
-      this.handleUserListChange
-    );
-    AuthStore.unlisten(
-      EventTypes.AUTH_CREATE_USER_ERROR,
-      this.handleUserAddError
-    );
-    AuthStore.unlisten(
-      EventTypes.AUTH_CREATE_USER_SUCCESS,
-      this.handleUserAddSuccess
-    );
-    AuthStore.unlisten(
-      EventTypes.AUTH_DELETE_USER_SUCCESS,
-      this.handleUserDeleteSuccess
-    );
+    AuthStore.unlisten(EventTypes.AUTH_LIST_USERS_SUCCESS, this.handleUserListChange);
+    AuthStore.unlisten(EventTypes.AUTH_CREATE_USER_ERROR, this.handleUserAddError);
+    AuthStore.unlisten(EventTypes.AUTH_CREATE_USER_SUCCESS, this.handleUserAddSuccess);
+    AuthStore.unlisten(EventTypes.AUTH_DELETE_USER_SUCCESS, this.handleUserDeleteSuccess);
   }
 
   getUserList() {
@@ -82,32 +58,26 @@ class AuthTab extends SettingsTab {
         removeIcon = (
           <span
             className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-            onClick={this.handleDeleteUserClick.bind(this, user.username)}
-          >
+            onClick={this.handleDeleteUserClick.bind(this, user.username)}>
             <Close />
           </span>
         );
       } else {
         badge = (
           <span className="interactive-list__label__tag tag">
-            <FormattedMessage
-              id="auth.current.user"
-              defaultMessage="Current User"
-            />
+            <FormattedMessage id="auth.current.user" defaultMessage="Current User" />
           </span>
         );
       }
 
       const classes = classnames('interactive-list__item', {
-        'interactive-list__item--disabled': isCurrentUser
+        'interactive-list__item--disabled': isCurrentUser,
       });
 
       return (
         <li className={classes} key={index}>
           <span className="interactive-list__label">
-            <div className="interactive-list__label__text">
-              {user.username}
-            </div>
+            <div className="interactive-list__label__text">{user.username}</div>
             {badge}
           </span>
           {removeIcon}
@@ -124,13 +94,13 @@ class AuthTab extends SettingsTab {
     this.formData = formData;
   };
 
-  handleFormSubmit = (formData) => {
+  handleFormSubmit = formData => {
     if (this.formData.username === '') {
       this.setState({
         addUserError: this.props.intl.formatMessage({
           id: 'auth.error.username.empty',
-          defaultMessage: 'Username cannot be empty.'
-        })
+          defaultMessage: 'Username cannot be empty.',
+        }),
       });
     } else {
       this.setState({isAddingUser: true});
@@ -139,7 +109,7 @@ class AuthTab extends SettingsTab {
         password: this.formData.password,
         host: this.formData.rtorrentHost,
         port: this.formData.rtorrentPort,
-        socketPath: this.formData.rtorrentSocketPath
+        socketPath: this.formData.rtorrentSocketPath,
       });
     }
   };
@@ -148,7 +118,7 @@ class AuthTab extends SettingsTab {
     this.setState({hasFetchedUserList: true, users: AuthStore.getUsers()});
   };
 
-  handleUserAddError = (error) => {
+  handleUserAddError = error => {
     this.setState({addUserError: error, isAddingUser: false});
   };
 
@@ -167,7 +137,7 @@ class AuthTab extends SettingsTab {
   render() {
     const isLoading = !this.state.hasFetchedUserList && this.state.users.length === 0;
     const interactiveListClasses = classnames('interactive-list', {
-      'interactive-list--loading': isLoading
+      'interactive-list--loading': isLoading,
     });
     let errorElement = null;
     let loadingIndicator = null;
@@ -175,9 +145,7 @@ class AuthTab extends SettingsTab {
     if (this.state.addUserError) {
       errorElement = (
         <FormRow>
-          <FormError>
-            {this.state.addUserError}
-          </FormError>
+          <FormError>{this.state.addUserError}</FormError>
         </FormRow>
       );
     }
@@ -191,16 +159,9 @@ class AuthTab extends SettingsTab {
     }
 
     return (
-      <Form
-        onChange={this.handleFormChange}
-        onSubmit={this.handleFormSubmit}
-        ref={(ref) => this.formRef = ref}
-      >
+      <Form onChange={this.handleFormChange} onSubmit={this.handleFormSubmit} ref={ref => (this.formRef = ref)}>
         <ModalFormSectionHeader>
-          <FormattedMessage
-            id="auth.user.accounts"
-            defaultMessage="User Accounts"
-          />
+          <FormattedMessage id="auth.user.accounts" defaultMessage="User Accounts" />
         </ModalFormSectionHeader>
         <FormRow>
           <FormRowItem>
@@ -208,8 +169,7 @@ class AuthTab extends SettingsTab {
               <CSSTransitionGroup
                 transitionName="interactive-list__loading-indicator"
                 transitionEnterTimeout={250}
-                transitionLeaveTimeout={250}
-              >
+                transitionLeaveTimeout={250}>
                 {loadingIndicator}
               </CSSTransitionGroup>
               {this.getUserList()}
@@ -217,47 +177,31 @@ class AuthTab extends SettingsTab {
           </FormRowItem>
         </FormRow>
         <ModalFormSectionHeader>
-          <FormattedMessage
-            id="auth.add.user"
-            defaultMessage="Add User"
-          />
+          <FormattedMessage id="auth.add.user" defaultMessage="Add User" />
         </ModalFormSectionHeader>
         {errorElement}
         <FormRow>
           <Textbox
             id="username"
-            label={(
-              <FormattedMessage
-                id="auth.username"
-                defaultMessage="Username"
-              />
-            )}
+            label={<FormattedMessage id="auth.username" defaultMessage="Username" />}
             placeholder={this.props.intl.formatMessage({
               id: 'auth.username',
-              defaultMessage: 'Username'
+              defaultMessage: 'Username',
             })}
           />
           <Textbox
             id="password"
-            label={(
-              <FormattedMessage
-                id="auth.password"
-                defaultMessage="Password"
-              />
-            )}
+            label={<FormattedMessage id="auth.password" defaultMessage="Password" />}
             placeholder={this.props.intl.formatMessage({
               id: 'auth.password',
-              defaultMessage: 'Password'
+              defaultMessage: 'Password',
             })}
           />
         </FormRow>
         <RtorrentConnectionTypeSelection />
         <FormRow justify="end">
           <Button isLoading={this.state.isAddingUser} priority="primary" type="submit" width="auto">
-            <FormattedMessage
-              id="button.add"
-              defaultMessage="Add"
-            />
+            <FormattedMessage id="button.add" defaultMessage="Add" />
           </Button>
         </FormRow>
       </Form>

@@ -6,23 +6,19 @@ class SidebarItem extends React.Component {
   static propTypes = {
     baseClassName: PropTypes.string,
     children: PropTypes.node,
-    modifier: PropTypes.string
+    modifier: PropTypes.string,
   };
 
   static defaultProps = {
-    baseClassName: 'sidebar__item'
+    baseClassName: 'sidebar__item',
   };
 
   render() {
     let classes = classnames(this.props.baseClassName, {
-      [`${this.props.baseClassName}--${this.props.modifier}`]: this.props.modifier
+      [`${this.props.baseClassName}--${this.props.modifier}`]: this.props.modifier,
     });
 
-    return (
-      <div className={classes}>
-        {this.props.children}
-      </div>
-    );
+    return <div className={classes}>{this.props.children}</div>;
   }
 }
 

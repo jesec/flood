@@ -11,6 +11,7 @@ matrix:
 before_script:
   - cp config.template.js config.js
 script:
+  - npm run check-source-formatting
   - npm run lint
   - npm run test
   - npm run build

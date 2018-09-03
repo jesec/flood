@@ -24,20 +24,11 @@ class TaxonomyService extends BaseService {
 
     const clientGatewayService = this.services.clientGatewayService;
 
-    clientGatewayService.on(
-      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START,
-      this.handleProcessTorrentListStart
-    );
+    clientGatewayService.on(clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START, this.handleProcessTorrentListStart);
 
-    clientGatewayService.on(
-      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END,
-      this.handleProcessTorrentListEnd
-    );
+    clientGatewayService.on(clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END, this.handleProcessTorrentListEnd);
 
-    clientGatewayService.on(
-      clientGatewayServiceEvents.PROCESS_TORRENT,
-      this.handleProcessTorrent
-    );
+    clientGatewayService.on(clientGatewayServiceEvents.PROCESS_TORRENT, this.handleProcessTorrent);
   }
 
   destroy() {
@@ -53,10 +44,7 @@ class TaxonomyService extends BaseService {
       this.handleProcessTorrentListEnd
     );
 
-    clientGatewayService.removeListener(
-      clientGatewayServiceEvents.PROCESS_TORRENT,
-      this.handleProcessTorrent
-    );
+    clientGatewayService.removeListener(clientGatewayServiceEvents.PROCESS_TORRENT, this.handleProcessTorrent);
   }
 
   destroy() {
@@ -72,10 +60,7 @@ class TaxonomyService extends BaseService {
       this.handleProcessTorrentListEnd
     );
 
-    clientGatewayService.removeListener(
-      clientGatewayServiceEvents.PROCESS_TORRENT,
-      this.handleProcessTorrent
-    );
+    clientGatewayService.removeListener(clientGatewayServiceEvents.PROCESS_TORRENT, this.handleProcessTorrent);
   }
 
   getTaxonomy() {
@@ -84,8 +69,8 @@ class TaxonomyService extends BaseService {
       taxonomy: {
         statusCounts: this.statusCounts,
         tagCounts: this.tagCounts,
-        trackerCounts: this.trackerCounts
-      }
+        trackerCounts: this.trackerCounts,
+      },
     };
   }
 
@@ -111,18 +96,9 @@ class TaxonomyService extends BaseService {
     this.trackerCounts.all = length;
 
     const taxonomyDiffs = {
-      statusCounts: objectUtil.getDiff(
-        this.lastStatusCounts,
-        this.statusCounts
-      ),
-      tagCounts: objectUtil.getDiff(
-        this.lastTagCounts,
-        this.tagCounts
-      ),
-      trackerCounts: objectUtil.getDiff(
-        this.lastTrackerCounts,
-        this.trackerCounts
-      )
+      statusCounts: objectUtil.getDiff(this.lastStatusCounts, this.statusCounts),
+      tagCounts: objectUtil.getDiff(this.lastTagCounts, this.tagCounts),
+      trackerCounts: objectUtil.getDiff(this.lastTrackerCounts, this.trackerCounts),
     };
 
     const didDiffChange = Object.keys(taxonomyDiffs).some(diffKey => {
@@ -130,13 +106,10 @@ class TaxonomyService extends BaseService {
     });
 
     if (didDiffChange) {
-      this.emit(
-        taxonomyServiceEvents.TAXONOMY_DIFF_CHANGE,
-        {
-          diff: taxonomyDiffs,
-          id: Date.now()
-        }
-      );
+      this.emit(taxonomyServiceEvents.TAXONOMY_DIFF_CHANGE, {
+        diff: taxonomyDiffs,
+        id: Date.now(),
+      });
     }
   }
 

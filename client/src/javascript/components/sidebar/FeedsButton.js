@@ -8,8 +8,8 @@ import UIActions from '../../actions/UIActions';
 const MESSAGES = defineMessages({
   feeds: {
     id: 'sidebar.button.feeds',
-    defaultMessage: 'Feeds'
-  }
+    defaultMessage: 'Feeds',
+  },
 });
 
 const METHODS_TO_BIND = ['handleFeedsButtonClick'];
@@ -20,7 +20,7 @@ class FeedsButton extends React.Component {
 
     this.tooltipRef = null;
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
@@ -40,7 +40,7 @@ class FeedsButton extends React.Component {
       <Tooltip
         content={label}
         onClick={this.handleFeedsButtonClick}
-        ref={(ref) => this.tooltipRef = ref}
+        ref={ref => (this.tooltipRef = ref)}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           sidebar__icon-button--interactive tooltip__wrapper">

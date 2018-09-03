@@ -15,23 +15,23 @@ class DirectoryFiles extends React.Component {
   static propTypes = {
     isParentSelected: PropTypes.bool,
     path: PropTypes.array,
-    selectedItems: PropTypes.object
+    selectedItems: PropTypes.object,
   };
 
   static defaultProps = {
     isParentSelected: false,
     path: [],
-    selectedItems: {}
+    selectedItems: {},
   };
 
   constructor() {
     super();
 
     this.state = {
-      files: null
+      files: null,
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
@@ -47,16 +47,13 @@ class DirectoryFiles extends React.Component {
 
     return (
       <div className="file__checkbox directory-tree__checkbox">
-        <div className="directory-tree__checkbox__item
+        <div
+          className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <Checkbox
-            checked={isSelected}
-            id={file.index}
-            onChange={changeHandler}
-            useProps={true}
-          />
+          <Checkbox checked={isSelected} id={file.index} onChange={changeHandler} useProps={true} />
         </div>
-        <div className="directory-tree__checkbox__item
+        <div
+          className="directory-tree__checkbox__item
           directory-tree__checkbox__item--icon">
           {ICONS.file}
         </div>
@@ -73,7 +70,7 @@ class DirectoryFiles extends React.Component {
       isParentSelected: this.props.isParentSelected,
       isSelected,
       path: this.getCurrentPath(file),
-      type: 'file'
+      type: 'file',
     });
   }
 
@@ -91,31 +88,31 @@ class DirectoryFiles extends React.Component {
 
     let files = branch.map((file, index) => {
       let isSelected = this.props.selectedItems[file.filename] && this.props.selectedItems[file.filename].isSelected;
-      let classes = classnames('directory-tree__node file',
-        'directory-tree__node--file directory-tree__node--selectable', {
-          'directory-tree__node--selected': isSelected
-        });
+      let classes = classnames(
+        'directory-tree__node file',
+        'directory-tree__node--file directory-tree__node--selectable',
+        {
+          'directory-tree__node--selected': isSelected,
+        }
+      );
 
       return (
-        <div className={classes} key={`${index}-${file.filename}`}
-          title={file.filename}>
+        <div className={classes} key={`${index}-${file.filename}`} title={file.filename}>
           <div className="file__label file__detail">
             {this.getIcon(file, isSelected)}
-            <div className="file__name">
-              {file.filename}
-            </div>
+            <div className="file__name">{file.filename}</div>
           </div>
           <div className="file__detail file__detail--secondary">
             <Size value={file.sizeBytes} precision={1} />
           </div>
-          <div className="file__detail file__detail--secondary">
-            {file.percentComplete}%
-          </div>
-          <div className="file__detail file__detail--secondary
+          <div className="file__detail file__detail--secondary">{file.percentComplete}%</div>
+          <div
+            className="file__detail file__detail--secondary
             file__detail--priority">
             <PriorityMeter
               key={`${file.index}-${file.filename}`}
-              level={file.priority} id={file.index}
+              level={file.priority}
+              id={file.index}
               maxLevel={2}
               onChange={this.handlePriorityChange}
               type="file"
@@ -125,11 +122,7 @@ class DirectoryFiles extends React.Component {
       );
     });
 
-    return (
-      <div className="directory-tree__node directory-tree__node--file-list">
-        {files}
-      </div>
-    );
+    return <div className="directory-tree__node directory-tree__node--file-list">{files}</div>;
   }
 }
 

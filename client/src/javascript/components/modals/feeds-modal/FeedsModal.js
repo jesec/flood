@@ -17,16 +17,16 @@ class FeedsModal extends React.Component {
         content: FeedsTab,
         label: this.props.intl.formatMessage({
           id: 'feeds.tabs.feeds',
-          defaultMessage: 'Feeds'
-        })
+          defaultMessage: 'Feeds',
+        }),
       },
       downloadRules: {
         content: DownloadRulesTab,
         label: this.props.intl.formatMessage({
           id: 'feeds.tabs.download.rules',
-          defaultMessage: 'Download Rules'
-        })
-      }
+          defaultMessage: 'Download Rules',
+        }),
+      },
     };
 
     return (
@@ -34,7 +34,7 @@ class FeedsModal extends React.Component {
         dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
           id: 'feeds.tabs.heading',
-          defaultMessage: 'Torrent Feeds'
+          defaultMessage: 'Torrent Feeds',
         })}
         orientation="horizontal"
         size="large"

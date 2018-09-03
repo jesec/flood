@@ -4,7 +4,7 @@ import React from 'react';
 export default class LoadingIndicator extends React.Component {
   render() {
     let classes = classnames('loading-indicator', {
-      'is-inverse': this.props.inverse
+      'is-inverse': this.props.inverse,
     });
 
     return (

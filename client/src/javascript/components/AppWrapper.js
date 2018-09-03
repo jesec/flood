@@ -16,7 +16,7 @@ import UIStore from '../stores/UIStore';
 import WindowTitle from './general/WindowTitle';
 
 const ICONS = {
-  satisfied: <Checkmark />
+  satisfied: <Checkmark />,
 };
 
 const METHODS_TO_BIND = [
@@ -26,12 +26,12 @@ const METHODS_TO_BIND = [
   'handleLoginSuccess',
   'handleRegisterSuccess',
   'handleUIDependenciesChange',
-  'handleUIDependenciesLoaded'
+  'handleUIDependenciesLoaded',
 ];
 
 class AuthEnforcer extends React.Component {
   static propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   constructor() {
@@ -42,98 +42,49 @@ class AuthEnforcer extends React.Component {
       dependencies: {
         authentication: {
           message: (
-            <FormattedMessage id="dependency.loading.authentication.status"
-              defaultMessage="Authentication Status" />
+            <FormattedMessage id="dependency.loading.authentication.status" defaultMessage="Authentication Status" />
           ),
-          satisfied: false
-        }
+          satisfied: false,
+        },
       },
       isAuthenticated: false,
       isClientConnected: false,
-      dependenciesLoaded: false
+      dependenciesLoaded: false,
     };
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
 
   componentDidMount() {
-    AuthStore.listen(
-      EventTypes.AUTH_REGISTER_SUCCESS,
-      this.handleRegisterSuccess
-    );
-    AuthStore.listen(
-      EventTypes.AUTH_LOGIN_ERROR,
-      this.handleLoginError
-    );
-    AuthStore.listen(
-      EventTypes.AUTH_LOGIN_SUCCESS,
-      this.handleLoginSuccess
-    );
-    AuthStore.listen(
-      EventTypes.AUTH_VERIFY_ERROR,
-      this.handleVerifyError
-    );
-    AuthStore.listen(
-      EventTypes.AUTH_VERIFY_SUCCESS,
-      this.handleVerifySuccess
-    );
-    ClientStatusStore.listen(
-      EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
-      this.handleClientStatusChange
-    );
-    UIStore.listen(
-      EventTypes.UI_DEPENDENCIES_LOADED,
-      this.handleUIDependenciesLoaded
-    );
-    UIStore.listen(
-      EventTypes.UI_DEPENDENCIES_CHANGE,
-      this.handleUIDependenciesChange
-    );
+    AuthStore.listen(EventTypes.AUTH_REGISTER_SUCCESS, this.handleRegisterSuccess);
+    AuthStore.listen(EventTypes.AUTH_LOGIN_ERROR, this.handleLoginError);
+    AuthStore.listen(EventTypes.AUTH_LOGIN_SUCCESS, this.handleLoginSuccess);
+    AuthStore.listen(EventTypes.AUTH_VERIFY_ERROR, this.handleVerifyError);
+    AuthStore.listen(EventTypes.AUTH_VERIFY_SUCCESS, this.handleVerifySuccess);
+    ClientStatusStore.listen(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
+    UIStore.listen(EventTypes.UI_DEPENDENCIES_LOADED, this.handleUIDependenciesLoaded);
+    UIStore.listen(EventTypes.UI_DEPENDENCIES_CHANGE, this.handleUIDependenciesChange);
     AuthStore.verify();
   }
 
   componentWillUnmount() {
-    AuthStore.unlisten(
-      EventTypes.AUTH_REGISTER_SUCCESS,
-      this.handleRegisterSuccess
-    );
-    AuthStore.unlisten(
-      EventTypes.AUTH_LOGIN_ERROR,
-      this.handleLoginError
-    );
-    AuthStore.unlisten(
-      EventTypes.AUTH_LOGIN_SUCCESS,
-      this.handleLoginSuccess
-    );
-    AuthStore.unlisten(
-      EventTypes.AUTH_VERIFY_ERROR,
-      this.handleVerifyError
-    );
-    AuthStore.unlisten(
-      EventTypes.AUTH_VERIFY_SUCCESS,
-      this.handleVerifySuccess
-    );
-    ClientStatusStore.unlisten(
-      EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
-      this.handleClientStatusChange
-    );
-    UIStore.unlisten(
-      EventTypes.UI_DEPENDENCIES_LOADED,
-      this.handleUIDependenciesLoaded
-    );
-    UIStore.unlisten(
-      EventTypes.UI_DEPENDENCIES_CHANGE,
-      this.handleUIDependenciesChange
-    );
+    AuthStore.unlisten(EventTypes.AUTH_REGISTER_SUCCESS, this.handleRegisterSuccess);
+    AuthStore.unlisten(EventTypes.AUTH_LOGIN_ERROR, this.handleLoginError);
+    AuthStore.unlisten(EventTypes.AUTH_LOGIN_SUCCESS, this.handleLoginSuccess);
+    AuthStore.unlisten(EventTypes.AUTH_VERIFY_ERROR, this.handleVerifyError);
+    AuthStore.unlisten(EventTypes.AUTH_VERIFY_SUCCESS, this.handleVerifySuccess);
+    ClientStatusStore.unlisten(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
+    UIStore.unlisten(EventTypes.UI_DEPENDENCIES_LOADED, this.handleUIDependenciesLoaded);
+    UIStore.unlisten(EventTypes.UI_DEPENDENCIES_CHANGE, this.handleUIDependenciesChange);
   }
 
   handleClientStatusChange = () => {
     this.setState({
-      isClientConnected: ClientStatusStore.getIsConnected()
+      isClientConnected: ClientStatusStore.getIsConnected(),
     });
-  }
+  };
 
   handleVerifySuccess(data) {
     if (data.initialUser) {
@@ -173,26 +124,18 @@ class AuthEnforcer extends React.Component {
       const {message, satisfied} = dependencies[id];
       const statusIcon = ICONS.satisfied;
       const classes = classnames('dependency-list__dependency', {
-        'dependency-list__dependency--satisfied': satisfied
+        'dependency-list__dependency--satisfied': satisfied,
       });
 
       return (
         <li className={classes} key={id}>
-          <span className="dependency-list__dependency__icon">
-            {statusIcon}
-          </span>
-          <span className="dependency-list__dependency__message">
-            {message}
-          </span>
+          <span className="dependency-list__dependency__icon">{statusIcon}</span>
+          <span className="dependency-list__dependency__message">{message}</span>
         </li>
       );
     });
 
-    return (
-      <ul className="dependency-list">
-        {listItems}
-      </ul>
-    )
+    return <ul className="dependency-list">{listItems}</ul>;
   }
 
   handleUIDependenciesChange() {
@@ -200,13 +143,12 @@ class AuthEnforcer extends React.Component {
       dependencies: {
         authentication: {
           message: (
-            <FormattedMessage id="dependency.loading.authentication.status"
-              defaultMessage="Authentication Status" />
+            <FormattedMessage id="dependency.loading.authentication.status" defaultMessage="Authentication Status" />
           ),
-          satisfied: this.state.authStatusDetermined
+          satisfied: this.state.authStatusDetermined,
         },
-        ...UIStore.getDependencies()
-      }
+        ...UIStore.getDependencies(),
+      },
     });
   }
 
@@ -226,8 +168,9 @@ class AuthEnforcer extends React.Component {
     }
 
     // Iterate over current dependencies looking for unsatisified dependencies.
-    const isDependencyActive = Object.keys(this.state.dependencies)
-      .some(dependencyKey => !this.state.dependencies[dependencyKey].satisfied);
+    const isDependencyActive = Object.keys(this.state.dependencies).some(
+      dependencyKey => !this.state.dependencies[dependencyKey].satisfied
+    );
 
     // If any dependency is unsatisfied, show the loading indicator.
     if (isDependencyActive) {

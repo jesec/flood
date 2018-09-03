@@ -14,18 +14,14 @@ import TransferDataStore from '../../stores/TransferDataStore';
 const MESSAGES = defineMessages({
   speedLimits: {
     defaultMessage: 'Speed Limits',
-    id: 'sidebar.button.speedlimits'
+    id: 'sidebar.button.speedlimits',
   },
   unlimited: {
     defaultMessage: 'Unlimited',
-    id: 'speed.unlimited'
-  }
+    id: 'speed.unlimited',
+  },
 });
-const METHODS_TO_BIND = [
-  'handleDropdownOpen',
-  'handleSettingsFetchRequestSuccess',
-  'onTransferSummaryChange'
-];
+const METHODS_TO_BIND = ['handleDropdownOpen', 'handleSettingsFetchRequestSuccess', 'onTransferSummaryChange'];
 
 class SpeedLimitDropdown extends React.Component {
   constructor() {
@@ -35,57 +31,46 @@ class SpeedLimitDropdown extends React.Component {
       speedLimits: SettingsStore.getFloodSettings('speedLimits'),
       currentThrottles: {
         download: null,
-        upload: null
-      }
+        upload: null,
+      },
     };
     this.tooltip = null;
 
-    METHODS_TO_BIND.forEach((method) => {
+    METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
 
   componentDidMount() {
-    SettingsStore.listen(
-      EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsFetchRequestSuccess
-    );
-    TransferDataStore.listen(
-      EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
-      this.onTransferSummaryChange
-    );
+    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsFetchRequestSuccess);
+    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE, this.onTransferSummaryChange);
   }
 
   componentWillUnmount() {
-    SettingsStore.unlisten(
-      EventTypes.SETTINGS_CHANGE,
-      this.handleSettingsFetchRequestSuccess
-    );
-    TransferDataStore.unlisten(
-      EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
-      this.onTransferSummaryChange
-    );
+    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.handleSettingsFetchRequestSuccess);
+    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE, this.onTransferSummaryChange);
   }
 
   onTransferSummaryChange() {
     const transferSummary = TransferDataStore.getTransferSummary();
 
     if (
-      this.state.currentThrottles.upload !== transferSummary.upThrottle
-      || this.state.currentThrottles.download !== transferSummary.downThrottle
+      this.state.currentThrottles.upload !== transferSummary.upThrottle ||
+      this.state.currentThrottles.download !== transferSummary.downThrottle
     ) {
       this.setState({
         currentThrottles: {
           upload: transferSummary.upThrottle,
-          download: transferSummary.downThrottle
-        }
+          download: transferSummary.downThrottle,
+        },
       });
     }
   }
 
   getDropdownHeader() {
     return (
-      <a className="sidebar__icon-button sidebar__icon-button--interactive
+      <a
+        className="sidebar__icon-button sidebar__icon-button--interactive
         sidebar__icon-button--limits"
         title={this.props.intl.formatMessage(MESSAGES.speedLimits)}>
         <LimitsIcon />
@@ -101,7 +86,9 @@ class SpeedLimitDropdown extends React.Component {
       <Tooltip
         content={label}
         position="bottom"
-        ref={(node) => {this.tooltip = node;}}
+        ref={node => {
+          this.tooltip = node;
+        }}
         wrapperClassName="sidebar__icon-button tooltip__wrapper">
         <LimitsIcon />
       </Tooltip>
@@ -112,9 +99,7 @@ class SpeedLimitDropdown extends React.Component {
     if (bytes === 0) {
       return this.props.intl.formatMessage(MESSAGES.unlimited);
     } else {
-      return (
-        <Size value={bytes} isSpeed={true} precision={1} />
-      );
+      return <Size value={bytes} isSpeed={true} precision={1} />;
     }
   }
 
@@ -123,14 +108,14 @@ class SpeedLimitDropdown extends React.Component {
       className: `dropdown__label dropdown__label--${property}`,
       displayName: `${property.charAt(0).toUpperCase()}${property.slice(1)}`,
       selectable: false,
-      value: null
+      value: null,
     };
 
     let insertCurrentThrottle = true;
     let currentThrottle = this.state.currentThrottles;
     let speeds = this.state.speedLimits[property];
 
-    let items = speeds.map((bytes) => {
+    let items = speeds.map(bytes => {
       let selected = false;
       bytes = Number(bytes);
 
@@ -146,7 +131,7 @@ class SpeedLimitDropdown extends React.Component {
         property,
         selected,
         selectable: true,
-        value: bytes
+        value: bytes,
       };
     });
 
@@ -162,7 +147,7 @@ class SpeedLimitDropdown extends React.Component {
         property: property,
         selected: true,
         selectable: true,
-        value: currentThrottle[property]
+        value: currentThrottle[property],
       });
     }
 
@@ -199,7 +184,8 @@ class SpeedLimitDropdown extends React.Component {
         header={this.getDropdownHeader()}
         menuItems={this.getDropdownMenus()}
         onOpen={this.handleDropdownOpen}
-        trigger={this.getDropdownTrigger()} />
+        trigger={this.getDropdownTrigger()}
+      />
     );
   }
 }

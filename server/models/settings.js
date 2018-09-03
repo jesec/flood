@@ -19,7 +19,7 @@ const changedKeys = {
   totalSeeds: 'seedsTotal',
   added: 'dateAdded',
   creationDate: 'dateCreated',
-  trackers: 'trackerURIs'
+  trackers: 'trackerURIs',
 };
 
 const removedKeys = ['freeDiskSpace'];
@@ -34,45 +34,34 @@ const removedKeys = ['freeDiskSpace'];
  * @return {Object} - the settings object, altered if legacy keys exist.
  */
 const transformLegacyKeys = settings => {
-  if (
-    settings.sortTorrents
-    && settings.sortTorrents.property in changedKeys
-  ) {
-    settings.sortTorrents.property = changedKeys[
-      settings.sortTorrents.property
-    ];
+  if (settings.sortTorrents && settings.sortTorrents.property in changedKeys) {
+    settings.sortTorrents.property = changedKeys[settings.sortTorrents.property];
   }
 
   if (settings.torrentDetails) {
-    settings.torrentDetails = settings.torrentDetails.reduce(
-      (accumulator, detailItem, index) => {
-        if (
-          detailItem && detailItem.id in changedKeys
-          && !(settings.torrentDetails.some(subDetailItem => {
-            return subDetailItem.id === changedKeys[detailItem.id];
-          }))
-        ) {
-          detailItem.id = changedKeys[detailItem.id];
-        }
+    settings.torrentDetails = settings.torrentDetails.reduce((accumulator, detailItem, index) => {
+      if (
+        detailItem &&
+        detailItem.id in changedKeys &&
+        !settings.torrentDetails.some(subDetailItem => {
+          return subDetailItem.id === changedKeys[detailItem.id];
+        })
+      ) {
+        detailItem.id = changedKeys[detailItem.id];
+      }
 
-        if (!removedKeys.includes(detailItem.id)) {
-          accumulator.push(detailItem);
-        }
+      if (!removedKeys.includes(detailItem.id)) {
+        accumulator.push(detailItem);
+      }
 
-        return accumulator;
-      },
-      []
-    );
+      return accumulator;
+    }, []);
   }
 
   if (settings.torrentListColumnWidths) {
     Object.keys(settings.torrentListColumnWidths).forEach(columnID => {
-      if (
-        columnID in changedKeys
-        && !(changedKeys[columnID] in settings.torrentListColumnWidths)
-      ) {
-        settings.torrentListColumnWidths[changedKeys[columnID]]
-          = settings.torrentListColumnWidths[columnID];
+      if (columnID in changedKeys && !(changedKeys[columnID] in settings.torrentListColumnWidths)) {
+        settings.torrentListColumnWidths[changedKeys[columnID]] = settings.torrentListColumnWidths[columnID];
       }
     });
   }
@@ -89,13 +78,13 @@ function getDb(user) {
 
   const database = new Datastore({
     autoload: true,
-    filename: path.join(config.dbPath, userId, 'settings', 'settings.db')
+    filename: path.join(config.dbPath, userId, 'settings', 'settings.db'),
   });
 
   databases.set(userId, database);
 
   return database;
-};
+}
 
 const settings = {
   get: (user, opts, callback) => {
@@ -106,18 +95,20 @@ const settings = {
       query.id = opts.property;
     }
 
-    getDb(user).find(query).exec((err, docs) => {
-      if (err) {
-        callback(null, err);
-        return;
-      }
+    getDb(user)
+      .find(query)
+      .exec((err, docs) => {
+        if (err) {
+          callback(null, err);
+          return;
+        }
 
-      docs.forEach((doc) => {
-        settings[doc.id] = doc.data;
+        docs.forEach(doc => {
+          settings[doc.id] = doc.data;
+        });
+
+        callback(transformLegacyKeys(settings));
       });
-
-      callback(transformLegacyKeys(settings));
-    });
   },
 
   set: (user, payloads, callback = _.noop) => {
@@ -144,7 +135,7 @@ const settings = {
     } else {
       callback();
     }
-  }
-}
+  },
+};
 
 module.exports = settings;

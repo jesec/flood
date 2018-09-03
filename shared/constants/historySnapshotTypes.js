@@ -8,7 +8,7 @@ const historySnapshotTypes = {
   HOUR: 'hour',
   WEEK: 'week',
   MONTH: 'month',
-  YEAR: 'year'
+  YEAR: 'year',
 };
 
 module.exports = objectUtil.reflect(historySnapshotTypes);

@@ -10,20 +10,20 @@ class NavigationList extends React.Component {
     listClassName: PropTypes.string,
     onChange: PropTypes.func,
     selectedClassName: PropTypes.string,
-    uniqueClassName: PropTypes.string
+    uniqueClassName: PropTypes.string,
   };
 
   static defaultProps = {
     itemClassName: 'navigation__item',
     listClassName: 'navigation',
-    selectedClassName: 'is-active'
+    selectedClassName: 'is-active',
   };
 
   constructor() {
     super();
 
     this.state = {
-      selectedItem: null
+      selectedItem: null,
     };
   }
 
@@ -38,12 +38,11 @@ class NavigationList extends React.Component {
       }
 
       let classes = classnames(this.props.itemClassName, {
-        [this.props.selectedClassName]: item.slug === selectedSlug
+        [this.props.selectedClassName]: item.slug === selectedSlug,
       });
 
       return (
-        <li className={classes} key={index}
-          onClick={this.handleItemClick.bind(this, item)}>
+        <li className={classes} key={index} onClick={this.handleItemClick.bind(this, item)}>
           {item.label}
         </li>
       );
@@ -52,7 +51,7 @@ class NavigationList extends React.Component {
 
   handleItemClick(item) {
     this.setState({
-      selectedItem: item.slug
+      selectedItem: item.slug,
     });
 
     this.props.onChange(item);
@@ -60,14 +59,10 @@ class NavigationList extends React.Component {
 
   render() {
     let classes = classnames(this.props.listClassName, {
-      [this.props.uniqueClassName]: this.props.uniqueClassName
+      [this.props.uniqueClassName]: this.props.uniqueClassName,
     });
 
-    return (
-      <ul className={classes}>
-        {this.getNavigationItems(this.props.items)}
-      </ul>
-    );
+    return <ul className={classes}>{this.getNavigationItems(this.props.items)}</ul>;
   }
 }
 

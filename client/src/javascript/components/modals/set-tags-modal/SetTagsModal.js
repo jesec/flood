@@ -11,23 +11,20 @@ class SetTagsModal extends React.Component {
 
   state = {
     isSettingTags: false,
-    tags: ''
+    tags: '',
   };
 
   handleSetTagsClick = () => {
     const formData = this.formRef.getFormData();
     const tags = formData.tags ? formData.tags.split(',') : [];
 
-    this.setState(
-      {isSettingTags: true},
-      () => TorrentActions.setTaxonomy(TorrentStore.getSelectedTorrents(), tags)
-    );
+    this.setState({isSettingTags: true}, () => TorrentActions.setTaxonomy(TorrentStore.getSelectedTorrents(), tags));
   };
 
   getActions() {
     let primaryButtonText = this.props.intl.formatMessage({
       id: 'torrents.set.tags.button.set',
-      defaultMessage: 'Set Tags'
+      defaultMessage: 'Set Tags',
     });
 
     return [
@@ -35,18 +32,18 @@ class SetTagsModal extends React.Component {
         clickHandler: null,
         content: this.props.intl.formatMessage({
           id: 'button.cancel',
-          defaultMessage: 'Cancel'
+          defaultMessage: 'Cancel',
         }),
         triggerDismiss: true,
-        type: 'tertiary'
+        type: 'tertiary',
       },
       {
         clickHandler: this.handleSetTagsClick,
         content: primaryButtonText,
         isLoading: this.state.isSettingTags,
         triggerDismiss: false,
-        type: 'primary'
-      }
+        type: 'primary',
+      },
     ];
   }
 
@@ -55,14 +52,14 @@ class SetTagsModal extends React.Component {
 
     return (
       <div className="modal__content inverse">
-        <Form ref={ref => this.formRef = ref}>
+        <Form ref={ref => (this.formRef = ref)}>
           <FormRow>
             <Textbox
               defaultValue={tagsValue}
               id="tags"
               placeholder={this.props.intl.formatMessage({
                 id: 'torrents.set.tags.enter.tags',
-                defaultMessage: 'Enter tags'
+                defaultMessage: 'Enter tags',
               })}
             />
           </FormRow>
@@ -73,13 +70,15 @@ class SetTagsModal extends React.Component {
 
   render() {
     return (
-      <Modal actions={this.getActions()}
+      <Modal
+        actions={this.getActions()}
         content={this.getContent()}
         dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
           id: 'torrents.set.tags.heading',
-          defaultMessage: 'Set Tags'
-        })} />
+          defaultMessage: 'Set Tags',
+        })}
+      />
     );
   }
 }

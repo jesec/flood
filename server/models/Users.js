@@ -46,14 +46,7 @@ class Users {
   }
 
   createUser(credentials, callback) {
-    const {
-      password,
-      username,
-      host,
-      port,
-      socketPath,
-      isAdmin
-    } = credentials;
+    const {password, username, host, port, socketPath, isAdmin} = credentials;
 
     if (!this.ready) {
       return callback(null, 'Users database is not ready.');
@@ -68,7 +61,7 @@ class Users {
     argon2
       .hash(password)
       .then(hash => {
-        this.db.insert({ username, password: hash, host, port, socket, socketPath, isAdmin }, (error, user) => {
+        this.db.insert({username, password: hash, host, port, socket, socketPath, isAdmin}, (error, user) => {
           if (error) {
             if (error.errorType === 'uniqueViolated') {
               error = 'Username already exists.';
@@ -79,7 +72,7 @@ class Users {
 
           services.bootstrapServicesForUser(user);
 
-          return callback({ username });
+          return callback({username});
         });
       })
       .catch(error => {
@@ -112,10 +105,10 @@ class Users {
 
   updateUser(username, userRecordPatch, callback) {
     const nextUserRecordPatch = Object.assign({}, userRecordPatch, {
-      socket: userRecordPatch.socketPath != null
+      socket: userRecordPatch.socketPath != null,
     });
 
-    this.db.update({ username }, { $set: nextUserRecordPatch }, (err, numUsersUpdated, updatedUser) => {
+    this.db.update({username}, {$set: nextUserRecordPatch}, (err, numUsersUpdated, updatedUser) => {
       if (err) return callback(null, err);
       // Username not found.
       if (numUsersUpdated === 0) {
@@ -139,7 +132,7 @@ class Users {
   loadDatabase() {
     let db = new Datastore({
       autoload: true,
-      filename: path.join(config.dbPath, 'users.db')
+      filename: path.join(config.dbPath, 'users.db'),
     });
 
     db.ensureIndex({fieldName: 'username', unique: true});

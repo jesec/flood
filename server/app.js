@@ -18,7 +18,7 @@ const Users = require('./models/Users');
 Users.bootstrapServicesForAllUsers();
 
 // Remove Express header
-if(process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV !== 'development') {
   app.disable('x-powered-by');
 }
 
@@ -56,7 +56,7 @@ if (app.get('env') === 'development') {
     res.render('error', {
       message: err.message,
       error: err,
-      title: 'Flood Error'
+      title: 'Flood Error',
     });
   });
 } else {
@@ -66,7 +66,7 @@ if (app.get('env') === 'development') {
     res.render('error', {
       message: err.message,
       error: {},
-      title: 'Flood Error'
+      title: 'Flood Error',
     });
   });
 }

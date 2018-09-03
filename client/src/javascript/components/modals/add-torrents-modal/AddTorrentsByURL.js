@@ -18,20 +18,17 @@ class AddTorrentsByURL extends React.Component {
     isAddingTorrents: false,
     tags: '',
     urlTextboxes: [{value: ''}],
-    startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad')
+    startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad'),
   };
 
   getURLsFromForm() {
-    return Object.keys(this._formData).reduce(
-      (accumulator, formItemKey) => {
-        if (/^urls/.test(formItemKey)) {
-          accumulator.push(this._formData[formItemKey]);
-        }
+    return Object.keys(this._formData).reduce((accumulator, formItemKey) => {
+      if (/^urls/.test(formItemKey)) {
+        accumulator.push(this._formData[formItemKey]);
+      }
 
-        return accumulator;
-      },
-      []
-    );
+      return accumulator;
+    }, []);
   }
 
   handleAddTorrents = () => {
@@ -43,12 +40,12 @@ class AddTorrentsByURL extends React.Component {
       destination: formData.destination,
       isBasePath: formData.useBasePath,
       start: formData.start,
-      tags: formData.tags.split(',')
+      tags: formData.tags.split(','),
     });
 
     SettingsStore.updateOptimisticallyOnly({
       id: 'startTorrentsOnLoad',
-      data: formData.start
+      data: formData.start,
     });
   };
 
@@ -58,23 +55,23 @@ class AddTorrentsByURL extends React.Component {
 
   render() {
     return (
-      <Form className="inverse" onChange={this.handleFormChange} ref={ref => this._formRef = ref}>
+      <Form className="inverse" onChange={this.handleFormChange} ref={ref => (this._formRef = ref)}>
         <TextboxRepeater
           id="urls"
           label={this.props.intl.formatMessage({
             id: 'torrents.add.torrents.label',
-            defaultMessage: 'Torrents'
+            defaultMessage: 'Torrents',
           })}
           placeholder={this.props.intl.formatMessage({
             id: 'torrents.add.tab.url.input.placeholder',
-            defaultMessage: 'Torrent URL or Magnet Link'
+            defaultMessage: 'Torrent URL or Magnet Link',
           })}
         />
         <TorrentDestination
           id="destination"
           label={this.props.intl.formatMessage({
             id: 'torrents.add.destination.label',
-            defaultMessage: 'Destination'
+            defaultMessage: 'Destination',
           })}
         />
         <FormRow>
@@ -83,7 +80,7 @@ class AddTorrentsByURL extends React.Component {
             defaultValue={this.state.tags}
             label={this.props.intl.formatMessage({
               id: 'torrents.add.tags',
-              defaultMessage: 'Tags'
+              defaultMessage: 'Tags',
             })}
           />
         </FormRow>

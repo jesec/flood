@@ -9,31 +9,30 @@ class NavigationList extends React.Component {
     items: PropTypes.array,
     listClassName: PropTypes.string,
     onChange: PropTypes.func,
-    selectedClassName: PropTypes.string
+    selectedClassName: PropTypes.string,
   };
 
   static defaultProps = {
     itemClassName: 'navigation__item',
-    listClassName: 'navigation'
+    listClassName: 'navigation',
   };
 
   constructor() {
     super();
 
     this.state = {
-      selectedItem: null
+      selectedItem: null,
     };
   }
 
   getNavigationItems(items) {
     return items.map((item, index) => {
       let classes = classnames(this.props.itemClassName, {
-        [this.props.selectedClassName]: item.slug === this.state.selectedItem
+        [this.props.selectedClassName]: item.slug === this.state.selectedItem,
       });
 
       return (
-        <li className={classes} key={index}
-          onClick={this.handleItemClick.bind(this, item)}>
+        <li className={classes} key={index} onClick={this.handleItemClick.bind(this, item)}>
           {item.label}
         </li>
       );
@@ -42,18 +41,14 @@ class NavigationList extends React.Component {
 
   handleItemClick(item) {
     this.setState({
-      selectedItem: item.slug
+      selectedItem: item.slug,
     });
 
     this.props.onChange(item);
   }
 
   render() {
-    return (
-      <ul className={this.props.listClassName}>
-        {this.getNavigationItems(this.props.items)}
-      </ul>
-    );
+    return <ul className={this.props.listClassName}>{this.getNavigationItems(this.props.items)}</ul>;
   }
 }
 

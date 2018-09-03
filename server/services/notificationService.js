@@ -35,7 +35,7 @@ class NotificationService extends BaseService {
         ts: timestamp,
         data: notification.data,
         id: notification.id,
-        read: false
+        read: false,
       };
     });
 
@@ -43,7 +43,7 @@ class NotificationService extends BaseService {
   }
 
   clearNotifications(options, callback) {
-    this.db.remove({}, {multi: true}, (err) => {
+    this.db.remove({}, {multi: true}, err => {
       if (err) {
         callback(null, err);
         return;
@@ -62,7 +62,7 @@ class NotificationService extends BaseService {
       if (err) {
         this.count = Object.assign({}, INITIAL_COUNT_VALUE);
       } else {
-        docs.forEach((notification) => {
+        docs.forEach(notification => {
           if (notification.read) {
             this.count.read++;
           } else {
@@ -78,13 +78,10 @@ class NotificationService extends BaseService {
   }
 
   emitUpdate() {
-    this.emit(
-      notificationServiceEvents.NOTIFICATION_COUNT_CHANGE,
-      {
-        id: Date.now(),
-        data: this.count
-      }
-    );
+    this.emit(notificationServiceEvents.NOTIFICATION_COUNT_CHANGE, {
+      id: Date.now(),
+      data: this.count,
+    });
   }
 
   getNotificationCount() {
@@ -110,9 +107,7 @@ class NotificationService extends BaseService {
         .limit(Number(query.limit) || DEFAULT_QUERY_LIMIT)
         .exec(queryCallback);
     } else {
-      sortedNotifications
-        .limit(Number(query.limit) || DEFAULT_QUERY_LIMIT)
-        .exec(queryCallback);
+      sortedNotifications.limit(Number(query.limit) || DEFAULT_QUERY_LIMIT).exec(queryCallback);
     }
   }
 
@@ -121,7 +116,7 @@ class NotificationService extends BaseService {
 
     const db = new Datastore({
       autoload: true,
-      filename: path.join(config.dbPath, this.user._id, 'notifications.db')
+      filename: path.join(config.dbPath, this.user._id, 'notifications.db'),
     });
 
     this.ready = true;

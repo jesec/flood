@@ -11,9 +11,7 @@ export default class ProgressBar extends React.PureComponent {
 
     return (
       <div className="progress-bar">
-        <div className="progress-bar__icon">
-          {this.props.icon}
-        </div>
+        <div className="progress-bar__icon">{this.props.icon}</div>
         <div className="progress-bar__fill__wrapper">
           <div className="progress-bar__fill" style={style} />
         </div>

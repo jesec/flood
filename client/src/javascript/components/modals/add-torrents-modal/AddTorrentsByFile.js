@@ -20,7 +20,7 @@ class AddTorrentsByFile extends React.Component {
     isAddingTorrents: false,
     files: [],
     tags: '',
-    startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad')
+    startTorrents: SettingsStore.getFloodSettings('startTorrentsOnLoad'),
   };
 
   getFileDropzone() {
@@ -29,21 +29,14 @@ class AddTorrentsByFile extends React.Component {
     if (this.state.files.length > 0) {
       const files = this.state.files.map((file, index) => {
         return (
-          <li
-            className="dropzone__selected-files__file interactive-list__item"
-            key={index}
-            title={file.name}
-          >
+          <li className="dropzone__selected-files__file interactive-list__item" key={index} title={file.name}>
             <span className="interactive-list__icon">
               <File />
             </span>
-            <span className="interactive-list__label">
-              {file.name}
-            </span>
+            <span className="interactive-list__label">{file.name}</span>
             <span
               className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-              onClick={() => this.handleFileRemove(index)}
-            >
+              onClick={() => this.handleFileRemove(index)}>
               <Close />
             </span>
           </li>
@@ -51,10 +44,7 @@ class AddTorrentsByFile extends React.Component {
       });
 
       fileContent = (
-        <ul
-          className="dropzone__selected-files interactive-list"
-          onClick={this.handleFilesClick}
-        >
+        <ul className="dropzone__selected-files interactive-list" onClick={this.handleFilesClick}>
           {files}
         </ul>
       );
@@ -63,10 +53,7 @@ class AddTorrentsByFile extends React.Component {
     return (
       <FormRowItem>
         <label className="form__element__label">
-          <FormattedMessage
-            id="torrents.add.torrents.label"
-            defaultMessage="Torrents"
-          />
+          <FormattedMessage id="torrents.add.torrents.label" defaultMessage="Torrents" />
         </label>
         {fileContent}
         <Dropzone
@@ -74,23 +61,16 @@ class AddTorrentsByFile extends React.Component {
           className="form__dropzone dropzone interactive-list"
           ref="dropzone"
           onDrop={this.handleFileDrop}
-          disablePreview
-        >
+          disablePreview>
           <div className="dropzone__copy">
             <div className="dropzone__icon">
               <Files />
             </div>
-            <FormattedMessage
-              id="torrents.add.tab.file.drop"
-              defaultMessage="Drop some files here,"
-            />
-            {' '}
+            <FormattedMessage id="torrents.add.tab.file.drop" defaultMessage="Drop some files here," />{' '}
             <span className="dropzone__browse-button">
-              <FormattedMessage
-                id="torrents.add.tab.file.browse"
-                defaultMessage="or click to browse"
-              />
-            </span>.
+              <FormattedMessage id="torrents.add.tab.file.browse" defaultMessage="or click to browse" />
+            </span>
+            .
           </div>
         </Dropzone>
       </FormRowItem>
@@ -105,7 +85,7 @@ class AddTorrentsByFile extends React.Component {
     }
 
     this.setState(state => {
-      return { errors: nextErrorsState, files: state.files.concat(files) };
+      return {errors: nextErrorsState, files: state.files.concat(files)};
     });
   };
 
@@ -148,22 +128,20 @@ class AddTorrentsByFile extends React.Component {
 
   render() {
     return (
-      <Form className="inverse" onChange={this.handleFormChange} ref={ref => this._formRef = ref}>
-        <FormRow>
-          {this.getFileDropzone()}
-        </FormRow>
+      <Form className="inverse" onChange={this.handleFormChange} ref={ref => (this._formRef = ref)}>
+        <FormRow>{this.getFileDropzone()}</FormRow>
         <TorrentDestination
           id="destination"
           label={this.props.intl.formatMessage({
             id: 'torrents.add.destination.label',
-            defaultMessage: 'Destination'
+            defaultMessage: 'Destination',
           })}
         />
         <FormRow>
           <Textbox
             label={this.props.intl.formatMessage({
               id: 'torrents.add.tags',
-              defaultMessage: 'Tags'
+              defaultMessage: 'Tags',
             })}
             defaultValue={this.state.tags}
             id="tags"

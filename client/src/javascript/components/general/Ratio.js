@@ -16,8 +16,6 @@ export default class Ratio extends React.Component {
 
     ratio = ratio.toFixed(precision);
 
-    return (
-      <FormattedNumber value={ratio} />
-    );
+    return <FormattedNumber value={ratio} />;
   }
 }

@@ -3,15 +3,11 @@ import React from 'react';
 
 class ApplicationContent extends React.Component {
   static propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   render() {
-    return (
-      <div className="application__content">
-        {this.props.children}
-      </div>
-    );
+    return <div className="application__content">{this.props.children}</div>;
   }
 }
 

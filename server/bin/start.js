@@ -8,9 +8,8 @@ const {startWebServer} = require('./web-server');
 enforcePrerequisites()
   .then(migrateData)
   .then(startWebServer)
-  .catch((error) => {
+  .catch(error => {
     console.log(chalk.red('Failed to start Flood:'));
     console.trace(error);
     process.exit(1);
   });
-  

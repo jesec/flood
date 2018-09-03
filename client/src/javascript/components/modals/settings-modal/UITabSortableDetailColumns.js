@@ -18,18 +18,17 @@ class UITabSortableDetailColumns extends React.PureComponent {
     if (this.props.torrentListViewSize === 'expanded') {
       let nextUnlockedIndex = lockedIDs.length;
 
-      torrentDetailItems = torrentDetailItems.reduce(
-        (accumulator, detail, index) => {
-          let lockedIDIndex = lockedIDs.indexOf(detail.id);
+      torrentDetailItems = torrentDetailItems.reduce((accumulator, detail, index) => {
+        let lockedIDIndex = lockedIDs.indexOf(detail.id);
 
-          if (lockedIDIndex > -1) {
-            accumulator[lockedIDIndex] = detail;
-          } else {
-            accumulator[nextUnlockedIndex++] = detail;
-          }
+        if (lockedIDIndex > -1) {
+          accumulator[lockedIDIndex] = detail;
+        } else {
+          accumulator[nextUnlockedIndex++] = detail;
+        }
 
-          return accumulator;
-        }, []);
+        return accumulator;
+      }, []);
     }
 
     return (

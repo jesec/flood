@@ -15,24 +15,19 @@ export default class ModalTabs extends React.Component {
       currentTab.id = tabId;
 
       let classes = classnames('modal__tab', {
-        'is-active': tabId === this.props.activeTabId
+        'is-active': tabId === this.props.activeTabId,
       });
 
       return (
-        <li className={classes} key={index}
-          onClick={this.handleTabClick.bind(this, currentTab)}>
+        <li className={classes} key={index} onClick={this.handleTabClick.bind(this, currentTab)}>
           {currentTab.label}
         </li>
       );
     });
-    return (
-      <ul className="modal__tabs">
-        {tabs}
-      </ul>
-    );
+    return <ul className="modal__tabs">{tabs}</ul>;
   }
 }
 
 ModalTabs.defaultProps = {
-  tabs: []
+  tabs: [],
 };

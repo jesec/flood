@@ -34,15 +34,15 @@ const objectUtil = {
         accumulator.push({
           action: diffActionTypes.ITEM_ADDED,
           data: {
-            [key]: nextValue
-          }
+            [key]: nextValue,
+          },
         });
       } else if (prevValue !== nextValue) {
         accumulator.push({
           action: diffActionTypes.ITEM_CHANGED,
           data: {
-            [key]: nextValue
-          }
+            [key]: nextValue,
+          },
         });
       }
 
@@ -54,7 +54,7 @@ const objectUtil = {
         if (nextObject[key] == null) {
           diff.push({
             action: diffActionTypes.ITEM_REMOVED,
-            data: key
+            data: key,
           });
         }
       });
@@ -63,14 +63,14 @@ const objectUtil = {
     return diff;
   },
 
-  reflect: (object) => {
+  reflect: object => {
     return Object.keys(object).reduce((memo, key) => {
       memo[key] = object[key];
       memo[object[key]] = key;
 
       return memo;
     }, {});
-  }
+  },
 };
 
 module.exports = objectUtil;

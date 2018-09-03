@@ -258,5 +258,5 @@ export default {
   'torrents.set.tags.button.set': 'Tags instellen',
   'torrents.set.tags.heading': 'Tags instellen',
 
-  'torrents.sort.title': 'Sorteer op'
+  'torrents.sort.title': 'Sorteer op',
 };
