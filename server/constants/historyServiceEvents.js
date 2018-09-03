@@ -1,5 +1,3 @@
-'use strict';
-
 const historySnapshotTypes = require('../../shared/constants/historySnapshotTypes');
 const objectUtil = require('../../shared/util/objectUtil');
 

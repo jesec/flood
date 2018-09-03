@@ -1,5 +1,3 @@
-'use strict';
-
 let fs = require('fs');
 let ospath = require('ospath');
 let path = require('path');

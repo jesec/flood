@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = key => {
   return (req, res, next) => {
     const value = req.body && req.body[key];

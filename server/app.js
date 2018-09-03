@@ -12,7 +12,6 @@ const app = express();
 const apiRoutes = require('./routes/api');
 const authRoutes = require('./routes/auth');
 const paths = require('../client/config/paths');
-const services = require('./services');
 const Users = require('./models/Users');
 
 Users.bootstrapServicesForAllUsers();

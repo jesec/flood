@@ -1,4 +1,3 @@
-'use strict';
 const transferSummaryPropMap = new Map();
 
 transferSummaryPropMap.set('upRate', {

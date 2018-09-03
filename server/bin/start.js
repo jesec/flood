@@ -1,4 +1,3 @@
-'use strict';
 const chalk = require('chalk');
 
 const enforcePrerequisites = require('./enforce-prerequisites');

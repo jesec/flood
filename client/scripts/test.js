@@ -1,5 +1,3 @@
-'use strict';
-
 console.log('There are no tests yet.');
 process.exit(0);
 

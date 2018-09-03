@@ -1,5 +1,3 @@
-'use strict';
-
 let child_process = require('child_process');
 
 const services = require('../services');

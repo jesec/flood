@@ -1,5 +1,3 @@
-const EventEmitter = require('events');
-
 const BaseService = require('./BaseService');
 const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
 const objectUtil = require('../../shared/util/objectUtil');
@@ -29,22 +27,6 @@ class TaxonomyService extends BaseService {
     clientGatewayService.on(clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END, this.handleProcessTorrentListEnd);
 
     clientGatewayService.on(clientGatewayServiceEvents.PROCESS_TORRENT, this.handleProcessTorrent);
-  }
-
-  destroy() {
-    const clientGatewayService = this.services.clientGatewayService;
-
-    clientGatewayService.removeListener(
-      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START,
-      this.handleProcessTorrentListStart
-    );
-
-    clientGatewayService.removeListener(
-      clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END,
-      this.handleProcessTorrentListEnd
-    );
-
-    clientGatewayService.removeListener(clientGatewayServiceEvents.PROCESS_TORRENT, this.handleProcessTorrent);
   }
 
   destroy() {

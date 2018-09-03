@@ -1,4 +1,3 @@
-'use strict';
 const diffActionTypes = require('../constants/diffActionTypes');
 
 const objectUtil = {

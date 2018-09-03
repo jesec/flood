@@ -1,6 +1,4 @@
 const deepEqual = require('deep-equal');
-const EventEmitter = require('events');
-
 const BaseService = require('./BaseService');
 const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
 const config = require('../../config');

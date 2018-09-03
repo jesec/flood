@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const Datastore = require('nedb');
-const EventEmitter = require('events');
 const path = require('path');
 
 const BaseService = require('./BaseService');

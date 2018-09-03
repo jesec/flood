@@ -1,5 +1,3 @@
-'use strict';
-
 let FeedSub = require('feedsub');
 
 class Feed {

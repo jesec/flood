@@ -1,7 +1,4 @@
-'use strict';
 const geoip = require('geoip-country-only');
-const util = require('util');
-
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
 const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');

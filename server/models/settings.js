@@ -1,5 +1,3 @@
-'use strict';
-
 const _ = require('lodash');
 const Datastore = require('nedb');
 const path = require('path');

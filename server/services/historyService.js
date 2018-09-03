@@ -1,5 +1,3 @@
-const EventEmitter = require('events');
-
 const BaseService = require('./BaseService');
 const config = require('../../config');
 const HistoryEra = require('../models/HistoryEra');

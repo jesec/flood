@@ -1,5 +1,3 @@
-'use strict';
-
 let objectUtil = require('../util/objectUtil');
 
 let clientSettingsMap = objectUtil.reflect({
@@ -37,8 +35,6 @@ let clientSettingsMap = objectUtil.reflect({
   systemFileSplitSuffix: 'system.file.split_suffix',
   throttleGlobalDownMax: 'throttle.global_down.max_rate',
   throttleGlobalUpMax: 'throttle.global_up.max_rate',
-  throttleMaxDownloadsDiv: 'throttle.max_downloads.div',
-  throttleMaxDownloadsGlobal: 'throttle.max_downloads.global',
   throttleMaxPeersNormal: 'throttle.max_peers.normal',
   throttleMaxPeersSeed: 'throttle.max_peers.seed',
   throttleMaxDownloads: 'throttle.max_downloads',

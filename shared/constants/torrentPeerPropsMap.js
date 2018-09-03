@@ -1,5 +1,3 @@
-'use strict';
-
 const torrentPeerPropsMap = {
   props: [
     'address',

@@ -1,5 +1,3 @@
-'use strict';
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const fs = require('fs');
 const path = require('path');
 
@@ -9,10 +7,8 @@ const configFiles = [path.join(__dirname, '../../config.js')];
 
 // Taken from react-scripts/check-required-files, but without console.logs.
 const doFilesExist = files => {
-  let currentFilePath;
   try {
     files.forEach(filename => {
-      currentFilePath = filename;
       fs.accessSync(filename, fs.F_OK);
     });
     return true;

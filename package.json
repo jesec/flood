@@ -9,7 +9,7 @@
     "deprecated-warning": "node client/scripts/deprecated-warning.js && sleep 10",
     "format-source": "node scripts/prettier.js format",
     "check-source-formatting": "node scripts/prettier.js check",
-    "lint": "eslint .",
+    "lint": "eslint --max-warnings 0 .",
     "start": "node server/bin/start.js",
     "start:development": "UPDATED_SCRIPT=start:development:server npm run deprecated-warning && npm run start:development:server",
     "start:development:client": "node client/scripts/start.js",

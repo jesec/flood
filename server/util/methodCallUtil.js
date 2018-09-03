@@ -1,5 +1,3 @@
-'use strict';
-
 const methodCallUtil = {
   getMethodCallConfigFromPropMap(map = new Map(), requestedKeys) {
     let desiredKeys = Array.from(map.keys());

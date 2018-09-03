@@ -1,9 +1,7 @@
-const EventEmitter = require('events');
 const path = require('path');
 const rimraf = require('rimraf');
 
 const BaseService = require('./BaseService');
-const ClientRequestManager = require('./clientRequestManager');
 const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
 const fileListPropMap = require('../constants/fileListPropMap');
 const methodCallUtil = require('../util/methodCallUtil');

@@ -1,5 +1,3 @@
-'use strict';
-
 const startWebServer = () => {
   const chalk = require('chalk');
   const debug = require('debug')('flood:server');
@@ -20,7 +18,7 @@ const startWebServer = () => {
 
   if (useSSL) {
     if (!config.sslKey || !config.sslCert) {
-      console.error('Cannot start HTTPS server, `sslKey` or `sslCert`' + ' is missing in config.js.');
+      console.error('Cannot start HTTPS server, `sslKey` or `sslCert` is missing in config.js.');
       process.exit(1);
     }
 

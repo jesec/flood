@@ -1,5 +1,3 @@
-'use strict';
-
 let ajaxUtil = {
   getResponseFn: res => {
     return (data, error) => {

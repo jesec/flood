@@ -1,5 +1,3 @@
-'use strict';
-
 const objectUtil = require('../util/objectUtil');
 
 const torrentStatusMap = objectUtil.reflect({

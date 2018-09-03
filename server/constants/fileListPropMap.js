@@ -1,4 +1,3 @@
-'use strict';
 const fileListPropMap = new Map();
 const defaultTransformer = value => value;
 
