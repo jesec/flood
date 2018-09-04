@@ -246,6 +246,7 @@ class ClientGatewayService extends BaseService {
         .then(this.processClientRequestSuccess)
         .catch(this.processClientRequestError);
     }
+
     return scgiUtil.methodCall(
       {
         socket: clientSettings.socket,

@@ -56,12 +56,10 @@ class Users {
       return callback(null, 'Username cannot be empty.');
     }
 
-    const socket = socketPath != null && socketPath !== '' && 0 < socketPath.trim().length;
-
     argon2
       .hash(password)
       .then(hash => {
-        this.db.insert({username, password: hash, host, port, socket, socketPath, isAdmin}, (error, user) => {
+        this.db.insert({username, password: hash, host, port, socketPath, isAdmin}, (error, user) => {
           if (error) {
             if (error.errorType === 'uniqueViolated') {
               error = 'Username already exists.';
@@ -104,18 +102,14 @@ class Users {
   }
 
   updateUser(username, userRecordPatch, callback) {
-    const nextUserRecordPatch = Object.assign({}, userRecordPatch, {
-      socket: userRecordPatch.socketPath != null,
-    });
-
-    this.db.update({username}, {$set: nextUserRecordPatch}, (err, numUsersUpdated, updatedUser) => {
+    this.db.update({username}, {$set: userRecordPatch}, (err, numUsersUpdated, updatedUser) => {
       if (err) return callback(null, err);
       // Username not found.
       if (numUsersUpdated === 0) {
         return callback(null, err);
       }
 
-      return callback(nextUserRecordPatch);
+      return callback(userRecordPatch);
     });
   }
 

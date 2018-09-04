@@ -18,7 +18,7 @@ const migrate = () => {
       const existingConfig = {
         host: scgi.host,
         port: scgi.port,
-        socket: scgi.socket === true,
+        socketPath: scgi.socketPath,
       };
 
       resolve(
@@ -26,25 +26,24 @@ const migrate = () => {
           users.map(
             user =>
               new Promise((resolve, reject) => {
-                if (user.socket == null) {
-                  log(chalk.yellow(`Migrating user ${user.username}`));
-                  const userPatch = {
-                    host: existingConfig.host,
-                    port: existingConfig.port,
-                    socket: existingConfig.socket,
-                  };
+                log(chalk.yellow(`Migrating user ${user.username}`));
+                const userPatch = {
+                  host: existingConfig.host,
+                  port: existingConfig.port,
+                };
 
-                  if (userPatch.socket && existingConfig.socketPath) {
-                    userPatch.socketPath = existingConfig.socketPath;
-                  }
-
-                  Users.updateUser(user.username, userPatch, (response, error) => {
-                    if (error) reject(error);
-                    resolve(response);
-                  });
+                if (existingConfig.socketPath && existingConfig.socketPath.trim().length > 0) {
+                  userPatch.socketPath = existingConfig.socketPath;
                 }
 
-                resolve(user);
+                Users.updateUser(user.username, userPatch, (response, error) => {
+                  if (error) {
+                    reject(error);
+                    return;
+                  }
+
+                  resolve(response);
+                });
               })
           )
         )
