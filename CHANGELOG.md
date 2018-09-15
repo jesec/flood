@@ -1,6 +1,9 @@
 # Change Log
 
 ## [Unreleased]
+* Supports connecting to multiple rtorrent instances (one per user)
+  * Moved rtorrent configuration to user database
+  * Prompts user for connection details in UI when can't connect to rtorrent
 * Changed `/list/` route to `/overview/`
 * Reorganized and renamed component source files
 * Removed verbose logging from `HistoryEra`
