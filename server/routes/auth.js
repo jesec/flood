@@ -139,7 +139,16 @@ router.delete('/users/:username', (req, res, next) => {
 
 router.patch('/users/:username', (req, res, next) => {
   const username = req.params.username;
-  Users.updateUser(username, req.body, user => {
+  const userPatch = req.body;
+
+  if (!userPatch.socketPath) {
+    userPatch.socketPath = null;
+  } else {
+    userPatch.host = null;
+    userPatch.port = null;
+  }
+
+  Users.updateUser(username, userPatch, user => {
     Users.lookupUser({username}, (err, user) => {
       if (err) return req.status(500).json({error: err});
       services.updateUserServices(user);

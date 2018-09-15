@@ -28,9 +28,8 @@ class ClientRequestManager extends BaseService {
 
   sendMethodCall(methodName, parameters) {
     const connectionMethod = {
-      address: this.user.address,
+      host: this.user.host,
       port: this.user.port,
-      socket: this.user.socket,
       socketPath: this.user.socketPath,
     };
 
