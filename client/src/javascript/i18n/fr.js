@@ -239,14 +239,24 @@ export default {
   'torrents.move.data.label': 'Déplacer les Données',
   'torrents.move.heading': "Définir l'Emplacement de Téléchargement",
 
+  'torrents.properties.base.path': 'Chemin absolu',
+  'torrents.properties.comment': 'Commentaire',
+  'torrents.properties.creation.date': 'Date de Création',
   'torrents.properties.date.added': "Date d'Ajout",
   'torrents.properties.download.speed': 'Vitesse de Téléchargement',
   'torrents.properties.download.total': 'Données Reçues',
-  'torrents.properties.eta': 'ETA',
+  'torrents.properties.eta': 'Date de fin estimée',
+  'torrents.properties.free.disk.space': 'Espace libre',
+  'torrents.properties.hash': 'Hash',
+  'torrents.properties.ignore.schedule': 'Ignorer le Planificateur',
+  'torrents.properties.is.private': 'Privé',
   'torrents.properties.name': 'Nom des Fichiers',
   'torrents.properties.percentage': 'Pourcentage Complété',
   'torrents.properties.ratio': 'Ratio',
   'torrents.properties.size': 'Taille des Fichiers',
+  'torrents.properties.tags': 'Tags',
+  'torrents.properties.tracker.message': 'Message du Tracker',
+
   'torrents.properties.upload.speed': "Vitesse d'Envoi",
   'torrents.properties.upload.total': 'Données Envoyées',
 
@@ -255,12 +265,13 @@ export default {
       =1 {un torrent}
       other {# torrents}
     } ?`,
-  'torrents.remove.delete.data': 'Supprimer les Données',
+  'torrents.remove.delete.data': 'Supprimer les données',
   'torrents.remove.error.no.torrents.selected': "Vous n'avez sélectionné aucun torrent.",
   'torrents.remove': 'Supprimer les Torrents',
 
-  'torrents.set.tags.button.set': 'Définir un Tag',
-  'torrents.set.tags.heading': 'Définir un Tag',
+  'torrents.set.tags.button.set': 'Définir des Tags',
+  'torrents.set.tags.heading': 'Définir des Tags',
+  'torrents.set.tags.enter.tags': 'Entrer des Tags',
 
   'torrents.sort.title': 'Trier par',
 };
