@@ -6,6 +6,7 @@ const BaseService = require('./BaseService');
 const client = require('../models/client');
 const config = require('../../config');
 const Feed = require('../models/Feed');
+const regEx = require('../../shared/util/regEx');
 
 class FeedService extends BaseService {
   constructor() {
@@ -163,6 +164,13 @@ class FeedService extends BaseService {
 
     // If there are no enclosures, then use the link tag instead
     if (feedItem.link) {
+      // remove CDATA tags around links
+      const cdata = regEx.cdata.exec(feedItem.link);
+
+      if (cdata && cdata[1]) {
+        return [cdata[1]];
+      }
+
       return [feedItem.link];
     }
 
