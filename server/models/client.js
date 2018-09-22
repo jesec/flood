@@ -83,7 +83,7 @@ const client = {
       const selectedTorrent = services.torrentService.getTorrent(hash);
       if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
-      this.getTorrentDetails(user, hash, torrentDetails => {
+      this.getTorrentDetails(user, services, hash, torrentDetails => {
         if (!torrentDetails) return res.status(404).json({error: 'Torrent details not found'});
 
         let files;
