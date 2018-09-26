@@ -16,12 +16,14 @@ export default class TorrentPeers extends React.Component {
     };
   }
 
+  flagImageAsErrored(countryCode) {
+    let {erroredCountryImages} = this.state;
+    erroredCountryImages.push(countryCode);
+    this.setState({erroredCountryImages});
+  }
+
   getImageErrorHandlerFn(countryCode) {
-    return () => {
-      let {erroredCountryImages} = this.state;
-      erroredCountryImages.push(countryCode);
-      this.setState({erroredCountryImages});
-    };
+    return () => this.flagImageAsErrored(countryCode);
   }
 
   render() {
@@ -38,16 +40,24 @@ export default class TorrentPeers extends React.Component {
           let image = null;
 
           if (!erroredCountryImages.includes(countryCode)) {
-            const flagImageSrc = require(`../../../../images/flags/${countryCode.toLowerCase()}.png`);
+            let flagImageSrc;
+            try {
+              flagImageSrc = require(`../../../../images/flags/${countryCode.toLowerCase()}.png`);
+            } catch (err) {
+              this.flagImageAsErrored(countryCode);
+              flagImageSrc = null;
+            }
 
-            image = (
-              <img
-                alt={countryCode}
-                className="peers-list__flag__image"
-                onError={this.getImageErrorHandlerFn(countryCode)}
-                src={flagImageSrc}
-              />
-            );
+            if (flagImageSrc) {
+              image = (
+                <img
+                  alt={countryCode}
+                  className="peers-list__flag__image"
+                  onError={this.getImageErrorHandlerFn(countryCode)}
+                  src={flagImageSrc}
+                />
+              );
+            }
           }
 
           peerCountry = (
