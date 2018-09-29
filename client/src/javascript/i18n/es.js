@@ -34,6 +34,8 @@ export default {
   'auth.password': 'Contraseña',
   'auth.user.accounts': 'Cuentas de Usuario',
   'auth.username': 'Nombre de Usuario',
+  'auth.admin': 'Admin',
+  'auth.message.not.admin': 'El Usuario no es Administrador',
 
   'button.add': 'Agregar',
   'button.cancel': 'Cancelar',

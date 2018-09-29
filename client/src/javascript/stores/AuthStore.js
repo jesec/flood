@@ -38,6 +38,10 @@ class AuthStoreClass extends BaseStore {
     return this.currentUser.username;
   }
 
+  isAdmin() {
+    return this.currentUser.isAdmin;
+  }
+
   getToken() {
     return this.token;
   }
@@ -80,6 +84,7 @@ class AuthStoreClass extends BaseStore {
   handleLoginSuccess(data) {
     this.emit(EventTypes.AUTH_LOGIN_SUCCESS);
     this.currentUser.username = data.username;
+    this.currentUser.isAdmin = data.isAdmin;
     this.token = data.token;
   }
 
@@ -90,6 +95,7 @@ class AuthStoreClass extends BaseStore {
 
   handleRegisterSuccess(data) {
     this.currentUser.username = data.username;
+    this.currentUser.isAdmin = data.isAdmin;
     this.emit(EventTypes.AUTH_REGISTER_SUCCESS, data);
   }
 
@@ -104,6 +110,7 @@ class AuthStoreClass extends BaseStore {
       host: credentials.host,
       port: credentials.port,
       socketPath: credentials.socketPath,
+      isAdmin: true,
     });
   }
 
@@ -113,6 +120,7 @@ class AuthStoreClass extends BaseStore {
 
   handleAuthVerificationSuccess(data) {
     this.currentUser.username = data.username;
+    this.currentUser.isAdmin = data.isAdmin;
     AuthStore.emit(EventTypes.AUTH_VERIFY_SUCCESS, data);
   }
 

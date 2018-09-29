@@ -8,6 +8,8 @@ export default {
   'auth.password': 'Wachtwoord',
   'auth.user.accounts': 'Accounts',
   'auth.username': 'Gebruikersnaam',
+  'auth.admin': 'Beheerder',
+  'auth.message.not.admin': 'Gebruiker is geen Beheerder',
 
   'button.add': 'Toevoegen',
   'button.cancel': 'Annuleren',

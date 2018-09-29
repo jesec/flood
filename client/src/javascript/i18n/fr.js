@@ -8,6 +8,8 @@ export default {
   'auth.password': 'Mot de Passe',
   'auth.user.accounts': 'Comptes',
   'auth.username': "Nom d'Utilisateur",
+  'auth.admin': 'Admin',
+  'auth.message.not.admin': "L'Utilisateur n'est pas Administrateur",
 
   'button.add': 'Ajouter',
   'button.cancel': 'Annuler',

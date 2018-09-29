@@ -1,4 +1,4 @@
-import {Button, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from 'flood-ui-kit';
+import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from 'flood-ui-kit';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
 import {FormattedMessage, injectIntl} from 'react-intl';
@@ -16,6 +16,7 @@ class AuthTab extends SettingsTab {
     addUserError: null,
     hasFetchedUserList: false,
     isAddingUser: false,
+    isAdmin: false,
     users: [],
   };
 
@@ -24,9 +25,14 @@ class AuthTab extends SettingsTab {
 
   componentWillMount() {
     this.setState({users: AuthStore.getUsers()});
+    this.setState({isAdmin: AuthStore.isAdmin()});
   }
 
   componentDidMount() {
+    if (!this.state.isAdmin) {
+      return;
+    }
+
     AuthStore.listen(EventTypes.AUTH_LIST_USERS_SUCCESS, this.handleUserListChange);
     AuthStore.listen(EventTypes.AUTH_CREATE_USER_ERROR, this.handleUserAddError);
     AuthStore.listen(EventTypes.AUTH_CREATE_USER_SUCCESS, this.handleUserAddSuccess);
@@ -36,6 +42,9 @@ class AuthTab extends SettingsTab {
   }
 
   componentWillUnmount() {
+    if (!this.state.isAdmin) {
+      return;
+    }
     AuthStore.unlisten(EventTypes.AUTH_LIST_USERS_SUCCESS, this.handleUserListChange);
     AuthStore.unlisten(EventTypes.AUTH_CREATE_USER_ERROR, this.handleUserAddError);
     AuthStore.unlisten(EventTypes.AUTH_CREATE_USER_SUCCESS, this.handleUserAddSuccess);
@@ -104,12 +113,14 @@ class AuthTab extends SettingsTab {
       });
     } else {
       this.setState({isAddingUser: true});
+
       AuthStore.createUser({
         username: this.formData.username,
         password: this.formData.password,
         host: this.formData.rtorrentHost,
         port: this.formData.rtorrentPort,
         socketPath: this.formData.rtorrentSocketPath,
+        isAdmin: this.formData.isAdmin === '1',
       });
     }
   };
@@ -135,6 +146,21 @@ class AuthTab extends SettingsTab {
   }
 
   render() {
+    if (!this.state.isAdmin) {
+      return (
+        <Form>
+          <ModalFormSectionHeader>
+            <FormattedMessage id="auth.user.accounts" defaultMessage="User Accounts" />
+          </ModalFormSectionHeader>
+          <FormRow>
+            <FormError>
+              <FormattedMessage id="auth.message.not.admin" defaultMessage="User is not Admin" />
+            </FormError>
+          </FormRow>
+        </Form>
+      );
+    }
+
     const isLoading = !this.state.hasFetchedUserList && this.state.users.length === 0;
     const interactiveListClasses = classnames('interactive-list', {
       'interactive-list--loading': isLoading,
@@ -197,6 +223,9 @@ class AuthTab extends SettingsTab {
               defaultMessage: 'Password',
             })}
           />
+          <Checkbox grow={false} id="isAdmin" labelOffset matchTextboxHeight>
+            <FormattedMessage id="auth.admin" defaultMessage="Admin" />
+          </Checkbox>
         </FormRow>
         <RtorrentConnectionTypeSelection />
         <FormRow justify="end">

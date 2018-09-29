@@ -36,6 +36,8 @@ export default {
   'auth.password': 'Password',
   'auth.user.accounts': 'User Accounts',
   'auth.username': 'Username',
+  'auth.admin': 'Admin',
+  'auth.message.not.admin': 'User is not Admin',
 
   'button.add': 'Add',
   'button.cancel': 'Cancel',

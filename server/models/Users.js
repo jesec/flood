@@ -36,10 +36,10 @@ class Users {
         .verify(user.password, credentials.password)
         .then(argon2Match => {
           if (argon2Match) {
-            return callback(argon2Match);
+            return callback(argon2Match, user.isAdmin);
           }
 
-          callback(null, argon2Match);
+          callback(null, argon2Match, false);
         })
         .catch(error => callback(null, error));
     });
