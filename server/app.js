@@ -21,6 +21,7 @@ if (process.env.NODE_ENV !== 'development') {
   app.disable('x-powered-by');
 }
 
+app.set('etag', false);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 

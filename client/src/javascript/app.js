@@ -44,9 +44,6 @@ class FloodApp extends React.Component {
 
   componentDidMount() {
     SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsChange);
-
-    SettingsStore.fetchClientSettings();
-    SettingsStore.fetchFloodSettings();
   }
 
   componentWillUnmount() {

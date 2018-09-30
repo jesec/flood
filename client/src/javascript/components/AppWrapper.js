@@ -1,7 +1,6 @@
 import {browserHistory} from 'react-router';
 import classnames from 'classnames';
 import CSSTransitionGroup from 'react-addons-css-transition-group';
-import {FormattedMessage} from 'react-intl';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -12,6 +11,7 @@ import ClientConnectionInterruption from './general/ClientConnectionInterruption
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
 import LoadingIndicator from './general/LoadingIndicator';
+import SettingsStore from '../stores/SettingsStore';
 import UIStore from '../stores/UIStore';
 import WindowTitle from './general/WindowTitle';
 
@@ -39,14 +39,7 @@ class AuthEnforcer extends React.Component {
 
     this.state = {
       authStatusDetermined: false,
-      dependencies: {
-        authentication: {
-          message: (
-            <FormattedMessage id="dependency.loading.authentication.status" defaultMessage="Authentication Status" />
-          ),
-          satisfied: false,
-        },
-      },
+      dependencies: {},
       isAuthenticated: false,
       isClientConnected: false,
       dependenciesLoaded: false,
@@ -92,6 +85,8 @@ class AuthEnforcer extends React.Component {
       browserHistory.replace('register');
     } else {
       this.setState({authStatusDetermined: true, isAuthenticated: true});
+      SettingsStore.fetchClientSettings();
+      SettingsStore.fetchFloodSettings();
       browserHistory.replace('overview');
     }
   }
@@ -107,6 +102,8 @@ class AuthEnforcer extends React.Component {
   }
 
   handleLoginSuccess() {
+    SettingsStore.fetchClientSettings();
+    SettingsStore.fetchFloodSettings();
     FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.replace('overview');
@@ -140,15 +137,7 @@ class AuthEnforcer extends React.Component {
 
   handleUIDependenciesChange() {
     this.setState({
-      dependencies: {
-        authentication: {
-          message: (
-            <FormattedMessage id="dependency.loading.authentication.status" defaultMessage="Authentication Status" />
-          ),
-          satisfied: this.state.authStatusDetermined,
-        },
-        ...UIStore.getDependencies(),
-      },
+      dependencies: UIStore.getDependencies(),
     });
   }
 
