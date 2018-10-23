@@ -155,7 +155,7 @@ router.patch('/users/:username', (req, res, next) => {
     userPatch.port = null;
   }
 
-  Users.patchUser(username, userPatch, user => {
+  Users.updateUser(username, userPatch, user => {
     Users.lookupUser({username}, (err, user) => {
       if (err) return req.status(500).json({error: err});
       services.updateUserServices(user);
