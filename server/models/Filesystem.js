@@ -11,10 +11,13 @@ class Filesystem {
       let files = [];
 
       fs.readdirSync(sourcePath).forEach(item => {
-        if (fs.statSync(path.join(sourcePath, item)).isDirectory()) {
-          directories.push(item);
-        } else {
-          files.push(item);
+        const joinedPath = path.join(sourcePath, item);
+        if (fs.existsSync(joinedPath)) {
+          if (fs.statSync(joinedPath).isDirectory()) {
+            directories.push(item);
+          } else {
+            files.push(item);
+          }
         }
       });
 
