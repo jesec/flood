@@ -1,8 +1,10 @@
 ARG NODE_IMAGE=node:10.1-alpine
+ARG WORKDIR=/usr/src/app/
 
 FROM ${NODE_IMAGE} as nodebuild
+ARG WORKDIR
 
-WORKDIR /usr/src/app
+WORKDIR $WORKDIR
 
 # Generate node_modules
 COPY package.json ./package.json
@@ -21,9 +23,17 @@ RUN npm run build && \
     npm prune --production
 COPY server ./server
 
+# Now get the clean image without any dependencies and copy compiled app
+FROM ${NODE_IMAGE} as flood
+ARG WORKDIR
+
+WORKDIR $WORKDIR
+
 # Install runtime dependencies.
 RUN apk --no-cache add \
     mediainfo
+
+COPY --from=nodebuild $WORKDIR $WORKDIR
 
 # Hints for consumers of the container.
 EXPOSE 3000
