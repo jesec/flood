@@ -2,6 +2,11 @@
   "name": "flood",
   "version": "1.0.0",
   "private": false,
+  "license" : "GPL-3.0-only"
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/jfurrow/flood.git"
+  }
   "scripts": {
     "build": "node client/scripts/build.js",
     "build-assets": "UPDATED_SCRIPT=build npm run deprecated-warning && npm run build",
