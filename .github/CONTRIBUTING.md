@@ -8,7 +8,7 @@ you agree to abide by the thoughtbot [code of conduct].
 
 # Issue
 
-See [ISSUE_TEMPLATE.md](ISSUE_TEMPLATE.md).
+See [ISSUE_TEMPLATE](ISSUE_TEMPLATE).
 
 # Pull request
 
