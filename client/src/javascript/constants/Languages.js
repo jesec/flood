@@ -15,6 +15,10 @@ const LANGUAGES = {
     defaultMessage: 'Nederlands',
     id: 'locale.language.nl',
   },
+  ko: {
+    defaultMessage: 'Korean',
+    id: 'locale.language.ko',
+  },
 };
 
 export default LANGUAGES;

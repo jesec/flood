@@ -103,6 +103,7 @@ export default {
   'locale.language.en': 'Inglés',
   'locale.language.es': 'Español',
   'locale.language.fr': 'Francés',
+  'locale.language.ko': 'Coreano',
   'locale.language.nl': 'Holandés',
 
   'mediainfo.execError':

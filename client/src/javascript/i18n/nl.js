@@ -63,6 +63,7 @@ export default {
 
   'locale.language.en': 'English',
   'locale.language.fr': 'Frans',
+  'locale.language.ko': 'Koreaans',
   'locale.language.nl': 'Nederlands',
 
   'alert.torrent.add': `Het toevoegen van {countElement} {count, plural,

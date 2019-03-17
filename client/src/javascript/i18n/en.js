@@ -109,6 +109,7 @@ export default {
 
   'locale.language.en': 'English',
   'locale.language.fr': 'French',
+  'locale.language.ko': 'Korean',
   'locale.language.nl': 'Nederlands',
 
   'mediainfo.execError':
