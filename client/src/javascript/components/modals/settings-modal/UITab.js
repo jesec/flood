@@ -93,7 +93,7 @@ class UITab extends SettingsTab {
             checked={visible}
             onChange={event => this.handleDetailCheckboxValueChange(id, event.target.checked)}
             modifier="dark">
-            Enabled
+            <FormattedMessage id="settings.ui.torrent.details.enabled" defaultMessage="Enabled" />
           </Checkbox>
         </span>
       );

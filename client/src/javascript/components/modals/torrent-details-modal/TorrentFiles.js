@@ -259,7 +259,11 @@ class TorrentFiles extends React.Component {
       );
     } else {
       directoryHeadingIconContent = <Disk />;
-      fileDetailContent = <div className="directory-tree__node directory-tree__node--file">Loading file detail...</div>;
+      fileDetailContent = (
+        <div className="directory-tree__node directory-tree__node--file">
+          <FormattedMessage id="torrents.details.files.loading" defaultMessage="Loading file detail..." />
+        </div>
+      );
     }
 
     let directoryHeadingClasses = classnames(

@@ -113,7 +113,7 @@ class FeedsTab extends React.Component {
           <Select
             defaultID={this.state.intervals[0].value}
             label={this.props.intl.formatMessage({
-              id: 'feeds.interval',
+              id: 'feeds.select.interval',
               defaultMessage: 'Interval',
             })}
             id="interval"

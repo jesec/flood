@@ -1,4 +1,9 @@
 export default {
+  'actionbar.button.start.torrent': 'Start Torrent',
+  'actionbar.button.stop.torrent': 'Stop Torrent',
+  'actionbar.button.add.torrent': 'Add Torrent',
+  'actionbar.button.remove.torrent': 'Remove Torrent',
+
   'alert.torrent.add': `Successfully added {countElement} {count, plural,
       =1 {torrent}
       other {torrents}
@@ -26,6 +31,9 @@ export default {
   'alert.settings.saved': 'Successfully saved settings.',
 
   'auth.add.user': 'Add User',
+  'auth.connectionType': 'rTorrent Connection Type',
+  'auth.connectionType.tcp': 'TCP',
+  'auth.connectionType.socket': 'Unix Socket',
   'auth.create.account': 'Create Account',
   'auth.create.an.account': 'Create an account',
   'auth.create.an.account.intro': 'Welcome to Flood!',
@@ -38,6 +46,10 @@ export default {
   'auth.username': 'Username',
   'auth.admin': 'Admin',
   'auth.message.not.admin': 'User is not Admin',
+  'auth.rtorrentHost': 'rTorrent Host',
+  'auth.rtorrentPort': 'rTorrent Port',
+  'auth.rtorrentSocket': 'rTorrent Socket',
+  'auth.rtorrentSocketPath': 'rTorrent Socket Path',
 
   'button.add': 'Add',
   'button.cancel': 'Cancel',
@@ -179,6 +191,7 @@ export default {
   'settings.ui.torrent.size': 'Torrent Size',
   'settings.ui.torrent.size.expanded': 'Expanded View',
   'settings.ui.torrent.size.condensed': 'Condensed View',
+  'settings.ui.torrent.details.enabled': 'Enabled',
   'settings.ui.torrent.details.tags.placement': 'In the expanded view, tags work best at the end of the list.',
 
   'sidebar.button.feeds': 'Feeds',
@@ -227,6 +240,7 @@ export default {
   'torrents.details.actions.stop': 'Stop',
   'torrents.details.details': 'Details',
   'torrents.details.files': 'Files',
+  'torrents.details.files.loading': 'Loading file detail...',
   'torrents.details.files.download.file': `{count, plural,
     =1 {Download File}
     other {Download Files}

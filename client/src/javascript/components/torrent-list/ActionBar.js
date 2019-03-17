@@ -92,13 +92,40 @@ class ActionBar extends React.Component {
         </div>
         <div className="actions action-bar__item action-bar__item--torrent-operations">
           <div className="action-bar__group">
-            <Action label="Start Torrent" slug="start-torrent" icon={<StartIcon />} clickHandler={this.handleStart} />
-            <Action label="Stop Torrent" slug="stop-torrent" icon={<StopIcon />} clickHandler={this.handleStop} />
+            <Action
+              label={this.props.intl.formatMessage({
+                id: 'actionbar.button.start.torrent',
+                defaultMessage: 'Start Torrent',
+              })}
+              slug="start-torrent"
+              icon={<StartIcon />}
+              clickHandler={this.handleStart}
+            />
+            <Action
+              label={this.props.intl.formatMessage({
+                id: 'actionbar.button.stop.torrent',
+                defaultMessage: 'Stop Torrent',
+              })}
+              slug="stop-torrent"
+              icon={<StopIcon />}
+              clickHandler={this.handleStop}
+            />
           </div>
           <div className="action-bar__group action-bar__group--has-divider">
-            <Action label="Add Torrent" slug="add-torrent" icon={<Add />} clickHandler={this.handleAddTorrents} />
             <Action
-              label="Remove Torrent"
+              label={this.props.intl.formatMessage({
+                id: 'actionbar.button.add.torrent',
+                defaultMessage: 'Add Torrent',
+              })}
+              slug="add-torrent"
+              icon={<Add />}
+              clickHandler={this.handleAddTorrents}
+            />
+            <Action
+              label={this.props.intl.formatMessage({
+                id: 'actionbar.button.remove.torrent',
+                defaultMessage: 'Remove Torrent',
+              })}
               slug="remove-torrent"
               icon={<Remove />}
               clickHandler={this.handleRemoveTorrents}

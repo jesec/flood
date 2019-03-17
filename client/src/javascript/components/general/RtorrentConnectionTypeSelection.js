@@ -52,7 +52,7 @@ class RtorrentConnectionTypeSelection extends Component {
       <FormRow>
         <Textbox
           id="rtorrentSocketPath"
-          label={<FormattedMessage id="auth.rtorrentSocketPath" defaultMessage="rTorrent Socket" />}
+          label={<FormattedMessage id="auth.rtorrentSocket" defaultMessage="rTorrent Socket" />}
           placeholder={this.props.intl.formatMessage({
             id: 'auth.rtorrentSocketPath',
             defaultMessage: 'rTorrent Socket Path',
