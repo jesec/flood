@@ -5,6 +5,7 @@ const config = require('../../config');
 const formatUtil = require('../../shared/util/formatUtil');
 const methodCallUtil = require('../util/methodCallUtil');
 const serverEventTypes = require('../../shared/constants/serverEventTypes');
+const truncateTo = require('../util/numberUtils');
 const torrentListPropMap = require('../constants/torrentListPropMap');
 const torrentServiceEvents = require('../constants/torrentServiceEvents');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
@@ -116,9 +117,9 @@ class TorrentService extends BaseService {
     const percentComplete = (torrentDetails.bytesDone / torrentDetails.sizeBytes) * 100;
 
     if (percentComplete > 0 && percentComplete < 10) {
-      return Number(percentComplete.toFixed(2));
+      return Number(truncateTo(percentComplete, 2));
     } else if (percentComplete > 10 && percentComplete < 100) {
-      return Number(percentComplete.toFixed(1));
+      return Number(truncateTo(percentComplete, 1));
     }
 
     return percentComplete;

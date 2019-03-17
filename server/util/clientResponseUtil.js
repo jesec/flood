@@ -1,4 +1,5 @@
 const geoip = require('geoip-lite');
+const truncateTo = require('./numberUtils');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
 const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
@@ -72,7 +73,7 @@ let clientResponseUtil = {
 
   processFile(file) {
     file.filename = file.pathComponents[file.pathComponents.length - 1];
-    file.percentComplete = ((file.completedChunks / file.sizeChunks) * 100).toFixed(0);
+    file.percentComplete = truncateTo((file.completedChunks / file.sizeChunks) * 100);
 
     delete file.completedChunks;
     delete file.pathComponents;
