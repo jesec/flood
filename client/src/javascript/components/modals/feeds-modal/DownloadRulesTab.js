@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Form,
+  FormElementAddon,
   FormError,
   FormRow,
   FormRowGroup,
@@ -15,6 +16,7 @@ import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import Edit from '../../icons/Edit';
+import Checkmark from '../../icons/Checkmark';
 import Close from '../../icons/Close';
 import EventTypes from '../../../constants/EventTypes';
 import FeedMonitorStore from '../../../stores/FeedMonitorStore';
@@ -57,7 +59,7 @@ const MESSAGES = defineMessages({
   },
   check: {
     id: 'feeds.check',
-    defaultMessage: 'Check matching',
+    defaultMessage: 'Test Match Pattern',
   },
 });
 
@@ -109,7 +111,7 @@ class DownloadRulesTab extends React.Component {
     feeds: FeedMonitorStore.getFeeds(),
     rules: FeedMonitorStore.getRules(),
     currentlyEditingRule: null,
-    checkMatchClass: '',
+    doesPatternMatchTest: false,
   };
 
   componentDidMount() {
@@ -129,20 +131,16 @@ class DownloadRulesTab extends React.Component {
     }
   }, 150);
 
-  checkMatch(match, exclude, check) {
-    let checkMatchClass = '';
+  checkMatchingPattern(match, exclude, check) {
+    let doesPatternMatchTest = false;
 
     if (Validator.isNotEmpty(check) && Validator.isRegExValid(match) && Validator.isRegExValid(exclude)) {
       const isMatched = new RegExp(match, 'gi').test(check);
       const isExcluded = exclude !== '' && new RegExp(exclude, 'gi').test(check);
-      if (isMatched && !isExcluded) {
-        checkMatchClass = 'check-match-success';
-      } else {
-        checkMatchClass = 'check-match-failed';
-      }
+      doesPatternMatchTest = isMatched && !isExcluded;
     }
 
-    this.setState({checkMatchClass});
+    this.setState({doesPatternMatchTest});
   }
 
   getAmendedFormData() {
@@ -185,93 +183,98 @@ class DownloadRulesTab extends React.Component {
   }
 
   getModifyRuleForm(rule) {
-    console.log(this.state.checkMatchClass);
+    const {doesPatternMatchTest, currentlyEditingRule} = this.state;
+
     return (
-      <li className="interactive-list__item interactive-list__item--stacked-content feed-list__feed" key={rule._id}>
-        <FormRowGroup>
-          <FormRow>
-            <Textbox
-              id="label"
-              label={this.props.intl.formatMessage({
-                id: 'feeds.label',
-                defaultMessage: 'Label',
-              })}
-              defaultValue={rule.label}
-            />
-            <Select
-              disabled={!this.state.feeds.length}
-              id="feedID"
-              label={this.props.intl.formatMessage({
-                id: 'feeds.applicable.feed',
-                defaultMessage: 'Applicable Feed',
-              })}
-              defaultID={rule.feedID}>
-              {this.getAvailableFeedsOptions()}
-            </Select>
-          </FormRow>
-          <FormRow>
-            <Textbox
-              id="match"
-              label={this.props.intl.formatMessage({
-                id: 'feeds.match.pattern',
-                defaultMessage: 'Match Pattern',
-              })}
-              placeholder={this.props.intl.formatMessage(MESSAGES.regEx)}
-              defaultValue={rule.match}
-            />
-            <Textbox
-              id="exclude"
-              label={this.props.intl.formatMessage({
-                id: 'feeds.exclude.pattern',
-                defaultMessage: 'Exclude Pattern',
-              })}
-              placeholder={this.props.intl.formatMessage(MESSAGES.regEx)}
-              defaultValue={rule.exclude}
-            />
-            <div className={this.state.checkMatchClass}>
-              <Textbox
-                id="check"
-                label={this.props.intl.formatMessage({
-                  id: 'feeds.test.match',
-                  defaultMessage: 'Check Matching.',
-                })}
-                placeholder={this.props.intl.formatMessage(MESSAGES.check)}
-              />
-            </div>
-          </FormRow>
-          <FormRow>
-            <TorrentDestination
-              id="destination"
-              label={this.props.intl.formatMessage({
-                id: 'feeds.torrent.destination',
-                defaultMessage: 'Torrent Destination',
-              })}
-              suggested={rule.destination}
-            />
-            <Textbox
-              id="tags"
-              label={this.props.intl.formatMessage({
-                id: 'feeds.apply.tags',
-                defaultMessage: 'Apply Tags',
-              })}
-              placeholder={this.props.intl.formatMessage(MESSAGES.tags)}
-              defaultValue={rule.tags.join(', ')}
-            />
-          </FormRow>
-          <FormRow>
-            <FormRowItem width="auto" />
-            <Checkbox id="startOnLoad" checked={rule.startOnLoad} matchTextboxHeight>
-              <FormattedMessage id="feeds.start.on.load" defaultMessage="Start on load" />
-            </Checkbox>
-            <Button onClick={() => this.setState({currentlyEditingRule: null})}>
-              <FormattedMessage id="button.cancel" defaultMessage="Cancel" />
-            </Button>
-            <Button type="submit">
-              <FormattedMessage id="button.save.feed" defaultMessage="Save" />
-            </Button>
-          </FormRow>
-        </FormRowGroup>
-      </li>
+      <FormRowGroup key={currentlyEditingRule == null ? 'default' : currentlyEditingRule._id}>
+        <FormRow>
+          <Textbox
+            id="label"
+            label={this.props.intl.formatMessage({
+              id: 'feeds.label',
+              defaultMessage: 'Label',
+            })}
+            defaultValue={rule.label}
+          />
+          <Select
+            disabled={!this.state.feeds.length}
+            id="feedID"
+            label={this.props.intl.formatMessage({
+              id: 'feeds.applicable.feed',
+              defaultMessage: 'Applicable Feed',
+            })}
+            defaultID={rule.feedID}>
+            {this.getAvailableFeedsOptions()}
+          </Select>
+        </FormRow>
+        <FormRow>
+          <Textbox
+            id="match"
+            label={this.props.intl.formatMessage({
+              id: 'feeds.match.pattern',
+              defaultMessage: 'Match Pattern',
+            })}
+            placeholder={this.props.intl.formatMessage(MESSAGES.regEx)}
+            defaultValue={rule.match}
+            width="three-eighths"
+          />
+          <Textbox
+            id="exclude"
+            label={this.props.intl.formatMessage({
+              id: 'feeds.exclude.pattern',
+              defaultMessage: 'Exclude Pattern',
+            })}
+            placeholder={this.props.intl.formatMessage(MESSAGES.regEx)}
+            defaultValue={rule.exclude}
+            width="three-eighths"
+          />
+          <Textbox
+            addonPlacement="after"
+            id="check"
+            label={this.props.intl.formatMessage({
+              id: 'feeds.test.match',
+              defaultMessage: 'Test Match Pattern',
+            })}
+            placeholder={this.props.intl.formatMessage(MESSAGES.check)}>
+            {doesPatternMatchTest && (
+              <FormElementAddon>
+                <Checkmark />
+              </FormElementAddon>
+            )}
+          </Textbox>
+        </FormRow>
+        <FormRow>
+          <TorrentDestination
+            id="destination"
+            label={this.props.intl.formatMessage({
+              id: 'feeds.torrent.destination',
+              defaultMessage: 'Torrent Destination',
+            })}
+            suggested={rule.destination}
+          />
+          <Textbox
+            id="tags"
+            label={this.props.intl.formatMessage({
+              id: 'feeds.apply.tags',
+              defaultMessage: 'Apply Tags',
+            })}
+            placeholder={this.props.intl.formatMessage(MESSAGES.tags)}
+            defaultValue={rule.tags.join(', ')}
+          />
+        </FormRow>
+        <FormRow>
+          <FormRowItem width="auto" />
+          <Checkbox id="startOnLoad" checked={rule.startOnLoad} matchTextboxHeight>
+            <FormattedMessage id="feeds.start.on.load" defaultMessage="Start on load" />
+          </Checkbox>
+          <Button onClick={() => this.setState({currentlyEditingRule: null})}>
+            <FormattedMessage id="button.cancel" defaultMessage="Cancel" />
+          </Button>
+          <Button type="submit">
+            <FormattedMessage id="button.save.feed" defaultMessage="Save" />
+          </Button>
+        </FormRow>
+      </FormRowGroup>
     );
   }
 
@@ -385,7 +388,7 @@ class DownloadRulesTab extends React.Component {
 
   handleFormChange = ({event, formData}) => {
     this.checkFieldValidity(event.target.name, formData[event.target.name]);
-    this.checkMatch(formData.match, formData.exclude, formData.check);
+    this.checkMatchingPattern(formData.match, formData.exclude, formData.check);
   };
 
   handleFormSubmit = () => {
@@ -414,9 +417,9 @@ class DownloadRulesTab extends React.Component {
     }
   }
 
-  handleAddRuleClick() {
+  handleAddRuleClick = () => {
     this.setState({currentlyEditingRule: defaultRule});
-  }
+  };
 
   handleModifyRuleClick(rule) {
     this.setState({currentlyEditingRule: rule});
@@ -465,7 +468,7 @@ class DownloadRulesTab extends React.Component {
         ) : (
           <FormRow>
             <FormRowItem width="auto" />
-            <Button onClick={() => this.handleAddRuleClick()}>
+            <Button onClick={this.handleAddRuleClick}>
               <FormattedMessage id="button.new" defaultMessage="New" />
             </Button>
           </FormRow>
