@@ -23,6 +23,22 @@ class Feed {
     this.initReader();
   }
 
+  modify(options) {
+    Object.assign(this.options, options);
+    this.items = [];
+
+    this.reader = new FeedSub(options.url, {
+      autoStart: true,
+      emitOnStart: true,
+      maxHistory: this.options.maxItemHistory,
+      interval: options.interval ? Number(options.interval) : 15,
+      forceInterval: true,
+      readEveryItem: true,
+    });
+
+    this.initReader();
+  }
+
   getItems() {
     return this.items;
   }
@@ -36,7 +52,10 @@ class Feed {
 
     this.items = this.items.concat(items);
 
-    this.options.onNewItems({feed: this.options, items});
+    this.options.onNewItems({
+      feed: this.options,
+      items,
+    });
   }
 
   initReader() {

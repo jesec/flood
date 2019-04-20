@@ -68,11 +68,8 @@ $interactive-list--detail-list--item--padding--vertical: 0;
     }
 
     &:hover {
-
       .interactive-list {
-
         &__icon {
-
           &--action {
             background: $grey;
 
@@ -93,7 +90,6 @@ $interactive-list--detail-list--item--padding--vertical: 0;
       align-items: center;
 
       .interactive-list {
-
         &__label {
           align-items: stretch;
           flex-direction: column;
@@ -184,12 +180,15 @@ $interactive-list--detail-list--item--padding--vertical: 0;
       }
     }
 
+    &--padding {
+      margin-right: 0.5em;
+    }
+
     &--action {
       cursor: pointer;
       transition: background $speed--xx-fast;
 
       &:hover {
-
         .icon {
           fill: $interactive-list--item--icon--fill--hover;
         }
@@ -198,7 +197,6 @@ $interactive-list--detail-list--item--padding--vertical: 0;
   }
 
   &__detail {
-
     &--primary {
       font-weight: 700;
     }
@@ -216,7 +214,8 @@ $interactive-list--detail-list--item--padding--vertical: 0;
     &__item {
       flex: 0 0 auto;
       max-width: 100%;
-      padding: $interactive-list--detail-list--item--padding--vertical $interactive-list--detail-list--item--padding--horizontal;
+      padding: $interactive-list--detail-list--item--padding--vertical
+        $interactive-list--detail-list--item--padding--horizontal;
 
       &:first-child {
         padding-left: 0;

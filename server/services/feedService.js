@@ -25,6 +25,17 @@ class FeedService extends BaseService {
     });
   }
 
+  modifyFeed(id, feed, callback) {
+    const modifiedFeed = this.feeds.find(feed => {
+      return feed.options._id === id;
+    });
+    modifiedFeed.stopReader();
+    modifiedFeed.modify(feed);
+    this.modifyItem(id, feed, err => {
+      callback(err);
+    });
+  }
+
   addItem(type, item, callback) {
     if (!this.isDBReady) return;
 
@@ -35,6 +46,21 @@ class FeedService extends BaseService {
       }
 
       callback(newDoc);
+    });
+  }
+
+  modifyItem(id, newItem, callback) {
+    if (!this.isDBReady) {
+      return;
+    }
+
+    this.db.update({_id: id}, {$set: newItem}, {}, err => {
+      if (err) {
+        callback(null, err);
+        return;
+      }
+
+      callback(null);
     });
   }
 
@@ -93,6 +119,26 @@ class FeedService extends BaseService {
 
   getFeeds(query, callback) {
     this.queryItem('feed', query, callback);
+  }
+
+  getItems(query, callback) {
+    let feed = this.feeds.find(feed => {
+      return feed.options._id === query.id;
+    });
+
+    if (feed) {
+      if (query.search) {
+        callback(
+          feed.getItems().filter(item => {
+            return item.title.toLowerCase().indexOf(query.search.toLowerCase()) !== -1;
+          })
+        );
+      } else {
+        callback(feed.getItems());
+      }
+    } else {
+      callback(null);
+    }
   }
 
   getItemsMatchingRules(feedItems, rules, feed) {
@@ -155,6 +201,11 @@ class FeedService extends BaseService {
 
         return urls;
       }, []);
+    }
+
+    // If we've got a Object of enclosures, use url key
+    if (feedItem.enclosure && feedItem.enclosure.url) {
+      return [feedItem.enclosure.url];
     }
 
     // If we've got a Object of enclosures, use url key
@@ -286,11 +337,10 @@ class FeedService extends BaseService {
 
   loadDatabase() {
     if (this.isDBReady) return;
-    const {_id: userId} = this.user;
 
     const db = new Datastore({
       autoload: true,
-      filename: path.join(config.dbPath, userId, 'settings', 'feeds.db'),
+      filename: path.join(config.dbPath, this.user._id, 'settings', 'feeds.db'),
     });
     this.isDBReady = true;
     return db;

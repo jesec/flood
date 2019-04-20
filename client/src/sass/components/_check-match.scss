@@ -1,0 +1,10 @@
+$check--match-success: #39ce83;
+$check--match-failed: #e95779;
+
+.check-match-success input {
+  background-color: $check--match-success !important;
+}
+
+.check-match-failed input {
+  background-color: $check--match-failed !important;
+}

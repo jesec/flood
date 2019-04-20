@@ -14,6 +14,7 @@ export default {
   'button.add': 'Toevoegen',
   'button.cancel': 'Annuleren',
   'button.no': 'Nee',
+  'button.save.feed': 'Opslaan',
   'button.save': 'Instellingen opslaan',
   'button.state.adding': 'Toevoegen...',
   'button.yes': 'Ja',

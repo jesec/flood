@@ -40,6 +40,7 @@ export default {
   'button.add': 'Agregar',
   'button.cancel': 'Cancelar',
   'button.no': 'No',
+  'button.save.feed': 'Gaurdar',
   'button.save': 'Guardar Configuración',
   'button.state.adding': 'Agregando...',
   'button.yes': 'Sí',
