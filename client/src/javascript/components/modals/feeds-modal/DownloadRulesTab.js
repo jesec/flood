@@ -348,7 +348,7 @@ class DownloadRulesTab extends React.Component {
           </ul>
         </div>
         <span
-          className="interactive-list__icon interactive-list__icon--action interactive-list__icon--padding"
+          className="interactive-list__icon interactive-list__icon--action"
           onClick={() => this.handleModifyRuleClick(rule)}>
           <Edit />
         </span>

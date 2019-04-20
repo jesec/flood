@@ -180,10 +180,6 @@ $interactive-list--detail-list--item--padding--vertical: 0;
       }
     }
 
-    &--padding {
-      margin-right: 0.5em;
-    }
-
     &--action {
       cursor: pointer;
       transition: background $speed--xx-fast;
@@ -192,6 +188,10 @@ $interactive-list--detail-list--item--padding--vertical: 0;
         .icon {
           fill: $interactive-list--item--icon--fill--hover;
         }
+      }
+
+      & + .interactive-list__icon--action {
+        margin-left: $spacing--x-small;
       }
     }
   }
