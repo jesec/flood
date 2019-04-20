@@ -11,7 +11,6 @@ import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import UIStore from '../../../stores/UIStore';
 
 class AddTorrentsByURL extends React.Component {
-  _formData = {};
   _formRef = null;
 
   constructor() {
@@ -58,13 +57,9 @@ class AddTorrentsByURL extends React.Component {
     });
   };
 
-  handleFormChange = ({event, formData}) => {
-    this._formData = formData;
-  };
-
   render() {
     return (
-      <Form className="inverse" onChange={this.handleFormChange} ref={ref => (this._formRef = ref)}>
+      <Form className="inverse" ref={ref => (this._formRef = ref)}>
         <TextboxRepeater
           id="urls"
           label={this.props.intl.formatMessage({

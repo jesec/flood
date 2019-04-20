@@ -12,7 +12,6 @@ import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
 
 class AddTorrentsByFile extends React.Component {
-  _formData = {};
   _formRef = null;
 
   state = {
@@ -122,13 +121,9 @@ class AddTorrentsByFile extends React.Component {
     SettingsStore.updateOptimisticallyOnly({id: 'startTorrentsOnLoad', data: start});
   };
 
-  handleFormChange = ({event, formData}) => {
-    this._formData = formData;
-  };
-
   render() {
     return (
-      <Form className="inverse" onChange={this.handleFormChange} ref={ref => (this._formRef = ref)}>
+      <Form className="inverse" ref={ref => (this._formRef = ref)}>
         <FormRow>{this.getFileDropzone()}</FormRow>
         <TorrentDestination
           id="destination"
