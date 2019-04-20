@@ -244,14 +244,16 @@ class DownloadRulesTab extends React.Component {
           </Textbox>
         </FormRow>
         <FormRow>
-          <TorrentDestination
-            id="destination"
-            label={this.props.intl.formatMessage({
-              id: 'feeds.torrent.destination',
-              defaultMessage: 'Torrent Destination',
-            })}
-            suggested={rule.destination}
-          />
+          <FormRowItem>
+            <TorrentDestination
+              id="destination"
+              label={this.props.intl.formatMessage({
+                id: 'feeds.torrent.destination',
+                defaultMessage: 'Torrent Destination',
+              })}
+              suggested={rule.destination}
+            />
+          </FormRowItem>
           <Textbox
             id="tags"
             label={this.props.intl.formatMessage({
