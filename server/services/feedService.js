@@ -127,14 +127,16 @@ class FeedService extends BaseService {
     });
 
     if (feed) {
+      const items = feed.getItems();
+
       if (query.search) {
         callback(
-          feed.getItems().filter(item => {
+          items.filter(item => {
             return item.title.toLowerCase().indexOf(query.search.toLowerCase()) !== -1;
           })
         );
       } else {
-        callback(feed.getItems());
+        callback(items);
       }
     } else {
       callback(null);

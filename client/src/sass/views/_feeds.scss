@@ -1,0 +1,8 @@
+.feed-list {
+  
+  &__feed-label {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

@@ -350,29 +350,19 @@ class FeedsTab extends React.Component {
         <FormRow>
           <Select
             disabled={!this.state.feeds.length}
+            grow={false}
             id="feedID"
             label={this.props.intl.formatMessage({
               id: 'feeds.select.feed',
               defaultMessage: 'Select feed',
             })}
-            width="one-quarter">
+            width="three-eighths">
             {this.getAvailableFeedsOptions()}
           </Select>
-          {this.state.selectedFeed && [
-            <Textbox
-              id="search"
-              label={this.props.intl.formatMessage({
-                id: 'feeds.search.term',
-                defaultMessage: 'Search term',
-              })}
-              placeholder={this.props.intl.formatMessage(MESSAGES.search)}
-            />,
-            <Button type="submit" labelOffset>
-              <FormattedMessage id="button.download" defaultMessage="Download" />
-            </Button>,
-          ]}
+          {this.renderSearchField()}
+          {this.renderDownloadButton()}
         </FormRow>
-        {this.state.selectedFeed && [<FormRow>{this.getFeedItemsList()}</FormRow>]}
+        {this.state.selectedFeed && <FormRow>{this.getFeedItemsList()}</FormRow>}
       </Form>
     );
   }
@@ -395,15 +385,7 @@ class FeedsTab extends React.Component {
         <li
           className="interactive-list__item interactive-list__item--stacked-content feed-list__feed"
           key={'item' + index}>
-          <div className="interactive-list__label">
-            <ul className="interactive-list__detail-list">
-              <li
-                className="interactive-list__detail-list__item
-                interactive-list__detail--primary">
-                {item.title}
-              </li>
-            </ul>
-          </div>
+          <div className="interactive-list__label feed-list__feed-label">{item.title}</div>
           <Checkbox id={index} />
         </li>
       );
@@ -471,15 +453,10 @@ class FeedsTab extends React.Component {
   };
 
   handleBrowseFeedChange = input => {
-    this.setState({
-      selectedFeed: input.formData.feedID,
-    });
-    FeedMonitorStore.fetchItems({
-      params: {
-        id: input.formData.feedID,
-        search: input.formData.search,
-      },
-    });
+    if (input.event.target.type !== 'checkbox') {
+      this.setState({selectedFeed: input.formData.feedID});
+      FeedMonitorStore.fetchItems({params: {id: input.formData.feedID, search: input.formData.search}});
+    }
   };
 
   handleBrowseFeedSubmit = () => {
@@ -506,6 +483,35 @@ class FeedsTab extends React.Component {
 
     return {errors, isValid: !Object.keys(errors).length};
   }
+
+  renderSearchField = () => {
+    const {selectedFeed} = this.state;
+
+    if (selectedFeed == null) return null;
+
+    return (
+      <Textbox
+        id="search"
+        label={this.props.intl.formatMessage({
+          id: 'feeds.search.term',
+          defaultMessage: 'Search term',
+        })}
+        placeholder={this.props.intl.formatMessage(MESSAGES.search)}
+      />
+    );
+  };
+
+  renderDownloadButton = () => {
+    const {selectedFeed} = this.state;
+
+    if (selectedFeed == null) return null;
+
+    return (
+      <Button key="button" type="submit" labelOffset>
+        <FormattedMessage id="button.download" defaultMessage="Download" />
+      </Button>
+    );
+  };
 
   render() {
     const errors = Object.keys(this.state.errors).map((errorID, index) => {
