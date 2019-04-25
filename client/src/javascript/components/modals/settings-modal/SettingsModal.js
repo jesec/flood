@@ -1,6 +1,7 @@
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
+import AboutTab from './AboutTab';
 import AuthTab from './AuthTab';
 import BandwidthTab from './BandwidthTab';
 import ConnectivityTab from './ConnectivityTab';
@@ -222,6 +223,13 @@ class SettingsModal extends React.Component {
           onSettingsChange: this.handleFloodSettingsChange,
           scrollContainer: this.modalBodyRef,
         },
+      },
+      about: {
+        content: AboutTab,
+        label: this.props.intl.formatMessage({
+          id: 'settings.tabs.about',
+          defaultMessage: 'About',
+        }),
       },
     };
 

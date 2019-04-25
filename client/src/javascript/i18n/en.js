@@ -187,6 +187,7 @@ export default {
   'settings.tabs.resources': 'Resources',
   'settings.tabs.authentication': 'Authentication',
   'settings.tabs.userinterface': 'User Interface',
+  'settings.tabs.about': 'About',
 
   'settings.ui.locale': 'Locale',
   'settings.ui.language': 'Language',
@@ -196,6 +197,8 @@ export default {
   'settings.ui.torrent.size.condensed': 'Condensed View',
   'settings.ui.torrent.details.enabled': 'Enabled',
   'settings.ui.torrent.details.tags.placement': 'In the expanded view, tags work best at the end of the list.',
+
+  'settings.about.flood': 'About Flood',
 
   'sidebar.button.feeds': 'Feeds',
   'sidebar.button.notifications': 'Notifications',
