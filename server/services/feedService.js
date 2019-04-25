@@ -210,11 +210,6 @@ class FeedService extends BaseService {
       return [feedItem.enclosure.url];
     }
 
-    // If we've got a Object of enclosures, use url key
-    if (feedItem.enclosure && feedItem.enclosure.url) {
-      return [feedItem.enclosure.url];
-    }
-
     // If there are no enclosures, then use the link tag instead
     if (feedItem.link) {
       // remove CDATA tags around links
