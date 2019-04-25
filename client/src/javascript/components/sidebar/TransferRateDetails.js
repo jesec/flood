@@ -30,7 +30,7 @@ class TransferRateDetails extends React.Component {
     super();
 
     this.state = {
-      isClientConnected: false,
+      isClientConnected: ClientStatusStore.getIsConnected(),
       inspectorPoint: null,
     };
 

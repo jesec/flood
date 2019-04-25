@@ -67,6 +67,7 @@ class TorrentListContainer extends React.Component {
       displayedProperties: SettingsStore.getFloodSettings('torrentDetails'),
       emptyTorrentList: false,
       handleTorrentPriorityChange: null,
+      isClientConnected: ClientStatusStore.getIsConnected(),
       tableScrollLeft: 0,
       torrentCount: 0,
       torrentHeight: null,

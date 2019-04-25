@@ -41,7 +41,7 @@ class AuthEnforcer extends React.Component {
       authStatusDetermined: false,
       dependencies: {},
       isAuthenticated: false,
-      isClientConnected: false,
+      isClientConnected: ClientStatusStore.getIsConnected(),
       dependenciesLoaded: false,
     };
 

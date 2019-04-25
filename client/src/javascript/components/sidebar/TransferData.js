@@ -27,7 +27,7 @@ class TransferData extends React.Component {
 
     this.state = {
       graphInspectorPoint: null,
-      isClientConnected: false,
+      isClientConnected: ClientStatusStore.getIsConnected(),
       sidebarWidth: 0,
       transferHistoryRequestSuccess: false,
       transferDataRequestError: false,
