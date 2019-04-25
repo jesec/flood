@@ -17,7 +17,8 @@ If you have a specific issue or bug, please file a Github issue. Please join the
 1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed and running __with XMLRPC__ configuration.
     * For Linux & OS X, check out [rTorrent's installation wiki](https://github.com/rakshasa/rtorrent/wiki/Installing#compilation-help) and/or [this third-party tutorial](https://jes.sc/kb/rTorrent+ruTorrent-Seedbox-Guide.php#Install-Dependencies). When you run `./configure`, be sure to run with the `--with-xmlrpc-c` flag.
     * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows).
-2. Install NodeJS version `8` or higher (you might want to manage different Node versions with [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)).
+2. Install NodeJS version `8` or higher (you might want to manage different Node versions with [nodenv](https://github.com/nodenv/nodenv) or [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)).
+3. Install `node-gyp` pre-requisites, see https://www.npmjs.com/package/node-gyp#installation, ex: `python2`, `make`, `gcc`.
 
 ### Configuration
 
@@ -85,7 +86,3 @@ I've been bad about cutting actual releases, so check this repo for recent commi
 The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`.
 
 Check out the [Wiki](https://github.com/jfurrow/flood/wiki/Docker) for more information.
-
-## Acknowledgments
-
-Check out [`package.json`](./package.json)'s `dependency` property to see the projects that make this app possible. Flood's client-side build tooling is based on the wonderful [create-react-app](https://github.com/facebookincubator/create-react-app).
