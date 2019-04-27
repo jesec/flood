@@ -5,7 +5,7 @@
   "license": "GPL-3.0-only",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jfurrow/flood.git"
+    "url": "https://github.com/Flood-UI/flood.git"
   },
   "scripts": {
     "build": "node client/scripts/build.js",

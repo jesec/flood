@@ -5,8 +5,8 @@ about: "Report a general bug in flood"
 Type: Bug Report
 
 - [ ] Try to follow the update procedure described in the README and try again before opening this issue.
-- [ ] Please check the [F.A.Q.](https://github.com/jfurrow/flood/wiki/F.A.Q.).
-- [ ] Please check the [Troubleshooting](https://github.com/jfurrow/flood/wiki/Troubleshooting) wiki section.
+- [ ] Please check the [F.A.Q.](https://github.com/Flood-UI/flood/wiki/F.A.Q.).
+- [ ] Please check the [Troubleshooting](https://github.com/Flood-UI/flood/wiki/Troubleshooting) wiki section.
 
 ## Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->

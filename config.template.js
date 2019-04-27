@@ -11,7 +11,7 @@ const CONFIG = {
   // '/flood' and configure your web server to pass _all_ requests from `/flood` to
   // the root of Flood's web server.
   // Recompiling assets with `npm run build` is needed after each `baseURI` change.
-  // See https://github.com/jfurrow/flood/wiki/Using-Flood-behind-a-reverse-proxy
+  // See https://github.com/Flood-UI/flood/wiki/Using-Flood-behind-a-reverse-proxy
   baseURI: '/',
   // Flood uses a local nedb database to keep track of users, torrents,
   // and activity. The database is regularly purged to remove outdated data.
@@ -40,7 +40,7 @@ const CONFIG = {
   // Configuration for SSL, if using SSL with the Flood service directly.
   ssl: false,
   sslKey: '/absolute/path/to/key/',
-  sslCert: '/absolute/path/to/certificate/'
+  sslCert: '/absolute/path/to/certificate/',
 };
 // Do not remove the below line.
 module.exports = CONFIG;

@@ -39,5 +39,5 @@
 * Basic torrent list filtering (by status, tag, and tracker)
 * Auto-download torrents from RSS feeds
 
-[Unreleased]:https://github.com/jfurrow/flood/compare/v1.0.0...HEAD
-[1.0.0]:https://github.com/jfurrow/flood/compare/ae520c0a33ffb4ae6f21e47bc6f7e6007dd1e6dc...v1.0.0
+[Unreleased]:https://github.com/Flood-UI/flood/compare/v1.0.0...HEAD
+[1.0.0]:https://github.com/Flood-UI/flood/compare/ae520c0a33ffb4ae6f21e47bc6f7e6007dd1e6dc...v1.0.0

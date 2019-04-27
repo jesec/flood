@@ -2,7 +2,7 @@
 
 ![Flood logo](flood.png)
 
-[![Travis CI build status badge](https://img.shields.io/travis/jfurrow/flood/master.svg?style=flat-square)](https://travis-ci.org/jfurrow/flood) [![Discord server badge](https://img.shields.io/discord/418267176873623553.svg?style=flat-square)](https://discord.gg/Z7yR5Uf)
+[![Travis CI build status badge](https://img.shields.io/travis/Flood-UI/flood/master.svg?style=flat-square)](https://travis-ci.org/Flood-UI/flood) [![Discord server badge](https://img.shields.io/discord/418267176873623553.svg?style=flat-square)](https://discord.gg/Z7yR5Uf)
 
 Flood is a monitoring service for [rTorrent](https://github.com/rakshasa/rtorrent). It's a Node.js service that communicates with rTorrent instances and serves a decent web UI for administration. It's a work-in-progress.
 
@@ -31,7 +31,7 @@ When loading the web interface, you will be prompted to configure the connection
 1. Be sure to create a long and unique secret (used to sign [JWT auth tokens](https://github.com/auth0/node-jsonwebtoken)).
 3. If you are proxying requests to Flood from your own web server, configure Flood's path from the host at the `baseURI` property. All requests will be prefixed with this value.
     * For example, if serving Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If serving flood from `https://foo.bar`, you do not need to configure `baseURI`.
-    * [Read more about proxying requests to Flood on the Wiki](https://github.com/jfurrow/flood/wiki/Using-Flood-behind-a-reverse-proxy), this is a common pain-point for users.
+    * [Read more about proxying requests to Flood on the Wiki](https://github.com/Flood-UI/flood/wiki/Using-Flood-behind-a-reverse-proxy), this is a common pain-point for users.
     
 **Note**: Some of these values are baked into the static assets (like `baseURI`), so changes to this file require recompling static assets.
 
@@ -85,4 +85,4 @@ I've been bad about cutting actual releases, so check this repo for recent commi
 
 The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`.
 
-Check out the [Wiki](https://github.com/jfurrow/flood/wiki/Docker) for more information.
+Check out the [Wiki](https://github.com/Flood-UI/flood/wiki/Docker) for more information.
