@@ -19,6 +19,7 @@ RUN apk add --no-cache --virtual=build-dependencies \
 COPY client ./client
 COPY shared ./shared
 COPY config.docker.js ./config.js
+COPY ABOUT.md ./ABOUT.md
 RUN npm run build && \
     npm prune --production
 COPY server ./server
