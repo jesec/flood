@@ -14,7 +14,7 @@ class SidebarItem extends React.Component {
   };
 
   render() {
-    let classes = classnames(this.props.baseClassName, {
+    const classes = classnames(this.props.baseClassName, {
       [`${this.props.baseClassName}--${this.props.modifier}`]: this.props.modifier,
     });
 

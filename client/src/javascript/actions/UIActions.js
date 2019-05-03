@@ -3,7 +3,7 @@ import _ from 'lodash';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
-let UIActions = {
+const UIActions = {
   displayContextMenu: data => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,
@@ -82,7 +82,7 @@ let UIActions = {
       });
     },
     250,
-    {trailing: true}
+    {trailing: true},
   ),
 
   setTorrentsSort: data => {

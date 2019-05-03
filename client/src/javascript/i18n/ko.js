@@ -66,7 +66,7 @@ export default {
   'feeds.existing.feeds': '설정된 피드',
   'feeds.existing.rules': '설정된 규칙',
   'feeds.label': '라벨',
-  'feeds.match.count': `{count, plural, =1 {# 일치} other {# 일치}}`,
+  'feeds.match.count': '{count, plural, =1 {# 일치} other {# 일치}}',
   'feeds.match.pattern': '일치 패턴',
   'feeds.match': '일치',
   'feeds.exclude': '제외',
@@ -348,7 +348,7 @@ export default {
   'torrents.sort.title': '정렬 기준',
 
   'connection-interruption.heading': 'rTorrent에 연결하지 못했습니다',
-  'connection-interruption.verify-settings-prompt': `연결 설정을 검증해보겠습니다.`,
-  'connection-interruption.verification-error': `연결을 검증하지 못했습니다.`,
-  'connection-interruption.verification-success': `연결 성공`,
+  'connection-interruption.verify-settings-prompt': '연결 설정을 검증해보겠습니다.',
+  'connection-interruption.verification-error': '연결을 검증하지 못했습니다.',
+  'connection-interruption.verification-success': '연결 성공',
 };

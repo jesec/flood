@@ -7,7 +7,7 @@ import React from 'react';
 import ConfigStore from '../../../stores/ConfigStore';
 import Disk from '../../icons/Disk';
 import DirectoryTree from '../../general/filesystem/DirectoryTree';
-import TorrentStore from '../../../stores/TorrentStore';
+import TorrentActions from '../../../actions/TorrentActions';
 
 const TORRENT_PROPS_TO_CHECK = ['bytesDone'];
 const METHODS_TO_BIND = ['handleItemSelect', 'handlePriorityChange', 'handleSelectAllClick'];
@@ -40,7 +40,7 @@ class TorrentFiles extends React.Component {
     // If we know that the user changed a file's priority, we deeply check the
     // file tree to render when the priority change is detected.
     if (this.hasPriorityChanged) {
-      let shouldUpdate = !_.isEqual(nextProps.fileTree, this.props.fileTree);
+      const shouldUpdate = !_.isEqual(nextProps.fileTree, this.props.fileTree);
 
       // Reset the flag so we don't deeply check the next file tree.
       if (shouldUpdate) {
@@ -57,9 +57,7 @@ class TorrentFiles extends React.Component {
 
     // Check specific properties to re-render when the torrent is active.
     if (nextProps.torrent) {
-      return TORRENT_PROPS_TO_CHECK.some(property => {
-        return this.props.torrent[property] !== nextProps.torrent[property];
-      });
+      return TORRENT_PROPS_TO_CHECK.some(property => this.props.torrent[property] !== nextProps.torrent[property]);
     }
 
     return true;
@@ -70,7 +68,7 @@ class TorrentFiles extends React.Component {
       selectedFiles = [
         ...selectedFiles,
         ...Object.keys(selectionTree.files).reduce((previousValue, filename) => {
-          let file = selectionTree.files[filename];
+          const file = selectionTree.files[filename];
 
           if (file.isSelected) {
             previousValue.push(file.index);
@@ -101,18 +99,25 @@ class TorrentFiles extends React.Component {
     link.click();
   };
 
-  handleFormChange = ({event, formData}) => {
+  handleFormChange = ({event}) => {
     if (event.target.name === 'file-priority') {
       this.handlePriorityChange();
-      TorrentStore.setFilePriority(this.props.hash, this.state.selectedFiles, event.target.value);
+      TorrentActions.setFilePriority(this.props.hash, this.state.selectedFiles, event.target.value);
     }
   };
 
   handleItemSelect(selectedItem) {
     this.hasSelectionChanged = true;
-    let selectedItems = this.mergeSelection(selectedItem, this.state.selectedItems, 0, this.props.fileTree);
-    let selectedFiles = this.getSelectedFiles(selectedItems);
-    this.setState({selectedItems, allSelected: false, selectedFiles});
+    this.setState(state => {
+      const selectedItems = this.mergeSelection(selectedItem, state.selectedItems, 0, this.props.fileTree);
+      const selectedFiles = this.getSelectedFiles(selectedItems);
+
+      return {
+        selectedItems,
+        allSelected: false,
+        selectedFiles,
+      };
+    });
   }
 
   handlePriorityChange() {
@@ -121,12 +126,16 @@ class TorrentFiles extends React.Component {
 
   handleSelectAllClick() {
     this.hasSelectionChanged = true;
-    let selectedItems = this.selectAll(this.state.selectedItems, this.props.fileTree, this.state.allSelected);
-    let selectedFiles = this.getSelectedFiles(selectedItems);
-    this.setState({
-      selectedItems,
-      allSelected: !this.state.allSelected,
-      selectedFiles,
+
+    this.setState((state, props) => {
+      const selectedItems = this.selectAll(state.selectedItems, props.fileTree, state.allSelected);
+      const selectedFiles = this.getSelectedFiles(selectedItems);
+
+      return {
+        selectedItems,
+        allSelected: !state.allSelected,
+        selectedFiles,
+      };
     });
   }
 
@@ -135,9 +144,9 @@ class TorrentFiles extends React.Component {
   }
 
   mergeSelection(item, tree = {}, depth = 0, fileTree = {}) {
-    let {path} = item;
-    let pathSegment = path[depth];
-    let selectionSubTree = item.type === 'file' ? 'files' : 'directories';
+    const {path} = item;
+    const pathSegment = path[depth];
+    const selectionSubTree = item.type === 'file' ? 'files' : 'directories';
 
     if (!tree[selectionSubTree]) {
       tree[selectionSubTree] = {};
@@ -165,24 +174,22 @@ class TorrentFiles extends React.Component {
         item,
         tree.directories[pathSegment],
         depth,
-        fileTree.directories[pathSegment]
+        fileTree.directories[pathSegment],
       );
+    } else if (item.isSelected) {
+      delete tree.isSelected;
+      delete tree[selectionSubTree][pathSegment];
     } else {
-      if (item.isSelected) {
-        delete tree.isSelected;
-        delete tree[selectionSubTree][pathSegment];
+      let value;
+
+      // If a directory was checked, recursively check all its children.
+      if (item.type === 'directory') {
+        value = this.selectAll(tree[selectionSubTree][pathSegment], fileTree[selectionSubTree][pathSegment]);
       } else {
-        let value;
-
-        // If a directory was checked, recursively check all its children.
-        if (item.type === 'directory') {
-          value = this.selectAll(tree[selectionSubTree][pathSegment], fileTree[selectionSubTree][pathSegment]);
-        } else {
-          value = {...item, isSelected: true};
-        }
-
-        tree[selectionSubTree][pathSegment] = value;
+        value = {...item, isSelected: true};
       }
+
+      tree[selectionSubTree][pathSegment] = value;
     }
 
     return tree;
@@ -216,7 +223,7 @@ class TorrentFiles extends React.Component {
         selectionTree.directories[directory] = this.selectAll(
           selectionTree.directories[directory],
           fileTree.directories[directory],
-          deselect
+          deselect,
         );
       });
     }
@@ -226,7 +233,7 @@ class TorrentFiles extends React.Component {
   }
 
   render() {
-    let {fileTree, torrent} = this.props;
+    const {fileTree, torrent} = this.props;
     let directoryHeadingIconContent = null;
     let fileDetailContent = null;
 
@@ -237,7 +244,7 @@ class TorrentFiles extends React.Component {
             className="directory-tree__checkbox__item
             directory-tree__checkbox__item--checkbox">
             <FormRow>
-              <Checkbox checked={this.state.allSelected} onChange={this.handleSelectAllClick} useProps={true} />
+              <Checkbox checked={this.state.allSelected} onChange={this.handleSelectAllClick} useProps />
             </FormRow>
           </div>
           <div
@@ -266,15 +273,15 @@ class TorrentFiles extends React.Component {
       );
     }
 
-    let directoryHeadingClasses = classnames(
+    const directoryHeadingClasses = classnames(
       'directory-tree__node',
       'directory-tree__parent-directory torrent-details__section__heading',
       {
         'directory-tree__node--selected': this.state.allSelected,
-      }
+      },
     );
 
-    let directoryHeading = (
+    const directoryHeading = (
       <div className={directoryHeadingClasses}>
         <div className="file__label">
           {directoryHeadingIconContent}
@@ -283,7 +290,7 @@ class TorrentFiles extends React.Component {
       </div>
     );
 
-    let wrapperClasses = classnames('inverse directory-tree__wrapper', {
+    const wrapperClasses = classnames('inverse directory-tree__wrapper', {
       'directory-tree__wrapper--toolbar-visible': this.state.selectedFiles.length > 0,
     });
 

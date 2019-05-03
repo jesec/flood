@@ -21,13 +21,13 @@ class Portal extends React.Component {
     this.renderChildren(this.props);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.renderChildren(nextProps);
+  }
+
   componentWillUnmount() {
     ReactDOM.unmountComponentAtNode(this.nodeEl);
     document.body.removeChild(this.nodeEl);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.renderChildren(nextProps);
   }
 
   renderChildren(props) {
@@ -35,10 +35,11 @@ class Portal extends React.Component {
       const locale = SettingsStore.getFloodSettings('language');
 
       ReactDOM.render(
+        // eslint-disable-next-line import/namespace
         <IntlProvider locale={locale} messages={i18n[locale]}>
           {props.children}
         </IntlProvider>,
-        this.nodeEl
+        this.nodeEl,
       );
     }
   }

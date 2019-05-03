@@ -69,13 +69,13 @@ class TorrentDetailsModal extends React.Component {
   }
 
   render() {
-    let props = {
+    const props = {
       ...this.props.options,
       torrent: this.state.torrent,
       ...this.state.torrentDetails,
     };
 
-    let tabs = {
+    const tabs = {
       'torrent-details': {
         content: TorrentGeneralInfo,
         label: this.props.intl.formatMessage({
@@ -126,7 +126,7 @@ class TorrentDetailsModal extends React.Component {
         size="large"
         tabs={tabs}
         orientation="vertical"
-        tabsInBody={true}
+        tabsInBody
       />
     );
   }

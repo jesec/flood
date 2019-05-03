@@ -52,11 +52,11 @@ export default class Modal extends React.Component {
         'modal--tabs-in-body': this.props.tabsInBody,
         inverse: this.props.inverse,
       },
-      this.props.className
+      this.props.className,
     );
     let modalBody = this.props.content;
-    let modalHeader = this.props.heading;
-    let headerClasses = classnames('modal__header', {
+    const modalHeader = this.props.heading;
+    const headerClasses = classnames('modal__header', {
       'has-tabs': this.props.tabs,
     });
 
@@ -65,14 +65,14 @@ export default class Modal extends React.Component {
     let headerTabs;
 
     if (this.props.tabs) {
-      let activeTabId = this.getActiveTabId();
-      let activeTab = this.props.tabs[activeTabId];
-      let contentClasses = classnames('modal__content', activeTab.modalContentClasses);
+      const activeTabId = this.getActiveTabId();
+      const activeTab = this.props.tabs[activeTabId];
+      const contentClasses = classnames('modal__content', activeTab.modalContentClasses);
 
-      let ModalContentComponent = activeTab.content;
-      let modalContentData = activeTab.props;
+      const ModalContentComponent = activeTab.content;
+      const modalContentData = activeTab.props;
 
-      let tabs = (
+      const tabs = (
         <ModalTabs
           activeTabId={activeTabId}
           key="modal-tabs"

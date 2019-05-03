@@ -7,11 +7,24 @@ const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
 const CUMULATIVE_DATA_BUFFER_DIFF = 500; // 500 miliseconds
 const REQUIRED_FIELDS = ['interval', 'maxTime', 'name'];
 
+const hasRequiredFields = opts => {
+  let requirementsMet = true;
+
+  REQUIRED_FIELDS.forEach(field => {
+    if (opts[field] == null) {
+      console.error(`HistoryEra requires ${field}`);
+      requirementsMet = false;
+    }
+  });
+
+  return requirementsMet;
+};
+
 class HistoryEra {
   constructor(user, opts) {
     opts = opts || {};
 
-    if (!this.hasRequiredFields(opts)) {
+    if (!hasRequiredFields(opts)) {
       return;
     }
 
@@ -26,7 +39,7 @@ class HistoryEra {
     this.removeOutdatedData(this.db);
 
     let cleanupInterval = this.opts.maxTime;
-    let nextEraUpdateInterval = this.opts.nextEraUpdateInterval;
+    let {nextEraUpdateInterval} = this.opts;
 
     if (cleanupInterval === 0 || cleanupInterval > config.dbCleanInterval) {
       cleanupInterval = config.dbCleanInterval;
@@ -59,7 +72,7 @@ class HistoryEra {
       return;
     }
 
-    let currentTime = Date.now();
+    const currentTime = Date.now();
 
     if (currentTime - this.lastUpdate >= this.opts.interval - CUMULATIVE_DATA_BUFFER_DIFF) {
       this.lastUpdate = currentTime;
@@ -72,13 +85,13 @@ class HistoryEra {
     } else {
       this.db.find({ts: this.lastUpdate}, (err, docs) => {
         if (docs.length !== 0) {
-          let doc = docs[0];
-          let numUpdates = Number(doc.num || 1);
-          let currentDownAvg = Number(doc.dn);
-          let currentUpAvg = Number(doc.up);
+          const doc = docs[0];
+          const numUpdates = Number(doc.num || 1);
+          const currentDownAvg = Number(doc.dn);
+          const currentUpAvg = Number(doc.up);
 
-          let downAvg = ((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
-          let upAvg = ((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
+          const downAvg = ((currentDownAvg * numUpdates + Number(data.download)) / (numUpdates + 1)).toFixed(1);
+          const upAvg = ((currentUpAvg * numUpdates + Number(data.upload)) / (numUpdates + 1)).toFixed(1);
 
           // TODO: Remove this nonsense, I think this bug is resolved.
           if (downAvg == null || upAvg == null) {
@@ -86,7 +99,11 @@ class HistoryEra {
             console.error('Warning: null values set in database!');
             console.error(`DB: ${this.opts.name}`);
             console.error(
-              `numUpdates: ${numUpdates}\ncurrentDownAvg: ${currentDownAvg}\ncurrentUpAvg: ${currentUpAvg}\ndownAvg: ${downAvg}\nupAvg: ${upAvg}`
+              `numUpdates: ${numUpdates}
+currentDownAvg: ${currentDownAvg}
+currentUpAvg: ${currentUpAvg}
+downAvg: ${downAvg}
+upAvg: ${upAvg}`,
             );
             console.error('\n\n');
           }
@@ -100,7 +117,7 @@ class HistoryEra {
               up: Number(upAvg),
               dn: Number(downAvg),
               num: numUpdates + 1,
-            }
+            },
           );
         }
       });
@@ -113,7 +130,7 @@ class HistoryEra {
   }
 
   getData(opts, callback) {
-    let minTimestamp = Date.now() - this.opts.maxTime;
+    const minTimestamp = Date.now() - this.opts.maxTime;
 
     this.db
       .find({ts: {$gte: minTimestamp}})
@@ -128,22 +145,9 @@ class HistoryEra {
       });
   }
 
-  hasRequiredFields(opts) {
-    let requirementsMet = true;
-
-    REQUIRED_FIELDS.forEach(field => {
-      if (opts[field] == null) {
-        console.error(`HistoryEra requires ${field}`);
-        requirementsMet = false;
-      }
-    });
-
-    return requirementsMet;
-  }
-
   removeOutdatedData(db) {
     if (this.opts.maxTime > 0) {
-      let minTimestamp = Date.now() - this.opts.maxTime;
+      const minTimestamp = Date.now() - this.opts.maxTime;
       db.remove({ts: {$lt: minTimestamp}}, {multi: true});
     }
   }
@@ -174,13 +178,13 @@ class HistoryEra {
     this.autoCleanupInterval = null;
   }
 
-  stopNextEraUpdate(interval, db) {
+  stopNextEraUpdate() {
     clearInterval(this.nextEraUpdateInterval);
     this.nextEraUpdateInterval = null;
   }
 
-  updateNextEra(currentDB, nextDB) {
-    let minTimestamp = Date.now() - this.opts.nextEraUpdateInterval;
+  updateNextEra(currentDB) {
+    const minTimestamp = Date.now() - this.opts.nextEraUpdateInterval;
     currentDB.find({ts: {$gte: minTimestamp}}, (err, docs) => {
       let downTotal = 0;
       let upTotal = 0;

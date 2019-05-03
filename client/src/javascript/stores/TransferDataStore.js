@@ -33,15 +33,15 @@ class TransferDataStoreClass extends BaseStore {
     return this.transferRates;
   }
 
-  handleSetThrottleSuccess(data) {
+  handleSetThrottleSuccess() {
     this.emit(EventTypes.CLIENT_SET_THROTTLE_SUCCESS);
   }
 
-  handleSetThrottleError(error) {
+  handleSetThrottleError() {
     this.emit(EventTypes.CLIENT_SET_THROTTLE_ERROR);
   }
 
-  handleFetchTransferHistoryError(error) {
+  handleFetchTransferHistoryError() {
     this.emit(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_ERROR);
   }
 
@@ -74,7 +74,7 @@ class TransferDataStoreClass extends BaseStore {
   }
 }
 
-let TransferDataStore = new TransferDataStoreClass();
+const TransferDataStore = new TransferDataStoreClass();
 
 TransferDataStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;

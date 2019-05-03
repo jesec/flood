@@ -1,21 +1,19 @@
 import {EventEmitter} from 'events';
 
 export default class BaseStore extends EventEmitter {
-  constructor() {
-    super(...arguments);
+  constructor(...eventEmitterConfig) {
+    super(...eventEmitterConfig);
 
     this.dispatcherID = null;
-    this.on('uncaughtException', this.handleError);
+    this.on('uncaughtException', error => {
+      throw new Error(error);
+    });
     this.requests = {};
     this.setMaxListeners(20);
   }
 
   beginRequest(id) {
     this.requests[id] = true;
-  }
-
-  handleError(error) {
-    console.trace(error);
   }
 
   isRequestPending(id) {

@@ -41,7 +41,7 @@ class Sidebar extends React.Component {
 
   render() {
     return (
-      <CustomScrollbars className="application__sidebar" inverted={true}>
+      <CustomScrollbars className="application__sidebar" inverted>
         <SidebarActions>
           <SpeedLimitDropdown />
           <SettingsButton />

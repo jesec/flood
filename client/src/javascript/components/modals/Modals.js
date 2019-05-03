@@ -57,7 +57,7 @@ export default class Modals extends React.Component {
   }
 
   getModal() {
-    let ActiveModal = this.modals[this.state.activeModal.id];
+    const ActiveModal = this.modals[this.state.activeModal.id];
 
     return <ActiveModal dismiss={this.dismissModal} options={this.state.activeModal.options} />;
   }

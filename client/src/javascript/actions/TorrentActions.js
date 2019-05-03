@@ -6,9 +6,9 @@ import ConfigStore from '../stores/ConfigStore';
 
 const baseURI = ConfigStore.getBaseURI();
 
-let TorrentActions = {
-  addTorrentsByUrls: options => {
-    return axios
+const TorrentActions = {
+  addTorrentsByUrls: options =>
+    axios
       .post(`${baseURI}api/client/add`, options)
       .then((json = {}) => json.data)
       .then(
@@ -29,12 +29,11 @@ let TorrentActions = {
               error,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
-  addTorrentsByFiles: (formData, destination) => {
-    return axios
+  addTorrentsByFiles: (formData, destination) =>
+    axios
       .post(`${baseURI}api/client/add-files`, formData)
       .then((json = {}) => json.data)
       .then(
@@ -55,12 +54,11 @@ let TorrentActions = {
               error,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
-  deleteTorrents: (hash, deleteData) => {
-    return axios
+  deleteTorrents: (hash, deleteData) =>
+    axios
       .post(`${baseURI}api/client/torrents/delete`, {hash, deleteData})
       .then((json = {}) => json.data)
       .then(
@@ -82,12 +80,11 @@ let TorrentActions = {
               count: hash.length,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
-  checkHash: hash => {
-    return axios
+  checkHash: hash =>
+    axios
       .post(`${baseURI}api/client/torrents/check-hash`, {hash})
       .then((json = {}) => json.data)
       .then(
@@ -108,12 +105,11 @@ let TorrentActions = {
               count: hash.length,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
-  fetchTorrentDetails: hash => {
-    return axios
+  fetchTorrentDetails: hash =>
+    axios
       .post(`${baseURI}api/client/torrent-details`, {
         hash,
       })
@@ -128,22 +124,28 @@ let TorrentActions = {
             },
           });
         },
-        error => {
+        () => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_FETCH_TORRENT_DETAILS_ERROR,
             data: {
               hash,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
   moveTorrents: (hashes, options) => {
-    let {destination, isBasePath, filenames, sources, moveFiles} = options;
+    const {destination, isBasePath, filenames, sources, moveFiles} = options;
 
     return axios
-      .post(`${baseURI}api/client/torrents/move`, {hashes, destination, isBasePath, filenames, sources, moveFiles})
+      .post(`${baseURI}api/client/torrents/move`, {
+        hashes,
+        destination,
+        isBasePath,
+        filenames,
+        sources,
+        moveFiles,
+      })
       .then((json = {}) => json.data)
       .then(
         data => {
@@ -160,12 +162,12 @@ let TorrentActions = {
             type: ActionTypes.CLIENT_MOVE_TORRENTS_ERROR,
             error,
           });
-        }
+        },
       );
   },
 
-  startTorrents: hashes => {
-    return axios
+  startTorrents: hashes =>
+    axios
       .post(`${baseURI}api/client/start`, {
         hashes,
       })
@@ -186,12 +188,11 @@ let TorrentActions = {
               error,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
-  stopTorrents: hashes => {
-    return axios
+  stopTorrents: hashes =>
+    axios
       .post(`${baseURI}api/client/stop`, {
         hashes,
       })
@@ -212,12 +213,11 @@ let TorrentActions = {
               error,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
-  setPriority: (hash, priority) => {
-    return axios
+  setPriority: (hash, priority) =>
+    axios
       .patch(`${baseURI}api/client/torrents/${hash}/priority`, {
         hash,
         priority,
@@ -235,12 +235,11 @@ let TorrentActions = {
             type: ActionTypes.CLIENT_SET_TORRENT_PRIORITY_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  setFilePriority: (hash, fileIndices, priority) => {
-    return axios
+  setFilePriority: (hash, fileIndices, priority) =>
+    axios
       .patch(`${baseURI}api/client/torrents/${hash}/file-priority`, {
         hash,
         fileIndices,
@@ -264,12 +263,11 @@ let TorrentActions = {
             type: ActionTypes.CLIENT_SET_FILE_PRIORITY_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  setTaxonomy: (hashes, tags, options = {}) => {
-    return axios
+  setTaxonomy: (hashes, tags, options = {}) =>
+    axios
       .patch(`${baseURI}api/client/torrents/taxonomy`, {
         hashes,
         tags,
@@ -288,9 +286,8 @@ let TorrentActions = {
             type: ActionTypes.CLIENT_SET_TAXONOMY_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 };
 
 export default TorrentActions;

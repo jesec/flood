@@ -12,7 +12,7 @@ class FeedsModal extends React.Component {
   }
 
   render() {
-    let tabs = {
+    const tabs = {
       feeds: {
         content: FeedsTab,
         label: this.props.intl.formatMessage({

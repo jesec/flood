@@ -37,13 +37,11 @@ const transformLegacyKeys = settings => {
   }
 
   if (settings.torrentDetails) {
-    settings.torrentDetails = settings.torrentDetails.reduce((accumulator, detailItem, index) => {
+    settings.torrentDetails = settings.torrentDetails.reduce((accumulator, detailItem) => {
       if (
         detailItem &&
         detailItem.id in changedKeys &&
-        !settings.torrentDetails.some(subDetailItem => {
-          return subDetailItem.id === changedKeys[detailItem.id];
-        })
+        !settings.torrentDetails.some(subDetailItem => subDetailItem.id === changedKeys[detailItem.id])
       ) {
         detailItem.id = changedKeys[detailItem.id];
       }
@@ -86,8 +84,8 @@ function getDb(user) {
 
 const settings = {
   get: (user, opts, callback) => {
-    let query = {};
-    let settings = {};
+    const query = {};
+    const settingsToReturn = {};
 
     if (opts.property) {
       query.id = opts.property;
@@ -102,15 +100,15 @@ const settings = {
         }
 
         docs.forEach(doc => {
-          settings[doc.id] = doc.data;
+          settingsToReturn[doc.id] = doc.data;
         });
 
-        callback(transformLegacyKeys(settings));
+        callback(transformLegacyKeys(settingsToReturn));
       });
   },
 
   set: (user, payloads, callback = _.noop) => {
-    let docsResponse = [];
+    const docsResponse = [];
 
     if (!Array.isArray(payloads)) {
       payloads = [payloads];
@@ -126,7 +124,6 @@ const settings = {
               return;
             }
             callback(docsResponse);
-            return;
           }
         });
       });

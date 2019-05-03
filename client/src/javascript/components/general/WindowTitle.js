@@ -47,7 +47,7 @@ class WindowTitle extends React.Component {
       },
       {
         baseUnit: intl.formatMessage({id: getTranslationString(down.unit)}),
-      }
+      },
     );
     const translatedUpUnit = intl.formatMessage(
       {
@@ -56,7 +56,7 @@ class WindowTitle extends React.Component {
       },
       {
         baseUnit: intl.formatMessage({id: getTranslationString(up.unit)}),
-      }
+      },
     );
 
     const formattedTitle = intl.formatMessage(
@@ -68,7 +68,7 @@ class WindowTitle extends React.Component {
       {
         down: `${formattedDownSpeed} ${translatedDownUnit}`,
         up: `${formattedUpSpeed} ${translatedUpUnit}`,
-      }
+      },
     );
 
     this.setState({

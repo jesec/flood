@@ -71,7 +71,7 @@ export default {
   'feeds.existing.feeds': 'Existing Feeds',
   'feeds.existing.rules': 'Existing Rules',
   'feeds.label': 'Label',
-  'feeds.match.count': `{count, plural, =1 {# match} other {# matches}}`,
+  'feeds.match.count': '{count, plural, =1 {# match} other {# matches}}',
   'feeds.match.pattern': 'Match Pattern',
   'feeds.match': 'Match',
   'feeds.exclude': 'Exclude',
@@ -344,7 +344,7 @@ export default {
   'torrents.sort.title': 'Sort By',
 
   'connection-interruption.heading': 'Cannot connect to rTorrent',
-  'connection-interruption.verify-settings-prompt': `Let's verify your connection settings.`,
-  'connection-interruption.verification-error': `Connection could not be verified.`,
-  'connection-interruption.verification-success': `Connection successful`,
+  'connection-interruption.verify-settings-prompt': "Let's verify your connection settings.",
+  'connection-interruption.verification-error': 'Connection could not be verified.',
+  'connection-interruption.verification-success': 'Connection successful',
 };

@@ -53,7 +53,7 @@ export default {
   'feeds.existing.feeds': 'Fuentes Existentes',
   'feeds.existing.rules': 'Reglas Existentes',
   'feeds.label': 'Rotulo',
-  'feeds.match.count': `{count, plural, =1 {# Encontrado} other {# Encontrados}}`,
+  'feeds.match.count': '{count, plural, =1 {# Encontrado} other {# Encontrados}}',
   'feeds.match.pattern': 'Patrón de Inclusión',
   'feeds.match': 'Encontrado',
   'feeds.no.feeds.available': 'No hay fuentes disponibles',

@@ -21,6 +21,7 @@ class AuthTab extends SettingsTab {
   };
 
   formData = {};
+
   formRef = null;
 
   componentWillMount() {
@@ -52,13 +53,11 @@ class AuthTab extends SettingsTab {
   }
 
   getUserList() {
-    let userList = this.state.users.sort((a, b) => {
-      return a.username.localeCompare(b.username);
-    });
+    const userList = this.state.users.sort((a, b) => a.username.localeCompare(b.username));
 
     const currentUsername = AuthStore.getCurrentUsername();
 
-    return userList.map((user, index) => {
+    return userList.map(user => {
       const isCurrentUser = user.username === currentUsername;
       let badge = null;
       let removeIcon = null;
@@ -84,7 +83,7 @@ class AuthTab extends SettingsTab {
       });
 
       return (
-        <li className={classes} key={index}>
+        <li className={classes} key={user.username}>
           <span className="interactive-list__label">
             <div className="interactive-list__label__text">{user.username}</div>
             {badge}
@@ -103,7 +102,7 @@ class AuthTab extends SettingsTab {
     this.formData = formData;
   };
 
-  handleFormSubmit = formData => {
+  handleFormSubmit = () => {
     if (this.formData.username === '') {
       this.setState({
         addUserError: this.props.intl.formatMessage({
@@ -185,7 +184,12 @@ class AuthTab extends SettingsTab {
     }
 
     return (
-      <Form onChange={this.handleFormChange} onSubmit={this.handleFormSubmit} ref={ref => (this.formRef = ref)}>
+      <Form
+        onChange={this.handleFormChange}
+        onSubmit={this.handleFormSubmit}
+        ref={ref => {
+          this.formRef = ref;
+        }}>
         <ModalFormSectionHeader>
           <FormattedMessage id="auth.user.accounts" defaultMessage="User Accounts" />
         </ModalFormSectionHeader>

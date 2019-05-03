@@ -33,28 +33,27 @@ export default class TrackerFilters extends React.Component {
   }
 
   getFilters() {
-    let filterItems = Object.keys(this.state.trackerCount).sort((a, b) => {
+    const filterItems = Object.keys(this.state.trackerCount).sort((a, b) => {
       if (a === 'all') {
         return -1;
-      } else if (b === 'all') {
+      }
+      if (b === 'all') {
         return 1;
       }
 
       return a.localeCompare(b);
     });
 
-    let filterElements = filterItems.map((filter, index) => {
-      return (
-        <SidebarFilter
-          handleClick={this.handleClick}
-          count={this.state.trackerCount[filter] || 0}
-          key={filter}
-          isActive={filter === this.state.trackerFilter}
-          name={filter}
-          slug={filter}
-        />
-      );
-    });
+    const filterElements = filterItems.map(filter => (
+      <SidebarFilter
+        handleClick={this.handleClick}
+        count={this.state.trackerCount[filter] || 0}
+        key={filter}
+        isActive={filter === this.state.trackerFilter}
+        name={filter}
+        slug={filter}
+      />
+    ));
 
     return filterElements;
   }
@@ -64,7 +63,7 @@ export default class TrackerFilters extends React.Component {
   }
 
   hasTrackers() {
-    let trackers = Object.keys(this.state.trackerCount);
+    const trackers = Object.keys(this.state.trackerCount);
 
     return !(trackers.length === 1 && trackers[0] === 'all');
   }
@@ -74,12 +73,12 @@ export default class TrackerFilters extends React.Component {
   }
 
   onTorrentTaxonomyChange() {
-    let trackerCount = TorrentFilterStore.getTorrentTrackerCount();
+    const trackerCount = TorrentFilterStore.getTorrentTrackerCount();
     this.setState({trackerCount});
   }
 
   render() {
-    let filters = this.getFilters();
+    const filters = this.getFilters();
 
     if (!this.hasTrackers()) {
       return null;

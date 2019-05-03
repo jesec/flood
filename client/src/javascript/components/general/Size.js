@@ -5,7 +5,7 @@ import {compute, getTranslationString} from '../../util/size';
 
 class Size extends React.Component {
   renderNumber(computedNumber) {
-    if (isNaN(computedNumber.value)) {
+    if (Number.isNaN(computedNumber.value)) {
       return '—';
     }
 
@@ -26,7 +26,7 @@ class Size extends React.Component {
         },
         {
           baseUnit: translatedUnit,
-        }
+        },
       );
     }
 

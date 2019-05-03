@@ -1,6 +1,5 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
 import EventTypes from '../../constants/EventTypes';
@@ -30,7 +29,6 @@ class TransferData extends React.Component {
       isClientConnected: ClientStatusStore.getIsConnected(),
       sidebarWidth: 0,
       transferHistoryRequestSuccess: false,
-      transferDataRequestError: false,
       transferDataRequestSuccess: false,
     };
 
@@ -53,9 +51,13 @@ class TransferData extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-      sidebarWidth: ReactDOM.findDOMNode(this).offsetWidth,
-    });
+    const wrapperNode = this.wrapperRef;
+
+    if (wrapperNode != null) {
+      this.setState({
+        sidebarWidth: wrapperNode.offsetWidth,
+      });
+    }
 
     ClientStatusStore.listen(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
     TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE, this.onTransferSummaryChange);
@@ -67,7 +69,7 @@ class TransferData extends React.Component {
     TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE, this.onTransferSummaryChange);
     TransferDataStore.unlisten(
       EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
-      this.onTransferHistoryRequestSuccess
+      this.onTransferHistoryRequestSuccess,
     );
   }
 
@@ -92,11 +94,15 @@ class TransferData extends React.Component {
   }
 
   handleMouseOut() {
-    this.state.isClientConnected && this.rateGraphRef.handleMouseOut();
+    if (this.state.isClientConnected) {
+      this.rateGraphRef.handleMouseOut();
+    }
   }
 
   handleMouseOver() {
-    this.state.isClientConnected && this.rateGraphRef.handleMouseOver();
+    if (this.state.isClientConnected) {
+      this.rateGraphRef.handleMouseOver();
+    }
   }
 
   isLoading() {
@@ -109,14 +115,12 @@ class TransferData extends React.Component {
 
   onTransferDataRequestError() {
     this.setState({
-      transferDataRequestError: true,
       transferDataRequestSuccess: false,
     });
   }
 
   onTransferSummaryChange() {
     this.setState({
-      transferDataRequestError: false,
       transferDataRequestSuccess: true,
     });
 
@@ -142,7 +146,9 @@ class TransferData extends React.Component {
         id="transfer-rate-graph"
         onMouseOut={this.handleGraphMouseOut}
         onHover={this.handleGraphHover}
-        ref={ref => (this.rateGraphRef = ref)}
+        ref={ref => {
+          this.rateGraphRef = ref;
+        }}
         width={this.state.sidebarWidth}
       />
     );
@@ -169,10 +175,18 @@ class TransferData extends React.Component {
         </div>
       );
     } else {
-      content = <LoadingIndicator inverse={true} />;
+      content = <LoadingIndicator inverse />;
     }
 
-    return <div className="client-stats__wrapper sidebar__item">{content}</div>;
+    return (
+      <div
+        className="client-stats__wrapper sidebar__item"
+        ref={ref => {
+          this.wrapperRef = ref;
+        }}>
+        {content}
+      </div>
+    );
   }
 }
 

@@ -38,7 +38,7 @@ messageDefs.forEach(messageDef => {
 
   const formattedMessage = messageDef.chalkStyles.reduce(
     (accumulator, styleFn) => chalk[styleFn](accumulator),
-    messageDef.message
+    messageDef.message,
   );
 
   console.log(chalk.bgRed(`${getSpaces(leftPadding)}${formattedMessage}${getSpaces(rightPadding)}`));

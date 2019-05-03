@@ -20,7 +20,7 @@ export default class Alert extends React.Component {
 
   render() {
     let icon = <CircleCheckmarkIcon />;
-    let alertClasses = classnames('alert', {
+    const alertClasses = classnames('alert', {
       'is-success': this.props.type === 'success',
       'is-error': this.props.type === 'error',
     });

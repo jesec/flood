@@ -17,7 +17,7 @@ export default class TorrentPeers extends React.Component {
   }
 
   flagImageAsErrored(countryCode) {
-    let {erroredCountryImages} = this.state;
+    const {erroredCountryImages} = this.state;
     erroredCountryImages.push(countryCode);
     this.setState({erroredCountryImages});
   }
@@ -31,7 +31,7 @@ export default class TorrentPeers extends React.Component {
 
     if (peers) {
       const {erroredCountryImages} = this.state;
-      const peerList = peers.map((peer, index) => {
+      const peerList = peers.map(peer => {
         const {country: countryCode} = peer;
         const encryptedIcon = peer.isEncrypted ? checkmark : null;
         let peerCountry = null;
@@ -42,6 +42,8 @@ export default class TorrentPeers extends React.Component {
           if (!erroredCountryImages.includes(countryCode)) {
             let flagImageSrc;
             try {
+              // We can ignore the lint warnings becuase we need all of the flags available for request.
+              // eslint-disable-next-line global-require,no-undef,import/no-dynamic-require
               flagImageSrc = require(`../../../../images/flags/${countryCode.toLowerCase()}.png`);
             } catch (err) {
               this.flagImageAsErrored(countryCode);
@@ -69,16 +71,16 @@ export default class TorrentPeers extends React.Component {
         }
 
         return (
-          <tr key={index}>
+          <tr key={peer.address}>
             <td>
               {peerCountry}
               {peer.address}
             </td>
             <td>
-              <Size value={peer.downloadRate} isSpeed={true} />
+              <Size value={peer.downloadRate} isSpeed />
             </td>
             <td>
-              <Size value={peer.uploadRate} isSpeed={true} />
+              <Size value={peer.uploadRate} isSpeed />
             </td>
             <td>{peer.completedPercent}%</td>
             <td>{peer.clientVersion}</td>
@@ -107,15 +109,14 @@ export default class TorrentPeers extends React.Component {
           </table>
         </div>
       );
-    } else {
-      return (
-        <span className="torrent-details__section__null-data">
-          <FormattedMessage
-            id="torrents.details.peers.no.data"
-            defaultMessage="There is no peer data for this torrent."
-          />
-        </span>
-      );
     }
+    return (
+      <span className="torrent-details__section__null-data">
+        <FormattedMessage
+          id="torrents.details.peers.no.data"
+          defaultMessage="There is no peer data for this torrent."
+        />
+      </span>
+    );
   }
 }

@@ -16,7 +16,7 @@ class RtorrentConnectionTypeSelection extends Component {
     connectionType: 'tcp',
   };
 
-  handleTypeChange = (event, bar, baz) => {
+  handleTypeChange = event => {
     if (this.state.connectionType !== event.target.value) {
       this.setState({connectionType: event.target.value});
     }

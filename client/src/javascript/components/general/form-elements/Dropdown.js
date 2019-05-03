@@ -72,7 +72,7 @@ class Dropdown extends React.Component {
 
     this.setState({isOpen: true});
 
-    if (!!this.props.onOpen) {
+    if (this.props.onOpen) {
       this.props.onOpen();
     }
 
@@ -121,24 +121,25 @@ class Dropdown extends React.Component {
   }
 
   getDropdownMenu(items) {
-    let arrayMethod = this.props.direction === 'up' ? 'unshift' : 'push';
-    let content = [
+    // TODO: Rewrite this function, wtf was I thinking
+    const arrayMethod = this.props.direction === 'up' ? 'unshift' : 'push';
+    const content = [
       <div className="dropdown__header" key="dropdown-header">
         {this.getDropdownButton({header: true, trigger: false})}
       </div>,
     ];
-    let dropdownLists = items.map((itemList, index) => {
-      return (
-        <div className="dropdown__list" key={index}>
-          {this.getDropdownMenuItems(itemList)}
-        </div>
-      );
-    });
+    const dropdownLists = items.map((itemList, index) => (
+      // TODO: Find a better key
+      // eslint-disable-next-line react/no-array-index-key
+      <div className="dropdown__list" key={index}>
+        {this.getDropdownMenuItems(itemList)}
+      </div>
+    ));
 
     content[arrayMethod](
       <ul className="dropdown__items" key="dropdown-items">
         {dropdownLists}
-      </ul>
+      </ul>,
     );
 
     return <div className="dropdown__content menu">{content}</div>;
@@ -146,7 +147,7 @@ class Dropdown extends React.Component {
 
   getDropdownMenuItems(listItems) {
     return listItems.map((property, index) => {
-      let classes = classnames('dropdown__item menu__item', property.className, {
+      const classes = classnames('dropdown__item menu__item', property.className, {
         'is-selectable': property.selectable !== false,
         'is-selected': property.selected,
       });
@@ -157,6 +158,8 @@ class Dropdown extends React.Component {
       }
 
       return (
+        // TODO: Find a better key
+        // eslint-disable-next-line react/no-array-index-key
         <li className={classes} key={index} onClick={clickHandler}>
           {property.displayName}
         </li>
@@ -165,7 +168,7 @@ class Dropdown extends React.Component {
   }
 
   render() {
-    let dropdownWrapperClass = classnames(
+    const dropdownWrapperClass = classnames(
       this.props.dropdownWrapperClass,
       `${this.props.baseClassName}--direction-${this.props.direction}`,
       {
@@ -173,7 +176,7 @@ class Dropdown extends React.Component {
         [`${this.props.baseClassName}--width-${this.props.width}`]: this.props.width != null,
         [`${this.props.baseClassName}--no-wrap`]: this.props.nowrap,
         'is-expanded': this.state.isOpen,
-      }
+      },
     );
 
     let menu = null;

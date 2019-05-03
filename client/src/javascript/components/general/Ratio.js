@@ -5,7 +5,7 @@ export default class Ratio extends React.Component {
   render() {
     let ratio = this.props.value;
 
-    ratio = ratio / 1000;
+    ratio /= 1000;
     let precision = 1;
 
     if (ratio < 10) {

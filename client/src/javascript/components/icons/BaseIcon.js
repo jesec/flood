@@ -3,7 +3,6 @@ import React from 'react';
 
 export default class BaseIcon extends React.Component {
   static propTypes = {
-    className: PropTypes.string,
     size: PropTypes.string,
     viewBox: PropTypes.string,
   };
@@ -14,7 +13,7 @@ export default class BaseIcon extends React.Component {
   };
 
   getViewBox() {
-    let viewBox = this.props.viewBox;
+    let {viewBox} = this.props;
 
     if (this.props.size && this.props.size === 'mini') {
       viewBox = '0 0 8 8';

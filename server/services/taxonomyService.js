@@ -5,8 +5,8 @@ const taxonomyServiceEvents = require('../constants/taxonomyServiceEvents');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
 class TaxonomyService extends BaseService {
-  constructor() {
-    super(...arguments);
+  constructor(...serviceConfig) {
+    super(...serviceConfig);
 
     this.lastStatusCounts = {all: 0};
     this.lastTagCounts = {all: 0};
@@ -20,7 +20,7 @@ class TaxonomyService extends BaseService {
     this.handleProcessTorrentListStart = this.handleProcessTorrentListStart.bind(this);
     this.handleProcessTorrentListEnd = this.handleProcessTorrentListEnd.bind(this);
 
-    const clientGatewayService = this.services.clientGatewayService;
+    const {clientGatewayService} = this.services;
 
     clientGatewayService.on(clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START, this.handleProcessTorrentListStart);
 
@@ -30,16 +30,16 @@ class TaxonomyService extends BaseService {
   }
 
   destroy() {
-    const clientGatewayService = this.services.clientGatewayService;
+    const {clientGatewayService} = this.services;
 
     clientGatewayService.removeListener(
       clientGatewayServiceEvents.PROCESS_TORRENT_LIST_START,
-      this.handleProcessTorrentListStart
+      this.handleProcessTorrentListStart,
     );
 
     clientGatewayService.removeListener(
       clientGatewayServiceEvents.PROCESS_TORRENT_LIST_END,
-      this.handleProcessTorrentListEnd
+      this.handleProcessTorrentListEnd,
     );
 
     clientGatewayService.removeListener(clientGatewayServiceEvents.PROCESS_TORRENT, this.handleProcessTorrent);
@@ -83,9 +83,7 @@ class TaxonomyService extends BaseService {
       trackerCounts: objectUtil.getDiff(this.lastTrackerCounts, this.trackerCounts),
     };
 
-    const didDiffChange = Object.keys(taxonomyDiffs).some(diffKey => {
-      return taxonomyDiffs[diffKey].length > 0;
-    });
+    const didDiffChange = Object.keys(taxonomyDiffs).some(diffKey => taxonomyDiffs[diffKey].length > 0);
 
     if (didDiffChange) {
       this.emit(taxonomyServiceEvents.TAXONOMY_DIFF_CHANGE, {

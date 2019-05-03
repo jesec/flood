@@ -33,13 +33,15 @@ class SettingsButton extends React.Component {
   }
 
   render() {
-    let label = this.props.intl.formatMessage(MESSAGES.settings);
+    const label = this.props.intl.formatMessage(MESSAGES.settings);
 
     return (
       <Tooltip
         content={label}
         onClick={this.handleSettingsButtonClick}
-        ref={ref => (this.tooltipRef = ref)}
+        ref={ref => {
+          this.tooltipRef = ref;
+        }}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           sidebar__icon-button--interactive tooltip__wrapper">

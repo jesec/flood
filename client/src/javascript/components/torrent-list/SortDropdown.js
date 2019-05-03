@@ -36,20 +36,20 @@ class SortDropdown extends React.Component {
     }
 
     return (
-      <a className="dropdown__button">
+      <button className="dropdown__button">
         <label className="dropdown__label">
           <FormattedMessage id="torrents.sort.title" defaultMessage="Sort By" />
         </label>
         <span className="dropdown__value">
           <FormattedMessage id={propertyMessageConfig.id} defaultMessage={propertyMessageConfig.defaultMessage} />
         </span>
-      </a>
+      </button>
     );
   }
 
   getDropdownMenus() {
     const {direction, selectedProperty} = this.props;
-    let items = SORT_PROPERTIES.map(sortProp => {
+    const items = SORT_PROPERTIES.map(sortProp => {
       const isSelected = sortProp === selectedProperty;
       const directionIndicator = isSelected ? (
         <span className={`sort-dropdown__indicator sort-dropdown__indicator--${direction}`} />
@@ -73,7 +73,7 @@ class SortDropdown extends React.Component {
 
   handleItemSelect(selection) {
     let {direction} = this.props;
-    let {property} = selection;
+    const {property} = selection;
 
     if (this.props.selectedProperty === property) {
       direction = direction === 'asc' ? 'desc' : 'asc';

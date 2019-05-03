@@ -26,14 +26,14 @@ const processData = (opts, callback, data, error) => {
 
         return accumulator;
       },
-      {upload: [], download: [], timestamps: []}
-    )
+      {upload: [], download: [], timestamps: []},
+    ),
   );
 };
 
 class HistoryService extends BaseService {
-  constructor() {
-    super(...arguments);
+  constructor(...serviceConfig) {
+    super(...serviceConfig);
 
     this.errorCount = 0;
     this.lastSnapshots = {};

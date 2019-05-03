@@ -2,8 +2,8 @@ const BaseService = require('./BaseService');
 const scgiUtil = require('../util/scgiUtil');
 
 class ClientRequestManager extends BaseService {
-  constructor() {
-    super(...arguments);
+  constructor(...serviceConfig) {
+    super(...serviceConfig);
 
     this.isRequestPending = false;
     this.lastResponseTimestamp = 0;
@@ -58,12 +58,16 @@ class ClientRequestManager extends BaseService {
     // We only allow one request at a time.
     if (this.isRequestPending) {
       return new Promise((resolve, reject) => {
-        this.pendingRequests.push({methodName, parameters, resolve, reject});
+        this.pendingRequests.push({
+          methodName,
+          parameters,
+          resolve,
+          reject,
+        });
       });
-    } else {
-      this.isRequestPending = true;
-      return this.sendMethodCall(methodName, parameters);
     }
+    this.isRequestPending = true;
+    return this.sendMethodCall(methodName, parameters);
   }
 }
 

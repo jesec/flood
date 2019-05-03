@@ -168,9 +168,7 @@ torrentListPropMap.set('tags', {
     return value
       .split(',')
       .sort()
-      .map(tag => {
-        return decodeURIComponent(tag);
-      });
+      .map(tag => decodeURIComponent(tag));
   },
 });
 
@@ -209,7 +207,7 @@ torrentListPropMap.set('trackerURIs', {
         let desiredSubsets = 2;
 
         if (domainSubsets.length > desiredSubsets) {
-          let lastDesiredSubset = domainSubsets[domainSubsets.length - desiredSubsets];
+          const lastDesiredSubset = domainSubsets[domainSubsets.length - desiredSubsets];
           if (lastDesiredSubset.length <= minSubsetLength) {
             desiredSubsets++;
           }
@@ -232,9 +230,7 @@ torrentListPropMap.set('seedsConnected', {
 
 torrentListPropMap.set('seedsTotal', {
   methodCall: 'cat="$t.multicall=d.hash=,t.scrape_complete=,cat={|||}"',
-  transformValue: value => {
-    return Number(value.substr(0, value.indexOf('|||')));
-  },
+  transformValue: value => Number(value.substr(0, value.indexOf('|||'))),
 });
 
 torrentListPropMap.set('peersConnected', {
@@ -244,9 +240,7 @@ torrentListPropMap.set('peersConnected', {
 
 torrentListPropMap.set('peersTotal', {
   methodCall: 'cat="$t.multicall=d.hash=,t.scrape_incomplete=,cat={|||}"',
-  transformValue: value => {
-    return Number(value.substr(0, value.indexOf('|||')));
-  },
+  transformValue: value => Number(value.substr(0, value.indexOf('|||'))),
 });
 
 module.exports = torrentListPropMap;

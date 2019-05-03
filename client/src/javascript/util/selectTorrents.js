@@ -1,7 +1,7 @@
 export function selectTorrents(options) {
   if (options.event.shiftKey) {
     if (options.selectedTorrents.length) {
-      let lastHash = options.selectedTorrents[options.selectedTorrents.length - 1];
+      const lastHash = options.selectedTorrents[options.selectedTorrents.length - 1];
       let currentHashIndex;
       let lastHashIndex;
 
@@ -38,7 +38,7 @@ export function selectTorrents(options) {
       }
 
       while (currentHashIndex !== lastHashIndex) {
-        let foundHash = options.torrentList[currentHashIndex].hash;
+        const foundHash = options.torrentList[currentHashIndex].hash;
         // if the torrent isn't already selected, add the hash to the array.
         if (options.selectedTorrents.indexOf(foundHash) === -1) {
           options.selectedTorrents.push(foundHash);
@@ -49,7 +49,7 @@ export function selectTorrents(options) {
       options.selectedTorrents = [options.hash];
     }
   } else if (options.event.metaKey || options.event.ctrlKey) {
-    let hashPosition = options.selectedTorrents.indexOf(options.hash);
+    const hashPosition = options.selectedTorrents.indexOf(options.hash);
     if (hashPosition === -1) {
       // if the hash is not in the array, add it.
       options.selectedTorrents.push(options.hash);

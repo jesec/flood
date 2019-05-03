@@ -27,7 +27,9 @@ class TableHeading extends React.Component {
     this.isMouseDown = false;
     this.lastMouseX = null;
 
-    methodsToBind.forEach(method => (this[method] = this[method].bind(this)));
+    methodsToBind.forEach(method => {
+      this[method] = this[method].bind(this);
+    });
   }
 
   componentDidMount() {
@@ -48,12 +50,12 @@ class TableHeading extends React.Component {
       this.lastMouseX = event.clientX;
       this.resizeLine.style.transform = `translateX(${Math.max(
         0,
-        event.clientX - this.tableHeadingX + this.props.scrollOffset
+        event.clientX - this.tableHeadingX + this.props.scrollOffset,
       )}px)`;
     }
   }
 
-  handleMouseUp(event) {
+  handleMouseUp() {
     UIStore.removeGlobalStyle(mouseDownStyles);
     global.document.removeEventListener('mouseup', this.handleMouseUp);
     global.document.removeEventListener('mousemove', this.handleMouseMove);
@@ -84,7 +86,7 @@ class TableHeading extends React.Component {
       this.lastMouseX = event.clientX;
       this.resizeLine.style.transform = `translateX(${Math.max(
         0,
-        event.clientX - this.tableHeadingX + this.props.scrollOffset
+        event.clientX - this.tableHeadingX + this.props.scrollOffset,
       )}px)`;
       this.resizeLine.style.opacity = 1;
     }
@@ -141,7 +143,7 @@ class TableHeading extends React.Component {
             {label}
           </span>
           {handle}
-        </div>
+        </div>,
       );
 
       return accumulator;
@@ -150,10 +152,19 @@ class TableHeading extends React.Component {
 
   render() {
     return (
-      <div className="table__row table__row--heading" ref={ref => (this.tableHeading = ref)}>
+      <div
+        className="table__row table__row--heading"
+        ref={ref => {
+          this.tableHeading = ref;
+        }}>
         {this.getHeadingElements()}
         <div className="table__cell table__heading table__heading--fill" />
-        <div className="table__heading__resize-line" ref={ref => (this.resizeLine = ref)} />
+        <div
+          className="table__heading__resize-line"
+          ref={ref => {
+            this.resizeLine = ref;
+          }}
+        />
       </div>
     );
   }

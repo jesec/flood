@@ -3,7 +3,8 @@ import React from 'react';
 
 export default class Duration extends React.Component {
   render() {
-    let {value: duration, suffix = null} = this.props;
+    let {suffix = null} = this.props;
+    const {value: duration} = this.props;
 
     if (duration == null) {
       return null;

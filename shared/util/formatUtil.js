@@ -1,4 +1,4 @@
-let moment = require('moment');
+const moment = require('moment');
 
 const formatUtil = {
   secondsToDuration: cumSeconds => {
@@ -27,18 +27,16 @@ const formatUtil = {
     return timeRemaining;
   },
 
-  minToHumanReadable: min => {
-    return moment.duration(min * 60 * 1000).humanize();
-  },
+  minToHumanReadable: min => moment.duration(min * 60 * 1000).humanize(),
 
   parsePeers: string => {
     // This lovely delimiter is defined in clientResponseUtil.
-    let markerPosition = string.indexOf('@!@');
+    const markerPosition = string.indexOf('@!@');
     return string.substr(0, markerPosition);
   },
 
   status: (isHashChecking, isComplete, isOpen, uploadRate, downloadRate, state, message) => {
-    let torrentStatus = [];
+    const torrentStatus = [];
 
     if (isHashChecking === '1') {
       torrentStatus.push('ch'); // checking

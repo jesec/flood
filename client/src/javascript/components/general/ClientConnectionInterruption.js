@@ -36,19 +36,11 @@ export default class ClientConnectionInterruption extends React.Component {
   };
 
   handleFormSubmit = ({formData}) => {
-    this.setState({
-      isSavingSettings: true,
-    });
-
     AuthActions.updateUser(AuthStore.getCurrentUsername(), formData)
       .then(() => {
         FloodActions.restartActivityStream();
       })
-      .catch(error => {
-        this.setState({
-          isSavingSettings: false,
-        });
-      });
+      .catch(() => {});
   };
 
   handleTestButtonClick = () => {
@@ -75,7 +67,7 @@ export default class ClientConnectionInterruption extends React.Component {
               isTestingConnection: false,
             });
           });
-      }
+      },
     );
   };
 
@@ -113,7 +105,12 @@ export default class ClientConnectionInterruption extends React.Component {
 
     return (
       <Panel spacing="large">
-        <Form onChange={this.handleFormChange} onSubmit={this.handleFormSubmit} ref={ref => (this.formRef = ref)}>
+        <Form
+          onChange={this.handleFormChange}
+          onSubmit={this.handleFormSubmit}
+          ref={ref => {
+            this.formRef = ref;
+          }}>
           <PanelHeader>
             <h1>
               <FormattedMessage id="connection-interruption.heading" defaultMessage="Cannot connect to rTorrent" />

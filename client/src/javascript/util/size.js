@@ -1,10 +1,14 @@
 export function compute(bytes, precision = 2) {
-  const kilobyte = 1024,
-    megabyte = kilobyte * 1024,
-    gigabyte = megabyte * 1024,
-    terabyte = gigabyte * 1024;
-  let value = 0,
-    unit = '';
+  const kilobyte = 1024;
+
+  const megabyte = kilobyte * 1024;
+
+  const gigabyte = megabyte * 1024;
+
+  const terabyte = gigabyte * 1024;
+  let value = 0;
+
+  let unit = '';
 
   if (bytes >= terabyte) {
     value = bytes / terabyte;
@@ -28,7 +32,7 @@ export function compute(bytes, precision = 2) {
     value = Math.floor(value);
   } else if (!!value && value > 10) {
     value = Number(value.toFixed(precision - 1));
-  } else if (!!value) {
+  } else if (value) {
     value = Number(value.toFixed(precision));
   }
 

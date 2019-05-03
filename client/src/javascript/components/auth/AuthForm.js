@@ -1,11 +1,10 @@
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from 'flood-ui-kit';
 import AuthStore from '../../stores/AuthStore';
 import EventTypes from '../../constants/EventTypes';
 import RtorrentConnectionTypeSelection from '../general/RtorrentConnectionTypeSelection';
-
-import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from 'flood-ui-kit';
 
 const METHODS_TO_BIND = ['handleAuthError', 'handleFormSubmit'];
 
@@ -107,7 +106,7 @@ class AuthForm extends React.Component {
       });
 
       registerFields = (
-        <PanelContent hasBorder={true}>
+        <PanelContent hasBorder>
           <RtorrentConnectionTypeSelection />
         </PanelContent>
       );
@@ -124,7 +123,11 @@ class AuthForm extends React.Component {
     return (
       <div className="application__entry-barrier">
         <Panel spacing="large">
-          <Form onSubmit={this.handleFormSubmit} ref={ref => (this.formRef = ref)}>
+          <Form
+            onSubmit={this.handleFormSubmit}
+            ref={ref => {
+              this.formRef = ref;
+            }}>
             <PanelHeader>
               <h1>{this.getHeaderText()}</h1>
             </PanelHeader>
@@ -141,7 +144,9 @@ class AuthForm extends React.Component {
             {registerFields}
             <PanelFooter hasBorder>
               <FormRow justify="end">
-                <Button children="Clear" priority="tertiary" onClick={() => this.formRef.resetForm()} />
+                <Button priority="tertiary" onClick={() => this.formRef.resetForm()}>
+                  Clear
+                </Button>
                 <Button isLoading={this.state.isAuthStatusLoading} type="submit">
                   {actionText}
                 </Button>

@@ -13,13 +13,13 @@ module.exports = (req, res, next) => {
   res.write('retry: 500\n\n');
 
   // Keep the connection open by sending a message every so often.
-  const keepAliveTimeout = setInterval(function() {
+  const keepAliveTimeout = setInterval(() => {
     res.write(':keep-alive\n\n');
     res.flush();
   }, 500);
 
   // cleanup on close
-  res.on('close', function close() {
+  res.on('close', () => {
     clearInterval(keepAliveTimeout);
   });
 

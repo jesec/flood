@@ -4,8 +4,8 @@ import React from 'react';
 import BaseIcon from './BaseIcon';
 
 export default class SpinnerIcon extends BaseIcon {
-  constructor() {
-    super(...arguments);
+  constructor(...iconConfig) {
+    super(...iconConfig);
 
     this.id = _.uniqueId();
   }
@@ -15,7 +15,7 @@ export default class SpinnerIcon extends BaseIcon {
   }
 
   render() {
-    let maskID = `icon--spinner__mask-id--${this.id}`;
+    const maskID = `icon--spinner__mask-id--${this.id}`;
 
     return (
       <svg className={`icon icon--spinner ${this.props.className}`} viewBox={this.getViewBox()}>

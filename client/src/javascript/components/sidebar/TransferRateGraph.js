@@ -113,6 +113,37 @@ class TransferRateGraph extends React.Component {
     this.graphRefs.download.inspectPoint.style('opacity', 1);
   }
 
+  setInspectorCoordinates(slug, hoverPoint) {
+    const {
+      graphRefs: {
+        [slug]: {inspectPoint},
+      },
+      xScale,
+      yScale,
+    } = this;
+
+    const historicalData = TransferDataStore.getTransferRates();
+    const upperSpeed = historicalData[slug][Math.ceil(hoverPoint)];
+    const lowerSpeed = historicalData[slug][Math.floor(hoverPoint)];
+
+    const delta = upperSpeed - lowerSpeed;
+    const speedAtHoverPoint = lowerSpeed + delta * (hoverPoint % 1);
+
+    const coordinates = {x: xScale(hoverPoint), y: yScale(speedAtHoverPoint)};
+
+    inspectPoint.attr('transform', `translate(${coordinates.x},${coordinates.y})`);
+
+    return speedAtHoverPoint;
+  }
+
+  updateGraph() {
+    this.renderGraphData();
+
+    if (this.graphRefs.isHovered) {
+      this.renderPrecisePointInspectors();
+    }
+  }
+
   renderGraphData() {
     const historicalData = TransferDataStore.getTransferRates();
     const {height, id, width} = this.props;
@@ -128,28 +159,24 @@ class TransferRateGraph extends React.Component {
       .linear()
       .domain([
         0,
-        d3.max(historicalData.download, (dataPoint, index) => {
-          return Math.max(dataPoint, historicalData.upload[index]);
-        }),
+        d3.max(historicalData.download, (dataPoint, index) => Math.max(dataPoint, historicalData.upload[index])),
       ])
       .range([height - margin.top, margin.bottom]);
 
-    const lineFunc = interpolation => {
-      return d3.svg
+    const lineFunc = interpolation =>
+      d3.svg
         .line()
         .x((dataPoint, index) => this.xScale(index))
         .y(dataPoint => this.yScale(dataPoint))
         .interpolate(interpolation);
-    };
 
-    const areaFunc = interpolation => {
-      return d3.svg
+    const areaFunc = interpolation =>
+      d3.svg
         .area()
         .x((dataPoint, index) => this.xScale(index))
         .y0(height)
         .y1(dataPoint => this.yScale(dataPoint))
         .interpolate(interpolation);
-    };
 
     const interpolation = 'monotone';
     const downloadLinePath = lineFunc(interpolation)(historicalData.download);
@@ -196,40 +223,14 @@ class TransferRateGraph extends React.Component {
     }
   }
 
-  setInspectorCoordinates(slug, hoverPoint) {
-    const {
-      graphRefs: {
-        [slug]: {inspectPoint},
-      },
-      xScale,
-      yScale,
-    } = this;
-
-    const historicalData = TransferDataStore.getTransferRates();
-    const upperSpeed = historicalData[slug][Math.ceil(hoverPoint)];
-    const lowerSpeed = historicalData[slug][Math.floor(hoverPoint)];
-
-    const delta = upperSpeed - lowerSpeed;
-    const speedAtHoverPoint = lowerSpeed + delta * (hoverPoint % 1);
-
-    const coordinates = {x: xScale(hoverPoint), y: yScale(speedAtHoverPoint)};
-
-    inspectPoint.attr('transform', 'translate(' + coordinates.x + ',' + coordinates.y + ')');
-
-    return speedAtHoverPoint;
-  }
-
-  updateGraph() {
-    this.renderGraphData();
-
-    if (this.graphRefs.isHovered) {
-      this.renderPrecisePointInspectors();
-    }
-  }
-
   render() {
     return (
-      <svg className="graph" id={this.props.id} ref={ref => (this.graphRefs.graph = ref)}>
+      <svg
+        className="graph"
+        id={this.props.id}
+        ref={ref => {
+          this.graphRefs.graph = ref;
+        }}>
         <defs>
           {this.getGradient('upload')}
           {this.getGradient('download')}

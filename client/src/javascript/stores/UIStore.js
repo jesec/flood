@@ -7,8 +7,8 @@ import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
 
 class UIStoreClass extends BaseStore {
-  constructor() {
-    super(...arguments);
+  constructor(...storeConfig) {
+    super(...storeConfig);
 
     this.activeContextMenu = null;
     this.activeDropdownMenu = null;
@@ -18,9 +18,15 @@ class UIStoreClass extends BaseStore {
     this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
     this.createStyleElement();
-
-    this.fetchDirectoryList = _.debounce(this.fetchDirectoryList, 100, {leading: true});
   }
+
+  fetchDirectoryList = _.debounce(
+    options => {
+      FloodActions.fetchDirectoryList(options);
+    },
+    100,
+    {leading: true},
+  );
 
   addGlobalStyle(cssString) {
     this.globalStyles.push(cssString);
@@ -63,10 +69,6 @@ class UIStoreClass extends BaseStore {
 
   dismissModal() {
     this.setActiveModal(null);
-  }
-
-  fetchDirectoryList(options) {
-    FloodActions.fetchDirectoryList(options);
   }
 
   getActiveContextMenu() {
@@ -128,7 +130,7 @@ class UIStoreClass extends BaseStore {
     }
 
     dependencies.forEach(dependency => {
-      let {id} = dependency;
+      const {id} = dependency;
 
       if (!this.dependencies[id]) {
         this.dependencies[id] = {...dependency, satisfied: false};
@@ -166,9 +168,7 @@ class UIStoreClass extends BaseStore {
   }
 
   verifyDependencies() {
-    let isDependencyLoading = Object.keys(this.dependencies).some(id => {
-      return this.dependencies[id].satisfied === false;
-    });
+    const isDependencyLoading = Object.keys(this.dependencies).some(id => this.dependencies[id].satisfied === false);
 
     if (!isDependencyLoading) {
       this.emit(EventTypes.UI_DEPENDENCIES_LOADED);
@@ -176,7 +176,7 @@ class UIStoreClass extends BaseStore {
   }
 }
 
-let UIStore = new UIStoreClass();
+const UIStore = new UIStoreClass();
 
 UIStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;

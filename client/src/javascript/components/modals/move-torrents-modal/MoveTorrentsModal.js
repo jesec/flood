@@ -11,10 +11,7 @@ import TorrentStore from '../../../stores/TorrentStore';
 
 class MoveTorrents extends React.Component {
   state = {
-    moveTorrentsError: null,
-    isExpanded: false,
     isSettingDownloadPath: false,
-    moveTorrents: false,
     originalSource: null,
   };
 

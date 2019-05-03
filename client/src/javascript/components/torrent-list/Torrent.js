@@ -17,9 +17,9 @@ import UploadThickIcon from '../icons/UploadThickIcon';
 const condensedValueTransformers = {
   downloadTotal: torrent => torrent.bytesDone,
   peers: torrent => torrent.peersConnected,
-  percentComplete: torrent => {
-    return <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />;
-  },
+  percentComplete: torrent => (
+    <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
+  ),
   seeds: torrent => torrent.seedsConnected,
 };
 
@@ -78,12 +78,6 @@ class Torrent extends React.Component {
     });
   }
 
-  componentWillUpdate(nextProps) {
-    if (nextProps.selected !== this.props.selected) {
-      this.setState({isSelected: nextProps.selected});
-    }
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     if (
       nextProps.selected !== this.props.selected ||
@@ -93,50 +87,49 @@ class Torrent extends React.Component {
       return true;
     }
 
-    let nextTorrent = nextProps.torrent;
-    let {torrent} = this.props;
+    const nextTorrent = nextProps.torrent;
+    const {torrent} = this.props;
 
     let shouldUpdate = TORRENT_ARRAYS_TO_OBSERVE.some(key => {
-      let nextArr = nextTorrent[key];
-      let currentArr = this.props.torrent[key];
+      const nextArr = nextTorrent[key];
+      const currentArr = this.props.torrent[key];
 
       return (
-        nextArr.length !== currentArr.length ||
-        nextArr.some((nextValue, index) => {
-          return nextValue !== currentArr[index];
-        })
+        nextArr.length !== currentArr.length || nextArr.some((nextValue, index) => nextValue !== currentArr[index])
       );
     });
 
     if (!shouldUpdate) {
-      shouldUpdate = TORRENT_PRIMITIVES_TO_OBSERVE.some(key => {
-        return nextTorrent[key] !== torrent[key];
-      });
+      shouldUpdate = TORRENT_PRIMITIVES_TO_OBSERVE.some(key => nextTorrent[key] !== torrent[key]);
     }
 
     if (!shouldUpdate) {
-      shouldUpdate = Object.keys(nextProps.propWidths).some(key => {
-        return nextProps.propWidths[key] !== this.props.propWidths[key];
-      });
+      shouldUpdate = Object.keys(nextProps.propWidths).some(
+        key => nextProps.propWidths[key] !== this.props.propWidths[key],
+      );
     }
 
     if (!shouldUpdate) {
-      shouldUpdate = nextProps.columns.some(({id}, index) => {
-        return id !== this.props.columns[index].id;
-      });
+      shouldUpdate = nextProps.columns.some(({id}, index) => id !== this.props.columns[index].id);
     }
 
     return shouldUpdate;
   }
 
+  componentWillUpdate(nextProps) {
+    if (nextProps.selected !== this.props.selected) {
+      // TODO: Fix this, don't duplicate selected state from props
+      // eslint-disable-next-line react/no-will-update-set-state
+      this.setState({isSelected: nextProps.selected});
+    }
+  }
+
   getTags(tags) {
-    return tags.map((tag, index) => {
-      return (
-        <li className="torrent__tag" key={index}>
-          {tag}
-        </li>
-      );
-    });
+    return tags.map(tag => (
+      <li className="torrent__tag" key={tag}>
+        {tag}
+      </li>
+    ));
   }
 
   getWidth(slug) {
@@ -172,7 +165,7 @@ class Torrent extends React.Component {
         'torrent--is-condensed': isCondensed,
         'torrent--is-expanded': !isCondensed,
       },
-      'torrent'
+      'torrent',
     );
 
     if (isCondensed) {
@@ -201,7 +194,7 @@ class Torrent extends React.Component {
             slug={id}
             value={value}
             width={this.getWidth(id)}
-          />
+          />,
         );
 
         return accumulator;
@@ -243,7 +236,7 @@ class Torrent extends React.Component {
               className="torrent__details__section torrent__details__section--primary"
               slug={id}
               value={value}
-            />
+            />,
           );
         } else if (expandedTorrentSectionContent.secondary.includes(id)) {
           sections.secondary[expandedTorrentSectionContent.secondary.indexOf(id)] = (
@@ -251,7 +244,7 @@ class Torrent extends React.Component {
           );
         } else {
           sections.tertiary.push(
-            <TorrentDetail icon key={id} secondaryValue={secondaryValue} slug={id} value={value} />
+            <TorrentDetail icon key={id} secondaryValue={secondaryValue} slug={id} value={value} />,
           );
         }
       }

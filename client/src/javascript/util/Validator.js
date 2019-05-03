@@ -1,13 +1,14 @@
 import regEx from 'universally-shared-code/util/regEx';
 
 export default class Validator {
-  static isNotEmpty(value) {
+  isNotEmpty(value) {
     return value != null && value !== '';
   }
 
-  static isRegExValid(regEx) {
+  isRegExValid(regExToCheck) {
     try {
-      new RegExp(regEx);
+      // eslint-disable-next-line no-new
+      new RegExp(regExToCheck);
     } catch (err) {
       return false;
     }
@@ -15,15 +16,15 @@ export default class Validator {
     return true;
   }
 
-  static isURLValid(url) {
+  isURLValid(url) {
     return url != null && url !== '' && url.match(regEx.url) !== null;
   }
 
-  static isPositiveInteger(value) {
+  isPositiveInteger(value) {
     if (value === null || value === '') return false;
 
-    let number = parseInt(value, 10);
+    const number = parseInt(value, 10);
 
-    return !isNaN(number) && number > 0;
+    return !Number.isNaN(number) && number > 0;
   }
 }

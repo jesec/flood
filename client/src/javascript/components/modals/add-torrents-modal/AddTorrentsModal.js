@@ -12,7 +12,7 @@ class AddTorrents extends React.Component {
   }
 
   render() {
-    let tabs = {
+    const tabs = {
       'by-url': {
         content: AddTorrentsByURL,
         label: this.props.intl.formatMessage({

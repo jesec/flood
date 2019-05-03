@@ -16,7 +16,7 @@ export default class ConnectivityTab extends SettingsTab {
     return this.props.settings.dhtStats.dht === 'auto';
   }
 
-  handleFormChange = ({event, formData}) => {
+  handleFormChange = ({event}) => {
     if (event.target.name === 'dhtEnabled') {
       const dhtEnabled = !this.getDHTEnabledValue();
       const dhtEnabledString = dhtEnabled ? 'auto' : 'disable';

@@ -77,23 +77,6 @@ const defaultFeed = {
 };
 
 class FeedsTab extends React.Component {
-  formRef;
-  manualAddingFormRef;
-  validatedFields = {
-    url: {
-      isValid: Validator.isURLValid,
-      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyURL),
-    },
-    label: {
-      isValid: Validator.isNotEmpty,
-      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
-    },
-    interval: {
-      isValid: Validator.isPositiveInteger,
-      error: this.props.intl.formatMessage(MESSAGES.intervalNotPositive),
-    },
-  };
-
   state = {
     errors: {},
     intervalmultipliers: [
@@ -127,6 +110,25 @@ class FeedsTab extends React.Component {
     FeedMonitorStore.unlisten(EventTypes.SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS, this.handleFeedItemsFetchSuccess);
   }
 
+  formRef;
+
+  manualAddingFormRef;
+
+  validatedFields = {
+    url: {
+      isValid: Validator.isURLValid,
+      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyURL),
+    },
+    label: {
+      isValid: Validator.isNotEmpty,
+      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
+    },
+    interval: {
+      isValid: Validator.isPositiveInteger,
+      error: this.props.intl.formatMessage(MESSAGES.intervalNotPositive),
+    },
+  };
+
   checkFieldValidity = _.throttle((fieldName, fieldValue) => {
     const {errors} = this.state;
 
@@ -145,13 +147,11 @@ class FeedsTab extends React.Component {
   }
 
   getIntervalSelectOptions() {
-    return this.state.intervalmultipliers.map((interval, index) => {
-      return (
-        <SelectItem key={index} id={interval.value}>
-          {interval.displayName}
-        </SelectItem>
-      );
-    });
+    return this.state.intervalmultipliers.map(interval => (
+      <SelectItem key={interval.value} id={interval.value}>
+        {interval.displayName}
+      </SelectItem>
+    ));
   }
 
   getAvailableFeedsOptions() {
@@ -166,24 +166,28 @@ class FeedsTab extends React.Component {
     }
 
     return this.state.feeds.reduce(
-      (feedOptions, feed) => {
-        return feedOptions.concat(
+      (feedOptions, feed) =>
+        feedOptions.concat(
           <SelectItem key={feed._id} id={feed._id}>
             {feed.label}
-          </SelectItem>
-        );
-      },
+          </SelectItem>,
+        ),
       [
         <SelectItem key="select-feed" id="placeholder" placeholder>
           <em>
             <FormattedMessage id="feeds.select.feed" defaultMessage="Select feed" />
           </em>
         </SelectItem>,
-      ]
+      ],
     );
   }
 
   getModifyFeedForm(feed) {
+    const isDayInterval = feed.interval % 1440;
+    const minutesDivisor = feed.interval % 60 ? 1 : 60;
+    const defaultIntervalTextValue = feed.interval / isDayInterval ? minutesDivisor : 1440;
+    const defaultIntervalMultiplierId = isDayInterval ? minutesDivisor : 1440;
+
     return (
       <FormRowGroup>
         <FormRow>
@@ -200,14 +204,10 @@ class FeedsTab extends React.Component {
               defaultMessage: 'Interval',
             })}
             placeholder={this.props.intl.formatMessage(MESSAGES.interval)}
-            defaultValue={feed.interval / (feed.interval % 1440 ? (feed.interval % 60 ? 1 : 60) : 1440)}
+            defaultValue={defaultIntervalTextValue}
             width="one-eighth"
           />
-          <Select
-            labelOffset
-            defaultID={feed.interval % 1440 ? (feed.interval % 60 ? 1 : 60) : 1440}
-            id="intervalMultiplier"
-            width="one-eighth">
+          <Select labelOffset defaultID={defaultIntervalMultiplierId} id="intervalMultiplier" width="one-eighth">
             {this.getIntervalSelectOptions()}
           </Select>
         </FormRow>
@@ -233,7 +233,7 @@ class FeedsTab extends React.Component {
   }
 
   getFeedsListItem(feed) {
-    let matchedCount = feed.count || 0;
+    const matchedCount = feed.count || 0;
     return (
       <li className="interactive-list__item interactive-list__item--stacked-content feed-list__feed" key={feed._id}>
         <div className="interactive-list__label">
@@ -272,7 +272,7 @@ class FeedsTab extends React.Component {
               className="interactive-list__detail-list__item
               interactive-list__detail-list__item--overflow
               interactive-list__detail interactive-list__detail--tertiary">
-              <a href={feed.url} target="_blank">
+              <a href={feed.url} rel="noopener noreferrer" target="_blank">
                 {feed.url}
               </a>
             </li>
@@ -291,13 +291,16 @@ class FeedsTab extends React.Component {
       </li>
     );
   }
+
   getFeedAddForm(errors) {
     return (
       <Form
         className="inverse"
         onChange={this.handleFormChange}
         onSubmit={this.handleFormSubmit}
-        ref={ref => (this.formRef = ref)}>
+        ref={ref => {
+          this.formRef = ref;
+        }}>
         <ModalFormSectionHeader>
           <FormattedMessage id="feeds.existing.feeds" defaultMessage="Existing Feeds" />
         </ModalFormSectionHeader>
@@ -330,9 +333,7 @@ class FeedsTab extends React.Component {
       );
     }
 
-    const feedsList = this.state.feeds.map(feed => {
-      return this.getFeedsListItem(feed);
-    });
+    const feedsList = this.state.feeds.map(feed => this.getFeedsListItem(feed));
 
     return <ul className="interactive-list feed-list">{feedsList}</ul>;
   }
@@ -343,7 +344,9 @@ class FeedsTab extends React.Component {
         className="inverse"
         onChange={this.handleBrowseFeedChange}
         onSubmit={this.handleBrowseFeedSubmit}
-        ref={ref => (this.manualAddingFormRef = ref)}>
+        ref={ref => {
+          this.manualAddingFormRef = ref;
+        }}>
         <ModalFormSectionHeader>
           <FormattedMessage id="feeds.browse.feeds" defaultMessage="Browse feeds" />
         </ModalFormSectionHeader>
@@ -380,24 +383,18 @@ class FeedsTab extends React.Component {
       );
     }
 
-    const itemsList = this.state.items.map((item, index) => {
-      return (
-        <li
-          className="interactive-list__item interactive-list__item--stacked-content feed-list__feed"
-          key={'item' + index}>
-          <div className="interactive-list__label feed-list__feed-label">{item.title}</div>
-          <Checkbox id={index} />
-        </li>
-      );
-    });
+    const itemsList = this.state.items.map((item, index) => (
+      <li className="interactive-list__item interactive-list__item--stacked-content feed-list__feed" key={item.title}>
+        <div className="interactive-list__label feed-list__feed-label">{item.title}</div>
+        <Checkbox id={index} />
+      </li>
+    ));
 
     return <ul className="interactive-list feed-list">{itemsList}</ul>;
   }
 
   getSelectedDropdownItem(itemSet) {
-    return this.state[itemSet].find(item => {
-      return item.selected;
-    });
+    return this.state[itemSet].find(item => item.selected);
   }
 
   handleFormSubmit = () => {
@@ -472,7 +469,7 @@ class FeedsTab extends React.Component {
   validateForm() {
     const formData = this.formRef.getFormData();
     const errors = Object.keys(this.validatedFields).reduce((memo, fieldName) => {
-      let fieldValue = formData[fieldName];
+      const fieldValue = formData[fieldName];
 
       if (!this.validatedFields[fieldName].isValid(fieldValue)) {
         memo[fieldName] = this.validatedFields[fieldName].error;
@@ -514,13 +511,11 @@ class FeedsTab extends React.Component {
   };
 
   render() {
-    const errors = Object.keys(this.state.errors).map((errorID, index) => {
-      return (
-        <FormRow key={index}>
-          <FormError>{this.state.errors[errorID]}</FormError>
-        </FormRow>
-      );
-    });
+    const errors = Object.keys(this.state.errors).map(errorID => (
+      <FormRow key={errorID}>
+        <FormError>{this.state.errors[errorID]}</FormError>
+      </FormRow>
+    ));
     return (
       <div>
         {this.getFeedAddForm(errors)}

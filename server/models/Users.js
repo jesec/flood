@@ -59,19 +59,29 @@ class Users {
     argon2
       .hash(password)
       .then(hash => {
-        this.db.insert({username, password: hash, host, port, socketPath, isAdmin}, (error, user) => {
-          if (error) {
-            if (error.errorType === 'uniqueViolated') {
-              error = 'Username already exists.';
+        this.db.insert(
+          {
+            username,
+            password: hash,
+            host,
+            port,
+            socketPath,
+            isAdmin,
+          },
+          (error, user) => {
+            if (error) {
+              if (error.errorType === 'uniqueViolated') {
+                error = 'Username already exists.';
+              }
+
+              return callback(null, error);
             }
 
-            return callback(null, error);
-          }
+            services.bootstrapServicesForUser(user);
 
-          services.bootstrapServicesForUser(user);
-
-          return callback({username});
-        });
+            return callback({username});
+          },
+        );
       })
       .catch(error => {
         callback(null, error);
@@ -79,9 +89,9 @@ class Users {
   }
 
   removeUser(username, callback) {
-    this.db.findOne({username}).exec((err, user) => {
-      if (err) {
-        return callback(null, err);
+    this.db.findOne({username}).exec((findError, user) => {
+      if (findError) {
+        return callback(null, findError);
       }
 
       // Username not found.
@@ -89,9 +99,9 @@ class Users {
         return callback(null, user);
       }
 
-      this.db.remove({username}, {}, (err, numRemoved) => {
-        if (err) {
-          return callback(null, err);
+      this.db.remove({username}, {}, removeError => {
+        if (removeError) {
+          return callback(null, removeError);
         }
 
         fs.removeSync(path.join(config.dbPath, user._id));
@@ -109,7 +119,7 @@ class Users {
         return callback(null, err);
       }
 
-      return callback(userRecordPatch);
+      return callback(updatedUser);
     });
   }
 
@@ -124,7 +134,7 @@ class Users {
   }
 
   loadDatabase() {
-    let db = new Datastore({
+    const db = new Datastore({
       autoload: true,
       filename: path.join(config.dbPath, 'users.db'),
     });

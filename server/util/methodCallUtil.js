@@ -20,7 +20,7 @@ const methodCallUtil = {
         methodCalls: [],
         propLabels: [],
         valueTransformations: [],
-      }
+      },
     );
   },
 };

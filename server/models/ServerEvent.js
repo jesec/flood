@@ -11,9 +11,7 @@ class ServerEvent {
   addData(data) {
     const lines = JSON.stringify(data).split(/\n/);
 
-    this.data = lines.reduce((accumulator, datum) => {
-      return `${this.data}data:${datum}\n`;
-    }, this.data);
+    this.data = lines.reduce((accumulator, datum) => `${this.data}data:${datum}\n`, this.data);
   }
 
   emit() {

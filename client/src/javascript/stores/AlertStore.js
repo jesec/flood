@@ -13,7 +13,7 @@ class AlertStoreClass extends BaseStore {
   }
 
   accumulate(alert) {
-    let {id, value} = alert.accumulation;
+    const {id, value} = alert.accumulation;
 
     if (this.accumulation[id] == null) {
       this.accumulation[id] = value;
@@ -23,10 +23,10 @@ class AlertStoreClass extends BaseStore {
   }
 
   add(alert) {
-    alert.duration = this.getDuration(alert);
-    alert.id = this.getID(alert);
+    alert.duration = alert.duration || DEFAULT_DURATION;
+    alert.id = alert.id || Date.now();
 
-    if (!!alert.accumulation) {
+    if (alert.accumulation) {
       this.accumulate(alert);
     }
 
@@ -37,17 +37,13 @@ class AlertStoreClass extends BaseStore {
     this.emit(EventTypes.ALERTS_CHANGE);
   }
 
-  getDuration(alert) {
-    return alert.duration || DEFAULT_DURATION;
-  }
-
   getAlerts() {
-    let alertIDs = Object.keys(this.alerts).sort();
+    const alertIDs = Object.keys(this.alerts).sort();
 
     return alertIDs.map(id => {
-      let alert = this.alerts[id];
+      const alert = this.alerts[id];
 
-      if (!!alert.accumulation) {
+      if (alert.accumulation) {
         alert.count = this.accumulation[alert.accumulation.id];
       }
 
@@ -55,14 +51,10 @@ class AlertStoreClass extends BaseStore {
     });
   }
 
-  getID(alert) {
-    return alert.id || Date.now();
-  }
-
   removeExpired(alert) {
-    let {accumulation} = alert;
+    const {accumulation} = alert;
 
-    if (!!accumulation) {
+    if (accumulation) {
       this.removeAccumulation(alert);
 
       if (this.accumulation[accumulation.id] === 0) {
@@ -77,7 +69,7 @@ class AlertStoreClass extends BaseStore {
   }
 
   removeAccumulation(alert) {
-    let {id, value} = alert.accumulation;
+    const {id, value} = alert.accumulation;
 
     if (this.accumulation[id] == null) {
       return;
@@ -91,12 +83,8 @@ class AlertStoreClass extends BaseStore {
   }
 }
 
-let AlertStore = new AlertStoreClass();
+const AlertStore = new AlertStoreClass();
 
-AlertStore.dispatcherID = AppDispatcher.register(payload => {
-  // const {action, source} = payload;
-  // switch (action.type) {
-  // }
-});
+AlertStore.dispatcherID = AppDispatcher.register(() => {});
 
 export default AlertStore;

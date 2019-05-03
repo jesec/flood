@@ -1,28 +1,35 @@
-const ajaxUtil = require('../util/ajaxUtil');
 const express = require('express');
 const joi = require('joi');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
+const ajaxUtil = require('../util/ajaxUtil');
 
 const requireAdmin = require('../middleware/requireAdmin');
 const config = require('../../config');
+
 const router = express.Router();
 const services = require('../services');
 const Users = require('../models/Users');
+
 const failedLoginResponse = 'Failed login.';
 
 const setAuthToken = (res, username, isAdmin) => {
-  let expirationSeconds = 60 * 60 * 24 * 7; // one week
-  let cookieExpiration = Date.now() + expirationSeconds * 1000;
+  const expirationSeconds = 60 * 60 * 24 * 7; // one week
+  const cookieExpiration = Date.now() + expirationSeconds * 1000;
 
   // Create token if the password matched and no error was thrown.
-  let token = jwt.sign({username}, config.secret, {
+  const token = jwt.sign({username}, config.secret, {
     expiresIn: expirationSeconds,
   });
 
   res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true});
 
-  return res.json({success: true, token: `JWT ${token}`, username, isAdmin});
+  return res.json({
+    success: true,
+    token: `JWT ${token}`,
+    username,
+    isAdmin,
+  });
 };
 
 const authValidation = joi.object().keys({
@@ -56,17 +63,14 @@ router.post('/authenticate', (req, res) => {
   };
 
   Users.comparePassword(credentials, (isMatch, isAdmin, err) => {
-    if (isMatch == null) {
-      // Incorrect username.
-      return res.status(401).json({message: failedLoginResponse});
+    if (isMatch != null && !err) {
+      return setAuthToken(res, credentials.username, isAdmin);
     }
 
-    if (isMatch && !err) {
-      return setAuthToken(res, credentials.username, isAdmin);
-    } else {
-      // Incorrect password.
-      return res.status(401).json({message: failedLoginResponse});
-    }
+    // Incorrect username or password.
+    return res.status(401).json({
+      message: failedLoginResponse,
+    });
   });
 });
 
@@ -77,8 +81,8 @@ router.use('/register', (req, res, next) => {
       next();
     },
     handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (req, res, next) => {
-        res.json({username: req.username});
+      passport.authenticate('jwt', {session: false}, (passportReq, passportRes) => {
+        passportRes.json({username: req.username});
       });
     },
   });
@@ -102,7 +106,7 @@ router.post('/register', (req, res) => {
       }
 
       setAuthToken(res, req.body.username, true);
-    }
+    },
   );
 });
 
@@ -120,7 +124,7 @@ router.use('/verify', (req, res, next) => {
   });
 });
 
-router.get('/verify', (req, res, next) => {
+router.get('/verify', (req, res) => {
   res.json({
     initialUser: req.initialUser,
     username: req.user && req.user.username,
@@ -135,17 +139,17 @@ router.get('/logout', (req, res) => {
   res.clearCookie('jwt').send();
 });
 
-router.get('/users', (req, res, next) => {
+router.get('/users', (req, res) => {
   Users.listUsers(ajaxUtil.getResponseFn(res));
 });
 
-router.delete('/users/:username', (req, res, next) => {
+router.delete('/users/:username', (req, res) => {
   Users.removeUser(req.params.username, ajaxUtil.getResponseFn(res));
   services.destroyUserServices(req.user);
 });
 
-router.patch('/users/:username', (req, res, next) => {
-  const username = req.params.username;
+router.patch('/users/:username', (req, res) => {
+  const {username} = req.params;
   const userPatch = req.body;
 
   if (!userPatch.socketPath) {
@@ -155,7 +159,7 @@ router.patch('/users/:username', (req, res, next) => {
     userPatch.port = null;
   }
 
-  Users.updateUser(username, userPatch, user => {
+  Users.updateUser(username, userPatch, () => {
     Users.lookupUser({username}, (err, user) => {
       if (err) return req.status(500).json({error: err});
       services.updateUserServices(user);
@@ -164,7 +168,7 @@ router.patch('/users/:username', (req, res, next) => {
   });
 });
 
-router.put('/users', (req, res, next) => {
+router.put('/users', (req, res) => {
   Users.createUser(
     {
       username: req.body.username,
@@ -174,7 +178,7 @@ router.put('/users', (req, res, next) => {
       socketPath: req.body.socketPath,
       isAdmin: req.body.isAdmin,
     },
-    ajaxUtil.getResponseFn(res)
+    ajaxUtil.getResponseFn(res),
   );
 });
 

@@ -13,26 +13,25 @@ const layerStyles = {
   height: '100%',
 };
 
-function getItemStyles(props) {
-  const {clientOffset, differenceFromInitialOffset, listOffset} = props;
-
-  if (!clientOffset || !listOffset) {
-    return {display: 'none'};
-  }
-
-  const x = differenceFromInitialOffset.x;
-  const y = clientOffset.y - listOffset.top - 15;
-
-  return {transform: `translate(${x}px, ${y}px)`};
-}
-
 class SortableListItemDragLayer extends Component {
   static propTypes = {
     clientOffset: PropTypes.object,
     differenceFromInitialOffset: PropTypes.object,
     isDragging: PropTypes.bool.isRequired,
     item: PropTypes.object,
-    itemType: PropTypes.string,
+  };
+
+  getItemStyles = () => {
+    const {clientOffset, differenceFromInitialOffset, listOffset} = this.props;
+
+    if (!clientOffset || !listOffset) {
+      return {display: 'none'};
+    }
+
+    const {x} = differenceFromInitialOffset;
+    const y = clientOffset.y - listOffset.top - 15;
+
+    return {transform: `translate(${x}px, ${y}px)`};
   };
 
   render() {
@@ -44,7 +43,7 @@ class SortableListItemDragLayer extends Component {
 
     return (
       <div style={layerStyles}>
-        <div style={getItemStyles(this.props)}>{this.props.renderItem({...item, dragIndicator: true})}</div>
+        <div style={this.getItemStyles()}>{this.props.renderItem({...item, dragIndicator: true})}</div>
       </div>
     );
   }
@@ -55,5 +54,4 @@ export default DragLayer(monitor => ({
   differenceFromInitialOffset: monitor.getDifferenceFromInitialOffset(),
   isDragging: monitor.isDragging(),
   item: monitor.getItem(),
-  itemType: monitor.getItemType(),
 }))(injectIntl(SortableListItemDragLayer));

@@ -13,13 +13,13 @@ class NotificationStoreClass extends BaseStore {
     this.ongoingPolls = {};
   }
 
+  fetchNotifications(options = {}) {
+    FloodActions.fetchNotifications(options);
+  }
+
   clearAll(options) {
     this.notifications = {};
     FloodActions.clearNotifications(options);
-  }
-
-  fetchNotifications(options = {}) {
-    FloodActions.fetchNotifications(options);
   }
 
   getNotifications(id) {
@@ -38,7 +38,7 @@ class NotificationStoreClass extends BaseStore {
     });
   }
 
-  handleNotificationsFetchError(error) {
+  handleNotificationsFetchError() {
     this.emit(EventTypes.NOTIFICATIONS_FETCH_ERROR);
   }
 
@@ -49,7 +49,7 @@ class NotificationStoreClass extends BaseStore {
   }
 }
 
-let NotificationStore = new NotificationStoreClass();
+const NotificationStore = new NotificationStoreClass();
 
 NotificationStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;

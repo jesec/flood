@@ -1,16 +1,16 @@
-const jwtStrategy = require('passport-jwt').Strategy;
+const JwtStrategy = require('passport-jwt').Strategy;
 
 const config = require('../../config');
 const Users = require('../models/Users');
 
 // Setup work and export for the JWT passport strategy.
 module.exports = passport => {
-  let options = {
+  const options = {
     jwtFromRequest: req => {
       let token = null;
 
       if (req && req.cookies) {
-        token = req.cookies['jwt'];
+        token = req.cookies.jwt;
       }
 
       return token;
@@ -19,7 +19,7 @@ module.exports = passport => {
   };
 
   passport.use(
-    new jwtStrategy(options, (jwtPayload, callback) => {
+    new JwtStrategy(options, (jwtPayload, callback) => {
       Users.lookupUser({username: jwtPayload.username}, (err, user) => {
         if (err) {
           return callback(err, false);
@@ -31,6 +31,6 @@ module.exports = passport => {
 
         return callback(null, false);
       });
-    })
+    }),
   );
 };

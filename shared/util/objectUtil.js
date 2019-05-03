@@ -1,21 +1,19 @@
 const diffActionTypes = require('../constants/diffActionTypes');
 
 const objectUtil = {
-  createStringMapFromArray: (array = []) => {
-    return array.reduce((memo, key) => {
+  createStringMapFromArray: (array = []) =>
+    array.reduce((memo, key) => {
       memo[key] = key;
 
       return memo;
-    }, {});
-  },
+    }, {}),
 
-  createSymbolMapFromArray: (array = []) => {
-    return array.reduce((memo, key) => {
+  createSymbolMapFromArray: (array = []) =>
+    array.reduce((memo, key) => {
       memo[key] = Symbol(key);
 
       return memo;
-    }, {});
-  },
+    }, {}),
 
   getDiff: (prevObject = {}, nextObject = {}) => {
     const prevObjectKeys = Object.keys(prevObject);
@@ -62,14 +60,13 @@ const objectUtil = {
     return diff;
   },
 
-  reflect: object => {
-    return Object.keys(object).reduce((memo, key) => {
+  reflect: object =>
+    Object.keys(object).reduce((memo, key) => {
       memo[key] = object[key];
       memo[object[key]] = key;
 
       return memo;
-    }, {});
-  },
+    }, {}),
 };
 
 module.exports = objectUtil;

@@ -83,7 +83,7 @@ module.exports = (req, res) => {
       serverEvent.setType(serverEventTypes.TRANSFER_HISTORY_FULL_UPDATE);
       serverEvent.addData(data);
       serverEvent.emit();
-    }
+    },
   );
 
   serviceInstances.notificationService.on(notificationServiceEvents.NOTIFICATION_COUNT_CHANGE, payload => {

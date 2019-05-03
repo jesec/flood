@@ -10,8 +10,8 @@ const DEFAULT_QUERY_LIMIT = 20;
 const INITIAL_COUNT_VALUE = {read: 0, total: 0, unread: 0};
 
 class NotificationService extends BaseService {
-  constructor() {
-    super(...arguments);
+  constructor(...serviceConfig) {
+    super(...serviceConfig);
 
     this.count = Object.assign({}, INITIAL_COUNT_VALUE);
     this.ready = false;
@@ -29,14 +29,12 @@ class NotificationService extends BaseService {
     this.count.unread = this.count.unread + notifications.length;
 
     const timestamp = Date.now();
-    const notificationsToInsert = notifications.map(notification => {
-      return {
-        ts: timestamp,
-        data: notification.data,
-        id: notification.id,
-        read: false,
-      };
-    });
+    const notificationsToInsert = notifications.map(notification => ({
+      ts: timestamp,
+      data: notification.data,
+      id: notification.id,
+      read: false,
+    }));
 
     this.db.insert(notificationsToInsert, () => this.emitUpdate());
   }
@@ -88,8 +86,8 @@ class NotificationService extends BaseService {
   }
 
   getNotifications(query, callback) {
-    let sortedNotifications = this.db.find({}).sort({ts: -1});
-    let queryCallback = (err, docs) => {
+    const sortedNotifications = this.db.find({}).sort({ts: -1});
+    const queryCallback = (err, docs) => {
       if (err) {
         callback(null, err);
         return;

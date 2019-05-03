@@ -6,12 +6,13 @@ import React from 'react';
 
 import AuthStore from '../stores/AuthStore';
 import Checkmark from './icons/Checkmark';
-import ClientStatusStore from '../stores/ClientStatusStore';
+import ClientActions from '../actions/ClientActions';
 import ClientConnectionInterruption from './general/ClientConnectionInterruption';
+import ClientStatusStore from '../stores/ClientStatusStore';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
 import LoadingIndicator from './general/LoadingIndicator';
-import SettingsStore from '../stores/SettingsStore';
+import SettingsActions from '../actions/SettingsActions';
 import UIStore from '../stores/UIStore';
 import WindowTitle from './general/WindowTitle';
 
@@ -85,13 +86,13 @@ class AuthEnforcer extends React.Component {
       browserHistory.replace('register');
     } else {
       this.setState({authStatusDetermined: true, isAuthenticated: true});
-      SettingsStore.fetchClientSettings();
-      SettingsStore.fetchFloodSettings();
+      ClientActions.fetchSettings();
+      SettingsActions.fetchSettings();
       browserHistory.replace('overview');
     }
   }
 
-  handleVerifyError(error) {
+  handleVerifyError() {
     this.setState({authStatusDetermined: true, isAuthenticated: false});
     browserHistory.replace('login');
   }
@@ -102,8 +103,8 @@ class AuthEnforcer extends React.Component {
   }
 
   handleLoginSuccess() {
-    SettingsStore.fetchClientSettings();
-    SettingsStore.fetchFloodSettings();
+    ClientActions.fetchSettings();
+    SettingsActions.fetchSettings();
     FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.replace('overview');
@@ -113,26 +114,6 @@ class AuthEnforcer extends React.Component {
     FloodActions.restartActivityStream();
     this.setState({authStatusDetermined: true, isAuthenticated: true});
     browserHistory.replace('overview');
-  }
-
-  renderDependencyList() {
-    const {dependencies} = this.state;
-    const listItems = Object.keys(dependencies).map((id, index) => {
-      const {message, satisfied} = dependencies[id];
-      const statusIcon = ICONS.satisfied;
-      const classes = classnames('dependency-list__dependency', {
-        'dependency-list__dependency--satisfied': satisfied,
-      });
-
-      return (
-        <li className={classes} key={id}>
-          <span className="dependency-list__dependency__icon">{statusIcon}</span>
-          <span className="dependency-list__dependency__message">{message}</span>
-        </li>
-      );
-    });
-
-    return <ul className="dependency-list">{listItems}</ul>;
   }
 
   handleUIDependenciesChange() {
@@ -158,7 +139,7 @@ class AuthEnforcer extends React.Component {
 
     // Iterate over current dependencies looking for unsatisified dependencies.
     const isDependencyActive = Object.keys(this.state.dependencies).some(
-      dependencyKey => !this.state.dependencies[dependencyKey].satisfied
+      dependencyKey => !this.state.dependencies[dependencyKey].satisfied,
     );
 
     // If any dependency is unsatisfied, show the loading indicator.
@@ -175,7 +156,7 @@ class AuthEnforcer extends React.Component {
     if (this.isLoading()) {
       return (
         <div className="application__loading-overlay">
-          <LoadingIndicator inverse={true} />
+          <LoadingIndicator inverse />
           {this.renderDependencyList()}
         </div>
       );
@@ -192,6 +173,26 @@ class AuthEnforcer extends React.Component {
     }
 
     return null;
+  }
+
+  renderDependencyList() {
+    const {dependencies} = this.state;
+    const listItems = Object.keys(dependencies).map(id => {
+      const {message, satisfied} = dependencies[id];
+      const statusIcon = ICONS.satisfied;
+      const classes = classnames('dependency-list__dependency', {
+        'dependency-list__dependency--satisfied': satisfied,
+      });
+
+      return (
+        <li className={classes} key={id}>
+          <span className="dependency-list__dependency__icon">{statusIcon}</span>
+          <span className="dependency-list__dependency__message">{message}</span>
+        </li>
+      );
+    });
+
+    return <ul className="dependency-list">{listItems}</ul>;
   }
 
   render() {

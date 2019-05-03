@@ -33,28 +33,27 @@ export default class TagFilters extends React.Component {
   }
 
   getFilters() {
-    let filterItems = Object.keys(this.state.tagCount).sort((a, b) => {
+    const filterItems = Object.keys(this.state.tagCount).sort((a, b) => {
       if (a === 'all' || a === 'untagged') {
         return -1;
-      } else if (b === 'all' || b === 'untagged') {
+      }
+      if (b === 'all' || b === 'untagged') {
         return 1;
       }
 
       return a.localeCompare(b);
     });
 
-    let filterElements = filterItems.map((filter, index) => {
-      return (
-        <SidebarFilter
-          handleClick={this.handleClick}
-          count={this.state.tagCount[filter] || 0}
-          key={filter}
-          isActive={filter === this.state.tagFilter}
-          name={filter}
-          slug={filter}
-        />
-      );
-    });
+    const filterElements = filterItems.map(filter => (
+      <SidebarFilter
+        handleClick={this.handleClick}
+        count={this.state.tagCount[filter] || 0}
+        key={filter}
+        isActive={filter === this.state.tagFilter}
+        name={filter}
+        slug={filter}
+      />
+    ));
 
     return filterElements;
   }
@@ -64,7 +63,7 @@ export default class TagFilters extends React.Component {
   }
 
   hasTags() {
-    let tags = Object.keys(this.state.tagCount);
+    const tags = Object.keys(this.state.tagCount);
 
     return !((tags.length === 1 && tags[0] === 'all') || (tags.length === 2 && tags[1] === 'untagged'));
   }
@@ -74,7 +73,7 @@ export default class TagFilters extends React.Component {
   }
 
   onTorrentTaxonomyChange() {
-    let tagCount = TorrentFilterStore.getTorrentTagCount();
+    const tagCount = TorrentFilterStore.getTorrentTagCount();
     this.setState({tagCount});
   }
 

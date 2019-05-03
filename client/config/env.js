@@ -7,11 +7,6 @@ const userConfig = require('../../config');
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('./paths')];
 
-const NODE_ENV = process.env.NODE_ENV;
-if (!NODE_ENV) {
-  throw new Error('The NODE_ENV environment variable is required but was not specified.');
-}
-
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
 // https://github.com/facebookincubator/create-react-app/issues/253.
@@ -45,7 +40,7 @@ function getClientEnvironment() {
         NODE_ENV: environment,
         BASE_URI: environment !== 'development' ? paths.servedPath : '',
         POLL_INTERVAL: userConfig.torrentClientPollInterval,
-      }
+      },
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = {

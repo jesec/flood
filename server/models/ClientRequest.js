@@ -10,6 +10,38 @@ const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
 const rTorrentPropMap = require('../util/rTorrentPropMap');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
+const addTagsToRequest = (tagsArr, requestParameters) => {
+  if (tagsArr && tagsArr.length) {
+    const tags = tagsArr
+      .reduce((accumulator, currentTag) => {
+        const tag = encodeURIComponent(currentTag.trim());
+
+        if (tag !== '' && accumulator.indexOf(tag) === -1) {
+          accumulator.push(tag);
+        }
+
+        return accumulator;
+      }, [])
+      .join(',');
+
+    requestParameters.push(`d.custom1.set="${tags}"`);
+  }
+
+  return requestParameters;
+};
+
+const getEnsuredArray = item => {
+  if (!util.isArray(item)) {
+    return [item];
+  }
+  return item;
+};
+
+const getMethodCall = (methodName, params) => {
+  params = params || [];
+  return {methodName, params};
+};
+
 class ClientRequest {
   constructor(user, services, options) {
     options = options || {};
@@ -35,47 +67,26 @@ class ClientRequest {
     }
   }
 
-  addTagsToRequest(tagsArr, requestParameters) {
-    if (tagsArr && tagsArr.length) {
-      const tags = tagsArr
-        .reduce((accumulator, currentTag) => {
-          const tag = encodeURIComponent(currentTag.trim());
-
-          if (tag !== '' && accumulator.indexOf(tag) === -1) {
-            accumulator.push(tag);
-          }
-
-          return accumulator;
-        }, [])
-        .join(',');
-
-      requestParameters.push(`d.custom1.set="${tags}"`);
+  // TODO: Move this to util, doesn't belong here
+  createDirectory(options) {
+    if (options.path) {
+      mkdirp(options.path, error => {
+        if (error) {
+          console.trace('Error creating directory.', error);
+        }
+      });
     }
-
-    return requestParameters;
   }
 
   clearRequestQueue() {
     this.requests = [];
   }
 
-  getEnsuredArray(item) {
-    if (!util.isArray(item)) {
-      return [item];
-    }
-    return item;
-  }
-
-  getMethodCall(methodName, params) {
-    params = params || [];
-    return {methodName, params};
-  }
-
   handleError(error) {
     if (error.code === 'ECONNREFUSED') {
       console.error(
         `Connection refused at ${error.address}${error.port ? `:${error.port}` : ''}. ` +
-          `Check these values in config.js and ensure that rTorrent is running.`
+          'Check these values in config.js and ensure that rTorrent is running.',
       );
     }
 
@@ -109,8 +120,8 @@ class ClientRequest {
   }
 
   send() {
-    let handleSuccess = this.handleSuccess.bind(this);
-    let handleError = this.handleError.bind(this);
+    const handleSuccess = this.handleSuccess.bind(this);
+    const handleError = this.handleError.bind(this);
 
     this.clientRequestManager
       .methodCall('system.multicall', [this.requests])
@@ -121,26 +132,23 @@ class ClientRequest {
   // TODO: Separate these and add support for additional clients.
   // rTorrent method calls.
   addFiles(options) {
-    let files = this.getEnsuredArray(options.files);
-    let path = options.path;
-    let isBasePath = options.isBasePath;
-    let start = options.start;
-    let tagsArr = options.tags;
+    const files = getEnsuredArray(options.files);
+    const {path: destinationPath, isBasePath, start, tags: tagsArr} = options;
 
     files.forEach(file => {
       let methodCall = 'load.raw_start';
       let parameters = ['', file.buffer];
-      let timeAdded = Math.floor(Date.now() / 1000);
+      const timeAdded = Math.floor(Date.now() / 1000);
 
-      if (path) {
+      if (destinationPath) {
         if (isBasePath) {
-          parameters.push(`d.directory_base.set="${path}"`);
+          parameters.push(`d.directory_base.set="${destinationPath}"`);
         } else {
-          parameters.push(`d.directory.set="${path}"`);
+          parameters.push(`d.directory.set="${destinationPath}"`);
         }
       }
 
-      parameters = this.addTagsToRequest(tagsArr, parameters);
+      parameters = addTagsToRequest(tagsArr, parameters);
 
       parameters.push(`d.custom.set=x-filename,${file.originalname}`);
       parameters.push(`d.custom.set=addtime,${timeAdded}`);
@@ -151,31 +159,28 @@ class ClientRequest {
         methodCall = 'load.raw';
       }
 
-      this.requests.push(this.getMethodCall(methodCall, parameters));
+      this.requests.push(getMethodCall(methodCall, parameters));
     });
   }
 
   addURLs(options) {
-    let path = options.path;
-    let isBasePath = options.isBasePath;
-    let start = options.start;
-    let tagsArr = options.tags;
-    let urls = this.getEnsuredArray(options.urls);
+    const {path: destinationPath, isBasePath, start, tags: tagsArr} = options;
+    const urls = getEnsuredArray(options.urls);
 
     urls.forEach(url => {
       let methodCall = 'load.start';
       let parameters = ['', url];
-      let timeAdded = Math.floor(Date.now() / 1000);
+      const timeAdded = Math.floor(Date.now() / 1000);
 
-      if (path) {
+      if (destinationPath) {
         if (isBasePath) {
-          parameters.push(`d.directory_base.set="${path}"`);
+          parameters.push(`d.directory_base.set="${destinationPath}"`);
         } else {
-          parameters.push(`d.directory.set="${path}"`);
+          parameters.push(`d.directory.set="${destinationPath}"`);
         }
       }
 
-      parameters = this.addTagsToRequest(tagsArr, parameters);
+      parameters = addTagsToRequest(tagsArr, parameters);
 
       parameters.push(`d.custom.set=addtime,${timeAdded}`);
 
@@ -183,23 +188,23 @@ class ClientRequest {
         methodCall = 'load.normal';
       }
 
-      this.requests.push(this.getMethodCall(methodCall, parameters));
+      this.requests.push(getMethodCall(methodCall, parameters));
     });
   }
 
   checkHash(options) {
-    const torrentService = this.services.torrentService;
-    const hashes = this.getEnsuredArray(options.hashes);
-    const stoppedHashes = hashes.filter(hash => {
-      return torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped);
-    });
+    const {torrentService} = this.services;
+    const hashes = getEnsuredArray(options.hashes);
+    const stoppedHashes = hashes.filter(hash =>
+      torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped),
+    );
 
     const hashesToStart = [];
 
     this.stopTorrents({hashes});
 
     hashes.forEach(hash => {
-      this.requests.push(this.getMethodCall('d.check_hash', [hash]));
+      this.requests.push(getMethodCall('d.check_hash', [hash]));
 
       if (!stoppedHashes.includes(hash)) {
         hashesToStart.push(hash);
@@ -211,25 +216,11 @@ class ClientRequest {
     }
   }
 
-  createDirectory(options) {
-    if (options.path) {
-      mkdirp(options.path, error => {
-        if (error) {
-          console.trace('Error creating directory.', error);
-        }
-      });
-    }
-  }
-
   fetchSettings(options) {
-    let requestedSettings = [];
+    let {requestedSettings} = options;
 
-    if (options.requestedSettings) {
-      requestedSettings = options.requestedSettings;
-    } else {
-      requestedSettings = clientSettingsMap.defaults.map(settingsKey => {
-        return clientSettingsMap[settingsKey];
-      });
+    if (requestedSettings == null) {
+      requestedSettings = clientSettingsMap.defaults.map(settingsKey => clientSettingsMap[settingsKey]);
     }
 
     // Ensure client's response gets mapped to the correct requested keys.
@@ -238,39 +229,39 @@ class ClientRequest {
     }
 
     requestedSettings.forEach(settingsKey => {
-      this.requests.push(this.getMethodCall(settingsKey));
+      this.requests.push(getMethodCall(settingsKey));
     });
   }
 
   getTorrentDetails(options) {
-    var peerParams = [options.hash, ''].concat(options.peerProps);
-    var fileParams = [options.hash, ''].concat(options.fileProps);
-    var trackerParams = [options.hash, ''].concat(options.trackerProps);
+    const peerParams = [options.hash, ''].concat(options.peerProps);
+    const fileParams = [options.hash, ''].concat(options.fileProps);
+    const trackerParams = [options.hash, ''].concat(options.trackerProps);
 
-    this.requests.push(this.getMethodCall('p.multicall', peerParams));
-    this.requests.push(this.getMethodCall('f.multicall', fileParams));
-    this.requests.push(this.getMethodCall('t.multicall', trackerParams));
+    this.requests.push(getMethodCall('p.multicall', peerParams));
+    this.requests.push(getMethodCall('f.multicall', fileParams));
+    this.requests.push(getMethodCall('t.multicall', trackerParams));
   }
 
   getTorrentList(options) {
-    this.requests.push(this.getMethodCall('d.multicall2', options.props));
+    this.requests.push(getMethodCall('d.multicall2', options.props));
   }
 
-  getTransferData(options) {
+  getTransferData() {
     Object.keys(rTorrentPropMap.transferData).forEach(key => {
-      this.requests.push(this.getMethodCall(rTorrentPropMap.transferData[key]));
+      this.requests.push(getMethodCall(rTorrentPropMap.transferData[key]));
     });
   }
 
   listMethods(options) {
-    let args = this.getEnsuredArray(options.args);
-    this.requests.push(this.getMethodCall(options.method, [args]));
+    const args = getEnsuredArray(options.args);
+    this.requests.push(getMethodCall(options.method, [args]));
   }
 
   moveTorrents(options) {
-    const destinationPath = options.destinationPath;
-    const filenames = this.getEnsuredArray(options.filenames);
-    const sourcePaths = this.getEnsuredArray(options.sourcePaths);
+    const {destinationPath} = options;
+    const filenames = getEnsuredArray(options.filenames);
+    const sourcePaths = getEnsuredArray(options.sourcePaths);
 
     sourcePaths.forEach((source, index) => {
       let callback = () => {};
@@ -290,7 +281,7 @@ class ClientRequest {
   }
 
   setDownloadPath(options) {
-    let hashes = this.getEnsuredArray(options.hashes);
+    const hashes = getEnsuredArray(options.hashes);
 
     let pathMethod;
     if (options.isBasePath) {
@@ -300,51 +291,51 @@ class ClientRequest {
     }
 
     hashes.forEach(hash => {
-      this.requests.push(this.getMethodCall(pathMethod, [hash, options.path]));
-      this.requests.push(this.getMethodCall('d.open', [hash]));
-      this.requests.push(this.getMethodCall('d.close', [hash]));
+      this.requests.push(getMethodCall(pathMethod, [hash, options.path]));
+      this.requests.push(getMethodCall('d.open', [hash]));
+      this.requests.push(getMethodCall('d.close', [hash]));
     });
   }
 
   setFilePriority(options) {
-    let fileIndices = this.getEnsuredArray(options.fileIndices);
-    let hashes = this.getEnsuredArray(options.hashes);
+    const fileIndices = getEnsuredArray(options.fileIndices);
+    const hashes = getEnsuredArray(options.hashes);
 
     hashes.forEach(hash => {
       fileIndices.forEach(fileIndex => {
-        this.requests.push(this.getMethodCall('f.priority.set', [`${hash}:f${fileIndex}`, options.priority]));
+        this.requests.push(getMethodCall('f.priority.set', [`${hash}:f${fileIndex}`, options.priority]));
       });
-      this.requests.push(this.getMethodCall('d.update_priorities', [hash]));
+      this.requests.push(getMethodCall('d.update_priorities', [hash]));
     });
   }
 
   setPriority(options) {
-    let hashes = this.getEnsuredArray(options.hashes);
+    const hashes = getEnsuredArray(options.hashes);
 
     hashes.forEach(hash => {
-      this.requests.push(this.getMethodCall('d.priority.set', [hash, options.priority]));
-      this.requests.push(this.getMethodCall('d.update_priorities', [hash]));
+      this.requests.push(getMethodCall('d.priority.set', [hash, options.priority]));
+      this.requests.push(getMethodCall('d.update_priorities', [hash]));
     });
   }
 
   setSettings(options) {
-    let settings = this.getEnsuredArray(options.settings);
+    const settings = getEnsuredArray(options.settings);
 
     settings.forEach(setting => {
       if (setting.overrideLocalSetting) {
-        this.requests.push(this.getMethodCall(setting.id, setting.data));
+        this.requests.push(getMethodCall(setting.id, setting.data));
       } else {
-        this.requests.push(this.getMethodCall(`${clientSettingsMap[setting.id]}.set`, ['', setting.data]));
+        this.requests.push(getMethodCall(`${clientSettingsMap[setting.id]}.set`, ['', setting.data]));
       }
     });
   }
 
   setTaxonomy(options) {
-    let methodName = 'd.custom1.set';
+    const methodName = 'd.custom1.set';
 
-    let tags = options.tags
+    const tags = options.tags
       .reduce((memo, currentTag) => {
-        let tag = encodeURIComponent(currentTag.trim());
+        const tag = encodeURIComponent(currentTag.trim());
 
         if (tag !== '' && memo.indexOf(tag) === -1) {
           memo.push(tag);
@@ -354,8 +345,8 @@ class ClientRequest {
       }, [])
       .join(',');
 
-    this.getEnsuredArray(options.hashes).forEach(hash => {
-      this.requests.push(this.getMethodCall(methodName, [hash, tags]));
+    getEnsuredArray(options.hashes).forEach(hash => {
+      this.requests.push(getMethodCall(methodName, [hash, tags]));
     });
   }
 
@@ -364,7 +355,7 @@ class ClientRequest {
     if (options.direction === 'upload') {
       methodName = 'throttle.global_up.max_rate.set';
     }
-    this.requests.push(this.getMethodCall(methodName, ['', options.throttle]));
+    this.requests.push(getMethodCall(methodName, ['', options.throttle]));
   }
 
   startTorrents(options) {
@@ -373,9 +364,9 @@ class ClientRequest {
       return;
     }
 
-    this.getEnsuredArray(options.hashes).forEach(hash => {
-      this.requests.push(this.getMethodCall('d.open', [hash]));
-      this.requests.push(this.getMethodCall('d.start', [hash]));
+    getEnsuredArray(options.hashes).forEach(hash => {
+      this.requests.push(getMethodCall('d.open', [hash]));
+      this.requests.push(getMethodCall('d.start', [hash]));
     });
   }
 
@@ -385,9 +376,9 @@ class ClientRequest {
       return;
     }
 
-    this.getEnsuredArray(options.hashes).forEach(hash => {
-      this.requests.push(this.getMethodCall('d.stop', [hash]));
-      this.requests.push(this.getMethodCall('d.close', [hash]));
+    getEnsuredArray(options.hashes).forEach(hash => {
+      this.requests.push(getMethodCall('d.stop', [hash]));
+      this.requests.push(getMethodCall('d.close', [hash]));
     });
   }
 }

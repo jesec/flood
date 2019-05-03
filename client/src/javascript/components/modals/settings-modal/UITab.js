@@ -13,6 +13,7 @@ import TorrentProperties from '../../../constants/TorrentProperties';
 
 class UITab extends SettingsTab {
   tooltipRef = null;
+
   state = {
     torrentDetails: SettingsStore.getFloodSettings('torrentDetails'),
     torrentListViewSize: SettingsStore.getFloodSettings('torrentListViewSize'),
@@ -116,11 +117,13 @@ class UITab extends SettingsTab {
           className="tooltip tooltip--is-error"
           content={tooltipContent}
           offset={-5}
-          ref={ref => (this.tooltipRef = ref)}
+          ref={ref => {
+            this.tooltipRef = ref;
+          }}
           scrollContainer={this.props.scrollContainer}
           width={200}
           wrapperClassName="sortable-list__content sortable-list__content--secondary tooltip__wrapper"
-          wrapText={true}>
+          wrapText>
           <ErrorIcon />
         </Tooltip>
       );
@@ -151,8 +154,8 @@ class UITab extends SettingsTab {
       let nextUnlockedIndex = lockedIDs.length;
 
       torrentDetailItems = torrentDetailItems
-        .reduce((accumulator, detail, index) => {
-          let lockedIDIndex = lockedIDs.indexOf(detail.id);
+        .reduce((accumulator, detail) => {
+          const lockedIDIndex = lockedIDs.indexOf(detail.id);
 
           if (lockedIDIndex > -1) {
             accumulator[lockedIDIndex] = detail;

@@ -27,7 +27,7 @@ export default {
   'feeds.existing.feeds': 'Flux Existants',
   'feeds.existing.rules': 'Règles Existantes',
   'feeds.label': 'Label',
-  'feeds.match.count': `{count, plural, =1 {# correspond} other {# correspondent}}`,
+  'feeds.match.count': '{count, plural, =1 {# correspond} other {# correspondent}}',
   'feeds.match.pattern': 'Motif Correspondant',
   'feeds.match': 'Correspondance',
   'feeds.no.feeds.available': 'Aucun flux disponible.',

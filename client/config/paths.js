@@ -6,15 +6,15 @@ const userConfig = require('../../config');
 // https://github.com/facebookincubator/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-const ensureSlash = (path, needsSlash) => {
-  const hasSlash = path.endsWith('/');
+const ensureSlash = (questionablePath, needsSlash) => {
+  const hasSlash = questionablePath.endsWith('/');
   if (hasSlash && !needsSlash) {
-    return path.substr(path, path.length - 1);
-  } else if (!hasSlash && needsSlash) {
-    return `${path}/`;
-  } else {
-    return path;
+    return questionablePath.substr(questionablePath, questionablePath.length - 1);
   }
+  if (!hasSlash && needsSlash) {
+    return `${questionablePath}/`;
+  }
+  return questionablePath;
 };
 
 module.exports = {

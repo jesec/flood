@@ -6,9 +6,9 @@ import ConfigStore from '../stores/ConfigStore';
 
 const baseURI = ConfigStore.getBaseURI();
 
-let ClientActions = {
-  fetchSettings: property => {
-    return axios
+const ClientActions = {
+  fetchSettings: property =>
+    axios
       .get(`${baseURI}api/client/settings`, {params: {property}})
       .then((json = {}) => json.data)
       .then(
@@ -23,12 +23,11 @@ let ClientActions = {
             type: ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  saveSettings: (settings, options) => {
-    return axios
+  saveSettings: (settings, options) =>
+    axios
       .patch(`${baseURI}api/client/settings`, settings)
       .then((json = {}) => json.data)
       .then(
@@ -45,12 +44,11 @@ let ClientActions = {
             error,
             options,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  setThrottle: (direction, throttle) => {
-    return axios
+  setThrottle: (direction, throttle) =>
+    axios
       .put(`${baseURI}api/client/settings/speed-limits`, {
         direction,
         throttle,
@@ -72,9 +70,8 @@ let ClientActions = {
               error,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
   testClientConnectionSettings: connectionSettings => {
     const requestPayload = {
@@ -86,23 +83,22 @@ let ClientActions = {
     return axios.post(`${baseURI}api/client/connection-test`, requestPayload).then((json = {}) => json.data);
   },
 
-  testConnection: () => {
-    return axios
+  testConnection: () =>
+    axios
       .get(`${baseURI}api/client/connection-test`)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        () => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_CONNECTION_TEST_SUCCESS,
           });
         },
-        error => {
+        () => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_CONNECTION_TEST_ERROR,
           });
-        }
-      );
-  },
+        },
+      ),
 };
 
 export default ClientActions;

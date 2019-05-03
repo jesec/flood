@@ -6,9 +6,9 @@ import ConfigStore from '../stores/ConfigStore';
 
 const baseURI = ConfigStore.getBaseURI();
 
-let SettingsActions = {
-  addFeed: feed => {
-    return axios
+const SettingsActions = {
+  addFeed: feed =>
+    axios
       .put(`${baseURI}api/feed-monitor/feeds`, feed)
       .then((json = {}) => json.data)
       .then(
@@ -23,12 +23,11 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_ADD_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  modifyFeed: (id, feed) => {
-    return axios
+  modifyFeed: (id, feed) =>
+    axios
       .put(`${baseURI}api/feed-monitor/feeds/${id}`, feed)
       .then((json = {}) => json.data)
       .then(
@@ -43,12 +42,11 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_MODiFY_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  addRule: rule => {
-    return axios
+  addRule: rule =>
+    axios
       .put(`${baseURI}api/feed-monitor/rules`, rule)
       .then((json = {}) => json.data)
       .then(
@@ -63,12 +61,11 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_FEED_MONITOR_RULE_ADD_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  fetchFeedMonitors: query => {
-    return axios
+  fetchFeedMonitors: query =>
+    axios
       .get(`${baseURI}api/feed-monitor`, query)
       .then((json = {}) => json.data)
       .then(
@@ -83,12 +80,11 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_FEED_MONITORS_FETCH_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  fetchFeeds: query => {
-    return axios
+  fetchFeeds: query =>
+    axios
       .get(`${baseURI}api/feed-monitor/feeds`, query)
       .then((json = {}) => json.data)
       .then(
@@ -103,12 +99,11 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEEDS_FETCH_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  fetchItems: query => {
-    return axios
+  fetchItems: query =>
+    axios
       .get(`${baseURI}api/feed-monitor/items`, query)
       .then((json = {}) => json.data)
       .then(
@@ -123,12 +118,11 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_FEED_MONITOR_ITEMS_FETCH_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  fetchRules: query => {
-    return axios
+  fetchRules: query =>
+    axios
       .get(`${baseURI}api/feed-monitor/rules`, query)
       .then((json = {}) => json.data)
       .then(
@@ -143,12 +137,11 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_FEED_MONITOR_RULES_FETCH_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  fetchSettings: property => {
-    return axios
+  fetchSettings: property =>
+    axios
       .get(`${baseURI}api/settings`, {params: {property}})
       .then((json = {}) => json.data)
       .then(
@@ -163,12 +156,11 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_FETCH_REQUEST_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 
-  removeFeedMonitor: id => {
-    return axios
+  removeFeedMonitor: id =>
+    axios
       .delete(`${baseURI}api/feed-monitor/${id}`)
       .then((json = {}) => json.data)
       .then(
@@ -189,12 +181,11 @@ let SettingsActions = {
               id,
             },
           });
-        }
-      );
-  },
+        },
+      ),
 
-  saveSettings: (settings, options = {}) => {
-    return axios
+  saveSettings: (settings, options = {}) =>
+    axios
       .patch(`${baseURI}api/settings`, settings)
       .then((json = {}) => json.data)
       .then(
@@ -210,9 +201,8 @@ let SettingsActions = {
             type: ActionTypes.SETTINGS_SAVE_REQUEST_ERROR,
             error,
           });
-        }
-      );
-  },
+        },
+      ),
 };
 
 export default SettingsActions;

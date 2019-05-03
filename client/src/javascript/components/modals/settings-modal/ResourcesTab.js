@@ -8,7 +8,7 @@ import SettingsTab from './SettingsTab';
 export default class ResourcesTab extends SettingsTab {
   state = {};
 
-  handleFormChange = ({event, formData}) => {
+  handleFormChange = ({event}) => {
     this.handleClientSettingFieldChange(event.target.name, event);
   };
 

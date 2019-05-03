@@ -27,7 +27,7 @@ export default {
   'feeds.existing.feeds': 'Feeds',
   'feeds.existing.rules': 'Regels',
   'feeds.label': 'Label',
-  'feeds.match.count': `{count, plural, =1 {# match} other {# matches}}`,
+  'feeds.match.count': '{count, plural, =1 {# match} other {# matches}}',
   'feeds.match.pattern': 'Match op patroon',
   'feeds.match': 'Match',
   'feeds.no.feeds.available': 'Geen feeds beschikbaar.',

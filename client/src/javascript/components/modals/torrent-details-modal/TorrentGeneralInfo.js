@@ -5,17 +5,15 @@ import Size from '../../general/Size';
 
 class TorrentGeneralInfo extends React.Component {
   getTags(tags) {
-    return tags.map((tag, index) => {
-      return (
-        <span className="tag" key={index}>
-          {tag}
-        </span>
-      );
-    });
+    return tags.map(tag => (
+      <span className="tag" key={tag}>
+        {tag}
+      </span>
+    ));
   }
 
   render() {
-    let torrent = this.props.torrent;
+    const {torrent} = this.props;
 
     let dateAdded = null;
     if (torrent.dateAdded) {
@@ -48,13 +46,11 @@ class TorrentGeneralInfo extends React.Component {
               </td>
               <td className="torrent-details__detail__value">
                 {dateAdded
-                  ? this.props.intl.formatDate(dateAdded, {
+                  ? `${this.props.intl.formatDate(dateAdded, {
                       year: 'numeric',
                       month: 'long',
                       day: '2-digit',
-                    }) +
-                    ' ' +
-                    this.props.intl.formatTime(dateAdded)
+                    })} ${this.props.intl.formatTime(dateAdded)}`
                   : VALUE_NOT_AVAILABLE}
               </td>
             </tr>
@@ -151,13 +147,11 @@ class TorrentGeneralInfo extends React.Component {
               </td>
               <td className="torrent-details__detail__value">
                 {creation
-                  ? this.props.intl.formatDate(creation, {
+                  ? `${this.props.intl.formatDate(creation, {
                       year: 'numeric',
                       month: 'long',
                       day: '2-digit',
-                    }) +
-                    ' ' +
-                    this.props.intl.formatTime(creation)
+                    })} ${this.props.intl.formatTime(creation)}`
                   : VALUE_NOT_AVAILABLE}
               </td>
             </tr>

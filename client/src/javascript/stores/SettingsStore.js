@@ -57,14 +57,6 @@ class SettingsStoreClass extends BaseStore {
     };
   }
 
-  fetchClientSettings(property) {
-    ClientActions.fetchSettings(property);
-  }
-
-  fetchFloodSettings(property) {
-    SettingsActions.fetchSettings(property);
-  }
-
   getClientSettings(property) {
     if (property) {
       return this.clientSettings[property];
@@ -88,7 +80,7 @@ class SettingsStoreClass extends BaseStore {
     this.processSettingsState();
   }
 
-  handleClientSettingsFetchError(error) {
+  handleClientSettingsFetchError() {
     this.emit(EventTypes.CLIENT_SETTINGS_FETCH_REQUEST_ERROR);
   }
 
@@ -110,7 +102,7 @@ class SettingsStoreClass extends BaseStore {
     }
   }
 
-  handleSettingsFetchError(error) {
+  handleSettingsFetchError() {
     this.emit(EventTypes.SETTINGS_FETCH_REQUEST_ERROR);
   }
 
@@ -192,7 +184,7 @@ class SettingsStoreClass extends BaseStore {
   }
 }
 
-let SettingsStore = new SettingsStoreClass();
+const SettingsStore = new SettingsStoreClass();
 
 SettingsStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;
@@ -205,7 +197,7 @@ SettingsStore.dispatcherID = AppDispatcher.register(payload => {
       SettingsStore.handleClientSettingsFetchSuccess(action.data);
       break;
     case ActionTypes.CLIENT_SET_THROTTLE_SUCCESS:
-      SettingsStore.fetchClientSettings();
+      ClientActions.fetchSettings();
       break;
     case ActionTypes.SETTINGS_FETCH_REQUEST_ERROR:
       SettingsStore.handleSettingsFetchError(action.error);

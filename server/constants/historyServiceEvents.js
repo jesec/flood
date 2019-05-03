@@ -11,7 +11,7 @@ const torrentServiceEvents = [
     accumulator.push(`${snapshotType}_SNAPSHOT_FULL_UPDATE`, `${snapshotType}_SNAPSHOT_DIFF_CHANGE`);
 
     return accumulator;
-  }, [])
+  }, []),
 );
 
 module.exports = objectUtil.createSymbolMapFromArray(torrentServiceEvents);

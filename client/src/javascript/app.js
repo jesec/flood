@@ -58,9 +58,10 @@ class FloodApp extends React.Component {
   }
 
   render() {
-    let {locale} = this.state;
+    const {locale} = this.state;
 
     return (
+      // eslint-disable-next-line import/namespace
       <IntlProvider locale={locale} messages={i18n[locale]}>
         {appRoutes}
       </IntlProvider>

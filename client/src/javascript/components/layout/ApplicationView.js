@@ -9,7 +9,7 @@ class ApplicationView extends React.Component {
   };
 
   render() {
-    let classes = classnames('application__view', {
+    const classes = classnames('application__view', {
       [`application__view--${this.props.modifier}`]: this.props.modifier != null,
     });
 

@@ -36,7 +36,7 @@ class SearchBox extends React.Component {
   }
 
   handleSearchChange(event) {
-    let searchValue = event.target.value;
+    const searchValue = event.target.value;
     this.setState({searchValue});
     UIActions.setTorrentsSearchFilter(searchValue);
   }
@@ -52,7 +52,7 @@ class SearchBox extends React.Component {
 
   render() {
     let clearSearchButton = null;
-    let classes = classnames({
+    const classes = classnames({
       sidebar__item: true,
       search: true,
       'is-in-use': this.isSearchActive(),

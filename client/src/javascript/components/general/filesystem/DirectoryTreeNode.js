@@ -5,6 +5,8 @@ import React from 'react';
 
 import FolderClosedSolid from '../../icons/FolderClosedSolid';
 import FolderOpenSolid from '../../icons/FolderOpenSolid';
+// TODO: Fix this circular dependency
+// eslint-disable-next-line import/no-cycle
 import DirectoryTree from './DirectoryTree';
 
 const METHODS_TO_BIND = ['handleDirectoryClick', 'handleDirectorySelection'];
@@ -56,7 +58,7 @@ class DirectoryTreeNode extends React.Component {
             checked={this.props.isSelected}
             id={this.props.id}
             onChange={this.handleDirectorySelection}
-            useProps={true}
+            useProps
           />
         </div>
         <div
@@ -90,9 +92,11 @@ class DirectoryTreeNode extends React.Component {
     return null;
   }
 
-  handleDirectoryClick(event) {
-    this.setState({
-      expanded: !this.state.expanded,
+  handleDirectoryClick() {
+    this.setState(state => {
+      return {
+        expanded: !state.expanded,
+      };
     });
   }
 
@@ -109,15 +113,15 @@ class DirectoryTreeNode extends React.Component {
   }
 
   render() {
-    let branchClasses = classnames('directory-tree__branch', `directory-tree__branch--depth-${this.props.depth}`, {
+    const branchClasses = classnames('directory-tree__branch', `directory-tree__branch--depth-${this.props.depth}`, {
       'directory-tree__node--selected': this.props.isSelected,
     });
-    let directoryClasses = classnames(
+    const directoryClasses = classnames(
       'directory-tree__node',
       'directory-tree__node--selectable directory-tree__node--directory',
       {
         'is-expanded': this.state.expanded,
-      }
+      },
     );
 
     return (

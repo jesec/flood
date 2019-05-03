@@ -40,6 +40,14 @@ class FeedsStoreClass extends BaseStore {
     SettingsActions.fetchRules(query);
   }
 
+  removeFeed(id) {
+    SettingsActions.removeFeedMonitor(id);
+  }
+
+  removeRule(id) {
+    SettingsActions.removeFeedMonitor(id);
+  }
+
   getFeeds() {
     return this.feeds;
   }
@@ -125,23 +133,13 @@ class FeedsStoreClass extends BaseStore {
     this.emit(EventTypes.SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS);
   }
 
-  removeFeed(id) {
-    SettingsActions.removeFeedMonitor(id);
-  }
-
-  removeRule(id) {
-    SettingsActions.removeFeedMonitor(id);
-  }
-
   setItems(type, items) {
     if (items == null) {
       this[type] = [];
       return;
     }
 
-    this[type] = items.sort((a, b) => {
-      return a.label.localeCompare(b.label);
-    });
+    this[type] = items.sort((a, b) => a.label.localeCompare(b.label));
   }
 
   setFeeds(feeds) {
@@ -153,7 +151,7 @@ class FeedsStoreClass extends BaseStore {
   }
 }
 
-let FeedsStore = new FeedsStoreClass();
+const FeedsStore = new FeedsStoreClass();
 
 FeedsStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;

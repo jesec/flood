@@ -5,6 +5,7 @@ import React from 'react';
 
 import ClipboardIcon from '../../icons/ClipboardIcon';
 import EventTypes from '../../../constants/EventTypes';
+import FloodActions from '../../../actions/FloodActions';
 import Tooltip from '../../general/Tooltip';
 import TorrentStore from '../../../stores/TorrentStore';
 
@@ -59,15 +60,13 @@ class TorrentMediainfo extends React.Component {
   componentDidMount() {
     TorrentStore.listen(EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS, this.handleFetchMediainfoSuccess);
     TorrentStore.listen(EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR, this.handleFetchMediainfoError);
-    TorrentStore.fetchMediainfo(this.props.hash);
+    FloodActions.fetchMediainfo({hash: this.props.hash});
   }
 
   componentDidUpdate() {
     if (this.copyButtonRef && this.clipboard == null) {
       this.clipboard = new Clipboard(this.copyButtonRef, {
-        text: () => {
-          return this.state.mediainfo;
-        },
+        text: () => this.state.mediainfo,
       });
 
       this.clipboard.on('success', this.handleCopySuccess);
@@ -118,7 +117,7 @@ class TorrentMediainfo extends React.Component {
     }
 
     if (this.state.fetchMediainfoError) {
-      let errorData = this.state.fetchMediainfoError.data || {};
+      const errorData = this.state.fetchMediainfoError.data || {};
 
       return (
         <div className="torrent-details__section mediainfo">
@@ -148,7 +147,11 @@ class TorrentMediainfo extends React.Component {
             content={tooltipText}
             onMouseLeave={this.handleCopyButtonMouseLeave}
             wrapperClassName="tooltip__wrapper mediainfo__toolbar__item">
-            <Button priority="tertiary" buttonRef={ref => (this.copyButtonRef = ref)}>
+            <Button
+              priority="tertiary"
+              buttonRef={ref => {
+                this.copyButtonRef = ref;
+              }}>
               <ClipboardIcon />
             </Button>
           </Tooltip>

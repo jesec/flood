@@ -5,8 +5,6 @@ import {Scrollbars} from 'react-custom-scrollbars';
 const METHODS_TO_BIND = ['getHorizontalThumb', 'getVerticalThumb'];
 
 export default class CustomScrollbar extends React.Component {
-  scrollbarRef = null;
-
   constructor() {
     super();
 
@@ -14,6 +12,8 @@ export default class CustomScrollbar extends React.Component {
       this[method] = this[method].bind(this);
     });
   }
+
+  scrollbarRef = null;
 
   getHorizontalThumb(props) {
     if (this.props.getHorizontalThumb) {
@@ -48,7 +48,7 @@ export default class CustomScrollbar extends React.Component {
   }
 
   render() {
-    let {
+    const {
       children,
       className,
       inverted,
@@ -58,14 +58,16 @@ export default class CustomScrollbar extends React.Component {
       scrollHandler,
       ...otherProps
     } = this.props;
-    let classes = classnames('scrollbars', className, {
+    const classes = classnames('scrollbars', className, {
       'is-inverted': inverted,
     });
 
     return (
       <Scrollbars
         className={classes}
-        ref={ref => (this.scrollbarRef = ref)}
+        ref={ref => {
+          this.scrollbarRef = ref;
+        }}
         renderView={this.renderView}
         renderThumbHorizontal={this.getHorizontalThumb}
         renderThumbVertical={this.getVerticalThumb}

@@ -4,7 +4,6 @@ import React from 'react';
 
 class NavigationList extends React.Component {
   static propTypes = {
-    defaultItem: PropTypes.string,
     itemClassName: PropTypes.string,
     items: PropTypes.array,
     listClassName: PropTypes.string,
@@ -26,13 +25,13 @@ class NavigationList extends React.Component {
   }
 
   getNavigationItems(items) {
-    return items.map((item, index) => {
-      let classes = classnames(this.props.itemClassName, {
+    return items.map(item => {
+      const classes = classnames(this.props.itemClassName, {
         [this.props.selectedClassName]: item.slug === this.state.selectedItem,
       });
 
       return (
-        <li className={classes} key={index} onClick={this.handleItemClick.bind(this, item)}>
+        <li className={classes} key={item.slug} onClick={this.handleItemClick.bind(this, item)}>
           {item.label}
         </li>
       );

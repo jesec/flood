@@ -1,4 +1,4 @@
-let child_process = require('child_process');
+const childProcess = require('child_process');
 
 const services = require('../services');
 
@@ -13,23 +13,24 @@ module.exports = {
     }
     const selectedTorrent = torrentService.getTorrent(hash);
     try {
-      child_process.execFile('mediainfo', [selectedTorrent.basePath], {maxBuffer: 1024 * 2000}, function(
-        error,
-        stdout,
-        stderr
-      ) {
-        if (error) {
-          callback(null, {error});
-          return;
-        }
+      childProcess.execFile(
+        'mediainfo',
+        [selectedTorrent.basePath],
+        {maxBuffer: 1024 * 2000},
+        (error, stdout, stderr) => {
+          if (error) {
+            callback(null, {error});
+            return;
+          }
 
-        if (stderr) {
-          callback(null, {error: stderr});
-          return;
-        }
+          if (stderr) {
+            callback(null, {error: stderr});
+            return;
+          }
 
-        callback({output: stdout});
-      });
+          callback({output: stdout});
+        },
+      );
     } catch (childProcessError) {
       callback(null, {error: childProcessError});
     }

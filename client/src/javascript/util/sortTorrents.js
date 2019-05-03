@@ -3,13 +3,10 @@
 const stringProps = ['basePath', 'comment', 'hash', 'message', 'name'];
 
 export function sortTorrents(torrentsHash, sortBy) {
-  let torrents = Object.keys(torrentsHash).map(hash => {
-    return {hash, ...torrentsHash[hash]};
-  });
+  const torrents = Object.keys(torrentsHash).map(hash => ({hash, ...torrentsHash[hash]}));
 
   if (torrents.length) {
-    let direction = sortBy.direction;
-    let property = sortBy.property;
+    const {direction, property} = sortBy;
 
     torrents.sort((a, b) => {
       let valA = a[property];
@@ -27,9 +24,11 @@ export function sortTorrents(torrentsHash, sortBy) {
         // Keep Infinity and null values at bottom of array.
         if ((valA === 'Infinity' && valB !== 'Infinity') || (valA == null && valB != null)) {
           return 1;
-        } else if ((valA !== 'Infinity' && valB === 'Infinity') || (valA != null && valB == null)) {
+        }
+        if ((valA !== 'Infinity' && valB === 'Infinity') || (valA != null && valB == null)) {
           return -1;
-        } else if (valA == null && valB == null) {
+        }
+        if (valA == null && valB == null) {
           return 0;
         }
 
@@ -74,7 +73,6 @@ export function sortTorrents(torrentsHash, sortBy) {
     });
 
     return torrents;
-  } else {
-    return torrents;
   }
+  return torrents;
 }

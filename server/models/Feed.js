@@ -1,4 +1,4 @@
-let FeedSub = require('feedsub');
+const FeedSub = require('feedsub');
 
 class Feed {
   constructor(options) {

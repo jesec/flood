@@ -41,14 +41,14 @@ class TransferRateDetails extends React.Component {
     ClientStatusStore.listen(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
   }
 
-  componentWillUnmount() {
-    ClientStatusStore.unlisten(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.inspectorPoint != null) {
       this.setState({timestamp: nextProps.inspectorPoint.nearestTimestamp});
     }
+  }
+
+  componentWillUnmount() {
+    ClientStatusStore.unlisten(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
   }
 
   getCurrentTansferRate(slug, options = {}) {
@@ -62,7 +62,7 @@ class TransferRateDetails extends React.Component {
       upload: transferSummary.upThrottle,
     };
     let timestamp = null;
-    let transferTotals = {
+    const transferTotals = {
       download: transferSummary.downTotal,
       upload: transferSummary.upTotal,
     };
@@ -90,7 +90,7 @@ class TransferRateDetails extends React.Component {
     if (this.state.timestamp != null) {
       const currentTime = moment(Date.now());
       const durationSummary = formatUtil.secondsToDuration(
-        moment.duration(currentTime.diff(moment(this.state.timestamp))).asSeconds()
+        moment.duration(currentTime.diff(moment(this.state.timestamp))).asSeconds(),
       );
 
       timestamp = (
@@ -105,7 +105,7 @@ class TransferRateDetails extends React.Component {
     if (throttles[slug] === 0) {
       limit = icons.infinity;
     } else {
-      limit = <Size value={throttles[slug]} isSpeed={true} />;
+      limit = <Size value={throttles[slug]} isSpeed />;
     }
 
     return (
@@ -113,7 +113,7 @@ class TransferRateDetails extends React.Component {
         <div className="client-stats__rate__icon">{icons[slug]}</div>
         <div className="client-stats__rate__data">
           <div className="client-stats__rate__data--primary">
-            <Size value={transferRates[slug]} isSpeed={true} />
+            <Size value={transferRates[slug]} isSpeed />
           </div>
           {timestamp}
           <div className={secondaryDataClasses}>

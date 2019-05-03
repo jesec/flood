@@ -6,13 +6,14 @@ import UIActions from '../../actions/UIActions';
 
 export default class ModalActions extends React.Component {
   getModalButtons(actions) {
-    let buttons = actions.map((action, index) => {
-      let classes = classnames('button', {
+    const buttons = actions.map((action, index) => {
+      const classes = classnames('button', {
         [action.supplementalClassName]: action.supplementalClassName,
       });
 
       if (action.type === 'checkbox') {
         return (
+          // eslint-disable-next-line react/no-array-index-key
           <Checkbox checked={action.checked} id={action.id} key={index} onChange={this.getClickHandler(action)}>
             {action.content}
           </Checkbox>
@@ -25,6 +26,7 @@ export default class ModalActions extends React.Component {
           isLoading={action.isLoading}
           onClick={this.getClickHandler(action)}
           priority={action.type}
+          // eslint-disable-next-line react/no-array-index-key
           key={index}
           type={action.submit ? 'submit' : 'button'}>
           {action.content}

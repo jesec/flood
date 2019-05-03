@@ -11,9 +11,9 @@ const log = data => {
 const migrate = () => {
   log(chalk.green('Migrating data: moving rTorrent connection information to users database'));
 
-  return new Promise((resolve, reject) => {
-    Users.listUsers((users, error) => {
-      if (error) return reject(error);
+  return new Promise((migrateResolve, migrateReject) => {
+    Users.listUsers((users, listUsersError) => {
+      if (listUsersError) return migrateReject(listUsersError);
       const {scgi = {}} = config;
       const existingConfig = {
         host: scgi.host,
@@ -21,7 +21,7 @@ const migrate = () => {
         socketPath: scgi.socketPath,
       };
 
-      resolve(
+      migrateResolve(
         Promise.all(
           users.map(user => {
             let userPatch = null;
@@ -53,21 +53,21 @@ const migrate = () => {
             if (userPatch != null) {
               log(chalk.yellow(`Migrating user ${user.username}`));
 
-              return new Promise((resolve, reject) => {
-                Users.updateUser(user.username, userPatch, (response, error) => {
-                  if (error) {
-                    reject(error);
+              return new Promise((updateUserResolve, updateUserReject) => {
+                Users.updateUser(user.username, userPatch, (response, updateUserError) => {
+                  if (updateUserError) {
+                    updateUserReject(updateUserError);
                     return;
                   }
 
-                  resolve(response);
+                  updateUserResolve(response);
                 });
               });
             }
 
             return Promise.resolve();
-          })
-        )
+          }),
+        ),
       );
     });
   });

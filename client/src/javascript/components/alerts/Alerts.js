@@ -8,8 +8,8 @@ import EventTypes from '../../constants/EventTypes';
 const METHODS_TO_BIND = ['handleAlertChange'];
 
 export default class Alerts extends React.Component {
-  constructor() {
-    super(...arguments);
+  constructor(...componentConfig) {
+    super(...componentConfig);
 
     this.state = {
       alerts: [],
@@ -29,9 +29,9 @@ export default class Alerts extends React.Component {
   }
 
   getAlerts() {
-    return this.state.alerts.map((alert, index) => {
-      return <Alert {...alert} key={index} />;
-    });
+    // TODO: Find a better key
+    // eslint-disable-next-line react/no-array-index-key
+    return this.state.alerts.map((alert, index) => <Alert {...alert} key={index} />);
   }
 
   handleAlertChange() {

@@ -74,38 +74,6 @@ const defaultRule = {
 };
 
 class DownloadRulesTab extends React.Component {
-  formRef;
-  validatedFields = {
-    destination: {
-      isValid: Validator.isNotEmpty,
-      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyDestination),
-    },
-    feedID: {
-      isValid: Validator.isNotEmpty,
-      error: this.props.intl.formatMessage(MESSAGES.mustSelectFeed),
-    },
-    label: {
-      isValid: Validator.isNotEmpty,
-      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
-    },
-    match: {
-      isValid: value => {
-        return Validator.isNotEmpty(value) && Validator.isRegExValid(value);
-      },
-      error: this.props.intl.formatMessage(MESSAGES.invalidRegularExpression),
-    },
-    exclude: {
-      isValid: value => {
-        if (Validator.isNotEmpty(value)) {
-          return Validator.isRegExValid(value);
-        }
-
-        return true;
-      },
-      error: this.props.intl.formatMessage(MESSAGES.invalidRegularExpression),
-    },
-  };
-
   state = {
     errors: {},
     feeds: FeedMonitorStore.getFeeds(),
@@ -121,6 +89,37 @@ class DownloadRulesTab extends React.Component {
   componentWillUnmount() {
     FeedMonitorStore.unlisten(EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS, this.handleFeedMonitorsFetchSuccess);
   }
+
+  validatedFields = {
+    destination: {
+      isValid: Validator.isNotEmpty,
+      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyDestination),
+    },
+    feedID: {
+      isValid: Validator.isNotEmpty,
+      error: this.props.intl.formatMessage(MESSAGES.mustSelectFeed),
+    },
+    label: {
+      isValid: Validator.isNotEmpty,
+      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
+    },
+    match: {
+      isValid: value => Validator.isNotEmpty(value) && Validator.isRegExValid(value),
+      error: this.props.intl.formatMessage(MESSAGES.invalidRegularExpression),
+    },
+    exclude: {
+      isValid: value => {
+        if (Validator.isNotEmpty(value)) {
+          return Validator.isRegExValid(value);
+        }
+
+        return true;
+      },
+      error: this.props.intl.formatMessage(MESSAGES.invalidRegularExpression),
+    },
+  };
+
+  formRef = null;
 
   checkFieldValidity = _.throttle((fieldName, fieldValue) => {
     const {errors} = this.state;
@@ -165,20 +164,19 @@ class DownloadRulesTab extends React.Component {
     }
 
     return this.state.feeds.reduce(
-      (feedOptions, feed) => {
-        return feedOptions.concat(
+      (feedOptions, feed) =>
+        feedOptions.concat(
           <SelectItem key={feed._id} id={feed._id}>
             {feed.label}
-          </SelectItem>
-        );
-      },
+          </SelectItem>,
+        ),
       [
         <SelectItem key="select-feed" id="placeholder" placeholder>
           <em>
             <FormattedMessage id="feeds.select.feed" defaultMessage="Select feed" />
           </em>
         </SelectItem>,
-      ]
+      ],
     );
   }
 
@@ -296,13 +294,11 @@ class DownloadRulesTab extends React.Component {
     }
 
     if (rule.tags && rule.tags.length > 0) {
-      const tagNodes = rule.tags.map((tag, index) => {
-        return (
-          <span className="tag" key={index}>
-            {tag}
-          </span>
-        );
-      });
+      const tagNodes = rule.tags.map(tag => (
+        <span className="tag" key={tag}>
+          {tag}
+        </span>
+      ));
 
       tags = (
         <li className="interactive-list__detail-list__item interactive-list__detail interactive-list__detail--tertiary">
@@ -374,9 +370,7 @@ class DownloadRulesTab extends React.Component {
       );
     }
 
-    const rulesList = this.state.rules.map(rule => {
-      return this.getRulesListItem(rule);
-    });
+    const rulesList = this.state.rules.map(rule => this.getRulesListItem(rule));
 
     return <ul className="interactive-list">{rulesList}</ul>;
   }
@@ -444,20 +438,20 @@ class DownloadRulesTab extends React.Component {
   }
 
   render() {
-    const errors = Object.keys(this.state.errors).map((errorID, index) => {
-      return (
-        <FormRow key={index}>
-          <FormError>{this.state.errors[errorID]}</FormError>
-        </FormRow>
-      );
-    });
+    const errors = Object.keys(this.state.errors).map(errorID => (
+      <FormRow key={errorID}>
+        <FormError>{this.state.errors[errorID]}</FormError>
+      </FormRow>
+    ));
 
     return (
       <Form
         className="inverse"
         onChange={this.handleFormChange}
         onSubmit={this.handleFormSubmit}
-        ref={ref => (this.formRef = ref)}>
+        ref={ref => {
+          this.formRef = ref;
+        }}>
         <ModalFormSectionHeader>
           <FormattedMessage id="feeds.existing.rules" defaultMessage="Existing Rules" />
         </ModalFormSectionHeader>

@@ -17,11 +17,6 @@ class AuthStoreClass extends BaseStore {
     AuthActions.authenticate(credentials);
   }
 
-  addOptimisticUser(credentials) {
-    this.optimisticUsers.push({username: credentials.username});
-    this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
-  }
-
   createUser(credentials) {
     AuthActions.createUser(credentials);
   }
@@ -32,6 +27,26 @@ class AuthStoreClass extends BaseStore {
 
   fetchUserList() {
     AuthActions.fetchUsers();
+  }
+
+  register(credentials) {
+    AuthActions.register({
+      username: credentials.username,
+      password: credentials.password,
+      host: credentials.host,
+      port: credentials.port,
+      socketPath: credentials.socketPath,
+      isAdmin: true,
+    });
+  }
+
+  verify() {
+    AuthActions.verify();
+  }
+
+  addOptimisticUser(credentials) {
+    this.optimisticUsers.push({username: credentials.username});
+    this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
   }
 
   getCurrentUsername() {
@@ -67,16 +82,14 @@ class AuthStoreClass extends BaseStore {
     this.emit(EventTypes.AUTH_DELETE_USER_SUCCESS, data.username);
   }
 
-  handleListUsersError(error) {
+  handleListUsersError() {
     this.emit(EventTypes.AUTH_LIST_USERS_ERROR);
   }
 
   handleListUsersSuccess(nextUserList) {
-    this.optimisticUsers = this.optimisticUsers.filter(optimisticUser => {
-      return !nextUserList.some(databaseUser => {
-        return databaseUser.username === optimisticUser.username;
-      });
-    });
+    this.optimisticUsers = this.optimisticUsers.filter(
+      optimisticUser => !nextUserList.some(databaseUser => databaseUser.username === optimisticUser.username),
+    );
     this.users = nextUserList;
     this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
   }
@@ -103,33 +116,18 @@ class AuthStoreClass extends BaseStore {
     this.emit(EventTypes.AUTH_REGISTER_ERROR, error);
   }
 
-  register(credentials) {
-    AuthActions.register({
-      username: credentials.username,
-      password: credentials.password,
-      host: credentials.host,
-      port: credentials.port,
-      socketPath: credentials.socketPath,
-      isAdmin: true,
-    });
-  }
-
-  verify() {
-    AuthActions.verify();
-  }
-
   handleAuthVerificationSuccess(data) {
     this.currentUser.username = data.username;
     this.currentUser.isAdmin = data.isAdmin;
-    AuthStore.emit(EventTypes.AUTH_VERIFY_SUCCESS, data);
+    this.emit(EventTypes.AUTH_VERIFY_SUCCESS, data);
   }
 
   handleAuthVerificationError(action) {
-    AuthStore.emit(EventTypes.AUTH_VERIFY_ERROR, action.error);
+    this.emit(EventTypes.AUTH_VERIFY_ERROR, action.error);
   }
 }
 
-let AuthStore = new AuthStoreClass();
+const AuthStore = new AuthStoreClass();
 
 AuthStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;
