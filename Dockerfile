@@ -1,4 +1,4 @@
-ARG NODE_IMAGE=node:10.1-alpine
+ARG NODE_IMAGE=node:12.2-alpine
 ARG WORKDIR=/usr/src/app/
 
 FROM ${NODE_IMAGE} as nodebuild
@@ -7,22 +7,24 @@ ARG WORKDIR
 WORKDIR $WORKDIR
 
 # Generate node_modules
-COPY package.json ./package.json
-COPY package-lock.json ./package-lock.json
+COPY package.json \
+     package-lock.json \
+     .babelrc \
+     .eslintrc.js \
+     ABOUT.md \
+     $WORKDIR
 RUN apk add --no-cache --virtual=build-dependencies \
-    python \
-    build-base && \
+    python build-base && \
     npm install && \
     apk del --purge build-dependencies
 
 # Build static assets and remove devDependencies.
 COPY client ./client
+COPY server ./server
 COPY shared ./shared
 COPY config.docker.js ./config.js
-COPY ABOUT.md ./ABOUT.md
 RUN npm run build && \
     npm prune --production
-COPY server ./server
 
 # Now get the clean image without any dependencies and copy compiled app
 FROM ${NODE_IMAGE} as flood
