@@ -42,6 +42,7 @@ class AuthEnforcer extends React.Component {
       authStatusDetermined: false,
       dependencies: {},
       isAuthenticated: false,
+      isInitialUser: false,
       isClientConnected: ClientStatusStore.getIsConnected(),
       dependenciesLoaded: false,
     };
@@ -82,10 +83,10 @@ class AuthEnforcer extends React.Component {
 
   handleVerifySuccess(data) {
     if (data.initialUser) {
-      this.setState({authStatusDetermined: true, isAuthenticated: false});
+      this.setState({authStatusDetermined: true, isAuthenticated: false, isInitialUser: true});
       browserHistory.replace('register');
     } else {
-      this.setState({authStatusDetermined: true, isAuthenticated: true});
+      this.setState({authStatusDetermined: true, isAuthenticated: true, isInitialUser: false});
       ClientActions.fetchSettings();
       SettingsActions.fetchSettings();
       browserHistory.replace('overview');
@@ -93,12 +94,12 @@ class AuthEnforcer extends React.Component {
   }
 
   handleVerifyError() {
-    this.setState({authStatusDetermined: true, isAuthenticated: false});
+    this.setState({authStatusDetermined: true, isAuthenticated: false, isInitialUser: false});
     browserHistory.replace('login');
   }
 
   handleLoginError() {
-    this.setState({authStatusDetermined: true, isAuthenticated: false});
+    this.setState({authStatusDetermined: true, isAuthenticated: false, isInitialUser: false});
     browserHistory.replace('login');
   }
 
@@ -106,13 +107,13 @@ class AuthEnforcer extends React.Component {
     ClientActions.fetchSettings();
     SettingsActions.fetchSettings();
     FloodActions.restartActivityStream();
-    this.setState({authStatusDetermined: true, isAuthenticated: true});
+    this.setState({authStatusDetermined: true, isAuthenticated: true, isInitialUser: false});
     browserHistory.replace('overview');
   }
 
   handleRegisterSuccess() {
     FloodActions.restartActivityStream();
-    this.setState({authStatusDetermined: true, isAuthenticated: true});
+    this.setState({authStatusDetermined: true, isAuthenticated: true, isInitialUser: false});
     browserHistory.replace('overview');
   }
 
@@ -163,10 +164,11 @@ class AuthEnforcer extends React.Component {
     }
 
     if (this.state.isAuthenticated && !this.state.isClientConnected) {
+      const {isInitialUser} = this.state;
       return (
         <div className="application__loading-overlay">
           <div className="application__entry-barrier">
-            <ClientConnectionInterruption />
+            <ClientConnectionInterruption isInitialUser={isInitialUser} />
           </div>
         </div>
       );

@@ -139,6 +139,15 @@ router.get('/logout', (req, res) => {
   res.clearCookie('jwt').send();
 });
 
+router.use('/users', (req, res, next) => {
+  if (req.user && req.user.isAdmin) {
+    next();
+    return;
+  }
+
+  res.status(401).send('Not authorized');
+});
+
 router.get('/users', (req, res) => {
   Users.listUsers(ajaxUtil.getResponseFn(res));
 });

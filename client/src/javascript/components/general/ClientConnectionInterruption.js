@@ -101,7 +101,29 @@ export default class ClientConnectionInterruption extends React.Component {
   }
 
   render() {
+    const isAdmin = AuthStore.isAdmin();
+    const {isInitialUser} = this.props;
     const {isConnectionVerified, isTestingConnection} = this.state;
+
+    if (!isAdmin && !isInitialUser) {
+      return (
+        <Panel spacing="large">
+          <PanelHeader>
+            <h1>
+              <FormattedMessage id="connection-interruption.heading" defaultMessage="Cannot connect to rTorrent" />
+            </h1>
+          </PanelHeader>
+          <PanelContent>
+            <p className="copy--lead">
+              <FormattedMessage
+                id="connection-interruption.verify-settings-not-admin"
+                defaultMessage="Please contact your Flood administator to fix the issue."
+              />
+            </p>
+          </PanelContent>
+        </Panel>
+      );
+    }
 
     return (
       <Panel spacing="large">
