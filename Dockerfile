@@ -11,6 +11,8 @@ COPY package.json \
      package-lock.json \
      .babelrc \
      .eslintrc.js \
+     .eslintignore \
+     .prettierrc \
      ABOUT.md \
      $WORKDIR
 RUN apk add --no-cache --virtual=build-dependencies \
@@ -22,6 +24,7 @@ RUN apk add --no-cache --virtual=build-dependencies \
 COPY client ./client
 COPY server ./server
 COPY shared ./shared
+COPY scripts ./scripts
 COPY config.docker.js ./config.js
 RUN npm run build && \
     npm prune --production
