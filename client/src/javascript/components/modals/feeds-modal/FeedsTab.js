@@ -20,7 +20,7 @@ import Close from '../../icons/Close';
 import EventTypes from '../../../constants/EventTypes';
 import FeedMonitorStore from '../../../stores/FeedMonitorStore';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import Validator from '../../../util/Validator';
+import * as validators from '../../../util/validators';
 import UIActions from '../../../actions/UIActions';
 
 const MESSAGES = defineMessages({
@@ -116,15 +116,15 @@ class FeedsTab extends React.Component {
 
   validatedFields = {
     url: {
-      isValid: Validator.isURLValid,
+      isValid: validators.isURLValid,
       error: this.props.intl.formatMessage(MESSAGES.mustSpecifyURL),
     },
     label: {
-      isValid: Validator.isNotEmpty,
+      isValid: validators.isNotEmpty,
       error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
     },
     interval: {
-      isValid: Validator.isPositiveInteger,
+      isValid: validators.isPositiveInteger,
       error: this.props.intl.formatMessage(MESSAGES.intervalNotPositive),
     },
   };

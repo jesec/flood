@@ -22,7 +22,7 @@ import EventTypes from '../../../constants/EventTypes';
 import FeedMonitorStore from '../../../stores/FeedMonitorStore';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
-import Validator from '../../../util/Validator';
+import * as validators from '../../../util/validators';
 
 const MESSAGES = defineMessages({
   mustSpecifyDestination: {
@@ -92,25 +92,25 @@ class DownloadRulesTab extends React.Component {
 
   validatedFields = {
     destination: {
-      isValid: Validator.isNotEmpty,
+      isValid: validators.isNotEmpty,
       error: this.props.intl.formatMessage(MESSAGES.mustSpecifyDestination),
     },
     feedID: {
-      isValid: Validator.isNotEmpty,
+      isValid: validators.isNotEmpty,
       error: this.props.intl.formatMessage(MESSAGES.mustSelectFeed),
     },
     label: {
-      isValid: Validator.isNotEmpty,
+      isValid: validators.isNotEmpty,
       error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
     },
     match: {
-      isValid: value => Validator.isNotEmpty(value) && Validator.isRegExValid(value),
+      isValid: value => validators.isNotEmpty(value) && validators.isRegExValid(value),
       error: this.props.intl.formatMessage(MESSAGES.invalidRegularExpression),
     },
     exclude: {
       isValid: value => {
-        if (Validator.isNotEmpty(value)) {
-          return Validator.isRegExValid(value);
+        if (validators.isNotEmpty(value)) {
+          return validators.isRegExValid(value);
         }
 
         return true;
@@ -133,7 +133,7 @@ class DownloadRulesTab extends React.Component {
   checkMatchingPattern(match, exclude, check) {
     let doesPatternMatchTest = false;
 
-    if (Validator.isNotEmpty(check) && Validator.isRegExValid(match) && Validator.isRegExValid(exclude)) {
+    if (validators.isNotEmpty(check) && validators.isRegExValid(match) && validators.isRegExValid(exclude)) {
       const isMatched = new RegExp(match, 'gi').test(check);
       const isExcluded = exclude !== '' && new RegExp(exclude, 'gi').test(check);
       doesPatternMatchTest = isMatched && !isExcluded;
