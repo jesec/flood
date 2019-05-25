@@ -263,8 +263,6 @@ class FeedService extends BaseService {
               }
 
               this.db.update({_id: item.ruleID}, {$inc: {count: 1}}, {upsert: true});
-
-              this.db.update({_id: item.feedID}, {$inc: {count: 1}}, {upsert: true});
             },
           );
         });
