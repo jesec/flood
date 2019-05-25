@@ -41,7 +41,7 @@ export default class TextboxRepeater extends React.PureComponent {
             wrapperClassName="textbox-repeater">
             <FormElementAddon
               onClick={() => {
-                this.handleTextboxAddthis(index);
+                this.handleTextboxAdd(index);
               }}>
               <AddMini size="mini" />
             </FormElementAddon>
