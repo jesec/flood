@@ -56,13 +56,12 @@ const client = {
   },
 
   addUrls(user, services, data, callback) {
-    const {urls, path: destinationPath, isBasePath, start, tags} = data;
+    const {urls, destination, isBasePath, start, tags} = data;
     const request = new ClientRequest(user, services);
-
-    request.createDirectory({path: destinationPath});
+    request.createDirectory({path: destination});
     request.addURLs({
       urls,
-      path: destinationPath,
+      path: destination,
       isBasePath,
       start,
       tags,
