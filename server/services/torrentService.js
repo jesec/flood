@@ -238,7 +238,7 @@ class TorrentService extends BaseService {
     // If more than consecutive errors have occurred, then we delay the next
     // request.
     if (++this.errorCount >= 3) {
-      nextInterval = Math.max(nextInterval + (this.errorCount * nextInterval) / 4, 1000 * 60);
+      nextInterval = Math.min(nextInterval + 2 ** this.errorCount, 1000 * 60);
     }
 
     this.deferFetchTorrentList(nextInterval);

@@ -59,6 +59,10 @@ module.exports = (req, res) => {
     serverEvent.emit();
   });
 
+  if (serviceInstances.clientGatewayService.hasError) {
+    serviceInstances.clientGatewayService.testGateway();
+  }
+
   // TODO: Handle empty or sub-optimal history states.
   // Get user's specified history snapshot current history.
   serviceInstances.historyService.getHistory({snapshot: historySnapshot}, (snapshot, error) => {

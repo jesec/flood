@@ -14,6 +14,24 @@ class ClientRequestManager extends BaseService {
     this.methodCall = this.methodCall.bind(this);
   }
 
+  handleRequestEnd() {
+    this.isRequestPending = false;
+
+    // We avoid initiating any deffered requests until at least 250ms have
+    // since the previous response.
+    const currentTimestamp = Date.now();
+    const timeSinceLastResponse = currentTimestamp - this.lastResponseTimestamp;
+
+    if (timeSinceLastResponse <= 250) {
+      const delay = 250 - timeSinceLastResponse;
+      setTimeout(this.sendDefferedMethodCall, delay);
+      this.lastResponseTimestamp = currentTimestamp + delay;
+    } else {
+      this.sendDefferedMethodCall();
+      this.lastResponseTimestamp = currentTimestamp;
+    }
+  }
+
   sendDefferedMethodCall() {
     if (this.pendingRequests.length > 0) {
       this.isRequestPending = true;
@@ -33,25 +51,16 @@ class ClientRequestManager extends BaseService {
       socketPath: this.user.socketPath,
     };
 
-    return scgiUtil.methodCall(connectionMethod, methodName, parameters).then(response => {
-      this.isRequestPending = false;
-
-      // We avoid initiating any deffered requests until at least 250ms have
-      // since the previous response.
-      const currentTimestamp = Date.now();
-      const timeSinceLastResponse = currentTimestamp - this.lastResponseTimestamp;
-
-      if (timeSinceLastResponse <= 250) {
-        const delay = 250 - timeSinceLastResponse;
-        setTimeout(this.sendDefferedMethodCall, delay);
-        this.lastResponseTimestamp = currentTimestamp + delay;
-      } else {
-        this.sendDefferedMethodCall();
-        this.lastResponseTimestamp = currentTimestamp;
-      }
-
-      return response;
-    });
+    return scgiUtil
+      .methodCall(connectionMethod, methodName, parameters)
+      .then(response => {
+        this.handleRequestEnd();
+        return response;
+      })
+      .catch(error => {
+        this.handleRequestEnd();
+        throw error;
+      });
   }
 
   methodCall(methodName, parameters) {
