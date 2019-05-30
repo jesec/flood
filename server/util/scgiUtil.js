@@ -1,8 +1,17 @@
-const Deserializer = require('xmlrpc/lib/deserializer');
 const net = require('net');
 const Serializer = require('xmlrpc/lib/serializer');
+const rTorrentDeserializer = require('./rTorrentDeserializer');
 
 const NULL_CHAR = String.fromCharCode(0);
+
+const bufferStream = stream => {
+  const chunks = [];
+  return new Promise((resolve, reject) => {
+    stream.on('data', chunk => chunks.push(Buffer.from(chunk)));
+    stream.on('error', reject);
+    stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
+  });
+};
 
 const methodCall = (connectionMethod, methodName, parameters) =>
   new Promise((resolve, reject) => {
@@ -11,7 +20,6 @@ const methodCall = (connectionMethod, methodName, parameters) =>
         ? {path: connectionMethod.socketPath}
         : {port: connectionMethod.port, host: connectionMethod.host};
 
-    const deserializer = new Deserializer('utf8');
     const stream = net.connect(networkConfiguration);
     const xml = Serializer.serializeMethodCall(methodName, parameters);
     const xmlLength = Buffer.byteLength(xml, 'utf8');
@@ -24,9 +32,8 @@ const methodCall = (connectionMethod, methodName, parameters) =>
 
     stream.write(`${headerLength}:${headerItems.join('')},${xml}`);
 
-    deserializer.deserializeMethodResponse(stream, (error, response) => {
-      if (error) return reject(error);
-      return resolve(response);
+    bufferStream(stream).then(data => {
+      rTorrentDeserializer.deserialize(data, resolve, reject);
     });
   });
 

@@ -87,6 +87,7 @@
     "rimraf": "^2.6.2",
     "run-series": "^1.1.6",
     "sass-loader": "^6.0.7",
+    "saxen": "8.1.x",
     "spdy": "^3.4.7",
     "style-loader": "0.20.3",
     "tar-stream": "^1.6.2",
