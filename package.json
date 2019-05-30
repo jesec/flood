@@ -41,7 +41,7 @@
     "clipboard": "^2.0.4",
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.3",
-    "css-loader": "0.28.11",
+    "css-loader": "^2.1.1",
     "d3": "^3.5.17",
     "debug": "^3.2.6",
     "deep-equal": "^1.0.1",
