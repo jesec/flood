@@ -81,16 +81,16 @@ class MoveTorrents extends React.Component {
 
   handleFormSubmit = ({formData}) => {
     const filenames = TorrentStore.getSelectedTorrentsFilename();
-    const sources = TorrentStore.getSelectedTorrentsDownloadLocations();
+    const sourcePaths = TorrentStore.getSelectedTorrentsDownloadLocations();
 
-    if (sources.length) {
+    if (sourcePaths.length) {
       this.setState({isSettingDownloadPath: true});
       TorrentActions.moveTorrents(TorrentStore.getSelectedTorrents(), {
         destination: formData.destination,
         isBasePath: formData.useBasePath,
         filenames,
         moveFiles: formData.moveFiles,
-        sources,
+        sourcePaths,
       });
     }
   };
