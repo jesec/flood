@@ -23,7 +23,7 @@ const methodCall = (connectionMethod, methodName, parameters) =>
     const stream = net.connect(networkConfiguration);
     const xml = Serializer.serializeMethodCall(methodName, parameters);
     const xmlLength = Buffer.byteLength(xml, 'utf8');
-  
+
     stream.on('error', reject);
     stream.setEncoding('UTF8');
 
@@ -33,9 +33,11 @@ const methodCall = (connectionMethod, methodName, parameters) =>
 
     stream.write(`${headerLength}:${headerItems.join('')},${xml}`);
 
-    bufferStream(stream).then(data => {
-      rTorrentDeserializer.deserialize(data, resolve, reject);
-    }).catch(err => reject(err));
+    bufferStream(stream)
+      .then(data => {
+        rTorrentDeserializer.deserialize(data, resolve, reject);
+      })
+      .catch(reject);
   });
 
 module.exports = {methodCall};
