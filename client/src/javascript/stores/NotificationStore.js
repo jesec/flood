@@ -4,6 +4,8 @@ import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
 import FloodActions from '../actions/FloodActions';
 
+const INTIAL_COUNT_SATE = {total: 0, unread: 0, read: 0};
+
 class NotificationStoreClass extends BaseStore {
   constructor() {
     super();
@@ -13,17 +15,22 @@ class NotificationStoreClass extends BaseStore {
     this.ongoingPolls = {};
   }
 
-  fetchNotifications(options = {}) {
-    FloodActions.fetchNotifications(options);
-  }
-
   clearAll(options) {
     this.notifications = {};
     FloodActions.clearNotifications(options);
   }
 
+  getNotificationCount() {
+    return this.notificationCount;
+  }
+
   getNotifications(id) {
-    return this.notifications[id];
+    const notificationState = this.notifications[id];
+
+    return {
+      count: INTIAL_COUNT_SATE,
+      ...notificationState,
+    };
   }
 
   handleNotificationCountChange(notificationCount) {
@@ -32,7 +39,7 @@ class NotificationStoreClass extends BaseStore {
   }
 
   handleNotificationsClearSuccess(options) {
-    this.fetchNotifications({
+    FloodActions.fetchNotifications({
       ...options,
       start: 0,
     });
@@ -44,7 +51,6 @@ class NotificationStoreClass extends BaseStore {
 
   handleNotificationsFetchSuccess(response) {
     this.notifications[response.id] = response;
-
     this.emit(EventTypes.NOTIFICATIONS_FETCH_SUCCESS);
   }
 }

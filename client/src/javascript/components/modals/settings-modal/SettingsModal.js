@@ -5,49 +5,21 @@ import AboutTab from './AboutTab';
 import AuthTab from './AuthTab';
 import BandwidthTab from './BandwidthTab';
 import ConnectivityTab from './ConnectivityTab';
+import connectStores from '../../../util/connectStores';
 import EventTypes from '../../../constants/EventTypes';
 import Modal from '../Modal';
 import ResourcesTab from './ResourcesTab';
 import SettingsStore from '../../../stores/SettingsStore';
 import UITab from './UITab';
 
-const METHODS_TO_BIND = [
-  'handleClientSettingsChange',
-  'handleCustomsSettingChange',
-  'handleFloodSettingsChange',
-  'handleModalRefSet',
-  'handleSaveSettingsClick',
-  'handleSaveSettingsError',
-  'handleSettingsStoreChange',
-];
-
 class SettingsModal extends React.Component {
-  constructor() {
-    super();
+  state = {
+    isSavingSettings: false,
+    changedClientSettings: {},
+    changedFloodSettings: {},
+  };
 
-    this.modalBodyRef = null;
-    this.state = {
-      isSavingSettings: false,
-      changedClientSettings: {},
-      changedFloodSettings: {},
-      clientSettings: SettingsStore.getClientSettings(),
-      floodSettings: SettingsStore.getFloodSettings(),
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsStoreChange);
-    SettingsStore.listen(EventTypes.SETTINGS_SAVE_REQUEST_ERROR, this.handleSaveSettingsError);
-  }
-
-  componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.handleSettingsStoreChange);
-    SettingsStore.unlisten(EventTypes.SETTINGS_SAVE_REQUEST_ERROR, this.handleSaveSettingsError);
-  }
+  modalBodyRef = null;
 
   getActions() {
     return [
@@ -83,7 +55,7 @@ class SettingsModal extends React.Component {
     });
   };
 
-  handleSaveSettingsClick() {
+  handleSaveSettingsClick = () => {
     const floodSettings = Object.keys(this.state.changedFloodSettings).map(settingsKey => ({
       id: settingsKey,
       data: this.state.changedFloodSettings[settingsKey],
@@ -99,54 +71,47 @@ class SettingsModal extends React.Component {
       return {id: settingsKey, data};
     });
 
-    this.setState({isSavingSettings: true});
-
-    SettingsStore.saveFloodSettings(floodSettings, {
-      dismissModal: true,
-      alert: true,
+    this.setState({isSavingSettings: true}, () => {
+      Promise.all([
+        SettingsStore.saveFloodSettings(floodSettings, {
+          dismissModal: true,
+          alert: true,
+        }),
+        SettingsStore.saveClientSettings(clientSettings, {
+          dismissModal: true,
+          alert: true,
+        }),
+      ]).then(() => {
+        this.setState({isSavingSettings: false});
+      });
     });
+  };
 
-    SettingsStore.saveClientSettings(clientSettings, {
-      dismissModal: true,
-      alert: true,
-    });
-  }
-
-  handleSaveSettingsError() {
-    this.setState({isSavingSettings: false});
-  }
-
-  handleSettingsStoreChange() {
-    this.setState({
-      clientSettings: SettingsStore.getClientSettings(),
-      floodSettings: SettingsStore.getFloodSettings(),
-    });
-  }
-
-  handleFloodSettingsChange(changedSettings) {
-    this.setState(state => {
-      const floodSettings = this.mergeObjects(state.floodSettings, changedSettings);
+  handleFloodSettingsChange = changedSettings => {
+    this.setState((state, props) => {
+      const floodSettings = this.mergeObjects(props.floodSettings, changedSettings);
       const changedFloodSettings = this.mergeObjects(state.changedFloodSettings, changedSettings);
 
       return {floodSettings, changedFloodSettings};
     });
-  }
+  };
 
-  handleClientSettingsChange(changedSettings) {
-    this.setState(state => {
-      const clientSettings = this.mergeObjects(state.clientSettings, changedSettings);
+  handleClientSettingsChange = changedSettings => {
+    this.setState((state, props) => {
+      const clientSettings = this.mergeObjects(props.clientSettings, changedSettings);
       const changedClientSettings = this.mergeObjects(state.changedClientSettings, changedSettings);
 
       return {clientSettings, changedClientSettings};
     });
-  }
+  };
 
-  handleModalRefSet(id, ref) {
+  handleModalRefSet = (id, ref) => {
     if (id === 'modal-body') {
       this.modalBodyRef = ref;
     }
-  }
+  };
 
+  // TODO: Use lodash or something non-custom for this
   mergeObjects(objA, objB) {
     Object.keys(objB).forEach(key => {
       if (!Object.prototype.hasOwnProperty.call(objB, key) || objB[key] == null) {
@@ -170,15 +135,17 @@ class SettingsModal extends React.Component {
   }
 
   render() {
+    const {clientSettings, floodSettings, intl} = this.props;
+
     const tabs = {
       bandwidth: {
         content: BandwidthTab,
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
           onSettingsChange: this.handleFloodSettingsChange,
-          settings: this.mergeObjects(this.state.floodSettings, this.state.clientSettings),
+          settings: this.mergeObjects(floodSettings, clientSettings),
         },
-        label: this.props.intl.formatMessage({
+        label: intl.formatMessage({
           id: 'settings.tabs.bandwidth',
           defaultMessage: 'Bandwidth',
         }),
@@ -188,9 +155,9 @@ class SettingsModal extends React.Component {
         props: {
           onCustomSettingsChange: this.handleCustomsSettingChange,
           onClientSettingsChange: this.handleClientSettingsChange,
-          settings: this.state.clientSettings,
+          settings: clientSettings,
         },
-        label: this.props.intl.formatMessage({
+        label: intl.formatMessage({
           id: 'settings.tabs.connectivity',
           defaultMessage: 'Connectivity',
         }),
@@ -199,23 +166,23 @@ class SettingsModal extends React.Component {
         content: ResourcesTab,
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
-          settings: this.state.clientSettings,
+          settings: clientSettings,
         },
-        label: this.props.intl.formatMessage({
+        label: intl.formatMessage({
           id: 'settings.tabs.resources',
           defaultMessage: 'Resources',
         }),
       },
       authentication: {
         content: AuthTab,
-        label: this.props.intl.formatMessage({
+        label: intl.formatMessage({
           id: 'settings.tabs.authentication',
           defaultMessage: 'Authentication',
         }),
       },
       ui: {
         content: UITab,
-        label: this.props.intl.formatMessage({
+        label: intl.formatMessage({
           id: 'settings.tabs.userinterface',
           defaultMessage: 'User Interface',
         }),
@@ -226,7 +193,7 @@ class SettingsModal extends React.Component {
       },
       about: {
         content: AboutTab,
-        label: this.props.intl.formatMessage({
+        label: intl.formatMessage({
           id: 'settings.tabs.about',
           defaultMessage: 'About',
         }),
@@ -250,4 +217,19 @@ class SettingsModal extends React.Component {
   }
 }
 
-export default injectIntl(SettingsModal);
+const ConnectedSettingsModal = connectStores(injectIntl(SettingsModal), () => {
+  return [
+    {
+      store: SettingsStore,
+      event: EventTypes.SETTINGS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          clientSettings: store.getClientSettings(),
+          floodSettings: store.getFloodSettings(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedSettingsModal;

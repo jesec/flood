@@ -1,10 +1,7 @@
-import _ from 'lodash';
-
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
-import FloodActions from '../actions/FloodActions';
 
 class UIStoreClass extends BaseStore {
   constructor(...storeConfig) {
@@ -15,18 +12,11 @@ class UIStoreClass extends BaseStore {
     this.activeModal = null;
     this.dependencies = {};
     this.globalStyles = [];
+    this.haveUIDependenciesResolved = false;
     this.latestTorrentLocation = null;
     this.torrentDetailsHash = null;
     this.createStyleElement();
   }
-
-  fetchDirectoryList = _.debounce(
-    options => {
-      FloodActions.fetchDirectoryList(options);
-    },
-    100,
-    {leading: true},
-  );
 
   addGlobalStyle(cssString) {
     this.globalStyles.push(cssString);
@@ -93,14 +83,6 @@ class UIStoreClass extends BaseStore {
 
   getTorrentDetailsHash() {
     return this.torrentDetailsHash;
-  }
-
-  handleFetchDirectoryListError(error) {
-    this.emit(EventTypes.FLOOD_FETCH_DIRECTORY_LIST_ERROR, error);
-  }
-
-  handleFetchDirectoryListSuccess(response) {
-    this.emit(EventTypes.FLOOD_FETCH_DIRECTORY_LIST_SUCCESS, response);
   }
 
   handleSetTaxonomySuccess() {
@@ -171,6 +153,7 @@ class UIStoreClass extends BaseStore {
     const isDependencyLoading = Object.keys(this.dependencies).some(id => this.dependencies[id].satisfied === false);
 
     if (!isDependencyLoading) {
+      this.haveUIDependenciesResolved = true;
       this.emit(EventTypes.UI_DEPENDENCIES_LOADED);
     }
   }
@@ -182,12 +165,6 @@ UIStore.dispatcherID = AppDispatcher.register(payload => {
   const {action} = payload;
 
   switch (action.type) {
-    case ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_ERROR:
-      UIStore.handleFetchDirectoryListError(action.error);
-      break;
-    case ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_SUCCESS:
-      UIStore.handleFetchDirectoryListSuccess(action.data);
-      break;
     case ActionTypes.UI_CLICK_TORRENT:
       UIStore.handleTorrentClick(action.data.hash);
       break;
@@ -209,6 +186,21 @@ UIStore.dispatcherID = AppDispatcher.register(payload => {
       break;
     case ActionTypes.UI_DISPLAY_CONTEXT_MENU:
       UIStore.setActiveContextMenu(action.data);
+      break;
+    case ActionTypes.NOTIFICATION_COUNT_CHANGE:
+      UIStore.satisfyDependency('notifications');
+      break;
+    case ActionTypes.TAXONOMY_FULL_UPDATE:
+      UIStore.satisfyDependency('torrent-taxonomy');
+      break;
+    case ActionTypes.TORRENT_LIST_FULL_UPDATE:
+      UIStore.satisfyDependency('torrent-list');
+      break;
+    case ActionTypes.TRANSFER_SUMMARY_FULL_UPDATE:
+      UIStore.satisfyDependency('transfer-data');
+      break;
+    case ActionTypes.TRANSFER_HISTORY_FULL_UPDATE:
+      UIStore.satisfyDependency('transfer-history');
       break;
     default:
       break;

@@ -4,6 +4,7 @@ import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import ClipboardIcon from '../../icons/ClipboardIcon';
+import connectStores from '../../../util/connectStores';
 import EventTypes from '../../../constants/EventTypes';
 import FloodActions from '../../../actions/FloodActions';
 import Tooltip from '../../general/Tooltip';
@@ -33,40 +34,38 @@ const MESSAGES = defineMessages({
   },
 });
 
-const METHODS_TO_BIND = [
-  'handleCopyButtonMouseLeave',
-  'handleCopySuccess',
-  'handleFetchMediainfoError',
-  'handleFetchMediainfoSuccess',
-];
-
 class TorrentMediainfo extends React.Component {
-  constructor() {
-    super();
+  clipboard = null;
 
-    this.clipboard = null;
-    this.state = {
-      copiedToClipboard: false,
-      isFetchingMediainfo: true,
-      mediainfo: null,
-      fetchMediainfoError: null,
-    };
+  timeoutId = null;
 
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
+  state = {
+    copiedToClipboard: false,
+    isFetchingMediainfo: true,
+    fetchMediainfoError: null,
+  };
 
   componentDidMount() {
-    TorrentStore.listen(EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS, this.handleFetchMediainfoSuccess);
-    TorrentStore.listen(EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR, this.handleFetchMediainfoError);
-    FloodActions.fetchMediainfo({hash: this.props.hash});
+    FloodActions.fetchMediainfo({hash: this.props.hash}).then(
+      () => {
+        this.setState({
+          isFetchingMediainfo: false,
+          fetchMediainfoError: null,
+        });
+      },
+      error => {
+        this.setState({
+          isFetchingMediainfo: false,
+          fetchMediainfoError: error,
+        });
+      },
+    );
   }
 
   componentDidUpdate() {
     if (this.copyButtonRef && this.clipboard == null) {
       this.clipboard = new Clipboard(this.copyButtonRef, {
-        text: () => this.state.mediainfo,
+        text: () => this.props.mediainfo,
       });
 
       this.clipboard.on('success', this.handleCopySuccess);
@@ -74,38 +73,24 @@ class TorrentMediainfo extends React.Component {
   }
 
   componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS, this.handleFetchMediainfoSuccess);
-    TorrentStore.unlisten(EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR, this.handleFetchMediainfoError);
+    if (this.timeoutId != null) {
+      global.clearTimeout(this.timeoutId);
+    }
   }
 
-  handleCopyButtonMouseLeave() {
-    global.setTimeout(() => {
+  handleCopyButtonMouseLeave = () => {
+    this.timeoutId = global.setTimeout(() => {
       this.setState({
         copiedToClipboard: false,
       });
     }, 500);
-  }
+  };
 
-  handleCopySuccess() {
+  handleCopySuccess = () => {
     this.setState({
       copiedToClipboard: true,
     });
-  }
-
-  handleFetchMediainfoError(error) {
-    this.setState({
-      isFetchingMediainfo: false,
-      fetchMediainfoError: error,
-    });
-  }
-
-  handleFetchMediainfoSuccess() {
-    this.setState({
-      mediainfo: TorrentStore.getMediainfo(this.props.hash),
-      isFetchingMediainfo: false,
-      fetchMediainfoError: null,
-    });
-  }
+  };
 
   render() {
     if (this.state.isFetchingMediainfo) {
@@ -156,10 +141,24 @@ class TorrentMediainfo extends React.Component {
             </Button>
           </Tooltip>
         </div>
-        <pre className="mediainfo__output">{this.state.mediainfo}</pre>
+        <pre className="mediainfo__output">{this.props.mediainfo}</pre>
       </div>
     );
   }
 }
 
-export default injectIntl(TorrentMediainfo);
+const ConnectedTorrentMediainfo = connectStores(injectIntl(TorrentMediainfo), () => {
+  return [
+    {
+      store: TorrentStore,
+      event: EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
+      getValue: ({store, props}) => {
+        return {
+          mediainfo: store.getMediainfo(props.hash),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedTorrentMediainfo;

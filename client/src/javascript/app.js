@@ -1,18 +1,66 @@
-import {IntlProvider} from 'react-intl';
+import {FormattedMessage, IntlProvider} from 'react-intl';
 import {IndexRoute, Router, Route, browserHistory} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as i18n from './i18n/languages';
+import connectStores from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
+import AuthActions from './actions/AuthActions';
 import EventTypes from './constants/EventTypes';
 import FloodActions from './actions/FloodActions';
 import Login from './components/views/Login';
 import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
 import TorrentClientOverview from './components/views/TorrentClientOverview';
+import UIStore from './stores/UIStore';
 
 import '../sass/style.scss';
+
+const initialize = () => {
+  UIStore.registerDependency({
+    id: 'notifications',
+    message: <FormattedMessage id="dependency.loading.notifications" defaultMessage="Notifications" />,
+  });
+
+  UIStore.registerDependency({
+    id: 'torrent-taxonomy',
+    message: <FormattedMessage id="dependency.loading.torrent.taxonomy" defaultMessage="Torrent Taxonomy" />,
+  });
+
+  UIStore.registerDependency([
+    {
+      id: 'transfer-data',
+      message: (
+        <FormattedMessage id="dependency.loading.transfer.rate.details" defaultMessage="Data Transfer Rate Details" />
+      ),
+    },
+    {
+      id: 'transfer-history',
+      message: <FormattedMessage id="dependency.loading.transfer.history" defaultMessage="Data Transfer History" />,
+    },
+  ]);
+
+  UIStore.registerDependency({
+    id: 'torrent-list',
+    message: <FormattedMessage id="dependency.loading.torrent.list" defaultMessage="Torrent List" />,
+  });
+
+  AuthActions.verify().then(
+    ({initialUser}) => {
+      if (initialUser) {
+        browserHistory.replace('register');
+      } else {
+        browserHistory.replace('overview');
+      }
+    },
+    () => {
+      browserHistory.replace('login');
+    },
+  );
+
+  FloodActions.startActivityStream();
+};
 
 const appRoutes = (
   <Router history={browserHistory}>
@@ -25,40 +73,14 @@ const appRoutes = (
     </Route>
   </Router>
 );
-const METHODS_TO_BIND = ['handleSettingsChange'];
 
 class FloodApp extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      locale: SettingsStore.getFloodSettings('language'),
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-
-    FloodActions.startActivityStream();
-  }
-
   componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsChange);
-  }
-
-  componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.handleSettingsChange);
-  }
-
-  handleSettingsChange() {
-    const nextLocale = SettingsStore.getFloodSettings('language');
-    if (nextLocale !== this.state.language) {
-      this.setState({locale: nextLocale});
-    }
+    initialize();
   }
 
   render() {
-    const {locale} = this.state;
+    const {locale} = this.props;
 
     return (
       // eslint-disable-next-line import/namespace
@@ -69,4 +91,18 @@ class FloodApp extends React.Component {
   }
 }
 
-ReactDOM.render(<FloodApp />, document.getElementById('app'));
+const ConnectedFloodApp = connectStores(FloodApp, () => {
+  return [
+    {
+      store: SettingsStore,
+      event: EventTypes.SETTINGS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          locale: store.getFloodSettings('language'),
+        };
+      },
+    },
+  ];
+});
+
+ReactDOM.render(<ConnectedFloodApp />, document.getElementById('app'));

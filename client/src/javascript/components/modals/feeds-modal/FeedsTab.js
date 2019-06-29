@@ -22,6 +22,7 @@ import FeedMonitorStore from '../../../stores/FeedMonitorStore';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import * as validators from '../../../util/validators';
 import UIActions from '../../../actions/UIActions';
+import connectStores from '../../../util/connectStores';
 
 const MESSAGES = defineMessages({
   mustSpecifyURL: {
@@ -77,6 +78,25 @@ const defaultFeed = {
 };
 
 class FeedsTab extends React.Component {
+  formRef = null;
+
+  manualAddingFormRef = null;
+
+  validatedFields = {
+    url: {
+      isValid: validators.isURLValid,
+      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyURL),
+    },
+    label: {
+      isValid: validators.isNotEmpty,
+      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
+    },
+    interval: {
+      isValid: validators.isPositiveInteger,
+      error: this.props.intl.formatMessage(MESSAGES.intervalNotPositive),
+    },
+  };
+
   state = {
     errors: {},
     intervalmultipliers: [
@@ -93,40 +113,8 @@ class FeedsTab extends React.Component {
         value: 1440,
       },
     ],
-    feeds: FeedMonitorStore.getFeeds(),
-    rules: FeedMonitorStore.getRules(),
-    items: FeedMonitorStore.getItems(),
     currentlyEditingFeed: null,
     selectedFeed: null,
-  };
-
-  componentDidMount() {
-    FeedMonitorStore.listen(EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS, this.handleFeedMonitorsFetchSuccess);
-    FeedMonitorStore.listen(EventTypes.SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS, this.handleFeedItemsFetchSuccess);
-  }
-
-  componentWillUnmount() {
-    FeedMonitorStore.unlisten(EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS, this.handleFeedMonitorsFetchSuccess);
-    FeedMonitorStore.unlisten(EventTypes.SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS, this.handleFeedItemsFetchSuccess);
-  }
-
-  formRef;
-
-  manualAddingFormRef;
-
-  validatedFields = {
-    url: {
-      isValid: validators.isURLValid,
-      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyURL),
-    },
-    label: {
-      isValid: validators.isNotEmpty,
-      error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
-    },
-    interval: {
-      isValid: validators.isPositiveInteger,
-      error: this.props.intl.formatMessage(MESSAGES.intervalNotPositive),
-    },
   };
 
   checkFieldValidity = _.throttle((fieldName, fieldValue) => {
@@ -155,7 +143,9 @@ class FeedsTab extends React.Component {
   }
 
   getAvailableFeedsOptions() {
-    if (!this.state.feeds.length) {
+    const {feeds} = this.props;
+
+    if (!feeds.length) {
       return [
         <SelectItem key="empty" id="placeholder" placeholder>
           <em>
@@ -165,7 +155,7 @@ class FeedsTab extends React.Component {
       ];
     }
 
-    return this.state.feeds.reduce(
+    return feeds.reduce(
       (feedOptions, feed) =>
         feedOptions.concat(
           <SelectItem key={feed._id} id={feed._id}>
@@ -323,7 +313,9 @@ class FeedsTab extends React.Component {
   }
 
   getFeedsList() {
-    if (this.state.feeds.length === 0) {
+    const {feeds} = this.props;
+
+    if (feeds.length === 0) {
       return (
         <ul className="interactive-list">
           <li className="interactive-list__item">
@@ -333,7 +325,7 @@ class FeedsTab extends React.Component {
       );
     }
 
-    const feedsList = this.state.feeds.map(feed => this.getFeedsListItem(feed));
+    const feedsList = feeds.map(feed => this.getFeedsListItem(feed));
 
     return <ul className="interactive-list feed-list">{feedsList}</ul>;
   }
@@ -352,7 +344,7 @@ class FeedsTab extends React.Component {
         </ModalFormSectionHeader>
         <FormRow>
           <Select
-            disabled={!this.state.feeds.length}
+            disabled={!this.props.feeds.length}
             grow={false}
             id="feedID"
             label={this.props.intl.formatMessage({
@@ -371,7 +363,9 @@ class FeedsTab extends React.Component {
   }
 
   getFeedItemsList() {
-    if (this.state.items.length === 0) {
+    const {items} = this.props;
+
+    if (items.length === 0) {
       return (
         <ul className="interactive-list">
           <li className="interactive-list__item">
@@ -383,7 +377,7 @@ class FeedsTab extends React.Component {
       );
     }
 
-    const itemsList = this.state.items.map((item, index) => (
+    const itemsList = items.map((item, index) => (
       <li className="interactive-list__item interactive-list__item--stacked-content feed-list__feed" key={item.title}>
         <div className="interactive-list__label feed-list__feed-label">{item.title}</div>
         <Checkbox id={index} />
@@ -391,10 +385,6 @@ class FeedsTab extends React.Component {
     ));
 
     return <ul className="interactive-list feed-list">{itemsList}</ul>;
-  }
-
-  getSelectedDropdownItem(itemSet) {
-    return this.state[itemSet].find(item => item.selected);
   }
 
   handleFormSubmit = () => {
@@ -414,19 +404,6 @@ class FeedsTab extends React.Component {
       this.formRef.resetForm();
       this.setState({currentlyEditingFeed: null});
     }
-  };
-
-  handleFeedMonitorsFetchSuccess = () => {
-    this.setState({
-      feeds: FeedMonitorStore.getFeeds(),
-      rules: FeedMonitorStore.getRules(),
-    });
-  };
-
-  handleFeedItemsFetchSuccess = () => {
-    this.setState({
-      items: FeedMonitorStore.getItems() || [],
-    });
   };
 
   handleFormChange = ({event, formData}) => {
@@ -459,7 +436,7 @@ class FeedsTab extends React.Component {
   handleBrowseFeedSubmit = () => {
     const formData = this.manualAddingFormRef.getFormData();
 
-    const downloadedTorrents = this.state.items
+    const downloadedTorrents = this.props.items
       .filter((item, index) => formData[index])
       .map((torrent, index) => ({id: index, value: torrent.link}));
 
@@ -525,4 +502,27 @@ class FeedsTab extends React.Component {
   }
 }
 
-export default injectIntl(FeedsTab);
+const ConnectedFeedsTab = connectStores(injectIntl(FeedsTab), () => {
+  return [
+    {
+      store: FeedMonitorStore,
+      event: EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
+      getValue: ({store}) => {
+        return {
+          feeds: store.getFeeds(),
+        };
+      },
+    },
+    {
+      store: FeedMonitorStore,
+      event: EventTypes.SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS,
+      getValue: ({store}) => {
+        return {
+          items: store.getItems() || [],
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedFeedsTab;

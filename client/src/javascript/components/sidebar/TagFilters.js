@@ -1,39 +1,15 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
+import connectStores from '../../util/connectStores';
 import EventTypes from '../../constants/EventTypes';
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
-const METHODS_TO_BIND = ['getFilters', 'handleClick', 'onTagFilterChange', 'onTorrentTaxonomyChange'];
-
-export default class TagFilters extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      tagCount: {},
-      tagFilter: TorrentFilterStore.getTagFilter(),
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS, this.onTorrentTaxonomyChange);
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_TAG_CHANGE, this.onTagFilterChange);
-  }
-
-  componentWillUnmount() {
-    TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS, this.onTorrentTaxonomyChange);
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_TAG_CHANGE, this.onTagFilterChange);
-  }
-
+class TagFilters extends React.Component {
   getFilters() {
-    const filterItems = Object.keys(this.state.tagCount).sort((a, b) => {
+    const filterItems = Object.keys(this.props.tagCount).sort((a, b) => {
       if (a === 'all' || a === 'untagged') {
         return -1;
       }
@@ -47,9 +23,9 @@ export default class TagFilters extends React.Component {
     const filterElements = filterItems.map(filter => (
       <SidebarFilter
         handleClick={this.handleClick}
-        count={this.state.tagCount[filter] || 0}
+        count={this.props.tagCount[filter] || 0}
         key={filter}
-        isActive={filter === this.state.tagFilter}
+        isActive={filter === this.props.tagFilter}
         name={filter}
         slug={filter}
       />
@@ -63,18 +39,9 @@ export default class TagFilters extends React.Component {
   }
 
   hasTags() {
-    const tags = Object.keys(this.state.tagCount);
+    const tags = Object.keys(this.props.tagCount);
 
     return !((tags.length === 1 && tags[0] === 'all') || (tags.length === 2 && tags[1] === 'untagged'));
-  }
-
-  onTagFilterChange() {
-    this.setState({tagFilter: TorrentFilterStore.getTagFilter()});
-  }
-
-  onTorrentTaxonomyChange() {
-    const tagCount = TorrentFilterStore.getTorrentTagCount();
-    this.setState({tagCount});
   }
 
   render() {
@@ -92,3 +59,28 @@ export default class TagFilters extends React.Component {
     );
   }
 }
+
+const ConnectedTagFilters = connectStores(TagFilters, () => {
+  return [
+    {
+      store: TorrentFilterStore,
+      event: EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+      getValue: ({store}) => {
+        return {
+          tagCount: store.getTorrentTagCount(),
+        };
+      },
+    },
+    {
+      store: TorrentFilterStore,
+      event: EventTypes.UI_TORRENTS_FILTER_TAG_CHANGE,
+      getValue: ({store}) => {
+        return {
+          tagFilter: store.getTagFilter(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedTagFilters;

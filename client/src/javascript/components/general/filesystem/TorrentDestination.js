@@ -10,6 +10,12 @@ import SettingsStore from '../../../stores/SettingsStore';
 import UIStore from '../../../stores/UIStore';
 
 class NewTorrentDestination extends React.Component {
+  contextMenuInstanceRef = null;
+
+  contextMenuNodeRef = null;
+
+  textboxRef = null;
+
   constructor(props) {
     super(props);
 
@@ -21,11 +27,8 @@ class NewTorrentDestination extends React.Component {
 
     this.state = {
       destination,
-      isBasePath: false,
       isDirectoryListOpen: false,
     };
-
-    this.handleWindowResize = _.debounce(this.handleWindowResize, 100);
   }
 
   componentDidMount() {
@@ -53,31 +56,27 @@ class NewTorrentDestination extends React.Component {
     global.addEventListener('resize', this.handleWindowResize);
   }
 
-  contextMenuInstanceRef = null;
-
-  contextMenuNodeRef = null;
-
-  textboxRef = null;
-
   closeDirectoryList = () => {
     if (this.state.isDirectoryListOpen) {
       this.setState({isDirectoryListOpen: false});
     }
   };
 
-  handleBasePathCheckBoxCheck = value => {
-    this.setState({isBasePath: value});
-  };
+  /* eslint-disable react/sort-comp */
+  handleDestinationInputChange = _.debounce(
+    () => {
+      const destination = this.textboxRef.value;
 
-  handleDestinationChange = _.debounce(() => {
-    const destination = this.textboxRef.value;
+      if (this.props.onChange) {
+        this.props.onChange(destination);
+      }
 
-    if (this.props.onChange) {
-      this.props.onChange(destination);
-    }
-
-    this.setState({destination});
-  });
+      this.setState({destination});
+    },
+    100,
+    {leading: true},
+  );
+  /* eslint-enable react/sort-comp */
 
   handleDirectoryListButtonClick = () => {
     this.setState(state => {
@@ -106,10 +105,6 @@ class NewTorrentDestination extends React.Component {
     this.closeDirectoryList();
   };
 
-  isBasePath() {
-    return this.state.isBasePath;
-  }
-
   removeDestinationOpenEventListeners() {
     global.document.removeEventListener('click', this.handleDocumentClick);
     global.removeEventListener('resize', this.handleWindowResize);
@@ -124,14 +119,17 @@ class NewTorrentDestination extends React.Component {
   };
 
   render() {
+    const {destination, isDirectoryListOpen} = this.state;
+
     return (
       <FormRowGroup>
         <FormRow>
           <Textbox
             addonPlacement="after"
-            defaultValue={this.state.destination}
+            defaultValue={destination}
             id={this.props.id}
-            onChange={this.handleDestinationChange}
+            label={this.props.label}
+            onChange={this.handleDestinationInputChange}
             onClick={event => event.nativeEvent.stopImmediatePropagation()}
             placeholder={this.props.intl.formatMessage({
               id: 'torrents.add.destination.placeholder',
@@ -145,7 +143,7 @@ class NewTorrentDestination extends React.Component {
             </FormElementAddon>
             <Portal>
               <ContextMenu
-                in={this.state.isDirectoryListOpen}
+                in={isDirectoryListOpen}
                 onClick={event => event.nativeEvent.stopImmediatePropagation()}
                 overlayProps={{isInteractive: false}}
                 padding={false}
@@ -158,7 +156,7 @@ class NewTorrentDestination extends React.Component {
                 scrolling={false}
                 triggerRef={this.textboxRef}>
                 <FilesystemBrowser
-                  directory={this.state.destination}
+                  directory={destination}
                   intl={this.props.intl}
                   maxHeight={
                     this.contextMenuInstanceRef &&

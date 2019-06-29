@@ -2,46 +2,26 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import AuthActions from '../actions/AuthActions';
 import BaseStore from './BaseStore';
+import FloodActions from '../actions/FloodActions';
 import EventTypes from '../constants/EventTypes';
 
 class AuthStoreClass extends BaseStore {
   constructor() {
     super();
+    this.isAuthenticating = false;
+    this.isAuthenticated = false;
     this.token = null;
     this.users = [];
     this.optimisticUsers = [];
-    this.currentUser = {};
-  }
-
-  authenticate(credentials) {
-    AuthActions.authenticate(credentials);
+    this.currentUser = {
+      isAdmin: false,
+      isInitialUser: false,
+      username: null,
+    };
   }
 
   createUser(credentials) {
     AuthActions.createUser(credentials);
-  }
-
-  deleteUser(username) {
-    AuthActions.deleteUser(username);
-  }
-
-  fetchUserList() {
-    AuthActions.fetchUsers();
-  }
-
-  register(credentials) {
-    AuthActions.register({
-      username: credentials.username,
-      password: credentials.password,
-      host: credentials.host,
-      port: credentials.port,
-      socketPath: credentials.socketPath,
-      isAdmin: true,
-    });
-  }
-
-  verify() {
-    AuthActions.verify();
   }
 
   addOptimisticUser(credentials) {
@@ -57,16 +37,24 @@ class AuthStoreClass extends BaseStore {
     return this.currentUser.isAdmin;
   }
 
+  getIsAuthenticating() {
+    return this.isAuthenticating;
+  }
+
+  getIsAuthenticated() {
+    return this.isAuthenticated;
+  }
+
+  getIsInitialUser() {
+    return this.currentUser.isInitialUser;
+  }
+
   getToken() {
     return this.token;
   }
 
   getUsers() {
     return this.users;
-  }
-
-  handleCreateUserError(error) {
-    this.emit(EventTypes.AUTH_CREATE_USER_ERROR, error);
   }
 
   handleCreateUserSuccess(data) {
@@ -82,10 +70,6 @@ class AuthStoreClass extends BaseStore {
     this.emit(EventTypes.AUTH_DELETE_USER_SUCCESS, data.username);
   }
 
-  handleListUsersError() {
-    this.emit(EventTypes.AUTH_LIST_USERS_ERROR);
-  }
-
   handleListUsersSuccess(nextUserList) {
     this.optimisticUsers = this.optimisticUsers.filter(
       optimisticUser => !nextUserList.some(databaseUser => databaseUser.username === optimisticUser.username),
@@ -95,21 +79,29 @@ class AuthStoreClass extends BaseStore {
   }
 
   handleLoginSuccess(data) {
-    this.emit(EventTypes.AUTH_LOGIN_SUCCESS);
     this.currentUser.username = data.username;
     this.currentUser.isAdmin = data.isAdmin;
+    this.currentUser.isInitialUser = false;
     this.token = data.token;
+    this.isAuthenticating = true;
+    this.isAuthenticated = true;
+
+    this.emit(EventTypes.AUTH_LOGIN_SUCCESS);
   }
 
   handleLoginError(error) {
     this.token = null;
+    this.isAuthenticated = false;
+    this.isAuthenticating = true;
     this.emit(EventTypes.AUTH_LOGIN_ERROR, error);
   }
 
   handleRegisterSuccess(data) {
     this.currentUser.username = data.username;
     this.currentUser.isAdmin = data.isAdmin;
+    this.currentUser.isInitialUser = false;
     this.emit(EventTypes.AUTH_REGISTER_SUCCESS, data);
+    FloodActions.restartActivityStream();
   }
 
   handleRegisterError(error) {
@@ -119,10 +111,16 @@ class AuthStoreClass extends BaseStore {
   handleAuthVerificationSuccess(data) {
     this.currentUser.username = data.username;
     this.currentUser.isAdmin = data.isAdmin;
+    this.currentUser.isInitialUser = data.initialUser;
+    this.isAuthenticating = true;
+    this.isAuthenticated = !data.initialUser;
     this.emit(EventTypes.AUTH_VERIFY_SUCCESS, data);
   }
 
   handleAuthVerificationError(action) {
+    this.isAuthenticated = false;
+    this.isAuthenticating = true;
+    this.currentUser.isInitialUser = false;
     this.emit(EventTypes.AUTH_VERIFY_ERROR, action.error);
   }
 }
@@ -142,14 +140,8 @@ AuthStore.dispatcherID = AppDispatcher.register(payload => {
     case ActionTypes.AUTH_LIST_USERS_SUCCESS:
       AuthStore.handleListUsersSuccess(action.data);
       break;
-    case ActionTypes.AUTH_LIST_USERS_ERROR:
-      AuthStore.handleListUsersError(action.error);
-      break;
     case ActionTypes.AUTH_CREATE_USER_SUCCESS:
       AuthStore.handleCreateUserSuccess(action.data);
-      break;
-    case ActionTypes.AUTH_CREATE_USER_ERROR:
-      AuthStore.handleCreateUserError(action.error);
       break;
     case ActionTypes.AUTH_DELETE_USER_SUCCESS:
       AuthStore.handleDeleteUserSuccess(action.data);

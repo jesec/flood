@@ -3,6 +3,7 @@ import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
 import ClientActions from '../../actions/ClientActions';
+import connectStores from '../../util/connectStores';
 import Dropdown from '../general/form-elements/Dropdown';
 import EventTypes from '../../constants/EventTypes';
 import LimitsIcon from '../icons/Limits';
@@ -21,51 +22,9 @@ const MESSAGES = defineMessages({
     id: 'speed.unlimited',
   },
 });
-const METHODS_TO_BIND = ['handleDropdownOpen', 'handleSettingsFetchRequestSuccess', 'onTransferSummaryChange'];
 
 class SpeedLimitDropdown extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      speedLimits: SettingsStore.getFloodSettings('speedLimits'),
-      currentThrottles: {
-        download: null,
-        upload: null,
-      },
-    };
-    this.tooltip = null;
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsFetchRequestSuccess);
-    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE, this.onTransferSummaryChange);
-  }
-
-  componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.handleSettingsFetchRequestSuccess);
-    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE, this.onTransferSummaryChange);
-  }
-
-  onTransferSummaryChange() {
-    const transferSummary = TransferDataStore.getTransferSummary();
-
-    if (
-      this.state.currentThrottles.upload !== transferSummary.upThrottle ||
-      this.state.currentThrottles.download !== transferSummary.downThrottle
-    ) {
-      this.setState({
-        currentThrottles: {
-          upload: transferSummary.upThrottle,
-          download: transferSummary.downThrottle,
-        },
-      });
-    }
-  }
+  tooltipRef = null;
 
   getDropdownHeader() {
     return (
@@ -87,7 +46,7 @@ class SpeedLimitDropdown extends React.Component {
         content={label}
         position="bottom"
         ref={node => {
-          this.tooltip = node;
+          this.tooltipRef = node;
         }}
         wrapperClassName="sidebar__icon-button tooltip__wrapper">
         <LimitsIcon />
@@ -111,8 +70,8 @@ class SpeedLimitDropdown extends React.Component {
     };
 
     let insertCurrentThrottle = true;
-    const currentThrottle = this.state.currentThrottles;
-    const speeds = this.state.speedLimits[property];
+    const currentThrottle = this.props.currentThrottles;
+    const speeds = this.props.speedLimits[property];
 
     const items = speeds.map(bytes => {
       let selected = false;
@@ -159,20 +118,12 @@ class SpeedLimitDropdown extends React.Component {
     return [this.getSpeedList('download'), this.getSpeedList('upload')];
   }
 
-  handleDropdownOpen() {
-    this.tooltip.dismissTooltip();
-  }
+  handleDropdownOpen = () => {
+    this.tooltipRef.dismissTooltip();
+  };
 
   handleItemSelect(data) {
     ClientActions.setThrottle(data.property, data.value);
-  }
-
-  handleSettingsFetchRequestSuccess() {
-    const speedLimits = SettingsStore.getFloodSettings('speedLimits');
-
-    if (speedLimits) {
-      this.setState({speedLimits});
-    }
   }
 
   render() {
@@ -189,4 +140,32 @@ class SpeedLimitDropdown extends React.Component {
   }
 }
 
-export default injectIntl(SpeedLimitDropdown);
+const ConnectedSpeedLimitDropdown = connectStores(injectIntl(SpeedLimitDropdown), () => {
+  return [
+    {
+      store: SettingsStore,
+      event: EventTypes.SETTINGS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          speedLimits: store.getFloodSettings('speedLimits'),
+        };
+      },
+    },
+    {
+      store: TransferDataStore,
+      event: EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
+      getValue: ({store}) => {
+        const transferSummary = store.getTransferSummary();
+
+        return {
+          currentThrottles: {
+            upload: transferSummary.upThrottle,
+            download: transferSummary.downThrottle,
+          },
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedSpeedLimitDropdown;

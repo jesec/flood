@@ -11,6 +11,8 @@ import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import UIStore from '../../../stores/UIStore';
 
 class AddTorrentsByURL extends React.Component {
+  formRef = null;
+
   constructor() {
     super();
 
@@ -23,8 +25,6 @@ class AddTorrentsByURL extends React.Component {
       urlTextboxes: initialUrls || [{id: 0, value: ''}],
     };
   }
-
-  formRef = null;
 
   getURLsFromForm() {
     const formData = this.formRef.getFormData();

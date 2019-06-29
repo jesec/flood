@@ -36,7 +36,7 @@ module.exports = {
     'react/sort-comp': [
       2,
       {
-        order: ['static-methods', 'lifecycle', 'everything-else', 'rendering'],
+        order: ['static-methods', 'instance-variables', 'lifecycle', 'everything-else', 'rendering'],
         groups: {
           rendering: ['/^render.+$/', 'render'],
         },

@@ -2,7 +2,6 @@ import {Form} from 'flood-ui-kit';
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
-import EventTypes from '../../../constants/EventTypes';
 import Modal from '../Modal';
 import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
@@ -24,18 +23,6 @@ class MoveTorrents extends React.Component {
       this.setState({originalSource});
     }
   }
-
-  componentDidMount() {
-    TorrentStore.listen(EventTypes.CLIENT_MOVE_TORRENTS_REQUEST_ERROR, this.onMoveError);
-  }
-
-  componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.CLIENT_MOVE_TORRENTS_REQUEST_ERROR, this.onMoveError);
-  }
-
-  onMoveError = () => {
-    this.setState({isSettingDownloadPath: false});
-  };
 
   getActions() {
     return [
@@ -91,6 +78,8 @@ class MoveTorrents extends React.Component {
         filenames,
         moveFiles: formData.moveFiles,
         sourcePaths,
+      }).then(() => {
+        this.setState({isSettingDownloadPath: false});
       });
     }
   };

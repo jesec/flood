@@ -1,40 +1,18 @@
+import {browserHistory} from 'react-router';
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
 import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from 'flood-ui-kit';
+import AuthActions from '../../actions/AuthActions';
 import AuthStore from '../../stores/AuthStore';
+import connectStores from '../../util/connectStores';
 import EventTypes from '../../constants/EventTypes';
 import RtorrentConnectionTypeSelection from '../general/RtorrentConnectionTypeSelection';
 
-const METHODS_TO_BIND = ['handleAuthError', 'handleFormSubmit'];
-
 class AuthForm extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      error: null,
-      isAuthStatusLoading: false,
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    AuthStore.listen(EventTypes.AUTH_LOGIN_ERROR, this.handleAuthError);
-    AuthStore.listen(EventTypes.AUTH_REGISTER_ERROR, this.handleAuthError);
-  }
-
-  componentWillUnmount() {
-    AuthStore.unlisten(EventTypes.AUTH_LOGIN_ERROR, this.handleAuthError);
-    AuthStore.unlisten(EventTypes.AUTH_REGISTER_ERROR, this.handleAuthError);
-  }
-
-  getValue(fieldName) {
-    return this.state[fieldName];
-  }
+  state = {
+    isSubmitting: false,
+  };
 
   getHeaderText() {
     if (this.props.mode === 'login') {
@@ -64,61 +42,40 @@ class AuthForm extends React.Component {
     });
   }
 
-  handleAuthError(error) {
-    this.setState({isAuthStatusLoading: false, error});
-  }
-
-  handleFormSubmit(submission) {
+  handleFormSubmit = submission => {
     submission.event.preventDefault();
 
-    this.setState({isAuthStatusLoading: true});
+    this.setState({isSubmitting: true});
 
     if (this.props.mode === 'login') {
-      AuthStore.authenticate({
+      AuthActions.authenticate({
         username: submission.formData.username,
         password: submission.formData.password,
-      });
+      })
+        .then(() => {
+          this.setState({isSubmitting: false}, () => browserHistory.replace('overview'));
+        })
+        .catch(() => {
+          this.setState({isSubmitting: false}, () => browserHistory.replace('login'));
+        });
     } else {
-      AuthStore.register({
+      AuthActions.register({
         username: submission.formData.username,
         password: submission.formData.password,
         host: submission.formData.rtorrentHost,
         port: submission.formData.rtorrentPort,
         socketPath: submission.formData.rtorrentSocketPath,
+        isAdmin: true,
+      }).then(() => {
+        this.setState({isSubmitting: false}, () => browserHistory.replace('overview'));
       });
     }
-  }
+  };
 
   render() {
-    let actionText = null;
-    let errorRow;
-    let registerFields;
-
-    if (this.props.mode === 'login') {
-      actionText = this.props.intl.formatMessage({
-        id: 'auth.log.in',
-        defaultMessage: 'Log In',
-      });
-    } else {
-      actionText = this.props.intl.formatMessage({
-        id: 'auth.create.account',
-        defaultMessage: 'Create Account',
-      });
-
-      registerFields = (
-        <PanelContent hasBorder>
-          <RtorrentConnectionTypeSelection />
-        </PanelContent>
-      );
-    }
-
-    if (this.state.error) {
-      errorRow = (
-        <FormRow>
-          <FormError isLoading={this.state.isAuthStatusLoading}>{this.state.error}</FormError>
-        </FormRow>
-      );
-    }
+    const {isSubmitting} = this.state;
+    const {error, intl, mode} = this.props;
+    const isLoginMode = mode === 'login';
 
     return (
       <div className="application__entry-barrier">
@@ -133,7 +90,11 @@ class AuthForm extends React.Component {
             </PanelHeader>
             <PanelContent>
               <p className="copy--lead">{this.getIntroText()}</p>
-              {errorRow}
+              {error != null ? (
+                <FormRow>
+                  <FormError isLoading={isSubmitting}>{error}</FormError>
+                </FormRow>
+              ) : null}
               <FormRow>
                 <Textbox placeholder="Username" id="username" />
               </FormRow>
@@ -141,14 +102,26 @@ class AuthForm extends React.Component {
                 <Textbox placeholder="Passsword" id="password" type="password" />
               </FormRow>
             </PanelContent>
-            {registerFields}
+            {isLoginMode ? null : (
+              <PanelContent hasBorder>
+                <RtorrentConnectionTypeSelection />
+              </PanelContent>
+            )}
             <PanelFooter hasBorder>
               <FormRow justify="end">
                 <Button priority="tertiary" onClick={() => this.formRef.resetForm()}>
                   Clear
                 </Button>
-                <Button isLoading={this.state.isAuthStatusLoading} type="submit">
-                  {actionText}
+                <Button isLoading={this.state.isSubmitting} type="submit">
+                  {isLoginMode
+                    ? intl.formatMessage({
+                        id: 'auth.log.in',
+                        defaultMessage: 'Log In',
+                      })
+                    : intl.formatMessage({
+                        id: 'auth.create.account',
+                        defaultMessage: 'Create Account',
+                      })}
                 </Button>
               </FormRow>
             </PanelFooter>
@@ -159,4 +132,18 @@ class AuthForm extends React.Component {
   }
 }
 
-export default injectIntl(AuthForm);
+const ConnectedAuthForm = connectStores(injectIntl(AuthForm), () => {
+  return [
+    {
+      store: AuthStore,
+      event: [EventTypes.AUTH_LOGIN_ERROR, EventTypes.AUTH_REGISTER_ERROR],
+      getValue: ({payload}) => {
+        return {
+          error: payload,
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedAuthForm;

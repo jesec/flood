@@ -145,10 +145,6 @@ class TorrentStoreClass extends BaseStore {
     });
   }
 
-  handleFetchMediainfoError(error) {
-    this.emit(EventTypes.FLOOD_FETCH_MEDIAINFO_ERROR, error);
-  }
-
   handleFetchMediainfoSuccess(response) {
     this.mediainfo[response.hash] = response.output;
     this.emit(EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS);
@@ -325,9 +321,6 @@ TorrentStore.dispatcherID = AppDispatcher.register(payload => {
       break;
     case ActionTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS:
       TorrentStore.handleFetchMediainfoSuccess(action.data);
-      break;
-    case ActionTypes.FLOOD_FETCH_MEDIAINFO_ERROR:
-      TorrentStore.handleFetchMediainfoError(action.error);
       break;
     case ActionTypes.UI_CLICK_TORRENT:
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);

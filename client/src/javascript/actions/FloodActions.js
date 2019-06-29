@@ -88,25 +88,12 @@ const FloodActions = {
         params: options,
       })
       .then((json = {}) => json.data)
-      .then(
-        response => {
-          AppDispatcher.dispatchServerAction({
-            type: ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_SUCCESS,
-            data: {
-              ...options,
-              ...response,
-            },
-          });
-        },
-        (error = {}) => {
-          const {response: errorData} = error;
-
-          AppDispatcher.dispatchServerAction({
-            type: ActionTypes.FLOOD_FETCH_DIRECTORY_LIST_ERROR,
-            error: errorData,
-          });
-        },
-      ),
+      .then(response => {
+        return {
+          ...options,
+          ...response,
+        };
+      }),
 
   fetchMediainfo: options =>
     axios
@@ -116,23 +103,15 @@ const FloodActions = {
         },
       })
       .then((json = {}) => json.data)
-      .then(
-        response => {
-          AppDispatcher.dispatchServerAction({
-            type: ActionTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
-            data: {
-              ...response,
-              ...options,
-            },
-          });
-        },
-        error => {
-          AppDispatcher.dispatchServerAction({
-            type: ActionTypes.FLOOD_FETCH_MEDIAINFO_ERROR,
-            error,
-          });
-        },
-      ),
+      .then(response => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
+          data: {
+            ...response,
+            ...options,
+          },
+        });
+      }),
 
   fetchNotifications: options =>
     axios

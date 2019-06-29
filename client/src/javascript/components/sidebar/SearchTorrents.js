@@ -3,64 +3,58 @@ import classnames from 'classnames';
 import React from 'react';
 
 import Close from '../icons/Close';
+import connectStores from '../../util/connectStores';
 import EventTypes from '../../constants/EventTypes';
 import Search from '../icons/Search';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
-const METHODS_TO_BIND = ['handleExternalSearchChange', 'handleSearchChange', 'resetSearch'];
-
 class SearchBox extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      searchValue: '',
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
+  state = {
+    inputFieldKey: 0,
+    isSearchActive: false,
+  };
 
   componentDidMount() {
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_SEARCH_CHANGE, this.handleExternalSearchChange);
+    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CLEAR, this.resetSearch);
   }
 
   componentWillUnmount() {
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_SEARCH_CHANGE, this.handleExternalSearchChange);
+    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CLEAR, this.resetSearch);
   }
 
-  handleExternalSearchChange() {
-    this.setState({searchValue: TorrentFilterStore.getSearchFilter()});
-  }
+  handleSearchChange = event => {
+    const {value} = event.target;
+    this.setState({isSearchActive: value !== ''});
+    UIActions.setTorrentsSearchFilter(value);
+  };
 
-  handleSearchChange(event) {
-    const searchValue = event.target.value;
-    this.setState({searchValue});
-    UIActions.setTorrentsSearchFilter(searchValue);
-  }
-
-  isSearchActive() {
-    return this.state.searchValue !== '';
-  }
-
-  resetSearch() {
-    this.setState({searchValue: ''});
+  handleResetClick = () => {
+    this.resetSearch();
     UIActions.setTorrentsSearchFilter('');
-  }
+  };
+
+  resetSearch = () => {
+    this.setState(state => {
+      return {
+        inputFieldKey: state.inputFieldKey + 1,
+        isSearchActive: false,
+      };
+    });
+  };
 
   render() {
+    const {inputFieldKey, isSearchActive} = this.state;
     let clearSearchButton = null;
     const classes = classnames({
       sidebar__item: true,
       search: true,
-      'is-in-use': this.isSearchActive(),
+      'is-in-use': isSearchActive,
     });
 
-    if (this.isSearchActive()) {
+    if (isSearchActive) {
       clearSearchButton = (
-        <button className="button search__reset-button" onClick={this.resetSearch}>
+        <button className="button search__reset-button" onClick={this.handleResetClick}>
           <Close />
         </button>
       );
@@ -72,17 +66,31 @@ class SearchBox extends React.Component {
         <Search />
         <input
           className="textbox"
+          key={inputFieldKey}
           type="text"
           placeholder={this.props.intl.formatMessage({
             id: 'sidebar.search.placeholder',
             defaultMessage: 'Search torrents',
           })}
           onChange={this.handleSearchChange}
-          value={this.state.searchValue}
         />
       </div>
     );
   }
 }
 
-export default injectIntl(SearchBox);
+const ConnectedSearchBox = connectStores(injectIntl(SearchBox), () => {
+  return [
+    {
+      store: TorrentFilterStore,
+      event: EventTypes.UI_TORRENTS_FILTER_SEARCH_CHANGE,
+      getValue: ({store}) => {
+        return {
+          searchValue: store.getSearchFilter(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedSearchBox;

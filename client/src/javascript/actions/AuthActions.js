@@ -2,7 +2,10 @@ import axios from 'axios';
 
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
+import ClientActions from './ClientActions';
 import ConfigStore from '../stores/ConfigStore';
+import FloodActions from './FloodActions';
+import SettingsActions from './SettingsActions';
 
 const baseURI = ConfigStore.getBaseURI();
 
@@ -19,6 +22,8 @@ const AuthActions = {
           });
         },
         error => {
+          // TODO: Handle errors consistently in API, then create a client-side class to get meaningful messages from
+          // server's response.
           let errorMessage;
 
           if (error.response) {
@@ -33,27 +38,28 @@ const AuthActions = {
             type: ActionTypes.AUTH_LOGIN_ERROR,
             error: errorMessage,
           });
+
+          throw new Error(errorMessage);
         },
-      ),
+      )
+      .then(() => {
+        return Promise.all([
+          ClientActions.fetchSettings(),
+          SettingsActions.fetchSettings(),
+          FloodActions.restartActivityStream(),
+        ]);
+      }),
 
   createUser: credentials =>
     axios
       .put(`${baseURI}auth/users`, credentials)
       .then((json = {}) => json.data)
-      .then(
-        data => {
-          AppDispatcher.dispatchServerAction({
-            type: ActionTypes.AUTH_CREATE_USER_SUCCESS,
-            data,
-          });
-        },
-        error => {
-          AppDispatcher.dispatchServerAction({
-            type: ActionTypes.AUTH_CREATE_USER_ERROR,
-            error: error.response.data.message,
-          });
-        },
-      ),
+      .then(data => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.AUTH_CREATE_USER_SUCCESS,
+          data,
+        });
+      }),
 
   updateUser: (username, connectionSettings) => {
     const requestPayload = {};
@@ -99,20 +105,12 @@ const AuthActions = {
     axios
       .get(`${baseURI}auth/users`)
       .then((json = {}) => json.data)
-      .then(
-        data => {
-          AppDispatcher.dispatchServerAction({
-            type: ActionTypes.AUTH_LIST_USERS_SUCCESS,
-            data,
-          });
-        },
-        error => {
-          AppDispatcher.dispatchServerAction({
-            type: ActionTypes.AUTH_LIST_USERS_ERROR,
-            error,
-          });
-        },
-      ),
+      .then(data => {
+        AppDispatcher.dispatchServerAction({
+          type: ActionTypes.AUTH_LIST_USERS_SUCCESS,
+          data,
+        });
+      }),
 
   logout: () =>
     axios.get(`${baseURI}auth/logout`).then(
@@ -158,12 +156,18 @@ const AuthActions = {
             type: ActionTypes.AUTH_VERIFY_SUCCESS,
             data,
           });
+
+          return Promise.all([ClientActions.fetchSettings(), SettingsActions.fetchSettings()]).then(() => {
+            return data;
+          });
         },
         error => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.AUTH_VERIFY_ERROR,
             error,
           });
+
+          throw error;
         },
       ),
 };

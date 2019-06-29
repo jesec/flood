@@ -4,6 +4,7 @@ import React from 'react';
 import Active from '../icons/Active';
 import All from '../icons/All';
 import Completed from '../icons/Completed';
+import connectStores from '../../util/connectStores';
 import DownloadSmall from '../icons/DownloadSmall';
 import ErrorIcon from '../icons/ErrorIcon';
 import EventTypes from '../../constants/EventTypes';
@@ -13,32 +14,7 @@ import StopIcon from '../icons/StopIcon';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
-const METHODS_TO_BIND = ['getFilters', 'handleClick', 'onStatusFilterChange', 'onTorrentTaxonomyChange'];
-
 class StatusFilters extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      statusCount: {},
-      statusFilter: TorrentFilterStore.getStatusFilter(),
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    TorrentFilterStore.listen(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS, this.onTorrentTaxonomyChange);
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
-  }
-
-  componentWillUnmount() {
-    TorrentFilterStore.unlisten(EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS, this.onTorrentTaxonomyChange);
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE, this.onStatusFilterChange);
-  }
-
   handleClick(filter) {
     UIActions.setTorrentStatusFilter(filter);
   }
@@ -106,27 +82,16 @@ class StatusFilters extends React.Component {
     const filterElements = filters.map(filter => (
       <SidebarFilter
         handleClick={this.handleClick}
-        count={this.state.statusCount[filter.slug] || 0}
+        count={this.props.statusCount[filter.slug] || 0}
         key={filter.slug}
         icon={filter.icon}
-        isActive={filter.slug === this.state.statusFilter}
+        isActive={filter.slug === this.props.statusFilter}
         name={filter.label}
         slug={filter.slug}
       />
     ));
 
     return filterElements;
-  }
-
-  onStatusFilterChange() {
-    this.setState({
-      statusFilter: TorrentFilterStore.getStatusFilter(),
-    });
-  }
-
-  onTorrentTaxonomyChange() {
-    const statusCount = TorrentFilterStore.getTorrentStatusCount();
-    this.setState({statusCount});
   }
 
   render() {
@@ -143,4 +108,27 @@ class StatusFilters extends React.Component {
   }
 }
 
-export default injectIntl(StatusFilters);
+const ConnectedStatusFilters = connectStores(injectIntl(StatusFilters), () => {
+  return [
+    {
+      store: TorrentFilterStore,
+      event: EventTypes.CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS,
+      getValue: ({store}) => {
+        return {
+          statusCount: store.getTorrentStatusCount(),
+        };
+      },
+    },
+    {
+      store: TorrentFilterStore,
+      event: EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          statusFilter: store.getStatusFilter(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedStatusFilters;

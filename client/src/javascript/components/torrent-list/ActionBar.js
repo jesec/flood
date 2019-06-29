@@ -4,6 +4,7 @@ import React from 'react';
 
 import Action from './Action';
 import Add from '../icons/Add';
+import connectStores from '../../util/connectStores';
 import EventTypes from '../../constants/EventTypes';
 import Remove from '../icons/Remove';
 import SettingsStore from '../../stores/SettingsStore';
@@ -14,37 +15,7 @@ import TorrentActions from '../../actions/TorrentActions';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
-const METHODS_TO_BIND = [
-  'handleAddTorrents',
-  'handleRemoveTorrents',
-  'handleSortChange',
-  'handleStart',
-  'handleStop',
-  'handleSettingsChange',
-];
-
 class ActionBar extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      sortBy: SettingsStore.getFloodSettings('sortTorrents'),
-      torrentListViewSize: SettingsStore.getFloodSettings('torrentListViewSize'),
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    SettingsStore.listen(EventTypes.SETTINGS_CHANGE, this.handleSettingsChange);
-  }
-
-  componentWillUnmount() {
-    SettingsStore.unlisten(EventTypes.SETTINGS_CHANGE, this.handleSettingsChange);
-  }
-
   handleAddTorrents() {
     UIActions.displayModal({id: 'add-torrents'});
   }
@@ -56,7 +27,6 @@ class ActionBar extends React.Component {
   }
 
   handleSortChange(sortBy) {
-    this.setState({sortBy});
     SettingsStore.saveFloodSettings({id: 'sortTorrents', data: sortBy});
     UIActions.setTorrentsSort(sortBy);
   }
@@ -69,25 +39,18 @@ class ActionBar extends React.Component {
     TorrentActions.stopTorrents(TorrentStore.getSelectedTorrents());
   }
 
-  handleSettingsChange() {
-    this.setState({
-      sortBy: SettingsStore.getFloodSettings('sortTorrents'),
-      torrentListViewSize: SettingsStore.getFloodSettings('torrentListViewSize'),
-    });
-  }
-
   render() {
     const classes = classnames('action-bar', {
-      'action-bar--is-condensed': this.state.torrentListViewSize === 'condensed',
+      'action-bar--is-condensed': this.props.torrentListViewSize === 'condensed',
     });
 
     return (
       <nav className={classes}>
         <div className="actions action-bar__item action-bar__item--sort-torrents">
           <SortDropdown
-            direction={this.state.sortBy.direction}
+            direction={this.props.sortBy.direction}
             onSortChange={this.handleSortChange}
-            selectedProperty={this.state.sortBy.property}
+            selectedProperty={this.props.sortBy.property}
           />
         </div>
         <div className="actions action-bar__item action-bar__item--torrent-operations">
@@ -137,4 +100,19 @@ class ActionBar extends React.Component {
   }
 }
 
-export default injectIntl(ActionBar);
+const ConnectedActionBar = connectStores(injectIntl(ActionBar), () => {
+  return [
+    {
+      store: SettingsStore,
+      event: EventTypes.SETTINGS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          sortBy: store.getFloodSettings('sortTorrents'),
+          torrentListViewSize: store.getFloodSettings('torrentListViewSize'),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedActionBar;

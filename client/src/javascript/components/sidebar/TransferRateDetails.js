@@ -5,11 +5,13 @@ import moment from 'moment';
 import React from 'react';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
+import connectStores from '../../util/connectStores';
 import Download from '../icons/Download';
 import Duration from '../general/Duration';
 import EventTypes from '../../constants/EventTypes';
 import InfinityIcon from '../icons/InfinityIcon';
 import Size from '../general/Size';
+import TransferDataStore from '../../stores/TransferDataStore';
 import Upload from '../icons/Upload';
 
 const messages = defineMessages({
@@ -26,36 +28,8 @@ const icons = {
 };
 
 class TransferRateDetails extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      isClientConnected: ClientStatusStore.getIsConnected(),
-      inspectorPoint: null,
-    };
-
-    this.handleClientStatusChange = this.handleClientStatusChange.bind(this);
-  }
-
-  componentDidMount() {
-    ClientStatusStore.listen(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.inspectorPoint != null) {
-      this.setState({timestamp: nextProps.inspectorPoint.nearestTimestamp});
-    }
-  }
-
-  componentWillUnmount() {
-    ClientStatusStore.unlisten(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
-  }
-
   getCurrentTansferRate(slug, options = {}) {
-    const {
-      props: {inspectorPoint, transferSummary},
-    } = this;
-    const {isClientConnected} = this.state;
+    const {inspectorPoint, isClientConnected, transferSummary} = this.props;
 
     const throttles = {
       download: transferSummary.downThrottle,
@@ -87,10 +61,10 @@ class TransferRateDetails extends React.Component {
       'is-visible': inspectorPoint != null && options.showHoverDuration,
     });
 
-    if (this.state.timestamp != null) {
+    if (inspectorPoint != null && inspectorPoint.nearestTimestamp != null) {
       const currentTime = moment(Date.now());
       const durationSummary = formatUtil.secondsToDuration(
-        moment.duration(currentTime.diff(moment(this.state.timestamp))).asSeconds(),
+        moment.duration(currentTime.diff(moment(inspectorPoint.nearestTimestamp))).asSeconds(),
       );
 
       timestamp = (
@@ -143,4 +117,27 @@ class TransferRateDetails extends React.Component {
   }
 }
 
-export default injectIntl(TransferRateDetails);
+const ConnectedTransferRateDetails = connectStores(injectIntl(TransferRateDetails), () => {
+  return [
+    {
+      store: ClientStatusStore,
+      event: EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          isClientConnected: store.getIsConnected(),
+        };
+      },
+    },
+    {
+      store: TransferDataStore,
+      event: EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE,
+      getValue: ({store}) => {
+        return {
+          transferSummary: store.getTransferSummary(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedTransferRateDetails;

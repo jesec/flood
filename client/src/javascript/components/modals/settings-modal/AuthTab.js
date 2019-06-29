@@ -4,8 +4,10 @@ import CSSTransitionGroup from 'react-addons-css-transition-group';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import AuthActions from '../../../actions/AuthActions';
 import AuthStore from '../../../stores/AuthStore';
 import Close from '../../icons/Close';
+import connectStores from '../../../util/connectStores';
 import EventTypes from '../../../constants/EventTypes';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import RtorrentConnectionTypeSelection from '../../general/RtorrentConnectionTypeSelection';
@@ -16,44 +18,22 @@ class AuthTab extends SettingsTab {
     addUserError: null,
     hasFetchedUserList: false,
     isAddingUser: false,
-    isAdmin: false,
-    users: [],
   };
 
   formData = {};
 
   formRef = null;
 
-  componentWillMount() {
-    this.setState({users: AuthStore.getUsers()});
-    this.setState({isAdmin: AuthStore.isAdmin()});
-  }
-
   componentDidMount() {
-    if (!this.state.isAdmin) {
-      return;
-    }
+    if (!this.props.isAdmin) return;
 
-    AuthStore.listen(EventTypes.AUTH_LIST_USERS_SUCCESS, this.handleUserListChange);
-    AuthStore.listen(EventTypes.AUTH_CREATE_USER_ERROR, this.handleUserAddError);
-    AuthStore.listen(EventTypes.AUTH_CREATE_USER_SUCCESS, this.handleUserAddSuccess);
-    AuthStore.listen(EventTypes.AUTH_DELETE_USER_SUCCESS, this.handleUserDeleteSuccess);
-
-    AuthStore.fetchUserList();
-  }
-
-  componentWillUnmount() {
-    if (!this.state.isAdmin) {
-      return;
-    }
-    AuthStore.unlisten(EventTypes.AUTH_LIST_USERS_SUCCESS, this.handleUserListChange);
-    AuthStore.unlisten(EventTypes.AUTH_CREATE_USER_ERROR, this.handleUserAddError);
-    AuthStore.unlisten(EventTypes.AUTH_CREATE_USER_SUCCESS, this.handleUserAddSuccess);
-    AuthStore.unlisten(EventTypes.AUTH_DELETE_USER_SUCCESS, this.handleUserDeleteSuccess);
+    AuthActions.fetchUsers().then(() => {
+      this.setState({hasFetchedUserList: true});
+    });
   }
 
   getUserList() {
-    const userList = this.state.users.sort((a, b) => a.username.localeCompare(b.username));
+    const userList = this.props.users.sort((a, b) => a.username.localeCompare(b.username));
 
     const currentUsername = AuthStore.getCurrentUsername();
 
@@ -95,7 +75,7 @@ class AuthTab extends SettingsTab {
   }
 
   handleDeleteUserClick(username) {
-    AuthStore.deleteUser(username);
+    AuthActions.deleteUser(username).then(AuthActions.fetchUsers);
   }
 
   handleFormChange = ({formData}) => {
@@ -113,39 +93,26 @@ class AuthTab extends SettingsTab {
     } else {
       this.setState({isAddingUser: true});
 
-      AuthStore.createUser({
+      AuthActions.createUser({
         username: this.formData.username,
         password: this.formData.password,
         host: this.formData.rtorrentHost,
         port: this.formData.rtorrentPort,
         socketPath: this.formData.rtorrentSocketPath,
         isAdmin: this.formData.isAdmin === '1',
-      });
+      })
+        .then(AuthActions.fetchUsers, error => {
+          this.setState({addUserError: error.response.data.message, isAddingUser: false});
+        })
+        .then(() => {
+          this.formRef.resetForm();
+          this.setState({addUserError: null, isAddingUser: false});
+        });
     }
   };
 
-  handleUserListChange = () => {
-    this.setState({hasFetchedUserList: true, users: AuthStore.getUsers()});
-  };
-
-  handleUserAddError = error => {
-    this.setState({addUserError: error, isAddingUser: false});
-  };
-
-  handleUserAddSuccess = () => {
-    this.formRef.resetForm();
-
-    this.setState({addUserError: null, isAddingUser: false});
-
-    AuthStore.fetchUserList();
-  };
-
-  handleUserDeleteSuccess() {
-    AuthStore.fetchUserList();
-  }
-
   render() {
-    if (!this.state.isAdmin) {
+    if (!this.props.isAdmin) {
       return (
         <Form>
           <ModalFormSectionHeader>
@@ -160,7 +127,7 @@ class AuthTab extends SettingsTab {
       );
     }
 
-    const isLoading = !this.state.hasFetchedUserList && this.state.users.length === 0;
+    const isLoading = !this.state.hasFetchedUserList && this.props.users.length === 0;
     const interactiveListClasses = classnames('interactive-list', {
       'interactive-list--loading': isLoading,
     });
@@ -242,4 +209,19 @@ class AuthTab extends SettingsTab {
   }
 }
 
-export default injectIntl(AuthTab);
+const ConnectedAuthTab = connectStores(injectIntl(AuthTab), () => {
+  return [
+    {
+      store: AuthStore,
+      event: EventTypes.AUTH_LIST_USERS_SUCCESS,
+      getValue: ({store}) => {
+        return {
+          users: store.getUsers(),
+          isAdmin: store.isAdmin(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedAuthTab;

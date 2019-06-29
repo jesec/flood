@@ -16,10 +16,12 @@ import AuthActions from '../../actions/AuthActions';
 import AuthStore from '../../stores/AuthStore';
 import Checkmark from '../icons/Checkmark';
 import ClientActions from '../../actions/ClientActions';
+import connectStores from '../../util/connectStores';
+import EventTypes from '../../constants/EventTypes';
 import FloodActions from '../../actions/FloodActions';
 import RtorrentConnectionTypeSelection from './RtorrentConnectionTypeSelection';
 
-export default class ClientConnectionInterruption extends React.Component {
+class ClientConnectionInterruption extends React.Component {
   state = {
     hasTestedConnection: false,
     isConnectionVerified: false,
@@ -101,8 +103,7 @@ export default class ClientConnectionInterruption extends React.Component {
   }
 
   render() {
-    const isAdmin = AuthStore.isAdmin();
-    const {isInitialUser} = this.props;
+    const {isAdmin, isInitialUser} = this.props;
     const {isConnectionVerified, isTestingConnection} = this.state;
 
     if (!isAdmin && !isInitialUser) {
@@ -164,3 +165,25 @@ export default class ClientConnectionInterruption extends React.Component {
     );
   }
 }
+
+const ConnectedClientConnectionInterruption = connectStores(ClientConnectionInterruption, () => {
+  return [
+    {
+      store: AuthStore,
+      event: [
+        EventTypes.AUTH_LOGIN_SUCCESS,
+        EventTypes.AUTH_REGISTER_SUCCESS,
+        EventTypes.AUTH_VERIFY_SUCCESS,
+        EventTypes.AUTH_VERIFY_ERROR,
+      ],
+      getValue: ({store}) => {
+        return {
+          isAdmin: store.isAdmin(),
+          isInitialUser: store.getIsInitialUser(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedClientConnectionInterruption;

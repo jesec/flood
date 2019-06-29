@@ -5,6 +5,8 @@ import {Scrollbars} from 'react-custom-scrollbars';
 const METHODS_TO_BIND = ['getHorizontalThumb', 'getVerticalThumb'];
 
 export default class CustomScrollbar extends React.Component {
+  scrollbarRef = null;
+
   constructor() {
     super();
 
@@ -12,8 +14,6 @@ export default class CustomScrollbar extends React.Component {
       this[method] = this[method].bind(this);
     });
   }
-
-  scrollbarRef = null;
 
   getHorizontalThumb(props) {
     if (this.props.getHorizontalThumb) {

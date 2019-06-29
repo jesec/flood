@@ -1,6 +1,7 @@
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
+import connectStores from '../../../util/connectStores';
 import Modal from '../Modal';
 import EventTypes from '../../../constants/EventTypes';
 import TorrentMediainfo from './TorrentMediainfo';
@@ -13,51 +14,13 @@ import TorrentTrackers from './TorrentTrackers';
 import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
 
-const METHODS_TO_BIND = ['onTorrentDetailsChange', 'onReceiveTorrentsSuccess'];
-
 class TorrentDetailsModal extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      torrent: null,
-      torrentDetails: null,
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentWillMount() {
-    this.setState({
-      torrent: TorrentStore.getTorrent(UIStore.getTorrentDetailsHash()),
-      torrentDetails: TorrentStore.getTorrentDetails(UIStore.getTorrentDetailsHash()),
-    });
-  }
-
   componentDidMount() {
-    TorrentStore.listen(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
-    TorrentStore.listen(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.fetchTorrentDetails();
   }
 
   componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.CLIENT_TORRENT_DETAILS_CHANGE, this.onTorrentDetailsChange);
-    TorrentStore.unlisten(EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS, this.onReceiveTorrentsSuccess);
     TorrentStore.stopPollingTorrentDetails();
-  }
-
-  onReceiveTorrentsSuccess() {
-    this.setState({
-      torrent: TorrentStore.getTorrent(UIStore.getTorrentDetailsHash()),
-    });
-  }
-
-  onTorrentDetailsChange() {
-    this.setState({
-      torrentDetails: TorrentStore.getTorrentDetails(UIStore.getTorrentDetailsHash()),
-    });
   }
 
   dismissModal() {
@@ -65,14 +28,14 @@ class TorrentDetailsModal extends React.Component {
   }
 
   getModalHeading() {
-    return <TorrentHeading torrent={this.state.torrent} key="torrent-heading" />;
+    return <TorrentHeading torrent={this.props.torrent} key="torrent-heading" />;
   }
 
   render() {
     const props = {
       ...this.props.options,
-      torrent: this.state.torrent,
-      ...this.state.torrentDetails,
+      torrent: this.props.torrent,
+      ...this.props.torrentDetails,
     };
 
     const tabs = {
@@ -132,4 +95,27 @@ class TorrentDetailsModal extends React.Component {
   }
 }
 
-export default injectIntl(TorrentDetailsModal);
+const ConnectedTorrentDetailsModal = connectStores(injectIntl(TorrentDetailsModal), () => {
+  return [
+    {
+      store: TorrentStore,
+      event: EventTypes.CLIENT_TORRENT_DETAILS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          torrentDetails: store.getTorrentDetails(UIStore.getTorrentDetailsHash()),
+        };
+      },
+    },
+    {
+      store: TorrentStore,
+      event: EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
+      getValue: ({store}) => {
+        return {
+          torrent: store.getTorrent(UIStore.getTorrentDetailsHash()),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedTorrentDetailsModal;

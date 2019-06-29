@@ -15,6 +15,7 @@ import {
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import connectStores from '../../../util/connectStores';
 import Edit from '../../icons/Edit';
 import Checkmark from '../../icons/Checkmark';
 import Close from '../../icons/Close';
@@ -76,19 +77,9 @@ const defaultRule = {
 class DownloadRulesTab extends React.Component {
   state = {
     errors: {},
-    feeds: FeedMonitorStore.getFeeds(),
-    rules: FeedMonitorStore.getRules(),
     currentlyEditingRule: null,
     doesPatternMatchTest: false,
   };
-
-  componentDidMount() {
-    FeedMonitorStore.listen(EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS, this.handleFeedMonitorsFetchSuccess);
-  }
-
-  componentWillUnmount() {
-    FeedMonitorStore.unlisten(EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS, this.handleFeedMonitorsFetchSuccess);
-  }
 
   validatedFields = {
     destination: {
@@ -124,7 +115,7 @@ class DownloadRulesTab extends React.Component {
   checkFieldValidity = _.throttle((fieldName, fieldValue) => {
     const {errors} = this.state;
 
-    if (this.state.errors[fieldName] && this.validatedFields[fieldName].isValid(fieldValue)) {
+    if (errors[fieldName] && this.validatedFields[fieldName].isValid(fieldValue)) {
       delete errors[fieldName];
       this.setState({errors});
     }
@@ -153,7 +144,9 @@ class DownloadRulesTab extends React.Component {
   }
 
   getAvailableFeedsOptions() {
-    if (!this.state.feeds.length) {
+    const {feeds} = this.props;
+
+    if (feeds.length === 0) {
       return [
         <SelectItem key="empty" id="placeholder" placeholder>
           <em>
@@ -163,7 +156,7 @@ class DownloadRulesTab extends React.Component {
       ];
     }
 
-    return this.state.feeds.reduce(
+    return feeds.reduce(
       (feedOptions, feed) =>
         feedOptions.concat(
           <SelectItem key={feed._id} id={feed._id}>
@@ -195,7 +188,7 @@ class DownloadRulesTab extends React.Component {
             defaultValue={rule.label}
           />
           <Select
-            disabled={!this.state.feeds.length}
+            disabled={!this.props.feeds.length}
             id="feedID"
             label={this.props.intl.formatMessage({
               id: 'feeds.applicable.feed',
@@ -360,7 +353,9 @@ class DownloadRulesTab extends React.Component {
   }
 
   getRulesList() {
-    if (this.state.rules.length === 0) {
+    const {rules} = this.props;
+
+    if (rules.length === 0) {
       return (
         <ul className="interactive-list">
           <li className="interactive-list__item">
@@ -370,17 +365,10 @@ class DownloadRulesTab extends React.Component {
       );
     }
 
-    const rulesList = this.state.rules.map(rule => this.getRulesListItem(rule));
+    const rulesList = rules.map(rule => this.getRulesListItem(rule));
 
     return <ul className="interactive-list">{rulesList}</ul>;
   }
-
-  handleFeedMonitorsFetchSuccess = () => {
-    this.setState({
-      feeds: FeedMonitorStore.getFeeds(),
-      rules: FeedMonitorStore.getRules(),
-    });
-  };
 
   handleFormChange = ({event, formData}) => {
     this.checkFieldValidity(event.target.name, formData[event.target.name]);
@@ -474,4 +462,19 @@ class DownloadRulesTab extends React.Component {
   }
 }
 
-export default injectIntl(DownloadRulesTab);
+const ConnectedDownloadRulesTab = connectStores(injectIntl(DownloadRulesTab), () => {
+  return [
+    {
+      store: FeedMonitorStore,
+      event: EventTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
+      getValue: ({store}) => {
+        return {
+          feeds: store.getFeeds(),
+          rules: store.getRules(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedDownloadRulesTab;

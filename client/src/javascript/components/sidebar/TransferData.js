@@ -1,54 +1,16 @@
-import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
+import connectStores from '../../util/connectStores';
 import EventTypes from '../../constants/EventTypes';
-import LoadingIndicator from '../general/LoadingIndicator';
-import TransferDataStore from '../../stores/TransferDataStore';
 import TransferRateDetails from './TransferRateDetails';
 import TransferRateGraph from './TransferRateGraph';
-import UIStore from '../../stores/UIStore';
-
-const METHODS_TO_BIND = [
-  'handleGraphHover',
-  'handleGraphMouseOut',
-  'handleMouseMove',
-  'handleMouseOut',
-  'handleMouseOver',
-  'onTransferDataRequestError',
-  'onTransferSummaryChange',
-  'onTransferHistoryRequestSuccess',
-];
 
 class TransferData extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      graphInspectorPoint: null,
-      isClientConnected: ClientStatusStore.getIsConnected(),
-      sidebarWidth: 0,
-      transferHistoryRequestSuccess: false,
-      transferDataRequestSuccess: false,
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-
-    UIStore.registerDependency([
-      {
-        id: 'transfer-data',
-        message: (
-          <FormattedMessage id="dependency.loading.transfer.rate.details" defaultMessage="Data Transfer Rate Details" />
-        ),
-      },
-      {
-        id: 'transfer-history',
-        message: <FormattedMessage id="dependency.loading.transfer.history" defaultMessage="Data Transfer History" />,
-      },
-    ]);
-  }
+  state = {
+    graphInspectorPoint: null,
+    sidebarWidth: 0,
+  };
 
   componentDidMount() {
     const wrapperNode = this.wrapperRef;
@@ -58,87 +20,36 @@ class TransferData extends React.Component {
         sidebarWidth: wrapperNode.offsetWidth,
       });
     }
-
-    ClientStatusStore.listen(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
-    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE, this.onTransferSummaryChange);
-    TransferDataStore.listen(EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS, this.onTransferHistoryRequestSuccess);
   }
 
-  componentWillUnmount() {
-    ClientStatusStore.unlisten(EventTypes.CLIENT_CONNECTION_STATUS_CHANGE, this.handleClientStatusChange);
-    TransferDataStore.unlisten(EventTypes.CLIENT_TRANSFER_SUMMARY_CHANGE, this.onTransferSummaryChange);
-    TransferDataStore.unlisten(
-      EventTypes.CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS,
-      this.onTransferHistoryRequestSuccess,
-    );
-  }
-
-  handleClientStatusChange = () => {
-    this.setState({
-      isClientConnected: ClientStatusStore.getIsConnected(),
-    });
+  handleGraphHover = graphInspectorPoint => {
+    this.setState({graphInspectorPoint});
   };
 
-  handleGraphHover(graphInspectorPoint) {
-    this.setState({graphInspectorPoint});
-  }
-
-  handleGraphMouseOut() {
+  handleGraphMouseOut = () => {
     this.setState({graphInspectorPoint: null});
-  }
+  };
 
-  handleMouseMove(event) {
-    if (this.state.isClientConnected && event && event.nativeEvent && event.nativeEvent.clientX != null) {
+  handleMouseMove = event => {
+    if (this.props.isClientConnected && event && event.nativeEvent && event.nativeEvent.clientX != null) {
       this.rateGraphRef.handleMouseMove(event.nativeEvent.clientX);
     }
-  }
+  };
 
-  handleMouseOut() {
-    if (this.state.isClientConnected) {
+  handleMouseOut = () => {
+    if (this.props.isClientConnected) {
       this.rateGraphRef.handleMouseOut();
     }
-  }
+  };
 
-  handleMouseOver() {
-    if (this.state.isClientConnected) {
+  handleMouseOver = () => {
+    if (this.props.isClientConnected) {
       this.rateGraphRef.handleMouseOver();
     }
-  }
-
-  isLoading() {
-    if (!this.state.transferHistoryRequestSuccess || !this.state.transferDataRequestSuccess) {
-      return true;
-    }
-
-    return false;
-  }
-
-  onTransferDataRequestError() {
-    this.setState({
-      transferDataRequestSuccess: false,
-    });
-  }
-
-  onTransferSummaryChange() {
-    this.setState({
-      transferDataRequestSuccess: true,
-    });
-
-    UIStore.satisfyDependency('transfer-data');
-  }
-
-  onTransferHistoryRequestSuccess() {
-    if (!this.state.transferHistoryRequestSuccess) {
-      this.setState({
-        transferHistoryRequestSuccess: true,
-      });
-    }
-
-    UIStore.satisfyDependency('transfer-history');
-  }
+  };
 
   renderTransferRateGraph() {
-    if (!this.state.isClientConnected) return null;
+    if (!this.props.isClientConnected) return null;
 
     return (
       <TransferRateGraph
@@ -155,36 +66,20 @@ class TransferData extends React.Component {
   }
 
   render() {
-    let content = null;
-
-    if (!this.isLoading()) {
-      const transferSummary = TransferDataStore.getTransferSummary();
-
-      content = (
-        <div
-          className="client-stats"
-          onMouseMove={this.handleMouseMove}
-          onMouseOut={this.handleMouseOut}
-          onMouseOver={this.handleMouseOver}>
-          <TransferRateDetails
-            isClientConnected={this.state.isClientConnected}
-            inspectorPoint={this.state.graphInspectorPoint}
-            transferSummary={transferSummary}
-          />
-          {this.renderTransferRateGraph()}
-        </div>
-      );
-    } else {
-      content = <LoadingIndicator inverse />;
-    }
-
     return (
       <div
         className="client-stats__wrapper sidebar__item"
         ref={ref => {
           this.wrapperRef = ref;
         }}>
-        {content}
+        <div
+          className="client-stats"
+          onMouseMove={this.handleMouseMove}
+          onMouseOut={this.handleMouseOut}
+          onMouseOver={this.handleMouseOver}>
+          <TransferRateDetails inspectorPoint={this.state.graphInspectorPoint} />
+          {this.renderTransferRateGraph()}
+        </div>
       </div>
     );
   }
@@ -194,4 +89,18 @@ TransferData.defaultProps = {
   historyLength: 1,
 };
 
-export default TransferData;
+const ConnectedTransferData = connectStores(TransferData, () => {
+  return [
+    {
+      store: ClientStatusStore,
+      event: EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          isClientConnected: store.getIsConnected(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedTransferData;

@@ -3,60 +3,51 @@ import React from 'react';
 
 import Alert from './Alert';
 import AlertStore from '../../stores/AlertStore';
+import connectStores from '../../util/connectStores';
 import EventTypes from '../../constants/EventTypes';
 
-const METHODS_TO_BIND = ['handleAlertChange'];
+class Alerts extends React.Component {
+  renderAlerts() {
+    const {alerts} = this.props;
 
-export default class Alerts extends React.Component {
-  constructor(...componentConfig) {
-    super(...componentConfig);
-
-    this.state = {
-      alerts: [],
-    };
-
-    METHODS_TO_BIND.forEach(method => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  componentDidMount() {
-    AlertStore.listen(EventTypes.ALERTS_CHANGE, this.handleAlertChange);
-  }
-
-  componentWillUnmount() {
-    AlertStore.unlisten(EventTypes.ALERTS_CHANGE, this.handleAlertChange);
-  }
-
-  getAlerts() {
-    // TODO: Find a better key
-    // eslint-disable-next-line react/no-array-index-key
-    return this.state.alerts.map((alert, index) => <Alert {...alert} key={index} />);
-  }
-
-  handleAlertChange() {
-    this.setState({alerts: AlertStore.getAlerts()});
-  }
-
-  render() {
-    let alerts = null;
-
-    if (this.state.alerts.length > 0) {
-      alerts = (
+    if (alerts.length > 0) {
+      return (
         <ul className="alerts__list" key="alerts-list">
-          {this.getAlerts()}
+          {this.props.alerts.map(alert => (
+            <Alert {...alert} key={alert.id} />
+          ))}
         </ul>
       );
     }
 
+    return null;
+  }
+
+  render() {
     return (
       <CSSTransitionGroup
         transitionName="alerts__list"
         transitionEnterTimeout={250}
         transitionLeaveTimeout={250}
         className="alerts">
-        {alerts}
+        {this.renderAlerts()}
       </CSSTransitionGroup>
     );
   }
 }
+
+const ConnectedAlerts = connectStores(Alerts, () => {
+  return [
+    {
+      store: AlertStore,
+      event: EventTypes.ALERTS_CHANGE,
+      getValue: ({store}) => {
+        return {
+          alerts: store.getAlerts(),
+        };
+      },
+    },
+  ];
+});
+
+export default ConnectedAlerts;
