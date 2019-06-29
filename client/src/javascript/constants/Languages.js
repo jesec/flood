@@ -19,6 +19,10 @@ const LANGUAGES = {
     defaultMessage: 'Korean',
     id: 'locale.language.ko',
   },
+  zh: {
+    defaultMessage: 'Chinese',
+    id: 'locale.language.zh',
+  },
 };
 
 export default LANGUAGES;
