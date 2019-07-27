@@ -1,4 +1,4 @@
-const geoip = require('geoip-lite');
+const geoip = require('geoip-country');
 const truncateTo = require('./numberUtils');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');

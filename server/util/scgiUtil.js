@@ -31,7 +31,7 @@ const methodCall = (connectionMethod, methodName, parameters) =>
 
     const headerLength = headerItems.reduce((accumulator, headerItem) => accumulator + headerItem.length, 0);
 
-    stream.write(`${headerLength}:${headerItems.join('')},${xml}`);
+    stream.end(`${headerLength}:${headerItems.join('')},${xml}`);
 
     bufferStream(stream)
       .then(data => {
