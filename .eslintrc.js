@@ -23,6 +23,8 @@ module.exports = {
     'no-param-reassign': 0,
     'no-plusplus': 0,
     'no-underscore-dangle': [2, {allow: ['_id']}],
+    'no-unused-vars': [0, { "argsIgnorePattern": "^_" }],
+
     'object-curly-newline': 0,
     'object-curly-spacing': 0,
     'prefer-destructuring': [

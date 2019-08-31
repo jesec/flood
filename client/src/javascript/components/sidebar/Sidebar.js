@@ -12,6 +12,7 @@ import SpeedLimitDropdown from './SpeedLimitDropdown';
 import StatusFilters from './StatusFilters';
 import TagFilters from './TagFilters';
 import TrackerFilters from './TrackerFilters';
+import DiskUsage from './DiskUsage';
 
 const Sidebar = () => {
   return (
@@ -28,6 +29,7 @@ const Sidebar = () => {
       <StatusFilters />
       <TagFilters />
       <TrackerFilters />
+      <DiskUsage />
     </CustomScrollbars>
   );
 };

@@ -12,7 +12,6 @@ $sidebar--icon-button--foreground: rgba($sidebar--foreground, 0.7);
 $sidebar--icon-button--foreground--hover: $blue;
 
 .application {
-
   &__sidebar {
     background: $sidebar--background;
     box-shadow: 1px 0 $sidebar--border;
@@ -27,7 +26,6 @@ $sidebar--icon-button--foreground--hover: $blue;
 }
 
 .sidebar {
-
   &__icon-button {
     color: $sidebar--icon-button--foreground;
     display: block;
@@ -61,7 +59,6 @@ $sidebar--icon-button--foreground--hover: $blue;
   }
 
   &__action {
-
     &--last {
       margin-left: auto;
     }
@@ -72,19 +69,55 @@ $sidebar--icon-button--foreground--hover: $blue;
     padding: $spacing-unit * 1/5;
     justify-content: flex-start;
   }
+
+  &__diskusage {
+    .progress-bar__icon {
+      display: none;
+    }
+    .progress-bar__fill__wrapper {
+      background: rgba($sidebar-filter--foreground, 0.5);
+    }
+    .progress-bar__fill {
+      background: $sidebar-filter--foreground;
+    }
+  }
+}
+
+.diskuage__size-avail {
+  margin-left: 1em;
+}
+
+.diskusage__text-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.diskusage {
+  &__details-list {
+    display: flex;
+
+    &__item {
+      & + .diskusage__details-list__item {
+        margin-left: 10px;
+      }
+    }
+
+    &__label {
+      color: $light-grey;
+      display: block;
+      font-size: 0.9em;
+      font-weight: 600;
+    }
+  }
 }
 
 .dropdown {
-
   &--speed-limits {
-
     .dropdown {
-
       &__content {
         min-width: 180px;
 
         .sidebar {
-
           &__icon-button {
             padding: $spacing-unit * 2/5;
 
