@@ -19,7 +19,7 @@ const filterMountPoint =
 
 const diskUsage = {
   linux: () =>
-    execFile('df --block-size=1024 --portability | tail -n+2', {
+    execFile('df | tail -n+2', {
       shell: true,
       maxBuffer: 4096,
     }).then(({stdout}) =>
