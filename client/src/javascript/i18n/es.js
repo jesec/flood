@@ -40,7 +40,7 @@ export default {
   'button.add': 'Agregar',
   'button.cancel': 'Cancelar',
   'button.no': 'No',
-  'button.save.feed': 'Gaurdar',
+  'button.save.feed': 'Guardar',
   'button.save': 'Guardar Configuración',
   'button.state.adding': 'Agregando...',
   'button.yes': 'Sí',
@@ -52,7 +52,7 @@ export default {
   'feeds.exclude.pattern': 'Patrón de Exclusión',
   'feeds.existing.feeds': 'Fuentes Existentes',
   'feeds.existing.rules': 'Reglas Existentes',
-  'feeds.label': 'Rotulo',
+  'feeds.label': 'Rótulo',
   'feeds.match.count': '{count, plural, =1 {# Encontrado} other {# Encontrados}}',
   'feeds.match.pattern': 'Patrón de Inclusión',
   'feeds.match': 'Encontrado',
@@ -109,7 +109,7 @@ export default {
 
   'mediainfo.execError':
     'Se ha encontrado un error al correr Mediainfo. Confirme que Mediainfo este instalado y disponible a Flood en el PATH',
-  'mediainfo.fetching': 'Fetching...',
+  'mediainfo.fetching': 'Obteniendo...',
   'mediainfo.heading': 'Mediainfo',
 
   'notification.torrent.finished.heading': 'Descarga Completada',
@@ -301,12 +301,12 @@ export default {
   'torrents.properties.upload.speed': 'Velocidad de Subida',
   'torrents.properties.upload.total': 'Cant. Subida',
 
-  'torrents.remove.are.you.sure': `Are you sure you want to remove {count, plural,
-      =0 {zero torrents}
+  'torrents.remove.are.you.sure': `¿Seguro que quiere eliminar {count, plural,
+      =0 {cero torrents}
       =1 {un torrent}
       other {# torrents}
     }?`,
-  'torrents.remove.delete.data': 'Delete data',
+  'torrents.remove.delete.data': 'Eliminar datos',
   'torrents.remove.error.no.torrents.selected': 'No ha seleccionado un torrent.',
   'torrents.remove': 'Eliminar Torrents',
 
