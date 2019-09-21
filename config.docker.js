@@ -10,7 +10,7 @@ const CONFIG = {
     host: process.env.RTORRENT_SCGI_HOST || 'localhost',
     port: process.env.RTORRENT_SCGI_PORT || 5000,
     socket: process.env.RTORRENT_SOCK === 'true' || process.env.RTORRENT_SOCK === true,
-    socketPath: '/data/rtorrent.sock',
+    socketPath: process.env.RTORRENT_SOCK_PATH || '/data/rtorrent.sock',
   },
   ssl: process.env.FLOOD_ENABLE_SSL === 'true' || process.env.FLOOD_ENABLE_SSL === true,
   sslKey: '/data/flood_ssl.key',

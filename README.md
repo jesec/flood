@@ -83,6 +83,6 @@ I've been bad about cutting actual releases, so check this repo for recent commi
     * `FLOOD_SECRET`
     * `FLOOD_ENABLE_SSL`
 
-The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`.
+The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`. The location of the socket file can be overrided by setting `RTORRENT_SOCK_PATH` to the path of the socket.
 
 Check out the [Wiki](https://github.com/Flood-UI/flood/wiki/Docker) for more information.
