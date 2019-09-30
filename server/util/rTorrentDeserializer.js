@@ -7,6 +7,14 @@ let dataIsVal;
 let endOfResponse;
 let rejectCallback;
 
+const unescapeXMLString = (value) =>
+  value
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&apos;/g, "'")
+    .replace(/&quot;/g, '"');
+
 const openTag = (elementName) => {
   if (elementName === 'array' || elementName === 'struct') {
     stackMarks.push(dataStack.length);
@@ -16,7 +24,7 @@ const openTag = (elementName) => {
 };
 
 const onText = (value) => {
-  tmpData.push(value);
+  tmpData.push(unescapeXMLString(value));
 };
 
 const onError = (err) => {
