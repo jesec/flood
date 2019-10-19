@@ -8,7 +8,7 @@ const execFile = util.promisify(require('child_process').execFile);
 const config = require('../../config');
 const diskUsageServiceEvents = require('../constants/diskUsageServiceEvents');
 
-const PLATFORMS_SUPPORTED = ['darwin', 'linux', 'freebsd'];
+const PLATFORMS_SUPPORTED = ['darwin', 'linux', 'freebsd', 'win32'];
 const MAX_BUFFER_SIZE = 65536;
 
 const filterMountPoint =
@@ -59,6 +59,24 @@ const diskUsage = {
             target,
           };
         }),
+    ),
+  win32: () =>
+    execFile('wmic logicaldisk', {
+      shell: true,
+      maxBuffer: MAX_BUFFER_SIZE,
+    }).then(({stdout}) =>
+      stdout
+        .trim()
+        .split('\n')
+        .slice(1)
+        .map(disk => disk.split(/\s+/))
+        .filter(disk => filterMountPoint(disk[1]))
+        .map(disk => ({
+          size: disk[14],
+          used: disk[14] - disk[10],
+          avail: disk[10],
+          target: disk[1],
+        })),
     ),
 };
 
