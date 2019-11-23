@@ -440,7 +440,7 @@ class TorrentListContainer extends React.Component {
         key={hash}
         columns={displayedProperties}
         propWidths={torrentListColumnWidths}
-        selected={selectedTorrents.includes(hash)}
+        isSelected={selectedTorrents.includes(hash)}
         torrent={torrent}
       />
     );

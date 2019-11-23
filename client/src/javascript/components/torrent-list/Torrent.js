@@ -75,7 +75,7 @@ class Torrent extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if (nextProps.selected !== this.props.selected || nextProps.isCondensed !== this.props.isCondensed) {
+    if (nextProps.isSelected !== this.props.isSelected || nextProps.isCondensed !== this.props.isCondensed) {
       return true;
     }
 
