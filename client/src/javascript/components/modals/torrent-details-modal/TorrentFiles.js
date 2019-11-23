@@ -21,7 +21,6 @@ class TorrentFiles extends React.Component {
 
     this.state = {
       allSelected: false,
-      lastSelectedPath: '',
       selectedItems: {},
       selectedFiles: [],
     };

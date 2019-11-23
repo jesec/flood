@@ -101,12 +101,6 @@ class TransferRateDetails extends React.Component {
     );
   }
 
-  handleClientStatusChange() {
-    this.setState({
-      isClientConnected: ClientStatusStore.getIsConnected(),
-    });
-  }
-
   render() {
     return (
       <div className="client-stats__rates">

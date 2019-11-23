@@ -54,24 +54,24 @@ class GlobalContextMenuMountPoint extends React.Component {
     return shouldUpdate;
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (!this.state.isOpen && nextState.isOpen) {
-      global.document.addEventListener('keydown', this.handleKeyPress);
-
-      if (this.props.onMenuOpen) {
-        this.props.onMenuOpen();
-      }
-    } else if (this.state.isOpen && !nextState.isOpen) {
-      global.document.removeEventListener('keydown', this.handleKeyPress);
-
-      if (this.props.onMenuClose) {
-        this.props.onMenuClose();
-      }
-    }
-  }
-
   componentWillUnmount() {
     UIStore.unlisten(EventTypes.UI_CONTEXT_MENU_CHANGE, this.handleContextMenuChange);
+  }
+
+  comnponentDidUpdate(prevProps, prevState) {
+    if (!prevState.isOpen && this.state.isOpen) {
+      global.document.addEventListener('keydown', this.handleKeyPress);
+
+      if (prevProps.onMenuOpen) {
+        prevProps.onMenuOpen();
+      }
+    } else if (prevState.isOpen && !this.state.isOpen) {
+      global.document.removeEventListener('keydown', this.handleKeyPress);
+
+      if (prevProps.onMenuClose) {
+        prevProps.onMenuClose();
+      }
+    }
   }
 
   getMenuItems() {

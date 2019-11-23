@@ -66,24 +66,16 @@ const TORRENT_PRIMITIVES_TO_OBSERVE = ['bytesDone', 'downRate', 'peersTotal', 's
 const TORRENT_ARRAYS_TO_OBSERVE = ['status', 'tags'];
 
 class Torrent extends React.Component {
-  constructor(props) {
+  constructor() {
     super();
-
-    this.state = {
-      isSelected: props.selected,
-    };
 
     METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (
-      nextProps.selected !== this.props.selected ||
-      nextState.isSelected !== this.state.isSelected ||
-      nextProps.isCondensed !== this.props.isCondensed
-    ) {
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.selected !== this.props.selected || nextProps.isCondensed !== this.props.isCondensed) {
       return true;
     }
 
@@ -116,14 +108,6 @@ class Torrent extends React.Component {
     return shouldUpdate;
   }
 
-  componentWillUpdate(nextProps) {
-    if (nextProps.selected !== this.props.selected) {
-      // TODO: Fix this, don't duplicate selected state from props
-      // eslint-disable-next-line react/no-will-update-set-state
-      this.setState({isSelected: nextProps.selected});
-    }
-  }
-
   getTags(tags) {
     return tags.map(tag => (
       <li className="torrent__tag" key={tag}>
@@ -139,7 +123,6 @@ class Torrent extends React.Component {
   }
 
   handleClick(event) {
-    this.setState({isSelected: true});
     this.props.handleClick(this.props.torrent.hash, event);
   }
 
@@ -148,7 +131,7 @@ class Torrent extends React.Component {
   }
 
   handleRightClick(event) {
-    if (!this.state.isSelected) {
+    if (!this.props.isSelected) {
       this.handleClick(event);
     }
 
@@ -156,8 +139,7 @@ class Torrent extends React.Component {
   }
 
   render() {
-    const {isSelected} = this.state;
-    const {isCondensed, columns, torrent} = this.props;
+    const {isCondensed, isSelected, columns, torrent} = this.props;
     const torrentClasses = torrentStatusClasses(
       torrent,
       {

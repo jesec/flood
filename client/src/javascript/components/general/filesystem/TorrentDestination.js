@@ -38,10 +38,10 @@ class NewTorrentDestination extends React.Component {
     this.forceUpdate();
   }
 
-  componentWillUpdate(_nextProps, nextState) {
-    if (!this.state.isDirectoryListOpen && nextState.isDirectoryListOpen) {
+  componentDidUpdate(_prevProps, prevState) {
+    if (!prevState.isDirectoryListOpen && this.state.isDirectoryListOpen) {
       this.addDestinationOpenEventListeners();
-    } else if (this.state.isDirectoryListOpen && !nextState.isDirectoryListOpen) {
+    } else if (prevState.isDirectoryListOpen && !this.state.isDirectoryListOpen) {
       this.removeDestinationOpenEventListeners();
     }
   }

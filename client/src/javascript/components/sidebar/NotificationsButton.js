@@ -187,7 +187,7 @@ class NotificationsButton extends React.Component {
           <span className="notification__category">
             {this.props.intl.formatMessage(MESSAGES[`${notification.id}.heading`])}
           </span>
-          {' — '}
+          ' — '
           <span className="notification__timestamp">
             {date} {this.props.intl.formatMessage(MESSAGES.at)} {time}
           </span>

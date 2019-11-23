@@ -43,16 +43,9 @@ class TorrentListContainer extends React.Component {
     global.addEventListener('resize', this.updateTorrentListViewWidth);
   }
 
-  componentWillUpdate(nextProps) {
-    const {torrentListViewSize} = this.props;
-    if (nextProps.torrentListViewSize !== torrentListViewSize && this.listViewportRef != null) {
-      this.listViewportRef.measureItemHeight();
-    }
-  }
-
   componentDidUpdate(prevProps) {
-    const {torrentListViewSize} = this.props;
-    const isCondensed = torrentListViewSize === 'condensed';
+    const {torrentListViewSize: currentTorrentListViewSize} = this.props;
+    const isCondensed = currentTorrentListViewSize === 'condensed';
     const wasCondensed = prevProps.torrentListViewSize === 'condensed';
 
     if (this.horizontalScrollRef != null && this.state.torrentListViewportSize == null) {
@@ -67,6 +60,10 @@ class TorrentListContainer extends React.Component {
           (this.getTotalCellWidth() - this.listContainer.clientWidth) * -1 + this.lastScrollLeft,
         );
       }
+    }
+
+    if (currentTorrentListViewSize !== prevProps.torrentListViewSize && this.listViewportRef != null) {
+      this.listViewportRef.measureItemHeight();
     }
   }
 

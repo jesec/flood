@@ -17,12 +17,6 @@ const methodsToBind = [
 ];
 
 class ListViewport extends React.Component {
-  static defaultProps = {
-    bottomSpacerClass: 'list__spacer list__spacer--bottom',
-    itemScrollOffset: 10,
-    topSpacerClass: 'list__spacer list__spacer--top',
-  };
-
   static propTypes = {
     bottomSpacerClass: PropTypes.string,
     itemRenderer: PropTypes.func.isRequired,
@@ -31,6 +25,12 @@ class ListViewport extends React.Component {
     listLength: PropTypes.number.isRequired,
     scrollContainerClass: PropTypes.string,
     topSpacerClass: PropTypes.string,
+  };
+
+  static defaultProps = {
+    bottomSpacerClass: 'list__spacer list__spacer--bottom',
+    itemScrollOffset: 10,
+    topSpacerClass: 'list__spacer list__spacer--top',
   };
 
   constructor() {

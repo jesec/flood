@@ -24,11 +24,6 @@ class DirectoryTree extends React.Component {
   constructor() {
     super();
 
-    this.state = {
-      selectedDirectories: [],
-      selectedNodes: [],
-    };
-
     METHODS_TO_BIND.forEach(method => {
       this[method] = this[method].bind(this);
     });
