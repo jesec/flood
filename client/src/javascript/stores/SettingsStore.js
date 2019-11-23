@@ -54,6 +54,7 @@ class SettingsStoreClass extends BaseStore {
         upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
       },
       startTorrentsOnLoad: false,
+      mountPoints: [],
     };
   }
 

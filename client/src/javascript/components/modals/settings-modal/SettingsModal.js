@@ -11,6 +11,7 @@ import Modal from '../Modal';
 import ResourcesTab from './ResourcesTab';
 import SettingsStore from '../../../stores/SettingsStore';
 import UITab from './UITab';
+import DiskUsageTab from './DiskUsageTab';
 
 class SettingsModal extends React.Component {
   state = {
@@ -189,6 +190,16 @@ class SettingsModal extends React.Component {
         props: {
           onSettingsChange: this.handleFloodSettingsChange,
           scrollContainer: this.modalBodyRef,
+        },
+      },
+      diskusage: {
+        content: DiskUsageTab,
+        label: intl.formatMessage({
+          id: 'settings.tabs.diskusage',
+          defaultMessage: 'Disk Usage',
+        }),
+        props: {
+          onSettingsChange: this.handleFloodSettingsChange,
         },
       },
       about: {

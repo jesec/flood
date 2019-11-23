@@ -188,6 +188,7 @@ export default {
   'settings.tabs.resources': 'Resources',
   'settings.tabs.authentication': 'Authentication',
   'settings.tabs.userinterface': 'User Interface',
+  'settings.tabs.diskusage': 'Disk Usage',
   'settings.tabs.about': 'About',
 
   'settings.ui.locale': 'Locale',
@@ -198,6 +199,9 @@ export default {
   'settings.ui.torrent.size.condensed': 'Condensed View',
   'settings.ui.torrent.details.enabled': 'Enabled',
   'settings.ui.torrent.details.tags.placement': 'In the expanded view, tags work best at the end of the list.',
+
+  'settings.diskuseage.show': 'Show',
+  'settings.diskuseage.mount.points': 'Disk Usage Mount Points',
 
   'settings.about.flood': 'About Flood',
 

@@ -7,6 +7,7 @@ import Size from '../general/Size';
 import Tooltip from '../general/Tooltip';
 import connectStores from '../../util/connectStores';
 import ProgressBar from '../general/ProgressBar';
+import SettingsStore from '../../stores/SettingsStore';
 
 const DiskUsageTooltipItem = ({label, value}) => {
   return (
@@ -19,37 +20,45 @@ const DiskUsageTooltipItem = ({label, value}) => {
 
 class DiskUsage extends React.Component {
   getDisks() {
-    return this.props.disks.map(d => {
-      return (
-        <li key={d.target} className="sidebar-filter__item sidebar__diskusage">
-          <Tooltip
-            content={
-              <ul className="diskusage__details-list">
-                <DiskUsageTooltipItem
-                  value={d.used}
-                  label={<FormattedMessage id="status.diskusage.used" defaultMessage="Used" />}
-                />
-                <DiskUsageTooltipItem
-                  value={d.avail}
-                  label={<FormattedMessage id="status.diskusage.free" defaultMessage="Free" />}
-                />
-                <DiskUsageTooltipItem
-                  value={d.size}
-                  label={<FormattedMessage id="status.diskusage.total" defaultMessage="Total" />}
-                />
-              </ul>
-            }
-            position="top"
-            wrapperClassName="diskusage__item">
-            <div className="diskusage__text-row">
-              {d.target}
-              <span>{Math.round((100 * d.used) / d.size)}%</span>
-            </div>
-            <ProgressBar percent={(100 * d.used) / d.size} />
-          </Tooltip>
-        </li>
-      );
-    });
+    const {disks, mountPoints} = this.props;
+    const diskMap = disks.reduce((disksByTarget, disk) => {
+      disksByTarget[disk.target] = disk;
+      return disksByTarget;
+    }, {});
+    return mountPoints
+      .filter(target => target in diskMap)
+      .map(target => diskMap[target])
+      .map(d => {
+        return (
+          <li key={d.target} className="sidebar-filter__item sidebar__diskusage">
+            <Tooltip
+              content={
+                <ul className="diskusage__details-list">
+                  <DiskUsageTooltipItem
+                    value={d.used}
+                    label={<FormattedMessage id="status.diskusage.used" defaultMessage="Used" />}
+                  />
+                  <DiskUsageTooltipItem
+                    value={d.avail}
+                    label={<FormattedMessage id="status.diskusage.free" defaultMessage="Free" />}
+                  />
+                  <DiskUsageTooltipItem
+                    value={d.size}
+                    label={<FormattedMessage id="status.diskusage.total" defaultMessage="Total" />}
+                  />
+                </ul>
+              }
+              position="top"
+              wrapperClassName="diskusage__item">
+              <div className="diskusage__text-row">
+                {d.target}
+                <span>{Math.round((100 * d.used) / d.size)}%</span>
+              </div>
+              <ProgressBar percent={(100 * d.used) / d.size} />
+            </Tooltip>
+          </li>
+        );
+      });
   }
 
   render() {
@@ -77,5 +86,14 @@ export default connectStores(DiskUsage, () => [
     getValue: ({store}) => ({
       disks: store.getDiskUsage(),
     }),
+  },
+  {
+    store: SettingsStore,
+    event: EventTypes.SETTINGS_CHANGE,
+    getValue: ({store}) => {
+      return {
+        mountPoints: store.getFloodSettings('mountPoints'),
+      };
+    },
   },
 ]);
