@@ -1,4 +1,4 @@
-import objectUtil from 'universally-shared-code/util/objectUtil';
+import objectUtil from '@shared/util/objectUtil';
 
 const actionTypes = [
   'AUTH_CREATE_USER_SUCCESS',

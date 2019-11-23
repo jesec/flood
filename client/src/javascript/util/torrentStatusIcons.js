@@ -1,5 +1,5 @@
 import React from 'react';
-import torrentStatusMap from 'universally-shared-code/constants/torrentStatusMap';
+import torrentStatusMap from '@shared/constants/torrentStatusMap';
 
 import ErrorIcon from '../components/icons/ErrorIcon';
 import SpinnerIcon from '../components/icons/SpinnerIcon';

@@ -13,5 +13,6 @@ before_script:
 script:
   - npm run check-source-formatting
   - npm run lint
+  - npm run check-types
   - npm run test
   - npm run build

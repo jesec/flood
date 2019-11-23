@@ -1,4 +1,4 @@
-import {Checkbox, Form, FormRow, Select, SelectItem, Radio} from 'flood-ui-kit';
+import {Checkbox, Form, FormRow} from 'flood-ui-kit';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
@@ -73,7 +73,7 @@ class DiskUsageTab extends SettingsTab {
     this.updateSettings(items);
   };
 
-  renderDiskItem = (item, index) => {
+  renderDiskItem = item => {
     const {id, visible} = item;
     let checkbox = null;
 

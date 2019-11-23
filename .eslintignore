@@ -1,2 +1,4 @@
 /node_modules
 /server/assets
+**/*.d.ts
+/docs

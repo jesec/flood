@@ -1,4 +1,4 @@
-import regEx from 'universally-shared-code/util/regEx';
+import regEx from '@shared/util/regEx';
 
 export const isNotEmpty = value => {
   return value != null && value !== '';

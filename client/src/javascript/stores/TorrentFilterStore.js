@@ -1,4 +1,4 @@
-import diffActionTypes from 'universally-shared-code/constants/diffActionTypes';
+import diffActionTypes from '@shared/constants/diffActionTypes';
 
 import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';

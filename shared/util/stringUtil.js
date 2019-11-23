@@ -11,4 +11,6 @@ module.exports = {
 
     return string;
   },
+
+  withoutTrailingSlash: input => input.replace(/\/{1,}$/, ''),
 };

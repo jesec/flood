@@ -1,4 +1,4 @@
-import serverEventTypes from 'universally-shared-code/constants/serverEventTypes';
+import serverEventTypes from '@shared/constants/serverEventTypes';
 
 import ActionTypes from '../constants/ActionTypes';
 import AlertStore from './AlertStore';

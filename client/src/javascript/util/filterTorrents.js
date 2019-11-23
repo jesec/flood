@@ -1,4 +1,4 @@
-import torrentStatusMap from 'universally-shared-code/constants/torrentStatusMap';
+import torrentStatusMap from '@shared/constants/torrentStatusMap';
 
 export function filterTorrents(torrentList, opts) {
   const {type, filter} = opts;

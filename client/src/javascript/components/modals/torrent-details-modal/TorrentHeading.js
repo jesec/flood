@@ -1,8 +1,8 @@
 import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
-import stringUtil from 'universally-shared-code/util/stringUtil';
-import torrentStatusMap from 'universally-shared-code/constants/torrentStatusMap';
+import stringUtil from '@shared/util/stringUtil';
+import torrentStatusMap from '@shared/constants/torrentStatusMap';
 
 import ClockIcon from '../../icons/ClockIcon';
 import DownloadThickIcon from '../../icons/DownloadThickIcon';

@@ -12,7 +12,7 @@ import {
   SelectItem,
   Textbox,
 } from 'flood-ui-kit';
-import formatUtil from 'universally-shared-code/util/formatUtil';
+import formatUtil from '@shared/util/formatUtil';
 import React from 'react';
 
 import Edit from '../../icons/Edit';

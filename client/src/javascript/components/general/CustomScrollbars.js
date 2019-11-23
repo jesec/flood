@@ -52,10 +52,12 @@ export default class CustomScrollbar extends React.Component {
       children,
       className,
       inverted,
-      getHorizontalThumb,
-      getVerticalThumb,
       nativeScrollHandler,
       scrollHandler,
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+      getHorizontalThumb: _getHorizontalThumb,
+      getVerticalThumb: _getVerticalThumb,
+      /* eslint-enable @typescript-eslint/no-unused-vars */
       ...otherProps
     } = this.props;
     const classes = classnames('scrollbars', className, {

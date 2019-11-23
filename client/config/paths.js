@@ -21,7 +21,7 @@ module.exports = {
   appBuild: resolveApp('server/assets'),
   appPublic: resolveApp('client/src/public/'),
   appHtml: resolveApp('client/src/index.html'),
-  appIndexJs: resolveApp('client/src/javascript/app.js'),
+  appIndex: resolveApp('client/src/javascript/app.tsx'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('./'),
   clientSrc: resolveApp('client/src'),

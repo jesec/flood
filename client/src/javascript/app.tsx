@@ -1,14 +1,16 @@
+import {Router} from 'react-router-dom';
 import {FormattedMessage, IntlProvider} from 'react-intl';
-import {IndexRoute, Router, Route, browserHistory} from 'react-router';
+import {Route} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import * as i18n from './i18n/languages';
-import connectStores from './util/connectStores';
+import connectStores, {EventListenerDescriptor} from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
 import EventTypes from './constants/EventTypes';
 import FloodActions from './actions/FloodActions';
+import history from './util/history';
 import Login from './components/views/Login';
 import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
@@ -17,7 +19,7 @@ import UIStore from './stores/UIStore';
 
 import '../sass/style.scss';
 
-const initialize = () => {
+const initialize = (): void => {
   UIStore.registerDependency({
     id: 'notifications',
     message: <FormattedMessage id="dependency.loading.notifications" defaultMessage="Notifications" />,
@@ -47,15 +49,15 @@ const initialize = () => {
   });
 
   AuthActions.verify().then(
-    ({initialUser}) => {
+    ({initialUser}): void => {
       if (initialUser) {
-        browserHistory.replace('register');
+        history.replace('register');
       } else {
-        browserHistory.replace('overview');
+        history.replace('overview');
       }
     },
-    () => {
-      browserHistory.replace('login');
+    (): void => {
+      history.replace('login');
     },
   );
 
@@ -63,27 +65,28 @@ const initialize = () => {
 };
 
 const appRoutes = (
-  <Router history={browserHistory}>
-    <Route path="/" component={AppWrapper}>
-      <IndexRoute component={Login} />
-      <Route path="login" component={Login} />
-      <Route path="register" component={Register} />
-      <Route path="overview" component={TorrentClientOverview} />
-      <Route path="*" component={Login} />
-    </Route>
+  <Router history={history}>
+    <AppWrapper>
+      <Route path="/login" component={Login} />
+      <Route path="/register" component={Register} />
+      <Route path="/overview" component={TorrentClientOverview} />
+    </AppWrapper>
   </Router>
 );
 
-class FloodApp extends React.Component {
-  componentDidMount() {
+interface InjectedFloodAppProps {
+  locale: keyof typeof i18n;
+}
+
+class FloodApp extends React.Component<InjectedFloodAppProps> {
+  public componentDidMount(): void {
     initialize();
   }
 
-  render() {
+  public render(): React.ReactNode {
     const {locale} = this.props;
 
     return (
-      // eslint-disable-next-line import/namespace
       <IntlProvider locale={locale} messages={i18n[locale]}>
         {appRoutes}
       </IntlProvider>
@@ -91,18 +94,21 @@ class FloodApp extends React.Component {
   }
 }
 
-const ConnectedFloodApp = connectStores(FloodApp, () => {
-  return [
-    {
-      store: SettingsStore,
-      event: EventTypes.SETTINGS_CHANGE,
-      getValue: ({store}) => {
-        return {
-          locale: store.getFloodSettings('language'),
-        };
+const ConnectedFloodApp = connectStores<InjectedFloodAppProps>(
+  FloodApp,
+  (): EventListenerDescriptor<InjectedFloodAppProps>[] => {
+    return [
+      {
+        store: SettingsStore,
+        event: EventTypes.SETTINGS_CHANGE,
+        getValue: (): InjectedFloodAppProps => {
+          return {
+            locale: SettingsStore.getFloodSettings('language'),
+          };
+        },
       },
-    },
-  ];
-});
+    ];
+  },
+);
 
 ReactDOM.render(<ConnectedFloodApp />, document.getElementById('app'));

@@ -1,4 +1,3 @@
-import {browserHistory} from 'react-router';
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
@@ -6,6 +5,7 @@ import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, Pane
 import AuthActions from '../../actions/AuthActions';
 import AuthStore from '../../stores/AuthStore';
 import connectStores from '../../util/connectStores';
+import history from '../../util/history';
 import EventTypes from '../../constants/EventTypes';
 import RtorrentConnectionTypeSelection from '../general/RtorrentConnectionTypeSelection';
 
@@ -53,10 +53,10 @@ class AuthForm extends React.Component {
         password: submission.formData.password,
       })
         .then(() => {
-          this.setState({isSubmitting: false}, () => browserHistory.replace('overview'));
+          this.setState({isSubmitting: false}, () => history.replace('overview'));
         })
         .catch(() => {
-          this.setState({isSubmitting: false}, () => browserHistory.replace('login'));
+          this.setState({isSubmitting: false}, () => history.replace('login'));
         });
     } else {
       AuthActions.register({
@@ -67,7 +67,7 @@ class AuthForm extends React.Component {
         socketPath: submission.formData.rtorrentSocketPath,
         isAdmin: true,
       }).then(() => {
-        this.setState({isSubmitting: false}, () => browserHistory.replace('overview'));
+        this.setState({isSubmitting: false}, () => history.replace('overview'));
       });
     }
   };

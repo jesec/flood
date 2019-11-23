@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {defineMessages, injectIntl} from 'react-intl';
-import formatUtil from 'universally-shared-code/util/formatUtil';
+import formatUtil from '@shared/util/formatUtil';
 import moment from 'moment';
 import React from 'react';
 
