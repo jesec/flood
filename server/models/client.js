@@ -52,7 +52,7 @@ const client = {
       fileRequest.send();
     });
 
-    settings.set(user, {id: 'startTorrentsOnLoad', data: start});
+    settings.set(user, {id: 'startTorrentsOnLoad', data: start === 'true' || start === true});
   },
 
   addUrls(user, services, data, callback) {
