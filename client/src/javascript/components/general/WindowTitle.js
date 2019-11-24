@@ -52,7 +52,6 @@ const WindowTitle = props => {
         );
       }
 
-      console.log('setting title', title);
       document.title = title;
     },
     [intl, summary],
