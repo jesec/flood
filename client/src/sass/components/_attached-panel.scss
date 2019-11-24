@@ -35,7 +35,7 @@ $attached-panel--shadow: #05080a;
     }
   }
 
-  &-leave {
+  &-exit {
     opacity: 1;
 
     &-active {
@@ -45,9 +45,7 @@ $attached-panel--shadow: #05080a;
 }
 
 .textbox {
-
   &--has-attached-panel {
-
     &--is-open {
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;

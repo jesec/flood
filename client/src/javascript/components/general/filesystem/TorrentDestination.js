@@ -9,7 +9,7 @@ import Search from '../../icons/Search';
 import SettingsStore from '../../../stores/SettingsStore';
 import UIStore from '../../../stores/UIStore';
 
-class NewTorrentDestination extends React.Component {
+class TorrentDestination extends React.Component {
   contextMenuInstanceRef = null;
 
   contextMenuNodeRef = null;
@@ -179,4 +179,4 @@ class NewTorrentDestination extends React.Component {
   }
 }
 
-export default injectIntl(NewTorrentDestination, {withRef: true});
+export default injectIntl(TorrentDestination, {withRef: true});

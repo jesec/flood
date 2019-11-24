@@ -1,6 +1,6 @@
 import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from 'flood-ui-kit';
 import classnames from 'classnames';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
@@ -144,9 +144,11 @@ class AuthTab extends SettingsTab {
 
     if (isLoading) {
       loadingIndicator = (
-        <div className="interactive-list__loading-indicator" key="loading-indicator">
-          <LoadingRing />
-        </div>
+        <CSSTransition classNames="interactive-list__loading-indicator" timeout={{enter: 250, exit: 250}}>
+          <div className="interactive-list__loading-indicator" key="loading-indicator">
+            <LoadingRing />
+          </div>
+        </CSSTransition>
       );
     }
 
@@ -163,12 +165,7 @@ class AuthTab extends SettingsTab {
         <FormRow>
           <FormRowItem>
             <ul className={interactiveListClasses}>
-              <CSSTransitionGroup
-                transitionName="interactive-list__loading-indicator"
-                transitionEnterTimeout={250}
-                transitionLeaveTimeout={250}>
-                {loadingIndicator}
-              </CSSTransitionGroup>
+              <TransitionGroup>{loadingIndicator}</TransitionGroup>
               {this.getUserList()}
             </ul>
           </FormRowItem>

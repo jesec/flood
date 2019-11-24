@@ -73,15 +73,16 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     color: $modal--tab--foreground;
     font-size: 0.85rem;
     font-weight: 500;
-    margin: $modal--tabs--margin--top $modal--tabs--margin--right $modal--tabs--margin--bottom $modal--tabs--margin--left;
+    margin: $modal--tabs--margin--top $modal--tabs--margin--right $modal--tabs--margin--bottom
+      $modal--tabs--margin--left;
 
     .modal {
-
       &__tab {
         cursor: pointer;
         display: inline-block;
         margin-right: $spacing-unit * 2/5;
-        padding: $modal--tabs--padding--top $modal--tabs--padding--right $modal--tabs--padding--bottom $modal--tabs--padding--left;
+        padding: $modal--tabs--padding--top $modal--tabs--padding--right $modal--tabs--padding--bottom
+          $modal--tabs--padding--left;
         position: relative;
 
         &:after {
@@ -121,7 +122,6 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     padding: $modal--padding--vertical $modal--padding--horizontal;
 
     &.has-tabs {
-
       .modal--tabs-in-header & {
         padding-bottom: 0;
       }
@@ -130,17 +130,15 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 
   &__content {
     flex: 1 1 auto;
-    padding: $modal--content--padding--top $modal--content--padding--right $modal--content--padding--bottom $modal--content--padding--left;
+    padding: $modal--content--padding--top $modal--content--padding--right $modal--content--padding--bottom
+      $modal--content--padding--left;
     position: relative;
 
     &__wrapper {
       background: $modal--background;
       border-radius: $modal--border-radius;
-      box-shadow:
-        0 0 256px rgba($modal--content--shadow, 0.1),
-        0 2px 4px rgba($modal--content--shadow, 0.5),
-        0 2px 8px rgba($modal--content--shadow, 0.1),
-        0 4px 32px rgba($modal--content--shadow, 0.3);
+      box-shadow: 0 0 256px rgba($modal--content--shadow, 0.1), 0 2px 4px rgba($modal--content--shadow, 0.5),
+        0 2px 8px rgba($modal--content--shadow, 0.1), 0 4px 32px rgba($modal--content--shadow, 0.3);
       display: flex;
       flex-direction: column;
       height: auto;
@@ -167,7 +165,8 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
       }
 
       &__content {
-        padding: $modal--content--padding--top $modal--content--padding--right $modal--content--padding--bottom $modal--content--padding--left;
+        padding: $modal--content--padding--top $modal--content--padding--right $modal--content--padding--bottom
+          $modal--content--padding--left;
       }
     }
   }
@@ -189,7 +188,6 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     padding: 0 $modal--padding--horizontal $modal--padding--vertical $modal--padding--horizontal;
 
     .modal {
-
       &__actions {
         margin-top: 0;
       }
@@ -214,9 +212,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     opacity: 0;
 
     .modal {
-
       &__content {
-
         &__wrapper {
           transform: translate(-50%, 0) scale($modal--transition--scale);
         }
@@ -228,9 +224,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     opacity: 1;
 
     .modal {
-
       &__content {
-
         &__wrapper {
           transform: translate(-50%, 0) scale(1, 1);
         }
@@ -238,14 +232,12 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     }
   }
 
-  &__animation-leave {
+  &__animation-exit {
     opacity: 1;
     pointer-events: none;
 
     .modal {
-
       &__content {
-
         &__wrapper {
           transform: translate(-50%, 0) scale(1, 1);
         }
@@ -253,13 +245,11 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     }
   }
 
-  &__animation-leave-active {
+  &__animation-exit-active {
     opacity: 0;
 
     .modal {
-
       &__content {
-
         &__wrapper {
           transform: translate(-50%, 0) scale($modal--transition--scale);
         }
@@ -268,14 +258,11 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
   }
 
   &--vertical {
-
     &.modal {
-
       &--tabs-in-header {
         flex-direction: row;
 
         .modal {
-
           &__header {
             border-radius: $modal--border-radius 0 0 $modal--border-radius;
             flex-basis: 175px;
@@ -296,9 +283,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
       }
 
       &--tabs-in-body {
-
         .modal {
-
           &__body {
             display: flex;
             flex: 1 1 auto;
@@ -321,16 +306,16 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     }
 
     .modal {
-
       &__tabs {
-        margin: $modal--vertical--tabs--margin--top $modal--vertical--tabs--margin--right $modal--vertical--tabs--margin--bottom $modal--vertical--tabs--margin--left;
+        margin: $modal--vertical--tabs--margin--top $modal--vertical--tabs--margin--right
+          $modal--vertical--tabs--margin--bottom $modal--vertical--tabs--margin--left;
 
         .modal {
-
           &__tab {
             display: block;
             margin-right: 0;
-            padding: $modal--tabs--padding--vertical--top $modal--tabs--padding--vertical--right $modal--tabs--padding--vertical--bottom $modal--tabs--padding--vertical--left;
+            padding: $modal--tabs--padding--vertical--top $modal--tabs--padding--vertical--right
+              $modal--tabs--padding--vertical--bottom $modal--tabs--padding--vertical--left;
 
             &:after {
               bottom: 0;
@@ -364,14 +349,11 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
   }
 
   &--size {
-
     &-large {
       width: 700px;
 
       &.modal {
-
         &__content {
-
           &__wrapper {
             bottom: 10%;
           }
@@ -381,9 +363,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
   }
 
   .form {
-
     &__section {
-
       &__heading {
         color: $modal--heading--foreground;
         font-size: 0.925em;

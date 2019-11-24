@@ -1,4 +1,4 @@
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import React from 'react';
 
 import Alert from './Alert';
@@ -12,11 +12,13 @@ class Alerts extends React.Component {
 
     if (alerts.length > 0) {
       return (
-        <ul className="alerts__list" key="alerts-list">
-          {this.props.alerts.map(alert => (
-            <Alert {...alert} key={alert.id} />
-          ))}
-        </ul>
+        <CSSTransition classNames="alerts__list" timeout={{enter: 250, exit: 250}}>
+          <ul className="alerts__list" key="alerts-list">
+            {this.props.alerts.map(alert => (
+              <Alert {...alert} key={alert.id} />
+            ))}
+          </ul>
+        </CSSTransition>
       );
     }
 
@@ -24,15 +26,7 @@ class Alerts extends React.Component {
   }
 
   render() {
-    return (
-      <CSSTransitionGroup
-        transitionName="alerts__list"
-        transitionEnterTimeout={250}
-        transitionLeaveTimeout={250}
-        className="alerts">
-        {this.renderAlerts()}
-      </CSSTransitionGroup>
-    );
+    return <TransitionGroup>{this.renderAlerts()}</TransitionGroup>;
   }
 }
 

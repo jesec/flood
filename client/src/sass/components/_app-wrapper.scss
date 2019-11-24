@@ -1,5 +1,4 @@
 .application {
-
   &__loading-overlay {
     align-items: center;
     background: $light-blue;
@@ -15,7 +14,7 @@
     width: 100%;
     z-index: 1000;
 
-    &-leave {
+    &-exit {
       opacity: 1;
       transition: opacity 1s;
 

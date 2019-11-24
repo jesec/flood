@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import React from 'react';
 
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
@@ -70,18 +70,16 @@ class Modals extends React.Component {
 
     if (this.props.activeModal != null) {
       modal = (
-        <div key={this.props.activeModal.id} className="modal">
-          <div className="modal__overlay" onClick={this.handleOverlayClick} />
-          {this.getModal()}
-        </div>
+        <CSSTransition key={this.props.activeModal.id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
+          <div className="modal">
+            <div className="modal__overlay" onClick={this.handleOverlayClick} />
+            {this.getModal()}
+          </div>
+        </CSSTransition>
       );
     }
 
-    return (
-      <CSSTransitionGroup transitionName="modal__animation" transitionEnterTimeout={500} transitionLeaveTimeout={500}>
-        {modal}
-      </CSSTransitionGroup>
-    );
+    return <TransitionGroup>{modal}</TransitionGroup>;
   }
 }
 

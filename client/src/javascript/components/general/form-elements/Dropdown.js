@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import classnames from 'classnames';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -142,7 +142,11 @@ class Dropdown extends React.Component {
       </ul>,
     );
 
-    return <div className="dropdown__content menu">{content}</div>;
+    return (
+      <CSSTransition classNames="menu" timeout={{enter: 250, exit: 250}}>
+        <div className="dropdown__content menu">{content}</div>
+      </CSSTransition>
+    );
   }
 
   getDropdownMenuItems(listItems) {
@@ -188,9 +192,7 @@ class Dropdown extends React.Component {
     return (
       <div className={dropdownWrapperClass}>
         {this.getDropdownButton({header: false, trigger: true})}
-        <CSSTransitionGroup transitionName="menu" transitionEnterTimeout={250} transitionLeaveTimeout={250}>
-          {menu}
-        </CSSTransitionGroup>
+        <TransitionGroup>{menu}</TransitionGroup>
       </div>
     );
   }

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import CSSTransitionGroup from 'react-addons-css-transition-group';
+import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -39,9 +39,10 @@ class AuthEnforcer extends React.Component {
 
   renderOverlay() {
     const {isAuthenticated, isClientConnected} = this.props;
+    let content;
 
     if (this.isLoading()) {
-      return (
+      content = (
         <div className="application__loading-overlay">
           <LoadingIndicator inverse />
           {this.renderDependencyList()}
@@ -50,7 +51,7 @@ class AuthEnforcer extends React.Component {
     }
 
     if (isAuthenticated && !isClientConnected) {
-      return (
+      content = (
         <div className="application__loading-overlay">
           <div className="application__entry-barrier">
             <ClientConnectionInterruption />
@@ -59,7 +60,11 @@ class AuthEnforcer extends React.Component {
       );
     }
 
-    return null;
+    return content != null ? (
+      <CSSTransition timeout={{enter: 1000, exit: 1000}} classNames="application__loading-overlay">
+        {content}
+      </CSSTransition>
+    ) : null;
   }
 
   renderDependencyList() {
@@ -86,12 +91,7 @@ class AuthEnforcer extends React.Component {
     return (
       <div className="application">
         <WindowTitle />
-        <CSSTransitionGroup
-          transitionEnterTimeout={1000}
-          transitionLeaveTimeout={1000}
-          transitionName="application__loading-overlay">
-          {this.renderOverlay()}
-        </CSSTransitionGroup>
+        <TransitionGroup>{this.renderOverlay()}</TransitionGroup>
         {this.props.children}
       </div>
     );

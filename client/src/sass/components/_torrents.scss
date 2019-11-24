@@ -41,12 +41,10 @@ $torrents-list--alert--foreground: rgba(#8899a8, 0.5);
 }
 
 .torrent {
-
   &__list {
     position: relative;
 
     &__scrollbars {
-
       &--horizontal {
         left: 0;
         position: absolute !important;
@@ -75,7 +73,6 @@ $torrents-list--alert--foreground: rgba(#8899a8, 0.5);
     }
 
     &--loading {
-
       &-enter {
         opacity: 0;
         transition: opacity 1s;
@@ -85,7 +82,7 @@ $torrents-list--alert--foreground: rgba(#8899a8, 0.5);
         }
       }
 
-      &-leave {
+      &-exit {
         opacity: 1;
         transition: opacity 1s;
 
@@ -102,7 +99,6 @@ $torrents-list--alert--foreground: rgba(#8899a8, 0.5);
 }
 
 .view {
-
   &--torrent-list {
     background: #e9eef2;
     box-shadow: -1px 0 $torrent-list--border;
