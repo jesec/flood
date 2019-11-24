@@ -24,8 +24,8 @@ class SortableList extends React.Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({items: nextProps.items});
+  static getDerivedStateFromProps(props) {
+    return {items: props.items};
   }
 
   handleDrop() {

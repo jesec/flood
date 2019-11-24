@@ -11,11 +11,8 @@ import DiskUsageStore from '../../../stores/DiskUsageStore';
 class DiskUsageTab extends SettingsTab {
   tooltipRef = null;
 
-  state = {
-    diskItems: [],
-  };
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const mountPoints = SettingsStore.getFloodSettings('mountPoints');
     const disks = DiskUsageStore.getDiskUsage().reduce((disksByTarget, disk) => {
       disksByTarget[disk.target] = disk;
@@ -40,7 +37,9 @@ class DiskUsageTab extends SettingsTab {
           })),
       );
 
-    this.setState({diskItems});
+    this.state = {
+      diskItems,
+    };
   }
 
   updateSettings = diskItems => {

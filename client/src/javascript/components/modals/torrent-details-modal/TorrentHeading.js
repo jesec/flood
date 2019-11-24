@@ -34,12 +34,6 @@ export default class TorrentHeading extends React.Component {
     });
   }
 
-  componentWillReceiveProps() {
-    if (this.state.optimisticData.currentStatus) {
-      this.setState({optimisticData: {currentStatus: null}});
-    }
-  }
-
   getCurrentStatus(torrentStatus) {
     if (torrentStatus.includes(torrentStatusMap.stopped)) {
       return 'stop';

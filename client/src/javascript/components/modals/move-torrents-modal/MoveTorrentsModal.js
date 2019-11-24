@@ -9,19 +9,15 @@ import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import TorrentStore from '../../../stores/TorrentStore';
 
 class MoveTorrents extends React.Component {
-  state = {
-    isSettingDownloadPath: false,
-    originalSource: null,
-  };
-
-  componentWillMount() {
+  constructor(props) {
+    super(props);
     const filenames = TorrentStore.getSelectedTorrentsFilename();
     const sources = TorrentStore.getSelectedTorrentsDownloadLocations();
 
-    if (sources.length === 1) {
-      const originalSource = this.removeTrailingFilename(sources[0], filenames[0]);
-      this.setState({originalSource});
-    }
+    this.state = {
+      isSettingDownloadPath: false,
+      originalSource: sources.length === 1 ? this.removeTrailingFilename(sources[0], filenames[0]) : null,
+    };
   }
 
   getActions() {

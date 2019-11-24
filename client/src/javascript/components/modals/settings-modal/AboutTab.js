@@ -10,7 +10,7 @@ export default class AboutTab extends SettingsTab {
     about: null,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     axios.get(AboutMarkdownPath).then(response => {
       this.setState({about: response.data});
     });
