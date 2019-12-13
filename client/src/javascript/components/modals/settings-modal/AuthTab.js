@@ -99,7 +99,7 @@ class AuthTab extends SettingsTab {
         host: this.formData.rtorrentHost,
         port: this.formData.rtorrentPort,
         socketPath: this.formData.rtorrentSocketPath,
-        isAdmin: this.formData.isAdmin === '1',
+        isAdmin: this.formData.isAdmin === true,
       })
         .then(AuthActions.fetchUsers, (error) => {
           this.setState({addUserError: error.response.data.message, isAddingUser: false});
