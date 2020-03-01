@@ -1,4 +1,5 @@
 import React from 'react';
+import Measure from 'react-measure';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
 import connectStores from '../../util/connectStores';
@@ -11,16 +12,6 @@ class TransferData extends React.Component {
     graphInspectorPoint: null,
     sidebarWidth: 0,
   };
-
-  componentDidMount() {
-    const wrapperNode = this.wrapperRef;
-
-    if (wrapperNode != null) {
-      this.setState({
-        sidebarWidth: wrapperNode.offsetWidth,
-      });
-    }
-  }
 
   handleGraphHover = (graphInspectorPoint) => {
     this.setState({graphInspectorPoint});
@@ -67,20 +58,24 @@ class TransferData extends React.Component {
 
   render() {
     return (
-      <div
-        className="client-stats__wrapper sidebar__item"
-        ref={(ref) => {
-          this.wrapperRef = ref;
+      <Measure
+        offset
+        onResize={(contentRect) => {
+          this.setState({sidebarWidth: contentRect.offset.width});
         }}>
-        <div
-          className="client-stats"
-          onMouseMove={this.handleMouseMove}
-          onMouseOut={this.handleMouseOut}
-          onMouseOver={this.handleMouseOver}>
-          <TransferRateDetails inspectorPoint={this.state.graphInspectorPoint} />
-          {this.renderTransferRateGraph()}
-        </div>
-      </div>
+        {({measureRef}) => (
+          <div ref={measureRef} className="client-stats__wrapper sidebar__item">
+            <div
+              className="client-stats"
+              onMouseMove={this.handleMouseMove}
+              onMouseOut={this.handleMouseOut}
+              onMouseOver={this.handleMouseOver}>
+              <TransferRateDetails inspectorPoint={this.state.graphInspectorPoint} />
+              {this.renderTransferRateGraph()}
+            </div>
+          </div>
+        )}
+      </Measure>
     );
   }
 }
