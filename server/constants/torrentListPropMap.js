@@ -53,9 +53,9 @@ torrentListPropMap.set('isComplete', {
   transformValue: booleanTransformer,
 });
 
-torrentListPropMap.set('isHashChecking', {
-  methodCall: 'd.is_hash_checking=',
-  transformValue: booleanTransformer,
+torrentListPropMap.set('isHashing', {
+  methodCall: 'd.hashing=',
+  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('isOpen', {

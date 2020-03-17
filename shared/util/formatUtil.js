@@ -35,10 +35,10 @@ const formatUtil = {
     return string.substr(0, markerPosition);
   },
 
-  status: (isHashChecking, isComplete, isOpen, uploadRate, downloadRate, state, message) => {
+  status: (isHashing, isComplete, isOpen, uploadRate, downloadRate, state, message) => {
     const torrentStatus = [];
 
-    if (isHashChecking === '1') {
+    if (isHashing !== '0') {
       torrentStatus.push('ch'); // checking
     } else if (isComplete === '1' && isOpen === '1' && state === '1') {
       torrentStatus.push('sd'); // seeding

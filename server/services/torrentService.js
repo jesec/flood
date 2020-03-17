@@ -36,11 +36,11 @@ const getTorrentPercentCompleteFromDetails = (torrentDetails) => {
 };
 
 const getTorrentStatusFromDetails = (torrentDetails) => {
-  const {isHashChecking, isComplete, isOpen, upRate, downRate, state, message} = torrentDetails;
+  const {isHashing, isComplete, isOpen, upRate, downRate, state, message} = torrentDetails;
 
   const torrentStatus = [];
 
-  if (isHashChecking) {
+  if (isHashing !== '0') {
     torrentStatus.push(torrentStatusMap.checking);
   } else if (isComplete && isOpen && state === '1') {
     torrentStatus.push(torrentStatusMap.complete);
