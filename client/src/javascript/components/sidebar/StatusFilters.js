@@ -11,6 +11,7 @@ import EventTypes from '../../constants/EventTypes';
 import Inactive from '../icons/Inactive';
 import SidebarFilter from './SidebarFilter';
 import StopIcon from '../icons/StopIcon';
+import SpinnerIcon from '../icons/SpinnerIcon';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
@@ -39,6 +40,14 @@ class StatusFilters extends React.Component {
       },
       {
         label: this.props.intl.formatMessage({
+          id: 'filter.status.checking',
+          defaultMessage: 'Checking',
+        }),
+        slug: 'checking',
+        icon: <SpinnerIcon />,
+      },
+      {
+        label: this.props.intl.formatMessage({
           id: 'filter.status.completed',
           defaultMessage: 'Complete',
         }),
@@ -56,7 +65,7 @@ class StatusFilters extends React.Component {
       {
         label: this.props.intl.formatMessage({
           id: 'filter.status.active',
-          defaultMessage: 'All',
+          defaultMessage: 'Active',
         }),
         slug: 'active',
         icon: <Active />,
