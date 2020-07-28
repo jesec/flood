@@ -15,6 +15,7 @@ const CONFIG = {
   ssl: process.env.FLOOD_ENABLE_SSL === 'true' || process.env.FLOOD_ENABLE_SSL === true,
   sslKey: '/data/flood_ssl.key',
   sslCert: '/data/flood_ssl.cert',
+  disableUsersAndAuth: false,
 };
 
 module.exports = CONFIG;

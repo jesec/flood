@@ -42,6 +42,9 @@ const authValidation = joi.object().keys({
 });
 
 router.use('/', (req, res, next) => {
+  if (config.disableUsersAndAuth) {
+    req.user = Users.getConfigUser();
+  }
   const validation = joi.validate(req.body, authValidation);
 
   if (!validation.error) {
@@ -54,9 +57,14 @@ router.use('/', (req, res, next) => {
   }
 });
 
-router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
+if (!config.disableUsersAndAuth) {
+  router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
+}
 
 router.post('/authenticate', (req, res) => {
+  if (config.disableUsersAndAuth) {
+    return setAuthToken(res, req.user._id, true);
+  }
   const credentials = {
     password: req.body.password,
     username: req.body.username,
@@ -74,44 +82,49 @@ router.post('/authenticate', (req, res) => {
   });
 });
 
-// Allow unauthenticated registration if no users are currently registered.
-router.use('/register', (req, res, next) => {
-  Users.initialUserGate({
-    handleInitialUser: () => {
-      next();
-    },
-    handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (passportReq, passportRes) => {
-        passportRes.json({username: req.username});
-      });
-    },
+if (!config.disableUsersAndAuth) {
+  // Allow unauthenticated registration if no users are currently registered.
+  router.use('/register', (req, res, next) => {
+    Users.initialUserGate({
+      handleInitialUser: () => {
+        next();
+      },
+      handleSubsequentUser: () => {
+        passport.authenticate('jwt', {session: false}, (passportReq, passportRes) => {
+          passportRes.json({username: req.username});
+        });
+      },
+    });
   });
-});
 
-router.post('/register', (req, res) => {
-  // Attempt to save the user
-  Users.createUser(
-    {
-      username: req.body.username,
-      password: req.body.password,
-      host: req.body.host,
-      port: req.body.port,
-      socketPath: req.body.socketPath,
-      isAdmin: true,
-    },
-    (createUserResponse, createUserError) => {
-      if (createUserError) {
-        ajaxUtil.getResponseFn(res)(createUserResponse, createUserError);
-        return;
-      }
+  router.post('/register', (req, res) => {
+    // Attempt to save the user
+    Users.createUser(
+      {
+        username: req.body.username,
+        password: req.body.password,
+        host: req.body.host,
+        port: req.body.port,
+        socketPath: req.body.socketPath,
+        isAdmin: true,
+      },
+      (createUserResponse, createUserError) => {
+        if (createUserError) {
+          ajaxUtil.getResponseFn(res)(createUserResponse, createUserError);
+          return;
+        }
 
-      setAuthToken(res, req.body.username, true);
-    },
-  );
-});
+        setAuthToken(res, req.body.username, true);
+      },
+    );
+  });
+}
 
 // Allow unauthenticated verification if no users are currently registered.
 router.use('/verify', (req, res, next) => {
+  if (config.disableUsersAndAuth) {
+    return next();
+  }
   Users.initialUserGate({
     handleInitialUser: () => {
       req.initialUser = true;
@@ -132,63 +145,65 @@ router.get('/verify', (req, res) => {
   });
 });
 
-// All subsequent routes are protected.
-router.use('/', passport.authenticate('jwt', {session: false}));
+if (!config.disableUsersAndAuth) {
+  // All subsequent routes are protected.
+  router.use('/', passport.authenticate('jwt', {session: false}));
 
-router.get('/logout', (req, res) => {
-  res.clearCookie('jwt').send();
-});
+  router.get('/logout', (req, res) => {
+    res.clearCookie('jwt').send();
+  });
 
-router.use('/users', (req, res, next) => {
-  if (req.user && req.user.isAdmin) {
-    next();
-    return;
-  }
+  router.use('/users', (req, res, next) => {
+    if (req.user && req.user.isAdmin) {
+      next();
+      return;
+    }
 
-  res.status(401).send('Not authorized');
-});
+    res.status(401).send('Not authorized');
+  });
 
-router.get('/users', (req, res) => {
-  Users.listUsers(ajaxUtil.getResponseFn(res));
-});
+  router.get('/users', (req, res) => {
+    Users.listUsers(ajaxUtil.getResponseFn(res));
+  });
 
-router.delete('/users/:username', (req, res) => {
-  Users.removeUser(req.params.username, ajaxUtil.getResponseFn(res));
-  services.destroyUserServices(req.user);
-});
+  router.delete('/users/:username', (req, res) => {
+    Users.removeUser(req.params.username, ajaxUtil.getResponseFn(res));
+    services.destroyUserServices(req.user);
+  });
 
-router.patch('/users/:username', (req, res) => {
-  const {username} = req.params;
-  const userPatch = req.body;
+  router.patch('/users/:username', (req, res) => {
+    const {username} = req.params;
+    const userPatch = req.body;
 
-  if (!userPatch.socketPath) {
-    userPatch.socketPath = null;
-  } else {
-    userPatch.host = null;
-    userPatch.port = null;
-  }
+    if (!userPatch.socketPath) {
+      userPatch.socketPath = null;
+    } else {
+      userPatch.host = null;
+      userPatch.port = null;
+    }
 
-  Users.updateUser(username, userPatch, () => {
-    Users.lookupUser({username}, (err, user) => {
-      if (err) return req.status(500).json({error: err});
-      services.updateUserServices(user);
-      res.send();
+    Users.updateUser(username, userPatch, () => {
+      Users.lookupUser({username}, (err, user) => {
+        if (err) return req.status(500).json({error: err});
+        services.updateUserServices(user);
+        res.send();
+      });
     });
   });
-});
 
-router.put('/users', (req, res) => {
-  Users.createUser(
-    {
-      username: req.body.username,
-      password: req.body.password,
-      host: req.body.host,
-      port: req.body.port,
-      socketPath: req.body.socketPath,
-      isAdmin: req.body.isAdmin,
-    },
-    ajaxUtil.getResponseFn(res),
-  );
-});
+  router.put('/users', (req, res) => {
+    Users.createUser(
+      {
+        username: req.body.username,
+        password: req.body.password,
+        host: req.body.host,
+        port: req.body.port,
+        socketPath: req.body.socketPath,
+        isAdmin: req.body.isAdmin,
+      },
+      ajaxUtil.getResponseFn(res),
+    );
+  });
+}
 
 module.exports = router;

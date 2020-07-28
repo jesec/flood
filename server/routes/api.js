@@ -12,8 +12,17 @@ const eventStream = require('../middleware/eventStream');
 const Filesystem = require('../models/Filesystem');
 const mediainfo = require('../util/mediainfo');
 const settings = require('../models/settings');
+const config = require('../../config');
+const Users = require('../models/Users');
 
-router.use('/', passport.authenticate('jwt', {session: false}), appendUserServices);
+if (config.disableUsersAndAuth) {
+  router.use('/', (req, res, next) => {
+    req.user = Users.getConfigUser();
+    appendUserServices(req, res, next);
+  });
+} else {
+  router.use('/', passport.authenticate('jwt', {session: false}), appendUserServices);
+}
 
 router.use('/client', clientRoutes);
 

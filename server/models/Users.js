@@ -155,7 +155,23 @@ class Users {
     });
   }
 
+  getConfigUser() {
+    const {socket} = config.configUser;
+    return {
+      _id: '_config',
+      username: '_config',
+      host: socket ? null : config.configUser.host,
+      port: socket ? null : config.configUser.port,
+      socketPath: socket ? config.configUser.socketPath : null,
+      password: '',
+      isAdmin: true,
+    };
+  }
+
   listUsers(callback) {
+    if (config.disableUsersAndAuth) {
+      return callback([this.getConfigUser()]);
+    }
     this.db.find({}, (err, users) => {
       if (err) {
         return callback(null, err);

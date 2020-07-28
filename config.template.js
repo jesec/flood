@@ -19,6 +19,23 @@ const CONFIG = {
   dbCleanInterval: 1000 * 60 * 60,
   // Where to store the local nedb database.
   dbPath: './server/db/',
+  // If this is true, there will be no users and no attempt to
+  // authenticate or password-protect any page. In that case,
+  // instead of per-user config, the following configUser settings
+  // will be used.
+  disableUsersAndAuth: false,
+  // Settings for the no-user configuration.
+  configUser: {
+    // How to connect to rTorrent. If this is true, it will connect
+    // to the unix socket defined in socketPath.
+    // Otherwise, it will connect via SCGI with the host and port.
+    socket: true,
+    // Path to the rTorrent unix socket.
+    socketPath: '/path/to/rtorrent.sock',
+    // SCGI host and port to connect to rTorrent.
+    host: 'localhost',
+    port: 5000,
+  },
   // The host that Flood should listen for web connections on.
   // If you want to connect to Flood from hosts other that the one it is running
   // on, you should change this value.
