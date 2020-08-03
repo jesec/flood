@@ -1,6 +1,7 @@
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -184,6 +185,17 @@ module.exports = {
     // having to parse `index.html`.
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'client/src/images/flags/*.png',
+          to: 'static/images/flags',
+          transformPath(targetPath) {
+            return targetPath.replace('client/src/images/flags/', '');
+          },
+        },
+      ],
     }),
   ],
   performance: {

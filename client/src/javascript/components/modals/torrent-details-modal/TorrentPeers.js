@@ -8,63 +8,28 @@ import Checkmark from '../../icons/Checkmark';
 const checkmark = <Checkmark />;
 
 export default class TorrentPeers extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      erroredCountryImages: [],
-    };
-  }
-
-  flagImageAsErrored(countryCode) {
-    const {erroredCountryImages} = this.state;
-    erroredCountryImages.push(countryCode);
-    this.setState({erroredCountryImages});
-  }
-
-  getImageErrorHandlerFn(countryCode) {
-    return () => this.flagImageAsErrored(countryCode);
-  }
-
   render() {
     const {peers} = this.props;
 
     if (peers) {
-      const {erroredCountryImages} = this.state;
       const peerList = peers.map((peer) => {
         const {country: countryCode} = peer;
         const encryptedIcon = peer.isEncrypted ? checkmark : null;
         let peerCountry = null;
 
         if (countryCode) {
-          let image = null;
-
-          if (!erroredCountryImages.includes(countryCode)) {
-            let flagImageSrc;
-            try {
-              // We can ignore the lint warnings becuase we need all of the flags available for request.
-              // eslint-disable-next-line global-require,no-undef,import/no-dynamic-require
-              flagImageSrc = require(`../../../../images/flags/${countryCode.toLowerCase()}.png`);
-            } catch (err) {
-              this.flagImageAsErrored(countryCode);
-              flagImageSrc = null;
-            }
-
-            if (flagImageSrc) {
-              image = (
-                <img
-                  alt={countryCode}
-                  className="peers-list__flag__image"
-                  onError={this.getImageErrorHandlerFn(countryCode)}
-                  src={flagImageSrc}
-                />
-              );
-            }
-          }
-
+          const flagImageSrc = `static/images/flags/${countryCode.toLowerCase()}.png`;
           peerCountry = (
             <span className="peers-list__flag">
-              {image}
+              <img
+                alt={countryCode}
+                className="peers-list__flag__image"
+                src={flagImageSrc}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.style.display = 'none';
+                }}
+              />
               <span className="peers-list__flag__text">{countryCode}</span>
             </span>
           );

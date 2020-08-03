@@ -103,6 +103,7 @@
     "@typescript-eslint/eslint-plugin": "^1.13.0",
     "@typescript-eslint/parser": "^1.13.0",
     "acorn": "^7.4.0",
+    "copy-webpack-plugin": "^6.0.3",
     "eslint": "^5.16.0",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-config-prettier": "^4.3.0",
