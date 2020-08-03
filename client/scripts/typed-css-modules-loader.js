@@ -1,5 +1,5 @@
 const chalk = require('chalk');
-const DtsCreator = require('typed-css-modules');
+const DtsCreator = require('typed-css-modules').default;
 const prettier = require('../../scripts/prettier');
 
 const creator = new DtsCreator();

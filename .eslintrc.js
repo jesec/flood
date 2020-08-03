@@ -7,6 +7,16 @@ module.exports = {
     'class-methods-use-this': 0,
     'consistent-return': 0,
     'implicit-arrow-linebreak': 0,
+    'import/extensions': [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
     'import/no-extraneous-dependencies': 0,
     'import/prefer-default-export': 0,
     'max-len': [
