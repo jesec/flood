@@ -10,18 +10,18 @@ import SettingsActions from './SettingsActions';
 const baseURI = ConfigStore.getBaseURI();
 
 const AuthActions = {
-  authenticate: credentials =>
+  authenticate: (credentials) =>
     axios
       .post(`${baseURI}auth/authenticate`, credentials)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.AUTH_LOGIN_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           // TODO: Handle errors consistently in API, then create a client-side class to get meaningful messages from
           // server's response.
           let errorMessage;
@@ -50,11 +50,11 @@ const AuthActions = {
         ]);
       }),
 
-  createUser: credentials =>
+  createUser: (credentials) =>
     axios
       .put(`${baseURI}auth/users`, credentials)
       .then((json = {}) => json.data)
-      .then(data => {
+      .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_CREATE_USER_SUCCESS,
           data,
@@ -76,12 +76,12 @@ const AuthActions = {
       .then((json = {}) => json.data);
   },
 
-  deleteUser: username =>
+  deleteUser: (username) =>
     axios
       .delete(`${baseURI}auth/users/${encodeURIComponent(username)}`)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.AUTH_DELETE_USER_SUCCESS,
             data: {
@@ -90,7 +90,7 @@ const AuthActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.AUTH_DELETE_USER_ERROR,
             error: {
@@ -105,7 +105,7 @@ const AuthActions = {
     axios
       .get(`${baseURI}auth/users`)
       .then((json = {}) => json.data)
-      .then(data => {
+      .then((data) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LIST_USERS_SUCCESS,
           data,
@@ -119,7 +119,7 @@ const AuthActions = {
           type: ActionTypes.AUTH_LOGOUT_SUCCESS,
         });
       },
-      error => {
+      (error) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.AUTH_LOGOUT_ERROR,
           error,
@@ -127,18 +127,18 @@ const AuthActions = {
       },
     ),
 
-  register: credentials =>
+  register: (credentials) =>
     axios
       .post(`${baseURI}auth/register`, credentials)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.AUTH_REGISTER_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.AUTH_REGISTER_ERROR,
             error: error.response.data.message,
@@ -151,7 +151,7 @@ const AuthActions = {
       .get(`${baseURI}auth/verify?${Date.now()}`)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.AUTH_VERIFY_SUCCESS,
             data,
@@ -161,7 +161,7 @@ const AuthActions = {
             return data;
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.AUTH_VERIFY_ERROR,
             error,

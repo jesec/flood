@@ -79,7 +79,7 @@ class StatusFilters extends React.Component {
       },
     ];
 
-    const filterElements = filters.map(filter => (
+    const filterElements = filters.map((filter) => (
       <SidebarFilter
         handleClick={this.handleClick}
         count={this.props.statusCount[filter.slug] || 0}

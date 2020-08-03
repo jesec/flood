@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const formatUtil = {
-  secondsToDuration: cumSeconds => {
+  secondsToDuration: (cumSeconds) => {
     const years = Math.floor(cumSeconds / 31536000);
     const weeks = Math.floor((cumSeconds % 31536000) / 604800);
     const days = Math.floor(((cumSeconds % 31536000) % 604800) / 86400);
@@ -27,9 +27,9 @@ const formatUtil = {
     return timeRemaining;
   },
 
-  minToHumanReadable: min => moment.duration(min * 60 * 1000).humanize(),
+  minToHumanReadable: (min) => moment.duration(min * 60 * 1000).humanize(),
 
-  parsePeers: string => {
+  parsePeers: (string) => {
     // This lovely delimiter is defined in clientResponseUtil.
     const markerPosition = string.indexOf('@!@');
     return string.substr(0, markerPosition);

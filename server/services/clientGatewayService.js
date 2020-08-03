@@ -76,7 +76,7 @@ class ClientGatewayService extends BaseService {
 
     return this.services.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(response => {
+      .then((response) => {
         if (options.deleteData) {
           const torrentCount = options.hashes.length;
           const filesToDelete = options.hashes.reduce((accumulator, hash, hashIndex) => {
@@ -101,8 +101,8 @@ class ClientGatewayService extends BaseService {
             return accumulator.concat(torrentFilesToDelete);
           }, []);
 
-          filesToDelete.forEach(file => {
-            rimraf(file, {disableGlob: true}, error => {
+          filesToDelete.forEach((file) => {
+            rimraf(file, {disableGlob: true}, (error) => {
               if (error) {
                 console.error(`Error deleting file: ${file}\n${error}`);
               }
@@ -135,17 +135,17 @@ class ClientGatewayService extends BaseService {
     return this.services.clientRequestManager
       .methodCall('d.multicall2', ['', 'main'].concat(options.methodCalls))
       .then(this.processClientRequestSuccess)
-      .then(torrents => this.processTorrentListResponse(torrents, options))
+      .then((torrents) => this.processTorrentListResponse(torrents, options))
       .catch(this.processClientRequestError);
   }
 
   fetchTransferSummary(options) {
-    const methodCalls = options.methodCalls.map(methodName => ({methodName, params: []}));
+    const methodCalls = options.methodCalls.map((methodName) => ({methodName, params: []}));
 
     return this.services.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess)
-      .then(transferRate => this.processTransferRateResponse(transferRate, options))
+      .then((transferRate) => this.processTransferRateResponse(transferRate, options))
       .catch(this.processClientRequestError);
   }
 
@@ -199,7 +199,7 @@ class ClientGatewayService extends BaseService {
         }, {});
 
         // Assign values from external reducers to the torrent list object.
-        this.torrentListReducers.forEach(reducer => {
+        this.torrentListReducers.forEach((reducer) => {
           const {key, reduce} = reducer;
 
           processedTorrentDetailValues[key] = reduce(processedTorrentDetailValues);

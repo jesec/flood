@@ -5,7 +5,7 @@ import Size from '../../general/Size';
 
 class TorrentGeneralInfo extends React.Component {
   getTags(tags) {
-    return tags.map(tag => (
+    return tags.map((tag) => (
       <span className="tag" key={tag}>
         {tag}
       </span>

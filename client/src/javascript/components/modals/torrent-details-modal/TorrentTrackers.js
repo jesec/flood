@@ -10,7 +10,7 @@ export default class TorrentTrackrs extends React.Component {
     const trackerCount = trackers.length;
     const trackerTypes = ['http', 'udp', 'dht'];
 
-    const trackerDetails = trackers.map(tracker => (
+    const trackerDetails = trackers.map((tracker) => (
       <tr key={tracker.url}>
         <td>{tracker.url}</td>
         <td>{trackerTypes[tracker.type - 1]}</td>

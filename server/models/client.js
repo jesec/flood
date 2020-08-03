@@ -88,7 +88,7 @@ const client = {
       const selectedTorrent = services.torrentService.getTorrent(hash);
       if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
-      this.getTorrentDetails(user, services, hash, torrentDetails => {
+      this.getTorrentDetails(user, services, hash, (torrentDetails) => {
         if (!torrentDetails) return res.status(404).json({error: 'Torrent details not found'});
 
         let files;
@@ -98,7 +98,7 @@ const client = {
           files = fileString.split(',');
         }
 
-        const filePathsToDownload = this.findFilesByIndicies(files, torrentDetails.fileTree).map(file =>
+        const filePathsToDownload = this.findFilesByIndicies(files, torrentDetails.fileTree).map((file) =>
           path.join(selectedTorrent.directory, file.path),
         );
 
@@ -115,10 +115,10 @@ const client = {
         const pack = tar.pack();
         pack.pipe(res);
 
-        const tasks = filePathsToDownload.map(filePath => {
+        const tasks = filePathsToDownload.map((filePath) => {
           const filename = path.basename(filePath);
 
-          return next => {
+          return (next) => {
             fs.stat(filePath, (err, stats) => {
               if (err) return next(err);
 
@@ -135,7 +135,7 @@ const client = {
           };
         });
 
-        series(tasks, error => {
+        series(tasks, (error) => {
           if (error) return res.status(500).json(error);
 
           pack.finalize();
@@ -149,7 +149,7 @@ const client = {
   findFilesByIndicies(indices, fileTree = {}) {
     const {directories, files = []} = fileTree;
 
-    let selectedFiles = files.filter(file => indices.includes(`${file.index}`));
+    let selectedFiles = files.filter((file) => indices.includes(`${file.index}`));
 
     if (directories != null) {
       selectedFiles = selectedFiles.concat(
@@ -169,19 +169,19 @@ const client = {
     const response = {};
 
     const outboundTransformation = {
-      throttleGlobalDownMax: apiResponse => Number(apiResponse) / 1024,
-      throttleGlobalUpMax: apiResponse => Number(apiResponse) / 1024,
-      piecesMemoryMax: apiResponse => Number(apiResponse) / (1024 * 1024),
+      throttleGlobalDownMax: (apiResponse) => Number(apiResponse) / 1024,
+      throttleGlobalUpMax: (apiResponse) => Number(apiResponse) / 1024,
+      piecesMemoryMax: (apiResponse) => Number(apiResponse) / (1024 * 1024),
     };
 
     request.fetchSettings({
       options,
-      setRequestedKeysArr: requestedSettingsKeysArr => {
+      setRequestedKeysArr: (requestedSettingsKeysArr) => {
         requestedSettingsKeys = requestedSettingsKeysArr;
       },
     });
 
-    request.postProcess(data => {
+    request.postProcess((data) => {
       if (!data) {
         return null;
       }
@@ -231,7 +231,7 @@ const client = {
     const mainRequest = new ClientRequest(user, services);
 
     const hashesToRestart = hashes.filter(
-      hash => !services.torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped),
+      (hash) => !services.torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped),
     );
 
     let afterCheckHash;
@@ -305,21 +305,21 @@ const client = {
     if (payloads.length === 0) return callback({});
 
     const inboundTransformation = {
-      throttleGlobalDownMax: userInput => ({
+      throttleGlobalDownMax: (userInput) => ({
         id: userInput.id,
         data: Number(userInput.data) * 1024,
       }),
-      throttleGlobalUpMax: userInput => ({
+      throttleGlobalUpMax: (userInput) => ({
         id: userInput.id,
         data: Number(userInput.data) * 1024,
       }),
-      piecesMemoryMax: userInput => ({
+      piecesMemoryMax: (userInput) => ({
         id: userInput.id,
         data: (Number(userInput.data) * 1024 * 1024).toString(),
       }),
     };
 
-    const transformedPayloads = payloads.map(payload => {
+    const transformedPayloads = payloads.map((payload) => {
       if (inboundTransformation[payload.id]) {
         return inboundTransformation[payload.id](payload);
       }

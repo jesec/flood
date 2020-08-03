@@ -61,7 +61,7 @@ class TaxonomyService extends BaseService {
     this.lastTagCounts = Object.assign({}, this.tagCounts);
     this.lastTrackerCounts = Object.assign({}, this.trackerCounts);
 
-    torrentStatusMap.statusShorthand.forEach(statusShorthand => {
+    torrentStatusMap.statusShorthand.forEach((statusShorthand) => {
       this.statusCounts[torrentStatusMap[statusShorthand]] = 0;
     });
 
@@ -83,7 +83,7 @@ class TaxonomyService extends BaseService {
       trackerCounts: objectUtil.getDiff(this.lastTrackerCounts, this.trackerCounts),
     };
 
-    const didDiffChange = Object.keys(taxonomyDiffs).some(diffKey => taxonomyDiffs[diffKey].length > 0);
+    const didDiffChange = Object.keys(taxonomyDiffs).some((diffKey) => taxonomyDiffs[diffKey].length > 0);
 
     if (didDiffChange) {
       this.emit(taxonomyServiceEvents.TAXONOMY_DIFF_CHANGE, {
@@ -100,7 +100,7 @@ class TaxonomyService extends BaseService {
   }
 
   incrementStatusCounts(statuses) {
-    statuses.forEach(status => {
+    statuses.forEach((status) => {
       this.statusCounts[torrentStatusMap[status]]++;
     });
   }
@@ -110,7 +110,7 @@ class TaxonomyService extends BaseService {
       tags = ['untagged'];
     }
 
-    tags.forEach(tag => {
+    tags.forEach((tag) => {
       if (this.tagCounts[tag] != null) {
         this.tagCounts[tag]++;
       } else {
@@ -120,7 +120,7 @@ class TaxonomyService extends BaseService {
   }
 
   incrementTrackerCounts(trackers) {
-    trackers.forEach(tracker => {
+    trackers.forEach((tracker) => {
       if (this.trackerCounts[tracker] != null) {
         this.trackerCounts[tracker]++;
       } else {

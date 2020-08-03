@@ -14,7 +14,7 @@ class Alerts extends React.Component {
       return (
         <CSSTransition classNames="alerts__list" timeout={{enter: 250, exit: 250}}>
           <ul className="alerts__list" key="alerts-list">
-            {this.props.alerts.map(alert => (
+            {this.props.alerts.map((alert) => (
               <Alert {...alert} key={alert.id} />
             ))}
           </ul>

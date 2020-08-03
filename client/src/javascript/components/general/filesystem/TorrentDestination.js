@@ -79,7 +79,7 @@ class TorrentDestination extends React.Component {
   /* eslint-enable react/sort-comp */
 
   handleDirectoryListButtonClick = () => {
-    this.setState(state => {
+    this.setState((state) => {
       const isOpening = !state.isDirectoryListOpen;
 
       return {
@@ -88,7 +88,7 @@ class TorrentDestination extends React.Component {
     });
   };
 
-  handleDirectorySelection = destination => {
+  handleDirectorySelection = (destination) => {
     this.textboxRef.value = destination;
     this.setState({destination});
   };
@@ -111,7 +111,7 @@ class TorrentDestination extends React.Component {
   }
 
   toggleOpenState = () => {
-    this.setState(state => {
+    this.setState((state) => {
       return {
         isDirectoryListOpen: !state.isDirectoryListOpen,
       };
@@ -130,12 +130,12 @@ class TorrentDestination extends React.Component {
             id={this.props.id}
             label={this.props.label}
             onChange={this.handleDestinationInputChange}
-            onClick={event => event.nativeEvent.stopImmediatePropagation()}
+            onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
             placeholder={this.props.intl.formatMessage({
               id: 'torrents.add.destination.placeholder',
               defaultMessage: 'Destination',
             })}
-            setRef={ref => {
+            setRef={(ref) => {
               this.textboxRef = ref;
             }}>
             <FormElementAddon onClick={this.handleDirectoryListButtonClick}>
@@ -144,13 +144,13 @@ class TorrentDestination extends React.Component {
             <Portal>
               <ContextMenu
                 in={isDirectoryListOpen}
-                onClick={event => event.nativeEvent.stopImmediatePropagation()}
+                onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
                 overlayProps={{isInteractive: false}}
                 padding={false}
-                ref={ref => {
+                ref={(ref) => {
                   this.contextMenuInstanceRef = ref;
                 }}
-                setRef={ref => {
+                setRef={(ref) => {
                   this.contextMenuNodeRef = ref;
                 }}
                 scrolling={false}

@@ -4,28 +4,28 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
 
 const UIActions = {
-  displayContextMenu: data => {
+  displayContextMenu: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_CONTEXT_MENU,
       data,
     });
   },
 
-  displayDropdownMenu: data => {
+  displayDropdownMenu: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_DROPDOWN_MENU,
       data,
     });
   },
 
-  displayModal: data => {
+  displayModal: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISPLAY_MODAL,
       data,
     });
   },
 
-  dismissContextMenu: contextMenuID => {
+  dismissContextMenu: (contextMenuID) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_DISMISS_CONTEXT_MENU,
       data: contextMenuID,
@@ -39,35 +39,35 @@ const UIActions = {
     });
   },
 
-  handleDetailsClick: data => {
+  handleDetailsClick: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_CLICK_TORRENT_DETAILS,
       data,
     });
   },
 
-  handleTorrentClick: data => {
+  handleTorrentClick: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_CLICK_TORRENT,
       data,
     });
   },
 
-  setTorrentStatusFilter: data => {
+  setTorrentStatusFilter: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_STATUS_FILTER,
       data,
     });
   },
 
-  setTorrentTagFilter: data => {
+  setTorrentTagFilter: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_TAG_FILTER,
       data,
     });
   },
 
-  setTorrentTrackerFilter: data => {
+  setTorrentTrackerFilter: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_TRACKER_FILTER,
       data,
@@ -75,7 +75,7 @@ const UIActions = {
   },
 
   setTorrentsSearchFilter: _.debounce(
-    data => {
+    (data) => {
       AppDispatcher.dispatchUIAction({
         type: ActionTypes.UI_SET_TORRENT_SEARCH_FILTER,
         data,
@@ -85,7 +85,7 @@ const UIActions = {
     {trailing: true},
   ),
 
-  setTorrentsSort: data => {
+  setTorrentsSort: (data) => {
     AppDispatcher.dispatchUIAction({
       type: ActionTypes.UI_SET_TORRENT_SORT,
       data,

@@ -9,15 +9,13 @@ interface GenericStore {
 
 export interface EventListenerDescriptor<DerivedState, WrappedComponentProps = {}> {
   store: GenericStore;
-  event: (keyof typeof EventTypes) | (keyof typeof EventTypes)[];
-  getValue: (
-    props: {
-      payload: unknown;
-      props: WrappedComponentProps;
-      state: DerivedState;
-      store: GenericStore;
-    },
-  ) => Partial<DerivedState>;
+  event: keyof typeof EventTypes | (keyof typeof EventTypes)[];
+  getValue: (props: {
+    payload: unknown;
+    props: WrappedComponentProps;
+    state: DerivedState;
+    store: GenericStore;
+  }) => Partial<DerivedState>;
 }
 
 const connectStores = <DerivedState extends object, WrappedComponentProps extends object = {}>(
@@ -34,73 +32,60 @@ const connectStores = <DerivedState extends object, WrappedComponentProps extend
 
     private constructor(props: WrappedComponentProps) {
       super(props);
-      this.state = getEventListenerDescriptors(props).reduce(
-        (state, eventListenerDescriptor): DerivedState => {
-          const {store, getValue} = eventListenerDescriptor;
-          return {
-            ...state,
-            ...getValue({state, props, store, payload: null}),
-          };
-        },
-        ({} as unknown) as DerivedState,
-      );
+      this.state = getEventListenerDescriptors(props).reduce((state, eventListenerDescriptor): DerivedState => {
+        const {store, getValue} = eventListenerDescriptor;
+        return {
+          ...state,
+          ...getValue({state, props, store, payload: null}),
+        };
+      }, ({} as unknown) as DerivedState);
     }
 
     public componentDidMount(): void {
       const eventListenerDescriptors = getEventListenerDescriptors(this.props);
 
-      eventListenerDescriptors.forEach(
-        (eventListenerDescriptor): void => {
-          const {store, event, getValue} = eventListenerDescriptor;
-          const eventHandler = (payload: unknown): void =>
-            this.setState(
-              (state: DerivedState, props: WrappedComponentProps): DerivedState =>
-                getValue({state, props, store, payload}) as DerivedState,
-            );
-          const events = Array.isArray(event) ? event : [event];
-
-          events.forEach(
-            (storeEvent): void => {
-              store.listen(storeEvent, eventHandler);
-            },
+      eventListenerDescriptors.forEach((eventListenerDescriptor): void => {
+        const {store, event, getValue} = eventListenerDescriptor;
+        const eventHandler = (payload: unknown): void =>
+          this.setState(
+            (state: DerivedState, props: WrappedComponentProps): DerivedState =>
+              getValue({state, props, store, payload}) as DerivedState,
           );
+        const events = Array.isArray(event) ? event : [event];
 
-          if (this.eventHandlersByStore.get(store) == null) {
-            const newSet: Set<{
-              events: (keyof typeof EventTypes)[];
-              eventHandler: (payload: unknown) => void;
-            }> = new Set();
-            this.eventHandlersByStore.set(store, newSet);
-          }
+        events.forEach((storeEvent): void => {
+          store.listen(storeEvent, eventHandler);
+        });
 
-          const eventHandlersForStore = this.eventHandlersByStore.get(store);
-          if (eventHandlersForStore != null) {
-            eventHandlersForStore.add({events, eventHandler});
-          }
-        },
-      );
+        if (this.eventHandlersByStore.get(store) == null) {
+          const newSet: Set<{
+            events: (keyof typeof EventTypes)[];
+            eventHandler: (payload: unknown) => void;
+          }> = new Set();
+          this.eventHandlersByStore.set(store, newSet);
+        }
+
+        const eventHandlersForStore = this.eventHandlersByStore.get(store);
+        if (eventHandlersForStore != null) {
+          eventHandlersForStore.add({events, eventHandler});
+        }
+      });
     }
 
     public componentWillUnmount(): void {
-      this.eventHandlersByStore.forEach(
-        (listenerDescriptors, store): void => {
-          listenerDescriptors.forEach(
-            ({events, eventHandler}): void => {
-              events.forEach(
-                (event): void => {
-                  store.unlisten(event, eventHandler);
-                },
-              );
-            },
-          );
-        },
-      );
+      this.eventHandlersByStore.forEach((listenerDescriptors, store): void => {
+        listenerDescriptors.forEach(({events, eventHandler}): void => {
+          events.forEach((event): void => {
+            store.unlisten(event, eventHandler);
+          });
+        });
+      });
 
       this.eventHandlersByStore.clear();
     }
 
     public render(): React.ReactNode {
-      return <InputComponent {...this.props as WrappedComponentProps} {...this.state as DerivedState} />;
+      return <InputComponent {...(this.props as WrappedComponentProps)} {...(this.state as DerivedState)} />;
     }
   }
 

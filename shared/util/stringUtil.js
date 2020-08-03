@@ -1,5 +1,5 @@
 module.exports = {
-  capitalize: string => string.charAt(0).toUpperCase() + string.slice(1),
+  capitalize: (string) => string.charAt(0).toUpperCase() + string.slice(1),
 
   pluralize: (string, count) => {
     if (count !== 1) {
@@ -12,5 +12,5 @@ module.exports = {
     return string;
   },
 
-  withoutTrailingSlash: input => input.replace(/\/{1,}$/, ''),
+  withoutTrailingSlash: (input) => input.replace(/\/{1,}$/, ''),
 };

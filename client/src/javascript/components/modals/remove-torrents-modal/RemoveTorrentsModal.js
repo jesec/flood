@@ -79,7 +79,7 @@ class RemoveTorrentsModal extends React.Component {
     return (
       <div className="modal__content inverse">
         <Form
-          ref={ref => {
+          ref={(ref) => {
             this.formRef = ref;
           }}>
           <FormRow>{modalContent}</FormRow>

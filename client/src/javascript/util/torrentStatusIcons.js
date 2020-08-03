@@ -22,10 +22,10 @@ export function torrentStatusIcons(status) {
     running: [status.includes(torrentStatusMap.downloading), status.includes(torrentStatusMap.seeding)],
   };
 
-  Object.keys(statusConditions).some(conditionName => {
+  Object.keys(statusConditions).some((conditionName) => {
     const conditions = statusConditions[conditionName];
 
-    conditions.some(condition => {
+    conditions.some((condition) => {
       if (condition) {
         statusString = conditionName;
       }

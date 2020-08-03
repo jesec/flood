@@ -36,7 +36,7 @@ module.exports = (req, res) => {
   serverEvent.addData({isConnected: !serviceInstances.clientGatewayService.hasError});
   serverEvent.emit();
 
-  const handleDiskUsageChange = diskUsageChange => {
+  const handleDiskUsageChange = (diskUsageChange) => {
     serverEvent.setID(diskUsageChange.id);
     serverEvent.setType(serverEventTypes.DISK_USAGE_CHANGE);
     serverEvent.addData(diskUsageChange.disks);
@@ -101,7 +101,7 @@ module.exports = (req, res) => {
   handleEvents(
     serviceInstances.historyService,
     historyServiceEvents[`${historySnapshotTypes[historySnapshot]}_SNAPSHOT_FULL_UPDATE`],
-    payload => {
+    (payload) => {
       const {data, id} = payload;
 
       serverEvent.setID(id);
@@ -111,7 +111,7 @@ module.exports = (req, res) => {
     },
   );
 
-  handleEvents(serviceInstances.notificationService, notificationServiceEvents.NOTIFICATION_COUNT_CHANGE, payload => {
+  handleEvents(serviceInstances.notificationService, notificationServiceEvents.NOTIFICATION_COUNT_CHANGE, (payload) => {
     const {data, id} = payload;
 
     serverEvent.setID(id);
@@ -121,7 +121,7 @@ module.exports = (req, res) => {
   });
 
   // Add diff event listeners.
-  handleEvents(serviceInstances.historyService, historyServiceEvents.TRANSFER_SUMMARY_DIFF_CHANGE, payload => {
+  handleEvents(serviceInstances.historyService, historyServiceEvents.TRANSFER_SUMMARY_DIFF_CHANGE, (payload) => {
     const {diff, id} = payload;
 
     serverEvent.setID(id);
@@ -130,7 +130,7 @@ module.exports = (req, res) => {
     serverEvent.emit();
   });
 
-  handleEvents(serviceInstances.taxonomyService, taxonomyServiceEvents.TAXONOMY_DIFF_CHANGE, payload => {
+  handleEvents(serviceInstances.taxonomyService, taxonomyServiceEvents.TAXONOMY_DIFF_CHANGE, (payload) => {
     const {diff, id} = payload;
 
     serverEvent.setID(id);
@@ -139,7 +139,7 @@ module.exports = (req, res) => {
     serverEvent.emit();
   });
 
-  handleEvents(serviceInstances.torrentService, torrentServiceEvents.TORRENT_LIST_DIFF_CHANGE, payload => {
+  handleEvents(serviceInstances.torrentService, torrentServiceEvents.TORRENT_LIST_DIFF_CHANGE, (payload) => {
     const {diff, id} = payload;
 
     serverEvent.setID(id);

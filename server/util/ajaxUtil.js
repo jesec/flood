@@ -1,5 +1,5 @@
 const ajaxUtil = {
-  getResponseFn: res => (data, error) => {
+  getResponseFn: (res) => (data, error) => {
     if (error) {
       if (process.env.NODE_ENV === 'development') {
         console.trace(error);

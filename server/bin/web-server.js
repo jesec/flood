@@ -8,7 +8,7 @@ const app = require('../app');
 const config = require('../../config');
 
 // Normalize a port into a number, string, or false.
-const normalizePort = val => {
+const normalizePort = (val) => {
   const port = parseInt(val, 10);
 
   // Named pipe.
@@ -52,7 +52,7 @@ const startWebServer = () => {
     server = http.createServer(app);
   }
 
-  const handleError = error => {
+  const handleError = (error) => {
     if (error.syscall !== 'listen') {
       throw error;
     }

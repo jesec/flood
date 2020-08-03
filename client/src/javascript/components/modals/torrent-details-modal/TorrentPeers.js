@@ -31,7 +31,7 @@ export default class TorrentPeers extends React.Component {
 
     if (peers) {
       const {erroredCountryImages} = this.state;
-      const peerList = peers.map(peer => {
+      const peerList = peers.map((peer) => {
         const {country: countryCode} = peer;
         const encryptedIcon = peer.isEncrypted ? checkmark : null;
         let peerCountry = null;

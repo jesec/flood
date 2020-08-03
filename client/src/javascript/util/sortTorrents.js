@@ -3,7 +3,7 @@
 const stringProps = ['basePath', 'comment', 'hash', 'message', 'name'];
 
 export function sortTorrents(torrentsHash, sortBy) {
-  const torrents = Object.keys(torrentsHash).map(hash => ({hash, ...torrentsHash[hash]}));
+  const torrents = Object.keys(torrentsHash).map((hash) => ({hash, ...torrentsHash[hash]}));
 
   if (torrents.length) {
     const {direction, property} = sortBy;

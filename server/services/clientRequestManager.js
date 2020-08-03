@@ -53,11 +53,11 @@ class ClientRequestManager extends BaseService {
 
     return scgiUtil
       .methodCall(connectionMethod, methodName, parameters)
-      .then(response => {
+      .then((response) => {
         this.handleRequestEnd();
         return response;
       })
-      .catch(error => {
+      .catch((error) => {
         this.handleRequestEnd();
         throw error;
       });

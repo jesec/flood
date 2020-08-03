@@ -135,7 +135,7 @@ class FeedsTab extends React.Component {
   }
 
   getIntervalSelectOptions() {
-    return this.state.intervalmultipliers.map(interval => (
+    return this.state.intervalmultipliers.map((interval) => (
       <SelectItem key={interval.value} id={interval.value}>
         {interval.displayName}
       </SelectItem>
@@ -288,7 +288,7 @@ class FeedsTab extends React.Component {
         className="inverse"
         onChange={this.handleFormChange}
         onSubmit={this.handleFormSubmit}
-        ref={ref => {
+        ref={(ref) => {
           this.formRef = ref;
         }}>
         <ModalFormSectionHeader>
@@ -325,7 +325,7 @@ class FeedsTab extends React.Component {
       );
     }
 
-    const feedsList = feeds.map(feed => this.getFeedsListItem(feed));
+    const feedsList = feeds.map((feed) => this.getFeedsListItem(feed));
 
     return <ul className="interactive-list feed-list">{feedsList}</ul>;
   }
@@ -336,7 +336,7 @@ class FeedsTab extends React.Component {
         className="inverse"
         onChange={this.handleBrowseFeedChange}
         onSubmit={this.handleBrowseFeedSubmit}
-        ref={ref => {
+        ref={(ref) => {
           this.manualAddingFormRef = ref;
         }}>
         <ModalFormSectionHeader>
@@ -410,7 +410,7 @@ class FeedsTab extends React.Component {
     this.checkFieldValidity(event.target.name, formData[event.target.name]);
   };
 
-  handleRemoveFeedClick = feed => {
+  handleRemoveFeedClick = (feed) => {
     FeedMonitorStore.removeFeed(feed._id);
 
     if (feed === this.state.currentlyEditingFeed) {
@@ -422,11 +422,11 @@ class FeedsTab extends React.Component {
     this.setState({currentlyEditingFeed: defaultFeed});
   };
 
-  handleModifyFeedClick = feed => {
+  handleModifyFeedClick = (feed) => {
     this.setState({currentlyEditingFeed: feed});
   };
 
-  handleBrowseFeedChange = input => {
+  handleBrowseFeedChange = (input) => {
     if (input.event.target.type !== 'checkbox') {
       this.setState({selectedFeed: input.formData.feedID});
       FeedMonitorStore.fetchItems({params: {id: input.formData.feedID, search: input.formData.search}});
@@ -488,7 +488,7 @@ class FeedsTab extends React.Component {
   };
 
   render() {
-    const errors = Object.keys(this.state.errors).map(errorID => (
+    const errors = Object.keys(this.state.errors).map((errorID) => (
       <FormRow key={errorID}>
         <FormError>{this.state.errors[errorID]}</FormError>
       </FormRow>

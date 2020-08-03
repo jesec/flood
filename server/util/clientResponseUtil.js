@@ -4,7 +4,7 @@ const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap'
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
 const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
-const processFile = file => {
+const processFile = (file) => {
   file.filename = file.pathComponents[file.pathComponents.length - 1];
   file.percentComplete = truncateTo((file.completedChunks / file.sizeChunks) * 100);
 
@@ -83,7 +83,7 @@ const mapPropsToResponse = (requestedKeys, clientResponse) => {
   );
 };
 
-const processTorrentDetails = data => {
+const processTorrentDetails = (data) => {
   // TODO: This is ugly.
   const peersData = data[0][0] || null;
   const filesData = data[1][0] || null;
@@ -94,7 +94,7 @@ const processTorrentDetails = data => {
   let fileTree = {};
 
   if (peersData && peersData.length) {
-    peers = mapPropsToResponse(torrentPeerPropsMap.props, peersData).map(peer => {
+    peers = mapPropsToResponse(torrentPeerPropsMap.props, peersData).map((peer) => {
       const geoData = geoip.lookup(peer.address) || {};
       peer.country = geoData.country;
 

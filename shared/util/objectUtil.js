@@ -47,7 +47,7 @@ const objectUtil = {
     }, []);
 
     if (shouldCheckForRemovals) {
-      prevObjectKeys.forEach(key => {
+      prevObjectKeys.forEach((key) => {
         if (nextObject[key] == null) {
           diff.push({
             action: diffActionTypes.ITEM_REMOVED,
@@ -60,7 +60,7 @@ const objectUtil = {
     return diff;
   },
 
-  reflect: object =>
+  reflect: (object) =>
     Object.keys(object).reduce((memo, key) => {
       memo[key] = object[key];
       memo[object[key]] = key;

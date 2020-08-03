@@ -1,5 +1,5 @@
 const fileListPropMap = new Map();
-const defaultTransformer = value => value;
+const defaultTransformer = (value) => value;
 
 fileListPropMap.set('path', {
   methodCall: 'f.path=',

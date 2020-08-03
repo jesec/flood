@@ -46,7 +46,7 @@ class ListViewport extends React.Component {
       viewportHeight: null,
     };
 
-    methodsToBind.forEach(method => {
+    methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
     });
 
@@ -235,12 +235,12 @@ class ListViewport extends React.Component {
     const listContent = (
       <ul
         className={props.listClass}
-        ref={ref => {
+        ref={(ref) => {
           nodeRefs.list = ref;
         }}>
         <li
           className={props.topSpacerClass}
-          ref={ref => {
+          ref={(ref) => {
             nodeRefs.topSpacer = ref;
           }}
           style={{height: `${listPadding.top}px`}}
@@ -262,7 +262,7 @@ class ListViewport extends React.Component {
         getVerticalThumb={props.getVerticalThumb}
         onScrollStart={this.handleScrollStart}
         onScrollStop={this.handleScrollStop}
-        ref={ref => {
+        ref={(ref) => {
           this.nodeRefs.outerScrollbar = ref;
         }}
         scrollHandler={this.handleScroll}

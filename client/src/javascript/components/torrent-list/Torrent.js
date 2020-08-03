@@ -15,17 +15,17 @@ import TorrentDetail from './TorrentDetail';
 import UploadThickIcon from '../icons/UploadThickIcon';
 
 const condensedValueTransformers = {
-  downloadTotal: torrent => torrent.bytesDone,
-  peers: torrent => torrent.peersConnected,
-  percentComplete: torrent => (
+  downloadTotal: (torrent) => torrent.bytesDone,
+  peers: (torrent) => torrent.peersConnected,
+  percentComplete: (torrent) => (
     <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
   ),
-  seeds: torrent => torrent.seedsConnected,
+  seeds: (torrent) => torrent.seedsConnected,
 };
 
 const condensedSecondaryValueTransformers = {
-  peers: torrent => torrent.peersTotal,
-  seeds: torrent => torrent.seedsTotal,
+  peers: (torrent) => torrent.peersTotal,
+  seeds: (torrent) => torrent.seedsTotal,
 };
 
 const expandedTorrentSectionContent = {
@@ -37,14 +37,14 @@ const expandedTorrentSectionContent = {
 const expandedTorrentDetailsToHide = ['downTotal'];
 
 const expandedValueTransformers = {
-  peers: torrent => torrent.peersConnected,
-  seeds: torrent => torrent.seedsConnected,
+  peers: (torrent) => torrent.peersConnected,
+  seeds: (torrent) => torrent.seedsConnected,
 };
 
 const expandedSecondaryValueTransformers = {
-  peers: torrent => torrent.peersTotal,
-  seeds: torrent => torrent.seedsTotal,
-  percentComplete: torrent => torrent.bytesDone,
+  peers: (torrent) => torrent.peersTotal,
+  seeds: (torrent) => torrent.seedsTotal,
+  percentComplete: (torrent) => torrent.bytesDone,
 };
 
 const ICONS = {
@@ -69,7 +69,7 @@ class Torrent extends React.Component {
   constructor() {
     super();
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -82,7 +82,7 @@ class Torrent extends React.Component {
     const nextTorrent = nextProps.torrent;
     const {torrent} = this.props;
 
-    let shouldUpdate = TORRENT_ARRAYS_TO_OBSERVE.some(key => {
+    let shouldUpdate = TORRENT_ARRAYS_TO_OBSERVE.some((key) => {
       const nextArr = nextTorrent[key];
       const currentArr = this.props.torrent[key];
 
@@ -92,12 +92,12 @@ class Torrent extends React.Component {
     });
 
     if (!shouldUpdate) {
-      shouldUpdate = TORRENT_PRIMITIVES_TO_OBSERVE.some(key => nextTorrent[key] !== torrent[key]);
+      shouldUpdate = TORRENT_PRIMITIVES_TO_OBSERVE.some((key) => nextTorrent[key] !== torrent[key]);
     }
 
     if (!shouldUpdate) {
       shouldUpdate = Object.keys(nextProps.propWidths).some(
-        key => nextProps.propWidths[key] !== this.props.propWidths[key],
+        (key) => nextProps.propWidths[key] !== this.props.propWidths[key],
       );
     }
 
@@ -109,7 +109,7 @@ class Torrent extends React.Component {
   }
 
   getTags(tags) {
-    return tags.map(tag => (
+    return tags.map((tag) => (
       <li className="torrent__tag" key={tag}>
         {tag}
       </li>

@@ -31,7 +31,7 @@ class DirectoryTreeNode extends React.Component {
       expanded: false,
     };
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -93,7 +93,7 @@ class DirectoryTreeNode extends React.Component {
   }
 
   handleDirectoryClick() {
-    this.setState(state => {
+    this.setState((state) => {
       return {
         expanded: !state.expanded,
       };

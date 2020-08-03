@@ -1,10 +1,10 @@
 import regEx from '@shared/util/regEx';
 
-export const isNotEmpty = value => {
+export const isNotEmpty = (value) => {
   return value != null && value !== '';
 };
 
-export const isRegExValid = regExToCheck => {
+export const isRegExValid = (regExToCheck) => {
   try {
     // eslint-disable-next-line no-new
     new RegExp(regExToCheck);
@@ -15,11 +15,11 @@ export const isRegExValid = regExToCheck => {
   return true;
 };
 
-export const isURLValid = url => {
+export const isURLValid = (url) => {
   return url != null && url !== '' && url.match(regEx.url) !== null;
 };
 
-export const isPositiveInteger = value => {
+export const isPositiveInteger = (value) => {
   if (value === null || value === '') return false;
 
   const number = parseInt(value, 10);

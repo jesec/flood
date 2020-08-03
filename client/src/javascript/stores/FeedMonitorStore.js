@@ -153,7 +153,7 @@ class FeedsStoreClass extends BaseStore {
 
 const FeedsStore = new FeedsStoreClass();
 
-FeedsStore.dispatcherID = AppDispatcher.register(payload => {
+FeedsStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action} = payload;
 
   switch (action.type) {

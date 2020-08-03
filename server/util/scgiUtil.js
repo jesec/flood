@@ -4,10 +4,10 @@ const rTorrentDeserializer = require('./rTorrentDeserializer');
 
 const NULL_CHAR = String.fromCharCode(0);
 
-const bufferStream = stream => {
+const bufferStream = (stream) => {
   const chunks = [];
   return new Promise((resolve, reject) => {
-    stream.on('data', chunk => chunks.push(Buffer.from(chunk)));
+    stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
     stream.on('error', reject);
     stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
   });
@@ -34,7 +34,7 @@ const methodCall = (connectionMethod, methodName, parameters) =>
     stream.end(`${headerLength}:${headerItems.join('')},${xml}`);
 
     bufferStream(stream)
-      .then(data => {
+      .then((data) => {
         rTorrentDeserializer.deserialize(data, resolve, reject);
       })
       .catch(reject);

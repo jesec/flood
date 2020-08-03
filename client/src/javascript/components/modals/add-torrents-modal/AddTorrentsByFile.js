@@ -72,17 +72,17 @@ class AddTorrentsByFile extends React.Component {
     );
   }
 
-  handleFileDrop = files => {
+  handleFileDrop = (files) => {
     const nextErrorsState = this.state.errors;
 
     if (nextErrorsState.files != null) {
       delete nextErrorsState.files;
     }
 
-    this.setState(state => ({errors: nextErrorsState, files: state.files.concat(files)}));
+    this.setState((state) => ({errors: nextErrorsState, files: state.files.concat(files)}));
   };
 
-  handleFileRemove = fileIndex => {
+  handleFileRemove = (fileIndex) => {
     const {files} = this.state;
     files.splice(fileIndex, 1);
     this.setState({files});
@@ -99,11 +99,11 @@ class AddTorrentsByFile extends React.Component {
     const fileData = new FormData();
     const {destination, start, tags, useBasePath} = formData;
 
-    this.state.files.forEach(file => {
+    this.state.files.forEach((file) => {
       fileData.append('torrents', file);
     });
 
-    tags.split(',').forEach(tag => {
+    tags.split(',').forEach((tag) => {
       fileData.append('tags', tag);
     });
 
@@ -119,7 +119,7 @@ class AddTorrentsByFile extends React.Component {
     return (
       <Form
         className="inverse"
-        ref={ref => {
+        ref={(ref) => {
           this.formRef = ref;
         }}>
         <FormRow>{this.getFileDropzone()}</FormRow>

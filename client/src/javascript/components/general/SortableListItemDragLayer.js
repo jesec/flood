@@ -49,7 +49,7 @@ class SortableListItemDragLayer extends Component {
   }
 }
 
-export default DragLayer(monitor => ({
+export default DragLayer((monitor) => ({
   clientOffset: monitor.getClientOffset(),
   differenceFromInitialOffset: monitor.getDifferenceFromInitialOffset(),
   isDragging: monitor.isDragging(),

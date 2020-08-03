@@ -19,7 +19,7 @@ class SettingsButton extends React.Component {
 
     this.tooltipRef = null;
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -39,7 +39,7 @@ class SettingsButton extends React.Component {
       <Tooltip
         content={label}
         onClick={this.handleSettingsButtonClick}
-        ref={ref => {
+        ref={(ref) => {
           this.tooltipRef = ref;
         }}
         position="bottom"

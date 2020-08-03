@@ -102,7 +102,7 @@ class HistoryService extends BaseService {
   }
 
   checkSnapshotDiffs() {
-    Object.keys(historySnapshotTypes).forEach(snapshotType => {
+    Object.keys(historySnapshotTypes).forEach((snapshotType) => {
       this.getHistory({snapshot: historySnapshotTypes[snapshotType]}, (nextSnapshot, error) => {
         if (error) {
           return;

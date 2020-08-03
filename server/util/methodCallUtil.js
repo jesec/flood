@@ -3,7 +3,7 @@ const methodCallUtil = {
     let desiredKeys = Array.from(map.keys());
 
     if (requestedKeys != null) {
-      desiredKeys = desiredKeys.filter(key => requestedKeys.includes(key));
+      desiredKeys = desiredKeys.filter((key) => requestedKeys.includes(key));
     }
 
     return desiredKeys.reduce(

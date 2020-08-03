@@ -26,9 +26,9 @@ class DiskUsage extends React.Component {
       return disksByTarget;
     }, {});
     return mountPoints
-      .filter(target => target in diskMap)
-      .map(target => diskMap[target])
-      .map(d => {
+      .filter((target) => target in diskMap)
+      .map((target) => diskMap[target])
+      .map((d) => {
         return (
           <li key={d.target} className="sidebar-filter__item sidebar__diskusage">
             <Tooltip

@@ -23,15 +23,15 @@ class DiskUsageTab extends SettingsTab {
     // first targets saved in mountPoints that exist in disks
     // then remaing targets from disks
     const diskItems = mountPoints
-      .filter(target => target in disks)
-      .map(target => ({
+      .filter((target) => target in disks)
+      .map((target) => ({
         id: target,
         visible: true,
       }))
       .concat(
         Object.keys(disks)
-          .filter(target => !mountPoints.includes(target))
-          .map(target => ({
+          .filter((target) => !mountPoints.includes(target))
+          .map((target) => ({
             id: target,
             visible: false,
           })),
@@ -42,15 +42,15 @@ class DiskUsageTab extends SettingsTab {
     };
   }
 
-  updateSettings = diskItems => {
-    const mountPoints = diskItems.filter(item => item.visible).map(item => item.id);
+  updateSettings = (diskItems) => {
+    const mountPoints = diskItems.filter((item) => item.visible).map((item) => item.id);
     this.props.onSettingsChange({mountPoints});
   };
 
   handleDiskCheckboxValueChange = (id, value) => {
     const {diskItems} = this.state;
 
-    const newItems = diskItems.map(disk => {
+    const newItems = diskItems.map((disk) => {
       if (disk.id === id) {
         return {...disk, visible: value};
       }
@@ -67,12 +67,12 @@ class DiskUsageTab extends SettingsTab {
     }
   };
 
-  handleDiskMove = items => {
+  handleDiskMove = (items) => {
     this.setState({diskItems: items});
     this.updateSettings(items);
   };
 
-  renderDiskItem = item => {
+  renderDiskItem = (item) => {
     const {id, visible} = item;
     let checkbox = null;
 
@@ -81,7 +81,7 @@ class DiskUsageTab extends SettingsTab {
         <span className="sortable-list__content sortable-list__content--secondary">
           <Checkbox
             checked={visible}
-            onChange={event => this.handleDiskCheckboxValueChange(id, event.target.checked)}
+            onChange={(event) => this.handleDiskCheckboxValueChange(id, event.target.checked)}
             modifier="dark">
             <FormattedMessage id="settings.diskusage.show" defaultMessage="Show" />
           </Checkbox>

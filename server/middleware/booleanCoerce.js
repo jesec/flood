@@ -1,4 +1,4 @@
-module.exports = key => (req, res, next) => {
+module.exports = (key) => (req, res, next) => {
   const value = req.body && req.body[key];
 
   if (value && typeof value === 'string') {

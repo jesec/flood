@@ -7,18 +7,18 @@ import ConfigStore from '../stores/ConfigStore';
 const baseURI = ConfigStore.getBaseURI();
 
 const ClientActions = {
-  fetchSettings: property =>
+  fetchSettings: (property) =>
     axios
       .get(`${baseURI}api/client/settings`, {params: {property}})
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SETTINGS_FETCH_REQUEST_ERROR,
             error,
@@ -31,14 +31,14 @@ const ClientActions = {
       .patch(`${baseURI}api/client/settings`, settings)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SETTINGS_SAVE_SUCCESS,
             data,
             options,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SETTINGS_SAVE_ERROR,
             error,
@@ -55,7 +55,7 @@ const ClientActions = {
       })
       .then((json = {}) => json.data)
       .then(
-        transferData => {
+        (transferData) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SET_THROTTLE_SUCCESS,
             data: {
@@ -63,7 +63,7 @@ const ClientActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SET_THROTTLE_ERROR,
             data: {
@@ -73,7 +73,7 @@ const ClientActions = {
         },
       ),
 
-  testClientConnectionSettings: connectionSettings => {
+  testClientConnectionSettings: (connectionSettings) => {
     const requestPayload = {
       host: connectionSettings.rtorrentHost,
       port: connectionSettings.rtorrentPort,

@@ -28,7 +28,7 @@ class NavigationList extends React.Component {
   }
 
   getNavigationItems(items) {
-    return items.map(item => {
+    return items.map((item) => {
       let selectedSlug = null;
 
       if (this.state.selectedItem) {

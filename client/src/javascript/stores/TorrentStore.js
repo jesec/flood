@@ -20,7 +20,7 @@ import UIStore from './UIStore';
 const pollInterval = ConfigStore.getPollInterval();
 
 // TODO: Handle these events in the respective stores
-const handleRemoveTorrentsSuccess = response => {
+const handleRemoveTorrentsSuccess = (response) => {
   SettingsStore.saveFloodSettings({
     id: 'deleteTorrentData',
     data: response.deleteData,
@@ -35,7 +35,7 @@ const handleRemoveTorrentsSuccess = response => {
   });
 };
 
-const handleRemoveTorrentsError = error => {
+const handleRemoveTorrentsError = (error) => {
   AlertStore.add({
     accumulation: {
       id: 'alert.torrent.remove.failed',
@@ -113,15 +113,15 @@ class TorrentStoreClass extends BaseStore {
   }
 
   getSelectedTorrentsDownloadLocations() {
-    return this.selectedTorrents.map(hash => this.torrents[hash].basePath);
+    return this.selectedTorrents.map((hash) => this.torrents[hash].basePath);
   }
 
   getSelectedTorrentsFilename() {
-    return this.selectedTorrents.map(hash => this.torrents[hash].baseFilename);
+    return this.selectedTorrents.map((hash) => this.torrents[hash].baseFilename);
   }
 
   getSelectedTorrentsTags() {
-    return this.selectedTorrents.map(hash => this.torrents[hash].tags);
+    return this.selectedTorrents.map((hash) => this.torrents[hash].tags);
   }
 
   handleAddTorrentError() {
@@ -211,7 +211,7 @@ class TorrentStoreClass extends BaseStore {
   }
 
   handleTorrentListDiffChange(torrentListDiff) {
-    Object.keys(torrentListDiff).forEach(torrentHash => {
+    Object.keys(torrentListDiff).forEach((torrentHash) => {
       const {action, data} = torrentListDiff[torrentHash];
 
       switch (action) {
@@ -220,13 +220,13 @@ class TorrentStoreClass extends BaseStore {
           break;
         case serverEventTypes.TORRENT_LIST_ACTION_TORRENT_DELETED:
           if (this.selectedTorrents.includes(torrentHash)) {
-            this.selectedTorrents = this.selectedTorrents.filter(hash => hash !== torrentHash);
+            this.selectedTorrents = this.selectedTorrents.filter((hash) => hash !== torrentHash);
           }
 
           delete this.torrents[torrentHash];
           break;
         case serverEventTypes.TORRENT_LIST_ACTION_TORRENT_DETAIL_UPDATED:
-          Object.keys(data).forEach(detailKey => {
+          Object.keys(data).forEach((detailKey) => {
             this.torrents[torrentHash][detailKey] = data[detailKey];
           });
           break;
@@ -285,7 +285,7 @@ class TorrentStoreClass extends BaseStore {
 
 const TorrentStore = new TorrentStoreClass();
 
-TorrentStore.dispatcherID = AppDispatcher.register(payload => {
+TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action} = payload;
 
   switch (action.type) {

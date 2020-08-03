@@ -95,11 +95,11 @@ class DownloadRulesTab extends React.Component {
       error: this.props.intl.formatMessage(MESSAGES.mustSpecifyLabel),
     },
     match: {
-      isValid: value => validators.isNotEmpty(value) && validators.isRegExValid(value),
+      isValid: (value) => validators.isNotEmpty(value) && validators.isRegExValid(value),
       error: this.props.intl.formatMessage(MESSAGES.invalidRegularExpression),
     },
     exclude: {
-      isValid: value => {
+      isValid: (value) => {
         if (validators.isNotEmpty(value)) {
           return validators.isRegExValid(value);
         }
@@ -287,7 +287,7 @@ class DownloadRulesTab extends React.Component {
     }
 
     if (rule.tags && rule.tags.length > 0) {
-      const tagNodes = rule.tags.map(tag => (
+      const tagNodes = rule.tags.map((tag) => (
         <span className="tag" key={tag}>
           {tag}
         </span>
@@ -365,7 +365,7 @@ class DownloadRulesTab extends React.Component {
       );
     }
 
-    const rulesList = rules.map(rule => this.getRulesListItem(rule));
+    const rulesList = rules.map((rule) => this.getRulesListItem(rule));
 
     return <ul className="interactive-list">{rulesList}</ul>;
   }
@@ -426,7 +426,7 @@ class DownloadRulesTab extends React.Component {
   }
 
   render() {
-    const errors = Object.keys(this.state.errors).map(errorID => (
+    const errors = Object.keys(this.state.errors).map((errorID) => (
       <FormRow key={errorID}>
         <FormError>{this.state.errors[errorID]}</FormError>
       </FormRow>
@@ -437,7 +437,7 @@ class DownloadRulesTab extends React.Component {
         className="inverse"
         onChange={this.handleFormChange}
         onSubmit={this.handleFormSubmit}
-        ref={ref => {
+        ref={(ref) => {
           this.formRef = ref;
         }}>
         <ModalFormSectionHeader>

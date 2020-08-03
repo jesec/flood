@@ -68,11 +68,7 @@ module.exports = {
               // Necessary for external CSS imports to work
               // https://github.com/facebookincubator/create-react-app/issues/2677
               ident: 'postcss',
-              plugins: () => [
-                autoprefixer({
-                  browsers: ['>1%'],
-                }),
-              ],
+              plugins: () => [autoprefixer()],
             },
           },
           {
@@ -172,7 +168,7 @@ module.exports = {
     // In development, we always serve from the root. This makes config easier.
     publicPath: '/',
     // Point sourcemap entries to original disk location (format as URL on Windows)
-    devtoolModuleFilenameTemplate: info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+    devtoolModuleFilenameTemplate: (info) => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   plugins: [
     // Makes some environment variables available in index.html.

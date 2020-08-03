@@ -9,7 +9,7 @@ export default class ModalTabs extends React.Component {
   }
 
   render() {
-    const tabs = Object.keys(this.props.tabs).map(tabId => {
+    const tabs = Object.keys(this.props.tabs).map((tabId) => {
       const currentTab = this.props.tabs[tabId];
 
       currentTab.id = tabId;

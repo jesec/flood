@@ -30,7 +30,7 @@ const addTagsToRequest = (tagsArr, requestParameters) => {
   return requestParameters;
 };
 
-const getEnsuredArray = item => {
+const getEnsuredArray = (item) => {
   if (!util.isArray(item)) {
     return [item];
   }
@@ -70,7 +70,7 @@ class ClientRequest {
   // TODO: Move this to util, doesn't belong here
   createDirectory(options) {
     if (options.path) {
-      mkdirp(options.path, error => {
+      mkdirp(options.path, (error) => {
         if (error) {
           console.trace('Error creating directory.', error);
         }
@@ -123,10 +123,7 @@ class ClientRequest {
     const handleSuccess = this.handleSuccess.bind(this);
     const handleError = this.handleError.bind(this);
 
-    this.clientRequestManager
-      .methodCall('system.multicall', [this.requests])
-      .then(handleSuccess)
-      .catch(handleError);
+    this.clientRequestManager.methodCall('system.multicall', [this.requests]).then(handleSuccess).catch(handleError);
   }
 
   // TODO: Separate these and add support for additional clients.
@@ -135,7 +132,7 @@ class ClientRequest {
     const files = getEnsuredArray(options.files);
     const {path: destinationPath, isBasePath, start, tags: tagsArr} = options;
 
-    files.forEach(file => {
+    files.forEach((file) => {
       let methodCall = 'load.raw_start';
       let parameters = ['', file.buffer];
       const timeAdded = Math.floor(Date.now() / 1000);
@@ -167,7 +164,7 @@ class ClientRequest {
     const {path: destinationPath, isBasePath, start, tags: tagsArr} = options;
     const urls = getEnsuredArray(options.urls);
 
-    urls.forEach(url => {
+    urls.forEach((url) => {
       let methodCall = 'load.start';
       let parameters = ['', url];
       const timeAdded = Math.floor(Date.now() / 1000);
@@ -195,7 +192,7 @@ class ClientRequest {
   checkHash(options) {
     const {torrentService} = this.services;
     const hashes = getEnsuredArray(options.hashes);
-    const stoppedHashes = hashes.filter(hash =>
+    const stoppedHashes = hashes.filter((hash) =>
       torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped),
     );
 
@@ -203,7 +200,7 @@ class ClientRequest {
 
     this.stopTorrents({hashes});
 
-    hashes.forEach(hash => {
+    hashes.forEach((hash) => {
       this.requests.push(getMethodCall('d.check_hash', [hash]));
 
       if (!stoppedHashes.includes(hash)) {
@@ -220,7 +217,7 @@ class ClientRequest {
     let {requestedSettings} = options;
 
     if (requestedSettings == null) {
-      requestedSettings = clientSettingsMap.defaults.map(settingsKey => clientSettingsMap[settingsKey]);
+      requestedSettings = clientSettingsMap.defaults.map((settingsKey) => clientSettingsMap[settingsKey]);
     }
 
     // Ensure client's response gets mapped to the correct requested keys.
@@ -228,7 +225,7 @@ class ClientRequest {
       options.setRequestedKeysArr(requestedSettings);
     }
 
-    requestedSettings.forEach(settingsKey => {
+    requestedSettings.forEach((settingsKey) => {
       this.requests.push(getMethodCall(settingsKey));
     });
   }
@@ -248,7 +245,7 @@ class ClientRequest {
   }
 
   getTransferData() {
-    Object.keys(rTorrentPropMap.transferData).forEach(key => {
+    Object.keys(rTorrentPropMap.transferData).forEach((key) => {
       this.requests.push(getMethodCall(rTorrentPropMap.transferData[key]));
     });
   }
@@ -290,7 +287,7 @@ class ClientRequest {
       pathMethod = 'd.directory.set';
     }
 
-    hashes.forEach(hash => {
+    hashes.forEach((hash) => {
       this.requests.push(getMethodCall(pathMethod, [hash, options.path]));
       this.requests.push(getMethodCall('d.open', [hash]));
       this.requests.push(getMethodCall('d.close', [hash]));
@@ -301,8 +298,8 @@ class ClientRequest {
     const fileIndices = getEnsuredArray(options.fileIndices);
     const hashes = getEnsuredArray(options.hashes);
 
-    hashes.forEach(hash => {
-      fileIndices.forEach(fileIndex => {
+    hashes.forEach((hash) => {
+      fileIndices.forEach((fileIndex) => {
         this.requests.push(getMethodCall('f.priority.set', [`${hash}:f${fileIndex}`, options.priority]));
       });
       this.requests.push(getMethodCall('d.update_priorities', [hash]));
@@ -312,7 +309,7 @@ class ClientRequest {
   setPriority(options) {
     const hashes = getEnsuredArray(options.hashes);
 
-    hashes.forEach(hash => {
+    hashes.forEach((hash) => {
       this.requests.push(getMethodCall('d.priority.set', [hash, options.priority]));
       this.requests.push(getMethodCall('d.update_priorities', [hash]));
     });
@@ -321,7 +318,7 @@ class ClientRequest {
   setSettings(options) {
     const settings = getEnsuredArray(options.settings);
 
-    settings.forEach(setting => {
+    settings.forEach((setting) => {
       if (setting.overrideLocalSetting) {
         this.requests.push(getMethodCall(setting.id, setting.data));
       } else {
@@ -345,7 +342,7 @@ class ClientRequest {
       }, [])
       .join(',');
 
-    getEnsuredArray(options.hashes).forEach(hash => {
+    getEnsuredArray(options.hashes).forEach((hash) => {
       this.requests.push(getMethodCall(methodName, [hash, tags]));
     });
   }
@@ -364,7 +361,7 @@ class ClientRequest {
       return;
     }
 
-    getEnsuredArray(options.hashes).forEach(hash => {
+    getEnsuredArray(options.hashes).forEach((hash) => {
       this.requests.push(getMethodCall('d.open', [hash]));
       this.requests.push(getMethodCall('d.start', [hash]));
     });
@@ -376,7 +373,7 @@ class ClientRequest {
       return;
     }
 
-    getEnsuredArray(options.hashes).forEach(hash => {
+    getEnsuredArray(options.hashes).forEach((hash) => {
       this.requests.push(getMethodCall('d.stop', [hash]));
       this.requests.push(getMethodCall('d.close', [hash]));
     });

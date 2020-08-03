@@ -8,7 +8,7 @@ const Feed = require('../models/Feed');
 const regEx = require('../../shared/util/regEx');
 
 // TODO: Allow users to specify which key contains the URLs.
-const getTorrentUrlsFromItem = feedItem => {
+const getTorrentUrlsFromItem = (feedItem) => {
   // If we've got an Array of enclosures, we'll iterate over the values and
   // look for the url key.
   if (feedItem.enclosures && Array.isArray(feedItem.enclosures)) {
@@ -43,14 +43,14 @@ const getTorrentUrlsFromItem = feedItem => {
 
 const getItemsMatchingRules = (feedItems, rules, feed) => {
   return feedItems.reduce((matchedItems, feedItem) => {
-    rules.forEach(rule => {
+    rules.forEach((rule) => {
       const isMatched = new RegExp(rule.match, 'gi').test(feedItem[rule.field]);
       const isExcluded = rule.exclude !== '' && new RegExp(rule.exclude, 'gi').test(feedItem[rule.field]);
 
       if (isMatched && !isExcluded) {
         const torrentUrls = getTorrentUrlsFromItem(feedItem);
-        const isAlreadyDownloaded = matchedItems.some(matchedItem =>
-          torrentUrls.every(url => matchedItem.urls.includes(url)),
+        const isAlreadyDownloaded = matchedItems.some((matchedItem) =>
+          torrentUrls.every((url) => matchedItem.urls.includes(url)),
         );
 
         if (!isAlreadyDownloaded) {
@@ -73,7 +73,7 @@ const getItemsMatchingRules = (feedItems, rules, feed) => {
   }, []);
 };
 
-const getUrlsFromItems = feedItems => {
+const getUrlsFromItems = (feedItems) => {
   return feedItems.reduce((urls, feedItem) => urls.concat(feedItem.urls), []);
 };
 
@@ -88,17 +88,17 @@ class FeedService extends BaseService {
   }
 
   addFeed(feed, callback) {
-    this.addItem('feed', feed, newFeed => {
+    this.addItem('feed', feed, (newFeed) => {
       this.startNewFeed(newFeed);
       callback(newFeed);
     });
   }
 
   modifyFeed(id, feedToModify, callback) {
-    const modifiedFeed = this.feeds.find(feed => feed.options._id === id);
+    const modifiedFeed = this.feeds.find((feed) => feed.options._id === id);
     modifiedFeed.stopReader();
     modifiedFeed.modify(feedToModify);
-    this.modifyItem(id, feedToModify, err => {
+    this.modifyItem(id, feedToModify, (err) => {
       callback(err);
     });
   }
@@ -121,7 +121,7 @@ class FeedService extends BaseService {
       return;
     }
 
-    this.db.update({_id: id}, {$set: newItem}, {}, err => {
+    this.db.update({_id: id}, {$set: newItem}, {}, (err) => {
       if (err) {
         callback(null, err);
         return;
@@ -146,7 +146,7 @@ class FeedService extends BaseService {
 
       this.rules[newRule.feedID].push(newRule);
 
-      const associatedFeed = this.feeds.find(feed => feed.options._id === newRule.feedID);
+      const associatedFeed = this.feeds.find((feed) => feed.options._id === newRule.feedID);
 
       if (associatedFeed) {
         this.handleNewItems({
@@ -187,13 +187,13 @@ class FeedService extends BaseService {
   }
 
   getItems(query, callback) {
-    const selectedFeed = this.feeds.find(feed => feed.options._id === query.id);
+    const selectedFeed = this.feeds.find((feed) => feed.options._id === query.id);
 
     if (selectedFeed) {
       const items = selectedFeed.getItems();
 
       if (query.search) {
-        callback(items.filter(item => item.title.toLowerCase().indexOf(query.search.toLowerCase()) !== -1));
+        callback(items.filter((item) => item.title.toLowerCase().indexOf(query.search.toLowerCase()) !== -1));
       } else {
         callback(items);
       }
@@ -220,13 +220,13 @@ class FeedService extends BaseService {
 
   handleNewItems({items: feedItems, feed}) {
     this.getPreviouslyMatchedUrls()
-      .then(previouslyMatchedUrls => {
+      .then((previouslyMatchedUrls) => {
         const applicableRules = this.rules[feed._id];
         if (!applicableRules) return;
 
         const itemsMatchingRules = getItemsMatchingRules(feedItems, applicableRules, feed);
-        const itemsToDownload = itemsMatchingRules.filter(item =>
-          item.urls.some(url => !previouslyMatchedUrls.includes(url)),
+        const itemsToDownload = itemsMatchingRules.filter((item) =>
+          item.urls.some((url) => !previouslyMatchedUrls.includes(url)),
         );
 
         const lastAddUrlCallback = () => {
@@ -235,7 +235,7 @@ class FeedService extends BaseService {
           this.db.update({type: 'matchedTorrents'}, {$push: {urls: {$each: urlsToAdd}}}, {upsert: true});
 
           this.services.notificationService.addNotification(
-            itemsToDownload.map(item => ({
+            itemsToDownload.map((item) => ({
               id: 'notification.feed.downloaded.torrent',
               data: {
                 feedLabel: item.feedLabel,
@@ -291,7 +291,7 @@ class FeedService extends BaseService {
       );
 
       // Add all download rules to the local state.
-      feedsSummary.rules.forEach(rule => {
+      feedsSummary.rules.forEach((rule) => {
         if (this.rules[rule.feedID] == null) {
           this.rules[rule.feedID] = [];
         }
@@ -300,7 +300,7 @@ class FeedService extends BaseService {
       });
 
       // Initiate all feeds.
-      feedsSummary.feeds.forEach(feed => {
+      feedsSummary.feeds.forEach((feed) => {
         this.startNewFeed(feed);
       });
     });

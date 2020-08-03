@@ -59,7 +59,7 @@ class AddTorrentsByURL extends React.Component {
     return (
       <Form
         className="inverse"
-        ref={ref => {
+        ref={(ref) => {
           this.formRef = ref;
         }}>
         <TextboxRepeater

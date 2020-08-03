@@ -37,7 +37,7 @@ class AuthTab extends SettingsTab {
 
     const currentUsername = AuthStore.getCurrentUsername();
 
-    return userList.map(user => {
+    return userList.map((user) => {
       const isCurrentUser = user.username === currentUsername;
       let badge = null;
       let removeIcon = null;
@@ -101,7 +101,7 @@ class AuthTab extends SettingsTab {
         socketPath: this.formData.rtorrentSocketPath,
         isAdmin: this.formData.isAdmin === '1',
       })
-        .then(AuthActions.fetchUsers, error => {
+        .then(AuthActions.fetchUsers, (error) => {
           this.setState({addUserError: error.response.data.message, isAddingUser: false});
         })
         .then(() => {
@@ -156,7 +156,7 @@ class AuthTab extends SettingsTab {
       <Form
         onChange={this.handleFormChange}
         onSubmit={this.handleFormSubmit}
-        ref={ref => {
+        ref={(ref) => {
           this.formRef = ref;
         }}>
         <ModalFormSectionHeader>

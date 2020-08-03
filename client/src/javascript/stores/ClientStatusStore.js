@@ -24,7 +24,7 @@ class ClientStatusStoreClass extends BaseStore {
 
 const ClientStatusStore = new ClientStatusStoreClass();
 
-ClientStatusStore.dispatcherID = AppDispatcher.register(payload => {
+ClientStatusStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action} = payload;
 
   switch (action.type) {

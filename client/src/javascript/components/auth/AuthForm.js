@@ -42,7 +42,7 @@ class AuthForm extends React.Component {
     });
   }
 
-  handleFormSubmit = submission => {
+  handleFormSubmit = (submission) => {
     submission.event.preventDefault();
 
     this.setState({isSubmitting: true});
@@ -82,7 +82,7 @@ class AuthForm extends React.Component {
         <Panel spacing="large">
           <Form
             onSubmit={this.handleFormSubmit}
-            ref={ref => {
+            ref={(ref) => {
               this.formRef = ref;
             }}>
             <PanelHeader>

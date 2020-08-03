@@ -58,11 +58,7 @@ module.exports = {
               // Necessary for external CSS imports to work
               // https://github.com/facebookincubator/create-react-app/issues/2677
               ident: 'postcss',
-              plugins: () => [
-                autoprefixer({
-                  browsers: ['>1%'],
-                }),
-              ],
+              plugins: () => [autoprefixer()],
             },
           },
           {
@@ -157,7 +153,7 @@ module.exports = {
     // It requires a trailing slash, or the file assets will get an incorrect path.
     publicPath: paths.servedPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
-    devtoolModuleFilenameTemplate: info => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/'),
+    devtoolModuleFilenameTemplate: (info) => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   plugins: [
     // Makes some environment variables available in index.html.

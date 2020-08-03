@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const config = require('../../../config');
 const Users = require('../../models/Users');
 
-const log = data => {
+const log = (data) => {
   if (process.env.DEBUG) {
     console.log(data);
   }
@@ -23,7 +23,7 @@ const migrate = () => {
 
       migrateResolve(
         Promise.all(
-          users.map(user => {
+          users.map((user) => {
             let userPatch = null;
 
             // A bug in this script caused all of these xmlrpc values to be defined in the user db.

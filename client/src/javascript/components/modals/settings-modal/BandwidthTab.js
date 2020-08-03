@@ -44,7 +44,7 @@ export default class BandwidthTab extends SettingsTab {
       return;
     }
 
-    return speeds.map(speed => Number(speed) / 1024).join(', ');
+    return speeds.map((speed) => Number(speed) / 1024).join(', ');
   }
 
   processSpeedsForSave(speeds = '') {
@@ -55,7 +55,7 @@ export default class BandwidthTab extends SettingsTab {
     return speeds
       .replace(/\s/g, '')
       .split(',')
-      .map(speed => Number(speed) * 1024);
+      .map((speed) => Number(speed) * 1024);
   }
 
   render() {

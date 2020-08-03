@@ -284,7 +284,7 @@ class NotificationsButton extends React.Component {
 
   handleNewerNotificationsClick = () => {
     if (this.state.paginationStart - NOTIFICATIONS_PER_PAGE >= 0) {
-      this.setState(state => {
+      this.setState((state) => {
         const paginationStart = state.paginationStart - NOTIFICATIONS_PER_PAGE;
         return {
           paginationStart,
@@ -295,7 +295,7 @@ class NotificationsButton extends React.Component {
 
   handleOlderNotificationsClick = () => {
     if (this.props.count.total > this.state.paginationStart + NOTIFICATIONS_PER_PAGE) {
-      this.setState(state => {
+      this.setState((state) => {
         const paginationStart = state.paginationStart + NOTIFICATIONS_PER_PAGE;
         return {
           paginationStart,
@@ -315,7 +315,7 @@ class NotificationsButton extends React.Component {
         content={this.getTooltipContent()}
         interactive={this.props.count.total !== 0}
         onOpen={this.handleTooltipOpen}
-        ref={ref => {
+        ref={(ref) => {
           this.tooltipRef = ref;
         }}
         width={this.props.count.total === 0 ? null : 340}

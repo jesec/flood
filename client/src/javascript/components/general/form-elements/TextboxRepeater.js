@@ -51,16 +51,16 @@ export default class TextboxRepeater extends React.PureComponent {
       );
     });
 
-  handleTextboxAdd = index => {
-    this.setState(state => {
+  handleTextboxAdd = (index) => {
+    this.setState((state) => {
       const textboxes = Object.assign([], state.textboxes);
       textboxes.splice(index + 1, 0, {id: this.getID(), value: ''});
       return {textboxes};
     });
   };
 
-  handleTextboxRemove = index => {
-    this.setState(state => {
+  handleTextboxRemove = (index) => {
+    this.setState((state) => {
       const textboxes = Object.assign([], state.textboxes);
       textboxes.splice(index, 1);
       return {textboxes};

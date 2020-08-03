@@ -45,7 +45,7 @@ class SpeedLimitDropdown extends React.Component {
       <Tooltip
         content={label}
         position="bottom"
-        ref={node => {
+        ref={(node) => {
           this.tooltipRef = node;
         }}
         wrapperClassName="sidebar__icon-button tooltip__wrapper">
@@ -73,7 +73,7 @@ class SpeedLimitDropdown extends React.Component {
     const currentThrottle = this.props.currentThrottles;
     const speeds = this.props.speedLimits[property];
 
-    const items = speeds.map(bytes => {
+    const items = speeds.map((bytes) => {
       let selected = false;
       bytes = Number(bytes);
 

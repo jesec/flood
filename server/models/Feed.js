@@ -60,7 +60,7 @@ class Feed {
 
   initReader() {
     this.reader.on('items', this.handleFeedItems.bind(this));
-    this.reader.on('error', error => {
+    this.reader.on('error', (error) => {
       console.log('Feed reader error:', error);
     });
     this.reader.start();

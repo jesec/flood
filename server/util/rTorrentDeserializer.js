@@ -7,7 +7,7 @@ let dataIsVal;
 let endOfResponse;
 let rejectCallback;
 
-const openTag = elementName => {
+const openTag = (elementName) => {
   if (elementName === 'array' || elementName === 'struct') {
     stackMarks.push(dataStack.length);
   }
@@ -15,15 +15,15 @@ const openTag = elementName => {
   dataIsVal = elementName === 'value';
 };
 
-const onText = value => {
+const onText = (value) => {
   tmpData.push(value);
 };
 
-const onError = err => {
+const onError = (err) => {
   rejectCallback(err);
 };
 
-const closeTag = elementName => {
+const closeTag = (elementName) => {
   let stackMark;
   const tagValue = tmpData.join('');
   // types that rTorrent uses:

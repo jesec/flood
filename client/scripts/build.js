@@ -5,7 +5,7 @@ process.env.NODE_ENV = 'production';
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
 // terminate the Node.js process with a non-zero exit code.
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   throw err;
 });
 
@@ -35,12 +35,12 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndex])) {
 const copyPublicFolder = () => {
   fs.copySync(paths.appPublic, paths.appBuild, {
     dereference: true,
-    filter: file => file !== paths.appHtml,
+    filter: (file) => file !== paths.appHtml,
   });
 };
 
 // Create the production build and print the deployment instructions.
-const build = previousFileSizes => {
+const build = (previousFileSizes) => {
   console.log('Creating an optimized production build...');
 
   const compiler = webpack(config);
@@ -77,7 +77,7 @@ const build = previousFileSizes => {
 // First, read the current file sizes in build directory.
 // This lets us display how much they changed later.
 measureFileSizesBeforeBuild(paths.appBuild)
-  .then(previousFileSizes => {
+  .then((previousFileSizes) => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.appBuild);
@@ -106,7 +106,7 @@ measureFileSizesBeforeBuild(paths.appBuild)
         WARN_AFTER_CHUNK_GZIP_SIZE,
       );
     },
-    err => {
+    (err) => {
       console.log(chalk.red('Failed to compile.\n'));
       console.log(`${err.message || err}\n`);
       process.exit(1);

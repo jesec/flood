@@ -23,7 +23,7 @@ class SearchBox extends React.Component {
     TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CLEAR, this.resetSearch);
   }
 
-  handleSearchChange = event => {
+  handleSearchChange = (event) => {
     const {value} = event.target;
     this.setState({isSearchActive: value !== ''});
     UIActions.setTorrentsSearchFilter(value);
@@ -35,7 +35,7 @@ class SearchBox extends React.Component {
   };
 
   resetSearch = () => {
-    this.setState(state => {
+    this.setState((state) => {
       return {
         inputFieldKey: state.inputFieldKey + 1,
         isSearchActive: false,

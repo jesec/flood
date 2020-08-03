@@ -22,7 +22,7 @@ class SortDropdown extends React.Component {
   constructor() {
     super();
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -49,7 +49,7 @@ class SortDropdown extends React.Component {
 
   getDropdownMenus() {
     const {direction, selectedProperty} = this.props;
-    const items = SORT_PROPERTIES.map(sortProp => {
+    const items = SORT_PROPERTIES.map((sortProp) => {
       const isSelected = sortProp === selectedProperty;
       const directionIndicator = isSelected ? (
         <span className={`sort-dropdown__indicator sort-dropdown__indicator--${direction}`} />

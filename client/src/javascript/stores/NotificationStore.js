@@ -57,7 +57,7 @@ class NotificationStoreClass extends BaseStore {
 
 const NotificationStore = new NotificationStoreClass();
 
-NotificationStore.dispatcherID = AppDispatcher.register(payload => {
+NotificationStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action} = payload;
 
   switch (action.type) {

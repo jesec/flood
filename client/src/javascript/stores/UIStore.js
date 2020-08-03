@@ -101,7 +101,7 @@ class UIStoreClass extends BaseStore {
   }
 
   removeGlobalStyle(cssString) {
-    this.globalStyles = this.globalStyles.filter(style => style !== cssString);
+    this.globalStyles = this.globalStyles.filter((style) => style !== cssString);
 
     this.applyStyles();
   }
@@ -111,7 +111,7 @@ class UIStoreClass extends BaseStore {
       dependencies = [dependencies];
     }
 
-    dependencies.forEach(dependency => {
+    dependencies.forEach((dependency) => {
       const {id} = dependency;
 
       if (!this.dependencies[id]) {
@@ -150,7 +150,7 @@ class UIStoreClass extends BaseStore {
   }
 
   verifyDependencies() {
-    const isDependencyLoading = Object.keys(this.dependencies).some(id => this.dependencies[id].satisfied === false);
+    const isDependencyLoading = Object.keys(this.dependencies).some((id) => this.dependencies[id].satisfied === false);
 
     if (!isDependencyLoading) {
       this.haveUIDependenciesResolved = true;
@@ -161,7 +161,7 @@ class UIStoreClass extends BaseStore {
 
 const UIStore = new UIStoreClass();
 
-UIStore.dispatcherID = AppDispatcher.register(payload => {
+UIStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action} = payload;
 
   switch (action.type) {

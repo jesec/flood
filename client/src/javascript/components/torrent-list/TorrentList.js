@@ -255,7 +255,7 @@ class TorrentListContainer extends React.Component {
     });
   };
 
-  handleFileDrop = files => {
+  handleFileDrop = (files) => {
     const destination =
       SettingsStore.getFloodSettings('torrentDestination') || SettingsStore.getClientSettings('directoryDefault') || '';
 
@@ -265,7 +265,7 @@ class TorrentListContainer extends React.Component {
 
     const fileData = new FormData();
 
-    files.forEach(file => {
+    files.forEach((file) => {
       fileData.append('torrents', file);
     });
 
@@ -344,7 +344,7 @@ class TorrentListContainer extends React.Component {
         <div
           className="scrollbars__thumb scrollbars__thumb--horizontal scrollbars__thumb--surrogate"
           onMouseUp={onMouseUp}
-          ref={ref => {
+          ref={(ref) => {
             this.verticalScrollbarThumb = ref;
           }}
           role="button"
@@ -354,7 +354,7 @@ class TorrentListContainer extends React.Component {
     );
   };
 
-  bindExternalPriorityChangeHandler = priorityChangeHandler => {
+  bindExternalPriorityChangeHandler = (priorityChangeHandler) => {
     this.handleTorrentPriorityChange = priorityChangeHandler;
   };
 
@@ -384,7 +384,7 @@ class TorrentListContainer extends React.Component {
     TorrentActions.setPriority(hash, level);
   }
 
-  handleHorizontalScroll = event => {
+  handleHorizontalScroll = (event) => {
     if (this.verticalScrollbarThumb != null) {
       const {clientWidth, scrollLeft, scrollWidth} = event.target;
       this.lastScrollLeft = scrollLeft;
@@ -396,7 +396,7 @@ class TorrentListContainer extends React.Component {
     this.setState({tableScrollLeft: this.lastScrollLeft});
   };
 
-  handlePropWidthChange = newPropWidths => {
+  handlePropWidthChange = (newPropWidths) => {
     SettingsStore.saveFloodSettings({
       id: 'torrentListColumnWidths',
       data: {...this.props.torrentListColumnWidths, ...newPropWidths},
@@ -417,11 +417,11 @@ class TorrentListContainer extends React.Component {
   );
   /* eslint-enable react/sort-comp */
 
-  updateVerticalThumbPosition = offset => {
+  updateVerticalThumbPosition = (offset) => {
     this.verticalScrollbarThumb.style.transform = `translateX(${offset}px)`;
   };
 
-  renderListItem = index => {
+  renderListItem = (index) => {
     const selectedTorrents = TorrentStore.getSelectedTorrents();
     const {displayedProperties, torrentListViewSize, torrentListColumnWidths, torrents} = this.props;
     const torrent = torrents[index];
@@ -474,7 +474,7 @@ class TorrentListContainer extends React.Component {
           itemRenderer={this.renderListItem}
           listClass="torrent__list"
           listLength={torrents.length}
-          ref={ref => {
+          ref={(ref) => {
             this.listViewportRef = ref;
           }}
           scrollContainerClass="torrent__list__scrollbars--vertical"
@@ -501,7 +501,7 @@ class TorrentListContainer extends React.Component {
       <Dropzone
         activeClassName="dropzone--is-dragging"
         className="dropzone dropzone--with-overlay torrents"
-        ref={ref => {
+        ref={(ref) => {
           this.listContainer = ref;
         }}
         onDrop={this.handleFileDrop}
@@ -511,7 +511,7 @@ class TorrentListContainer extends React.Component {
           className="torrent__list__scrollbars--horizontal"
           onScrollStop={this.handleHorizontalScrollStop}
           nativeScrollHandler={this.handleHorizontalScroll}
-          ref={ref => {
+          ref={(ref) => {
             this.horizontalScrollRef = ref;
           }}>
           <div className="torrent__list__wrapper" style={listWrapperStyle}>

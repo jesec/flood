@@ -25,7 +25,7 @@ class NavigationList extends React.Component {
   }
 
   getNavigationItems(items) {
-    return items.map(item => {
+    return items.map((item) => {
       const classes = classnames(this.props.itemClassName, {
         [this.props.selectedClassName]: item.slug === this.state.selectedItem,
       });

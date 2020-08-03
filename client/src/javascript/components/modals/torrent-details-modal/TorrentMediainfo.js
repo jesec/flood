@@ -53,7 +53,7 @@ class TorrentMediainfo extends React.Component {
           fetchMediainfoError: null,
         });
       },
-      error => {
+      (error) => {
         this.setState({
           isFetchingMediainfo: false,
           fetchMediainfoError: error,
@@ -134,7 +134,7 @@ class TorrentMediainfo extends React.Component {
             wrapperClassName="tooltip__wrapper mediainfo__toolbar__item">
             <Button
               priority="tertiary"
-              buttonRef={ref => {
+              buttonRef={(ref) => {
                 this.copyButtonRef = ref;
               }}>
               <ClipboardIcon />

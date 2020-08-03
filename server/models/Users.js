@@ -34,14 +34,14 @@ class Users {
 
       argon2
         .verify(user.password, credentials.password)
-        .then(argon2Match => {
+        .then((argon2Match) => {
           if (argon2Match) {
             return callback(argon2Match, user.isAdmin);
           }
 
           callback(null, argon2Match, false);
         })
-        .catch(error => callback(null, error));
+        .catch((error) => callback(null, error));
     });
   }
 
@@ -58,7 +58,7 @@ class Users {
 
     argon2
       .hash(password)
-      .then(hash => {
+      .then((hash) => {
         this.db.insert(
           {
             username,
@@ -83,7 +83,7 @@ class Users {
           },
         );
       })
-      .catch(error => {
+      .catch((error) => {
         callback(null, error);
       });
   }
@@ -99,7 +99,7 @@ class Users {
         return callback(null, user);
       }
 
-      this.db.remove({username}, {}, removeError => {
+      this.db.remove({username}, {}, (removeError) => {
         if (removeError) {
           return callback(null, removeError);
         }

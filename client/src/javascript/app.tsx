@@ -94,21 +94,20 @@ class FloodApp extends React.Component<InjectedFloodAppProps> {
   }
 }
 
-const ConnectedFloodApp = connectStores<InjectedFloodAppProps>(
-  FloodApp,
-  (): EventListenerDescriptor<InjectedFloodAppProps>[] => {
-    return [
-      {
-        store: SettingsStore,
-        event: EventTypes.SETTINGS_CHANGE,
-        getValue: (): InjectedFloodAppProps => {
-          return {
-            locale: SettingsStore.getFloodSettings('language'),
-          };
-        },
+const ConnectedFloodApp = connectStores<InjectedFloodAppProps>(FloodApp, (): EventListenerDescriptor<
+  InjectedFloodAppProps
+>[] => {
+  return [
+    {
+      store: SettingsStore,
+      event: EventTypes.SETTINGS_CHANGE,
+      getValue: (): InjectedFloodAppProps => {
+        return {
+          locale: SettingsStore.getFloodSettings('language'),
+        };
       },
-    ];
-  },
-);
+    },
+  ];
+});
 
 ReactDOM.render(<ConnectedFloodApp />, document.getElementById('app'));

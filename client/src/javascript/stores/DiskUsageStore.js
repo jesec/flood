@@ -21,7 +21,7 @@ class DiskUsageStoreClass extends BaseStore {
 
 const DiskUsageStore = new DiskUsageStoreClass();
 
-DiskUsageStore.dispatcherID = AppDispatcher.register(payload => {
+DiskUsageStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action} = payload;
   switch (action.type) {
     case ActionTypes.DISK_USAGE_CHANGE:

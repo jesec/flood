@@ -29,7 +29,9 @@ class AuthEnforcer extends React.Component {
     // Allow the UI to load if the user is not authenticated.
     if (!isAuthenticated) return false;
     // Iterate over current dependencies looking for unsatisified dependencies.
-    const isDependencyActive = Object.keys(dependencies).some(dependencyKey => !dependencies[dependencyKey].satisfied);
+    const isDependencyActive = Object.keys(dependencies).some(
+      (dependencyKey) => !dependencies[dependencyKey].satisfied,
+    );
     // If any dependency is unsatisfied, show the loading indicator.
     if (isDependencyActive) return true;
     // Dismiss the loading indicator if the UI store thinks all dependencies
@@ -69,7 +71,7 @@ class AuthEnforcer extends React.Component {
 
   renderDependencyList() {
     const {dependencies} = this.props;
-    const listItems = Object.keys(dependencies).map(id => {
+    const listItems = Object.keys(dependencies).map((id) => {
       const {message, satisfied} = dependencies[id];
       const statusIcon = ICONS.satisfied;
       const classes = classnames('dependency-list__dependency', {

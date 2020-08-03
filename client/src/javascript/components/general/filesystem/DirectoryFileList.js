@@ -27,7 +27,7 @@ class DirectoryFiles extends React.Component {
   constructor() {
     super();
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -80,7 +80,7 @@ class DirectoryFiles extends React.Component {
 
     branch.sort((a, b) => a.filename.localeCompare(b.filename));
 
-    const files = branch.map(file => {
+    const files = branch.map((file) => {
       const isSelected = this.props.selectedItems[file.filename] && this.props.selectedItems[file.filename].isSelected;
       const classes = classnames(
         'directory-tree__node file',

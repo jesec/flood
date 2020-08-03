@@ -21,7 +21,7 @@ class UITab extends SettingsTab {
   };
 
   getLanguageSelectOptions() {
-    return Object.keys(Languages).map(languageID => {
+    return Object.keys(Languages).map((languageID) => {
       const selectedLanguageDefinition = Languages[languageID];
 
       return (
@@ -43,7 +43,7 @@ class UITab extends SettingsTab {
   handleDetailCheckboxValueChange = (id, value) => {
     let {torrentDetails} = this.state;
 
-    torrentDetails = torrentDetails.map(detail => {
+    torrentDetails = torrentDetails.map((detail) => {
       if (detail.id === id) {
         detail.visible = value;
       }
@@ -77,7 +77,7 @@ class UITab extends SettingsTab {
     }
   };
 
-  handleTorrentDetailsMove = items => {
+  handleTorrentDetailsMove = (items) => {
     this.setState({torrentDetails: items});
     this.props.onSettingsChange({torrentDetails: items});
   };
@@ -92,7 +92,7 @@ class UITab extends SettingsTab {
         <span className="sortable-list__content sortable-list__content--secondary">
           <Checkbox
             checked={visible}
-            onChange={event => this.handleDetailCheckboxValueChange(id, event.target.checked)}
+            onChange={(event) => this.handleDetailCheckboxValueChange(id, event.target.checked)}
             modifier="dark">
             <FormattedMessage id="settings.ui.torrent.details.enabled" defaultMessage="Enabled" />
           </Checkbox>
@@ -117,7 +117,7 @@ class UITab extends SettingsTab {
           className="tooltip tooltip--is-error"
           content={tooltipContent}
           offset={-5}
-          ref={ref => {
+          ref={(ref) => {
             this.tooltipRef = ref;
           }}
           scrollContainer={this.props.scrollContainer}
@@ -165,7 +165,7 @@ class UITab extends SettingsTab {
 
           return accumulator;
         }, [])
-        .filter(item => item != null);
+        .filter((item) => item != null);
     }
 
     return (

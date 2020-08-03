@@ -22,7 +22,7 @@ class TransferData extends React.Component {
     }
   }
 
-  handleGraphHover = graphInspectorPoint => {
+  handleGraphHover = (graphInspectorPoint) => {
     this.setState({graphInspectorPoint});
   };
 
@@ -30,7 +30,7 @@ class TransferData extends React.Component {
     this.setState({graphInspectorPoint: null});
   };
 
-  handleMouseMove = event => {
+  handleMouseMove = (event) => {
     if (this.props.isClientConnected && event && event.nativeEvent && event.nativeEvent.clientX != null) {
       this.rateGraphRef.handleMouseMove(event.nativeEvent.clientX);
     }
@@ -57,7 +57,7 @@ class TransferData extends React.Component {
         id="transfer-rate-graph"
         onMouseOut={this.handleGraphMouseOut}
         onHover={this.handleGraphHover}
-        ref={ref => {
+        ref={(ref) => {
           this.rateGraphRef = ref;
         }}
         width={this.state.sidebarWidth}
@@ -69,7 +69,7 @@ class TransferData extends React.Component {
     return (
       <div
         className="client-stats__wrapper sidebar__item"
-        ref={ref => {
+        ref={(ref) => {
           this.wrapperRef = ref;
         }}>
         <div

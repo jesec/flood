@@ -83,7 +83,7 @@ class Tooltip extends React.Component {
   constructor() {
     super();
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
 
@@ -334,14 +334,14 @@ class Tooltip extends React.Component {
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
         {...elementProps}
-        ref={ref => {
+        ref={(ref) => {
           this.triggerNode = ref;
         }}>
         {props.children}
         <Portal>
           <div
             className={tooltipClasses}
-            ref={ref => {
+            ref={(ref) => {
               this.tooltipNode = ref;
             }}
             style={tooltipStyle}

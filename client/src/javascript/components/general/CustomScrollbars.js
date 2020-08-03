@@ -10,7 +10,7 @@ export default class CustomScrollbar extends React.Component {
   constructor() {
     super();
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -67,7 +67,7 @@ export default class CustomScrollbar extends React.Component {
     return (
       <Scrollbars
         className={classes}
-        ref={ref => {
+        ref={(ref) => {
           this.scrollbarRef = ref;
         }}
         renderView={this.renderView}

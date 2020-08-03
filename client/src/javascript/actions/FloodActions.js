@@ -13,7 +13,7 @@ let lastActivityStreamOptions;
 let visibilityChangeTimeout = null;
 
 const FloodActions = {
-  clearNotifications: options =>
+  clearNotifications: (options) =>
     axios
       .delete(`${baseURI}api/notifications`)
       .then((json = {}) => json.data)
@@ -27,7 +27,7 @@ const FloodActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.FLOOD_CLEAR_NOTIFICATIONS_ERROR,
             data: {
@@ -90,14 +90,14 @@ const FloodActions = {
         params: options,
       })
       .then((json = {}) => json.data)
-      .then(response => {
+      .then((response) => {
         return {
           ...options,
           ...response,
         };
       }),
 
-  fetchMediainfo: options =>
+  fetchMediainfo: (options) =>
     axios
       .get(`${baseURI}api/mediainfo`, {
         params: {
@@ -105,7 +105,7 @@ const FloodActions = {
         },
       })
       .then((json = {}) => json.data)
-      .then(response => {
+      .then((response) => {
         AppDispatcher.dispatchServerAction({
           type: ActionTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
           data: {
@@ -115,7 +115,7 @@ const FloodActions = {
         });
       }),
 
-  fetchNotifications: options =>
+  fetchNotifications: (options) =>
     axios
       .get(`${baseURI}api/notifications`, {
         params: {
@@ -125,7 +125,7 @@ const FloodActions = {
       })
       .then((json = {}) => json.data)
       .then(
-        response => {
+        (response) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.FLOOD_FETCH_NOTIFICATIONS_SUCCESS,
             data: {
@@ -134,7 +134,7 @@ const FloodActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.FLOOD_FETCH_NOTIFICATIONS_ERROR,
             data: {

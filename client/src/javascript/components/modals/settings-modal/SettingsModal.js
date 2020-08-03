@@ -46,8 +46,8 @@ class SettingsModal extends React.Component {
     ];
   }
 
-  handleCustomsSettingChange = data => {
-    this.setState(state => {
+  handleCustomsSettingChange = (data) => {
+    this.setState((state) => {
       return {
         changedClientSettings: this.mergeObjects(state.changedClientSettings, {
           [data.id]: {...data, overrideLocalSetting: true},
@@ -57,12 +57,12 @@ class SettingsModal extends React.Component {
   };
 
   handleSaveSettingsClick = () => {
-    const floodSettings = Object.keys(this.state.changedFloodSettings).map(settingsKey => ({
+    const floodSettings = Object.keys(this.state.changedFloodSettings).map((settingsKey) => ({
       id: settingsKey,
       data: this.state.changedFloodSettings[settingsKey],
     }));
 
-    const clientSettings = Object.keys(this.state.changedClientSettings).map(settingsKey => {
+    const clientSettings = Object.keys(this.state.changedClientSettings).map((settingsKey) => {
       const data = this.state.changedClientSettings[settingsKey];
 
       if (data.overrideLocalSetting) {
@@ -88,7 +88,7 @@ class SettingsModal extends React.Component {
     });
   };
 
-  handleFloodSettingsChange = changedSettings => {
+  handleFloodSettingsChange = (changedSettings) => {
     this.setState((state, props) => {
       const floodSettings = this.mergeObjects(props.floodSettings, changedSettings);
       const changedFloodSettings = this.mergeObjects(state.changedFloodSettings, changedSettings);
@@ -97,7 +97,7 @@ class SettingsModal extends React.Component {
     });
   };
 
-  handleClientSettingsChange = changedSettings => {
+  handleClientSettingsChange = (changedSettings) => {
     this.setState((state, props) => {
       const clientSettings = this.mergeObjects(props.clientSettings, changedSettings);
       const changedClientSettings = this.mergeObjects(state.changedClientSettings, changedSettings);
@@ -114,7 +114,7 @@ class SettingsModal extends React.Component {
 
   // TODO: Use lodash or something non-custom for this
   mergeObjects(objA, objB) {
-    Object.keys(objB).forEach(key => {
+    Object.keys(objB).forEach((key) => {
       if (!Object.prototype.hasOwnProperty.call(objB, key) || objB[key] == null) {
         return;
       }

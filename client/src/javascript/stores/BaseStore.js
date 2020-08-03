@@ -5,7 +5,7 @@ export default class BaseStore extends EventEmitter {
     super(...eventEmitterConfig);
 
     this.dispatcherID = null;
-    this.on('uncaughtException', error => {
+    this.on('uncaughtException', (error) => {
       throw new Error(error);
     });
     this.requests = {};

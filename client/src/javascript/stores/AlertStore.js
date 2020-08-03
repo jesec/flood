@@ -40,7 +40,7 @@ class AlertStoreClass extends BaseStore {
   getAlerts() {
     const alertIDs = Object.keys(this.alerts).sort();
 
-    return alertIDs.map(id => {
+    return alertIDs.map((id) => {
       const alert = this.alerts[id];
 
       if (alert.accumulation) {

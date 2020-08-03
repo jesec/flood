@@ -90,7 +90,7 @@ router.post('/torrents/delete', (req, res) => {
   req.services.clientGatewayService
     .removeTorrents({hashes, deleteData})
     .then(callback)
-    .catch(err => {
+    .catch((err) => {
       callback(null, err);
     });
 });

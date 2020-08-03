@@ -4,9 +4,9 @@ const config = require('../../config');
 const Users = require('../models/Users');
 
 // Setup work and export for the JWT passport strategy.
-module.exports = passport => {
+module.exports = (passport) => {
   const options = {
-    jwtFromRequest: req => {
+    jwtFromRequest: (req) => {
       let token = null;
 
       if (req && req.cookies) {

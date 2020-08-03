@@ -134,7 +134,7 @@ class GlobalContextMenuMountPoint extends React.Component {
     }
   };
 
-  handleKeyPress = event => {
+  handleKeyPress = (event) => {
     if (event.key === 'Escape') {
       UIActions.dismissContextMenu(this.props.id);
     }

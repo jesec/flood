@@ -48,13 +48,13 @@ class FilesystemBrowser extends React.PureComponent {
 
   fetchDirectoryListForCurrentDirectory = () => {
     FloodActions.fetchDirectoryList({path: this.props.directory})
-      .then(response => {
+      .then((response) => {
         this.setState({
           ...response,
           errorResponse: null,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({errorResponse: error.response});
       });
   };
@@ -70,7 +70,7 @@ class FilesystemBrowser extends React.PureComponent {
     return `${directory}${separator}${nextDirectorySegment}`;
   }
 
-  handleDirectoryClick = directory => {
+  handleDirectoryClick = (directory) => {
     const nextDirectory = this.getNewDestination(directory);
 
     if (this.props.onDirectorySelection) {

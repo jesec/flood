@@ -27,7 +27,7 @@ class TableHeading extends React.Component {
     this.isMouseDown = false;
     this.lastMouseX = null;
 
-    methodsToBind.forEach(method => {
+    methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -111,7 +111,7 @@ class TableHeading extends React.Component {
         handle = (
           <span
             className="table__heading__handle"
-            onMouseDown={event => {
+            onMouseDown={(event) => {
               this.handleCellMouseDown(event, id, width);
             }}
           />
@@ -132,7 +132,7 @@ class TableHeading extends React.Component {
         <div
           className={classes}
           key={id}
-          onClick={event => this.handleCellClick(id, event)}
+          onClick={(event) => this.handleCellClick(id, event)}
           style={{width: `${width}px`}}>
           <span
             className="table__heading__label"
@@ -154,14 +154,14 @@ class TableHeading extends React.Component {
     return (
       <div
         className="table__row table__row--heading"
-        ref={ref => {
+        ref={(ref) => {
           this.tableHeading = ref;
         }}>
         {this.getHeadingElements()}
         <div className="table__cell table__heading table__heading--fill" />
         <div
           className="table__heading__resize-line"
-          ref={ref => {
+          ref={(ref) => {
             this.resizeLine = ref;
           }}
         />

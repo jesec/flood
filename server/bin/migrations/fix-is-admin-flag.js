@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 const Users = require('../../models/Users');
 
-const log = data => {
+const log = (data) => {
   if (process.env.DEBUG) {
     console.log(data);
   }
@@ -16,7 +16,7 @@ const migrate = () => {
 
       migrateResolve(
         Promise.all(
-          users.map(user => {
+          users.map((user) => {
             let userPatch = null;
 
             if (user.isAdmin == null) {

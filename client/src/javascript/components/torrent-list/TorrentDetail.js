@@ -43,8 +43,8 @@ const icons = {
   upTotal: <UploadThickIcon />,
 };
 
-const booleanRenderer = value => (value ? icons.checkmark : null);
-const dateRenderer = date => <FormattedDate value={date * 1000} />;
+const booleanRenderer = (value) => (value ? icons.checkmark : null);
+const dateRenderer = (date) => <FormattedDate value={date * 1000} />;
 const peersRenderer = (peersConnected, totalPeers) => (
   <FormattedMessage
     id="torrent.list.peers"
@@ -60,8 +60,8 @@ const peersRenderer = (peersConnected, totalPeers) => (
     }}
   />
 );
-const speedRenderer = value => <Size value={value} isSpeed />;
-const sizeRenderer = value => <Size value={value} />;
+const speedRenderer = (value) => <Size value={value} isSpeed />;
+const sizeRenderer = (value) => <Size value={value} />;
 
 const transformers = {
   dateAdded: dateRenderer,
@@ -80,21 +80,21 @@ const transformers = {
   ),
   peers: peersRenderer,
   seeds: peersRenderer,
-  tags: tags => (
+  tags: (tags) => (
     <ul className="torrent__tags tag">
-      {tags.map(tag => (
+      {tags.map((tag) => (
         <li className="torrent__tag" key={tag}>
           {tag}
         </li>
       ))}
     </ul>
   ),
-  ratio: ratio => <Ratio value={ratio} />,
+  ratio: (ratio) => <Ratio value={ratio} />,
   sizeBytes: sizeRenderer,
-  trackerURIs: trackers => trackers.join(', '),
+  trackerURIs: (trackers) => trackers.join(', '),
   upRate: speedRenderer,
   upTotal: sizeRenderer,
-  eta: eta => {
+  eta: (eta) => {
     if (!eta) {
       return null;
     }

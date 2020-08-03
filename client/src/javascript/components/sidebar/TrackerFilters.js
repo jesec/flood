@@ -20,7 +20,7 @@ class TrackerFilters extends React.Component {
       return a.localeCompare(b);
     });
 
-    const filterElements = filterItems.map(filter => (
+    const filterElements = filterItems.map((filter) => (
       <SidebarFilter
         handleClick={this.handleClick}
         count={this.props.trackerCount[filter] || 0}

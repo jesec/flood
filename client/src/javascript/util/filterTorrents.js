@@ -6,13 +6,13 @@ export function filterTorrents(torrentList, opts) {
   if (filter !== 'all') {
     if (type === 'status') {
       const statusFilter = torrentStatusMap[filter];
-      return torrentList.filter(torrent => torrent.status.includes(statusFilter));
+      return torrentList.filter((torrent) => torrent.status.includes(statusFilter));
     }
     if (type === 'tracker') {
-      return torrentList.filter(torrent => torrent.trackerURIs.includes(filter));
+      return torrentList.filter((torrent) => torrent.trackerURIs.includes(filter));
     }
     if (type === 'tag') {
-      return torrentList.filter(torrent => {
+      return torrentList.filter((torrent) => {
         if (filter === 'untagged') {
           return torrent.tags.length === 0;
         }

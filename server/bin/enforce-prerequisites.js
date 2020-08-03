@@ -6,9 +6,9 @@ const staticAssets = [path.join(__dirname, '../assets/index.html')];
 const configFiles = [path.join(__dirname, '../../config.js')];
 
 // Taken from react-scripts/check-required-files, but without console.logs.
-const doFilesExist = files => {
+const doFilesExist = (files) => {
   try {
-    files.forEach(filename => {
+    files.forEach((filename) => {
       fs.accessSync(filename, fs.F_OK);
     });
     return true;

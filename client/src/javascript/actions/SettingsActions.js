@@ -7,18 +7,18 @@ import ConfigStore from '../stores/ConfigStore';
 const baseURI = ConfigStore.getBaseURI();
 
 const SettingsActions = {
-  addFeed: feed =>
+  addFeed: (feed) =>
     axios
       .put(`${baseURI}api/feed-monitor/feeds`, feed)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_ADD_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_ADD_ERROR,
             error,
@@ -31,13 +31,13 @@ const SettingsActions = {
       .put(`${baseURI}api/feed-monitor/feeds/${id}`, feed)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_MODIFY_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEED_MODiFY_ERROR,
             error,
@@ -45,18 +45,18 @@ const SettingsActions = {
         },
       ),
 
-  addRule: rule =>
+  addRule: (rule) =>
     axios
       .put(`${baseURI}api/feed-monitor/rules`, rule)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_RULE_ADD_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_RULE_ADD_ERROR,
             error,
@@ -64,18 +64,18 @@ const SettingsActions = {
         },
       ),
 
-  fetchFeedMonitors: query =>
+  fetchFeedMonitors: (query) =>
     axios
       .get(`${baseURI}api/feed-monitor`, query)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITORS_FETCH_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITORS_FETCH_ERROR,
             error,
@@ -83,18 +83,18 @@ const SettingsActions = {
         },
       ),
 
-  fetchFeeds: query =>
+  fetchFeeds: (query) =>
     axios
       .get(`${baseURI}api/feed-monitor/feeds`, query)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEEDS_FETCH_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_FEEDS_FETCH_ERROR,
             error,
@@ -102,18 +102,18 @@ const SettingsActions = {
         },
       ),
 
-  fetchItems: query =>
+  fetchItems: (query) =>
     axios
       .get(`${baseURI}api/feed-monitor/items`, query)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_ITEMS_FETCH_ERROR,
             error,
@@ -121,18 +121,18 @@ const SettingsActions = {
         },
       ),
 
-  fetchRules: query =>
+  fetchRules: (query) =>
     axios
       .get(`${baseURI}api/feed-monitor/rules`, query)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_RULES_FETCH_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_RULES_FETCH_ERROR,
             error,
@@ -140,18 +140,18 @@ const SettingsActions = {
         },
       ),
 
-  fetchSettings: property =>
+  fetchSettings: (property) =>
     axios
       .get(`${baseURI}api/settings`, {params: {property}})
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FETCH_REQUEST_ERROR,
             error,
@@ -159,12 +159,12 @@ const SettingsActions = {
         },
       ),
 
-  removeFeedMonitor: id =>
+  removeFeedMonitor: (id) =>
     axios
       .delete(`${baseURI}api/feed-monitor/${id}`)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_REMOVE_SUCCESS,
             data: {
@@ -173,7 +173,7 @@ const SettingsActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_FEED_MONITOR_REMOVE_ERROR,
             error: {
@@ -189,14 +189,14 @@ const SettingsActions = {
       .patch(`${baseURI}api/settings`, settings)
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_SAVE_REQUEST_SUCCESS,
             data,
             options,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.SETTINGS_SAVE_REQUEST_ERROR,
             error,

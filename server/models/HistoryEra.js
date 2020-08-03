@@ -7,10 +7,10 @@ const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
 const CUMULATIVE_DATA_BUFFER_DIFF = 500; // 500 miliseconds
 const REQUIRED_FIELDS = ['interval', 'maxTime', 'name'];
 
-const hasRequiredFields = opts => {
+const hasRequiredFields = (opts) => {
   let requirementsMet = true;
 
-  REQUIRED_FIELDS.forEach(field => {
+  REQUIRED_FIELDS.forEach((field) => {
     if (opts[field] == null) {
       console.error(`HistoryEra requires ${field}`);
       requirementsMet = false;
@@ -156,7 +156,7 @@ upAvg: ${upAvg}`,
     let lastUpdate = 0;
 
     db.find({}, (err, docs) => {
-      docs.forEach(doc => {
+      docs.forEach((doc) => {
         if (doc.ts > lastUpdate) {
           lastUpdate = doc.ts;
         }
@@ -189,7 +189,7 @@ upAvg: ${upAvg}`,
       let downTotal = 0;
       let upTotal = 0;
 
-      docs.forEach(doc => {
+      docs.forEach((doc) => {
         downTotal += Number(doc.dn);
         upTotal += Number(doc.up);
       });

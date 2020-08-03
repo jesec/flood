@@ -25,7 +25,7 @@ class TorrentFiles extends React.Component {
       selectedFiles: [],
     };
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -56,7 +56,7 @@ class TorrentFiles extends React.Component {
 
     // Check specific properties to re-render when the torrent is active.
     if (nextProps.torrent) {
-      return TORRENT_PROPS_TO_CHECK.some(property => this.props.torrent[property] !== nextProps.torrent[property]);
+      return TORRENT_PROPS_TO_CHECK.some((property) => this.props.torrent[property] !== nextProps.torrent[property]);
     }
 
     return true;
@@ -79,7 +79,7 @@ class TorrentFiles extends React.Component {
     }
 
     if (selectionTree.directories) {
-      Object.keys(selectionTree.directories).forEach(directory => {
+      Object.keys(selectionTree.directories).forEach((directory) => {
         selectedFiles = [...selectedFiles, ...this.getSelectedFiles(selectionTree.directories[directory])];
       });
     }
@@ -87,7 +87,7 @@ class TorrentFiles extends React.Component {
     return selectedFiles;
   }
 
-  handleDownloadButtonClick = event => {
+  handleDownloadButtonClick = (event) => {
     event.preventDefault();
     const baseURI = ConfigStore.getBaseURI();
     const link = document.createElement('a');
@@ -107,7 +107,7 @@ class TorrentFiles extends React.Component {
 
   handleItemSelect(selectedItem) {
     this.hasSelectionChanged = true;
-    this.setState(state => {
+    this.setState((state) => {
       const selectedItems = this.mergeSelection(selectedItem, state.selectedItems, 0, this.props.fileTree);
       const selectedFiles = this.getSelectedFiles(selectedItems);
 
@@ -196,7 +196,7 @@ class TorrentFiles extends React.Component {
 
   selectAll(selectionTree = {}, fileTree = {}, deselect = false) {
     if (fileTree.files) {
-      fileTree.files.forEach(file => {
+      fileTree.files.forEach((file) => {
         if (!selectionTree.files) {
           selectionTree.files = {};
         }
@@ -210,7 +210,7 @@ class TorrentFiles extends React.Component {
     }
 
     if (fileTree.directories) {
-      Object.keys(fileTree.directories).forEach(directory => {
+      Object.keys(fileTree.directories).forEach((directory) => {
         if (!selectionTree.directories) {
           selectionTree.directories = {};
         }

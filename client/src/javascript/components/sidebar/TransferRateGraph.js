@@ -27,7 +27,7 @@ class TransferRateGraph extends React.Component {
   constructor() {
     super();
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
 
@@ -163,19 +163,19 @@ class TransferRateGraph extends React.Component {
       ])
       .range([height - margin.top, margin.bottom]);
 
-    const lineFunc = interpolation =>
+    const lineFunc = (interpolation) =>
       d3.svg
         .line()
         .x((dataPoint, index) => this.xScale(index))
-        .y(dataPoint => this.yScale(dataPoint))
+        .y((dataPoint) => this.yScale(dataPoint))
         .interpolate(interpolation);
 
-    const areaFunc = interpolation =>
+    const areaFunc = (interpolation) =>
       d3.svg
         .area()
         .x((dataPoint, index) => this.xScale(index))
         .y0(height)
-        .y1(dataPoint => this.yScale(dataPoint))
+        .y1((dataPoint) => this.yScale(dataPoint))
         .interpolate(interpolation);
 
     const interpolation = 'monotone';
@@ -228,7 +228,7 @@ class TransferRateGraph extends React.Component {
       <svg
         className="graph"
         id={this.props.id}
-        ref={ref => {
+        ref={(ref) => {
           this.graphRefs.graph = ref;
         }}>
         <defs>

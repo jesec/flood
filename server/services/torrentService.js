@@ -12,7 +12,7 @@ const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
 const torrentListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(torrentListPropMap);
 
-const getTorrentETAFromDetails = torrentDetails => {
+const getTorrentETAFromDetails = (torrentDetails) => {
   const {downRate, bytesDone, sizeBytes} = torrentDetails;
 
   if (downRate > 0) {
@@ -22,7 +22,7 @@ const getTorrentETAFromDetails = torrentDetails => {
   return Infinity;
 };
 
-const getTorrentPercentCompleteFromDetails = torrentDetails => {
+const getTorrentPercentCompleteFromDetails = (torrentDetails) => {
   const percentComplete = (torrentDetails.bytesDone / torrentDetails.sizeBytes) * 100;
 
   if (percentComplete > 0 && percentComplete < 10) {
@@ -35,7 +35,7 @@ const getTorrentPercentCompleteFromDetails = torrentDetails => {
   return percentComplete;
 };
 
-const getTorrentStatusFromDetails = torrentDetails => {
+const getTorrentStatusFromDetails = (torrentDetails) => {
   const {isHashChecking, isComplete, isOpen, upRate, downRate, state, message} = torrentDetails;
 
   const torrentStatus = [];
@@ -149,7 +149,7 @@ class TorrentService extends BaseService {
     }
 
     if (shouldLookForDeletedTorrents) {
-      Object.keys(this.torrentListSummary.torrents).forEach(hash => {
+      Object.keys(this.torrentListSummary.torrents).forEach((hash) => {
         if (nextTorrentListSummary.torrents[hash] == null) {
           diff[hash] = {
             action: serverEventTypes.TORRENT_LIST_ACTION_TORRENT_DELETED,
@@ -206,7 +206,7 @@ class TorrentService extends BaseService {
         // Track the number of new torrents added.
         newTorrentCount++;
       } else {
-        Object.keys(nextTorrentDetails).forEach(propKey => {
+        Object.keys(nextTorrentDetails).forEach((propKey) => {
           // If one of the details is inequal, we need to add it to the diff.
           if (!deepEqual(currentTorrentDetails[propKey], nextTorrentDetails[propKey])) {
             // Initialize with an empty object when this is the first known

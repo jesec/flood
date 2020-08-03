@@ -131,7 +131,7 @@ class ClientConnectionInterruption extends React.Component {
         <Form
           onChange={this.handleFormChange}
           onSubmit={this.handleFormSubmit}
-          ref={ref => {
+          ref={(ref) => {
             this.formRef = ref;
           }}>
           <PanelHeader>

@@ -2,8 +2,8 @@ const regEx = require('../../shared/util/regEx');
 
 const torrentListPropMap = new Map();
 
-const booleanTransformer = value => value === '1';
-const dateTransformer = dirtyDate => {
+const booleanTransformer = (value) => value === '1';
+const dateTransformer = (dirtyDate) => {
   if (!dirtyDate) {
     return '';
   }
@@ -16,7 +16,7 @@ const dateTransformer = dirtyDate => {
 
   return date;
 };
-const defaultTransformer = value => value;
+const defaultTransformer = (value) => value;
 
 torrentListPropMap.set('hash', {
   methodCall: 'd.hash=',
@@ -160,7 +160,7 @@ torrentListPropMap.set('isPrivate', {
 
 torrentListPropMap.set('tags', {
   methodCall: 'd.custom1=',
-  transformValue: value => {
+  transformValue: (value) => {
     if (value === '') {
       return [];
     }
@@ -168,13 +168,13 @@ torrentListPropMap.set('tags', {
     return value
       .split(',')
       .sort()
-      .map(tag => decodeURIComponent(tag));
+      .map((tag) => decodeURIComponent(tag));
   },
 });
 
 torrentListPropMap.set('comment', {
   methodCall: 'd.custom2=',
-  transformValue: value => {
+  transformValue: (value) => {
     let comment = decodeURIComponent(value);
 
     if (comment.match(/^VRS24mrker/)) {
@@ -192,11 +192,11 @@ torrentListPropMap.set('ignoreScheduler', {
 
 torrentListPropMap.set('trackerURIs', {
   methodCall: 'cat="$t.multicall=d.hash=,t.url=,cat={|||}"',
-  transformValue: value => {
+  transformValue: (value) => {
     const trackers = value.split('|||');
     const trackerDomains = [];
 
-    trackers.forEach(tracker => {
+    trackers.forEach((tracker) => {
       let domain = regEx.domainName.exec(tracker);
 
       if (domain && domain[1]) {
@@ -230,7 +230,7 @@ torrentListPropMap.set('seedsConnected', {
 
 torrentListPropMap.set('seedsTotal', {
   methodCall: 'cat="$t.multicall=d.hash=,t.scrape_complete=,cat={|||}"',
-  transformValue: value => Number(value.substr(0, value.indexOf('|||'))),
+  transformValue: (value) => Number(value.substr(0, value.indexOf('|||'))),
 });
 
 torrentListPropMap.set('peersConnected', {
@@ -240,7 +240,7 @@ torrentListPropMap.set('peersConnected', {
 
 torrentListPropMap.set('peersTotal', {
   methodCall: 'cat="$t.multicall=d.hash=,t.scrape_incomplete=,cat={|||}"',
-  transformValue: value => Number(value.substr(0, value.indexOf('|||'))),
+  transformValue: (value) => Number(value.substr(0, value.indexOf('|||'))),
 });
 
 module.exports = torrentListPropMap;

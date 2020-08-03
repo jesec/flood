@@ -15,7 +15,7 @@ export default class Modal extends React.Component {
       activeTabId: null,
     };
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -109,7 +109,7 @@ export default class Modal extends React.Component {
           {modalHeader}
           {headerTabs}
         </div>
-        <div className="modal__body" ref={ref => this.setRef('modal-body', ref)}>
+        <div className="modal__body" ref={(ref) => this.setRef('modal-body', ref)}>
           {modalBody}
           {footer}
         </div>

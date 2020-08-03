@@ -4,14 +4,14 @@ const {stringifyRequest} = require('loader-utils');
 
 const stringifiedRegexp = /^'|".*'|"$/;
 
-const stringify = content => {
+const stringify = (content) => {
   if (typeof content === 'string' && stringifiedRegexp.test(content)) {
     return content;
   }
   return JSON.stringify(content, null, 2);
 };
 
-const stringifySymbol = symbol =>
+const stringifySymbol = (symbol) =>
   stringify({
     id: symbol.id,
     use: symbol.useId,

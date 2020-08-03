@@ -98,7 +98,7 @@ export default _.flow([
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging(),
   })),
-  DropTarget('globally-draggable-item', itemTarget, connect => ({
+  DropTarget('globally-draggable-item', itemTarget, (connect) => ({
     connectDropTarget: connect.dropTarget(),
   })),
 ])(SortableListItem);

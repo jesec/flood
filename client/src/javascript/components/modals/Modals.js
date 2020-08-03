@@ -51,7 +51,7 @@ class Modals extends React.Component {
     return <ActiveModal dismiss={this.dismissModal} options={this.props.activeModal.options} />;
   }
 
-  handleKeyPress = event => {
+  handleKeyPress = (event) => {
     if (this.props.activeModal != null && event.keyCode === 27) {
       this.dismissModal();
     }

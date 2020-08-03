@@ -31,7 +31,7 @@ const removedKeys = ['freeDiskSpace'];
  * @param  {Object} settings - the stored settings object.
  * @return {Object} - the settings object, altered if legacy keys exist.
  */
-const transformLegacyKeys = settings => {
+const transformLegacyKeys = (settings) => {
   if (settings.sortTorrents && settings.sortTorrents.property in changedKeys) {
     settings.sortTorrents.property = changedKeys[settings.sortTorrents.property];
   }
@@ -41,7 +41,7 @@ const transformLegacyKeys = settings => {
       if (
         detailItem &&
         detailItem.id in changedKeys &&
-        !settings.torrentDetails.some(subDetailItem => subDetailItem.id === changedKeys[detailItem.id])
+        !settings.torrentDetails.some((subDetailItem) => subDetailItem.id === changedKeys[detailItem.id])
       ) {
         detailItem.id = changedKeys[detailItem.id];
       }
@@ -55,7 +55,7 @@ const transformLegacyKeys = settings => {
   }
 
   if (settings.torrentListColumnWidths) {
-    Object.keys(settings.torrentListColumnWidths).forEach(columnID => {
+    Object.keys(settings.torrentListColumnWidths).forEach((columnID) => {
       if (columnID in changedKeys && !(changedKeys[columnID] in settings.torrentListColumnWidths)) {
         settings.torrentListColumnWidths[changedKeys[columnID]] = settings.torrentListColumnWidths[columnID];
       }
@@ -99,7 +99,7 @@ const settings = {
           return;
         }
 
-        docs.forEach(doc => {
+        docs.forEach((doc) => {
           settingsToReturn[doc.id] = doc.data;
         });
 

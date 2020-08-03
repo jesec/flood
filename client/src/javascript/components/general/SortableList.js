@@ -19,7 +19,7 @@ class SortableList extends React.Component {
       items: props.items,
     };
 
-    methodsToBind.forEach(method => {
+    methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
@@ -95,7 +95,7 @@ class SortableList extends React.Component {
       <ul
         className={classes}
         onMouseDown={this.handleMouseDown}
-        ref={ref => {
+        ref={(ref) => {
           this.sortableListRef = ref;
         }}>
         <SortableListItemDragLayer

@@ -4,11 +4,9 @@ const glob = require('glob');
 const path = require('path');
 const prettier = require('prettier');
 
-const SOURCE_PATTERN = `{client,scripts,server,shared}${path.sep}!(assets){${path.sep},}{**${
-  path.sep
-}*,*}.{js,jsx,ts,tsx,json,md}`;
+const SOURCE_PATTERN = `{client,scripts,server,shared}${path.sep}!(assets){${path.sep},}{**${path.sep}*,*}.{js,jsx,ts,tsx,json,md}`;
 
-const readFile = filePath => {
+const readFile = (filePath) => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (error, fileContent) => {
       if (error != null) {
@@ -23,7 +21,7 @@ const readFile = filePath => {
 
 const writeFile = (filePath, fileContent) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile(filePath, fileContent, writeFileError => {
+    fs.writeFile(filePath, fileContent, (writeFileError) => {
       if (writeFileError) {
         reject(writeFileError);
         return;
@@ -53,7 +51,7 @@ const getSourceFilePaths = () => {
         return;
       }
 
-      resolve(files.map(filePath => path.join(process.cwd(), filePath)));
+      resolve(files.map((filePath) => path.join(process.cwd(), filePath)));
     });
   });
 };
@@ -63,7 +61,7 @@ const formatSource = async () => {
 
   try {
     const sourceFilePaths = await getSourceFilePaths();
-    const formattedPaths = await Promise.all(sourceFilePaths.map(filePath => formatFile(filePath, filePath)));
+    const formattedPaths = await Promise.all(sourceFilePaths.map((filePath) => formatFile(filePath, filePath)));
 
     console.log(chalk.green(`Formatted ${formattedPaths.length} files.`));
   } catch (error) {
@@ -78,7 +76,7 @@ const check = async () => {
   try {
     const sourceFilePaths = await getSourceFilePaths();
     await Promise.all(
-      sourceFilePaths.map(async filePath => {
+      sourceFilePaths.map(async (filePath) => {
         const fileContent = await readFile(filePath);
         const prettierConfig = await prettier.resolveConfig(filePath);
         const isCompliant = prettier.check(fileContent, {...prettierConfig, filepath: filePath});

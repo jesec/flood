@@ -7,12 +7,12 @@ import ConfigStore from '../stores/ConfigStore';
 const baseURI = ConfigStore.getBaseURI();
 
 const TorrentActions = {
-  addTorrentsByUrls: options =>
+  addTorrentsByUrls: (options) =>
     axios
       .post(`${baseURI}api/client/add`, options)
       .then((json = {}) => json.data)
       .then(
-        response => {
+        (response) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_ADD_TORRENT_SUCCESS,
             data: {
@@ -22,7 +22,7 @@ const TorrentActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_ADD_TORRENT_ERROR,
             data: {
@@ -37,7 +37,7 @@ const TorrentActions = {
       .post(`${baseURI}api/client/add-files`, formData)
       .then((json = {}) => json.data)
       .then(
-        response => {
+        (response) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_ADD_TORRENT_SUCCESS,
             data: {
@@ -47,7 +47,7 @@ const TorrentActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_ADD_TORRENT_ERROR,
             data: {
@@ -62,7 +62,7 @@ const TorrentActions = {
       .post(`${baseURI}api/client/torrents/delete`, {hash, deleteData})
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_REMOVE_TORRENT_SUCCESS,
             data: {
@@ -72,7 +72,7 @@ const TorrentActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_REMOVE_TORRENT_ERROR,
             error: {
@@ -83,12 +83,12 @@ const TorrentActions = {
         },
       ),
 
-  checkHash: hash =>
+  checkHash: (hash) =>
     axios
       .post(`${baseURI}api/client/torrents/check-hash`, {hash})
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_CHECK_HASH_SUCCESS,
             data: {
@@ -97,7 +97,7 @@ const TorrentActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_CHECK_HASH_ERROR,
             error: {
@@ -108,14 +108,14 @@ const TorrentActions = {
         },
       ),
 
-  fetchTorrentDetails: hash =>
+  fetchTorrentDetails: (hash) =>
     axios
       .post(`${baseURI}api/client/torrent-details`, {
         hash,
       })
       .then((json = {}) => json.data)
       .then(
-        torrentDetails => {
+        (torrentDetails) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_FETCH_TORRENT_DETAILS_SUCCESS,
             data: {
@@ -148,7 +148,7 @@ const TorrentActions = {
       })
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS,
             data: {
@@ -157,7 +157,7 @@ const TorrentActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_MOVE_TORRENTS_ERROR,
             error,
@@ -166,14 +166,14 @@ const TorrentActions = {
       );
   },
 
-  startTorrents: hashes =>
+  startTorrents: (hashes) =>
     axios
       .post(`${baseURI}api/client/start`, {
         hashes,
       })
       .then((json = {}) => json.data)
       .then(
-        response => {
+        (response) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_START_TORRENT_SUCCESS,
             data: {
@@ -181,7 +181,7 @@ const TorrentActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_START_TORRENT_ERROR,
             data: {
@@ -191,14 +191,14 @@ const TorrentActions = {
         },
       ),
 
-  stopTorrents: hashes =>
+  stopTorrents: (hashes) =>
     axios
       .post(`${baseURI}api/client/stop`, {
         hashes,
       })
       .then((json = {}) => json.data)
       .then(
-        response => {
+        (response) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_STOP_TORRENT_SUCCESS,
             data: {
@@ -206,7 +206,7 @@ const TorrentActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_STOP_TORRENT_ERROR,
             data: {
@@ -224,13 +224,13 @@ const TorrentActions = {
       })
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SET_TORRENT_PRIORITY_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SET_TORRENT_PRIORITY_ERROR,
             error,
@@ -247,7 +247,7 @@ const TorrentActions = {
       })
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS,
             data: {
@@ -258,7 +258,7 @@ const TorrentActions = {
             },
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SET_FILE_PRIORITY_ERROR,
             error,
@@ -275,13 +275,13 @@ const TorrentActions = {
       })
       .then((json = {}) => json.data)
       .then(
-        data => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SET_TAXONOMY_SUCCESS,
             data,
           });
         },
-        error => {
+        (error) => {
           AppDispatcher.dispatchServerAction({
             type: ActionTypes.CLIENT_SET_TAXONOMY_ERROR,
             error,

@@ -29,7 +29,7 @@ export default class TorrentHeading extends React.Component {
       optimisticData: {currentStatus: null},
     };
 
-    METHODS_TO_BIND.forEach(method => {
+    METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
   }
