@@ -32,6 +32,15 @@ class MoveTorrents extends React.Component {
         type: 'checkbox',
       },
       {
+        checked: true,
+        content: this.props.intl.formatMessage({
+          id: 'torrents.move.check_hash.label',
+          defaultMessage: 'Check hash',
+        }),
+        id: 'isCheckHash',
+        type: 'checkbox',
+      },
+      {
         content: this.props.intl.formatMessage({
           id: 'button.cancel',
           defaultMessage: 'Cancel',
@@ -74,6 +83,7 @@ class MoveTorrents extends React.Component {
         filenames,
         moveFiles: formData.moveFiles,
         sourcePaths,
+        isCheckHash: formData.isCheckHash,
       }).then(() => {
         this.setState({isSettingDownloadPath: false});
       });

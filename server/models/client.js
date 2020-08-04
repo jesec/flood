@@ -227,7 +227,7 @@ const client = {
 
   moveTorrents(user, services, data, callback) {
     const destinationPath = data.destination;
-    const {isBasePath, hashes, filenames, moveFiles, sourcePaths} = data;
+    const {isBasePath, hashes, filenames, moveFiles, sourcePaths, isCheckHash} = data;
     const mainRequest = new ClientRequest(user, services);
 
     const hashesToRestart = hashes.filter(
@@ -247,12 +247,18 @@ const client = {
       afterCheckHash = callback;
     }
 
-    const checkHash = () => {
-      const checkHashRequest = new ClientRequest(user, services);
-      checkHashRequest.checkHash({hashes});
-      checkHashRequest.onComplete(afterCheckHash);
-      checkHashRequest.send();
-    };
+    let checkHash;
+
+    if (isCheckHash) {
+      checkHash = () => {
+        const checkHashRequest = new ClientRequest(user, services);
+        checkHashRequest.checkHash({hashes});
+        checkHashRequest.onComplete(afterCheckHash);
+        checkHashRequest.send();
+      };
+    } else {
+      checkHash = afterCheckHash;
+    }
 
     const moveTorrents = () => {
       const moveTorrentsRequest = new ClientRequest(user, services);

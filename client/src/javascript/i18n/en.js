@@ -311,6 +311,7 @@ export default {
   'torrents.move.button.set.location': 'Set Location',
   'torrents.move.button.state.setting': 'Setting...',
   'torrents.move.data.label': 'Move data',
+  'torrents.move.check_hash.label': 'Check hash',
   'torrents.move.heading': 'Set Torrent Location',
 
   'torrents.properties.date.added': 'Added',
