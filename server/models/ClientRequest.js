@@ -1,7 +1,7 @@
 /**
  * This file is deprecated in favor of clientGatewayService.
  */
-const mkdirp = require('mkdirp');
+const fs = require('fs');
 const mv = require('mv');
 const path = require('path');
 const util = require('util');
@@ -70,7 +70,7 @@ class ClientRequest {
   // TODO: Move this to util, doesn't belong here
   createDirectory(options) {
     if (options.path) {
-      mkdirp(options.path, (error) => {
+      fs.mkdir(options.path, {recursive: true}, (error) => {
         if (error) {
           console.trace('Error creating directory.', error);
         }
