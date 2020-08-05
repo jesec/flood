@@ -1,6 +1,9 @@
 # Change Log
 
-## [Unreleased]
+## [2.0.0] (August 5, 2020)
+* BREAKING CHANGES:
+  * Bump dependencies to the latest version if possible
+  * Node 12 or later is now required
 * Supports connecting to multiple rtorrent instances (one per user)
   * Moved rtorrent configuration to user database
   * Prompts user for connection details in UI when can't connect to rtorrent
@@ -21,6 +24,14 @@
 * Close event stream after the window/tab has been inactive for 30 seconds
 * Refactor development experience, using `Webpack` & `WebpackDevServer`
 * Require users to build static assets again
+* Simplify peer geo flag handling
+  * Flag images now serves as static asset
+* moveTorrents: Allow hash check to be skipped by user
+* Add an option to completely disable users and authentication
+* server: Takes baseURI into account for routes and assets
+* torrentListPropMap: use d.hashing= instead of d.is_hash_checking=
+  * Torrents queued for checking are now shown
+* sidebar: Add Checking filter view
 
 ## [1.0.0] (April 21, 2017)
 * First "official" release
@@ -41,3 +52,4 @@
 
 [Unreleased]:https://github.com/Flood-UI/flood/compare/v1.0.0...HEAD
 [1.0.0]:https://github.com/Flood-UI/flood/compare/ae520c0a33ffb4ae6f21e47bc6f7e6007dd1e6dc...v1.0.0
+[2.0.0]:https://github.com/jesec/flood/compare/v1.0.0...v2.0.0
