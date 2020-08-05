@@ -13,6 +13,8 @@ import SettingsStore from '../../../stores/SettingsStore';
 import UITab from './UITab';
 import DiskUsageTab from './DiskUsageTab';
 
+import UserConfig from '../../../../../../config';
+
 class SettingsModal extends React.Component {
   state = {
     isSavingSettings: false,
@@ -174,13 +176,18 @@ class SettingsModal extends React.Component {
           defaultMessage: 'Resources',
         }),
       },
-      authentication: {
-        content: AuthTab,
-        label: intl.formatMessage({
-          id: 'settings.tabs.authentication',
-          defaultMessage: 'Authentication',
-        }),
-      },
+      // TODO: disableUsersAndAuth is server's config not user's
+      ...(UserConfig.disableUsersAndAuth !== true
+        ? {
+            authentication: {
+              content: AuthTab,
+              label: intl.formatMessage({
+                id: 'settings.tabs.authentication',
+                defaultMessage: 'Authentication',
+              }),
+            },
+          }
+        : []),
       ui: {
         content: UITab,
         label: intl.formatMessage({
