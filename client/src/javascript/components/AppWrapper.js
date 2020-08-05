@@ -13,6 +13,8 @@ import LoadingIndicator from './general/LoadingIndicator';
 import UIStore from '../stores/UIStore';
 import WindowTitle from './general/WindowTitle';
 
+import UserConfig from '../../../../config';
+
 const ICONS = {
   satisfied: <Checkmark />,
 };
@@ -52,7 +54,8 @@ class AuthEnforcer extends React.Component {
       );
     }
 
-    if (isAuthenticated && !isClientConnected) {
+    // TODO: disableUsersAndAuth is server's config not user's
+    if (isAuthenticated && !isClientConnected && !UserConfig.disableUsersAndAuth) {
       content = (
         <div className="application__loading-overlay">
           <div className="application__entry-barrier">
