@@ -2,13 +2,17 @@
 
 ![Flood logo](flood.png)
 
-[![Travis CI build status badge](https://img.shields.io/travis/Flood-UI/flood/master.svg?style=flat-square)](https://travis-ci.org/Flood-UI/flood) [![Discord server badge](https://img.shields.io/discord/418267176873623553.svg?style=flat-square)](https://discord.gg/Z7yR5Uf)
+[![Github Actions build status badge](https://github.com/jesec/flood/workflows/Build/badge.svg?branch=master&event=push)](https://github.com/jesec/flood/actions) [![Discord server badge](https://img.shields.io/discord/418267176873623553.svg?style=flat-square)](https://discord.gg/Z7yR5Uf)
 
 Flood is a monitoring service for [rTorrent](https://github.com/rakshasa/rtorrent). It's a Node.js service that communicates with rTorrent instances and serves a decent web UI for administration. It's a work-in-progress.
 
 #### Feedback
 
-If you have a specific issue or bug, please file a Github issue. Please join the [Flood Discord server](https://discord.gg/Z7yR5Uf) to discuss feature requests and implementation details.
+If you have a specific issue or bug, please file a [GitHub issue](https://github.com/jesec/flood/issues). Please join the [Flood Discord server](https://discord.gg/Z7yR5Uf) to discuss feature requests and implementation details.
+
+#### More information
+
+Check out the [Wiki](https://github.com/jesec/flood/wiki) for more information.
 
 # Getting started
 
@@ -84,5 +88,3 @@ I've been bad about cutting actual releases, so check this repo for recent commi
     * `FLOOD_ENABLE_SSL`
 
 The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`. The location of the socket file can be overrided by setting `RTORRENT_SOCK_PATH` to the path of the socket.
-
-Check out the [Wiki](https://github.com/Flood-UI/flood/wiki/Docker) for more information.
