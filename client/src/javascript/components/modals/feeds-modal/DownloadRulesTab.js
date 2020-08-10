@@ -359,7 +359,7 @@ class DownloadRulesTab extends React.Component {
       return (
         <ul className="interactive-list">
           <li className="interactive-list__item">
-            <FormattedMessage defaultMessage="No rules defined." id="rules.no.rules.defined" />
+            <FormattedMessage defaultMessage="No rules defined." id="feeds.no.rules.defined" />
           </li>
         </ul>
       );

@@ -59,6 +59,7 @@ export default {
   'button.test': 'Test',
   'button.state.adding': 'Adding...',
   'button.yes': 'Yes',
+  'button.new': 'New',
 
   'connectivity.modal.title': 'Connectivity Issue',
   'connectivity.modal.content': 'Cannot connect to rTorrent. Please update the information now.',
@@ -97,6 +98,7 @@ export default {
   'feeds.validation.must.specify.destination': 'You must specify a destination.',
   'feeds.validation.must.specify.label': 'You must specify a label.',
   'feeds.validation.must.specify.valid.feed.url': 'You must specify a valid feed URL.',
+  'feeds.browse.feeds': 'Browse feeds',
 
   'filesystem.empty.directory': 'Empty directory.',
   'filesystem.error.eacces': 'Flood does not have permission to read this directory.',
@@ -110,6 +112,8 @@ export default {
   'filter.status.active': 'Active',
   'filter.status.inactive': 'Inactive',
   'filter.status.error': 'Error',
+  'filter.status.stopped': 'Stopped',
+  'filter.status.checking': 'Checking',
   'filter.tracker.title': 'Filter by Tracker',
   'filter.tag.title': 'Filter by Tag',
   'filter.untagged': 'Untagged',
@@ -199,9 +203,10 @@ export default {
   'settings.ui.torrent.size.condensed': 'Condensed View',
   'settings.ui.torrent.details.enabled': 'Enabled',
   'settings.ui.torrent.details.tags.placement': 'In the expanded view, tags work best at the end of the list.',
+  'settings.ui.displayed.details': 'Torrent Detail Columns',
 
-  'settings.diskuseage.show': 'Show',
-  'settings.diskuseage.mount.points': 'Disk Usage Mount Points',
+  'settings.diskusage.show': 'Show',
+  'settings.diskusage.mount.points': 'Disk Usage Mount Points',
 
   'settings.about.flood': 'About Flood',
 
@@ -243,6 +248,7 @@ export default {
   'torrents.add.tab.url.input.placeholder': 'Torrent URL or Magnet Link',
   'torrents.add.tab.url.title': 'By URL',
   'torrents.add.torrents.label': 'Torrents',
+  'torrents.add.tags': 'Tags',
 
   'torrents.destination.base_path': 'Use as Base Path',
 
@@ -353,4 +359,6 @@ export default {
   'connection-interruption.verify-settings-prompt': "Let's verify your connection settings.",
   'connection-interruption.verification-error': 'Connection could not be verified.',
   'connection-interruption.verification-success': 'Connection successful',
+
+  'status.diskusage.title': 'Disk Usage',
 };
