@@ -258,4 +258,6 @@ export default {
   'torrents.set.tags.heading': 'Tags instellen',
 
   'torrents.sort.title': 'Sorteer op',
+
+  'locale.language.auto': 'Automatisch',
 };

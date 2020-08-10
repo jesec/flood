@@ -24,6 +24,14 @@ class UITab extends SettingsTab {
     return Object.keys(Languages).map((languageID) => {
       const selectedLanguageDefinition = Languages[languageID];
 
+      if (languageID === 'auto') {
+        return (
+          <SelectItem key={languageID} id={languageID}>
+            {this.props.intl.formatMessage(selectedLanguageDefinition)}
+          </SelectItem>
+        );
+      }
+
       return (
         <SelectItem key={languageID} id={languageID}>
           {selectedLanguageDefinition}

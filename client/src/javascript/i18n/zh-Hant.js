@@ -326,4 +326,6 @@ export default {
   'connection-interruption.verification-success': '連線成功',
 
   'status.diskusage.title': '磁碟空間使用量',
+
+  'locale.language.auto': '自動',
 };

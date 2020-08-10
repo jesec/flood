@@ -273,4 +273,6 @@ export default {
   'torrents.set.tags.enter.tags': 'Entrer des Tags',
 
   'torrents.sort.title': 'Trier par',
+
+  'locale.language.auto': 'Automatique',
 };

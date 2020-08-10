@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import detectLocale from '../../util/detectLocale';
 import * as i18n from '../../i18n/languages';
 import SettingsStore from '../../stores/SettingsStore';
 
@@ -26,7 +27,10 @@ class Portal extends React.Component {
   }
 
   render() {
-    const locale = SettingsStore.getFloodSettings('language');
+    let locale = SettingsStore.getFloodSettings('language');
+    if (locale === 'auto') {
+      locale = detectLocale();
+    }
     if (this.nodeEl == null) return null;
     return ReactDOM.createPortal(
       // eslint-disable-next-line import/namespace

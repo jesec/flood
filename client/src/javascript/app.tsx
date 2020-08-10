@@ -4,6 +4,7 @@ import {Route} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import detectLocale from './util/detectLocale';
 import * as i18n from './i18n/languages';
 import connectStores, {EventListenerDescriptor} from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
@@ -84,7 +85,10 @@ class FloodApp extends React.Component<InjectedFloodAppProps> {
   }
 
   public render(): React.ReactNode {
-    const {locale} = this.props;
+    let {locale} = this.props;
+    if (locale === 'auto') {
+      locale = detectLocale();
+    }
 
     return (
       <IntlProvider locale={locale} messages={i18n.languages[locale]}>

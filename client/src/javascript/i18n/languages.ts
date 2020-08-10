@@ -24,6 +24,7 @@ addLocaleData(nlLocaleData);
 addLocaleData(zhLocaleData);
 
 export const languages = {
+  auto: EN,
   en: EN,
   es: ES,
   fr: FR,
