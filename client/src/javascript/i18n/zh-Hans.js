@@ -341,4 +341,6 @@ export default {
   'connection-interruption.verify-settings-prompt': '让我们验证你的连接设置。',
   'connection-interruption.verification-error': '无法验证连接。',
   'connection-interruption.verification-success': '连接成功！',
+
+  'locale.language.auto': '自动',
 };

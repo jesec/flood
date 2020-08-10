@@ -344,4 +344,6 @@ export default {
   'connection-interruption.verify-settings-prompt': '연결 설정을 검증해보겠습니다.',
   'connection-interruption.verification-error': '연결을 검증하지 못했습니다.',
   'connection-interruption.verification-success': '연결 성공',
+
+  'locale.language.auto': '자동',
 };

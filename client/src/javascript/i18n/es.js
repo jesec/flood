@@ -308,4 +308,6 @@ export default {
   'torrents.set.tags.heading': 'Configurar Etiquetas',
 
   'torrents.sort.title': 'Ordenar Por',
+
+  'locale.language.auto': 'Automátic',
 };

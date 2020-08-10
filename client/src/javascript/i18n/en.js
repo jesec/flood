@@ -355,4 +355,6 @@ export default {
   'connection-interruption.verification-success': 'Connection successful',
 
   'status.diskusage.title': 'Disk Usage',
+
+  'locale.language.auto': 'Automatic',
 };
