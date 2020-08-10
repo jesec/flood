@@ -7,6 +7,15 @@ import koLocaleData from 'react-intl/locale-data/ko';
 import nlLocaleData from 'react-intl/locale-data/nl';
 import zhLocaleData from 'react-intl/locale-data/zh';
 
+import DE from './de';
+import EN from './en';
+import ES from './es';
+import FR from './fr';
+import KO from './ko';
+import NL from './nl';
+import ZH_HANS from './zh-Hans';
+import ZH_HANT from './zh-Hant';
+
 addLocaleData(deLocaleData);
 addLocaleData(enLocaleData);
 addLocaleData(esLocaleData);
@@ -15,10 +24,13 @@ addLocaleData(koLocaleData);
 addLocaleData(nlLocaleData);
 addLocaleData(zhLocaleData);
 
-export {default as de} from './de';
-export {default as en} from './en';
-export {default as es} from './es';
-export {default as fr} from './fr';
-export {default as ko} from './ko';
-export {default as nl} from './nl';
-export {default as zh} from './zh';
+export const languages = {
+  de: DE,
+  en: EN,
+  es: ES,
+  fr: FR,
+  ko: KO,
+  nl: NL,
+  'zh-Hans': ZH_HANS,
+  'zh-Hant': ZH_HANT,
+};

@@ -19,9 +19,13 @@ const LANGUAGES = {
     defaultMessage: 'Korean',
     id: 'locale.language.ko',
   },
-  zh: {
-    defaultMessage: 'Chinese',
-    id: 'locale.language.zh',
+  'zh-Hans': {
+    defaultMessage: 'Chinese (Simplified)',
+    id: 'locale.language.zh-Hans',
+  },
+  'zh-Hant': {
+    defaultMessage: 'Chinese (Traditional)',
+    id: 'locale.language.zh-Hant',
   },
 };
 
