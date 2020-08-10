@@ -30,7 +30,7 @@ class Portal extends React.Component {
     if (this.nodeEl == null) return null;
     return ReactDOM.createPortal(
       // eslint-disable-next-line import/namespace
-      <IntlProvider locale={locale} messages={i18n[locale]}>
+      <IntlProvider locale={locale} messages={i18n.languages[locale]}>
         {this.props.children}
       </IntlProvider>,
       this.nodeEl,

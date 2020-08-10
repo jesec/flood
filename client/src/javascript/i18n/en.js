@@ -130,7 +130,8 @@ export default {
   'locale.language.fr': 'French',
   'locale.language.ko': 'Korean',
   'locale.language.nl': 'Nederlands',
-  'locale.language.zh': 'Chinese',
+  'locale.language.zh-Hans': 'Chinese (Simplified)',
+  'locale.language.zh-Hant': 'Chinese (Traditional)',
 
   'mediainfo.execError':
     'An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood.',

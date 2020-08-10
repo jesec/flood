@@ -126,7 +126,8 @@ export default {
   'locale.language.fr': '法语',
   'locale.language.ko': '韩语',
   'locale.language.nl': '荷兰语',
-  'locale.language.zh': '中文',
+  'locale.language.zh-Hans': '中文(简体)',
+  'locale.language.zh-Hant': '中文(繁体)',
 
   'mediainfo.execError': '在服务器上运行mediainfo时发生错误。检查mediainfo是否已经安装，并且在PTAH中正确配置！',
   'mediainfo.fetching': '获取中...',

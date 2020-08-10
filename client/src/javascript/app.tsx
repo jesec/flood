@@ -75,7 +75,7 @@ const appRoutes = (
 );
 
 interface InjectedFloodAppProps {
-  locale: keyof typeof i18n;
+  locale: keyof typeof i18n.languages;
 }
 
 class FloodApp extends React.Component<InjectedFloodAppProps> {
@@ -87,7 +87,7 @@ class FloodApp extends React.Component<InjectedFloodAppProps> {
     const {locale} = this.props;
 
     return (
-      <IntlProvider locale={locale} messages={i18n[locale]}>
+      <IntlProvider locale={locale} messages={i18n.languages[locale]}>
         {appRoutes}
       </IntlProvider>
     );
