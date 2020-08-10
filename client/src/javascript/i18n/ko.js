@@ -117,13 +117,6 @@ export default {
   'general.clipboard.copy': '복사',
   'general.clipboard.copied': '복사됨',
 
-  'locale.language.de': 'Deutsch',
-  'locale.language.en': 'English',
-  'locale.language.es': 'Español',
-  'locale.language.fr': 'Français',
-  'locale.language.ko': '한국어',
-  'locale.language.nl': 'Nederlands',
-
   'mediainfo.execError':
     '서버에서 미디어 정보를 가져오는 중 오류가 발생했습니다. mediainfo가 설치되어 있으며 Flood가 쓸 수 있도록 PATH가 지정되어 있는지 확인하세요.',
   'mediainfo.fetching': '가져오는 중...',

@@ -126,13 +126,6 @@ export default {
   'general.clipboard.copy': 'Copy',
   'general.clipboard.copied': 'Copied',
 
-  'locale.language.en': 'English',
-  'locale.language.fr': 'French',
-  'locale.language.ko': 'Korean',
-  'locale.language.nl': 'Nederlands',
-  'locale.language.zh-Hans': 'Chinese (Simplified)',
-  'locale.language.zh-Hant': 'Chinese (Traditional)',
-
   'mediainfo.execError':
     'An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood.',
   'mediainfo.fetching': 'Fetching...',

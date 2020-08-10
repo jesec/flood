@@ -108,13 +108,6 @@ export default {
   'general.clipboard.copy': '複製',
   'general.clipboard.copied': '已複製',
 
-  'locale.language.en': '英文',
-  'locale.language.fr': '法文',
-  'locale.language.ko': '韓文',
-  'locale.language.nl': '荷蘭文',
-  'locale.language.zh-Hans': '中文(簡體)',
-  'locale.language.zh-Hant': '中文(繁體)',
-
   'mediainfo.execError': '執行 MediaInfo 發生錯誤，請確認系統中有安裝 mediainfo 且該執行檔位於 PATH 變數中。',
   'mediainfo.fetching': '抓取中...',
   'mediainfo.heading': 'Mediainfo輸出',

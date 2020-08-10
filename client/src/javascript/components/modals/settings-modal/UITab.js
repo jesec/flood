@@ -26,7 +26,7 @@ class UITab extends SettingsTab {
 
       return (
         <SelectItem key={languageID} id={languageID}>
-          {this.props.intl.formatMessage(selectedLanguageDefinition)}
+          {selectedLanguageDefinition}
         </SelectItem>
       );
     });

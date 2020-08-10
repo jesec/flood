@@ -101,12 +101,6 @@ export default {
   'general.clipboard.copy': 'Copiar',
   'general.clipboard.copied': 'Copiado',
 
-  'locale.language.en': 'Inglés',
-  'locale.language.es': 'Español',
-  'locale.language.fr': 'Francés',
-  'locale.language.ko': 'Coreano',
-  'locale.language.nl': 'Holandés',
-
   'mediainfo.execError':
     'Se ha encontrado un error al correr Mediainfo. Confirme que Mediainfo este instalado y disponible a Flood en el PATH',
   'mediainfo.fetching': 'Obteniendo...',
