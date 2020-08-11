@@ -216,7 +216,7 @@ export default {
     'torrents.add.tab.url.input.placeholder': '토렌트 URL 또는 마그넷 주소',
     'torrents.add.tab.url.title': 'By URL',
     'torrents.add.torrents.label': '토렌트',
-    'torrents.add.tags': 'Tags',
+    'torrents.add.tags': '태그',
     'torrents.destination.base_path': '기본 경로로 사용',
     'torrents.details.actions.pause': '일시중지',
     'torrents.details.actions.start': '시작',
