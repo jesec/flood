@@ -7,7 +7,6 @@ import koLocaleData from 'react-intl/locale-data/ko';
 import nlLocaleData from 'react-intl/locale-data/nl';
 import zhLocaleData from 'react-intl/locale-data/zh';
 
-import DE from './de';
 import EN from './en';
 import ES from './es';
 import FR from './fr';
@@ -25,7 +24,6 @@ addLocaleData(nlLocaleData);
 addLocaleData(zhLocaleData);
 
 export const languages = {
-  de: DE,
   en: EN,
   es: ES,
   fr: FR,
