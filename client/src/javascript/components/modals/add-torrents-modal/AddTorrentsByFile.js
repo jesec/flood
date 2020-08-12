@@ -52,21 +52,24 @@ class AddTorrentsByFile extends React.Component {
           <FormattedMessage id="torrents.add.torrents.label" />
         </label>
         {fileContent}
-        <Dropzone
-          activeClassName="dropzone--is-dragging"
-          className="form__dropzone dropzone interactive-list"
-          onDrop={this.handleFileDrop}
-          disablePreview>
-          <div className="dropzone__copy">
-            <div className="dropzone__icon">
-              <Files />
+        <Dropzone onDrop={this.handleFileDrop}>
+          {({getRootProps, getInputProps, isDragActive}) => (
+            <div
+              {...getRootProps()}
+              className={`form__dropzone dropzone interactive-list ${isDragActive ? 'dropzone--is-dragging' : ''}`}>
+              <input {...getInputProps()} />
+              <div className="dropzone__copy">
+                <div className="dropzone__icon">
+                  <Files />
+                </div>
+                <FormattedMessage id="torrents.add.tab.file.drop" />{' '}
+                <span className="dropzone__browse-button">
+                  <FormattedMessage id="torrents.add.tab.file.browse" />
+                </span>
+                .
+              </div>
             </div>
-            <FormattedMessage id="torrents.add.tab.file.drop" />{' '}
-            <span className="dropzone__browse-button">
-              <FormattedMessage id="torrents.add.tab.file.browse" />
-            </span>
-            .
-          </div>
+          )}
         </Dropzone>
       </FormRowItem>
     );

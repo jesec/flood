@@ -490,36 +490,39 @@ class TorrentListContainer extends React.Component {
 
     return (
       <Dropzone
-        activeClassName="dropzone--is-dragging"
-        className="dropzone dropzone--with-overlay torrents"
+        onDrop={this.handleFileDrop}
         ref={(ref) => {
           this.listContainer = ref;
-        }}
-        onDrop={this.handleFileDrop}
-        disableClick
-        disablePreview>
-        <CustomScrollbars
-          className="torrent__list__scrollbars--horizontal"
-          onScrollStop={this.handleHorizontalScrollStop}
-          nativeScrollHandler={this.handleHorizontalScroll}
-          ref={(ref) => {
-            this.horizontalScrollRef = ref;
-          }}>
-          <div className="torrent__list__wrapper" style={listWrapperStyle}>
-            <GlobalContextMenuMountPoint id="torrent-list-item" />
-            {torrentListHeading}
-            {content}
-          </div>
-        </CustomScrollbars>
+        }}>
+        {({getRootProps, isDragActive}) => (
+          <div
+            {...getRootProps({onClick: (evt) => evt.preventDefault()})}
+            className={`dropzone dropzone--with-overlay torrents ${isDragActive ? 'dropzone--is-dragging' : ''}`}
+            tabIndex="none">
+            <CustomScrollbars
+              className="torrent__list__scrollbars--horizontal"
+              onScrollStop={this.handleHorizontalScrollStop}
+              nativeScrollHandler={this.handleHorizontalScroll}
+              ref={(ref) => {
+                this.horizontalScrollRef = ref;
+              }}>
+              <div className="torrent__list__wrapper" style={listWrapperStyle}>
+                <GlobalContextMenuMountPoint id="torrent-list-item" />
+                {torrentListHeading}
+                {content}
+              </div>
+            </CustomScrollbars>
 
-        <div className="dropzone__overlay">
-          <div className="dropzone__copy">
-            <div className="dropzone__icon">
-              <Files />
+            <div className="dropzone__overlay">
+              <div className="dropzone__copy">
+                <div className="dropzone__icon">
+                  <Files />
+                </div>
+                <FormattedMessage id="torrents.list.drop" />
+              </div>
             </div>
-            <FormattedMessage id="torrents.list.drop" />
           </div>
-        </div>
+        )}
       </Dropzone>
     );
   }
