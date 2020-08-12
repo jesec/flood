@@ -21,6 +21,7 @@
   "auth.error.username.empty": "Gebruikersnaam mag niet leeg zijn.",
   "auth.log.in": "Log in",
   "auth.login": "Aanmelden",
+  "auth.login.intro": "Log in to your account.",
   "auth.password": "Wachtwoord",
   "auth.user.accounts": "Accounts",
   "auth.username": "Gebruikersnaam",
