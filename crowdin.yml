@@ -1,0 +1,5 @@
+commit_message: 'i18n: new translations for %language%'
+append_commit_message: false
+files:
+  - source: /client/src/javascript/i18n/strings.js
+    translation: /client/src/javascript/i18n/translations/%osx_locale%.js
