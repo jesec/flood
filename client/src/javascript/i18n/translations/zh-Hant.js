@@ -3,15 +3,13 @@ export default {
   'actionbar.button.stop.torrent': '停止下載',
   'actionbar.button.add.torrent': '新增種子',
   'actionbar.button.remove.torrent': '移除種子',
-
-  'alert.torrent.add': `成功新增 {countElement} 個種子。`,
-  'alert.torrent.add.failed': `新增 {countElement} 個種子失敗。`,
-  'alert.torrent.move': `成功移動 {countElement} 個種子。`,
-  'alert.torrent.move.failed': `移動 {countElement} 個種子失敗。`,
-  'alert.torrent.remove': `成功移除 {countElement} 個種子。`,
-  'alert.torrent.remove.failed': `移除 {countElement} 個種子失敗。`,
+  'alert.torrent.add': '成功新增 {countElement} 個種子。',
+  'alert.torrent.add.failed': '新增 {countElement} 個種子失敗。',
+  'alert.torrent.move': '成功移動 {countElement} 個種子。',
+  'alert.torrent.move.failed': '移動 {countElement} 個種子失敗。',
+  'alert.torrent.remove': '成功移除 {countElement} 個種子。',
+  'alert.torrent.remove.failed': '移除 {countElement} 個種子失敗。',
   'alert.settings.saved': '設定儲存成功。',
-
   'auth.add.user': '新增使用者',
   'auth.connectionType': 'rTorrent 連線類型',
   'auth.connectionType.tcp': 'TCP',
@@ -32,7 +30,6 @@ export default {
   'auth.rtorrentPort': 'rTorrent 連接埠',
   'auth.rtorrentSocket': 'rTorrent Socket',
   'auth.rtorrentSocketPath': 'rTorrent Socket 路徑',
-
   'button.add': '新增',
   'button.cancel': '取消',
   'button.no': '否',
@@ -42,10 +39,8 @@ export default {
   'button.state.adding': '新增中...',
   'button.yes': '是',
   'button.new': '新增',
-
   'connectivity.modal.title': '連線問題',
   'connectivity.modal.content': '無法連線到 rTorrent。請更新連線資訊。',
-
   'feeds.add.automatic.download.rule': '新增下載規則',
   'feeds.add.feed': '新增訊息來源',
   'feeds.applicable.feed': '可使用的訊息來源',
@@ -81,12 +76,10 @@ export default {
   'feeds.validation.must.specify.label': '你必須指定標籤。',
   'feeds.validation.must.specify.valid.feed.url': '你必須指定一個有效的訊息來源網址。',
   'feeds.browse.feeds': '瀏覽訊息來源',
-
   'filesystem.empty.directory': '空白資料夾。',
   'filesystem.error.eacces': 'Flood 沒有權限去讀取資料夾的內容。',
   'filesystem.error.enoent': '路徑不存在，系統會自動建立。',
   'filesystem.fetching': '抓取資料夾結構中...',
-
   'filter.all': '全部',
   'filter.status.title': '篩選狀態',
   'filter.status.downloading': '下載中',
@@ -99,31 +92,25 @@ export default {
   'filter.tracker.title': '篩選 Tracker',
   'filter.tag.title': '篩選 Tag',
   'filter.untagged': '未標籤',
-
   'general.ago': '前',
   'general.at': '於',
   'general.to': '給',
   'general.of': '的',
-
   'general.clipboard.copy': '複製',
   'general.clipboard.copied': '已複製',
-
   'mediainfo.execError': '執行 MediaInfo 發生錯誤，請確認系統中有安裝 mediainfo 且該執行檔位於 PATH 變數中。',
   'mediainfo.fetching': '抓取中...',
   'mediainfo.heading': 'Mediainfo輸出',
-
   'notification.torrent.finished.heading': '下載完成',
   'notification.torrent.finished.body': '{name}',
   'notification.torrent.errored.heading': '錯誤回報',
   'notification.torrent.errored.body': '{name}',
   'notification.clear.all': '全部清除',
   'notification.showing': '檢視',
-
   'priority.dont.download': '不要下載',
   'priority.high': '高優先權',
   'priority.low': '低優先權',
   'priority.normal': '中優先權',
-
   'settings.bandwidth.slots.download.divider.label': '下載數間隔',
   'settings.bandwidth.slots.download.global.label': '最大同時下載數',
   'settings.bandwidth.slots.download.label': '每個 Torrent 最大下載數',
@@ -136,7 +123,6 @@ export default {
   'settings.bandwidth.transferrate.global.throttle.download': '總下載速度限制',
   'settings.bandwidth.transferrate.global.throttle.upload': '總上傳速度限制',
   'settings.bandwidth.transferrate.heading': '傳輸速度限制',
-
   'settings.connectivity.dht.label': '啟用 DHT',
   'settings.connectivity.dht.port.label': 'DHT 連接埠',
   'settings.connectivity.dpd.heading': '分散式節點發現',
@@ -153,14 +139,12 @@ export default {
   'settings.connectivity.port.open.label': '開放連接埠',
   'settings.connectivity.port.randomize.label': '隨機連接埠',
   'settings.connectivity.port.range.label': '連接埠範圍',
-
   'settings.resources.disk.check.hash.label': '完成時驗證雜湊',
   'settings.resources.disk.download.location.label': '預設下載資料夾',
   'settings.resources.disk.heading': '磁碟',
   'settings.resources.max.open.files': '最大開啟檔案數',
   'settings.resources.memory.heading': '記憶體',
   'settings.resources.memory.max.label': '最大記憶體使用量',
-
   'settings.tabs.bandwidth': '頻寬',
   'settings.tabs.connectivity': '連線',
   'settings.tabs.heading': '設定',
@@ -169,7 +153,6 @@ export default {
   'settings.tabs.userinterface': '使用者介面',
   'settings.tabs.diskusage': '磁碟使用量',
   'settings.tabs.about': '關於',
-
   'settings.ui.locale': '語系',
   'settings.ui.language': '語言',
   'settings.ui.torrent.list': '種子列表顯示模式',
@@ -179,25 +162,18 @@ export default {
   'settings.ui.torrent.details.enabled': '啟用',
   'settings.ui.torrent.details.tags.placement': '在展開模式中，把標籤放在列表的最後一項會比較好。',
   'settings.ui.displayed.details': '種子詳細資訊欄位',
-
   'settings.diskusage.show': '顯示',
   'settings.diskusage.mount.points': '掛載節點磁碟空間使用量',
-
   'settings.about.flood': '關於Flood',
-
   'sidebar.button.feeds': '訊息來源',
   'sidebar.button.notifications': '通知',
   'sidebar.button.settings': '設定',
   'sidebar.button.speedlimits': '速度限制',
   'sidebar.button.log.out': '登出',
-
   'sidebar.search.placeholder': '搜尋種子',
-
   'sidebar.transferdata.downloaded': '已下載',
   'sidebar.transferdata.uploaded': '已上傳',
-
   'speed.unlimited': '無限制',
-
   'unit.size.byte': 'B',
   'unit.size.kilobyte': 'KB',
   'unit.size.megabyte': 'MB',
@@ -211,7 +187,6 @@ export default {
   'unit.time.minute': '分',
   'unit.time.second': '秒',
   'unit.time.infinity': '∞',
-
   'torrents.add.button.add': '新增種子',
   'torrents.add.destination.label': '下載位置',
   'torrents.add.destination.placeholder': '下載位置',
@@ -224,16 +199,14 @@ export default {
   'torrents.add.tab.url.title': '從網址',
   'torrents.add.torrents.label': '種子',
   'torrents.add.tags': '標籤',
-
   'torrents.destination.base_path': '當作基本路徑',
-
   'torrents.details.actions.pause': '暫停',
   'torrents.details.actions.start': '開始',
   'torrents.details.actions.stop': '停止',
   'torrents.details.details': '詳細資訊',
   'torrents.details.files': '檔案',
   'torrents.details.files.loading': '讀取檔案詳細資訊...',
-  'torrents.details.files.download.file': `下載檔案`,
+  'torrents.details.files.download.file': '下載檔案',
   'torrents.details.general.comment': '評論',
   'torrents.details.general.connected': '已連線到 {total} 中的 {connected}',
   'torrents.details.general.date.added': '新增日期',
@@ -261,12 +234,11 @@ export default {
   'torrents.details.mediainfo': 'Mediainfo',
   'torrents.details.peers.no.data': '這個種子沒有任何節點資訊。',
   'torrents.details.peers': '節點',
-  'torrents.details.selected.files': `已選擇 {countElement} 個檔案`,
+  'torrents.details.selected.files': '已選擇 {countElement} 個檔案',
   'torrents.details.selected.files.set.priority': '設定優先權',
   'torrents.details.trackers.no.data': '這個種子沒有任何 tracker 資訊。',
   'torrents.details.trackers.type': '類型',
   'torrents.details.trackers': 'Trackers',
-
   'torrents.list.clear.filters': '清除篩選條件',
   'torrents.list.context.check.hash': '檢查雜湊',
   'torrents.list.context.details': '種子詳細資訊',
@@ -282,13 +254,11 @@ export default {
   'torrents.list.cannot.connect': '無法連線到 rTorrent。',
   'torrent.list.peers': '{total} 中的 {connected}',
   'torrent.list.peers.of': '中的',
-
   'torrents.move.button.set.location': '設定下載位置',
   'torrents.move.button.state.setting': '設定中...',
   'torrents.move.data.label': '移動資料',
   'torrents.move.check_hash.label': '檢查雜湊',
   'torrents.move.heading': '設定下載位置',
-
   'torrents.properties.date.added': '新增日期',
   'torrents.properties.base.path': '下載位置',
   'torrents.properties.comment': '評論',
@@ -308,24 +278,18 @@ export default {
   'torrents.properties.tracker.message': 'Tracker 訊息',
   'torrents.properties.upload.speed': '上傳速度',
   'torrents.properties.upload.total': '已上傳',
-
-  'torrents.remove.are.you.sure': `你確定要移除這些種子嗎？`,
+  'torrents.remove.are.you.sure': '你確定要移除這些種子嗎？',
   'torrents.remove.delete.data': '刪除已下載檔案',
   'torrents.remove.error.no.torrents.selected': '你沒有選擇任何種子。',
   'torrents.remove': '移除種子',
-
   'torrents.set.tags.button.set': '設定標籤',
   'torrents.set.tags.heading': '設定標籤',
   'torrents.set.tags.enter.tags': '輸入標籤',
-
   'torrents.sort.title': '排序方式',
-
   'connection-interruption.heading': '無法連線到 rTorrent',
   'connection-interruption.verify-settings-prompt': '檢查連線設定。',
   'connection-interruption.verification-error': '無法建立連線。',
   'connection-interruption.verification-success': '連線成功',
-
   'status.diskusage.title': '磁碟空間使用量',
-
   'locale.language.auto': '自動',
 };

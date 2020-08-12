@@ -3,33 +3,13 @@ export default {
   'actionbar.button.stop.torrent': '停止 Torrent',
   'actionbar.button.add.torrent': '添加 Torrent',
   'actionbar.button.remove.torrent': '移除 Torrent',
-
-  'alert.torrent.add': `成功添加 {countElement} {count, plural,
-        =1 {torrent}
-        other {torrents}
-      }。`,
-  'alert.torrent.add.failed': `添加 {countElement} {count, plural,
-        =1 {torrent}
-        other {torrents}
-      } 失败。`,
-  'alert.torrent.move': `移动 {countElement} {count, plural,
-        =1 {torrent}
-        other {torrents}
-      } 成功。`,
-  'alert.torrent.move.failed': `移动 {countElement} {count, plural,
-        =1 {torrent}
-        other {torrents}
-      } 失败。`,
-  'alert.torrent.remove': `成功移除 {countElement} {count, plural,
-        =1 {torrent}
-        other {torrents}
-      }。`,
-  'alert.torrent.remove.failed': `移除 {countElement} {count, plural,
-        =1 {torrent}
-        other {torrents}
-      } 失败。`,
+  'alert.torrent.add': '成功添加 {countElement} {count, plural, =1 {torrent} other {torrents}}。',
+  'alert.torrent.add.failed': '添加 {countElement} {count, plural, =1 {torrent} other {torrents}} 失败。',
+  'alert.torrent.move': '移动 {countElement} {count, plural, =1 {torrent} other {torrents}} 成功。',
+  'alert.torrent.move.failed': '移动 {countElement} {count, plural, =1 {torrent} other {torrents}} 失败。',
+  'alert.torrent.remove': '成功移除 {countElement} {count, plural, =1 {torrent} other {torrents}}。',
+  'alert.torrent.remove.failed': '移除 {countElement} {count, plural, =1 {torrent} other {torrents}} 失败。',
   'alert.settings.saved': '设置保存成功！',
-
   'auth.add.user': '增加用户',
   'auth.connectionType': 'rTorrent 连接类型',
   'auth.connectionType.tcp': 'TCP',
@@ -50,7 +30,6 @@ export default {
   'auth.rtorrentPort': 'rTorrent Port',
   'auth.rtorrentSocket': 'rTorrent Socket',
   'auth.rtorrentSocketPath': 'rTorrent Socket Path',
-
   'button.add': '新增',
   'button.cancel': '取消',
   'button.no': '否',
@@ -59,10 +38,8 @@ export default {
   'button.test': '测试',
   'button.state.adding': '增加中...',
   'button.yes': '是',
-
   'connectivity.modal.title': 'Connectivity Issue',
   'connectivity.modal.content': '无法连接至 rTorrent. 请更新信息！',
-
   'feeds.add.automatic.download.rule': '增加下载规则',
   'feeds.add.feed': '添加Feed',
   'feeds.applicable.feed': '可用的 Feed',
@@ -97,12 +74,10 @@ export default {
   'feeds.validation.must.specify.destination': '你必须指定目的地。',
   'feeds.validation.must.specify.label': '你必须指定标签。',
   'feeds.validation.must.specify.valid.feed.url': '你必须指定有效的feed网址。',
-
   'filesystem.empty.directory': '空目录.',
   'filesystem.error.eacces': 'Flood无权读取此目录。',
   'filesystem.error.enoent': '路径不存在，将会创建此目录。',
   'filesystem.fetching': '获取目录结构...',
-
   'filter.all': 'All',
   'filter.status.title': '根据状态过滤',
   'filter.status.downloading': '下载中',
@@ -113,31 +88,25 @@ export default {
   'filter.tracker.title': '根据Tracker过滤',
   'filter.tag.title': '根据Tag过滤',
   'filter.untagged': '未标记',
-
   'general.ago': 'ago',
   'general.at': 'at',
   'general.to': 'to',
   'general.of': 'of',
-
   'general.clipboard.copy': '复制',
   'general.clipboard.copied': '复制成功',
-
   'mediainfo.execError': '在服务器上运行mediainfo时发生错误。检查mediainfo是否已经安装，并且在PTAH中正确配置！',
   'mediainfo.fetching': '获取中...',
   'mediainfo.heading': 'Mediainfo 输出',
-
   'notification.torrent.finished.heading': '下载完成！',
   'notification.torrent.finished.body': '{name}',
   'notification.torrent.errored.heading': '错误报告',
   'notification.torrent.errored.body': '{name}',
   'notification.clear.all': '全部清除',
   'notification.showing': 'Showing',
-
   'priority.dont.download': '不下载',
   'priority.high': '高',
   'priority.low': '低',
   'priority.normal': '正常',
-
   'settings.bandwidth.slots.download.divider.label': '下载槽分配器',
   'settings.bandwidth.slots.download.global.label': '从全球下载槽',
   'settings.bandwidth.slots.download.label': '下载每个Torrent插槽',
@@ -150,7 +119,6 @@ export default {
   'settings.bandwidth.transferrate.global.throttle.download': '全球下载比例阈值',
   'settings.bandwidth.transferrate.global.throttle.upload': '全球上传比例阈值',
   'settings.bandwidth.transferrate.heading': '传输比例阈值',
-
   'settings.connectivity.dht.label': '启动 DHT',
   'settings.connectivity.dht.port.label': 'DHT 端口',
   'settings.connectivity.dpd.heading': 'Decentralized Peer Discovery',
@@ -167,14 +135,12 @@ export default {
   'settings.connectivity.port.open.label': '打开端口',
   'settings.connectivity.port.randomize.label': '随机端口',
   'settings.connectivity.port.range.label': '端口范围',
-
   'settings.resources.disk.check.hash.label': '完成时验证Hash值',
   'settings.resources.disk.download.location.label': '默认下载目录',
   'settings.resources.disk.heading': '磁盘',
   'settings.resources.max.open.files': '打开文件最大值',
   'settings.resources.memory.heading': '内存',
   'settings.resources.memory.max.label': '最大内存使用',
-
   'settings.tabs.bandwidth': '带宽',
   'settings.tabs.connectivity': '连接',
   'settings.tabs.heading': '设置',
@@ -182,7 +148,6 @@ export default {
   'settings.tabs.authentication': '认证',
   'settings.tabs.userinterface': '用户接口',
   'settings.tabs.about': '关于',
-
   'settings.ui.locale': '语言环境',
   'settings.ui.language': '语言',
   'settings.ui.torrent.list': 'Torrent 列表显示',
@@ -191,22 +156,16 @@ export default {
   'settings.ui.torrent.size.condensed': '凝聚试图',
   'settings.ui.torrent.details.enabled': '启动',
   'settings.ui.torrent.details.tags.placement': '在展开视图中，tags在列表末尾最有效。',
-
   'settings.about.flood': '关于Flood',
-
   'sidebar.button.feeds': '订阅',
   'sidebar.button.notifications': '通知',
   'sidebar.button.settings': '设置',
   'sidebar.button.speedlimits': '速度限制',
   'sidebar.button.log.out': '登出',
-
   'sidebar.search.placeholder': '搜索 torrents',
-
   'sidebar.transferdata.downloaded': '已下载',
   'sidebar.transferdata.uploaded': '已上传',
-
   'speed.unlimited': '不限制',
-
   'unit.size.byte': 'B',
   'unit.size.kilobyte': 'kB',
   'unit.size.megabyte': 'MB',
@@ -220,7 +179,6 @@ export default {
   'unit.time.minute': '分',
   'unit.time.second': '秒',
   'unit.time.infinity': '∞',
-
   'torrents.add.button.add': '添加Torrent',
   'torrents.add.destination.label': '路径',
   'torrents.add.destination.placeholder': '路径',
@@ -232,19 +190,14 @@ export default {
   'torrents.add.tab.url.input.placeholder': 'Torrent URL或者磁力链接',
   'torrents.add.tab.url.title': '根据URL',
   'torrents.add.torrents.label': 'Torrents',
-
   'torrents.destination.base_path': '作为基础路径',
-
   'torrents.details.actions.pause': '暂停',
   'torrents.details.actions.start': '开始',
   'torrents.details.actions.stop': '停止',
   'torrents.details.details': '详情',
   'torrents.details.files': '文件',
   'torrents.details.files.loading': '加载文件详情...',
-  'torrents.details.files.download.file': `{count, plural,
-      =1 {Download File}
-      other {Download Files}
-    }`,
+  'torrents.details.files.download.file': '{count, plural, =1 {Download File} other {Download Files}}',
   'torrents.details.general.comment': '评论',
   'torrents.details.general.connected': '{connected} connected of {total}',
   'torrents.details.general.date.added': '已添加',
@@ -272,15 +225,12 @@ export default {
   'torrents.details.mediainfo': 'Mediainfo',
   'torrents.details.peers.no.data': '这个种子没有peer数据。',
   'torrents.details.peers': 'Peers',
-  'torrents.details.selected.files': `{count, plural,
-      =1 {{countElement} selected file}
-      other {{countElement} selected files}
-    }`,
+  'torrents.details.selected.files':
+    '{count, plural, =1 {{countElement} selected file} other {{countElement} selected files}}',
   'torrents.details.selected.files.set.priority': '设置优先级',
   'torrents.details.trackers.no.data': '这个种子没有tracker 数据。',
   'torrents.details.trackers.type': 'Type',
   'torrents.details.trackers': 'Trackers',
-
   'torrents.list.clear.filters': '清除过滤器',
   'torrents.list.context.check.hash': '检查 Hash',
   'torrents.list.context.details': 'Torrent 详情',
@@ -296,12 +246,10 @@ export default {
   'torrents.list.cannot.connect': '无法连接到 rTorrent.',
   'torrent.list.peers': '{connected} {of} {total}',
   'torrent.list.peers.of': 'of',
-
   'torrents.move.button.set.location': '设置下载路径',
   'torrents.move.button.state.setting': '设置中...',
   'torrents.move.data.label': '移动数据',
   'torrents.move.heading': '设置 Torrent 路径',
-
   'torrents.properties.date.added': '已添加',
   'torrents.properties.base.path': 'Base Path',
   'torrents.properties.comment': '备注',
@@ -321,26 +269,17 @@ export default {
   'torrents.properties.tracker.message': 'Tracker 信息',
   'torrents.properties.upload.speed': '上传速度',
   'torrents.properties.upload.total': '已上传',
-
-  'torrents.remove.are.you.sure': `你确定移动 {count, plural,
-        =0 {no torrents}
-        =1 {one torrent}
-        other {# torrents}
-      }?`,
+  'torrents.remove.are.you.sure': '你确定移动 {count, plural, =0 {no torrents} =1 {one torrent} other {# torrents}}?',
   'torrents.remove.delete.data': '删除数据',
   'torrents.remove.error.no.torrents.selected': '你没有选中任何 torrents.',
   'torrents.remove': '移除 Torrents',
-
   'torrents.set.tags.button.set': '设置 Tags',
   'torrents.set.tags.heading': '设置 Tags',
   'torrents.set.tags.enter.tags': '输入 tags',
-
   'torrents.sort.title': '排序',
-
   'connection-interruption.heading': '无法连接至 rTorrent',
   'connection-interruption.verify-settings-prompt': '让我们验证你的连接设置。',
   'connection-interruption.verification-error': '无法验证连接。',
   'connection-interruption.verification-success': '连接成功！',
-
   'locale.language.auto': '自动',
 };

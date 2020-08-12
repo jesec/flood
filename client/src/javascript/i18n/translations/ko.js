@@ -1,30 +1,11 @@
 export default {
-  'alert.torrent.add': `{countElement} {count, plural,
-      =1 {토렌트}
-      other {토렌트}
-    }를 추가했습니다.`,
-  'alert.torrent.add.failed': `{countElement} {count, plural,
-      =1 {토렌트}
-      other {토렌트}
-    }를 추가하지 못했습니다.`,
-  'alert.torrent.move': `{countElement} {count, plural,
-      =1 {토렌트}
-      other {토렌트}
-    }를 이동했습니다.`,
-  'alert.torrent.move.failed': `{countElement} {count, plural,
-      =1 {토렌트}
-      other {토렌트}
-    }를 이동하지 못했습니다.`,
-  'alert.torrent.remove': `{countElement} {count, plural,
-      =1 {토렌트}
-      other {토렌트}
-    }를 제거했습니다.`,
-  'alert.torrent.remove.failed': `{countElement} {count, plural,
-      =1 {토렌트}
-      other {토렌트}
-    }를 제거하지 못했습니다.`,
+  'alert.torrent.add': '{countElement} {count, plural, =1 {토렌트} other {토렌트}}를 추가했습니다.',
+  'alert.torrent.add.failed': '{countElement} {count, plural, =1 {토렌트} other {토렌트}}를 추가하지 못했습니다.',
+  'alert.torrent.move': '{countElement} {count, plural, =1 {토렌트} other {토렌트}}를 이동했습니다.',
+  'alert.torrent.move.failed': '{countElement} {count, plural, =1 {토렌트} other {토렌트}}를 이동하지 못했습니다.',
+  'alert.torrent.remove': '{countElement} {count, plural, =1 {토렌트} other {토렌트}}를 제거했습니다.',
+  'alert.torrent.remove.failed': '{countElement} {count, plural, =1 {토렌트} other {토렌트}}를 제거하지 못했습니다.',
   'alert.settings.saved': '설정을 저장했습니다.',
-
   'auth.add.user': '사용자 추가',
   'auth.create.account': '계정 생성',
   'auth.create.an.account': '계정 생성',
@@ -46,7 +27,6 @@ export default {
   'auth.connectionType': 'rTorrent 연결 종류',
   'auth.connectionType.tcp': 'TCP',
   'auth.connectionType.socket': '유닉스 소켓',
-
   'button.add': '추가',
   'button.cancel': '취소',
   'button.no': '아니오',
@@ -54,10 +34,8 @@ export default {
   'button.test': '테스트',
   'button.state.adding': '추가 중...',
   'button.yes': '예',
-
   'connectivity.modal.title': '연결 문제',
   'connectivity.modal.content': 'rTorrent에 연결하지 못했습니다. 지금, 설정을 고쳐주세요.',
-
   'feeds.add.automatic.download.rule': '다운로드 규칙 추가',
   'feeds.add.feed': '피드 추가',
   'feeds.applicable.feed': '가용 피드',
@@ -91,12 +69,10 @@ export default {
   'feeds.validation.must.specify.destination': '저장할 경로를 지정해야 합니다.',
   'feeds.validation.must.specify.label': '라벨을 지정해야 합니다.',
   'feeds.validation.must.specify.valid.feed.url': '올바른 피드 URL을 지정해야 합니다.',
-
   'filesystem.empty.directory': '비어있는 디렉토리입니다.',
   'filesystem.error.eacces': 'Flood에 이 디렉토리를 읽을 권한이 없습니다.',
   'filesystem.error.enoent': '없는 경로입니다. 생성될 것입니다.',
   'filesystem.fetching': '디렉토리 구조 가져오는 중...',
-
   'filter.all': '전체',
   'filter.status.title': '필터: 상태',
   'filter.status.downloading': '다운로드 중',
@@ -108,32 +84,26 @@ export default {
   'filter.tracker.title': '필터: 트래커',
   'filter.tag.title': '필터: 태그',
   'filter.untagged': '태그 없음',
-
   'general.ago': '전',
   'general.at': '@',
   'general.to': '-',
   'general.of': '/',
-
   'general.clipboard.copy': '복사',
   'general.clipboard.copied': '복사됨',
-
   'mediainfo.execError':
     '서버에서 미디어 정보를 가져오는 중 오류가 발생했습니다. mediainfo가 설치되어 있으며 Flood가 쓸 수 있도록 PATH가 지정되어 있는지 확인하세요.',
   'mediainfo.fetching': '가져오는 중...',
   'mediainfo.heading': 'Mediainfo 출력',
-
   'notification.torrent.finished.heading': '다운로드 완료',
   'notification.torrent.finished.body': '{name}',
   'notification.torrent.errored.heading': '오류 보고',
   'notification.torrent.errored.body': '{name}',
   'notification.clear.all': '모두 지우기',
   'notification.showing': '표시 중',
-
   'priority.dont.download': '다운로드하지 않음',
   'priority.high': '높음',
   'priority.low': '낮음',
   'priority.normal': '보통',
-
   'settings.bandwidth.slots.download.divider.label': '다운로드 슬롯 나눌 값',
   'settings.bandwidth.slots.download.global.label': '전체 다운로드 슬롯 개수',
   'settings.bandwidth.slots.download.label': '토렌트당 다운로드 슬롯 개수',
@@ -146,7 +116,6 @@ export default {
   'settings.bandwidth.transferrate.global.throttle.download': '전체 다운로드 속도 제한',
   'settings.bandwidth.transferrate.global.throttle.upload': '전체 업로드 속도 제한',
   'settings.bandwidth.transferrate.heading': '전송 속도 제한',
-
   'settings.connectivity.dht.label': 'DHT 사용',
   'settings.connectivity.dht.port.label': 'DHT 포트',
   'settings.connectivity.dpd.heading': '탈중앙 피어 탐색',
@@ -163,21 +132,18 @@ export default {
   'settings.connectivity.port.open.label': '포트 열기',
   'settings.connectivity.port.randomize.label': '임의 포트',
   'settings.connectivity.port.range.label': '포트 범위',
-
   'settings.resources.disk.check.hash.label': '완료 시 해시 검증',
   'settings.resources.disk.download.location.label': '기본 다운로드 경로',
   'settings.resources.disk.heading': '디스크',
   'settings.resources.max.open.files': '최대 열어둘 파일 개수',
   'settings.resources.memory.heading': '메모리',
   'settings.resources.memory.max.label': '최대 메모리 사용량',
-
   'settings.tabs.bandwidth': '대역폭',
   'settings.tabs.connectivity': '연결',
   'settings.tabs.heading': '설정',
   'settings.tabs.resources': '자원',
   'settings.tabs.authentication': '인증',
   'settings.tabs.userinterface': '사용자 인터페이스',
-
   'settings.ui.locale': '지역',
   'settings.ui.language': '언어',
   'settings.ui.torrent.list': '토렌트 목록 표시',
@@ -187,25 +153,19 @@ export default {
   'settings.ui.torrent.displayed.details': '토렌트 속성 열',
   'settings.ui.torrent.details.tags.placement': '확장 보기에서는, 태그를 목록 끝에 배치하면 제일 잘 작동합니다.',
   'settings.ui.torrent.details.enabled': '표시',
-
   'sidebar.button.feeds': '피드',
   'sidebar.button.notifications': '알림',
   'sidebar.button.settings': '설정',
   'sidebar.button.speedlimits': '속도 제한',
   'sidebar.button.log.out': '로그아웃',
-
   'sidebar.search.placeholder': '토렌트 검색',
-
   'sidebar.transferdata.downloaded': '다운로드한 크기',
   'sidebar.transferdata.uploaded': '업로드한 크기',
-
   'actionbar.button.start.torrent': '토렌트 시작',
   'actionbar.button.stop.torrent': '토렌트 중지',
   'actionbar.button.add.torrent': '토렌트 추가',
   'actionbar.button.remove.torrent': '토렌트 제거',
-
   'speed.unlimited': '무제한',
-
   'unit.size.byte': 'B',
   'unit.size.kilobyte': 'kB',
   'unit.size.megabyte': 'MB',
@@ -219,7 +179,6 @@ export default {
   'unit.time.minute': '분',
   'unit.time.second': '초',
   'unit.time.infinity': '∞',
-
   'torrents.add.button.add': '토렌트 추가',
   'torrents.add.destination.label': '저장 경로',
   'torrents.add.destination.placeholder': '저장 경로',
@@ -231,18 +190,13 @@ export default {
   'torrents.add.tab.url.input.placeholder': '토렌트 URL 또는 마그넷 주소',
   'torrents.add.tab.url.title': 'URL',
   'torrents.add.torrents.label': '토렌트',
-
   'torrents.destination.base_path': '기본 경로로 사용',
-
   'torrents.details.actions.pause': '일시중지',
   'torrents.details.actions.start': '시작',
   'torrents.details.actions.stop': '중지',
   'torrents.details.details': '속성',
   'torrents.details.files': '파일',
-  'torrents.details.files.download.file': `{count, plural,
-    =1 {선택한 파일 다운로드}
-    other {선택한 파일 다운로드}
-  }`,
+  'torrents.details.files.download.file': '{count, plural, =1 {선택한 파일 다운로드} other {선택한 파일 다운로드}}',
   'torrents.details.general.comment': '설명',
   'torrents.details.general.connected': '{total} 중 {connected} 연결됨',
   'torrents.details.general.date.added': '추가한 날',
@@ -271,15 +225,11 @@ export default {
   'torrents.details.peers.no.data': '이 토렌트에는 피어 정보가 없습니다.',
   'torrents.details.peers': '피어',
   'torrents.details.files.loading': '파일 목록 불러오는 중...',
-  'torrents.details.selected.files': `{count, plural,
-    =1 {{countElement} 파일 선택}
-    other {{countElement} 파일 선택}
-  }`,
+  'torrents.details.selected.files': '{count, plural, =1 {{countElement} 파일 선택} other {{countElement} 파일 선택}}',
   'torrents.details.selected.files.set.priority': '우선순위 지정',
   'torrents.details.trackers.no.data': '이 토렌트에는 트래커 정보가 없습니다.',
   'torrents.details.trackers.type': '종류',
   'torrents.details.trackers': '트래커',
-
   'torrents.list.clear.filters': '필터 지우기',
   'torrents.list.context.check.hash': '해시 검사',
   'torrents.list.context.details': '토렌트 속성',
@@ -296,12 +246,10 @@ export default {
   'torrents.list.cannot.connect': 'rTorrent에 연결하지 못했습니다.',
   'torrent.list.peers': '{total} {of} {connected}',
   'torrent.list.peers.of': '중',
-
   'torrents.move.button.set.location': '경로 지정',
   'torrents.move.button.state.setting': '이동 중...',
   'torrents.move.data.label': '데이터 이동',
   'torrents.move.heading': '토렌트 경로 지정',
-
   'torrents.properties.date.added': '추가한 날',
   'torrents.properties.base.path': '기본 경로',
   'torrents.properties.comment': '설명',
@@ -324,26 +272,18 @@ export default {
   'torrents.properties.trackers': '트래커',
   'torrents.properties.upload.speed': '업로드 속도',
   'torrents.properties.upload.total': '업로드 크기',
-
-  'torrents.remove.are.you.sure': `정말 {count, plural,
-      =0 {0개 토렌트를}
-      =1 {토렌트 한 개를}
-      other {#개 토렌트를}
-    } 제거할까요?`,
+  'torrents.remove.are.you.sure':
+    '정말 {count, plural, =0 {0개 토렌트를} =1 {토렌트 한 개를} other {#개 토렌트를}} 제거할까요?',
   'torrents.remove.delete.data': '데이터 삭제',
   'torrents.remove.error.no.torrents.selected': '토렌트를 선택하지 않았습니다.',
   'torrents.remove': '토렌트 제거',
-
   'torrents.set.tags.button.set': '태그 지정',
   'torrents.set.tags.heading': '태그 지정',
   'torrents.set.tags.enter.tags': '태그 입력',
-
   'torrents.sort.title': '정렬 기준',
-
   'connection-interruption.heading': 'rTorrent에 연결하지 못했습니다',
   'connection-interruption.verify-settings-prompt': '연결 설정을 검증해보겠습니다.',
   'connection-interruption.verification-error': '연결을 검증하지 못했습니다.',
   'connection-interruption.verification-success': '연결 성공',
-
   'locale.language.auto': '자동',
 };

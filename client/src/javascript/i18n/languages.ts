@@ -7,13 +7,13 @@ import koLocaleData from 'react-intl/locale-data/ko';
 import nlLocaleData from 'react-intl/locale-data/nl';
 import zhLocaleData from 'react-intl/locale-data/zh';
 
-import EN from './en';
-import ES from './es';
-import FR from './fr';
-import KO from './ko';
-import NL from './nl';
-import ZH_HANS from './zh-Hans';
-import ZH_HANT from './zh-Hant';
+import EN from './strings';
+import ES from './translations/es';
+import FR from './translations/fr';
+import KO from './translations/ko';
+import NL from './translations/nl';
+import ZH_HANS from './translations/zh-Hans';
+import ZH_HANT from './translations/zh-Hant';
 
 addLocaleData(deLocaleData);
 addLocaleData(enLocaleData);

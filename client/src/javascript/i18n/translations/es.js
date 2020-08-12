@@ -1,30 +1,15 @@
 export default {
-  'alert.torrent.add': `{countElement} {count, plural,
-      =1 {torrent agregado}
-      other {torrents agregados}
-    }.`,
-  'alert.torrent.add.failed': `{countElement} {count, plural,
-      =1 {torrent fallo al agregar}
-      other {torrents fallaron al agregarse}
-    }.`,
-  'alert.torrent.move': `{countElement} {count, plural,
-      =1 {torrent se ha movido}
-      other {torrents se han movido}
-    }.`,
-  'alert.torrent.move.failed': `{countElement} {count, plural,
-      =1 {torrent fallo al moverse}
-      other {torrents fallaron al moverse}
-    }.`,
-  'alert.torrent.remove': `{countElement} {count, plural,
-      =1 {torrent se ha eliminado}
-      other {torrents se han eliminado}
-    }.`,
-  'alert.torrent.remove.failed': `{countElement} {count, plural,
-      =1 {torrent fallo al eliminarse}
-      other {torrents fallaron al eliminarse}
-    }.`,
+  'alert.torrent.add': '{countElement} {count, plural, =1 {torrent agregado} other {torrents agregados}}.',
+  'alert.torrent.add.failed':
+    '{countElement} {count, plural, =1 {torrent fallo al agregar} other {torrents fallaron al agregarse}}.',
+  'alert.torrent.move': '{countElement} {count, plural, =1 {torrent se ha movido} other {torrents se han movido}}.',
+  'alert.torrent.move.failed':
+    '{countElement} {count, plural, =1 {torrent fallo al moverse} other {torrents fallaron al moverse}}.',
+  'alert.torrent.remove':
+    '{countElement} {count, plural, =1 {torrent se ha eliminado} other {torrents se han eliminado}}.',
+  'alert.torrent.remove.failed':
+    '{countElement} {count, plural, =1 {torrent fallo al eliminarse} other {torrents fallaron al eliminarse}}.',
   'alert.settings.saved': 'Configuración Guardada.',
-
   'auth.add.user': 'Agregar usuario',
   'auth.create.account': 'Crear Cuenta',
   'auth.create.an.account': 'Crear una Cuenta',
@@ -36,7 +21,6 @@ export default {
   'auth.username': 'Nombre de Usuario',
   'auth.admin': 'Admin',
   'auth.message.not.admin': 'El Usuario no es Administrador',
-
   'button.add': 'Agregar',
   'button.cancel': 'Cancelar',
   'button.no': 'No',
@@ -44,7 +28,6 @@ export default {
   'button.save': 'Guardar Configuración',
   'button.state.adding': 'Agregando...',
   'button.yes': 'Sí',
-
   'feeds.add.automatic.download.rule': 'Agregar Regla de Descarga',
   'feeds.add.feed': 'Agregar Fuente',
   'feeds.applicable.feed': 'Fuente Correspondiente',
@@ -76,12 +59,10 @@ export default {
   'feeds.validation.must.specify.destination': 'Debe seleccionar una destinación.',
   'feeds.validation.must.specify.label': 'Debe seleccionar un rotulo',
   'feeds.validation.must.specify.valid.feed.url': 'Debe seleccionar un URL de fuente valido.',
-
   'filesystem.empty.directory': 'Carpeta vacía',
   'filesystem.error.eacces': 'Flood no tiene permisos para leer esta carpeta.',
   'filesystem.error.enoent': 'Esta ruta no existe. Se creara.',
   'filesystem.fetching': 'Cargando estructura de carpeta...',
-
   'filter.all': 'Todo',
   'filter.status.title': 'Filtrar por Estado',
   'filter.status.downloading': 'Descargando',
@@ -92,32 +73,26 @@ export default {
   'filter.tracker.title': 'Filtrar por Tracker',
   'filter.tag.title': 'Filtrar por Etiqueta',
   'filter.untagged': 'Sin Etiqueta',
-
   'general.ago': 'hace',
   'general.at': 'en',
   'general.to': 'hasta',
   'general.of': 'de',
-
   'general.clipboard.copy': 'Copiar',
   'general.clipboard.copied': 'Copiado',
-
   'mediainfo.execError':
     'Se ha encontrado un error al correr Mediainfo. Confirme que Mediainfo este instalado y disponible a Flood en el PATH',
   'mediainfo.fetching': 'Obteniendo...',
   'mediainfo.heading': 'Mediainfo',
-
   'notification.torrent.finished.heading': 'Descarga Completada',
   'notification.torrent.finished.body': '{name}',
   'notification.torrent.errored.heading': 'Error Reportado',
   'notification.torrent.errored.body': '{name}',
   'notification.clear.all': 'Borrar Todos',
   'notification.showing': 'Mostrando',
-
   'priority.dont.download': 'No Descargar',
   'priority.high': 'Alta',
   'priority.low': 'Baja',
   'priority.normal': 'Normal',
-
   'settings.bandwidth.slots.download.divider.label': 'Divisor de Espacios de Descarga',
   'settings.bandwidth.slots.download.global.label': 'Cant. Global de Espacios de Descargas',
   'settings.bandwidth.slots.download.label': 'Cant. por Torrent de Espacios de Descarga',
@@ -130,7 +105,6 @@ export default {
   'settings.bandwidth.transferrate.global.throttle.download': 'Regulador Global de Velocidad de Descarga',
   'settings.bandwidth.transferrate.global.throttle.upload': 'Regulador Global de Velocidad de Subida',
   'settings.bandwidth.transferrate.heading': 'Reguladores de Velocidad',
-
   'settings.connectivity.dht.label': 'Habilitar DHT',
   'settings.connectivity.dht.port.label': 'Puerto para DHT',
   'settings.connectivity.dpd.heading': 'Descubrimiento de Peers Descentralizado',
@@ -147,21 +121,18 @@ export default {
   'settings.connectivity.port.open.label': 'Puerto Abierto',
   'settings.connectivity.port.randomize.label': 'Puerto Aleatorio',
   'settings.connectivity.port.range.label': 'Rango de Puertos',
-
   'settings.resources.disk.check.hash.label': 'Verificar Hash al Terminar',
   'settings.resources.disk.download.location.label': 'Carpeta de Descargas Predeterminada',
   'settings.resources.disk.heading': 'Disco',
   'settings.resources.max.open.files': 'Cant. Máxima de Archivos Abiertos',
   'settings.resources.memory.heading': 'Memoria',
   'settings.resources.memory.max.label': 'Utilización Máxima de Memoria',
-
   'settings.tabs.bandwidth': 'Ancho de Banda',
   'settings.tabs.connectivity': 'Conectividad',
   'settings.tabs.heading': 'Configuración',
   'settings.tabs.resources': 'Recursos',
   'settings.tabs.authentication': 'Autenticación',
   'settings.tabs.userinterface': 'Interfaz de Usuario',
-
   'settings.ui.locale': 'Región',
   'settings.ui.language': 'Idioma',
   'settings.ui.torrent.list': 'Exhibición de Torrents',
@@ -170,19 +141,14 @@ export default {
   'settings.ui.torrent.size.condensed': 'Modo Condensado',
   'settings.ui.torrent.details.tags.placement':
     'En el modo expandido, las etiquetas se ven mejor al final de la lista.',
-
   'sidebar.button.feeds': 'Fuentes',
   'sidebar.button.notifications': 'Notificaciones',
   'sidebar.button.settings': 'Ajustes',
   'sidebar.button.speedlimits': 'Limites de Velocidad',
-
   'sidebar.search.placeholder': 'Buscar torrents',
-
   'sidebar.transferdata.downloaded': 'Descargado',
   'sidebar.transferdata.uploaded': 'Subido',
-
   'speed.unlimited': 'Sín Límite',
-
   'unit.size.byte': 'B',
   'unit.size.kilobyte': 'kB',
   'unit.size.megabyte': 'MB',
@@ -196,7 +162,6 @@ export default {
   'unit.time.minute': 'm',
   'unit.time.second': 's',
   'unit.time.infinity': '∞',
-
   'torrents.add.button.add': 'Agregar Torrent',
   'torrents.add.destination.label': 'Destinación',
   'torrents.add.destination.placeholder': 'Destinación',
@@ -208,18 +173,13 @@ export default {
   'torrents.add.tab.url.input.placeholder': 'URL de Torrent o Magnet Link',
   'torrents.add.tab.url.title': 'Con URL',
   'torrents.add.torrents.label': 'Torrents',
-
   'torrents.destination.base_path': 'Usar como Base Path',
-
   'torrents.details.actions.pause': 'Pausar',
   'torrents.details.actions.start': 'Comenzar',
   'torrents.details.actions.stop': 'Parar',
   'torrents.details.details': 'Detalles',
   'torrents.details.files': 'Archivos',
-  'torrents.details.files.download.file': `{count, plural,
-    =1 {Archivo}
-    other {Archivos}
-  }`,
+  'torrents.details.files.download.file': '{count, plural, =1 {Archivo} other {Archivos}}',
   'torrents.details.general.comment': 'Comentario',
   'torrents.details.general.connected': '{connected} conectados de {total}',
   'torrents.details.general.date.added': 'Agregado en',
@@ -247,15 +207,12 @@ export default {
   'torrents.details.mediainfo': 'Mediainfo',
   'torrents.details.peers.no.data': 'No existen Peers para este torrent.',
   'torrents.details.peers': 'Peers',
-  'torrents.details.selected.files': `{count, plural,
-    =1 {{countElement} archivo seleccionado}
-    other {{countElement} archivos seleccionados}
-  }`,
+  'torrents.details.selected.files':
+    '{count, plural, =1 {{countElement} archivo seleccionado} other {{countElement} archivos seleccionados}}',
   'torrents.details.selected.files.set.priority': 'Ajustar Prioridad',
   'torrents.details.trackers.no.data': 'No existe información de tracker para este torrent.',
   'torrents.details.trackers.type': 'Tipo',
   'torrents.details.trackers': 'Trackers',
-
   'torrents.list.clear.filters': 'Borrar Filtros',
   'torrents.list.context.check.hash': 'Verificar Hash',
   'torrents.list.context.details': 'Detalles de Torrent',
@@ -269,12 +226,10 @@ export default {
   'torrents.list.no.torrents': 'No hay torrents',
   'torrent.list.peers': '{connected} {of} {total}',
   'torrent.list.peers.of': 'de',
-
   'torrents.move.button.set.location': 'Configurar',
   'torrents.move.button.state.setting': 'Guardando...',
   'torrents.move.data.label': 'Mover archivos',
   'torrents.move.heading': 'Configurar Carpeta de Descarga',
-
   'torrents.properties.date.added': 'Agregado en',
   'torrents.properties.base.path': 'Carpeta Base',
   'torrents.properties.comment': 'Comentario',
@@ -294,20 +249,13 @@ export default {
   'torrents.properties.tracker.message': 'Mensaje de Tracker',
   'torrents.properties.upload.speed': 'Velocidad de Subida',
   'torrents.properties.upload.total': 'Cant. Subida',
-
-  'torrents.remove.are.you.sure': `¿Seguro que quiere eliminar {count, plural,
-      =0 {cero torrents}
-      =1 {un torrent}
-      other {# torrents}
-    }?`,
+  'torrents.remove.are.you.sure':
+    '¿Seguro que quiere eliminar {count, plural, =0 {cero torrents} =1 {un torrent} other {# torrents}}?',
   'torrents.remove.delete.data': 'Eliminar datos',
   'torrents.remove.error.no.torrents.selected': 'No ha seleccionado un torrent.',
   'torrents.remove': 'Eliminar Torrents',
-
   'torrents.set.tags.button.set': 'Configurar',
   'torrents.set.tags.heading': 'Configurar Etiquetas',
-
   'torrents.sort.title': 'Ordenar Por',
-
   'locale.language.auto': 'Automátic',
 };

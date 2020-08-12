@@ -10,7 +10,6 @@ export default {
   'auth.username': "Nom d'Utilisateur",
   'auth.admin': 'Admin',
   'auth.message.not.admin': "L'Utilisateur n'est pas Administrateur",
-
   'button.add': 'Ajouter',
   'button.cancel': 'Annuler',
   'button.no': 'Non',
@@ -18,7 +17,6 @@ export default {
   'button.save': 'Enregistrer',
   'button.state.adding': 'Ajout...',
   'button.yes': 'Oui',
-
   'feeds.add.automatic.download.rule': 'Ajouter une règle de téléchargement',
   'feeds.add.feed': 'Ajouter un Flux',
   'feeds.applicable.feed': 'Flux Applicable',
@@ -50,7 +48,6 @@ export default {
   'feeds.validation.must.specify.destination': 'Vous devez définir un emplacement.',
   'feeds.validation.must.specify.label': 'Vous devez définir un label.',
   'feeds.validation.must.specify.valid.feed.url': 'Vous devez définir une URL de flux valide.',
-
   'filter.all': 'Tout',
   'filter.status.title': 'Filtrer par Status',
   'filter.status.downloading': 'En Téléchargement',
@@ -61,38 +58,19 @@ export default {
   'filter.tracker.title': 'Filtrer par Traqueur',
   'filter.tag.title': 'Filtrer par Tag',
   'filter.untagged': 'Sans Tag',
-
-  'alert.torrent.add': `L'ajout de {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    } a réussi.`,
-  'alert.torrent.add.failed': `L'ajout de {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    } a échoué.`,
-  'alert.torrent.move': `Le déplacement de {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    } a réussi.`,
-  'alert.torrent.move.failed': `Le déplacement de {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    } a échoué.`,
-  'alert.torrent.remove': `La suppression de {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    } a réussi.`,
-  'alert.torrent.remove.failed': `La suppression de {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    } a échoué.`,
+  'alert.torrent.add': "L'ajout de {countElement} {count, plural, =1 {torrent} other {torrents}} a réussi.",
+  'alert.torrent.add.failed': "L'ajout de {countElement} {count, plural, =1 {torrent} other {torrents}} a échoué.",
+  'alert.torrent.move': 'Le déplacement de {countElement} {count, plural, =1 {torrent} other {torrents}} a réussi.',
+  'alert.torrent.move.failed':
+    'Le déplacement de {countElement} {count, plural, =1 {torrent} other {torrents}} a échoué.',
+  'alert.torrent.remove': 'La suppression de {countElement} {count, plural, =1 {torrent} other {torrents}} a réussi.',
+  'alert.torrent.remove.failed':
+    'La suppression de {countElement} {count, plural, =1 {torrent} other {torrents}} a échoué.',
   'alert.settings.saved': 'Paramètres modifiés.',
-
   'priority.dont.download': 'Arrêt',
   'priority.high': 'Haute',
   'priority.low': 'Basse',
   'priority.normal': 'Normale',
-
   'settings.bandwidth.slots.download.divider.label': 'Diviseur Slots de Réception',
   'settings.bandwidth.slots.download.global.label': 'Slots de Réception (Global)',
   'settings.bandwidth.slots.download.label': 'Slots de Réception par Torrent',
@@ -105,7 +83,6 @@ export default {
   'settings.bandwidth.transferrate.global.throttle.download': 'Limitation Globale de Réception',
   'settings.bandwidth.transferrate.global.throttle.upload': "Limitation Globale d'Envoi",
   'settings.bandwidth.transferrate.heading': 'Configuration Taux de Transfert',
-
   'settings.connectivity.dht.label': 'Activer le DHT',
   'settings.connectivity.dht.port.label': 'Port DHT',
   'settings.connectivity.dpd.heading': 'Découverte de Pairs Décentralisée',
@@ -122,14 +99,12 @@ export default {
   'settings.connectivity.port.open.label': 'Port Ouvert',
   'settings.connectivity.port.randomize.label': 'Port Aléatoire',
   'settings.connectivity.port.range.label': 'Plage de Ports',
-
   'settings.resources.disk.check.hash.label': 'Vérifier le hash après le Téléchargement',
   'settings.resources.disk.download.location.label': 'Répertoire de Téléchargement par défaut',
   'settings.resources.disk.heading': 'Disque Dur',
   'settings.resources.max.open.files': 'Fichiers Ouverts Maximum',
   'settings.resources.memory.heading': 'Mémoire Vive',
   'settings.resources.memory.max.label': "Limite d'utilisation Mémoire Vive",
-
   'settings.tabs.bandwidth': 'Bande Passante',
   'settings.tabs.connectivity': 'Connectivité',
   'settings.tabs.heading': 'Paramètres',
@@ -137,23 +112,16 @@ export default {
   'settings.tabs.authentication': 'Authentification',
   'settings.tabs.userinterface': 'Interface',
   'settings.tabs.about': 'À propos',
-
   'settings.ui.locale': 'Traductions',
   'settings.ui.language': 'Langue',
-
   'settings.about.flood': 'À propos de Flood',
-
   'sidebar.button.feeds': 'Flux',
   'sidebar.button.settings': 'Réglages',
   'sidebar.button.speedlimits': 'Limites de Vitesse',
-
   'sidebar.search.placeholder': 'Rechercher des Torrents',
-
   'sidebar.transferdata.downloaded': 'Reçu',
   'sidebar.transferdata.uploaded': 'Envoyé',
-
   'speed.unlimited': 'Illimité',
-
   'unit.size.byte': 'o',
   'unit.size.kilobyte': 'ko',
   'unit.size.megabyte': 'Mo',
@@ -167,7 +135,6 @@ export default {
   'unit.time.minute': 'min',
   'unit.time.second': 's',
   'unit.time.infinity': '∞',
-
   'torrents.add.button.add': 'Ajouter un Torrent',
   'torrents.add.destination.label': 'Destination',
   'torrents.add.destination.placeholder': 'Répertoire de Destination',
@@ -179,7 +146,6 @@ export default {
   'torrents.add.tab.url.input.placeholder': 'URL du Torrent',
   'torrents.add.tab.url.title': 'Par URL',
   'torrents.add.torrents.label': 'Torrents',
-
   'torrents.details.actions.pause': 'Pause',
   'torrents.details.actions.start': 'Démarrer',
   'torrents.details.actions.stop': 'Arrêter',
@@ -211,15 +177,12 @@ export default {
   'torrents.details.general.type': 'Type',
   'torrents.details.peers.no.data': "Il n'y a aucun Pair actif pour ce Torrent.",
   'torrents.details.peers': 'Pairs',
-  'torrents.details.selected.files': `{count, plural,
-    =1 {{countElement} fichier sélectionné}
-    other {{countElement} fichiers sélectionnés}
-  }`,
+  'torrents.details.selected.files':
+    '{count, plural, =1 {{countElement} fichier sélectionné} other {{countElement} fichiers sélectionnés}}',
   'torrents.details.selected.files.set.priority': 'Priorité',
   'torrents.details.trackers.no.data': "Il n'y a aucun Traqueur actif pour ce Torrent.",
   'torrents.details.trackers.type': 'Type',
   'torrents.details.trackers': 'Traqueurs',
-
   'torrents.list.clear.filters': 'Vider les Filtres',
   'torrents.list.context.check.hash': 'Vérifier le Hash',
   'torrents.list.context.move': 'Déplacer',
@@ -232,12 +195,10 @@ export default {
   'torrents.list.no.torrents': 'Aucun Torrent à afficher.',
   'torrent.list.peers': '{connected} {of} {total}',
   'torrent.list.peers.of': 'sur',
-
   'torrents.move.button.set.location': 'Emplacement',
   'torrents.move.button.state.setting': 'Réglages...',
   'torrents.move.data.label': 'Déplacer les Données',
   'torrents.move.heading': "Définir l'Emplacement de Téléchargement",
-
   'torrents.properties.base.path': 'Chemin absolu',
   'torrents.properties.comment': 'Commentaire',
   'torrents.properties.creation.date': 'Date de Création',
@@ -255,24 +216,16 @@ export default {
   'torrents.properties.size': 'Taille des Fichiers',
   'torrents.properties.tags': 'Tags',
   'torrents.properties.tracker.message': 'Message du Tracker',
-
   'torrents.properties.upload.speed': "Vitesse d'Envoi",
   'torrents.properties.upload.total': 'Données Envoyées',
-
-  'torrents.remove.are.you.sure': `Êtes-vous certain(e) de vouloir supprimer {count, plural,
-      =0 {aucun torrent}
-      =1 {un torrent}
-      other {# torrents}
-    } ?`,
+  'torrents.remove.are.you.sure':
+    'Êtes-vous certain(e) de vouloir supprimer {count, plural, =0 {aucun torrent} =1 {un torrent} other {# torrents}} ?',
   'torrents.remove.delete.data': 'Supprimer les données',
   'torrents.remove.error.no.torrents.selected': "Vous n'avez sélectionné aucun torrent.",
   'torrents.remove': 'Supprimer les Torrents',
-
   'torrents.set.tags.button.set': 'Définir des Tags',
   'torrents.set.tags.heading': 'Définir des Tags',
   'torrents.set.tags.enter.tags': 'Entrer des Tags',
-
   'torrents.sort.title': 'Trier par',
-
   'locale.language.auto': 'Automatique',
 };

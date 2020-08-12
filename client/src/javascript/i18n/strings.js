@@ -4,30 +4,12 @@ export default {
   'actionbar.button.add.torrent': 'Add Torrent',
   'actionbar.button.remove.torrent': 'Remove Torrent',
 
-  'alert.torrent.add': `Successfully added {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.add.failed': `Failed to add {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.move': `Successfully moved {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.move.failed': `Failed to move {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.remove': `Successfully removed {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
-  'alert.torrent.remove.failed': `Failed to remove {countElement} {count, plural,
-      =1 {torrent}
-      other {torrents}
-    }.`,
+  'alert.torrent.add': `Successfully added {countElement} {count, plural, =1 {torrent} other {torrents}}.`,
+  'alert.torrent.add.failed': `Failed to add {countElement} {count, plural, =1 {torrent} other {torrents}}.`,
+  'alert.torrent.move': `Successfully moved {countElement} {count, plural, =1 {torrent} other {torrents}}.`,
+  'alert.torrent.move.failed': `Failed to move {countElement} {count, plural, =1 {torrent} other {torrents}}.`,
+  'alert.torrent.remove': `Successfully removed {countElement} {count, plural, =1 {torrent} other {torrents}}.`,
+  'alert.torrent.remove.failed': `Failed to remove {countElement} {count, plural, =1 {torrent} other {torrents}}.`,
   'alert.settings.saved': 'Successfully saved settings.',
 
   'auth.add.user': 'Add User',
@@ -252,10 +234,7 @@ export default {
   'torrents.details.details': 'Details',
   'torrents.details.files': 'Files',
   'torrents.details.files.loading': 'Loading file detail...',
-  'torrents.details.files.download.file': `{count, plural,
-    =1 {Download File}
-    other {Download Files}
-  }`,
+  'torrents.details.files.download.file': `{count, plural, =1 {Download File} other {Download Files}}`,
   'torrents.details.general.comment': 'Comment',
   'torrents.details.general.connected': '{connected} connected of {total}',
   'torrents.details.general.date.added': 'Added',
@@ -283,10 +262,7 @@ export default {
   'torrents.details.mediainfo': 'Mediainfo',
   'torrents.details.peers.no.data': 'There is no peer data for this torrent.',
   'torrents.details.peers': 'Peers',
-  'torrents.details.selected.files': `{count, plural,
-    =1 {{countElement} selected file}
-    other {{countElement} selected files}
-  }`,
+  'torrents.details.selected.files': `{count, plural, =1 {{countElement} selected file} other {{countElement} selected files}}`,
   'torrents.details.selected.files.set.priority': 'Set Priority',
   'torrents.details.trackers.no.data': 'There is no tracker data for this torrent.',
   'torrents.details.trackers.type': 'Type',
@@ -334,11 +310,7 @@ export default {
   'torrents.properties.upload.speed': 'Upload Speed',
   'torrents.properties.upload.total': 'Uploaded',
 
-  'torrents.remove.are.you.sure': `Are you sure you want to remove {count, plural,
-      =0 {no torrents}
-      =1 {one torrent}
-      other {# torrents}
-    }?`,
+  'torrents.remove.are.you.sure': `Are you sure you want to remove {count, plural, =1 {# torrent} other {# torrents}}?`,
   'torrents.remove.delete.data': 'Delete data',
   'torrents.remove.error.no.torrents.selected': "You haven't selected any torrents.",
   'torrents.remove': 'Remove Torrents',
