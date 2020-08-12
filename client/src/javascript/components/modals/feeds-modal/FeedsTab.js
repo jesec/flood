@@ -27,47 +27,36 @@ import connectStores from '../../../util/connectStores';
 const MESSAGES = defineMessages({
   mustSpecifyURL: {
     id: 'feeds.validation.must.specify.valid.feed.url',
-    defaultMessage: 'You must specify a valid feed URL.',
   },
   mustSpecifyLabel: {
     id: 'feeds.validation.must.specify.label',
-    defaultMessage: 'You must specify a label.',
   },
   intervalNotPositive: {
     id: 'feeds.validation.interval.not.positive',
-    defaultMessage: 'The interval must be a positive integer.',
   },
   min: {
     id: 'feeds.time.min',
-    defaultMessage: 'Minutes',
   },
   hr: {
     id: 'feeds.time.hr',
-    defaultMessage: 'Hours',
   },
   day: {
     id: 'feeds.time.day',
-    defaultMessage: 'Days',
   },
   url: {
     id: 'feeds.url',
-    defaultMessage: 'URL',
   },
   label: {
     id: 'feeds.label',
-    defaultMessage: 'Label',
   },
   interval: {
     id: 'feeds.interval',
-    defaultMessage: 'Interval',
   },
   tags: {
     id: 'feeds.tags',
-    defaultMessage: 'Tags',
   },
   search: {
     id: 'feeds.search',
-    defaultMessage: 'Search term',
   },
 });
 
@@ -149,7 +138,7 @@ class FeedsTab extends React.Component {
       return [
         <SelectItem key="empty" id="placeholder" placeholder>
           <em>
-            <FormattedMessage id="feeds.no.feeds.available" defaultMessage="No feeds available." />
+            <FormattedMessage id="feeds.no.feeds.available" />
           </em>
         </SelectItem>,
       ];
@@ -165,7 +154,7 @@ class FeedsTab extends React.Component {
       [
         <SelectItem key="select-feed" id="placeholder" placeholder>
           <em>
-            <FormattedMessage id="feeds.select.feed" defaultMessage="Select feed" />
+            <FormattedMessage id="feeds.select.feed" />
           </em>
         </SelectItem>,
       ],
@@ -191,7 +180,6 @@ class FeedsTab extends React.Component {
             id="interval"
             label={this.props.intl.formatMessage({
               id: 'feeds.select.interval',
-              defaultMessage: 'Interval',
             })}
             placeholder={this.props.intl.formatMessage(MESSAGES.interval)}
             defaultValue={defaultIntervalTextValue}
@@ -206,16 +194,15 @@ class FeedsTab extends React.Component {
             id="url"
             label={this.props.intl.formatMessage({
               id: 'feeds.url',
-              defaultMessage: 'URL',
             })}
             placeholder={this.props.intl.formatMessage(MESSAGES.url)}
             defaultValue={feed.url}
           />
           <Button labelOffset onClick={() => this.setState({currentlyEditingFeed: null})}>
-            <FormattedMessage id="button.cancel" defaultMessage="Cancel" />
+            <FormattedMessage id="button.cancel" />
           </Button>
           <Button labelOffset type="submit">
-            <FormattedMessage id="button.save.feed" defaultMessage="Save" />
+            <FormattedMessage id="button.save.feed" />
           </Button>
         </FormRow>
       </FormRowGroup>
@@ -237,12 +224,7 @@ class FeedsTab extends React.Component {
               className="interactive-list__detail-list__item
               interactive-list__detail-list__item--overflow
               interactive-list__detail interactive-list__detail--secondary">
-              <FormattedMessage
-                id="feeds.match.count"
-                defaultMessage="{count, plural, =1 {# match} other
-                  {# matches}}"
-                values={{count: matchedCount}}
-              />
+              <FormattedMessage id="feeds.match.count" values={{count: matchedCount}} />
             </li>
             {feed === this.state.currentlyEditingFeed && (
               <li
@@ -292,7 +274,7 @@ class FeedsTab extends React.Component {
           this.formRef = ref;
         }}>
         <ModalFormSectionHeader>
-          <FormattedMessage id="feeds.existing.feeds" defaultMessage="Existing Feeds" />
+          <FormattedMessage id="feeds.existing.feeds" />
         </ModalFormSectionHeader>
         {errors}
         <FormRow>
@@ -304,7 +286,7 @@ class FeedsTab extends React.Component {
           <FormRow>
             <FormRowItem width="auto" />
             <Button onClick={() => this.handleAddFeedClick()}>
-              <FormattedMessage id="button.new" defaultMessage="New" />
+              <FormattedMessage id="button.new" />
             </Button>
           </FormRow>
         )}
@@ -319,7 +301,7 @@ class FeedsTab extends React.Component {
       return (
         <ul className="interactive-list">
           <li className="interactive-list__item">
-            <FormattedMessage defaultMessage="No feeds defined." id="feeds.no.feeds.defined" />
+            <FormattedMessage id="feeds.no.feeds.defined" />
           </li>
         </ul>
       );
@@ -340,7 +322,7 @@ class FeedsTab extends React.Component {
           this.manualAddingFormRef = ref;
         }}>
         <ModalFormSectionHeader>
-          <FormattedMessage id="feeds.browse.feeds" defaultMessage="Browse feeds" />
+          <FormattedMessage id="feeds.browse.feeds" />
         </ModalFormSectionHeader>
         <FormRow>
           <Select
@@ -349,7 +331,6 @@ class FeedsTab extends React.Component {
             id="feedID"
             label={this.props.intl.formatMessage({
               id: 'feeds.select.feed',
-              defaultMessage: 'Select feed',
             })}
             width="three-eighths">
             {this.getAvailableFeedsOptions()}
@@ -370,7 +351,7 @@ class FeedsTab extends React.Component {
         <ul className="interactive-list">
           <li className="interactive-list__item">
             <div className="interactive-list__label">
-              <FormattedMessage defaultMessage="No items matching search term." id="feeds.no.items.matching" />
+              <FormattedMessage id="feeds.no.items.matching" />
             </div>
           </li>
         </ul>
@@ -468,7 +449,6 @@ class FeedsTab extends React.Component {
         id="search"
         label={this.props.intl.formatMessage({
           id: 'feeds.search.term',
-          defaultMessage: 'Search term',
         })}
         placeholder={this.props.intl.formatMessage(MESSAGES.search)}
       />
@@ -482,7 +462,7 @@ class FeedsTab extends React.Component {
 
     return (
       <Button key="button" type="submit" labelOffset>
-        <FormattedMessage id="button.download" defaultMessage="Download" />
+        <FormattedMessage id="button.download" />
       </Button>
     );
   };

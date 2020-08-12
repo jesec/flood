@@ -62,115 +62,68 @@ export default class BandwidthTab extends SettingsTab {
     return (
       <Form onChange={this.handleFormChange}>
         <ModalFormSectionHeader>
-          <FormattedMessage id="settings.bandwidth.transferrate.heading" defaultMessage="Transfer Rate Throttles" />
+          <FormattedMessage id="settings.bandwidth.transferrate.heading" />
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
             defaultValue={this.getDownloadValue()}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.transferrate.dropdown.preset.download.label"
-                defaultMessage="Dropdown Presets: Download"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.transferrate.dropdown.preset.download.label" />}
             id="dropdownPresetDownload"
           />
         </FormRow>
         <FormRow>
           <Textbox
             defaultValue={this.getUploadValue()}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.transferrate.dropdown.preset.upload.label"
-                defaultMessage="Dropdown Presets: Upload"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.transferrate.dropdown.preset.upload.label" />}
             id="dropdownPresetUpload"
           />
         </FormRow>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('throttleGlobalDownMax')}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.transferrate.global.throttle.download"
-                defaultMessage="Global Download Rate Throttle"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.transferrate.global.throttle.download" />}
             id="throttleGlobalDownMax"
           />
           <Textbox
             defaultValue={this.getFieldValue('throttleGlobalUpMax')}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.transferrate.global.throttle.upload"
-                defaultMessage="Global Upload Rate Throttle"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.transferrate.global.throttle.upload" />}
             id="throttleGlobalUpMax"
           />
         </FormRow>
         <ModalFormSectionHeader>
-          <FormattedMessage id="settings.bandwidth.slots.heading" defaultMessage="Slot Availability" />
+          <FormattedMessage id="settings.bandwidth.slots.heading" />
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxUploads')}
-            label={
-              <FormattedMessage id="settings.bandwidth.slots.upload.label" defaultMessage="Upload Slots Per Torrent" />
-            }
+            label={<FormattedMessage id="settings.bandwidth.slots.upload.label" />}
             id="throttleMaxUploads"
           />
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxUploadsDiv')}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.slots.upload.divider.label"
-                defaultMessage="Upload Slots Divider"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.slots.upload.divider.label" />}
             id="throttleMaxUploadsDiv"
           />
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxUploadsGlobal')}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.slots.upload.global.label"
-                defaultMessage="Upload Slots Global"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.slots.upload.global.label" />}
             id="throttleMaxUploadsGlobal"
           />
         </FormRow>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxDownloads')}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.slots.download.label"
-                defaultMessage="Download Slots Per Torrent"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.slots.download.label" />}
             id="throttleMaxDownloads"
           />
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxDownloadsDiv')}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.slots.download.divider.label"
-                defaultMessage="Download Slots Divider"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.slots.download.divider.label" />}
             id="throttleMaxDownloadsDiv"
           />
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxDownloadsGlobal')}
-            label={
-              <FormattedMessage
-                id="settings.bandwidth.slots.download.global.label"
-                defaultMessage="Download Slots Global"
-              />
-            }
+            label={<FormattedMessage id="settings.bandwidth.slots.download.global.label" />}
             id="throttleMaxDownloadsGlobal"
           />
         </FormRow>

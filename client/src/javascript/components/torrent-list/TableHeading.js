@@ -124,9 +124,7 @@ class TableHeading extends React.Component {
         [`table__heading--direction--${sortProp.direction}`]: isSortActive,
       });
 
-      const label = (
-        <FormattedMessage id={TorrentProperties[id].id} defaultMessage={TorrentProperties[id].defaultMessage} />
-      );
+      const label = <FormattedMessage id={TorrentProperties[id].id} />;
 
       accumulator.push(
         <div
@@ -138,7 +136,6 @@ class TableHeading extends React.Component {
             className="table__heading__label"
             title={this.props.intl.formatMessage({
               id: TorrentProperties[id].id,
-              defaultMessage: TorrentProperties[id].defaultMessage,
             })}>
             {label}
           </span>

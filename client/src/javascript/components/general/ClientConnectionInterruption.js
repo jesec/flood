@@ -80,7 +80,7 @@ class ClientConnectionInterruption extends React.Component {
       <FormRowItem className="connection-status">
         <Checkmark className="connection-status__icon" />
         <span className="connection-status__copy">
-          <FormattedMessage id="connection-interruption.verification-success" defaultMessage="Connection successful" />
+          <FormattedMessage id="connection-interruption.verification-success" />
         </span>
       </FormRowItem>
     );
@@ -92,10 +92,7 @@ class ClientConnectionInterruption extends React.Component {
       return (
         <FormRow>
           <FormError isLoading={isTestingConnection}>
-            <FormattedMessage
-              id="connection-interruption.verification-error"
-              defaultMessage="Connection could not be verified."
-            />
+            <FormattedMessage id="connection-interruption.verification-error" />
           </FormError>
         </FormRow>
       );
@@ -111,15 +108,12 @@ class ClientConnectionInterruption extends React.Component {
         <Panel spacing="large">
           <PanelHeader>
             <h1>
-              <FormattedMessage id="connection-interruption.heading" defaultMessage="Cannot connect to rTorrent" />
+              <FormattedMessage id="connection-interruption.heading" />
             </h1>
           </PanelHeader>
           <PanelContent>
             <p className="copy--lead">
-              <FormattedMessage
-                id="connection-interruption.verify-settings-not-admin"
-                defaultMessage="Please contact your Flood administator to fix the issue."
-              />
+              <FormattedMessage id="connection-interruption.verify-settings-not-admin" />
             </p>
           </PanelContent>
         </Panel>
@@ -136,15 +130,12 @@ class ClientConnectionInterruption extends React.Component {
           }}>
           <PanelHeader>
             <h1>
-              <FormattedMessage id="connection-interruption.heading" defaultMessage="Cannot connect to rTorrent" />
+              <FormattedMessage id="connection-interruption.heading" />
             </h1>
           </PanelHeader>
           <PanelContent>
             <p className="copy--lead">
-              <FormattedMessage
-                id="connection-interruption.verify-settings-prompt"
-                defaultMessage="Let's verify your connection settings."
-              />
+              <FormattedMessage id="connection-interruption.verify-settings-prompt" />
             </p>
             {this.renderFormError()}
             <RtorrentConnectionTypeSelection isDisabled={isTestingConnection} />
@@ -153,10 +144,10 @@ class ClientConnectionInterruption extends React.Component {
             <FormRow justify="end">
               {this.renderConnectionTestResult()}
               <Button isLoading={isTestingConnection} priority="tertiary" onClick={this.handleTestButtonClick}>
-                <FormattedMessage id="button.test" defaultMessage="Test" />
+                <FormattedMessage id="button.test" />
               </Button>
               <Button type="submit" disabled={!isConnectionVerified}>
-                <FormattedMessage id="button.save" defaultMessage="Save Settings" />
+                <FormattedMessage id="button.save" />
               </Button>
             </FormRow>
           </PanelFooter>

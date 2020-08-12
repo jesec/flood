@@ -30,7 +30,6 @@ class SettingsModal extends React.Component {
         clickHandler: null,
         content: this.props.intl.formatMessage({
           id: 'button.cancel',
-          defaultMessage: 'Cancel',
         }),
         triggerDismiss: true,
         type: 'tertiary',
@@ -40,7 +39,6 @@ class SettingsModal extends React.Component {
         isLoading: this.state.isSavingSettings,
         content: this.props.intl.formatMessage({
           id: 'button.save',
-          defaultMessage: 'Save Settings',
         }),
         triggerDismiss: false,
         type: 'primary',
@@ -150,7 +148,6 @@ class SettingsModal extends React.Component {
         },
         label: intl.formatMessage({
           id: 'settings.tabs.bandwidth',
-          defaultMessage: 'Bandwidth',
         }),
       },
       connectivity: {
@@ -162,7 +159,6 @@ class SettingsModal extends React.Component {
         },
         label: intl.formatMessage({
           id: 'settings.tabs.connectivity',
-          defaultMessage: 'Connectivity',
         }),
       },
       resources: {
@@ -173,7 +169,6 @@ class SettingsModal extends React.Component {
         },
         label: intl.formatMessage({
           id: 'settings.tabs.resources',
-          defaultMessage: 'Resources',
         }),
       },
       // TODO: disableUsersAndAuth is server's config not user's
@@ -183,7 +178,6 @@ class SettingsModal extends React.Component {
               content: AuthTab,
               label: intl.formatMessage({
                 id: 'settings.tabs.authentication',
-                defaultMessage: 'Authentication',
               }),
             },
           }
@@ -192,7 +186,6 @@ class SettingsModal extends React.Component {
         content: UITab,
         label: intl.formatMessage({
           id: 'settings.tabs.userinterface',
-          defaultMessage: 'User Interface',
         }),
         props: {
           onSettingsChange: this.handleFloodSettingsChange,
@@ -203,7 +196,6 @@ class SettingsModal extends React.Component {
         content: DiskUsageTab,
         label: intl.formatMessage({
           id: 'settings.tabs.diskusage',
-          defaultMessage: 'Disk Usage',
         }),
         props: {
           onSettingsChange: this.handleFloodSettingsChange,
@@ -213,7 +205,6 @@ class SettingsModal extends React.Component {
         content: AboutTab,
         label: intl.formatMessage({
           id: 'settings.tabs.about',
-          defaultMessage: 'About',
         }),
       },
     };
@@ -224,7 +215,6 @@ class SettingsModal extends React.Component {
         size="large"
         heading={this.props.intl.formatMessage({
           id: 'settings.tabs.heading',
-          defaultMessage: 'Settings',
         })}
         onSetRef={this.handleModalRefSet}
         orientation="vertical"

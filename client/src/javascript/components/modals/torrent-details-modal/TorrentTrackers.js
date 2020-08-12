@@ -24,11 +24,11 @@ export default class TorrentTrackrs extends React.Component {
             <thead className="torrent-details__table__heading">
               <tr>
                 <th className="torrent-details__table__heading--primary">
-                  <FormattedMessage id="torrents.details.trackers" defaultMessage="Trackers" />
+                  <FormattedMessage id="torrents.details.trackers" />
                   <Badge>{trackerCount}</Badge>
                 </th>
                 <th className="torrent-details__table__heading--secondary">
-                  <FormattedMessage id="torrents.details.trackers.type" defaultMessage="Type" />
+                  <FormattedMessage id="torrents.details.trackers.type" />
                 </th>
               </tr>
             </thead>
@@ -39,10 +39,7 @@ export default class TorrentTrackrs extends React.Component {
     }
     return (
       <span className="torrent-details__section__null-data">
-        <FormattedMessage
-          id="torrents.details.trackers.no.data"
-          defaultMessage="There is no tracker data for this torrent."
-        />
+        <FormattedMessage id="torrents.details.trackers.no.data" />
       </span>
     );
   }

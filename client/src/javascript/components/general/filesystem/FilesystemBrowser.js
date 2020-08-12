@@ -10,19 +10,15 @@ import FloodActions from '../../../actions/FloodActions';
 const MESSAGES = defineMessages({
   EACCES: {
     id: 'filesystem.error.eacces',
-    defaultMessage: 'Flood does not have permission to read this directory.',
   },
   ENOENT: {
     id: 'filesystem.error.enoent',
-    defaultMessage: 'This path does not exist. It will be created.',
   },
   emptyDirectory: {
     id: 'filesystem.empty.directory',
-    defaultMessage: 'Empty directory.',
   },
   fetching: {
     id: 'filesystem.fetching',
-    defaultMessage: 'Fetching directory structure...',
   },
 });
 
@@ -135,7 +131,6 @@ class FilesystemBrowser extends React.PureComponent {
           <ArrowIcon />
           {this.props.intl.formatMessage({
             id: 'filesystem.parent.directory',
-            defaultMessage: 'Parent Directory',
           })}
         </li>
       );

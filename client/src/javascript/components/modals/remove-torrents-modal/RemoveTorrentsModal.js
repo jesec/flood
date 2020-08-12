@@ -25,7 +25,6 @@ class RemoveTorrentsModal extends React.Component {
         clickHandler: this.handleRemoveTorrentDecline,
         content: this.props.intl.formatMessage({
           id: 'button.no',
-          defaultMessage: 'No',
         }),
         triggerDismiss: true,
         type: 'tertiary',
@@ -34,7 +33,6 @@ class RemoveTorrentsModal extends React.Component {
         clickHandler: this.handleRemovalConfirmation,
         content: this.props.intl.formatMessage({
           id: 'button.yes',
-          defaultMessage: 'Yes',
         }),
         triggerDismiss: true,
         type: 'primary',
@@ -48,29 +46,14 @@ class RemoveTorrentsModal extends React.Component {
     const selectedTorrentCount = torrents.length;
 
     if (selectedTorrentCount === 0) {
-      modalContent = (
-        <FormattedMessage
-          id="torrents.remove.error.no.torrents.selected"
-          defaultMessage="You haven't selected any torrents."
-        />
-      );
+      modalContent = <FormattedMessage id="torrents.remove.error.no.torrents.selected" />;
     } else {
-      modalContent = (
-        <FormattedMessage
-          id="torrents.remove.are.you.sure"
-          defaultMessage="Are you sure you want to remove {count, plural,
-            =0 {no torrents}
-            =1 {one torrent}
-            other {# torrents}
-          }?"
-          values={{count: selectedTorrentCount}}
-        />
-      );
+      modalContent = <FormattedMessage id="torrents.remove.are.you.sure" values={{count: selectedTorrentCount}} />;
 
       deleteDataContent = (
         <FormRow>
           <Checkbox id="deleteData" checked={SettingsStore.getFloodSettings('deleteTorrentData')}>
-            <FormattedMessage defaultMessage="Delete data" id="torrents.remove.delete.data" />
+            <FormattedMessage id="torrents.remove.delete.data" />
           </Checkbox>
         </FormRow>
       );
@@ -99,7 +82,6 @@ class RemoveTorrentsModal extends React.Component {
     const selectedTorrents = TorrentStore.getSelectedTorrents();
     const modalHeading = this.props.intl.formatMessage({
       id: 'torrents.remove',
-      defaultMessage: 'Remove Torrents',
     });
 
     return (

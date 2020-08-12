@@ -66,11 +66,9 @@ class AddTorrentsByURL extends React.Component {
           id="urls"
           label={this.props.intl.formatMessage({
             id: 'torrents.add.torrents.label',
-            defaultMessage: 'Torrents',
           })}
           placeholder={this.props.intl.formatMessage({
             id: 'torrents.add.tab.url.input.placeholder',
-            defaultMessage: 'Torrent URL or Magnet Link',
           })}
           defaultValues={this.state.urlTextboxes}
         />
@@ -78,7 +76,6 @@ class AddTorrentsByURL extends React.Component {
           id="destination"
           label={this.props.intl.formatMessage({
             id: 'torrents.add.destination.label',
-            defaultMessage: 'Destination',
           })}
         />
         <FormRow>
@@ -87,7 +84,6 @@ class AddTorrentsByURL extends React.Component {
             defaultValue={this.state.tags}
             label={this.props.intl.formatMessage({
               id: 'torrents.add.tags',
-              defaultMessage: 'Tags',
             })}
           />
         </FormRow>

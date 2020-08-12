@@ -83,7 +83,7 @@ class DiskUsageTab extends SettingsTab {
             checked={visible}
             onChange={(event) => this.handleDiskCheckboxValueChange(id, event.target.checked)}
             modifier="dark">
-            <FormattedMessage id="settings.diskusage.show" defaultMessage="Show" />
+            <FormattedMessage id="settings.diskusage.show" />
           </Checkbox>
         </span>
       );
@@ -111,7 +111,7 @@ class DiskUsageTab extends SettingsTab {
     return (
       <Form>
         <ModalFormSectionHeader>
-          <FormattedMessage defaultMessage="Disk Usage Mount Points" id="settings.diskusage.mount.points" />
+          <FormattedMessage id="settings.diskusage.mount.points" />
         </ModalFormSectionHeader>
         <FormRow>
           <SortableList

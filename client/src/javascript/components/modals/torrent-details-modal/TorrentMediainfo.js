@@ -13,24 +13,18 @@ import TorrentStore from '../../../stores/TorrentStore';
 const MESSAGES = defineMessages({
   copy: {
     id: 'general.clipboard.copy',
-    defaultMessage: 'Copy',
   },
   copied: {
     id: 'general.clipboard.copied',
-    defaultMessage: 'Copied',
   },
   execError: {
     id: 'mediainfo.execError',
-    defaultMessage:
-      'An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood.',
   },
   fetching: {
     id: 'mediainfo.fetching',
-    defaultMessage: 'Fetching...',
   },
   heading: {
     id: 'mediainfo.heading',
-    defaultMessage: 'Mediainfo Output',
   },
 });
 
@@ -96,7 +90,7 @@ class TorrentMediainfo extends React.Component {
     if (this.state.isFetchingMediainfo) {
       return (
         <div className="torrent-details__section mediainfo">
-          <FormattedMessage id={MESSAGES.fetching.id} defaultMessage={MESSAGES.fetching.defaultMessage} />
+          <FormattedMessage id={MESSAGES.fetching.id} />
         </div>
       );
     }
@@ -107,7 +101,7 @@ class TorrentMediainfo extends React.Component {
       return (
         <div className="torrent-details__section mediainfo">
           <p>
-            <FormattedMessage id={MESSAGES.execError.id} defaultMessage={MESSAGES.execError.defaultMessage} />
+            <FormattedMessage id={MESSAGES.execError.id} />
           </p>
           <pre className="mediainfo__output mediainfo__output--error">{JSON.stringify(errorData.error, null, 2)}</pre>
         </div>
@@ -125,7 +119,7 @@ class TorrentMediainfo extends React.Component {
         <div className="mediainfo__toolbar">
           <div className="mediainfo__toolbar__item">
             <span className="torrent-details__table__heading--tertiary">
-              <FormattedMessage id={MESSAGES.heading.id} defaultMessage={MESSAGES.heading.defaultMessage} />
+              <FormattedMessage id={MESSAGES.heading.id} />
             </span>
           </div>
           <Tooltip

@@ -17,7 +17,6 @@ import Upload from '../icons/Upload';
 const messages = defineMessages({
   ago: {
     id: 'general.ago',
-    defaultMessage: 'ago',
   },
 });
 

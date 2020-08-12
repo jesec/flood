@@ -18,47 +18,36 @@ const loadingIndicatorIcon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
 const MESSAGES = defineMessages({
   notifications: {
     id: 'sidebar.button.notifications',
-    defaultMessage: 'Notifications',
   },
   'notification.torrent.finished.heading': {
     id: 'notification.torrent.finished.heading',
-    defaultMessage: 'Finished Downloading',
   },
   'notification.torrent.finished.body': {
     id: 'notification.torrent.finished.body',
-    defaultMessage: '{name}',
   },
   'notification.torrent.errored.heading': {
     id: 'notification.torrent.errored.heading',
-    defaultMessage: 'Error Reported',
   },
   'notification.torrent.errored.body': {
     id: 'notification.torrent.errored.body',
-    defaultMessage: '{name}',
   },
   'notification.feed.downloaded.torrent.heading': {
     id: 'notification.feed.downloaded.torrent.heading',
-    defaultMessage: 'Matched Feed Rule',
   },
   clearAll: {
     id: 'notification.clear.all',
-    defaultMessage: 'Clear All',
   },
   showing: {
     id: 'notification.showing',
-    defaultMessage: 'Showing',
   },
   at: {
     id: 'general.at',
-    defaultMessage: 'at',
   },
   to: {
     id: 'general.to',
-    defaultMessage: 'to',
   },
   of: {
     id: 'general.of',
-    defaultMessage: 'of',
   },
 });
 
@@ -164,7 +153,6 @@ class NotificationsButton extends React.Component {
       notificationBody = (
         <FormattedMessage
           id={`${notification.id}.body`}
-          defaultMessage="{matchedDetails} — {title}"
           values={{
             matchedDetails: (
               <strong className="notification__message__sub-heading">

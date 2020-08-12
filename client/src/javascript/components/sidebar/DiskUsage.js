@@ -34,18 +34,9 @@ class DiskUsage extends React.Component {
             <Tooltip
               content={
                 <ul className="diskusage__details-list">
-                  <DiskUsageTooltipItem
-                    value={d.used}
-                    label={<FormattedMessage id="status.diskusage.used" defaultMessage="Used" />}
-                  />
-                  <DiskUsageTooltipItem
-                    value={d.avail}
-                    label={<FormattedMessage id="status.diskusage.free" defaultMessage="Free" />}
-                  />
-                  <DiskUsageTooltipItem
-                    value={d.size}
-                    label={<FormattedMessage id="status.diskusage.total" defaultMessage="Total" />}
-                  />
+                  <DiskUsageTooltipItem value={d.used} label={<FormattedMessage id="status.diskusage.used" />} />
+                  <DiskUsageTooltipItem value={d.avail} label={<FormattedMessage id="status.diskusage.free" />} />
+                  <DiskUsageTooltipItem value={d.size} label={<FormattedMessage id="status.diskusage.total" />} />
                 </ul>
               }
               position="top"
@@ -71,7 +62,7 @@ class DiskUsage extends React.Component {
     return (
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
-          <FormattedMessage id="status.diskusage.title" defaultMessage="Disk Usage" />
+          <FormattedMessage id="status.diskusage.title" />
         </li>
         {disks}
       </ul>

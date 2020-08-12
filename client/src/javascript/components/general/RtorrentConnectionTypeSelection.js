@@ -30,18 +30,16 @@ class RtorrentConnectionTypeSelection extends Component {
         <FormRow>
           <Textbox
             id="rtorrentHost"
-            label={<FormattedMessage id="auth.rtorrentHost" defaultMessage="rTorrent Host" />}
+            label={<FormattedMessage id="auth.rtorrentHost" />}
             placeholder={this.props.intl.formatMessage({
               id: 'auth.rtorrentHost',
-              defaultMessage: 'rTorrent Host',
             })}
           />
           <Textbox
             id="rtorrentPort"
-            label={<FormattedMessage id="auth.rtorrentPort" defaultMessage="rTorrent Port" />}
+            label={<FormattedMessage id="auth.rtorrentPort" />}
             placeholder={this.props.intl.formatMessage({
               id: 'auth.rtorrentPort',
-              defaultMessage: 'rTorrent Port',
             })}
           />
         </FormRow>
@@ -52,10 +50,9 @@ class RtorrentConnectionTypeSelection extends Component {
       <FormRow>
         <Textbox
           id="rtorrentSocketPath"
-          label={<FormattedMessage id="auth.rtorrentSocket" defaultMessage="rTorrent Socket" />}
+          label={<FormattedMessage id="auth.rtorrentSocket" />}
           placeholder={this.props.intl.formatMessage({
             id: 'auth.rtorrentSocketPath',
-            defaultMessage: 'rTorrent Socket Path',
           })}
         />
       </FormRow>
@@ -70,7 +67,6 @@ class RtorrentConnectionTypeSelection extends Component {
             <FormGroup
               label={this.props.intl.formatMessage({
                 id: 'auth.connectionType',
-                defaultMessage: 'rTorrent Connection Type',
               })}>
               <FormRow>
                 <Radio
@@ -79,7 +75,7 @@ class RtorrentConnectionTypeSelection extends Component {
                   id="tcp"
                   grow={false}
                   checked={this.state.connectionType === 'tcp'}>
-                  <FormattedMessage id="auth.connectionType.tcp" defaultMessage="TCP" />
+                  <FormattedMessage id="auth.connectionType.tcp" />
                 </Radio>
                 <Radio
                   onChange={this.handleTypeChange}
@@ -87,7 +83,7 @@ class RtorrentConnectionTypeSelection extends Component {
                   id="socket"
                   grow={false}
                   checked={this.state.connectionType === 'socket'}>
-                  <FormattedMessage id="auth.connectionType.socket" defaultMessage="Unix Socket" />
+                  <FormattedMessage id="auth.connectionType.socket" />
                 </Radio>
               </FormRow>
             </FormGroup>

@@ -1,6 +1,5 @@
 const LANGUAGES = {
   auto: {
-    defaultMessage: 'Automatic',
     id: 'locale.language.auto',
   },
   en: 'English',

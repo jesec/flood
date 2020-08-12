@@ -23,30 +23,28 @@ import '../sass/style.scss';
 const initialize = (): void => {
   UIStore.registerDependency({
     id: 'notifications',
-    message: <FormattedMessage id="dependency.loading.notifications" defaultMessage="Notifications" />,
+    message: <FormattedMessage id="dependency.loading.notifications" />,
   });
 
   UIStore.registerDependency({
     id: 'torrent-taxonomy',
-    message: <FormattedMessage id="dependency.loading.torrent.taxonomy" defaultMessage="Torrent Taxonomy" />,
+    message: <FormattedMessage id="dependency.loading.torrent.taxonomy" />,
   });
 
   UIStore.registerDependency([
     {
       id: 'transfer-data',
-      message: (
-        <FormattedMessage id="dependency.loading.transfer.rate.details" defaultMessage="Data Transfer Rate Details" />
-      ),
+      message: <FormattedMessage id="dependency.loading.transfer.rate.details" />,
     },
     {
       id: 'transfer-history',
-      message: <FormattedMessage id="dependency.loading.transfer.history" defaultMessage="Data Transfer History" />,
+      message: <FormattedMessage id="dependency.loading.transfer.history" />,
     },
   ]);
 
   UIStore.registerDependency({
     id: 'torrent-list',
-    message: <FormattedMessage id="dependency.loading.torrent.list" defaultMessage="Torrent List" />,
+    message: <FormattedMessage id="dependency.loading.torrent.list" />,
   });
 
   AuthActions.verify().then(

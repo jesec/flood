@@ -8,7 +8,6 @@ import Tooltip from '../general/Tooltip';
 const MESSAGES = defineMessages({
   logOut: {
     id: 'sidebar.button.log.out',
-    defaultMessage: 'Log Out',
   },
 });
 

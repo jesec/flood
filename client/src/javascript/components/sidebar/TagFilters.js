@@ -52,7 +52,7 @@ class TagFilters extends React.Component {
     return (
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
-          <FormattedMessage id="filter.tag.title" defaultMessage="Filter by Tag" />
+          <FormattedMessage id="filter.tag.title" />
         </li>
         {this.getFilters()}
       </ul>

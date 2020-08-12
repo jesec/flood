@@ -26,7 +26,6 @@ class MoveTorrents extends React.Component {
         checked: false,
         content: this.props.intl.formatMessage({
           id: 'torrents.move.data.label',
-          defaultMessage: 'Move data',
         }),
         id: 'moveFiles',
         type: 'checkbox',
@@ -35,7 +34,6 @@ class MoveTorrents extends React.Component {
         checked: true,
         content: this.props.intl.formatMessage({
           id: 'torrents.move.check_hash.label',
-          defaultMessage: 'Check hash',
         }),
         id: 'isCheckHash',
         type: 'checkbox',
@@ -43,7 +41,6 @@ class MoveTorrents extends React.Component {
       {
         content: this.props.intl.formatMessage({
           id: 'button.cancel',
-          defaultMessage: 'Cancel',
         }),
         triggerDismiss: true,
         type: 'tertiary',
@@ -51,7 +48,6 @@ class MoveTorrents extends React.Component {
       {
         content: this.props.intl.formatMessage({
           id: 'torrents.move.button.set.location',
-          defaultMessage: 'Set Location',
         }),
         isLoading: this.state.isSettingDownloadPath,
         submit: true,
@@ -110,7 +106,6 @@ class MoveTorrents extends React.Component {
         dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
           id: 'torrents.move.heading',
-          defaultMessage: 'Set Torrent Location',
         })}
       />
     );

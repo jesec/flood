@@ -58,7 +58,6 @@ class ActionBar extends React.Component {
             <Action
               label={this.props.intl.formatMessage({
                 id: 'actionbar.button.start.torrent',
-                defaultMessage: 'Start Torrent',
               })}
               slug="start-torrent"
               icon={<StartIcon />}
@@ -67,7 +66,6 @@ class ActionBar extends React.Component {
             <Action
               label={this.props.intl.formatMessage({
                 id: 'actionbar.button.stop.torrent',
-                defaultMessage: 'Stop Torrent',
               })}
               slug="stop-torrent"
               icon={<StopIcon />}
@@ -78,7 +76,6 @@ class ActionBar extends React.Component {
             <Action
               label={this.props.intl.formatMessage({
                 id: 'actionbar.button.add.torrent',
-                defaultMessage: 'Add Torrent',
               })}
               slug="add-torrent"
               icon={<Add />}
@@ -87,7 +84,6 @@ class ActionBar extends React.Component {
             <Action
               label={this.props.intl.formatMessage({
                 id: 'actionbar.button.remove.torrent',
-                defaultMessage: 'Remove Torrent',
               })}
               slug="remove-torrent"
               icon={<Remove />}

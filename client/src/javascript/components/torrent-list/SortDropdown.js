@@ -38,10 +38,10 @@ class SortDropdown extends React.Component {
     return (
       <button className="dropdown__button">
         <label className="dropdown__label">
-          <FormattedMessage id="torrents.sort.title" defaultMessage="Sort By" />
+          <FormattedMessage id="torrents.sort.title" />
         </label>
         <span className="dropdown__value">
-          <FormattedMessage id={propertyMessageConfig.id} defaultMessage={propertyMessageConfig.defaultMessage} />
+          <FormattedMessage id={propertyMessageConfig.id} />
         </span>
       </button>
     );

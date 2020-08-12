@@ -49,7 +49,7 @@ class AddTorrentsByFile extends React.Component {
     return (
       <FormRowItem>
         <label className="form__element__label">
-          <FormattedMessage id="torrents.add.torrents.label" defaultMessage="Torrents" />
+          <FormattedMessage id="torrents.add.torrents.label" />
         </label>
         {fileContent}
         <Dropzone
@@ -61,9 +61,9 @@ class AddTorrentsByFile extends React.Component {
             <div className="dropzone__icon">
               <Files />
             </div>
-            <FormattedMessage id="torrents.add.tab.file.drop" defaultMessage="Drop some files here," />{' '}
+            <FormattedMessage id="torrents.add.tab.file.drop" />{' '}
             <span className="dropzone__browse-button">
-              <FormattedMessage id="torrents.add.tab.file.browse" defaultMessage="or click to browse" />
+              <FormattedMessage id="torrents.add.tab.file.browse" />
             </span>
             .
           </div>
@@ -127,14 +127,12 @@ class AddTorrentsByFile extends React.Component {
           id="destination"
           label={this.props.intl.formatMessage({
             id: 'torrents.add.destination.label',
-            defaultMessage: 'Destination',
           })}
         />
         <FormRow>
           <Textbox
             label={this.props.intl.formatMessage({
               id: 'torrents.add.tags',
-              defaultMessage: 'Tags',
             })}
             defaultValue={this.state.tags}
             id="tags"

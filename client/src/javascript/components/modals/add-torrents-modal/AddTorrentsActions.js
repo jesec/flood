@@ -13,7 +13,6 @@ class AddTorrentsActions extends PureComponent {
         clickHandler: this.handleStartTorrentsToggle,
         content: this.props.intl.formatMessage({
           id: 'torrents.add.start.label',
-          defaultMessage: 'Start Torrent',
         }),
         id: 'start',
         triggerDismiss: false,
@@ -23,7 +22,6 @@ class AddTorrentsActions extends PureComponent {
         clickHandler: null,
         content: this.props.intl.formatMessage({
           id: 'button.cancel',
-          defaultMessage: 'Cancel',
         }),
         triggerDismiss: true,
         type: 'tertiary',
@@ -32,7 +30,6 @@ class AddTorrentsActions extends PureComponent {
         clickHandler: this.props.onAddTorrentsClick,
         content: this.props.intl.formatMessage({
           id: 'torrents.add.button.add',
-          defaultMessage: 'Add Torrent',
         }),
         isLoading: this.props.isAddingTorrents,
         submit: true,

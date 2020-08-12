@@ -16,25 +16,20 @@ export default class ResourcesTab extends SettingsTab {
     return (
       <Form onChange={this.handleFormChange}>
         <ModalFormSectionHeader>
-          <FormattedMessage id="settings.resources.disk.heading" defaultMessage="Disk" />
+          <FormattedMessage id="settings.resources.disk.heading" />
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('directoryDefault')}
             id="directoryDefault"
-            label={
-              <FormattedMessage
-                id="settings.resources.disk.download.location.label"
-                defaultMessage="Default Download Directory"
-              />
-            }
+            label={<FormattedMessage id="settings.resources.disk.download.location.label" />}
           />
         </FormRow>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('networkMaxOpenFiles')}
             id="networkMaxOpenFiles"
-            label={<FormattedMessage id="settings.resources.max.open.files" defaultMessage="Maximum Open Files" />}
+            label={<FormattedMessage id="settings.resources.max.open.files" />}
             width="one-half"
           />
           <Checkbox
@@ -43,14 +38,11 @@ export default class ResourcesTab extends SettingsTab {
             id="piecesHashOnCompletion"
             labelOffset
             matchTextboxHeight>
-            <FormattedMessage
-              id="settings.resources.disk.check.hash.label"
-              defaultMessage="Verify Hash on Completion"
-            />
+            <FormattedMessage id="settings.resources.disk.check.hash.label" />
           </Checkbox>
         </FormRow>
         <ModalFormSectionHeader>
-          <FormattedMessage id="settings.resources.memory.heading" defaultMessage="Memory" />
+          <FormattedMessage id="settings.resources.memory.heading" />
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
@@ -58,8 +50,7 @@ export default class ResourcesTab extends SettingsTab {
             id="piecesMemoryMax"
             label={
               <div>
-                <FormattedMessage id="settings.resources.memory.max.label" defaultMessage="Max Memory Usage" />{' '}
-                <em className="unit">(MB)</em>
+                <FormattedMessage id="settings.resources.memory.max.label" /> <em className="unit">(MB)</em>
               </div>
             }
             width="one-half"

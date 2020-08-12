@@ -23,7 +23,6 @@ class SetTagsModal extends React.Component {
   getActions() {
     const primaryButtonText = this.props.intl.formatMessage({
       id: 'torrents.set.tags.button.set',
-      defaultMessage: 'Set Tags',
     });
 
     return [
@@ -31,7 +30,6 @@ class SetTagsModal extends React.Component {
         clickHandler: null,
         content: this.props.intl.formatMessage({
           id: 'button.cancel',
-          defaultMessage: 'Cancel',
         }),
         triggerDismiss: true,
         type: 'tertiary',
@@ -61,7 +59,6 @@ class SetTagsModal extends React.Component {
               id="tags"
               placeholder={this.props.intl.formatMessage({
                 id: 'torrents.set.tags.enter.tags',
-                defaultMessage: 'Enter tags',
               })}
             />
           </FormRow>
@@ -78,7 +75,6 @@ class SetTagsModal extends React.Component {
         dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
           id: 'torrents.set.tags.heading',
-          defaultMessage: 'Set Tags',
         })}
       />
     );

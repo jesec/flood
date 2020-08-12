@@ -48,12 +48,11 @@ const dateRenderer = (date) => <FormattedDate value={date * 1000} />;
 const peersRenderer = (peersConnected, totalPeers) => (
   <FormattedMessage
     id="torrent.list.peers"
-    defaultMessage="{connected} {of} {total}"
     values={{
       connected: <FormattedNumber value={peersConnected} />,
       of: (
         <em className="unit">
-          <FormattedMessage id="torrent.list.peers.of" defaultMessage="of" />
+          <FormattedMessage id="torrent.list.peers.of" />
         </em>
       ),
       total: <FormattedNumber value={totalPeers} />,

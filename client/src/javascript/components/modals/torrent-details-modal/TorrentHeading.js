@@ -72,7 +72,7 @@ export default class TorrentHeading extends React.Component {
         // eslint-disable-next-line react/no-array-index-key
         <li className={classes} key={index} onClick={this[`handle${capitalizedAction}`]}>
           {statusIcons[torrentAction]}
-          <FormattedMessage id={`torrents.details.actions.${torrentAction}`} defaultMessage={capitalizedAction} />
+          <FormattedMessage id={`torrents.details.actions.${torrentAction}`} />
         </li>,
       );
     });

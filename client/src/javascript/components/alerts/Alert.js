@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Alerts from '../../constants/Alerts';
 import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
 import CircleExclamationIcon from '../icons/CircleExclamationIcon';
 
@@ -35,7 +34,6 @@ export default class Alert extends React.Component {
         <span className="alert__content">
           <FormattedMessage
             id={this.props.id}
-            defaultMessage={Alerts[this.props.id]}
             values={{
               count: this.props.count,
               countElement: <span className="alert__count">{this.props.count}</span>,

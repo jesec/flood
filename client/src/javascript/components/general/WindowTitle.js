@@ -22,7 +22,6 @@ const WindowTitle = (props) => {
       const translatedDownUnit = intl.formatMessage(
         {
           id: 'unit.speed',
-          defaultMessage: '{baseUnit}/s',
         },
         {
           baseUnit: intl.formatMessage({id: getTranslationString(down.unit)}),
@@ -31,7 +30,6 @@ const WindowTitle = (props) => {
       const translatedUpUnit = intl.formatMessage(
         {
           id: 'unit.speed',
-          defaultMessage: '{baseUnit}/s',
         },
         {
           baseUnit: intl.formatMessage({id: getTranslationString(up.unit)}),
@@ -42,7 +40,6 @@ const WindowTitle = (props) => {
         {
           id: 'window.title',
           // \u2193 and \u2191 are down and up arrows, respectively
-          defaultMessage: '\u2193 {down} \u2191 {up} - Flood',
         },
         {
           down: `${formattedDownSpeed} ${translatedDownUnit}`,

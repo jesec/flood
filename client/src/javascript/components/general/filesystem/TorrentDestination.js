@@ -133,7 +133,6 @@ class TorrentDestination extends React.Component {
             onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
             placeholder={this.props.intl.formatMessage({
               id: 'torrents.add.destination.placeholder',
-              defaultMessage: 'Destination',
             })}
             setRef={(ref) => {
               this.textboxRef = ref;
@@ -171,7 +170,7 @@ class TorrentDestination extends React.Component {
         </FormRow>
         <FormRow>
           <Checkbox grow={false} id="useBasePath">
-            <FormattedMessage id="torrents.destination.base_path" defaultMessage="Use as Base Path" />
+            <FormattedMessage id="torrents.destination.base_path" />
           </Checkbox>
         </FormRow>
       </FormRowGroup>

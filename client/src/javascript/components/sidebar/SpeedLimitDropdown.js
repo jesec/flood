@@ -14,11 +14,9 @@ import TransferDataStore from '../../stores/TransferDataStore';
 
 const MESSAGES = defineMessages({
   speedLimits: {
-    defaultMessage: 'Speed Limits',
     id: 'sidebar.button.speedlimits',
   },
   unlimited: {
-    defaultMessage: 'Unlimited',
     id: 'speed.unlimited',
   },
 });

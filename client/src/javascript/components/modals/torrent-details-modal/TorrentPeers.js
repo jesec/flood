@@ -60,7 +60,7 @@ export default class TorrentPeers extends React.Component {
             <thead className="torrent-details__table__heading">
               <tr>
                 <th className="torrent-details__table__heading--primary">
-                  <FormattedMessage id="torrents.details.peers" defaultMessage="Peers" />
+                  <FormattedMessage id="torrents.details.peers" />
                   <Badge>{peers.length}</Badge>
                 </th>
                 <th className="torrent-details__table__heading--secondary">DL</th>
@@ -77,10 +77,7 @@ export default class TorrentPeers extends React.Component {
     }
     return (
       <span className="torrent-details__section__null-data">
-        <FormattedMessage
-          id="torrents.details.peers.no.data"
-          defaultMessage="There is no peer data for this torrent."
-        />
+        <FormattedMessage id="torrents.details.peers.no.data" />
       </span>
     );
   }

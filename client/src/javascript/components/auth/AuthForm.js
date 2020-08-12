@@ -18,13 +18,11 @@ class AuthForm extends React.Component {
     if (this.props.mode === 'login') {
       return this.props.intl.formatMessage({
         id: 'auth.login',
-        defaultMessage: 'Login',
       });
     }
 
     return this.props.intl.formatMessage({
       id: 'auth.create.an.account',
-      defaultMessage: 'Create an account',
     });
   }
 
@@ -32,13 +30,11 @@ class AuthForm extends React.Component {
     if (this.props.mode === 'login') {
       return this.props.intl.formatMessage({
         id: 'auth.login.intro',
-        defaultMessage: 'Log in to your account.',
       });
     }
 
     return this.props.intl.formatMessage({
       id: 'auth.create.an.account.intro',
-      defaultMessage: 'Welcome to Flood! Create a username and strong password.',
     });
   }
 
@@ -116,11 +112,9 @@ class AuthForm extends React.Component {
                   {isLoginMode
                     ? intl.formatMessage({
                         id: 'auth.log.in',
-                        defaultMessage: 'Log In',
                       })
                     : intl.formatMessage({
                         id: 'auth.create.account',
-                        defaultMessage: 'Create Account',
                       })}
                 </Button>
               </FormRow>

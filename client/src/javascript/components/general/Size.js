@@ -22,7 +22,6 @@ class Size extends React.Component {
       translatedUnit = intl.formatMessage(
         {
           id: 'unit.speed',
-          defaultMessage: '{baseUnit}/s',
         },
         {
           baseUnit: translatedUnit,

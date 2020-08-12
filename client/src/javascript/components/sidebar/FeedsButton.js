@@ -8,7 +8,6 @@ import UIActions from '../../actions/UIActions';
 const MESSAGES = defineMessages({
   feeds: {
     id: 'sidebar.button.feeds',
-    defaultMessage: 'Feeds',
   },
 });
 

@@ -53,7 +53,7 @@ class AuthTab extends SettingsTab {
       } else {
         badge = (
           <span className="interactive-list__label__tag tag">
-            <FormattedMessage id="auth.current.user" defaultMessage="Current User" />
+            <FormattedMessage id="auth.current.user" />
           </span>
         );
       }
@@ -87,7 +87,6 @@ class AuthTab extends SettingsTab {
       this.setState({
         addUserError: this.props.intl.formatMessage({
           id: 'auth.error.username.empty',
-          defaultMessage: 'Username cannot be empty.',
         }),
       });
     } else {
@@ -116,11 +115,11 @@ class AuthTab extends SettingsTab {
       return (
         <Form>
           <ModalFormSectionHeader>
-            <FormattedMessage id="auth.user.accounts" defaultMessage="User Accounts" />
+            <FormattedMessage id="auth.user.accounts" />
           </ModalFormSectionHeader>
           <FormRow>
             <FormError>
-              <FormattedMessage id="auth.message.not.admin" defaultMessage="User is not Admin" />
+              <FormattedMessage id="auth.message.not.admin" />
             </FormError>
           </FormRow>
         </Form>
@@ -160,7 +159,7 @@ class AuthTab extends SettingsTab {
           this.formRef = ref;
         }}>
         <ModalFormSectionHeader>
-          <FormattedMessage id="auth.user.accounts" defaultMessage="User Accounts" />
+          <FormattedMessage id="auth.user.accounts" />
         </ModalFormSectionHeader>
         <FormRow>
           <FormRowItem>
@@ -171,34 +170,32 @@ class AuthTab extends SettingsTab {
           </FormRowItem>
         </FormRow>
         <ModalFormSectionHeader>
-          <FormattedMessage id="auth.add.user" defaultMessage="Add User" />
+          <FormattedMessage id="auth.add.user" />
         </ModalFormSectionHeader>
         {errorElement}
         <FormRow>
           <Textbox
             id="username"
-            label={<FormattedMessage id="auth.username" defaultMessage="Username" />}
+            label={<FormattedMessage id="auth.username" />}
             placeholder={this.props.intl.formatMessage({
               id: 'auth.username',
-              defaultMessage: 'Username',
             })}
           />
           <Textbox
             id="password"
-            label={<FormattedMessage id="auth.password" defaultMessage="Password" />}
+            label={<FormattedMessage id="auth.password" />}
             placeholder={this.props.intl.formatMessage({
               id: 'auth.password',
-              defaultMessage: 'Password',
             })}
           />
           <Checkbox grow={false} id="isAdmin" labelOffset matchTextboxHeight>
-            <FormattedMessage id="auth.admin" defaultMessage="Admin" />
+            <FormattedMessage id="auth.admin" />
           </Checkbox>
         </FormRow>
         <RtorrentConnectionTypeSelection />
         <FormRow justify="end">
           <Button isLoading={this.state.isAddingUser} priority="primary" type="submit" width="auto">
-            <FormattedMessage id="button.add" defaultMessage="Add" />
+            <FormattedMessage id="button.add" />
           </Button>
         </FormRow>
       </Form>

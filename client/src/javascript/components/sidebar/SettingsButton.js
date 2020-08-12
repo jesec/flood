@@ -8,7 +8,6 @@ import UIActions from '../../actions/UIActions';
 const MESSAGES = defineMessages({
   settings: {
     id: 'sidebar.button.settings',
-    defaultMessage: 'Settings',
   },
 });
 const METHODS_TO_BIND = ['handleSettingsButtonClick'];

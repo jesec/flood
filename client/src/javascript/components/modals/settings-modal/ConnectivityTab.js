@@ -37,15 +37,13 @@ export default class ConnectivityTab extends SettingsTab {
     return (
       <Form onChange={this.handleFormChange}>
         <ModalFormSectionHeader>
-          <FormattedMessage defaultMessage="Incoming Connections" id="settings.connectivity.incoming.heading" />
+          <FormattedMessage id="settings.connectivity.incoming.heading" />
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('networkPortRange')}
             id="networkPortRange"
-            label={
-              <FormattedMessage id="settings.connectivity.port.range.label" defaultMessage="Listening Port Range" />
-            }
+            label={<FormattedMessage id="settings.connectivity.port.range.label" />}
             width="one-quarter"
           />
           <Checkbox
@@ -54,7 +52,7 @@ export default class ConnectivityTab extends SettingsTab {
             id="networkPortRandom"
             labelOffset
             matchTextboxHeight>
-            <FormattedMessage id="settings.connectivity.port.randomize.label" defaultMessage="Randomize Port" />
+            <FormattedMessage id="settings.connectivity.port.randomize.label" />
           </Checkbox>
           <Checkbox
             checked={this.getFieldValue('networkPortOpen') === '1'}
@@ -62,40 +60,33 @@ export default class ConnectivityTab extends SettingsTab {
             id="networkPortOpen"
             labelOffset
             matchTextboxHeight>
-            <FormattedMessage id="settings.connectivity.port.open.label" defaultMessage="Open Port" />
+            <FormattedMessage id="settings.connectivity.port.open.label" />
           </Checkbox>
         </FormRow>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('networkLocalAddress')}
             id="networkLocalAddress"
-            label={
-              <FormattedMessage id="settings.connectivity.ip.hostname.label" defaultMessage="Reported IP/Hostname" />
-            }
+            label={<FormattedMessage id="settings.connectivity.ip.hostname.label" />}
           />
           <Textbox
             defaultValue={this.getFieldValue('networkHttpMaxOpen')}
             id="networkHttpMaxOpen"
-            label={
-              <FormattedMessage
-                id="settings.connectivity.max.http.connections"
-                defaultMessage="Maximum HTTP Connections"
-              />
-            }
+            label={<FormattedMessage id="settings.connectivity.max.http.connections" />}
           />
         </FormRow>
         <ModalFormSectionHeader>
-          <FormattedMessage id="settings.connectivity.dpd.heading" defaultMessage="Decentralized Peer Discovery" />
+          <FormattedMessage id="settings.connectivity.dpd.heading" />
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('dhtPort')}
             id="dhtPort"
-            label={<FormattedMessage id="settings.connectivity.dht.port.label" defaultMessage="DHT Port" />}
+            label={<FormattedMessage id="settings.connectivity.dht.port.label" />}
             width="one-quarter"
           />
           <Checkbox checked={this.getDHTEnabledValue()} grow={false} id="dhtEnabled" labelOffset matchTextboxHeight>
-            <FormattedMessage id="settings.connectivity.dht.label" defaultMessage="Enable DHT" />
+            <FormattedMessage id="settings.connectivity.dht.label" />
           </Checkbox>
           <Checkbox
             checked={this.getFieldValue('protocolPex') === '1'}
@@ -103,51 +94,41 @@ export default class ConnectivityTab extends SettingsTab {
             id="protocolPex"
             labelOffset
             matchTextboxHeight>
-            <FormattedMessage id="settings.connectivity.peer.exchange.label" defaultMessage="Enable Peer Exchange" />
+            <FormattedMessage id="settings.connectivity.peer.exchange.label" />
           </Checkbox>
         </FormRow>
         <ModalFormSectionHeader>
-          <FormattedMessage id="settings.connectivity.peers.heading" defaultMessage="Peers" />
+          <FormattedMessage id="settings.connectivity.peers.heading" />
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('throttleMinPeersNormal')}
             id="throttleMinPeersNormal"
-            label={<FormattedMessage id="settings.connectivity.peers.min.label" defaultMessage="Minimum Peers" />}
+            label={<FormattedMessage id="settings.connectivity.peers.min.label" />}
           />
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxPeersNormal')}
             id="throttleMaxPeersNormal"
-            label={<FormattedMessage id="settings.connectivity.peers.max.label" defaultMessage="Maxmimum Peers" />}
+            label={<FormattedMessage id="settings.connectivity.peers.max.label" />}
           />
         </FormRow>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('throttleMinPeersSeed')}
             id="throttleMinPeersSeed"
-            label={
-              <FormattedMessage
-                id="settings.connectivity.peers.seeding.min.label"
-                defaultMessage="Minimum Peers Seeding"
-              />
-            }
+            label={<FormattedMessage id="settings.connectivity.peers.seeding.min.label" />}
           />
           <Textbox
             defaultValue={this.getFieldValue('throttleMaxPeersSeed')}
             id="throttleMaxPeersSeed"
-            label={
-              <FormattedMessage
-                id="settings.connectivity.peers.seeding.max.label"
-                defaultMessage="Maxmimum Peers Seeding"
-              />
-            }
+            label={<FormattedMessage id="settings.connectivity.peers.seeding.max.label" />}
           />
         </FormRow>
         <FormRow>
           <Textbox
             defaultValue={this.getFieldValue('trackersNumWant')}
             id="trackersNumWant"
-            label={<FormattedMessage id="settings.connectivity.peers.desired.label" defaultMessage="Peers Desired" />}
+            label={<FormattedMessage id="settings.connectivity.peers.desired.label" />}
             width="one-half"
           />
         </FormRow>

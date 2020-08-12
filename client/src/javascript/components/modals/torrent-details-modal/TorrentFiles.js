@@ -267,7 +267,7 @@ class TorrentFiles extends React.Component {
       directoryHeadingIconContent = <Disk />;
       fileDetailContent = (
         <div className="directory-tree__node directory-tree__node--file">
-          <FormattedMessage id="torrents.details.files.loading" defaultMessage="Loading file detail..." />
+          <FormattedMessage id="torrents.details.files.loading" />
         </div>
       );
     }
@@ -300,8 +300,6 @@ class TorrentFiles extends React.Component {
             <FormRowItem width="one-quarter" grow={false} shrink={false}>
               <FormattedMessage
                 id="torrents.details.selected.files"
-                defaultMessage="{count, plural, =1 {{countElement} selected file} other
-                  {{countElement} selected files}}"
                 values={{
                   count: this.state.selectedFiles.length,
                   countElement: (
@@ -315,8 +313,6 @@ class TorrentFiles extends React.Component {
             <Button onClick={this.handleDownloadButtonClick} grow={false} shrink={false}>
               <FormattedMessage
                 id="torrents.details.files.download.file"
-                defaultMessage="{count, plural, =1 {Download File} other
-                  {Download Files}}"
                 values={{
                   count: this.state.selectedFiles.length,
                 }}
@@ -324,24 +320,21 @@ class TorrentFiles extends React.Component {
             </Button>
             <Select id="file-priority" persistentPlaceholder shrink={false}>
               <SelectItem placeholder>
-                <FormattedMessage id="torrents.details.selected.files.set.priority" defaultMessage="Set Priority" />
+                <FormattedMessage id="torrents.details.selected.files.set.priority" />
               </SelectItem>
               <SelectItem id={0}>
                 {this.props.intl.formatMessage({
                   id: 'priority.dont.download',
-                  defaultMessage: "Don't Download",
                 })}
               </SelectItem>
               <SelectItem id={1}>
                 {this.props.intl.formatMessage({
                   id: 'priority.normal',
-                  defaultMessage: 'Normal',
                 })}
               </SelectItem>
               <SelectItem id={2}>
                 {this.props.intl.formatMessage({
                   id: 'priority.high',
-                  defaultMessage: 'High',
                 })}
               </SelectItem>
             </Select>

@@ -43,7 +43,6 @@ class TorrentDetailsModal extends React.Component {
         content: TorrentGeneralInfo,
         label: this.props.intl.formatMessage({
           id: 'torrents.details.details',
-          defaultMessage: 'Details',
         }),
         props,
       },
@@ -51,7 +50,6 @@ class TorrentDetailsModal extends React.Component {
         content: TorrentFiles,
         label: this.props.intl.formatMessage({
           id: 'torrents.details.files',
-          defaultMessage: 'Files',
         }),
         modalContentClasses: 'modal__content--nested-scroll',
         props,
@@ -60,7 +58,6 @@ class TorrentDetailsModal extends React.Component {
         content: TorrentPeers,
         label: this.props.intl.formatMessage({
           id: 'torrents.details.peers',
-          defaultMessage: 'Peers',
         }),
         props,
       },
@@ -68,7 +65,6 @@ class TorrentDetailsModal extends React.Component {
         content: TorrentTrackers,
         label: this.props.intl.formatMessage({
           id: 'torrents.details.trackers',
-          defaultMessage: 'Trackers',
         }),
         props,
       },
@@ -76,7 +72,6 @@ class TorrentDetailsModal extends React.Component {
         content: TorrentMediainfo,
         label: this.props.intl.formatMessage({
           id: 'torrents.details.mediainfo',
-          defaultMessage: 'Mediainfo',
         }),
         props,
       },

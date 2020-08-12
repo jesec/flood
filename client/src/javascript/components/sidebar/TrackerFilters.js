@@ -54,7 +54,7 @@ class TrackerFilters extends React.Component {
     return (
       <ul className="sidebar-filter sidebar__item">
         <li className="sidebar-filter__item sidebar-filter__item--heading">
-          <FormattedMessage id="filter.tracker.title" defaultMessage="Filter by Tracker" />
+          <FormattedMessage id="filter.tracker.title" />
         </li>
         {filters}
       </ul>

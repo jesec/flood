@@ -17,19 +17,19 @@ export default class Duration extends React.Component {
     }
 
     if (duration === 'Infinity') {
-      content = <FormattedMessage id="unit.time.infinity" defaultMessage="∞" />;
+      content = <FormattedMessage id="unit.time.infinity" />;
     } else if (duration.years > 0) {
       content = [
         <span className="duration--segment" key="years">
           {duration.years}
           <em className="unit">
-            <FormattedMessage id="unit.time.year" defaultMessage="yr" />
+            <FormattedMessage id="unit.time.year" />
           </em>
         </span>,
         <span className="duration--segment" key="weeks">
           {duration.weeks}
           <em className="unit">
-            <FormattedMessage id="unit.time.week" defaultMessage="wk" />
+            <FormattedMessage id="unit.time.week" />
           </em>
         </span>,
       ];
@@ -38,13 +38,13 @@ export default class Duration extends React.Component {
         <span className="duration--segment" key="weeks">
           {duration.weeks}
           <em className="unit">
-            <FormattedMessage id="unit.time.week" defaultMessage="wk" />
+            <FormattedMessage id="unit.time.week" />
           </em>
         </span>,
         <span className="duration--segment" key="days">
           {duration.days}
           <em className="unit">
-            <FormattedMessage id="unit.time.day" defaultMessage="d" />
+            <FormattedMessage id="unit.time.day" />
           </em>
         </span>,
       ];
@@ -53,13 +53,13 @@ export default class Duration extends React.Component {
         <span className="duration--segment" key="days">
           {duration.days}
           <em className="unit">
-            <FormattedMessage id="unit.time.day" defaultMessage="d" />
+            <FormattedMessage id="unit.time.day" />
           </em>
         </span>,
         <span className="duration--segment" key="hours">
           {duration.hours}
           <em className="unit">
-            <FormattedMessage id="unit.time.hour" defaultMessage="hr" />
+            <FormattedMessage id="unit.time.hour" />
           </em>
         </span>,
       ];
@@ -68,13 +68,13 @@ export default class Duration extends React.Component {
         <span className="duration--segment" key="hours">
           {duration.hours}
           <em className="unit">
-            <FormattedMessage id="unit.time.hour" defaultMessage="hr" />
+            <FormattedMessage id="unit.time.hour" />
           </em>
         </span>,
         <span className="duration--segment" key="minutes">
           {duration.minutes}
           <em className="unit">
-            <FormattedMessage id="unit.time.minute" defaultMessage="m" />
+            <FormattedMessage id="unit.time.minute" />
           </em>
         </span>,
       ];
@@ -83,13 +83,13 @@ export default class Duration extends React.Component {
         <span className="duration--segment" key="minutes">
           {duration.minutes}
           <em className="unit">
-            <FormattedMessage id="unit.time.minute" defaultMessage="m" />
+            <FormattedMessage id="unit.time.minute" />
           </em>
         </span>,
         <span className="duration--segment" key="seconds">
           {duration.seconds}
           <em className="unit">
-            <FormattedMessage id="unit.time.second" defaultMessage="s" />
+            <FormattedMessage id="unit.time.second" />
           </em>
         </span>,
       ];
@@ -98,7 +98,7 @@ export default class Duration extends React.Component {
         <span className="duration--segment">
           {duration.seconds}
           <em className="unit">
-            <FormattedMessage id="unit.time.second" defaultMessage="s" />
+            <FormattedMessage id="unit.time.second" />
           </em>
         </span>
       );

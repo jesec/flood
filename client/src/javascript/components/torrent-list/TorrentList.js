@@ -87,7 +87,6 @@ class TorrentListContainer extends React.Component {
         clickHandler,
         label: intl.formatMessage({
           id: 'torrents.list.context.start',
-          defaultMessage: 'Start',
         }),
       },
       {
@@ -95,7 +94,6 @@ class TorrentListContainer extends React.Component {
         clickHandler,
         label: intl.formatMessage({
           id: 'torrents.list.context.stop',
-          defaultMessage: 'Stop',
         }),
       },
       {
@@ -103,7 +101,6 @@ class TorrentListContainer extends React.Component {
         clickHandler,
         label: intl.formatMessage({
           id: 'torrents.list.context.remove',
-          defaultMessage: 'Remove',
         }),
       },
       {
@@ -111,7 +108,6 @@ class TorrentListContainer extends React.Component {
         clickHandler,
         label: intl.formatMessage({
           id: 'torrents.list.context.check.hash',
-          defaultMessage: 'Check Hash',
         }),
       },
       {
@@ -122,7 +118,6 @@ class TorrentListContainer extends React.Component {
         clickHandler,
         label: intl.formatMessage({
           id: 'torrents.list.context.set.tags',
-          defaultMessage: 'Set Tags',
         }),
       },
       {
@@ -130,7 +125,6 @@ class TorrentListContainer extends React.Component {
         clickHandler,
         label: intl.formatMessage({
           id: 'torrents.list.context.move',
-          defaultMessage: 'Set Torrent Location',
         }),
       },
       {
@@ -143,7 +137,6 @@ class TorrentListContainer extends React.Component {
         },
         label: intl.formatMessage({
           id: 'torrents.list.context.details',
-          defaultMessage: 'Torrent Details',
         }),
       },
       {
@@ -153,7 +146,6 @@ class TorrentListContainer extends React.Component {
         },
         label: intl.formatMessage({
           id: 'torrents.list.context.download',
-          defaultMessage: 'Download',
         }),
       },
       {
@@ -162,7 +154,6 @@ class TorrentListContainer extends React.Component {
         dismissMenu: false,
         label: intl.formatMessage({
           id: 'torrents.list.context.priority',
-          defaultMessage: 'Priority',
         }),
         labelAction: (
           <PriorityMeter
@@ -294,7 +285,7 @@ class TorrentListContainer extends React.Component {
       clearFilters = (
         <div className="torrents__alert__action">
           <Button onClick={this.handleClearFiltersClick} priority="tertiary">
-            <FormattedMessage id="torrents.list.clear.filters" defaultMessage="Clear filters" />
+            <FormattedMessage id="torrents.list.clear.filters" />
           </Button>
         </div>
       );
@@ -303,7 +294,7 @@ class TorrentListContainer extends React.Component {
     return (
       <div className="torrents__alert__wrapper">
         <div className="torrents__alert">
-          <FormattedMessage id="torrents.list.no.torrents" defaultMessage="No torrents to display." />
+          <FormattedMessage id="torrents.list.no.torrents" />
         </div>
         {clearFilters}
       </div>
@@ -461,7 +452,7 @@ class TorrentListContainer extends React.Component {
       content = (
         <div className="torrents__alert__wrapper">
           <div className="torrents__alert">
-            <FormattedMessage id="torrents.list.cannot.connect" defaultMessage="Cannot connect to rTorrent." />
+            <FormattedMessage id="torrents.list.cannot.connect" />
           </div>
         </div>
       );
@@ -526,7 +517,7 @@ class TorrentListContainer extends React.Component {
             <div className="dropzone__icon">
               <Files />
             </div>
-            <FormattedMessage id="torrents.list.drop" defaultMessage="Drop files here to add them to rTorrent." />
+            <FormattedMessage id="torrents.list.drop" />
           </div>
         </div>
       </Dropzone>
