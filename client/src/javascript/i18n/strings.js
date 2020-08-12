@@ -23,6 +23,7 @@ export default {
   'auth.error.username.empty': 'Username cannot be empty.',
   'auth.log.in': 'Log In',
   'auth.login': 'Login',
+  'auth.login.intro': 'Log in to your account.',
   'auth.password': 'Password',
   'auth.user.accounts': 'User Accounts',
   'auth.username': 'Username',
