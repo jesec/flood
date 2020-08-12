@@ -1,0 +1,4 @@
+commit_message: "i18n: new translations for {languageName}"
+files:
+  - source: /client/src/javascript/i18n/strings.js
+    translation: /client/src/javascript/i18n/translations/%two_letters_code%.js
