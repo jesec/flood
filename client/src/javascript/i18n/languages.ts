@@ -1,23 +1,3 @@
-import {addLocaleData} from 'react-intl';
-import enLocaleData from 'react-intl/locale-data/en';
-import csLocaleData from 'react-intl/locale-data/cs';
-import deLocaleData from 'react-intl/locale-data/de';
-import esLocaleData from 'react-intl/locale-data/es';
-import frLocaleData from 'react-intl/locale-data/fr';
-import itLocaleData from 'react-intl/locale-data/it';
-import nlLocaleData from 'react-intl/locale-data/nl';
-import noLocaleData from 'react-intl/locale-data/no';
-import plLocaleData from 'react-intl/locale-data/pl';
-import ptLocaleData from 'react-intl/locale-data/pt';
-import ruLocaleData from 'react-intl/locale-data/ru';
-import roLocaleData from 'react-intl/locale-data/ro';
-import svLocaleData from 'react-intl/locale-data/sv';
-import ukLocaleData from 'react-intl/locale-data/uk';
-import koLocaleData from 'react-intl/locale-data/ko';
-import jaLocaleData from 'react-intl/locale-data/ja';
-import zhLocaleData from 'react-intl/locale-data/zh';
-import arLocaleData from 'react-intl/locale-data/ar';
-
 import EN from './strings';
 
 import CS from './translations/cs';
@@ -38,25 +18,6 @@ import JA from './translations/ja';
 import ZH_HANS from './translations/zh-Hans';
 import ZH_HANT from './translations/zh-Hant';
 import AR from './translations/ar';
-
-addLocaleData(enLocaleData);
-addLocaleData(csLocaleData);
-addLocaleData(deLocaleData);
-addLocaleData(esLocaleData);
-addLocaleData(frLocaleData);
-addLocaleData(itLocaleData);
-addLocaleData(nlLocaleData);
-addLocaleData(noLocaleData);
-addLocaleData(plLocaleData);
-addLocaleData(ptLocaleData);
-addLocaleData(ruLocaleData);
-addLocaleData(roLocaleData);
-addLocaleData(svLocaleData);
-addLocaleData(ukLocaleData);
-addLocaleData(koLocaleData);
-addLocaleData(jaLocaleData);
-addLocaleData(zhLocaleData);
-addLocaleData(arLocaleData);
 
 export const languages = {
   auto: EN,
