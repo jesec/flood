@@ -28,7 +28,7 @@ class Portal extends React.Component {
 
   render() {
     let locale = SettingsStore.getFloodSettings('language');
-    if (locale === 'auto') {
+    if (locale === 'auto' || !Object.prototype.hasOwnProperty.call(i18n.languages, locale)) {
       locale = detectLocale();
     }
     if (this.nodeEl == null) return null;

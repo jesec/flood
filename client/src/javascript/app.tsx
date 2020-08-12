@@ -86,7 +86,7 @@ class FloodApp extends React.Component<InjectedFloodAppProps> {
 
   public render(): React.ReactNode {
     let {locale} = this.props;
-    if (locale === 'auto') {
+    if (locale === 'auto' || !Object.prototype.hasOwnProperty.call(i18n.languages, locale)) {
       locale = detectLocale();
     }
 

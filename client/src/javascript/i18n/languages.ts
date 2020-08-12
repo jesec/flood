@@ -26,10 +26,30 @@ addLocaleData(zhLocaleData);
 export const languages = {
   auto: EN,
   en: EN,
-  es: ES,
-  fr: FR,
-  ko: KO,
-  nl: NL,
-  'zh-Hans': ZH_HANS,
-  'zh-Hant': ZH_HANT,
+  es: {
+    ...EN,
+    ...ES,
+  },
+  fr: {
+    ...EN,
+    ...FR,
+  },
+  ko: {
+    ...EN,
+    ...KO,
+  },
+  nl: {
+    ...EN,
+    ...NL,
+  },
+  'zh-Hans': {
+    ...EN,
+    ...ZH_HANT,
+    ...ZH_HANS,
+  },
+  'zh-Hant': {
+    ...EN,
+    ...ZH_HANS,
+    ...ZH_HANT,
+  },
 };
