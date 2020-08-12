@@ -1,4 +1,4 @@
-import d3 from 'd3';
+import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 import React from 'react';
 
@@ -150,13 +150,13 @@ class TransferRateGraph extends React.Component {
     const graph = d3.select(`#${id}`);
     const margin = {bottom: 10, top: 10};
 
-    this.xScale = d3.scale
-      .linear()
+    this.xScale = d3
+      .scaleLinear()
       .domain([0, historicalData.download.length - 1])
       .range([0, width]);
 
-    this.yScale = d3.scale
-      .linear()
+    this.yScale = d3
+      .scaleLinear()
       .domain([
         0,
         d3.max(historicalData.download, (dataPoint, index) => Math.max(dataPoint, historicalData.upload[index])),
@@ -164,21 +164,21 @@ class TransferRateGraph extends React.Component {
       .range([height - margin.top, margin.bottom]);
 
     const lineFunc = (interpolation) =>
-      d3.svg
+      d3
         .line()
         .x((dataPoint, index) => this.xScale(index))
         .y((dataPoint) => this.yScale(dataPoint))
-        .interpolate(interpolation);
+        .curve(interpolation);
 
     const areaFunc = (interpolation) =>
-      d3.svg
+      d3
         .area()
         .x((dataPoint, index) => this.xScale(index))
         .y0(height)
         .y1((dataPoint) => this.yScale(dataPoint))
-        .interpolate(interpolation);
+        .curve(interpolation);
 
-    const interpolation = 'monotone';
+    const interpolation = d3.curveMonotoneX;
     const downloadLinePath = lineFunc(interpolation)(historicalData.download);
     const downloadAreaShape = areaFunc(interpolation)(historicalData.download);
     const uploadLinePath = lineFunc(interpolation)(historicalData.upload);

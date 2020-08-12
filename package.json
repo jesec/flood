@@ -45,7 +45,7 @@
     "compression": "^1.7.3",
     "cookie-parser": "^1.4.5",
     "css-loader": "^3.2.0",
-    "d3": "^3.5.17",
+    "d3": "^5.16.0",
     "debug": "^4.1.1",
     "deep-equal": "^2.0.3",
     "express": "^4.17.1",
