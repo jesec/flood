@@ -35,6 +35,12 @@ class SidebarFilter extends React.Component {
       });
     }
 
+    if (this.props.slug === 'checking' || this.props.slug === 'error') {
+      if (this.props.count === 0) {
+        return null;
+      }
+    }
+
     return (
       <li className={classNames} onClick={this.handleClick}>
         {this.props.icon}
