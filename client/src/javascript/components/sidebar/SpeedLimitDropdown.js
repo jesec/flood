@@ -16,6 +16,12 @@ const MESSAGES = defineMessages({
   speedLimits: {
     id: 'sidebar.button.speedlimits',
   },
+  download: {
+    id: 'sidebar.speedlimits.download',
+  },
+  upload: {
+    id: 'sidebar.speedlimits.upload',
+  },
   unlimited: {
     id: 'speed.unlimited',
   },
@@ -62,7 +68,9 @@ class SpeedLimitDropdown extends React.Component {
   getSpeedList(property) {
     const heading = {
       className: `dropdown__label dropdown__label--${property}`,
-      displayName: `${property.charAt(0).toUpperCase()}${property.slice(1)}`,
+      ...(property === 'download'
+        ? {displayName: this.props.intl.formatMessage(MESSAGES.download)}
+        : {displayName: this.props.intl.formatMessage(MESSAGES.upload)}),
       selectable: false,
       value: null,
     };

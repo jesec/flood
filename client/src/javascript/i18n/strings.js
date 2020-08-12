@@ -197,6 +197,9 @@ export default {
   'sidebar.transferdata.downloaded': 'Downloaded',
   'sidebar.transferdata.uploaded': 'Uploaded',
 
+  'sidebar.speedlimits.download': 'DOWNLOAD',
+  'sidebar.speedlimits.upload': 'UPLOAD',
+
   'speed.unlimited': 'Unlimited',
 
   'unit.size.byte': 'B',
