@@ -45,7 +45,7 @@ router.use('/', (req, res, next) => {
   if (config.disableUsersAndAuth) {
     req.user = Users.getConfigUser();
   }
-  const validation = joi.validate(req.body, authValidation);
+  const validation = authValidation.validate(req.body);
 
   if (!validation.error) {
     next();
