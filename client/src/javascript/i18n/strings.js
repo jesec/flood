@@ -80,6 +80,7 @@ export default {
   'feeds.validation.must.specify.destination': 'You must specify a destination.',
   'feeds.validation.must.specify.label': 'You must specify a label.',
   'feeds.validation.must.specify.valid.feed.url': 'You must specify a valid feed URL.',
+  'feeds.validation.interval.not.positive': 'The interval must be a positive integer.',
   'feeds.browse.feeds': 'Browse feeds',
 
   'filesystem.empty.directory': 'Empty directory.',
@@ -276,6 +277,7 @@ export default {
   'torrents.list.context.details': 'Torrent Details',
   'torrents.list.context.move': 'Set Torrent Location',
   'torrents.list.context.pause': 'Pause',
+  'torrents.list.context.download': 'Download',
   'torrents.list.context.priority': 'Priority',
   'torrents.list.context.remove': 'Remove',
   'torrents.list.context.set.tags': 'Set Tags',
@@ -312,6 +314,9 @@ export default {
   'torrents.properties.tracker.message': 'Tracker Message',
   'torrents.properties.upload.speed': 'Upload Speed',
   'torrents.properties.upload.total': 'Uploaded',
+  'torrents.properties.seeds': 'Seeds',
+  'torrents.properties.peers': 'Peers',
+  'torrents.properties.trackers': 'Trackers',
 
   'torrents.remove.are.you.sure': `Are you sure you want to remove {count, plural, =1 {# torrent} other {# torrents}}?`,
   'torrents.remove.delete.data': 'Delete data',
@@ -332,4 +337,11 @@ export default {
   'status.diskusage.title': 'Disk Usage',
 
   'locale.language.auto': 'Automatic',
+
+  'window.title': '\u2193 {down} \u2191 {up} - Flood',
+  'dependency.loading.notifications': 'Notifications',
+  'dependency.loading.torrent.taxonomy': 'Torrent Taxonomy',
+  'dependency.loading.transfer.rate.details': 'Data Transfer Rate Details',
+  'dependency.loading.transfer.history': 'Data Transfer History',
+  'dependency.loading.torrent.list': 'Torrent List',
 };
