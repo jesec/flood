@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import {DragDropContext} from 'react-dnd';
+import {DndProvider} from 'react-dnd';
 import {injectIntl} from 'react-intl';
-import HTML5Backend from 'react-dnd-html5-backend';
+import {HTML5Backend} from 'react-dnd-html5-backend';
 import React from 'react';
 
 import SortableListItemDragLayer from './SortableListItemDragLayer';
@@ -109,4 +109,12 @@ class SortableList extends React.Component {
   }
 }
 
-export default DragDropContext(HTML5Backend)(injectIntl(SortableList));
+const DndSortableList = (props) => {
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <SortableList {...props} />
+    </DndProvider>
+  );
+};
+
+export default injectIntl(DndSortableList);
