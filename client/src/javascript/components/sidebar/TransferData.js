@@ -8,10 +8,17 @@ import TransferRateDetails from './TransferRateDetails';
 import TransferRateGraph from './TransferRateGraph';
 
 class TransferData extends React.Component {
-  state = {
-    graphInspectorPoint: null,
-    sidebarWidth: 0,
+  static defaultProps = {
+    historyLength: 1,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      graphInspectorPoint: null,
+      sidebarWidth: 0,
+    };
+  }
 
   handleGraphHover = (graphInspectorPoint) => {
     this.setState({graphInspectorPoint});
@@ -79,10 +86,6 @@ class TransferData extends React.Component {
     );
   }
 }
-
-TransferData.defaultProps = {
-  historyLength: 1,
-};
 
 const ConnectedTransferData = connectStores(TransferData, () => {
   return [

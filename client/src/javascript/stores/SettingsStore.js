@@ -63,7 +63,7 @@ class SettingsStoreClass extends BaseStore {
       return this.clientSettings[property];
     }
 
-    return Object.assign({}, this.clientSettings);
+    return {...this.clientSettings};
   }
 
   getFloodSettings(property) {
@@ -71,7 +71,7 @@ class SettingsStoreClass extends BaseStore {
       return this.floodSettings[property];
     }
 
-    return Object.assign({}, this.floodSettings);
+    return {...this.floodSettings};
   }
 
   handleClientSettingsFetchSuccess(settings) {

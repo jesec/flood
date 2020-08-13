@@ -7,6 +7,13 @@ const METHODS_TO_BIND = ['getHorizontalThumb', 'getVerticalThumb'];
 export default class CustomScrollbar extends React.Component {
   scrollbarRef = null;
 
+  static defaultProps = {
+    className: '',
+    inverted: false,
+    nativeScrollHandler: null,
+    scrollHandler: null,
+  };
+
   constructor() {
     super();
 
@@ -81,10 +88,3 @@ export default class CustomScrollbar extends React.Component {
     );
   }
 }
-
-CustomScrollbar.defaultProps = {
-  className: '',
-  inverted: false,
-  nativeScrollHandler: null,
-  scrollHandler: null,
-};

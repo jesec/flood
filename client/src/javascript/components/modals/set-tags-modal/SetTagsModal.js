@@ -7,11 +7,14 @@ import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
 class SetTagsModal extends React.Component {
-  state = {
-    isSettingTags: false,
-  };
-
   formRef = null;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSettingTags: false,
+    };
+  }
 
   handleSetTagsClick = () => {
     const formData = this.formRef.getFormData();

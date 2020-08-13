@@ -4,6 +4,11 @@ import React from 'react';
 import {compute, getTranslationString} from '../../util/size';
 
 class Size extends React.Component {
+  static defaultProps = {
+    isSpeed: false,
+    precision: 2,
+  };
+
   renderNumber(computedNumber) {
     if (Number.isNaN(computedNumber.value)) {
       return '—';
@@ -37,10 +42,5 @@ class Size extends React.Component {
     );
   }
 }
-
-Size.defaultProps = {
-  isSpeed: false,
-  precision: 2,
-};
 
 export default injectIntl(Size);

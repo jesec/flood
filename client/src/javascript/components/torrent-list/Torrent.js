@@ -66,6 +66,10 @@ const TORRENT_PRIMITIVES_TO_OBSERVE = ['bytesDone', 'downRate', 'peersTotal', 's
 const TORRENT_ARRAYS_TO_OBSERVE = ['status', 'tags'];
 
 class Torrent extends React.Component {
+  static defaultProps = {
+    isCondensed: false,
+  };
+
   constructor() {
     super();
 
@@ -256,9 +260,5 @@ class Torrent extends React.Component {
     );
   }
 }
-
-Torrent.defaultProps = {
-  isCondensed: false,
-};
 
 export default Torrent;

@@ -10,9 +10,12 @@ import EventTypes from '../../constants/EventTypes';
 import RtorrentConnectionTypeSelection from '../general/RtorrentConnectionTypeSelection';
 
 class AuthForm extends React.Component {
-  state = {
-    isSubmitting: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSubmitting: false,
+    };
+  }
 
   getHeaderText() {
     if (this.props.mode === 'login') {

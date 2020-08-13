@@ -32,10 +32,13 @@ class TorrentListContainer extends React.Component {
 
   lastScrollLeft = 0;
 
-  state = {
-    tableScrollLeft: 0,
-    torrentListViewportSize: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      tableScrollLeft: 0,
+      torrentListViewportSize: null,
+    };
+  }
 
   componentDidMount() {
     TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.handleTorrentSelectionChange);

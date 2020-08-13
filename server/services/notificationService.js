@@ -13,7 +13,7 @@ class NotificationService extends BaseService {
   constructor(...serviceConfig) {
     super(...serviceConfig);
 
-    this.count = Object.assign({}, INITIAL_COUNT_VALUE);
+    this.count = {...INITIAL_COUNT_VALUE};
     this.ready = false;
 
     this.db = this.loadDatabase();
@@ -25,8 +25,8 @@ class NotificationService extends BaseService {
   addNotification(notifications) {
     notifications = _.castArray(notifications);
 
-    this.count.total = this.count.total + notifications.length;
-    this.count.unread = this.count.unread + notifications.length;
+    this.count.total += notifications.length;
+    this.count.unread += notifications.length;
 
     const timestamp = Date.now();
     const notificationsToInsert = notifications.map((notification) => ({
@@ -46,7 +46,7 @@ class NotificationService extends BaseService {
         return;
       }
 
-      this.count = Object.assign({}, INITIAL_COUNT_VALUE);
+      this.count = {...INITIAL_COUNT_VALUE};
 
       callback();
     });
@@ -57,7 +57,7 @@ class NotificationService extends BaseService {
   countNotifications() {
     this.db.find({}, (err, docs) => {
       if (err) {
-        this.count = Object.assign({}, INITIAL_COUNT_VALUE);
+        this.count = {...INITIAL_COUNT_VALUE};
       } else {
         docs.forEach((notification) => {
           if (notification.read) {

@@ -86,26 +86,6 @@ class FeedsTab extends React.Component {
     },
   };
 
-  state = {
-    errors: {},
-    intervalmultipliers: [
-      {
-        displayName: this.props.intl.formatMessage(MESSAGES.min),
-        value: 1,
-      },
-      {
-        displayName: this.props.intl.formatMessage(MESSAGES.hr),
-        value: 60,
-      },
-      {
-        displayName: this.props.intl.formatMessage(MESSAGES.day),
-        value: 1440,
-      },
-    ],
-    currentlyEditingFeed: null,
-    selectedFeed: null,
-  };
-
   checkFieldValidity = _.throttle((fieldName, fieldValue) => {
     const {errors} = this.state;
 
@@ -114,6 +94,29 @@ class FeedsTab extends React.Component {
       this.setState({errors});
     }
   }, 150);
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      errors: {},
+      intervalmultipliers: [
+        {
+          displayName: this.props.intl.formatMessage(MESSAGES.min),
+          value: 1,
+        },
+        {
+          displayName: this.props.intl.formatMessage(MESSAGES.hr),
+          value: 60,
+        },
+        {
+          displayName: this.props.intl.formatMessage(MESSAGES.day),
+          value: 1440,
+        },
+      ],
+      currentlyEditingFeed: null,
+      selectedFeed: null,
+    };
+  }
 
   getAmendedFormData() {
     const formData = this.formRef.getFormData();

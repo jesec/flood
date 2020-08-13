@@ -33,11 +33,14 @@ class TorrentMediainfo extends React.Component {
 
   timeoutId = null;
 
-  state = {
-    copiedToClipboard: false,
-    isFetchingMediainfo: true,
-    fetchMediainfoError: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      copiedToClipboard: false,
+      isFetchingMediainfo: true,
+      fetchMediainfoError: null,
+    };
+  }
 
   componentDidMount() {
     FloodActions.fetchMediainfo({hash: this.props.hash}).then(

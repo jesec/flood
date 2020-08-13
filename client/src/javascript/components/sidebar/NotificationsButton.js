@@ -56,10 +56,13 @@ const NOTIFICATIONS_PER_PAGE = 10;
 class NotificationsButton extends React.Component {
   tooltipRef = null;
 
-  state = {
-    isLoading: false,
-    paginationStart: 0,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: false,
+      paginationStart: 0,
+    };
+  }
 
   componentDidMount() {
     NotificationStore.listen(EventTypes.NOTIFICATIONS_COUNT_CHANGE, this.handleNotificationCountChange);

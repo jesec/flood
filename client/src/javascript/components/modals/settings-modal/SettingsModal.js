@@ -16,13 +16,16 @@ import DiskUsageTab from './DiskUsageTab';
 import UserConfig from '../../../../../../config';
 
 class SettingsModal extends React.Component {
-  state = {
-    isSavingSettings: false,
-    changedClientSettings: {},
-    changedFloodSettings: {},
-  };
-
   modalBodyRef = null;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isSavingSettings: false,
+      changedClientSettings: {},
+      changedFloodSettings: {},
+    };
+  }
 
   getActions() {
     return [

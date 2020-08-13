@@ -22,11 +22,14 @@ import FloodActions from '../../actions/FloodActions';
 import RtorrentConnectionTypeSelection from './RtorrentConnectionTypeSelection';
 
 class ClientConnectionInterruption extends React.Component {
-  state = {
-    hasTestedConnection: false,
-    isConnectionVerified: false,
-    isTestingConnection: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasTestedConnection: false,
+      isConnectionVerified: false,
+      isTestingConnection: false,
+    };
+  }
 
   handleFormChange = () => {
     if (this.state.hasTestedConnection) {
@@ -42,7 +45,9 @@ class ClientConnectionInterruption extends React.Component {
       .then(() => {
         FloodActions.restartActivityStream();
       })
-      .catch(() => {});
+      .catch(() => {
+        // do nothing.
+      });
   };
 
   handleTestButtonClick = () => {

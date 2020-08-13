@@ -1,7 +1,10 @@
 import React from 'react';
 
 export default class SettingsTab extends React.Component {
-  state = {};
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
   getFieldValue(fieldName) {
     if (this.state[fieldName] == null) {

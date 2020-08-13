@@ -7,6 +7,15 @@ import ModalTabs from './ModalTabs';
 const METHODS_TO_BIND = ['handleTabChange'];
 
 export default class Modal extends React.Component {
+  static defaultProps = {
+    alignment: 'left',
+    className: null,
+    inverse: true,
+    size: 'medium',
+    orientation: 'horizontal',
+    tabsInBody: false,
+  };
+
   constructor() {
     super();
 
@@ -117,12 +126,3 @@ export default class Modal extends React.Component {
     );
   }
 }
-
-Modal.defaultProps = {
-  alignment: 'left',
-  className: null,
-  inverse: true,
-  size: 'medium',
-  orientation: 'horizontal',
-  tabsInBody: false,
-};

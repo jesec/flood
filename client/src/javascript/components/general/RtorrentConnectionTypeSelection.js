@@ -9,12 +9,17 @@ class RtorrentConnectionTypeSelection extends Component {
   };
 
   static defaultProps = {
-    onChange: () => {},
+    onChange: () => {
+      // do nothing.
+    },
   };
 
-  state = {
-    connectionType: 'tcp',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      connectionType: 'tcp',
+    };
+  }
 
   handleTypeChange = (event) => {
     if (this.state.connectionType !== event.target.value) {

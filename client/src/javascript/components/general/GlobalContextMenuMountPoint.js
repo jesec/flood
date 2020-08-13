@@ -19,11 +19,14 @@ class GlobalContextMenuMountPoint extends React.Component {
     width: 200,
   };
 
-  state = {
-    clickPosition: {},
-    isOpen: false,
-    items: [],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      clickPosition: {},
+      isOpen: false,
+      items: [],
+    };
+  }
 
   componentDidMount() {
     UIStore.listen(EventTypes.UI_CONTEXT_MENU_CHANGE, this.handleContextMenuChange);

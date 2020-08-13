@@ -66,12 +66,6 @@ const defaultRule = {
 };
 
 class DownloadRulesTab extends React.Component {
-  state = {
-    errors: {},
-    currentlyEditingRule: null,
-    doesPatternMatchTest: false,
-  };
-
   validatedFields = {
     destination: {
       isValid: validators.isNotEmpty,
@@ -112,6 +106,15 @@ class DownloadRulesTab extends React.Component {
     }
   }, 150);
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      errors: {},
+      currentlyEditingRule: null,
+      doesPatternMatchTest: false,
+    };
+  }
+
   checkMatchingPattern(match, exclude, check) {
     let doesPatternMatchTest = false;
 
@@ -128,10 +131,7 @@ class DownloadRulesTab extends React.Component {
     const formData = this.formRef.getFormData();
     delete formData.check;
 
-    return Object.assign({}, formData, {
-      field: 'title',
-      tags: formData.tags.split(','),
-    });
+    return {...formData, field: 'title', tags: formData.tags.split(',')};
   }
 
   getAvailableFeedsOptions() {

@@ -85,6 +85,8 @@ class AlertStoreClass extends BaseStore {
 
 const AlertStore = new AlertStoreClass();
 
-AlertStore.dispatcherID = AppDispatcher.register(() => {});
+AlertStore.dispatcherID = AppDispatcher.register(() => {
+  // do nothing.
+});
 
 export default AlertStore;

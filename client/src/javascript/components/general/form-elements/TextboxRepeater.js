@@ -5,11 +5,14 @@ import AddMini from '../../icons/AddMini';
 import RemoveMini from '../../icons/RemoveMini';
 
 export default class TextboxRepeater extends React.PureComponent {
-  state = {
-    textboxes: this.props.defaultValues || [{id: 0, value: ''}],
-  };
-
   idCounter = 0;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      textboxes: this.props.defaultValues || [{id: 0, value: ''}],
+    };
+  }
 
   getID() {
     return ++this.idCounter;

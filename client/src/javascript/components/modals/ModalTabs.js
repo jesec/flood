@@ -2,6 +2,10 @@ import classnames from 'classnames';
 import React from 'react';
 
 export default class ModalTabs extends React.Component {
+  static defaultProps = {
+    tabs: [],
+  };
+
   handleTabClick(tab) {
     if (this.props.onTabChange) {
       this.props.onTabChange(tab);
@@ -27,7 +31,3 @@ export default class ModalTabs extends React.Component {
     return <ul className="modal__tabs">{tabs}</ul>;
   }
 }
-
-ModalTabs.defaultProps = {
-  tabs: [],
-};

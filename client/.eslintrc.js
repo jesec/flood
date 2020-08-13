@@ -15,13 +15,13 @@ module.exports = {
   plugins: ['import'],
   rules: {
     '@typescript-eslint/no-var-requires': 0,
-    // This is enabled to allow BEM-style classnames to be referenced JS
-    // Remvoe when BEM-style classnames are converted to locally-scoped
-    // class names
-    '@typescript-eslint/camelcase': ['error', {allow: [/[^\s]__[^\s]{1,}$/]}],
+    '@typescript-eslint/camelcase': ['error'],
     camelcase: 0,
+    // TODO: Explict return type
+    '@typescript-eslint/explicit-function-return-type': 0,
     // TODO: Enable a11y features
     'jsx-a11y/click-events-have-key-events': 0,
+    'jsx-a11y/control-has-associated-label': 0,
     'jsx-a11y/label-has-associated-control': 0,
     'jsx-a11y/label-has-for': 0,
     'jsx-a11y/mouse-events-have-key-events': 0,
@@ -36,6 +36,7 @@ module.exports = {
     'react/jsx-filename-extension': [1, {extensions: ['.js', '.tsx']}],
     'react/jsx-one-expression-per-line': 0,
     'react/jsx-wrap-multilines': 0,
+    'react/jsx-props-no-spreading': 0,
     'react/no-unescaped-entities': ['error', {forbid: ['>', '}']}],
     'react/no-unused-prop-types': 0,
     'react/prefer-stateless-function': 0,
@@ -50,6 +51,7 @@ module.exports = {
         },
       },
     ],
+    'react/static-property-placement': [1, 'static public field'],
   },
   settings: {
     'import/resolver': {

@@ -5,6 +5,10 @@ import React from 'react';
 import UIActions from '../../actions/UIActions';
 
 export default class ModalActions extends React.Component {
+  static defaultProps = {
+    alignment: 'left',
+  };
+
   getModalButtons(actions) {
     const buttons = actions.map((action, index) => {
       const classes = classnames('button', {
@@ -53,7 +57,3 @@ export default class ModalActions extends React.Component {
     return <div className="modal__actions">{this.getModalButtons(this.props.actions)}</div>;
   }
 }
-
-ModalActions.defaultProps = {
-  alignment: 'left',
-};

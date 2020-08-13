@@ -103,6 +103,11 @@ const transformers = {
 };
 
 class TorrentDetail extends React.PureComponent {
+  static defaultProps = {
+    preventTransform: false,
+    className: '',
+  };
+
   render() {
     const {className, preventTransform, secondaryValue, slug, width} = this.props;
     let {icon, value} = this.props;
@@ -127,10 +132,5 @@ class TorrentDetail extends React.PureComponent {
     );
   }
 }
-
-TorrentDetail.defaultProps = {
-  preventTransform: false,
-  className: '',
-};
 
 export default TorrentDetail;

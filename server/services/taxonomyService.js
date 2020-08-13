@@ -57,9 +57,9 @@ class TaxonomyService extends BaseService {
   }
 
   handleProcessTorrentListStart() {
-    this.lastStatusCounts = Object.assign({}, this.statusCounts);
-    this.lastTagCounts = Object.assign({}, this.tagCounts);
-    this.lastTrackerCounts = Object.assign({}, this.trackerCounts);
+    this.lastStatusCounts = {...this.statusCounts};
+    this.lastTagCounts = {...this.tagCounts};
+    this.lastTrackerCounts = {...this.trackerCounts};
 
     torrentStatusMap.statusShorthand.forEach((statusShorthand) => {
       this.statusCounts[torrentStatusMap[statusShorthand]] = 0;

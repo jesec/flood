@@ -12,14 +12,17 @@ import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
 
 class AddTorrentsByFile extends React.Component {
-  state = {
-    errors: {},
-    isAddingTorrents: false,
-    files: [],
-    tags: '',
-  };
-
   formRef = null;
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      errors: {},
+      isAddingTorrents: false,
+      files: [],
+      tags: '',
+    };
+  }
 
   getFileDropzone() {
     let fileContent = null;

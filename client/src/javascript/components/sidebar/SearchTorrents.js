@@ -10,10 +10,13 @@ import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
 class SearchBox extends React.Component {
-  state = {
-    inputFieldKey: 0,
-    isSearchActive: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputFieldKey: 0,
+      isSearchActive: false,
+    };
+  }
 
   componentDidMount() {
     TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CLEAR, this.resetSearch);
@@ -47,7 +50,7 @@ class SearchBox extends React.Component {
     const {inputFieldKey, isSearchActive} = this.state;
     let clearSearchButton = null;
     const classes = classnames({
-      sidebar__item: true,
+      sidebar__item: true, // eslint-disable-line
       search: true,
       'is-in-use': isSearchActive,
     });
