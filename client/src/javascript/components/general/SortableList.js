@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import {DndProvider} from 'react-dnd';
+import {DndProvider} from 'react-dnd-multi-backend';
+import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import {injectIntl} from 'react-intl';
-import {HTML5Backend} from 'react-dnd-html5-backend';
 import React from 'react';
 
 import SortableListItemDragLayer from './SortableListItemDragLayer';
@@ -111,7 +111,7 @@ class SortableList extends React.Component {
 
 const DndSortableList = (props) => {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider options={HTML5toTouch}>
       <SortableList {...props} />
     </DndProvider>
   );
