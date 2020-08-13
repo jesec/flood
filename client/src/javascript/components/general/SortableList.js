@@ -4,7 +4,6 @@ import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
-import SortableListItemDragLayer from './SortableListItemDragLayer';
 import SortableListItem from './SortableListItem';
 
 const methodsToBind = ['handleDrop', 'handleMove', 'handleMouseDown'];
@@ -15,7 +14,6 @@ class SortableList extends React.Component {
 
     this.sortableListRef = null;
     this.state = {
-      listOffset: null,
       items: props.items,
     };
 
@@ -35,12 +33,6 @@ class SortableList extends React.Component {
   }
 
   handleMouseDown(event) {
-    if (this.sortableListRef != null) {
-      this.setState({
-        listOffset: this.sortableListRef.getBoundingClientRect(),
-      });
-    }
-
     if (this.props.onMouseDown) {
       this.props.onMouseDown(event);
     }
@@ -98,11 +90,6 @@ class SortableList extends React.Component {
         ref={(ref) => {
           this.sortableListRef = ref;
         }}>
-        <SortableListItemDragLayer
-          items={this.state.items}
-          listOffset={this.state.listOffset}
-          renderItem={this.props.renderItem}
-        />
         {this.getItemList()}
       </ul>
     );
