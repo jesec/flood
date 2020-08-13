@@ -1,5 +1,5 @@
 const path = require('path');
-const rimraf = require('rimraf');
+const fs = require('fs');
 
 const BaseService = require('./BaseService');
 const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
@@ -102,11 +102,15 @@ class ClientGatewayService extends BaseService {
           }, []);
 
           filesToDelete.forEach((file) => {
-            rimraf(file, {disableGlob: true}, (error) => {
-              if (error) {
-                console.error(`Error deleting file: ${file}\n${error}`);
+            try {
+              if (fs.lstatSync(file).isDirectory()) {
+                fs.rmdirSync(file, {recursive: true});
+              } else {
+                fs.unlinkSync(file);
               }
-            });
+            } catch (error) {
+              console.error(`Error deleting file: ${file}\n${error}`);
+            }
           });
         }
 
