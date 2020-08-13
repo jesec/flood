@@ -1,8 +1,8 @@
-import {Checkbox} from 'flood-ui-kit';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {Checkbox} from '../../../ui';
 import File from '../../icons/File';
 import PriorityMeter from './PriorityMeter';
 import Size from '../Size';

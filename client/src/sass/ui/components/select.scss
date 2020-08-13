@@ -1,0 +1,98 @@
+.select {
+  position: relative;
+
+  &__button {
+    position: relative;
+    text-align: left;
+
+    &:hover {
+
+      .select {
+
+        &__indicator {
+
+          .icon {
+            fill: $grey--hard;
+          }
+        }
+      }
+    }
+
+    &:focus,
+    &:active {
+
+      .select {
+
+        &__indicator {
+
+          .icon {
+            fill: $blue;
+            transition: all $speed--xx-fast;
+          }
+        }
+      }
+    }
+
+    .icon {
+      display: none;
+    }
+
+    .select {
+
+      &__item {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  &__item {
+    cursor: pointer;
+    padding: $spacing--x-small $spacing--small;
+    position: relative;
+    transition: all $speed--xx-fast;
+    z-index: 1;
+
+    .context-menu__items & {
+
+      &:hover {
+        background: $light-grey--lighter;
+      }
+    }
+
+    .icon {
+      fill: $grey;
+      height: 14px;
+      right: $spacing--small;
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-60%);
+      transition: all $speed--xx-fast;
+      width: 14px;
+    }
+
+    &--is-selected {
+      color: $blue;
+      font-weight: 500;
+
+      .icon {
+        fill: $blue;
+        opacity: 1;
+      }
+    }
+  }
+
+  &--is-open {
+
+    .select {
+
+      &__indicator {
+
+        .icon {
+          transform: translate(-50%, -50%) rotate(180deg);
+        }
+      }
+    }
+  }
+}

@@ -1,17 +1,7 @@
-import {
-  Button,
-  Form,
-  FormError,
-  FormRow,
-  FormRowItem,
-  Panel,
-  PanelContent,
-  PanelHeader,
-  PanelFooter,
-} from 'flood-ui-kit';
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
+import {Button, Form, FormError, FormRow, FormRowItem, Panel, PanelContent, PanelHeader, PanelFooter} from '../../ui';
 import AuthActions from '../../actions/AuthActions';
 import AuthStore from '../../stores/AuthStore';
 import Checkmark from '../icons/Checkmark';

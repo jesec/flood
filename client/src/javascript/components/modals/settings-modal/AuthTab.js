@@ -1,9 +1,9 @@
-import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from 'flood-ui-kit';
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '../../../ui';
 import AuthActions from '../../../actions/AuthActions';
 import AuthStore from '../../../stores/AuthStore';
 import Close from '../../icons/Close';

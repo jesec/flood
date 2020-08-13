@@ -1,9 +1,9 @@
-import {Button} from 'flood-ui-kit';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import _ from 'lodash';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
+import {Button} from '../../ui';
 import ClientStatusStore from '../../stores/ClientStatusStore';
 import ConfigStore from '../../stores/ConfigStore';
 import connectStores from '../../util/connectStores';

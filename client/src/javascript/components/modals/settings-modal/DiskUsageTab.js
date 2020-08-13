@@ -1,7 +1,7 @@
-import {Checkbox, Form, FormRow} from 'flood-ui-kit';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Checkbox, Form, FormRow} from '../../../ui';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import SettingsStore from '../../../stores/SettingsStore';
 import SettingsTab from './SettingsTab';

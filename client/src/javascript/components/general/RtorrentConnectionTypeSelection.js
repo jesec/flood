@@ -1,7 +1,7 @@
-import {FormGroup, FormRow, Radio, Textbox} from 'flood-ui-kit';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import PropTypes from 'prop-types';
 import React, {Component} from 'react';
+import {FormGroup, FormRow, Radio, Textbox} from '../../ui';
 
 class RtorrentConnectionTypeSelection extends Component {
   static propTypes = {

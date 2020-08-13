@@ -1,7 +1,7 @@
-import {Button, Checkbox} from 'flood-ui-kit';
 import classnames from 'classnames';
 import React from 'react';
 
+import {Button, Checkbox} from '../../ui';
 import UIActions from '../../actions/UIActions';
 
 export default class ModalActions extends React.Component {

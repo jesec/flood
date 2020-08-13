@@ -1,0 +1,239 @@
+.input {
+  background: $input--background;
+  color: $input--foreground;
+  border: $form--element--border-width solid $input--border;
+  box-shadow: $form--element--box-shadow;
+
+  &::placeholder {
+    color: $input--foreground--placeholder;
+    transition: color $speed--xx-fast;
+  }
+
+  &:hover {
+    border-color: $input--border--hover;
+    color: $input--foreground--hover;
+
+    &::placeholder {
+      color: $input--foreground--placeholder--hover;
+    }
+  }
+
+  &:active,
+  &:focus {
+    background-color: $blue--soft;
+    color: desaturate($blue--darker, 25%);
+    border-color: $blue;
+    box-shadow: form--element--box-shadow--active($blue);
+
+    &::placeholder {
+      color: rgba($blue--light, 0.5);
+    }
+  }
+
+  .inverse & {
+    background: $input--inverse--background;
+    border: $form--element--border-width solid $input--inverse--border;
+    box-shadow: $form--element--inverse--box-shadow;
+    color: $input--inverse--foreground;
+
+    &::placeholder {
+      color: $input--inverse--foreground--placeholder;
+    }
+
+    &:hover {
+      border-color: $input--inverse--border--hover;
+      color: $input--inverse--foreground--hover;
+
+      &::placeholder {
+        color: $input--inverse--foreground--placeholder--hover;
+      }
+    }
+
+    &:active,
+    &:focus {
+      background-color: rgba($blue--soft, 0.15);
+      color: $input--inverse--foreground--active;
+      border-color: $blue;
+      box-shadow: form--element--box-shadow--active($blue);
+
+      &::placeholder {
+        color: $input--inverse--foreground--placeholder--active;
+      }
+    }
+  }
+
+  &--hidden {
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    z-index: -1;
+  }
+}
+
+.toggle-input {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  outline: none;
+  padding: $form--element--padding--y 0 $form--element--padding--y $toggle-input--width + $spacing--x-small;
+  position: relative;
+  transition: all $speed--x-fast;
+  user-select: none;
+
+  &:hover {
+    transition: all $speed--xx-fast;
+
+    .toggle-input {
+
+      &__indicator {
+        border-color: $input--border--hover;
+
+        .inverse & {
+          border-color: $input--inverse--border--hover;
+        }
+
+        &,
+        &__icon {
+          transition: all $speed--xx-fast;
+        }
+
+        &__icon {
+
+          &,
+          .icon {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+
+  &:focus,
+  &:active {
+    color: $blue;
+
+    .toggle-input {
+
+      &__indicator {
+        border-color: $blue;
+        box-shadow: form--element--box-shadow--active($blue);
+
+        .inverse & {
+          border-color: $blue;
+          box-shadow: form--element--box-shadow--active($blue);
+        }
+
+        &,
+        &__icon {
+          transition: all $speed--xx-fast;
+
+          .icon {
+            fill: $blue;
+          }
+        }
+      }
+    }
+  }
+
+  &:active,
+  &--is-active {
+
+    .toggle-input {
+
+      &__indicator {
+        background-color: rgba($blue, 0.1);
+        color: rgba($blue, 0.8);
+
+        .inverse & {
+          background-color: rgba($blue, 0.1);
+          color: rgba($blue, 0.8);
+        }
+
+        &__icon {
+          opacity: 0.25;
+        }
+      }
+    }
+  }
+
+  &__element {
+    position: absolute;
+    visibility: hidden;
+
+    &:checked {
+
+      & + .toggle-input {
+
+        &__indicator {
+
+          .toggle-input {
+
+            &__indicator {
+
+              &__icon {
+                opacity: 1;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__indicator {
+    background: $input--background;
+    border: $form--element--border-width solid $input--border;
+    box-shadow: $form--element--box-shadow;
+    display: inline-block;
+    height: $toggle-input--height;
+    left: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all $speed--x-fast;
+    width: $toggle-input--width;
+
+    &__icon {
+      opacity: 0;
+      transition: all $speed--x-fast;
+
+      &,
+      .icon {
+        height: 100%;
+        width: 100%;
+      }
+
+      .icon {
+        fill: $grey;
+        transition: all $speed--x-fast;
+      }
+    }
+
+    .inverse & {
+      background: $input--inverse--background;
+      border: $form--element--border-width solid $input--inverse--border;
+      box-shadow: $form--element--inverse--box-shadow;
+    }
+  }
+
+  &.checkbox {
+
+    .toggle-input {
+
+      &__indicator {
+        border-radius: $form--element--border-radius;
+      }
+    }
+  }
+
+  &.radio {
+
+    .toggle-input {
+
+      &__indicator {
+        border-radius: 100%;
+      }
+    }
+  }
+}

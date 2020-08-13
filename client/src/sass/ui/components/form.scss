@@ -1,0 +1,164 @@
+.input,
+.button {
+  appearance: none;
+  border-radius: $form--element--border-radius;
+  font-size: $font-size--small;
+  height: $form--element--height;
+  outline: none;
+  padding: $form--element--padding--y $form--element--padding--x;
+  transition: all $speed--x-fast;
+
+  &:focus,
+  &:active {
+    transition: all $speed--xx-fast;
+  }
+}
+
+.form {
+
+  &__row {
+    display: flex;
+    margin-bottom: $form__row--margin--vertical;
+    width: 100%;
+
+    &:last-child,
+    &--no-margin {
+      margin-bottom: 0;
+    }
+
+    &--group {
+      flex-direction: column;
+    }
+
+    &--align {
+
+      &--start {
+        align-items: flex-start;
+      }
+
+      &--center {
+        align-items: center;
+      }
+
+      &--end {
+        align-items: flex-end;
+      }
+    }
+
+    &--justify {
+
+      &--start {
+        justify-content: flex-start;
+      }
+
+      &--center {
+        justify-content: center;
+      }
+
+      &--end {
+        justify-content: flex-end;
+      }
+    }
+
+    &__item {
+      flex: 0 0 auto;
+      margin: 0 $spacing--x-small;
+      min-width: 1px;
+      position: relative;
+      width: auto;
+
+      &:first-child,
+      &.is-first {
+        margin-left: 0;
+      }
+
+      &:last-child,
+      &.is-last {
+        margin-right: 0;
+      }
+
+      &--grow {
+        flex-grow: 1;
+      }
+
+      &--shrink {
+        flex-shrink: 1;
+      }
+
+      &--one-eighth {
+        width: 12.5%;
+      }
+
+      &--one-quarter {
+        width: 25%;
+      }
+
+      &--three-eighths {
+        width: 37.5%;
+      }
+
+      &--one-half {
+        width: 50%;
+      }
+
+      &--five-eighths {
+        width: 62.5%;
+      }
+
+      &--three-quarters {
+        width: 75%;
+      }
+
+      &--seven-eighths {
+        width: 87.5%;
+      }
+
+      .button,
+      .checkbox,
+      .form__element__wrapper,
+      .input,
+      .error,
+      .radio {
+        width: 100%;
+      }
+
+      .error {
+        background: $red--alpha--light;
+        border: 1px solid $red--alpha--medium;
+        border-radius: $border-radius--small;
+        color: $red;
+        padding: $form--element--padding--x * 2/3 $form--element--padding--x;
+        transition: opacity $speed--x-fast;
+
+        &--is-loading {
+          opacity: 0.4;
+        }
+      }
+    }
+  }
+
+  &__element {
+
+    &__label {
+      display: block;
+      font-size: $font-size--x-small;
+      line-height: 1rem;
+      margin-bottom: $spacing--xx-small;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    &__wrapper {
+      position: relative;
+    }
+
+    &--label-offset {
+      margin-top: calc(#{$spacing--xx-small} + 1rem);
+    }
+
+    &--match-textbox-height {
+      height: $form--element--height;
+    }
+  }
+}

@@ -1,0 +1,52 @@
+// Forms
+$form--element--border-radius: $border-radius--medium;
+$form--element--border-width: 1px;
+$form--element--height: 34px;
+$form--element--padding--x: $spacing--small + $spacing--xx-small;
+$form--element--padding--y: 0;
+$form__row--margin--vertical: $spacing--medium;
+
+// Checkboxes & Radio buttons
+$toggle-input--height: $spacing--large;
+$toggle-input--width: $spacing--large;
+
+// Select
+$select--indicator--width: $form--element--padding--x * 2 + $spacing--small;
+$select--button--padding-right: $select--indicator--width + $spacing--x-small;
+
+// Input Elements
+$input--background: $white;
+$input--border: $grey--lighter;
+$input--border--hover: $medium-grey;
+$form--element--box-shadow: form--element--box-shadow($grey--lighter);
+$input--foreground: $grey;
+$input--foreground--hover: $grey--hard;
+$input--foreground--placeholder: rgba($medium-grey, 0.5);
+$input--foreground--placeholder--hover: rgba($grey--light, 0.6);
+
+// Inverse input Elements
+$input--inverse--background: $darkest-grey--hard;
+$input--inverse--border: $darkest-grey--darker;
+$input--inverse--border--hover: darken($darkest-grey--darker, 5%);
+$form--element--inverse--box-shadow: form--element--box-shadow($darkest-grey--hard);
+$input--inverse--foreground: $grey;
+$input--inverse--foreground--hover: $grey--lighter;
+$input--inverse--foreground--active: $blue--lighter;
+$input--inverse--foreground--placeholder--active: rgba(lighten($blue, 15%), 0.5);
+$input--inverse--foreground--placeholder: rgba($medium-grey, 0.25);
+$input--inverse--foreground--placeholder--hover: rgba($medium-grey, 0.4);
+
+$input--addon--width: $form--element--padding--x * 2 + $spacing--small + $form--element--border-width;
+$input--addon--padding--right: $input--addon--width + $form--element--padding--x / 2;
+$input--addon--padding--left: $input--addon--width + $form--element--padding--x / 2;
+$input--two-addons--padding--right: $input--addon--width * 2 + $form--element--padding--x / 2;
+$input--two-addons--padding--left: $input--addon--width * 2 + $form--element--padding--x / 2;
+
+// Button
+$button--addon--width: $input--addon--width;
+$button--has-addon--padding--right: $input--addon--padding--right;
+$button--has-addon--padding--left: $input--addon--padding--left;
+$button--has-two-addons--padding--right: $input--two-addons--padding--right;
+$button--has-two-addons--padding--left: $input--two-addons--padding--left;
+
+$font-family--monospace: monaco, Consolas, "Lucida Console", monospace;

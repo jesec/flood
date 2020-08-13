@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import {Checkbox, ContextMenu, FormElementAddon, FormRow, FormRowGroup, Portal, Textbox} from 'flood-ui-kit';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Checkbox, ContextMenu, FormElementAddon, FormRow, FormRowGroup, Portal, Textbox} from '../../../ui';
 import EventTypes from '../../../constants/EventTypes';
 import FilesystemBrowser from './FilesystemBrowser';
 import Search from '../../icons/Search';

@@ -1,0 +1,112 @@
+
+$panel--spacing--horizontal--medium: $spacing--x-large;
+$panel--spacing--vertical--medium: $spacing--medium;
+
+$panel--spacing--horizontal--large: $spacing--xxx-large;
+$panel--spacing--vertical--large: $spacing--xx-large;
+
+.panel {
+  border: 1px solid $grey--lighter;
+  border-radius: $border-radius--medium;
+  box-shadow: panel--box-shadow($grey--lighter);
+  overflow: hidden;
+
+  &--medium {
+
+    .panel {
+
+      &__content {
+        padding: $panel--spacing--vertical--medium $panel--spacing--horizontal--medium;
+      }
+
+      &__header {
+        padding: $panel--spacing--vertical--medium $panel--spacing--horizontal--medium 0 $panel--spacing--horizontal--medium;
+
+        &--has-border {
+          padding-bottom: $panel--spacing--vertical--medium;
+        }
+      }
+
+      &__footer {
+        padding: 0 $panel--spacing--horizontal--medium $panel--spacing--vertical--medium $panel--spacing--horizontal--medium;
+
+        &--has-border {
+          padding-top: $panel--spacing--vertical--medium;
+        }
+      }
+    }
+  }
+
+  &--large {
+
+    .panel {
+
+      &__content {
+        padding: $panel--spacing--vertical--large $panel--spacing--horizontal--large;
+      }
+
+      &__header {
+        padding: $panel--spacing--vertical--large $panel--spacing--horizontal--large 0 $panel--spacing--horizontal--large;
+
+        &--has-border {
+          padding-bottom: $panel--spacing--vertical--large;
+        }
+      }
+
+      &__footer {
+        padding: 0 $panel--spacing--horizontal--large $panel--spacing--vertical--large $panel--spacing--horizontal--large ;
+
+        &--has-border {
+          padding-top: $panel--spacing--vertical--large;
+        }
+      }
+    }
+  }
+
+  &__header {
+
+    &--has-border {
+      border-bottom: 1px solid $grey--soft;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .h1,
+    .h2,
+    .h3,
+    .h4,
+    .h5,
+    .h6 {
+      margin: 0;
+    }
+  }
+
+  &__content {
+
+    &--has-border {
+
+      &--top {
+        border-top: 1px solid $grey--soft;
+      }
+
+      &--bottom {
+        border-bottom: 1px solid $grey--soft;
+      }
+    }
+  }
+
+  &__footer {
+
+    &--has-border {
+      border-top: 1px solid $grey--soft;
+    }
+  }
+
+  &--light {
+    background: #fff;
+  }
+}

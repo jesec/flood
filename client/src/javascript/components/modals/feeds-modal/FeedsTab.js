@@ -1,5 +1,8 @@
 import _ from 'lodash';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
+import formatUtil from '@shared/util/formatUtil';
+import React from 'react';
+
 import {
   Button,
   Checkbox,
@@ -11,10 +14,7 @@ import {
   Select,
   SelectItem,
   Textbox,
-} from 'flood-ui-kit';
-import formatUtil from '@shared/util/formatUtil';
-import React from 'react';
-
+} from '../../../ui';
 import Edit from '../../icons/Edit';
 import Close from '../../icons/Close';
 import EventTypes from '../../../constants/EventTypes';

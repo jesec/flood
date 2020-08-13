@@ -1,8 +1,8 @@
-import {Checkbox} from 'flood-ui-kit';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {Checkbox} from '../../../ui';
 import FolderClosedSolid from '../../icons/FolderClosedSolid';
 import FolderOpenSolid from '../../icons/FolderOpenSolid';
 // TODO: Fix this circular dependency

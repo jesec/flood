@@ -1,8 +1,8 @@
 import {FormattedMessage, injectIntl} from 'react-intl';
-import {Form, FormRow, FormRowItem, Textbox} from 'flood-ui-kit';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
+import {Form, FormRow, FormRowItem, Textbox} from '../../../ui';
 import AddTorrentsActions from './AddTorrentsActions';
 import Close from '../../icons/Close';
 import File from '../../icons/File';

@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from 'flood-ui-kit';
 import classnames from 'classnames';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from '../../../ui';
 import ConfigStore from '../../../stores/ConfigStore';
 import Disk from '../../icons/Disk';
 import DirectoryTree from '../../general/filesystem/DirectoryTree';

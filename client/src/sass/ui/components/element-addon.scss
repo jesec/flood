@@ -1,0 +1,106 @@
+.form {
+
+  &__element {
+
+    &--has-addon {
+
+      &--placed-before {
+        padding-left: $button--has-addon--padding--left;
+
+        &.form__element--has-addon--count-2 {
+          padding-left: $button--has-two-addons--padding--left;
+        }
+      }
+
+      &--placed-after {
+        padding-right: $button--has-addon--padding--right;
+
+        &.form__element--has-addon--count-2 {
+          padding-right: $button--has-two-addons--padding--right;
+        }
+      }
+    }
+
+    &__addon {
+      border-width: 0;
+      border-style: solid;
+      border-color: $grey--soft;
+      bottom: 0;
+      pointer-events: none;
+      position: absolute;
+      transition: all $speed--x-fast;
+      top: 0;
+
+      .inverse & {
+        border-color: $darkest-grey--darker;
+      }
+
+      .form__element:focus ~ &,
+      .form__element:active ~ & {
+        border-color: rgba($blue, 0.15);
+        transition: all $speed--xx-fast;
+
+        .icon {
+          fill: $blue;
+          transition: all $speed--xx-fast;
+
+          &--stroke {
+            fill: none;
+            stroke: $blue;
+          }
+        }
+      }
+
+      .icon {
+        @extend .icon--small;
+        fill: $grey;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform-origin: 50% 50%;
+        transform: translate(-50%, -50%);
+        transition: all $speed--x-fast;
+
+        &--stroke {
+          fill: none;
+          stroke: $grey;
+        }
+      }
+
+      &--placed-before {
+        border-right-width: 1px;
+        left: 0;
+
+        &.form__element__addon--index-2 {
+          left: $button--addon--width;
+        }
+      }
+
+      &--placed-after {
+        border-left-width: 1px;
+        right: 0;
+
+        &.form__element__addon--index-2 {
+          right: $button--addon--width;
+        }
+      }
+
+      &--is-icon {
+        width: $button--addon--width;
+      }
+
+      &--is-interactive {
+        cursor: pointer;
+        pointer-events: auto;
+
+        &:hover {
+
+          .icon {
+            fill: $blue;
+            transition: all $speed--xx-fast;
+          }
+        }
+      }
+    }
+  }
+}

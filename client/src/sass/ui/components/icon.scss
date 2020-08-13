@@ -1,0 +1,42 @@
+@keyframes rotateAroundMidpoint {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.icon {
+  position: relative;
+
+  &--small {
+    height: 18px;
+    width: 18px;
+  }
+
+  &--large {
+    height: 24px;
+    width: 24px;
+  }
+
+  &__element {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  &--loading {
+
+    &--ring {
+      stroke: currentColor;
+    }
+  }
+
+  &__ring-slice {
+    animation: 1s linear infinite forwards rotateAroundMidpoint;
+  }
+}

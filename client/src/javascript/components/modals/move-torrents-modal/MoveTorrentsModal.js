@@ -1,7 +1,7 @@
-import {Form} from 'flood-ui-kit';
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Form} from '../../../ui';
 import Modal from '../Modal';
 import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';

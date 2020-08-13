@@ -1,8 +1,8 @@
-import {Button} from 'flood-ui-kit';
 import Clipboard from 'clipboard';
 import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Button} from '../../../ui';
 import ClipboardIcon from '../../icons/ClipboardIcon';
 import connectStores from '../../../util/connectStores';
 import EventTypes from '../../../constants/EventTypes';

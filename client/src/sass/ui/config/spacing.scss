@@ -1,0 +1,20 @@
+$spacing: 12px;
+
+$spacing--xx-small: $spacing * 1/4;
+$spacing--x-small: $spacing * 2/4;
+$spacing--small: $spacing * 3/4;
+$spacing--medium: $spacing * 5/4;
+$spacing--large: $spacing * 6/4;
+$spacing--x-large: $spacing * 7/4;
+$spacing--xx-large: $spacing * 8/4;
+$spacing--xxx-large: $spacing * 12/4;
+
+// Specifics
+$app-panel--padding--x: $spacing--large;
+$app-panel--padding--y: $spacing--xx-large;
+
+$app--heading--padding--x: $app-panel--padding--x;
+$app--heading--padding--y: $spacing--x-small;
+
+$app--sidebar--item--padding--x: $app-panel--padding--x;
+$app--sidebar--item--padding--y: $spacing--small;

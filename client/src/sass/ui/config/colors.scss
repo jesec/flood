@@ -1,0 +1,49 @@
+@function harden($color, $modifier: 1) {
+  @return darken($color, 6% * $modifier);
+}
+
+$white: #fff;
+
+$red: #f34570;
+$red--alpha--light: rgba($red, 0.1);
+$red--alpha--medium: rgba($red, 0.2);
+
+$blue: #349CF4;
+$blue--light: lighten($blue, 7%);
+$blue--lighter: lighten($blue, 40%);
+$blue--soft: rgba($blue, 0.05);
+$blue--hard: harden($blue, 1.5);
+
+$blue--darker: darken($blue, 20%);
+
+$green: #39CE83;
+$green--light: lighten($green, 7%);
+$green--hard: harden($green, 1.3);
+
+$medium-grey: #ABBAC7;
+$medium-grey--lighter: #B9C7D3;
+$medium-grey--soft: rgba($medium-grey, 0.15);
+
+$grey: #8899A8;
+$grey--soft: rgba($grey, 0.15);
+$grey--light: lighten($grey, 7%);
+$grey--lighter: lighten($grey, 25%);
+$grey--hard: harden($grey, 1.75);
+$grey--harder: harden($grey, 1);
+
+$dark-grey: #34516C;
+$dark-grey--light: lighten($dark-grey, 7%);
+
+$darker-grey: #1D2938;
+
+$darkest-grey: #28303b;
+
+$darkest-grey--hard: #293341;
+$darkest-grey--darker: #202D3C;
+
+$another-grey: #3A4553;
+
+$light-grey: #E9EEF2;
+$light-grey--lighter: #F8F9FB;
+$light-grey--soft: rgba($light-grey, 0.15);
+$light-grey--hard: harden($light-grey);

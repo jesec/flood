@@ -1,6 +1,6 @@
-import {FormElementAddon, FormRow, FormRowGroup, Textbox} from 'flood-ui-kit';
 import React from 'react';
 
+import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '../../../ui';
 import AddMini from '../../icons/AddMini';
 import RemoveMini from '../../icons/RemoveMini';
 

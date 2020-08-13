@@ -1,7 +1,7 @@
-import {Checkbox, Form, FormRow, Select, SelectItem, Radio} from 'flood-ui-kit';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Checkbox, Form, FormRow, Select, SelectItem, Radio} from '../../../ui';
 import ErrorIcon from '../../icons/ErrorIcon';
 import Languages from '../../../constants/Languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';

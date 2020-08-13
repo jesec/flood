@@ -1,7 +1,7 @@
-import {Checkbox, Form, FormRow} from 'flood-ui-kit';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import {Checkbox, Form, FormRow} from '../../../ui';
 import Modal from '../Modal';
 import SettingsStore from '../../../stores/SettingsStore';
 import TorrentActions from '../../../actions/TorrentActions';

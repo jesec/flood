@@ -1,8 +1,8 @@
 import classnames from 'classnames';
-import {ContextMenu} from 'flood-ui-kit';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import {ContextMenu} from '../../ui';
 import EventTypes from '../../constants/EventTypes';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';

@@ -1,0 +1,17 @@
+.error {
+  background: $red;
+  border-radius: $border-radius--small;
+  color: #fff;
+  padding: $form--element--padding--x * 2/3 $form--element--padding--x;
+  transition: opacity $speed--x-fast;
+
+  &--is-loading {
+    opacity: 0.25;
+  }
+
+  .inverse & {
+    color: #fff;
+    border: none;
+    background: $red;
+  }
+}
