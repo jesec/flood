@@ -1,0 +1,2212 @@
+{
+  "actionbar.button.add.torrent": [
+    {
+      "type": 0,
+      "value": "Add Torrent"
+    }
+  ],
+  "actionbar.button.remove.torrent": [
+    {
+      "type": 0,
+      "value": "Remove Torrent"
+    }
+  ],
+  "actionbar.button.start.torrent": [
+    {
+      "type": 0,
+      "value": "Start Torrent"
+    }
+  ],
+  "actionbar.button.stop.torrent": [
+    {
+      "type": 0,
+      "value": "Stop Torrent"
+    }
+  ],
+  "alert.settings.saved": [
+    {
+      "type": 0,
+      "value": "Successfully saved settings."
+    }
+  ],
+  "alert.torrent.add": [
+    {
+      "type": 0,
+      "value": "Successfully added "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.add.failed": [
+    {
+      "type": 0,
+      "value": "Failed to add "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.move": [
+    {
+      "type": 0,
+      "value": "Successfully moved "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.move.failed": [
+    {
+      "type": 0,
+      "value": "Failed to move "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.remove": [
+    {
+      "type": 0,
+      "value": "Successfully removed "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.remove.failed": [
+    {
+      "type": 0,
+      "value": "Failed to remove "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "auth.add.user": [
+    {
+      "type": 0,
+      "value": "Add User"
+    }
+  ],
+  "auth.admin": [
+    {
+      "type": 0,
+      "value": "Admin"
+    }
+  ],
+  "auth.connectionType": [
+    {
+      "type": 0,
+      "value": "rTorrent Connection Type"
+    }
+  ],
+  "auth.connectionType.socket": [
+    {
+      "type": 0,
+      "value": "Unix Socket"
+    }
+  ],
+  "auth.connectionType.tcp": [
+    {
+      "type": 0,
+      "value": "TCP"
+    }
+  ],
+  "auth.create.account": [
+    {
+      "type": 0,
+      "value": "Create Account"
+    }
+  ],
+  "auth.create.an.account": [
+    {
+      "type": 0,
+      "value": "Create an account"
+    }
+  ],
+  "auth.create.an.account.intro": [
+    {
+      "type": 0,
+      "value": "Welcome to Flood!"
+    }
+  ],
+  "auth.current.user": [
+    {
+      "type": 0,
+      "value": "Current User"
+    }
+  ],
+  "auth.error.username.empty": [
+    {
+      "type": 0,
+      "value": "Username cannot be empty."
+    }
+  ],
+  "auth.log.in": [
+    {
+      "type": 0,
+      "value": "Log In"
+    }
+  ],
+  "auth.login": [
+    {
+      "type": 0,
+      "value": "Login"
+    }
+  ],
+  "auth.login.intro": [
+    {
+      "type": 0,
+      "value": "Log in to your account."
+    }
+  ],
+  "auth.message.not.admin": [
+    {
+      "type": 0,
+      "value": "User is not Admin"
+    }
+  ],
+  "auth.password": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "auth.rtorrentHost": [
+    {
+      "type": 0,
+      "value": "rTorrent Host"
+    }
+  ],
+  "auth.rtorrentPort": [
+    {
+      "type": 0,
+      "value": "rTorrent Port"
+    }
+  ],
+  "auth.rtorrentSocket": [
+    {
+      "type": 0,
+      "value": "rTorrent Socket"
+    }
+  ],
+  "auth.rtorrentSocketPath": [
+    {
+      "type": 0,
+      "value": "rTorrent Socket Path"
+    }
+  ],
+  "auth.user.accounts": [
+    {
+      "type": 0,
+      "value": "User Accounts"
+    }
+  ],
+  "auth.username": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
+  "button.add": [
+    {
+      "type": 0,
+      "value": "Add"
+    }
+  ],
+  "button.cancel": [
+    {
+      "type": 0,
+      "value": "Cancel"
+    }
+  ],
+  "button.new": [
+    {
+      "type": 0,
+      "value": "New"
+    }
+  ],
+  "button.no": [
+    {
+      "type": 0,
+      "value": "No"
+    }
+  ],
+  "button.save": [
+    {
+      "type": 0,
+      "value": "Save Settings"
+    }
+  ],
+  "button.save.feed": [
+    {
+      "type": 0,
+      "value": "Save"
+    }
+  ],
+  "button.state.adding": [
+    {
+      "type": 0,
+      "value": "Adding..."
+    }
+  ],
+  "button.test": [
+    {
+      "type": 0,
+      "value": "Test"
+    }
+  ],
+  "button.yes": [
+    {
+      "type": 0,
+      "value": "Yes"
+    }
+  ],
+  "connection-interruption.heading": [
+    {
+      "type": 0,
+      "value": "Cannot connect to rTorrent"
+    }
+  ],
+  "connection-interruption.verification-error": [
+    {
+      "type": 0,
+      "value": "Connection could not be verified."
+    }
+  ],
+  "connection-interruption.verification-success": [
+    {
+      "type": 0,
+      "value": "Connection successful"
+    }
+  ],
+  "connection-interruption.verify-settings-prompt": [
+    {
+      "type": 0,
+      "value": "Let's verify your connection settings."
+    }
+  ],
+  "connectivity.modal.content": [
+    {
+      "type": 0,
+      "value": "Cannot connect to rTorrent. Please update the information now."
+    }
+  ],
+  "connectivity.modal.title": [
+    {
+      "type": 0,
+      "value": "Connectivity Issue"
+    }
+  ],
+  "dependency.loading.notifications": [
+    {
+      "type": 0,
+      "value": "Notifications"
+    }
+  ],
+  "dependency.loading.torrent.list": [
+    {
+      "type": 0,
+      "value": "Torrent List"
+    }
+  ],
+  "dependency.loading.torrent.taxonomy": [
+    {
+      "type": 0,
+      "value": "Torrent Taxonomy"
+    }
+  ],
+  "dependency.loading.transfer.history": [
+    {
+      "type": 0,
+      "value": "Data Transfer History"
+    }
+  ],
+  "dependency.loading.transfer.rate.details": [
+    {
+      "type": 0,
+      "value": "Data Transfer Rate Details"
+    }
+  ],
+  "feeds.add.automatic.download.rule": [
+    {
+      "type": 0,
+      "value": "Add Download Rule"
+    }
+  ],
+  "feeds.add.feed": [
+    {
+      "type": 0,
+      "value": "Add Feed"
+    }
+  ],
+  "feeds.applicable.feed": [
+    {
+      "type": 0,
+      "value": "Applicable Feed"
+    }
+  ],
+  "feeds.apply.tags": [
+    {
+      "type": 0,
+      "value": "Apply Tags"
+    }
+  ],
+  "feeds.browse.feeds": [
+    {
+      "type": 0,
+      "value": "Browse feeds"
+    }
+  ],
+  "feeds.exclude": [
+    {
+      "type": 0,
+      "value": "Exclude"
+    }
+  ],
+  "feeds.exclude.pattern": [
+    {
+      "type": 0,
+      "value": "Exclude Pattern"
+    }
+  ],
+  "feeds.existing.feeds": [
+    {
+      "type": 0,
+      "value": "Existing Feeds"
+    }
+  ],
+  "feeds.existing.rules": [
+    {
+      "type": 0,
+      "value": "Existing Rules"
+    }
+  ],
+  "feeds.label": [
+    {
+      "type": 0,
+      "value": "Label"
+    }
+  ],
+  "feeds.match": [
+    {
+      "type": 0,
+      "value": "Match"
+    }
+  ],
+  "feeds.match.count": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " match"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " matches"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "feeds.match.pattern": [
+    {
+      "type": 0,
+      "value": "Match Pattern"
+    }
+  ],
+  "feeds.no.feeds.available": [
+    {
+      "type": 0,
+      "value": "No feeds available."
+    }
+  ],
+  "feeds.no.feeds.defined": [
+    {
+      "type": 0,
+      "value": "No feeds defined."
+    }
+  ],
+  "feeds.no.rules.defined": [
+    {
+      "type": 0,
+      "value": "No rules defined."
+    }
+  ],
+  "feeds.regEx": [
+    {
+      "type": 0,
+      "value": "RegEx"
+    }
+  ],
+  "feeds.search": [
+    {
+      "type": 0,
+      "value": "Search term"
+    }
+  ],
+  "feeds.select.feed": [
+    {
+      "type": 0,
+      "value": "Select Feed"
+    }
+  ],
+  "feeds.select.interval": [
+    {
+      "type": 0,
+      "value": "Interval"
+    }
+  ],
+  "feeds.start.on.load": [
+    {
+      "type": 0,
+      "value": "Start on load"
+    }
+  ],
+  "feeds.tabs.download.rules": [
+    {
+      "type": 0,
+      "value": "Download Rules"
+    }
+  ],
+  "feeds.tabs.feeds": [
+    {
+      "type": 0,
+      "value": "Feeds"
+    }
+  ],
+  "feeds.tabs.heading": [
+    {
+      "type": 0,
+      "value": "Torrent Feeds"
+    }
+  ],
+  "feeds.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "feeds.time.day": [
+    {
+      "type": 0,
+      "value": "Days"
+    }
+  ],
+  "feeds.time.hr": [
+    {
+      "type": 0,
+      "value": "Hours"
+    }
+  ],
+  "feeds.time.min": [
+    {
+      "type": 0,
+      "value": "Minutes"
+    }
+  ],
+  "feeds.torrent.destination": [
+    {
+      "type": 0,
+      "value": "Torrent Destination"
+    }
+  ],
+  "feeds.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "feeds.validation.interval.not.positive": [
+    {
+      "type": 0,
+      "value": "The interval must be a positive integer."
+    }
+  ],
+  "feeds.validation.invalid.regular.expression": [
+    {
+      "type": 0,
+      "value": "Invalid regular expression."
+    }
+  ],
+  "feeds.validation.must.select.feed": [
+    {
+      "type": 0,
+      "value": "You must select a feed."
+    }
+  ],
+  "feeds.validation.must.specify.destination": [
+    {
+      "type": 0,
+      "value": "You must specify a destination."
+    }
+  ],
+  "feeds.validation.must.specify.label": [
+    {
+      "type": 0,
+      "value": "You must specify a label."
+    }
+  ],
+  "feeds.validation.must.specify.valid.feed.url": [
+    {
+      "type": 0,
+      "value": "You must specify a valid feed URL."
+    }
+  ],
+  "filesystem.empty.directory": [
+    {
+      "type": 0,
+      "value": "Empty directory."
+    }
+  ],
+  "filesystem.error.eacces": [
+    {
+      "type": 0,
+      "value": "Flood does not have permission to read this directory."
+    }
+  ],
+  "filesystem.error.enoent": [
+    {
+      "type": 0,
+      "value": "This path does not exist. It will be created."
+    }
+  ],
+  "filesystem.fetching": [
+    {
+      "type": 0,
+      "value": "Fetching directory structure..."
+    }
+  ],
+  "filter.all": [
+    {
+      "type": 0,
+      "value": "All"
+    }
+  ],
+  "filter.status.active": [
+    {
+      "type": 0,
+      "value": "Active"
+    }
+  ],
+  "filter.status.checking": [
+    {
+      "type": 0,
+      "value": "Checking"
+    }
+  ],
+  "filter.status.completed": [
+    {
+      "type": 0,
+      "value": "Complete"
+    }
+  ],
+  "filter.status.downloading": [
+    {
+      "type": 0,
+      "value": "Downloading"
+    }
+  ],
+  "filter.status.error": [
+    {
+      "type": 0,
+      "value": "Error"
+    }
+  ],
+  "filter.status.inactive": [
+    {
+      "type": 0,
+      "value": "Inactive"
+    }
+  ],
+  "filter.status.stopped": [
+    {
+      "type": 0,
+      "value": "Stopped"
+    }
+  ],
+  "filter.status.title": [
+    {
+      "type": 0,
+      "value": "Filter by Status"
+    }
+  ],
+  "filter.tag.title": [
+    {
+      "type": 0,
+      "value": "Filter by Tag"
+    }
+  ],
+  "filter.tracker.title": [
+    {
+      "type": 0,
+      "value": "Filter by Tracker"
+    }
+  ],
+  "filter.untagged": [
+    {
+      "type": 0,
+      "value": "Untagged"
+    }
+  ],
+  "general.ago": [
+    {
+      "type": 0,
+      "value": "ago"
+    }
+  ],
+  "general.at": [
+    {
+      "type": 0,
+      "value": "at"
+    }
+  ],
+  "general.clipboard.copied": [
+    {
+      "type": 0,
+      "value": "Copied"
+    }
+  ],
+  "general.clipboard.copy": [
+    {
+      "type": 0,
+      "value": "Copy"
+    }
+  ],
+  "general.of": [
+    {
+      "type": 0,
+      "value": "of"
+    }
+  ],
+  "general.to": [
+    {
+      "type": 0,
+      "value": "to"
+    }
+  ],
+  "locale.language.auto": [
+    {
+      "type": 0,
+      "value": "Automatic"
+    }
+  ],
+  "mediainfo.execError": [
+    {
+      "type": 0,
+      "value": "An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood."
+    }
+  ],
+  "mediainfo.fetching": [
+    {
+      "type": 0,
+      "value": "Fetching..."
+    }
+  ],
+  "mediainfo.heading": [
+    {
+      "type": 0,
+      "value": "Mediainfo Output"
+    }
+  ],
+  "notification.clear.all": [
+    {
+      "type": 0,
+      "value": "Clear All"
+    }
+  ],
+  "notification.showing": [
+    {
+      "type": 0,
+      "value": "Showing"
+    }
+  ],
+  "notification.torrent.errored.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.errored.heading": [
+    {
+      "type": 0,
+      "value": "Error Reported"
+    }
+  ],
+  "notification.torrent.finished.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.finished.heading": [
+    {
+      "type": 0,
+      "value": "Finished Downloading"
+    }
+  ],
+  "priority.dont.download": [
+    {
+      "type": 0,
+      "value": "Don't Download"
+    }
+  ],
+  "priority.high": [
+    {
+      "type": 0,
+      "value": "High"
+    }
+  ],
+  "priority.low": [
+    {
+      "type": 0,
+      "value": "Low"
+    }
+  ],
+  "priority.normal": [
+    {
+      "type": 0,
+      "value": "Normal"
+    }
+  ],
+  "settings.about.flood": [
+    {
+      "type": 0,
+      "value": "About Flood"
+    }
+  ],
+  "settings.bandwidth.slots.download.divider.label": [
+    {
+      "type": 0,
+      "value": "Download Slots Divider"
+    }
+  ],
+  "settings.bandwidth.slots.download.global.label": [
+    {
+      "type": 0,
+      "value": "Download Slots Global"
+    }
+  ],
+  "settings.bandwidth.slots.download.label": [
+    {
+      "type": 0,
+      "value": "Download Slots Per Torrent"
+    }
+  ],
+  "settings.bandwidth.slots.heading": [
+    {
+      "type": 0,
+      "value": "Slot Availability"
+    }
+  ],
+  "settings.bandwidth.slots.upload.divider.label": [
+    {
+      "type": 0,
+      "value": "Upload Slots Divider"
+    }
+  ],
+  "settings.bandwidth.slots.upload.global.label": [
+    {
+      "type": 0,
+      "value": "Upload Slots Global"
+    }
+  ],
+  "settings.bandwidth.slots.upload.label": [
+    {
+      "type": 0,
+      "value": "Upload Slots Per Torrent"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.download.label": [
+    {
+      "type": 0,
+      "value": "Dropdown Presets: Download"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
+    {
+      "type": 0,
+      "value": "Dropdown Presets: Upload"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.download": [
+    {
+      "type": 0,
+      "value": "Global Download Rate Throttle"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.upload": [
+    {
+      "type": 0,
+      "value": "Global Upload Rate Throttle"
+    }
+  ],
+  "settings.bandwidth.transferrate.heading": [
+    {
+      "type": 0,
+      "value": "Transfer Rate Throttles"
+    }
+  ],
+  "settings.connectivity.dht.label": [
+    {
+      "type": 0,
+      "value": "Enable DHT"
+    }
+  ],
+  "settings.connectivity.dht.port.label": [
+    {
+      "type": 0,
+      "value": "DHT Port"
+    }
+  ],
+  "settings.connectivity.dpd.heading": [
+    {
+      "type": 0,
+      "value": "Decentralized Peer Discovery"
+    }
+  ],
+  "settings.connectivity.incoming.heading": [
+    {
+      "type": 0,
+      "value": "Incoming Connections"
+    }
+  ],
+  "settings.connectivity.ip.hostname.label": [
+    {
+      "type": 0,
+      "value": "Reported IP/Hostname"
+    }
+  ],
+  "settings.connectivity.max.http.connections": [
+    {
+      "type": 0,
+      "value": "Maximum HTTP Connections"
+    }
+  ],
+  "settings.connectivity.peer.exchange.label": [
+    {
+      "type": 0,
+      "value": "Enable Peer Exchange"
+    }
+  ],
+  "settings.connectivity.peers.desired.label": [
+    {
+      "type": 0,
+      "value": "Peers Desired"
+    }
+  ],
+  "settings.connectivity.peers.heading": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "settings.connectivity.peers.max.label": [
+    {
+      "type": 0,
+      "value": "Maximum Peers"
+    }
+  ],
+  "settings.connectivity.peers.min.label": [
+    {
+      "type": 0,
+      "value": "Minimum Peers"
+    }
+  ],
+  "settings.connectivity.peers.seeding.max.label": [
+    {
+      "type": 0,
+      "value": "Maximum Peers Seeding"
+    }
+  ],
+  "settings.connectivity.peers.seeding.min.label": [
+    {
+      "type": 0,
+      "value": "Minimum Peers Seeding"
+    }
+  ],
+  "settings.connectivity.port.open.label": [
+    {
+      "type": 0,
+      "value": "Open Port"
+    }
+  ],
+  "settings.connectivity.port.randomize.label": [
+    {
+      "type": 0,
+      "value": "Randomize Port"
+    }
+  ],
+  "settings.connectivity.port.range.label": [
+    {
+      "type": 0,
+      "value": "Port Range"
+    }
+  ],
+  "settings.diskusage.mount.points": [
+    {
+      "type": 0,
+      "value": "Disk Usage Mount Points"
+    }
+  ],
+  "settings.diskusage.show": [
+    {
+      "type": 0,
+      "value": "Show"
+    }
+  ],
+  "settings.resources.disk.check.hash.label": [
+    {
+      "type": 0,
+      "value": "Verify Hash on Completion"
+    }
+  ],
+  "settings.resources.disk.download.location.label": [
+    {
+      "type": 0,
+      "value": "Default Download Directory"
+    }
+  ],
+  "settings.resources.disk.heading": [
+    {
+      "type": 0,
+      "value": "Disk"
+    }
+  ],
+  "settings.resources.max.open.files": [
+    {
+      "type": 0,
+      "value": "Maximum Open Files"
+    }
+  ],
+  "settings.resources.memory.heading": [
+    {
+      "type": 0,
+      "value": "Memory"
+    }
+  ],
+  "settings.resources.memory.max.label": [
+    {
+      "type": 0,
+      "value": "Max Memory Usage"
+    }
+  ],
+  "settings.tabs.about": [
+    {
+      "type": 0,
+      "value": "About"
+    }
+  ],
+  "settings.tabs.authentication": [
+    {
+      "type": 0,
+      "value": "Authentication"
+    }
+  ],
+  "settings.tabs.bandwidth": [
+    {
+      "type": 0,
+      "value": "Bandwidth"
+    }
+  ],
+  "settings.tabs.connectivity": [
+    {
+      "type": 0,
+      "value": "Connectivity"
+    }
+  ],
+  "settings.tabs.diskusage": [
+    {
+      "type": 0,
+      "value": "Disk Usage"
+    }
+  ],
+  "settings.tabs.heading": [
+    {
+      "type": 0,
+      "value": "Settings"
+    }
+  ],
+  "settings.tabs.resources": [
+    {
+      "type": 0,
+      "value": "Resources"
+    }
+  ],
+  "settings.tabs.userinterface": [
+    {
+      "type": 0,
+      "value": "User Interface"
+    }
+  ],
+  "settings.ui.displayed.details": [
+    {
+      "type": 0,
+      "value": "Torrent Detail Columns"
+    }
+  ],
+  "settings.ui.language": [
+    {
+      "type": 0,
+      "value": "Language"
+    }
+  ],
+  "settings.ui.locale": [
+    {
+      "type": 0,
+      "value": "Locale"
+    }
+  ],
+  "settings.ui.torrent.details.enabled": [
+    {
+      "type": 0,
+      "value": "Enabled"
+    }
+  ],
+  "settings.ui.torrent.details.tags.placement": [
+    {
+      "type": 0,
+      "value": "In the expanded view, tags work best at the end of the list."
+    }
+  ],
+  "settings.ui.torrent.list": [
+    {
+      "type": 0,
+      "value": "Torrent List Display"
+    }
+  ],
+  "settings.ui.torrent.size": [
+    {
+      "type": 0,
+      "value": "Torrent Size"
+    }
+  ],
+  "settings.ui.torrent.size.condensed": [
+    {
+      "type": 0,
+      "value": "Condensed View"
+    }
+  ],
+  "settings.ui.torrent.size.expanded": [
+    {
+      "type": 0,
+      "value": "Expanded View"
+    }
+  ],
+  "sidebar.button.feeds": [
+    {
+      "type": 0,
+      "value": "Feeds"
+    }
+  ],
+  "sidebar.button.log.out": [
+    {
+      "type": 0,
+      "value": "Log Out"
+    }
+  ],
+  "sidebar.button.notifications": [
+    {
+      "type": 0,
+      "value": "Notifications"
+    }
+  ],
+  "sidebar.button.settings": [
+    {
+      "type": 0,
+      "value": "Settings"
+    }
+  ],
+  "sidebar.button.speedlimits": [
+    {
+      "type": 0,
+      "value": "Speed Limits"
+    }
+  ],
+  "sidebar.search.placeholder": [
+    {
+      "type": 0,
+      "value": "Search torrents"
+    }
+  ],
+  "sidebar.speedlimits.download": [
+    {
+      "type": 0,
+      "value": "DOWNLOAD"
+    }
+  ],
+  "sidebar.speedlimits.upload": [
+    {
+      "type": 0,
+      "value": "UPLOAD"
+    }
+  ],
+  "sidebar.transferdata.downloaded": [
+    {
+      "type": 0,
+      "value": "Downloaded"
+    }
+  ],
+  "sidebar.transferdata.uploaded": [
+    {
+      "type": 0,
+      "value": "Uploaded"
+    }
+  ],
+  "speed.unlimited": [
+    {
+      "type": 0,
+      "value": "Unlimited"
+    }
+  ],
+  "status.diskusage.title": [
+    {
+      "type": 0,
+      "value": "Disk Usage"
+    }
+  ],
+  "torrent.list.peers": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "of"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrent.list.peers.of": [
+    {
+      "type": 0,
+      "value": "of"
+    }
+  ],
+  "torrents.add.button.add": [
+    {
+      "type": 0,
+      "value": "Add Torrent"
+    }
+  ],
+  "torrents.add.destination.label": [
+    {
+      "type": 0,
+      "value": "Destination"
+    }
+  ],
+  "torrents.add.destination.placeholder": [
+    {
+      "type": 0,
+      "value": "Destination"
+    }
+  ],
+  "torrents.add.heading": [
+    {
+      "type": 0,
+      "value": "Add Torrents"
+    }
+  ],
+  "torrents.add.start.label": [
+    {
+      "type": 0,
+      "value": "Start Torrent"
+    }
+  ],
+  "torrents.add.tab.file.browse": [
+    {
+      "type": 0,
+      "value": "or click to browse"
+    }
+  ],
+  "torrents.add.tab.file.drop": [
+    {
+      "type": 0,
+      "value": "Drop some files here,"
+    }
+  ],
+  "torrents.add.tab.file.title": [
+    {
+      "type": 0,
+      "value": "By File"
+    }
+  ],
+  "torrents.add.tab.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Torrent URL or Magnet Link"
+    }
+  ],
+  "torrents.add.tab.url.title": [
+    {
+      "type": 0,
+      "value": "By URL"
+    }
+  ],
+  "torrents.add.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "torrents.add.torrents.label": [
+    {
+      "type": 0,
+      "value": "Torrents"
+    }
+  ],
+  "torrents.destination.base_path": [
+    {
+      "type": 0,
+      "value": "Use as Base Path"
+    }
+  ],
+  "torrents.details.actions.pause": [
+    {
+      "type": 0,
+      "value": "Pause"
+    }
+  ],
+  "torrents.details.actions.start": [
+    {
+      "type": 0,
+      "value": "Start"
+    }
+  ],
+  "torrents.details.actions.stop": [
+    {
+      "type": 0,
+      "value": "Stop"
+    }
+  ],
+  "torrents.details.details": [
+    {
+      "type": 0,
+      "value": "Details"
+    }
+  ],
+  "torrents.details.files": [
+    {
+      "type": 0,
+      "value": "Files"
+    }
+  ],
+  "torrents.details.files.download.file": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Download File"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Download Files"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.files.loading": [
+    {
+      "type": 0,
+      "value": "Loading file detail..."
+    }
+  ],
+  "torrents.details.general.comment": [
+    {
+      "type": 0,
+      "value": "Comment"
+    }
+  ],
+  "torrents.details.general.connected": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " connected of "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrents.details.general.date.added": [
+    {
+      "type": 0,
+      "value": "Added"
+    }
+  ],
+  "torrents.details.general.date.created": [
+    {
+      "type": 0,
+      "value": "Creation Date"
+    }
+  ],
+  "torrents.details.general.downloaded": [
+    {
+      "type": 0,
+      "value": "Downloaded"
+    }
+  ],
+  "torrents.details.general.free.disk.space": [
+    {
+      "type": 0,
+      "value": "Free Disk Space"
+    }
+  ],
+  "torrents.details.general.hash": [
+    {
+      "type": 0,
+      "value": "Hash"
+    }
+  ],
+  "torrents.details.general.heading.general": [
+    {
+      "type": 0,
+      "value": "General"
+    }
+  ],
+  "torrents.details.general.heading.torrent": [
+    {
+      "type": 0,
+      "value": "Torrent"
+    }
+  ],
+  "torrents.details.general.heading.tracker": [
+    {
+      "type": 0,
+      "value": "Tracker"
+    }
+  ],
+  "torrents.details.general.heading.transfer": [
+    {
+      "type": 0,
+      "value": "Transfer"
+    }
+  ],
+  "torrents.details.general.location": [
+    {
+      "type": 0,
+      "value": "Location"
+    }
+  ],
+  "torrents.details.general.none": [
+    {
+      "type": 0,
+      "value": "None"
+    }
+  ],
+  "torrents.details.general.peers": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "torrents.details.general.scheduler": [
+    {
+      "type": 0,
+      "value": "Scheduler"
+    }
+  ],
+  "torrents.details.general.scheduler.ignored": [
+    {
+      "type": 0,
+      "value": "Ignored"
+    }
+  ],
+  "torrents.details.general.scheduler.obeyed": [
+    {
+      "type": 0,
+      "value": "Obeyed"
+    }
+  ],
+  "torrents.details.general.seeds": [
+    {
+      "type": 0,
+      "value": "Seeds"
+    }
+  ],
+  "torrents.details.general.size": [
+    {
+      "type": 0,
+      "value": "Size"
+    }
+  ],
+  "torrents.details.general.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "torrents.details.general.tracker.message": [
+    {
+      "type": 0,
+      "value": "Tracker Message"
+    }
+  ],
+  "torrents.details.general.type": [
+    {
+      "type": 0,
+      "value": "Type"
+    }
+  ],
+  "torrents.details.general.type.private": [
+    {
+      "type": 0,
+      "value": "Private"
+    }
+  ],
+  "torrents.details.general.type.public": [
+    {
+      "type": 0,
+      "value": "Public"
+    }
+  ],
+  "torrents.details.mediainfo": [
+    {
+      "type": 0,
+      "value": "Mediainfo"
+    }
+  ],
+  "torrents.details.peers": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "torrents.details.peers.no.data": [
+    {
+      "type": 0,
+      "value": "There is no peer data for this torrent."
+    }
+  ],
+  "torrents.details.selected.files": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " selected file"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " selected files"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.selected.files.set.priority": [
+    {
+      "type": 0,
+      "value": "Set Priority"
+    }
+  ],
+  "torrents.details.trackers": [
+    {
+      "type": 0,
+      "value": "Trackers"
+    }
+  ],
+  "torrents.details.trackers.no.data": [
+    {
+      "type": 0,
+      "value": "There is no tracker data for this torrent."
+    }
+  ],
+  "torrents.details.trackers.type": [
+    {
+      "type": 0,
+      "value": "Type"
+    }
+  ],
+  "torrents.list.cannot.connect": [
+    {
+      "type": 0,
+      "value": "Cannot connect to rTorrent."
+    }
+  ],
+  "torrents.list.clear.filters": [
+    {
+      "type": 0,
+      "value": "Clear Filters"
+    }
+  ],
+  "torrents.list.context.check.hash": [
+    {
+      "type": 0,
+      "value": "Check Hash"
+    }
+  ],
+  "torrents.list.context.details": [
+    {
+      "type": 0,
+      "value": "Torrent Details"
+    }
+  ],
+  "torrents.list.context.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "torrents.list.context.move": [
+    {
+      "type": 0,
+      "value": "Set Torrent Location"
+    }
+  ],
+  "torrents.list.context.pause": [
+    {
+      "type": 0,
+      "value": "Pause"
+    }
+  ],
+  "torrents.list.context.priority": [
+    {
+      "type": 0,
+      "value": "Priority"
+    }
+  ],
+  "torrents.list.context.remove": [
+    {
+      "type": 0,
+      "value": "Remove"
+    }
+  ],
+  "torrents.list.context.set.tags": [
+    {
+      "type": 0,
+      "value": "Set Tags"
+    }
+  ],
+  "torrents.list.context.start": [
+    {
+      "type": 0,
+      "value": "Start"
+    }
+  ],
+  "torrents.list.context.stop": [
+    {
+      "type": 0,
+      "value": "Stop"
+    }
+  ],
+  "torrents.list.drop": [
+    {
+      "type": 0,
+      "value": "Drop files here to add them to rTorrent."
+    }
+  ],
+  "torrents.list.no.torrents": [
+    {
+      "type": 0,
+      "value": "No torrents to display."
+    }
+  ],
+  "torrents.move.button.set.location": [
+    {
+      "type": 0,
+      "value": "Set Location"
+    }
+  ],
+  "torrents.move.button.state.setting": [
+    {
+      "type": 0,
+      "value": "Setting..."
+    }
+  ],
+  "torrents.move.check_hash.label": [
+    {
+      "type": 0,
+      "value": "Check hash"
+    }
+  ],
+  "torrents.move.data.label": [
+    {
+      "type": 0,
+      "value": "Move data"
+    }
+  ],
+  "torrents.move.heading": [
+    {
+      "type": 0,
+      "value": "Set Torrent Location"
+    }
+  ],
+  "torrents.properties.base.path": [
+    {
+      "type": 0,
+      "value": "Base Path"
+    }
+  ],
+  "torrents.properties.comment": [
+    {
+      "type": 0,
+      "value": "Comment"
+    }
+  ],
+  "torrents.properties.creation.date": [
+    {
+      "type": 0,
+      "value": "Creation Date"
+    }
+  ],
+  "torrents.properties.date.added": [
+    {
+      "type": 0,
+      "value": "Added"
+    }
+  ],
+  "torrents.properties.download.speed": [
+    {
+      "type": 0,
+      "value": "Download Speed"
+    }
+  ],
+  "torrents.properties.download.total": [
+    {
+      "type": 0,
+      "value": "Downloaded"
+    }
+  ],
+  "torrents.properties.eta": [
+    {
+      "type": 0,
+      "value": "ETA"
+    }
+  ],
+  "torrents.properties.free.disk.space": [
+    {
+      "type": 0,
+      "value": "Free Disk Space"
+    }
+  ],
+  "torrents.properties.hash": [
+    {
+      "type": 0,
+      "value": "Hash"
+    }
+  ],
+  "torrents.properties.ignore.schedule": [
+    {
+      "type": 0,
+      "value": "Ignore Scheduler"
+    }
+  ],
+  "torrents.properties.is.private": [
+    {
+      "type": 0,
+      "value": "Private"
+    }
+  ],
+  "torrents.properties.name": [
+    {
+      "type": 0,
+      "value": "Name"
+    }
+  ],
+  "torrents.properties.peers": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "torrents.properties.percentage": [
+    {
+      "type": 0,
+      "value": "Percent Complete"
+    }
+  ],
+  "torrents.properties.ratio": [
+    {
+      "type": 0,
+      "value": "Ratio"
+    }
+  ],
+  "torrents.properties.seeds": [
+    {
+      "type": 0,
+      "value": "Seeds"
+    }
+  ],
+  "torrents.properties.size": [
+    {
+      "type": 0,
+      "value": "File Size"
+    }
+  ],
+  "torrents.properties.tags": [
+    {
+      "type": 0,
+      "value": "Tags"
+    }
+  ],
+  "torrents.properties.tracker.message": [
+    {
+      "type": 0,
+      "value": "Tracker Message"
+    }
+  ],
+  "torrents.properties.trackers": [
+    {
+      "type": 0,
+      "value": "Trackers"
+    }
+  ],
+  "torrents.properties.upload.speed": [
+    {
+      "type": 0,
+      "value": "Upload Speed"
+    }
+  ],
+  "torrents.properties.upload.total": [
+    {
+      "type": 0,
+      "value": "Uploaded"
+    }
+  ],
+  "torrents.remove": [
+    {
+      "type": 0,
+      "value": "Remove Torrents"
+    }
+  ],
+  "torrents.remove.are.you.sure": [
+    {
+      "type": 0,
+      "value": "Are you sure you want to remove "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "torrents.remove.delete.data": [
+    {
+      "type": 0,
+      "value": "Delete data"
+    }
+  ],
+  "torrents.remove.error.no.torrents.selected": [
+    {
+      "type": 0,
+      "value": "You haven't selected any torrents."
+    }
+  ],
+  "torrents.set.tags.button.set": [
+    {
+      "type": 0,
+      "value": "Set Tags"
+    }
+  ],
+  "torrents.set.tags.enter.tags": [
+    {
+      "type": 0,
+      "value": "Enter tags"
+    }
+  ],
+  "torrents.set.tags.heading": [
+    {
+      "type": 0,
+      "value": "Set Tags"
+    }
+  ],
+  "torrents.sort.title": [
+    {
+      "type": 0,
+      "value": "Sort By"
+    }
+  ],
+  "unit.size.byte": [
+    {
+      "type": 0,
+      "value": "B"
+    }
+  ],
+  "unit.size.gigabyte": [
+    {
+      "type": 0,
+      "value": "GB"
+    }
+  ],
+  "unit.size.kilobyte": [
+    {
+      "type": 0,
+      "value": "kB"
+    }
+  ],
+  "unit.size.megabyte": [
+    {
+      "type": 0,
+      "value": "MB"
+    }
+  ],
+  "unit.size.terabyte": [
+    {
+      "type": 0,
+      "value": "TB"
+    }
+  ],
+  "unit.speed": [
+    {
+      "type": 1,
+      "value": "baseUnit"
+    },
+    {
+      "type": 0,
+      "value": "/s"
+    }
+  ],
+  "unit.time.day": [
+    {
+      "type": 0,
+      "value": "d"
+    }
+  ],
+  "unit.time.hour": [
+    {
+      "type": 0,
+      "value": "hr"
+    }
+  ],
+  "unit.time.infinity": [
+    {
+      "type": 0,
+      "value": "∞"
+    }
+  ],
+  "unit.time.minute": [
+    {
+      "type": 0,
+      "value": "m"
+    }
+  ],
+  "unit.time.second": [
+    {
+      "type": 0,
+      "value": "s"
+    }
+  ],
+  "unit.time.week": [
+    {
+      "type": 0,
+      "value": "wk"
+    }
+  ],
+  "unit.time.year": [
+    {
+      "type": 0,
+      "value": "yr"
+    }
+  ],
+  "window.title": [
+    {
+      "type": 0,
+      "value": "↓ "
+    },
+    {
+      "type": 1,
+      "value": "down"
+    },
+    {
+      "type": 0,
+      "value": " ↑ "
+    },
+    {
+      "type": 1,
+      "value": "up"
+    },
+    {
+      "type": 0,
+      "value": " - Flood"
+    }
+  ]
+}

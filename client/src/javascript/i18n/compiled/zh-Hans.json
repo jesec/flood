@@ -1,0 +1,1928 @@
+{
+  "actionbar.button.add.torrent": [
+    {
+      "type": 0,
+      "value": "添加种子"
+    }
+  ],
+  "actionbar.button.remove.torrent": [
+    {
+      "type": 0,
+      "value": "移除种子"
+    }
+  ],
+  "actionbar.button.start.torrent": [
+    {
+      "type": 0,
+      "value": "启动种子"
+    }
+  ],
+  "actionbar.button.stop.torrent": [
+    {
+      "type": 0,
+      "value": "停止种子"
+    }
+  ],
+  "alert.settings.saved": [
+    {
+      "type": 0,
+      "value": "设置保存成功！"
+    }
+  ],
+  "alert.torrent.add": [
+    {
+      "type": 0,
+      "value": "成功添加 "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " 个种子。"
+    }
+  ],
+  "alert.torrent.add.failed": [
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " 个种子添加失败。"
+    }
+  ],
+  "alert.torrent.move": [
+    {
+      "type": 0,
+      "value": "移动 "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " 个种子成功。"
+    }
+  ],
+  "alert.torrent.move.failed": [
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " 个种子移动失败。"
+    }
+  ],
+  "alert.torrent.remove": [
+    {
+      "type": 0,
+      "value": "成功移除 "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " 个种子。"
+    }
+  ],
+  "alert.torrent.remove.failed": [
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " 个种子移除失败。"
+    }
+  ],
+  "auth.add.user": [
+    {
+      "type": 0,
+      "value": "增加用户"
+    }
+  ],
+  "auth.admin": [
+    {
+      "type": 0,
+      "value": "管理员"
+    }
+  ],
+  "auth.connectionType": [
+    {
+      "type": 0,
+      "value": "rTorrent 连接类型"
+    }
+  ],
+  "auth.connectionType.socket": [
+    {
+      "type": 0,
+      "value": "Unix Socket"
+    }
+  ],
+  "auth.connectionType.tcp": [
+    {
+      "type": 0,
+      "value": "TCP"
+    }
+  ],
+  "auth.create.account": [
+    {
+      "type": 0,
+      "value": "创建账号"
+    }
+  ],
+  "auth.create.an.account": [
+    {
+      "type": 0,
+      "value": "创建一个账号"
+    }
+  ],
+  "auth.create.an.account.intro": [
+    {
+      "type": 0,
+      "value": "欢迎使用 Flood！"
+    }
+  ],
+  "auth.current.user": [
+    {
+      "type": 0,
+      "value": "当前用户"
+    }
+  ],
+  "auth.error.username.empty": [
+    {
+      "type": 0,
+      "value": "用户名不能为空"
+    }
+  ],
+  "auth.log.in": [
+    {
+      "type": 0,
+      "value": "登录"
+    }
+  ],
+  "auth.login": [
+    {
+      "type": 0,
+      "value": "登录"
+    }
+  ],
+  "auth.login.intro": [
+    {
+      "type": 0,
+      "value": "Log in to your account."
+    }
+  ],
+  "auth.message.not.admin": [
+    {
+      "type": 0,
+      "value": "用户不是管理员"
+    }
+  ],
+  "auth.password": [
+    {
+      "type": 0,
+      "value": "密码"
+    }
+  ],
+  "auth.rtorrentHost": [
+    {
+      "type": 0,
+      "value": "rTorrent 主机"
+    }
+  ],
+  "auth.rtorrentPort": [
+    {
+      "type": 0,
+      "value": "rTorrent 端口"
+    }
+  ],
+  "auth.rtorrentSocket": [
+    {
+      "type": 0,
+      "value": "rTorrent Socket"
+    }
+  ],
+  "auth.rtorrentSocketPath": [
+    {
+      "type": 0,
+      "value": "rTorrent Socket 路径"
+    }
+  ],
+  "auth.user.accounts": [
+    {
+      "type": 0,
+      "value": "用户账号"
+    }
+  ],
+  "auth.username": [
+    {
+      "type": 0,
+      "value": "用户名"
+    }
+  ],
+  "button.add": [
+    {
+      "type": 0,
+      "value": "新增"
+    }
+  ],
+  "button.cancel": [
+    {
+      "type": 0,
+      "value": "取消"
+    }
+  ],
+  "button.new": [
+    {
+      "type": 0,
+      "value": "添加"
+    }
+  ],
+  "button.no": [
+    {
+      "type": 0,
+      "value": "取消"
+    }
+  ],
+  "button.save": [
+    {
+      "type": 0,
+      "value": "保存设置"
+    }
+  ],
+  "button.save.feed": [
+    {
+      "type": 0,
+      "value": "保存"
+    }
+  ],
+  "button.state.adding": [
+    {
+      "type": 0,
+      "value": "正在添加..."
+    }
+  ],
+  "button.test": [
+    {
+      "type": 0,
+      "value": "测试"
+    }
+  ],
+  "button.yes": [
+    {
+      "type": 0,
+      "value": "是"
+    }
+  ],
+  "connection-interruption.heading": [
+    {
+      "type": 0,
+      "value": "无法连接到 rTorrent"
+    }
+  ],
+  "connection-interruption.verification-error": [
+    {
+      "type": 0,
+      "value": "无法建立连接。"
+    }
+  ],
+  "connection-interruption.verification-success": [
+    {
+      "type": 0,
+      "value": "连接成功！"
+    }
+  ],
+  "connection-interruption.verify-settings-prompt": [
+    {
+      "type": 0,
+      "value": "检查您的连接设置"
+    }
+  ],
+  "connectivity.modal.content": [
+    {
+      "type": 0,
+      "value": "无法连接至 rTorrent. 请更新信息！"
+    }
+  ],
+  "connectivity.modal.title": [
+    {
+      "type": 0,
+      "value": "连接失败"
+    }
+  ],
+  "dependency.loading.notifications": [
+    {
+      "type": 0,
+      "value": "Notifications"
+    }
+  ],
+  "dependency.loading.torrent.list": [
+    {
+      "type": 0,
+      "value": "Torrent List"
+    }
+  ],
+  "dependency.loading.torrent.taxonomy": [
+    {
+      "type": 0,
+      "value": "Torrent Taxonomy"
+    }
+  ],
+  "dependency.loading.transfer.history": [
+    {
+      "type": 0,
+      "value": "Data Transfer History"
+    }
+  ],
+  "dependency.loading.transfer.rate.details": [
+    {
+      "type": 0,
+      "value": "Data Transfer Rate Details"
+    }
+  ],
+  "feeds.add.automatic.download.rule": [
+    {
+      "type": 0,
+      "value": "增加下载规则"
+    }
+  ],
+  "feeds.add.feed": [
+    {
+      "type": 0,
+      "value": "添加订阅源"
+    }
+  ],
+  "feeds.applicable.feed": [
+    {
+      "type": 0,
+      "value": "可用的订阅源"
+    }
+  ],
+  "feeds.apply.tags": [
+    {
+      "type": 0,
+      "value": "变更标签"
+    }
+  ],
+  "feeds.browse.feeds": [
+    {
+      "type": 0,
+      "value": "浏览订阅源"
+    }
+  ],
+  "feeds.exclude": [
+    {
+      "type": 0,
+      "value": "排除"
+    }
+  ],
+  "feeds.exclude.pattern": [
+    {
+      "type": 0,
+      "value": "排除规则"
+    }
+  ],
+  "feeds.existing.feeds": [
+    {
+      "type": 0,
+      "value": "现有的订阅源"
+    }
+  ],
+  "feeds.existing.rules": [
+    {
+      "type": 0,
+      "value": "现有的规则"
+    }
+  ],
+  "feeds.label": [
+    {
+      "type": 0,
+      "value": "标签"
+    }
+  ],
+  "feeds.match": [
+    {
+      "type": 0,
+      "value": "匹配"
+    }
+  ],
+  "feeds.match.count": [
+    {
+      "type": 0,
+      "value": "# 个匹配"
+    }
+  ],
+  "feeds.match.pattern": [
+    {
+      "type": 0,
+      "value": "匹配规则"
+    }
+  ],
+  "feeds.no.feeds.available": [
+    {
+      "type": 0,
+      "value": "没有可用的订阅源。"
+    }
+  ],
+  "feeds.no.feeds.defined": [
+    {
+      "type": 0,
+      "value": "没有定义订阅源。"
+    }
+  ],
+  "feeds.no.rules.defined": [
+    {
+      "type": 0,
+      "value": "没有定义规则。"
+    }
+  ],
+  "feeds.regEx": [
+    {
+      "type": 0,
+      "value": "正则"
+    }
+  ],
+  "feeds.search": [
+    {
+      "type": 0,
+      "value": "搜索关键词"
+    }
+  ],
+  "feeds.select.feed": [
+    {
+      "type": 0,
+      "value": "选择订阅源"
+    }
+  ],
+  "feeds.select.interval": [
+    {
+      "type": 0,
+      "value": "间隔"
+    }
+  ],
+  "feeds.start.on.load": [
+    {
+      "type": 0,
+      "value": "读取后开始"
+    }
+  ],
+  "feeds.tabs.download.rules": [
+    {
+      "type": 0,
+      "value": "下载规则"
+    }
+  ],
+  "feeds.tabs.feeds": [
+    {
+      "type": 0,
+      "value": "订阅源"
+    }
+  ],
+  "feeds.tabs.heading": [
+    {
+      "type": 0,
+      "value": "种子源"
+    }
+  ],
+  "feeds.tags": [
+    {
+      "type": 0,
+      "value": "标签"
+    }
+  ],
+  "feeds.time.day": [
+    {
+      "type": 0,
+      "value": "天"
+    }
+  ],
+  "feeds.time.hr": [
+    {
+      "type": 0,
+      "value": "时"
+    }
+  ],
+  "feeds.time.min": [
+    {
+      "type": 0,
+      "value": "分"
+    }
+  ],
+  "feeds.torrent.destination": [
+    {
+      "type": 0,
+      "value": "下载位置"
+    }
+  ],
+  "feeds.url": [
+    {
+      "type": 0,
+      "value": "网址"
+    }
+  ],
+  "feeds.validation.interval.not.positive": [
+    {
+      "type": 0,
+      "value": "The interval must be a positive integer."
+    }
+  ],
+  "feeds.validation.invalid.regular.expression": [
+    {
+      "type": 0,
+      "value": "无效的RegEx。"
+    }
+  ],
+  "feeds.validation.must.select.feed": [
+    {
+      "type": 0,
+      "value": "你必须选择一个订阅源。"
+    }
+  ],
+  "feeds.validation.must.specify.destination": [
+    {
+      "type": 0,
+      "value": "你必须指定下载位置。"
+    }
+  ],
+  "feeds.validation.must.specify.label": [
+    {
+      "type": 0,
+      "value": "你必须指定标签。"
+    }
+  ],
+  "feeds.validation.must.specify.valid.feed.url": [
+    {
+      "type": 0,
+      "value": "你必须指定有效的订阅源网址。"
+    }
+  ],
+  "filesystem.empty.directory": [
+    {
+      "type": 0,
+      "value": "空目录。"
+    }
+  ],
+  "filesystem.error.eacces": [
+    {
+      "type": 0,
+      "value": "Flood没有权限读取此目录。"
+    }
+  ],
+  "filesystem.error.enoent": [
+    {
+      "type": 0,
+      "value": "路径不存在，将会创建此目录。"
+    }
+  ],
+  "filesystem.fetching": [
+    {
+      "type": 0,
+      "value": "获取目录结构..."
+    }
+  ],
+  "filter.all": [
+    {
+      "type": 0,
+      "value": "全部"
+    }
+  ],
+  "filter.status.active": [
+    {
+      "type": 0,
+      "value": "活动中"
+    }
+  ],
+  "filter.status.checking": [
+    {
+      "type": 0,
+      "value": "校验中"
+    }
+  ],
+  "filter.status.completed": [
+    {
+      "type": 0,
+      "value": "已完成"
+    }
+  ],
+  "filter.status.downloading": [
+    {
+      "type": 0,
+      "value": "下载中"
+    }
+  ],
+  "filter.status.error": [
+    {
+      "type": 0,
+      "value": "错误"
+    }
+  ],
+  "filter.status.inactive": [
+    {
+      "type": 0,
+      "value": "非活动中"
+    }
+  ],
+  "filter.status.stopped": [
+    {
+      "type": 0,
+      "value": "已停止"
+    }
+  ],
+  "filter.status.title": [
+    {
+      "type": 0,
+      "value": "按状态筛选"
+    }
+  ],
+  "filter.tag.title": [
+    {
+      "type": 0,
+      "value": "按标签筛选"
+    }
+  ],
+  "filter.tracker.title": [
+    {
+      "type": 0,
+      "value": "按Tracker筛选"
+    }
+  ],
+  "filter.untagged": [
+    {
+      "type": 0,
+      "value": "无标签"
+    }
+  ],
+  "general.ago": [
+    {
+      "type": 0,
+      "value": "前"
+    }
+  ],
+  "general.at": [
+    {
+      "type": 0,
+      "value": "在"
+    }
+  ],
+  "general.clipboard.copied": [
+    {
+      "type": 0,
+      "value": "复制成功"
+    }
+  ],
+  "general.clipboard.copy": [
+    {
+      "type": 0,
+      "value": "复制"
+    }
+  ],
+  "general.of": [
+    {
+      "type": 0,
+      "value": "的"
+    }
+  ],
+  "general.to": [
+    {
+      "type": 0,
+      "value": "到"
+    }
+  ],
+  "locale.language.auto": [
+    {
+      "type": 0,
+      "value": "自动"
+    }
+  ],
+  "mediainfo.execError": [
+    {
+      "type": 0,
+      "value": "在服务器上运行mediainfo时发生错误。检查mediainfo是否已经安装，并且在PATH中！"
+    }
+  ],
+  "mediainfo.fetching": [
+    {
+      "type": 0,
+      "value": "获取中..."
+    }
+  ],
+  "mediainfo.heading": [
+    {
+      "type": 0,
+      "value": "Mediainfo 输出"
+    }
+  ],
+  "notification.clear.all": [
+    {
+      "type": 0,
+      "value": "全部清除"
+    }
+  ],
+  "notification.showing": [
+    {
+      "type": 0,
+      "value": "显示"
+    }
+  ],
+  "notification.torrent.errored.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.errored.heading": [
+    {
+      "type": 0,
+      "value": "错误报告"
+    }
+  ],
+  "notification.torrent.finished.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.finished.heading": [
+    {
+      "type": 0,
+      "value": "下载完成！"
+    }
+  ],
+  "priority.dont.download": [
+    {
+      "type": 0,
+      "value": "不下载"
+    }
+  ],
+  "priority.high": [
+    {
+      "type": 0,
+      "value": "高"
+    }
+  ],
+  "priority.low": [
+    {
+      "type": 0,
+      "value": "低"
+    }
+  ],
+  "priority.normal": [
+    {
+      "type": 0,
+      "value": "正常"
+    }
+  ],
+  "settings.about.flood": [
+    {
+      "type": 0,
+      "value": "关于Flood"
+    }
+  ],
+  "settings.bandwidth.slots.download.divider.label": [
+    {
+      "type": 0,
+      "value": "下载槽分配器"
+    }
+  ],
+  "settings.bandwidth.slots.download.global.label": [
+    {
+      "type": 0,
+      "value": "全局下载槽数"
+    }
+  ],
+  "settings.bandwidth.slots.download.label": [
+    {
+      "type": 0,
+      "value": "每个种子下载槽数"
+    }
+  ],
+  "settings.bandwidth.slots.heading": [
+    {
+      "type": 0,
+      "value": "传输槽位限制"
+    }
+  ],
+  "settings.bandwidth.slots.upload.divider.label": [
+    {
+      "type": 0,
+      "value": "上传槽分配器"
+    }
+  ],
+  "settings.bandwidth.slots.upload.global.label": [
+    {
+      "type": 0,
+      "value": "全局上传槽数"
+    }
+  ],
+  "settings.bandwidth.slots.upload.label": [
+    {
+      "type": 0,
+      "value": "每个种子上传槽数"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.download.label": [
+    {
+      "type": 0,
+      "value": "下载速度限制菜单"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
+    {
+      "type": 0,
+      "value": "上传速度限制菜单"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.download": [
+    {
+      "type": 0,
+      "value": "全局下载速度限制"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.upload": [
+    {
+      "type": 0,
+      "value": "全局上传速度限制"
+    }
+  ],
+  "settings.bandwidth.transferrate.heading": [
+    {
+      "type": 0,
+      "value": "传输速度限制"
+    }
+  ],
+  "settings.connectivity.dht.label": [
+    {
+      "type": 0,
+      "value": "开启 DHT"
+    }
+  ],
+  "settings.connectivity.dht.port.label": [
+    {
+      "type": 0,
+      "value": "DHT 端口"
+    }
+  ],
+  "settings.connectivity.dpd.heading": [
+    {
+      "type": 0,
+      "value": "分散式节点发现"
+    }
+  ],
+  "settings.connectivity.incoming.heading": [
+    {
+      "type": 0,
+      "value": "传入连接"
+    }
+  ],
+  "settings.connectivity.ip.hostname.label": [
+    {
+      "type": 0,
+      "value": "上报 IP/主机名"
+    }
+  ],
+  "settings.connectivity.max.http.connections": [
+    {
+      "type": 0,
+      "value": "最大HTTP连接数"
+    }
+  ],
+  "settings.connectivity.peer.exchange.label": [
+    {
+      "type": 0,
+      "value": "启用节点交换"
+    }
+  ],
+  "settings.connectivity.peers.desired.label": [
+    {
+      "type": 0,
+      "value": "期望节点数"
+    }
+  ],
+  "settings.connectivity.peers.heading": [
+    {
+      "type": 0,
+      "value": "节点"
+    }
+  ],
+  "settings.connectivity.peers.max.label": [
+    {
+      "type": 0,
+      "value": "最大节点数"
+    }
+  ],
+  "settings.connectivity.peers.min.label": [
+    {
+      "type": 0,
+      "value": "最小节点数"
+    }
+  ],
+  "settings.connectivity.peers.seeding.max.label": [
+    {
+      "type": 0,
+      "value": "最大做种数"
+    }
+  ],
+  "settings.connectivity.peers.seeding.min.label": [
+    {
+      "type": 0,
+      "value": "最小做种数"
+    }
+  ],
+  "settings.connectivity.port.open.label": [
+    {
+      "type": 0,
+      "value": "开放端口"
+    }
+  ],
+  "settings.connectivity.port.randomize.label": [
+    {
+      "type": 0,
+      "value": "随机端口"
+    }
+  ],
+  "settings.connectivity.port.range.label": [
+    {
+      "type": 0,
+      "value": "端口范围"
+    }
+  ],
+  "settings.diskusage.mount.points": [
+    {
+      "type": 0,
+      "value": "磁盘挂载点"
+    }
+  ],
+  "settings.diskusage.show": [
+    {
+      "type": 0,
+      "value": "显示"
+    }
+  ],
+  "settings.resources.disk.check.hash.label": [
+    {
+      "type": 0,
+      "value": "完成后校验"
+    }
+  ],
+  "settings.resources.disk.download.location.label": [
+    {
+      "type": 0,
+      "value": "默认下载目录"
+    }
+  ],
+  "settings.resources.disk.heading": [
+    {
+      "type": 0,
+      "value": "磁盘"
+    }
+  ],
+  "settings.resources.max.open.files": [
+    {
+      "type": 0,
+      "value": "最大打开文件数"
+    }
+  ],
+  "settings.resources.memory.heading": [
+    {
+      "type": 0,
+      "value": "内存"
+    }
+  ],
+  "settings.resources.memory.max.label": [
+    {
+      "type": 0,
+      "value": "最大内存使用"
+    }
+  ],
+  "settings.tabs.about": [
+    {
+      "type": 0,
+      "value": "关于"
+    }
+  ],
+  "settings.tabs.authentication": [
+    {
+      "type": 0,
+      "value": "认证"
+    }
+  ],
+  "settings.tabs.bandwidth": [
+    {
+      "type": 0,
+      "value": "带宽"
+    }
+  ],
+  "settings.tabs.connectivity": [
+    {
+      "type": 0,
+      "value": "连接"
+    }
+  ],
+  "settings.tabs.diskusage": [
+    {
+      "type": 0,
+      "value": "磁盘使用"
+    }
+  ],
+  "settings.tabs.heading": [
+    {
+      "type": 0,
+      "value": "设置"
+    }
+  ],
+  "settings.tabs.resources": [
+    {
+      "type": 0,
+      "value": "资源"
+    }
+  ],
+  "settings.tabs.userinterface": [
+    {
+      "type": 0,
+      "value": "用户接口"
+    }
+  ],
+  "settings.ui.displayed.details": [
+    {
+      "type": 0,
+      "value": "种子详情列表"
+    }
+  ],
+  "settings.ui.language": [
+    {
+      "type": 0,
+      "value": "语言"
+    }
+  ],
+  "settings.ui.locale": [
+    {
+      "type": 0,
+      "value": "本地化"
+    }
+  ],
+  "settings.ui.torrent.details.enabled": [
+    {
+      "type": 0,
+      "value": "启用"
+    }
+  ],
+  "settings.ui.torrent.details.tags.placement": [
+    {
+      "type": 0,
+      "value": "在展开模式中，标签最好能够在列表末尾。"
+    }
+  ],
+  "settings.ui.torrent.list": [
+    {
+      "type": 0,
+      "value": "种子列表显示模式"
+    }
+  ],
+  "settings.ui.torrent.size": [
+    {
+      "type": 0,
+      "value": "种子大小"
+    }
+  ],
+  "settings.ui.torrent.size.condensed": [
+    {
+      "type": 0,
+      "value": "紧凑模式"
+    }
+  ],
+  "settings.ui.torrent.size.expanded": [
+    {
+      "type": 0,
+      "value": "展开模式"
+    }
+  ],
+  "sidebar.button.feeds": [
+    {
+      "type": 0,
+      "value": "订阅源"
+    }
+  ],
+  "sidebar.button.log.out": [
+    {
+      "type": 0,
+      "value": "登出"
+    }
+  ],
+  "sidebar.button.notifications": [
+    {
+      "type": 0,
+      "value": "通知"
+    }
+  ],
+  "sidebar.button.settings": [
+    {
+      "type": 0,
+      "value": "设置"
+    }
+  ],
+  "sidebar.button.speedlimits": [
+    {
+      "type": 0,
+      "value": "速度限制"
+    }
+  ],
+  "sidebar.search.placeholder": [
+    {
+      "type": 0,
+      "value": "搜索种子"
+    }
+  ],
+  "sidebar.speedlimits.download": [
+    {
+      "type": 0,
+      "value": "DOWNLOAD"
+    }
+  ],
+  "sidebar.speedlimits.upload": [
+    {
+      "type": 0,
+      "value": "UPLOAD"
+    }
+  ],
+  "sidebar.transferdata.downloaded": [
+    {
+      "type": 0,
+      "value": "已下载"
+    }
+  ],
+  "sidebar.transferdata.uploaded": [
+    {
+      "type": 0,
+      "value": "已上传"
+    }
+  ],
+  "speed.unlimited": [
+    {
+      "type": 0,
+      "value": "无限制"
+    }
+  ],
+  "status.diskusage.title": [
+    {
+      "type": 0,
+      "value": "磁盘使用量"
+    }
+  ],
+  "torrent.list.peers": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " / "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrent.list.peers.of": [
+    {
+      "type": 0,
+      "value": "/"
+    }
+  ],
+  "torrents.add.button.add": [
+    {
+      "type": 0,
+      "value": "添加种子"
+    }
+  ],
+  "torrents.add.destination.label": [
+    {
+      "type": 0,
+      "value": "下载位置"
+    }
+  ],
+  "torrents.add.destination.placeholder": [
+    {
+      "type": 0,
+      "value": "下载位置"
+    }
+  ],
+  "torrents.add.heading": [
+    {
+      "type": 0,
+      "value": "添加种子"
+    }
+  ],
+  "torrents.add.start.label": [
+    {
+      "type": 0,
+      "value": "开始下载"
+    }
+  ],
+  "torrents.add.tab.file.browse": [
+    {
+      "type": 0,
+      "value": "或点击浏览"
+    }
+  ],
+  "torrents.add.tab.file.drop": [
+    {
+      "type": 0,
+      "value": "将文件拖至此处,"
+    }
+  ],
+  "torrents.add.tab.file.title": [
+    {
+      "type": 0,
+      "value": "上传文件"
+    }
+  ],
+  "torrents.add.tab.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "种子网址或磁力链接"
+    }
+  ],
+  "torrents.add.tab.url.title": [
+    {
+      "type": 0,
+      "value": "从网址"
+    }
+  ],
+  "torrents.add.tags": [
+    {
+      "type": 0,
+      "value": "标签"
+    }
+  ],
+  "torrents.add.torrents.label": [
+    {
+      "type": 0,
+      "value": "种子"
+    }
+  ],
+  "torrents.destination.base_path": [
+    {
+      "type": 0,
+      "value": "作为基础路径"
+    }
+  ],
+  "torrents.details.actions.pause": [
+    {
+      "type": 0,
+      "value": "暂停"
+    }
+  ],
+  "torrents.details.actions.start": [
+    {
+      "type": 0,
+      "value": "开始"
+    }
+  ],
+  "torrents.details.actions.stop": [
+    {
+      "type": 0,
+      "value": "停止"
+    }
+  ],
+  "torrents.details.details": [
+    {
+      "type": 0,
+      "value": "详情"
+    }
+  ],
+  "torrents.details.files": [
+    {
+      "type": 0,
+      "value": "文件"
+    }
+  ],
+  "torrents.details.files.download.file": [
+    {
+      "type": 0,
+      "value": "下载文件"
+    }
+  ],
+  "torrents.details.files.loading": [
+    {
+      "type": 0,
+      "value": "正在加载详细信息..."
+    }
+  ],
+  "torrents.details.general.comment": [
+    {
+      "type": 0,
+      "value": "评论"
+    }
+  ],
+  "torrents.details.general.connected": [
+    {
+      "type": 0,
+      "value": "已连接到 "
+    },
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " / "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrents.details.general.date.added": [
+    {
+      "type": 0,
+      "value": "添加时间"
+    }
+  ],
+  "torrents.details.general.date.created": [
+    {
+      "type": 0,
+      "value": "创建时间"
+    }
+  ],
+  "torrents.details.general.downloaded": [
+    {
+      "type": 0,
+      "value": "已下载"
+    }
+  ],
+  "torrents.details.general.free.disk.space": [
+    {
+      "type": 0,
+      "value": "可用磁盘空间"
+    }
+  ],
+  "torrents.details.general.hash": [
+    {
+      "type": 0,
+      "value": "Hash"
+    }
+  ],
+  "torrents.details.general.heading.general": [
+    {
+      "type": 0,
+      "value": "概况"
+    }
+  ],
+  "torrents.details.general.heading.torrent": [
+    {
+      "type": 0,
+      "value": "种子"
+    }
+  ],
+  "torrents.details.general.heading.tracker": [
+    {
+      "type": 0,
+      "value": "Tracker"
+    }
+  ],
+  "torrents.details.general.heading.transfer": [
+    {
+      "type": 0,
+      "value": "传输"
+    }
+  ],
+  "torrents.details.general.location": [
+    {
+      "type": 0,
+      "value": "位置"
+    }
+  ],
+  "torrents.details.general.none": [
+    {
+      "type": 0,
+      "value": "无"
+    }
+  ],
+  "torrents.details.general.peers": [
+    {
+      "type": 0,
+      "value": "节点"
+    }
+  ],
+  "torrents.details.general.scheduler": [
+    {
+      "type": 0,
+      "value": "调度器"
+    }
+  ],
+  "torrents.details.general.scheduler.ignored": [
+    {
+      "type": 0,
+      "value": "已忽略"
+    }
+  ],
+  "torrents.details.general.scheduler.obeyed": [
+    {
+      "type": 0,
+      "value": "已遵守"
+    }
+  ],
+  "torrents.details.general.seeds": [
+    {
+      "type": 0,
+      "value": "做种者"
+    }
+  ],
+  "torrents.details.general.size": [
+    {
+      "type": 0,
+      "value": "大小"
+    }
+  ],
+  "torrents.details.general.tags": [
+    {
+      "type": 0,
+      "value": "标签"
+    }
+  ],
+  "torrents.details.general.tracker.message": [
+    {
+      "type": 0,
+      "value": "Tracker 信息"
+    }
+  ],
+  "torrents.details.general.type": [
+    {
+      "type": 0,
+      "value": "类型"
+    }
+  ],
+  "torrents.details.general.type.private": [
+    {
+      "type": 0,
+      "value": "私有"
+    }
+  ],
+  "torrents.details.general.type.public": [
+    {
+      "type": 0,
+      "value": "公开"
+    }
+  ],
+  "torrents.details.mediainfo": [
+    {
+      "type": 0,
+      "value": "Mediainfo"
+    }
+  ],
+  "torrents.details.peers": [
+    {
+      "type": 0,
+      "value": "节点"
+    }
+  ],
+  "torrents.details.peers.no.data": [
+    {
+      "type": 0,
+      "value": "这个种子没有节点信息。"
+    }
+  ],
+  "torrents.details.selected.files": [
+    {
+      "type": 0,
+      "value": "已选择 "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " 个文件"
+    }
+  ],
+  "torrents.details.selected.files.set.priority": [
+    {
+      "type": 0,
+      "value": "设置优先级"
+    }
+  ],
+  "torrents.details.trackers": [
+    {
+      "type": 0,
+      "value": "Tracker 服务器"
+    }
+  ],
+  "torrents.details.trackers.no.data": [
+    {
+      "type": 0,
+      "value": "这个种子没有 Tracker 信息。"
+    }
+  ],
+  "torrents.details.trackers.type": [
+    {
+      "type": 0,
+      "value": "类型"
+    }
+  ],
+  "torrents.list.cannot.connect": [
+    {
+      "type": 0,
+      "value": "无法连接到 rTorrent."
+    }
+  ],
+  "torrents.list.clear.filters": [
+    {
+      "type": 0,
+      "value": "清除筛选"
+    }
+  ],
+  "torrents.list.context.check.hash": [
+    {
+      "type": 0,
+      "value": "校验"
+    }
+  ],
+  "torrents.list.context.details": [
+    {
+      "type": 0,
+      "value": "种子详情"
+    }
+  ],
+  "torrents.list.context.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "torrents.list.context.move": [
+    {
+      "type": 0,
+      "value": "设置种子位置"
+    }
+  ],
+  "torrents.list.context.pause": [
+    {
+      "type": 0,
+      "value": "暂停"
+    }
+  ],
+  "torrents.list.context.priority": [
+    {
+      "type": 0,
+      "value": "优先级"
+    }
+  ],
+  "torrents.list.context.remove": [
+    {
+      "type": 0,
+      "value": "移除"
+    }
+  ],
+  "torrents.list.context.set.tags": [
+    {
+      "type": 0,
+      "value": "设置标签"
+    }
+  ],
+  "torrents.list.context.start": [
+    {
+      "type": 0,
+      "value": "开始"
+    }
+  ],
+  "torrents.list.context.stop": [
+    {
+      "type": 0,
+      "value": "停止"
+    }
+  ],
+  "torrents.list.drop": [
+    {
+      "type": 0,
+      "value": "将文件拖放到此处，以添加到 rTorrent。"
+    }
+  ],
+  "torrents.list.no.torrents": [
+    {
+      "type": 0,
+      "value": "没有可显示的种子。"
+    }
+  ],
+  "torrents.move.button.set.location": [
+    {
+      "type": 0,
+      "value": "设置路径"
+    }
+  ],
+  "torrents.move.button.state.setting": [
+    {
+      "type": 0,
+      "value": "设置中..."
+    }
+  ],
+  "torrents.move.check_hash.label": [
+    {
+      "type": 0,
+      "value": "校验"
+    }
+  ],
+  "torrents.move.data.label": [
+    {
+      "type": 0,
+      "value": "移动数据"
+    }
+  ],
+  "torrents.move.heading": [
+    {
+      "type": 0,
+      "value": "设置种子路径"
+    }
+  ],
+  "torrents.properties.base.path": [
+    {
+      "type": 0,
+      "value": "位置"
+    }
+  ],
+  "torrents.properties.comment": [
+    {
+      "type": 0,
+      "value": "备注"
+    }
+  ],
+  "torrents.properties.creation.date": [
+    {
+      "type": 0,
+      "value": "创建时间"
+    }
+  ],
+  "torrents.properties.date.added": [
+    {
+      "type": 0,
+      "value": "添加时间"
+    }
+  ],
+  "torrents.properties.download.speed": [
+    {
+      "type": 0,
+      "value": "下载速度"
+    }
+  ],
+  "torrents.properties.download.total": [
+    {
+      "type": 0,
+      "value": "已下载"
+    }
+  ],
+  "torrents.properties.eta": [
+    {
+      "type": 0,
+      "value": "剩余时间"
+    }
+  ],
+  "torrents.properties.free.disk.space": [
+    {
+      "type": 0,
+      "value": "可用磁盘空间"
+    }
+  ],
+  "torrents.properties.hash": [
+    {
+      "type": 0,
+      "value": "Hash"
+    }
+  ],
+  "torrents.properties.ignore.schedule": [
+    {
+      "type": 0,
+      "value": "忽略调度器"
+    }
+  ],
+  "torrents.properties.is.private": [
+    {
+      "type": 0,
+      "value": "私有"
+    }
+  ],
+  "torrents.properties.name": [
+    {
+      "type": 0,
+      "value": "名称"
+    }
+  ],
+  "torrents.properties.peers": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "torrents.properties.percentage": [
+    {
+      "type": 0,
+      "value": "完成百分比"
+    }
+  ],
+  "torrents.properties.ratio": [
+    {
+      "type": 0,
+      "value": "分享率"
+    }
+  ],
+  "torrents.properties.seeds": [
+    {
+      "type": 0,
+      "value": "Seeds"
+    }
+  ],
+  "torrents.properties.size": [
+    {
+      "type": 0,
+      "value": "文件大小"
+    }
+  ],
+  "torrents.properties.tags": [
+    {
+      "type": 0,
+      "value": "标签"
+    }
+  ],
+  "torrents.properties.tracker.message": [
+    {
+      "type": 0,
+      "value": "Tracker 信息"
+    }
+  ],
+  "torrents.properties.trackers": [
+    {
+      "type": 0,
+      "value": "Trackers"
+    }
+  ],
+  "torrents.properties.upload.speed": [
+    {
+      "type": 0,
+      "value": "上传速度"
+    }
+  ],
+  "torrents.properties.upload.total": [
+    {
+      "type": 0,
+      "value": "已上传"
+    }
+  ],
+  "torrents.remove": [
+    {
+      "type": 0,
+      "value": "移除种子"
+    }
+  ],
+  "torrents.remove.are.you.sure": [
+    {
+      "type": 0,
+      "value": "你确定你想要删除 # 个种子"
+    }
+  ],
+  "torrents.remove.delete.data": [
+    {
+      "type": 0,
+      "value": "删除数据"
+    }
+  ],
+  "torrents.remove.error.no.torrents.selected": [
+    {
+      "type": 0,
+      "value": "您没有选择任何种子。"
+    }
+  ],
+  "torrents.set.tags.button.set": [
+    {
+      "type": 0,
+      "value": "设置标签"
+    }
+  ],
+  "torrents.set.tags.enter.tags": [
+    {
+      "type": 0,
+      "value": "输入标签"
+    }
+  ],
+  "torrents.set.tags.heading": [
+    {
+      "type": 0,
+      "value": "设置标签"
+    }
+  ],
+  "torrents.sort.title": [
+    {
+      "type": 0,
+      "value": "排序方式"
+    }
+  ],
+  "unit.size.byte": [
+    {
+      "type": 0,
+      "value": "B"
+    }
+  ],
+  "unit.size.gigabyte": [
+    {
+      "type": 0,
+      "value": "GB"
+    }
+  ],
+  "unit.size.kilobyte": [
+    {
+      "type": 0,
+      "value": "kB"
+    }
+  ],
+  "unit.size.megabyte": [
+    {
+      "type": 0,
+      "value": "MB"
+    }
+  ],
+  "unit.size.terabyte": [
+    {
+      "type": 0,
+      "value": "TB"
+    }
+  ],
+  "unit.speed": [
+    {
+      "type": 1,
+      "value": "baseUnit"
+    },
+    {
+      "type": 0,
+      "value": "/s"
+    }
+  ],
+  "unit.time.day": [
+    {
+      "type": 0,
+      "value": "天"
+    }
+  ],
+  "unit.time.hour": [
+    {
+      "type": 0,
+      "value": "时"
+    }
+  ],
+  "unit.time.infinity": [
+    {
+      "type": 0,
+      "value": "∞"
+    }
+  ],
+  "unit.time.minute": [
+    {
+      "type": 0,
+      "value": "分"
+    }
+  ],
+  "unit.time.second": [
+    {
+      "type": 0,
+      "value": "秒"
+    }
+  ],
+  "unit.time.week": [
+    {
+      "type": 0,
+      "value": "周"
+    }
+  ],
+  "unit.time.year": [
+    {
+      "type": 0,
+      "value": "年"
+    }
+  ],
+  "window.title": [
+    {
+      "type": 0,
+      "value": "↓ "
+    },
+    {
+      "type": 1,
+      "value": "down"
+    },
+    {
+      "type": 0,
+      "value": " ↑ "
+    },
+    {
+      "type": 1,
+      "value": "up"
+    },
+    {
+      "type": 0,
+      "value": " - Flood"
+    }
+  ]
+}

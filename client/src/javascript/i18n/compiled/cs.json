@@ -1,0 +1,2188 @@
+{
+  "actionbar.button.add.torrent": [
+    {
+      "type": 0,
+      "value": "Přidat Torrent"
+    }
+  ],
+  "actionbar.button.remove.torrent": [
+    {
+      "type": 0,
+      "value": "Odebrat Torrent"
+    }
+  ],
+  "actionbar.button.start.torrent": [
+    {
+      "type": 0,
+      "value": "Spustit Torrent"
+    }
+  ],
+  "actionbar.button.stop.torrent": [
+    {
+      "type": 0,
+      "value": "Zastavit Torrent"
+    }
+  ],
+  "alert.settings.saved": [
+    {
+      "type": 0,
+      "value": "Nastavení bylo úspěšně uloženo."
+    }
+  ],
+  "alert.torrent.add": [
+    {
+      "type": 0,
+      "value": "Úspěšně přidáno "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrenty"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.add.failed": [
+    {
+      "type": 0,
+      "value": "Nepodařilo se přidat "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrenty"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.move": [
+    {
+      "type": 0,
+      "value": "Úspěšně přesunuto "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrenty"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.move.failed": [
+    {
+      "type": 0,
+      "value": "Nepodařilo se přesunout "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrenty"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.remove": [
+    {
+      "type": 0,
+      "value": "Úspěšně odstraněno "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrenty"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.remove.failed": [
+    {
+      "type": 0,
+      "value": "Nepodařilo se odstranit "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrenty"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "auth.add.user": [
+    {
+      "type": 0,
+      "value": "Přidat uživatele"
+    }
+  ],
+  "auth.admin": [
+    {
+      "type": 0,
+      "value": "Admin"
+    }
+  ],
+  "auth.connectionType": [
+    {
+      "type": 0,
+      "value": "Typ připojení rTorrent"
+    }
+  ],
+  "auth.connectionType.socket": [
+    {
+      "type": 0,
+      "value": "Unixní raketa"
+    }
+  ],
+  "auth.connectionType.tcp": [
+    {
+      "type": 0,
+      "value": "TCP"
+    }
+  ],
+  "auth.create.account": [
+    {
+      "type": 0,
+      "value": "Vytvořit účet"
+    }
+  ],
+  "auth.create.an.account": [
+    {
+      "type": 0,
+      "value": "Vytvořit účet"
+    }
+  ],
+  "auth.create.an.account.intro": [
+    {
+      "type": 0,
+      "value": "Vítejte v záplavě!"
+    }
+  ],
+  "auth.current.user": [
+    {
+      "type": 0,
+      "value": "Aktuální uživatel"
+    }
+  ],
+  "auth.error.username.empty": [
+    {
+      "type": 0,
+      "value": "Uživatelské jméno nemůže být prázdné."
+    }
+  ],
+  "auth.log.in": [
+    {
+      "type": 0,
+      "value": "Přihlásit se"
+    }
+  ],
+  "auth.login": [
+    {
+      "type": 0,
+      "value": "Přihlásit se"
+    }
+  ],
+  "auth.login.intro": [
+    {
+      "type": 0,
+      "value": "Log in to your account."
+    }
+  ],
+  "auth.message.not.admin": [
+    {
+      "type": 0,
+      "value": "Uživatel není správce"
+    }
+  ],
+  "auth.password": [
+    {
+      "type": 0,
+      "value": "Heslo"
+    }
+  ],
+  "auth.rtorrentHost": [
+    {
+      "type": 0,
+      "value": "Hostitel rTorrentu"
+    }
+  ],
+  "auth.rtorrentPort": [
+    {
+      "type": 0,
+      "value": "Port rTorrentu"
+    }
+  ],
+  "auth.rtorrentSocket": [
+    {
+      "type": 0,
+      "value": "Raketa rTorrentu"
+    }
+  ],
+  "auth.rtorrentSocketPath": [
+    {
+      "type": 0,
+      "value": "Cesta k rtorrentu"
+    }
+  ],
+  "auth.user.accounts": [
+    {
+      "type": 0,
+      "value": "Uživatelské účty"
+    }
+  ],
+  "auth.username": [
+    {
+      "type": 0,
+      "value": "Uživatelské jméno"
+    }
+  ],
+  "button.add": [
+    {
+      "type": 0,
+      "value": "Přidat"
+    }
+  ],
+  "button.cancel": [
+    {
+      "type": 0,
+      "value": "Zrušit"
+    }
+  ],
+  "button.new": [
+    {
+      "type": 0,
+      "value": "Nové"
+    }
+  ],
+  "button.no": [
+    {
+      "type": 0,
+      "value": "Ne"
+    }
+  ],
+  "button.save": [
+    {
+      "type": 0,
+      "value": "Uložit nastavení"
+    }
+  ],
+  "button.save.feed": [
+    {
+      "type": 0,
+      "value": "Uložit"
+    }
+  ],
+  "button.state.adding": [
+    {
+      "type": 0,
+      "value": "Přidávání..."
+    }
+  ],
+  "button.test": [
+    {
+      "type": 0,
+      "value": "Zkouška"
+    }
+  ],
+  "button.yes": [
+    {
+      "type": 0,
+      "value": "Ano"
+    }
+  ],
+  "connection-interruption.heading": [
+    {
+      "type": 0,
+      "value": "Nelze se připojit k rTorrent"
+    }
+  ],
+  "connection-interruption.verification-error": [
+    {
+      "type": 0,
+      "value": "Nelze ověřit spojení."
+    }
+  ],
+  "connection-interruption.verification-success": [
+    {
+      "type": 0,
+      "value": "Připojení bylo úspěšné"
+    }
+  ],
+  "connection-interruption.verify-settings-prompt": [
+    {
+      "type": 0,
+      "value": "Pojďme ověřit nastavení připojení."
+    }
+  ],
+  "connectivity.modal.content": [
+    {
+      "type": 0,
+      "value": "Nelze se připojit k rTorrent. Aktualizujte prosím informace nyní."
+    }
+  ],
+  "connectivity.modal.title": [
+    {
+      "type": 0,
+      "value": "Problém s připojením"
+    }
+  ],
+  "dependency.loading.notifications": [
+    {
+      "type": 0,
+      "value": "Notifications"
+    }
+  ],
+  "dependency.loading.torrent.list": [
+    {
+      "type": 0,
+      "value": "Torrent List"
+    }
+  ],
+  "dependency.loading.torrent.taxonomy": [
+    {
+      "type": 0,
+      "value": "Torrent Taxonomy"
+    }
+  ],
+  "dependency.loading.transfer.history": [
+    {
+      "type": 0,
+      "value": "Data Transfer History"
+    }
+  ],
+  "dependency.loading.transfer.rate.details": [
+    {
+      "type": 0,
+      "value": "Data Transfer Rate Details"
+    }
+  ],
+  "feeds.add.automatic.download.rule": [
+    {
+      "type": 0,
+      "value": "Přidat pravidlo pro stahování"
+    }
+  ],
+  "feeds.add.feed": [
+    {
+      "type": 0,
+      "value": "Přidat kanál"
+    }
+  ],
+  "feeds.applicable.feed": [
+    {
+      "type": 0,
+      "value": "Použitelný kanál"
+    }
+  ],
+  "feeds.apply.tags": [
+    {
+      "type": 0,
+      "value": "Použít štítky"
+    }
+  ],
+  "feeds.browse.feeds": [
+    {
+      "type": 0,
+      "value": "Procházet kanály"
+    }
+  ],
+  "feeds.exclude": [
+    {
+      "type": 0,
+      "value": "Vyjmout"
+    }
+  ],
+  "feeds.exclude.pattern": [
+    {
+      "type": 0,
+      "value": "Vyloučit vzor"
+    }
+  ],
+  "feeds.existing.feeds": [
+    {
+      "type": 0,
+      "value": "Existující kanály"
+    }
+  ],
+  "feeds.existing.rules": [
+    {
+      "type": 0,
+      "value": "Stávající pravidla"
+    }
+  ],
+  "feeds.label": [
+    {
+      "type": 0,
+      "value": "Popisek"
+    }
+  ],
+  "feeds.match": [
+    {
+      "type": 0,
+      "value": "Zápas"
+    }
+  ],
+  "feeds.match.count": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " shoduje se s"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " se shoduje s"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "feeds.match.pattern": [
+    {
+      "type": 0,
+      "value": "Vzor zápasu"
+    }
+  ],
+  "feeds.no.feeds.available": [
+    {
+      "type": 0,
+      "value": "Žádné zdroje nejsou k dispozici."
+    }
+  ],
+  "feeds.no.feeds.defined": [
+    {
+      "type": 0,
+      "value": "Nebyly definovány žádné kanály."
+    }
+  ],
+  "feeds.no.rules.defined": [
+    {
+      "type": 0,
+      "value": "Nebyla definována žádná pravidla."
+    }
+  ],
+  "feeds.regEx": [
+    {
+      "type": 0,
+      "value": "RegEx"
+    }
+  ],
+  "feeds.search": [
+    {
+      "type": 0,
+      "value": "Hledat termín"
+    }
+  ],
+  "feeds.select.feed": [
+    {
+      "type": 0,
+      "value": "Vybrat kanál"
+    }
+  ],
+  "feeds.select.interval": [
+    {
+      "type": 0,
+      "value": "Interval"
+    }
+  ],
+  "feeds.start.on.load": [
+    {
+      "type": 0,
+      "value": "Spustit při načítání"
+    }
+  ],
+  "feeds.tabs.download.rules": [
+    {
+      "type": 0,
+      "value": "Pravidla pro stahování"
+    }
+  ],
+  "feeds.tabs.feeds": [
+    {
+      "type": 0,
+      "value": "Zdroje"
+    }
+  ],
+  "feeds.tabs.heading": [
+    {
+      "type": 0,
+      "value": "Torrent kanály"
+    }
+  ],
+  "feeds.tags": [
+    {
+      "type": 0,
+      "value": "Štítky"
+    }
+  ],
+  "feeds.time.day": [
+    {
+      "type": 0,
+      "value": "Dny"
+    }
+  ],
+  "feeds.time.hr": [
+    {
+      "type": 0,
+      "value": "Hodiny"
+    }
+  ],
+  "feeds.time.min": [
+    {
+      "type": 0,
+      "value": "Zápis z jednání"
+    }
+  ],
+  "feeds.torrent.destination": [
+    {
+      "type": 0,
+      "value": "Cíl Torrentu"
+    }
+  ],
+  "feeds.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "feeds.validation.interval.not.positive": [
+    {
+      "type": 0,
+      "value": "The interval must be a positive integer."
+    }
+  ],
+  "feeds.validation.invalid.regular.expression": [
+    {
+      "type": 0,
+      "value": "Neplatný regulární výraz."
+    }
+  ],
+  "feeds.validation.must.select.feed": [
+    {
+      "type": 0,
+      "value": "Musíte vybrat kanál."
+    }
+  ],
+  "feeds.validation.must.specify.destination": [
+    {
+      "type": 0,
+      "value": "Musíte zadat destinaci."
+    }
+  ],
+  "feeds.validation.must.specify.label": [
+    {
+      "type": 0,
+      "value": "Musíte zadat popisek."
+    }
+  ],
+  "feeds.validation.must.specify.valid.feed.url": [
+    {
+      "type": 0,
+      "value": "Musíte zadat platnou URL kanálu."
+    }
+  ],
+  "filesystem.empty.directory": [
+    {
+      "type": 0,
+      "value": "Prázdný adresář."
+    }
+  ],
+  "filesystem.error.eacces": [
+    {
+      "type": 0,
+      "value": "Záplava nemá oprávnění ke čtení tohoto adresáře."
+    }
+  ],
+  "filesystem.error.enoent": [
+    {
+      "type": 0,
+      "value": "Tato cesta neexistuje. Bude vytvořena."
+    }
+  ],
+  "filesystem.fetching": [
+    {
+      "type": 0,
+      "value": "Načítání adresářové struktury..."
+    }
+  ],
+  "filter.all": [
+    {
+      "type": 0,
+      "value": "Vše"
+    }
+  ],
+  "filter.status.active": [
+    {
+      "type": 0,
+      "value": "Aktivní"
+    }
+  ],
+  "filter.status.checking": [
+    {
+      "type": 0,
+      "value": "Kontrola"
+    }
+  ],
+  "filter.status.completed": [
+    {
+      "type": 0,
+      "value": "Complete"
+    }
+  ],
+  "filter.status.downloading": [
+    {
+      "type": 0,
+      "value": "Stahování"
+    }
+  ],
+  "filter.status.error": [
+    {
+      "type": 0,
+      "value": "Chyba"
+    }
+  ],
+  "filter.status.inactive": [
+    {
+      "type": 0,
+      "value": "Neaktivní"
+    }
+  ],
+  "filter.status.stopped": [
+    {
+      "type": 0,
+      "value": "Zastaveno"
+    }
+  ],
+  "filter.status.title": [
+    {
+      "type": 0,
+      "value": "Filtrovat podle stavu"
+    }
+  ],
+  "filter.tag.title": [
+    {
+      "type": 0,
+      "value": "Filtrovat podle tagu"
+    }
+  ],
+  "filter.tracker.title": [
+    {
+      "type": 0,
+      "value": "Filtrovat podle sledovače"
+    }
+  ],
+  "filter.untagged": [
+    {
+      "type": 0,
+      "value": "Neoznačeno"
+    }
+  ],
+  "general.ago": [
+    {
+      "type": 0,
+      "value": "zpět"
+    }
+  ],
+  "general.at": [
+    {
+      "type": 0,
+      "value": "v"
+    }
+  ],
+  "general.clipboard.copied": [
+    {
+      "type": 0,
+      "value": "Zkopírováno"
+    }
+  ],
+  "general.clipboard.copy": [
+    {
+      "type": 0,
+      "value": "Kopírovat"
+    }
+  ],
+  "general.of": [
+    {
+      "type": 0,
+      "value": "z"
+    }
+  ],
+  "general.to": [
+    {
+      "type": 0,
+      "value": "do"
+    }
+  ],
+  "locale.language.auto": [
+    {
+      "type": 0,
+      "value": "Automaticky"
+    }
+  ],
+  "mediainfo.execError": [
+    {
+      "type": 0,
+      "value": "Došlo k chybě při běhu mediainfo na serveru. Zkontrolujte, zda je mediainfo nainstalováno a dostupné v PATH na Flood."
+    }
+  ],
+  "mediainfo.fetching": [
+    {
+      "type": 0,
+      "value": "Načítání..."
+    }
+  ],
+  "mediainfo.heading": [
+    {
+      "type": 0,
+      "value": "Mediainfo výstup"
+    }
+  ],
+  "notification.clear.all": [
+    {
+      "type": 0,
+      "value": "Vymazat vše"
+    }
+  ],
+  "notification.showing": [
+    {
+      "type": 0,
+      "value": "Zobrazení"
+    }
+  ],
+  "notification.torrent.errored.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.errored.heading": [
+    {
+      "type": 0,
+      "value": "Nahlášena chyba"
+    }
+  ],
+  "notification.torrent.finished.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.finished.heading": [
+    {
+      "type": 0,
+      "value": "Dokončené stahování"
+    }
+  ],
+  "priority.dont.download": [
+    {
+      "type": 0,
+      "value": "Nestahovat"
+    }
+  ],
+  "priority.high": [
+    {
+      "type": 0,
+      "value": "Vysoká"
+    }
+  ],
+  "priority.low": [
+    {
+      "type": 0,
+      "value": "Nízká"
+    }
+  ],
+  "priority.normal": [
+    {
+      "type": 0,
+      "value": "Normální"
+    }
+  ],
+  "settings.about.flood": [
+    {
+      "type": 0,
+      "value": "O záplavách"
+    }
+  ],
+  "settings.bandwidth.slots.download.divider.label": [
+    {
+      "type": 0,
+      "value": "Stáhnout Slot Divider"
+    }
+  ],
+  "settings.bandwidth.slots.download.global.label": [
+    {
+      "type": 0,
+      "value": "Stáhnout sloty globálně"
+    }
+  ],
+  "settings.bandwidth.slots.download.label": [
+    {
+      "type": 0,
+      "value": "Stáhnout Slot Per Torrent"
+    }
+  ],
+  "settings.bandwidth.slots.heading": [
+    {
+      "type": 0,
+      "value": "Dostupnost slotu"
+    }
+  ],
+  "settings.bandwidth.slots.upload.divider.label": [
+    {
+      "type": 0,
+      "value": "Nahrát rozdělovač slotů"
+    }
+  ],
+  "settings.bandwidth.slots.upload.global.label": [
+    {
+      "type": 0,
+      "value": "Nahrát globální sloty"
+    }
+  ],
+  "settings.bandwidth.slots.upload.label": [
+    {
+      "type": 0,
+      "value": "Nahrát sloty na Torrent"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.download.label": [
+    {
+      "type": 0,
+      "value": "Přednastavení rozbalovacího seznamu: Stáhnout"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
+    {
+      "type": 0,
+      "value": "Předvolby rozbalovacího seznamu: Nahrát"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.download": [
+    {
+      "type": 0,
+      "value": "Globální rychlost stahování plynu"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.upload": [
+    {
+      "type": 0,
+      "value": "Plyn globální rychlosti nahrávání"
+    }
+  ],
+  "settings.bandwidth.transferrate.heading": [
+    {
+      "type": 0,
+      "value": "Převodní rychlost tahů"
+    }
+  ],
+  "settings.connectivity.dht.label": [
+    {
+      "type": 0,
+      "value": "Povolit DHT"
+    }
+  ],
+  "settings.connectivity.dht.port.label": [
+    {
+      "type": 0,
+      "value": "Port DHT"
+    }
+  ],
+  "settings.connectivity.dpd.heading": [
+    {
+      "type": 0,
+      "value": "Decentralizované objevení Klienta"
+    }
+  ],
+  "settings.connectivity.incoming.heading": [
+    {
+      "type": 0,
+      "value": "Příchozí připojení"
+    }
+  ],
+  "settings.connectivity.ip.hostname.label": [
+    {
+      "type": 0,
+      "value": "Nahlášený IP/Hostname"
+    }
+  ],
+  "settings.connectivity.max.http.connections": [
+    {
+      "type": 0,
+      "value": "Maximální HTTP připojení"
+    }
+  ],
+  "settings.connectivity.peer.exchange.label": [
+    {
+      "type": 0,
+      "value": "Povolit Peer Exchange"
+    }
+  ],
+  "settings.connectivity.peers.desired.label": [
+    {
+      "type": 0,
+      "value": "Klienti požadováni"
+    }
+  ],
+  "settings.connectivity.peers.heading": [
+    {
+      "type": 0,
+      "value": "Klienti"
+    }
+  ],
+  "settings.connectivity.peers.max.label": [
+    {
+      "type": 0,
+      "value": "Maximální počet klientů"
+    }
+  ],
+  "settings.connectivity.peers.min.label": [
+    {
+      "type": 0,
+      "value": "Minimální počet klientů"
+    }
+  ],
+  "settings.connectivity.peers.seeding.max.label": [
+    {
+      "type": 0,
+      "value": "Maximální počet Distribucí Klientů"
+    }
+  ],
+  "settings.connectivity.peers.seeding.min.label": [
+    {
+      "type": 0,
+      "value": "Minimální počet Distribucí Klientů"
+    }
+  ],
+  "settings.connectivity.port.open.label": [
+    {
+      "type": 0,
+      "value": "Otevřít port"
+    }
+  ],
+  "settings.connectivity.port.randomize.label": [
+    {
+      "type": 0,
+      "value": "Náhodné nastavení portu"
+    }
+  ],
+  "settings.connectivity.port.range.label": [
+    {
+      "type": 0,
+      "value": "Rozsah portu"
+    }
+  ],
+  "settings.diskusage.mount.points": [
+    {
+      "type": 0,
+      "value": "Využití přípojných bodů disku"
+    }
+  ],
+  "settings.diskusage.show": [
+    {
+      "type": 0,
+      "value": "Zobrazit"
+    }
+  ],
+  "settings.resources.disk.check.hash.label": [
+    {
+      "type": 0,
+      "value": "Ověřit hash po dokončení"
+    }
+  ],
+  "settings.resources.disk.download.location.label": [
+    {
+      "type": 0,
+      "value": "Výchozí adresář pro stahování"
+    }
+  ],
+  "settings.resources.disk.heading": [
+    {
+      "type": 0,
+      "value": "Disk"
+    }
+  ],
+  "settings.resources.max.open.files": [
+    {
+      "type": 0,
+      "value": "Maximální počet otevřených souborů"
+    }
+  ],
+  "settings.resources.memory.heading": [
+    {
+      "type": 0,
+      "value": "Paměť"
+    }
+  ],
+  "settings.resources.memory.max.label": [
+    {
+      "type": 0,
+      "value": "Maximální využití paměti"
+    }
+  ],
+  "settings.tabs.about": [
+    {
+      "type": 0,
+      "value": "O aplikaci"
+    }
+  ],
+  "settings.tabs.authentication": [
+    {
+      "type": 0,
+      "value": "Ověření"
+    }
+  ],
+  "settings.tabs.bandwidth": [
+    {
+      "type": 0,
+      "value": "Šířka pásma"
+    }
+  ],
+  "settings.tabs.connectivity": [
+    {
+      "type": 0,
+      "value": "Připojení"
+    }
+  ],
+  "settings.tabs.diskusage": [
+    {
+      "type": 0,
+      "value": "Využití disku"
+    }
+  ],
+  "settings.tabs.heading": [
+    {
+      "type": 0,
+      "value": "Nastavení"
+    }
+  ],
+  "settings.tabs.resources": [
+    {
+      "type": 0,
+      "value": "Zdroje"
+    }
+  ],
+  "settings.tabs.userinterface": [
+    {
+      "type": 0,
+      "value": "Uživatelské rozhraní"
+    }
+  ],
+  "settings.ui.displayed.details": [
+    {
+      "type": 0,
+      "value": "Detailní torrent sloupce"
+    }
+  ],
+  "settings.ui.language": [
+    {
+      "type": 0,
+      "value": "Jazyk"
+    }
+  ],
+  "settings.ui.locale": [
+    {
+      "type": 0,
+      "value": "Místní prostředí"
+    }
+  ],
+  "settings.ui.torrent.details.enabled": [
+    {
+      "type": 0,
+      "value": "Povoleno"
+    }
+  ],
+  "settings.ui.torrent.details.tags.placement": [
+    {
+      "type": 0,
+      "value": "V rozšířeném zobrazení, značky fungují nejlépe na konci seznamu."
+    }
+  ],
+  "settings.ui.torrent.list": [
+    {
+      "type": 0,
+      "value": "Zobrazení seznamu Torrentů"
+    }
+  ],
+  "settings.ui.torrent.size": [
+    {
+      "type": 0,
+      "value": "Velikost Torrentu"
+    }
+  ],
+  "settings.ui.torrent.size.condensed": [
+    {
+      "type": 0,
+      "value": "Zkrácené zobrazení"
+    }
+  ],
+  "settings.ui.torrent.size.expanded": [
+    {
+      "type": 0,
+      "value": "Rozšířené zobrazení"
+    }
+  ],
+  "sidebar.button.feeds": [
+    {
+      "type": 0,
+      "value": "Zdroje"
+    }
+  ],
+  "sidebar.button.log.out": [
+    {
+      "type": 0,
+      "value": "Odhlásit se"
+    }
+  ],
+  "sidebar.button.notifications": [
+    {
+      "type": 0,
+      "value": "Oznámení"
+    }
+  ],
+  "sidebar.button.settings": [
+    {
+      "type": 0,
+      "value": "Nastavení"
+    }
+  ],
+  "sidebar.button.speedlimits": [
+    {
+      "type": 0,
+      "value": "Omezení rychlosti"
+    }
+  ],
+  "sidebar.search.placeholder": [
+    {
+      "type": 0,
+      "value": "Hledat torrenty"
+    }
+  ],
+  "sidebar.speedlimits.download": [
+    {
+      "type": 0,
+      "value": "DOWNLOAD"
+    }
+  ],
+  "sidebar.speedlimits.upload": [
+    {
+      "type": 0,
+      "value": "UPLOAD"
+    }
+  ],
+  "sidebar.transferdata.downloaded": [
+    {
+      "type": 0,
+      "value": "Staženo"
+    }
+  ],
+  "sidebar.transferdata.uploaded": [
+    {
+      "type": 0,
+      "value": "Nahráno"
+    }
+  ],
+  "speed.unlimited": [
+    {
+      "type": 0,
+      "value": "Bez omezení"
+    }
+  ],
+  "status.diskusage.title": [
+    {
+      "type": 0,
+      "value": "Využití disku"
+    }
+  ],
+  "torrent.list.peers": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "of"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrent.list.peers.of": [
+    {
+      "type": 0,
+      "value": "z"
+    }
+  ],
+  "torrents.add.button.add": [
+    {
+      "type": 0,
+      "value": "Přidat Torrent"
+    }
+  ],
+  "torrents.add.destination.label": [
+    {
+      "type": 0,
+      "value": "Místo určení"
+    }
+  ],
+  "torrents.add.destination.placeholder": [
+    {
+      "type": 0,
+      "value": "Místo určení"
+    }
+  ],
+  "torrents.add.heading": [
+    {
+      "type": 0,
+      "value": "Přidat torrenty"
+    }
+  ],
+  "torrents.add.start.label": [
+    {
+      "type": 0,
+      "value": "Spustit Torrent"
+    }
+  ],
+  "torrents.add.tab.file.browse": [
+    {
+      "type": 0,
+      "value": "nebo klikněte pro procházení"
+    }
+  ],
+  "torrents.add.tab.file.drop": [
+    {
+      "type": 0,
+      "value": "Sem přetáhněte některé soubory."
+    }
+  ],
+  "torrents.add.tab.file.title": [
+    {
+      "type": 0,
+      "value": "Podle souboru"
+    }
+  ],
+  "torrents.add.tab.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Torrent URL nebo Magnet odkaz"
+    }
+  ],
+  "torrents.add.tab.url.title": [
+    {
+      "type": 0,
+      "value": "Podle URL"
+    }
+  ],
+  "torrents.add.tags": [
+    {
+      "type": 0,
+      "value": "Štítky"
+    }
+  ],
+  "torrents.add.torrents.label": [
+    {
+      "type": 0,
+      "value": "Torrenty"
+    }
+  ],
+  "torrents.destination.base_path": [
+    {
+      "type": 0,
+      "value": "Použít jako základní cestu"
+    }
+  ],
+  "torrents.details.actions.pause": [
+    {
+      "type": 0,
+      "value": "Pozastavit"
+    }
+  ],
+  "torrents.details.actions.start": [
+    {
+      "type": 0,
+      "value": "Začít"
+    }
+  ],
+  "torrents.details.actions.stop": [
+    {
+      "type": 0,
+      "value": "Zastavit"
+    }
+  ],
+  "torrents.details.details": [
+    {
+      "type": 0,
+      "value": "Detaily"
+    }
+  ],
+  "torrents.details.files": [
+    {
+      "type": 0,
+      "value": "Soubory"
+    }
+  ],
+  "torrents.details.files.download.file": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Stáhněte soubor"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Stáhněte soubory"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.files.loading": [
+    {
+      "type": 0,
+      "value": "Načítání detailu souboru..."
+    }
+  ],
+  "torrents.details.general.comment": [
+    {
+      "type": 0,
+      "value": "Komentář"
+    }
+  ],
+  "torrents.details.general.connected": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " připojen k "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrents.details.general.date.added": [
+    {
+      "type": 0,
+      "value": "Přidáno"
+    }
+  ],
+  "torrents.details.general.date.created": [
+    {
+      "type": 0,
+      "value": "Datum vytvoření"
+    }
+  ],
+  "torrents.details.general.downloaded": [
+    {
+      "type": 0,
+      "value": "Staženo"
+    }
+  ],
+  "torrents.details.general.free.disk.space": [
+    {
+      "type": 0,
+      "value": "Volné místo na disku"
+    }
+  ],
+  "torrents.details.general.hash": [
+    {
+      "type": 0,
+      "value": "Hash"
+    }
+  ],
+  "torrents.details.general.heading.general": [
+    {
+      "type": 0,
+      "value": "Obecná ustanovení"
+    }
+  ],
+  "torrents.details.general.heading.torrent": [
+    {
+      "type": 0,
+      "value": "Torrent"
+    }
+  ],
+  "torrents.details.general.heading.tracker": [
+    {
+      "type": 0,
+      "value": "Sledování"
+    }
+  ],
+  "torrents.details.general.heading.transfer": [
+    {
+      "type": 0,
+      "value": "Převod"
+    }
+  ],
+  "torrents.details.general.location": [
+    {
+      "type": 0,
+      "value": "Poloha"
+    }
+  ],
+  "torrents.details.general.none": [
+    {
+      "type": 0,
+      "value": "Nic"
+    }
+  ],
+  "torrents.details.general.peers": [
+    {
+      "type": 0,
+      "value": "Klienti"
+    }
+  ],
+  "torrents.details.general.scheduler": [
+    {
+      "type": 0,
+      "value": "Plánovač"
+    }
+  ],
+  "torrents.details.general.scheduler.ignored": [
+    {
+      "type": 0,
+      "value": "Ignorováno"
+    }
+  ],
+  "torrents.details.general.scheduler.obeyed": [
+    {
+      "type": 0,
+      "value": "Ovesné"
+    }
+  ],
+  "torrents.details.general.seeds": [
+    {
+      "type": 0,
+      "value": "Semena"
+    }
+  ],
+  "torrents.details.general.size": [
+    {
+      "type": 0,
+      "value": "Velikost"
+    }
+  ],
+  "torrents.details.general.tags": [
+    {
+      "type": 0,
+      "value": "Štítky"
+    }
+  ],
+  "torrents.details.general.tracker.message": [
+    {
+      "type": 0,
+      "value": "Sledovací zpráva"
+    }
+  ],
+  "torrents.details.general.type": [
+    {
+      "type": 0,
+      "value": "Typ"
+    }
+  ],
+  "torrents.details.general.type.private": [
+    {
+      "type": 0,
+      "value": "Soukromé"
+    }
+  ],
+  "torrents.details.general.type.public": [
+    {
+      "type": 0,
+      "value": "Veřejnost"
+    }
+  ],
+  "torrents.details.mediainfo": [
+    {
+      "type": 0,
+      "value": "Mediainfo"
+    }
+  ],
+  "torrents.details.peers": [
+    {
+      "type": 0,
+      "value": "Klienti"
+    }
+  ],
+  "torrents.details.peers.no.data": [
+    {
+      "type": 0,
+      "value": "Pro tento torrent nejsou k dispozici žádná klientská data."
+    }
+  ],
+  "torrents.details.selected.files": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " vybral soubor"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " vybrané soubory"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.selected.files.set.priority": [
+    {
+      "type": 0,
+      "value": "Nastavit prioritu"
+    }
+  ],
+  "torrents.details.trackers": [
+    {
+      "type": 0,
+      "value": "Sledovače"
+    }
+  ],
+  "torrents.details.trackers.no.data": [
+    {
+      "type": 0,
+      "value": "Pro tento torrent nejsou k dispozici žádná data trackeru."
+    }
+  ],
+  "torrents.details.trackers.type": [
+    {
+      "type": 0,
+      "value": "Typ"
+    }
+  ],
+  "torrents.list.cannot.connect": [
+    {
+      "type": 0,
+      "value": "Nelze se připojit k rTorrent."
+    }
+  ],
+  "torrents.list.clear.filters": [
+    {
+      "type": 0,
+      "value": "Vymazat filtry"
+    }
+  ],
+  "torrents.list.context.check.hash": [
+    {
+      "type": 0,
+      "value": "Zkontrolovat Hash"
+    }
+  ],
+  "torrents.list.context.details": [
+    {
+      "type": 0,
+      "value": "Podrobnosti Torrentu"
+    }
+  ],
+  "torrents.list.context.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "torrents.list.context.move": [
+    {
+      "type": 0,
+      "value": "Nastavit umístění Torrentu"
+    }
+  ],
+  "torrents.list.context.pause": [
+    {
+      "type": 0,
+      "value": "Pozastavit"
+    }
+  ],
+  "torrents.list.context.priority": [
+    {
+      "type": 0,
+      "value": "Priorita"
+    }
+  ],
+  "torrents.list.context.remove": [
+    {
+      "type": 0,
+      "value": "Odebrat"
+    }
+  ],
+  "torrents.list.context.set.tags": [
+    {
+      "type": 0,
+      "value": "Nastavit štítky"
+    }
+  ],
+  "torrents.list.context.start": [
+    {
+      "type": 0,
+      "value": "Začít"
+    }
+  ],
+  "torrents.list.context.stop": [
+    {
+      "type": 0,
+      "value": "Zastavit"
+    }
+  ],
+  "torrents.list.drop": [
+    {
+      "type": 0,
+      "value": "Přetáhněte soubory pro jejich přidání do rTorrent."
+    }
+  ],
+  "torrents.list.no.torrents": [
+    {
+      "type": 0,
+      "value": "Žádné torrenty k zobrazení."
+    }
+  ],
+  "torrents.move.button.set.location": [
+    {
+      "type": 0,
+      "value": "Nastavit umístění"
+    }
+  ],
+  "torrents.move.button.state.setting": [
+    {
+      "type": 0,
+      "value": "Nastavení..."
+    }
+  ],
+  "torrents.move.check_hash.label": [
+    {
+      "type": 0,
+      "value": "Zkontrolovat hash"
+    }
+  ],
+  "torrents.move.data.label": [
+    {
+      "type": 0,
+      "value": "Přesunout data"
+    }
+  ],
+  "torrents.move.heading": [
+    {
+      "type": 0,
+      "value": "Nastavit umístění Torrentu"
+    }
+  ],
+  "torrents.properties.base.path": [
+    {
+      "type": 0,
+      "value": "Základní cesta"
+    }
+  ],
+  "torrents.properties.comment": [
+    {
+      "type": 0,
+      "value": "Komentář"
+    }
+  ],
+  "torrents.properties.creation.date": [
+    {
+      "type": 0,
+      "value": "Datum vytvoření"
+    }
+  ],
+  "torrents.properties.date.added": [
+    {
+      "type": 0,
+      "value": "Přidáno"
+    }
+  ],
+  "torrents.properties.download.speed": [
+    {
+      "type": 0,
+      "value": "Rychlost stahování"
+    }
+  ],
+  "torrents.properties.download.total": [
+    {
+      "type": 0,
+      "value": "Staženo"
+    }
+  ],
+  "torrents.properties.eta": [
+    {
+      "type": 0,
+      "value": "ETA"
+    }
+  ],
+  "torrents.properties.free.disk.space": [
+    {
+      "type": 0,
+      "value": "Volné místo na disku"
+    }
+  ],
+  "torrents.properties.hash": [
+    {
+      "type": 0,
+      "value": "Hash"
+    }
+  ],
+  "torrents.properties.ignore.schedule": [
+    {
+      "type": 0,
+      "value": "Ignorovat plánovač"
+    }
+  ],
+  "torrents.properties.is.private": [
+    {
+      "type": 0,
+      "value": "Soukromé"
+    }
+  ],
+  "torrents.properties.name": [
+    {
+      "type": 0,
+      "value": "Název"
+    }
+  ],
+  "torrents.properties.peers": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "torrents.properties.percentage": [
+    {
+      "type": 0,
+      "value": "Procento dokončeno"
+    }
+  ],
+  "torrents.properties.ratio": [
+    {
+      "type": 0,
+      "value": "Poměr"
+    }
+  ],
+  "torrents.properties.seeds": [
+    {
+      "type": 0,
+      "value": "Seeds"
+    }
+  ],
+  "torrents.properties.size": [
+    {
+      "type": 0,
+      "value": "Velikost souboru"
+    }
+  ],
+  "torrents.properties.tags": [
+    {
+      "type": 0,
+      "value": "Štítky"
+    }
+  ],
+  "torrents.properties.tracker.message": [
+    {
+      "type": 0,
+      "value": "Sledovací zpráva"
+    }
+  ],
+  "torrents.properties.trackers": [
+    {
+      "type": 0,
+      "value": "Trackers"
+    }
+  ],
+  "torrents.properties.upload.speed": [
+    {
+      "type": 0,
+      "value": "Rychlost nahrávání"
+    }
+  ],
+  "torrents.properties.upload.total": [
+    {
+      "type": 0,
+      "value": "Nahráno"
+    }
+  ],
+  "torrents.remove": [
+    {
+      "type": 0,
+      "value": "Odebrat Torrenty"
+    }
+  ],
+  "torrents.remove.are.you.sure": [
+    {
+      "type": 0,
+      "value": "Jste si jisti, že chcete odstranit "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " torrentů"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "torrents.remove.delete.data": [
+    {
+      "type": 0,
+      "value": "Odstranit data"
+    }
+  ],
+  "torrents.remove.error.no.torrents.selected": [
+    {
+      "type": 0,
+      "value": "Nevybrali jste žádné torrenty."
+    }
+  ],
+  "torrents.set.tags.button.set": [
+    {
+      "type": 0,
+      "value": "Nastavit štítky"
+    }
+  ],
+  "torrents.set.tags.enter.tags": [
+    {
+      "type": 0,
+      "value": "Zadejte štítky"
+    }
+  ],
+  "torrents.set.tags.heading": [
+    {
+      "type": 0,
+      "value": "Nastavit štítky"
+    }
+  ],
+  "torrents.sort.title": [
+    {
+      "type": 0,
+      "value": "Seřadit podle"
+    }
+  ],
+  "unit.size.byte": [
+    {
+      "type": 0,
+      "value": "B"
+    }
+  ],
+  "unit.size.gigabyte": [
+    {
+      "type": 0,
+      "value": "CZ"
+    }
+  ],
+  "unit.size.kilobyte": [
+    {
+      "type": 0,
+      "value": "kB"
+    }
+  ],
+  "unit.size.megabyte": [
+    {
+      "type": 0,
+      "value": "MB"
+    }
+  ],
+  "unit.size.terabyte": [
+    {
+      "type": 0,
+      "value": "TB"
+    }
+  ],
+  "unit.speed": [
+    {
+      "type": 1,
+      "value": "baseUnit"
+    },
+    {
+      "type": 0,
+      "value": "/s"
+    }
+  ],
+  "unit.time.day": [
+    {
+      "type": 0,
+      "value": "d"
+    }
+  ],
+  "unit.time.hour": [
+    {
+      "type": 0,
+      "value": "hod."
+    }
+  ],
+  "unit.time.infinity": [
+    {
+      "type": 0,
+      "value": "∞"
+    }
+  ],
+  "unit.time.minute": [
+    {
+      "type": 0,
+      "value": "m"
+    }
+  ],
+  "unit.time.second": [
+    {
+      "type": 0,
+      "value": "s"
+    }
+  ],
+  "unit.time.week": [
+    {
+      "type": 0,
+      "value": "wk"
+    }
+  ],
+  "unit.time.year": [
+    {
+      "type": 0,
+      "value": "yr"
+    }
+  ],
+  "window.title": [
+    {
+      "type": 0,
+      "value": "↓ "
+    },
+    {
+      "type": 1,
+      "value": "down"
+    },
+    {
+      "type": 0,
+      "value": " ↑ "
+    },
+    {
+      "type": 1,
+      "value": "up"
+    },
+    {
+      "type": 0,
+      "value": " - Flood"
+    }
+  ]
+}

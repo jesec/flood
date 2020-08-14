@@ -1,0 +1,2188 @@
+{
+  "actionbar.button.add.torrent": [
+    {
+      "type": 0,
+      "value": "إضافة تورنت"
+    }
+  ],
+  "actionbar.button.remove.torrent": [
+    {
+      "type": 0,
+      "value": "إزالة التورنت"
+    }
+  ],
+  "actionbar.button.start.torrent": [
+    {
+      "type": 0,
+      "value": "ابدأ التورينت"
+    }
+  ],
+  "actionbar.button.stop.torrent": [
+    {
+      "type": 0,
+      "value": "إيقاف التورنت"
+    }
+  ],
+  "alert.settings.saved": [
+    {
+      "type": 0,
+      "value": "تم حفظ الإعدادات بنجاح."
+    }
+  ],
+  "alert.torrent.add": [
+    {
+      "type": 0,
+      "value": "تمت إضافة "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.add.failed": [
+    {
+      "type": 0,
+      "value": "فشل في إضافة "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.move": [
+    {
+      "type": 0,
+      "value": "تم نقل "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " بنجاح "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.move.failed": [
+    {
+      "type": 0,
+      "value": "فشل نقل "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.remove": [
+    {
+      "type": 0,
+      "value": "تم بنجاح إزالة "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "alert.torrent.remove.failed": [
+    {
+      "type": 0,
+      "value": "فشل في إزالة "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تورنت"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "auth.add.user": [
+    {
+      "type": 0,
+      "value": "إضافة مستخدم"
+    }
+  ],
+  "auth.admin": [
+    {
+      "type": 0,
+      "value": "المشرف"
+    }
+  ],
+  "auth.connectionType": [
+    {
+      "type": 0,
+      "value": "نوع اتصال rTorrent"
+    }
+  ],
+  "auth.connectionType.socket": [
+    {
+      "type": 0,
+      "value": "مقبس يونكس"
+    }
+  ],
+  "auth.connectionType.tcp": [
+    {
+      "type": 0,
+      "value": "TCP"
+    }
+  ],
+  "auth.create.account": [
+    {
+      "type": 0,
+      "value": "إنشاء حساب"
+    }
+  ],
+  "auth.create.an.account": [
+    {
+      "type": 0,
+      "value": "إنشاء حساب"
+    }
+  ],
+  "auth.create.an.account.intro": [
+    {
+      "type": 0,
+      "value": "مرحبا بكم في الفيضان!"
+    }
+  ],
+  "auth.current.user": [
+    {
+      "type": 0,
+      "value": "المستخدم الحالي"
+    }
+  ],
+  "auth.error.username.empty": [
+    {
+      "type": 0,
+      "value": "اسم المستخدم لا يمكن أن يكون فارغاً."
+    }
+  ],
+  "auth.log.in": [
+    {
+      "type": 0,
+      "value": "تسجيل الدخول"
+    }
+  ],
+  "auth.login": [
+    {
+      "type": 0,
+      "value": "تسجيل الدخول"
+    }
+  ],
+  "auth.login.intro": [
+    {
+      "type": 0,
+      "value": "Log in to your account."
+    }
+  ],
+  "auth.message.not.admin": [
+    {
+      "type": 0,
+      "value": "المستخدم ليس مشرف"
+    }
+  ],
+  "auth.password": [
+    {
+      "type": 0,
+      "value": "كلمة المرور"
+    }
+  ],
+  "auth.rtorrentHost": [
+    {
+      "type": 0,
+      "value": "مضيف rTorrent"
+    }
+  ],
+  "auth.rtorrentPort": [
+    {
+      "type": 0,
+      "value": "منفذ rTorrent"
+    }
+  ],
+  "auth.rtorrentSocket": [
+    {
+      "type": 0,
+      "value": "مقبس rTorrent"
+    }
+  ],
+  "auth.rtorrentSocketPath": [
+    {
+      "type": 0,
+      "value": "مسار مقبس rTorrent"
+    }
+  ],
+  "auth.user.accounts": [
+    {
+      "type": 0,
+      "value": "حسابات المستخدم"
+    }
+  ],
+  "auth.username": [
+    {
+      "type": 0,
+      "value": "اسم المستخدم"
+    }
+  ],
+  "button.add": [
+    {
+      "type": 0,
+      "value": "إضافة"
+    }
+  ],
+  "button.cancel": [
+    {
+      "type": 0,
+      "value": "إلغاء"
+    }
+  ],
+  "button.new": [
+    {
+      "type": 0,
+      "value": "جديد"
+    }
+  ],
+  "button.no": [
+    {
+      "type": 0,
+      "value": "لا"
+    }
+  ],
+  "button.save": [
+    {
+      "type": 0,
+      "value": "حفظ الإعدادات"
+    }
+  ],
+  "button.save.feed": [
+    {
+      "type": 0,
+      "value": "حفظ"
+    }
+  ],
+  "button.state.adding": [
+    {
+      "type": 0,
+      "value": "إضافة..."
+    }
+  ],
+  "button.test": [
+    {
+      "type": 0,
+      "value": "اختبار"
+    }
+  ],
+  "button.yes": [
+    {
+      "type": 0,
+      "value": "نعم"
+    }
+  ],
+  "connection-interruption.heading": [
+    {
+      "type": 0,
+      "value": "لا يمكن الاتصال بـ rTorrent"
+    }
+  ],
+  "connection-interruption.verification-error": [
+    {
+      "type": 0,
+      "value": "تعذر التحقق من الاتصال."
+    }
+  ],
+  "connection-interruption.verification-success": [
+    {
+      "type": 0,
+      "value": "تم الاتصال بنجاح"
+    }
+  ],
+  "connection-interruption.verify-settings-prompt": [
+    {
+      "type": 0,
+      "value": "دعونا نتحقق من إعدادات الاتصال الخاصة بك."
+    }
+  ],
+  "connectivity.modal.content": [
+    {
+      "type": 0,
+      "value": "لا يمكن الاتصال بـ rTorrent. الرجاء تحديث المعلومات الآن."
+    }
+  ],
+  "connectivity.modal.title": [
+    {
+      "type": 0,
+      "value": "مشكلة في الاتصال"
+    }
+  ],
+  "dependency.loading.notifications": [
+    {
+      "type": 0,
+      "value": "Notifications"
+    }
+  ],
+  "dependency.loading.torrent.list": [
+    {
+      "type": 0,
+      "value": "Torrent List"
+    }
+  ],
+  "dependency.loading.torrent.taxonomy": [
+    {
+      "type": 0,
+      "value": "Torrent Taxonomy"
+    }
+  ],
+  "dependency.loading.transfer.history": [
+    {
+      "type": 0,
+      "value": "Data Transfer History"
+    }
+  ],
+  "dependency.loading.transfer.rate.details": [
+    {
+      "type": 0,
+      "value": "Data Transfer Rate Details"
+    }
+  ],
+  "feeds.add.automatic.download.rule": [
+    {
+      "type": 0,
+      "value": "إضافة قاعدة تحميل"
+    }
+  ],
+  "feeds.add.feed": [
+    {
+      "type": 0,
+      "value": "إضافة موجز ويب"
+    }
+  ],
+  "feeds.applicable.feed": [
+    {
+      "type": 0,
+      "value": "تغذية قابلة للتطبيق"
+    }
+  ],
+  "feeds.apply.tags": [
+    {
+      "type": 0,
+      "value": "تطبيق العلامات"
+    }
+  ],
+  "feeds.browse.feeds": [
+    {
+      "type": 0,
+      "value": "تصفح الخلاصات"
+    }
+  ],
+  "feeds.exclude": [
+    {
+      "type": 0,
+      "value": "استبعاد"
+    }
+  ],
+  "feeds.exclude.pattern": [
+    {
+      "type": 0,
+      "value": "استبعاد النمط"
+    }
+  ],
+  "feeds.existing.feeds": [
+    {
+      "type": 0,
+      "value": "التحديثات الموجودة"
+    }
+  ],
+  "feeds.existing.rules": [
+    {
+      "type": 0,
+      "value": "القواعد الحالية"
+    }
+  ],
+  "feeds.label": [
+    {
+      "type": 0,
+      "value": "تسمية"
+    }
+  ],
+  "feeds.match": [
+    {
+      "type": 0,
+      "value": "المباراة"
+    }
+  ],
+  "feeds.match.count": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " تطابق"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " يتطابق"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "feeds.match.pattern": [
+    {
+      "type": 0,
+      "value": "نمط المطابقة"
+    }
+  ],
+  "feeds.no.feeds.available": [
+    {
+      "type": 0,
+      "value": "لا توجد تغذية متاحة."
+    }
+  ],
+  "feeds.no.feeds.defined": [
+    {
+      "type": 0,
+      "value": "لم يتم تعريف أي تغذية."
+    }
+  ],
+  "feeds.no.rules.defined": [
+    {
+      "type": 0,
+      "value": "لا توجد قواعد معرفة."
+    }
+  ],
+  "feeds.regEx": [
+    {
+      "type": 0,
+      "value": "ريريكس"
+    }
+  ],
+  "feeds.search": [
+    {
+      "type": 0,
+      "value": "مصطلح البحث"
+    }
+  ],
+  "feeds.select.feed": [
+    {
+      "type": 0,
+      "value": "حدد موجز الويب"
+    }
+  ],
+  "feeds.select.interval": [
+    {
+      "type": 0,
+      "value": "الفاصل"
+    }
+  ],
+  "feeds.start.on.load": [
+    {
+      "type": 0,
+      "value": "البدء عند التحميل"
+    }
+  ],
+  "feeds.tabs.download.rules": [
+    {
+      "type": 0,
+      "value": "قواعد التحميل"
+    }
+  ],
+  "feeds.tabs.feeds": [
+    {
+      "type": 0,
+      "value": "التحديثات"
+    }
+  ],
+  "feeds.tabs.heading": [
+    {
+      "type": 0,
+      "value": "تغذية تورنت"
+    }
+  ],
+  "feeds.tags": [
+    {
+      "type": 0,
+      "value": "الوسوم"
+    }
+  ],
+  "feeds.time.day": [
+    {
+      "type": 0,
+      "value": "أيام"
+    }
+  ],
+  "feeds.time.hr": [
+    {
+      "type": 0,
+      "value": "الساعات"
+    }
+  ],
+  "feeds.time.min": [
+    {
+      "type": 0,
+      "value": "دقائق"
+    }
+  ],
+  "feeds.torrent.destination": [
+    {
+      "type": 0,
+      "value": "وجهة تورنت"
+    }
+  ],
+  "feeds.url": [
+    {
+      "type": 0,
+      "value": "الرابط"
+    }
+  ],
+  "feeds.validation.interval.not.positive": [
+    {
+      "type": 0,
+      "value": "The interval must be a positive integer."
+    }
+  ],
+  "feeds.validation.invalid.regular.expression": [
+    {
+      "type": 0,
+      "value": "تعبير عادي غير صالح."
+    }
+  ],
+  "feeds.validation.must.select.feed": [
+    {
+      "type": 0,
+      "value": "يجب عليك تحديد التغذية."
+    }
+  ],
+  "feeds.validation.must.specify.destination": [
+    {
+      "type": 0,
+      "value": "يجب عليك تحديد الوجهة."
+    }
+  ],
+  "feeds.validation.must.specify.label": [
+    {
+      "type": 0,
+      "value": "يجب عليك تحديد التسمية."
+    }
+  ],
+  "feeds.validation.must.specify.valid.feed.url": [
+    {
+      "type": 0,
+      "value": "يجب عليك تحديد رابط تغذية صالح."
+    }
+  ],
+  "filesystem.empty.directory": [
+    {
+      "type": 0,
+      "value": "مجلد فارغ."
+    }
+  ],
+  "filesystem.error.eacces": [
+    {
+      "type": 0,
+      "value": "الفيضان ليس لديه الصلاحية لقراءة هذا الدليل."
+    }
+  ],
+  "filesystem.error.enoent": [
+    {
+      "type": 0,
+      "value": "هذا المسار غير موجود. سيتم إنشاؤه."
+    }
+  ],
+  "filesystem.fetching": [
+    {
+      "type": 0,
+      "value": "جلب بنية الدليل..."
+    }
+  ],
+  "filter.all": [
+    {
+      "type": 0,
+      "value": "الكل"
+    }
+  ],
+  "filter.status.active": [
+    {
+      "type": 0,
+      "value": "نشط"
+    }
+  ],
+  "filter.status.checking": [
+    {
+      "type": 0,
+      "value": "التحقق"
+    }
+  ],
+  "filter.status.completed": [
+    {
+      "type": 0,
+      "value": "Complete"
+    }
+  ],
+  "filter.status.downloading": [
+    {
+      "type": 0,
+      "value": "تنزيل"
+    }
+  ],
+  "filter.status.error": [
+    {
+      "type": 0,
+      "value": "خطأ"
+    }
+  ],
+  "filter.status.inactive": [
+    {
+      "type": 0,
+      "value": "غير نشط"
+    }
+  ],
+  "filter.status.stopped": [
+    {
+      "type": 0,
+      "value": "توقفت"
+    }
+  ],
+  "filter.status.title": [
+    {
+      "type": 0,
+      "value": "تصفية حسب الحالة"
+    }
+  ],
+  "filter.tag.title": [
+    {
+      "type": 0,
+      "value": "تصفية حسب العلامة"
+    }
+  ],
+  "filter.tracker.title": [
+    {
+      "type": 0,
+      "value": "تصفية حسب التتبع"
+    }
+  ],
+  "filter.untagged": [
+    {
+      "type": 0,
+      "value": "غير موسومة"
+    }
+  ],
+  "general.ago": [
+    {
+      "type": 0,
+      "value": "مضت"
+    }
+  ],
+  "general.at": [
+    {
+      "type": 0,
+      "value": "في"
+    }
+  ],
+  "general.clipboard.copied": [
+    {
+      "type": 0,
+      "value": "منسوخ"
+    }
+  ],
+  "general.clipboard.copy": [
+    {
+      "type": 0,
+      "value": "نسخ"
+    }
+  ],
+  "general.of": [
+    {
+      "type": 0,
+      "value": "من"
+    }
+  ],
+  "general.to": [
+    {
+      "type": 0,
+      "value": "إلى"
+    }
+  ],
+  "locale.language.auto": [
+    {
+      "type": 0,
+      "value": "تلقائي"
+    }
+  ],
+  "mediainfo.execError": [
+    {
+      "type": 0,
+      "value": "حدث خطأ أثناء تشغيل mediainfo على الخادم. تحقق من أن mediainfo مثبت ومتاح في PATH للفيضان."
+    }
+  ],
+  "mediainfo.fetching": [
+    {
+      "type": 0,
+      "value": "إحضار ..."
+    }
+  ],
+  "mediainfo.heading": [
+    {
+      "type": 0,
+      "value": "ناتج ميداينفو"
+    }
+  ],
+  "notification.clear.all": [
+    {
+      "type": 0,
+      "value": "مسح الكل"
+    }
+  ],
+  "notification.showing": [
+    {
+      "type": 0,
+      "value": "عرض"
+    }
+  ],
+  "notification.torrent.errored.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.errored.heading": [
+    {
+      "type": 0,
+      "value": "تم الإبلاغ عن خطأ"
+    }
+  ],
+  "notification.torrent.finished.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.finished.heading": [
+    {
+      "type": 0,
+      "value": "انتهى التحميل"
+    }
+  ],
+  "priority.dont.download": [
+    {
+      "type": 0,
+      "value": "عدم التحميل"
+    }
+  ],
+  "priority.high": [
+    {
+      "type": 0,
+      "value": "مرتفع"
+    }
+  ],
+  "priority.low": [
+    {
+      "type": 0,
+      "value": "منخفض"
+    }
+  ],
+  "priority.normal": [
+    {
+      "type": 0,
+      "value": "عادي"
+    }
+  ],
+  "settings.about.flood": [
+    {
+      "type": 0,
+      "value": "حول الفيضان"
+    }
+  ],
+  "settings.bandwidth.slots.download.divider.label": [
+    {
+      "type": 0,
+      "value": "تنزيل مزود الفتحات"
+    }
+  ],
+  "settings.bandwidth.slots.download.global.label": [
+    {
+      "type": 0,
+      "value": "تحميل الفتحات العالمية"
+    }
+  ],
+  "settings.bandwidth.slots.download.label": [
+    {
+      "type": 0,
+      "value": "تنزيل الفتحات لكل تورينت"
+    }
+  ],
+  "settings.bandwidth.slots.heading": [
+    {
+      "type": 0,
+      "value": "توفر الخانة"
+    }
+  ],
+  "settings.bandwidth.slots.upload.divider.label": [
+    {
+      "type": 0,
+      "value": "تحميل مقسم الخانات"
+    }
+  ],
+  "settings.bandwidth.slots.upload.global.label": [
+    {
+      "type": 0,
+      "value": "تحميل خانات عامة"
+    }
+  ],
+  "settings.bandwidth.slots.upload.label": [
+    {
+      "type": 0,
+      "value": "تحميل الفتحات لكل تورينت"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.download.label": [
+    {
+      "type": 0,
+      "value": "المنسدلة مسبقاً: تحميل"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
+    {
+      "type": 0,
+      "value": "القائمة المنسدلة مسبقاً: تحميل"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.download": [
+    {
+      "type": 0,
+      "value": "خنق معدل التحميل العالمي"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.upload": [
+    {
+      "type": 0,
+      "value": "خنق معدل التحميل العالمي"
+    }
+  ],
+  "settings.bandwidth.transferrate.heading": [
+    {
+      "type": 0,
+      "value": "خانات معدل التحويل"
+    }
+  ],
+  "settings.connectivity.dht.label": [
+    {
+      "type": 0,
+      "value": "تمكين DHT"
+    }
+  ],
+  "settings.connectivity.dht.port.label": [
+    {
+      "type": 0,
+      "value": "منفذ DHT"
+    }
+  ],
+  "settings.connectivity.dpd.heading": [
+    {
+      "type": 0,
+      "value": "اكتشاف الند اللامركزي"
+    }
+  ],
+  "settings.connectivity.incoming.heading": [
+    {
+      "type": 0,
+      "value": "اتصالات واردة"
+    }
+  ],
+  "settings.connectivity.ip.hostname.label": [
+    {
+      "type": 0,
+      "value": "اسم IP/المضيف المبلغ عنه"
+    }
+  ],
+  "settings.connectivity.max.http.connections": [
+    {
+      "type": 0,
+      "value": "الحد الأقصى لاتصالات HTTP"
+    }
+  ],
+  "settings.connectivity.peer.exchange.label": [
+    {
+      "type": 0,
+      "value": "تمكين تبادل الأقران"
+    }
+  ],
+  "settings.connectivity.peers.desired.label": [
+    {
+      "type": 0,
+      "value": "الند المنشود"
+    }
+  ],
+  "settings.connectivity.peers.heading": [
+    {
+      "type": 0,
+      "value": "أقران"
+    }
+  ],
+  "settings.connectivity.peers.max.label": [
+    {
+      "type": 0,
+      "value": "الحد الأقصى للنظراء"
+    }
+  ],
+  "settings.connectivity.peers.min.label": [
+    {
+      "type": 0,
+      "value": "الحد الأدنى للنظراء"
+    }
+  ],
+  "settings.connectivity.peers.seeding.max.label": [
+    {
+      "type": 0,
+      "value": "الحد الأقصى لبذور النظراء"
+    }
+  ],
+  "settings.connectivity.peers.seeding.min.label": [
+    {
+      "type": 0,
+      "value": "الحد الأدنى لبذور الند"
+    }
+  ],
+  "settings.connectivity.port.open.label": [
+    {
+      "type": 0,
+      "value": "فتح المنفذ"
+    }
+  ],
+  "settings.connectivity.port.randomize.label": [
+    {
+      "type": 0,
+      "value": "تصوير المنفذ عشوائي"
+    }
+  ],
+  "settings.connectivity.port.range.label": [
+    {
+      "type": 0,
+      "value": "نطاق المنفذ"
+    }
+  ],
+  "settings.diskusage.mount.points": [
+    {
+      "type": 0,
+      "value": "نقاط استخدام القرص"
+    }
+  ],
+  "settings.diskusage.show": [
+    {
+      "type": 0,
+      "value": "إظهار"
+    }
+  ],
+  "settings.resources.disk.check.hash.label": [
+    {
+      "type": 0,
+      "value": "التحقق من التجزئة عند الاكتمال"
+    }
+  ],
+  "settings.resources.disk.download.location.label": [
+    {
+      "type": 0,
+      "value": "دليل التحميل الافتراضي"
+    }
+  ],
+  "settings.resources.disk.heading": [
+    {
+      "type": 0,
+      "value": "قرص"
+    }
+  ],
+  "settings.resources.max.open.files": [
+    {
+      "type": 0,
+      "value": "الحد الأقصى للملفات المفتوحة"
+    }
+  ],
+  "settings.resources.memory.heading": [
+    {
+      "type": 0,
+      "value": "الذاكرة"
+    }
+  ],
+  "settings.resources.memory.max.label": [
+    {
+      "type": 0,
+      "value": "الحد الأقصى لاستخدام الذاكرة"
+    }
+  ],
+  "settings.tabs.about": [
+    {
+      "type": 0,
+      "value": "حول"
+    }
+  ],
+  "settings.tabs.authentication": [
+    {
+      "type": 0,
+      "value": "المصادقة"
+    }
+  ],
+  "settings.tabs.bandwidth": [
+    {
+      "type": 0,
+      "value": "عرض التردد"
+    }
+  ],
+  "settings.tabs.connectivity": [
+    {
+      "type": 0,
+      "value": "الاتصال"
+    }
+  ],
+  "settings.tabs.diskusage": [
+    {
+      "type": 0,
+      "value": "استخدام القرص"
+    }
+  ],
+  "settings.tabs.heading": [
+    {
+      "type": 0,
+      "value": "الإعدادات"
+    }
+  ],
+  "settings.tabs.resources": [
+    {
+      "type": 0,
+      "value": "الموارد"
+    }
+  ],
+  "settings.tabs.userinterface": [
+    {
+      "type": 0,
+      "value": "واجهة المستخدم"
+    }
+  ],
+  "settings.ui.displayed.details": [
+    {
+      "type": 0,
+      "value": "أعمدة تفاصيل تورنت"
+    }
+  ],
+  "settings.ui.language": [
+    {
+      "type": 0,
+      "value": "اللغة"
+    }
+  ],
+  "settings.ui.locale": [
+    {
+      "type": 0,
+      "value": "محلي"
+    }
+  ],
+  "settings.ui.torrent.details.enabled": [
+    {
+      "type": 0,
+      "value": "تمكين"
+    }
+  ],
+  "settings.ui.torrent.details.tags.placement": [
+    {
+      "type": 0,
+      "value": "ومن وجهة النظر الموسعة، فإن العلامات تعمل على أفضل وجه في نهاية القائمة."
+    }
+  ],
+  "settings.ui.torrent.list": [
+    {
+      "type": 0,
+      "value": "عرض قائمة التورينت"
+    }
+  ],
+  "settings.ui.torrent.size": [
+    {
+      "type": 0,
+      "value": "حجم التورنت"
+    }
+  ],
+  "settings.ui.torrent.size.condensed": [
+    {
+      "type": 0,
+      "value": "عرض مكثف"
+    }
+  ],
+  "settings.ui.torrent.size.expanded": [
+    {
+      "type": 0,
+      "value": "عرض موسع"
+    }
+  ],
+  "sidebar.button.feeds": [
+    {
+      "type": 0,
+      "value": "التحديثات"
+    }
+  ],
+  "sidebar.button.log.out": [
+    {
+      "type": 0,
+      "value": "تسجيل الخروج"
+    }
+  ],
+  "sidebar.button.notifications": [
+    {
+      "type": 0,
+      "value": "الإشعارات"
+    }
+  ],
+  "sidebar.button.settings": [
+    {
+      "type": 0,
+      "value": "الإعدادات"
+    }
+  ],
+  "sidebar.button.speedlimits": [
+    {
+      "type": 0,
+      "value": "حدود السرعة"
+    }
+  ],
+  "sidebar.search.placeholder": [
+    {
+      "type": 0,
+      "value": "البحث عن التورنت"
+    }
+  ],
+  "sidebar.speedlimits.download": [
+    {
+      "type": 0,
+      "value": "DOWNLOAD"
+    }
+  ],
+  "sidebar.speedlimits.upload": [
+    {
+      "type": 0,
+      "value": "UPLOAD"
+    }
+  ],
+  "sidebar.transferdata.downloaded": [
+    {
+      "type": 0,
+      "value": "تم التحميل"
+    }
+  ],
+  "sidebar.transferdata.uploaded": [
+    {
+      "type": 0,
+      "value": "تم الرفع"
+    }
+  ],
+  "speed.unlimited": [
+    {
+      "type": 0,
+      "value": "غير محدود"
+    }
+  ],
+  "status.diskusage.title": [
+    {
+      "type": 0,
+      "value": "استخدام القرص"
+    }
+  ],
+  "torrent.list.peers": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "of"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrent.list.peers.of": [
+    {
+      "type": 0,
+      "value": "من"
+    }
+  ],
+  "torrents.add.button.add": [
+    {
+      "type": 0,
+      "value": "إضافة تورنت"
+    }
+  ],
+  "torrents.add.destination.label": [
+    {
+      "type": 0,
+      "value": "الوجهة"
+    }
+  ],
+  "torrents.add.destination.placeholder": [
+    {
+      "type": 0,
+      "value": "الوجهة"
+    }
+  ],
+  "torrents.add.heading": [
+    {
+      "type": 0,
+      "value": "إضافة تورينت"
+    }
+  ],
+  "torrents.add.start.label": [
+    {
+      "type": 0,
+      "value": "ابدأ التورينت"
+    }
+  ],
+  "torrents.add.tab.file.browse": [
+    {
+      "type": 0,
+      "value": "أو انقر لتصفح"
+    }
+  ],
+  "torrents.add.tab.file.drop": [
+    {
+      "type": 0,
+      "value": "إسقاط بعض الملفات هنا،"
+    }
+  ],
+  "torrents.add.tab.file.title": [
+    {
+      "type": 0,
+      "value": "حسب الملف"
+    }
+  ],
+  "torrents.add.tab.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "رابط تورينت أو رابط الـ Magnet"
+    }
+  ],
+  "torrents.add.tab.url.title": [
+    {
+      "type": 0,
+      "value": "حسب عنوان URL"
+    }
+  ],
+  "torrents.add.tags": [
+    {
+      "type": 0,
+      "value": "الوسوم"
+    }
+  ],
+  "torrents.add.torrents.label": [
+    {
+      "type": 0,
+      "value": "تورينتس"
+    }
+  ],
+  "torrents.destination.base_path": [
+    {
+      "type": 0,
+      "value": "استخدام كمسار أساسي"
+    }
+  ],
+  "torrents.details.actions.pause": [
+    {
+      "type": 0,
+      "value": "إيقاف"
+    }
+  ],
+  "torrents.details.actions.start": [
+    {
+      "type": 0,
+      "value": "ابدأ"
+    }
+  ],
+  "torrents.details.actions.stop": [
+    {
+      "type": 0,
+      "value": "توقف"
+    }
+  ],
+  "torrents.details.details": [
+    {
+      "type": 0,
+      "value": "التفاصيل"
+    }
+  ],
+  "torrents.details.files": [
+    {
+      "type": 0,
+      "value": "الملفات"
+    }
+  ],
+  "torrents.details.files.download.file": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تحميل الملف"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "تحميل الملفات"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.files.loading": [
+    {
+      "type": 0,
+      "value": "تحميل تفاصيل الملف..."
+    }
+  ],
+  "torrents.details.general.comment": [
+    {
+      "type": 0,
+      "value": "تعليق"
+    }
+  ],
+  "torrents.details.general.connected": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " متصل بـ "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrents.details.general.date.added": [
+    {
+      "type": 0,
+      "value": "أضيف"
+    }
+  ],
+  "torrents.details.general.date.created": [
+    {
+      "type": 0,
+      "value": "تاريخ الإنشاء"
+    }
+  ],
+  "torrents.details.general.downloaded": [
+    {
+      "type": 0,
+      "value": "تم التحميل"
+    }
+  ],
+  "torrents.details.general.free.disk.space": [
+    {
+      "type": 0,
+      "value": "مساحة القرص الحرة"
+    }
+  ],
+  "torrents.details.general.hash": [
+    {
+      "type": 0,
+      "value": "التجزئة"
+    }
+  ],
+  "torrents.details.general.heading.general": [
+    {
+      "type": 0,
+      "value": "عام"
+    }
+  ],
+  "torrents.details.general.heading.torrent": [
+    {
+      "type": 0,
+      "value": "تورنت"
+    }
+  ],
+  "torrents.details.general.heading.tracker": [
+    {
+      "type": 0,
+      "value": "المتتبع"
+    }
+  ],
+  "torrents.details.general.heading.transfer": [
+    {
+      "type": 0,
+      "value": "نقل"
+    }
+  ],
+  "torrents.details.general.location": [
+    {
+      "type": 0,
+      "value": "الموقع"
+    }
+  ],
+  "torrents.details.general.none": [
+    {
+      "type": 0,
+      "value": "لا"
+    }
+  ],
+  "torrents.details.general.peers": [
+    {
+      "type": 0,
+      "value": "أقران"
+    }
+  ],
+  "torrents.details.general.scheduler": [
+    {
+      "type": 0,
+      "value": "جدولة"
+    }
+  ],
+  "torrents.details.general.scheduler.ignored": [
+    {
+      "type": 0,
+      "value": "تجاهل"
+    }
+  ],
+  "torrents.details.general.scheduler.obeyed": [
+    {
+      "type": 0,
+      "value": "عقيب"
+    }
+  ],
+  "torrents.details.general.seeds": [
+    {
+      "type": 0,
+      "value": "بذور"
+    }
+  ],
+  "torrents.details.general.size": [
+    {
+      "type": 0,
+      "value": "الحجم"
+    }
+  ],
+  "torrents.details.general.tags": [
+    {
+      "type": 0,
+      "value": "الوسوم"
+    }
+  ],
+  "torrents.details.general.tracker.message": [
+    {
+      "type": 0,
+      "value": "رسالة تتبع"
+    }
+  ],
+  "torrents.details.general.type": [
+    {
+      "type": 0,
+      "value": "نوع"
+    }
+  ],
+  "torrents.details.general.type.private": [
+    {
+      "type": 0,
+      "value": "خاص"
+    }
+  ],
+  "torrents.details.general.type.public": [
+    {
+      "type": 0,
+      "value": "عامة"
+    }
+  ],
+  "torrents.details.mediainfo": [
+    {
+      "type": 0,
+      "value": "Mediainfo"
+    }
+  ],
+  "torrents.details.peers": [
+    {
+      "type": 0,
+      "value": "أقران"
+    }
+  ],
+  "torrents.details.peers.no.data": [
+    {
+      "type": 0,
+      "value": "لا توجد بيانات أقران لهذا التورنت."
+    }
+  ],
+  "torrents.details.selected.files": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " ملف محدد"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " ملفات محددة"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.selected.files.set.priority": [
+    {
+      "type": 0,
+      "value": "تعيين الأولوية"
+    }
+  ],
+  "torrents.details.trackers": [
+    {
+      "type": 0,
+      "value": "المتتبعون"
+    }
+  ],
+  "torrents.details.trackers.no.data": [
+    {
+      "type": 0,
+      "value": "لا توجد بيانات تتبع لهذا التورنت."
+    }
+  ],
+  "torrents.details.trackers.type": [
+    {
+      "type": 0,
+      "value": "نوع"
+    }
+  ],
+  "torrents.list.cannot.connect": [
+    {
+      "type": 0,
+      "value": "لا يمكن الاتصال بـ rTorrent."
+    }
+  ],
+  "torrents.list.clear.filters": [
+    {
+      "type": 0,
+      "value": "مسح الفلاتر"
+    }
+  ],
+  "torrents.list.context.check.hash": [
+    {
+      "type": 0,
+      "value": "تحقق من التجزئة"
+    }
+  ],
+  "torrents.list.context.details": [
+    {
+      "type": 0,
+      "value": "تفاصيل التورنت"
+    }
+  ],
+  "torrents.list.context.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "torrents.list.context.move": [
+    {
+      "type": 0,
+      "value": "تعيين موقع التورنت"
+    }
+  ],
+  "torrents.list.context.pause": [
+    {
+      "type": 0,
+      "value": "إيقاف"
+    }
+  ],
+  "torrents.list.context.priority": [
+    {
+      "type": 0,
+      "value": "الأولوية"
+    }
+  ],
+  "torrents.list.context.remove": [
+    {
+      "type": 0,
+      "value": "إزالة"
+    }
+  ],
+  "torrents.list.context.set.tags": [
+    {
+      "type": 0,
+      "value": "تعيين العلامات"
+    }
+  ],
+  "torrents.list.context.start": [
+    {
+      "type": 0,
+      "value": "ابدأ"
+    }
+  ],
+  "torrents.list.context.stop": [
+    {
+      "type": 0,
+      "value": "توقف"
+    }
+  ],
+  "torrents.list.drop": [
+    {
+      "type": 0,
+      "value": "إسقاط الملفات هنا لإضافتها إلى rTorrent."
+    }
+  ],
+  "torrents.list.no.torrents": [
+    {
+      "type": 0,
+      "value": "لا يوجد سلالات لعرضها."
+    }
+  ],
+  "torrents.move.button.set.location": [
+    {
+      "type": 0,
+      "value": "تعيين الموقع"
+    }
+  ],
+  "torrents.move.button.state.setting": [
+    {
+      "type": 0,
+      "value": "إعداد..."
+    }
+  ],
+  "torrents.move.check_hash.label": [
+    {
+      "type": 0,
+      "value": "تحقق من التجزئة"
+    }
+  ],
+  "torrents.move.data.label": [
+    {
+      "type": 0,
+      "value": "نقل البيانات"
+    }
+  ],
+  "torrents.move.heading": [
+    {
+      "type": 0,
+      "value": "تعيين موقع التورنت"
+    }
+  ],
+  "torrents.properties.base.path": [
+    {
+      "type": 0,
+      "value": "المسار الأساسي"
+    }
+  ],
+  "torrents.properties.comment": [
+    {
+      "type": 0,
+      "value": "تعليق"
+    }
+  ],
+  "torrents.properties.creation.date": [
+    {
+      "type": 0,
+      "value": "تاريخ الإنشاء"
+    }
+  ],
+  "torrents.properties.date.added": [
+    {
+      "type": 0,
+      "value": "أضيف"
+    }
+  ],
+  "torrents.properties.download.speed": [
+    {
+      "type": 0,
+      "value": "سرعة التنزيل"
+    }
+  ],
+  "torrents.properties.download.total": [
+    {
+      "type": 0,
+      "value": "تم التحميل"
+    }
+  ],
+  "torrents.properties.eta": [
+    {
+      "type": 0,
+      "value": "ETA"
+    }
+  ],
+  "torrents.properties.free.disk.space": [
+    {
+      "type": 0,
+      "value": "مساحة القرص الحرة"
+    }
+  ],
+  "torrents.properties.hash": [
+    {
+      "type": 0,
+      "value": "التجزئة"
+    }
+  ],
+  "torrents.properties.ignore.schedule": [
+    {
+      "type": 0,
+      "value": "تجاهل المجدول"
+    }
+  ],
+  "torrents.properties.is.private": [
+    {
+      "type": 0,
+      "value": "خاص"
+    }
+  ],
+  "torrents.properties.name": [
+    {
+      "type": 0,
+      "value": "الاسم"
+    }
+  ],
+  "torrents.properties.peers": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "torrents.properties.percentage": [
+    {
+      "type": 0,
+      "value": "اكتمل النسبة"
+    }
+  ],
+  "torrents.properties.ratio": [
+    {
+      "type": 0,
+      "value": "النسبة"
+    }
+  ],
+  "torrents.properties.seeds": [
+    {
+      "type": 0,
+      "value": "Seeds"
+    }
+  ],
+  "torrents.properties.size": [
+    {
+      "type": 0,
+      "value": "حجم الملف"
+    }
+  ],
+  "torrents.properties.tags": [
+    {
+      "type": 0,
+      "value": "الوسوم"
+    }
+  ],
+  "torrents.properties.tracker.message": [
+    {
+      "type": 0,
+      "value": "رسالة تتبع"
+    }
+  ],
+  "torrents.properties.trackers": [
+    {
+      "type": 0,
+      "value": "Trackers"
+    }
+  ],
+  "torrents.properties.upload.speed": [
+    {
+      "type": 0,
+      "value": "سرعة التحميل"
+    }
+  ],
+  "torrents.properties.upload.total": [
+    {
+      "type": 0,
+      "value": "تم الرفع"
+    }
+  ],
+  "torrents.remove": [
+    {
+      "type": 0,
+      "value": "إزالة التورنت"
+    }
+  ],
+  "torrents.remove.are.you.sure": [
+    {
+      "type": 0,
+      "value": "هل أنت متأكد من أنك تريد إزالة "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " تورنت"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " تورنت"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "torrents.remove.delete.data": [
+    {
+      "type": 0,
+      "value": "حذف البيانات"
+    }
+  ],
+  "torrents.remove.error.no.torrents.selected": [
+    {
+      "type": 0,
+      "value": "لم تقم باختيار أي تورنات."
+    }
+  ],
+  "torrents.set.tags.button.set": [
+    {
+      "type": 0,
+      "value": "تعيين العلامات"
+    }
+  ],
+  "torrents.set.tags.enter.tags": [
+    {
+      "type": 0,
+      "value": "أدخل العلامات"
+    }
+  ],
+  "torrents.set.tags.heading": [
+    {
+      "type": 0,
+      "value": "تعيين العلامات"
+    }
+  ],
+  "torrents.sort.title": [
+    {
+      "type": 0,
+      "value": "الترتيب حسب"
+    }
+  ],
+  "unit.size.byte": [
+    {
+      "type": 0,
+      "value": "ب"
+    }
+  ],
+  "unit.size.gigabyte": [
+    {
+      "type": 0,
+      "value": "جيجابايت"
+    }
+  ],
+  "unit.size.kilobyte": [
+    {
+      "type": 0,
+      "value": "كيلوبايت"
+    }
+  ],
+  "unit.size.megabyte": [
+    {
+      "type": 0,
+      "value": "ميغابايت"
+    }
+  ],
+  "unit.size.terabyte": [
+    {
+      "type": 0,
+      "value": "تيلبايت"
+    }
+  ],
+  "unit.speed": [
+    {
+      "type": 1,
+      "value": "baseUnit"
+    },
+    {
+      "type": 0,
+      "value": "/ث"
+    }
+  ],
+  "unit.time.day": [
+    {
+      "type": 0,
+      "value": "د"
+    }
+  ],
+  "unit.time.hour": [
+    {
+      "type": 0,
+      "value": "ساعة"
+    }
+  ],
+  "unit.time.infinity": [
+    {
+      "type": 0,
+      "value": "∞"
+    }
+  ],
+  "unit.time.minute": [
+    {
+      "type": 0,
+      "value": "د"
+    }
+  ],
+  "unit.time.second": [
+    {
+      "type": 0,
+      "value": "ث"
+    }
+  ],
+  "unit.time.week": [
+    {
+      "type": 0,
+      "value": "تأجج"
+    }
+  ],
+  "unit.time.year": [
+    {
+      "type": 0,
+      "value": "yr"
+    }
+  ],
+  "window.title": [
+    {
+      "type": 0,
+      "value": "↓ "
+    },
+    {
+      "type": 1,
+      "value": "down"
+    },
+    {
+      "type": 0,
+      "value": " ↑ "
+    },
+    {
+      "type": 1,
+      "value": "up"
+    },
+    {
+      "type": 0,
+      "value": " - Flood"
+    }
+  ]
+}

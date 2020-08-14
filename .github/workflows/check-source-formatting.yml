@@ -1,6 +1,10 @@
 name: Check source formatting
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - 'integration/**'
+  pull_request:
 
 jobs:
   check-source-formatting:

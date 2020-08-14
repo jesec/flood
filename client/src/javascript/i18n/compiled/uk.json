@@ -1,0 +1,2212 @@
+{
+  "actionbar.button.add.torrent": [
+    {
+      "type": 0,
+      "value": "Додати Торрент"
+    }
+  ],
+  "actionbar.button.remove.torrent": [
+    {
+      "type": 0,
+      "value": "Прибрати торент"
+    }
+  ],
+  "actionbar.button.start.torrent": [
+    {
+      "type": 0,
+      "value": "Почати торент"
+    }
+  ],
+  "actionbar.button.stop.torrent": [
+    {
+      "type": 0,
+      "value": "Зупинити торрент"
+    }
+  ],
+  "alert.settings.saved": [
+    {
+      "type": 0,
+      "value": "Налаштування успішно збережені."
+    }
+  ],
+  "alert.torrent.add": [
+    {
+      "type": 0,
+      "value": "Успішно додано "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торрент"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торрент"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.add.failed": [
+    {
+      "type": 0,
+      "value": "Не вдалося додати "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торент"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торрент"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.move": [
+    {
+      "type": 0,
+      "value": "Успішно переміщено "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торент"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торрент"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.move.failed": [
+    {
+      "type": 0,
+      "value": "Не вдалося перемістити "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торент"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торрент"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.remove": [
+    {
+      "type": 0,
+      "value": "Успішно видалено "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торент"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торрент"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.remove.failed": [
+    {
+      "type": 0,
+      "value": "Не вдалося видалити "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торент"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "торрент"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "auth.add.user": [
+    {
+      "type": 0,
+      "value": "Добавити користувача"
+    }
+  ],
+  "auth.admin": [
+    {
+      "type": 0,
+      "value": "Адмін"
+    }
+  ],
+  "auth.connectionType": [
+    {
+      "type": 0,
+      "value": "тип підключення rTorrent"
+    }
+  ],
+  "auth.connectionType.socket": [
+    {
+      "type": 0,
+      "value": "Унікальний сокет"
+    }
+  ],
+  "auth.connectionType.tcp": [
+    {
+      "type": 0,
+      "value": "TCP"
+    }
+  ],
+  "auth.create.account": [
+    {
+      "type": 0,
+      "value": "Створити обл. запис"
+    }
+  ],
+  "auth.create.an.account": [
+    {
+      "type": 0,
+      "value": "Створити акаунт"
+    }
+  ],
+  "auth.create.an.account.intro": [
+    {
+      "type": 0,
+      "value": "Ласкаво просимо до Флуту!"
+    }
+  ],
+  "auth.current.user": [
+    {
+      "type": 0,
+      "value": "Поточний користувач"
+    }
+  ],
+  "auth.error.username.empty": [
+    {
+      "type": 0,
+      "value": "Ім'я користувача не може бути порожнім."
+    }
+  ],
+  "auth.log.in": [
+    {
+      "type": 0,
+      "value": "Увійти"
+    }
+  ],
+  "auth.login": [
+    {
+      "type": 0,
+      "value": "Логін"
+    }
+  ],
+  "auth.login.intro": [
+    {
+      "type": 0,
+      "value": "Log in to your account."
+    }
+  ],
+  "auth.message.not.admin": [
+    {
+      "type": 0,
+      "value": "Користувач не є адміністратором"
+    }
+  ],
+  "auth.password": [
+    {
+      "type": 0,
+      "value": "Пароль"
+    }
+  ],
+  "auth.rtorrentHost": [
+    {
+      "type": 0,
+      "value": "rTorrent Хост"
+    }
+  ],
+  "auth.rtorrentPort": [
+    {
+      "type": 0,
+      "value": "rTorrent порт"
+    }
+  ],
+  "auth.rtorrentSocket": [
+    {
+      "type": 0,
+      "value": "rTorrent Сокет"
+    }
+  ],
+  "auth.rtorrentSocketPath": [
+    {
+      "type": 0,
+      "value": "RTorrent Socket шлях"
+    }
+  ],
+  "auth.user.accounts": [
+    {
+      "type": 0,
+      "value": "Облікові записи користувачів"
+    }
+  ],
+  "auth.username": [
+    {
+      "type": 0,
+      "value": "Ім'я користувача"
+    }
+  ],
+  "button.add": [
+    {
+      "type": 0,
+      "value": "Додати"
+    }
+  ],
+  "button.cancel": [
+    {
+      "type": 0,
+      "value": "Скасувати"
+    }
+  ],
+  "button.new": [
+    {
+      "type": 0,
+      "value": "Новий"
+    }
+  ],
+  "button.no": [
+    {
+      "type": 0,
+      "value": "Ні"
+    }
+  ],
+  "button.save": [
+    {
+      "type": 0,
+      "value": "Зберегти Налаштування"
+    }
+  ],
+  "button.save.feed": [
+    {
+      "type": 0,
+      "value": "Зберегти"
+    }
+  ],
+  "button.state.adding": [
+    {
+      "type": 0,
+      "value": "Додаємо..."
+    }
+  ],
+  "button.test": [
+    {
+      "type": 0,
+      "value": "Тест"
+    }
+  ],
+  "button.yes": [
+    {
+      "type": 0,
+      "value": "Так"
+    }
+  ],
+  "connection-interruption.heading": [
+    {
+      "type": 0,
+      "value": "Не вдається підключитися до rTorrent"
+    }
+  ],
+  "connection-interruption.verification-error": [
+    {
+      "type": 0,
+      "value": "Неможливо перевірити підключення."
+    }
+  ],
+  "connection-interruption.verification-success": [
+    {
+      "type": 0,
+      "value": "З'єднання успішне"
+    }
+  ],
+  "connection-interruption.verify-settings-prompt": [
+    {
+      "type": 0,
+      "value": "Давайте перевіримо ваші параметри підключення."
+    }
+  ],
+  "connectivity.modal.content": [
+    {
+      "type": 0,
+      "value": "Не вдається підключитися до rTorrent. Зараз необхідно оновити інформацію."
+    }
+  ],
+  "connectivity.modal.title": [
+    {
+      "type": 0,
+      "value": "Проблема з підключенням"
+    }
+  ],
+  "dependency.loading.notifications": [
+    {
+      "type": 0,
+      "value": "Notifications"
+    }
+  ],
+  "dependency.loading.torrent.list": [
+    {
+      "type": 0,
+      "value": "Torrent List"
+    }
+  ],
+  "dependency.loading.torrent.taxonomy": [
+    {
+      "type": 0,
+      "value": "Torrent Taxonomy"
+    }
+  ],
+  "dependency.loading.transfer.history": [
+    {
+      "type": 0,
+      "value": "Data Transfer History"
+    }
+  ],
+  "dependency.loading.transfer.rate.details": [
+    {
+      "type": 0,
+      "value": "Data Transfer Rate Details"
+    }
+  ],
+  "feeds.add.automatic.download.rule": [
+    {
+      "type": 0,
+      "value": "Додати правило завантаження"
+    }
+  ],
+  "feeds.add.feed": [
+    {
+      "type": 0,
+      "value": "Добавити RSS Feed"
+    }
+  ],
+  "feeds.applicable.feed": [
+    {
+      "type": 0,
+      "value": "Стрічка додатків"
+    }
+  ],
+  "feeds.apply.tags": [
+    {
+      "type": 0,
+      "value": "Застосувати мітки"
+    }
+  ],
+  "feeds.browse.feeds": [
+    {
+      "type": 0,
+      "value": "Перегляд стрічок"
+    }
+  ],
+  "feeds.exclude": [
+    {
+      "type": 0,
+      "value": "Не включати"
+    }
+  ],
+  "feeds.exclude.pattern": [
+    {
+      "type": 0,
+      "value": "Виключити ключ"
+    }
+  ],
+  "feeds.existing.feeds": [
+    {
+      "type": 0,
+      "value": "Існуючі подачі"
+    }
+  ],
+  "feeds.existing.rules": [
+    {
+      "type": 0,
+      "value": "Існуючі правила"
+    }
+  ],
+  "feeds.label": [
+    {
+      "type": 0,
+      "value": "Мітка"
+    }
+  ],
+  "feeds.match": [
+    {
+      "type": 0,
+      "value": "Матч"
+    }
+  ],
+  "feeds.match.count": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " співпадають"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " матчів"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "feeds.match.pattern": [
+    {
+      "type": 0,
+      "value": "Шаблон матчу"
+    }
+  ],
+  "feeds.no.feeds.available": [
+    {
+      "type": 0,
+      "value": "Немає доступних каналів."
+    }
+  ],
+  "feeds.no.feeds.defined": [
+    {
+      "type": 0,
+      "value": "Каналів не визначено."
+    }
+  ],
+  "feeds.no.rules.defined": [
+    {
+      "type": 0,
+      "value": "Правила не визначені."
+    }
+  ],
+  "feeds.regEx": [
+    {
+      "type": 0,
+      "value": "Реджекс"
+    }
+  ],
+  "feeds.search": [
+    {
+      "type": 0,
+      "value": "Шукати за словом"
+    }
+  ],
+  "feeds.select.feed": [
+    {
+      "type": 0,
+      "value": "Вибрати стрічку"
+    }
+  ],
+  "feeds.select.interval": [
+    {
+      "type": 0,
+      "value": "Проміжок"
+    }
+  ],
+  "feeds.start.on.load": [
+    {
+      "type": 0,
+      "value": "Запустити при завантаженні"
+    }
+  ],
+  "feeds.tabs.download.rules": [
+    {
+      "type": 0,
+      "value": "Правила завантаження"
+    }
+  ],
+  "feeds.tabs.feeds": [
+    {
+      "type": 0,
+      "value": "Стрічки новин"
+    }
+  ],
+  "feeds.tabs.heading": [
+    {
+      "type": 0,
+      "value": "Торент фіди"
+    }
+  ],
+  "feeds.tags": [
+    {
+      "type": 0,
+      "value": "Мітки"
+    }
+  ],
+  "feeds.time.day": [
+    {
+      "type": 0,
+      "value": "Днів"
+    }
+  ],
+  "feeds.time.hr": [
+    {
+      "type": 0,
+      "value": "Годин"
+    }
+  ],
+  "feeds.time.min": [
+    {
+      "type": 0,
+      "value": "Хвилин"
+    }
+  ],
+  "feeds.torrent.destination": [
+    {
+      "type": 0,
+      "value": "Призначення торенту"
+    }
+  ],
+  "feeds.url": [
+    {
+      "type": 0,
+      "value": "Адреса"
+    }
+  ],
+  "feeds.validation.interval.not.positive": [
+    {
+      "type": 0,
+      "value": "The interval must be a positive integer."
+    }
+  ],
+  "feeds.validation.invalid.regular.expression": [
+    {
+      "type": 0,
+      "value": "Недійсний регулярний вираз."
+    }
+  ],
+  "feeds.validation.must.select.feed": [
+    {
+      "type": 0,
+      "value": "Ви повинні вибрати канал."
+    }
+  ],
+  "feeds.validation.must.specify.destination": [
+    {
+      "type": 0,
+      "value": "Ви повинні вказати місце призначення."
+    }
+  ],
+  "feeds.validation.must.specify.label": [
+    {
+      "type": 0,
+      "value": "Будь ласка, вкажіть мітку."
+    }
+  ],
+  "feeds.validation.must.specify.valid.feed.url": [
+    {
+      "type": 0,
+      "value": "Необхідно вказати дійсний URL каналу."
+    }
+  ],
+  "filesystem.empty.directory": [
+    {
+      "type": 0,
+      "value": "Тека порожня."
+    }
+  ],
+  "filesystem.error.eacces": [
+    {
+      "type": 0,
+      "value": "Флуд не має дозволу на читання цієї теки."
+    }
+  ],
+  "filesystem.error.enoent": [
+    {
+      "type": 0,
+      "value": "Цей шлях не існує. Він буде створений."
+    }
+  ],
+  "filesystem.fetching": [
+    {
+      "type": 0,
+      "value": "Отримання структури каталогу..."
+    }
+  ],
+  "filter.all": [
+    {
+      "type": 0,
+      "value": "Всі"
+    }
+  ],
+  "filter.status.active": [
+    {
+      "type": 0,
+      "value": "Активний"
+    }
+  ],
+  "filter.status.checking": [
+    {
+      "type": 0,
+      "value": "Перевірка"
+    }
+  ],
+  "filter.status.completed": [
+    {
+      "type": 0,
+      "value": "Complete"
+    }
+  ],
+  "filter.status.downloading": [
+    {
+      "type": 0,
+      "value": "Завантажується"
+    }
+  ],
+  "filter.status.error": [
+    {
+      "type": 0,
+      "value": "Помилка"
+    }
+  ],
+  "filter.status.inactive": [
+    {
+      "type": 0,
+      "value": "Неактивний"
+    }
+  ],
+  "filter.status.stopped": [
+    {
+      "type": 0,
+      "value": "Зупинено"
+    }
+  ],
+  "filter.status.title": [
+    {
+      "type": 0,
+      "value": "Фільтр за станом"
+    }
+  ],
+  "filter.tag.title": [
+    {
+      "type": 0,
+      "value": "Фільтр за ярликами"
+    }
+  ],
+  "filter.tracker.title": [
+    {
+      "type": 0,
+      "value": "Фільтр по трекеру"
+    }
+  ],
+  "filter.untagged": [
+    {
+      "type": 0,
+      "value": "Без тегів"
+    }
+  ],
+  "general.ago": [
+    {
+      "type": 0,
+      "value": "тому"
+    }
+  ],
+  "general.at": [
+    {
+      "type": 0,
+      "value": "під"
+    }
+  ],
+  "general.clipboard.copied": [
+    {
+      "type": 0,
+      "value": "Скопійовано"
+    }
+  ],
+  "general.clipboard.copy": [
+    {
+      "type": 0,
+      "value": "Копія"
+    }
+  ],
+  "general.of": [
+    {
+      "type": 0,
+      "value": "з"
+    }
+  ],
+  "general.to": [
+    {
+      "type": 0,
+      "value": "по"
+    }
+  ],
+  "locale.language.auto": [
+    {
+      "type": 0,
+      "value": "Автоматично"
+    }
+  ],
+  "mediainfo.execError": [
+    {
+      "type": 0,
+      "value": "Виникла помилка під час роботи mediainfo на сервері. Перевірте, що mediainfo встановлений і доступний у PATH to Flood."
+    }
+  ],
+  "mediainfo.fetching": [
+    {
+      "type": 0,
+      "value": "Отримання..."
+    }
+  ],
+  "mediainfo.heading": [
+    {
+      "type": 0,
+      "value": "Вивід Середньовіччя"
+    }
+  ],
+  "notification.clear.all": [
+    {
+      "type": 0,
+      "value": "Очистити все"
+    }
+  ],
+  "notification.showing": [
+    {
+      "type": 0,
+      "value": "Показано"
+    }
+  ],
+  "notification.torrent.errored.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.errored.heading": [
+    {
+      "type": 0,
+      "value": "Повідомлення про помилку"
+    }
+  ],
+  "notification.torrent.finished.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.finished.heading": [
+    {
+      "type": 0,
+      "value": "Завершене завантаження"
+    }
+  ],
+  "priority.dont.download": [
+    {
+      "type": 0,
+      "value": "Не завантажувати"
+    }
+  ],
+  "priority.high": [
+    {
+      "type": 0,
+      "value": "Високий"
+    }
+  ],
+  "priority.low": [
+    {
+      "type": 0,
+      "value": "Низька"
+    }
+  ],
+  "priority.normal": [
+    {
+      "type": 0,
+      "value": "Нормальний"
+    }
+  ],
+  "settings.about.flood": [
+    {
+      "type": 0,
+      "value": "Про Flood"
+    }
+  ],
+  "settings.bandwidth.slots.download.divider.label": [
+    {
+      "type": 0,
+      "value": "Завантажити розділювач слотів"
+    }
+  ],
+  "settings.bandwidth.slots.download.global.label": [
+    {
+      "type": 0,
+      "value": "Завантажити слоти глобальним"
+    }
+  ],
+  "settings.bandwidth.slots.download.label": [
+    {
+      "type": 0,
+      "value": "Завантажити слоти на торент"
+    }
+  ],
+  "settings.bandwidth.slots.heading": [
+    {
+      "type": 0,
+      "value": "Наявність слоту"
+    }
+  ],
+  "settings.bandwidth.slots.upload.divider.label": [
+    {
+      "type": 0,
+      "value": "Завантажити розділювач слотів"
+    }
+  ],
+  "settings.bandwidth.slots.upload.global.label": [
+    {
+      "type": 0,
+      "value": "Глобальна передача слотів"
+    }
+  ],
+  "settings.bandwidth.slots.upload.label": [
+    {
+      "type": 0,
+      "value": "Відвантажити слоти за торент"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.download.label": [
+    {
+      "type": 0,
+      "value": "Пресети випадаючого списку: Завантажити"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
+    {
+      "type": 0,
+      "value": "Пресети випадаючого списку: Завантаження"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.download": [
+    {
+      "type": 0,
+      "value": "Збільшення швидкості завантаження"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.upload": [
+    {
+      "type": 0,
+      "value": "Збільшення швидкості вивантаження"
+    }
+  ],
+  "settings.bandwidth.transferrate.heading": [
+    {
+      "type": 0,
+      "value": "Збільшення швидкості передачі"
+    }
+  ],
+  "settings.connectivity.dht.label": [
+    {
+      "type": 0,
+      "value": "Увімкнути DHT"
+    }
+  ],
+  "settings.connectivity.dht.port.label": [
+    {
+      "type": 0,
+      "value": "DHT порт"
+    }
+  ],
+  "settings.connectivity.dpd.heading": [
+    {
+      "type": 0,
+      "value": "Децентралізований канал для учасника"
+    }
+  ],
+  "settings.connectivity.incoming.heading": [
+    {
+      "type": 0,
+      "value": "Вхідні підключення"
+    }
+  ],
+  "settings.connectivity.ip.hostname.label": [
+    {
+      "type": 0,
+      "value": "Повідомлено IP/Hostname"
+    }
+  ],
+  "settings.connectivity.max.http.connections": [
+    {
+      "type": 0,
+      "value": "Максимальна HTTP підключень"
+    }
+  ],
+  "settings.connectivity.peer.exchange.label": [
+    {
+      "type": 0,
+      "value": "Увімкнути обмін учасниками"
+    }
+  ],
+  "settings.connectivity.peers.desired.label": [
+    {
+      "type": 0,
+      "value": "Учасників Бажано"
+    }
+  ],
+  "settings.connectivity.peers.heading": [
+    {
+      "type": 0,
+      "value": "Учасники"
+    }
+  ],
+  "settings.connectivity.peers.max.label": [
+    {
+      "type": 0,
+      "value": "Максимальна кількість учасників"
+    }
+  ],
+  "settings.connectivity.peers.min.label": [
+    {
+      "type": 0,
+      "value": "Мінімум учасників"
+    }
+  ],
+  "settings.connectivity.peers.seeding.max.label": [
+    {
+      "type": 0,
+      "value": "Максимальна кількість учасників роздачі"
+    }
+  ],
+  "settings.connectivity.peers.seeding.min.label": [
+    {
+      "type": 0,
+      "value": "Мінімум учасників на роздачі"
+    }
+  ],
+  "settings.connectivity.port.open.label": [
+    {
+      "type": 0,
+      "value": "Відкритий порт"
+    }
+  ],
+  "settings.connectivity.port.randomize.label": [
+    {
+      "type": 0,
+      "value": "Перемішати порт"
+    }
+  ],
+  "settings.connectivity.port.range.label": [
+    {
+      "type": 0,
+      "value": "Діапазон портів"
+    }
+  ],
+  "settings.diskusage.mount.points": [
+    {
+      "type": 0,
+      "value": "Очки для використання диску"
+    }
+  ],
+  "settings.diskusage.show": [
+    {
+      "type": 0,
+      "value": "Показати"
+    }
+  ],
+  "settings.resources.disk.check.hash.label": [
+    {
+      "type": 0,
+      "value": "Перевірити хеш при завершенні"
+    }
+  ],
+  "settings.resources.disk.download.location.label": [
+    {
+      "type": 0,
+      "value": "Тека для завантажень за замовчуванням"
+    }
+  ],
+  "settings.resources.disk.heading": [
+    {
+      "type": 0,
+      "value": "Диск"
+    }
+  ],
+  "settings.resources.max.open.files": [
+    {
+      "type": 0,
+      "value": "Максимум відкритих файлів"
+    }
+  ],
+  "settings.resources.memory.heading": [
+    {
+      "type": 0,
+      "value": "Пам'ять"
+    }
+  ],
+  "settings.resources.memory.max.label": [
+    {
+      "type": 0,
+      "value": "Макс. використання пам'яті"
+    }
+  ],
+  "settings.tabs.about": [
+    {
+      "type": 0,
+      "value": "Про програму"
+    }
+  ],
+  "settings.tabs.authentication": [
+    {
+      "type": 0,
+      "value": "Автентифікація"
+    }
+  ],
+  "settings.tabs.bandwidth": [
+    {
+      "type": 0,
+      "value": "Ширина пропускної здатності"
+    }
+  ],
+  "settings.tabs.connectivity": [
+    {
+      "type": 0,
+      "value": "Підключення"
+    }
+  ],
+  "settings.tabs.diskusage": [
+    {
+      "type": 0,
+      "value": "Використання диску"
+    }
+  ],
+  "settings.tabs.heading": [
+    {
+      "type": 0,
+      "value": "Налаштування"
+    }
+  ],
+  "settings.tabs.resources": [
+    {
+      "type": 0,
+      "value": "Ресурси"
+    }
+  ],
+  "settings.tabs.userinterface": [
+    {
+      "type": 0,
+      "value": "Інтерфейс користувача"
+    }
+  ],
+  "settings.ui.displayed.details": [
+    {
+      "type": 0,
+      "value": "Стовпці подробиць торенту"
+    }
+  ],
+  "settings.ui.language": [
+    {
+      "type": 0,
+      "value": "Мова:"
+    }
+  ],
+  "settings.ui.locale": [
+    {
+      "type": 0,
+      "value": "Локалізація"
+    }
+  ],
+  "settings.ui.torrent.details.enabled": [
+    {
+      "type": 0,
+      "value": "Увімкнено"
+    }
+  ],
+  "settings.ui.torrent.details.tags.placement": [
+    {
+      "type": 0,
+      "value": "У розширеному перегляді теги в кінці списку працюють найкраще."
+    }
+  ],
+  "settings.ui.torrent.list": [
+    {
+      "type": 0,
+      "value": "Відображення торрентів"
+    }
+  ],
+  "settings.ui.torrent.size": [
+    {
+      "type": 0,
+      "value": "Розмір торенту"
+    }
+  ],
+  "settings.ui.torrent.size.condensed": [
+    {
+      "type": 0,
+      "value": "Стиснутий вигляд"
+    }
+  ],
+  "settings.ui.torrent.size.expanded": [
+    {
+      "type": 0,
+      "value": "Розширений вигляд"
+    }
+  ],
+  "sidebar.button.feeds": [
+    {
+      "type": 0,
+      "value": "Стрічки новин"
+    }
+  ],
+  "sidebar.button.log.out": [
+    {
+      "type": 0,
+      "value": "Вийти з системи"
+    }
+  ],
+  "sidebar.button.notifications": [
+    {
+      "type": 0,
+      "value": "Сповіщення"
+    }
+  ],
+  "sidebar.button.settings": [
+    {
+      "type": 0,
+      "value": "Налаштування"
+    }
+  ],
+  "sidebar.button.speedlimits": [
+    {
+      "type": 0,
+      "value": "Обмеження швидкості"
+    }
+  ],
+  "sidebar.search.placeholder": [
+    {
+      "type": 0,
+      "value": "Пошук торентів"
+    }
+  ],
+  "sidebar.speedlimits.download": [
+    {
+      "type": 0,
+      "value": "DOWNLOAD"
+    }
+  ],
+  "sidebar.speedlimits.upload": [
+    {
+      "type": 0,
+      "value": "UPLOAD"
+    }
+  ],
+  "sidebar.transferdata.downloaded": [
+    {
+      "type": 0,
+      "value": "Завантажено"
+    }
+  ],
+  "sidebar.transferdata.uploaded": [
+    {
+      "type": 0,
+      "value": "Відвантажено"
+    }
+  ],
+  "speed.unlimited": [
+    {
+      "type": 0,
+      "value": "Необмежено"
+    }
+  ],
+  "status.diskusage.title": [
+    {
+      "type": 0,
+      "value": "Використання диску"
+    }
+  ],
+  "torrent.list.peers": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "of"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrent.list.peers.of": [
+    {
+      "type": 0,
+      "value": "з"
+    }
+  ],
+  "torrents.add.button.add": [
+    {
+      "type": 0,
+      "value": "Додати Торрент"
+    }
+  ],
+  "torrents.add.destination.label": [
+    {
+      "type": 0,
+      "value": "Пункт призначення"
+    }
+  ],
+  "torrents.add.destination.placeholder": [
+    {
+      "type": 0,
+      "value": "Пункт призначення"
+    }
+  ],
+  "torrents.add.heading": [
+    {
+      "type": 0,
+      "value": "Додати торенти"
+    }
+  ],
+  "torrents.add.start.label": [
+    {
+      "type": 0,
+      "value": "Почати торент"
+    }
+  ],
+  "torrents.add.tab.file.browse": [
+    {
+      "type": 0,
+      "value": "або клацніть для перегляду"
+    }
+  ],
+  "torrents.add.tab.file.drop": [
+    {
+      "type": 0,
+      "value": "Перетягніть сюди файли,"
+    }
+  ],
+  "torrents.add.tab.file.title": [
+    {
+      "type": 0,
+      "value": "За файлом"
+    }
+  ],
+  "torrents.add.tab.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Адреса торенту або Magnet-посилання"
+    }
+  ],
+  "torrents.add.tab.url.title": [
+    {
+      "type": 0,
+      "value": "За URL"
+    }
+  ],
+  "torrents.add.tags": [
+    {
+      "type": 0,
+      "value": "Мітки"
+    }
+  ],
+  "torrents.add.torrents.label": [
+    {
+      "type": 0,
+      "value": "Торенти"
+    }
+  ],
+  "torrents.destination.base_path": [
+    {
+      "type": 0,
+      "value": "Використовувати як Базовий шлях"
+    }
+  ],
+  "torrents.details.actions.pause": [
+    {
+      "type": 0,
+      "value": "Пауза"
+    }
+  ],
+  "torrents.details.actions.start": [
+    {
+      "type": 0,
+      "value": "Старт"
+    }
+  ],
+  "torrents.details.actions.stop": [
+    {
+      "type": 0,
+      "value": "Зупинити"
+    }
+  ],
+  "torrents.details.details": [
+    {
+      "type": 0,
+      "value": "Подробиці"
+    }
+  ],
+  "torrents.details.files": [
+    {
+      "type": 0,
+      "value": "Файли"
+    }
+  ],
+  "torrents.details.files.download.file": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Завантажити файл"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Завантажити файл"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.files.loading": [
+    {
+      "type": 0,
+      "value": "Завантаження подробиць файлу..."
+    }
+  ],
+  "torrents.details.general.comment": [
+    {
+      "type": 0,
+      "value": "Коментар"
+    }
+  ],
+  "torrents.details.general.connected": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " підключено до "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrents.details.general.date.added": [
+    {
+      "type": 0,
+      "value": "Додано"
+    }
+  ],
+  "torrents.details.general.date.created": [
+    {
+      "type": 0,
+      "value": "Дата створення"
+    }
+  ],
+  "torrents.details.general.downloaded": [
+    {
+      "type": 0,
+      "value": "Завантажено"
+    }
+  ],
+  "torrents.details.general.free.disk.space": [
+    {
+      "type": 0,
+      "value": "Вільний дисковий простір"
+    }
+  ],
+  "torrents.details.general.hash": [
+    {
+      "type": 0,
+      "value": "Хеш"
+    }
+  ],
+  "torrents.details.general.heading.general": [
+    {
+      "type": 0,
+      "value": "Загальні налаштування"
+    }
+  ],
+  "torrents.details.general.heading.torrent": [
+    {
+      "type": 0,
+      "value": "Торент"
+    }
+  ],
+  "torrents.details.general.heading.tracker": [
+    {
+      "type": 0,
+      "value": "Трекер"
+    }
+  ],
+  "torrents.details.general.heading.transfer": [
+    {
+      "type": 0,
+      "value": "Переказ"
+    }
+  ],
+  "torrents.details.general.location": [
+    {
+      "type": 0,
+      "value": "Місцезнаходження"
+    }
+  ],
+  "torrents.details.general.none": [
+    {
+      "type": 0,
+      "value": "Без ефекту"
+    }
+  ],
+  "torrents.details.general.peers": [
+    {
+      "type": 0,
+      "value": "Учасники"
+    }
+  ],
+  "torrents.details.general.scheduler": [
+    {
+      "type": 0,
+      "value": "Планувальник"
+    }
+  ],
+  "torrents.details.general.scheduler.ignored": [
+    {
+      "type": 0,
+      "value": "Ігнорується"
+    }
+  ],
+  "torrents.details.general.scheduler.obeyed": [
+    {
+      "type": 0,
+      "value": "Підборіддя"
+    }
+  ],
+  "torrents.details.general.seeds": [
+    {
+      "type": 0,
+      "value": "Насіння"
+    }
+  ],
+  "torrents.details.general.size": [
+    {
+      "type": 0,
+      "value": "Розмір"
+    }
+  ],
+  "torrents.details.general.tags": [
+    {
+      "type": 0,
+      "value": "Мітки"
+    }
+  ],
+  "torrents.details.general.tracker.message": [
+    {
+      "type": 0,
+      "value": "Трекер повідомлення"
+    }
+  ],
+  "torrents.details.general.type": [
+    {
+      "type": 0,
+      "value": "Тип"
+    }
+  ],
+  "torrents.details.general.type.private": [
+    {
+      "type": 0,
+      "value": "Приватний"
+    }
+  ],
+  "torrents.details.general.type.public": [
+    {
+      "type": 0,
+      "value": "Загальнодоступна"
+    }
+  ],
+  "torrents.details.mediainfo": [
+    {
+      "type": 0,
+      "value": "Mediainfo"
+    }
+  ],
+  "torrents.details.peers": [
+    {
+      "type": 0,
+      "value": "Учасники"
+    }
+  ],
+  "torrents.details.peers.no.data": [
+    {
+      "type": 0,
+      "value": "Немає даних для учасників цього торенту."
+    }
+  ],
+  "torrents.details.selected.files": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " Обраний файл"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " обрані файли"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.selected.files.set.priority": [
+    {
+      "type": 0,
+      "value": "Встановити пріоритет"
+    }
+  ],
+  "torrents.details.trackers": [
+    {
+      "type": 0,
+      "value": "Трекери"
+    }
+  ],
+  "torrents.details.trackers.no.data": [
+    {
+      "type": 0,
+      "value": "Немає даних трекеру для цього торенту."
+    }
+  ],
+  "torrents.details.trackers.type": [
+    {
+      "type": 0,
+      "value": "Тип"
+    }
+  ],
+  "torrents.list.cannot.connect": [
+    {
+      "type": 0,
+      "value": "Не вдалося підключитися до rTorrent."
+    }
+  ],
+  "torrents.list.clear.filters": [
+    {
+      "type": 0,
+      "value": "Скинути фільтри"
+    }
+  ],
+  "torrents.list.context.check.hash": [
+    {
+      "type": 0,
+      "value": "Перевірити хеш"
+    }
+  ],
+  "torrents.list.context.details": [
+    {
+      "type": 0,
+      "value": "Деталі торенту"
+    }
+  ],
+  "torrents.list.context.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "torrents.list.context.move": [
+    {
+      "type": 0,
+      "value": "Встановити розташування торентів"
+    }
+  ],
+  "torrents.list.context.pause": [
+    {
+      "type": 0,
+      "value": "Пауза"
+    }
+  ],
+  "torrents.list.context.priority": [
+    {
+      "type": 0,
+      "value": "Пріоритет"
+    }
+  ],
+  "torrents.list.context.remove": [
+    {
+      "type": 0,
+      "value": "Видалити"
+    }
+  ],
+  "torrents.list.context.set.tags": [
+    {
+      "type": 0,
+      "value": "Встановити позначки"
+    }
+  ],
+  "torrents.list.context.start": [
+    {
+      "type": 0,
+      "value": "Старт"
+    }
+  ],
+  "torrents.list.context.stop": [
+    {
+      "type": 0,
+      "value": "Зупинити"
+    }
+  ],
+  "torrents.list.drop": [
+    {
+      "type": 0,
+      "value": "Перетягніть файли сюди, щоб додати їх в rTorrent."
+    }
+  ],
+  "torrents.list.no.torrents": [
+    {
+      "type": 0,
+      "value": "Немає торентів для відображення."
+    }
+  ],
+  "torrents.move.button.set.location": [
+    {
+      "type": 0,
+      "value": "Задати місцезнаходження"
+    }
+  ],
+  "torrents.move.button.state.setting": [
+    {
+      "type": 0,
+      "value": "Налаштування..."
+    }
+  ],
+  "torrents.move.check_hash.label": [
+    {
+      "type": 0,
+      "value": "Перевірити хеш"
+    }
+  ],
+  "torrents.move.data.label": [
+    {
+      "type": 0,
+      "value": "Переміщення даних"
+    }
+  ],
+  "torrents.move.heading": [
+    {
+      "type": 0,
+      "value": "Встановити розташування торентів"
+    }
+  ],
+  "torrents.properties.base.path": [
+    {
+      "type": 0,
+      "value": "Основний шлях"
+    }
+  ],
+  "torrents.properties.comment": [
+    {
+      "type": 0,
+      "value": "Коментар"
+    }
+  ],
+  "torrents.properties.creation.date": [
+    {
+      "type": 0,
+      "value": "Дата створення"
+    }
+  ],
+  "torrents.properties.date.added": [
+    {
+      "type": 0,
+      "value": "Додано"
+    }
+  ],
+  "torrents.properties.download.speed": [
+    {
+      "type": 0,
+      "value": "Швидкість завантаження"
+    }
+  ],
+  "torrents.properties.download.total": [
+    {
+      "type": 0,
+      "value": "Завантажено"
+    }
+  ],
+  "torrents.properties.eta": [
+    {
+      "type": 0,
+      "value": "ETA"
+    }
+  ],
+  "torrents.properties.free.disk.space": [
+    {
+      "type": 0,
+      "value": "Вільний дисковий простір"
+    }
+  ],
+  "torrents.properties.hash": [
+    {
+      "type": 0,
+      "value": "Хеш"
+    }
+  ],
+  "torrents.properties.ignore.schedule": [
+    {
+      "type": 0,
+      "value": "Ігнорувати планувальник"
+    }
+  ],
+  "torrents.properties.is.private": [
+    {
+      "type": 0,
+      "value": "Приватний"
+    }
+  ],
+  "torrents.properties.name": [
+    {
+      "type": 0,
+      "value": "Ім'я"
+    }
+  ],
+  "torrents.properties.peers": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "torrents.properties.percentage": [
+    {
+      "type": 0,
+      "value": "Процент завершено"
+    }
+  ],
+  "torrents.properties.ratio": [
+    {
+      "type": 0,
+      "value": "Співвідношення"
+    }
+  ],
+  "torrents.properties.seeds": [
+    {
+      "type": 0,
+      "value": "Seeds"
+    }
+  ],
+  "torrents.properties.size": [
+    {
+      "type": 0,
+      "value": "Розмір файлу"
+    }
+  ],
+  "torrents.properties.tags": [
+    {
+      "type": 0,
+      "value": "Мітки"
+    }
+  ],
+  "torrents.properties.tracker.message": [
+    {
+      "type": 0,
+      "value": "Трекер повідомлення"
+    }
+  ],
+  "torrents.properties.trackers": [
+    {
+      "type": 0,
+      "value": "Trackers"
+    }
+  ],
+  "torrents.properties.upload.speed": [
+    {
+      "type": 0,
+      "value": "Швидкість вивантаження"
+    }
+  ],
+  "torrents.properties.upload.total": [
+    {
+      "type": 0,
+      "value": "Відвантажено"
+    }
+  ],
+  "torrents.remove": [
+    {
+      "type": 0,
+      "value": "Вилучити торенти"
+    }
+  ],
+  "torrents.remove.are.you.sure": [
+    {
+      "type": 0,
+      "value": "Ви впевнені, що хочете видалити "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " торент"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " торрентів"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "?"
+    }
+  ],
+  "torrents.remove.delete.data": [
+    {
+      "type": 0,
+      "value": "Видалити дані"
+    }
+  ],
+  "torrents.remove.error.no.torrents.selected": [
+    {
+      "type": 0,
+      "value": "Ви не вибрали жодного торенту."
+    }
+  ],
+  "torrents.set.tags.button.set": [
+    {
+      "type": 0,
+      "value": "Встановити позначки"
+    }
+  ],
+  "torrents.set.tags.enter.tags": [
+    {
+      "type": 0,
+      "value": "Введіть мітки"
+    }
+  ],
+  "torrents.set.tags.heading": [
+    {
+      "type": 0,
+      "value": "Встановити позначки"
+    }
+  ],
+  "torrents.sort.title": [
+    {
+      "type": 0,
+      "value": "Сортувати за"
+    }
+  ],
+  "unit.size.byte": [
+    {
+      "type": 0,
+      "value": "Сі"
+    }
+  ],
+  "unit.size.gigabyte": [
+    {
+      "type": 0,
+      "value": "ГБ"
+    }
+  ],
+  "unit.size.kilobyte": [
+    {
+      "type": 0,
+      "value": "кБ"
+    }
+  ],
+  "unit.size.megabyte": [
+    {
+      "type": 0,
+      "value": "МБ"
+    }
+  ],
+  "unit.size.terabyte": [
+    {
+      "type": 0,
+      "value": "ТБ"
+    }
+  ],
+  "unit.speed": [
+    {
+      "type": 1,
+      "value": "baseUnit"
+    },
+    {
+      "type": 0,
+      "value": "/с"
+    }
+  ],
+  "unit.time.day": [
+    {
+      "type": 0,
+      "value": "д"
+    }
+  ],
+  "unit.time.hour": [
+    {
+      "type": 0,
+      "value": "год"
+    }
+  ],
+  "unit.time.infinity": [
+    {
+      "type": 0,
+      "value": "∞"
+    }
+  ],
+  "unit.time.minute": [
+    {
+      "type": 0,
+      "value": "м"
+    }
+  ],
+  "unit.time.second": [
+    {
+      "type": 0,
+      "value": "с"
+    }
+  ],
+  "unit.time.week": [
+    {
+      "type": 0,
+      "value": "тижд"
+    }
+  ],
+  "unit.time.year": [
+    {
+      "type": 0,
+      "value": "yr"
+    }
+  ],
+  "window.title": [
+    {
+      "type": 0,
+      "value": "↓ "
+    },
+    {
+      "type": 1,
+      "value": "down"
+    },
+    {
+      "type": 0,
+      "value": " ↑ "
+    },
+    {
+      "type": 1,
+      "value": "up"
+    },
+    {
+      "type": 0,
+      "value": " - Flood"
+    }
+  ]
+}

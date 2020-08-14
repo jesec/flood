@@ -1,0 +1,2225 @@
+{
+  "actionbar.button.add.torrent": [
+    {
+      "type": 0,
+      "value": "Torrent toevoegen"
+    }
+  ],
+  "actionbar.button.remove.torrent": [
+    {
+      "type": 0,
+      "value": "Verwijder Torrent"
+    }
+  ],
+  "actionbar.button.start.torrent": [
+    {
+      "type": 0,
+      "value": "Start Torrent"
+    }
+  ],
+  "actionbar.button.stop.torrent": [
+    {
+      "type": 0,
+      "value": "Stop Torrent"
+    }
+  ],
+  "alert.settings.saved": [
+    {
+      "type": 0,
+      "value": "Instellingen zijn opgeslagen."
+    }
+  ],
+  "alert.torrent.add": [
+    {
+      "type": 0,
+      "value": "Het toevoegen van "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " is klaar."
+    }
+  ],
+  "alert.torrent.add.failed": [
+    {
+      "type": 0,
+      "value": "Het toevoegen van "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " is mislukt."
+    }
+  ],
+  "alert.torrent.move": [
+    {
+      "type": 0,
+      "value": "Het verplaatsen van "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " is klaar."
+    }
+  ],
+  "alert.torrent.move.failed": [
+    {
+      "type": 0,
+      "value": "Het verplaatsen van "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " is mislukt."
+    }
+  ],
+  "alert.torrent.remove": [
+    {
+      "type": 0,
+      "value": "Het verwijderen van "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " is klaar."
+    }
+  ],
+  "alert.torrent.remove.failed": [
+    {
+      "type": 0,
+      "value": "Het verwijderen van "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " is mislukt."
+    }
+  ],
+  "auth.add.user": [
+    {
+      "type": 0,
+      "value": "Gebruiker toevoegen"
+    }
+  ],
+  "auth.admin": [
+    {
+      "type": 0,
+      "value": "Beheerder"
+    }
+  ],
+  "auth.connectionType": [
+    {
+      "type": 0,
+      "value": "rTorrent type verbinding"
+    }
+  ],
+  "auth.connectionType.socket": [
+    {
+      "type": 0,
+      "value": "Unix socket"
+    }
+  ],
+  "auth.connectionType.tcp": [
+    {
+      "type": 0,
+      "value": "TCP"
+    }
+  ],
+  "auth.create.account": [
+    {
+      "type": 0,
+      "value": "Maak account"
+    }
+  ],
+  "auth.create.an.account": [
+    {
+      "type": 0,
+      "value": "Maak een account"
+    }
+  ],
+  "auth.create.an.account.intro": [
+    {
+      "type": 0,
+      "value": "Welkom bij Flood!"
+    }
+  ],
+  "auth.current.user": [
+    {
+      "type": 0,
+      "value": "Huidige gebruiker"
+    }
+  ],
+  "auth.error.username.empty": [
+    {
+      "type": 0,
+      "value": "Gebruikersnaam mag niet leeg zijn."
+    }
+  ],
+  "auth.log.in": [
+    {
+      "type": 0,
+      "value": "Log in"
+    }
+  ],
+  "auth.login": [
+    {
+      "type": 0,
+      "value": "Aanmelden"
+    }
+  ],
+  "auth.login.intro": [
+    {
+      "type": 0,
+      "value": "Log in to your account."
+    }
+  ],
+  "auth.message.not.admin": [
+    {
+      "type": 0,
+      "value": "Gebruiker is geen Beheerder"
+    }
+  ],
+  "auth.password": [
+    {
+      "type": 0,
+      "value": "Wachtwoord"
+    }
+  ],
+  "auth.rtorrentHost": [
+    {
+      "type": 0,
+      "value": "rTorrent Host"
+    }
+  ],
+  "auth.rtorrentPort": [
+    {
+      "type": 0,
+      "value": "rTorrent Poort"
+    }
+  ],
+  "auth.rtorrentSocket": [
+    {
+      "type": 0,
+      "value": "rTorrent Socket"
+    }
+  ],
+  "auth.rtorrentSocketPath": [
+    {
+      "type": 0,
+      "value": "rTorrent Socket Pad"
+    }
+  ],
+  "auth.user.accounts": [
+    {
+      "type": 0,
+      "value": "Accounts"
+    }
+  ],
+  "auth.username": [
+    {
+      "type": 0,
+      "value": "Gebruikersnaam"
+    }
+  ],
+  "button.add": [
+    {
+      "type": 0,
+      "value": "Toevoegen"
+    }
+  ],
+  "button.cancel": [
+    {
+      "type": 0,
+      "value": "Annuleren"
+    }
+  ],
+  "button.new": [
+    {
+      "type": 0,
+      "value": "Nieuw"
+    }
+  ],
+  "button.no": [
+    {
+      "type": 0,
+      "value": "Nee"
+    }
+  ],
+  "button.save": [
+    {
+      "type": 0,
+      "value": "Instellingen opslaan"
+    }
+  ],
+  "button.save.feed": [
+    {
+      "type": 0,
+      "value": "Opslaan"
+    }
+  ],
+  "button.state.adding": [
+    {
+      "type": 0,
+      "value": "Toevoegen..."
+    }
+  ],
+  "button.test": [
+    {
+      "type": 0,
+      "value": "Test"
+    }
+  ],
+  "button.yes": [
+    {
+      "type": 0,
+      "value": "Ja"
+    }
+  ],
+  "connection-interruption.heading": [
+    {
+      "type": 0,
+      "value": "Kan geen verbinding maken met rTorrent"
+    }
+  ],
+  "connection-interruption.verification-error": [
+    {
+      "type": 0,
+      "value": "Verbinding kon niet worden geverifieerd."
+    }
+  ],
+  "connection-interruption.verification-success": [
+    {
+      "type": 0,
+      "value": "Verbinding succesvol"
+    }
+  ],
+  "connection-interruption.verify-settings-prompt": [
+    {
+      "type": 0,
+      "value": "Laten we je verbindingsinstellingen verifiëren."
+    }
+  ],
+  "connectivity.modal.content": [
+    {
+      "type": 0,
+      "value": "Kan geen verbinding maken met rTorrent. Update de informatie nu."
+    }
+  ],
+  "connectivity.modal.title": [
+    {
+      "type": 0,
+      "value": "Probleem met verbinding"
+    }
+  ],
+  "dependency.loading.notifications": [
+    {
+      "type": 0,
+      "value": "Notificaties"
+    }
+  ],
+  "dependency.loading.torrent.list": [
+    {
+      "type": 0,
+      "value": "Torrent lijst"
+    }
+  ],
+  "dependency.loading.torrent.taxonomy": [
+    {
+      "type": 0,
+      "value": "Torrent Taxonomie"
+    }
+  ],
+  "dependency.loading.transfer.history": [
+    {
+      "type": 0,
+      "value": "Gegevensoverdracht geschiedenis"
+    }
+  ],
+  "dependency.loading.transfer.rate.details": [
+    {
+      "type": 0,
+      "value": "Gegevensoverdracht snelheid details"
+    }
+  ],
+  "feeds.add.automatic.download.rule": [
+    {
+      "type": 0,
+      "value": "Regel toevoegen"
+    }
+  ],
+  "feeds.add.feed": [
+    {
+      "type": 0,
+      "value": "Feed toevoegen"
+    }
+  ],
+  "feeds.applicable.feed": [
+    {
+      "type": 0,
+      "value": "Feed"
+    }
+  ],
+  "feeds.apply.tags": [
+    {
+      "type": 0,
+      "value": "Tags toevoegen"
+    }
+  ],
+  "feeds.browse.feeds": [
+    {
+      "type": 0,
+      "value": "Bekijk feeds"
+    }
+  ],
+  "feeds.exclude": [
+    {
+      "type": 0,
+      "value": "Uitsluiten"
+    }
+  ],
+  "feeds.exclude.pattern": [
+    {
+      "type": 0,
+      "value": "Overslaan op patroon"
+    }
+  ],
+  "feeds.existing.feeds": [
+    {
+      "type": 0,
+      "value": "Bestaande feeds"
+    }
+  ],
+  "feeds.existing.rules": [
+    {
+      "type": 0,
+      "value": "Regels"
+    }
+  ],
+  "feeds.label": [
+    {
+      "type": 0,
+      "value": "Omschrijving"
+    }
+  ],
+  "feeds.match": [
+    {
+      "type": 0,
+      "value": "Overeenkomst"
+    }
+  ],
+  "feeds.match.count": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " match"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " matches"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "feeds.match.pattern": [
+    {
+      "type": 0,
+      "value": "Overeenkomst op patroon"
+    }
+  ],
+  "feeds.no.feeds.available": [
+    {
+      "type": 0,
+      "value": "Geen feeds beschikbaar."
+    }
+  ],
+  "feeds.no.feeds.defined": [
+    {
+      "type": 0,
+      "value": "Geen feeds toegevoegd."
+    }
+  ],
+  "feeds.no.rules.defined": [
+    {
+      "type": 0,
+      "value": "Geen regels toegevoegd."
+    }
+  ],
+  "feeds.regEx": [
+    {
+      "type": 0,
+      "value": "Reguliere expressie"
+    }
+  ],
+  "feeds.search": [
+    {
+      "type": 0,
+      "value": "Zoek term"
+    }
+  ],
+  "feeds.select.feed": [
+    {
+      "type": 0,
+      "value": "Selecteer feed"
+    }
+  ],
+  "feeds.select.interval": [
+    {
+      "type": 0,
+      "value": "Interval"
+    }
+  ],
+  "feeds.start.on.load": [
+    {
+      "type": 0,
+      "value": "Start na toevoegen"
+    }
+  ],
+  "feeds.tabs.download.rules": [
+    {
+      "type": 0,
+      "value": "Regels"
+    }
+  ],
+  "feeds.tabs.feeds": [
+    {
+      "type": 0,
+      "value": "Feeds"
+    }
+  ],
+  "feeds.tabs.heading": [
+    {
+      "type": 0,
+      "value": "Torrent feeds"
+    }
+  ],
+  "feeds.tags": [
+    {
+      "type": 0,
+      "value": "Labels"
+    }
+  ],
+  "feeds.time.day": [
+    {
+      "type": 0,
+      "value": "dagen"
+    }
+  ],
+  "feeds.time.hr": [
+    {
+      "type": 1,
+      "value": "durationValue"
+    },
+    {
+      "type": 0,
+      "value": " uur"
+    }
+  ],
+  "feeds.time.min": [
+    {
+      "type": 1,
+      "value": "durationValue"
+    },
+    {
+      "type": 0,
+      "value": " minuten"
+    }
+  ],
+  "feeds.torrent.destination": [
+    {
+      "type": 0,
+      "value": "Torrent downloadlocatie"
+    }
+  ],
+  "feeds.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "feeds.validation.interval.not.positive": [
+    {
+      "type": 0,
+      "value": "Je moet een positief nummer opgeven."
+    }
+  ],
+  "feeds.validation.invalid.regular.expression": [
+    {
+      "type": 0,
+      "value": "Fout in reguliere expressie."
+    }
+  ],
+  "feeds.validation.must.select.feed": [
+    {
+      "type": 0,
+      "value": "Je moet een feed selecteren."
+    }
+  ],
+  "feeds.validation.must.specify.destination": [
+    {
+      "type": 0,
+      "value": "Je moet een downloadlocatie opgeven."
+    }
+  ],
+  "feeds.validation.must.specify.label": [
+    {
+      "type": 0,
+      "value": "Je moet een label selecteren."
+    }
+  ],
+  "feeds.validation.must.specify.valid.feed.url": [
+    {
+      "type": 0,
+      "value": "Je moet een geldige feed URL opgeven."
+    }
+  ],
+  "filesystem.empty.directory": [
+    {
+      "type": 0,
+      "value": "Lege map."
+    }
+  ],
+  "filesystem.error.eacces": [
+    {
+      "type": 0,
+      "value": "Flood heeft geen toestemming om deze map te lezen."
+    }
+  ],
+  "filesystem.error.enoent": [
+    {
+      "type": 0,
+      "value": "Dit pad bestaat niet. Het zal worden aangemaakt."
+    }
+  ],
+  "filesystem.fetching": [
+    {
+      "type": 0,
+      "value": "Ophalen van map structuur..."
+    }
+  ],
+  "filter.all": [
+    {
+      "type": 0,
+      "value": "Alles"
+    }
+  ],
+  "filter.status.active": [
+    {
+      "type": 0,
+      "value": "Actief"
+    }
+  ],
+  "filter.status.checking": [
+    {
+      "type": 0,
+      "value": "Controleren"
+    }
+  ],
+  "filter.status.completed": [
+    {
+      "type": 0,
+      "value": "Klaar"
+    }
+  ],
+  "filter.status.downloading": [
+    {
+      "type": 0,
+      "value": "Downloaden"
+    }
+  ],
+  "filter.status.error": [
+    {
+      "type": 0,
+      "value": "Fout"
+    }
+  ],
+  "filter.status.inactive": [
+    {
+      "type": 0,
+      "value": "Inactief"
+    }
+  ],
+  "filter.status.stopped": [
+    {
+      "type": 0,
+      "value": "Gestopt"
+    }
+  ],
+  "filter.status.title": [
+    {
+      "type": 0,
+      "value": "Filter op status"
+    }
+  ],
+  "filter.tag.title": [
+    {
+      "type": 0,
+      "value": "Filter op tag"
+    }
+  ],
+  "filter.tracker.title": [
+    {
+      "type": 0,
+      "value": "Filter op tracker"
+    }
+  ],
+  "filter.untagged": [
+    {
+      "type": 0,
+      "value": "Niet getagd"
+    }
+  ],
+  "general.ago": [
+    {
+      "type": 0,
+      "value": "geleden"
+    }
+  ],
+  "general.at": [
+    {
+      "type": 0,
+      "value": "bij"
+    }
+  ],
+  "general.clipboard.copied": [
+    {
+      "type": 0,
+      "value": "Gekoppeld"
+    }
+  ],
+  "general.clipboard.copy": [
+    {
+      "type": 0,
+      "value": "Kopiëren"
+    }
+  ],
+  "general.of": [
+    {
+      "type": 0,
+      "value": "van"
+    }
+  ],
+  "general.to": [
+    {
+      "type": 0,
+      "value": "naar"
+    }
+  ],
+  "locale.language.auto": [
+    {
+      "type": 0,
+      "value": "Automatisch"
+    }
+  ],
+  "mediainfo.execError": [
+    {
+      "type": 0,
+      "value": "Er is een fout opgetreden tijdens het uitvoeren van mediainfo op de server. Controleer of mediainformatie is geïnstalleerd en beschikbaar is in de PATH naar Flood."
+    }
+  ],
+  "mediainfo.fetching": [
+    {
+      "type": 0,
+      "value": "Ophalen..."
+    }
+  ],
+  "mediainfo.heading": [
+    {
+      "type": 0,
+      "value": "Mediainfo Uitvoer"
+    }
+  ],
+  "notification.clear.all": [
+    {
+      "type": 0,
+      "value": "Alles wissen"
+    }
+  ],
+  "notification.showing": [
+    {
+      "type": 0,
+      "value": "Weergegeven"
+    }
+  ],
+  "notification.torrent.errored.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.errored.heading": [
+    {
+      "type": 0,
+      "value": "Fout gerapporteerd"
+    }
+  ],
+  "notification.torrent.finished.body": [
+    {
+      "type": 1,
+      "value": "name"
+    }
+  ],
+  "notification.torrent.finished.heading": [
+    {
+      "type": 0,
+      "value": "Downloaden voltooid"
+    }
+  ],
+  "priority.dont.download": [
+    {
+      "type": 0,
+      "value": "Niet downloaden"
+    }
+  ],
+  "priority.high": [
+    {
+      "type": 0,
+      "value": "Hoog"
+    }
+  ],
+  "priority.low": [
+    {
+      "type": 0,
+      "value": "Laag"
+    }
+  ],
+  "priority.normal": [
+    {
+      "type": 0,
+      "value": "Normaal"
+    }
+  ],
+  "settings.about.flood": [
+    {
+      "type": 0,
+      "value": "Over Flood"
+    }
+  ],
+  "settings.bandwidth.slots.download.divider.label": [
+    {
+      "type": 0,
+      "value": "Download slots divider"
+    }
+  ],
+  "settings.bandwidth.slots.download.global.label": [
+    {
+      "type": 0,
+      "value": "Download slots globaal"
+    }
+  ],
+  "settings.bandwidth.slots.download.label": [
+    {
+      "type": 0,
+      "value": "Download slots per torrent"
+    }
+  ],
+  "settings.bandwidth.slots.heading": [
+    {
+      "type": 0,
+      "value": "Slots"
+    }
+  ],
+  "settings.bandwidth.slots.upload.divider.label": [
+    {
+      "type": 0,
+      "value": "Upload slots divider"
+    }
+  ],
+  "settings.bandwidth.slots.upload.global.label": [
+    {
+      "type": 0,
+      "value": "Upload slots globaal"
+    }
+  ],
+  "settings.bandwidth.slots.upload.label": [
+    {
+      "type": 0,
+      "value": "Upload slots per torrent"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.download.label": [
+    {
+      "type": 0,
+      "value": "Dropdown downloadbeperking items"
+    }
+  ],
+  "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
+    {
+      "type": 0,
+      "value": "Dropdown uploadbeperking items"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.download": [
+    {
+      "type": 0,
+      "value": "Globale downloadbeperking"
+    }
+  ],
+  "settings.bandwidth.transferrate.global.throttle.upload": [
+    {
+      "type": 0,
+      "value": "Gobale uploadbeperking"
+    }
+  ],
+  "settings.bandwidth.transferrate.heading": [
+    {
+      "type": 0,
+      "value": "Sneldheidsbeperkingen"
+    }
+  ],
+  "settings.connectivity.dht.label": [
+    {
+      "type": 0,
+      "value": "Gebruik DHT"
+    }
+  ],
+  "settings.connectivity.dht.port.label": [
+    {
+      "type": 0,
+      "value": "DHT Poort"
+    }
+  ],
+  "settings.connectivity.dpd.heading": [
+    {
+      "type": 0,
+      "value": "Ongecentraliseerde Peer Ontdekking"
+    }
+  ],
+  "settings.connectivity.incoming.heading": [
+    {
+      "type": 0,
+      "value": "Inkomende Connecties"
+    }
+  ],
+  "settings.connectivity.ip.hostname.label": [
+    {
+      "type": 0,
+      "value": "Vermeld IP/Hostnaam"
+    }
+  ],
+  "settings.connectivity.max.http.connections": [
+    {
+      "type": 0,
+      "value": "Maximaal aantal HTTP connecties"
+    }
+  ],
+  "settings.connectivity.peer.exchange.label": [
+    {
+      "type": 0,
+      "value": "Gebruik Peer Exchange"
+    }
+  ],
+  "settings.connectivity.peers.desired.label": [
+    {
+      "type": 0,
+      "value": "Gewenst aantal peers"
+    }
+  ],
+  "settings.connectivity.peers.heading": [
+    {
+      "type": 0,
+      "value": "Leechers"
+    }
+  ],
+  "settings.connectivity.peers.max.label": [
+    {
+      "type": 0,
+      "value": "Maximaal aantal peers"
+    }
+  ],
+  "settings.connectivity.peers.min.label": [
+    {
+      "type": 0,
+      "value": "Minimaal aantal peers"
+    }
+  ],
+  "settings.connectivity.peers.seeding.max.label": [
+    {
+      "type": 0,
+      "value": "Maximaal aantal peers seeding"
+    }
+  ],
+  "settings.connectivity.peers.seeding.min.label": [
+    {
+      "type": 0,
+      "value": "Minimaal aantal peers seeding"
+    }
+  ],
+  "settings.connectivity.port.open.label": [
+    {
+      "type": 0,
+      "value": "Open poort"
+    }
+  ],
+  "settings.connectivity.port.randomize.label": [
+    {
+      "type": 0,
+      "value": "Willekeurige poort"
+    }
+  ],
+  "settings.connectivity.port.range.label": [
+    {
+      "type": 0,
+      "value": "Poortbereik"
+    }
+  ],
+  "settings.diskusage.mount.points": [
+    {
+      "type": 0,
+      "value": "Tekenpunten voor schijfgebruik"
+    }
+  ],
+  "settings.diskusage.show": [
+    {
+      "type": 0,
+      "value": "Weergeven"
+    }
+  ],
+  "settings.resources.disk.check.hash.label": [
+    {
+      "type": 0,
+      "value": "Controleer hash na downloaden"
+    }
+  ],
+  "settings.resources.disk.download.location.label": [
+    {
+      "type": 0,
+      "value": "Standaard downloadlocatie"
+    }
+  ],
+  "settings.resources.disk.heading": [
+    {
+      "type": 0,
+      "value": "Schijf"
+    }
+  ],
+  "settings.resources.max.open.files": [
+    {
+      "type": 0,
+      "value": "Maximaal aantal open bestanden"
+    }
+  ],
+  "settings.resources.memory.heading": [
+    {
+      "type": 0,
+      "value": "Geheugen"
+    }
+  ],
+  "settings.resources.memory.max.label": [
+    {
+      "type": 0,
+      "value": "Maximaal geheugengebruik"
+    }
+  ],
+  "settings.tabs.about": [
+    {
+      "type": 0,
+      "value": "Informatie"
+    }
+  ],
+  "settings.tabs.authentication": [
+    {
+      "type": 0,
+      "value": "Authenticatie"
+    }
+  ],
+  "settings.tabs.bandwidth": [
+    {
+      "type": 0,
+      "value": "Bandbreedte"
+    }
+  ],
+  "settings.tabs.connectivity": [
+    {
+      "type": 0,
+      "value": "Connectiviteit"
+    }
+  ],
+  "settings.tabs.diskusage": [
+    {
+      "type": 0,
+      "value": "Schijf gebruik"
+    }
+  ],
+  "settings.tabs.heading": [
+    {
+      "type": 0,
+      "value": "Instellingen"
+    }
+  ],
+  "settings.tabs.resources": [
+    {
+      "type": 0,
+      "value": "Hulpmiddelen"
+    }
+  ],
+  "settings.tabs.userinterface": [
+    {
+      "type": 0,
+      "value": "Gebruikersomgeving"
+    }
+  ],
+  "settings.ui.displayed.details": [
+    {
+      "type": 0,
+      "value": "Torrent detail kolommen"
+    }
+  ],
+  "settings.ui.language": [
+    {
+      "type": 0,
+      "value": "Taal"
+    }
+  ],
+  "settings.ui.locale": [
+    {
+      "type": 0,
+      "value": "Landinstelling"
+    }
+  ],
+  "settings.ui.torrent.details.enabled": [
+    {
+      "type": 0,
+      "value": "Ingeschakeld"
+    }
+  ],
+  "settings.ui.torrent.details.tags.placement": [
+    {
+      "type": 0,
+      "value": "In de uitgebreide weergave werken tags het beste aan het einde van de lijst."
+    }
+  ],
+  "settings.ui.torrent.list": [
+    {
+      "type": 0,
+      "value": "Torrent Lijst Weergave"
+    }
+  ],
+  "settings.ui.torrent.size": [
+    {
+      "type": 0,
+      "value": "Torrent Grootte"
+    }
+  ],
+  "settings.ui.torrent.size.condensed": [
+    {
+      "type": 0,
+      "value": "Gecondenseerde weergave"
+    }
+  ],
+  "settings.ui.torrent.size.expanded": [
+    {
+      "type": 0,
+      "value": "Uitgebreide weergave"
+    }
+  ],
+  "sidebar.button.feeds": [
+    {
+      "type": 0,
+      "value": "Feeds"
+    }
+  ],
+  "sidebar.button.log.out": [
+    {
+      "type": 0,
+      "value": "Log uit"
+    }
+  ],
+  "sidebar.button.notifications": [
+    {
+      "type": 0,
+      "value": "Notificaties"
+    }
+  ],
+  "sidebar.button.settings": [
+    {
+      "type": 0,
+      "value": "Instellingen"
+    }
+  ],
+  "sidebar.button.speedlimits": [
+    {
+      "type": 0,
+      "value": "Sneldheidsbeperkingen"
+    }
+  ],
+  "sidebar.search.placeholder": [
+    {
+      "type": 0,
+      "value": "Zoek torrents"
+    }
+  ],
+  "sidebar.speedlimits.download": [
+    {
+      "type": 0,
+      "value": "DOWNLOAD"
+    }
+  ],
+  "sidebar.speedlimits.upload": [
+    {
+      "type": 0,
+      "value": "UPLOAD"
+    }
+  ],
+  "sidebar.transferdata.downloaded": [
+    {
+      "type": 0,
+      "value": "Gedownload"
+    }
+  ],
+  "sidebar.transferdata.uploaded": [
+    {
+      "type": 0,
+      "value": "Geupload"
+    }
+  ],
+  "speed.unlimited": [
+    {
+      "type": 0,
+      "value": "Ongelimiteerd"
+    }
+  ],
+  "status.diskusage.title": [
+    {
+      "type": 0,
+      "value": "Schijf gebruik"
+    }
+  ],
+  "torrent.list.peers": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "of"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrent.list.peers.of": [
+    {
+      "type": 0,
+      "value": "van"
+    }
+  ],
+  "torrents.add.button.add": [
+    {
+      "type": 0,
+      "value": "Torrent toevoegen"
+    }
+  ],
+  "torrents.add.destination.label": [
+    {
+      "type": 0,
+      "value": "Downloadlocatie"
+    }
+  ],
+  "torrents.add.destination.placeholder": [
+    {
+      "type": 0,
+      "value": "Downloadlocatie"
+    }
+  ],
+  "torrents.add.heading": [
+    {
+      "type": 0,
+      "value": "Torrents toevoegen"
+    }
+  ],
+  "torrents.add.start.label": [
+    {
+      "type": 0,
+      "value": "Torrent starten"
+    }
+  ],
+  "torrents.add.tab.file.browse": [
+    {
+      "type": 0,
+      "value": "of klik om te bladeren."
+    }
+  ],
+  "torrents.add.tab.file.drop": [
+    {
+      "type": 0,
+      "value": "Sleep bestanden hierheen,"
+    }
+  ],
+  "torrents.add.tab.file.title": [
+    {
+      "type": 0,
+      "value": "Via bestand"
+    }
+  ],
+  "torrents.add.tab.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Torrent URL"
+    }
+  ],
+  "torrents.add.tab.url.title": [
+    {
+      "type": 0,
+      "value": "Via URL"
+    }
+  ],
+  "torrents.add.tags": [
+    {
+      "type": 0,
+      "value": "Labels"
+    }
+  ],
+  "torrents.add.torrents.label": [
+    {
+      "type": 0,
+      "value": "Torrents"
+    }
+  ],
+  "torrents.destination.base_path": [
+    {
+      "type": 0,
+      "value": "Gebruiken als basis pad"
+    }
+  ],
+  "torrents.details.actions.pause": [
+    {
+      "type": 0,
+      "value": "Pauzeer"
+    }
+  ],
+  "torrents.details.actions.start": [
+    {
+      "type": 0,
+      "value": "Starten"
+    }
+  ],
+  "torrents.details.actions.stop": [
+    {
+      "type": 0,
+      "value": "Stoppen"
+    }
+  ],
+  "torrents.details.details": [
+    {
+      "type": 0,
+      "value": "Beschrijving"
+    }
+  ],
+  "torrents.details.files": [
+    {
+      "type": 0,
+      "value": "Bestanden"
+    }
+  ],
+  "torrents.details.files.download.file": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Download bestand"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Download bestanden"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.files.loading": [
+    {
+      "type": 0,
+      "value": "Bestand details laden..."
+    }
+  ],
+  "torrents.details.general.comment": [
+    {
+      "type": 0,
+      "value": "Opmerking"
+    }
+  ],
+  "torrents.details.general.connected": [
+    {
+      "type": 1,
+      "value": "connected"
+    },
+    {
+      "type": 0,
+      "value": " verbonden van "
+    },
+    {
+      "type": 1,
+      "value": "total"
+    }
+  ],
+  "torrents.details.general.date.added": [
+    {
+      "type": 0,
+      "value": "Toegevoegd op"
+    }
+  ],
+  "torrents.details.general.date.created": [
+    {
+      "type": 0,
+      "value": "Aangemaakt op"
+    }
+  ],
+  "torrents.details.general.downloaded": [
+    {
+      "type": 0,
+      "value": "Gedownload"
+    }
+  ],
+  "torrents.details.general.free.disk.space": [
+    {
+      "type": 0,
+      "value": "Vrije schijfruimte"
+    }
+  ],
+  "torrents.details.general.hash": [
+    {
+      "type": 0,
+      "value": "Toegangssleutel"
+    }
+  ],
+  "torrents.details.general.heading.general": [
+    {
+      "type": 0,
+      "value": "Algemeen"
+    }
+  ],
+  "torrents.details.general.heading.torrent": [
+    {
+      "type": 0,
+      "value": "Torrent"
+    }
+  ],
+  "torrents.details.general.heading.tracker": [
+    {
+      "type": 0,
+      "value": "Tracker"
+    }
+  ],
+  "torrents.details.general.heading.transfer": [
+    {
+      "type": 0,
+      "value": "Overdracht"
+    }
+  ],
+  "torrents.details.general.location": [
+    {
+      "type": 0,
+      "value": "Downloadlocatie"
+    }
+  ],
+  "torrents.details.general.none": [
+    {
+      "type": 0,
+      "value": "Geen"
+    }
+  ],
+  "torrents.details.general.peers": [
+    {
+      "type": 0,
+      "value": "Leechers"
+    }
+  ],
+  "torrents.details.general.scheduler": [
+    {
+      "type": 0,
+      "value": "Taakplanner"
+    }
+  ],
+  "torrents.details.general.scheduler.ignored": [
+    {
+      "type": 0,
+      "value": "Genegeerd"
+    }
+  ],
+  "torrents.details.general.scheduler.obeyed": [
+    {
+      "type": 0,
+      "value": "Uitgevoerd"
+    }
+  ],
+  "torrents.details.general.seeds": [
+    {
+      "type": 0,
+      "value": "Seeders"
+    }
+  ],
+  "torrents.details.general.size": [
+    {
+      "type": 0,
+      "value": "Grootte"
+    }
+  ],
+  "torrents.details.general.tags": [
+    {
+      "type": 0,
+      "value": "Labels"
+    }
+  ],
+  "torrents.details.general.tracker.message": [
+    {
+      "type": 0,
+      "value": "Bericht van tracker"
+    }
+  ],
+  "torrents.details.general.type": [
+    {
+      "type": 0,
+      "value": "Type"
+    }
+  ],
+  "torrents.details.general.type.private": [
+    {
+      "type": 0,
+      "value": "Privé"
+    }
+  ],
+  "torrents.details.general.type.public": [
+    {
+      "type": 0,
+      "value": "Publiek"
+    }
+  ],
+  "torrents.details.mediainfo": [
+    {
+      "type": 0,
+      "value": "Media Info"
+    }
+  ],
+  "torrents.details.peers": [
+    {
+      "type": 0,
+      "value": "Leechers"
+    }
+  ],
+  "torrents.details.peers.no.data": [
+    {
+      "type": 0,
+      "value": "Er zijn geen peer-gegevens voor deze torrent."
+    }
+  ],
+  "torrents.details.selected.files": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " bestand geselecteerd"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 1,
+              "value": "countElement"
+            },
+            {
+              "type": 0,
+              "value": " bestanden geselecteerd"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    }
+  ],
+  "torrents.details.selected.files.set.priority": [
+    {
+      "type": 0,
+      "value": "Wijzig prioriteit"
+    }
+  ],
+  "torrents.details.trackers": [
+    {
+      "type": 0,
+      "value": "Trackers"
+    }
+  ],
+  "torrents.details.trackers.no.data": [
+    {
+      "type": 0,
+      "value": "Er zijn geen tracker-gegevens voor deze torrent."
+    }
+  ],
+  "torrents.details.trackers.type": [
+    {
+      "type": 0,
+      "value": "Type"
+    }
+  ],
+  "torrents.list.cannot.connect": [
+    {
+      "type": 0,
+      "value": "Kan geen verbinding maken met rTorrent."
+    }
+  ],
+  "torrents.list.clear.filters": [
+    {
+      "type": 0,
+      "value": "Wis filters"
+    }
+  ],
+  "torrents.list.context.check.hash": [
+    {
+      "type": 0,
+      "value": "Controleer hash"
+    }
+  ],
+  "torrents.list.context.details": [
+    {
+      "type": 0,
+      "value": "Torrent details"
+    }
+  ],
+  "torrents.list.context.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
+  "torrents.list.context.move": [
+    {
+      "type": 0,
+      "value": "Downloadlocatie..."
+    }
+  ],
+  "torrents.list.context.pause": [
+    {
+      "type": 0,
+      "value": "Pauzeer"
+    }
+  ],
+  "torrents.list.context.priority": [
+    {
+      "type": 0,
+      "value": "Prioriteit"
+    }
+  ],
+  "torrents.list.context.remove": [
+    {
+      "type": 0,
+      "value": "Verwijder"
+    }
+  ],
+  "torrents.list.context.set.tags": [
+    {
+      "type": 0,
+      "value": "Tags instellen"
+    }
+  ],
+  "torrents.list.context.start": [
+    {
+      "type": 0,
+      "value": "Starten"
+    }
+  ],
+  "torrents.list.context.stop": [
+    {
+      "type": 0,
+      "value": "Stoppen"
+    }
+  ],
+  "torrents.list.drop": [
+    {
+      "type": 0,
+      "value": "Sleep bestanden hier om ze toe te voegen aan Torrent."
+    }
+  ],
+  "torrents.list.no.torrents": [
+    {
+      "type": 0,
+      "value": "Geen torrents om te laten zien."
+    }
+  ],
+  "torrents.move.button.set.location": [
+    {
+      "type": 0,
+      "value": "Wijzig downloadlocatie"
+    }
+  ],
+  "torrents.move.button.state.setting": [
+    {
+      "type": 0,
+      "value": "Wijzigen..."
+    }
+  ],
+  "torrents.move.check_hash.label": [
+    {
+      "type": 0,
+      "value": "Controleer hash"
+    }
+  ],
+  "torrents.move.data.label": [
+    {
+      "type": 0,
+      "value": "Verplaats bestanden"
+    }
+  ],
+  "torrents.move.heading": [
+    {
+      "type": 0,
+      "value": "Wijzig downloadlocatie"
+    }
+  ],
+  "torrents.properties.base.path": [
+    {
+      "type": 0,
+      "value": "Standaard pad"
+    }
+  ],
+  "torrents.properties.comment": [
+    {
+      "type": 0,
+      "value": "Opmerking"
+    }
+  ],
+  "torrents.properties.creation.date": [
+    {
+      "type": 0,
+      "value": "Aanmaak datum"
+    }
+  ],
+  "torrents.properties.date.added": [
+    {
+      "type": 0,
+      "value": "Datum toegevoegd"
+    }
+  ],
+  "torrents.properties.download.speed": [
+    {
+      "type": 0,
+      "value": "Downloadsnelheid"
+    }
+  ],
+  "torrents.properties.download.total": [
+    {
+      "type": 0,
+      "value": "Gedownload"
+    }
+  ],
+  "torrents.properties.eta": [
+    {
+      "type": 0,
+      "value": "ETA"
+    }
+  ],
+  "torrents.properties.free.disk.space": [
+    {
+      "type": 0,
+      "value": "Vrije schijfruimte"
+    }
+  ],
+  "torrents.properties.hash": [
+    {
+      "type": 0,
+      "value": "Toegangssleutel"
+    }
+  ],
+  "torrents.properties.ignore.schedule": [
+    {
+      "type": 0,
+      "value": "Negeer Taakplanner"
+    }
+  ],
+  "torrents.properties.is.private": [
+    {
+      "type": 0,
+      "value": "Privé"
+    }
+  ],
+  "torrents.properties.name": [
+    {
+      "type": 0,
+      "value": "Naam"
+    }
+  ],
+  "torrents.properties.peers": [
+    {
+      "type": 0,
+      "value": "Peers"
+    }
+  ],
+  "torrents.properties.percentage": [
+    {
+      "type": 0,
+      "value": "Percentage compleet"
+    }
+  ],
+  "torrents.properties.ratio": [
+    {
+      "type": 0,
+      "value": "Verhouding"
+    }
+  ],
+  "torrents.properties.seeds": [
+    {
+      "type": 0,
+      "value": "Seeders"
+    }
+  ],
+  "torrents.properties.size": [
+    {
+      "type": 0,
+      "value": "Bestandsgrootte"
+    }
+  ],
+  "torrents.properties.tags": [
+    {
+      "type": 0,
+      "value": "Labels"
+    }
+  ],
+  "torrents.properties.tracker.message": [
+    {
+      "type": 0,
+      "value": "Tracker bericht"
+    }
+  ],
+  "torrents.properties.trackers": [
+    {
+      "type": 0,
+      "value": "Trackers"
+    }
+  ],
+  "torrents.properties.upload.speed": [
+    {
+      "type": 0,
+      "value": "Uploadsnelheid"
+    }
+  ],
+  "torrents.properties.upload.total": [
+    {
+      "type": 0,
+      "value": "Geupload"
+    }
+  ],
+  "torrents.remove": [
+    {
+      "type": 0,
+      "value": "Torrents verwijderen"
+    }
+  ],
+  "torrents.remove.are.you.sure": [
+    {
+      "type": 0,
+      "value": "Weet je zeker dat je "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=0": {
+          "value": [
+            {
+              "type": 0,
+              "value": "geen torrents"
+            }
+          ]
+        },
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "één torrent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 7
+            },
+            {
+              "type": 0,
+              "value": " torrents"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " wilt verwijderen?"
+    }
+  ],
+  "torrents.remove.delete.data": [
+    {
+      "type": 0,
+      "value": "Gegevens verwijderen"
+    }
+  ],
+  "torrents.remove.error.no.torrents.selected": [
+    {
+      "type": 0,
+      "value": "Je hebt geen torrents geselecteerd."
+    }
+  ],
+  "torrents.set.tags.button.set": [
+    {
+      "type": 0,
+      "value": "Tags instellen"
+    }
+  ],
+  "torrents.set.tags.enter.tags": [
+    {
+      "type": 0,
+      "value": "Tags invoeren"
+    }
+  ],
+  "torrents.set.tags.heading": [
+    {
+      "type": 0,
+      "value": "Tags instellen"
+    }
+  ],
+  "torrents.sort.title": [
+    {
+      "type": 0,
+      "value": "Sorteer op"
+    }
+  ],
+  "unit.size.byte": [
+    {
+      "type": 0,
+      "value": "B"
+    }
+  ],
+  "unit.size.gigabyte": [
+    {
+      "type": 0,
+      "value": "GB"
+    }
+  ],
+  "unit.size.kilobyte": [
+    {
+      "type": 0,
+      "value": "KB"
+    }
+  ],
+  "unit.size.megabyte": [
+    {
+      "type": 0,
+      "value": "MB"
+    }
+  ],
+  "unit.size.terabyte": [
+    {
+      "type": 0,
+      "value": "TB"
+    }
+  ],
+  "unit.speed": [
+    {
+      "type": 1,
+      "value": "baseUnit"
+    },
+    {
+      "type": 0,
+      "value": "/s"
+    }
+  ],
+  "unit.time.day": [
+    {
+      "type": 0,
+      "value": "d"
+    }
+  ],
+  "unit.time.hour": [
+    {
+      "type": 0,
+      "value": "h"
+    }
+  ],
+  "unit.time.infinity": [
+    {
+      "type": 0,
+      "value": "∞"
+    }
+  ],
+  "unit.time.minute": [
+    {
+      "type": 0,
+      "value": "m"
+    }
+  ],
+  "unit.time.second": [
+    {
+      "type": 0,
+      "value": "s"
+    }
+  ],
+  "unit.time.week": [
+    {
+      "type": 0,
+      "value": "w"
+    }
+  ],
+  "unit.time.year": [
+    {
+      "type": 0,
+      "value": "j"
+    }
+  ],
+  "window.title": [
+    {
+      "type": 0,
+      "value": "↓ "
+    },
+    {
+      "type": 1,
+      "value": "down"
+    },
+    {
+      "type": 0,
+      "value": " ↑ "
+    },
+    {
+      "type": 1,
+      "value": "up"
+    },
+    {
+      "type": 0,
+      "value": " - Flood"
+    }
+  ]
+}

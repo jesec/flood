@@ -1,6 +1,10 @@
 name: Check types
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - 'integration/**'
+  pull_request:
 
 jobs:
   check-types:

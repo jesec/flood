@@ -1,23 +1,23 @@
-import EN from './strings.json';
+import EN from './compiled/strings.json';
 
-import CS from './translations/cs.json';
-import DE from './translations/de.json';
-import ES from './translations/es.json';
-import FR from './translations/fr.json';
-import IT from './translations/it.json';
-import NL from './translations/nl.json';
-import NO from './translations/no.json';
-import PL from './translations/pl.json';
-import PT from './translations/pt.json';
-import RU from './translations/ru.json';
-import RO from './translations/ro.json';
-import SV from './translations/sv.json';
-import UK from './translations/uk.json';
-import KO from './translations/ko.json';
-import JA from './translations/ja.json';
-import ZH_HANS from './translations/zh-Hans.json';
-import ZH_HANT from './translations/zh-Hant.json';
-import AR from './translations/ar.json';
+import CS from './compiled/cs.json';
+import DE from './compiled/de.json';
+import ES from './compiled/es.json';
+import FR from './compiled/fr.json';
+import IT from './compiled/it.json';
+import NL from './compiled/nl.json';
+import NO from './compiled/no.json';
+import PL from './compiled/pl.json';
+import PT from './compiled/pt.json';
+import RU from './compiled/ru.json';
+import RO from './compiled/ro.json';
+import SV from './compiled/sv.json';
+import UK from './compiled/uk.json';
+import KO from './compiled/ko.json';
+import JA from './compiled/ja.json';
+import ZH_HANS from './compiled/zh-Hans.json';
+import ZH_HANT from './compiled/zh-Hant.json';
+import AR from './compiled/ar.json';
 
 export const languages = {
   auto: EN,

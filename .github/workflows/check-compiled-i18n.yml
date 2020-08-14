@@ -1,4 +1,4 @@
-name: Build
+name: Check pre-compiled i18n
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  check-compiled-i18n:
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,4 +24,4 @@ jobs:
 
     - run: cp config.template.js config.js
     - run: npm install
-    - run: npm run build
+    - run: npm run check-compiled-i18n
