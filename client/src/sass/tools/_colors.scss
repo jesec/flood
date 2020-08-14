@@ -1,17 +1,67 @@
-$dark-blue: #1d2938;
-$grey: #293341;
-$light-grey: #3a4553;
-$light-grey--lighter: lighten($light-grey, 40%);
-$blue: #258de5;
-$blue--lighter: saturate(lighten($blue, 10%), 100%);
-$green: #39ce83;
-$green--darker: darken(#39ce83, 4%);
-$light-blue: #e9eef2;
-$red: #e95779;
+@function harden($color, $modifier: 1) {
+  @return darken($color, 6% * $modifier);
+}
+
 $white: #fff;
+
+$red: #f34570;
+$red--alpha--light: rgba($red, 0.1);
+$red--alpha--medium: rgba($red, 0.2);
+
+$blue: #349cf4;
+$blue--light: lighten($blue, 7%);
+$blue--lighter: lighten($blue, 40%);
+$blue--soft: rgba($blue, 0.05);
+$blue--hard: harden($blue, 1.5);
+$blue--darker: darken($blue, 20%);
+
+$light-blue: #e9eef2;
+$dark-blue: #1d2938;
+
+$green: #39ce83;
+$green--light: lighten($green, 7%);
+$green--hard: harden($green, 1.3);
+$green--darker: darken(#39ce83, 4%);
+
+$medium-grey: #abbac7;
+$medium-grey--lighter: #b9c7d3;
+$medium-grey--soft: rgba($medium-grey, 0.15);
+
+$grey: #8899a8;
+$grey--soft: rgba($grey, 0.15);
+$grey--light: lighten($grey, 7%);
+$grey--lighter: lighten($grey, 25%);
+$grey--hard: harden($grey, 1.75);
+$grey--harder: harden($grey, 1);
+
+$dark-grey: #34516c;
+$dark-grey--light: lighten($dark-grey, 7%);
+$darker-grey: #1d2938;
+$darkest-grey: #28303b;
+$darkest-grey--hard: #293341;
+$darkest-grey--darker: #202d3c;
+
+$light-grey: #e9eef2;
+$light-grey--lighter: #f8f9fb;
+$light-grey--soft: rgba($light-grey, 0.15);
+$light-grey--hard: harden($light-grey);
+
+$another-grey: #3a4553;
 
 $background: $dark-blue;
 $foreground: #53718a;
 
-$sidebar--background: $grey;
+$sidebar--background: $darkest-grey--hard;
 $main-content--background: $light-blue;
+
+$textbox--background: #242b36;
+$textbox--foreground: #5e728c;
+$textbox--border: #1a2028;
+$textbox--fulfilled--background: $textbox--background;
+$textbox--placeholder: #424d5e;
+$textbox--selection--foreground: #1a2028;
+$textbox--selection--background: $blue--lighter;
+$textbox--active--background: $textbox--background;
+$textbox--active--border: $blue;
+$textbox--active--foreground: $blue;
+$textbox--active--placeholder: $textbox--placeholder;

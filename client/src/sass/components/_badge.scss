@@ -1,5 +1,5 @@
-$sidebar-filter--count--foreground: darken($grey, 5%);
-$sidebar-filter--count--background: lighten($grey, 20%);
+$sidebar-filter--count--foreground: darken($darkest-grey--hard, 5%);
+$sidebar-filter--count--background: lighten($darkest-grey--hard, 20%);
 $sidebar-filter--count--background--active: $blue;
 
 .badge {
