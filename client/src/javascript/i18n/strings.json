@@ -82,6 +82,7 @@
   "filesystem.error.eacces": "Flood does not have permission to read this directory.",
   "filesystem.error.enoent": "This path does not exist. It will be created.",
   "filesystem.fetching": "Fetching directory structure...",
+  "filesystem.parent.directory": "Parent Directory",
   "filter.all": "All",
   "filter.status.title": "Filter by Status",
   "filter.status.downloading": "Downloading",
