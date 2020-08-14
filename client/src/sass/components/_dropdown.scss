@@ -41,7 +41,8 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
 
   &__button {
     display: block;
-    padding: $dropdown--button--padding--top $dropdown--button--padding--right + $dropdown--arrow--width + $dropdown--arrow--margin $dropdown--button--padding--bottom $dropdown--button--padding--left;
+    padding: $dropdown--button--padding--top $dropdown--button--padding--right + $dropdown--arrow--width +
+      $dropdown--arrow--margin $dropdown--button--padding--bottom $dropdown--button--padding--left;
     text-align: left;
     width: auto;
 
@@ -136,9 +137,7 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
   }
 
   &--match-button-width {
-
     .dropdown {
-
       &__content {
         max-width: 100%;
       }
@@ -153,11 +152,8 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
     z-index: 10;
 
     .dropdown {
-
       &__header {
-
         .dropdown {
-
           &__value {
             color: $dropdown--value--active;
           }

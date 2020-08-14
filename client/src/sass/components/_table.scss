@@ -1,4 +1,4 @@
-$table--heading--background: rgba(#f6f8fA, 0.6);
+$table--heading--background: rgba(#f6f8fa, 0.6);
 $table--heading--border: rgba(#1d2938, 0.1);
 $table--heading--border--horizontal: rgba(#1d2938, 0.08);
 
@@ -9,12 +9,10 @@ $table--heading--color--active--hover: darken($table--heading--color, 40%);
 
 $table--heading--resize--handle--width: 9px;
 $table--heading--resize--indicator--width: 1px;
-$table--heading--resize--indicator--background: rgba(darken(#f6f8fA, 10%), 0.75);
+$table--heading--resize--indicator--background: rgba(darken(#f6f8fa, 10%), 0.75);
 
 .table {
-
   &__row {
-
     &--heading {
       background: $table--heading--background;
       box-shadow: 0 1px 0 $table--heading--border;
@@ -71,9 +69,7 @@ $table--heading--resize--indicator--background: rgba(darken(#f6f8fA, 10%), 0.75)
     }
 
     &--direction {
-
       &--asc {
-
         &:after {
           transform: rotate(180deg);
         }
@@ -85,7 +81,6 @@ $table--heading--resize--indicator--background: rgba(darken(#f6f8fA, 10%), 0.75)
       min-width: 0;
 
       &.table {
-
         &__heading {
           border: none;
           margin: 0;

@@ -9,9 +9,7 @@ $authentication--header--foreground: $white;
 $authentication--label--foreground: #3a5567;
 
 .application {
-
   &__view {
-
     &--auth-form {
       background: $light-blue;
     }
@@ -19,13 +17,11 @@ $authentication--label--foreground: #3a5567;
 }
 
 .form {
-
   &--authentication {
     max-width: 350px;
     width: 100%;
 
     .form {
-
       &__wrapper {
         background: $white;
         border: 1px solid $authentication--form--border;
@@ -34,7 +30,8 @@ $authentication--label--foreground: #3a5567;
 
       &__header {
         background: $blue;
-        margin: $authentication--form--padding * -1 $authentication--form--padding * -1 0 $authentication--form--padding * -1;
+        margin: $authentication--form--padding * -1 $authentication--form--padding * -1 0 $authentication--form--padding *
+          -1;
         padding: $authentication--form--padding * 0.75 $authentication--form--padding;
 
         h1 {
@@ -50,7 +47,6 @@ $authentication--label--foreground: #3a5567;
       }
 
       &--header {
-
       }
 
       &__label {
@@ -58,7 +54,6 @@ $authentication--label--foreground: #3a5567;
       }
 
       &__row {
-
         &--error {
           color: $red;
           font-size: 0.75em;

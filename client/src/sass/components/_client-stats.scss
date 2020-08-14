@@ -5,11 +5,11 @@ $client-stats--speed--stroke--width: 2px;
 
 $client-stats--download--primary--foreground: #39ce83;
 $client-stats--download--secondary--foreground: rgba($client-stats--download--primary--foreground, 0.75);
-$client-stats--download--graph--stroke: #39Ce83;
+$client-stats--download--graph--stroke: #39ce83;
 $client-stats--download--graph--fill--top: #2bae6c;
 $client-stats--download--graph--fill--bottom: #2bae6c;
 
-$client-stats--upload--primary--foreground: #349Cf4;
+$client-stats--upload--primary--foreground: #349cf4;
 $client-stats--upload--secondary--foreground: rgba($client-stats--upload--primary--foreground, 0.75);
 $client-stats--upload--graph--stroke: #349cf4;
 $client-stats--upload--graph--fill--top: #2387d9;
@@ -40,11 +40,8 @@ $client-stats--timestamp--foreground: #526780;
       color: $client-stats--download--primary--foreground;
 
       .client-stats {
-
         &__rate {
-
           &__data {
-
             &--limit {
               background: $client-stats--download--primary--foreground;
             }
@@ -61,11 +58,8 @@ $client-stats--timestamp--foreground: #526780;
       color: $client-stats--upload--primary--foreground;
 
       .client-stats {
-
         &__rate {
-
           &__data {
-
             &--limit {
               background: $client-stats--upload--primary--foreground;
             }
@@ -91,7 +85,6 @@ $client-stats--timestamp--foreground: #526780;
     }
 
     &__data {
-
       &--secondary,
       &--timestamp {
         font-size: 0.8em;
@@ -178,9 +171,7 @@ $client-stats--timestamp--foreground: #526780;
 }
 
 .graph {
-
   &__gradient {
-
     &--bottom {
       stop-opacity: $client-stats--speed--fill--bottom--opacity;
 

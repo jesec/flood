@@ -85,7 +85,6 @@
     transition: all $speed--xx-fast;
 
     .toggle-input {
-
       &__indicator {
         border-color: $input--border--hover;
 
@@ -99,7 +98,6 @@
         }
 
         &__icon {
-
           &,
           .icon {
             display: block;
@@ -114,7 +112,6 @@
     color: $blue;
 
     .toggle-input {
-
       &__indicator {
         border-color: $blue;
         box-shadow: form--element--box-shadow--active($blue);
@@ -138,9 +135,7 @@
 
   &:active,
   &--is-active {
-
     .toggle-input {
-
       &__indicator {
         background-color: rgba($blue, 0.1);
         color: rgba($blue, 0.8);
@@ -162,15 +157,10 @@
     visibility: hidden;
 
     &:checked {
-
       & + .toggle-input {
-
         &__indicator {
-
           .toggle-input {
-
             &__indicator {
-
               &__icon {
                 opacity: 1;
               }
@@ -218,9 +208,7 @@
   }
 
   &.checkbox {
-
     .toggle-input {
-
       &__indicator {
         border-radius: $form--element--border-radius;
       }
@@ -228,9 +216,7 @@
   }
 
   &.radio {
-
     .toggle-input {
-
       &__indicator {
         border-radius: 100%;
       }

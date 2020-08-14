@@ -6,11 +6,8 @@
     text-align: left;
 
     &:hover {
-
       .select {
-
         &__indicator {
-
           .icon {
             fill: $grey--hard;
           }
@@ -20,11 +17,8 @@
 
     &:focus,
     &:active {
-
       .select {
-
         &__indicator {
-
           .icon {
             fill: $blue;
             transition: all $speed--xx-fast;
@@ -38,7 +32,6 @@
     }
 
     .select {
-
       &__item {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -54,7 +47,6 @@
     z-index: 1;
 
     .context-menu__items & {
-
       &:hover {
         background: $light-grey--lighter;
       }
@@ -84,11 +76,8 @@
   }
 
   &--is-open {
-
     .select {
-
       &__indicator {
-
         .icon {
           transform: translate(-50%, -50%) rotate(180deg);
         }

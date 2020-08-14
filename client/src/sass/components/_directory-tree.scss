@@ -14,18 +14,14 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     min-height: 0;
 
     &--toolbar-visible {
-
       .directory-tree {
-
         &__selection-toolbar {
           transform: translateY(0);
         }
       }
 
       .modal__content {
-
         &--nested-scroll {
-
           &__content {
             margin-bottom: $selection-toolbar--height;
           }
@@ -70,16 +66,13 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     }
 
     .dropdown {
-
       &__items {
         font-size: 1.1em;
         padding-bottom: 0;
       }
 
       &__trigger {
-
         .dropdown {
-
           &__button {
             padding-top: 5px;
             padding-bottom: 5px;
@@ -99,7 +92,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     text-overflow: ellipsis;
 
     .icon {
-
       &--disk {
         height: 14px;
         margin-right: 8px;
@@ -109,11 +101,8 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     }
 
     .directory-tree {
-
       &__checkbox {
-
         .checkbox {
-
           &__decoy {
             height: 18px;
             width: 18px;
@@ -124,7 +113,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
   }
 
   &__tree {
-
     .directory-tree__tree {
       padding-left: 0;
     }
@@ -138,15 +126,10 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     white-space: nowrap;
 
     &:hover > .file__label .directory-tree {
-
       &__checkbox {
-
         .directory-tree {
-
           &__checkbox {
-
             &__item {
-
               &--icon {
                 opacity: 0;
               }
@@ -155,9 +138,7 @@ $selection-toolbar--height: $spacing-unit * 1.5;
                 opacity: 1;
 
                 .checkbox {
-
                   &__decoy {
-
                     &:after {
                       opacity: 1;
                     }
@@ -171,15 +152,10 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     }
 
     &--selected .directory-tree {
-
       &__checkbox {
-
         .directory-tree {
-
           &__checkbox {
-
             &__item {
-
               &--icon {
                 opacity: 0.75;
               }
@@ -214,7 +190,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
       width: auto;
 
       .icon {
-
         &--file {
           transition: fill 0.25s;
         }
@@ -232,7 +207,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
         }
 
         &--priority {
-
           .icon {
             height: auto;
             margin-right: 0;
@@ -286,7 +260,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
         z-index: 2;
 
         .checkbox {
-
           &__decoy {
             height: 16px;
             margin-right: 0;
@@ -300,7 +273,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
         z-index: 1;
 
         .icon {
-
           &.icon--folder {
             margin: -1px 0 0 1px;
           }
@@ -310,11 +282,8 @@ $selection-toolbar--height: $spacing-unit * 1.5;
   }
 
   & > .directory-tree {
-
     &__tree {
-
       & > .directory-tree {
-
         &__node {
           padding-left: 0;
         }
@@ -323,7 +292,6 @@ $selection-toolbar--height: $spacing-unit * 1.5;
   }
 
   .icon {
-
     &--file,
     &--folder {
       height: 14px;
@@ -337,11 +305,8 @@ $selection-toolbar--height: $spacing-unit * 1.5;
 }
 
 .directory-tree {
-
   &__node {
-
     .file {
-
       &__label {
         align-items: center;
         display: flex;

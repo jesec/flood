@@ -1,9 +1,6 @@
 .form {
-
   &__element {
-
     &--has-addon {
-
       &--placed-before {
         padding-left: $button--has-addon--padding--left;
 
@@ -94,7 +91,6 @@
         pointer-events: auto;
 
         &:hover {
-
           .icon {
             fill: $blue;
             transition: all $speed--xx-fast;

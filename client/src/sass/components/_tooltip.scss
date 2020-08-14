@@ -70,21 +70,15 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
   }
 
   &--position {
-
     &--bottom,
     &--top {
-
       &.tooltip {
-
         &--anchor {
-
           &--center {
             transform: translateX(-50%);
 
             .tooltip {
-
               &__content {
-
                 &:after {
                   left: 50%;
                   transform: translateX(-50%);
@@ -94,11 +88,8 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
           }
 
           &--start {
-
             &.tooltip {
-
               &--align {
-
                 &--center {
                   transform: translateX($tooltip-anchor-offset * -1);
                 }
@@ -106,9 +97,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
             }
 
             .tooltip {
-
               &__content {
-
                 &:after {
                   left: $tooltip-arrow-offset;
                 }
@@ -120,9 +109,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
             transform: translateX(calc(-100% + #{$tooltip-anchor-offset}));
 
             .tooltip {
-
               &__content {
-
                 &:after {
                   right: $tooltip-arrow-offset;
                 }
@@ -137,9 +124,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
       padding-top: $tooltip-arrow-border-width;
 
       .tooltip {
-
         &__content {
-
           &:after {
             border-left-color: transparent;
             border-right-color: transparent;
@@ -154,9 +139,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
       padding-bottom: $tooltip-arrow-border-width;
 
       .tooltip {
-
         &__content {
-
           &:after {
             border-bottom: none;
             border-left-color: transparent;
@@ -169,19 +152,14 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
 
     &--left,
     &--right {
-
       &.tooltip {
-
         &--anchor {
-
           &--center {
             top: 50%;
             transform: translateY(-50%);
 
             .tooltip {
-
               &__content {
-
                 &:after {
                   top: 50%;
                   transform: translateY(-50%);
@@ -194,9 +172,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
             transform: translateY($tooltip-anchor-offset * -1);
 
             .tooltip {
-
               &__content {
-
                 &:after {
                   top: $tooltip-arrow-offset;
                 }
@@ -208,9 +184,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
             transform: translateY(calc(-100% + #{$tooltip-anchor-offset}));
 
             .tooltip {
-
               &__content {
-
                 &:after {
                   bottom: $tooltip-arrow-offset;
                 }
@@ -225,9 +199,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
       padding-right: $tooltip-arrow-border-width;
 
       .tooltip {
-
         &__content {
-
           &:after {
             border-bottom-color: transparent;
             border-right: none;
@@ -242,9 +214,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
       padding-left: $tooltip-arrow-border-width;
 
       .tooltip {
-
         &__content {
-
           &:after {
             border-bottom-color: transparent;
             border-left: none;
@@ -257,9 +227,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
   }
 
   &--is-error {
-
     .tooltip {
-
       &__content {
         background: $tooltip-background--error;
         color: $tooltip-foreground--error;

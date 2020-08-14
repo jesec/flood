@@ -5,9 +5,7 @@
   width: 100%;
 
   &--dark {
-
     &.toolbar {
-
       &--bottom {
         border-top: 1px solid $dark-blue;
       }
@@ -18,9 +16,7 @@
     }
 
     .toolbar {
-
       &__item {
-
         &--button {
           color: darken($foreground, 10%);
 

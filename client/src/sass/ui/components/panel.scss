@@ -1,4 +1,3 @@
-
 $panel--spacing--horizontal--medium: $spacing--x-large;
 $panel--spacing--vertical--medium: $spacing--medium;
 
@@ -12,15 +11,14 @@ $panel--spacing--vertical--large: $spacing--xx-large;
   overflow: hidden;
 
   &--medium {
-
     .panel {
-
       &__content {
         padding: $panel--spacing--vertical--medium $panel--spacing--horizontal--medium;
       }
 
       &__header {
-        padding: $panel--spacing--vertical--medium $panel--spacing--horizontal--medium 0 $panel--spacing--horizontal--medium;
+        padding: $panel--spacing--vertical--medium $panel--spacing--horizontal--medium 0
+          $panel--spacing--horizontal--medium;
 
         &--has-border {
           padding-bottom: $panel--spacing--vertical--medium;
@@ -28,7 +26,8 @@ $panel--spacing--vertical--large: $spacing--xx-large;
       }
 
       &__footer {
-        padding: 0 $panel--spacing--horizontal--medium $panel--spacing--vertical--medium $panel--spacing--horizontal--medium;
+        padding: 0 $panel--spacing--horizontal--medium $panel--spacing--vertical--medium
+          $panel--spacing--horizontal--medium;
 
         &--has-border {
           padding-top: $panel--spacing--vertical--medium;
@@ -38,15 +37,14 @@ $panel--spacing--vertical--large: $spacing--xx-large;
   }
 
   &--large {
-
     .panel {
-
       &__content {
         padding: $panel--spacing--vertical--large $panel--spacing--horizontal--large;
       }
 
       &__header {
-        padding: $panel--spacing--vertical--large $panel--spacing--horizontal--large 0 $panel--spacing--horizontal--large;
+        padding: $panel--spacing--vertical--large $panel--spacing--horizontal--large 0
+          $panel--spacing--horizontal--large;
 
         &--has-border {
           padding-bottom: $panel--spacing--vertical--large;
@@ -54,7 +52,8 @@ $panel--spacing--vertical--large: $spacing--xx-large;
       }
 
       &__footer {
-        padding: 0 $panel--spacing--horizontal--large $panel--spacing--vertical--large $panel--spacing--horizontal--large ;
+        padding: 0 $panel--spacing--horizontal--large $panel--spacing--vertical--large
+          $panel--spacing--horizontal--large;
 
         &--has-border {
           padding-top: $panel--spacing--vertical--large;
@@ -64,7 +63,6 @@ $panel--spacing--vertical--large: $spacing--xx-large;
   }
 
   &__header {
-
     &--has-border {
       border-bottom: 1px solid $grey--soft;
     }
@@ -86,9 +84,7 @@ $panel--spacing--vertical--large: $spacing--xx-large;
   }
 
   &__content {
-
     &--has-border {
-
       &--top {
         border-top: 1px solid $grey--soft;
       }
@@ -100,7 +96,6 @@ $panel--spacing--vertical--large: $spacing--xx-large;
   }
 
   &__footer {
-
     &--has-border {
       border-top: 1px solid $grey--soft;
     }

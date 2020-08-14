@@ -23,9 +23,7 @@ $loading-indicator--tick--background--inverse: rgba($blue, 0.75);
   width: 32px;
 
   &.is-inverse {
-
     .loading-indicator {
-
       &__bar {
         background: $loading-indicator--bar--background--inverse;
 

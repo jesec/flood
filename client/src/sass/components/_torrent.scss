@@ -58,13 +58,11 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &:hover {
-
     &:after {
       background: $torrent--background--hover;
     }
 
     .torrent {
-
       &__more-info {
         opacity: 1;
         pointer-events: auto;
@@ -82,9 +80,7 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     &--tags {
-
       .torrent {
-
         &__tag {
           display: inline-block;
           margin-right: $spacing-unit * 3/10;
@@ -102,9 +98,7 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     &__icon {
-
       &--checkmark {
-
         &.icon {
           opacity: 1;
         }
@@ -120,9 +114,7 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &__details {
-
     &__section {
-
       &--secondary {
         color: $torrent--secondary--foreground;
       }
@@ -134,13 +126,9 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &--is-stopped {
-
     .torrent {
-
       &__details {
-
         &__section {
-
           &--secondary {
             color: $torrent--secondary--foreground--stopped;
           }
@@ -167,15 +155,10 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &--has-error {
-
     &.torrent {
-
       &--is-stopped {
-
         .torrent {
-
           &__detail {
-
             &--name {
               color: $torrent--primary--foreground--error--stopped;
             }
@@ -185,9 +168,7 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     .torrent {
-
       &__detail {
-
         &--name {
           color: $torrent--primary--foreground--error;
         }
@@ -200,13 +181,9 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &--is-downloading {
-
     &--actively {
-
       .torrent {
-
         &__detail {
-
           &--downRate {
             color: $green;
             font-weight: 500;
@@ -215,11 +192,8 @@ $more-info--border: $textbox-repeater--button--border;
       }
 
       .torrent-details {
-
         &__sub-heading {
-
           &__tertiary {
-
             &--download {
               color: $blue;
 
@@ -234,13 +208,9 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &--is-uploading {
-
     &--actively {
-
       .torrent {
-
         &__detail {
-
           &--upRate {
             color: $blue;
             font-weight: 500;
@@ -249,11 +219,8 @@ $more-info--border: $textbox-repeater--button--border;
       }
 
       .torrent-details {
-
         &__sub-heading {
-
           &__tertiary {
-
             &--upload {
               color: $green;
 
@@ -268,21 +235,15 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &--is-selected {
-
     &.torrent {
-
       &--has-error {
-
         .torrent {
-
           &__detail {
-
             &--name {
               color: $torrent--primary--foreground--selected--error;
             }
 
             &--tags {
-
               .tag {
                 background: $torrent--tags--background--selected--has-error;
                 color: $torrent--tags--foreground--has-error;
@@ -298,7 +259,6 @@ $more-info--border: $textbox-repeater--button--border;
 
         &,
         &:hover {
-
           &:after {
             background: $torrent--background--error;
           }
@@ -306,15 +266,10 @@ $more-info--border: $textbox-repeater--button--border;
       }
 
       &--is-stopped {
-
         &.torrent {
-
           &--has-error {
-
             .torrent {
-
               &__detail {
-
                 &--name {
                   color: $torrent--primary--foreground--error--stopped--selected;
                 }
@@ -324,7 +279,6 @@ $more-info--border: $textbox-repeater--button--border;
         }
 
         .torrent {
-
           &__detail {
             color: $torrent--secondary--foreground--selected--stopped;
 
@@ -343,9 +297,7 @@ $more-info--border: $textbox-repeater--button--border;
           }
 
           &__details {
-
             &__section {
-
               &--secondary {
                 color: $torrent--secondary--foreground--selected--stopped;
               }
@@ -361,7 +313,6 @@ $more-info--border: $textbox-repeater--button--border;
 
     &,
     &:hover {
-
       &:after {
         background: $torrent--background--selected;
         opacity: 1;
@@ -369,7 +320,6 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     .torrent {
-
       &__detail {
         color: $torrent--secondary--foreground--selected;
 
@@ -383,7 +333,6 @@ $more-info--border: $textbox-repeater--button--border;
         }
 
         &--tags {
-
           .tag {
             background: $torrent--tags--background--selected;
             color: $torrent--tags--foreground--selected;
@@ -392,9 +341,7 @@ $more-info--border: $textbox-repeater--button--border;
       }
 
       &__details {
-
         &__section {
-
           &--secondary {
             color: $torrent--secondary--foreground--selected;
           }
@@ -416,15 +363,10 @@ $more-info--border: $textbox-repeater--button--border;
     height: 70px;
 
     &.torrent {
-
       &--is-downloading {
-
         &--actively {
-
           .torrent {
-
             &__detail {
-
               &--eta {
                 margin-right: 10px;
                 opacity: 1;
@@ -437,9 +379,7 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     .torrent {
-
       &__details {
-
         &__section {
           display: flex;
 
@@ -467,7 +407,6 @@ $more-info--border: $textbox-repeater--button--border;
             }
 
             .torrent {
-
               &__detail {
                 width: auto;
               }
@@ -541,20 +480,17 @@ $more-info--border: $textbox-repeater--button--border;
         }
 
         &--tags {
-
           &:last-child {
             margin-left: auto;
             width: auto;
           }
 
           .torrent {
-
             &__tags {
               margin-right: 0;
             }
 
             &__tag {
-
               &:last-child {
                 margin-right: 0;
               }
@@ -587,11 +523,8 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     &.torrent {
-
       &--is-stopped {
-
         .torrent {
-
           &__detail {
             color: $torrent--secondary--foreground--stopped;
           }
@@ -599,16 +532,13 @@ $more-info--border: $textbox-repeater--button--border;
       }
 
       &--is-selected {
-
         &,
         & + .torrent {
           border-color: $torrent--border--selected;
         }
 
         &.torrent {
-
           &--has-error {
-
             &,
             & + .torrent {
               border-color: $torrent--border--selected--error;
@@ -616,9 +546,7 @@ $more-info--border: $textbox-repeater--button--border;
           }
 
           &--is-stopped {
-
             .torrent {
-
               &__detail {
                 color: $torrent--tertiary--foreground--selected--stopped;
               }
@@ -627,7 +555,6 @@ $more-info--border: $textbox-repeater--button--border;
         }
 
         .torrent {
-
           &__detail {
             color: $torrent--secondary--foreground--selected;
           }
@@ -636,7 +563,6 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     .torrent {
-
       &__detail {
         flex: 0 0 auto;
         font-size: 0.8em;
@@ -650,7 +576,6 @@ $more-info--border: $textbox-repeater--button--border;
         }
 
         &--percentComplete {
-
           .icon {
             opacity: 1;
           }
@@ -659,9 +584,7 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     .progress-bar {
-
       &__icon {
-
         .icon {
           margin-right: 0;
         }
@@ -672,9 +595,7 @@ $more-info--border: $textbox-repeater--button--border;
   &__more-info {
     background: $more-info--background;
     border-radius: 32px 0 0 32px;
-    box-shadow:
-      0 0 30px rgba($more-info--box-shadow--hue, 0.11),
-      0 0 0 1px rgba($more-info--box-shadow--hue, 0.07);
+    box-shadow: 0 0 30px rgba($more-info--box-shadow--hue, 0.11), 0 0 0 1px rgba($more-info--box-shadow--hue, 0.07);
     height: 32px;
     margin-top: -16px;
     position: absolute;
@@ -697,9 +618,7 @@ $more-info--border: $textbox-repeater--button--border;
 
     &:hover {
       background: $more-info--background--hover;
-      box-shadow:
-        0 0 30px rgba($more-info--box-shadow--hue, 0.2),
-        0 0 0 1px rgba($more-info--box-shadow--hue, 0.1);
+      box-shadow: 0 0 30px rgba($more-info--box-shadow--hue, 0.2), 0 0 0 1px rgba($more-info--box-shadow--hue, 0.1);
 
       .icon {
         fill: $blue;

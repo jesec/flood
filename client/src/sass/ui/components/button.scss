@@ -1,11 +1,9 @@
 @function button--text-shadow($color) {
-  @return 0 1px 0 darken($color, 5%),
-    0 1px 2px rgba(darken($color, 10%), 0.8);
+  @return 0 1px 0 darken($color, 5%), 0 1px 2px rgba(darken($color, 10%), 0.8);
 }
 
 @function button--svg-shadow($color) {
-  @return drop-shadow(0 1px 0 darken($color, 5%))
-    drop-shadow(0 1px 2px rgba(darken($color, 10%), 0.8));
+  @return drop-shadow(0 1px 0 darken($color, 5%)) drop-shadow(0 1px 2px rgba(darken($color, 10%), 0.8));
 }
 
 .button {
@@ -268,16 +266,13 @@
   }
 
   &--is-loading {
-
     .button {
-
       &__content {
         opacity: 0;
       }
     }
 
     .icon {
-
       &--loading {
         opacity: 1;
       }

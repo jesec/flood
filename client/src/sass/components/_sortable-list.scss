@@ -59,17 +59,15 @@ $sortable-list--item--border--preview: darken($sortable-list--item--border, 3%);
     }
 
     & + .sortable-list {
-
       &__item {
         margin-top: -1px;
       }
     }
 
     .toggle-input {
-
       &__indicator {
         background: darken($input--inverse--background, 5%);
-        border-color:  darken($input--inverse--background, 8%);
+        border-color: darken($input--inverse--background, 8%);
       }
     }
 

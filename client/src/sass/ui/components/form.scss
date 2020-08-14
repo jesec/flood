@@ -15,7 +15,6 @@
 }
 
 .form {
-
   &__row {
     display: flex;
     margin-bottom: $form__row--margin--vertical;
@@ -31,7 +30,6 @@
     }
 
     &--align {
-
       &--start {
         align-items: flex-start;
       }
@@ -46,7 +44,6 @@
     }
 
     &--justify {
-
       &--start {
         justify-content: flex-start;
       }
@@ -138,7 +135,6 @@
   }
 
   &__element {
-
     &__label {
       display: block;
       font-size: $font-size--x-small;

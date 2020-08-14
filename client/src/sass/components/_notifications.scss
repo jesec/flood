@@ -1,15 +1,12 @@
 $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
 
 .notifications {
-
   &--empty {
     text-align: center;
   }
 
   &--is-loading {
-
     .notifications {
-
       &__list {
         opacity: 0.25;
       }
@@ -64,9 +61,7 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
       width: 24px;
 
       .loading-indicator {
-
         &--dots {
-
           &__dot {
             fill: currentColor;
           }
@@ -76,11 +71,8 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
   }
 
   &__toolbar {
-
     .toolbar {
-
       &__item {
-
         &--button {
           flex-basis: 33.33%;
         }
@@ -90,7 +82,6 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
 }
 
 .notification {
-
   &__heading {
     color: #495d76;
     font-size: 0.75rem;
@@ -102,7 +93,6 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
   }
 
   &__message {
-
     &__sub-heading {
       color: $notification--sub-heading--color;
       font-style: italic;

@@ -4,7 +4,6 @@ $filesystem--directory-list--background--hover: rgba($filesystem--directory-list
 $filesystem--directory-list--parent--border-color: lighten($filesystem--directory-list--foreground, 43%);
 
 .filesystem {
-
   &__directory-list {
     color: $filesystem--directory-list--foreground;
     list-style: none;
@@ -26,7 +25,6 @@ $filesystem--directory-list--parent--border-color: lighten($filesystem--director
       }
 
       &--directory {
-
         &:hover {
           background: $filesystem--directory-list--background--hover;
         }

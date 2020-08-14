@@ -4,7 +4,7 @@ const glob = require('glob');
 const path = require('path');
 const prettier = require('prettier');
 
-const SOURCE_PATTERN = `{client,scripts,server,shared}${path.sep}!(assets){${path.sep},}{**${path.sep}*,*}.{js,jsx,ts,tsx,json,md}`;
+const SOURCE_PATTERN = `{client,scripts,server,shared}${path.sep}!(assets){${path.sep},}{**${path.sep}*,*}.{js,jsx,ts,tsx,json,md,css,scss,sass,less}`;
 
 const readFile = (filePath) => {
   return new Promise((resolve, reject) => {

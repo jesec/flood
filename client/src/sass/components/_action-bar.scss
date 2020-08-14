@@ -24,7 +24,6 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   }
 
   &__item {
-
     &:first-child {
       text-align: left;
     }
@@ -97,9 +96,7 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
 }
 
 .action {
-  box-shadow:
-    1px 0 transparent,
-    -1px 0 transparent;
+  box-shadow: 1px 0 transparent, -1px 0 transparent;
   cursor: pointer;
   display: inline-block;
   height: 60px;
@@ -110,9 +107,7 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
 
   &:hover {
     background: $action--background--hover;
-    box-shadow:
-      1px 0 $action--border--hover,
-      -1px 0 $action--border--hover;
+    box-shadow: 1px 0 $action--border--hover, -1px 0 $action--border--hover;
 
     .icon {
       fill: $action--foreground--hover;

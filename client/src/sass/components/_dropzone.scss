@@ -22,7 +22,6 @@ $dropzone--file--foreground: $dropzone--foreground;
     border-color: $input--inverse--border--hover;
 
     .dropzone__icon {
-
       .icon {
         fill: $dropzone--icon--fill--hover;
       }
@@ -30,14 +29,12 @@ $dropzone--file--foreground: $dropzone--foreground;
   }
 
   &--is-dragging {
-
     &,
     &:hover {
       border-color: $dropzone--border--dragging;
       color: $dropzone--foreground--dragging;
 
       .dropzone__icon {
-
         .icon {
           fill: $dropzone--icon--fill--dragging;
         }
@@ -46,9 +43,7 @@ $dropzone--file--foreground: $dropzone--foreground;
   }
 
   &__icon {
-
     .icon {
-
       &--files {
         fill: $dropzone--icon--fill;
         height: 64px;
@@ -56,7 +51,6 @@ $dropzone--file--foreground: $dropzone--foreground;
         width: 64px;
 
         &__file {
-
           &--right,
           &--left {
             fill-opacity: 0.5;
@@ -97,9 +91,7 @@ $dropzone--file--foreground: $dropzone--foreground;
     }
 
     &__file {
-
       .icon {
-
         &--file {
           display: inline-block;
           height: 14px;
@@ -114,9 +106,7 @@ $dropzone--file--foreground: $dropzone--foreground;
       }
 
       &:hover {
-
         .icon {
-
           &--file {
             opacity: 0.5;
           }

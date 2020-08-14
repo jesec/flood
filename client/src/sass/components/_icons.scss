@@ -19,11 +19,8 @@
 }
 
 .icon {
-
   &--eta {
-
     .icon {
-
       &__ring {
         fill-opacity: 1;
       }
@@ -31,7 +28,6 @@
   }
 
   &--information {
-
     &__fill {
       fill-opacity: 0.05;
     }
@@ -42,11 +38,8 @@
   }
 
   &--limits {
-
     .limits {
-
       &__bars {
-
         &--top {
           fill-opacity: 0.4;
         }
@@ -63,11 +56,8 @@
   }
 
   &--loading-indicator {
-
     .loading-indicator {
-
       &--dots {
-
         &__dot {
           animation: loading-indicator-dots-pulse 0.6s linear alternate infinite;
           fill: $white;

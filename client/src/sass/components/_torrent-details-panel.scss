@@ -41,7 +41,6 @@ $torrent-details--tags--background: #515f6f;
 $torrent-details--tags--foreground: #1a2028;
 
 .torrent-details {
-
   &__heading {
     color: inherit;
     font-size: inherit;
@@ -103,14 +102,10 @@ $torrent-details--tags--foreground: #1a2028;
   }
 
   &__header {
-
     &.is-completed,
     &.is-stopped {
-
       .progress-bar {
-
         &__icon {
-
           .icon {
             fill: $torrent-details--header--progress-bar--fill;
           }
@@ -120,7 +115,6 @@ $torrent-details--tags--foreground: #1a2028;
           background: $torrent-details--header--progress-bar--fill;
 
           &__wrapper {
-
             &:after {
               background: $torrent-details--header--progress-bar--fill;
             }
@@ -152,7 +146,6 @@ $torrent-details--tags--foreground: #1a2028;
     width: 100%;
 
     &__heading {
-
       &--primary {
         color: $torrent-details--directory-tree--parent-directory--foreground;
         font-size: 1.125em;
@@ -186,14 +179,12 @@ $torrent-details--tags--foreground: #1a2028;
       margin-left: -8px;
 
       .directory-tree {
-
         &__node {
           color: $directory-tree--foreground;
           position: relative;
           transition: background 0.25s, border 0.25s, color 0.25s;
 
           &--group {
-
             &:after {
               background: $directory-tree--group--extension;
             }
@@ -207,7 +198,6 @@ $torrent-details--tags--foreground: #1a2028;
               font-weight: 500;
 
               .icon {
-
                 &--folder {
                   fill: $directory-tree--icon--folder--open;
                 }
@@ -215,7 +205,6 @@ $torrent-details--tags--foreground: #1a2028;
             }
 
             .icon {
-
               &--folder {
                 fill: $directory-tree--icon--folder;
               }
@@ -247,9 +236,7 @@ $torrent-details--tags--foreground: #1a2028;
               }
 
               .file {
-
                 &__detail {
-
                   &--size,
                   &--priority {
                     color: $directory-tree--file-details--hover--foreground;
@@ -258,7 +245,6 @@ $torrent-details--tags--foreground: #1a2028;
               }
 
               .icon {
-
                 &--file {
                   fill: $torrent-details--directory-tree--file--hover--foreground;
                 }
@@ -270,7 +256,6 @@ $torrent-details--tags--foreground: #1a2028;
             width: auto;
 
             &__detail {
-
               &--size,
               &--priority {
                 color: currentColor;
@@ -287,7 +272,6 @@ $torrent-details--tags--foreground: #1a2028;
           color: $torrent-details--directory-tree--parent-directory--foreground;
 
           .icon {
-
             &--disk {
               fill: $torrent-details--directory-tree--parent-directory--icon--fill;
             }
@@ -296,7 +280,6 @@ $torrent-details--tags--foreground: #1a2028;
       }
 
       .icon {
-
         &--file {
           fill: $directory-tree--icon--file;
         }
@@ -310,16 +293,13 @@ $torrent-details--tags--foreground: #1a2028;
   }
 
   &__detail {
-
     &--hash {
-
       .torrent-details__detail__value {
         word-break: break-all;
       }
     }
 
     &--tags {
-
       .tag {
         background: $torrent-details--tags--background;
         color: $torrent-details--tags--foreground;
@@ -327,7 +307,6 @@ $torrent-details--tags--foreground: #1a2028;
     }
 
     & + .torrent-details__table__heading {
-
       .torrent-details__table__heading--tertiary {
         padding-top: 10px;
       }

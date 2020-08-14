@@ -4,7 +4,6 @@ $scrollbar--thumb--background--inverted--inactive: rgba(#e9eef2, 0.3);
 $scrollbar--thumb--background--inverted--hover: rgba(#e9eef2, 0.6);
 
 .scrollbars {
-
   &__thumb {
     background: $scrollbar--thumb--background--inactive;
     border-radius: 10px;
@@ -39,7 +38,6 @@ $scrollbar--thumb--background--inverted--hover: rgba(#e9eef2, 0.6);
   }
 
   &:hover {
-
     .scrollbars__thumb {
       opacity: 1;
     }
