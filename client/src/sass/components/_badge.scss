@@ -1,11 +1,7 @@
-$sidebar-filter--count--foreground: darken($darkest-grey--hard, 5%);
-$sidebar-filter--count--background: lighten($darkest-grey--hard, 20%);
-$sidebar-filter--count--background--active: $blue;
-
 .badge {
-  background: $sidebar-filter--count--background;
+  @include theme('background', 'sidebar-filter--count--background');
   border-radius: 100px;
-  color: $sidebar-filter--count--foreground;
+  @include theme('color', 'sidebar-filter--count--foreground');
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 700;

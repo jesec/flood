@@ -1,21 +1,8 @@
-$sidebar--foreground: #526780;
-$sidebar--border: rgba(darken($sidebar--foreground, 40%), 0.3);
-
-$sidebar-filter--foreground: $sidebar--foreground;
-$sidebar-filter--foreground--header: rgba($sidebar-filter--foreground, 0.5);
-$sidebar-filter--foreground--active: $blue;
-$sidebar-filter--foreground--hover: lighten($sidebar-filter--foreground, 15%);
-
-$sidebar--icon-button--fill: $sidebar--foreground;
-$sidebar--icon-button--fill--hover: $blue;
-$sidebar--icon-button--foreground: rgba($sidebar--foreground, 0.7);
-$sidebar--icon-button--foreground--hover: $blue;
-
 .application {
   &__sidebar {
-    background: $sidebar--background;
-    box-shadow: 1px 0 $sidebar--border;
-    color: $sidebar--foreground;
+    @include theme('background', 'sidebar--background');
+    @include theme('box-shadow', 'sidebar--border');
+    @include theme('color', 'sidebar--foreground');
     flex: 1;
     min-width: 200px;
     max-width: 240px;
@@ -27,7 +14,7 @@ $sidebar--icon-button--foreground--hover: $blue;
 
 .sidebar {
   &__icon-button {
-    color: $sidebar--icon-button--foreground;
+    @include theme('color', 'sidebar--icon-button--foreground');
     display: block;
     font-size: 0.8em;
     line-height: 1;
@@ -36,10 +23,10 @@ $sidebar--icon-button--foreground--hover: $blue;
     transition: color 0.25s;
 
     &:hover {
-      color: $sidebar--icon-button--foreground--hover;
+      @include theme('color', 'sidebar--icon-button--foreground--hover');
 
       .icon {
-        fill: $sidebar--icon-button--fill--hover;
+        @include theme('fill', 'sidebar--icon-button--fill--hover');
       }
     }
 
@@ -48,7 +35,7 @@ $sidebar--icon-button--foreground--hover: $blue;
     }
 
     .icon {
-      fill: $sidebar--icon-button--fill;
+      @include theme('fill', 'sidebar--icon-button--fill');
       height: 13px;
       transition: fill 0.25s;
       position: relative;
@@ -75,10 +62,10 @@ $sidebar--icon-button--foreground--hover: $blue;
       display: none;
     }
     .progress-bar__fill__wrapper {
-      background: rgba($sidebar-filter--foreground, 0.5);
+      @include theme('background', 'sidebar-filter--foreground--fill');
     }
     .progress-bar__fill {
-      background: $sidebar-filter--foreground;
+      @include theme('background', 'sidebar-filter--foreground');
     }
   }
 }

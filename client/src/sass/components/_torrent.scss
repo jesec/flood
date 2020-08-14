@@ -1,44 +1,3 @@
-$torrent--primary--foreground: saturate(darken(#8899a8, 20%), 10%);
-$torrent--primary--foreground--error: #e95779;
-$torrent--primary--foreground--error--stopped: rgba($torrent--primary--foreground--error, 0.6);
-$torrent--primary--foreground--error--stopped--selected: rgba($white, 0.6);
-$torrent--primary--foreground--stopped: rgba(#8899a8, 0.8);
-$torrent--primary--foreground--selected: $white;
-$torrent--primary--foreground--selected--stopped: rgba($torrent--primary--foreground--selected, 0.6);
-$torrent--primary--foreground--selected--error: $white;
-
-$torrent--secondary--foreground: #8899a8;
-$torrent--secondary--foreground--stopped: #c3ccd3;
-$torrent--secondary--foreground--selected: $white;
-$torrent--secondary--foreground--selected--stopped: rgba($white, 0.6);
-
-$torrent--tertiary--foreground: #8899a8;
-$torrent--tertiary--foreground--stopped: #c3ccd3;
-$torrent--tertiary--foreground--selected: rgba($white, 0.9);
-$torrent--tertiary--foreground--selected--stopped: rgba($white, 0.5);
-
-$torrent--background--hover: #f6f8fa;
-$torrent--background--selected: $blue;
-$torrent--background--error: #e95779;
-
-$torrent--border: #e9eef2;
-$torrent--border--selected: darken($torrent--background--selected, 3%);
-$torrent--border--selected--error: darken($torrent--background--error, 3%);
-
-$torrent--speed--foreground--selected--has-error: $white;
-$torrent--speed--foreground--selected: $white;
-
-$torrent--tags--background: #dce2e6;
-$torrent--tags--foreground: #6f7d87;
-$torrent--tags--background--selected: #4ea3ea;
-$torrent--tags--background--selected--has-error: #ed7994;
-$torrent--tags--foreground--selected: $white;
-$torrent--tags--foreground--has-error: #fbe8ec;
-
-$more-info--background: $white;
-$more-info--background--hover: $white;
-
-$more-info--box-shadow--hue: #1a2f3d;
 $more-info--border: $textbox-repeater--button--border;
 
 .torrent {
@@ -59,7 +18,7 @@ $more-info--border: $textbox-repeater--button--border;
 
   &:hover {
     &:after {
-      background: $torrent--background--hover;
+      @include theme('background', 'torrent--background--hover');
     }
 
     .torrent {
@@ -72,11 +31,11 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &__detail {
-    color: $torrent--secondary--foreground;
+    @include theme('color', 'torrent--secondary--foreground');
 
     &--name {
-      color: $torrent--primary--foreground;
-      font-weight: 500;
+      @include theme('color', 'torrent--primary--foreground');
+      @include theme('font-weight', 'torrent--primary--font-weight');
     }
 
     &--tags {
@@ -92,8 +51,8 @@ $more-info--border: $textbox-repeater--button--border;
       }
 
       .tag {
-        background: $torrent--tags--background;
-        color: $torrent--tags--foreground;
+        @include theme('background', 'torrent--tags--background');
+        @include theme('color', 'torrent--tags--foreground');
       }
     }
 
@@ -116,11 +75,11 @@ $more-info--border: $textbox-repeater--button--border;
   &__details {
     &__section {
       &--secondary {
-        color: $torrent--secondary--foreground;
+        @include theme('color', 'torrent--secondary--foreground');
       }
 
       &--tertiary {
-        color: $torrent--tertiary--foreground;
+        @include theme('color', 'torrent--tertiary--foreground');
       }
     }
   }
@@ -130,20 +89,20 @@ $more-info--border: $textbox-repeater--button--border;
       &__details {
         &__section {
           &--secondary {
-            color: $torrent--secondary--foreground--stopped;
+            @include theme('color', 'torrent--secondary--foreground--stopped');
           }
 
           &--tertiary {
-            color: $torrent--tertiary--foreground--stopped;
+            @include theme('color', 'torrent--tertiary--foreground--stopped');
           }
         }
       }
 
       &__detail {
-        color: $torrent--secondary--foreground--stopped;
+        @include theme('color', 'torrent--secondary--foreground--stopped');
 
         &--name {
-          color: $torrent--primary--foreground--stopped;
+          @include theme('color', 'torrent--primary--foreground--stopped');
           font-weight: 400;
         }
 
@@ -160,7 +119,7 @@ $more-info--border: $textbox-repeater--button--border;
         .torrent {
           &__detail {
             &--name {
-              color: $torrent--primary--foreground--error--stopped;
+              @include theme('color', 'torrent--primary--foreground--error--stopped');
             }
           }
         }
@@ -170,13 +129,13 @@ $more-info--border: $textbox-repeater--button--border;
     .torrent {
       &__detail {
         &--name {
-          color: $torrent--primary--foreground--error;
+          @include theme('color', 'torrent--primary--foreground--error');
         }
       }
     }
 
     &:after {
-      background: $torrent--background--error;
+      @include theme('background', 'torrent--background--error');
     }
   }
 
@@ -240,19 +199,19 @@ $more-info--border: $textbox-repeater--button--border;
         .torrent {
           &__detail {
             &--name {
-              color: $torrent--primary--foreground--selected--error;
+              @include theme('color', 'torrent--primary--foreground--selected--error');
             }
 
             &--tags {
               .tag {
-                background: $torrent--tags--background--selected--has-error;
-                color: $torrent--tags--foreground--has-error;
+                @include theme('background', 'torrent--tags--background--selected--has-error');
+                @include theme('color', 'torrent--tags--foreground--has-error');
               }
             }
 
             &--downRate,
             &--upRate {
-              color: $torrent--speed--foreground--selected--has-error;
+              @include theme('color', 'torrent--speed--foreground--selected--has-error');
             }
           }
         }
@@ -260,7 +219,7 @@ $more-info--border: $textbox-repeater--button--border;
         &,
         &:hover {
           &:after {
-            background: $torrent--background--error;
+            @include theme('background', 'torrent--background--error');
           }
         }
       }
@@ -271,7 +230,7 @@ $more-info--border: $textbox-repeater--button--border;
             .torrent {
               &__detail {
                 &--name {
-                  color: $torrent--primary--foreground--error--stopped--selected;
+                  @include theme('color', 'torrent--primary--foreground--error--stopped--selected');
                 }
               }
             }
@@ -280,15 +239,15 @@ $more-info--border: $textbox-repeater--button--border;
 
         .torrent {
           &__detail {
-            color: $torrent--secondary--foreground--selected--stopped;
+            @include theme('color', 'torrent--secondary--foreground--selected--stopped');
 
             &--name {
-              color: $torrent--primary--foreground--selected--stopped;
+              @include theme('color', 'torrent--primary--foreground--selected--stopped');
             }
 
             &--downRate,
             &--upRate {
-              color: $torrent--tertiary--foreground--selected--stopped;
+              @include theme('color', 'torrent--tertiary--foreground--selected--stopped');
             }
 
             &--tags {
@@ -299,11 +258,11 @@ $more-info--border: $textbox-repeater--button--border;
           &__details {
             &__section {
               &--secondary {
-                color: $torrent--secondary--foreground--selected--stopped;
+                @include theme('color', 'torrent--secondary--foreground--selected--stopped');
               }
 
               &--tertiary {
-                color: $torrent--tertiary--foreground--selected--stopped;
+                @include theme('color', 'torrent--tertiary--foreground--selected--stopped');
               }
             }
           }
@@ -314,28 +273,28 @@ $more-info--border: $textbox-repeater--button--border;
     &,
     &:hover {
       &:after {
-        background: $torrent--background--selected;
+        @include theme('background', 'torrent--background--selected');
         opacity: 1;
       }
     }
 
     .torrent {
       &__detail {
-        color: $torrent--secondary--foreground--selected;
+        @include theme('color', 'torrent--secondary--foreground--selected');
 
         &--name {
-          color: $torrent--primary--foreground--selected;
+          @include theme('color', 'torrent--primary--foreground--selected');
         }
 
         &--downRate,
         &--upRate {
-          color: $torrent--speed--foreground--selected;
+          @include theme('color', 'torrent--speed--foreground--selected');
         }
 
         &--tags {
           .tag {
-            background: $torrent--tags--background--selected;
-            color: $torrent--tags--foreground--selected;
+            @include theme('background', 'torrent--tags--background--selected');
+            @include theme('color', 'torrent--tags--foreground--selected');
           }
         }
       }
@@ -343,11 +302,11 @@ $more-info--border: $textbox-repeater--button--border;
       &__details {
         &__section {
           &--secondary {
-            color: $torrent--secondary--foreground--selected;
+            @include theme('color', 'torrent--secondary--foreground--selected');
           }
 
           &--tertiary {
-            color: $torrent--tertiary--foreground--selected;
+            @include theme('color', 'torrent--tertiary--foreground--selected');
           }
         }
       }
@@ -513,7 +472,7 @@ $more-info--border: $textbox-repeater--button--border;
 
   &--is-condensed {
     align-items: center;
-    border-top: 1px solid $torrent--border;
+    @include theme('border-top', 'torrent--border');
     display: flex;
     height: 30px;
     padding: 0;
@@ -526,7 +485,7 @@ $more-info--border: $textbox-repeater--button--border;
       &--is-stopped {
         .torrent {
           &__detail {
-            color: $torrent--secondary--foreground--stopped;
+            @include theme('color', 'torrent--secondary--foreground--stopped');
           }
         }
       }
@@ -534,21 +493,21 @@ $more-info--border: $textbox-repeater--button--border;
       &--is-selected {
         &,
         & + .torrent {
-          border-color: $torrent--border--selected;
+          @include theme('border-color', 'torrent--border--selected');
         }
 
         &.torrent {
           &--has-error {
             &,
             & + .torrent {
-              border-color: $torrent--border--selected--error;
+              @include theme('border-color', 'torrent--border--selected--error');
             }
           }
 
           &--is-stopped {
             .torrent {
               &__detail {
-                color: $torrent--tertiary--foreground--selected--stopped;
+                @include theme('color', 'torrent--tertiary--foreground--selected--stopped');
               }
             }
           }
@@ -556,7 +515,7 @@ $more-info--border: $textbox-repeater--button--border;
 
         .torrent {
           &__detail {
-            color: $torrent--secondary--foreground--selected;
+            @include theme('color', 'torrent--secondary--foreground--selected');
           }
         }
       }
@@ -593,9 +552,9 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &__more-info {
-    background: $more-info--background;
+    @include theme('background', 'more-info--background');
     border-radius: 32px 0 0 32px;
-    box-shadow: 0 0 30px rgba($more-info--box-shadow--hue, 0.11), 0 0 0 1px rgba($more-info--box-shadow--hue, 0.07);
+    @include theme('box-shadow', 'more-info--box-shadow');
     height: 32px;
     margin-top: -16px;
     position: absolute;
@@ -617,8 +576,8 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     &:hover {
-      background: $more-info--background--hover;
-      box-shadow: 0 0 30px rgba($more-info--box-shadow--hue, 0.2), 0 0 0 1px rgba($more-info--box-shadow--hue, 0.1);
+      @include theme('background', 'more-info--background--hover');
+      @include theme('box-shadow', 'more-info--box-shadow--hover');
 
       .icon {
         fill: $blue;

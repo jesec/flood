@@ -7,36 +7,37 @@
   }
 
   &__item {
-    color: $sidebar-filter--foreground;
+    @include theme('color', 'sidebar-filter--foreground');
     cursor: pointer;
     font-weight: 400;
     padding: 3px 20px;
     transition: color 0.25s;
 
     &:hover {
-      color: $sidebar-filter--foreground--hover;
+      @include theme('color', 'sidebar-filter--foreground--hover');
 
       .icon {
-        fill: $sidebar-filter--foreground--hover;
+        @include theme('fill', 'sidebar-filter--foreground--hover');
       }
     }
 
     &.is-active {
-      color: $sidebar-filter--foreground--active;
+      @include theme('color', 'sidebar-filter--foreground--active');
       font-weight: 700;
 
       .badge {
-        background: $sidebar-filter--count--background--active;
+        @include theme('background', 'sidebar-filter--count--background--active');
+        @include theme('color', 'sidebar-filter--count--foreground--active');
       }
 
       .icon {
-        fill: $sidebar-filter--foreground--active;
+        @include theme('fill', 'sidebar-filter--foreground--active');
       }
     }
 
     .icon {
       display: inline-block;
-      fill: $sidebar-filter--foreground;
+      @include theme('fill', 'sidebar-filter--foreground');
       height: 14px;
       margin-right: 7px;
       transition: fill 0.25s;
@@ -46,8 +47,8 @@
   }
 
   .badge {
-    background: $sidebar-filter--count--background;
-    color: $sidebar-filter--count--foreground;
+    @include theme('background', 'sidebar-filter--count--background');
+    @include theme('color', 'sidebar-filter--count--foreground');
   }
 }
 
@@ -62,7 +63,7 @@
 
       &,
       &:hover {
-        color: $sidebar-filter--foreground--header;
+        @include theme('color', 'sidebar-filter--foreground--header');
       }
     }
   }

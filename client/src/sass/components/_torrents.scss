@@ -1,11 +1,6 @@
-$torrent-list--background: #fff;
-$torrent-list--border: rgba($sidebar--background, 0.15);
-
-$torrents-list--alert--foreground: rgba(#8899a8, 0.5);
-
 .torrents {
-  background: $torrent-list--background;
-  box-shadow: -1px 0 0 0 $torrent-list--border;
+  @include theme('background', 'torrent-list--background');
+  @include theme('box-shadow', 'torrent-list--border');
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -19,7 +14,7 @@ $torrents-list--alert--foreground: rgba(#8899a8, 0.5);
   }
 
   &__alert {
-    color: $torrents-list--alert--foreground;
+    @include theme('color', 'torrents-list--alert--foreground');
     text-align: center;
 
     &__wrapper {
@@ -100,7 +95,7 @@ $torrents-list--alert--foreground: rgba(#8899a8, 0.5);
 
 .view {
   &--torrent-list {
-    background: #e9eef2;
+    @include theme('background', 'torrent-view--background');
     box-shadow: -1px 0 $torrent-list--border;
     display: flex;
     flex-direction: column;

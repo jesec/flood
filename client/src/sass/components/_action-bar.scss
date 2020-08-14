@@ -2,7 +2,6 @@ $action-bar--background: transparent;
 $action-bar--foreground: #1b1a1c;
 $action-bar--group--border: rgba(#7a8080, 0.15);
 
-$action--foreground: #8899a8;
 $action--foreground--hover: $blue;
 $action--background--hover: rgba(#333e4a, 0.05);
 $action--border--hover: rgba(#333e4a, 0.15);
@@ -132,7 +131,7 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   }
 
   .icon {
-    fill: $action--foreground;
+    @include theme('fill', 'action--foreground');
     height: 25px;
     left: 50%;
     position: absolute;

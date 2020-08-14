@@ -123,7 +123,7 @@ $client-stats--timestamp--foreground: #526780;
       &--limit {
         align-items: center;
         display: inline-flex;
-        color: $sidebar--background;
+        @include theme('color', 'sidebar--background');
         border-radius: 2px;
         font-size: 0.8em;
         font-style: normal;

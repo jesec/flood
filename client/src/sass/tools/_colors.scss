@@ -3,6 +3,7 @@
 }
 
 $white: #fff;
+$black: #000;
 
 $red: #f34570;
 $red--alpha--light: rgba($red, 0.1);
@@ -52,6 +53,7 @@ $background: $dark-blue;
 $foreground: #53718a;
 
 $sidebar--background: $darkest-grey--hard;
+$sidebar--foreground: #526780;
 $main-content--background: $light-blue;
 
 $textbox--background: #242b36;
@@ -65,3 +67,5 @@ $textbox--active--background: $textbox--background;
 $textbox--active--border: $blue;
 $textbox--active--foreground: $blue;
 $textbox--active--placeholder: $textbox--placeholder;
+
+$table--heading--color: #abbac7;
