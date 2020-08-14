@@ -625,6 +625,12 @@
       "value": "抓取資料夾結構中..."
     }
   ],
+  "filesystem.parent.directory": [
+    {
+      "type": 0,
+      "value": "Parent Directory"
+    }
+  ],
   "filter.all": [
     {
       "type": 0,
@@ -1207,10 +1213,28 @@
       "value": "無限制"
     }
   ],
+  "status.diskusage.free": [
+    {
+      "type": 0,
+      "value": "Free"
+    }
+  ],
   "status.diskusage.title": [
     {
       "type": 0,
       "value": "磁碟空間使用量"
+    }
+  ],
+  "status.diskusage.total": [
+    {
+      "type": 0,
+      "value": "Total"
+    }
+  ],
+  "status.diskusage.used": [
+    {
+      "type": 0,
+      "value": "Used"
     }
   ],
   "torrent.list.peers": [

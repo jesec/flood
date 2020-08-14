@@ -587,6 +587,12 @@
       "value": "获取目录结构..."
     }
   ],
+  "filesystem.parent.directory": [
+    {
+      "type": 0,
+      "value": "Parent Directory"
+    }
+  ],
   "filter.all": [
     {
       "type": 0,
@@ -1169,10 +1175,28 @@
       "value": "无限制"
     }
   ],
+  "status.diskusage.free": [
+    {
+      "type": 0,
+      "value": "Free"
+    }
+  ],
   "status.diskusage.title": [
     {
       "type": 0,
       "value": "磁盘使用量"
+    }
+  ],
+  "status.diskusage.total": [
+    {
+      "type": 0,
+      "value": "Total"
+    }
+  ],
+  "status.diskusage.used": [
+    {
+      "type": 0,
+      "value": "Used"
     }
   ],
   "torrent.list.peers": [

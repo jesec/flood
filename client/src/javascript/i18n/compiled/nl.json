@@ -801,6 +801,12 @@
       "value": "Ophalen van map structuur..."
     }
   ],
+  "filesystem.parent.directory": [
+    {
+      "type": 0,
+      "value": "Parent Directory"
+    }
+  ],
   "filter.all": [
     {
       "type": 0,
@@ -1383,10 +1389,28 @@
       "value": "Ongelimiteerd"
     }
   ],
+  "status.diskusage.free": [
+    {
+      "type": 0,
+      "value": "Free"
+    }
+  ],
   "status.diskusage.title": [
     {
       "type": 0,
       "value": "Schijf gebruik"
+    }
+  ],
+  "status.diskusage.total": [
+    {
+      "type": 0,
+      "value": "Total"
+    }
+  ],
+  "status.diskusage.used": [
+    {
+      "type": 0,
+      "value": "Used"
     }
   ],
   "torrent.list.peers": [
