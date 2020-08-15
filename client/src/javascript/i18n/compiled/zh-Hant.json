@@ -188,7 +188,7 @@
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "登入你的帳號"
     }
   ],
   "auth.message.not.admin": [
@@ -332,13 +332,13 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "通知"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "種子列表"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
@@ -350,13 +350,13 @@
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "資料傳輸紀錄"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "詳細資料傳輸率"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -568,7 +568,7 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "警告限制必須是正整數"
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -628,7 +628,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "上一層目錄"
     }
   ],
   "filter.all": [
@@ -1186,13 +1186,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "下載速度"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "上傳速度"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1216,7 +1216,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "可用"
     }
   ],
   "status.diskusage.title": [
@@ -1228,13 +1228,13 @@
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "總計"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "已使用"
     }
   ],
   "torrent.list.peers": [
@@ -1616,7 +1616,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "下載"
     }
   ],
   "torrents.list.context.move": [
@@ -1778,7 +1778,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "節點"
     }
   ],
   "torrents.properties.percentage": [
@@ -1796,7 +1796,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "種子"
     }
   ],
   "torrents.properties.size": [
