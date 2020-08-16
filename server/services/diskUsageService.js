@@ -18,29 +18,45 @@ const filterMountPoint =
       (mountpoint) => config.diskUsageService.watchMountPoints.includes(mountpoint)
     : () => true; // include all mounted file systems by default
 
-const linuxDfParsing = () =>
-  execFile('df | tail -n+2', {
-    shell: true,
-    maxBuffer: MAX_BUFFER_SIZE,
-  }).then(({stdout}) =>
-    stdout
-      .trim()
-      .split('\n')
-      .map((disk) => disk.split(/\s+/))
-      .filter((disk) => filterMountPoint(disk[5]))
-      .map(([_fs, size, used, avail, _pcent, target]) => {
-        return {
-          size: Number.parseInt(size, 10) * 1024,
-          used: Number.parseInt(used, 10) * 1024,
-          avail: Number.parseInt(avail, 10) * 1024,
-          target,
-        };
-      }),
-  );
-
 const diskUsage = {
-  linux: linuxDfParsing,
-  freebsd: linuxDfParsing,
+  linux: () =>
+    execFile('df -xsquashfs -xtmpfs -xdevtmpfs | tail -n+2', {
+      shell: true,
+      maxBuffer: MAX_BUFFER_SIZE,
+    }).then(({stdout}) =>
+      stdout
+        .trim()
+        .split('\n')
+        .map((disk) => disk.split(/\s+/))
+        .filter((disk) => filterMountPoint(disk[5]))
+        .map(([_fs, size, used, avail, _pcent, target]) => {
+          return {
+            size: Number.parseInt(size, 10) * 1024,
+            used: Number.parseInt(used, 10) * 1024,
+            avail: Number.parseInt(avail, 10) * 1024,
+            target,
+          };
+        }),
+    ),
+  freebsd: () =>
+    execFile('df | tail -n+2', {
+      shell: true,
+      maxBuffer: MAX_BUFFER_SIZE,
+    }).then(({stdout}) =>
+      stdout
+        .trim()
+        .split('\n')
+        .map((disk) => disk.split(/\s+/))
+        .filter((disk) => filterMountPoint(disk[5]))
+        .map(([_fs, size, used, avail, _pcent, target]) => {
+          return {
+            size: Number.parseInt(size, 10) * 1024,
+            used: Number.parseInt(used, 10) * 1024,
+            avail: Number.parseInt(avail, 10) * 1024,
+            target,
+          };
+        }),
+    ),
   darwin: () =>
     execFile('df -kl | tail -n+2', {
       shell: true,
