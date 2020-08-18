@@ -17,6 +17,9 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   height: 60px;
   position: relative;
 
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+
   &--is-condensed {
     flex-basis: 30px;
     height: 30px;
