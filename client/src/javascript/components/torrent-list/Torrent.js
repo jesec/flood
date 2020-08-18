@@ -1,18 +1,9 @@
 import React from 'react';
 
-import CalendarIcon from '../icons/CalendarIcon';
-import ClockIcon from '../icons/ClockIcon';
-import DiskIcon from '../icons/DiskIcon';
-import DownloadThickIcon from '../icons/DownloadThickIcon';
-import InformationIcon from '../icons/InformationIcon';
-import PeersIcon from '../icons/PeersIcon';
 import ProgressBar from '../general/ProgressBar';
-import RatioIcon from '../icons/RatioIcon';
-import SeedsIcon from '../icons/SeedsIcon';
 import {torrentStatusIcons} from '../../util/torrentStatusIcons';
 import {torrentStatusClasses} from '../../util/torrentStatusClasses';
 import TorrentDetail from './TorrentDetail';
-import UploadThickIcon from '../icons/UploadThickIcon';
 
 const condensedValueTransformers = {
   downloadTotal: (torrent) => torrent.bytesDone,
@@ -45,18 +36,6 @@ const expandedSecondaryValueTransformers = {
   peers: (torrent) => torrent.peersTotal,
   seeds: (torrent) => torrent.seedsTotal,
   percentComplete: (torrent) => torrent.bytesDone,
-};
-
-const ICONS = {
-  clock: <ClockIcon />,
-  disk: <DiskIcon />,
-  downloadThick: <DownloadThickIcon />,
-  information: <InformationIcon />,
-  calendar: <CalendarIcon />,
-  peers: <PeersIcon />,
-  ratio: <RatioIcon />,
-  seeds: <SeedsIcon />,
-  uploadThick: <UploadThickIcon />,
 };
 
 const METHODS_TO_BIND = ['handleClick', 'handleDoubleClick', 'handleRightClick'];
@@ -262,12 +241,6 @@ class Torrent extends React.Component {
         <div className="torrent__details__section torrent__details__section--quaternary">
           <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
         </div>
-        <button
-          className="torrent__more-info floating-action__button"
-          onClick={this.props.handleDetailsClick.bind(this, torrent)}
-          tabIndex="-1">
-          {ICONS.information}
-        </button>
       </li>
     );
   }
