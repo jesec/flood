@@ -78,6 +78,12 @@ class Torrent extends React.Component {
     });
   }
 
+  componentDidMount() {
+    if (this.torrentRef != null) {
+      this.torrentRef.addEventListener('long-press', this.handleRightClick);
+    }
+  }
+
   shouldComponentUpdate(nextProps) {
     if (nextProps.isSelected !== this.props.isSelected || nextProps.isCondensed !== this.props.isCondensed) {
       return true;
@@ -191,7 +197,10 @@ class Torrent extends React.Component {
           className={torrentClasses}
           onClick={this.handleClick}
           onContextMenu={this.handleRightClick}
-          onDoubleClick={this.handleDoubleClick}>
+          onDoubleClick={this.handleDoubleClick}
+          ref={(ref) => {
+            this.torrentRef = ref;
+          }}>
           {torrentPropertyColumns}
         </li>
       );
@@ -241,7 +250,10 @@ class Torrent extends React.Component {
         className={torrentClasses}
         onClick={this.handleClick}
         onContextMenu={this.handleRightClick}
-        onDoubleClick={this.handleDoubleClick}>
+        onDoubleClick={this.handleDoubleClick}
+        ref={(ref) => {
+          this.torrentRef = ref;
+        }}>
         <div className="torrent__details__section__wrapper">
           {sections.primary}
           <div className="torrent__details__section torrent__details__section--secondary">{sections.secondary}</div>
