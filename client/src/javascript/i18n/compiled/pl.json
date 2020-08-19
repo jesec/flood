@@ -419,6 +419,12 @@
       "value": "Anuluj"
     }
   ],
+  "button.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
   "button.new": [
     {
       "type": 0,
@@ -557,6 +563,12 @@
       "value": "Przeglądaj kanały"
     }
   ],
+  "feeds.check": [
+    {
+      "type": 0,
+      "value": "Test Match Pattern"
+    }
+  ],
   "feeds.exclude": [
     {
       "type": 0,
@@ -579,6 +591,12 @@
     {
       "type": 0,
       "value": "Istniejące reguły"
+    }
+  ],
+  "feeds.interval": [
+    {
+      "type": 0,
+      "value": "Interval"
     }
   ],
   "feeds.label": [
@@ -643,6 +661,12 @@
       "value": "Nie zdefiniowano kanałów."
     }
   ],
+  "feeds.no.items.matching": [
+    {
+      "type": 0,
+      "value": "No items matching search term."
+    }
+  ],
   "feeds.no.rules.defined": [
     {
       "type": 0,
@@ -659,6 +683,12 @@
     {
       "type": 0,
       "value": "Szukaj frazy"
+    }
+  ],
+  "feeds.search.term": [
+    {
+      "type": 0,
+      "value": "Search term"
     }
   ],
   "feeds.select.feed": [
@@ -701,6 +731,12 @@
     {
       "type": 0,
       "value": "Tagi"
+    }
+  ],
+  "feeds.test.match": [
+    {
+      "type": 0,
+      "value": "Test Match Pattern"
     }
   ],
   "feeds.time.day": [

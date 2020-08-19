@@ -251,6 +251,12 @@
       "value": "取消"
     }
   ],
+  "button.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
   "button.new": [
     {
       "type": 0,
@@ -389,6 +395,12 @@
       "value": "瀏覽訊息來源"
     }
   ],
+  "feeds.check": [
+    {
+      "type": 0,
+      "value": "Test Match Pattern"
+    }
+  ],
   "feeds.exclude": [
     {
       "type": 0,
@@ -411,6 +423,12 @@
     {
       "type": 0,
       "value": "已存在的規則 "
+    }
+  ],
+  "feeds.interval": [
+    {
+      "type": 0,
+      "value": "Interval"
     }
   ],
   "feeds.label": [
@@ -475,6 +493,12 @@
       "value": "沒有任何訊息來源"
     }
   ],
+  "feeds.no.items.matching": [
+    {
+      "type": 0,
+      "value": "No items matching search term."
+    }
+  ],
   "feeds.no.rules.defined": [
     {
       "type": 0,
@@ -491,6 +515,12 @@
     {
       "type": 0,
       "value": "搜尋關鍵字"
+    }
+  ],
+  "feeds.search.term": [
+    {
+      "type": 0,
+      "value": "Search term"
     }
   ],
   "feeds.select.feed": [
@@ -533,6 +563,12 @@
     {
       "type": 0,
       "value": "標籤"
+    }
+  ],
+  "feeds.test.match": [
+    {
+      "type": 0,
+      "value": "Test Match Pattern"
     }
   ],
   "feeds.time.day": [

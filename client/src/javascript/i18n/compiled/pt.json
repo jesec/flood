@@ -26,10 +26,14 @@
   "alert.settings.saved": [
     {
       "type": 0,
-      "value": "Configurações salvas com sucesso."
+      "value": "Configurações guardas com sucesso."
     }
   ],
   "alert.torrent.add": [
+    {
+      "type": 0,
+      "value": "Adicionado com sucesso "
+    },
     {
       "type": 1,
       "value": "countElement"
@@ -61,6 +65,10 @@
       "pluralType": "cardinal",
       "type": 6,
       "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
     }
   ],
   "alert.torrent.add.failed": [
@@ -99,6 +107,10 @@
       "pluralType": "cardinal",
       "type": 6,
       "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
     }
   ],
   "alert.torrent.move": [
@@ -175,9 +187,17 @@
       "pluralType": "cardinal",
       "type": 6,
       "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
     }
   ],
   "alert.torrent.remove": [
+    {
+      "type": 0,
+      "value": "Removido com sucesso "
+    },
     {
       "type": 1,
       "value": "countElement"
@@ -209,6 +229,10 @@
       "pluralType": "cardinal",
       "type": 6,
       "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
     }
   ],
   "alert.torrent.remove.failed": [
@@ -247,12 +271,16 @@
       "pluralType": "cardinal",
       "type": 6,
       "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
     }
   ],
   "auth.add.user": [
     {
       "type": 0,
-      "value": "Adicionar Usuário"
+      "value": "Adicionar Utilizador"
     }
   ],
   "auth.admin": [
@@ -270,7 +298,7 @@
   "auth.connectionType.socket": [
     {
       "type": 0,
-      "value": "Encaixe Unix"
+      "value": "Unix Socket"
     }
   ],
   "auth.connectionType.tcp": [
@@ -294,19 +322,19 @@
   "auth.create.an.account.intro": [
     {
       "type": 0,
-      "value": "Bem vindo à Inundação!"
+      "value": "Bem vindo ao Flood!"
     }
   ],
   "auth.current.user": [
     {
       "type": 0,
-      "value": "Usuário atual"
+      "value": "Utilizador atual"
     }
   ],
   "auth.error.username.empty": [
     {
       "type": 0,
-      "value": "Nome de usuário não pode estar vazio."
+      "value": "Nome de utilizador não pode estar vazio."
     }
   ],
   "auth.log.in": [
@@ -318,19 +346,19 @@
   "auth.login": [
     {
       "type": 0,
-      "value": "Conectar-se"
+      "value": "Iniciar sessão"
     }
   ],
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "Inicie sessão na sua conta."
     }
   ],
   "auth.message.not.admin": [
     {
       "type": 0,
-      "value": "Usuário não é Administrador"
+      "value": "Utilizador não é Administrador"
     }
   ],
   "auth.password": [
@@ -354,25 +382,25 @@
   "auth.rtorrentSocket": [
     {
       "type": 0,
-      "value": "Encaixe rTorrent"
+      "value": "Socket do rTorrent"
     }
   ],
   "auth.rtorrentSocketPath": [
     {
       "type": 0,
-      "value": "Caminho de soquete rTorrent"
+      "value": "Localização da Socket do rTorrent"
     }
   ],
   "auth.user.accounts": [
     {
       "type": 0,
-      "value": "Contas de usuário"
+      "value": "Contas dos utilizadores"
     }
   ],
   "auth.username": [
     {
       "type": 0,
-      "value": "Usuário:"
+      "value": "Nome de Utilizador"
     }
   ],
   "button.add": [
@@ -384,7 +412,13 @@
   "button.cancel": [
     {
       "type": 0,
-      "value": "cancelar"
+      "value": "Cancelar"
+    }
+  ],
+  "button.download": [
+    {
+      "type": 0,
+      "value": "Transferir"
     }
   ],
   "button.new": [
@@ -402,7 +436,7 @@
   "button.save": [
     {
       "type": 0,
-      "value": "Salvar Configurações"
+      "value": "Guardar Configurações"
     }
   ],
   "button.save.feed": [
@@ -420,13 +454,13 @@
   "button.test": [
     {
       "type": 0,
-      "value": "teste"
+      "value": "Testar"
     }
   ],
   "button.yes": [
     {
       "type": 0,
-      "value": "sim"
+      "value": "Sim"
     }
   ],
   "connection-interruption.heading": [
@@ -456,7 +490,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Não é possível conectar-se ao rTorrent. Por favor, atualize a informação agora."
+      "value": "Não é possível conectar-se ao rTorrent. Por favor atualize a informação agora."
     }
   ],
   "connectivity.modal.title": [
@@ -468,31 +502,31 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Notificações"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "Lista de Torrents"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "Taxonomia do Torrent"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "Histórico de Transferências de Dados"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "Detalhes da Taxa de Transferência de Dados"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -516,13 +550,19 @@
   "feeds.apply.tags": [
     {
       "type": 0,
-      "value": "Aplicar Tags"
+      "value": "Aplicar Etiquetas"
     }
   ],
   "feeds.browse.feeds": [
     {
       "type": 0,
       "value": "Procurar feeds"
+    }
+  ],
+  "feeds.check": [
+    {
+      "type": 0,
+      "value": "Padrão de Teste de Partida"
     }
   ],
   "feeds.exclude": [
@@ -549,10 +589,16 @@
       "value": "Regras existentes"
     }
   ],
+  "feeds.interval": [
+    {
+      "type": 0,
+      "value": "Intervalo"
+    }
+  ],
   "feeds.label": [
     {
       "type": 0,
-      "value": "Descrição"
+      "value": "Etiqueta"
     }
   ],
   "feeds.match": [
@@ -596,7 +642,7 @@
   "feeds.match.pattern": [
     {
       "type": 0,
-      "value": "Padrão da Partida"
+      "value": "Padrão Correspondente"
     }
   ],
   "feeds.no.feeds.available": [
@@ -608,7 +654,13 @@
   "feeds.no.feeds.defined": [
     {
       "type": 0,
-      "value": "Nenhum feeds definido."
+      "value": "Não foi definido nenhum feed."
+    }
+  ],
+  "feeds.no.items.matching": [
+    {
+      "type": 0,
+      "value": "Nenhum item corresponde ao termo de pesquisa."
     }
   ],
   "feeds.no.rules.defined": [
@@ -620,13 +672,19 @@
   "feeds.regEx": [
     {
       "type": 0,
-      "value": "RegEx:"
+      "value": "RegEx"
     }
   ],
   "feeds.search": [
     {
       "type": 0,
-      "value": "Termo para pesquisa"
+      "value": "Termo de pesquisa"
+    }
+  ],
+  "feeds.search.term": [
+    {
+      "type": 0,
+      "value": "Termo de pesquisa"
     }
   ],
   "feeds.select.feed": [
@@ -650,19 +708,19 @@
   "feeds.tabs.download.rules": [
     {
       "type": 0,
-      "value": "Baixar regras"
+      "value": "Regras de Transferência"
     }
   ],
   "feeds.tabs.feeds": [
     {
       "type": 0,
-      "value": "Conteúdos"
+      "value": "Feeds"
     }
   ],
   "feeds.tabs.heading": [
     {
       "type": 0,
-      "value": "Feed de Torrent"
+      "value": "Feeds de Torrent"
     }
   ],
   "feeds.tags": [
@@ -671,22 +729,28 @@
       "value": "Etiquetas"
     }
   ],
+  "feeds.test.match": [
+    {
+      "type": 0,
+      "value": "Testar Padrão Correspondente"
+    }
+  ],
   "feeds.time.day": [
     {
       "type": 0,
-      "value": "dias"
+      "value": "Dias"
     }
   ],
   "feeds.time.hr": [
     {
       "type": 0,
-      "value": "horas"
+      "value": "Horas"
     }
   ],
   "feeds.time.min": [
     {
       "type": 0,
-      "value": "minutos"
+      "value": "Minutos"
     }
   ],
   "feeds.torrent.destination": [
@@ -698,13 +762,13 @@
   "feeds.url": [
     {
       "type": 0,
-      "value": "URL:"
+      "value": "URL"
     }
   ],
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "O intervalo deve ser um número inteiro positivo."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -716,25 +780,25 @@
   "feeds.validation.must.select.feed": [
     {
       "type": 0,
-      "value": "Você precisa selecionar um feed."
+      "value": "Precisa selecionar um feed."
     }
   ],
   "feeds.validation.must.specify.destination": [
     {
       "type": 0,
-      "value": "Você deve especificar um destino."
+      "value": "Precisa especificar um destino."
     }
   ],
   "feeds.validation.must.specify.label": [
     {
       "type": 0,
-      "value": "Você deve especificar uma etiqueta."
+      "value": "Precisa especificar uma etiqueta."
     }
   ],
   "feeds.validation.must.specify.valid.feed.url": [
     {
       "type": 0,
-      "value": "Você deve especificar uma URL de feed válida."
+      "value": "Precisa especificar um URL de feed válido."
     }
   ],
   "filesystem.empty.directory": [
@@ -746,37 +810,37 @@
   "filesystem.error.eacces": [
     {
       "type": 0,
-      "value": "O Flood não tem permissão para ler este diretório."
+      "value": "O Flood não tem permissão para aceder a este diretório."
     }
   ],
   "filesystem.error.enoent": [
     {
       "type": 0,
-      "value": "Este caminho não existe. Ele será criado."
+      "value": "Este caminho não existe. Vai ser criado."
     }
   ],
   "filesystem.fetching": [
     {
       "type": 0,
-      "value": "Buscando estrutura de diretórios..."
+      "value": "Obtendo a estrutura de diretórios..."
     }
   ],
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "Diretório Superior"
     }
   ],
   "filter.all": [
     {
       "type": 0,
-      "value": "TODOS"
+      "value": "Todos"
     }
   ],
   "filter.status.active": [
     {
       "type": 0,
-      "value": "ativo"
+      "value": "Ativo"
     }
   ],
   "filter.status.checking": [
@@ -788,19 +852,19 @@
   "filter.status.completed": [
     {
       "type": 0,
-      "value": "Complete"
+      "value": "Concluído"
     }
   ],
   "filter.status.downloading": [
     {
       "type": 0,
-      "value": "Baixando"
+      "value": "Transferindo"
     }
   ],
   "filter.status.error": [
     {
       "type": 0,
-      "value": "ERRO"
+      "value": "Erro"
     }
   ],
   "filter.status.inactive": [
@@ -836,13 +900,13 @@
   "filter.untagged": [
     {
       "type": 0,
-      "value": "Desmarcado"
+      "value": "Sem etiqueta"
     }
   ],
   "general.ago": [
     {
       "type": 0,
-      "value": "Atrás"
+      "value": "atrás"
     }
   ],
   "general.at": [
@@ -860,7 +924,7 @@
   "general.clipboard.copy": [
     {
       "type": 0,
-      "value": "copiar"
+      "value": "Copiar"
     }
   ],
   "general.of": [
@@ -1322,13 +1386,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "TRANSFERIR"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "ENVIAR"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1352,7 +1416,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "Livre"
     }
   ],
   "status.diskusage.title": [
@@ -1370,7 +1434,7 @@
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "Utilizado"
     }
   ],
   "torrent.list.peers": [
@@ -1696,7 +1760,7 @@
   "torrents.details.mediainfo": [
     {
       "type": 0,
-      "value": "Mediainfo"
+      "value": "Informações de mídia"
     }
   ],
   "torrents.details.peers": [
@@ -1796,7 +1860,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Transferir"
     }
   ],
   "torrents.list.context.move": [
@@ -1922,7 +1986,7 @@
   "torrents.properties.eta": [
     {
       "type": 0,
-      "value": "ETA"
+      "value": "Tempo Estimado"
     }
   ],
   "torrents.properties.free.disk.space": [
@@ -1958,7 +2022,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Pares"
     }
   ],
   "torrents.properties.percentage": [
@@ -1976,7 +2040,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Sementes"
     }
   ],
   "torrents.properties.size": [
@@ -2000,7 +2064,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Rastreadores"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2176,7 +2240,7 @@
   "unit.time.year": [
     {
       "type": 0,
-      "value": "yr"
+      "value": "a"
     }
   ],
   "window.title": [
