@@ -395,6 +395,12 @@
       "value": "Cancelar"
     }
   ],
+  "button.download": [
+    {
+      "type": 0,
+      "value": "Download"
+    }
+  ],
   "button.new": [
     {
       "type": 0,
@@ -533,6 +539,12 @@
       "value": "Ver feeds"
     }
   ],
+  "feeds.check": [
+    {
+      "type": 0,
+      "value": "Test Match Pattern"
+    }
+  ],
   "feeds.exclude": [
     {
       "type": 0,
@@ -555,6 +567,12 @@
     {
       "type": 0,
       "value": "Reglas Existentes"
+    }
+  ],
+  "feeds.interval": [
+    {
+      "type": 0,
+      "value": "Interval"
     }
   ],
   "feeds.label": [
@@ -619,6 +637,12 @@
       "value": "No hay fuentes definidas"
     }
   ],
+  "feeds.no.items.matching": [
+    {
+      "type": 0,
+      "value": "No items matching search term."
+    }
+  ],
   "feeds.no.rules.defined": [
     {
       "type": 0,
@@ -635,6 +659,12 @@
     {
       "type": 0,
       "value": "Buscar término"
+    }
+  ],
+  "feeds.search.term": [
+    {
+      "type": 0,
+      "value": "Search term"
     }
   ],
   "feeds.select.feed": [
@@ -677,6 +707,12 @@
     {
       "type": 0,
       "value": "Etiquetas"
+    }
+  ],
+  "feeds.test.match": [
+    {
+      "type": 0,
+      "value": "Test Match Pattern"
     }
   ],
   "feeds.time.day": [
