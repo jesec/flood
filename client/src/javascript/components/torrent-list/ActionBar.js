@@ -6,6 +6,7 @@ import Action from './Action';
 import Add from '../icons/Add';
 import connectStores from '../../util/connectStores';
 import EventTypes from '../../constants/EventTypes';
+import MenuIcon from '../icons/MenuIcon';
 import Remove from '../icons/Remove';
 import SettingsStore from '../../stores/SettingsStore';
 import SortDropdown from './SortDropdown';
@@ -39,6 +40,18 @@ class ActionBar extends React.Component {
     TorrentActions.stopTorrents(TorrentStore.getSelectedTorrents());
   }
 
+  handleSidebarChange() {
+    const sidebar = document.getElementsByClassName('application__sidebar')[0];
+    if (sidebar != null) {
+      const expanded = window.getComputedStyle(sidebar, null).getPropertyValue('display') !== 'none';
+      if (expanded) {
+        sidebar.style.display = 'none';
+      } else {
+        sidebar.style.display = 'block';
+      }
+    }
+  }
+
   render() {
     const classes = classnames('action-bar', {
       'action-bar--is-condensed': this.props.torrentListViewSize === 'condensed',
@@ -46,6 +59,15 @@ class ActionBar extends React.Component {
 
     return (
       <nav className={classes}>
+        <div className="actions action-bar__item action-bar__item--sidebar-expand-collapse">
+          <Action
+            label="actionbar.button.sidebar.expand.collapse"
+            slug="sidebar-expand-collapse"
+            icon={<MenuIcon />}
+            clickHandler={this.handleSidebarChange}
+            noTip
+          />
+        </div>
         <div className="actions action-bar__item action-bar__item--sort-torrents">
           <SortDropdown
             direction={this.props.sortBy.direction}

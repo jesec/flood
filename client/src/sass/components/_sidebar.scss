@@ -4,7 +4,7 @@
     @include theme('box-shadow', 'sidebar--border');
     @include theme('color', 'sidebar--foreground');
     flex: 1;
-    min-width: 200px;
+    min-width: 240px;
     max-width: 240px;
     overflow: auto;
     position: relative;
