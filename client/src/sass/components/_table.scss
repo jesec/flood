@@ -23,6 +23,7 @@ $table--heading--resize--indicator--width: 1px;
     flex: 0 0 auto;
     position: relative;
     transition: color 0.15s;
+    touch-action: none;
 
     &:last-child {
       border-right: none;
