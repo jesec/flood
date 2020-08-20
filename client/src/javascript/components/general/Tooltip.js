@@ -2,8 +2,7 @@ import _ from 'lodash';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
-
-import Portal from './Portal';
+import ReactDOM from 'react-dom';
 
 const ARROW_SIZE = 7;
 const METHODS_TO_BIND = [
@@ -338,7 +337,7 @@ class Tooltip extends React.Component {
           this.triggerNode = ref;
         }}>
         {props.children}
-        <Portal>
+        {ReactDOM.createPortal(
           <div
             className={tooltipClasses}
             ref={(ref) => {
@@ -348,8 +347,9 @@ class Tooltip extends React.Component {
             onMouseEnter={this.handleTooltipMouseEnter}
             onMouseLeave={this.handleTooltipMouseLeave}>
             <div className={props.contentClassName}>{props.content}</div>
-          </div>
-        </Portal>
+          </div>,
+          document.getElementById('app'),
+        )}
       </props.elementTag>
     );
   }
