@@ -119,9 +119,9 @@ declare const styles: {
   readonly 'action-bar--is-condensed': string;
   readonly 'action-bar__item': string;
   readonly 'action-bar__item--sort-torrents': string;
-  readonly dropdown: string;
   readonly dropdown__content: string;
   readonly 'action-bar__item--torrent-operations': string;
+  readonly dropdown: string;
   readonly 'action-bar__group': string;
   readonly 'action-bar__group--has-divider': string;
   readonly actions: string;

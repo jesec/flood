@@ -20,6 +20,11 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 
+  @media (max-width: 515px) {
+    flex-basis: 45px;
+    height: 45px;
+  }
+
   &--is-condensed {
     flex-basis: 30px;
     height: 30px;
@@ -36,10 +41,10 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
 
     &--sort-torrents {
       flex: 1 0 auto;
+      display: flex;
+      align-items: center;
 
       .dropdown {
-        margin: 5px 0 0 15px;
-
         &__content {
           min-width: 250px;
         }
@@ -60,6 +65,10 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
         display: flex;
         height: 60px;
 
+        @media (max-width: 515px) {
+          height: 45px;
+        }
+
         &__content {
           min-width: 430px;
           right: 4px;
@@ -72,6 +81,10 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
     display: flex;
     font-size: 0;
     padding: 0 15px;
+
+    @media (max-width: 515px) {
+      padding: 0 10px;
+    }
 
     .action-bar--is-condensed & {
       padding: 0 10px;
@@ -113,6 +126,16 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
 
     .icon {
       fill: $action--foreground--hover;
+    }
+  }
+
+  @media (max-width: 515px) {
+    height: 45px;
+    width: 46px;
+
+    .icon {
+      height: 18px;
+      width: 18px;
     }
   }
 

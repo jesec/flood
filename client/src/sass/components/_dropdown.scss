@@ -88,6 +88,13 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
     color: $dropdown--value;
     transition: color 0.25s;
 
+    @media (max-width: 515px) {
+      max-width: 15vw;
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     &:after {
       border-top: 5px solid $dropdown--value;
       border-left: $dropdown--arrow--width / 2 solid transparent;
