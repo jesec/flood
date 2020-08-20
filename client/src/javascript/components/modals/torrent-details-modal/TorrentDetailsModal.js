@@ -83,8 +83,8 @@ class TorrentDetailsModal extends React.Component {
         dismiss={this.dismissModal}
         size="large"
         tabs={tabs}
-        orientation="vertical"
-        tabsInBody
+        orientation={window.matchMedia('(max-width: 720px)').matches ? 'horizontal' : 'vertical'}
+        {...(window.matchMedia('(max-width: 720px)').matches ? [] : {tabsInBody: true})}
       />
     );
   }

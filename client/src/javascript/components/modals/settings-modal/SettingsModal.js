@@ -220,7 +220,7 @@ class SettingsModal extends React.Component {
           id: 'settings.tabs.heading',
         })}
         onSetRef={this.handleModalRefSet}
-        orientation="vertical"
+        orientation={window.matchMedia('(max-width: 720px)').matches ? 'horizontal' : 'vertical'}
         dismiss={this.props.dismiss}
         tabs={tabs}
       />

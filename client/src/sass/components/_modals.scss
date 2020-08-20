@@ -152,6 +152,14 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
       transform: translate(-50%, 0);
       transform-origin: 50% 50%;
       width: 500px;
+
+      @media (max-width: 720px) {
+        max-width: 100%;
+        height: 80%;
+        width: 100%;
+        top: unset;
+        bottom: 0%;
+      }
     }
 
     &--nested-scroll {
@@ -356,6 +364,10 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
         &__content {
           &__wrapper {
             bottom: 10%;
+
+            @media (max-width: 720px) {
+              bottom: 0%;
+            }
           }
         }
       }
