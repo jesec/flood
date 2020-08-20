@@ -9,6 +9,11 @@
     overflow: auto;
     position: relative;
     z-index: 2;
+
+    display: block;
+    @media (max-width: 720px) {
+      display: none;
+    }
   }
 }
 
