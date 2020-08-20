@@ -7,13 +7,13 @@ import UIStore from '../../stores/UIStore';
 
 const methodsToBind = [
   'getHeadingElements',
-  'handleCellMouseDown',
-  'handleMouseUp',
-  'handleMouseMove',
+  'handleCellPointerDown',
+  'handlePointerUp',
+  'handlePointerMove',
   'updateCellWidth',
 ];
 
-const mouseDownStyles = `
+const pointerDownStyles = `
   body { user-select: none !important; }
   * { cursor: col-resize !important; }
 `;
@@ -24,8 +24,8 @@ class TableHeading extends React.Component {
 
     this.focusedCell = null;
     this.focusedCellWidth = null;
-    this.isMouseDown = false;
-    this.lastMouseX = null;
+    this.isPointerDown = false;
+    this.lastPointerX = null;
 
     methodsToBind.forEach((method) => {
       this[method] = this[method].bind(this);
@@ -36,18 +36,18 @@ class TableHeading extends React.Component {
     this.tableHeadingX = this.tableHeading.getBoundingClientRect().left;
   }
 
-  handleMouseMove(event) {
+  handlePointerMove(event) {
     let widthDelta = 0;
 
-    if (this.lastMouseX != null) {
-      widthDelta = event.clientX - this.lastMouseX;
+    if (this.lastPointerX != null) {
+      widthDelta = event.clientX - this.lastPointerX;
     }
 
     const nextCellWidth = this.focusedCellWidth + widthDelta;
 
     if (nextCellWidth > 20) {
       this.focusedCellWidth = nextCellWidth;
-      this.lastMouseX = event.clientX;
+      this.lastPointerX = event.clientX;
       this.resizeLine.style.transform = `translateX(${Math.max(
         0,
         event.clientX - this.tableHeadingX + this.props.scrollOffset,
@@ -55,13 +55,13 @@ class TableHeading extends React.Component {
     }
   }
 
-  handleMouseUp() {
-    UIStore.removeGlobalStyle(mouseDownStyles);
-    global.document.removeEventListener('mouseup', this.handleMouseUp);
-    global.document.removeEventListener('mousemove', this.handleMouseMove);
+  handlePointerUp() {
+    UIStore.removeGlobalStyle(pointerDownStyles);
+    global.document.removeEventListener('pointerup', this.handlePointerUp);
+    global.document.removeEventListener('pointermove', this.handlePointerMove);
 
-    this.isMouseDown = false;
-    this.lastMouseX = null;
+    this.isPointerDown = false;
+    this.lastPointerX = null;
     this.resizeLine.style.opacity = 0;
 
     this.updateCellWidth(this.focusedCell, this.focusedCellWidth);
@@ -74,16 +74,16 @@ class TableHeading extends React.Component {
     this.props.onCellClick(slug, event);
   }
 
-  handleCellMouseDown(event, slug, width) {
-    if (!this.isMouseDown) {
-      UIStore.addGlobalStyle(mouseDownStyles);
-      global.document.addEventListener('mouseup', this.handleMouseUp);
-      global.document.addEventListener('mousemove', this.handleMouseMove);
+  handleCellPointerDown(event, slug, width) {
+    if (!this.isPointerDown) {
+      UIStore.addGlobalStyle(pointerDownStyles);
+      global.document.addEventListener('pointerup', this.handlePointerUp);
+      global.document.addEventListener('pointermove', this.handlePointerMove);
 
       this.focusedCell = slug;
       this.focusedCellWidth = width;
-      this.isMouseDown = true;
-      this.lastMouseX = event.clientX;
+      this.isPointerDown = true;
+      this.lastPointerX = event.clientX;
       this.resizeLine.style.transform = `translateX(${Math.max(
         0,
         event.clientX - this.tableHeadingX + this.props.scrollOffset,
@@ -107,12 +107,12 @@ class TableHeading extends React.Component {
       let handle = null;
       const width = propWidths[id] || defaultPropWidths[id] || defaultWidth;
 
-      if (!this.isMouseDown) {
+      if (!this.isPointerDown) {
         handle = (
           <span
             className="table__heading__handle"
-            onMouseDown={(event) => {
-              this.handleCellMouseDown(event, id, width);
+            onPointerDown={(event) => {
+              this.handleCellPointerDown(event, id, width);
             }}
           />
         );
