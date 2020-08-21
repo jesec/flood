@@ -254,7 +254,7 @@
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "下載"
     }
   ],
   "button.new": [
@@ -350,7 +350,7 @@
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "種子分類"
     }
   ],
   "dependency.loading.transfer.history": [
@@ -398,7 +398,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "測試Pattern"
     }
   ],
   "feeds.exclude": [
@@ -428,7 +428,7 @@
   "feeds.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "內部"
     }
   ],
   "feeds.label": [
@@ -454,7 +454,7 @@
             },
             {
               "type": 0,
-              "value": " match"
+              "value": " 項符合"
             }
           ]
         },
@@ -465,7 +465,7 @@
             },
             {
               "type": 0,
-              "value": " matches"
+              "value": " 項符合"
             }
           ]
         }
@@ -496,7 +496,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "沒有符合搜尋條件的項目"
     }
   ],
   "feeds.no.rules.defined": [
@@ -520,7 +520,7 @@
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "搜尋條件"
     }
   ],
   "feeds.select.feed": [
@@ -568,7 +568,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "測試Pattern"
     }
   ],
   "feeds.time.day": [
@@ -718,19 +718,19 @@
   "filter.status.title": [
     {
       "type": 0,
-      "value": "篩選狀態"
+      "value": "狀態篩選"
     }
   ],
   "filter.tag.title": [
     {
       "type": 0,
-      "value": "篩選 Tag"
+      "value": "標籤篩選"
     }
   ],
   "filter.tracker.title": [
     {
       "type": 0,
-      "value": "篩選 Tracker"
+      "value": "Tracker篩選"
     }
   ],
   "filter.untagged": [
@@ -1572,7 +1572,7 @@
   "torrents.details.mediainfo": [
     {
       "type": 0,
-      "value": "Mediainfo"
+      "value": "MediaInfo"
     }
   ],
   "torrents.details.peers": [
@@ -1956,7 +1956,7 @@
     },
     {
       "type": 0,
-      "value": "/s"
+      "value": "/秒"
     }
   ],
   "unit.time.day": [
