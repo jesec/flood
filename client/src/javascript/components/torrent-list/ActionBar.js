@@ -41,14 +41,9 @@ class ActionBar extends React.Component {
   }
 
   handleSidebarChange() {
-    const sidebar = document.getElementsByClassName('application__sidebar')[0];
-    if (sidebar != null) {
-      const expanded = window.getComputedStyle(sidebar, null).getPropertyValue('display') !== 'none';
-      if (expanded) {
-        sidebar.style.display = 'none';
-      } else {
-        sidebar.style.display = 'block';
-      }
+    const view = document.getElementsByClassName('application__view')[0];
+    if (view != null) {
+      view.classList.toggle('application__view--sidebar-alternative-state');
     }
   }
 

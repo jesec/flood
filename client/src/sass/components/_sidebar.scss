@@ -9,10 +9,10 @@
     overflow: auto;
     position: relative;
     z-index: 2;
+    transition: transform 0.2s;
 
-    display: block;
     @media (max-width: 720px) {
-      display: none;
+      transform: translateX(-120px);
     }
   }
 }

@@ -26,6 +26,36 @@ body {
     justify-content: center;
     height: 100%;
     width: 100%;
+
+    &--sidebar-alternative-state {
+      .application__sidebar {
+        display: none;
+      }
+
+      @media (max-width: 720px) {
+        .application__sidebar {
+          display: block;
+          transform: translateX(120px);
+          z-index: unset;
+        }
+
+        .application__content {
+          transform: translateX(120px);
+
+          .modal {
+            transform: translateX(-240px);
+          }
+
+          .context-menu__items {
+            transform: translateX(-240px);
+          }
+
+          .table__heading__resize-line {
+            left: -240px;
+          }
+        }
+      }
+    }
   }
 
   &__content {
@@ -37,6 +67,12 @@ body {
     justify-content: center;
     position: relative;
     min-width: 60px;
+    transition: transform 0.2s;
+
+    @media (max-width: 720px) {
+      width: 100vw;
+      transform: translateX(-120px);
+    }
   }
 
   &__panel {

@@ -107,7 +107,12 @@ declare const styles: {
   readonly app: string;
   readonly application: string;
   readonly application__view: string;
+  readonly 'application--sidebar-alternative-state': string;
+  readonly application__sidebar: string;
+  readonly 'application__view--sidebar-alternative-state': string;
   readonly application__content: string;
+  readonly modal: string;
+  readonly 'table__heading__resize-line': string;
   readonly application__panel: string;
   readonly 'application__panel--torrent-list': string;
   readonly 'is-open': string;
@@ -310,7 +315,6 @@ declare const styles: {
   readonly tooltip__wrapper: string;
   readonly 'mediainfo__copy-button': string;
   readonly mediainfo__output: string;
-  readonly modal: string;
   readonly modal__overlay: string;
   readonly 'modal--align-center': string;
   readonly modal__tabs: string;
@@ -376,7 +380,6 @@ declare const styles: {
   readonly search: string;
   readonly textbox: string;
   readonly 'is-in-use': string;
-  readonly application__sidebar: string;
   readonly 'sidebar__icon-button': string;
   readonly 'sidebar__icon-button--interactive': string;
   readonly 'sidebar__action--last': string;
@@ -413,7 +416,6 @@ declare const styles: {
   readonly 'table__heading--fill': string;
   readonly table__heading__handle: string;
   readonly table__heading__label: string;
-  readonly 'table__heading__resize-line': string;
   readonly 'table__heading__column-fill': string;
   readonly table__cell: string;
   readonly 'textbox-repeater': string;
