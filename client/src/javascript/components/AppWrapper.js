@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import AuthStore from '../stores/AuthStore';
+import ConfigStore from '../stores/ConfigStore';
 import Checkmark from './icons/Checkmark';
 import ClientConnectionInterruption from './general/ClientConnectionInterruption';
 import ClientStatusStore from '../stores/ClientStatusStore';
@@ -12,8 +13,6 @@ import EventTypes from '../constants/EventTypes';
 import LoadingIndicator from './general/LoadingIndicator';
 import UIStore from '../stores/UIStore';
 import WindowTitle from './general/WindowTitle';
-
-import UserConfig from '../../../../config';
 
 const ICONS = {
   satisfied: <Checkmark />,
@@ -55,7 +54,7 @@ class AuthEnforcer extends React.Component {
     }
 
     // TODO: disableUsersAndAuth is server's config not user's
-    if (isAuthenticated && !isClientConnected && !UserConfig.disableUsersAndAuth) {
+    if (isAuthenticated && !isClientConnected && !ConfigStore.getDisableAuth()) {
       content = (
         <div className="application__loading-overlay">
           <div className="application__entry-barrier">

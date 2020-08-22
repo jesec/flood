@@ -9,11 +9,10 @@ import connectStores from '../../../util/connectStores';
 import EventTypes from '../../../constants/EventTypes';
 import Modal from '../Modal';
 import ResourcesTab from './ResourcesTab';
+import ConfigStore from '../../../stores/ConfigStore';
 import SettingsStore from '../../../stores/SettingsStore';
 import UITab from './UITab';
 import DiskUsageTab from './DiskUsageTab';
-
-import UserConfig from '../../../../../../config';
 
 class SettingsModal extends React.Component {
   modalBodyRef = null;
@@ -175,7 +174,7 @@ class SettingsModal extends React.Component {
         }),
       },
       // TODO: disableUsersAndAuth is server's config not user's
-      ...(UserConfig.disableUsersAndAuth !== true
+      ...(!ConfigStore.getDisableAuth()
         ? {
             authentication: {
               content: AuthTab,

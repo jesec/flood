@@ -8,6 +8,10 @@ class ConfigStoreClass extends BaseStore {
   getPollInterval() {
     return process.env.POLL_INTERVAL || 5000;
   }
+
+  getDisableAuth() {
+    return process.env.DISABLE_AUTH || false;
+  }
 }
 
 export default new ConfigStoreClass();

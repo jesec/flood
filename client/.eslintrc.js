@@ -14,6 +14,9 @@ module.exports = {
   },
   plugins: ['import'],
   rules: {
+    "no-restricted-imports": ["error", {
+      "patterns": ["**/config"],
+    }],
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/camelcase': ['error'],
     camelcase: 0,

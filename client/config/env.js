@@ -40,6 +40,7 @@ function getClientEnvironment() {
         NODE_ENV: environment,
         BASE_URI: environment !== 'development' ? paths.servedPath : '',
         POLL_INTERVAL: userConfig.torrentClientPollInterval,
+        DISABLE_AUTH: userConfig.disableUsersAndAuth,
       },
     );
   // Stringify all values so we can feed into Webpack DefinePlugin
