@@ -7,7 +7,8 @@ const CONFIG = {
   pollInterval: 1000 * 5,
   // eslint-disable-next-line no-undef
   secret: process.env.FLOOD_SECRET || CHANGE_ME,
-  scgi: {
+  disableUsersAndAuth: process.env.FLOOD_DISABLE_AUTH === 'true' || process.env.FLOOD_DISABLE_AUTH === true,
+  configUser: {
     host: process.env.RTORRENT_SCGI_HOST || 'localhost',
     port: process.env.RTORRENT_SCGI_PORT || 5000,
     socket: process.env.RTORRENT_SOCK === 'true' || process.env.RTORRENT_SOCK === true,
@@ -16,7 +17,6 @@ const CONFIG = {
   ssl: process.env.FLOOD_ENABLE_SSL === 'true' || process.env.FLOOD_ENABLE_SSL === true,
   sslKey: '/data/flood_ssl.key',
   sslCert: '/data/flood_ssl.cert',
-  disableUsersAndAuth: false,
 };
 
 module.exports = CONFIG;
