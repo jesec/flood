@@ -25,3 +25,5 @@ jobs:
     - run: cp config.template.js config.js
     - run: npm install
     - run: npm run check-source-formatting
+      env:
+        FLOOD_SECRET: ${{ secrets.FLOOD_SECRET }}

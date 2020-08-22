@@ -51,9 +51,11 @@ const CONFIG = {
   maxHistoryStates: 30,
   // How often (in milliseconds) Flood will request the torrent list from.
   torrentClientPollInterval: 1000 * 2,
-  // A unique secret for signing messages with JWT (see https://jwt.io). Change
-  // this to something unique and hard to guess.
-  secret: 'flood',
+  // A unique secret for signing messages with JWT (see https://jwt.io).
+  // Change this to something unique and hard to guess.
+  // You can use 'uuidgen' or 'cat /proc/sys/kernel/random/uuid' or 'uuidgenerator.net'.
+  // eslint-disable-next-line no-undef
+  secret: process.env.FLOOD_SECRET || CHANGE_ME,
   // Configuration for SSL, if using SSL with the Flood service directly.
   ssl: false,
   sslKey: '/absolute/path/to/key/',

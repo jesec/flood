@@ -5,7 +5,8 @@ const CONFIG = {
   floodServerPort: 3000,
   maxHistoryStates: 30,
   pollInterval: 1000 * 5,
-  secret: process.env.FLOOD_SECRET || 'flood',
+  // eslint-disable-next-line no-undef
+  secret: process.env.FLOOD_SECRET || CHANGE_ME,
   scgi: {
     host: process.env.RTORRENT_SCGI_HOST || 'localhost',
     port: process.env.RTORRENT_SCGI_PORT || 5000,
