@@ -21,8 +21,8 @@ Check out the [Wiki](https://github.com/jesec/flood/wiki) for more information.
 1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed and running __with XMLRPC__ configuration.
     * For Linux & OS X, check out [rTorrent's installation wiki](https://github.com/rakshasa/rtorrent/wiki/Installing#compilation-help) and/or [this third-party tutorial](https://jes.sc/kb/rTorrent+ruTorrent-Seedbox-Guide.php#Install-Dependencies). When you run `./configure`, be sure to run with the `--with-xmlrpc-c` flag.
     * For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows).
-2. Install NodeJS version `8` or higher (you might want to manage different Node versions with [nodenv](https://github.com/nodenv/nodenv) or [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)).
-3. Install `node-gyp` pre-requisites, see https://www.npmjs.com/package/node-gyp#installation, ex: `python2`, `make`, `gcc`.
+2. Install [NodeJS](https://nodejs.org/) version `Current` (you might want to manage different Node versions with [nodenv](https://github.com/nodenv/nodenv) or [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)). Flood tracks latest NodeJS release and does NOT provide support to legacy NodeJS versions.
+3. Install `node-gyp` pre-requisites, see https://www.npmjs.com/package/node-gyp#installation, ex: `python`, `make`, `gcc`.
 
 ### Configuration
 
@@ -61,7 +61,7 @@ I've been bad about cutting actual releases, so check this repo for recent commi
 
 ### Troubleshooting
 
-* Ubuntu users may need to install `nodejs-legacy` (`sudo apt-get install nodejs-legacy`) for dependencies to install successfully. You can read more on [this Stack Overflow post](http://stackoverflow.com/questions/21168141/cannot-install-packages-using-node-package-manager-in-ubuntu).
+* Debian, Ubuntu and RHEL-based distributions users can install latest `nodejs` from [NodeSource](https://github.com/nodesource/distributions).
 * Ask for help in the [Flood Discord server](https://discord.gg/Z7yR5Uf).
 
 ### Local Development
@@ -80,11 +80,15 @@ I've been bad about cutting actual releases, so check this repo for recent commi
 
 ### Running with Docker
 
-1. `docker build -t rtorrent-flood .`
-2. `docker run --name rtorrent-flood -e RTORRENT_SCGI_HOST=w.x.y.z -p 3000:3000 rtorrent-flood`
-3. Other supported environment variables:
+1. `uuidgen > flood.secret`
+2. `docker build -t rtorrent-flood .`
+3. ``docker run --name rtorrent-flood -e FLOOD_SECRET=`cat flood.secret` -p 3000:3000 rtorrent-flood``
+4. Other supported environment variables:
     * `FLOOD_BASE_URI`
-    * `FLOOD_SECRET`
     * `FLOOD_ENABLE_SSL`
+    * `FLOOD_DISABLE_AUTH`
+       * `RTORRENT_SCGI_HOST`
+       * `RTORRENT_SCGI_PORT`
+       * `RTORRENT_SOCK=true` + `RTORRENT_SOCK_PATH`
 
 The docker container includes a volume at `/data`, which is where the database will be located.  Additionally, you can place your SSL files there, `/data/flood_ssl.key` and `/data/flood_ssl.cert`. Set `FLOOD_ENABLE_SSL` to `true` to enable their use if present. Additionally, a local rtorrent socket file located at `/data/rtorrent.sock` can be used if `RTORRENT_SOCK` is set to `true`. The location of the socket file can be overrided by setting `RTORRENT_SOCK_PATH` to the path of the socket.

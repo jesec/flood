@@ -11,6 +11,9 @@ pids
 *.seed
 *.pid.lock
 
+# Secrets
+*.secret
+
 # Dependency directories
 node_modules/
 
