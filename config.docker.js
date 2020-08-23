@@ -2,6 +2,7 @@ const CONFIG = {
   baseURI: process.env.FLOOD_BASE_URI || '/',
   dbCleanInterval: 1000 * 60 * 60,
   dbPath: '/data/server/db/',
+  tempPath: '/data/server/temp/',
   floodServerPort: 3000,
   maxHistoryStates: 30,
   pollInterval: 1000 * 5,

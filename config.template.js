@@ -17,7 +17,9 @@ const CONFIG = {
   // This value dictates how old data is, in milliseconds, before being purged.
   dbCleanInterval: 1000 * 60 * 60,
   // Where to store the local nedb database.
-  dbPath: './server/db/',
+  dbPath: './run/db/',
+  // Where to store Flood's temporary files
+  tempPath: './run/temp/',
   // If this is true, there will be no users and no attempt to
   // authenticate or password-protect any page. In that case,
   // instead of per-user config, the following configUser settings

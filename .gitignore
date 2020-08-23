@@ -50,9 +50,8 @@ config.js
 # Static assets
 dist/assets
 
-# Flood server
-server/db
-server/temp
+# Runtime files
+run/
 
 # Vim temp files
 *.swp

@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+const {tempPath} = require('../../config');
+
 class TemporaryStorage {
   constructor() {
-    this.tempPath = path.join(path.dirname(require.main.filename), '..', 'temp');
-
-    fs.mkdir(this.tempPath, {recursive: true});
+    fs.mkdir(tempPath, {recursive: true});
   }
 
   deleteFile(filename) {
@@ -13,7 +13,7 @@ class TemporaryStorage {
   }
 
   getTempPath(filename) {
-    return path.join(this.tempPath, filename);
+    return path.join(tempPath, filename);
   }
 }
 
