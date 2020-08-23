@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-const paths = require('./paths');
 const userConfig = require('../../config');
 
 // Make sure that including paths.js after env.js will read .env variables.
@@ -38,7 +37,6 @@ function getClientEnvironment() {
       },
       {
         NODE_ENV: environment,
-        BASE_URI: environment !== 'development' ? paths.servedPath : '',
         POLL_INTERVAL: userConfig.torrentClientPollInterval,
         DISABLE_AUTH: userConfig.disableUsersAndAuth,
       },

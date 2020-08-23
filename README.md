@@ -36,8 +36,6 @@ When loading the web interface, you will be prompted to configure the connection
 3. If you are proxying requests to Flood from your own web server, configure Flood's path from the host at the `baseURI` property. All requests will be prefixed with this value.
     * For example, if serving Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If serving flood from `https://foo.bar`, you do not need to configure `baseURI`.
     * [Read more about proxying requests to Flood on the Wiki](https://github.com/Flood-UI/flood/wiki/Using-Flood-behind-a-reverse-proxy), this is a common pain-point for users.
-    
-**Note**: Some of these values are baked into the static assets (like `baseURI`), so changes to this file require recompling static assets.
 
 ### Compiling assets and starting the server
 

@@ -9,8 +9,7 @@ const CONFIG = {
   // web server.
   // For example, if you intend to serve from http://example.com/flood, set this to
   // '/flood' and configure your web server to pass _all_ requests from `/flood` to
-  // the root of Flood's web server.
-  // Recompiling assets with `npm run build` is needed after each `baseURI` change.
+  // the `/flood` of Flood's web server.
   // See https://github.com/Flood-UI/flood/wiki/Using-Flood-behind-a-reverse-proxy
   baseURI: '/',
   // Flood uses a local nedb database to keep track of users, torrents,

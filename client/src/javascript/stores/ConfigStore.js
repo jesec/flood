@@ -2,7 +2,8 @@ import BaseStore from './BaseStore';
 
 class ConfigStoreClass extends BaseStore {
   getBaseURI() {
-    return process.env.BASE_URI;
+    const {pathname} = window.location;
+    return pathname.substr(0, pathname.lastIndexOf('/') + 1);
   }
 
   getPollInterval() {
