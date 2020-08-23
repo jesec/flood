@@ -1,5 +1,8 @@
 const fs = require('fs');
+const glob = require('glob');
 const path = require('path');
+
+const {secret} = require('../../config');
 
 const staticAssets = [path.join(__dirname, '../assets/index.html')];
 
@@ -17,6 +20,20 @@ const doFilesExist = (files) => {
   }
 };
 
+const grepRecursive = (folder, match) => {
+  return glob.sync(folder.concat('/**/*')).some((file) => {
+    try {
+      if (!fs.lstatSync(file).isDirectory()) {
+        return fs.readFileSync(file, {encoding: 'utf8'}).includes(match);
+      }
+      return false;
+    } catch (error) {
+      console.error(`Error reading file: ${file}\n${error}`);
+      return false;
+    }
+  });
+};
+
 const enforcePrerequisites = () =>
   new Promise((resolve, reject) => {
     if (!doFilesExist(configFiles)) {
@@ -30,6 +47,12 @@ const enforcePrerequisites = () =>
           `Static assets (index.html) are missing. Please check the 'Compiling assets and starting the server' section of README.md.`,
         ),
       );
+      return;
+    }
+
+    // Ensures that server secret is not served to user
+    if (grepRecursive(path.join(__dirname, '../assets'), secret)) {
+      reject(new Error(`Secret is included in static assets. Please ensure that secret is unique.`));
       return;
     }
 
