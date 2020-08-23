@@ -3,8 +3,9 @@ const glob = require('glob');
 const path = require('path');
 
 const {secret} = require('../../config');
+const {appBuild} = require('../../shared/config/paths');
 
-const staticAssets = [path.join(__dirname, '../assets/index.html')];
+const staticAssets = [path.join(appBuild, 'index.html')];
 
 const configFiles = [path.join(__dirname, '../../config.js')];
 
@@ -51,7 +52,7 @@ const enforcePrerequisites = () =>
     }
 
     // Ensures that server secret is not served to user
-    if (grepRecursive(path.join(__dirname, '../assets'), secret)) {
+    if (grepRecursive(appBuild, secret)) {
       reject(new Error(`Secret is included in static assets. Please ensure that secret is unique.`));
       return;
     }

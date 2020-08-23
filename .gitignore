@@ -47,9 +47,11 @@ node_modules/
 # Personal flood config
 config.js
 
+# Static assets
+dist/assets
+
 # Flood server
 server/db
-server/assets
 server/temp
 
 # Vim temp files

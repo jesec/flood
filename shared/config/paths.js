@@ -18,7 +18,7 @@ const ensureSlash = (questionablePath, needsSlash) => {
 };
 
 module.exports = {
-  appBuild: resolveApp('server/assets'),
+  appBuild: resolveApp('dist/assets'),
   appPublic: resolveApp('client/src/public/'),
   appHtml: resolveApp('client/src/index.html'),
   appIndex: resolveApp('client/src/javascript/app.tsx'),

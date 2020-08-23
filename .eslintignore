@@ -1,4 +1,4 @@
 /node_modules
-/server/assets
+/dist/assets
 **/*.d.ts
 /docs
