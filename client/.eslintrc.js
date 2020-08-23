@@ -15,7 +15,10 @@ module.exports = {
   plugins: ['import'],
   rules: {
     "no-restricted-imports": ["error", {
-      "patterns": ["**/config"],
+      "patterns": ["**/config", "**/server/**/*"]
+    }],
+    "no-restricted-modules": ["error", {
+      "patterns": ["**/server/**/*"]
     }],
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/camelcase': ['error'],

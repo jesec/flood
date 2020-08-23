@@ -18,7 +18,7 @@ const webpack = require('webpack');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
-const paths = require('../config/paths');
+const paths = require('../../shared/config/paths');
 const config = require('../config/webpack.config.prod');
 
 const {measureFileSizesBeforeBuild, printFileSizesAfterBuild} = FileSizeReporter;

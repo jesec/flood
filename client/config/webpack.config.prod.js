@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const getClientEnvironment = require('./env');
-const paths = require('./paths');
+const paths = require('../../shared/config/paths');
 
 const env = getClientEnvironment();
 

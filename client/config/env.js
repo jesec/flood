@@ -4,7 +4,7 @@ const path = require('path');
 const userConfig = require('../../config');
 
 // Make sure that including paths.js after env.js will read .env variables.
-delete require.cache[require.resolve('./paths')];
+delete require.cache[require.resolve('../../shared/config/paths')];
 
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
