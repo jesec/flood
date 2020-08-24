@@ -15,6 +15,9 @@ $alert--foreground: #8fa2b2;
     width: 250px;
     z-index: 99;
 
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+
     &-exit {
       opacity: 1;
 
