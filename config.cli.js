@@ -1,38 +1,45 @@
 const { mkdirSync } = require('fs');
 const path = require('path');
-const yargs = require('yargs');
-
-const { argv } = yargs
+const {argv} = require('yargs')
   .option('baseuri', {
+    describe: "This URI will prefix all of Flood's HTTP requests",
     type: 'string',
   })
   .option('rundir', {
     alias: 'd',
+    describe: "Where to store Flood's runtime files (eg. database)",
     type: 'string',
   })
   .option('host', {
     alias: 'h',
+    describe: 'The host that Flood should listen for web connections on',
     type: 'string',
   })
   .option('port', {
     alias: 'p',
+    describe: 'The port that Flood should listen for web connections on',
     type: 'number',
   })
   .option('secret', {
     alias: 's',
+    describe: 'A unique secret, a random one will be generated if not provided',
     type: 'string',
   })
   .option('noauth', {
     alias: 'n',
+    describe: "Disable Flood's builtin access control system, needs rthost+rtport OR rtsocket.",
     type: 'boolean',
   })
   .option('rthost', {
+    describe: "Depends on noauth: Host of rTorrent's SCGI interface",
     type: 'string',
   })
   .option('rtport', {
+    describe: "Depends on noauth: Port of rTorrent's SCGI interface",
     type: 'number',
   })
   .option('rtsocket', {
+    describe: "Depends on noauth: Path to rTorrent's SCGI unix socket",
     type: 'string',
   })
   .help();
