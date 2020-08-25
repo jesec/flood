@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -45,11 +46,6 @@ const {argv} = require('yargs')
   })
   .help();
 
-if (!argv.secret) {
-  console.error('Secret must be provided.')
-  process.exit(1);
-}
-
 const DEFAULT_RUNDIR = path.join(os.homedir(), '.local/share/flood');
 const RUNDIR = argv.rundir ? argv.rundir : DEFAULT_RUNDIR;
 
@@ -59,6 +55,27 @@ try {
 } catch (error) {
   console.error('Failed to access runtime directory');
   process.exit(1);
+}
+
+const DEFAULT_SECRET_PATH = path.join(RUNDIR, 'flood.secret');
+let secret;
+
+if (!argv.secret) {
+  try {
+    if (fs.existsSync(DEFAULT_SECRET_PATH)) {
+      secret = fs.readFileSync(DEFAULT_SECRET_PATH, {encoding: 'utf8'});
+    } else {
+      const buf = Buffer.alloc(36);
+      crypto.randomFillSync(buf);
+      secret = buf.toString('hex');
+      fs.writeFileSync(DEFAULT_SECRET_PATH, secret, {mode: 0o600});
+    }
+  } catch (error) {
+    console.error('Failed to read or generate secret');
+    process.exit(1);
+  }
+} else {
+  ({secret} = argv);
 }
 
 const CONFIG = {
@@ -77,7 +94,7 @@ const CONFIG = {
   floodServerPort: argv.port || 3000,
   maxHistoryStates: 30,
   torrentClientPollInterval: 1000 * 2,
-  secret: argv.secret,
+  secret,
   ssl: false,
   sslKey: '/absolute/path/to/key/',
   sslCert: '/absolute/path/to/certificate/',
