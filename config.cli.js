@@ -1,4 +1,5 @@
-const { mkdirSync } = require('fs');
+const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const {argv} = require('yargs')
   .option('baseuri', {
@@ -49,9 +50,12 @@ if (!argv.secret) {
   process.exit(1);
 }
 
+const DEFAULT_RUNDIR = path.join(os.homedir(), '.local/share/flood');
+const RUNDIR = argv.rundir ? argv.rundir : DEFAULT_RUNDIR;
+
 try {
-  mkdirSync(path.join(argv.rundir ? argv.rundir : './run', 'db'), { recursive: true });
-  mkdirSync(path.join(argv.rundir ? argv.rundir : './run', 'temp'), { recursive: true });
+  fs.mkdirSync(path.join(RUNDIR, 'db'), {recursive: true});
+  fs.mkdirSync(path.join(RUNDIR, 'temp'), {recursive: true});
 } catch (error) {
   console.error('Failed to access runtime directory');
   process.exit(1);
@@ -60,8 +64,8 @@ try {
 const CONFIG = {
   baseURI: argv.baseuri || '/',
   dbCleanInterval: 1000 * 60 * 60,
-  dbPath: path.resolve(path.join(argv.rundir ? argv.rundir : "./run", 'db')),
-  tempPath: path.resolve(path.join(argv.rundir ? argv.rundir : "./run", 'temp')),
+  dbPath: path.resolve(path.join(RUNDIR, 'db')),
+  tempPath: path.resolve(path.join(RUNDIR, 'temp')),
   disableUsersAndAuth: argv.noauth || false,
   configUser: {
     host: argv.rthost || 'localhost',
