@@ -1,5 +1,34 @@
 # Change Log
 
+## [3.0.0] (August 25, 2020)
+* BREAKING CHANGES:
+  * If `baseURI` is set, server will only respond to requests with baseURI. For instance, if you use `location /flood {proxy_pass http://127.0.0.1:3000;}`, you would have to change it to `location /flood {proxy_pass http://127.0.0.1:3000/flood;}`.
+  * Static assets now use relative paths only. It is no longer needed to recompile after `baseURI` change.
+  * Location of runtime files are rearranged. New default location for runtime files is `./run` folder. `tempPath` is now made configurable.
+  * Static assets are relocated to `./dist` folder. You have to change the path from `./server/assets` to `./dist/assets` if you serve static assets from web server.
+  * Flood will refuse to start if secrets are detected in static assets. Former default secret `flood` and some other weak secrets are no longer accepted.
+* A command line interface is added as `config.cli.js`. Rename it to `config.js` and run `npm run start -- --help` for more details.
+* With some changes, Flood is now ready for publish to `npm`. You can now use `sudo npm install -g @jesec/flood` to get a ready-to-use copy of Flood, then run `flood`. It is even easier with `npx`, try `npx @jesec/flood --help` now.
+* Better localization:
+  * Flood project is now integrated with [Crowdin](https://crwd.in/flood), a renowned translation management system. It is now easier than ever to contribute your translations to Flood.
+  * Language will now be automatically detected from your browser by default.
+  * New languages are supported: `Čeština`, `Deutsch`, `italiano`, `norsk`, `Polskie`, `русский язык`, `Romanian`, `svenska`, `українська мова`, `日本語` and `اَلْعَرَبِيَّةُ` thanks to `Crowdin Machine Translation`.
+  * New translations for `Chinese (Traditional)` thanks to @vongola12324.
+  * New translations for `Dutch` thanks to @NLxDoDge.
+  * New translations for `Portuguese` thanks to @MiguelNdeCarvalho.
+* Support for touch and smaller screen devices:
+  * Sidebar is able to be collapsed via a button. It is collapsed by default when screen width is lower than `720px`.
+  * Modals (Settings, Torrent Details, Add Torrent, etc.) are tuned for smaller screen devices.
+  * It is now possible to open context (right click) menu on iOS/Safari devices by long pressing the item.
+  * Drag and drop is now possible for touch devices. You can now adjust the order of columns in Settings on touch devices.
+  * Widths of columns are now adjustable on touch devices. (condensed view)
+* Dark color scheme support:
+  * Flood now automatically switches between light and dark color scheme based on your system settings.
+* XML special chars (`&`, `<`, `>`, `'`, `"`) are properly handled. For instance, escaped chars like `&` will be properly displayed as `&` instead of `&amp;`. File operations on torrent with special chars no longer fail.
+* `squashfs` and `tmpfs` mount points are now excluded by default in disk usage. This hopefully makes sure that useless system mounts won't spam the list.
+* `More Info` button in expanded view is removed.
+* More dependencies are bumped to the latest revisions.
+
 ## [2.0.0] (August 5, 2020)
 * BREAKING CHANGES:
   * Bump dependencies to the latest version if possible
@@ -53,3 +82,4 @@
 [Unreleased]:https://github.com/Flood-UI/flood/compare/v1.0.0...HEAD
 [1.0.0]:https://github.com/Flood-UI/flood/compare/ae520c0a33ffb4ae6f21e47bc6f7e6007dd1e6dc...v1.0.0
 [2.0.0]:https://github.com/jesec/flood/compare/v1.0.0...v2.0.0
+[3.0.0]:https://github.com/jesec/flood/compare/v2.0.0...v3.0.0
