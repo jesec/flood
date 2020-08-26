@@ -6,6 +6,7 @@ const tar = require('tar-stream');
 const ClientRequest = require('./ClientRequest');
 const clientResponseUtil = require('../util/clientResponseUtil');
 const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
+const fileUtil = require('../util/fileUtil');
 const settings = require('./settings');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
@@ -23,7 +24,13 @@ const client = {
       tags = tags.split(',');
     }
 
-    request.createDirectory({path: destinationPath});
+    const resolvedPath = path.resolve(destinationPath);
+    if (!fileUtil.isAllowedPath(resolvedPath)) {
+      callback(null, fileUtil.accessDeniedError());
+      return;
+    }
+
+    fileUtil.createDirectory({path: resolvedPath});
     request.send();
 
     // Each torrent is sent individually because rTorrent accepts a total
@@ -35,7 +42,7 @@ const client = {
       const fileRequest = new ClientRequest(user, services);
       fileRequest.addFiles({
         files: file,
-        path: destinationPath,
+        path: resolvedPath,
         isBasePath,
         start,
         tags,
@@ -58,10 +65,15 @@ const client = {
   addUrls(user, services, data, callback) {
     const {urls, destination, isBasePath, start, tags} = data;
     const request = new ClientRequest(user, services);
-    request.createDirectory({path: destination});
+    const resolvedPath = path.resolve(destination);
+    if (!fileUtil.isAllowedPath(resolvedPath)) {
+      callback(null, fileUtil.accessDeniedError());
+      return;
+    }
+    fileUtil.createDirectory({path: resolvedPath});
     request.addURLs({
       urls,
-      path: destination,
+      path: resolvedPath,
       isBasePath,
       start,
       tags,
@@ -230,6 +242,12 @@ const client = {
     const {isBasePath, hashes, filenames, moveFiles, sourcePaths, isCheckHash} = data;
     const mainRequest = new ClientRequest(user, services);
 
+    const resolvedPath = path.resolve(destinationPath);
+    if (!fileUtil.isAllowedPath(resolvedPath)) {
+      callback(null, fileUtil.accessDeniedError());
+      return;
+    }
+
     const hashesToRestart = hashes.filter(
       (hash) => !services.torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped),
     );
@@ -266,7 +284,7 @@ const client = {
       moveTorrentsRequest.moveTorrents({
         filenames,
         sourcePaths,
-        destinationPath,
+        resolvedPath,
       });
     };
 
@@ -277,7 +295,7 @@ const client = {
     }
 
     mainRequest.stopTorrents({hashes});
-    mainRequest.setDownloadPath({hashes, path: destinationPath, isBasePath});
+    mainRequest.setDownloadPath({hashes, path: resolvedPath, isBasePath});
     mainRequest.onComplete(afterSetPath);
     mainRequest.send();
   },

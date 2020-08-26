@@ -68,6 +68,10 @@ const {argv} = require('yargs')
     hidden: true,
     type: 'string',
   })
+  .option('allowedpath', {
+    describe: 'Allowed path for file operations, can be called multiple times',
+    type: 'string',
+  })
   .option('dbclean', {
     default: 1000 * 60 * 60,
     describe: 'ADVANCED: Interval between database purge',
@@ -144,6 +148,7 @@ const CONFIG = {
   ssl: argv.ssl,
   sslKey: argv.sslkey || path.resolve(path.join(argv.rundir, 'key.pem')),
   sslCert: argv.sslcert || path.resolve(path.join(argv.rundir, 'fullchain.pem')),
+  allowedPaths: argv.allowedpath ? [].concat(argv.allowedpath) : null,
 };
 
 module.exports = CONFIG;

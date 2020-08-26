@@ -67,7 +67,9 @@ const CONFIG = {
     // watchMountPoints: [
     //   "/mnt/disk"
     // ]
-  }
+  },
+  // Allowed paths for file operations
+  // allowedPaths: ['/mnt/download', '/data/download'],
 };
 // Do not remove the below line.
 module.exports = CONFIG;

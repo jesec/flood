@@ -67,17 +67,6 @@ class ClientRequest {
     }
   }
 
-  // TODO: Move this to util, doesn't belong here
-  createDirectory(options) {
-    if (options.path) {
-      fs.mkdir(options.path, {recursive: true}, (error) => {
-        if (error) {
-          console.trace('Error creating directory.', error);
-        }
-      });
-    }
-  }
-
   clearRequestQueue() {
     this.requests = [];
   }
