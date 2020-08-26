@@ -40,17 +40,24 @@ app.use(path.join(paths.servedPath, 'auth'), authRoutes);
 // After routes, look for static assets.
 app.use(paths.servedPath, express.static(paths.appBuild));
 
-app.use((req, res, next) => {
-  // If request URL starts with baseURI
-  if (req.url.startsWith(paths.servedPath)) {
-    // Always return index.html
-    res.sendFile(path.join(paths.appBuild, 'index.html'));
-  } else {
-    // Catch 404 and forward to error handler.
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  }
+// Client app routes, serve index.html and client js will figure it out
+app.get(path.join(paths.servedPath, 'login'), (_req, res) => {
+  res.sendFile(path.join(paths.appBuild, 'index.html'));
+});
+
+app.get(path.join(paths.servedPath, 'register'), (_req, res) => {
+  res.sendFile(path.join(paths.appBuild, 'index.html'));
+});
+
+app.get(path.join(paths.servedPath, 'overview'), (_req, res) => {
+  res.sendFile(path.join(paths.appBuild, 'index.html'));
+});
+
+// Catch 404 and forward to error handler.
+app.use((_req, _res, next) => {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // Development error handler, will print stacktrace.
