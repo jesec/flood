@@ -1,9 +1,9 @@
 const fs = require('fs');
-const ospath = require('ospath');
+const os = require('os');
 const path = require('path');
 
 const getDirectoryList = (options, callback) => {
-  const sourcePath = (options.path || '/').replace(/^~/, ospath.home());
+  const sourcePath = (options.path || '/').replace(/^~/, os.homedir());
 
   try {
     const directories = [];
