@@ -37,7 +37,7 @@ router.delete('/feed-monitor/:id', (req, res) => {
 });
 
 router.get('/feed-monitor', (req, res) => {
-  req.services.feedService.getAll(req.body.query, ajaxUtil.getResponseFn(res));
+  req.services.feedService.getAll(ajaxUtil.getResponseFn(res));
 });
 
 router.get('/feed-monitor/feeds', (req, res) => {

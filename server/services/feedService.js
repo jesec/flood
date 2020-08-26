@@ -157,9 +157,7 @@ class FeedService extends BaseService {
     });
   }
 
-  getAll(query, callback) {
-    query = query || {};
-
+  getAll(callback) {
     this.db.find({}, (err, docs) => {
       if (err) {
         callback(null, err);
