@@ -121,9 +121,14 @@ class SettingsModal extends React.Component {
         return;
       }
 
+      // Blacklist __proto__ and constructor to avoid prototype pollution
+      if (key === '__proto__' || key === 'constructor') {
+        return;
+      }
+
       // If it's an object, then recursive merge.
       if (
-        !Array.isArray(objB[key]) &&
+        !Array.isArray(objA[key]) &&
         !Array.isArray(objB[key]) &&
         typeof objA[key] === 'object' &&
         typeof objB[key] === 'object'
