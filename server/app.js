@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const fs = require('fs');
 const morgan = require('morgan');
 const passport = require('passport');
 const path = require('path');
@@ -41,16 +42,18 @@ app.use(path.join(paths.servedPath, 'auth'), authRoutes);
 app.use(paths.servedPath, express.static(paths.appBuild));
 
 // Client app routes, serve index.html and client js will figure it out
+const html = fs.readFileSync(path.join(paths.appBuild, 'index.html'), {encoding: 'utf8'});
+
 app.get(path.join(paths.servedPath, 'login'), (_req, res) => {
-  res.sendFile(path.join(paths.appBuild, 'index.html'));
+  res.send(html);
 });
 
 app.get(path.join(paths.servedPath, 'register'), (_req, res) => {
-  res.sendFile(path.join(paths.appBuild, 'index.html'));
+  res.send(html);
 });
 
 app.get(path.join(paths.servedPath, 'overview'), (_req, res) => {
-  res.sendFile(path.join(paths.appBuild, 'index.html'));
+  res.send(html);
 });
 
 // Catch 404 and forward to error handler.
