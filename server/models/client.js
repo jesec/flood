@@ -326,7 +326,7 @@ const client = {
     };
 
     const transformedPayloads = payloads.map((payload) => {
-      if (inboundTransformation[payload.id]) {
+      if (Object.prototype.hasOwnProperty.call(inboundTransformation, payload.id)) {
         return inboundTransformation[payload.id](payload);
       }
 
