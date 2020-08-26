@@ -21,25 +21,14 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
   .map((folder) => path.resolve(appDirectory, folder))
   .join(path.delimiter);
 
-// Grab NODE_ENV and REACT_APP_* environment variables and prepare them to be
+// Grab environment variables and prepare them to be
 // injected into the application via DefinePlugin in Webpack configuration.
-const REACT_APP = /^REACT_APP_/i;
-const environment = process.env.NODE_ENV || 'development';
-
 function getClientEnvironment() {
-  const raw = Object.keys(process.env)
-    .filter((key) => REACT_APP.test(key))
-    .reduce(
-      (env, key) => {
-        env[key] = process.env[key];
-        return env;
-      },
-      {
-        NODE_ENV: environment,
-        POLL_INTERVAL: userConfig.torrentClientPollInterval,
-        DISABLE_AUTH: userConfig.disableUsersAndAuth,
-      },
-    );
+  const raw = {
+    NODE_ENV: process.env.NODE_ENV || 'development',
+    POLL_INTERVAL: userConfig.torrentClientPollInterval,
+    DISABLE_AUTH: userConfig.disableUsersAndAuth,
+  };
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = {
     'process.env': Object.keys(raw).reduce((env, key) => {
