@@ -9,11 +9,11 @@ let rejectCallback;
 
 const unescapeXMLString = (value) =>
   value
-    .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&apos;/g, "'")
-    .replace(/&quot;/g, '"');
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&');
 
 const openTag = (elementName) => {
   if (elementName === 'array' || elementName === 'struct') {
