@@ -1,5 +1,5 @@
 {
-  "name": "@jesec/flood",
+  "name": "flood",
   "version": "3.0.0",
   "private": false,
   "license": "GPL-3.0-only",

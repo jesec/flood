@@ -8,7 +8,7 @@
   * Static assets are relocated to `./dist` folder. You have to change the path from `./server/assets` to `./dist/assets` if you serve static assets from web server.
   * Flood will refuse to start if secrets are detected in static assets. Former default secret `flood` and some other weak secrets are no longer accepted.
 * A command line interface is added as `config.cli.js`. Rename it to `config.js` and run `npm run start -- --help` for more details.
-* With some changes, Flood is now ready for publish to `npm`. You can now use `sudo npm install -g @jesec/flood` to get a ready-to-use copy of Flood, then run `flood`. It is even easier with `npx`, try `npx @jesec/flood --help` now.
+* With some changes, Flood is now ready for publish to `npm`. You can now use `sudo npm install -g flood` to get a ready-to-use copy of Flood, then run `flood`. It is even easier with `npx`, try `npx flood --help` now.
 * Better localization:
   * Flood project is now integrated with [Crowdin](https://crwd.in/flood), a renowned translation management system. It is now easier than ever to contribute your translations to Flood.
   * Language will now be automatically detected from your browser by default.
