@@ -115,18 +115,20 @@ const settings = {
     }
 
     if (payloads && payloads.length) {
-      payloads.forEach((payload, index) => {
+      let error;
+      payloads.forEach((payload) => {
         getDb(user).update({id: payload.id}, {$set: {data: payload.data}}, {upsert: true}, (err, docs) => {
           docsResponse.push(docs);
-          if (index + 1 === payloads.length) {
-            if (err) {
-              callback(null, err);
-              return;
-            }
-            callback(docsResponse);
+          if (err) {
+            error = err;
           }
         });
       });
+      if (error) {
+        callback(null, error);
+      } else {
+        callback(docsResponse);
+      }
     } else {
       callback();
     }
