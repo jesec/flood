@@ -12,6 +12,19 @@ class Users {
     this.db = this.loadDatabase();
   }
 
+  getConfigUser() {
+    const {socket} = config.configUser;
+    return {
+      _id: '_config',
+      username: '_config',
+      host: socket ? null : config.configUser.host,
+      port: socket ? null : config.configUser.port,
+      socketPath: socket ? config.configUser.socketPath : null,
+      password: '',
+      isAdmin: true,
+    };
+  }
+
   bootstrapServicesForAllUsers() {
     this.listUsers((users, err) => {
       if (err) throw err;
@@ -146,6 +159,9 @@ class Users {
   }
 
   lookupUser(credentials, callback) {
+    if (config.disableUsersAndAuth) {
+      return callback(null, this.getConfigUser());
+    }
     this.db.findOne({username: credentials.username}, (err, user) => {
       if (err) {
         return callback(err);
@@ -156,6 +172,9 @@ class Users {
   }
 
   listUsers(callback) {
+    if (config.disableUsersAndAuth) {
+      return callback([this.getConfigUser()]);
+    }
     this.db.find({}, (err, users) => {
       if (err) {
         return callback(null, err);

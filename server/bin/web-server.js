@@ -89,6 +89,10 @@ const startWebServer = () => {
   const address = chalk.underline(`${useSSL ? 'https' : 'http'}://${host}:${port}`);
 
   console.log(chalk.green(`Flood server starting on ${address}.\n`));
+
+  if (config.disableUsersAndAuth) {
+    console.log(chalk.yellow('Starting without builtin authentication\n'));
+  }
 };
 
 module.exports = {startWebServer};

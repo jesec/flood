@@ -57,6 +57,9 @@ router.use('/', (req, res, next) => {
 router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
 
 router.post('/authenticate', (req, res) => {
+  if (config.disableUsersAndAuth) {
+    return setAuthToken(res, Users.getConfigUser()._id, true);
+  }
   const credentials = {
     password: req.body.password,
     username: req.body.username,
@@ -89,6 +92,12 @@ router.use('/register', (req, res, next) => {
 });
 
 router.post('/register', (req, res) => {
+  // No user can be registered when disableUsersAndAuth is true
+  if (config.disableUsersAndAuth) {
+    // Return 404
+    res.status(404).send('Not found');
+    return;
+  }
   // Attempt to save the user
   Users.createUser(
     {
@@ -112,6 +121,9 @@ router.post('/register', (req, res) => {
 
 // Allow unauthenticated verification if no users are currently registered.
 router.use('/verify', (req, res, next) => {
+  if (config.disableUsersAndAuth) {
+    return setAuthToken(res, Users.getConfigUser()._id, true);
+  }
   Users.initialUserGate({
     handleInitialUser: () => {
       req.initialUser = true;
@@ -140,6 +152,13 @@ router.get('/logout', (req, res) => {
 });
 
 router.use('/users', (req, res, next) => {
+  // No operation on user when disableUsersAndAuth is true
+  if (config.disableUsersAndAuth) {
+    // Return 404
+    res.status(404).send('Not found');
+    return;
+  }
+
   if (req.user && req.user.isAdmin) {
     next();
     return;
