@@ -113,6 +113,10 @@ class AuthStoreClass extends BaseStore {
     if (data.token != null) {
       // Auth is disabled if a token is sent on verification
       ConfigStore.setDisableAuth(true);
+      // Now we have token, restart activity stream
+      if (FloodActions.activityStreamAccessDenied) {
+        FloodActions.restartActivityStream();
+      }
       data.initialUser = false;
     }
     this.currentUser.username = data.username;
