@@ -16,7 +16,7 @@
   "auth.connectionType.socket": "Unix Socket",
   "auth.create.account": "Criar conta",
   "auth.create.an.account": "Criar uma conta",
-  "auth.create.an.account.intro": "Bem vindo ao Flood!",
+  "auth.create.an.account.intro": "Bem-vindo ao Flood!",
   "auth.current.user": "Utilizador atual",
   "auth.error.username.empty": "Nome de utilizador não pode estar vazio.",
   "auth.log.in": "Iniciar sessão",
