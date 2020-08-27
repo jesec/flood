@@ -5,6 +5,7 @@ import DE from './compiled/de.json';
 import ES from './compiled/es.json';
 import FR from './compiled/fr.json';
 import IT from './compiled/it.json';
+import HU from './compiled/hu.json';
 import NL from './compiled/nl.json';
 import NO from './compiled/no.json';
 import PL from './compiled/pl.json';
@@ -41,6 +42,10 @@ export const languages = {
   it: {
     ...EN,
     ...IT,
+  },
+  hu: {
+    ...EN,
+    ...HU,
   },
   nl: {
     ...EN,
