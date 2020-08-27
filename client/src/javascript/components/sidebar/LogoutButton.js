@@ -2,6 +2,7 @@ import {defineMessages, injectIntl} from 'react-intl';
 import React from 'react';
 
 import AuthActions from '../../actions/AuthActions';
+import ConfigStore from '../../stores/ConfigStore';
 import Logout from '../icons/Logout';
 import Tooltip from '../general/Tooltip';
 
@@ -19,6 +20,9 @@ class LogoutButton extends React.Component {
   }
 
   render() {
+    if (ConfigStore.getDisableAuth()) {
+      return null;
+    }
     return (
       <Tooltip
         content={this.props.intl.formatMessage(MESSAGES.logOut)}
