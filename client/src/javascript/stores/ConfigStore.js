@@ -1,5 +1,7 @@
 import BaseStore from './BaseStore';
 
+let disableUsersAndAuth = false;
+
 class ConfigStoreClass extends BaseStore {
   getBaseURI() {
     const {pathname} = window.location;
@@ -11,7 +13,11 @@ class ConfigStoreClass extends BaseStore {
   }
 
   getDisableAuth() {
-    return process.env.DISABLE_AUTH || false;
+    return disableUsersAndAuth;
+  }
+
+  setDisableAuth(val) {
+    disableUsersAndAuth = val;
   }
 }
 

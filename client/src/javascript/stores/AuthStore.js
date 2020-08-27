@@ -2,6 +2,7 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import AuthActions from '../actions/AuthActions';
 import BaseStore from './BaseStore';
+import ConfigStore from './ConfigStore';
 import FloodActions from '../actions/FloodActions';
 import EventTypes from '../constants/EventTypes';
 
@@ -109,6 +110,11 @@ class AuthStoreClass extends BaseStore {
   }
 
   handleAuthVerificationSuccess(data) {
+    if (data.token != null) {
+      // Auth is disabled if a token is sent on verification
+      ConfigStore.setDisableAuth(true);
+      data.initialUser = false;
+    }
     this.currentUser.username = data.username;
     this.currentUser.isAdmin = data.isAdmin;
     this.currentUser.isInitialUser = data.initialUser;

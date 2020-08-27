@@ -27,7 +27,6 @@ function getClientEnvironment() {
   const raw = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     POLL_INTERVAL: userConfig.torrentClientPollInterval,
-    DISABLE_AUTH: userConfig.disableUsersAndAuth,
   };
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = {
