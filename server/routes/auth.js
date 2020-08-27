@@ -22,7 +22,7 @@ const setAuthToken = (res, username, isAdmin) => {
     expiresIn: expirationSeconds,
   });
 
-  res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true});
+  res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true, sameSite: 'Strict'});
 
   return res.json({
     success: true,
