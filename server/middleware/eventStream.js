@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
     'Content-Type': 'text/event-stream',
     'Cache-Control': 'no-cache',
     Connection: 'keep-alive',
-    'Access-Control-Allow-Origin': '*',
+    'Cross-Origin-Resource-Policy': 'same-origin',
     'X-Accel-Buffering': 'no',
   });
   res.status(200);
