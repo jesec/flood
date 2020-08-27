@@ -462,7 +462,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to rTorrent"
+      "value": "Nem tudok csatlakozni az rTorrent-hez"
     }
   ],
   "connection-interruption.verification-error": [
@@ -498,7 +498,7 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Értesítések"
     }
   ],
   "dependency.loading.torrent.list": [
@@ -594,7 +594,7 @@
   "feeds.label": [
     {
       "type": 0,
-      "value": "Label"
+      "value": "Megnevezés"
     }
   ],
   "feeds.match": [
@@ -674,13 +674,13 @@
   "feeds.search": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Keresési kifejezés"
     }
   ],
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Keresési kifejezés"
     }
   ],
   "feeds.select.feed": [
@@ -692,19 +692,19 @@
   "feeds.select.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "Intervallum"
     }
   ],
   "feeds.start.on.load": [
     {
       "type": 0,
-      "value": "Start on load"
+      "value": "Indítás azonnal"
     }
   ],
   "feeds.tabs.download.rules": [
     {
       "type": 0,
-      "value": "Download Rules"
+      "value": "Letöltési szabályok"
     }
   ],
   "feeds.tabs.feeds": [
@@ -722,7 +722,7 @@
   "feeds.tags": [
     {
       "type": 0,
-      "value": "Tags"
+      "value": "Címkék"
     }
   ],
   "feeds.test.match": [
@@ -734,25 +734,25 @@
   "feeds.time.day": [
     {
       "type": 0,
-      "value": "Days"
+      "value": "Nap"
     }
   ],
   "feeds.time.hr": [
     {
       "type": 0,
-      "value": "Hours"
+      "value": "Óra"
     }
   ],
   "feeds.time.min": [
     {
       "type": 0,
-      "value": "Minutes"
+      "value": "Perc"
     }
   ],
   "feeds.torrent.destination": [
     {
       "type": 0,
-      "value": "Torrent Destination"
+      "value": "Torrent letöltési könyvár"
     }
   ],
   "feeds.url": [
@@ -764,13 +764,13 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "Az intervallum pozitív egész szám kell legyen."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
     {
       "type": 0,
-      "value": "Invalid regular expression."
+      "value": "Érvénytelen szabályos kifejezés."
     }
   ],
   "feeds.validation.must.select.feed": [
@@ -782,13 +782,13 @@
   "feeds.validation.must.specify.destination": [
     {
       "type": 0,
-      "value": "You must specify a destination."
+      "value": "Meg kell adnod egy célkönyvtárat."
     }
   ],
   "feeds.validation.must.specify.label": [
     {
       "type": 0,
-      "value": "You must specify a label."
+      "value": "Meg kell adnod egy nevet."
     }
   ],
   "feeds.validation.must.specify.valid.feed.url": [
@@ -800,37 +800,37 @@
   "filesystem.empty.directory": [
     {
       "type": 0,
-      "value": "Empty directory."
+      "value": "Üres könyvtár."
     }
   ],
   "filesystem.error.eacces": [
     {
       "type": 0,
-      "value": "Flood does not have permission to read this directory."
+      "value": "A Flood-nak nincs jogosultsága olvasni ezt a könyvtárat."
     }
   ],
   "filesystem.error.enoent": [
     {
       "type": 0,
-      "value": "This path does not exist. It will be created."
+      "value": "Az elérési út nem létezik, így létre lesz hozva."
     }
   ],
   "filesystem.fetching": [
     {
       "type": 0,
-      "value": "Fetching directory structure..."
+      "value": "Könyvtárszerkezet lekérdezése..."
     }
   ],
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "Szülőkönyvtár"
     }
   ],
   "filter.all": [
     {
       "type": 0,
-      "value": "All"
+      "value": "Mind"
     }
   ],
   "filter.status.active": [
@@ -854,7 +854,7 @@
   "filter.status.downloading": [
     {
       "type": 0,
-      "value": "Downloading"
+      "value": "Letöltés"
     }
   ],
   "filter.status.error": [
@@ -878,7 +878,7 @@
   "filter.status.title": [
     {
       "type": 0,
-      "value": "Filter by Status"
+      "value": "Szűrés állapot szerint"
     }
   ],
   "filter.tag.title": [
@@ -938,7 +938,7 @@
   "locale.language.auto": [
     {
       "type": 0,
-      "value": "Automatic"
+      "value": "Automatikus"
     }
   ],
   "mediainfo.execError": [
@@ -950,7 +950,7 @@
   "mediainfo.fetching": [
     {
       "type": 0,
-      "value": "Fetching..."
+      "value": "Lekérés..."
     }
   ],
   "mediainfo.heading": [
@@ -1220,7 +1220,7 @@
   "settings.resources.disk.heading": [
     {
       "type": 0,
-      "value": "Disk"
+      "value": "Lemez"
     }
   ],
   "settings.resources.max.open.files": [
@@ -1232,61 +1232,61 @@
   "settings.resources.memory.heading": [
     {
       "type": 0,
-      "value": "Memory"
+      "value": "Memória"
     }
   ],
   "settings.resources.memory.max.label": [
     {
       "type": 0,
-      "value": "Max Memory Usage"
+      "value": "Max. memória használat"
     }
   ],
   "settings.tabs.about": [
     {
       "type": 0,
-      "value": "About"
+      "value": "Névjegy"
     }
   ],
   "settings.tabs.authentication": [
     {
       "type": 0,
-      "value": "Authentication"
+      "value": "Azonosítás"
     }
   ],
   "settings.tabs.bandwidth": [
     {
       "type": 0,
-      "value": "Bandwidth"
+      "value": "Sávszélesség"
     }
   ],
   "settings.tabs.connectivity": [
     {
       "type": 0,
-      "value": "Connectivity"
+      "value": "Kapcsolat"
     }
   ],
   "settings.tabs.diskusage": [
     {
       "type": 0,
-      "value": "Disk Usage"
+      "value": "Lemezhasználat"
     }
   ],
   "settings.tabs.heading": [
     {
       "type": 0,
-      "value": "Settings"
+      "value": "Beállítások"
     }
   ],
   "settings.tabs.resources": [
     {
       "type": 0,
-      "value": "Resources"
+      "value": "Erőforrások"
     }
   ],
   "settings.tabs.userinterface": [
     {
       "type": 0,
-      "value": "User Interface"
+      "value": "Felhasználói felület"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1298,7 +1298,7 @@
   "settings.ui.language": [
     {
       "type": 0,
-      "value": "Language"
+      "value": "Nyelv"
     }
   ],
   "settings.ui.locale": [
@@ -1328,7 +1328,7 @@
   "settings.ui.torrent.size": [
     {
       "type": 0,
-      "value": "Torrent Size"
+      "value": "Torrent mérete"
     }
   ],
   "settings.ui.torrent.size.condensed": [
@@ -1412,25 +1412,25 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "Szabad"
     }
   ],
   "status.diskusage.title": [
     {
       "type": 0,
-      "value": "Disk Usage"
+      "value": "Lemezhasználat"
     }
   ],
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "Összesen"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "Felhasznált"
     }
   ],
   "torrent.list.peers": [
@@ -1654,7 +1654,7 @@
   "torrents.details.general.heading.general": [
     {
       "type": 0,
-      "value": "General"
+      "value": "Általános"
     }
   ],
   "torrents.details.general.heading.torrent": [
@@ -1832,7 +1832,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Nem sikerül kapcsolódni az rTorrent-hez."
+      "value": "Nem tudok csatlakozni az rTorrent-hez."
     }
   ],
   "torrents.list.clear.filters": [
@@ -2124,13 +2124,13 @@
   "torrents.remove.delete.data": [
     {
       "type": 0,
-      "value": "Delete data"
+      "value": "Adat törlése"
     }
   ],
   "torrents.remove.error.no.torrents.selected": [
     {
       "type": 0,
-      "value": "You haven't selected any torrents."
+      "value": "Nem jelöltél ki egyetlen torrentet sem."
     }
   ],
   "torrents.set.tags.button.set": [
@@ -2142,19 +2142,19 @@
   "torrents.set.tags.enter.tags": [
     {
       "type": 0,
-      "value": "Enter tags"
+      "value": "Címke felvétele"
     }
   ],
   "torrents.set.tags.heading": [
     {
       "type": 0,
-      "value": "Set Tags"
+      "value": "Címke hozzárendelése"
     }
   ],
   "torrents.sort.title": [
     {
       "type": 0,
-      "value": "Sort By"
+      "value": "Rendezés"
     }
   ],
   "unit.size.byte": [
