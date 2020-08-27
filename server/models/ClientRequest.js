@@ -1,7 +1,6 @@
 /**
  * This file is deprecated in favor of clientGatewayService.
  */
-const fs = require('fs');
 const mv = require('mv');
 const path = require('path');
 const util = require('util');

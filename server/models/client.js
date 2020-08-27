@@ -24,7 +24,7 @@ const client = {
       tags = tags.split(',');
     }
 
-    const resolvedPath = path.resolve(destinationPath);
+    const resolvedPath = fileUtil.sanitizePath(destinationPath);
     if (!fileUtil.isAllowedPath(resolvedPath)) {
       callback(null, fileUtil.accessDeniedError());
       return;
@@ -65,7 +65,7 @@ const client = {
   addUrls(user, services, data, callback) {
     const {urls, destination, isBasePath, start, tags} = data;
     const request = new ClientRequest(user, services);
-    const resolvedPath = path.resolve(destination);
+    const resolvedPath = fileUtil.sanitizePath(destination);
     if (!fileUtil.isAllowedPath(resolvedPath)) {
       callback(null, fileUtil.accessDeniedError());
       return;
@@ -242,7 +242,7 @@ const client = {
     const {isBasePath, hashes, filenames, moveFiles, sourcePaths, isCheckHash} = data;
     const mainRequest = new ClientRequest(user, services);
 
-    const resolvedPath = path.resolve(destinationPath);
+    const resolvedPath = fileUtil.sanitizePath(destinationPath);
     if (!fileUtil.isAllowedPath(resolvedPath)) {
       callback(null, fileUtil.accessDeniedError());
       return;

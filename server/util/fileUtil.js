@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 
 const config = require('../../config');
 
@@ -24,6 +25,12 @@ const isAllowedPath = (resolvedPath) => {
   });
 };
 
+const sanitizePath = (input) => {
+  // eslint-disable-next-line no-control-regex
+  const controlRe = /[\x00-\x1f\x80-\x9f]/g;
+  return path.resolve(input).replace(controlRe, '');
+};
+
 const accessDeniedError = () => {
   const error = new Error();
   error.code = 'EACCES';
@@ -33,6 +40,7 @@ const accessDeniedError = () => {
 const fileUtil = {
   createDirectory,
   isAllowedPath,
+  sanitizePath,
   accessDeniedError,
 };
 

@@ -7,7 +7,7 @@ const fileUtil = require('../util/fileUtil');
 const getDirectoryList = (options, callback) => {
   const sourcePath = (options.path || '/').replace(/^~/, os.homedir());
 
-  const resolvedPath = path.resolve(sourcePath);
+  const resolvedPath = fileUtil.sanitizePath(sourcePath);
   if (!fileUtil.isAllowedPath(resolvedPath)) {
     callback(null, fileUtil.accessDeniedError());
     return;
