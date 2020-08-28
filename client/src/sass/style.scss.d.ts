@@ -410,6 +410,7 @@ declare const styles: {
   readonly 'sortable-list__content--primary': string;
   readonly 'sortable-list__content--secondary': string;
   readonly 'sortable-list__content--secondary__copy': string;
+  readonly 'sortable-list--torrent-context-menu-items': string;
   readonly 'table__row--heading': string;
   readonly table__heading: string;
   readonly 'table__heading--is-sorted': string;

@@ -1297,6 +1297,12 @@
       "value": "User Interface"
     }
   ],
+  "settings.ui.displayed.context.menu.items": [
+    {
+      "type": 0,
+      "value": "Context Menu Items"
+    }
+  ],
   "settings.ui.displayed.details": [
     {
       "type": 0,
@@ -1313,6 +1319,12 @@
     {
       "type": 0,
       "value": "Locale"
+    }
+  ],
+  "settings.ui.torrent.context.menu.items.show": [
+    {
+      "type": 0,
+      "value": "Show"
     }
   ],
   "settings.ui.torrent.details.enabled": [

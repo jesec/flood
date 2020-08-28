@@ -90,7 +90,7 @@ class TorrentListContainer extends React.Component {
         x: event.clientX,
         y: event.clientY,
       },
-      items: TorrentListContextMenu.getContextMenuItems(this.props.intl, torrent),
+      items: TorrentListContextMenu.getContextMenuItems(this.props.intl, torrent, this.props.torrentContextMenuItems),
     });
   };
 
@@ -385,6 +385,7 @@ const ConnectedTorrentList = connectStores(injectIntl(TorrentListContainer), () 
       getValue: ({store}) => {
         return {
           displayedProperties: store.getFloodSettings('torrentDetails'),
+          torrentContextMenuItems: store.getFloodSettings('torrentContextMenuItems'),
           torrentListColumnWidths: store.getFloodSettings('torrentListColumnWidths'),
           torrentListViewSize: store.getFloodSettings('torrentListViewSize'),
         };

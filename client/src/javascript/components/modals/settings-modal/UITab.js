@@ -6,6 +6,7 @@ import Languages from '../../../constants/Languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import SettingsStore from '../../../stores/SettingsStore';
 import SettingsTab from './SettingsTab';
+import TorrentContextMenuItemsList from './lists/TorrentContextMenuItemsList';
 import TorrentDetailItemsList from './lists/TorrentDetailItemsList';
 
 class UITab extends SettingsTab {
@@ -95,6 +96,12 @@ class UITab extends SettingsTab {
             torrentListViewSize={this.state.torrentListViewSize}
             onSettingsChange={this.props.onSettingsChange}
           />
+        </FormRow>
+        <ModalFormSectionHeader>
+          <FormattedMessage id="settings.ui.displayed.context.menu.items" />
+        </ModalFormSectionHeader>
+        <FormRow>
+          <TorrentContextMenuItemsList onSettingsChange={this.props.onSettingsChange} />
         </FormRow>
       </Form>
     );
