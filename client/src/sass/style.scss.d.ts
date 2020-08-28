@@ -8,6 +8,7 @@ declare const styles: {
   readonly 'button--is-disabled': string;
   readonly button__content: string;
   readonly icon: string;
+  readonly 'icon--clipboard': string;
   readonly 'icon--loading': string;
   readonly 'button--is-loading': string;
   readonly 'context-menu': string;

@@ -255,6 +255,10 @@
   .icon {
     fill: currentColor;
 
+    &--clipboard {
+      width: 15px;
+    }
+
     &--loading {
       left: 50%;
       opacity: 0;
