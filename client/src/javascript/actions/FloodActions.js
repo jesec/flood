@@ -13,8 +13,6 @@ let lastActivityStreamOptions;
 let visibilityChangeTimeout = null;
 
 const FloodActions = {
-  activityStreamAccessDenied: false,
-
   clearNotifications: (options) =>
     axios
       .delete(`${baseURI}api/notifications`)
@@ -236,14 +234,6 @@ const FloodActions = {
     // alraedy been created, we open the event stream.
     if (didHistorySnapshotChange || activityStreamEventSource === null) {
       activityStreamEventSource = new EventSource(`${baseURI}api/activity-stream?historySnapshot=${historySnapshot}`);
-
-      activityStreamEventSource.onerror = (error) => {
-        if (error) {
-          if (error.status === 401 || error.status === 403) {
-            this.activityStreamAccessDenied = true;
-          }
-        }
-      };
 
       activityStreamEventSource.addEventListener(
         serverEventTypes.CLIENT_CONNECTIVITY_STATUS_CHANGE,
