@@ -289,6 +289,29 @@ const TorrentActions = {
           });
         },
       ),
+
+  setTracker: (hashes, tracker, options = {}) =>
+    axios
+      .patch(`${baseURI}api/client/torrents/tracker`, {
+        hashes,
+        tracker,
+        options,
+      })
+      .then((json = {}) => json.data)
+      .then(
+        (data) => {
+          AppDispatcher.dispatchServerAction({
+            type: ActionTypes.CLIENT_SET_TRACKER_SUCCESS,
+            data,
+          });
+        },
+        (error) => {
+          AppDispatcher.dispatchServerAction({
+            type: ActionTypes.CLIENT_SET_TRACKER_ERROR,
+            error,
+          });
+        },
+      ),
 };
 
 export default TorrentActions;

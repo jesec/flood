@@ -1897,6 +1897,12 @@
       "value": "Set Tags"
     }
   ],
+  "torrents.list.context.set.tracker": [
+    {
+      "type": 0,
+      "value": "Set Tracker"
+    }
+  ],
   "torrents.list.context.start": [
     {
       "type": 0,
@@ -2157,6 +2163,24 @@
     {
       "type": 0,
       "value": "Set Tags"
+    }
+  ],
+  "torrents.set.tracker.button.set": [
+    {
+      "type": 0,
+      "value": "Set Tracker"
+    }
+  ],
+  "torrents.set.tracker.enter.tracker": [
+    {
+      "type": 0,
+      "value": "Enter a tracker"
+    }
+  ],
+  "torrents.set.tracker.heading": [
+    {
+      "type": 0,
+      "value": "Set Tracker"
     }
   ],
   "torrents.sort.title": [

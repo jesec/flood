@@ -177,6 +177,7 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.CLIENT_SET_TAXONOMY_SUCCESS:
       UIStore.handleSetTaxonomySuccess();
       break;
+    case ActionTypes.CLIENT_SET_TRACKER_SUCCESS:
     case ActionTypes.CLIENT_ADD_TORRENT_SUCCESS:
     case ActionTypes.CLIENT_MOVE_TORRENTS_SUCCESS:
       UIStore.dismissModal();
