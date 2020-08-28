@@ -19,6 +19,7 @@ const TorrentContextMenuItems = {
   },
   'set-tracker': {
     id: 'torrents.list.context.set.tracker',
+    warning: 'settings.warning.set.tracker',
   },
   'torrent-details': {
     id: 'torrents.list.context.details',

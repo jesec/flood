@@ -2,12 +2,15 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import {Checkbox} from '../../../../ui';
+import ErrorIcon from '../../../icons/ErrorIcon';
 import SettingsStore from '../../../../stores/SettingsStore';
 import SortableList from '../../../general/SortableList';
-
+import Tooltip from '../../../general/Tooltip';
 import TorrentContextMenuItems from '../../../../constants/TorrentContextMenuItems';
 
 class TorrentContextMenuItemsList extends React.Component {
+  tooltipRef = null;
+
   constructor(props) {
     super(props);
 
@@ -40,7 +43,9 @@ class TorrentContextMenuItemsList extends React.Component {
   };
 
   handleMouseDown = () => {
-    // do nothing.
+    if (this.tooltipRef != null) {
+      this.tooltipRef.dismissTooltip();
+    }
   };
 
   handleMove = () => {
@@ -49,7 +54,9 @@ class TorrentContextMenuItemsList extends React.Component {
 
   renderItem = (item) => {
     const {id, visible} = item;
+    const warningMessageId = TorrentContextMenuItems[id].warning;
     let checkbox = null;
+    let warning = null;
 
     if (!this.getLockedIDs().includes(id)) {
       checkbox = (
@@ -64,8 +71,29 @@ class TorrentContextMenuItemsList extends React.Component {
       );
     }
 
+    if (warningMessageId != null) {
+      const tooltipContent = <FormattedMessage id={warningMessageId} />;
+
+      warning = (
+        <Tooltip
+          className="tooltip tooltip--is-error"
+          content={tooltipContent}
+          offset={-5}
+          ref={(ref) => {
+            this.tooltipRef = ref;
+          }}
+          scrollContainer={this.props.scrollContainer}
+          width={200}
+          wrapperClassName="sortable-list__content sortable-list__content--secondary tooltip__wrapper"
+          wrapText>
+          <ErrorIcon />
+        </Tooltip>
+      );
+    }
+
     const content = (
       <div className="sortable-list__content sortable-list__content__wrapper">
+        {warning}
         <span className="sortable-list__content sortable-list__content--primary">
           <FormattedMessage id={TorrentContextMenuItems[id].id} />
         </span>

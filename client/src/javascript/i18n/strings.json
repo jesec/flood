@@ -176,6 +176,7 @@
   "settings.diskusage.show": "Show",
   "settings.diskusage.mount.points": "Disk Usage Mount Points",
   "settings.about.flood": "About Flood",
+  "settings.warning.set.tracker": "Replaces main tracker. Ideal for single-tracker private torrents. Not recommended for multi-tracker torrents.",
   "sidebar.button.feeds": "Feeds",
   "sidebar.button.notifications": "Notifications",
   "sidebar.button.settings": "Settings",
