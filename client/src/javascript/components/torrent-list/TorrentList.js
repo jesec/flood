@@ -131,6 +131,13 @@ class TorrentListContainer extends React.Component {
         }),
       },
       {
+        action: 'set-tracker',
+        clickHandler,
+        label: intl.formatMessage({
+          id: 'torrents.list.context.set.tracker',
+        }),
+      },
+      {
         type: 'separator',
       },
       {
@@ -182,6 +189,9 @@ class TorrentListContainer extends React.Component {
         break;
       case 'set-taxonomy':
         UIActions.displayModal({id: 'set-taxonomy'});
+        break;
+      case 'set-tracker':
+        UIActions.displayModal({id: 'set-tracker'});
         break;
       case 'start':
         TorrentActions.startTorrents(selectedTorrents);

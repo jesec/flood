@@ -124,6 +124,10 @@ class TorrentStoreClass extends BaseStore {
     return this.selectedTorrents.map((hash) => this.torrents[hash].tags);
   }
 
+  getSelectedTorrentsTrackerURIs() {
+    return this.selectedTorrents.map((hash) => this.torrents[hash].trackerURIs);
+  }
+
   handleAddTorrentError() {
     this.emit(EventTypes.CLIENT_ADD_TORRENT_ERROR);
   }
@@ -318,6 +322,12 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case ActionTypes.CLIENT_SET_FILE_PRIORITY_SUCCESS:
       TorrentStore.handleSetFilePrioritySuccess(action.data);
+      break;
+    case ActionTypes.CLIENT_SET_TRACKER_SUCCESS:
+      // TODO: popup set tracker success message here
+      break;
+    case ActionTypes.CLIENT_SET_TRACKER_ERROR:
+      // TODO: popup set tracker failed message here
       break;
     case ActionTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS:
       TorrentStore.handleFetchMediainfoSuccess(action.data);

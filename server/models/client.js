@@ -382,6 +382,18 @@ const client = {
     request.send();
   },
 
+  setTracker(user, services, data, callback) {
+    const request = new ClientRequest(user, services);
+
+    request.setTracker(data);
+    request.onComplete((response, error) => {
+      // Fetch the latest torrent list to re-index trackerURI.
+      services.torrentService.fetchTorrentList();
+      callback(response, error);
+    });
+    request.send();
+  },
+
   stopTorrent(user, services, hashes, callback) {
     const request = new ClientRequest(user, services);
     request.stopTorrents({hashes});

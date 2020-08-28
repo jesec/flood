@@ -10,6 +10,7 @@ import FeedsModal from './feeds-modal/FeedsModal';
 import MoveTorrentsModal from './move-torrents-modal/MoveTorrentsModal';
 import RemoveTorrentsModal from './remove-torrents-modal/RemoveTorrentsModal';
 import SetTagsModal from './set-tags-modal/SetTagsModal';
+import SetTrackerModal from './set-tracker-modal/SetTrackerModal';
 import SettingsModal from './settings-modal/SettingsModal';
 import TorrentDetailsModal from './torrent-details-modal/TorrentDetailsModal';
 import UIActions from '../../actions/UIActions';
@@ -26,6 +27,7 @@ class Modals extends React.Component {
       'move-torrents': MoveTorrentsModal,
       'remove-torrents': RemoveTorrentsModal,
       'set-taxonomy': SetTagsModal,
+      'set-tracker': SetTrackerModal,
       settings: SettingsModal,
       'torrent-details': TorrentDetailsModal,
     };

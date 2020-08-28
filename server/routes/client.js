@@ -99,6 +99,10 @@ router.patch('/torrents/taxonomy', (req, res) => {
   client.setTaxonomy(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
+router.patch('/torrents/tracker', (req, res) => {
+  client.setTracker(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
+});
+
 router.get('/methods.json', (req, res) => {
   const {type} = req.query;
   const {args} = req.query;

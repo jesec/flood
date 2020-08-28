@@ -335,6 +335,20 @@ class ClientRequest {
     });
   }
 
+  setTracker(options) {
+    const existingTrackerIndex = 0;
+    const {tracker} = options;
+
+    getEnsuredArray(options.hashes).forEach((hash) => {
+      // Disable existing tracker
+      this.requests.push(getMethodCall('t.disable', [`${hash}:t${existingTrackerIndex}`]));
+      // Insert new tracker
+      this.requests.push(getMethodCall('d.tracker.insert', [hash, `${existingTrackerIndex}`, tracker]));
+      // Save full session to apply tracker change
+      this.requests.push(getMethodCall('d.save_full_session', [hash]));
+    });
+  }
+
   setThrottle(options) {
     let methodName = 'throttle.global_down.max_rate.set';
     if (options.direction === 'upload') {
