@@ -52,6 +52,7 @@ const initialize = (): void => {
       if (initialUser) {
         history.replace('register');
       } else {
+        FloodActions.startActivityStream();
         history.replace('overview');
       }
     },
@@ -59,8 +60,6 @@ const initialize = (): void => {
       history.replace('login');
     },
   );
-
-  FloodActions.startActivityStream();
 };
 
 const appRoutes = (

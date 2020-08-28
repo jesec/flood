@@ -38,6 +38,10 @@ const FloodActions = {
       ),
 
   closeActivityStream() {
+    if (activityStreamEventSource == null) {
+      return;
+    }
+
     activityStreamEventSource.close();
 
     activityStreamEventSource.removeEventListener(
