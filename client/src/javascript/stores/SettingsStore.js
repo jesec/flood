@@ -48,6 +48,18 @@ class SettingsStoreClass extends BaseStore {
         {id: 'tags', visible: true},
       ],
       torrentListColumnWidths: {},
+      torrentContextMenuItems: [
+        {id: 'start', visible: true},
+        {id: 'stop', visible: true},
+        {id: 'remove', visible: true},
+        {id: 'check-hash', visible: true},
+        {id: 'set-taxonomy', visible: true},
+        {id: 'move', visible: true},
+        {id: 'set-tracker', visible: false},
+        {id: 'torrent-details', visible: true},
+        {id: 'torrent-download-tar', visible: true},
+        {id: 'set-priority', visible: false},
+      ],
       torrentListViewSize: 'condensed',
       speedLimits: {
         download: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],

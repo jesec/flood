@@ -12,8 +12,16 @@ const itemSource = {
     return {id, index, isVisible};
   },
 
-  canDrag({isLocked}) {
-    return !isLocked;
+  canDrag({isLocked, isDraggable}) {
+    if (isDraggable != null) {
+      return isDraggable;
+    }
+
+    if (isLocked) {
+      return false;
+    }
+
+    return true;
   },
 };
 

@@ -3,6 +3,7 @@ import React from 'react';
 import ConfigStore from '../../stores/ConfigStore';
 import PriorityMeter from '../general/filesystem/PriorityMeter';
 import TorrentActions from '../../actions/TorrentActions';
+import TorrentContextMenuItems from '../../constants/TorrentContextMenuItems';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
@@ -71,37 +72,27 @@ const handleItemClick = (action, event, torrent) => {
   }
 };
 
-const getContextMenuItems = (intl, torrent) => {
+const getContextMenuItems = (intl, torrent, settings) => {
   const clickHandler = handleItemClick;
 
-  return [
+  const ret = [];
+
+  [
     {
       action: 'start',
       clickHandler,
-      label: intl.formatMessage({
-        id: 'torrents.list.context.start',
-      }),
     },
     {
       action: 'stop',
       clickHandler,
-      label: intl.formatMessage({
-        id: 'torrents.list.context.stop',
-      }),
     },
     {
       action: 'remove',
       clickHandler,
-      label: intl.formatMessage({
-        id: 'torrents.list.context.remove',
-      }),
     },
     {
       action: 'check-hash',
       clickHandler,
-      label: intl.formatMessage({
-        id: 'torrents.list.context.check.hash',
-      }),
     },
     {
       type: 'separator',
@@ -109,23 +100,14 @@ const getContextMenuItems = (intl, torrent) => {
     {
       action: 'set-taxonomy',
       clickHandler,
-      label: intl.formatMessage({
-        id: 'torrents.list.context.set.tags',
-      }),
     },
     {
       action: 'move',
       clickHandler,
-      label: intl.formatMessage({
-        id: 'torrents.list.context.move',
-      }),
     },
     {
       action: 'set-tracker',
       clickHandler,
-      label: intl.formatMessage({
-        id: 'torrents.list.context.set.tracker',
-      }),
     },
     {
       type: 'separator',
@@ -135,26 +117,17 @@ const getContextMenuItems = (intl, torrent) => {
       clickHandler: (action, event) => {
         clickHandler(action, event, torrent);
       },
-      label: intl.formatMessage({
-        id: 'torrents.list.context.details',
-      }),
     },
     {
       action: 'torrent-download-tar',
       clickHandler: (action, event) => {
         clickHandler(action, event, torrent);
       },
-      label: intl.formatMessage({
-        id: 'torrents.list.context.download',
-      }),
     },
     {
       action: 'set-priority',
       clickHandler,
       dismissMenu: false,
-      label: intl.formatMessage({
-        id: 'torrents.list.context.priority',
-      }),
       labelAction: (
         <PriorityMeter
           id={torrent.hash}
@@ -170,7 +143,26 @@ const getContextMenuItems = (intl, torrent) => {
         />
       ),
     },
-  ];
+  ].forEach((item) => {
+    if (item.action != null) {
+      const hidden = settings.some((setting) => {
+        if (item.action === setting.id) {
+          return !setting.visible;
+        }
+        return false;
+      });
+
+      if (hidden) {
+        return;
+      }
+
+      item.label = intl.formatMessage({id: TorrentContextMenuItems[item.action].id});
+    }
+
+    ret.push(item);
+  });
+
+  return ret;
 };
 
 export default {

@@ -59,7 +59,7 @@ class SortableList extends React.Component {
       handleDrop,
       handleMove,
       state: {items},
-      props: {lockedIDs, renderItem},
+      props: {lockedIDs, isDraggable, renderItem},
     } = this;
 
     return items.map((item, index) => {
@@ -70,6 +70,7 @@ class SortableList extends React.Component {
           id={id}
           index={index}
           isLocked={lockedIDs.includes(id)}
+          isDraggable={isDraggable}
           isVisible={visible}
           key={id}
           onDrop={handleDrop}
