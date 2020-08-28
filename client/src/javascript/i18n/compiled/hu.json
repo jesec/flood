@@ -474,7 +474,7 @@
   "connection-interruption.verification-success": [
     {
       "type": 0,
-      "value": "Connection successful"
+      "value": "Sikeres kapcsolódás"
     }
   ],
   "connection-interruption.verify-settings-prompt": [
@@ -504,7 +504,7 @@
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "Torrent lista"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
@@ -1382,13 +1382,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "LETÖLTÉS"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "FELTÖLTÉS"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1406,7 +1406,7 @@
   "speed.unlimited": [
     {
       "type": 0,
-      "value": "Unlimited"
+      "value": "Korlátlan"
     }
   ],
   "status.diskusage.free": [
@@ -1470,55 +1470,55 @@
   "torrents.add.destination.label": [
     {
       "type": 0,
-      "value": "Destination"
+      "value": "Cél"
     }
   ],
   "torrents.add.destination.placeholder": [
     {
       "type": 0,
-      "value": "Destination"
+      "value": "Cél"
     }
   ],
   "torrents.add.heading": [
     {
       "type": 0,
-      "value": "Add Torrents"
+      "value": "Torrentek hozzáadása"
     }
   ],
   "torrents.add.start.label": [
     {
       "type": 0,
-      "value": "Start Torrent"
+      "value": "Torrent indítása"
     }
   ],
   "torrents.add.tab.file.browse": [
     {
       "type": 0,
-      "value": "or click to browse"
+      "value": "vagy kattints a böngészéshez"
     }
   ],
   "torrents.add.tab.file.drop": [
     {
       "type": 0,
-      "value": "Drop some files here,"
+      "value": "Húzd ide a fájlokat,"
     }
   ],
   "torrents.add.tab.file.title": [
     {
       "type": 0,
-      "value": "By File"
+      "value": "Fájl alapján"
     }
   ],
   "torrents.add.tab.url.input.placeholder": [
     {
       "type": 0,
-      "value": "Torrent URL or Magnet Link"
+      "value": "Torrent URL vagy Magnet Link"
     }
   ],
   "torrents.add.tab.url.title": [
     {
       "type": 0,
-      "value": "By URL"
+      "value": "URL alapján"
     }
   ],
   "torrents.add.tags": [
@@ -1604,7 +1604,7 @@
   "torrents.details.general.comment": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Megjegyzés"
     }
   ],
   "torrents.details.general.connected": [
@@ -1614,35 +1614,39 @@
     },
     {
       "type": 0,
-      "value": " connected of "
+      "value": " csatlakozva a "
     },
     {
       "type": 1,
       "value": "total"
+    },
+    {
+      "type": 0,
+      "value": "-ból/ből"
     }
   ],
   "torrents.details.general.date.added": [
     {
       "type": 0,
-      "value": "Added"
+      "value": "Hozzáadva"
     }
   ],
   "torrents.details.general.date.created": [
     {
       "type": 0,
-      "value": "Creation Date"
+      "value": "Létrehozás dátuma"
     }
   ],
   "torrents.details.general.downloaded": [
     {
       "type": 0,
-      "value": "Downloaded"
+      "value": "Letöltve"
     }
   ],
   "torrents.details.general.free.disk.space": [
     {
       "type": 0,
-      "value": "Free Disk Space"
+      "value": "Szabad lemezterület"
     }
   ],
   "torrents.details.general.hash": [
@@ -1672,13 +1676,13 @@
   "torrents.details.general.heading.transfer": [
     {
       "type": 0,
-      "value": "Transfer"
+      "value": "Átvitel"
     }
   ],
   "torrents.details.general.location": [
     {
       "type": 0,
-      "value": "Location"
+      "value": "Tartózkodási hely"
     }
   ],
   "torrents.details.general.none": [
@@ -1690,7 +1694,7 @@
   "torrents.details.general.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Peer-ek"
     }
   ],
   "torrents.details.general.scheduler": [
@@ -1702,7 +1706,7 @@
   "torrents.details.general.scheduler.ignored": [
     {
       "type": 0,
-      "value": "Ignored"
+      "value": "Mellőzve"
     }
   ],
   "torrents.details.general.scheduler.obeyed": [
@@ -1714,19 +1718,19 @@
   "torrents.details.general.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Seed-ek"
     }
   ],
   "torrents.details.general.size": [
     {
       "type": 0,
-      "value": "Size"
+      "value": "Méret"
     }
   ],
   "torrents.details.general.tags": [
     {
       "type": 0,
-      "value": "Tags"
+      "value": "Címkék"
     }
   ],
   "torrents.details.general.tracker.message": [
@@ -1738,19 +1742,19 @@
   "torrents.details.general.type": [
     {
       "type": 0,
-      "value": "Type"
+      "value": "Típus"
     }
   ],
   "torrents.details.general.type.private": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Privát"
     }
   ],
   "torrents.details.general.type.public": [
     {
       "type": 0,
-      "value": "Public"
+      "value": "Nyilvános"
     }
   ],
   "torrents.details.mediainfo": [
@@ -1762,13 +1766,13 @@
   "torrents.details.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Peer-ek"
     }
   ],
   "torrents.details.peers.no.data": [
     {
       "type": 0,
-      "value": "There is no peer data for this torrent."
+      "value": "Nincs elérhető peer információ ehhez a torrenthez."
     }
   ],
   "torrents.details.selected.files": [
@@ -1946,7 +1950,7 @@
   "torrents.properties.base.path": [
     {
       "type": 0,
-      "value": "Base Path"
+      "value": "Alap elérési út"
     }
   ],
   "torrents.properties.comment": [
@@ -1964,7 +1968,7 @@
   "torrents.properties.date.added": [
     {
       "type": 0,
-      "value": "Added"
+      "value": "Hozzáadva"
     }
   ],
   "torrents.properties.download.speed": [
