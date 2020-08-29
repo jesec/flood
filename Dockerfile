@@ -26,7 +26,7 @@ COPY server ./server
 COPY shared ./shared
 COPY scripts ./scripts
 COPY config.docker.js ./config.js
-RUN npm run build && \
+RUN FLOOD_SECRET=flood npm run build && \
     npm prune --production
 
 # Now get the clean image without any dependencies and copy compiled app
