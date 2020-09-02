@@ -1129,6 +1129,12 @@
       "value": "使用者介面"
     }
   ],
+  "settings.ui.displayed.context.menu.items": [
+    {
+      "type": 0,
+      "value": "Context Menu Items"
+    }
+  ],
   "settings.ui.displayed.details": [
     {
       "type": 0,
@@ -1145,6 +1151,12 @@
     {
       "type": 0,
       "value": "語系"
+    }
+  ],
+  "settings.ui.torrent.context.menu.items.show": [
+    {
+      "type": 0,
+      "value": "Show"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1181,6 +1193,12 @@
     {
       "type": 0,
       "value": "展開模式"
+    }
+  ],
+  "settings.warning.set.tracker": [
+    {
+      "type": 0,
+      "value": "Replaces main tracker. Ideal for single-tracker private torrents. Not recommended for multi-tracker torrents."
     }
   ],
   "sidebar.button.feeds": [
@@ -1685,6 +1703,12 @@
       "value": "設定標籤"
     }
   ],
+  "torrents.list.context.set.tracker": [
+    {
+      "type": 0,
+      "value": "Set Tracker"
+    }
+  ],
   "torrents.list.context.start": [
     {
       "type": 0,
@@ -1911,6 +1935,24 @@
     {
       "type": 0,
       "value": "設定標籤"
+    }
+  ],
+  "torrents.set.tracker.button.set": [
+    {
+      "type": 0,
+      "value": "Set Tracker"
+    }
+  ],
+  "torrents.set.tracker.enter.tracker": [
+    {
+      "type": 0,
+      "value": "Enter a tracker"
+    }
+  ],
+  "torrents.set.tracker.heading": [
+    {
+      "type": 0,
+      "value": "Set Tracker"
     }
   ],
   "torrents.sort.title": [
