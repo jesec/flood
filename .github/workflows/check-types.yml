@@ -22,8 +22,6 @@ jobs:
       with:
         node-version: ${{ matrix.node }}
 
-    - run: cp config.template.js config.js
+    - run: cp config.cli.js config.js
     - run: npm install
     - run: npm run check-types
-      env:
-        FLOOD_SECRET: ${{ secrets.FLOOD_SECRET }}

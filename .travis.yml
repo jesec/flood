@@ -9,7 +9,7 @@ matrix:
   allow_failures:
     - node_js: 10
 before_script:
-  - cp config.template.js config.js
+  - cp config.cli.js config.js
 script:
   - npm run check-source-formatting
   - npm run lint
