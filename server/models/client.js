@@ -328,27 +328,25 @@ const client = {
     const request = new ClientRequest(user, services);
     if (payloads.length === 0) return callback({});
 
-    const inboundTransformation = {
-      throttleGlobalDownMax: (userInput) => ({
+    const inboundTransformations = new Map();
+    inboundTransformations
+      .set('throttleGlobalDownMax', (userInput) => ({
         id: userInput.id,
         data: Number(userInput.data) * 1024,
-      }),
-      throttleGlobalUpMax: (userInput) => ({
+      }))
+      .set('throttleGlobalUpMax', (userInput) => ({
         id: userInput.id,
         data: Number(userInput.data) * 1024,
-      }),
-      piecesMemoryMax: (userInput) => ({
+      }))
+      .set('piecesMemoryMax', (userInput) => ({
         id: userInput.id,
         data: (Number(userInput.data) * 1024 * 1024).toString(),
-      }),
-    };
+      }));
 
     const transformedPayloads = payloads.map((payload) => {
-      if (Object.prototype.hasOwnProperty.call(inboundTransformation, payload.id)) {
-        const inboundTransformationAction = inboundTransformation[payload.id];
-        if (typeof inboundTransformationAction === 'function') {
-          return inboundTransformationAction(payload);
-        }
+      if (inboundTransformations.has(payload.id)) {
+        const inboundTransformation = inboundTransformations.get(payload.id);
+        return inboundTransformation(payload);
       }
 
       return payload;
