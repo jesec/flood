@@ -332,7 +332,7 @@
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "Přihlaste se ke svému účtu."
     }
   ],
   "auth.message.not.admin": [
@@ -398,7 +398,7 @@
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Stáhnout"
     }
   ],
   "button.new": [
@@ -482,31 +482,31 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Oznámení"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "List Torrentů"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "Taxonomie Torrentu"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "Historie přenosu dat"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "Podrobnosti o rychlosti přenosu dat"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -640,7 +640,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "Kritériím vyhledávání neodpovídají žádné položky."
     }
   ],
   "feeds.no.rules.defined": [
@@ -664,7 +664,7 @@
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Hledaný výraz"
     }
   ],
   "feeds.select.feed": [
@@ -748,7 +748,7 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "Interval musí být celé, kladné číslo."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -808,7 +808,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "Nadřazená složka"
     }
   ],
   "filter.all": [
@@ -832,7 +832,7 @@
   "filter.status.completed": [
     {
       "type": 0,
-      "value": "Complete"
+      "value": "Dokončeno"
     }
   ],
   "filter.status.downloading": [
@@ -1366,13 +1366,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "STÁHNOUT"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "NAHRÁT"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1396,7 +1396,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "Volné"
     }
   ],
   "status.diskusage.title": [
@@ -1408,13 +1408,13 @@
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "Celkem"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "Použité"
     }
   ],
   "torrent.list.peers": [
@@ -1840,7 +1840,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Stáhnout"
     }
   ],
   "torrents.list.context.move": [
@@ -2002,7 +2002,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Peery"
     }
   ],
   "torrents.properties.percentage": [
@@ -2020,7 +2020,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Seedy"
     }
   ],
   "torrents.properties.size": [
@@ -2044,7 +2044,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Trackery"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2214,13 +2214,13 @@
   "unit.time.week": [
     {
       "type": 0,
-      "value": "wk"
+      "value": "tý"
     }
   ],
   "unit.time.year": [
     {
       "type": 0,
-      "value": "yr"
+      "value": "let"
     }
   ],
   "window.title": [
