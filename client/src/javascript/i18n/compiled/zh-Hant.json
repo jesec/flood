@@ -1276,15 +1276,15 @@
   "torrent.list.peers": [
     {
       "type": 1,
-      "value": "total"
+      "value": "connected"
     },
     {
       "type": 0,
-      "value": " 中的 "
+      "value": " / "
     },
     {
       "type": 1,
-      "value": "connected"
+      "value": "total"
     }
   ],
   "torrent.list.peers.of": [
@@ -1320,7 +1320,7 @@
   "torrents.add.start.label": [
     {
       "type": 0,
-      "value": "開始下載"
+      "value": "新增後開始下載"
     }
   ],
   "torrents.add.tab.file.browse": [
