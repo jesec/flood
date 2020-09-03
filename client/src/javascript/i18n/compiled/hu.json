@@ -107,10 +107,6 @@
   ],
   "alert.torrent.move": [
     {
-      "type": 0,
-      "value": "Successfully moved "
-    },
-    {
       "type": 1,
       "value": "countElement"
     },
@@ -129,11 +125,14 @@
             }
           ]
         },
+        "one": {
+          "value": []
+        },
         "other": {
           "value": [
             {
               "type": 0,
-              "value": "torrents"
+              "value": "torrent"
             }
           ]
         }
@@ -144,15 +143,11 @@
     },
     {
       "type": 0,
-      "value": "."
+      "value": " sikeresen áthelyezve."
     }
   ],
   "alert.torrent.move.failed": [
     {
-      "type": 0,
-      "value": "Failed to move "
-    },
-    {
       "type": 1,
       "value": "countElement"
     },
@@ -167,15 +162,18 @@
           "value": [
             {
               "type": 0,
-              "value": "torrent"
+              "value": "torrentet"
             }
           ]
+        },
+        "one": {
+          "value": []
         },
         "other": {
           "value": [
             {
               "type": 0,
-              "value": "torrents"
+              "value": "torrentet"
             }
           ]
         }
@@ -186,15 +184,11 @@
     },
     {
       "type": 0,
-      "value": "."
+      "value": " nem sikerült áthelyezni."
     }
   ],
   "alert.torrent.remove": [
     {
-      "type": 0,
-      "value": "Successfully removed "
-    },
-    {
       "type": 1,
       "value": "countElement"
     },
@@ -213,11 +207,14 @@
             }
           ]
         },
+        "one": {
+          "value": []
+        },
         "other": {
           "value": [
             {
               "type": 0,
-              "value": "torrents"
+              "value": "torrent"
             }
           ]
         }
@@ -228,15 +225,11 @@
     },
     {
       "type": 0,
-      "value": "."
+      "value": " sikeresen eltávolítva."
     }
   ],
   "alert.torrent.remove.failed": [
     {
-      "type": 0,
-      "value": "Failed to remove "
-    },
-    {
       "type": 1,
       "value": "countElement"
     },
@@ -255,11 +248,14 @@
             }
           ]
         },
+        "one": {
+          "value": []
+        },
         "other": {
           "value": [
             {
               "type": 0,
-              "value": "torrents"
+              "value": "torrent"
             }
           ]
         }
@@ -270,7 +266,7 @@
     },
     {
       "type": 0,
-      "value": "."
+      "value": " eltávolítása sikertelen."
     }
   ],
   "auth.add.user": [
@@ -354,7 +350,7 @@
   "auth.message.not.admin": [
     {
       "type": 0,
-      "value": "User is not Admin"
+      "value": "A felhasználó nem Admin"
     }
   ],
   "auth.password": [
@@ -468,7 +464,7 @@
   "connection-interruption.verification-error": [
     {
       "type": 0,
-      "value": "Connection could not be verified."
+      "value": "A kapcsolatot nem sikerült ellenőrizni."
     }
   ],
   "connection-interruption.verification-success": [
@@ -480,7 +476,7 @@
   "connection-interruption.verify-settings-prompt": [
     {
       "type": 0,
-      "value": "Let's verify your connection settings."
+      "value": "Ellenőrizd a kapcsolat beállításait."
     }
   ],
   "connectivity.modal.content": [
@@ -516,13 +512,13 @@
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "Adatátviteli előzmények"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "Adatátviteli sebesség részletei"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -546,7 +542,7 @@
   "feeds.apply.tags": [
     {
       "type": 0,
-      "value": "Címke hozzáadása"
+      "value": "Címkék hozzáadása"
     }
   ],
   "feeds.browse.feeds": [
@@ -558,37 +554,37 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Találati minta tesztelése"
+      "value": "Egyezési minta tesztelése"
     }
   ],
   "feeds.exclude": [
     {
       "type": 0,
-      "value": "Exclude"
+      "value": "Kivéve"
     }
   ],
   "feeds.exclude.pattern": [
     {
       "type": 0,
-      "value": "Exclude Pattern"
+      "value": "Kizárási minta"
     }
   ],
   "feeds.existing.feeds": [
     {
       "type": 0,
-      "value": "Existing Feeds"
+      "value": "Rendelkezésre álló hírcsatornák"
     }
   ],
   "feeds.existing.rules": [
     {
       "type": 0,
-      "value": "Existing Rules"
+      "value": "Rendelkezésre álló szabályok"
     }
   ],
   "feeds.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "Intervallum"
     }
   ],
   "feeds.label": [
@@ -600,7 +596,7 @@
   "feeds.match": [
     {
       "type": 0,
-      "value": "Match"
+      "value": "Egyezés"
     }
   ],
   "feeds.match.count": [
@@ -614,9 +610,12 @@
             },
             {
               "type": 0,
-              "value": " match"
+              "value": " egyezés"
             }
           ]
+        },
+        "one": {
+          "value": []
         },
         "other": {
           "value": [
@@ -625,7 +624,7 @@
             },
             {
               "type": 0,
-              "value": " matches"
+              "value": " egyezés"
             }
           ]
         }
@@ -638,31 +637,31 @@
   "feeds.match.pattern": [
     {
       "type": 0,
-      "value": "Match Pattern"
+      "value": "Egyezési minta"
     }
   ],
   "feeds.no.feeds.available": [
     {
       "type": 0,
-      "value": "No feeds available."
+      "value": "Nincs elérhető hírcsatorna."
     }
   ],
   "feeds.no.feeds.defined": [
     {
       "type": 0,
-      "value": "No feeds defined."
+      "value": "Nincs megadva hírcsatorna."
     }
   ],
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "A keresési feltételnek egyetlen elem sem felel meg."
     }
   ],
   "feeds.no.rules.defined": [
     {
       "type": 0,
-      "value": "No rules defined."
+      "value": "Nincs megadva szabály."
     }
   ],
   "feeds.regEx": [
@@ -728,7 +727,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Egyezési minta tesztelése"
     }
   ],
   "feeds.time.day": [
@@ -752,7 +751,7 @@
   "feeds.torrent.destination": [
     {
       "type": 0,
-      "value": "Torrent letöltési könyvár"
+      "value": "Letöltési könyvár helye"
     }
   ],
   "feeds.url": [
@@ -854,7 +853,7 @@
   "filter.status.downloading": [
     {
       "type": 0,
-      "value": "Letöltés"
+      "value": "Letöltés alatt"
     }
   ],
   "filter.status.error": [
@@ -902,13 +901,13 @@
   "general.ago": [
     {
       "type": 0,
-      "value": "ago"
+      "value": "ezelőtt"
     }
   ],
   "general.at": [
     {
       "type": 0,
-      "value": "at"
+      "value": "-kor"
     }
   ],
   "general.clipboard.copied": [
@@ -944,7 +943,7 @@
   "mediainfo.execError": [
     {
       "type": 0,
-      "value": "An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood."
+      "value": "Hiba történt a mediainfo futtatásakor a szerveren. Ellenőrizd, hogy a mediainfo telepítve van és elérhető a Flood számára."
     }
   ],
   "mediainfo.fetching": [
@@ -956,19 +955,19 @@
   "mediainfo.heading": [
     {
       "type": 0,
-      "value": "Mediainfo Output"
+      "value": "A Mediainfo válasza"
     }
   ],
   "notification.clear.all": [
     {
       "type": 0,
-      "value": "Clear All"
+      "value": "Összes törlése"
     }
   ],
   "notification.showing": [
     {
       "type": 0,
-      "value": "Showing"
+      "value": "Mutat"
     }
   ],
   "notification.torrent.errored.body": [
@@ -980,7 +979,7 @@
   "notification.torrent.errored.heading": [
     {
       "type": 0,
-      "value": "Error Reported"
+      "value": "Hibajelzés"
     }
   ],
   "notification.torrent.finished.body": [
@@ -998,7 +997,7 @@
   "priority.dont.download": [
     {
       "type": 0,
-      "value": "Don't Download"
+      "value": "Ne töltsd"
     }
   ],
   "priority.high": [
@@ -1034,19 +1033,19 @@
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
-      "value": "Download Slots Global"
+      "value": "Globális letöltési szál"
     }
   ],
   "settings.bandwidth.slots.download.label": [
     {
       "type": 0,
-      "value": "Download Slots Per Torrent"
+      "value": "Letöltési szál per Torrent"
     }
   ],
   "settings.bandwidth.slots.heading": [
     {
       "type": 0,
-      "value": "Slot Availability"
+      "value": "Átviteli szálak meghatározása"
     }
   ],
   "settings.bandwidth.slots.upload.divider.label": [
@@ -1058,43 +1057,43 @@
   "settings.bandwidth.slots.upload.global.label": [
     {
       "type": 0,
-      "value": "Upload Slots Global"
+      "value": "Globális feltöltési szál"
     }
   ],
   "settings.bandwidth.slots.upload.label": [
     {
       "type": 0,
-      "value": "Upload Slots Per Torrent"
+      "value": "Feltöltési szál per Torrent"
     }
   ],
   "settings.bandwidth.transferrate.dropdown.preset.download.label": [
     {
       "type": 0,
-      "value": "Dropdown Presets: Download"
+      "value": "Legördülő lista értékei: Letöltés"
     }
   ],
   "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
     {
       "type": 0,
-      "value": "Dropdown Presets: Upload"
+      "value": "Legördülő lista értékei: Feltöltés"
     }
   ],
   "settings.bandwidth.transferrate.global.throttle.download": [
     {
       "type": 0,
-      "value": "Global Download Rate Throttle"
+      "value": "Globális letöltési sebességkorlát"
     }
   ],
   "settings.bandwidth.transferrate.global.throttle.upload": [
     {
       "type": 0,
-      "value": "Global Upload Rate Throttle"
+      "value": "Globális feltöltési sebességkorlát"
     }
   ],
   "settings.bandwidth.transferrate.heading": [
     {
       "type": 0,
-      "value": "Transfer Rate Throttles"
+      "value": "Adatátviteli sebességkorlátok"
     }
   ],
   "settings.connectivity.dht.label": [
@@ -1112,19 +1111,19 @@
   "settings.connectivity.dpd.heading": [
     {
       "type": 0,
-      "value": "Decentralized Peer Discovery"
+      "value": "Decentralizált Peer-ek felderítése"
     }
   ],
   "settings.connectivity.incoming.heading": [
     {
       "type": 0,
-      "value": "Incoming Connections"
+      "value": "Bejövő kapcsolatok"
     }
   ],
   "settings.connectivity.ip.hostname.label": [
     {
       "type": 0,
-      "value": "Reported IP/Hostname"
+      "value": "Közzétett IP/Hostname"
     }
   ],
   "settings.connectivity.max.http.connections": [
@@ -1160,37 +1159,37 @@
   "settings.connectivity.peers.min.label": [
     {
       "type": 0,
-      "value": "Minimum Peers"
+      "value": "Min. Peer-ek száma"
     }
   ],
   "settings.connectivity.peers.seeding.max.label": [
     {
       "type": 0,
-      "value": "Maximum Peers Seeding"
+      "value": "Seedeléskor max. Peer-ek száma"
     }
   ],
   "settings.connectivity.peers.seeding.min.label": [
     {
       "type": 0,
-      "value": "Minimum Peers Seeding"
+      "value": "Seedeléskor min. Peer-ek száma"
     }
   ],
   "settings.connectivity.port.open.label": [
     {
       "type": 0,
-      "value": "Open Port"
+      "value": "Nyitott port"
     }
   ],
   "settings.connectivity.port.randomize.label": [
     {
       "type": 0,
-      "value": "Randomize Port"
+      "value": "Véletlenszerű port"
     }
   ],
   "settings.connectivity.port.range.label": [
     {
       "type": 0,
-      "value": "Port Range"
+      "value": "Port tartomány"
     }
   ],
   "settings.diskusage.mount.points": [
@@ -1208,13 +1207,13 @@
   "settings.resources.disk.check.hash.label": [
     {
       "type": 0,
-      "value": "Verify Hash on Completion"
+      "value": "Hash ellenőrzés a letöltés végén"
     }
   ],
   "settings.resources.disk.download.location.label": [
     {
       "type": 0,
-      "value": "Default Download Directory"
+      "value": "Alapértelmezett letöltési könyvtár"
     }
   ],
   "settings.resources.disk.heading": [
@@ -1226,7 +1225,7 @@
   "settings.resources.max.open.files": [
     {
       "type": 0,
-      "value": "Maximum Open Files"
+      "value": "Max. megnyitott fájlok száma"
     }
   ],
   "settings.resources.memory.heading": [
@@ -1238,7 +1237,7 @@
   "settings.resources.memory.max.label": [
     {
       "type": 0,
-      "value": "Max. memória használat"
+      "value": "Max. memóriahasználat"
     }
   ],
   "settings.tabs.about": [
@@ -1310,7 +1309,7 @@
   "settings.ui.locale": [
     {
       "type": 0,
-      "value": "Locale"
+      "value": "Területi beállítások"
     }
   ],
   "settings.ui.torrent.context.menu.items.show": [
@@ -1328,13 +1327,13 @@
   "settings.ui.torrent.details.tags.placement": [
     {
       "type": 0,
-      "value": "In the expanded view, tags work best at the end of the list."
+      "value": "Kibővített nézetben a címkék megjelenítése a lista végén ajánlott."
     }
   ],
   "settings.ui.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List Display"
+      "value": "Torrent lista megjelenítése"
     }
   ],
   "settings.ui.torrent.size": [
@@ -1346,19 +1345,19 @@
   "settings.ui.torrent.size.condensed": [
     {
       "type": 0,
-      "value": "Condensed View"
+      "value": "Szűkített nézet"
     }
   ],
   "settings.ui.torrent.size.expanded": [
     {
       "type": 0,
-      "value": "Expanded View"
+      "value": "Bővített nézet"
     }
   ],
   "settings.warning.set.tracker": [
     {
       "type": 0,
-      "value": "Replaces main tracker. Ideal for single-tracker private torrents. Not recommended for multi-tracker torrents."
+      "value": "Lecseréli a fő tracker-t. Ideális egy tracker-es privát torrentekhez. De nem ajánlott több tracker-es torrentekhez."
     }
   ],
   "sidebar.button.feeds": [
@@ -1412,13 +1411,13 @@
   "sidebar.transferdata.downloaded": [
     {
       "type": 0,
-      "value": "Downloaded"
+      "value": "Letöltve"
     }
   ],
   "sidebar.transferdata.uploaded": [
     {
       "type": 0,
-      "value": "Uploaded"
+      "value": "Feltöltve"
     }
   ],
   "speed.unlimited": [
@@ -1488,13 +1487,13 @@
   "torrents.add.destination.label": [
     {
       "type": 0,
-      "value": "Cél"
+      "value": "Célkönyvtár"
     }
   ],
   "torrents.add.destination.placeholder": [
     {
       "type": 0,
-      "value": "Cél"
+      "value": "Célkönyvtár"
     }
   ],
   "torrents.add.heading": [
@@ -1554,7 +1553,7 @@
   "torrents.destination.base_path": [
     {
       "type": 0,
-      "value": "Use as Base Path"
+      "value": "Használd kiindulási pontként"
     }
   ],
   "torrents.details.actions.pause": [
@@ -1595,15 +1594,18 @@
           "value": [
             {
               "type": 0,
-              "value": "Download File"
+              "value": "Fájl letöltése"
             }
           ]
+        },
+        "one": {
+          "value": []
         },
         "other": {
           "value": [
             {
               "type": 0,
-              "value": "Download Files"
+              "value": "Fájlok letöltése"
             }
           ]
         }
@@ -1616,7 +1618,7 @@
   "torrents.details.files.loading": [
     {
       "type": 0,
-      "value": "Loading file detail..."
+      "value": "Fájl adatainak betöltése..."
     }
   ],
   "torrents.details.general.comment": [
@@ -1706,7 +1708,7 @@
   "torrents.details.general.none": [
     {
       "type": 0,
-      "value": "None"
+      "value": "Nincs"
     }
   ],
   "torrents.details.general.peers": [
@@ -1718,7 +1720,7 @@
   "torrents.details.general.scheduler": [
     {
       "type": 0,
-      "value": "Scheduler"
+      "value": "Ütemező"
     }
   ],
   "torrents.details.general.scheduler.ignored": [
@@ -1754,7 +1756,7 @@
   "torrents.details.general.tracker.message": [
     {
       "type": 0,
-      "value": "Tracker Message"
+      "value": "Tracker üzenete"
     }
   ],
   "torrents.details.general.type": [
@@ -1805,9 +1807,12 @@
             },
             {
               "type": 0,
-              "value": " selected file"
+              "value": " kiválasztott fájl"
             }
           ]
+        },
+        "one": {
+          "value": []
         },
         "other": {
           "value": [
@@ -1817,7 +1822,7 @@
             },
             {
               "type": 0,
-              "value": " selected files"
+              "value": " kiválasztott fájl"
             }
           ]
         }
@@ -1878,13 +1883,13 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Letöltés"
+      "value": "Letöltés helyigépre"
     }
   ],
   "torrents.list.context.move": [
     {
       "type": 0,
-      "value": "Set Torrent Location"
+      "value": "Áthelyezés"
     }
   ],
   "torrents.list.context.pause": [
@@ -1914,7 +1919,7 @@
   "torrents.list.context.set.tracker": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Tracker hozzáadása"
     }
   ],
   "torrents.list.context.start": [
@@ -1932,7 +1937,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them to rTorrent."
+      "value": "Húzd ide a fájlokat az rTorrent-hez történő hozzáadáshoz."
     }
   ],
   "torrents.list.no.torrents": [
@@ -1956,7 +1961,7 @@
   "torrents.move.check_hash.label": [
     {
       "type": 0,
-      "value": "Check hash"
+      "value": "Hash ellenőrzése"
     }
   ],
   "torrents.move.data.label": [
@@ -1968,7 +1973,7 @@
   "torrents.move.heading": [
     {
       "type": 0,
-      "value": "Set Torrent Location"
+      "value": "Torrent áthelyezése másik könyvtárba"
     }
   ],
   "torrents.properties.base.path": [
@@ -2028,7 +2033,7 @@
   "torrents.properties.ignore.schedule": [
     {
       "type": 0,
-      "value": "Ignore Scheduler"
+      "value": "Ütemező figyelmen kívül hagyása"
     }
   ],
   "torrents.properties.is.private": [
@@ -2112,7 +2117,7 @@
   "torrents.remove.are.you.sure": [
     {
       "type": 0,
-      "value": "Are you sure you want to remove "
+      "value": "Biztosan el akarod távolítani ezt a/az "
     },
     {
       "offset": 0,
@@ -2124,9 +2129,12 @@
             },
             {
               "type": 0,
-              "value": " torrent"
+              "value": " torrent-tet"
             }
           ]
+        },
+        "one": {
+          "value": []
         },
         "other": {
           "value": [
@@ -2135,7 +2143,7 @@
             },
             {
               "type": 0,
-              "value": " torrents"
+              "value": " torrent-tet"
             }
           ]
         }
@@ -2182,19 +2190,19 @@
   "torrents.set.tracker.button.set": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Tracker hozzáadása"
     }
   ],
   "torrents.set.tracker.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Adj meg egy Tracker-t"
     }
   ],
   "torrents.set.tracker.heading": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Tracker hozzáadása"
     }
   ],
   "torrents.sort.title": [
