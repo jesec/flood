@@ -1,3 +1,4 @@
+const {spawn} = require('child_process');
 const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
@@ -90,6 +91,12 @@ const {argv} = require('yargs')
     hidden: true,
     type: 'number',
   })
+  .option('rtorrent', {
+    default: false,
+    describe: 'ADVANCED: rTorrent daemon managed by Flood',
+    hidden: true,
+    type: 'boolean',
+  })
   .option('proxy', {
     default: 'http://127.0.0.1:3000',
     describe: 'DEV ONLY: See the "Local Development" section of README.md',
@@ -97,6 +104,14 @@ const {argv} = require('yargs')
     type: 'string',
   })
   .help();
+
+if (argv.rtorrent) {
+  const rTorrentProcess = spawn('rtorrent', ['-o', 'system.daemon.set=true']);
+  process.on('exit', () => {
+    console.log('Killing rTorrent daemon...')
+    rTorrentProcess.kill('SIGTERM');
+  });
+}
 
 process.on('SIGINT', () => {
   process.exit();
