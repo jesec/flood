@@ -1,0 +1,21 @@
+# Use node alpine docker image
+FROM node:alpine
+
+# Get the latest release from npm
+RUN npm i -g flood --unsafe-perm
+
+# Install runtime dependencies
+RUN apk --no-cache add \
+    mediainfo
+
+# Create "download" user
+RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
+
+# Run as "download" user
+USER download
+
+# Expose port 3000
+EXPOSE 3000
+
+# Flood
+ENTRYPOINT ["flood", "--host=0.0.0.0"]
