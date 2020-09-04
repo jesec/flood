@@ -1,5 +1,30 @@
 # Change Log
 
+## [3.1.0] (September 4, 2020)
+* Allow to replace main tracker of torrents
+* Allow adjustment of visible context menu items
+* config.cli: make all configs configurable by options and env
+* styles: properly set width of clipboard icon (fixes #26)
+* client: hide logout button when auth is disabled
+* Hungarian support (#21), thanks to @sfu420
+* New translations:
+  * Chinese Traditional, thanks to @vongola12324
+  * Czech, thanks to @brezina.jn
+  * Portuguese, thanks to @Zamalor
+* Security enhancements:
+  * Allow restriction on file operations by paths
+  * Do not bypass authentication token validation with disableUsersAndAuth
+  * server: prohibit Cross-Origin Resource Sharing
+  * server: auth: strictly prohibit cross-site cookie
+* Minor security fixes:
+  * rTorrentDeserializer: avoid double unescaping
+  * SettingsModal: mergeObjects: prevent prototype pollution
+  * server: setSettings: turn inboundTransformations into a Map to validate dynamic call
+  * server: be explicit about client app routes
+  * server: cache index.html into memory
+* Minor refactoring and other changes
+* Bump dependencies to the latest revisions
+
 ## [3.0.0] (August 25, 2020)
 * BREAKING CHANGES:
   * If `baseURI` is set, server will only respond to requests with baseURI. For instance, if you use `location /flood {proxy_pass http://127.0.0.1:3000;}`, you would have to change it to `location /flood {proxy_pass http://127.0.0.1:3000/flood;}`.
@@ -83,3 +108,4 @@
 [1.0.0]:https://github.com/Flood-UI/flood/compare/ae520c0a33ffb4ae6f21e47bc6f7e6007dd1e6dc...v1.0.0
 [2.0.0]:https://github.com/jesec/flood/compare/v1.0.0...v2.0.0
 [3.0.0]:https://github.com/jesec/flood/compare/v2.0.0...v3.0.0
+[3.1.0]:https://github.com/jesec/flood/compare/v3.0.0...v3.1.0
