@@ -1,49 +1,40 @@
-ARG NODE_IMAGE=node:12.2-alpine
-ARG WORKDIR=/usr/src/app/
+ARG NODE_IMAGE=node:alpine
 
 FROM ${NODE_IMAGE} as nodebuild
-ARG WORKDIR
 
-WORKDIR $WORKDIR
+WORKDIR /usr/src/app/
 
-# Generate node_modules
-COPY package.json \
-     package-lock.json \
-     .babelrc \
-     .eslintrc.js \
-     .eslintignore \
-     .prettierrc \
-     ABOUT.md \
-     $WORKDIR
-RUN apk add --no-cache --virtual=build-dependencies \
-    python build-base && \
-    npm install && \
-    apk del --purge build-dependencies
+# Copy project files
+COPY . ./
 
-# Build static assets and remove devDependencies.
-COPY client ./client
-COPY server ./server
-COPY shared ./shared
-COPY scripts ./scripts
-COPY config.docker.js ./config.js
-RUN FLOOD_SECRET=flood npm run build && \
-    npm prune --production
+# Fetch dependencies from npm
+RUN npm install
 
-# Now get the clean image without any dependencies and copy compiled app
+# Build package
+RUN npm pack
+
+# Now get the clean image
 FROM ${NODE_IMAGE} as flood
-ARG WORKDIR
 
-WORKDIR $WORKDIR
+# Copy package built
+COPY --from=nodebuild /usr/src/app/*.tgz /tmp/
 
-# Install runtime dependencies.
+# Install package
+RUN npm i -g /tmp/*.tgz --unsafe-perm
+RUN rm /tmp/*.tgz
+
+# Install runtime dependencies
 RUN apk --no-cache add \
     mediainfo
 
-COPY --from=nodebuild $WORKDIR $WORKDIR
+# Create "download" user
+RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
 
-# Hints for consumers of the container.
+# Run as "download" user
+USER download
+
+# Expose port 3000
 EXPOSE 3000
-VOLUME ["/data"]
 
-# Start application.
-CMD [ "npm", "start" ]
+# Flood
+ENTRYPOINT ["flood", "--host=0.0.0.0"]
