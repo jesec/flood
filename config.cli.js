@@ -98,6 +98,10 @@ const {argv} = require('yargs')
   })
   .help();
 
+process.on('SIGINT', () => {
+  process.exit();
+});
+
 try {
   fs.mkdirSync(path.join(argv.rundir, 'db'), {recursive: true});
   fs.mkdirSync(path.join(argv.rundir, 'temp'), {recursive: true});
