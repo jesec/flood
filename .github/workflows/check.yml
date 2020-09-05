@@ -1,4 +1,4 @@
-name: Check source formatting
+name: Check
 
 on:
   push:
@@ -7,12 +7,14 @@ on:
   pull_request:
 
 jobs:
-  check-source-formatting:
+  check:
     runs-on: ubuntu-latest
 
     strategy:
+      fail-fast: false
       matrix:
         node: [14]
+        check: [check-compiled-i18n, check-source-formatting, check-types, lint]
 
     steps:
     - uses: actions/checkout@v2
@@ -24,4 +26,4 @@ jobs:
 
     - run: cp config.cli.js config.js
     - run: npm install
-    - run: npm run check-source-formatting
+    - run: npm run ${{ matrix.check }}
