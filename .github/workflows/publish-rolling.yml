@@ -1,0 +1,38 @@
+name: Publish rolling build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: [14]
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+        registry-url: 'https://registry.npmjs.org'
+
+    - run: npm ci
+
+    - name: Tag rolling release
+      run: |
+       git_branch=${GITHUB_REF##*/}
+       git_hash=$(git rev-parse --short "$GITHUB_SHA")
+       npm version --no-git-tag-version 0.0.0-$git_branch.$git_hash
+    - name: Use @${{ github.actor }} scope
+      run: |
+       jq '.name = "@${{ github.actor }}/flood"' package.json > package.new.json
+       mv package.new.json package.json
+    - run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
