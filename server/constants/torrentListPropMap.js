@@ -219,7 +219,8 @@ torrentListPropMap.set('trackerURIs', {
       }
     });
 
-    return trackerDomains;
+    // Deduplicate
+    return [...new Set(trackerDomains)];
   },
 });
 
