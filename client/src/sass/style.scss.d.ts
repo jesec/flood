@@ -113,6 +113,7 @@ declare const styles: {
   readonly 'application__view--sidebar-alternative-state': string;
   readonly application__content: string;
   readonly modal: string;
+  readonly alerts__list: string;
   readonly 'table__heading__resize-line': string;
   readonly application__panel: string;
   readonly 'application__panel--torrent-list': string;
@@ -137,7 +138,6 @@ declare const styles: {
   readonly 'application__loading-overlay-exit': string;
   readonly 'application__loading-overlay-exit-active': string;
   readonly 'application__entry-barrier': string;
-  readonly alerts__list: string;
   readonly 'alerts__list-exit': string;
   readonly 'alerts__list-exit-active': string;
   readonly 'alerts__list-enter': string;
