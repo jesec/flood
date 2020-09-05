@@ -1,3 +1,8 @@
+# WARNING:
+# This Dockerfile uses contents of current folder which might contain
+# secrets, uncommitted changes or other sensitive information. DO NOT
+# publish the result image unless it was composed in a clean environment.
+
 ARG NODE_IMAGE=node:alpine
 
 FROM ${NODE_IMAGE} as nodebuild
@@ -8,10 +13,13 @@ WORKDIR /usr/src/app/
 COPY . ./
 
 # Fetch dependencies from npm
+RUN npm set unsafe-perm true
 RUN npm install
 
 # Build package
-RUN npm pack
+RUN cp config.cli.js config.js
+RUN npm run build
+RUN npm pack --ignore-scripts
 
 # Now get the clean image
 FROM ${NODE_IMAGE} as flood
