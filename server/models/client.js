@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const sanitize = require('sanitize-filename');
 const series = require('run-series');
 const tar = require('tar-stream');
 
@@ -10,6 +11,7 @@ const fileUtil = require('../util/fileUtil');
 const settings = require('./settings');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
+const torrentFileUtil = require('../util/torrentFileUtil');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
@@ -383,7 +385,23 @@ const client = {
   setTracker(user, services, data, callback) {
     const request = new ClientRequest(user, services);
 
+    request.getSessionPath();
     request.setTracker(data);
+    request.postProcess((response) => {
+      // Modify tracker URL in torrent files
+      const {tracker, hashes} = data;
+      const sessionPath = `${response.shift()}`;
+
+      if (typeof sessionPath === 'string') {
+        // Deduplicate hashes via Set() to avoid file ops on the same files
+        [...new Set(hashes)].forEach((hash) => {
+          const torrent = path.join(sessionPath, sanitize(`${hash}.torrent`));
+          torrentFileUtil.setTracker(torrent, tracker);
+        });
+      }
+
+      return response;
+    });
     request.onComplete((response, error) => {
       // Fetch the latest torrent list to re-index trackerURI.
       services.torrentService.fetchTorrentList();

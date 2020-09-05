@@ -380,6 +380,10 @@ class ClientRequest {
       this.requests.push(getMethodCall('d.close', [hash]));
     });
   }
+
+  getSessionPath() {
+    this.requests.push(getMethodCall('session.path'));
+  }
 }
 
 module.exports = ClientRequest;
