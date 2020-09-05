@@ -191,13 +191,18 @@ torrentListPropMap.set('ignoreScheduler', {
 });
 
 torrentListPropMap.set('trackerURIs', {
-  methodCall: 'cat="$t.multicall=d.hash=,t.url=,cat={|||}"',
+  methodCall: 'cat="$t.multicall=d.hash=,t.is_enabled=,t.url=,cat={|||}"',
   transformValue: (value) => {
     const trackers = value.split('|||');
     const trackerDomains = [];
 
     trackers.forEach((tracker) => {
-      let domain = regEx.domainName.exec(tracker);
+      // Only count enabled trackers
+      if (tracker.charAt(0) === '0') {
+        return;
+      }
+
+      let domain = regEx.domainName.exec(tracker.substr(1));
 
       if (domain && domain[1]) {
         domain = domain[1];
