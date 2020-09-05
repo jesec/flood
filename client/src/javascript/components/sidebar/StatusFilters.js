@@ -14,6 +14,7 @@ import StopIcon from '../icons/StopIcon';
 import SpinnerIcon from '../icons/SpinnerIcon';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
+import UploadSmall from '../icons/UploadSmall';
 
 class StatusFilters extends React.Component {
   handleClick(filter) {
@@ -35,6 +36,13 @@ class StatusFilters extends React.Component {
         }),
         slug: 'downloading',
         icon: <DownloadSmall />,
+      },
+      {
+        label: this.props.intl.formatMessage({
+          id: 'filter.status.seeding',
+        }),
+        slug: 'seeding',
+        icon: <UploadSmall />,
       },
       {
         label: this.props.intl.formatMessage({
