@@ -103,11 +103,6 @@ torrentListPropMap.set('sizeBytes', {
   transformValue: Number,
 });
 
-torrentListPropMap.set('peersConnected', {
-  methodCall: 'd.peers_connected=',
-  transformValue: Number,
-});
-
 torrentListPropMap.set('directory', {
   methodCall: 'd.directory=',
   transformValue: defaultTransformer,
