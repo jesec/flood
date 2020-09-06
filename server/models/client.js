@@ -10,7 +10,6 @@ const fileUtil = require('../util/fileUtil');
 const settings = require('./settings');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
 const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
-const torrentFileUtil = require('../util/torrentFileUtil');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
 
@@ -386,9 +385,6 @@ const client = {
 
     request.setTracker(data);
     request.onComplete((response, error) => {
-      // Modify tracker URL in torrent files
-      torrentFileUtil.setTracker(services, data);
-
       // Fetch the latest torrent list to re-index trackerURI.
       services.torrentService.fetchTorrentList();
       callback(response, error);

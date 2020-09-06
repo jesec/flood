@@ -249,9 +249,4 @@ torrentListPropMap.set('peersTotal', {
   transformValue: (value) => Number(value.substr(0, value.indexOf('|||'))),
 });
 
-torrentListPropMap.set('session', {
-  methodCall: 'cat=(session.path), (d.hash)',
-  transformValue: defaultTransformer,
-});
-
 module.exports = torrentListPropMap;
