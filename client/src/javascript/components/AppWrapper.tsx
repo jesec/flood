@@ -18,7 +18,20 @@ const ICONS = {
   satisfied: <Checkmark />,
 };
 
-class AuthEnforcer extends React.Component {
+interface AuthEnforcerProps {
+  dependencies?: {
+    [key: string]: {
+      message: string;
+      satisfied: boolean;
+    };
+  };
+  dependenciesLoaded?: boolean;
+  isAuthenticated?: boolean;
+  isAuthenticating?: boolean;
+  isClientConnected?: boolean;
+}
+
+class AuthEnforcer extends React.Component<AuthEnforcerProps> {
   static propTypes = {
     children: PropTypes.node,
   };
@@ -30,9 +43,10 @@ class AuthEnforcer extends React.Component {
     // Allow the UI to load if the user is not authenticated.
     if (!isAuthenticated) return false;
     // Iterate over current dependencies looking for unsatisified dependencies.
-    const isDependencyActive = Object.keys(dependencies).some(
-      (dependencyKey) => !dependencies[dependencyKey].satisfied,
-    );
+    let isDependencyActive;
+    if (dependencies != null) {
+      isDependencyActive = Object.keys(dependencies).some((dependencyKey) => !dependencies[dependencyKey].satisfied);
+    }
     // If any dependency is unsatisfied, show the loading indicator.
     if (isDependencyActive) return true;
     // Dismiss the loading indicator if the UI store thinks all dependencies
@@ -73,20 +87,23 @@ class AuthEnforcer extends React.Component {
 
   renderDependencyList() {
     const {dependencies} = this.props;
-    const listItems = Object.keys(dependencies).map((id) => {
-      const {message, satisfied} = dependencies[id];
-      const statusIcon = ICONS.satisfied;
-      const classes = classnames('dependency-list__dependency', {
-        'dependency-list__dependency--satisfied': satisfied,
-      });
+    let listItems;
+    if (dependencies != null) {
+      listItems = Object.keys(dependencies).map((id) => {
+        const {message, satisfied} = dependencies[id];
+        const statusIcon = ICONS.satisfied;
+        const classes = classnames('dependency-list__dependency', {
+          'dependency-list__dependency--satisfied': satisfied,
+        });
 
-      return (
-        <li className={classes} key={id}>
-          <span className="dependency-list__dependency__icon">{statusIcon}</span>
-          <span className="dependency-list__dependency__message">{message}</span>
-        </li>
-      );
-    });
+        return (
+          <li className={classes} key={id}>
+            <span className="dependency-list__dependency__icon">{statusIcon}</span>
+            <span className="dependency-list__dependency__message">{message}</span>
+          </li>
+        );
+      });
+    }
 
     return <ul className="dependency-list">{listItems}</ul>;
   }
@@ -113,9 +130,10 @@ const ConnectedAuthEnforcer = connectStores(AuthEnforcer, () => {
         EventTypes.AUTH_VERIFY_ERROR,
       ],
       getValue: ({store}) => {
+        const storeAuth = store as typeof AuthStore;
         return {
-          isAuthenticating: store.getIsAuthenticating(),
-          isAuthenticated: store.getIsAuthenticated(),
+          isAuthenticating: storeAuth.getIsAuthenticating(),
+          isAuthenticated: storeAuth.getIsAuthenticated(),
         };
       },
     },
@@ -123,8 +141,9 @@ const ConnectedAuthEnforcer = connectStores(AuthEnforcer, () => {
       store: UIStore,
       event: EventTypes.UI_DEPENDENCIES_CHANGE,
       getValue: ({store}) => {
+        const storeUI = store as typeof UIStore;
         return {
-          dependencies: store.getDependencies(),
+          dependencies: storeUI.getDependencies(),
         };
       },
     },
@@ -132,8 +151,9 @@ const ConnectedAuthEnforcer = connectStores(AuthEnforcer, () => {
       store: UIStore,
       event: EventTypes.UI_DEPENDENCIES_LOADED,
       getValue: ({store}) => {
+        const storeUI = store as typeof UIStore;
         return {
-          dependenciesLoaded: store.haveUIDependenciesResolved,
+          dependenciesLoaded: storeUI.haveUIDependenciesResolved,
         };
       },
     },
@@ -141,8 +161,9 @@ const ConnectedAuthEnforcer = connectStores(AuthEnforcer, () => {
       store: ClientStatusStore,
       event: EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
       getValue: ({store}) => {
+        const storeClientStatus = store as typeof ClientStatusStore;
         return {
-          isClientConnected: store.getIsConnected(),
+          isClientConnected: storeClientStatus.getIsConnected(),
         };
       },
     },

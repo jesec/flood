@@ -6,7 +6,29 @@ import ConfigStore from './ConfigStore';
 import FloodActions from '../actions/FloodActions';
 import EventTypes from '../constants/EventTypes';
 
+interface Credentials {
+  username: string;
+  password?: string;
+  host?: string;
+  port?: string;
+  socketPath?: string;
+  isAdmin?: boolean;
+  token?: string;
+  initialUser?: boolean;
+}
+
 class AuthStoreClass extends BaseStore {
+  isAuthenticating: boolean;
+  isAuthenticated: boolean;
+  token: string | null | undefined;
+  users: Array<Credentials>;
+  optimisticUsers: Array<Credentials>;
+  currentUser: {
+    isAdmin: boolean | undefined;
+    isInitialUser: boolean | undefined;
+    username: string | null;
+  };
+
   constructor() {
     super();
     this.isAuthenticating = false;
@@ -21,11 +43,11 @@ class AuthStoreClass extends BaseStore {
     };
   }
 
-  createUser(credentials) {
+  createUser(credentials: Credentials) {
     AuthActions.createUser(credentials);
   }
 
-  addOptimisticUser(credentials) {
+  addOptimisticUser(credentials: Credentials) {
     this.optimisticUsers.push({username: credentials.username});
     this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
   }
@@ -58,20 +80,20 @@ class AuthStoreClass extends BaseStore {
     return this.users;
   }
 
-  handleCreateUserSuccess(data) {
-    this.addOptimisticUser(data);
+  handleCreateUserSuccess(credentials: Credentials) {
+    this.addOptimisticUser(credentials);
     this.emit(EventTypes.AUTH_CREATE_USER_SUCCESS);
   }
 
-  handleDeleteUserError(error) {
-    this.emit(EventTypes.AUTH_DELETE_USER_ERROR, error.username);
+  handleDeleteUserError(credentials: Credentials) {
+    this.emit(EventTypes.AUTH_DELETE_USER_ERROR, credentials.username);
   }
 
-  handleDeleteUserSuccess(data) {
-    this.emit(EventTypes.AUTH_DELETE_USER_SUCCESS, data.username);
+  handleDeleteUserSuccess(credentials: Credentials) {
+    this.emit(EventTypes.AUTH_DELETE_USER_SUCCESS, credentials.username);
   }
 
-  handleListUsersSuccess(nextUserList) {
+  handleListUsersSuccess(nextUserList: Array<Credentials>) {
     this.optimisticUsers = this.optimisticUsers.filter(
       (optimisticUser) => !nextUserList.some((databaseUser) => databaseUser.username === optimisticUser.username),
     );
@@ -79,55 +101,55 @@ class AuthStoreClass extends BaseStore {
     this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
   }
 
-  handleLoginSuccess(data) {
-    this.currentUser.username = data.username;
-    this.currentUser.isAdmin = data.isAdmin;
+  handleLoginSuccess(credentials: Credentials) {
+    this.currentUser.username = credentials.username;
+    this.currentUser.isAdmin = credentials.isAdmin;
     this.currentUser.isInitialUser = false;
-    this.token = data.token;
+    this.token = credentials.token;
     this.isAuthenticating = true;
     this.isAuthenticated = true;
 
     this.emit(EventTypes.AUTH_LOGIN_SUCCESS);
   }
 
-  handleLoginError(error) {
+  handleLoginError(error: Error) {
     this.token = null;
     this.isAuthenticated = false;
     this.isAuthenticating = true;
     this.emit(EventTypes.AUTH_LOGIN_ERROR, error);
   }
 
-  handleRegisterSuccess(data) {
-    this.currentUser.username = data.username;
-    this.currentUser.isAdmin = data.isAdmin;
+  handleRegisterSuccess(credentials: Credentials) {
+    this.currentUser.username = credentials.username;
+    this.currentUser.isAdmin = credentials.isAdmin;
     this.currentUser.isInitialUser = false;
-    this.emit(EventTypes.AUTH_REGISTER_SUCCESS, data);
+    this.emit(EventTypes.AUTH_REGISTER_SUCCESS, credentials);
     FloodActions.restartActivityStream();
   }
 
-  handleRegisterError(error) {
+  handleRegisterError(error: Error) {
     this.emit(EventTypes.AUTH_REGISTER_ERROR, error);
   }
 
-  handleAuthVerificationSuccess(data) {
-    if (data.token != null) {
+  handleAuthVerificationSuccess(credentials: Credentials) {
+    if (credentials.token != null) {
       // Auth is disabled if a token is sent on verification
       ConfigStore.setDisableAuth(true);
-      data.initialUser = false;
+      credentials.initialUser = false;
     }
-    this.currentUser.username = data.username;
-    this.currentUser.isAdmin = data.isAdmin;
-    this.currentUser.isInitialUser = data.initialUser;
+    this.currentUser.username = credentials.username;
+    this.currentUser.isAdmin = credentials.isAdmin;
+    this.currentUser.isInitialUser = credentials.initialUser;
     this.isAuthenticating = true;
-    this.isAuthenticated = !data.initialUser;
-    this.emit(EventTypes.AUTH_VERIFY_SUCCESS, data);
+    this.isAuthenticated = !credentials.initialUser;
+    this.emit(EventTypes.AUTH_VERIFY_SUCCESS, credentials);
   }
 
-  handleAuthVerificationError(action) {
+  handleAuthVerificationError(error: Error) {
     this.isAuthenticated = false;
     this.isAuthenticating = true;
     this.currentUser.isInitialUser = false;
-    this.emit(EventTypes.AUTH_VERIFY_ERROR, action.error);
+    this.emit(EventTypes.AUTH_VERIFY_ERROR, error);
   }
 }
 
@@ -165,7 +187,7 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
       AuthStore.handleAuthVerificationSuccess(action.data);
       break;
     case ActionTypes.AUTH_VERIFY_ERROR:
-      AuthStore.handleAuthVerificationError(action);
+      AuthStore.handleAuthVerificationError(action.error);
       break;
     default:
       break;

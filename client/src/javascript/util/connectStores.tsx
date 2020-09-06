@@ -2,19 +2,25 @@ import React from 'react';
 
 import EventTypes from '../constants/EventTypes';
 
+import AuthStore from '../stores/AuthStore';
+import ClientStatusStore from '../stores/ClientStatusStore';
+import UIStore from '../stores/UIStore';
+
 interface GenericStore {
   listen: (event: keyof typeof EventTypes, eventHandler: (payload: unknown) => void) => void;
   unlisten: (event: keyof typeof EventTypes, eventHandler: (payload: unknown) => void) => void;
 }
 
+type Store = GenericStore | typeof AuthStore | typeof ClientStatusStore | typeof UIStore;
+
 export interface EventListenerDescriptor<DerivedState, WrappedComponentProps = {}> {
-  store: GenericStore;
+  store: Store;
   event: keyof typeof EventTypes | (keyof typeof EventTypes)[];
   getValue: (props: {
     payload: unknown;
     props: WrappedComponentProps;
     state: DerivedState;
-    store: GenericStore;
+    store: Store;
   }) => Partial<DerivedState>;
 }
 
@@ -26,7 +32,7 @@ const connectStores = <DerivedState extends object, WrappedComponentProps extend
 ): ((props: WrappedComponentProps) => React.ReactElement<WrappedComponentProps>) => {
   class ConnectedComponent extends React.Component<WrappedComponentProps, DerivedState> {
     private eventHandlersByStore: Map<
-      GenericStore,
+      Store,
       Set<{events: (keyof typeof EventTypes)[]; eventHandler: (payload: unknown) => void}>
     > = new Map();
 

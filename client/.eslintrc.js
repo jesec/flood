@@ -33,6 +33,11 @@ module.exports = {
     'jsx-a11y/mouse-events-have-key-events': 0,
     'jsx-a11y/no-noninteractive-element-interactions': 0,
     'jsx-a11y/no-static-element-interactions': 0,
+    'lines-between-class-members': [
+      'error',
+      'always',
+      { exceptAfterSingleLine: true },
+    ],
     'no-console': [2, {allow: ['warn', 'error']}],
     'react/button-has-type': 0,
     'react/default-props-match-prop-types': 0,
