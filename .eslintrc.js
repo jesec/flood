@@ -8,14 +8,14 @@ module.exports = {
     'consistent-return': 0,
     'implicit-arrow-linebreak': 0,
     'import/extensions': [
-      "error",
-      "ignorePackages",
+      'error',
+      'ignorePackages',
       {
-        "js": "never",
-        "jsx": "never",
-        "ts": "never",
-        "tsx": "never"
-      }
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
     ],
     'import/no-extraneous-dependencies': 0,
     'import/prefer-default-export': 0,
@@ -33,7 +33,7 @@ module.exports = {
     'no-param-reassign': 0,
     'no-plusplus': 0,
     'no-underscore-dangle': [2, {allow: ['_id']}],
-    'no-unused-vars': [0, { "argsIgnorePattern": "^_" }],
+    'no-unused-vars': [0, {argsIgnorePattern: '^_'}],
 
     'object-curly-newline': 0,
     'object-curly-spacing': 0,
@@ -48,4 +48,15 @@ module.exports = {
       },
     ],
   },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx', '**/*.ts', '**/*.tsx'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['import', '@typescript-eslint/eslint-plugin'],
+      rules: {
+        'no-unused-vars': 0,
+        '@typescript-eslint/no-unused-vars': 1,
+      },
+    },
+  ],
 };

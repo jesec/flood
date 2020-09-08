@@ -9,7 +9,6 @@ import * as i18n from './i18n/languages';
 import connectStores from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
-import EventTypes from './constants/EventTypes';
 import FloodActions from './actions/FloodActions';
 import history from './util/history';
 import Login from './components/views/Login';
@@ -52,7 +51,7 @@ const initialize = (): void => {
   });
 
   AuthActions.verify().then(
-    ({initialUser}): void => {
+    ({initialUser}: {initialUser?: boolean}): void => {
       if (initialUser) {
         history.replace('register');
       } else {
@@ -99,10 +98,10 @@ const ConnectedFloodApp = connectStores(FloodApp, () => {
   return [
     {
       store: SettingsStore,
-      event: EventTypes.SETTINGS_CHANGE,
+      event: 'SETTINGS_CHANGE',
       getValue: () => {
         return {
-          locale: SettingsStore.getFloodSettings('language'),
+          locale: SettingsStore.getFloodSetting('language'),
         };
       },
     },

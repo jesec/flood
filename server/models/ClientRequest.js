@@ -5,7 +5,7 @@ const mv = require('mv');
 const path = require('path');
 const util = require('util');
 
-const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
+const {clientSettings, clientSettingsMap} = require('../../shared/constants/clientSettingsMap');
 const rTorrentPropMap = require('../util/rTorrentPropMap');
 const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
 
@@ -205,7 +205,7 @@ class ClientRequest {
     let {requestedSettings} = options;
 
     if (requestedSettings == null) {
-      requestedSettings = clientSettingsMap.defaults.map((settingsKey) => clientSettingsMap[settingsKey]);
+      requestedSettings = Object.keys(clientSettings).map((settingsKey) => clientSettingsMap[settingsKey]);
     }
 
     // Ensure client's response gets mapped to the correct requested keys.
@@ -307,11 +307,7 @@ class ClientRequest {
     const settings = getEnsuredArray(options.settings);
 
     settings.forEach((setting) => {
-      if (setting.overrideLocalSetting) {
-        this.requests.push(getMethodCall(setting.id, setting.data));
-      } else {
-        this.requests.push(getMethodCall(`${clientSettingsMap[setting.id]}.set`, ['', setting.data]));
-      }
+      this.requests.push(getMethodCall(`${clientSettingsMap[setting.id]}.set`, ['', setting.data]));
     });
   }
 

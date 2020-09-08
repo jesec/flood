@@ -10,7 +10,7 @@ class MountPointsList extends React.Component {
   constructor(props) {
     super(props);
 
-    const mountPoints = SettingsStore.getFloodSettings('mountPoints');
+    const mountPoints = SettingsStore.getFloodSetting('mountPoints');
     const disks = DiskUsageStore.getDiskUsage().reduce((disksByTarget, disk) => {
       disksByTarget[disk.target] = disk;
       return disksByTarget;

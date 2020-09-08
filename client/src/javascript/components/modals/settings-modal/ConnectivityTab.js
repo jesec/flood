@@ -9,28 +9,16 @@ export default class ConnectivityTab extends SettingsTab {
   state = {};
 
   getDHTEnabledValue() {
-    if (this.state.dhtEnabled != null) {
-      return this.state.dhtEnabled;
-    }
-
-    return this.props.settings.dhtStats.dht === 'auto';
+    return this.props.settings.dhtStats.dht === 'auto' || this.props.settings.dhtStats.dht === 'on';
   }
 
   handleFormChange = ({event}) => {
     if (event.target.name === 'dhtEnabled') {
-      const dhtEnabled = !this.getDHTEnabledValue();
-      const dhtEnabledString = dhtEnabled ? 'auto' : 'disable';
-
-      this.setState({dhtEnabled});
-      this.props.onCustomSettingsChange({
-        id: 'dht',
-        data: [dhtEnabledString],
-        overrideID: 'dhtStats',
-        overrideData: {dht: dhtEnabledString},
-      });
-    } else {
-      this.handleClientSettingFieldChange(event.target.name, event);
+      this.props.onClientSettingsChange({dht: event.target.checked ? 'auto' : 'disable'});
+      return;
     }
+
+    this.handleClientSettingFieldChange(event.target.name, event);
   };
 
   render() {

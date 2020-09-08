@@ -1,0 +1,59 @@
+import classnames from 'classnames';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
+import React from 'react';
+
+import Badge from '../general/Badge';
+
+interface SidebarFilterProps extends WrappedComponentProps {
+  name: string;
+  icon?: JSX.Element;
+  isActive: boolean;
+  slug: string;
+  count: number;
+  handleClick: (slug: string) => void;
+}
+
+class SidebarFilter extends React.Component<SidebarFilterProps> {
+  constructor(props: SidebarFilterProps) {
+    super(props);
+
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.props.handleClick(this.props.slug);
+  }
+
+  render() {
+    const classNames = classnames('sidebar-filter__item', {
+      'is-active': this.props.isActive,
+    });
+    let {name} = this.props;
+
+    if (this.props.name === 'all') {
+      name = this.props.intl.formatMessage({
+        id: 'filter.all',
+      });
+    } else if (this.props.name === 'untagged') {
+      name = this.props.intl.formatMessage({
+        id: 'filter.untagged',
+      });
+    }
+
+    if (this.props.slug === 'checking' || this.props.slug === 'error') {
+      if (this.props.count === 0) {
+        return null;
+      }
+    }
+
+    return (
+      <li className={classNames} onClick={this.handleClick}>
+        {this.props.icon}
+        {name}
+        <Badge>{this.props.count}</Badge>
+      </li>
+    );
+  }
+}
+
+export default injectIntl(SidebarFilter);

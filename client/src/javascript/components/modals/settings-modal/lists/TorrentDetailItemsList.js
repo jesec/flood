@@ -15,7 +15,7 @@ class TorrentDetailItemsList extends React.Component {
     super(props);
 
     this.state = {
-      torrentDetails: SettingsStore.getFloodSettings('torrentDetails'),
+      torrentDetails: SettingsStore.getFloodSetting('torrentDetails'),
     };
   }
 

@@ -118,7 +118,7 @@ class AddTorrentsByFile extends React.Component {
     fileData.append('start', start);
 
     TorrentActions.addTorrentsByFiles(fileData, destination);
-    SettingsStore.updateOptimisticallyOnly({id: 'startTorrentsOnLoad', data: start});
+    SettingsStore.setFloodSetting('startTorrentsOnLoad', start);
   };
 
   render() {
@@ -154,4 +154,4 @@ class AddTorrentsByFile extends React.Component {
   }
 }
 
-export default injectIntl(AddTorrentsByFile, {withRef: true});
+export default injectIntl(AddTorrentsByFile, {forwardRef: true});

@@ -7,7 +7,6 @@ import {Button} from '../../ui';
 import ClientStatusStore from '../../stores/ClientStatusStore';
 import connectStores from '../../util/connectStores';
 import CustomScrollbars from '../general/CustomScrollbars';
-import EventTypes from '../../constants/EventTypes';
 import Files from '../icons/Files';
 import GlobalContextMenuMountPoint from '../general/GlobalContextMenuMountPoint';
 import ListViewport from '../general/ListViewport';
@@ -38,8 +37,8 @@ class TorrentListContainer extends React.Component {
   }
 
   componentDidMount() {
-    TorrentStore.listen(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.handleTorrentSelectionChange);
-    TorrentFilterStore.listen(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.handleTorrentFilterChange);
+    TorrentStore.listen('UI_TORRENT_SELECTION_CHANGE', this.handleTorrentSelectionChange);
+    TorrentFilterStore.listen('UI_TORRENTS_FILTER_CHANGE', this.handleTorrentFilterChange);
     global.addEventListener('resize', this.updateTorrentListViewWidth);
   }
 
@@ -68,8 +67,8 @@ class TorrentListContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    TorrentStore.unlisten(EventTypes.UI_TORRENT_SELECTION_CHANGE, this.handleTorrentSelectionChange);
-    TorrentFilterStore.unlisten(EventTypes.UI_TORRENTS_FILTER_CHANGE, this.handleTorrentFilterChange);
+    TorrentStore.unlisten('UI_TORRENT_SELECTION_CHANGE', this.handleTorrentSelectionChange);
+    TorrentFilterStore.unlisten('UI_TORRENTS_FILTER_CHANGE', this.handleTorrentFilterChange);
     global.removeEventListener('resize', this.updateTorrentListViewWidth);
   }
 
@@ -97,11 +96,11 @@ class TorrentListContainer extends React.Component {
 
   handleFileDrop = (files) => {
     const destination =
-      SettingsStore.getFloodSettings('torrentDestination') || SettingsStore.getClientSettings('directoryDefault') || '';
+      SettingsStore.getFloodSetting('torrentDestination') || SettingsStore.getClientSetting('directoryDefault') || '';
 
     const isBasePath = false;
 
-    const start = SettingsStore.getFloodSettings('startTorrentsOnLoad');
+    const start = SettingsStore.getFloodSetting('startTorrentsOnLoad');
 
     const fileData = new FormData();
 
@@ -208,7 +207,7 @@ class TorrentListContainer extends React.Component {
       direction: nextDirection,
     };
 
-    SettingsStore.saveFloodSettings({id: 'sortTorrents', data: sortBy});
+    SettingsStore.setFloodSetting('sortTorrents', sortBy);
     UIActions.setTorrentsSort(sortBy);
   }
 
@@ -229,10 +228,7 @@ class TorrentListContainer extends React.Component {
   };
 
   handlePropWidthChange = (newPropWidths) => {
-    SettingsStore.saveFloodSettings({
-      id: 'torrentListColumnWidths',
-      data: {...this.props.torrentListColumnWidths, ...newPropWidths},
-    });
+    SettingsStore.setFloodSetting('torrentListColumnWidths', {...this.props.torrentListColumnWidths, ...newPropWidths});
   };
 
   /* eslint-disable react/sort-comp */
@@ -373,31 +369,34 @@ const ConnectedTorrentList = connectStores(injectIntl(TorrentListContainer), () 
   return [
     {
       store: ClientStatusStore,
-      event: EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      event: 'CLIENT_CONNECTION_STATUS_CHANGE',
       getValue: ({store}) => {
+        const storeClientStatus = store;
         return {
-          isClientConnected: store.getIsConnected(),
+          isClientConnected: storeClientStatus.getIsConnected(),
         };
       },
     },
     {
       store: SettingsStore,
-      event: EventTypes.SETTINGS_CHANGE,
+      event: 'SETTINGS_CHANGE',
       getValue: ({store}) => {
+        const storeSettings = store;
         return {
-          displayedProperties: store.getFloodSettings('torrentDetails'),
-          torrentContextMenuItems: store.getFloodSettings('torrentContextMenuItems'),
-          torrentListColumnWidths: store.getFloodSettings('torrentListColumnWidths'),
-          torrentListViewSize: store.getFloodSettings('torrentListViewSize'),
+          displayedProperties: storeSettings.getFloodSetting('torrentDetails'),
+          torrentContextMenuItems: storeSettings.getFloodSetting('torrentContextMenuItems'),
+          torrentListColumnWidths: storeSettings.getFloodSetting('torrentListColumnWidths'),
+          torrentListViewSize: storeSettings.getFloodSetting('torrentListViewSize'),
         };
       },
     },
     {
       store: TorrentStore,
-      event: [EventTypes.UI_TORRENTS_LIST_FILTERED, EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS],
+      event: ['UI_TORRENTS_LIST_FILTERED', 'CLIENT_TORRENTS_REQUEST_SUCCESS'],
       getValue: ({store}) => {
+        const storeTorrent = store;
         return {
-          torrents: store.getTorrents(),
+          torrents: storeTorrent.getTorrents(),
         };
       },
     },
