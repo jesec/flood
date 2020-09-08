@@ -2,7 +2,12 @@ const path = require('path');
 
 module.exports = {
   parser: 'babel-eslint',
-  extends: ['plugin:@typescript-eslint/recommended', 'prettier', 'prettier/@typescript-eslint'],
+  extends: [
+    'plugin:import/typescript',
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'prettier/@typescript-eslint',
+  ],
   env: {
     browser: 1,
     node: 0,
@@ -14,12 +19,18 @@ module.exports = {
   },
   plugins: ['import'],
   rules: {
-    "no-restricted-imports": ["error", {
-      "patterns": ["**/config", "**/server/**/*"]
-    }],
-    "no-restricted-modules": ["error", {
-      "patterns": ["**/server/**/*"]
-    }],
+    'no-restricted-imports': [
+      'error',
+      {
+        patterns: ['**/config', '**/server/**/*'],
+      },
+    ],
+    'no-restricted-modules': [
+      'error',
+      {
+        patterns: ['**/server/**/*'],
+      },
+    ],
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/camelcase': ['error'],
     camelcase: 0,
@@ -33,11 +44,7 @@ module.exports = {
     'jsx-a11y/mouse-events-have-key-events': 0,
     'jsx-a11y/no-noninteractive-element-interactions': 0,
     'jsx-a11y/no-static-element-interactions': 0,
-    'lines-between-class-members': [
-      'error',
-      'always',
-      { exceptAfterSingleLine: true },
-    ],
+    'lines-between-class-members': ['error', 'always', {exceptAfterSingleLine: true}],
     'no-console': [2, {allow: ['warn', 'error']}],
     'react/button-has-type': 0,
     'react/default-props-match-prop-types': 0,

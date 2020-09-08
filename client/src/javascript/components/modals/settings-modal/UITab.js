@@ -14,8 +14,8 @@ class UITab extends SettingsTab {
     super(props);
 
     this.state = {
-      torrentListViewSize: SettingsStore.getFloodSettings('torrentListViewSize'),
-      selectedLanguage: SettingsStore.getFloodSettings('language'),
+      torrentListViewSize: SettingsStore.getFloodSetting('torrentListViewSize'),
+      selectedLanguage: SettingsStore.getFloodSetting('language'),
     };
   }
 

@@ -6,7 +6,7 @@ const tar = require('tar-stream');
 
 const ClientRequest = require('./ClientRequest');
 const clientResponseUtil = require('../util/clientResponseUtil');
-const clientSettingsMap = require('../../shared/constants/clientSettingsMap');
+const {clientSettingsMap} = require('../../shared/constants/clientSettingsMap');
 const fileUtil = require('../util/fileUtil');
 const settings = require('./settings');
 const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');

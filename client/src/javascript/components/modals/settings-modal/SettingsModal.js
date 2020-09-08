@@ -6,7 +6,6 @@ import AuthTab from './AuthTab';
 import BandwidthTab from './BandwidthTab';
 import ConnectivityTab from './ConnectivityTab';
 import connectStores from '../../../util/connectStores';
-import EventTypes from '../../../constants/EventTypes';
 import Modal from '../Modal';
 import ResourcesTab from './ResourcesTab';
 import ConfigStore from '../../../stores/ConfigStore';
@@ -48,31 +47,16 @@ class SettingsModal extends React.Component {
     ];
   }
 
-  handleCustomsSettingChange = (data) => {
-    this.setState((state) => {
-      return {
-        changedClientSettings: this.mergeObjects(state.changedClientSettings, {
-          [data.id]: {...data, overrideLocalSetting: true},
-        }),
-      };
-    });
-  };
-
   handleSaveSettingsClick = () => {
     const floodSettings = Object.keys(this.state.changedFloodSettings).map((settingsKey) => ({
       id: settingsKey,
       data: this.state.changedFloodSettings[settingsKey],
     }));
 
-    const clientSettings = Object.keys(this.state.changedClientSettings).map((settingsKey) => {
-      const data = this.state.changedClientSettings[settingsKey];
-
-      if (data.overrideLocalSetting) {
-        return data;
-      }
-
-      return {id: settingsKey, data};
-    });
+    const clientSettings = Object.keys(this.state.changedClientSettings).map((settingsKey) => ({
+      id: settingsKey,
+      data: this.state.changedClientSettings[settingsKey],
+    }));
 
     this.setState({isSavingSettings: true}, () => {
       Promise.all([
@@ -160,7 +144,6 @@ class SettingsModal extends React.Component {
       connectivity: {
         content: ConnectivityTab,
         props: {
-          onCustomSettingsChange: this.handleCustomsSettingChange,
           onClientSettingsChange: this.handleClientSettingsChange,
           settings: clientSettings,
         },
@@ -236,11 +219,12 @@ const ConnectedSettingsModal = connectStores(injectIntl(SettingsModal), () => {
   return [
     {
       store: SettingsStore,
-      event: EventTypes.SETTINGS_CHANGE,
+      event: 'SETTINGS_CHANGE',
       getValue: ({store}) => {
+        const storeSettings = store;
         return {
-          clientSettings: store.getClientSettings(),
-          floodSettings: store.getFloodSettings(),
+          clientSettings: storeSettings.getClientSettings(),
+          floodSettings: storeSettings.getFloodSettings(),
         };
       },
     },

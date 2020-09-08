@@ -15,7 +15,7 @@ class TorrentContextMenuItemsList extends React.Component {
     super(props);
 
     this.state = {
-      torrentContextMenuItems: SettingsStore.getFloodSettings('torrentContextMenuItems'),
+      torrentContextMenuItems: SettingsStore.getFloodSetting('torrentContextMenuItems'),
     };
   }
 

@@ -1,7 +1,7 @@
 const diffActionTypes = require('../constants/diffActionTypes');
 
 const objectUtil = {
-  createStringMapFromArray: (array = []) =>
+  createStringMapFromArray: (array) =>
     array.reduce((memo, key) => {
       memo[key] = key;
 

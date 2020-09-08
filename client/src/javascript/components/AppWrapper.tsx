@@ -1,6 +1,5 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import AuthStore from '../stores/AuthStore';
@@ -9,22 +8,19 @@ import Checkmark from './icons/Checkmark';
 import ClientConnectionInterruption from './general/ClientConnectionInterruption';
 import ClientStatusStore from '../stores/ClientStatusStore';
 import connectStores from '../util/connectStores';
-import EventTypes from '../constants/EventTypes';
 import LoadingIndicator from './general/LoadingIndicator';
 import UIStore from '../stores/UIStore';
 import WindowTitle from './general/WindowTitle';
+
+import type {Dependencies} from '../stores/UIStore';
 
 const ICONS = {
   satisfied: <Checkmark />,
 };
 
 interface AuthEnforcerProps {
-  dependencies?: {
-    [key: string]: {
-      message: string;
-      satisfied: boolean;
-    };
-  };
+  children: React.ReactNode;
+  dependencies?: Dependencies;
   dependenciesLoaded?: boolean;
   isAuthenticated?: boolean;
   isAuthenticating?: boolean;
@@ -32,10 +28,6 @@ interface AuthEnforcerProps {
 }
 
 class AuthEnforcer extends React.Component<AuthEnforcerProps> {
-  static propTypes = {
-    children: PropTypes.node,
-  };
-
   isLoading() {
     const {dependencies, dependenciesLoaded, isAuthenticated, isAuthenticating} = this.props;
     // If the auth status is undetermined, show the loading indicator.
@@ -89,7 +81,7 @@ class AuthEnforcer extends React.Component<AuthEnforcerProps> {
     const {dependencies} = this.props;
     let listItems;
     if (dependencies != null) {
-      listItems = Object.keys(dependencies).map((id) => {
+      listItems = Object.keys(dependencies).map((id: string) => {
         const {message, satisfied} = dependencies[id];
         const statusIcon = ICONS.satisfied;
         const classes = classnames('dependency-list__dependency', {
@@ -123,12 +115,7 @@ const ConnectedAuthEnforcer = connectStores(AuthEnforcer, () => {
   return [
     {
       store: AuthStore,
-      event: [
-        EventTypes.AUTH_LOGIN_SUCCESS,
-        EventTypes.AUTH_REGISTER_SUCCESS,
-        EventTypes.AUTH_VERIFY_SUCCESS,
-        EventTypes.AUTH_VERIFY_ERROR,
-      ],
+      event: ['AUTH_LOGIN_SUCCESS', 'AUTH_REGISTER_SUCCESS', 'AUTH_VERIFY_SUCCESS', 'AUTH_VERIFY_ERROR'],
       getValue: ({store}) => {
         const storeAuth = store as typeof AuthStore;
         return {
@@ -139,7 +126,7 @@ const ConnectedAuthEnforcer = connectStores(AuthEnforcer, () => {
     },
     {
       store: UIStore,
-      event: EventTypes.UI_DEPENDENCIES_CHANGE,
+      event: 'UI_DEPENDENCIES_CHANGE',
       getValue: ({store}) => {
         const storeUI = store as typeof UIStore;
         return {
@@ -149,7 +136,7 @@ const ConnectedAuthEnforcer = connectStores(AuthEnforcer, () => {
     },
     {
       store: UIStore,
-      event: EventTypes.UI_DEPENDENCIES_LOADED,
+      event: 'UI_DEPENDENCIES_LOADED',
       getValue: ({store}) => {
         const storeUI = store as typeof UIStore;
         return {
@@ -159,7 +146,7 @@ const ConnectedAuthEnforcer = connectStores(AuthEnforcer, () => {
     },
     {
       store: ClientStatusStore,
-      event: EventTypes.CLIENT_CONNECTION_STATUS_CHANGE,
+      event: 'CLIENT_CONNECTION_STATUS_CHANGE',
       getValue: ({store}) => {
         const storeClientStatus = store as typeof ClientStatusStore;
         return {

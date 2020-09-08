@@ -6,7 +6,7 @@ import SettingsStore from '../../../stores/SettingsStore';
 
 class AddTorrentsActions extends PureComponent {
   getActions() {
-    const startTorrentsOnLoad = SettingsStore.getFloodSettings('startTorrentsOnLoad');
+    const startTorrentsOnLoad = SettingsStore.getFloodSetting('startTorrentsOnLoad');
     return [
       {
         checked: startTorrentsOnLoad === 'true' || startTorrentsOnLoad === true,

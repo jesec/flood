@@ -1,6 +1,7 @@
 const objectUtil = require('../util/objectUtil');
 
-const clientSettingsMap = objectUtil.reflect({
+const clientSettings = {
+  dht: 'dht.mode',
   dhtPort: 'dht.port',
   dhtStats: 'dht.statistics',
   directoryDefault: 'directory.default',
@@ -47,55 +48,8 @@ const clientSettingsMap = objectUtil.reflect({
   throttleMinPeersSeed: 'throttle.min_peers.seed',
   trackersNumWant: 'trackers.numwant',
   trackersUseUdp: 'trackers.use_udp',
-});
+};
 
-clientSettingsMap.defaults = [
-  'dhtPort',
-  'dhtStats',
-  'directoryDefault',
-  'maxFileSize',
-  'networkBindAddress',
-  'networkHttpCert',
-  'networkHttpMaxOpen',
-  'networkHttpPath',
-  'networkHttpProxy',
-  'networkLocalAddress',
-  'networkMaxOpenFiles',
-  'networkMaxOpenSockets',
-  'networkPortOpen',
-  'networkPortRandom',
-  'networkPortRange',
-  'networkReceiveBufferSize',
-  'networkScgiDontRoute',
-  'networkSendBufferSize',
-  'piecesHashOnCompletion',
-  'piecesMemoryMax',
-  'piecesPreloadMinRate',
-  'piecesPreloadMinSize',
-  'piecesPreloadType',
-  'piecesSyncAlwaysSafe',
-  'piecesSyncTimeout',
-  'piecesSyncTimeoutSafe',
-  'protocolPex',
-  'sessionOnCompletion',
-  'sessionPath',
-  'sessionUseLock',
-  'systemFileSplitSize',
-  'systemFileSplitSuffix',
-  'throttleGlobalDownMax',
-  'throttleGlobalUpMax',
-  'throttleMaxDownloadsDiv',
-  'throttleMaxDownloadsGlobal',
-  'throttleMaxPeersNormal',
-  'throttleMaxPeersSeed',
-  'throttleMaxDownloads',
-  'throttleMaxUploads',
-  'throttleMaxUploadsDiv',
-  'throttleMaxUploadsGlobal',
-  'throttleMinPeersNormal',
-  'throttleMinPeersSeed',
-  'trackersNumWant',
-  'trackersUseUdp',
-];
+const clientSettingsMap = objectUtil.reflect(clientSettings);
 
-module.exports = clientSettingsMap;
+module.exports = {clientSettings, clientSettingsMap};

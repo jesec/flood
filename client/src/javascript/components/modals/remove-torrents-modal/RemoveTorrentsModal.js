@@ -52,7 +52,7 @@ class RemoveTorrentsModal extends React.Component {
 
       deleteDataContent = (
         <FormRow>
-          <Checkbox id="deleteData" checked={SettingsStore.getFloodSettings('deleteTorrentData')}>
+          <Checkbox id="deleteData" checked={SettingsStore.getFloodSetting('deleteTorrentData')}>
             <FormattedMessage id="torrents.remove.delete.data" />
           </Checkbox>
         </FormRow>

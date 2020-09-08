@@ -1,12 +1,17 @@
-import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import AuthActions from '../actions/AuthActions';
 import BaseStore from './BaseStore';
 import ConfigStore from './ConfigStore';
 import FloodActions from '../actions/FloodActions';
-import EventTypes from '../constants/EventTypes';
 
-interface Credentials {
+export interface ConnectionSettings {
+  connectionType?: 'socket' | 'tcp';
+  rtorrentSocketPath?: string;
+  rtorrentPort?: string;
+  rtorrentHost?: string;
+}
+
+export interface Credentials {
   username: string;
   password?: string;
   host?: string;
@@ -17,39 +22,31 @@ interface Credentials {
   initialUser?: boolean;
 }
 
+export type UserConfig = Credentials & ConnectionSettings;
+
 class AuthStoreClass extends BaseStore {
-  isAuthenticating: boolean;
-  isAuthenticated: boolean;
-  token: string | null | undefined;
-  users: Array<Credentials>;
-  optimisticUsers: Array<Credentials>;
+  isAuthenticating = false;
+  isAuthenticated = false;
+  token: string | null | undefined = null;
+  users: Array<Credentials> = [];
+  optimisticUsers: Array<Credentials> = [];
   currentUser: {
     isAdmin: boolean | undefined;
     isInitialUser: boolean | undefined;
     username: string | null;
+  } = {
+    isAdmin: false,
+    isInitialUser: false,
+    username: null,
   };
 
-  constructor() {
-    super();
-    this.isAuthenticating = false;
-    this.isAuthenticated = false;
-    this.token = null;
-    this.users = [];
-    this.optimisticUsers = [];
-    this.currentUser = {
-      isAdmin: false,
-      isInitialUser: false,
-      username: null,
-    };
-  }
-
-  createUser(credentials: Credentials) {
-    AuthActions.createUser(credentials);
+  createUser(config: UserConfig) {
+    AuthActions.createUser(config);
   }
 
   addOptimisticUser(credentials: Credentials) {
     this.optimisticUsers.push({username: credentials.username});
-    this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
+    this.emit('AUTH_LIST_USERS_SUCCESS');
   }
 
   getCurrentUsername() {
@@ -82,15 +79,15 @@ class AuthStoreClass extends BaseStore {
 
   handleCreateUserSuccess(credentials: Credentials) {
     this.addOptimisticUser(credentials);
-    this.emit(EventTypes.AUTH_CREATE_USER_SUCCESS);
+    this.emit('AUTH_CREATE_USER_SUCCESS');
   }
 
-  handleDeleteUserError(credentials: Credentials) {
-    this.emit(EventTypes.AUTH_DELETE_USER_ERROR, credentials.username);
+  handleDeleteUserError(error?: Error & Partial<Pick<Credentials, 'username'>>) {
+    this.emit('AUTH_DELETE_USER_ERROR', error != null ? error.username : error);
   }
 
   handleDeleteUserSuccess(credentials: Credentials) {
-    this.emit(EventTypes.AUTH_DELETE_USER_SUCCESS, credentials.username);
+    this.emit('AUTH_DELETE_USER_SUCCESS', credentials.username);
   }
 
   handleListUsersSuccess(nextUserList: Array<Credentials>) {
@@ -98,7 +95,7 @@ class AuthStoreClass extends BaseStore {
       (optimisticUser) => !nextUserList.some((databaseUser) => databaseUser.username === optimisticUser.username),
     );
     this.users = nextUserList;
-    this.emit(EventTypes.AUTH_LIST_USERS_SUCCESS);
+    this.emit('AUTH_LIST_USERS_SUCCESS');
   }
 
   handleLoginSuccess(credentials: Credentials) {
@@ -109,26 +106,26 @@ class AuthStoreClass extends BaseStore {
     this.isAuthenticating = true;
     this.isAuthenticated = true;
 
-    this.emit(EventTypes.AUTH_LOGIN_SUCCESS);
+    this.emit('AUTH_LOGIN_SUCCESS');
   }
 
-  handleLoginError(error: Error) {
+  handleLoginError(error?: Error) {
     this.token = null;
     this.isAuthenticated = false;
     this.isAuthenticating = true;
-    this.emit(EventTypes.AUTH_LOGIN_ERROR, error);
+    this.emit('AUTH_LOGIN_ERROR', error);
   }
 
   handleRegisterSuccess(credentials: Credentials) {
     this.currentUser.username = credentials.username;
     this.currentUser.isAdmin = credentials.isAdmin;
     this.currentUser.isInitialUser = false;
-    this.emit(EventTypes.AUTH_REGISTER_SUCCESS, credentials);
+    this.emit('AUTH_REGISTER_SUCCESS', credentials);
     FloodActions.restartActivityStream();
   }
 
-  handleRegisterError(error: Error) {
-    this.emit(EventTypes.AUTH_REGISTER_ERROR, error);
+  handleRegisterError(error?: Error) {
+    this.emit('AUTH_REGISTER_ERROR', error);
   }
 
   handleAuthVerificationSuccess(credentials: Credentials) {
@@ -142,14 +139,14 @@ class AuthStoreClass extends BaseStore {
     this.currentUser.isInitialUser = credentials.initialUser;
     this.isAuthenticating = true;
     this.isAuthenticated = !credentials.initialUser;
-    this.emit(EventTypes.AUTH_VERIFY_SUCCESS, credentials);
+    this.emit('AUTH_VERIFY_SUCCESS', credentials);
   }
 
-  handleAuthVerificationError(error: Error) {
+  handleAuthVerificationError(error?: Error) {
     this.isAuthenticated = false;
     this.isAuthenticating = true;
     this.currentUser.isInitialUser = false;
-    this.emit(EventTypes.AUTH_VERIFY_ERROR, error);
+    this.emit('AUTH_VERIFY_ERROR', error);
   }
 }
 
@@ -159,34 +156,34 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action} = payload;
 
   switch (action.type) {
-    case ActionTypes.AUTH_LOGIN_SUCCESS:
-      AuthStore.handleLoginSuccess(action.data);
+    case 'AUTH_LOGIN_SUCCESS':
+      AuthStore.handleLoginSuccess(action.data as Credentials);
       break;
-    case ActionTypes.AUTH_LOGIN_ERROR:
+    case 'AUTH_LOGIN_ERROR':
       AuthStore.handleLoginError(action.error);
       break;
-    case ActionTypes.AUTH_LIST_USERS_SUCCESS:
-      AuthStore.handleListUsersSuccess(action.data);
+    case 'AUTH_LIST_USERS_SUCCESS':
+      AuthStore.handleListUsersSuccess(action.data as Array<Credentials>);
       break;
-    case ActionTypes.AUTH_CREATE_USER_SUCCESS:
-      AuthStore.handleCreateUserSuccess(action.data);
+    case 'AUTH_CREATE_USER_SUCCESS':
+      AuthStore.handleCreateUserSuccess(action.data as Credentials);
       break;
-    case ActionTypes.AUTH_DELETE_USER_SUCCESS:
-      AuthStore.handleDeleteUserSuccess(action.data);
+    case 'AUTH_DELETE_USER_SUCCESS':
+      AuthStore.handleDeleteUserSuccess(action.data as Credentials);
       break;
-    case ActionTypes.AUTH_DELETE_USER_ERROR:
+    case 'AUTH_DELETE_USER_ERROR':
       AuthStore.handleDeleteUserError(action.error);
       break;
-    case ActionTypes.AUTH_REGISTER_SUCCESS:
-      AuthStore.handleRegisterSuccess(action.data);
+    case 'AUTH_REGISTER_SUCCESS':
+      AuthStore.handleRegisterSuccess(action.data as Credentials);
       break;
-    case ActionTypes.AUTH_REGISTER_ERROR:
+    case 'AUTH_REGISTER_ERROR':
       AuthStore.handleRegisterError(action.error);
       break;
-    case ActionTypes.AUTH_VERIFY_SUCCESS:
-      AuthStore.handleAuthVerificationSuccess(action.data);
+    case 'AUTH_VERIFY_SUCCESS':
+      AuthStore.handleAuthVerificationSuccess(action.data as Credentials);
       break;
-    case ActionTypes.AUTH_VERIFY_ERROR:
+    case 'AUTH_VERIFY_ERROR':
       AuthStore.handleAuthVerificationError(action.error);
       break;
     default:

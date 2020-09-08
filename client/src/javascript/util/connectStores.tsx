@@ -1,21 +1,35 @@
 import React from 'react';
 
-import EventTypes from '../constants/EventTypes';
-
+import AlertStore from '../stores/AlertStore';
 import AuthStore from '../stores/AuthStore';
 import ClientStatusStore from '../stores/ClientStatusStore';
+import DiskUsageStore from '../stores/DiskUsageStore';
+import FeedsStore from '../stores/FeedsStore';
+import NotificationStore from '../stores/NotificationStore';
+import SettingsStore from '../stores/SettingsStore';
+import TorrentFilterStore from '../stores/TorrentFilterStore';
+import TorrentStore from '../stores/TorrentStore';
+import TransferDataStore from '../stores/TransferDataStore';
 import UIStore from '../stores/UIStore';
 
-interface GenericStore {
-  listen: (event: keyof typeof EventTypes, eventHandler: (payload: unknown) => void) => void;
-  unlisten: (event: keyof typeof EventTypes, eventHandler: (payload: unknown) => void) => void;
-}
+import type {EventType} from '../constants/EventTypes';
 
-type Store = GenericStore | typeof AuthStore | typeof ClientStatusStore | typeof UIStore;
+type Store =
+  | typeof AlertStore
+  | typeof AuthStore
+  | typeof ClientStatusStore
+  | typeof DiskUsageStore
+  | typeof FeedsStore
+  | typeof NotificationStore
+  | typeof SettingsStore
+  | typeof TorrentFilterStore
+  | typeof TorrentStore
+  | typeof TransferDataStore
+  | typeof UIStore;
 
 export interface EventListenerDescriptor<ConnectedComponentProps, ConnectedComponentStates> {
   store: Store;
-  event: keyof typeof EventTypes | (keyof typeof EventTypes)[];
+  event: EventType | Array<EventType>;
   getValue: (props: {
     payload: unknown;
     props: ConnectedComponentProps;
@@ -33,7 +47,7 @@ const connectStores = <ConnectedComponentProps extends object, ConnectedComponen
   class ConnectedComponent extends React.Component<ConnectedComponentProps, ConnectedComponentStates> {
     private eventHandlersByStore: Map<
       Store,
-      Set<{events: (keyof typeof EventTypes)[]; eventHandler: (payload: unknown) => void}>
+      Set<{events: Array<EventType>; eventHandler: (payload: unknown) => void}>
     > = new Map();
 
     private constructor(props: ConnectedComponentProps) {
@@ -68,7 +82,7 @@ const connectStores = <ConnectedComponentProps extends object, ConnectedComponen
 
         if (this.eventHandlersByStore.get(store) == null) {
           const newSet: Set<{
-            events: (keyof typeof EventTypes)[];
+            events: Array<EventType>;
             eventHandler: (payload: unknown) => void;
           }> = new Set();
           this.eventHandlersByStore.set(store, newSet);
