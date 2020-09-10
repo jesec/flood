@@ -13,38 +13,41 @@ interface GenericStore {
 
 type Store = GenericStore | typeof AuthStore | typeof ClientStatusStore | typeof UIStore;
 
-export interface EventListenerDescriptor<DerivedState, WrappedComponentProps = {}> {
+export interface EventListenerDescriptor<ConnectedComponentProps, ConnectedComponentStates> {
   store: Store;
   event: keyof typeof EventTypes | (keyof typeof EventTypes)[];
   getValue: (props: {
     payload: unknown;
-    props: WrappedComponentProps;
-    state: DerivedState;
+    props: ConnectedComponentProps;
+    state: ConnectedComponentStates;
     store: Store;
-  }) => Partial<DerivedState>;
+  }) => Partial<ConnectedComponentProps>;
 }
 
-const connectStores = <DerivedState extends object, WrappedComponentProps extends object = {}>(
-  InputComponent: React.JSXElementConstructor<WrappedComponentProps & DerivedState>,
+const connectStores = <ConnectedComponentProps extends object, ConnectedComponentStates extends object = {}>(
+  InputComponent: React.JSXElementConstructor<ConnectedComponentProps & ConnectedComponentStates>,
   getEventListenerDescriptors: (
-    props: WrappedComponentProps,
-  ) => EventListenerDescriptor<DerivedState, WrappedComponentProps>[],
-): ((props: WrappedComponentProps) => React.ReactElement<WrappedComponentProps>) => {
-  class ConnectedComponent extends React.Component<WrappedComponentProps, DerivedState> {
+    props: ConnectedComponentProps,
+  ) => EventListenerDescriptor<ConnectedComponentProps, ConnectedComponentStates>[],
+): ((props: ConnectedComponentProps) => React.ReactElement<ConnectedComponentProps>) => {
+  class ConnectedComponent extends React.Component<ConnectedComponentProps, ConnectedComponentStates> {
     private eventHandlersByStore: Map<
       Store,
       Set<{events: (keyof typeof EventTypes)[]; eventHandler: (payload: unknown) => void}>
     > = new Map();
 
-    private constructor(props: WrappedComponentProps) {
+    private constructor(props: ConnectedComponentProps) {
       super(props);
-      this.state = getEventListenerDescriptors(props).reduce((state, eventListenerDescriptor): DerivedState => {
-        const {store, getValue} = eventListenerDescriptor;
-        return {
-          ...state,
-          ...getValue({state, props, store, payload: null}),
-        };
-      }, ({} as unknown) as DerivedState);
+      this.state = getEventListenerDescriptors(props).reduce(
+        (state, eventListenerDescriptor): ConnectedComponentStates => {
+          const {store, getValue} = eventListenerDescriptor;
+          return {
+            ...state,
+            ...getValue({state, props, store, payload: null}),
+          };
+        },
+        ({} as unknown) as ConnectedComponentStates,
+      );
     }
 
     public componentDidMount(): void {
@@ -54,8 +57,8 @@ const connectStores = <DerivedState extends object, WrappedComponentProps extend
         const {store, event, getValue} = eventListenerDescriptor;
         const eventHandler = (payload: unknown): void =>
           this.setState(
-            (state: DerivedState, props: WrappedComponentProps): DerivedState =>
-              getValue({state, props, store, payload}) as DerivedState,
+            (state: ConnectedComponentStates, props: ConnectedComponentProps): ConnectedComponentStates =>
+              getValue({state, props, store, payload}) as ConnectedComponentStates,
           );
         const events = Array.isArray(event) ? event : [event];
 
@@ -91,11 +94,13 @@ const connectStores = <DerivedState extends object, WrappedComponentProps extend
     }
 
     public render(): React.ReactNode {
-      return <InputComponent {...(this.props as WrappedComponentProps)} {...(this.state as DerivedState)} />;
+      return (
+        <InputComponent {...(this.props as ConnectedComponentProps)} {...(this.state as ConnectedComponentStates)} />
+      );
     }
   }
 
-  return (props: WrappedComponentProps): React.ReactElement<WrappedComponentProps> => {
+  return (props: ConnectedComponentProps): React.ReactElement<ConnectedComponentProps> => {
     return <ConnectedComponent {...props} />;
   };
 };

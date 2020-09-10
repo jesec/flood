@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 
 import detectLocale from './util/detectLocale';
 import * as i18n from './i18n/languages';
-import connectStores, {EventListenerDescriptor} from './util/connectStores';
+import connectStores from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
 import EventTypes from './constants/EventTypes';
@@ -19,6 +19,10 @@ import TorrentClientOverview from './components/views/TorrentClientOverview';
 import UIStore from './stores/UIStore';
 
 import '../sass/style.scss';
+
+interface FloodAppProps {
+  locale?: keyof typeof i18n.languages;
+}
 
 const initialize = (): void => {
   UIStore.registerDependency({
@@ -72,18 +76,14 @@ const appRoutes = (
   </Router>
 );
 
-interface InjectedFloodAppProps {
-  locale: keyof typeof i18n.languages;
-}
-
-class FloodApp extends React.Component<InjectedFloodAppProps> {
+class FloodApp extends React.Component<FloodAppProps> {
   public componentDidMount(): void {
     initialize();
   }
 
   public render(): React.ReactNode {
     let {locale} = this.props;
-    if (locale === 'auto' || !Object.prototype.hasOwnProperty.call(i18n.languages, locale)) {
+    if (locale == null || locale === 'auto' || !Object.prototype.hasOwnProperty.call(i18n.languages, locale)) {
       locale = detectLocale();
     }
 
@@ -95,14 +95,12 @@ class FloodApp extends React.Component<InjectedFloodAppProps> {
   }
 }
 
-const ConnectedFloodApp = connectStores<InjectedFloodAppProps>(FloodApp, (): EventListenerDescriptor<
-  InjectedFloodAppProps
->[] => {
+const ConnectedFloodApp = connectStores(FloodApp, () => {
   return [
     {
       store: SettingsStore,
       event: EventTypes.SETTINGS_CHANGE,
-      getValue: (): InjectedFloodAppProps => {
+      getValue: () => {
         return {
           locale: SettingsStore.getFloodSettings('language'),
         };
