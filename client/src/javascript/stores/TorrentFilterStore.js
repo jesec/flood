@@ -4,10 +4,6 @@ import ActionTypes from '../constants/ActionTypes';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import EventTypes from '../constants/EventTypes';
-import SettingsStore from './SettingsStore';
-// TODO: Fix this circular dependency
-// eslint-disable-next-line
-import TorrentStore from './TorrentStore';
 
 class TorrentFilterStoreClass extends BaseStore {
   constructor() {
@@ -18,7 +14,6 @@ class TorrentFilterStoreClass extends BaseStore {
     this.taxonomy = {};
     this.tagFilter = 'all';
     this.trackerFilter = 'all';
-    this.sortTorrentsBy = SettingsStore.getFloodSettings('sortTorrents');
   }
 
   clearAllFilters() {
@@ -26,7 +21,6 @@ class TorrentFilterStoreClass extends BaseStore {
     this.statusFilter = 'all';
     this.tagFilter = 'all';
     this.trackerFilter = 'all';
-    TorrentStore.triggerTorrentsFilter();
     this.emit(EventTypes.UI_TORRENTS_FILTER_CLEAR);
     this.emit(EventTypes.UI_TORRENTS_FILTER_SEARCH_CHANGE);
     this.emit(EventTypes.UI_TORRENTS_FILTER_STATUS_CHANGE);
@@ -50,10 +44,6 @@ class TorrentFilterStoreClass extends BaseStore {
     return this.trackerFilter;
   }
 
-  getTorrentsSort() {
-    return this.sortTorrentsBy;
-  }
-
   getTorrentStatusCount() {
     return this.taxonomy.statusCounts || {};
   }
@@ -64,10 +54,6 @@ class TorrentFilterStoreClass extends BaseStore {
 
   getTorrentTrackerCount() {
     return this.taxonomy.trackerCounts || {};
-  }
-
-  handleFetchSettingsRequest() {
-    this.setTorrentsSort(SettingsStore.getFloodSettings('sortTorrents'));
   }
 
   handleTorrentTaxonomyDiffChange(diff) {
@@ -140,12 +126,6 @@ class TorrentFilterStoreClass extends BaseStore {
     this.emit(EventTypes.UI_TORRENTS_FILTER_TRACKER_CHANGE);
   }
 
-  setTorrentsSort(sortBy) {
-    this.sortTorrentsBy = sortBy;
-    TorrentStore.triggerTorrentsSort();
-    this.emit(EventTypes.UI_TORRENTS_SORT_CHANGE);
-  }
-
   setTorrentStatusCount(statusCount) {
     this.torrentStatusCount = statusCount;
     this.emit(EventTypes.CLIENT_TORRENT_STATUS_COUNT_CHANGE);
@@ -170,18 +150,11 @@ TorrentFilterStore.dispatcherID = AppDispatcher.register((payload) => {
     case ActionTypes.UI_SET_TORRENT_TRACKER_FILTER:
       TorrentFilterStore.setTrackerFilter(action.data);
       break;
-    case ActionTypes.UI_SET_TORRENT_SORT:
-      TorrentFilterStore.setTorrentsSort(action.data);
-      break;
     case ActionTypes.TAXONOMY_FULL_UPDATE:
       TorrentFilterStore.handleTorrentTaxonomyFullUpdate(action.data);
       break;
     case ActionTypes.TAXONOMY_DIFF_CHANGE:
       TorrentFilterStore.handleTorrentTaxonomyDiffChange(action.data);
-      break;
-    case ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS:
-      AppDispatcher.waitFor([SettingsStore.dispatcherID]);
-      TorrentFilterStore.handleFetchSettingsRequest();
       break;
     default:
       break;

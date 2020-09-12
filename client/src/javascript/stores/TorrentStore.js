@@ -12,8 +12,6 @@ import {selectTorrents} from '../util/selectTorrents';
 import SettingsStore from './SettingsStore';
 import {sortTorrents} from '../util/sortTorrents';
 import TorrentActions from '../actions/TorrentActions';
-// TODO: Fix this circular dependency
-// eslint-disable-next-line
 import TorrentFilterStore from './TorrentFilterStore';
 import UIStore from './UIStore';
 
@@ -54,6 +52,7 @@ class TorrentStoreClass extends BaseStore {
     this.pollTorrentDetailsIntervalID = null;
     this.selectedTorrents = [];
     this.sortedTorrents = [];
+    this.sortTorrentsBy = {};
     this.torrents = {};
   }
 
@@ -154,6 +153,10 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS);
   }
 
+  handleFetchSettingsRequest() {
+    this.triggerTorrentsSort(SettingsStore.getFloodSettings('sortTorrents'));
+  }
+
   getTorrent(hash) {
     return this.torrents[hash];
   }
@@ -173,6 +176,10 @@ class TorrentStoreClass extends BaseStore {
     }
 
     return this.sortedTorrents;
+  }
+
+  getTorrentsSort() {
+    return this.sortTorrentsBy;
   }
 
   handleMoveTorrentsSuccess(response) {
@@ -261,10 +268,8 @@ class TorrentStoreClass extends BaseStore {
   }
 
   sortTorrents() {
-    const sortBy = TorrentFilterStore.getTorrentsSort();
-
     // Convert torrents hash to array and sort it.
-    this.sortedTorrents = sortTorrents(this.torrents, sortBy);
+    this.sortedTorrents = sortTorrents(this.torrents, this.getTorrentsSort());
   }
 
   startPollingTorrentDetails() {
@@ -281,9 +286,11 @@ class TorrentStoreClass extends BaseStore {
     this.emit(EventTypes.UI_TORRENTS_LIST_FILTERED);
   }
 
-  triggerTorrentsSort() {
+  triggerTorrentsSort(sortBy) {
+    this.sortTorrentsBy = sortBy;
     this.sortTorrents();
     this.triggerTorrentsFilter();
+    this.emit(EventTypes.UI_TORRENTS_SORT_CHANGE);
   }
 }
 
@@ -336,13 +343,17 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       TorrentStore.setSelectedTorrents(action.data.event, action.data.hash);
       break;
     case ActionTypes.UI_SET_TORRENT_SORT:
-      TorrentStore.triggerTorrentsSort();
+      TorrentStore.triggerTorrentsSort(action.data);
       break;
     case ActionTypes.UI_SET_TORRENT_SEARCH_FILTER:
     case ActionTypes.UI_SET_TORRENT_STATUS_FILTER:
     case ActionTypes.UI_SET_TORRENT_TAG_FILTER:
     case ActionTypes.UI_SET_TORRENT_TRACKER_FILTER:
       TorrentStore.triggerTorrentsFilter();
+      break;
+    case ActionTypes.SETTINGS_FETCH_REQUEST_SUCCESS:
+      AppDispatcher.waitFor([SettingsStore.dispatcherID]);
+      TorrentStore.handleFetchSettingsRequest();
       break;
     default:
       break;

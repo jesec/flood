@@ -75,6 +75,7 @@ class TorrentListContainer extends React.Component {
 
   handleClearFiltersClick() {
     TorrentFilterStore.clearAllFilters();
+    TorrentStore.triggerTorrentsFilter();
   }
 
   handleDoubleClick = (torrent, event) => {
@@ -194,7 +195,7 @@ class TorrentListContainer extends React.Component {
   };
 
   handleTableHeadingCellClick(slug) {
-    const currentSort = TorrentFilterStore.getTorrentsSort();
+    const currentSort = TorrentStore.getTorrentsSort();
 
     let nextDirection = 'asc';
 
@@ -322,7 +323,7 @@ class TorrentListContainer extends React.Component {
             onWidthsChange={this.handlePropWidthChange}
             propWidths={torrentListColumnWidths}
             scrollOffset={this.state.tableScrollLeft}
-            sortProp={TorrentFilterStore.getTorrentsSort()}
+            sortProp={TorrentStore.getTorrentsSort()}
           />
         );
       }
