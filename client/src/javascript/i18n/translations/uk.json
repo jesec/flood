@@ -92,6 +92,7 @@
   "filter.all": "Всі",
   "filter.status.title": "Фільтр за станом",
   "filter.status.downloading": "Завантажується",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Complete",
   "filter.status.active": "Активний",
   "filter.status.inactive": "Неактивний",

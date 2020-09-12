@@ -92,6 +92,7 @@
   "filter.all": "Alla",
   "filter.status.title": "Filtrera efter status",
   "filter.status.downloading": "Hämtar",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Complete",
   "filter.status.active": "Aktiv",
   "filter.status.inactive": "Inaktiv",

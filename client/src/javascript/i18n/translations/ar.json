@@ -92,6 +92,7 @@
   "filter.all": "الكل",
   "filter.status.title": "تصفية حسب الحالة",
   "filter.status.downloading": "تنزيل",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Complete",
   "filter.status.active": "نشط",
   "filter.status.inactive": "غير نشط",

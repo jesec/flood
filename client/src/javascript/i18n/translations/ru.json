@@ -92,6 +92,7 @@
   "filter.all": "Все",
   "filter.status.title": "Фильтр по статусу",
   "filter.status.downloading": "Скачивание",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Complete",
   "filter.status.active": "Активный",
   "filter.status.inactive": "Неактивный",
