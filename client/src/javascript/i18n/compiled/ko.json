@@ -861,6 +861,12 @@
       "value": "비활성"
     }
   ],
+  "filter.status.seeding": [
+    {
+      "type": 0,
+      "value": "Seeding"
+    }
+  ],
   "filter.status.stopped": [
     {
       "type": 0,

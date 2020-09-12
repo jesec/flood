@@ -92,6 +92,7 @@
   "filter.all": "すべて",
   "filter.status.title": "ステータスでフィルター",
   "filter.status.downloading": "ダウンロード中",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Complete",
   "filter.status.active": "アクティブ",
   "filter.status.inactive": "非アクティブ",

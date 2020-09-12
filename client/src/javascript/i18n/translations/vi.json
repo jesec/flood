@@ -92,6 +92,7 @@
   "filter.all": "All",
   "filter.status.title": "Filter by Status",
   "filter.status.downloading": "Downloading",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Complete",
   "filter.status.active": "Active",
   "filter.status.inactive": "Inactive",

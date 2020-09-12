@@ -868,6 +868,12 @@
       "value": "Inaktív"
     }
   ],
+  "filter.status.seeding": [
+    {
+      "type": 0,
+      "value": "Seeding"
+    }
+  ],
   "filter.status.stopped": [
     {
       "type": 0,

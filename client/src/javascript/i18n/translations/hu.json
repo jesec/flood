@@ -92,6 +92,7 @@
   "filter.all": "Mind",
   "filter.status.title": "Szűrés állapot szerint",
   "filter.status.downloading": "Letöltés alatt",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Befejezett",
   "filter.status.active": "Aktív",
   "filter.status.inactive": "Inaktív",

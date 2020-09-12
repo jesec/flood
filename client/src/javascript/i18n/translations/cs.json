@@ -92,6 +92,7 @@
   "filter.all": "Vše",
   "filter.status.title": "Filtrovat podle stavu",
   "filter.status.downloading": "Stahování",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Dokončeno",
   "filter.status.active": "Aktivní",
   "filter.status.inactive": "Neaktivní",

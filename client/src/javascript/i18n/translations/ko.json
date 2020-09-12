@@ -92,6 +92,7 @@
   "filter.all": "전체",
   "filter.status.title": "필터: 상태",
   "filter.status.downloading": "다운로드 중",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "완료",
   "filter.status.active": "활성",
   "filter.status.inactive": "비활성",

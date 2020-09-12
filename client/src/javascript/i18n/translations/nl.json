@@ -92,6 +92,7 @@
   "filter.all": "Alles",
   "filter.status.title": "Filter op status",
   "filter.status.downloading": "Downloaden",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Klaar",
   "filter.status.active": "Actief",
   "filter.status.inactive": "Inactief",

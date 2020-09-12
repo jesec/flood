@@ -709,6 +709,12 @@
       "value": "不活躍的"
     }
   ],
+  "filter.status.seeding": [
+    {
+      "type": 0,
+      "value": "Seeding"
+    }
+  ],
   "filter.status.stopped": [
     {
       "type": 0,

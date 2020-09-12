@@ -92,6 +92,7 @@
   "filter.all": "全部",
   "filter.status.title": "按状态筛选",
   "filter.status.downloading": "下载中",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "已完成",
   "filter.status.active": "活动中",
   "filter.status.inactive": "非活动中",

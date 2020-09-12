@@ -92,6 +92,7 @@
   "filter.all": "Toate",
   "filter.status.title": "Filtrare după stare",
   "filter.status.downloading": "Descărcare",
+  "filter.status.seeding": "Seeding",
   "filter.status.completed": "Complete",
   "filter.status.active": "Activ",
   "filter.status.inactive": "Inactiv",
