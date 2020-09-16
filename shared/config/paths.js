@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const userConfig = require('../../config');
 
@@ -16,8 +17,20 @@ const ensureSlash = (questionablePath, needsSlash) => {
   return questionablePath;
 };
 
+const getAppBuild = () => {
+  let appBuild = resolveApp('dist/assets');
+  if (!fs.existsSync(appBuild)) {
+    // In production, appDirectory is dist/.
+    const appDist = resolveApp('assets');
+    if (fs.existsSync(appDist)) {
+      appBuild = appDist;
+    }
+  }
+  return appBuild;
+};
+
 module.exports = {
-  appBuild: resolveApp('dist/assets'),
+  appBuild: getAppBuild(),
   appPublic: resolveApp('client/src/public/'),
   appHtml: resolveApp('client/src/index.html'),
   appIndex: resolveApp('client/src/javascript/app.tsx'),

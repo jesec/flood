@@ -1,15 +1,17 @@
-const chalk = require('chalk');
-const debug = require('debug')('flood:server');
-const fs = require('fs');
-const http = require('http');
-const spdy = require('spdy');
+import chalk from 'chalk';
+import debug from 'debug';
+import fs from 'fs';
+import http from 'http';
+import spdy from 'spdy';
 
-const app = require('../app');
-const config = require('../../config');
+import app from '../app';
+import config from '../../config';
+
+const debugFloodServer = debug('flood:server');
 
 // Normalize a port into a number, string, or false.
-const normalizePort = (val) => {
-  const port = parseInt(val, 10);
+const normalizePort = (val: string | number): string | number => {
+  const port = parseInt(val as string, 10);
 
   // Named pipe.
   if (Number.isNaN(port)) {
@@ -21,10 +23,11 @@ const normalizePort = (val) => {
     return port;
   }
 
-  return false;
+  console.error('Unexpected port or pipe');
+  process.exit(1);
 };
 
-const startWebServer = () => {
+export const startWebServer = () => {
   const port = normalizePort(config.floodServerPort);
   const host = config.floodServerHost;
   const useSSL = config.ssl;
@@ -33,7 +36,7 @@ const startWebServer = () => {
   app.set('host', host);
 
   // Create HTTP or HTTPS server.
-  let server;
+  let server: http.Server | spdy.Server;
 
   if (useSSL) {
     if (!config.sslKey || !config.sslCert) {
@@ -52,7 +55,7 @@ const startWebServer = () => {
     server = http.createServer(app);
   }
 
-  const handleError = (error) => {
+  const handleError = (error: NodeJS.ErrnoException) => {
     if (error.syscall !== 'listen') {
       throw error;
     }
@@ -77,12 +80,21 @@ const startWebServer = () => {
   // Event listener for HTTP server "listening" event.
   const handleListening = () => {
     const addr = server.address();
+    if (addr == null) {
+      console.error('Unable to get listening address.');
+      process.exit(1);
+    }
     const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-    debug(`Listening on ${bind}`);
+    debugFloodServer(`Listening on ${bind}`);
   };
 
   // Listen on provided port, on all network interfaces.
-  server.listen(port, host);
+  if (typeof port === 'string') {
+    server.listen(port);
+  } else {
+    server.listen(port, host);
+  }
+
   server.on('error', handleError);
   server.on('listening', handleListening);
 
@@ -94,5 +106,3 @@ const startWebServer = () => {
     console.log(chalk.yellow('Starting without builtin authentication\n'));
   }
 };
-
-module.exports = {startWebServer};

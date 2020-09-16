@@ -1,19 +1,19 @@
-const fs = require('fs');
-const glob = require('glob');
-const path = require('path');
+import fs from 'fs';
+import glob from 'glob';
+import path from 'path';
 
-const {secret} = require('../../config');
-const {appBuild} = require('../../shared/config/paths');
+import {secret} from '../../config';
+import {appBuild} from '../../shared/config/paths';
 
 const staticAssets = [path.join(appBuild, 'index.html')];
 
 const configFiles = [path.join(__dirname, '../../config.js')];
 
 // Taken from react-scripts/check-required-files, but without console.logs.
-const doFilesExist = (files) => {
+const doFilesExist = (files: Array<string>) => {
   try {
     files.forEach((filename) => {
-      fs.accessSync(filename, fs.F_OK);
+      fs.accessSync(filename, fs.constants.F_OK);
     });
     return true;
   } catch (err) {
@@ -21,7 +21,7 @@ const doFilesExist = (files) => {
   }
 };
 
-const grepRecursive = (folder, match) => {
+const grepRecursive = (folder: string, match: string) => {
   return glob.sync(folder.concat('/**/*')).some((file) => {
     try {
       if (!fs.lstatSync(file).isDirectory()) {
@@ -36,7 +36,7 @@ const grepRecursive = (folder, match) => {
 };
 
 const enforcePrerequisites = () =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve, reject: (error: Error) => void) => {
     if (!doFilesExist(configFiles)) {
       reject(new Error(`Configuration files missing. Please check the 'Configuring' section of README.md.`));
       return;
@@ -60,4 +60,4 @@ const enforcePrerequisites = () =>
     return resolve();
   });
 
-module.exports = enforcePrerequisites;
+export default enforcePrerequisites;
