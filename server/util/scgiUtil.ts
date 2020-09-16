@@ -1,11 +1,13 @@
 import net from 'net';
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import Serializer from 'xmlrpc/lib/serializer';
 import rTorrentDeserializer from './rTorrentDeserializer';
 
 const NULL_CHAR = String.fromCharCode(0);
 
-const bufferStream = (stream) => {
-  const chunks = [];
+const bufferStream = (stream: net.Socket) => {
+  const chunks: Array<Buffer> = [];
   return new Promise((resolve, reject) => {
     stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
     stream.on('error', reject);
@@ -13,14 +15,22 @@ const bufferStream = (stream) => {
   });
 };
 
-const methodCall = (connectionMethod, methodName, parameters) =>
+const methodCall = (
+  connectionMethod: {socketPath?: string; host?: string; port?: number},
+  methodName: string,
+  parameters: Array<string>,
+) =>
   new Promise((resolve, reject) => {
-    const networkConfiguration =
-      connectionMethod.socketPath != null
-        ? {path: connectionMethod.socketPath}
-        : {port: connectionMethod.port, host: connectionMethod.host};
+    let stream: net.Socket | null = null;
 
-    const stream = net.connect(networkConfiguration);
+    if (connectionMethod.socketPath != null) {
+      stream = net.connect(connectionMethod.socketPath);
+    } else if (connectionMethod.port != null && connectionMethod.host != null) {
+      stream = net.connect(connectionMethod.port, connectionMethod.host);
+    } else {
+      return;
+    }
+
     const xml = Serializer.serializeMethodCall(methodName, parameters);
     const xmlLength = Buffer.byteLength(xml, 'utf8');
 
@@ -35,7 +45,7 @@ const methodCall = (connectionMethod, methodName, parameters) =>
 
     bufferStream(stream)
       .then((data) => {
-        rTorrentDeserializer.deserialize(data, resolve, reject);
+        rTorrentDeserializer.deserialize(data as string, resolve, reject);
       })
       .catch(reject);
   });

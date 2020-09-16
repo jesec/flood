@@ -5,14 +5,14 @@ import {tempPath} from '../../config';
 
 class TemporaryStorage {
   constructor() {
-    fs.mkdir(tempPath, {recursive: true});
+    fs.mkdirSync(tempPath, {recursive: true});
   }
 
-  deleteFile(filename) {
-    fs.unlink(this.getTempPath(filename));
+  deleteFile(filename: string): void {
+    fs.unlinkSync(this.getTempPath(filename));
   }
 
-  getTempPath(filename) {
+  getTempPath(filename: string): string {
     return path.join(tempPath, filename);
   }
 }

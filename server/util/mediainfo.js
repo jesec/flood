@@ -1,4 +1,4 @@
-import childProcess from 'child_process';
+import {execFile} from 'child_process';
 
 import services from '../services';
 
@@ -13,24 +13,19 @@ export default {
     }
     const selectedTorrent = torrentService.getTorrent(hash);
     try {
-      childProcess.execFile(
-        'mediainfo',
-        [selectedTorrent.basePath],
-        {maxBuffer: 1024 * 2000},
-        (error, stdout, stderr) => {
-          if (error) {
-            callback(null, {error});
-            return;
-          }
+      execFile('mediainfo', [selectedTorrent.basePath], {maxBuffer: 1024 * 2000}, (error, stdout, stderr) => {
+        if (error) {
+          callback(null, {error});
+          return;
+        }
 
-          if (stderr) {
-            callback(null, {error: stderr});
-            return;
-          }
+        if (stderr) {
+          callback(null, {error: stderr});
+          return;
+        }
 
-          callback({output: stdout});
-        },
-      );
+        callback({output: stdout});
+      });
     } catch (childProcessError) {
       callback(null, {error: childProcessError});
     }

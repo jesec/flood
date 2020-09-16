@@ -3,17 +3,15 @@ import path from 'path';
 
 import config from '../../config';
 
-const createDirectory = (options) => {
-  if (options.path) {
-    fs.mkdir(options.path, {recursive: true}, (error) => {
-      if (error) {
-        console.trace('Error creating directory.', error);
-      }
-    });
-  }
+const createDirectory = (dir: string) => {
+  fs.mkdir(dir, {recursive: true}, (error) => {
+    if (error) {
+      console.trace('Error creating directory.', error);
+    }
+  });
 };
 
-const isAllowedPath = (resolvedPath) => {
+const isAllowedPath = (resolvedPath: string) => {
   if (config.allowedPaths == null) {
     return true;
   }
@@ -25,14 +23,14 @@ const isAllowedPath = (resolvedPath) => {
   });
 };
 
-const sanitizePath = (input) => {
+const sanitizePath = (input: string) => {
   // eslint-disable-next-line no-control-regex
   const controlRe = /[\x00-\x1f\x80-\x9f]/g;
   return path.resolve(input).replace(controlRe, '');
 };
 
 const accessDeniedError = () => {
-  const error = new Error();
+  const error: NodeJS.ErrnoException = new Error();
   error.code = 'EACCES';
   return error;
 };

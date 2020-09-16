@@ -1,4 +1,6 @@
 import serverEventTypes from '@shared/constants/serverEventTypes';
+import type {TorrentFile} from '@shared/constants/torrentFilePropsMap';
+import type {TorrentPeer} from '@shared/constants/torrentPeerPropsMap';
 
 import AlertStore from './AlertStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -26,35 +28,10 @@ export interface Duration {
 
 interface TorrentDetails {
   fileTree: {
-    files: Array<{
-      index: number;
-      filename: string;
-      path: string;
-      percentComplete: number;
-      priority: number;
-      sizeBytes: number;
-    }>;
+    files: Array<TorrentFile>;
     peers: Array<TorrentPeer>;
     trackers: Array<TorrentTracker>;
   };
-}
-
-// TODO: Unite with torrentPeerPropsMap when it is TS.
-export interface TorrentPeer {
-  index: number;
-  country: string;
-  address: string;
-  completedPercent: number;
-  clientVersion: string;
-  downloadRate: number;
-  downloadTotal: number;
-  uploadRate: number;
-  uploadTotal: number;
-  id: string;
-  peerRate: number;
-  peerTotal: number;
-  isEncrypted: boolean;
-  isIncoming: boolean;
 }
 
 // TODO: Unite with torrentTrackerPropsMap when it is TS.
@@ -135,6 +112,7 @@ class TorrentStoreClass extends BaseStore {
   torrents: Torrents = {};
 
   fetchTorrentDetails(options: {forceUpdate?: boolean} = {}) {
+    // TODO: Rampant and frequent over-fetching observed.
     if (!this.isRequestPending('fetch-torrent-details') || options.forceUpdate) {
       this.beginRequest('fetch-torrent-details');
       TorrentActions.fetchTorrentDetails(UIStore.getTorrentDetailsHash());

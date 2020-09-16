@@ -29,4 +29,25 @@ const torrentPeerPropsMap = {
   ],
 };
 
-module.exports = torrentPeerPropsMap;
+export interface TorrentPeerRPCResponse {
+  address: string;
+  completedPercent: number;
+  clientVersion: string;
+  downloadRate: number;
+  downloadTotal: number;
+  uploadRate: number;
+  uploadTotal: number;
+  id: string;
+  peerRate: number;
+  peerTotal: number;
+  isEncrypted: string;
+  isIncoming: string;
+}
+
+export type TorrentPeer = Omit<TorrentPeerRPCResponse, 'isEncrypted' | 'isIncoming'> & {
+  country: string;
+  isEncrypted: boolean;
+  isIncoming: boolean;
+};
+
+export default torrentPeerPropsMap;

@@ -16,26 +16,21 @@ const dateTransformer = (dirtyDate) => {
 
   return date;
 };
-const defaultTransformer = (value) => value;
 
 torrentListPropMap.set('hash', {
   methodCall: 'd.hash=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('name', {
   methodCall: 'd.name=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('message', {
   methodCall: 'd.message=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('state', {
   methodCall: 'd.state=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('isStateChanged', {
@@ -55,7 +50,6 @@ torrentListPropMap.set('isComplete', {
 
 torrentListPropMap.set('isHashing', {
   methodCall: 'd.hashing=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('isOpen', {
@@ -65,7 +59,6 @@ torrentListPropMap.set('isOpen', {
 
 torrentListPropMap.set('priority', {
   methodCall: 'd.priority=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('upRate', {
@@ -105,27 +98,22 @@ torrentListPropMap.set('sizeBytes', {
 
 torrentListPropMap.set('directory', {
   methodCall: 'd.directory=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('basePath', {
   methodCall: 'd.base_path=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('baseFilename', {
   methodCall: 'd.base_filename=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('baseDirectory', {
   methodCall: 'd.directory_base=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('seedingTime', {
   methodCall: 'd.custom=seedingtime',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('dateAdded', {
@@ -140,7 +128,6 @@ torrentListPropMap.set('dateCreated', {
 
 torrentListPropMap.set('throttleName', {
   methodCall: 'd.throttle_name=',
-  transformValue: defaultTransformer,
 });
 
 torrentListPropMap.set('isMultiFile', {

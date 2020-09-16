@@ -1,8 +1,9 @@
 import bodyParser from 'body-parser';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-import express from 'express';
+import express, {Request, Response, NextFunction, ErrorRequestHandler} from 'express';
 import fs from 'fs';
+import createHttpError, {HttpError} from 'http-errors';
 import morgan from 'morgan';
 import passport from 'passport';
 import path from 'path';
@@ -58,31 +59,34 @@ app.get(path.join(paths.servedPath, 'overview'), (_req, res) => {
 
 // Catch 404 and forward to error handler.
 app.use((_req, _res, next) => {
-  const err = new Error('Not Found');
+  const err = createHttpError('Not Found');
   err.status = 404;
   next(err);
 });
 
+// Production error handler, no stacktrace leaked to user.
+let errorRequestHandler: ErrorRequestHandler = (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {},
+    title: 'Flood Error',
+  });
+};
+
 // Development error handler, will print stacktrace.
 if (app.get('env') === 'development') {
-  app.use((err, req, res) => {
+  errorRequestHandler = (err: HttpError, _req: Request, res: Response, _next: NextFunction) => {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
       error: err,
       title: 'Flood Error',
     });
-  });
-} else {
-  // Production error handler, no stacktraces leaked to user.
-  app.use((err, req, res) => {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: {},
-      title: 'Flood Error',
-    });
-  });
+  };
 }
+
+// Error handler.
+app.use(errorRequestHandler);
 
 export default app;

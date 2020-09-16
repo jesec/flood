@@ -1,16 +1,20 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 import {Parser} from 'saxen';
 
-let stackMarks;
-let dataStack;
-let tmpData;
-let dataIsVal;
+type Data = string | boolean | Array<string> | object;
+
+let stackMarks: Array<number>;
+let dataStack: Array<Data>;
+let tmpData: Array<string>;
+let dataIsVal: boolean;
 let endOfResponse;
-let rejectCallback;
-let parser = new Parser();
+let rejectCallback: (err: string) => void;
 
 let parserInit = false;
+const parser = new Parser();
 
-const unescapeXMLString = (value) =>
+const unescapeXMLString = (value: string) =>
   value
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
@@ -18,7 +22,7 @@ const unescapeXMLString = (value) =>
     .replace(/&quot;/g, '"')
     .replace(/&amp;/g, '&');
 
-const openTag = (elementName) => {
+const openTag = (elementName: string) => {
   if (elementName === 'array' || elementName === 'struct') {
     stackMarks.push(dataStack.length);
   }
@@ -26,15 +30,15 @@ const openTag = (elementName) => {
   dataIsVal = elementName === 'value';
 };
 
-const onText = (value) => {
+const onText = (value: string) => {
   tmpData.push(unescapeXMLString(value));
 };
 
-const onError = (err) => {
+const onError = (err: string) => {
   rejectCallback(err);
 };
 
-const closeTag = (elementName) => {
+const closeTag = (elementName: string) => {
   let stackMark;
   const tagValue = tmpData.join('');
   // types that rTorrent uses:
@@ -62,18 +66,25 @@ const closeTag = (elementName) => {
 
     case 'array':
       stackMark = stackMarks.pop();
-      dataStack.splice(stackMark, dataStack.length - stackMark, dataStack.slice(stackMark));
+      if (stackMark != null) {
+        dataStack.splice(stackMark, dataStack.length - stackMark, dataStack.slice(stackMark) as Array<string>);
+      }
       dataIsVal = false;
       break;
 
     case 'struct': {
       stackMark = stackMarks.pop();
-      const struct = {};
+      const struct: Record<string, Data> = {};
       const items = dataStack.slice(stackMark);
       for (let i = 0; i < items.length; i += 2) {
-        struct[items[i]] = items[i + 1];
+        const key = items[i];
+        if (typeof key === 'string') {
+          struct[key] = items[i + 1];
+        }
       }
-      dataStack.splice(stackMark, dataStack.length - stackMark, struct);
+      if (stackMark != null) {
+        dataStack.splice(stackMark, dataStack.length - stackMark, struct);
+      }
       dataIsVal = false;
       break;
     }
@@ -103,7 +114,7 @@ const initParser = () => {
   parserInit = true;
 };
 
-const deserialize = (data, resolve, reject) => {
+const deserialize = (data: string, resolve: (data: Data) => void, reject: (err: string) => void): void => {
   stackMarks = [];
   dataStack = [];
   tmpData = [];

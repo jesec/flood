@@ -5,9 +5,9 @@ import series from 'run-series';
 import tar from 'tar-stream';
 
 import ClientRequest from './ClientRequest';
-import clientResponseUtil from '../util/clientResponseUtil';
 import {clientSettingsMap} from '../../shared/constants/clientSettingsMap';
 import fileUtil from '../util/fileUtil';
+import {processTorrentDetails} from '../util/torrentDetailsUtil';
 import settings from './settings';
 import torrentFilePropsMap from '../../shared/constants/torrentFilePropsMap';
 import torrentPeerPropsMap from '../../shared/constants/torrentPeerPropsMap';
@@ -32,7 +32,7 @@ const client = {
       return;
     }
 
-    fileUtil.createDirectory({path: resolvedPath});
+    fileUtil.createDirectory(resolvedPath);
     request.send();
 
     // Each torrent is sent individually because rTorrent accepts a total
@@ -72,7 +72,7 @@ const client = {
       callback(null, fileUtil.accessDeniedError());
       return;
     }
-    fileUtil.createDirectory({path: resolvedPath});
+    fileUtil.createDirectory(resolvedPath);
     request.addURLs({
       urls,
       path: resolvedPath,
@@ -226,7 +226,7 @@ const client = {
       peerProps: torrentPeerPropsMap.methods,
       trackerProps: torrentTrackerPropsMap.methods,
     });
-    request.postProcess(clientResponseUtil.processTorrentDetails);
+    request.postProcess(processTorrentDetails);
     request.onComplete(callback);
     request.send();
   },

@@ -1,11 +1,11 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
+import type {TorrentPeer} from '@shared/constants/torrentPeerPropsMap';
+
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';
 import Checkmark from '../../icons/Checkmark';
-
-import type {TorrentPeer} from '../../../stores/TorrentStore';
 
 interface TorrentPeersProps {
   peers: Array<TorrentPeer>;

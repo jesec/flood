@@ -1,5 +1,5 @@
 const methodCallUtil = {
-  getMethodCallConfigFromPropMap(map = new Map(), requestedKeys) {
+  getMethodCallConfigFromPropMap(map = new Map(), requestedKeys?: Array<string>) {
     let desiredKeys = Array.from(map.keys());
 
     if (requestedKeys != null) {
@@ -12,7 +12,12 @@ const methodCallUtil = {
 
         accumulator.methodCalls.push(methodCall);
         accumulator.propLabels.push(key);
-        accumulator.valueTransformations.push(transformValue);
+
+        if (transformValue == null) {
+          accumulator.valueTransformations.push((value: unknown) => value);
+        } else {
+          accumulator.valueTransformations.push(transformValue);
+        }
 
         return accumulator;
       },
