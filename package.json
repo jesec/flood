@@ -25,7 +25,7 @@
     "check-source-formatting": "node scripts/prettier.js check",
     "check-types": "tsc",
     "lint": "NODE_ENV=development eslint --max-warnings 0 . --ext .js --ext .jsx --ext .ts --ext .tsx",
-    "prepack": "rm -rf dist && cp config.cli.js config.js && npm run build",
+    "prepack": "rm -rf dist && npm run build",
     "start": "node --use_strict dist/server/bin/start.js",
     "start:development": "UPDATED_SCRIPT=start:development:server npm run deprecated-warning && npm run start:development:server",
     "start:development:client": "node client/scripts/start.js",
