@@ -17,7 +17,6 @@ RUN npm set unsafe-perm true
 RUN npm install
 
 # Build package
-RUN cp config.cli.js config.js
 RUN npm run build
 RUN npm pack --ignore-scripts
 
