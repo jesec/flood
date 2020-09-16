@@ -1,12 +1,14 @@
 /**
- * This service is not per rtorrent session, which is why it does not inherit
- * `BaseService` nor have any use of the per user API ie. `getSerivce()`
+ * This service is not per rTorrent session, which is why it does not inherit
+ * `BaseService` nor have any use of the per user API ie. `getService()`
  */
-const EventEmitter = require('events');
-const util = require('util');
-const execFile = util.promisify(require('child_process').execFile);
-const config = require('../../config');
-const diskUsageServiceEvents = require('../constants/diskUsageServiceEvents');
+import EventEmitter from 'events';
+import {execFile} from 'child_process';
+import util from 'util';
+import config from '../../config';
+import diskUsageServiceEvents from '../constants/diskUsageServiceEvents';
+
+const execFileAsync = util.promisify(execFile);
 
 const PLATFORMS_SUPPORTED = ['darwin', 'linux', 'freebsd', 'win32'];
 const MAX_BUFFER_SIZE = 65536;
@@ -20,7 +22,7 @@ const filterMountPoint =
 
 const diskUsage = {
   linux: () =>
-    execFile('df -xsquashfs -xtmpfs -xdevtmpfs | tail -n+2', {
+    execFileAsync('df -xsquashfs -xtmpfs -xdevtmpfs | tail -n+2', {
       shell: true,
       maxBuffer: MAX_BUFFER_SIZE,
     }).then(({stdout}) =>
@@ -39,7 +41,7 @@ const diskUsage = {
         }),
     ),
   freebsd: () =>
-    execFile('df | tail -n+2', {
+    execFileAsync('df | tail -n+2', {
       shell: true,
       maxBuffer: MAX_BUFFER_SIZE,
     }).then(({stdout}) =>
@@ -58,7 +60,7 @@ const diskUsage = {
         }),
     ),
   darwin: () =>
-    execFile('df -kl | tail -n+2', {
+    execFileAsync('df -kl | tail -n+2', {
       shell: true,
       maxBuffer: MAX_BUFFER_SIZE,
     }).then(({stdout}) =>
@@ -77,7 +79,7 @@ const diskUsage = {
         }),
     ),
   win32: () =>
-    execFile('wmic logicaldisk', {
+    execFileAsync('wmic logicaldisk', {
       shell: true,
       maxBuffer: MAX_BUFFER_SIZE,
     }).then(({stdout}) =>
@@ -152,4 +154,4 @@ class DiskUsageService extends EventEmitter {
   }
 }
 
-module.exports = new DiskUsageService();
+export default new DiskUsageService();

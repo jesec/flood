@@ -1,10 +1,10 @@
-const _ = require('lodash');
-const Datastore = require('nedb');
-const path = require('path');
+import _ from 'lodash';
+import Datastore from 'nedb';
+import path from 'path';
 
-const BaseService = require('./BaseService');
-const config = require('../../config');
-const notificationServiceEvents = require('../constants/notificationServiceEvents');
+import BaseService from './BaseService';
+import config from '../../config';
+import notificationServiceEvents from '../constants/notificationServiceEvents';
 
 const DEFAULT_QUERY_LIMIT = 20;
 const INITIAL_COUNT_VALUE = {read: 0, total: 0, unread: 0};
@@ -122,4 +122,4 @@ class NotificationService extends BaseService {
   }
 }
 
-module.exports = NotificationService;
+export default NotificationService;

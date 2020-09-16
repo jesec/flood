@@ -1,6 +1,6 @@
-const chalk = require('chalk');
-const config = require('../../../config');
-const Users = require('../../models/Users');
+import chalk from 'chalk';
+import config from '../../../config';
+import Users from '../../models/Users';
 
 const log = (data) => {
   if (process.env.DEBUG) {
@@ -73,4 +73,4 @@ const migrate = () => {
   });
 };
 
-module.exports = migrate;
+export default migrate;

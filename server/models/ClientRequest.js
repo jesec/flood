@@ -1,13 +1,13 @@
 /**
  * This file is deprecated in favor of clientGatewayService.
  */
-const mv = require('mv');
-const path = require('path');
-const util = require('util');
+import mv from 'mv';
+import path from 'path';
+import util from 'util';
 
-const {clientSettings, clientSettingsMap} = require('../../shared/constants/clientSettingsMap');
-const rTorrentPropMap = require('../util/rTorrentPropMap');
-const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
+import {clientSettings, clientSettingsMap} from '../../shared/constants/clientSettingsMap';
+import rTorrentPropMap from '../util/rTorrentPropMap';
+import torrentStatusMap from '../../shared/constants/torrentStatusMap';
 
 const addTagsToRequest = (tagsArr, requestParameters) => {
   if (tagsArr && tagsArr.length) {
@@ -384,4 +384,4 @@ class ClientRequest {
   }
 }
 
-module.exports = ClientRequest;
+export default ClientRequest;

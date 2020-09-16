@@ -9,4 +9,4 @@ const RTORRENT_PROPS_MAP = {
   },
 };
 
-module.exports = RTORRENT_PROPS_MAP;
+export default RTORRENT_PROPS_MAP;

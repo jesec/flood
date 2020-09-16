@@ -1,6 +1,6 @@
-const net = require('net');
-const Serializer = require('xmlrpc/lib/serializer');
-const rTorrentDeserializer = require('./rTorrentDeserializer');
+import net from 'net';
+import Serializer from 'xmlrpc/lib/serializer';
+import rTorrentDeserializer from './rTorrentDeserializer';
 
 const NULL_CHAR = String.fromCharCode(0);
 
@@ -40,4 +40,4 @@ const methodCall = (connectionMethod, methodName, parameters) =>
       .catch(reject);
   });
 
-module.exports = {methodCall};
+export default {methodCall};

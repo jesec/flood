@@ -1,10 +1,10 @@
-const ClientGatewayService = require('./clientGatewayService');
-const ClientRequestManager = require('./clientRequestManager');
-const FeedService = require('./feedService');
-const HistoryService = require('./historyService');
-const NotificationService = require('./notificationService');
-const TaxonomyService = require('./taxonomyService');
-const TorrentService = require('./torrentService');
+import ClientGatewayService from './clientGatewayService';
+import ClientRequestManager from './clientRequestManager';
+import FeedService from './feedService';
+import HistoryService from './historyService';
+import NotificationService from './notificationService';
+import TaxonomyService from './taxonomyService';
+import TorrentService from './torrentService';
 
 const clientRequestManagers = new Map();
 const clientGatewayServices = new Map();
@@ -113,7 +113,7 @@ const updateUserServices = (user) => {
   });
 };
 
-module.exports = {
+export default {
   bootstrapServicesForUser,
   destroyUserServices,
   getAllServices,

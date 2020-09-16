@@ -1,4 +1,4 @@
-const regEx = require('../../shared/util/regEx');
+import regEx from '../../shared/util/regEx';
 
 const torrentListPropMap = new Map();
 
@@ -244,4 +244,4 @@ torrentListPropMap.set('peersTotal', {
   transformValue: (value) => Number(value.substr(0, value.indexOf('|||'))),
 });
 
-module.exports = torrentListPropMap;
+export default torrentListPropMap;

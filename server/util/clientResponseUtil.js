@@ -1,8 +1,8 @@
-const geoip = require('geoip-country');
-const truncateTo = require('./numberUtils');
-const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
-const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
-const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
+import geoip from 'geoip-country';
+import truncateTo from './numberUtils';
+import torrentFilePropsMap from '../../shared/constants/torrentFilePropsMap';
+import torrentPeerPropsMap from '../../shared/constants/torrentPeerPropsMap';
+import torrentTrackerPropsMap from '../../shared/constants/torrentTrackerPropsMap';
 
 const processFile = (file) => {
   file.filename = file.pathComponents[file.pathComponents.length - 1];
@@ -124,4 +124,4 @@ const clientResponseUtil = {
   processTorrentDetails,
 };
 
-module.exports = clientResponseUtil;
+export default clientResponseUtil;

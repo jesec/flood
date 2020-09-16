@@ -1,17 +1,17 @@
-const express = require('express');
-const passport = require('passport');
+import express from 'express';
+import passport from 'passport';
+
+import appendUserServices from '../middleware/appendUserServices';
+import ajaxUtil from '../util/ajaxUtil';
+import client from '../models/client';
+import clientRoutes from './client';
+import clientActivityStream from '../middleware/clientActivityStream';
+import eventStream from '../middleware/eventStream';
+import Filesystem from '../models/Filesystem';
+import mediainfo from '../util/mediainfo';
+import settings from '../models/settings';
 
 const router = express.Router();
-
-const appendUserServices = require('../middleware/appendUserServices');
-const ajaxUtil = require('../util/ajaxUtil');
-const client = require('../models/client');
-const clientRoutes = require('./client');
-const clientActivityStream = require('../middleware/clientActivityStream');
-const eventStream = require('../middleware/eventStream');
-const Filesystem = require('../models/Filesystem');
-const mediainfo = require('../util/mediainfo');
-const settings = require('../models/settings');
 
 router.use('/', passport.authenticate('jwt', {session: false}), appendUserServices);
 
@@ -83,4 +83,4 @@ router.patch('/settings', (req, res) => {
   settings.set(req.user, req.body, ajaxUtil.getResponseFn(res));
 });
 
-module.exports = router;
+export default router;

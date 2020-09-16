@@ -1,4 +1,4 @@
-const EventEmitter = require('events');
+import EventEmitter from 'events';
 
 class BaseService extends EventEmitter {
   constructor(user, services, ...eventEmitterConfig) {
@@ -19,4 +19,4 @@ class BaseService extends EventEmitter {
   }
 }
 
-module.exports = BaseService;
+export default BaseService;

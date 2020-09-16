@@ -1,4 +1,4 @@
-const objectUtil = require('../../shared/util/objectUtil');
+import objectUtil from '../../shared/util/objectUtil';
 
 const clientGatewayServiceEvents = [
   'CLIENT_CONNECTION_STATE_CHANGE',
@@ -9,4 +9,4 @@ const clientGatewayServiceEvents = [
   'TORRENTS_REMOVED',
 ];
 
-module.exports = objectUtil.createSymbolMapFromArray(clientGatewayServiceEvents);
+export default objectUtil.createSymbolMapFromArray(clientGatewayServiceEvents);

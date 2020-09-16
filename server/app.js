@@ -1,19 +1,19 @@
-require('events').EventEmitter.defaultMaxListeners = Infinity;
+import bodyParser from 'body-parser';
+import compression from 'compression';
+import cookieParser from 'cookie-parser';
+import express from 'express';
+import fs from 'fs';
+import morgan from 'morgan';
+import passport from 'passport';
+import path from 'path';
 
-const bodyParser = require('body-parser');
-const compression = require('compression');
-const cookieParser = require('cookie-parser');
-const express = require('express');
-const fs = require('fs');
-const morgan = require('morgan');
-const passport = require('passport');
-const path = require('path');
+import apiRoutes from './routes/api';
+import authRoutes from './routes/auth';
+import passportConfig from './config/passport';
+import paths from '../shared/config/paths';
+import Users from './models/Users';
 
 const app = express();
-const apiRoutes = require('./routes/api');
-const authRoutes = require('./routes/auth');
-const paths = require('../shared/config/paths');
-const Users = require('./models/Users');
 
 Users.bootstrapServicesForAllUsers();
 
@@ -33,7 +33,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
-require('./config/passport')(passport);
+passportConfig(passport);
 
 app.use(path.join(paths.servedPath, 'api'), apiRoutes);
 app.use(path.join(paths.servedPath, 'auth'), authRoutes);
@@ -85,4 +85,4 @@ if (app.get('env') === 'development') {
   });
 }
 
-module.exports = app;
+export default app;

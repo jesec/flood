@@ -1,9 +1,9 @@
-const express = require('express');
-const multer = require('multer');
+import express from 'express';
+import multer from 'multer';
 
-const ajaxUtil = require('../util/ajaxUtil');
-const booleanCoerce = require('../middleware/booleanCoerce');
-const client = require('../models/client');
+import ajaxUtil from '../util/ajaxUtil';
+import booleanCoerce from '../middleware/booleanCoerce';
+import client from '../models/client';
 
 const router = express.Router();
 
@@ -117,4 +117,4 @@ router.get('/methods.json', (req, res) => {
   client.listMethods(req.user, req.services, method, args, ajaxUtil.getResponseFn(res));
 });
 
-module.exports = router;
+export default router;

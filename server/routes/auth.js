@@ -1,15 +1,16 @@
-const express = require('express');
-const joi = require('joi');
-const jwt = require('jsonwebtoken');
-const passport = require('passport');
-const ajaxUtil = require('../util/ajaxUtil');
+import express from 'express';
+import joi from 'joi';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import ajaxUtil from '../util/ajaxUtil';
 
-const requireAdmin = require('../middleware/requireAdmin');
-const config = require('../../config');
+import requireAdmin from '../middleware/requireAdmin';
+import config from '../../config';
+
+import services from '../services';
+import Users from '../models/Users';
 
 const router = express.Router();
-const services = require('../services');
-const Users = require('../models/Users');
 
 const failedLoginResponse = 'Failed login.';
 
@@ -210,4 +211,4 @@ router.put('/users', (req, res) => {
   );
 });
 
-module.exports = router;
+export default router;

@@ -30,4 +30,4 @@ transferSummaryPropMap.set('downThrottle', {
   transformValue: Number,
 });
 
-module.exports = transferSummaryPropMap;
+export default transferSummaryPropMap;

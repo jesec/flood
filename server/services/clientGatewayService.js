@@ -1,11 +1,11 @@
-const path = require('path');
-const fs = require('fs');
+import path from 'path';
+import fs from 'fs';
 
-const BaseService = require('./BaseService');
-const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
-const fileListPropMap = require('../constants/fileListPropMap');
-const methodCallUtil = require('../util/methodCallUtil');
-const scgiUtil = require('../util/scgiUtil');
+import BaseService from './BaseService';
+import clientGatewayServiceEvents from '../constants/clientGatewayServiceEvents';
+import fileListPropMap from '../constants/fileListPropMap';
+import methodCallUtil from '../util/methodCallUtil';
+import scgiUtil from '../util/scgiUtil';
 
 const fileListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(fileListPropMap, ['pathComponents']);
 
@@ -262,4 +262,4 @@ class ClientGatewayService extends BaseService {
   }
 }
 
-module.exports = ClientGatewayService;
+export default ClientGatewayService;

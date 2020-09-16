@@ -1,11 +1,11 @@
-const path = require('path');
-const Datastore = require('nedb');
+import path from 'path';
+import Datastore from 'nedb';
 
-const BaseService = require('./BaseService');
-const client = require('../models/client');
-const config = require('../../config');
-const Feed = require('../models/Feed');
-const regEx = require('../../shared/util/regEx');
+import BaseService from './BaseService';
+import client from '../models/client';
+import config from '../../config';
+import Feed from '../models/Feed';
+import regEx from '../../shared/util/regEx';
 
 // TODO: Allow users to specify which key contains the URLs.
 const getTorrentUrlsFromItem = (feedItem) => {
@@ -360,4 +360,4 @@ class FeedService extends BaseService {
   }
 }
 
-module.exports = FeedService;
+export default FeedService;

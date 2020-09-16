@@ -1,4 +1,4 @@
-module.exports = (key) => (req, res, next) => {
+export default (key) => (req, res, next) => {
   const value = req.body && req.body[key];
 
   if (value && typeof value === 'string') {

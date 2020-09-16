@@ -1,14 +1,14 @@
-const deepEqual = require('deep-equal');
-const BaseService = require('./BaseService');
-const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
-const config = require('../../config');
-const formatUtil = require('../../shared/util/formatUtil');
-const methodCallUtil = require('../util/methodCallUtil');
-const serverEventTypes = require('../../shared/constants/serverEventTypes');
-const truncateTo = require('../util/numberUtils');
-const torrentListPropMap = require('../constants/torrentListPropMap');
-const torrentServiceEvents = require('../constants/torrentServiceEvents');
-const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
+import deepEqual from 'deep-equal';
+import BaseService from './BaseService';
+import clientGatewayServiceEvents from '../constants/clientGatewayServiceEvents';
+import config from '../../config';
+import formatUtil from '../../shared/util/formatUtil';
+import methodCallUtil from '../util/methodCallUtil';
+import serverEventTypes from '../../shared/constants/serverEventTypes';
+import truncateTo from '../util/numberUtils';
+import torrentListPropMap from '../constants/torrentListPropMap';
+import torrentServiceEvents from '../constants/torrentServiceEvents';
+import torrentStatusMap from '../../shared/constants/torrentStatusMap';
 
 const torrentListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(torrentListPropMap);
 
@@ -280,4 +280,4 @@ class TorrentService extends BaseService {
   }
 }
 
-module.exports = TorrentService;
+export default TorrentService;

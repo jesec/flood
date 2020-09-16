@@ -1,5 +1,5 @@
-const objectUtil = require('../../shared/util/objectUtil');
+import objectUtil from '../../shared/util/objectUtil';
 
 const taxonomyServiceEvents = ['TAXONOMY_DIFF_CHANGE'];
 
-module.exports = objectUtil.createSymbolMapFromArray(taxonomyServiceEvents);
+export default objectUtil.createSymbolMapFromArray(taxonomyServiceEvents);

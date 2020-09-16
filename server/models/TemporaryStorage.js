@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const {tempPath} = require('../../config');
+import {tempPath} from '../../config';
 
 class TemporaryStorage {
   constructor() {
@@ -17,4 +17,4 @@ class TemporaryStorage {
   }
 }
 
-module.exports = new TemporaryStorage();
+export default new TemporaryStorage();

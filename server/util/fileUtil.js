@@ -1,7 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
-const config = require('../../config');
+import config from '../../config';
 
 const createDirectory = (options) => {
   if (options.path) {
@@ -44,4 +44,4 @@ const fileUtil = {
   accessDeniedError,
 };
 
-module.exports = fileUtil;
+export default fileUtil;

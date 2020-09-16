@@ -1,8 +1,8 @@
-const childProcess = require('child_process');
+import childProcess from 'child_process';
 
-const services = require('../services');
+import services from '../services';
 
-module.exports = {
+export default {
   getMediainfo(user, options, callback) {
     const torrentService = services.getTorrentService(user);
     const {hash} = options;

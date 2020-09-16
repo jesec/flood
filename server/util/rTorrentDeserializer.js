@@ -1,4 +1,4 @@
-const saxen = require('saxen');
+import {Parser} from 'saxen';
 
 let stackMarks;
 let dataStack;
@@ -6,6 +6,9 @@ let tmpData;
 let dataIsVal;
 let endOfResponse;
 let rejectCallback;
+let parser = new Parser();
+
+let parserInit = false;
 
 const unescapeXMLString = (value) =>
   value
@@ -87,6 +90,19 @@ const closeTag = (elementName) => {
   }
 };
 
+const initParser = () => {
+  if (parserInit === true) {
+    return;
+  }
+
+  parser.on('openTag', openTag);
+  parser.on('closeTag', closeTag);
+  parser.on('text', onText);
+  parser.on('error', onError);
+
+  parserInit = true;
+};
+
 const deserialize = (data, resolve, reject) => {
   stackMarks = [];
   dataStack = [];
@@ -94,16 +110,15 @@ const deserialize = (data, resolve, reject) => {
   dataIsVal = false;
   endOfResponse = false;
   rejectCallback = reject;
-  const parser = new saxen.Parser();
-  parser.on('openTag', openTag);
-  parser.on('closeTag', closeTag);
-  parser.on('text', onText);
-  parser.on('error', onError);
+
+  initParser();
   parser.parse(data);
+
   if (endOfResponse) {
     return resolve(dataStack[0]);
   }
+
   return reject('truncated response was received');
 };
 
-module.exports = {deserialize};
+export default {deserialize};

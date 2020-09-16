@@ -1,10 +1,10 @@
-const argon2 = require('argon2');
-const Datastore = require('nedb');
-const fs = require('fs-extra');
-const path = require('path');
+import argon2 from 'argon2';
+import Datastore from 'nedb';
+import fs from 'fs-extra';
+import path from 'path';
 
-const config = require('../../config');
-const services = require('../services');
+import config from '../../config';
+import services from '../services';
 
 class Users {
   constructor() {
@@ -185,4 +185,4 @@ class Users {
   }
 }
 
-module.exports = new Users();
+export default new Users();

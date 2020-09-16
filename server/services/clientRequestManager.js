@@ -1,5 +1,5 @@
-const BaseService = require('./BaseService');
-const scgiUtil = require('../util/scgiUtil');
+import BaseService from './BaseService';
+import scgiUtil from '../util/scgiUtil';
 
 class ClientRequestManager extends BaseService {
   constructor(...serviceConfig) {
@@ -80,4 +80,4 @@ class ClientRequestManager extends BaseService {
   }
 }
 
-module.exports = ClientRequestManager;
+export default ClientRequestManager;

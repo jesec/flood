@@ -1,5 +1,5 @@
-const bencode = require('bencode');
-const fs = require('fs');
+import bencode from 'bencode';
+import fs from 'fs';
 
 const setTracker = (torrent, tracker) => {
   fs.readFile(torrent, (err, data) => {
@@ -21,4 +21,4 @@ const torrentFileUtil = {
   setTracker,
 };
 
-module.exports = torrentFileUtil;
+export default torrentFileUtil;

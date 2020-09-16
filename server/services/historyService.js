@@ -1,11 +1,11 @@
-const BaseService = require('./BaseService');
-const config = require('../../config');
-const HistoryEra = require('../models/HistoryEra');
-const historyServiceEvents = require('../constants/historyServiceEvents');
-const historySnapshotTypes = require('../../shared/constants/historySnapshotTypes');
-const methodCallUtil = require('../util/methodCallUtil');
-const objectUtil = require('../../shared/util/objectUtil');
-const transferSummaryPropMap = require('../constants/transferSummaryPropMap');
+import BaseService from './BaseService';
+import config from '../../config';
+import HistoryEra from '../models/HistoryEra';
+import historyServiceEvents from '../constants/historyServiceEvents';
+import historySnapshotTypes from '../../shared/constants/historySnapshotTypes';
+import methodCallUtil from '../util/methodCallUtil';
+import objectUtil from '../../shared/util/objectUtil';
+import transferSummaryPropMap from '../constants/transferSummaryPropMap';
 
 const transferSummaryMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(transferSummaryPropMap);
 
@@ -209,4 +209,4 @@ class HistoryService extends BaseService {
   }
 }
 
-module.exports = HistoryService;
+export default HistoryService;

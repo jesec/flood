@@ -1,6 +1,6 @@
-const services = require('../services');
+import services from '../services';
 
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   req.services = services.getAllServices(req.user);
   next();
 };

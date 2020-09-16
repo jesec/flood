@@ -1,4 +1,4 @@
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
   req.socket.setKeepAlive(true);
   req.socket.setTimeout(0);
 

@@ -1,5 +1,5 @@
-const chalk = require('chalk');
-const Users = require('../../models/Users');
+import chalk from 'chalk';
+import Users from '../../models/Users';
 
 const log = (data) => {
   if (process.env.DEBUG) {
@@ -46,4 +46,4 @@ const migrate = () => {
   });
 };
 
-module.exports = migrate;
+export default migrate;

@@ -1,7 +1,7 @@
-const Datastore = require('nedb');
-const path = require('path');
+import Datastore from 'nedb';
+import path from 'path';
 
-const config = require('../../config');
+import config from '../../config';
 
 const MAX_NEXT_ERA_UPDATE_INTERVAL = 1000 * 60 * 60 * 12; // 12 hours
 const CUMULATIVE_DATA_BUFFER_DIFF = 500; // 500 miliseconds
@@ -202,4 +202,4 @@ upAvg: ${upAvg}`,
   }
 }
 
-module.exports = HistoryEra;
+export default HistoryEra;

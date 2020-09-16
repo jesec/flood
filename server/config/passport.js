@@ -1,10 +1,10 @@
-const JwtStrategy = require('passport-jwt').Strategy;
+import {Strategy as JwtStrategy} from 'passport-jwt';
 
-const config = require('../../config');
-const Users = require('../models/Users');
+import config from '../../config';
+import Users from '../models/Users';
 
 // Setup work and export for the JWT passport strategy.
-module.exports = (passport) => {
+export default (passport) => {
   const options = {
     jwtFromRequest: (req) => {
       let token = null;

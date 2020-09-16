@@ -1,5 +1,5 @@
-const objectUtil = require('../../shared/util/objectUtil');
+import objectUtil from '../../shared/util/objectUtil';
 
 const diskUsageServiceEvents = ['DISK_USAGE_CHANGE'];
 
-module.exports = objectUtil.createSymbolMapFromArray(diskUsageServiceEvents);
+export default objectUtil.createSymbolMapFromArray(diskUsageServiceEvents);

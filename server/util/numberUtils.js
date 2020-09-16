@@ -3,4 +3,4 @@ const truncateTo = (num, precision = 0) => {
   return Math.floor(num * factor) / factor;
 };
 
-module.exports = truncateTo;
+export default truncateTo;

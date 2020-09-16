@@ -1,16 +1,16 @@
-const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
-const historyServiceEvents = require('../constants/historyServiceEvents');
-const historySnapshotTypes = require('../../shared/constants/historySnapshotTypes');
-const notificationServiceEvents = require('../constants/notificationServiceEvents');
-const ServerEvent = require('../models/ServerEvent');
-const serverEventTypes = require('../../shared/constants/serverEventTypes');
-const services = require('../services');
-const taxonomyServiceEvents = require('../constants/taxonomyServiceEvents');
-const torrentServiceEvents = require('../constants/torrentServiceEvents');
-const diskUsageServiceEvents = require('../constants/diskUsageServiceEvents');
-const DiskUsageService = require('../services/diskUsageService');
+import clientGatewayServiceEvents from '../constants/clientGatewayServiceEvents';
+import historyServiceEvents from '../constants/historyServiceEvents';
+import historySnapshotTypes from '../../shared/constants/historySnapshotTypes';
+import notificationServiceEvents from '../constants/notificationServiceEvents';
+import ServerEvent from '../models/ServerEvent';
+import serverEventTypes from '../../shared/constants/serverEventTypes';
+import services from '../services';
+import taxonomyServiceEvents from '../constants/taxonomyServiceEvents';
+import torrentServiceEvents from '../constants/torrentServiceEvents';
+import diskUsageServiceEvents from '../constants/diskUsageServiceEvents';
+import DiskUsageService from '../services/diskUsageService';
 
-module.exports = (req, res) => {
+export default (req, res) => {
   const {
     query: {historySnapshot = historySnapshotTypes.FIVE_MINUTE},
     user,

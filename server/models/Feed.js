@@ -1,4 +1,4 @@
-const FeedSub = require('feedsub');
+import FeedSub from 'feedsub';
 
 class Feed {
   constructor(options) {
@@ -71,4 +71,4 @@ class Feed {
   }
 }
 
-module.exports = Feed;
+export default Feed;

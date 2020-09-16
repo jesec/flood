@@ -1,8 +1,8 @@
-const BaseService = require('./BaseService');
-const clientGatewayServiceEvents = require('../constants/clientGatewayServiceEvents');
-const objectUtil = require('../../shared/util/objectUtil');
-const taxonomyServiceEvents = require('../constants/taxonomyServiceEvents');
-const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
+import BaseService from './BaseService';
+import clientGatewayServiceEvents from '../constants/clientGatewayServiceEvents';
+import objectUtil from '../../shared/util/objectUtil';
+import taxonomyServiceEvents from '../constants/taxonomyServiceEvents';
+import torrentStatusMap from '../../shared/constants/torrentStatusMap';
 
 class TaxonomyService extends BaseService {
   constructor(...serviceConfig) {
@@ -130,4 +130,4 @@ class TaxonomyService extends BaseService {
   }
 }
 
-module.exports = TaxonomyService;
+export default TaxonomyService;

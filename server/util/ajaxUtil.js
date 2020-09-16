@@ -18,4 +18,4 @@ const ajaxUtil = {
   },
 };
 
-module.exports = ajaxUtil;
+export default ajaxUtil;

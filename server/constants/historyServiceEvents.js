@@ -1,5 +1,5 @@
-const historySnapshotTypes = require('../../shared/constants/historySnapshotTypes');
-const objectUtil = require('../../shared/util/objectUtil');
+import historySnapshotTypes from '../../shared/constants/historySnapshotTypes';
+import objectUtil from '../../shared/util/objectUtil';
 
 const torrentServiceEvents = [
   'FETCH_TRANSFER_SUMMARY_ERROR',
@@ -14,4 +14,4 @@ const torrentServiceEvents = [
   }, []),
 );
 
-module.exports = objectUtil.createSymbolMapFromArray(torrentServiceEvents);
+export default objectUtil.createSymbolMapFromArray(torrentServiceEvents);

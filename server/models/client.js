@@ -1,19 +1,19 @@
-const fs = require('fs');
-const path = require('path');
-const sanitize = require('sanitize-filename');
-const series = require('run-series');
-const tar = require('tar-stream');
+import fs from 'fs';
+import path from 'path';
+import sanitize from 'sanitize-filename';
+import series from 'run-series';
+import tar from 'tar-stream';
 
-const ClientRequest = require('./ClientRequest');
-const clientResponseUtil = require('../util/clientResponseUtil');
-const {clientSettingsMap} = require('../../shared/constants/clientSettingsMap');
-const fileUtil = require('../util/fileUtil');
-const settings = require('./settings');
-const torrentFilePropsMap = require('../../shared/constants/torrentFilePropsMap');
-const torrentPeerPropsMap = require('../../shared/constants/torrentPeerPropsMap');
-const torrentFileUtil = require('../util/torrentFileUtil');
-const torrentStatusMap = require('../../shared/constants/torrentStatusMap');
-const torrentTrackerPropsMap = require('../../shared/constants/torrentTrackerPropsMap');
+import ClientRequest from './ClientRequest';
+import clientResponseUtil from '../util/clientResponseUtil';
+import {clientSettingsMap} from '../../shared/constants/clientSettingsMap';
+import fileUtil from '../util/fileUtil';
+import settings from './settings';
+import torrentFilePropsMap from '../../shared/constants/torrentFilePropsMap';
+import torrentPeerPropsMap from '../../shared/constants/torrentPeerPropsMap';
+import torrentFileUtil from '../util/torrentFileUtil';
+import torrentStatusMap from '../../shared/constants/torrentStatusMap';
+import torrentTrackerPropsMap from '../../shared/constants/torrentTrackerPropsMap';
 
 const client = {
   addFiles(user, services, req, callback) {
@@ -432,4 +432,4 @@ const client = {
   },
 };
 
-module.exports = client;
+export default client;

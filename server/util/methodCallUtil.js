@@ -25,4 +25,4 @@ const methodCallUtil = {
   },
 };
 
-module.exports = methodCallUtil;
+export default methodCallUtil;

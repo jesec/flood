@@ -1,8 +1,8 @@
-const _ = require('lodash');
-const Datastore = require('nedb');
-const path = require('path');
+import _ from 'lodash';
+import Datastore from 'nedb';
+import path from 'path';
 
-const config = require('../../config');
+import config from '../../config';
 
 const databases = new Map();
 
@@ -135,4 +135,4 @@ const settings = {
   },
 };
 
-module.exports = settings;
+export default settings;

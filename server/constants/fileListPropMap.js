@@ -31,4 +31,4 @@ fileListPropMap.set('completedChunks', {
   transformValue: Number,
 });
 
-module.exports = fileListPropMap;
+export default fileListPropMap;

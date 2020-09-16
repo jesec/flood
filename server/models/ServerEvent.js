@@ -29,4 +29,4 @@ class ServerEvent {
   }
 }
 
-module.exports = ServerEvent;
+export default ServerEvent;
