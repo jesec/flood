@@ -47,8 +47,8 @@ node_modules/
 # Personal flood config
 config.js
 
-# Static assets
-dist/assets
+# Distribution files
+dist/
 
 # Runtime files
 run/

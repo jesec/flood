@@ -1,5 +1,12 @@
 module.exports = {
-  extends: ['airbnb', 'plugin:import/errors', 'plugin:import/warnings', 'prettier'],
+  extends: [
+    'airbnb',
+    'plugin:import/errors',
+    'plugin:import/warnings',
+    'plugin:import/typescript',
+    'prettier',
+    'prettier/@typescript-eslint',
+  ],
   parser: 'babel-eslint',
   plugins: ['import'],
   rules: {
@@ -51,11 +58,14 @@ module.exports = {
   overrides: [
     {
       files: ['*.ts', '*.tsx', '**/*.ts', '**/*.tsx'],
-      parser: '@typescript-eslint/parser',
-      plugins: ['import', '@typescript-eslint/eslint-plugin'],
+      extends: ['plugin:@typescript-eslint/recommended', 'prettier', 'prettier/@typescript-eslint'],
       rules: {
         'no-unused-vars': 0,
-        '@typescript-eslint/no-unused-vars': 1,
+        '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
+        // TODO: Explicit return type
+        '@typescript-eslint/explicit-function-return-type': 0,
+        // TODO: Re-enable after everything is module
+        '@typescript-eslint/no-var-requires': 0,
       },
     },
   ],

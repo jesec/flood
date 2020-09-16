@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-const chalk = require('chalk');
+import chalk from 'chalk';
 
-const enforcePrerequisites = require('./enforce-prerequisites');
-const migrateData = require('./migrations/run');
-const {startWebServer} = require('./web-server');
+import enforcePrerequisites from './enforce-prerequisites';
+import migrateData from './migrations/run';
+import {startWebServer} from './web-server';
 
 enforcePrerequisites()
   .then(migrateData)
