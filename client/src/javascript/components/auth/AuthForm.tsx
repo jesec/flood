@@ -15,7 +15,7 @@ interface AuthFormProps extends WrappedComponentProps {
   error?: Error;
 }
 
-interface AuthFormStates {
+interface AuthFormStates extends Record<string, unknown> {
   isSubmitting: boolean;
 }
 

@@ -9,7 +9,7 @@ interface SelectTorrentOptions {
   torrentList: Array<TorrentProperties>;
 }
 
-export function selectTorrents(options: SelectTorrentOptions): string[] {
+function selectTorrents(options: SelectTorrentOptions): string[] {
   if (options.event.shiftKey) {
     if (options.selectedTorrents.length) {
       const lastHash = options.selectedTorrents[options.selectedTorrents.length - 1];
@@ -65,7 +65,7 @@ export function selectTorrents(options: SelectTorrentOptions): string[] {
         currentHashIndex += increment;
       }
     } else {
-      options.selectedTorrents = [options.hash];
+      return [options.hash];
     }
   } else if (options.event.metaKey || options.event.ctrlKey) {
     const hashPosition = options.selectedTorrents.indexOf(options.hash);
@@ -78,7 +78,9 @@ export function selectTorrents(options: SelectTorrentOptions): string[] {
     }
   } else {
     // clicked torrent is only item in list.
-    options.selectedTorrents = [options.hash];
+    return [options.hash];
   }
   return options.selectedTorrents;
 }
+
+export default selectTorrents;

@@ -4,7 +4,7 @@ import {Route} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import {AsyncIntlProvider} from './i18n/languages';
+import AsyncIntlProvider from './i18n/languages';
 import connectStores from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
@@ -25,15 +25,19 @@ interface FloodAppProps {
 }
 
 const initialize = (): void => {
-  UIStore.registerDependency({
-    id: 'notifications',
-    message: <FormattedMessage id="dependency.loading.notifications" />,
-  });
+  UIStore.registerDependency([
+    {
+      id: 'notifications',
+      message: <FormattedMessage id="dependency.loading.notifications" />,
+    },
+  ]);
 
-  UIStore.registerDependency({
-    id: 'torrent-taxonomy',
-    message: <FormattedMessage id="dependency.loading.torrent.taxonomy" />,
-  });
+  UIStore.registerDependency([
+    {
+      id: 'torrent-taxonomy',
+      message: <FormattedMessage id="dependency.loading.torrent.taxonomy" />,
+    },
+  ]);
 
   UIStore.registerDependency([
     {
@@ -46,10 +50,12 @@ const initialize = (): void => {
     },
   ]);
 
-  UIStore.registerDependency({
-    id: 'torrent-list',
-    message: <FormattedMessage id="dependency.loading.torrent.list" />,
-  });
+  UIStore.registerDependency([
+    {
+      id: 'torrent-list',
+      message: <FormattedMessage id="dependency.loading.torrent.list" />,
+    },
+  ]);
 
   AuthActions.verify().then(
     ({initialUser}: {initialUser?: boolean}): void => {

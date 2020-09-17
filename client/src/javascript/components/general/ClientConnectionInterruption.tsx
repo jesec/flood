@@ -102,7 +102,7 @@ class ClientConnectionInterruption extends React.Component<
     );
   }
 
-  renderFormError() {
+  renderFormError(): React.ReactNode {
     const {hasTestedConnection, isConnectionVerified, isTestingConnection} = this.state;
     if (hasTestedConnection && !isConnectionVerified) {
       return (
@@ -113,6 +113,7 @@ class ClientConnectionInterruption extends React.Component<
         </FormRow>
       );
     }
+    return undefined;
   }
 
   render() {

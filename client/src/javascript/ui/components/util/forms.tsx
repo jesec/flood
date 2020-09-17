@@ -23,22 +23,23 @@ export const getDataFromForm = (form: HTMLFormElement) => {
   return Array.from(form.elements).reduce((formData: Record<string, unknown>, element) => {
     const inputElement = element as HTMLInputElement;
     const {name, type, value} = inputElement;
+    const retForm = formData;
 
     if (!name || type === 'button' || type === 'submit' || type === 'reset') {
-      return formData;
+      return retForm;
     }
 
     if (type === 'checkbox') {
-      formData[name] = inputElement.checked;
+      retForm[name] = inputElement.checked;
     } else if (type !== 'radio') {
-      formData[name] = value;
+      retForm[name] = value;
     } else if (type === 'radio' && !inputElement.checked && formData[name] === undefined) {
-      formData[name] = null;
+      retForm[name] = null;
     } else if (type === 'radio' && inputElement.checked) {
-      formData[name] = value;
+      retForm[name] = value;
     }
 
-    return formData;
+    return retForm;
   }, {});
 };
 

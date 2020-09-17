@@ -17,7 +17,7 @@ export type ButtonProps = Pick<React.ButtonHTMLAttributes<HTMLButtonElement>, 'd
 
   wrap?: boolean;
   wrapper?: string | React.FunctionComponent;
-  wrapperProps?: object;
+  wrapperProps?: Record<string, unknown>;
   grow?: boolean;
   shrink?: boolean;
 };

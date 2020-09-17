@@ -17,7 +17,7 @@ import {
 } from '../../../ui';
 import Edit from '../../icons/Edit';
 import Close from '../../icons/Close';
-import FeedsStore from '../../../stores/FeedsStore';
+import FeedsStore, {FeedsStoreClass} from '../../../stores/FeedsStore';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import * as validators from '../../../util/validators';
 import UIActions from '../../../actions/UIActions';
@@ -41,7 +41,7 @@ interface FeedsTabProps extends WrappedComponentProps {
   items: Items;
 }
 
-interface FeedsTabStates {
+interface FeedsTabStates extends Record<string, unknown> {
   errors?: {
     [field in ValidatedFields]?: string;
   };
@@ -310,7 +310,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     );
   }
 
-  getFeedAddForm(errors: Array<object | null> | null) {
+  getFeedAddForm(errors: React.ReactNode) {
     return (
       <Form
         className="inverse"
@@ -425,9 +425,9 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
 
       if (formData != null) {
         if (currentFeed === defaultFeed) {
-          FeedsStore.addFeed(formData);
+          FeedsStoreClass.addFeed(formData);
         } else if (currentFeed != null && currentFeed._id != null) {
-          FeedsStore.modifyFeed(currentFeed._id, formData);
+          FeedsStoreClass.modifyFeed(currentFeed._id, formData);
         }
       }
       if (this.formRef != null) {
@@ -451,7 +451,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
 
   handleRemoveFeedClick = (feed: Feed) => {
     if (feed._id != null) {
-      FeedsStore.removeFeed(feed._id);
+      FeedsStoreClass.removeFeed(feed._id);
     }
 
     if (feed === this.state.currentlyEditingFeed) {
@@ -474,7 +474,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     const feedBrowseForm = input.formData as {feedID: string; search: string};
     if ((input.event.target as HTMLInputElement).type !== 'checkbox') {
       this.setState({selectedFeedID: feedBrowseForm.feedID});
-      FeedsStore.fetchItems({params: {id: feedBrowseForm.feedID, search: feedBrowseForm.search}});
+      FeedsStoreClass.fetchItems({params: {id: feedBrowseForm.feedID, search: feedBrowseForm.search}});
     }
   };
 
@@ -483,7 +483,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
       return;
     }
 
-    const formData = this.manualAddingFormRef.getFormData() as Record<string, object>;
+    const formData = this.manualAddingFormRef.getFormData();
 
     const downloadedTorrents = this.props.items
       .filter((item, index) => formData[index])
@@ -497,16 +497,17 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
       return {isValid: false};
     }
 
-    const formData = this.formRef.getFormData() as Record<string, object>;
+    const formData = this.formRef.getFormData();
     const errors = Object.keys(this.validatedFields).reduce((memo: FeedsTabStates['errors'], field) => {
       const fieldName = field as ValidatedFields;
       const fieldValue = `${formData[fieldName]}`;
 
-      if (!this.validatedFields[fieldName].isValid(fieldValue) && memo != null) {
-        memo[fieldName] = this.validatedFields[fieldName].error;
-      }
-
-      return memo;
+      return {
+        ...memo,
+        ...(!this.validatedFields[fieldName].isValid(fieldValue) && memo != null
+          ? {fieldName: this.validatedFields[fieldName].error}
+          : {}),
+      };
     }, {});
 
     if (errors == null) {

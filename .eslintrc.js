@@ -59,12 +59,18 @@ module.exports = {
   overrides: [
     {
       files: ['*.ts', '*.tsx', '**/*.ts', '**/*.tsx'],
-      extends: ['plugin:@typescript-eslint/recommended', 'prettier', 'prettier/@typescript-eslint'],
+      extends: ['airbnb-typescript', 'plugin:@typescript-eslint/recommended', 'prettier', 'prettier/@typescript-eslint'],
+      parserOptions: {
+        project: './tsconfig.json'
+      },
       rules: {
+        'no-underscore-dangle': [2, {allow: ['_id']}],
         'no-unused-vars': 0,
+        '@typescript-eslint/lines-between-class-members': ['error', 'always', {exceptAfterSingleLine: true}],
         '@typescript-eslint/no-unused-vars': ['error', {argsIgnorePattern: '^_'}],
         // TODO: Explicit return type
         '@typescript-eslint/explicit-function-return-type': 0,
+        "@typescript-eslint/explicit-module-boundary-types": 0,
         // TODO: Re-enable after everything is module
         '@typescript-eslint/no-var-requires': 0,
       },

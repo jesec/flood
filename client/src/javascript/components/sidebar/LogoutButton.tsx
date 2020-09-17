@@ -13,7 +13,7 @@ const MESSAGES = defineMessages({
 });
 
 class LogoutButton extends React.Component<WrappedComponentProps> {
-  handleLogoutClick() {
+  static handleLogoutClick() {
     AuthActions.logout().then(() => {
       window.location.reload();
     });
@@ -26,7 +26,7 @@ class LogoutButton extends React.Component<WrappedComponentProps> {
     return (
       <Tooltip
         content={this.props.intl.formatMessage(MESSAGES.logOut)}
-        onClick={this.handleLogoutClick}
+        onClick={LogoutButton.handleLogoutClick}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__action--last
           sidebar__icon-button sidebar__icon-button--interactive

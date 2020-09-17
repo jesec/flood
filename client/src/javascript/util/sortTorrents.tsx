@@ -4,7 +4,7 @@ import type {Duration, Torrents, TorrentProperties} from '../stores/TorrentStore
 
 const stringProps = ['basePath', 'comment', 'hash', 'message', 'name'];
 
-export function sortTorrents(torrentsHash: Torrents, sortBy: FloodSettings['sortTorrents']) {
+function sortTorrents(torrentsHash: Torrents, sortBy: FloodSettings['sortTorrents']) {
   const torrents = Object.keys(torrentsHash).map((hash) => ({...torrentsHash[hash]}));
 
   if (torrents.length) {
@@ -78,3 +78,5 @@ export function sortTorrents(torrentsHash: Torrents, sortBy: FloodSettings['sort
   }
   return torrents;
 }
+
+export default sortTorrents;

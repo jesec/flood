@@ -25,9 +25,10 @@ const normalizePort = (val: string | number): string | number => {
 
   console.error('Unexpected port or pipe');
   process.exit(1);
+  return 0;
 };
 
-export const startWebServer = () => {
+const startWebServer = () => {
   const port = normalizePort(config.floodServerPort);
   const host = config.floodServerHost;
   const useSSL = config.ssl;
@@ -106,3 +107,5 @@ export const startWebServer = () => {
     console.log(chalk.yellow('Starting without builtin authentication\n'));
   }
 };
+
+export default startWebServer;

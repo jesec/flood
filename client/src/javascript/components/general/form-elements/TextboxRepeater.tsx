@@ -28,7 +28,8 @@ export default class TextboxRepeater extends React.PureComponent<TextboxRepeater
   }
 
   getID() {
-    return ++this.idCounter;
+    this.idCounter += 1;
+    return this.idCounter;
   }
 
   getTextboxes = () =>

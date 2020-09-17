@@ -66,10 +66,9 @@ module.exports = {
             loader: 'postcss-loader',
             options: {
               sourceMap: true,
-              // Necessary for external CSS imports to work
-              // https://github.com/facebookincubator/create-react-app/issues/2677
-              ident: 'postcss',
-              plugins: () => [autoprefixer()],
+              postcssOptions: {
+                plugins: () => [autoprefixer()],
+              },
             },
           },
           {

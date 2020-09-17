@@ -199,7 +199,7 @@ class SettingsStoreClass extends BaseStore {
     }
   }
 
-  saveFloodSettings(settings: SettingUpdatesFlood, options: object = {}) {
+  saveFloodSettings(settings: SettingUpdatesFlood, options: Record<string, unknown> = {}) {
     SettingsActions.saveSettings(settings, options);
     settings.forEach(<P extends FloodSetting, V extends FloodSettings[P]>({id, data}: {id: P; data: V}) => {
       this.floodSettings[id] = data;
@@ -207,21 +207,17 @@ class SettingsStoreClass extends BaseStore {
     this.emit('SETTINGS_CHANGE');
   }
 
-  saveClientSettings(settings: SettingUpdatesClient, options: object = {}) {
-    // Special case:
-    // DHT mode uses different set and get methods. (rTorrent's problem)
-    // TODO: This is cleaner than previous solution but it is still dirty.
-    // It is totally nonsense that dht.mode.set sets DHT mode but dht.mode doesn't work.
-    const dhtSetting = settings.find(({id}) => id === 'dht');
-    if (dhtSetting != null) {
-      settings = settings.concat({
-        id: 'dhtStats',
-        data: {dht: dhtSetting.data},
-      });
-    }
-
+  saveClientSettings(settings: SettingUpdatesClient, options: Record<string, unknown> = {}) {
     ClientActions.saveSettings(settings, options);
     settings.forEach(<P extends ClientSetting, V extends ClientSettings[P]>({id, data}: {id: P; data: V}) => {
+      if (id === 'dht') {
+        // Special case:
+        // DHT mode uses different set and get methods. (rTorrent's problem)
+        // TODO: This is cleaner than previous solution but it is still dirty.
+        // It is totally nonsense that dht.mode.set sets DHT mode but dht.mode doesn't work.
+        this.clientSettings.dhtStats = {dht: data};
+        return;
+      }
       this.clientSettings[id] = data;
     });
     this.emit('SETTINGS_CHANGE');

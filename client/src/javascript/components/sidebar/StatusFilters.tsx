@@ -21,7 +21,7 @@ interface StatusFiltersProps extends WrappedComponentProps {
 }
 
 class StatusFilters extends React.Component<StatusFiltersProps> {
-  handleClick(filter: string) {
+  static handleClick(filter: string) {
     UIActions.setTorrentStatusFilter(filter);
   }
 
@@ -94,7 +94,7 @@ class StatusFilters extends React.Component<StatusFiltersProps> {
 
     const filterElements = filters.map((filter) => (
       <SidebarFilter
-        handleClick={this.handleClick}
+        handleClick={StatusFilters.handleClick}
         count={(this.props.statusCount != null && this.props.statusCount[filter.slug]) || 0}
         key={filter.slug}
         icon={filter.icon}
@@ -121,29 +121,32 @@ class StatusFilters extends React.Component<StatusFiltersProps> {
   }
 }
 
-const ConnectedStatusFilters = connectStores<Omit<StatusFiltersProps, 'intl'>>(injectIntl(StatusFilters), () => {
-  return [
-    {
-      store: TorrentFilterStore,
-      event: 'CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS',
-      getValue: ({store}) => {
-        const storeTorrentFilter = store as typeof TorrentFilterStore;
-        return {
-          statusCount: storeTorrentFilter.getTorrentStatusCount(),
-        };
+const ConnectedStatusFilters = connectStores<Omit<StatusFiltersProps, 'intl'>, Record<string, unknown>>(
+  injectIntl(StatusFilters),
+  () => {
+    return [
+      {
+        store: TorrentFilterStore,
+        event: 'CLIENT_FETCH_TORRENT_TAXONOMY_SUCCESS',
+        getValue: ({store}) => {
+          const storeTorrentFilter = store as typeof TorrentFilterStore;
+          return {
+            statusCount: storeTorrentFilter.getTorrentStatusCount(),
+          };
+        },
       },
-    },
-    {
-      store: TorrentFilterStore,
-      event: 'UI_TORRENTS_FILTER_STATUS_CHANGE',
-      getValue: ({store}) => {
-        const storeTorrentFilter = store as typeof TorrentFilterStore;
-        return {
-          statusFilter: storeTorrentFilter.getStatusFilter(),
-        };
+      {
+        store: TorrentFilterStore,
+        event: 'UI_TORRENTS_FILTER_STATUS_CHANGE',
+        getValue: ({store}) => {
+          const storeTorrentFilter = store as typeof TorrentFilterStore;
+          return {
+            statusFilter: storeTorrentFilter.getStatusFilter(),
+          };
+        },
       },
-    },
-  ];
-});
+    ];
+  },
+);
 
 export default ConnectedStatusFilters;

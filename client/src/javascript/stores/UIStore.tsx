@@ -132,11 +132,7 @@ class UIStoreClass extends BaseStore {
     this.applyStyles();
   }
 
-  registerDependency(dependencies: Array<Omit<Dependency, 'satisfied'>> | Omit<Dependency, 'satisfied'>) {
-    if (!Array.isArray(dependencies)) {
-      dependencies = [dependencies];
-    }
-
+  registerDependency(dependencies: Array<Omit<Dependency, 'satisfied'>>) {
     dependencies.forEach((dependency) => {
       const {id} = dependency;
 

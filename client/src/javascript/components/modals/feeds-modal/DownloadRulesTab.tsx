@@ -19,7 +19,7 @@ import connectStores from '../../../util/connectStores';
 import Edit from '../../icons/Edit';
 import Checkmark from '../../icons/Checkmark';
 import Close from '../../icons/Close';
-import FeedsStore from '../../../stores/FeedsStore';
+import FeedsStore, {FeedsStoreClass} from '../../../stores/FeedsStore';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import * as validators from '../../../util/validators';
@@ -38,7 +38,7 @@ interface DownloadRulesTabProps extends WrappedComponentProps {
   rules: Rules;
 }
 
-interface DownloadRulesTabStates {
+interface DownloadRulesTabStates extends Record<string, unknown> {
   errors?: {
     [field in ValidatedFields]?: string;
   };
@@ -421,9 +421,9 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
 
       if (formData != null) {
         if (currentRule !== null && currentRule !== defaultRule && currentRule._id != null) {
-          FeedsStore.removeRule(currentRule._id);
+          FeedsStoreClass.removeRule(currentRule._id);
         }
-        FeedsStore.addRule(formData);
+        FeedsStoreClass.addRule(formData);
       }
 
       if (this.formRef != null) {
@@ -436,7 +436,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
 
   handleRemoveRuleClick(rule: Rule) {
     if (rule._id != null) {
-      FeedsStore.removeRule(rule._id);
+      FeedsStoreClass.removeRule(rule._id);
     }
 
     if (rule === this.state.currentlyEditingRule) {

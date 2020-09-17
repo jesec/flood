@@ -35,6 +35,10 @@ const MESSAGES = defineMessages({
 });
 
 class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
+  static handleItemSelect(item: DropdownItem) {
+    ClientActions.setThrottle(item.property, item.value);
+  }
+
   tooltipRef: Tooltip | null = null;
 
   getDropdownHeader(): React.ReactNode {
@@ -88,7 +92,6 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
 
     const items: Array<DropdownItem> = speeds.map((bytes) => {
       let selected = false;
-      bytes = Number(bytes);
 
       // Check if the current throttle setting exists in the preset speeds list.
       // Determine if we need to add the current throttle setting to the menu.
@@ -137,15 +140,11 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
     }
   };
 
-  handleItemSelect(item: DropdownItem) {
-    ClientActions.setThrottle(item.property, item.value);
-  }
-
   render() {
     return (
       <Dropdown
         dropdownWrapperClass="dropdown dropdown--speed-limits sidebar__action"
-        handleItemSelect={this.handleItemSelect}
+        handleItemSelect={SpeedLimitDropdown.handleItemSelect}
         header={this.getDropdownHeader()}
         menuItems={this.getDropdownMenus()}
         onOpen={this.handleDropdownOpen}

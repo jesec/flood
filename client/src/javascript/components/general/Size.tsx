@@ -16,7 +16,7 @@ class Size extends React.Component<SizeProps> {
     precision: 2,
   };
 
-  renderNumber(computedNumber: ReturnType<typeof compute>) {
+  static renderNumber(computedNumber: ReturnType<typeof compute>) {
     if (Number.isNaN(computedNumber.value)) {
       return '—';
     }
@@ -43,7 +43,7 @@ class Size extends React.Component<SizeProps> {
 
     return (
       <span className={className}>
-        {this.renderNumber(computed)}
+        {Size.renderNumber(computed)}
         <em className="unit">{translatedUnit}</em>
       </span>
     );

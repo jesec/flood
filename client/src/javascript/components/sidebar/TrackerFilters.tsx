@@ -12,6 +12,10 @@ interface TrackerFiltersProps {
 }
 
 class TrackerFilters extends React.Component<TrackerFiltersProps> {
+  static handleClick(filter: string): void {
+    UIActions.setTorrentTrackerFilter(filter);
+  }
+
   getFilters(): React.ReactNode {
     if (this.props.trackerCount == null) {
       return null;
@@ -30,7 +34,7 @@ class TrackerFilters extends React.Component<TrackerFiltersProps> {
 
     const filterElements = filterItems.map((filter) => (
       <SidebarFilter
-        handleClick={this.handleClick}
+        handleClick={TrackerFilters.handleClick}
         count={(this.props.trackerCount != null && this.props.trackerCount[filter]) || 0}
         key={filter}
         isActive={filter === this.props.trackerFilter}
@@ -40,10 +44,6 @@ class TrackerFilters extends React.Component<TrackerFiltersProps> {
     ));
 
     return filterElements;
-  }
-
-  handleClick(filter: string): void {
-    UIActions.setTorrentTrackerFilter(filter);
   }
 
   hasTrackers(): boolean {

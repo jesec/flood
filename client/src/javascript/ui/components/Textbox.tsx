@@ -25,7 +25,7 @@ export default class Textbox extends Component<TextboxProps> {
     type: 'text',
   };
 
-  getLabel() {
+  getLabel(): React.ReactNode {
     if (this.props.label) {
       return (
         <label className="form__element__label" htmlFor={this.props.id}>
@@ -33,6 +33,7 @@ export default class Textbox extends Component<TextboxProps> {
         </label>
       );
     }
+    return undefined;
   }
 
   render() {
@@ -40,7 +41,7 @@ export default class Textbox extends Component<TextboxProps> {
     const children = React.Children.map(this.props.children, (child) => {
       const childAsElement = child as React.ReactElement;
       if (childAsElement && childAsElement.type === FormElementAddon) {
-        addonCount++;
+        addonCount += 1;
         return React.cloneElement(childAsElement, {
           addonIndex: addonCount,
           addonPlacement: this.props.addonPlacement,

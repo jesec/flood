@@ -47,7 +47,7 @@ class AuthTab extends SettingsTab {
         removeIcon = (
           <span
             className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-            onClick={this.handleDeleteUserClick.bind(this, user.username)}>
+            onClick={AuthTab.handleDeleteUserClick.bind(this, user.username)}>
             <Close />
           </span>
         );
@@ -75,7 +75,7 @@ class AuthTab extends SettingsTab {
     });
   }
 
-  handleDeleteUserClick(username: UserConfig['username']) {
+  static handleDeleteUserClick(username: UserConfig['username']) {
     AuthActions.deleteUser(username).then(AuthActions.fetchUsers);
   }
 

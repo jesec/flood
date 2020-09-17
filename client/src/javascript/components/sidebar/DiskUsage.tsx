@@ -15,7 +15,7 @@ interface DiskUsageProps {
   mountPoints?: Array<string>;
 }
 
-const DiskUsageTooltipItem = ({label, value}: {label: object; value: number}) => {
+const DiskUsageTooltipItem = ({label, value}: {label: React.ReactNode; value: number}) => {
   return (
     <li className="diskusage__details-list__item">
       <label className="diskusage__details-list__label">{label}</label>
@@ -33,8 +33,10 @@ class DiskUsage extends React.Component<DiskUsageProps> {
     }
 
     const diskMap = disks.reduce((disksByTarget: Record<string, Disk>, disk: Disk) => {
-      disksByTarget[disk.target] = disk;
-      return disksByTarget;
+      return {
+        ...disksByTarget,
+        [disk.target]: disk,
+      };
     }, {});
 
     return mountPoints

@@ -5,10 +5,10 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import ConfigStore from './ConfigStore';
 import {filterTorrents} from '../util/filterTorrents';
-import {searchTorrents} from '../util/searchTorrents';
-import {selectTorrents} from '../util/selectTorrents';
+import searchTorrents from '../util/searchTorrents';
+import selectTorrents from '../util/selectTorrents';
 import SettingsStore from './SettingsStore';
-import {sortTorrents} from '../util/sortTorrents';
+import sortTorrents from '../util/sortTorrents';
 import TorrentActions from '../actions/TorrentActions';
 import TorrentFilterStore from './TorrentFilterStore';
 import UIStore from './UIStore';
@@ -281,7 +281,7 @@ class TorrentStoreClass extends BaseStore {
     });
   }
 
-  handleRemoveTorrentsSuccess(response: {count: number; deleteData: boolean}) {
+  static handleRemoveTorrentsSuccess(response: {count: number; deleteData: boolean}) {
     SettingsStore.setFloodSetting('deleteTorrentData', response.deleteData);
 
     AlertStore.add({
@@ -293,7 +293,7 @@ class TorrentStoreClass extends BaseStore {
     });
   }
 
-  handleRemoveTorrentsError(error: Error & {count: number}) {
+  static handleRemoveTorrentsError(error: Error & {count: number}) {
     AlertStore.add({
       accumulation: {
         id: 'alert.torrent.remove.failed',
@@ -422,10 +422,10 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       TorrentStore.handleMoveTorrentsError(action.error as Error & {count: number});
       break;
     case 'CLIENT_REMOVE_TORRENT_SUCCESS':
-      TorrentStore.handleRemoveTorrentsSuccess(action.data as {count: number; deleteData: boolean});
+      TorrentStoreClass.handleRemoveTorrentsSuccess(action.data as {count: number; deleteData: boolean});
       break;
     case 'CLIENT_REMOVE_TORRENT_ERROR':
-      TorrentStore.handleRemoveTorrentsError(action.error as Error & {count: number});
+      TorrentStoreClass.handleRemoveTorrentsError(action.error as Error & {count: number});
       break;
     case 'CLIENT_SET_FILE_PRIORITY_SUCCESS':
       TorrentStore.handleSetFilePrioritySuccess();

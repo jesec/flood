@@ -45,24 +45,27 @@ class ToggleInput extends Component<ToggleInputProps, ToggleInputStates> {
     };
   }
 
-  getCheckedProp() {
+  getCheckedProp(): React.InputHTMLAttributes<HTMLInputElement>['checked'] {
     // When element is controlled, we provide the checked prop.
     if (this.props.useProps) {
       return this.props.checked != null && this.props.checked;
     }
+    return undefined;
   }
 
-  getDefaultCheckedProp() {
+  getDefaultCheckedProp(): React.InputHTMLAttributes<HTMLInputElement>['defaultChecked'] {
     // When element is uncontrolled, we provide the defaultChecked prop.
     if (!this.props.useProps) {
       return this.props.checked;
     }
+    return undefined;
   }
 
-  getValueProp() {
+  getValueProp(): React.InputHTMLAttributes<HTMLInputElement>['value'] {
     if (this.props.type === 'radio') {
       return this.props.value;
     }
+    return undefined;
   }
 
   handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

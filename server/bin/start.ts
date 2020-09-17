@@ -4,7 +4,7 @@ import chalk from 'chalk';
 
 import enforcePrerequisites from './enforce-prerequisites';
 import migrateData from './migrations/run';
-import {startWebServer} from './web-server';
+import startWebServer from './web-server';
 
 enforcePrerequisites()
   .then(migrateData)

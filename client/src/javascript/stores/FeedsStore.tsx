@@ -35,44 +35,44 @@ export type Feeds = Array<Feed>;
 export type Rules = Array<Rule>;
 export type Items = Array<Item>;
 
-class FeedsStoreClass extends BaseStore {
+export class FeedsStoreClass extends BaseStore {
   feeds: Feeds = [];
   rules: Rules = [];
   items: Items = [];
 
-  addFeed(feed: Feed) {
+  static addFeed(feed: Feed) {
     SettingsActions.addFeed(feed);
   }
 
-  modifyFeed(id: Feed['_id'], feed: Feed) {
+  static modifyFeed(id: Feed['_id'], feed: Feed) {
     SettingsActions.modifyFeed(id, feed);
   }
 
-  addRule(rule: Rule) {
+  static addRule(rule: Rule) {
     SettingsActions.addRule(rule);
   }
 
-  fetchFeedMonitors(query?: string) {
+  static fetchFeedMonitors(query?: string) {
     SettingsActions.fetchFeedMonitors(query);
   }
 
-  fetchFeeds(query: string) {
+  static fetchFeeds(query: string) {
     SettingsActions.fetchFeeds(query);
   }
 
-  fetchItems(query: {params: {id: string; search: string}}) {
+  static fetchItems(query: {params: {id: string; search: string}}) {
     SettingsActions.fetchItems(query);
   }
 
-  fetchRules(query: string) {
+  static fetchRules(query: string) {
     SettingsActions.fetchRules(query);
   }
 
-  removeFeed(id: Feed['_id']) {
+  static removeFeed(id: Feed['_id']) {
     SettingsActions.removeFeedMonitor(id);
   }
 
-  removeRule(id: Rule['_id']) {
+  static removeRule(id: Rule['_id']) {
     SettingsActions.removeFeedMonitor(id);
   }
 
@@ -93,7 +93,7 @@ class FeedsStoreClass extends BaseStore {
   }
 
   handleFeedAddSuccess() {
-    this.fetchFeedMonitors();
+    FeedsStoreClass.fetchFeedMonitors();
     this.emit('SETTINGS_FEED_MONITOR_FEED_ADD_SUCCESS');
   }
 
@@ -102,7 +102,7 @@ class FeedsStoreClass extends BaseStore {
   }
 
   handleFeedModifySuccess() {
-    this.fetchFeedMonitors();
+    FeedsStoreClass.fetchFeedMonitors();
     this.emit('SETTINGS_FEED_MONITOR_FEED_MODIFY_SUCCESS');
   }
 
@@ -111,7 +111,7 @@ class FeedsStoreClass extends BaseStore {
   }
 
   handleRuleAddSuccess() {
-    this.fetchFeedMonitors();
+    FeedsStoreClass.fetchFeedMonitors();
     this.emit('SETTINGS_FEED_MONITOR_RULE_ADD_SUCCESS');
   }
 
@@ -130,7 +130,7 @@ class FeedsStoreClass extends BaseStore {
   }
 
   handleFeedMonitorRemoveSuccess(id: string) {
-    this.fetchFeedMonitors();
+    FeedsStoreClass.fetchFeedMonitors();
     this.emit('SETTINGS_FEED_MONITOR_REMOVE_SUCCESS', id);
   }
 

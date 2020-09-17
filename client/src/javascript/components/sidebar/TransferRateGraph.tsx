@@ -27,6 +27,15 @@ const METHODS_TO_BIND = [
 ] as const;
 
 class TransferRateGraph extends React.Component<TransferRateGraphProps> {
+  private static getGradient(slug: TransferDirection): React.ReactNode {
+    return (
+      <linearGradient id={`graph__gradient--${slug}`} x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop className={`graph__gradient--top graph__gradient--top--${slug}`} offset="0%" />
+        <stop className={`graph__gradient--bottom graph__gradient--bottom--${slug}`} offset="100%" />
+      </linearGradient>
+    );
+  }
+
   lastMouseX?: number;
   xScale?: d3.ScaleLinear<number, number>;
   yScale?: d3.ScaleLinear<number, number>;
@@ -130,15 +139,6 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
     });
 
     this.graphRefs.areDefined = true;
-  }
-
-  private getGradient(slug: TransferDirection): React.ReactNode {
-    return (
-      <linearGradient id={`graph__gradient--${slug}`} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop className={`graph__gradient--top graph__gradient--top--${slug}`} offset="0%" />
-        <stop className={`graph__gradient--bottom graph__gradient--bottom--${slug}`} offset="100%" />
-      </linearGradient>
-    );
   }
 
   private setInspectorCoordinates(slug: TransferDirection, hoverPoint: number): number {
@@ -263,8 +263,8 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
           this.graphRefs.graph = ref;
         }}>
         <defs>
-          {this.getGradient('upload')}
-          {this.getGradient('download')}
+          {TransferRateGraph.getGradient('upload')}
+          {TransferRateGraph.getGradient('download')}
         </defs>
       </svg>
     );

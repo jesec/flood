@@ -8,7 +8,7 @@ const ajaxUtil = {
       }
 
       if (typeof error === 'string') {
-        error = Error(error);
+        res.status(500).json(Error(error));
       }
 
       res.status(500).json(error);

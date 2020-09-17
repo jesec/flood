@@ -2,7 +2,7 @@ import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
 import DownloadRulesTab from './DownloadRulesTab';
-import FeedsStore from '../../../stores/FeedsStore';
+import {FeedsStoreClass} from '../../../stores/FeedsStore';
 import FeedsTab from './FeedsTab';
 import Modal from '../Modal';
 
@@ -12,7 +12,7 @@ interface FeedsModalProps extends WrappedComponentProps {
 
 class FeedsModal extends React.Component<FeedsModalProps> {
   componentDidMount() {
-    FeedsStore.fetchFeedMonitors();
+    FeedsStoreClass.fetchFeedMonitors();
   }
 
   render() {

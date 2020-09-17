@@ -1,3 +1,4 @@
+.eslintrc.js
 /node_modules
 /dist
 **/*.d.ts

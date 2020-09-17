@@ -1,5 +1,4 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
-import AuthActions from '../actions/AuthActions';
 import BaseStore from './BaseStore';
 import ConfigStore from './ConfigStore';
 import FloodActions from '../actions/FloodActions';
@@ -39,10 +38,6 @@ class AuthStoreClass extends BaseStore {
     isInitialUser: false,
     username: null,
   };
-
-  createUser(config: UserConfig) {
-    AuthActions.createUser(config);
-  }
 
   addOptimisticUser(credentials: Credentials) {
     this.optimisticUsers.push({username: credentials.username});
@@ -129,16 +124,20 @@ class AuthStoreClass extends BaseStore {
   }
 
   handleAuthVerificationSuccess(credentials: Credentials) {
+    this.currentUser = {
+      username: credentials.username,
+      isAdmin: credentials.isAdmin,
+      isInitialUser: credentials.initialUser,
+    };
+
     if (credentials.token != null) {
       // Auth is disabled if a token is sent on verification
       ConfigStore.setDisableAuth(true);
-      credentials.initialUser = false;
+      this.currentUser.isInitialUser = false;
     }
-    this.currentUser.username = credentials.username;
-    this.currentUser.isAdmin = credentials.isAdmin;
-    this.currentUser.isInitialUser = credentials.initialUser;
+
     this.isAuthenticating = true;
-    this.isAuthenticated = !credentials.initialUser;
+    this.isAuthenticated = !this.currentUser.isInitialUser;
     this.emit('AUTH_VERIFY_SUCCESS', credentials);
   }
 

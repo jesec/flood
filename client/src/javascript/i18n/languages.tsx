@@ -22,18 +22,24 @@ function getMessages(locale: Exclude<keyof typeof Languages, 'auto'>) {
   if (messagesCache[locale]) {
     return messagesCache[locale];
   }
+  // eslint-disable-next-line @typescript-eslint/no-throw-literal
   throw loadMessages(locale as Exclude<keyof typeof Languages, 'auto' | 'en'>);
 }
 
-export const AsyncIntlProvider = ({locale, children}: {locale?: keyof typeof Languages; children: React.ReactNode}) => {
-  if (locale == null || locale === 'auto') {
-    locale = detectLocale();
+const AsyncIntlProvider = ({locale, children}: {locale?: keyof typeof Languages; children: React.ReactNode}) => {
+  let validatedLocale: Exclude<keyof typeof Languages, 'auto'>;
+  if (locale == null || locale === 'auto' || !Object.prototype.hasOwnProperty.call(Languages, locale)) {
+    validatedLocale = detectLocale();
+  } else {
+    validatedLocale = locale;
   }
 
-  const messages = getMessages(locale as Exclude<keyof typeof Languages, 'auto'>);
+  const messages = getMessages(validatedLocale);
   return (
-    <IntlProvider locale={locale} messages={messages}>
+    <IntlProvider locale={validatedLocale} messages={messages}>
       {children}
     </IntlProvider>
   );
 };
+
+export default AsyncIntlProvider;

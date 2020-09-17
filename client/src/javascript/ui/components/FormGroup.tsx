@@ -5,10 +5,11 @@ import FormRowItem from './FormRowItem';
 import type {FormRowItemProps} from './FormRowItem';
 
 export default class FormRowItemGroup extends Component<{label?: string; width?: FormRowItemProps['width']}> {
-  getLabel() {
+  getLabel(): React.ReactNode {
     if (this.props.label) {
       return <label className="form__element__label">{this.props.label}</label>;
     }
+    return undefined;
   }
 
   render() {

@@ -59,7 +59,7 @@ class NotificationStoreClass extends BaseStore {
     this.emit('NOTIFICATIONS_COUNT_CHANGE', notificationCount);
   }
 
-  handleNotificationsClearSuccess(options: NotificationClearOptions) {
+  static handleNotificationsClearSuccess(options: NotificationClearOptions) {
     FloodActions.fetchNotifications({
       ...options,
       start: 0,
@@ -83,7 +83,7 @@ NotificationStore.dispatcherID = AppDispatcher.register((payload) => {
 
   switch (action.type) {
     case 'FLOOD_CLEAR_NOTIFICATIONS_SUCCESS':
-      NotificationStore.handleNotificationsClearSuccess(action.data as NotificationClearOptions);
+      NotificationStoreClass.handleNotificationsClearSuccess(action.data as NotificationClearOptions);
       break;
     case 'FLOOD_FETCH_NOTIFICATIONS_ERROR':
       NotificationStore.handleNotificationsFetchError();

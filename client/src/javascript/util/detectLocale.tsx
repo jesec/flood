@@ -1,10 +1,10 @@
 import {getUserLocales} from 'get-user-locale';
 import Languages from '../constants/Languages';
 
-let detectedLocale: keyof typeof Languages = 'en';
+let detectedLocale: Exclude<keyof typeof Languages, 'auto'> = 'en';
 let localeDetected = false;
 
-export default function (): keyof typeof Languages {
+function detectLocale(): Exclude<keyof typeof Languages, 'auto'> {
   if (localeDetected) {
     return detectedLocale;
   }
@@ -12,29 +12,32 @@ export default function (): keyof typeof Languages {
   getUserLocales()
     .reverse()
     .forEach((userLocale): void => {
-      switch (userLocale) {
+      let locale = userLocale;
+      switch (locale) {
         // Special handlings for languages with variants
         case 'zh':
         case 'zh-CN':
         case 'zh-SG':
         case 'zh-MY':
-          userLocale = 'zh-Hans';
+          locale = 'zh-Hans';
           break;
         case 'zh-TW':
         case 'zh-HK':
         case 'zh-MO':
-          userLocale = 'zh-Hant';
+          locale = 'zh-Hant';
           break;
         default:
           break;
       }
-      if (Object.prototype.hasOwnProperty.call(Languages, userLocale)) {
-        detectedLocale = userLocale as keyof typeof Languages;
-      } else if (Object.prototype.hasOwnProperty.call(Languages, userLocale.substr(0, 2))) {
+      if (Object.prototype.hasOwnProperty.call(Languages, locale)) {
+        detectedLocale = locale as Exclude<keyof typeof Languages, 'auto'>;
+      } else if (Object.prototype.hasOwnProperty.call(Languages, locale.substr(0, 2))) {
         // In rare cases, user provides a locale (eg. en-US) without fallback (eg. en)
-        detectedLocale = userLocale.substr(0, 2) as keyof typeof Languages;
+        detectedLocale = locale.substr(0, 2) as Exclude<keyof typeof Languages, 'auto'>;
       }
     });
   localeDetected = true;
   return detectedLocale;
 }
+
+export default detectLocale;

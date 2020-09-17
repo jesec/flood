@@ -35,14 +35,17 @@ class AlertStoreClass extends BaseStore {
   }
 
   add(alert: Alert) {
-    alert.duration = alert.duration || DEFAULT_DURATION;
-    alert.id = alert.id || `${Date.now()}`;
+    const newAlert: Alert = {
+      ...alert,
+      id: alert.id || `${Date.now()}`,
+      duration: alert.duration || DEFAULT_DURATION,
+    };
 
-    this.accumulate(alert);
+    this.accumulate(newAlert);
 
-    this.scheduleCleanse(alert);
+    this.scheduleCleanse(newAlert);
 
-    this.alerts[alert.id] = alert;
+    this.alerts[newAlert.id] = newAlert;
 
     this.emit('ALERTS_CHANGE');
   }

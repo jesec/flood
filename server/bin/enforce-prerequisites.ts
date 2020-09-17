@@ -57,7 +57,7 @@ const enforcePrerequisites = () =>
       return;
     }
 
-    return resolve();
+    resolve();
   });
 
 export default enforcePrerequisites;

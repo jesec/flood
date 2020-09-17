@@ -23,30 +23,30 @@ interface ActionBarProps extends WrappedComponentProps {
 }
 
 class ActionBar extends React.Component<ActionBarProps> {
-  handleAddTorrents() {
+  static handleAddTorrents() {
     UIActions.displayModal({id: 'add-torrents'});
   }
 
-  handleRemoveTorrents() {
+  static handleRemoveTorrents() {
     UIActions.displayModal({
       id: 'remove-torrents',
     });
   }
 
-  handleSortChange(sortBy: FloodSettings['sortTorrents']) {
+  static handleSortChange(sortBy: FloodSettings['sortTorrents']) {
     SettingsStore.setFloodSetting('sortTorrents', sortBy);
     UIActions.setTorrentsSort(sortBy);
   }
 
-  handleStart() {
+  static handleStart() {
     TorrentActions.startTorrents(TorrentStore.getSelectedTorrents());
   }
 
-  handleStop() {
+  static handleStop() {
     TorrentActions.stopTorrents(TorrentStore.getSelectedTorrents());
   }
 
-  handleSidebarChange() {
+  static handleSidebarChange() {
     const view = document.getElementsByClassName('application__view')[0];
     if (view != null) {
       view.classList.toggle('application__view--sidebar-alternative-state');
@@ -65,14 +65,14 @@ class ActionBar extends React.Component<ActionBarProps> {
             label="actionbar.button.sidebar.expand.collapse"
             slug="sidebar-expand-collapse"
             icon={<MenuIcon />}
-            clickHandler={this.handleSidebarChange}
+            clickHandler={ActionBar.handleSidebarChange}
             noTip
           />
         </div>
         <div className="actions action-bar__item action-bar__item--sort-torrents">
           <SortDropdown
             direction={this.props.sortBy != null ? this.props.sortBy.direction : 'desc'}
-            onSortChange={this.handleSortChange}
+            onSortChange={ActionBar.handleSortChange}
             selectedProperty={this.props.sortBy != null ? this.props.sortBy.property : 'dateAdded'}
           />
         </div>
@@ -84,7 +84,7 @@ class ActionBar extends React.Component<ActionBarProps> {
               })}
               slug="start-torrent"
               icon={<StartIcon />}
-              clickHandler={this.handleStart}
+              clickHandler={ActionBar.handleStart}
             />
             <Action
               label={this.props.intl.formatMessage({
@@ -92,7 +92,7 @@ class ActionBar extends React.Component<ActionBarProps> {
               })}
               slug="stop-torrent"
               icon={<StopIcon />}
-              clickHandler={this.handleStop}
+              clickHandler={ActionBar.handleStop}
             />
           </div>
           <div className="action-bar__group action-bar__group--has-divider">
@@ -102,7 +102,7 @@ class ActionBar extends React.Component<ActionBarProps> {
               })}
               slug="add-torrent"
               icon={<Add />}
-              clickHandler={this.handleAddTorrents}
+              clickHandler={ActionBar.handleAddTorrents}
             />
             <Action
               label={this.props.intl.formatMessage({
@@ -110,7 +110,7 @@ class ActionBar extends React.Component<ActionBarProps> {
               })}
               slug="remove-torrent"
               icon={<Remove />}
-              clickHandler={this.handleRemoveTorrents}
+              clickHandler={ActionBar.handleRemoveTorrents}
             />
           </div>
         </div>

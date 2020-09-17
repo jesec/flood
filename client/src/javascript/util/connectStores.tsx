@@ -38,7 +38,10 @@ export interface EventListenerDescriptor<ConnectedComponentProps, ConnectedCompo
   }) => Partial<ConnectedComponentProps>;
 }
 
-const connectStores = <ConnectedComponentProps extends object, ConnectedComponentStates extends object = {}>(
+const connectStores = <
+  ConnectedComponentProps extends Record<string, unknown>,
+  ConnectedComponentStates extends Record<string, unknown>
+>(
   InputComponent: React.JSXElementConstructor<ConnectedComponentProps & ConnectedComponentStates>,
   getEventListenerDescriptors: (
     props: ConnectedComponentProps,
@@ -60,7 +63,7 @@ const connectStores = <ConnectedComponentProps extends object, ConnectedComponen
             ...getValue({state, props, store, payload: null}),
           };
         },
-        ({} as unknown) as ConnectedComponentStates,
+        {} as ConnectedComponentStates,
       );
     }
 

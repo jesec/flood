@@ -125,7 +125,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
     }, []);
   }
 
-  getLabel() {
+  getLabel(): React.ReactNode {
     if (this.props.label) {
       return (
         <label className="form__element__label" htmlFor={`${this.props.id}`}>
@@ -133,6 +133,8 @@ export default class Select extends Component<SelectProps, SelectStates> {
         </label>
       );
     }
+
+    return undefined;
   }
 
   getSelectedItem(children: React.ReactNodeArray): React.ReactElement | undefined {
@@ -148,6 +150,8 @@ export default class Select extends Component<SelectProps, SelectStates> {
     if (selectedItem) {
       return React.cloneElement(selectedItem as React.ReactElement, {isTrigger: true});
     }
+
+    return undefined;
   }
 
   getTrigger(selectItems: React.ReactNodeArray) {

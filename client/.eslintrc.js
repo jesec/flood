@@ -11,8 +11,8 @@ module.exports = {
     process: 'writable',
     window: 'writable',
   },
-  plugins: ['import'],
   rules: {
+    'import/no-extraneous-dependencies': 0,
     'no-restricted-imports': [
       'error',
       {
@@ -25,7 +25,6 @@ module.exports = {
         patterns: ['**/server/**/*'],
       },
     ],
-    '@typescript-eslint/camelcase': ['error'],
     camelcase: 0,
     // TODO: Enable a11y features
     'jsx-a11y/click-events-have-key-events': 0,

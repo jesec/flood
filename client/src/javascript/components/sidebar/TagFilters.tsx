@@ -12,6 +12,10 @@ interface TagFiltersProps {
 }
 
 class TagFilters extends React.Component<TagFiltersProps> {
+  static handleClick(filter: string) {
+    UIActions.setTorrentTagFilter(filter);
+  }
+
   getFilters() {
     if (this.props.tagCount == null) {
       return null;
@@ -30,7 +34,7 @@ class TagFilters extends React.Component<TagFiltersProps> {
 
     const filterElements = filterItems.map((filter) => (
       <SidebarFilter
-        handleClick={this.handleClick}
+        handleClick={TagFilters.handleClick}
         count={(this.props.tagCount != null && this.props.tagCount[filter]) || 0}
         key={filter}
         isActive={filter === this.props.tagFilter}
@@ -40,10 +44,6 @@ class TagFilters extends React.Component<TagFiltersProps> {
     ));
 
     return filterElements;
-  }
-
-  handleClick(filter: string) {
-    UIActions.setTorrentTagFilter(filter);
   }
 
   hasTags(): boolean {

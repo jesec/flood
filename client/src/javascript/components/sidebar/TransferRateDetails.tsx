@@ -118,7 +118,7 @@ class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
   }
 }
 
-const ConnectedTransferRateDetails = connectStores<Omit<TransferRateDetailsProps, 'intl'>>(
+const ConnectedTransferRateDetails = connectStores<Omit<TransferRateDetailsProps, 'intl'>, Record<string, unknown>>(
   injectIntl(TransferRateDetails),
   () => {
     return [

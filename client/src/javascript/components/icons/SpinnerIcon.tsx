@@ -6,7 +6,7 @@ import BaseIcon from './BaseIcon';
 export default class SpinnerIcon extends BaseIcon {
   id = _.uniqueId();
 
-  getViewBox() {
+  static getViewBox() {
     return '0 0 128 128';
   }
 
@@ -14,7 +14,7 @@ export default class SpinnerIcon extends BaseIcon {
     const maskID = `icon--spinner__mask-id--${this.id}`;
 
     return (
-      <svg className={`icon icon--spinner ${this.props.className}`} viewBox={this.getViewBox()}>
+      <svg className={`icon icon--spinner ${this.props.className}`} viewBox={SpinnerIcon.getViewBox()}>
         <defs>
           <mask id={maskID} x="0" y="0" width="128" height="128" maskUnits="userSpaceOnUse">
             <image

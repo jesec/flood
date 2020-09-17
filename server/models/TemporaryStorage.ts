@@ -8,11 +8,11 @@ class TemporaryStorage {
     fs.mkdirSync(tempPath, {recursive: true});
   }
 
-  deleteFile(filename: string): void {
-    fs.unlinkSync(this.getTempPath(filename));
+  static deleteFile(filename: string): void {
+    fs.unlinkSync(TemporaryStorage.getTempPath(filename));
   }
 
-  getTempPath(filename: string): string {
+  static getTempPath(filename: string): string {
     return path.join(tempPath, filename);
   }
 }
