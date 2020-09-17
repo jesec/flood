@@ -18,7 +18,7 @@
     "build-assets": "node client/scripts/build.js",
     "build-ts": "tsc-transpile-only -p server/tsconfig.json && cat config.js > dist/config.js && chmod 755 dist/server/bin/start.js",
     "build-docs": "jsdoc -c ./.jsdoc.json",
-    "build-i18n": "formatjs compile-folder --ast --format simple client/src/javascript/i18n client/src/javascript/i18n/compiled && formatjs compile-folder --ast --format simple client/src/javascript/i18n/translations client/src/javascript/i18n/compiled",
+    "build-i18n": "formatjs compile --ast --format simple client/src/javascript/i18n/strings.json --out-file client/src/javascript/i18n/strings.compiled.json && formatjs compile-folder --ast --format simple client/src/javascript/i18n/translations client/src/javascript/i18n/compiled",
     "deprecated-warning": "node client/scripts/deprecated-warning.js && sleep 10",
     "format-source": "node scripts/prettier.js formatSource",
     "check-compiled-i18n": "npm run build-i18n && npm run format-source && git diff --quiet client/src/javascript/i18n/compiled",
@@ -164,6 +164,6 @@
     "npm": ">=6.0.0"
   },
   "browserslist": [
-    "> 1%"
+    "> 5%"
   ]
 }

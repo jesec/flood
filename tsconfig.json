@@ -5,6 +5,7 @@
     "target": "esnext",
     "moduleResolution": "node",
     "allowJs": true,
+    "module": "esnext",
     "noEmit": true,
     "strict": true,
     "isolatedModules": true,

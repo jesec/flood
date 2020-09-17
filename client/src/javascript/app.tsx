@@ -1,16 +1,16 @@
 import {Router} from 'react-router-dom';
-import {FormattedMessage, IntlProvider} from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import {Route} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import detectLocale from './util/detectLocale';
-import * as i18n from './i18n/languages';
+import {AsyncIntlProvider} from './i18n/languages';
 import connectStores from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
 import FloodActions from './actions/FloodActions';
 import history from './util/history';
+import Languages from './constants/Languages';
 import Login from './components/views/Login';
 import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
@@ -20,7 +20,7 @@ import UIStore from './stores/UIStore';
 import '../sass/style.scss';
 
 interface FloodAppProps {
-  locale?: keyof typeof i18n.languages;
+  locale?: keyof typeof Languages;
 }
 
 const initialize = (): void => {
@@ -81,15 +81,10 @@ class FloodApp extends React.Component<FloodAppProps> {
   }
 
   public render(): React.ReactNode {
-    let {locale} = this.props;
-    if (locale == null || locale === 'auto' || !Object.prototype.hasOwnProperty.call(i18n.languages, locale)) {
-      locale = detectLocale();
-    }
-
     return (
-      <IntlProvider locale={locale} messages={i18n.languages[locale]}>
-        {appRoutes}
-      </IntlProvider>
+      <React.Suspense fallback={<AsyncIntlProvider locale="en">{appRoutes}</AsyncIntlProvider>}>
+        <AsyncIntlProvider locale={this.props.locale}>{appRoutes}</AsyncIntlProvider>
+      </React.Suspense>
     );
   }
 }

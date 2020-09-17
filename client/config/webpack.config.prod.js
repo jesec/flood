@@ -139,6 +139,7 @@ module.exports = {
   resolve: {
     extensions: ['*', '.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
+      'react-intl': 'react-intl/react-intl-no-parser.umd.min.js',
       '@shared': path.resolve('./shared'),
     },
   },
