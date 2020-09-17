@@ -11,6 +11,7 @@ import AuthActions from './actions/AuthActions';
 import FloodActions from './actions/FloodActions';
 import history from './util/history';
 import Languages from './constants/Languages';
+import LoadingIndicator from './components/general/LoadingIndicator';
 import Login from './components/views/Login';
 import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
@@ -82,7 +83,12 @@ class FloodApp extends React.Component<FloodAppProps> {
 
   public render(): React.ReactNode {
     return (
-      <React.Suspense fallback={<AsyncIntlProvider locale="en">{appRoutes}</AsyncIntlProvider>}>
+      <React.Suspense
+        fallback={
+          <div className="application__loading-overlay">
+            <LoadingIndicator inverse />
+          </div>
+        }>
         <AsyncIntlProvider locale={this.props.locale}>{appRoutes}</AsyncIntlProvider>
       </React.Suspense>
     );
