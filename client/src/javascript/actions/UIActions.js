@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ActionTypes from '../constants/ActionTypes';
@@ -74,7 +74,7 @@ const UIActions = {
     });
   },
 
-  setTorrentsSearchFilter: _.debounce(
+  setTorrentsSearchFilter: debounce(
     (data) => {
       AppDispatcher.dispatchUIAction({
         type: ActionTypes.UI_SET_TORRENT_SEARCH_FILTER,

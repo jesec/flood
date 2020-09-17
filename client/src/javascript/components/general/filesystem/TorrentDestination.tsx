@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
@@ -74,7 +74,7 @@ class TorrentDestination extends React.Component<TorrentDestinationProps, Torren
   };
 
   /* eslint-disable react/sort-comp */
-  handleDestinationInputChange = _.debounce(
+  handleDestinationInputChange = debounce(
     () => {
       if (this.textboxRef == null) {
         return;

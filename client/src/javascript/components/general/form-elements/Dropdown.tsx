@@ -1,7 +1,8 @@
-import _ from 'lodash';
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import React from 'react';
+import throttle from 'lodash/throttle';
+import uniqueId from 'lodash/uniqueId';
 
 import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
@@ -47,7 +48,7 @@ const METHODS_TO_BIND = [
 ] as const;
 
 class Dropdown extends React.Component<DropdownProps, DropdownStates> {
-  id = _.uniqueId('dropdown_');
+  id = uniqueId('dropdown_');
 
   static defaultProps = {
     baseClassName: 'dropdown',
@@ -69,7 +70,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownStates> {
       this[methodName] = this[methodName].bind(this);
     });
 
-    this.handleKeyPress = _.throttle(this.handleKeyPress, 200);
+    this.handleKeyPress = throttle(this.handleKeyPress, 200);
   }
 
   closeDropdown() {

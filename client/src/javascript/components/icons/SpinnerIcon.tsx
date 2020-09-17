@@ -1,10 +1,10 @@
-import _ from 'lodash';
 import React from 'react';
+import uniqueId from 'lodash/uniqueId';
 
 import BaseIcon from './BaseIcon';
 
 export default class SpinnerIcon extends BaseIcon {
-  id = _.uniqueId();
+  id = uniqueId();
 
   static getViewBox() {
     return '0 0 128 128';

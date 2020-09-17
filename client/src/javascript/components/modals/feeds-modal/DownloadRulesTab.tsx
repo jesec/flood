@@ -1,6 +1,6 @@
-import _ from 'lodash';
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
+import throttle from 'lodash/throttle';
 
 import {
   Button,
@@ -118,7 +118,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     },
   };
 
-  checkFieldValidity = _.throttle((fieldName: ValidatedFields, fieldValue) => {
+  checkFieldValidity = throttle((fieldName: ValidatedFields, fieldValue) => {
     const {errors} = this.state;
 
     if (errors == null) {

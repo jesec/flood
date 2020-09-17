@@ -1,5 +1,6 @@
-import _ from 'lodash';
+import castArray from 'lodash/castArray';
 import Datastore from 'nedb';
+import debounce from 'lodash/debounce';
 import path from 'path';
 
 import BaseService from './BaseService';
@@ -18,12 +19,12 @@ class NotificationService extends BaseService {
 
     this.db = this.loadDatabase();
 
-    this.emitUpdate = _.debounce(this.emitUpdate.bind(this), 100);
+    this.emitUpdate = debounce(this.emitUpdate.bind(this), 100);
     this.countNotifications();
   }
 
   addNotification(notifications) {
-    notifications = _.castArray(notifications);
+    notifications = castArray(notifications);
 
     this.count.total += notifications.length;
     this.count.unread += notifications.length;

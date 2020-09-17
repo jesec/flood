@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import classnames from 'classnames';
+import isEqual from 'lodash/isEqual';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
@@ -39,7 +39,7 @@ class TorrentFiles extends React.Component {
     // If we know that the user changed a file's priority, we deeply check the
     // file tree to render when the priority change is detected.
     if (this.hasPriorityChanged) {
-      const shouldUpdate = !_.isEqual(nextProps.fileTree, this.props.fileTree);
+      const shouldUpdate = !isEqual(nextProps.fileTree, this.props.fileTree);
 
       // Reset the flag so we don't deeply check the next file tree.
       if (shouldUpdate) {

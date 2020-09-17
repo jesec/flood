@@ -1,6 +1,6 @@
-import _ from 'lodash';
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
+import sortedIndex from 'lodash/sortedIndex';
 
 import ClientActions from '../../actions/ClientActions';
 import connectStores from '../../util/connectStores';
@@ -114,7 +114,7 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
     if (insertCurrentThrottle && currentThrottle) {
       // Find the position to insert the current throttle setting so that it
       // remains sorted from lowest to highest.
-      const insertionPoint = _.sortedIndex(speeds, currentThrottle[direction]);
+      const insertionPoint = sortedIndex(speeds, currentThrottle[direction]);
 
       items.splice(insertionPoint, 0, {
         displayName: this.getHumanReadableSpeed(currentThrottle[direction]),

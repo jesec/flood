@@ -1,6 +1,6 @@
-import _ from 'lodash';
 import classnames from 'classnames';
 import {DragSource, DropTarget} from 'react-dnd';
+import flow from 'lodash/flow';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -100,7 +100,7 @@ class SortableListItem extends React.Component {
   }
 }
 
-export default _.flow([
+export default flow([
   DragSource('globally-draggable-item', itemSource, (connect, monitor) => ({
     connectDragPreview: connect.dragPreview(),
     connectDragSource: connect.dragSource(),

@@ -1,5 +1,5 @@
 import {FormattedMessage, injectIntl} from 'react-intl';
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
@@ -232,7 +232,7 @@ class TorrentListContainer extends React.Component {
   };
 
   /* eslint-disable react/sort-comp */
-  updateTorrentListViewWidth = _.debounce(
+  updateTorrentListViewWidth = debounce(
     () => {
       if (this.horizontalScrollRef != null) {
         this.setState({

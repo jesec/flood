@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import classnames from 'classnames';
+import omit from 'lodash/omit';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -298,7 +298,7 @@ class Tooltip extends React.Component {
     const anchor = state.anchor || props.anchor;
     const position = state.position || props.position;
     // Pass along any props that aren't specific to the Tooltip.
-    const elementProps = _.omit(props, TOOLTIP_PROPS);
+    const elementProps = omit(props, TOOLTIP_PROPS);
 
     const tooltipClasses = classnames(
       props.className,

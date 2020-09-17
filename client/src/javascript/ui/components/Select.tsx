@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import noop from 'lodash/noop';
 import classnames from 'classnames';
 import React, {Component} from 'react';
 
@@ -235,7 +235,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
           <input
             className="input input--hidden"
             name={`${this.props.id}`}
-            onChange={_.noop}
+            onChange={noop}
             tabIndex={-1}
             ref={(ref) => {
               this.inputRef = ref;

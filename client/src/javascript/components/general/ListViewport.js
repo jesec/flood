@@ -1,6 +1,7 @@
-import _ from 'lodash';
+import debounce from 'lodash/debounce';
 import PropTypes from 'prop-types';
 import React from 'react';
+import throttle from 'lodash/throttle';
 
 import CustomScrollbars from './CustomScrollbars';
 
@@ -50,12 +51,12 @@ class ListViewport extends React.Component {
       this[method] = this[method].bind(this);
     });
 
-    this.setViewportHeight = _.debounce(this.setViewportHeight, 250);
-    this.updateAfterScrolling = _.debounce(this.updateAfterScrolling, 500, {
+    this.setViewportHeight = debounce(this.setViewportHeight, 250);
+    this.updateAfterScrolling = debounce(this.updateAfterScrolling, 500, {
       leading: true,
       trailing: true,
     });
-    this.setScrollPosition = _.throttle(this.setScrollPosition, 100);
+    this.setScrollPosition = throttle(this.setScrollPosition, 100);
   }
 
   componentDidMount() {

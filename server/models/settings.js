@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import Datastore from 'nedb';
+import noop from 'lodash/noop';
 import path from 'path';
 
 import config from '../../config';
@@ -107,7 +107,7 @@ const settings = {
       });
   },
 
-  set: (user, payloads, callback = _.noop) => {
+  set: (user, payloads, callback = noop) => {
     const docsResponse = [];
 
     if (!Array.isArray(payloads)) {

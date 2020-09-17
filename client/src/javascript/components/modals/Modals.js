@@ -1,6 +1,6 @@
-import _ from 'lodash';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import React from 'react';
+import throttle from 'lodash/throttle';
 
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
 import ConfirmModal from './confirm-modal/ConfirmModal';
@@ -32,7 +32,7 @@ class Modals extends React.Component {
       'torrent-details': TorrentDetailsModal,
     };
 
-    this.handleKeyPress = _.throttle(this.handleKeyPress, 1000);
+    this.handleKeyPress = throttle(this.handleKeyPress, 1000);
   }
 
   componentDidMount() {

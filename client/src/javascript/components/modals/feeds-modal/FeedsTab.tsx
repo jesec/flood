@@ -1,7 +1,7 @@
-import _ from 'lodash';
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import formatUtil from '@shared/util/formatUtil';
 import React from 'react';
+import throttle from 'lodash/throttle';
 
 import {
   Button,
@@ -112,7 +112,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     },
   };
 
-  checkFieldValidity = _.throttle((fieldName: ValidatedFields, fieldValue) => {
+  checkFieldValidity = throttle((fieldName: ValidatedFields, fieldValue) => {
     const {errors} = this.state;
 
     if (errors == null) {
