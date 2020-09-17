@@ -1,5 +1,4 @@
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import formatUtil from '@shared/util/formatUtil';
 import React from 'react';
 import throttle from 'lodash/throttle';
 
@@ -18,6 +17,7 @@ import {
 import Edit from '../../icons/Edit';
 import Close from '../../icons/Close';
 import FeedsStore, {FeedsStoreClass} from '../../../stores/FeedsStore';
+import {minToHumanReadable} from '../../../i18n/languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import * as validators from '../../../util/validators';
 import UIActions from '../../../actions/UIActions';
@@ -284,7 +284,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
             <li
               className="interactive-list__detail-list__item
               interactive-list__detail interactive-list__detail--tertiary">
-              {formatUtil.minToHumanReadable(feed.interval)}
+              {minToHumanReadable(feed.interval)}
             </li>
             <li
               className="interactive-list__detail-list__item

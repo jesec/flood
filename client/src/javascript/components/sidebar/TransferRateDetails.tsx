@@ -1,7 +1,8 @@
 import classnames from 'classnames';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import formatUtil from '@shared/util/formatUtil';
-import moment from 'moment';
 import React from 'react';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
@@ -69,9 +70,9 @@ class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
     });
 
     if (inspectorPoint != null && inspectorPoint.nearestTimestamp != null) {
-      const currentTime = moment(Date.now());
+      const currentTime = dayjs(Date.now());
       const durationSummary = formatUtil.secondsToDuration(
-        moment.duration(currentTime.diff(moment(inspectorPoint.nearestTimestamp))).asSeconds(),
+        dayjs.duration(currentTime.diff(dayjs(inspectorPoint.nearestTimestamp))).asSeconds(),
       );
 
       timestamp = (
@@ -117,6 +118,8 @@ class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
     );
   }
 }
+
+dayjs.extend(duration);
 
 const ConnectedTransferRateDetails = connectStores<Omit<TransferRateDetailsProps, 'intl'>, Record<string, unknown>>(
   injectIntl(TransferRateDetails),
