@@ -1,7 +1,7 @@
 import bencode from 'bencode';
 import fs from 'fs';
 
-const setTracker = (torrent, tracker) => {
+const setTracker = (torrent: string, tracker: string) => {
   fs.readFile(torrent, (err, data) => {
     if (err) {
       return;

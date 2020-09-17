@@ -7,6 +7,6 @@ const RTORRENT_PROPS_MAP = {
     downloadTotal: 'throttle.global_down.total',
     downloadThrottle: 'throttle.global_down.max_rate',
   },
-};
+} as const;
 
 export default RTORRENT_PROPS_MAP;

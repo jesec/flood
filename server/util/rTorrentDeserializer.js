@@ -6,9 +6,9 @@ let tmpData;
 let dataIsVal;
 let endOfResponse;
 let rejectCallback;
-let parser = new Parser();
 
 let parserInit = false;
+const parser = new Parser();
 
 const unescapeXMLString = (value) =>
   value
