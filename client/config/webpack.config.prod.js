@@ -5,6 +5,9 @@ const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const getClientEnvironment = require('./env');
 const paths = require('../../shared/config/paths');
 
@@ -36,7 +39,11 @@ module.exports = {
         test: /\.s?css$/,
         use: [
           {
-            loader: 'style-loader',
+            loader: MiniCssExtractPlugin.loader,
+            options: {
+              // filename is static/css/x.css, so root path is ../../
+              publicPath: '../../',
+            },
           },
           {
             loader: 'css-loader',
@@ -194,7 +201,29 @@ module.exports = {
         },
       ],
     }),
+    new MiniCssExtractPlugin({
+      filename: 'static/css/[name].[hash].css',
+      chunkFilename: 'static/css/[id].[hash].css',
+    }),
   ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          output: {
+            comments: false,
+          },
+        },
+        extractComments: false,
+      }),
+      new OptimizeCssAssetsPlugin({
+        cssProcessorPluginOptions: {
+          preset: ['default', {discardComments: {removeAll: true}}],
+        },
+      }),
+    ],
+  },
   performance: {
     // TODO: Add code-splitting and re-enable this when the bundle is smaller
     hints: false,
