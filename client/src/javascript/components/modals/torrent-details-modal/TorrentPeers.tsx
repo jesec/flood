@@ -4,6 +4,7 @@ import React from 'react';
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';
 import Checkmark from '../../icons/Checkmark';
+import SpinnerIcon from '../../icons/SpinnerIcon';
 
 import type {TorrentPeer} from '../../../stores/TorrentStore';
 
@@ -11,7 +12,47 @@ interface TorrentPeersProps {
   peers: Array<TorrentPeer>;
 }
 
+const flagsCache: Record<string, string | null> = {};
+
 export default class TorrentPeers extends React.Component<TorrentPeersProps> {
+  private static getFlag(countryCode?: string): string | null {
+    if (countryCode == null) {
+      return null;
+    }
+
+    if (flagsCache[countryCode] !== undefined) {
+      return flagsCache[countryCode];
+    }
+
+    const loadFlag = async () => {
+      let flag: string | null = null;
+      await import(`../../../../images/flags/${countryCode.toLowerCase()}.png`)
+        .then(
+          ({default: image}: {default: string}) => {
+            flag = image;
+          },
+          () => {
+            flag = null;
+          },
+        )
+        .finally(() => {
+          flagsCache[countryCode] = flag;
+        });
+      return flag;
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
+    throw loadFlag();
+  }
+
+  private static CountryFlag({countryCode}: {countryCode?: string}): JSX.Element | null {
+    const flag = TorrentPeers.getFlag(countryCode);
+    if (flag == null) {
+      return null;
+    }
+    return <img alt={countryCode} className="peers-list__flag__image" src={flag} />;
+  }
+
   render() {
     const {peers} = this.props;
 
@@ -19,30 +60,16 @@ export default class TorrentPeers extends React.Component<TorrentPeersProps> {
       const peerList = peers.map((peer) => {
         const {country: countryCode} = peer;
         const encryptedIcon = peer.isEncrypted ? <Checkmark /> : null;
-        let peerCountry = null;
-
-        if (countryCode) {
-          const flagImageSrc = `static/images/flags/${countryCode.toLowerCase()}.png`;
-          peerCountry = (
-            <span className="peers-list__flag">
-              <img
-                alt={countryCode}
-                className="peers-list__flag__image"
-                src={flagImageSrc}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).onerror = null;
-                  (e.target as HTMLImageElement).style.display = 'none';
-                }}
-              />
-              <span className="peers-list__flag__text">{countryCode}</span>
-            </span>
-          );
-        }
 
         return (
           <tr key={peer.address}>
             <td>
-              {peerCountry}
+              <span className="peers-list__flag">
+                <React.Suspense fallback={<SpinnerIcon />}>
+                  <TorrentPeers.CountryFlag countryCode={countryCode} />
+                </React.Suspense>
+                <span className="peers-list__flag__text">{countryCode}</span>
+              </span>
               {peer.address}
             </td>
             <td>

@@ -1,7 +1,6 @@
 const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
-const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
@@ -193,16 +192,5 @@ module.exports = {
     // makes the discovery automatic so you don't have to restart.
     // See https://github.com/facebookincubator/create-react-app/issues/186
     new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'client/src/images/flags/*.png',
-          to: 'static/images/flags',
-          transformPath(targetPath) {
-            return targetPath.replace('client/src/images/flags/', '');
-          },
-        },
-      ],
-    }),
   ],
 };
