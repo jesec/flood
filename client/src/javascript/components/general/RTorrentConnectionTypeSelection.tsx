@@ -14,17 +14,12 @@ class RTorrentConnectionTypeSelection extends Component<
   RTorrentConnectionTypeSelectionProps,
   RTorrentConnectionTypeSelectionStates
 > {
-  static defaultProps = {
-    onChange: () => {
-      // do nothing.
-    },
-  };
-
   constructor(props: RTorrentConnectionTypeSelectionProps) {
     super(props);
     this.state = {
       connectionType: 'tcp',
     };
+    this.handleTypeChange = this.handleTypeChange.bind(this);
   }
 
   handleTypeChange(event: React.MouseEvent<HTMLInputElement> | KeyboardEvent) {
