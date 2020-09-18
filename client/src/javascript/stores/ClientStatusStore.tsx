@@ -6,7 +6,7 @@ interface ClientStatus {
 }
 
 class ClientStatusStoreClass extends BaseStore {
-  isConnected: ClientStatus['isConnected'] = false;
+  isConnected: ClientStatus['isConnected'] = true;
 
   getIsConnected(): ClientStatus['isConnected'] {
     return this.isConnected;
