@@ -193,6 +193,9 @@ module.exports = {
       filename: 'static/css/[name].[hash].css',
       chunkFilename: 'static/css/[id].[hash].css',
     }),
+    new webpack.optimize.MinChunkSizePlugin({
+      minChunkSize: 10000,
+    }),
   ],
   optimization: {
     minimize: true,
