@@ -1,15 +1,21 @@
 import React from 'react';
 
 import ActionBar from '../torrent-list/ActionBar';
-import Alerts from '../alerts/Alerts';
 import ApplicationContent from '../layout/ApplicationContent';
 import ApplicationPanel from '../layout/ApplicationPanel';
 import ApplicationView from '../layout/ApplicationView';
-import Modals from '../modals/Modals';
+import FloodActions from '../../actions/FloodActions';
 import Sidebar from '../sidebar/Sidebar';
 import TorrentList from '../torrent-list/TorrentList';
 
+const Alerts = React.lazy(() => import('../alerts/Alerts'));
+const Modals = React.lazy(() => import('../modals/Modals'));
+
 export default class TorrentClientOverview extends React.Component {
+  async componentDidMount() {
+    FloodActions.startActivityStream();
+  }
+
   render() {
     return (
       <ApplicationView>

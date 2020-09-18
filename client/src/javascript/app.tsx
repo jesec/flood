@@ -1,6 +1,6 @@
 import {Router} from 'react-router-dom';
 import {FormattedMessage} from 'react-intl';
-import {Route} from 'react-router';
+import {Route, Switch} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -8,21 +8,27 @@ import AsyncIntlProvider from './i18n/languages';
 import connectStores from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
-import FloodActions from './actions/FloodActions';
 import history from './util/history';
 import Languages from './constants/Languages';
 import LoadingIndicator from './components/general/LoadingIndicator';
-import Login from './components/views/Login';
-import Register from './components/views/Register';
 import SettingsStore from './stores/SettingsStore';
-import TorrentClientOverview from './components/views/TorrentClientOverview';
 import UIStore from './stores/UIStore';
 
 import '../sass/style.scss';
 
+const Login = React.lazy(() => import('./components/views/Login'));
+const Register = React.lazy(() => import('./components/views/Register'));
+const TorrentClientOverview = React.lazy(() => import('./components/views/TorrentClientOverview'));
+
 interface FloodAppProps {
   locale?: keyof typeof Languages;
 }
+
+const loadingOverlay = (
+  <div className="application__loading-overlay">
+    <LoadingIndicator inverse />
+  </div>
+);
 
 const initialize = (): void => {
   UIStore.registerDependency([
@@ -62,7 +68,6 @@ const initialize = (): void => {
       if (initialUser) {
         history.replace('register');
       } else {
-        FloodActions.startActivityStream();
         history.replace('overview');
       }
     },
@@ -75,9 +80,11 @@ const initialize = (): void => {
 const appRoutes = (
   <Router history={history}>
     <AppWrapper>
-      <Route path="/login" component={Login} />
-      <Route path="/register" component={Register} />
-      <Route path="/overview" component={TorrentClientOverview} />
+      <Switch>
+        <Route path="/login" component={Login} />
+        <Route path="/register" component={Register} />
+        <Route path="/overview" component={TorrentClientOverview} />
+      </Switch>
     </AppWrapper>
   </Router>
 );
@@ -89,12 +96,7 @@ class FloodApp extends React.Component<FloodAppProps> {
 
   public render(): React.ReactNode {
     return (
-      <React.Suspense
-        fallback={
-          <div className="application__loading-overlay">
-            <LoadingIndicator inverse />
-          </div>
-        }>
+      <React.Suspense fallback={loadingOverlay}>
         <AsyncIntlProvider locale={this.props.locale}>{appRoutes}</AsyncIntlProvider>
       </React.Suspense>
     );
