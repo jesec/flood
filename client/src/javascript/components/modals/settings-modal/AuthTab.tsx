@@ -187,6 +187,7 @@ class AuthTab extends SettingsTab {
             placeholder={this.props.intl.formatMessage({
               id: 'auth.username',
             })}
+            autoComplete="username"
           />
           <Textbox
             id="password"
@@ -194,6 +195,7 @@ class AuthTab extends SettingsTab {
             placeholder={this.props.intl.formatMessage({
               id: 'auth.password',
             })}
+            autoComplete="new-password"
           />
           <Checkbox grow={false} id="isAdmin" labelOffset matchTextboxHeight>
             <FormattedMessage id="auth.admin" />

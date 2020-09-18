@@ -7,8 +7,8 @@ import FormRowItem from './FormRowItem';
 import type {FormRowItemProps} from './FormRowItem';
 
 type TextboxProps = Pick<
-  React.HTMLAttributes<HTMLInputElement>,
-  'defaultValue' | 'placeholder' | 'onChange' | 'onClick'
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'defaultValue' | 'placeholder' | 'onChange' | 'onClick' | 'autoComplete'
 > & {
   id: string;
   label?: React.ReactNode;
@@ -73,6 +73,7 @@ export default class Textbox extends Component<TextboxProps> {
             ref={this.props.setRef}
             tabIndex={0}
             type={this.props.type}
+            autoComplete={this.props.autoComplete}
           />
           {children}
         </div>

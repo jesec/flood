@@ -128,10 +128,15 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
                 </FormRow>
               ) : null}
               <FormRow>
-                <Textbox placeholder="Username" id="username" />
+                <Textbox placeholder="Username" id="username" autoComplete="username" />
               </FormRow>
               <FormRow>
-                <Textbox placeholder="Passsword" id="password" type="password" />
+                <Textbox
+                  placeholder="Password"
+                  id="password"
+                  type="password"
+                  autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+                />
               </FormRow>
             </PanelContent>
             {isLoginMode ? null : (
