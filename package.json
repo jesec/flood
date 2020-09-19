@@ -34,7 +34,7 @@
     "start:watch": "UPDATED_SCRIPT=start:development:client npm run deprecated-warning && npm run start:development:client"
   },
   "dependencies": {
-    "argon2": "^0.27.0",
+    "argon2-browser": "^1.15.1",
     "bencode": "^2.0.1",
     "body-parser": "^1.18.3",
     "chalk": "^4.1.0",
@@ -73,6 +73,7 @@
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
     "@formatjs/cli": "^2.11.2",
+    "@types/argon2-browser": "^1.12.0",
     "@types/bencode": "^2.0.0",
     "@types/body-parser": "^1.19.0",
     "@types/classnames": "^2.2.10",

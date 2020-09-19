@@ -1,4 +1,5 @@
-import argon2 from 'argon2';
+import argon2 from 'argon2-browser';
+import crypto from 'crypto';
 import Datastore from 'nedb';
 import fs from 'fs';
 import path from 'path';
@@ -66,14 +67,9 @@ class Users {
       }
 
       argon2
-        .verify(user.password, credentials.password)
-        .then((argon2Match) => {
-          if (argon2Match) {
-            return callback(true, user.isAdmin);
-          }
-          return callback(false, false, new Error());
-        })
-        .catch((error) => callback(false, false, error));
+        .verify({pass: credentials.password, encoded: user.password})
+        .then(() => callback(true, user.isAdmin))
+        .catch((e) => callback(false, false, e));
 
       return undefined;
     });
@@ -102,11 +98,11 @@ class Users {
     }
 
     argon2
-      .hash(password)
+      .hash({pass: password, salt: crypto.randomBytes(16).toString('hex')})
       .then((hash) => {
         const userEntry: Required<Credentials> = {
           username,
-          password: hash,
+          password: hash.encoded,
           host: host || null,
           port: Number(port) || null,
           socketPath: socketPath || null,
