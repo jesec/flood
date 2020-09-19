@@ -29,7 +29,7 @@
     "start": "node --use_strict dist/server/bin/start.js",
     "start:development": "UPDATED_SCRIPT=start:development:server npm run deprecated-warning && npm run start:development:server",
     "start:development:client": "node client/scripts/start.js",
-    "start:development:server": "NODE_ENV=development ts-node-dev --transpile-only server/bin/start.ts",
+    "start:development:server": "NODE_ENV=development TS_NODE_PROJECT=server/tsconfig.json ts-node-dev --transpile-only server/bin/start.ts",
     "start:production": "UPDATED_SCRIPT=start npm run deprecated-warning && npm start",
     "start:watch": "UPDATED_SCRIPT=start:development:client npm run deprecated-warning && npm run start:development:client"
   },
