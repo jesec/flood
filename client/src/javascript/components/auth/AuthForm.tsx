@@ -1,6 +1,8 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
+import type {ConnectionSettings, Credentials} from '@shared/types/Auth';
+
 import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '../../ui';
 import AuthActions from '../../actions/AuthActions';
 import AuthStore from '../../stores/AuthStore';
@@ -8,7 +10,8 @@ import connectStores from '../../util/connectStores';
 import history from '../../util/history';
 import RTorrentConnectionTypeSelection from '../general/RTorrentConnectionTypeSelection';
 
-import type {Credentials, UserConfig} from '../../stores/AuthStore';
+type LoginFormData = Pick<Credentials, 'username' | 'password'>;
+type RegisterFormData = Pick<Credentials, 'username' | 'password'> & ConnectionSettings;
 
 interface AuthFormProps extends WrappedComponentProps {
   mode: 'login' | 'register';
@@ -62,7 +65,7 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
     this.setState({isSubmitting: true});
 
     if (this.props.mode === 'login') {
-      const credentials = submission.formData as Partial<Credentials>;
+      const credentials = submission.formData as Partial<LoginFormData>;
 
       if (credentials.username == null || credentials.username === '') {
         this.setState({isSubmitting: false}, () => {
@@ -82,9 +85,9 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
           this.setState({isSubmitting: false}, () => history.replace('login'));
         });
     } else {
-      const config = submission.formData as Partial<UserConfig>;
+      const config = submission.formData as Partial<RegisterFormData>;
 
-      if (config.username == null || config.username === '') {
+      if (config.username == null || config.username === '' || config.password == null || config.password === '') {
         this.setState({isSubmitting: false}, () => {
           // do nothing.
         });
@@ -94,9 +97,9 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
       AuthActions.register({
         username: config.username,
         password: config.password,
-        host: config.rtorrentHost,
-        port: config.rtorrentPort,
-        socketPath: config.rtorrentSocketPath,
+        host: config.rtorrentHost || null,
+        port: config.rtorrentPort || null,
+        socketPath: config.rtorrentSocketPath || null,
         isAdmin: true,
       }).then(() => {
         this.setState({isSubmitting: false}, () => history.replace('overview'));

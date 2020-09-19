@@ -36,9 +36,9 @@ const setAuthToken = (res, username, isAdmin) => {
 const authValidation = joi.object().keys({
   username: joi.string(),
   password: joi.string(),
-  host: joi.string(),
-  port: joi.string(),
-  socketPath: joi.string(),
+  host: joi.string().allow(null),
+  port: joi.number().allow(null),
+  socketPath: joi.string().allow(null),
   isAdmin: joi.bool(),
 });
 
@@ -67,7 +67,7 @@ router.post('/authenticate', (req, res) => {
   };
 
   Users.comparePassword(credentials, (isMatch, isAdmin, err) => {
-    if (isMatch != null && !err) {
+    if (isMatch === true && err == null) {
       return setAuthToken(res, credentials.username, isAdmin);
     }
 

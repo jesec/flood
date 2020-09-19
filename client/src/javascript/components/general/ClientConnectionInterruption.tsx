@@ -1,6 +1,8 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
+import {ConnectionSettings} from '@shared/types/Auth';
+
 import {Button, Form, FormError, FormRow, FormRowItem, Panel, PanelContent, PanelHeader, PanelFooter} from '../../ui';
 import AuthActions from '../../actions/AuthActions';
 import AuthStore from '../../stores/AuthStore';
@@ -63,7 +65,7 @@ class ClientConnectionInterruption extends React.Component<
 
   handleTestButtonClick = () => {
     if (this.state.isTestingConnection || this.formRef == null) return;
-    const formData = this.formRef.getFormData();
+    const formData = this.formRef.getFormData() as ConnectionSettings;
 
     this.setState(
       {

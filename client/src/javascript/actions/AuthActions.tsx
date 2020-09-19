@@ -1,12 +1,12 @@
 import axios from 'axios';
 
+import type {AuthVerificationResponse, ConnectionSettings, Credentials} from '@shared/types/Auth';
+
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ClientActions from './ClientActions';
 import ConfigStore from '../stores/ConfigStore';
 import FloodActions from './FloodActions';
 import SettingsActions from './SettingsActions';
-
-import type {ConnectionSettings, Credentials, UserConfig} from '../stores/AuthStore';
 
 const baseURI = ConfigStore.getBaseURI();
 
@@ -51,7 +51,7 @@ const AuthActions = {
         ]);
       }),
 
-  createUser: (config: UserConfig) =>
+  createUser: (config: Required<Credentials>) =>
     axios
       .put(`${baseURI}auth/users`, config)
       .then((json) => json.data)
@@ -128,7 +128,7 @@ const AuthActions = {
       },
     ),
 
-  register: (config: UserConfig) =>
+  register: (config: Required<Credentials>) =>
     axios
       .post(`${baseURI}auth/register`, config)
       .then((json) => json.data)
@@ -152,7 +152,7 @@ const AuthActions = {
       .get(`${baseURI}auth/verify?${Date.now()}`)
       .then((json) => json.data)
       .then(
-        (data: {isAdmin: boolean; success: boolean; initialUser?: boolean; token?: string; username: string}) => {
+        (data: AuthVerificationResponse) => {
           AppDispatcher.dispatchServerAction({
             type: 'AUTH_VERIFY_SUCCESS',
             data,

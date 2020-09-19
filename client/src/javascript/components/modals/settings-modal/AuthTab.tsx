@@ -3,6 +3,8 @@ import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import type {Credentials, ConnectionSettings} from '@shared/types/Auth';
+
 import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '../../../ui';
 import AuthActions from '../../../actions/AuthActions';
 import AuthStore from '../../../stores/AuthStore';
@@ -12,7 +14,7 @@ import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import RTorrentConnectionTypeSelection from '../../general/RTorrentConnectionTypeSelection';
 import SettingsTab from './SettingsTab';
 
-import type {UserConfig} from '../../../stores/AuthStore';
+type AuthTabFormData = Pick<Credentials, 'username' | 'password' | 'isAdmin'> & ConnectionSettings;
 
 class AuthTab extends SettingsTab {
   state = {
@@ -21,7 +23,7 @@ class AuthTab extends SettingsTab {
     isAddingUser: false,
   };
 
-  formData?: Partial<UserConfig>;
+  formData?: Partial<AuthTabFormData>;
 
   formRef?: Form | null = null;
 
@@ -34,11 +36,11 @@ class AuthTab extends SettingsTab {
   }
 
   getUserList() {
-    const userList = this.props.users.sort((a: UserConfig, b: UserConfig) => a.username.localeCompare(b.username));
+    const userList = this.props.users.sort((a: Credentials, b: Credentials) => a.username.localeCompare(b.username));
 
     const currentUsername = AuthStore.getCurrentUsername();
 
-    return userList.map((user: UserConfig) => {
+    return userList.map((user: Credentials) => {
       const isCurrentUser = user.username === currentUsername;
       let badge = null;
       let removeIcon = null;
@@ -75,12 +77,12 @@ class AuthTab extends SettingsTab {
     });
   }
 
-  static handleDeleteUserClick(username: UserConfig['username']) {
+  static handleDeleteUserClick(username: string) {
     AuthActions.deleteUser(username).then(AuthActions.fetchUsers);
   }
 
   handleFormChange = ({formData}: {formData: Record<string, unknown>}) => {
-    this.formData = formData as Partial<UserConfig>;
+    this.formData = formData as Partial<AuthTabFormData>;
   };
 
   handleFormSubmit = () => {
@@ -94,15 +96,21 @@ class AuthTab extends SettingsTab {
           id: 'auth.error.username.empty',
         }),
       });
+    } else if (this.formData.password == null || this.formData.password === '') {
+      this.setState({
+        addUserError: this.props.intl.formatMessage({
+          id: 'auth.error.password.empty',
+        }),
+      });
     } else {
       this.setState({isAddingUser: true});
 
       AuthActions.createUser({
         username: this.formData.username,
         password: this.formData.password,
-        host: this.formData.rtorrentHost,
-        port: this.formData.rtorrentPort,
-        socketPath: this.formData.rtorrentSocketPath,
+        host: this.formData.rtorrentHost || null,
+        port: this.formData.rtorrentPort || null,
+        socketPath: this.formData.rtorrentSocketPath || null,
         isAdmin: this.formData.isAdmin === true,
       })
         .then(AuthActions.fetchUsers, (error) => {

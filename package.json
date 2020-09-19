@@ -84,6 +84,8 @@
     "@types/flux": "^3.1.9",
     "@types/http-errors": "^1.8.0",
     "@types/morgan": "^1.9.1",
+    "@types/nedb": "^1.8.11",
+    "@types/node": "^14.11.1",
     "@types/passport": "^1.0.4",
     "@types/react": "^16.9.49",
     "@types/react-dom": "^16.9.8",
