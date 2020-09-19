@@ -118,7 +118,7 @@ class ClientGatewayService extends BaseService {
 
         return response;
       })
-      .catch(this.processClientError);
+      .catch(this.processClientRequestError);
   }
 
   /**

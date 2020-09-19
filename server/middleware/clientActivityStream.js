@@ -80,7 +80,7 @@ export default (req, res) => {
   });
 
   if (serviceInstances.clientGatewayService.hasError) {
-    serviceInstances.clientGatewayService.testGateway();
+    serviceInstances.clientGatewayService.testGateway().catch(console.error);
   }
 
   // TODO: Handle empty or sub-optimal history states.
