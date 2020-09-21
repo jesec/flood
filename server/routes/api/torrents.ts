@@ -156,6 +156,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
             destination: sourcePath,
             tags,
             isBasePath: true,
+            isCompleted: true,
             start: start || false,
           })
           .catch(() => {

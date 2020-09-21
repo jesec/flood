@@ -17,6 +17,7 @@ interface AddTorrentsByFileFormData {
   start: boolean;
   tags: string;
   isBasePath: boolean;
+  isCompleted: boolean;
 }
 
 interface AddTorrentsByFileStates {
@@ -136,7 +137,7 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
     const formData = this.formRef.getFormData();
     this.setState({isAddingTorrents: true});
 
-    const {destination, start, tags, isBasePath} = formData as Partial<AddTorrentsByFileFormData>;
+    const {destination, start, tags, isBasePath, isCompleted} = formData as Partial<AddTorrentsByFileFormData>;
 
     const filesData: Array<string> = [];
     this.state.files.forEach((file) => {
@@ -151,8 +152,9 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
       files: filesData,
       destination,
       tags: tags != null ? tags.split(',') : undefined,
-      isBasePath: isBasePath || false,
-      start: start || false,
+      isBasePath,
+      isCompleted,
+      start,
     });
 
     saveAddTorrentsUserPreferences({start, destination});
@@ -176,6 +178,7 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
           })}
           selectable="directories"
           showBasePathToggle
+          showCompletedToggle
         />
         <FormRow>
           <TagSelect

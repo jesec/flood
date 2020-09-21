@@ -14,6 +14,7 @@ interface FilesystemBrowserTextboxProps extends WrappedComponentProps {
   selectable?: 'directories' | 'files';
   suggested?: string;
   showBasePathToggle?: boolean;
+  showCompletedToggle?: boolean;
   onChange?: (destination: string) => void;
 }
 
@@ -140,16 +141,26 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
   }
 
   render() {
-    const {intl, id, label, selectable, showBasePathToggle} = this.props;
+    const {intl, id, label, selectable, showBasePathToggle, showCompletedToggle} = this.props;
     const {destination, isDirectoryListOpen} = this.state;
 
-    const basePathToggle = showBasePathToggle ? (
-      <FormRow>
+    const toggles: React.ReactNodeArray = [];
+
+    if (showBasePathToggle) {
+      toggles.push(
         <Checkbox grow={false} id="isBasePath">
           <FormattedMessage id="torrents.destination.base_path" />
-        </Checkbox>
-      </FormRow>
-    ) : null;
+        </Checkbox>,
+      );
+    }
+
+    if (showCompletedToggle) {
+      toggles.push(
+        <Checkbox grow={false} id="isCompleted">
+          <FormattedMessage id="torrents.destination.completed" />
+        </Checkbox>,
+      );
+    }
 
     return (
       <FormRowGroup>
@@ -199,7 +210,7 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
             </Portal>
           </Textbox>
         </FormRow>
-        {basePathToggle}
+        {toggles.length > 0 ? <FormRow>{toggles}</FormRow> : null}
       </FormRowGroup>
     );
   }

@@ -16,6 +16,7 @@ type AddTorrentsByURLFormData = {
 } & {
   destination: string;
   isBasePath: boolean;
+  isCompleted: boolean;
   start: boolean;
   tags: string;
 };
@@ -68,8 +69,9 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
       urls,
       cookies: processedCookies,
       destination: formData.destination,
-      isBasePath: formData.isBasePath || false,
-      start: formData.start || false,
+      isBasePath: formData.isBasePath,
+      isCompleted: formData.isCompleted,
+      start: formData.start,
       tags: formData.tags != null ? formData.tags.split(',') : undefined,
     });
 
@@ -109,6 +111,7 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
           })}
           selectable="directories"
           showBasePathToggle
+          showCompletedToggle
         />
         <FormRow>
           <TagSelect

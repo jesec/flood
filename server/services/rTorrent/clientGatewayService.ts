@@ -32,7 +32,7 @@ import ClientRequestManager from './clientRequestManager';
 import scgiUtil from './util/scgiUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {fetchURLToTempFile, saveBufferToTempFile} from '../../util/tempFileUtil';
-import torrentFileUtil from '../../util/torrentFileUtil';
+import {setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import {
   encodeTags,
   getTorrentETAFromProperties,
@@ -55,17 +55,36 @@ const filePathMethodCalls = getMethodCalls({pathComponents: torrentContentMethod
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
 
-  async addTorrentsByFile({files, destination, tags, isBasePath, start}: AddTorrentByFileOptions): Promise<void> {
+  async addTorrentsByFile({
+    files,
+    destination,
+    tags,
+    isBasePath,
+    isCompleted,
+    start,
+  }: AddTorrentByFileOptions): Promise<void> {
+    if (!Array.isArray(files)) {
+      throw new Error();
+    }
+
     const torrentPaths = await Promise.all(
       files.map(async (file) => {
         return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent');
       }),
     );
 
-    return this.addTorrentsByURL({urls: torrentPaths, destination, tags, isBasePath, start});
+    return this.addTorrentsByURL({urls: torrentPaths, destination, tags, isBasePath, isCompleted, start});
   }
 
-  async addTorrentsByURL({urls, cookies, destination, tags, isBasePath, start}: AddTorrentByURLOptions): Promise<void> {
+  async addTorrentsByURL({
+    urls,
+    cookies,
+    destination,
+    tags,
+    isBasePath,
+    isCompleted,
+    start,
+  }: AddTorrentByURLOptions): Promise<void> {
     const destinationPath = sanitizePath(destination);
 
     if (!isAllowedPath(destinationPath)) {
@@ -74,28 +93,44 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     await createDirectory(destinationPath);
 
-    const torrentPaths = await Promise.all(
-      urls.map(async (url) => {
-        if (/^(http|https):\/\//.test(url)) {
-          const domain = url.split('/')[2];
+    const torrentPaths: Array<string> = (
+      await Promise.all(
+        urls.map(async (url) => {
+          if (/^(http|https):\/\//.test(url)) {
+            const domain = url.split('/')[2];
 
-          // TODO: properly handle error and let frontend know
-          const torrentPath = await fetchURLToTempFile(
-            url,
-            cookies ? cookies[domain] : undefined,
-            'torrent',
-          ).catch((e) => console.error(e));
+            // TODO: properly handle error and let frontend know
+            const torrentPath = await fetchURLToTempFile(
+              url,
+              cookies ? cookies[domain] : undefined,
+              'torrent',
+            ).catch((e) => console.error(e));
 
-          if (typeof torrentPath === 'string') {
-            return torrentPath;
+            if (typeof torrentPath === 'string') {
+              return torrentPath;
+            }
+
+            return '';
           }
-        }
 
-        // TODO: handle potential other types of downloads
+          // TODO: handle potential other types of downloads
 
-        return url;
-      }),
-    );
+          return url;
+        }),
+      )
+    ).filter((torrentPath) => torrentPath !== '');
+
+    if (isCompleted) {
+      await Promise.all(
+        torrentPaths.map((torrentPath) => {
+          if (!fs.existsSync(torrentPath)) {
+            return false;
+          }
+
+          return setCompleted(torrentPath, destinationPath, isBasePath);
+        }),
+      );
+    }
 
     const methodCalls: MultiMethodCalls = torrentPaths.map((torrentPath) => {
       const additionalCalls: Array<string> = [];
@@ -430,7 +465,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             await Promise.all(
               [...new Set(hashes)].map(async (hash) => {
                 const torrent = path.join(session, sanitize(`${hash}.torrent`));
-                return torrentFileUtil.setTrackers(torrent, trackers);
+                return setTrackers(torrent, trackers);
               }),
             );
           }
