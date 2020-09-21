@@ -1697,6 +1697,12 @@
       "value": "Use as Base Path"
     }
   ],
+  "torrents.destination.completed": [
+    {
+      "type": 0,
+      "value": "Completed"
+    }
+  ],
   "torrents.details.actions.pause": [
     {
       "type": 0,

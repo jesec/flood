@@ -14,10 +14,12 @@ export interface AddTorrentByURLOptions {
   destination: string;
   // Tags
   tags?: Array<string>;
-  // Whether destination is the base path
-  isBasePath: boolean;
-  // Whether to start torrent
-  start: boolean;
+  // Whether destination is the base path [default: false]
+  isBasePath?: boolean;
+  // Whether destination contains completed contents [default: false]
+  isCompleted?: boolean;
+  // Whether to start torrent [default: false]
+  start?: boolean;
 }
 
 // POST /api/torrents/add-files
@@ -28,10 +30,12 @@ export interface AddTorrentByFileOptions {
   destination: string;
   // Tags
   tags?: Array<string>;
-  // Whether destination is the base path
-  isBasePath: boolean;
-  // Whether to start torrent
-  start: boolean;
+  // Whether destination is the base path [default: false]
+  isBasePath?: boolean;
+  // Whether destination contains completed contents [default: false]
+  isCompleted?: boolean;
+  // Whether to start torrent [default: false]
+  start?: boolean;
 }
 
 // POST /api/torrents/create

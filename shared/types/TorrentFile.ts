@@ -22,12 +22,18 @@ export interface TorrentFile {
   };
 }
 
+export enum LibTorrentFilePriority {
+  OFF = 0,
+  NORMAL = 1,
+  HIGH = 2,
+}
+
 export interface LibTorrentResume {
   bitfield: number;
   files: Array<{
     completed: number; // number of completed pieces
     mtime: number; // timestamp
-    priority: 0 | 1 | 2; // off | normal | high
+    priority: LibTorrentFilePriority;
   }>;
   peers?: Array<{
     failed: 0 | 1;
@@ -39,7 +45,7 @@ export interface LibTorrentResume {
       enabled: 0 | 1;
     };
   };
-  'uncertain_pieces.timestamp': number; // timestamp
+  'uncertain_pieces.timestamp'?: number; // timestamp
 }
 
 export interface RTorrentSession {
