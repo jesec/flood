@@ -23,8 +23,6 @@ Check out the [Wiki](https://github.com/jesec/flood/wiki) for more information.
    - For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows).
 1. Install [NodeJS](https://nodejs.org/) version `Current` (you might want to manage different Node versions with [nodenv](https://github.com/nodenv/nodenv) or [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)). Flood tracks latest NodeJS release and does NOT provide support to legacy NodeJS versions.
 
-**EXPERIMENTAL**: You can download a single-executable rolling build of Flood from [Github Actions](https://github.com/jesec/flood/actions?query=workflow%3A%22Publish+rolling+build%22). It bundles `NodeJS` and supports `Linux`, `MacOS` or `Windows`.
-
 ### Installation
 
 `sudo npm i -g flood` or `npx flood`
