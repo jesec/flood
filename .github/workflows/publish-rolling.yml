@@ -65,14 +65,17 @@ jobs:
     - name: 'Upload executable: Linux'
       uses: actions/upload-artifact@v2
       with:
+        name: flood-linux
         path: flood-linux
 
     - name: 'Upload executable: MacOS'
       uses: actions/upload-artifact@v2
       with:
+        name: flood-macos
         path: flood-macos
 
     - name: 'Upload executable: Windows'
       uses: actions/upload-artifact@v2
       with:
+        name: flood-win
         path: flood-win.exe
