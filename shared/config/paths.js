@@ -30,7 +30,7 @@ const getAppDist = () => {
   return appDist;
 };
 
-module.exports = {
+const PATHS = {
   appBuild: resolveApp('dist/assets'),
   appDist: getAppDist(),
   appPublic: resolveApp('client/src/public/'),
@@ -43,3 +43,5 @@ module.exports = {
   appNodeModules: resolveApp('node_modules'),
   servedPath: ensureSlash(userConfig.baseURI || '/', true),
 };
+
+module.exports = PATHS;

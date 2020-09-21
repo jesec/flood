@@ -33,8 +33,8 @@ app.use(cookieParser());
 
 passportConfig(passport);
 
-app.use(path.join(paths.servedPath, 'api'), apiRoutes);
-app.use(path.join(paths.servedPath, 'auth'), authRoutes);
+app.use(`${paths.servedPath}api`, apiRoutes);
+app.use(`${paths.servedPath}auth`, authRoutes);
 
 // After routes, look for static assets.
 app.use(paths.servedPath, express.static(paths.appDist));
@@ -42,15 +42,15 @@ app.use(paths.servedPath, express.static(paths.appDist));
 // Client app routes, serve index.html and client js will figure it out
 const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {encoding: 'utf8'});
 
-app.get(path.join(paths.servedPath, 'login'), (_req, res) => {
+app.get(`${paths.servedPath}login`, (_req, res) => {
   res.send(html);
 });
 
-app.get(path.join(paths.servedPath, 'register'), (_req, res) => {
+app.get(`${paths.servedPath}register`, (_req, res) => {
   res.send(html);
 });
 
-app.get(path.join(paths.servedPath, 'overview'), (_req, res) => {
+app.get(`${paths.servedPath}overview`, (_req, res) => {
   res.send(html);
 });
 
