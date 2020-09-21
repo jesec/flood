@@ -13,9 +13,17 @@
   "bin": {
     "flood": "./dist/index.js"
   },
+  "pkg": {
+    "assets": [
+      "dist/assets/**/*",
+      "dist/geoip-country.dat",
+      "dist/geoip-country6.dat"
+    ]
+  },
   "scripts": {
     "build": "npm run build-assets && npm run build-ts",
     "build-assets": "node client/scripts/build.js",
+    "build-pkg": "rm -rf dist && npm run build && pkg .",
     "build-ts": "rm -f node_modules/argon2-browser/dist/*.wasm; ncc build server/bin/start.ts -m -t; rm -rf dist/data",
     "build-docs": "jsdoc -c ./.jsdoc.json",
     "build-i18n": "formatjs compile --ast --format simple client/src/javascript/i18n/strings.json --out-file client/src/javascript/i18n/strings.compiled.json && formatjs compile-folder --ast --format simple client/src/javascript/i18n/translations client/src/javascript/i18n/compiled",
