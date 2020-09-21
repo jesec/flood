@@ -47,10 +47,10 @@ When Flood's builtin user management is enabled (default), you will be prompted 
 
 **What to configure**
 
-1. Be sure to create a long and unique secret (used to sign [JWT auth tokens](https://github.com/auth0/node-jsonwebtoken)).
 1. If you are proxying requests to Flood from your own web server, configure Flood's path from the host at the `--baseuri` (or `baseURI`) property. All requests will be prefixed with this value.
    - For example, if serving Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If serving flood from `https://foo.bar`, you do not need to configure `baseURI`.
    - [Read more about proxying requests to Flood on the Wiki](https://github.com/jesec/flood/wiki), this is a common pain-point for users.
+1. Check [Wiki](https://github.com/jesec/flood/wiki), especially `Security` sections.
 
 ### Upgrade
 
@@ -60,8 +60,8 @@ Run the installation command again.
 
 - Debian, Ubuntu and RHEL-based distributions users can install latest `nodejs` from [NodeSource](https://github.com/nodesource/distributions).
 - Flood and filesystem:
-   - Flood's relationship with rTorrent is NOT truly server-client. Flood server performs file operations itself. Flood server itself needs to have permissions/access to the files.
-   - Flood only uses the path provided by rTorrent so it needs to have the same filesystem context as rTorrent. If a file is "/path/to/a/file" to rTorrent, it has to be "/path/to/a/file" to Flood in order to get file operations working. It can't be "/mnt/some/different/path/file".
+  - Flood's relationship with rTorrent is NOT truly server-client. Flood server performs file operations itself. Flood server itself needs to have permissions/access to the files.
+  - Flood only uses the path provided by rTorrent so it needs to have the same filesystem context as rTorrent. If a file is "/path/to/a/file" to rTorrent, it has to be "/path/to/a/file" to Flood in order to get file operations working. It can't be "/mnt/some/different/path/file".
 - Ask for help in the [Flood Discord server](https://discord.gg/Z7yR5Uf).
 
 ### Docker
