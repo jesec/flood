@@ -16,7 +16,7 @@
   "scripts": {
     "build": "npm run build-assets && npm run build-ts",
     "build-assets": "node client/scripts/build.js",
-    "build-ts": "rm -f node_modules/argon2-browser/dist/*.wasm; ncc build server/bin/start.ts -m -t; rm -rf dist/data",
+    "build-ts": "ncc build server/bin/start.ts -m -t -e argon2-browser -e geoip-country",
     "build-docs": "jsdoc -c ./.jsdoc.json",
     "build-i18n": "formatjs compile --ast --format simple client/src/javascript/i18n/strings.json --out-file client/src/javascript/i18n/strings.compiled.json && formatjs compile-folder --ast --format simple client/src/javascript/i18n/translations client/src/javascript/i18n/compiled",
     "deprecated-warning": "node client/scripts/deprecated-warning.js && sleep 10",
@@ -33,7 +33,10 @@
     "start:production": "UPDATED_SCRIPT=start npm run deprecated-warning && npm start",
     "start:watch": "UPDATED_SCRIPT=start:development:client npm run deprecated-warning && npm run start:development:client"
   },
-  "dependencies": {},
+  "dependencies": {
+    "argon2-browser": "^1.15.1",
+    "geoip-country": "^4.0.36"
+  },
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
@@ -65,7 +68,6 @@
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
     "@vercel/ncc": "^0.24.1",
-    "argon2-browser": "^1.15.1",
     "autoprefixer": "^10.0.0",
     "axios": "^0.20.0",
     "babel-eslint": "^10.1.0",
@@ -101,7 +103,6 @@
     "file-loader": "^6.1.0",
     "flux": "^3.1.3",
     "fs-extra": "^9.0.1",
-    "geoip-country": "^4.0.36",
     "get-user-locale": "^1.4.0",
     "glob": "^7.1.6",
     "html-webpack-plugin": "^4.4.1",
