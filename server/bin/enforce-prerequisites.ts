@@ -3,11 +3,9 @@ import glob from 'glob';
 import path from 'path';
 
 import {secret} from '../../config';
-import {appBuild} from '../../shared/config/paths';
+import {appDist} from '../../shared/config/paths';
 
-const staticAssets = [path.join(appBuild, 'index.html')];
-
-const configFiles = [path.join(__dirname, '../../config.js')];
+const staticAssets = [path.join(appDist, 'index.html')];
 
 // Taken from react-scripts/check-required-files, but without console.logs.
 const doFilesExist = (files: Array<string>) => {
@@ -37,11 +35,6 @@ const grepRecursive = (folder: string, match: string) => {
 
 const enforcePrerequisites = () =>
   new Promise((resolve, reject: (error: Error) => void) => {
-    if (!doFilesExist(configFiles)) {
-      reject(new Error(`Configuration files missing. Please check the 'Configuring' section of README.md.`));
-      return;
-    }
-
     if (!doFilesExist(staticAssets)) {
       reject(
         new Error(
@@ -52,7 +45,7 @@ const enforcePrerequisites = () =>
     }
 
     // Ensures that server secret is not served to user
-    if (grepRecursive(appBuild, secret)) {
+    if (grepRecursive(appDist, secret)) {
       reject(new Error(`Secret is included in static assets. Please ensure that secret is unique.`));
       return;
     }

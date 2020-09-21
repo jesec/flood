@@ -17,20 +17,22 @@ const ensureSlash = (questionablePath, needsSlash) => {
   return questionablePath;
 };
 
-const getAppBuild = () => {
-  let appBuild = resolveApp('dist/assets');
-  if (!fs.existsSync(appBuild)) {
-    // In production, appDirectory is dist/.
-    const appDist = resolveApp('assets');
-    if (fs.existsSync(appDist)) {
-      appBuild = appDist;
+const getAppDist = () => {
+  // In production, assets are in assets/.
+  const appDist = path.resolve(path.join(__dirname, 'assets'));
+  if (!fs.existsSync(appDist)) {
+    // In development, assets are in ${appDirectory}/dist/assets/.
+    const appBuild = resolveApp('dist/assets');
+    if (fs.existsSync(appBuild)) {
+      return appBuild;
     }
   }
-  return appBuild;
+  return appDist;
 };
 
 module.exports = {
-  appBuild: getAppBuild(),
+  appBuild: resolveApp('dist/assets'),
+  appDist: getAppDist(),
   appPublic: resolveApp('client/src/public/'),
   appHtml: resolveApp('client/src/index.html'),
   appIndex: resolveApp('client/src/javascript/app.tsx'),

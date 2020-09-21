@@ -64,6 +64,7 @@ module.exports = {
         project: './tsconfig.json'
       },
       rules: {
+        'import/no-extraneous-dependencies': 0,
         'no-underscore-dangle': [2, {allow: ['_id']}],
         'no-unused-vars': 0,
         '@typescript-eslint/lines-between-class-members': ['error', 'always', {exceptAfterSingleLine: true}],

@@ -38,10 +38,10 @@ app.use(path.join(paths.servedPath, 'api'), apiRoutes);
 app.use(path.join(paths.servedPath, 'auth'), authRoutes);
 
 // After routes, look for static assets.
-app.use(paths.servedPath, express.static(paths.appBuild));
+app.use(paths.servedPath, express.static(paths.appDist));
 
 // Client app routes, serve index.html and client js will figure it out
-const html = fs.readFileSync(path.join(paths.appBuild, 'index.html'), {encoding: 'utf8'});
+const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {encoding: 'utf8'});
 
 app.get(path.join(paths.servedPath, 'login'), (_req, res) => {
   res.send(html);
