@@ -1,18 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 import sanitize from 'sanitize-filename';
-import series from 'run-series';
+import {series} from 'async';
 import tar from 'tar-stream';
 
 import ClientRequest from './ClientRequest';
 import clientResponseUtil from '../util/clientResponseUtil';
-import {clientSettingsMap} from '../../shared/constants/clientSettingsMap';
+import {clientSettingsBiMap} from '../../shared/constants/clientSettingsMap';
 import fileUtil from '../util/fileUtil';
 import settings from './settings';
 import torrentFilePropsMap from '../../shared/constants/torrentFilePropsMap';
 import torrentPeerPropsMap from '../../shared/constants/torrentPeerPropsMap';
 import torrentFileUtil from '../util/torrentFileUtil';
-import torrentStatusMap from '../../shared/constants/torrentStatusMap';
 import torrentTrackerPropsMap from '../../shared/constants/torrentTrackerPropsMap';
 
 const client = {
@@ -86,10 +85,10 @@ const client = {
     settings.set(user, {id: 'startTorrentsOnLoad', data: start});
   },
 
-  checkHash(user, services, hashes, callback) {
+  checkHash(user, services, {hashes}, callback) {
     const request = new ClientRequest(user, services);
 
-    request.checkHash({hashes});
+    request.checkHash(hashes);
     request.onComplete((response, error) => {
       services.torrentService.fetchTorrentList();
       callback(response, error);
@@ -150,7 +149,7 @@ const client = {
         });
 
         series(tasks, (error) => {
-          if (error) return res.status(500).json(error);
+          if (error) res.status(500).json(error);
 
           pack.finalize();
         });
@@ -202,7 +201,7 @@ const client = {
 
       data.forEach((datum, index) => {
         let value = datum[0];
-        const settingsKey = clientSettingsMap[requestedSettingsKeys[index]];
+        const settingsKey = clientSettingsBiMap[requestedSettingsKeys[index]];
 
         if (outboundTransformation[settingsKey]) {
           value = outboundTransformation[settingsKey](value);
@@ -251,7 +250,7 @@ const client = {
     }
 
     const hashesToRestart = hashes.filter(
-      (hash) => !services.torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped),
+      (hash) => !services.torrentService.getTorrent(hash).status.includes('stopped'),
     );
 
     let afterCheckHash;

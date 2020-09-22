@@ -78,13 +78,13 @@ const getUrlsFromItems = (feedItems) => {
 };
 
 class FeedService extends BaseService {
-  constructor(...serviceConfig) {
-    super(...serviceConfig);
+  constructor(...args) {
+    super(...args);
 
-    this.isDBReady = false;
     this.db = this.loadDatabase();
-
-    this.init();
+    this.onServicesUpdated = () => {
+      this.init();
+    };
   }
 
   addFeed(feed, callback) {
@@ -104,7 +104,9 @@ class FeedService extends BaseService {
   }
 
   addItem(type, item, callback) {
-    if (!this.isDBReady) return;
+    if (this.db == null) {
+      return;
+    }
 
     this.db.insert(Object.assign(item, {type}), (err, newDoc) => {
       if (err) {
@@ -117,7 +119,7 @@ class FeedService extends BaseService {
   }
 
   modifyItem(id, newItem, callback) {
-    if (!this.isDBReady) {
+    if (this.db == null) {
       return;
     }
 
@@ -305,13 +307,15 @@ class FeedService extends BaseService {
   }
 
   loadDatabase() {
-    if (this.isDBReady) return;
+    if (this.db != null) {
+      return this.db;
+    }
 
     const db = new Datastore({
       autoload: true,
       filename: path.join(config.dbPath, this.user._id, 'settings', 'feeds.db'),
     });
-    this.isDBReady = true;
+
     return db;
   }
 

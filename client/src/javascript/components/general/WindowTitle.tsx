@@ -1,11 +1,11 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
+import type {TransferSummary} from '@shared/types/TransferData';
+
 import connectStores from '../../util/connectStores';
 import {compute, getTranslationString} from '../../util/size';
 import TransferDataStore from '../../stores/TransferDataStore';
-
-import type {TransferSummary} from '../../stores/TransferDataStore';
 
 interface WindowTitleProps extends WrappedComponentProps {
   summary?: TransferSummary;

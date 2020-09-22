@@ -74,11 +74,15 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
     const formData = this.formRef.getFormData() as Partial<AddTorrentsByURLFormData>;
     this.setState({isAddingTorrents: true});
 
+    if (formData.destination == null) {
+      return;
+    }
+
     TorrentActions.addTorrentsByUrls({
       urls: this.getURLsFromForm(),
       destination: formData.destination,
-      isBasePath: formData.useBasePath,
-      start: formData.start,
+      isBasePath: formData.useBasePath || false,
+      start: formData.start || false,
       tags: formData.tags != null ? formData.tags.split(',') : undefined,
     });
 

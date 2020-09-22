@@ -19,6 +19,9 @@ declare const CONFIG: {
   ssl: boolean;
   sslKey: string;
   sslCert: string;
+  diskUsageService: {
+    watchMountPoints: Array<string>;
+  };
   allowedPaths: Array<string> | null;
 };
 

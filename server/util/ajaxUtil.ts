@@ -1,7 +1,7 @@
 import type {Response} from 'express';
 
 const ajaxUtil = {
-  getResponseFn: (res: Response) => <D extends unknown>(data: D, error: Error | string) => {
+  getResponseFn: (res: Response) => <D extends unknown>(data: D, error?: Error | string) => {
     if (error) {
       if (process.env.NODE_ENV === 'development') {
         console.trace(error);

@@ -1,14 +1,14 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
+import type {Disk, Disks} from '@shared/types/DiskUsage';
+
 import DiskUsageStore from '../../stores/DiskUsageStore';
 import Size from '../general/Size';
 import Tooltip from '../general/Tooltip';
 import connectStores from '../../util/connectStores';
 import ProgressBar from '../general/ProgressBar';
 import SettingsStore from '../../stores/SettingsStore';
-
-import type {Disk, Disks} from '../../stores/DiskUsageStore';
 
 interface DiskUsageProps {
   disks?: Disks;

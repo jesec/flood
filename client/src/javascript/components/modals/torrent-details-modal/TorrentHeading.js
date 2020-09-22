@@ -2,7 +2,6 @@ import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import React from 'react';
 import stringUtil from '@shared/util/stringUtil';
-import torrentStatusMap from '@shared/constants/torrentStatusMap';
 
 import ClockIcon from '../../icons/ClockIcon';
 import DownloadThickIcon from '../../icons/DownloadThickIcon';
@@ -15,8 +14,8 @@ import Size from '../../general/Size';
 import StartIcon from '../../icons/StartIcon';
 import StopIcon from '../../icons/StopIcon';
 import TorrentActions from '../../../actions/TorrentActions';
-import {torrentStatusClasses} from '../../../util/torrentStatusClasses';
-import {torrentStatusIcons} from '../../../util/torrentStatusIcons';
+import torrentStatusClasses from '../../../util/torrentStatusClasses';
+import torrentStatusIcons from '../../../util/torrentStatusIcons';
 import UploadThickIcon from '../../icons/UploadThickIcon';
 
 const METHODS_TO_BIND = ['getCurrentStatus', 'handleStart', 'handleStop'];
@@ -35,7 +34,7 @@ export default class TorrentHeading extends React.Component {
   }
 
   getCurrentStatus(torrentStatus) {
-    if (torrentStatus.includes(torrentStatusMap.stopped)) {
+    if (torrentStatus.includes('stopped')) {
       return 'stop';
     }
     return 'start';

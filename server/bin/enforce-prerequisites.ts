@@ -34,7 +34,7 @@ const grepRecursive = (folder: string, match: string) => {
 };
 
 const enforcePrerequisites = () =>
-  new Promise((resolve, reject: (error: Error) => void) => {
+  new Promise<void>((resolve, reject: (error: Error) => void) => {
     if (!doFilesExist(staticAssets)) {
       reject(
         new Error(

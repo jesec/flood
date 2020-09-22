@@ -1,13 +1,12 @@
 /**
  * This file is deprecated in favor of clientGatewayService.
  */
-import mv from 'mv';
+import {move} from 'fs-extra';
 import path from 'path';
 import util from 'util';
 
-import {clientSettings, clientSettingsMap} from '../../shared/constants/clientSettingsMap';
+import {clientSettingsMap} from '../../shared/constants/clientSettingsMap';
 import rTorrentPropMap from '../util/rTorrentPropMap';
-import torrentStatusMap from '../../shared/constants/torrentStatusMap';
 
 const addTagsToRequest = (tagsArr, requestParameters) => {
   if (tagsArr && tagsArr.length) {
@@ -180,9 +179,7 @@ class ClientRequest {
   checkHash(options) {
     const {torrentService} = this.services;
     const hashes = getEnsuredArray(options.hashes);
-    const stoppedHashes = hashes.filter((hash) =>
-      torrentService.getTorrent(hash).status.includes(torrentStatusMap.stopped),
-    );
+    const stoppedHashes = hashes.filter((hash) => torrentService.getTorrent(hash).status.includes('stopped'));
 
     const hashesToStart = [];
 
@@ -205,7 +202,7 @@ class ClientRequest {
     let {requestedSettings} = options;
 
     if (requestedSettings == null) {
-      requestedSettings = Object.keys(clientSettings).map((settingsKey) => clientSettingsMap[settingsKey]);
+      requestedSettings = Object.values(clientSettingsMap);
     }
 
     // Ensure client's response gets mapped to the correct requested keys.
@@ -260,7 +257,13 @@ class ClientRequest {
       }
 
       if (source !== destination) {
-        mv(source, destination, {mkdirp: true}, callback);
+        move(source, destination, {overwrite: true}, (err) => {
+          if (err) {
+            console.error(`Failed to move files to ${destinationPath}.`);
+            console.error(err);
+          }
+          callback();
+        });
       } else if (isLastRequest) {
         callback();
       }

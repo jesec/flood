@@ -1,5 +1,5 @@
 const methodCallUtil = {
-  getMethodCallConfigFromPropMap(map = new Map(), requestedKeys) {
+  getMethodCallConfigFromPropMap(map, requestedKeys) {
     let desiredKeys = Array.from(map.keys());
 
     if (requestedKeys != null) {

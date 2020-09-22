@@ -14,6 +14,8 @@ export interface Credentials {
   isAdmin?: boolean;
 }
 
+export type UserInDatabase = Required<Credentials> & {_id: string};
+
 // auth/authenticate
 export interface AuthAuthenticationResponse {
   success: boolean;

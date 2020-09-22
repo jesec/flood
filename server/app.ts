@@ -7,11 +7,21 @@ import morgan from 'morgan';
 import passport from 'passport';
 import path from 'path';
 
+import type {UserInDatabase} from '@shared/types/Auth';
+
 import apiRoutes from './routes/api';
 import authRoutes from './routes/auth';
 import passportConfig from './config/passport';
 import paths from '../shared/config/paths';
 import Users from './models/Users';
+
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface User extends UserInDatabase {}
+  }
+}
 
 const app = express();
 

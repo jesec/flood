@@ -4,12 +4,10 @@ import Datastore from 'nedb';
 import fs from 'fs';
 import path from 'path';
 
-import type {Credentials} from '@shared/types/Auth';
+import type {Credentials, UserInDatabase} from '@shared/types/Auth';
 
 import config from '../../config';
 import services from '../services';
-
-type UserInDatabase = Required<Credentials> & {_id: string};
 
 class Users {
   db = Users.loadDatabase();
@@ -77,7 +75,7 @@ class Users {
 
   createUser(
     credentials: Credentials,
-    callback: (data: {username: Credentials['username']} | null, error?: Error | null) => void,
+    callback: (data: {username: Credentials['username']} | null, error?: Error) => void,
   ): void {
     const {password, username, host, port, socketPath, isAdmin} = credentials;
 
@@ -117,7 +115,7 @@ class Users {
             return callback(null, error);
           }
 
-          services.bootstrapServicesForUser(user);
+          services.bootstrapServicesForUser(user as UserInDatabase);
           return callback({username});
         });
       })
@@ -128,10 +126,7 @@ class Users {
     return undefined;
   }
 
-  removeUser(
-    username: Credentials['username'],
-    callback: (data: Credentials | null, error?: Error | null) => void,
-  ): void {
+  removeUser(username: Credentials['username'], callback: (data: Credentials | null, error?: Error) => void): void {
     this.db.findOne({username}, (findError: Error | null, user: UserInDatabase): void => {
       if (findError) {
         return callback(null, findError);

@@ -1,7 +1,8 @@
-import perUserRtorrentInstances from './per-user-rtorrent-instances';
-import fixIsAdminFlag from './fix-is-admin-flag';
-
-const migrations = [perUserRtorrentInstances, fixIsAdminFlag];
+const migrations = [
+  () => {
+    // do nothing. there is no migration at the moment.
+  },
+];
 
 const migrate = () => Promise.all(migrations.map((migration) => migration()));
 

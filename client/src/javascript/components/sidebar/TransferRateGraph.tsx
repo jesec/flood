@@ -1,9 +1,9 @@
 import * as d3 from 'd3';
 import React from 'react';
 
-import TransferDataStore, {TRANSFER_DIRECTIONS} from '../../stores/TransferDataStore';
+import type {TransferDirection} from '@shared/types/TransferData';
 
-import type {TransferDirection} from '../../stores/TransferDataStore';
+import TransferDataStore, {TRANSFER_DIRECTIONS} from '../../stores/TransferDataStore';
 
 export interface TransferRateGraphInspectorPoint {
   uploadSpeed: number;

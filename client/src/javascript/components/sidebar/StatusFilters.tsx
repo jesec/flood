@@ -1,6 +1,8 @@
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
+import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
+
 import Active from '../icons/Active';
 import All from '../icons/All';
 import Completed from '../icons/Completed';
@@ -22,11 +24,15 @@ interface StatusFiltersProps extends WrappedComponentProps {
 
 class StatusFilters extends React.Component<StatusFiltersProps> {
   static handleClick(filter: string) {
-    UIActions.setTorrentStatusFilter(filter);
+    UIActions.setTorrentStatusFilter(filter as TorrentStatus);
   }
 
   getFilters() {
-    const filters = [
+    const filters: Array<{
+      label: string;
+      slug: TorrentStatus;
+      icon: JSX.Element;
+    }> = [
       {
         label: this.props.intl.formatMessage({
           id: 'filter.all',

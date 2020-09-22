@@ -5,6 +5,8 @@ import duration from 'dayjs/plugin/duration';
 import formatUtil from '@shared/util/formatUtil';
 import React from 'react';
 
+import type {TransferDirection, TransferSummary} from '@shared/types/TransferData';
+
 import ClientStatusStore from '../../stores/ClientStatusStore';
 import connectStores from '../../util/connectStores';
 import Download from '../icons/Download';
@@ -14,7 +16,6 @@ import Size from '../general/Size';
 import TransferDataStore from '../../stores/TransferDataStore';
 import Upload from '../icons/Upload';
 
-import type {TransferDirection, TransferSummary} from '../../stores/TransferDataStore';
 import type {TransferRateGraphInspectorPoint} from './TransferRateGraph';
 
 interface TransferRateDetailsProps extends WrappedComponentProps {

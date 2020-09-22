@@ -1,5 +1,6 @@
 import FeedSub from 'feedsub';
 
+// TODO: Use a type-checked Feed parser
 class Feed {
   constructor(options) {
     this.options = options || {};

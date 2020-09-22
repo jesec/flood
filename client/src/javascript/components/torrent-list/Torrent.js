@@ -1,8 +1,8 @@
 import React from 'react';
 
 import ProgressBar from '../general/ProgressBar';
-import {torrentStatusIcons} from '../../util/torrentStatusIcons';
-import {torrentStatusClasses} from '../../util/torrentStatusClasses';
+import torrentStatusIcons from '../../util/torrentStatusIcons';
+import torrentStatusClasses from '../../util/torrentStatusClasses';
 import TorrentDetail from './TorrentDetail';
 
 const condensedValueTransformers = {

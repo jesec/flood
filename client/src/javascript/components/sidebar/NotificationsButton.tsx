@@ -2,6 +2,8 @@ import classnames from 'classnames';
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
+import type {Notification, NotificationCount} from '@shared/types/Notification';
+
 import FloodActions from '../../actions/FloodActions';
 import ChevronLeftIcon from '../icons/ChevronLeftIcon';
 import ChevronRightIcon from '../icons/ChevronRightIcon';
@@ -11,8 +13,6 @@ import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import NotificationIcon from '../icons/NotificationIcon';
 import NotificationStore from '../../stores/NotificationStore';
 import Tooltip from '../general/Tooltip';
-
-import type {Notification, NotificationCount} from '../../stores/NotificationStore';
 
 interface NotificationsButtonProps extends WrappedComponentProps {
   count?: NotificationCount;
@@ -272,6 +272,7 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
     NotificationStore.clearAll({
       id: 'notification-tooltip',
       limit: NOTIFICATIONS_PER_PAGE,
+      start: 0,
     });
 
     if (this.tooltipRef != null) {

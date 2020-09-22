@@ -2,6 +2,8 @@ import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} fro
 import React from 'react';
 import sortedIndex from 'lodash/sortedIndex';
 
+import type {TransferDirection} from '@shared/types/TransferData';
+
 import ClientActions from '../../actions/ClientActions';
 import connectStores from '../../util/connectStores';
 import Dropdown from '../general/form-elements/Dropdown';
@@ -12,7 +14,6 @@ import Tooltip from '../general/Tooltip';
 import TransferDataStore from '../../stores/TransferDataStore';
 
 import type {DropdownItem} from '../general/form-elements/Dropdown';
-import type {TransferDirection} from '../../stores/TransferDataStore';
 
 interface SpeedLimitDropdownProps extends WrappedComponentProps {
   currentThrottles?: Record<TransferDirection, number>;
@@ -36,7 +37,9 @@ const MESSAGES = defineMessages({
 
 class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
   static handleItemSelect(item: DropdownItem) {
-    ClientActions.setThrottle(item.property, item.value);
+    if (item.value != null) {
+      ClientActions.setThrottle(item.property as TransferDirection, item.value);
+    }
   }
 
   tooltipRef: Tooltip | null = null;
