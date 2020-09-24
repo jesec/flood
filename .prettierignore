@@ -1,0 +1,9 @@
+# Hidden folders
+.*/
+
+# Markdown and HTML
+*.md
+*.html
+
+# Distribution files
+dist/

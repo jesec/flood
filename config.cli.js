@@ -108,7 +108,7 @@ const {argv} = require('yargs')
 if (argv.rtorrent) {
   const rTorrentProcess = spawn('rtorrent', ['-o', 'system.daemon.set=true']);
   process.on('exit', () => {
-    console.log('Killing rTorrent daemon...')
+    console.log('Killing rTorrent daemon...');
     rTorrentProcess.kill('SIGTERM');
   });
 }
