@@ -103,6 +103,8 @@ const {argv} = require('yargs')
     hidden: true,
     type: 'string',
   })
+  .version(require('./package.json').version)
+  .alias('v', 'version')
   .help();
 
 if (argv.rtorrent) {
