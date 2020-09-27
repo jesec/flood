@@ -73,9 +73,10 @@ class RemoveTorrentsModal extends React.Component {
   }
 
   handleRemovalConfirmation = () => {
-    const torrents = TorrentStore.getSelectedTorrents();
-    const formData = this.formRef.getFormData();
-    TorrentActions.deleteTorrents(torrents, formData.deleteData);
+    TorrentActions.deleteTorrents({
+      hashes: TorrentStore.getSelectedTorrents(),
+      deleteData: this.formRef.getFormData().deleteData,
+    });
   };
 
   render() {

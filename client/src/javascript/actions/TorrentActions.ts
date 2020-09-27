@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type {AddTorrentByURLOptions, MoveTorrentsOptions} from '@shared/types/Action';
+import type {AddTorrentByURLOptions, DeleteTorrentsOptions, MoveTorrentsOptions} from '@shared/types/Action';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -59,9 +59,9 @@ const TorrentActions = {
         },
       ),
 
-  deleteTorrents: (hashes: Array<TorrentProperties['hash']>, deleteData: boolean) =>
+  deleteTorrents: (options: DeleteTorrentsOptions) =>
     axios
-      .post(`${baseURI}api/client/torrents/delete`, {hashes, deleteData})
+      .post(`${baseURI}api/client/torrents/delete`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -69,8 +69,8 @@ const TorrentActions = {
             type: 'CLIENT_REMOVE_TORRENT_SUCCESS',
             data: {
               data,
-              count: hashes.length,
-              deleteData,
+              count: options.hashes.length,
+              deleteData: options.deleteData || false,
             },
           });
         },
@@ -79,7 +79,7 @@ const TorrentActions = {
             type: 'CLIENT_REMOVE_TORRENT_ERROR',
             error: {
               error,
-              count: hashes.length,
+              count: options.hashes.length,
             },
           });
         },

@@ -1,6 +1,8 @@
 import express from 'express';
 import multer from 'multer';
 
+import type {DeleteTorrentsOptions} from '@shared/types/Action';
+
 import ajaxUtil from '../util/ajaxUtil';
 import booleanCoerce from '../middleware/booleanCoerce';
 import client from '../models/client';
@@ -83,8 +85,17 @@ router.post('/torrents/move', (req, res) => {
   client.moveTorrents(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.post('/torrents/delete', (req, res) => {
-  const {deleteData, hashes} = req.body;
+/**
+ * POST /api/client/torrents/delete
+ * @summary Removes torrents from Flood. Optionally deletes data of torrents.
+ * @tags Torrents
+ * @security AuthenticatedUser
+ * @param {DeleteTorrentsOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.post<unknown, unknown, DeleteTorrentsOptions>('/torrents/delete', (req, res) => {
+  const {hashes, deleteData} = req.body;
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService

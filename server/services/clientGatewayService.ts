@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 import type {Credentials} from '@shared/types/Auth';
+import type {DeleteTorrentsOptions} from '@shared/types/Action';
 import type {TorrentProperties, Torrents} from '@shared/types/Torrent';
 import type {TransferSummary} from '@shared/types/TransferData';
 
@@ -65,7 +66,13 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     this.torrentListReducers.push(reducer);
   }
 
-  removeTorrents({hashes, deleteData}: {hashes: Array<string>; deleteData: boolean}) {
+  /**
+   * Removes torrents from rTorrent's session. Optionally deletes data of torrents.
+   *
+   * @param {DeleteTorrentsOptions} options - An object of options...
+   * @return {Promise} - Resolves with the processed client response or rejects with the processed client error.
+   */
+  removeTorrents({hashes, deleteData}: DeleteTorrentsOptions) {
     if (this.services == null || this.services.clientRequestManager == null) {
       return Promise.reject();
     }
@@ -74,8 +81,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       (accumulator: Array<{methodName: string; params: Array<string>}>, hash, index) => {
         let eraseFileMethodCallIndex = index;
 
-        // If we're deleting files, we grab each torrents' file list before we
-        // remove them.
+        // If we're deleting files, we grab each torrents' file list before we remove them.
         if (deleteData === true) {
           // We offset the indices of these method calls so that we know exactly
           // where to retrieve the responses in the future.
