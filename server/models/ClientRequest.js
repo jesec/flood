@@ -176,9 +176,8 @@ class ClientRequest {
     });
   }
 
-  checkHash(options) {
+  checkHash(hashes) {
     const {torrentService} = this.services;
-    const hashes = getEnsuredArray(options.hashes);
     const stoppedHashes = hashes.filter((hash) => torrentService.getTorrent(hash).status.includes('stopped'));
 
     const hashesToStart = [];
