@@ -35,6 +35,9 @@ class SidebarFilter extends React.Component<SidebarFilterProps> {
         id: 'filter.all',
       });
     } else if (this.props.name === 'untagged') {
+      if (this.props.count === 0) {
+        return null;
+      }
       name = this.props.intl.formatMessage({
         id: 'filter.untagged',
       });
