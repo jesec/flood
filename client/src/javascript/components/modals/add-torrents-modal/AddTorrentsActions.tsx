@@ -1,16 +1,20 @@
-import {injectIntl} from 'react-intl';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React, {PureComponent} from 'react';
 
 import ModalActions from '../ModalActions';
 import SettingsStore from '../../../stores/SettingsStore';
 
-class AddTorrentsActions extends PureComponent {
-  getActions() {
-    const startTorrentsOnLoad = SettingsStore.getFloodSetting('startTorrentsOnLoad');
+interface AddTorrentsActionsProps extends WrappedComponentProps {
+  isAddingTorrents: boolean;
+  onAddTorrentsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+class AddTorrentsActions extends PureComponent<AddTorrentsActionsProps> {
+  getActions(): ModalActions['props']['actions'] {
     return [
       {
-        checked: startTorrentsOnLoad === 'true' || startTorrentsOnLoad === true,
-        clickHandler: this.handleStartTorrentsToggle,
+        checked: Boolean(SettingsStore.getFloodSetting('startTorrentsOnLoad')),
+        clickHandler: null,
         content: this.props.intl.formatMessage({
           id: 'torrents.add.start.label',
         }),
@@ -40,7 +44,7 @@ class AddTorrentsActions extends PureComponent {
   }
 
   render() {
-    return <ModalActions actions={this.getActions()} dismiss={this.props.dismiss} />;
+    return <ModalActions actions={this.getActions()} />;
   }
 }
 

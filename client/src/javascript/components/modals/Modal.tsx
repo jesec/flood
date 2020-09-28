@@ -4,9 +4,31 @@ import React from 'react';
 import ModalActions from './ModalActions';
 import ModalTabs from './ModalTabs';
 
-const METHODS_TO_BIND = ['handleTabChange'];
+import type {Tab} from './ModalTabs';
 
-export default class Modal extends React.Component {
+interface ModalProps {
+  heading?: React.ReactNode;
+  content?: React.ReactNode;
+  className?: string | null;
+  alignment?: 'left' | 'center';
+  size?: 'medium' | 'large';
+  orientation?: 'horizontal' | 'vertical';
+  tabsInBody?: boolean;
+  inverse?: boolean;
+  actions?: ModalActions['props']['actions'];
+  tabs?: Record<string, Tab>;
+  onSetRef?: (id: string, ref: HTMLDivElement | null) => void;
+}
+
+interface ModalStates {
+  activeTabId: string | null;
+}
+
+const METHODS_TO_BIND = ['handleTabChange'] as const;
+
+export default class Modal extends React.Component<ModalProps, ModalStates> {
+  domRefs: Record<string, HTMLDivElement | null> = {};
+
   static defaultProps = {
     alignment: 'left',
     className: null,
@@ -16,10 +38,9 @@ export default class Modal extends React.Component {
     tabsInBody: false,
   };
 
-  constructor() {
-    super();
+  constructor(props: ModalProps) {
+    super(props);
 
-    this.domRefs = {};
     this.state = {
       activeTabId: null,
     };
@@ -29,19 +50,11 @@ export default class Modal extends React.Component {
     });
   }
 
-  getActiveTabId() {
-    if (this.state.activeTabId) {
-      return this.state.activeTabId;
-    }
-
-    return Object.keys(this.props.tabs)[0];
+  handleTabChange(tab: Tab) {
+    this.setState({activeTabId: tab.id || null});
   }
 
-  handleTabChange(tab) {
-    this.setState({activeTabId: tab.id});
-  }
-
-  setRef(id, ref) {
+  setRef(id: string, ref: HTMLDivElement | null) {
     this.domRefs[id] = ref;
 
     if (this.props.onSetRef) {
@@ -74,11 +87,15 @@ export default class Modal extends React.Component {
     let headerTabs;
 
     if (this.props.tabs) {
-      const activeTabId = this.getActiveTabId();
+      let {activeTabId} = this.state;
+      if (activeTabId == null) {
+        [activeTabId] = Object.keys(this.props.tabs);
+      }
+
       const activeTab = this.props.tabs[activeTabId];
       const contentClasses = classnames('modal__content', activeTab.modalContentClasses);
 
-      const ModalContentComponent = activeTab.content;
+      const ModalContentComponent = activeTab.content as React.FunctionComponent;
       const modalContentData = activeTab.props;
 
       const tabs = (
@@ -107,7 +124,7 @@ export default class Modal extends React.Component {
     if (this.props.actions) {
       footer = (
         <div className="modal__footer">
-          <ModalActions actions={this.props.actions} dismiss={this.props.dismiss} />
+          <ModalActions actions={this.props.actions} />
         </div>
       );
     }

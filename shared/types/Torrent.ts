@@ -1,6 +1,7 @@
 import {TorrentStatus} from '../constants/torrentStatusMap';
 
 export interface Duration {
+  years?: number;
   weeks?: number;
   days?: number;
   hours?: number;

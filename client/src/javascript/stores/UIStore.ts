@@ -29,8 +29,18 @@ export interface Dependency {
 export type Dependencies = Record<string, Dependency>;
 
 export interface Modal {
-  id: string;
+  id:
+    | 'add-torrents'
+    | 'confirm'
+    | 'feeds'
+    | 'move-torrents'
+    | 'remove-torrents'
+    | 'set-taxonomy'
+    | 'set-tracker'
+    | 'settings'
+    | 'torrent-details';
   torrents?: unknown;
+  options?: unknown;
 }
 
 class UIStoreClass extends BaseStore {

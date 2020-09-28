@@ -1,4 +1,4 @@
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
 import {Checkbox, Form, FormRow} from '../../../ui';
@@ -7,9 +7,11 @@ import SettingsStore from '../../../stores/SettingsStore';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
-class RemoveTorrentsModal extends React.Component {
-  getActions(torrents) {
-    if (torrents.length === 0) {
+class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
+  formRef?: Form | null;
+
+  getActions(torrentCount: number): Modal['props']['actions'] {
+    if (torrentCount === 0) {
       return [
         {
           clickHandler: null,
@@ -22,7 +24,7 @@ class RemoveTorrentsModal extends React.Component {
 
     return [
       {
-        clickHandler: this.handleRemoveTorrentDecline,
+        clickHandler: null,
         content: this.props.intl.formatMessage({
           id: 'button.no',
         }),
@@ -40,15 +42,14 @@ class RemoveTorrentsModal extends React.Component {
     ];
   }
 
-  getContent(torrents) {
+  getContent(torrentCount: number) {
     let modalContent = null;
     let deleteDataContent = null;
-    const selectedTorrentCount = torrents.length;
 
-    if (selectedTorrentCount === 0) {
+    if (torrentCount === 0) {
       modalContent = <FormattedMessage id="torrents.remove.error.no.torrents.selected" />;
     } else {
-      modalContent = <FormattedMessage id="torrents.remove.are.you.sure" values={{count: selectedTorrentCount}} />;
+      modalContent = <FormattedMessage id="torrents.remove.are.you.sure" values={{count: torrentCount}} />;
 
       deleteDataContent = (
         <FormRow>
@@ -73,9 +74,14 @@ class RemoveTorrentsModal extends React.Component {
   }
 
   handleRemovalConfirmation = () => {
+    let deleteData = false;
+    if (this.formRef != null && this.formRef.getFormData().deleteData) {
+      deleteData = true;
+    }
+
     TorrentActions.deleteTorrents({
       hashes: TorrentStore.getSelectedTorrents(),
-      deleteData: this.formRef.getFormData().deleteData,
+      deleteData,
     });
   };
 
@@ -87,10 +93,9 @@ class RemoveTorrentsModal extends React.Component {
 
     return (
       <Modal
-        actions={this.getActions(selectedTorrents)}
+        actions={this.getActions(selectedTorrents.length)}
         alignment="center"
-        content={this.getContent(selectedTorrents)}
-        dismiss={this.props.dismiss}
+        content={this.getContent(selectedTorrents.length)}
         heading={modalHeading}
       />
     );

@@ -1,12 +1,26 @@
 import classnames from 'classnames';
 import React from 'react';
 
-export default class ModalTabs extends React.Component {
+export interface Tab {
+  id?: string;
+  label: React.ReactNode;
+  content: React.ReactNode | React.FunctionComponent;
+  props?: Record<string, unknown>;
+  modalContentClasses?: string;
+}
+
+interface ModalTabsProps {
+  activeTabId: string | null;
+  tabs: Record<string, Tab>;
+  onTabChange: (tab: Tab) => void;
+}
+
+export default class ModalTabs extends React.Component<ModalTabsProps> {
   static defaultProps = {
-    tabs: [],
+    tabs: {},
   };
 
-  handleTabClick(tab) {
+  handleTabClick(tab: Tab) {
     if (this.props.onTabChange) {
       this.props.onTabChange(tab);
     }

@@ -22,7 +22,7 @@ export interface Rule {
   destination: string;
   tags: Array<string>;
   startOnLoad: boolean;
-  useBasePath?: boolean;
+  isBasePath?: boolean;
   count?: number;
 }
 

@@ -1,7 +1,14 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
-export default class Duration extends React.Component {
+import type {Duration as DurationType} from '@shared/types/Torrent';
+
+interface DurationProps {
+  suffix: React.ReactNode;
+  value: 'Infinity' | DurationType;
+}
+
+export default class Duration extends React.Component<DurationProps> {
   render() {
     let {suffix = null} = this.props;
     const {value: duration} = this.props;
@@ -18,7 +25,7 @@ export default class Duration extends React.Component {
 
     if (duration === 'Infinity') {
       content = <FormattedMessage id="unit.time.infinity" />;
-    } else if (duration.years > 0) {
+    } else if (duration.years != null && duration.years > 0) {
       content = [
         <span className="duration--segment" key="years">
           {duration.years}
@@ -33,7 +40,7 @@ export default class Duration extends React.Component {
           </em>
         </span>,
       ];
-    } else if (duration.weeks > 0) {
+    } else if (duration.weeks != null && duration.weeks > 0) {
       content = [
         <span className="duration--segment" key="weeks">
           {duration.weeks}
@@ -48,7 +55,7 @@ export default class Duration extends React.Component {
           </em>
         </span>,
       ];
-    } else if (duration.days > 0) {
+    } else if (duration.days != null && duration.days > 0) {
       content = [
         <span className="duration--segment" key="days">
           {duration.days}
@@ -63,7 +70,7 @@ export default class Duration extends React.Component {
           </em>
         </span>,
       ];
-    } else if (duration.hours > 0) {
+    } else if (duration.hours != null && duration.hours > 0) {
       content = [
         <span className="duration--segment" key="hours">
           {duration.hours}
@@ -78,7 +85,7 @@ export default class Duration extends React.Component {
           </em>
         </span>,
       ];
-    } else if (duration.minutes > 0) {
+    } else if (duration.minutes != null && duration.minutes > 0) {
       content = [
         <span className="duration--segment" key="minutes">
           {duration.minutes}

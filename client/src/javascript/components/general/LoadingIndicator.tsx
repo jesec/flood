@@ -1,7 +1,11 @@
 import classnames from 'classnames';
 import React from 'react';
 
-export default class LoadingIndicator extends React.Component {
+interface LoadingIndicatorProps {
+  inverse?: boolean;
+}
+
+export default class LoadingIndicator extends React.Component<LoadingIndicatorProps> {
   render() {
     const classes = classnames('loading-indicator', {
       'is-inverse': this.props.inverse,

@@ -103,7 +103,7 @@ class AddTorrentsByFile extends React.Component {
     this.setState({isAddingTorrents: true});
 
     const fileData = new FormData();
-    const {destination, start, tags, useBasePath} = formData;
+    const {destination, start, tags, isBasePath} = formData;
 
     this.state.files.forEach((file) => {
       fileData.append('torrents', file);
@@ -114,7 +114,7 @@ class AddTorrentsByFile extends React.Component {
     });
 
     fileData.append('destination', destination);
-    fileData.append('isBasePath', useBasePath);
+    fileData.append('isBasePath', isBasePath);
     fileData.append('start', start);
 
     TorrentActions.addTorrentsByFiles(fileData, destination);
@@ -145,7 +145,6 @@ class AddTorrentsByFile extends React.Component {
           />
         </FormRow>
         <AddTorrentsActions
-          dismiss={this.props.dismissModal}
           onAddTorrentsClick={this.handleAddTorrents}
           isAddingTorrents={this.state.isAddingTorrents}
         />

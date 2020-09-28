@@ -1,16 +1,11 @@
-import {injectIntl} from 'react-intl';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
 import AddTorrentsByFile from './AddTorrentsByFile';
 import AddTorrentsByURL from './AddTorrentsByURL';
 import Modal from '../Modal';
-import UIActions from '../../../actions/UIActions';
 
-class AddTorrents extends React.Component {
-  dismissModal() {
-    UIActions.dismissModal();
-  }
-
+class AddTorrents extends React.Component<WrappedComponentProps> {
   render() {
     const tabs = {
       'by-url': {
@@ -32,7 +27,6 @@ class AddTorrents extends React.Component {
         heading={this.props.intl.formatMessage({
           id: 'torrents.add.heading',
         })}
-        dismiss={this.dismissModal}
         tabs={tabs}
       />
     );

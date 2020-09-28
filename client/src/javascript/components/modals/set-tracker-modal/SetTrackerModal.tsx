@@ -1,4 +1,4 @@
-import {injectIntl} from 'react-intl';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
 import {Form, FormRow, Textbox} from '../../../ui';
@@ -6,26 +6,36 @@ import Modal from '../Modal';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
-class SetTagsModal extends React.Component {
-  formRef = null;
+interface SetTrackerModalStates {
+  isSettingTracker: boolean;
+}
 
-  constructor(props) {
+class SetTrackerModal extends React.Component<WrappedComponentProps, SetTrackerModalStates> {
+  formRef: Form | null = null;
+
+  constructor(props: WrappedComponentProps) {
     super(props);
     this.state = {
-      isSettingTags: false,
+      isSettingTracker: false,
     };
   }
 
-  handleSetTagsClick = () => {
-    const formData = this.formRef.getFormData();
-    const tags = formData.tags ? formData.tags.split(',') : [];
+  handleSetTrackerClick = (): void => {
+    if (this.formRef == null) {
+      return;
+    }
 
-    this.setState({isSettingTags: true}, () => TorrentActions.setTaxonomy(TorrentStore.getSelectedTorrents(), tags));
+    const formData = this.formRef.getFormData() as {tracker: string};
+    const {tracker} = formData;
+
+    this.setState({isSettingTracker: true}, () =>
+      TorrentActions.setTracker(TorrentStore.getSelectedTorrents(), tracker),
+    );
   };
 
-  getActions() {
+  getActions(): Modal['props']['actions'] {
     const primaryButtonText = this.props.intl.formatMessage({
-      id: 'torrents.set.tags.button.set',
+      id: 'torrents.set.tracker.button.set',
     });
 
     return [
@@ -38,17 +48,17 @@ class SetTagsModal extends React.Component {
         type: 'tertiary',
       },
       {
-        clickHandler: this.handleSetTagsClick,
+        clickHandler: this.handleSetTrackerClick,
         content: primaryButtonText,
-        isLoading: this.state.isSettingTags,
+        isLoading: this.state.isSettingTracker,
         triggerDismiss: false,
         type: 'primary',
       },
     ];
   }
 
-  getContent() {
-    const tagsValue = TorrentStore.getSelectedTorrentsTags()[0].join(', ');
+  getContent(): React.ReactNode {
+    const trackerValue = TorrentStore.getSelectedTorrentsTrackerURIs()[0].join(', ');
 
     return (
       <div className="modal__content inverse">
@@ -58,10 +68,10 @@ class SetTagsModal extends React.Component {
           }}>
           <FormRow>
             <Textbox
-              defaultValue={tagsValue}
-              id="tags"
+              defaultValue={trackerValue}
+              id="tracker"
               placeholder={this.props.intl.formatMessage({
-                id: 'torrents.set.tags.enter.tags',
+                id: 'torrents.set.tracker.enter.tracker',
               })}
             />
           </FormRow>
@@ -75,13 +85,12 @@ class SetTagsModal extends React.Component {
       <Modal
         actions={this.getActions()}
         content={this.getContent()}
-        dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
-          id: 'torrents.set.tags.heading',
+          id: 'torrents.set.tracker.heading',
         })}
       />
     );
   }
 }
 
-export default injectIntl(SetTagsModal);
+export default injectIntl(SetTrackerModal);

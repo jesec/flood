@@ -1,7 +1,11 @@
 import {FormattedNumber} from 'react-intl';
 import React from 'react';
 
-export default class Ratio extends React.Component {
+interface RatioProps {
+  value: number;
+}
+
+export default class Ratio extends React.Component<RatioProps> {
   render() {
     let ratio = this.props.value;
 
@@ -14,7 +18,7 @@ export default class Ratio extends React.Component {
       precision = 0;
     }
 
-    ratio = ratio.toFixed(precision);
+    ratio = Number(ratio.toFixed(precision));
 
     return <FormattedNumber value={ratio} />;
   }

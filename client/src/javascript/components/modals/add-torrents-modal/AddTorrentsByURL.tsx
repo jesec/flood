@@ -17,14 +17,10 @@ type AddTorrentsByURLFormData = {
   [urls: string]: string;
 } & {
   destination: string;
-  useBasePath: boolean;
+  isBasePath: boolean;
   start: boolean;
   tags: string;
 };
-
-interface AddTorrentsByURLProps extends WrappedComponentProps {
-  dismissModal: () => void;
-}
 
 interface AddTorrentsByURLStates {
   isAddingTorrents: boolean;
@@ -32,10 +28,10 @@ interface AddTorrentsByURLStates {
   urlTextboxes: Textboxes;
 }
 
-class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrentsByURLStates> {
+class AddTorrentsByURL extends React.Component<WrappedComponentProps, AddTorrentsByURLStates> {
   formRef: Form | null = null;
 
-  constructor(props: AddTorrentsByURLProps) {
+  constructor(props: WrappedComponentProps) {
     super(props);
 
     const activeModal = UIStore.getActiveModal();
@@ -81,7 +77,7 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
     TorrentActions.addTorrentsByUrls({
       urls: this.getURLsFromForm(),
       destination: formData.destination,
-      isBasePath: formData.useBasePath || false,
+      isBasePath: formData.isBasePath || false,
       start: formData.start || false,
       tags: formData.tags != null ? formData.tags.split(',') : undefined,
     });
@@ -122,7 +118,6 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
           />
         </FormRow>
         <AddTorrentsActions
-          dismiss={this.props.dismissModal}
           onAddTorrentsClick={this.handleAddTorrents}
           isAddingTorrents={this.state.isAddingTorrents}
         />

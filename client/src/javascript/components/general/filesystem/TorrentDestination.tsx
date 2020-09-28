@@ -186,7 +186,7 @@ class TorrentDestination extends React.Component<TorrentDestinationProps, Torren
           </Textbox>
         </FormRow>
         <FormRow>
-          <Checkbox grow={false} id="useBasePath">
+          <Checkbox grow={false} id="isBasePath">
             <FormattedMessage id="torrents.destination.base_path" />
           </Checkbox>
         </FormRow>

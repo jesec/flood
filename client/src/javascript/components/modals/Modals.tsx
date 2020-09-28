@@ -16,21 +16,44 @@ import TorrentDetailsModal from './torrent-details-modal/TorrentDetailsModal';
 import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
-class Modals extends React.Component {
-  constructor() {
-    super();
+import type {Modal} from '../../stores/UIStore';
 
-    this.modals = {
-      'add-torrents': AddTorrentsModal,
-      confirm: ConfirmModal,
-      feeds: FeedsModal,
-      'move-torrents': MoveTorrentsModal,
-      'remove-torrents': RemoveTorrentsModal,
-      'set-taxonomy': SetTagsModal,
-      'set-tracker': SetTrackerModal,
-      settings: SettingsModal,
-      'torrent-details': TorrentDetailsModal,
-    };
+interface ModalsProps {
+  activeModal?: Modal | null;
+}
+
+const createModal = (id: Modal['id'], options: Modal['options']): React.ReactNode => {
+  switch (id) {
+    case 'add-torrents':
+      return <AddTorrentsModal />;
+    case 'confirm':
+      return <ConfirmModal options={options as ConfirmModal['props']['options']} />;
+    case 'feeds':
+      return <FeedsModal />;
+    case 'move-torrents':
+      return <MoveTorrentsModal />;
+    case 'remove-torrents':
+      return <RemoveTorrentsModal />;
+    case 'set-taxonomy':
+      return <SetTagsModal />;
+    case 'set-tracker':
+      return <SetTrackerModal />;
+    case 'settings':
+      return <SettingsModal />;
+    case 'torrent-details':
+      return <TorrentDetailsModal options={options} />;
+    default:
+      return null;
+  }
+};
+
+const dismissModal = () => {
+  UIActions.dismissModal();
+};
+
+class Modals extends React.Component<ModalsProps> {
+  constructor(props: ModalsProps) {
+    super(props);
 
     this.handleKeyPress = throttle(this.handleKeyPress, 1000);
   }
@@ -43,28 +66,14 @@ class Modals extends React.Component {
     window.removeEventListener('keydown', this.handleKeyPress);
   }
 
-  dismissModal() {
-    UIActions.dismissModal();
-  }
-
-  getModal() {
-    const ActiveModal = this.modals[this.props.activeModal.id];
-
-    return <ActiveModal dismiss={this.dismissModal} options={this.props.activeModal.options} />;
-  }
-
-  handleKeyPress = (event) => {
+  handleKeyPress = (event: KeyboardEvent) => {
     if (this.props.activeModal != null && event.keyCode === 27) {
-      this.dismissModal();
+      dismissModal();
     }
   };
 
-  handleModalClick(event) {
-    event.stopPropagation();
-  }
-
   handleOverlayClick = () => {
-    this.dismissModal();
+    dismissModal();
   };
 
   render() {
@@ -75,7 +84,7 @@ class Modals extends React.Component {
         <CSSTransition key={this.props.activeModal.id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
           <div className="modal">
             <div className="modal__overlay" onClick={this.handleOverlayClick} />
-            {this.getModal()}
+            {createModal(this.props.activeModal.id, this.props.activeModal.options)}
           </div>
         </CSSTransition>
       );
@@ -90,9 +99,9 @@ const ConnectedModals = connectStores(Modals, () => {
     {
       store: UIStore,
       event: EventTypes.UI_MODAL_CHANGE,
-      getValue: ({store}) => {
+      getValue: () => {
         return {
-          activeModal: store.getActiveModal(),
+          activeModal: UIStore.getActiveModal(),
         };
       },
     },

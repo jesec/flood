@@ -11,7 +11,6 @@ import TorrentHeading from './TorrentHeading';
 import TorrentPeers from './TorrentPeers';
 import TorrentStore from '../../../stores/TorrentStore';
 import TorrentTrackers from './TorrentTrackers';
-import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
 
 class TorrentDetailsModal extends React.Component {
@@ -21,10 +20,6 @@ class TorrentDetailsModal extends React.Component {
 
   componentWillUnmount() {
     TorrentStore.stopPollingTorrentDetails();
-  }
-
-  dismissModal() {
-    UIActions.dismissModal();
   }
 
   getModalHeading() {
@@ -80,7 +75,6 @@ class TorrentDetailsModal extends React.Component {
     return (
       <Modal
         heading={this.getModalHeading()}
-        dismiss={this.dismissModal}
         size="large"
         tabs={tabs}
         orientation={window.matchMedia('(max-width: 720px)').matches ? 'horizontal' : 'vertical'}

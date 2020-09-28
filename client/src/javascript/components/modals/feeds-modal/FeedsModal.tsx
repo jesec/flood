@@ -6,11 +6,7 @@ import {FeedsStoreClass} from '../../../stores/FeedsStore';
 import FeedsTab from './FeedsTab';
 import Modal from '../Modal';
 
-interface FeedsModalProps extends WrappedComponentProps {
-  dismiss(): void;
-}
-
-class FeedsModal extends React.Component<FeedsModalProps> {
+class FeedsModal extends React.Component<WrappedComponentProps> {
   componentDidMount() {
     FeedsStoreClass.fetchFeedMonitors();
   }
@@ -33,7 +29,6 @@ class FeedsModal extends React.Component<FeedsModalProps> {
 
     return (
       <Modal
-        dismiss={this.props.dismiss}
         heading={this.props.intl.formatMessage({
           id: 'feeds.tabs.heading',
         })}
