@@ -249,7 +249,7 @@ class ClientRequest {
       let callback = () => {
         // empty initializer
       };
-      const destination = `${destinationPath}${path.sep}${filenames[index]}`;
+      const destination = path.join(destinationPath, filenames[index]);
       const isLastRequest = index + 1 === sourcePaths.length;
 
       if (isLastRequest) {

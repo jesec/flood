@@ -285,7 +285,7 @@ const client = {
       moveTorrentsRequest.moveTorrents({
         filenames,
         sourcePaths,
-        resolvedPath,
+        destinationPath: resolvedPath,
       });
     };
 
