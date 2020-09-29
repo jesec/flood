@@ -160,7 +160,10 @@ const TorrentActions = {
         (error) => {
           AppDispatcher.dispatchServerAction({
             type: 'CLIENT_MOVE_TORRENTS_ERROR',
-            error,
+            error: {
+              error,
+              count: options.hashes.length,
+            },
           });
         },
       );

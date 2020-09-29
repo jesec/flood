@@ -160,11 +160,11 @@ router.post<unknown, unknown, CheckTorrentsOptions>('/torrents/check-hash', (req
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, MoveTorrentsOptions>('/torrents/move', (req, res) => {
-  const {hashes, filenames, sourcePaths, destination, moveFiles, isBasePath, isCheckHash} = req.body;
+  const {hashes, destination, moveFiles, isBasePath, isCheckHash} = req.body;
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .moveTorrents({hashes, filenames, sourcePaths, destination, moveFiles, isBasePath, isCheckHash})
+    .moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash})
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;

@@ -107,15 +107,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @param {MoveTorrentsOptions} options - An object of options...
    * @return {Promise} - Resolves with the processed client response or rejects with the processed client error.
    */
-  async moveTorrents({
-    hashes,
-    filenames,
-    sourcePaths,
-    destination,
-    moveFiles,
-    isBasePath,
-    isCheckHash,
-  }: MoveTorrentsOptions) {
+  async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions) {
     if (this.services == null || this.services.clientRequestManager == null || this.services.torrentService == null) {
       return Promise.reject();
     }
@@ -152,15 +144,18 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       });
 
     if (moveFiles) {
-      sourcePaths.forEach((source, index) => {
-        const destinationFilePath = fileUtil.sanitizePath(path.join(resolvedPath, filenames[index]));
-        if (!fileUtil.isAllowedPath(destinationFilePath)) {
-          throw fileUtil.accessDeniedError();
+      hashes.forEach((hash) => {
+        const sourceBasePath = this.services?.torrentService.getTorrent(hash).basePath;
+        const baseFileName = this.services?.torrentService.getTorrent(hash).baseFilename;
+
+        if (sourceBasePath == null || baseFileName == null) {
+          return;
         }
 
-        if (source !== destinationFilePath) {
+        const destinationFilePath = fileUtil.sanitizePath(path.join(resolvedPath, baseFileName));
+        if (sourceBasePath !== destinationFilePath) {
           try {
-            moveSync(source, destinationFilePath, {overwrite: true});
+            moveSync(sourceBasePath, destinationFilePath, {overwrite: true});
           } catch (err) {
             console.error(`Failed to move files to ${resolvedPath}.`);
             console.error(err);
