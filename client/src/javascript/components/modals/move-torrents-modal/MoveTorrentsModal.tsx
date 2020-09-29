@@ -43,7 +43,7 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
   getActions(): ModalActions['props']['actions'] {
     return [
       {
-        checked: false,
+        checked: true,
         content: this.props.intl.formatMessage({
           id: 'torrents.move.data.label',
         }),
@@ -51,7 +51,7 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
         type: 'checkbox',
       },
       {
-        checked: true,
+        checked: false,
         content: this.props.intl.formatMessage({
           id: 'torrents.move.check_hash.label',
         }),
