@@ -85,12 +85,16 @@ export default class TorrentHeading extends React.Component {
 
   handleStart() {
     this.setState({optimisticData: {currentStatus: 'start'}});
-    TorrentActions.startTorrents([this.props.torrent.hash]);
+    TorrentActions.startTorrents({
+      hashes: [this.props.torrent.hash],
+    });
   }
 
   handleStop() {
     this.setState({optimisticData: {currentStatus: 'stop'}});
-    TorrentActions.stopTorrents([this.props.torrent.hash]);
+    TorrentActions.stopTorrents({
+      hashes: [this.props.torrent.hash],
+    });
   }
 
   render() {

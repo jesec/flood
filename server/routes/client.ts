@@ -1,7 +1,7 @@
 import express from 'express';
 import multer from 'multer';
 
-import type {DeleteTorrentsOptions} from '@shared/types/Action';
+import type {DeleteTorrentsOptions, StartTorrentsOptions, StopTorrentsOptions} from '@shared/types/Action';
 
 import ajaxUtil from '../util/ajaxUtil';
 import booleanCoerce from '../middleware/booleanCoerce';
@@ -57,14 +57,6 @@ router.put('/settings/speed-limits', (req, res) => {
   client.setSpeedLimits(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.post('/start', (req, res) => {
-  client.startTorrent(req.user, req.services, req.body.hashes, ajaxUtil.getResponseFn(res));
-});
-
-router.post('/stop', (req, res) => {
-  client.stopTorrent(req.user, req.services, req.body.hashes, ajaxUtil.getResponseFn(res));
-});
-
 router.post('/torrent-details', (req, res) => {
   client.getTorrentDetails(req.user, req.services, req.body.hash, ajaxUtil.getResponseFn(res));
 });
@@ -75,6 +67,48 @@ router.patch('/torrents/:hash/priority', (req, res) => {
 
 router.patch('/torrents/:hash/file-priority', (req, res) => {
   client.setFilePriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
+});
+
+/**
+ * POST /api/client/torrents/start
+ * @summary Starts torrents.
+ * @tags Torrents
+ * @security AuthenticatedUser
+ * @param {StartTorrentsOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.post<unknown, unknown, StartTorrentsOptions>('/torrents/start', (req, res) => {
+  const {hashes} = req.body;
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .startTorrents({hashes})
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
+});
+
+/**
+ * POST /api/client/torrents/stop
+ * @summary Stops torrents.
+ * @tags Torrents
+ * @security AuthenticatedUser
+ * @param {StopTorrentsOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.post<unknown, unknown, StopTorrentsOptions>('/torrents/stop', (req, res) => {
+  const {hashes} = req.body;
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .stopTorrents({hashes})
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
 router.post('/torrents/check-hash', (req, res) => {

@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 import type {Credentials} from '@shared/types/Auth';
-import type {DeleteTorrentsOptions} from '@shared/types/Action';
+import type {DeleteTorrentsOptions, StartTorrentsOptions, StopTorrentsOptions} from '@shared/types/Action';
 import type {TorrentProperties, Torrents} from '@shared/types/Torrent';
 import type {TransferSummary} from '@shared/types/TransferData';
 
@@ -10,6 +10,8 @@ import BaseService from './BaseService';
 import fileListPropMap from '../constants/fileListPropMap';
 import methodCallUtil from '../util/methodCallUtil';
 import scgiUtil from '../util/scgiUtil';
+
+import type {MultiMethodCalls} from './clientRequestManager';
 
 interface ClientGatewayServiceEvents {
   TORRENTS_REMOVED: () => void;
@@ -77,39 +79,36 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return Promise.reject();
     }
 
-    const methodCalls = hashes.reduce(
-      (accumulator: Array<{methodName: string; params: Array<string>}>, hash, index) => {
-        let eraseFileMethodCallIndex = index;
+    const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash, index) => {
+      let eraseFileMethodCallIndex = index;
 
-        // If we're deleting files, we grab each torrents' file list before we remove them.
-        if (deleteData === true) {
-          // We offset the indices of these method calls so that we know exactly
-          // where to retrieve the responses in the future.
-          const directoryBaseMethodCallIndex = index + hashes.length;
-          // We also need to ensure that the erase method call occurs after
-          // our request for information.
-          eraseFileMethodCallIndex = index + hashes.length * 2;
+      // If we're deleting files, we grab each torrents' file list before we remove them.
+      if (deleteData === true) {
+        // We offset the indices of these method calls so that we know exactly
+        // where to retrieve the responses in the future.
+        const directoryBaseMethodCallIndex = index + hashes.length;
+        // We also need to ensure that the erase method call occurs after
+        // our request for information.
+        eraseFileMethodCallIndex = index + hashes.length * 2;
 
-          accumulator[index] = {
-            methodName: 'f.multicall',
-            params: [hash, ''].concat(fileListMethodCallConfig.methodCalls),
-          };
-
-          accumulator[directoryBaseMethodCallIndex] = {
-            methodName: 'd.directory_base',
-            params: [hash],
-          };
-        }
-
-        accumulator[eraseFileMethodCallIndex] = {
-          methodName: 'd.erase',
-          params: [hash],
+        accumulator[index] = {
+          methodName: 'f.multicall',
+          params: [hash, ''].concat(fileListMethodCallConfig.methodCalls),
         };
 
-        return accumulator;
-      },
-      [],
-    );
+        accumulator[directoryBaseMethodCallIndex] = {
+          methodName: 'd.directory_base',
+          params: [hash],
+        };
+      }
+
+      accumulator[eraseFileMethodCallIndex] = {
+        methodName: 'd.erase',
+        params: [hash],
+      };
+
+      return accumulator;
+    }, []);
 
     return this.services.clientRequestManager.methodCall('system.multicall', [methodCalls]).then((response) => {
       if (deleteData === true) {
@@ -153,6 +152,74 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
 
       return response;
     }, this.processClientRequestError);
+  }
+
+  /**
+   * Starts torrents
+   *
+   * @param {StartTorrentsOptions} options - An object of options...
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async startTorrents({hashes}: StartTorrentsOptions) {
+    if (this.services == null || this.services.clientRequestManager == null || this.services.torrentService == null) {
+      return Promise.reject();
+    }
+
+    const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
+      accumulator.push({
+        methodName: 'd.open',
+        params: [hash],
+      });
+
+      accumulator.push({
+        methodName: 'd.start',
+        params: [hash],
+      });
+
+      return accumulator;
+    }, []);
+
+    return this.services.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((response) => {
+        this.services?.torrentService.fetchTorrentList();
+        return response;
+      });
+  }
+
+  /**
+   * Stops torrents
+   *
+   * @param {StopTorrentsOptions} options - An object of options...
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async stopTorrents({hashes}: StopTorrentsOptions) {
+    if (this.services == null || this.services.clientRequestManager == null || this.services.torrentService == null) {
+      return Promise.reject();
+    }
+
+    const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
+      accumulator.push({
+        methodName: 'd.stop',
+        params: [hash],
+      });
+
+      accumulator.push({
+        methodName: 'd.close',
+        params: [hash],
+      });
+
+      return accumulator;
+    }, []);
+
+    return this.services.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((response) => {
+        this.services?.torrentService.fetchTorrentList();
+        return response;
+      });
   }
 
   /**

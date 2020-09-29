@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-import type {AddTorrentByURLOptions, DeleteTorrentsOptions, MoveTorrentsOptions} from '@shared/types/Action';
+import type {
+  AddTorrentByURLOptions,
+  DeleteTorrentsOptions,
+  MoveTorrentsOptions,
+  StartTorrentsOptions,
+  StopTorrentsOptions,
+} from '@shared/types/Action';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -169,11 +175,9 @@ const TorrentActions = {
       );
   },
 
-  startTorrents: (hashes: Array<TorrentProperties['hash']>) =>
+  startTorrents: (options: StartTorrentsOptions) =>
     axios
-      .post(`${baseURI}api/client/start`, {
-        hashes,
-      })
+      .post(`${baseURI}api/client/torrents/start`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -190,11 +194,9 @@ const TorrentActions = {
         },
       ),
 
-  stopTorrents: (hashes: Array<TorrentProperties['hash']>) =>
+  stopTorrents: (options: StopTorrentsOptions) =>
     axios
-      .post(`${baseURI}api/client/stop`, {
-        hashes,
-      })
+      .post(`${baseURI}api/client/torrents/stop`, options)
       .then((json) => json.data)
       .then(
         (data) => {

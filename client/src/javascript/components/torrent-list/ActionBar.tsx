@@ -39,11 +39,15 @@ class ActionBar extends React.Component<ActionBarProps> {
   }
 
   static handleStart() {
-    TorrentActions.startTorrents(TorrentStore.getSelectedTorrents());
+    TorrentActions.startTorrents({
+      hashes: TorrentStore.getSelectedTorrents(),
+    });
   }
 
   static handleStop() {
-    TorrentActions.stopTorrents(TorrentStore.getSelectedTorrents());
+    TorrentActions.stopTorrents({
+      hashes: TorrentStore.getSelectedTorrents(),
+    });
   }
 
   static handleSidebarChange() {

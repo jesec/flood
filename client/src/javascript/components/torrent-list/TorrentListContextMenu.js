@@ -47,10 +47,14 @@ const handleItemClick = (action, event, torrent) => {
       UIActions.displayModal({id: 'set-tracker'});
       break;
     case 'start':
-      TorrentActions.startTorrents(selectedTorrents);
+      TorrentActions.startTorrents({
+        hashes: selectedTorrents,
+      });
       break;
     case 'stop':
-      TorrentActions.stopTorrents(selectedTorrents);
+      TorrentActions.stopTorrents({
+        hashes: selectedTorrents,
+      });
       break;
     case 'remove':
       UIActions.displayModal({id: 'remove-torrents'});

@@ -408,27 +408,6 @@ const client = {
     });
     request.send();
   },
-
-  stopTorrent(user, services, hashes, callback) {
-    const request = new ClientRequest(user, services);
-    request.stopTorrents({hashes});
-    request.onComplete((response, error) => {
-      services.torrentService.fetchTorrentList();
-      callback(response, error);
-    });
-    request.send();
-  },
-
-  startTorrent(user, services, hashes, callback) {
-    const request = new ClientRequest(user, services);
-
-    request.startTorrents({hashes});
-    request.onComplete((response, error) => {
-      services.torrentService.fetchTorrentList();
-      callback(response, error);
-    });
-    request.send();
-  },
 };
 
 export default client;
