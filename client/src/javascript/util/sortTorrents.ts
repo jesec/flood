@@ -1,83 +1,62 @@
-import type {Duration, TorrentProperties, Torrents} from '@shared/types/Torrent';
+import sort from 'fast-sort';
+
+import type {TorrentProperties} from '@shared/types/Torrent';
 
 import type {FloodSettings} from '../stores/SettingsStore';
 
-const stringProps = ['basePath', 'comment', 'hash', 'message', 'name'];
+type SortRule = {
+  [direction in FloodSettings['sortTorrents']['direction']]:
+    | keyof TorrentProperties
+    | ((p: TorrentProperties) => unknown);
+};
 
-// TODO: Split up this garbage.
-function sortTorrents(torrentsHash: Torrents, sortBy: FloodSettings['sortTorrents']) {
-  const torrents = Object.keys(torrentsHash).map((hash) => ({...torrentsHash[hash]}));
+function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<FloodSettings['sortTorrents']>) {
+  const {property} = sortBy;
+  const sortRules: Array<SortRule> = [];
 
-  if (torrents.length) {
-    const {direction, property} = sortBy;
-
-    torrents.sort((a, b) => {
-      let valA = a[property as keyof TorrentProperties];
-      let valB = b[property as keyof TorrentProperties];
-
-      if (property === 'peers' || property === 'seeds') {
-        valA = a[`${property}Connected` as keyof TorrentProperties];
-        valB = b[`${property}Connected` as keyof TorrentProperties];
-
-        if (valA === valB) {
-          valA = a[`${property}Total` as keyof TorrentProperties];
-          valB = b[`${property}Total` as keyof TorrentProperties];
-        }
-      } else if (property === 'eta') {
-        // Keep Infinity and null values at bottom of array.
-        if ((valA === 'Infinity' && valB !== 'Infinity') || (valA == null && valB != null)) {
-          return 1;
-        }
-        if ((valA !== 'Infinity' && valB === 'Infinity') || (valA != null && valB == null)) {
-          return -1;
-        }
-        if (valA == null && valB == null) {
-          return 0;
-        }
-
-        // If it's not infinity, compare the cumulative seconds as regular numbers.
-        if (valA !== 'Infinity') {
-          valA = Number((valA as Duration).cumSeconds);
-        }
-
-        if (valB !== 'Infinity') {
-          valB = Number((valB as Duration).cumSeconds);
-        }
-      } else if (property === 'tags') {
-        // TODO: Find a better way to sort tags.
-        valA = (valA as TorrentProperties['tags']).join(',').toLowerCase();
-        valB = (valB as TorrentProperties['tags']).join(',').toLowerCase();
-      } else if (stringProps.includes(property)) {
-        valA = (valA as string).toLowerCase();
-        valB = (valB as string).toLowerCase();
-      } else {
-        valA = Number(valA);
-        valB = Number(valB);
-      }
-
-      // TODO: Use locale compare for sorting strings.
-      if (direction === 'asc') {
-        if (valA > valB) {
-          return 1;
-        }
-        if (valA < valB) {
-          return -1;
-        }
-      } else {
-        if (valA > valB) {
-          return -1;
-        }
-        if (valA < valB) {
-          return 1;
-        }
-      }
-
-      return 0;
-    });
-
-    return torrents;
+  switch (property) {
+    case 'peers':
+    case 'seeds':
+      sortRules.push(
+        {[sortBy.direction]: `${property}Connected`} as SortRule,
+        {[sortBy.direction]: `${property}Total`} as SortRule,
+      );
+      break;
+    case 'eta':
+      sortRules.push({
+        [sortBy.direction]: (p: TorrentProperties) => {
+          if (p.eta === 'Infinity') {
+            return -1;
+          }
+          return p.eta.cumSeconds;
+        },
+      } as SortRule);
+      break;
+    case 'tags':
+      sortRules.push({
+        [sortBy.direction]: (p: TorrentProperties) => {
+          return p[property].join(',').toLowerCase();
+        },
+      } as SortRule);
+      break;
+    case 'basePath':
+    case 'comment':
+    case 'hash':
+    case 'message':
+    case 'name':
+      // Those fields are strings. We want case-insensitive sorting.
+      sortRules.push({
+        [sortBy.direction]: (p: TorrentProperties) => {
+          return p[property].toLowerCase();
+        },
+      } as SortRule);
+      break;
+    default:
+      sortRules.push({[sortBy.direction]: property} as SortRule);
+      break;
   }
-  return torrents;
+
+  return sort(torrents).by(sortRules);
 }
 
 export default sortTorrents;

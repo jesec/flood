@@ -220,7 +220,7 @@ class TorrentStoreClass extends BaseStore {
 
       switch (diff.action) {
         case 'TORRENT_LIST_ACTION_TORRENT_ADDED':
-          this.torrents[torrentHash] = diff.data as TorrentProperties;
+          this.torrents[torrentHash] = diff.data;
           break;
         case 'TORRENT_LIST_ACTION_TORRENT_DELETED':
           if (this.selectedTorrents.includes(torrentHash)) {
@@ -266,7 +266,7 @@ class TorrentStoreClass extends BaseStore {
 
   sortTorrents() {
     // Convert torrents hash to array and sort it.
-    this.sortedTorrents = sortTorrents(this.torrents, this.getTorrentsSort());
+    this.sortedTorrents = sortTorrents(Object.values(this.torrents), this.getTorrentsSort());
   }
 
   startPollingTorrentDetails() {

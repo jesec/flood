@@ -108,6 +108,7 @@
     "eslint-plugin-react": "^7.21.2",
     "eslint-plugin-react-hooks": "^4.1.2",
     "express": "^4.17.1",
+    "fast-sort": "^2.2.0",
     "feedsub": "^0.7.1",
     "file-loader": "^6.1.0",
     "flux": "^3.1.3",
