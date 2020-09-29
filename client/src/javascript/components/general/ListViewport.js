@@ -103,7 +103,7 @@ class ListViewport extends React.Component {
   }
 
   getViewportLimits(scrollDelta) {
-    if (this.state.itemHeight == null) {
+    if (this.state.itemHeight == null || this.state.itemHeight === 0) {
       return {
         minItemIndex: 0,
         maxItemIndex: Math.min(50, this.props.listLength),
@@ -111,7 +111,7 @@ class ListViewport extends React.Component {
     }
 
     // Calculate the number of items that should be rendered based on the height
-    // of the viewport. We offset this to render a few more outide of the
+    // of the viewport. We offset this to render a few more outside of the
     // container's dimensions, which looks nicer when the user scrolls.
     const {itemScrollOffset} = this.props;
     const offsetBottom = scrollDelta > 0 ? itemScrollOffset * 2 : itemScrollOffset / 2;
