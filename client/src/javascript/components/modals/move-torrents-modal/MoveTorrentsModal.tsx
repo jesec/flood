@@ -15,28 +15,41 @@ interface MoveTorrentsStates {
   originalSource?: string;
 }
 
-const removeTrailingFilename = (path: string, filename: string): string => {
-  let directoryPath = path.substring(0, path.length - filename.length);
+const getSuggestedPath = (sources: Array<string>, filenames: Array<string>): string | undefined => {
+  let commonPath = sources[0].substring(0, sources[0].length - filenames[0].length);
 
-  if (
-    directoryPath.charAt(directoryPath.length - 1) === '/' ||
-    directoryPath.charAt(directoryPath.length - 1) === '\\'
-  ) {
-    directoryPath = directoryPath.substring(0, directoryPath.length - 1);
+  // Remove trailing slash
+  if (commonPath.charAt(commonPath.length - 1) === '/' || commonPath.charAt(commonPath.length - 1) === '\\') {
+    commonPath = commonPath.substring(0, commonPath.length - 1);
   }
 
-  return directoryPath;
+  if (
+    !sources.some((path) => {
+      if (!path.includes(commonPath)) {
+        // Bail out if at least one selected torrent doesn't match.
+        return true;
+      }
+      return false;
+    })
+  ) {
+    // If every selected torrent shares a common path, suggest it.
+    return commonPath;
+  }
+
+  // Fallback to default download location.
+  return undefined;
 };
 
 class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsStates> {
   constructor(props: WrappedComponentProps) {
     super(props);
-    const filenames = TorrentStore.getSelectedTorrentsFilename();
-    const sources = TorrentStore.getSelectedTorrentsDownloadLocations();
 
     this.state = {
       isSettingDownloadPath: false,
-      originalSource: sources.length === 1 ? removeTrailingFilename(sources[0], filenames[0]) : undefined,
+      originalSource: getSuggestedPath(
+        TorrentStore.getSelectedTorrentsDownloadLocations(),
+        TorrentStore.getSelectedTorrentsFilename(),
+      ),
     };
   }
 
