@@ -85,17 +85,6 @@ const client = {
     settings.set(user, {id: 'startTorrentsOnLoad', data: start});
   },
 
-  checkHash(user, services, {hashes}, callback) {
-    const request = new ClientRequest(user, services);
-
-    request.checkHash(hashes);
-    request.onComplete((response, error) => {
-      services.torrentService.fetchTorrentList();
-      callback(response, error);
-    });
-    request.send();
-  },
-
   downloadFiles(user, services, hash, fileString, res) {
     try {
       const selectedTorrent = services.torrentService.getTorrent(hash);

@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import type {
   AddTorrentByURLOptions,
+  CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   StartTorrentsOptions,
@@ -91,9 +92,9 @@ const TorrentActions = {
         },
       ),
 
-  checkHash: (hashes: Array<TorrentProperties['hash']>) =>
+  checkHash: (options: CheckTorrentsOptions) =>
     axios
-      .post(`${baseURI}api/client/torrents/check-hash`, {hashes})
+      .post(`${baseURI}api/client/torrents/check-hash`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -101,7 +102,7 @@ const TorrentActions = {
             type: 'CLIENT_CHECK_HASH_SUCCESS',
             data: {
               data,
-              count: hashes.length,
+              count: options.hashes.length,
             },
           });
         },
@@ -110,7 +111,7 @@ const TorrentActions = {
             type: 'CLIENT_CHECK_HASH_ERROR',
             error: {
               error,
-              count: hashes.length,
+              count: options.hashes.length,
             },
           });
         },

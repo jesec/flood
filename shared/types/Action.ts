@@ -9,6 +9,12 @@ export interface AddTorrentByURLOptions {
   tags?: Array<string>;
 }
 
+// POST /api/client/torrents/check-hash
+export interface CheckTorrentsOptions {
+  // An array of string representing hashes of torrents to be checked
+  hashes: Array<TorrentProperties['hash']>;
+}
+
 // POST /api/client/torrents/delete
 export interface DeleteTorrentsOptions {
   // An array of string representing hashes of torrents to be removed

@@ -1,7 +1,12 @@
 import express from 'express';
 import multer from 'multer';
 
-import type {DeleteTorrentsOptions, StartTorrentsOptions, StopTorrentsOptions} from '@shared/types/Action';
+import type {
+  CheckTorrentsOptions,
+  DeleteTorrentsOptions,
+  StartTorrentsOptions,
+  StopTorrentsOptions,
+} from '@shared/types/Action';
 
 import ajaxUtil from '../util/ajaxUtil';
 import booleanCoerce from '../middleware/booleanCoerce';
@@ -84,6 +89,10 @@ router.post<unknown, unknown, StartTorrentsOptions>('/torrents/start', (req, res
 
   req.services?.clientGatewayService
     .startTorrents({hashes})
+    .then((response) => {
+      req.services?.torrentService.fetchTorrentList();
+      return response;
+    })
     .then(callback)
     .catch((err) => {
       callback(null, err);
@@ -105,14 +114,39 @@ router.post<unknown, unknown, StopTorrentsOptions>('/torrents/stop', (req, res) 
 
   req.services?.clientGatewayService
     .stopTorrents({hashes})
+    .then((response) => {
+      req.services?.torrentService.fetchTorrentList();
+      return response;
+    })
     .then(callback)
     .catch((err) => {
       callback(null, err);
     });
 });
 
-router.post('/torrents/check-hash', (req, res) => {
-  client.checkHash(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
+/**
+ * POST /api/client/torrents/check-hash
+ * @summary Hash checks torrents.
+ * @tags Torrents
+ * @security AuthenticatedUser
+ * @param {CheckTorrentsOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.post<unknown, unknown, CheckTorrentsOptions>('/torrents/check-hash', (req, res) => {
+  const {hashes} = req.body;
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .checkTorrents({hashes})
+    .then((response) => {
+      req.services?.torrentService.fetchTorrentList();
+      return response;
+    })
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
 router.post('/torrents/move', (req, res) => {
@@ -134,6 +168,10 @@ router.post<unknown, unknown, DeleteTorrentsOptions>('/torrents/delete', (req, r
 
   req.services?.clientGatewayService
     .removeTorrents({hashes, deleteData})
+    .then((response) => {
+      req.services?.torrentService.fetchTorrentList();
+      return response;
+    })
     .then(callback)
     .catch((err) => {
       callback(null, err);

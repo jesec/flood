@@ -38,7 +38,9 @@ const handleItemClick = (action, event, torrent) => {
   const selectedTorrents = TorrentStore.getSelectedTorrents();
   switch (action) {
     case 'check-hash':
-      TorrentActions.checkHash(selectedTorrents);
+      TorrentActions.checkHash({
+        hashes: selectedTorrents,
+      });
       break;
     case 'set-taxonomy':
       UIActions.displayModal({id: 'set-taxonomy'});

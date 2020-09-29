@@ -35,7 +35,6 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
 
     this.fetchTorrentList = this.fetchTorrentList.bind(this);
     this.handleTorrentProcessed = this.handleTorrentProcessed.bind(this);
-    this.handleTorrentsRemoved = this.handleTorrentsRemoved.bind(this);
     this.handleFetchTorrentListSuccess = this.handleFetchTorrentListSuccess.bind(this);
     this.handleFetchTorrentListError = this.handleFetchTorrentListError.bind(this);
 
@@ -62,8 +61,6 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
       });
 
       clientGatewayService.on('PROCESS_TORRENT', this.handleTorrentProcessed);
-
-      clientGatewayService.on('TORRENTS_REMOVED', this.handleTorrentsRemoved);
 
       this.fetchTorrentList();
     };
@@ -236,10 +233,6 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
         },
       ]);
     }
-  }
-
-  handleTorrentsRemoved() {
-    this.fetchTorrentList();
   }
 }
 
