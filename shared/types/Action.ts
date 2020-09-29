@@ -9,6 +9,20 @@ export interface AddTorrentByURLOptions {
   tags?: Array<string>;
 }
 
+// POST /api/client/add-files
+export interface AddTorrentByFileOptions {
+  // Torrent files in base64
+  files: Array<string>;
+  // Path of destination
+  destination: string;
+  // Tags
+  tags?: Array<string>;
+  // Whether destination is the base path
+  isBasePath: boolean;
+  // Whether to start torrent
+  start: boolean;
+}
+
 // POST /api/client/torrents/check-hash
 export interface CheckTorrentsOptions {
   // An array of string representing hashes of torrents to be checked

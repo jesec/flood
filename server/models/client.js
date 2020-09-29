@@ -15,15 +15,8 @@ import torrentFileUtil from '../util/torrentFileUtil';
 import torrentTrackerPropsMap from '../../shared/constants/torrentTrackerPropsMap';
 
 const client = {
-  addFiles(user, services, req, callback) {
-    const {files} = req;
-    const {destination: destinationPath, isBasePath, start} = req.body;
-    let {tags} = req.body;
-    const request = new ClientRequest(user, services);
-
-    if (!Array.isArray(tags)) {
-      tags = tags.split(',');
-    }
+  addFiles(user, services, options, callback) {
+    const {destination: destinationPath, files, isBasePath, start, tags} = options;
 
     const resolvedPath = fileUtil.sanitizePath(destinationPath);
     if (!fileUtil.isAllowedPath(resolvedPath)) {
@@ -32,17 +25,14 @@ const client = {
     }
 
     fileUtil.createDirectory({path: resolvedPath});
-    request.send();
 
     // Each torrent is sent individually because rTorrent accepts a total
     // filesize of 524 kilobytes or less. This allows the user to send many
     // torrent files reliably.
     files.forEach((file, index) => {
-      file.originalname = encodeURIComponent(file.originalname);
-
       const fileRequest = new ClientRequest(user, services);
       fileRequest.addFiles({
-        files: file,
+        files: [file],
         path: resolvedPath,
         isBasePath,
         start,

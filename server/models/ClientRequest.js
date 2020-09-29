@@ -114,13 +114,12 @@ class ClientRequest {
   // TODO: Separate these and add support for additional clients.
   // rTorrent method calls.
   addFiles(options) {
-    const files = getEnsuredArray(options.files);
-    const {path: destinationPath, isBasePath, start, tags: tagsArr} = options;
+    const {files, path: destinationPath, isBasePath, start, tags: tagsArr} = options;
 
     files.forEach((file) => {
-      let methodCall = 'load.raw_start';
-      let parameters = ['', file.buffer];
+      const methodCall = start ? 'load.raw_start' : 'load.raw';
       const timeAdded = Math.floor(Date.now() / 1000);
+      let parameters = ['', Buffer.from(file, 'base64')];
 
       if (destinationPath) {
         if (isBasePath) {
@@ -132,14 +131,8 @@ class ClientRequest {
 
       parameters = addTagsToRequest(tagsArr, parameters);
 
-      parameters.push(`d.custom.set=x-filename,${file.originalname}`);
+      // parameters.push(`d.custom.set=x-filename,${file.originalname}`);
       parameters.push(`d.custom.set=addtime,${timeAdded}`);
-
-      // The start value is a string because it was appended to a FormData
-      // object.
-      if (start === 'false') {
-        methodCall = 'load.raw';
-      }
 
       this.requests.push(getMethodCall(methodCall, parameters));
     });

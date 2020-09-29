@@ -95,25 +95,33 @@ class TorrentListContainer extends React.Component {
   };
 
   handleFileDrop = (files) => {
-    const destination =
-      SettingsStore.getFloodSetting('torrentDestination') || SettingsStore.getClientSetting('directoryDefault') || '';
+    const filesData = [];
 
-    const isBasePath = false;
+    const callback = (data) => {
+      filesData.concat(data);
 
-    const start = SettingsStore.getFloodSetting('startTorrentsOnLoad');
-
-    const fileData = new FormData();
+      if (filesData.length === files.length) {
+        TorrentActions.addTorrentsByFiles({
+          files: filesData,
+          destination:
+            SettingsStore.getFloodSetting('torrentDestination') ||
+            SettingsStore.getClientSetting('directoryDefault') ||
+            '',
+          isBasePath: false,
+          start: SettingsStore.getFloodSetting('startTorrentsOnLoad'),
+        });
+      }
+    };
 
     files.forEach((file) => {
-      fileData.append('torrents', file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target != null && e.target.result != null && typeof e.target.result === 'string') {
+          callback(e.target.result.split('base64,')[1]);
+        }
+      };
+      reader.readAsDataURL(file);
     });
-
-    fileData.append('destination', destination);
-    fileData.append('isBasePath', isBasePath);
-    fileData.append('start', start);
-    fileData.append('tags', '');
-
-    TorrentActions.addTorrentsByFiles(fileData, destination);
   };
 
   handleTorrentFilterChange = () => {

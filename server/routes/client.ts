@@ -1,5 +1,4 @@
 import express from 'express';
-import multer from 'multer';
 
 import type {
   CheckTorrentsOptions,
@@ -10,16 +9,9 @@ import type {
 } from '@shared/types/Action';
 
 import ajaxUtil from '../util/ajaxUtil';
-import booleanCoerce from '../middleware/booleanCoerce';
 import client from '../models/client';
 
 const router = express.Router();
-
-const upload = multer({
-  dest: 'uploads/',
-  limits: {fileSize: 10000000},
-  storage: multer.memoryStorage(),
-});
 
 router.get('/connection-test', (req, res) => {
   req.services?.clientGatewayService
@@ -47,8 +39,8 @@ router.post('/add', (req, res) => {
   client.addUrls(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.post('/add-files', upload.array('torrents'), booleanCoerce('isBasePath'), (req, res) => {
-  client.addFiles(req.user, req.services, req, ajaxUtil.getResponseFn(res));
+router.post('/add-files', (req, res) => {
+  client.addFiles(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/settings', (req, res) => {

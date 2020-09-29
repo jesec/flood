@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import type {
+  AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
@@ -41,18 +42,18 @@ const TorrentActions = {
         },
       ),
 
-  addTorrentsByFiles: (formData: FormData, destination: string) =>
+  addTorrentsByFiles: (options: AddTorrentByFileOptions) =>
     axios
-      .post(`${baseURI}api/client/add-files`, formData)
+      .post(`${baseURI}api/client/add-files`, options)
       .then((json) => json.data)
       .then(
-        (response) => {
+        (data) => {
           AppDispatcher.dispatchServerAction({
             type: 'CLIENT_ADD_TORRENT_SUCCESS',
             data: {
-              count: formData.getAll('torrents').length,
-              destination,
-              response,
+              count: options.files.length,
+              destination: options.destination,
+              data,
             },
           });
         },

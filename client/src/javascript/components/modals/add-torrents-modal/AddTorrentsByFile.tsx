@@ -1,26 +1,43 @@
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
 import {Form, FormRow, FormRowItem, Textbox} from '../../../ui';
 import AddTorrentsActions from './AddTorrentsActions';
-import Close from '../../icons/Close';
-import File from '../../icons/File';
-import Files from '../../icons/Files';
+import CloseIcon from '../../icons/Close';
+import FileIcon from '../../icons/File';
+import FilesIcon from '../../icons/Files';
 import SettingsStore from '../../../stores/SettingsStore';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
 
-class AddTorrentsByFile extends React.Component {
-  formRef = null;
+interface AddTorrentsByFileFormData {
+  destination: string;
+  start: boolean;
+  tags: string;
+  isBasePath: boolean;
+}
 
-  constructor(props) {
+interface AddTorrentsByFileStates {
+  errors: Record<string, unknown>;
+  files: Array<{
+    name: string;
+    data: string;
+  }>;
+  tags: string;
+  isAddingTorrents: boolean;
+}
+
+class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorrentsByFileStates> {
+  formRef: Form | null = null;
+
+  constructor(props: WrappedComponentProps) {
     super(props);
     this.state = {
       errors: {},
-      isAddingTorrents: false,
       files: [],
       tags: '',
+      isAddingTorrents: false,
     };
   }
 
@@ -31,19 +48,23 @@ class AddTorrentsByFile extends React.Component {
       const files = this.state.files.map((file, index) => (
         <li className="dropzone__selected-files__file interactive-list__item" key={file.name} title={file.name}>
           <span className="interactive-list__icon">
-            <File />
+            <FileIcon />
           </span>
           <span className="interactive-list__label">{file.name}</span>
           <span
             className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
             onClick={() => this.handleFileRemove(index)}>
-            <Close />
+            <CloseIcon />
           </span>
         </li>
       ));
 
       fileContent = (
-        <ul className="dropzone__selected-files interactive-list" onClick={this.handleFilesClick}>
+        <ul
+          className="dropzone__selected-files interactive-list"
+          onClick={(event) => {
+            event.stopPropagation();
+          }}>
           {files}
         </ul>
       );
@@ -63,7 +84,7 @@ class AddTorrentsByFile extends React.Component {
               <input {...getInputProps()} />
               <div className="dropzone__copy">
                 <div className="dropzone__icon">
-                  <Files />
+                  <FilesIcon />
                 </div>
                 <FormattedMessage id="torrents.add.tab.file.drop" />{' '}
                 <span className="dropzone__browse-button">
@@ -78,47 +99,69 @@ class AddTorrentsByFile extends React.Component {
     );
   }
 
-  handleFileDrop = (files) => {
+  handleFileDrop = (files: Array<File>) => {
     const nextErrorsState = this.state.errors;
 
     if (nextErrorsState.files != null) {
       delete nextErrorsState.files;
     }
 
-    this.setState((state) => ({errors: nextErrorsState, files: state.files.concat(files)}));
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.setState((state) => {
+          if (e.target != null && e.target.result != null && typeof e.target.result === 'string') {
+            return {
+              errors: nextErrorsState,
+              files: state.files.concat({
+                name: file.name,
+                data: e.target.result.split('base64,')[1],
+              }),
+            };
+          }
+          return {errors: nextErrorsState, files: state.files};
+        });
+      };
+      reader.readAsDataURL(file);
+    });
   };
 
-  handleFileRemove = (fileIndex) => {
+  handleFileRemove = (fileIndex: number) => {
     const {files} = this.state;
     files.splice(fileIndex, 1);
     this.setState({files});
   };
 
-  handleFilesClick(event) {
-    event.stopPropagation();
-  }
-
   handleAddTorrents = () => {
+    if (this.formRef == null) {
+      return;
+    }
+
     const formData = this.formRef.getFormData();
     this.setState({isAddingTorrents: true});
 
-    const fileData = new FormData();
-    const {destination, start, tags, isBasePath} = formData;
+    const {destination, start, tags, isBasePath} = formData as Partial<AddTorrentsByFileFormData>;
 
+    const filesData: Array<string> = [];
     this.state.files.forEach((file) => {
-      fileData.append('torrents', file);
+      filesData.push(file.data);
     });
 
-    tags.split(',').forEach((tag) => {
-      fileData.append('tags', tag);
+    if (filesData.length === 0 || destination == null) {
+      return;
+    }
+
+    TorrentActions.addTorrentsByFiles({
+      files: filesData,
+      destination,
+      tags: tags != null ? tags.split(',') : undefined,
+      isBasePath: isBasePath || false,
+      start: start || false,
     });
 
-    fileData.append('destination', destination);
-    fileData.append('isBasePath', isBasePath);
-    fileData.append('start', start);
-
-    TorrentActions.addTorrentsByFiles(fileData, destination);
-    SettingsStore.setFloodSetting('startTorrentsOnLoad', start);
+    if (start != null) {
+      SettingsStore.setFloodSetting('startTorrentsOnLoad', start);
+    }
   };
 
   render() {
