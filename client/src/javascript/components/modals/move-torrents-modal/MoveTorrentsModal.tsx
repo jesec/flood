@@ -97,7 +97,8 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
 
     if (sourcePaths.length) {
       this.setState({isSettingDownloadPath: true});
-      TorrentActions.moveTorrents(TorrentStore.getSelectedTorrents(), {
+      TorrentActions.moveTorrents({
+        hashes: TorrentStore.getSelectedTorrents(),
         destination: formData.destination,
         isBasePath: formData.isBasePath,
         filenames,

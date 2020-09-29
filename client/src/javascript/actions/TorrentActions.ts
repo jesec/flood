@@ -143,19 +143,9 @@ const TorrentActions = {
         },
       ),
 
-  moveTorrents: (hashes: Array<TorrentProperties['hash']>, options: MoveTorrentsOptions) => {
-    const {destination, isBasePath, filenames, sourcePaths, moveFiles, isCheckHash} = options;
-
+  moveTorrents: (options: MoveTorrentsOptions) => {
     return axios
-      .post(`${baseURI}api/client/torrents/move`, {
-        hashes,
-        destination,
-        isBasePath,
-        filenames,
-        sourcePaths,
-        moveFiles,
-        isCheckHash,
-      })
+      .post(`${baseURI}api/client/torrents/move`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -163,7 +153,7 @@ const TorrentActions = {
             type: 'CLIENT_MOVE_TORRENTS_SUCCESS',
             data: {
               data,
-              count: hashes.length,
+              count: options.hashes.length,
             },
           });
         },

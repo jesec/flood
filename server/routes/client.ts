@@ -4,6 +4,7 @@ import multer from 'multer';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
+  MoveTorrentsOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/Action';
@@ -149,8 +150,29 @@ router.post<unknown, unknown, CheckTorrentsOptions>('/torrents/check-hash', (req
     });
 });
 
-router.post('/torrents/move', (req, res) => {
-  client.moveTorrents(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
+/**
+ * POST /api/client/torrents/move
+ * @summary Moves torrents to specified destination path.
+ * @tags Torrents
+ * @security AuthenticatedUser
+ * @param {MoveTorrentsOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.post<unknown, unknown, MoveTorrentsOptions>('/torrents/move', (req, res) => {
+  const {hashes, filenames, sourcePaths, destination, moveFiles, isBasePath, isCheckHash} = req.body;
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .moveTorrents({hashes, filenames, sourcePaths, destination, moveFiles, isBasePath, isCheckHash})
+    .then((response) => {
+      req.services?.torrentService.fetchTorrentList();
+      return response;
+    })
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
 /**

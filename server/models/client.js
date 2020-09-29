@@ -227,69 +227,6 @@ const client = {
     request.send();
   },
 
-  moveTorrents(user, services, data, callback) {
-    const destinationPath = data.destination;
-    const {isBasePath, hashes, filenames, moveFiles, sourcePaths, isCheckHash} = data;
-    const mainRequest = new ClientRequest(user, services);
-
-    const resolvedPath = fileUtil.sanitizePath(destinationPath);
-    if (!fileUtil.isAllowedPath(resolvedPath)) {
-      callback(null, fileUtil.accessDeniedError());
-      return;
-    }
-
-    const hashesToRestart = hashes.filter(
-      (hash) => !services.torrentService.getTorrent(hash).status.includes('stopped'),
-    );
-
-    let afterCheckHash;
-
-    if (hashesToRestart.length) {
-      afterCheckHash = () => {
-        const startTorrentsRequest = new ClientRequest(user, services);
-        startTorrentsRequest.startTorrents({hashes: hashesToRestart});
-        startTorrentsRequest.onComplete(callback);
-        startTorrentsRequest.send();
-      };
-    } else {
-      afterCheckHash = callback;
-    }
-
-    let checkHash;
-
-    if (isCheckHash) {
-      checkHash = () => {
-        const checkHashRequest = new ClientRequest(user, services);
-        checkHashRequest.checkHash({hashes});
-        checkHashRequest.onComplete(afterCheckHash);
-        checkHashRequest.send();
-      };
-    } else {
-      checkHash = afterCheckHash;
-    }
-
-    const moveTorrents = () => {
-      const moveTorrentsRequest = new ClientRequest(user, services);
-      moveTorrentsRequest.onComplete(checkHash);
-      moveTorrentsRequest.moveTorrents({
-        filenames,
-        sourcePaths,
-        destinationPath: resolvedPath,
-      });
-    };
-
-    let afterSetPath = checkHash;
-
-    if (moveFiles) {
-      afterSetPath = moveTorrents;
-    }
-
-    mainRequest.stopTorrents({hashes});
-    mainRequest.setDownloadPath({hashes, path: resolvedPath, isBasePath});
-    mainRequest.onComplete(afterSetPath);
-    mainRequest.send();
-  },
-
   setFilePriority(user, services, hashes, data, callback) {
     // TODO Add support for multiple hashes.
     const {fileIndices} = data;

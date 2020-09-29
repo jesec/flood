@@ -1,8 +1,6 @@
 /**
  * This file is deprecated in favor of clientGatewayService.
  */
-import {move} from 'fs-extra';
-import path from 'path';
 import util from 'util';
 
 import {clientSettingsMap} from '../../shared/constants/clientSettingsMap';
@@ -176,27 +174,6 @@ class ClientRequest {
     });
   }
 
-  checkHash(hashes) {
-    const {torrentService} = this.services;
-    const stoppedHashes = hashes.filter((hash) => torrentService.getTorrent(hash).status.includes('stopped'));
-
-    const hashesToStart = [];
-
-    this.stopTorrents({hashes});
-
-    hashes.forEach((hash) => {
-      this.requests.push(getMethodCall('d.check_hash', [hash]));
-
-      if (!stoppedHashes.includes(hash)) {
-        hashesToStart.push(hash);
-      }
-    });
-
-    if (hashesToStart.length) {
-      this.startTorrents({hashes: hashesToStart});
-    }
-  }
-
   fetchSettings(options) {
     let {requestedSettings} = options;
 
@@ -237,36 +214,6 @@ class ClientRequest {
   listMethods(options) {
     const args = getEnsuredArray(options.args);
     this.requests.push(getMethodCall(options.method, [args]));
-  }
-
-  moveTorrents(options) {
-    const {destinationPath} = options;
-    const filenames = getEnsuredArray(options.filenames);
-    const sourcePaths = getEnsuredArray(options.sourcePaths);
-
-    sourcePaths.forEach((source, index) => {
-      let callback = () => {
-        // empty initializer
-      };
-      const destination = path.join(destinationPath, filenames[index]);
-      const isLastRequest = index + 1 === sourcePaths.length;
-
-      if (isLastRequest) {
-        callback = this.handleSuccess.bind(this);
-      }
-
-      if (source !== destination) {
-        move(source, destination, {overwrite: true}, (err) => {
-          if (err) {
-            console.error(`Failed to move files to ${destinationPath}.`);
-            console.error(err);
-          }
-          callback();
-        });
-      } else if (isLastRequest) {
-        callback();
-      }
-    });
   }
 
   setDownloadPath(options) {
@@ -355,30 +302,6 @@ class ClientRequest {
       methodName = 'throttle.global_up.max_rate.set';
     }
     this.requests.push(getMethodCall(methodName, ['', options.throttle]));
-  }
-
-  startTorrents(options) {
-    if (!options.hashes) {
-      console.error("startTorrents requires key 'hashes'.");
-      return;
-    }
-
-    getEnsuredArray(options.hashes).forEach((hash) => {
-      this.requests.push(getMethodCall('d.open', [hash]));
-      this.requests.push(getMethodCall('d.start', [hash]));
-    });
-  }
-
-  stopTorrents(options) {
-    if (!options.hashes) {
-      console.error("stopTorrents requires key 'hashes'.");
-      return;
-    }
-
-    getEnsuredArray(options.hashes).forEach((hash) => {
-      this.requests.push(getMethodCall('d.stop', [hash]));
-      this.requests.push(getMethodCall('d.close', [hash]));
-    });
   }
 
   getSessionPath() {

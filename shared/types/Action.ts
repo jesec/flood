@@ -23,13 +23,22 @@ export interface DeleteTorrentsOptions {
   deleteData?: boolean;
 }
 
+// TODO: filenames and sourcePaths should not be supplied by the client.
 // POST /api/client/torrents/move
 export interface MoveTorrentsOptions {
+  // Hashes of torrents to be moved
+  hashes: Array<TorrentProperties['hash']>;
+  // Path of destination
   destination: string;
-  isBasePath: boolean;
+  // Filenames of data of torrents
   filenames: Array<string>;
+  // Source paths of data of torrents
   sourcePaths: Array<string>;
+  // Whether to move data of torrents
   moveFiles: boolean;
+  // Whether destination is the base path
+  isBasePath: boolean;
+  // Whether to check hash after completion
   isCheckHash: boolean;
 }
 

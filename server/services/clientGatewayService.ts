@@ -1,18 +1,21 @@
 import path from 'path';
 import fs from 'fs';
+import {moveSync} from 'fs-extra';
 
 import type {Credentials} from '@shared/types/Auth';
+import type {TorrentProperties, Torrents} from '@shared/types/Torrent';
+import type {TransferSummary} from '@shared/types/TransferData';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
+  MoveTorrentsOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/Action';
-import type {TorrentProperties, Torrents} from '@shared/types/Torrent';
-import type {TransferSummary} from '@shared/types/TransferData';
 
 import BaseService from './BaseService';
 import fileListPropMap from '../constants/fileListPropMap';
+import fileUtil from '../util/fileUtil';
 import methodCallUtil from '../util/methodCallUtil';
 import scgiUtil from '../util/scgiUtil';
 
@@ -79,7 +82,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @return {Promise} - Resolves with RPC call response or rejects with error.
    */
   async checkTorrents({hashes}: CheckTorrentsOptions) {
-    if (this.services == null || this.services.clientRequestManager == null || this.services.torrentService == null) {
+    if (this.services == null || this.services.clientRequestManager == null) {
       return Promise.reject();
     }
 
@@ -92,9 +95,87 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services?.clientRequestManager
+    return this.services.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processClientRequestError);
+  }
+
+  /**
+   * Moves torrents to specified destination path.
+   * This function requires that the destination path is allowed by config.
+   *
+   * @param {MoveTorrentsOptions} options - An object of options...
+   * @return {Promise} - Resolves with the processed client response or rejects with the processed client error.
+   */
+  async moveTorrents({
+    hashes,
+    filenames,
+    sourcePaths,
+    destination,
+    moveFiles,
+    isBasePath,
+    isCheckHash,
+  }: MoveTorrentsOptions) {
+    if (this.services == null || this.services.clientRequestManager == null || this.services.torrentService == null) {
+      return Promise.reject();
+    }
+
+    const resolvedPath = fileUtil.sanitizePath(destination);
+    if (!fileUtil.isAllowedPath(resolvedPath)) {
+      return Promise.reject(fileUtil.accessDeniedError());
+    }
+
+    const hashesToRestart: Array<string> = [];
+
+    const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
+      accumulator.push({
+        methodName: isBasePath ? 'd.directory_base.set' : 'd.directory.set',
+        params: [hash, resolvedPath],
+      });
+
+      if (!this.services?.torrentService.getTorrent(hash).status.includes('stopped')) {
+        hashesToRestart.push(hash);
+      }
+
+      return accumulator;
+    }, []);
+
+    await this.stopTorrents({hashes}).catch((e) => {
+      throw e;
+    });
+
+    await this.services.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .catch((e) => {
+        throw e;
+      });
+
+    if (moveFiles) {
+      sourcePaths.forEach((source, index) => {
+        const destinationFilePath = fileUtil.sanitizePath(path.join(resolvedPath, filenames[index]));
+        if (!fileUtil.isAllowedPath(destinationFilePath)) {
+          throw fileUtil.accessDeniedError();
+        }
+
+        if (source !== destinationFilePath) {
+          try {
+            moveSync(source, destinationFilePath, {overwrite: true});
+          } catch (err) {
+            console.error(`Failed to move files to ${resolvedPath}.`);
+            console.error(err);
+          }
+        }
+      });
+    }
+
+    if (isCheckHash) {
+      await this.checkTorrents({hashes}).catch((e) => {
+        throw e;
+      });
+    }
+
+    return this.startTorrents({hashes: hashesToRestart});
   }
 
   /**
