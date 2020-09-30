@@ -8,7 +8,6 @@ import type {NotificationFetchOptions} from '@shared/types/Notification';
 
 import appendUserServices from '../../middleware/appendUserServices';
 import ajaxUtil from '../../util/ajaxUtil';
-import client from '../../models/client';
 import clientRoutes from './client';
 import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
@@ -28,10 +27,6 @@ router.use('/feed-monitor', feedMonitorRoutes);
 router.use('/torrents', torrentsRoutes);
 
 router.get('/activity-stream', eventStream, clientActivityStream);
-
-router.get('/download', (req, res) => {
-  client.downloadFiles(req.user, req.services, req.query.hash, req.query.files, res);
-});
 
 router.get('/directory-list', (req, res) => {
   Filesystem.getDirectoryList(req.query, ajaxUtil.getResponseFn(res));

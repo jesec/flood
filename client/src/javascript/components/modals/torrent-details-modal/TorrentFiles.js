@@ -92,7 +92,7 @@ class TorrentFiles extends React.Component {
     const baseURI = ConfigStore.getBaseURI();
     const link = document.createElement('a');
     link.download = `${this.props.torrent.name}.tar`;
-    link.href = `${baseURI}api/download?hash=${this.props.torrent.hash}&files=${this.state.selectedFiles.join(',')}`;
+    link.href = `${baseURI}api/torrents/${this.props.torrent.hash}/contents/${this.state.selectedFiles.join(',')}/data`;
     link.style.display = 'none';
     document.body.appendChild(link); // Fix for Firefox 58+
     link.click();

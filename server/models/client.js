@@ -84,7 +84,7 @@ const client = {
         if (!torrentDetails) return res.status(404).json({error: 'Torrent details not found'});
 
         let files;
-        if (!fileString) {
+        if (!fileString || fileString === 'all') {
           files = torrentDetails.fileTree.files.map((x, i) => `${i}`);
         } else {
           files = fileString.split(',');

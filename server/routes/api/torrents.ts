@@ -194,9 +194,43 @@ router.patch('/tracker', (req, res) => {
  */
 
 /**
+ * TODO: API not yet implemented
+ * GET /api/torrents/{hash}
+ * @summary Gets information of a torrent.
+ * @tags Torrent
+ * @security AuthenticatedUser
+ * @param {string} hash.path - Hash of a torrent
+ */
+
+/**
+ * TODO: API not yet implemented
+ * GET /api/torrents/{hash}/contents
+ * @summary Gets the list of contents of a torrent and their properties.
+ * @tags Torrent
+ * @security AuthenticatedUser
+ * @param {string} hash.path
+ */
+
+/**
+ * GET /api/torrents/{hash}/contents/{indices}/data
+ * @summary Gets downloaded data of contents of a torrent.
+ * @tags Torrent
+ * @security AuthenticatedUser
+ * @param {string} hash.path
+ * @param {string} indices.path - 'all' or indices of selected contents separated by ','
+ * @return {object} 200 - contents archived in .tar - application/x-tar
+ */
+router.get('/:hash/contents/:indices/data', (req, res) => {
+  client.downloadFiles(req.user, req.services, req.params.hash, req.params.indices, res);
+});
+
+/**
+ * TODO: Split to /peers, /trackers and /contents endpoints
  * GET /api/torrents/{hash}/details
  * @summary Gets details of a torrent.
+ * @tags Torrent
  * @security AuthenticatedUser
+ * @param {string} hash.path
  */
 router.get('/:hash/details', (req, res) => {
   client.getTorrentDetails(req.user, req.services, req.params.hash, ajaxUtil.getResponseFn(res));
@@ -205,7 +239,9 @@ router.get('/:hash/details', (req, res) => {
 /**
  * GET /api/torrents/{hash}/mediainfo
  * @summary Gets mediainfo output of a torrent.
+ * @tags Torrent
  * @security AuthenticatedUser
+ * @param {string} hash.path
  */
 router.get('/:hash/mediainfo', (req, res) => {
   mediainfo.getMediainfo(req.services, req.params.hash, ajaxUtil.getResponseFn(res));
@@ -214,7 +250,9 @@ router.get('/:hash/mediainfo', (req, res) => {
 /**
  * PATCH /api/torrents/{hash}/priority
  * @summary Sets priority of a torrent.
+ * @tags Torrent
  * @security AuthenticatedUser
+ * @param {string} hash.path
  */
 router.patch('/:hash/priority', (req, res) => {
   client.setPriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
@@ -223,7 +261,9 @@ router.patch('/:hash/priority', (req, res) => {
 /**
  * PATCH /api/torrents/{hash}/file-priority
  * @summary Sets priority of files of a torrent.
+ * @tags Torrent
  * @security AuthenticatedUser
+ * @param {string} hash.path
  */
 router.patch('/:hash/file-priority', (req, res) => {
   client.setFilePriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));

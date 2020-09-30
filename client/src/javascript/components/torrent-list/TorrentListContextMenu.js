@@ -28,7 +28,7 @@ const handleTorrentDownload = (torrent, event) => {
   const baseURI = ConfigStore.getBaseURI();
   const link = document.createElement('a');
   link.download = torrent.isMultiFile ? `${torrent.name}.tar` : torrent.name;
-  link.href = `${baseURI}api/download?hash=${torrent.hash}`;
+  link.href = `${baseURI}api/torrents/${torrent.hash}/contents/all/data`;
   link.style.display = 'none';
   document.body.appendChild(link);
   link.click();
