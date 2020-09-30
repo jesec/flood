@@ -12,6 +12,7 @@ import type {
 
 import ajaxUtil from '../../util/ajaxUtil';
 import client from '../../models/client';
+import mediainfo from '../../util/mediainfo';
 
 const router = express.Router();
 
@@ -193,7 +194,7 @@ router.patch('/tracker', (req, res) => {
  */
 
 /**
- * GET /api/{hash}/details
+ * GET /api/torrents/{hash}/details
  * @summary Gets details of a torrent.
  * @security AuthenticatedUser
  */
@@ -202,7 +203,16 @@ router.get('/:hash/details', (req, res) => {
 });
 
 /**
- * PATCH /api/{hash}/priority
+ * GET /api/torrents/{hash}/mediainfo
+ * @summary Gets mediainfo output of a torrent.
+ * @security AuthenticatedUser
+ */
+router.get('/:hash/mediainfo', (req, res) => {
+  mediainfo.getMediainfo(req.services, req.params.hash, ajaxUtil.getResponseFn(res));
+});
+
+/**
+ * PATCH /api/torrents/{hash}/priority
  * @summary Sets priority of a torrent.
  * @security AuthenticatedUser
  */
@@ -211,7 +221,7 @@ router.patch('/:hash/priority', (req, res) => {
 });
 
 /**
- * PATCH /api/{hash}/file-priority
+ * PATCH /api/torrents/{hash}/file-priority
  * @summary Sets priority of files of a torrent.
  * @security AuthenticatedUser
  */

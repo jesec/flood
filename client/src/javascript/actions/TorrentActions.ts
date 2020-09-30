@@ -118,6 +118,20 @@ const TorrentActions = {
         },
       ),
 
+  fetchMediainfo: (hash: TorrentProperties['hash']) =>
+    axios
+      .get(`${baseURI}api/torrents/${hash}/mediainfo`)
+      .then((json) => json.data)
+      .then((response) => {
+        AppDispatcher.dispatchServerAction({
+          type: 'CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS',
+          data: {
+            ...response,
+            hash,
+          },
+        });
+      }),
+
   fetchTorrentDetails: (hash: TorrentProperties['hash']) =>
     axios
       .get(`${baseURI}api/torrents/${hash}/details`)

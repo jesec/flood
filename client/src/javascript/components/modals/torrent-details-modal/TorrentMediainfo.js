@@ -6,8 +6,8 @@ import {Button} from '../../../ui';
 import ClipboardIcon from '../../icons/ClipboardIcon';
 import connectStores from '../../../util/connectStores';
 import EventTypes from '../../../constants/EventTypes';
-import FloodActions from '../../../actions/FloodActions';
 import Tooltip from '../../general/Tooltip';
+import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
 const MESSAGES = defineMessages({
@@ -43,7 +43,7 @@ class TorrentMediainfo extends React.Component {
   }
 
   componentDidMount() {
-    FloodActions.fetchMediainfo({hash: this.props.hash}).then(
+    TorrentActions.fetchMediainfo(this.props.hash).then(
       () => {
         this.setState({
           isFetchingMediainfo: false,
@@ -148,7 +148,7 @@ const ConnectedTorrentMediainfo = connectStores(injectIntl(TorrentMediainfo), ()
   return [
     {
       store: TorrentStore,
-      event: EventTypes.FLOOD_FETCH_MEDIAINFO_SUCCESS,
+      event: EventTypes.CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS,
       getValue: ({store, props}) => {
         return {
           mediainfo: store.getMediainfo(props.hash),

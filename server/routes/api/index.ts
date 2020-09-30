@@ -14,7 +14,6 @@ import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
 import Filesystem from '../../models/Filesystem';
-import mediainfo from '../../util/mediainfo';
 import settings from '../../models/settings';
 import torrentsRoutes from './torrents';
 
@@ -40,10 +39,6 @@ router.get('/directory-list', (req, res) => {
 
 router.get('/history', (req: Request<unknown, unknown, unknown, {snapshot: HistorySnapshot}>, res) => {
   req.services?.historyService.getHistory(req.query, ajaxUtil.getResponseFn(res));
-});
-
-router.get('/mediainfo', (req, res) => {
-  mediainfo.getMediainfo(req.user, req.query, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/notifications', (req: Request<unknown, unknown, unknown, NotificationFetchOptions>, res) => {

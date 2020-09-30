@@ -116,6 +116,11 @@ interface ClientCheckHashErrorAction {
   };
 }
 
+interface ClientFetchTorrentMediainfoSuccessAction {
+  type: 'CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS';
+  data: {hash: string; output: string};
+}
+
 interface ClientSettingsFetchRequestSuccessAction {
   type: 'CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS';
   data: ClientSettings;
@@ -128,6 +133,7 @@ export interface ClientSettingsSaveSuccessAction {
 
 type ClientAction =
   | ClientCheckHashErrorAction
+  | ClientFetchTorrentMediainfoSuccessAction
   | ClientSettingsFetchRequestSuccessAction
   | ClientSettingsSaveSuccessAction;
 
@@ -136,11 +142,6 @@ type ServerEventAction<T extends keyof ServerEvents> = {
   type: T;
   data: ServerEvents[T];
 };
-
-interface FloodFetchMediainfoSuccessAction {
-  type: 'FLOOD_FETCH_MEDIAINFO_SUCCESS';
-  data: {hash: string; output: string};
-}
 
 interface FloodClearNotificationsSuccessAction {
   type: 'FLOOD_CLEAR_NOTIFICATIONS_SUCCESS';
@@ -163,7 +164,6 @@ type FloodAction =
   | ServerEventAction<'TRANSFER_HISTORY_FULL_UPDATE'>
   | ServerEventAction<'TRANSFER_SUMMARY_FULL_UPDATE'>
   | ServerEventAction<'TRANSFER_SUMMARY_DIFF_CHANGE'>
-  | FloodFetchMediainfoSuccessAction
   | FloodClearNotificationsSuccessAction
   | FloodFetchNotificationsSuccessAction;
 

@@ -121,7 +121,7 @@ class TorrentStoreClass extends BaseStore {
 
   handleFetchMediainfoSuccess(response: {hash: string; output: string}) {
     this.mediainfo[response.hash] = response.output;
-    this.emit('FLOOD_FETCH_MEDIAINFO_SUCCESS');
+    this.emit('CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS');
   }
 
   handleFetchSettingsRequest() {
@@ -314,6 +314,9 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
     case 'TORRENT_LIST_FULL_UPDATE':
       TorrentStore.handleTorrentListFullUpdate(action.data);
       break;
+    case 'CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS':
+      TorrentStore.handleFetchMediainfoSuccess(action.data);
+      break;
     case 'CLIENT_MOVE_TORRENTS_SUCCESS':
       TorrentStore.handleMoveTorrentsSuccess(action.data);
       break;
@@ -334,9 +337,6 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case 'CLIENT_SET_TRACKER_ERROR':
       // TODO: popup set tracker failed message here
-      break;
-    case 'FLOOD_FETCH_MEDIAINFO_SUCCESS':
-      TorrentStore.handleFetchMediainfoSuccess(action.data);
       break;
     case 'UI_CLICK_TORRENT':
       TorrentStore.setSelectedTorrents(action.data);

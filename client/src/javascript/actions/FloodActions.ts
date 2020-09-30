@@ -3,7 +3,6 @@ import axios from 'axios';
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
 import type {ServerEvents} from '@shared/types/ServerEvents';
-import type {TorrentProperties} from '@shared/types/Torrent';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ConfigStore from '../stores/ConfigStore';
@@ -143,24 +142,6 @@ const FloodActions = {
           ...options,
           ...response,
         };
-      }),
-
-  fetchMediainfo: (options: {hash: TorrentProperties['hash']}) =>
-    axios
-      .get(`${baseURI}api/mediainfo`, {
-        params: {
-          hash: options.hash,
-        },
-      })
-      .then((json) => json.data)
-      .then((response) => {
-        AppDispatcher.dispatchServerAction({
-          type: 'FLOOD_FETCH_MEDIAINFO_SUCCESS',
-          data: {
-            ...response,
-            ...options,
-          },
-        });
       }),
 
   fetchNotifications: (options: NotificationFetchOptions) =>
