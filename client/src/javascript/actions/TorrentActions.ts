@@ -19,7 +19,7 @@ const baseURI = ConfigStore.getBaseURI();
 const TorrentActions = {
   addTorrentsByUrls: (options: AddTorrentByURLOptions) =>
     axios
-      .post(`${baseURI}api/client/torrents/add`, options)
+      .post(`${baseURI}api/torrents/add`, options)
       .then((json) => json.data)
       .then(
         (response) => {
@@ -44,7 +44,7 @@ const TorrentActions = {
 
   addTorrentsByFiles: (options: AddTorrentByFileOptions) =>
     axios
-      .post(`${baseURI}api/client/torrents/add-files`, options)
+      .post(`${baseURI}api/torrents/add-files`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -69,7 +69,7 @@ const TorrentActions = {
 
   deleteTorrents: (options: DeleteTorrentsOptions) =>
     axios
-      .post(`${baseURI}api/client/torrents/delete`, options)
+      .post(`${baseURI}api/torrents/delete`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -95,7 +95,7 @@ const TorrentActions = {
 
   checkHash: (options: CheckTorrentsOptions) =>
     axios
-      .post(`${baseURI}api/client/torrents/check-hash`, options)
+      .post(`${baseURI}api/torrents/check-hash`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -120,7 +120,7 @@ const TorrentActions = {
 
   fetchTorrentDetails: (hash: TorrentProperties['hash']) =>
     axios
-      .get(`${baseURI}api/client/torrents/${hash}/details`)
+      .get(`${baseURI}api/torrents/${hash}/details`)
       .then((json) => json.data)
       .then(
         (torrentDetails) => {
@@ -144,7 +144,7 @@ const TorrentActions = {
 
   moveTorrents: (options: MoveTorrentsOptions) => {
     return axios
-      .post(`${baseURI}api/client/torrents/move`, options)
+      .post(`${baseURI}api/torrents/move`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -170,7 +170,7 @@ const TorrentActions = {
 
   startTorrents: (options: StartTorrentsOptions) =>
     axios
-      .post(`${baseURI}api/client/torrents/start`, options)
+      .post(`${baseURI}api/torrents/start`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -189,7 +189,7 @@ const TorrentActions = {
 
   stopTorrents: (options: StopTorrentsOptions) =>
     axios
-      .post(`${baseURI}api/client/torrents/stop`, options)
+      .post(`${baseURI}api/torrents/stop`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -208,7 +208,7 @@ const TorrentActions = {
 
   setPriority: (hash: TorrentProperties['hash'], priority: number) =>
     axios
-      .patch(`${baseURI}api/client/torrents/${hash}/priority`, {
+      .patch(`${baseURI}api/torrents/${hash}/priority`, {
         hash,
         priority,
       })
@@ -230,7 +230,7 @@ const TorrentActions = {
 
   setFilePriority: (hash: TorrentProperties['hash'], fileIndices: Array<number>, priority: number) =>
     axios
-      .patch(`${baseURI}api/client/torrents/${hash}/file-priority`, {
+      .patch(`${baseURI}api/torrents/${hash}/file-priority`, {
         hash,
         fileIndices,
         priority,
@@ -258,7 +258,7 @@ const TorrentActions = {
 
   setTaxonomy: (hashes: Array<TorrentProperties['hash']>, tags: Array<string>, options = {}) =>
     axios
-      .patch(`${baseURI}api/client/torrents/taxonomy`, {
+      .patch(`${baseURI}api/torrents/taxonomy`, {
         hashes,
         tags,
         options,
@@ -281,7 +281,7 @@ const TorrentActions = {
 
   setTracker: (hashes: Array<TorrentProperties['hash']>, tracker: string, options = {}) =>
     axios
-      .patch(`${baseURI}api/client/torrents/tracker`, {
+      .patch(`${baseURI}api/torrents/tracker`, {
         hashes,
         tracker,
         options,

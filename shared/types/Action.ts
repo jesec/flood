@@ -1,15 +1,20 @@
 import {TorrentProperties} from './Torrent';
 
-// POST /api/client/add
+// POST /api/torrents/add
 export interface AddTorrentByURLOptions {
+  // URLs to download torrents from
   urls: Array<string>;
+  // Path of destination
   destination: string;
-  isBasePath: boolean;
-  start: boolean;
+  // Tags
   tags?: Array<string>;
+  // Whether destination is the base path
+  isBasePath: boolean;
+  // Whether to start torrent
+  start: boolean;
 }
 
-// POST /api/client/add-files
+// POST /api/torrents/add-files
 export interface AddTorrentByFileOptions {
   // Torrent files in base64
   files: Array<string>;
@@ -23,13 +28,13 @@ export interface AddTorrentByFileOptions {
   start: boolean;
 }
 
-// POST /api/client/torrents/check-hash
+// POST /api/torrents/check-hash
 export interface CheckTorrentsOptions {
   // An array of string representing hashes of torrents to be checked
   hashes: Array<TorrentProperties['hash']>;
 }
 
-// POST /api/client/torrents/delete
+// POST /api/torrents/delete
 export interface DeleteTorrentsOptions {
   // An array of string representing hashes of torrents to be removed
   hashes: Array<TorrentProperties['hash']>;
@@ -37,7 +42,7 @@ export interface DeleteTorrentsOptions {
   deleteData?: boolean;
 }
 
-// POST /api/client/torrents/move
+// POST /api/torrents/move
 export interface MoveTorrentsOptions {
   // Hashes of torrents to be moved
   hashes: Array<TorrentProperties['hash']>;
@@ -51,13 +56,13 @@ export interface MoveTorrentsOptions {
   isCheckHash: boolean;
 }
 
-// POST /api/client/torrents/start
+// POST /api/torrents/start
 export interface StartTorrentsOptions {
   // An array of string representing hashes of torrents to be started
   hashes: Array<TorrentProperties['hash']>;
 }
 
-// POST /api/client/torrents/stop
+// POST /api/torrents/stop
 export interface StopTorrentsOptions {
   // An array of string representing hashes of torrents to be stopped
   hashes: Array<TorrentProperties['hash']>;

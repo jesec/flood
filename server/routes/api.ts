@@ -15,12 +15,15 @@ import eventStream from '../middleware/eventStream';
 import Filesystem from '../models/Filesystem';
 import mediainfo from '../util/mediainfo';
 import settings from '../models/settings';
+import torrentsRoutes from './torrents';
 
 const router = express.Router();
 
 router.use('/', passport.authenticate('jwt', {session: false}), appendUserServices);
 
 router.use('/client', clientRoutes);
+
+router.use('/torrents', torrentsRoutes);
 
 router.get('/activity-stream', eventStream, clientActivityStream);
 
