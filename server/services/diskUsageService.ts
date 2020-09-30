@@ -4,9 +4,12 @@
  */
 import {EventEmitter} from 'events';
 import type TypedEmitter from 'typed-emitter';
+
 import type {Disks} from '@shared/types/DiskUsage';
-import {isPlatformSupported, diskUsage} from '../util/diskUsage';
-import type {SupportedPlatform} from '../util/diskUsage';
+
+import {isPlatformSupported, diskUsage} from '../util/diskUsageUtil';
+
+import type {SupportedPlatform} from '../util/diskUsageUtil';
 
 export interface DiskUsage {
   id: number;

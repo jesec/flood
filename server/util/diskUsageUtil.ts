@@ -23,7 +23,7 @@ const filterMountPoint =
 const MAX_BUFFER_SIZE = 65536;
 export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<Disk>>>> = {
   linux: () =>
-    execFileAsync('df -xsquashfs -xtmpfs -xdevtmpfs | tail -n+2', {
+    execFileAsync('df -T | tail -n+2', {
       shell: true,
       maxBuffer: MAX_BUFFER_SIZE,
     }).then(({stdout}) =>
@@ -31,8 +31,9 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
         .trim()
         .split('\n')
         .map((disk) => disk.split(/\s+/))
-        .filter((disk) => filterMountPoint(disk[5]))
-        .map(([_fs, size, used, avail, _pcent, target]) => {
+        .filter((disk) => filterMountPoint(disk[6]))
+        .filter((disk) => disk[1] !== 'devtmpfs' && disk[1] !== 'squashfs' && disk[1] !== 'tmpfs')
+        .map(([_dev, _fs, size, used, avail, _pcent, target]) => {
           return {
             size: Number.parseInt(size, 10) * 1024,
             used: Number.parseInt(used, 10) * 1024,
@@ -51,7 +52,7 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
         .split('\n')
         .map((disk) => disk.split(/\s+/))
         .filter((disk) => filterMountPoint(disk[5]))
-        .map(([_fs, size, used, avail, _pcent, target]) => {
+        .map(([_dev, size, used, avail, _pcent, target]) => {
           return {
             size: Number.parseInt(size, 10) * 1024,
             used: Number.parseInt(used, 10) * 1024,
@@ -70,7 +71,7 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
         .split('\n')
         .map((disk) => disk.split(/\s+/))
         .filter((disk) => filterMountPoint(disk[8]))
-        .map(([_fs, size, used, avail, _pcent, _iused, _ifree, _piused, target]) => {
+        .map(([_dev, size, used, avail, _pcent, _iused, _ifree, _piused, target]) => {
           return {
             size: Number.parseInt(size, 10) * 1024,
             used: Number.parseInt(used, 10) * 1024,
