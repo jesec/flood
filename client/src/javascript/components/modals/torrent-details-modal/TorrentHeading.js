@@ -55,7 +55,6 @@ export default class TorrentHeading extends React.Component {
           maxLevel={3}
           priorityType="torrent"
           onChange={this.handlePriorityChange}
-          showLabel
         />
       </li>,
     ];

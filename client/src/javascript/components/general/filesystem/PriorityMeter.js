@@ -1,7 +1,7 @@
 import {injectIntl} from 'react-intl';
 import React from 'react';
 
-import PiorityLevels from '../../../constants/PriorityLevels';
+import PriorityLevels from '../../../constants/PriorityLevels';
 
 const METHODS_TO_BIND = ['handleClick'];
 
@@ -33,7 +33,7 @@ class PriorityMeter extends React.Component {
   }
 
   getPriorityLabel() {
-    switch (PiorityLevels[this.props.priorityType][this.getPriorityLevel()]) {
+    switch (PriorityLevels[this.props.priorityType][this.getPriorityLevel()]) {
       case 'DONT_DOWNLOAD':
         return this.props.intl.formatMessage({
           id: 'priority.dont.download',
