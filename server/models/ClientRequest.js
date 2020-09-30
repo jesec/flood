@@ -227,12 +227,12 @@ class ClientRequest {
   }
 
   setFilePriority(options) {
-    const fileIndices = getEnsuredArray(options.fileIndices);
+    const indices = getEnsuredArray(options.indices);
     const hashes = getEnsuredArray(options.hashes);
 
     hashes.forEach((hash) => {
-      fileIndices.forEach((fileIndex) => {
-        this.requests.push(getMethodCall('f.priority.set', [`${hash}:f${fileIndex}`, options.priority]));
+      indices.forEach((index) => {
+        this.requests.push(getMethodCall('f.priority.set', [`${hash}:f${index}`, options.priority]));
       });
       this.requests.push(getMethodCall('d.update_priorities', [hash]));
     });

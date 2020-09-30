@@ -242,11 +242,10 @@ const TorrentActions = {
         },
       ),
 
-  setFilePriority: (hash: TorrentProperties['hash'], fileIndices: Array<number>, priority: number) =>
+  setFilePriority: (hash: TorrentProperties['hash'], indices: Array<number>, priority: number) =>
     axios
-      .patch(`${baseURI}api/torrents/${hash}/file-priority`, {
-        hash,
-        fileIndices,
+      .patch(`${baseURI}api/torrents/${hash}/contents`, {
+        indices,
         priority,
       })
       .then((json) => json.data)
@@ -257,7 +256,7 @@ const TorrentActions = {
             data: {
               ...data,
               hash,
-              fileIndices,
+              indices,
               priority,
             },
           });

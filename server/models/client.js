@@ -218,11 +218,10 @@ const client = {
   },
 
   setFilePriority(user, services, hashes, data, callback) {
-    // TODO Add support for multiple hashes.
-    const {fileIndices} = data;
+    const {indices, priority} = data;
     const request = new ClientRequest(user, services);
 
-    request.setFilePriority({hashes, fileIndices, priority: data.priority});
+    request.setFilePriority({hashes, indices, priority});
     request.onComplete((response, error) => {
       services.torrentService.fetchTorrentList();
       callback(response, error);

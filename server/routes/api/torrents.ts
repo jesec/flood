@@ -212,6 +212,17 @@ router.patch('/tracker', (req, res) => {
  */
 
 /**
+ * PATCH /api/torrents/{hash}/contents
+ * @summary Sets properties of contents of a torrent. Only priority can be set.
+ * @tags Torrent
+ * @security AuthenticatedUser
+ * @param {string} hash.path
+ */
+router.patch('/:hash/contents', (req, res) => {
+  client.setFilePriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
+});
+
+/**
  * GET /api/torrents/{hash}/contents/{indices}/data
  * @summary Gets downloaded data of contents of a torrent.
  * @tags Torrent
@@ -256,17 +267,6 @@ router.get('/:hash/mediainfo', (req, res) => {
  */
 router.patch('/:hash/priority', (req, res) => {
   client.setPriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
-});
-
-/**
- * PATCH /api/torrents/{hash}/file-priority
- * @summary Sets priority of files of a torrent.
- * @tags Torrent
- * @security AuthenticatedUser
- * @param {string} hash.path
- */
-router.patch('/:hash/file-priority', (req, res) => {
-  client.setFilePriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
 });
 
 export default router;
