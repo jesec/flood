@@ -2,6 +2,13 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import type {
+  TorrentContentSelection,
+  TorrentContentSelectionTree,
+  TorrentContentTree,
+} from '@shared/constants/torrentFilePropsMap';
+import type {TorrentProperties} from '@shared/types/Torrent';
+
 import {Checkbox} from '../../../ui';
 import FolderClosedSolid from '../../icons/FolderClosedSolid';
 import FolderOpenSolid from '../../icons/FolderOpenSolid';
@@ -9,30 +16,45 @@ import FolderOpenSolid from '../../icons/FolderOpenSolid';
 // eslint-disable-next-line import/no-cycle
 import DirectoryTree from './DirectoryTree';
 
-const METHODS_TO_BIND = ['handleDirectoryClick', 'handleDirectorySelection'];
+interface DirectoryTreeNodeProps {
+  id: string;
+  depth: number;
+  hash: TorrentProperties['hash'];
+  path: Array<string>;
+  directoryName: string;
+  selectedItems: TorrentContentSelectionTree;
+  subTree: TorrentContentTree;
+  isSelected: boolean;
+  onPriorityChange: () => void;
+  onItemSelect: (selection: TorrentContentSelection) => void;
+}
 
-class DirectoryTreeNode extends React.Component {
+interface DirectoryTreeNodeStates {
+  expanded: boolean;
+}
+
+const METHODS_TO_BIND = ['handleDirectoryClick', 'handleDirectorySelection'] as const;
+
+class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, DirectoryTreeNodeStates> {
   static propTypes = {
-    isParentSelected: PropTypes.bool,
     path: PropTypes.array,
     selectedItems: PropTypes.object,
   };
 
   static defaultProps = {
-    isParentSelected: false,
     path: [],
     selectedItems: {},
   };
 
-  constructor() {
-    super();
+  constructor(props: DirectoryTreeNodeProps) {
+    super(props);
 
     this.state = {
       expanded: false,
     };
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
+    METHODS_TO_BIND.forEach(<T extends typeof METHODS_TO_BIND[number]>(methodName: T) => {
+      this[methodName] = this[methodName].bind(this);
     });
   }
 
@@ -78,7 +100,6 @@ class DirectoryTreeNode extends React.Component {
             tree={this.props.subTree}
             depth={this.props.depth}
             hash={this.props.hash}
-            isParentSelected={this.props.isSelected || this.props.isParentSelected}
             key={`${this.state.expanded}-${this.props.depth}`}
             onPriorityChange={this.props.onPriorityChange}
             onItemSelect={this.props.onItemSelect}
@@ -100,15 +121,12 @@ class DirectoryTreeNode extends React.Component {
     });
   }
 
-  handleDirectorySelection(event) {
+  handleDirectorySelection() {
     this.props.onItemSelect({
-      depth: this.props.depth,
-      event,
-      id: this.props.id,
-      isParentSelected: this.props.isParentSelected,
-      isSelected: this.props.isSelected,
-      path: this.getCurrentPath(),
       type: 'directory',
+      depth: this.props.depth,
+      path: this.getCurrentPath(),
+      select: !this.props.isSelected,
     });
   }
 

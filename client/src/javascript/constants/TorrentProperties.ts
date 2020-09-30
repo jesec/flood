@@ -45,9 +45,6 @@ const torrentProperties = {
   basePath: {
     id: 'torrents.properties.base.path',
   },
-  ignoreScheduler: {
-    id: 'torrents.properties.ignore.schedule',
-  },
   comment: {
     id: 'torrents.properties.comment',
   },

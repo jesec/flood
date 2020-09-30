@@ -1,6 +1,8 @@
 import Clipboard from 'clipboard';
-import {defineMessages, FormattedMessage, injectIntl} from 'react-intl';
+import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
+
+import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Button} from '../../../ui';
 import ClipboardIcon from '../../icons/ClipboardIcon';
@@ -9,6 +11,17 @@ import EventTypes from '../../../constants/EventTypes';
 import Tooltip from '../../general/Tooltip';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
+
+interface TorrentMediainfoProps extends WrappedComponentProps {
+  hash: TorrentProperties['hash'];
+  mediainfo: string;
+}
+
+interface TorrentMediainfoStates extends Record<string, unknown> {
+  copiedToClipboard: boolean;
+  isFetchingMediainfo: boolean;
+  fetchMediainfoError: {data: {error: unknown}} | null;
+}
 
 const MESSAGES = defineMessages({
   copy: {
@@ -28,12 +41,12 @@ const MESSAGES = defineMessages({
   },
 });
 
-class TorrentMediainfo extends React.Component {
-  clipboard = null;
+class TorrentMediainfo extends React.Component<TorrentMediainfoProps, TorrentMediainfoStates> {
+  clipboard: Clipboard | null = null;
+  copyButtonRef: HTMLButtonElement | null = null;
+  timeoutId: NodeJS.Timeout | null = null;
 
-  timeoutId = null;
-
-  constructor(props) {
+  constructor(props: TorrentMediainfoProps) {
     super(props);
     this.state = {
       copiedToClipboard: false,
@@ -144,18 +157,21 @@ class TorrentMediainfo extends React.Component {
   }
 }
 
-const ConnectedTorrentMediainfo = connectStores(injectIntl(TorrentMediainfo), () => {
-  return [
-    {
-      store: TorrentStore,
-      event: EventTypes.CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS,
-      getValue: ({store, props}) => {
-        return {
-          mediainfo: store.getMediainfo(props.hash),
-        };
+const ConnectedTorrentMediainfo = connectStores<Omit<TorrentMediainfoProps, 'intl'>, TorrentMediainfoStates>(
+  injectIntl(TorrentMediainfo),
+  () => {
+    return [
+      {
+        store: TorrentStore,
+        event: EventTypes.CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS,
+        getValue: ({props}) => {
+          return {
+            mediainfo: TorrentStore.getMediainfo(props.hash),
+          };
+        },
       },
-    },
-  ];
-});
+    ];
+  },
+);
 
 export default ConnectedTorrentMediainfo;

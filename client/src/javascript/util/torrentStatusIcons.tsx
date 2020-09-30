@@ -16,9 +16,9 @@ const STATUS_ICON_MAP: Partial<Record<TorrentStatus, JSX.Element>> = {
 } as const;
 
 function torrentStatusIcons(statuses: Array<TorrentStatus>) {
-  let resultIcon: React.ReactNode = null;
+  let resultIcon: JSX.Element = <StopIcon />;
   Object.entries(STATUS_ICON_MAP).some(([status, icon]) => {
-    if (statuses.includes(status as TorrentStatus)) {
+    if (statuses.includes(status as TorrentStatus) && icon != null) {
       resultIcon = icon;
       return true;
     }

@@ -489,7 +489,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
       .filter((item, index) => formData[index])
       .map((torrent, index) => ({id: index, value: torrent.link}));
 
-    UIActions.displayModal({id: 'add-torrents', torrents: downloadedTorrents});
+    UIActions.displayModal({id: 'add-torrents', initialURLs: downloadedTorrents});
   };
 
   validateForm(): {errors?: FeedsTabStates['errors']; isValid: boolean} {

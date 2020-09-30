@@ -4,17 +4,15 @@ import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '../../../ui';
 import AddMini from '../../icons/AddMini';
 import RemoveMini from '../../icons/RemoveMini';
 
-export type Textboxes = Array<{id: number; value: string}>;
-
 interface TextboxRepeaterProps {
-  defaultValues?: Textboxes;
+  defaultValues?: Array<{id: number; value: string}>;
   id: number | string;
   label?: string;
   placeholder?: string;
 }
 
 interface TextboxRepeaterStates {
-  textboxes: Textboxes;
+  textboxes: Array<{id: number; value: string}>;
 }
 
 export default class TextboxRepeater extends React.PureComponent<TextboxRepeaterProps, TextboxRepeaterStates> {

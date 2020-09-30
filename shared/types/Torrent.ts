@@ -1,4 +1,7 @@
-import {TorrentStatus} from '../constants/torrentStatusMap';
+import type {TorrentContentTree} from '../constants/torrentFilePropsMap';
+import type {TorrentPeer} from '../constants/torrentPeerPropsMap';
+import type {TorrentStatus} from '../constants/torrentStatusMap';
+import type {TorrentTracker} from '../constants/torrentTrackerPropsMap';
 
 export interface Duration {
   years?: number;
@@ -11,47 +14,9 @@ export interface Duration {
 }
 
 export interface TorrentDetails {
-  fileTree: {
-    files: Array<{
-      index: number;
-      filename: string;
-      path: string;
-      percentComplete: number;
-      priority: number;
-      sizeBytes: number;
-    }>;
-    peers: Array<TorrentPeer>;
-    trackers: Array<TorrentTracker>;
-  };
-}
-
-// TODO: Unite with torrentPeerPropsMap when it is TS.
-export interface TorrentPeer {
-  index: number;
-  country: string;
-  address: string;
-  completedPercent: number;
-  clientVersion: string;
-  downloadRate: number;
-  downloadTotal: number;
-  uploadRate: number;
-  uploadTotal: number;
-  id: string;
-  peerRate: number;
-  peerTotal: number;
-  isEncrypted: boolean;
-  isIncoming: boolean;
-}
-
-// TODO: Unite with torrentTrackerPropsMap when it is TS.
-export interface TorrentTracker {
-  index: number;
-  id: string;
-  url: string;
-  type: number;
-  group: number;
-  minInterval: number;
-  normalInterval: number;
+  peers: Array<TorrentPeer>;
+  trackers: Array<TorrentTracker>;
+  fileTree: TorrentContentTree;
 }
 
 // TODO: Rampant over-fetching of torrent properties. Need to remove unused items.
@@ -62,15 +27,14 @@ export interface TorrentProperties {
   basePath: string;
   bytesDone: number;
   comment: string;
-  dateAdded: string;
-  dateCreated: string;
+  dateAdded: number;
+  dateCreated: number;
   details: TorrentDetails;
   directory: string;
   downRate: number;
   downTotal: number;
   eta: 'Infinity' | Duration;
   hash: string;
-  ignoreScheduler: boolean;
   isActive: boolean;
   isComplete: boolean;
   isHashing: string;
@@ -83,7 +47,7 @@ export interface TorrentProperties {
   peersConnected: number;
   peersTotal: number;
   percentComplete: number;
-  priority: string;
+  priority: number;
   ratio: number;
   seedingTime: string;
   seedsConnected: number;

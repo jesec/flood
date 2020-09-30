@@ -1,5 +1,7 @@
-import {injectIntl} from 'react-intl';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
+
+import type {TorrentDetails, TorrentProperties} from '@shared/types/Torrent';
 
 import connectStores from '../../../util/connectStores';
 import Modal from '../Modal';
@@ -11,11 +13,16 @@ import TorrentHeading from './TorrentHeading';
 import TorrentPeers from './TorrentPeers';
 import TorrentStore from '../../../stores/TorrentStore';
 import TorrentTrackers from './TorrentTrackers';
-import UIStore from '../../../stores/UIStore';
 
-class TorrentDetailsModal extends React.Component {
+export interface TorrentDetailsModalProps extends WrappedComponentProps {
+  options: {hash: TorrentProperties['hash']};
+  torrent?: TorrentProperties;
+  torrentDetails?: TorrentDetails;
+}
+
+class TorrentDetailsModal extends React.Component<TorrentDetailsModalProps> {
   componentDidMount() {
-    TorrentStore.fetchTorrentDetails();
+    TorrentStore.fetchTorrentDetails(this.props.options.hash);
   }
 
   componentWillUnmount() {
@@ -23,7 +30,10 @@ class TorrentDetailsModal extends React.Component {
   }
 
   getModalHeading() {
-    return <TorrentHeading torrent={this.props.torrent} key="torrent-heading" />;
+    if (this.props.torrent != null) {
+      return <TorrentHeading torrent={this.props.torrent} key="torrent-heading" />;
+    }
+    return null;
   }
 
   render() {
@@ -84,27 +94,30 @@ class TorrentDetailsModal extends React.Component {
   }
 }
 
-const ConnectedTorrentDetailsModal = connectStores(injectIntl(TorrentDetailsModal), () => {
-  return [
-    {
-      store: TorrentStore,
-      event: EventTypes.CLIENT_TORRENT_DETAILS_CHANGE,
-      getValue: ({store}) => {
-        return {
-          torrentDetails: store.getTorrentDetails(UIStore.getTorrentDetailsHash()),
-        };
+const ConnectedTorrentDetailsModal = connectStores<Omit<TorrentDetailsModalProps, 'intl'>, Record<string, unknown>>(
+  injectIntl(TorrentDetailsModal),
+  () => {
+    return [
+      {
+        store: TorrentStore,
+        event: EventTypes.CLIENT_TORRENT_DETAILS_CHANGE,
+        getValue: ({props}) => {
+          return {
+            torrentDetails: TorrentStore.getTorrentDetails(props.options.hash),
+          };
+        },
       },
-    },
-    {
-      store: TorrentStore,
-      event: EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
-      getValue: ({store}) => {
-        return {
-          torrent: store.getTorrent(UIStore.getTorrentDetailsHash()),
-        };
+      {
+        store: TorrentStore,
+        event: EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
+        getValue: ({props}) => {
+          return {
+            torrent: TorrentStore.getTorrent(props.options.hash),
+          };
+        },
       },
-    },
-  ];
-});
+    ];
+  },
+);
 
 export default ConnectedTorrentDetailsModal;

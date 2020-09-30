@@ -1,9 +1,15 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
+import type {TorrentTracker} from '@shared/constants/torrentTrackerPropsMap';
+
 import Badge from '../../general/Badge';
 
-export default class TorrentTrackrs extends React.Component {
+interface TorrentTrackersProps {
+  trackers: Array<TorrentTracker>;
+}
+
+export default class TorrentTrackers extends React.Component<TorrentTrackersProps> {
   render() {
     const trackers = this.props.trackers || [];
 

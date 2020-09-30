@@ -22,12 +22,12 @@ interface ModalsProps {
   activeModal?: Modal | null;
 }
 
-const createModal = (id: Modal['id'], options: Modal['options']): React.ReactNode => {
-  switch (id) {
+const createModal = (activeModal: Modal): React.ReactNode => {
+  switch (activeModal.id) {
     case 'add-torrents':
-      return <AddTorrentsModal />;
+      return <AddTorrentsModal initialURLs={activeModal.initialURLs} />;
     case 'confirm':
-      return <ConfirmModal options={options as ConfirmModal['props']['options']} />;
+      return <ConfirmModal options={activeModal.options} />;
     case 'feeds':
       return <FeedsModal />;
     case 'move-torrents':
@@ -41,7 +41,7 @@ const createModal = (id: Modal['id'], options: Modal['options']): React.ReactNod
     case 'settings':
       return <SettingsModal />;
     case 'torrent-details':
-      return <TorrentDetailsModal options={options} />;
+      return <TorrentDetailsModal options={activeModal.options} />;
     default:
       return null;
   }
@@ -84,7 +84,7 @@ class Modals extends React.Component<ModalsProps> {
         <CSSTransition key={this.props.activeModal.id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
           <div className="modal">
             <div className="modal__overlay" onClick={this.handleOverlayClick} />
-            {createModal(this.props.activeModal.id, this.props.activeModal.options)}
+            {createModal(this.props.activeModal)}
           </div>
         </CSSTransition>
       );

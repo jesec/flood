@@ -67,7 +67,6 @@ const transformers = {
   dateCreated: dateRenderer,
   downRate: speedRenderer,
   downTotal: sizeRenderer,
-  ignoreScheduler: booleanRenderer,
   isPrivate: booleanRenderer,
   percentComplete: (percent, size) => (
     <span>

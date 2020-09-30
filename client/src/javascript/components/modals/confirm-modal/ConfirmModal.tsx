@@ -2,7 +2,7 @@ import React from 'react';
 
 import Modal from '../Modal';
 
-interface ConfirmModalProps {
+export interface ConfirmModalProps {
   options: {
     content: React.ReactNode;
     heading: React.ReactNode;

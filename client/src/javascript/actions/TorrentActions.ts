@@ -250,14 +250,11 @@ const TorrentActions = {
       })
       .then((json) => json.data)
       .then(
-        (data) => {
+        () => {
           AppDispatcher.dispatchServerAction({
             type: 'CLIENT_SET_FILE_PRIORITY_SUCCESS',
             data: {
-              ...data,
               hash,
-              indices,
-              priority,
             },
           });
         },

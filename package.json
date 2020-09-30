@@ -49,6 +49,7 @@
     "@types/bencode": "^2.0.0",
     "@types/body-parser": "^1.19.0",
     "@types/classnames": "^2.2.10",
+    "@types/clipboard": "^2.0.1",
     "@types/compression": "^1.7.0",
     "@types/cookie-parser": "^1.4.2",
     "@types/d3": "^5.7.2",

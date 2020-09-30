@@ -1,13 +1,29 @@
-import {injectIntl} from 'react-intl';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
 import PriorityLevels from '../../../constants/PriorityLevels';
 
-const METHODS_TO_BIND = ['handleClick'];
+interface PriorityMeterProps extends WrappedComponentProps {
+  id: string | number;
+  level: number;
+  maxLevel: number;
+  priorityType: keyof typeof PriorityLevels;
+  showLabel?: boolean;
+  onChange: (id: this['id'], level: this['level']) => void;
+  bindExternalChangeHandler?: (clickHandler: (() => void) | null) => void;
+}
 
-class PriorityMeter extends React.Component {
-  constructor() {
-    super();
+interface PriorityMeterStates {
+  optimisticData: {
+    level: number | null;
+  };
+}
+
+const METHODS_TO_BIND = ['handleClick'] as const;
+
+class PriorityMeter extends React.Component<PriorityMeterProps, PriorityMeterStates> {
+  constructor(props: PriorityMeterProps) {
+    super(props);
 
     this.state = {
       optimisticData: {
@@ -33,7 +49,8 @@ class PriorityMeter extends React.Component {
   }
 
   getPriorityLabel() {
-    switch (PriorityLevels[this.props.priorityType][this.getPriorityLevel()]) {
+    const priorityLevel = PriorityLevels[this.props.priorityType];
+    switch (priorityLevel[this.getPriorityLevel() as keyof typeof priorityLevel]) {
       case 'DONT_DOWNLOAD':
         return this.props.intl.formatMessage({
           id: 'priority.dont.download',
@@ -66,8 +83,10 @@ class PriorityMeter extends React.Component {
   handleClick() {
     let level = this.getPriorityLevel();
 
-    if (level++ >= this.props.maxLevel) {
+    if (level >= this.props.maxLevel) {
       level = 0;
+    } else {
+      level += 1;
     }
 
     this.setState({optimisticData: {level}});

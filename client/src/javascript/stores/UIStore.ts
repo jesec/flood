@@ -1,6 +1,9 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 
+import type {ConfirmModalProps} from '../components/modals/confirm-modal/ConfirmModal';
+import type {TorrentDetailsModalProps} from '../components/modals/torrent-details-modal/TorrentDetailsModal';
+
 export interface ContextMenuItem {
   type?: 'separator';
   action: string;
@@ -28,20 +31,22 @@ export interface Dependency {
 
 export type Dependencies = Record<string, Dependency>;
 
-export interface Modal {
-  id:
-    | 'add-torrents'
-    | 'confirm'
-    | 'feeds'
-    | 'move-torrents'
-    | 'remove-torrents'
-    | 'set-taxonomy'
-    | 'set-tracker'
-    | 'settings'
-    | 'torrent-details';
-  torrents?: unknown;
-  options?: unknown;
-}
+export type Modal =
+  | {
+      id: 'feeds' | 'move-torrents' | 'remove-torrents' | 'set-taxonomy' | 'set-tracker' | 'settings';
+    }
+  | {
+      id: 'add-torrents';
+      initialURLs?: Array<{id: number; value: string}>;
+    }
+  | {
+      id: 'confirm';
+      options: ConfirmModalProps['options'];
+    }
+  | {
+      id: 'torrent-details';
+      options: TorrentDetailsModalProps['options'];
+    };
 
 class UIStoreClass extends BaseStore {
   activeContextMenu: ContextMenu | null = null;
@@ -50,7 +55,6 @@ class UIStoreClass extends BaseStore {
   dependencies: Dependencies = {};
   globalStyles: Array<string> = [];
   haveUIDependenciesResolved = false;
-  torrentDetailsHash: string | null = null;
   styleElement: HTMLStyleElement & {styleSheet?: {cssText: string}} = this.createStyleElement();
 
   addGlobalStyle(cssString: string) {
@@ -117,19 +121,10 @@ class UIStoreClass extends BaseStore {
     return this.dependencies;
   }
 
-  getTorrentDetailsHash() {
-    return this.torrentDetailsHash;
-  }
-
   handleSetTaxonomySuccess() {
     if (this.activeModal != null && this.activeModal.id === 'set-taxonomy') {
       this.dismissModal();
     }
-  }
-
-  handleTorrentClick({hash}: {hash: string}) {
-    this.torrentDetailsHash = hash;
-    this.emit('UI_TORRENT_DETAILS_HASH_CHANGE');
   }
 
   hasSatisfiedDependencies() {
@@ -197,9 +192,6 @@ UIStore.dispatcherID = AppDispatcher.register((payload) => {
   const {action} = payload;
 
   switch (action.type) {
-    case 'UI_CLICK_TORRENT':
-      UIStore.handleTorrentClick(action.data);
-      break;
     case 'UI_DISPLAY_DROPDOWN_MENU':
       UIStore.setActiveDropdownMenu(action.data);
       break;

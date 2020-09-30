@@ -11,7 +11,6 @@ import SettingsStore from './SettingsStore';
 import sortTorrents from '../util/sortTorrents';
 import TorrentActions from '../actions/TorrentActions';
 import TorrentFilterStore from './TorrentFilterStore';
-import UIStore from './UIStore';
 
 import type {FloodSettings} from './SettingsStore';
 
@@ -26,18 +25,14 @@ class TorrentStoreClass extends BaseStore {
   sortTorrentsBy: FloodSettings['sortTorrents'] = {direction: 'desc', property: 'dateAdded'};
   torrents: Torrents = {};
 
-  fetchTorrentDetails(options: {forceUpdate?: boolean} = {}) {
-    if (!this.isRequestPending('fetch-torrent-details') || options.forceUpdate) {
+  fetchTorrentDetails(hash: TorrentProperties['hash'], forceUpdate?: boolean) {
+    if (!this.isRequestPending('fetch-torrent-details') || forceUpdate) {
       this.beginRequest('fetch-torrent-details');
-
-      const hash = UIStore.getTorrentDetailsHash();
-      if (hash != null) {
-        TorrentActions.fetchTorrentDetails(hash);
-      }
+      TorrentActions.fetchTorrentDetails(hash);
     }
 
     if (this.pollTorrentDetailsIntervalID === null) {
-      this.startPollingTorrentDetails();
+      this.startPollingTorrentDetails(hash);
     }
   }
 
@@ -209,9 +204,9 @@ class TorrentStoreClass extends BaseStore {
     this.emit('UI_TORRENT_SELECTION_CHANGE');
   }
 
-  handleSetFilePrioritySuccess() {
+  handleSetFilePrioritySuccess({hash}: {hash: string}) {
     this.emit('CLIENT_SET_FILE_PRIORITY_SUCCESS');
-    this.fetchTorrentDetails({forceUpdate: true});
+    this.fetchTorrentDetails(hash, true);
   }
 
   handleTorrentListDiffChange(torrentListDiff: TorrentListDiff) {
@@ -269,8 +264,8 @@ class TorrentStoreClass extends BaseStore {
     this.sortedTorrents = sortTorrents(Object.values(this.torrents), this.getTorrentsSort());
   }
 
-  startPollingTorrentDetails() {
-    this.pollTorrentDetailsIntervalID = setInterval(this.fetchTorrentDetails.bind(this), pollInterval);
+  startPollingTorrentDetails(hash: TorrentProperties['hash']) {
+    this.pollTorrentDetailsIntervalID = setInterval(this.fetchTorrentDetails.bind(this, hash), pollInterval);
   }
 
   stopPollingTorrentDetails() {
@@ -330,7 +325,7 @@ TorrentStore.dispatcherID = AppDispatcher.register((payload) => {
       TorrentStoreClass.handleRemoveTorrentsError(action.error);
       break;
     case 'CLIENT_SET_FILE_PRIORITY_SUCCESS':
-      TorrentStore.handleSetFilePrioritySuccess();
+      TorrentStore.handleSetFilePrioritySuccess(action.data);
       break;
     case 'CLIENT_SET_TRACKER_SUCCESS':
       // TODO: popup set tracker success message here

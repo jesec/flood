@@ -41,7 +41,6 @@ const successTypes = [
   'AUTH_LOGOUT_SUCCESS',
   'CLIENT_CHECK_HASH_SUCCESS',
   'CLIENT_CONNECTION_TEST_SUCCESS',
-  'CLIENT_SET_FILE_PRIORITY_SUCCESS',
   'CLIENT_SET_TORRENT_PRIORITY_SUCCESS',
   'CLIENT_SET_TAXONOMY_SUCCESS',
   'CLIENT_SET_THROTTLE_SUCCESS',
@@ -121,6 +120,11 @@ interface ClientFetchTorrentMediainfoSuccessAction {
   data: {hash: string; output: string};
 }
 
+interface ClientSetFilePrioritySuccessAction {
+  type: 'CLIENT_SET_FILE_PRIORITY_SUCCESS';
+  data: {hash: string};
+}
+
 interface ClientSettingsFetchRequestSuccessAction {
   type: 'CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS';
   data: ClientSettings;
@@ -134,6 +138,7 @@ export interface ClientSettingsSaveSuccessAction {
 type ClientAction =
   | ClientCheckHashErrorAction
   | ClientFetchTorrentMediainfoSuccessAction
+  | ClientSetFilePrioritySuccessAction
   | ClientSettingsFetchRequestSuccessAction
   | ClientSettingsSaveSuccessAction;
 

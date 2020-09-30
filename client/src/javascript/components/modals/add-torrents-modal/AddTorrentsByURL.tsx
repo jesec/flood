@@ -9,9 +9,6 @@ import SettingsStore from '../../../stores/SettingsStore';
 import TextboxRepeater from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
-import UIStore from '../../../stores/UIStore';
-
-import type {Textboxes} from '../../general/form-elements/TextboxRepeater';
 
 type AddTorrentsByURLFormData = {
   [urls: string]: string;
@@ -22,25 +19,26 @@ type AddTorrentsByURLFormData = {
   tags: string;
 };
 
+interface AddTorrentsByURLProps extends WrappedComponentProps {
+  initialURLs?: Array<{id: number; value: string}>;
+}
+
 interface AddTorrentsByURLStates {
   isAddingTorrents: boolean;
   tags: string;
-  urlTextboxes: Textboxes;
+  urlTextboxes: Array<{id: number; value: string}>;
 }
 
-class AddTorrentsByURL extends React.Component<WrappedComponentProps, AddTorrentsByURLStates> {
+class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrentsByURLStates> {
   formRef: Form | null = null;
 
-  constructor(props: WrappedComponentProps) {
+  constructor(props: AddTorrentsByURLProps) {
     super(props);
-
-    const activeModal = UIStore.getActiveModal();
-    const initialUrls = activeModal ? activeModal.torrents : null;
 
     this.state = {
       isAddingTorrents: false,
       tags: '',
-      urlTextboxes: (initialUrls as Textboxes) || [{id: 0, value: ''}],
+      urlTextboxes: this.props.initialURLs || [{id: 0, value: ''}],
     };
   }
 

@@ -1,17 +1,23 @@
-import {FormattedMessage, FormattedNumber, injectIntl} from 'react-intl';
+import {FormattedMessage, FormattedNumber, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
+
+import type {TorrentProperties} from '@shared/types/Torrent';
 
 import Size from '../../general/Size';
 
-class TorrentGeneralInfo extends React.Component {
-  getTags(tags) {
-    return tags.map((tag) => (
-      <span className="tag" key={tag}>
-        {tag}
-      </span>
-    ));
-  }
+interface TorrentGeneralInfoProps extends WrappedComponentProps {
+  torrent: TorrentProperties;
+}
 
+const getTags = (tags: TorrentProperties['tags']) => {
+  return tags.map((tag) => (
+    <span className="tag" key={tag}>
+      {tag}
+    </span>
+  ));
+};
+
+class TorrentGeneralInfo extends React.Component<TorrentGeneralInfoProps> {
   render() {
     const {torrent} = this.props;
 
@@ -21,8 +27,8 @@ class TorrentGeneralInfo extends React.Component {
     }
 
     let creation = null;
-    if (torrent.creationDate) {
-      creation = new Date(torrent.creationDate * 1000);
+    if (torrent.dateCreated) {
+      creation = new Date(torrent.dateCreated * 1000);
     }
 
     const VALUE_NOT_AVAILABLE = (
@@ -36,7 +42,7 @@ class TorrentGeneralInfo extends React.Component {
         <table className="torrent-details__table table">
           <tbody>
             <tr className="torrent-details__table__heading">
-              <td className="torrent-details__table__heading--tertiary" colSpan="2">
+              <td className="torrent-details__table__heading--tertiary" colSpan={2}>
                 <FormattedMessage id="torrents.details.general.heading.general" />
               </td>
             </tr>
@@ -60,30 +66,16 @@ class TorrentGeneralInfo extends React.Component {
               </td>
               <td className="torrent-details__detail__value">{torrent.basePath}</td>
             </tr>
-            <tr className="torrent-details__detail torrent-details__detail--scheduler">
-              <td className="torrent-details__detail__label">
-                <FormattedMessage id="torrents.details.general.scheduler" />
-              </td>
-              <td className="torrent-details__detail__value">
-                {torrent.ignoreScheduler === '1'
-                  ? this.props.intl.formatMessage({
-                      id: 'torrents.details.general.scheduler.ignored',
-                    })
-                  : this.props.intl.formatMessage({
-                      id: 'torrents.details.general.scheduler.obeyed',
-                    })}
-              </td>
-            </tr>
             <tr className="torrent-details__detail torrent-details__detail--tags">
               <td className="torrent-details__detail__label">
                 <FormattedMessage id="torrents.details.general.tags" />
               </td>
               <td className="torrent-details__detail__value">
-                {torrent.tags.length ? this.getTags(torrent.tags) : VALUE_NOT_AVAILABLE}
+                {torrent.tags.length ? getTags(torrent.tags) : VALUE_NOT_AVAILABLE}
               </td>
             </tr>
             <tr className="torrent-details__table__heading">
-              <td className="torrent-details__table__heading--tertiary" colSpan="2">
+              <td className="torrent-details__table__heading--tertiary" colSpan={2}>
                 <FormattedMessage id="torrents.details.general.heading.transfer" />
               </td>
             </tr>
@@ -127,7 +119,7 @@ class TorrentGeneralInfo extends React.Component {
               </td>
             </tr>
             <tr className="torrent-details__table__heading">
-              <td className="torrent-details__table__heading--tertiary" colSpan="2">
+              <td className="torrent-details__table__heading--tertiary" colSpan={2}>
                 <FormattedMessage id="torrents.details.general.heading.torrent" />
               </td>
             </tr>
@@ -170,17 +162,17 @@ class TorrentGeneralInfo extends React.Component {
                 <FormattedMessage id="torrents.details.general.type" />
               </td>
               <td className="torrent-details__detail__value">
-                {torrent.isPrivate === '0'
+                {torrent.isPrivate
                   ? this.props.intl.formatMessage({
-                      id: 'torrents.details.general.type.public',
+                      id: 'torrents.details.general.type.private',
                     })
                   : this.props.intl.formatMessage({
-                      id: 'torrents.details.general.type.private',
+                      id: 'torrents.details.general.type.public',
                     })}
               </td>
             </tr>
             <tr className="torrent-details__table__heading">
-              <td className="torrent-details__table__heading--tertiary" colSpan="2">
+              <td className="torrent-details__table__heading--tertiary" colSpan={2}>
                 <FormattedMessage id="torrents.details.general.heading.tracker" />
               </td>
             </tr>

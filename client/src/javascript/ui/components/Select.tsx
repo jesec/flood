@@ -96,10 +96,10 @@ export default class Select extends Component<SelectProps, SelectStates> {
     if (childArray != null) {
       const item = childArray.find((child) => {
         return (child as SelectItem).props.id != null;
-      });
+      }) as SelectItem;
 
-      if (item != null) {
-        return (item as SelectItem).props.id;
+      if (item != null && item.props.id != null) {
+        return item.props.id;
       }
     }
 

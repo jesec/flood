@@ -5,7 +5,7 @@ import Checkmark from '../icons/Checkmark';
 import ContextMenuItem from './ContextMenuItem';
 
 interface SelectItemProps {
-  id: string | number;
+  id?: string | number;
   isSelected?: boolean;
   isTrigger?: boolean;
   placeholder?: boolean;

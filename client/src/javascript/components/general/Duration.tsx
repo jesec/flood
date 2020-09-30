@@ -4,7 +4,7 @@ import React from 'react';
 import type {Duration as DurationType} from '@shared/types/Torrent';
 
 interface DurationProps {
-  suffix: React.ReactNode;
+  suffix?: React.ReactNode;
   value: 'Infinity' | DurationType;
 }
 

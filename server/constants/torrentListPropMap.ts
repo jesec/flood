@@ -3,19 +3,6 @@ import regEx from '../../shared/util/regEx';
 const torrentListPropMap = new Map();
 
 const booleanTransformer = (value: string) => value === '1';
-const dateTransformer = (dirtyDate: string) => {
-  if (!dirtyDate) {
-    return '';
-  }
-
-  const date = dirtyDate.trim();
-
-  if (date === '0') {
-    return '';
-  }
-
-  return date;
-};
 const defaultTransformer = (value: unknown) => value;
 
 torrentListPropMap.set('hash', {
@@ -65,7 +52,7 @@ torrentListPropMap.set('isOpen', {
 
 torrentListPropMap.set('priority', {
   methodCall: 'd.priority=',
-  transformValue: defaultTransformer,
+  transformValue: Number,
 });
 
 torrentListPropMap.set('upRate', {
@@ -130,12 +117,12 @@ torrentListPropMap.set('seedingTime', {
 
 torrentListPropMap.set('dateAdded', {
   methodCall: 'd.custom=addtime',
-  transformValue: dateTransformer,
+  transformValue: Number,
 });
 
 torrentListPropMap.set('dateCreated', {
   methodCall: 'd.creation_date=',
-  transformValue: dateTransformer,
+  transformValue: Number,
 });
 
 torrentListPropMap.set('throttleName', {
@@ -178,11 +165,6 @@ torrentListPropMap.set('comment', {
 
     return comment;
   },
-});
-
-torrentListPropMap.set('ignoreScheduler', {
-  methodCall: 'd.custom=sch_ignore',
-  transformValue: booleanTransformer,
 });
 
 torrentListPropMap.set('trackerURIs', {

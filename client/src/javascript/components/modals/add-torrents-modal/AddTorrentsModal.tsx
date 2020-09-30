@@ -5,7 +5,11 @@ import AddTorrentsByFile from './AddTorrentsByFile';
 import AddTorrentsByURL from './AddTorrentsByURL';
 import Modal from '../Modal';
 
-class AddTorrents extends React.Component<WrappedComponentProps> {
+export interface AddTorrentsModalProps extends WrappedComponentProps {
+  initialURLs?: Array<{id: number; value: string}>;
+}
+
+class AddTorrentsModal extends React.Component<AddTorrentsModalProps> {
   render() {
     const tabs = {
       'by-url': {
@@ -13,6 +17,7 @@ class AddTorrents extends React.Component<WrappedComponentProps> {
         label: this.props.intl.formatMessage({
           id: 'torrents.add.tab.url.title',
         }),
+        props: this.props,
       },
       'by-file': {
         content: AddTorrentsByFile,
@@ -33,4 +38,4 @@ class AddTorrents extends React.Component<WrappedComponentProps> {
   }
 }
 
-export default injectIntl(AddTorrents);
+export default injectIntl(AddTorrentsModal);
