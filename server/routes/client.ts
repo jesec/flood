@@ -35,14 +35,6 @@ router.post('/connection-test', (req, res) => {
     });
 });
 
-router.post('/add', (req, res) => {
-  client.addUrls(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
-});
-
-router.post('/add-files', (req, res) => {
-  client.addFiles(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
-});
-
 router.get('/settings', (req, res) => {
   client.getSettings(req.user, req.services, req.query, ajaxUtil.getResponseFn(res));
 });
@@ -55,16 +47,12 @@ router.put('/settings/speed-limits', (req, res) => {
   client.setSpeedLimits(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.post('/torrent-details', (req, res) => {
-  client.getTorrentDetails(req.user, req.services, req.body.hash, ajaxUtil.getResponseFn(res));
+router.post('/torrents/add', (req, res) => {
+  client.addUrls(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.patch('/torrents/:hash/priority', (req, res) => {
-  client.setPriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
-});
-
-router.patch('/torrents/:hash/file-priority', (req, res) => {
-  client.setFilePriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
+router.post('/torrents/add-files', (req, res) => {
+  client.addFiles(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
 /**
@@ -198,6 +186,18 @@ router.patch('/torrents/taxonomy', (req, res) => {
 
 router.patch('/torrents/tracker', (req, res) => {
   client.setTracker(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
+});
+
+router.get('/torrents/:hash/details', (req, res) => {
+  client.getTorrentDetails(req.user, req.services, req.params.hash, ajaxUtil.getResponseFn(res));
+});
+
+router.patch('/torrents/:hash/priority', (req, res) => {
+  client.setPriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
+});
+
+router.patch('/torrents/:hash/file-priority', (req, res) => {
+  client.setFilePriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
 });
 
 router.get('/methods.json', (req, res) => {

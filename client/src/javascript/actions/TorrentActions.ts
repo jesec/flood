@@ -19,7 +19,7 @@ const baseURI = ConfigStore.getBaseURI();
 const TorrentActions = {
   addTorrentsByUrls: (options: AddTorrentByURLOptions) =>
     axios
-      .post(`${baseURI}api/client/add`, options)
+      .post(`${baseURI}api/client/torrents/add`, options)
       .then((json) => json.data)
       .then(
         (response) => {
@@ -44,7 +44,7 @@ const TorrentActions = {
 
   addTorrentsByFiles: (options: AddTorrentByFileOptions) =>
     axios
-      .post(`${baseURI}api/client/add-files`, options)
+      .post(`${baseURI}api/client/torrents/add-files`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -120,9 +120,7 @@ const TorrentActions = {
 
   fetchTorrentDetails: (hash: TorrentProperties['hash']) =>
     axios
-      .post(`${baseURI}api/client/torrent-details`, {
-        hash,
-      })
+      .get(`${baseURI}api/client/torrents/${hash}/details`)
       .then((json) => json.data)
       .then(
         (torrentDetails) => {
