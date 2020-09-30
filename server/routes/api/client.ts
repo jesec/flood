@@ -1,7 +1,7 @@
 import express from 'express';
 
-import ajaxUtil from '../util/ajaxUtil';
-import client from '../models/client';
+import ajaxUtil from '../../util/ajaxUtil';
+import client from '../../models/client';
 
 const router = express.Router();
 

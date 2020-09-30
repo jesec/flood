@@ -10,8 +10,8 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/Action';
 
-import ajaxUtil from '../util/ajaxUtil';
-import client from '../models/client';
+import ajaxUtil from '../../util/ajaxUtil';
+import client from '../../models/client';
 
 const router = express.Router();
 
