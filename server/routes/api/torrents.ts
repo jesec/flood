@@ -17,7 +17,7 @@ import mediainfo from '../../util/mediainfo';
 const router = express.Router();
 
 /**
- * POST /api/torrents/add
+ * POST /api/torrents/add-urls
  * @summary Adds torrents by URLs.
  * @tags Torrents
  * @security AuthenticatedUser
@@ -25,7 +25,7 @@ const router = express.Router();
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, AddTorrentByURLOptions>('/add', (req, res) => {
+router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) => {
   client.addUrls(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
