@@ -349,7 +349,7 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
                 }}
               />
             </Button>
-            <Select id="file-priority" persistentPlaceholder shrink={false}>
+            <Select id="file-priority" persistentPlaceholder shrink={false} defaultID="">
               <SelectItem placeholder>
                 <FormattedMessage id="torrents.details.selected.files.set.priority" />
               </SelectItem>
