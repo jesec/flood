@@ -7,6 +7,8 @@ import torrentTrackerPropsMap from '../../shared/constants/torrentTrackerPropsMa
 const processFile = (file) => {
   file.filename = file.pathComponents[file.pathComponents.length - 1];
   file.percentComplete = truncateTo((file.completedChunks / file.sizeChunks) * 100);
+  file.priority = Number(file.priority);
+  file.sizeBytes = Number(file.sizeBytes);
 
   delete file.completedChunks;
   delete file.pathComponents;
@@ -102,6 +104,15 @@ const processTorrentDetails = (data) => {
       peer.isEncrypted = peer.isEncrypted === '1';
       peer.isIncoming = peer.isIncoming === '1';
 
+      // Strings to number
+      peer.completedPercent = Number(peer.completedPercent);
+      peer.downloadRate = Number(peer.downloadRate);
+      peer.downloadTotal = Number(peer.downloadTotal);
+      peer.uploadRate = Number(peer.uploadRate);
+      peer.uploadTotal = Number(peer.uploadTotal);
+      peer.peerRate = Number(peer.peerRate);
+      peer.peerTotal = Number(peer.peerTotal);
+
       return peer;
     });
   }
@@ -112,7 +123,14 @@ const processTorrentDetails = (data) => {
   }
 
   if (trackerData && trackerData.length) {
-    trackers = mapPropsToResponse(torrentTrackerPropsMap.props, trackerData);
+    trackers = mapPropsToResponse(torrentTrackerPropsMap.props, trackerData).map((tracker) => {
+      tracker.group = Number(tracker.group);
+      tracker.minInterval = Number(tracker.minInterval);
+      tracker.normalInterval = Number(tracker.normalInterval);
+      tracker.type = Number(tracker.type);
+
+      return tracker;
+    });
   }
 
   return {peers, trackers, fileTree};
