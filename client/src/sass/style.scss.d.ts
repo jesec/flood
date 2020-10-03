@@ -356,6 +356,7 @@ declare const styles: {
   readonly 'peers-list__flag__image': string;
   readonly 'peers-list__flag__text': string;
   readonly 'peers-list__encryption': string;
+  readonly 'peers-list__incoming': string;
   readonly 'priority-meter': string;
   readonly 'priority-meter__wrapper': string;
   readonly 'priority-meter--max-2': string;

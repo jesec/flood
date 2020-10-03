@@ -6,6 +6,7 @@ import type {TorrentPeer} from '@shared/constants/torrentPeerPropsMap';
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';
 import Checkmark from '../../icons/Checkmark';
+import LockIcon from '../../icons/LockIcon';
 import SpinnerIcon from '../../icons/SpinnerIcon';
 
 interface TorrentPeersProps {
@@ -59,7 +60,8 @@ export default class TorrentPeers extends React.Component<TorrentPeersProps> {
     if (peers) {
       const peerList = peers.map((peer) => {
         const {country: countryCode} = peer;
-        const encryptedIcon = peer.isEncrypted ? <Checkmark /> : null;
+        const encryptedIcon = peer.isEncrypted ? <LockIcon /> : null;
+        const incomingIcon = peer.isIncoming ? <Checkmark /> : null;
 
         return (
           <tr key={peer.address}>
@@ -81,6 +83,7 @@ export default class TorrentPeers extends React.Component<TorrentPeersProps> {
             <td>{peer.completedPercent}%</td>
             <td>{peer.clientVersion}</td>
             <td className="peers-list__encryption">{encryptedIcon}</td>
+            <td className="peers-list__incoming">{incomingIcon}</td>
           </tr>
         );
       });
@@ -99,6 +102,7 @@ export default class TorrentPeers extends React.Component<TorrentPeersProps> {
                 <th className="torrent-details__table__heading--secondary">%</th>
                 <th className="torrent-details__table__heading--secondary">Client</th>
                 <th className="torrent-details__table__heading--secondary">Enc</th>
+                <th className="torrent-details__table__heading--secondary">In</th>
               </tr>
             </thead>
             <tbody>{peerList}</tbody>
