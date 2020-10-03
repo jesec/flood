@@ -4,6 +4,8 @@ $priority-meter--track--level-1--background: rgba($blue, 0.2);
 $priority-meter--bar--level-1--background: $blue;
 $priority-meter--track--level-2--background: rgba($green, 0.2);
 $priority-meter--bar--level-2--background: $green;
+$priority-meter--track--level-3--background: rgba($red, 0.2);
+$priority-meter--bar--level-3--background: $red;
 
 .priority-meter {
   height: 8px;
@@ -117,11 +119,11 @@ $priority-meter--bar--level-2--background: $green;
 
       &--level-3 {
         &:before {
-          background: $priority-meter--track--level-2--background;
+          background: $priority-meter--track--level-3--background;
         }
 
         &:after {
-          background: $priority-meter--bar--level-2--background;
+          background: $priority-meter--bar--level-3--background;
           left: 24px;
         }
       }
