@@ -22,7 +22,7 @@ class TorrentStoreClass extends BaseStore {
   pollTorrentDetailsIntervalID: number | null = null;
   selectedTorrents: Array<string> = [];
   sortedTorrents: Array<TorrentProperties> = [];
-  sortTorrentsBy: FloodSettings['sortTorrents'] = {direction: 'desc', property: 'dateAdded'};
+  sortTorrentsBy: FloodSettings['sortTorrents'] = SettingsStore.getFloodSetting('sortTorrents');
   torrents: Torrents = {};
 
   fetchTorrentDetails(hash: TorrentProperties['hash'], forceUpdate?: boolean) {
