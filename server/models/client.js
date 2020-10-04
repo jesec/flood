@@ -229,17 +229,6 @@ const client = {
     request.send();
   },
 
-  setPriority(user, services, hashes, data, callback) {
-    const request = new ClientRequest(user, services);
-
-    request.setPriority({hashes, priority: data.priority});
-    request.onComplete((response, error) => {
-      services.torrentService.fetchTorrentList();
-      callback(response, error);
-    });
-    request.send();
-  },
-
   setSettings(user, services, payloads, callback) {
     const request = new ClientRequest(user, services);
     if (payloads.length === 0) return callback({});

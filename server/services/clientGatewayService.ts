@@ -9,6 +9,7 @@ import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
+  SetTorrentsPriorityOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/Action';
@@ -255,6 +256,36 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
 
       return response;
     }, this.processClientRequestError);
+  }
+
+  /**
+   * Sets priority of torrents
+   *
+   * @param {SetTorrentsPriorityOptions} options - An object of options...
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async setTorrentsPriority({hashes, priority}: SetTorrentsPriorityOptions) {
+    if (this.services == null || this.services.clientRequestManager == null) {
+      return Promise.reject();
+    }
+
+    const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
+      accumulator.push({
+        methodName: 'd.priority.set',
+        params: [hash, `${priority}`],
+      });
+
+      accumulator.push({
+        methodName: 'd.update_priorities',
+        params: [hash],
+      });
+
+      return accumulator;
+    }, []);
+
+    return this.services.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   /**

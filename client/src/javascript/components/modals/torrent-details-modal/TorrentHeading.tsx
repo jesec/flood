@@ -64,7 +64,7 @@ export default class TorrentHeading extends React.Component<TorrentHeadingProps,
           maxLevel={3}
           priorityType="torrent"
           onChange={(hash, level) => {
-            TorrentActions.setPriority(hash as string, level);
+            TorrentActions.setPriority({hashes: [`${hash}`], priority: level});
           }}
         />
       </li>,

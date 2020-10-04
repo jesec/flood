@@ -9,8 +9,8 @@ interface PriorityMeterProps extends WrappedComponentProps {
   maxLevel: number;
   priorityType: keyof typeof PriorityLevels;
   showLabel?: boolean;
+  clickHandled?: boolean;
   onChange: (id: this['id'], level: this['level']) => void;
-  bindExternalChangeHandler?: (clickHandler: (() => void) | null) => void;
 }
 
 interface PriorityMeterStates {
@@ -34,18 +34,6 @@ class PriorityMeter extends React.Component<PriorityMeterProps, PriorityMeterSta
     METHODS_TO_BIND.forEach((method) => {
       this[method] = this[method].bind(this);
     });
-  }
-
-  componentDidMount() {
-    if (this.props.bindExternalChangeHandler) {
-      this.props.bindExternalChangeHandler(this.handleClick);
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.props.bindExternalChangeHandler) {
-      this.props.bindExternalChangeHandler(null);
-    }
   }
 
   getPriorityLabel() {
@@ -101,7 +89,7 @@ class PriorityMeter extends React.Component<PriorityMeterProps, PriorityMeterSta
     }
 
     return (
-      <div className="priority-meter__wrapper" onClick={this.handleClick}>
+      <div className="priority-meter__wrapper" onClick={this.props.clickHandled ? undefined : this.handleClick}>
         <div
           className={
             'priority-meter ' +
@@ -115,4 +103,4 @@ class PriorityMeter extends React.Component<PriorityMeterProps, PriorityMeterSta
   }
 }
 
-export default injectIntl(PriorityMeter);
+export default injectIntl(PriorityMeter, {forwardRef: true});

@@ -238,15 +238,6 @@ class ClientRequest {
     });
   }
 
-  setPriority(options) {
-    const hashes = getEnsuredArray(options.hashes);
-
-    hashes.forEach((hash) => {
-      this.requests.push(getMethodCall('d.priority.set', [hash, options.priority]));
-      this.requests.push(getMethodCall('d.update_priorities', [hash]));
-    });
-  }
-
   setSettings(options) {
     const settings = getEnsuredArray(options.settings);
 

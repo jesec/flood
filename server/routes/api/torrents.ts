@@ -1,11 +1,12 @@
 import express from 'express';
 
-import type {
+import {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
+  SetTorrentsPriorityOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/Action';
@@ -168,6 +169,31 @@ router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
 });
 
 /**
+ * PATCH /api/torrents/priority
+ * @summary Sets priority of torrents.
+ * @tags Torrent
+ * @security AuthenticatedUser
+ * @param {SetTorrentsPriorityOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, res) => {
+  const {hashes, priority} = req.body;
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .setTorrentsPriority({hashes, priority})
+    .then((response) => {
+      req.services?.torrentService.fetchTorrentList();
+      return response;
+    })
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
+});
+
+/**
  * PATCH /api/torrents/taxonomy
  * @summary Sets tags of torrents.
  * @tags Torrents
@@ -256,17 +282,6 @@ router.get('/:hash/details', (req, res) => {
  */
 router.get('/:hash/mediainfo', (req, res) => {
   mediainfo.getMediainfo(req.services, req.params.hash, ajaxUtil.getResponseFn(res));
-});
-
-/**
- * PATCH /api/torrents/{hash}/priority
- * @summary Sets priority of a torrent.
- * @tags Torrent
- * @security AuthenticatedUser
- * @param {string} hash.path
- */
-router.patch('/:hash/priority', (req, res) => {
-  client.setPriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
 });
 
 export default router;

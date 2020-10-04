@@ -7,9 +7,8 @@ import TorrentContextMenuItems from '../../constants/TorrentContextMenuItems';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
-let handleTorrentPriorityChange = (hash, level) => {
-  TorrentActions.setPriority(hash, level);
-};
+const priorityMeterRef = React.createRef();
+let prioritySelected = 1;
 
 const handleDetailsClick = (torrent, event) => {
   UIActions.handleDetailsClick({
@@ -71,7 +70,11 @@ const handleItemClick = (action, event, torrent) => {
       handleTorrentDownload(torrent, event);
       break;
     case 'set-priority':
-      handleTorrentPriorityChange(event);
+      priorityMeterRef.current.handleClick();
+      TorrentActions.setPriority({
+        hashes: selectedTorrents,
+        priority: prioritySelected,
+      });
       break;
     default:
       break;
@@ -138,14 +141,15 @@ const getContextMenuItems = (intl, torrent, settings) => {
         <PriorityMeter
           id={torrent.hash}
           key={torrent.hash}
-          bindExternalChangeHandler={(priorityChangeHandler) => {
-            handleTorrentPriorityChange = priorityChangeHandler;
-          }}
+          ref={priorityMeterRef}
           level={torrent.priority}
           maxLevel={3}
           priorityType="torrent"
-          onChange={handleTorrentPriorityChange}
+          onChange={(_id, level) => {
+            prioritySelected = level;
+          }}
           showLabel={false}
+          clickHandled
         />
       ),
     },

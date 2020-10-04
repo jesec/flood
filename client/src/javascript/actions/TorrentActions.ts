@@ -6,6 +6,7 @@ import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
+  SetTorrentsPriorityOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/Action';
@@ -220,12 +221,9 @@ const TorrentActions = {
         },
       ),
 
-  setPriority: (hash: TorrentProperties['hash'], priority: number) =>
+  setPriority: (options: SetTorrentsPriorityOptions) =>
     axios
-      .patch(`${baseURI}api/torrents/${hash}/priority`, {
-        hash,
-        priority,
-      })
+      .patch(`${baseURI}api/torrents/priority`, options)
       .then((json) => json.data)
       .then(
         (data) => {
