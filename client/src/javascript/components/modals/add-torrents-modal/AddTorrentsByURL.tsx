@@ -1,11 +1,12 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import {Form, FormRow, Textbox} from '../../../ui';
+import {Form, FormRow} from '../../../ui';
 
 import AddTorrentsActions from './AddTorrentsActions';
 
 import SettingsStore from '../../../stores/SettingsStore';
+import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
@@ -25,7 +26,6 @@ interface AddTorrentsByURLProps extends WrappedComponentProps {
 
 interface AddTorrentsByURLStates {
   isAddingTorrents: boolean;
-  tags: string;
   urlTextboxes: Array<{id: number; value: string}>;
 }
 
@@ -37,7 +37,6 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
 
     this.state = {
       isAddingTorrents: false,
-      tags: '',
       urlTextboxes: this.props.initialURLs || [{id: 0, value: ''}],
     };
   }
@@ -107,9 +106,8 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
           })}
         />
         <FormRow>
-          <Textbox
+          <TagSelect
             id="tags"
-            defaultValue={this.state.tags}
             label={this.props.intl.formatMessage({
               id: 'torrents.add.tags',
             })}

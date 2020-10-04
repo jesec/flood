@@ -21,6 +21,7 @@ import Checkmark from '../../icons/Checkmark';
 import Close from '../../icons/Close';
 import FeedsStore, {FeedsStoreClass} from '../../../stores/FeedsStore';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
+import TagSelect from '../../general/form-elements/TagSelect';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import * as validators from '../../../util/validators';
 
@@ -274,13 +275,13 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
               suggested={rule.destination}
             />
           </FormRowItem>
-          <Textbox
+          <TagSelect
             id="tags"
             label={this.props.intl.formatMessage({
               id: 'feeds.apply.tags',
             })}
             placeholder={this.props.intl.formatMessage(MESSAGES.tags)}
-            defaultValue={rule.tags.join(', ')}
+            defaultValue={rule.tags.join()}
           />
         </FormRow>
         <FormRow>

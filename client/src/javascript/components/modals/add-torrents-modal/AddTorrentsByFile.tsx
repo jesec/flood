@@ -2,12 +2,13 @@ import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
-import {Form, FormRow, FormRowItem, Textbox} from '../../../ui';
+import {Form, FormRow, FormRowItem} from '../../../ui';
 import AddTorrentsActions from './AddTorrentsActions';
 import CloseIcon from '../../icons/Close';
 import FileIcon from '../../icons/File';
 import FilesIcon from '../../icons/Files';
 import SettingsStore from '../../../stores/SettingsStore';
+import TagSelect from '../../general/form-elements/TagSelect';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentDestination from '../../general/filesystem/TorrentDestination';
 
@@ -24,7 +25,6 @@ interface AddTorrentsByFileStates {
     name: string;
     data: string;
   }>;
-  tags: string;
   isAddingTorrents: boolean;
 }
 
@@ -36,7 +36,6 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
     this.state = {
       errors: {},
       files: [],
-      tags: '',
       isAddingTorrents: false,
     };
   }
@@ -179,11 +178,10 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
           })}
         />
         <FormRow>
-          <Textbox
+          <TagSelect
             label={this.props.intl.formatMessage({
               id: 'torrents.add.tags',
             })}
-            defaultValue={this.state.tags}
             id="tags"
           />
         </FormRow>
