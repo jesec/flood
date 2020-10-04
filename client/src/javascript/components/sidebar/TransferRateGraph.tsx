@@ -1,4 +1,7 @@
-import * as d3 from 'd3';
+import {area, curveMonotoneX, line} from 'd3-shape';
+import {max} from 'd3-array';
+import {ScaleLinear, scaleLinear} from 'd3-scale';
+import {Selection, select} from 'd3-selection';
 import React from 'react';
 
 import type {TransferDirection} from '@shared/types/TransferData';
@@ -37,8 +40,8 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
   }
 
   lastMouseX?: number;
-  xScale?: d3.ScaleLinear<number, number>;
-  yScale?: d3.ScaleLinear<number, number>;
+  xScale?: ScaleLinear<number, number>;
+  yScale?: ScaleLinear<number, number>;
   graphRefs: {
     graph: SVGSVGElement | null;
     areDefined: boolean;
@@ -46,9 +49,9 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
   } & Record<
     TransferDirection,
     {
-      area?: d3.Selection<SVGPathElement, unknown, HTMLElement, unknown>;
-      inspectPoint?: d3.Selection<SVGCircleElement, unknown, HTMLElement, unknown>;
-      rateLine?: d3.Selection<SVGPathElement, unknown, HTMLElement, unknown>;
+      graphArea?: Selection<SVGPathElement, unknown, HTMLElement, unknown>;
+      inspectPoint?: Selection<SVGCircleElement, unknown, HTMLElement, unknown>;
+      rateLine?: Selection<SVGPathElement, unknown, HTMLElement, unknown>;
     }
   > = {graph: null, areDefined: false, isHovered: false, download: {}, upload: {}};
 
@@ -120,10 +123,10 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
       return;
     }
 
-    const graph = d3.select(`#${this.props.id}`);
+    const graph = select(`#${this.props.id}`);
     TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
       // appendEmptyGraphShapes
-      this.graphRefs[direction].area = graph
+      this.graphRefs[direction].graphArea = graph
         .append('path')
         .attr('class', 'graph__area')
         .attr('fill', `url('#graph__gradient--${direction}')`);
@@ -181,45 +184,39 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
     const {height, width} = this.props;
     const margin = {bottom: 10, top: 10};
 
-    this.xScale = d3
-      .scaleLinear()
+    this.xScale = scaleLinear()
       .domain([0, historicalData.download.length - 1])
       .range([0, width]);
 
-    this.yScale = d3
-      .scaleLinear()
+    this.yScale = scaleLinear()
       .domain([
         0,
-        d3.max(historicalData.download, (dataPoint, index) =>
-          Math.max(dataPoint, historicalData.upload[index]),
-        ) as number,
+        max(historicalData.download, (dataPoint, index) => Math.max(dataPoint, historicalData.upload[index])) as number,
       ])
       .range([height - margin.top, margin.bottom]);
 
     this.initGraph();
 
-    const interpolation = d3.curveMonotoneX;
+    const interpolation = curveMonotoneX;
     TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
       const {xScale, yScale} = this;
-      const {area, rateLine} = this.graphRefs[direction];
+      const {graphArea, rateLine} = this.graphRefs[direction];
 
-      if (rateLine == null || area == null || xScale == null || yScale == null) {
+      if (rateLine == null || graphArea == null || xScale == null || yScale == null) {
         return;
       }
 
       this.graphRefs[direction].rateLine = rateLine.attr(
         'd',
-        d3
-          .line<number>()
+        line<number>()
           .x((_dataPoint, index) => xScale(index))
           .y((dataPoint) => yScale(dataPoint))
           .curve(interpolation)(historicalData[direction]) as string,
       );
 
-      this.graphRefs[direction].area = area.attr(
+      this.graphRefs[direction].graphArea = graphArea.attr(
         'd',
-        d3
-          .area<number>()
+        area<number>()
           .x((dataPoint, index) => xScale(index))
           .y0(height)
           .y1((dataPoint) => yScale(dataPoint))
