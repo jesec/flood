@@ -1,8 +1,9 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import {Form, FormRow, Textbox} from '../../../ui';
+import {Form, FormRow} from '../../../ui';
 import Modal from '../Modal';
+import TagSelect from '../../general/form-elements/TagSelect';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
@@ -56,8 +57,6 @@ class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalSt
   }
 
   getContent() {
-    const tagsValue = TorrentStore.getSelectedTorrentsTags()[0].join(', ');
-
     return (
       <div className="modal__content inverse">
         <Form
@@ -65,8 +64,8 @@ class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalSt
             this.formRef = ref;
           }}>
           <FormRow>
-            <Textbox
-              defaultValue={tagsValue}
+            <TagSelect
+              defaultValue={TorrentStore.getSelectedTorrentsTags()[0]}
               id="tags"
               placeholder={this.props.intl.formatMessage({
                 id: 'torrents.set.tags.enter.tags',

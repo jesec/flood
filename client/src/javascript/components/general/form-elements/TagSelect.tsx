@@ -11,7 +11,7 @@ import TorrentFilterStore from '../../../stores/TorrentFilterStore';
 interface TagSelectProps {
   id?: string;
   label?: React.ReactNode;
-  defaultValue?: string;
+  defaultValue?: TorrentProperties['tags'];
   placeholder?: string;
 }
 
@@ -53,9 +53,11 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
   constructor(props: TagSelectProps) {
     super(props);
 
+    const {defaultValue} = this.props;
+
     this.state = {
       isOpen: false,
-      selectedTags: [],
+      selectedTags: defaultValue != null ? defaultValue : [],
     };
   }
 

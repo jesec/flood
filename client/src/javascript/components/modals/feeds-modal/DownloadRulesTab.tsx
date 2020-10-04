@@ -281,7 +281,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
               id: 'feeds.apply.tags',
             })}
             placeholder={this.props.intl.formatMessage(MESSAGES.tags)}
-            defaultValue={rule.tags.join()}
+            defaultValue={rule.tags}
           />
         </FormRow>
         <FormRow>
