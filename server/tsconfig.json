@@ -1,6 +1,7 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
+    "target": "es2019",
     "module": "commonjs",
     "noEmit": false,
     "sourceMap": false,
