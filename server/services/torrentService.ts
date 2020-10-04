@@ -1,4 +1,4 @@
-import deepEqual from 'deep-equal';
+import {deepEqual} from 'fast-equals';
 
 import type {TorrentProperties, TorrentListDiff, Torrents} from '@shared/types/Torrent';
 
