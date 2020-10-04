@@ -3,6 +3,7 @@ import type TypedEmitter from 'typed-emitter';
 
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {TransferHistory, TransferSummaryDiff} from '@shared/types/TransferData';
+import type {TorrentListDiff} from '@shared/types/Torrent';
 
 import ServerEvent from '../models/ServerEvent';
 import services from '../services';
@@ -10,13 +11,10 @@ import DiskUsageService from '../services/diskUsageService';
 
 import type {DiskUsage} from '../services/diskUsageService';
 
-export default (req: Request<unknown, unknown, unknown, {historySnapshot: HistorySnapshot}>, res: Response) => {
+export default async (req: Request<unknown, unknown, unknown, {historySnapshot: HistorySnapshot}>, res: Response) => {
   const {
     query: {historySnapshot = 'FIVE_MINUTE'},
     user,
-  }: {
-    query: {historySnapshot: HistorySnapshot};
-    user?: Express.User;
   } = req;
 
   if (user == null) {
@@ -25,9 +23,7 @@ export default (req: Request<unknown, unknown, unknown, {historySnapshot: Histor
 
   const serviceInstances = services.getAllServices(user);
   const serverEvent = new ServerEvent(res);
-  const taxonomy = serviceInstances.taxonomyService.getTaxonomy();
-  const torrentList = serviceInstances.torrentService.getTorrentList();
-  const transferSummary = serviceInstances.historyService.getTransferSummary();
+  const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();
 
   // Hook into events and stop listening when connection is closed
   const handleEvents = <T extends TypedEmitter<Record<string, unknown>>>(
@@ -46,19 +42,17 @@ export default (req: Request<unknown, unknown, unknown, {historySnapshot: Histor
     isConnected: !serviceInstances.clientGatewayService.hasError,
   });
 
-  const handleDiskUsageChange = (diskUsageChange: DiskUsage) => {
+  // Disk usage change event
+  handleEvents(DiskUsageService, 'DISK_USAGE_CHANGE', (diskUsageChange: DiskUsage) => {
     serverEvent.emit(diskUsageChange.id, 'DISK_USAGE_CHANGE', diskUsageChange.disks);
-  };
+  });
 
-  DiskUsageService.updateDisks()
-    .then(() => {
-      const diskUsage = DiskUsageService.getDiskUsage();
-      serverEvent.emit(diskUsage.id, 'DISK_USAGE_CHANGE', diskUsage.disks);
-      handleEvents(DiskUsageService, 'DISK_USAGE_CHANGE', handleDiskUsageChange);
-    })
-    .catch(() => {
-      // do nothing.
-    });
+  // Trigger an immediate update
+  DiskUsageService.updateDisks().catch((e) => console.error(e));
+
+  const torrentList = (await fetchTorrentList) || serviceInstances.torrentService.getTorrentListSummary();
+  const taxonomy = serviceInstances.taxonomyService.getTaxonomy();
+  const transferSummary = serviceInstances.historyService.getTransferSummary();
 
   serverEvent.emit(torrentList.id, 'TORRENT_LIST_FULL_UPDATE', torrentList.torrents);
   serverEvent.emit(taxonomy.id, 'TAXONOMY_FULL_UPDATE', taxonomy.taxonomy);
@@ -107,11 +101,10 @@ export default (req: Request<unknown, unknown, unknown, {historySnapshot: Histor
 
   // Add diff event listeners.
   handleEvents(
-    serviceInstances.historyService,
-    'TRANSFER_SUMMARY_DIFF_CHANGE',
-    (payload: {id: number; diff: TransferSummaryDiff}) => {
-      const {diff, id} = payload;
-      serverEvent.emit(id, 'TRANSFER_SUMMARY_DIFF_CHANGE', diff);
+    serviceInstances.torrentService,
+    'TORRENT_LIST_DIFF_CHANGE',
+    ({id, diff}: {id: number; diff: TorrentListDiff}) => {
+      serverEvent.emit(id, 'TORRENT_LIST_DIFF_CHANGE', diff);
     },
   );
 
@@ -120,8 +113,11 @@ export default (req: Request<unknown, unknown, unknown, {historySnapshot: Histor
     serverEvent.emit(id, 'TAXONOMY_DIFF_CHANGE', diff);
   });
 
-  handleEvents(serviceInstances.torrentService, 'TORRENT_LIST_DIFF_CHANGE', (payload) => {
-    const {diff, id} = payload;
-    serverEvent.emit(id, 'TORRENT_LIST_DIFF_CHANGE', diff);
-  });
+  handleEvents(
+    serviceInstances.historyService,
+    'TRANSFER_SUMMARY_DIFF_CHANGE',
+    ({id, diff}: {id: number; diff: TransferSummaryDiff}) => {
+      serverEvent.emit(id, 'TRANSFER_SUMMARY_DIFF_CHANGE', diff);
+    },
+  );
 };

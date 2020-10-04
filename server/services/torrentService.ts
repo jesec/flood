@@ -18,12 +18,15 @@ interface TorrentServiceEvents {
   FETCH_TORRENT_LIST_SUCCESS: () => void;
   FETCH_TORRENT_LIST_ERROR: () => void;
   TORRENT_LIST_DIFF_CHANGE: (payload: {id: number; diff: TorrentListDiff}) => void;
+  newListener: (event: keyof Omit<TorrentServiceEvents, 'newListener' | 'removeListener'>) => void;
+  removeListener: (event: keyof Omit<TorrentServiceEvents, 'newListener' | 'removeListener'>) => void;
 }
 
 const torrentListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(torrentListPropMap);
 
 class TorrentService extends BaseService<TorrentServiceEvents> {
   errorCount = 0;
+  pollEnabled = false;
   pollTimeout: NodeJS.Timeout | null = null;
   torrentListSummary: {
     id: number;
@@ -63,6 +66,21 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
       clientGatewayService.on('PROCESS_TORRENT', this.handleTorrentProcessed);
 
       this.fetchTorrentList();
+
+      // starts polling when the first streaming listener is added
+      this.on('newListener', (event) => {
+        if (!this.pollEnabled && event === 'TORRENT_LIST_DIFF_CHANGE') {
+          this.pollEnabled = true;
+          this.deferFetchTorrentList();
+        }
+      });
+
+      // stops polling when the last streaming listener is removed
+      this.on('removeListener', (event) => {
+        if (event === 'TORRENT_LIST_DIFF_CHANGE' && this.listenerCount('TORRENT_LIST_DIFF_CHANGE') === 0) {
+          this.pollEnabled = false;
+        }
+      });
     };
   }
 
@@ -112,7 +130,9 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   }
 
   deferFetchTorrentList(interval = config.torrentClientPollInterval || 2000) {
-    this.pollTimeout = setTimeout(this.fetchTorrentList, interval);
+    if (this.pollEnabled) {
+      this.pollTimeout = setTimeout(this.fetchTorrentList, interval);
+    }
   }
 
   destroy() {
@@ -126,7 +146,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
       clearTimeout(this.pollTimeout);
     }
 
-    this.services?.clientGatewayService
+    return this.services?.clientGatewayService
       .fetchTorrentList(torrentListMethodCallConfig)
       .then(this.handleFetchTorrentListSuccess)
       .catch(this.handleFetchTorrentListError);
@@ -137,7 +157,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   }
 
   getTorrentList() {
-    return this.torrentListSummary;
+    return this.torrentListSummary.torrents;
   }
 
   getTorrentListDiff(nextTorrentListSummary: this['torrentListSummary']) {
@@ -206,6 +226,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     this.deferFetchTorrentList(nextInterval);
 
     this.emit('FETCH_TORRENT_LIST_ERROR');
+    return null;
   }
 
   handleFetchTorrentListSuccess(nextTorrentListSummary: this['torrentListSummary']) {
@@ -220,6 +241,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
 
     this.errorCount = 0;
     this.emit('FETCH_TORRENT_LIST_SUCCESS');
+    return this.torrentListSummary;
   }
 
   handleTorrentProcessed(nextTorrentProperties: TorrentProperties) {
