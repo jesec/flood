@@ -311,6 +311,12 @@
       "value": "Aktuální uživatel"
     }
   ],
+  "auth.error.password.empty": [
+    {
+      "type": 0,
+      "value": "Password cannot be empty."
+    }
+  ],
   "auth.error.username.empty": [
     {
       "type": 0,

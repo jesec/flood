@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Vítejte v záplavě!",
   "auth.current.user": "Aktuální uživatel",
   "auth.error.username.empty": "Uživatelské jméno nemůže být prázdné.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Přihlásit se",
   "auth.login": "Přihlásit se",
   "auth.login.intro": "Přihlaste se ke svému účtu.",

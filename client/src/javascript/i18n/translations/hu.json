@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Üdvözöli a Flood!",
   "auth.current.user": "Jelenlegi felhasználó",
   "auth.error.username.empty": "A felhasználónév nem lehet üres.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Bejelentkezés",
   "auth.login": "Bejelentkezés",
   "auth.login.intro": "Jelentkezz be a fiókodba.",

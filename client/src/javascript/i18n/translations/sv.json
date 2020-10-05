@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Välkommen till översvämningen!",
   "auth.current.user": "Nuvarande användare",
   "auth.error.username.empty": "Användarnamnet får inte vara tomt.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Logga in",
   "auth.login": "Inloggning",
   "auth.login.intro": "Log in to your account.",

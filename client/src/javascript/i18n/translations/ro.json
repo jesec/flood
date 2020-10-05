@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Bine ai venit la inundație!",
   "auth.current.user": "Utilizator curent",
   "auth.error.username.empty": "Numele de utilizator nu poate fi gol.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Autentificare",
   "auth.login": "Autentificare",
   "auth.login.intro": "Log in to your account.",

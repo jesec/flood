@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Welcome to Flood!",
   "auth.current.user": "Current User",
   "auth.error.username.empty": "Username cannot be empty.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Log In",
   "auth.login": "Login",
   "auth.login.intro": "Log in to your account.",

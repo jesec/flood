@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Ласкаво просимо до Флуту!",
   "auth.current.user": "Поточний користувач",
   "auth.error.username.empty": "Ім'я користувача не може бути порожнім.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Увійти",
   "auth.login": "Логін",
   "auth.login.intro": "Log in to your account.",

@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Добро пожаловать в Flood!",
   "auth.current.user": "Текущий пользователь",
   "auth.error.username.empty": "Имя пользователя не может быть пустым.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Войти",
   "auth.login": "Логин",
   "auth.login.intro": "Log in to your account.",
