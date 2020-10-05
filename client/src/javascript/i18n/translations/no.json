@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Velkommen til flommet!",
   "auth.current.user": "Gjeldende bruker",
   "auth.error.username.empty": "Brukernavnfeltet kan ikke være tomt.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Logg inn",
   "auth.login": "Innlogging",
   "auth.login.intro": "Log in to your account.",

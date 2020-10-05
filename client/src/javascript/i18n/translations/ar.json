@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "مرحبا بكم في الفيضان!",
   "auth.current.user": "المستخدم الحالي",
   "auth.error.username.empty": "اسم المستخدم لا يمكن أن يكون فارغاً.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "تسجيل الدخول",
   "auth.login": "تسجيل الدخول",
   "auth.login.intro": "Log in to your account.",

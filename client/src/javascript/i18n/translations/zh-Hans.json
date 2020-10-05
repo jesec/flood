@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "欢迎使用 Flood！",
   "auth.current.user": "当前用户",
   "auth.error.username.empty": "用户名不能为空",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "登录",
   "auth.login": "登录",
   "auth.login.intro": "Log in to your account.",

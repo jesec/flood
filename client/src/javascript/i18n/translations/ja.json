@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "洪水へようこそ！",
   "auth.current.user": "現在のユーザー",
   "auth.error.username.empty": "ユーザー名は空にできません。",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "ログイン",
   "auth.login": "ログイン",
   "auth.login.intro": "Log in to your account.",

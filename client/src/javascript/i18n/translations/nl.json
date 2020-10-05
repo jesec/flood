@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Welkom bij Flood!",
   "auth.current.user": "Huidige gebruiker",
   "auth.error.username.empty": "Gebruikersnaam mag niet leeg zijn.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Log in",
   "auth.login": "Aanmelden",
   "auth.login.intro": "Log in to your account.",

@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "Witaj w powodzie!",
   "auth.current.user": "Bieżący użytkownik",
   "auth.error.username.empty": "Nazwa użytkownika nie może być pusta.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "Zaloguj się",
   "auth.login": "Logowanie",
   "auth.login.intro": "Log in to your account.",

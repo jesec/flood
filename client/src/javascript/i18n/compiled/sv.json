@@ -323,6 +323,12 @@
       "value": "Nuvarande användare"
     }
   ],
+  "auth.error.password.empty": [
+    {
+      "type": 0,
+      "value": "Password cannot be empty."
+    }
+  ],
   "auth.error.username.empty": [
     {
       "type": 0,

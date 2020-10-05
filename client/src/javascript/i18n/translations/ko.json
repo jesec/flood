@@ -19,6 +19,7 @@
   "auth.create.an.account.intro": "환영합니다, Flood입니다!",
   "auth.current.user": "현재 사용자",
   "auth.error.username.empty": "사용자 이름은 비어있을 수 없습니다.",
+  "auth.error.password.empty": "Password cannot be empty.",
   "auth.log.in": "로그인",
   "auth.login": "로그인",
   "auth.login.intro": "Log in to your account.",
