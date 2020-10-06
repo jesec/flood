@@ -1,11 +1,10 @@
 import {deepEqual} from 'fast-equals';
 
-import type {TorrentProperties, TorrentListDiff, Torrents} from '@shared/types/Torrent';
+import type {TorrentProperties, TorrentListDiff, TorrentListSummary} from '@shared/types/Torrent';
 
 import BaseService from './BaseService';
 import config from '../../config';
-import methodCallUtil from '../util/methodCallUtil';
-import torrentListPropMap from '../constants/torrentListPropMap';
+import torrentListMethodCallConfigs from '../constants/torrentListMethodCallConfigs';
 
 import {
   getTorrentETAFromProperties,
@@ -22,16 +21,11 @@ interface TorrentServiceEvents {
   removeListener: (event: keyof Omit<TorrentServiceEvents, 'newListener' | 'removeListener'>) => void;
 }
 
-const torrentListMethodCallConfig = methodCallUtil.getMethodCallConfigFromPropMap(torrentListPropMap);
-
 class TorrentService extends BaseService<TorrentServiceEvents> {
   errorCount = 0;
   pollEnabled = false;
   pollTimeout: NodeJS.Timeout | null = null;
-  torrentListSummary: {
-    id: number;
-    torrents: Torrents;
-  } = {id: Date.now(), torrents: {}};
+  torrentListSummary: TorrentListSummary = {id: Date.now(), torrents: {}};
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
@@ -147,7 +141,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     }
 
     return this.services?.clientGatewayService
-      .fetchTorrentList(torrentListMethodCallConfig)
+      .fetchTorrentList(torrentListMethodCallConfigs)
       .then(this.handleFetchTorrentListSuccess)
       .catch(this.handleFetchTorrentListError);
   }

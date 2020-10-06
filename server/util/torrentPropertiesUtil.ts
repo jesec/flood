@@ -4,8 +4,12 @@ import truncateTo from './numberUtils';
 import type {TorrentProperties} from '../../shared/types/Torrent';
 import type {TorrentStatus} from '../../shared/constants/torrentStatusMap';
 
-export const getTorrentETAFromProperties = (torrentProperties: TorrentProperties) => {
-  const {downRate, bytesDone, sizeBytes} = torrentProperties;
+export const getTorrentETAFromProperties = (processingTorrentProperties: Record<string, unknown>) => {
+  const {downRate, bytesDone, sizeBytes} = processingTorrentProperties;
+
+  if (typeof downRate !== 'number' || typeof bytesDone !== 'number' || typeof sizeBytes !== 'number') {
+    return Infinity;
+  }
 
   if (downRate > 0) {
     return formatUtil.secondsToDuration((sizeBytes - bytesDone) / downRate);
@@ -14,8 +18,14 @@ export const getTorrentETAFromProperties = (torrentProperties: TorrentProperties
   return Infinity;
 };
 
-export const getTorrentPercentCompleteFromProperties = (torrentProperties: TorrentProperties) => {
-  const percentComplete = (torrentProperties.bytesDone / torrentProperties.sizeBytes) * 100;
+export const getTorrentPercentCompleteFromProperties = (processingTorrentProperties: Record<string, unknown>) => {
+  const {bytesDone, sizeBytes} = processingTorrentProperties;
+
+  if (typeof bytesDone !== 'number' || typeof sizeBytes !== 'number') {
+    return 0;
+  }
+
+  const percentComplete = (bytesDone / sizeBytes) * 100;
 
   if (percentComplete > 0 && percentComplete < 10) {
     return Number(truncateTo(percentComplete, 2));
@@ -27,8 +37,8 @@ export const getTorrentPercentCompleteFromProperties = (torrentProperties: Torre
   return percentComplete;
 };
 
-export const getTorrentStatusFromProperties = (torrentProperties: TorrentProperties) => {
-  const {isHashing, isComplete, isOpen, upRate, downRate, state, message} = torrentProperties;
+export const getTorrentStatusFromProperties = (processingTorrentProperties: Record<string, unknown>) => {
+  const {isHashing, isComplete, isOpen, upRate, downRate, state, message} = processingTorrentProperties;
 
   const torrentStatus: Array<TorrentStatus> = [];
 
@@ -50,7 +60,7 @@ export const getTorrentStatusFromProperties = (torrentProperties: TorrentPropert
     torrentStatus.push('stopped');
   }
 
-  if (message.length) {
+  if (typeof message === 'string' && message.length) {
     torrentStatus.push('error');
   }
 

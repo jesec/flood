@@ -1,7 +1,7 @@
 import BaseService from './BaseService';
 import scgiUtil from '../util/scgiUtil';
 
-export type MultiMethodCalls = Array<{methodName: string; params: Array<string>}>;
+import type {MultiMethodCalls} from '../constants/rTorrentMethodCall';
 
 class ClientRequestManager extends BaseService {
   isRequestPending = false;

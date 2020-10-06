@@ -4,7 +4,7 @@ import torrentStatusMap from '../../shared/constants/torrentStatusMap';
 
 import type {Taxonomy, TaxonomyDiffs} from '../../shared/types/Taxonomy';
 import type {TorrentStatus} from '../../shared/constants/torrentStatusMap';
-import type {TorrentProperties, Torrents} from '../../shared/types/Torrent';
+import type {TorrentProperties, TorrentList} from '../../shared/types/Torrent';
 
 interface TaxonomyServiceEvents {
   TAXONOMY_DIFF_CHANGE: (payload: {id: number; diff: TaxonomyDiffs}) => void;
@@ -74,7 +74,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     this.taxonomy.trackerCounts = {all: 0};
   }
 
-  handleProcessTorrentListEnd({torrents}: {torrents: Torrents}) {
+  handleProcessTorrentListEnd({torrents}: {torrents: TorrentList}) {
     const {length} = Object.keys(torrents);
 
     this.taxonomy.statusCounts.all = length;

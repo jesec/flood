@@ -77,6 +77,11 @@ export interface TorrentListDiff {
       };
 }
 
-export interface Torrents {
+export interface TorrentList {
   [hash: string]: TorrentProperties;
+}
+
+export interface TorrentListSummary {
+  id: number;
+  torrents: TorrentList;
 }

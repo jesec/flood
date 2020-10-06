@@ -1,4 +1,4 @@
-import type {TorrentDetails, TorrentProperties, TorrentListDiff, Torrents} from '@shared/types/Torrent';
+import type {TorrentDetails, TorrentProperties, TorrentListDiff, TorrentList} from '@shared/types/Torrent';
 
 import AlertStore from './AlertStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -23,7 +23,7 @@ class TorrentStoreClass extends BaseStore {
   selectedTorrents: Array<string> = [];
   sortedTorrents: Array<TorrentProperties> = [];
   sortTorrentsBy: FloodSettings['sortTorrents'] = SettingsStore.getFloodSetting('sortTorrents');
-  torrents: Torrents = {};
+  torrents: TorrentList = {};
 
   fetchTorrentDetails(hash: TorrentProperties['hash'], forceUpdate?: boolean) {
     if (!this.isRequestPending('fetch-torrent-details') || forceUpdate) {
@@ -244,7 +244,7 @@ class TorrentStoreClass extends BaseStore {
     this.emit('CLIENT_TORRENTS_REQUEST_SUCCESS');
   }
 
-  handleTorrentListFullUpdate(torrentList: Torrents) {
+  handleTorrentListFullUpdate(torrentList: TorrentList) {
     this.torrents = torrentList;
 
     this.sortTorrents();
