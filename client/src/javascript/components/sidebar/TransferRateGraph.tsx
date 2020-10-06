@@ -209,17 +209,17 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
       this.graphRefs[direction].rateLine = rateLine.attr(
         'd',
         line<number>()
-          .x((_dataPoint, index) => xScale(index))
-          .y((dataPoint) => yScale(dataPoint))
+          .x((_dataPoint, index) => xScale(index) || 0)
+          .y((dataPoint) => yScale(dataPoint) || 0)
           .curve(interpolation)(historicalData[direction]) as string,
       );
 
       this.graphRefs[direction].graphArea = graphArea.attr(
         'd',
         area<number>()
-          .x((dataPoint, index) => xScale(index))
+          .x((_dataPoint, index) => xScale(index) || 0)
           .y0(height)
-          .y1((dataPoint) => yScale(dataPoint))
+          .y1((dataPoint) => yScale(dataPoint) || 0)
           .curve(interpolation)(historicalData[direction]) as string,
       );
     });
