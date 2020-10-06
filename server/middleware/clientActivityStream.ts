@@ -23,7 +23,7 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
 
   const serviceInstances = services.getAllServices(user);
   const serverEvent = new ServerEvent(res);
-  const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();
+  const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList()?.catch((e) => console.error(e));
 
   // Hook into events and stop listening when connection is closed
   const handleEvents = <T extends TypedEmitter<Record<string, unknown>>>(

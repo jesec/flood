@@ -83,10 +83,6 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @return {Promise} - Resolves with RPC call response or rejects with error.
    */
   async checkTorrents({hashes}: CheckTorrentsOptions) {
-    if (this.services == null || this.services.clientRequestManager == null) {
-      return Promise.reject();
-    }
-
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.check_hash',
@@ -96,7 +92,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services.clientRequestManager
+    return this.services?.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
@@ -109,10 +105,6 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @return {Promise} - Resolves with the processed client response or rejects with the processed client error.
    */
   async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions) {
-    if (this.services == null || this.services.clientRequestManager == null || this.services.torrentService == null) {
-      return Promise.reject();
-    }
-
     const resolvedPath = fileUtil.sanitizePath(destination);
     if (!fileUtil.isAllowedPath(resolvedPath)) {
       return Promise.reject(fileUtil.accessDeniedError());
@@ -137,7 +129,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       throw e;
     });
 
-    await this.services.clientRequestManager
+    await this.services?.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processClientRequestError)
       .catch((e) => {
@@ -180,11 +172,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @param {DeleteTorrentsOptions} options - An object of options...
    * @return {Promise} - Resolves with the processed client response or rejects with the processed client error.
    */
-  removeTorrents({hashes, deleteData}: DeleteTorrentsOptions) {
-    if (this.services == null || this.services.clientRequestManager == null) {
-      return Promise.reject();
-    }
-
+  async removeTorrents({hashes, deleteData}: DeleteTorrentsOptions) {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash, index) => {
       let eraseFileMethodCallIndex = index;
 
@@ -216,7 +204,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services.clientRequestManager.methodCall('system.multicall', [methodCalls]).then((response) => {
+    return this.services?.clientRequestManager.methodCall('system.multicall', [methodCalls]).then((response) => {
       if (deleteData === true) {
         const torrentCount = hashes.length;
         const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
@@ -265,10 +253,6 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @return {Promise} - Resolves with RPC call response or rejects with error.
    */
   async setTorrentsPriority({hashes, priority}: SetTorrentsPriorityOptions) {
-    if (this.services == null || this.services.clientRequestManager == null) {
-      return Promise.reject();
-    }
-
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.priority.set',
@@ -283,7 +267,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services.clientRequestManager
+    return this.services?.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
@@ -295,10 +279,6 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @return {Promise} - Resolves with RPC call response or rejects with error.
    */
   async startTorrents({hashes}: StartTorrentsOptions) {
-    if (this.services == null || this.services.clientRequestManager == null) {
-      return Promise.reject();
-    }
-
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.open',
@@ -313,7 +293,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services.clientRequestManager
+    return this.services?.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
@@ -325,10 +305,6 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @return {Promise} - Resolves with RPC call response or rejects with error.
    */
   async stopTorrents({hashes}: StopTorrentsOptions) {
-    if (this.services == null || this.services.clientRequestManager == null) {
-      return Promise.reject();
-    }
-
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.stop',
@@ -343,7 +319,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services.clientRequestManager
+    return this.services?.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
@@ -362,34 +338,30 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @return {Promise} - Resolves with the processed client response or rejects
    *   with the processed client error.
    */
-  fetchTorrentList(options: MethodCallConfig) {
-    if (this.services == null) {
-      return Promise.reject();
-    }
-
-    return this.services.clientRequestManager
-      .methodCall('d.multicall2', ['', 'main'].concat(options.methodCalls))
-      .then(this.processClientRequestSuccess)
-      .then(
-        (torrents) => this.processTorrentListResponse(torrents as Array<Array<string>>, options),
-        this.processClientRequestError,
-      );
+  async fetchTorrentList(options: MethodCallConfig) {
+    return (
+      this.services?.clientRequestManager
+        .methodCall('d.multicall2', ['', 'main'].concat(options.methodCalls))
+        .then(this.processClientRequestSuccess)
+        .then(
+          (torrents) => this.processTorrentListResponse(torrents as Array<Array<string>>, options),
+          this.processClientRequestError,
+        ) || Promise.reject()
+    );
   }
 
-  fetchTransferSummary(options: MethodCallConfig) {
-    if (this.services == null) {
-      return Promise.reject();
-    }
-
+  async fetchTransferSummary(options: MethodCallConfig) {
     const methodCalls = options.methodCalls.map((methodName) => ({methodName, params: []}));
 
-    return this.services.clientRequestManager
-      .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess)
-      .then(
-        (transferRate) => this.processTransferRateResponse(transferRate as Array<string>, options),
-        this.processClientRequestError,
-      );
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess)
+        .then(
+          (transferRate) => this.processTransferRateResponse(transferRate as Array<string>, options),
+          this.processClientRequestError,
+        ) || Promise.reject()
+    );
   }
 
   processClientRequestSuccess<T>(response: T): T {
