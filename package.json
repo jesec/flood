@@ -61,7 +61,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/morgan": "^1.9.1",
     "@types/nedb": "^1.8.11",
-    "@types/node": "^14.11.2",
+    "@types/node": "^12.12.64",
     "@types/passport": "^1.0.4",
     "@types/passport-jwt": "^3.0.3",
     "@types/react": "^16.9.49",
