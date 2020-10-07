@@ -1,8 +1,6 @@
 import express from 'express';
 import passport from 'passport';
 
-import type {Request} from 'express';
-
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
 
@@ -12,7 +10,7 @@ import clientRoutes from './client';
 import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
-import Filesystem from '../../models/Filesystem';
+import {getDirectoryList} from '../../util/fileUtil';
 import settings from '../../models/settings';
 import torrentsRoutes from './torrents';
 
@@ -28,15 +26,22 @@ router.use('/torrents', torrentsRoutes);
 
 router.get('/activity-stream', eventStream, clientActivityStream);
 
-router.get('/directory-list', (req, res) => {
-  Filesystem.getDirectoryList(req.query, ajaxUtil.getResponseFn(res));
+router.get<unknown, unknown, unknown, string>('/directory-list', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+  getDirectoryList(req.query)
+    .then((data) => {
+      callback(data);
+    })
+    .catch((error) => {
+      callback(null, error);
+    });
 });
 
-router.get('/history', (req: Request<unknown, unknown, unknown, {snapshot: HistorySnapshot}>, res) => {
+router.get<unknown, unknown, unknown, {snapshot: HistorySnapshot}>('/history', (req, res) => {
   req.services?.historyService.getHistory(req.query, ajaxUtil.getResponseFn(res));
 });
 
-router.get('/notifications', (req: Request<unknown, unknown, unknown, NotificationFetchOptions>, res) => {
+router.get<unknown, unknown, unknown, NotificationFetchOptions>('/notifications', (req, res) => {
   req.services?.notificationService.getNotifications(req.query, ajaxUtil.getResponseFn(res));
 });
 

@@ -14,9 +14,9 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/Action';
 
+import {accessDeniedError, isAllowedPath, sanitizePath} from '../util/fileUtil';
 import BaseService from './BaseService';
 import fileListMethodCallConfigs from '../constants/fileListMethodCallConfigs';
-import fileUtil from '../util/fileUtil';
 import scgiUtil from '../util/scgiUtil';
 
 import type {MethodCallConfigs, MultiMethodCalls} from '../constants/rTorrentMethodCall';
@@ -100,9 +100,9 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
    * @return {Promise} - Resolves with the processed client response or rejects with the processed client error.
    */
   async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions) {
-    const resolvedPath = fileUtil.sanitizePath(destination);
-    if (!fileUtil.isAllowedPath(resolvedPath)) {
-      return Promise.reject(fileUtil.accessDeniedError());
+    const resolvedPath = sanitizePath(destination);
+    if (!isAllowedPath(resolvedPath)) {
+      throw accessDeniedError();
     }
 
     const hashesToRestart: Array<string> = [];
@@ -140,7 +140,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
           return;
         }
 
-        const destinationFilePath = fileUtil.sanitizePath(path.join(resolvedPath, baseFileName));
+        const destinationFilePath = sanitizePath(path.join(resolvedPath, baseFileName));
         if (sourceBasePath !== destinationFilePath) {
           try {
             moveSync(sourceBasePath, destinationFilePath, {overwrite: true});

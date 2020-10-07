@@ -4,10 +4,10 @@ import sanitize from 'sanitize-filename';
 import {series} from 'async';
 import tar from 'tar-stream';
 
+import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../util/fileUtil';
 import ClientRequest from './ClientRequest';
 import clientResponseUtil from '../util/clientResponseUtil';
 import {clientSettingsBiMap} from '../../shared/constants/clientSettingsMap';
-import fileUtil from '../util/fileUtil';
 import settings from './settings';
 import torrentFilePropsMap from '../../shared/constants/torrentFilePropsMap';
 import torrentPeerPropsMap from '../../shared/constants/torrentPeerPropsMap';
@@ -18,13 +18,13 @@ const client = {
   addFiles(user, services, options, callback) {
     const {destination: destinationPath, files, isBasePath, start, tags} = options;
 
-    const resolvedPath = fileUtil.sanitizePath(destinationPath);
-    if (!fileUtil.isAllowedPath(resolvedPath)) {
-      callback(null, fileUtil.accessDeniedError());
+    const resolvedPath = sanitizePath(destinationPath);
+    if (!isAllowedPath(resolvedPath)) {
+      callback(null, accessDeniedError());
       return;
     }
 
-    fileUtil.createDirectory({path: resolvedPath});
+    createDirectory({path: resolvedPath});
 
     // Each torrent is sent individually because rTorrent accepts a total
     // filesize of 524 kilobytes or less. This allows the user to send many
@@ -56,12 +56,12 @@ const client = {
   addUrls(user, services, data, callback) {
     const {urls, destination, isBasePath, start, tags} = data;
     const request = new ClientRequest(user, services);
-    const resolvedPath = fileUtil.sanitizePath(destination);
-    if (!fileUtil.isAllowedPath(resolvedPath)) {
-      callback(null, fileUtil.accessDeniedError());
+    const resolvedPath = sanitizePath(destination);
+    if (!isAllowedPath(resolvedPath)) {
+      callback(null, accessDeniedError());
       return;
     }
-    fileUtil.createDirectory({path: resolvedPath});
+    createDirectory({path: resolvedPath});
     request.addURLs({
       urls,
       path: resolvedPath,
