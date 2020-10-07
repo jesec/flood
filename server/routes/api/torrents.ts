@@ -337,13 +337,22 @@ router.patch('/tracker', (req, res) => {
  */
 
 /**
- * TODO: API not yet implemented
  * GET /api/torrents/{hash}/contents
  * @summary Gets the list of contents of a torrent and their properties.
  * @tags Torrent
  * @security AuthenticatedUser
  * @param {string} hash.path
  */
+router.get('/:hash/contents', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .getTorrentContents(req.params.hash)
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
+});
 
 /**
  * PATCH /api/torrents/{hash}/contents
@@ -387,8 +396,22 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
  * @security AuthenticatedUser
  * @param {string} hash.path
  */
-router.get('/:hash/details', (req, res) => {
-  client.getTorrentDetails(req.user, req.services, req.params.hash, ajaxUtil.getResponseFn(res));
+router.get('/:hash/details', async (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  try {
+    const contents = req.services?.clientGatewayService.getTorrentContents(req.params.hash);
+    const peers = req.services?.clientGatewayService.getTorrentPeers(req.params.hash);
+    const trackers = req.services?.clientGatewayService.getTorrentTrackers(req.params.hash);
+
+    callback({
+      fileTree: await contents,
+      peers: await peers,
+      trackers: await trackers,
+    });
+  } catch (e) {
+    callback(null, e);
+  }
 });
 
 /**
@@ -400,6 +423,42 @@ router.get('/:hash/details', (req, res) => {
  */
 router.get('/:hash/mediainfo', (req, res) => {
   mediainfo.getMediainfo(req.services, req.params.hash, ajaxUtil.getResponseFn(res));
+});
+
+/**
+ * GET /api/torrents/{hash}/peers
+ * @summary Gets the list of peers of a torrent.
+ * @tags Torrent
+ * @security AuthenticatedUser
+ * @param {string} hash.path
+ */
+router.get('/:hash/peers', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .getTorrentPeers(req.params.hash)
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
+});
+
+/**
+ * GET /api/torrents/{hash}/trackers
+ * @summary Gets the list of trackers of a torrent.
+ * @tags Torrent
+ * @security AuthenticatedUser
+ * @param {string} hash.path
+ */
+router.get('/:hash/trackers', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .getTorrentTrackers(req.params.hash)
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
 export default router;

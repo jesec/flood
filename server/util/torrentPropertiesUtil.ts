@@ -4,21 +4,25 @@ import truncateTo from './numberUtils';
 import type {TorrentProperties} from '../../shared/types/Torrent';
 import type {TorrentStatus} from '../../shared/constants/torrentStatusMap';
 
-export const getTorrentETAFromProperties = (processingTorrentProperties: Record<string, unknown>) => {
+export const getTorrentETAFromProperties = (
+  processingTorrentProperties: Record<string, unknown>,
+): TorrentProperties['eta'] => {
   const {downRate, bytesDone, sizeBytes} = processingTorrentProperties;
 
   if (typeof downRate !== 'number' || typeof bytesDone !== 'number' || typeof sizeBytes !== 'number') {
-    return Infinity;
+    return -1;
   }
 
   if (downRate > 0) {
     return formatUtil.secondsToDuration((sizeBytes - bytesDone) / downRate);
   }
 
-  return Infinity;
+  return -1;
 };
 
-export const getTorrentPercentCompleteFromProperties = (processingTorrentProperties: Record<string, unknown>) => {
+export const getTorrentPercentCompleteFromProperties = (
+  processingTorrentProperties: Record<string, unknown>,
+): TorrentProperties['percentComplete'] => {
   const {bytesDone, sizeBytes} = processingTorrentProperties;
 
   if (typeof bytesDone !== 'number' || typeof sizeBytes !== 'number') {
@@ -37,12 +41,14 @@ export const getTorrentPercentCompleteFromProperties = (processingTorrentPropert
   return percentComplete;
 };
 
-export const getTorrentStatusFromProperties = (processingTorrentProperties: Record<string, unknown>) => {
+export const getTorrentStatusFromProperties = (
+  processingTorrentProperties: Record<string, unknown>,
+): TorrentProperties['status'] => {
   const {isHashing, isComplete, isOpen, upRate, downRate, state, message} = processingTorrentProperties;
 
   const torrentStatus: Array<TorrentStatus> = [];
 
-  if (isHashing !== '0') {
+  if (isHashing) {
     torrentStatus.push('checking');
   } else if (isComplete && isOpen && state === '1') {
     torrentStatus.push('complete');
@@ -84,7 +90,7 @@ export const getTorrentStatusFromProperties = (processingTorrentProperties: Reco
 export const hasTorrentFinished = (
   prevData: Partial<TorrentProperties> = {},
   nextData: Partial<TorrentProperties> = {},
-) => {
+): boolean => {
   if (prevData.status != null && prevData.status.includes('checking')) {
     return false;
   }

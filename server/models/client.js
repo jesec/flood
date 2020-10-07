@@ -5,30 +5,26 @@ import {series} from 'async';
 import tar from 'tar-stream';
 
 import ClientRequest from './ClientRequest';
-import clientResponseUtil from '../util/clientResponseUtil';
 import {clientSettingsBiMap} from '../../shared/constants/clientSettingsMap';
-import torrentFilePropsMap from '../../shared/constants/torrentFilePropsMap';
-import torrentPeerPropsMap from '../../shared/constants/torrentPeerPropsMap';
 import torrentFileUtil from '../util/torrentFileUtil';
-import torrentTrackerPropsMap from '../../shared/constants/torrentTrackerPropsMap';
 
 const client = {
-  downloadFiles(user, services, hash, fileString, res) {
+  downloadFiles(services, hash, fileString, res) {
     try {
       const selectedTorrent = services.torrentService.getTorrent(hash);
       if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
-      this.getTorrentDetails(user, services, hash, (torrentDetails) => {
-        if (!torrentDetails) return res.status(404).json({error: 'Torrent details not found'});
+      services.clientGatewayService.getTorrentContents(hash).then((contents) => {
+        if (!contents) return res.status(404).json({error: 'Torrent contents not found'});
 
         let files;
         if (!fileString || fileString === 'all') {
-          files = torrentDetails.fileTree.files.map((x, i) => `${i}`);
+          files = contents.files.map((x, i) => `${i}`);
         } else {
           files = fileString.split(',');
         }
 
-        const filePathsToDownload = this.findFilesByIndicies(files, torrentDetails.fileTree).map((file) =>
+        const filePathsToDownload = this.findFilesByIndices(files, contents).map((file) =>
           path.join(selectedTorrent.directory, file.path),
         );
 
@@ -76,7 +72,7 @@ const client = {
     }
   },
 
-  findFilesByIndicies(indices, fileTree = {}) {
+  findFilesByIndices(indices, fileTree = {}) {
     const {directories, files = []} = fileTree;
 
     let selectedFiles = files.filter((file) => indices.includes(`${file.index}`));
@@ -84,7 +80,7 @@ const client = {
     if (directories != null) {
       selectedFiles = selectedFiles.concat(
         Object.keys(directories).reduce(
-          (accumulator, directory) => accumulator.concat(this.findFilesByIndicies(indices, directories[directory])),
+          (accumulator, directory) => accumulator.concat(this.findFilesByIndices(indices, directories[directory])),
           [],
         ),
       );
@@ -129,20 +125,6 @@ const client = {
 
       return response;
     });
-    request.onComplete(callback);
-    request.send();
-  },
-
-  getTorrentDetails(user, services, hash, callback) {
-    const request = new ClientRequest(user, services);
-
-    request.getTorrentDetails({
-      hash,
-      fileProps: torrentFilePropsMap.methods,
-      peerProps: torrentPeerPropsMap.methods,
-      trackerProps: torrentTrackerPropsMap.methods,
-    });
-    request.postProcess(clientResponseUtil.processTorrentDetails);
     request.onComplete(callback);
     request.send();
   },

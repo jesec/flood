@@ -45,9 +45,6 @@ const torrentProperties = {
   basePath: {
     id: 'torrents.properties.base.path',
   },
-  comment: {
-    id: 'torrents.properties.comment',
-  },
   hash: {
     id: 'torrents.properties.hash',
   },

@@ -1,7 +1,7 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
-import type {TorrentTracker} from '@shared/constants/torrentTrackerPropsMap';
+import type {TorrentTracker} from '@shared/types/TorrentTracker';
 
 import Badge from '../../general/Badge';
 

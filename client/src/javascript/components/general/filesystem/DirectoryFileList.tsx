@@ -2,11 +2,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import type {
-  TorrentContent,
-  TorrentContentSelection,
-  TorrentContentSelectionTree,
-} from '@shared/constants/torrentFilePropsMap';
+import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Checkbox} from '../../../ui';

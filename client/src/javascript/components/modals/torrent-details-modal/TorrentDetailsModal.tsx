@@ -17,7 +17,7 @@ import TorrentTrackers from './TorrentTrackers';
 export interface TorrentDetailsModalProps extends WrappedComponentProps {
   options: {hash: TorrentProperties['hash']};
   torrent?: TorrentProperties;
-  torrentDetails?: TorrentDetails;
+  torrentDetails?: TorrentDetails | null;
 }
 
 class TorrentDetailsModal extends React.Component<TorrentDetailsModalProps> {
