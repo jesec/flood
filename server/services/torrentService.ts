@@ -4,14 +4,8 @@ import type {TorrentProperties, TorrentListDiff, TorrentListSummary} from '@shar
 
 import BaseService from './BaseService';
 import config from '../../config';
-import torrentListMethodCallConfigs from '../constants/torrentListMethodCallConfigs';
 
-import {
-  getTorrentETAFromProperties,
-  getTorrentPercentCompleteFromProperties,
-  getTorrentStatusFromProperties,
-  hasTorrentFinished,
-} from '../util/torrentPropertiesUtil';
+import {hasTorrentFinished} from '../util/torrentPropertiesUtil';
 
 interface TorrentServiceEvents {
   FETCH_TORRENT_LIST_SUCCESS: () => void;
@@ -41,21 +35,6 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
       }
 
       const {clientGatewayService} = this.services;
-
-      clientGatewayService.addTorrentListReducer({
-        key: 'status',
-        reduce: getTorrentStatusFromProperties,
-      });
-
-      clientGatewayService.addTorrentListReducer({
-        key: 'percentComplete',
-        reduce: getTorrentPercentCompleteFromProperties,
-      });
-
-      clientGatewayService.addTorrentListReducer({
-        key: 'eta',
-        reduce: getTorrentETAFromProperties,
-      });
 
       clientGatewayService.on('PROCESS_TORRENT', this.handleTorrentProcessed);
 
@@ -141,7 +120,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     }
 
     return this.services?.clientGatewayService
-      .fetchTorrentList(torrentListMethodCallConfigs)
+      .fetchTorrentList()
       .then(this.handleFetchTorrentListSuccess)
       .catch(this.handleFetchTorrentListError);
   }

@@ -1,7 +1,7 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
-import type {TorrentPeer} from '@shared/constants/torrentPeerPropsMap';
+import type {TorrentPeer} from '@shared/types/TorrentPeer';
 
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';

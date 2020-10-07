@@ -4,7 +4,6 @@
 import util from 'util';
 
 import {clientSettingsMap} from '../../shared/constants/clientSettingsMap';
-import rTorrentPropMap from '../util/rTorrentPropMap';
 
 const getEnsuredArray = (item) => {
   if (!util.isArray(item)) {
@@ -106,16 +105,6 @@ class ClientRequest {
     requestedSettings.forEach((settingsKey) => {
       this.requests.push(getMethodCall(settingsKey));
     });
-  }
-
-  getTorrentDetails(options) {
-    const peerParams = [options.hash, ''].concat(options.peerProps);
-    const fileParams = [options.hash, ''].concat(options.fileProps);
-    const trackerParams = [options.hash, ''].concat(options.trackerProps);
-
-    this.requests.push(getMethodCall('p.multicall', peerParams));
-    this.requests.push(getMethodCall('f.multicall', fileParams));
-    this.requests.push(getMethodCall('t.multicall', trackerParams));
   }
 
   setSettings(options) {

@@ -1,8 +1,3 @@
-const torrentFilePropsMap = {
-  props: ['path', 'pathComponents', 'priority', 'sizeBytes', 'sizeChunks', 'completedChunks'],
-  methods: ['f.path=', 'f.path_components=', 'f.priority=', 'f.size_bytes=', 'f.size_chunks=', 'f.completed_chunks='],
-} as const;
-
 export interface TorrentContent {
   index: number;
   path: string;
@@ -35,5 +30,3 @@ export interface TorrentContentSelectionTree {
     [directoryName: string]: TorrentContentSelectionTree;
   };
 }
-
-export default torrentFilePropsMap;

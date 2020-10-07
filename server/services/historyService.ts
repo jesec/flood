@@ -7,7 +7,6 @@ import config from '../../config';
 import HistoryEra from '../models/HistoryEra';
 import historySnapshotTypes from '../../shared/constants/historySnapshotTypes';
 import objectUtil from '../../shared/util/objectUtil';
-import transferSummaryMethodCallConfigs from '../constants/transferSummaryMethodCallConfigs';
 
 type HistorySnapshotEvents = {
   // TODO: Switch to string literal template type when TypeScript 4.1 is released.
@@ -148,7 +147,7 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     }
 
     this.services?.clientGatewayService
-      .fetchTransferSummary(transferSummaryMethodCallConfigs)
+      .fetchTransferSummary()
       .then(this.handleFetchTransferSummarySuccess.bind(this))
       .catch(this.handleFetchTransferSummaryError.bind(this));
   }

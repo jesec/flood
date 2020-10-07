@@ -6,7 +6,7 @@ import type {
   TorrentContentSelection,
   TorrentContentSelectionTree,
   TorrentContentTree,
-} from '@shared/constants/torrentFilePropsMap';
+} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Checkbox} from '../../../ui';

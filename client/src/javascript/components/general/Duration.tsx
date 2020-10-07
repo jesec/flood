@@ -5,7 +5,7 @@ import type {Duration as DurationType} from '@shared/types/Torrent';
 
 interface DurationProps {
   suffix?: React.ReactNode;
-  value: 'Infinity' | DurationType;
+  value: -1 | DurationType;
 }
 
 export default class Duration extends React.Component<DurationProps> {
@@ -23,7 +23,7 @@ export default class Duration extends React.Component<DurationProps> {
       suffix = <span className="duration--segment">{suffix}</span>;
     }
 
-    if (duration === 'Infinity') {
+    if (duration === -1) {
       content = <FormattedMessage id="unit.time.infinity" />;
     } else if (duration.years != null && duration.years > 0) {
       content = [

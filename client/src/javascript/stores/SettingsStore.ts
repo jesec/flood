@@ -85,7 +85,6 @@ class SettingsStoreClass extends BaseStore {
       {id: 'dateAdded', visible: true},
       {id: 'dateCreated', visible: false},
       {id: 'basePath', visible: false},
-      {id: 'comment', visible: false},
       {id: 'hash', visible: false},
       {id: 'isPrivate', visible: false},
       {id: 'message', visible: false},

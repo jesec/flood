@@ -25,7 +25,7 @@ function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<Flood
     case 'eta':
       sortRules.push({
         [sortBy.direction]: (p: TorrentProperties) => {
-          if (p.eta === 'Infinity') {
+          if (p.eta === -1) {
             return -1;
           }
           return p.eta.cumSeconds;
@@ -40,7 +40,6 @@ function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<Flood
       } as SortRule);
       break;
     case 'basePath':
-    case 'comment':
     case 'hash':
     case 'message':
     case 'name':

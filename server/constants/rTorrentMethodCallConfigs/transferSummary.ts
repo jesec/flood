@@ -1,36 +1,30 @@
-import {numberTransformer} from './rTorrentMethodCall';
+import {numberTransformer} from '../../util/rTorrentMethodCallUtil';
 
-const transferSummaryMethodCallConfigs = [
-  {
-    propLabel: 'upRate',
+const transferSummaryMethodCallConfigs = {
+  upRate: {
     methodCall: 'throttle.global_up.rate',
     transformValue: numberTransformer,
   },
-  {
-    propLabel: 'upTotal',
+  upTotal: {
     methodCall: 'throttle.global_up.total',
     transformValue: numberTransformer,
   },
-  {
-    propLabel: 'upThrottle',
+  upThrottle: {
     methodCall: 'throttle.global_up.max_rate',
     transformValue: numberTransformer,
   },
-  {
-    propLabel: 'downRate',
+  downRate: {
     methodCall: 'throttle.global_down.rate',
     transformValue: numberTransformer,
   },
-  {
-    propLabel: 'downTotal',
+  downTotal: {
     methodCall: 'throttle.global_down.total',
     transformValue: numberTransformer,
   },
-  {
-    propLabel: 'downThrottle',
+  downThrottle: {
     methodCall: 'throttle.global_down.max_rate',
     transformValue: numberTransformer,
   },
-] as const;
+} as const;
 
 export default transferSummaryMethodCallConfigs;

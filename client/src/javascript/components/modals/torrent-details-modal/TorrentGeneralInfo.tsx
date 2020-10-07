@@ -123,12 +123,6 @@ class TorrentGeneralInfo extends React.Component<TorrentGeneralInfoProps> {
                 <FormattedMessage id="torrents.details.general.heading.torrent" />
               </td>
             </tr>
-            <tr className="torrent-details__detail torrent-details__detail--comment">
-              <td className="torrent-details__detail__label">
-                <FormattedMessage id="torrents.details.general.comment" />
-              </td>
-              <td className="torrent-details__detail__value">{torrent.comment || VALUE_NOT_AVAILABLE}</td>
-            </tr>
             <tr className="torrent-details__detail torrent-details__detail--created">
               <td className="torrent-details__detail__label">
                 <FormattedMessage id="torrents.details.general.date.created" />

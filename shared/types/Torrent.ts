@@ -1,7 +1,7 @@
-import type {TorrentContentTree} from '../constants/torrentFilePropsMap';
-import type {TorrentPeer} from '../constants/torrentPeerPropsMap';
+import type {TorrentContentTree} from './TorrentContent';
+import type {TorrentPeer} from './TorrentPeer';
 import type {TorrentStatus} from '../constants/torrentStatusMap';
-import type {TorrentTracker} from '../constants/torrentTrackerPropsMap';
+import type {TorrentTracker} from './TorrentTracker';
 
 export interface Duration {
   years?: number;
@@ -26,22 +26,20 @@ export interface TorrentProperties {
   baseFilename: string;
   basePath: string;
   bytesDone: number;
-  comment: string;
   dateAdded: number;
   dateCreated: number;
-  details: TorrentDetails;
+  details?: TorrentDetails;
   directory: string;
   downRate: number;
   downTotal: number;
-  eta: 'Infinity' | Duration;
+  eta: -1 | Duration;
   hash: string;
   isActive: boolean;
   isComplete: boolean;
-  isHashing: string;
+  isHashing: boolean;
   isMultiFile: boolean;
   isOpen: boolean;
   isPrivate: boolean;
-  isStateChanged: boolean;
   message: string;
   name: string;
   peersConnected: number;
@@ -49,14 +47,12 @@ export interface TorrentProperties {
   percentComplete: number;
   priority: number;
   ratio: number;
-  seedingTime: string;
   seedsConnected: number;
   seedsTotal: number;
   sizeBytes: number;
   state: string;
   status: Array<TorrentStatus>;
   tags: Array<string>;
-  throttleName: string;
   trackerURIs: Array<string>;
   upRate: number;
   upTotal: number;

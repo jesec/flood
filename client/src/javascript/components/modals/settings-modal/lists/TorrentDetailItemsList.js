@@ -114,7 +114,9 @@ class TorrentDetailItemsList extends React.Component {
 
   render() {
     const lockedIDs = this.getLockedIDs();
-    let torrentDetailItems = this.state.torrentDetails.slice();
+    let torrentDetailItems = this.state.torrentDetails
+      .slice()
+      .filter((property) => Object.prototype.hasOwnProperty.call(TorrentProperties, property.id));
 
     if (this.props.torrentListViewSize === 'expanded') {
       let nextUnlockedIndex = lockedIDs.length;

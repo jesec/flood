@@ -1,147 +1,109 @@
-import {defaultTransformer, booleanTransformer, numberTransformer} from './rTorrentMethodCall';
-import regEx from '../../shared/util/regEx';
+import regEx from '../../../shared/util/regEx';
+import {stringTransformer, booleanTransformer, numberTransformer} from '../../util/rTorrentMethodCallUtil';
 
-const torrentListMethodCallConfigs = [
-  {
-    propLabel: 'hash',
+const torrentListMethodCallConfigs = {
+  hash: {
     methodCall: 'd.hash=',
-    transformValue: defaultTransformer,
+    transformValue: stringTransformer,
   },
-  {
-    propLabel: 'name',
+  name: {
     methodCall: 'd.name=',
-    transformValue: defaultTransformer,
+    transformValue: stringTransformer,
   },
-  {
-    propLabel: 'message',
+  message: {
     methodCall: 'd.message=',
-    transformValue: defaultTransformer,
+    transformValue: stringTransformer,
   },
-  {
-    propLabel: 'state',
+  state: {
     methodCall: 'd.state=',
-    transformValue: defaultTransformer,
+    transformValue: stringTransformer,
   },
-  {
-    propLabel: 'isStateChanged',
-    methodCall: 'd.state_changed=',
-    transformValue: booleanTransformer,
-  },
-  {
-    propLabel: 'isActive',
+  isActive: {
     methodCall: 'd.is_active=',
     transformValue: booleanTransformer,
   },
-  {
-    propLabel: 'isComplete',
+  isComplete: {
     methodCall: 'd.complete=',
     transformValue: booleanTransformer,
   },
-  {
-    propLabel: 'isHashing',
-    methodCall: 'd.hashing=',
-    transformValue: defaultTransformer,
-  },
-  {
-    propLabel: 'isOpen',
-    methodCall: 'd.is_open=',
-    transformValue: booleanTransformer,
-  },
-  {
-    propLabel: 'priority',
-    methodCall: 'd.priority=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'upRate',
-    methodCall: 'd.up.rate=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'upTotal',
-    methodCall: 'd.up.total=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'downRate',
-    methodCall: 'd.down.rate=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'downTotal',
-    methodCall: 'd.down.total=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'ratio',
-    methodCall: 'd.ratio=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'bytesDone',
-    methodCall: 'd.bytes_done=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'sizeBytes',
-    methodCall: 'd.size_bytes=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'directory',
-    methodCall: 'd.directory=',
-    transformValue: defaultTransformer,
-  },
-  {
-    propLabel: 'basePath',
-    methodCall: 'd.base_path=',
-    transformValue: defaultTransformer,
-  },
-  {
-    propLabel: 'baseFilename',
-    methodCall: 'd.base_filename=',
-    transformValue: defaultTransformer,
-  },
-  {
-    propLabel: 'baseDirectory',
-    methodCall: 'd.directory_base=',
-    transformValue: defaultTransformer,
-  },
-  {
-    propLabel: 'seedingTime',
-    methodCall: 'd.custom=seedingtime',
-    transformValue: defaultTransformer,
-  },
-  {
-    propLabel: 'dateAdded',
-    methodCall: 'd.custom=addtime',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'dateCreated',
-    methodCall: 'd.creation_date=',
-    transformValue: numberTransformer,
-  },
-  {
-    propLabel: 'throttleName',
-    methodCall: 'd.throttle_name=',
-    transformValue: defaultTransformer,
-  },
-  {
-    propLabel: 'isMultiFile',
+  isMultiFile: {
     methodCall: 'd.is_multi_file=',
     transformValue: booleanTransformer,
   },
-  {
-    propLabel: 'isPrivate',
+  isPrivate: {
     methodCall: 'd.is_private=',
     transformValue: booleanTransformer,
   },
-  {
-    propLabel: 'tags',
+  isOpen: {
+    methodCall: 'd.is_open=',
+    transformValue: booleanTransformer,
+  },
+  isHashing: {
+    methodCall: 'd.hashing=',
+    transformValue: (value: unknown): boolean => {
+      return value !== '0';
+    },
+  },
+  priority: {
+    methodCall: 'd.priority=',
+    transformValue: numberTransformer,
+  },
+  upRate: {
+    methodCall: 'd.up.rate=',
+    transformValue: numberTransformer,
+  },
+  upTotal: {
+    methodCall: 'd.up.total=',
+    transformValue: numberTransformer,
+  },
+  downRate: {
+    methodCall: 'd.down.rate=',
+    transformValue: numberTransformer,
+  },
+  downTotal: {
+    methodCall: 'd.down.total=',
+    transformValue: numberTransformer,
+  },
+  ratio: {
+    methodCall: 'd.ratio=',
+    transformValue: numberTransformer,
+  },
+  bytesDone: {
+    methodCall: 'd.bytes_done=',
+    transformValue: numberTransformer,
+  },
+  sizeBytes: {
+    methodCall: 'd.size_bytes=',
+    transformValue: numberTransformer,
+  },
+  directory: {
+    methodCall: 'd.directory=',
+    transformValue: stringTransformer,
+  },
+  basePath: {
+    methodCall: 'd.base_path=',
+    transformValue: stringTransformer,
+  },
+  baseFilename: {
+    methodCall: 'd.base_filename=',
+    transformValue: stringTransformer,
+  },
+  baseDirectory: {
+    methodCall: 'd.directory_base=',
+    transformValue: stringTransformer,
+  },
+  dateAdded: {
+    methodCall: 'd.custom=addtime',
+    transformValue: numberTransformer,
+  },
+  dateCreated: {
+    methodCall: 'd.creation_date=',
+    transformValue: numberTransformer,
+  },
+  tags: {
     methodCall: 'd.custom1=',
-    transformValue: (value: string) => {
-      if (value === '') {
+    transformValue: (value: unknown): string[] => {
+      if (value === '' || typeof value !== 'string') {
         return [];
       }
 
@@ -151,23 +113,13 @@ const torrentListMethodCallConfigs = [
         .map((tag) => decodeURIComponent(tag));
     },
   },
-  {
-    propLabel: 'comment',
-    methodCall: 'd.custom2=',
-    transformValue: (value: string) => {
-      let comment = decodeURIComponent(value);
-
-      if (comment.match(/^VRS24mrker/)) {
-        comment = comment.substr(10);
+  trackerURIs: {
+    methodCall: 'cat="$t.multicall=d.hash=,t.is_enabled=,t.url=,cat={|||}"',
+    transformValue: (value: unknown): string[] => {
+      if (typeof value !== 'string') {
+        return [];
       }
 
-      return comment;
-    },
-  },
-  {
-    propLabel: 'trackerURIs',
-    methodCall: 'cat="$t.multicall=d.hash=,t.is_enabled=,t.url=,cat={|||}"',
-    transformValue: (value: string) => {
       const trackers = value.split('|||');
       const trackerDomains: Array<string> = [];
 
@@ -203,26 +155,32 @@ const torrentListMethodCallConfigs = [
       return [...new Set(trackerDomains)];
     },
   },
-  {
-    propLabel: 'seedsConnected',
+  seedsConnected: {
     methodCall: 'd.peers_complete=',
     transformValue: numberTransformer,
   },
-  {
-    propLabel: 'seedsTotal',
+  seedsTotal: {
     methodCall: 'cat="$t.multicall=d.hash=,t.scrape_complete=,cat={|||}"',
-    transformValue: (value: string) => Number(value.substr(0, value.indexOf('|||'))),
+    transformValue: (value: unknown): number => {
+      if (typeof value !== 'string') {
+        return 0;
+      }
+      return Number(value.substr(0, value.indexOf('|||')));
+    },
   },
-  {
-    propLabel: 'peersConnected',
+  peersConnected: {
     methodCall: 'd.peers_accounted=',
     transformValue: numberTransformer,
   },
-  {
-    propLabel: 'peersTotal',
+  peersTotal: {
     methodCall: 'cat="$t.multicall=d.hash=,t.scrape_incomplete=,cat={|||}"',
-    transformValue: (value: string) => Number(value.substr(0, value.indexOf('|||'))),
+    transformValue: (value: unknown): number => {
+      if (typeof value !== 'string') {
+        return 0;
+      }
+      return Number(value.substr(0, value.indexOf('|||')));
+    },
   },
-] as const;
+} as const;
 
 export default torrentListMethodCallConfigs;

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/constants/torrentFilePropsMap';
+import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentDetails, TorrentProperties} from '@shared/types/Torrent';
 
 import DirectoryFileList from './DirectoryFileList';

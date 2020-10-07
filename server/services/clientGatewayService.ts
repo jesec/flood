@@ -1,9 +1,13 @@
 import path from 'path';
 import fs from 'fs';
+import geoip from 'geoip-country';
 import {moveSync} from 'fs-extra';
 
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {TorrentContentTree} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentPeer} from '@shared/types/TorrentPeer';
+import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 import type {
   AddTorrentByFileOptions,
@@ -20,60 +24,43 @@ import type {
 
 import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../util/fileUtil';
 import BaseService from './BaseService';
-import {encodeTags} from '../util/torrentPropertiesUtil';
-import fileListMethodCallConfigs from '../constants/fileListMethodCallConfigs';
+import {getFileTreeFromPathsArr} from '../util/fileTreeUtil';
 import scgiUtil from '../util/scgiUtil';
+import {getMethodCalls, processMethodCallResponse} from '../util/rTorrentMethodCallUtil';
+import {
+  encodeTags,
+  getTorrentETAFromProperties,
+  getTorrentPercentCompleteFromProperties,
+  getTorrentStatusFromProperties,
+} from '../util/torrentPropertiesUtil';
+import {
+  torrentContentMethodCallConfigs,
+  torrentListMethodCallConfigs,
+  torrentPeerMethodCallConfigs,
+  torrentTrackerMethodCallConfigs,
+  transferSummaryMethodCallConfigs,
+} from '../constants/rTorrentMethodCallConfigs';
 
-import type {MethodCallConfigs, MultiMethodCalls} from '../constants/rTorrentMethodCall';
+import type {MultiMethodCalls} from '../util/rTorrentMethodCallUtil';
 
-const filePathMethodCalls = fileListMethodCallConfigs
-  .filter((config) => config.propLabel === 'pathComponents')
-  .map((config) => config.methodCall);
+const filePathMethodCalls = getMethodCalls({pathComponents: torrentContentMethodCallConfigs.pathComponents});
 
 interface ClientGatewayServiceEvents {
   CLIENT_CONNECTION_STATE_CHANGE: () => void;
   PROCESS_TORRENT_LIST_START: () => void;
-  PROCESS_TORRENT_LIST_END: (processedTorrentList: {torrents: TorrentList}) => void;
-  PROCESS_TORRENT: (processedTorrentDetailValues: TorrentProperties) => void;
+  PROCESS_TORRENT_LIST_END: (torrentListSummary: TorrentListSummary) => void;
+  PROCESS_TORRENT: (torrentProperties: TorrentProperties) => void;
   PROCESS_TRANSFER_RATE_START: () => void;
-}
-
-interface TorrentListReducer<T extends keyof TorrentProperties = keyof TorrentProperties> {
-  key: T;
-  reduce: (properties: Record<string, unknown>) => TorrentProperties[T];
 }
 
 class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
   hasError: boolean | null = null;
-  torrentListReducers: Array<TorrentListReducer> = [];
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
 
     this.processClientRequestError = this.processClientRequestError.bind(this);
     this.processClientRequestSuccess = this.processClientRequestSuccess.bind(this);
-  }
-
-  /**
-   * Adds a reducer to be applied when processing the torrent list.
-   *
-   * @param {Object} reducer - The reducer object
-   * @param {string} reducer.key - The key of the reducer, to be applied to the
-   *   torrent list object.
-   * @param {function} reducer.reduce - The actual reducer. This will receive
-   *   the entire processed torrent list response and it should return it own
-   *   processed value, to be assigned to the provided key.
-   */
-  addTorrentListReducer<T extends TorrentListReducer>(reducer: T) {
-    if (typeof reducer.key !== 'string') {
-      throw new Error('reducer.key must be a string.');
-    }
-
-    if (typeof reducer.reduce !== 'function') {
-      throw new Error('reducer.reduce must be a function.');
-    }
-
-    this.torrentListReducers.push(reducer);
   }
 
   /**
@@ -176,6 +163,78 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       this.services?.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
+  }
+
+  /**
+   * Gets the list of contents of a torrent.
+   *
+   * @param {string} hash - Hash of torrent
+   * @return {Promise<TorrentContentTree>} - Resolves with TorrentContentTree or rejects with error.
+   */
+  async getTorrentContents(hash: TorrentProperties['hash']): Promise<TorrentContentTree> {
+    const configs = torrentContentMethodCallConfigs;
+    return (
+      this.services?.clientRequestManager
+        .methodCall('f.multicall', [hash, ''].concat(getMethodCalls(configs)))
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then((responses: string[][]) => {
+          return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
+        })
+        .then((processedResponses) => {
+          return processedResponses.reduce(
+            (memo, content, index) => getFileTreeFromPathsArr(memo, content.pathComponents[0], {index, ...content}),
+            {},
+          );
+        }) || Promise.reject()
+    );
+  }
+
+  /**
+   * Gets the list of peers of a torrent.
+   *
+   * @param {string} hash - Hash of torrent
+   * @return {Promise<Array<TorrentPeer>>} - Resolves with an array of TorrentPeer or rejects with error.
+   */
+  async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
+    const configs = torrentPeerMethodCallConfigs;
+    return (
+      this.services?.clientRequestManager
+        .methodCall('p.multicall', [hash, ''].concat(getMethodCalls(configs)))
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then((responses: string[][]) => {
+          return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
+        })
+        .then((processedResponses) => {
+          return Promise.all(
+            processedResponses.map(async (processedResponse) => {
+              return {
+                ...processedResponse,
+                country: geoip.lookup(processedResponse.address)?.country || '',
+              };
+            }),
+          );
+        }) || Promise.reject()
+    );
+  }
+
+  /**
+   * Gets the list of trackers of a torrent.
+   *
+   * @param {string} hash - Hash of torrent
+   * @return {Promise<Array<TorrentTracker>>} - Resolves with an array of TorrentTracker or rejects with error.
+   */
+  async getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
+    const configs = torrentTrackerMethodCallConfigs;
+    return (
+      this.services?.clientRequestManager
+        .methodCall('t.multicall', [hash, ''].concat(getMethodCalls(configs)))
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then((responses: string[][]) => {
+          return Promise.all(
+            responses.map((response) => processMethodCallResponse(response, configs) as Promise<TorrentTracker>),
+          );
+        }) || Promise.reject()
     );
   }
 
@@ -467,28 +526,62 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
   }
 
   /**
-   * Sends a multicall request to rTorrent with the requested method calls.
+   * Fetches the list of torrents
    *
-   * @param {MethodCallConfigs} configs - An array of method call config...
-   * @return {Promise} - Resolves with the processed client response or rejects
-   *   with the processed client error.
+   * @return {Promise<TorrentListSummary>} - Resolves with TorrentListSummary or rejects with error.
    */
-  async fetchTorrentList(configs: MethodCallConfigs) {
+  async fetchTorrentList(): Promise<TorrentListSummary> {
+    const configs = torrentListMethodCallConfigs;
     return (
       this.services?.clientRequestManager
-        .methodCall('d.multicall2', ['', 'main'].concat(configs.map((config) => config.methodCall)))
-        .then(this.processClientRequestSuccess)
-        .then(
-          (torrents) => this.processTorrentListResponse(torrents as Array<Array<string>>, configs),
-          this.processClientRequestError,
-        ) || Promise.reject()
+        .methodCall('d.multicall2', ['', 'main'].concat(getMethodCalls(configs)))
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then((responses: string[][]) => {
+          this.emit('PROCESS_TORRENT_LIST_START');
+          return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
+        })
+        .then(async (processedResponses) => {
+          const torrentList: TorrentList = Object.assign(
+            {},
+            ...(await Promise.all(
+              processedResponses.map(async (response) => {
+                const torrentProperties: TorrentProperties = {
+                  ...response,
+                  status: getTorrentStatusFromProperties(response),
+                  percentComplete: getTorrentPercentCompleteFromProperties(response),
+                  eta: getTorrentETAFromProperties(response),
+                };
+
+                this.emit('PROCESS_TORRENT', torrentProperties);
+
+                return {
+                  [response.hash]: torrentProperties,
+                };
+              }),
+            )),
+          );
+
+          const torrentListSummary = {
+            id: Date.now(),
+            torrents: torrentList,
+          };
+
+          this.emit('PROCESS_TORRENT_LIST_END', torrentListSummary);
+          return torrentListSummary;
+        }) || Promise.reject()
     );
   }
 
-  async fetchTransferSummary(configs: MethodCallConfigs) {
-    const methodCalls: MultiMethodCalls = configs.map((config) => {
+  /**
+   * Fetches the transfer summary
+   *
+   * @return {Promise<TransferSummary>} - Resolves with TransferSummary or rejects with error.
+   */
+  async fetchTransferSummary(): Promise<TransferSummary> {
+    const configs = transferSummaryMethodCallConfigs;
+    const methodCalls: MultiMethodCalls = getMethodCalls(configs).map((methodCall) => {
       return {
-        methodName: config.methodCall,
+        methodName: methodCall,
         params: [],
       };
     });
@@ -497,10 +590,10 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       this.services?.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess)
-        .then(
-          (transferRate) => this.processTransferRateResponse(transferRate as Array<string>, configs),
-          this.processClientRequestError,
-        ) || Promise.reject()
+        .then((response) => {
+          this.emit('PROCESS_TRANSFER_RATE_START');
+          return processMethodCallResponse(response, configs);
+        }, this.processClientRequestError) || Promise.reject()
     );
   }
 
@@ -519,82 +612,6 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       this.emit('CLIENT_CONNECTION_STATE_CHANGE');
     }
     return Promise.reject(error);
-  }
-
-  /**
-   * After rTorrent responds with the requested torrent details, we construct
-   * an object with hashes as keys and processed details as values.
-   *
-   * @param {Array} response - The array of all torrents and their details.
-   * @param {MethodCallConfigs} configs - An array of method call config...
-   * @return {Object} - An object that represents all torrents with hashes as
-   *   keys, each value being an object of detail labels and values.
-   */
-  async processTorrentListResponse(
-    torrentList: Array<Array<string>>,
-    configs: MethodCallConfigs,
-  ): Promise<TorrentListSummary> {
-    this.emit('PROCESS_TORRENT_LIST_START');
-
-    // We map the array of details to objects with sensibly named keys. We want
-    // to return an object with torrent hashes as keys and an object of torrent
-    // details as values.
-    const processedTorrentList = Object.assign(
-      {},
-      ...(await Promise.all(
-        torrentList.map(async (torrentDetailValues) => {
-          // Transform the array of torrent detail values to an object with
-          // sensibly named keys.
-          const processingTorrentDetailValues = torrentDetailValues.reduce(
-            (accumulator: Record<string, unknown>, value: string, index: number) => {
-              const {propLabel, transformValue} = configs[index];
-
-              accumulator[propLabel] = transformValue(value);
-
-              return accumulator;
-            },
-            {},
-          );
-
-          // Assign values from external reducers to the torrent list object.
-          this.torrentListReducers.forEach((reducer) => {
-            const {key, reduce} = reducer;
-            processingTorrentDetailValues[key] = reduce(processingTorrentDetailValues);
-          });
-
-          const processedTorrentDetailValues = (processingTorrentDetailValues as unknown) as TorrentProperties;
-
-          this.emit('PROCESS_TORRENT', processedTorrentDetailValues);
-
-          return {
-            [processedTorrentDetailValues.hash]: processedTorrentDetailValues,
-          };
-        }),
-      )),
-    ) as TorrentList;
-
-    const torrentListSummary = {
-      id: Date.now(),
-      torrents: processedTorrentList,
-    };
-
-    this.emit('PROCESS_TORRENT_LIST_END', torrentListSummary);
-
-    return torrentListSummary;
-  }
-
-  async processTransferRateResponse(transferRate: Array<string>, configs: MethodCallConfigs) {
-    this.emit('PROCESS_TRANSFER_RATE_START');
-
-    return Object.assign(
-      {},
-      ...transferRate.map((value, index) => {
-        const {propLabel, transformValue} = configs[index];
-        return {
-          [propLabel]: transformValue(value),
-        };
-      }),
-    ) as TransferSummary;
   }
 
   testGateway(clientSettings?: RTorrentConnectionSettings) {
