@@ -1,7 +1,7 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import type {ConnectionSettings, Credentials} from '@shared/types/Auth';
+import type {ConnectionSettingsForm, Credentials} from '@shared/types/Auth';
 
 import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '../../ui';
 import AuthActions from '../../actions/AuthActions';
@@ -11,7 +11,7 @@ import history from '../../util/history';
 import RTorrentConnectionTypeSelection from '../general/RTorrentConnectionTypeSelection';
 
 type LoginFormData = Pick<Credentials, 'username' | 'password'>;
-type RegisterFormData = Pick<Credentials, 'username' | 'password'> & ConnectionSettings;
+type RegisterFormData = Pick<Credentials, 'username' | 'password'> & ConnectionSettingsForm;
 
 interface AuthFormProps extends WrappedComponentProps {
   mode: 'login' | 'register';
@@ -67,7 +67,12 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
     if (this.props.mode === 'login') {
       const credentials = submission.formData as Partial<LoginFormData>;
 
-      if (credentials.username == null || credentials.username === '') {
+      if (
+        credentials.username == null ||
+        credentials.username === '' ||
+        credentials.password == null ||
+        credentials.password === ''
+      ) {
         this.setState({isSubmitting: false}, () => {
           // do nothing.
         });

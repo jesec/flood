@@ -4,13 +4,13 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 
 import type {Response} from 'express';
-import type {Credentials} from '@shared/types/Auth';
+import type {AuthRegisterOptions, AuthUpdateUserOptions, Credentials} from '@shared/types/Auth';
 
-import ajaxUtil from '../util/ajaxUtil';
-import config from '../../config';
-import requireAdmin from '../middleware/requireAdmin';
-import services from '../services';
-import Users from '../models/Users';
+import ajaxUtil from '../../util/ajaxUtil';
+import config from '../../../config';
+import requireAdmin from '../../middleware/requireAdmin';
+import services from '../../services';
+import Users from '../../models/Users';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -99,13 +99,14 @@ router.use('/register', (req, _res, next) => {
     },
     handleSubsequentUser: () => {
       passport.authenticate('jwt', {session: false}, (passportReq, passportRes) => {
-        passportRes.json({username: req.body.username});
+        // Only admin users can create users
+        requireAdmin(passportReq, passportRes, next);
       });
     },
   });
 });
 
-router.post('/register', (req, res) => {
+router.post<unknown, unknown, AuthRegisterOptions, {cookie: string}>('/register', (req, res) => {
   // No user can be registered when disableUsersAndAuth is true
   if (config.disableUsersAndAuth) {
     // Return 404
@@ -125,6 +126,11 @@ router.post('/register', (req, res) => {
     (createUserResponse, createUserError) => {
       if (createUserError) {
         ajaxUtil.getResponseFn(res)(createUserResponse, createUserError);
+        return;
+      }
+
+      if (req.query.cookie === 'false') {
+        ajaxUtil.getResponseFn(res)(createUserResponse);
         return;
       }
 
@@ -200,7 +206,7 @@ router.delete('/users/:username', (req, res) => {
   });
 });
 
-router.patch('/users/:username', (req, res) => {
+router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions>('/users/:username', (req, res) => {
   const {username} = req.params;
   const userPatch = req.body;
 
@@ -226,20 +232,6 @@ router.patch('/users/:username', (req, res) => {
       res.send();
     });
   });
-});
-
-router.put('/users', (req, res) => {
-  Users.createUser(
-    {
-      username: req.body.username,
-      password: req.body.password,
-      host: req.body.host,
-      port: req.body.port,
-      socketPath: req.body.socketPath,
-      isAdmin: req.body.isAdmin,
-    },
-    ajaxUtil.getResponseFn(res),
-  );
 });
 
 export default router;

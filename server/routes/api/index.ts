@@ -6,6 +6,7 @@ import type {NotificationFetchOptions} from '@shared/types/Notification';
 
 import appendUserServices from '../../middleware/appendUserServices';
 import ajaxUtil from '../../util/ajaxUtil';
+import authRoutes from './auth';
 import clientRoutes from './client';
 import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
@@ -16,6 +17,9 @@ import torrentsRoutes from './torrents';
 
 const router = express.Router();
 
+router.use('/auth', authRoutes);
+
+// All subsequent routes need authentication
 router.use('/', passport.authenticate('jwt', {session: false}), appendUserServices);
 
 router.use('/client', clientRoutes);

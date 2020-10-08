@@ -1,7 +1,7 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
-import {ConnectionSettings} from '@shared/types/Auth';
+import {ConnectionSettingsForm} from '@shared/types/Auth';
 
 import {Button, Form, FormError, FormRow, FormRowItem, Panel, PanelContent, PanelHeader, PanelFooter} from '../../ui';
 import AuthActions from '../../actions/AuthActions';
@@ -47,14 +47,26 @@ class ClientConnectionInterruption extends React.Component<
     }
   };
 
-  handleFormSubmit = ({formData}: {formData: Record<string, unknown>}) => {
+  handleFormSubmit = ({formData}: {formData: ConnectionSettingsForm}) => {
     const currentUsername = AuthStore.getCurrentUsername();
 
     if (currentUsername == null) {
       return;
     }
 
-    AuthActions.updateUser(currentUsername, formData)
+    if (
+      (formData.connectionType === 'socket' && formData.rtorrentSocketPath == null) ||
+      (formData.connectionType === 'tcp' && (formData.rtorrentHost == null || formData.rtorrentPort == null))
+    ) {
+      return;
+    }
+
+    AuthActions.updateUser(
+      currentUsername,
+      formData.connectionType === 'socket'
+        ? {socketPath: formData.rtorrentSocketPath as string}
+        : {host: formData.rtorrentHost as string, port: Number(formData.rtorrentPort)},
+    )
       .then(() => {
         FloodActions.restartActivityStream();
       })
@@ -65,7 +77,7 @@ class ClientConnectionInterruption extends React.Component<
 
   handleTestButtonClick = () => {
     if (this.state.isTestingConnection || this.formRef == null) return;
-    const formData = this.formRef.getFormData() as ConnectionSettings;
+    const formData = this.formRef.getFormData() as ConnectionSettingsForm;
 
     this.setState(
       {

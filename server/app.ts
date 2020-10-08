@@ -10,7 +10,6 @@ import path from 'path';
 import type {UserInDatabase} from '@shared/types/Auth';
 
 import apiRoutes from './routes/api';
-import authRoutes from './routes/auth';
 import passportConfig from './config/passport';
 import paths from '../shared/config/paths';
 import Users from './models/Users';
@@ -44,7 +43,6 @@ app.use(cookieParser());
 passportConfig(passport);
 
 app.use(`${paths.servedPath}api`, apiRoutes);
-app.use(`${paths.servedPath}auth`, authRoutes);
 
 // After routes, look for static assets.
 app.use(paths.servedPath, express.static(paths.appDist));

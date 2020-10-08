@@ -3,7 +3,7 @@ import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-import type {Credentials, ConnectionSettings} from '@shared/types/Auth';
+import type {Credentials, ConnectionSettingsForm} from '@shared/types/Auth';
 
 import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '../../../ui';
 import AuthActions from '../../../actions/AuthActions';
@@ -14,7 +14,7 @@ import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import RTorrentConnectionTypeSelection from '../../general/RTorrentConnectionTypeSelection';
 import SettingsTab from './SettingsTab';
 
-type AuthTabFormData = Pick<Credentials, 'username' | 'password' | 'isAdmin'> & ConnectionSettings;
+type AuthTabFormData = Pick<Credentials, 'username' | 'password' | 'isAdmin'> & ConnectionSettingsForm;
 
 class AuthTab extends SettingsTab {
   state = {

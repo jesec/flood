@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type {ConnectionSettings} from '@shared/types/Auth';
+import type {ConnectionSettingsForm} from '@shared/types/Auth';
 import type {TransferDirection} from '@shared/types/TransferData';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -78,7 +78,7 @@ const ClientActions = {
         },
       ),
 
-  testClientConnectionSettings: (connectionSettings: ConnectionSettings) => {
+  testClientConnectionSettings: (connectionSettings: ConnectionSettingsForm) => {
     const requestPayload = {
       host: connectionSettings.rtorrentHost,
       port: connectionSettings.rtorrentPort,

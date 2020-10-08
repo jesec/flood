@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-import type {AuthVerificationResponse, ConnectionSettings, Credentials} from '@shared/types/Auth';
+import type {
+  AuthAuthenticationOptions,
+  AuthRegisterOptions,
+  AuthUpdateUserOptions,
+  AuthVerificationResponse,
+  Credentials,
+} from '@shared/types/Auth';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ClientActions from './ClientActions';
@@ -11,9 +17,9 @@ import SettingsActions from './SettingsActions';
 const baseURI = ConfigStore.getBaseURI();
 
 const AuthActions = {
-  authenticate: (credentials: Credentials) =>
+  authenticate: (options: AuthAuthenticationOptions) =>
     axios
-      .post(`${baseURI}auth/authenticate`, credentials)
+      .post(`${baseURI}api/auth/authenticate`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -51,9 +57,9 @@ const AuthActions = {
         ]);
       }),
 
-  createUser: (config: Required<Credentials>) =>
+  createUser: (options: AuthRegisterOptions) =>
     axios
-      .put(`${baseURI}auth/users`, config)
+      .post(`${baseURI}api/auth/register?cookie=false`, options)
       .then((json) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
@@ -62,24 +68,12 @@ const AuthActions = {
         });
       }),
 
-  updateUser: (username: Credentials['username'], connectionSettings: ConnectionSettings) => {
-    const requestPayload: Partial<Credentials> = {};
-
-    if (connectionSettings.connectionType === 'socket') {
-      requestPayload.socketPath = connectionSettings.rtorrentSocketPath;
-    } else {
-      requestPayload.port = connectionSettings.rtorrentPort;
-      requestPayload.host = connectionSettings.rtorrentHost;
-    }
-
-    return axios
-      .patch(`${baseURI}auth/users/${encodeURIComponent(username)}`, requestPayload)
-      .then((json) => json.data);
-  },
+  updateUser: (username: Credentials['username'], options: AuthUpdateUserOptions) =>
+    axios.patch(`${baseURI}api/auth/users/${encodeURIComponent(username)}`, options).then((json) => json.data),
 
   deleteUser: (username: Credentials['username']) =>
     axios
-      .delete(`${baseURI}auth/users/${encodeURIComponent(username)}`)
+      .delete(`${baseURI}api/auth/users/${encodeURIComponent(username)}`)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -104,7 +98,7 @@ const AuthActions = {
 
   fetchUsers: () =>
     axios
-      .get(`${baseURI}auth/users`)
+      .get(`${baseURI}api/auth/users`)
       .then((json) => json.data)
       .then((data) => {
         AppDispatcher.dispatchServerAction({
@@ -114,7 +108,7 @@ const AuthActions = {
       }),
 
   logout: () =>
-    axios.get(`${baseURI}auth/logout`).then(
+    axios.get(`${baseURI}api/auth/logout`).then(
       () => {
         AppDispatcher.dispatchServerAction({
           type: 'AUTH_LOGOUT_SUCCESS',
@@ -128,9 +122,9 @@ const AuthActions = {
       },
     ),
 
-  register: (config: Required<Credentials>) =>
+  register: (options: AuthRegisterOptions) =>
     axios
-      .post(`${baseURI}auth/register`, config)
+      .post(`${baseURI}api/auth/register`, options)
       .then((json) => json.data)
       .then(
         (data) => {
@@ -149,7 +143,7 @@ const AuthActions = {
 
   verify: () =>
     axios
-      .get(`${baseURI}auth/verify?${Date.now()}`)
+      .get(`${baseURI}api/auth/verify?${Date.now()}`)
       .then((json) => json.data)
       .then(
         (data: AuthVerificationResponse) => {
