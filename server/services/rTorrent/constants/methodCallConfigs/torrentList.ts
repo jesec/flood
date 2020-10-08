@@ -1,4 +1,4 @@
-import regEx from '../../../shared/util/regEx';
+import regEx from '../../../../../shared/util/regEx';
 import {stringTransformer, booleanTransformer, numberTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const torrentListMethodCallConfigs = {
