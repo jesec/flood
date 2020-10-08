@@ -194,6 +194,13 @@ const FloodActions = {
     // If the user requested a new history snapshot, or the event source has not
     // alraedy been created, we open the event stream.
     if (didHistorySnapshotChange || activityStreamEventSource == null) {
+      import(/* webpackPrefetch: true */ '../stores/ClientStatusStore');
+      import(/* webpackPrefetch: true */ '../stores/DiskUsageStore');
+      import(/* webpackPrefetch: true */ '../stores/NotificationStore');
+      import(/* webpackPrefetch: true */ '../stores/TorrentStore');
+      import(/* webpackPrefetch: true */ '../stores/TorrentFilterStore');
+      import(/* webpackPrefetch: true */ '../stores/TransferDataStore');
+      import(/* webpackPrefetch: true */ '../stores/UIStore');
       activityStreamEventSource = new EventSource(`${baseURI}api/activity-stream?historySnapshot=${historySnapshot}`);
 
       Object.entries(ServerEventHandlers).forEach(([event, handler]) => {
