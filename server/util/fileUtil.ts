@@ -4,6 +4,12 @@ import path from 'path';
 
 import config from '../../config';
 
+export const accessDeniedError = () => {
+  const error = new Error() as NodeJS.ErrnoException;
+  error.code = 'EACCES';
+  return error;
+};
+
 export const isAllowedPath = (resolvedPath: string) => {
   if (config.allowedPaths == null) {
     return true;
@@ -17,20 +23,18 @@ export const isAllowedPath = (resolvedPath: string) => {
 };
 
 export const sanitizePath = (input: string) => {
+  if (typeof input !== 'string') {
+    throw accessDeniedError();
+  }
+
   // eslint-disable-next-line no-control-regex
   const controlRe = /[\x00-\x1f\x80-\x9f]/g;
   return path.resolve(input).replace(controlRe, '');
 };
 
-export const accessDeniedError = () => {
-  const error = new Error() as NodeJS.ErrnoException;
-  error.code = 'EACCES';
-  return error;
-};
-
-export const createDirectory = (options: {path: string}) => {
-  if (options.path) {
-    fs.mkdir(options.path, {recursive: true}, (error) => {
+export const createDirectory = (directoryPath: string) => {
+  if (directoryPath) {
+    fs.mkdir(directoryPath, {recursive: true}, (error) => {
       if (error) {
         console.trace('Error creating directory.', error);
       }

@@ -4,77 +4,15 @@ import sanitize from 'sanitize-filename';
 import {series} from 'async';
 import tar from 'tar-stream';
 
-import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../util/fileUtil';
 import ClientRequest from './ClientRequest';
 import clientResponseUtil from '../util/clientResponseUtil';
 import {clientSettingsBiMap} from '../../shared/constants/clientSettingsMap';
-import settings from './settings';
 import torrentFilePropsMap from '../../shared/constants/torrentFilePropsMap';
 import torrentPeerPropsMap from '../../shared/constants/torrentPeerPropsMap';
 import torrentFileUtil from '../util/torrentFileUtil';
 import torrentTrackerPropsMap from '../../shared/constants/torrentTrackerPropsMap';
 
 const client = {
-  addFiles(user, services, options, callback) {
-    const {destination: destinationPath, files, isBasePath, start, tags} = options;
-
-    const resolvedPath = sanitizePath(destinationPath);
-    if (!isAllowedPath(resolvedPath)) {
-      callback(null, accessDeniedError());
-      return;
-    }
-
-    createDirectory({path: resolvedPath});
-
-    // Each torrent is sent individually because rTorrent accepts a total
-    // filesize of 524 kilobytes or less. This allows the user to send many
-    // torrent files reliably.
-    files.forEach((file, index) => {
-      const fileRequest = new ClientRequest(user, services);
-      fileRequest.addFiles({
-        files: [file],
-        path: resolvedPath,
-        isBasePath,
-        start,
-        tags,
-      });
-
-      // Set the callback for only the last request.
-      if (index === files.length - 1) {
-        fileRequest.onComplete((response, error) => {
-          services.torrentService.fetchTorrentList();
-          callback(response, error);
-        });
-      }
-
-      fileRequest.send();
-    });
-
-    settings.set(user, {id: 'startTorrentsOnLoad', data: start === 'true' || start === true});
-  },
-
-  addUrls(user, services, data, callback) {
-    const {urls, destination, isBasePath, start, tags} = data;
-    const request = new ClientRequest(user, services);
-    const resolvedPath = sanitizePath(destination);
-    if (!isAllowedPath(resolvedPath)) {
-      callback(null, accessDeniedError());
-      return;
-    }
-    createDirectory({path: resolvedPath});
-    request.addURLs({
-      urls,
-      path: resolvedPath,
-      isBasePath,
-      start,
-      tags,
-    });
-    request.onComplete(callback);
-    request.send();
-
-    settings.set(user, {id: 'startTorrentsOnLoad', data: start});
-  },
-
   downloadFiles(user, services, hash, fileString, res) {
     try {
       const selectedTorrent = services.torrentService.getTorrent(hash);
@@ -205,14 +143,6 @@ const client = {
       trackerProps: torrentTrackerPropsMap.methods,
     });
     request.postProcess(clientResponseUtil.processTorrentDetails);
-    request.onComplete(callback);
-    request.send();
-  },
-
-  listMethods(user, services, method, args, callback) {
-    const request = new ClientRequest(user, services);
-
-    request.listMethods({method, args});
     request.onComplete(callback);
     request.send();
   },

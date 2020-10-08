@@ -6,6 +6,8 @@ import type {Credentials} from '@shared/types/Auth';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TransferSummary} from '@shared/types/TransferData';
 import type {
+  AddTorrentByFileOptions,
+  AddTorrentByURLOptions,
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
@@ -14,8 +16,9 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/Action';
 
-import {accessDeniedError, isAllowedPath, sanitizePath} from '../util/fileUtil';
+import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../util/fileUtil';
 import BaseService from './BaseService';
+import {encodeTags} from '../util/torrentPropertiesUtil';
 import fileListMethodCallConfigs from '../constants/fileListMethodCallConfigs';
 import scgiUtil from '../util/scgiUtil';
 
@@ -72,6 +75,86 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
   }
 
   /**
+   * Adds torrents by file
+   *
+   * @param {AddTorrentByFileOptions} options - An object of options...
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async addTorrentsByFile({files, destination, tags, isBasePath, start}: AddTorrentByFileOptions) {
+    const destinationPath = sanitizePath(destination);
+
+    if (!isAllowedPath(destinationPath)) {
+      throw accessDeniedError();
+    }
+
+    createDirectory(destinationPath);
+
+    // Each torrent is sent individually because rTorrent might have small
+    // XMLRPC request size limit. This allows the user to send files reliably.
+    return Promise.all(
+      files.map(async (file) => {
+        const additionalCalls: Array<string> = [];
+
+        additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destinationPath}"`);
+
+        if (Array.isArray(tags)) {
+          additionalCalls.push(`d.custom1.set=${encodeTags(tags)}`);
+        }
+
+        additionalCalls.push(`d.custom.set=addtime,${Date.now() / 1000}`);
+
+        return (
+          this.services?.clientRequestManager
+            .methodCall(
+              start ? 'load.raw_start' : 'load.raw',
+              ['', Buffer.from(file, 'base64')].concat(additionalCalls),
+            )
+            .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        );
+      }),
+    );
+  }
+
+  /**
+   * Adds torrents by URL
+   *
+   * @param {AddTorrentByURLOptions} options - An object of options...
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async addTorrentsByURL({urls, destination, tags, isBasePath, start}: AddTorrentByURLOptions) {
+    const destinationPath = sanitizePath(destination);
+
+    if (!isAllowedPath(destinationPath)) {
+      throw accessDeniedError();
+    }
+
+    createDirectory(destinationPath);
+
+    const methodCalls: MultiMethodCalls = urls.map((url) => {
+      const additionalCalls: Array<string> = [];
+
+      additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destinationPath}"`);
+
+      if (Array.isArray(tags)) {
+        additionalCalls.push(`d.custom1.set=${encodeTags(tags)}`);
+      }
+
+      additionalCalls.push(`d.custom.set=addtime,${Date.now() / 1000}`);
+
+      return {
+        methodName: start ? 'load.start' : 'load.normal',
+        params: ['', url].concat(additionalCalls),
+      };
+    }, []);
+
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
+  }
+
+  /**
    * Checks torrents
    *
    * @param {CheckTorrentsOptions} options - An object of options...
@@ -87,9 +170,11 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services?.clientRequestManager
-      .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
   }
 
   /**
@@ -137,7 +222,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
         const baseFileName = this.services?.torrentService.getTorrent(hash).baseFilename;
 
         if (sourceBasePath == null || baseFileName == null) {
-          return;
+          throw new Error();
         }
 
         const destinationFilePath = sanitizePath(path.join(resolvedPath, baseFileName));
@@ -199,46 +284,48 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services?.clientRequestManager.methodCall('system.multicall', [methodCalls]).then((response) => {
-      if (deleteData === true) {
-        const torrentCount = hashes.length;
-        const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
-          const fileList = (response as string[][][][][])[hashIndex][0];
-          const directoryBase = (response as string[][])[hashIndex + torrentCount][0];
+    return (
+      this.services?.clientRequestManager.methodCall('system.multicall', [methodCalls]).then((response) => {
+        if (deleteData === true) {
+          const torrentCount = hashes.length;
+          const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
+            const fileList = (response as string[][][][][])[hashIndex][0];
+            const directoryBase = (response as string[][])[hashIndex + torrentCount][0];
 
-          const torrentFilesToDelete = fileList.reduce((fileListAccumulator, file) => {
-            // We only look at the first path component returned because
-            // if it's a directory within the torrent, then we'll remove
-            // the entire directory.
-            const filePath = path.join(directoryBase, file[0][0]);
+            const torrentFilesToDelete = fileList.reduce((fileListAccumulator, file) => {
+              // We only look at the first path component returned because
+              // if it's a directory within the torrent, then we'll remove
+              // the entire directory.
+              const filePath = path.join(directoryBase, file[0][0]);
 
-            // filePath might be a directory, so it may have already been
-            // added. If not, we add it.
-            if (!fileListAccumulator.includes(filePath)) {
-              fileListAccumulator.push(filePath);
-            }
+              // filePath might be a directory, so it may have already been
+              // added. If not, we add it.
+              if (!fileListAccumulator.includes(filePath)) {
+                fileListAccumulator.push(filePath);
+              }
 
-            return fileListAccumulator;
+              return fileListAccumulator;
+            }, [] as Array<string>);
+
+            return accumulator.concat(torrentFilesToDelete);
           }, [] as Array<string>);
 
-          return accumulator.concat(torrentFilesToDelete);
-        }, [] as Array<string>);
-
-        filesToDelete.forEach((file) => {
-          try {
-            if (fs.lstatSync(file).isDirectory()) {
-              fs.rmdirSync(file, {recursive: true});
-            } else {
-              fs.unlinkSync(file);
+          filesToDelete.forEach((file) => {
+            try {
+              if (fs.lstatSync(file).isDirectory()) {
+                fs.rmdirSync(file, {recursive: true});
+              } else {
+                fs.unlinkSync(file);
+              }
+            } catch (error) {
+              console.error(`Error deleting file: ${file}\n${error}`);
             }
-          } catch (error) {
-            console.error(`Error deleting file: ${file}\n${error}`);
-          }
-        });
-      }
+          });
+        }
 
-      return response;
-    }, this.processClientRequestError);
+        return response;
+      }, this.processClientRequestError) || Promise.reject()
+    );
   }
 
   /**
@@ -262,9 +349,11 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services?.clientRequestManager
-      .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
   }
 
   /**
@@ -288,9 +377,11 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services?.clientRequestManager
-      .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
   }
 
   /**
@@ -314,9 +405,11 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       return accumulator;
     }, []);
 
-    return this.services?.clientRequestManager
-      .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
   }
 
   /**

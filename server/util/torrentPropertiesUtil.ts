@@ -99,3 +99,17 @@ export const hasTorrentFinished = (
 
   return false;
 };
+
+export const encodeTags = (tags: TorrentProperties['tags']): string => {
+  return tags
+    .reduce((accumulator: Array<string>, currentTag) => {
+      const tag = encodeURIComponent(currentTag.trim());
+
+      if (tag !== '' && accumulator.indexOf(tag) === -1) {
+        accumulator.push(tag);
+      }
+
+      return accumulator;
+    }, [])
+    .join(',');
+};

@@ -6,7 +6,7 @@ export interface MethodCallConfig {
 
 export type MethodCallConfigs = Readonly<Array<MethodCallConfig>>;
 
-export type MultiMethodCalls = Array<{methodName: string; params: Array<string>}>;
+export type MultiMethodCalls = Array<{methodName: string; params: Array<string | Buffer>}>;
 
 export const defaultTransformer = (value: string): string => {
   return value;

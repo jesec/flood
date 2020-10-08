@@ -39,18 +39,4 @@ router.put('/settings/speed-limits', (req, res) => {
   client.setSpeedLimits(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
 });
 
-router.get('/rtorrent-methods', (req, res) => {
-  const {type} = req.query;
-  const {args} = req.query;
-  let method = 'system.listMethods';
-
-  if (type === 'help') {
-    method = 'system.methodHelp';
-  } else if (type === 'signature') {
-    method = 'system.methodSignature';
-  }
-
-  client.listMethods(req.user, req.services, method, args, ajaxUtil.getResponseFn(res));
-});
-
 export default router;

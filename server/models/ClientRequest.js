@@ -6,26 +6,6 @@ import util from 'util';
 import {clientSettingsMap} from '../../shared/constants/clientSettingsMap';
 import rTorrentPropMap from '../util/rTorrentPropMap';
 
-const addTagsToRequest = (tagsArr, requestParameters) => {
-  if (tagsArr && tagsArr.length) {
-    const tags = tagsArr
-      .reduce((accumulator, currentTag) => {
-        const tag = encodeURIComponent(currentTag.trim());
-
-        if (tag !== '' && accumulator.indexOf(tag) === -1) {
-          accumulator.push(tag);
-        }
-
-        return accumulator;
-      }, [])
-      .join(',');
-
-    requestParameters.push(`d.custom1.set="${tags}"`);
-  }
-
-  return requestParameters;
-};
-
 const getEnsuredArray = (item) => {
   if (!util.isArray(item)) {
     return [item];
@@ -111,62 +91,6 @@ class ClientRequest {
     this.clientRequestManager.methodCall('system.multicall', [this.requests]).then(handleSuccess).catch(handleError);
   }
 
-  // TODO: Separate these and add support for additional clients.
-  // rTorrent method calls.
-  addFiles(options) {
-    const {files, path: destinationPath, isBasePath, start, tags: tagsArr} = options;
-
-    files.forEach((file) => {
-      const methodCall = start ? 'load.raw_start' : 'load.raw';
-      const timeAdded = Math.floor(Date.now() / 1000);
-      let parameters = ['', Buffer.from(file, 'base64')];
-
-      if (destinationPath) {
-        if (isBasePath) {
-          parameters.push(`d.directory_base.set="${destinationPath}"`);
-        } else {
-          parameters.push(`d.directory.set="${destinationPath}"`);
-        }
-      }
-
-      parameters = addTagsToRequest(tagsArr, parameters);
-
-      // parameters.push(`d.custom.set=x-filename,${file.originalname}`);
-      parameters.push(`d.custom.set=addtime,${timeAdded}`);
-
-      this.requests.push(getMethodCall(methodCall, parameters));
-    });
-  }
-
-  addURLs(options) {
-    const {path: destinationPath, isBasePath, start, tags: tagsArr} = options;
-    const urls = getEnsuredArray(options.urls);
-
-    urls.forEach((url) => {
-      let methodCall = 'load.start';
-      let parameters = ['', url];
-      const timeAdded = Math.floor(Date.now() / 1000);
-
-      if (destinationPath) {
-        if (isBasePath) {
-          parameters.push(`d.directory_base.set="${destinationPath}"`);
-        } else {
-          parameters.push(`d.directory.set="${destinationPath}"`);
-        }
-      }
-
-      parameters = addTagsToRequest(tagsArr, parameters);
-
-      parameters.push(`d.custom.set=addtime,${timeAdded}`);
-
-      if (!start) {
-        methodCall = 'load.normal';
-      }
-
-      this.requests.push(getMethodCall(methodCall, parameters));
-    });
-  }
-
   fetchSettings(options) {
     let {requestedSettings} = options;
 
@@ -192,38 +116,6 @@ class ClientRequest {
     this.requests.push(getMethodCall('p.multicall', peerParams));
     this.requests.push(getMethodCall('f.multicall', fileParams));
     this.requests.push(getMethodCall('t.multicall', trackerParams));
-  }
-
-  getTorrentList(options) {
-    this.requests.push(getMethodCall('d.multicall2', options.props));
-  }
-
-  getTransferData() {
-    Object.keys(rTorrentPropMap.transferData).forEach((key) => {
-      this.requests.push(getMethodCall(rTorrentPropMap.transferData[key]));
-    });
-  }
-
-  listMethods(options) {
-    const args = getEnsuredArray(options.args);
-    this.requests.push(getMethodCall(options.method, [args]));
-  }
-
-  setDownloadPath(options) {
-    const hashes = getEnsuredArray(options.hashes);
-
-    let pathMethod;
-    if (options.isBasePath) {
-      pathMethod = 'd.directory_base.set';
-    } else {
-      pathMethod = 'd.directory.set';
-    }
-
-    hashes.forEach((hash) => {
-      this.requests.push(getMethodCall(pathMethod, [hash, options.path]));
-      this.requests.push(getMethodCall('d.open', [hash]));
-      this.requests.push(getMethodCall('d.close', [hash]));
-    });
   }
 
   setFilePriority(options) {

@@ -3,12 +3,14 @@ import scgiUtil from '../util/scgiUtil';
 
 import type {MultiMethodCalls} from '../constants/rTorrentMethodCall';
 
+type MethodCallParameters = Array<string | Buffer | MultiMethodCalls>;
+
 class ClientRequestManager extends BaseService {
   isRequestPending = false;
   lastResponseTimestamp = 0;
   pendingRequests: Array<{
     methodName: string;
-    parameters: Array<string | MultiMethodCalls>;
+    parameters: MethodCallParameters;
     resolve: (value?: Record<string, string>) => void;
     reject: (error?: NodeJS.ErrnoException) => void;
   }> = [];
@@ -49,7 +51,7 @@ class ClientRequestManager extends BaseService {
     this.sendMethodCall(nextRequest.methodName, nextRequest.parameters).then(nextRequest.resolve, nextRequest.reject);
   }
 
-  sendMethodCall(methodName: string, parameters: Array<string | MultiMethodCalls>) {
+  sendMethodCall(methodName: string, parameters: MethodCallParameters) {
     const connectionMethod = {
       host: this.user.host,
       port: this.user.port,
@@ -68,7 +70,7 @@ class ClientRequestManager extends BaseService {
     );
   }
 
-  methodCall(methodName: string, parameters: Array<string | MultiMethodCalls>) {
+  methodCall(methodName: string, parameters: MethodCallParameters) {
     // We only allow one request at a time.
     if (this.isRequestPending) {
       return new Promise(
