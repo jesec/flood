@@ -11,7 +11,7 @@ import type {
   SetTorrentsTagsOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
-} from '@shared/types/Action';
+} from '@shared/types/api/torrents';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';

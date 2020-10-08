@@ -1,4 +1,5 @@
-import type {AuthAuthenticationResponse, AuthVerificationResponse, Credentials} from '@shared/types/Auth';
+import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/types/api/auth';
+import type {Credentials} from '@shared/types/Auth';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';

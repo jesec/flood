@@ -16,7 +16,7 @@ import type {
   SetTorrentsTagsOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
-} from '@shared/types/Action';
+} from '@shared/types/api/torrents';
 
 import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../util/fileUtil';
 import BaseService from './BaseService';

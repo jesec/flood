@@ -5,8 +5,8 @@ import type {
   AuthRegisterOptions,
   AuthUpdateUserOptions,
   AuthVerificationResponse,
-  Credentials,
-} from '@shared/types/Auth';
+} from '@shared/types/api/auth';
+import type {Credentials} from '@shared/types/Auth';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ClientActions from './ClientActions';

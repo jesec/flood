@@ -11,7 +11,7 @@ import {
   SetTorrentsTagsOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
-} from '@shared/types/Action';
+} from '@shared/types/api/torrents';
 
 import ajaxUtil from '../../util/ajaxUtil';
 import client from '../../models/client';

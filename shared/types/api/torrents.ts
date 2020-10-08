@@ -1,4 +1,4 @@
-import {TorrentProperties} from './Torrent';
+import {TorrentProperties} from '../Torrent';
 
 // POST /api/torrents/add-urls
 export interface AddTorrentByURLOptions {

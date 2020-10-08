@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 
 import type {Response} from 'express';
-import type {AuthRegisterOptions, AuthUpdateUserOptions, Credentials} from '@shared/types/Auth';
+import type {AuthRegisterOptions, AuthUpdateUserOptions} from '@shared/types/api/auth';
+import type {Credentials} from '@shared/types/Auth';
 
 import ajaxUtil from '../../util/ajaxUtil';
 import config from '../../../config';
