@@ -11,7 +11,9 @@ import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
+  SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
+  SetTorrentsTagsOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/Action';
@@ -348,6 +350,58 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
 
       return accumulator;
     }, []);
+
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
+  }
+
+  /**
+   * Sets tags of torrents
+   *
+   * @param {SetTorrentsTagsOptions} options - An object of options...
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions) {
+    const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
+      accumulator.push({
+        methodName: 'd.custom1.set',
+        params: [hash, encodeTags(tags)],
+      });
+
+      return accumulator;
+    }, []);
+
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
+  }
+
+  /**
+   * Sets priority of contents of a torrent
+   * @param {string} hash - Hash of the torrent.
+   * @param {Array<number>} indices - Indices of contents to be altered.
+   * @param {number} priority - Target priority.
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async setTorrentContentsPriority(hash: string, {indices, priority}: SetTorrentContentsPropertiesOptions) {
+    const methodCalls = indices.reduce((accumulator: MultiMethodCalls, index) => {
+      accumulator.push({
+        methodName: 'f.priority.set',
+        params: [`${hash}:f${index}`, `${priority}`],
+      });
+
+      return accumulator;
+    }, []);
+
+    methodCalls.push({
+      methodName: 'd.update_priorities',
+      params: [hash],
+    });
 
     return (
       this.services?.clientRequestManager

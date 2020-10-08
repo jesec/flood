@@ -70,12 +70,31 @@ export interface StopTorrentsOptions {
 
 // PATCH /api/torrents/priority
 export interface SetTorrentsPriorityOptions {
-  // An array of string representing hashes of torrents to operated on
+  // An array of string representing hashes of torrents to operate on
   hashes: Array<TorrentProperties['hash']>;
   // Number representing priority:
   // 0 - DON'T_DOWNLOAD
   // 1 - LOW
   // 2 - NORMAL
   // 3 - HIGH
+  priority: number;
+}
+
+// PATCH /api/torrents/tags
+export interface SetTorrentsTagsOptions {
+  // An array of string representing hashes of torrents to operate on
+  hashes: Array<TorrentProperties['hash']>;
+  // An array of string representing tags
+  tags: TorrentProperties['tags'];
+}
+
+// PATCH /api/torrents/{hash}/contents
+export interface SetTorrentContentsPropertiesOptions {
+  // An array of number representing indices of contents of a torrent
+  indices: Array<number>;
+  // Number representing priority:
+  // 0 - DON'T_DOWNLOAD
+  // 1 - NORMAL
+  // 2 - HIGH
   priority: number;
 }

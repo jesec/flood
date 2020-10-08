@@ -29,7 +29,9 @@ class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalSt
     const formData = this.formRef.getFormData() as {tags: string};
     const tags = formData.tags ? formData.tags.split(',') : [];
 
-    this.setState({isSettingTags: true}, () => TorrentActions.setTaxonomy(TorrentStore.getSelectedTorrents(), tags));
+    this.setState({isSettingTags: true}, () =>
+      TorrentActions.setTags({hashes: TorrentStore.getSelectedTorrents(), tags}),
+    );
   };
 
   getActions(): Modal['props']['actions'] {

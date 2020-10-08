@@ -82,7 +82,7 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
 
   handlePriorityChange(fileIndex: React.ReactText, priorityLevel: number) {
     this.props.onPriorityChange();
-    TorrentActions.setFilePriority(this.props.hash, [Number(fileIndex)], priorityLevel);
+    TorrentActions.setFilePriority(this.props.hash, {indices: [Number(fileIndex)], priority: priorityLevel});
   }
 
   render() {

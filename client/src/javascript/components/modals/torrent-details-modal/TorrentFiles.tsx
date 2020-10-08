@@ -120,7 +120,10 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
       const inputElement = event.target as HTMLInputElement;
       if (inputElement.name === 'file-priority') {
         this.handlePriorityChange();
-        TorrentActions.setFilePriority(this.props.torrent.hash, this.state.selectedFiles, Number(inputElement.value));
+        TorrentActions.setFilePriority(this.props.torrent.hash, {
+          indices: this.state.selectedFiles,
+          priority: Number(inputElement.value),
+        });
       }
     }
   };

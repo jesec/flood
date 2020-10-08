@@ -118,43 +118,11 @@ class ClientRequest {
     this.requests.push(getMethodCall('t.multicall', trackerParams));
   }
 
-  setFilePriority(options) {
-    const indices = getEnsuredArray(options.indices);
-    const hashes = getEnsuredArray(options.hashes);
-
-    hashes.forEach((hash) => {
-      indices.forEach((index) => {
-        this.requests.push(getMethodCall('f.priority.set', [`${hash}:f${index}`, options.priority]));
-      });
-      this.requests.push(getMethodCall('d.update_priorities', [hash]));
-    });
-  }
-
   setSettings(options) {
     const settings = getEnsuredArray(options.settings);
 
     settings.forEach((setting) => {
       this.requests.push(getMethodCall(`${clientSettingsMap[setting.id]}.set`, ['', setting.data]));
-    });
-  }
-
-  setTaxonomy(options) {
-    const methodName = 'd.custom1.set';
-
-    const tags = options.tags
-      .reduce((memo, currentTag) => {
-        const tag = encodeURIComponent(currentTag.trim());
-
-        if (tag !== '' && memo.indexOf(tag) === -1) {
-          memo.push(tag);
-        }
-
-        return memo;
-      }, [])
-      .join(',');
-
-    getEnsuredArray(options.hashes).forEach((hash) => {
-      this.requests.push(getMethodCall(methodName, [hash, tags]));
     });
   }
 

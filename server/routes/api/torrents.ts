@@ -6,7 +6,9 @@ import {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
+  SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
+  SetTorrentsTagsOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/Action';
@@ -217,13 +219,27 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, re
 });
 
 /**
- * PATCH /api/torrents/taxonomy
+ * PATCH /api/torrents/tags
  * @summary Sets tags of torrents.
  * @tags Torrents
  * @security AuthenticatedUser
+ * @param {SetTorrentsTagsOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
  */
-router.patch('/taxonomy', (req, res) => {
-  client.setTaxonomy(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
+router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .setTorrentsTags(req.body)
+    .then((response) => {
+      req.services?.torrentService.fetchTorrentList();
+      return response;
+    })
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
 /**
@@ -262,13 +278,23 @@ router.patch('/tracker', (req, res) => {
 
 /**
  * PATCH /api/torrents/{hash}/contents
- * @summary Sets properties of contents of a torrent. Only priority can be set.
+ * @summary Sets properties of contents of a torrent. Only priority can be set for now.
  * @tags Torrent
  * @security AuthenticatedUser
  * @param {string} hash.path
+ * @param {SetTorrentContentsPropertiesOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
  */
-router.patch('/:hash/contents', (req, res) => {
-  client.setFilePriority(req.user, req.services, req.params.hash, req.body, ajaxUtil.getResponseFn(res));
+router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:hash/contents', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .setTorrentContentsPriority(req.params.hash, req.body)
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
 /**

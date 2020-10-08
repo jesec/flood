@@ -147,18 +147,6 @@ const client = {
     request.send();
   },
 
-  setFilePriority(user, services, hashes, data, callback) {
-    const {indices, priority} = data;
-    const request = new ClientRequest(user, services);
-
-    request.setFilePriority({hashes, indices, priority});
-    request.onComplete((response, error) => {
-      services.torrentService.fetchTorrentList();
-      callback(response, error);
-    });
-    request.send();
-  },
-
   setSettings(user, services, payloads, callback) {
     const request = new ClientRequest(user, services);
     if (payloads.length === 0) return callback({});
@@ -200,18 +188,6 @@ const client = {
       throttle: data.throttle,
     });
     request.onComplete(callback);
-    request.send();
-  },
-
-  setTaxonomy(user, services, data, callback) {
-    const request = new ClientRequest(user, services);
-
-    request.setTaxonomy(data);
-    request.onComplete((response, error) => {
-      // Fetch the latest torrent list to re-index the taxonomy.
-      services.torrentService.fetchTorrentList();
-      callback(response, error);
-    });
     request.send();
   },
 

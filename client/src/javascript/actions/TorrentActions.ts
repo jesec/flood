@@ -6,7 +6,9 @@ import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
+  SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
+  SetTorrentsTagsOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/Action';
@@ -240,12 +242,9 @@ const TorrentActions = {
         },
       ),
 
-  setFilePriority: (hash: TorrentProperties['hash'], indices: Array<number>, priority: number) =>
+  setFilePriority: (hash: TorrentProperties['hash'], options: SetTorrentContentsPropertiesOptions) =>
     axios
-      .patch(`${baseURI}api/torrents/${hash}/contents`, {
-        indices,
-        priority,
-      })
+      .patch(`${baseURI}api/torrents/${hash}/contents`, options)
       .then((json) => json.data)
       .then(
         () => {
@@ -264,13 +263,9 @@ const TorrentActions = {
         },
       ),
 
-  setTaxonomy: (hashes: Array<TorrentProperties['hash']>, tags: Array<string>, options = {}) =>
+  setTags: (options: SetTorrentsTagsOptions) =>
     axios
-      .patch(`${baseURI}api/torrents/taxonomy`, {
-        hashes,
-        tags,
-        options,
-      })
+      .patch(`${baseURI}api/torrents/tags`, options)
       .then((json) => json.data)
       .then(
         (data) => {
