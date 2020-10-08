@@ -1,7 +1,7 @@
-import BaseService from './BaseService';
-import scgiUtil from '../util/scgiUtil';
+import BaseService from '../BaseService';
+import scgiUtil from './util/scgiUtil';
 
-import type {MultiMethodCalls} from '../util/rTorrentMethodCallUtil';
+import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 
 type MethodCallParameters = Array<string | Buffer | MultiMethodCalls>;
 

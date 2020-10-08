@@ -1,7 +1,7 @@
 import type {UserInDatabase} from '@shared/schema/Auth';
 
-import ClientGatewayService from './clientGatewayService';
-import ClientRequestManager from './clientRequestManager';
+import ClientGatewayService from './rTorrent/clientGatewayService';
+import ClientRequestManager from './rTorrent/clientRequestManager';
 import FeedService from './feedService';
 import HistoryService from './historyService';
 import NotificationService from './notificationService';

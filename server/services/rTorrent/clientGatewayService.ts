@@ -22,26 +22,26 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 
-import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../util/fileUtil';
-import BaseService from './BaseService';
-import {getFileTreeFromPathsArr} from '../util/fileTreeUtil';
-import scgiUtil from '../util/scgiUtil';
-import {getMethodCalls, processMethodCallResponse} from '../util/rTorrentMethodCallUtil';
+import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import BaseService from '../BaseService';
+import {getFileTreeFromPathsArr} from './util/fileTreeUtil';
+import scgiUtil from './util/scgiUtil';
+import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {
   encodeTags,
   getTorrentETAFromProperties,
   getTorrentPercentCompleteFromProperties,
   getTorrentStatusFromProperties,
-} from '../util/torrentPropertiesUtil';
+} from './util/torrentPropertiesUtil';
 import {
   torrentContentMethodCallConfigs,
   torrentListMethodCallConfigs,
   torrentPeerMethodCallConfigs,
   torrentTrackerMethodCallConfigs,
   transferSummaryMethodCallConfigs,
-} from '../constants/rTorrentMethodCallConfigs';
+} from './constants/methodCallConfigs';
 
-import type {MultiMethodCalls} from '../util/rTorrentMethodCallUtil';
+import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 
 const filePathMethodCalls = getMethodCalls({pathComponents: torrentContentMethodCallConfigs.pathComponents});
 
