@@ -1,12 +1,12 @@
 import debounce from 'lodash/debounce';
 import React from 'react';
 
+import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
 import type {ContextMenu, Modal} from '../stores/UIStore';
-import type {FloodSettings} from '../stores/SettingsStore';
 
 export interface UIClickTorrentAction {
   type: 'UI_CLICK_TORRENT';

@@ -1,17 +1,32 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import type {FloodSettings} from '@shared/types/FloodSettings';
+
 import {Checkbox} from '../../../../ui';
 import ErrorIcon from '../../../icons/ErrorIcon';
 import SettingsStore from '../../../../stores/SettingsStore';
-import SortableList from '../../../general/SortableList';
+import SortableList, {ListItem} from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
 import TorrentContextMenuItems from '../../../../constants/TorrentContextMenuItems';
 
-class TorrentContextMenuItemsList extends React.Component {
-  tooltipRef = null;
+interface TorrentContextMenuItemsListProps {
+  onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
+}
 
-  constructor(props) {
+interface TorrentContextMenuItemsListStates {
+  torrentContextMenuItems: FloodSettings['torrentContextMenuItems'];
+}
+
+const lockedIDs = ['start', 'stop', 'set-taxonomy', 'torrent-details'];
+
+class TorrentContextMenuItemsList extends React.Component<
+  TorrentContextMenuItemsListProps,
+  TorrentContextMenuItemsListStates
+> {
+  tooltipRef: Tooltip | null = null;
+
+  constructor(props: TorrentContextMenuItemsListProps) {
     super(props);
 
     this.state = {
@@ -19,23 +34,18 @@ class TorrentContextMenuItemsList extends React.Component {
     };
   }
 
-  updateSettings = (torrentContextMenuItems) => {
+  updateSettings = (torrentContextMenuItems: FloodSettings['torrentContextMenuItems']) => {
     this.props.onSettingsChange({torrentContextMenuItems});
   };
 
-  getLockedIDs() {
-    return ['start', 'stop', 'set-taxonomy', 'torrent-details'];
-  }
-
-  handleCheckboxValueChange = (id, value) => {
+  handleCheckboxValueChange = (id: string, value: boolean) => {
     let {torrentContextMenuItems} = this.state;
 
     torrentContextMenuItems = torrentContextMenuItems.map((setting) => {
-      if (setting.id === id) {
-        setting.visible = value;
-      }
-
-      return setting;
+      return {
+        id: setting.id,
+        visible: setting.id === id ? value : setting.visible,
+      };
     });
 
     this.props.onSettingsChange({torrentContextMenuItems});
@@ -52,27 +62,25 @@ class TorrentContextMenuItemsList extends React.Component {
     // do nothing.
   };
 
-  renderItem = (item) => {
-    const {id, visible} = item;
-    const warningMessageId = TorrentContextMenuItems[id].warning;
+  renderItem = (item: ListItem) => {
+    const {id, visible} = item as FloodSettings['torrentContextMenuItems'][number];
     let checkbox = null;
     let warning = null;
 
-    if (!this.getLockedIDs().includes(id)) {
+    if (!lockedIDs.includes(id)) {
       checkbox = (
         <span className="sortable-list__content sortable-list__content--secondary">
           <Checkbox
             checked={visible}
-            onChange={(event) => this.handleCheckboxValueChange(id, event.target.checked)}
-            modifier="dark">
+            onChange={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
             <FormattedMessage id="settings.ui.torrent.context.menu.items.show" />
           </Checkbox>
         </span>
       );
     }
 
-    if (warningMessageId != null) {
-      const tooltipContent = <FormattedMessage id={warningMessageId} />;
+    if (id === 'set-tracker') {
+      const tooltipContent = <FormattedMessage id={TorrentContextMenuItems[id].warning} />;
 
       warning = (
         <Tooltip
@@ -82,7 +90,6 @@ class TorrentContextMenuItemsList extends React.Component {
           ref={(ref) => {
             this.tooltipRef = ref;
           }}
-          scrollContainer={this.props.scrollContainer}
           width={200}
           wrapperClassName="sortable-list__content sortable-list__content--secondary tooltip__wrapper"
           wrapText>
@@ -106,10 +113,10 @@ class TorrentContextMenuItemsList extends React.Component {
 
   render() {
     const {torrentContextMenuItems} = this.state;
-    const lockedIDs = this.getLockedIDs();
 
     return (
       <SortableList
+        id="torrent-context-menu-items"
         className="sortable-list--torrent-context-menu-items"
         items={torrentContextMenuItems}
         lockedIDs={lockedIDs}

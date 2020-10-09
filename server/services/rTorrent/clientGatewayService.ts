@@ -650,6 +650,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       switch (property) {
         case 'dht':
           methodName = 'dht.mode.set';
+          param = (param as ClientSettings[typeof property]) ? 'auto' : 'disable';
           break;
         case 'throttleGlobalDownMax':
         case 'throttleGlobalUpMax':
@@ -663,6 +664,10 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
         default:
           methodName = `${configs[property].methodCall}.set`;
           break;
+      }
+
+      if (typeof param === 'boolean') {
+        param = param ? '1' : '0';
       }
 
       accumulator.push({

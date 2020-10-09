@@ -1,3 +1,4 @@
+import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {TorrentDetails, TorrentProperties, TorrentListDiff, TorrentList} from '@shared/types/Torrent';
 
 import AlertStore from './AlertStore';
@@ -11,8 +12,6 @@ import SettingsStore from './SettingsStore';
 import sortTorrents from '../util/sortTorrents';
 import TorrentActions from '../actions/TorrentActions';
 import TorrentFilterStore from './TorrentFilterStore';
-
-import type {FloodSettings} from './SettingsStore';
 
 const pollInterval: number = ConfigStore.getPollInterval();
 

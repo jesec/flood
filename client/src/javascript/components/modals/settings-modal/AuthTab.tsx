@@ -1,9 +1,10 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import {AccessLevel, Credentials} from '@shared/schema/Auth';
+import {AccessLevel} from '@shared/schema/Auth';
+import type {Credentials} from '@shared/schema/Auth';
 
 import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '../../../ui';
 import AuthActions from '../../../actions/AuthActions';
@@ -12,7 +13,6 @@ import ClientConnectionSettingsForm from '../../general/connection-settings/Clie
 import Close from '../../icons/Close';
 import connectStores from '../../../util/connectStores';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import SettingsTab from './SettingsTab';
 
 import type {ClientConnectionSettingsFormType} from '../../general/connection-settings/ClientConnectionSettingsForm';
 
@@ -22,18 +22,33 @@ interface AuthTabFormData {
   isAdmin: boolean;
 }
 
-class AuthTab extends SettingsTab {
-  state = {
-    addUserError: null,
-    hasFetchedUserList: false,
-    isAddingUser: false,
-  };
+interface AuthTabProps extends WrappedComponentProps {
+  users: Array<Credentials>;
+  isAdmin: boolean;
+}
 
+interface AuthTabStates {
+  addUserError: string | null;
+  hasFetchedUserList: boolean;
+  isAddingUser: boolean;
+}
+
+class AuthTab extends React.Component<AuthTabProps, AuthTabStates> {
   formData?: Partial<AuthTabFormData>;
 
   formRef?: Form | null = null;
 
   settingsFormRef: React.RefObject<ClientConnectionSettingsFormType> = React.createRef();
+
+  constructor(props: AuthTabProps) {
+    super(props);
+
+    this.state = {
+      addUserError: null,
+      hasFetchedUserList: false,
+      isAddingUser: false,
+    };
+  }
 
   componentDidMount() {
     if (!this.props.isAdmin) return;
@@ -57,7 +72,7 @@ class AuthTab extends SettingsTab {
         removeIcon = (
           <span
             className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-            onClick={AuthTab.handleDeleteUserClick.bind(this, user.username)}>
+            onClick={() => AuthActions.deleteUser(user.username).then(AuthActions.fetchUsers)}>
             <Close />
           </span>
         );
@@ -83,10 +98,6 @@ class AuthTab extends SettingsTab {
         </li>
       );
     });
-  }
-
-  static handleDeleteUserClick(username: string) {
-    AuthActions.deleteUser(username).then(AuthActions.fetchUsers);
   }
 
   handleFormChange = ({formData}: {formData: Record<string, unknown>}) => {

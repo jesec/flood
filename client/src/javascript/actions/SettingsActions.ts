@@ -1,11 +1,12 @@
 import axios from 'axios';
 
+import type {SetFloodSettingsOptions} from '@shared/types/api/index';
+
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ConfigStore from '../stores/ConfigStore';
 
 import type {Feed, Rule} from '../stores/FeedsStore';
 import type {SettingsSaveRequestSuccessAction} from '../constants/ServerActions';
-import type {SettingUpdatesFlood} from '../stores/SettingsStore';
 
 const baseURI = ConfigStore.getBaseURI();
 
@@ -184,7 +185,7 @@ const SettingsActions = {
         },
       ),
 
-  saveSettings: (settings: SettingUpdatesFlood, options: SettingsSaveRequestSuccessAction['options']) =>
+  saveSettings: (settings: SetFloodSettingsOptions, options: SettingsSaveRequestSuccessAction['options']) =>
     axios
       .patch(`${baseURI}api/settings`, settings)
       .then((json) => json.data)

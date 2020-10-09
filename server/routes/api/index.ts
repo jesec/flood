@@ -3,6 +3,7 @@ import passport from 'passport';
 
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
+import type {SetFloodSettingsOptions} from '@shared/types/api/index';
 
 import appendUserServices from '../../middleware/appendUserServices';
 import ajaxUtil from '../../util/ajaxUtil';
@@ -55,18 +56,27 @@ router.delete('/notifications', (req, res) => {
 
 router.get('/settings', (req, res) => {
   if (req.user == null) {
-    res.status(500).json(Error('Unauthenticated'));
+    res.status(401).json(Error('Unauthorized'));
     return;
   }
   settings.get(req.user, req.query, ajaxUtil.getResponseFn(res));
 });
 
-router.patch('/settings', (req, res) => {
-  if (req.user == null) {
-    res.status(500).json(Error('Unauthenticated'));
-    return;
-  }
-  settings.set(req.user, req.body, ajaxUtil.getResponseFn(res));
+router.patch<unknown, unknown, SetFloodSettingsOptions>('/settings', (req, res) => {
+  Promise.all(
+    Object.keys(req.body).map(async (property) => {
+      return {
+        id: property,
+        data: req.body[property as keyof typeof req.body],
+      };
+    }),
+  ).then((settingRecords) => {
+    if (req.user == null) {
+      res.status(401).json(Error('Unauthorized'));
+      return;
+    }
+    settings.set(req.user, settingRecords, ajaxUtil.getResponseFn(res));
+  });
 });
 
 export default router;

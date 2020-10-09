@@ -1,17 +1,28 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import type {FloodSettings} from '@shared/types/FloodSettings';
+
 import {Checkbox} from '../../../../ui';
 import ErrorIcon from '../../../icons/ErrorIcon';
 import SettingsStore from '../../../../stores/SettingsStore';
-import SortableList from '../../../general/SortableList';
+import SortableList, {ListItem} from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
 import TorrentProperties from '../../../../constants/TorrentProperties';
 
-class TorrentDetailItemsList extends React.Component {
-  tooltipRef = null;
+interface TorrentDetailItemsListProps {
+  torrentListViewSize: FloodSettings['torrentListViewSize'];
+  onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
+}
 
-  constructor(props) {
+interface TorrentDetailItemsListStates {
+  torrentDetails: FloodSettings['torrentDetails'];
+}
+
+class TorrentDetailItemsList extends React.Component<TorrentDetailItemsListProps, TorrentDetailItemsListStates> {
+  tooltipRef: Tooltip | null = null;
+
+  constructor(props: TorrentDetailItemsListProps) {
     super(props);
 
     this.state = {
@@ -19,52 +30,50 @@ class TorrentDetailItemsList extends React.Component {
     };
   }
 
-  getLockedIDs() {
+  getLockedIDs(): Array<keyof typeof TorrentProperties> {
     if (this.props.torrentListViewSize === 'expanded') {
-      return ['name', 'eta', 'downloadRate', 'uploadRate'];
+      return ['name', 'eta', 'downRate', 'upRate'];
     }
 
     return [];
   }
 
-  handleCheckboxValueChange = (id, value) => {
+  handleCheckboxValueChange = (id: string, value: boolean): void => {
     let {torrentDetails} = this.state;
 
     torrentDetails = torrentDetails.map((detail) => {
-      if (detail.id === id) {
-        detail.visible = value;
-      }
-
-      return detail;
+      return {
+        id: detail.id,
+        visible: detail.id === id ? value : detail.visible,
+      };
     });
 
     this.props.onSettingsChange({torrentDetails});
     this.setState({torrentDetails});
   };
 
-  handleMouseDown = () => {
+  handleMouseDown = (): void => {
     if (this.tooltipRef != null) {
       this.tooltipRef.dismissTooltip();
     }
   };
 
-  handleMove = (items) => {
-    this.setState({torrentDetails: items});
-    this.props.onSettingsChange({torrentDetails: items});
+  handleMove = (items: Array<ListItem>): void => {
+    this.setState({torrentDetails: items as FloodSettings['torrentDetails']});
+    this.props.onSettingsChange({torrentDetails: items as FloodSettings['torrentDetails']});
   };
 
-  renderItem = (item, index) => {
-    const {id, visible} = item;
+  renderItem = (item: ListItem, index: number): React.ReactNode => {
+    const {id, visible} = item as FloodSettings['torrentDetails'][number];
     let checkbox = null;
     let warning = null;
 
-    if (!item.dragIndicator && !this.getLockedIDs().includes(id)) {
+    if (!this.getLockedIDs().includes(id)) {
       checkbox = (
         <span className="sortable-list__content sortable-list__content--secondary">
           <Checkbox
             checked={visible}
-            onChange={(event) => this.handleCheckboxValueChange(id, event.target.checked)}
-            modifier="dark">
+            onChange={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
             <FormattedMessage id="settings.ui.torrent.details.enabled" />
           </Checkbox>
         </span>
@@ -86,7 +95,6 @@ class TorrentDetailItemsList extends React.Component {
           ref={(ref) => {
             this.tooltipRef = ref;
           }}
-          scrollContainer={this.props.scrollContainer}
           width={200}
           wrapperClassName="sortable-list__content sortable-list__content--secondary tooltip__wrapper"
           wrapText>
@@ -105,14 +113,10 @@ class TorrentDetailItemsList extends React.Component {
       </div>
     );
 
-    if (item.dragIndicator) {
-      return <div className="sortable-list__item">{content}</div>;
-    }
-
     return content;
   };
 
-  render() {
+  render(): React.ReactNode {
     const lockedIDs = this.getLockedIDs();
     let torrentDetailItems = this.state.torrentDetails
       .slice()
@@ -122,13 +126,14 @@ class TorrentDetailItemsList extends React.Component {
       let nextUnlockedIndex = lockedIDs.length;
 
       torrentDetailItems = torrentDetailItems
-        .reduce((accumulator, detail) => {
+        .reduce((accumulator: FloodSettings['torrentDetails'], detail) => {
           const lockedIDIndex = lockedIDs.indexOf(detail.id);
 
           if (lockedIDIndex > -1) {
             accumulator[lockedIDIndex] = detail;
           } else {
-            accumulator[nextUnlockedIndex++] = detail;
+            accumulator[nextUnlockedIndex] = detail;
+            nextUnlockedIndex += 1;
           }
 
           return accumulator;
@@ -138,6 +143,7 @@ class TorrentDetailItemsList extends React.Component {
 
     return (
       <SortableList
+        id="torrent-details"
         className="sortable-list--torrent-details"
         items={torrentDetailItems}
         lockedIDs={lockedIDs}

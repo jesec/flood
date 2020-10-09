@@ -1,59 +1,17 @@
 import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
+import type {FloodSetting, FloodSettings} from '@shared/types/FloodSettings';
 
 import AlertStore from './AlertStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 import ClientActions from '../actions/ClientActions';
-import Languages from '../constants/Languages';
 import SettingsActions from '../actions/SettingsActions';
-import TorrentContextMenuItems from '../constants/TorrentContextMenuItems';
-import TorrentProperties from '../constants/TorrentProperties';
 import UIStore from './UIStore';
 
 export interface SettingsSaveOptions {
   alert?: boolean;
   dismissModal?: boolean;
 }
-
-type FloodSetting = keyof FloodSettings;
-export interface FloodSettings {
-  language: keyof typeof Languages;
-  sortTorrents: {
-    direction: 'desc' | 'asc';
-    property: keyof typeof TorrentProperties;
-  };
-  torrentDetails: Array<{
-    id: keyof typeof TorrentProperties;
-    visible: boolean;
-  }>;
-  torrentListColumnWidths: {
-    name?: number;
-    percentComplete?: number;
-  };
-  torrentContextMenuItems: Array<{
-    id: keyof typeof TorrentContextMenuItems;
-    visible: boolean;
-  }>;
-  torrentListViewSize: 'condensed' | 'expanded';
-  speedLimits: {
-    download: Array<number>;
-    upload: Array<number>;
-  };
-  startTorrentsOnLoad: boolean;
-  mountPoints: Array<string>;
-
-  // Below: default setting is not specified
-  torrentDestination?: string;
-  deleteTorrentData?: boolean;
-}
-
-export type SettingUpdate<Type, Prop extends keyof Type> = {
-  id: Prop;
-  data: Type[Prop];
-};
-
-export type SettingUpdatesClient = Array<SettingUpdate<ClientSettings, ClientSetting>>;
-export type SettingUpdatesFlood = Array<SettingUpdate<FloodSettings, FloodSetting>>;
 
 class SettingsStoreClass extends BaseStore {
   fetchStatus = {
@@ -171,14 +129,7 @@ class SettingsStoreClass extends BaseStore {
   handleSettingsFetchSuccess(settings: Partial<FloodSettings>): void {
     this.fetchStatus.floodSettingsFetched = true;
 
-    Object.keys(settings).forEach((property) => {
-      const incomingFloodSetting = property as FloodSetting;
-      const incomingFloodSettingValue = settings[incomingFloodSetting];
-
-      if (incomingFloodSettingValue != null) {
-        this.setFloodSetting(incomingFloodSetting, incomingFloodSettingValue);
-      }
-    });
+    Object.assign(this.floodSettings, settings);
 
     this.emit('SETTINGS_FETCH_REQUEST_SUCCESS');
     this.processSettingsState();
@@ -208,22 +159,34 @@ class SettingsStoreClass extends BaseStore {
     }
   }
 
-  saveFloodSettings(settings: SettingUpdatesFlood, options: SettingsSaveOptions = {}) {
-    SettingsActions.saveSettings(settings, options);
-    settings.forEach(<P extends FloodSetting, V extends FloodSettings[P]>({id, data}: {id: P; data: V}) => {
-      this.floodSettings[id] = data;
-    });
+  saveFloodSettings(settings: Partial<FloodSettings>, options: SettingsSaveOptions = {}) {
+    if (Object.keys(settings).length > 0) {
+      SettingsActions.saveSettings(settings, options);
+    } else {
+      AppDispatcher.dispatchServerAction({
+        type: 'SETTINGS_SAVE_REQUEST_SUCCESS',
+        options,
+      });
+    }
+    Object.assign(this.floodSettings, settings);
     this.emit('SETTINGS_CHANGE');
   }
 
   saveClientSettings(settings: Partial<ClientSettings>, options: SettingsSaveOptions = {}) {
-    ClientActions.saveSettings(settings, options);
+    if (Object.keys(settings).length > 0) {
+      ClientActions.saveSettings(settings, options);
+    } else {
+      AppDispatcher.dispatchServerAction({
+        type: 'CLIENT_SETTINGS_SAVE_SUCCESS',
+        options,
+      });
+    }
     Object.assign(this.clientSettings, settings);
     this.emit('SETTINGS_CHANGE');
   }
 
   setFloodSetting = <T extends FloodSetting>(property: T, data: FloodSettings[T]) => {
-    this.saveFloodSettings([{id: property, data}]);
+    this.saveFloodSettings({[property]: data});
   };
 
   setClientSetting = <T extends ClientSetting>(property: T, data: ClientSettings[T]) => {

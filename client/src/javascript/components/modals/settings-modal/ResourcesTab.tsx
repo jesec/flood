@@ -6,34 +6,28 @@ import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import SettingsTab from './SettingsTab';
 
 export default class ResourcesTab extends SettingsTab {
-  state = {};
-
-  handleFormChange = ({event}) => {
-    this.handleClientSettingFieldChange(event.target.name, event);
-  };
-
   render() {
     return (
-      <Form onChange={this.handleFormChange}>
+      <Form onChange={({event}) => this.handleClientSettingChange(event)}>
         <ModalFormSectionHeader>
           <FormattedMessage id="settings.resources.disk.heading" />
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
-            defaultValue={this.getFieldValue('directoryDefault')}
+            defaultValue={this.getChangedClientSetting('directoryDefault')}
             id="directoryDefault"
             label={<FormattedMessage id="settings.resources.disk.download.location.label" />}
           />
         </FormRow>
         <FormRow>
           <Textbox
-            defaultValue={this.getFieldValue('networkMaxOpenFiles')}
+            defaultValue={this.getChangedClientSetting('networkMaxOpenFiles')}
             id="networkMaxOpenFiles"
             label={<FormattedMessage id="settings.resources.max.open.files" />}
             width="one-half"
           />
           <Checkbox
-            checked={this.getFieldValue('piecesHashOnCompletion') === '1'}
+            checked={this.getChangedClientSetting('piecesHashOnCompletion')}
             grow={false}
             id="piecesHashOnCompletion"
             labelOffset
@@ -46,7 +40,7 @@ export default class ResourcesTab extends SettingsTab {
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
-            defaultValue={this.getFieldValue('piecesMemoryMax')}
+            defaultValue={this.getChangedClientSetting('piecesMemoryMax')}
             id="piecesMemoryMax"
             label={
               <div>
