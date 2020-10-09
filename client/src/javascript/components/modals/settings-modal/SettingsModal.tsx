@@ -1,5 +1,8 @@
-import {injectIntl} from 'react-intl';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
+
+import type {ClientSettings} from '@shared/types/ClientSettings';
+import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import AboutTab from './AboutTab';
 import AuthTab from './AuthTab';
@@ -13,10 +16,19 @@ import SettingsStore from '../../../stores/SettingsStore';
 import UITab from './UITab';
 import DiskUsageTab from './DiskUsageTab';
 
-class SettingsModal extends React.Component {
-  modalBodyRef = null;
+interface SettingsModalProps extends WrappedComponentProps {
+  clientSettings?: ClientSettings | null;
+  floodSettings?: FloodSettings | null;
+}
 
-  constructor(props) {
+interface SettingsModalStates extends Record<string, unknown> {
+  isSavingSettings: boolean;
+  changedClientSettings: Partial<ClientSettings>;
+  changedFloodSettings: Partial<FloodSettings>;
+}
+
+class SettingsModal extends React.Component<SettingsModalProps, SettingsModalStates> {
+  constructor(props: SettingsModalProps) {
     super(props);
     this.state = {
       isSavingSettings: false,
@@ -25,7 +37,7 @@ class SettingsModal extends React.Component {
     };
   }
 
-  getActions() {
+  getActions(): Modal['props']['actions'] {
     return [
       {
         clickHandler: null,
@@ -48,14 +60,9 @@ class SettingsModal extends React.Component {
   }
 
   handleSaveSettingsClick = () => {
-    const floodSettings = Object.keys(this.state.changedFloodSettings).map((settingsKey) => ({
-      id: settingsKey,
-      data: this.state.changedFloodSettings[settingsKey],
-    }));
-
     this.setState({isSavingSettings: true}, () => {
       Promise.all([
-        SettingsStore.saveFloodSettings(floodSettings, {
+        SettingsStore.saveFloodSettings(this.state.changedFloodSettings, {
           dismissModal: true,
           alert: true,
         }),
@@ -69,57 +76,27 @@ class SettingsModal extends React.Component {
     });
   };
 
-  handleFloodSettingsChange = (changedSettings) => {
-    this.setState((state, props) => {
-      const floodSettings = this.mergeObjects(props.floodSettings, changedSettings);
-      const changedFloodSettings = this.mergeObjects(state.changedFloodSettings, changedSettings);
+  handleFloodSettingsChange = (changedSettings: Partial<FloodSettings>) => {
+    this.setState((state) => {
+      const changedFloodSettings = {
+        ...state.changedFloodSettings,
+        ...changedSettings,
+      };
 
-      return {floodSettings, changedFloodSettings};
+      return {changedFloodSettings};
     });
   };
 
-  handleClientSettingsChange = (changedSettings) => {
-    this.setState((state, props) => {
-      const clientSettings = this.mergeObjects(props.clientSettings, changedSettings);
-      const changedClientSettings = this.mergeObjects(state.changedClientSettings, changedSettings);
+  handleClientSettingsChange = (changedSettings: Partial<ClientSettings>) => {
+    this.setState((state) => {
+      const changedClientSettings = {
+        ...state.changedClientSettings,
+        ...changedSettings,
+      };
 
-      return {clientSettings, changedClientSettings};
+      return {changedClientSettings};
     });
   };
-
-  handleModalRefSet = (id, ref) => {
-    if (id === 'modal-body') {
-      this.modalBodyRef = ref;
-    }
-  };
-
-  // TODO: Use lodash or something non-custom for this
-  mergeObjects(objA, objB) {
-    Object.keys(objB).forEach((key) => {
-      if (!Object.prototype.hasOwnProperty.call(objB, key) || objB[key] == null) {
-        return;
-      }
-
-      // Blacklist __proto__ and constructor to avoid prototype pollution
-      if (key === '__proto__' || key === 'constructor') {
-        return;
-      }
-
-      // If it's an object, then recursive merge.
-      if (
-        !Array.isArray(objA[key]) &&
-        !Array.isArray(objB[key]) &&
-        typeof objA[key] === 'object' &&
-        typeof objB[key] === 'object'
-      ) {
-        objA[key] = this.mergeObjects(objA[key], objB[key]);
-      } else {
-        objA[key] = objB[key];
-      }
-    });
-
-    return objA;
-  }
 
   render() {
     const {clientSettings, floodSettings, intl} = this.props;
@@ -130,7 +107,8 @@ class SettingsModal extends React.Component {
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
           onSettingsChange: this.handleFloodSettingsChange,
-          settings: this.mergeObjects(floodSettings, clientSettings),
+          clientSettings,
+          floodSettings,
         },
         label: intl.formatMessage({
           id: 'settings.tabs.bandwidth',
@@ -140,7 +118,8 @@ class SettingsModal extends React.Component {
         content: ConnectivityTab,
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
-          settings: clientSettings,
+          clientSettings,
+          floodSettings,
         },
         label: intl.formatMessage({
           id: 'settings.tabs.connectivity',
@@ -150,7 +129,8 @@ class SettingsModal extends React.Component {
         content: ResourcesTab,
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
-          settings: clientSettings,
+          clientSettings,
+          floodSettings,
         },
         label: intl.formatMessage({
           id: 'settings.tabs.resources',
@@ -166,7 +146,7 @@ class SettingsModal extends React.Component {
               }),
             },
           }
-        : []),
+        : {}),
       ui: {
         content: UITab,
         label: intl.formatMessage({
@@ -174,7 +154,6 @@ class SettingsModal extends React.Component {
         }),
         props: {
           onSettingsChange: this.handleFloodSettingsChange,
-          scrollContainer: this.modalBodyRef,
         },
       },
       diskusage: {
@@ -201,7 +180,6 @@ class SettingsModal extends React.Component {
         heading={this.props.intl.formatMessage({
           id: 'settings.tabs.heading',
         })}
-        onSetRef={this.handleModalRefSet}
         orientation={window.matchMedia('(max-width: 720px)').matches ? 'horizontal' : 'vertical'}
         tabs={tabs}
       />
@@ -209,20 +187,22 @@ class SettingsModal extends React.Component {
   }
 }
 
-const ConnectedSettingsModal = connectStores(injectIntl(SettingsModal), () => {
-  return [
-    {
-      store: SettingsStore,
-      event: 'SETTINGS_CHANGE',
-      getValue: ({store}) => {
-        const storeSettings = store;
-        return {
-          clientSettings: storeSettings.getClientSettings(),
-          floodSettings: storeSettings.getFloodSettings(),
-        };
+const ConnectedSettingsModal = connectStores<Omit<SettingsModalProps, 'intl'>, SettingsModalStates>(
+  injectIntl(SettingsModal),
+  () => {
+    return [
+      {
+        store: SettingsStore,
+        event: 'SETTINGS_CHANGE',
+        getValue: () => {
+          return {
+            clientSettings: SettingsStore.getClientSettings(),
+            floodSettings: SettingsStore.getFloodSettings(),
+          };
+        },
       },
-    },
-  ];
-});
+    ];
+  },
+);
 
 export default ConnectedSettingsModal;

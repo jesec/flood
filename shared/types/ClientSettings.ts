@@ -22,7 +22,7 @@ export interface ClientSettings {
   dhtStats: DHTStats;
   directoryDefault: string;
   networkHttpMaxOpen: number;
-  networkLocalAddress: string;
+  networkLocalAddress: Array<string>;
   networkMaxOpenFiles: number;
   networkPortOpen: boolean;
   networkPortRandom: boolean;

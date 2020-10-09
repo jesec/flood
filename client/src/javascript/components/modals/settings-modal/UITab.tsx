@@ -1,6 +1,8 @@
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
+import type {FloodSettings} from '@shared/types/FloodSettings';
+
 import {Form, FormRow, Select, SelectItem, Radio} from '../../../ui';
 import Languages from '../../../constants/Languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
@@ -10,48 +12,46 @@ import TorrentContextMenuItemsList from './lists/TorrentContextMenuItemsList';
 import TorrentDetailItemsList from './lists/TorrentDetailItemsList';
 
 class UITab extends SettingsTab {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      torrentListViewSize: SettingsStore.getFloodSetting('torrentListViewSize'),
-      selectedLanguage: SettingsStore.getFloodSetting('language'),
-    };
-  }
+  torrentListViewSize = SettingsStore.getFloodSetting('torrentListViewSize');
+  selectedLanguage = SettingsStore.getFloodSetting('language');
 
   getLanguageSelectOptions() {
     return Object.keys(Languages).map((languageID) => {
-      const selectedLanguageDefinition = Languages[languageID];
-
       if (languageID === 'auto') {
         return (
           <SelectItem key={languageID} id={languageID}>
-            {this.props.intl.formatMessage(selectedLanguageDefinition)}
+            {this.props.intl.formatMessage({
+              id: Languages[languageID].id,
+            })}
           </SelectItem>
         );
       }
 
       return (
         <SelectItem key={languageID} id={languageID}>
-          {selectedLanguageDefinition}
+          {Languages[languageID as keyof typeof Languages]}
         </SelectItem>
       );
     });
   }
 
-  handleFormChange = ({event, formData}) => {
-    if (event.target.type === 'radio') {
-      const newState = {torrentListViewSize: formData['ui-torrent-size']};
+  handleFormChange = ({
+    event,
+    formData,
+  }: {
+    event: Event | React.FormEvent<HTMLFormElement>;
+    formData: Record<string, unknown>;
+  }) => {
+    const inputElement = event.target as HTMLInputElement;
 
-      this.props.onSettingsChange(newState);
-      this.setState(newState);
+    if (inputElement.type === 'radio') {
+      this.torrentListViewSize = formData['ui-torrent-size'] as FloodSettings['torrentListViewSize'];
+      this.props.onSettingsChange({torrentListViewSize: this.torrentListViewSize});
     }
 
-    if (event.target.name === 'language') {
-      const {language} = formData;
-
-      this.setState({selectedLanguage: language});
-      this.props.onSettingsChange({language});
+    if (inputElement.name === 'language') {
+      this.selectedLanguage = formData.language as FloodSettings['language'];
+      this.props.onSettingsChange({language: this.selectedLanguage});
     }
   };
 
@@ -63,7 +63,7 @@ class UITab extends SettingsTab {
         </ModalFormSectionHeader>
         <FormRow>
           <Select
-            defaultID={this.state.selectedLanguage}
+            defaultID={this.selectedLanguage}
             id="language"
             label={<FormattedMessage id="settings.ui.language" />}>
             {this.getLanguageSelectOptions()}
@@ -73,15 +73,11 @@ class UITab extends SettingsTab {
           <FormattedMessage id="settings.ui.torrent.list" />
         </ModalFormSectionHeader>
         <FormRow>
-          <Radio
-            checked={this.state.torrentListViewSize === 'expanded'}
-            groupID="ui-torrent-size"
-            id="expanded"
-            width="auto">
+          <Radio checked={this.torrentListViewSize === 'expanded'} groupID="ui-torrent-size" id="expanded" width="auto">
             <FormattedMessage id="settings.ui.torrent.size.expanded" />
           </Radio>
           <Radio
-            checked={this.state.torrentListViewSize === 'condensed'}
+            checked={this.torrentListViewSize === 'condensed'}
             groupID="ui-torrent-size"
             id="condensed"
             width="auto">
@@ -93,7 +89,7 @@ class UITab extends SettingsTab {
         </ModalFormSectionHeader>
         <FormRow>
           <TorrentDetailItemsList
-            torrentListViewSize={this.state.torrentListViewSize}
+            torrentListViewSize={this.torrentListViewSize}
             onSettingsChange={this.props.onSettingsChange}
           />
         </FormRow>

@@ -5,57 +5,63 @@ import {Form, FormRow, Textbox} from '../../../ui';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import SettingsTab from './SettingsTab';
 
-export default class BandwidthTab extends SettingsTab {
-  state = {};
+const processSpeedsForDisplay = (speeds: number[]) => {
+  if (!speeds || speeds.length === 0) {
+    return undefined;
+  }
 
-  handleFormChange = ({event, formData}) => {
-    if (event.target.name === 'dropdownPresetDownload' || event.target.name === 'dropdownPresetUpload') {
+  return speeds.map((speed) => Number(speed) / 1024).join(', ');
+};
+
+const processSpeedsForSave = (speeds = '') => {
+  if (speeds === '') {
+    return [];
+  }
+
+  return speeds
+    .replace(/\s/g, '')
+    .split(',')
+    .map((speed) => Number(speed) * 1024);
+};
+
+export default class BandwidthTab extends SettingsTab {
+  handleFormChange = ({
+    event,
+    formData,
+  }: {
+    event: Event | React.FormEvent<HTMLFormElement>;
+    formData: Record<string, unknown>;
+  }) => {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (inputElement.name === 'dropdownPresetDownload' || inputElement.name === 'dropdownPresetUpload') {
       this.props.onSettingsChange({
         speedLimits: {
-          download: this.processSpeedsForSave(formData.dropdownPresetDownload),
-          upload: this.processSpeedsForSave(formData.dropdownPresetUpload),
+          download: processSpeedsForSave(formData.dropdownPresetDownload as string),
+          upload: processSpeedsForSave(formData.dropdownPresetUpload as string),
         },
       });
 
       return;
     }
 
-    this.handleClientSettingFieldChange(event.target.name, event);
+    this.handleClientSettingChange(event);
   };
 
   getDownloadValue() {
-    if (this.props.settings.speedLimits != null) {
-      return this.processSpeedsForDisplay(this.props.settings.speedLimits.download);
+    if (this.props.floodSettings.speedLimits != null) {
+      return processSpeedsForDisplay(this.props.floodSettings.speedLimits.download);
     }
 
     return 0;
   }
 
   getUploadValue() {
-    if (this.props.settings.speedLimits != null) {
-      return this.processSpeedsForDisplay(this.props.settings.speedLimits.upload);
+    if (this.props.floodSettings.speedLimits != null) {
+      return processSpeedsForDisplay(this.props.floodSettings.speedLimits.upload);
     }
 
     return 0;
-  }
-
-  processSpeedsForDisplay(speeds = []) {
-    if (!speeds || speeds.length === 0) {
-      return;
-    }
-
-    return speeds.map((speed) => Number(speed) / 1024).join(', ');
-  }
-
-  processSpeedsForSave(speeds = '') {
-    if (speeds === '') {
-      return [];
-    }
-
-    return speeds
-      .replace(/\s/g, '')
-      .split(',')
-      .map((speed) => Number(speed) * 1024);
   }
 
   render() {
@@ -80,12 +86,12 @@ export default class BandwidthTab extends SettingsTab {
         </FormRow>
         <FormRow>
           <Textbox
-            defaultValue={this.getFieldValue('throttleGlobalDownMax')}
+            defaultValue={this.getChangedClientSetting('throttleGlobalDownMax')}
             label={<FormattedMessage id="settings.bandwidth.transferrate.global.throttle.download" />}
             id="throttleGlobalDownMax"
           />
           <Textbox
-            defaultValue={this.getFieldValue('throttleGlobalUpMax')}
+            defaultValue={this.getChangedClientSetting('throttleGlobalUpMax')}
             label={<FormattedMessage id="settings.bandwidth.transferrate.global.throttle.upload" />}
             id="throttleGlobalUpMax"
           />
@@ -95,34 +101,34 @@ export default class BandwidthTab extends SettingsTab {
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
-            defaultValue={this.getFieldValue('throttleMaxUploads')}
+            defaultValue={this.getChangedClientSetting('throttleMaxUploads')}
             label={<FormattedMessage id="settings.bandwidth.slots.upload.label" />}
             id="throttleMaxUploads"
           />
           <Textbox
-            defaultValue={this.getFieldValue('throttleMaxUploadsDiv')}
+            defaultValue={this.getChangedClientSetting('throttleMaxUploadsDiv')}
             label={<FormattedMessage id="settings.bandwidth.slots.upload.divider.label" />}
             id="throttleMaxUploadsDiv"
           />
           <Textbox
-            defaultValue={this.getFieldValue('throttleMaxUploadsGlobal')}
+            defaultValue={this.getChangedClientSetting('throttleMaxUploadsGlobal')}
             label={<FormattedMessage id="settings.bandwidth.slots.upload.global.label" />}
             id="throttleMaxUploadsGlobal"
           />
         </FormRow>
         <FormRow>
           <Textbox
-            defaultValue={this.getFieldValue('throttleMaxDownloads')}
+            defaultValue={this.getChangedClientSetting('throttleMaxDownloads')}
             label={<FormattedMessage id="settings.bandwidth.slots.download.label" />}
             id="throttleMaxDownloads"
           />
           <Textbox
-            defaultValue={this.getFieldValue('throttleMaxDownloadsDiv')}
+            defaultValue={this.getChangedClientSetting('throttleMaxDownloadsDiv')}
             label={<FormattedMessage id="settings.bandwidth.slots.download.divider.label" />}
             id="throttleMaxDownloadsDiv"
           />
           <Textbox
-            defaultValue={this.getFieldValue('throttleMaxDownloadsGlobal')}
+            defaultValue={this.getChangedClientSetting('throttleMaxDownloadsGlobal')}
             label={<FormattedMessage id="settings.bandwidth.slots.download.global.label" />}
             id="throttleMaxDownloadsGlobal"
           />

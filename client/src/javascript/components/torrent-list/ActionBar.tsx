@@ -2,6 +2,8 @@ import classnames from 'classnames';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
+import type {FloodSettings} from '@shared/types/FloodSettings';
+
 import Action from './Action';
 import Add from '../icons/Add';
 import connectStores from '../../util/connectStores';
@@ -14,8 +16,6 @@ import StopIcon from '../icons/StopIcon';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
-
-import type {FloodSettings} from '../../stores/SettingsStore';
 
 interface ActionBarProps extends WrappedComponentProps {
   sortBy?: FloodSettings['sortTorrents'];

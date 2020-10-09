@@ -322,7 +322,7 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
         ref={(ref) => {
           this.tooltipRef = ref;
         }}
-        width={this.props.count == null || this.props.count.total === 0 ? null : 340}
+        width={this.props.count == null || this.props.count.total === 0 ? undefined : 340}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           tooltip__wrapper">

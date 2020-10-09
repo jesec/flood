@@ -1,4 +1,4 @@
-import {numberTransformer, stringTransformer} from '../../util/rTorrentMethodCallUtil';
+import {numberTransformer, stringTransformer, stringArrayTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const clientSettingMethodCallConfigs = {
   dhtPort: {
@@ -39,7 +39,7 @@ const clientSettingMethodCallConfigs = {
   },
   networkLocalAddress: {
     methodCall: 'network.local_address',
-    transformValue: stringTransformer,
+    transformValue: stringArrayTransformer,
   },
   networkMaxOpenFiles: {
     methodCall: 'network.max_open_files',

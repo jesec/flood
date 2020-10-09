@@ -1,20 +1,34 @@
 import React from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import type {FloodSettings} from '@shared/types/FloodSettings';
+
 import {Checkbox} from '../../../../ui';
 import DiskUsageStore from '../../../../stores/DiskUsageStore';
 import SettingsStore from '../../../../stores/SettingsStore';
-import SortableList from '../../../general/SortableList';
+import SortableList, {ListItem} from '../../../general/SortableList';
 
-class MountPointsList extends React.Component {
-  constructor(props) {
+interface MountPointsListProps {
+  onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
+}
+
+interface MountPointsListStates {
+  diskItems: Array<ListItem>;
+}
+
+class MountPointsList extends React.Component<MountPointsListProps, MountPointsListStates> {
+  constructor(props: MountPointsListProps) {
     super(props);
 
     const mountPoints = SettingsStore.getFloodSetting('mountPoints');
-    const disks = DiskUsageStore.getDiskUsage().reduce((disksByTarget, disk) => {
-      disksByTarget[disk.target] = disk;
-      return disksByTarget;
-    }, {});
+    const disks = Object.assign(
+      {},
+      ...DiskUsageStore.getDiskUsage().map((disk) => {
+        return {
+          [disk.target]: disk,
+        };
+      }),
+    );
 
     // assemble disk items from saved "mountPoints" and list of disks "disks"
     // first targets saved in mountPoints that exist in disks
@@ -39,12 +53,13 @@ class MountPointsList extends React.Component {
     };
   }
 
-  updateSettings = (diskItems) => {
-    const mountPoints = diskItems.filter((item) => item.visible).map((item) => item.id);
-    this.props.onSettingsChange({mountPoints});
+  updateSettings = (diskItems: Array<ListItem>) => {
+    this.props.onSettingsChange({
+      mountPoints: diskItems.filter((item) => item.visible).map((item) => item.id),
+    });
   };
 
-  handleCheckboxValueChange = (id, value) => {
+  handleCheckboxValueChange = (id: string, value: boolean) => {
     const {diskItems} = this.state;
 
     const newItems = diskItems.map((disk) => {
@@ -62,27 +77,23 @@ class MountPointsList extends React.Component {
     // do nothing.
   };
 
-  handleMove = (items) => {
+  handleMove = (items: Array<ListItem>): void => {
     this.setState({diskItems: items});
     this.updateSettings(items);
   };
 
-  renderItem = (item) => {
+  renderItem = (item: ListItem) => {
     const {id, visible} = item;
-    let checkbox = null;
 
-    if (!item.dragIndicator) {
-      checkbox = (
-        <span className="sortable-list__content sortable-list__content--secondary">
-          <Checkbox
-            checked={visible}
-            onChange={(event) => this.handleCheckboxValueChange(id, event.target.checked)}
-            modifier="dark">
-            <FormattedMessage id="settings.diskusage.show" />
-          </Checkbox>
-        </span>
-      );
-    }
+    const checkbox = (
+      <span className="sortable-list__content sortable-list__content--secondary">
+        <Checkbox
+          checked={visible}
+          onChange={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
+          <FormattedMessage id="settings.diskusage.show" />
+        </Checkbox>
+      </span>
+    );
 
     const content = (
       <div className="sortable-list__content sortable-list__content__wrapper">
@@ -93,10 +104,6 @@ class MountPointsList extends React.Component {
       </div>
     );
 
-    if (item.dragIndicator) {
-      return <div className="sortable-list__item">{content}</div>;
-    }
-
     return content;
   };
 
@@ -105,6 +112,7 @@ class MountPointsList extends React.Component {
 
     return (
       <SortableList
+        id="disks"
         className="sortable-list--disks"
         items={diskItems}
         lockedIDs={[]}
