@@ -5,7 +5,6 @@ import {series} from 'async';
 import tar from 'tar-stream';
 
 import ClientRequest from './ClientRequest';
-import {clientSettingsBiMap} from '../../shared/constants/clientSettingsMap';
 import torrentFileUtil from '../util/torrentFileUtil';
 
 const client = {
@@ -87,79 +86,6 @@ const client = {
     }
 
     return selectedFiles;
-  },
-
-  getSettings(user, services, options, callback) {
-    let requestedSettingsKeys = [];
-    const request = new ClientRequest(user, services);
-    const response = {};
-
-    const outboundTransformation = {
-      throttleGlobalDownMax: (apiResponse) => Number(apiResponse) / 1024,
-      throttleGlobalUpMax: (apiResponse) => Number(apiResponse) / 1024,
-      piecesMemoryMax: (apiResponse) => Number(apiResponse) / (1024 * 1024),
-    };
-
-    request.fetchSettings({
-      options,
-      setRequestedKeysArr: (requestedSettingsKeysArr) => {
-        requestedSettingsKeys = requestedSettingsKeysArr;
-      },
-    });
-
-    request.postProcess((data) => {
-      if (!data) {
-        return null;
-      }
-
-      data.forEach((datum, index) => {
-        let value = datum[0];
-        const settingsKey = clientSettingsBiMap[requestedSettingsKeys[index]];
-
-        if (outboundTransformation[settingsKey]) {
-          value = outboundTransformation[settingsKey](value);
-        }
-
-        response[settingsKey] = value;
-      });
-
-      return response;
-    });
-    request.onComplete(callback);
-    request.send();
-  },
-
-  setSettings(user, services, payloads, callback) {
-    const request = new ClientRequest(user, services);
-    if (payloads.length === 0) return callback({});
-
-    const inboundTransformations = new Map();
-    inboundTransformations
-      .set('throttleGlobalDownMax', (userInput) => ({
-        id: userInput.id,
-        data: Number(userInput.data) * 1024,
-      }))
-      .set('throttleGlobalUpMax', (userInput) => ({
-        id: userInput.id,
-        data: Number(userInput.data) * 1024,
-      }))
-      .set('piecesMemoryMax', (userInput) => ({
-        id: userInput.id,
-        data: (Number(userInput.data) * 1024 * 1024).toString(),
-      }));
-
-    const transformedPayloads = payloads.map((payload) => {
-      if (inboundTransformations.has(payload.id)) {
-        const inboundTransformation = inboundTransformations.get(payload.id);
-        return inboundTransformation(payload);
-      }
-
-      return payload;
-    });
-
-    request.setSettings({settings: transformedPayloads});
-    request.onComplete(callback);
-    request.send();
   },
 
   setSpeedLimits(user, services, data, callback) {

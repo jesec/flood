@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {TransferDirection} from '@shared/types/TransferData';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ConfigStore from '../stores/ConfigStore';
 
 import type {ClientSettingsSaveSuccessAction} from '../constants/ServerActions';
-import type {SettingUpdatesClient} from '../stores/SettingsStore';
 
 const baseURI = ConfigStore.getBaseURI();
 
@@ -31,7 +31,7 @@ const ClientActions = {
         },
       ),
 
-  saveSettings: (settings: SettingUpdatesClient, options: ClientSettingsSaveSuccessAction['options']) =>
+  saveSettings: (settings: SetClientSettingsOptions, options: ClientSettingsSaveSuccessAction['options']) =>
     axios
       .patch(`${baseURI}api/client/settings`, settings)
       .then((json) => json.data)

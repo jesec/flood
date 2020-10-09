@@ -1,6 +1,7 @@
 import express from 'express';
 
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ajaxUtil from '../../util/ajaxUtil';
 import client from '../../models/client';
@@ -62,12 +63,39 @@ router.post<unknown, unknown, ClientConnectionSettings>('/connection-test', (req
     });
 });
 
+/**
+ * GET /api/client/settings
+ * @summary Gets settings of torrent client managed by Flood.
+ * @tags Client
+ * @security AuthenticatedUser
+ * @return {ClientSettings} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
 router.get('/settings', (req, res) => {
-  client.getSettings(req.user, req.services, req.query, ajaxUtil.getResponseFn(res));
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .getClientSettings()
+    .then(callback)
+    .catch((e) => callback(null, e));
 });
 
-router.patch('/settings', (req, res) => {
-  client.setSettings(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
+/**
+ * PATCH /api/client/settings
+ * @summary Sets settings of torrent client managed by Flood.
+ * @tags Client
+ * @security AuthenticatedUser
+ * @param {SetClientSettingsOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.patch<unknown, unknown, SetClientSettingsOptions>('/settings', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .setClientSettings(req.body)
+    .then(callback)
+    .catch((e) => callback(null, e));
 });
 
 export default router;
