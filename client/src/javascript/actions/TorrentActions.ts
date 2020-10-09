@@ -1,9 +1,11 @@
 import axios from 'axios';
+import download from 'js-file-download';
 
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   CheckTorrentsOptions,
+  CreateTorrentOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
@@ -69,6 +71,25 @@ const TorrentActions = {
           });
         },
       ),
+
+  createTorrent: (options: CreateTorrentOptions) =>
+    axios.post(`${baseURI}api/torrents/create`, options, {responseType: 'blob'}).then(
+      (response) => {
+        AppDispatcher.dispatchServerAction({
+          type: 'CLIENT_ADD_TORRENT_SUCCESS',
+          data: {
+            count: 1,
+            destination: '',
+          },
+        });
+        download(response.data, (options.name || `${Date.now()}`).concat('.torrent'));
+      },
+      () => {
+        AppDispatcher.dispatchServerAction({
+          type: 'CLIENT_ADD_TORRENT_ERROR',
+        });
+      },
+    ),
 
   deleteTorrents: (options: DeleteTorrentsOptions) =>
     axios

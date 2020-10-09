@@ -8,26 +8,28 @@ import Search from '../../icons/Search';
 import SettingsStore from '../../../stores/SettingsStore';
 import UIStore from '../../../stores/UIStore';
 
-interface TorrentDestinationProps extends WrappedComponentProps {
+interface FilesystemBrowserTextboxProps extends WrappedComponentProps {
   id: string;
   label?: React.ReactNode;
+  selectable?: 'directories' | 'files';
   suggested?: string;
+  basePathToggle?: boolean;
   onChange?: (destination: string) => void;
 }
 
-interface TorrentDestinationStates {
+interface FilesystemBrowserTextboxStates {
   destination: string;
   isDirectoryListOpen: boolean;
 }
 
-class TorrentDestination extends React.Component<TorrentDestinationProps, TorrentDestinationStates> {
+class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxProps, FilesystemBrowserTextboxStates> {
   contextMenuInstanceRef: ContextMenu | null = null;
 
   contextMenuNodeRef: HTMLDivElement | null = null;
 
   textboxRef: HTMLInputElement | null = null;
 
-  constructor(props: TorrentDestinationProps) {
+  constructor(props: FilesystemBrowserTextboxProps) {
     super(props);
 
     const destination: string =
@@ -49,7 +51,7 @@ class TorrentDestination extends React.Component<TorrentDestinationProps, Torren
     this.forceUpdate();
   }
 
-  componentDidUpdate(_prevProps: TorrentDestinationProps, prevState: TorrentDestinationStates) {
+  componentDidUpdate(_prevProps: FilesystemBrowserTextboxProps, prevState: FilesystemBrowserTextboxStates) {
     if (!prevState.isDirectoryListOpen && this.state.isDirectoryListOpen) {
       this.addDestinationOpenEventListeners();
     } else if (prevState.isDirectoryListOpen && !this.state.isDirectoryListOpen) {
@@ -103,11 +105,11 @@ class TorrentDestination extends React.Component<TorrentDestinationProps, Torren
     });
   };
 
-  handleDirectorySelection = (destination: string) => {
+  handleItemSelection = (destination: string, isDirectory = true) => {
     if (this.textboxRef != null) {
       this.textboxRef.value = destination;
     }
-    this.setState({destination});
+    this.setState({destination, isDirectoryListOpen: isDirectory});
   };
 
   handleDocumentClick = () => {
@@ -137,6 +139,14 @@ class TorrentDestination extends React.Component<TorrentDestinationProps, Torren
 
   render() {
     const {destination, isDirectoryListOpen} = this.state;
+
+    const basePathToggle = this.props.basePathToggle ? (
+      <FormRow>
+        <Checkbox grow={false} id="isBasePath">
+          <FormattedMessage id="torrents.destination.base_path" />
+        </Checkbox>
+      </FormRow>
+    ) : null;
 
     return (
       <FormRowGroup>
@@ -179,20 +189,17 @@ class TorrentDestination extends React.Component<TorrentDestinationProps, Torren
                     this.contextMenuInstanceRef.dropdownStyle &&
                     this.contextMenuInstanceRef.dropdownStyle.maxHeight
                   }
-                  onDirectorySelection={this.handleDirectorySelection}
+                  selectable={this.props.selectable}
+                  onItemSelection={this.handleItemSelection}
                 />
               </ContextMenu>
             </Portal>
           </Textbox>
         </FormRow>
-        <FormRow>
-          <Checkbox grow={false} id="isBasePath">
-            <FormattedMessage id="torrents.destination.base_path" />
-          </Checkbox>
-        </FormRow>
+        {basePathToggle}
       </FormRowGroup>
     );
   }
 }
 
-export default injectIntl(TorrentDestination, {forwardRef: true});
+export default injectIntl(FilesystemBrowserTextbox, {forwardRef: true});

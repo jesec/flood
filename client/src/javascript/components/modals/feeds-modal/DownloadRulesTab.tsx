@@ -20,9 +20,9 @@ import Edit from '../../icons/Edit';
 import Checkmark from '../../icons/Checkmark';
 import Close from '../../icons/Close';
 import FeedsStore, {FeedsStoreClass} from '../../../stores/FeedsStore';
+import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import TagSelect from '../../general/form-elements/TagSelect';
-import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import * as validators from '../../../util/validators';
 
 import type {Feeds, Rule, Rules} from '../../../stores/FeedsStore';
@@ -267,12 +267,14 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
         </FormRow>
         <FormRow>
           <FormRowItem>
-            <TorrentDestination
+            <FilesystemBrowserTextbox
               id="destination"
               label={this.props.intl.formatMessage({
                 id: 'feeds.torrent.destination',
               })}
+              selectable="directories"
               suggested={rule.destination}
+              basePathToggle
             />
           </FormRowItem>
           <TagSelect

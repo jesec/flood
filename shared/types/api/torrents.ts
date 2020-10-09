@@ -28,6 +28,28 @@ export interface AddTorrentByFileOptions {
   start: boolean;
 }
 
+// POST /api/torrents/create
+export interface CreateTorrentOptions {
+  // Name of the torrent:
+  // For multi-file torrents, this becomes the base directory
+  // For single-file torrents, this becomes the filename
+  name?: string;
+  // Path to the file of folder
+  sourcePath: string;
+  // Trackers
+  trackers: Array<string>;
+  // Optional comment in torrent file
+  comment?: string;
+  // Optional source entry in infohash
+  infoSource?: string;
+  // Whether the torrent is private
+  isPrivate: boolean;
+  // Whether to start torrent
+  start?: boolean;
+  // Tags, not added to torrent file
+  tags?: Array<string>;
+}
+
 // POST /api/torrents/check-hash
 export interface CheckTorrentsOptions {
   // An array of string representing hashes of torrents to be checked

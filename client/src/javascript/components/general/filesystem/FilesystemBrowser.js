@@ -66,11 +66,9 @@ class FilesystemBrowser extends React.PureComponent {
     return `${directory}${separator}${nextDirectorySegment}`;
   }
 
-  handleDirectoryClick = (directory) => {
-    const nextDirectory = this.getNewDestination(directory);
-
-    if (this.props.onDirectorySelection) {
-      this.props.onDirectorySelection(nextDirectory);
+  handleItemClick = (item, isDirectory = true) => {
+    if (this.props.onItemSelection) {
+      this.props.onItemSelection(this.getNewDestination(item), isDirectory);
     }
   };
 
@@ -87,18 +85,18 @@ class FilesystemBrowser extends React.PureComponent {
 
     directory = directoryArr.join(separator);
 
-    if (this.props.onDirectorySelection) {
-      this.props.onDirectorySelection(directory);
+    if (this.props.onItemSelection) {
+      this.props.onItemSelection(directory);
     }
   };
 
   render() {
-    const {directories, errorResponse, files = [], hasParent} = this.state;
+    const {selectable} = this.props;
+    const {directories, errorResponse, files = []} = this.state;
     let errorMessage = null;
     let listItems = null;
     let parentDirectory = null;
     let shouldShowDirectoryList = true;
-    let shouldForceShowParentDirectory = false;
 
     if (directories == null) {
       shouldShowDirectoryList = false;
@@ -112,10 +110,6 @@ class FilesystemBrowser extends React.PureComponent {
     if (errorResponse && errorResponse.data && errorResponse.data.code && MESSAGES[errorResponse.data.code]) {
       shouldShowDirectoryList = false;
 
-      if (errorResponse.data.code === 'EACCES') {
-        shouldForceShowParentDirectory = true;
-      }
-
       errorMessage = (
         <div className="filesystem__directory-list__item filesystem__directory-list__item--message">
           <em>{this.props.intl.formatMessage(MESSAGES[errorResponse.data.code])}</em>
@@ -123,37 +117,41 @@ class FilesystemBrowser extends React.PureComponent {
       );
     }
 
-    if (hasParent || shouldForceShowParentDirectory) {
-      parentDirectory = (
-        <li
-          className="filesystem__directory-list__item filesystem__directory-list__item--parent"
-          onClick={this.handleParentDirectoryClick}>
-          <ArrowIcon />
-          {this.props.intl.formatMessage({
-            id: 'filesystem.parent.directory',
-          })}
-        </li>
-      );
-    }
+    parentDirectory = (
+      <li
+        className="filesystem__directory-list__item filesystem__directory-list__item--parent"
+        onClick={this.handleParentDirectoryClick}>
+        <ArrowIcon />
+        {this.props.intl.formatMessage({
+          id: 'filesystem.parent.directory',
+        })}
+      </li>
+    );
 
     if (shouldShowDirectoryList) {
       const directoryList = directories.map((directory, index) => (
         <li
-          className="filesystem__directory-list__item
-            filesystem__directory-list__item--directory"
+          className={`${'filesystem__directory-list__item filesystem__directory-list__item--directory'.concat(
+            selectable !== 'files' ? ' filesystem__directory-list__item--selectable' : '',
+          )}`}
           // TODO: Find a better key
           // eslint-disable-next-line react/no-array-index-key
           key={index}
-          onClick={() => this.handleDirectoryClick(directory)}>
+          onClick={selectable !== 'files' ? () => this.handleItemClick(directory) : undefined}>
           <FolderClosedSolid />
           {directory}
         </li>
       ));
 
       const filesList = files.map((file, index) => (
-        // TODO: Find a better key
-        // eslint-disable-next-line react/no-array-index-key
-        <li className="filesystem__directory-list__item filesystem__directory-list__item--file" key={`file.${index}`}>
+        <li
+          className={`${'filesystem__directory-list__item filesystem__directory-list__item--file'.concat(
+            selectable !== 'directories' ? ' filesystem__directory-list__item--selectable' : '',
+          )}`}
+          // TODO: Find a better key
+          // eslint-disable-next-line react/no-array-index-key
+          key={`file.${index}`}
+          onClick={selectable !== 'directories' ? () => this.handleItemClick(file, false) : undefined}>
           <File />
           {file}
         </li>
