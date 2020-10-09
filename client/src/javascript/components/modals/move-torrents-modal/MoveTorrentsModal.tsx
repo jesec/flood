@@ -3,11 +3,11 @@ import React from 'react';
 
 import type {MoveTorrentsOptions} from '@shared/types/api/torrents';
 
+import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
 import {Form} from '../../../ui';
 import Modal from '../Modal';
 import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
-import TorrentDestination from '../../general/filesystem/TorrentDestination';
 import TorrentStore from '../../../stores/TorrentStore';
 
 interface MoveTorrentsStates {
@@ -97,7 +97,12 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
           onSubmit={({event: _e, formData}) => {
             return this.handleFormSubmit((formData as unknown) as MoveTorrentsOptions);
           }}>
-          <TorrentDestination id="destination" suggested={this.state.originalSource} />
+          <FilesystemBrowserTextbox
+            id="destination"
+            selectable="directories"
+            suggested={this.state.originalSource}
+            basePathToggle
+          />
           <ModalActions actions={this.getActions()} />
         </Form>
       </div>

@@ -9,25 +9,26 @@ $filesystem--directory-list--parent--border-color: lighten($filesystem--director
     list-style: none;
 
     &__item {
+      opacity: 0.5;
       padding: $spacing--xx-small $spacing--small;
       transition: color 0.25s;
       white-space: nowrap;
 
       &--parent,
-      &--directory {
+      &--selectable {
+        opacity: 1;
         cursor: pointer;
         transition: background $speed--x-fast, color $speed--x-fast;
         user-select: none;
 
         &:hover {
           color: $filesystem--directory-list--foreground--hover;
+          background: $filesystem--directory-list--background--hover;
         }
       }
 
-      &--directory {
-        &:hover {
-          background: $filesystem--directory-list--background--hover;
-        }
+      &--message {
+        opacity: 1;
       }
 
       &--parent {
@@ -43,10 +44,6 @@ $filesystem--directory-list--parent--border-color: lighten($filesystem--director
         &:last-child {
           margin-bottom: 0;
         }
-      }
-
-      &--file {
-        opacity: 0.5;
       }
     }
 

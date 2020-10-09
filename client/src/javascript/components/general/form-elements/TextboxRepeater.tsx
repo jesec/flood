@@ -4,6 +4,18 @@ import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '../../../ui';
 import AddMini from '../../icons/AddMini';
 import RemoveMini from '../../icons/RemoveMini';
 
+export const getTextArray = (formData: Record<string, string | undefined>, id: string) => {
+  return Object.keys(formData).reduce((accumulator: Array<string>, formItemKey: string) => {
+    if (formItemKey.startsWith(id)) {
+      const text = formData[formItemKey];
+      if (text != null) {
+        accumulator.push(text);
+      }
+    }
+    return accumulator;
+  }, []);
+};
+
 interface TextboxRepeaterProps {
   defaultValues?: Array<{id: number; value: string}>;
   id: number | string;

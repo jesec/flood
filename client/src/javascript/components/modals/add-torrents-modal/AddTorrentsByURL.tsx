@@ -4,12 +4,11 @@ import React from 'react';
 import {Form, FormRow} from '../../../ui';
 
 import AddTorrentsActions from './AddTorrentsActions';
-
+import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
 import SettingsStore from '../../../stores/SettingsStore';
 import TagSelect from '../../general/form-elements/TagSelect';
-import TextboxRepeater from '../../general/form-elements/TextboxRepeater';
+import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
-import TorrentDestination from '../../general/filesystem/TorrentDestination';
 
 type AddTorrentsByURLFormData = {
   [urls: string]: string;
@@ -41,24 +40,6 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
     };
   }
 
-  getURLsFromForm() {
-    if (this.formRef == null) {
-      return [];
-    }
-
-    const formData = this.formRef.getFormData() as Partial<AddTorrentsByURLFormData>;
-    return Object.keys(formData).reduce((accumulator: Array<string>, formItemKey: string) => {
-      if (/^urls/.test(formItemKey)) {
-        const url = formData[formItemKey];
-        if (url != null) {
-          accumulator.push(url);
-        }
-      }
-
-      return accumulator;
-    }, []);
-  }
-
   handleAddTorrents = () => {
     if (this.formRef == null) {
       return;
@@ -72,7 +53,7 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
     }
 
     TorrentActions.addTorrentsByUrls({
-      urls: this.getURLsFromForm(),
+      urls: getTextArray(formData, 'urls'),
       destination: formData.destination,
       isBasePath: formData.isBasePath || false,
       start: formData.start || false,
@@ -99,11 +80,13 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
           })}
           defaultValues={this.state.urlTextboxes}
         />
-        <TorrentDestination
+        <FilesystemBrowserTextbox
           id="destination"
           label={this.props.intl.formatMessage({
             id: 'torrents.add.destination.label',
           })}
+          selectable="directories"
+          basePathToggle
         />
         <FormRow>
           <TagSelect

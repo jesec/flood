@@ -264,8 +264,8 @@ declare const styles: {
   readonly 'filesystem__directory-list': string;
   readonly 'filesystem__directory-list__item': string;
   readonly 'filesystem__directory-list__item--parent': string;
-  readonly 'filesystem__directory-list__item--directory': string;
-  readonly 'filesystem__directory-list__item--file': string;
+  readonly 'filesystem__directory-list__item--selectable': string;
+  readonly 'filesystem__directory-list__item--message': string;
   readonly 'floating-action__button': string;
   readonly 'floating-action__button--search': string;
   readonly 'floating-action__group--on-textbox': string;

@@ -1,9 +1,14 @@
+import createTorrent from 'create-torrent';
 import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import sanitize from 'sanitize-filename';
 
 import {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   CheckTorrentsOptions,
+  CreateTorrentOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
@@ -13,8 +18,10 @@ import {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 
+import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ajaxUtil from '../../util/ajaxUtil';
 import client from '../../models/client';
+import {getTempPath} from '../../models/TemporaryStorage';
 import mediainfo from '../../util/mediainfo';
 import settings from '../../models/settings';
 
@@ -72,6 +79,68 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) 
     .catch((err) => {
       callback(null, err);
     });
+});
+
+/**
+ * POST /api/torrents/create
+ * @summary Creates a torrent
+ * @tags Torrents
+ * @security AuthenticatedUser
+ * @param {CreateTorrentOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/x-bittorrent
+ * @return {Error} 500 - failure response - application/json
+ */
+router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) => {
+  const {name, sourcePath, trackers, comment, infoSource, isPrivate} = req.body;
+  const callback = ajaxUtil.getResponseFn(res);
+
+  if (typeof sourcePath !== 'string') {
+    callback(null, accessDeniedError());
+    return;
+  }
+
+  const sanitizedPath = sanitizePath(sourcePath);
+  if (!isAllowedPath(sanitizedPath)) {
+    callback(null, accessDeniedError());
+    return;
+  }
+
+  const torrentFileName = sanitize(name || sanitizedPath.split(path.sep).pop() || `${Date.now()}`).concat('.torrent');
+  const torrentPath = getTempPath(torrentFileName);
+
+  createTorrent(
+    sanitizedPath,
+    {
+      name,
+      comment,
+      createdBy: 'Flood - flood.js.org',
+      private: isPrivate,
+      announceList: [trackers],
+      info: infoSource
+        ? {
+            source: infoSource,
+          }
+        : undefined,
+    },
+    (err, torrent) => {
+      if (err) {
+        callback(null, err);
+        return;
+      }
+
+      fs.writeFile(torrentPath, torrent, (writeErr) => {
+        if (writeErr) {
+          callback(null, writeErr);
+          return;
+        }
+
+        res.attachment(torrentFileName);
+        res.download(torrentPath);
+
+        // TODO: add created torrent.
+      });
+    },
+  );
 });
 
 /**
