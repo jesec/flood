@@ -187,10 +187,17 @@ router.get('/users', (req, res) => {
 });
 
 router.delete('/users/:username', (req, res) => {
-  Users.removeUser(req.params.username, ajaxUtil.getResponseFn(res));
-  if (req.user != null) {
-    services.destroyUserServices(req.user);
-  }
+  const callback = ajaxUtil.getResponseFn(res);
+  Users.removeUser(req.params.username, (id, err) => {
+    if (err || id == null) {
+      callback(null, err || new Error());
+      return;
+    }
+
+    services.destroyUserServices(id);
+
+    callback({usernmae: req.params.username});
+  });
 });
 
 router.patch('/users/:username', (req, res) => {
@@ -212,7 +219,7 @@ router.patch('/users/:username', (req, res) => {
       }
 
       if (user != null) {
-        services.destroyUserServices(user);
+        services.destroyUserServices(user._id);
         services.bootstrapServicesForUser(user);
       }
 

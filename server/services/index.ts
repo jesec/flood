@@ -118,8 +118,7 @@ const createUserServices = (user: UserInDatabase): boolean => {
   });
 };
 
-const destroyUserServices = (user: UserInDatabase) => {
-  const userId = user._id;
+const destroyUserServices = (userId: UserInDatabase['_id']) => {
   Object.keys(serviceInstances).forEach((key) => {
     const serviceMap = key as keyof typeof serviceInstances;
     const userService = serviceInstances[serviceMap][userId];

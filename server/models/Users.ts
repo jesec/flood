@@ -126,7 +126,10 @@ class Users {
     return undefined;
   }
 
-  removeUser(username: Credentials['username'], callback: (data: Credentials | null, error?: Error) => void): void {
+  removeUser(
+    username: Credentials['username'],
+    callback: (userId: UserInDatabase['_id'] | null, error?: Error) => void,
+  ): void {
     this.db.findOne({username}, (findError: Error | null, user: UserInDatabase): void => {
       if (findError) {
         return callback(null, findError);
@@ -137,6 +140,7 @@ class Users {
         return callback(null, new Error('User not found.'));
       }
 
+      const userId = user._id;
       this.db.remove({username}, {}, (removeError) => {
         if (removeError) {
           return callback(null, removeError);
@@ -144,7 +148,7 @@ class Users {
 
         fs.rmdirSync(path.join(config.dbPath, user._id), {recursive: true});
 
-        return callback({username});
+        return callback(userId);
       });
 
       return undefined;
