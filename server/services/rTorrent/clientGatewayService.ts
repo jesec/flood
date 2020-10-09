@@ -3,6 +3,7 @@ import fs from 'fs';
 import geoip from 'geoip-country';
 import {moveSync} from 'fs-extra';
 
+import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {TorrentContentTree} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
@@ -21,6 +22,7 @@ import type {
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
+import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import BaseService from '../BaseService';
@@ -34,6 +36,7 @@ import {
   getTorrentStatusFromProperties,
 } from './util/torrentPropertiesUtil';
 import {
+  clientSettingMethodCallConfigs,
   torrentContentMethodCallConfigs,
   torrentListMethodCallConfigs,
   torrentPeerMethodCallConfigs,
@@ -589,11 +592,91 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     return (
       this.services?.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess)
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((response) => {
           this.emit('PROCESS_TRANSFER_RATE_START');
           return processMethodCallResponse(response, configs);
-        }, this.processClientRequestError) || Promise.reject()
+        }) || Promise.reject()
+    );
+  }
+
+  /**
+   * Gets settings of rTorrent
+   *
+   * @return {Promise<ClientSettings>} - Resolves with ClientSettings or rejects with error.
+   */
+  async getClientSettings(): Promise<ClientSettings> {
+    const configs = clientSettingMethodCallConfigs;
+    const methodCalls: MultiMethodCalls = getMethodCalls(configs).map((methodCall) => {
+      return {
+        methodName: methodCall,
+        params: [],
+      };
+    });
+
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then((response) => {
+          return processMethodCallResponse(response, configs);
+        })
+        .then((processedResponse) => {
+          return {
+            dht: processedResponse.dhtStats.dht !== 'disable',
+            ...processedResponse,
+          };
+        }) || Promise.reject()
+    );
+  }
+
+  /**
+   * Sets settings of rTorrent
+   *
+   * @param {SetClientSettingsOptions} - Settings to be set.
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async setClientSettings(settings: SetClientSettingsOptions) {
+    const configs = clientSettingMethodCallConfigs;
+    const methodCalls = Object.keys(settings).reduce((accumulator: MultiMethodCalls, key) => {
+      const property = key as keyof SetClientSettingsOptions;
+      let methodName = '';
+      let param = settings[property];
+
+      if (param == null) {
+        return accumulator;
+      }
+
+      switch (property) {
+        case 'dht':
+          methodName = 'dht.mode.set';
+          break;
+        case 'throttleGlobalDownMax':
+        case 'throttleGlobalUpMax':
+          methodName = `${configs[property].methodCall}.set`;
+          param = (param as ClientSettings[typeof property]) * 1024;
+          break;
+        case 'piecesMemoryMax':
+          methodName = `${configs[property].methodCall}.set`;
+          param = (param as ClientSettings[typeof property]) * 1024 * 1024;
+          break;
+        default:
+          methodName = `${configs[property].methodCall}.set`;
+          break;
+      }
+
+      accumulator.push({
+        methodName,
+        params: ['', `${param}`],
+      });
+
+      return accumulator;
+    }, []);
+
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
     );
   }
 

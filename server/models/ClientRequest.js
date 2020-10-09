@@ -3,8 +3,6 @@
  */
 import util from 'util';
 
-import {clientSettingsMap} from '../../shared/constants/clientSettingsMap';
-
 const getEnsuredArray = (item) => {
   if (!util.isArray(item)) {
     return [item];
@@ -88,31 +86,6 @@ class ClientRequest {
     const handleError = this.handleError.bind(this);
 
     this.clientRequestManager.methodCall('system.multicall', [this.requests]).then(handleSuccess).catch(handleError);
-  }
-
-  fetchSettings(options) {
-    let {requestedSettings} = options;
-
-    if (requestedSettings == null) {
-      requestedSettings = Object.values(clientSettingsMap);
-    }
-
-    // Ensure client's response gets mapped to the correct requested keys.
-    if (options.setRequestedKeysArr) {
-      options.setRequestedKeysArr(requestedSettings);
-    }
-
-    requestedSettings.forEach((settingsKey) => {
-      this.requests.push(getMethodCall(settingsKey));
-    });
-  }
-
-  setSettings(options) {
-    const settings = getEnsuredArray(options.settings);
-
-    settings.forEach((setting) => {
-      this.requests.push(getMethodCall(`${clientSettingsMap[setting.id]}.set`, ['', setting.data]));
-    });
   }
 
   setTracker(options) {

@@ -53,18 +53,13 @@ class SettingsModal extends React.Component {
       data: this.state.changedFloodSettings[settingsKey],
     }));
 
-    const clientSettings = Object.keys(this.state.changedClientSettings).map((settingsKey) => ({
-      id: settingsKey,
-      data: this.state.changedClientSettings[settingsKey],
-    }));
-
     this.setState({isSavingSettings: true}, () => {
       Promise.all([
         SettingsStore.saveFloodSettings(floodSettings, {
           dismissModal: true,
           alert: true,
         }),
-        SettingsStore.saveClientSettings(clientSettings, {
+        SettingsStore.saveClientSettings(this.state.changedClientSettings, {
           dismissModal: true,
           alert: true,
         }),

@@ -1,4 +1,4 @@
-import type {ClientSetting, ClientSettings} from '@shared/constants/clientSettingsMap';
+import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
 
 import AlertStore from './AlertStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -61,7 +61,7 @@ class SettingsStoreClass extends BaseStore {
     floodSettingsFetched: false,
   };
 
-  clientSettings: ClientSettings = {};
+  clientSettings: ClientSettings | null = null;
 
   // Default settings are overridden by settings stored in database.
   floodSettings: FloodSettings = {
@@ -113,11 +113,17 @@ class SettingsStoreClass extends BaseStore {
     mountPoints: [],
   };
 
-  getClientSetting<T extends ClientSetting>(property: T): ClientSettings[T] {
+  getClientSetting<T extends ClientSetting>(property: T): ClientSettings[T] | null {
+    if (this.clientSettings == null) {
+      return null;
+    }
     return this.clientSettings[property];
   }
 
-  getClientSettings(): ClientSettings {
+  getClientSettings(): ClientSettings | null {
+    if (this.clientSettings == null) {
+      return null;
+    }
     return this.clientSettings;
   }
 
@@ -210,19 +216,9 @@ class SettingsStoreClass extends BaseStore {
     this.emit('SETTINGS_CHANGE');
   }
 
-  saveClientSettings(settings: SettingUpdatesClient, options: SettingsSaveOptions = {}) {
+  saveClientSettings(settings: Partial<ClientSettings>, options: SettingsSaveOptions = {}) {
     ClientActions.saveSettings(settings, options);
-    settings.forEach(<P extends ClientSetting, V extends ClientSettings[P]>({id, data}: {id: P; data: V}) => {
-      if (id === 'dht') {
-        // Special case:
-        // DHT mode uses different set and get methods. (rTorrent's problem)
-        // TODO: This is cleaner than previous solution but it is still dirty.
-        // It is totally nonsense that dht.mode.set sets DHT mode but dht.mode doesn't work.
-        this.clientSettings.dhtStats = {dht: data};
-        return;
-      }
-      this.clientSettings[id] = data;
-    });
+    Object.assign(this.clientSettings, settings);
     this.emit('SETTINGS_CHANGE');
   }
 
@@ -231,7 +227,7 @@ class SettingsStoreClass extends BaseStore {
   };
 
   setClientSetting = <T extends ClientSetting>(property: T, data: ClientSettings[T]) => {
-    this.saveClientSettings([{id: property, data}]);
+    this.saveClientSettings({[property]: data});
   };
 }
 

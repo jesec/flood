@@ -1,6 +1,6 @@
 export interface MethodCallConfig {
   readonly methodCall: string;
-  readonly transformValue: (value: unknown) => string | boolean | number | string[];
+  readonly transformValue: (value: unknown) => string | boolean | number | string[] | Record<string, unknown>;
 }
 
 export type MethodCallConfigs = Readonly<{
