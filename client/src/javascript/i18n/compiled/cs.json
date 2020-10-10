@@ -314,7 +314,7 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "Heslo nemůže být prázdné."
     }
   ],
   "auth.error.username.empty": [
@@ -548,7 +548,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Otestovat srovnávací vzor"
     }
   ],
   "feeds.exclude": [
@@ -718,7 +718,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Otestovat srovnávací vzor"
     }
   ],
   "feeds.time.day": [
@@ -862,7 +862,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "Seedování"
     }
   ],
   "filter.status.stopped": [
@@ -1288,7 +1288,7 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "Položky kontextové nabídky"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1312,7 +1312,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "Zobrazit"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1354,7 +1354,7 @@
   "settings.warning.set.tracker": [
     {
       "type": 0,
-      "value": "Replaces main tracker. Ideal for single-tracker private torrents. Not recommended for multi-tracker torrents."
+      "value": "Nahradí hlavní tracker. Ideální pro soukromé torrenty s jediným trackerem. Nedoporučuje se pro torrenty s více trackery."
     }
   ],
   "sidebar.button.feeds": [
@@ -1906,7 +1906,7 @@
   "torrents.list.context.set.tracker": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Nastavit tracker"
     }
   ],
   "torrents.list.context.start": [
@@ -2174,19 +2174,19 @@
   "torrents.set.tracker.button.set": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Nastavit tracker"
     }
   ],
   "torrents.set.tracker.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Vložit tracker"
     }
   ],
   "torrents.set.tracker.heading": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Nastavit tracker"
     }
   ],
   "torrents.sort.title": [
