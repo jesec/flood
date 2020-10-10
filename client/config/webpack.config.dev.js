@@ -79,6 +79,7 @@ module.exports = {
         ],
       },
       {
+        exclude: [/node_modules/],
         test: /\.(ts|js)x?$/,
         use: ['source-map-loader'],
         enforce: 'pre',
