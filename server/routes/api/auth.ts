@@ -1,11 +1,19 @@
 import express from 'express';
-import joi from 'joi';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 
 import type {Response} from 'express';
-import type {AuthRegisterOptions, AuthUpdateUserOptions} from '@shared/types/api/auth';
-import type {Credentials, UserInDatabase} from '@shared/types/Auth';
+import {
+  AuthAuthenticationOptions,
+  AuthAuthenticationResponse,
+  authAuthenticationSchema,
+  AuthRegistrationOptions,
+  authRegistrationSchema,
+  AuthUpdateUserOptions,
+  authUpdateUserSchema,
+  AuthVerificationResponse,
+} from '../../../shared/schema/api/auth';
+import {AccessLevel, Credentials, UserInDatabase} from '../../../shared/schema/Auth';
 
 import ajaxUtil from '../../util/ajaxUtil';
 import config from '../../../config';
@@ -13,20 +21,11 @@ import requireAdmin from '../../middleware/requireAdmin';
 import services from '../../services';
 import Users from '../../models/Users';
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface Request {
-      initialUser?: boolean;
-    }
-  }
-}
-
 const router = express.Router();
 
 const failedLoginResponse = 'Failed login.';
 
-const setAuthToken = (res: Response, username: Credentials['username'], isAdmin: Credentials['isAdmin']): void => {
+const getAuthToken = (username: string, res?: Response): string => {
   const expirationSeconds = 60 * 60 * 24 * 7; // one week
   const cookieExpiration = Date.now() + expirationSeconds * 1000;
 
@@ -35,53 +34,74 @@ const setAuthToken = (res: Response, username: Credentials['username'], isAdmin:
     expiresIn: expirationSeconds,
   });
 
-  res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true, sameSite: 'strict'});
+  if (res != null) {
+    res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true, sameSite: 'strict'});
+  }
 
-  res.json({
+  return token;
+};
+
+const sendAuthenticationResponse = (
+  res: Response,
+  credentials: Required<Pick<Credentials, 'username' | 'level'>>,
+): void => {
+  const {username, level} = credentials;
+  const token = getAuthToken(username, res);
+
+  const response: AuthAuthenticationResponse = {
     success: true,
     token: `JWT ${token}`,
     username,
-    isAdmin,
+    level,
+  };
+
+  res.json(response);
+};
+
+const validationError = (res: Response, err: Error) => {
+  res.status(422).json({
+    message: 'Validation error.',
+    error: err,
   });
 };
 
-const authValidation = joi.object().keys({
-  username: joi.string(),
-  password: joi.string(),
-  host: joi.string().allow(null),
-  port: joi.number().allow(null),
-  socketPath: joi.string().allow(null),
-  isAdmin: joi.bool(),
-});
-
-router.use('/', (req, res, next) => {
-  const validation = authValidation.validate(req.body);
-
-  if (!validation.error) {
-    next();
-  } else {
-    res.status(422).json({
-      message: 'Validation error.',
-      error: validation.error,
-    });
-  }
-});
-
 router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
 
-router.post('/authenticate', (req, res) => {
+/**
+ * POST /api/auth/authenticate
+ * @summary Authenticates a user
+ * @tags Auth
+ * @security None
+ * @param {AuthAuthenticationOptions} request.body.required - options - application/json
+ * @return {object} 422 - request validation error - application/json
+ * @return {object} 401 - incorrect username or password - application/json
+ * @return {AuthAuthenticationResponse} 200 - success response - application/json
+ */
+router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', (req, res) => {
   if (config.disableUsersAndAuth) {
-    setAuthToken(res, Users.getConfigUser()._id, true);
+    sendAuthenticationResponse(res, Users.getConfigUser());
     return;
   }
-  const credentials = {
-    password: req.body.password,
-    username: req.body.username,
-  };
 
-  Users.comparePassword(credentials, (isMatch, isAdmin, err) => {
-    if (isMatch === true && err == null) {
-      setAuthToken(res, credentials.username, isAdmin);
+  const parsedResult = authAuthenticationSchema.safeParse(req.body);
+
+  if (!parsedResult.success) {
+    validationError(res, parsedResult.error);
+    return;
+  }
+
+  const credentials = parsedResult.data;
+
+  Users.comparePassword(credentials, (isMatch, level, err) => {
+    if (err) {
+      return;
+    }
+
+    if (isMatch === true && level != null) {
+      sendAuthenticationResponse(res, {
+        ...credentials,
+        level,
+      });
       return;
     }
 
@@ -112,69 +132,120 @@ router.use('/register', (req, res, next) => {
   });
 });
 
-router.post<unknown, unknown, AuthRegisterOptions, {cookie: string}>('/register', (req, res) => {
+/**
+ * POST /api/auth/register
+ * @summary Registers a user
+ * @tags Auth
+ * @security None - initial request
+ * @security Administrator - subsequent requests
+ * @param {AuthRegistrationOptions} request.body.required - options - application/json
+ * @param {'true' | 'false'} cookie.query - whether to Set-Cookie if succeeded
+ * @return {string} 404 - registration is disabled
+ * @return {string} 403 - user is not authorized to create user
+ * @return {object} 422 - request validation error - application/json
+ * @return {{username: string}} 200 - success response if cookie=false - application/json
+ * @return {AuthAuthenticationResponse} 200 - success response - application/json
+ */
+router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/register', (req, res) => {
   // No user can be registered when disableUsersAndAuth is true
   if (config.disableUsersAndAuth) {
     // Return 404
     res.status(404).send('Not found');
     return;
   }
+
+  const parsedResult = authRegistrationSchema.safeParse(req.body);
+
+  if (!parsedResult.success) {
+    validationError(res, parsedResult.error);
+    return;
+  }
+
+  const credentials = parsedResult.data;
+
   // Attempt to save the user
-  Users.createUser(
-    {
-      username: req.body.username,
-      password: req.body.password,
-      host: req.body.host,
-      port: req.body.port,
-      socketPath: req.body.socketPath,
-      isAdmin: req.body.isAdmin === true,
-    },
-    (createUserResponse, createUserError) => {
-      if (createUserError) {
-        ajaxUtil.getResponseFn(res)(createUserResponse, createUserError);
-        return;
-      }
+  Users.createUser(credentials, (createUserResponse, createUserError) => {
+    if (createUserError) {
+      ajaxUtil.getResponseFn(res)(createUserResponse, createUserError);
+      return;
+    }
 
-      if (req.query.cookie === 'false') {
-        ajaxUtil.getResponseFn(res)(createUserResponse);
-        return;
-      }
+    if (req.query.cookie === 'false') {
+      ajaxUtil.getResponseFn(res)(createUserResponse);
+      return;
+    }
 
-      setAuthToken(res, req.body.username, true);
-    },
-  );
+    sendAuthenticationResponse(res, credentials);
+  });
 });
 
 // Allow unauthenticated verification if no users are currently registered.
 router.use('/verify', (req, res, next) => {
+  // Unconditionally provide a token if auth is disabled
   if (config.disableUsersAndAuth) {
-    setAuthToken(res, Users.getConfigUser()._id, true);
+    const {username, level} = Users.getConfigUser();
+    const token = getAuthToken(username, res);
+
+    const response: AuthVerificationResponse = {
+      initialUser: false,
+      username,
+      level,
+      token: `JWT ${token}`,
+    };
+
+    res.json(response);
     return;
   }
+
   Users.initialUserGate({
     handleInitialUser: () => {
-      req.initialUser = true;
-      next();
+      const response: AuthVerificationResponse = {
+        initialUser: true,
+      };
+      res.json(response);
     },
     handleSubsequentUser: () => {
-      req.initialUser = false;
       passport.authenticate('jwt', {session: false})(req, res, next);
     },
   });
 });
 
+/**
+ * GET /api/auth/verify
+ * @summary Verifies the connectivity and validity of session
+ * @tags Auth
+ * @security User
+ * @return {string} 401 - not authenticated or token expired
+ * @return {string} 500 - authenticated succeeded but user is unattached (this should NOT happen)
+ * @return {AuthVerificationResponse} 200 - success response - application/json
+ */
 router.get('/verify', (req, res) => {
-  res.json({
-    initialUser: req.initialUser,
-    username: req.user && req.user.username,
-    isAdmin: req.user && req.user.isAdmin,
-  });
+  if (req.user == null) {
+    res.status(500).send('Unattached user.');
+    return;
+  }
+
+  const response: AuthVerificationResponse = {
+    initialUser: false,
+    username: req.user.username,
+    level: req.user.level,
+  };
+
+  res.json(response);
 });
 
 // All subsequent routes are protected.
 router.use('/', passport.authenticate('jwt', {session: false}));
 
-router.get('/logout', (req, res) => {
+/**
+ * GET /api/auth/logout
+ * @summary Clears the session cookie
+ * @tags Auth
+ * @security User
+ * @return {string} 401 - not authenticated or token expired
+ * @return {} 200 - success response
+ */
+router.get('/logout', (_req, res) => {
   res.clearCookie('jwt').send();
 });
 
@@ -186,18 +257,37 @@ router.use('/users', (req, res, next) => {
     return;
   }
 
-  if (req.user && req.user.isAdmin) {
+  if (req.user && req.user.level === AccessLevel.ADMINISTRATOR) {
     next();
     return;
   }
 
-  res.status(401).send('Not authorized');
+  res.status(403).send('Forbidden');
 });
 
-router.get('/users', (req, res) => {
+/**
+ * GET /api/auth/users
+ * @summary Lists all users
+ * @tags Auth
+ * @security Administrator
+ * @return {string} 401 - not authenticated or token expired
+ * @return {string} 403 - user is not authorized to list users
+ * @return {Array<UserInDatabase>} 200 - success response - application/json
+ */
+router.get('/users', (_req, res) => {
   Users.listUsers(ajaxUtil.getResponseFn(res));
 });
 
+/**
+ * DELETE /api/auth/users/{username}
+ * @summary Deletes a user
+ * @tags Auth
+ * @security Administrator
+ * @param {string} username.path - username of the user to be deleted
+ * @return {string} 401 - not authenticated or token expired
+ * @return {string} 403 - user is not authorized to delete user
+ * @return {{username: string}} 200 - success response - application/json
+ */
 router.delete('/users/:username', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
   Users.removeUser(req.params.username, (id, err) => {
@@ -208,23 +298,36 @@ router.delete('/users/:username', (req, res) => {
 
     services.destroyUserServices(id);
 
-    callback({usernmae: req.params.username});
+    callback({username: req.params.username});
   });
 });
 
+/**
+ * PATCH /api/auth/users/{username}
+ * @summary Updates a user
+ * @tags Auth
+ * @security Administrator
+ * @param {string} username.path - username of the user to be updated
+ * @param {AuthUpdateUserOptions} request.body.required - options - application/json
+ * @return {string} 401 - not authenticated or token expired
+ * @return {string} 403 - user is not authorized to update user
+ * @return {object} 422 - request validation error - application/json
+ * @return {} 200 - success response
+ */
 router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions>('/users/:username', (req, res) => {
   const {username} = req.params;
-  const userPatch = req.body;
 
-  if (!userPatch.socketPath) {
-    userPatch.socketPath = null;
-  } else {
-    userPatch.host = null;
-    userPatch.port = null;
+  const parsedResult = authUpdateUserSchema.safeParse(req.body);
+
+  if (!parsedResult.success) {
+    validationError(res, parsedResult.error);
+    return;
   }
 
-  Users.updateUser(username, userPatch, () => {
-    Users.lookupUser({username}, (err, user) => {
+  const patch = parsedResult.data;
+
+  Users.updateUser(username, patch, () => {
+    Users.lookupUser(username, (err, user) => {
       if (err) {
         res.status(500).json({error: err});
         return;

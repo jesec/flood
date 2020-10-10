@@ -7,7 +7,7 @@ import morgan from 'morgan';
 import passport from 'passport';
 import path from 'path';
 
-import type {UserInDatabase} from '@shared/types/Auth';
+import type {UserInDatabase} from '@shared/schema/Auth';
 
 import apiRoutes from './routes/api';
 import passportConfig from './config/passport';

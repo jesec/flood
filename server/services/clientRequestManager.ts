@@ -52,11 +52,19 @@ class ClientRequestManager extends BaseService {
   }
 
   sendMethodCall(methodName: string, parameters: MethodCallParameters) {
-    const connectionMethod = {
-      host: this.user.host,
-      port: this.user.port,
-      socketPath: this.user.socketPath,
-    };
+    if (this.user.client.client !== 'rTorrent') {
+      return Promise.reject();
+    }
+
+    const connectionMethod =
+      this.user.client.type === 'socket'
+        ? {
+            socketPath: this.user.client.socket,
+          }
+        : {
+            host: this.user.client.host,
+            port: this.user.client.port,
+          };
 
     return scgiUtil.methodCall(connectionMethod, methodName, parameters).then(
       (response) => {

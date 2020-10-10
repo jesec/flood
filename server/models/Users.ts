@@ -4,7 +4,9 @@ import Datastore from 'nedb';
 import fs from 'fs';
 import path from 'path';
 
-import type {Credentials, UserInDatabase} from '@shared/types/Auth';
+import {AccessLevel} from '../../shared/schema/Auth';
+
+import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
 
 import config from '../../config';
 import services from '../services';
@@ -14,11 +16,9 @@ class Users {
   configUser: UserInDatabase = {
     _id: '_config',
     username: '_config',
-    host: config.configUser.socket ? null : config.configUser.host,
-    port: config.configUser.socket ? null : config.configUser.port,
-    socketPath: config.configUser.socket ? config.configUser.socketPath : null,
     password: '',
-    isAdmin: true,
+    client: config.configUser,
+    level: AccessLevel.ADMINISTRATOR,
   };
 
   static loadDatabase(): Datastore {
@@ -46,28 +46,28 @@ class Users {
   }
 
   comparePassword(
-    credentials: Credentials,
-    callback: (isMatch: boolean, isAdmin: Credentials['isAdmin'], err?: Error) => void,
+    credentials: Pick<Credentials, 'username' | 'password'>,
+    callback: (isMatch: boolean, level: Credentials['level'] | null, err?: Error) => void,
   ) {
     this.db.findOne({username: credentials.username}, (err: Error | null, user: UserInDatabase): void => {
       if (err) {
-        return callback(false, false, err);
+        return callback(false, null, err);
       }
 
       // Wrong data provided
       if (credentials == null || credentials.password == null) {
-        return callback(false, false, new Error());
+        return callback(false, null, new Error());
       }
 
       // Username not found.
       if (user == null) {
-        return callback(false, false, user);
+        return callback(false, null, user);
       }
 
       argon2
         .verify({pass: credentials.password, encoded: user.password})
-        .then(() => callback(true, user.isAdmin))
-        .catch((e) => callback(false, false, e));
+        .then(() => callback(true, user.level))
+        .catch((e) => callback(false, null, e));
 
       return undefined;
     });
@@ -75,49 +75,33 @@ class Users {
 
   createUser(
     credentials: Credentials,
-    callback: (data: {username: Credentials['username']} | null, error?: Error) => void,
+    callback: (data: {username: Required<Credentials['username']>} | null, error?: Error) => void,
   ): void {
-    const {password, username, host, port, socketPath, isAdmin} = credentials;
-
     if (this.db == null) {
       return callback(null, new Error('Users database is not ready.'));
     }
 
-    if (username === '' || username == null) {
-      return callback(null, new Error('Username cannot be empty.'));
-    }
-
-    if (password == null) {
-      return callback(null, new Error('Password cannot be empty'));
-    }
-
-    if ((host == null || Number(port) == null) && socketPath == null) {
-      return callback(null, new Error('Connection settings cannot be empty'));
-    }
-
     argon2
-      .hash({pass: password, salt: crypto.randomBytes(16).toString('hex')})
+      .hash({pass: credentials.password, salt: crypto.randomBytes(16).toString('hex')})
       .then((hash) => {
-        const userEntry: Required<Credentials> = {
-          username,
-          password: hash.encoded,
-          host: host || null,
-          port: Number(port) || null,
-          socketPath: socketPath || null,
-          isAdmin: isAdmin || false,
-        };
-        this.db.insert(userEntry, (error, user) => {
-          if (error) {
-            if (error.message.includes('violates the unique constraint')) {
-              return callback(null, new Error('Username already exists.'));
+        this.db.insert(
+          {
+            ...credentials,
+            password: hash.encoded,
+          },
+          (error, user) => {
+            if (error) {
+              if (error.message.includes('violates the unique constraint')) {
+                return callback(null, new Error('Username already exists.'));
+              }
+
+              return callback(null, error);
             }
 
-            return callback(null, error);
-          }
-
-          services.bootstrapServicesForUser(user as UserInDatabase);
-          return callback({username});
-        });
+            services.bootstrapServicesForUser(user as UserInDatabase);
+            return callback({username: credentials.username});
+          },
+        );
       })
       .catch((error) => {
         callback(null, error);
@@ -189,12 +173,12 @@ class Users {
     });
   }
 
-  lookupUser(credentials: Credentials, callback: (err: Error | null, user?: UserInDatabase) => void): void {
+  lookupUser(username: string, callback: (err: Error | null, user?: UserInDatabase) => void): void {
     if (config.disableUsersAndAuth) {
       return callback(null, this.getConfigUser());
     }
 
-    this.db.findOne({username: credentials.username}, (err: Error | null, user: UserInDatabase): void => {
+    this.db.findOne({username}, (err: Error | null, user: UserInDatabase): void => {
       if (err) {
         return callback(err);
       }

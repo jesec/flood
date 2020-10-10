@@ -1,4 +1,4 @@
-import type {UserInDatabase} from '@shared/types/Auth';
+import type {UserInDatabase} from '@shared/schema/Auth';
 
 import ClientGatewayService from './clientGatewayService';
 import ClientRequestManager from './clientRequestManager';

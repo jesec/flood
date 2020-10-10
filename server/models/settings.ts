@@ -2,7 +2,7 @@ import Datastore from 'nedb';
 import noop from 'lodash/noop';
 import path from 'path';
 
-import type {UserInDatabase} from '@shared/types/Auth';
+import type {UserInDatabase} from '@shared/schema/Auth';
 
 import config from '../../config';
 
