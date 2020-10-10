@@ -31,7 +31,9 @@
     "start:development:client": "node client/scripts/start.js",
     "start:development:server": "NODE_ENV=development TS_NODE_PROJECT=server/tsconfig.json ts-node-dev --transpile-only server/bin/start.ts",
     "start:production": "UPDATED_SCRIPT=start npm run deprecated-warning && npm start",
-    "start:watch": "UPDATED_SCRIPT=start:development:client npm run deprecated-warning && npm run start:development:client"
+    "start:watch": "UPDATED_SCRIPT=start:development:client npm run deprecated-warning && npm run start:development:client",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
   },
   "dependencies": {
     "argon2-browser": "^1.15.1",
@@ -58,6 +60,7 @@
     "@types/flux": "^3.1.9",
     "@types/fs-extra": "^9.0.1",
     "@types/http-errors": "^1.8.0",
+    "@types/jest": "^26.0.14",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/morgan": "^1.9.1",
     "@types/nedb": "^1.8.11",
@@ -71,6 +74,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-transition-group": "^4.4.0",
     "@types/spdy": "^3.4.4",
+    "@types/supertest": "^2.0.10",
     "@types/tar-stream": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
@@ -119,6 +123,7 @@
     "glob": "^7.1.6",
     "html-webpack-plugin": "^4.5.0",
     "http-errors": "^1.8.0",
+    "jest": "^26.5.2",
     "joi": "^17.2.1",
     "jsdoc": "^3.6.5",
     "jsonwebtoken": "^8.5.1",
@@ -160,6 +165,7 @@
     "source-map-loader": "^1.1.0",
     "spdy": "^4.0.2",
     "style-loader": "^1.3.0",
+    "supertest": "^5.0.0",
     "tar-stream": "^2.1.4",
     "terser-webpack-plugin": "^4.2.1",
     "ts-node-dev": "^1.0.0-pre.63",

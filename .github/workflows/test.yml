@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  push:
+    branches-ignore:
+      - 'integration/**'
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: [12, 14]
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+
+    - run: npm ci
+    - run: npm run build
+    - run: npm run start -- --help
+    - run: npm test
