@@ -1,4 +1,4 @@
-import type {UserInDatabase} from '@shared/types/Auth';
+import type {UserInDatabase} from '@shared/schema/Auth';
 import type {TransferData, TransferSnapshot} from '@shared/types/TransferData';
 
 import Datastore from 'nedb';

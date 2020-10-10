@@ -1,17 +1,21 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import type {ConnectionSettingsForm, Credentials} from '@shared/types/Auth';
+import {AccessLevel} from '@shared/schema/Auth';
+
+import type {Credentials} from '@shared/schema/Auth';
 
 import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '../../ui';
 import AuthActions from '../../actions/AuthActions';
 import AuthStore from '../../stores/AuthStore';
+import ClientConnectionSettingsForm from '../general/connection-settings/ClientConnectionSettingsForm';
 import connectStores from '../../util/connectStores';
 import history from '../../util/history';
-import RTorrentConnectionTypeSelection from '../general/RTorrentConnectionTypeSelection';
+
+import type {ClientConnectionSettingsFormType} from '../general/connection-settings/ClientConnectionSettingsForm';
 
 type LoginFormData = Pick<Credentials, 'username' | 'password'>;
-type RegisterFormData = Pick<Credentials, 'username' | 'password'> & ConnectionSettingsForm;
+type RegisterFormData = Pick<Credentials, 'username' | 'password'>;
 
 interface AuthFormProps extends WrappedComponentProps {
   mode: 'login' | 'register';
@@ -24,6 +28,7 @@ interface AuthFormStates extends Record<string, unknown> {
 
 class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
   formRef?: Form | null;
+  settingsFormRef: React.RefObject<ClientConnectionSettingsFormType> = React.createRef();
 
   constructor(props: AuthFormProps) {
     super(props);
@@ -92,20 +97,28 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
     } else {
       const config = submission.formData as Partial<RegisterFormData>;
 
-      if (config.username == null || config.username === '' || config.password == null || config.password === '') {
-        this.setState({isSubmitting: false}, () => {
-          // do nothing.
-        });
+      if (
+        config.username == null ||
+        config.username === '' ||
+        config.password == null ||
+        config.password === '' ||
+        this.settingsFormRef.current == null
+      ) {
+        this.setState({isSubmitting: false});
+        return;
+      }
+
+      const connectionSettings = this.settingsFormRef.current.getConnectionSettings();
+      if (connectionSettings == null) {
+        this.setState({isSubmitting: false});
         return;
       }
 
       AuthActions.register({
         username: config.username,
         password: config.password,
-        host: config.rtorrentHost || null,
-        port: config.rtorrentPort || null,
-        socketPath: config.rtorrentSocketPath || null,
-        isAdmin: true,
+        client: connectionSettings,
+        level: AccessLevel.ADMINISTRATOR,
       }).then(() => {
         this.setState({isSubmitting: false}, () => history.replace('overview'));
       });
@@ -149,7 +162,7 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
             </PanelContent>
             {isLoginMode ? null : (
               <PanelContent hasBorder>
-                <RTorrentConnectionTypeSelection />
+                <ClientConnectionSettingsForm ref={this.settingsFormRef} />
               </PanelContent>
             )}
             <PanelFooter hasBorder>

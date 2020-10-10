@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import {moveSync} from 'fs-extra';
 
-import type {Credentials} from '@shared/types/Auth';
+import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TransferSummary} from '@shared/types/TransferData';
 import type {
@@ -597,7 +597,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     ) as TransferSummary;
   }
 
-  testGateway(clientSettings?: Pick<Credentials, 'socketPath' | 'port' | 'host'>) {
+  testGateway(clientSettings?: RTorrentConnectionSettings) {
     if (clientSettings == null) {
       if (this.services != null && this.services.clientRequestManager != null) {
         return this.services.clientRequestManager
@@ -609,11 +609,14 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }
 
     return scgiUtil.methodCall(
-      {
-        socketPath: clientSettings.socketPath,
-        port: clientSettings.port,
-        host: clientSettings.host,
-      },
+      clientSettings.type === 'socket'
+        ? {
+            socketPath: clientSettings.socket,
+          }
+        : {
+            host: clientSettings.host,
+            port: clientSettings.port,
+          },
       'system.methodExist',
       ['system.multicall'],
     );

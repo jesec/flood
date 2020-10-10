@@ -3,18 +3,24 @@ import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FormattedMessage, injectIntl} from 'react-intl';
 import React from 'react';
 
-import type {Credentials, ConnectionSettingsForm} from '@shared/types/Auth';
+import {AccessLevel, Credentials} from '@shared/schema/Auth';
 
 import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '../../../ui';
 import AuthActions from '../../../actions/AuthActions';
 import AuthStore from '../../../stores/AuthStore';
+import ClientConnectionSettingsForm from '../../general/connection-settings/ClientConnectionSettingsForm';
 import Close from '../../icons/Close';
 import connectStores from '../../../util/connectStores';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import RTorrentConnectionTypeSelection from '../../general/RTorrentConnectionTypeSelection';
 import SettingsTab from './SettingsTab';
 
-type AuthTabFormData = Pick<Credentials, 'username' | 'password' | 'isAdmin'> & ConnectionSettingsForm;
+import type {ClientConnectionSettingsFormType} from '../../general/connection-settings/ClientConnectionSettingsForm';
+
+interface AuthTabFormData {
+  username: string;
+  password: string;
+  isAdmin: boolean;
+}
 
 class AuthTab extends SettingsTab {
   state = {
@@ -26,6 +32,8 @@ class AuthTab extends SettingsTab {
   formData?: Partial<AuthTabFormData>;
 
   formRef?: Form | null = null;
+
+  settingsFormRef: React.RefObject<ClientConnectionSettingsFormType> = React.createRef();
 
   componentDidMount() {
     if (!this.props.isAdmin) return;
@@ -86,7 +94,7 @@ class AuthTab extends SettingsTab {
   };
 
   handleFormSubmit = () => {
-    if (this.formData == null) {
+    if (this.formData == null || this.settingsFormRef.current == null) {
       return;
     }
 
@@ -105,13 +113,22 @@ class AuthTab extends SettingsTab {
     } else {
       this.setState({isAddingUser: true});
 
+      const connectionSettings = this.settingsFormRef.current.getConnectionSettings();
+      if (connectionSettings == null) {
+        this.setState({
+          addUserError: this.props.intl.formatMessage({
+            id: 'connection.settings.error.empty',
+          }),
+          isAddingUser: false,
+        });
+        return;
+      }
+
       AuthActions.createUser({
         username: this.formData.username,
         password: this.formData.password,
-        host: this.formData.rtorrentHost || null,
-        port: this.formData.rtorrentPort || null,
-        socketPath: this.formData.rtorrentSocketPath || null,
-        isAdmin: this.formData.isAdmin === true,
+        client: connectionSettings,
+        level: this.formData.isAdmin === true ? AccessLevel.ADMINISTRATOR : AccessLevel.USER,
       })
         .then(AuthActions.fetchUsers, (error) => {
           this.setState({addUserError: error.response.data.message, isAddingUser: false});
@@ -209,7 +226,8 @@ class AuthTab extends SettingsTab {
             <FormattedMessage id="auth.admin" />
           </Checkbox>
         </FormRow>
-        <RTorrentConnectionTypeSelection />
+        <ClientConnectionSettingsForm ref={this.settingsFormRef} />
+        <p />
         <FormRow justify="end">
           <Button isLoading={this.state.isAddingUser} priority="primary" type="submit">
             <FormattedMessage id="button.add" />
@@ -225,11 +243,10 @@ const ConnectedAuthTab = connectStores(injectIntl(AuthTab), () => {
     {
       store: AuthStore,
       event: 'AUTH_LIST_USERS_SUCCESS',
-      getValue: ({store}) => {
-        const storeAuth = store as typeof AuthStore;
+      getValue: () => {
         return {
-          users: storeAuth.getUsers(),
-          isAdmin: storeAuth.isAdmin(),
+          users: AuthStore.getUsers(),
+          isAdmin: AuthStore.isAdmin(),
         };
       },
     },

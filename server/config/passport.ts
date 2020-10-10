@@ -23,7 +23,7 @@ export default (passport: PassportStatic) => {
 
   passport.use(
     new Strategy(options, (jwtPayload, callback) => {
-      Users.lookupUser({username: jwtPayload.username}, (err, user) => {
+      Users.lookupUser(jwtPayload.username, (err, user) => {
         if (err) {
           return callback(err, false);
         }

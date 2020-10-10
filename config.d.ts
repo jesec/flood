@@ -1,15 +1,12 @@
+import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+
 declare const CONFIG: {
   baseURI: string;
   dbCleanInterval: number;
   dbPath: string;
   tempPath: string;
   disableUsersAndAuth: boolean;
-  configUser: {
-    host: string;
-    port: number;
-    socket: boolean;
-    socketPath: string;
-  };
+  configUser: ClientConnectionSettings;
   floodServerHost: string;
   floodServerPort: number;
   floodServerProxy: string;

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import type {ConnectionSettingsForm} from '@shared/types/Auth';
+import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {TransferDirection} from '@shared/types/TransferData';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -78,15 +78,8 @@ const ClientActions = {
         },
       ),
 
-  testClientConnectionSettings: (connectionSettings: ConnectionSettingsForm) => {
-    const requestPayload = {
-      host: connectionSettings.rtorrentHost,
-      port: connectionSettings.rtorrentPort,
-      socketPath: connectionSettings.rtorrentSocketPath,
-    };
-
-    return axios.post(`${baseURI}api/client/connection-test`, requestPayload).then((json) => json.data);
-  },
+  testClientConnectionSettings: (connectionSettings: ClientConnectionSettings) =>
+    axios.post(`${baseURI}api/client/connection-test`, connectionSettings).then((json) => json.data),
 
   testConnection: () =>
     axios

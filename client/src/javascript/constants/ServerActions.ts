@@ -1,5 +1,5 @@
-import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/types/api/auth';
-import type {Credentials} from '@shared/types/Auth';
+import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/schema/api/auth';
+import type {Credentials} from '@shared/schema/Auth';
 import type {ClientSettings} from '@shared/constants/clientSettingsMap';
 import type {NotificationFetchOptions, NotificationState} from '@shared/types/Notification';
 import type {ServerEvents} from '@shared/types/ServerEvents';

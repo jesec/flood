@@ -1,7 +1,7 @@
 import {EventEmitter} from 'events';
 import type TypedEmitter from 'typed-emitter';
 
-import type {UserInDatabase} from '@shared/types/Auth';
+import type {UserInDatabase} from '@shared/schema/Auth';
 
 import type {UserServices} from '.';
 

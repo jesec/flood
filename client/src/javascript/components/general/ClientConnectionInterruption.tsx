@@ -1,16 +1,16 @@
 import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
-import {ConnectionSettingsForm} from '@shared/types/Auth';
-
 import {Button, Form, FormError, FormRow, FormRowItem, Panel, PanelContent, PanelHeader, PanelFooter} from '../../ui';
 import AuthActions from '../../actions/AuthActions';
 import AuthStore from '../../stores/AuthStore';
 import Checkmark from '../icons/Checkmark';
 import ClientActions from '../../actions/ClientActions';
+import ClientConnectionSettingsForm from './connection-settings/ClientConnectionSettingsForm';
 import connectStores from '../../util/connectStores';
 import FloodActions from '../../actions/FloodActions';
-import RTorrentConnectionTypeSelection from './RTorrentConnectionTypeSelection';
+
+import type {ClientConnectionSettingsFormType} from './connection-settings/ClientConnectionSettingsForm';
 
 interface ClientConnectionInterruptionProps {
   isAdmin?: boolean;
@@ -28,6 +28,7 @@ class ClientConnectionInterruption extends React.Component<
   ClientConnectionInterruptionStates
 > {
   formRef?: Form | null;
+  settingsFormRef: React.RefObject<ClientConnectionSettingsFormType> = React.createRef();
 
   constructor(props: ClientConnectionInterruptionProps) {
     super(props);
@@ -47,26 +48,19 @@ class ClientConnectionInterruption extends React.Component<
     }
   };
 
-  handleFormSubmit = ({formData}: {formData: ConnectionSettingsForm}) => {
+  handleFormSubmit = () => {
     const currentUsername = AuthStore.getCurrentUsername();
 
-    if (currentUsername == null) {
+    if (currentUsername == null || this.settingsFormRef.current == null) {
       return;
     }
 
-    if (
-      (formData.connectionType === 'socket' && formData.rtorrentSocketPath == null) ||
-      (formData.connectionType === 'tcp' && (formData.rtorrentHost == null || formData.rtorrentPort == null))
-    ) {
+    const connectionSettings = this.settingsFormRef.current.getConnectionSettings();
+    if (connectionSettings == null) {
       return;
     }
 
-    AuthActions.updateUser(
-      currentUsername,
-      formData.connectionType === 'socket'
-        ? {socketPath: formData.rtorrentSocketPath as string}
-        : {host: formData.rtorrentHost as string, port: Number(formData.rtorrentPort)},
-    )
+    AuthActions.updateUser(currentUsername, {client: connectionSettings})
       .then(() => {
         FloodActions.restartActivityStream();
       })
@@ -76,15 +70,19 @@ class ClientConnectionInterruption extends React.Component<
   };
 
   handleTestButtonClick = () => {
-    if (this.state.isTestingConnection || this.formRef == null) return;
-    const formData = this.formRef.getFormData() as ConnectionSettingsForm;
+    if (this.state.isTestingConnection || this.formRef == null || this.settingsFormRef.current == null) return;
+
+    const connectionSettings = this.settingsFormRef.current.getConnectionSettings();
+    if (connectionSettings == null) {
+      return;
+    }
 
     this.setState(
       {
         isTestingConnection: true,
       },
       () => {
-        ClientActions.testClientConnectionSettings(formData)
+        ClientActions.testClientConnectionSettings(connectionSettings)
           .then(() => {
             this.setState({
               hasTestedConnection: true,
@@ -169,7 +167,7 @@ class ClientConnectionInterruption extends React.Component<
               <FormattedMessage id="connection-interruption.verify-settings-prompt" />
             </p>
             {this.renderFormError()}
-            <RTorrentConnectionTypeSelection />
+            <ClientConnectionSettingsForm ref={this.settingsFormRef} />
           </PanelContent>
           <PanelFooter hasBorder>
             <FormRow justify="end">
@@ -193,11 +191,10 @@ const ConnectedClientConnectionInterruption = connectStores(ClientConnectionInte
     {
       store: AuthStore,
       event: ['AUTH_LOGIN_SUCCESS', 'AUTH_REGISTER_SUCCESS', 'AUTH_VERIFY_SUCCESS', 'AUTH_VERIFY_ERROR'],
-      getValue: ({store}) => {
-        const storeAuth = store as typeof AuthStore;
+      getValue: () => {
         return {
-          isAdmin: storeAuth.isAdmin(),
-          isInitialUser: storeAuth.getIsInitialUser(),
+          isAdmin: AuthStore.isAdmin(),
+          isInitialUser: AuthStore.getIsInitialUser(),
         };
       },
     },

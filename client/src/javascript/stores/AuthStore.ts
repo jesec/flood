@@ -1,5 +1,7 @@
-import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/types/api/auth';
-import type {Credentials} from '@shared/types/Auth';
+import {AccessLevel} from '@shared/schema/Auth';
+
+import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/schema/api/auth';
+import type {Credentials} from '@shared/schema/Auth';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
@@ -11,7 +13,7 @@ class AuthStoreClass extends BaseStore {
   isAuthenticated = false;
   token: string | null | undefined = null;
   users: Array<Credentials> = [];
-  optimisticUsers: Array<Credentials> = [];
+  optimisticUsers: Array<{username: string}> = [];
   currentUser: {
     isAdmin: boolean;
     isInitialUser: boolean;
@@ -60,8 +62,8 @@ class AuthStoreClass extends BaseStore {
     this.emit('AUTH_DELETE_USER_ERROR', username);
   }
 
-  handleDeleteUserSuccess(credentials: Credentials): void {
-    this.emit('AUTH_DELETE_USER_SUCCESS', credentials.username);
+  handleDeleteUserSuccess({username}: {username: Credentials['username']}): void {
+    this.emit('AUTH_DELETE_USER_SUCCESS', username);
   }
 
   handleListUsersSuccess(nextUserList: Array<Credentials>): void {
@@ -74,7 +76,7 @@ class AuthStoreClass extends BaseStore {
 
   handleLoginSuccess(response: AuthAuthenticationResponse): void {
     this.currentUser.username = response.username;
-    this.currentUser.isAdmin = response.isAdmin;
+    this.currentUser.isAdmin = response.level === AccessLevel.ADMINISTRATOR;
     this.currentUser.isInitialUser = false;
     this.token = response.token;
     this.isAuthenticating = true;
@@ -92,7 +94,7 @@ class AuthStoreClass extends BaseStore {
 
   handleRegisterSuccess(response: AuthAuthenticationResponse): void {
     this.currentUser.username = response.username;
-    this.currentUser.isAdmin = response.isAdmin;
+    this.currentUser.isAdmin = response.level === AccessLevel.ADMINISTRATOR;
     this.currentUser.isInitialUser = false;
     this.emit('AUTH_REGISTER_SUCCESS', response);
     FloodActions.restartActivityStream();
@@ -103,16 +105,19 @@ class AuthStoreClass extends BaseStore {
   }
 
   handleAuthVerificationSuccess(response: AuthVerificationResponse): void {
-    this.currentUser = {
-      username: response.username,
-      isAdmin: response.isAdmin,
-      isInitialUser: response.initialUser,
-    };
+    if (response.initialUser === true) {
+      this.currentUser.isInitialUser = response.initialUser;
+    } else {
+      this.currentUser = {
+        username: response.username,
+        isAdmin: response.level === AccessLevel.ADMINISTRATOR,
+        isInitialUser: response.initialUser,
+      };
 
-    if (response.token != null) {
-      // Auth is disabled if a token is sent on verification
-      ConfigStore.setDisableAuth(true);
-      this.currentUser.isInitialUser = false;
+      if (response.token != null) {
+        // Auth is disabled if a token is sent on verification
+        ConfigStore.setDisableAuth(true);
+      }
     }
 
     this.isAuthenticating = true;

@@ -154,12 +154,21 @@ const CONFIG = {
   dbPath: path.resolve(path.join(argv.rundir, 'db')),
   tempPath: path.resolve(path.join(argv.rundir, 'temp')),
   disableUsersAndAuth: argv.noauth,
-  configUser: {
-    host: argv.rthost || 'localhost',
-    port: argv.rtport || 5000,
-    socket: argv.rtsocket != null,
-    socketPath: argv.rtsocket || '/data/rtorrent.sock',
-  },
+  configUser:
+    argv.rtsocket != null
+      ? {
+          client: 'rTorrent',
+          type: 'socket',
+          version: 1,
+          socket: argv.rtsocket || '/data/rtorrent.sock',
+        }
+      : {
+          client: 'rTorrent',
+          type: 'tcp',
+          version: 1,
+          host: argv.rthost || 'localhost',
+          port: argv.rtport || 5000,
+        },
   floodServerHost: argv.host,
   floodServerPort: argv.port,
   floodServerProxy: argv.proxy,

@@ -2,11 +2,11 @@ import axios from 'axios';
 
 import type {
   AuthAuthenticationOptions,
-  AuthRegisterOptions,
+  AuthRegistrationOptions,
   AuthUpdateUserOptions,
   AuthVerificationResponse,
-} from '@shared/types/api/auth';
-import type {Credentials} from '@shared/types/Auth';
+} from '@shared/schema/api/auth';
+import type {Credentials} from '@shared/schema/Auth';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ClientActions from './ClientActions';
@@ -57,7 +57,7 @@ const AuthActions = {
         ]);
       }),
 
-  createUser: (options: AuthRegisterOptions) =>
+  createUser: (options: AuthRegistrationOptions) =>
     axios
       .post(`${baseURI}api/auth/register?cookie=false`, options)
       .then((json) => json.data)
@@ -122,7 +122,7 @@ const AuthActions = {
       },
     ),
 
-  register: (options: AuthRegisterOptions) =>
+  register: (options: AuthRegistrationOptions) =>
     axios
       .post(`${baseURI}api/auth/register`, options)
       .then((json) => json.data)

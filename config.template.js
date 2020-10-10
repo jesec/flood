@@ -27,15 +27,11 @@ const CONFIG = {
   disableUsersAndAuth: false,
   // Settings for the no-user configuration.
   configUser: {
-    // How to connect to rTorrent. If this is true, it will connect
-    // to the unix socket defined in socketPath.
-    // Otherwise, it will connect via SCGI with the host and port.
-    socket: true,
-    // Path to the rTorrent unix socket.
-    socketPath: '/path/to/rtorrent.sock',
-    // SCGI host and port to connect to rTorrent.
-    host: 'localhost',
-    port: 5000,
+    // {ClientConnectionSettings}
+    client: 'rTorrent',
+    type: 'socket',
+    version: 1,
+    socket: '/data/rtorrent.sock',
   },
   // The host that Flood should listen for web connections on.
   // If you want to connect to Flood from hosts other that the one it is running
