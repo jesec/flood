@@ -5,7 +5,7 @@ import passport from 'passport';
 
 import type {Response} from 'express';
 import type {AuthRegisterOptions, AuthUpdateUserOptions} from '@shared/types/api/auth';
-import type {Credentials} from '@shared/types/Auth';
+import type {Credentials, UserInDatabase} from '@shared/types/Auth';
 
 import ajaxUtil from '../../util/ajaxUtil';
 import config from '../../../config';
@@ -93,16 +93,21 @@ router.post('/authenticate', (req, res) => {
 });
 
 // Allow unauthenticated registration if no users are currently registered.
-router.use('/register', (req, _res, next) => {
+router.use('/register', (req, res, next) => {
   Users.initialUserGate({
     handleInitialUser: () => {
       next();
     },
     handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (passportReq, passportRes) => {
+      passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
+        if (err || !user) {
+          res.status(401).send('Unauthorized');
+          return;
+        }
+        req.user = user;
         // Only admin users can create users
-        requireAdmin(passportReq, passportRes, next);
-      });
+        requireAdmin(req, res, next);
+      })(req, res, next);
     },
   });
 });
