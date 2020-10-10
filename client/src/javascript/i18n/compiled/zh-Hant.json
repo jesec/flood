@@ -170,7 +170,7 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "密碼不能留空。"
     }
   ],
   "auth.error.username.empty": [
@@ -718,7 +718,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "做種中"
     }
   ],
   "filter.status.stopped": [
@@ -1144,7 +1144,7 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "右鍵選單項目"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1168,7 +1168,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "顯示"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1210,7 +1210,7 @@
   "settings.warning.set.tracker": [
     {
       "type": 0,
-      "value": "Replaces main tracker. Ideal for single-tracker private torrents. Not recommended for multi-tracker torrents."
+      "value": "取代主要Tracker，建議只有單一Tracker的私有種子使用，多Tracker的種子不建議使用。"
     }
   ],
   "sidebar.button.feeds": [
@@ -1718,7 +1718,7 @@
   "torrents.list.context.set.tracker": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "設定Tracker"
     }
   ],
   "torrents.list.context.start": [
@@ -1952,19 +1952,19 @@
   "torrents.set.tracker.button.set": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "設定Tracker"
     }
   ],
   "torrents.set.tracker.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "輸入Tracker地址"
     }
   ],
   "torrents.set.tracker.heading": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "設定Tracker"
     }
   ],
   "torrents.sort.title": [
