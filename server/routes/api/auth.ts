@@ -127,7 +127,7 @@ router.post<unknown, unknown, AuthRegisterOptions, {cookie: string}>('/register'
       host: req.body.host,
       port: req.body.port,
       socketPath: req.body.socketPath,
-      isAdmin: true,
+      isAdmin: req.body.isAdmin === true,
     },
     (createUserResponse, createUserError) => {
       if (createUserError) {
