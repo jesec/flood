@@ -4,23 +4,22 @@ import passport from 'passport';
 import rateLimit from 'express-rate-limit';
 
 import type {Response} from 'express';
-import {
-  AuthAuthenticationOptions,
-  AuthAuthenticationResponse,
-  authAuthenticationSchema,
-  AuthRegistrationOptions,
-  authRegistrationSchema,
-  AuthUpdateUserOptions,
-  authUpdateUserSchema,
-  AuthVerificationResponse,
-} from '../../../shared/schema/api/auth';
-import {AccessLevel, Credentials, UserInDatabase} from '../../../shared/schema/Auth';
 
 import ajaxUtil from '../../util/ajaxUtil';
+import {authAuthenticationSchema, authRegistrationSchema, authUpdateUserSchema} from '../../../shared/schema/api/auth';
 import config from '../../../config';
 import requireAdmin from '../../middleware/requireAdmin';
 import services from '../../services';
 import Users from '../../models/Users';
+
+import type {
+  AuthAuthenticationOptions,
+  AuthAuthenticationResponse,
+  AuthRegistrationOptions,
+  AuthUpdateUserOptions,
+  AuthVerificationResponse,
+} from '../../../shared/schema/api/auth';
+import type {Credentials, UserInDatabase} from '../../../shared/schema/Auth';
 
 const router = express.Router();
 
@@ -36,7 +35,7 @@ router.use(
   }),
 );
 
-const getAuthToken = (username: string, res?: Response): string => {
+export const getAuthToken = (username: string, res?: Response): string => {
   const expirationSeconds = 60 * 60 * 24 * 7; // one week
   const cookieExpiration = Date.now() + expirationSeconds * 1000;
 
@@ -258,20 +257,17 @@ router.get('/logout', (_req, res) => {
   res.clearCookie('jwt').send();
 });
 
-router.use('/users', (req, res, next) => {
+// All subsequent routes need administrator access.
+router.use('/', requireAdmin);
+
+router.use('/users', (_req, res, next) => {
   // No operation on user when disableUsersAndAuth is true
   if (config.disableUsersAndAuth) {
     // Return 404
     res.status(404).send('Not found');
-    return;
   }
 
-  if (req.user && req.user.level === AccessLevel.ADMINISTRATOR) {
-    next();
-    return;
-  }
-
-  res.status(403).send('Forbidden');
+  next();
 });
 
 /**
@@ -335,10 +331,15 @@ router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions
 
   const patch = parsedResult.data;
 
-  Users.updateUser(username, patch, () => {
-    Users.lookupUser(username, (err, user) => {
-      if (err) {
-        res.status(500).json({error: err});
+  Users.updateUser(username, patch, (newUsername, err) => {
+    if (err || newUsername == null) {
+      res.status(500).json({error: err});
+      return;
+    }
+
+    Users.lookupUser(newUsername, (errLookup, user) => {
+      if (errLookup) {
+        res.status(500).json({error: errLookup});
         return;
       }
 

@@ -142,25 +142,20 @@ class Users {
   updateUser(
     username: Credentials['username'],
     userRecordPatch: Partial<Credentials>,
-    callback: (response: UserInDatabase | null, updateUserError?: Error | null) => void,
+    callback: (newUsername: Credentials['username'] | null, updateUserError?: Error | null) => void,
   ): void {
-    this.db.update(
-      {username},
-      {$set: userRecordPatch},
-      undefined,
-      (err: Error | null, numUsersUpdated: number, updatedUser: UserInDatabase): void => {
-        if (err) {
-          return callback(null, err);
-        }
+    this.db.update({username}, {$set: userRecordPatch}, {}, (err: Error | null, numUsersUpdated: number): void => {
+      if (err) {
+        return callback(null, err);
+      }
 
-        // Username not found.
-        if (numUsersUpdated === 0) {
-          return callback(null, err);
-        }
+      // Username not found.
+      if (numUsersUpdated === 0) {
+        return callback(null, err);
+      }
 
-        return callback(updatedUser);
-      },
-    );
+      return callback(userRecordPatch.username || username);
+    });
   }
 
   initialUserGate(handlers: {handleInitialUser: () => void; handleSubsequentUser: () => void}) {
