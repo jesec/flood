@@ -3,3 +3,4 @@
 /dist
 **/*.d.ts
 /docs
+coverage/
