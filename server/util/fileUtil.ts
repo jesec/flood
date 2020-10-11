@@ -10,6 +10,12 @@ export const accessDeniedError = () => {
   return error;
 };
 
+export const fileNotFoundError = () => {
+  const error = new Error() as NodeJS.ErrnoException;
+  error.code = 'ENOENT';
+  return error;
+};
+
 export const isAllowedPath = (resolvedPath: string) => {
   if (config.allowedPaths == null) {
     return true;
@@ -43,7 +49,11 @@ export const createDirectory = (directoryPath: string) => {
 };
 
 export const getDirectoryList = async (inputPath: string) => {
-  const sourcePath = (inputPath || '/').replace(/^~/, homedir());
+  if (typeof inputPath !== 'string') {
+    throw fileNotFoundError();
+  }
+
+  const sourcePath = inputPath.replace(/^~/, homedir());
 
   const resolvedPath = sanitizePath(sourcePath);
   if (!isAllowedPath(resolvedPath)) {
