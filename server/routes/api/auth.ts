@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
+import rateLimit from 'express-rate-limit';
 
 import type {Response} from 'express';
 import {
@@ -24,6 +25,16 @@ import Users from '../../models/Users';
 const router = express.Router();
 
 const failedLoginResponse = 'Failed login.';
+
+// Limit each IP to 200 request every 5 minutes
+// to prevent brute forcing password or denial-of-service
+router.use(
+  '/',
+  rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 200,
+  }),
+);
 
 const getAuthToken = (username: string, res?: Response): string => {
   const expirationSeconds = 60 * 60 * 24 * 7; // one week

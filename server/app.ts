@@ -32,6 +32,7 @@ if (process.env.NODE_ENV !== 'development') {
 }
 
 app.set('etag', false);
+app.set('trust proxy', 'loopback');
 
 app.use(morgan('dev'));
 app.use(passport.initialize());
