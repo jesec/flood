@@ -30,9 +30,9 @@ router.use('/torrents', torrentsRoutes);
 
 router.get('/activity-stream', eventStream, clientActivityStream);
 
-router.get<unknown, unknown, unknown, string>('/directory-list', (req, res) => {
+router.get<unknown, unknown, unknown, {path: string}>('/directory-list', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
-  getDirectoryList(req.query)
+  getDirectoryList(req.query.path)
     .then((data) => {
       callback(data);
     })
