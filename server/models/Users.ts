@@ -75,7 +75,8 @@ class Users {
 
   createUser(
     credentials: Credentials,
-    callback: (data: {username: Required<Credentials['username']>} | null, error?: Error) => void,
+    callback: (user: UserInDatabase | null, error?: Error) => void,
+    shouldHash = true,
   ): void {
     if (this.db == null) {
       return callback(null, new Error('Users database is not ready.'));
@@ -87,7 +88,7 @@ class Users {
         this.db.insert(
           {
             ...credentials,
-            password: hash.encoded,
+            password: shouldHash ? hash.encoded : credentials.password,
           },
           (error, user) => {
             if (error) {
@@ -98,8 +99,7 @@ class Users {
               return callback(null, error);
             }
 
-            services.bootstrapServicesForUser(user as UserInDatabase);
-            return callback({username: credentials.username});
+            return callback(user as UserInDatabase);
           },
         );
       })

@@ -92,11 +92,7 @@ router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', (req, 
 
   const credentials = parsedResult.data;
 
-  Users.comparePassword(credentials, (isMatch, level, err) => {
-    if (err) {
-      return;
-    }
-
+  Users.comparePassword(credentials, (isMatch, level, _err) => {
     if (isMatch === true && level != null) {
       sendAuthenticationResponse(res, {
         ...credentials,
@@ -164,14 +160,16 @@ router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/regis
   const credentials = parsedResult.data;
 
   // Attempt to save the user
-  Users.createUser(credentials, (createUserResponse, createUserError) => {
-    if (createUserError) {
-      ajaxUtil.getResponseFn(res)(createUserResponse, createUserError);
+  Users.createUser(credentials, (user, error) => {
+    if (error || user == null) {
+      ajaxUtil.getResponseFn(res)({username: credentials.username}, error);
       return;
     }
 
+    services.bootstrapServicesForUser(user);
+
     if (req.query.cookie === 'false') {
-      ajaxUtil.getResponseFn(res)(createUserResponse);
+      ajaxUtil.getResponseFn(res)({username: user.username});
       return;
     }
 

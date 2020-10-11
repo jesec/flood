@@ -1,8 +1,6 @@
-const migrations = [
-  () => {
-    // do nothing. there is no migration at the moment.
-  },
-];
+import UserInDatabase2 from './UserInDatabase2';
+
+const migrations = [UserInDatabase2];
 
 const migrate = () => Promise.all(migrations.map((migration) => migration()));
 
