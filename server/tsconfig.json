@@ -1,11 +1,19 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
     "target": "es2019",
+    "moduleResolution": "node",
+    "allowJs": true,
     "module": "commonjs",
-    "noEmit": false,
     "sourceMap": false,
+    "strict": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "baseUrl": "../",
+    "paths": {
+      "@shared/*": ["shared/*"]
+    },
     "outDir": "../dist"
   },
-  "include": ["./**/*.ts", "./**/*.tsx", "../shared/**/*.ts", "../config.ts"]
+  "include": ["./**/*.ts", "../shared/**/*.ts", "../config.js", "../config.ts"],
+  "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
 }

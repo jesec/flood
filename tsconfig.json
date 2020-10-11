@@ -17,5 +17,5 @@
     }
   },
   "include": ["./client/**/*.ts", "./client/**/*.tsx", "./server/**/*.ts", "./server/**/*.tsx", "./custom.d.ts"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "exclude": ["node_modules"]
 }
