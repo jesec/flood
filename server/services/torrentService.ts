@@ -118,10 +118,12 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
       clearTimeout(this.pollTimeout);
     }
 
-    return this.services?.clientGatewayService
-      .fetchTorrentList()
-      .then(this.handleFetchTorrentListSuccess)
-      .catch(this.handleFetchTorrentListError);
+    return (
+      this.services?.clientGatewayService
+        .fetchTorrentList()
+        .then(this.handleFetchTorrentListSuccess)
+        .catch(this.handleFetchTorrentListError) || Promise.reject()
+    );
   }
 
   getTorrent(hash: TorrentProperties['hash']) {

@@ -29,6 +29,14 @@ router.use('/feed-monitor', feedMonitorRoutes);
 
 router.use('/torrents', torrentsRoutes);
 
+/**
+ * GET /api/activity-stream
+ * @summary Subscribes to activity stream
+ * @tags Flood
+ * @security User
+ * @return {EventSource<ServerEvent>} 200 - success response - text/event-stream
+ * @return {Error} 500 - failure response - application/json
+ */
 router.get('/activity-stream', eventStream, clientActivityStream);
 
 router.get<unknown, unknown, unknown, {path: string}>('/directory-list', (req, res) => {

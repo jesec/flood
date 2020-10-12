@@ -32,8 +32,8 @@
     "start:development:server": "NODE_ENV=development TS_NODE_PROJECT=server/tsconfig.json ts-node-dev --transpile-only server/bin/start.ts",
     "start:production": "UPDATED_SCRIPT=start npm run deprecated-warning && npm start",
     "start:watch": "UPDATED_SCRIPT=start:development:client npm run deprecated-warning && npm run start:development:client",
-    "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test": "jest --forceExit",
+    "test:watch": "jest --watchAll --forceExit"
   },
   "dependencies": {
     "argon2-browser": "^1.15.1",
