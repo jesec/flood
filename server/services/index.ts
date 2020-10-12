@@ -5,6 +5,7 @@ import ClientRequestManager from './rTorrent/clientRequestManager';
 import FeedService from './feedService';
 import HistoryService from './historyService';
 import NotificationService from './notificationService';
+import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
 import TorrentService from './torrentService';
 
@@ -14,6 +15,7 @@ type Service =
   | typeof FeedService
   | typeof HistoryService
   | typeof NotificationService
+  | typeof SettingService
   | typeof TaxonomyService
   | typeof TorrentService;
 
@@ -23,6 +25,7 @@ const serviceInstances: {
   feedServices: Record<string, FeedService>;
   historyServices: Record<string, HistoryService>;
   notificationServices: Record<string, NotificationService>;
+  settingServices: Record<string, SettingService>;
   taxonomyServices: Record<string, TaxonomyService>;
   torrentServices: Record<string, TorrentService>;
 } = {
@@ -31,6 +34,7 @@ const serviceInstances: {
   feedServices: {},
   historyServices: {},
   notificationServices: {},
+  settingServices: {},
   taxonomyServices: {},
   torrentServices: {},
 };
@@ -70,6 +74,10 @@ const getNotificationService = (user: UserInDatabase): NotificationService => {
   return getService('notificationServices', NotificationService, user);
 };
 
+const getSettingService = (user: UserInDatabase): SettingService => {
+  return getService('settingServices', SettingService, user);
+};
+
 const getTaxonomyService = (user: UserInDatabase): TaxonomyService => {
   return getService('taxonomyServices', TaxonomyService, user);
 };
@@ -98,6 +106,10 @@ const getAllServices = (user: UserInDatabase) =>
 
     get notificationService() {
       return getNotificationService(user);
+    },
+
+    get settingService() {
+      return getSettingService(user);
     },
 
     get taxonomyService() {
@@ -157,6 +169,7 @@ export default {
   getClientGatewayService,
   getHistoryService,
   getNotificationService,
+  getSettingService,
   getTaxonomyService,
   getTorrentService,
 };

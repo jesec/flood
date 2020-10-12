@@ -1,6 +1,7 @@
 import express from 'express';
 import passport from 'passport';
 
+import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
@@ -13,7 +14,6 @@ import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
 import {getDirectoryList} from '../../util/fileUtil';
-import settings from '../../models/settings';
 import torrentsRoutes from './torrents';
 
 const router = express.Router();
@@ -54,29 +54,69 @@ router.delete('/notifications', (req, res) => {
   req.services?.notificationService.clearNotifications(ajaxUtil.getResponseFn(res));
 });
 
+/**
+ * GET /api/settings
+ * @summary Gets all Flood's settings
+ * @tags Flood
+ * @security User
+ * @return {FloodSettings} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
 router.get('/settings', (req, res) => {
-  if (req.user == null) {
-    res.status(401).json(Error('Unauthorized'));
-    return;
-  }
-  settings.get(req.user, req.query, ajaxUtil.getResponseFn(res));
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.settingService
+    .get(null)
+    .then((settings) => {
+      callback(settings as FloodSettings);
+    })
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
+/**
+ * GET /api/settings/{property}
+ * @summary Gets Flood's settings
+ * @tags Flood
+ * @security User
+ * @param property.path
+ * @return {Partial<FloodSettings>} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.get('/settings/:property', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.settingService
+    .get(req.params.property)
+    .then((settings) => {
+      callback(settings);
+    })
+    .catch((err) => {
+      callback(null, err);
+    });
+});
+
+/**
+ * PATCH /api/settings
+ * @summary Sets Flood's settings
+ * @tags Flood
+ * @security User
+ * @param {Partial<FloodSettings>} request.body.required - options - application/json
+ * @return {Partial<FloodSettings>} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
 router.patch<unknown, unknown, SetFloodSettingsOptions>('/settings', (req, res) => {
-  Promise.all(
-    Object.keys(req.body).map(async (property) => {
-      return {
-        id: property,
-        data: req.body[property as keyof typeof req.body],
-      };
-    }),
-  ).then((settingRecords) => {
-    if (req.user == null) {
-      res.status(401).json(Error('Unauthorized'));
-      return;
-    }
-    settings.set(req.user, settingRecords, ajaxUtil.getResponseFn(res));
-  });
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.settingService
+    .set(req.body)
+    .then((savedSettings) => {
+      callback(savedSettings);
+    })
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
 export default router;
