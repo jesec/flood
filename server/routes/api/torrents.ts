@@ -27,6 +27,25 @@ import mediainfo from '../../util/mediainfo';
 const router = express.Router();
 
 /**
+ * GET /api/torrents
+ * @summary Gets the list of torrents
+ * @tags Torrents
+ * @security User
+ * @return {TorrentListSummary} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.get('/', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.torrentService
+    .fetchTorrentList()
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
+});
+
+/**
  * POST /api/torrents/add-urls
  * @summary Adds torrents by URLs.
  * @tags Torrents
