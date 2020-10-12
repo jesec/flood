@@ -1,3 +1,4 @@
 module.exports = {
-  projects: ['<rootDir>/server/jest.config.js'],
+  verbose: true,
+  projects: ['<rootDir>/server/.jest/auth.config.js', '<rootDir>/server/.jest/test.config.js'],
 };
