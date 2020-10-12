@@ -1,11 +1,9 @@
 import crypto from 'crypto';
-import fs from 'fs';
 import supertest from 'supertest';
 
 import {AccessLevel} from '../../../shared/schema/Auth';
 
 import app from '../../app';
-import {dbPath} from '../../../config';
 import {getAuthToken} from './auth';
 
 import type {
@@ -15,9 +13,6 @@ import type {
   AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
 import type {ClientConnectionSettings} from '../../../shared/schema/ClientConnectionSettings';
-
-// Clear database before starting the test
-fs.rmdirSync(dbPath, {recursive: true});
 
 const request = supertest(app);
 
