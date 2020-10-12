@@ -1,7 +1,3 @@
-/**
- * This service is not per rTorrent session, which is why it does not inherit
- * `BaseService` nor have any use of the per user API ie. `getService()`
- */
 import {EventEmitter} from 'events';
 import type TypedEmitter from 'typed-emitter';
 
@@ -11,20 +7,20 @@ import {isPlatformSupported, diskUsage} from '../util/diskUsageUtil';
 
 import type {SupportedPlatform} from '../util/diskUsageUtil';
 
-export interface DiskUsage {
+export interface DiskUsageSummary {
   id: number;
   disks: Disks;
 }
 
 interface DiskUsageEvents {
-  DISK_USAGE_CHANGE: (usage: DiskUsage) => void;
+  DISK_USAGE_CHANGE: (usage: DiskUsageSummary) => void;
   newListener: (event: keyof Omit<DiskUsageEvents, 'newListener' | 'removeListener'>) => void;
   removeListener: (event: keyof Omit<DiskUsageEvents, 'newListener' | 'removeListener'>) => void;
 }
 
 const INTERVAL_UPDATE = 10000;
 
-class DiskUsageService extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>) {
+class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>) {
   disks: Disks = [];
   tLastChange = 0;
   interval = 0;
@@ -70,7 +66,7 @@ class DiskUsageService extends (EventEmitter as new () => TypedEmitter<DiskUsage
     });
   }
 
-  getDiskUsage(): DiskUsage {
+  getDiskUsage(): DiskUsageSummary {
     return {
       id: this.tLastChange,
       disks: this.disks,
@@ -78,4 +74,4 @@ class DiskUsageService extends (EventEmitter as new () => TypedEmitter<DiskUsage
   }
 }
 
-export default new DiskUsageService();
+export default new DiskUsage();
