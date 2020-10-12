@@ -233,7 +233,7 @@ interface ClientFetchTorrentDetailsSuccessAction {
 
 interface ClientAddTorrentSuccessAction {
   type: 'CLIENT_ADD_TORRENT_SUCCESS';
-  data: {count: number; destination: string};
+  data: {count: number; start?: boolean; destination?: string};
 }
 
 interface ClientMoveTorrentsSuccessAction {

@@ -23,7 +23,6 @@ import ajaxUtil from '../../util/ajaxUtil';
 import client from '../../models/client';
 import {getTempPath} from '../../models/TemporaryStorage';
 import mediainfo from '../../util/mediainfo';
-import settings from '../../models/settings';
 
 const router = express.Router();
 
@@ -42,9 +41,6 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) =>
   req.services?.clientGatewayService
     .addTorrentsByURL(req.body)
     .then((response) => {
-      if (req.user != null) {
-        settings.set(req.user, [{id: 'startTorrentsOnLoad', data: req.body.start === true}]);
-      }
       req.services?.torrentService.fetchTorrentList();
       return response;
     })
@@ -69,9 +65,6 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) 
   req.services?.clientGatewayService
     .addTorrentsByFile(req.body)
     .then((response) => {
-      if (req.user != null) {
-        settings.set(req.user, [{id: 'startTorrentsOnLoad', data: req.body.start === true}]);
-      }
       req.services?.torrentService.fetchTorrentList();
       return response;
     })

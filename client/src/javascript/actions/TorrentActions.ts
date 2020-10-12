@@ -32,6 +32,7 @@ const TorrentActions = {
             type: 'CLIENT_ADD_TORRENT_SUCCESS',
             data: {
               count: options.urls.length,
+              start: options.start,
               destination: options.destination,
               response,
             },
@@ -57,6 +58,7 @@ const TorrentActions = {
             type: 'CLIENT_ADD_TORRENT_SUCCESS',
             data: {
               count: options.files.length,
+              start: options.start,
               destination: options.destination,
               data,
             },
@@ -79,7 +81,6 @@ const TorrentActions = {
           type: 'CLIENT_ADD_TORRENT_SUCCESS',
           data: {
             count: 1,
-            destination: '',
           },
         });
         download(response.data, (options.name || `${Date.now()}`).concat('.torrent'));
