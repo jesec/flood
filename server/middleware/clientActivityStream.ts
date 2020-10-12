@@ -5,11 +5,11 @@ import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {TransferHistory, TransferSummaryDiff} from '@shared/types/TransferData';
 import type {TorrentListDiff} from '@shared/types/Torrent';
 
+import DiskUsage from '../models/DiskUsage';
 import ServerEvent from '../models/ServerEvent';
 import services from '../services';
-import DiskUsageService from '../services/diskUsageService';
 
-import type {DiskUsage} from '../services/diskUsageService';
+import type {DiskUsageSummary} from '../models/DiskUsage';
 
 export default async (req: Request<unknown, unknown, unknown, {historySnapshot: HistorySnapshot}>, res: Response) => {
   const {
@@ -43,12 +43,12 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
   });
 
   // Disk usage change event
-  handleEvents(DiskUsageService, 'DISK_USAGE_CHANGE', (diskUsageChange: DiskUsage) => {
+  handleEvents(DiskUsage, 'DISK_USAGE_CHANGE', (diskUsageChange: DiskUsageSummary) => {
     serverEvent.emit(diskUsageChange.id, 'DISK_USAGE_CHANGE', diskUsageChange.disks);
   });
 
   // Trigger an immediate update
-  DiskUsageService.updateDisks().catch((e) => console.error(e));
+  DiskUsage.updateDisks().catch((e) => console.error(e));
 
   const torrentList = (await fetchTorrentList) || serviceInstances.torrentService.getTorrentListSummary();
   const taxonomy = serviceInstances.taxonomyService.getTaxonomy();
