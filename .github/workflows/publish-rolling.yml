@@ -14,23 +14,23 @@ jobs:
         node: [14]
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Use Node.js ${{ matrix.node }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node }}
-        registry-url: 'https://registry.npmjs.org'
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+          registry-url: 'https://registry.npmjs.org'
 
-    - run: npm ci
+      - run: npm ci
 
-    - name: Tag rolling release
-      run: |
-       npm version --no-git-tag-version 0.0.0-master.`git rev-parse --short HEAD`
-    - name: Use @${{ github.actor }} scope
-      run: |
-       jq '.name = "@${{ github.actor }}/flood"' package.json > package.new.json
-       mv package.new.json package.json
-    - run: npm publish --access public
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Tag rolling release
+        run: |
+          npm version --no-git-tag-version 0.0.0-master.`git rev-parse --short HEAD`
+      - name: Use @${{ github.actor }} scope
+        run: |
+          jq '.name = "@${{ github.actor }}/flood"' package.json > package.new.json
+          mv package.new.json package.json
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
