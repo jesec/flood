@@ -1,7 +1,7 @@
 import type {UserInDatabase} from '@shared/schema/Auth';
 
-import ClientGatewayService from './rTorrent/clientGatewayService';
-import ClientRequestManager from './rTorrent/clientRequestManager';
+import BaseService from './BaseService';
+import ClientGatewayService from './interfaces/clientGatewayService';
 import FeedService from './feedService';
 import HistoryService from './historyService';
 import NotificationService from './notificationService';
@@ -9,9 +9,14 @@ import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
 import TorrentService from './torrentService';
 
+import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
+
+type ClientGatewayServiceImpl = typeof ClientGatewayService & {
+  new (...args: ConstructorParameters<typeof BaseService>): RTorrentClientGatewayService;
+};
+
 type Service =
-  | typeof ClientGatewayService
-  | typeof ClientRequestManager
+  | ClientGatewayServiceImpl
   | typeof FeedService
   | typeof HistoryService
   | typeof NotificationService
@@ -21,7 +26,6 @@ type Service =
 
 const serviceInstances: {
   clientGatewayServices: Record<string, ClientGatewayService>;
-  clientRequestManagers: Record<string, ClientRequestManager>;
   feedServices: Record<string, FeedService>;
   historyServices: Record<string, HistoryService>;
   notificationServices: Record<string, NotificationService>;
@@ -30,7 +34,6 @@ const serviceInstances: {
   torrentServices: Record<string, TorrentService>;
 } = {
   clientGatewayServices: {},
-  clientRequestManagers: {},
   feedServices: {},
   historyServices: {},
   notificationServices: {},
@@ -54,12 +57,13 @@ const getService = <S extends Service>(servicesMap: ServiceMap, Service: S, user
   return newInstance;
 };
 
-const getClientRequestManager = (user: UserInDatabase) => {
-  return getService('clientRequestManagers', ClientRequestManager, user);
-};
-
-const getClientGatewayService = (user: UserInDatabase) => {
-  return getService('clientGatewayServices', ClientGatewayService, user);
+const getClientGatewayService = (user: UserInDatabase): ClientGatewayService | undefined => {
+  switch (user.client.client) {
+    case 'rTorrent':
+      return getService('clientGatewayServices', RTorrentClientGatewayService, user);
+    default:
+      return undefined;
+  }
 };
 
 const getFeedService = (user: UserInDatabase): FeedService => {
@@ -88,10 +92,6 @@ const getTorrentService = (user: UserInDatabase): TorrentService => {
 
 const getAllServices = (user: UserInDatabase) =>
   ({
-    get clientRequestManager() {
-      return getClientRequestManager(user);
-    },
-
     get clientGatewayService() {
       return getClientGatewayService(user);
     },
@@ -165,7 +165,6 @@ export default {
   bootstrapServicesForUser,
   destroyUserServices,
   getAllServices,
-  getClientRequestManager,
   getClientGatewayService,
   getHistoryService,
   getNotificationService,

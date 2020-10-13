@@ -1,11 +1,13 @@
-import BaseService from '../BaseService';
+import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+
 import scgiUtil from './util/scgiUtil';
 
 import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 
 type MethodCallParameters = Array<string | Buffer | MultiMethodCalls>;
 
-class ClientRequestManager extends BaseService {
+class ClientRequestManager {
+  connectionSettings: RTorrentConnectionSettings;
   isRequestPending = false;
   lastResponseTimestamp = 0;
   pendingRequests: Array<{
@@ -15,9 +17,8 @@ class ClientRequestManager extends BaseService {
     reject: (error?: NodeJS.ErrnoException) => void;
   }> = [];
 
-  constructor(...args: ConstructorParameters<typeof BaseService>) {
-    super(...args);
-
+  constructor(connectionSettings: RTorrentConnectionSettings) {
+    this.connectionSettings = connectionSettings;
     this.sendDeferredMethodCall = this.sendDeferredMethodCall.bind(this);
     this.sendMethodCall = this.sendMethodCall.bind(this);
     this.methodCall = this.methodCall.bind(this);
@@ -52,18 +53,14 @@ class ClientRequestManager extends BaseService {
   }
 
   sendMethodCall(methodName: string, parameters: MethodCallParameters) {
-    if (this.user.client.client !== 'rTorrent') {
-      return Promise.reject();
-    }
-
     const connectionMethod =
-      this.user.client.type === 'socket'
+      this.connectionSettings.type === 'socket'
         ? {
-            socketPath: this.user.client.socket,
+            socketPath: this.connectionSettings.socket,
           }
         : {
-            host: this.user.client.host,
-            port: this.user.client.port,
+            host: this.connectionSettings.host,
+            port: this.connectionSettings.port,
           };
 
     return scgiUtil.methodCall(connectionMethod, methodName, parameters).then(

@@ -22,7 +22,7 @@ const router = express.Router();
  */
 router.get('/connection-test', (req, res) => {
   req.services?.clientGatewayService
-    .testGateway()
+    ?.testGateway()
     .then(() => {
       res.status(200).json({isConnected: true});
     })
@@ -43,7 +43,7 @@ router.get('/connection-test', (req, res) => {
 router.post('/connection-test', requireAdmin);
 router.post<unknown, unknown, ClientConnectionSettings>('/connection-test', (req, res) => {
   req.services?.clientGatewayService
-    .testGateway(req.body)
+    ?.testGateway(req.body)
     .then(() => {
       res.status(200).json({isConnected: true});
     })
@@ -64,7 +64,7 @@ router.get('/settings', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .getClientSettings()
+    ?.getClientSettings()
     .then(callback)
     .catch((e) => callback(null, e));
 });
@@ -96,7 +96,7 @@ router.patch<unknown, unknown, SetClientSettingsOptions>('/settings', (req, res)
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .setClientSettings(req.body)
+    ?.setClientSettings(req.body)
     .then(callback)
     .catch((e) => callback(null, e));
 });

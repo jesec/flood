@@ -5,7 +5,7 @@ import {moveSync} from 'fs-extra';
 import sanitize from 'sanitize-filename';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {ClientConnectionSettings, RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {TorrentContentTree} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
@@ -27,7 +27,8 @@ import type {
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import BaseService from '../BaseService';
+import ClientGatewayService from '../interfaces/clientGatewayService';
+import ClientRequestManager from './clientRequestManager';
 import {getFileTreeFromPathsArr} from './util/fileTreeUtil';
 import scgiUtil from './util/scgiUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
@@ -51,31 +52,10 @@ import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 
 const filePathMethodCalls = getMethodCalls({pathComponents: torrentContentMethodCallConfigs.pathComponents});
 
-interface ClientGatewayServiceEvents {
-  CLIENT_CONNECTION_STATE_CHANGE: () => void;
-  PROCESS_TORRENT_LIST_START: () => void;
-  PROCESS_TORRENT_LIST_END: (torrentListSummary: TorrentListSummary) => void;
-  PROCESS_TORRENT: (torrentProperties: TorrentProperties) => void;
-  PROCESS_TRANSFER_RATE_START: () => void;
-}
+class RTorrentClientGatewayService extends ClientGatewayService {
+  clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
 
-class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
-  hasError: boolean | null = null;
-
-  constructor(...args: ConstructorParameters<typeof BaseService>) {
-    super(...args);
-
-    this.processClientRequestError = this.processClientRequestError.bind(this);
-    this.processClientRequestSuccess = this.processClientRequestSuccess.bind(this);
-  }
-
-  /**
-   * Adds torrents by file
-   *
-   * @param {AddTorrentByFileOptions} options - An object of options...
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async addTorrentsByFile({files, destination, tags, isBasePath, start}: AddTorrentByFileOptions) {
+  async addTorrentsByFile({files, destination, tags, isBasePath, start}: AddTorrentByFileOptions): Promise<void> {
     const destinationPath = sanitizePath(destination);
 
     if (!isAllowedPath(destinationPath)) {
@@ -86,7 +66,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
 
     // Each torrent is sent individually because rTorrent might have small
     // XMLRPC request size limit. This allows the user to send files reliably.
-    return Promise.all(
+    await Promise.all(
       files.map(async (file) => {
         const additionalCalls: Array<string> = [];
 
@@ -99,24 +79,21 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
         additionalCalls.push(`d.custom.set=addtime,${Date.now() / 1000}`);
 
         return (
-          this.services?.clientRequestManager
+          this.clientRequestManager
             .methodCall(
               start ? 'load.raw_start' : 'load.raw',
               ['', Buffer.from(file, 'base64')].concat(additionalCalls),
             )
-            .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+            .then(this.processClientRequestSuccess, this.processClientRequestError)
+            .then(() => {
+              // returns nothing.
+            }) || Promise.reject()
         );
       }),
     );
   }
 
-  /**
-   * Adds torrents by URL
-   *
-   * @param {AddTorrentByURLOptions} options - An object of options...
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async addTorrentsByURL({urls, destination, tags, isBasePath, start}: AddTorrentByURLOptions) {
+  async addTorrentsByURL({urls, destination, tags, isBasePath, start}: AddTorrentByURLOptions): Promise<void> {
     const destinationPath = sanitizePath(destination);
 
     if (!isAllowedPath(destinationPath)) {
@@ -143,19 +120,16 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }, []);
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
     );
   }
 
-  /**
-   * Checks torrents
-   *
-   * @param {CheckTorrentsOptions} options - An object of options...
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async checkTorrents({hashes}: CheckTorrentsOptions) {
+  async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.check_hash',
@@ -166,22 +140,19 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }, []);
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
     );
   }
 
-  /**
-   * Gets the list of contents of a torrent.
-   *
-   * @param {string} hash - Hash of torrent
-   * @return {Promise<TorrentContentTree>} - Resolves with TorrentContentTree or rejects with error.
-   */
   async getTorrentContents(hash: TorrentProperties['hash']): Promise<TorrentContentTree> {
     const configs = torrentContentMethodCallConfigs;
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('f.multicall', [hash, ''].concat(getMethodCalls(configs)))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
@@ -196,16 +167,10 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     );
   }
 
-  /**
-   * Gets the list of peers of a torrent.
-   *
-   * @param {string} hash - Hash of torrent
-   * @return {Promise<Array<TorrentPeer>>} - Resolves with an array of TorrentPeer or rejects with error.
-   */
   async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
     const configs = torrentPeerMethodCallConfigs;
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('p.multicall', [hash, ''].concat(getMethodCalls(configs)))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
@@ -224,16 +189,10 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     );
   }
 
-  /**
-   * Gets the list of trackers of a torrent.
-   *
-   * @param {string} hash - Hash of torrent
-   * @return {Promise<Array<TorrentTracker>>} - Resolves with an array of TorrentTracker or rejects with error.
-   */
   async getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
     const configs = torrentTrackerMethodCallConfigs;
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('t.multicall', [hash, ''].concat(getMethodCalls(configs)))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
@@ -244,14 +203,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     );
   }
 
-  /**
-   * Moves torrents to specified destination path.
-   * This function requires that the destination path is allowed by config.
-   *
-   * @param {MoveTorrentsOptions} options - An object of options...
-   * @return {Promise} - Resolves with the processed client response or rejects with the processed client error.
-   */
-  async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions) {
+  async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions): Promise<void> {
     const resolvedPath = sanitizePath(destination);
     if (!isAllowedPath(resolvedPath)) {
       throw accessDeniedError();
@@ -276,7 +228,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       throw e;
     });
 
-    await this.services?.clientRequestManager
+    await this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processClientRequestError)
       .catch((e) => {
@@ -313,13 +265,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     return this.startTorrents({hashes: hashesToRestart});
   }
 
-  /**
-   * Removes torrents from rTorrent's session. Optionally deletes data of torrents.
-   *
-   * @param {DeleteTorrentsOptions} options - An object of options...
-   * @return {Promise} - Resolves with the processed client response or rejects with the processed client error.
-   */
-  async removeTorrents({hashes, deleteData}: DeleteTorrentsOptions) {
+  async removeTorrents({hashes, deleteData}: DeleteTorrentsOptions): Promise<void> {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash, index) => {
       let eraseFileMethodCallIndex = index;
 
@@ -352,7 +298,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }, []);
 
     return (
-      this.services?.clientRequestManager.methodCall('system.multicall', [methodCalls]).then((response) => {
+      this.clientRequestManager.methodCall('system.multicall', [methodCalls]).then((response) => {
         if (deleteData === true) {
           const torrentCount = hashes.length;
           const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
@@ -389,19 +335,11 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
             }
           });
         }
-
-        return response;
       }, this.processClientRequestError) || Promise.reject()
     );
   }
 
-  /**
-   * Sets priority of torrents
-   *
-   * @param {SetTorrentsPriorityOptions} options - An object of options...
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async setTorrentsPriority({hashes, priority}: SetTorrentsPriorityOptions) {
+  async setTorrentsPriority({hashes, priority}: SetTorrentsPriorityOptions): Promise<void> {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.priority.set',
@@ -417,19 +355,16 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }, []);
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
     );
   }
 
-  /**
-   * Sets tags of torrents
-   *
-   * @param {SetTorrentsTagsOptions} options - An object of options...
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions) {
+  async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.custom1.set',
@@ -440,19 +375,16 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }, []);
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
     );
   }
 
-  /**
-   * Sets trackers of torrents
-   *
-   * @param {SetTorrentsTrackersOptions} options - An object of options...
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions) {
+  async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions): Promise<void> {
     const methodCalls = hashes.reduce(
       (accumulator: MultiMethodCalls, hash) => {
         // Disable existing trackers
@@ -486,7 +418,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     );
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then(async (response: string[][]) => {
@@ -501,20 +433,14 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
               }),
             );
           }
-
-          return response;
         }) || Promise.reject()
     );
   }
 
-  /**
-   * Sets priority of contents of a torrent
-   * @param {string} hash - Hash of the torrent.
-   * @param {Array<number>} indices - Indices of contents to be altered.
-   * @param {number} priority - Target priority.
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async setTorrentContentsPriority(hash: string, {indices, priority}: SetTorrentContentsPropertiesOptions) {
+  async setTorrentContentsPriority(
+    hash: string,
+    {indices, priority}: SetTorrentContentsPropertiesOptions,
+  ): Promise<void> {
     const methodCalls = indices.reduce((accumulator: MultiMethodCalls, index) => {
       accumulator.push({
         methodName: 'f.priority.set',
@@ -530,19 +456,16 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     });
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
     );
   }
 
-  /**
-   * Starts torrents
-   *
-   * @param {StartTorrentsOptions} options - An object of options...
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async startTorrents({hashes}: StartTorrentsOptions) {
+  async startTorrents({hashes}: StartTorrentsOptions): Promise<void> {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.open',
@@ -558,19 +481,16 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }, []);
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
     );
   }
 
-  /**
-   * Stops torrents
-   *
-   * @param {StopTorrentsOptions} options - An object of options...
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async stopTorrents({hashes}: StopTorrentsOptions) {
+  async stopTorrents({hashes}: StopTorrentsOptions): Promise<void> {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: 'd.stop',
@@ -586,21 +506,19 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }, []);
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
     );
   }
 
-  /**
-   * Fetches the list of torrents
-   *
-   * @return {Promise<TorrentListSummary>} - Resolves with TorrentListSummary or rejects with error.
-   */
   async fetchTorrentList(): Promise<TorrentListSummary> {
     const configs = torrentListMethodCallConfigs;
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('d.multicall2', ['', 'main'].concat(getMethodCalls(configs)))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
@@ -639,11 +557,6 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     );
   }
 
-  /**
-   * Fetches the transfer summary
-   *
-   * @return {Promise<TransferSummary>} - Resolves with TransferSummary or rejects with error.
-   */
   async fetchTransferSummary(): Promise<TransferSummary> {
     const configs = transferSummaryMethodCallConfigs;
     const methodCalls: MultiMethodCalls = getMethodCalls(configs).map((methodCall) => {
@@ -654,7 +567,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     });
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((response) => {
@@ -664,11 +577,6 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     );
   }
 
-  /**
-   * Gets settings of rTorrent
-   *
-   * @return {Promise<ClientSettings>} - Resolves with ClientSettings or rejects with error.
-   */
   async getClientSettings(): Promise<ClientSettings> {
     const configs = clientSettingMethodCallConfigs;
     const methodCalls: MultiMethodCalls = getMethodCalls(configs).map((methodCall) => {
@@ -679,7 +587,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     });
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((response) => {
@@ -694,13 +602,7 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     );
   }
 
-  /**
-   * Sets settings of rTorrent
-   *
-   * @param {SetClientSettingsOptions} - Settings to be set.
-   * @return {Promise} - Resolves with RPC call response or rejects with error.
-   */
-  async setClientSettings(settings: SetClientSettingsOptions) {
+  async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
     const configs = clientSettingMethodCallConfigs;
     const methodCalls = Object.keys(settings).reduce((accumulator: MultiMethodCalls, key) => {
       const property = key as keyof SetClientSettingsOptions;
@@ -743,37 +645,24 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
     }, []);
 
     return (
-      this.services?.clientRequestManager
+      this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
     );
   }
 
-  processClientRequestSuccess<T>(response: T): T {
-    if (this.hasError == null || this.hasError === true) {
-      this.hasError = false;
-      this.emit('CLIENT_CONNECTION_STATE_CHANGE');
-    }
-
-    return response;
-  }
-
-  processClientRequestError(error: Error) {
-    if (!this.hasError) {
-      this.hasError = true;
-      this.emit('CLIENT_CONNECTION_STATE_CHANGE');
-    }
-    return Promise.reject(error);
-  }
-
-  testGateway(clientSettings?: RTorrentConnectionSettings) {
+  async testGateway(clientSettings?: ClientConnectionSettings): Promise<void> {
     if (clientSettings == null) {
-      if (this.services != null && this.services.clientRequestManager != null) {
-        return this.services.clientRequestManager
-          .methodCall('system.methodExist', ['system.multicall'])
-          .then(this.processClientRequestSuccess)
-          .catch(this.processClientRequestError);
-      }
+      return this.clientRequestManager
+        .methodCall('system.methodExist', ['system.multicall'])
+        .then(this.processClientRequestSuccess)
+        .catch(this.processClientRequestError);
+    }
+
+    if (clientSettings.client !== 'rTorrent') {
       return Promise.reject();
     }
 
@@ -792,4 +681,4 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
   }
 }
 
-export default ClientGatewayService;
+export default RTorrentClientGatewayService;
