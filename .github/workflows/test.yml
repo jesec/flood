@@ -29,3 +29,5 @@ jobs:
       - run: npm run build
       - run: npm run start -- --help
       - run: npm test
+
+      - uses: codecov/codecov-action@v1
