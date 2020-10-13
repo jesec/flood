@@ -2,6 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import geoip from 'geoip-country';
 import {moveSync} from 'fs-extra';
+import sanitize from 'sanitize-filename';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
@@ -19,6 +20,7 @@ import type {
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
   SetTorrentsTagsOptions,
+  SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
@@ -29,6 +31,7 @@ import BaseService from '../BaseService';
 import {getFileTreeFromPathsArr} from './util/fileTreeUtil';
 import scgiUtil from './util/scgiUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
+import torrentFileUtil from '../../util/torrentFileUtil';
 import {
   encodeTags,
   getTorrentETAFromProperties,
@@ -440,6 +443,67 @@ class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
       this.services?.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError) || Promise.reject()
+    );
+  }
+
+  /**
+   * Sets trackers of torrents
+   *
+   * @param {SetTorrentsTrackersOptions} options - An object of options...
+   * @return {Promise} - Resolves with RPC call response or rejects with error.
+   */
+  async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions) {
+    const methodCalls = hashes.reduce(
+      (accumulator: MultiMethodCalls, hash) => {
+        // Disable existing trackers
+        accumulator.push({
+          methodName: 't.multicall',
+          params: [hash, '', 't.disable='],
+        });
+
+        // Insert new trackers
+        trackers.forEach((tracker) => {
+          accumulator.push({
+            methodName: 'd.tracker.insert',
+            params: [hash, '0', tracker],
+          });
+        });
+
+        // Save full session to apply tracker change
+        accumulator.push({
+          methodName: 'd.save_full_session',
+          params: [hash],
+        });
+
+        return accumulator;
+      },
+      [
+        {
+          methodName: 'session.path',
+          params: [],
+        },
+      ],
+    );
+
+    return (
+      this.services?.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(async (response: string[][]) => {
+          const [session] = response.shift() as string[];
+
+          if (typeof session === 'string') {
+            // Deduplicate hashes via Set() to avoid file ops on the same files
+            await Promise.all(
+              [...new Set(hashes)].map(async (hash) => {
+                const torrent = path.join(session, sanitize(`${hash}.torrent`));
+                return torrentFileUtil.setTrackers(torrent, trackers);
+              }),
+            );
+          }
+
+          return response;
+        }) || Promise.reject()
     );
   }
 

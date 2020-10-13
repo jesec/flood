@@ -6,4 +6,5 @@ export interface TorrentTracker {
   group: number;
   minInterval: number;
   normalInterval: number;
+  isEnabled: boolean;
 }

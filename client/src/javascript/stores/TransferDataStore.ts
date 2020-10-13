@@ -41,14 +41,6 @@ class TransferDataStoreClass extends BaseStore {
     return this.transferRates;
   }
 
-  handleSetThrottleSuccess() {
-    this.emit('CLIENT_SET_THROTTLE_SUCCESS');
-  }
-
-  handleSetThrottleError() {
-    this.emit('CLIENT_SET_THROTTLE_ERROR');
-  }
-
   handleFetchTransferHistoryError() {
     this.emit('CLIENT_TRANSFER_HISTORY_REQUEST_ERROR');
   }
@@ -93,12 +85,6 @@ TransferDataStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case 'TRANSFER_SUMMARY_FULL_UPDATE':
       TransferDataStore.handleTransferSummaryFullUpdate(action.data);
-      break;
-    case 'CLIENT_SET_THROTTLE_SUCCESS':
-      TransferDataStore.handleSetThrottleSuccess();
-      break;
-    case 'CLIENT_SET_THROTTLE_ERROR':
-      TransferDataStore.handleSetThrottleError();
       break;
     case 'TRANSFER_HISTORY_FULL_UPDATE':
       TransferDataStore.handleFetchTransferHistorySuccess(action.data);

@@ -1,4 +1,4 @@
-import {stringTransformer, numberTransformer} from '../../util/rTorrentMethodCallUtil';
+import {booleanTransformer, numberTransformer, stringTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const torrentTrackerMethodCallConfigs = {
   id: {
@@ -24,6 +24,10 @@ const torrentTrackerMethodCallConfigs = {
   normalInterval: {
     methodCall: 't.normal_interval=',
     transformValue: numberTransformer,
+  },
+  isEnabled: {
+    methodCall: 't.is_enabled=',
+    transformValue: booleanTransformer,
   },
 } as const;
 

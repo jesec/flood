@@ -1,11 +1,14 @@
 import express from 'express';
 
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ajaxUtil from '../../util/ajaxUtil';
-import client from '../../models/client';
 import requireAdmin from '../../middleware/requireAdmin';
+
+// Those settings don't require administrator access.
+const SAFE_CLIENT_SETTINGS: Array<keyof ClientSettings> = ['throttleGlobalDownMax', 'throttleGlobalUpMax'];
 
 const router = express.Router();
 
@@ -29,21 +32,6 @@ router.get('/connection-test', (req, res) => {
 });
 
 /**
- * PUT /api/client/settings/speed-limits
- * @summary Sets speed limits of the torrent client
- * @tags Client
- * @security User
- */
-router.put('/settings/speed-limits', (req, res) => {
-  client.setSpeedLimits(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
-});
-
-// Some settings are sensitive (e.g. can open undesired ports on the instance or make the
-// instance send unsanctioned requests to another machine). So administrator access is required.
-// TODO: separate sensitive settings from unsensitive ones.
-router.use('/', requireAdmin);
-
-/**
  * POST /api/client/connection-test
  * @summary Tests connection to the torrent client with supplied new settings
  * @tags Client
@@ -52,6 +40,7 @@ router.use('/', requireAdmin);
  * @return {{isConnected: true}} 200 - success response - application/json
  * @return {{isConnected: false}} 500 - failure response - application/json
  */
+router.post('/connection-test', requireAdmin);
 router.post<unknown, unknown, ClientConnectionSettings>('/connection-test', (req, res) => {
   req.services?.clientGatewayService
     .testGateway(req.body)
@@ -67,7 +56,7 @@ router.post<unknown, unknown, ClientConnectionSettings>('/connection-test', (req
  * GET /api/client/settings
  * @summary Gets settings of torrent client managed by Flood.
  * @tags Client
- * @security AuthenticatedUser
+ * @security User
  * @return {ClientSettings} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
@@ -84,11 +73,25 @@ router.get('/settings', (req, res) => {
  * PATCH /api/client/settings
  * @summary Sets settings of torrent client managed by Flood.
  * @tags Client
- * @security AuthenticatedUser
+ * @security User - safe settings
+ * @security Administrator - sensitive settings
  * @param {SetClientSettingsOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
+router.patch('/settings', (req, res, next) => {
+  if (
+    Object.keys(req.body).some((key) => {
+      return !SAFE_CLIENT_SETTINGS.includes(key as keyof ClientSettings);
+    })
+  ) {
+    // Some settings are sensitive (e.g. can open undesired ports on the instance or make the
+    // instance send unsanctioned requests to another machine). So administrator access is required.
+    requireAdmin(req, res, next);
+  } else {
+    next();
+  }
+});
 router.patch<unknown, unknown, SetClientSettingsOptions>('/settings', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 

@@ -4,7 +4,6 @@ import sortedIndex from 'lodash/sortedIndex';
 
 import type {TransferDirection} from '@shared/types/TransferData';
 
-import ClientActions from '../../actions/ClientActions';
 import connectStores from '../../util/connectStores';
 import Dropdown from '../general/form-elements/Dropdown';
 import LimitsIcon from '../icons/Limits';
@@ -36,9 +35,13 @@ const MESSAGES = defineMessages({
 });
 
 class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
-  static handleItemSelect(item: DropdownItem) {
+  static handleItemSelect(item: DropdownItem<TransferDirection>) {
     if (item.value != null) {
-      ClientActions.setThrottle(item.property as TransferDirection, item.value);
+      if (item.property === 'download') {
+        SettingsStore.setClientSetting('throttleGlobalDownMax', item.value);
+      } else if (item.property === 'upload') {
+        SettingsStore.setClientSetting('throttleGlobalUpMax', item.value);
+      }
     }
   }
 
@@ -79,7 +82,7 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
     return <Size value={bytes} isSpeed precision={1} />;
   }
 
-  getSpeedList(direction: TransferDirection): Array<DropdownItem> {
+  getSpeedList(direction: TransferDirection): Array<DropdownItem<TransferDirection>> {
     const heading = {
       className: `dropdown__label dropdown__label--${direction}`,
       ...(direction === 'download'
@@ -93,7 +96,7 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
     const currentThrottle: Record<TransferDirection, number> = this.props.currentThrottles || {download: 0, upload: 0};
     const speeds: number[] = (this.props.speedLimits != null && this.props.speedLimits[direction]) || [0];
 
-    const items: Array<DropdownItem> = speeds.map((bytes) => {
+    const items: Array<DropdownItem<TransferDirection>> = speeds.map((bytes) => {
       let selected = false;
 
       // Check if the current throttle setting exists in the preset speeds list.
