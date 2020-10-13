@@ -1,24 +1,27 @@
 import bencode from 'bencode';
 import fs from 'fs';
 
-const setTracker = (torrent: string, tracker: string) => {
-  fs.readFile(torrent, (err, data) => {
-    if (err) {
-      return;
-    }
+import type {TorrentFile} from '@shared/types/TorrentFile';
 
-    const torrentData = bencode.decode(data);
+const setTrackers = async (torrent: string, trackers: Array<string>) => {
+  const torrentData: TorrentFile = bencode.decode(fs.readFileSync(torrent));
 
-    if (torrentData.announce != null) {
-      torrentData.announce = Buffer.from(tracker);
+  torrentData.announce = Buffer.from(trackers[0]);
 
-      fs.writeFileSync(torrent, bencode.encode(torrentData));
-    }
-  });
+  if (trackers.length > 1 || torrentData['announce-list'] != null) {
+    torrentData['announce-list'] = [];
+    torrentData['announce-list'].push(
+      trackers.map((tracker) => {
+        return Buffer.from(tracker);
+      }),
+    );
+  }
+
+  return fs.writeFileSync(torrent, bencode.encode(torrentData));
 };
 
 const torrentFileUtil = {
-  setTracker,
+  setTrackers,
 };
 
 export default torrentFileUtil;

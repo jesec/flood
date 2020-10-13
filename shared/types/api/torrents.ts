@@ -110,6 +110,14 @@ export interface SetTorrentsTagsOptions {
   tags: TorrentProperties['tags'];
 }
 
+// PATCH /api/torrents/trackers
+export interface SetTorrentsTrackersOptions {
+  // An array of string representing hashes of torrents to operate on
+  hashes: Array<TorrentProperties['hash']>;
+  // URLs of trackers to be added to the torrents
+  trackers: Array<string>;
+}
+
 // PATCH /api/torrents/{hash}/contents
 export interface SetTorrentContentsPropertiesOptions {
   // An array of number representing indices of contents of a torrent

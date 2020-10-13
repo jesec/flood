@@ -2,6 +2,8 @@ import fs from 'fs';
 import {homedir} from 'os';
 import path from 'path';
 
+import {TorrentContent, TorrentContentTree} from '@shared/types/TorrentContent';
+
 import config from '../../config';
 
 export const accessDeniedError = () => {
@@ -46,6 +48,24 @@ export const createDirectory = (directoryPath: string) => {
       }
     });
   }
+};
+
+export const findFilesByIndices = (indices: Array<number>, fileTree: TorrentContentTree): TorrentContent[] => {
+  const {directories, files = []} = fileTree;
+
+  let selectedFiles = files.filter((file) => indices.includes(file.index));
+
+  if (directories != null) {
+    selectedFiles = selectedFiles.concat(
+      Object.keys(directories).reduce(
+        (accumulator: TorrentContent[], directory) =>
+          accumulator.concat(findFilesByIndices(indices, directories[directory])),
+        [],
+      ),
+    );
+  }
+
+  return selectedFiles;
 };
 
 export const getDirectoryList = async (inputPath: string) => {

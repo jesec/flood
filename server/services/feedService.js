@@ -2,7 +2,6 @@ import path from 'path';
 import Datastore from 'nedb';
 
 import BaseService from './BaseService';
-import client from '../models/client';
 import config from '../../config';
 import Feed from '../models/Feed';
 import regEx from '../../shared/util/regEx';
@@ -248,23 +247,22 @@ class FeedService extends BaseService {
         };
 
         itemsToDownload.forEach((item, index) => {
-          client.addUrls(
-            this.user,
-            this.services,
-            {
+          this.services.clientGatewayService
+            .addTorrentsByURL({
               urls: item.urls,
               destination: item.destination,
+              isBasePath: false,
               start: item.startOnLoad,
               tags: item.tags,
-            },
-            () => {
+            })
+            .then(() => {
               if (index === itemsToDownload.length - 1) {
                 lastAddUrlCallback();
               }
 
               this.db.update({_id: item.ruleID}, {$inc: {count: 1}}, {upsert: true});
-            },
-          );
+            })
+            .catch(console.error);
         });
       })
       .catch(console.error);

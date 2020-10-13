@@ -3,6 +3,7 @@ import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import sanitize from 'sanitize-filename';
+import tar from 'tar';
 
 import {
   AddTorrentByFileOptions,
@@ -14,13 +15,13 @@ import {
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
   SetTorrentsTagsOptions,
+  SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 
-import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {accessDeniedError, findFilesByIndices, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ajaxUtil from '../../util/ajaxUtil';
-import client from '../../models/client';
 import {getTempPath} from '../../models/TemporaryStorage';
 import mediainfo from '../../util/mediainfo';
 
@@ -49,7 +50,7 @@ router.get('/', (req, res) => {
  * POST /api/torrents/add-urls
  * @summary Adds torrents by URLs.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {AddTorrentByURLOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -73,7 +74,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) =>
  * POST /api/torrents/add-files
  * @summary Adds torrents by files.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {AddTorrentByFileOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -97,7 +98,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) 
  * POST /api/torrents/create
  * @summary Creates a torrent
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {CreateTorrentOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/x-bittorrent
  * @return {Error} 500 - failure response - application/json
@@ -159,7 +160,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
  * POST /api/torrents/start
  * @summary Starts torrents.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {StartTorrentsOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -183,7 +184,7 @@ router.post<unknown, unknown, StartTorrentsOptions>('/start', (req, res) => {
  * POST /api/torrents/stop
  * @summary Stops torrents.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {StopTorrentsOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -207,7 +208,7 @@ router.post<unknown, unknown, StopTorrentsOptions>('/stop', (req, res) => {
  * POST /api/torrents/check-hash
  * @summary Hash checks torrents.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {CheckTorrentsOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -231,7 +232,7 @@ router.post<unknown, unknown, CheckTorrentsOptions>('/check-hash', (req, res) =>
  * POST /api/torrents/move
  * @summary Moves torrents to specified destination path.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {MoveTorrentsOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -255,7 +256,7 @@ router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
  * POST /api/torrents/delete
  * @summary Removes torrents from Flood. Optionally deletes data of torrents.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {DeleteTorrentsOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -279,7 +280,7 @@ router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
  * PATCH /api/torrents/priority
  * @summary Sets priority of torrents.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {SetTorrentsPriorityOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -303,7 +304,7 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, re
  * PATCH /api/torrents/tags
  * @summary Sets tags of torrents.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
  * @param {SetTorrentsTagsOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
@@ -324,13 +325,27 @@ router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
 });
 
 /**
- * PATCH /api/torrents/tracker
- * @summary Sets tracker of torrents.
+ * PATCH /api/torrents/trackers
+ * @summary Sets trackers of torrents.
  * @tags Torrents
- * @security AuthenticatedUser
+ * @security User
+ * @param {SetTorrentsTrackersOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
  */
-router.patch('/tracker', (req, res) => {
-  client.setTracker(req.user, req.services, req.body, ajaxUtil.getResponseFn(res));
+router.patch<unknown, unknown, SetTorrentsTrackersOptions>('/trackers', (req, res) => {
+  const callback = ajaxUtil.getResponseFn(res);
+
+  req.services?.clientGatewayService
+    .setTorrentsTrackers(req.body)
+    .then((response) => {
+      req.services?.torrentService.fetchTorrentList();
+      return response;
+    })
+    .then(callback)
+    .catch((err) => {
+      callback(null, err);
+    });
 });
 
 /**
@@ -344,7 +359,7 @@ router.patch('/tracker', (req, res) => {
  * GET /api/torrents/{hash}
  * @summary Gets information of a torrent.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {string} hash.path - Hash of a torrent
  */
 
@@ -352,7 +367,7 @@ router.patch('/tracker', (req, res) => {
  * GET /api/torrents/{hash}/contents
  * @summary Gets the list of contents of a torrent and their properties.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {string} hash.path
  */
 router.get('/:hash/contents', (req, res) => {
@@ -370,7 +385,7 @@ router.get('/:hash/contents', (req, res) => {
  * PATCH /api/torrents/{hash}/contents
  * @summary Sets properties of contents of a torrent. Only priority can be set for now.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {string} hash.path
  * @param {SetTorrentContentsPropertiesOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
@@ -391,13 +406,45 @@ router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:ha
  * GET /api/torrents/{hash}/contents/{indices}/data
  * @summary Gets downloaded data of contents of a torrent.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {string} hash.path
  * @param {string} indices.path - 'all' or indices of selected contents separated by ','
  * @return {object} 200 - contents archived in .tar - application/x-tar
  */
 router.get('/:hash/contents/:indices/data', (req, res) => {
-  client.downloadFiles(req.services, req.params.hash, req.params.indices, res);
+  const {hash, indices: stringIndices} = req.params;
+  try {
+    const selectedTorrent = req.services?.torrentService.getTorrent(hash);
+    if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
+
+    return req.services?.clientGatewayService.getTorrentContents(hash).then((contents) => {
+      if (!contents || !contents.files) return res.status(404).json({error: 'Torrent contents not found'});
+
+      let indices: Array<number>;
+      if (!stringIndices || stringIndices === 'all') {
+        indices = contents.files.map((x) => x.index);
+      } else {
+        indices = stringIndices.split(',').map((value) => Number(value));
+      }
+
+      const filePathsToDownload = findFilesByIndices(indices, contents).map((file) =>
+        path.join(selectedTorrent.directory, file.path),
+      );
+
+      if (filePathsToDownload.length === 1) {
+        const file = filePathsToDownload[0];
+        if (!fs.existsSync(file)) return res.status(404).json({error: 'File not found.'});
+
+        res.attachment(path.basename(file));
+        return res.download(file);
+      }
+
+      res.attachment(`${selectedTorrent.name}.tar`);
+      return tar.c({}, filePathsToDownload).pipe(res);
+    });
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 });
 
 /**
@@ -405,7 +452,7 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
  * GET /api/torrents/{hash}/details
  * @summary Gets details of a torrent.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {string} hash.path
  */
 router.get('/:hash/details', async (req, res) => {
@@ -430,7 +477,7 @@ router.get('/:hash/details', async (req, res) => {
  * GET /api/torrents/{hash}/mediainfo
  * @summary Gets mediainfo output of a torrent.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {string} hash.path
  */
 router.get('/:hash/mediainfo', (req, res) => {
@@ -441,7 +488,7 @@ router.get('/:hash/mediainfo', (req, res) => {
  * GET /api/torrents/{hash}/peers
  * @summary Gets the list of peers of a torrent.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {string} hash.path
  */
 router.get('/:hash/peers', (req, res) => {
@@ -459,8 +506,10 @@ router.get('/:hash/peers', (req, res) => {
  * GET /api/torrents/{hash}/trackers
  * @summary Gets the list of trackers of a torrent.
  * @tags Torrent
- * @security AuthenticatedUser
+ * @security User
  * @param {string} hash.path
+ * @return {Array<TorrentTracker>} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
  */
 router.get('/:hash/trackers', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);

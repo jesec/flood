@@ -7,23 +7,23 @@ import uniqueId from 'lodash/uniqueId';
 import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
 
-export interface DropdownItem {
+export interface DropdownItem<T = string> {
   className?: string;
   displayName: React.ReactNode;
   selectable: boolean;
   selected?: boolean;
-  property?: string;
+  property?: T;
   value?: number | null;
 }
 
-type DropdownItems = Array<DropdownItem>;
+type DropdownItems<T> = Array<DropdownItem<T>>;
 
-interface DropdownProps {
+interface DropdownProps<T> {
   header: React.ReactNode;
   trigger?: React.ReactNode;
   dropdownButtonClass?: string;
-  menuItems: Array<DropdownItems>;
-  handleItemSelect: (item: DropdownItem) => void;
+  menuItems: Array<DropdownItems<T>>;
+  handleItemSelect: (item: DropdownItem<T>) => void;
   onOpen?: () => void;
 
   dropdownWrapperClass?: string;
@@ -47,7 +47,7 @@ const METHODS_TO_BIND = [
   'handleKeyPress',
 ] as const;
 
-class Dropdown extends React.Component<DropdownProps, DropdownStates> {
+class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownStates> {
   id = uniqueId('dropdown_');
 
   static defaultProps = {
@@ -59,14 +59,14 @@ class Dropdown extends React.Component<DropdownProps, DropdownStates> {
     noWrap: false,
   };
 
-  constructor(props: DropdownProps) {
+  constructor(props: DropdownProps<T>) {
     super(props);
 
     this.state = {
       isOpen: false,
     };
 
-    METHODS_TO_BIND.forEach(<T extends typeof METHODS_TO_BIND[number]>(methodName: T) => {
+    METHODS_TO_BIND.forEach(<M extends typeof METHODS_TO_BIND[number]>(methodName: M) => {
       this[methodName] = this[methodName].bind(this);
     });
 
@@ -111,7 +111,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownStates> {
     }
   }
 
-  handleItemSelect(item: DropdownItem) {
+  handleItemSelect(item: DropdownItem<T>) {
     this.closeDropdown();
     this.props.handleItemSelect(item);
   }
@@ -136,7 +136,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownStates> {
     );
   }
 
-  private getDropdownMenu(items: Array<DropdownItems>) {
+  private getDropdownMenu(items: Array<DropdownItems<T>>) {
     // TODO: Rewrite this function, wtf was I thinking
     const arrayMethod = this.props.direction === 'up' ? 'unshift' : 'push';
     const content = [
@@ -165,7 +165,7 @@ class Dropdown extends React.Component<DropdownProps, DropdownStates> {
     );
   }
 
-  private getDropdownMenuItems(listItems: DropdownItems) {
+  private getDropdownMenuItems(listItems: DropdownItems<T>) {
     return listItems.map((property, index) => {
       const classes = classnames('dropdown__item menu__item', property.className, {
         'is-selectable': property.selectable !== false,

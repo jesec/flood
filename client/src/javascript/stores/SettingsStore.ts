@@ -206,9 +206,6 @@ SettingsStore.dispatcherID = AppDispatcher.register((payload) => {
     case 'CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS':
       SettingsStore.handleClientSettingsFetchSuccess(action.data);
       break;
-    case 'CLIENT_SET_THROTTLE_SUCCESS':
-      ClientActions.fetchSettings();
-      break;
     case 'SETTINGS_FETCH_REQUEST_ERROR':
       SettingsStore.handleSettingsFetchError();
       break;

@@ -2,7 +2,6 @@ import axios from 'axios';
 
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
-import type {TransferDirection} from '@shared/types/TransferData';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ConfigStore from '../stores/ConfigStore';
@@ -48,32 +47,6 @@ const ClientActions = {
             type: 'CLIENT_SETTINGS_SAVE_ERROR',
             error,
             options,
-          });
-        },
-      ),
-
-  setThrottle: (direction: TransferDirection, throttle: number) =>
-    axios
-      .put(`${baseURI}api/client/settings/speed-limits`, {
-        direction,
-        throttle,
-      })
-      .then((json) => json.data)
-      .then(
-        (transferData) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_THROTTLE_SUCCESS',
-            data: {
-              transferData,
-            },
-          });
-        },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_THROTTLE_ERROR',
-            data: {
-              error,
-            },
           });
         },
       ),

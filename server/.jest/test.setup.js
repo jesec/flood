@@ -4,7 +4,7 @@ import os from 'os';
 import path from 'path';
 import {spawn} from 'child_process';
 
-const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), crypto.randomBytes(12).toString('hex'));
+const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
 
 const rTorrentSession = path.join(temporaryRuntimeDirectory, '.session');
 const rTorrentSocket = path.join(temporaryRuntimeDirectory, 'rtorrent.sock');
