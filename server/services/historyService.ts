@@ -147,7 +147,7 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     }
 
     this.services?.clientGatewayService
-      .fetchTransferSummary()
+      ?.fetchTransferSummary()
       .then(this.handleFetchTransferSummarySuccess.bind(this))
       .catch(this.handleFetchTransferSummaryError.bind(this));
   }

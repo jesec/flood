@@ -25,6 +25,10 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
   const serverEvent = new ServerEvent(res);
   const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList()?.catch((e) => console.error(e));
 
+  if (serviceInstances.clientGatewayService == null) {
+    return;
+  }
+
   // Hook into events and stop listening when connection is closed
   const handleEvents = <T extends TypedEmitter<Record<string, unknown>>>(
     emitter: T,
@@ -65,7 +69,7 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
 
   handleEvents(serviceInstances.clientGatewayService, 'CLIENT_CONNECTION_STATE_CHANGE', () => {
     serverEvent.emit(Date.now(), 'CLIENT_CONNECTIVITY_STATUS_CHANGE', {
-      isConnected: !serviceInstances.clientGatewayService.hasError,
+      isConnected: !serviceInstances.clientGatewayService?.hasError,
     });
   });
 

@@ -59,7 +59,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) =>
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .addTorrentsByURL(req.body)
+    ?.addTorrentsByURL(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -83,7 +83,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) 
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .addTorrentsByFile(req.body)
+    ?.addTorrentsByFile(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -169,7 +169,7 @@ router.post<unknown, unknown, StartTorrentsOptions>('/start', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .startTorrents(req.body)
+    ?.startTorrents(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -193,7 +193,7 @@ router.post<unknown, unknown, StopTorrentsOptions>('/stop', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .stopTorrents(req.body)
+    ?.stopTorrents(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -217,7 +217,7 @@ router.post<unknown, unknown, CheckTorrentsOptions>('/check-hash', (req, res) =>
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .checkTorrents(req.body)
+    ?.checkTorrents(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -241,7 +241,7 @@ router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .moveTorrents(req.body)
+    ?.moveTorrents(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -265,7 +265,7 @@ router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .removeTorrents(req.body)
+    ?.removeTorrents(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -289,7 +289,7 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, re
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .setTorrentsPriority(req.body)
+    ?.setTorrentsPriority(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -313,7 +313,7 @@ router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .setTorrentsTags(req.body)
+    ?.setTorrentsTags(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -337,7 +337,7 @@ router.patch<unknown, unknown, SetTorrentsTrackersOptions>('/trackers', (req, re
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .setTorrentsTrackers(req.body)
+    ?.setTorrentsTrackers(req.body)
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -374,7 +374,7 @@ router.get('/:hash/contents', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .getTorrentContents(req.params.hash)
+    ?.getTorrentContents(req.params.hash)
     .then(callback)
     .catch((err) => {
       callback(null, err);
@@ -395,7 +395,7 @@ router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:ha
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .setTorrentContentsPriority(req.params.hash, req.body)
+    ?.setTorrentContentsPriority(req.params.hash, req.body)
     .then(callback)
     .catch((err) => {
       callback(null, err);
@@ -417,7 +417,7 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
     const selectedTorrent = req.services?.torrentService.getTorrent(hash);
     if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
-    return req.services?.clientGatewayService.getTorrentContents(hash).then((contents) => {
+    return req.services?.clientGatewayService?.getTorrentContents(hash).then((contents) => {
       if (!contents || !contents.files) return res.status(404).json({error: 'Torrent contents not found'});
 
       let indices: Array<number>;
@@ -459,9 +459,9 @@ router.get('/:hash/details', async (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   try {
-    const contents = req.services?.clientGatewayService.getTorrentContents(req.params.hash);
-    const peers = req.services?.clientGatewayService.getTorrentPeers(req.params.hash);
-    const trackers = req.services?.clientGatewayService.getTorrentTrackers(req.params.hash);
+    const contents = req.services?.clientGatewayService?.getTorrentContents(req.params.hash);
+    const peers = req.services?.clientGatewayService?.getTorrentPeers(req.params.hash);
+    const trackers = req.services?.clientGatewayService?.getTorrentTrackers(req.params.hash);
 
     callback({
       fileTree: await contents,
@@ -495,7 +495,7 @@ router.get('/:hash/peers', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .getTorrentPeers(req.params.hash)
+    ?.getTorrentPeers(req.params.hash)
     .then(callback)
     .catch((err) => {
       callback(null, err);
@@ -515,7 +515,7 @@ router.get('/:hash/trackers', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.clientGatewayService
-    .getTorrentTrackers(req.params.hash)
+    ?.getTorrentTrackers(req.params.hash)
     .then(callback)
     .catch((err) => {
       callback(null, err);

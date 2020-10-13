@@ -120,7 +120,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
 
     return (
       this.services?.clientGatewayService
-        .fetchTorrentList()
+        ?.fetchTorrentList()
         .then(this.handleFetchTorrentListSuccess)
         .catch(this.handleFetchTorrentListError) || Promise.reject()
     );
