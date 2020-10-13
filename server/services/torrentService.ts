@@ -4,7 +4,7 @@ import type {TorrentProperties, TorrentListSummary} from '@shared/types/Torrent'
 
 import BaseService from './BaseService';
 import config from '../../config';
-import hasTorrentFinished from '../util/torrentPropertiesUtil';
+import {hasTorrentFinished} from '../util/torrentPropertiesUtil';
 
 interface TorrentServiceEvents {
   FETCH_TORRENT_LIST_SUCCESS: () => void;
