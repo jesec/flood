@@ -467,6 +467,48 @@
       "value": "Connection settings can not be empty."
     }
   ],
+  "connection.settings.qbittorrent": [
+    {
+      "type": 0,
+      "value": "qBittorrent"
+    }
+  ],
+  "connection.settings.qbittorrent.password": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.qbittorrent.password.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.qbittorrent.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "connection.settings.qbittorrent.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "URL to qBittorrent Web API"
+    }
+  ],
+  "connection.settings.qbittorrent.username": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
+  "connection.settings.qbittorrent.username.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
   "connection.settings.rtorrent": [
     {
       "type": 0,

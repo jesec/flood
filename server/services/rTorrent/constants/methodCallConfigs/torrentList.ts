@@ -1,4 +1,4 @@
-import regEx from '../../../../../shared/util/regEx';
+import {getDomainsFromURLs} from '../../../../util/torrentPropertiesUtil';
 import {stringTransformer, booleanTransformer, numberTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const torrentListMethodCallConfigs = {
@@ -119,40 +119,18 @@ const torrentListMethodCallConfigs = {
       if (typeof value !== 'string') {
         return [];
       }
-
-      const trackers = value.split('|||');
-      const trackerDomains: Array<string> = [];
-
-      trackers.forEach((tracker) => {
-        // Only count enabled trackers
-        if (tracker.charAt(0) === '0') {
-          return;
-        }
-
-        const regexMatched = regEx.domainName.exec(tracker.substr(1));
-
-        if (regexMatched != null && regexMatched[1]) {
-          let domain = regexMatched[1];
-
-          const minSubsetLength = 3;
-          const domainSubsets = domain.split('.');
-          let desiredSubsets = 2;
-
-          if (domainSubsets.length > desiredSubsets) {
-            const lastDesiredSubset = domainSubsets[domainSubsets.length - desiredSubsets];
-            if (lastDesiredSubset.length <= minSubsetLength) {
-              desiredSubsets += 1;
-            }
+      return getDomainsFromURLs(
+        value.split('|||').reduce((trackers: Array<string>, tracker) => {
+          // Only count enabled trackers
+          if (tracker.charAt(0) === '0') {
+            return trackers;
           }
 
-          domain = domainSubsets.slice(desiredSubsets * -1).join('.');
+          trackers.push(tracker.substr(1));
 
-          trackerDomains.push(domain);
-        }
-      });
-
-      // Deduplicate
-      return [...new Set(trackerDomains)];
+          return trackers;
+        }, []),
+      );
     },
   },
   seedsConnected: {

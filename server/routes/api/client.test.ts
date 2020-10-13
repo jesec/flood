@@ -29,8 +29,8 @@ describe('GET /api/client/connection-test', () => {
 });
 
 const settings: Partial<ClientSettings> = {
-  throttleGlobalDownMax: 100,
-  throttleGlobalUpMax: 100,
+  throttleGlobalDownMax: 2048,
+  throttleGlobalUpMax: 2048,
 };
 
 describe('PATCH /api/client/settings', () => {
