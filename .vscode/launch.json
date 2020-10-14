@@ -2,9 +2,9 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch development server",
       "type": "node",
       "request": "launch",
-      "name": "Launch server",
       "skipFiles": ["<node_internals>/**"],
       "env": {
         "NODE_ENV": "development",
@@ -14,6 +14,13 @@
       "runtimeArgs": ["--respawn", "--inspect", "--transpile-only"],
       "program": "server/bin/start.ts",
       "args": []
+    },
+    {
+      "name": "Launch development client",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }
