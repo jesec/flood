@@ -7,10 +7,6 @@ class ServerEvent {
 
   constructor(res: Response) {
     this.res = res;
-
-    // Add 2kb padding for IE.
-    const padding = new Array(2049);
-    res.write(`:${padding.join(' ')}\n`);
   }
 
   emit<T extends keyof ServerEvents>(id: number, eventType: T, data: ServerEvents[T]) {
