@@ -183,6 +183,7 @@
     "webpack": "^4.44.2",
     "webpack-dev-server": "^3.11.0",
     "webpack-manifest-plugin": "^2.2.0",
+    "webpackbar": "^4.0.0",
     "xmlrpc": "^1.3.2",
     "yargs": "^16.0.3",
     "zod": "^1.11.9"
