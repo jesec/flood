@@ -81,8 +81,67 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
     TransferDataStore.unlisten('CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS', this.handleTransferHistoryChange);
   }
 
-  handleTransferHistoryChange(): void {
-    this.updateGraph();
+  private setInspectorCoordinates(slug: TransferDirection, hoverPoint: number): number {
+    const {
+      graphRefs: {
+        [slug]: {inspectPoint},
+      },
+      xScale,
+      yScale,
+    } = this;
+
+    if (xScale == null || yScale == null || inspectPoint == null) {
+      return 0;
+    }
+
+    const historicalData = TransferDataStore.getTransferRates();
+    const upperSpeed = historicalData[slug][Math.ceil(hoverPoint)];
+    const lowerSpeed = historicalData[slug][Math.floor(hoverPoint)];
+
+    const delta = upperSpeed - lowerSpeed;
+    const speedAtHoverPoint = lowerSpeed + delta * (hoverPoint % 1);
+
+    const coordinates = {x: xScale(hoverPoint), y: yScale(speedAtHoverPoint)};
+
+    inspectPoint.attr('transform', `translate(${coordinates.x},${coordinates.y})`);
+
+    return speedAtHoverPoint;
+  }
+
+  private initGraph(): void {
+    if (this.graphRefs.areDefined === true) {
+      return;
+    }
+
+    const {id} = this.props;
+
+    const graph = select(`#${id}`);
+    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
+      // appendEmptyGraphShapes
+      this.graphRefs[direction].graphArea = graph
+        .append('path')
+        .attr('class', 'graph__area')
+        .attr('fill', `url('#graph__gradient--${direction}')`);
+
+      // appendEmptyGraphLines
+      this.graphRefs[direction].rateLine = graph.append('path').attr('class', `graph__line graph__line--${direction}`);
+
+      // appendGraphCircles
+      this.graphRefs[direction].inspectPoint = graph
+        .append('circle')
+        .attr('class', `graph__circle graph__circle--${direction}`)
+        .attr('r', 2.5);
+    });
+
+    this.graphRefs.areDefined = true;
+  }
+
+  private updateGraph() {
+    this.renderGraphData();
+
+    if (this.graphRefs.isHovered) {
+      this.renderPrecisePointInspectors();
+    }
   }
 
   handleMouseMove(mouseX: number): void {
@@ -118,64 +177,33 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
     });
   }
 
-  private initGraph(): void {
-    if (this.graphRefs.areDefined === true) {
+  handleTransferHistoryChange(): void {
+    this.updateGraph();
+  }
+
+  private renderPrecisePointInspectors(): void {
+    const {
+      lastMouseX,
+      props: {onHover},
+      xScale,
+    } = this;
+
+    if (xScale == null || lastMouseX == null) {
       return;
     }
 
-    const graph = select(`#${this.props.id}`);
-    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
-      // appendEmptyGraphShapes
-      this.graphRefs[direction].graphArea = graph
-        .append('path')
-        .attr('class', 'graph__area')
-        .attr('fill', `url('#graph__gradient--${direction}')`);
-
-      // appendEmptyGraphLines
-      this.graphRefs[direction].rateLine = graph.append('path').attr('class', `graph__line graph__line--${direction}`);
-
-      // appendGraphCircles
-      this.graphRefs[direction].inspectPoint = graph
-        .append('circle')
-        .attr('class', `graph__circle graph__circle--${direction}`)
-        .attr('r', 2.5);
-    });
-
-    this.graphRefs.areDefined = true;
-  }
-
-  private setInspectorCoordinates(slug: TransferDirection, hoverPoint: number): number {
-    const {
-      graphRefs: {
-        [slug]: {inspectPoint},
-      },
-      xScale,
-      yScale,
-    } = this;
-
-    if (xScale == null || yScale == null || inspectPoint == null) {
-      return 0;
-    }
-
     const historicalData = TransferDataStore.getTransferRates();
-    const upperSpeed = historicalData[slug][Math.ceil(hoverPoint)];
-    const lowerSpeed = historicalData[slug][Math.floor(hoverPoint)];
+    const hoverPoint = xScale.invert(lastMouseX);
+    const uploadSpeed = this.setInspectorCoordinates('upload', hoverPoint);
+    const downloadSpeed = this.setInspectorCoordinates('download', hoverPoint);
+    const nearestTimestamp = historicalData.timestamps[Math.round(hoverPoint)];
 
-    const delta = upperSpeed - lowerSpeed;
-    const speedAtHoverPoint = lowerSpeed + delta * (hoverPoint % 1);
-
-    const coordinates = {x: xScale(hoverPoint), y: yScale(speedAtHoverPoint)};
-
-    inspectPoint.attr('transform', `translate(${coordinates.x},${coordinates.y})`);
-
-    return speedAtHoverPoint;
-  }
-
-  private updateGraph() {
-    this.renderGraphData();
-
-    if (this.graphRefs.isHovered) {
-      this.renderPrecisePointInspectors();
+    if (onHover) {
+      onHover({
+        uploadSpeed,
+        downloadSpeed,
+        nearestTimestamp,
+      });
     }
   }
 
@@ -225,37 +253,13 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
     });
   }
 
-  private renderPrecisePointInspectors(): void {
-    const {
-      lastMouseX,
-      props: {onHover},
-      xScale,
-    } = this;
-
-    if (xScale == null || lastMouseX == null) {
-      return;
-    }
-
-    const historicalData = TransferDataStore.getTransferRates();
-    const hoverPoint = xScale.invert(lastMouseX);
-    const uploadSpeed = this.setInspectorCoordinates('upload', hoverPoint);
-    const downloadSpeed = this.setInspectorCoordinates('download', hoverPoint);
-    const nearestTimestamp = historicalData.timestamps[Math.round(hoverPoint)];
-
-    if (onHover) {
-      onHover({
-        uploadSpeed,
-        downloadSpeed,
-        nearestTimestamp,
-      });
-    }
-  }
-
   render() {
+    const {id} = this.props;
+
     return (
       <svg
         className="graph"
-        id={this.props.id}
+        id={id}
         ref={(ref) => {
           this.graphRefs.graph = ref;
         }}>

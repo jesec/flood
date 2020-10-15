@@ -60,39 +60,38 @@ export default class Select extends Component<SelectProps, SelectStates> {
   }
 
   componentDidUpdate(_prevProps: SelectProps, prevState: SelectStates) {
-    // if (!prevState.isOpen && this.state.isOpen) {
-    //   // TODO: Set focus on the dropdown menu.
-    // } else if (prevState.isOpen && !this.state.isOpen) {
-    //   // this.triggerRef.focus();
-    // }
+    const {onOpen, onClose} = this.props;
+    const {isOpen} = this.state;
 
-    if (this.state.isOpen && !prevState.isOpen) {
+    if (isOpen && !prevState.isOpen) {
       window.addEventListener('keydown', this.handleKeyDown);
       window.addEventListener('scroll', this.handleWindowScroll, {
         capture: true,
       });
 
-      if (this.props.onOpen) {
-        this.props.onOpen();
+      if (onOpen) {
+        onOpen();
       }
-    } else if (!this.state.isOpen && prevState.isOpen) {
+    } else if (!isOpen && prevState.isOpen) {
       window.addEventListener('keydown', this.handleKeyDown);
       window.removeEventListener('scroll', this.handleWindowScroll, {
         capture: true,
       });
 
-      if (this.props.onClose) {
-        this.props.onClose();
+      if (onClose) {
+        onClose();
       }
     }
   }
 
   getInitialSelectedID(): string | number {
-    if (this.props.defaultID != null) {
-      return this.props.defaultID;
+    const {children, defaultID} = this.props;
+
+    if (defaultID != null) {
+      return defaultID;
     }
 
-    const childArray = this.props.children as React.ReactNodeArray;
+    const childArray = children as React.ReactNodeArray;
     if (childArray != null) {
       const item = childArray.find((child) => {
         return (child as SelectItem).props.id != null;
@@ -114,10 +113,12 @@ export default class Select extends Component<SelectProps, SelectStates> {
         return accumulator;
       }
 
+      const {selectedID} = this.state;
+
       accumulator.push(
         React.cloneElement(child as React.ReactElement, {
           onClick: this.handleItemClick,
-          isSelected: item.props.id === this.state.selectedID,
+          isSelected: item.props.id === selectedID,
         }),
       );
 
@@ -126,10 +127,12 @@ export default class Select extends Component<SelectProps, SelectStates> {
   }
 
   getLabel(): React.ReactNode {
-    if (this.props.label) {
+    const {id, label} = this.props;
+
+    if (label) {
       return (
-        <label className="form__element__label" htmlFor={`${this.props.id}`}>
-          {this.props.label}
+        <label className="form__element__label" htmlFor={`${id}`}>
+          {label}
         </label>
       );
     }
@@ -138,12 +141,15 @@ export default class Select extends Component<SelectProps, SelectStates> {
   }
 
   getSelectedItem(children: React.ReactNodeArray): React.ReactElement | undefined {
+    const {persistentPlaceholder} = this.props;
+    const {selectedID} = this.state;
+
     const selectedItem = children.find((child, index) => {
       const item = child as SelectItem;
       return (
-        (this.props.persistentPlaceholder && item.props.placeholder) ||
-        (!this.state.selectedID && index === 0) ||
-        item.props.id === this.state.selectedID
+        (persistentPlaceholder && item.props.placeholder) ||
+        (!selectedID && index === 0) ||
+        item.props.id === selectedID
       );
     });
 
@@ -155,6 +161,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
   }
 
   getTrigger(selectItems: React.ReactNodeArray) {
+    const {priority} = this.props;
     const selectedItem = this.getSelectedItem(selectItems);
 
     return (
@@ -165,7 +172,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
         }}
         addonPlacement="after"
         onClick={this.handleTriggerClick}
-        priority={this.props.priority}
+        priority={priority}
         wrap={false}>
         <FormElementAddon className="select__indicator">
           <Chevron />
@@ -221,35 +228,49 @@ export default class Select extends Component<SelectProps, SelectStates> {
   };
 
   render() {
-    const selectItems = React.Children.toArray(this.props.children);
-    const classes = classnames('select form__element', this.props.additionalClassNames, {
-      'form__element--disabled': this.props.disabled,
-      'form__element--label-offset': this.props.labelOffset,
-      'select--is-open': this.state.isOpen,
+    const {
+      additionalClassNames,
+      children,
+      disabled,
+      labelOffset,
+      shrink,
+      grow,
+      matchTriggerWidth,
+      width,
+      id,
+      menuAlign,
+    } = this.props;
+    const {isOpen, selectedID} = this.state;
+
+    const selectItems = React.Children.toArray(children);
+    const classes = classnames('select form__element', additionalClassNames, {
+      'form__element--disabled': disabled,
+      'form__element--label-offset': labelOffset,
+      'select--is-open': isOpen,
     });
 
     return (
-      <FormRowItem shrink={this.props.shrink} grow={this.props.grow} width={this.props.width}>
+      <FormRowItem shrink={shrink} grow={grow} width={width}>
         {this.getLabel()}
         <div className={classes}>
           <input
             className="input input--hidden"
-            name={`${this.props.id}`}
+            name={`${id}`}
             onChange={noop}
             tabIndex={-1}
             ref={(ref) => {
               this.inputRef = ref;
             }}
             type="text"
-            value={this.state.selectedID}
+            value={selectedID}
           />
           {this.getTrigger(selectItems)}
           <Portal>
             <ContextMenu
               onOverlayClick={this.handleOverlayClick}
-              in={this.state.isOpen}
-              matchTriggerWidth={this.props.matchTriggerWidth}
-              menuAlign={this.props.menuAlign}
+              isIn={isOpen}
+              matchTriggerWidth={matchTriggerWidth}
+              menuAlign={menuAlign}
               setRef={(ref) => {
                 this.menuRef = ref;
               }}

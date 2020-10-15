@@ -1,23 +1,20 @@
-import Languages from '../../client/src/javascript/constants/Languages';
-import TorrentContextMenuItems from '../../client/src/javascript/constants/TorrentContextMenuItems';
-import TorrentProperties from '../../client/src/javascript/constants/TorrentProperties';
+import type {Language} from '../../client/src/javascript/constants/Languages';
+import type {TorrentContextMenuAction} from '../../client/src/javascript/constants/TorrentContextMenuActions';
+import type {TorrentListColumn} from '../../client/src/javascript/constants/TorrentListColumns';
 
 export interface FloodSettings {
-  language: keyof typeof Languages;
+  language: Language;
   sortTorrents: {
     direction: 'desc' | 'asc';
-    property: keyof typeof TorrentProperties;
+    property: TorrentListColumn;
   };
-  torrentDetails: Array<{
-    id: keyof typeof TorrentProperties;
+  torrentListColumns: Array<{
+    id: TorrentListColumn;
     visible: boolean;
   }>;
-  torrentListColumnWidths: {
-    name?: number;
-    percentComplete?: number;
-  };
-  torrentContextMenuItems: Array<{
-    id: keyof typeof TorrentContextMenuItems;
+  torrentListColumnWidths: Record<TorrentListColumn, number>;
+  torrentContextMenuActions: Array<{
+    id: TorrentContextMenuAction;
     visible: boolean;
   }>;
   torrentListViewSize: 'condensed' | 'expanded';

@@ -1,3 +1,5 @@
+import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
+
 import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSetting, FloodSettings} from '@shared/types/FloodSettings';
 
@@ -22,54 +24,7 @@ class SettingsStoreClass extends BaseStore {
   clientSettings: ClientSettings | null = null;
 
   // Default settings are overridden by settings stored in database.
-  floodSettings: FloodSettings = {
-    language: 'auto',
-    sortTorrents: {
-      direction: 'desc',
-      property: 'dateAdded',
-    },
-    torrentDetails: [
-      {id: 'name', visible: true},
-      {id: 'percentComplete', visible: true},
-      {id: 'downTotal', visible: true},
-      {id: 'downRate', visible: true},
-      {id: 'upTotal', visible: true},
-      {id: 'upRate', visible: true},
-      {id: 'eta', visible: true},
-      {id: 'ratio', visible: true},
-      {id: 'sizeBytes', visible: true},
-      {id: 'peers', visible: true},
-      {id: 'seeds', visible: true},
-      {id: 'dateAdded', visible: true},
-      {id: 'dateCreated', visible: false},
-      {id: 'basePath', visible: false},
-      {id: 'hash', visible: false},
-      {id: 'isPrivate', visible: false},
-      {id: 'message', visible: false},
-      {id: 'trackerURIs', visible: false},
-      {id: 'tags', visible: true},
-    ],
-    torrentListColumnWidths: {},
-    torrentContextMenuItems: [
-      {id: 'start', visible: true},
-      {id: 'stop', visible: true},
-      {id: 'remove', visible: true},
-      {id: 'check-hash', visible: true},
-      {id: 'set-taxonomy', visible: true},
-      {id: 'move', visible: true},
-      {id: 'set-tracker', visible: false},
-      {id: 'torrent-details', visible: true},
-      {id: 'torrent-download-tar', visible: true},
-      {id: 'set-priority', visible: false},
-    ],
-    torrentListViewSize: 'condensed',
-    speedLimits: {
-      download: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
-      upload: [1024, 10240, 102400, 512000, 1048576, 2097152, 5242880, 10485760, 0],
-    },
-    startTorrentsOnLoad: false,
-    mountPoints: [],
-  };
+  floodSettings: FloodSettings = {...defaultFloodSettings};
 
   getClientSetting<T extends ClientSetting>(property: T): ClientSettings[T] | null {
     if (this.clientSettings == null) {

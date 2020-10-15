@@ -1,10 +1,14 @@
-import {FormattedMessage, injectIntl} from 'react-intl';
+import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import Dropdown from '../general/form-elements/Dropdown';
-import TorrentProperties from '../../constants/TorrentProperties';
+import type {FloodSettings} from '@shared/types/FloodSettings';
 
-const METHODS_TO_BIND = ['getDropdownHeader', 'handleItemSelect'];
+import Dropdown from '../general/form-elements/Dropdown';
+import TorrentListColumns from '../../constants/TorrentListColumns';
+
+import type {DropdownItem} from '../general/form-elements/Dropdown';
+import type {TorrentListColumn} from '../../constants/TorrentListColumns';
+
 const SORT_PROPERTIES = [
   'name',
   'eta',
@@ -16,27 +20,32 @@ const SORT_PROPERTIES = [
   'upTotal',
   'sizeBytes',
   'dateAdded',
-];
+] as const;
 
-class SortDropdown extends React.Component {
-  constructor() {
-    super();
+interface SortDropdownProps extends WrappedComponentProps {
+  selectedProperty: TorrentListColumn;
+  direction: 'asc' | 'desc';
+  onSortChange: (sortBy: FloodSettings['sortTorrents']) => void;
+}
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
+class SortDropdown extends React.PureComponent<SortDropdownProps> {
+  constructor(props: SortDropdownProps) {
+    super(props);
+
+    this.getDropdownHeader = this.getDropdownHeader.bind(this);
+    this.handleItemSelect = this.handleItemSelect.bind(this);
   }
 
   getDropdownHeader() {
     const {selectedProperty} = this.props;
-    let propertyMessageConfig = TorrentProperties[selectedProperty];
+    let propertyMessageConfig = TorrentListColumns[selectedProperty];
 
     if (propertyMessageConfig == null) {
-      propertyMessageConfig = TorrentProperties.dateAdded;
+      propertyMessageConfig = TorrentListColumns.dateAdded;
     }
 
     return (
-      <button className="dropdown__button">
+      <button className="dropdown__button" type="button">
         <label className="dropdown__label">
           <FormattedMessage id="torrents.sort.title" />
         </label>
@@ -48,7 +57,7 @@ class SortDropdown extends React.Component {
   }
 
   getDropdownMenus() {
-    const {direction, selectedProperty} = this.props;
+    const {direction, selectedProperty, intl} = this.props;
     const items = SORT_PROPERTIES.map((sortProp) => {
       const isSelected = sortProp === selectedProperty;
       const directionIndicator = isSelected ? (
@@ -58,7 +67,7 @@ class SortDropdown extends React.Component {
       return {
         displayName: (
           <div className="sort-dropdown__item">
-            {this.props.intl.formatMessage(TorrentProperties[sortProp])}
+            {intl.formatMessage(TorrentListColumns[sortProp])}
             {directionIndicator}
           </div>
         ),
@@ -71,9 +80,13 @@ class SortDropdown extends React.Component {
     return [items];
   }
 
-  handleItemSelect(selection) {
+  handleItemSelect(selection: DropdownItem<typeof SORT_PROPERTIES[number]>) {
     let {direction} = this.props;
     const {property} = selection;
+
+    if (property == null) {
+      return;
+    }
 
     if (this.props.selectedProperty === property) {
       direction = direction === 'asc' ? 'desc' : 'asc';

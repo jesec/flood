@@ -58,8 +58,10 @@ class ActionBar extends React.Component<ActionBarProps> {
   }
 
   render() {
+    const {sortBy, torrentListViewSize, intl} = this.props;
+
     const classes = classnames('action-bar', {
-      'action-bar--is-condensed': this.props.torrentListViewSize === 'condensed',
+      'action-bar--is-condensed': torrentListViewSize === 'condensed',
     });
 
     return (
@@ -75,15 +77,15 @@ class ActionBar extends React.Component<ActionBarProps> {
         </div>
         <div className="actions action-bar__item action-bar__item--sort-torrents">
           <SortDropdown
-            direction={this.props.sortBy != null ? this.props.sortBy.direction : 'desc'}
+            direction={sortBy != null ? sortBy.direction : 'desc'}
             onSortChange={ActionBar.handleSortChange}
-            selectedProperty={this.props.sortBy != null ? this.props.sortBy.property : 'dateAdded'}
+            selectedProperty={sortBy != null ? sortBy.property : 'dateAdded'}
           />
         </div>
         <div className="actions action-bar__item action-bar__item--torrent-operations">
           <div className="action-bar__group">
             <Action
-              label={this.props.intl.formatMessage({
+              label={intl.formatMessage({
                 id: 'actionbar.button.start.torrent',
               })}
               slug="start-torrent"
@@ -91,7 +93,7 @@ class ActionBar extends React.Component<ActionBarProps> {
               clickHandler={ActionBar.handleStart}
             />
             <Action
-              label={this.props.intl.formatMessage({
+              label={intl.formatMessage({
                 id: 'actionbar.button.stop.torrent',
               })}
               slug="stop-torrent"
@@ -101,7 +103,7 @@ class ActionBar extends React.Component<ActionBarProps> {
           </div>
           <div className="action-bar__group action-bar__group--has-divider">
             <Action
-              label={this.props.intl.formatMessage({
+              label={intl.formatMessage({
                 id: 'actionbar.button.add.torrent',
               })}
               slug="add-torrent"
@@ -109,7 +111,7 @@ class ActionBar extends React.Component<ActionBarProps> {
               clickHandler={ActionBar.handleAddTorrents}
             />
             <Action
-              label={this.props.intl.formatMessage({
+              label={intl.formatMessage({
                 id: 'actionbar.button.remove.torrent',
               })}
               slug="remove-torrent"

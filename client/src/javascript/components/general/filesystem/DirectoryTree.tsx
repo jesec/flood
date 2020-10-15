@@ -10,91 +10,70 @@ import DirectoryTreeNode from './DirectoryTreeNode';
 
 interface DirectoryTreeProps {
   depth?: number;
-  path: Array<string>;
+  path?: Array<string>;
   hash: TorrentProperties['hash'];
   itemsTree: TorrentContentSelectionTree;
   onPriorityChange: () => void;
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
 
-const METHODS_TO_BIND = ['getDirectoryTreeDomNodes'] as const;
+const DirectoryTree: React.FC<DirectoryTreeProps> = (props: DirectoryTreeProps) => {
+  const {depth = 0, itemsTree, hash, path, onItemSelect, onPriorityChange} = props;
+  const {files, directories} = itemsTree;
+  const childDepth = depth + 1;
 
-class DirectoryTree extends React.Component<DirectoryTreeProps> {
-  static defaultProps = {
-    path: [],
-    itemsTree: {},
-  };
+  const directoryNodes: Array<React.ReactNode> =
+    directories != null
+      ? Object.keys(directories)
+          .sort((a, b) => a.localeCompare(b))
+          .map(
+            (directoryName, index): React.ReactNode => {
+              const subSelectedItems = itemsTree.directories && itemsTree.directories[directoryName];
 
-  constructor(props: DirectoryTreeProps) {
-    super(props);
+              const id = `${index}${childDepth}${directoryName}`;
+              const isSelected = (subSelectedItems && subSelectedItems.isSelected) || false;
 
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
+              if (subSelectedItems == null) {
+                return null;
+              }
 
-  getDirectoryTreeDomNodes(itemsTree: TorrentContentSelectionTree, depth = 0) {
-    const {hash} = this.props;
-    const {files, directories} = itemsTree;
-    const childDepth = depth + 1;
+              return (
+                <DirectoryTreeNode
+                  depth={childDepth}
+                  directoryName={directoryName}
+                  hash={hash}
+                  id={id}
+                  isSelected={isSelected}
+                  key={id}
+                  itemsTree={subSelectedItems}
+                  onItemSelect={onItemSelect}
+                  onPriorityChange={onPriorityChange}
+                  path={path}
+                />
+              );
+            },
+          )
+      : [];
 
-    const directoryNodes: Array<React.ReactNode> =
-      directories != null
-        ? Object.keys(directories)
-            .sort((a, b) => a.localeCompare(b))
-            .map(
-              (directoryName, index): React.ReactNode => {
-                const subSelectedItems =
-                  this.props.itemsTree.directories && this.props.itemsTree.directories[directoryName];
+  const fileList: React.ReactNode =
+    files != null && Object.keys(files).length > 0 ? (
+      <DirectoryFileList
+        depth={childDepth}
+        hash={hash}
+        key={`files-${childDepth}`}
+        onItemSelect={onItemSelect}
+        onPriorityChange={onPriorityChange}
+        path={path}
+        items={itemsTree.files}
+      />
+    ) : null;
 
-                const id = `${index}${childDepth}${directoryName}`;
-                const isSelected = (subSelectedItems && subSelectedItems.isSelected) || false;
+  return <div className="directory-tree__tree">{directoryNodes.concat(fileList)}</div>;
+};
 
-                if (subSelectedItems == null) {
-                  return null;
-                }
-
-                return (
-                  <DirectoryTreeNode
-                    depth={childDepth}
-                    directoryName={directoryName}
-                    hash={hash}
-                    id={id}
-                    isSelected={isSelected}
-                    key={id}
-                    itemsTree={subSelectedItems}
-                    onItemSelect={this.props.onItemSelect}
-                    onPriorityChange={this.props.onPriorityChange}
-                    path={this.props.path}
-                  />
-                );
-              },
-            )
-        : [];
-
-    const fileList: React.ReactNode =
-      files != null && Object.keys(files).length > 0 ? (
-        <DirectoryFileList
-          depth={childDepth}
-          hash={hash}
-          key={`files-${childDepth}`}
-          onItemSelect={this.props.onItemSelect}
-          onPriorityChange={this.props.onPriorityChange}
-          path={this.props.path}
-          items={this.props.itemsTree.files}
-        />
-      ) : null;
-
-    return directoryNodes.concat(fileList);
-  }
-
-  render() {
-    return (
-      <div className="directory-tree__tree">
-        {this.getDirectoryTreeDomNodes(this.props.itemsTree, this.props.depth)}
-      </div>
-    );
-  }
-}
+DirectoryTree.defaultProps = {
+  depth: 0,
+  path: [],
+};
 
 export default DirectoryTree;

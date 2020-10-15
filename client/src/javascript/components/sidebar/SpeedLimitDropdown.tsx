@@ -52,7 +52,8 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
       <button
         className="sidebar__icon-button sidebar__icon-button--interactive
         sidebar__icon-button--limits"
-        title={this.props.intl.formatMessage(MESSAGES.speedLimits)}>
+        title={this.props.intl.formatMessage(MESSAGES.speedLimits)}
+        type="button">
         <LimitsIcon />
         <FormattedMessage {...MESSAGES.speedLimits} />
       </button>

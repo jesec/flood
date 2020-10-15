@@ -1,16 +1,23 @@
+import {IntlShape} from 'react-intl';
 import React from 'react';
+
+import type {TorrentProperties} from '@shared/types/Torrent';
 
 import ConfigStore from '../../stores/ConfigStore';
 import PriorityMeter from '../general/filesystem/PriorityMeter';
 import TorrentActions from '../../actions/TorrentActions';
-import TorrentContextMenuItems from '../../constants/TorrentContextMenuItems';
+import TorrentContextMenuActions from '../../constants/TorrentContextMenuActions';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
-const priorityMeterRef = React.createRef();
+import type {ContextMenuItem} from '../../stores/UIStore';
+import type {PriorityMeterType} from '../general/filesystem/PriorityMeter';
+import type {TorrentContextMenuAction} from '../../constants/TorrentContextMenuActions';
+
+const priorityMeterRef: React.RefObject<PriorityMeterType> = React.createRef();
 let prioritySelected = 1;
 
-const handleDetailsClick = (torrent, event) => {
+const handleDetailsClick = (torrent: TorrentProperties, event: React.MouseEvent): void => {
   UIActions.handleDetailsClick({
     hash: torrent.hash,
     event,
@@ -22,7 +29,7 @@ const handleDetailsClick = (torrent, event) => {
   });
 };
 
-const handleTorrentDownload = (torrent, event) => {
+const handleTorrentDownload = (torrent: TorrentProperties, event: React.MouseEvent): void => {
   event.preventDefault();
   const baseURI = ConfigStore.getBaseURI();
   const link = document.createElement('a');
@@ -33,18 +40,18 @@ const handleTorrentDownload = (torrent, event) => {
   link.click();
 };
 
-const handleItemClick = (action, event, torrent) => {
+const handleItemClick = (action: TorrentContextMenuAction, event: React.MouseEvent): void => {
   const selectedTorrents = TorrentStore.getSelectedTorrents();
   switch (action) {
-    case 'check-hash':
+    case 'checkHash':
       TorrentActions.checkHash({
         hashes: selectedTorrents,
       });
       break;
-    case 'set-taxonomy':
+    case 'setTaxonomy':
       UIActions.displayModal({id: 'set-taxonomy'});
       break;
-    case 'set-tracker':
+    case 'setTracker':
       UIActions.displayModal({id: 'set-tracker'});
       break;
     case 'start':
@@ -63,14 +70,16 @@ const handleItemClick = (action, event, torrent) => {
     case 'move':
       UIActions.displayModal({id: 'move-torrents'});
       break;
-    case 'torrent-details':
-      handleDetailsClick(torrent, event);
+    case 'torrentDetails':
+      handleDetailsClick(TorrentStore.getTorrent(selectedTorrents.pop() as string), event);
       break;
-    case 'torrent-download-tar':
-      handleTorrentDownload(torrent, event);
+    case 'torrentDownload':
+      handleTorrentDownload(TorrentStore.getTorrent(selectedTorrents.pop() as string), event);
       break;
-    case 'set-priority':
-      priorityMeterRef.current.handleClick();
+    case 'setPriority':
+      if (priorityMeterRef.current != null) {
+        priorityMeterRef.current.handleClick();
+      }
       TorrentActions.setPriority({
         hashes: selectedTorrents,
         priority: prioritySelected,
@@ -81,60 +90,74 @@ const handleItemClick = (action, event, torrent) => {
   }
 };
 
-const getContextMenuItems = (intl, torrent, settings) => {
+const getContextMenuItems = (intl: IntlShape, torrent: TorrentProperties): Array<ContextMenuItem> => {
   const clickHandler = handleItemClick;
 
-  const ret = [];
-
-  [
+  return [
     {
+      type: 'action',
       action: 'start',
+      label: intl.formatMessage(TorrentContextMenuActions.start),
       clickHandler,
     },
     {
+      type: 'action',
       action: 'stop',
+      label: intl.formatMessage(TorrentContextMenuActions.stop),
       clickHandler,
     },
     {
+      type: 'action',
       action: 'remove',
+      label: intl.formatMessage(TorrentContextMenuActions.remove),
       clickHandler,
     },
     {
-      action: 'check-hash',
+      type: 'action',
+      action: 'checkHash',
+      label: intl.formatMessage(TorrentContextMenuActions.checkHash),
       clickHandler,
     },
     {
       type: 'separator',
     },
     {
-      action: 'set-taxonomy',
+      type: 'action',
+      action: 'setTaxonomy',
+      label: intl.formatMessage(TorrentContextMenuActions.setTaxonomy),
       clickHandler,
     },
     {
+      type: 'action',
       action: 'move',
+      label: intl.formatMessage(TorrentContextMenuActions.move),
       clickHandler,
     },
     {
-      action: 'set-tracker',
+      type: 'action',
+      action: 'setTracker',
+      label: intl.formatMessage(TorrentContextMenuActions.setTracker),
       clickHandler,
     },
     {
       type: 'separator',
     },
     {
-      action: 'torrent-details',
-      clickHandler: (action, event) => {
-        clickHandler(action, event, torrent);
-      },
+      type: 'action',
+      action: 'torrentDetails',
+      label: intl.formatMessage(TorrentContextMenuActions.torrentDetails),
+      clickHandler,
     },
     {
-      action: 'torrent-download-tar',
-      clickHandler: (action, event) => {
-        clickHandler(action, event, torrent);
-      },
+      type: 'action',
+      action: 'torrentDownload',
+      label: intl.formatMessage(TorrentContextMenuActions.torrentDownload),
+      clickHandler,
     },
     {
-      action: 'set-priority',
+      type: 'action',
+      action: 'setPriority',
+      label: intl.formatMessage(TorrentContextMenuActions.setPriority),
       clickHandler,
       dismissMenu: false,
       labelAction: (
@@ -153,26 +176,7 @@ const getContextMenuItems = (intl, torrent, settings) => {
         />
       ),
     },
-  ].forEach((item) => {
-    if (item.action != null) {
-      const hidden = settings.some((setting) => {
-        if (item.action === setting.id) {
-          return !setting.visible;
-        }
-        return false;
-      });
-
-      if (hidden) {
-        return;
-      }
-
-      item.label = intl.formatMessage({id: TorrentContextMenuItems[item.action].id});
-    }
-
-    ret.push(item);
-  });
-
-  return ret;
+  ];
 };
 
 export default {

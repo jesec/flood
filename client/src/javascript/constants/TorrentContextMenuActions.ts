@@ -1,5 +1,4 @@
-// Actually string ID of TorrentContextMenuItems.
-const TorrentContextMenuItems = {
+const TorrentContextMenuActions = {
   start: {
     id: 'torrents.list.context.start',
   },
@@ -9,28 +8,29 @@ const TorrentContextMenuItems = {
   remove: {
     id: 'torrents.list.context.remove',
   },
-  'check-hash': {
+  checkHash: {
     id: 'torrents.list.context.check.hash',
   },
-  'set-taxonomy': {
+  setTaxonomy: {
     id: 'torrents.list.context.set.tags',
   },
   move: {
     id: 'torrents.list.context.move',
   },
-  'set-tracker': {
+  setTracker: {
     id: 'torrents.list.context.set.tracker',
     warning: 'settings.warning.set.tracker',
   },
-  'torrent-details': {
+  torrentDetails: {
     id: 'torrents.list.context.details',
   },
-  'torrent-download-tar': {
+  torrentDownload: {
     id: 'torrents.list.context.download',
   },
-  'set-priority': {
+  setPriority: {
     id: 'torrents.list.context.priority',
   },
 } as const;
 
-export default TorrentContextMenuItems;
+export default TorrentContextMenuActions;
+export type TorrentContextMenuAction = keyof typeof TorrentContextMenuActions;

@@ -1,4 +1,4 @@
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {useIntl} from 'react-intl';
 import React from 'react';
 
 import AddTorrentsByFile from './AddTorrentsByFile';
@@ -6,43 +6,44 @@ import AddTorrentsByURL from './AddTorrentsByURL';
 import Modal from '../Modal';
 import AddTorrentsByCreation from './AddTorrentsByCreation';
 
-export interface AddTorrentsModalProps extends WrappedComponentProps {
+export interface AddTorrentsModalProps {
   initialURLs?: Array<{id: number; value: string}>;
 }
 
-class AddTorrentsModal extends React.Component<AddTorrentsModalProps> {
-  render() {
-    const tabs = {
-      'by-url': {
-        content: AddTorrentsByURL,
-        label: this.props.intl.formatMessage({
-          id: 'torrents.add.tab.url.title',
-        }),
-        props: this.props,
-      },
-      'by-file': {
-        content: AddTorrentsByFile,
-        label: this.props.intl.formatMessage({
-          id: 'torrents.add.tab.file.title',
-        }),
-      },
-      'by-creation': {
-        content: AddTorrentsByCreation,
-        label: this.props.intl.formatMessage({
-          id: 'torrents.add.tab.create.title',
-        }),
-      },
-    };
+const AddTorrentsModal: React.FC<AddTorrentsModalProps> = (props: AddTorrentsModalProps) => {
+  const {initialURLs} = props;
+  const intl = useIntl();
 
-    return (
-      <Modal
-        heading={this.props.intl.formatMessage({
-          id: 'torrents.add.heading',
-        })}
-        tabs={tabs}
-      />
-    );
-  }
-}
+  const tabs = {
+    'by-url': {
+      content: AddTorrentsByURL,
+      label: intl.formatMessage({
+        id: 'torrents.add.tab.url.title',
+      }),
+      props: {initialURLs},
+    },
+    'by-file': {
+      content: AddTorrentsByFile,
+      label: intl.formatMessage({
+        id: 'torrents.add.tab.file.title',
+      }),
+    },
+    'by-creation': {
+      content: AddTorrentsByCreation,
+      label: intl.formatMessage({
+        id: 'torrents.add.tab.create.title',
+      }),
+    },
+  };
 
-export default injectIntl(AddTorrentsModal);
+  return (
+    <Modal
+      heading={intl.formatMessage({
+        id: 'torrents.add.heading',
+      })}
+      tabs={tabs}
+    />
+  );
+};
+
+export default AddTorrentsModal;

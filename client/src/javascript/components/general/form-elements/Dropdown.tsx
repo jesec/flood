@@ -10,7 +10,7 @@ import UIStore from '../../../stores/UIStore';
 export interface DropdownItem<T = string> {
   className?: string;
   displayName: React.ReactNode;
-  selectable: boolean;
+  selectable?: boolean;
   selected?: boolean;
   property?: T;
   value?: number | null;
@@ -73,72 +73,26 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
     this.handleKeyPress = throttle(this.handleKeyPress, 200);
   }
 
-  closeDropdown() {
-    window.removeEventListener('keydown', this.handleKeyPress);
-    window.removeEventListener('click', this.closeDropdown);
-    UIStore.unlisten('UI_DROPDOWN_MENU_CHANGE', this.handleActiveDropdownChange);
-
-    this.setState({isOpen: false});
-  }
-
-  openDropdown() {
-    window.addEventListener('keydown', this.handleKeyPress);
-    window.addEventListener('click', this.closeDropdown);
-    UIStore.listen('UI_DROPDOWN_MENU_CHANGE', this.handleActiveDropdownChange);
-
-    this.setState({isOpen: true});
-
-    if (this.props.onOpen) {
-      this.props.onOpen();
-    }
-
-    UIActions.displayDropdownMenu(this.id);
-  }
-
-  handleDropdownClick(event: React.MouseEvent<HTMLDivElement>) {
-    event.stopPropagation();
-
-    if (this.state.isOpen) {
-      this.closeDropdown();
-    } else {
-      this.openDropdown();
-    }
-  }
-
-  handleActiveDropdownChange() {
-    if (this.state.isOpen && UIStore.getActiveDropdownMenu() !== this.id) {
-      this.closeDropdown();
-    }
-  }
-
-  handleItemSelect(item: DropdownItem<T>) {
-    this.closeDropdown();
-    this.props.handleItemSelect(item);
-  }
-
-  handleKeyPress(event: KeyboardEvent) {
-    if (this.state.isOpen && event.keyCode === 27) {
-      this.closeDropdown();
-    }
-  }
-
   private getDropdownButton(options: {header?: boolean; trigger?: boolean} = {}) {
-    let label = this.props.header;
+    const {header, trigger, dropdownButtonClass} = this.props;
 
-    if (options.trigger && !!this.props.trigger) {
-      label = this.props.trigger;
+    let label = header;
+    if (options.trigger && !!trigger) {
+      label = trigger;
     }
 
     return (
-      <div className={this.props.dropdownButtonClass} onClick={this.handleDropdownClick}>
+      <div className={dropdownButtonClass} onClick={this.handleDropdownClick}>
         {label}
       </div>
     );
   }
 
   private getDropdownMenu(items: Array<DropdownItems<T>>) {
+    const {direction} = this.props;
+
     // TODO: Rewrite this function, wtf was I thinking
-    const arrayMethod = this.props.direction === 'up' ? 'unshift' : 'push';
+    const arrayMethod = direction === 'up' ? 'unshift' : 'push';
     const content = [
       <div className="dropdown__header" key="dropdown-header">
         {this.getDropdownButton({header: true, trigger: false})}
@@ -187,26 +141,82 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
     });
   }
 
+  closeDropdown() {
+    window.removeEventListener('keydown', this.handleKeyPress);
+    window.removeEventListener('click', this.closeDropdown);
+    UIStore.unlisten('UI_DROPDOWN_MENU_CHANGE', this.handleActiveDropdownChange);
+
+    this.setState({isOpen: false});
+  }
+
+  openDropdown() {
+    window.addEventListener('keydown', this.handleKeyPress);
+    window.addEventListener('click', this.closeDropdown);
+    UIStore.listen('UI_DROPDOWN_MENU_CHANGE', this.handleActiveDropdownChange);
+
+    this.setState({isOpen: true});
+
+    const {onOpen} = this.props;
+
+    if (onOpen) {
+      onOpen();
+    }
+
+    UIActions.displayDropdownMenu(this.id);
+  }
+
+  handleDropdownClick(event: React.MouseEvent<HTMLDivElement>) {
+    event.stopPropagation();
+
+    const {isOpen} = this.state;
+
+    if (isOpen) {
+      this.closeDropdown();
+    } else {
+      this.openDropdown();
+    }
+  }
+
+  handleActiveDropdownChange() {
+    const {isOpen} = this.state;
+    if (isOpen && UIStore.getActiveDropdownMenu() !== this.id) {
+      this.closeDropdown();
+    }
+  }
+
+  handleItemSelect(item: DropdownItem<T>) {
+    const {handleItemSelect} = this.props;
+
+    this.closeDropdown();
+    handleItemSelect(item);
+  }
+
+  handleKeyPress(event: KeyboardEvent) {
+    const {isOpen} = this.state;
+    if (isOpen && event.keyCode === 27) {
+      this.closeDropdown();
+    }
+  }
+
   render() {
-    const dropdownWrapperClass = classnames(
-      this.props.dropdownWrapperClass,
-      `${this.props.baseClassName}--direction-${this.props.direction}`,
-      {
-        [`${this.props.baseClassName}--match-button-width`]: this.props.matchButtonWidth,
-        [`${this.props.baseClassName}--width-${this.props.width}`]: this.props.width != null,
-        [`${this.props.baseClassName}--no-wrap`]: this.props.noWrap,
-        'is-expanded': this.state.isOpen,
-      },
-    );
+    const {baseClassName, dropdownWrapperClass, direction, matchButtonWidth, menuItems, noWrap, width} = this.props;
+    const {isOpen} = this.state;
+
+    const dropdownWrapperClassName = classnames(dropdownWrapperClass, `${baseClassName}--direction-${direction}`, {
+      [`${baseClassName}--match-button-width`]: matchButtonWidth,
+      [`${baseClassName}--width-${width}`]: width != null,
+      [`${baseClassName}--no-wrap`]: noWrap,
+      'is-expanded': isOpen,
+    });
 
     let menu: React.ReactNode = null;
 
-    if (this.state.isOpen) {
-      menu = this.getDropdownMenu(this.props.menuItems);
+    if (isOpen) {
+      menu = this.getDropdownMenu(menuItems);
     }
 
     return (
-      <div className={dropdownWrapperClass}>
+      <div className={dropdownWrapperClassName}>
         {this.getDropdownButton({header: false, trigger: true})}
         <TransitionGroup>{menu}</TransitionGroup>
       </div>

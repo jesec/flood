@@ -1,53 +1,52 @@
-import {FormattedNumber, injectIntl, WrappedComponentProps} from 'react-intl';
+import {FormattedNumber, useIntl} from 'react-intl';
 import React from 'react';
 
 import {compute, getTranslationString} from '../../util/size';
 
-interface SizeProps extends WrappedComponentProps {
+const renderNumber = (computedNumber: ReturnType<typeof compute>) => {
+  if (Number.isNaN(computedNumber.value)) {
+    return '—';
+  }
+
+  return <FormattedNumber value={computedNumber.value} />;
+};
+
+interface SizeProps {
   value: number;
   precision?: number;
   isSpeed?: boolean;
   className?: string;
 }
 
-class Size extends React.Component<SizeProps> {
-  static defaultProps = {
-    isSpeed: false,
-    precision: 2,
-  };
+const Size: React.FC<SizeProps> = ({value, isSpeed, className, precision}: SizeProps) => {
+  const computed = compute(value, precision);
+  const intl = useIntl();
 
-  static renderNumber(computedNumber: ReturnType<typeof compute>) {
-    if (Number.isNaN(computedNumber.value)) {
-      return '—';
-    }
+  let translatedUnit = intl.formatMessage({id: getTranslationString(computed.unit)});
 
-    return <FormattedNumber value={computedNumber.value} />;
-  }
-
-  render() {
-    const {value, isSpeed, className, precision, intl} = this.props;
-    const computed = compute(value, precision);
-
-    let translatedUnit = intl.formatMessage({id: getTranslationString(computed.unit)});
-
-    if (isSpeed) {
-      translatedUnit = intl.formatMessage(
-        {
-          id: 'unit.speed',
-        },
-        {
-          baseUnit: translatedUnit,
-        },
-      );
-    }
-
-    return (
-      <span className={className}>
-        {Size.renderNumber(computed)}
-        <em className="unit">{translatedUnit}</em>
-      </span>
+  if (isSpeed) {
+    translatedUnit = intl.formatMessage(
+      {
+        id: 'unit.speed',
+      },
+      {
+        baseUnit: translatedUnit,
+      },
     );
   }
-}
 
-export default injectIntl(Size);
+  return (
+    <span className={className}>
+      {renderNumber(computed)}
+      <em className="unit">{translatedUnit}</em>
+    </span>
+  );
+};
+
+Size.defaultProps = {
+  isSpeed: false,
+  precision: 2,
+  className: undefined,
+};
+
+export default Size;

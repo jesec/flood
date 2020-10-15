@@ -1,9 +1,11 @@
 import React from 'react';
 
-class ApplicationContent extends React.Component {
-  render() {
-    return <div className="application__content">{this.props.children}</div>;
-  }
+interface ApplicationContentProps {
+  children: React.ReactNode;
 }
+
+const ApplicationContent: React.FC<ApplicationContentProps> = ({children}: ApplicationContentProps) => {
+  return <div className="application__content">{children}</div>;
+};
 
 export default ApplicationContent;

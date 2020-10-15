@@ -38,7 +38,7 @@ const icons = {
 
 class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
   getCurrentTransferRate(direction: TransferDirection, options: {showHoverDuration?: boolean} = {}) {
-    const {inspectorPoint, isClientConnected, transferSummary} = this.props;
+    const {inspectorPoint, intl, isClientConnected, transferSummary} = this.props;
 
     const throttles = {
       download: transferSummary != null ? transferSummary.downThrottle : 0,
@@ -78,7 +78,7 @@ class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
 
       timestamp = (
         <div className={timestampClasses}>
-          <Duration suffix={this.props.intl.formatMessage(messages.ago)} value={durationSummary} />
+          <Duration suffix={intl.formatMessage(messages.ago)} value={durationSummary} />
         </div>
       );
     }

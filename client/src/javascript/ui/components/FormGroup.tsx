@@ -6,17 +6,21 @@ import type {FormRowItemProps} from './FormRowItem';
 
 export default class FormRowItemGroup extends Component<{label?: string; width?: FormRowItemProps['width']}> {
   getLabel(): React.ReactNode {
-    if (this.props.label) {
-      return <label className="form__element__label">{this.props.label}</label>;
+    const {label} = this.props;
+
+    if (label) {
+      return <label className="form__element__label">{label}</label>;
     }
     return undefined;
   }
 
   render() {
+    const {children, width} = this.props;
+
     return (
-      <FormRowItem className="form__group" width={this.props.width}>
+      <FormRowItem className="form__group" width={width}>
         {this.getLabel()}
-        {this.props.children}
+        {children}
       </FormRowItem>
     );
   }

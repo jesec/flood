@@ -51,6 +51,7 @@ class SearchBox extends React.Component<WrappedComponentProps, SearchBoxStates> 
   };
 
   render() {
+    const {intl} = this.props;
     const {inputFieldKey, isSearchActive} = this.state;
     let clearSearchButton = null;
     const classes = classnames({
@@ -61,7 +62,7 @@ class SearchBox extends React.Component<WrappedComponentProps, SearchBoxStates> 
 
     if (isSearchActive) {
       clearSearchButton = (
-        <button className="button search__reset-button" onClick={this.handleResetClick}>
+        <button className="button search__reset-button" onClick={this.handleResetClick} type="button">
           <Close />
         </button>
       );
@@ -75,7 +76,7 @@ class SearchBox extends React.Component<WrappedComponentProps, SearchBoxStates> 
           className="textbox"
           key={inputFieldKey}
           type="text"
-          placeholder={this.props.intl.formatMessage({
+          placeholder={intl.formatMessage({
             id: 'sidebar.search.placeholder',
           })}
           onChange={this.handleSearchChange}

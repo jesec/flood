@@ -176,67 +176,6 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
     this.removeScrollListener();
   }
 
-  handleMouseEnter(forceOpen?: boolean): void {
-    const {props} = this;
-
-    if (props.suppress && !forceOpen) {
-      return;
-    }
-
-    if (props.anchor == null || props.position == null) {
-      return;
-    }
-
-    const {anchor, position, coordinates} = this.getIdealLocation(props.anchor, props.position);
-
-    this.setState({
-      anchor,
-      isOpen: true,
-      position,
-      coordinates,
-      wasTriggeredClose: false,
-    });
-    this.addScrollListener();
-
-    if (props.onOpen) {
-      props.onOpen();
-    }
-  }
-
-  handleMouseLeave(): void {
-    this.dismissTooltip();
-
-    if (this.props.onMouseLeave) {
-      this.props.onMouseLeave();
-    }
-  }
-
-  handleTooltipMouseEnter(): void {
-    if (this.props.interactive && !this.state.wasTriggeredClose) {
-      this.setState({isOpen: true});
-      this.addScrollListener();
-    }
-  }
-
-  handleTooltipMouseLeave(): void {
-    this.dismissTooltip();
-  }
-
-  addScrollListener(): void {
-    this.container.addEventListener('scroll', (_e) => this.dismissTooltip());
-  }
-
-  dismissTooltip(forceClose?: boolean): void {
-    if ((!this.props.stayOpen || forceClose) && this.state.isOpen) {
-      this.setState({isOpen: false});
-      this.removeScrollListener();
-
-      if (this.props.onClose) {
-        this.props.onClose();
-      }
-    }
-  }
-
   getCoordinates(
     position: Position,
     clearance: Clearance,
@@ -327,8 +266,79 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
     };
   }
 
+  dismissTooltip(forceClose?: boolean): void {
+    const {stayOpen, onClose} = this.props;
+    const {isOpen} = this.state;
+
+    if ((!stayOpen || forceClose) && isOpen) {
+      this.setState({isOpen: false});
+      this.removeScrollListener();
+
+      if (onClose) {
+        onClose();
+      }
+    }
+  }
+
+  addScrollListener(): void {
+    this.container.addEventListener('scroll', (_e) => this.dismissTooltip());
+  }
+
+  handleTooltipMouseEnter(): void {
+    const {interactive} = this.props;
+    const {wasTriggeredClose} = this.state;
+
+    if (interactive && !wasTriggeredClose) {
+      this.setState({isOpen: true});
+      this.addScrollListener();
+    }
+  }
+
+  handleTooltipMouseLeave(): void {
+    this.dismissTooltip();
+  }
+
+  handleMouseEnter(forceOpen?: boolean): void {
+    const {props} = this;
+
+    if (props.suppress && !forceOpen) {
+      return;
+    }
+
+    if (props.anchor == null || props.position == null) {
+      return;
+    }
+
+    const {anchor, position, coordinates} = this.getIdealLocation(props.anchor, props.position);
+
+    this.setState({
+      anchor,
+      isOpen: true,
+      position,
+      coordinates,
+      wasTriggeredClose: false,
+    });
+    this.addScrollListener();
+
+    if (props.onOpen) {
+      props.onOpen();
+    }
+  }
+
+  handleMouseLeave(): void {
+    this.dismissTooltip();
+
+    const {onMouseLeave} = this.props;
+
+    if (onMouseLeave) {
+      onMouseLeave();
+    }
+  }
+
   isOpen(): boolean {
-    return this.state.isOpen;
+    const {isOpen} = this.state;
+
+    return isOpen;
   }
 
   removeScrollListener(): void {
@@ -347,40 +357,54 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
   }
 
   render(): React.ReactNode {
-    const {props, state} = this;
+    const {
+      anchor: defaultAnchor,
+      position: defaultPosition,
+      children,
+      align,
+      className,
+      interactive,
+      wrapText,
+      width,
+      maxWidth,
+      wrapperClassName,
+      contentClassName,
+      content,
+      onClick,
+    } = this.props;
+    const {anchor: stateAnchor, position: statePosition, coordinates, isOpen} = this.state;
     let tooltipStyle: React.CSSProperties = {};
 
-    const {align} = props;
     // Get the anchor and position from state if possible. If not, get it from
     // the props.
-    const anchor = state.anchor || props.anchor;
-    const position = state.position || props.position;
+    const anchor = stateAnchor || defaultAnchor;
+    const position = statePosition || defaultPosition;
 
     const tooltipClasses = classnames(
-      props.className,
+      className,
       `tooltip--anchor--${anchor}`,
       `tooltip--position--${position}`,
       `tooltip--align--${align}`,
       {
-        'is-interactive': props.interactive,
-        'is-open': state.isOpen,
-        'tooltip--no-wrap': !props.wrapText,
+        'is-interactive': interactive,
+        'is-open': isOpen,
+        'tooltip--no-wrap': !wrapText,
       },
     );
 
-    if (state.coordinates) {
+    if (coordinates) {
       tooltipStyle = {
-        left: state.coordinates.left,
-        top: state.coordinates.top,
+        left: coordinates.left,
+        top: coordinates.top,
       };
     }
 
-    if (props.width) {
-      tooltipStyle.width = props.width;
+    if (width) {
+      tooltipStyle.width = width;
     }
 
-    if (props.maxWidth) {
-      tooltipStyle.maxWidth = props.maxWidth;
+    if (maxWidth) {
+      tooltipStyle.maxWidth = maxWidth;
     }
 
     const appElement = document.getElementById('app');
@@ -391,14 +415,14 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
 
     return (
       <div
-        className={props.wrapperClassName}
-        onClick={this.props.onClick}
+        className={wrapperClassName}
+        onClick={onClick}
         onMouseEnter={(_e) => this.handleMouseEnter()}
         onMouseLeave={(_e) => this.handleMouseLeave()}
         ref={(ref) => {
           this.triggerNode = ref;
         }}>
-        {props.children}
+        {children}
         {ReactDOM.createPortal(
           <div
             className={tooltipClasses}
@@ -408,7 +432,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
             style={tooltipStyle}
             onMouseEnter={this.handleTooltipMouseEnter}
             onMouseLeave={this.handleTooltipMouseLeave}>
-            <div className={props.contentClassName}>{props.content}</div>
+            <div className={contentClassName}>{content}</div>
           </div>,
           appElement,
         )}

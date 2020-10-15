@@ -86,7 +86,7 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
             id: 'torrents.add.destination.label',
           })}
           selectable="directories"
-          basePathToggle
+          showBasePathToggle
         />
         <FormRow>
           <TagSelect

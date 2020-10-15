@@ -1,7 +1,9 @@
 import classnames from 'classnames';
-import React, {Component} from 'react';
+import React from 'react';
 
 export interface FormRowItemProps {
+  children: React.ReactNode;
+
   className?: string;
   type?: string;
 
@@ -18,23 +20,28 @@ export interface FormRowItemProps {
     | 'seven-eighths';
 }
 
-class FormRowItem extends Component<FormRowItemProps> {
-  static defaultProps = {
-    grow: true,
-    shrink: true,
-    width: 'auto',
-  };
+const FormRowItem: React.FC<FormRowItemProps> = ({
+  children,
+  className,
+  type,
+  width,
+  grow,
+  shrink,
+}: FormRowItemProps) => {
+  const classes = classnames('form__row__item', className, {
+    [`form__row__item--${width}`]: width,
+    'form__row__item--grow': grow,
+    'form__row__item--shrink': shrink,
+    'form__row__item--error': type === 'error',
+  });
 
-  render() {
-    const classes = classnames('form__row__item', this.props.className, {
-      [`form__row__item--${this.props.width}`]: this.props.width,
-      'form__row__item--grow': this.props.grow,
-      'form__row__item--shrink': this.props.shrink,
-      'form__row__item--error': this.props.type === 'error',
-    });
+  return <div className={classes}>{children}</div>;
+};
 
-    return <div className={classes}>{this.props.children}</div>;
-  }
-}
+FormRowItem.defaultProps = {
+  grow: true,
+  shrink: true,
+  width: 'auto',
+};
 
 export default FormRowItem;

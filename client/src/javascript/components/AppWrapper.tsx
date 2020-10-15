@@ -101,11 +101,13 @@ class AuthEnforcer extends React.Component<AuthEnforcerProps> {
   }
 
   render() {
+    const {children} = this.props;
+
     return (
       <div className="application">
         <WindowTitle />
         <TransitionGroup>{this.renderOverlay()}</TransitionGroup>
-        {this.props.children}
+        {children}
       </div>
     );
   }

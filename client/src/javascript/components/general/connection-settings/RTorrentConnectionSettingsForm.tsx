@@ -34,29 +34,31 @@ class RTorrentConnectionSettingsForm extends Component<
   }
 
   getConnectionSettings(): RTorrentConnectionSettings | null {
-    switch (this.state.type) {
+    const {type, socket, host, port} = this.state;
+
+    switch (type) {
       case 'socket': {
-        if (this.state.socket == null) {
+        if (socket == null) {
           return null;
         }
         const settings: RTorrentSocketConnectionSettings = {
           client: 'rTorrent',
           type: 'socket',
           version: 1,
-          socket: this.state.socket,
+          socket,
         };
         return settings;
       }
       case 'tcp': {
-        const portAsNumber = Number(this.state.port);
-        if (this.state.host == null || portAsNumber == null) {
+        const portAsNumber = Number(port);
+        if (host == null || portAsNumber == null) {
           return null;
         }
         const settings: RTorrentTCPConnectionSettings = {
           client: 'rTorrent',
           type: 'tcp',
           version: 1,
-          host: this.state.host,
+          host,
           port: portAsNumber,
         };
         return settings;
@@ -89,14 +91,17 @@ class RTorrentConnectionSettingsForm extends Component<
   }
 
   renderConnectionOptions() {
-    if (this.state.type === 'tcp') {
+    const {intl} = this.props;
+    const {type} = this.state;
+
+    if (type === 'tcp') {
       return (
         <FormRow>
           <Textbox
             onChange={(e) => this.handleFormChange(e, 'host')}
             id="host"
             label={<FormattedMessage id="connection.settings.rtorrent.host" />}
-            placeholder={this.props.intl.formatMessage({
+            placeholder={intl.formatMessage({
               id: 'connection.settings.rtorrent.host.input.placeholder',
             })}
           />
@@ -104,7 +109,7 @@ class RTorrentConnectionSettingsForm extends Component<
             onChange={(e) => this.handleFormChange(e, 'port')}
             id="port"
             label={<FormattedMessage id="connection.settings.rtorrent.port" />}
-            placeholder={this.props.intl.formatMessage({
+            placeholder={intl.formatMessage({
               id: 'connection.settings.rtorrent.port.input.placeholder',
             })}
           />
@@ -118,7 +123,7 @@ class RTorrentConnectionSettingsForm extends Component<
           onChange={(e) => this.handleFormChange(e, 'socket')}
           id="socket"
           label={<FormattedMessage id="connection.settings.rtorrent.socket" />}
-          placeholder={this.props.intl.formatMessage({
+          placeholder={intl.formatMessage({
             id: 'connection.settings.rtorrent.socket.input.placeholder',
           })}
         />
@@ -127,12 +132,15 @@ class RTorrentConnectionSettingsForm extends Component<
   }
 
   render() {
+    const {intl} = this.props;
+    const {type} = this.state;
+
     return (
       <FormRow>
         <FormGroup>
           <FormRow>
             <FormGroup
-              label={this.props.intl.formatMessage({
+              label={intl.formatMessage({
                 id: 'connection.settings.rtorrent.type',
               })}>
               <FormRow>
@@ -141,7 +149,7 @@ class RTorrentConnectionSettingsForm extends Component<
                   groupID="type"
                   id="tcp"
                   grow={false}
-                  checked={this.state.type === 'tcp'}>
+                  checked={type === 'tcp'}>
                   <FormattedMessage id="connection.settings.rtorrent.type.tcp" />
                 </Radio>
                 <Radio
@@ -149,7 +157,7 @@ class RTorrentConnectionSettingsForm extends Component<
                   groupID="type"
                   id="socket"
                   grow={false}
-                  checked={this.state.type === 'socket'}>
+                  checked={type === 'socket'}>
                   <FormattedMessage id="connection.settings.rtorrent.type.socket" />
                 </Radio>
               </FormRow>

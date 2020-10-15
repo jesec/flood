@@ -7,16 +7,17 @@ interface ProgressBarProps {
 
 export default class ProgressBar extends React.PureComponent<ProgressBarProps> {
   render() {
-    const percent = Math.round(this.props.percent);
+    const {percent, icon} = this.props;
+    const roundedPercent = Math.round(percent);
     const style: React.CSSProperties = {};
 
-    if (percent !== 100) {
-      style.width = `${percent}%`;
+    if (roundedPercent !== 100) {
+      style.width = `${roundedPercent}%`;
     }
 
     return (
       <div className="progress-bar">
-        <div className="progress-bar__icon">{this.props.icon}</div>
+        <div className="progress-bar__icon">{icon}</div>
         <div className="progress-bar__fill__wrapper">
           <div className="progress-bar__fill" style={style} />
         </div>

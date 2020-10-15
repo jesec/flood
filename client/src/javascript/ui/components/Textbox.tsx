@@ -26,10 +26,12 @@ export default class Textbox extends Component<TextboxProps> {
   };
 
   getLabel(): React.ReactNode {
-    if (this.props.label) {
+    const {id, label} = this.props;
+
+    if (label) {
       return (
-        <label className="form__element__label" htmlFor={this.props.id}>
-          {this.props.label}
+        <label className="form__element__label" htmlFor={id}>
+          {label}
         </label>
       );
     }
@@ -37,14 +39,30 @@ export default class Textbox extends Component<TextboxProps> {
   }
 
   render() {
+    const {
+      children,
+      id,
+      addonPlacement,
+      labelOffset,
+      wrapperClassName,
+      width,
+      defaultValue,
+      placeholder,
+      autoComplete,
+      type,
+      setRef,
+      onChange,
+      onClick,
+    } = this.props;
+
     let addonCount = 0;
-    const children = React.Children.map(this.props.children, (child) => {
+    const childElements = React.Children.map(children, (child) => {
       const childAsElement = child as React.ReactElement;
       if (childAsElement && childAsElement.type === FormElementAddon) {
         addonCount += 1;
         return React.cloneElement(childAsElement, {
           addonIndex: addonCount,
-          addonPlacement: this.props.addonPlacement,
+          addonPlacement,
         });
       }
 
@@ -52,30 +70,29 @@ export default class Textbox extends Component<TextboxProps> {
     });
 
     const inputClasses = classnames('input input--text form__element', {
-      [`form__element--has-addon--placed-${this.props.addonPlacement}`]:
-        this.props.addonPlacement && this.props.children,
+      [`form__element--has-addon--placed-${addonPlacement}`]: addonPlacement && children,
       [`form__element--has-addon--count-${addonCount}`]: addonCount > 0,
-      'form__element--label-offset': this.props.labelOffset,
+      'form__element--label-offset': labelOffset,
     });
-    const wrapperClasses = classnames('form__element__wrapper', this.props.wrapperClassName);
+    const wrapperClasses = classnames('form__element__wrapper', wrapperClassName);
 
     return (
-      <FormRowItem width={this.props.width}>
+      <FormRowItem width={width}>
         {this.getLabel()}
         <div className={wrapperClasses}>
           <input
             className={inputClasses}
-            defaultValue={this.props.defaultValue}
-            placeholder={this.props.placeholder}
-            name={this.props.id}
-            onChange={this.props.onChange}
-            onClick={this.props.onClick}
-            ref={this.props.setRef}
+            defaultValue={defaultValue}
+            placeholder={placeholder}
+            name={id}
+            onChange={onChange}
+            onClick={onClick}
+            ref={setRef}
             tabIndex={0}
-            type={this.props.type}
-            autoComplete={this.props.autoComplete}
+            type={type}
+            autoComplete={autoComplete}
           />
-          {children}
+          {childElements}
         </div>
       </FormRowItem>
     );

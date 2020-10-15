@@ -23,8 +23,9 @@ interface SortableListItemProps {
 
 class SortableListItem extends React.Component<SortableListItemProps> {
   componentDidMount() {
+    const {connectDragPreview} = this.props;
     // Replace the native drag preview with an empty image.
-    this.props.connectDragPreview(getEmptyImage(), {
+    connectDragPreview(getEmptyImage(), {
       captureDraggingState: true,
     });
   }

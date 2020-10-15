@@ -5,18 +5,24 @@ interface LoadingIndicatorProps {
   inverse?: boolean;
 }
 
-export default class LoadingIndicator extends React.Component<LoadingIndicatorProps> {
-  render() {
-    const classes = classnames('loading-indicator', {
-      'is-inverse': this.props.inverse,
-    });
+const LoadingIndicator: React.FC<LoadingIndicatorProps> = (props: LoadingIndicatorProps) => {
+  const {inverse} = props;
 
-    return (
-      <div className={classes} key="loading-indicator">
-        <div className="loading-indicator__bar loading-indicator__bar--1" />
-        <div className="loading-indicator__bar loading-indicator__bar--2" />
-        <div className="loading-indicator__bar loading-indicator__bar--3" />
-      </div>
-    );
-  }
-}
+  const classes = classnames('loading-indicator', {
+    'is-inverse': inverse,
+  });
+
+  return (
+    <div className={classes} key="loading-indicator">
+      <div className="loading-indicator__bar loading-indicator__bar--1" />
+      <div className="loading-indicator__bar loading-indicator__bar--2" />
+      <div className="loading-indicator__bar loading-indicator__bar--3" />
+    </div>
+  );
+};
+
+LoadingIndicator.defaultProps = {
+  inverse: true,
+};
+
+export default LoadingIndicator;

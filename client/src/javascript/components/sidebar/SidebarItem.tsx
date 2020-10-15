@@ -2,22 +2,21 @@ import classnames from 'classnames';
 import React from 'react';
 
 interface SidebarItemProps {
-  baseClassName: string;
+  children: React.ReactNode;
+  baseClassName?: string;
   modifier: string;
 }
 
-class SidebarItem extends React.Component<SidebarItemProps> {
-  static defaultProps = {
-    baseClassName: 'sidebar__item',
-  };
+const SidebarItem: React.FC<SidebarItemProps> = ({children, baseClassName, modifier}: SidebarItemProps) => {
+  const classes = classnames(baseClassName, {
+    [`${baseClassName}--${modifier}`]: modifier,
+  });
 
-  render() {
-    const classes = classnames(this.props.baseClassName, {
-      [`${this.props.baseClassName}--${this.props.modifier}`]: this.props.modifier,
-    });
+  return <div className={classes}>{children}</div>;
+};
 
-    return <div className={classes}>{this.props.children}</div>;
-  }
-}
+SidebarItem.defaultProps = {
+  baseClassName: 'sidebar__item',
+};
 
 export default SidebarItem;

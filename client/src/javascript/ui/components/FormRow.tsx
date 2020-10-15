@@ -1,22 +1,27 @@
 import classnames from 'classnames';
-import React, {Component} from 'react';
+import React from 'react';
 
 interface FormRowProps {
+  children: React.ReactNode;
   align?: 'start' | 'center' | 'end';
   justify?: 'start' | 'center' | 'end';
   wrap?: boolean;
 }
 
-class FormRow extends Component<FormRowProps> {
-  render() {
-    const classes = classnames('form__row', {
-      'form__row--wrap': this.props.wrap,
-      [`form__row--justify--${this.props.justify}`]: this.props.justify,
-      [`form__row--align--${this.props.align}`]: this.props.align,
-    });
+const FormRow: React.FC<FormRowProps> = ({children, align, justify, wrap}: FormRowProps) => {
+  const classes = classnames('form__row', {
+    'form__row--wrap': wrap,
+    [`form__row--justify--${justify}`]: justify,
+    [`form__row--align--${align}`]: align,
+  });
 
-    return <div className={classes}>{this.props.children}</div>;
-  }
-}
+  return <div className={classes}>{children}</div>;
+};
+
+FormRow.defaultProps = {
+  align: 'start',
+  justify: 'start',
+  wrap: false,
+};
 
 export default FormRow;

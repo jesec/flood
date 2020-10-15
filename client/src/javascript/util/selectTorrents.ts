@@ -3,7 +3,7 @@ import React from 'react';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 interface SelectTorrentOptions {
-  event: React.MouseEvent<HTMLLIElement>;
+  event: React.MouseEvent;
   hash: string;
   selectedTorrents: Array<string>;
   torrentList: Array<TorrentProperties>;

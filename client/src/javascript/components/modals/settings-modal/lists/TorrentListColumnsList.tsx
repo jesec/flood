@@ -8,48 +8,50 @@ import ErrorIcon from '../../../icons/ErrorIcon';
 import SettingsStore from '../../../../stores/SettingsStore';
 import SortableList, {ListItem} from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
-import TorrentProperties from '../../../../constants/TorrentProperties';
+import TorrentListColumns from '../../../../constants/TorrentListColumns';
 
-interface TorrentDetailItemsListProps {
+import type {TorrentListColumn} from '../../../../constants/TorrentListColumns';
+
+interface TorrentListColumnsListProps {
   torrentListViewSize: FloodSettings['torrentListViewSize'];
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
 }
 
-interface TorrentDetailItemsListStates {
-  torrentDetails: FloodSettings['torrentDetails'];
+interface TorrentListColumnsListStates {
+  torrentListColumns: FloodSettings['torrentListColumns'];
 }
 
-class TorrentDetailItemsList extends React.Component<TorrentDetailItemsListProps, TorrentDetailItemsListStates> {
+class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps, TorrentListColumnsListStates> {
   tooltipRef: Tooltip | null = null;
 
-  constructor(props: TorrentDetailItemsListProps) {
+  constructor(props: TorrentListColumnsListProps) {
     super(props);
 
     this.state = {
-      torrentDetails: SettingsStore.getFloodSetting('torrentDetails'),
+      torrentListColumns: SettingsStore.getFloodSetting('torrentListColumns'),
     };
   }
 
-  getLockedIDs(): Array<keyof typeof TorrentProperties> {
+  getLockedIDs(): Array<TorrentListColumn> {
     if (this.props.torrentListViewSize === 'expanded') {
-      return ['name', 'eta', 'downRate', 'upRate'];
+      return ['name', 'eta', 'downRate', 'percentComplete', 'downTotal', 'upRate'];
     }
 
     return [];
   }
 
   handleCheckboxValueChange = (id: string, value: boolean): void => {
-    let {torrentDetails} = this.state;
+    const {torrentListColumns} = this.state;
 
-    torrentDetails = torrentDetails.map((detail) => {
+    const changedTorrentListColumns = torrentListColumns.map((column) => {
       return {
-        id: detail.id,
-        visible: detail.id === id ? value : detail.visible,
+        id: column.id,
+        visible: column.id === id ? value : column.visible,
       };
     });
 
-    this.props.onSettingsChange({torrentDetails});
-    this.setState({torrentDetails});
+    this.props.onSettingsChange({torrentListColumns: changedTorrentListColumns});
+    this.setState({torrentListColumns: changedTorrentListColumns});
   };
 
   handleMouseDown = (): void => {
@@ -59,12 +61,13 @@ class TorrentDetailItemsList extends React.Component<TorrentDetailItemsListProps
   };
 
   handleMove = (items: Array<ListItem>): void => {
-    this.setState({torrentDetails: items as FloodSettings['torrentDetails']});
-    this.props.onSettingsChange({torrentDetails: items as FloodSettings['torrentDetails']});
+    const changedItems = items.slice() as FloodSettings['torrentListColumns'];
+    this.setState({torrentListColumns: changedItems});
+    this.props.onSettingsChange({torrentListColumns: changedItems});
   };
 
   renderItem = (item: ListItem, index: number): React.ReactNode => {
-    const {id, visible} = item as FloodSettings['torrentDetails'][number];
+    const {id, visible} = item as FloodSettings['torrentListColumns'][number];
     let checkbox = null;
     let warning = null;
 
@@ -83,7 +86,7 @@ class TorrentDetailItemsList extends React.Component<TorrentDetailItemsListProps
     if (
       id === 'tags' &&
       this.props.torrentListViewSize === 'expanded' &&
-      index < this.state.torrentDetails.length - 1
+      index < this.state.torrentListColumns.length - 1
     ) {
       const tooltipContent = <FormattedMessage id="settings.ui.torrent.details.tags.placement" />;
 
@@ -107,7 +110,7 @@ class TorrentDetailItemsList extends React.Component<TorrentDetailItemsListProps
       <div className="sortable-list__content sortable-list__content__wrapper">
         {warning}
         <span className="sortable-list__content sortable-list__content--primary">
-          <FormattedMessage id={TorrentProperties[id].id} />
+          <FormattedMessage id={TorrentListColumns[id].id} />
         </span>
         {checkbox}
       </div>
@@ -118,34 +121,31 @@ class TorrentDetailItemsList extends React.Component<TorrentDetailItemsListProps
 
   render(): React.ReactNode {
     const lockedIDs = this.getLockedIDs();
-    let torrentDetailItems = this.state.torrentDetails
-      .slice()
-      .filter((property) => Object.prototype.hasOwnProperty.call(TorrentProperties, property.id));
+    let nextUnlockedIndex = lockedIDs.length;
 
-    if (this.props.torrentListViewSize === 'expanded') {
-      let nextUnlockedIndex = lockedIDs.length;
+    const torrentListColumnItems =
+      this.props.torrentListViewSize === 'expanded'
+        ? this.state.torrentListColumns
+            .reduce((accumulator: FloodSettings['torrentListColumns'], column) => {
+              const lockedIDIndex = lockedIDs.indexOf(column.id);
 
-      torrentDetailItems = torrentDetailItems
-        .reduce((accumulator: FloodSettings['torrentDetails'], detail) => {
-          const lockedIDIndex = lockedIDs.indexOf(detail.id);
+              if (lockedIDIndex > -1) {
+                accumulator[lockedIDIndex] = column;
+              } else {
+                accumulator[nextUnlockedIndex] = column;
+                nextUnlockedIndex += 1;
+              }
 
-          if (lockedIDIndex > -1) {
-            accumulator[lockedIDIndex] = detail;
-          } else {
-            accumulator[nextUnlockedIndex] = detail;
-            nextUnlockedIndex += 1;
-          }
-
-          return accumulator;
-        }, [])
-        .filter((item) => item != null);
-    }
+              return accumulator;
+            }, [])
+            .filter((column) => column != null)
+        : this.state.torrentListColumns;
 
     return (
       <SortableList
         id="torrent-details"
         className="sortable-list--torrent-details"
-        items={torrentDetailItems}
+        items={torrentListColumnItems}
         lockedIDs={lockedIDs}
         onMouseDown={this.handleMouseDown}
         onDrop={this.handleMove}
@@ -155,4 +155,4 @@ class TorrentDetailItemsList extends React.Component<TorrentDetailItemsListProps
   }
 }
 
-export default TorrentDetailItemsList;
+export default TorrentListColumnsList;

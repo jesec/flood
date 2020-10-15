@@ -5,7 +5,6 @@ import type {TorrentDetails, TorrentProperties} from '@shared/types/Torrent';
 
 import connectStores from '../../../util/connectStores';
 import Modal from '../Modal';
-import EventTypes from '../../../constants/EventTypes';
 import TorrentMediainfo from './TorrentMediainfo';
 import TorrentFiles from './TorrentFiles';
 import TorrentGeneralInfo from './TorrentGeneralInfo';
@@ -100,7 +99,7 @@ const ConnectedTorrentDetailsModal = connectStores<Omit<TorrentDetailsModalProps
     return [
       {
         store: TorrentStore,
-        event: EventTypes.CLIENT_TORRENT_DETAILS_CHANGE,
+        event: 'CLIENT_TORRENT_DETAILS_CHANGE',
         getValue: ({props}) => {
           return {
             torrentDetails: TorrentStore.getTorrentDetails(props.options.hash),
@@ -109,7 +108,7 @@ const ConnectedTorrentDetailsModal = connectStores<Omit<TorrentDetailsModalProps
       },
       {
         store: TorrentStore,
-        event: EventTypes.CLIENT_TORRENTS_REQUEST_SUCCESS,
+        event: 'CLIENT_TORRENTS_REQUEST_SUCCESS',
         getValue: ({props}) => {
           return {
             torrent: TorrentStore.getTorrent(props.options.hash),

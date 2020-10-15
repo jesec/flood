@@ -859,6 +859,12 @@
       "value": "This path does not exist. It will be created."
     }
   ],
+  "filesystem.error.unknown": [
+    {
+      "type": 0,
+      "value": "An unknown error occurred. Please try again."
+    }
+  ],
   "filesystem.fetching": [
     {
       "type": 0,

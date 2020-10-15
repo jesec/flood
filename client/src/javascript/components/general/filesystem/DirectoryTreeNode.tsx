@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
@@ -31,11 +30,6 @@ interface DirectoryTreeNodeStates {
 const METHODS_TO_BIND = ['handleDirectoryClick', 'handleDirectorySelection'] as const;
 
 class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, DirectoryTreeNodeStates> {
-  static propTypes = {
-    path: PropTypes.array,
-    selectedItems: PropTypes.object,
-  };
-
   static defaultProps = {
     path: [],
     selectedItems: {},
@@ -54,13 +48,17 @@ class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, Director
   }
 
   getCurrentPath() {
-    return [...this.props.path, this.props.directoryName];
+    const {path, directoryName} = this.props;
+
+    return [...path, directoryName];
   }
 
   getIcon() {
-    let icon = null;
+    const {id, isSelected} = this.props;
+    const {expanded} = this.state;
 
-    if (this.state.expanded) {
+    let icon = null;
+    if (expanded) {
       icon = <FolderOpenSolid />;
     } else {
       icon = <FolderClosedSolid />;
@@ -71,12 +69,7 @@ class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, Director
         <div
           className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <Checkbox
-            checked={this.props.isSelected}
-            id={this.props.id}
-            onChange={this.handleDirectorySelection}
-            useProps
-          />
+          <Checkbox checked={isSelected} id={id} onChange={this.handleDirectorySelection} useProps />
         </div>
         <div
           className="directory-tree__checkbox__item
@@ -88,17 +81,20 @@ class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, Director
   }
 
   getSubTree() {
-    if (this.state.expanded) {
+    const {depth, itemsTree, hash, onItemSelect, onPriorityChange} = this.props;
+    const {expanded} = this.state;
+
+    if (expanded) {
       return (
         <div className="directory-tree__node directory-tree__node--group">
           <DirectoryTree
-            depth={this.props.depth}
-            hash={this.props.hash}
-            key={`${this.state.expanded}-${this.props.depth}`}
-            onPriorityChange={this.props.onPriorityChange}
-            onItemSelect={this.props.onItemSelect}
+            depth={depth}
+            hash={hash}
+            key={`${expanded}-${depth}`}
+            onPriorityChange={onPriorityChange}
+            onItemSelect={onItemSelect}
             path={this.getCurrentPath()}
-            itemsTree={this.props.itemsTree}
+            itemsTree={itemsTree}
           />
         </div>
       );
@@ -116,32 +112,37 @@ class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, Director
   }
 
   handleDirectorySelection() {
-    this.props.onItemSelect({
+    const {depth, isSelected, onItemSelect} = this.props;
+
+    onItemSelect({
       type: 'directory',
-      depth: this.props.depth,
+      depth,
       path: this.getCurrentPath(),
-      select: !this.props.isSelected,
+      select: !isSelected,
     });
   }
 
   render() {
-    const branchClasses = classnames('directory-tree__branch', `directory-tree__branch--depth-${this.props.depth}`, {
-      'directory-tree__node--selected': this.props.isSelected,
+    const {depth, directoryName, isSelected} = this.props;
+    const {expanded} = this.state;
+
+    const branchClasses = classnames('directory-tree__branch', `directory-tree__branch--depth-${depth}`, {
+      'directory-tree__node--selected': isSelected,
     });
     const directoryClasses = classnames(
       'directory-tree__node',
       'directory-tree__node--selectable directory-tree__node--directory',
       {
-        'is-expanded': this.state.expanded,
+        'is-expanded': expanded,
       },
     );
 
     return (
       <div className={branchClasses}>
-        <div className={directoryClasses} onClick={this.handleDirectoryClick} title={this.props.directoryName}>
+        <div className={directoryClasses} onClick={this.handleDirectoryClick} title={directoryName}>
           <div className="file__label">
             {this.getIcon()}
-            <div className="file__name">{this.props.directoryName}</div>
+            <div className="file__name">{directoryName}</div>
           </div>
         </div>
         {this.getSubTree()}

@@ -8,48 +8,50 @@ import ErrorIcon from '../../../icons/ErrorIcon';
 import SettingsStore from '../../../../stores/SettingsStore';
 import SortableList, {ListItem} from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
-import TorrentContextMenuItems from '../../../../constants/TorrentContextMenuItems';
+import TorrentContextMenuActions from '../../../../constants/TorrentContextMenuActions';
 
-interface TorrentContextMenuItemsListProps {
+import type {TorrentContextMenuAction} from '../../../../constants/TorrentContextMenuActions';
+
+interface TorrentContextMenuActionsListProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
 }
 
-interface TorrentContextMenuItemsListStates {
-  torrentContextMenuItems: FloodSettings['torrentContextMenuItems'];
+interface TorrentContextMenuActionsListStates {
+  torrentContextMenuActions: FloodSettings['torrentContextMenuActions'];
 }
 
-const lockedIDs = ['start', 'stop', 'set-taxonomy', 'torrent-details'];
+const lockedIDs: Array<TorrentContextMenuAction> = ['start', 'stop', 'setTaxonomy', 'torrentDetails'];
 
-class TorrentContextMenuItemsList extends React.Component<
-  TorrentContextMenuItemsListProps,
-  TorrentContextMenuItemsListStates
+class TorrentContextMenuActionsList extends React.Component<
+  TorrentContextMenuActionsListProps,
+  TorrentContextMenuActionsListStates
 > {
   tooltipRef: Tooltip | null = null;
 
-  constructor(props: TorrentContextMenuItemsListProps) {
+  constructor(props: TorrentContextMenuActionsListProps) {
     super(props);
 
     this.state = {
-      torrentContextMenuItems: SettingsStore.getFloodSetting('torrentContextMenuItems'),
+      torrentContextMenuActions: SettingsStore.getFloodSetting('torrentContextMenuActions'),
     };
   }
 
-  updateSettings = (torrentContextMenuItems: FloodSettings['torrentContextMenuItems']) => {
-    this.props.onSettingsChange({torrentContextMenuItems});
+  updateSettings = (torrentContextMenuActions: FloodSettings['torrentContextMenuActions']) => {
+    this.props.onSettingsChange({torrentContextMenuActions});
   };
 
   handleCheckboxValueChange = (id: string, value: boolean) => {
-    let {torrentContextMenuItems} = this.state;
+    let {torrentContextMenuActions} = this.state;
 
-    torrentContextMenuItems = torrentContextMenuItems.map((setting) => {
+    torrentContextMenuActions = torrentContextMenuActions.map((setting) => {
       return {
         id: setting.id,
         visible: setting.id === id ? value : setting.visible,
       };
     });
 
-    this.props.onSettingsChange({torrentContextMenuItems});
-    this.setState({torrentContextMenuItems});
+    this.props.onSettingsChange({torrentContextMenuActions});
+    this.setState({torrentContextMenuActions});
   };
 
   handleMouseDown = () => {
@@ -63,7 +65,7 @@ class TorrentContextMenuItemsList extends React.Component<
   };
 
   renderItem = (item: ListItem) => {
-    const {id, visible} = item as FloodSettings['torrentContextMenuItems'][number];
+    const {id, visible} = item as FloodSettings['torrentContextMenuActions'][number];
     let checkbox = null;
     let warning = null;
 
@@ -79,8 +81,8 @@ class TorrentContextMenuItemsList extends React.Component<
       );
     }
 
-    if (id === 'set-tracker') {
-      const tooltipContent = <FormattedMessage id={TorrentContextMenuItems[id].warning} />;
+    if (id === 'setTracker') {
+      const tooltipContent = <FormattedMessage id={TorrentContextMenuActions[id].warning} />;
 
       warning = (
         <Tooltip
@@ -102,7 +104,7 @@ class TorrentContextMenuItemsList extends React.Component<
       <div className="sortable-list__content sortable-list__content__wrapper">
         {warning}
         <span className="sortable-list__content sortable-list__content--primary">
-          <FormattedMessage id={TorrentContextMenuItems[id].id} />
+          <FormattedMessage id={TorrentContextMenuActions[id].id} />
         </span>
         {checkbox}
       </div>
@@ -112,13 +114,13 @@ class TorrentContextMenuItemsList extends React.Component<
   };
 
   render() {
-    const {torrentContextMenuItems} = this.state;
+    const {torrentContextMenuActions} = this.state;
 
     return (
       <SortableList
         id="torrent-context-menu-items"
         className="sortable-list--torrent-context-menu-items"
-        items={torrentContextMenuItems}
+        items={torrentContextMenuActions}
         lockedIDs={lockedIDs}
         isDraggable={false}
         onMouseDown={this.handleMouseDown}
@@ -129,4 +131,4 @@ class TorrentContextMenuItemsList extends React.Component<
   }
 }
 
-export default TorrentContextMenuItemsList;
+export default TorrentContextMenuActionsList;

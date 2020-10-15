@@ -1,4 +1,4 @@
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {useIntl} from 'react-intl';
 import React from 'react';
 
 import type {TransferSummary} from '@shared/types/TransferData';
@@ -7,12 +7,13 @@ import connectStores from '../../util/connectStores';
 import {compute, getTranslationString} from '../../util/size';
 import TransferDataStore from '../../stores/TransferDataStore';
 
-interface WindowTitleProps extends WrappedComponentProps {
+interface WindowTitleProps {
   summary?: TransferSummary;
 }
 
-const WindowTitleFunc = (props: WindowTitleProps) => {
-  const {intl, summary} = props;
+const WindowTitleFunc: React.FC<WindowTitleProps> = (props: WindowTitleProps) => {
+  const {summary} = props;
+  const intl = useIntl();
 
   React.useEffect(() => {
     let title = 'Flood';
@@ -59,7 +60,7 @@ const WindowTitleFunc = (props: WindowTitleProps) => {
   return null;
 };
 
-const WindowTitle = connectStores(injectIntl(WindowTitleFunc), () => {
+const WindowTitle = connectStores(WindowTitleFunc, () => {
   return [
     {
       store: TransferDataStore,

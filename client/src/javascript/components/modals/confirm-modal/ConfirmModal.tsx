@@ -2,11 +2,13 @@ import React from 'react';
 
 import Modal from '../Modal';
 
+import type {ModalAction} from '../ModalActions';
+
 export interface ConfirmModalProps {
   options: {
     content: React.ReactNode;
     heading: React.ReactNode;
-    actions: Modal['props']['actions'];
+    actions: Array<ModalAction>;
   };
 }
 

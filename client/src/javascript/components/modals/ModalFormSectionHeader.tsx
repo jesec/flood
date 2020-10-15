@@ -1,9 +1,11 @@
 import React from 'react';
 
-class ModalFormSectionHeader extends React.PureComponent {
-  render() {
-    return <h2 className="h4">{this.props.children}</h2>;
-  }
+interface ModalFormSectionHeaderProps {
+  children: React.ReactNode;
 }
+
+const ModalFormSectionHeader: React.FC<ModalFormSectionHeaderProps> = ({children}: ModalFormSectionHeaderProps) => {
+  return <h2 className="h4">{children}</h2>;
+};
 
 export default ModalFormSectionHeader;

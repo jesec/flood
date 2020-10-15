@@ -1,5 +1,4 @@
-// Actually string ID of torrentProperties.
-const torrentProperties = {
+const TorrentListColumns = {
   dateAdded: {
     id: 'torrents.properties.date.added',
   },
@@ -59,4 +58,5 @@ const torrentProperties = {
   },
 } as const;
 
-export default torrentProperties;
+export default TorrentListColumns;
+export type TorrentListColumn = keyof typeof TorrentListColumns;

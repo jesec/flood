@@ -9,10 +9,11 @@ import connectStores from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
 import history from './util/history';
-import Languages from './constants/Languages';
 import LoadingIndicator from './components/general/LoadingIndicator';
 import SettingsStore from './stores/SettingsStore';
 import UIStore from './stores/UIStore';
+
+import type {Language} from './constants/Languages';
 
 import '../sass/style.scss';
 
@@ -21,7 +22,7 @@ const Register = React.lazy(() => import('./components/views/Register'));
 const TorrentClientOverview = React.lazy(() => import('./components/views/TorrentClientOverview'));
 
 interface FloodAppProps {
-  locale?: keyof typeof Languages;
+  locale?: Language;
 }
 
 const loadingOverlay = (
@@ -95,9 +96,11 @@ class FloodApp extends React.Component<FloodAppProps> {
   }
 
   public render(): React.ReactNode {
+    const {locale} = this.props;
+
     return (
       <React.Suspense fallback={loadingOverlay}>
-        <AsyncIntlProvider locale={this.props.locale}>{appRoutes}</AsyncIntlProvider>
+        <AsyncIntlProvider locale={locale}>{appRoutes}</AsyncIntlProvider>
       </React.Suspense>
     );
   }

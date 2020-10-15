@@ -83,21 +83,11 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
     NotificationStore.unlisten('NOTIFICATIONS_COUNT_CHANGE', this.handleNotificationCountChange);
   }
 
-  fetchNotifications = () => {
-    this.setState({isLoading: true});
-
-    FloodActions.fetchNotifications({
-      id: 'notification-tooltip',
-      limit: NOTIFICATIONS_PER_PAGE,
-      start: this.state.paginationStart,
-    }).then(() => {
-      this.setState({isLoading: false});
-    });
-  };
-
   getBadge() {
-    if (this.props.count != null && this.props.count.total > 0) {
-      return <span className="notifications__badge">{this.props.count.total}</span>;
+    const {count} = this.props;
+
+    if (count != null && count.total > 0) {
+      return <span className="notifications__badge">{count.total}</span>;
     }
 
     return null;
@@ -138,7 +128,8 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
           className="notifications__toolbar toolbar toolbar--dark
           toolbar--bottom">
           <li className={newerButtonClass} onClick={this.handleNewerNotificationsClick}>
-            <ChevronLeftIcon /> {newerFrom + 1} &ndash; {newerTo}
+            <ChevronLeftIcon />
+            {`${newerFrom + 1} &ndash; ${newerTo}`}
           </li>
           <li
             className="toolbar__item toolbar__item--button
@@ -147,8 +138,8 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
             {this.props.intl.formatMessage(MESSAGES.clearAll)}
           </li>
           <li className={olderButtonClass} onClick={this.handleOlderNotificationsClick}>
-            {olderFrom} &ndash;
-            {olderTo} <ChevronRightIcon />
+            {`${olderFrom} &ndash; ${olderTo}`}
+            <ChevronRightIcon />
           </li>
         </ul>
       );
@@ -158,8 +149,9 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
   };
 
   getNotification = (notification: Notification, index: number) => {
-    const date = this.props.intl.formatDate(notification.ts, {year: 'numeric', month: 'long', day: '2-digit'});
-    const time = this.props.intl.formatTime(notification.ts);
+    const {intl} = this.props;
+    const date = intl.formatDate(notification.ts, {year: 'numeric', month: 'long', day: '2-digit'});
+    const time = intl.formatTime(notification.ts);
 
     let notificationBody = null;
 
@@ -181,19 +173,17 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
       );
     } else {
       const messageID = MESSAGES[`${notification.id}.body` as keyof typeof MESSAGES];
-      notificationBody = this.props.intl.formatMessage(messageID, notification.data);
+      notificationBody = intl.formatMessage(messageID, notification.data);
     }
 
     return (
       <li className="notifications__list__item" key={index}>
         <div className="notification__heading">
           <span className="notification__category">
-            {this.props.intl.formatMessage(MESSAGES[`${notification.id}.heading` as keyof typeof MESSAGES])}
+            {intl.formatMessage(MESSAGES[`${notification.id}.heading` as keyof typeof MESSAGES])}
           </span>
           {' — '}
-          <span className="notification__timestamp">
-            {date} {this.props.intl.formatMessage(MESSAGES.at)} {time}
-          </span>
+          <span className="notification__timestamp">{`${date} ${intl.formatMessage(MESSAGES.at)} ${time}`}</span>
         </div>
         <div className="notification__message">{notificationBody}</div>
       </li>
@@ -201,29 +191,31 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
   };
 
   getTopToolbar() {
-    if (this.props.count != null && this.props.count.total > NOTIFICATIONS_PER_PAGE) {
-      let countStart = this.state.paginationStart + 1;
-      let countEnd = this.state.paginationStart + NOTIFICATIONS_PER_PAGE;
+    const {count, intl} = this.props;
+    const {paginationStart} = this.state;
+    if (count != null && count.total > NOTIFICATIONS_PER_PAGE) {
+      let countStart = paginationStart + 1;
+      let countEnd = paginationStart + NOTIFICATIONS_PER_PAGE;
 
-      if (countStart > this.props.count.total) {
-        countStart = this.props.count.total;
+      if (countStart > count.total) {
+        countStart = count.total;
       }
 
-      if (countEnd > this.props.count.total) {
-        countEnd = this.props.count.total;
+      if (countEnd > count.total) {
+        countEnd = count.total;
       }
 
       return (
         <div className="toolbar toolbar--dark toolbar--top tooltip__toolbar tooltip__content--padding-surrogate">
           <span className="toolbar__item toolbar__item--label">
-            {`${this.props.intl.formatMessage(MESSAGES.showing)} `}
+            {`${intl.formatMessage(MESSAGES.showing)} `}
             <strong>
               {countStart}
-              {` ${this.props.intl.formatMessage(MESSAGES.to)} `}
+              {` ${intl.formatMessage(MESSAGES.to)} `}
               {countEnd}
             </strong>
-            {` ${this.props.intl.formatMessage(MESSAGES.of)} `}
-            <strong>{this.props.count.total}</strong>
+            {` ${intl.formatMessage(MESSAGES.of)} `}
+            <strong>{count.total}</strong>
           </span>
         </div>
       );
@@ -262,6 +254,18 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
         {this.getBottomToolbar()}
       </div>
     );
+  };
+
+  fetchNotifications = () => {
+    this.setState({isLoading: true});
+
+    FloodActions.fetchNotifications({
+      id: 'notification-tooltip',
+      limit: NOTIFICATIONS_PER_PAGE,
+      start: this.state.paginationStart,
+    }).then(() => {
+      this.setState({isLoading: false});
+    });
   };
 
   handleClearNotificationsClick = () => {
@@ -313,16 +317,18 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
   };
 
   render() {
+    const {count} = this.props;
+
     return (
       <Tooltip
         contentClassName="tooltip__content tooltip__content--no-padding"
         content={this.getTooltipContent()}
-        interactive={this.props.count != null && this.props.count.total !== 0}
+        interactive={count != null && count.total !== 0}
         onOpen={this.handleTooltipOpen}
         ref={(ref) => {
           this.tooltipRef = ref;
         }}
-        width={this.props.count == null || this.props.count.total === 0 ? undefined : 340}
+        width={count == null || count.total === 0 ? undefined : 340}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           tooltip__wrapper">

@@ -2,17 +2,22 @@ import classnames from 'classnames';
 import React from 'react';
 
 interface ApplicationViewProps {
+  children: React.ReactNode;
   modifier?: string;
 }
 
-class ApplicationView extends React.Component<ApplicationViewProps> {
-  render() {
-    const classes = classnames('application__view', {
-      [`application__view--${this.props.modifier}`]: this.props.modifier != null,
-    });
+const ApplicationView: React.FC<ApplicationViewProps> = (props: ApplicationViewProps) => {
+  const {children, modifier} = props;
 
-    return <div className={classes}>{this.props.children}</div>;
-  }
-}
+  const classes = classnames('application__view', {
+    [`application__view--${modifier}`]: modifier != null,
+  });
+
+  return <div className={classes}>{children}</div>;
+};
+
+ApplicationView.defaultProps = {
+  modifier: undefined,
+};
 
 export default ApplicationView;
