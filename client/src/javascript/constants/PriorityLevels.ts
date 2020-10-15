@@ -1,4 +1,4 @@
-const PRIORITY_LEVELS = {
+const PriorityLevels = {
   file: {
     0: 'DONT_DOWNLOAD',
     1: 'NORMAL',
@@ -12,4 +12,4 @@ const PRIORITY_LEVELS = {
   },
 } as const;
 
-export default PRIORITY_LEVELS;
+export default PriorityLevels;

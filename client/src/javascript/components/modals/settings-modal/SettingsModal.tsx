@@ -16,6 +16,8 @@ import SettingsStore from '../../../stores/SettingsStore';
 import UITab from './UITab';
 import DiskUsageTab from './DiskUsageTab';
 
+import type {ModalAction} from '../ModalActions';
+
 interface SettingsModalProps extends WrappedComponentProps {
   clientSettings?: ClientSettings | null;
   floodSettings?: FloodSettings | null;
@@ -37,7 +39,7 @@ class SettingsModal extends React.Component<SettingsModalProps, SettingsModalSta
     };
   }
 
-  getActions(): Modal['props']['actions'] {
+  getActions(): Array<ModalAction> {
     return [
       {
         clickHandler: null,

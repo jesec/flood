@@ -41,33 +41,30 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
   }
 
   getFileDropzone() {
-    let fileContent = null;
+    const {files} = this.state;
 
-    if (this.state.files.length > 0) {
-      const files = this.state.files.map((file, index) => (
-        <li className="dropzone__selected-files__file interactive-list__item" key={file.name} title={file.name}>
-          <span className="interactive-list__icon">
-            <FileIcon />
-          </span>
-          <span className="interactive-list__label">{file.name}</span>
-          <span
-            className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-            onClick={() => this.handleFileRemove(index)}>
-            <CloseIcon />
-          </span>
-        </li>
-      ));
-
-      fileContent = (
+    const fileContent =
+      files.length > 0 ? (
         <ul
           className="dropzone__selected-files interactive-list"
           onClick={(event) => {
             event.stopPropagation();
           }}>
-          {files}
+          {files.map((file, index) => (
+            <li className="dropzone__selected-files__file interactive-list__item" key={file.name} title={file.name}>
+              <span className="interactive-list__icon">
+                <FileIcon />
+              </span>
+              <span className="interactive-list__label">{file.name}</span>
+              <span
+                className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
+                onClick={() => this.handleFileRemove(index)}>
+                <CloseIcon />
+              </span>
+            </li>
+          ))}
         </ul>
-      );
-    }
+      ) : null;
 
     return (
       <FormRowItem>
@@ -164,6 +161,9 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
   };
 
   render() {
+    const {intl} = this.props;
+    const {isAddingTorrents} = this.state;
+
     return (
       <Form
         className="inverse"
@@ -173,24 +173,21 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
         <FormRow>{this.getFileDropzone()}</FormRow>
         <FilesystemBrowserTextbox
           id="destination"
-          label={this.props.intl.formatMessage({
+          label={intl.formatMessage({
             id: 'torrents.add.destination.label',
           })}
           selectable="directories"
-          basePathToggle
+          showBasePathToggle
         />
         <FormRow>
           <TagSelect
-            label={this.props.intl.formatMessage({
+            label={intl.formatMessage({
               id: 'torrents.add.tags',
             })}
             id="tags"
           />
         </FormRow>
-        <AddTorrentsActions
-          onAddTorrentsClick={this.handleAddTorrents}
-          isAddingTorrents={this.state.isAddingTorrents}
-        />
+        <AddTorrentsActions onAddTorrentsClick={this.handleAddTorrents} isAddingTorrents={isAddingTorrents} />
       </Form>
     );
   }

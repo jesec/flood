@@ -48,34 +48,6 @@ class SortableList extends React.Component<SortableListProps, SortableListStates
     return {items: props.items};
   }
 
-  handleDrop() {
-    if (this.props.onDrop) {
-      this.props.onDrop(this.state.items);
-    }
-  }
-
-  handleMouseDown(event: React.MouseEvent<HTMLUListElement>) {
-    if (this.props.onMouseDown) {
-      this.props.onMouseDown(event);
-    }
-  }
-
-  handleMove(dragIndex: number, hoverIndex: number) {
-    const {items} = this.state;
-    const draggedItem = items[dragIndex];
-
-    // Remove the item being dragged.
-    items.splice(dragIndex, 1);
-    // Add the item being dragged in its new position.
-    items.splice(hoverIndex, 0, draggedItem);
-
-    this.setState({items});
-
-    if (this.props.onMove) {
-      this.props.onMove(items);
-    }
-  }
-
   getItemList() {
     const {
       handleDrop,
@@ -104,8 +76,40 @@ class SortableList extends React.Component<SortableListProps, SortableListStates
     });
   }
 
+  handleDrop() {
+    const {onDrop} = this.props;
+    if (onDrop) {
+      onDrop(this.state.items);
+    }
+  }
+
+  handleMouseDown(event: React.MouseEvent<HTMLUListElement>) {
+    const {onMouseDown} = this.props;
+    if (onMouseDown) {
+      onMouseDown(event);
+    }
+  }
+
+  handleMove(dragIndex: number, hoverIndex: number) {
+    const {onMove} = this.props;
+    const {items} = this.state;
+    const draggedItem = items[dragIndex];
+
+    // Remove the item being dragged.
+    items.splice(dragIndex, 1);
+    // Add the item being dragged in its new position.
+    items.splice(hoverIndex, 0, draggedItem);
+
+    this.setState({items});
+
+    if (onMove) {
+      onMove(items);
+    }
+  }
+
   render() {
-    const classes = classnames('sortable-list', this.props.className);
+    const {className} = this.props;
+    const classes = classnames('sortable-list', className);
 
     return (
       <DndProvider options={HTML5toTouch}>

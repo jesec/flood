@@ -39,10 +39,13 @@ class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps
   }
 
   render() {
+    const {intl} = this.props;
+    const {client} = this.state;
+
     let settingsForm: React.ReactNode = null;
-    switch (this.state.client) {
+    switch (client) {
       case 'rTorrent':
-        settingsForm = <RTorrentConnectionSettingsForm intl={this.props.intl} ref={this.settingsRef} />;
+        settingsForm = <RTorrentConnectionSettingsForm intl={intl} ref={this.settingsRef} />;
         break;
       default:
         break;
@@ -53,9 +56,9 @@ class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps
         <FormRow>
           <Select
             id="client"
-            label={this.props.intl.formatMessage({id: 'connection.settings.client.select'})}
-            onSelect={(client) => {
-              this.setState({client: client as ClientConnectionSettings['client']});
+            label={intl.formatMessage({id: 'connection.settings.client.select'})}
+            onSelect={(selectedClient) => {
+              this.setState({client: selectedClient as ClientConnectionSettings['client']});
             }}>
             {getClientSelectItems()}
           </Select>

@@ -1,7 +1,8 @@
 import classnames from 'classnames';
-import React, {Component} from 'react';
+import React from 'react';
 
 interface FormElementAddonProps {
+  children: React.ReactNode;
   addonPlacement?: 'before' | 'after';
   addonIndex?: number;
   className?: string;
@@ -10,28 +11,40 @@ interface FormElementAddonProps {
   onClick?: React.HTMLAttributes<HTMLDivElement>['onClick'];
 }
 
-export default class FormElementAddon extends Component<FormElementAddonProps> {
-  static defaultProps = {
-    type: 'icon',
-    isInteractive: false,
-  };
+const FormElementAddon: React.FC<FormElementAddonProps> = ({
+  children,
+  type,
+  addonPlacement,
+  addonIndex,
+  className,
+  isInteractive,
+  onClick,
+}: FormElementAddonProps) => {
+  const classes = classnames(
+    'form__element__addon',
+    {
+      [`form__element__addon--placed-${addonPlacement}`]: addonPlacement,
+      [`form__element__addon--index-${addonIndex}`]: addonIndex,
+      'form__element__addon--is-interactive': isInteractive || onClick,
+      'form__element__addon--is-icon': type === 'icon',
+    },
+    className,
+  );
 
-  render() {
-    const classes = classnames(
-      'form__element__addon',
-      {
-        [`form__element__addon--placed-${this.props.addonPlacement}`]: this.props.addonPlacement,
-        [`form__element__addon--index-${this.props.addonIndex}`]: this.props.addonIndex,
-        'form__element__addon--is-interactive': this.props.isInteractive || this.props.onClick,
-        'form__element__addon--is-icon': this.props.type === 'icon',
-      },
-      this.props.className,
-    );
+  return (
+    <div className={classes} onClick={onClick}>
+      {children}
+    </div>
+  );
+};
 
-    return (
-      <div className={classes} onClick={this.props.onClick}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+FormElementAddon.defaultProps = {
+  type: 'icon',
+  isInteractive: false,
+  addonPlacement: undefined,
+  addonIndex: undefined,
+  className: undefined,
+  onClick: undefined,
+};
+
+export default FormElementAddon;

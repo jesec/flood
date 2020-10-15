@@ -5,6 +5,7 @@ module.exports = {
     'plugin:import/warnings',
     'plugin:import/typescript',
     'prettier',
+    'prettier/react',
     'prettier/@typescript-eslint',
   ],
   parser: 'babel-eslint',
@@ -63,6 +64,7 @@ module.exports = {
         'airbnb-typescript',
         'plugin:@typescript-eslint/recommended',
         'prettier',
+        'prettier/react',
         'prettier/@typescript-eslint',
       ],
       parserOptions: {

@@ -46,24 +46,30 @@ class ToggleInput extends Component<ToggleInputProps, ToggleInputStates> {
   }
 
   getCheckedProp(): React.InputHTMLAttributes<HTMLInputElement>['checked'] {
+    const {useProps, checked} = this.props;
+
     // When element is controlled, we provide the checked prop.
-    if (this.props.useProps) {
-      return this.props.checked != null && this.props.checked;
+    if (useProps) {
+      return checked != null && checked;
     }
     return undefined;
   }
 
   getDefaultCheckedProp(): React.InputHTMLAttributes<HTMLInputElement>['defaultChecked'] {
+    const {useProps, checked} = this.props;
+
     // When element is uncontrolled, we provide the defaultChecked prop.
-    if (!this.props.useProps) {
-      return this.props.checked;
+    if (!useProps) {
+      return checked;
     }
     return undefined;
   }
 
   getValueProp(): React.InputHTMLAttributes<HTMLInputElement>['value'] {
-    if (this.props.type === 'radio') {
-      return this.props.value;
+    const {type, value} = this.props;
+
+    if (type === 'radio') {
+      return value;
     }
     return undefined;
   }
@@ -121,32 +127,35 @@ class ToggleInput extends Component<ToggleInputProps, ToggleInputStates> {
   };
 
   render() {
-    const classes = classnames('form__element toggle-input', this.props.type, {
-      'toggle-input--is-active': this.state.isActive,
-      'form__element--match-textbox-height': this.props.matchTextboxHeight,
-      'form__element--label-offset': this.props.labelOffset,
+    const {children, id, groupID, type, labelOffset, matchTextboxHeight, icon, width, shrink, grow} = this.props;
+    const {isActive} = this.state;
+
+    const classes = classnames('form__element toggle-input', type, {
+      'toggle-input--is-active': isActive,
+      'form__element--match-textbox-height': matchTextboxHeight,
+      'form__element--label-offset': labelOffset,
     });
 
     return (
-      <FormRowItem shrink={this.props.shrink} grow={this.props.grow} width={this.props.width}>
+      <FormRowItem shrink={shrink} grow={grow} width={width}>
         <label className={classes} onBlur={this.handleLabelBlur} onFocus={this.handleLabelFocus}>
           <input
             defaultChecked={this.getDefaultCheckedProp()}
             checked={this.getCheckedProp()}
             className="toggle-input__element"
-            name={this.props.type === 'radio' ? this.props.groupID : this.props.id}
+            name={type === 'radio' ? groupID : id}
             onClick={this.handleInputClick}
             onChange={this.handleInputChange}
             ref={(ref) => {
               this.inputRef = ref;
             }}
-            type={this.props.type}
+            type={type}
             value={this.getValueProp()}
           />
           <div className="toggle-input__indicator">
-            <div className="toggle-input__indicator__icon">{this.props.icon}</div>
+            <div className="toggle-input__indicator__icon">{icon}</div>
           </div>
-          <div className="toggle-input__label">{this.props.children}</div>
+          <div className="toggle-input__label">{children}</div>
         </label>
       </FormRowItem>
     );

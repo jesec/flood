@@ -1,14 +1,17 @@
 import CSSTransition, {CSSTransitionProps} from 'react-transition-group/CSSTransition';
 import React from 'react';
 
-class FadeIn extends React.PureComponent<Partial<CSSTransitionProps>> {
-  render() {
-    return (
-      <CSSTransition classNames="fade" mountOnEnter timeout={375} {...this.props}>
-        {this.props.children}
-      </CSSTransition>
-    );
-  }
+interface FadeInProps {
+  children: React.ReactNode;
+  isIn: CSSTransitionProps['in'];
 }
+
+const FadeIn: React.FC<FadeInProps> = ({children, isIn}: FadeInProps) => {
+  return (
+    <CSSTransition classNames="fade" mountOnEnter timeout={375} in={isIn}>
+      {children}
+    </CSSTransition>
+  );
+};
 
 export default FadeIn;

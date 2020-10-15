@@ -4,13 +4,15 @@ import React, {PureComponent} from 'react';
 import ModalActions from '../ModalActions';
 import SettingsStore from '../../../stores/SettingsStore';
 
+import type {ModalAction} from '../ModalActions';
+
 interface AddTorrentsActionsProps extends WrappedComponentProps {
   isAddingTorrents: boolean;
   onAddTorrentsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 class AddTorrentsActions extends PureComponent<AddTorrentsActionsProps> {
-  getActions(): ModalActions['props']['actions'] {
+  getActions(): Array<ModalAction> {
     return [
       {
         checked: Boolean(SettingsStore.getFloodSetting('startTorrentsOnLoad')),

@@ -13,7 +13,7 @@ interface FilesystemBrowserTextboxProps extends WrappedComponentProps {
   label?: React.ReactNode;
   selectable?: 'directories' | 'files';
   suggested?: string;
-  basePathToggle?: boolean;
+  showBasePathToggle?: boolean;
   onChange?: (destination: string) => void;
 }
 
@@ -52,9 +52,11 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
   }
 
   componentDidUpdate(_prevProps: FilesystemBrowserTextboxProps, prevState: FilesystemBrowserTextboxStates) {
-    if (!prevState.isDirectoryListOpen && this.state.isDirectoryListOpen) {
+    const {isDirectoryListOpen} = this.state;
+
+    if (!prevState.isDirectoryListOpen && isDirectoryListOpen) {
       this.addDestinationOpenEventListeners();
-    } else if (prevState.isDirectoryListOpen && !this.state.isDirectoryListOpen) {
+    } else if (prevState.isDirectoryListOpen && !isDirectoryListOpen) {
       this.removeDestinationOpenEventListeners();
     }
   }
@@ -62,11 +64,6 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
   componentWillUnmount() {
     UIStore.unlisten('UI_MODAL_DISMISSED', this.handleModalDismiss);
     this.removeDestinationOpenEventListeners();
-  }
-
-  addDestinationOpenEventListeners() {
-    document.addEventListener('click', this.handleDocumentClick);
-    window.addEventListener('resize', this.handleWindowResize);
   }
 
   closeDirectoryList = () => {
@@ -124,11 +121,6 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
     this.closeDirectoryList();
   };
 
-  removeDestinationOpenEventListeners() {
-    document.removeEventListener('click', this.handleDocumentClick);
-    window.removeEventListener('resize', this.handleWindowResize);
-  }
-
   toggleOpenState = () => {
     this.setState((state) => {
       return {
@@ -137,10 +129,21 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
     });
   };
 
+  removeDestinationOpenEventListeners() {
+    document.removeEventListener('click', this.handleDocumentClick);
+    window.removeEventListener('resize', this.handleWindowResize);
+  }
+
+  addDestinationOpenEventListeners() {
+    document.addEventListener('click', this.handleDocumentClick);
+    window.addEventListener('resize', this.handleWindowResize);
+  }
+
   render() {
+    const {intl, id, label, selectable, showBasePathToggle} = this.props;
     const {destination, isDirectoryListOpen} = this.state;
 
-    const basePathToggle = this.props.basePathToggle ? (
+    const basePathToggle = showBasePathToggle ? (
       <FormRow>
         <Checkbox grow={false} id="isBasePath">
           <FormattedMessage id="torrents.destination.base_path" />
@@ -154,11 +157,11 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
           <Textbox
             addonPlacement="after"
             defaultValue={destination}
-            id={this.props.id}
-            label={this.props.label}
+            id={id}
+            label={label}
             onChange={this.handleDestinationInputChange}
             onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
-            placeholder={this.props.intl.formatMessage({
+            placeholder={intl.formatMessage({
               id: 'torrents.add.destination.placeholder',
             })}
             setRef={(ref) => {
@@ -169,7 +172,7 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
             </FormElementAddon>
             <Portal>
               <ContextMenu
-                in={isDirectoryListOpen}
+                isIn={isDirectoryListOpen}
                 onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
                 overlayProps={{isInteractive: false}}
                 padding={false}
@@ -183,13 +186,13 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
                 triggerRef={this.textboxRef}>
                 <FilesystemBrowser
                   directory={destination}
-                  intl={this.props.intl}
+                  intl={intl}
                   maxHeight={
                     this.contextMenuInstanceRef &&
                     this.contextMenuInstanceRef.dropdownStyle &&
                     this.contextMenuInstanceRef.dropdownStyle.maxHeight
                   }
-                  selectable={this.props.selectable}
+                  selectable={selectable}
                   onItemSelection={this.handleItemSelection}
                 />
               </ContextMenu>

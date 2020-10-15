@@ -5,7 +5,6 @@ import throttle from 'lodash/throttle';
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
 import ConfirmModal from './confirm-modal/ConfirmModal';
 import connectStores from '../../util/connectStores';
-import EventTypes from '../../constants/EventTypes';
 import FeedsModal from './feeds-modal/FeedsModal';
 import MoveTorrentsModal from './move-torrents-modal/MoveTorrentsModal';
 import RemoveTorrentsModal from './remove-torrents-modal/RemoveTorrentsModal';
@@ -77,14 +76,15 @@ class Modals extends React.Component<ModalsProps> {
   };
 
   render() {
-    let modal;
+    const {activeModal} = this.props;
 
-    if (this.props.activeModal != null) {
+    let modal;
+    if (activeModal != null) {
       modal = (
-        <CSSTransition key={this.props.activeModal.id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
+        <CSSTransition key={activeModal.id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
           <div className="modal">
             <div className="modal__overlay" onClick={this.handleOverlayClick} />
-            {createModal(this.props.activeModal)}
+            {createModal(activeModal)}
           </div>
         </CSSTransition>
       );
@@ -98,7 +98,7 @@ const ConnectedModals = connectStores(Modals, () => {
   return [
     {
       store: UIStore,
-      event: EventTypes.UI_MODAL_CHANGE,
+      event: 'UI_MODAL_CHANGE',
       getValue: () => {
         return {
           activeModal: UIStore.getActiveModal(),

@@ -36,7 +36,9 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
   }
 
   getCurrentPath(file: TorrentContent) {
-    return [...this.props.path, file.filename];
+    const {path} = this.props;
+
+    return [...path, file.filename];
   }
 
   getIcon(file: TorrentContent, isSelected: boolean) {
@@ -61,29 +63,34 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
   }
 
   handleFileSelect(file: TorrentContent, isSelected: boolean): void {
-    this.props.onItemSelect({
+    const {depth, onItemSelect} = this.props;
+
+    onItemSelect({
       type: 'file',
-      depth: this.props.depth,
+      depth,
       path: this.getCurrentPath(file),
       select: !isSelected,
     });
   }
 
   handlePriorityChange(fileIndex: React.ReactText, priorityLevel: number) {
-    this.props.onPriorityChange();
-    TorrentActions.setFilePriority(this.props.hash, {indices: [Number(fileIndex)], priority: priorityLevel});
+    const {hash, onPriorityChange} = this.props;
+
+    onPriorityChange();
+    TorrentActions.setFilePriority(hash, {indices: [Number(fileIndex)], priority: priorityLevel});
   }
 
   render() {
-    if (this.props.items == null) {
+    const {items} = this.props;
+
+    if (items == null) {
       return null;
     }
 
-    const files = Object.values(this.props.items)
+    const files = Object.values(items)
       .sort((a, b) => a.filename.localeCompare(b.filename))
       .map((file) => {
-        const isSelected =
-          (this.props.items && this.props.items[file.filename] && this.props.items[file.filename].isSelected) || false;
+        const isSelected = (items && items[file.filename] && items[file.filename].isSelected) || false;
         const classes = classnames(
           'directory-tree__node file',
           'directory-tree__node--file directory-tree__node--selectable',

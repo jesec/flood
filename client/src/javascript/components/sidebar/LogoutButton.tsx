@@ -1,4 +1,4 @@
-import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
+import {useIntl} from 'react-intl';
 import React from 'react';
 
 import AuthActions from '../../actions/AuthActions';
@@ -6,35 +6,30 @@ import ConfigStore from '../../stores/ConfigStore';
 import Logout from '../icons/Logout';
 import Tooltip from '../general/Tooltip';
 
-const MESSAGES = defineMessages({
-  logOut: {
-    id: 'sidebar.button.log.out',
-  },
-});
-
-class LogoutButton extends React.Component<WrappedComponentProps> {
-  static handleLogoutClick() {
-    AuthActions.logout().then(() => {
-      window.location.reload();
-    });
+const LogoutButton = () => {
+  if (ConfigStore.getDisableAuth()) {
+    return null;
   }
 
-  render() {
-    if (ConfigStore.getDisableAuth()) {
-      return null;
-    }
-    return (
-      <Tooltip
-        content={this.props.intl.formatMessage(MESSAGES.logOut)}
-        onClick={LogoutButton.handleLogoutClick}
-        position="bottom"
-        wrapperClassName="sidebar__action sidebar__action--last
+  const intl = useIntl();
+
+  return (
+    <Tooltip
+      content={intl.formatMessage({
+        id: 'sidebar.button.log.out',
+      })}
+      onClick={() =>
+        AuthActions.logout().then(() => {
+          window.location.reload();
+        })
+      }
+      position="bottom"
+      wrapperClassName="sidebar__action sidebar__action--last
           sidebar__icon-button sidebar__icon-button--interactive
           tooltip__wrapper">
-        <Logout />
-      </Tooltip>
-    );
-  }
-}
+      <Logout />
+    </Tooltip>
+  );
+};
 
-export default injectIntl(LogoutButton);
+export default LogoutButton;

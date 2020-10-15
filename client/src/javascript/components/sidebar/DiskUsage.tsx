@@ -15,7 +15,12 @@ interface DiskUsageProps {
   mountPoints?: Array<string>;
 }
 
-const DiskUsageTooltipItem = ({label, value}: {label: React.ReactNode; value: number}) => {
+interface DiskUsageTooltipItemProps {
+  label: React.ReactNode;
+  value: number;
+}
+
+const DiskUsageTooltipItem: React.FC<DiskUsageTooltipItemProps> = ({label, value}: DiskUsageTooltipItemProps) => {
   return (
     <li className="diskusage__details-list__item">
       <label className="diskusage__details-list__label">{label}</label>

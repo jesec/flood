@@ -8,8 +8,10 @@ import Languages from '../../../constants/Languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import SettingsStore from '../../../stores/SettingsStore';
 import SettingsTab from './SettingsTab';
-import TorrentContextMenuItemsList from './lists/TorrentContextMenuItemsList';
-import TorrentDetailItemsList from './lists/TorrentDetailItemsList';
+import TorrentContextMenuActionsList from './lists/TorrentContextMenuActionsList';
+import TorrentListColumnsList from './lists/TorrentListColumnsList';
+
+import type {Language} from '../../../constants/Languages';
 
 class UITab extends SettingsTab {
   torrentListViewSize = SettingsStore.getFloodSetting('torrentListViewSize');
@@ -29,7 +31,7 @@ class UITab extends SettingsTab {
 
       return (
         <SelectItem key={languageID} id={languageID}>
-          {Languages[languageID as keyof typeof Languages]}
+          {Languages[languageID as Language]}
         </SelectItem>
       );
     });
@@ -88,7 +90,7 @@ class UITab extends SettingsTab {
           <FormattedMessage id="settings.ui.displayed.details" />
         </ModalFormSectionHeader>
         <FormRow>
-          <TorrentDetailItemsList
+          <TorrentListColumnsList
             torrentListViewSize={this.torrentListViewSize}
             onSettingsChange={this.props.onSettingsChange}
           />
@@ -97,7 +99,7 @@ class UITab extends SettingsTab {
           <FormattedMessage id="settings.ui.displayed.context.menu.items" />
         </ModalFormSectionHeader>
         <FormRow>
-          <TorrentContextMenuItemsList onSettingsChange={this.props.onSettingsChange} />
+          <TorrentContextMenuActionsList onSettingsChange={this.props.onSettingsChange} />
         </FormRow>
       </Form>
     );

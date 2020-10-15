@@ -38,25 +38,29 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
   }
 
   getHeaderText() {
-    if (this.props.mode === 'login') {
-      return this.props.intl.formatMessage({
+    const {mode, intl} = this.props;
+
+    if (mode === 'login') {
+      return intl.formatMessage({
         id: 'auth.login',
       });
     }
 
-    return this.props.intl.formatMessage({
+    return intl.formatMessage({
       id: 'auth.create.an.account',
     });
   }
 
   getIntroText() {
-    if (this.props.mode === 'login') {
-      return this.props.intl.formatMessage({
+    const {mode, intl} = this.props;
+
+    if (mode === 'login') {
+      return intl.formatMessage({
         id: 'auth.login.intro',
       });
     }
 
-    return this.props.intl.formatMessage({
+    return intl.formatMessage({
       id: 'auth.create.an.account.intro',
     });
   }
@@ -176,7 +180,7 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
                   }}>
                   Clear
                 </Button>
-                <Button isLoading={this.state.isSubmitting} type="submit">
+                <Button isLoading={isSubmitting} type="submit">
                   {isLoginMode
                     ? intl.formatMessage({
                         id: 'auth.log.in',

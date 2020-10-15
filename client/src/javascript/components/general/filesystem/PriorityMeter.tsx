@@ -103,4 +103,5 @@ class PriorityMeter extends React.Component<PriorityMeterProps, PriorityMeterSta
   }
 }
 
+export type PriorityMeterType = PriorityMeter;
 export default injectIntl(PriorityMeter, {forwardRef: true});

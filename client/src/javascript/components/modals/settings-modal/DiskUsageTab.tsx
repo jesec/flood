@@ -11,7 +11,7 @@ interface DiskUsageTabProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
 }
 
-const DiskUsageTab: React.FunctionComponent<DiskUsageTabProps> = (props) => {
+const DiskUsageTab: React.FC<DiskUsageTabProps> = (props: DiskUsageTabProps) => {
   return (
     <Form>
       <ModalFormSectionHeader>

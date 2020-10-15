@@ -10,6 +10,8 @@ import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
+import type {ModalAction} from '../ModalActions';
+
 interface MoveTorrentsStates {
   isSettingDownloadPath: boolean;
   originalSource?: string;
@@ -53,7 +55,7 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
     };
   }
 
-  getActions(): ModalActions['props']['actions'] {
+  getActions(): Array<ModalAction> {
     return [
       {
         checked: true,
@@ -101,7 +103,7 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
             id="destination"
             selectable="directories"
             suggested={this.state.originalSource}
-            basePathToggle
+            showBasePathToggle
           />
           <ModalActions actions={this.getActions()} />
         </Form>

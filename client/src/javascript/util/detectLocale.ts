@@ -1,10 +1,12 @@
 import {getUserLocales} from 'get-user-locale';
 import Languages from '../constants/Languages';
 
-let detectedLocale: Exclude<keyof typeof Languages, 'auto'> = 'en';
+import type {Language} from '../constants/Languages';
+
+let detectedLocale: Exclude<Language, 'auto'> = 'en';
 let localeDetected = false;
 
-function detectLocale(): Exclude<keyof typeof Languages, 'auto'> {
+function detectLocale(): Exclude<Language, 'auto'> {
   if (localeDetected) {
     return detectedLocale;
   }
@@ -30,10 +32,10 @@ function detectLocale(): Exclude<keyof typeof Languages, 'auto'> {
           break;
       }
       if (Object.prototype.hasOwnProperty.call(Languages, locale)) {
-        detectedLocale = locale as Exclude<keyof typeof Languages, 'auto'>;
+        detectedLocale = locale as Exclude<Language, 'auto'>;
       } else if (Object.prototype.hasOwnProperty.call(Languages, locale.substr(0, 2))) {
         // In rare cases, user provides a locale (eg. en-US) without fallback (eg. en)
-        detectedLocale = locale.substr(0, 2) as Exclude<keyof typeof Languages, 'auto'>;
+        detectedLocale = locale.substr(0, 2) as Exclude<Language, 'auto'>;
       }
     });
   localeDetected = true;

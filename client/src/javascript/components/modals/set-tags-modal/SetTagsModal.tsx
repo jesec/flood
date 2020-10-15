@@ -7,6 +7,8 @@ import TagSelect from '../../general/form-elements/TagSelect';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
+import type {ModalAction} from '../ModalActions';
+
 interface SetTagsModalStates {
   isSettingTags: boolean;
 }
@@ -21,20 +23,7 @@ class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalSt
     };
   }
 
-  handleSetTagsClick = () => {
-    if (this.formRef == null) {
-      return;
-    }
-
-    const formData = this.formRef.getFormData() as {tags: string};
-    const tags = formData.tags ? formData.tags.split(',') : [];
-
-    this.setState({isSettingTags: true}, () =>
-      TorrentActions.setTags({hashes: TorrentStore.getSelectedTorrents(), tags}),
-    );
-  };
-
-  getActions(): Modal['props']['actions'] {
+  getActions(): Array<ModalAction> {
     const primaryButtonText = this.props.intl.formatMessage({
       id: 'torrents.set.tags.button.set',
     });
@@ -78,6 +67,19 @@ class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalSt
       </div>
     );
   }
+
+  handleSetTagsClick = () => {
+    if (this.formRef == null) {
+      return;
+    }
+
+    const formData = this.formRef.getFormData() as {tags: string};
+    const tags = formData.tags ? formData.tags.split(',') : [];
+
+    this.setState({isSettingTags: true}, () =>
+      TorrentActions.setTags({hashes: TorrentStore.getSelectedTorrents(), tags}),
+    );
+  };
 
   render() {
     return (

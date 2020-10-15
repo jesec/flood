@@ -26,21 +26,22 @@ export default class SelectItem extends Component<SelectItemProps> {
   };
 
   render() {
-    let icon = null;
+    const {children, isTrigger, isSelected} = this.props;
 
-    if (!this.props.isTrigger && this.props.isSelected) {
+    let icon = null;
+    if (!isTrigger && isSelected) {
       icon = <Checkmark />;
     }
 
     const classes = classnames({
-      'select__item context-menu__item': !this.props.isTrigger,
-      'select__item--is-selected': this.props.isSelected,
+      'select__item context-menu__item': !isTrigger,
+      'select__item--is-selected': isSelected,
     });
 
     return (
       <ContextMenuItem className={classes} onClick={this.handleClick}>
         {icon}
-        {this.props.children}
+        {children}
       </ContextMenuItem>
     );
   }

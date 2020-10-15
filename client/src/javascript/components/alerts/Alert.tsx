@@ -7,40 +7,42 @@ import CircleExclamationIcon from '../icons/CircleExclamationIcon';
 
 interface AlertProps {
   id: string;
-  count: number;
-  type: 'success' | 'error';
+  count?: number;
+  type?: 'success' | 'error';
 }
 
-export default class Alert extends React.Component<AlertProps> {
-  static defaultProps = {
-    count: 0,
-    type: 'success',
-  };
+const Alert: React.FC<AlertProps> = (props: AlertProps) => {
+  const {id, count, type} = props;
 
-  render() {
-    let icon = <CircleCheckmarkIcon />;
-    const alertClasses = classnames('alert', {
-      'is-success': this.props.type === 'success',
-      'is-error': this.props.type === 'error',
-    });
+  const alertClasses = classnames('alert', {
+    'is-success': type === 'success',
+    'is-error': type === 'error',
+  });
 
-    if (this.props.type === 'error') {
-      icon = <CircleExclamationIcon />;
-    }
-
-    return (
-      <li className={alertClasses}>
-        {icon}
-        <span className="alert__content">
-          <FormattedMessage
-            id={this.props.id}
-            values={{
-              count: this.props.count,
-              countElement: <span className="alert__count">{this.props.count}</span>,
-            }}
-          />
-        </span>
-      </li>
-    );
+  let icon = <CircleCheckmarkIcon />;
+  if (type === 'error') {
+    icon = <CircleExclamationIcon />;
   }
-}
+
+  return (
+    <li className={alertClasses}>
+      {icon}
+      <span className="alert__content">
+        <FormattedMessage
+          id={id}
+          values={{
+            count,
+            countElement: <span className="alert__count">{count}</span>,
+          }}
+        />
+      </span>
+    </li>
+  );
+};
+
+Alert.defaultProps = {
+  count: 0,
+  type: 'success',
+};
+
+export default Alert;

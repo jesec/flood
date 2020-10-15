@@ -1,9 +1,11 @@
 import React from 'react';
 
-class SidebarActions extends React.Component {
-  render() {
-    return <div className="sidebar__actions">{this.props.children}</div>;
-  }
+interface SidebarActionsProps {
+  children: React.ReactNode;
 }
+
+const SidebarActions: React.FC<SidebarActionsProps> = ({children}: SidebarActionsProps) => {
+  return <div className="sidebar__actions">{children}</div>;
+};
 
 export default SidebarActions;

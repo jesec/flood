@@ -330,7 +330,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
           this.getModifyFeedForm(this.state.currentlyEditingFeed)
         ) : (
           <FormRow>
-            <FormRowItem width="auto" />
+            <FormRowItem width="auto">{null}</FormRowItem>
             <Button onClick={() => this.handleAddFeedClick()}>
               <FormattedMessage id="button.new" />
             </Button>

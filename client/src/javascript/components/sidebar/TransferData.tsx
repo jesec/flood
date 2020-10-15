@@ -61,7 +61,10 @@ class TransferData extends React.Component<TransferDataProps, TransferDataStates
   };
 
   renderTransferRateGraph() {
-    if (!this.props.isClientConnected) return null;
+    const {isClientConnected} = this.props;
+    const {sidebarWidth} = this.state;
+
+    if (!isClientConnected) return null;
 
     return (
       <TransferRateGraph
@@ -72,12 +75,14 @@ class TransferData extends React.Component<TransferDataProps, TransferDataStates
         ref={(ref) => {
           this.rateGraphRef = ref;
         }}
-        width={this.state.sidebarWidth}
+        width={sidebarWidth}
       />
     );
   }
 
   render() {
+    const {graphInspectorPoint} = this.state;
+
     return (
       <Measure
         offset
@@ -93,7 +98,7 @@ class TransferData extends React.Component<TransferDataProps, TransferDataStates
               onMouseMove={this.handleMouseMove}
               onMouseOut={this.handleMouseOut}
               onMouseOver={this.handleMouseOver}>
-              <TransferRateDetails inspectorPoint={this.state.graphInspectorPoint} />
+              <TransferRateDetails inspectorPoint={graphInspectorPoint} />
               {this.renderTransferRateGraph()}
             </div>
           </div>

@@ -10,8 +10,8 @@ interface BaseAction {
 
 interface CheckboxAction extends BaseAction {
   type: 'checkbox';
-  id?: Checkbox['props']['id'];
-  checked?: Checkbox['props']['checked'];
+  id?: string;
+  checked?: boolean;
   clickHandler?: ((event: React.MouseEvent<HTMLInputElement> | KeyboardEvent) => void) | null;
 }
 
@@ -22,59 +22,63 @@ interface ButtonAction extends BaseAction {
   clickHandler?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | null;
 }
 
+export type ModalAction = CheckboxAction | ButtonAction;
+
 interface ModalActionsProps {
-  actions: Array<CheckboxAction | ButtonAction>;
+  actions: Array<ModalAction>;
 }
 
-export default class ModalActions extends React.Component<ModalActionsProps> {
-  render() {
-    const buttons = this.props.actions.map((action, index) => {
-      let dismissIfNeeded = () => {
-        // do nothing by default.
+const ModalActions: React.FC<ModalActionsProps> = (props: ModalActionsProps) => {
+  const {actions} = props;
+
+  const buttons = actions.map((action, index) => {
+    let dismissIfNeeded = () => {
+      // do nothing by default.
+    };
+
+    if (action.triggerDismiss) {
+      dismissIfNeeded = () => {
+        UIActions.dismissModal();
       };
+    }
 
-      if (action.triggerDismiss) {
-        dismissIfNeeded = () => {
-          UIActions.dismissModal();
-        };
-      }
-
-      if (action.type === 'checkbox') {
-        return (
-          <Checkbox
-            checked={action.checked}
-            id={action.id}
-            key={index} // eslint-disable-line react/no-array-index-key
-            onChange={(event) => {
-              if (action.clickHandler != null) {
-                action.clickHandler(event);
-              }
-              dismissIfNeeded();
-            }}>
-            {action.content}
-          </Checkbox>
-        );
-      }
-
+    if (action.type === 'checkbox') {
       return (
-        <Button
-          isLoading={action.isLoading}
-          onClick={(event) => {
+        <Checkbox
+          checked={action.checked}
+          id={action.id}
+          key={index} // eslint-disable-line react/no-array-index-key
+          onChange={(event) => {
             if (action.clickHandler != null) {
               action.clickHandler(event);
             }
             dismissIfNeeded();
-          }}
-          priority={action.type}
-          key={index} // eslint-disable-line react/no-array-index-key
-          type={action.submit ? 'submit' : 'button'}>
+          }}>
           {action.content}
-        </Button>
+        </Checkbox>
       );
-    });
+    }
 
-    const buttonsGroup = <div className="modal__button-group">{buttons}</div>;
+    return (
+      <Button
+        isLoading={action.isLoading}
+        onClick={(event) => {
+          if (action.clickHandler != null) {
+            action.clickHandler(event);
+          }
+          dismissIfNeeded();
+        }}
+        priority={action.type}
+        key={index} // eslint-disable-line react/no-array-index-key
+        type={action.submit ? 'submit' : 'button'}>
+        {action.content}
+      </Button>
+    );
+  });
 
-    return <div className="modal__actions">{buttonsGroup}</div>;
-  }
-}
+  const buttonsGroup = <div className="modal__button-group">{buttons}</div>;
+
+  return <div className="modal__actions">{buttonsGroup}</div>;
+};
+
+export default ModalActions;

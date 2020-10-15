@@ -9,8 +9,8 @@ import type {ContextMenu as ContextMenuType, ContextMenuItem} from '../../stores
 
 interface GlobalContextMenuMountPointProps {
   id: ContextMenuType['id'];
-  onMenuOpen: () => void;
-  onMenuClose: () => void;
+  onMenuOpen?: () => void;
+  onMenuClose?: () => void;
 }
 
 interface GlobalContextMenuMountPointStates {
@@ -40,38 +40,39 @@ class GlobalContextMenuMountPoint extends React.Component<
   }
 
   shouldComponentUpdate(_nextProps: GlobalContextMenuMountPointProps, nextState: GlobalContextMenuMountPointStates) {
-    if (!this.state.isOpen && !nextState.isOpen) {
+    const {isOpen, clickPosition, items} = this.state;
+
+    if (!isOpen && !nextState.isOpen) {
       return false;
     }
 
-    if (this.state.isOpen !== nextState.isOpen) {
+    if (isOpen !== nextState.isOpen) {
       return true;
     }
 
     let shouldUpdate = true;
 
-    if (
-      this.state.clickPosition.x === nextState.clickPosition.x &&
-      this.state.clickPosition.y === nextState.clickPosition.y
-    ) {
+    if (clickPosition.x === nextState.clickPosition.x && clickPosition.y === nextState.clickPosition.y) {
       shouldUpdate = false;
     }
 
     if (!shouldUpdate) {
-      return this.state.items.some((item, index) => item !== nextState.items[index]);
+      return items.some((item, index) => item !== nextState.items[index]);
     }
 
     return shouldUpdate;
   }
 
   componentDidUpdate(prevProps: GlobalContextMenuMountPointProps, prevState: GlobalContextMenuMountPointStates) {
-    if (!prevState.isOpen && this.state.isOpen) {
+    const {isOpen} = this.state;
+
+    if (!prevState.isOpen && isOpen) {
       document.addEventListener('keydown', this.handleKeyPress);
 
       if (prevProps.onMenuOpen) {
         prevProps.onMenuOpen();
       }
-    } else if (prevState.isOpen && !this.state.isOpen) {
+    } else if (prevState.isOpen && !isOpen) {
       document.removeEventListener('keydown', this.handleKeyPress);
 
       if (prevProps.onMenuClose) {
@@ -85,43 +86,45 @@ class GlobalContextMenuMountPoint extends React.Component<
   }
 
   getMenuItems() {
-    return this.state.items.map((item, index) => {
-      let labelAction;
-      let labelSecondary;
+    const {items} = this.state;
+
+    return items.map((item, index) => {
       let menuItemContent;
+      let menuItemClasses;
 
-      const menuItemClasses = classnames('menu__item', {
-        'is-selectable': item.clickHandler,
-        'menu__item--separator': item.type === 'separator',
-      });
-      const primaryLabelClasses = classnames('menu__item__label--primary', {
-        'has-action': item.labelAction,
-      });
-
-      if (item.labelSecondary) {
-        labelSecondary = <span className="menu__item__label--secondary">{item.labelSecondary}</span>;
-      }
-
-      if (item.labelAction) {
-        labelAction = <span className="menu__item__label__action">{item.labelAction}</span>;
-      }
-
-      if (item.type !== 'separator') {
-        menuItemContent = (
-          <span>
-            <span className={primaryLabelClasses}>
-              <span className="menu__item__label">{item.label}</span>
-              {labelAction}
+      switch (item.type) {
+        case 'action':
+          menuItemClasses = classnames('menu__item', {
+            'is-selectable': item.clickHandler,
+          });
+          menuItemContent = (
+            <span>
+              <span
+                className={classnames('menu__item__label--primary', {
+                  'has-action': item.labelAction,
+                })}>
+                <span className="menu__item__label">{item.label}</span>
+                {item.labelAction ? <span className="menu__item__label__action">{item.labelAction}</span> : undefined}
+              </span>
+              {item.labelSecondary ? (
+                <span className="menu__item__label--secondary">{item.labelSecondary}</span>
+              ) : undefined}
             </span>
-            {labelSecondary}
-          </span>
-        );
+          );
+          break;
+        case 'separator':
+        default:
+          menuItemClasses = classnames('menu__item', {
+            'menu__item--separator': item.type === 'separator',
+          });
+          break;
       }
 
       return (
-        // TODO: Find a better key for this
-        // eslint-disable-next-line react/no-array-index-key
-        <li className={menuItemClasses} key={index} onClick={this.handleMenuItemClick.bind(this, item)}>
+        <li
+          className={menuItemClasses}
+          key={item.type === 'action' ? item.action : `sep-${index}`}
+          onClick={this.handleMenuItemClick.bind(this, item)}>
           {menuItemContent}
         </li>
       );
@@ -150,32 +153,35 @@ class GlobalContextMenuMountPoint extends React.Component<
     }
   };
 
+  handleOverlayClick = () => {
+    UIActions.dismissContextMenu(this.props.id);
+  };
+
   handleMenuItemClick(item: ContextMenuItem, event: React.MouseEvent<HTMLLIElement>) {
-    if (item.dismissMenu === false) {
-      event.nativeEvent.stopImmediatePropagation();
-    }
+    const {id} = this.props;
 
-    if (item.clickHandler) {
-      item.clickHandler(item.action, event);
-    }
+    if (item.type !== 'separator') {
+      if (item.dismissMenu === false) {
+        event.nativeEvent.stopImmediatePropagation();
+      }
 
-    if (item.dismissMenu !== false) {
-      UIActions.dismissContextMenu(this.props.id);
+      if (item.clickHandler) {
+        item.clickHandler(item.action, event);
+      }
+
+      if (item.dismissMenu !== false) {
+        UIActions.dismissContextMenu(id);
+      }
     }
 
     return false;
   }
 
-  handleOverlayClick = () => {
-    UIActions.dismissContextMenu(this.props.id);
-  };
-
   render() {
+    const {clickPosition, isOpen} = this.state;
+
     return (
-      <ContextMenu
-        triggerCoordinates={this.state.clickPosition}
-        onOverlayClick={this.handleOverlayClick}
-        in={this.state.isOpen}>
+      <ContextMenu triggerCoordinates={clickPosition} onOverlayClick={this.handleOverlayClick} isIn={isOpen}>
         {this.getMenuItems()}
       </ContextMenu>
     );

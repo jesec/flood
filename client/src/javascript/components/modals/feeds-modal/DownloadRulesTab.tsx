@@ -141,18 +141,6 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     };
   }
 
-  checkMatchingPattern(match: RuleFormData['match'], exclude: RuleFormData['exclude'], check: RuleFormData['check']) {
-    let doesPatternMatchTest = false;
-
-    if (validators.isNotEmpty(check) && validators.isRegExValid(match) && validators.isRegExValid(exclude)) {
-      const isMatched = new RegExp(match, 'gi').test(check);
-      const isExcluded = exclude !== '' && new RegExp(exclude, 'gi').test(check);
-      doesPatternMatchTest = isMatched && !isExcluded;
-    }
-
-    this.setState({doesPatternMatchTest});
-  }
-
   getAmendedFormData(): Rule | null {
     if (this.formRef == null) {
       return null;
@@ -274,7 +262,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
               })}
               selectable="directories"
               suggested={rule.destination}
-              basePathToggle
+              showBasePathToggle
             />
           </FormRowItem>
           <TagSelect
@@ -287,7 +275,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
           />
         </FormRow>
         <FormRow>
-          <FormRowItem width="auto" />
+          <br />
           <Checkbox id="startOnLoad" checked={rule.startOnLoad} matchTextboxHeight>
             <FormattedMessage id="feeds.start.on.load" />
           </Checkbox>
@@ -312,7 +300,8 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
         <li
           className="interactive-list__detail-list__item
           interactive-list__detail interactive-list__detail--tertiary">
-          <FormattedMessage id="feeds.exclude" /> {rule.exclude}
+          <FormattedMessage id="feeds.exclude" />
+          {rule.exclude}
         </li>
       );
     }
@@ -326,7 +315,8 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
 
       tags = (
         <li className="interactive-list__detail-list__item interactive-list__detail interactive-list__detail--tertiary">
-          <FormattedMessage id="feeds.tags" /> {tagNodes}
+          <FormattedMessage id="feeds.tags" />
+          {tagNodes}
         </li>
       );
     }
@@ -358,7 +348,8 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
             <li
               className="interactive-list__detail-list__item
               interactive-list__detail interactive-list__detail--tertiary">
-              <FormattedMessage id="feeds.match" /> {rule.match}
+              <FormattedMessage id="feeds.match" />
+              {rule.match}
             </li>
             {excludeNode}
             {tags}
@@ -437,6 +428,10 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     }
   };
 
+  handleAddRuleClick = () => {
+    this.setState({currentlyEditingRule: defaultRule});
+  };
+
   handleRemoveRuleClick(rule: Rule) {
     if (rule._id != null) {
       FeedsStoreClass.removeRule(rule._id);
@@ -447,12 +442,20 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     }
   }
 
-  handleAddRuleClick = () => {
-    this.setState({currentlyEditingRule: defaultRule});
-  };
-
   handleModifyRuleClick(rule: Rule) {
     this.setState({currentlyEditingRule: rule});
+  }
+
+  checkMatchingPattern(match: RuleFormData['match'], exclude: RuleFormData['exclude'], check: RuleFormData['check']) {
+    let doesPatternMatchTest = false;
+
+    if (validators.isNotEmpty(check) && validators.isRegExValid(match) && validators.isRegExValid(exclude)) {
+      const isMatched = new RegExp(match, 'gi').test(check);
+      const isExcluded = exclude !== '' && new RegExp(exclude, 'gi').test(check);
+      doesPatternMatchTest = isMatched && !isExcluded;
+    }
+
+    this.setState({doesPatternMatchTest});
   }
 
   validateForm(): {errors?: DownloadRulesTabStates['errors']; isValid: boolean} {
@@ -515,7 +518,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
           this.getModifyRuleForm(this.state.currentlyEditingRule)
         ) : (
           <FormRow>
-            <FormRowItem width="auto" />
+            <br />
             <Button onClick={this.handleAddRuleClick}>
               <FormattedMessage id="button.new" />
             </Button>

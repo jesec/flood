@@ -7,10 +7,12 @@ import SettingsStore from '../../../stores/SettingsStore';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
+import type {ModalAction} from '../ModalActions';
+
 class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
   formRef?: Form | null;
 
-  getActions(torrentCount: number): Modal['props']['actions'] {
+  getActions(torrentCount: number): Array<ModalAction> {
     if (torrentCount === 0) {
       return [
         {

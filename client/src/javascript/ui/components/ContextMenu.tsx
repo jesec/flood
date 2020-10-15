@@ -24,7 +24,7 @@ interface ContextMenuProps {
   matchTriggerWidth?: boolean;
   padding?: boolean;
   scrolling?: boolean;
-  in?: boolean;
+  isIn?: boolean;
 }
 
 export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
@@ -45,11 +45,24 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
   };
 
   render() {
+    const {
+      children,
+      isIn,
+      matchTriggerWidth,
+      menuAlign,
+      padding,
+      scrolling,
+      triggerRef,
+      triggerCoordinates,
+      setRef,
+      onClick,
+      overlayProps,
+    } = this.props;
     const dropdownStyle: React.CSSProperties = {};
     let shouldRenderAbove = false;
 
-    if (this.props.triggerRef) {
-      const buttonBoundingRect = this.props.triggerRef.getBoundingClientRect();
+    if (triggerRef) {
+      const buttonBoundingRect = triggerRef.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const spaceAbove = buttonBoundingRect.top;
       const spaceBelow = windowHeight - buttonBoundingRect.bottom;
@@ -65,21 +78,21 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
         dropdownStyle.maxHeight = spaceBelow - 10;
       }
 
-      if (this.props.matchTriggerWidth) {
+      if (matchTriggerWidth) {
         dropdownStyle.width = buttonBoundingRect.width;
         dropdownStyle.left = buttonBoundingRect.left;
         dropdownStyle.right = window.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
-      } else if (this.props.menuAlign === 'right') {
+      } else if (menuAlign === 'right') {
         dropdownStyle.right = window.innerWidth - buttonBoundingRect.left - buttonBoundingRect.width;
       } else {
         dropdownStyle.left = buttonBoundingRect.left;
       }
 
       this.dropdownStyle = dropdownStyle;
-    } else if (this.props.triggerCoordinates) {
+    } else if (triggerCoordinates) {
       const windowHeight = window.innerHeight;
       const windowWidth = window.innerWidth;
-      const spaceAbove = this.props.triggerCoordinates.y;
+      const spaceAbove = triggerCoordinates.y;
       const spaceBelow = windowHeight - spaceAbove;
 
       shouldRenderAbove = spaceBelow < minPreferableBottomSpace && spaceAbove > spaceBelow;
@@ -93,13 +106,10 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
         dropdownStyle.maxHeight = spaceBelow - 10;
       }
 
-      if (
-        this.props.menuAlign === 'right' ||
-        windowWidth - this.props.triggerCoordinates.x < minPreferableHorizontalSpace
-      ) {
-        dropdownStyle.right = windowWidth - this.props.triggerCoordinates.x;
+      if (menuAlign === 'right' || windowWidth - triggerCoordinates.x < minPreferableHorizontalSpace) {
+        dropdownStyle.right = windowWidth - triggerCoordinates.x;
       } else {
-        dropdownStyle.left = this.props.triggerCoordinates.x;
+        dropdownStyle.left = triggerCoordinates.x;
       }
 
       this.dropdownStyle = dropdownStyle;
@@ -108,9 +118,9 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
     const classes = classnames('context-menu__items', {
       'context-menu__items--is-up': shouldRenderAbove,
       'context-menu__items--is-down': !shouldRenderAbove,
-      'context-menu__items--match-trigger-width': this.props.matchTriggerWidth,
-      'context-menu__items--no-padding': !this.props.padding,
-      'context-menu__items--no-scrolling': !this.props.scrolling,
+      'context-menu__items--match-trigger-width': matchTriggerWidth,
+      'context-menu__items--no-padding': !padding,
+      'context-menu__items--no-scrolling': !scrolling,
     });
 
     return (
@@ -123,19 +133,19 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
           appear: 'context-menu--appear',
           appearActive: 'context-menu--appear--active',
         }}
-        in={this.props.in}
+        in={isIn}
         mountOnEnter
         unmountOnExit
         timeout={transitionTimeouts.xFast}>
-        <div className="context-menu" onClick={this.props.onClick}>
+        <div className="context-menu" onClick={onClick}>
           <Overlay
             additionalClassNames="context-menu__overlay"
             onClick={this.handleOverlayClick}
             isTransparent
-            {...this.props.overlayProps}
+            {...overlayProps}
           />
-          <div className={classes} ref={this.props.setRef} style={dropdownStyle}>
-            {this.props.children}
+          <div className={classes} ref={setRef} style={dropdownStyle}>
+            {children}
           </div>
         </div>
       </CSSTransition>

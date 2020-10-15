@@ -7,7 +7,6 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 import {Button} from '../../../ui';
 import ClipboardIcon from '../../icons/ClipboardIcon';
 import connectStores from '../../../util/connectStores';
-import EventTypes from '../../../constants/EventTypes';
 import Tooltip from '../../general/Tooltip';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
@@ -163,7 +162,7 @@ const ConnectedTorrentMediainfo = connectStores<Omit<TorrentMediainfoProps, 'int
     return [
       {
         store: TorrentStore,
-        event: EventTypes.CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS,
+        event: 'CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS',
         getValue: ({props}) => {
           return {
             mediainfo: TorrentStore.getMediainfo(props.hash),

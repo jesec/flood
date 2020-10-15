@@ -1,9 +1,11 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 
-class FormRowGroup extends PureComponent {
-  render() {
-    return <div className="form__row form__row--group">{this.props.children}</div>;
-  }
+interface FormRowGroupProps {
+  children: React.ReactNode;
 }
+
+const FormRowGroup: React.FC<FormRowGroupProps> = ({children}: FormRowGroupProps) => {
+  return <div className="form__row form__row--group">{children}</div>;
+};
 
 export default FormRowGroup;

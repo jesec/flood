@@ -62,13 +62,15 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
   }
 
   componentDidUpdate(_prevProps: TagSelectProps, prevState: TagSelectStates) {
-    if (this.state.isOpen && !prevState.isOpen) {
+    const {isOpen} = this.state;
+
+    if (isOpen && !prevState.isOpen) {
       window.addEventListener('keydown', this.handleKeyDown);
       window.addEventListener('scroll', this.handleWindowScroll, {
         capture: true,
       });
       document.addEventListener('click', this.toggleOpenState);
-    } else if (!this.state.isOpen && prevState.isOpen) {
+    } else if (!isOpen && prevState.isOpen) {
       window.addEventListener('keydown', this.handleKeyDown);
       window.removeEventListener('scroll', this.handleWindowScroll, {
         capture: true,
@@ -85,10 +87,12 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
         return accumulator;
       }
 
+      const {selectedTags} = this.state;
+
       accumulator.push(
         React.cloneElement(child as React.ReactElement, {
           onClick: this.handleItemClick,
-          isSelected: this.state.selectedTags.includes(item.props.id as string),
+          isSelected: selectedTags.includes(item.props.id as string),
         }),
       );
 
@@ -138,19 +142,22 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
   };
 
   render() {
+    const {defaultValue, placeholder, id, label} = this.props;
+    const {isOpen} = this.state;
+
     const classes = classnames('select form__element', {
-      'select--is-open': this.state.isOpen,
+      'select--is-open': isOpen,
     });
 
     return (
       <FormRowItem>
-        <label className="form__element__label">{this.props.label}</label>
+        <label className="form__element__label">{label}</label>
         <div className={classes}>
           <Textbox
-            id={this.props.id || 'tags'}
+            id={id || 'tags'}
             addonPlacement="after"
-            defaultValue={this.props.defaultValue}
-            placeholder={this.props.placeholder}
+            defaultValue={defaultValue}
+            placeholder={placeholder}
             setRef={(ref) => {
               this.textboxRef = ref;
             }}>
@@ -159,7 +166,7 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
             </FormElementAddon>
             <Portal>
               <ContextMenu
-                in={this.state.isOpen}
+                isIn={isOpen}
                 onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
                 overlayProps={{isInteractive: false}}
                 setRef={(ref) => {

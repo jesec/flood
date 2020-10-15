@@ -6,6 +6,8 @@ import Modal from '../Modal';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
+import type {ModalAction} from '../ModalActions';
+
 interface SetTrackerModalStates {
   isSettingTracker: boolean;
 }
@@ -20,20 +22,7 @@ class SetTrackerModal extends React.Component<WrappedComponentProps, SetTrackerM
     };
   }
 
-  handleSetTrackerClick = (): void => {
-    if (this.formRef == null) {
-      return;
-    }
-
-    const formData = this.formRef.getFormData() as {tracker: string};
-    const {tracker} = formData;
-
-    this.setState({isSettingTracker: true}, () =>
-      TorrentActions.setTracker(TorrentStore.getSelectedTorrents(), tracker),
-    );
-  };
-
-  getActions(): Modal['props']['actions'] {
+  getActions(): Array<ModalAction> {
     const primaryButtonText = this.props.intl.formatMessage({
       id: 'torrents.set.tracker.button.set',
     });
@@ -79,6 +68,19 @@ class SetTrackerModal extends React.Component<WrappedComponentProps, SetTrackerM
       </div>
     );
   }
+
+  handleSetTrackerClick = (): void => {
+    if (this.formRef == null) {
+      return;
+    }
+
+    const formData = this.formRef.getFormData() as {tracker: string};
+    const {tracker} = formData;
+
+    this.setState({isSettingTracker: true}, () =>
+      TorrentActions.setTracker(TorrentStore.getSelectedTorrents(), tracker),
+    );
+  };
 
   render() {
     return (

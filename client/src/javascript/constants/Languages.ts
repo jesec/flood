@@ -1,4 +1,4 @@
-const LANGUAGES = {
+const Languages = {
   auto: {
     id: 'locale.language.auto',
   },
@@ -24,4 +24,5 @@ const LANGUAGES = {
   ar: 'اَلْعَرَبِيَّةُ',
 } as const;
 
-export default LANGUAGES;
+export default Languages;
+export type Language = keyof typeof Languages;

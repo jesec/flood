@@ -1,30 +1,38 @@
 import classnames from 'classnames';
-import React, {Component} from 'react';
+import React from 'react';
 
 export interface OverlayProps {
+  children?: React.ReactNode;
   additionalClassNames?: string;
   isInteractive?: boolean;
   isTransparent?: boolean;
   onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
 }
 
-class Overlay extends Component<OverlayProps> {
-  static defaultProps = {
-    isInteractive: true,
-  };
+const Overlay: React.FC<OverlayProps> = ({
+  children,
+  additionalClassNames,
+  onClick,
+  isInteractive,
+  isTransparent,
+}: OverlayProps) => {
+  const classes = classnames('overlay', additionalClassNames, {
+    'overlay--no-interaction': !isInteractive,
+    'overlay--transparent': isTransparent,
+  });
 
-  render() {
-    const classes = classnames('overlay', this.props.additionalClassNames, {
-      'overlay--no-interaction': !this.props.isInteractive,
-      'overlay--transparent': this.props.isTransparent,
-    });
+  return (
+    <div className={classes} onClickCapture={onClick}>
+      {children}
+    </div>
+  );
+};
 
-    return (
-      <div className={classes} onClickCapture={this.props.onClick}>
-        {this.props.children}
-      </div>
-    );
-  }
-}
+Overlay.defaultProps = {
+  additionalClassNames: undefined,
+  isInteractive: true,
+  isTransparent: false,
+  onClick: undefined,
+};
 
 export default Overlay;

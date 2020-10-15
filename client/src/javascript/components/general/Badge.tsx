@@ -1,7 +1,11 @@
 import React from 'react';
 
-export default class Badge extends React.Component {
-  render() {
-    return <div className="badge">{this.props.children}</div>;
-  }
+interface BadgeProps {
+  children: React.ReactNode;
 }
+
+const Badge: React.FC<BadgeProps> = ({children}: BadgeProps) => {
+  return <div className="badge">{children}</div>;
+};
+
+export default Badge;

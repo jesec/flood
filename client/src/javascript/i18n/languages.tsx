@@ -11,14 +11,13 @@ import detectLocale from '../util/detectLocale';
 import EN from './strings.compiled.json';
 import Languages from '../constants/Languages';
 
-let dayjsLocale: Exclude<keyof typeof Languages, 'auto' | 'zh-Hans' | 'zh-Hant'> | 'zh-cn' | 'zh-tw' = 'en';
+import type {Language} from '../constants/Languages';
 
-const messagesCache: Partial<Record<
-  Exclude<keyof typeof Languages, 'auto'>,
-  Record<string, MessageFormatElement[]>
->> = {en: EN};
+let dayjsLocale: Exclude<Language, 'auto' | 'zh-Hans' | 'zh-Hant'> | 'zh-cn' | 'zh-tw' = 'en';
 
-async function loadMessages(locale: Exclude<keyof typeof Languages, 'auto' | 'en'>) {
+const messagesCache: Partial<Record<Exclude<Language, 'auto'>, Record<string, MessageFormatElement[]>>> = {en: EN};
+
+async function loadMessages(locale: Exclude<Language, 'auto' | 'en'>) {
   const messages: Record<string, MessageFormatElement[]> = await import(`./compiled/${locale}.json`);
   messagesCache[locale] = messages;
 
@@ -27,7 +26,7 @@ async function loadMessages(locale: Exclude<keyof typeof Languages, 'auto' | 'en
   return messages;
 }
 
-function getMessages(locale: Exclude<keyof typeof Languages, 'auto'>) {
+function getMessages(locale: Exclude<Language, 'auto'>) {
   if (locale === 'zh-Hans') {
     dayjsLocale = 'zh-cn';
   } else if (locale === 'zh-Hant') {
@@ -41,11 +40,16 @@ function getMessages(locale: Exclude<keyof typeof Languages, 'auto'>) {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-throw-literal
-  throw loadMessages(locale as Exclude<keyof typeof Languages, 'auto' | 'en'>);
+  throw loadMessages(locale as Exclude<Language, 'auto' | 'en'>);
 }
 
-const AsyncIntlProvider = ({locale, children}: {locale?: keyof typeof Languages; children: React.ReactNode}) => {
-  let validatedLocale: Exclude<keyof typeof Languages, 'auto'>;
+interface AsyncIntlProviderProps {
+  locale?: Language;
+  children: React.ReactNode;
+}
+
+const AsyncIntlProvider: React.FC<AsyncIntlProviderProps> = ({locale, children}: AsyncIntlProviderProps) => {
+  let validatedLocale: Exclude<Language, 'auto'>;
   if (locale == null || locale === 'auto' || !Object.prototype.hasOwnProperty.call(Languages, locale)) {
     validatedLocale = detectLocale();
   } else {
@@ -58,6 +62,10 @@ const AsyncIntlProvider = ({locale, children}: {locale?: keyof typeof Languages;
       {children}
     </IntlProvider>
   );
+};
+
+AsyncIntlProvider.defaultProps = {
+  locale: 'en',
 };
 
 dayjs.extend(duration);

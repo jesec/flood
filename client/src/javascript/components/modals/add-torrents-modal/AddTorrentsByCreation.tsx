@@ -67,6 +67,9 @@ class AddTorrentsByCreation extends React.Component<WrappedComponentProps, AddTo
   };
 
   render() {
+    const {intl} = this.props;
+    const {isCreatingTorrents, trackerTextboxes} = this.state;
+
     return (
       <Form
         className="inverse"
@@ -75,27 +78,27 @@ class AddTorrentsByCreation extends React.Component<WrappedComponentProps, AddTo
         }}>
         <FilesystemBrowserTextbox
           id="sourcePath"
-          label={this.props.intl.formatMessage({
+          label={intl.formatMessage({
             id: 'torrents.create.source.path.label',
           })}
         />
         <TextboxRepeater
           id="trackers"
-          label={this.props.intl.formatMessage({
+          label={intl.formatMessage({
             id: 'torrents.create.trackers.label',
           })}
-          placeholder={this.props.intl.formatMessage({
+          placeholder={intl.formatMessage({
             id: 'torrents.create.tracker.input.placeholder',
           })}
-          defaultValues={this.state.trackerTextboxes}
+          defaultValues={trackerTextboxes}
         />
         <FormRow>
           <Textbox
             id="name"
-            label={this.props.intl.formatMessage({
+            label={intl.formatMessage({
               id: 'torrents.create.base.name.label',
             })}
-            placeholder={this.props.intl.formatMessage({
+            placeholder={intl.formatMessage({
               id: 'torrents.create.base.name.input.placeholder',
             })}
           />
@@ -103,10 +106,10 @@ class AddTorrentsByCreation extends React.Component<WrappedComponentProps, AddTo
         <FormRow>
           <Textbox
             id="comment"
-            label={this.props.intl.formatMessage({
+            label={intl.formatMessage({
               id: 'torrents.create.comment.label',
             })}
-            placeholder={this.props.intl.formatMessage({
+            placeholder={intl.formatMessage({
               id: 'torrents.create.comment.input.placeholder',
             })}
           />
@@ -114,34 +117,31 @@ class AddTorrentsByCreation extends React.Component<WrappedComponentProps, AddTo
         <FormRow>
           <Textbox
             id="infoSource"
-            label={this.props.intl.formatMessage({
+            label={intl.formatMessage({
               id: 'torrents.create.info.source.label',
             })}
-            placeholder={this.props.intl.formatMessage({
+            placeholder={intl.formatMessage({
               id: 'torrents.create.info.source.input.placeholder',
             })}
           />
         </FormRow>
         <FormRow>
           <Checkbox grow={false} id="isPrivate">
-            {this.props.intl.formatMessage({id: 'torrents.create.is.private.label'})}
+            {intl.formatMessage({id: 'torrents.create.is.private.label'})}
           </Checkbox>
         </FormRow>
         <FormRow>
           <TagSelect
             id="tags"
-            label={this.props.intl.formatMessage({
+            label={intl.formatMessage({
               id: 'torrents.add.tags',
             })}
-            placeholder={this.props.intl.formatMessage({
+            placeholder={intl.formatMessage({
               id: 'torrents.create.tags.input.placeholder',
             })}
           />
         </FormRow>
-        <AddTorrentsActions
-          onAddTorrentsClick={this.handleAddTorrents}
-          isAddingTorrents={this.state.isCreatingTorrents}
-        />
+        <AddTorrentsActions onAddTorrentsClick={this.handleAddTorrents} isAddingTorrents={isCreatingTorrents} />
       </Form>
     );
   }

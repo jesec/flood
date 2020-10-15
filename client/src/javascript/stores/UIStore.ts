@@ -2,17 +2,22 @@ import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
 
 import type {ConfirmModalProps} from '../components/modals/confirm-modal/ConfirmModal';
+import type {TorrentContextMenuAction} from '../constants/TorrentContextMenuActions';
 import type {TorrentDetailsModalProps} from '../components/modals/torrent-details-modal/TorrentDetailsModal';
 
-export interface ContextMenuItem {
-  type?: 'separator';
-  action: string;
-  label: string;
-  labelAction?: React.ReactNode;
-  labelSecondary?: React.ReactNode;
-  clickHandler(action: ContextMenuItem['action'], event: React.MouseEvent<HTMLLIElement>): void;
-  dismissMenu?: boolean;
-}
+export type ContextMenuItem =
+  | {
+      type: 'action';
+      action: TorrentContextMenuAction;
+      label: string;
+      labelAction?: React.ReactNode;
+      labelSecondary?: React.ReactNode;
+      clickHandler(action: TorrentContextMenuAction, event: React.MouseEvent<HTMLLIElement>): void;
+      dismissMenu?: boolean;
+    }
+  | {
+      type: 'separator';
+    };
 
 export interface ContextMenu {
   id: string;

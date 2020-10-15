@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Portal extends React.Component {
-  mountPoint: HTMLDivElement | null = null;
+interface PortalProps {
+  children: React.ReactNode;
+}
 
-  static defaultProps = {
-    children: <div />,
-  };
+class Portal extends React.Component<PortalProps> {
+  mountPoint: HTMLDivElement | null = null;
 
   componentDidMount() {
     this.mountPoint = document.createElement('div');
@@ -24,7 +24,10 @@ class Portal extends React.Component {
 
   render() {
     if (this.mountPoint == null) return null;
-    return ReactDOM.createPortal(this.props.children, this.mountPoint);
+
+    const {children} = this.props;
+
+    return ReactDOM.createPortal(children, this.mountPoint);
   }
 }
 
