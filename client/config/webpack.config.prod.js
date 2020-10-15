@@ -7,6 +7,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const WebpackBar = require('webpackbar');
 const getClientEnvironment = require('./env');
 const paths = require('../../shared/config/paths');
 
@@ -197,6 +198,7 @@ module.exports = {
     new webpack.optimize.MinChunkSizePlugin({
       minChunkSize: 10000,
     }),
+    new WebpackBar(),
   ],
   optimization: {
     minimize: true,
