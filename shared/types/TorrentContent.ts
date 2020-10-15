@@ -1,17 +1,16 @@
+export enum TorrentContentPriority {
+  DO_NOT_DOWNLOAD = 0,
+  NORMAL = 1,
+  HIGH = 2,
+}
+
 export interface TorrentContent {
   index: number;
   path: string;
   filename: string;
   percentComplete: number;
-  priority: number;
+  priority: TorrentContentPriority;
   sizeBytes: number;
-}
-
-export interface TorrentContentTree {
-  files?: Array<TorrentContent>;
-  directories?: {
-    [directoryName: string]: TorrentContentTree;
-  };
 }
 
 export interface TorrentContentSelection {
@@ -24,7 +23,7 @@ export interface TorrentContentSelection {
 export interface TorrentContentSelectionTree {
   isSelected?: boolean;
   files?: {
-    [fileName: string]: TorrentContent & {isSelected: boolean};
+    [fileName: string]: TorrentContent & {isSelected?: boolean};
   };
   directories?: {
     [directoryName: string]: TorrentContentSelectionTree;

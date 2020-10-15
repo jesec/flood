@@ -1,30 +1,27 @@
 import classnames from 'classnames';
-import isEqual from 'lodash/isEqual';
+import {deepEqual} from 'fast-equals';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import type {
-  TorrentContentSelection,
-  TorrentContentSelectionTree,
-  TorrentContentTree,
-} from '@shared/types/TorrentContent';
+import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from '../../../ui';
 import ConfigStore from '../../../stores/ConfigStore';
 import Disk from '../../icons/Disk';
 import DirectoryTree from '../../general/filesystem/DirectoryTree';
+import selectionTree from '../../../util/selectionTree';
 import TorrentActions from '../../../actions/TorrentActions';
 
 interface TorrentFilesProps extends WrappedComponentProps {
-  fileTree: TorrentContentTree;
+  contents: Array<TorrentContent>;
   torrent: TorrentProperties;
 }
 
 interface TorrentFilesStates {
   allSelected: boolean;
-  selectedItems: TorrentContentSelectionTree;
-  selectedFiles: Array<number>;
+  itemsTree: TorrentContentSelectionTree;
+  selectedIndices: Array<number>;
 }
 
 const TORRENT_PROPS_TO_CHECK = ['bytesDone'] as const;
@@ -39,8 +36,8 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
 
     this.state = {
       allSelected: false,
-      selectedItems: this.selectAll(this.props.fileTree, false),
-      selectedFiles: [],
+      itemsTree: selectionTree.getSelectionTree(this.props.contents, false),
+      selectedIndices: [],
     };
 
     METHODS_TO_BIND.forEach(<T extends typeof METHODS_TO_BIND[number]>(methodName: T) => {
@@ -57,7 +54,7 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
     // If we know that the user changed a file's priority, we deeply check the
     // file tree to render when the priority change is detected.
     if (this.hasPriorityChanged) {
-      const shouldUpdate = !isEqual(nextProps.fileTree, this.props.fileTree);
+      const shouldUpdate = !deepEqual(nextProps.contents, this.props.contents);
 
       // Reset the flag so we don't deeply check the next file tree.
       if (shouldUpdate) {
@@ -68,7 +65,7 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
     }
 
     // Update when the previous props weren't defined and the next are.
-    if ((!this.props.torrent && nextProps.torrent) || (!this.props.fileTree && nextProps.fileTree)) {
+    if ((!this.props.torrent && nextProps.torrent) || (!this.props.contents && nextProps.contents)) {
       return true;
     }
 
@@ -80,11 +77,11 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
     return true;
   }
 
-  getSelectedFiles(selectionTree: TorrentContentSelectionTree) {
+  getSelectedFiles(tree: TorrentContentSelectionTree) {
     const indices: Array<number> = [];
 
-    if (selectionTree.files != null) {
-      const {files} = selectionTree;
+    if (tree.files != null) {
+      const {files} = tree;
       Object.keys(files).forEach((fileName) => {
         const file = files[fileName];
 
@@ -94,8 +91,8 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
       });
     }
 
-    if (selectionTree.directories != null) {
-      const {directories} = selectionTree;
+    if (tree.directories != null) {
+      const {directories} = tree;
       Object.keys(directories).forEach((directoryName) => {
         indices.push(...this.getSelectedFiles(directories[directoryName]));
       });
@@ -109,7 +106,9 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
     const baseURI = ConfigStore.getBaseURI();
     const link = document.createElement('a');
     link.download = `${this.props.torrent.name}.tar`;
-    link.href = `${baseURI}api/torrents/${this.props.torrent.hash}/contents/${this.state.selectedFiles.join(',')}/data`;
+    link.href = `${baseURI}api/torrents/${this.props.torrent.hash}/contents/${this.state.selectedIndices.join(
+      ',',
+    )}/data`;
     link.style.display = 'none';
     document.body.appendChild(link); // Fix for Firefox 58+
     link.click();
@@ -121,7 +120,7 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
       if (inputElement.name === 'file-priority') {
         this.handlePriorityChange();
         TorrentActions.setFilePriority(this.props.torrent.hash, {
-          indices: this.state.selectedFiles,
+          indices: this.state.selectedIndices,
           priority: Number(inputElement.value),
         });
       }
@@ -131,13 +130,13 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
   handleItemSelect(selectedItem: TorrentContentSelection) {
     this.hasSelectionChanged = true;
     this.setState((state) => {
-      const selectedItems = this.mergeSelection(selectedItem, 0, state.selectedItems, this.props.fileTree);
+      const selectedItems = selectionTree.applySelection(state.itemsTree, selectedItem);
       const selectedFiles = this.getSelectedFiles(selectedItems);
 
       return {
-        selectedItems,
+        itemsTree: selectedItems,
         allSelected: false,
-        selectedFiles,
+        selectedIndices: selectedFiles,
       };
     });
   }
@@ -150,123 +149,23 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
     this.hasSelectionChanged = true;
 
     this.setState((state, props) => {
-      const selectedItems = this.selectAll(props.fileTree, state.allSelected);
+      const selectedItems = selectionTree.getSelectionTree(props.contents, state.allSelected);
       const selectedFiles = this.getSelectedFiles(selectedItems);
 
       return {
-        selectedItems,
+        itemsTree: selectedItems,
         allSelected: !state.allSelected,
-        selectedFiles,
+        selectedIndices: selectedFiles,
       };
     });
   }
 
   isLoaded() {
-    return this.props.fileTree != null;
-  }
-
-  mergeSelection(
-    item: TorrentContentSelection,
-    currentDepth: number,
-    tree: TorrentContentSelectionTree,
-    fileTree: TorrentContentTree = {},
-  ): TorrentContentSelectionTree {
-    const {depth, path, select, type} = item;
-    const currentPath = path[currentDepth];
-
-    // Change happens
-    if (currentDepth === depth - 1) {
-      if (type === 'file' && tree.files != null && tree.files[currentPath] != null) {
-        const files = {
-          ...tree.files,
-          [currentPath]: {
-            ...tree.files[currentPath],
-            isSelected: select,
-          },
-        };
-
-        return {
-          ...tree,
-          files,
-          isSelected:
-            Object.values(files).every(({isSelected}) => isSelected) &&
-            (tree.directories != null ? Object.values(tree.directories).every(({isSelected}) => isSelected) : true),
-        };
-      }
-
-      if (
-        type === 'directory' &&
-        tree.directories != null &&
-        fileTree.directories != null &&
-        fileTree.directories[currentPath] != null
-      ) {
-        const directories = {
-          ...tree.directories,
-          [currentPath]: this.selectAll(fileTree.directories[currentPath], select),
-        };
-
-        return {
-          ...tree,
-          directories,
-          isSelected:
-            Object.values(directories).every(({isSelected}) => isSelected) &&
-            (tree.files != null ? Object.values(tree.files).every(({isSelected}) => isSelected) : true),
-        };
-      }
-
-      return tree;
-    }
-
-    // Recursive call till we reach the target
-    if (tree.directories != null && fileTree.directories != null) {
-      const selectionSubTree = tree.directories;
-      const fileSubTree = fileTree.directories;
-      Object.keys(selectionSubTree).forEach((directory) => {
-        if (directory === currentPath) {
-          selectionSubTree[directory] = this.mergeSelection(
-            item,
-            currentDepth + 1,
-            selectionSubTree[directory],
-            fileSubTree[directory],
-          );
-        }
-      });
-      return {
-        ...tree,
-        directories: selectionSubTree,
-        isSelected: Object.values(selectionSubTree).every(({isSelected}) => isSelected),
-      };
-    }
-
-    return tree;
-  }
-
-  selectAll(fileTree: TorrentContentTree, isSelected = true): TorrentContentSelectionTree {
-    const {files, directories} = fileTree;
-    const selectionTree: TorrentContentSelectionTree = {};
-
-    if (files) {
-      const selectedFiles: Exclude<TorrentContentSelectionTree['files'], undefined> = {};
-      files.forEach((file) => {
-        selectedFiles[file.filename] = {...file, isSelected};
-      });
-      selectionTree.files = selectedFiles;
-    }
-
-    if (directories) {
-      const selectedDirectories: Exclude<TorrentContentSelectionTree['directories'], undefined> = {};
-      Object.keys(directories).forEach((directory) => {
-        selectedDirectories[directory] = this.selectAll(directories[directory], isSelected);
-      });
-      selectionTree.directories = selectedDirectories;
-    }
-
-    selectionTree.isSelected = isSelected;
-    return selectionTree;
+    return this.props.contents != null;
   }
 
   render() {
-    const {fileTree, torrent} = this.props;
+    const {torrent} = this.props;
     let directoryHeadingIconContent = null;
     let fileDetailContent = null;
 
@@ -293,8 +192,7 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
           onItemSelect={this.handleItemSelect}
           onPriorityChange={this.handlePriorityChange}
           hash={this.props.torrent.hash}
-          selectedItems={this.state.selectedItems}
-          tree={fileTree}
+          itemsTree={this.state.itemsTree}
         />
       );
     } else {
@@ -324,7 +222,7 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
     );
 
     const wrapperClasses = classnames('inverse directory-tree__wrapper', {
-      'directory-tree__wrapper--toolbar-visible': this.state.selectedFiles.length > 0,
+      'directory-tree__wrapper--toolbar-visible': this.state.selectedIndices.length > 0,
     });
 
     return (
@@ -335,10 +233,10 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
               <FormattedMessage
                 id="torrents.details.selected.files"
                 values={{
-                  count: this.state.selectedFiles.length,
+                  count: this.state.selectedIndices.length,
                   countElement: (
                     <span className="directory-tree__selection-toolbar__item-count">
-                      {this.state.selectedFiles.length}
+                      {this.state.selectedIndices.length}
                     </span>
                   ),
                 }}
@@ -348,7 +246,7 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
               <FormattedMessage
                 id="torrents.details.files.download.file"
                 values={{
-                  count: this.state.selectedFiles.length,
+                  count: this.state.selectedIndices.length,
                 }}
               />
             </Button>

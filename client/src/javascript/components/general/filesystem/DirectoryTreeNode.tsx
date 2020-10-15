@@ -2,11 +2,7 @@ import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import type {
-  TorrentContentSelection,
-  TorrentContentSelectionTree,
-  TorrentContentTree,
-} from '@shared/types/TorrentContent';
+import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Checkbox} from '../../../ui';
@@ -22,8 +18,7 @@ interface DirectoryTreeNodeProps {
   hash: TorrentProperties['hash'];
   path: Array<string>;
   directoryName: string;
-  selectedItems: TorrentContentSelectionTree;
-  subTree: TorrentContentTree;
+  itemsTree: TorrentContentSelectionTree;
   isSelected: boolean;
   onPriorityChange: () => void;
   onItemSelect: (selection: TorrentContentSelection) => void;
@@ -97,14 +92,13 @@ class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, Director
       return (
         <div className="directory-tree__node directory-tree__node--group">
           <DirectoryTree
-            tree={this.props.subTree}
             depth={this.props.depth}
             hash={this.props.hash}
             key={`${this.state.expanded}-${this.props.depth}`}
             onPriorityChange={this.props.onPriorityChange}
             onItemSelect={this.props.onItemSelect}
             path={this.getCurrentPath()}
-            selectedItems={this.props.selectedItems}
+            itemsTree={this.props.itemsTree}
           />
         </div>
       );

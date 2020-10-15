@@ -11,7 +11,7 @@ const torrentContentMethodCallConfigs = {
   },
   priority: {
     methodCall: 'f.priority=',
-    transformValue: stringTransformer,
+    transformValue: numberTransformer,
   },
   sizeBytes: {
     methodCall: 'f.size_bytes=',

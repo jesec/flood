@@ -6,7 +6,7 @@ import sanitize from 'sanitize-filename';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {ClientConnectionSettings, RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import type {TorrentContentTree} from '@shared/types/TorrentContent';
+import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
@@ -29,7 +29,6 @@ import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
-import {getFileTreeFromPathsArr} from './util/fileTreeUtil';
 import scgiUtil from './util/scgiUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import torrentFileUtil from '../../util/torrentFileUtil';
@@ -149,7 +148,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     );
   }
 
-  async getTorrentContents(hash: TorrentProperties['hash']): Promise<TorrentContentTree> {
+  async getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
     const configs = torrentContentMethodCallConfigs;
     return (
       this.clientRequestManager
@@ -159,10 +158,16 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
         })
         .then((processedResponses) => {
-          return processedResponses.reduce(
-            (memo, content, index) => getFileTreeFromPathsArr(memo, content.pathComponents[0], {index, ...content}),
-            {},
-          );
+          return processedResponses.map((content, index) => {
+            return {
+              index,
+              path: content.path,
+              filename: content.path.split('/').pop() || '',
+              percentComplete: Math.trunc((content.completedChunks / content.sizeChunks) * 100),
+              priority: content.priority,
+              sizeBytes: content.sizeBytes,
+            };
+          });
         }) || Promise.reject()
     );
   }

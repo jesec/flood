@@ -20,7 +20,7 @@ import {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 
-import {accessDeniedError, findFilesByIndices, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ajaxUtil from '../../util/ajaxUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 import mediainfo from '../../util/mediainfo';
@@ -418,18 +418,21 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
     if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
     return req.services?.clientGatewayService?.getTorrentContents(hash).then((contents) => {
-      if (!contents || !contents.files) return res.status(404).json({error: 'Torrent contents not found'});
+      if (!contents) return res.status(404).json({error: 'Torrent contents not found'});
 
       let indices: Array<number>;
       if (!stringIndices || stringIndices === 'all') {
-        indices = contents.files.map((x) => x.index);
+        indices = contents.map((x) => x.index);
       } else {
         indices = stringIndices.split(',').map((value) => Number(value));
       }
 
-      const filePathsToDownload = findFilesByIndices(indices, contents).map((file) =>
-        path.join(selectedTorrent.directory, file.path),
-      );
+      const filePathsToDownload = contents
+        .filter((content) => indices.includes(content.index))
+        .map((content) => {
+          return sanitizePath(path.join(selectedTorrent.directory, content.path));
+        })
+        .filter((filePath) => isAllowedPath(filePath));
 
       if (filePathsToDownload.length === 1) {
         const file = filePathsToDownload[0];
@@ -464,7 +467,7 @@ router.get('/:hash/details', async (req, res) => {
     const trackers = req.services?.clientGatewayService?.getTorrentTrackers(req.params.hash);
 
     callback({
-      fileTree: await contents,
+      contents: await contents,
       peers: await peers,
       trackers: await trackers,
     });

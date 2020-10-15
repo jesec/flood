@@ -1,4 +1,4 @@
-import type {TorrentContentTree} from './TorrentContent';
+import type {TorrentContent} from './TorrentContent';
 import type {TorrentPeer} from './TorrentPeer';
 import type {TorrentStatus} from '../constants/torrentStatusMap';
 import type {TorrentTracker} from './TorrentTracker';
@@ -14,13 +14,18 @@ export interface Duration {
 }
 
 export interface TorrentDetails {
+  contents: Array<TorrentContent>;
   peers: Array<TorrentPeer>;
   trackers: Array<TorrentTracker>;
-  fileTree: TorrentContentTree;
 }
 
-// TODO: Rampant over-fetching of torrent properties. Need to remove unused items.
-// TODO: Unite with torrentListPropMap when it is TS.
+export enum TorrentPriority {
+  DO_NOT_DOWNLOAD = 0,
+  LOW = 1,
+  NORMAL = 2,
+  HIGH = 3,
+}
+
 export interface TorrentProperties {
   baseDirectory: string;
   baseFilename: string;
@@ -34,23 +39,18 @@ export interface TorrentProperties {
   downTotal: number;
   eta: -1 | Duration;
   hash: string;
-  isActive: boolean;
-  isComplete: boolean;
-  isHashing: boolean;
   isMultiFile: boolean;
-  isOpen: boolean;
   isPrivate: boolean;
   message: string;
   name: string;
   peersConnected: number;
   peersTotal: number;
   percentComplete: number;
-  priority: number;
+  priority: TorrentPriority;
   ratio: number;
   seedsConnected: number;
   seedsTotal: number;
   sizeBytes: number;
-  state: string;
   status: Array<TorrentStatus>;
   tags: Array<string>;
   trackerURIs: Array<string>;
