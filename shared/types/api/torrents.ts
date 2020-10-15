@@ -1,4 +1,5 @@
-import {TorrentProperties} from '../Torrent';
+import type {TorrentPriority, TorrentProperties} from '../Torrent';
+import type {TorrentContentPriority} from '../TorrentContent';
 
 // POST /api/torrents/add-urls
 export interface AddTorrentByURLOptions {
@@ -94,12 +95,8 @@ export interface StopTorrentsOptions {
 export interface SetTorrentsPriorityOptions {
   // An array of string representing hashes of torrents to operate on
   hashes: Array<TorrentProperties['hash']>;
-  // Number representing priority:
-  // 0 - DON'T_DOWNLOAD
-  // 1 - LOW
-  // 2 - NORMAL
-  // 3 - HIGH
-  priority: number;
+  // Number representing priority
+  priority: TorrentPriority;
 }
 
 // PATCH /api/torrents/tags
@@ -122,9 +119,6 @@ export interface SetTorrentsTrackersOptions {
 export interface SetTorrentContentsPropertiesOptions {
   // An array of number representing indices of contents of a torrent
   indices: Array<number>;
-  // Number representing priority:
-  // 0 - DON'T_DOWNLOAD
-  // 1 - NORMAL
-  // 2 - HIGH
-  priority: number;
+  // Number representing priority
+  priority: TorrentContentPriority;
 }

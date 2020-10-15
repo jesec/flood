@@ -1,8 +1,7 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 
 import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
-import type {TorrentDetails, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentProperties} from '@shared/types/Torrent';
 
 import DirectoryFileList from './DirectoryFileList';
 // TODO: Fix this circular dependency
@@ -13,8 +12,7 @@ interface DirectoryTreeProps {
   depth?: number;
   path: Array<string>;
   hash: TorrentProperties['hash'];
-  tree: TorrentDetails['fileTree'];
-  selectedItems: TorrentContentSelectionTree;
+  itemsTree: TorrentContentSelectionTree;
   onPriorityChange: () => void;
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
@@ -22,14 +20,9 @@ interface DirectoryTreeProps {
 const METHODS_TO_BIND = ['getDirectoryTreeDomNodes'] as const;
 
 class DirectoryTree extends React.Component<DirectoryTreeProps> {
-  static propTypes = {
-    path: PropTypes.array,
-    selectedItems: PropTypes.object,
-  };
-
   static defaultProps = {
     path: [],
-    selectedItems: {},
+    itemsTree: {},
   };
 
   constructor(props: DirectoryTreeProps) {
@@ -40,9 +33,9 @@ class DirectoryTree extends React.Component<DirectoryTreeProps> {
     });
   }
 
-  getDirectoryTreeDomNodes(tree: TorrentDetails['fileTree'], depth = 0) {
+  getDirectoryTreeDomNodes(itemsTree: TorrentContentSelectionTree, depth = 0) {
     const {hash} = this.props;
-    const {files, directories} = tree;
+    const {files, directories} = itemsTree;
     const childDepth = depth + 1;
 
     const directoryNodes: Array<React.ReactNode> =
@@ -52,11 +45,14 @@ class DirectoryTree extends React.Component<DirectoryTreeProps> {
             .map(
               (directoryName, index): React.ReactNode => {
                 const subSelectedItems =
-                  this.props.selectedItems.directories && this.props.selectedItems.directories[directoryName];
+                  this.props.itemsTree.directories && this.props.itemsTree.directories[directoryName];
 
-                const subTree = directories[directoryName];
                 const id = `${index}${childDepth}${directoryName}`;
                 const isSelected = (subSelectedItems && subSelectedItems.isSelected) || false;
+
+                if (subSelectedItems == null) {
+                  return null;
+                }
 
                 return (
                   <DirectoryTreeNode
@@ -66,11 +62,10 @@ class DirectoryTree extends React.Component<DirectoryTreeProps> {
                     id={id}
                     isSelected={isSelected}
                     key={id}
-                    selectedItems={subSelectedItems}
+                    itemsTree={subSelectedItems}
                     onItemSelect={this.props.onItemSelect}
                     onPriorityChange={this.props.onPriorityChange}
                     path={this.props.path}
-                    subTree={subTree}
                   />
                 );
               },
@@ -78,16 +73,15 @@ class DirectoryTree extends React.Component<DirectoryTreeProps> {
         : [];
 
     const fileList: React.ReactNode =
-      files != null && files.length > 0 ? (
+      files != null && Object.keys(files).length > 0 ? (
         <DirectoryFileList
           depth={childDepth}
-          fileList={files}
           hash={hash}
           key={`files-${childDepth}`}
           onItemSelect={this.props.onItemSelect}
           onPriorityChange={this.props.onPriorityChange}
           path={this.props.path}
-          selectedItems={this.props.selectedItems.files}
+          items={this.props.itemsTree.files}
         />
       ) : null;
 
@@ -96,7 +90,9 @@ class DirectoryTree extends React.Component<DirectoryTreeProps> {
 
   render() {
     return (
-      <div className="directory-tree__tree">{this.getDirectoryTreeDomNodes(this.props.tree, this.props.depth)}</div>
+      <div className="directory-tree__tree">
+        {this.getDirectoryTreeDomNodes(this.props.itemsTree, this.props.depth)}
+      </div>
     );
   }
 }

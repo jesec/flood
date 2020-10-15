@@ -4,21 +4,21 @@ import readline from 'readline';
 import stream from 'stream';
 import supertest from 'supertest';
 
+import app from '../../app';
+import {getAuthToken} from './auth';
+import {getTempPath} from '../../models/TemporaryStorage';
+
 import type {AddTorrentByURLOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
+import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentList, TorrentProperties} from '../../../shared/types/Torrent';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
-
-import app from '../../app';
-import {getAuthToken} from './auth';
-
-import {getTempPath} from '../../models/TemporaryStorage';
 
 const request = supertest(app);
 
 const authToken = `jwt=${getAuthToken('_config')}`;
 
-const tempDirectory = getTempPath('rtorrent');
+const tempDirectory = getTempPath('download');
 
 fs.mkdirSync(tempDirectory, {recursive: true});
 
@@ -157,6 +157,27 @@ describe('PATCH /api/torrents/trackers', () => {
         expect(trackers.filter((tracker) => testTrackers.includes(tracker.url)).length).toBeGreaterThanOrEqual(
           testTrackers.length,
         );
+
+        done();
+      });
+  });
+});
+
+describe('GET /api/torrents/{hash}/contents', () => {
+  it('Gets contents of torrents', (done) => {
+    request
+      .get(`/api/torrents/${torrentHash}/contents`)
+      .send()
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end((err, res) => {
+        if (err) done(err);
+
+        const contents: Array<TorrentContent> = res.body;
+
+        expect(Array.isArray(contents)).toBe(true);
 
         done();
       });

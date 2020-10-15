@@ -1,11 +1,17 @@
 import {DiffAction} from '@shared/constants/diffActionTypes';
 
 export interface TransferSummary {
+  // Global download rate
   downRate: number;
+  // Download rate limit
   downThrottle: number;
+  // Data downloaded this session
   downTotal: number;
+  // Global upload rate
   upRate: number;
+  // Upload rate limit
   upThrottle: number;
+  // Data uploaded this session
   upTotal: number;
 }
 

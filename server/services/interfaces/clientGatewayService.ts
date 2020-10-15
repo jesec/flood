@@ -1,6 +1,6 @@
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {TorrentContentTree} from '@shared/types/TorrentContent';
+import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
@@ -70,7 +70,7 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
    * @param {string} hash - Hash of torrent
    * @return {Promise<TorrentContentTree>} - Resolves with TorrentContentTree or rejects with error.
    */
-  abstract getTorrentContents(hash: TorrentProperties['hash']): Promise<TorrentContentTree>;
+  abstract getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>>;
 
   /**
    * Gets the list of peers of a torrent.
