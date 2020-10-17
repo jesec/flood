@@ -269,24 +269,6 @@
       "value": "Admin"
     }
   ],
-  "auth.connectionType": [
-    {
-      "type": 0,
-      "value": "Typ připojení rTorrent"
-    }
-  ],
-  "auth.connectionType.socket": [
-    {
-      "type": 0,
-      "value": "Unixní raketa"
-    }
-  ],
-  "auth.connectionType.tcp": [
-    {
-      "type": 0,
-      "value": "TCP"
-    }
-  ],
   "auth.create.account": [
     {
       "type": 0,
@@ -351,30 +333,6 @@
     {
       "type": 0,
       "value": "Heslo"
-    }
-  ],
-  "auth.rtorrentHost": [
-    {
-      "type": 0,
-      "value": "Hostitel rTorrentu"
-    }
-  ],
-  "auth.rtorrentPort": [
-    {
-      "type": 0,
-      "value": "Port rTorrentu"
-    }
-  ],
-  "auth.rtorrentSocket": [
-    {
-      "type": 0,
-      "value": "Raketa rTorrentu"
-    }
-  ],
-  "auth.rtorrentSocketPath": [
-    {
-      "type": 0,
-      "value": "Cesta k rtorrentu"
     }
   ],
   "auth.user.accounts": [
@@ -452,7 +410,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Nelze se připojit k rTorrent"
+      "value": "Nelze se připojit ke klientu"
     }
   ],
   "connection-interruption.verification-error": [
@@ -473,10 +431,82 @@
       "value": "Pojďme ověřit nastavení připojení."
     }
   ],
+  "connection.settings.client.select": [
+    {
+      "type": 0,
+      "value": "Klient"
+    }
+  ],
+  "connection.settings.error.empty": [
+    {
+      "type": 0,
+      "value": "Nastavení připojení nemůže být prázdné."
+    }
+  ],
+  "connection.settings.rtorrent": [
+    {
+      "type": 0,
+      "value": "rTorrent"
+    }
+  ],
+  "connection.settings.rtorrent.host": [
+    {
+      "type": 0,
+      "value": "Hostitel"
+    }
+  ],
+  "connection.settings.rtorrent.host.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Hostname nebo IP adresa"
+    }
+  ],
+  "connection.settings.rtorrent.port": [
+    {
+      "type": 0,
+      "value": "Port"
+    }
+  ],
+  "connection.settings.rtorrent.port.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Port"
+    }
+  ],
+  "connection.settings.rtorrent.socket": [
+    {
+      "type": 0,
+      "value": "Cesta"
+    }
+  ],
+  "connection.settings.rtorrent.socket.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Cesta k socketu"
+    }
+  ],
+  "connection.settings.rtorrent.type": [
+    {
+      "type": 0,
+      "value": "Typ připojení"
+    }
+  ],
+  "connection.settings.rtorrent.type.socket": [
+    {
+      "type": 0,
+      "value": "Socket"
+    }
+  ],
+  "connection.settings.rtorrent.type.tcp": [
+    {
+      "type": 0,
+      "value": "TCP"
+    }
+  ],
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Nelze se připojit k rTorrent. Aktualizujte prosím informace nyní."
+      "value": "Nelze se připojit k klientovi. Prosím aktualizujte nastavení připojení."
     }
   ],
   "connectivity.modal.title": [
@@ -1505,6 +1535,12 @@
       "value": "Spustit Torrent"
     }
   ],
+  "torrents.add.tab.create.title": [
+    {
+      "type": 0,
+      "value": "Vytvořit"
+    }
+  ],
   "torrents.add.tab.file.browse": [
     {
       "type": 0,
@@ -1545,6 +1581,72 @@
     {
       "type": 0,
       "value": "Torrenty"
+    }
+  ],
+  "torrents.create.base.name.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Volitelný základní soubor nebo název adresáře torrentu"
+    }
+  ],
+  "torrents.create.base.name.label": [
+    {
+      "type": 0,
+      "value": "Základní název"
+    }
+  ],
+  "torrents.create.comment.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Volitelný komentář v souboru torrentu"
+    }
+  ],
+  "torrents.create.comment.label": [
+    {
+      "type": 0,
+      "value": "Komentář"
+    }
+  ],
+  "torrents.create.info.source.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Volitelná zdrojová položka v infohashi"
+    }
+  ],
+  "torrents.create.info.source.label": [
+    {
+      "type": 0,
+      "value": "Zdroj informací"
+    }
+  ],
+  "torrents.create.is.private.label": [
+    {
+      "type": 0,
+      "value": "Soukromé"
+    }
+  ],
+  "torrents.create.source.path.label": [
+    {
+      "type": 0,
+      "value": "Zdroj"
+    }
+  ],
+  "torrents.create.tags.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Štítky ve Floodu. Nepřidáno k vytvořenému torrentu."
+    }
+  ],
+  "torrents.create.tracker.input.placeholder": [
+    {
+      "type": 0,
+      "value": "URL Trackeru"
+    }
+  ],
+  "torrents.create.trackers.label": [
+    {
+      "type": 0,
+      "value": "Trackery"
     }
   ],
   "torrents.destination.base_path": [
@@ -1846,7 +1948,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Nelze se připojit k rTorrent."
+      "value": "Nelze se připojit ke klientu."
     }
   ],
   "torrents.list.clear.filters": [
@@ -1924,7 +2026,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Přetáhněte soubory pro jejich přidání do rTorrent."
+      "value": "Přetáhněte soubory sem pro přidání."
     }
   ],
   "torrents.list.no.torrents": [
