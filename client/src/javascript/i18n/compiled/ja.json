@@ -245,24 +245,6 @@
       "value": "管理者"
     }
   ],
-  "auth.connectionType": [
-    {
-      "type": 0,
-      "value": "rTorrent 接続タイプ"
-    }
-  ],
-  "auth.connectionType.socket": [
-    {
-      "type": 0,
-      "value": "Unix ソケット"
-    }
-  ],
-  "auth.connectionType.tcp": [
-    {
-      "type": 0,
-      "value": "TCP"
-    }
-  ],
   "auth.create.account": [
     {
       "type": 0,
@@ -327,30 +309,6 @@
     {
       "type": 0,
       "value": "パスワード"
-    }
-  ],
-  "auth.rtorrentHost": [
-    {
-      "type": 0,
-      "value": "rTorrent ホスト"
-    }
-  ],
-  "auth.rtorrentPort": [
-    {
-      "type": 0,
-      "value": "rTorrent ポート"
-    }
-  ],
-  "auth.rtorrentSocket": [
-    {
-      "type": 0,
-      "value": "rTorrent Socket"
-    }
-  ],
-  "auth.rtorrentSocketPath": [
-    {
-      "type": 0,
-      "value": "rTorrent ソケットパス"
     }
   ],
   "auth.user.accounts": [
@@ -428,7 +386,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "rTorrent に接続できません"
+      "value": "Cannot connect to the client"
     }
   ],
   "connection-interruption.verification-error": [
@@ -449,10 +407,82 @@
       "value": "接続設定を確認してみましょう。"
     }
   ],
+  "connection.settings.client.select": [
+    {
+      "type": 0,
+      "value": "Client"
+    }
+  ],
+  "connection.settings.error.empty": [
+    {
+      "type": 0,
+      "value": "Connection settings can not be empty."
+    }
+  ],
+  "connection.settings.rtorrent": [
+    {
+      "type": 0,
+      "value": "rTorrent"
+    }
+  ],
+  "connection.settings.rtorrent.host": [
+    {
+      "type": 0,
+      "value": "Host"
+    }
+  ],
+  "connection.settings.rtorrent.host.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Hostname or IP"
+    }
+  ],
+  "connection.settings.rtorrent.port": [
+    {
+      "type": 0,
+      "value": "Port"
+    }
+  ],
+  "connection.settings.rtorrent.port.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Port"
+    }
+  ],
+  "connection.settings.rtorrent.socket": [
+    {
+      "type": 0,
+      "value": "Path"
+    }
+  ],
+  "connection.settings.rtorrent.socket.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Path to socket"
+    }
+  ],
+  "connection.settings.rtorrent.type": [
+    {
+      "type": 0,
+      "value": "Connection Type"
+    }
+  ],
+  "connection.settings.rtorrent.type.socket": [
+    {
+      "type": 0,
+      "value": "Socket"
+    }
+  ],
+  "connection.settings.rtorrent.type.tcp": [
+    {
+      "type": 0,
+      "value": "TCP"
+    }
+  ],
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "rTorrent に接続できません。今すぐ情報を更新してください。"
+      "value": "Cannot connect to the client. Please update connection settings."
     }
   ],
   "connectivity.modal.title": [
@@ -1481,6 +1511,12 @@
       "value": "Torrent を開始"
     }
   ],
+  "torrents.add.tab.create.title": [
+    {
+      "type": 0,
+      "value": "Create"
+    }
+  ],
   "torrents.add.tab.file.browse": [
     {
       "type": 0,
@@ -1521,6 +1557,72 @@
     {
       "type": 0,
       "value": "Torrent"
+    }
+  ],
+  "torrents.create.base.name.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Optional base file or directory name of the torrent"
+    }
+  ],
+  "torrents.create.base.name.label": [
+    {
+      "type": 0,
+      "value": "Base Name"
+    }
+  ],
+  "torrents.create.comment.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Optional comment in torrent file"
+    }
+  ],
+  "torrents.create.comment.label": [
+    {
+      "type": 0,
+      "value": "Comment"
+    }
+  ],
+  "torrents.create.info.source.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Optional source entry in infohash"
+    }
+  ],
+  "torrents.create.info.source.label": [
+    {
+      "type": 0,
+      "value": "Info Source"
+    }
+  ],
+  "torrents.create.is.private.label": [
+    {
+      "type": 0,
+      "value": "Private"
+    }
+  ],
+  "torrents.create.source.path.label": [
+    {
+      "type": 0,
+      "value": "Source"
+    }
+  ],
+  "torrents.create.tags.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Tags in Flood. Not added to created torrent."
+    }
+  ],
+  "torrents.create.tracker.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Tracker URL"
+    }
+  ],
+  "torrents.create.trackers.label": [
+    {
+      "type": 0,
+      "value": "Trackers"
     }
   ],
   "torrents.destination.base_path": [
@@ -1826,7 +1928,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "rTorrent に接続できません。"
+      "value": "Cannot connect to the client."
     }
   ],
   "torrents.list.clear.filters": [
@@ -1904,7 +2006,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "ここにファイルをドロップして、rTorrentに追加します。"
+      "value": "Drop files here to add them."
     }
   ],
   "torrents.list.no.torrents": [
