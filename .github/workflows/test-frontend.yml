@@ -1,0 +1,35 @@
+name: Test frontend
+
+on:
+  push:
+    branches-ignore:
+      - 'integration/**'
+  pull_request:
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-16.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - run: sudo apt-get install -y rtorrent
+
+      - run: sudo npm i -g wait-on
+      - run: npm ci
+      - run: npm run build
+
+      - run: npm run start -- -p 4200 &
+      - run: wait-on tcp:4200
+
+      - uses: cypress-io/github-action@v2
+        with:
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

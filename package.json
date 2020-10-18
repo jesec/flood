@@ -33,7 +33,8 @@
     "start:production": "UPDATED_SCRIPT=start npm run deprecated-warning && npm start",
     "start:watch": "UPDATED_SCRIPT=start:development:client npm run deprecated-warning && npm run start:development:client",
     "test": "jest --forceExit",
-    "test:watch": "jest --watchAll --forceExit"
+    "test:watch": "jest --watchAll --forceExit",
+    "test:client": "FLOOD_OPTION_port=4200 start-server-and-test start 4200 'cypress run'"
   },
   "dependencies": {
     "argon2-browser": "^1.15.2",
@@ -185,6 +186,10 @@
     "xmlrpc": "^1.3.2",
     "yargs": "^16.0.3",
     "zod": "^1.11.9"
+  },
+  "optionalDependencies": {
+    "cypress": "^5.4.0",
+    "start-server-and-test": "^1.11.5"
   },
   "eslintConfig": {
     "extends": "react-app"

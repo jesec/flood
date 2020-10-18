@@ -22,7 +22,7 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
-      - run: npm ci
+      - run: npm ci --no-optional
 
       - name: Tag rolling release
         run: |

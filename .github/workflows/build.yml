@@ -23,6 +23,6 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - run: npm ci
+      - run: npm ci --no-optional
       - run: npm run build
       - run: npm run start -- --help

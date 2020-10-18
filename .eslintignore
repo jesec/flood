@@ -4,3 +4,4 @@
 **/*.d.ts
 /docs
 coverage/
+cypress/

@@ -62,3 +62,7 @@ out/
 
 # Coverage reports
 coverage/
+
+# Test results
+cypress/videos
+cypress/screenshots
