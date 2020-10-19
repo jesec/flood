@@ -103,7 +103,6 @@ const TorrentActions = {
             data: {
               data,
               count: options.hashes.length,
-              deleteData: options.deleteData || false,
             },
           });
         },

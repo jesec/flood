@@ -184,9 +184,7 @@ class TorrentStoreClass extends BaseStore {
     });
   }
 
-  static handleRemoveTorrentsSuccess(response: {count: number; deleteData: boolean}) {
-    SettingsStore.setFloodSetting('deleteTorrentData', response.deleteData);
-
+  static handleRemoveTorrentsSuccess(response: {count: number}) {
     AlertStore.add({
       accumulation: {
         id: 'alert.torrent.remove',

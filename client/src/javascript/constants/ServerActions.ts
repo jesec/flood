@@ -244,7 +244,7 @@ interface ClientMoveTorrentsErrorAction {
 
 interface ClientRemoveTorrentSuccessAction {
   type: 'CLIENT_REMOVE_TORRENT_SUCCESS';
-  data: {count: number; deleteData: boolean};
+  data: {count: number};
 }
 
 interface ClientRemoveTorrentErrorAction {

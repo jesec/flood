@@ -85,6 +85,8 @@ class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
       hashes: TorrentStore.getSelectedTorrents(),
       deleteData,
     });
+
+    SettingsStore.setFloodSetting('deleteTorrentData', deleteData);
   };
 
   render() {
