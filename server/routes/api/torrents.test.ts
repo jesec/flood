@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
+import os from 'os';
 import path from 'path';
 import readline from 'readline';
 import stream from 'stream';
@@ -67,7 +68,24 @@ describe('POST /api/torrents/add-urls', () => {
     });
   });
 
-  it('Adds a torrent from URL', (done) => {
+  it('Adds torrents to disallowed path via URLs', (done) => {
+    request
+      .post('/api/torrents/add-urls')
+      .send({...addTorrentByURLOptions, destination: path.join(os.tmpdir(), 'notAllowed')})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(500)
+      .expect('Content-Type', /json/)
+      .end((err, res) => {
+        if (err) done(err);
+
+        expect(res.body).toEqual({code: 'EACCES'});
+
+        done();
+      });
+  });
+
+  it('Adds torrents via URLs', (done) => {
     request
       .post('/api/torrents/add-urls')
       .send(addTorrentByURLOptions)
@@ -139,7 +157,24 @@ describe('POST /api/torrents/add-files', () => {
     });
   });
 
-  it('Adds a torrent from files', (done) => {
+  it('Adds torrents to disallowed path via files', (done) => {
+    request
+      .post('/api/torrents/add-urls')
+      .send({...addTorrentByFileOptions, destination: path.join(os.tmpdir(), 'notAllowed')})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(500)
+      .expect('Content-Type', /json/)
+      .end((err, res) => {
+        if (err) done(err);
+
+        expect(res.body).toEqual({code: 'EACCES'});
+
+        done();
+      });
+  });
+
+  it('Adds torrents via files', (done) => {
     request
       .post('/api/torrents/add-files')
       .send(addTorrentByFileOptions)
