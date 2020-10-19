@@ -34,6 +34,7 @@ process.argv = ['node', 'flood'];
 process.argv.push('--rundir', temporaryRuntimeDirectory);
 process.argv.push('--noauth');
 process.argv.push('--rtsocket', rTorrentSocket);
+process.argv.push('--allowedpath', temporaryRuntimeDirectory);
 
 afterAll((done) => {
   rTorrentProcess.on('close', () => {

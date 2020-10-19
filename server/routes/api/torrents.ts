@@ -104,7 +104,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) 
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) => {
-  const {name, sourcePath, trackers, comment, infoSource, isPrivate} = req.body;
+  const {name, sourcePath, trackers, comment, infoSource, isPrivate, tags, start} = req.body;
   const callback = ajaxUtil.getResponseFn(res);
 
   if (typeof sourcePath !== 'string') {
@@ -150,7 +150,17 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
         res.attachment(torrentFileName);
         res.download(torrentPath);
 
-        // TODO: add created torrent.
+        req.services?.clientGatewayService
+          ?.addTorrentsByFile({
+            files: [torrent.toString('base64')],
+            destination: sourcePath,
+            tags,
+            isBasePath: true,
+            start: start || false,
+          })
+          .catch(() => {
+            // do nothing.
+          });
       });
     },
   );
