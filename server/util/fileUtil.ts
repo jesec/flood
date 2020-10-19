@@ -38,14 +38,21 @@ export const sanitizePath = (input: string) => {
   return path.resolve(input).replace(controlRe, '');
 };
 
-export const createDirectory = (directoryPath: string) => {
-  if (directoryPath) {
-    fs.mkdir(directoryPath, {recursive: true}, (error) => {
-      if (error) {
-        console.trace('Error creating directory.', error);
-      }
-    });
-  }
+export const createDirectory = (directoryPath: string): Promise<void> => {
+  return new Promise<void>((resolve, reject) => {
+    if (directoryPath) {
+      fs.mkdir(directoryPath, {recursive: true}, (error) => {
+        if (error) {
+          console.trace('Error creating directory.', error);
+          reject();
+          return;
+        }
+        resolve();
+      });
+    } else {
+      reject();
+    }
+  });
 };
 
 export const getDirectoryList = async (inputPath: string) => {

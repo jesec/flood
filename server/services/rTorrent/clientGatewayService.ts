@@ -61,7 +61,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       throw accessDeniedError();
     }
 
-    createDirectory(destinationPath);
+    await createDirectory(destinationPath);
 
     // Each torrent is sent individually because rTorrent might have small
     // XMLRPC request size limit. This allows the user to send files reliably.
@@ -99,7 +99,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       throw accessDeniedError();
     }
 
-    createDirectory(destinationPath);
+    await createDirectory(destinationPath);
 
     const methodCalls: MultiMethodCalls = urls.map((url) => {
       const additionalCalls: Array<string> = [];
