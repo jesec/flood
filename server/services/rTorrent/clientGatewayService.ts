@@ -96,7 +96,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         additionalCalls.push(`d.custom1.set=${encodeTags(tags)}`);
       }
 
-      additionalCalls.push(`d.custom.set=addtime,${Date.now() / 1000}`);
+      additionalCalls.push(`d.custom.set=addtime,${Math.round(Date.now() / 1000)}`);
 
       return {
         methodName: start ? 'load.start' : 'load.normal',
