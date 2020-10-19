@@ -77,13 +77,13 @@ const TorrentActions = {
   createTorrent: (options: CreateTorrentOptions) =>
     axios.post(`${baseURI}api/torrents/create`, options, {responseType: 'blob'}).then(
       (response) => {
+        download(response.data, (options.name || `${Date.now()}`).concat('.torrent'));
         AppDispatcher.dispatchServerAction({
           type: 'CLIENT_ADD_TORRENT_SUCCESS',
           data: {
             count: 1,
           },
         });
-        download(response.data, (options.name || `${Date.now()}`).concat('.torrent'));
       },
       () => {
         AppDispatcher.dispatchServerAction({
