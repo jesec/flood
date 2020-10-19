@@ -10,7 +10,7 @@ process.argv.push('--rundir', temporaryRuntimeDirectory);
 process.argv.push('--noauth', 'false');
 
 afterAll(() => {
-  // TODO: This leads test flakiness caused by ENOENT error
+  // TODO: This leads to test flakiness caused by ENOENT error
   // NeDB provides no method to close database connection
   fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
 });

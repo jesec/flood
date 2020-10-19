@@ -38,7 +38,7 @@ process.argv.push('--allowedpath', temporaryRuntimeDirectory);
 
 afterAll((done) => {
   rTorrentProcess.on('close', () => {
-    // TODO: This leads test flakiness caused by ENOENT error
+    // TODO: This leads to test flakiness caused by ENOENT error
     // NeDB provides no method to close database connection
     fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
     done();
