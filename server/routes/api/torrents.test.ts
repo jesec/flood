@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import fs from 'fs';
+import path from 'path';
 import readline from 'readline';
 import stream from 'stream';
 import supertest from 'supertest';
@@ -7,8 +8,13 @@ import supertest from 'supertest';
 import app from '../../app';
 import {getAuthToken} from './auth';
 import {getTempPath} from '../../models/TemporaryStorage';
+import paths from '../../../shared/config/paths';
 
-import type {AddTorrentByURLOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
+import type {
+  AddTorrentByFileOptions,
+  AddTorrentByURLOptions,
+  SetTorrentsTrackersOptions,
+} from '../../../shared/types/api/torrents';
 import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentList, TorrentProperties} from '../../../shared/types/Torrent';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
@@ -24,6 +30,13 @@ fs.mkdirSync(tempDirectory, {recursive: true});
 
 jest.setTimeout(20000);
 
+const torrentFiles = [
+  path.join(paths.appSrc, 'fixtures/single.torrent'),
+  path.join(paths.appSrc, 'fixtures/multi.torrent'),
+].map((torrentPath) => Buffer.from(fs.readFileSync(torrentPath)).toString('base64'));
+
+const torrentURLs = ['https://releases.ubuntu.com/20.04/ubuntu-20.04.1-live-server-amd64.iso.torrent'];
+
 let torrentHash = '';
 
 const activityStream = new stream.PassThrough();
@@ -32,7 +45,7 @@ request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activ
 
 describe('POST /api/torrents/add-urls', () => {
   const addTorrentByURLOptions: AddTorrentByURLOptions = {
-    urls: ['https://releases.ubuntu.com/20.04/ubuntu-20.04.1-live-server-amd64.iso.torrent'],
+    urls: torrentURLs,
     destination: tempDirectory,
     tags: ['test'],
     isBasePath: false,
@@ -41,7 +54,7 @@ describe('POST /api/torrents/add-urls', () => {
 
   const torrentAdded = new Promise((resolve) => {
     rl.on('line', (input) => {
-      if (input.includes('TORRENT_LIST_DIFF_CHANGE')) {
+      if (input.includes('TORRENT_LIST_ACTION_TORRENT_ADDED')) {
         resolve();
       }
     });
@@ -62,7 +75,7 @@ describe('POST /api/torrents/add-urls', () => {
       });
   });
 
-  it('GET /api/torrents', (done) => {
+  it('GET /api/torrents to verify torrents are added via URLs', (done) => {
     torrentAdded.then(() => {
       request
         .get('/api/torrents')
@@ -88,6 +101,63 @@ describe('POST /api/torrents/add-urls', () => {
           expect(torrent.status).toEqual(expect.arrayContaining(expectedStatuses));
 
           torrentHash = torrent.hash;
+
+          done();
+        });
+    });
+  });
+});
+
+describe('POST /api/torrents/add-files', () => {
+  const addTorrentByFileOptions: AddTorrentByFileOptions = {
+    files: torrentFiles,
+    destination: tempDirectory,
+    tags: ['test'],
+    isBasePath: false,
+    start: false,
+  };
+
+  const torrentAdded = new Promise((resolve) => {
+    rl.on('line', (input) => {
+      if (input.includes('TORRENT_LIST_ACTION_TORRENT_ADDED')) {
+        resolve();
+      }
+    });
+  });
+
+  it('Adds a torrent from files', (done) => {
+    request
+      .post('/api/torrents/add-files')
+      .send(addTorrentByFileOptions)
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end((err, _res) => {
+        if (err) done(err);
+
+        done();
+      });
+  });
+
+  it('GET /api/torrents to verify torrents are added via files', (done) => {
+    torrentAdded.then(() => {
+      request
+        .get('/api/torrents')
+        .send()
+        .set('Cookie', [authToken])
+        .set('Accept', 'application/json')
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if (err) done(err);
+
+          expect(res.body.torrents == null).toBe(false);
+          const torrentList: TorrentList = res.body.torrents;
+
+          expect(Object.keys(torrentList).length).toBeGreaterThanOrEqual(
+            torrentFiles.length + (torrentHash !== '' ? 1 : 0),
+          );
 
           done();
         });

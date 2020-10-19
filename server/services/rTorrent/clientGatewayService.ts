@@ -1,7 +1,8 @@
-import path from 'path';
+import crypto from 'crypto';
 import fs from 'fs';
 import geoip from 'geoip-country';
 import {moveSync} from 'fs-extra';
+import path from 'path';
 import sanitize from 'sanitize-filename';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
@@ -31,6 +32,7 @@ import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import scgiUtil from './util/scgiUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
+import {getTempPath} from '../../models/TemporaryStorage';
 import torrentFileUtil from '../../util/torrentFileUtil';
 import {
   encodeTags,
@@ -55,41 +57,25 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
 
   async addTorrentsByFile({files, destination, tags, isBasePath, start}: AddTorrentByFileOptions): Promise<void> {
-    const destinationPath = sanitizePath(destination);
+    const tempPath = path.join(
+      getTempPath(this.user._id),
+      'torrents',
+      `${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
+    );
+    await createDirectory(tempPath);
 
-    if (!isAllowedPath(destinationPath)) {
-      throw accessDeniedError();
-    }
-
-    await createDirectory(destinationPath);
-
-    // Each torrent is sent individually because rTorrent might have small
-    // XMLRPC request size limit. This allows the user to send files reliably.
-    await Promise.all(
-      files.map(async (file) => {
-        const additionalCalls: Array<string> = [];
-
-        additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destinationPath}"`);
-
-        if (Array.isArray(tags)) {
-          additionalCalls.push(`d.custom1.set=${encodeTags(tags)}`);
-        }
-
-        additionalCalls.push(`d.custom.set=addtime,${Date.now() / 1000}`);
-
-        return (
-          this.clientRequestManager
-            .methodCall(
-              start ? 'load.raw_start' : 'load.raw',
-              ['', Buffer.from(file, 'base64')].concat(additionalCalls),
-            )
-            .then(this.processClientRequestSuccess, this.processClientRequestError)
-            .then(() => {
-              // returns nothing.
-            }) || Promise.reject()
-        );
+    const torrentPaths = await Promise.all(
+      files.map(async (file, index) => {
+        const torrentPath = path.join(tempPath, `${index}.torrent`);
+        fs.writeFileSync(torrentPath, Buffer.from(file, 'base64'), {});
+        return torrentPath;
       }),
     );
+
+    // Delete temp files after 5 minutes. This is more than enough.
+    setTimeout(() => fs.rmdirSync(tempPath, {recursive: true}), 1000 * 60 * 5);
+
+    return this.addTorrentsByURL({urls: torrentPaths, destination, tags, isBasePath, start});
   }
 
   async addTorrentsByURL({urls, destination, tags, isBasePath, start}: AddTorrentByURLOptions): Promise<void> {
