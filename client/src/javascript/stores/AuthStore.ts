@@ -100,10 +100,6 @@ class AuthStoreClass extends BaseStore {
     FloodActions.restartActivityStream();
   }
 
-  handleRegisterError(error?: Error): void {
-    this.emit('AUTH_REGISTER_ERROR', error);
-  }
-
   handleAuthVerificationSuccess(response: AuthVerificationResponse): void {
     if (response.initialUser === true) {
       this.currentUser.isInitialUser = response.initialUser;
@@ -159,9 +155,6 @@ AuthStore.dispatcherID = AppDispatcher.register((payload) => {
       break;
     case 'AUTH_REGISTER_SUCCESS':
       AuthStore.handleRegisterSuccess(action.data);
-      break;
-    case 'AUTH_REGISTER_ERROR':
-      AuthStore.handleRegisterError(action.error);
       break;
     case 'AUTH_VERIFY_SUCCESS':
       AuthStore.handleAuthVerificationSuccess(action.data);

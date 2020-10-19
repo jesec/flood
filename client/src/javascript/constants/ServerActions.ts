@@ -12,7 +12,6 @@ import type {Feeds, Items, Rules} from '../stores/FeedsStore';
 type ErrorType =
   | 'AUTH_LOGIN_ERROR'
   | 'AUTH_LOGOUT_ERROR'
-  | 'AUTH_REGISTER_ERROR'
   | 'AUTH_VERIFY_ERROR'
   | 'CLIENT_ADD_TORRENT_ERROR'
   | 'FLOOD_CLEAR_NOTIFICATIONS_ERROR'

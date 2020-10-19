@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 
 import type {
   AuthAuthenticationOptions,
@@ -33,7 +33,7 @@ const AuthActions = {
           // server's response.
           let errorMessage;
 
-          if (error.response) {
+          if (error.response && error.response.data.message != null) {
             errorMessage = error.response.data.message;
           } else if (error.message) {
             errorMessage = error.message;
@@ -133,11 +133,8 @@ const AuthActions = {
             data,
           });
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_REGISTER_ERROR',
-            error: error.response.data.message,
-          });
+        (error: AxiosError) => {
+          throw error;
         },
       ),
 

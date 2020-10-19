@@ -1,5 +1,12 @@
 context('Register', () => {
   beforeEach(() => {
+    cy.server();
+    cy.route({
+      method: 'GET',
+      url: 'http://127.0.0.1:4200/api/auth/verify?*',
+      response: {initialUser: true},
+      status: 200,
+    }).as('verify-request');
     cy.visit('http://127.0.0.1:4200/register');
     cy.url().should('include', 'register');
   });
@@ -38,6 +45,7 @@ context('Register', () => {
     cy.get('.application__view--auth-form').should('be.visible');
     cy.get('.application__content').should('not.be.visible');
     cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.error').should('be.visible');
   });
 
   it('Register without password', () => {
@@ -51,6 +59,7 @@ context('Register', () => {
     cy.get('.application__view--auth-form').should('be.visible');
     cy.get('.application__content').should('not.be.visible');
     cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.error').should('be.visible');
   });
 
   it('Register without connection settings', () => {
@@ -60,9 +69,10 @@ context('Register', () => {
     cy.get('.application__view--auth-form').should('be.visible');
     cy.get('.application__content').should('not.be.visible');
     cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.error').should('be.visible');
   });
 
-  it('Register with socket connection settings', () => {
+  it('Register with socket connection settings, server error occurred', () => {
     cy.get('.input[name="username"]').type('test');
     cy.get('.input[name="password"]').type('test');
     cy.get('.select').click();
@@ -71,13 +81,16 @@ context('Register', () => {
     cy.get('.input--text[name="socket"]').type('/data/rtorrent.sock');
 
     cy.server();
-    cy.route({method: 'POST', url: 'http://127.0.0.1:4200/api/auth/register', response: {}, status: 403}).as(
+    cy.route({method: 'POST', url: 'http://127.0.0.1:4200/api/auth/register', response: {}, status: 500}).as(
       'register-request',
     );
 
     cy.get('.button[type="submit"]').click();
 
-    cy.get('.application__view--auth-form').should('not.be.visible');
-    cy.get('.application__content').should('be.visible');
+    cy.get('.application__view--auth-form').should('be.visible');
+    cy.get('.application__content').should('not.be.visible');
+    cy.get('.application__loading-overlay').should('not.be.visible');
+
+    cy.get('.error').should('be.visible');
   });
 });

@@ -7,9 +7,7 @@ import type {Credentials} from '@shared/schema/Auth';
 
 import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '../../ui';
 import AuthActions from '../../actions/AuthActions';
-import AuthStore from '../../stores/AuthStore';
 import ClientConnectionSettingsForm from '../general/connection-settings/ClientConnectionSettingsForm';
-import connectStores from '../../util/connectStores';
 import history from '../../util/history';
 
 import type {ClientConnectionSettingsFormType} from '../general/connection-settings/ClientConnectionSettingsForm';
@@ -19,11 +17,11 @@ type RegisterFormData = Pick<Credentials, 'username' | 'password'>;
 
 interface AuthFormProps extends WrappedComponentProps {
   mode: 'login' | 'register';
-  error?: Error;
 }
 
-interface AuthFormStates extends Record<string, unknown> {
+interface AuthFormStates {
   isSubmitting: boolean;
+  errorMessage?: string;
 }
 
 class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
@@ -73,20 +71,22 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
 
     this.setState({isSubmitting: true});
 
-    if (this.props.mode === 'login') {
-      const credentials = submission.formData as Partial<LoginFormData>;
+    const {intl, mode} = this.props;
 
-      if (
-        credentials.username == null ||
-        credentials.username === '' ||
-        credentials.password == null ||
-        credentials.password === ''
-      ) {
-        this.setState({isSubmitting: false}, () => {
-          // do nothing.
-        });
-        return;
-      }
+    const formData = submission.formData as Partial<LoginFormData> | Partial<RegisterFormData>;
+
+    if (formData.username == null || formData.username === '') {
+      this.setState({isSubmitting: false, errorMessage: intl.formatMessage({id: 'auth.error.username.empty'})});
+      return;
+    }
+
+    if (formData.password == null || formData.password === '') {
+      this.setState({isSubmitting: false, errorMessage: intl.formatMessage({id: 'auth.error.password.empty'})});
+      return;
+    }
+
+    if (mode === 'login') {
+      const credentials = formData as LoginFormData;
 
       AuthActions.authenticate({
         username: credentials.username,
@@ -95,26 +95,20 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
         .then(() => {
           this.setState({isSubmitting: false}, () => history.replace('overview'));
         })
-        .catch(() => {
-          this.setState({isSubmitting: false}, () => history.replace('login'));
+        .catch((error: Error) => {
+          this.setState({isSubmitting: false, errorMessage: error.message}, () => history.replace('login'));
         });
     } else {
-      const config = submission.formData as Partial<RegisterFormData>;
+      const config = formData as RegisterFormData;
 
-      if (
-        config.username == null ||
-        config.username === '' ||
-        config.password == null ||
-        config.password === '' ||
-        this.settingsFormRef.current == null
-      ) {
-        this.setState({isSubmitting: false});
+      if (this.settingsFormRef.current == null) {
+        this.setState({isSubmitting: false, errorMessage: intl.formatMessage({id: 'connection.settings.error.empty'})});
         return;
       }
 
       const connectionSettings = this.settingsFormRef.current.getConnectionSettings();
       if (connectionSettings == null) {
-        this.setState({isSubmitting: false});
+        this.setState({isSubmitting: false, errorMessage: intl.formatMessage({id: 'connection.settings.error.empty'})});
         return;
       }
 
@@ -123,15 +117,20 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
         password: config.password,
         client: connectionSettings,
         level: AccessLevel.ADMINISTRATOR,
-      }).then(() => {
-        this.setState({isSubmitting: false}, () => history.replace('overview'));
-      });
+      }).then(
+        () => {
+          this.setState({isSubmitting: false}, () => history.replace('overview'));
+        },
+        (error: Error) => {
+          this.setState({isSubmitting: false, errorMessage: error.message});
+        },
+      );
     }
   };
 
   render() {
-    const {isSubmitting} = this.state;
-    const {error, intl, mode} = this.props;
+    const {errorMessage, isSubmitting} = this.state;
+    const {intl, mode} = this.props;
     const isLoginMode = mode === 'login';
 
     return (
@@ -147,9 +146,9 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
             </PanelHeader>
             <PanelContent>
               <p className="copy--lead">{this.getIntroText()}</p>
-              {error != null ? (
+              {errorMessage != null ? (
                 <FormRow>
-                  <FormError isLoading={isSubmitting}>{error}</FormError>
+                  <FormError isLoading={isSubmitting}>{errorMessage}</FormError>
                 </FormRow>
               ) : null}
               <FormRow>
@@ -198,18 +197,4 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
   }
 }
 
-const ConnectedAuthForm = connectStores<Omit<AuthFormProps, 'intl'>, AuthFormStates>(injectIntl(AuthForm), () => {
-  return [
-    {
-      store: AuthStore,
-      event: ['AUTH_LOGIN_ERROR', 'AUTH_REGISTER_ERROR'],
-      getValue: ({payload}) => {
-        return {
-          error: payload as AuthFormProps['error'],
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedAuthForm;
+export default injectIntl(AuthForm);
