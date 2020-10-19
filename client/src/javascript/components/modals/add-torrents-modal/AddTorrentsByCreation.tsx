@@ -1,11 +1,9 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import {Checkbox, Form, FormRow, Textbox} from '../../../ui';
-
 import AddTorrentsActions from './AddTorrentsActions';
-
-import SettingsStore from '../../../stores/SettingsStore';
+import {Checkbox, Form, FormRow, Textbox} from '../../../ui';
+import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
@@ -63,7 +61,7 @@ class AddTorrentsByCreation extends React.Component<WrappedComponentProps, AddTo
       tags: formData.tags != null ? formData.tags.split(',') : undefined,
     });
 
-    SettingsStore.setFloodSetting('startTorrentsOnLoad', Boolean(formData.start));
+    saveAddTorrentsUserPreferences({start: formData.start, destination: formData.sourcePath});
   };
 
   render() {

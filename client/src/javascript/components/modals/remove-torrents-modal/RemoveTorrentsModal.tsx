@@ -3,6 +3,7 @@ import React from 'react';
 
 import {Checkbox, Form, FormRow} from '../../../ui';
 import Modal from '../Modal';
+import {saveDeleteTorrentsUserPreferences} from '../../../util/userPreferences';
 import SettingsStore from '../../../stores/SettingsStore';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
@@ -86,7 +87,7 @@ class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
       deleteData,
     });
 
-    SettingsStore.setFloodSetting('deleteTorrentData', deleteData);
+    saveDeleteTorrentsUserPreferences({deleteData});
   };
 
   render() {

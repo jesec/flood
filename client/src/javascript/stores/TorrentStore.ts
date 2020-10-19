@@ -99,24 +99,8 @@ class TorrentStoreClass extends BaseStore {
     this.emit('CLIENT_ADD_TORRENT_ERROR');
   }
 
-  handleAddTorrentSuccess({count, start, destination}: {count: number; start?: boolean; destination?: string}) {
+  handleAddTorrentSuccess({count}: {count: number}) {
     this.emit('CLIENT_ADD_TORRENT_SUCCESS');
-
-    // Remembers user's selections
-    const changedSettings: Partial<FloodSettings> = {
-      ...(start != null
-        ? {
-            startTorrentsOnLoad: start,
-          }
-        : {}),
-      ...(destination != null
-        ? {
-            torrentDestination: destination,
-          }
-        : {}),
-    };
-    SettingsStore.saveFloodSettings(changedSettings);
-
     AlertStore.add({
       accumulation: {
         id: 'alert.torrent.add',

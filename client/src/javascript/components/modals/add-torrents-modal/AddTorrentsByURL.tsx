@@ -1,11 +1,10 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import {Form, FormRow} from '../../../ui';
-
 import AddTorrentsActions from './AddTorrentsActions';
 import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
-import SettingsStore from '../../../stores/SettingsStore';
+import {Form, FormRow} from '../../../ui';
+import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
@@ -60,7 +59,7 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
       tags: formData.tags != null ? formData.tags.split(',') : undefined,
     });
 
-    SettingsStore.setFloodSetting('startTorrentsOnLoad', Boolean(formData.start));
+    saveAddTorrentsUserPreferences({start: formData.start, destination: formData.destination});
   };
 
   render() {

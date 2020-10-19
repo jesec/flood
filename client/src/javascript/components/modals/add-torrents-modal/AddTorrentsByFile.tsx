@@ -2,13 +2,13 @@ import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import Dropzone from 'react-dropzone';
 import React from 'react';
 
-import {Form, FormRow, FormRowItem} from '../../../ui';
 import AddTorrentsActions from './AddTorrentsActions';
 import CloseIcon from '../../icons/Close';
 import FileIcon from '../../icons/File';
 import FilesIcon from '../../icons/Files';
 import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
-import SettingsStore from '../../../stores/SettingsStore';
+import {Form, FormRow, FormRowItem} from '../../../ui';
+import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TorrentActions from '../../../actions/TorrentActions';
 
@@ -155,9 +155,7 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
       start: start || false,
     });
 
-    if (start != null) {
-      SettingsStore.setFloodSetting('startTorrentsOnLoad', start);
-    }
+    saveAddTorrentsUserPreferences({start, destination});
   };
 
   render() {

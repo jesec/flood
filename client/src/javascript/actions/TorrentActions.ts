@@ -32,8 +32,6 @@ const TorrentActions = {
             type: 'CLIENT_ADD_TORRENT_SUCCESS',
             data: {
               count: options.urls.length,
-              start: options.start,
-              destination: options.destination,
               response,
             },
           });
@@ -58,8 +56,6 @@ const TorrentActions = {
             type: 'CLIENT_ADD_TORRENT_SUCCESS',
             data: {
               count: options.files.length,
-              start: options.start,
-              destination: options.destination,
               data,
             },
           });
