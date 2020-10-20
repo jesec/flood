@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import fs from 'fs';
 import geoip from 'geoip-country';
 import {moveSync} from 'fs-extra';
@@ -32,7 +31,7 @@ import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import scgiUtil from './util/scgiUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
-import {getTempPath} from '../../models/TemporaryStorage';
+import {fetchURLToTempFile, saveBufferToTempFile} from '../../util/tempFileUtil';
 import torrentFileUtil from '../../util/torrentFileUtil';
 import {
   encodeTags,
@@ -57,23 +56,11 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
 
   async addTorrentsByFile({files, destination, tags, isBasePath, start}: AddTorrentByFileOptions): Promise<void> {
-    const tempPath = path.join(
-      getTempPath(this.user._id),
-      'torrents',
-      `${Date.now()}-${crypto.randomBytes(4).toString('hex')}`,
-    );
-    await createDirectory(tempPath);
-
     const torrentPaths = await Promise.all(
-      files.map(async (file, index) => {
-        const torrentPath = path.join(tempPath, `${index}.torrent`);
-        fs.writeFileSync(torrentPath, Buffer.from(file, 'base64'), {});
-        return torrentPath;
+      files.map(async (file) => {
+        return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent');
       }),
     );
-
-    // Delete temp files after 5 minutes. This is more than enough.
-    setTimeout(() => fs.rmdirSync(tempPath, {recursive: true}), 1000 * 60 * 5);
 
     return this.addTorrentsByURL({urls: torrentPaths, destination, tags, isBasePath, start});
   }
@@ -87,7 +74,24 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     await createDirectory(destinationPath);
 
-    const methodCalls: MultiMethodCalls = urls.map((url) => {
+    const torrentPaths = await Promise.all(
+      urls.map(async (url) => {
+        if (/^(http|https):\/\//.test(url)) {
+          // TODO: properly handle error and let frontend know
+          const torrentPath = await fetchURLToTempFile(url, 'torrent').catch((e) => console.error(e));
+
+          if (typeof torrentPath === 'string') {
+            return torrentPath;
+          }
+        }
+
+        // TODO: handle potential other types of downloads
+
+        return url;
+      }),
+    );
+
+    const methodCalls: MultiMethodCalls = torrentPaths.map((torrentPath) => {
       const additionalCalls: Array<string> = [];
 
       additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destinationPath}"`);
@@ -100,7 +104,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
       return {
         methodName: start ? 'load.start' : 'load.normal',
-        params: ['', url].concat(additionalCalls),
+        params: ['', torrentPath].concat(additionalCalls),
       };
     }, []);
 
