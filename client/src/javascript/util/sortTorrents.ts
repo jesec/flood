@@ -25,7 +25,7 @@ function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<Flood
       sortRules.push({
         [sortBy.direction]: (p: TorrentProperties) => {
           if (p.eta === -1) {
-            return -1;
+            return Infinity;
           }
           return p.eta.cumSeconds;
         },
