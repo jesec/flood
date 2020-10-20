@@ -159,8 +159,15 @@ class TorrentList extends React.Component<TorrentListProps, TorrentListStates> {
     }, 0);
   }
 
-  handleContextMenuClick = (torrent: TorrentProperties, event: React.MouseEvent) => {
-    event.preventDefault();
+  handleContextMenuClick = (torrent: TorrentProperties, event: React.MouseEvent | React.TouchEvent) => {
+    if (event.cancelable === true) {
+      event.preventDefault();
+    }
+
+    const mouseClientX = ((event as unknown) as MouseEvent).clientX;
+    const mouseClientY = ((event as unknown) as MouseEvent).clientY;
+    const touchClientX = ((event as unknown) as TouchEvent).touches?.[0].clientX;
+    const touchClientY = ((event as unknown) as TouchEvent).touches?.[0].clientY;
 
     if (!TorrentStore.getSelectedTorrents().includes(torrent.hash)) {
       UIActions.handleTorrentClick({hash: torrent.hash, event});
@@ -169,8 +176,8 @@ class TorrentList extends React.Component<TorrentListProps, TorrentListStates> {
     UIActions.displayContextMenu({
       id: 'torrent-list-item',
       clickPosition: {
-        x: event.clientX,
-        y: event.clientY,
+        x: mouseClientX || touchClientX || 0,
+        y: mouseClientY || touchClientY || 0,
       },
       items: TorrentListContextMenu.getContextMenuItems(this.props.intl, torrent).filter((item) => {
         if (item.type === 'separator') {

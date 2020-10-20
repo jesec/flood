@@ -1,4 +1,8 @@
 {
   "presets": ["@babel/env", "@babel/typescript", "@babel/react"],
-  "plugins": ["@babel/plugin-proposal-class-properties", "@babel/proposal-object-rest-spread"]
+  "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/proposal-object-rest-spread",
+    "@babel/plugin-proposal-optional-chaining"
+  ]
 }

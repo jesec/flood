@@ -16,6 +16,8 @@ interface TorrentListRowCondensedProps {
   handleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleDoubleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
+  handleTouchStart: (event: React.TouchEvent) => void;
+  handleTouchEnd: (event: React.TouchEvent) => void;
 }
 
 const TorrentListRowCondensed = React.forwardRef<HTMLLIElement, TorrentListRowCondensedProps>(
@@ -28,6 +30,8 @@ const TorrentListRowCondensed = React.forwardRef<HTMLLIElement, TorrentListRowCo
       handleClick,
       handleDoubleClick,
       handleRightClick,
+      handleTouchStart,
+      handleTouchEnd,
     }: TorrentListRowCondensedProps,
     ref,
   ) => {
@@ -56,6 +60,8 @@ const TorrentListRowCondensed = React.forwardRef<HTMLLIElement, TorrentListRowCo
         onClick={handleClick.bind(this, torrent)}
         onContextMenu={handleRightClick.bind(this, torrent)}
         onDoubleClick={handleDoubleClick.bind(this, torrent)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         ref={ref}>
         {torrentListColumns}
       </li>

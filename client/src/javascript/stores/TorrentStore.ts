@@ -190,7 +190,7 @@ class TorrentStoreClass extends BaseStore {
     });
   }
 
-  setSelectedTorrents({event, hash}: {event: React.MouseEvent; hash: string}) {
+  setSelectedTorrents({event, hash}: {event: React.MouseEvent | React.TouchEvent; hash: string}) {
     this.selectedTorrents = selectTorrents({
       event,
       hash,

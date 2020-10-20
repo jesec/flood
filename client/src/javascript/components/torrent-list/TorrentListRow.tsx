@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import {LongPressDetectEvents, useLongPress} from 'use-long-press';
 import React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
@@ -17,85 +18,72 @@ interface TorrentListRowProps {
   isCondensed: boolean;
   handleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleDoubleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
-  handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
+  handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent | React.TouchEvent) => void;
 }
 
-class TorrentListRow extends React.PureComponent<TorrentListRowProps> {
-  torrentRef: HTMLLIElement | null = null;
-  handleRightClick: (event: React.MouseEvent) => void;
+const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProps) => {
+  const {
+    isCondensed,
+    isSelected,
+    columns,
+    columnWidths,
+    torrent,
+    handleClick,
+    handleDoubleClick,
+    handleRightClick,
+  } = props;
 
-  static defaultProps = {
-    isCondensed: false,
-  };
+  const torrentClasses = torrentStatusClasses(
+    torrent,
+    classnames({
+      'torrent--is-selected': isSelected,
+      'torrent--is-condensed': isCondensed,
+      'torrent--is-expanded': !isCondensed,
+    }),
+    'torrent',
+  );
 
-  constructor(props: TorrentListRowProps) {
-    super(props);
+  const longPressBind = useLongPress(
+    (e) => {
+      if (e != null) {
+        handleRightClick(torrent, e);
+      }
+    },
+    {
+      captureEvent: true,
+      detect: LongPressDetectEvents.TOUCH,
+      onFinish: (e) => ((e as unknown) as TouchEvent)?.preventDefault(),
+    },
+  );
 
-    const {handleRightClick, torrent} = props;
-
-    this.handleRightClick = handleRightClick.bind(this, torrent);
-  }
-
-  componentDidMount(): void {
-    if (this.torrentRef != null) {
-      this.torrentRef.addEventListener('long-press', (e) => this.handleRightClick((e as unknown) as React.MouseEvent));
-    }
-  }
-
-  componentWillUnmount(): void {
-    if (this.torrentRef != null) {
-      this.torrentRef.removeEventListener('long-press', (e) =>
-        this.handleRightClick((e as unknown) as React.MouseEvent),
-      );
-    }
-  }
-
-  render(): React.ReactNode {
-    const {
-      isCondensed,
-      isSelected,
-      columns,
-      columnWidths,
-      torrent,
-      handleClick,
-      handleDoubleClick,
-      handleRightClick,
-    } = this.props;
-    const torrentClasses = torrentStatusClasses(
-      torrent,
-      classnames({
-        'torrent--is-selected': isSelected,
-        'torrent--is-condensed': isCondensed,
-        'torrent--is-expanded': !isCondensed,
-      }),
-      'torrent',
-    );
-
-    if (isCondensed) {
-      return (
-        <TorrentListRowCondensed
-          className={torrentClasses}
-          columns={columns}
-          columnWidths={columnWidths}
-          torrent={torrent}
-          handleClick={handleClick}
-          handleDoubleClick={handleDoubleClick}
-          handleRightClick={handleRightClick}
-        />
-      );
-    }
-
+  if (isCondensed) {
     return (
-      <TorrentListRowExpanded
+      <TorrentListRowCondensed
         className={torrentClasses}
         columns={columns}
+        columnWidths={columnWidths}
         torrent={torrent}
         handleClick={handleClick}
         handleDoubleClick={handleDoubleClick}
         handleRightClick={handleRightClick}
+        handleTouchStart={longPressBind.onTouchStart}
+        handleTouchEnd={longPressBind.onTouchEnd}
       />
     );
   }
-}
 
-export default TorrentListRow;
+  return (
+    <TorrentListRowExpanded
+      className={torrentClasses}
+      columns={columns}
+      torrent={torrent}
+      handleClick={handleClick}
+      handleDoubleClick={handleDoubleClick}
+      handleRightClick={handleRightClick}
+      handleTouchStart={longPressBind.onTouchStart}
+      handleTouchEnd={longPressBind.onTouchEnd}
+    />
+  );
+};
+
+export default React.memo(TorrentListRow);

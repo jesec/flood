@@ -17,11 +17,22 @@ interface TorrentListRowExpandedProps {
   handleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleDoubleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
+  handleTouchStart: (event: React.TouchEvent) => void;
+  handleTouchEnd: (event: React.TouchEvent) => void;
 }
 
 const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExpandedProps>(
   (
-    {className, columns, torrent, handleClick, handleDoubleClick, handleRightClick}: TorrentListRowExpandedProps,
+    {
+      className,
+      columns,
+      torrent,
+      handleClick,
+      handleDoubleClick,
+      handleRightClick,
+      handleTouchStart,
+      handleTouchEnd,
+    }: TorrentListRowExpandedProps,
     ref,
   ) => {
     const primarySection: React.ReactNodeArray = [];
@@ -85,6 +96,8 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
         onClick={handleClick.bind(this, torrent)}
         onContextMenu={handleRightClick.bind(this, torrent)}
         onDoubleClick={handleDoubleClick.bind(this, torrent)}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
         ref={ref}>
         <div className="torrent__details__section__wrapper">
           {primarySection}

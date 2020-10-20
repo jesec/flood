@@ -10,7 +10,7 @@ import type {ContextMenu, Modal} from '../stores/UIStore';
 
 export interface UIClickTorrentAction {
   type: 'UI_CLICK_TORRENT';
-  data: {event: React.MouseEvent; hash: string};
+  data: {event: React.MouseEvent | React.TouchEvent; hash: string};
 }
 
 export interface UIClickTorrentDetailsAction {
