@@ -37,7 +37,14 @@ const torrentFiles = [
   path.join(paths.appSrc, 'fixtures/multi.torrent'),
 ].map((torrentPath) => Buffer.from(fs.readFileSync(torrentPath)).toString('base64'));
 
-const torrentURLs = ['https://releases.ubuntu.com/20.04/ubuntu-20.04.1-live-server-amd64.iso.torrent'];
+const torrentURLs = [
+  'https://releases.ubuntu.com/20.04/ubuntu-20.04.1-live-server-amd64.iso.torrent',
+  'https://flood.js.org/api/test-cookie',
+];
+
+const torrentCookies = {
+  'flood.js.org': ['test=test'],
+};
 
 const testTrackers = [
   `https://${crypto.randomBytes(8).toString('hex')}.com/announce`,
@@ -68,6 +75,7 @@ const watchTorrentList = (op: 'add' | 'remove' | 'replace' | 'move' | 'copy' | '
 describe('POST /api/torrents/add-urls', () => {
   const addTorrentByURLOptions: AddTorrentByURLOptions = {
     urls: torrentURLs,
+    cookies: torrentCookies,
     destination: tempDirectory,
     tags: ['testURLs'],
     isBasePath: false,
