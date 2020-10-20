@@ -1,25 +1,13 @@
-import axios from 'axios';
 import React from 'react';
 
-import AboutMarkdownPath from '../../../../../../ABOUT.md';
-
-const ReactMarkdown = React.lazy(() => import('react-markdown'));
-
-let cachedContent: string;
+const AboutMarkdown = React.lazy(() =>
+  import('../../../../../../ABOUT.md').then((module) => ({default: module.react})),
+);
 
 const AboutTab = () => {
-  const [content, setContent] = React.useState(cachedContent);
-
-  if (content == null) {
-    axios.get(AboutMarkdownPath).then((response) => {
-      cachedContent = response.data;
-      setContent(cachedContent);
-    });
-  }
-
   return (
     <React.Suspense fallback={null}>
-      <ReactMarkdown source={content} />
+      <AboutMarkdown />
     </React.Suspense>
   );
 };
