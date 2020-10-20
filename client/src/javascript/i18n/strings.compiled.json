@@ -1541,6 +1541,18 @@
       "value": "Add Torrent"
     }
   ],
+  "torrents.add.cookies.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Optional cookie-name=cookie-value"
+    }
+  ],
+  "torrents.add.cookies.label": [
+    {
+      "type": 0,
+      "value": "Cookies"
+    }
+  ],
   "torrents.add.destination.label": [
     {
       "type": 0,

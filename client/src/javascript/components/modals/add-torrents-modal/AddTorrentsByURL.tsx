@@ -12,6 +12,8 @@ import TorrentActions from '../../../actions/TorrentActions';
 type AddTorrentsByURLFormData = {
   [urls: string]: string;
 } & {
+  [cookies: string]: string;
+} & {
   destination: string;
   isBasePath: boolean;
   start: boolean;
@@ -51,8 +53,20 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
       return;
     }
 
+    const urls = getTextArray(formData, 'urls');
+    const cookies = getTextArray(formData, 'cookies');
+
+    // TODO: handle multiple domain names
+    const firstDomain = urls[0].startsWith('http') && urls[0].split('/')[2];
+    const processedCookies = firstDomain
+      ? {
+          [firstDomain]: cookies,
+        }
+      : undefined;
+
     TorrentActions.addTorrentsByUrls({
-      urls: getTextArray(formData, 'urls'),
+      urls,
+      cookies: processedCookies,
       destination: formData.destination,
       isBasePath: formData.isBasePath || false,
       start: formData.start || false,
@@ -78,6 +92,15 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
             id: 'torrents.add.tab.url.input.placeholder',
           })}
           defaultValues={this.state.urlTextboxes}
+        />
+        <TextboxRepeater
+          id="cookies"
+          label={this.props.intl.formatMessage({
+            id: 'torrents.add.cookies.label',
+          })}
+          placeholder={this.props.intl.formatMessage({
+            id: 'torrents.add.cookies.input.placeholder',
+          })}
         />
         <FilesystemBrowserTextbox
           id="destination"

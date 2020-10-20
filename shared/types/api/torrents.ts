@@ -5,6 +5,11 @@ import type {TorrentContentPriority} from '../TorrentContent';
 export interface AddTorrentByURLOptions {
   // URLs to download torrents from
   urls: Array<string>;
+  // Cookies to attach to requests
+  cookies?: {
+    // An array of strings in the format "name=value";
+    [domain: string]: Array<string>;
+  };
   // Path of destination
   destination: string;
   // Tags

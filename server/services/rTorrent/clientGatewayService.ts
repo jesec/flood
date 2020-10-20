@@ -65,7 +65,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     return this.addTorrentsByURL({urls: torrentPaths, destination, tags, isBasePath, start});
   }
 
-  async addTorrentsByURL({urls, destination, tags, isBasePath, start}: AddTorrentByURLOptions): Promise<void> {
+  async addTorrentsByURL({urls, cookies, destination, tags, isBasePath, start}: AddTorrentByURLOptions): Promise<void> {
     const destinationPath = sanitizePath(destination);
 
     if (!isAllowedPath(destinationPath)) {
@@ -77,8 +77,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const torrentPaths = await Promise.all(
       urls.map(async (url) => {
         if (/^(http|https):\/\//.test(url)) {
+          const domain = url.split('/')[2];
+
           // TODO: properly handle error and let frontend know
-          const torrentPath = await fetchURLToTempFile(url, 'torrent').catch((e) => console.error(e));
+          const torrentPath = await fetchURLToTempFile(
+            url,
+            cookies ? cookies[domain] : undefined,
+            'torrent',
+          ).catch((e) => console.error(e));
 
           if (typeof torrentPath === 'string') {
             return torrentPath;

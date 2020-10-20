@@ -210,6 +210,8 @@
   "unit.time.second": "s",
   "unit.time.infinity": "∞",
   "torrents.add.button.add": "Add Torrent",
+  "torrents.add.cookies.label": "Cookies",
+  "torrents.add.cookies.input.placeholder": "Optional cookie-name=cookie-value",
   "torrents.add.destination.label": "Destination",
   "torrents.add.destination.placeholder": "Destination",
   "torrents.add.heading": "Add Torrents",

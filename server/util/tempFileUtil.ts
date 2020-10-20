@@ -37,7 +37,7 @@ export const saveBufferToTempFile = async (buffer: Buffer, extension?: string): 
  * @param {string} extension - file extension of temp file
  * @return {string} - path of saved temporary file. deleted after 5 minutes.
  */
-export const fetchURLToTempFile = async (url: string, extension?: string): Promise<string> => {
+export const fetchURLToTempFile = async (url: string, cookies?: Array<string>, extension?: string): Promise<string> => {
   const tempPath = getTempFilePath(extension);
 
   await new Promise((resolve) => {
@@ -45,6 +45,9 @@ export const fetchURLToTempFile = async (url: string, extension?: string): Promi
       method: 'GET',
       url,
       responseType: 'stream',
+      headers: {
+        Cookie: cookies?.join('; ').concat(';'),
+      },
     }).then((res: AxiosResponse) => {
       res.data.pipe(fs.createWriteStream(tempPath)).on('finish', () => resolve());
     });
