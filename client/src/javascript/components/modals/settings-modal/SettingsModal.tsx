@@ -23,7 +23,7 @@ interface SettingsModalProps extends WrappedComponentProps {
   floodSettings?: FloodSettings | null;
 }
 
-interface SettingsModalStates extends Record<string, unknown> {
+interface SettingsModalStates {
   isSavingSettings: boolean;
   changedClientSettings: Partial<ClientSettings>;
   changedFloodSettings: Partial<FloodSettings>;

@@ -39,8 +39,10 @@ export interface EventListenerDescriptor<ConnectedComponentProps, ConnectedCompo
 }
 
 const connectStores = <
-  ConnectedComponentProps extends Record<string, unknown>,
-  ConnectedComponentStates extends Record<string, unknown>
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  ConnectedComponentProps extends object,
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  ConnectedComponentStates extends object
 >(
   InputComponent: React.JSXElementConstructor<ConnectedComponentProps & ConnectedComponentStates>,
   getEventListenerDescriptors: (

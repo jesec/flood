@@ -41,7 +41,7 @@ interface FeedsTabProps extends WrappedComponentProps {
   items: Items;
 }
 
-interface FeedsTabStates extends Record<string, unknown> {
+interface FeedsTabStates {
   errors?: {
     [field in ValidatedFields]?: string;
   };

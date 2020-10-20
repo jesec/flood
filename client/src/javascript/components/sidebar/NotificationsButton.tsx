@@ -19,7 +19,7 @@ interface NotificationsButtonProps extends WrappedComponentProps {
   notifications?: Array<Notification>;
 }
 
-interface NotificationsButtonStates extends Record<string, unknown> {
+interface NotificationsButtonStates {
   isLoading: boolean;
   paginationStart: number;
 }

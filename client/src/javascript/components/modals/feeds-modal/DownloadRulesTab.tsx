@@ -39,7 +39,7 @@ interface DownloadRulesTabProps extends WrappedComponentProps {
   rules: Rules;
 }
 
-interface DownloadRulesTabStates extends Record<string, unknown> {
+interface DownloadRulesTabStates {
   errors?: {
     [field in ValidatedFields]?: string;
   };

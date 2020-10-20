@@ -69,7 +69,7 @@ interface TorrentListProps extends WrappedComponentProps {
   isClientConnected?: boolean;
 }
 
-interface TorrentListStates extends Record<string, unknown> {
+interface TorrentListStates {
   tableScrollLeft: number;
   torrentListViewportSize: number | null;
 }

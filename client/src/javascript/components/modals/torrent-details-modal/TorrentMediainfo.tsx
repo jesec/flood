@@ -16,7 +16,7 @@ interface TorrentMediainfoProps extends WrappedComponentProps {
   mediainfo: string;
 }
 
-interface TorrentMediainfoStates extends Record<string, unknown> {
+interface TorrentMediainfoStates {
   copiedToClipboard: boolean;
   isFetchingMediainfo: boolean;
   fetchMediainfoError: {data: {error: unknown}} | null;
