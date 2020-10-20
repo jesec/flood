@@ -132,7 +132,7 @@
     "eslint-plugin-react-hooks": "^4.1.2",
     "express": "^4.17.1",
     "express-rate-limit": "^5.1.3",
-    "fast-equals": "^2.0.0",
+    "fast-json-patch": "^3.0.0-1",
     "fast-sort": "^2.2.0",
     "feedsub": "^0.7.2",
     "file-loader": "^6.1.1",

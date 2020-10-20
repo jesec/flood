@@ -51,6 +51,20 @@ const activityStream = new stream.PassThrough();
 const rl = readline.createInterface({input: activityStream});
 request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
 
+const watchTorrentList = (op: 'add' | 'remove' | 'replace' | 'move' | 'copy' | 'test'): Promise<void> => {
+  return new Promise((resolve) => {
+    let eventDetected = false;
+    rl.on('line', (input) => {
+      if (eventDetected && input.includes(`"op":"${op}"`)) {
+        resolve();
+      }
+      if (input.includes('TORRENT_LIST_DIFF_CHANGE')) {
+        eventDetected = true;
+      }
+    });
+  });
+};
+
 describe('POST /api/torrents/add-urls', () => {
   const addTorrentByURLOptions: AddTorrentByURLOptions = {
     urls: torrentURLs,
@@ -60,13 +74,7 @@ describe('POST /api/torrents/add-urls', () => {
     start: false,
   };
 
-  const torrentAdded = new Promise((resolve) => {
-    rl.on('line', (input) => {
-      if (input.includes('TORRENT_LIST_ACTION_TORRENT_ADDED')) {
-        resolve();
-      }
-    });
-  });
+  const torrentAdded = watchTorrentList('add');
 
   it('Adds torrents to disallowed path via URLs', (done) => {
     request
@@ -149,13 +157,7 @@ describe('POST /api/torrents/add-files', () => {
     start: false,
   };
 
-  const torrentAdded = new Promise((resolve) => {
-    rl.on('line', (input) => {
-      if (input.includes('TORRENT_LIST_ACTION_TORRENT_ADDED')) {
-        resolve();
-      }
-    });
-  });
+  const torrentAdded = watchTorrentList('add');
 
   it('Adds torrents to disallowed path via files', (done) => {
     request
@@ -231,13 +233,7 @@ describe('POST /api/torrents/create', () => {
     isPrivate: false,
   };
 
-  const torrentAdded = new Promise((resolve) => {
-    rl.on('line', (input) => {
-      if (input.includes('TORRENT_LIST_ACTION_TORRENT_ADDED')) {
-        resolve();
-      }
-    });
-  });
+  const torrentAdded = watchTorrentList('add');
 
   it('Creates a torrent', (done) => {
     fs.writeFileSync(path.join(tempDirectory, 'dummy'), 'test');

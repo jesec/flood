@@ -1,6 +1,6 @@
-import {deepEqual} from 'fast-equals';
+import jsonpatch, {Operation} from 'fast-json-patch';
 
-import type {TorrentProperties, TorrentListDiff, TorrentListSummary} from '@shared/types/Torrent';
+import type {TorrentProperties, TorrentListSummary} from '@shared/types/Torrent';
 
 import BaseService from './BaseService';
 import config from '../../config';
@@ -9,7 +9,7 @@ import hasTorrentFinished from '../util/torrentPropertiesUtil';
 interface TorrentServiceEvents {
   FETCH_TORRENT_LIST_SUCCESS: () => void;
   FETCH_TORRENT_LIST_ERROR: () => void;
-  TORRENT_LIST_DIFF_CHANGE: (payload: {id: number; diff: TorrentListDiff}) => void;
+  TORRENT_LIST_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
   newListener: (event: keyof Omit<TorrentServiceEvents, 'newListener' | 'removeListener'>) => void;
   removeListener: (event: keyof Omit<TorrentServiceEvents, 'newListener' | 'removeListener'>) => void;
 }
@@ -56,51 +56,6 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     };
   }
 
-  assignDeletedTorrentsToDiff(
-    diff: TorrentListDiff,
-    nextTorrentListSummary: this['torrentListSummary'],
-    newTorrentCount: number,
-  ): TorrentListDiff {
-    const prevTorrentCount = Object.keys(this.torrentListSummary.torrents).length;
-    const nextTorrentCount = Object.keys(nextTorrentListSummary.torrents).length;
-
-    // We need to look for deleted torrents in two scenarios:
-    // 1. the next list length is less than than the current length
-    // 2. at least one new torrent was added and the next list length is
-    //    equal to or greater than the current list length.
-    //
-    // We definitely don't need to look for deleted torrents if the number
-    // of new torrents is equal to the difference between next torrent list
-    // length and previous torrent list length.
-    let shouldLookForDeletedTorrents = nextTorrentCount < prevTorrentCount;
-
-    if (newTorrentCount > 0) {
-      if (nextTorrentCount >= prevTorrentCount) {
-        shouldLookForDeletedTorrents = true;
-      }
-
-      if (newTorrentCount === nextTorrentCount - prevTorrentCount) {
-        shouldLookForDeletedTorrents = false;
-      }
-    }
-
-    let diffWithDeleted = diff;
-
-    if (shouldLookForDeletedTorrents) {
-      Object.keys(this.torrentListSummary.torrents).forEach((hash) => {
-        if (nextTorrentListSummary.torrents[hash] == null) {
-          diffWithDeleted = Object.assign(diffWithDeleted, {
-            [hash]: {
-              action: 'TORRENT_LIST_ACTION_TORRENT_DELETED',
-            },
-          });
-        }
-      }, {});
-    }
-
-    return diffWithDeleted;
-  }
-
   deferFetchTorrentList(interval = config.torrentClientPollInterval || 2000) {
     if (this.pollEnabled) {
       this.pollTimeout = setTimeout(this.fetchTorrentList, interval);
@@ -134,56 +89,6 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     return this.torrentListSummary.torrents;
   }
 
-  getTorrentListDiff(nextTorrentListSummary: this['torrentListSummary']) {
-    let newTorrentCount = 0;
-
-    // Get the diff...
-    const diff = Object.keys(nextTorrentListSummary.torrents).reduce((accumulator, hash) => {
-      const currentTorrentProperties = this.torrentListSummary.torrents[hash];
-      const nextTorrentProperties = nextTorrentListSummary.torrents[hash];
-
-      // If the current torrent list doesn't contain any details for this
-      // hash, then it's a brand new torrent, so every detail is part of the
-      // diff.
-      if (currentTorrentProperties == null) {
-        accumulator[hash] = {
-          action: 'TORRENT_LIST_ACTION_TORRENT_ADDED',
-          data: nextTorrentProperties,
-        };
-
-        // Track the number of new torrents added.
-        newTorrentCount += 1;
-      } else {
-        let changed = false;
-        let changedProperties: Partial<TorrentProperties> = {};
-
-        Object.keys(nextTorrentProperties).forEach((key) => {
-          const property = key as keyof TorrentProperties;
-          // If one of the details is unequal, we need to add it to the diff.
-          if (!deepEqual(currentTorrentProperties[property], nextTorrentProperties[property])) {
-            // Add the diff details.
-            changed = true;
-            changedProperties = {
-              ...changedProperties,
-              [property]: nextTorrentProperties[property],
-            };
-          }
-        });
-
-        if (changed) {
-          accumulator[hash] = {
-            action: 'TORRENT_LIST_ACTION_TORRENT_DETAIL_UPDATED',
-            data: changedProperties,
-          };
-        }
-      }
-
-      return accumulator;
-    }, {} as TorrentListDiff);
-
-    return this.assignDeletedTorrentsToDiff(diff, nextTorrentListSummary, newTorrentCount);
-  }
-
   getTorrentListSummary() {
     return this.torrentListSummary;
   }
@@ -204,8 +109,8 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   }
 
   handleFetchTorrentListSuccess(nextTorrentListSummary: this['torrentListSummary']) {
-    const diff = this.getTorrentListDiff(nextTorrentListSummary);
-    if (Object.keys(diff).length > 0) {
+    const diff = jsonpatch.compare(this.torrentListSummary.torrents, nextTorrentListSummary.torrents);
+    if (diff.length > 0) {
       this.emit('TORRENT_LIST_DIFF_CHANGE', {diff, id: nextTorrentListSummary.id});
     }
 

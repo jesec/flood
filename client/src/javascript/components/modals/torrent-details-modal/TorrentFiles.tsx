@@ -1,5 +1,4 @@
 import classnames from 'classnames';
-import {deepEqual} from 'fast-equals';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
@@ -51,17 +50,10 @@ class TorrentFiles extends React.Component<TorrentFilesProps, TorrentFilesStates
       return true;
     }
 
-    // If we know that the user changed a file's priority, we deeply check the
-    // file tree to render when the priority change is detected.
+    // Update when the priority has changed
     if (this.hasPriorityChanged) {
-      const shouldUpdate = !deepEqual(nextProps.contents, this.props.contents);
-
-      // Reset the flag so we don't deeply check the next file tree.
-      if (shouldUpdate) {
-        this.hasPriorityChanged = false;
-      }
-
-      return shouldUpdate;
+      this.hasPriorityChanged = false;
+      return true;
     }
 
     // Update when the previous props weren't defined and the next are.

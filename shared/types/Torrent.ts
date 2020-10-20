@@ -58,21 +58,6 @@ export interface TorrentProperties {
   upTotal: number;
 }
 
-export interface TorrentListDiff {
-  [hash: string]:
-    | {
-        action: 'TORRENT_LIST_ACTION_TORRENT_ADDED';
-        data: TorrentProperties;
-      }
-    | {
-        action: 'TORRENT_LIST_ACTION_TORRENT_DELETED';
-      }
-    | {
-        action: 'TORRENT_LIST_ACTION_TORRENT_DETAIL_UPDATED';
-        data: Partial<TorrentProperties>;
-      };
-}
-
 export interface TorrentList {
   [hash: string]: TorrentProperties;
 }

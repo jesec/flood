@@ -1,9 +1,6 @@
-import type {
-  TransferDirection,
-  TransferHistory,
-  TransferSummary,
-  TransferSummaryDiff,
-} from '@shared/types/TransferData';
+import jsonpatch, {Operation} from 'fast-json-patch';
+
+import type {TransferDirection, TransferHistory, TransferSummary} from '@shared/types/TransferData';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import BaseStore from './BaseStore';
@@ -50,18 +47,8 @@ class TransferDataStoreClass extends BaseStore {
     this.emit('CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS');
   }
 
-  handleTransferSummaryDiffChange(diff: TransferSummaryDiff) {
-    diff.forEach((change) => {
-      if (change.action === 'ITEM_REMOVED') {
-        delete this.transferSummary[change.data];
-      } else {
-        this.transferSummary = {
-          ...this.transferSummary,
-          ...change.data,
-        };
-      }
-    });
-
+  handleTransferSummaryDiffChange(diff: Operation[]) {
+    jsonpatch.applyPatch(this.transferSummary, diff);
     this.appendCurrentTransferRateToHistory();
     this.emit('CLIENT_TRANSFER_SUMMARY_CHANGE');
   }

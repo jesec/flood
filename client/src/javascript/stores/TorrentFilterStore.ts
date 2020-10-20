@@ -1,4 +1,6 @@
-import type {Taxonomy, TaxonomyDiffs} from '@shared/types/Taxonomy';
+import jsonpatch, {Operation} from 'fast-json-patch';
+
+import type {Taxonomy} from '@shared/types/Taxonomy';
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -56,26 +58,8 @@ class TorrentFilterStoreClass extends BaseStore {
     return this.taxonomy.trackerCounts;
   }
 
-  handleTorrentTaxonomyDiffChange(diff: TaxonomyDiffs) {
-    Object.entries(diff).forEach(([key, value]) => {
-      const taxonomyKey = key as keyof TaxonomyDiffs;
-      const changes = value as TaxonomyDiffs[keyof TaxonomyDiffs];
-
-      if (changes == null) {
-        return;
-      }
-
-      changes.forEach((change) => {
-        if (change.action === 'ITEM_REMOVED') {
-          delete this.taxonomy[taxonomyKey][change.data];
-        } else {
-          this.taxonomy[taxonomyKey] = {
-            ...this.taxonomy[taxonomyKey],
-            ...change.data,
-          };
-        }
-      });
-    });
+  handleTorrentTaxonomyDiffChange(diff: Operation[]) {
+    jsonpatch.applyPatch(this.taxonomy, diff);
 
     // TODO: This logic is duplicated. Also update it to check for changed
     // trackers.

@@ -1,5 +1,3 @@
-import {DiffAction} from '@shared/constants/diffActionTypes';
-
 export interface TransferSummary {
   // Global download rate
   downRate: number;
@@ -14,8 +12,6 @@ export interface TransferSummary {
   // Data uploaded this session
   upTotal: number;
 }
-
-export type TransferSummaryDiff = DiffAction<Partial<TransferSummary>>;
 
 export type TransferDirection = 'upload' | 'download';
 

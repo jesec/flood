@@ -1,13 +1,14 @@
+import jsonpatch, {Operation} from 'fast-json-patch';
+
 import BaseService from './BaseService';
-import objectUtil from '../../shared/util/objectUtil';
 import torrentStatusMap from '../../shared/constants/torrentStatusMap';
 
-import type {Taxonomy, TaxonomyDiffs} from '../../shared/types/Taxonomy';
+import type {Taxonomy} from '../../shared/types/Taxonomy';
 import type {TorrentStatus} from '../../shared/constants/torrentStatusMap';
 import type {TorrentProperties, TorrentList} from '../../shared/types/Torrent';
 
 interface TaxonomyServiceEvents {
-  TAXONOMY_DIFF_CHANGE: (payload: {id: number; diff: TaxonomyDiffs}) => void;
+  TAXONOMY_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
 }
 
 class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
@@ -81,21 +82,9 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     this.taxonomy.tagCounts.all = length;
     this.taxonomy.trackerCounts.all = length;
 
-    let didDiffChange = false;
-    const taxonomyDiffs = Object.keys(this.taxonomy).reduce((accumulator, key) => {
-      const countType = key as keyof Taxonomy;
-      const countDiff = objectUtil.getDiff(this.lastTaxonomy[countType], this.taxonomy[countType]);
+    const taxonomyDiffs = jsonpatch.compare(this.lastTaxonomy, this.taxonomy);
 
-      if (countDiff.length > 0) {
-        didDiffChange = true;
-      }
-
-      return Object.assign(accumulator, {
-        [countType]: countDiff,
-      });
-    }, {} as TaxonomyDiffs);
-
-    if (didDiffChange) {
+    if (taxonomyDiffs.length > 0) {
       this.emit('TAXONOMY_DIFF_CHANGE', {
         diff: taxonomyDiffs,
         id: Date.now(),

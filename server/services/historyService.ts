@@ -1,12 +1,12 @@
-import type {DiffAction} from '@shared/constants/diffActionTypes';
+import jsonpatch, {Operation} from 'fast-json-patch';
+
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
-import type {TransferHistory, TransferSummary, TransferSummaryDiff} from '@shared/types/TransferData';
+import type {TransferHistory, TransferSummary} from '@shared/types/TransferData';
 
 import BaseService from './BaseService';
 import config from '../../config';
 import HistoryEra from '../models/HistoryEra';
 import historySnapshotTypes from '../../shared/constants/historySnapshotTypes';
-import objectUtil from '../../shared/util/objectUtil';
 
 type HistorySnapshotEvents = {
   // TODO: Switch to string literal template type when TypeScript 4.1 is released.
@@ -15,7 +15,7 @@ type HistorySnapshotEvents = {
 };
 
 interface HistoryServiceEvents extends HistorySnapshotEvents {
-  TRANSFER_SUMMARY_DIFF_CHANGE: (payload: {id: number; diff: TransferSummaryDiff}) => void;
+  TRANSFER_SUMMARY_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
   FETCH_TRANSFER_SUMMARY_SUCCESS: () => void;
   FETCH_TRANSFER_SUMMARY_ERROR: () => void;
 }
@@ -182,7 +182,7 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
   }
 
   handleFetchTransferSummarySuccess(nextTransferSummary: TransferSummary) {
-    const summaryDiff = objectUtil.getDiff(this.transferSummary, nextTransferSummary) as DiffAction<TransferSummary>;
+    const summaryDiff = jsonpatch.compare(this.transferSummary, nextTransferSummary);
 
     if (summaryDiff.length > 0) {
       this.emit('TRANSFER_SUMMARY_DIFF_CHANGE', {

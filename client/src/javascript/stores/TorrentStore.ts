@@ -1,5 +1,7 @@
+import {applyOperation, Operation} from 'fast-json-patch';
+
 import type {FloodSettings} from '@shared/types/FloodSettings';
-import type {TorrentDetails, TorrentProperties, TorrentListDiff, TorrentList} from '@shared/types/Torrent';
+import type {TorrentDetails, TorrentProperties, TorrentList} from '@shared/types/Torrent';
 
 import AlertStore from './AlertStore';
 import AppDispatcher from '../dispatcher/AppDispatcher';
@@ -203,32 +205,14 @@ class TorrentStoreClass extends BaseStore {
     this.fetchTorrentDetails(hash, true);
   }
 
-  handleTorrentListDiffChange(torrentListDiff: TorrentListDiff) {
-    Object.keys(torrentListDiff).forEach((torrentHash) => {
-      const diff = torrentListDiff[torrentHash];
+  handleTorrentListDiffChange(torrentListDiffs: Operation[]) {
+    torrentListDiffs.forEach((diff) => {
+      applyOperation(this.torrents, diff);
+      const [, changedTorrentHash, changedProperty] = diff.path.split('/');
 
-      switch (diff.action) {
-        case 'TORRENT_LIST_ACTION_TORRENT_ADDED':
-          this.torrents[torrentHash] = diff.data;
-          break;
-        case 'TORRENT_LIST_ACTION_TORRENT_DELETED':
-          if (this.selectedTorrents.includes(torrentHash)) {
-            this.selectedTorrents = this.selectedTorrents.filter((hash: string) => hash !== torrentHash);
-          }
-
-          delete this.torrents[torrentHash];
-          break;
-        case 'TORRENT_LIST_ACTION_TORRENT_DETAIL_UPDATED':
-          if (diff.data == null || this.torrents[torrentHash] == null) {
-            break;
-          }
-          this.torrents[torrentHash] = {
-            ...this.torrents[torrentHash],
-            ...diff.data,
-          };
-          break;
-        default:
-          break;
+      if (changedProperty != null) {
+        // Spread to decouple the object references so components know the properties have changed.
+        this.torrents[changedTorrentHash] = {...this.torrents[changedTorrentHash]};
       }
     });
 

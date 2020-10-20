@@ -1,9 +1,9 @@
+import type {Operation} from 'fast-json-patch';
 import type {Request, Response} from 'express';
 import type TypedEmitter from 'typed-emitter';
 
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
-import type {TransferHistory, TransferSummaryDiff} from '@shared/types/TransferData';
-import type {TorrentListDiff} from '@shared/types/Torrent';
+import type {TransferHistory} from '@shared/types/TransferData';
 
 import DiskUsage from '../models/DiskUsage';
 import ServerEvent from '../models/ServerEvent';
@@ -107,7 +107,7 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
   handleEvents(
     serviceInstances.torrentService,
     'TORRENT_LIST_DIFF_CHANGE',
-    ({id, diff}: {id: number; diff: TorrentListDiff}) => {
+    ({id, diff}: {id: number; diff: Operation[]}) => {
       serverEvent.emit(id, 'TORRENT_LIST_DIFF_CHANGE', diff);
     },
   );
@@ -120,7 +120,7 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
   handleEvents(
     serviceInstances.historyService,
     'TRANSFER_SUMMARY_DIFF_CHANGE',
-    ({id, diff}: {id: number; diff: TransferSummaryDiff}) => {
+    ({id, diff}: {id: number; diff: Operation[]}) => {
       serverEvent.emit(id, 'TRANSFER_SUMMARY_DIFF_CHANGE', diff);
     },
   );
