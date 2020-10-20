@@ -45,9 +45,11 @@ export const fetchURLToTempFile = async (url: string, cookies?: Array<string>, e
       method: 'GET',
       url,
       responseType: 'stream',
-      headers: {
-        Cookie: cookies?.join('; ').concat(';'),
-      },
+      headers: cookies
+        ? {
+            Cookie: cookies.join('; ').concat(';'),
+          }
+        : undefined,
     }).then((res: AxiosResponse) => {
       res.data.pipe(fs.createWriteStream(tempPath)).on('finish', () => resolve());
     });
