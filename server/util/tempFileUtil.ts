@@ -14,6 +14,19 @@ const getTempFilePath = (extension = 'tmp'): string => {
 };
 
 /**
+ * Deletes the file after 5 minutes
+ */
+const delayedDelete = (tempPath: string): void => {
+  setTimeout(() => {
+    try {
+      fs.unlinkSync(tempPath);
+    } catch (_e) {
+      // do nothing.
+    }
+  }, 1000 * 60 * 5);
+};
+
+/**
  * Saves buffer to temporary storage as a file.
  *
  * @param {Buffer} buffer - buffer
@@ -25,7 +38,7 @@ export const saveBufferToTempFile = async (buffer: Buffer, extension?: string): 
 
   fs.writeFileSync(tempPath, buffer);
 
-  setTimeout(() => fs.unlinkSync(tempPath), 1000 * 60 * 5);
+  delayedDelete(tempPath);
 
   return tempPath;
 };
@@ -52,7 +65,7 @@ export const fetchURLToTempFile = async (url: string, cookies?: Array<string>, e
         : undefined,
     }).then(
       (res: AxiosResponse) => {
-        setTimeout(() => fs.unlinkSync(tempPath), 1000 * 60 * 5);
+        delayedDelete(tempPath);
         res.data.pipe(fs.createWriteStream(tempPath)).on('finish', () => resolve(tempPath));
       },
       (e: AxiosError) => {
