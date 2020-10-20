@@ -53,8 +53,7 @@ export const fetchURLToTempFile = async (url: string, cookies?: Array<string>, e
     }).then(
       (res: AxiosResponse) => {
         setTimeout(() => fs.unlinkSync(tempPath), 1000 * 60 * 5);
-        res.data.pipe(fs.createWriteStream(tempPath)).on('finish', () => resolve());
-        return tempPath;
+        res.data.pipe(fs.createWriteStream(tempPath)).on('finish', () => resolve(tempPath));
       },
       (e: AxiosError) => {
         reject(e);
