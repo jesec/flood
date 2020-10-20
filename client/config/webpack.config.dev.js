@@ -108,18 +108,7 @@ module.exports = {
         ],
       },
       {
-        exclude: [
-          /\.html$/,
-          /\.(js|jsx|ts|tsx)$/,
-          /\.css$/,
-          /\.scss$/,
-          /\.json$/,
-          /\.bmp$/,
-          /\.gif$/,
-          /\.jpe?g$/,
-          /\.png$/,
-          /\.svg$/,
-        ],
+        test: [/\.md$/, /\.eot$/, /\.ttf$/, /\.woff$/, /\.woff2$/],
         loader: require.resolve('file-loader'),
         options: {
           name: 'static/media/[name].[hash:8].[ext]',
@@ -148,7 +137,7 @@ module.exports = {
   },
   entry: paths.appIndex,
   resolve: {
-    extensions: ['*', '.js', '.jsx', '.ts', '.tsx', '.json'],
+    extensions: ['.cjs', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
       '@shared': path.resolve('./shared'),
     },
