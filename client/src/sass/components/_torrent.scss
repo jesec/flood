@@ -154,10 +154,10 @@ $more-info--border: $textbox-repeater--button--border;
         &__sub-heading {
           &__tertiary {
             &--download {
-              color: $blue;
+              color: $green;
 
               .icon {
-                fill: $blue;
+                fill: $green;
               }
             }
           }
@@ -181,10 +181,10 @@ $more-info--border: $textbox-repeater--button--border;
         &__sub-heading {
           &__tertiary {
             &--upload {
-              color: $green;
+              color: $blue;
 
               .icon {
-                fill: $green;
+                fill: $blue;
               }
             }
           }
