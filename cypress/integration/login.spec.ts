@@ -34,6 +34,7 @@ context('Login', () => {
     cy.route({
       method: 'POST',
       url: 'http://127.0.0.1:4200/api/auth/authenticate',
+      response: {},
       status: 500,
     }).as('verify-request');
 
