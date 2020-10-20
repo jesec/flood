@@ -1,4 +1,4 @@
-import axios, {AxiosResponse} from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 import crypto from 'crypto';
 import fs from 'fs';
 
@@ -40,7 +40,7 @@ export const saveBufferToTempFile = async (buffer: Buffer, extension?: string): 
 export const fetchURLToTempFile = async (url: string, cookies?: Array<string>, extension?: string): Promise<string> => {
   const tempPath = getTempFilePath(extension);
 
-  await new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     axios({
       method: 'GET',
       url,
@@ -50,12 +50,15 @@ export const fetchURLToTempFile = async (url: string, cookies?: Array<string>, e
             Cookie: cookies.join('; ').concat(';'),
           }
         : undefined,
-    }).then((res: AxiosResponse) => {
-      res.data.pipe(fs.createWriteStream(tempPath)).on('finish', () => resolve());
-    });
+    }).then(
+      (res: AxiosResponse) => {
+        setTimeout(() => fs.unlinkSync(tempPath), 1000 * 60 * 5);
+        res.data.pipe(fs.createWriteStream(tempPath)).on('finish', () => resolve());
+        return tempPath;
+      },
+      (e: AxiosError) => {
+        reject(e);
+      },
+    );
   });
-
-  setTimeout(() => fs.unlinkSync(tempPath), 1000 * 60 * 5);
-
-  return tempPath;
 };
