@@ -1,11 +1,23 @@
 {
   "name": "flood",
   "version": "3.1.0",
+  "description": "A modern Web UI for various torrent clients with multi-user and multi-client support",
+  "keywords": [
+    "typescript",
+    "react",
+    "node",
+    "webui",
+    "web ui",
+    "rTorrent"
+  ],
   "private": false,
   "license": "GPL-3.0-only",
   "repository": {
     "type": "git",
     "url": "https://github.com/jesec/flood.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jesec/flood/issues"
   },
   "files": [
     "dist"
