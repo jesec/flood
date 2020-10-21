@@ -153,7 +153,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
         req.services?.clientGatewayService
           ?.addTorrentsByFile({
             files: [torrent.toString('base64')],
-            destination: sourcePath,
+            destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
             tags,
             isBasePath: true,
             isCompleted: true,
