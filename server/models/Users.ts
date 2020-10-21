@@ -55,7 +55,7 @@ class Users {
       }
 
       // Wrong data provided
-      if (credentials == null || credentials.password == null) {
+      if (credentials?.password == null) {
         return callback(false, null, new Error());
       }
 
@@ -120,7 +120,7 @@ class Users {
       }
 
       // Username not found.
-      if (user == null || user._id == null) {
+      if (user?._id == null) {
         return callback(null, new Error('User not found.'));
       }
 

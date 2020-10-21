@@ -97,7 +97,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
         return (child as SelectItem).props.id != null;
       }) as SelectItem;
 
-      if (item != null && item.props.id != null) {
+      if (item?.props?.id != null) {
         return item.props.id;
       }
     }

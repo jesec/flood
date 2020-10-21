@@ -214,7 +214,7 @@ class TorrentList extends React.Component<TorrentListProps, TorrentListStates> {
     files.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        if (e.target != null && e.target.result != null && typeof e.target.result === 'string') {
+        if (e.target?.result != null && typeof e.target.result === 'string') {
           callback(e.target.result.split('base64,')[1]);
         }
       };

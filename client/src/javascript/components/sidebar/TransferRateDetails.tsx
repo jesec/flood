@@ -70,7 +70,7 @@ class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
       'is-visible': inspectorPoint != null && options.showHoverDuration,
     });
 
-    if (inspectorPoint != null && inspectorPoint.nearestTimestamp != null) {
+    if (inspectorPoint?.nearestTimestamp != null) {
       const currentTime = dayjs(Date.now());
       const durationSummary = formatUtil.secondsToDuration(
         dayjs.duration(currentTime.diff(dayjs(inspectorPoint.nearestTimestamp))).asSeconds(),

@@ -426,7 +426,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
       if (formData != null) {
         if (currentFeed === defaultFeed) {
           FeedsStoreClass.addFeed(formData);
-        } else if (currentFeed != null && currentFeed._id != null) {
+        } else if (currentFeed?._id != null) {
           FeedsStoreClass.modifyFeed(currentFeed._id, formData);
         }
       }
@@ -550,7 +550,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     if (this.state.errors != null) {
       errors = Object.keys(this.state.errors).map((error) => {
         const errorID = error as ValidatedFields;
-        if (this.state.errors == null || this.state.errors[errorID] == null) {
+        if (this.state.errors?.[errorID] == null) {
           return null;
         }
         return (

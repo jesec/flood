@@ -488,7 +488,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     if (this.state.errors != null) {
       errors = Object.keys(this.state.errors).map((error) => {
         const errorID = error as ValidatedFields;
-        if (this.state.errors == null || this.state.errors[errorID] == null) {
+        if (this.state.errors?.[errorID] == null) {
           return null;
         }
         return (

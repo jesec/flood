@@ -28,7 +28,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     this.handleProcessTorrentListEnd = this.handleProcessTorrentListEnd.bind(this);
 
     this.onServicesUpdated = () => {
-      if (this.services == null || this.services.clientGatewayService == null) {
+      if (this.services?.clientGatewayService == null) {
         return;
       }
 
@@ -41,7 +41,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   }
 
   destroy() {
-    if (this.services == null || this.services.clientGatewayService == null) {
+    if (this.services?.clientGatewayService == null) {
       return;
     }
 

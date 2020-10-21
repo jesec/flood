@@ -249,7 +249,7 @@ class ListViewport extends React.Component<ListViewportProps, ListViewportStates
           ref={(ref) => {
             this.topSpacerRef = ref;
 
-            if (itemHeight == null && this.topSpacerRef != null && this.topSpacerRef.nextSibling != null) {
+            if (itemHeight == null && this.topSpacerRef?.nextSibling != null) {
               this.setState({
                 itemHeight: (this.topSpacerRef.nextSibling as HTMLLIElement).offsetHeight,
               });

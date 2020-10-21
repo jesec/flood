@@ -29,7 +29,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     this.handleFetchTorrentListError = this.handleFetchTorrentListError.bind(this);
 
     this.onServicesUpdated = () => {
-      if (this.services == null || this.services.clientGatewayService == null) {
+      if (this.services?.clientGatewayService == null) {
         return;
       }
 

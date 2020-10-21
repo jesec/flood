@@ -106,7 +106,7 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
       const reader = new FileReader();
       reader.onload = (e) => {
         this.setState((state) => {
-          if (e.target != null && e.target.result != null && typeof e.target.result === 'string') {
+          if (e.target?.result != null && typeof e.target.result === 'string') {
             return {
               errors: nextErrorsState,
               files: state.files.concat({

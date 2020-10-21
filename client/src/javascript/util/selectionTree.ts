@@ -48,7 +48,7 @@ const applySelection = (
 
   // Change happens
   if (recursiveDepth === depth - 1) {
-    if (type === 'file' && tree.files != null && tree.files[currentPath] != null) {
+    if (type === 'file' && tree.files?.[currentPath] != null) {
       const files = {
         ...tree.files,
         [currentPath]: {
