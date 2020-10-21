@@ -24,12 +24,12 @@ export default class SettingsTab extends React.Component<SettingsTabProps, Setti
     };
   }
 
-  getChangedClientSetting<T extends ClientSetting>(property: T): ClientSettings[T] {
+  getChangedClientSetting<T extends ClientSetting>(property: T): ClientSettings[T] | undefined {
     if (this.state.changedClientSettings[property] != null) {
       return this.state.changedClientSettings[property] as ClientSettings[T];
     }
 
-    return this.props.clientSettings[property];
+    return this.props?.clientSettings?.[property];
   }
 
   handleClientSettingChange(event: React.FormEvent<HTMLFormElement> | Event) {
