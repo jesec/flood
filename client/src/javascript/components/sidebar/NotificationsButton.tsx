@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
 import type {Notification, NotificationCount} from '@shared/types/Notification';
@@ -42,8 +42,11 @@ const MESSAGES = defineMessages({
   'notification.torrent.errored.body': {
     id: 'notification.torrent.errored.body',
   },
-  'notification.feed.downloaded.torrent.heading': {
-    id: 'notification.feed.downloaded.torrent.heading',
+  'notification.feed.torrent.added.heading': {
+    id: 'notification.feed.torrent.added.heading',
+  },
+  'notification.feed.torrent.added.body': {
+    id: 'notification.feed.torrent.added.body',
   },
   clearAll: {
     id: 'notification.clear.all',
@@ -129,7 +132,7 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
           toolbar--bottom">
           <li className={newerButtonClass} onClick={this.handleNewerNotificationsClick}>
             <ChevronLeftIcon />
-            {`${newerFrom + 1} &ndash; ${newerTo}`}
+            {`${newerFrom + 1} - ${newerTo}`}
           </li>
           <li
             className="toolbar__item toolbar__item--button
@@ -138,7 +141,7 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
             {this.props.intl.formatMessage(MESSAGES.clearAll)}
           </li>
           <li className={olderButtonClass} onClick={this.handleOlderNotificationsClick}>
-            {`${olderFrom} &ndash; ${olderTo}`}
+            {`${olderFrom} - ${olderTo}`}
             <ChevronRightIcon />
           </li>
         </ul>
@@ -153,39 +156,23 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
     const date = intl.formatDate(notification.ts, {year: 'numeric', month: 'long', day: '2-digit'});
     const time = intl.formatTime(notification.ts);
 
-    let notificationBody = null;
-
-    if (notification.id === 'notification.feed.downloaded.torrent') {
-      notificationBody = (
-        <FormattedMessage
-          id={`${notification.id}.body`}
-          values={{
-            matchedDetails: (
-              <strong className="notification__message__sub-heading">
-                {notification.data.ruleLabel}
-                {' / '}
-                {notification.data.feedLabel}
-              </strong>
-            ),
-            title: notification.data.title,
-          }}
-        />
-      );
-    } else {
-      const messageID = MESSAGES[`${notification.id}.body` as keyof typeof MESSAGES];
-      notificationBody = intl.formatMessage(messageID, notification.data);
-    }
-
     return (
       <li className="notifications__list__item" key={index}>
         <div className="notification__heading">
           <span className="notification__category">
-            {intl.formatMessage(MESSAGES[`${notification.id}.heading` as keyof typeof MESSAGES])}
+            {intl.formatMessage(
+              MESSAGES[`${notification.id}.heading` as keyof typeof MESSAGES] || {id: 'general.error.unknown'},
+            )}
           </span>
           {' — '}
           <span className="notification__timestamp">{`${date} ${intl.formatMessage(MESSAGES.at)} ${time}`}</span>
         </div>
-        <div className="notification__message">{notificationBody}</div>
+        <div className="notification__message">
+          {intl.formatMessage(
+            MESSAGES[`${notification.id}.body` as keyof typeof MESSAGES] || {id: 'general.error.unknown'},
+            notification.data,
+          )}
+        </div>
       </li>
     );
   };

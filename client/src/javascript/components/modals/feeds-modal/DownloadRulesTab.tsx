@@ -2,6 +2,9 @@ import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} fro
 import React from 'react';
 import throttle from 'lodash/throttle';
 
+import type {AddRuleOptions} from '@shared/types/api/feed-monitor';
+import type {Feed, Rule} from '@shared/types/Feed';
+
 import {
   Button,
   Checkbox,
@@ -16,16 +19,15 @@ import {
   Textbox,
 } from '../../../ui';
 import connectStores from '../../../util/connectStores';
-import Edit from '../../icons/Edit';
 import Checkmark from '../../icons/Checkmark';
 import Close from '../../icons/Close';
-import FeedsStore, {FeedsStoreClass} from '../../../stores/FeedsStore';
+import Edit from '../../icons/Edit';
+import FeedsStore from '../../../stores/FeedsStore';
 import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
+import SettingsActions from '../../../actions/SettingsActions';
 import TagSelect from '../../general/form-elements/TagSelect';
 import * as validators from '../../../util/validators';
-
-import type {Feeds, Rule, Rules} from '../../../stores/FeedsStore';
 
 type ValidatedFields = 'destination' | 'feedID' | 'label' | 'match' | 'exclude';
 
@@ -35,15 +37,15 @@ interface RuleFormData extends Omit<Rule, 'tags'> {
 }
 
 interface DownloadRulesTabProps extends WrappedComponentProps {
-  feeds: Feeds;
-  rules: Rules;
+  feeds: Array<Feed>;
+  rules: Array<Rule>;
 }
 
 interface DownloadRulesTabStates {
   errors?: {
     [field in ValidatedFields]?: string;
   };
-  currentlyEditingRule: Rule | null;
+  currentlyEditingRule: Partial<Rule> | null;
   doesPatternMatchTest: boolean;
 }
 
@@ -141,7 +143,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     };
   }
 
-  getAmendedFormData(): Rule | null {
+  getAmendedFormData(): AddRuleOptions | null {
     if (this.formRef == null) {
       return null;
     }
@@ -156,7 +158,6 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     return {
       ...defaultRule,
       ...formData,
-      field: 'title',
       ...(formData.tags != null
         ? {
             tags: formData.tags.split(','),
@@ -197,7 +198,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     );
   }
 
-  getModifyRuleForm(rule: Rule) {
+  getModifyRuleForm(rule: Partial<Rule>) {
     const {doesPatternMatchTest, currentlyEditingRule} = this.state;
 
     return (
@@ -301,6 +302,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
           className="interactive-list__detail-list__item
           interactive-list__detail interactive-list__detail--tertiary">
           <FormattedMessage id="feeds.exclude" />
+          {': '}
           {rule.exclude}
         </li>
       );
@@ -316,6 +318,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
       tags = (
         <li className="interactive-list__detail-list__item interactive-list__detail interactive-list__detail--tertiary">
           <FormattedMessage id="feeds.tags" />
+          {': '}
           {tagNodes}
         </li>
       );
@@ -347,10 +350,13 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
           <ul className="interactive-list__detail-list">
             <li
               className="interactive-list__detail-list__item
-              interactive-list__detail interactive-list__detail--tertiary">
+              interactive-list__detail interactive-list__detail--tertiary"
+              style={{maxWidth: '50%', overflow: 'hidden', textOverflow: 'ellipsis'}}>
               <FormattedMessage id="feeds.match" />
+              {': '}
               {rule.match}
             </li>
+            <div style={{width: '100%'}} />
             {excludeNode}
             {tags}
           </ul>
@@ -415,9 +421,9 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
 
       if (formData != null) {
         if (currentRule !== null && currentRule !== defaultRule && currentRule._id != null) {
-          FeedsStoreClass.removeRule(currentRule._id);
+          SettingsActions.removeFeedMonitor(currentRule._id);
         }
-        FeedsStoreClass.addRule(formData);
+        SettingsActions.addRule(formData);
       }
 
       if (this.formRef != null) {
@@ -434,7 +440,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
 
   handleRemoveRuleClick(rule: Rule) {
     if (rule._id != null) {
-      FeedsStoreClass.removeRule(rule._id);
+      SettingsActions.removeFeedMonitor(rule._id);
     }
 
     if (rule === this.state.currentlyEditingRule) {

@@ -1,171 +1,100 @@
+import type {Feed, Rule, Item} from '@shared/types/Feed';
+
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import SettingsActions from '../actions/SettingsActions';
 import BaseStore from './BaseStore';
 
-export interface Feed {
-  _id?: string;
-  type?: 'feed';
-  label: string;
-  url: string;
-  interval: number;
-  count?: number;
-}
+class FeedsStoreClass extends BaseStore {
+  private feeds: Array<Feed> = [];
+  private rules: Array<Rule> = [];
+  private items: Array<Item> = [];
 
-export interface Rule {
-  _id?: string;
-  type?: 'rule';
-  label: string;
-  feedID: string;
-  field?: string;
-  match: string;
-  exclude: string;
-  destination: string;
-  tags: Array<string>;
-  startOnLoad: boolean;
-  isBasePath?: boolean;
-  count?: number;
-}
-
-export interface Item {
-  title: string;
-  link: string;
-}
-
-export type Feeds = Array<Feed>;
-export type Rules = Array<Rule>;
-export type Items = Array<Item>;
-
-export class FeedsStoreClass extends BaseStore {
-  feeds: Feeds = [];
-  rules: Rules = [];
-  items: Items = [];
-
-  static addFeed(feed: Feed) {
-    SettingsActions.addFeed(feed);
-  }
-
-  static modifyFeed(id: Feed['_id'], feed: Feed) {
-    SettingsActions.modifyFeed(id, feed);
-  }
-
-  static addRule(rule: Rule) {
-    SettingsActions.addRule(rule);
-  }
-
-  static fetchFeedMonitors() {
-    SettingsActions.fetchFeedMonitors();
-  }
-
-  static fetchFeeds(query: string) {
-    SettingsActions.fetchFeeds(query);
-  }
-
-  static fetchItems(query: {params: {id: string; search: string}}) {
-    SettingsActions.fetchItems(query);
-  }
-
-  static fetchRules(query: string) {
-    SettingsActions.fetchRules(query);
-  }
-
-  static removeFeed(id: Feed['_id']) {
-    if (id != null) {
-      SettingsActions.removeFeedMonitor(id);
-    }
-  }
-
-  static removeRule(id: Rule['_id']) {
-    if (id != null) {
-      SettingsActions.removeFeedMonitor(id);
-    }
-  }
-
-  getFeeds() {
+  getFeeds(): Array<Feed> {
     return this.feeds;
   }
 
-  getRules() {
+  getRules(): Array<Rule> {
     return this.rules;
   }
 
-  getItems() {
+  getItems(): Array<Item> {
     return this.items;
   }
 
-  handleFeedAddError(error?: Error) {
+  handleFeedAddError(error?: Error): void {
     this.emit('SETTINGS_FEED_MONITOR_FEED_ADD_ERROR', error);
   }
 
-  handleFeedAddSuccess() {
-    FeedsStoreClass.fetchFeedMonitors();
+  handleFeedAddSuccess(): void {
+    SettingsActions.fetchFeedMonitors();
     this.emit('SETTINGS_FEED_MONITOR_FEED_ADD_SUCCESS');
   }
 
-  handleFeedModifyError(error?: Error) {
+  handleFeedModifyError(error?: Error): void {
     this.emit('SETTINGS_FEED_MONITOR_FEED_MODIFY_ERROR', error);
   }
 
-  handleFeedModifySuccess() {
-    FeedsStoreClass.fetchFeedMonitors();
+  handleFeedModifySuccess(): void {
+    SettingsActions.fetchFeedMonitors();
     this.emit('SETTINGS_FEED_MONITOR_FEED_MODIFY_SUCCESS');
   }
 
-  handleRuleAddError(error?: Error) {
+  handleRuleAddError(error?: Error): void {
     this.emit('SETTINGS_FEED_MONITOR_RULE_ADD_ERROR', error);
   }
 
-  handleRuleAddSuccess() {
-    FeedsStoreClass.fetchFeedMonitors();
+  handleRuleAddSuccess(): void {
+    SettingsActions.fetchFeedMonitors();
     this.emit('SETTINGS_FEED_MONITOR_RULE_ADD_SUCCESS');
   }
 
-  handleFeedMonitorsFetchError(error?: Error) {
+  handleFeedMonitorsFetchError(error?: Error): void {
     this.emit('SETTINGS_FEED_MONITORS_FETCH_ERROR', error);
   }
 
-  handleFeedMonitorsFetchSuccess(feedMonitors: {feeds: Feeds; rules: Rules}) {
+  handleFeedMonitorsFetchSuccess(feedMonitors: {feeds: Array<Feed>; rules: Array<Rule>}): void {
     this.setFeeds(feedMonitors.feeds);
     this.setRules(feedMonitors.rules);
     this.emit('SETTINGS_FEED_MONITORS_FETCH_SUCCESS');
   }
 
-  handleFeedMonitorRemoveError(id: string) {
+  handleFeedMonitorRemoveError(id: string): void {
     this.emit('SETTINGS_FEED_MONITOR_REMOVE_ERROR', id);
   }
 
-  handleFeedMonitorRemoveSuccess(id: string) {
-    FeedsStoreClass.fetchFeedMonitors();
+  handleFeedMonitorRemoveSuccess(id: string): void {
+    SettingsActions.fetchFeedMonitors();
     this.emit('SETTINGS_FEED_MONITOR_REMOVE_SUCCESS', id);
   }
 
-  handleFeedsFetchError(error?: Error) {
+  handleFeedsFetchError(error?: Error): void {
     this.emit('SETTINGS_FEED_MONITOR_FEEDS_FETCH_ERROR', error);
   }
 
-  handleFeedsFetchSuccess(feeds: Feeds) {
+  handleFeedsFetchSuccess(feeds: Array<Feed>): void {
     this.setFeeds(feeds);
     this.emit('SETTINGS_FEED_MONITOR_FEEDS_FETCH_SUCCESS');
   }
 
-  handleRulesFetchError(error?: Error) {
+  handleRulesFetchError(error?: Error): void {
     this.emit('SETTINGS_FEED_MONITOR_RULES_FETCH_ERROR', error);
   }
 
-  handleRulesFetchSuccess(rules: Rules) {
+  handleRulesFetchSuccess(rules: Array<Rule>): void {
     this.setRules(rules);
     this.emit('SETTINGS_FEED_MONITOR_RULES_FETCH_SUCCESS');
   }
 
-  handleItemsFetchError(error?: Error) {
+  handleItemsFetchError(error?: Error): void {
     this.emit('SETTINGS_FEED_MONITOR_ITEMS_FETCH_ERROR', error);
   }
 
-  handleItemsFetchSuccess(items: Items) {
+  handleItemsFetchSuccess(items: Array<Item>): void {
     this.items = items;
     this.emit('SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS');
   }
 
-  setFeeds(feeds: Feeds) {
+  setFeeds(feeds: Array<Feed>): void {
     if (feeds == null) {
       this.feeds = [];
       return;
@@ -176,7 +105,7 @@ export class FeedsStoreClass extends BaseStore {
     });
   }
 
-  setRules(rules: Rules) {
+  setRules(rules: Array<Rule>): void {
     if (rules == null) {
       this.rules = [];
       return;

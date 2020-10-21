@@ -2,13 +2,13 @@ import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
 import DownloadRulesTab from './DownloadRulesTab';
-import {FeedsStoreClass} from '../../../stores/FeedsStore';
 import FeedsTab from './FeedsTab';
 import Modal from '../Modal';
+import SettingsActions from '../../../actions/SettingsActions';
 
 class FeedsModal extends React.Component<WrappedComponentProps> {
   componentDidMount() {
-    FeedsStoreClass.fetchFeedMonitors();
+    SettingsActions.fetchFeedMonitors();
   }
 
   render() {

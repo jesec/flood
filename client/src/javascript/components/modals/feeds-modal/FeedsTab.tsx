@@ -2,6 +2,8 @@ import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} fro
 import React from 'react';
 import throttle from 'lodash/throttle';
 
+import type {Feed, Item} from '@shared/types/Feed';
+
 import {
   Button,
   Checkbox,
@@ -14,16 +16,15 @@ import {
   SelectItem,
   Textbox,
 } from '../../../ui';
-import Edit from '../../icons/Edit';
+import connectStores from '../../../util/connectStores';
 import Close from '../../icons/Close';
-import FeedsStore, {FeedsStoreClass} from '../../../stores/FeedsStore';
+import Edit from '../../icons/Edit';
+import FeedsStore from '../../../stores/FeedsStore';
 import {minToHumanReadable} from '../../../i18n/languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import * as validators from '../../../util/validators';
+import SettingsActions from '../../../actions/SettingsActions';
 import UIActions from '../../../actions/UIActions';
-import connectStores from '../../../util/connectStores';
-
-import type {Feed, Feeds, Items} from '../../../stores/FeedsStore';
+import * as validators from '../../../util/validators';
 
 interface IntervalMultiplier {
   displayName: string;
@@ -33,12 +34,15 @@ interface IntervalMultiplier {
 type ValidatedFields = 'url' | 'label' | 'interval';
 
 interface FeedFormData extends Feed {
+  url: string;
+  label: string;
+  interval: number;
   intervalMultiplier: number;
 }
 
 interface FeedsTabProps extends WrappedComponentProps {
-  feeds: Feeds;
-  items: Items;
+  feeds: Array<Feed>;
+  items: Array<Item>;
 }
 
 interface FeedsTabStates {
@@ -46,7 +50,7 @@ interface FeedsTabStates {
     [field in ValidatedFields]?: string;
   };
   intervalMultipliers: Array<IntervalMultiplier>;
-  currentlyEditingFeed: Feed | null;
+  currentlyEditingFeed: Partial<Feed> | null;
   selectedFeedID: string | null;
 }
 
@@ -148,20 +152,24 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     };
   }
 
-  getAmendedFormData(): Feed | null {
+  getAmendedFormData(): Pick<Feed, 'url' | 'label' | 'interval'> | null {
     if (this.formRef == null) {
       return null;
     }
 
     const formData = this.formRef.getFormData() as Partial<FeedFormData>;
 
-    if (formData.interval != null && formData.intervalMultiplier != null) {
-      formData.interval *= formData.intervalMultiplier;
+    const {url, label} = formData;
+    if (url == null || label == null) {
+      return null;
     }
 
-    delete formData.intervalMultiplier;
+    let {interval} = defaultFeed;
+    if (formData.interval != null && formData.intervalMultiplier != null) {
+      interval = formData.interval * formData.intervalMultiplier;
+    }
 
-    return {...defaultFeed, ...formData};
+    return {url, label, interval};
   }
 
   getIntervalSelectOptions() {
@@ -207,10 +215,11 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     );
   }
 
-  getModifyFeedForm(feed: Feed) {
-    const isDayInterval = feed.interval % 1440;
-    const minutesDivisor = feed.interval % 60 ? 1 : 60;
-    const defaultIntervalTextValue = feed.interval / isDayInterval ? minutesDivisor : 1440;
+  getModifyFeedForm(feed: Partial<Feed>) {
+    const feedInterval = feed.interval || defaultFeed.interval;
+    const isDayInterval = feedInterval % 1440;
+    const minutesDivisor = feedInterval % 60 ? 1 : 60;
+    const defaultIntervalTextValue = feedInterval / isDayInterval ? minutesDivisor : 1440;
     const defaultIntervalMultiplierId = isDayInterval ? minutesDivisor : 1440;
 
     return (
@@ -425,9 +434,9 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
 
       if (formData != null) {
         if (currentFeed === defaultFeed) {
-          FeedsStoreClass.addFeed(formData);
+          SettingsActions.addFeed(formData);
         } else if (currentFeed?._id != null) {
-          FeedsStoreClass.modifyFeed(currentFeed._id, formData);
+          SettingsActions.modifyFeed(currentFeed._id, formData);
         }
       }
       if (this.formRef != null) {
@@ -451,7 +460,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
 
   handleRemoveFeedClick = (feed: Feed) => {
     if (feed._id != null) {
-      FeedsStoreClass.removeFeed(feed._id);
+      SettingsActions.removeFeedMonitor(feed._id);
     }
 
     if (feed === this.state.currentlyEditingFeed) {
@@ -474,7 +483,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     const feedBrowseForm = input.formData as {feedID: string; search: string};
     if ((input.event.target as HTMLInputElement).type !== 'checkbox') {
       this.setState({selectedFeedID: feedBrowseForm.feedID});
-      FeedsStoreClass.fetchItems({params: {id: feedBrowseForm.feedID, search: feedBrowseForm.search}});
+      SettingsActions.fetchItems({id: feedBrowseForm.feedID, search: feedBrowseForm.search});
     }
   };
 
@@ -485,11 +494,12 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
 
     const formData = this.manualAddingFormRef.getFormData();
 
-    const downloadedTorrents = this.props.items
-      .filter((item, index) => formData[index])
-      .map((torrent, index) => ({id: index, value: torrent.link}));
+    // TODO: Properly handle array of array of URLs
+    const torrentsToDownload = this.props.items
+      .filter((_item, index) => formData[index])
+      .map((item, index) => ({id: index, value: item.torrentURLs[0]}));
 
-    UIActions.displayModal({id: 'add-torrents', initialURLs: downloadedTorrents});
+    UIActions.displayModal({id: 'add-torrents', initialURLs: torrentsToDownload});
   };
 
   validateForm(): {errors?: FeedsTabStates['errors']; isValid: boolean} {
