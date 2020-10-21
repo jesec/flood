@@ -82,8 +82,6 @@ describe('POST /api/torrents/add-urls', () => {
     start: false,
   };
 
-  const torrentAdded = watchTorrentList('add');
-
   it('Adds torrents to disallowed path via URLs', (done) => {
     request
       .post('/api/torrents/add-urls')
@@ -102,6 +100,7 @@ describe('POST /api/torrents/add-urls', () => {
   });
 
   it('Adds torrents via URLs', (done) => {
+    const torrentAdded = watchTorrentList('add');
     request
       .post('/api/torrents/add-urls')
       .send(addTorrentByURLOptions)
@@ -112,47 +111,47 @@ describe('POST /api/torrents/add-urls', () => {
       .end((err, _res) => {
         if (err) done(err);
 
-        done();
+        torrentAdded.then(() => {
+          done();
+        });
       });
   });
 
   it('GET /api/torrents to verify torrents are added via URLs', (done) => {
-    torrentAdded.then(() => {
-      request
-        .get('/api/torrents')
-        .send()
-        .set('Cookie', [authToken])
-        .set('Accept', 'application/json')
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end(async (err, res) => {
-          if (err) done(err);
+    request
+      .get('/api/torrents')
+      .send()
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(async (err, res) => {
+        if (err) done(err);
 
-          expect(res.body.torrents).not.toBeNull();
-          const torrentList: TorrentList = res.body.torrents;
+        expect(res.body.torrents).not.toBeNull();
+        const torrentList: TorrentList = res.body.torrents;
 
-          const addedTorrents = Object.values(torrentList).filter((torrent) =>
-            addTorrentByURLOptions.tags?.every((tag) => torrent.tags.includes(tag)),
-          );
+        const addedTorrents = Object.values(torrentList).filter((torrent) =>
+          addTorrentByURLOptions.tags?.every((tag) => torrent.tags.includes(tag)),
+        );
 
-          expect(addedTorrents).toHaveLength(addTorrentByURLOptions.urls.length);
+        expect(addedTorrents).toHaveLength(addTorrentByURLOptions.urls.length);
 
-          await Promise.all(
-            addedTorrents.map(async (torrent) => {
-              expect(torrent.baseDirectory).toBe(addTorrentByURLOptions.destination);
+        await Promise.all(
+          addedTorrents.map(async (torrent) => {
+            expect(torrent.baseDirectory).toBe(addTorrentByURLOptions.destination);
 
-              const expectedStatuses: Array<TorrentStatus> = addTorrentByURLOptions.start
-                ? ['downloading']
-                : ['stopped', 'inactive'];
-              expect(torrent.status).toEqual(expect.arrayContaining(expectedStatuses));
+            const expectedStatuses: Array<TorrentStatus> = addTorrentByURLOptions.start
+              ? ['downloading']
+              : ['stopped', 'inactive'];
+            expect(torrent.status).toEqual(expect.arrayContaining(expectedStatuses));
 
-              torrentHash = torrent.hash;
-            }),
-          );
+            torrentHash = torrent.hash;
+          }),
+        );
 
-          done();
-        });
-    });
+        done();
+      });
   });
 });
 
@@ -164,8 +163,6 @@ describe('POST /api/torrents/add-files', () => {
     isBasePath: false,
     start: false,
   };
-
-  const torrentAdded = watchTorrentList('add');
 
   it('Adds torrents to disallowed path via files', (done) => {
     request
@@ -185,6 +182,7 @@ describe('POST /api/torrents/add-files', () => {
   });
 
   it('Adds torrents via files', (done) => {
+    const torrentAdded = watchTorrentList('add');
     request
       .post('/api/torrents/add-files')
       .send(addTorrentByFileOptions)
@@ -195,40 +193,40 @@ describe('POST /api/torrents/add-files', () => {
       .end((err, _res) => {
         if (err) done(err);
 
-        done();
+        torrentAdded.then(() => {
+          done();
+        });
       });
   });
 
   it('GET /api/torrents to verify torrents are added via files', (done) => {
-    torrentAdded.then(() => {
-      request
-        .get('/api/torrents')
-        .send()
-        .set('Cookie', [authToken])
-        .set('Accept', 'application/json')
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end(async (err, res) => {
-          if (err) done(err);
+    request
+      .get('/api/torrents')
+      .send()
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(async (err, res) => {
+        if (err) done(err);
 
-          expect(res.body.torrents == null).toBe(false);
-          const torrentList: TorrentList = res.body.torrents;
+        expect(res.body.torrents == null).toBe(false);
+        const torrentList: TorrentList = res.body.torrents;
 
-          const addedTorrents = Object.values(torrentList).filter((torrent) =>
-            addTorrentByFileOptions.tags?.every((tag) => torrent.tags.includes(tag)),
-          );
+        const addedTorrents = Object.values(torrentList).filter((torrent) =>
+          addTorrentByFileOptions.tags?.every((tag) => torrent.tags.includes(tag)),
+        );
 
-          expect(addedTorrents).toHaveLength(addTorrentByFileOptions.files.length);
+        expect(addedTorrents).toHaveLength(addTorrentByFileOptions.files.length);
 
-          await Promise.all(
-            addedTorrents.map(async (torrent) => {
-              expect(torrent.directory.startsWith(addTorrentByFileOptions.destination)).toBe(true);
-            }),
-          );
+        await Promise.all(
+          addedTorrents.map(async (torrent) => {
+            expect(torrent.directory.startsWith(addTorrentByFileOptions.destination)).toBe(true);
+          }),
+        );
 
-          done();
-        });
-    });
+        done();
+      });
   });
 });
 
@@ -237,14 +235,15 @@ describe('POST /api/torrents/create', () => {
     sourcePath: tempDirectory,
     tags: ['testCreate'],
     trackers: testTrackers,
-    start: false,
+    start: true,
     isPrivate: false,
   };
 
-  const torrentAdded = watchTorrentList('add');
+  const dummyFilePath = path.join(tempDirectory, 'dummy');
+  fs.writeFileSync(dummyFilePath, 'test');
 
-  it('Creates a torrent', (done) => {
-    fs.writeFileSync(path.join(tempDirectory, 'dummy'), 'test');
+  it('Creates a multi-file torrent', (done) => {
+    const torrentAdded = watchTorrentList('add');
     request
       .post('/api/torrents/create')
       .send(createTorrentOptions)
@@ -261,36 +260,53 @@ describe('POST /api/torrents/create', () => {
       });
   });
 
-  it('GET /api/torrents to verify torrents are added via creation', (done) => {
-    torrentAdded.then(() => {
-      request
-        .get('/api/torrents')
-        .send()
-        .set('Cookie', [authToken])
-        .set('Accept', 'application/json')
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end(async (err, res) => {
-          if (err) done(err);
+  it('Creates a single-file torrent', (done) => {
+    const torrentAdded = watchTorrentList('add');
+    request
+      .post('/api/torrents/create')
+      .send({...createTorrentOptions, sourcePath: dummyFilePath})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/x-bittorrent')
+      .expect(200)
+      .expect('Content-Type', /x-bittorrent/)
+      .end((err, _res) => {
+        if (err) done(err);
 
-          expect(res.body.torrents == null).toBe(false);
-          const torrentList: TorrentList = res.body.torrents;
-
-          const addedTorrents = Object.values(torrentList).filter((torrent) =>
-            createTorrentOptions.tags?.every((tag) => torrent.tags.includes(tag)),
-          );
-
-          expect(addedTorrents).toHaveLength(1);
-
-          await Promise.all(
-            addedTorrents.map(async (torrent) => {
-              expect(torrent.isPrivate).toBe(createTorrentOptions.isPrivate);
-            }),
-          );
-
+        torrentAdded.then(() => {
           done();
         });
-    });
+      });
+  });
+
+  it('GET /api/torrents to verify torrents are added via creation', (done) => {
+    request
+      .get('/api/torrents')
+      .send()
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(async (err, res) => {
+        if (err) done(err);
+
+        expect(res.body.torrents == null).toBe(false);
+        const torrentList: TorrentList = res.body.torrents;
+
+        const addedTorrents = Object.values(torrentList).filter((torrent) =>
+          createTorrentOptions.tags?.every((tag) => torrent.tags.includes(tag)),
+        );
+
+        expect(addedTorrents).toHaveLength(2);
+
+        await Promise.all(
+          addedTorrents.map(async (torrent) => {
+            expect(torrent.isPrivate).toBe(createTorrentOptions.isPrivate);
+            expect(torrent.percentComplete).toBe(100);
+          }),
+        );
+
+        done();
+      });
   });
 });
 
