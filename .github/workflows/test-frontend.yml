@@ -20,7 +20,7 @@ jobs:
 
       - run: sudo apt-get install -y rtorrent
 
-      - run: sudo npm i -g wait-on
+      - run: sudo npm i -g wait-on cypress
       - run: npm ci
       - run: npm run build
 
