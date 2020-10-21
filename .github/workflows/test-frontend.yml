@@ -20,15 +20,20 @@ jobs:
 
       - run: sudo apt-get install -y rtorrent
 
-      - run: sudo npm i -g wait-on cypress
+      - run: sudo npm i -g wait-on
+      - run: sudo CYPRESS_INSTALL_BINARY=0 npm i -g cypress
+
       - run: npm ci
       - run: npm run build
-
       - run: npm run start -- -p 4200 &
+
       - run: wait-on tcp:4200
 
+      - run: npm link cypress
+      - run: cypress install
       - uses: cypress-io/github-action@v2
         with:
+          install: false
           record: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
