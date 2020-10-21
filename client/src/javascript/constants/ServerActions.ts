@@ -1,13 +1,13 @@
 import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/schema/api/auth';
 import type {Credentials} from '@shared/schema/Auth';
 import type {ClientSettings} from '@shared/types/ClientSettings';
+import type {Feed, Item, Rule} from '@shared/types/Feed';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {NotificationFetchOptions, NotificationState} from '@shared/types/Notification';
 import type {ServerEvents} from '@shared/types/ServerEvents';
 import type {TorrentDetails} from '@shared/types/Torrent';
 
 import type {SettingsSaveOptions} from '../stores/SettingsStore';
-import type {Feeds, Items, Rules} from '../stores/FeedsStore';
 
 type ErrorType =
   | 'AUTH_LOGIN_ERROR'
@@ -182,22 +182,22 @@ interface SettingsFeedMonitorRemoveSuccessAction {
 
 interface SettingsFeedMonitorFeedsFetchSuccessAction {
   type: 'SETTINGS_FEED_MONITOR_FEEDS_FETCH_SUCCESS';
-  data: Feeds;
+  data: Array<Feed>;
 }
 
 interface SettingsFeedMonitorRulesFetchSuccessAction {
   type: 'SETTINGS_FEED_MONITOR_RULES_FETCH_SUCCESS';
-  data: Rules;
+  data: Array<Rule>;
 }
 
 interface SettingsFeedMonitorsFetchSuccessAction {
   type: 'SETTINGS_FEED_MONITORS_FETCH_SUCCESS';
-  data: {feeds: Feeds; rules: Rules};
+  data: {feeds: Array<Feed>; rules: Array<Rule>};
 }
 
 interface SettingsFeedMonitorItemsFetchSuccessAction {
   type: 'SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS';
-  data: Items;
+  data: Array<Item>;
 }
 
 interface SettingsFetchRequestSuccessAction {

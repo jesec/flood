@@ -37,7 +37,7 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
       data: notification.data,
       id: notification.id,
       read: false,
-    }));
+    })) as Notification[];
 
     this.db.insert(notificationsToInsert, () => this.emitUpdate());
   }

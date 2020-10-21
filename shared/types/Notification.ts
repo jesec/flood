@@ -1,15 +1,26 @@
-export interface Notification {
+export interface BaseNotification {
   _id?: string;
-  id: 'notification.torrent.finished' | 'notification.torrent.errored' | 'notification.feed.downloaded.torrent';
   read: boolean;
   ts: number; // timestamp
+}
+
+export interface TorrentNotification extends BaseNotification {
+  id: 'notification.torrent.finished' | 'notification.torrent.errored';
   data: {
     name: string;
-    ruleLabel?: string;
-    feedLabel?: string;
-    title?: string;
   };
 }
+
+export interface FeedNotification extends BaseNotification {
+  id: 'notification.feed.torrent.added';
+  data: {
+    title: string;
+    feedLabel: string;
+    ruleLabel: string;
+  };
+}
+
+export type Notification = TorrentNotification | FeedNotification;
 
 export interface NotificationCount {
   total: number;

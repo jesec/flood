@@ -1,19 +1,19 @@
 import axios from 'axios';
 
+import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '@shared/types/api/feed-monitor';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
 import ConfigStore from '../stores/ConfigStore';
 
-import type {Feed, Rule} from '../stores/FeedsStore';
 import type {SettingsSaveRequestSuccessAction} from '../constants/ServerActions';
 
 const baseURI = ConfigStore.getBaseURI();
 
 const SettingsActions = {
-  addFeed: (feed: Feed) =>
+  addFeed: (options: AddFeedOptions) =>
     axios
-      .put(`${baseURI}api/feed-monitor/feeds`, feed)
+      .put(`${baseURI}api/feed-monitor/feeds`, options)
       .then((json) => json.data)
       .then(
         () => {
@@ -29,9 +29,9 @@ const SettingsActions = {
         },
       ),
 
-  modifyFeed: (id: Feed['_id'], feed: Feed) =>
+  modifyFeed: (id: string, options: ModifyFeedOptions) =>
     axios
-      .put(`${baseURI}api/feed-monitor/feeds/${id}`, feed)
+      .put(`${baseURI}api/feed-monitor/feeds/${id}`, options)
       .then((json) => json.data)
       .then(
         () => {
@@ -47,9 +47,9 @@ const SettingsActions = {
         },
       ),
 
-  addRule: (rule: Rule) =>
+  addRule: (options: AddRuleOptions) =>
     axios
-      .put(`${baseURI}api/feed-monitor/rules`, rule)
+      .put(`${baseURI}api/feed-monitor/rules`, options)
       .then((json) => json.data)
       .then(
         () => {
@@ -84,28 +84,13 @@ const SettingsActions = {
         },
       ),
 
-  fetchFeeds: (query: string) =>
+  fetchItems: ({id, search}: {id: string; search: string}) =>
     axios
-      .get(`${baseURI}api/feed-monitor/feeds`, {params: query})
-      .then((json) => json.data)
-      .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'SETTINGS_FEED_MONITOR_FEEDS_FETCH_SUCCESS',
-            data,
-          });
+      .get(`${baseURI}api/feed-monitor/feeds/${id}/items`, {
+        params: {
+          search,
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'SETTINGS_FEED_MONITOR_FEEDS_FETCH_ERROR',
-            error,
-          });
-        },
-      ),
-
-  fetchItems: (query: {params: {id: string; search: string}}) =>
-    axios
-      .get(`${baseURI}api/feed-monitor/items`, query)
+      })
       .then((json) => json.data)
       .then(
         (data) => {
@@ -117,25 +102,6 @@ const SettingsActions = {
         (error) => {
           AppDispatcher.dispatchServerAction({
             type: 'SETTINGS_FEED_MONITOR_ITEMS_FETCH_ERROR',
-            error,
-          });
-        },
-      ),
-
-  fetchRules: (query: string) =>
-    axios
-      .get(`${baseURI}api/feed-monitor/rules`, {params: query})
-      .then((json) => json.data)
-      .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'SETTINGS_FEED_MONITOR_RULES_FETCH_SUCCESS',
-            data,
-          });
-        },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'SETTINGS_FEED_MONITOR_RULES_FETCH_ERROR',
             error,
           });
         },

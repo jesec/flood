@@ -979,6 +979,12 @@
       "value": "Copy"
     }
   ],
+  "general.error.unknown": [
+    {
+      "type": 0,
+      "value": "An unknown error occurred"
+    }
+  ],
   "general.of": [
     {
       "type": 0,
@@ -1019,6 +1025,18 @@
     {
       "type": 0,
       "value": "Clear All"
+    }
+  ],
+  "notification.feed.torrent.added.body": [
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "notification.feed.torrent.added.heading": [
+    {
+      "type": 0,
+      "value": "Feed Item Queued"
     }
   ],
   "notification.showing": [
