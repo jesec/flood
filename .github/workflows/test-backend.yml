@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [12, 14]
+        node: [14, 15]
       fail-fast: false
 
     steps:
@@ -31,4 +31,4 @@ jobs:
       - run: npm test || npm test || npm test
 
       - uses: codecov/codecov-action@v1
-        if: matrix.node == 14
+        if: matrix.node == 15

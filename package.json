@@ -23,7 +23,7 @@
     "dist"
   ],
   "bin": {
-    "flood": "./dist/index.js"
+    "flood": "dist/index.js"
   },
   "scripts": {
     "build": "npm run build-assets && npm run build-ts",

@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [14]
+        node: [15]
 
     steps:
       - uses: actions/checkout@v2
@@ -26,11 +26,15 @@ jobs:
 
       - name: Tag rolling release
         run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           npm version --no-git-tag-version 0.0.0-master.`git rev-parse --short HEAD`
+
       - name: Use @${{ github.actor }} scope
         run: |
           jq '.name = "@${{ github.actor }}/flood"' package.json > package.new.json
           mv package.new.json package.json
+
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
