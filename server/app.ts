@@ -31,6 +31,7 @@ if (process.env.NODE_ENV !== 'development') {
   app.disable('x-powered-by');
 }
 
+app.set('strict routing', true);
 app.set('etag', false);
 app.set('trust proxy', 'loopback');
 
