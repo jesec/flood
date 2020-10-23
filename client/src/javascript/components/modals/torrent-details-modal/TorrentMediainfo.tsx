@@ -1,26 +1,13 @@
+import axios from 'axios';
 import Clipboard from 'clipboard';
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import type {TorrentProperties} from '@shared/types/Torrent';
-
 import {Button} from '../../../ui';
 import ClipboardIcon from '../../icons/ClipboardIcon';
-import connectStores from '../../../util/connectStores';
 import Tooltip from '../../general/Tooltip';
 import TorrentActions from '../../../actions/TorrentActions';
-import TorrentStore from '../../../stores/TorrentStore';
-
-interface TorrentMediainfoProps extends WrappedComponentProps {
-  hash: TorrentProperties['hash'];
-  mediainfo: string;
-}
-
-interface TorrentMediainfoStates {
-  copiedToClipboard: boolean;
-  isFetchingMediainfo: boolean;
-  fetchMediainfoError: {data: {error: unknown}} | null;
-}
+import UIStore from '../../../stores/UIStore';
 
 const MESSAGES = defineMessages({
   copy: {
@@ -40,41 +27,54 @@ const MESSAGES = defineMessages({
   },
 });
 
-class TorrentMediainfo extends React.Component<TorrentMediainfoProps, TorrentMediainfoStates> {
+interface TorrentMediainfoStates {
+  copiedToClipboard: boolean;
+}
+
+class TorrentMediainfo extends React.Component<WrappedComponentProps, TorrentMediainfoStates> {
+  mediainfo: string | null = null;
+  isFetchingMediainfo = true;
+  fetchMediainfoError: Error | null = null;
+
+  cancelToken = axios.CancelToken.source();
   clipboard: Clipboard | null = null;
   copyButtonRef: HTMLButtonElement | null = null;
   timeoutId: NodeJS.Timeout | null = null;
 
-  constructor(props: TorrentMediainfoProps) {
+  constructor(props: WrappedComponentProps) {
     super(props);
+
     this.state = {
       copiedToClipboard: false,
-      isFetchingMediainfo: true,
-      fetchMediainfoError: null,
     };
-  }
 
-  componentDidMount() {
-    TorrentActions.fetchMediainfo(this.props.hash).then(
-      () => {
-        this.setState({
-          isFetchingMediainfo: false,
-          fetchMediainfoError: null,
-        });
-      },
-      (error) => {
-        this.setState({
-          isFetchingMediainfo: false,
-          fetchMediainfoError: error,
-        });
-      },
-    );
+    if (UIStore.activeModal?.id === 'torrent-details') {
+      TorrentActions.fetchMediainfo(UIStore.activeModal?.hash, this.cancelToken.token).then(
+        (mediainfo) => {
+          this.fetchMediainfoError = null;
+          this.mediainfo = mediainfo.output;
+          this.isFetchingMediainfo = false;
+          this.forceUpdate();
+        },
+        (error) => {
+          if (!axios.isCancel(error)) {
+            this.fetchMediainfoError = error.response.data;
+            this.isFetchingMediainfo = false;
+            this.forceUpdate();
+          }
+        },
+      );
+    }
   }
 
   componentDidUpdate() {
+    if (this.mediainfo === null) {
+      return;
+    }
+
     if (this.copyButtonRef && this.clipboard == null) {
       this.clipboard = new Clipboard(this.copyButtonRef, {
-        text: () => this.props.mediainfo,
+        text: () => this.mediainfo as string,
       });
 
       this.clipboard.on('success', this.handleCopySuccess);
@@ -82,6 +82,7 @@ class TorrentMediainfo extends React.Component<TorrentMediainfoProps, TorrentMed
   }
 
   componentWillUnmount() {
+    this.cancelToken.cancel();
     if (this.timeoutId != null) {
       global.clearTimeout(this.timeoutId);
     }
@@ -102,7 +103,7 @@ class TorrentMediainfo extends React.Component<TorrentMediainfoProps, TorrentMed
   };
 
   render() {
-    if (this.state.isFetchingMediainfo) {
+    if (this.isFetchingMediainfo) {
       return (
         <div className="torrent-details__section mediainfo">
           <FormattedMessage id={MESSAGES.fetching.id} />
@@ -110,15 +111,13 @@ class TorrentMediainfo extends React.Component<TorrentMediainfoProps, TorrentMed
       );
     }
 
-    if (this.state.fetchMediainfoError) {
-      const errorData = this.state.fetchMediainfoError.data || {};
-
+    if (this.fetchMediainfoError) {
       return (
         <div className="torrent-details__section mediainfo">
           <p>
             <FormattedMessage id={MESSAGES.execError.id} />
           </p>
-          <pre className="mediainfo__output mediainfo__output--error">{JSON.stringify(errorData.error, null, 2)}</pre>
+          <pre className="mediainfo__output mediainfo__output--error">{this.fetchMediainfoError.message}</pre>
         </div>
       );
     }
@@ -150,27 +149,10 @@ class TorrentMediainfo extends React.Component<TorrentMediainfoProps, TorrentMed
             </Button>
           </Tooltip>
         </div>
-        <pre className="mediainfo__output">{this.props.mediainfo}</pre>
+        <pre className="mediainfo__output">{this.mediainfo}</pre>
       </div>
     );
   }
 }
 
-const ConnectedTorrentMediainfo = connectStores<Omit<TorrentMediainfoProps, 'intl'>, TorrentMediainfoStates>(
-  injectIntl(TorrentMediainfo),
-  () => {
-    return [
-      {
-        store: TorrentStore,
-        event: 'CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS',
-        getValue: ({props}) => {
-          return {
-            mediainfo: TorrentStore.getMediainfo(props.hash),
-          };
-        },
-      },
-    ];
-  },
-);
-
-export default ConnectedTorrentMediainfo;
+export default injectIntl(TorrentMediainfo);

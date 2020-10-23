@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import {reaction} from 'mobx';
 import React from 'react';
 
 import {ContextMenu} from '../../ui';
@@ -25,6 +26,9 @@ class GlobalContextMenuMountPoint extends React.Component<
 > {
   constructor(props: GlobalContextMenuMountPointProps) {
     super(props);
+
+    reaction(() => UIStore.activeContextMenu, this.handleContextMenuChange);
+
     this.state = {
       clickPosition: {
         x: 0,
@@ -33,10 +37,6 @@ class GlobalContextMenuMountPoint extends React.Component<
       isOpen: false,
       items: [],
     };
-  }
-
-  componentDidMount() {
-    UIStore.listen('UI_CONTEXT_MENU_CHANGE', this.handleContextMenuChange);
   }
 
   shouldComponentUpdate(_nextProps: GlobalContextMenuMountPointProps, nextState: GlobalContextMenuMountPointStates) {
@@ -81,10 +81,6 @@ class GlobalContextMenuMountPoint extends React.Component<
     }
   }
 
-  componentWillUnmount() {
-    UIStore.unlisten('UI_CONTEXT_MENU_CHANGE', this.handleContextMenuChange);
-  }
-
   getMenuItems() {
     const {items} = this.state;
 
@@ -104,10 +100,16 @@ class GlobalContextMenuMountPoint extends React.Component<
                   'has-action': item.labelAction,
                 })}>
                 <span className="menu__item__label">{item.label}</span>
-                {item.labelAction ? <span className="menu__item__label__action">{item.labelAction}</span> : undefined}
+                {item.labelAction ? (
+                  <span className="menu__item__label__action">
+                    <item.labelAction />
+                  </span>
+                ) : undefined}
               </span>
               {item.labelSecondary ? (
-                <span className="menu__item__label--secondary">{item.labelSecondary}</span>
+                <span className="menu__item__label--secondary">
+                  <item.labelSecondary />
+                </span>
               ) : undefined}
             </span>
           );
@@ -132,7 +134,7 @@ class GlobalContextMenuMountPoint extends React.Component<
   }
 
   handleContextMenuChange = () => {
-    const activeContextMenu = UIStore.getActiveContextMenu();
+    const {activeContextMenu} = UIStore;
 
     if (activeContextMenu != null && activeContextMenu.id === this.props.id) {
       this.setState({

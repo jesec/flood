@@ -1,42 +1,34 @@
 import classnames from 'classnames';
 import {LongPressDetectEvents, useLongPress} from 'use-long-press';
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
-import type {FloodSettings} from '@shared/types/FloodSettings';
 
+import SettingStore from '../../stores/SettingStore';
 import torrentStatusClasses from '../../util/torrentStatusClasses';
+import TorrentStore from '../../stores/TorrentStore';
 
 import TorrentListRowCondensed from './TorrentListRowCondensed';
 import TorrentListRowExpanded from './TorrentListRowExpanded';
 
 interface TorrentListRowProps {
-  torrent: TorrentProperties;
-  columns: FloodSettings['torrentListColumns'];
-  columnWidths: FloodSettings['torrentListColumnWidths'];
-  isSelected: boolean;
-  isCondensed: boolean;
+  hash: string;
   handleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleDoubleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent | React.TouchEvent) => void;
 }
 
 const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProps) => {
-  const {
-    isCondensed,
-    isSelected,
-    columns,
-    columnWidths,
-    torrent,
-    handleClick,
-    handleDoubleClick,
-    handleRightClick,
-  } = props;
+  const {hash, handleClick, handleDoubleClick, handleRightClick} = props;
+
+  const torrent = TorrentStore.torrents[hash];
+  const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
 
   const torrentClasses = torrentStatusClasses(
     torrent,
     classnames({
-      'torrent--is-selected': isSelected,
+      'torrent--is-selected': TorrentStore.selectedTorrents.includes(torrent.hash),
       'torrent--is-condensed': isCondensed,
       'torrent--is-expanded': !isCondensed,
     }),
@@ -60,9 +52,7 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
     return (
       <TorrentListRowCondensed
         className={torrentClasses}
-        columns={columns}
-        columnWidths={columnWidths}
-        torrent={torrent}
+        hash={hash}
         handleClick={handleClick}
         handleDoubleClick={handleDoubleClick}
         handleRightClick={handleRightClick}
@@ -75,8 +65,7 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
   return (
     <TorrentListRowExpanded
       className={torrentClasses}
-      columns={columns}
-      torrent={torrent}
+      hash={hash}
       handleClick={handleClick}
       handleDoubleClick={handleDoubleClick}
       handleRightClick={handleRightClick}
@@ -86,4 +75,4 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
   );
 };
 
-export default React.memo(TorrentListRow);
+export default observer(TorrentListRow);

@@ -1,15 +1,16 @@
 import classnames from 'classnames';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import Action from './Action';
 import Add from '../icons/Add';
-import connectStores from '../../util/connectStores';
 import MenuIcon from '../icons/MenuIcon';
 import Remove from '../icons/Remove';
-import SettingsStore from '../../stores/SettingsStore';
+import SettingActions from '../../actions/SettingActions';
+import SettingStore from '../../stores/SettingStore';
 import SortDropdown from './SortDropdown';
 import StartIcon from '../icons/StartIcon';
 import StopIcon from '../icons/StopIcon';
@@ -17,12 +18,8 @@ import TorrentActions from '../../actions/TorrentActions';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
-interface ActionBarProps extends WrappedComponentProps {
-  sortBy?: FloodSettings['sortTorrents'];
-  torrentListViewSize?: FloodSettings['torrentListViewSize'];
-}
-
-class ActionBar extends React.Component<ActionBarProps> {
+@observer
+class ActionBar extends React.Component<WrappedComponentProps> {
   static handleAddTorrents() {
     UIActions.displayModal({id: 'add-torrents'});
   }
@@ -34,19 +31,18 @@ class ActionBar extends React.Component<ActionBarProps> {
   }
 
   static handleSortChange(sortBy: FloodSettings['sortTorrents']) {
-    SettingsStore.setFloodSetting('sortTorrents', sortBy);
-    UIActions.setTorrentsSort(sortBy);
+    SettingActions.saveSetting('sortTorrents', sortBy);
   }
 
   static handleStart() {
     TorrentActions.startTorrents({
-      hashes: TorrentStore.getSelectedTorrents(),
+      hashes: TorrentStore.selectedTorrents,
     });
   }
 
   static handleStop() {
     TorrentActions.stopTorrents({
-      hashes: TorrentStore.getSelectedTorrents(),
+      hashes: TorrentStore.selectedTorrents,
     });
   }
 
@@ -58,7 +54,8 @@ class ActionBar extends React.Component<ActionBarProps> {
   }
 
   render() {
-    const {sortBy, torrentListViewSize, intl} = this.props;
+    const {intl} = this.props;
+    const {sortTorrents: sortBy, torrentListViewSize} = SettingStore.floodSettings;
 
     const classes = classnames('action-bar', {
       'action-bar--is-condensed': torrentListViewSize === 'condensed',
@@ -125,20 +122,4 @@ class ActionBar extends React.Component<ActionBarProps> {
   }
 }
 
-const ConnectedActionBar = connectStores(injectIntl(ActionBar), () => {
-  return [
-    {
-      store: SettingsStore,
-      event: 'SETTINGS_CHANGE',
-      getValue: ({store}) => {
-        const storeSettings = store as typeof SettingsStore;
-        return {
-          sortBy: storeSettings.getFloodSetting('sortTorrents'),
-          torrentListViewSize: storeSettings.getFloodSetting('torrentListViewSize'),
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedActionBar;
+export default injectIntl(ActionBar);

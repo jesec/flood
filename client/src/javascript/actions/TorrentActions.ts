@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, {CancelToken} from 'axios';
 import download from 'js-file-download';
 
 import type {
@@ -14,12 +14,26 @@ import type {
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
+import type {TorrentContent} from '@shared/types/TorrentContent';
+import type {TorrentPeer} from '@shared/types/TorrentPeer';
+import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import AlertStore from '../stores/AlertStore';
 import ConfigStore from '../stores/ConfigStore';
+import UIStore from '../stores/UIStore';
 
 const baseURI = ConfigStore.getBaseURI();
+
+const emitTorrentAddedAlert = (count: number) => {
+  AlertStore.add({
+    accumulation: {
+      id: 'alert.torrent.add',
+      value: count,
+    },
+    id: 'alert.torrent.add',
+  });
+};
 
 const TorrentActions = {
   addTorrentsByUrls: (options: AddTorrentByURLOptions) =>
@@ -27,22 +41,11 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/add-urls`, options)
       .then((json) => json.data)
       .then(
-        (response) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_ADD_TORRENT_SUCCESS',
-            data: {
-              count: options.urls.length,
-              response,
-            },
-          });
+        () => {
+          emitTorrentAddedAlert(options.urls.length);
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_ADD_TORRENT_ERROR',
-            data: {
-              error,
-            },
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -51,22 +54,11 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/add-files`, options)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_ADD_TORRENT_SUCCESS',
-            data: {
-              count: options.files.length,
-              data,
-            },
-          });
+        () => {
+          emitTorrentAddedAlert(options.files.length);
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_ADD_TORRENT_ERROR',
-            data: {
-              error,
-            },
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -74,17 +66,10 @@ const TorrentActions = {
     axios.post(`${baseURI}api/torrents/create`, options, {responseType: 'blob'}).then(
       (response) => {
         download(response.data, (options.name || `${Date.now()}`).concat('.torrent'));
-        AppDispatcher.dispatchServerAction({
-          type: 'CLIENT_ADD_TORRENT_SUCCESS',
-          data: {
-            count: 1,
-          },
-        });
+        emitTorrentAddedAlert(1);
       },
       () => {
-        AppDispatcher.dispatchServerAction({
-          type: 'CLIENT_ADD_TORRENT_ERROR',
-        });
+        // do nothing.
       },
     ),
 
@@ -93,22 +78,22 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/delete`, options)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_REMOVE_TORRENT_SUCCESS',
-            data: {
-              data,
-              count: options.hashes.length,
+        () => {
+          AlertStore.add({
+            accumulation: {
+              id: 'alert.torrent.remove',
+              value: options.hashes.length,
             },
+            id: 'alert.torrent.remove',
           });
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_REMOVE_TORRENT_ERROR',
-            error: {
-              error,
-              count: options.hashes.length,
+        () => {
+          AlertStore.add({
+            accumulation: {
+              id: 'alert.torrent.remove.failed',
+              value: options.hashes.length,
             },
+            id: 'alert.torrent.remove.failed',
           });
         },
       ),
@@ -118,61 +103,53 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/check-hash`, options)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_CHECK_HASH_SUCCESS',
-            data: {
-              data,
-              count: options.hashes.length,
-            },
-          });
+        () => {
+          // do nothing.
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_CHECK_HASH_ERROR',
-            error: {
-              error,
-              count: options.hashes.length,
-            },
-          });
+        () => {
+          // do nothing.
         },
       ),
 
-  fetchMediainfo: (hash: TorrentProperties['hash']) =>
-    axios
-      .get(`${baseURI}api/torrents/${hash}/mediainfo`)
-      .then((json) => json.data)
-      .then((response) => {
-        AppDispatcher.dispatchServerAction({
-          type: 'CLIENT_FETCH_TORRENT_MEDIAINFO_SUCCESS',
-          data: {
-            ...response,
-            hash,
-          },
-        });
-      }),
+  fetchMediainfo: (hash: TorrentProperties['hash'], cancelToken?: CancelToken): Promise<{output: string}> =>
+    axios.get(`${baseURI}api/torrents/${hash}/mediainfo`, {cancelToken}).then<{output: string}>((json) => json.data),
 
-  fetchTorrentDetails: (hash: TorrentProperties['hash']) =>
+  fetchTorrentContents: (hash: TorrentProperties['hash']): Promise<Array<TorrentContent> | null> =>
     axios
-      .get(`${baseURI}api/torrents/${hash}/details`)
-      .then((json) => json.data)
+      .get(`${baseURI}api/torrents/${hash}/contents`)
+      .then<Array<TorrentContent>>((json) => json.data)
       .then(
-        (torrentDetails) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_FETCH_TORRENT_DETAILS_SUCCESS',
-            data: {
-              hash,
-              torrentDetails,
-            },
-          });
+        (contents) => {
+          return contents;
         },
         () => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_FETCH_TORRENT_DETAILS_ERROR',
-            data: {
-              hash,
-            },
-          });
+          return null;
+        },
+      ),
+
+  fetchTorrentPeers: (hash: TorrentProperties['hash']): Promise<Array<TorrentPeer> | null> =>
+    axios
+      .get(`${baseURI}api/torrents/${hash}/peers`)
+      .then<Array<TorrentPeer>>((json) => json.data)
+      .then(
+        (peers) => {
+          return peers;
+        },
+        () => {
+          return null;
+        },
+      ),
+
+  fetchTorrentTrackers: (hash: TorrentProperties['hash']): Promise<Array<TorrentTracker> | null> =>
+    axios
+      .get(`${baseURI}api/torrents/${hash}/trackers`)
+      .then<Array<TorrentTracker>>((json) => json.data)
+      .then(
+        (trackers) => {
+          return trackers;
+        },
+        () => {
+          return null;
         },
       ),
 
@@ -181,22 +158,22 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/move`, options)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_MOVE_TORRENTS_SUCCESS',
-            data: {
-              data,
-              count: options.hashes.length,
+        () => {
+          AlertStore.add({
+            accumulation: {
+              id: 'alert.torrent.move',
+              value: options.hashes.length,
             },
+            id: 'alert.torrent.move',
           });
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_MOVE_TORRENTS_ERROR',
-            error: {
-              error,
-              count: options.hashes.length,
+        () => {
+          AlertStore.add({
+            accumulation: {
+              id: 'alert.torrent.move.failed',
+              value: options.hashes.length,
             },
+            id: 'alert.torrent.move.failed',
           });
         },
       );
@@ -207,17 +184,11 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/start`, options)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_START_TORRENT_SUCCESS',
-            data,
-          });
+        () => {
+          // do nothing.
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_START_TORRENT_ERROR',
-            error,
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -226,17 +197,11 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/stop`, options)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_STOP_TORRENT_SUCCESS',
-            data,
-          });
+        () => {
+          // do nothing.
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_STOP_TORRENT_ERROR',
-            error,
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -245,17 +210,11 @@ const TorrentActions = {
       .patch(`${baseURI}api/torrents/priority`, options)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_TORRENT_PRIORITY_SUCCESS',
-            data,
-          });
+        () => {
+          // do nothing.
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_TORRENT_PRIORITY_ERROR',
-            error,
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -265,18 +224,10 @@ const TorrentActions = {
       .then((json) => json.data)
       .then(
         () => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_FILE_PRIORITY_SUCCESS',
-            data: {
-              hash,
-            },
-          });
+          // do nothing.
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_FILE_PRIORITY_ERROR',
-            error,
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -285,17 +236,11 @@ const TorrentActions = {
       .patch(`${baseURI}api/torrents/tags`, options)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_TAXONOMY_SUCCESS',
-            data,
-          });
+        () => {
+          UIStore.handleSetTaxonomySuccess();
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_TAXONOMY_ERROR',
-            error,
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -308,17 +253,11 @@ const TorrentActions = {
       })
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_TRACKER_SUCCESS',
-            data,
-          });
+        () => {
+          // do nothing.
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SET_TRACKER_ERROR',
-            error,
-          });
+        () => {
+          // do nothing.
         },
       ),
 };

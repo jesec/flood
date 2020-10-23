@@ -8,6 +8,7 @@ import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
+import UIStore from '../../../stores/UIStore';
 
 type AddTorrentsByURLFormData = {
   [urls: string]: string;
@@ -21,24 +22,22 @@ type AddTorrentsByURLFormData = {
   tags: string;
 };
 
-interface AddTorrentsByURLProps extends WrappedComponentProps {
-  initialURLs?: Array<{id: number; value: string}>;
-}
-
 interface AddTorrentsByURLStates {
   isAddingTorrents: boolean;
   urlTextboxes: Array<{id: number; value: string}>;
 }
 
-class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrentsByURLStates> {
+class AddTorrentsByURL extends React.Component<WrappedComponentProps, AddTorrentsByURLStates> {
   formRef: Form | null = null;
 
-  constructor(props: AddTorrentsByURLProps) {
+  constructor(props: WrappedComponentProps) {
     super(props);
 
     this.state = {
       isAddingTorrents: false,
-      urlTextboxes: this.props.initialURLs || [{id: 0, value: ''}],
+      urlTextboxes: (UIStore.activeModal?.id === 'add-torrents' && UIStore.activeModal?.initialURLs) || [
+        {id: 0, value: ''},
+      ],
     };
   }
 
@@ -50,11 +49,13 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
     const formData = this.formRef.getFormData() as Partial<AddTorrentsByURLFormData>;
     this.setState({isAddingTorrents: true});
 
-    if (formData.destination == null) {
+    const urls = getTextArray(formData, 'urls').filter((url) => url !== '');
+
+    if (urls.length === 0 || formData.destination == null) {
+      this.setState({isAddingTorrents: false});
       return;
     }
 
-    const urls = getTextArray(formData, 'urls');
     const cookies = getTextArray(formData, 'cookies');
 
     // TODO: handle multiple domain names
@@ -73,6 +74,8 @@ class AddTorrentsByURL extends React.Component<AddTorrentsByURLProps, AddTorrent
       isCompleted: formData.isCompleted,
       start: formData.start,
       tags: formData.tags != null ? formData.tags.split(',') : undefined,
+    }).then(() => {
+      UIStore.dismissModal();
     });
 
     saveAddTorrentsUserPreferences({start: formData.start, destination: formData.destination});

@@ -17,15 +17,10 @@ import type {TorrentContextMenuAction} from '../../constants/TorrentContextMenuA
 const priorityMeterRef: React.RefObject<PriorityMeterType> = React.createRef();
 let prioritySelected = 1;
 
-const handleDetailsClick = (torrent: TorrentProperties, event: React.MouseEvent): void => {
-  UIActions.handleDetailsClick({
-    hash: torrent.hash,
-    event,
-  });
-
+const handleDetailsClick = (torrent: TorrentProperties): void => {
   UIActions.displayModal({
     id: 'torrent-details',
-    options: {hash: torrent.hash},
+    hash: torrent.hash,
   });
 };
 
@@ -41,7 +36,7 @@ const handleTorrentDownload = (torrent: TorrentProperties, event: React.MouseEve
 };
 
 const handleItemClick = (action: TorrentContextMenuAction, event: React.MouseEvent): void => {
-  const selectedTorrents = TorrentStore.getSelectedTorrents();
+  const {selectedTorrents} = TorrentStore;
   switch (action) {
     case 'checkHash':
       TorrentActions.checkHash({
@@ -71,10 +66,10 @@ const handleItemClick = (action: TorrentContextMenuAction, event: React.MouseEve
       UIActions.displayModal({id: 'move-torrents'});
       break;
     case 'torrentDetails':
-      handleDetailsClick(TorrentStore.getTorrent(selectedTorrents.pop() as string), event);
+      handleDetailsClick(TorrentStore.torrents[selectedTorrents.pop() as string]);
       break;
     case 'torrentDownload':
-      handleTorrentDownload(TorrentStore.getTorrent(selectedTorrents.pop() as string), event);
+      handleTorrentDownload(TorrentStore.torrents[selectedTorrents.pop() as string], event);
       break;
     case 'setPriority':
       if (priorityMeterRef.current != null) {
@@ -160,7 +155,7 @@ const getContextMenuItems = (intl: IntlShape, torrent: TorrentProperties): Array
       label: intl.formatMessage(TorrentContextMenuActions.setPriority),
       clickHandler,
       dismissMenu: false,
-      labelAction: (
+      labelAction: () => (
         <PriorityMeter
           id={torrent.hash}
           key={torrent.hash}

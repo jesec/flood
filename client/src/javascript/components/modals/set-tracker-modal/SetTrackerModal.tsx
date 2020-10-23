@@ -5,8 +5,9 @@ import {Form, FormRow, Textbox} from '../../../ui';
 import Modal from '../Modal';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
+import UIStore from '../../../stores/UIStore';
 
-import type {ModalAction} from '../ModalActions';
+import type {ModalAction} from '../../../stores/UIStore';
 
 interface SetTrackerModalStates {
   isSettingTracker: boolean;
@@ -47,7 +48,9 @@ class SetTrackerModal extends React.Component<WrappedComponentProps, SetTrackerM
   }
 
   getContent(): React.ReactNode {
-    const trackerValue = TorrentStore.getSelectedTorrentsTrackerURIs()[0].join(', ');
+    const trackerValue = TorrentStore.selectedTorrents
+      .map((hash) => TorrentStore.torrents[hash].trackerURIs)[0]
+      .join(', ');
 
     return (
       <div className="modal__content inverse">
@@ -78,7 +81,9 @@ class SetTrackerModal extends React.Component<WrappedComponentProps, SetTrackerM
     const {tracker} = formData;
 
     this.setState({isSettingTracker: true}, () =>
-      TorrentActions.setTracker(TorrentStore.getSelectedTorrents(), tracker),
+      TorrentActions.setTracker(TorrentStore.selectedTorrents, tracker).then(() => {
+        UIStore.dismissModal();
+      }),
     );
   };
 

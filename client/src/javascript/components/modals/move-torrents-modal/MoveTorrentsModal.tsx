@@ -9,8 +9,9 @@ import Modal from '../Modal';
 import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
+import UIStore from '../../../stores/UIStore';
 
-import type {ModalAction} from '../ModalActions';
+import type {ModalAction} from '../../../stores/UIStore';
 
 interface MoveTorrentsStates {
   isSettingDownloadPath: boolean;
@@ -49,8 +50,8 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
     this.state = {
       isSettingDownloadPath: false,
       originalSource: getSuggestedPath(
-        TorrentStore.getSelectedTorrentsDownloadLocations(),
-        TorrentStore.getSelectedTorrentsFilename(),
+        TorrentStore.selectedTorrents.map((hash: string) => TorrentStore.torrents[hash].basePath),
+        TorrentStore.selectedTorrents.map((hash: string) => TorrentStore.torrents[hash].baseFilename),
       ),
     };
   }
@@ -112,7 +113,7 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
   }
 
   handleFormSubmit = (formData: MoveTorrentsOptions) => {
-    const hashes = TorrentStore.getSelectedTorrents();
+    const hashes = TorrentStore.selectedTorrents;
     if (hashes.length > 0) {
       this.setState({isSettingDownloadPath: true});
       TorrentActions.moveTorrents({
@@ -122,6 +123,7 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
         moveFiles: formData.moveFiles,
         isCheckHash: formData.isCheckHash,
       }).then(() => {
+        UIStore.dismissModal();
         this.setState({isSettingDownloadPath: false});
       });
     }

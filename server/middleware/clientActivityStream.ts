@@ -3,7 +3,6 @@ import type {Request, Response} from 'express';
 import type TypedEmitter from 'typed-emitter';
 
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
-import type {TransferHistory} from '@shared/types/TransferData';
 
 import DiskUsage from '../models/DiskUsage';
 import ServerEvent from '../models/ServerEvent';
@@ -89,15 +88,6 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
   });
 
   // Add user's specified history snapshot change event listener.
-  handleEvents(
-    serviceInstances.historyService,
-    `${historySnapshot}_SNAPSHOT_FULL_UPDATE` as 'FIVE_MINUTE_SNAPSHOT_FULL_UPDATE',
-    (payload: {id: number; data: TransferHistory}) => {
-      const {data, id} = payload;
-      serverEvent.emit(id, 'TRANSFER_HISTORY_FULL_UPDATE', data);
-    },
-  );
-
   handleEvents(serviceInstances.notificationService, 'NOTIFICATION_COUNT_CHANGE', (payload) => {
     const {data, id} = payload;
     serverEvent.emit(id, 'NOTIFICATION_COUNT_CHANGE', data);

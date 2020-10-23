@@ -33,7 +33,6 @@ export interface TorrentProperties {
   bytesDone: number;
   dateAdded: number;
   dateCreated: number;
-  details?: TorrentDetails;
   directory: string;
   downRate: number;
   downTotal: number;

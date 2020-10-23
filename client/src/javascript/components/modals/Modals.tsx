@@ -1,10 +1,9 @@
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import {observer} from 'mobx-react';
 import React from 'react';
-import throttle from 'lodash/throttle';
 
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
 import ConfirmModal from './confirm-modal/ConfirmModal';
-import connectStores from '../../util/connectStores';
 import FeedsModal from './feeds-modal/FeedsModal';
 import MoveTorrentsModal from './move-torrents-modal/MoveTorrentsModal';
 import RemoveTorrentsModal from './remove-torrents-modal/RemoveTorrentsModal';
@@ -17,16 +16,12 @@ import UIStore from '../../stores/UIStore';
 
 import type {Modal} from '../../stores/UIStore';
 
-interface ModalsProps {
-  activeModal?: Modal | null;
-}
-
-const createModal = (activeModal: Modal): React.ReactNode => {
-  switch (activeModal.id) {
+const createModal = (id: Modal['id']): React.ReactNode => {
+  switch (id) {
     case 'add-torrents':
-      return <AddTorrentsModal initialURLs={activeModal.initialURLs} />;
+      return <AddTorrentsModal />;
     case 'confirm':
-      return <ConfirmModal options={activeModal.options} />;
+      return <ConfirmModal />;
     case 'feeds':
       return <FeedsModal />;
     case 'move-torrents':
@@ -40,7 +35,7 @@ const createModal = (activeModal: Modal): React.ReactNode => {
     case 'settings':
       return <SettingsModal />;
     case 'torrent-details':
-      return <TorrentDetailsModal options={activeModal.options} />;
+      return <TorrentDetailsModal />;
     default:
       return null;
   }
@@ -50,13 +45,8 @@ const dismissModal = () => {
   UIActions.dismissModal();
 };
 
-class Modals extends React.Component<ModalsProps> {
-  constructor(props: ModalsProps) {
-    super(props);
-
-    this.handleKeyPress = throttle(this.handleKeyPress, 1000);
-  }
-
+@observer
+class Modals extends React.Component {
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyPress);
   }
@@ -66,7 +56,7 @@ class Modals extends React.Component<ModalsProps> {
   }
 
   handleKeyPress = (event: KeyboardEvent) => {
-    if (this.props.activeModal != null && event.keyCode === 27) {
+    if (UIStore.activeModal != null && event.key === 'Escape') {
       dismissModal();
     }
   };
@@ -76,15 +66,15 @@ class Modals extends React.Component<ModalsProps> {
   };
 
   render() {
-    const {activeModal} = this.props;
+    const id = UIStore.activeModal?.id;
 
     let modal;
-    if (activeModal != null) {
+    if (id != null) {
       modal = (
-        <CSSTransition key={activeModal.id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
+        <CSSTransition key={id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
           <div className="modal">
             <div className="modal__overlay" onClick={this.handleOverlayClick} />
-            {createModal(activeModal)}
+            {createModal(id)}
           </div>
         </CSSTransition>
       );
@@ -94,18 +84,4 @@ class Modals extends React.Component<ModalsProps> {
   }
 }
 
-const ConnectedModals = connectStores(Modals, () => {
-  return [
-    {
-      store: UIStore,
-      event: 'UI_MODAL_CHANGE',
-      getValue: () => {
-        return {
-          activeModal: UIStore.getActiveModal(),
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedModals;
+export default Modals;

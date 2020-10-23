@@ -3,6 +3,7 @@ import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import React from 'react';
 import throttle from 'lodash/throttle';
 import uniqueId from 'lodash/uniqueId';
+import {when} from 'mobx';
 
 import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
@@ -41,7 +42,6 @@ interface DropdownStates {
 const METHODS_TO_BIND = [
   'closeDropdown',
   'openDropdown',
-  'handleActiveDropdownChange',
   'handleDropdownClick',
   'handleItemSelect',
   'handleKeyPress',
@@ -62,15 +62,20 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
   constructor(props: DropdownProps<T>) {
     super(props);
 
-    this.state = {
-      isOpen: false,
-    };
-
     METHODS_TO_BIND.forEach(<M extends typeof METHODS_TO_BIND[number]>(methodName: M) => {
       this[methodName] = this[methodName].bind(this);
     });
 
     this.handleKeyPress = throttle(this.handleKeyPress, 200);
+
+    this.state = {
+      isOpen: false,
+    };
+
+    when(
+      () => this.state.isOpen && UIStore.activeDropdownMenu !== this.id,
+      () => this.closeDropdown,
+    );
   }
 
   private getDropdownButton(options: {header?: boolean; trigger?: boolean} = {}) {
@@ -144,7 +149,6 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
   closeDropdown() {
     window.removeEventListener('keydown', this.handleKeyPress);
     window.removeEventListener('click', this.closeDropdown);
-    UIStore.unlisten('UI_DROPDOWN_MENU_CHANGE', this.handleActiveDropdownChange);
 
     this.setState({isOpen: false});
   }
@@ -152,7 +156,6 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
   openDropdown() {
     window.addEventListener('keydown', this.handleKeyPress);
     window.addEventListener('click', this.closeDropdown);
-    UIStore.listen('UI_DROPDOWN_MENU_CHANGE', this.handleActiveDropdownChange);
 
     this.setState({isOpen: true});
 
@@ -174,13 +177,6 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
       this.closeDropdown();
     } else {
       this.openDropdown();
-    }
-  }
-
-  handleActiveDropdownChange() {
-    const {isOpen} = this.state;
-    if (isOpen && UIStore.getActiveDropdownMenu() !== this.id) {
-      this.closeDropdown();
     }
   }
 

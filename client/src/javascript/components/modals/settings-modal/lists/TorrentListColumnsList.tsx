@@ -5,7 +5,7 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import {Checkbox} from '../../../../ui';
 import ErrorIcon from '../../../icons/ErrorIcon';
-import SettingsStore from '../../../../stores/SettingsStore';
+import SettingStore from '../../../../stores/SettingStore';
 import SortableList, {ListItem} from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
 import TorrentListColumns from '../../../../constants/TorrentListColumns';
@@ -28,7 +28,7 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
     super(props);
 
     this.state = {
-      torrentListColumns: SettingsStore.getFloodSetting('torrentListColumns'),
+      torrentListColumns: SettingStore.floodSettings.torrentListColumns,
     };
   }
 
@@ -145,7 +145,7 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
       <SortableList
         id="torrent-details"
         className="sortable-list--torrent-details"
-        items={torrentListColumnItems}
+        items={torrentListColumnItems.slice()}
         lockedIDs={lockedIDs}
         onMouseDown={this.handleMouseDown}
         onDrop={this.handleMove}

@@ -3,6 +3,7 @@ import React from 'react';
 
 import {Form, FormRow, Textbox} from '../../../ui';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
+import SettingStore from '../../../stores/SettingStore';
 import SettingsTab from './SettingsTab';
 
 const processSpeedsForDisplay = (speeds: number[]) => {
@@ -48,22 +49,6 @@ export default class BandwidthTab extends SettingsTab {
     this.handleClientSettingChange(event);
   };
 
-  getDownloadValue() {
-    if (this.props.floodSettings.speedLimits != null) {
-      return processSpeedsForDisplay(this.props.floodSettings.speedLimits.download);
-    }
-
-    return 0;
-  }
-
-  getUploadValue() {
-    if (this.props.floodSettings.speedLimits != null) {
-      return processSpeedsForDisplay(this.props.floodSettings.speedLimits.upload);
-    }
-
-    return 0;
-  }
-
   render() {
     return (
       <Form onChange={this.handleFormChange}>
@@ -72,14 +57,22 @@ export default class BandwidthTab extends SettingsTab {
         </ModalFormSectionHeader>
         <FormRow>
           <Textbox
-            defaultValue={this.getDownloadValue()}
+            defaultValue={
+              SettingStore.floodSettings.speedLimits != null
+                ? processSpeedsForDisplay(SettingStore.floodSettings.speedLimits.download)
+                : 0
+            }
             label={<FormattedMessage id="settings.bandwidth.transferrate.dropdown.preset.download.label" />}
             id="dropdownPresetDownload"
           />
         </FormRow>
         <FormRow>
           <Textbox
-            defaultValue={this.getUploadValue()}
+            defaultValue={
+              SettingStore.floodSettings.speedLimits != null
+                ? processSpeedsForDisplay(SettingStore.floodSettings.speedLimits.upload)
+                : 0
+            }
             label={<FormattedMessage id="settings.bandwidth.transferrate.dropdown.preset.upload.label" />}
             id="dropdownPresetUpload"
           />

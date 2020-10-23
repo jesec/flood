@@ -25,30 +25,27 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
 
   textboxRef: HTMLInputElement | null = null;
 
-  tagMenuItems = Object.keys(TorrentFilterStore.getTorrentTagCount()).reduce(
-    (accumulator: React.ReactNodeArray, tag) => {
-      if (tag === 'all') {
-        return accumulator;
-      }
+  tagMenuItems = Object.keys(TorrentFilterStore.taxonomy.tagCounts).reduce((accumulator: React.ReactNodeArray, tag) => {
+    if (tag === '') {
+      return accumulator;
+    }
 
-      if (tag === 'untagged') {
-        accumulator.push(
-          <SelectItem id={tag} key={tag}>
-            <FormattedMessage id="filter.untagged" />
-          </SelectItem>,
-        );
-        return accumulator;
-      }
-
+    if (tag === 'untagged') {
       accumulator.push(
         <SelectItem id={tag} key={tag}>
-          {tag}
+          <FormattedMessage id="filter.untagged" />
         </SelectItem>,
       );
       return accumulator;
-    },
-    [],
-  );
+    }
+
+    accumulator.push(
+      <SelectItem id={tag} key={tag}>
+        {tag}
+      </SelectItem>,
+    );
+    return accumulator;
+  }, []);
 
   constructor(props: TagSelectProps) {
     super(props);

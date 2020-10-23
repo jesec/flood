@@ -5,7 +5,7 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import {Checkbox} from '../../../../ui';
 import DiskUsageStore from '../../../../stores/DiskUsageStore';
-import SettingsStore from '../../../../stores/SettingsStore';
+import SettingStore from '../../../../stores/SettingStore';
 import SortableList, {ListItem} from '../../../general/SortableList';
 
 interface MountPointsListProps {
@@ -20,10 +20,10 @@ class MountPointsList extends React.Component<MountPointsListProps, MountPointsL
   constructor(props: MountPointsListProps) {
     super(props);
 
-    const mountPoints = SettingsStore.getFloodSetting('mountPoints');
+    const {mountPoints} = SettingStore.floodSettings;
     const disks = Object.assign(
       {},
-      ...DiskUsageStore.getDiskUsage().map((disk) => {
+      ...DiskUsageStore.disks.map((disk) => {
         return {
           [disk.target]: disk,
         };
@@ -114,7 +114,7 @@ class MountPointsList extends React.Component<MountPointsListProps, MountPointsL
       <SortableList
         id="disks"
         className="sortable-list--disks"
-        items={diskItems}
+        items={diskItems.slice()}
         lockedIDs={[]}
         onMouseDown={this.handleMouseDown}
         onDrop={this.handleMove}

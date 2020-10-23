@@ -1,9 +1,10 @@
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 import throttle from 'lodash/throttle';
 
 import type {AddRuleOptions} from '@shared/types/api/feed-monitor';
-import type {Feed, Rule} from '@shared/types/Feed';
+import type {Rule} from '@shared/types/Feed';
 
 import {
   Button,
@@ -18,14 +19,13 @@ import {
   SelectItem,
   Textbox,
 } from '../../../ui';
-import connectStores from '../../../util/connectStores';
 import Checkmark from '../../icons/Checkmark';
 import Close from '../../icons/Close';
 import Edit from '../../icons/Edit';
-import FeedsStore from '../../../stores/FeedsStore';
+import FeedActions from '../../../actions/FeedActions';
+import FeedStore from '../../../stores/FeedStore';
 import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import SettingsActions from '../../../actions/SettingsActions';
 import TagSelect from '../../general/form-elements/TagSelect';
 import * as validators from '../../../util/validators';
 
@@ -35,11 +35,6 @@ interface RuleFormData extends Omit<Rule, 'tags' | 'feedIDs'> {
   check: string;
   feedID: string;
   tags: string;
-}
-
-interface DownloadRulesTabProps extends WrappedComponentProps {
-  feeds: Array<Feed>;
-  rules: Array<Rule>;
 }
 
 interface DownloadRulesTabStates {
@@ -90,7 +85,8 @@ const defaultRule = {
   startOnLoad: false,
 };
 
-class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRulesTabStates> {
+@observer
+class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRulesTabStates> {
   formRef: Form | null = null;
 
   validatedFields = {
@@ -135,8 +131,9 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     }
   }, 150);
 
-  constructor(props: DownloadRulesTabProps) {
+  constructor(props: WrappedComponentProps) {
     super(props);
+
     this.state = {
       errors: {},
       currentlyEditingRule: null,
@@ -173,38 +170,9 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
     };
   }
 
-  getAvailableFeedsOptions() {
-    const {feeds} = this.props;
-
-    if (feeds.length === 0) {
-      return [
-        <SelectItem key="empty" id="placeholder" placeholder>
-          <em>
-            <FormattedMessage id="feeds.no.feeds.available" />
-          </em>
-        </SelectItem>,
-      ];
-    }
-
-    return feeds.reduce(
-      (feedOptions, feed) =>
-        feedOptions.concat(
-          <SelectItem key={feed._id} id={`${feed._id}`}>
-            {feed.label}
-          </SelectItem>,
-        ),
-      [
-        <SelectItem key="select-feed" id="placeholder" placeholder>
-          <em>
-            <FormattedMessage id="feeds.select.feed" />
-          </em>
-        </SelectItem>,
-      ],
-    );
-  }
-
   getModifyRuleForm(rule: Partial<Rule>) {
     const {doesPatternMatchTest, currentlyEditingRule} = this.state;
+    const {feeds} = FeedStore;
 
     return (
       <FormRowGroup key={currentlyEditingRule == null ? 'default' : currentlyEditingRule._id}>
@@ -217,13 +185,35 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
             defaultValue={rule.label}
           />
           <Select
-            disabled={!this.props.feeds.length}
+            disabled={!feeds.length}
             id="feedID"
             label={this.props.intl.formatMessage({
               id: 'feeds.applicable.feed',
             })}
             defaultID={rule.feedIDs?.[0]}>
-            {this.getAvailableFeedsOptions()}
+            {feeds.length === 0
+              ? [
+                  <SelectItem key="empty" id="placeholder" placeholder>
+                    <em>
+                      <FormattedMessage id="feeds.no.feeds.available" />
+                    </em>
+                  </SelectItem>,
+                ]
+              : feeds.reduce(
+                  (feedOptions, feed) =>
+                    feedOptions.concat(
+                      <SelectItem key={feed._id} id={`${feed._id}`}>
+                        {feed.label}
+                      </SelectItem>,
+                    ),
+                  [
+                    <SelectItem key="select-feed" id="placeholder" placeholder>
+                      <em>
+                        <FormattedMessage id="feeds.select.feed" />
+                      </em>
+                    </SelectItem>,
+                  ],
+                )}
           </Select>
         </FormRow>
         <FormRow>
@@ -381,7 +371,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
   }
 
   getRulesList() {
-    const {rules} = this.props;
+    const {rules} = FeedStore;
 
     if (rules.length === 0) {
       return (
@@ -426,9 +416,9 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
 
       if (formData != null) {
         if (currentRule !== null && currentRule !== defaultRule && currentRule._id != null) {
-          SettingsActions.removeFeedMonitor(currentRule._id);
+          FeedActions.removeFeedMonitor(currentRule._id);
         }
-        SettingsActions.addRule(formData);
+        FeedActions.addRule(formData);
       }
 
       if (this.formRef != null) {
@@ -445,7 +435,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
 
   handleRemoveRuleClick(rule: Rule) {
     if (rule._id != null) {
-      SettingsActions.removeFeedMonitor(rule._id);
+      FeedActions.removeFeedMonitor(rule._id);
     }
 
     if (rule === this.state.currentlyEditingRule) {
@@ -540,23 +530,4 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
   }
 }
 
-const ConnectedDownloadRulesTab = connectStores<Omit<DownloadRulesTabProps, 'intl'>, DownloadRulesTabStates>(
-  injectIntl(DownloadRulesTab),
-  () => {
-    return [
-      {
-        store: FeedsStore,
-        event: 'SETTINGS_FEED_MONITORS_FETCH_SUCCESS',
-        getValue: ({store}) => {
-          const storeFeeds = store as typeof FeedsStore;
-          return {
-            feeds: storeFeeds.getFeeds(),
-            rules: storeFeeds.getRules(),
-          };
-        },
-      },
-    ];
-  },
-);
-
-export default ConnectedDownloadRulesTab;
+export default injectIntl(DownloadRulesTab);

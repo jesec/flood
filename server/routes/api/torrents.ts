@@ -493,6 +493,7 @@ router.get('/:hash/details', async (req, res) => {
  * @tags Torrent
  * @security User
  * @param {string} hash.path
+ * @return {{output: string}} - 200 - success response - application/json
  */
 router.get('/:hash/mediainfo', (req, res) => {
   mediainfo.getMediainfo(req.services, req.params.hash, ajaxUtil.getResponseFn(res));

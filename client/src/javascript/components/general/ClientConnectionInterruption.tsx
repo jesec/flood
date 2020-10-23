@@ -1,4 +1,5 @@
 import {FormattedMessage} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import {Button, Form, FormError, FormRow, FormRowItem, Panel, PanelContent, PanelHeader, PanelFooter} from '../../ui';
@@ -7,15 +8,9 @@ import AuthStore from '../../stores/AuthStore';
 import Checkmark from '../icons/Checkmark';
 import ClientActions from '../../actions/ClientActions';
 import ClientConnectionSettingsForm from './connection-settings/ClientConnectionSettingsForm';
-import connectStores from '../../util/connectStores';
 import FloodActions from '../../actions/FloodActions';
 
 import type {ClientConnectionSettingsFormType} from './connection-settings/ClientConnectionSettingsForm';
-
-interface ClientConnectionInterruptionProps {
-  isAdmin?: boolean;
-  isInitialUser?: boolean;
-}
 
 interface ClientConnectionInterruptionStates {
   hasTestedConnection: boolean;
@@ -23,15 +18,14 @@ interface ClientConnectionInterruptionStates {
   isTestingConnection: boolean;
 }
 
-class ClientConnectionInterruption extends React.Component<
-  ClientConnectionInterruptionProps,
-  ClientConnectionInterruptionStates
-> {
+@observer
+class ClientConnectionInterruption extends React.Component<unknown, ClientConnectionInterruptionStates> {
   formRef?: Form | null;
   settingsFormRef: React.RefObject<ClientConnectionSettingsFormType> = React.createRef();
 
-  constructor(props: ClientConnectionInterruptionProps) {
+  constructor(props: unknown) {
     super(props);
+
     this.state = {
       hasTestedConnection: false,
       isConnectionVerified: false,
@@ -49,7 +43,7 @@ class ClientConnectionInterruption extends React.Component<
   };
 
   handleFormSubmit = () => {
-    const currentUsername = AuthStore.getCurrentUsername();
+    const currentUsername = AuthStore.currentUser.username;
 
     if (currentUsername == null || this.settingsFormRef.current == null) {
       return;
@@ -129,10 +123,9 @@ class ClientConnectionInterruption extends React.Component<
   }
 
   render() {
-    const {isAdmin, isInitialUser} = this.props;
     const {isConnectionVerified, isTestingConnection} = this.state;
 
-    if (!isAdmin && !isInitialUser) {
+    if (!AuthStore.currentUser.isAdmin && !AuthStore.currentUser.isInitialUser) {
       return (
         <Panel spacing="large">
           <PanelHeader>
@@ -186,19 +179,4 @@ class ClientConnectionInterruption extends React.Component<
   }
 }
 
-const ConnectedClientConnectionInterruption = connectStores(ClientConnectionInterruption, () => {
-  return [
-    {
-      store: AuthStore,
-      event: ['AUTH_LOGIN_SUCCESS', 'AUTH_REGISTER_SUCCESS', 'AUTH_VERIFY_SUCCESS', 'AUTH_VERIFY_ERROR'],
-      getValue: () => {
-        return {
-          isAdmin: AuthStore.isAdmin(),
-          isInitialUser: AuthStore.getIsInitialUser(),
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedClientConnectionInterruption;
+export default ClientConnectionInterruption;

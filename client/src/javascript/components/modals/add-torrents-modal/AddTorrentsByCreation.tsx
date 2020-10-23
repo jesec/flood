@@ -3,11 +3,12 @@ import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import {Checkbox, Form, FormRow, Textbox} from '../../../ui';
+import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
 import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
-import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
+import UIStore from '../../../stores/UIStore';
 
 type AddTorrentsByCreationFormData = {
   [trackers: string]: string;
@@ -59,6 +60,8 @@ class AddTorrentsByCreation extends React.Component<WrappedComponentProps, AddTo
       isPrivate: formData.isPrivate || false,
       start: formData.start || false,
       tags: formData.tags != null ? formData.tags.split(',') : undefined,
+    }).then(() => {
+      UIStore.dismissModal();
     });
 
     saveAddTorrentsUserPreferences({start: formData.start, destination: formData.sourcePath});
