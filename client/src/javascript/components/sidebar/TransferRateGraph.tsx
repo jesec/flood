@@ -1,5 +1,7 @@
 import {area, curveMonotoneX, line} from 'd3-shape';
 import {max} from 'd3-array';
+import {observer} from 'mobx-react';
+import {reaction} from 'mobx';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 import {Selection, select} from 'd3-selection';
 import React from 'react';
@@ -29,6 +31,7 @@ const METHODS_TO_BIND = [
   'handleMouseMove',
 ] as const;
 
+@observer
 class TransferRateGraph extends React.Component<TransferRateGraphProps> {
   private static getGradient(slug: TransferDirection): React.ReactNode {
     return (
@@ -62,23 +65,24 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
   constructor(props: TransferRateGraphProps) {
     super(props);
 
+    reaction(
+      () => TransferDataStore.transferRates,
+      () => {
+        this.handleTransferHistoryChange();
+      },
+    );
+
     METHODS_TO_BIND.forEach(<T extends typeof METHODS_TO_BIND[number]>(methodName: T) => {
       this[methodName] = this[methodName].bind(this);
     });
   }
 
   componentDidMount(): void {
-    TransferDataStore.listen('CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS', this.handleTransferHistoryChange);
-
     this.renderGraphData();
   }
 
   componentDidUpdate(): void {
     this.renderGraphData();
-  }
-
-  componentWillUnmount(): void {
-    TransferDataStore.unlisten('CLIENT_TRANSFER_HISTORY_REQUEST_SUCCESS', this.handleTransferHistoryChange);
   }
 
   private setInspectorCoordinates(slug: TransferDirection, hoverPoint: number): number {
@@ -94,7 +98,7 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
       return 0;
     }
 
-    const historicalData = TransferDataStore.getTransferRates();
+    const historicalData = TransferDataStore.transferRates;
     const upperSpeed = historicalData[slug][Math.ceil(hoverPoint)];
     const lowerSpeed = historicalData[slug][Math.floor(hoverPoint)];
 
@@ -192,7 +196,7 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
       return;
     }
 
-    const historicalData = TransferDataStore.getTransferRates();
+    const historicalData = TransferDataStore.transferRates;
     const hoverPoint = xScale.invert(lastMouseX);
     const uploadSpeed = this.setInspectorCoordinates('upload', hoverPoint);
     const downloadSpeed = this.setInspectorCoordinates('download', hoverPoint);
@@ -208,7 +212,7 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
   }
 
   private renderGraphData(): void {
-    const historicalData = TransferDataStore.getTransferRates();
+    const historicalData = TransferDataStore.transferRates;
     const {height, width} = this.props;
     const margin = {bottom: 10, top: 10};
 

@@ -5,7 +5,7 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import {Checkbox} from '../../../../ui';
 import ErrorIcon from '../../../icons/ErrorIcon';
-import SettingsStore from '../../../../stores/SettingsStore';
+import SettingStore from '../../../../stores/SettingStore';
 import SortableList, {ListItem} from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
 import TorrentContextMenuActions from '../../../../constants/TorrentContextMenuActions';
@@ -32,7 +32,7 @@ class TorrentContextMenuActionsList extends React.Component<
     super(props);
 
     this.state = {
-      torrentContextMenuActions: SettingsStore.getFloodSetting('torrentContextMenuActions'),
+      torrentContextMenuActions: SettingStore.floodSettings.torrentContextMenuActions,
     };
   }
 
@@ -120,7 +120,7 @@ class TorrentContextMenuActionsList extends React.Component<
       <SortableList
         id="torrent-context-menu-items"
         className="sortable-list--torrent-context-menu-items"
-        items={torrentContextMenuActions}
+        items={torrentContextMenuActions.slice()}
         lockedIDs={lockedIDs}
         isDraggable={false}
         onMouseDown={this.handleMouseDown}

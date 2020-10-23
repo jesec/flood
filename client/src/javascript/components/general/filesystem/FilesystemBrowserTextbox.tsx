@@ -1,11 +1,12 @@
 import debounce from 'lodash/debounce';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {when} from 'mobx';
 import React from 'react';
 
 import {Checkbox, ContextMenu, FormElementAddon, FormRow, FormRowGroup, Portal, Textbox} from '../../../ui';
 import FilesystemBrowser from './FilesystemBrowser';
 import Search from '../../icons/Search';
-import SettingsStore from '../../../stores/SettingsStore';
+import SettingStore from '../../../stores/SettingStore';
 import UIStore from '../../../stores/UIStore';
 
 interface FilesystemBrowserTextboxProps extends WrappedComponentProps {
@@ -33,10 +34,15 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
   constructor(props: FilesystemBrowserTextboxProps) {
     super(props);
 
+    when(
+      () => UIStore.activeModal == null,
+      () => this.handleModalDismiss,
+    );
+
     const destination: string =
       props.suggested ||
-      SettingsStore.getFloodSetting('torrentDestination') ||
-      (SettingsStore.getClientSetting('directoryDefault') as string | undefined) ||
+      SettingStore.floodSettings.torrentDestination ||
+      SettingStore.clientSettings?.directoryDefault ||
       '';
 
     this.state = {
@@ -46,7 +52,6 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
   }
 
   componentDidMount() {
-    UIStore.listen('UI_MODAL_DISMISSED', this.handleModalDismiss);
     // TODO: Fix ContextMenu in flood-ui-kit and remove the forced double render
     // https://github.com/jfurrow/flood-ui-kit/issues/6
     this.forceUpdate();
@@ -63,7 +68,6 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
   }
 
   componentWillUnmount() {
-    UIStore.unlisten('UI_MODAL_DISMISSED', this.handleModalDismiss);
     this.removeDestinationOpenEventListeners();
   }
 
@@ -148,7 +152,7 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
 
     if (showBasePathToggle) {
       toggles.push(
-        <Checkbox grow={false} id="isBasePath">
+        <Checkbox grow={false} id="isBasePath" key="isBasePath">
           <FormattedMessage id="torrents.destination.base_path" />
         </Checkbox>,
       );
@@ -156,7 +160,7 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
 
     if (showCompletedToggle) {
       toggles.push(
-        <Checkbox grow={false} id="isCompleted">
+        <Checkbox grow={false} id="isCompleted" key="isCompleted">
           <FormattedMessage id="torrents.destination.completed" />
         </Checkbox>,
       );

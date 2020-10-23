@@ -4,9 +4,9 @@ import {WrappedComponentProps} from 'react-intl';
 import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
+import SettingStore from '../../../stores/SettingStore';
+
 interface SettingsTabProps extends WrappedComponentProps {
-  clientSettings: ClientSettings;
-  floodSettings: FloodSettings;
   onSettingsChange: (changeSettings: Partial<FloodSettings>) => void;
   onClientSettingsChange: (changeSettings: Partial<ClientSettings>) => void;
 }
@@ -15,7 +15,7 @@ interface SettingsTabStates {
   changedClientSettings: Partial<ClientSettings>;
 }
 
-export default class SettingsTab extends React.Component<SettingsTabProps, SettingsTabStates> {
+class SettingsTab extends React.Component<SettingsTabProps, SettingsTabStates> {
   constructor(props: SettingsTabProps) {
     super(props);
 
@@ -29,7 +29,7 @@ export default class SettingsTab extends React.Component<SettingsTabProps, Setti
       return this.state.changedClientSettings[property] as ClientSettings[T];
     }
 
-    return this.props?.clientSettings?.[property];
+    return SettingStore.clientSettings?.[property];
   }
 
   handleClientSettingChange(event: React.FormEvent<HTMLFormElement> | Event) {
@@ -55,3 +55,5 @@ export default class SettingsTab extends React.Component<SettingsTabProps, Setti
     this.props.onClientSettingsChange(changedClientSetting);
   }
 }
+
+export default SettingsTab;

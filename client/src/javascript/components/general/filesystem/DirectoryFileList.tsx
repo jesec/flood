@@ -15,7 +15,6 @@ interface DirectoryFilesProps {
   hash: TorrentProperties['hash'];
   items: TorrentContentSelectionTree['files'];
   path: Array<string>;
-  onPriorityChange: () => void;
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
 
@@ -74,9 +73,8 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
   }
 
   handlePriorityChange(fileIndex: React.ReactText, priorityLevel: number) {
-    const {hash, onPriorityChange} = this.props;
+    const {hash} = this.props;
 
-    onPriorityChange();
     TorrentActions.setFilePriority(hash, {indices: [Number(fileIndex)], priority: priorityLevel});
   }
 

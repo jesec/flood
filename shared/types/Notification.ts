@@ -29,11 +29,13 @@ export interface NotificationCount {
 }
 
 export interface NotificationState {
-  id: string;
   count: NotificationCount;
-  limit: number;
-  start: number;
   notifications: Array<Notification>;
 }
 
-export type NotificationFetchOptions = Pick<NotificationState, 'id' | 'limit' | 'start'> & {allNotifications?: boolean};
+export interface NotificationFetchOptions {
+  id: string;
+  limit: number;
+  start: number;
+  allNotifications?: boolean;
+}

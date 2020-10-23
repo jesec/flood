@@ -6,12 +6,7 @@ import AddTorrentsByURL from './AddTorrentsByURL';
 import Modal from '../Modal';
 import AddTorrentsByCreation from './AddTorrentsByCreation';
 
-export interface AddTorrentsModalProps {
-  initialURLs?: Array<{id: number; value: string}>;
-}
-
-const AddTorrentsModal: React.FC<AddTorrentsModalProps> = (props: AddTorrentsModalProps) => {
-  const {initialURLs} = props;
+const AddTorrentsModal: React.FC = () => {
   const intl = useIntl();
 
   const tabs = {
@@ -20,7 +15,6 @@ const AddTorrentsModal: React.FC<AddTorrentsModalProps> = (props: AddTorrentsMod
       label: intl.formatMessage({
         id: 'torrents.add.tab.url.title',
       }),
-      props: {initialURLs},
     },
     'by-file': {
       content: AddTorrentsByFile,

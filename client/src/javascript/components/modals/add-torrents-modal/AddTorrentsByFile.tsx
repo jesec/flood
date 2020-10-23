@@ -11,6 +11,7 @@ import {Form, FormRow, FormRowItem} from '../../../ui';
 import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TorrentActions from '../../../actions/TorrentActions';
+import UIStore from '../../../stores/UIStore';
 
 interface AddTorrentsByFileFormData {
   destination: string;
@@ -145,6 +146,7 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
     });
 
     if (filesData.length === 0 || destination == null) {
+      this.setState({isAddingTorrents: false});
       return;
     }
 
@@ -155,6 +157,8 @@ class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorren
       isBasePath,
       isCompleted,
       start,
+    }).then(() => {
+      UIStore.dismissModal();
     });
 
     saveAddTorrentsUserPreferences({start, destination});

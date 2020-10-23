@@ -18,7 +18,7 @@ const renderView: React.StatelessComponent = (props) => {
   );
 };
 
-interface CustomScrollbarProps {
+interface CustomScrollbarsProps {
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -34,7 +34,7 @@ interface CustomScrollbarProps {
   onScrollStop?: () => void;
 }
 
-const CustomScrollbar = React.forwardRef<Scrollbars, CustomScrollbarProps>((props: CustomScrollbarProps, ref) => {
+const CustomScrollbars = React.forwardRef<Scrollbars, CustomScrollbarsProps>((props: CustomScrollbarsProps, ref) => {
   const {
     children,
     className,
@@ -74,7 +74,7 @@ const CustomScrollbar = React.forwardRef<Scrollbars, CustomScrollbarProps>((prop
   );
 });
 
-CustomScrollbar.defaultProps = {
+CustomScrollbars.defaultProps = {
   className: '',
   style: undefined,
   autoHeight: undefined,
@@ -89,4 +89,4 @@ CustomScrollbar.defaultProps = {
   onScrollStop: undefined,
 };
 
-export default CustomScrollbar;
+export default CustomScrollbars;

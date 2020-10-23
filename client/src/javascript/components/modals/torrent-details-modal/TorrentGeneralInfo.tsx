@@ -1,13 +1,12 @@
 import {FormattedMessage, FormattedNumber, useIntl} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import Size from '../../general/Size';
-
-interface TorrentGeneralInfoProps {
-  torrent: TorrentProperties;
-}
+import TorrentStore from '../../../stores/TorrentStore';
+import UIStore from '../../../stores/UIStore';
 
 const getTags = (tags: TorrentProperties['tags']) => {
   return tags.map((tag) => (
@@ -17,7 +16,16 @@ const getTags = (tags: TorrentProperties['tags']) => {
   ));
 };
 
-const TorrentGeneralInfo: React.FC<TorrentGeneralInfoProps> = ({torrent}: TorrentGeneralInfoProps) => {
+const TorrentGeneralInfo: React.FC = () => {
+  if (UIStore.activeModal?.id !== 'torrent-details') {
+    return null;
+  }
+
+  const torrent = TorrentStore.torrents[UIStore?.activeModal?.hash];
+  if (torrent == null) {
+    return null;
+  }
+
   const intl = useIntl();
 
   let dateAdded = null;
@@ -183,4 +191,4 @@ const TorrentGeneralInfo: React.FC<TorrentGeneralInfoProps> = ({torrent}: Torren
   );
 };
 
-export default TorrentGeneralInfo;
+export default observer(TorrentGeneralInfo);

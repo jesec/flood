@@ -1,30 +1,24 @@
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import Modal from '../Modal';
+import UIStore from '../../../stores/UIStore';
 
-import type {ModalAction} from '../ModalActions';
-
-export interface ConfirmModalProps {
-  options: {
-    content: React.ReactNode;
-    heading: React.ReactNode;
-    actions: Array<ModalAction>;
-  };
-}
-
-export default class ConfirmModal extends React.Component<ConfirmModalProps> {
-  getContent() {
-    return <div className="modal__content">{this.props.options.content}</div>;
+const ConfirmModal: React.FC = () => {
+  if (UIStore.activeModal?.id !== 'confirm') {
+    return null;
   }
 
-  render() {
-    return (
-      <Modal
-        actions={this.props.options.actions}
-        alignment="center"
-        content={this.getContent()}
-        heading={this.props.options.heading}
-      />
-    );
-  }
-}
+  const {actions, content, heading} = UIStore.activeModal || {};
+
+  return (
+    <Modal
+      actions={actions}
+      alignment="center"
+      content={<div className="modal__content">{content}</div>}
+      heading={heading}
+    />
+  );
+};
+
+export default observer(ConfirmModal);

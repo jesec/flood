@@ -1,19 +1,20 @@
 import {FormattedNumber} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 
-import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {getTorrentListCellContent} from '../../util/torrentListCellContents';
 import ProgressBar from '../general/ProgressBar';
+import SettingStore from '../../stores/SettingStore';
 import Size from '../general/Size';
 import TorrentListCell from './TorrentListCell';
 import torrentStatusIcons from '../../util/torrentStatusIcons';
+import TorrentStore from '../../stores/TorrentStore';
 
 interface TorrentListRowExpandedProps {
   className: string;
-  columns: FloodSettings['torrentListColumns'];
-  torrent: TorrentProperties;
+  hash: string;
   handleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleDoubleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
@@ -25,8 +26,7 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
   (
     {
       className,
-      columns,
-      torrent,
+      hash,
       handleClick,
       handleDoubleClick,
       handleRightClick,
@@ -35,6 +35,9 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
     }: TorrentListRowExpandedProps,
     ref,
   ) => {
+    const torrent = TorrentStore.torrents[hash];
+    const columns = SettingStore.floodSettings.torrentListColumns;
+
     const primarySection: React.ReactNodeArray = [];
     const secondarySection: React.ReactNodeArray = [];
     const tertiarySection: React.ReactNodeArray = [];
@@ -112,4 +115,4 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
   },
 );
 
-export default React.memo(TorrentListRowExpanded);
+export default observer(TorrentListRowExpanded);

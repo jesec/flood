@@ -1,66 +1,55 @@
+import {observer} from 'mobx-react';
 import {Router} from 'react-router-dom';
-import {FormattedMessage} from 'react-intl';
 import {Route, Switch} from 'react-router';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import AsyncIntlProvider from './i18n/languages';
-import connectStores from './util/connectStores';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
 import history from './util/history';
-import LoadingIndicator from './components/general/LoadingIndicator';
-import SettingsStore from './stores/SettingsStore';
+import LoadingOverlay from './components/general/LoadingOverlay';
+import SettingStore from './stores/SettingStore';
 import UIStore from './stores/UIStore';
-
-import type {Language} from './constants/Languages';
 
 import '../sass/style.scss';
 
-const Login = React.lazy(() => import('./components/views/Login'));
-const Register = React.lazy(() => import('./components/views/Register'));
-const TorrentClientOverview = React.lazy(() => import('./components/views/TorrentClientOverview'));
-
-interface FloodAppProps {
-  locale?: Language;
-}
-
-const loadingOverlay = (
-  <div className="application__loading-overlay">
-    <LoadingIndicator inverse />
-  </div>
+const Login = React.lazy(() => import(/* webpackPrefetch: true */ './components/views/Login'));
+const Register = React.lazy(() => import(/* webpackPrefetch: true */ './components/views/Register'));
+const TorrentClientOverview = React.lazy(
+  () => import(/* webpackPrefetch: true */ './components/views/TorrentClientOverview'),
 );
 
-const initialize = (): void => {
+const initialize = async (): Promise<void> => {
   UIStore.registerDependency([
     {
       id: 'notifications',
-      message: <FormattedMessage id="dependency.loading.notifications" />,
+      message: {id: 'dependency.loading.notifications'},
     },
   ]);
 
   UIStore.registerDependency([
     {
       id: 'torrent-taxonomy',
-      message: <FormattedMessage id="dependency.loading.torrent.taxonomy" />,
+      message: {id: 'dependency.loading.torrent.taxonomy'},
     },
   ]);
 
   UIStore.registerDependency([
     {
       id: 'transfer-data',
-      message: <FormattedMessage id="dependency.loading.transfer.rate.details" />,
+      message: {id: 'dependency.loading.transfer.rate.details'},
     },
     {
       id: 'transfer-history',
-      message: <FormattedMessage id="dependency.loading.transfer.history" />,
+      message: {id: 'dependency.loading.transfer.history'},
     },
   ]);
 
   UIStore.registerDependency([
     {
       id: 'torrent-list',
-      message: <FormattedMessage id="dependency.loading.torrent.list" />,
+      message: {id: 'dependency.loading.torrent.list'},
     },
   ]);
 
@@ -90,34 +79,19 @@ const appRoutes = (
   </Router>
 );
 
-class FloodApp extends React.Component<FloodAppProps> {
-  public componentDidMount(): void {
+@observer
+class FloodApp extends React.Component {
+  componentDidMount(): void {
     initialize();
   }
 
-  public render(): React.ReactNode {
-    const {locale} = this.props;
-
+  render(): React.ReactNode {
     return (
-      <React.Suspense fallback={loadingOverlay}>
-        <AsyncIntlProvider locale={locale}>{appRoutes}</AsyncIntlProvider>
+      <React.Suspense fallback={<LoadingOverlay />}>
+        <AsyncIntlProvider locale={SettingStore.floodSettings.language}>{appRoutes}</AsyncIntlProvider>
       </React.Suspense>
     );
   }
 }
 
-const ConnectedFloodApp = connectStores(FloodApp, () => {
-  return [
-    {
-      store: SettingsStore,
-      event: 'SETTINGS_CHANGE',
-      getValue: () => {
-        return {
-          locale: SettingsStore.getFloodSetting('language'),
-        };
-      },
-    },
-  ];
-});
-
-ReactDOM.render(<ConnectedFloodApp />, document.getElementById('app'));
+ReactDOM.render(<FloodApp />, document.getElementById('app'));

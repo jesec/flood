@@ -1,12 +1,10 @@
 import classnames from 'classnames';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 
-import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
-
-import type {FloodSettings} from '@shared/types/FloodSettings';
-
 import TorrentListColumns, {TorrentListColumn} from '../../constants/TorrentListColumns';
+import SettingStore from '../../stores/SettingStore';
 import UIStore from '../../stores/UIStore';
 
 const pointerDownStyles = `
@@ -15,14 +13,12 @@ const pointerDownStyles = `
 `;
 
 interface TableHeadingProps extends WrappedComponentProps {
-  columns: FloodSettings['torrentListColumns'];
-  columnWidths: FloodSettings['torrentListColumnWidths'];
-  sortProp: FloodSettings['sortTorrents'];
   scrollOffset: number;
   onCellClick: (column: TorrentListColumn) => void;
   onWidthsChange: (column: TorrentListColumn, width: number) => void;
 }
 
+@observer
 class TableHeading extends React.PureComponent<TableHeadingProps> {
   focusedCell: TorrentListColumn | null = null;
   focusedCellWidth: number | null = null;
@@ -47,15 +43,15 @@ class TableHeading extends React.PureComponent<TableHeadingProps> {
   }
 
   getHeadingElements() {
-    const {intl, columns, columnWidths, sortProp, onCellClick} = this.props;
+    const {intl, onCellClick} = this.props;
 
-    return columns.reduce((accumulator: React.ReactNodeArray, {id, visible}) => {
+    return SettingStore.floodSettings.torrentListColumns.reduce((accumulator: React.ReactNodeArray, {id, visible}) => {
       if (!visible) {
         return accumulator;
       }
 
       let handle = null;
-      const width = columnWidths[id] || defaultFloodSettings.torrentListColumnWidths[id];
+      const width = SettingStore.floodSettings.torrentListColumnWidths[id];
 
       if (!this.isPointerDown) {
         handle = (
@@ -68,10 +64,10 @@ class TableHeading extends React.PureComponent<TableHeadingProps> {
         );
       }
 
-      const isSortActive = id === sortProp.property;
+      const isSortActive = id === SettingStore.floodSettings.sortTorrents.property;
       const classes = classnames('table__cell table__heading', {
         'table__heading--is-sorted': isSortActive,
-        [`table__heading--direction--${sortProp.direction}`]: isSortActive,
+        [`table__heading--direction--${SettingStore.floodSettings.sortTorrents.direction}`]: isSortActive,
       });
 
       const label = <FormattedMessage id={TorrentListColumns[id].id} />;

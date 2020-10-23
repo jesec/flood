@@ -1,23 +1,19 @@
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 import sortedIndex from 'lodash/sortedIndex';
 
 import type {TransferDirection} from '@shared/types/TransferData';
 
-import connectStores from '../../util/connectStores';
+import ClientActions from '../../actions/ClientActions';
 import Dropdown from '../general/form-elements/Dropdown';
 import LimitsIcon from '../icons/Limits';
-import SettingsStore from '../../stores/SettingsStore';
+import SettingStore from '../../stores/SettingStore';
 import Size from '../general/Size';
 import Tooltip from '../general/Tooltip';
 import TransferDataStore from '../../stores/TransferDataStore';
 
 import type {DropdownItem} from '../general/form-elements/Dropdown';
-
-interface SpeedLimitDropdownProps extends WrappedComponentProps {
-  currentThrottles?: Record<TransferDirection, number>;
-  speedLimits?: Record<TransferDirection, Array<number>>;
-}
 
 const MESSAGES = defineMessages({
   speedLimits: {
@@ -34,13 +30,14 @@ const MESSAGES = defineMessages({
   },
 });
 
-class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
+@observer
+class SpeedLimitDropdown extends React.Component<WrappedComponentProps> {
   static handleItemSelect(item: DropdownItem<TransferDirection>) {
     if (item.value != null) {
       if (item.property === 'download') {
-        SettingsStore.setClientSetting('throttleGlobalDownMax', item.value);
+        ClientActions.saveSetting('throttleGlobalDownMax', item.value);
       } else if (item.property === 'upload') {
-        SettingsStore.setClientSetting('throttleGlobalUpMax', item.value);
+        ClientActions.saveSetting('throttleGlobalUpMax', item.value);
       }
     }
   }
@@ -84,6 +81,9 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
   }
 
   getSpeedList(direction: TransferDirection): Array<DropdownItem<TransferDirection>> {
+    const {speedLimits} = SettingStore.floodSettings;
+    const {transferSummary} = TransferDataStore;
+
     const heading = {
       className: `dropdown__label dropdown__label--${direction}`,
       ...(direction === 'download'
@@ -94,8 +94,11 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
     };
 
     let insertCurrentThrottle = true;
-    const currentThrottle: Record<TransferDirection, number> = this.props.currentThrottles || {download: 0, upload: 0};
-    const speeds: number[] = (this.props.speedLimits != null && this.props.speedLimits[direction]) || [0];
+    const currentThrottle: Record<TransferDirection, number> = {
+      download: transferSummary.downThrottle,
+      upload: transferSummary.upThrottle,
+    } || {download: 0, upload: 0};
+    const speeds: number[] = (speedLimits != null && speedLimits[direction]) || [0];
 
     const items: Array<DropdownItem<TransferDirection>> = speeds.map((bytes) => {
       let selected = false;
@@ -161,34 +164,4 @@ class SpeedLimitDropdown extends React.Component<SpeedLimitDropdownProps> {
   }
 }
 
-const ConnectedSpeedLimitDropdown = connectStores(injectIntl(SpeedLimitDropdown), () => {
-  return [
-    {
-      store: SettingsStore,
-      event: 'SETTINGS_CHANGE',
-      getValue: ({store}) => {
-        const storeSettings = store as typeof SettingsStore;
-        return {
-          speedLimits: storeSettings.getFloodSetting('speedLimits'),
-        };
-      },
-    },
-    {
-      store: TransferDataStore,
-      event: 'CLIENT_TRANSFER_SUMMARY_CHANGE',
-      getValue: ({store}) => {
-        const storeTransferData = store as typeof TransferDataStore;
-        const transferSummary = storeTransferData.getTransferSummary();
-
-        return {
-          currentThrottles: {
-            upload: transferSummary.upThrottle,
-            download: transferSummary.downThrottle,
-          },
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedSpeedLimitDropdown;
+export default injectIntl(SpeedLimitDropdown);

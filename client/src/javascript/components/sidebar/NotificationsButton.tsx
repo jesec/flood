@@ -1,23 +1,19 @@
 import classnames from 'classnames';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
+import {observer} from 'mobx-react';
+import {reaction} from 'mobx';
 import React from 'react';
 
-import type {Notification, NotificationCount} from '@shared/types/Notification';
+import type {Notification} from '@shared/types/Notification';
 
 import FloodActions from '../../actions/FloodActions';
 import ChevronLeftIcon from '../icons/ChevronLeftIcon';
 import ChevronRightIcon from '../icons/ChevronRightIcon';
-import connectStores from '../../util/connectStores';
 import CustomScrollbars from '../general/CustomScrollbars';
 import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import NotificationIcon from '../icons/NotificationIcon';
 import NotificationStore from '../../stores/NotificationStore';
 import Tooltip from '../general/Tooltip';
-
-interface NotificationsButtonProps extends WrappedComponentProps {
-  count?: NotificationCount;
-  notifications?: Array<Notification>;
-}
 
 interface NotificationsButtonStates {
   isLoading: boolean;
@@ -67,37 +63,25 @@ const MESSAGES = defineMessages({
 
 const NOTIFICATIONS_PER_PAGE = 10;
 
-class NotificationsButton extends React.Component<NotificationsButtonProps, NotificationsButtonStates> {
+@observer
+class NotificationsButton extends React.Component<WrappedComponentProps, NotificationsButtonStates> {
   tooltipRef: Tooltip | null = null;
 
-  constructor(props: NotificationsButtonProps) {
+  constructor(props: WrappedComponentProps) {
     super(props);
+
+    reaction(() => NotificationStore.notificationCount, this.handleNotificationCountChange);
+
     this.state = {
       isLoading: false,
       paginationStart: 0,
     };
   }
 
-  componentDidMount() {
-    NotificationStore.listen('NOTIFICATIONS_COUNT_CHANGE', this.handleNotificationCountChange);
-  }
-
-  componentWillUnmount() {
-    NotificationStore.unlisten('NOTIFICATIONS_COUNT_CHANGE', this.handleNotificationCountChange);
-  }
-
-  getBadge() {
-    const {count} = this.props;
-
-    if (count != null && count.total > 0) {
-      return <span className="notifications__badge">{count.total}</span>;
-    }
-
-    return null;
-  }
-
   getBottomToolbar = () => {
-    if (this.props.count != null && this.props.count.total > 0) {
+    const {notificationCount} = NotificationStore;
+
+    if (notificationCount != null && notificationCount.total > 0) {
       const newerButtonClass = classnames(
         'toolbar__item toolbar__item--button',
         'tooltip__content--padding-surrogate',
@@ -109,7 +93,7 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
         'toolbar__item toolbar__item--button',
         'tooltip__content--padding-surrogate',
         {
-          'is-disabled': this.state.paginationStart + NOTIFICATIONS_PER_PAGE >= this.props.count.total,
+          'is-disabled': this.state.paginationStart + NOTIFICATIONS_PER_PAGE >= notificationCount.total,
         },
       );
 
@@ -118,8 +102,8 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
       let newerFrom = this.state.paginationStart - NOTIFICATIONS_PER_PAGE;
       const newerTo = this.state.paginationStart;
 
-      if (olderTo > this.props.count.total) {
-        olderTo = this.props.count.total;
+      if (olderTo > notificationCount.total) {
+        olderTo = notificationCount.total;
       }
 
       if (newerFrom < 0) {
@@ -178,18 +162,21 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
   };
 
   getTopToolbar() {
-    const {count, intl} = this.props;
+    const {intl} = this.props;
     const {paginationStart} = this.state;
-    if (count != null && count.total > NOTIFICATIONS_PER_PAGE) {
+
+    const {notificationCount} = NotificationStore;
+
+    if (notificationCount != null && notificationCount.total > NOTIFICATIONS_PER_PAGE) {
       let countStart = paginationStart + 1;
       let countEnd = paginationStart + NOTIFICATIONS_PER_PAGE;
 
-      if (countStart > count.total) {
-        countStart = count.total;
+      if (countStart > notificationCount.total) {
+        countStart = notificationCount.total;
       }
 
-      if (countEnd > count.total) {
-        countEnd = count.total;
+      if (countEnd > notificationCount.total) {
+        countEnd = notificationCount.total;
       }
 
       return (
@@ -202,7 +189,7 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
               {countEnd}
             </strong>
             {` ${intl.formatMessage(MESSAGES.of)} `}
-            <strong>{count.total}</strong>
+            <strong>{notificationCount.total}</strong>
           </span>
         </div>
       );
@@ -212,7 +199,11 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
   }
 
   getTooltipContent = () => {
-    if (this.props.count == null || this.props.count.total === 0) {
+    const {isLoading} = this.state;
+
+    const {notifications, notificationCount} = NotificationStore;
+
+    if (notificationCount == null || notificationCount.total === 0) {
       return (
         <div
           className="notifications notifications--empty
@@ -221,9 +212,6 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
         </div>
       );
     }
-
-    const {isLoading} = this.state;
-    const {notifications = []} = this.props;
 
     const notificationsWrapperClasses = classnames('notifications', {
       'notifications--is-loading': isLoading,
@@ -260,7 +248,7 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
       paginationStart: 0,
     });
 
-    NotificationStore.clearAll({
+    FloodActions.clearNotifications({
       id: 'notification-tooltip',
       limit: NOTIFICATIONS_PER_PAGE,
       start: 0,
@@ -289,7 +277,9 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
   };
 
   handleOlderNotificationsClick = () => {
-    if (this.props.count != null && this.props.count.total > this.state.paginationStart + NOTIFICATIONS_PER_PAGE) {
+    const {notificationCount} = NotificationStore;
+
+    if (notificationCount != null && notificationCount.total > this.state.paginationStart + NOTIFICATIONS_PER_PAGE) {
       this.setState((state) => {
         const paginationStart = state.paginationStart + NOTIFICATIONS_PER_PAGE;
         return {
@@ -304,59 +294,30 @@ class NotificationsButton extends React.Component<NotificationsButtonProps, Noti
   };
 
   render() {
-    const {count} = this.props;
+    const {notificationCount} = NotificationStore;
+
+    const hasNotifications = notificationCount != null && notificationCount.total !== 0;
 
     return (
       <Tooltip
         contentClassName="tooltip__content tooltip__content--no-padding"
-        content={this.getTooltipContent()}
-        interactive={count != null && count.total !== 0}
+        content={hasNotifications ? this.getTooltipContent() : null}
+        interactive={hasNotifications}
         onOpen={this.handleTooltipOpen}
         ref={(ref) => {
           this.tooltipRef = ref;
         }}
-        width={count == null || count.total === 0 ? undefined : 340}
+        width={notificationCount == null || notificationCount.total === 0 ? undefined : 340}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           tooltip__wrapper">
         <NotificationIcon />
-        {this.getBadge()}
+        {notificationCount != null && notificationCount.total > 0 ? (
+          <span className="notifications__badge">{notificationCount.total}</span>
+        ) : null}
       </Tooltip>
     );
   }
 }
 
-const ConnectedNotificationsButton = connectStores<Omit<NotificationsButtonProps, 'intl'>, NotificationsButtonStates>(
-  injectIntl(NotificationsButton),
-  () => {
-    return [
-      {
-        store: NotificationStore,
-        event: 'NOTIFICATIONS_FETCH_SUCCESS',
-        getValue: ({store}) => {
-          const storeNotification = store as typeof NotificationStore;
-          const tooltipNotificationState = storeNotification.getNotifications('notification-tooltip');
-
-          return {
-            count: tooltipNotificationState.count,
-            limit: tooltipNotificationState.limit,
-            notifications: tooltipNotificationState.notifications,
-            start: tooltipNotificationState.start,
-          };
-        },
-      },
-      {
-        store: NotificationStore,
-        event: 'NOTIFICATIONS_COUNT_CHANGE',
-        getValue: ({store}) => {
-          const storeNotification = store as typeof NotificationStore;
-          return {
-            count: storeNotification.getNotificationCount(),
-          };
-        },
-      },
-    ];
-  },
-);
-
-export default ConnectedNotificationsButton;
+export default injectIntl(NotificationsButton);

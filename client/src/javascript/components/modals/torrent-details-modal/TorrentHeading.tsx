@@ -1,5 +1,7 @@
 import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
+import {observable} from 'mobx';
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
@@ -17,15 +19,9 @@ import StopIcon from '../../icons/StopIcon';
 import TorrentActions from '../../../actions/TorrentActions';
 import torrentStatusClasses from '../../../util/torrentStatusClasses';
 import torrentStatusIcons from '../../../util/torrentStatusIcons';
+import TorrentStore from '../../../stores/TorrentStore';
 import UploadThickIcon from '../../icons/UploadThickIcon';
-
-interface TorrentHeadingProps {
-  torrent: TorrentProperties;
-}
-
-interface TorrentHeadingStates {
-  optimisticData: {currentStatus: 'start' | 'stop' | null};
-}
+import UIStore from '../../../stores/UIStore';
 
 const getCurrentStatus = (statuses: TorrentProperties['status']) => {
   if (statuses.includes('stopped')) {
@@ -34,88 +30,23 @@ const getCurrentStatus = (statuses: TorrentProperties['status']) => {
   return 'start';
 };
 
-const METHODS_TO_BIND = ['handleStart', 'handleStop'] as const;
-
-export default class TorrentHeading extends React.Component<TorrentHeadingProps, TorrentHeadingStates> {
-  constructor(props: TorrentHeadingProps) {
-    super(props);
-
-    this.state = {
-      optimisticData: {currentStatus: null},
-    };
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
-
-  getTorrentActions(torrent: TorrentProperties) {
-    const currentStatus = this.state.optimisticData.currentStatus || getCurrentStatus(torrent.status);
-    const statusIcons = {
-      start: <StartIcon />,
-      stop: <StopIcon />,
-    } as const;
-    const torrentActions = ['start', 'stop'] as const;
-    const torrentActionElements = [
-      <li className="torrent-details__sub-heading__tertiary" key={torrentActions.length + 1}>
-        <PriorityMeter
-          id={torrent.hash}
-          level={torrent.priority}
-          maxLevel={3}
-          priorityType="torrent"
-          onChange={(hash, level) => {
-            TorrentActions.setPriority({hashes: [`${hash}`], priority: level});
-          }}
-        />
-      </li>,
-    ];
-
-    torrentActions.forEach((torrentAction) => {
-      const classes = classnames('torrent-details__sub-heading__tertiary', 'torrent-details__action', {
-        'is-active': torrentAction === currentStatus,
-      });
-
-      let clickHandler = null;
-      switch (torrentAction) {
-        case 'start':
-          clickHandler = this.handleStart;
-          break;
-        case 'stop':
-          clickHandler = this.handleStop;
-          break;
-        default:
-          return;
-      }
-
-      torrentActionElements.push(
-        <li className={classes} key={torrentAction} onClick={clickHandler}>
-          {statusIcons[torrentAction]}
-          <FormattedMessage id={`torrents.details.actions.${torrentAction}`} />
-        </li>,
-      );
-    });
-
-    return torrentActionElements;
-  }
-
-  handleStart() {
-    this.setState({optimisticData: {currentStatus: 'start'}});
-    TorrentActions.startTorrents({
-      hashes: [this.props.torrent.hash],
-    });
-  }
-
-  handleStop() {
-    this.setState({optimisticData: {currentStatus: 'stop'}});
-    TorrentActions.stopTorrents({
-      hashes: [this.props.torrent.hash],
-    });
-  }
+@observer
+class TorrentHeading extends React.Component {
+  @observable torrentStatus: 'start' | 'stop' = 'stop';
 
   render() {
-    const {torrent} = this.props;
+    if (UIStore.activeModal?.id !== 'torrent-details') {
+      return null;
+    }
+
+    const torrent = TorrentStore.torrents[UIStore?.activeModal?.hash];
+    if (torrent == null) {
+      return null;
+    }
+
     const torrentClasses = torrentStatusClasses(torrent, 'torrent-details__header');
     const torrentStatusIcon = torrentStatusIcons(torrent.status);
+    this.torrentStatus = getCurrentStatus(torrent.status);
 
     return (
       <div className={torrentClasses}>
@@ -143,10 +74,52 @@ export default class TorrentHeading extends React.Component<TorrentHeadingProps,
               <Duration value={torrent.eta} />
             </li>
           </ul>
-          <ul className="torrent-details__sub-heading__secondary">{this.getTorrentActions(torrent)}</ul>
+          <ul className="torrent-details__sub-heading__secondary">
+            <li className="torrent-details__sub-heading__tertiary" key="priority-meter">
+              <PriorityMeter
+                id={torrent.hash}
+                level={torrent.priority}
+                maxLevel={3}
+                priorityType="torrent"
+                onChange={(hash, level) => {
+                  TorrentActions.setPriority({hashes: [`${hash}`], priority: level});
+                }}
+              />
+            </li>
+            <li
+              className={classnames('torrent-details__sub-heading__tertiary', 'torrent-details__action', {
+                'is-active': this.torrentStatus === 'start',
+              })}
+              key="start"
+              onClick={() => {
+                this.torrentStatus = 'start';
+                TorrentActions.startTorrents({
+                  hashes: [torrent.hash],
+                });
+              }}>
+              <StartIcon />
+              <FormattedMessage id="torrents.details.actions.start" />
+            </li>
+            <li
+              className={classnames('torrent-details__sub-heading__tertiary', 'torrent-details__action', {
+                'is-active': this.torrentStatus === 'stop',
+              })}
+              key="stop"
+              onClick={() => {
+                this.torrentStatus = 'stop';
+                TorrentActions.stopTorrents({
+                  hashes: [torrent.hash],
+                });
+              }}>
+              <StopIcon />
+              <FormattedMessage id="torrents.details.actions.stop" />
+            </li>
+          </ul>
         </div>
         <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcon} />
       </div>
     );
   }
 }
+
+export default TorrentHeading;

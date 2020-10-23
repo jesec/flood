@@ -4,7 +4,7 @@ import CustomScrollbars from '../general/CustomScrollbars';
 import FeedsButton from './FeedsButton';
 import LogoutButton from './LogoutButton';
 import NotificationsButton from './NotificationsButton';
-import SearchTorrents from './SearchTorrents';
+import SearchBox from './SearchBox';
 import SettingsButton from './SettingsButton';
 import SidebarActions from './SidebarActions';
 import SpeedLimitDropdown from './SpeedLimitDropdown';
@@ -25,7 +25,7 @@ const Sidebar = () => {
         <LogoutButton />
       </SidebarActions>
       <TransferData />
-      <SearchTorrents />
+      <SearchBox />
       <StatusFilters />
       <TagFilters />
       <TrackerFilters />

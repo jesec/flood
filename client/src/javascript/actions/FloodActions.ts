@@ -4,8 +4,14 @@ import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
 import type {ServerEvents} from '@shared/types/ServerEvents';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import ClientStatusStore from '../stores/ClientStatusStore';
 import ConfigStore from '../stores/ConfigStore';
+import DiskUsageStore from '../stores/DiskUsageStore';
+import NotificationStore from '../stores/NotificationStore';
+import TorrentFilterStore from '../stores/TorrentFilterStore';
+import TorrentStore from '../stores/TorrentStore';
+import TransferDataStore from '../stores/TransferDataStore';
+import UIStore from '../stores/UIStore';
 
 interface ActivityStreamOptions {
   historySnapshot: HistorySnapshot;
@@ -20,100 +26,66 @@ let visibilityChangeTimeout: NodeJS.Timeout;
 // TODO: Use standard Event interfaces
 const ServerEventHandlers: Record<keyof ServerEvents, (event: unknown) => void> = {
   CLIENT_CONNECTIVITY_STATUS_CHANGE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'CLIENT_CONNECTIVITY_STATUS_CHANGE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    ClientStatusStore.handleConnectivityStatusChange(JSON.parse((event as {data: string}).data));
   },
 
   DISK_USAGE_CHANGE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'DISK_USAGE_CHANGE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    DiskUsageStore.setDiskUsage(JSON.parse((event as {data: string}).data));
   },
 
   NOTIFICATION_COUNT_CHANGE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'NOTIFICATION_COUNT_CHANGE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    NotificationStore.handleNotificationCountChange(JSON.parse((event as {data: string}).data));
+    UIStore.satisfyDependency('notifications');
   },
 
   TORRENT_LIST_DIFF_CHANGE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'TORRENT_LIST_DIFF_CHANGE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    TorrentStore.handleTorrentListDiffChange(JSON.parse((event as {data: string}).data));
   },
 
   TORRENT_LIST_FULL_UPDATE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'TORRENT_LIST_FULL_UPDATE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    TorrentStore.handleTorrentListFullUpdate(JSON.parse((event as {data: string}).data));
+    UIStore.satisfyDependency('torrent-list');
   },
 
   TAXONOMY_DIFF_CHANGE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'TAXONOMY_DIFF_CHANGE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    TorrentFilterStore.handleTorrentTaxonomyDiffChange(JSON.parse((event as {data: string}).data));
   },
 
   TAXONOMY_FULL_UPDATE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'TAXONOMY_FULL_UPDATE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    TorrentFilterStore.handleTorrentTaxonomyFullUpdate(JSON.parse((event as {data: string}).data));
+    UIStore.satisfyDependency('torrent-taxonomy');
   },
 
   TRANSFER_SUMMARY_DIFF_CHANGE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'TRANSFER_SUMMARY_DIFF_CHANGE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    TransferDataStore.handleTransferSummaryDiffChange(JSON.parse((event as {data: string}).data));
   },
 
   TRANSFER_SUMMARY_FULL_UPDATE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'TRANSFER_SUMMARY_FULL_UPDATE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    TransferDataStore.handleTransferSummaryFullUpdate(JSON.parse((event as {data: string}).data));
+    UIStore.satisfyDependency('transfer-data');
   },
 
   TRANSFER_HISTORY_FULL_UPDATE: (event: unknown) => {
-    AppDispatcher.dispatchServerAction({
-      type: 'TRANSFER_HISTORY_FULL_UPDATE',
-      data: JSON.parse((event as {data: string}).data),
-    });
+    TransferDataStore.handleFetchTransferHistorySuccess(JSON.parse((event as {data: string}).data));
+    UIStore.satisfyDependency('transfer-history');
   },
-};
+} as const;
 
 const FloodActions = {
-  clearNotifications: (options: NotificationFetchOptions) =>
-    axios
+  clearNotifications: (options: NotificationFetchOptions) => {
+    NotificationStore.clearAll();
+    return axios
       .delete(`${baseURI}api/notifications`)
       .then((json) => json.data)
       .then(
-        (response = {}) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'FLOOD_CLEAR_NOTIFICATIONS_SUCCESS',
-            data: {
-              ...response,
-              ...options,
-            },
-          });
+        () => {
+          FloodActions.fetchNotifications(options);
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'FLOOD_CLEAR_NOTIFICATIONS_ERROR',
-            data: {
-              error,
-            },
-          });
+        () => {
+          // do nothing.
         },
-      ),
+      );
+  },
 
   closeActivityStream() {
     if (activityStreamEventSource == null) {
@@ -154,22 +126,11 @@ const FloodActions = {
       })
       .then((json) => json.data)
       .then(
-        (response) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'FLOOD_FETCH_NOTIFICATIONS_SUCCESS',
-            data: {
-              ...response,
-              ...options,
-            },
-          });
+        (data) => {
+          NotificationStore.handleNotificationsFetchSuccess(data);
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'FLOOD_FETCH_NOTIFICATIONS_ERROR',
-            data: {
-              error,
-            },
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -194,13 +155,6 @@ const FloodActions = {
     // If the user requested a new history snapshot, or the event source has not
     // alraedy been created, we open the event stream.
     if (didHistorySnapshotChange || activityStreamEventSource == null) {
-      import(/* webpackPrefetch: true */ '../stores/ClientStatusStore');
-      import(/* webpackPrefetch: true */ '../stores/DiskUsageStore');
-      import(/* webpackPrefetch: true */ '../stores/NotificationStore');
-      import(/* webpackPrefetch: true */ '../stores/TorrentStore');
-      import(/* webpackPrefetch: true */ '../stores/TorrentFilterStore');
-      import(/* webpackPrefetch: true */ '../stores/TransferDataStore');
-      import(/* webpackPrefetch: true */ '../stores/UIStore');
       activityStreamEventSource = new EventSource(`${baseURI}api/activity-stream?historySnapshot=${historySnapshot}`);
 
       Object.entries(ServerEventHandlers).forEach(([event, handler]) => {
@@ -210,7 +164,7 @@ const FloodActions = {
       });
     }
   },
-};
+} as const;
 
 const handleProlongedInactivity = () => {
   FloodActions.closeActivityStream();

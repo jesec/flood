@@ -6,7 +6,7 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 import {Form, FormRow, Select, SelectItem, Radio} from '../../../ui';
 import Languages from '../../../constants/Languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import SettingsStore from '../../../stores/SettingsStore';
+import SettingStore from '../../../stores/SettingStore';
 import SettingsTab from './SettingsTab';
 import TorrentContextMenuActionsList from './lists/TorrentContextMenuActionsList';
 import TorrentListColumnsList from './lists/TorrentListColumnsList';
@@ -14,8 +14,8 @@ import TorrentListColumnsList from './lists/TorrentListColumnsList';
 import type {Language} from '../../../constants/Languages';
 
 class UITab extends SettingsTab {
-  torrentListViewSize = SettingsStore.getFloodSetting('torrentListViewSize');
-  selectedLanguage = SettingsStore.getFloodSetting('language');
+  torrentListViewSize = SettingStore.floodSettings.torrentListViewSize;
+  selectedLanguage = SettingStore.floodSettings.language;
 
   getLanguageSelectOptions() {
     return Object.keys(Languages).map((languageID) => {

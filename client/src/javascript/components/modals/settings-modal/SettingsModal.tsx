@@ -7,21 +7,17 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 import AboutTab from './AboutTab';
 import AuthTab from './AuthTab';
 import BandwidthTab from './BandwidthTab';
+import ConfigStore from '../../../stores/ConfigStore';
 import ConnectivityTab from './ConnectivityTab';
-import connectStores from '../../../util/connectStores';
+import ClientActions from '../../../actions/ClientActions';
+import DiskUsageTab from './DiskUsageTab';
 import Modal from '../Modal';
 import ResourcesTab from './ResourcesTab';
-import ConfigStore from '../../../stores/ConfigStore';
-import SettingsStore from '../../../stores/SettingsStore';
+import SettingActions from '../../../actions/SettingActions';
 import UITab from './UITab';
-import DiskUsageTab from './DiskUsageTab';
+import UIStore from '../../../stores/UIStore';
 
-import type {ModalAction} from '../ModalActions';
-
-interface SettingsModalProps extends WrappedComponentProps {
-  clientSettings?: ClientSettings | null;
-  floodSettings?: FloodSettings | null;
-}
+import type {ModalAction} from '../../../stores/UIStore';
 
 interface SettingsModalStates {
   isSavingSettings: boolean;
@@ -29,9 +25,10 @@ interface SettingsModalStates {
   changedFloodSettings: Partial<FloodSettings>;
 }
 
-class SettingsModal extends React.Component<SettingsModalProps, SettingsModalStates> {
-  constructor(props: SettingsModalProps) {
+class SettingsModal extends React.Component<WrappedComponentProps, SettingsModalStates> {
+  constructor(props: WrappedComponentProps) {
     super(props);
+
     this.state = {
       isSavingSettings: false,
       changedClientSettings: {},
@@ -64,16 +61,15 @@ class SettingsModal extends React.Component<SettingsModalProps, SettingsModalSta
   handleSaveSettingsClick = () => {
     this.setState({isSavingSettings: true}, () => {
       Promise.all([
-        SettingsStore.saveFloodSettings(this.state.changedFloodSettings, {
-          dismissModal: true,
+        SettingActions.saveSettings(this.state.changedFloodSettings, {
           alert: true,
         }),
-        SettingsStore.saveClientSettings(this.state.changedClientSettings, {
-          dismissModal: true,
+        ClientActions.saveSettings(this.state.changedClientSettings, {
           alert: true,
         }),
       ]).then(() => {
         this.setState({isSavingSettings: false});
+        UIStore.dismissModal();
       });
     });
   };
@@ -101,7 +97,7 @@ class SettingsModal extends React.Component<SettingsModalProps, SettingsModalSta
   };
 
   render() {
-    const {clientSettings, floodSettings, intl} = this.props;
+    const {intl} = this.props;
 
     const tabs = {
       bandwidth: {
@@ -109,8 +105,6 @@ class SettingsModal extends React.Component<SettingsModalProps, SettingsModalSta
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
           onSettingsChange: this.handleFloodSettingsChange,
-          clientSettings,
-          floodSettings,
         },
         label: intl.formatMessage({
           id: 'settings.tabs.bandwidth',
@@ -120,8 +114,6 @@ class SettingsModal extends React.Component<SettingsModalProps, SettingsModalSta
         content: ConnectivityTab,
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
-          clientSettings,
-          floodSettings,
         },
         label: intl.formatMessage({
           id: 'settings.tabs.connectivity',
@@ -131,8 +123,6 @@ class SettingsModal extends React.Component<SettingsModalProps, SettingsModalSta
         content: ResourcesTab,
         props: {
           onClientSettingsChange: this.handleClientSettingsChange,
-          clientSettings,
-          floodSettings,
         },
         label: intl.formatMessage({
           id: 'settings.tabs.resources',
@@ -189,22 +179,4 @@ class SettingsModal extends React.Component<SettingsModalProps, SettingsModalSta
   }
 }
 
-const ConnectedSettingsModal = connectStores<Omit<SettingsModalProps, 'intl'>, SettingsModalStates>(
-  injectIntl(SettingsModal),
-  () => {
-    return [
-      {
-        store: SettingsStore,
-        event: 'SETTINGS_CHANGE',
-        getValue: () => {
-          return {
-            clientSettings: SettingsStore.getClientSettings(),
-            floodSettings: SettingsStore.getFloodSettings(),
-          };
-        },
-      },
-    ];
-  },
-);
-
-export default ConnectedSettingsModal;
+export default injectIntl(SettingsModal);

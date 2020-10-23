@@ -19,7 +19,7 @@ interface TagFilter {
 function filterTorrents(torrentList: Array<TorrentProperties>, opts: StatusFilter | TrackerFilter | TagFilter) {
   const {type, filter} = opts;
 
-  if (filter !== 'all') {
+  if (filter !== '') {
     if (type === 'status') {
       return torrentList.filter((torrent) => torrent.status.includes(filter as TorrentStatus));
     }

@@ -1,18 +1,12 @@
 import {useIntl} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 
-import type {TransferSummary} from '@shared/types/TransferData';
-
-import connectStores from '../../util/connectStores';
 import {compute, getTranslationString} from '../../util/size';
 import TransferDataStore from '../../stores/TransferDataStore';
 
-interface WindowTitleProps {
-  summary?: TransferSummary;
-}
-
-const WindowTitleFunc: React.FC<WindowTitleProps> = (props: WindowTitleProps) => {
-  const {summary} = props;
+const WindowTitle: React.FC = () => {
+  const {transferSummary: summary} = TransferDataStore;
   const intl = useIntl();
 
   React.useEffect(() => {
@@ -60,19 +54,4 @@ const WindowTitleFunc: React.FC<WindowTitleProps> = (props: WindowTitleProps) =>
   return null;
 };
 
-const WindowTitle = connectStores(WindowTitleFunc, () => {
-  return [
-    {
-      store: TransferDataStore,
-      event: 'CLIENT_TRANSFER_SUMMARY_CHANGE',
-      getValue: ({store}) => {
-        const storeTransferData = store as typeof TransferDataStore;
-        return {
-          summary: storeTransferData.getTransferSummary(),
-        };
-      },
-    },
-  ];
-});
-
-export default WindowTitle;
+export default observer(WindowTitle);
