@@ -1,11 +1,21 @@
 import * as z from 'zod';
-
 import {AccessLevel, credentialsSchema} from '../Auth';
+
+const httpBasicAuth = require('basic-auth')
 
 // All auth requests are schema validated to ensure security.
 
 // POST /api/auth/authenticate
 export const authAuthenticationSchema = credentialsSchema.pick({username: true, password: true});
+export const authHTTPBasicAuthenticationSchema = (req: any) => {
+  const parsed = httpBasicAuth.parse(req.header('authorization'));
+  if (parsed === undefined) {
+    return authAuthenticationSchema.safeParse({})
+  }
+
+  return authAuthenticationSchema.safeParse({username: parsed.name, password: parsed.pass})
+}
+
 export type AuthAuthenticationOptions = Required<z.infer<typeof authAuthenticationSchema>>;
 
 // POST /api/auth/authenticate - success response

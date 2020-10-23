@@ -6,6 +6,7 @@ declare const CONFIG: {
   dbPath: string;
   tempPath: string;
   disableUsersAndAuth: boolean;
+  enableUsersHTTPBasicAuthHandler: boolean;
   configUser: ClientConnectionSettings;
   floodServerHost: string;
   floodServerPort: number;

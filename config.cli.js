@@ -33,6 +33,12 @@ const {argv} = require('yargs')
     describe: 'A unique secret, a random one will be generated if not provided',
     type: 'string',
   })
+  .option('httpauth', {
+    conflicts: ['rthost', 'rtport', 'rtsocket'],
+    default: false,
+    describe: "Enable Flood's builtin access control system to read auth data from HTTP basic auth.",
+    type: 'boolean',
+  })
   .option('noauth', {
     alias: 'n',
     default: false,
@@ -160,6 +166,7 @@ const CONFIG = {
   dbPath: path.resolve(path.join(argv.rundir, 'db')),
   tempPath: path.resolve(path.join(argv.rundir, 'temp')),
   disableUsersAndAuth: argv.noauth,
+  enableUsersHTTPBasicAuthHandler: argv.httpauth,
   configUser:
     argv.rtsocket != null
       ? {
