@@ -12,6 +12,10 @@ WORKDIR /usr/src/app/
 # Copy project files
 COPY . ./
 
+# Install build dependencies
+RUN apk --no-cache add \
+    python build-base
+
 # Fetch dependencies from npm
 RUN npm set unsafe-perm true
 RUN npm install
