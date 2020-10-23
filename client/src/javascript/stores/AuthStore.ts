@@ -4,7 +4,11 @@ import FloodActions from '@client/actions/FloodActions';
 
 import {AccessLevel} from '@shared/schema/constants/Auth';
 
-import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/schema/api/auth';
+import type {
+  AuthAuthenticationResponse,
+  AuthHTTPBasicResponse,
+  AuthVerificationResponse,
+} from '@shared/schema/api/auth';
 import type {Credentials} from '@shared/schema/Auth';
 
 class AuthStore {
@@ -12,6 +16,14 @@ class AuthStore {
   isAuthenticated = false;
   users: Array<Credentials> = [];
   optimisticUsers: Array<{username: string}> = [];
+  httpAuthUser: {
+    username: string | null;
+    password: string | null;
+  } = {
+    username: null,
+    password: null,
+  };
+
   currentUser: {
     isAdmin: boolean;
     isInitialUser: boolean;
@@ -26,8 +38,14 @@ class AuthStore {
     makeAutoObservable(this);
   }
 
+
   handleCreateUserSuccess({username}: {username: Credentials['username']}): void {
     this.optimisticUsers.push({username});
+  }
+
+  handleHTTPBasicSuccess(response: AuthHTTPBasicResponse): void {
+    this.httpAuthUser.username = response.username;
+    this.httpAuthUser.password = response.password;
   }
 
   handleListUsersSuccess(nextUserList: Array<Credentials>): void {

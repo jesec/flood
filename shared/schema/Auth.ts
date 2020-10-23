@@ -27,4 +27,10 @@ export const authTokenSchema = object({
   exp: number(),
 });
 
+export const basicAuthorizationSchema = object({
+  authorization: string(),
+});
+
+export type Authorization = zodInfer<typeof basicAuthorizationSchema>;
+
 export type AuthToken = zodInfer<typeof authTokenSchema>;

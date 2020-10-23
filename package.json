@@ -122,6 +122,7 @@
     "axios": "^0.21.1",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.2",
+    "basic-auth": "^2.0.1",
     "bencode": "^2.0.1",
     "body-parser": "^1.19.0",
     "case-sensitive-paths-webpack-plugin": "2.4.0",

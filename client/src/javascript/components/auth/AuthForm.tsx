@@ -17,6 +17,7 @@ type RegisterFormData = Pick<Credentials, 'username' | 'password'>;
 
 interface AuthFormProps {
   mode: 'login' | 'register';
+  hasHTTPBasicAuth: boolean;
 }
 
 const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {

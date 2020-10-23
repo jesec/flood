@@ -16,6 +16,7 @@ import history from './util/history';
 
 import '../sass/style.scss';
 
+const Autologin = lazy(() => import(/* webpackPrefetch: true */ './routes/Autologin'));
 const Login = lazy(() => import(/* webpackPrefetch: true */ './routes/Login'));
 const Overview = lazy(() => import(/* webpackPreload: true */ './routes/Overview'));
 const Register = lazy(() => import(/* webpackPrefetch: true */ './routes/Register'));

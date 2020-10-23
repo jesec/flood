@@ -54,6 +54,12 @@ const {argv} = yargs(process.argv.slice(2))
     describe: "Disable Flood's builtin access control system, deprecated, use auth=none instead",
     type: 'boolean',
   })
+  .option('httpauth', {
+    conflicts: ['rthost', 'rtport', 'rtsocket'],
+    default: false,
+    describe: "Enable Flood's builtin access control system to read auth data from HTTP basic auth.",
+    type: 'boolean',
+  })
   .option('rthost', {
     describe: "Host of rTorrent's SCGI interface",
     type: 'string',

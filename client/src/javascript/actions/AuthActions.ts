@@ -16,8 +16,34 @@ import FloodActions from './FloodActions';
 import SettingActions from './SettingActions';
 
 const {baseURI} = ConfigStore;
+const baseURI = ConfigStore.getBaseURI();
+const httpBasicAuth = require('basic-auth')
 
 const AuthActions = {
+  httpbasicauth: () =>
+    axios.get(`${baseURI}api/auth/httpbasicauth`)
+      .then((json) => json.data)
+      .then(
+        (data) => {
+          const parsed = httpBasicAuth.parse(data.authorization);
+          if (parsed === undefined) {
+            return { hasHTTPBasicAuth: false };
+          }
+
+          data.username = parsed.name;
+          data.password = parsed.pass;
+
+          AppDispatcher.dispatchServerAction({
+            type: 'AUTH_HTTPBASIC_SUCCESS',
+            data,
+          })
+
+          return { hasHTTPBasicAuth: true };
+        },
+      (error: AxiosError) => {
+        throw error;
+      }),
+
   authenticate: (options: AuthAuthenticationOptions) =>
     axios
       .post(`${baseURI}api/auth/authenticate`, options)

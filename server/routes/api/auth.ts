@@ -1,11 +1,14 @@
 import express from 'express';
 import passport from 'passport';
 import rateLimit from 'express-rate-limit';
+import * as z from 'zod';
 
 import type {Response} from 'express';
 
 import {
   authAuthenticationSchema,
+  authHTTPBasicAuthenticationSchema,
+  authHTTPBasicCredentialsSchema,
   authRegistrationSchema,
   authUpdateUserSchema,
   AuthVerificationPreloadConfigs,
@@ -19,11 +22,12 @@ import Users from '../../models/Users';
 import type {
   AuthAuthenticationOptions,
   AuthAuthenticationResponse,
+  AuthHTTPBasicResponse,
   AuthRegistrationOptions,
   AuthUpdateUserOptions,
-  AuthVerificationResponse,
+  AuthVerificationResponse
 } from '../../../shared/schema/api/auth';
-import type {Credentials, UserInDatabase} from '../../../shared/schema/Auth';
+import type {Credentials, Authorization, UserInDatabase} from '../../../shared/schema/Auth';
 
 const router = express.Router();
 
@@ -38,6 +42,25 @@ router.use(
     max: 200,
   }),
 );
+
+const sendHTTPBasicAuthResponse = (
+  res: Response,
+  authData: Required<Pick<Authorization, 'authorization'>>,
+): void => {
+  const {authorization} = authData;
+
+  const username = null;
+  const password = null;
+
+  const response: AuthHTTPBasicResponse = {
+    authorization,
+    username,
+    password,
+  };
+
+  res.json(response);
+};
+
 
 const sendAuthenticationResponse = (
   res: Response,
@@ -64,6 +87,31 @@ const preloadConfigs: AuthVerificationPreloadConfigs = {
 router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
 
 /**
+ * GET /api/auth/httpbasicauth
+ * @summary Returns httpbasic header
+ * @tags Auth
+ * @security None
+ * @return {object} 422 - request validation error - application/json
+ * @return {HTTPBasicAuthResponse} 200 - success response - application/json
+ */
+router.get<unknown, unknown>('/httpbasicauth', (req, res) => {
+  if (!config.enableUsersHTTPBasicAuthHandler) {
+    return res.status(422).json({message: 'Validation error.'});
+    return;
+  }
+
+  const parsedResult = authHTTPBasicCredentialsSchema(req);
+  if (!parsedResult.success) {
+    return res.status(422).json({message: 'Validation error.'});
+    return;
+  }
+
+  sendHTTPBasicAuthResponse(res, {
+    ...parsedResult.data,
+  });
+});
+
+/**
  * POST /api/auth/authenticate
  * @summary Authenticates a user
  * @tags Auth
@@ -80,7 +128,12 @@ router.post<unknown, unknown, AuthAuthenticationOptions>(
       return sendAuthenticationResponse(res, Users.getConfigUser());
     }
 
-    const parsedResult = authAuthenticationSchema.safeParse(req.body);
+    let parsedResult = authAuthenticationSchema.safeParse(null);
+    if (config.enableUsersHTTPBasicAuthHandler) {
+      parsedResult = authHTTPBasicAuthenticationSchema(req);
+    } else {
+      parsedResult = authAuthenticationSchema.safeParse(req.body);
+    }
 
     if (!parsedResult.success) {
       return res.status(422).json({message: 'Validation error.'});
@@ -196,6 +249,7 @@ router.use('/verify', (req, res, next) => {
       res.json(response);
     },
     handleSubsequentUser: () => {
+<<<<<<< HEAD
       passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
         if (err || !user) {
           res.status(401).json({
@@ -207,6 +261,17 @@ router.use('/verify', (req, res, next) => {
         req.user = user;
         next();
       })(req, res, next);
+=======
+      if (config.enableUsersHTTPBasicAuthHandler) {
+        const parsedResult = authHTTPBasicAuthenticationSchema(req);
+        if (!parsedResult.success || res.cookie.toString().indexOf('jwt') === -1) {
+          res.status(403).send('Wait.');
+          return;
+        }
+      }
+
+      passport.authenticate('jwt', {session: false})(req, res, next);
+>>>>>>> f45aa7c4... HTTP_BASIC_AUTH_HANDLER
     },
   });
 });
@@ -250,7 +315,7 @@ router.use('/', passport.authenticate('jwt', {session: false}));
  * @return {} 200 - success response
  */
 router.get('/logout', (_req, res) => {
-  res.clearCookie('jwt').send();
+  res.clearCookie('jwt').status(401).send();
 });
 
 // All subsequent routes need administrator access.
