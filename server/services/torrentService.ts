@@ -41,7 +41,10 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
       // starts polling when the first streaming listener is added
       this.on('newListener', (event) => {
         if (event === 'TORRENT_LIST_DIFF_CHANGE') {
-          this.pollInterval = config.torrentClientPollInterval;
+          if (this.pollInterval !== config.torrentClientPollInterval) {
+            this.pollInterval = config.torrentClientPollInterval;
+            this.deferFetchTorrentList();
+          }
         }
       });
 
