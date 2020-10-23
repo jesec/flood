@@ -91,6 +91,12 @@ const {argv} = require('yargs')
     hidden: true,
     type: 'number',
   })
+  .option('clientpollidle', {
+    default: 1000 * 60 * 15,
+    describe: 'ADVANCED: How often (in ms) Flood will request the torrent list when no user is present',
+    hidden: true,
+    type: 'number',
+  })
   .option('rtorrent', {
     default: false,
     describe: 'ADVANCED: rTorrent daemon managed by Flood',
@@ -174,6 +180,7 @@ const CONFIG = {
   floodServerProxy: argv.proxy,
   maxHistoryStates: argv.maxhistorystates,
   torrentClientPollInterval: argv.clientpoll,
+  torrentClientPollIntervalIdle: argv.clientpollidle,
   secret,
   ssl: argv.ssl,
   sslKey: argv.sslkey || path.resolve(path.join(argv.rundir, 'key.pem')),

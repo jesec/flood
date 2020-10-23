@@ -12,6 +12,7 @@ declare const CONFIG: {
   floodServerProxy: string;
   maxHistoryStates: number;
   torrentClientPollInterval: number;
+  torrentClientPollIntervalIdle: number;
   secret: string;
   ssl: boolean;
   sslKey: string;

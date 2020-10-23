@@ -15,8 +15,7 @@ interface TorrentServiceEvents {
 }
 
 class TorrentService extends BaseService<TorrentServiceEvents> {
-  errorCount = 0;
-  pollEnabled = false;
+  pollInterval = config.torrentClientPollIntervalIdle;
   pollTimeout: NodeJS.Timeout | null = null;
   torrentListSummary: TorrentListSummary = {id: Date.now(), torrents: {}};
 
@@ -41,25 +40,22 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
 
       // starts polling when the first streaming listener is added
       this.on('newListener', (event) => {
-        if (!this.pollEnabled && event === 'TORRENT_LIST_DIFF_CHANGE') {
-          this.pollEnabled = true;
-          this.deferFetchTorrentList();
+        if (event === 'TORRENT_LIST_DIFF_CHANGE') {
+          this.pollInterval = config.torrentClientPollInterval;
         }
       });
 
       // stops polling when the last streaming listener is removed
       this.on('removeListener', (event) => {
         if (event === 'TORRENT_LIST_DIFF_CHANGE' && this.listenerCount('TORRENT_LIST_DIFF_CHANGE') === 0) {
-          this.pollEnabled = false;
+          this.pollInterval = config.torrentClientPollIntervalIdle;
         }
       });
     };
   }
 
-  deferFetchTorrentList(interval = config.torrentClientPollInterval || 2000) {
-    if (this.pollEnabled) {
-      this.pollTimeout = setTimeout(this.fetchTorrentList, interval);
-    }
+  deferFetchTorrentList() {
+    this.pollTimeout = setTimeout(this.fetchTorrentList, this.pollInterval || 2000);
   }
 
   destroy() {
@@ -94,15 +90,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   }
 
   handleFetchTorrentListError() {
-    let nextInterval = config.torrentClientPollInterval || 2000;
-
-    // If more than 2 consecutive errors have occurred, then we delay the next request.
-    this.errorCount += 1;
-    if (this.errorCount > 2) {
-      nextInterval = Math.min(nextInterval + 2 ** this.errorCount, 1000 * 60);
-    }
-
-    this.deferFetchTorrentList(nextInterval);
+    this.deferFetchTorrentList();
 
     this.emit('FETCH_TORRENT_LIST_ERROR');
     return null;
@@ -118,7 +106,6 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
 
     this.deferFetchTorrentList();
 
-    this.errorCount = 0;
     this.emit('FETCH_TORRENT_LIST_SUCCESS');
     return this.torrentListSummary;
   }
