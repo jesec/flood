@@ -97,7 +97,7 @@ const performAuthentication = (
     }
 
     // Incorrect username or password.
-    callback(true, null, failedLoginResponse);
+    callback(false, null, failedLoginResponse);
   });
 };
 
@@ -211,7 +211,7 @@ router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/regis
       return;
     }
 
-    const response = getAuthenticationResponse(res, Users.getConfigUser());
+    const response = getAuthenticationResponse(res, credentials);
     res.json(response);
   });
 });
@@ -317,7 +317,10 @@ router.get('/logout', (_req, res) => {
   res.clearCookie('jwt');
   if (config.enableUsersHTTPBasicAuthHandler) {
     res.status(401).send('Unauthorized');
+    return;
   }
+
+  res.send();
 });
 
 // All subsequent routes need administrator access.
