@@ -1,6 +1,16 @@
 import * as z from 'zod';
 import {AccessLevel, credentialsSchema} from '../Auth';
 
+export const httpBasicAuth = (authorization: string) => {
+  const credentials = Buffer.from(authorization, 'base64').toString().split(':');
+  console.log(credentials);
+  if (credentials.length !== 2 || credentials[0].length === 0 || credentials[1].length === 0) {
+    return null;
+  }
+
+  return credentials;
+}
+
 // All auth requests are schema validated to ensure security.
 
 // POST /api/auth/authenticate
@@ -10,8 +20,8 @@ export const authHTTPBasicAuthenticationSchema = (authorization?: string) => {
     return authAuthenticationSchema.safeParse({});
   }
 
-  const credentials = Buffer.from(authorization, 'base64').toString().split(':');
-  if (credentials.length !== 2 || credentials[0].length === 0 || credentials[1].length === 0) {
+  const credentials = httpBasicAuth(authorization);
+  if (credentials === null) {
     return authAuthenticationSchema.safeParse({});
   }
 
