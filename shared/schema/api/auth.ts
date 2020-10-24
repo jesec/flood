@@ -41,6 +41,7 @@ export type AuthVerificationResponse =
     }
   | {
       initialUser: false;
+      isHTTPAuthUser?: boolean,
       username: string;
       level: AccessLevel;
       token?: string;

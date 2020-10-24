@@ -257,6 +257,7 @@ router.use('/verify', (req, res, next) => {
 
           const verification: AuthVerificationResponse = {
             initialUser: false,
+            isHTTPAuthUser: true,
             username: response.username,
             level: response.level,
             token: `JWT ${token}`,
