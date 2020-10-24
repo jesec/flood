@@ -1,6 +1,7 @@
 import BaseStore from './BaseStore';
 
 let disableUsersAndAuth = false;
+let isHTTPUser = false;
 
 class ConfigStore extends BaseStore {
   static getBaseURI(): string {
@@ -16,8 +17,16 @@ class ConfigStore extends BaseStore {
     return disableUsersAndAuth;
   }
 
+  static getIsHTTPUser(): boolean {
+    return isHTTPUser;
+  }
+
   static setDisableAuth(val: boolean): void {
     disableUsersAndAuth = val;
+  }
+
+  static setIsHTTPUser(val: boolean): void {
+    isHTTPUser = val;
   }
 }
 

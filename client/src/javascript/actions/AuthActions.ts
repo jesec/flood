@@ -115,6 +115,13 @@ const AuthActions = {
         });
       },
       (error) => {
+        if (ConfigStore.getIsHTTPUser() && error.response && error.response.status === 401) {
+          AppDispatcher.dispatchServerAction({
+            type: 'AUTH_LOGOUT_SUCCESS',
+          });
+
+          return;
+        }
         AppDispatcher.dispatchServerAction({
           type: 'AUTH_LOGOUT_ERROR',
           error,

@@ -110,6 +110,11 @@ class AuthStoreClass extends BaseStore {
         isInitialUser: response.initialUser,
       };
 
+      if (response.isHTTPAuthUser) {
+        // Auth is disabled if a token is sent on verification
+        ConfigStore.setIsHTTPUser(true);
+      }
+
       if (response.token != null && !response.isHTTPAuthUser) {
         // Auth is disabled if a token is sent on verification
         ConfigStore.setDisableAuth(true);
