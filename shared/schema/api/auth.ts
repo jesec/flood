@@ -1,20 +1,22 @@
 import * as z from 'zod';
 import {AccessLevel, credentialsSchema} from '../Auth';
 
-const httpBasicAuth = require('basic-auth')
-
 // All auth requests are schema validated to ensure security.
 
 // POST /api/auth/authenticate
 export const authAuthenticationSchema = credentialsSchema.pick({username: true, password: true});
-export const authHTTPBasicAuthenticationSchema = (req: any) => {
-  const parsed = httpBasicAuth.parse(req.header('authorization'));
-  if (parsed === undefined) {
-    return authAuthenticationSchema.safeParse({})
+export const authHTTPBasicAuthenticationSchema = (authorization?: string) => {
+  if (authorization === undefined) {
+    return authAuthenticationSchema.safeParse({});
   }
 
-  return authAuthenticationSchema.safeParse({username: parsed.name, password: parsed.pass})
-}
+  const credentials = Buffer.from(authorization, 'base64').toString().split(':');
+  if (credentials.length !== 2 || credentials[0].length === 0 || credentials[1].length === 0) {
+    return authAuthenticationSchema.safeParse({});
+  }
+
+  return authAuthenticationSchema.safeParse({username: credentials[0], password: credentials[1]});
+};
 
 export type AuthAuthenticationOptions = Required<z.infer<typeof authAuthenticationSchema>>;
 
@@ -41,7 +43,7 @@ export type AuthVerificationResponse =
     }
   | {
       initialUser: false;
-      isHTTPAuthUser?: boolean,
+      isHTTPAuthUser?: boolean;
       username: string;
       level: AccessLevel;
       token?: string;

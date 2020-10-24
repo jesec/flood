@@ -2,12 +2,16 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import rateLimit from 'express-rate-limit';
-import * as z from 'zod';
 
 import type {Response} from 'express';
 
 import ajaxUtil from '../../util/ajaxUtil';
-import {authAuthenticationSchema, authRegistrationSchema, authUpdateUserSchema, authHTTPBasicAuthenticationSchema} from '../../../shared/schema/api/auth';
+import {
+  authAuthenticationSchema,
+  authRegistrationSchema,
+  authUpdateUserSchema,
+  authHTTPBasicAuthenticationSchema,
+} from '../../../shared/schema/api/auth';
 import config from '../../../config';
 import requireAdmin from '../../middleware/requireAdmin';
 import services from '../../services';
@@ -18,7 +22,7 @@ import type {
   AuthAuthenticationResponse,
   AuthRegistrationOptions,
   AuthUpdateUserOptions,
-  AuthVerificationResponse
+  AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
 import type {Credentials, UserInDatabase} from '../../../shared/schema/Auth';
 
@@ -79,7 +83,7 @@ const validationError = (res: Response, err: Error) => {
 const performAuthentication = (
   res: Response,
   credentials: Required<Pick<Credentials, 'username' | 'password'>>,
-  callback: (isSuccess: boolean, response: any, err?: string) => void,
+  callback: (isSuccess: boolean, response: AuthAuthenticationResponse | null, err?: string) => void,
 ): void => {
   Users.comparePassword(credentials, (isMatch, level, _err) => {
     if (isMatch === true && level != null) {
@@ -88,15 +92,14 @@ const performAuthentication = (
         level,
       });
 
-      callback(true, response)
+      callback(true, response);
       return;
     }
 
-
     // Incorrect username or password.
-    callback(true, null, failedLoginResponse)
+    callback(true, null, failedLoginResponse);
   });
-}
+};
 
 router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
 
@@ -119,7 +122,7 @@ router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', (req, 
 
   let parsedResult = authAuthenticationSchema.safeParse(null);
   if (config.enableUsersHTTPBasicAuthHandler) {
-    parsedResult = authHTTPBasicAuthenticationSchema(req);
+    parsedResult = authHTTPBasicAuthenticationSchema(req.header('authorization'));
   } else {
     parsedResult = authAuthenticationSchema.safeParse(req.body);
   }
@@ -133,7 +136,7 @@ router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', (req, 
 
   performAuthentication(res, credentials, (isSuccess, response, err) => {
     if (isSuccess) {
-      res.send(response)
+      res.send(response);
       return;
     }
 
@@ -240,7 +243,7 @@ router.use('/verify', (req, res, next) => {
     },
     handleSubsequentUser: () => {
       if (config.enableUsersHTTPBasicAuthHandler) {
-        const parsedResult = authHTTPBasicAuthenticationSchema(req);
+        const parsedResult = authHTTPBasicAuthenticationSchema(req.header('authorization'));
         if (!parsedResult.success) {
           validationError(res, parsedResult.error);
           return;
@@ -249,8 +252,9 @@ router.use('/verify', (req, res, next) => {
         const credentials = parsedResult.data;
 
         performAuthentication(res, credentials, (isSuccess, response) => {
-          if (!isSuccess) {
+          if (!isSuccess || response === null) {
             res.status(401).send('Unauthorized');
+            return;
           }
 
           const token = getAuthToken(response.username, res);
