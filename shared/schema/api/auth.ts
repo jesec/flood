@@ -9,7 +9,7 @@ export const httpBasicAuth = (authorization: string) => {
   }
 
   return credentials;
-}
+};
 
 // All auth requests are schema validated to ensure security.
 
