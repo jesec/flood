@@ -4,7 +4,6 @@ import {AccessLevel, credentialsSchema} from '../Auth';
 export const httpBasicAuth = (authorization: string) => {
   const base64 = authorization.replace(/basic /i, '');
   const credentials = Buffer.from(base64, 'base64').toString().split(':');
-  console.log(credentials);
   if (credentials.length !== 2 || credentials[0].length === 0 || credentials[1].length === 0) {
     return null;
   }
