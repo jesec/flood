@@ -93,7 +93,7 @@ router.put<unknown, unknown, AddFeedOptions>('/feeds', (req, res) => {
 });
 
 /**
- * PUT /api/feed-monitor/feeds/{id}
+ * PATCH /api/feed-monitor/feeds/{id}
  * @summary Modifies the options of a feed subscription
  * @tags Feeds
  * @security User
@@ -102,7 +102,7 @@ router.put<unknown, unknown, AddFeedOptions>('/feeds', (req, res) => {
  * @return {} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.put<{id: string}, unknown, ModifyFeedOptions>('/feeds/:id', (req, res) => {
+router.patch<{id: string}, unknown, ModifyFeedOptions>('/feeds/:id', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.feedService

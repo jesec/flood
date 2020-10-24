@@ -497,7 +497,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     // TODO: Properly handle array of array of URLs
     const torrentsToDownload = this.props.items
       .filter((_item, index) => formData[index])
-      .map((item, index) => ({id: index, value: item.torrentURLs[0]}));
+      .map((item, index) => ({id: index, value: item.urls[0]}));
 
     UIActions.displayModal({id: 'add-torrents', initialURLs: torrentsToDownload});
   };
