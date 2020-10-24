@@ -84,11 +84,13 @@ class FeedService extends BaseService {
       throw new Error();
     }
 
+    // JSON.parse(JSON.stringify()) to remove undefined properties
+
     modifiedFeedReader.stopReader();
-    modifiedFeedReader.modify({feedLabel: label, url, interval});
+    modifiedFeedReader.modify(JSON.parse(JSON.stringify({feedLabel: label, url, interval})));
 
     return new Promise<void>((resolve, reject) => {
-      this.db.update({_id: id}, {$set: {url, label, interval}}, {}, (err) => {
+      this.db.update({_id: id}, {$set: JSON.parse(JSON.stringify({label, url, interval}))}, {}, (err) => {
         if (err) {
           reject(err);
           return;
@@ -160,9 +162,9 @@ class FeedService extends BaseService {
     });
   }
 
-  async getFeeds(): Promise<Array<Feed>> {
+  async getFeeds(id?: string): Promise<Array<Feed>> {
     return new Promise<Array<Feed>>((resolve, reject) => {
-      this.db.find({type: 'feed'}, (err: Error | null, feeds: Array<Feed>) => {
+      this.db.find(id ? {_id: id} : {type: 'feed'}, (err: Error | null, feeds: Array<Feed>) => {
         if (err) {
           reject(err);
           return;
