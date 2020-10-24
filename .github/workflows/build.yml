@@ -2,9 +2,11 @@ name: Build
 
 on:
   push:
-    branches-ignore:
-      - 'integration/**'
+    branches:
+      - master
   pull_request:
+    branches:
+      - master
 
 jobs:
   build:
