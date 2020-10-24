@@ -111,7 +111,9 @@ describe('POST /api/torrents/add-urls', () => {
       .end((err, _res) => {
         if (err) done(err);
 
-        torrentAdded.then(() => {
+        // Continue after 15 seconds even if torrentAdded is not resolved to let the next step
+        // determine if the torrents have been successfully added.
+        Promise.race([torrentAdded, new Promise((r) => setTimeout(r, 1000 * 15))]).then(() => {
           done();
         });
       });
