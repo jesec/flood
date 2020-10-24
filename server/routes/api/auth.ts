@@ -21,7 +21,6 @@ import type {
   AuthVerificationResponse
 } from '../../../shared/schema/api/auth';
 import type {Credentials, UserInDatabase} from '../../../shared/schema/Auth';
-import {AccessLevel} from '../../../shared/schema/Auth';
 
 const router = express.Router();
 
@@ -209,7 +208,8 @@ router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/regis
       return;
     }
 
-    sendAuthenticationResponse(res, credentials);
+    const response = getAuthenticationResponse(res, Users.getConfigUser());
+    res.json(response);
   });
 });
 
@@ -309,7 +309,7 @@ router.use('/', passport.authenticate('jwt', {session: false}));
  * @return {} 200 - success response
  */
 router.get('/logout', (_req, res) => {
-  res.clearCookie('jwt').status(401).send();
+  res.clearCookie('jwt').status(401).send('Unauthorized');
 });
 
 // All subsequent routes need administrator access.
