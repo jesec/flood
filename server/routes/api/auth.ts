@@ -310,11 +310,14 @@ router.use('/', passport.authenticate('jwt', {session: false}));
  * @summary Clears the session cookie
  * @tags Auth
  * @security User
- * @return {string} 401 - not authenticated or token expired
+ * @return {string} 401 - if enableUsersHTTPBasicAuthHandler
  * @return {} 200 - success response
  */
 router.get('/logout', (_req, res) => {
-  res.clearCookie('jwt').status(401).send('Unauthorized');
+  res.clearCookie('jwt')
+  if (config.enableUsersHTTPBasicAuthHandler) {
+    res.status(401).send('Unauthorized');
+  }
 });
 
 // All subsequent routes need administrator access.
