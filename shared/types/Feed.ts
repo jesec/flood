@@ -6,7 +6,7 @@ export interface Feed {
   label: string;
   // URL of the feed.
   url: string;
-  // Interval between checking the feed for new items.
+  // Interval between checking the feed for new items. (in minutes)
   interval: number;
   // How many times rules have matched items of the feed.
   count?: number;

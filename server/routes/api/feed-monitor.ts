@@ -50,18 +50,19 @@ router.delete<{id: string}>('/:id', (req, res) => {
 });
 
 /**
- * GET /api/feed-monitor/feeds
+ * GET /api/feed-monitor/feeds/{id?}
  * @summary Gets subscribed feeds
  * @tags Feeds
  * @security User
+ * @param id.path.optional - Unique ID of the feed subscription
  * @return {Array<Feed>}} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get('/feeds', (req, res) => {
+router.get<{id?: string}>('/feeds/:id?', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
   req.services?.feedService
-    .getFeeds()
+    .getFeeds(req.params.id)
     .then((feeds) => {
       callback(feeds);
     })
@@ -173,8 +174,8 @@ router.put<unknown, unknown, AddRuleOptions>('/rules', (req, res) => {
 
   req.services?.feedService
     .addRule(req.body)
-    .then(() => {
-      callback(null);
+    .then((rule) => {
+      callback(rule);
     })
     .catch((error) => {
       callback(null, error);
