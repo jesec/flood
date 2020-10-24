@@ -31,7 +31,7 @@ const SettingsActions = {
 
   modifyFeed: (id: string, options: ModifyFeedOptions) =>
     axios
-      .put(`${baseURI}api/feed-monitor/feeds/${id}`, options)
+      .patch(`${baseURI}api/feed-monitor/feeds/${id}`, options)
       .then((json) => json.data)
       .then(
         () => {

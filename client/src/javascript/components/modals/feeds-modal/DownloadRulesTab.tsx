@@ -31,8 +31,9 @@ import * as validators from '../../../util/validators';
 
 type ValidatedFields = 'destination' | 'feedID' | 'label' | 'match' | 'exclude';
 
-interface RuleFormData extends Omit<Rule, 'tags'> {
+interface RuleFormData extends Omit<Rule, 'tags' | 'feedIDs'> {
   check: string;
+  feedID: string;
   tags: string;
 }
 
@@ -81,7 +82,7 @@ const MESSAGES = defineMessages({
 
 const defaultRule = {
   label: '',
-  feedID: '',
+  feedIDs: [''],
   match: '',
   exclude: '',
   tags: [],
@@ -153,11 +154,15 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
       return null;
     }
 
+    const feedIDs = [formData.feedID || ''];
+
+    delete formData.feedID;
     delete formData.check;
 
     return {
       ...defaultRule,
       ...formData,
+      feedIDs,
       ...(formData.tags != null
         ? {
             tags: formData.tags.split(','),
@@ -217,7 +222,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
             label={this.props.intl.formatMessage({
               id: 'feeds.applicable.feed',
             })}
-            defaultID={rule.feedID}>
+            defaultID={rule.feedIDs?.[0]}>
             {this.getAvailableFeedsOptions()}
           </Select>
         </FormRow>
@@ -473,7 +478,7 @@ class DownloadRulesTab extends React.Component<DownloadRulesTabProps, DownloadRu
 
     const errors = Object.keys(this.validatedFields).reduce((accumulator: DownloadRulesTabStates['errors'], field) => {
       const fieldName = field as ValidatedFields;
-      const fieldValue = formData[fieldName];
+      const fieldValue = fieldName === 'feedID' ? formData.feedIDs[0] : formData[fieldName];
 
       if (!this.validatedFields[fieldName].isValid(fieldValue) && accumulator != null) {
         accumulator[fieldName] = this.validatedFields[fieldName].error;

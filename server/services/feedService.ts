@@ -111,14 +111,14 @@ class FeedService extends BaseService {
       });
     });
 
-    if (this.rules[newRule.feedID] == null) {
-      this.rules[newRule.feedID] = [];
+    if (this.rules[newRule.feedIDs[0]] == null) {
+      this.rules[newRule.feedIDs[0]] = [];
     }
 
-    this.rules[newRule.feedID].push(newRule);
+    this.rules[newRule.feedIDs[0]].push(newRule);
 
     const associatedFeedReader = this.feedReaders.find(
-      (feedReader) => feedReader.getOptions().feedID === newRule.feedID,
+      (feedReader) => feedReader.getOptions().feedID === newRule.feedIDs[0],
     );
 
     if (associatedFeedReader) {
@@ -194,7 +194,7 @@ class FeedService extends BaseService {
     return filteredItems.map((item) => {
       return {
         title: typeof item.title === 'string' ? item.title : 'Unknown',
-        torrentURLs: getTorrentUrlsFromFeedItem(item),
+        urls: getTorrentUrlsFromFeedItem(item),
       };
     });
   }
@@ -309,11 +309,34 @@ class FeedService extends BaseService {
 
       // Add all download rules to the local state.
       feedsSummary.rules.forEach((rule) => {
-        if (this.rules[rule.feedID] == null) {
-          this.rules[rule.feedID] = [];
+        const feedID = rule?.feedIDs?.[0];
+
+        // Migration
+        if (feedID == null) {
+          this.removeItem(rule._id).then(() => {
+            const oldFeedID = ((rule as unknown) as {feedID: string})?.feedID;
+            if (oldFeedID != null) {
+              this.addRule({
+                destination: rule.destination,
+                tags: rule.tags,
+                label: rule.label,
+                feedIDs: [oldFeedID],
+                field: rule.field,
+                match: rule.match,
+                exclude: rule.exclude,
+                startOnLoad: rule.startOnLoad,
+                isBasePath: rule.isBasePath,
+              });
+            }
+          });
+          return;
         }
 
-        this.rules[rule.feedID].push(rule);
+        if (this.rules[feedID] == null) {
+          this.rules[feedID] = [];
+        }
+
+        this.rules[feedID].push(rule);
       });
 
       // Initiate all feeds.
