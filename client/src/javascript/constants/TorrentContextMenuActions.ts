@@ -17,9 +17,8 @@ const TorrentContextMenuActions = {
   move: {
     id: 'torrents.list.context.move',
   },
-  setTracker: {
-    id: 'torrents.list.context.set.tracker',
-    warning: 'settings.warning.set.tracker',
+  setTrackers: {
+    id: 'torrents.list.context.set.trackers',
   },
   torrentDetails: {
     id: 'torrents.list.context.details',

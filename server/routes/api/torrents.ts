@@ -462,7 +462,6 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
 });
 
 /**
- * TODO: Split to /peers, /trackers and /contents endpoints
  * GET /api/torrents/{hash}/details
  * @summary Gets details of a torrent.
  * @tags Torrent
