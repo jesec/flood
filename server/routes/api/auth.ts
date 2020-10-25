@@ -80,7 +80,7 @@ const validationError = (res: Response, err: Error) => {
   });
 };
 
-const performAuthentication = (
+const comparePassword = (
   res: Response,
   credentials: Required<Pick<Credentials, 'username' | 'password'>>,
   callback: (isSuccess: boolean, response: AuthAuthenticationResponse | null, err?: string) => void,
@@ -134,7 +134,7 @@ router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', (req, 
 
   const credentials = parsedResult.data;
 
-  performAuthentication(res, credentials, (isSuccess, response, err) => {
+  comparePassword(res, credentials, (isSuccess, response, err) => {
     if (isSuccess) {
       res.send(response);
       return;
@@ -251,7 +251,7 @@ router.use('/verify', (req, res, next) => {
 
         const credentials = parsedResult.data;
 
-        performAuthentication(res, credentials, (isSuccess, response) => {
+        comparePassword(res, credentials, (isSuccess, response) => {
           if (!isSuccess || response === null) {
             res.status(401).send('Unauthorized');
             return;
