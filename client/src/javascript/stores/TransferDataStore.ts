@@ -6,7 +6,12 @@ import type {TransferDirection, TransferHistory, TransferSummary} from '@shared/
 export const TRANSFER_DIRECTIONS: Readonly<Array<TransferDirection>> = ['download', 'upload'] as const;
 
 class TransferDataStoreClass {
-  transferRates: TransferHistory = {download: [], upload: [], timestamps: []};
+  transferRates: TransferHistory = {
+    download: new Array(30).fill(0),
+    upload: new Array(30).fill(0),
+    timestamps: new Array(30).fill(Date.now()),
+  };
+
   transferSummary: TransferSummary = {
     downRate: 0,
     downThrottle: 0,
@@ -25,12 +30,15 @@ class TransferDataStoreClass {
     const upload = this.transferRates.upload.slice();
     const timestamps = this.transferRates.timestamps.slice();
 
-    download.shift();
     download.push(this.transferSummary.downRate);
-    upload.shift();
     upload.push(this.transferSummary.upRate);
-    timestamps.shift();
     timestamps.push(Date.now());
+
+    if (timestamps.length > 30) {
+      download.shift();
+      upload.shift();
+      timestamps.shift();
+    }
 
     this.transferRates = {download, upload, timestamps};
   }

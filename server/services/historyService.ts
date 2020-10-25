@@ -152,12 +152,10 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
   handleFetchTransferSummarySuccess(nextTransferSummary: TransferSummary) {
     const summaryDiff = jsonpatch.compare(this.transferSummary, nextTransferSummary);
 
-    if (summaryDiff.length > 0) {
-      this.emit('TRANSFER_SUMMARY_DIFF_CHANGE', {
-        diff: summaryDiff,
-        id: Date.now(),
-      });
-    }
+    this.emit('TRANSFER_SUMMARY_DIFF_CHANGE', {
+      diff: summaryDiff,
+      id: Date.now(),
+    });
 
     this.errorCount = 0;
     this.transferSummary = nextTransferSummary;
