@@ -1,4 +1,5 @@
 module.exports = {
+  displayName: 'auth',
   preset: 'ts-jest/presets/js-with-babel',
   rootDir: './../',
   testEnvironment: 'node',

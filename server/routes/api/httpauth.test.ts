@@ -14,7 +14,6 @@ import type {
 } from '../../../shared/schema/api/auth';
 import type {ClientConnectionSettings} from '../../../shared/schema/ClientConnectionSettings';
 
-jest.setTimeout(20000);
 const request = supertest(app);
 
 const testConnectionSettings: ClientConnectionSettings = {

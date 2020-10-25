@@ -35,7 +35,6 @@ const {argv} = require('yargs')
   })
   .option('httpauth', {
     conflicts: ['rthost', 'rtport', 'rtsocket'],
-    default: false,
     describe: "Enable Flood's builtin access control system to read auth data from HTTP basic auth.",
     type: 'boolean',
   })

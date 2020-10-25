@@ -14,6 +14,7 @@ afterAll(() => {
   if (process.env.CI !== 'true') {
     // TODO: This leads to test flakiness caused by ENOENT error
     // NeDB provides no method to close database connection
+    process.kill(process.pid, 'SIGTERM');
     fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
   }
 });

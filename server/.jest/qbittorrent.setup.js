@@ -28,5 +28,6 @@ process.argv.push('--qbpass', 'adminadmin');
 
 afterAll(() => {
   qBittorrentDaemon.kill('SIGKILL');
+  process.kill(process.pid, 'SIGTERM');
   fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
 });
