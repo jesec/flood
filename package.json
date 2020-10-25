@@ -8,7 +8,8 @@
     "node",
     "webui",
     "web ui",
-    "rTorrent"
+    "rTorrent",
+    "qBittorrent"
   ],
   "private": false,
   "license": "GPL-3.0-only",
