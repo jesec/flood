@@ -88,6 +88,9 @@ const AuthActions = {
       () => {
         // do nothing.
       },
+      () => {
+        // do nothing.
+      },
     ),
 
   register: (options: AuthRegistrationOptions) =>
