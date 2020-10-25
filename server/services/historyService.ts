@@ -6,15 +6,8 @@ import type {TransferHistory, TransferSummary} from '@shared/types/TransferData'
 import BaseService from './BaseService';
 import config from '../../config';
 import HistoryEra from '../models/HistoryEra';
-import historySnapshotTypes from '../../shared/constants/historySnapshotTypes';
 
-type HistorySnapshotEvents = {
-  // TODO: Switch to string literal template type when TypeScript 4.1 is released.
-  // [snapshot in `${HistorySnapshot}_SNAPSHOT_FULL_UPDATE`]: (payload: {id: number, data: TransferHistory}) => void;
-  FIVE_MINUTE_SNAPSHOT_FULL_UPDATE: (payload: {id: number; data: TransferHistory}) => void;
-};
-
-interface HistoryServiceEvents extends HistorySnapshotEvents {
+interface HistoryServiceEvents {
   TRANSFER_SUMMARY_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
   FETCH_TRANSFER_SUMMARY_SUCCESS: () => void;
   FETCH_TRANSFER_SUMMARY_ERROR: () => void;
@@ -106,31 +99,6 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     };
   }
 
-  checkSnapshotDiffs() {
-    historySnapshotTypes.forEach((snapshotType: Readonly<HistorySnapshot>) => {
-      this.getHistory({snapshot: snapshotType}, (nextSnapshot, error) => {
-        if (error || nextSnapshot == null) {
-          return;
-        }
-
-        const lastSnapshot = this.lastSnapshots[snapshotType] || {timestamps: []};
-        const {timestamps} = lastSnapshot;
-
-        const nextLastTimestamp = timestamps[timestamps.length - 1];
-        const prevLastTimestamp = nextSnapshot.timestamps[nextSnapshot.timestamps.length - 1];
-
-        if (nextLastTimestamp !== prevLastTimestamp) {
-          this.emit(`${snapshotType}_SNAPSHOT_FULL_UPDATE` as `FIVE_MINUTE_SNAPSHOT_FULL_UPDATE`, {
-            id: nextLastTimestamp,
-            data: nextSnapshot,
-          });
-        }
-
-        this.lastSnapshots[snapshotType] = nextSnapshot;
-      });
-    });
-  }
-
   deferFetchTransferSummary(interval = config.torrentClientPollInterval || 2000) {
     this.pollTimeout = setTimeout(this.fetchCurrentTransferSummary, interval);
   }
@@ -184,12 +152,10 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
   handleFetchTransferSummarySuccess(nextTransferSummary: TransferSummary) {
     const summaryDiff = jsonpatch.compare(this.transferSummary, nextTransferSummary);
 
-    if (summaryDiff.length > 0) {
-      this.emit('TRANSFER_SUMMARY_DIFF_CHANGE', {
-        diff: summaryDiff,
-        id: Date.now(),
-      });
-    }
+    this.emit('TRANSFER_SUMMARY_DIFF_CHANGE', {
+      diff: summaryDiff,
+      id: Date.now(),
+    });
 
     this.errorCount = 0;
     this.transferSummary = nextTransferSummary;
@@ -198,7 +164,6 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
       download: nextTransferSummary.downRate,
     });
 
-    this.checkSnapshotDiffs();
     this.deferFetchTransferSummary();
 
     this.emit('FETCH_TRANSFER_SUMMARY_SUCCESS');

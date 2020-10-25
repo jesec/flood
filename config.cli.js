@@ -58,6 +58,18 @@ const {argv} = require('yargs')
     describe: "Depends on noauth: Path to rTorrent's SCGI unix socket",
     type: 'string',
   })
+  .option('qburl', {
+    describe: 'Depends on noauth: URL to qBittorrent Web API',
+    type: 'string',
+  })
+  .option('qbuser', {
+    describe: 'Depends on noauth: Username of qBittorrent Web API',
+    type: 'string',
+  })
+  .option('qbpass', {
+    describe: 'Depends on noauth: Password of qBittorrent Web API',
+    type: 'string',
+  })
   .option('ssl', {
     default: false,
     describe: 'Enable SSL, key.pem and fullchain.pem needed in runtime directory',
@@ -160,6 +172,35 @@ if (!argv.secret) {
   ({secret} = argv);
 }
 
+let connectionSettings;
+if (argv.rtsocket != null || argv.rthost != null) {
+  if (argv.rtsocket != null) {
+    connectionSettings = {
+      client: 'rTorrent',
+      type: 'socket',
+      version: 1,
+      socket: argv.rtsocket,
+    };
+  } else {
+    connectionSettings = {
+      client: 'rTorrent',
+      type: 'tcp',
+      version: 1,
+      host: argv.rthost,
+      port: argv.rtport,
+    };
+  }
+} else if (argv.qburl != null) {
+  connectionSettings = {
+    client: 'qBittorrent',
+    type: 'web',
+    version: 1,
+    url: argv.qburl,
+    username: argv.qbuser,
+    password: argv.qbpass,
+  };
+}
+
 const CONFIG = {
   baseURI: argv.baseuri,
   dbCleanInterval: argv.dbclean,
@@ -167,21 +208,7 @@ const CONFIG = {
   tempPath: path.resolve(path.join(argv.rundir, 'temp')),
   disableUsersAndAuth: argv.noauth,
   enableUsersHTTPBasicAuthHandler: argv.httpauth,
-  configUser:
-    argv.rtsocket != null
-      ? {
-          client: 'rTorrent',
-          type: 'socket',
-          version: 1,
-          socket: argv.rtsocket || '/data/rtorrent.sock',
-        }
-      : {
-          client: 'rTorrent',
-          type: 'tcp',
-          version: 1,
-          host: argv.rthost || 'localhost',
-          port: argv.rtport || 5000,
-        },
+  configUser: connectionSettings,
   floodServerHost: argv.host,
   floodServerPort: argv.port,
   floodServerProxy: argv.proxy,

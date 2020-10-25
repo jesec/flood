@@ -13,12 +13,11 @@ interface DirectoryTreeProps {
   path?: Array<string>;
   hash: TorrentProperties['hash'];
   itemsTree: TorrentContentSelectionTree;
-  onPriorityChange: () => void;
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
 
 const DirectoryTree: React.FC<DirectoryTreeProps> = (props: DirectoryTreeProps) => {
-  const {depth = 0, itemsTree, hash, path, onItemSelect, onPriorityChange} = props;
+  const {depth = 0, itemsTree, hash, path, onItemSelect} = props;
   const {files, directories} = itemsTree;
   const childDepth = depth + 1;
 
@@ -47,7 +46,6 @@ const DirectoryTree: React.FC<DirectoryTreeProps> = (props: DirectoryTreeProps) 
                   key={id}
                   itemsTree={subSelectedItems}
                   onItemSelect={onItemSelect}
-                  onPriorityChange={onPriorityChange}
                   path={path}
                 />
               );
@@ -62,7 +60,6 @@ const DirectoryTree: React.FC<DirectoryTreeProps> = (props: DirectoryTreeProps) 
         hash={hash}
         key={`files-${childDepth}`}
         onItemSelect={onItemSelect}
-        onPriorityChange={onPriorityChange}
         path={path}
         items={itemsTree.files}
       />

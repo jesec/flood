@@ -102,7 +102,31 @@ const applySelection = (
   return tree;
 };
 
-const getSelectionTree = (contents: Array<TorrentContent>, isSelected = true): TorrentContentSelectionTree => {
+const getSelectedItems = (tree: TorrentContentSelectionTree) => {
+  const indices: Array<number> = [];
+
+  if (tree.files != null) {
+    const {files} = tree;
+    Object.keys(files).forEach((fileName) => {
+      const file = files[fileName];
+
+      if (file.isSelected) {
+        indices.push(file.index);
+      }
+    });
+  }
+
+  if (tree.directories != null) {
+    const {directories} = tree;
+    Object.keys(directories).forEach((directoryName) => {
+      indices.push(...getSelectedItems(directories[directoryName]));
+    });
+  }
+
+  return indices;
+};
+
+const getSelectionTree = (contents: Array<TorrentContent>, isSelected = false): TorrentContentSelectionTree => {
   const tree: TorrentContentSelectionTree = {isSelected};
 
   contents.forEach((content) => {
@@ -113,20 +137,21 @@ const getSelectionTree = (contents: Array<TorrentContent>, isSelected = true): T
       const pathComponent = pathComponents.shift() as string;
 
       if (currentDirectory.directories == null) {
-        currentDirectory.directories = {[pathComponent]: {isSelected}};
-      } else {
-        if (currentDirectory.directories[pathComponent] == null) {
-          currentDirectory.directories[pathComponent] = {isSelected};
-        }
-        currentDirectory = currentDirectory.directories[pathComponent];
+        currentDirectory.directories = {};
       }
+
+      if (currentDirectory.directories[pathComponent] == null) {
+        currentDirectory.directories[pathComponent] = {isSelected};
+      }
+
+      currentDirectory = currentDirectory.directories[pathComponent];
     }
 
     if (currentDirectory.files == null) {
-      currentDirectory.files = {[content.filename]: {...content, isSelected}};
-    } else {
-      currentDirectory.files[content.filename] = content;
+      currentDirectory.files = {};
     }
+
+    currentDirectory.files[content.filename] = {...content, isSelected};
   });
 
   return tree;
@@ -135,6 +160,7 @@ const getSelectionTree = (contents: Array<TorrentContent>, isSelected = true): T
 const selectionTree = {
   selectAll,
   applySelection,
+  getSelectedItems,
   getSelectionTree,
 };
 

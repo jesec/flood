@@ -1,8 +1,9 @@
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 import throttle from 'lodash/throttle';
 
-import type {Feed, Item} from '@shared/types/Feed';
+import type {Feed} from '@shared/types/Feed';
 
 import {
   Button,
@@ -16,13 +17,12 @@ import {
   SelectItem,
   Textbox,
 } from '../../../ui';
-import connectStores from '../../../util/connectStores';
 import Close from '../../icons/Close';
 import Edit from '../../icons/Edit';
-import FeedsStore from '../../../stores/FeedsStore';
+import FeedActions from '../../../actions/FeedActions';
+import FeedStore from '../../../stores/FeedStore';
 import {minToHumanReadable} from '../../../i18n/languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import SettingsActions from '../../../actions/SettingsActions';
 import UIActions from '../../../actions/UIActions';
 import * as validators from '../../../util/validators';
 
@@ -38,11 +38,6 @@ interface FeedFormData extends Feed {
   label: string;
   interval: number;
   intervalMultiplier: number;
-}
-
-interface FeedsTabProps extends WrappedComponentProps {
-  feeds: Array<Feed>;
-  items: Array<Item>;
 }
 
 interface FeedsTabStates {
@@ -96,7 +91,8 @@ const defaultFeed = {
   url: '',
 };
 
-class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
+@observer
+class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
   formRef: Form | null = null;
 
   manualAddingFormRef: Form | null = null;
@@ -129,8 +125,9 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     }
   }, 150);
 
-  constructor(props: FeedsTabProps) {
+  constructor(props: WrappedComponentProps) {
     super(props);
+
     this.state = {
       errors: {},
       intervalMultipliers: [
@@ -178,41 +175,6 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
         {interval.displayName}
       </SelectItem>
     ));
-  }
-
-  getAvailableFeedsOptions() {
-    const {feeds} = this.props;
-
-    if (!feeds.length) {
-      return [
-        <SelectItem key="empty" id="placeholder" placeholder>
-          <em>
-            <FormattedMessage id="feeds.no.feeds.available" />
-          </em>
-        </SelectItem>,
-      ];
-    }
-
-    return feeds.reduce(
-      (feedOptions, feed) => {
-        if (feed._id == null) {
-          return feedOptions;
-        }
-
-        return feedOptions.concat(
-          <SelectItem key={feed._id} id={feed._id}>
-            {feed.label}
-          </SelectItem>,
-        );
-      },
-      [
-        <SelectItem key="select-feed" id="placeholder" placeholder>
-          <em>
-            <FormattedMessage id="feeds.select.feed" />
-          </em>
-        </SelectItem>,
-      ],
-    );
   }
 
   getModifyFeedForm(feed: Partial<Feed>) {
@@ -350,7 +312,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
   }
 
   getFeedsList() {
-    const {feeds} = this.props;
+    const {feeds} = FeedStore;
 
     if (feeds.length === 0) {
       return (
@@ -368,6 +330,8 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
   }
 
   getFeedItemsForm() {
+    const {feeds, items} = FeedStore;
+
     return (
       <Form
         className="inverse"
@@ -381,46 +345,71 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
         </ModalFormSectionHeader>
         <FormRow>
           <Select
-            disabled={!this.props.feeds.length}
+            disabled={!feeds.length}
             grow={false}
             id="feedID"
             label={this.props.intl.formatMessage({
               id: 'feeds.select.feed',
             })}
             width="three-eighths">
-            {this.getAvailableFeedsOptions()}
+            {!feeds.length
+              ? [
+                  <SelectItem key="empty" id="placeholder" placeholder>
+                    <em>
+                      <FormattedMessage id="feeds.no.feeds.available" />
+                    </em>
+                  </SelectItem>,
+                ]
+              : feeds.reduce(
+                  (feedOptions, feed) => {
+                    if (feed._id == null) {
+                      return feedOptions;
+                    }
+
+                    return feedOptions.concat(
+                      <SelectItem key={feed._id} id={feed._id}>
+                        {feed.label}
+                      </SelectItem>,
+                    );
+                  },
+                  [
+                    <SelectItem key="select-feed" id="placeholder" placeholder>
+                      <em>
+                        <FormattedMessage id="feeds.select.feed" />
+                      </em>
+                    </SelectItem>,
+                  ],
+                )}
           </Select>
           {this.renderSearchField()}
           {this.renderDownloadButton()}
         </FormRow>
-        {this.state.selectedFeedID && <FormRow>{this.getFeedItemsList()}</FormRow>}
+        {this.state.selectedFeedID && (
+          <FormRow>
+            {items.length === 0 ? (
+              <ul className="interactive-list">
+                <li className="interactive-list__item">
+                  <div className="interactive-list__label">
+                    <FormattedMessage id="feeds.no.items.matching" />
+                  </div>
+                </li>
+              </ul>
+            ) : (
+              <ul className="interactive-list feed-list">
+                {items.map((item, index) => (
+                  <li
+                    className="interactive-list__item interactive-list__item--stacked-content feed-list__feed"
+                    key={item.title}>
+                    <div className="interactive-list__label feed-list__feed-label">{item.title}</div>
+                    <Checkbox id={`${index}`} />
+                  </li>
+                ))}
+              </ul>
+            )}
+          </FormRow>
+        )}
       </Form>
     );
-  }
-
-  getFeedItemsList() {
-    const {items} = this.props;
-
-    if (items.length === 0) {
-      return (
-        <ul className="interactive-list">
-          <li className="interactive-list__item">
-            <div className="interactive-list__label">
-              <FormattedMessage id="feeds.no.items.matching" />
-            </div>
-          </li>
-        </ul>
-      );
-    }
-
-    const itemsList = items.map((item, index) => (
-      <li className="interactive-list__item interactive-list__item--stacked-content feed-list__feed" key={item.title}>
-        <div className="interactive-list__label feed-list__feed-label">{item.title}</div>
-        <Checkbox id={`${index}`} />
-      </li>
-    ));
-
-    return <ul className="interactive-list feed-list">{itemsList}</ul>;
   }
 
   handleFormSubmit = () => {
@@ -434,9 +423,9 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
 
       if (formData != null) {
         if (currentFeed === defaultFeed) {
-          SettingsActions.addFeed(formData);
+          FeedActions.addFeed(formData);
         } else if (currentFeed?._id != null) {
-          SettingsActions.modifyFeed(currentFeed._id, formData);
+          FeedActions.modifyFeed(currentFeed._id, formData);
         }
       }
       if (this.formRef != null) {
@@ -460,7 +449,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
 
   handleRemoveFeedClick = (feed: Feed) => {
     if (feed._id != null) {
-      SettingsActions.removeFeedMonitor(feed._id);
+      FeedActions.removeFeedMonitor(feed._id);
     }
 
     if (feed === this.state.currentlyEditingFeed) {
@@ -483,7 +472,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     const feedBrowseForm = input.formData as {feedID: string; search: string};
     if ((input.event.target as HTMLInputElement).type !== 'checkbox') {
       this.setState({selectedFeedID: feedBrowseForm.feedID});
-      SettingsActions.fetchItems({id: feedBrowseForm.feedID, search: feedBrowseForm.search});
+      FeedActions.fetchItems({id: feedBrowseForm.feedID, search: feedBrowseForm.search});
     }
   };
 
@@ -495,7 +484,7 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
     const formData = this.manualAddingFormRef.getFormData();
 
     // TODO: Properly handle array of array of URLs
-    const torrentsToDownload = this.props.items
+    const torrentsToDownload = FeedStore.items
       .filter((_item, index) => formData[index])
       .map((item, index) => ({id: index, value: item.urls[0]}));
 
@@ -579,29 +568,4 @@ class FeedsTab extends React.Component<FeedsTabProps, FeedsTabStates> {
   }
 }
 
-const ConnectedFeedsTab = connectStores<Omit<FeedsTabProps, 'intl'>, FeedsTabStates>(injectIntl(FeedsTab), () => {
-  return [
-    {
-      store: FeedsStore,
-      event: 'SETTINGS_FEED_MONITORS_FETCH_SUCCESS',
-      getValue: ({store}) => {
-        const storeFeeds = store as typeof FeedsStore;
-        return {
-          feeds: storeFeeds.getFeeds(),
-        };
-      },
-    },
-    {
-      store: FeedsStore,
-      event: 'SETTINGS_FEED_MONITOR_ITEMS_FETCH_SUCCESS',
-      getValue: ({store}) => {
-        const storeFeeds = store as typeof FeedsStore;
-        return {
-          items: storeFeeds.getItems() || [],
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedFeedsTab;
+export default injectIntl(FeedsTab);

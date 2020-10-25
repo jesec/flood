@@ -1,53 +1,38 @@
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import Alert from './Alert';
 import AlertStore from '../../stores/AlertStore';
-import connectStores from '../../util/connectStores';
 
-import type {Alert as AlertType} from '../../stores/AlertStore';
+const Alerts: React.FC = () => {
+  const {alerts, accumulation} = AlertStore;
 
-interface AlertsProps {
-  alerts?: Array<AlertType>;
-}
+  const sortedAlerts = Object.keys(alerts)
+    .sort()
+    .map((id) => {
+      const alert = alerts[id];
 
-class Alerts extends React.Component<AlertsProps> {
-  renderAlerts() {
-    const {alerts} = this.props;
+      if (alert.accumulation) {
+        alert.count = accumulation[alert.accumulation.id];
+      }
 
-    if (alerts != null && alerts.length > 0) {
-      return (
+      return alert;
+    });
+
+  return (
+    <TransitionGroup>
+      {sortedAlerts != null && sortedAlerts.length > 0 ? (
         <CSSTransition classNames="alerts__list" timeout={{enter: 250, exit: 250}}>
           <ul className="alerts__list" key="alerts-list">
-            {alerts.map((alert) => (
+            {sortedAlerts.map((alert) => (
               <Alert {...alert} key={alert.id} />
             ))}
           </ul>
         </CSSTransition>
-      );
-    }
+      ) : null}
+    </TransitionGroup>
+  );
+};
 
-    return null;
-  }
-
-  render() {
-    return <TransitionGroup>{this.renderAlerts()}</TransitionGroup>;
-  }
-}
-
-const ConnectedAlerts = connectStores(Alerts, () => {
-  return [
-    {
-      store: AlertStore,
-      event: 'ALERTS_CHANGE',
-      getValue: ({store}) => {
-        const storeAlert = store as typeof AlertStore;
-        return {
-          alerts: storeAlert.getAlerts(),
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedAlerts;
+export default observer(Alerts);

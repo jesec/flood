@@ -1,17 +1,14 @@
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import BaseStore from './BaseStore';
+import {makeAutoObservable} from 'mobx';
 
-import type {ConfirmModalProps} from '../components/modals/confirm-modal/ConfirmModal';
 import type {TorrentContextMenuAction} from '../constants/TorrentContextMenuActions';
-import type {TorrentDetailsModalProps} from '../components/modals/torrent-details-modal/TorrentDetailsModal';
 
 export type ContextMenuItem =
   | {
       type: 'action';
       action: TorrentContextMenuAction;
       label: string;
-      labelAction?: React.ReactNode;
-      labelSecondary?: React.ReactNode;
+      labelAction?: React.FC;
+      labelSecondary?: React.FC;
       clickHandler(action: TorrentContextMenuAction, event: React.MouseEvent<HTMLLIElement>): void;
       dismissMenu?: boolean;
     }
@@ -30,15 +27,36 @@ export interface ContextMenu {
 
 export interface Dependency {
   id: string;
-  message: JSX.Element;
-  satisfied: boolean;
+  message: {id: string} | string;
+  satisfied?: boolean;
 }
 
 export type Dependencies = Record<string, Dependency>;
 
+interface BaseModalAction {
+  content: React.ReactNode;
+  triggerDismiss?: boolean;
+}
+
+interface CheckboxModalAction extends BaseModalAction {
+  type: 'checkbox';
+  id?: string;
+  checked?: boolean;
+  clickHandler?: ((event: React.MouseEvent<HTMLInputElement> | KeyboardEvent) => void) | null;
+}
+
+interface ButtonModalAction extends BaseModalAction {
+  type: 'primary' | 'tertiary';
+  isLoading?: boolean;
+  submit?: boolean;
+  clickHandler?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | null;
+}
+
+export type ModalAction = CheckboxModalAction | ButtonModalAction;
+
 export type Modal =
   | {
-      id: 'feeds' | 'move-torrents' | 'remove-torrents' | 'set-taxonomy' | 'set-tracker' | 'settings';
+      id: 'feeds' | 'move-torrents' | 'remove-torrents' | 'set-taxonomy' | 'set-trackers' | 'settings';
     }
   | {
       id: 'add-torrents';
@@ -46,14 +64,16 @@ export type Modal =
     }
   | {
       id: 'confirm';
-      options: ConfirmModalProps['options'];
+      content: React.ReactNode;
+      heading: React.ReactNode;
+      actions: Array<ModalAction>;
     }
   | {
       id: 'torrent-details';
-      options: TorrentDetailsModalProps['options'];
+      hash: string;
     };
 
-class UIStoreClass extends BaseStore {
+class UIStoreClass {
   activeContextMenu: ContextMenu | null = null;
   activeDropdownMenu: string | null = null;
   activeModal: Modal | null = null;
@@ -61,6 +81,10 @@ class UIStoreClass extends BaseStore {
   globalStyles: Array<string> = [];
   haveUIDependenciesResolved = false;
   styleElement: HTMLStyleElement & {styleSheet?: {cssText: string}} = this.createStyleElement();
+
+  constructor() {
+    makeAutoObservable(this);
+  }
 
   addGlobalStyle(cssString: string) {
     this.globalStyles.push(cssString);
@@ -101,29 +125,11 @@ class UIStoreClass extends BaseStore {
   dismissContextMenu(menuID: ContextMenu['id']) {
     if (this.activeContextMenu != null && this.activeContextMenu.id === menuID) {
       this.activeContextMenu = null;
-
-      this.emit('UI_CONTEXT_MENU_CHANGE');
     }
   }
 
   dismissModal() {
     this.setActiveModal(null);
-  }
-
-  getActiveContextMenu() {
-    return this.activeContextMenu;
-  }
-
-  getActiveModal() {
-    return this.activeModal;
-  }
-
-  getActiveDropdownMenu() {
-    return this.activeDropdownMenu;
-  }
-
-  getDependencies() {
-    return this.dependencies;
   }
 
   handleSetTaxonomySuccess() {
@@ -132,13 +138,8 @@ class UIStoreClass extends BaseStore {
     }
   }
 
-  hasSatisfiedDependencies() {
-    return Object.keys(this.dependencies).length === 0;
-  }
-
   removeGlobalStyle(cssString: string) {
     this.globalStyles = this.globalStyles.filter((style) => style !== cssString);
-
     this.applyStyles();
   }
 
@@ -150,35 +151,25 @@ class UIStoreClass extends BaseStore {
         this.dependencies[id] = {...dependency, satisfied: false};
       }
     });
-
-    this.emit('UI_DEPENDENCIES_CHANGE');
   }
 
   satisfyDependency(dependencyID: string) {
     if (this.dependencies[dependencyID] && !this.dependencies[dependencyID].satisfied) {
       this.dependencies[dependencyID].satisfied = true;
-      this.emit('UI_DEPENDENCIES_CHANGE');
       this.verifyDependencies();
     }
   }
 
   setActiveContextMenu(contextMenu: this['activeContextMenu']) {
     this.activeContextMenu = contextMenu;
-    this.emit('UI_CONTEXT_MENU_CHANGE');
   }
 
   setActiveDropdownMenu(dropdownMenu: this['activeDropdownMenu']) {
     this.activeDropdownMenu = dropdownMenu;
-    this.emit('UI_DROPDOWN_MENU_CHANGE');
   }
 
   setActiveModal(modal: this['activeModal']) {
-    if (modal == null) {
-      this.emit('UI_MODAL_DISMISSED');
-    }
-
     this.activeModal = modal;
-    this.emit('UI_MODAL_CHANGE');
   }
 
   verifyDependencies() {
@@ -186,55 +177,10 @@ class UIStoreClass extends BaseStore {
 
     if (!isDependencyLoading) {
       this.haveUIDependenciesResolved = true;
-      this.emit('UI_DEPENDENCIES_LOADED');
     }
   }
 }
 
 const UIStore = new UIStoreClass();
-
-UIStore.dispatcherID = AppDispatcher.register((payload) => {
-  const {action} = payload;
-
-  switch (action.type) {
-    case 'UI_DISPLAY_DROPDOWN_MENU':
-      UIStore.setActiveDropdownMenu(action.data);
-      break;
-    case 'UI_DISPLAY_MODAL':
-      UIStore.setActiveModal(action.data);
-      break;
-    case 'CLIENT_SET_TAXONOMY_SUCCESS':
-      UIStore.handleSetTaxonomySuccess();
-      break;
-    case 'CLIENT_SET_TRACKER_SUCCESS':
-    case 'CLIENT_ADD_TORRENT_SUCCESS':
-    case 'CLIENT_MOVE_TORRENTS_SUCCESS':
-      UIStore.dismissModal();
-      break;
-    case 'UI_DISMISS_CONTEXT_MENU':
-      UIStore.dismissContextMenu(action.data);
-      break;
-    case 'UI_DISPLAY_CONTEXT_MENU':
-      UIStore.setActiveContextMenu(action.data);
-      break;
-    case 'NOTIFICATION_COUNT_CHANGE':
-      UIStore.satisfyDependency('notifications');
-      break;
-    case 'TAXONOMY_FULL_UPDATE':
-      UIStore.satisfyDependency('torrent-taxonomy');
-      break;
-    case 'TORRENT_LIST_FULL_UPDATE':
-      UIStore.satisfyDependency('torrent-list');
-      break;
-    case 'TRANSFER_SUMMARY_FULL_UPDATE':
-      UIStore.satisfyDependency('transfer-data');
-      break;
-    case 'TRANSFER_HISTORY_FULL_UPDATE':
-      UIStore.satisfyDependency('transfer-history');
-      break;
-    default:
-      break;
-  }
-});
 
 export default UIStore;

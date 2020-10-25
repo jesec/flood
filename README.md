@@ -1,10 +1,12 @@
-# Flood
+# Flood - [flood.js.org](https://flood.js.org)
 
-![Flood logo](flood.png)
+[![Flood logo](flood.png)](https://flood.js.org)
 
 [![Github Actions build status badge](https://github.com/jesec/flood/workflows/Build/badge.svg?branch=master&event=push)](https://github.com/jesec/flood/actions) [![Crowdin](https://badges.crowdin.net/flood/localized.svg)](https://crowdin.com/project/flood) [![Discord server badge](https://img.shields.io/discord/418267176873623553.svg?style=flat-square)](https://discord.gg/Z7yR5Uf)
 
-Flood is a monitoring service for [rTorrent](https://github.com/rakshasa/rtorrent). It's a Node.js service that communicates with rTorrent instances and serves a decent web UI for administration. This project is based on the [original Flood project](https://github.com/Flood-UI/flood).
+Flood is a monitoring service for various torrent clients. It's a Node.js service that communicates with your favorite torrent client and serves a decent web UI for administration. This project is based on the [original Flood project](https://github.com/Flood-UI/flood).
+
+Flood currently provides stable and tested support to [rTorrent](https://github.com/rakshasa/rtorrent) and experimental support to [qBittorrent](https://github.com/qbittorrent/qBittorrent).
 
 #### Feedback
 
@@ -58,8 +60,8 @@ Run the installation command again.
 
 - Debian, Ubuntu and RHEL-based distributions users can install latest `nodejs` from [NodeSource](https://github.com/nodesource/distributions).
 - Flood and filesystem:
-  - Flood's relationship with rTorrent is NOT truly server-client. Flood server performs file operations itself. Flood server itself needs to have permissions/access to the files.
-  - Flood only uses the path provided by rTorrent so it needs to have the same filesystem context as rTorrent. If a file is "/path/to/a/file" to rTorrent, it has to be "/path/to/a/file" to Flood in order to get file operations working. It can't be "/mnt/some/different/path/file".
+  - Flood server performs file operations itself. As such, Flood needs to have permissions/access to the files.
+  - Flood only uses the path provided by the torrent client so it needs to have the same filesystem context as the torrent client. If a file is "/path/to/a/file" to the torrent client, it has to be "/path/to/a/file" to Flood in order to get file operations working. It can't be "/mnt/some/different/path/file".
 - Ask for help in the [Flood Discord server](https://discord.gg/Z7yR5Uf).
 
 ### Docker

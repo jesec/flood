@@ -1,75 +1,80 @@
 import axios from 'axios';
 
+import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
 import ConfigStore from '../stores/ConfigStore';
-
-import type {ClientSettingsSaveSuccessAction} from '../constants/ServerActions';
+import SettingStore from '../stores/SettingStore';
+import AlertStore from '../stores/AlertStore';
 
 const baseURI = ConfigStore.getBaseURI();
 
 const ClientActions = {
-  fetchSettings: (property?: Record<string, unknown>) =>
+  fetchSettings: async (): Promise<void> =>
     axios
-      .get(`${baseURI}api/client/settings`, {params: {property}})
+      .get(`${baseURI}api/client/settings`)
       .then((json) => json.data)
       .then(
         (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SETTINGS_FETCH_REQUEST_SUCCESS',
-            data,
-          });
+          SettingStore.handleClientSettingsFetchSuccess(data);
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SETTINGS_FETCH_REQUEST_ERROR',
-            error,
-          });
+        () => {
+          // do nothing.
         },
       ),
 
-  saveSettings: (settings: SetClientSettingsOptions, options: ClientSettingsSaveSuccessAction['options']) =>
-    axios
-      .patch(`${baseURI}api/client/settings`, settings)
-      .then((json) => json.data)
-      .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SETTINGS_SAVE_SUCCESS',
-            data,
-            options,
-          });
-        },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_SETTINGS_SAVE_ERROR',
-            error,
-            options,
-          });
-        },
-      ),
+  saveSettings: async (settings: SetClientSettingsOptions, options?: {alert?: boolean}): Promise<void> => {
+    if (Object.keys(settings).length > 0) {
+      SettingStore.saveClientSettings(settings);
 
-  testClientConnectionSettings: (connectionSettings: ClientConnectionSettings) =>
+      let err = false;
+      await axios
+        .patch(`${baseURI}api/client/settings`, settings)
+        .then((json) => json.data)
+        .then(
+          () => {
+            // do nothing.
+          },
+          () => {
+            err = true;
+          },
+        );
+
+      if (options?.alert) {
+        // TODO: More precise error message.
+        AlertStore.add(
+          err
+            ? {
+                id: 'general.error.unknown',
+              }
+            : {
+                id: 'alert.settings.saved',
+              },
+        );
+      }
+    }
+  },
+
+  saveSetting: async <T extends ClientSetting>(property: T, data: ClientSettings[T]): Promise<void> => {
+    return ClientActions.saveSettings({[property]: data});
+  },
+
+  testClientConnectionSettings: async (connectionSettings: ClientConnectionSettings): Promise<{isConnected: boolean}> =>
     axios.post(`${baseURI}api/client/connection-test`, connectionSettings).then((json) => json.data),
 
-  testConnection: () =>
+  testConnection: async (): Promise<void> =>
     axios
       .get(`${baseURI}api/client/connection-test`)
       .then((json) => json.data)
       .then(
         () => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_CONNECTION_TEST_SUCCESS',
-          });
+          // do nothing.
         },
         () => {
-          AppDispatcher.dispatchServerAction({
-            type: 'CLIENT_CONNECTION_TEST_ERROR',
-          });
+          // do nothing.
         },
       ),
-};
+} as const;
 
 export default ClientActions;

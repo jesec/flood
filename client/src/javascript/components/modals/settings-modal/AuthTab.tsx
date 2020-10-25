@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import {AccessLevel} from '@shared/schema/Auth';
@@ -11,7 +12,6 @@ import AuthActions from '../../../actions/AuthActions';
 import AuthStore from '../../../stores/AuthStore';
 import ClientConnectionSettingsForm from '../../general/connection-settings/ClientConnectionSettingsForm';
 import Close from '../../icons/Close';
-import connectStores from '../../../util/connectStores';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 
 import type {ClientConnectionSettingsFormType} from '../../general/connection-settings/ClientConnectionSettingsForm';
@@ -22,25 +22,21 @@ interface AuthTabFormData {
   isAdmin: boolean;
 }
 
-interface AuthTabProps extends WrappedComponentProps {
-  users: Array<Credentials>;
-  isAdmin: boolean;
-}
-
 interface AuthTabStates {
   addUserError: string | null;
   hasFetchedUserList: boolean;
   isAddingUser: boolean;
 }
 
-class AuthTab extends React.Component<AuthTabProps, AuthTabStates> {
+@observer
+class AuthTab extends React.Component<WrappedComponentProps, AuthTabStates> {
   formData?: Partial<AuthTabFormData>;
 
   formRef?: Form | null = null;
 
   settingsFormRef: React.RefObject<ClientConnectionSettingsFormType> = React.createRef();
 
-  constructor(props: AuthTabProps) {
+  constructor(props: WrappedComponentProps) {
     super(props);
 
     this.state = {
@@ -51,52 +47,12 @@ class AuthTab extends React.Component<AuthTabProps, AuthTabStates> {
   }
 
   componentDidMount() {
-    if (!this.props.isAdmin) return;
+    if (!AuthStore.currentUser.isAdmin) {
+      return;
+    }
 
     AuthActions.fetchUsers().then(() => {
       this.setState({hasFetchedUserList: true});
-    });
-  }
-
-  getUserList() {
-    const userList = this.props.users.sort((a: Credentials, b: Credentials) => a.username.localeCompare(b.username));
-
-    const currentUsername = AuthStore.getCurrentUsername();
-
-    return userList.map((user: Credentials) => {
-      const isCurrentUser = user.username === currentUsername;
-      let badge = null;
-      let removeIcon = null;
-
-      if (!isCurrentUser) {
-        removeIcon = (
-          <span
-            className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-            onClick={() => AuthActions.deleteUser(user.username).then(AuthActions.fetchUsers)}>
-            <Close />
-          </span>
-        );
-      } else {
-        badge = (
-          <span className="interactive-list__label__tag tag">
-            <FormattedMessage id="auth.current.user" />
-          </span>
-        );
-      }
-
-      const classes = classnames('interactive-list__item', {
-        'interactive-list__item--disabled': isCurrentUser,
-      });
-
-      return (
-        <li className={classes} key={user.username}>
-          <span className="interactive-list__label">
-            <div className="interactive-list__label__text">{user.username}</div>
-            {badge}
-          </span>
-          {removeIcon}
-        </li>
-      );
     });
   }
 
@@ -154,7 +110,9 @@ class AuthTab extends React.Component<AuthTabProps, AuthTabStates> {
   };
 
   render() {
-    if (!this.props.isAdmin) {
+    const {addUserError, hasFetchedUserList} = this.state;
+
+    if (!AuthStore.currentUser.isAdmin) {
       return (
         <Form>
           <ModalFormSectionHeader>
@@ -169,17 +127,17 @@ class AuthTab extends React.Component<AuthTabProps, AuthTabStates> {
       );
     }
 
-    const isLoading = !this.state.hasFetchedUserList && this.props.users.length === 0;
+    const isLoading = !hasFetchedUserList && AuthStore.users.length === 0;
     const interactiveListClasses = classnames('interactive-list', {
       'interactive-list--loading': isLoading,
     });
     let errorElement = null;
     let loadingIndicator = null;
 
-    if (this.state.addUserError) {
+    if (addUserError) {
       errorElement = (
         <FormRow>
-          <FormError>{this.state.addUserError}</FormError>
+          <FormError>{addUserError}</FormError>
         </FormRow>
       );
     }
@@ -208,7 +166,44 @@ class AuthTab extends React.Component<AuthTabProps, AuthTabStates> {
           <FormRowItem>
             <ul className={interactiveListClasses}>
               <TransitionGroup>{loadingIndicator}</TransitionGroup>
-              {this.getUserList()}
+              {AuthStore.users
+                .slice()
+                .sort((a: Credentials, b: Credentials) => a.username.localeCompare(b.username))
+                .map((user: Credentials) => {
+                  const isCurrentUser = user.username === AuthStore.currentUser.username;
+                  let badge = null;
+                  let removeIcon = null;
+
+                  if (!isCurrentUser) {
+                    removeIcon = (
+                      <span
+                        className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
+                        onClick={() => AuthActions.deleteUser(user.username).then(AuthActions.fetchUsers)}>
+                        <Close />
+                      </span>
+                    );
+                  } else {
+                    badge = (
+                      <span className="interactive-list__label__tag tag">
+                        <FormattedMessage id="auth.current.user" />
+                      </span>
+                    );
+                  }
+
+                  const classes = classnames('interactive-list__item', {
+                    'interactive-list__item--disabled': isCurrentUser,
+                  });
+
+                  return (
+                    <li className={classes} key={user.username}>
+                      <span className="interactive-list__label">
+                        <div className="interactive-list__label__text">{user.username}</div>
+                        {badge}
+                      </span>
+                      {removeIcon}
+                    </li>
+                  );
+                })}
             </ul>
           </FormRowItem>
         </FormRow>
@@ -249,19 +244,4 @@ class AuthTab extends React.Component<AuthTabProps, AuthTabStates> {
   }
 }
 
-const ConnectedAuthTab = connectStores(injectIntl(AuthTab), () => {
-  return [
-    {
-      store: AuthStore,
-      event: 'AUTH_LIST_USERS_SUCCESS',
-      getValue: () => {
-        return {
-          users: AuthStore.getUsers(),
-          isAdmin: AuthStore.isAdmin(),
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedAuthTab;
+export default injectIntl(AuthTab);

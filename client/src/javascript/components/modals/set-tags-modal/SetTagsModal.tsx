@@ -7,7 +7,7 @@ import TagSelect from '../../general/form-elements/TagSelect';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
-import type {ModalAction} from '../ModalActions';
+import type {ModalAction} from '../../../stores/UIStore';
 
 interface SetTagsModalStates {
   isSettingTags: boolean;
@@ -56,7 +56,9 @@ class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalSt
           }}>
           <FormRow>
             <TagSelect
-              defaultValue={TorrentStore.getSelectedTorrentsTags()[0]}
+              defaultValue={TorrentStore.selectedTorrents
+                .map((hash: string) => TorrentStore.torrents[hash].tags)[0]
+                .slice()}
               id="tags"
               placeholder={this.props.intl.formatMessage({
                 id: 'torrents.set.tags.enter.tags',
@@ -76,9 +78,7 @@ class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalSt
     const formData = this.formRef.getFormData() as {tags: string};
     const tags = formData.tags ? formData.tags.split(',') : [];
 
-    this.setState({isSettingTags: true}, () =>
-      TorrentActions.setTags({hashes: TorrentStore.getSelectedTorrents(), tags}),
-    );
+    this.setState({isSettingTags: true}, () => TorrentActions.setTags({hashes: TorrentStore.selectedTorrents, tags}));
   };
 
   render() {

@@ -30,7 +30,7 @@ class SidebarFilter extends React.Component<SidebarFilterProps> {
     });
     let {name} = this.props;
 
-    if (this.props.name === 'all') {
+    if (this.props.name === '') {
       name = this.props.intl.formatMessage({
         id: 'filter.all',
       });

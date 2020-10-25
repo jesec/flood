@@ -11,6 +11,8 @@
     "isolatedModules": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true,
     "baseUrl": "./",
     "paths": {
       "@shared/*": ["shared/*"]

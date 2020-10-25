@@ -1,5 +1,4 @@
-import AppDispatcher from '../dispatcher/AppDispatcher';
-import BaseStore from './BaseStore';
+import {makeAutoObservable} from 'mobx';
 
 interface Accumulation {
   id: string;
@@ -15,10 +14,14 @@ export interface Alert {
 
 const DEFAULT_DURATION = 5 * 1000;
 
-class AlertStoreClass extends BaseStore {
+class AlertStoreClass {
   accumulation: Record<string, number> = {};
 
   alerts: Record<string, Alert> = {};
+
+  constructor() {
+    makeAutoObservable(this);
+  }
 
   accumulate(alert: Alert) {
     if (alert.accumulation == null) {
@@ -46,22 +49,6 @@ class AlertStoreClass extends BaseStore {
     this.scheduleCleanse(newAlert);
 
     this.alerts[newAlert.id] = newAlert;
-
-    this.emit('ALERTS_CHANGE');
-  }
-
-  getAlerts() {
-    const alertIDs = Object.keys(this.alerts).sort();
-
-    return alertIDs.map((id) => {
-      const alert = this.alerts[id];
-
-      if (alert.accumulation) {
-        alert.count = this.accumulation[alert.accumulation.id];
-      }
-
-      return alert;
-    });
   }
 
   removeExpired(alert: Alert) {
@@ -77,8 +64,6 @@ class AlertStoreClass extends BaseStore {
     } else {
       delete this.alerts[alert.id];
     }
-
-    this.emit('ALERTS_CHANGE');
   }
 
   removeAccumulation(alert: Alert) {
@@ -101,9 +86,5 @@ class AlertStoreClass extends BaseStore {
 }
 
 const AlertStore = new AlertStoreClass();
-
-AlertStore.dispatcherID = AppDispatcher.register(() => {
-  // do nothing.
-});
 
 export default AlertStore;

@@ -65,7 +65,7 @@ class FilesystemBrowser extends React.PureComponent<FilesystemBrowserProps, File
     const {separator} = this.state;
     const {directory} = this.props;
 
-    if (directory.endsWith(separator)) {
+    if (directory?.endsWith(separator)) {
       return `${directory}${nextDirectorySegment}`;
     }
 

@@ -1,6 +1,6 @@
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
-import SettingsStore from '../stores/SettingsStore';
+import SettingActions from '../actions/SettingActions';
 
 export const saveAddTorrentsUserPreferences = ({start, destination}: {start?: boolean; destination?: string}) => {
   const changedSettings: Partial<FloodSettings> = {};
@@ -13,9 +13,9 @@ export const saveAddTorrentsUserPreferences = ({start, destination}: {start?: bo
     changedSettings.torrentDestination = destination;
   }
 
-  SettingsStore.saveFloodSettings(changedSettings);
+  SettingActions.saveSettings(changedSettings);
 };
 
 export const saveDeleteTorrentsUserPreferences = ({deleteData}: {deleteData?: boolean}) => {
-  SettingsStore.setFloodSetting('deleteTorrentData', deleteData);
+  SettingActions.saveSetting('deleteTorrentData', deleteData);
 };

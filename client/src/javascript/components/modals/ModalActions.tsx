@@ -3,26 +3,7 @@ import React from 'react';
 import {Button, Checkbox} from '../../ui';
 import UIActions from '../../actions/UIActions';
 
-interface BaseAction {
-  content: React.ReactNode;
-  triggerDismiss?: boolean;
-}
-
-interface CheckboxAction extends BaseAction {
-  type: 'checkbox';
-  id?: string;
-  checked?: boolean;
-  clickHandler?: ((event: React.MouseEvent<HTMLInputElement> | KeyboardEvent) => void) | null;
-}
-
-interface ButtonAction extends BaseAction {
-  type: 'primary' | 'tertiary';
-  isLoading?: Button['props']['isLoading'];
-  submit?: boolean;
-  clickHandler?: ((event: React.MouseEvent<HTMLButtonElement>) => void) | null;
-}
-
-export type ModalAction = CheckboxAction | ButtonAction;
+import type {ModalAction} from '../../stores/UIStore';
 
 interface ModalActionsProps {
   actions: Array<ModalAction>;

@@ -2,9 +2,9 @@ import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React, {PureComponent} from 'react';
 
 import ModalActions from '../ModalActions';
-import SettingsStore from '../../../stores/SettingsStore';
+import SettingStore from '../../../stores/SettingStore';
 
-import type {ModalAction} from '../ModalActions';
+import type {ModalAction} from '../../../stores/UIStore';
 
 interface AddTorrentsActionsProps extends WrappedComponentProps {
   isAddingTorrents: boolean;
@@ -15,7 +15,7 @@ class AddTorrentsActions extends PureComponent<AddTorrentsActionsProps> {
   getActions(): Array<ModalAction> {
     return [
       {
-        checked: Boolean(SettingsStore.getFloodSetting('startTorrentsOnLoad')),
+        checked: Boolean(SettingStore.floodSettings.startTorrentsOnLoad),
         clickHandler: null,
         content: this.props.intl.formatMessage({
           id: 'torrents.add.start.label',

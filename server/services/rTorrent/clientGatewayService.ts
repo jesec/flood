@@ -26,7 +26,7 @@ import type {
 } from '@shared/types/api/torrents';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import {accessDeniedError, createDirectory, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {createDirectory} from '../../util/fileUtil';
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import scgiUtil from './util/scgiUtil';
@@ -85,13 +85,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isCompleted,
     start,
   }: AddTorrentByURLOptions): Promise<void> {
-    const destinationPath = sanitizePath(destination);
-
-    if (!isAllowedPath(destinationPath)) {
-      throw accessDeniedError();
-    }
-
-    await createDirectory(destinationPath);
+    await createDirectory(destination);
 
     const torrentPaths: Array<string> = (
       await Promise.all(
@@ -127,7 +121,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             return false;
           }
 
-          return setCompleted(torrentPath, destinationPath, isBasePath);
+          return setCompleted(torrentPath, destination, isBasePath);
         }),
       );
     }
@@ -135,7 +129,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const methodCalls: MultiMethodCalls = torrentPaths.map((torrentPath) => {
       const additionalCalls: Array<string> = [];
 
-      additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destinationPath}"`);
+      additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destination}"`);
 
       if (Array.isArray(tags)) {
         additionalCalls.push(`d.custom1.set=${encodeTags(tags)}`);
@@ -240,17 +234,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions): Promise<void> {
-    const resolvedPath = sanitizePath(destination);
-    if (!isAllowedPath(resolvedPath)) {
-      throw accessDeniedError();
-    }
-
     const hashesToRestart: Array<string> = [];
 
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: isBasePath ? 'd.directory_base.set' : 'd.directory.set',
-        params: [hash, resolvedPath],
+        params: [hash, destination],
       });
 
       if (!this.services?.torrentService.getTorrent(hash).status.includes('stopped')) {
@@ -280,12 +269,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           throw new Error();
         }
 
-        const destinationFilePath = sanitizePath(path.join(resolvedPath, baseFileName));
+        const destinationFilePath = path.join(destination, baseFileName);
         if (sourceBasePath !== destinationFilePath) {
           try {
             moveSync(sourceBasePath, destinationFilePath, {overwrite: true});
           } catch (err) {
-            console.error(`Failed to move files to ${resolvedPath}.`);
+            console.error(`Failed to move files to ${destination}.`);
             console.error(err);
           }
         }

@@ -5,11 +5,12 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import {Checkbox} from '../../../../ui';
 import ErrorIcon from '../../../icons/ErrorIcon';
-import SettingsStore from '../../../../stores/SettingsStore';
-import SortableList, {ListItem} from '../../../general/SortableList';
+import SettingStore from '../../../../stores/SettingStore';
+import SortableList from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
 import TorrentListColumns from '../../../../constants/TorrentListColumns';
 
+import type {ListItem} from '../../../general/SortableList';
 import type {TorrentListColumn} from '../../../../constants/TorrentListColumns';
 
 interface TorrentListColumnsListProps {
@@ -28,7 +29,7 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
     super(props);
 
     this.state = {
-      torrentListColumns: SettingsStore.getFloodSetting('torrentListColumns'),
+      torrentListColumns: SettingStore.floodSettings.torrentListColumns,
     };
   }
 
@@ -121,31 +122,25 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
 
   render(): React.ReactNode {
     const lockedIDs = this.getLockedIDs();
-    let nextUnlockedIndex = lockedIDs.length;
 
-    const torrentListColumnItems =
-      this.props.torrentListViewSize === 'expanded'
-        ? this.state.torrentListColumns
-            .reduce((accumulator: FloodSettings['torrentListColumns'], column) => {
-              const lockedIDIndex = lockedIDs.indexOf(column.id);
+    const torrentListColumnItems: ListItem[] = this.state.torrentListColumns
+      .filter((column) => TorrentListColumns[column.id] != null)
+      .slice();
 
-              if (lockedIDIndex > -1) {
-                accumulator[lockedIDIndex] = column;
-              } else {
-                accumulator[nextUnlockedIndex] = column;
-                nextUnlockedIndex += 1;
-              }
-
-              return accumulator;
-            }, [])
-            .filter((column) => column != null)
-        : this.state.torrentListColumns;
+    const newTorrentListColumnItems: ListItem[] = Object.keys(TorrentListColumns)
+      .filter((key) => this.state.torrentListColumns.every((column) => column.id !== key))
+      .map((newColumn) => {
+        return {
+          id: newColumn,
+          visible: false,
+        };
+      });
 
     return (
       <SortableList
         id="torrent-details"
         className="sortable-list--torrent-details"
-        items={torrentListColumnItems}
+        items={torrentListColumnItems.concat(newTorrentListColumnItems)}
         lockedIDs={lockedIDs}
         onMouseDown={this.handleMouseDown}
         onDrop={this.handleMove}

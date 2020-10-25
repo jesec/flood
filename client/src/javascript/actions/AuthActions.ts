@@ -8,11 +8,11 @@ import type {
 } from '@shared/schema/api/auth';
 import type {Credentials} from '@shared/schema/Auth';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import AuthStore from '../stores/AuthStore';
 import ClientActions from './ClientActions';
 import ConfigStore from '../stores/ConfigStore';
 import FloodActions from './FloodActions';
-import SettingsActions from './SettingsActions';
+import SettingActions from './SettingActions';
 
 const baseURI = ConfigStore.getBaseURI();
 
@@ -23,10 +23,7 @@ const AuthActions = {
       .then((json) => json.data)
       .then(
         (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_LOGIN_SUCCESS',
-            data,
-          });
+          AuthStore.handleLoginSuccess(data);
         },
         (error) => {
           // TODO: Handle errors consistently in API, then create a client-side class to get meaningful messages from
@@ -41,10 +38,7 @@ const AuthActions = {
             errorMessage = 'An unknown error occurred.';
           }
 
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_LOGIN_ERROR',
-            error: errorMessage,
-          });
+          AuthStore.handleLoginError();
 
           throw new Error(errorMessage);
         },
@@ -52,7 +46,7 @@ const AuthActions = {
       .then(() => {
         return Promise.all([
           ClientActions.fetchSettings(),
-          SettingsActions.fetchSettings(),
+          SettingActions.fetchSettings(),
           FloodActions.restartActivityStream(),
         ]);
       }),
@@ -62,10 +56,7 @@ const AuthActions = {
       .post(`${baseURI}api/auth/register?cookie=false`, options)
       .then((json) => json.data)
       .then((data) => {
-        AppDispatcher.dispatchServerAction({
-          type: 'AUTH_CREATE_USER_SUCCESS',
-          data,
-        });
+        AuthStore.handleCreateUserSuccess(data);
       }),
 
   updateUser: (username: Credentials['username'], options: AuthUpdateUserOptions) =>
@@ -76,23 +67,11 @@ const AuthActions = {
       .delete(`${baseURI}api/auth/users/${encodeURIComponent(username)}`)
       .then((json) => json.data)
       .then(
-        (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_DELETE_USER_SUCCESS',
-            data: {
-              username,
-              ...data,
-            },
-          });
+        () => {
+          // do nothing.
         },
-        (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_DELETE_USER_ERROR',
-            error: {
-              username,
-              ...error,
-            },
-          });
+        () => {
+          // do nothing.
         },
       ),
 
@@ -101,31 +80,13 @@ const AuthActions = {
       .get(`${baseURI}api/auth/users`)
       .then((json) => json.data)
       .then((data) => {
-        AppDispatcher.dispatchServerAction({
-          type: 'AUTH_LIST_USERS_SUCCESS',
-          data,
-        });
+        AuthStore.handleListUsersSuccess(data);
       }),
 
   logout: () =>
     axios.get(`${baseURI}api/auth/logout`).then(
       () => {
-        AppDispatcher.dispatchServerAction({
-          type: 'AUTH_LOGOUT_SUCCESS',
-        });
-      },
-      (error) => {
-        if (ConfigStore.getIsHTTPUser() && error.response && error.response.status === 401) {
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_LOGOUT_SUCCESS',
-          });
-
-          return;
-        }
-        AppDispatcher.dispatchServerAction({
-          type: 'AUTH_LOGOUT_ERROR',
-          error,
-        });
+        // do nothing.
       },
     ),
 
@@ -135,10 +96,7 @@ const AuthActions = {
       .then((json) => json.data)
       .then(
         (data) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_REGISTER_SUCCESS',
-            data,
-          });
+          AuthStore.handleRegisterSuccess(data);
         },
         (error: AxiosError) => {
           throw error;
@@ -151,24 +109,18 @@ const AuthActions = {
       .then((json) => json.data)
       .then(
         (data: AuthVerificationResponse) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_VERIFY_SUCCESS',
-            data,
-          });
+          AuthStore.handleAuthVerificationSuccess(data);
 
-          return Promise.all([ClientActions.fetchSettings(), SettingsActions.fetchSettings()]).then(() => {
+          return Promise.all([ClientActions.fetchSettings(), SettingActions.fetchSettings()]).then(() => {
             return data;
           });
         },
         (error) => {
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_VERIFY_ERROR',
-            error,
-          });
+          AuthStore.handleAuthVerificationError();
 
           throw error;
         },
       ),
-};
+} as const;
 
 export default AuthActions;

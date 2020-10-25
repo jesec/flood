@@ -4,7 +4,7 @@ import React from 'react';
 import ModalActions from './ModalActions';
 import ModalTabs from './ModalTabs';
 
-import type {ModalAction} from './ModalActions';
+import type {ModalAction} from '../../stores/UIStore';
 import type {Tab} from './ModalTabs';
 
 interface ModalProps {

@@ -1,9 +1,9 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import classnames from 'classnames';
+import {reaction} from 'mobx';
 import React from 'react';
 
 import Close from '../icons/Close';
-import connectStores from '../../util/connectStores';
 import Search from '../icons/Search';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
@@ -16,18 +16,20 @@ interface SearchBoxStates {
 class SearchBox extends React.Component<WrappedComponentProps, SearchBoxStates> {
   constructor(props: WrappedComponentProps) {
     super(props);
+
+    reaction(
+      () => TorrentFilterStore.filters.searchFilter,
+      (searchFilter) => {
+        if (searchFilter === '') {
+          this.resetSearch();
+        }
+      },
+    );
+
     this.state = {
       inputFieldKey: 0,
       isSearchActive: false,
     };
-  }
-
-  componentDidMount() {
-    TorrentFilterStore.listen('UI_TORRENTS_FILTER_CLEAR', this.resetSearch);
-  }
-
-  componentWillUnmount() {
-    TorrentFilterStore.unlisten('UI_TORRENTS_FILTER_CLEAR', this.resetSearch);
   }
 
   handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,19 +88,4 @@ class SearchBox extends React.Component<WrappedComponentProps, SearchBoxStates> 
   }
 }
 
-const ConnectedSearchBox = connectStores(injectIntl(SearchBox), () => {
-  return [
-    {
-      store: TorrentFilterStore,
-      event: 'UI_TORRENTS_FILTER_SEARCH_CHANGE',
-      getValue: ({store}) => {
-        const storeTorrentFilter = store as typeof TorrentFilterStore;
-        return {
-          searchValue: storeTorrentFilter.getSearchFilter(),
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedSearchBox;
+export default injectIntl(SearchBox);

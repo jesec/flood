@@ -1,18 +1,18 @@
+import {observer} from 'mobx-react';
 import React from 'react';
 
-import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {getTorrentListCellContent} from '../../util/torrentListCellContents';
 import ProgressBar from '../general/ProgressBar';
+import SettingStore from '../../stores/SettingStore';
 import TorrentListCell from './TorrentListCell';
 import torrentStatusIcons from '../../util/torrentStatusIcons';
+import TorrentStore from '../../stores/TorrentStore';
 
 interface TorrentListRowCondensedProps {
   className: string;
-  columns: FloodSettings['torrentListColumns'];
-  columnWidths: FloodSettings['torrentListColumnWidths'];
-  torrent: TorrentProperties;
+  hash: string;
   handleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleDoubleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
   handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
@@ -24,9 +24,7 @@ const TorrentListRowCondensed = React.forwardRef<HTMLLIElement, TorrentListRowCo
   (
     {
       className,
-      columns,
-      columnWidths,
-      torrent,
+      hash,
       handleClick,
       handleDoubleClick,
       handleRightClick,
@@ -35,24 +33,34 @@ const TorrentListRowCondensed = React.forwardRef<HTMLLIElement, TorrentListRowCo
     }: TorrentListRowCondensedProps,
     ref,
   ) => {
-    const torrentListColumns = columns.reduce((accumulator: React.ReactNodeArray, {id, visible}) => {
-      if (!visible) {
-        return accumulator;
-      }
+    const torrent = TorrentStore.torrents[hash];
+    const torrentListColumns = SettingStore.floodSettings.torrentListColumns.reduce(
+      (accumulator: React.ReactNodeArray, {id, visible}) => {
+        if (!visible) {
+          return accumulator;
+        }
 
-      const content: React.ReactNode =
-        id === 'percentComplete' ? (
-          <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
-        ) : (
-          getTorrentListCellContent(torrent, id)
+        const content: React.ReactNode =
+          id === 'percentComplete' ? (
+            <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
+          ) : (
+            getTorrentListCellContent(torrent, id)
+          );
+
+        accumulator.push(
+          <TorrentListCell
+            className="table__cell"
+            key={id}
+            column={id}
+            content={content}
+            width={SettingStore.floodSettings.torrentListColumnWidths[id]}
+          />,
         );
 
-      accumulator.push(
-        <TorrentListCell className="table__cell" key={id} column={id} content={content} width={columnWidths[id]} />,
-      );
-
-      return accumulator;
-    }, []);
+        return accumulator;
+      },
+      [],
+    );
 
     return (
       <li
@@ -69,4 +77,4 @@ const TorrentListRowCondensed = React.forwardRef<HTMLLIElement, TorrentListRowCo
   },
 );
 
-export default React.memo(TorrentListRowCondensed);
+export default observer(TorrentListRowCondensed);

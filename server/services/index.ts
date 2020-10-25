@@ -9,10 +9,13 @@ import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
 import TorrentService from './torrentService';
 
+import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService';
 import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
 
 type ClientGatewayServiceImpl = typeof ClientGatewayService & {
-  new (...args: ConstructorParameters<typeof BaseService>): RTorrentClientGatewayService;
+  new (...args: ConstructorParameters<typeof BaseService>):
+    | QBittorrentClientGatewayService
+    | RTorrentClientGatewayService;
 };
 
 type Service =
@@ -59,6 +62,8 @@ const getService = <S extends Service>(servicesMap: ServiceMap, Service: S, user
 
 const getClientGatewayService = (user: UserInDatabase): ClientGatewayService | undefined => {
   switch (user.client.client) {
+    case 'qBittorrent':
+      return getService('clientGatewayServices', QBittorrentClientGatewayService, user);
     case 'rTorrent':
       return getService('clientGatewayServices', RTorrentClientGatewayService, user);
     default:

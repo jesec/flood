@@ -3,12 +3,12 @@ import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import formatUtil from '@shared/util/formatUtil';
+import {observer} from 'mobx-react';
 import React from 'react';
 
-import type {TransferDirection, TransferSummary} from '@shared/types/TransferData';
+import type {TransferDirection} from '@shared/types/TransferData';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
-import connectStores from '../../util/connectStores';
 import Download from '../icons/Download';
 import Duration from '../general/Duration';
 import InfinityIcon from '../icons/InfinityIcon';
@@ -20,8 +20,6 @@ import type {TransferRateGraphInspectorPoint} from './TransferRateGraph';
 
 interface TransferRateDetailsProps extends WrappedComponentProps {
   inspectorPoint: TransferRateGraphInspectorPoint | null;
-  isClientConnected?: boolean;
-  transferSummary?: TransferSummary;
 }
 
 const messages = defineMessages({
@@ -36,9 +34,11 @@ const icons = {
   upload: <Upload />,
 };
 
+@observer
 class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
   getCurrentTransferRate(direction: TransferDirection, options: {showHoverDuration?: boolean} = {}) {
-    const {inspectorPoint, intl, isClientConnected, transferSummary} = this.props;
+    const {inspectorPoint, intl} = this.props;
+    const {transferSummary} = TransferDataStore;
 
     const throttles = {
       download: transferSummary != null ? transferSummary.downThrottle : 0,
@@ -63,7 +63,7 @@ class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
     }
 
     const secondaryDataClasses = classnames('client-stats__rate__data--secondary', {
-      'is-visible': inspectorPoint == null && isClientConnected,
+      'is-visible': inspectorPoint == null && ClientStatusStore.isConnected,
     });
 
     const timestampClasses = classnames('client-stats__rate__data--timestamp', {
@@ -122,32 +122,4 @@ class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
 
 dayjs.extend(duration);
 
-const ConnectedTransferRateDetails = connectStores<Omit<TransferRateDetailsProps, 'intl'>, Record<string, unknown>>(
-  injectIntl(TransferRateDetails),
-  () => {
-    return [
-      {
-        store: ClientStatusStore,
-        event: 'CLIENT_CONNECTION_STATUS_CHANGE',
-        getValue: ({store}) => {
-          const storeClientStatus = store as typeof ClientStatusStore;
-          return {
-            isClientConnected: storeClientStatus.getIsConnected(),
-          };
-        },
-      },
-      {
-        store: TransferDataStore,
-        event: 'CLIENT_TRANSFER_SUMMARY_CHANGE',
-        getValue: ({store}) => {
-          const storeTransferData = store as typeof TransferDataStore;
-          return {
-            transferSummary: storeTransferData.getTransferSummary(),
-          };
-        },
-      },
-    ];
-  },
-);
-
-export default ConnectedTransferRateDetails;
+export default injectIntl(TransferRateDetails);

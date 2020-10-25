@@ -19,7 +19,6 @@ interface DirectoryTreeNodeProps {
   directoryName: string;
   itemsTree: TorrentContentSelectionTree;
   isSelected: boolean;
-  onPriorityChange: () => void;
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
 
@@ -81,7 +80,7 @@ class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, Director
   }
 
   getSubTree() {
-    const {depth, itemsTree, hash, onItemSelect, onPriorityChange} = this.props;
+    const {depth, itemsTree, hash, onItemSelect} = this.props;
     const {expanded} = this.state;
 
     if (expanded) {
@@ -91,7 +90,6 @@ class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, Director
             depth={depth}
             hash={hash}
             key={`${expanded}-${depth}`}
-            onPriorityChange={onPriorityChange}
             onItemSelect={onItemSelect}
             path={this.getCurrentPath()}
             itemsTree={itemsTree}

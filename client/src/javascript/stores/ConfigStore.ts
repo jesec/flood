@@ -1,9 +1,7 @@
-import BaseStore from './BaseStore';
-
 let disableUsersAndAuth = false;
 let isHTTPUser = false;
 
-class ConfigStore extends BaseStore {
+class ConfigStore {
   static getBaseURI(): string {
     const {pathname} = window.location;
     return pathname.substr(0, pathname.lastIndexOf('/') + 1);

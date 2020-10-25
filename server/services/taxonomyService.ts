@@ -13,9 +13,9 @@ interface TaxonomyServiceEvents {
 
 class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   taxonomy: Taxonomy = {
-    statusCounts: {all: 0},
-    tagCounts: {all: 0, untagged: 0},
-    trackerCounts: {all: 0},
+    statusCounts: {'': 0},
+    tagCounts: {'': 0, untagged: 0},
+    trackerCounts: {'': 0},
   };
 
   lastTaxonomy: Taxonomy = this.taxonomy;
@@ -70,17 +70,17 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
       this.taxonomy.statusCounts[status] = 0;
     });
 
-    this.taxonomy.statusCounts.all = 0;
-    this.taxonomy.tagCounts = {all: 0, untagged: 0};
-    this.taxonomy.trackerCounts = {all: 0};
+    this.taxonomy.statusCounts[''] = 0;
+    this.taxonomy.tagCounts = {'': 0, untagged: 0};
+    this.taxonomy.trackerCounts = {'': 0};
   }
 
   handleProcessTorrentListEnd({torrents}: {torrents: TorrentList}) {
     const {length} = Object.keys(torrents);
 
-    this.taxonomy.statusCounts.all = length;
-    this.taxonomy.tagCounts.all = length;
-    this.taxonomy.trackerCounts.all = length;
+    this.taxonomy.statusCounts[''] = length;
+    this.taxonomy.tagCounts[''] = length;
+    this.taxonomy.trackerCounts[''] = length;
 
     const taxonomyDiffs = jsonpatch.compare(this.lastTaxonomy, this.taxonomy);
 

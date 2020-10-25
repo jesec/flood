@@ -4,11 +4,11 @@ import React from 'react';
 import {Checkbox, Form, FormRow} from '../../../ui';
 import Modal from '../Modal';
 import {saveDeleteTorrentsUserPreferences} from '../../../util/userPreferences';
-import SettingsStore from '../../../stores/SettingsStore';
+import SettingStore from '../../../stores/SettingStore';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 
-import type {ModalAction} from '../ModalActions';
+import type {ModalAction} from '../../../stores/UIStore';
 
 class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
   formRef?: Form | null;
@@ -56,7 +56,7 @@ class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
 
       deleteDataContent = (
         <FormRow>
-          <Checkbox id="deleteData" checked={SettingsStore.getFloodSetting('deleteTorrentData')}>
+          <Checkbox id="deleteData" checked={SettingStore.floodSettings.deleteTorrentData}>
             <FormattedMessage id="torrents.remove.delete.data" />
           </Checkbox>
         </FormRow>
@@ -83,7 +83,7 @@ class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
     }
 
     TorrentActions.deleteTorrents({
-      hashes: TorrentStore.getSelectedTorrents(),
+      hashes: TorrentStore.selectedTorrents,
       deleteData,
     });
 
@@ -91,7 +91,7 @@ class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
   };
 
   render() {
-    const selectedTorrents = TorrentStore.getSelectedTorrents();
+    const {selectedTorrents} = TorrentStore;
     const modalHeading = this.props.intl.formatMessage({
       id: 'torrents.remove',
     });

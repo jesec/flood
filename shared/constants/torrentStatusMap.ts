@@ -12,5 +12,5 @@ const torrentStatusMap = [
   'active',
 ] as const;
 
-export type TorrentStatus = typeof torrentStatusMap[number] | 'all';
+export type TorrentStatus = typeof torrentStatusMap[number];
 export default torrentStatusMap;

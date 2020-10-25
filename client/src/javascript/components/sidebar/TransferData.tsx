@@ -1,27 +1,25 @@
+import {observer} from 'mobx-react';
 import React from 'react';
 import Measure from 'react-measure';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
-import connectStores from '../../util/connectStores';
 import TransferRateDetails from './TransferRateDetails';
 import TransferRateGraph from './TransferRateGraph';
 
 import type {TransferRateGraphInspectorPoint} from './TransferRateGraph';
-
-interface TransferDataProps {
-  isClientConnected?: boolean;
-}
 
 interface TransferDataStates {
   graphInspectorPoint: TransferRateGraphInspectorPoint | null;
   sidebarWidth: number;
 }
 
-class TransferData extends React.Component<TransferDataProps, TransferDataStates> {
+@observer
+class TransferData extends React.Component<unknown, TransferDataStates> {
   rateGraphRef: TransferRateGraph | null = null;
 
-  constructor(props: TransferDataProps) {
+  constructor(props: unknown) {
     super(props);
+
     this.state = {
       graphInspectorPoint: null,
       sidebarWidth: 0,
@@ -39,7 +37,7 @@ class TransferData extends React.Component<TransferDataProps, TransferDataStates
   handleMouseMove = (event: React.MouseEvent) => {
     if (
       this.rateGraphRef != null &&
-      this.props.isClientConnected &&
+      ClientStatusStore.isConnected &&
       event &&
       event.nativeEvent &&
       event.nativeEvent.clientX != null
@@ -49,22 +47,21 @@ class TransferData extends React.Component<TransferDataProps, TransferDataStates
   };
 
   handleMouseOut = () => {
-    if (this.rateGraphRef != null && this.props.isClientConnected) {
+    if (this.rateGraphRef != null && ClientStatusStore.isConnected) {
       this.rateGraphRef.handleMouseOut();
     }
   };
 
   handleMouseOver = () => {
-    if (this.rateGraphRef != null && this.props.isClientConnected) {
+    if (this.rateGraphRef != null && ClientStatusStore.isConnected) {
       this.rateGraphRef.handleMouseOver();
     }
   };
 
   renderTransferRateGraph() {
-    const {isClientConnected} = this.props;
     const {sidebarWidth} = this.state;
 
-    if (!isClientConnected) return null;
+    if (!ClientStatusStore.isConnected) return null;
 
     return (
       <TransferRateGraph
@@ -108,19 +105,4 @@ class TransferData extends React.Component<TransferDataProps, TransferDataStates
   }
 }
 
-const ConnectedTransferData = connectStores(TransferData, () => {
-  return [
-    {
-      store: ClientStatusStore,
-      event: 'CLIENT_CONNECTION_STATUS_CHANGE',
-      getValue: ({store}) => {
-        const storeClientStatus = store as typeof ClientStatusStore;
-        return {
-          isClientConnected: storeClientStatus.getIsConnected(),
-        };
-      },
-    },
-  ];
-});
-
-export default ConnectedTransferData;
+export default TransferData;

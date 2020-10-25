@@ -1,26 +1,43 @@
 import {FormattedMessage} from 'react-intl';
+import {observable, runInAction} from 'mobx';
+import {observer} from 'mobx-react';
 import React from 'react';
 
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 
 import Badge from '../../general/Badge';
+import TorrentActions from '../../../actions/TorrentActions';
+import UIStore from '../../../stores/UIStore';
 
-interface TorrentTrackersProps {
-  trackers: Array<TorrentTracker>;
-}
+@observer
+class TorrentTrackers extends React.Component<unknown> {
+  trackers = observable.array<TorrentTracker>([]);
 
-const TorrentTrackers: React.FC<TorrentTrackersProps> = ({trackers}: TorrentTrackersProps) => {
-  const trackerCount = trackers.length;
-  const trackerTypes = ['http', 'udp', 'dht'];
+  constructor(props: unknown) {
+    super(props);
 
-  const trackerDetails = trackers.map((tracker) => (
-    <tr key={tracker.url}>
-      <td>{tracker.url}</td>
-      <td>{trackerTypes[tracker.type - 1]}</td>
-    </tr>
-  ));
+    if (UIStore.activeModal?.id === 'torrent-details') {
+      TorrentActions.fetchTorrentTrackers(UIStore.activeModal?.hash).then((trackers) => {
+        if (trackers != null) {
+          runInAction(() => {
+            this.trackers.replace(trackers.filter((tracker) => tracker.isEnabled));
+          });
+        }
+      });
+    }
+  }
 
-  if (trackerCount) {
+  render() {
+    const trackerCount = this.trackers.length;
+    const trackerTypes = ['http', 'udp', 'dht'];
+
+    const trackerDetails = this.trackers.map((tracker) => (
+      <tr key={tracker.url}>
+        <td>{tracker.url}</td>
+        <td>{trackerTypes[tracker.type - 1]}</td>
+      </tr>
+    ));
+
     return (
       <div className="torrent-details__trackers torrent-details__section">
         <table className="torrent-details__table table">
@@ -40,11 +57,6 @@ const TorrentTrackers: React.FC<TorrentTrackersProps> = ({trackers}: TorrentTrac
       </div>
     );
   }
-  return (
-    <span className="torrent-details__section__null-data">
-      <FormattedMessage id="torrents.details.trackers.no.data" />
-    </span>
-  );
-};
+}
 
 export default TorrentTrackers;

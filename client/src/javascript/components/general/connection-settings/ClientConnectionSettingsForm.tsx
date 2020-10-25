@@ -1,41 +1,51 @@
 import React from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 
+import {SUPPORTED_CLIENTS} from '@shared/schema/ClientConnectionSettings';
+
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
+import QBittorrentConnectionSettingsForm from './QBittorrentConnectionSettingsForm';
 import RTorrentConnectionSettingsForm from './RTorrentConnectionSettingsForm';
 import {FormRow, Select, SelectItem} from '../../../ui';
 
+const DEFAULT_SELECTION: ClientConnectionSettings['client'] = 'rTorrent' as const;
+
 const getClientSelectItems = (): React.ReactNodeArray => {
-  return [
-    <SelectItem key="rTorrent" id="rTorrent">
-      <FormattedMessage id="connection.settings.rtorrent" />
-    </SelectItem>,
-  ];
+  return SUPPORTED_CLIENTS.map((client) => {
+    return (
+      <SelectItem key={client} id={client}>
+        <FormattedMessage id={`connection.settings.${client.toLowerCase()}`} />
+      </SelectItem>
+    );
+  });
 };
+
+type ConnectionSettingsForm = QBittorrentConnectionSettingsForm | RTorrentConnectionSettingsForm;
 
 interface ClientConnectionSettingsFormStates {
   client: ClientConnectionSettings['client'];
 }
 
 class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps, ClientConnectionSettingsFormStates> {
-  settingsRef: React.RefObject<RTorrentConnectionSettingsForm> = React.createRef();
+  settingsRef: React.RefObject<never> = React.createRef();
 
   constructor(props: WrappedComponentProps) {
     super(props);
 
-    // Only rTorrent is supported at this moment.
     this.state = {
-      client: 'rTorrent',
+      client: DEFAULT_SELECTION,
     };
   }
 
   getConnectionSettings(): ClientConnectionSettings | null {
-    if (this.settingsRef.current == null) {
+    const settingsForm = this.settingsRef as React.RefObject<ConnectionSettingsForm>;
+
+    if (settingsForm.current == null) {
       return null;
     }
 
-    return this.settingsRef.current.getConnectionSettings();
+    return settingsForm.current.getConnectionSettings();
   }
 
   render() {
@@ -44,6 +54,9 @@ class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps
 
     let settingsForm: React.ReactNode = null;
     switch (client) {
+      case 'qBittorrent':
+        settingsForm = <QBittorrentConnectionSettingsForm intl={intl} ref={this.settingsRef} />;
+        break;
       case 'rTorrent':
         settingsForm = <RTorrentConnectionSettingsForm intl={intl} ref={this.settingsRef} />;
         break;
@@ -59,7 +72,8 @@ class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps
             label={intl.formatMessage({id: 'connection.settings.client.select'})}
             onSelect={(selectedClient) => {
               this.setState({client: selectedClient as ClientConnectionSettings['client']});
-            }}>
+            }}
+            defaultID={DEFAULT_SELECTION}>
             {getClientSelectItems()}
           </Select>
         </FormRow>

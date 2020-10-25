@@ -58,6 +58,11 @@ const transmissionConnectionSettingsSchema = z.object({
 
 export type TransmissionConnectionSettings = z.infer<typeof transmissionConnectionSettingsSchema>;
 
-export const clientConnectionSettingsSchema = rTorrentConnectionSettingsSchema;
+export const clientConnectionSettingsSchema = z.union([
+  qBittorrentConnectionSettingsSchema,
+  rTorrentConnectionSettingsSchema,
+]);
 
 export type ClientConnectionSettings = z.infer<typeof clientConnectionSettingsSchema>;
+
+export const SUPPORTED_CLIENTS: Array<ClientConnectionSettings['client']> = ['qBittorrent', 'rTorrent'];

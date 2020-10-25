@@ -2,25 +2,32 @@ import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
 import DownloadRulesTab from './DownloadRulesTab';
+import FeedActions from '../../../actions/FeedActions';
+import FeedStore from '../../../stores/FeedStore';
 import FeedsTab from './FeedsTab';
 import Modal from '../Modal';
-import SettingsActions from '../../../actions/SettingsActions';
 
 class FeedsModal extends React.Component<WrappedComponentProps> {
   componentDidMount() {
-    SettingsActions.fetchFeedMonitors();
+    FeedActions.fetchFeedMonitors();
   }
 
   render() {
     const tabs = {
       feeds: {
         content: FeedsTab,
+        props: {
+          feedStore: FeedStore,
+        },
         label: this.props.intl.formatMessage({
           id: 'feeds.tabs.feeds',
         }),
       },
       downloadRules: {
         content: DownloadRulesTab,
+        props: {
+          feedStore: FeedStore,
+        },
         label: this.props.intl.formatMessage({
           id: 'feeds.tabs.download.rules',
         }),
