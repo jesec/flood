@@ -46,8 +46,8 @@ const handleItemClick = (action: TorrentContextMenuAction, event: React.MouseEve
     case 'setTaxonomy':
       UIActions.displayModal({id: 'set-taxonomy'});
       break;
-    case 'setTracker':
-      UIActions.displayModal({id: 'set-tracker'});
+    case 'setTrackers':
+      UIActions.displayModal({id: 'set-trackers'});
       break;
     case 'start':
       TorrentActions.startTorrents({
@@ -130,8 +130,8 @@ const getContextMenuItems = (intl: IntlShape, torrent: TorrentProperties): Array
     },
     {
       type: 'action',
-      action: 'setTracker',
-      label: intl.formatMessage(TorrentContextMenuActions.setTracker),
+      action: 'setTrackers',
+      label: intl.formatMessage(TorrentContextMenuActions.setTrackers),
       clickHandler,
     },
     {

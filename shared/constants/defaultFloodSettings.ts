@@ -55,7 +55,7 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
     {id: 'checkHash', visible: true},
     {id: 'setTaxonomy', visible: true},
     {id: 'move', visible: true},
-    {id: 'setTracker', visible: false},
+    {id: 'setTrackers', visible: false},
     {id: 'torrentDetails', visible: true},
     {id: 'torrentDownload', visible: true},
     {id: 'setPriority', visible: false},

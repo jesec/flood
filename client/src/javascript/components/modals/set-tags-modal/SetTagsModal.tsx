@@ -56,7 +56,9 @@ class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalSt
           }}>
           <FormRow>
             <TagSelect
-              defaultValue={TorrentStore.selectedTorrents.map((hash: string) => TorrentStore.torrents[hash].tags)[0]}
+              defaultValue={TorrentStore.selectedTorrents
+                .map((hash: string) => TorrentStore.torrents[hash].tags)[0]
+                .slice()}
               id="tags"
               placeholder={this.props.intl.formatMessage({
                 id: 'torrents.set.tags.enter.tags',

@@ -11,6 +11,7 @@ import type {
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
   SetTorrentsTagsOptions,
+  SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
@@ -244,13 +245,9 @@ const TorrentActions = {
         },
       ),
 
-  setTracker: (hashes: Array<TorrentProperties['hash']>, tracker: string, options = {}) =>
+  setTrackers: (options: SetTorrentsTrackersOptions) =>
     axios
-      .patch(`${baseURI}api/torrents/tracker`, {
-        hashes,
-        tracker,
-        options,
-      })
+      .patch(`${baseURI}api/torrents/trackers`, options)
       .then((json) => json.data)
       .then(
         () => {
