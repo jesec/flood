@@ -14,9 +14,12 @@ context('Register', () => {
   it('Client selection menu', () => {
     cy.get('.select').click();
     cy.get('.context-menu').should('be.visible');
-    cy.get('.select__item').contains('rTorrent').click();
+    cy.get('.select__item').contains('qBittorrent').click();
     cy.get('.context-menu').should('not.be.visible');
-    cy.get('.input[name="client"]').should('have.value', 'rTorrent');
+    cy.get('.input[name="client"]').should('have.value', 'qBittorrent');
+    cy.get('.input--text[name="url"]').should('be.visible');
+    cy.get('.input--text[name="qbt-username"]').should('be.visible');
+    cy.get('.input--text[name="qbt-password"]').should('be.visible');
   });
 
   it('Connection type selection', () => {
@@ -92,5 +95,17 @@ context('Register', () => {
     cy.get('.application__loading-overlay').should('not.be.visible');
 
     cy.get('.error').should('be.visible');
+  });
+
+  it('Register with qBittorrent connection settings', () => {
+    cy.get('.input[name="username"]').type('test');
+    cy.get('.input[name="password"]').type('test');
+    cy.get('.select').click();
+    cy.get('.select__item').contains('qBittorrent').click();
+    cy.get('.input--text[name="url"]').type('http://127.0.0.1:8080');
+    cy.get('.input--text[name="qbt-username"]').type('admin');
+    cy.get('.input--text[name="qbt-password"]').type('adminadmin');
+
+    cy.get('.button[type="submit"]').click();
   });
 });
