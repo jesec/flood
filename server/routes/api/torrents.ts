@@ -58,8 +58,20 @@ router.get('/', (req, res) => {
 router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
+  let sanitizedPath: string | null = null;
+  try {
+    sanitizedPath = sanitizePath(req.body.destination);
+    if (!isAllowedPath(sanitizedPath)) {
+      callback(null, accessDeniedError());
+      return;
+    }
+  } catch (e) {
+    callback(null, e);
+    return;
+  }
+
   req.services?.clientGatewayService
-    ?.addTorrentsByURL(req.body)
+    ?.addTorrentsByURL({...req.body, destination: sanitizedPath})
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -82,8 +94,20 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) =>
 router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
+  let sanitizedPath: string | null = null;
+  try {
+    sanitizedPath = sanitizePath(req.body.destination);
+    if (!isAllowedPath(sanitizedPath)) {
+      callback(null, accessDeniedError());
+      return;
+    }
+  } catch (e) {
+    callback(null, e);
+    return;
+  }
+
   req.services?.clientGatewayService
-    ?.addTorrentsByFile(req.body)
+    ?.addTorrentsByFile({...req.body, destination: sanitizedPath})
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -251,8 +275,20 @@ router.post<unknown, unknown, CheckTorrentsOptions>('/check-hash', (req, res) =>
 router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
+  let sanitizedPath: string | null = null;
+  try {
+    sanitizedPath = sanitizePath(req.body.destination);
+    if (!isAllowedPath(sanitizedPath)) {
+      callback(null, accessDeniedError());
+      return;
+    }
+  } catch (e) {
+    callback(null, e);
+    return;
+  }
+
   req.services?.clientGatewayService
-    ?.moveTorrents(req.body)
+    ?.moveTorrents({...req.body, destination: sanitizedPath})
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;

@@ -2,6 +2,7 @@ import express from 'express';
 
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '@shared/types/api/feed-monitor';
 
+import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ajaxUtil from '../../util/ajaxUtil';
 
 const router = express.Router();
@@ -172,8 +173,20 @@ router.get('/rules', (req, res) => {
 router.put<unknown, unknown, AddRuleOptions>('/rules', (req, res) => {
   const callback = ajaxUtil.getResponseFn(res);
 
+  let sanitizedPath: string | null = null;
+  try {
+    sanitizedPath = sanitizePath(req.body.destination);
+    if (!isAllowedPath(sanitizedPath)) {
+      callback(null, accessDeniedError());
+      return;
+    }
+  } catch (e) {
+    callback(null, e);
+    return;
+  }
+
   req.services?.feedService
-    .addRule(req.body)
+    .addRule({...req.body, destination: sanitizedPath})
     .then((rule) => {
       callback(rule);
     })
