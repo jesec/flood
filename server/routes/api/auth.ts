@@ -316,7 +316,7 @@ router.use('/', passport.authenticate('jwt', {session: false}));
 router.get('/logout', (_req, res) => {
   res.clearCookie('jwt');
   if (config.enableUsersHTTPBasicAuthHandler) {
-    res.status(401).send('Unauthorized');
+    res.status(401).json('Unauthorized').send();
     return;
   }
 
