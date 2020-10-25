@@ -104,7 +104,7 @@ const performAuthentication = (
 router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
 
 /**
- * POST /api/auth/authenticate
+ * POST <</api/auth/authenticate>>
  * @summary Authenticates a user
  * @tags Auth
  * @security None
