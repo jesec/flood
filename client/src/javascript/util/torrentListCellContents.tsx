@@ -5,7 +5,6 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 import Checkmark from '../components/icons/Checkmark';
 import Duration from '../components/general/Duration';
-import Ratio from '../components/general/Ratio';
 import Size from '../components/general/Size';
 
 import type {TorrentListColumn} from '../constants/TorrentListColumns';
@@ -47,7 +46,7 @@ export const torrentListCellTransformers = {
       ))}
     </ul>
   ),
-  ratio: (ratio: TorrentProperties['ratio']) => <Ratio value={ratio} />,
+  ratio: (ratio: TorrentProperties['ratio']) => <FormattedNumber value={ratio} maximumFractionDigits={2} />,
   sizeBytes: sizeTransformer,
   trackerURIs: (trackers: TorrentProperties['trackerURIs']) => trackers.join(', '),
   upRate: speedTransformer,

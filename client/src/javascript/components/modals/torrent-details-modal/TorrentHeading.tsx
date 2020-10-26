@@ -1,4 +1,4 @@
-import {FormattedMessage} from 'react-intl';
+import {FormattedMessage, FormattedNumber} from 'react-intl';
 import classnames from 'classnames';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
@@ -11,7 +11,6 @@ import DownloadThickIcon from '../../icons/DownloadThickIcon';
 import Duration from '../../general/Duration';
 import PriorityMeter from '../../general/filesystem/PriorityMeter';
 import ProgressBar from '../../general/ProgressBar';
-import Ratio from '../../general/Ratio';
 import RatioIcon from '../../icons/RatioIcon';
 import Size from '../../general/Size';
 import StartIcon from '../../icons/StartIcon';
@@ -67,7 +66,7 @@ class TorrentHeading extends React.Component {
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <RatioIcon />
-              <Ratio value={torrent.ratio} />
+              <FormattedNumber value={torrent.ratio} />
             </li>
             <li className="torrent-details__sub-heading__tertiary">
               <ClockIcon />

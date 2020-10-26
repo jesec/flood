@@ -66,7 +66,9 @@ const torrentListMethodCallConfigs = {
   },
   ratio: {
     methodCall: 'd.ratio=',
-    transformValue: numberTransformer,
+    transformValue: (value: unknown): number => {
+      return (value as number) / 1000;
+    },
   },
   bytesDone: {
     methodCall: 'd.bytes_done=',
