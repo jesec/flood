@@ -32,7 +32,7 @@ const rTorrentProcess = spawn(
 
 process.argv = ['node', 'flood'];
 process.argv.push('--rundir', temporaryRuntimeDirectory);
-process.argv.push('--noauth');
+process.argv.push('--auth', 'none');
 process.argv.push('--rtsocket', rTorrentSocket);
 process.argv.push('--allowedpath', temporaryRuntimeDirectory);
 

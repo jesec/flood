@@ -169,7 +169,7 @@ class Users {
   }
 
   lookupUser(username: string, callback: (err: Error | null, user?: UserInDatabase) => void): void {
-    if (config.disableUsersAndAuth) {
+    if (config.authMethod === 'none') {
       return callback(null, this.getConfigUser());
     }
 
@@ -185,7 +185,7 @@ class Users {
   }
 
   listUsers(callback: (users: Array<UserInDatabase> | null, err?: Error) => void): void {
-    if (config.disableUsersAndAuth) {
+    if (config.authMethod === 'none') {
       return callback([this.getConfigUser()]);
     }
 

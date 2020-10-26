@@ -24,11 +24,23 @@ const CONFIG = {
   // Where to store Flood's temporary files
   tempPath: './run/temp/',
 
-  // If this is true, there will be no users and no attempt to
-  // authenticate or password-protect any page. In that case,
-  // instead of per-user config, the following configUser settings
-  // will be used.
-  disableUsersAndAuth: false,
+  //
+  // Authentication and user management method:
+  //
+  // default:
+  //  Flood uses its own authentication and user management system. Users are authenticated
+  //  by password and will be prompted to configure the connection to torrent client in the
+  //  web interface. On successful authentication via /authenticate API endpoint, Flood will
+  //  send a cookie with token to user. Users with admin privileges may create additional
+  //  users with different password and torrent client configurations.
+  //
+  // none:
+  //  There is no per-user config and no attempt to authenticate. An auth cookie with token is
+  //  still needed to access API endpoints. This allows us to utilize browser's protections
+  //  against session hijacking. The cookie with token will be sent unconditionally when
+  //  /authenticate or /verify endpoints are accessed. Instead of per-user config, the
+  //  configUser settings will be used.
+  authMethod: 'default',
 
   // Settings for the no-user configuration.
   configUser: {

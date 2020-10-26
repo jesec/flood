@@ -21,7 +21,7 @@ const qBittorrentDaemon = spawn(
 
 process.argv = ['node', 'flood'];
 process.argv.push('--rundir', temporaryRuntimeDirectory);
-process.argv.push('--noauth');
+process.argv.push('--auth', 'none');
 process.argv.push('--qburl', `http://127.0.0.1:${qbtPort}`);
 process.argv.push('--qbuser', 'admin');
 process.argv.push('--qbpass', 'adminadmin');
