@@ -26,7 +26,7 @@ const handleDetailsClick = (torrent: TorrentProperties): void => {
 
 const handleTorrentDownload = (torrent: TorrentProperties, event: React.MouseEvent): void => {
   event.preventDefault();
-  const baseURI = ConfigStore.getBaseURI();
+  const {baseURI} = ConfigStore;
   const link = document.createElement('a');
   link.download = torrent.isMultiFile ? `${torrent.name}.tar` : torrent.name;
   link.href = `${baseURI}api/torrents/${torrent.hash}/contents/all/data`;

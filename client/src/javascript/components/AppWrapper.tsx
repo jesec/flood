@@ -22,8 +22,7 @@ const AppWrapper: React.FC<AppWrapperProps> = (props: AppWrapperProps) => {
     overlay = <LoadingOverlay dependencies={UIStore.dependencies} />;
   }
 
-  // TODO: disableUsersAndAuth is server's config not user's
-  if (AuthStore.isAuthenticated && !ClientStatusStore.isConnected && !ConfigStore.getDisableAuth()) {
+  if (AuthStore.isAuthenticated && !ClientStatusStore.isConnected && !ConfigStore.disableAuth) {
     overlay = (
       <div className="application__loading-overlay">
         <div className="application__entry-barrier">

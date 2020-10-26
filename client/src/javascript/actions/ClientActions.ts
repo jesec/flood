@@ -8,7 +8,7 @@ import ConfigStore from '../stores/ConfigStore';
 import SettingStore from '../stores/SettingStore';
 import AlertStore from '../stores/AlertStore';
 
-const baseURI = ConfigStore.getBaseURI();
+const {baseURI} = ConfigStore;
 
 const ClientActions = {
   fetchSettings: async (): Promise<void> =>

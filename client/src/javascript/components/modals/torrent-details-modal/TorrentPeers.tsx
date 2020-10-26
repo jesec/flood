@@ -18,7 +18,7 @@ import UIStore from '../../../stores/UIStore';
 @observer
 class TorrentPeers extends React.Component<unknown> {
   peers = observable.array<TorrentPeer>([]);
-  polling = setInterval(() => this.fetchPeers(), ConfigStore.getPollInterval());
+  polling = setInterval(() => this.fetchPeers(), ConfigStore.pollInterval);
 
   constructor(props: unknown) {
     super(props);

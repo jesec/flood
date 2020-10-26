@@ -7,7 +7,7 @@ import Logout from '../icons/Logout';
 import Tooltip from '../general/Tooltip';
 
 const LogoutButton = () => {
-  if (ConfigStore.getDisableAuth()) {
+  if (ConfigStore.disableAuth) {
     return null;
   }
 

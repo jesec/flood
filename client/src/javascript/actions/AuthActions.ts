@@ -14,7 +14,7 @@ import ConfigStore from '../stores/ConfigStore';
 import FloodActions from './FloodActions';
 import SettingActions from './SettingActions';
 
-const baseURI = ConfigStore.getBaseURI();
+const {baseURI} = ConfigStore;
 
 const AuthActions = {
   authenticate: (options: AuthAuthenticationOptions) =>

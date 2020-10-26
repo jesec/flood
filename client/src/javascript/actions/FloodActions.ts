@@ -17,7 +17,7 @@ interface ActivityStreamOptions {
   historySnapshot: HistorySnapshot;
 }
 
-const baseURI = ConfigStore.getBaseURI();
+const {baseURI} = ConfigStore;
 
 let activityStreamEventSource: EventSource | null = null;
 let lastActivityStreamOptions: ActivityStreamOptions;

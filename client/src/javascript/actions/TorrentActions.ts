@@ -24,7 +24,7 @@ import AlertStore from '../stores/AlertStore';
 import ConfigStore from '../stores/ConfigStore';
 import UIStore from '../stores/UIStore';
 
-const baseURI = ConfigStore.getBaseURI();
+const {baseURI} = ConfigStore;
 
 const emitTorrentAddedAlert = (count: number) => {
   AlertStore.add({

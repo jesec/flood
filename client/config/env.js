@@ -1,7 +1,5 @@
 const path = require('path');
 
-const userConfig = require('../../config');
-
 // Make sure that including paths.js after env.js will read .env variables.
 delete require.cache[require.resolve('../../shared/config/paths')];
 
@@ -26,7 +24,6 @@ process.env.NODE_PATH = (process.env.NODE_PATH || '')
 function getClientEnvironment() {
   const raw = {
     NODE_ENV: process.env.NODE_ENV || 'development',
-    POLL_INTERVAL: userConfig.torrentClientPollInterval,
   };
   // Stringify all values so we can feed into Webpack DefinePlugin
   const stringified = {

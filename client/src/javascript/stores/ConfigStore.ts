@@ -1,22 +1,17 @@
-let disableUsersAndAuth = false;
+import {makeAutoObservable} from 'mobx';
 
 class ConfigStore {
-  static getBaseURI(): string {
-    const {pathname} = window.location;
-    return pathname.substr(0, pathname.lastIndexOf('/') + 1);
+  baseURI = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/') + 1);
+  disableAuth = false;
+  pollInterval = 2000;
+
+  constructor() {
+    makeAutoObservable(this);
   }
 
-  static getPollInterval(): number {
-    return Number(process.env.POLL_INTERVAL) || 5000;
-  }
-
-  static getDisableAuth(): boolean {
-    return disableUsersAndAuth;
-  }
-
-  static setDisableAuth(val: boolean): void {
-    disableUsersAndAuth = val;
+  setDisableAuth(val: boolean): void {
+    this.disableAuth = val;
   }
 }
 
-export default ConfigStore;
+export default new ConfigStore();

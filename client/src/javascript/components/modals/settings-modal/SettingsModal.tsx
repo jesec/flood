@@ -128,8 +128,7 @@ class SettingsModal extends React.Component<WrappedComponentProps, SettingsModal
           id: 'settings.tabs.resources',
         }),
       },
-      // TODO: disableUsersAndAuth is server's config not user's
-      ...(!ConfigStore.getDisableAuth()
+      ...(!ConfigStore.disableAuth
         ? {
             authentication: {
               content: AuthTab,

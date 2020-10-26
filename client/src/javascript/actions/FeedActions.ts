@@ -5,7 +5,7 @@ import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '@shared/ty
 import ConfigStore from '../stores/ConfigStore';
 import FeedStore from '../stores/FeedStore';
 
-const baseURI = ConfigStore.getBaseURI();
+const {baseURI} = ConfigStore;
 
 const FeedActions = {
   addFeed: (options: AddFeedOptions) =>

@@ -24,7 +24,7 @@ class TorrentContents extends React.Component<WrappedComponentProps> {
     // TODO: itemsTree is not regenerated as that would override user's selection.
     // As a result, percentage of contents of an active torrent is not updated.
     // this.fetchTorrentContents();
-  }, ConfigStore.getPollInterval());
+  }, ConfigStore.pollInterval);
 
   constructor(props: WrappedComponentProps) {
     super(props);
@@ -53,7 +53,7 @@ class TorrentContents extends React.Component<WrappedComponentProps> {
 
   handleDownloadButtonClick = (hash: string, event: React.MouseEvent<HTMLButtonElement>): void => {
     event.preventDefault();
-    const baseURI = ConfigStore.getBaseURI();
+    const {baseURI} = ConfigStore;
     const link = document.createElement('a');
     const {name} = TorrentStore.torrents[hash] || {};
 
