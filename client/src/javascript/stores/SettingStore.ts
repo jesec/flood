@@ -5,7 +5,7 @@ import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
-class SettingStoreClass {
+class SettingStore {
   fetchStatus = {
     clientSettingsFetched: false,
     floodSettingsFetched: false,
@@ -51,6 +51,4 @@ class SettingStoreClass {
   }
 }
 
-const SettingStore = new SettingStoreClass();
-
-export default SettingStore;
+export default new SettingStore();

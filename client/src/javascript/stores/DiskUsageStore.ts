@@ -2,7 +2,7 @@ import {makeAutoObservable} from 'mobx';
 
 import type {Disks} from '@shared/types/DiskUsage';
 
-class DiskUsageStoreClass {
+class DiskUsageStore {
   disks: Disks = [];
 
   constructor() {
@@ -14,6 +14,4 @@ class DiskUsageStoreClass {
   }
 }
 
-const DiskUsageStore = new DiskUsageStoreClass();
-
-export default DiskUsageStore;
+export default new DiskUsageStore();

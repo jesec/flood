@@ -4,7 +4,7 @@ import type {Notification, NotificationCount, NotificationState} from '@shared/t
 
 const INITIAL_COUNT_STATE: NotificationCount = {total: 0, unread: 0, read: 0};
 
-class NotificationStoreClass {
+class NotificationStore {
   notifications: Array<Notification> = [];
   notificationCount: NotificationCount = INITIAL_COUNT_STATE;
   ongoingPolls = {};
@@ -26,6 +26,4 @@ class NotificationStoreClass {
   }
 }
 
-const NotificationStore = new NotificationStoreClass();
-
-export default NotificationStore;
+export default new NotificationStore();

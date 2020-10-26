@@ -4,7 +4,7 @@ import jsonpatch, {Operation} from 'fast-json-patch';
 import type {Taxonomy} from '@shared/types/Taxonomy';
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
-class TorrentFilterStoreClass {
+class TorrentFilterStore {
   filters: {
     searchFilter: string;
     statusFilter: TorrentStatus | '';
@@ -82,6 +82,4 @@ class TorrentFilterStoreClass {
   }
 }
 
-const TorrentFilterStore = new TorrentFilterStoreClass();
-
-export default TorrentFilterStore;
+export default new TorrentFilterStore();

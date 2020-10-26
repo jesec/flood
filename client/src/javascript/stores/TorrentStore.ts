@@ -10,7 +10,7 @@ import SettingStore from './SettingStore';
 import sortTorrents from '../util/sortTorrents';
 import TorrentFilterStore from './TorrentFilterStore';
 
-class TorrentStoreClass {
+class TorrentStore {
   selectedTorrents: Array<string> = [];
   torrents: TorrentList = {};
 
@@ -73,6 +73,4 @@ class TorrentStoreClass {
   }
 }
 
-const TorrentStore = new TorrentStoreClass();
-
-export default TorrentStore;
+export default new TorrentStore();

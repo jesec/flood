@@ -5,7 +5,7 @@ import type {TransferDirection, TransferHistory, TransferSummary} from '@shared/
 
 export const TRANSFER_DIRECTIONS: Readonly<Array<TransferDirection>> = ['download', 'upload'] as const;
 
-class TransferDataStoreClass {
+class TransferDataStore {
   transferRates: TransferHistory = {
     download: new Array(30).fill(0),
     upload: new Array(30).fill(0),
@@ -58,6 +58,4 @@ class TransferDataStoreClass {
   }
 }
 
-const TransferDataStore = new TransferDataStoreClass();
-
-export default TransferDataStore;
+export default new TransferDataStore();

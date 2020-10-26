@@ -73,7 +73,7 @@ export type Modal =
       hash: string;
     };
 
-class UIStoreClass {
+class UIStore {
   activeContextMenu: ContextMenu | null = null;
   activeDropdownMenu: string | null = null;
   activeModal: Modal | null = null;
@@ -181,6 +181,4 @@ class UIStoreClass {
   }
 }
 
-const UIStore = new UIStoreClass();
-
-export default UIStore;
+export default new UIStore();

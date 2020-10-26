@@ -2,7 +2,7 @@ import {makeAutoObservable} from 'mobx';
 
 import type {Feed, Rule, Item} from '@shared/types/Feed';
 
-class FeedStoreClass {
+class FeedStore {
   feeds: Array<Feed> = [];
   rules: Array<Rule> = [];
   items: Array<Item> = [];
@@ -43,6 +43,4 @@ class FeedStoreClass {
   }
 }
 
-const FeedStore = new FeedStoreClass();
-
-export default FeedStore;
+export default new FeedStore();

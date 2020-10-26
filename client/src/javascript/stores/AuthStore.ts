@@ -8,7 +8,7 @@ import type {Credentials} from '@shared/schema/Auth';
 import ConfigStore from './ConfigStore';
 import FloodActions from '../actions/FloodActions';
 
-class AuthStoreClass {
+class AuthStore {
   isAuthenticating = false;
   isAuthenticated = false;
   token: string | null | undefined = null;
@@ -88,6 +88,4 @@ class AuthStoreClass {
   }
 }
 
-const AuthStore = new AuthStoreClass();
-
-export default AuthStore;
+export default new AuthStore();

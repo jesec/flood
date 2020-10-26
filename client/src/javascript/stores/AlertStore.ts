@@ -14,7 +14,7 @@ export interface Alert {
 
 const DEFAULT_DURATION = 5 * 1000;
 
-class AlertStoreClass {
+class AlertStore {
   accumulation: Record<string, number> = {};
 
   alerts: Record<string, Alert> = {};
@@ -85,6 +85,4 @@ class AlertStoreClass {
   }
 }
 
-const AlertStore = new AlertStoreClass();
-
-export default AlertStore;
+export default new AlertStore();

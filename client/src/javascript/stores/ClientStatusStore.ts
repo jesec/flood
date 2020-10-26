@@ -1,6 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 
-class ClientStatusStoreClass {
+class ClientStatusStore {
   isConnected = true;
 
   constructor() {
@@ -14,6 +14,4 @@ class ClientStatusStoreClass {
   }
 }
 
-const ClientStatusStore = new ClientStatusStoreClass();
-
-export default ClientStatusStore;
+export default new ClientStatusStore();
