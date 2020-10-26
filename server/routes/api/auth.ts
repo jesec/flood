@@ -56,11 +56,11 @@ const sendAuthenticationResponse = (
   credentials: Required<Pick<Credentials, 'username' | 'level'>>,
 ): void => {
   const {username, level} = credentials;
-  const token = getAuthToken(username, res);
+
+  getAuthToken(username, res);
 
   const response: AuthAuthenticationResponse = {
     success: true,
-    token: `JWT ${token}`,
     username,
     level,
   };
@@ -192,7 +192,8 @@ router.use('/verify', (req, res, next) => {
   // Unconditionally provide a token if auth is disabled
   if (config.disableUsersAndAuth) {
     const {username, level} = Users.getConfigUser();
-    const token = getAuthToken(username, res);
+
+    getAuthToken(username, res);
 
     const response: AuthVerificationResponse = {
       initialUser: false,

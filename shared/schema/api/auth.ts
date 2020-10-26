@@ -11,7 +11,6 @@ export type AuthAuthenticationOptions = Required<z.infer<typeof authAuthenticati
 // POST /api/auth/authenticate - success response
 export interface AuthAuthenticationResponse {
   success: boolean;
-  token: string;
   username: string;
   level: AccessLevel;
 }

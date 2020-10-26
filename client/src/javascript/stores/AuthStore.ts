@@ -11,7 +11,6 @@ import FloodActions from '../actions/FloodActions';
 class AuthStore {
   isAuthenticating = false;
   isAuthenticated = false;
-  token: string | null | undefined = null;
   users: Array<Credentials> = [];
   optimisticUsers: Array<{username: string}> = [];
   currentUser: {
@@ -43,13 +42,11 @@ class AuthStore {
     this.currentUser.username = response.username;
     this.currentUser.isAdmin = response.level === AccessLevel.ADMINISTRATOR;
     this.currentUser.isInitialUser = false;
-    this.token = response.token;
     this.isAuthenticating = true;
     this.isAuthenticated = true;
   }
 
   handleLoginError(): void {
-    this.token = null;
     this.isAuthenticated = false;
     this.isAuthenticating = true;
   }

@@ -7,7 +7,6 @@ import app from '../../app';
 import {getAuthToken} from './auth';
 
 import type {
-  AuthAuthenticationResponse,
   AuthRegistrationOptions,
   AuthUpdateUserOptions,
   AuthVerificationResponse,
@@ -68,15 +67,12 @@ describe('POST /api/auth/register', () => {
       .set('Accept', 'application/json')
       .expect(200)
       .expect('Content-Type', /json/)
+      .expect('Set-Cookie', /jwt=.*;/)
       .end((err, res) => {
         if (err) done(err);
 
-        const authResponse: AuthAuthenticationResponse = res.body;
-
-        expect(typeof authResponse.token === 'string').toBe(true);
-        expect(authResponse.token.includes('JWT')).toBe(true);
-
-        [, testAdminUserToken] = authResponse.token.split('JWT ');
+        [testAdminUserToken] = res.headers['set-cookie'];
+        expect(typeof testAdminUserToken).toBe('string');
 
         done();
       });
@@ -104,19 +100,15 @@ describe('POST /api/auth/register', () => {
       .post('/api/auth/register')
       .send(options)
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(200)
       .expect('Content-Type', /json/)
-      .expect('Set-Cookie', /jwt/)
+      .expect('Set-Cookie', /jwt=.*;/)
       .end((err, res) => {
         if (err) done(err);
 
-        const authResponse: AuthAuthenticationResponse = res.body;
-
-        expect(typeof authResponse.token === 'string').toBe(true);
-        expect(authResponse.token.includes('JWT')).toBe(true);
-
-        [, testNonAdminUserToken] = authResponse.token.split('JWT ');
+        [testNonAdminUserToken] = res.headers['set-cookie'];
+        expect(typeof testNonAdminUserToken).toBe('string');
 
         done();
       });
@@ -128,7 +120,7 @@ describe('POST /api/auth/register', () => {
       .post('/api/auth/register')
       .send(options)
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testNonAdminUserToken}`])
+      .set('Cookie', [testNonAdminUserToken])
       .expect(403)
       .end((err, res) => {
         if (err) done(err);
@@ -145,7 +137,7 @@ describe('POST /api/auth/register', () => {
       .post('/api/auth/register')
       .send(options)
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(500)
       .expect('Content-Type', /json/)
       .end((err, res) => {
@@ -166,7 +158,7 @@ describe('POST /api/auth/register', () => {
       .post('/api/auth/register?cookie=false')
       .send(options)
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
@@ -189,7 +181,7 @@ describe('POST /api/auth/register', () => {
         },
       })
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(422)
       .expect('Content-Type', /json/)
       .end((err, res) => {
@@ -220,7 +212,7 @@ describe('GET /api/auth/verify', () => {
       .get('/api/auth/verify')
       .send()
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(200)
       .end((err, res) => {
         if (err) done(err);
@@ -259,7 +251,7 @@ describe('GET /api/auth/logout', () => {
       .get('/api/auth/logout')
       .send()
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(200)
       .expect('Set-Cookie', /jwt=;/)
       .end((err, _res) => {
@@ -349,7 +341,7 @@ describe('GET /api/auth/users', () => {
       .get('/api/auth/users')
       .send()
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testNonAdminUserToken}`])
+      .set('Cookie', [testNonAdminUserToken])
       .expect(403)
       .end((err, res) => {
         if (err) done(err);
@@ -365,7 +357,7 @@ describe('GET /api/auth/users', () => {
       .get('/api/auth/users')
       .send()
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(200)
       .end((err, res) => {
         if (err) done(err);
@@ -393,7 +385,7 @@ describe('PATCH /api/auth/users/{username}', () => {
       .patch(`/api/auth/users/${`nonExistentUser`}`)
       .send(patch)
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(500)
       .end((err, _res) => {
         if (err) done(err);
@@ -406,7 +398,7 @@ describe('PATCH /api/auth/users/{username}', () => {
       .patch(`/api/auth/users/${testAdminUser.username}`)
       .send(patch)
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testNonAdminUserToken}`])
+      .set('Cookie', [testNonAdminUserToken])
       .expect(403)
       .end((err, _res) => {
         if (err) done(err);
@@ -419,7 +411,7 @@ describe('PATCH /api/auth/users/{username}', () => {
       .patch(`/api/auth/users/${testNonAdminUser.username}`)
       .send(patch)
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(200)
       .end((err, _res) => {
         if (err) done(err);
@@ -437,7 +429,7 @@ describe('PATCH /api/auth/users/{username}', () => {
         },
       })
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(422)
       .end((err, _res) => {
         if (err) done(err);
@@ -452,7 +444,7 @@ describe('DELETE /api/auth/users/{username}', () => {
       .delete(`/api/auth/users/${`nonExistentUser`}`)
       .send()
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(500)
       .end((err, _res) => {
         if (err) done(err);
@@ -465,7 +457,7 @@ describe('DELETE /api/auth/users/{username}', () => {
       .delete(`/api/auth/users/${testAdminUser.username}`)
       .send()
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testNonAdminUserToken}`])
+      .set('Cookie', [testNonAdminUserToken])
       .expect(403)
       .end((err, _res) => {
         if (err) done(err);
@@ -478,7 +470,7 @@ describe('DELETE /api/auth/users/{username}', () => {
       .delete(`/api/auth/users/${testNonAdminUser.username}`)
       .send()
       .set('Accept', 'application/json')
-      .set('Cookie', [`jwt=${testAdminUserToken}`])
+      .set('Cookie', [testAdminUserToken])
       .expect(200)
       .end((err, res) => {
         if (err) done(err);
