@@ -81,7 +81,7 @@ const validationError = (res: Response, err: Error) => {
 };
 
 const preloadConfigs: AuthVerificationPreloadConfigs = {
-  disableAuth: config.disableUsersAndAuth,
+  authMethod: config.authMethod,
   pollInterval: config.torrentClientPollInterval,
 };
 
@@ -98,7 +98,7 @@ router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmi
  * @return {AuthAuthenticationResponse} 200 - success response - application/json
  */
 router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', (req, res) => {
-  if (config.disableUsersAndAuth) {
+  if (config.authMethod === 'none') {
     sendAuthenticationResponse(res, Users.getConfigUser());
     return;
   }
@@ -163,8 +163,8 @@ router.use('/register', (req, res, next) => {
  * @return {AuthAuthenticationResponse} 200 - success response - application/json
  */
 router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/register', (req, res) => {
-  // No user can be registered when disableUsersAndAuth is true
-  if (config.disableUsersAndAuth) {
+  // No user can be registered when authMethod is none
+  if (config.authMethod === 'none') {
     // Return 404
     res.status(404).send('Not found');
     return;
@@ -200,7 +200,7 @@ router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/regis
 // Allow unauthenticated verification if no users are currently registered.
 router.use('/verify', (req, res, next) => {
   // Unconditionally provide a token if auth is disabled
-  if (config.disableUsersAndAuth) {
+  if (config.authMethod === 'none') {
     const {username, level} = Users.getConfigUser();
 
     getAuthToken(username, res);
@@ -284,8 +284,8 @@ router.get('/logout', (_req, res) => {
 router.use('/', requireAdmin);
 
 router.use('/users', (_req, res, next) => {
-  // No operation on user when disableUsersAndAuth is true
-  if (config.disableUsersAndAuth) {
+  // No operation on user when authMethod is none
+  if (config.authMethod === 'none') {
     // Return 404
     res.status(404).send('Not found');
   }

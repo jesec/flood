@@ -1,3 +1,4 @@
+import type {AuthMethod} from '@shared/schema/Auth';
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 declare const CONFIG: {
@@ -5,7 +6,7 @@ declare const CONFIG: {
   dbCleanInterval: number;
   dbPath: string;
   tempPath: string;
-  disableUsersAndAuth: boolean;
+  authMethod: AuthMethod;
   configUser: ClientConnectionSettings;
   floodServerHost: string;
   floodServerPort: number;

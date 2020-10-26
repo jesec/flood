@@ -4,6 +4,8 @@ import type {infer as zodInfer} from 'zod';
 import {AccessLevel} from './constants/Auth';
 import {clientConnectionSettingsSchema} from './ClientConnectionSettings';
 
+export type AuthMethod = 'default' | 'none';
+
 export const credentialsSchema = object({
   username: string(),
   password: string(),

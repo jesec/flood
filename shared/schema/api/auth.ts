@@ -3,6 +3,8 @@ import type {infer as zodInfer} from 'zod';
 import {AccessLevel} from '../constants/Auth';
 import {credentialsSchema} from '../Auth';
 
+import type {AuthMethod} from '../Auth';
+
 // All auth requests are schema validated to ensure security.
 
 // POST /api/auth/authenticate
@@ -26,7 +28,7 @@ export type AuthUpdateUserOptions = zodInfer<typeof authUpdateUserSchema>;
 
 // GET /api/auth/verify - preload configurations
 export interface AuthVerificationPreloadConfigs {
-  disableAuth: boolean;
+  authMethod: AuthMethod;
   pollInterval: number;
 }
 

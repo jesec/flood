@@ -103,7 +103,7 @@ const startWebServer = () => {
 
   console.log(chalk.green(`Flood server starting on ${address}.\n`));
 
-  if (config.disableUsersAndAuth) {
+  if (config.authMethod === 'none') {
     console.log(chalk.yellow('Starting without builtin authentication\n'));
   }
 };

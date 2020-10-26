@@ -30,40 +30,47 @@ const {argv} = require('yargs')
   })
   .option('secret', {
     alias: 's',
+    hidden: true,
     describe: 'A unique secret, a random one will be generated if not provided',
     type: 'string',
   })
+  .option('auth', {
+    describe: 'Access control and user management method',
+    choices: ['default', 'none'],
+  })
   .option('noauth', {
     alias: 'n',
+    hidden: true,
     default: false,
-    describe: "Disable Flood's builtin access control system, needs rthost+rtport OR rtsocket.",
+    describe: "Disable Flood's builtin access control system, deprecated, use auth=none instead",
     type: 'boolean',
   })
   .option('rthost', {
-    describe: "Depends on noauth: Host of rTorrent's SCGI interface",
+    describe: "Host of rTorrent's SCGI interface",
     type: 'string',
   })
   .option('rtport', {
-    describe: "Depends on noauth: Port of rTorrent's SCGI interface",
+    describe: "Port of rTorrent's SCGI interface",
     type: 'number',
   })
   .option('rtsocket', {
     conflicts: ['rthost', 'rtport'],
-    describe: "Depends on noauth: Path to rTorrent's SCGI unix socket",
+    describe: "Path to rTorrent's SCGI unix socket",
     type: 'string',
   })
   .option('qburl', {
-    describe: 'Depends on noauth: URL to qBittorrent Web API',
+    describe: 'URL to qBittorrent Web API',
     type: 'string',
   })
   .option('qbuser', {
-    describe: 'Depends on noauth: Username of qBittorrent Web API',
+    describe: 'Username of qBittorrent Web API',
     type: 'string',
   })
   .option('qbpass', {
-    describe: 'Depends on noauth: Password of qBittorrent Web API',
+    describe: 'Password of qBittorrent Web API',
     type: 'string',
   })
+  .group(['rthost', 'rtport', 'rtsocket', 'qburl', 'qbuser', 'qbpass'], 'When auth=none:')
   .option('ssl', {
     default: false,
     describe: 'Enable SSL, key.pem and fullchain.pem needed in runtime directory',
@@ -195,12 +202,17 @@ if (argv.rtsocket != null || argv.rthost != null) {
   };
 }
 
+let authMethod = 'default';
+if (argv.noauth || argv.auth === 'none') {
+  authMethod = 'none';
+}
+
 const CONFIG = {
   baseURI: argv.baseuri,
   dbCleanInterval: argv.dbclean,
   dbPath: path.resolve(path.join(argv.rundir, 'db')),
   tempPath: path.resolve(path.join(argv.rundir, 'temp')),
-  disableUsersAndAuth: argv.noauth,
+  authMethod,
   configUser: connectionSettings,
   floodServerHost: argv.host,
   floodServerPort: argv.port,

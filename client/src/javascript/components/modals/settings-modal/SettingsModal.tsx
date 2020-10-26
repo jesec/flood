@@ -128,7 +128,7 @@ class SettingsModal extends Component<WrappedComponentProps, SettingsModalStates
           id: 'settings.tabs.resources',
         }),
       },
-      ...(!ConfigStore.disableAuth
+      ...(ConfigStore.authMethod !== 'none'
         ? {
             authentication: {
               content: AuthTab,

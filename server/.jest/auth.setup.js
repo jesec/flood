@@ -7,7 +7,7 @@ const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto
 
 process.argv = ['node', 'flood'];
 process.argv.push('--rundir', temporaryRuntimeDirectory);
-process.argv.push('--noauth', 'false');
+process.argv.push('--auth', 'default');
 
 afterAll(() => {
   if (process.env.CI !== 'true') {
