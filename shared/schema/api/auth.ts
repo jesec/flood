@@ -23,8 +23,14 @@ export type AuthRegistrationOptions = Required<z.infer<typeof authRegistrationSc
 export const authUpdateUserSchema = credentialsSchema.partial();
 export type AuthUpdateUserOptions = z.infer<typeof authUpdateUserSchema>;
 
+// GET /api/auth/verify - preload configurations
+export interface AuthVerificationPreloadConfigs {
+  disableAuth: boolean;
+  pollInterval: number;
+}
+
 // GET /api/auth/verify - success response
-export type AuthVerificationResponse =
+export type AuthVerificationResponse = (
   | {
       initialUser: true;
     }
@@ -32,5 +38,7 @@ export type AuthVerificationResponse =
       initialUser: false;
       username: string;
       level: AccessLevel;
-      token?: string;
-    };
+    }
+) & {
+  configs: AuthVerificationPreloadConfigs;
+};

@@ -6,7 +6,12 @@ import rateLimit from 'express-rate-limit';
 import type {Response} from 'express';
 
 import ajaxUtil from '../../util/ajaxUtil';
-import {authAuthenticationSchema, authRegistrationSchema, authUpdateUserSchema} from '../../../shared/schema/api/auth';
+import {
+  authAuthenticationSchema,
+  authRegistrationSchema,
+  authUpdateUserSchema,
+  AuthVerificationPreloadConfigs,
+} from '../../../shared/schema/api/auth';
 import config from '../../../config';
 import requireAdmin from '../../middleware/requireAdmin';
 import services from '../../services';
@@ -73,6 +78,11 @@ const validationError = (res: Response, err: Error) => {
     message: 'Validation error.',
     error: err,
   });
+};
+
+const preloadConfigs: AuthVerificationPreloadConfigs = {
+  disableAuth: config.disableUsersAndAuth,
+  pollInterval: config.torrentClientPollInterval,
 };
 
 router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
@@ -199,7 +209,7 @@ router.use('/verify', (req, res, next) => {
       initialUser: false,
       username,
       level,
-      token: `JWT ${token}`,
+      configs: preloadConfigs,
     };
 
     res.json(response);
@@ -210,11 +220,22 @@ router.use('/verify', (req, res, next) => {
     handleInitialUser: () => {
       const response: AuthVerificationResponse = {
         initialUser: true,
+        configs: preloadConfigs,
       };
       res.json(response);
     },
     handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false})(req, res, next);
+      passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
+        if (err || !user) {
+          res.status(401).json({
+            configs: preloadConfigs,
+          });
+          return;
+        }
+
+        req.user = user;
+        next();
+      })(req, res, next);
     },
   });
 });
@@ -238,6 +259,7 @@ router.get('/verify', (req, res) => {
     initialUser: false,
     username: req.user.username,
     level: req.user.level,
+    configs: preloadConfigs,
   };
 
   res.json(response);

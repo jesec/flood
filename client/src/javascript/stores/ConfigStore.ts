@@ -1,5 +1,7 @@
 import {makeAutoObservable} from 'mobx';
 
+import {AuthVerificationPreloadConfigs} from '@shared/schema/api/auth';
+
 class ConfigStore {
   baseURI = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/') + 1);
   disableAuth = false;
@@ -9,8 +11,9 @@ class ConfigStore {
     makeAutoObservable(this);
   }
 
-  setDisableAuth(val: boolean): void {
-    this.disableAuth = val;
+  handlePreloadConfigs({disableAuth, pollInterval}: AuthVerificationPreloadConfigs) {
+    this.disableAuth = disableAuth != null ? disableAuth : false;
+    this.pollInterval = pollInterval || 2000;
   }
 }
 

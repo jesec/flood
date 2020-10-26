@@ -5,7 +5,6 @@ import {AccessLevel} from '@shared/schema/Auth';
 import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/schema/api/auth';
 import type {Credentials} from '@shared/schema/Auth';
 
-import ConfigStore from './ConfigStore';
 import FloodActions from '../actions/FloodActions';
 
 class AuthStore {
@@ -67,11 +66,6 @@ class AuthStore {
         isAdmin: response.level === AccessLevel.ADMINISTRATOR,
         isInitialUser: response.initialUser,
       };
-
-      if (response.token != null) {
-        // Auth is disabled if a token is sent on verification
-        ConfigStore.setDisableAuth(true);
-      }
     }
 
     this.isAuthenticating = true;

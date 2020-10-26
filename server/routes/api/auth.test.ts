@@ -52,6 +52,7 @@ describe('GET /api/auth/verify (initial)', () => {
         const verificationResponse: AuthVerificationResponse = res.body;
 
         expect(verificationResponse.initialUser).toBe(true);
+        expect(verificationResponse.configs).toBeDefined();
 
         done();
       });
@@ -201,8 +202,11 @@ describe('GET /api/auth/verify', () => {
       .send()
       .set('Accept', 'application/json')
       .expect(401)
-      .end((err, _res) => {
+      .end((err, res) => {
         if (err) done(err);
+
+        expect(res.body.configs).toBeDefined();
+
         done();
       });
   });
@@ -226,6 +230,8 @@ describe('GET /api/auth/verify', () => {
           expect(verificationResponse.username).toBe(testAdminUser.username);
         }
 
+        expect(verificationResponse.configs).toBeDefined();
+
         done();
       });
   });
@@ -237,8 +243,10 @@ describe('GET /api/auth/verify', () => {
       .set('Accept', 'application/json')
       .set('Cookie', [`jwt=${getAuthToken('nonExistentUser')}`])
       .expect(401)
-      .end((err, _res) => {
+      .end((err, res) => {
         if (err) done(err);
+
+        expect(res.body.configs).toBeDefined();
 
         done();
       });

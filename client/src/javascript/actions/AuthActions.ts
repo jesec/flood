@@ -1,4 +1,4 @@
-import axios, {AxiosError} from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 
 import type {
   AuthAuthenticationOptions,
@@ -109,7 +109,20 @@ const AuthActions = {
   verify: () =>
     axios
       .get(`${baseURI}api/auth/verify?${Date.now()}`)
-      .then((json) => json.data)
+      .then(
+        (res: AxiosResponse) => {
+          if (res.data.configs != null) {
+            ConfigStore.handlePreloadConfigs(res.data.configs);
+          }
+          return res.data;
+        },
+        (error: AxiosError) => {
+          if (error.response?.data?.configs != null) {
+            ConfigStore.handlePreloadConfigs(error.response.data.configs);
+          }
+          throw error;
+        },
+      )
       .then(
         (data: AuthVerificationResponse) => {
           AuthStore.handleAuthVerificationSuccess(data);
