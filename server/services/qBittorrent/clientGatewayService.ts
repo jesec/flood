@@ -34,9 +34,11 @@ import {
 import {QBittorrentTorrentContentPriority, QBittorrentTorrentTrackerStatus} from './types/QBittorrentTorrentsMethods';
 import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentPriority} from '../../../shared/types/Torrent';
+import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 
 class QBittorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
+  cachedTrackerURIs: Record<string, Array<string>> = {};
 
   async addTorrentsByFile({files, destination, isBasePath, start}: AddTorrentByFileOptions): Promise<void> {
     const fileBuffers = files.map((file) => {
@@ -173,7 +175,9 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions): Promise<void> {
     await Promise.all(
       hashes.map((hash) => {
-        return this.clientRequestManager.torrentsAddTrackers(hash, trackers);
+        return this.clientRequestManager
+          .torrentsAddTrackers(hash, trackers)
+          .then(() => delete this.cachedTrackerURIs[hash]);
       }),
     );
   }
@@ -210,48 +214,64 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     return this.clientRequestManager
       .getTorrentInfos()
       .then(this.processClientRequestSuccess, this.processClientRequestError)
-      .then((infos) => {
+      .then(async (infos) => {
         this.emit('PROCESS_TORRENT_LIST_START');
         const torrentList: TorrentList = Object.assign(
           {},
-          ...infos.map((info) => {
-            const torrentProperties: TorrentProperties = {
-              baseDirectory: info.save_path,
-              baseFilename: info.name,
-              basePath: info.save_path,
-              bytesDone: info.completed,
-              dateAdded: info.added_on,
-              dateCreated: 0, // need properties
-              directory: info.save_path,
-              downRate: info.dlspeed,
-              downTotal: info.downloaded,
-              eta: formatUtil.secondsToDuration(info.eta),
-              hash: info.hash,
-              isMultiFile: false,
-              isPrivate: false,
-              message: '', // in tracker method
-              name: info.name,
-              peersConnected: info.num_leechs,
-              peersTotal: info.num_incomplete,
-              percentComplete: Math.trunc(info.progress * 100),
-              priority: 1,
-              ratio: info.ratio,
-              seedsConnected: info.num_seeds,
-              seedsTotal: info.num_complete,
-              sizeBytes: info.size,
-              status: getTorrentStatusFromState(info.state),
-              tags: info.tags === '' ? [] : info.tags.split(','),
-              trackerURIs: getDomainsFromURLs([info.tracker]),
-              upRate: info.upspeed,
-              upTotal: info.uploaded,
-            };
+          ...(await Promise.all(
+            infos.map(async (info) => {
+              if (this.cachedTrackerURIs[info.hash] == null) {
+                const trackerURLs =
+                  (await this.getTorrentTrackers(info.hash).then(
+                    (trackers) =>
+                      trackers
+                        .filter((tracker) => tracker.type !== TorrentTrackerType.DHT)
+                        .map((tracker) => tracker.url),
+                    () => {
+                      // do nothing.
+                    },
+                  )) || [];
+                this.cachedTrackerURIs[info.hash] = getDomainsFromURLs(trackerURLs);
+              }
 
-            this.emit('PROCESS_TORRENT', torrentProperties);
+              const torrentProperties: TorrentProperties = {
+                baseDirectory: info.save_path,
+                baseFilename: info.name,
+                basePath: info.save_path,
+                bytesDone: info.completed,
+                dateAdded: info.added_on,
+                dateCreated: 0, // need properties
+                directory: info.save_path,
+                downRate: info.dlspeed,
+                downTotal: info.downloaded,
+                eta: info.eta === -1 ? -1 : formatUtil.secondsToDuration(info.eta),
+                hash: info.hash,
+                isMultiFile: false,
+                isPrivate: false,
+                message: '', // in tracker method
+                name: info.name,
+                peersConnected: info.num_leechs,
+                peersTotal: info.num_incomplete,
+                percentComplete: Math.trunc(info.progress * 100),
+                priority: 1,
+                ratio: info.ratio,
+                seedsConnected: info.num_seeds,
+                seedsTotal: info.num_complete,
+                sizeBytes: info.size,
+                status: getTorrentStatusFromState(info.state),
+                tags: info.tags === '' ? [] : info.tags.split(','),
+                trackerURIs: this.cachedTrackerURIs[info.hash] || [],
+                upRate: info.upspeed,
+                upTotal: info.uploaded,
+              };
 
-            return {
-              [torrentProperties.hash]: torrentProperties,
-            };
-          }),
+              this.emit('PROCESS_TORRENT', torrentProperties);
+
+              return {
+                [torrentProperties.hash]: torrentProperties,
+              };
+            }),
+          )),
         );
 
         const torrentListSummary = {
