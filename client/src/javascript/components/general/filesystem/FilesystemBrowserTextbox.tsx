@@ -26,9 +26,8 @@ interface FilesystemBrowserTextboxStates {
 
 class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxProps, FilesystemBrowserTextboxStates> {
   contextMenuInstanceRef: ContextMenu | null = null;
-
   contextMenuNodeRef: HTMLDivElement | null = null;
-
+  formRowRef = React.createRef<HTMLDivElement>();
   textboxRef: HTMLInputElement | null = null;
 
   constructor(props: FilesystemBrowserTextboxProps) {
@@ -114,8 +113,10 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
     this.setState({destination, isDirectoryListOpen: isDirectory});
   };
 
-  handleDocumentClick = () => {
-    this.closeDirectoryList();
+  handleDocumentClick = (e: Event) => {
+    if (!this.formRowRef.current?.contains((e.target as unknown) as Node)) {
+      this.closeDirectoryList();
+    }
   };
 
   handleModalDismiss = () => {
@@ -167,7 +168,7 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
     }
 
     return (
-      <FormRowGroup>
+      <FormRowGroup ref={this.formRowRef}>
         <FormRow>
           <Textbox
             addonPlacement="after"

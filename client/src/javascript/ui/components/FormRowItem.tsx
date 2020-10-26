@@ -20,23 +20,22 @@ export interface FormRowItemProps {
     | 'seven-eighths';
 }
 
-const FormRowItem: React.FC<FormRowItemProps> = ({
-  children,
-  className,
-  type,
-  width,
-  grow,
-  shrink,
-}: FormRowItemProps) => {
-  const classes = classnames('form__row__item', className, {
-    [`form__row__item--${width}`]: width,
-    'form__row__item--grow': grow,
-    'form__row__item--shrink': shrink,
-    'form__row__item--error': type === 'error',
-  });
+const FormRowItem = React.forwardRef<HTMLDivElement, FormRowItemProps>(
+  ({children, className, type, width, grow, shrink}: FormRowItemProps, ref) => {
+    const classes = classnames('form__row__item', className, {
+      [`form__row__item--${width}`]: width,
+      'form__row__item--grow': grow,
+      'form__row__item--shrink': shrink,
+      'form__row__item--error': type === 'error',
+    });
 
-  return <div className={classes}>{children}</div>;
-};
+    return (
+      <div className={classes} ref={ref}>
+        {children}
+      </div>
+    );
+  },
+);
 
 FormRowItem.defaultProps = {
   grow: true,

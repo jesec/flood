@@ -4,8 +4,12 @@ interface FormRowGroupProps {
   children: React.ReactNode;
 }
 
-const FormRowGroup: React.FC<FormRowGroupProps> = ({children}: FormRowGroupProps) => {
-  return <div className="form__row form__row--group">{children}</div>;
-};
+const FormRowGroup = React.forwardRef<HTMLDivElement, FormRowGroupProps>(({children}: FormRowGroupProps, ref) => {
+  return (
+    <div className="form__row form__row--group" ref={ref}>
+      {children}
+    </div>
+  );
+});
 
 export default FormRowGroup;

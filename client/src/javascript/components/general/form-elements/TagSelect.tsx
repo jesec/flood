@@ -21,8 +21,8 @@ interface TagSelectStates {
 }
 
 export default class TagSelect extends Component<TagSelectProps, TagSelectStates> {
+  formRowRef = React.createRef<HTMLDivElement>();
   menuRef: HTMLDivElement | null = null;
-
   textboxRef: HTMLInputElement | null = null;
 
   tagMenuItems = Object.keys(TorrentFilterStore.taxonomy.tagCounts).reduce((accumulator: React.ReactNodeArray, tag) => {
@@ -66,13 +66,13 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
       window.addEventListener('scroll', this.handleWindowScroll, {
         capture: true,
       });
-      document.addEventListener('click', this.toggleOpenState);
+      document.addEventListener('click', this.handleDocumentClick);
     } else if (!isOpen && prevState.isOpen) {
       window.addEventListener('keydown', this.handleKeyDown);
       window.removeEventListener('scroll', this.handleWindowScroll, {
         capture: true,
       });
-      document.removeEventListener('click', this.toggleOpenState);
+      document.removeEventListener('click', this.handleDocumentClick);
     }
   }
 
@@ -96,6 +96,12 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
       return accumulator;
     }, []);
   }
+
+  handleDocumentClick = (e: Event) => {
+    if (!this.formRowRef.current?.contains((e.target as unknown) as Node)) {
+      this.toggleOpenState();
+    }
+  };
 
   handleItemClick = (tag: string) => {
     let {selectedTags} = this.state;
@@ -147,7 +153,7 @@ export default class TagSelect extends Component<TagSelectProps, TagSelectStates
     });
 
     return (
-      <FormRowItem>
+      <FormRowItem ref={this.formRowRef}>
         <label className="form__element__label">{label}</label>
         <div className={classes}>
           <Textbox
