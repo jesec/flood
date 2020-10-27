@@ -352,7 +352,6 @@
   "status.diskusage.total": "Total",
   "locale.language.auto": "Automatic",
   "locale.language.translate": "Start to translate",
-  "window.title": "↓ {down} ↑ {up} - Flood",
   "dependency.loading.notifications": "Notifications",
   "dependency.loading.torrent.taxonomy": "Torrent Taxonomy",
   "dependency.loading.transfer.rate.details": "Data Transfer Rate Details",
