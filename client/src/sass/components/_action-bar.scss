@@ -13,7 +13,6 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   border-bottom: 1px solid $torrent-list--border;
   color: $action-bar--foreground;
   display: flex;
-  flex: 0 0 60px;
   height: 60px;
   position: relative;
 
@@ -21,12 +20,10 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   -webkit-touch-callout: none;
 
   @media (max-width: 515px) {
-    flex-basis: 45px;
     height: 45px;
   }
 
   &--is-condensed {
-    flex-basis: 30px;
     height: 30px;
   }
 
