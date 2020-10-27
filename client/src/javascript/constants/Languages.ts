@@ -22,6 +22,9 @@ const Languages = {
   'zh-Hans': '中文(简体)',
   'zh-Hant': '中文(繁體)',
   ar: 'اَلْعَرَبِيَّةُ',
+  translate: {
+    id: 'locale.language.translate',
+  },
 } as const;
 
 export default Languages;

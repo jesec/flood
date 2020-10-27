@@ -17,11 +17,24 @@ let dayjsLocale: Exclude<Language, 'auto' | 'zh-Hans' | 'zh-Hant'> | 'zh-cn' | '
 
 const messagesCache: Partial<Record<Exclude<Language, 'auto'>, Record<string, MessageFormatElement[]>>> = {en: EN};
 
-async function loadMessages(locale: Exclude<Language, 'auto' | 'en'>) {
-  const messages: Record<string, MessageFormatElement[]> = await import(`./compiled/${locale}.json`);
+const inContextTranslator = document.createElement('script');
+inContextTranslator.src = '//cdn.crowdin.com/jipt/jipt.js';
+
+function loadTranslator() {
+  if (!document.head.contains(inContextTranslator)) {
+    document.head.appendChild(inContextTranslator);
+  }
+}
+
+async function loadMessages(locale: Exclude<Language, 'auto'>) {
+  const messages: Record<string, MessageFormatElement[]> = await import(
+    `./compiled/${locale === 'translate' ? 'en' : locale}.json`
+  );
   messagesCache[locale] = messages;
 
-  await import(`dayjs/locale/${dayjsLocale}.js`);
+  if (locale !== 'translate') {
+    await import(`dayjs/locale/${dayjsLocale}.js`);
+  }
 
   return messages;
 }
@@ -31,6 +44,9 @@ function getMessages(locale: Exclude<Language, 'auto'>) {
     dayjsLocale = 'zh-cn';
   } else if (locale === 'zh-Hant') {
     dayjsLocale = 'zh-tw';
+  } else if (locale === 'translate') {
+    loadTranslator();
+    dayjsLocale = 'en';
   } else {
     dayjsLocale = locale;
   }
@@ -58,7 +74,7 @@ const AsyncIntlProvider: React.FC<AsyncIntlProviderProps> = ({locale, children}:
 
   const messages = getMessages(validatedLocale);
   return (
-    <IntlProvider locale={validatedLocale} messages={messages}>
+    <IntlProvider locale={validatedLocale === 'translate' ? 'en' : validatedLocale} messages={messages}>
       {children}
     </IntlProvider>
   );

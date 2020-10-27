@@ -19,19 +19,13 @@ class UITab extends SettingsTab {
 
   getLanguageSelectOptions() {
     return Object.keys(Languages).map((languageID) => {
-      if (languageID === 'auto') {
-        return (
-          <SelectItem key={languageID} id={languageID}>
-            {this.props.intl.formatMessage({
-              id: Languages[languageID].id,
-            })}
-          </SelectItem>
-        );
-      }
-
       return (
         <SelectItem key={languageID} id={languageID}>
-          {Languages[languageID as Language]}
+          {Languages[languageID as 'auto'].id != null
+            ? this.props.intl.formatMessage({
+                id: Languages[languageID as 'auto'].id,
+              })
+            : Languages[languageID as Language]}
         </SelectItem>
       );
     });
@@ -53,18 +47,23 @@ class UITab extends SettingsTab {
 
     if (inputElement.name === 'language') {
       this.selectedLanguage = formData.language as FloodSettings['language'];
-      this.props.onSettingsChange({language: this.selectedLanguage});
+      if (this.selectedLanguage === 'translate') {
+        SettingStore.saveFloodSettings({language: 'translate'});
+      } else {
+        this.props.onSettingsChange({language: this.selectedLanguage});
+      }
     }
   };
 
   render() {
     return (
       <Form onChange={this.handleFormChange}>
-        <ModalFormSectionHeader>
+        <ModalFormSectionHeader key="locale-header">
           <FormattedMessage id="settings.ui.locale" />
         </ModalFormSectionHeader>
-        <FormRow>
+        <FormRow key="locale-selection">
           <Select
+            disabled={this.selectedLanguage === 'translate'}
             defaultID={this.selectedLanguage}
             id="language"
             label={<FormattedMessage id="settings.ui.language" />}>
