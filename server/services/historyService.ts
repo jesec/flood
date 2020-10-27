@@ -128,7 +128,7 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
   }
 
   getHistory({snapshot}: {snapshot: HistorySnapshot}, callback: (data: TransferHistory | null, error?: Error) => void) {
-    this.snapshots[snapshot].getData((transferSnapshots, error) => {
+    this.snapshots[snapshot]?.getData((transferSnapshots, error) => {
       if (error || transferSnapshots == null) {
         callback(null, error);
         return;
