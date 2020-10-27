@@ -19,7 +19,7 @@ interface TableHeadingProps extends WrappedComponentProps {
 }
 
 @observer
-class TableHeading extends React.PureComponent<TableHeadingProps> {
+class TableHeading extends React.Component<TableHeadingProps> {
   focusedCell: TorrentListColumn | null = null;
   focusedCellWidth: number | null = null;
   isPointerDown = false;
