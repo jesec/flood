@@ -17,10 +17,10 @@ import type {TorrentContextMenuAction} from '../../constants/TorrentContextMenuA
 const priorityMeterRef: React.RefObject<PriorityMeterType> = React.createRef();
 let prioritySelected = 1;
 
-const handleDetailsClick = (torrent: TorrentProperties): void => {
+const handleDetailsClick = (hash: string): void => {
   UIActions.displayModal({
     id: 'torrent-details',
-    hash: torrent.hash,
+    hash,
   });
 };
 
@@ -66,10 +66,10 @@ const handleItemClick = (action: TorrentContextMenuAction, event: React.MouseEve
       UIActions.displayModal({id: 'move-torrents'});
       break;
     case 'torrentDetails':
-      handleDetailsClick(TorrentStore.torrents[selectedTorrents.pop() as string]);
+      handleDetailsClick(selectedTorrents[selectedTorrents.length - 1]);
       break;
     case 'torrentDownload':
-      handleTorrentDownload(TorrentStore.torrents[selectedTorrents.pop() as string], event);
+      handleTorrentDownload(TorrentStore.torrents[selectedTorrents[selectedTorrents.length - 1]], event);
       break;
     case 'setPriority':
       if (priorityMeterRef.current != null) {

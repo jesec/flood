@@ -43,7 +43,7 @@ class TorrentHeading extends React.Component {
       return null;
     }
 
-    const torrentClasses = torrentStatusClasses(torrent, 'torrent-details__header');
+    const torrentClasses = torrentStatusClasses(torrent.status, 'torrent-details__header');
     const torrentStatusIcon = torrentStatusIcons(torrent.status);
     this.torrentStatus = getCurrentStatus(torrent.status);
 

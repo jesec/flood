@@ -3,8 +3,6 @@ import {LongPressDetectEvents, useLongPress} from 'use-long-press';
 import {observer} from 'mobx-react';
 import React from 'react';
 
-import type {TorrentProperties} from '@shared/types/Torrent';
-
 import SettingStore from '../../stores/SettingStore';
 import torrentStatusClasses from '../../util/torrentStatusClasses';
 import TorrentStore from '../../stores/TorrentStore';
@@ -14,21 +12,20 @@ import TorrentListRowExpanded from './TorrentListRowExpanded';
 
 interface TorrentListRowProps {
   hash: string;
-  handleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
-  handleDoubleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
-  handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent | React.TouchEvent) => void;
+  handleClick: (hash: string, event: React.MouseEvent) => void;
+  handleDoubleClick: (hash: string, event: React.MouseEvent) => void;
+  handleRightClick: (hash: string, event: React.MouseEvent | React.TouchEvent) => void;
 }
 
 const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProps) => {
   const {hash, handleClick, handleDoubleClick, handleRightClick} = props;
 
-  const torrent = TorrentStore.torrents[hash];
   const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
 
   const torrentClasses = torrentStatusClasses(
-    torrent,
+    TorrentStore.torrents?.[hash].status,
     classnames({
-      'torrent--is-selected': TorrentStore.selectedTorrents.includes(torrent.hash),
+      'torrent--is-selected': TorrentStore.selectedTorrents.includes(hash),
       'torrent--is-condensed': isCondensed,
       'torrent--is-expanded': !isCondensed,
     }),
@@ -38,7 +35,7 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
   const longPressBind = useLongPress(
     (e) => {
       if (e != null) {
-        handleRightClick(torrent, e);
+        handleRightClick(hash, e);
       }
     },
     {

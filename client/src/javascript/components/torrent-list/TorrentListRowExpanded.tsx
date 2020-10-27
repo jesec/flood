@@ -2,22 +2,18 @@ import {FormattedNumber} from 'react-intl';
 import {observer} from 'mobx-react';
 import React from 'react';
 
-import type {TorrentProperties} from '@shared/types/Torrent';
-
-import {getTorrentListCellContent} from '../../util/torrentListCellContents';
 import ProgressBar from '../general/ProgressBar';
 import SettingStore from '../../stores/SettingStore';
 import Size from '../general/Size';
 import TorrentListCell from './TorrentListCell';
 import torrentStatusIcons from '../../util/torrentStatusIcons';
-import TorrentStore from '../../stores/TorrentStore';
 
 interface TorrentListRowExpandedProps {
   className: string;
   hash: string;
-  handleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
-  handleDoubleClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
-  handleRightClick: (torrent: TorrentProperties, event: React.MouseEvent) => void;
+  handleClick: (hash: string, event: React.MouseEvent) => void;
+  handleDoubleClick: (hash: string, event: React.MouseEvent) => void;
+  handleRightClick: (hash: string, event: React.MouseEvent) => void;
   handleTouchStart: (event: React.TouchEvent) => void;
   handleTouchEnd: (event: React.TouchEvent) => void;
 }
@@ -35,40 +31,47 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
     }: TorrentListRowExpandedProps,
     ref,
   ) => {
-    const torrent = TorrentStore.torrents[hash];
     const columns = SettingStore.floodSettings.torrentListColumns;
 
     const primarySection: React.ReactNodeArray = [
       <TorrentListCell
         key="name"
+        hash={hash}
         column="name"
         className="torrent__details__section torrent__details__section--primary"
-        content={getTorrentListCellContent(torrent, 'name')}
       />,
     ];
     const secondarySection: React.ReactNodeArray = [
-      <TorrentListCell key="eta" column="eta" content={getTorrentListCellContent(torrent, 'eta')} showIcon />,
-      <TorrentListCell
-        key="downRate"
-        column="downRate"
-        content={getTorrentListCellContent(torrent, 'downRate')}
-        showIcon
-      />,
-      <TorrentListCell key="upRate" column="upRate" content={getTorrentListCellContent(torrent, 'upRate')} showIcon />,
+      <TorrentListCell key="eta" hash={hash} column="eta" showIcon />,
+      <TorrentListCell key="downRate" hash={hash} column="downRate" showIcon />,
+      <TorrentListCell key="upRate" hash={hash} column="upRate" showIcon />,
     ];
     const tertiarySection: React.ReactNodeArray = [
       <TorrentListCell
         key="percentComplete"
+        hash={hash}
         column="percentComplete"
-        content={
+        content={(torrent) => (
           <span>
             <FormattedNumber value={torrent.percentComplete} />
             <em className="unit">%</em>
             &nbsp;&mdash;&nbsp;
             <Size value={torrent.downTotal} />
           </span>
-        }
+        )}
         showIcon
+      />,
+    ];
+    const quaternarySection: React.ReactNodeArray = [
+      <TorrentListCell
+        key="percentBar"
+        hash={hash}
+        column="percentComplete"
+        content={(torrent) => (
+          <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
+        )}
+        className="torrent__details__section torrent__details__section--quaternary"
+        classNameOverride
       />,
     ];
 
@@ -88,9 +91,7 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
           case 'percentComplete':
             break;
           default:
-            tertiarySection.push(
-              <TorrentListCell key={id} column={id} content={getTorrentListCellContent(torrent, id)} showIcon />,
-            );
+            tertiarySection.push(<TorrentListCell key={id} hash={hash} column={id} showIcon />);
             break;
         }
       }
@@ -99,9 +100,9 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
     return (
       <li
         className={className}
-        onClick={handleClick.bind(this, torrent)}
-        onContextMenu={handleRightClick.bind(this, torrent)}
-        onDoubleClick={handleDoubleClick.bind(this, torrent)}
+        onClick={handleClick.bind(this, hash)}
+        onContextMenu={handleRightClick.bind(this, hash)}
+        onDoubleClick={handleDoubleClick.bind(this, hash)}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         ref={ref}>
@@ -110,9 +111,7 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
           <div className="torrent__details__section torrent__details__section--secondary">{secondarySection}</div>
         </div>
         <div className="torrent__details__section torrent__details__section--tertiary">{tertiarySection}</div>
-        <div className="torrent__details__section torrent__details__section--quaternary">
-          <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
-        </div>
+        {quaternarySection}
       </li>
     );
   },

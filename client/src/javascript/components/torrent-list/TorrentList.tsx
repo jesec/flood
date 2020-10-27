@@ -7,7 +7,6 @@ import React from 'react';
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
-import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Button} from '../../ui';
 import ClientStatusStore from '../../stores/ClientStatusStore';
@@ -53,9 +52,9 @@ const getEmptyTorrentListNotification = (): React.ReactNode => {
   );
 };
 
-const handleClick = (torrent: TorrentProperties, event: React.MouseEvent) =>
-  UIActions.handleTorrentClick({hash: torrent.hash, event});
-const handleDoubleClick = (torrent: TorrentProperties) => TorrentListContextMenu.handleDetailsClick(torrent);
+const handleClick = (hash: string, event: React.MouseEvent) => UIActions.handleTorrentClick({hash, event});
+const handleDoubleClick = (hash: string) => TorrentListContextMenu.handleDetailsClick(hash);
+
 @observer
 class TorrentList extends React.Component<WrappedComponentProps> {
   listContainer: HTMLDivElement | null = null;
@@ -82,7 +81,7 @@ class TorrentList extends React.Component<WrappedComponentProps> {
     });
   };
 
-  handleContextMenuClick = (torrent: TorrentProperties, event: React.MouseEvent | React.TouchEvent) => {
+  handleContextMenuClick = (hash: string, event: React.MouseEvent | React.TouchEvent) => {
     if (event.cancelable === true) {
       event.preventDefault();
     }
@@ -92,11 +91,12 @@ class TorrentList extends React.Component<WrappedComponentProps> {
     const touchClientX = ((event as unknown) as TouchEvent).touches?.[0].clientX;
     const touchClientY = ((event as unknown) as TouchEvent).touches?.[0].clientY;
 
-    if (!TorrentStore.selectedTorrents.includes(torrent.hash)) {
-      UIActions.handleTorrentClick({hash: torrent.hash, event});
+    if (!TorrentStore.selectedTorrents.includes(hash)) {
+      UIActions.handleTorrentClick({hash, event});
     }
 
     const {torrentContextMenuActions = defaultFloodSettings.torrentContextMenuActions} = SettingStore.floodSettings;
+    const torrent = TorrentStore.torrents[hash];
 
     UIActions.displayContextMenu({
       id: 'torrent-list-item',
