@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import React from 'react';
 
 import DetailNotAvailableIcon from '../icons/DetailNotAvailableIcon';
@@ -23,7 +24,9 @@ const TorrentListCell: React.FC<TorrentListCellProps> = ({
   const icon = showIcon ? torrentPropertyIcons[column as keyof typeof torrentPropertyIcons] : null;
 
   return (
-    <div className={`torrent__detail torrent__detail--${column} ${className}`} style={{width: `${width}px`}}>
+    <div
+      className={classnames('torrent__detail', `torrent__detail--${column}`, className)}
+      style={{width: `${width}px`}}>
       {icon}
       {content || <DetailNotAvailableIcon />}
     </div>
