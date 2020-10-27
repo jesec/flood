@@ -439,6 +439,48 @@
       "value": "Connection settings can not be empty."
     }
   ],
+  "connection.settings.qbittorrent": [
+    {
+      "type": 0,
+      "value": "qBittorrent"
+    }
+  ],
+  "connection.settings.qbittorrent.password": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.qbittorrent.password.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.qbittorrent.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "connection.settings.qbittorrent.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "URL to qBittorrent Web API"
+    }
+  ],
+  "connection.settings.qbittorrent.username": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
+  "connection.settings.qbittorrent.username.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
   "connection.settings.rtorrent": [
     {
       "type": 0,
@@ -831,6 +873,12 @@
       "value": "Denne stien finnes ikke. Den vil bli opprettet."
     }
   ],
+  "filesystem.error.unknown": [
+    {
+      "type": 0,
+      "value": "An unknown error occurred. Please try again."
+    }
+  ],
   "filesystem.fetching": [
     {
       "type": 0,
@@ -945,6 +993,12 @@
       "value": "Kopier"
     }
   ],
+  "general.error.unknown": [
+    {
+      "type": 0,
+      "value": "An unknown error occurred"
+    }
+  ],
   "general.of": [
     {
       "type": 0,
@@ -985,6 +1039,18 @@
     {
       "type": 0,
       "value": "Fjern alle"
+    }
+  ],
+  "notification.feed.torrent.added.body": [
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "notification.feed.torrent.added.heading": [
+    {
+      "type": 0,
+      "value": "Feed Item Queued"
     }
   ],
   "notification.showing": [
@@ -1377,12 +1443,6 @@
       "value": "Utvidet visning"
     }
   ],
-  "settings.warning.set.tracker": [
-    {
-      "type": 0,
-      "value": "Replaces main tracker. Ideal for single-tracker private torrents. Not recommended for multi-tracker torrents."
-    }
-  ],
   "sidebar.button.feeds": [
     {
       "type": 0,
@@ -1505,6 +1565,18 @@
     {
       "type": 0,
       "value": "Legg til torrent"
+    }
+  ],
+  "torrents.add.cookies.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Optional cookie-name=cookie-value"
+    }
+  ],
+  "torrents.add.cookies.label": [
+    {
+      "type": 0,
+      "value": "Cookies"
     }
   ],
   "torrents.add.destination.label": [
@@ -1649,6 +1721,12 @@
     {
       "type": 0,
       "value": "Bruk som basis sti"
+    }
+  ],
+  "torrents.destination.completed": [
+    {
+      "type": 0,
+      "value": "Completed"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2001,10 +2079,10 @@
       "value": "Angi Etiketter"
     }
   ],
-  "torrents.list.context.set.tracker": [
+  "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Set Trackers"
     }
   ],
   "torrents.list.context.start": [
@@ -2269,22 +2347,28 @@
       "value": "Angi Etiketter"
     }
   ],
-  "torrents.set.tracker.button.set": [
+  "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Set Trackers"
     }
   ],
-  "torrents.set.tracker.enter.tracker": [
+  "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
       "value": "Enter a tracker"
     }
   ],
-  "torrents.set.tracker.heading": [
+  "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Tracker"
+      "value": "Set Trackers"
+    }
+  ],
+  "torrents.set.trackers.loading.trackers": [
+    {
+      "type": 0,
+      "value": "Loading trackers..."
     }
   ],
   "torrents.sort.title": [
