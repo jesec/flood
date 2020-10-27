@@ -1,6 +1,5 @@
 import React from 'react';
 
-import CustomScrollbars from '../general/CustomScrollbars';
 import FeedsButton from './FeedsButton';
 import LogoutButton from './LogoutButton';
 import NotificationsButton from './NotificationsButton';
@@ -16,7 +15,7 @@ import DiskUsage from './DiskUsage';
 
 const Sidebar = () => {
   return (
-    <CustomScrollbars className="application__sidebar" inverted>
+    <div className="application__sidebar">
       <SidebarActions>
         <SpeedLimitDropdown />
         <SettingsButton />
@@ -30,7 +29,7 @@ const Sidebar = () => {
       <TagFilters />
       <TrackerFilters />
       <DiskUsage />
-    </CustomScrollbars>
+    </div>
   );
 };
 

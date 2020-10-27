@@ -13,9 +13,9 @@ const pointerDownStyles = `
 `;
 
 interface TableHeadingProps extends WrappedComponentProps {
-  scrollOffset: number;
   onCellClick: (column: TorrentListColumn) => void;
   onWidthsChange: (column: TorrentListColumn, width: number) => void;
+  setRef?: React.RefCallback<HTMLDivElement>;
 }
 
 @observer
@@ -26,7 +26,6 @@ class TableHeading extends React.PureComponent<TableHeadingProps> {
   lastPointerX: number | null = null;
   tableHeading: HTMLDivElement | null = null;
   resizeLine: HTMLDivElement | null = null;
-  tableHeadingX = 0;
 
   constructor(props: TableHeadingProps) {
     super(props);
@@ -34,12 +33,6 @@ class TableHeading extends React.PureComponent<TableHeadingProps> {
     this.handlePointerDown = this.handlePointerDown.bind(this);
     this.handlePointerUp = this.handlePointerUp.bind(this);
     this.handlePointerMove = this.handlePointerMove.bind(this);
-  }
-
-  componentDidMount() {
-    if (this.tableHeading != null) {
-      this.tableHeadingX = this.tableHeading.getBoundingClientRect().left;
-    }
   }
 
   getHeadingElements() {
@@ -103,11 +96,10 @@ class TableHeading extends React.PureComponent<TableHeadingProps> {
     if (nextCellWidth > 20) {
       this.focusedCellWidth = nextCellWidth;
       this.lastPointerX = event.clientX;
-      if (this.resizeLine != null) {
-        this.resizeLine.style.transform = `translateX(${Math.max(
-          0,
-          event.clientX - this.tableHeadingX + this.props.scrollOffset,
-        )}px)`;
+      if (this.resizeLine != null && this.tableHeading != null) {
+        this.resizeLine.style.transform = `translate(${Math.max(0, event.clientX)}px, ${
+          this.tableHeading.getBoundingClientRect().top
+        }px)`;
       }
     }
   }
@@ -133,7 +125,7 @@ class TableHeading extends React.PureComponent<TableHeadingProps> {
   }
 
   handlePointerDown(event: React.PointerEvent, slug: TorrentListColumn, width: number) {
-    if (!this.isPointerDown && this.resizeLine != null) {
+    if (!this.isPointerDown && this.resizeLine != null && this.tableHeading != null) {
       global.document.addEventListener('pointerup', this.handlePointerUp);
       global.document.addEventListener('pointermove', this.handlePointerMove);
       UIStore.addGlobalStyle(pointerDownStyles);
@@ -142,20 +134,24 @@ class TableHeading extends React.PureComponent<TableHeadingProps> {
       this.focusedCellWidth = width;
       this.isPointerDown = true;
       this.lastPointerX = event.clientX;
-      this.resizeLine.style.transform = `translateX(${Math.max(
-        0,
-        event.clientX - this.tableHeadingX + this.props.scrollOffset,
-      )}px)`;
+      this.resizeLine.style.transform = `translate(${Math.max(0, event.clientX)}px, ${
+        this.tableHeading.getBoundingClientRect().top
+      }px)`;
       this.resizeLine.style.opacity = '1';
     }
   }
 
   render() {
+    const {setRef} = this.props;
+
     return (
       <div
         className="table__row table__row--heading"
         ref={(ref) => {
           this.tableHeading = ref;
+          if (setRef != null) {
+            setRef(ref);
+          }
         }}>
         {this.getHeadingElements()}
         <div className="table__cell table__heading table__heading--fill" />

@@ -1,9 +1,7 @@
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import debounce from 'lodash/debounce';
 import Dropzone from 'react-dropzone';
 import {observer} from 'mobx-react';
-import {Scrollbars} from 'react-custom-scrollbars';
-import {observable, reaction, runInAction} from 'mobx';
+import {observable, reaction} from 'mobx';
 import React from 'react';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
@@ -13,7 +11,6 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Button} from '../../ui';
 import ClientStatusStore from '../../stores/ClientStatusStore';
-import CustomScrollbars from '../general/CustomScrollbars';
 import Files from '../icons/Files';
 import GlobalContextMenuMountPoint from '../general/GlobalContextMenuMountPoint';
 import ListViewport from '../general/ListViewport';
@@ -59,18 +56,11 @@ const getEmptyTorrentListNotification = (): React.ReactNode => {
 const handleClick = (torrent: TorrentProperties, event: React.MouseEvent) =>
   UIActions.handleTorrentClick({hash: torrent.hash, event});
 const handleDoubleClick = (torrent: TorrentProperties) => TorrentListContextMenu.handleDetailsClick(torrent);
-
-interface TorrentListStates {
-  tableScrollLeft: number;
-}
-
 @observer
-class TorrentList extends React.Component<WrappedComponentProps, TorrentListStates> {
+class TorrentList extends React.Component<WrappedComponentProps> {
   listContainer: HTMLDivElement | null = null;
-  listViewportRef: ListViewport | null = null;
-  horizontalScrollRef: Scrollbars | null = null;
-  verticalScrollbarThumb: HTMLDivElement | null = null;
-  lastScrollLeft = 0;
+  listHeaderRef: HTMLDivElement | null = null;
+  listViewportRef = React.createRef<HTMLDivElement>();
 
   torrentListViewportSize = observable.object<{width: number; height: number}>({
     width: window.innerWidth,
@@ -80,48 +70,17 @@ class TorrentList extends React.Component<WrappedComponentProps, TorrentListStat
   constructor(props: WrappedComponentProps) {
     super(props);
 
-    reaction(
-      () => SettingStore.floodSettings.torrentListViewSize,
-      (currentTorrentListViewSize, prevTorrentListViewSize) => {
-        const isCondensed = currentTorrentListViewSize === 'condensed';
-        const wasCondensed = prevTorrentListViewSize === 'condensed';
-
-        if (this.verticalScrollbarThumb != null) {
-          if (!isCondensed && wasCondensed) {
-            this.updateVerticalThumbPosition(0);
-          } else if (isCondensed && this.listContainer != null) {
-            this.updateVerticalThumbPosition(
-              (SettingStore.totalCellWidth - this.listContainer.clientWidth) * -1 + this.lastScrollLeft,
-            );
-          }
-        }
-
-        if (currentTorrentListViewSize !== prevTorrentListViewSize && this.listViewportRef != null) {
-          this.listViewportRef.measureItemHeight();
-        }
-      },
-    );
-
     reaction(() => TorrentFilterStore.filters, this.handleTorrentFilterChange);
-
-    this.state = {
-      tableScrollLeft: 0,
-    };
   }
 
-  componentDidMount() {
-    window.addEventListener('resize', this.updateTorrentListViewSize);
-  }
+  handleColumnWidthChange = (column: TorrentListColumn, width: number) => {
+    const {torrentListColumnWidths = defaultFloodSettings.torrentListColumnWidths} = SettingStore.floodSettings;
 
-  componentDidUpdate() {
-    if (this.horizontalScrollRef != null && this.torrentListViewportSize.width === 0) {
-      this.updateTorrentListViewSize();
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateTorrentListViewSize);
-  }
+    SettingActions.saveSetting('torrentListColumnWidths', {
+      ...torrentListColumnWidths,
+      [column]: width,
+    });
+  };
 
   handleContextMenuClick = (torrent: TorrentProperties, event: React.MouseEvent | React.TouchEvent) => {
     if (event.cancelable === true) {
@@ -184,70 +143,14 @@ class TorrentList extends React.Component<WrappedComponentProps, TorrentListStat
   };
 
   handleTorrentFilterChange = () => {
-    if (this.listViewportRef != null) {
-      this.listViewportRef.scrollToTop();
+    if (this.listViewportRef.current != null) {
+      this.listViewportRef.current.scrollTop = 0;
     }
   };
 
-  getVerticalScrollbarThumb: React.StatelessComponent = (props) => {
-    return (
-      <div {...props}>
-        <div
-          className="scrollbars__thumb scrollbars__thumb--horizontal scrollbars__thumb--surrogate"
-          ref={(ref) => {
-            this.verticalScrollbarThumb = ref;
-          }}
-          role="button"
-          tabIndex={0}
-        />
-      </div>
-    );
-  };
-
-  handleHorizontalScroll = (event: React.UIEvent) => {
-    if (this.verticalScrollbarThumb != null) {
-      const {clientWidth, scrollLeft, scrollWidth} = event.target as HTMLElement;
-      this.lastScrollLeft = scrollLeft;
-      this.updateVerticalThumbPosition((scrollWidth - clientWidth) * -1 + scrollLeft);
-    }
-  };
-
-  handleHorizontalScrollStop = () => {
-    this.setState({tableScrollLeft: this.lastScrollLeft});
-  };
-
-  handleColumnWidthChange = (column: TorrentListColumn, width: number) => {
-    const {torrentListColumnWidths = defaultFloodSettings.torrentListColumnWidths} = SettingStore.floodSettings;
-
-    SettingActions.saveSetting('torrentListColumnWidths', {
-      ...torrentListColumnWidths,
-      [column]: width,
-    });
-  };
-
-  /* eslint-disable react/sort-comp */
-  updateTorrentListViewSize = debounce(
-    () => {
-      runInAction(() => {
-        this.torrentListViewportSize.height = this.horizontalScrollRef?.getClientHeight() || window.innerHeight;
-        this.torrentListViewportSize.width = this.horizontalScrollRef?.getClientWidth() || window.innerWidth;
-      });
-      if (SettingStore.floodSettings.torrentListViewSize === 'condensed') {
-        if (this.verticalScrollbarThumb != null && this.listContainer != null) {
-          this.updateVerticalThumbPosition(
-            (SettingStore.totalCellWidth - this.listContainer.clientWidth) * -1 + this.lastScrollLeft,
-          );
-        }
-      }
-    },
-    100,
-    {trailing: true},
-  );
-  /* eslint-enable react/sort-comp */
-
-  updateVerticalThumbPosition = (offset: number) => {
-    if (this.verticalScrollbarThumb != null) {
-      this.verticalScrollbarThumb.style.transform = `translateX(${offset}px)`;
+  handleViewportScroll = () => {
+    if (this.listHeaderRef != null && this.listViewportRef.current != null) {
+      this.listHeaderRef.scrollLeft = this.listViewportRef.current.scrollLeft;
     }
   };
 
@@ -285,23 +188,9 @@ class TorrentList extends React.Component<WrappedComponentProps, TorrentListStat
     } else if (isListEmpty || torrents == null) {
       content = getEmptyTorrentListNotification();
     } else {
-      content = (
-        <ListViewport
-          getVerticalThumb={this.getVerticalScrollbarThumb}
-          itemRenderer={this.renderListItem}
-          listClass="torrent__list"
-          listLength={torrents.length}
-          ref={(ref) => {
-            this.listViewportRef = ref;
-          }}
-          scrollContainerClass="torrent__list__scrollbars--vertical"
-        />
-      );
-
       if (isCondensed) {
         torrentListHeading = (
           <TableHeading
-            scrollOffset={this.state.tableScrollLeft}
             onCellClick={(property: TorrentListColumn) => {
               const currentSort = SettingStore.floodSettings.sortTorrents;
 
@@ -319,12 +208,23 @@ class TorrentList extends React.Component<WrappedComponentProps, TorrentListStat
               SettingActions.saveSetting('sortTorrents', sortBy);
             }}
             onWidthsChange={this.handleColumnWidthChange}
+            setRef={(ref) => {
+              this.listHeaderRef = ref;
+            }}
           />
         );
       }
-    }
 
-    const listViewportWidth = this.torrentListViewportSize.width;
+      content = (
+        <ListViewport
+          itemRenderer={this.renderListItem}
+          listClass="torrent__list"
+          listLength={torrents.length}
+          onScroll={this.handleViewportScroll}
+          ref={this.listViewportRef}
+        />
+      );
+    }
 
     return (
       <Dropzone onDrop={this.handleFileDrop} noClick noKeyboard>
@@ -335,26 +235,11 @@ class TorrentList extends React.Component<WrappedComponentProps, TorrentListStat
             ref={(ref) => {
               this.listContainer = ref;
             }}>
-            <CustomScrollbars
-              className="torrent__list__scrollbars--horizontal"
-              onScrollStop={this.handleHorizontalScrollStop}
-              nativeScrollHandler={this.handleHorizontalScroll}
-              ref={(ref) => {
-                this.horizontalScrollRef = ref;
-              }}>
-              <div
-                className="torrent__list__wrapper"
-                style={
-                  isCondensed && !isListEmpty
-                    ? {width: `${Math.max(listViewportWidth, SettingStore.totalCellWidth)}px`}
-                    : {}
-                }>
-                <GlobalContextMenuMountPoint id="torrent-list-item" />
-                {torrentListHeading}
-                {content}
-              </div>
-            </CustomScrollbars>
-
+            <div className="torrent__list__wrapper">
+              <GlobalContextMenuMountPoint id="torrent-list-item" />
+              {torrentListHeading}
+              {content}
+            </div>
             <div className="dropzone__overlay">
               <div className="dropzone__copy">
                 <div className="dropzone__icon">

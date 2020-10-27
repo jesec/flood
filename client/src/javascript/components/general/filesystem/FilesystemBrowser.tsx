@@ -2,7 +2,6 @@ import React from 'react';
 import {defineMessages, WrappedComponentProps} from 'react-intl';
 
 import ArrowIcon from '../../icons/ArrowIcon';
-import CustomScrollbars from '../CustomScrollbars';
 import File from '../../icons/File';
 import FolderClosedSolid from '../../icons/FolderClosedSolid';
 import FloodActions from '../../../actions/FloodActions';
@@ -28,7 +27,6 @@ const MESSAGES = defineMessages({
 interface FilesystemBrowserProps extends WrappedComponentProps {
   selectable?: 'files' | 'directories';
   directory: string;
-  maxHeight?: number | string | null;
   onItemSelection?: (newDestination: string, isDirectory?: boolean) => void;
 }
 
@@ -112,7 +110,7 @@ class FilesystemBrowser extends React.PureComponent<FilesystemBrowserProps, File
   };
 
   render() {
-    const {intl, selectable, maxHeight} = this.props;
+    const {intl, selectable} = this.props;
     const {directories, errorResponse, files} = this.state;
     let errorMessage = null;
     let listItems = null;
@@ -198,13 +196,11 @@ class FilesystemBrowser extends React.PureComponent<FilesystemBrowserProps, File
     }
 
     return (
-      <CustomScrollbars autoHeight autoHeightMin={0} autoHeightMax={maxHeight || undefined}>
-        <div className="filesystem__directory-list context-menu__items__padding-surrogate">
-          {parentDirectory}
-          {errorMessage}
-          {listItems}
-        </div>
-      </CustomScrollbars>
+      <div className="filesystem__directory-list context-menu__items__padding-surrogate">
+        {parentDirectory}
+        {errorMessage}
+        {listItems}
+      </div>
     );
   }
 }

@@ -6,7 +6,9 @@
     flex: 1;
     min-width: 240px;
     max-width: 250px;
-    overflow: auto;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: overlay;
     position: relative;
     z-index: 2;
     transition: transform 0.2s;

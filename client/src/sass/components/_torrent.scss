@@ -475,9 +475,11 @@ $more-info--border: $textbox-repeater--button--border;
     @include theme('border-top', 'torrent--border');
     display: flex;
     height: 30px;
+    min-width: max-content;
+    max-width: 100%;
     padding: 0;
 
-    &:nth-child(0n + 2) {
+    &:nth-child(0n + 1) {
       border-top: none;
     }
 

@@ -5,3 +5,30 @@ body {
 ul {
   list-style: none;
 }
+
+* {
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+::-webkit-scrollbar-corner {
+  background: none;
+}
+
+::-webkit-scrollbar-track {
+  opacity: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #8d8d8d;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 4px;
+  background: lighten(#8d8d8d, 10%);
+}

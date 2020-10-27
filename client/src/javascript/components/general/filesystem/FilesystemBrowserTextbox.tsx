@@ -198,16 +198,10 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
                 setRef={(ref) => {
                   this.contextMenuNodeRef = ref;
                 }}
-                scrolling={false}
                 triggerRef={this.textboxRef}>
                 <FilesystemBrowser
                   directory={destination}
                   intl={intl}
-                  maxHeight={
-                    this.contextMenuInstanceRef &&
-                    this.contextMenuInstanceRef.dropdownStyle &&
-                    this.contextMenuInstanceRef.dropdownStyle.maxHeight
-                  }
                   selectable={selectable}
                   onItemSelection={this.handleItemSelection}
                 />

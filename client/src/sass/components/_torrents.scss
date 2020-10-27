@@ -2,8 +2,9 @@
   @include theme('background', 'torrent-list--background');
   @include theme('box-shadow', 'torrent-list--border');
   display: flex;
-  flex: 1 1 auto;
+  flex: 1 1 0px;
   flex-direction: column;
+  overflow: hidden;
   position: relative;
 
   .loading-indicator {
@@ -52,11 +53,18 @@
       }
     }
 
+    &__viewport {
+      overflow-x: auto;
+      overflow-y: overlay;
+      height: 100%;
+    }
+
     &__wrapper {
       display: flex;
       flex: 1 1 auto;
       flex-direction: column;
       height: 100%;
+      width: 100%;
       justify-content: center;
       list-style: none;
       opacity: 1;
@@ -101,7 +109,6 @@
     box-shadow: -1px 0 $torrent-list--border;
     display: flex;
     flex-direction: column;
-    flex: 1;
     flex: 0 1 100%;
   }
 }

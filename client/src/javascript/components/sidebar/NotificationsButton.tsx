@@ -9,7 +9,6 @@ import type {Notification} from '@shared/types/Notification';
 import FloodActions from '../../actions/FloodActions';
 import ChevronLeftIcon from '../icons/ChevronLeftIcon';
 import ChevronRightIcon from '../icons/ChevronRightIcon';
-import CustomScrollbars from '../general/CustomScrollbars';
 import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
 import NotificationIcon from '../icons/NotificationIcon';
 import NotificationStore from '../../stores/NotificationStore';
@@ -221,11 +220,9 @@ class NotificationsButton extends React.Component<WrappedComponentProps, Notific
       <div className={notificationsWrapperClasses}>
         {this.getTopToolbar()}
         <div className="notifications__loading-indicator">{loadingIndicatorIcon}</div>
-        <CustomScrollbars autoHeight autoHeightMin={0} autoHeightMax={300} inverted>
-          <ul className="notifications__list tooltip__content--padding-surrogate">
-            {notifications.map(this.getNotification)}
-          </ul>
-        </CustomScrollbars>
+        <ul className="notifications__list tooltip__content--padding-surrogate">
+          {notifications.map(this.getNotification)}
+        </ul>
         {this.getBottomToolbar()}
       </div>
     );

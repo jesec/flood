@@ -477,6 +477,7 @@ declare const styles: {
   readonly torrent__list: string;
   readonly 'torrent__list__scrollbars--horizontal': string;
   readonly 'torrent__list__scrollbars--vertical': string;
+  readonly torrent__list__viewport: string;
   readonly torrent__list__wrapper: string;
   readonly 'torrent__list--loading-enter': string;
   readonly 'torrent__list--loading-enter-active': string;
