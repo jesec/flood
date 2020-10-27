@@ -443,6 +443,48 @@
       "value": "Nastavení připojení nemůže být prázdné."
     }
   ],
+  "connection.settings.qbittorrent": [
+    {
+      "type": 0,
+      "value": "qBittorrent"
+    }
+  ],
+  "connection.settings.qbittorrent.password": [
+    {
+      "type": 0,
+      "value": "Heslo"
+    }
+  ],
+  "connection.settings.qbittorrent.password.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Heslo"
+    }
+  ],
+  "connection.settings.qbittorrent.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "connection.settings.qbittorrent.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "URL webového API qBittorrentu"
+    }
+  ],
+  "connection.settings.qbittorrent.username": [
+    {
+      "type": 0,
+      "value": "Uživatelské jméno"
+    }
+  ],
+  "connection.settings.qbittorrent.username.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Uživatelské jméno"
+    }
+  ],
   "connection.settings.rtorrent": [
     {
       "type": 0,
@@ -835,6 +877,12 @@
       "value": "Tato cesta neexistuje. Bude vytvořena."
     }
   ],
+  "filesystem.error.unknown": [
+    {
+      "type": 0,
+      "value": "Došlo k neznámé chybě. Prosím, opakujte akci."
+    }
+  ],
   "filesystem.fetching": [
     {
       "type": 0,
@@ -949,6 +997,12 @@
       "value": "Kopírovat"
     }
   ],
+  "general.error.unknown": [
+    {
+      "type": 0,
+      "value": "Došlo k neznámé chybě"
+    }
+  ],
   "general.of": [
     {
       "type": 0,
@@ -989,6 +1043,18 @@
     {
       "type": 0,
       "value": "Vymazat vše"
+    }
+  ],
+  "notification.feed.torrent.added.body": [
+    {
+      "type": 1,
+      "value": "title"
+    }
+  ],
+  "notification.feed.torrent.added.heading": [
+    {
+      "type": 0,
+      "value": "Položka kanálu zařazena do fronty"
     }
   ],
   "notification.showing": [
@@ -1381,12 +1447,6 @@
       "value": "Rozšířené zobrazení"
     }
   ],
-  "settings.warning.set.tracker": [
-    {
-      "type": 0,
-      "value": "Nahradí hlavní tracker. Ideální pro soukromé torrenty s jediným trackerem. Nedoporučuje se pro torrenty s více trackery."
-    }
-  ],
   "sidebar.button.feeds": [
     {
       "type": 0,
@@ -1509,6 +1569,18 @@
     {
       "type": 0,
       "value": "Přidat Torrent"
+    }
+  ],
+  "torrents.add.cookies.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Volitelné cookie-name=cookie-value"
+    }
+  ],
+  "torrents.add.cookies.label": [
+    {
+      "type": 0,
+      "value": "Cookies"
     }
   ],
   "torrents.add.destination.label": [
@@ -1653,6 +1725,12 @@
     {
       "type": 0,
       "value": "Použít jako základní cestu"
+    }
+  ],
+  "torrents.destination.completed": [
+    {
+      "type": 0,
+      "value": "Dokončeno"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2005,10 +2083,10 @@
       "value": "Nastavit štítky"
     }
   ],
-  "torrents.list.context.set.tracker": [
+  "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Nastavit tracker"
+      "value": "Nastavit Trackery"
     }
   ],
   "torrents.list.context.start": [
@@ -2273,22 +2351,28 @@
       "value": "Nastavit štítky"
     }
   ],
-  "torrents.set.tracker.button.set": [
+  "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Nastavit tracker"
+      "value": "Nastavit Trackery"
     }
   ],
-  "torrents.set.tracker.enter.tracker": [
+  "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
       "value": "Vložit tracker"
     }
   ],
-  "torrents.set.tracker.heading": [
+  "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Nastavit tracker"
+      "value": "Nastavit Trackery"
+    }
+  ],
+  "torrents.set.trackers.loading.trackers": [
+    {
+      "type": 0,
+      "value": "Načítání trackerů..."
     }
   ],
   "torrents.sort.title": [
