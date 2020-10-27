@@ -38,9 +38,39 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
     const torrent = TorrentStore.torrents[hash];
     const columns = SettingStore.floodSettings.torrentListColumns;
 
-    const primarySection: React.ReactNodeArray = [];
-    const secondarySection: React.ReactNodeArray = [];
-    const tertiarySection: React.ReactNodeArray = [];
+    const primarySection: React.ReactNodeArray = [
+      <TorrentListCell
+        key="name"
+        column="name"
+        className="torrent__details__section torrent__details__section--primary"
+        content={getTorrentListCellContent(torrent, 'name')}
+      />,
+    ];
+    const secondarySection: React.ReactNodeArray = [
+      <TorrentListCell key="eta" column="eta" content={getTorrentListCellContent(torrent, 'eta')} showIcon />,
+      <TorrentListCell
+        key="downRate"
+        column="downRate"
+        content={getTorrentListCellContent(torrent, 'downRate')}
+        showIcon
+      />,
+      <TorrentListCell key="upRate" column="upRate" content={getTorrentListCellContent(torrent, 'upRate')} showIcon />,
+    ];
+    const tertiarySection: React.ReactNodeArray = [
+      <TorrentListCell
+        key="percentComplete"
+        column="percentComplete"
+        content={
+          <span>
+            <FormattedNumber value={torrent.percentComplete} />
+            <em className="unit">%</em>
+            &nbsp;&mdash;&nbsp;
+            <Size value={torrent.downTotal} />
+          </span>
+        }
+        showIcon
+      />,
+    ];
 
     // Using a for loop to maximize performance.
     for (let index = 0; index < columns.length; index += 1) {
@@ -49,40 +79,13 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
       if (visible) {
         switch (id) {
           case 'name':
-            primarySection.push(
-              <TorrentListCell
-                key={id}
-                column={id}
-                className="torrent__details__section torrent__details__section--primary"
-                content={getTorrentListCellContent(torrent, id)}
-              />,
-            );
             break;
           case 'downRate':
           case 'upRate':
           case 'eta':
-            secondarySection.push(
-              <TorrentListCell key={id} column={id} content={getTorrentListCellContent(torrent, id)} showIcon />,
-            );
             break;
           case 'downTotal':
-            break;
           case 'percentComplete':
-            tertiarySection.push(
-              <TorrentListCell
-                key={id}
-                column={id}
-                content={
-                  <span>
-                    <FormattedNumber value={torrent.percentComplete} />
-                    <em className="unit">%</em>
-                    &nbsp;&mdash;&nbsp;
-                    <Size value={torrent.downTotal} />
-                  </span>
-                }
-                showIcon
-              />,
-            );
             break;
           default:
             tertiarySection.push(
