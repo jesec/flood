@@ -177,7 +177,9 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
                       this.formRef.resetForm();
                     }
                   }}>
-                  Clear
+                  {intl.formatMessage({
+                    id: 'auth.input.clear',
+                  })}
                 </Button>
                 <Button isLoading={isSubmitting} type="submit">
                   {isLoginMode

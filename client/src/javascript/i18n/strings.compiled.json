@@ -329,6 +329,12 @@
       "value": "Username cannot be empty."
     }
   ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
+    }
+  ],
   "auth.log.in": [
     {
       "type": 0,
