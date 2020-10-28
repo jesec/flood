@@ -50,7 +50,7 @@ export type RTorrentConnectionSettings = zodInfer<typeof rTorrentConnectionSetti
 
 const transmissionConnectionSettingsSchema = object({
   client: literal('Transmission'),
-  type: literal('web'),
+  type: literal('rpc'),
   version: literal(1),
   url: string().url(),
   username: string(),
@@ -62,6 +62,7 @@ export type TransmissionConnectionSettings = zodInfer<typeof transmissionConnect
 export const clientConnectionSettingsSchema = union([
   qBittorrentConnectionSettingsSchema,
   rTorrentConnectionSettingsSchema,
+  transmissionConnectionSettingsSchema,
 ]);
 
 export type ClientConnectionSettings = zodInfer<typeof clientConnectionSettingsSchema>;

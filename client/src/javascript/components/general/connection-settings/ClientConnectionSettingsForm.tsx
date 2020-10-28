@@ -7,6 +7,7 @@ import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSett
 
 import QBittorrentConnectionSettingsForm from './QBittorrentConnectionSettingsForm';
 import RTorrentConnectionSettingsForm from './RTorrentConnectionSettingsForm';
+import TransmissionConnectionSettingsForm from './TransmissionConnectionSettingsForm';
 import {FormRow, Select, SelectItem} from '../../../ui';
 
 const DEFAULT_SELECTION: ClientConnectionSettings['client'] = 'rTorrent' as const;
@@ -21,7 +22,10 @@ const getClientSelectItems = (): React.ReactNodeArray => {
   });
 };
 
-type ConnectionSettingsForm = QBittorrentConnectionSettingsForm | RTorrentConnectionSettingsForm;
+type ConnectionSettingsForm =
+  | QBittorrentConnectionSettingsForm
+  | RTorrentConnectionSettingsForm
+  | TransmissionConnectionSettingsForm;
 
 interface ClientConnectionSettingsFormStates {
   client: ClientConnectionSettings['client'];
@@ -59,6 +63,9 @@ class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps
         break;
       case 'rTorrent':
         settingsForm = <RTorrentConnectionSettingsForm intl={intl} ref={this.settingsRef} />;
+        break;
+      case 'Transmission':
+        settingsForm = <TransmissionConnectionSettingsForm intl={intl} ref={this.settingsRef} />;
         break;
       default:
         break;

@@ -11,11 +11,13 @@ import TorrentService from './torrentService';
 
 import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService';
 import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
+import TransmissionClientGatewayService from './Transmission/clientGatewayService';
 
 type ClientGatewayServiceImpl = typeof ClientGatewayService & {
   new (...args: ConstructorParameters<typeof BaseService>):
     | QBittorrentClientGatewayService
-    | RTorrentClientGatewayService;
+    | RTorrentClientGatewayService
+    | TransmissionClientGatewayService;
 };
 
 type Service =
@@ -66,6 +68,8 @@ const getClientGatewayService = (user: UserInDatabase): ClientGatewayService | u
       return getService('clientGatewayServices', QBittorrentClientGatewayService, user);
     case 'rTorrent':
       return getService('clientGatewayServices', RTorrentClientGatewayService, user);
+    case 'Transmission':
+      return getService('clientGatewayServices', TransmissionClientGatewayService, user);
     default:
       return undefined;
   }

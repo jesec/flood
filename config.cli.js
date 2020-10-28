@@ -70,7 +70,19 @@ const {argv} = require('yargs')
     describe: 'Password of qBittorrent Web API',
     type: 'string',
   })
-  .group(['rthost', 'rtport', 'rtsocket', 'qburl', 'qbuser', 'qbpass'], 'When auth=none:')
+  .option('trurl', {
+    describe: 'URL to Transmission RPC interface',
+    type: 'string',
+  })
+  .option('truser', {
+    describe: 'Username of Transmission RPC interface',
+    type: 'string',
+  })
+  .option('trpass', {
+    describe: 'Password of Transmission RPC interface',
+    type: 'string',
+  })
+  .group(['rthost', 'rtport', 'rtsocket', 'qburl', 'qbuser', 'qbpass', 'trurl', 'truser', 'trpass'], 'When auth=none:')
   .option('ssl', {
     default: false,
     describe: 'Enable SSL, key.pem and fullchain.pem needed in runtime directory',
@@ -199,6 +211,15 @@ if (argv.rtsocket != null || argv.rthost != null) {
     url: argv.qburl,
     username: argv.qbuser,
     password: argv.qbpass,
+  };
+} else if (argv.trurl != null) {
+  connectionSettings = {
+    client: 'Transmission',
+    type: 'rpc',
+    version: 1,
+    url: argv.trurl,
+    username: argv.truser,
+    password: argv.trpass,
   };
 }
 
