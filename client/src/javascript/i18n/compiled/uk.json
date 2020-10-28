@@ -320,13 +320,19 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "Пароль не може бути порожнім."
     }
   ],
   "auth.error.username.empty": [
     {
       "type": 0,
       "value": "Ім'я користувача не може бути порожнім."
+    }
+  ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
     }
   ],
   "auth.log.in": [
@@ -344,7 +350,7 @@
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "Увійти до свого облікового запису."
     }
   ],
   "auth.message.not.admin": [
@@ -386,7 +392,7 @@
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Звантажити"
     }
   ],
   "button.new": [
@@ -434,7 +440,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "Не вдається підключитися до клієнта"
     }
   ],
   "connection-interruption.verification-error": [
@@ -458,55 +464,55 @@
   "connection.settings.client.select": [
     {
       "type": 0,
-      "value": "Client"
+      "value": "Клієнт"
     }
   ],
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "Параметри підключення не можуть бути порожніми."
     }
   ],
   "connection.settings.qbittorrent": [
     {
       "type": 0,
-      "value": "qBittorrent"
+      "value": "кБіторрент"
     }
   ],
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Пароль"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Пароль"
     }
   ],
   "connection.settings.qbittorrent.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "Адреса"
     }
   ],
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "URL на qBittorrent Web API"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Ім'я користувача"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Ім'я користувача"
     }
   ],
   "connection.settings.rtorrent": [
@@ -518,43 +524,43 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Хост"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "Ім'я хоста або IP адреса"
     }
   ],
   "connection.settings.rtorrent.port": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "Порт"
     }
   ],
   "connection.settings.rtorrent.port.input.placeholder": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "Порт"
     }
   ],
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "Шлях"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "Шлях до сокету"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "Тип з'єднання"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -572,7 +578,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "Не вдається підключитися до клієнта. Будь ласка, оновіть параметри підключення."
     }
   ],
   "connectivity.modal.title": [
@@ -584,31 +590,31 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Сповіщення"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "Торент-список"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "Торент таксономії"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "Історія передавання даних"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "Деталі частоти передачі даних"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -644,7 +650,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Тест шаблону матчу"
     }
   ],
   "feeds.exclude": [
@@ -674,7 +680,7 @@
   "feeds.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "Проміжок"
     }
   ],
   "feeds.label": [
@@ -742,7 +748,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "Немає елементів відповідних пошуковому запиту."
     }
   ],
   "feeds.no.rules.defined": [
@@ -766,7 +772,7 @@
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Шукати за словом"
     }
   ],
   "feeds.select.feed": [
@@ -814,7 +820,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Тест шаблону матчу"
     }
   ],
   "feeds.time.day": [
@@ -850,7 +856,7 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "Інтервал має бути додатним цілим числом."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -904,7 +910,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "Сталася невідома помилка, спробуйте ще раз."
     }
   ],
   "filesystem.fetching": [
@@ -916,7 +922,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "Батьківський каталог"
     }
   ],
   "filter.all": [
@@ -964,7 +970,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "Сідую"
     }
   ],
   "filter.status.stopped": [
@@ -1024,7 +1030,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "Сталася невідома помилка"
     }
   ],
   "general.of": [
@@ -1043,6 +1049,12 @@
     {
       "type": 0,
       "value": "Автоматично"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -1078,7 +1090,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "Черга RSS Feed'у"
     }
   ],
   "notification.showing": [
@@ -1408,7 +1420,7 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "Контекстне меню"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1432,7 +1444,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "Показати"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1510,13 +1522,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "ЗАВАНТАЖИТИ"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "ВИВАНТАЖИТИ"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1540,7 +1552,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "Безкоштовно"
     }
   ],
   "status.diskusage.title": [
@@ -1552,13 +1564,13 @@
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "Загальна сума замовлення"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "Використано"
     }
   ],
   "torrent.list.peers": [
@@ -1598,13 +1610,13 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "Необов'язкове значення cookie-name=cookie-value"
     }
   ],
   "torrents.add.cookies.label": [
     {
       "type": 0,
-      "value": "Cookies"
+      "value": "Файли Cookies"
     }
   ],
   "torrents.add.destination.label": [
@@ -1634,7 +1646,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "Створити"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1682,67 +1694,67 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "Необов'язковий файл або назва теки торента"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "Базова назва"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "Необов'язковий коментар у торент-файлі"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Коментар"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "Необов'язковий вихідний запис в infohash"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "Інформація про джерело"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Приватний"
     }
   ],
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "Джерело"
     }
   ],
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Теги в потоці. Не додано до створеного торенту."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "URL трекера"
     }
   ],
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Трекери"
     }
   ],
   "torrents.destination.base_path": [
@@ -1754,7 +1766,7 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "Завершені"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2050,7 +2062,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "Неможливо підключитися до клієнта."
     }
   ],
   "torrents.list.clear.filters": [
@@ -2074,7 +2086,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Звантажити"
     }
   ],
   "torrents.list.context.move": [
@@ -2110,7 +2122,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Встановити трекери"
     }
   ],
   "torrents.list.context.start": [
@@ -2128,7 +2140,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "Перетягніть файли сюди, щоб додати їх."
     }
   ],
   "torrents.list.no.torrents": [
@@ -2242,7 +2254,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Учасники"
     }
   ],
   "torrents.properties.percentage": [
@@ -2260,7 +2272,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Насіння"
     }
   ],
   "torrents.properties.size": [
@@ -2284,7 +2296,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Трекери"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2378,25 +2390,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Встановити трекери"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Ввести трекер"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Встановити трекери"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Завантаження трекерів..."
     }
   ],
   "torrents.sort.title": [
@@ -2485,28 +2497,6 @@
     {
       "type": 0,
       "value": "yr"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

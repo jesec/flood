@@ -329,6 +329,12 @@
       "value": "Le nom d'utilisateur ne peut pas être vide."
     }
   ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
+    }
+  ],
   "auth.log.in": [
     {
       "type": 0,
@@ -434,7 +440,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "Impossible de se connecter au client"
     }
   ],
   "connection-interruption.verification-error": [
@@ -464,7 +470,7 @@
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "Les paramètres de connexion ne peuvent pas être vides."
     }
   ],
   "connection.settings.qbittorrent": [
@@ -476,13 +482,13 @@
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Mot de passe"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Mot de passe"
     }
   ],
   "connection.settings.qbittorrent.url": [
@@ -494,19 +500,19 @@
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "URL de l'API Web qBittorrent"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Nom d'utilisateur"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Nom d'utilisateur"
     }
   ],
   "connection.settings.rtorrent": [
@@ -518,13 +524,13 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Hôte"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "Nom d'hôte ou IP"
     }
   ],
   "connection.settings.rtorrent.port": [
@@ -542,19 +548,19 @@
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "Chemin d'accès"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "Chemin d'accès au socket"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "Type de connexion"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -572,7 +578,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "Impossible de se connecter au client. Veuillez mettre à jour les paramètres de connexion."
     }
   ],
   "connectivity.modal.title": [
@@ -915,7 +921,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "Une erreur inconnue s'est produite. Veuillez réessayer."
     }
   ],
   "filesystem.fetching": [
@@ -1035,7 +1041,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "Une erreur inconnue s'est produite"
     }
   ],
   "general.of": [
@@ -1054,6 +1060,12 @@
     {
       "type": 0,
       "value": "Automatique"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -1089,7 +1101,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "Élément de flux en file d'attente"
     }
   ],
   "notification.showing": [
@@ -1609,7 +1621,7 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "cookie-name=cookie-value optionnel"
     }
   ],
   "torrents.add.cookies.label": [
@@ -1645,7 +1657,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "Créer"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1693,43 +1705,43 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "Fichier de base optionnel ou nom de répertoire du torrent"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "Nom de base"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "Commentaire optionnel dans le fichier torrent"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Commenter"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "Saisie optionnelle de la source dans le tableau de bord"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "Source d'info"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Privé"
     }
   ],
   "torrents.create.source.path.label": [
@@ -1741,13 +1753,13 @@
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Tags dans le Déluge. Non ajouté au torrent créé."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "URL du tracker"
     }
   ],
   "torrents.create.trackers.label": [
@@ -1765,7 +1777,7 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "Terminé"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2065,7 +2077,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "Impossible de se connecter au client."
     }
   ],
   "torrents.list.clear.filters": [
@@ -2125,7 +2137,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Définir les mouchards"
     }
   ],
   "torrents.list.context.start": [
@@ -2143,7 +2155,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "Déposez les fichiers ici pour les ajouter."
     }
   ],
   "torrents.list.no.torrents": [
@@ -2402,25 +2414,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Définir les mouchards"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Entrez un tracker"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Définir les mouchards"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Chargement des trackers..."
     }
   ],
   "torrents.sort.title": [
@@ -2509,28 +2521,6 @@
     {
       "type": 0,
       "value": "an"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

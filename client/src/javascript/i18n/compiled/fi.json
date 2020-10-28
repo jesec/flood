@@ -2,37 +2,37 @@
   "actionbar.button.add.torrent": [
     {
       "type": 0,
-      "value": "Add Torrent"
+      "value": "Lisää Torrentti"
     }
   ],
   "actionbar.button.remove.torrent": [
     {
       "type": 0,
-      "value": "Remove Torrent"
+      "value": "Poista Torrentti"
     }
   ],
   "actionbar.button.start.torrent": [
     {
       "type": 0,
-      "value": "Start Torrent"
+      "value": "Käynnistä Torrentti"
     }
   ],
   "actionbar.button.stop.torrent": [
     {
       "type": 0,
-      "value": "Stop Torrent"
+      "value": "Lopeta Torrentti"
     }
   ],
   "alert.settings.saved": [
     {
       "type": 0,
-      "value": "Successfully saved settings."
+      "value": "Asetukset tallennettu onnistuneesti."
     }
   ],
   "alert.torrent.add": [
     {
       "type": 0,
-      "value": "Successfully added "
+      "value": "Onnistuneesti lisättiin "
     },
     {
       "type": 1,
@@ -73,16 +73,12 @@
   ],
   "alert.torrent.add.failed": [
     {
-      "type": 0,
-      "value": "Failed to add "
-    },
-    {
       "type": 1,
       "value": "countElement"
     },
     {
       "type": 0,
-      "value": " "
+      "value": " ei voitu lisätä "
     },
     {
       "offset": 0,
@@ -116,7 +112,7 @@
   "alert.torrent.move": [
     {
       "type": 0,
-      "value": "Successfully moved "
+      "value": "Onnistuneesti siirretty "
     },
     {
       "type": 1,
@@ -141,7 +137,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrents"
+              "value": "torrentit"
             }
           ]
         }
@@ -157,16 +153,12 @@
   ],
   "alert.torrent.move.failed": [
     {
-      "type": 0,
-      "value": "Failed to move "
-    },
-    {
       "type": 1,
       "value": "countElement"
     },
     {
       "type": 0,
-      "value": " "
+      "value": " ei voitu siirtää "
     },
     {
       "offset": 0,
@@ -200,7 +192,7 @@
   "alert.torrent.remove": [
     {
       "type": 0,
-      "value": "Successfully removed "
+      "value": "Onnistuneesti poistettiin "
     },
     {
       "type": 1,
@@ -225,7 +217,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrents"
+              "value": "torrentit"
             }
           ]
         }
@@ -241,16 +233,12 @@
   ],
   "alert.torrent.remove.failed": [
     {
-      "type": 0,
-      "value": "Failed to remove "
-    },
-    {
       "type": 1,
       "value": "countElement"
     },
     {
       "type": 0,
-      "value": " "
+      "value": " poisto epäonnistui, "
     },
     {
       "offset": 0,
@@ -284,187 +272,193 @@
   "auth.add.user": [
     {
       "type": 0,
-      "value": "Add User"
+      "value": "Lisää Käyttäjä"
     }
   ],
   "auth.admin": [
     {
       "type": 0,
-      "value": "Admin"
+      "value": "Ylläpitäjä"
     }
   ],
   "auth.create.account": [
     {
       "type": 0,
-      "value": "Create Account"
+      "value": "Luo Tili"
     }
   ],
   "auth.create.an.account": [
     {
       "type": 0,
-      "value": "Create an account"
+      "value": "Luo tili"
     }
   ],
   "auth.create.an.account.intro": [
     {
       "type": 0,
-      "value": "Welcome to Flood!"
+      "value": "Tervetuloa tulvaan!"
     }
   ],
   "auth.current.user": [
     {
       "type": 0,
-      "value": "Current User"
+      "value": "Nykyinen Käyttäjä"
     }
   ],
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "Salasana ei voi olla tyhjä."
     }
   ],
   "auth.error.username.empty": [
     {
       "type": 0,
-      "value": "Username cannot be empty."
+      "value": "Käyttäjätunnus ei voi olla tyhjä."
+    }
+  ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
     }
   ],
   "auth.log.in": [
     {
       "type": 0,
-      "value": "Log In"
+      "value": "Kirjaudu Sisään"
     }
   ],
   "auth.login": [
     {
       "type": 0,
-      "value": "Login"
+      "value": "Kirjaudu"
     }
   ],
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "Kirjaudu sisään tilillesi."
     }
   ],
   "auth.message.not.admin": [
     {
       "type": 0,
-      "value": "User is not Admin"
+      "value": "Käyttäjä ei ole ylläpitäjä"
     }
   ],
   "auth.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Salasana"
     }
   ],
   "auth.user.accounts": [
     {
       "type": 0,
-      "value": "User Accounts"
+      "value": "Käyttäjän Tilit"
     }
   ],
   "auth.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Käyttäjätunnus"
     }
   ],
   "button.add": [
     {
       "type": 0,
-      "value": "Add"
+      "value": "Lisää"
     }
   ],
   "button.cancel": [
     {
       "type": 0,
-      "value": "Cancel"
+      "value": "Peruuta"
     }
   ],
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Lataa"
     }
   ],
   "button.new": [
     {
       "type": 0,
-      "value": "New"
+      "value": "Uusi"
     }
   ],
   "button.no": [
     {
       "type": 0,
-      "value": "No"
+      "value": "Ei"
     }
   ],
   "button.save": [
     {
       "type": 0,
-      "value": "Save Settings"
+      "value": "Tallenna Asetukset"
     }
   ],
   "button.save.feed": [
     {
       "type": 0,
-      "value": "Save"
+      "value": "Tallenna"
     }
   ],
   "button.state.adding": [
     {
       "type": 0,
-      "value": "Adding..."
+      "value": "Lisätään..."
     }
   ],
   "button.test": [
     {
       "type": 0,
-      "value": "Test"
+      "value": "Testi"
     }
   ],
   "button.yes": [
     {
       "type": 0,
-      "value": "Yes"
+      "value": "Kyllä"
     }
   ],
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "Asiakasta ei voi yhdistää"
     }
   ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
-      "value": "Connection could not be verified."
+      "value": "Yhteyttä ei voitu todentaa."
     }
   ],
   "connection-interruption.verification-success": [
     {
       "type": 0,
-      "value": "Connection successful"
+      "value": "Yhteys onnistui"
     }
   ],
   "connection-interruption.verify-settings-prompt": [
     {
       "type": 0,
-      "value": "Let's verify your connection settings."
+      "value": "Vahvistetaan yhteytesi asetukset."
     }
   ],
   "connection.settings.client.select": [
     {
       "type": 0,
-      "value": "Client"
+      "value": "Asiakas"
     }
   ],
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "Yhteyden asetukset eivät voi olla tyhjä."
     }
   ],
   "connection.settings.qbittorrent": [
@@ -476,37 +470,37 @@
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Salasana"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Salasana"
     }
   ],
   "connection.settings.qbittorrent.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "URL-osoite"
     }
   ],
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "URL qBittorrent Web API"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Käyttäjätunnus"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Käyttäjätunnus"
     }
   ],
   "connection.settings.rtorrent": [
@@ -518,43 +512,43 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Isäntä"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "Palvelimen nimi tai IP"
     }
   ],
   "connection.settings.rtorrent.port": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "Portti"
     }
   ],
   "connection.settings.rtorrent.port.input.placeholder": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "Portti"
     }
   ],
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "Polku"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "Polku pistorasiaan"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "Yhteyden Tyyppi"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -572,121 +566,121 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "Ei voi yhdistää asiakasta. Ole hyvä ja päivitä yhteysasetuksia."
     }
   ],
   "connectivity.modal.title": [
     {
       "type": 0,
-      "value": "Connectivity Issue"
+      "value": "Yhteyden Ongelma"
     }
   ],
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Ilmoitukset"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "Torrent- Luettelo"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "Torrent-Taksonomia"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "Tietojen Siirron Historia"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "Tietojen Siirron Hintatiedot"
     }
   ],
   "feeds.add.automatic.download.rule": [
     {
       "type": 0,
-      "value": "Add Download Rule"
+      "value": "Lisää Lataussääntö"
     }
   ],
   "feeds.add.feed": [
     {
       "type": 0,
-      "value": "Add Feed"
+      "value": "Lisää Syöte"
     }
   ],
   "feeds.applicable.feed": [
     {
       "type": 0,
-      "value": "Applicable Feed"
+      "value": "Sovellettava Syöte"
     }
   ],
   "feeds.apply.tags": [
     {
       "type": 0,
-      "value": "Apply Tags"
+      "value": "Käytä Tunnisteita"
     }
   ],
   "feeds.browse.feeds": [
     {
       "type": 0,
-      "value": "Browse feeds"
+      "value": "Selaa syötteitä"
     }
   ],
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Testaa Vastaavuus Kuvio"
     }
   ],
   "feeds.exclude": [
     {
       "type": 0,
-      "value": "Exclude"
+      "value": "Ohita"
     }
   ],
   "feeds.exclude.pattern": [
     {
       "type": 0,
-      "value": "Exclude Pattern"
+      "value": "Ohita Kuvio"
     }
   ],
   "feeds.existing.feeds": [
     {
       "type": 0,
-      "value": "Existing Feeds"
+      "value": "Olemassa Olevat Syötteet"
     }
   ],
   "feeds.existing.rules": [
     {
       "type": 0,
-      "value": "Existing Rules"
+      "value": "Voimassa Olevat Säännöt"
     }
   ],
   "feeds.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "Aikaväli"
     }
   ],
   "feeds.label": [
     {
       "type": 0,
-      "value": "Label"
+      "value": "Tunniste"
     }
   ],
   "feeds.match": [
     {
       "type": 0,
-      "value": "Match"
+      "value": "Osuma"
     }
   ],
   "feeds.match.count": [
@@ -700,7 +694,7 @@
             },
             {
               "type": 0,
-              "value": " match"
+              "value": " ottelua"
             }
           ]
         },
@@ -711,7 +705,7 @@
             },
             {
               "type": 0,
-              "value": " matches"
+              "value": " osumaa"
             }
           ]
         }
@@ -724,31 +718,31 @@
   "feeds.match.pattern": [
     {
       "type": 0,
-      "value": "Match Pattern"
+      "value": "Täsmää Kuvio"
     }
   ],
   "feeds.no.feeds.available": [
     {
       "type": 0,
-      "value": "No feeds available."
+      "value": "Syötteitä ei ole saatavilla."
     }
   ],
   "feeds.no.feeds.defined": [
     {
       "type": 0,
-      "value": "No feeds defined."
+      "value": "Syötteitä ei ole määritelty."
     }
   ],
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "Ei kohteita, jotka vastaavat hakutermiä."
     }
   ],
   "feeds.no.rules.defined": [
     {
       "type": 0,
-      "value": "No rules defined."
+      "value": "Sääntöjä ei ole määritelty."
     }
   ],
   "feeds.regEx": [
@@ -760,181 +754,181 @@
   "feeds.search": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Hae termi"
     }
   ],
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Hae termi"
     }
   ],
   "feeds.select.feed": [
     {
       "type": 0,
-      "value": "Select Feed"
+      "value": "Valitse Syöte"
     }
   ],
   "feeds.select.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "Aikaväli"
     }
   ],
   "feeds.start.on.load": [
     {
       "type": 0,
-      "value": "Start on load"
+      "value": "Aloita latauksessa"
     }
   ],
   "feeds.tabs.download.rules": [
     {
       "type": 0,
-      "value": "Download Rules"
+      "value": "Lataa Säännöt"
     }
   ],
   "feeds.tabs.feeds": [
     {
       "type": 0,
-      "value": "Feeds"
+      "value": "Syötteet"
     }
   ],
   "feeds.tabs.heading": [
     {
       "type": 0,
-      "value": "Torrent Feeds"
+      "value": "Torrent- Syötteet"
     }
   ],
   "feeds.tags": [
     {
       "type": 0,
-      "value": "Tags"
+      "value": "Tunnisteet"
     }
   ],
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Testaa Vastaavuus Kuvio"
     }
   ],
   "feeds.time.day": [
     {
       "type": 0,
-      "value": "Days"
+      "value": "Päivää"
     }
   ],
   "feeds.time.hr": [
     {
       "type": 0,
-      "value": "Hours"
+      "value": "Tuntia"
     }
   ],
   "feeds.time.min": [
     {
       "type": 0,
-      "value": "Minutes"
+      "value": "Minuuttia"
     }
   ],
   "feeds.torrent.destination": [
     {
       "type": 0,
-      "value": "Torrent Destination"
+      "value": "Torrent- Kohde"
     }
   ],
   "feeds.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "URL-osoite"
     }
   ],
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "Aikavälin on oltava positiivinen kokonaisluku."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
     {
       "type": 0,
-      "value": "Invalid regular expression."
+      "value": "Virheellinen säännöllinen lauseke."
     }
   ],
   "feeds.validation.must.select.feed": [
     {
       "type": 0,
-      "value": "You must select a feed."
+      "value": "Sinun täytyy valita syöte."
     }
   ],
   "feeds.validation.must.specify.destination": [
     {
       "type": 0,
-      "value": "You must specify a destination."
+      "value": "Sinun on määritettävä määränpää."
     }
   ],
   "feeds.validation.must.specify.label": [
     {
       "type": 0,
-      "value": "You must specify a label."
+      "value": "Sinun on määritettävä nimi."
     }
   ],
   "feeds.validation.must.specify.valid.feed.url": [
     {
       "type": 0,
-      "value": "You must specify a valid feed URL."
+      "value": "Sinun on määritettävä kelvollinen syötteen URL-osoite."
     }
   ],
   "filesystem.empty.directory": [
     {
       "type": 0,
-      "value": "Empty directory."
+      "value": "Tyhjä hakemisto."
     }
   ],
   "filesystem.error.eacces": [
     {
       "type": 0,
-      "value": "Flood does not have permission to read this directory."
+      "value": "Tulvalla ei ole oikeuksia lukea tätä hakemistoa."
     }
   ],
   "filesystem.error.enoent": [
     {
       "type": 0,
-      "value": "This path does not exist. It will be created."
+      "value": "Tätä polkua ei ole olemassa. Se luodaan."
     }
   ],
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "Tapahtui tuntematon virhe. Yritä uudelleen."
     }
   ],
   "filesystem.fetching": [
     {
       "type": 0,
-      "value": "Fetching directory structure..."
+      "value": "Haetaan kansioraketta..."
     }
   ],
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "Vanhemman Hakemisto"
     }
   ],
   "filter.all": [
     {
       "type": 0,
-      "value": "All"
+      "value": "Kaikki"
     }
   ],
   "filter.status.active": [
     {
       "type": 0,
-      "value": "Active"
+      "value": "Aktiivinen"
     }
   ],
   "filter.status.checking": [
     {
       "type": 0,
-      "value": "Checking"
+      "value": "Tarkistetaan"
     }
   ],
   "filter.status.completed": [
@@ -946,127 +940,133 @@
   "filter.status.downloading": [
     {
       "type": 0,
-      "value": "Downloading"
+      "value": "Ladataan"
     }
   ],
   "filter.status.error": [
     {
       "type": 0,
-      "value": "Error"
+      "value": "Virhe"
     }
   ],
   "filter.status.inactive": [
     {
       "type": 0,
-      "value": "Inactive"
+      "value": "Passiivinen"
     }
   ],
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "Lähetetään"
     }
   ],
   "filter.status.stopped": [
     {
       "type": 0,
-      "value": "Stopped"
+      "value": "Pysäytetty"
     }
   ],
   "filter.status.title": [
     {
       "type": 0,
-      "value": "Filter by Status"
+      "value": "Suodata tilan mukaan"
     }
   ],
   "filter.tag.title": [
     {
       "type": 0,
-      "value": "Filter by Tag"
+      "value": "Suodata tunnisteen mukaan"
     }
   ],
   "filter.tracker.title": [
     {
       "type": 0,
-      "value": "Filter by Tracker"
+      "value": "Suodata seurantapalvelimen mukaan"
     }
   ],
   "filter.untagged": [
     {
       "type": 0,
-      "value": "Untagged"
+      "value": "Merkitsemätön"
     }
   ],
   "general.ago": [
     {
       "type": 0,
-      "value": "ago"
+      "value": "sitten"
     }
   ],
   "general.at": [
     {
       "type": 0,
-      "value": "at"
+      "value": "klo"
     }
   ],
   "general.clipboard.copied": [
     {
       "type": 0,
-      "value": "Copied"
+      "value": "Kopioitu"
     }
   ],
   "general.clipboard.copy": [
     {
       "type": 0,
-      "value": "Copy"
+      "value": "Kopioi"
     }
   ],
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "Tapahtui tuntematon virhe"
     }
   ],
   "general.of": [
     {
       "type": 0,
-      "value": "of"
+      "value": "jostakin"
     }
   ],
   "general.to": [
     {
       "type": 0,
-      "value": "to"
+      "value": "päättyen"
     }
   ],
   "locale.language.auto": [
     {
       "type": 0,
-      "value": "Automatic"
+      "value": "Automaattinen"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
     {
       "type": 0,
-      "value": "An error occurred while running mediainfo on the server. Check that mediainfo is installed and available in the PATH to Flood."
+      "value": "Palvelimella tapahtui virhe. Tarkista, että mediainfo on asennettu ja saatavilla PATH to Flood."
     }
   ],
   "mediainfo.fetching": [
     {
       "type": 0,
-      "value": "Fetching..."
+      "value": "Haetaan..."
     }
   ],
   "mediainfo.heading": [
     {
       "type": 0,
-      "value": "Mediainfo Output"
+      "value": "Mediainfon Ulostulo"
     }
   ],
   "notification.clear.all": [
     {
       "type": 0,
-      "value": "Clear All"
+      "value": "Tyhjennä Kaikki"
     }
   ],
   "notification.feed.torrent.added.body": [
@@ -1078,13 +1078,13 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "Syötteen Kohdetta Jonossa"
     }
   ],
   "notification.showing": [
     {
       "type": 0,
-      "value": "Showing"
+      "value": "Näytetään"
     }
   ],
   "notification.torrent.errored.body": [
@@ -1096,7 +1096,7 @@
   "notification.torrent.errored.heading": [
     {
       "type": 0,
-      "value": "Error Reported"
+      "value": "Virhe Raportoitu"
     }
   ],
   "notification.torrent.finished.body": [
@@ -1108,457 +1108,457 @@
   "notification.torrent.finished.heading": [
     {
       "type": 0,
-      "value": "Finished Downloading"
+      "value": "Lataaminen Valmis"
     }
   ],
   "priority.dont.download": [
     {
       "type": 0,
-      "value": "Don't Download"
+      "value": "Älä Lataa"
     }
   ],
   "priority.high": [
     {
       "type": 0,
-      "value": "High"
+      "value": "Korkea"
     }
   ],
   "priority.low": [
     {
       "type": 0,
-      "value": "Low"
+      "value": "Matala"
     }
   ],
   "priority.normal": [
     {
       "type": 0,
-      "value": "Normal"
+      "value": "Normaali"
     }
   ],
   "settings.about.flood": [
     {
       "type": 0,
-      "value": "About Flood"
+      "value": "Tietoja Tulvasta"
     }
   ],
   "settings.bandwidth.slots.download.divider.label": [
     {
       "type": 0,
-      "value": "Download Slots Divider"
+      "value": "Lataa Slots Jakaja"
     }
   ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
-      "value": "Download Slots Global"
+      "value": "Lataa Slots Global"
     }
   ],
   "settings.bandwidth.slots.download.label": [
     {
       "type": 0,
-      "value": "Download Slots Per Torrent"
+      "value": "Lataa Paikkoja Torrenttia Kohti"
     }
   ],
   "settings.bandwidth.slots.heading": [
     {
       "type": 0,
-      "value": "Slot Availability"
+      "value": "Paikan Saatavuus"
     }
   ],
   "settings.bandwidth.slots.upload.divider.label": [
     {
       "type": 0,
-      "value": "Upload Slots Divider"
+      "value": "Lataa Slots Jakaja"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
     {
       "type": 0,
-      "value": "Upload Slots Global"
+      "value": "Lataa Slots Globaali"
     }
   ],
   "settings.bandwidth.slots.upload.label": [
     {
       "type": 0,
-      "value": "Upload Slots Per Torrent"
+      "value": "Lataa Paikkoja Torrenttia Kohti"
     }
   ],
   "settings.bandwidth.transferrate.dropdown.preset.download.label": [
     {
       "type": 0,
-      "value": "Dropdown Presets: Download"
+      "value": "Pudotusvalikon Esiasetukset: Lataus"
     }
   ],
   "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
     {
       "type": 0,
-      "value": "Dropdown Presets: Upload"
+      "value": "Pudotusvalikon Esiasetukset: Lataus"
     }
   ],
   "settings.bandwidth.transferrate.global.throttle.download": [
     {
       "type": 0,
-      "value": "Global Download Rate Throttle"
+      "value": "Maailmanlaajuinen Latausnopeus Throttle"
     }
   ],
   "settings.bandwidth.transferrate.global.throttle.upload": [
     {
       "type": 0,
-      "value": "Global Upload Rate Throttle"
+      "value": "Yleinen Lähetysnopeus Throttle"
     }
   ],
   "settings.bandwidth.transferrate.heading": [
     {
       "type": 0,
-      "value": "Transfer Rate Throttles"
+      "value": "Siirto^hinta Throttles"
     }
   ],
   "settings.connectivity.dht.label": [
     {
       "type": 0,
-      "value": "Enable DHT"
+      "value": "Ota Dht Käyttöön"
     }
   ],
   "settings.connectivity.dht.port.label": [
     {
       "type": 0,
-      "value": "DHT Port"
+      "value": "Dht Portti"
     }
   ],
   "settings.connectivity.dpd.heading": [
     {
       "type": 0,
-      "value": "Decentralized Peer Discovery"
+      "value": "Hajautettu Peer Discovery"
     }
   ],
   "settings.connectivity.incoming.heading": [
     {
       "type": 0,
-      "value": "Incoming Connections"
+      "value": "Tulevat Yhteydet"
     }
   ],
   "settings.connectivity.ip.hostname.label": [
     {
       "type": 0,
-      "value": "Reported IP/Hostname"
+      "value": "Raportoitu IP/isäntänimi"
     }
   ],
   "settings.connectivity.max.http.connections": [
     {
       "type": 0,
-      "value": "Maximum HTTP Connections"
+      "value": "Maksimi Http Yhteydet"
     }
   ],
   "settings.connectivity.peer.exchange.label": [
     {
       "type": 0,
-      "value": "Enable Peer Exchange"
+      "value": "Ota Käyttöön Vertaisvaihto"
     }
   ],
   "settings.connectivity.peers.desired.label": [
     {
       "type": 0,
-      "value": "Peers Desired"
+      "value": "Käyttäjät Haluttu"
     }
   ],
   "settings.connectivity.peers.heading": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Käyttäjät"
     }
   ],
   "settings.connectivity.peers.max.label": [
     {
       "type": 0,
-      "value": "Maximum Peers"
+      "value": "Käyttäjien Enimmäismäärä"
     }
   ],
   "settings.connectivity.peers.min.label": [
     {
       "type": 0,
-      "value": "Minimum Peers"
+      "value": "Käyttäjien Minimi"
     }
   ],
   "settings.connectivity.peers.seeding.max.label": [
     {
       "type": 0,
-      "value": "Maximum Peers Seeding"
+      "value": "Käyttäjien Maksimi Lähetys"
     }
   ],
   "settings.connectivity.peers.seeding.min.label": [
     {
       "type": 0,
-      "value": "Minimum Peers Seeding"
+      "value": "Käyttäjien Vähimmäismäärä"
     }
   ],
   "settings.connectivity.port.open.label": [
     {
       "type": 0,
-      "value": "Open Port"
+      "value": "Avaa Portti"
     }
   ],
   "settings.connectivity.port.randomize.label": [
     {
       "type": 0,
-      "value": "Randomize Port"
+      "value": "Satunnaista Portti"
     }
   ],
   "settings.connectivity.port.range.label": [
     {
       "type": 0,
-      "value": "Port Range"
+      "value": "Portti Alue"
     }
   ],
   "settings.diskusage.mount.points": [
     {
       "type": 0,
-      "value": "Disk Usage Mount Points"
+      "value": "Levynkäytön Pisteet"
     }
   ],
   "settings.diskusage.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "Näytä"
     }
   ],
   "settings.resources.disk.check.hash.label": [
     {
       "type": 0,
-      "value": "Verify Hash on Completion"
+      "value": "Vahvista täydennyksen vihje"
     }
   ],
   "settings.resources.disk.download.location.label": [
     {
       "type": 0,
-      "value": "Default Download Directory"
+      "value": "Oletus Lataus Hakemisto"
     }
   ],
   "settings.resources.disk.heading": [
     {
       "type": 0,
-      "value": "Disk"
+      "value": "Levy"
     }
   ],
   "settings.resources.max.open.files": [
     {
       "type": 0,
-      "value": "Maximum Open Files"
+      "value": "Enimmäismäärä Avoimia Tiedostoja"
     }
   ],
   "settings.resources.memory.heading": [
     {
       "type": 0,
-      "value": "Memory"
+      "value": "Muisti"
     }
   ],
   "settings.resources.memory.max.label": [
     {
       "type": 0,
-      "value": "Max Memory Usage"
+      "value": "Maksimi Muistin Käyttö"
     }
   ],
   "settings.tabs.about": [
     {
       "type": 0,
-      "value": "About"
+      "value": "Tietoja"
     }
   ],
   "settings.tabs.authentication": [
     {
       "type": 0,
-      "value": "Authentication"
+      "value": "Todennus"
     }
   ],
   "settings.tabs.bandwidth": [
     {
       "type": 0,
-      "value": "Bandwidth"
+      "value": "Kaistanleveys"
     }
   ],
   "settings.tabs.connectivity": [
     {
       "type": 0,
-      "value": "Connectivity"
+      "value": "Yhteys"
     }
   ],
   "settings.tabs.diskusage": [
     {
       "type": 0,
-      "value": "Disk Usage"
+      "value": "Levyn Käyttö"
     }
   ],
   "settings.tabs.heading": [
     {
       "type": 0,
-      "value": "Settings"
+      "value": "Asetukset"
     }
   ],
   "settings.tabs.resources": [
     {
       "type": 0,
-      "value": "Resources"
+      "value": "Resurssit"
     }
   ],
   "settings.tabs.userinterface": [
     {
       "type": 0,
-      "value": "User Interface"
+      "value": "Käyttöliittymä"
     }
   ],
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "Kontekstivalikon Nimikkeet"
     }
   ],
   "settings.ui.displayed.details": [
     {
       "type": 0,
-      "value": "Torrent Detail Columns"
+      "value": "Torrent- Yksityiskohtaiset Sarakkeet"
     }
   ],
   "settings.ui.language": [
     {
       "type": 0,
-      "value": "Language"
+      "value": "Kieli"
     }
   ],
   "settings.ui.locale": [
     {
       "type": 0,
-      "value": "Locale"
+      "value": "Lokaatio"
     }
   ],
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "Näytä"
     }
   ],
   "settings.ui.torrent.details.enabled": [
     {
       "type": 0,
-      "value": "Enabled"
+      "value": "Käytössä"
     }
   ],
   "settings.ui.torrent.details.tags.placement": [
     {
       "type": 0,
-      "value": "In the expanded view, tags work best at the end of the list."
+      "value": "Laajennetussa näkymässä tunnisteet toimivat parhaiten listan lopussa."
     }
   ],
   "settings.ui.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List Display"
+      "value": "Torrent- Listan Näyttö"
     }
   ],
   "settings.ui.torrent.size": [
     {
       "type": 0,
-      "value": "Torrent Size"
+      "value": "Torrenttien Koko"
     }
   ],
   "settings.ui.torrent.size.condensed": [
     {
       "type": 0,
-      "value": "Condensed View"
+      "value": "Tiivistetty Näkymä"
     }
   ],
   "settings.ui.torrent.size.expanded": [
     {
       "type": 0,
-      "value": "Expanded View"
+      "value": "Laajennettu Näkymä"
     }
   ],
   "sidebar.button.feeds": [
     {
       "type": 0,
-      "value": "Feeds"
+      "value": "Syötteet"
     }
   ],
   "sidebar.button.log.out": [
     {
       "type": 0,
-      "value": "Log Out"
+      "value": "Kirjaudu Ulos"
     }
   ],
   "sidebar.button.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Ilmoitukset"
     }
   ],
   "sidebar.button.settings": [
     {
       "type": 0,
-      "value": "Settings"
+      "value": "Asetukset"
     }
   ],
   "sidebar.button.speedlimits": [
     {
       "type": 0,
-      "value": "Speed Limits"
+      "value": "Nopeusrajat"
     }
   ],
   "sidebar.search.placeholder": [
     {
       "type": 0,
-      "value": "Search torrents"
+      "value": "Etsi torrent-tiedostoja"
     }
   ],
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "LATAA"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "LATAA"
     }
   ],
   "sidebar.transferdata.downloaded": [
     {
       "type": 0,
-      "value": "Downloaded"
+      "value": "Ladattu"
     }
   ],
   "sidebar.transferdata.uploaded": [
     {
       "type": 0,
-      "value": "Uploaded"
+      "value": "Ladattu"
     }
   ],
   "speed.unlimited": [
     {
       "type": 0,
-      "value": "Unlimited"
+      "value": "Rajoittamaton"
     }
   ],
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "Ilmainen"
     }
   ],
   "status.diskusage.title": [
     {
       "type": 0,
-      "value": "Disk Usage"
+      "value": "Levyn Käyttö"
     }
   ],
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "Yhteensä"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "Käytetty"
     }
   ],
   "torrent.list.peers": [
@@ -1586,205 +1586,205 @@
   "torrent.list.peers.of": [
     {
       "type": 0,
-      "value": "of"
+      "value": "jostakin"
     }
   ],
   "torrents.add.button.add": [
     {
       "type": 0,
-      "value": "Add Torrent"
+      "value": "Lisää Torrentti"
     }
   ],
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "Valinnainen evästeen nimi = evästeen arvo"
     }
   ],
   "torrents.add.cookies.label": [
     {
       "type": 0,
-      "value": "Cookies"
+      "value": "Evästeet"
     }
   ],
   "torrents.add.destination.label": [
     {
       "type": 0,
-      "value": "Destination"
+      "value": "Kohde"
     }
   ],
   "torrents.add.destination.placeholder": [
     {
       "type": 0,
-      "value": "Destination"
+      "value": "Kohde"
     }
   ],
   "torrents.add.heading": [
     {
       "type": 0,
-      "value": "Add Torrents"
+      "value": "Lisää Torrentit"
     }
   ],
   "torrents.add.start.label": [
     {
       "type": 0,
-      "value": "Start Torrent"
+      "value": "Käynnistä Torrentti"
     }
   ],
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "Luo"
     }
   ],
   "torrents.add.tab.file.browse": [
     {
       "type": 0,
-      "value": "or click to browse"
+      "value": "tai klikkaa selataksesi"
     }
   ],
   "torrents.add.tab.file.drop": [
     {
       "type": 0,
-      "value": "Drop some files here,"
+      "value": "Pudota joitakin tiedostoja tähän."
     }
   ],
   "torrents.add.tab.file.title": [
     {
       "type": 0,
-      "value": "By File"
+      "value": "Tiedoston Mukaan"
     }
   ],
   "torrents.add.tab.url.input.placeholder": [
     {
       "type": 0,
-      "value": "Torrent URL or Magnet Link"
+      "value": "Torrent- URL tai Magnet- linkki"
     }
   ],
   "torrents.add.tab.url.title": [
     {
       "type": 0,
-      "value": "By URL"
+      "value": "URL:n Mukaan"
     }
   ],
   "torrents.add.tags": [
     {
       "type": 0,
-      "value": "Tags"
+      "value": "Tunnisteet"
     }
   ],
   "torrents.add.torrents.label": [
     {
       "type": 0,
-      "value": "Torrents"
+      "value": "Torrentit"
     }
   ],
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "Valinnainen perustiedosto tai torrent-tiedoston nimi"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "Perusnimi"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "Valinnainen kommentti torrent-tiedostossa"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Kommentti"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "Valinnainen lähdemerkintä infohash"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "Tietojen Lähde"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Yksityinen"
     }
   ],
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "Lähde"
     }
   ],
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Tunnisteet Tulossa. Ei lisätty luotuun torrenttiin."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "Seurantapalvelimen URL"
     }
   ],
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Seurantapalvelimet"
     }
   ],
   "torrents.destination.base_path": [
     {
       "type": 0,
-      "value": "Use as Base Path"
+      "value": "Käytä peruspolkuna"
     }
   ],
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "Valmis"
     }
   ],
   "torrents.details.actions.pause": [
     {
       "type": 0,
-      "value": "Pause"
+      "value": "Tauko"
     }
   ],
   "torrents.details.actions.start": [
     {
       "type": 0,
-      "value": "Start"
+      "value": "Aloita"
     }
   ],
   "torrents.details.actions.stop": [
     {
       "type": 0,
-      "value": "Stop"
+      "value": "Pysäytä"
     }
   ],
   "torrents.details.details": [
     {
       "type": 0,
-      "value": "Details"
+      "value": "Yksityiskohdat"
     }
   ],
   "torrents.details.files": [
     {
       "type": 0,
-      "value": "Files"
+      "value": "Tiedostot"
     }
   ],
   "torrents.details.files.download.file": [
@@ -1795,7 +1795,7 @@
           "value": [
             {
               "type": 0,
-              "value": "Download File"
+              "value": "Lataa tiedosto"
             }
           ]
         },
@@ -1803,7 +1803,7 @@
           "value": [
             {
               "type": 0,
-              "value": "Download Files"
+              "value": "Lataa Tiedostoja"
             }
           ]
         }
@@ -1816,13 +1816,13 @@
   "torrents.details.files.loading": [
     {
       "type": 0,
-      "value": "Loading file detail..."
+      "value": "Ladataan tiedoston tietoa..."
     }
   ],
   "torrents.details.general.comment": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Kommentti"
     }
   ],
   "torrents.details.general.connected": [
@@ -1832,7 +1832,7 @@
     },
     {
       "type": 0,
-      "value": " connected of "
+      "value": " yhdistetty "
     },
     {
       "type": 1,
@@ -1842,25 +1842,25 @@
   "torrents.details.general.date.added": [
     {
       "type": 0,
-      "value": "Added"
+      "value": "Lisätty"
     }
   ],
   "torrents.details.general.date.created": [
     {
       "type": 0,
-      "value": "Creation Date"
+      "value": "Luonti Päivämäärä"
     }
   ],
   "torrents.details.general.downloaded": [
     {
       "type": 0,
-      "value": "Downloaded"
+      "value": "Ladattu"
     }
   ],
   "torrents.details.general.free.disk.space": [
     {
       "type": 0,
-      "value": "Free Disk Space"
+      "value": "Vapaa Levytila"
     }
   ],
   "torrents.details.general.hash": [
@@ -1872,103 +1872,103 @@
   "torrents.details.general.heading.general": [
     {
       "type": 0,
-      "value": "General"
+      "value": "Yleiset"
     }
   ],
   "torrents.details.general.heading.torrent": [
     {
       "type": 0,
-      "value": "Torrent"
+      "value": "Torrentti"
     }
   ],
   "torrents.details.general.heading.tracker": [
     {
       "type": 0,
-      "value": "Tracker"
+      "value": "Seurantapalvelin"
     }
   ],
   "torrents.details.general.heading.transfer": [
     {
       "type": 0,
-      "value": "Transfer"
+      "value": "Siirto"
     }
   ],
   "torrents.details.general.location": [
     {
       "type": 0,
-      "value": "Location"
+      "value": "Sijainti"
     }
   ],
   "torrents.details.general.none": [
     {
       "type": 0,
-      "value": "None"
+      "value": "Ei Mitään"
     }
   ],
   "torrents.details.general.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Käyttäjät"
     }
   ],
   "torrents.details.general.scheduler": [
     {
       "type": 0,
-      "value": "Scheduler"
+      "value": "Ajastus"
     }
   ],
   "torrents.details.general.scheduler.ignored": [
     {
       "type": 0,
-      "value": "Ignored"
+      "value": "Ohitettu"
     }
   ],
   "torrents.details.general.scheduler.obeyed": [
     {
       "type": 0,
-      "value": "Obeyed"
+      "value": "Ylimääräinen"
     }
   ],
   "torrents.details.general.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Siemenet"
     }
   ],
   "torrents.details.general.size": [
     {
       "type": 0,
-      "value": "Size"
+      "value": "Koko"
     }
   ],
   "torrents.details.general.tags": [
     {
       "type": 0,
-      "value": "Tags"
+      "value": "Tunnisteet"
     }
   ],
   "torrents.details.general.tracker.message": [
     {
       "type": 0,
-      "value": "Tracker Message"
+      "value": "Seurantapalvelimen Viesti"
     }
   ],
   "torrents.details.general.type": [
     {
       "type": 0,
-      "value": "Type"
+      "value": "Tyyppi"
     }
   ],
   "torrents.details.general.type.private": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Yksityinen"
     }
   ],
   "torrents.details.general.type.public": [
     {
       "type": 0,
-      "value": "Public"
+      "value": "Julkinen"
     }
   ],
   "torrents.details.mediainfo": [
@@ -1980,13 +1980,13 @@
   "torrents.details.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Käyttäjät"
     }
   ],
   "torrents.details.peers.no.data": [
     {
       "type": 0,
-      "value": "There is no peer data for this torrent."
+      "value": "Tälle torrentille ei ole vertaistietoja."
     }
   ],
   "torrents.details.selected.files": [
@@ -2001,7 +2001,7 @@
             },
             {
               "type": 0,
-              "value": " selected file"
+              "value": " valittu tiedosto"
             }
           ]
         },
@@ -2013,7 +2013,7 @@
             },
             {
               "type": 0,
-              "value": " selected files"
+              "value": " valitut tiedostot"
             }
           ]
         }
@@ -2026,181 +2026,181 @@
   "torrents.details.selected.files.set.priority": [
     {
       "type": 0,
-      "value": "Set Priority"
+      "value": "Aseta Prioriteetti"
     }
   ],
   "torrents.details.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Seurantapalvelimet"
     }
   ],
   "torrents.details.trackers.no.data": [
     {
       "type": 0,
-      "value": "There is no tracker data for this torrent."
+      "value": "Tälle torrentille ei ole seurantatietoja."
     }
   ],
   "torrents.details.trackers.type": [
     {
       "type": 0,
-      "value": "Type"
+      "value": "Tyyppi"
     }
   ],
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "Ei voi muodostaa yhteyttä asiakkaaseen."
     }
   ],
   "torrents.list.clear.filters": [
     {
       "type": 0,
-      "value": "Clear Filters"
+      "value": "Tyhjennä Suodattimet"
     }
   ],
   "torrents.list.context.check.hash": [
     {
       "type": 0,
-      "value": "Check Hash"
+      "value": "Tarkista Hash"
     }
   ],
   "torrents.list.context.details": [
     {
       "type": 0,
-      "value": "Torrent Details"
+      "value": "Torrent-tiedoston Tiedot"
     }
   ],
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Lataa"
     }
   ],
   "torrents.list.context.move": [
     {
       "type": 0,
-      "value": "Set Torrent Location"
+      "value": "Aseta Torrent- Sijainti"
     }
   ],
   "torrents.list.context.pause": [
     {
       "type": 0,
-      "value": "Pause"
+      "value": "Tauko"
     }
   ],
   "torrents.list.context.priority": [
     {
       "type": 0,
-      "value": "Priority"
+      "value": "Prioriteetti"
     }
   ],
   "torrents.list.context.remove": [
     {
       "type": 0,
-      "value": "Remove"
+      "value": "Poista"
     }
   ],
   "torrents.list.context.set.tags": [
     {
       "type": 0,
-      "value": "Set Tags"
+      "value": "Aseta Tagit"
     }
   ],
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Aseta Seurantapalvelimet"
     }
   ],
   "torrents.list.context.start": [
     {
       "type": 0,
-      "value": "Start"
+      "value": "Aloita"
     }
   ],
   "torrents.list.context.stop": [
     {
       "type": 0,
-      "value": "Stop"
+      "value": "Pysäytä"
     }
   ],
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "Pudota tiedostot tähän lisätäksesi ne."
     }
   ],
   "torrents.list.no.torrents": [
     {
       "type": 0,
-      "value": "No torrents to display."
+      "value": "Ei näytettäviä torrent-tiedostoja."
     }
   ],
   "torrents.move.button.set.location": [
     {
       "type": 0,
-      "value": "Set Location"
+      "value": "Aseta Sijainti"
     }
   ],
   "torrents.move.button.state.setting": [
     {
       "type": 0,
-      "value": "Setting..."
+      "value": "Asetetaan..."
     }
   ],
   "torrents.move.check_hash.label": [
     {
       "type": 0,
-      "value": "Check hash"
+      "value": "Tarkista tiivistys"
     }
   ],
   "torrents.move.data.label": [
     {
       "type": 0,
-      "value": "Move data"
+      "value": "Siirrä tiedot"
     }
   ],
   "torrents.move.heading": [
     {
       "type": 0,
-      "value": "Set Torrent Location"
+      "value": "Aseta Torrent- Sijainti"
     }
   ],
   "torrents.properties.base.path": [
     {
       "type": 0,
-      "value": "Base Path"
+      "value": "Perus Polku"
     }
   ],
   "torrents.properties.comment": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Kommentti"
     }
   ],
   "torrents.properties.creation.date": [
     {
       "type": 0,
-      "value": "Creation Date"
+      "value": "Luonti Päivämäärä"
     }
   ],
   "torrents.properties.date.added": [
     {
       "type": 0,
-      "value": "Added"
+      "value": "Lisätty"
     }
   ],
   "torrents.properties.download.speed": [
     {
       "type": 0,
-      "value": "Download Speed"
+      "value": "Latauksen Nopeus"
     }
   ],
   "torrents.properties.download.total": [
     {
       "type": 0,
-      "value": "Downloaded"
+      "value": "Ladattu"
     }
   ],
   "torrents.properties.eta": [
@@ -2212,7 +2212,7 @@
   "torrents.properties.free.disk.space": [
     {
       "type": 0,
-      "value": "Free Disk Space"
+      "value": "Vapaa Levytila"
     }
   ],
   "torrents.properties.hash": [
@@ -2224,91 +2224,91 @@
   "torrents.properties.ignore.schedule": [
     {
       "type": 0,
-      "value": "Ignore Scheduler"
+      "value": "Ohita Ajastin"
     }
   ],
   "torrents.properties.is.private": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Yksityinen"
     }
   ],
   "torrents.properties.name": [
     {
       "type": 0,
-      "value": "Name"
+      "value": "Nimi"
     }
   ],
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Käyttäjät"
     }
   ],
   "torrents.properties.percentage": [
     {
       "type": 0,
-      "value": "Percent Complete"
+      "value": "Prosentti Valmis"
     }
   ],
   "torrents.properties.ratio": [
     {
       "type": 0,
-      "value": "Ratio"
+      "value": "Suhde"
     }
   ],
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Siemenet"
     }
   ],
   "torrents.properties.size": [
     {
       "type": 0,
-      "value": "File Size"
+      "value": "Tiedoston Koko"
     }
   ],
   "torrents.properties.tags": [
     {
       "type": 0,
-      "value": "Tags"
+      "value": "Tunnisteet"
     }
   ],
   "torrents.properties.tracker.message": [
     {
       "type": 0,
-      "value": "Tracker Message"
+      "value": "Seurantapalvelimen Viesti"
     }
   ],
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Seurantapalvelimet"
     }
   ],
   "torrents.properties.upload.speed": [
     {
       "type": 0,
-      "value": "Upload Speed"
+      "value": "Lähetyksen Nopeus"
     }
   ],
   "torrents.properties.upload.total": [
     {
       "type": 0,
-      "value": "Uploaded"
+      "value": "Ladattu"
     }
   ],
   "torrents.remove": [
     {
       "type": 0,
-      "value": "Remove Torrents"
+      "value": "Poista Torrentit"
     }
   ],
   "torrents.remove.are.you.sure": [
     {
       "type": 0,
-      "value": "Are you sure you want to remove "
+      "value": "Oletko varma, että haluat poistaa "
     },
     {
       "offset": 0,
@@ -2331,7 +2331,7 @@
             },
             {
               "type": 0,
-              "value": " torrents"
+              "value": " torrent"
             }
           ]
         }
@@ -2348,61 +2348,61 @@
   "torrents.remove.delete.data": [
     {
       "type": 0,
-      "value": "Delete data"
+      "value": "Poista tiedot"
     }
   ],
   "torrents.remove.error.no.torrents.selected": [
     {
       "type": 0,
-      "value": "You haven't selected any torrents."
+      "value": "Et ole valinnut yhtään torrenttia."
     }
   ],
   "torrents.set.tags.button.set": [
     {
       "type": 0,
-      "value": "Set Tags"
+      "value": "Aseta Tagit"
     }
   ],
   "torrents.set.tags.enter.tags": [
     {
       "type": 0,
-      "value": "Enter tags"
+      "value": "Syötä tunnisteet"
     }
   ],
   "torrents.set.tags.heading": [
     {
       "type": 0,
-      "value": "Set Tags"
+      "value": "Aseta Tagit"
     }
   ],
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Aseta Seurantapalvelimet"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Anna seurantapalvelin"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Aseta Seurantapalvelimet"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Ladataan seurantaohjelmia..."
     }
   ],
   "torrents.sort.title": [
     {
       "type": 0,
-      "value": "Sort By"
+      "value": "Järjestä Mukaan"
     }
   ],
   "unit.size.byte": [
@@ -2414,25 +2414,25 @@
   "unit.size.gigabyte": [
     {
       "type": 0,
-      "value": "GB"
+      "value": "Gt"
     }
   ],
   "unit.size.kilobyte": [
     {
       "type": 0,
-      "value": "kB"
+      "value": "kt"
     }
   ],
   "unit.size.megabyte": [
     {
       "type": 0,
-      "value": "MB"
+      "value": "Mt"
     }
   ],
   "unit.size.terabyte": [
     {
       "type": 0,
-      "value": "TB"
+      "value": "Tt"
     }
   ],
   "unit.speed": [
@@ -2448,13 +2448,13 @@
   "unit.time.day": [
     {
       "type": 0,
-      "value": "d"
+      "value": "pv"
     }
   ],
   "unit.time.hour": [
     {
       "type": 0,
-      "value": "hr"
+      "value": "h"
     }
   ],
   "unit.time.infinity": [
@@ -2478,35 +2478,13 @@
   "unit.time.week": [
     {
       "type": 0,
-      "value": "wk"
+      "value": "vk"
     }
   ],
   "unit.time.year": [
     {
       "type": 0,
       "value": "yr"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

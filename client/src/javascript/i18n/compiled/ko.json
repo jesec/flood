@@ -305,6 +305,12 @@
       "value": "사용자 이름은 비어있을 수 없습니다."
     }
   ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
+    }
+  ],
   "auth.log.in": [
     {
       "type": 0,
@@ -1027,6 +1033,12 @@
     {
       "type": 0,
       "value": "자동"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -2478,28 +2490,6 @@
     {
       "type": 0,
       "value": "년"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }
