@@ -1,10 +1,10 @@
 import classnames from 'classnames';
-import {Component} from 'react';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {useIntl} from 'react-intl';
+import * as React from 'react';
 
 import Badge from '../general/Badge';
 
-interface SidebarFilterProps extends WrappedComponentProps {
+interface SidebarFilterProps {
   name: string;
   icon?: JSX.Element;
   isActive: boolean;
@@ -13,50 +13,45 @@ interface SidebarFilterProps extends WrappedComponentProps {
   handleClick: (slug: string) => void;
 }
 
-class SidebarFilter extends Component<SidebarFilterProps> {
-  constructor(props: SidebarFilterProps) {
-    super(props);
+const SidebarFilter: React.FC<SidebarFilterProps> = (props: SidebarFilterProps) => {
+  const {isActive, count, slug, icon, handleClick} = props;
+  const intl = useIntl();
 
-    this.handleClick = this.handleClick.bind(this);
-  }
+  const classNames = classnames('sidebar-filter__item', {
+    'is-active': isActive,
+  });
+  let {name} = props;
 
-  handleClick() {
-    this.props.handleClick(this.props.slug);
-  }
-
-  render() {
-    const classNames = classnames('sidebar-filter__item', {
-      'is-active': this.props.isActive,
+  if (name === '') {
+    name = intl.formatMessage({
+      id: 'filter.all',
     });
-    let {name} = this.props;
-
-    if (this.props.name === '') {
-      name = this.props.intl.formatMessage({
-        id: 'filter.all',
-      });
-    } else if (this.props.name === 'untagged') {
-      if (this.props.count === 0) {
-        return null;
-      }
-      name = this.props.intl.formatMessage({
-        id: 'filter.untagged',
-      });
+  } else if (name === 'untagged') {
+    if (count === 0) {
+      return null;
     }
-
-    if (this.props.slug === 'checking' || this.props.slug === 'error') {
-      if (this.props.count === 0) {
-        return null;
-      }
-    }
-
-    return (
-      <li className={classNames} onClick={this.handleClick}>
-        {this.props.icon}
-        {name}
-        <Badge>{this.props.count}</Badge>
-      </li>
-    );
+    name = intl.formatMessage({
+      id: 'filter.untagged',
+    });
   }
-}
 
-export default injectIntl(SidebarFilter);
+  if (slug === 'checking' || slug === 'error') {
+    if (count === 0) {
+      return null;
+    }
+  }
+
+  return (
+    <li className={classNames} onClick={() => handleClick(slug)}>
+      {icon}
+      {name}
+      <Badge>{count}</Badge>
+    </li>
+  );
+};
+
+SidebarFilter.defaultProps = {
+  icon: undefined,
+};
+
+export default SidebarFilter;

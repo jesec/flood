@@ -1,12 +1,13 @@
 import classnames from 'classnames';
-import {Component} from 'react';
 import {DragElementWrapper, DragPreviewOptions, DragSource, DragSourceOptions, DropTarget} from 'react-dnd';
 import flow from 'lodash/flow';
 import {getEmptyImage} from 'react-dnd-html5-backend';
+import * as React from 'react';
 
 import LockIcon from '../icons/LockIcon';
 
 interface SortableListItemProps {
+  children?: React.ReactNode;
   list: string;
   id: string;
   index: number;
@@ -21,39 +22,35 @@ interface SortableListItemProps {
   connectDropTarget: DragElementWrapper<never>;
 }
 
-class SortableListItem extends Component<SortableListItemProps> {
-  componentDidMount() {
-    const {connectDragPreview} = this.props;
-    // Replace the native drag preview with an empty image.
+const SortableListItem: React.FC<SortableListItemProps> = (props: SortableListItemProps) => {
+  const {children, isDragging, isLocked, connectDragPreview, connectDragSource, connectDropTarget} = props;
+
+  React.useEffect(() => {
     connectDragPreview(getEmptyImage(), {
       captureDraggingState: true,
     });
+  });
+
+  let lockedIcon = null;
+
+  if (isLocked) {
+    lockedIcon = <LockIcon />;
   }
 
-  render() {
-    const {children, isDragging, isLocked, connectDragSource, connectDropTarget} = this.props;
+  const classes = classnames('sortable-list__item', {
+    'sortable-list__item--is-dragging': isDragging,
+    'sortable-list__item--is-locked': isLocked,
+  });
 
-    let lockedIcon = null;
-
-    if (isLocked) {
-      lockedIcon = <LockIcon />;
-    }
-
-    const classes = classnames('sortable-list__item', {
-      'sortable-list__item--is-dragging': isDragging,
-      'sortable-list__item--is-locked': isLocked,
-    });
-
-    return connectDragSource(
-      connectDropTarget(
-        <div className={classes}>
-          {lockedIcon}
-          {children}
-        </div>,
-      ),
-    );
-  }
-}
+  return connectDragSource(
+    connectDropTarget(
+      <div className={classes}>
+        {lockedIcon}
+        {children}
+      </div>,
+    ),
+  );
+};
 
 export default flow([
   DragSource(

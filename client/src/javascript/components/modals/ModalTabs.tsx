@@ -11,37 +11,41 @@ export interface Tab {
 
 interface ModalTabsProps {
   activeTabId: string | null;
-  tabs: Record<string, Tab>;
+  tabs?: Record<string, Tab>;
   onTabChange: (tab: Tab) => void;
 }
 
-export default class ModalTabs extends React.Component<ModalTabsProps> {
-  static defaultProps = {
-    tabs: {},
-  };
+const ModalTabs: React.FC<ModalTabsProps> = (props: ModalTabsProps) => {
+  const {activeTabId, tabs = {}, onTabChange} = props;
 
-  handleTabClick(tab: Tab) {
-    if (this.props.onTabChange) {
-      this.props.onTabChange(tab);
-    }
-  }
+  const tabNodes: React.ReactNodeArray = Object.keys(tabs).map((tabId) => {
+    const currentTab = tabs[tabId];
 
-  render() {
-    const tabs = Object.keys(this.props.tabs).map((tabId) => {
-      const currentTab = this.props.tabs[tabId];
+    currentTab.id = tabId;
 
-      currentTab.id = tabId;
-
-      const classes = classnames('modal__tab', {
-        'is-active': tabId === this.props.activeTabId,
-      });
-
-      return (
-        <li className={classes} key={tabId} onClick={this.handleTabClick.bind(this, currentTab)}>
-          {currentTab.label}
-        </li>
-      );
+    const classes = classnames('modal__tab', {
+      'is-active': tabId === activeTabId,
     });
-    return <ul className="modal__tabs">{tabs}</ul>;
-  }
-}
+
+    return (
+      <li
+        className={classes}
+        key={tabId}
+        onClick={() => {
+          if (onTabChange) {
+            onTabChange(currentTab);
+          }
+        }}>
+        {currentTab.label}
+      </li>
+    );
+  });
+
+  return <ul className="modal__tabs">{tabNodes}</ul>;
+};
+
+ModalTabs.defaultProps = {
+  tabs: {},
+};
+
+export default ModalTabs;

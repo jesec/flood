@@ -51,7 +51,7 @@ class AlertStore {
     this.alerts[newAlert.id] = newAlert;
   }
 
-  removeExpired(alert: Alert) {
+  removeExpired = (alert: Alert) => {
     const {accumulation} = alert;
 
     if (accumulation) {
@@ -64,7 +64,7 @@ class AlertStore {
     } else {
       delete this.alerts[alert.id];
     }
-  }
+  };
 
   removeAccumulation(alert: Alert) {
     if (alert.accumulation == null) {
@@ -81,7 +81,7 @@ class AlertStore {
   }
 
   scheduleCleanse(alert: Alert) {
-    setTimeout(this.removeExpired.bind(this, alert), alert.duration);
+    setTimeout(() => this.removeExpired(alert), alert.duration);
   }
 }
 

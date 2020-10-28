@@ -26,8 +26,6 @@ interface DirectoryTreeNodeStates {
   expanded: boolean;
 }
 
-const METHODS_TO_BIND = ['handleDirectoryClick', 'handleDirectorySelection'] as const;
-
 class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeNodeStates> {
   static defaultProps = {
     path: [],
@@ -40,10 +38,6 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
     this.state = {
       expanded: false,
     };
-
-    METHODS_TO_BIND.forEach(<T extends typeof METHODS_TO_BIND[number]>(methodName: T) => {
-      this[methodName] = this[methodName].bind(this);
-    });
   }
 
   getCurrentPath() {
@@ -101,15 +95,15 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
     return null;
   }
 
-  handleDirectoryClick() {
+  handleDirectoryClick = (): void => {
     this.setState((state) => {
       return {
         expanded: !state.expanded,
       };
     });
-  }
+  };
 
-  handleDirectorySelection() {
+  handleDirectorySelection = (): void => {
     const {depth, isSelected, onItemSelect} = this.props;
 
     onItemSelect({
@@ -118,7 +112,7 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
       path: this.getCurrentPath(),
       select: !isSelected,
     });
-  }
+  };
 
   render() {
     const {depth, directoryName, isSelected} = this.props;

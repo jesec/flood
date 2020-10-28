@@ -21,8 +21,6 @@ class QBittorrentConnectionSettingsForm extends React.Component<
 > {
   constructor(props: QBittorrentConnectionSettingsProps) {
     super(props);
-    this.getConnectionSettings = this.getConnectionSettings.bind(this);
-    this.handleFormChange = this.handleFormChange.bind(this);
 
     this.state = {
       url: '',
@@ -31,7 +29,7 @@ class QBittorrentConnectionSettingsForm extends React.Component<
     };
   }
 
-  getConnectionSettings(): QBittorrentConnectionSettings | null {
+  getConnectionSettings = (): QBittorrentConnectionSettings | null => {
     if (this.state.url == null || this.state.url === '') {
       return null;
     }
@@ -46,12 +44,12 @@ class QBittorrentConnectionSettingsForm extends React.Component<
     };
 
     return settings;
-  }
+  };
 
-  handleFormChange(
+  handleFormChange = (
     event: React.MouseEvent<HTMLInputElement> | KeyboardEvent | React.ChangeEvent<HTMLInputElement>,
     field: keyof QBittorrentConnectionSettingsFormData,
-  ) {
+  ): void => {
     const inputElement = event.target as HTMLInputElement;
 
     if (inputElement == null) {
@@ -68,7 +66,7 @@ class QBittorrentConnectionSettingsForm extends React.Component<
         };
       });
     }
-  }
+  };
 
   render() {
     return (

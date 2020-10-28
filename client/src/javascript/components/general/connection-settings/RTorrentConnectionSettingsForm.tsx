@@ -29,11 +29,9 @@ class RTorrentConnectionSettingsForm extends React.Component<
     this.state = {
       type: 'tcp',
     };
-    this.getConnectionSettings = this.getConnectionSettings.bind(this);
-    this.handleFormChange = this.handleFormChange.bind(this);
   }
 
-  getConnectionSettings(): RTorrentConnectionSettings | null {
+  getConnectionSettings = (): RTorrentConnectionSettings | null => {
     const {type, socket, host, port} = this.state;
 
     switch (type) {
@@ -66,12 +64,12 @@ class RTorrentConnectionSettingsForm extends React.Component<
       default:
         return null;
     }
-  }
+  };
 
-  handleFormChange(
+  handleFormChange = (
     event: React.MouseEvent<HTMLInputElement> | KeyboardEvent | React.ChangeEvent<HTMLInputElement>,
     field: keyof RTorrentConnectionSettingsFormData,
-  ) {
+  ) => {
     const inputElement = event.target as HTMLInputElement;
 
     if (inputElement == null) {
@@ -88,7 +86,7 @@ class RTorrentConnectionSettingsForm extends React.Component<
         };
       });
     }
-  }
+  };
 
   renderConnectionOptions() {
     const {intl} = this.props;

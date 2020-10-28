@@ -1,5 +1,5 @@
-import {Component} from 'react';
-import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
+import {defineMessages, useIntl} from 'react-intl';
+import * as React from 'react';
 
 import SettingsIcon from '../icons/SettingsIcon';
 import Tooltip from '../general/Tooltip';
@@ -11,40 +11,28 @@ const MESSAGES = defineMessages({
   },
 });
 
-class SettingsButton extends Component<WrappedComponentProps> {
-  tooltipRef: Tooltip | null = null;
+const SettingsButton: React.FC = () => {
+  const intl = useIntl();
+  const label = intl.formatMessage(MESSAGES.settings);
+  const tooltipRef = React.useRef<Tooltip>(null);
 
-  constructor(props: WrappedComponentProps) {
-    super(props);
+  return (
+    <Tooltip
+      content={label}
+      onClick={() => {
+        if (tooltipRef.current != null) {
+          tooltipRef.current.dismissTooltip();
+        }
 
-    this.handleSettingsButtonClick = this.handleSettingsButtonClick.bind(this);
-  }
-
-  handleSettingsButtonClick() {
-    if (this.tooltipRef != null) {
-      this.tooltipRef.dismissTooltip();
-    }
-
-    UIActions.displayModal({id: 'settings'});
-  }
-
-  render() {
-    const label = this.props.intl.formatMessage(MESSAGES.settings);
-
-    return (
-      <Tooltip
-        content={label}
-        onClick={this.handleSettingsButtonClick}
-        ref={(ref) => {
-          this.tooltipRef = ref;
-        }}
-        position="bottom"
-        wrapperClassName="sidebar__action sidebar__icon-button
+        UIActions.displayModal({id: 'settings'});
+      }}
+      ref={tooltipRef}
+      position="bottom"
+      wrapperClassName="sidebar__action sidebar__icon-button
           sidebar__icon-button--interactive tooltip__wrapper">
-        <SettingsIcon />
-      </Tooltip>
-    );
-  }
-}
+      <SettingsIcon />
+    </Tooltip>
+  );
+};
 
-export default injectIntl(SettingsButton);
+export default SettingsButton;

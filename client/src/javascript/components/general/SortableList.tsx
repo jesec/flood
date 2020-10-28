@@ -27,8 +27,6 @@ interface SortableListStates {
   items: SortableListProps['items'];
 }
 
-const METHODS_TO_BIND = ['handleDrop', 'handleMove', 'handleMouseDown'] as const;
-
 class SortableList extends React.Component<SortableListProps, SortableListStates> {
   sortableListRef: HTMLUListElement | null = null;
 
@@ -38,10 +36,6 @@ class SortableList extends React.Component<SortableListProps, SortableListStates
     this.state = {
       items: props.items,
     };
-
-    METHODS_TO_BIND.forEach(<T extends typeof METHODS_TO_BIND[number]>(methodName: T) => {
-      this[methodName] = this[methodName].bind(this);
-    });
   }
 
   static getDerivedStateFromProps(props: SortableListProps) {
@@ -76,21 +70,21 @@ class SortableList extends React.Component<SortableListProps, SortableListStates
     });
   }
 
-  handleDrop() {
+  handleDrop = () => {
     const {onDrop} = this.props;
     if (onDrop) {
       onDrop(this.state.items);
     }
-  }
+  };
 
-  handleMouseDown(event: React.MouseEvent<HTMLUListElement>) {
+  handleMouseDown = (event: React.MouseEvent<HTMLUListElement>) => {
     const {onMouseDown} = this.props;
     if (onMouseDown) {
       onMouseDown(event);
     }
-  }
+  };
 
-  handleMove(dragIndex: number, hoverIndex: number) {
+  handleMove = (dragIndex: number, hoverIndex: number) => {
     const {onMove} = this.props;
     const {items} = this.state;
     const draggedItem = items[dragIndex];
@@ -105,7 +99,7 @@ class SortableList extends React.Component<SortableListProps, SortableListStates
     if (onMove) {
       onMove(items);
     }
-  }
+  };
 
   render() {
     const {className} = this.props;

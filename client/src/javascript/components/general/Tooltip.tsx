@@ -161,15 +161,10 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
   constructor(props: TooltipProps) {
     super(props);
 
-    this.dismissTooltip = this.dismissTooltip.bind(this);
-    this.handleMouseEnter = this.handleMouseEnter.bind(this);
-    this.handleMouseLeave = this.handleMouseLeave.bind(this);
-    this.handleTooltipMouseEnter = this.handleTooltipMouseEnter.bind(this);
-    this.handleTooltipMouseLeave = this.handleTooltipMouseLeave.bind(this);
-    this.isOpen = this.isOpen.bind(this);
-    this.triggerClose = this.triggerClose.bind(this);
-
-    this.state = {isOpen: false, wasTriggeredClose: false};
+    this.state = {
+      isOpen: false,
+      wasTriggeredClose: false,
+    };
   }
 
   componentWillUnmount(): void {
@@ -266,7 +261,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
     };
   }
 
-  dismissTooltip(forceClose?: boolean): void {
+  dismissTooltip = (forceClose?: boolean): void => {
     const {stayOpen, onClose} = this.props;
     const {isOpen} = this.state;
 
@@ -278,13 +273,9 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
         onClose();
       }
     }
-  }
+  };
 
-  addScrollListener(): void {
-    this.container.addEventListener('scroll', (_e) => this.dismissTooltip());
-  }
-
-  handleTooltipMouseEnter(): void {
+  handleTooltipMouseEnter = (): void => {
     const {interactive} = this.props;
     const {wasTriggeredClose} = this.state;
 
@@ -292,13 +283,13 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
       this.setState({isOpen: true});
       this.addScrollListener();
     }
-  }
+  };
 
-  handleTooltipMouseLeave(): void {
+  handleTooltipMouseLeave = (): void => {
     this.dismissTooltip();
-  }
+  };
 
-  handleMouseEnter(forceOpen?: boolean): void {
+  handleMouseEnter = (forceOpen?: boolean): void => {
     const {props} = this;
 
     if (props.suppress && !forceOpen) {
@@ -323,9 +314,9 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
     if (props.onOpen) {
       props.onOpen();
     }
-  }
+  };
 
-  handleMouseLeave(): void {
+  handleMouseLeave = (): void => {
     this.dismissTooltip();
 
     const {onMouseLeave} = this.props;
@@ -333,27 +324,22 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
     if (onMouseLeave) {
       onMouseLeave();
     }
-  }
+  };
 
-  isOpen(): boolean {
+  isOpen = (): boolean => {
     const {isOpen} = this.state;
 
     return isOpen;
+  };
+
+  addScrollListener(): void {
+    this.container.addEventListener('scroll', (_e) => this.dismissTooltip());
   }
 
   removeScrollListener(): void {
     if (this.container) {
       this.container.removeEventListener('scroll', (_e) => this.dismissTooltip());
     }
-  }
-
-  triggerClose(): void {
-    this.setState({wasTriggeredClose: true});
-    this.dismissTooltip(true);
-  }
-
-  triggerOpen(): void {
-    this.handleMouseEnter(true);
   }
 
   render(): React.ReactNode {

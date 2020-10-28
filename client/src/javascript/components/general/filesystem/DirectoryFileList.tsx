@@ -18,21 +18,11 @@ interface DirectoryFilesProps {
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
 
-const METHODS_TO_BIND = ['handlePriorityChange'] as const;
-
 class DirectoryFiles extends React.Component<DirectoryFilesProps> {
   static defaultProps = {
     path: [],
     items: {},
   };
-
-  constructor(props: DirectoryFilesProps) {
-    super(props);
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
-  }
 
   getCurrentPath(file: TorrentContent) {
     const {path} = this.props;
@@ -41,16 +31,17 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
   }
 
   getIcon(file: TorrentContent, isSelected: boolean) {
-    const changeHandler = (): void => {
-      this.handleFileSelect(file, isSelected);
-    };
-
     return (
       <div className="file__checkbox directory-tree__checkbox">
         <div
           className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <Checkbox checked={isSelected} id={`${file.index}`} onChange={changeHandler} useProps />
+          <Checkbox
+            checked={isSelected}
+            id={`${file.index}`}
+            onChange={() => this.handleFileSelect(file, isSelected)}
+            useProps
+          />
         </div>
         <div
           className="directory-tree__checkbox__item
@@ -61,7 +52,13 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
     );
   }
 
-  handleFileSelect(file: TorrentContent, isSelected: boolean): void {
+  handlePriorityChange = (fileIndex: React.ReactText, priorityLevel: number): void => {
+    const {hash} = this.props;
+
+    TorrentActions.setFilePriority(hash, {indices: [Number(fileIndex)], priority: priorityLevel});
+  };
+
+  handleFileSelect = (file: TorrentContent, isSelected: boolean): void => {
     const {depth, onItemSelect} = this.props;
 
     onItemSelect({
@@ -70,13 +67,7 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
       path: this.getCurrentPath(file),
       select: !isSelected,
     });
-  }
-
-  handlePriorityChange(fileIndex: React.ReactText, priorityLevel: number) {
-    const {hash} = this.props;
-
-    TorrentActions.setFilePriority(hash, {indices: [Number(fileIndex)], priority: priorityLevel});
-  }
+  };
 
   render() {
     const {items} = this.props;

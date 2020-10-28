@@ -1,5 +1,5 @@
-import {Component} from 'react';
-import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
+import {defineMessages, useIntl} from 'react-intl';
+import * as React from 'react';
 
 import FeedIcon from '../icons/FeedIcon';
 import Tooltip from '../general/Tooltip';
@@ -11,40 +11,28 @@ const MESSAGES = defineMessages({
   },
 });
 
-class FeedsButton extends Component<WrappedComponentProps> {
-  tooltipRef: Tooltip | null = null;
+const FeedsButton: React.FC = () => {
+  const intl = useIntl();
+  const label = intl.formatMessage(MESSAGES.feeds);
+  const tooltipRef = React.useRef<Tooltip>(null);
 
-  constructor(props: WrappedComponentProps) {
-    super(props);
+  return (
+    <Tooltip
+      content={label}
+      onClick={() => {
+        if (tooltipRef.current != null) {
+          tooltipRef.current.dismissTooltip();
+        }
 
-    this.handleFeedsButtonClick = this.handleFeedsButtonClick.bind(this);
-  }
-
-  handleFeedsButtonClick() {
-    if (this.tooltipRef != null) {
-      this.tooltipRef.dismissTooltip();
-    }
-
-    UIActions.displayModal({id: 'feeds'});
-  }
-
-  render() {
-    const label = this.props.intl.formatMessage(MESSAGES.feeds);
-
-    return (
-      <Tooltip
-        content={label}
-        onClick={this.handleFeedsButtonClick}
-        ref={(ref) => {
-          this.tooltipRef = ref;
-        }}
-        position="bottom"
-        wrapperClassName="sidebar__action sidebar__icon-button
+        UIActions.displayModal({id: 'feeds'});
+      }}
+      ref={tooltipRef}
+      position="bottom"
+      wrapperClassName="sidebar__action sidebar__icon-button
           sidebar__icon-button--interactive tooltip__wrapper">
-        <FeedIcon />
-      </Tooltip>
-    );
-  }
-}
+      <FeedIcon />
+    </Tooltip>
+  );
+};
 
-export default injectIntl(FeedsButton);
+export default FeedsButton;

@@ -27,14 +27,6 @@ class TableHeading extends React.Component<TableHeadingProps> {
   tableHeading: HTMLDivElement | null = null;
   resizeLine: HTMLDivElement | null = null;
 
-  constructor(props: TableHeadingProps) {
-    super(props);
-
-    this.handlePointerDown = this.handlePointerDown.bind(this);
-    this.handlePointerUp = this.handlePointerUp.bind(this);
-    this.handlePointerMove = this.handlePointerMove.bind(this);
-  }
-
   getHeadingElements() {
     const {intl, onCellClick} = this.props;
 
@@ -82,7 +74,7 @@ class TableHeading extends React.Component<TableHeadingProps> {
     }, []);
   }
 
-  handlePointerMove(event: PointerEvent) {
+  handlePointerMove = (event: PointerEvent) => {
     let widthDelta = 0;
     if (this.lastPointerX != null) {
       widthDelta = event.clientX - this.lastPointerX;
@@ -102,9 +94,9 @@ class TableHeading extends React.Component<TableHeadingProps> {
         }px)`;
       }
     }
-  }
+  };
 
-  handlePointerUp() {
+  handlePointerUp = () => {
     UIStore.removeGlobalStyle(pointerDownStyles);
     global.document.removeEventListener('pointerup', this.handlePointerUp);
     global.document.removeEventListener('pointermove', (e) => this.handlePointerMove(e));
@@ -122,9 +114,9 @@ class TableHeading extends React.Component<TableHeadingProps> {
 
     this.focusedCell = null;
     this.focusedCellWidth = null;
-  }
+  };
 
-  handlePointerDown(event: React.PointerEvent, slug: TorrentListColumn, width: number) {
+  handlePointerDown = (event: React.PointerEvent, slug: TorrentListColumn, width: number) => {
     if (!this.isPointerDown && this.resizeLine != null && this.tableHeading != null) {
       global.document.addEventListener('pointerup', this.handlePointerUp);
       global.document.addEventListener('pointermove', this.handlePointerMove);
@@ -139,7 +131,7 @@ class TableHeading extends React.Component<TableHeadingProps> {
       }px)`;
       this.resizeLine.style.opacity = '1';
     }
-  }
+  };
 
   render() {
     const {setRef} = this.props;

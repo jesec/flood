@@ -24,13 +24,6 @@ interface TransferRateGraphProps {
   onMouseOut: () => void;
 }
 
-const METHODS_TO_BIND = [
-  'handleTransferHistoryChange',
-  'handleMouseOut',
-  'handleMouseOver',
-  'handleMouseMove',
-] as const;
-
 @observer
 class TransferRateGraph extends React.Component<TransferRateGraphProps> {
   private static getGradient(slug: TransferDirection): React.ReactNode {
@@ -71,10 +64,6 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
         this.handleTransferHistoryChange();
       },
     );
-
-    METHODS_TO_BIND.forEach(<T extends typeof METHODS_TO_BIND[number]>(methodName: T) => {
-      this[methodName] = this[methodName].bind(this);
-    });
   }
 
   componentDidMount(): void {
@@ -112,6 +101,43 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
     return speedAtHoverPoint;
   }
 
+  handleMouseMove = (mouseX: number): void => {
+    this.lastMouseX = mouseX;
+    this.renderPrecisePointInspectors();
+  };
+
+  handleMouseOut = (): void => {
+    const {graphRefs, props} = this;
+
+    graphRefs.isHovered = false;
+
+    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
+      const {inspectPoint} = graphRefs[direction];
+      if (inspectPoint != null) {
+        graphRefs[direction].inspectPoint = inspectPoint.style('opacity', 0);
+      }
+    });
+
+    if (props.onMouseOut) {
+      props.onMouseOut();
+    }
+  };
+
+  handleMouseOver = (): void => {
+    this.graphRefs.isHovered = true;
+
+    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
+      const {inspectPoint} = this.graphRefs[direction];
+      if (inspectPoint != null) {
+        this.graphRefs[direction].inspectPoint = inspectPoint.style('opacity', 1);
+      }
+    });
+  };
+
+  handleTransferHistoryChange = (): void => {
+    this.updateGraph();
+  };
+
   private initGraph(): void {
     if (this.graphRefs.areDefined === true) {
       return;
@@ -146,43 +172,6 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
     if (this.graphRefs.isHovered) {
       this.renderPrecisePointInspectors();
     }
-  }
-
-  handleMouseMove(mouseX: number): void {
-    this.lastMouseX = mouseX;
-    this.renderPrecisePointInspectors();
-  }
-
-  handleMouseOut(): void {
-    const {graphRefs, props} = this;
-
-    graphRefs.isHovered = false;
-
-    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
-      const {inspectPoint} = graphRefs[direction];
-      if (inspectPoint != null) {
-        graphRefs[direction].inspectPoint = inspectPoint.style('opacity', 0);
-      }
-    });
-
-    if (props.onMouseOut) {
-      props.onMouseOut();
-    }
-  }
-
-  handleMouseOver(): void {
-    this.graphRefs.isHovered = true;
-
-    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
-      const {inspectPoint} = this.graphRefs[direction];
-      if (inspectPoint != null) {
-        this.graphRefs[direction].inspectPoint = inspectPoint.style('opacity', 1);
-      }
-    });
-  }
-
-  handleTransferHistoryChange(): void {
-    this.updateGraph();
   }
 
   private renderPrecisePointInspectors(): void {

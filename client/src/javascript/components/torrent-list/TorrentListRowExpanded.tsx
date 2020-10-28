@@ -100,9 +100,9 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
     return (
       <li
         className={className}
-        onClick={handleClick.bind(this, hash)}
-        onContextMenu={handleRightClick.bind(this, hash)}
-        onDoubleClick={handleDoubleClick.bind(this, hash)}
+        onClick={(e) => handleClick(hash, e)}
+        onContextMenu={(e) => handleRightClick(hash, e)}
+        onDoubleClick={(e) => handleDoubleClick(hash, e)}
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         ref={ref}>

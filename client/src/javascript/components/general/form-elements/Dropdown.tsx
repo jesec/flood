@@ -8,7 +8,7 @@ import * as React from 'react';
 import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
 
-export interface DropdownItem<T = string> {
+export interface DropdownItem<T extends string = string> {
   className?: string;
   displayName: React.ReactNode;
   selectable?: boolean;
@@ -17,9 +17,9 @@ export interface DropdownItem<T = string> {
   value?: number | null;
 }
 
-type DropdownItems<T> = Array<DropdownItem<T>>;
+type DropdownItems<T extends string = string> = Array<DropdownItem<T>>;
 
-interface DropdownProps<T> {
+interface DropdownProps<T extends string = string> {
   header: React.ReactNode;
   trigger?: React.ReactNode;
   dropdownButtonClass?: string;
@@ -39,15 +39,7 @@ interface DropdownStates {
   isOpen: boolean;
 }
 
-const METHODS_TO_BIND = [
-  'closeDropdown',
-  'openDropdown',
-  'handleDropdownClick',
-  'handleItemSelect',
-  'handleKeyPress',
-] as const;
-
-class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownStates> {
+class Dropdown<T extends string = string> extends React.Component<DropdownProps<T>, DropdownStates> {
   id = uniqueId('dropdown_');
 
   static defaultProps = {
@@ -61,10 +53,6 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
 
   constructor(props: DropdownProps<T>) {
     super(props);
-
-    METHODS_TO_BIND.forEach(<M extends typeof METHODS_TO_BIND[number]>(methodName: M) => {
-      this[methodName] = this[methodName].bind(this);
-    });
 
     this.handleKeyPress = throttle(this.handleKeyPress, 200);
 
@@ -125,35 +113,31 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
   }
 
   private getDropdownMenuItems(listItems: DropdownItems<T>) {
-    return listItems.map((property, index) => {
-      const classes = classnames('dropdown__item menu__item', property.className, {
-        'is-selectable': property.selectable !== false,
-        'is-selected': property.selected,
+    return listItems.map((item) => {
+      const classes = classnames('dropdown__item menu__item', item.className, {
+        'is-selectable': item.selectable !== false,
+        'is-selected': item.selected,
       });
-      let clickHandler;
-
-      if (property.selectable !== false) {
-        clickHandler = this.handleItemSelect.bind(this, property);
-      }
 
       return (
-        // TODO: Find a better key
-        // eslint-disable-next-line react/no-array-index-key
-        <li className={classes} key={index} onClick={clickHandler}>
-          {property.displayName}
+        <li
+          className={classes}
+          key={item.property}
+          onClick={item.selectable === false ? undefined : () => this.handleItemSelect(item)}>
+          {item.displayName}
         </li>
       );
     });
   }
 
-  closeDropdown() {
+  closeDropdown = () => {
     window.removeEventListener('keydown', this.handleKeyPress);
     window.removeEventListener('click', this.closeDropdown);
 
     this.setState({isOpen: false});
-  }
+  };
 
-  openDropdown() {
+  openDropdown = () => {
     window.addEventListener('keydown', this.handleKeyPress);
     window.addEventListener('click', this.closeDropdown);
 
@@ -166,9 +150,9 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
     }
 
     UIActions.displayDropdownMenu(this.id);
-  }
+  };
 
-  handleDropdownClick(event: React.MouseEvent<HTMLDivElement>) {
+  handleDropdownClick = (event: React.MouseEvent<HTMLDivElement>): void => {
     event.stopPropagation();
 
     const {isOpen} = this.state;
@@ -178,21 +162,21 @@ class Dropdown<T = string> extends React.Component<DropdownProps<T>, DropdownSta
     } else {
       this.openDropdown();
     }
-  }
+  };
 
-  handleItemSelect(item: DropdownItem<T>) {
+  handleItemSelect = (item: DropdownItem<T>): void => {
     const {handleItemSelect} = this.props;
 
     this.closeDropdown();
     handleItemSelect(item);
-  }
+  };
 
-  handleKeyPress(event: KeyboardEvent) {
+  handleKeyPress = (event: KeyboardEvent): void => {
     const {isOpen} = this.state;
     if (isOpen && event.keyCode === 27) {
       this.closeDropdown();
     }
-  }
+  };
 
   render() {
     const {baseClassName, dropdownWrapperClass, direction, matchButtonWidth, menuItems, noWrap, width} = this.props;

@@ -126,7 +126,7 @@ class GlobalContextMenuMountPoint extends React.Component<
         <li
           className={menuItemClasses}
           key={item.type === 'action' ? item.action : `sep-${index}`}
-          onClick={this.handleMenuItemClick.bind(this, item)}>
+          onClick={(e) => this.handleMenuItemClick(item, e)}>
           {menuItemContent}
         </li>
       );
@@ -159,7 +159,7 @@ class GlobalContextMenuMountPoint extends React.Component<
     UIActions.dismissContextMenu(this.props.id);
   };
 
-  handleMenuItemClick(item: ContextMenuItem, event: React.MouseEvent<HTMLLIElement>) {
+  handleMenuItemClick = (item: ContextMenuItem, event: React.MouseEvent<HTMLLIElement>) => {
     const {id} = this.props;
 
     if (item.type !== 'separator') {
@@ -177,7 +177,7 @@ class GlobalContextMenuMountPoint extends React.Component<
     }
 
     return false;
-  }
+  };
 
   render() {
     const {clickPosition, isOpen} = this.state;

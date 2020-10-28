@@ -19,8 +19,6 @@ interface PriorityMeterStates {
   };
 }
 
-const METHODS_TO_BIND = ['handleClick'] as const;
-
 class PriorityMeter extends Component<PriorityMeterProps, PriorityMeterStates> {
   constructor(props: PriorityMeterProps) {
     super(props);
@@ -30,10 +28,6 @@ class PriorityMeter extends Component<PriorityMeterProps, PriorityMeterStates> {
         level: null,
       },
     };
-
-    METHODS_TO_BIND.forEach((method) => {
-      this[method] = this[method].bind(this);
-    });
   }
 
   getPriorityLabel() {
@@ -68,7 +62,7 @@ class PriorityMeter extends Component<PriorityMeterProps, PriorityMeterStates> {
     return this.props.level;
   }
 
-  handleClick() {
+  handleClick = () => {
     let level = this.getPriorityLevel();
 
     if (level >= this.props.maxLevel) {
@@ -79,7 +73,7 @@ class PriorityMeter extends Component<PriorityMeterProps, PriorityMeterStates> {
 
     this.setState({optimisticData: {level}});
     this.props.onChange(this.props.id, level);
-  }
+  };
 
   render() {
     let label = null;
