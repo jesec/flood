@@ -4,6 +4,8 @@ import {observer} from 'mobx-react';
 import {observable, reaction} from 'mobx';
 import * as React from 'react';
 
+import type {FixedSizeList, ListChildComponentProps} from 'react-window';
+
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
@@ -59,7 +61,7 @@ const handleDoubleClick = (hash: string) => TorrentListContextMenu.handleDetails
 class TorrentList extends React.Component<WrappedComponentProps> {
   listContainer: HTMLDivElement | null = null;
   listHeaderRef: HTMLDivElement | null = null;
-  listViewportRef = React.createRef<HTMLDivElement>();
+  listViewportRef = React.createRef<FixedSizeList>();
 
   torrentListViewportSize = observable.object<{width: number; height: number}>({
     width: window.innerWidth,
@@ -144,17 +146,17 @@ class TorrentList extends React.Component<WrappedComponentProps> {
 
   handleTorrentFilterChange = () => {
     if (this.listViewportRef.current != null) {
-      this.listViewportRef.current.scrollTop = 0;
+      this.listViewportRef.current.scrollTo(0);
     }
   };
 
-  handleViewportScroll = () => {
-    if (this.listHeaderRef != null && this.listViewportRef.current != null) {
-      this.listHeaderRef.scrollLeft = this.listViewportRef.current.scrollLeft;
+  handleViewportScroll = (scrollLeft: number) => {
+    if (this.listHeaderRef != null) {
+      this.listHeaderRef.scrollLeft = scrollLeft;
     }
   };
 
-  renderListItem = (index: number) => {
+  renderListItem: React.FC<ListChildComponentProps> = observer(({index, style}) => {
     const torrent = TorrentStore.filteredTorrents[index];
 
     return (
@@ -163,10 +165,11 @@ class TorrentList extends React.Component<WrappedComponentProps> {
         handleDoubleClick={handleDoubleClick}
         handleRightClick={this.handleContextMenuClick}
         key={torrent.hash}
+        style={style}
         hash={torrent.hash}
       />
     );
-  };
+  });
 
   render() {
     const torrents = TorrentStore.filteredTorrents;
@@ -215,13 +218,22 @@ class TorrentList extends React.Component<WrappedComponentProps> {
         );
       }
 
+      // itemSize must sync with styles &--is-condensed and &--is-expanded
       content = (
         <ListViewport
+          className="torrent__list__viewport"
           itemRenderer={this.renderListItem}
-          listClass="torrent__list"
+          itemSize={isCondensed ? 30 : 70}
           listLength={torrents.length}
-          onScroll={this.handleViewportScroll}
           ref={this.listViewportRef}
+          outerRef={(ref) => {
+            const viewportDiv = ref;
+            if (viewportDiv != null && viewportDiv.onscroll == null) {
+              viewportDiv.onscroll = () => {
+                this.handleViewportScroll(viewportDiv.scrollLeft);
+              };
+            }
+          }}
         />
       );
     }

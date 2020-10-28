@@ -11,6 +11,7 @@ import TorrentListRowCondensed from './TorrentListRowCondensed';
 import TorrentListRowExpanded from './TorrentListRowExpanded';
 
 interface TorrentListRowProps {
+  style: React.CSSProperties;
   hash: string;
   handleClick: (hash: string, event: React.MouseEvent) => void;
   handleDoubleClick: (hash: string, event: React.MouseEvent) => void;
@@ -18,7 +19,7 @@ interface TorrentListRowProps {
 }
 
 const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProps) => {
-  const {hash, handleClick, handleDoubleClick, handleRightClick} = props;
+  const {style, hash, handleClick, handleDoubleClick, handleRightClick} = props;
 
   const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
 
@@ -49,6 +50,7 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
     return (
       <TorrentListRowCondensed
         className={torrentClasses}
+        style={style}
         hash={hash}
         handleClick={handleClick}
         handleDoubleClick={handleDoubleClick}
@@ -62,6 +64,7 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
   return (
     <TorrentListRowExpanded
       className={torrentClasses}
+      style={style}
       hash={hash}
       handleClick={handleClick}
       handleDoubleClick={handleDoubleClick}

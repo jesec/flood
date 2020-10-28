@@ -9,6 +9,7 @@ $table--heading--resize--indicator--width: 1px;
       @include theme('color', 'table--heading--color');
       display: flex;
       height: 24px;
+      min-height: 24px;
       overflow: hidden;
       font-size: 12px;
       white-space: nowrap;

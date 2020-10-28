@@ -38,8 +38,6 @@
 
 .torrent {
   &__list {
-    position: relative;
-
     &__scrollbars {
       &--horizontal {
         left: 0;
@@ -54,9 +52,7 @@
     }
 
     &__viewport {
-      overflow-x: auto;
-      overflow-y: overlay;
-      height: 100%;
+      overflow-y: overlay !important;
     }
 
     &__wrapper {

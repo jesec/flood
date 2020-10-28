@@ -1,37 +1,38 @@
+import {FixedSizeList} from 'react-window';
+import {useWindowHeight} from '@react-hook/window-size';
 import * as React from 'react';
 
+import type {ListChildComponentProps} from 'react-window';
+
 interface ListViewportProps {
-  children?: React.ReactNode;
-  itemRenderer: (index: number) => React.ReactNode;
-  listClass: string;
+  className: string;
+  itemRenderer: React.FC<ListChildComponentProps>;
+  itemSize: number;
   listLength: number;
-  onScroll?: () => void;
+  outerRef?: React.RefCallback<HTMLDivElement>;
 }
 
-// TODO: Implement windowing or infinite scrolling
-const ListViewport = React.forwardRef<HTMLDivElement, ListViewportProps>((props: ListViewportProps, ref) => {
-  const {children, listClass, listLength, itemRenderer, onScroll} = props;
-
-  const list = [];
-
-  // For loops are fast, and performance matters here.
-  for (let index = 0; index < listLength; index += 1) {
-    list.push(itemRenderer(index));
-  }
-
-  const listContent = <ul className={listClass}>{list}</ul>;
+const ListViewport = React.forwardRef<FixedSizeList, ListViewportProps>((props: ListViewportProps, ref) => {
+  const {className, itemRenderer, itemSize, listLength, outerRef} = props;
+  const windowHeight = useWindowHeight();
 
   return (
-    <div className="torrent__list__viewport" onScroll={onScroll} ref={ref}>
-      {children}
-      {listContent}
-    </div>
+    <FixedSizeList
+      className={className}
+      height={Math.max(itemSize * 30, windowHeight * 1.5)}
+      itemCount={listLength}
+      itemSize={itemSize}
+      width="100%"
+      innerElementType="ul"
+      ref={ref}
+      outerRef={outerRef}>
+      {itemRenderer}
+    </FixedSizeList>
   );
 });
 
 ListViewport.defaultProps = {
-  children: undefined,
-  onScroll: undefined,
+  outerRef: undefined,
 };
 
 export default ListViewport;

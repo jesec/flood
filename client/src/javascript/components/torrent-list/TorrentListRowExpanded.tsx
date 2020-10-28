@@ -10,6 +10,7 @@ import torrentStatusIcons from '../../util/torrentStatusIcons';
 
 interface TorrentListRowExpandedProps {
   className: string;
+  style: React.CSSProperties;
   hash: string;
   handleClick: (hash: string, event: React.MouseEvent) => void;
   handleDoubleClick: (hash: string, event: React.MouseEvent) => void;
@@ -22,6 +23,7 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
   (
     {
       className,
+      style,
       hash,
       handleClick,
       handleDoubleClick,
@@ -100,6 +102,7 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
     return (
       <li
         className={className}
+        style={style}
         onClick={(e) => handleClick(hash, e)}
         onContextMenu={(e) => handleRightClick(hash, e)}
         onDoubleClick={(e) => handleDoubleClick(hash, e)}
