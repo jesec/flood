@@ -1,7 +1,7 @@
 import React from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 
-import {SUPPORTED_CLIENTS} from '@shared/schema/ClientConnectionSettings';
+import {SUPPORTED_CLIENTS} from '@shared/schema/constants/ClientConnectionSettings';
 
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 

@@ -1,12 +1,13 @@
-import * as z from 'zod';
+import type {infer as zodInfer} from 'zod';
 
-import {AccessLevel, credentialsSchema} from '../Auth';
+import {AccessLevel} from '../constants/Auth';
+import {credentialsSchema} from '../Auth';
 
 // All auth requests are schema validated to ensure security.
 
 // POST /api/auth/authenticate
 export const authAuthenticationSchema = credentialsSchema.pick({username: true, password: true});
-export type AuthAuthenticationOptions = Required<z.infer<typeof authAuthenticationSchema>>;
+export type AuthAuthenticationOptions = Required<zodInfer<typeof authAuthenticationSchema>>;
 
 // POST /api/auth/authenticate - success response
 export interface AuthAuthenticationResponse {
@@ -17,11 +18,11 @@ export interface AuthAuthenticationResponse {
 
 // POST /api/auth/register
 export const authRegistrationSchema = credentialsSchema;
-export type AuthRegistrationOptions = Required<z.infer<typeof authRegistrationSchema>>;
+export type AuthRegistrationOptions = Required<zodInfer<typeof authRegistrationSchema>>;
 
 // PATCH /api/auth/users/{username}
 export const authUpdateUserSchema = credentialsSchema.partial();
-export type AuthUpdateUserOptions = z.infer<typeof authUpdateUserSchema>;
+export type AuthUpdateUserOptions = zodInfer<typeof authUpdateUserSchema>;
 
 // GET /api/auth/verify - preload configurations
 export interface AuthVerificationPreloadConfigs {

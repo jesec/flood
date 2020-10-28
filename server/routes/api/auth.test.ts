@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import supertest from 'supertest';
 
-import {AccessLevel} from '../../../shared/schema/Auth';
+import {AccessLevel} from '../../../shared/schema/constants/Auth';
 
 import app from '../../app';
 import {getAuthToken} from './auth';

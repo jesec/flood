@@ -1,68 +1,67 @@
-import * as z from 'zod';
+import {literal, number, object, string, union} from 'zod';
+import type {infer as zodInfer} from 'zod';
 
-const delugeConnectionSettingsSchema = z.object({
-  client: z.literal('Deluge'),
-  type: z.literal('web'),
-  version: z.literal(1),
-  url: z.string().url(),
-  password: z.string(),
+const delugeConnectionSettingsSchema = object({
+  client: literal('Deluge'),
+  type: literal('web'),
+  version: literal(1),
+  url: string().url(),
+  password: string(),
 });
 
-export type DelugeConnectionSettings = z.infer<typeof delugeConnectionSettingsSchema>;
+export type DelugeConnectionSettings = zodInfer<typeof delugeConnectionSettingsSchema>;
 
-const qBittorrentConnectionSettingsSchema = z.object({
-  client: z.literal('qBittorrent'),
-  type: z.literal('web'),
-  version: z.literal(1),
-  url: z.string().url(),
-  username: z.string(),
-  password: z.string(),
+const qBittorrentConnectionSettingsSchema = object({
+  client: literal('qBittorrent'),
+  type: literal('web'),
+  version: literal(1),
+  url: string().url(),
+  username: string(),
+  password: string(),
 });
 
-export type QBittorrentConnectionSettings = z.infer<typeof qBittorrentConnectionSettingsSchema>;
+export type QBittorrentConnectionSettings = zodInfer<typeof qBittorrentConnectionSettingsSchema>;
 
-const rTorrentTCPConnectionSettingsSchema = z.object({
-  client: z.literal('rTorrent'),
-  type: z.literal('tcp'),
-  version: z.literal(1),
-  host: z.string(),
-  port: z.number(),
+const rTorrentTCPConnectionSettingsSchema = object({
+  client: literal('rTorrent'),
+  type: literal('tcp'),
+  version: literal(1),
+  host: string(),
+  port: number(),
 });
 
-export type RTorrentTCPConnectionSettings = z.infer<typeof rTorrentTCPConnectionSettingsSchema>;
+export type RTorrentTCPConnectionSettings = zodInfer<typeof rTorrentTCPConnectionSettingsSchema>;
 
-const rTorrentSocketConnectionSettingsSchema = z.object({
-  client: z.literal('rTorrent'),
-  type: z.literal('socket'),
-  version: z.literal(1),
-  socket: z.string(),
+const rTorrentSocketConnectionSettingsSchema = object({
+  client: literal('rTorrent'),
+  type: literal('socket'),
+  version: literal(1),
+  socket: string(),
 });
 
-export type RTorrentSocketConnectionSettings = z.infer<typeof rTorrentSocketConnectionSettingsSchema>;
+export type RTorrentSocketConnectionSettings = zodInfer<typeof rTorrentSocketConnectionSettingsSchema>;
 
-const rTorrentConnectionSettingsSchema = z.union([
+const rTorrentConnectionSettingsSchema = union([
   rTorrentTCPConnectionSettingsSchema,
   rTorrentSocketConnectionSettingsSchema,
 ]);
 
-export type RTorrentConnectionSettings = z.infer<typeof rTorrentConnectionSettingsSchema>;
+export type RTorrentConnectionSettings = zodInfer<typeof rTorrentConnectionSettingsSchema>;
 
-const transmissionConnectionSettingsSchema = z.object({
-  client: z.literal('Transmission'),
-  type: z.literal('web'),
-  version: z.literal(1),
-  url: z.string().url(),
-  username: z.string(),
-  password: z.string(),
+const transmissionConnectionSettingsSchema = object({
+  client: literal('Transmission'),
+  type: literal('web'),
+  version: literal(1),
+  url: string().url(),
+  username: string(),
+  password: string(),
 });
 
-export type TransmissionConnectionSettings = z.infer<typeof transmissionConnectionSettingsSchema>;
+export type TransmissionConnectionSettings = zodInfer<typeof transmissionConnectionSettingsSchema>;
 
-export const clientConnectionSettingsSchema = z.union([
+export const clientConnectionSettingsSchema = union([
   qBittorrentConnectionSettingsSchema,
   rTorrentConnectionSettingsSchema,
 ]);
 
-export type ClientConnectionSettings = z.infer<typeof clientConnectionSettingsSchema>;
-
-export const SUPPORTED_CLIENTS: Array<ClientConnectionSettings['client']> = ['qBittorrent', 'rTorrent'];
+export type ClientConnectionSettings = zodInfer<typeof clientConnectionSettingsSchema>;

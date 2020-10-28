@@ -4,7 +4,7 @@ import Datastore from 'nedb';
 import fs from 'fs';
 import path from 'path';
 
-import {AccessLevel} from '../../shared/schema/Auth';
+import {AccessLevel} from '../../shared/schema/constants/Auth';
 
 import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
 

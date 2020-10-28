@@ -1,4 +1,4 @@
-import {AccessLevel} from '../../../shared/schema/Auth';
+import {AccessLevel} from '../../../shared/schema/constants/Auth';
 import Users from '../../models/Users';
 
 import type {Credentials} from '../../../shared/schema/Auth';

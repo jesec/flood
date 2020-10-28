@@ -1,6 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 
-import {AccessLevel} from '@shared/schema/Auth';
+import {AccessLevel} from '@shared/schema/constants/Auth';
 
 import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/schema/api/auth';
 import type {Credentials} from '@shared/schema/Auth';

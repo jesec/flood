@@ -1,6 +1,6 @@
 import {makeAutoObservable} from 'mobx';
 
-import {AuthVerificationPreloadConfigs} from '@shared/schema/api/auth';
+import type {AuthVerificationPreloadConfigs} from '@shared/schema/api/auth';
 
 class ConfigStore {
   baseURI = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/') + 1);

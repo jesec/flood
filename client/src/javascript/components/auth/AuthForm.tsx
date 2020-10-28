@@ -1,7 +1,7 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import React from 'react';
 
-import {AccessLevel} from '@shared/schema/Auth';
+import {AccessLevel} from '@shared/schema/constants/Auth';
 
 import type {Credentials} from '@shared/schema/Auth';
 

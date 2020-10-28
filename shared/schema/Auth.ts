@@ -1,19 +1,16 @@
-import * as z from 'zod';
+import {nativeEnum, object, string} from 'zod';
+import type {infer as zodInfer} from 'zod';
 
+import {AccessLevel} from './constants/Auth';
 import {clientConnectionSettingsSchema} from './ClientConnectionSettings';
 
-export enum AccessLevel {
-  USER = 5,
-  ADMINISTRATOR = 10,
-}
-
-export const credentialsSchema = z.object({
-  username: z.string(),
-  password: z.string(),
+export const credentialsSchema = object({
+  username: string(),
+  password: string(),
   client: clientConnectionSettingsSchema,
-  level: z.nativeEnum(AccessLevel),
+  level: nativeEnum(AccessLevel),
 });
 
-export type Credentials = z.infer<typeof credentialsSchema>;
+export type Credentials = zodInfer<typeof credentialsSchema>;
 
 export type UserInDatabase = Required<Credentials> & {_id: string};
