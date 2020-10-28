@@ -140,13 +140,19 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "密码不能为空。"
     }
   ],
   "auth.error.username.empty": [
     {
       "type": 0,
       "value": "用户名不能为空"
+    }
+  ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
     }
   ],
   "auth.log.in": [
@@ -164,7 +170,7 @@
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "登录您的帐户。"
     }
   ],
   "auth.message.not.admin": [
@@ -206,7 +212,7 @@
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "下载"
     }
   ],
   "button.new": [
@@ -254,7 +260,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "无法连接到客户端"
     }
   ],
   "connection-interruption.verification-error": [
@@ -278,55 +284,55 @@
   "connection.settings.client.select": [
     {
       "type": 0,
-      "value": "Client"
+      "value": "客户端："
     }
   ],
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "连接设置不能为空。"
     }
   ],
   "connection.settings.qbittorrent": [
     {
       "type": 0,
-      "value": "qBittorrent"
+      "value": "qBitTorrent"
     }
   ],
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "密码"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "密码"
     }
   ],
   "connection.settings.qbittorrent.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "网址"
     }
   ],
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "qBittorrent Web API 的 URL"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "用户名"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "用户名"
     }
   ],
   "connection.settings.rtorrent": [
@@ -338,43 +344,43 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "主机"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "主机名或IP"
     }
   ],
   "connection.settings.rtorrent.port": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "端口"
     }
   ],
   "connection.settings.rtorrent.port.input.placeholder": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "端口"
     }
   ],
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "路径"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "套接字路径"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "连接类型"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -392,7 +398,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "无法连接到客户端。请更新连接设置。"
     }
   ],
   "connectivity.modal.title": [
@@ -404,31 +410,31 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "通知"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "种子列表"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "种子分类"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "数据传输历史"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "数据传输速率详细信息"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -464,7 +470,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "测试匹配模式"
     }
   ],
   "feeds.exclude": [
@@ -494,7 +500,7 @@
   "feeds.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "间隔"
     }
   ],
   "feeds.label": [
@@ -536,7 +542,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "没有匹配搜索词的项目。"
     }
   ],
   "feeds.no.rules.defined": [
@@ -560,7 +566,7 @@
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "搜索词"
     }
   ],
   "feeds.select.feed": [
@@ -608,7 +614,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "测试匹配模式"
     }
   ],
   "feeds.time.day": [
@@ -644,7 +650,7 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "间隔必须是一个正整数。"
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -698,7 +704,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "发生未知错误。请重试。"
     }
   ],
   "filesystem.fetching": [
@@ -710,7 +716,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "父目录"
     }
   ],
   "filter.all": [
@@ -758,7 +764,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "做种中"
     }
   ],
   "filter.status.stopped": [
@@ -818,7 +824,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "发生未知错误"
     }
   ],
   "general.of": [
@@ -837,6 +843,12 @@
     {
       "type": 0,
       "value": "自动"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -872,7 +884,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "新闻源排队了"
     }
   ],
   "notification.showing": [
@@ -1202,7 +1214,7 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "上下文菜单项"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1226,7 +1238,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "显示"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1304,13 +1316,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "下载"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "上传"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1334,7 +1346,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "免费的"
     }
   ],
   "status.diskusage.title": [
@@ -1346,13 +1358,13 @@
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "总计"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "已使用"
     }
   ],
   "torrent.list.peers": [
@@ -1384,13 +1396,13 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "可选的 cookie-name=cookie值"
     }
   ],
   "torrents.add.cookies.label": [
     {
       "type": 0,
-      "value": "Cookies"
+      "value": "Cookie"
     }
   ],
   "torrents.add.destination.label": [
@@ -1420,7 +1432,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "创建"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1468,67 +1480,67 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "种子的可选基础文件或目录名称"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "基本名称"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "种子文件中的可选评论"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "评论"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "信息哈希中的可选源项"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "信息来源"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "非公开的"
     }
   ],
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "来源"
     }
   ],
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Flood中的标签。没有添加到创建种子。"
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "追踪器 URL"
     }
   ],
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "追踪器"
     }
   ],
   "torrents.destination.base_path": [
@@ -1540,7 +1552,7 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "已完成"
     }
   ],
   "torrents.details.actions.pause": [
@@ -1636,7 +1648,7 @@
   "torrents.details.general.hash": [
     {
       "type": 0,
-      "value": "Hash"
+      "value": "哈希"
     }
   ],
   "torrents.details.general.heading.general": [
@@ -1654,7 +1666,7 @@
   "torrents.details.general.heading.tracker": [
     {
       "type": 0,
-      "value": "Tracker"
+      "value": "追踪器"
     }
   ],
   "torrents.details.general.heading.transfer": [
@@ -1800,7 +1812,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "无法连接到客户端。"
     }
   ],
   "torrents.list.clear.filters": [
@@ -1824,7 +1836,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "下载"
     }
   ],
   "torrents.list.context.move": [
@@ -1860,7 +1872,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "设置追踪器"
     }
   ],
   "torrents.list.context.start": [
@@ -1878,7 +1890,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "将文件拖放到此处以添加它们。"
     }
   ],
   "torrents.list.no.torrents": [
@@ -1968,7 +1980,7 @@
   "torrents.properties.hash": [
     {
       "type": 0,
-      "value": "Hash"
+      "value": "哈希"
     }
   ],
   "torrents.properties.ignore.schedule": [
@@ -1992,7 +2004,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "对等点"
     }
   ],
   "torrents.properties.percentage": [
@@ -2010,7 +2022,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "种子"
     }
   ],
   "torrents.properties.size": [
@@ -2034,7 +2046,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "追踪器"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2094,25 +2106,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "设置追踪器"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "输入追踪器"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "设置追踪器"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "正在加载追踪器..."
     }
   ],
   "torrents.sort.title": [
@@ -2136,7 +2148,7 @@
   "unit.size.kilobyte": [
     {
       "type": 0,
-      "value": "kB"
+      "value": "千B"
     }
   ],
   "unit.size.megabyte": [
@@ -2158,7 +2170,7 @@
     },
     {
       "type": 0,
-      "value": "/s"
+      "value": "/秒"
     }
   ],
   "unit.time.day": [
@@ -2201,28 +2213,6 @@
     {
       "type": 0,
       "value": "年"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

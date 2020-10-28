@@ -308,13 +308,19 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "Lösenordet kan inte vara tomt."
     }
   ],
   "auth.error.username.empty": [
     {
       "type": 0,
       "value": "Användarnamnet får inte vara tomt."
+    }
+  ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
     }
   ],
   "auth.log.in": [
@@ -332,7 +338,7 @@
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "Logga in på ditt konto."
     }
   ],
   "auth.message.not.admin": [
@@ -374,7 +380,7 @@
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Hämta"
     }
   ],
   "button.new": [
@@ -422,7 +428,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "Kan inte ansluta till klienten"
     }
   ],
   "connection-interruption.verification-error": [
@@ -446,13 +452,13 @@
   "connection.settings.client.select": [
     {
       "type": 0,
-      "value": "Client"
+      "value": "Klient"
     }
   ],
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "Anslutningsinställningar kan inte vara tomt."
     }
   ],
   "connection.settings.qbittorrent": [
@@ -464,13 +470,13 @@
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Lösenord"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Lösenord"
     }
   ],
   "connection.settings.qbittorrent.url": [
@@ -482,19 +488,19 @@
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "URL till qBittorrent Web API"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Användarnamn"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Användarnamn"
     }
   ],
   "connection.settings.rtorrent": [
@@ -506,13 +512,13 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Värd"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "Värdnamn eller IP"
     }
   ],
   "connection.settings.rtorrent.port": [
@@ -530,19 +536,19 @@
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "Sökväg"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "Sökväg till uttag"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "Typ av anslutning"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -560,7 +566,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "Kan inte ansluta till klienten. Uppdatera anslutningsinställningarna."
     }
   ],
   "connectivity.modal.title": [
@@ -572,31 +578,31 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Aviseringar"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "Torrent lista"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "Torrent Taxonomi"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "Historik över dataöverföring"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "Detaljer för dataöverföringshastighet"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -632,7 +638,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Testa matchande mönster"
     }
   ],
   "feeds.exclude": [
@@ -662,7 +668,7 @@
   "feeds.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "Intervall"
     }
   ],
   "feeds.label": [
@@ -730,7 +736,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "Inga objekt matchar söktermen."
     }
   ],
   "feeds.no.rules.defined": [
@@ -754,7 +760,7 @@
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Sök termin"
     }
   ],
   "feeds.select.feed": [
@@ -802,7 +808,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Testa matchande mönster"
     }
   ],
   "feeds.time.day": [
@@ -838,7 +844,7 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "Intervallet måste vara ett positivt heltal."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -892,7 +898,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "Ett okänt fel inträffade. Försök igen."
     }
   ],
   "filesystem.fetching": [
@@ -904,7 +910,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "Överordnad katalog"
     }
   ],
   "filter.all": [
@@ -1012,7 +1018,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "Ett okänt fel uppstod"
     }
   ],
   "general.of": [
@@ -1031,6 +1037,12 @@
     {
       "type": 0,
       "value": "Automatisk"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -1066,7 +1078,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "Feed objekt köad"
     }
   ],
   "notification.showing": [
@@ -1396,7 +1408,7 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "Kontext menyobjekt"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1420,7 +1432,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "Visa"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1498,13 +1510,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "LADDA NER"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "LADDA UPP"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1528,7 +1540,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "Gratis"
     }
   ],
   "status.diskusage.title": [
@@ -1540,13 +1552,13 @@
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "Totalt"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "Använt"
     }
   ],
   "torrent.list.peers": [
@@ -1586,7 +1598,7 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "Valfritt cookie-namn=cookie-värde"
     }
   ],
   "torrents.add.cookies.label": [
@@ -1622,7 +1634,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "Skapa"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1670,67 +1682,67 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "Valfri basfil eller katalognamn för torrent"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "Grundnamn"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "Valfri kommentar i torrent-fil"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Kommentar"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "Valfri källpost i infohash"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "Info Källa"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Privat"
     }
   ],
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "Källa"
     }
   ],
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Taggar i översvämning. Ej tillagd till skapad torrent."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "Spårare URL"
     }
   ],
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Spårare"
     }
   ],
   "torrents.destination.base_path": [
@@ -1742,7 +1754,7 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "Slutförd"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2038,7 +2050,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "Kan inte ansluta till klienten."
     }
   ],
   "torrents.list.clear.filters": [
@@ -2062,7 +2074,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Hämta"
     }
   ],
   "torrents.list.context.move": [
@@ -2098,7 +2110,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Ange spårare"
     }
   ],
   "torrents.list.context.start": [
@@ -2116,7 +2128,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "Släpp filer här för att lägga till dem."
     }
   ],
   "torrents.list.no.torrents": [
@@ -2230,7 +2242,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Klienter"
     }
   ],
   "torrents.properties.percentage": [
@@ -2248,7 +2260,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Frön"
     }
   ],
   "torrents.properties.size": [
@@ -2272,7 +2284,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Spårare"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2366,25 +2378,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Ange spårare"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Ange en tracker"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Ange spårare"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Laddar spårare..."
     }
   ],
   "torrents.sort.title": [
@@ -2473,28 +2485,6 @@
     {
       "type": 0,
       "value": "yr"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

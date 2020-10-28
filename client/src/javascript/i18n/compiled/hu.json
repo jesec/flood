@@ -317,6 +317,12 @@
       "value": "A felhasználónév nem lehet üres."
     }
   ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
+    }
+  ],
   "auth.log.in": [
     {
       "type": 0,
@@ -1034,6 +1040,12 @@
     {
       "type": 0,
       "value": "Automatikus"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -2489,28 +2501,6 @@
     {
       "type": 0,
       "value": "év"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

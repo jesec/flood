@@ -209,6 +209,12 @@
       "value": "crwdns2936:0crwdne2936:0"
     }
   ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "crwdns3648:0crwdne3648:0"
+    }
+  ],
   "auth.log.in": [
     {
       "type": 0,
@@ -905,6 +911,12 @@
     {
       "type": 0,
       "value": "crwdns3498:0crwdne3498:0"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "crwdns3646:0crwdne3646:0"
     }
   ],
   "mediainfo.execError": [
@@ -2349,28 +2361,6 @@
     {
       "type": 0,
       "value": "crwdns3268:0crwdne3268:0"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "crwdns3500:0"
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": "crwdnd3500:0"
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": "crwdne3500:0"
     }
   ]
 }

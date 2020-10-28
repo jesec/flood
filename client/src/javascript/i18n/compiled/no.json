@@ -292,13 +292,19 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "Passord kan ikke være tomt."
     }
   ],
   "auth.error.username.empty": [
     {
       "type": 0,
       "value": "Brukernavnfeltet kan ikke være tomt."
+    }
+  ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
     }
   ],
   "auth.log.in": [
@@ -316,7 +322,7 @@
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "Logg inn på din konto."
     }
   ],
   "auth.message.not.admin": [
@@ -358,7 +364,7 @@
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Nedlasting"
     }
   ],
   "button.new": [
@@ -406,7 +412,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "Kan ikke koble til klienten"
     }
   ],
   "connection-interruption.verification-error": [
@@ -430,13 +436,13 @@
   "connection.settings.client.select": [
     {
       "type": 0,
-      "value": "Client"
+      "value": "Klient"
     }
   ],
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "Tilkoblingsinnstillinger kan ikke være tomt."
     }
   ],
   "connection.settings.qbittorrent": [
@@ -448,37 +454,37 @@
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Passord"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Passord"
     }
   ],
   "connection.settings.qbittorrent.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "Nettadresse"
     }
   ],
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "URL-adresse til qBittorrent Web API"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Brukernavn"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Brukernavn"
     }
   ],
   "connection.settings.rtorrent": [
@@ -490,13 +496,13 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Vert"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "Vertsnavn eller IP"
     }
   ],
   "connection.settings.rtorrent.port": [
@@ -514,19 +520,19 @@
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "Sti"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "Sti til stien"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "Tilkobling type"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -544,7 +550,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "Kan ikke koble til klienten. Oppdater tilkoblingsinnstillingene."
     }
   ],
   "connectivity.modal.title": [
@@ -556,31 +562,31 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Varsler"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "Liste over torrent"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "Torrent taksonomi"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "Data overførings historikk"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "Detaljer for overføring av data"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -616,7 +622,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Test samsvarsmønster"
     }
   ],
   "feeds.exclude": [
@@ -646,7 +652,7 @@
   "feeds.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "Intervall"
     }
   ],
   "feeds.label": [
@@ -714,7 +720,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "Ingen elementer samsvarende med søkebegrep."
     }
   ],
   "feeds.no.rules.defined": [
@@ -738,7 +744,7 @@
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Søk etter uttrykk"
     }
   ],
   "feeds.select.feed": [
@@ -786,7 +792,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Test samsvarsmønster"
     }
   ],
   "feeds.time.day": [
@@ -822,7 +828,7 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "Intervallet må være et positivt heltall."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -876,7 +882,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "Det oppstod en ukjent feil. Prøv på nytt."
     }
   ],
   "filesystem.fetching": [
@@ -888,7 +894,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "Overordnet mappe"
     }
   ],
   "filter.all": [
@@ -936,7 +942,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "Deler"
     }
   ],
   "filter.status.stopped": [
@@ -996,7 +1002,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "En ukjent feil har oppstått"
     }
   ],
   "general.of": [
@@ -1015,6 +1021,12 @@
     {
       "type": 0,
       "value": "Automatisk"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -1050,7 +1062,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "Strøm enhet i kø"
     }
   ],
   "notification.showing": [
@@ -1380,7 +1392,7 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "Sammenhengende menyelementer"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1404,7 +1416,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "Vis"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1482,13 +1494,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "LAST NED"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "LAST OPP"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1512,7 +1524,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "Gratis"
     }
   ],
   "status.diskusage.title": [
@@ -1524,13 +1536,13 @@
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "Totalt"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "Brukt"
     }
   ],
   "torrent.list.peers": [
@@ -1570,13 +1582,13 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "Valgfri cookie-name=cookie-value"
     }
   ],
   "torrents.add.cookies.label": [
     {
       "type": 0,
-      "value": "Cookies"
+      "value": "Informasjonskapsler"
     }
   ],
   "torrents.add.destination.label": [
@@ -1606,7 +1618,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "Opprett"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1654,67 +1666,67 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "Valgfri basisfil eller mappenavn på torrenten"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "Navn på database"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "Valgfri kommentar i torrentfil"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Kommentar"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "Valgfri kildeoppføring i infohash"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "Info kilde"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Privat"
     }
   ],
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "Kilde"
     }
   ],
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Etiketter i flommen. Ikke lagt til i opprettet torrent."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "Sporingsagent URL"
     }
   ],
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Sporere"
     }
   ],
   "torrents.destination.base_path": [
@@ -1726,7 +1738,7 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "Fullført"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2022,7 +2034,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "Kan ikke koble til annonsøren."
     }
   ],
   "torrents.list.clear.filters": [
@@ -2046,7 +2058,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Nedlasting"
     }
   ],
   "torrents.list.context.move": [
@@ -2082,7 +2094,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Angi trackere"
     }
   ],
   "torrents.list.context.start": [
@@ -2100,7 +2112,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "Slipp filer her for å legge dem til."
     }
   ],
   "torrents.list.no.torrents": [
@@ -2214,7 +2226,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Likemenn"
     }
   ],
   "torrents.properties.percentage": [
@@ -2232,7 +2244,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Frø"
     }
   ],
   "torrents.properties.size": [
@@ -2256,7 +2268,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Sporere"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2350,25 +2362,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Angi trackere"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Angi en tracker"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Angi trackere"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Laster sporere..."
     }
   ],
   "torrents.sort.title": [
@@ -2457,28 +2469,6 @@
     {
       "type": 0,
       "value": "yr"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

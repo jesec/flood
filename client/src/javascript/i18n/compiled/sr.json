@@ -329,6 +329,12 @@
       "value": "Username cannot be empty."
     }
   ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
+    }
+  ],
   "auth.log.in": [
     {
       "type": 0,
@@ -1043,6 +1049,12 @@
     {
       "type": 0,
       "value": "Automatic"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -2485,28 +2497,6 @@
     {
       "type": 0,
       "value": "yr"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

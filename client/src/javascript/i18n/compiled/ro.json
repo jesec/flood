@@ -296,13 +296,19 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "Parola nu poate fi goală."
     }
   ],
   "auth.error.username.empty": [
     {
       "type": 0,
       "value": "Numele de utilizator nu poate fi gol."
+    }
+  ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
     }
   ],
   "auth.log.in": [
@@ -320,7 +326,7 @@
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "Conectează-te la contul tău."
     }
   ],
   "auth.message.not.admin": [
@@ -362,7 +368,7 @@
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Descărcare"
     }
   ],
   "button.new": [
@@ -410,7 +416,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "Nu se poate conecta la client"
     }
   ],
   "connection-interruption.verification-error": [
@@ -440,7 +446,7 @@
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "Setările conexiunii nu pot fi goale."
     }
   ],
   "connection.settings.qbittorrent": [
@@ -452,13 +458,13 @@
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Parolă"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Parolă"
     }
   ],
   "connection.settings.qbittorrent.url": [
@@ -470,19 +476,19 @@
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "URL către qBittorrent Web API"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Nume"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Nume"
     }
   ],
   "connection.settings.rtorrent": [
@@ -494,43 +500,43 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Gazdă"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "Nume gazdă sau IP"
     }
   ],
   "connection.settings.rtorrent.port": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "Portul"
     }
   ],
   "connection.settings.rtorrent.port.input.placeholder": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "Portul"
     }
   ],
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "Cale"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "Calea către socket"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "Tipul conexiunii"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -548,7 +554,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "Nu se poate conecta la client. Actualizați setările conexiunii."
     }
   ],
   "connectivity.modal.title": [
@@ -560,31 +566,31 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "Notificări"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "Lista de Torente"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "Taxonomie Torrent"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "Istoricul transferurilor de date"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "Detaliile ratei transferului de date"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -620,7 +626,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Testează modelul meciului"
     }
   ],
   "feeds.exclude": [
@@ -718,7 +724,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "Nu există elemente care să corespundă termenului de căutare."
     }
   ],
   "feeds.no.rules.defined": [
@@ -742,7 +748,7 @@
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "Termenul de căutare"
     }
   ],
   "feeds.select.feed": [
@@ -790,7 +796,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Testează modelul meciului"
     }
   ],
   "feeds.time.day": [
@@ -826,7 +832,7 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "Intervalul trebuie să fie un număr întreg pozitiv."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -880,7 +886,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "A apărut o eroare necunoscută. Te rugăm să încerci din nou."
     }
   ],
   "filesystem.fetching": [
@@ -892,7 +898,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "Director Părinte"
     }
   ],
   "filter.all": [
@@ -1000,7 +1006,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "A apărut o eroare necunoscută"
     }
   ],
   "general.of": [
@@ -1019,6 +1025,12 @@
     {
       "type": 0,
       "value": "Automat"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -1054,7 +1066,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "Element Feed în așteptare"
     }
   ],
   "notification.showing": [
@@ -1384,7 +1396,7 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "Elemente meniu contextual"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1408,7 +1420,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "Afișare"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1486,13 +1498,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "DESCARCĂ"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "ÎNCĂRCARE"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1516,7 +1528,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "Gratuit"
     }
   ],
   "status.diskusage.title": [
@@ -1534,7 +1546,7 @@
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "Utilizat"
     }
   ],
   "torrent.list.peers": [
@@ -1574,13 +1586,13 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "Optional cookie-name=valoarea cookie-value"
     }
   ],
   "torrents.add.cookies.label": [
     {
       "type": 0,
-      "value": "Cookies"
+      "value": "Cookie-uri"
     }
   ],
   "torrents.add.destination.label": [
@@ -1610,7 +1622,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "Crează"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1658,67 +1670,67 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "Nume opțional de bază sau director al torentului"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "Nume de bază"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "Comentariu opțional în fișierul torent"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Comentariu"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "Intrare sursă opțională în infohash"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "Sursă de informații"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Privat"
     }
   ],
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "Sursa"
     }
   ],
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Etichete în inundații. Nu s-a adăugat la torentul creat."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "URL urmaritor"
     }
   ],
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Trackeri"
     }
   ],
   "torrents.destination.base_path": [
@@ -1730,7 +1742,7 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "Completat"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2026,7 +2038,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "Nu se poate conecta la client."
     }
   ],
   "torrents.list.clear.filters": [
@@ -2050,7 +2062,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "Descărcare"
     }
   ],
   "torrents.list.context.move": [
@@ -2086,7 +2098,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Setează Trackeri"
     }
   ],
   "torrents.list.context.start": [
@@ -2104,7 +2116,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "Plasați fișierele aici pentru a le adăuga."
     }
   ],
   "torrents.list.no.torrents": [
@@ -2218,7 +2230,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "Parteneri"
     }
   ],
   "torrents.properties.percentage": [
@@ -2236,7 +2248,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "Semințe"
     }
   ],
   "torrents.properties.size": [
@@ -2260,7 +2272,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Trackeri"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2354,25 +2366,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Setează Trackeri"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Introduceți un tracker"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Setează Trackeri"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Se încarcă trackerele..."
     }
   ],
   "torrents.sort.title": [
@@ -2461,28 +2473,6 @@
     {
       "type": 0,
       "value": "yr"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }

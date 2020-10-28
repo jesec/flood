@@ -296,13 +296,19 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "كلمة المرور لا يمكن أن تكون فارغة."
     }
   ],
   "auth.error.username.empty": [
     {
       "type": 0,
       "value": "اسم المستخدم لا يمكن أن يكون فارغاً."
+    }
+  ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Clear"
     }
   ],
   "auth.log.in": [
@@ -320,7 +326,7 @@
   "auth.login.intro": [
     {
       "type": 0,
-      "value": "Log in to your account."
+      "value": "تسجيل الدخول إلى حسابك."
     }
   ],
   "auth.message.not.admin": [
@@ -362,7 +368,7 @@
   "button.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "تنزيل"
     }
   ],
   "button.new": [
@@ -410,7 +416,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "لا يمكن الاتصال بالعميل"
     }
   ],
   "connection-interruption.verification-error": [
@@ -434,13 +440,13 @@
   "connection.settings.client.select": [
     {
       "type": 0,
-      "value": "Client"
+      "value": "العميل"
     }
   ],
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "لا يمكن أن تكون إعدادات الاتصال فارغة."
     }
   ],
   "connection.settings.qbittorrent": [
@@ -452,85 +458,85 @@
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "كلمة المرور"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "كلمة المرور"
     }
   ],
   "connection.settings.qbittorrent.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "الرابط"
     }
   ],
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "عنوان URL ل qBittorrent Web API"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "اسم المستخدم"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "اسم المستخدم"
     }
   ],
   "connection.settings.rtorrent": [
     {
       "type": 0,
-      "value": "rTorrent"
+      "value": "تورنت"
     }
   ],
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "المضيف"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "اسم المضيف أو IP"
     }
   ],
   "connection.settings.rtorrent.port": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "المنفذ"
     }
   ],
   "connection.settings.rtorrent.port.input.placeholder": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "المنفذ"
     }
   ],
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "المسار"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "المسار إلى المقبس"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "نوع الاتصال"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -548,7 +554,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "لا يمكن الاتصال بالعميل. الرجاء تحديث إعدادات الاتصال."
     }
   ],
   "connectivity.modal.title": [
@@ -560,31 +566,31 @@
   "dependency.loading.notifications": [
     {
       "type": 0,
-      "value": "Notifications"
+      "value": "الإشعارات"
     }
   ],
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Torrent List"
+      "value": "قائمة التورينت"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Torrent Taxonomy"
+      "value": "تصنيف تورنت"
     }
   ],
   "dependency.loading.transfer.history": [
     {
       "type": 0,
-      "value": "Data Transfer History"
+      "value": "سجل نقل البيانات"
     }
   ],
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Data Transfer Rate Details"
+      "value": "تفاصيل معدل نقل البيانات"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -620,7 +626,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "اختبار نمط المطابقة"
     }
   ],
   "feeds.exclude": [
@@ -650,7 +656,7 @@
   "feeds.interval": [
     {
       "type": 0,
-      "value": "Interval"
+      "value": "الفاصل"
     }
   ],
   "feeds.label": [
@@ -718,7 +724,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "No items matching search term."
+      "value": "لا توجد عناصر مطابقة لمصطلح البحث."
     }
   ],
   "feeds.no.rules.defined": [
@@ -742,7 +748,7 @@
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Search term"
+      "value": "مصطلح البحث"
     }
   ],
   "feeds.select.feed": [
@@ -790,7 +796,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "اختبار نمط المطابقة"
     }
   ],
   "feeds.time.day": [
@@ -826,7 +832,7 @@
   "feeds.validation.interval.not.positive": [
     {
       "type": 0,
-      "value": "The interval must be a positive integer."
+      "value": "الفاصل الزمني يجب أن يكون عددا صحيحا إيجابيا."
     }
   ],
   "feeds.validation.invalid.regular.expression": [
@@ -880,7 +886,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "حدث خطأ غير معروف. الرجاء المحاولة مرة أخرى."
     }
   ],
   "filesystem.fetching": [
@@ -892,7 +898,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Parent Directory"
+      "value": "الدليل الأصلي"
     }
   ],
   "filter.all": [
@@ -940,7 +946,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "البذور"
     }
   ],
   "filter.status.stopped": [
@@ -1000,7 +1006,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "حدث خطأ غير معروف"
     }
   ],
   "general.of": [
@@ -1019,6 +1025,12 @@
     {
       "type": 0,
       "value": "تلقائي"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Start to translate"
     }
   ],
   "mediainfo.execError": [
@@ -1054,7 +1066,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "قائمة انتظار عنصر التغذية"
     }
   ],
   "notification.showing": [
@@ -1384,7 +1396,7 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "عناصر قائمة السياق"
     }
   ],
   "settings.ui.displayed.details": [
@@ -1408,7 +1420,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "إظهار"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1486,13 +1498,13 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DOWNLOAD"
+      "value": "تحميل"
     }
   ],
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "UPLOAD"
+      "value": "تحميل"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1516,7 +1528,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Free"
+      "value": "مجاني"
     }
   ],
   "status.diskusage.title": [
@@ -1528,13 +1540,13 @@
   "status.diskusage.total": [
     {
       "type": 0,
-      "value": "Total"
+      "value": "المجموع"
     }
   ],
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Used"
+      "value": "مستخدم"
     }
   ],
   "torrent.list.peers": [
@@ -1574,13 +1586,13 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "قيمة cookie-name=cookie-value"
     }
   ],
   "torrents.add.cookies.label": [
     {
       "type": 0,
-      "value": "Cookies"
+      "value": "الكعكات"
     }
   ],
   "torrents.add.destination.label": [
@@ -1610,7 +1622,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "إنشاء"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1658,67 +1670,67 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "اسم ملف أساسي أو دليل تورنت اختياري"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "اسم القاعدة"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "التعليق الاختياري في ملف تورنت"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "تعليق"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "إدخال المصدر الاختياري في Infohash"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "مصدر المعلومات"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "خاص"
     }
   ],
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "المصدر"
     }
   ],
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "العلامات في الفيضان. غير مضافة إلى التورنت التي تم إنشاؤها."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "رابط التتبع"
     }
   ],
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "المتتبعون"
     }
   ],
   "torrents.destination.base_path": [
@@ -1730,7 +1742,7 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "مكتمل"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2026,7 +2038,7 @@
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "لا يمكن الاتصال بالعميل."
     }
   ],
   "torrents.list.clear.filters": [
@@ -2050,7 +2062,7 @@
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Download"
+      "value": "تنزيل"
     }
   ],
   "torrents.list.context.move": [
@@ -2086,7 +2098,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "تعيين التتبع"
     }
   ],
   "torrents.list.context.start": [
@@ -2104,7 +2116,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "إسقاط الملفات هنا لإضافتها."
     }
   ],
   "torrents.list.no.torrents": [
@@ -2218,7 +2230,7 @@
   "torrents.properties.peers": [
     {
       "type": 0,
-      "value": "Peers"
+      "value": "أقران"
     }
   ],
   "torrents.properties.percentage": [
@@ -2236,7 +2248,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Seeds"
+      "value": "بذور"
     }
   ],
   "torrents.properties.size": [
@@ -2260,7 +2272,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "المتتبعون"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2354,25 +2366,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "تعيين التتبع"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "أدخل متتبع"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "تعيين التتبع"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "جاري تحميل التتبع..."
     }
   ],
   "torrents.sort.title": [
@@ -2461,28 +2473,6 @@
     {
       "type": 0,
       "value": "yr"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }
