@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';

@@ -1,6 +1,6 @@
-import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {Component} from 'react';
 import Dropzone from 'react-dropzone';
-import React from 'react';
+import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import CloseIcon from '../../icons/Close';
@@ -30,7 +30,7 @@ interface AddTorrentsByFileStates {
   isAddingTorrents: boolean;
 }
 
-class AddTorrentsByFile extends React.Component<WrappedComponentProps, AddTorrentsByFileStates> {
+class AddTorrentsByFile extends Component<WrappedComponentProps, AddTorrentsByFileStates> {
   formRef: Form | null = null;
 
   constructor(props: WrappedComponentProps) {

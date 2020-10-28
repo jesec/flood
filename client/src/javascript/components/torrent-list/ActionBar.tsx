@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
-import React from 'react';
+import {Component} from 'react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -19,7 +19,7 @@ import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
 @observer
-class ActionBar extends React.Component<WrappedComponentProps> {
+class ActionBar extends Component<WrappedComponentProps> {
   static handleAddTorrents() {
     UIActions.displayModal({id: 'add-torrents'});
   }

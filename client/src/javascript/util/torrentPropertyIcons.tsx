@@ -1,5 +1,3 @@
-import React from 'react';
-
 import CalendarCreatedIcon from '../components/icons/CalendarCreatedIcon';
 import CalendarIcon from '../components/icons/CalendarIcon';
 import ClockIcon from '../components/icons/ClockIcon';

@@ -1,4 +1,4 @@
-import React from 'react';
+import {PureComponent} from 'react';
 
 import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '../../../ui';
 import AddMini from '../../icons/AddMini';
@@ -27,7 +27,7 @@ interface TextboxRepeaterStates {
   textboxes: Array<{id: number; value: string}>;
 }
 
-export default class TextboxRepeater extends React.PureComponent<TextboxRepeaterProps, TextboxRepeaterStates> {
+export default class TextboxRepeater extends PureComponent<TextboxRepeaterProps, TextboxRepeaterStates> {
   idCounter = 0;
 
   constructor(props: TextboxRepeaterProps) {

@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import PriorityLevels from '../../../constants/PriorityLevels';
 
@@ -21,7 +21,7 @@ interface PriorityMeterStates {
 
 const METHODS_TO_BIND = ['handleClick'] as const;
 
-class PriorityMeter extends React.Component<PriorityMeterProps, PriorityMeterStates> {
+class PriorityMeter extends Component<PriorityMeterProps, PriorityMeterStates> {
   constructor(props: PriorityMeterProps) {
     super(props);
 

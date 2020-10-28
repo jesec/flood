@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import {dispatchChangeEvent} from './util/forms';
 import FormRowItem from './FormRowItem';
@@ -26,7 +26,7 @@ interface ToggleInputStates {
   isActive: boolean;
 }
 
-class ToggleInput extends Component<ToggleInputProps, ToggleInputStates> {
+class ToggleInput extends React.Component<ToggleInputProps, ToggleInputStates> {
   inputRef: HTMLInputElement | null = null;
 
   static defaultProps = {

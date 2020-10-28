@@ -1,4 +1,4 @@
-import React from 'react';
+import {lazy, Component} from 'react';
 
 import ActionBar from '../torrent-list/ActionBar';
 import ApplicationContent from '../layout/ApplicationContent';
@@ -8,10 +8,10 @@ import FloodActions from '../../actions/FloodActions';
 import Sidebar from '../sidebar/Sidebar';
 import TorrentList from '../torrent-list/TorrentList';
 
-const Alerts = React.lazy(() => import('../alerts/Alerts'));
-const Modals = React.lazy(() => import('../modals/Modals'));
+const Alerts = lazy(() => import('../alerts/Alerts'));
+const Modals = lazy(() => import('../modals/Modals'));
 
-export default class TorrentClientOverview extends React.Component {
+export default class TorrentClientOverview extends Component {
   async componentDidMount() {
     FloodActions.startActivityStream();
   }

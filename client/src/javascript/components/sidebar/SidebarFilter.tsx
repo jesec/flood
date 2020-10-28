@@ -1,6 +1,6 @@
 import classnames from 'classnames';
+import {Component} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import Badge from '../general/Badge';
 
@@ -13,7 +13,7 @@ interface SidebarFilterProps extends WrappedComponentProps {
   handleClick: (slug: string) => void;
 }
 
-class SidebarFilter extends React.Component<SidebarFilterProps> {
+class SidebarFilter extends Component<SidebarFilterProps> {
   constructor(props: SidebarFilterProps) {
     super(props);
 

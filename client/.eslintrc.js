@@ -36,6 +36,8 @@ module.exports = {
     'no-console': [2, {allow: ['warn', 'error']}],
     'react/destructuring-assignment': 0,
     'react/jsx-props-no-spreading': 0,
+    'react/jsx-uses-react': 0,
+    'react/react-in-jsx-scope': 0,
     'react/static-property-placement': [2, 'static public field'],
   },
   settings: {

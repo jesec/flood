@@ -1,7 +1,7 @@
+import {Component} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {observable, runInAction} from 'mobx';
 import {observer} from 'mobx-react';
-import React from 'react';
 
 import {Form, FormRow, Textbox} from '../../../ui';
 import Modal from '../Modal';
@@ -18,7 +18,7 @@ interface SetTrackersModalStates {
 }
 
 @observer
-class SetTrackersModal extends React.Component<WrappedComponentProps, SetTrackersModalStates> {
+class SetTrackersModal extends Component<WrappedComponentProps, SetTrackersModalStates> {
   trackerURLs = observable.array<string>([]);
   formRef: Form | null = null;
 

@@ -1,5 +1,5 @@
-import React from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import * as React from 'react';
 
 import {SUPPORTED_CLIENTS} from '@shared/schema/constants/ClientConnectionSettings';
 

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React from 'react';
+import {Component} from 'react';
 
 import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
@@ -28,7 +28,7 @@ interface DirectoryTreeNodeStates {
 
 const METHODS_TO_BIND = ['handleDirectoryClick', 'handleDirectorySelection'] as const;
 
-class DirectoryTreeNode extends React.Component<DirectoryTreeNodeProps, DirectoryTreeNodeStates> {
+class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeNodeStates> {
   static defaultProps = {
     path: [],
     selectedItems: {},

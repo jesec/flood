@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import FadeIn from './FadeIn';
 import FormElementAddon from './FormElementAddon';
@@ -22,7 +22,7 @@ export type ButtonProps = Pick<React.ButtonHTMLAttributes<HTMLButtonElement>, 'd
   shrink?: boolean;
 };
 
-export default class Button extends Component<ButtonProps> {
+export default class Button extends React.Component<ButtonProps> {
   static defaultProps = {
     additionalClassNames: '',
     disabled: false,

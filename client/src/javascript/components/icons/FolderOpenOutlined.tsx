@@ -1,5 +1,3 @@
-import React from 'react';
-
 import BaseIcon from './BaseIcon';
 
 export default class FolderOpenOutlined extends BaseIcon {

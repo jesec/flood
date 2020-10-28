@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {useIntl} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import Checkmark from '../icons/Checkmark';
 import LoadingIndicator from './LoadingIndicator';

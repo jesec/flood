@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import TorrentListColumns, {TorrentListColumn} from '../../constants/TorrentListColumns';
 import SettingStore from '../../stores/SettingStore';

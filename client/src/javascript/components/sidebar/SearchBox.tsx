@@ -1,7 +1,7 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import classnames from 'classnames';
 import {reaction} from 'mobx';
-import React from 'react';
+import * as React from 'react';
 
 import Close from '../icons/Close';
 import Search from '../icons/Search';

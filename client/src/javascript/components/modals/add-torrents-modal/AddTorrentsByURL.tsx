@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
@@ -27,7 +27,7 @@ interface AddTorrentsByURLStates {
   urlTextboxes: Array<{id: number; value: string}>;
 }
 
-class AddTorrentsByURL extends React.Component<WrappedComponentProps, AddTorrentsByURLStates> {
+class AddTorrentsByURL extends Component<WrappedComponentProps, AddTorrentsByURLStates> {
   formRef: Form | null = null;
 
   constructor(props: WrappedComponentProps) {

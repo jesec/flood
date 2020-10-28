@@ -1,10 +1,10 @@
 import classnames from 'classnames';
+import {Component} from 'react';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import formatUtil from '@shared/util/formatUtil';
 import {observer} from 'mobx-react';
-import React from 'react';
 
 import type {TransferDirection} from '@shared/types/TransferData';
 
@@ -35,7 +35,7 @@ const icons = {
 };
 
 @observer
-class TransferRateDetails extends React.Component<TransferRateDetailsProps> {
+class TransferRateDetails extends Component<TransferRateDetailsProps> {
   getCurrentTransferRate(direction: TransferDirection, options: {showHoverDuration?: boolean} = {}) {
     const {inspectorPoint, intl} = this.props;
     const {transferSummary} = TransferDataStore;

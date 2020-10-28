@@ -1,5 +1,5 @@
 import {FormattedMessage, injectIntl} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 

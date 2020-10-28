@@ -1,5 +1,3 @@
-import React from 'react';
-
 import FeedsButton from './FeedsButton';
 import LogoutButton from './LogoutButton';
 import NotificationsButton from './NotificationsButton';

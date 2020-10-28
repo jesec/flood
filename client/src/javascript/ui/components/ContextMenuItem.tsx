@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 
-export default class ContextMenuItem extends PureComponent<{
+export default class ContextMenuItem extends React.PureComponent<{
   className?: string;
   onClick: React.MouseEventHandler<HTMLDivElement>;
 }> {

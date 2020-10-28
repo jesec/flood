@@ -1,5 +1,4 @@
 import {FormattedDate, FormattedMessage, FormattedNumber} from 'react-intl';
-import React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 

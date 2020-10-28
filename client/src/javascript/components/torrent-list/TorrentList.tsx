@@ -2,7 +2,7 @@ import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import Dropzone from 'react-dropzone';
 import {observer} from 'mobx-react';
 import {observable, reaction} from 'mobx';
-import React from 'react';
+import * as React from 'react';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 

@@ -1,6 +1,6 @@
 import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
-import React from 'react';
+import * as React from 'react';
 
 import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
 import CircleExclamationIcon from '../icons/CircleExclamationIcon';

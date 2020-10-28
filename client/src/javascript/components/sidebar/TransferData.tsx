@@ -1,6 +1,6 @@
 import {observer} from 'mobx-react';
-import React from 'react';
 import Measure from 'react-measure';
+import * as React from 'react';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
 import TransferRateDetails from './TransferRateDetails';

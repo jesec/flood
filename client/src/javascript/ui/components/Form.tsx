@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import {getDataFromForm, resetFormData} from './util/forms';
 
@@ -20,7 +20,7 @@ interface FormProps {
   }) => void;
 }
 
-class Form extends Component<FormProps> {
+class Form extends React.Component<FormProps> {
   formRef?: HTMLFormElement | null = null;
   componentDidMount() {
     if (this.formRef != null) {

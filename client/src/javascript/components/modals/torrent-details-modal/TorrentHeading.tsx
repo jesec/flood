@@ -1,8 +1,8 @@
 import {FormattedMessage, FormattedNumber} from 'react-intl';
 import classnames from 'classnames';
+import {Component} from 'react';
 import {observable} from 'mobx';
 import {observer} from 'mobx-react';
-import React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
@@ -30,7 +30,7 @@ const getCurrentStatus = (statuses: TorrentProperties['status']) => {
 };
 
 @observer
-class TorrentHeading extends React.Component {
+class TorrentHeading extends Component {
   @observable torrentStatus: 'start' | 'stop' = 'stop';
 
   render() {

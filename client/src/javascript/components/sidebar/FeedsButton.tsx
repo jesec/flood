@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import FeedIcon from '../icons/FeedIcon';
 import Tooltip from '../general/Tooltip';
@@ -11,7 +11,7 @@ const MESSAGES = defineMessages({
   },
 });
 
-class FeedsButton extends React.Component<WrappedComponentProps> {
+class FeedsButton extends Component<WrappedComponentProps> {
   tooltipRef: Tooltip | null = null;
 
   constructor(props: WrappedComponentProps) {

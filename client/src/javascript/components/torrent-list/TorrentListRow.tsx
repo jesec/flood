@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {LongPressDetectEvents, useLongPress} from 'use-long-press';
 import {observer} from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import SettingStore from '../../stores/SettingStore';
 import torrentStatusClasses from '../../util/torrentStatusClasses';

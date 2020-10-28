@@ -1,6 +1,6 @@
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 import throttle from 'lodash/throttle';
 
 import type {Feed} from '@shared/types/Feed';

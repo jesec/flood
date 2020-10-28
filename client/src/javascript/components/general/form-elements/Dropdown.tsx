@@ -1,9 +1,9 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import React from 'react';
 import throttle from 'lodash/throttle';
 import uniqueId from 'lodash/uniqueId';
 import {when} from 'mobx';
+import * as React from 'react';
 
 import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';

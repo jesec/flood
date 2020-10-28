@@ -1,5 +1,5 @@
 import {FormattedMessage, IntlShape} from 'react-intl';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
@@ -15,7 +15,7 @@ export interface QBittorrentConnectionSettingsFormData {
   password: string;
 }
 
-class QBittorrentConnectionSettingsForm extends Component<
+class QBittorrentConnectionSettingsForm extends React.Component<
   QBittorrentConnectionSettingsProps,
   QBittorrentConnectionSettingsFormData
 > {

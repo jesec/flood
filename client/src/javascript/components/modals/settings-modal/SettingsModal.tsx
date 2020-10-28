@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
@@ -25,7 +25,7 @@ interface SettingsModalStates {
   changedFloodSettings: Partial<FloodSettings>;
 }
 
-class SettingsModal extends React.Component<WrappedComponentProps, SettingsModalStates> {
+class SettingsModal extends Component<WrappedComponentProps, SettingsModalStates> {
   constructor(props: WrappedComponentProps) {
     super(props);
 

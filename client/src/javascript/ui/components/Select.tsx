@@ -1,6 +1,6 @@
 import noop from 'lodash/noop';
 import classnames from 'classnames';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import Button from './Button';
 import ContextMenu from './ContextMenu';
@@ -38,7 +38,7 @@ interface SelectStates {
   selectedID: string | number;
 }
 
-export default class Select extends Component<SelectProps, SelectStates> {
+export default class Select extends React.Component<SelectProps, SelectStates> {
   menuRef: HTMLDivElement | null = null;
 
   inputRef: HTMLInputElement | null = null;

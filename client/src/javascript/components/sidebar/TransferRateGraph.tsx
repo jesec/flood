@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 import {reaction} from 'mobx';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 import {Selection, select} from 'd3-selection';
-import React from 'react';
+import * as React from 'react';
 
 import type {TransferDirection} from '@shared/types/TransferData';
 

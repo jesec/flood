@@ -1,5 +1,5 @@
 import {FormattedMessage, IntlShape} from 'react-intl';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import type {
   RTorrentConnectionSettings,
@@ -20,7 +20,7 @@ export interface RTorrentConnectionSettingsFormData {
   port?: string;
 }
 
-class RTorrentConnectionSettingsForm extends Component<
+class RTorrentConnectionSettingsForm extends React.Component<
   RTorrentConnectionSettingsProps,
   RTorrentConnectionSettingsFormData
 > {

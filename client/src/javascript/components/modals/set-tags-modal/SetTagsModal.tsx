@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import {Form, FormRow} from '../../../ui';
 import Modal from '../Modal';
@@ -13,7 +13,7 @@ interface SetTagsModalStates {
   isSettingTags: boolean;
 }
 
-class SetTagsModal extends React.Component<WrappedComponentProps, SetTagsModalStates> {
+class SetTagsModal extends Component<WrappedComponentProps, SetTagsModalStates> {
   formRef: Form | null = null;
 
   constructor(props: WrappedComponentProps) {

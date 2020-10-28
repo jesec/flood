@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {FormattedMessage} from 'react-intl';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
@@ -20,7 +20,7 @@ interface TagSelectStates {
   selectedTags: TorrentProperties['tags'];
 }
 
-export default class TagSelect extends Component<TagSelectProps, TagSelectStates> {
+export default class TagSelect extends React.Component<TagSelectProps, TagSelectStates> {
   formRowRef = React.createRef<HTMLDivElement>();
   menuRef: HTMLDivElement | null = null;
   textboxRef: HTMLInputElement | null = null;

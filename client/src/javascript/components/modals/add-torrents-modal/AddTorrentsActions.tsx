@@ -1,5 +1,5 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React, {PureComponent} from 'react';
+import * as React from 'react';
 
 import ModalActions from '../ModalActions';
 import SettingStore from '../../../stores/SettingStore';
@@ -11,7 +11,7 @@ interface AddTorrentsActionsProps extends WrappedComponentProps {
   onAddTorrentsClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-class AddTorrentsActions extends PureComponent<AddTorrentsActionsProps> {
+class AddTorrentsActions extends React.PureComponent<AddTorrentsActionsProps> {
   getActions(): Array<ModalAction> {
     return [
       {

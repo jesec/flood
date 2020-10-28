@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import {AccessLevel} from '@shared/schema/constants/Auth';
 import type {Credentials} from '@shared/schema/Auth';

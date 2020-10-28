@@ -1,5 +1,5 @@
 import CSSTransition, {CSSTransitionProps} from 'react-transition-group/CSSTransition';
-import React from 'react';
+import * as React from 'react';
 
 interface FadeInProps {
   children: React.ReactNode;

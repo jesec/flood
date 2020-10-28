@@ -1,7 +1,7 @@
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
-import React from 'react';
 import sortedIndex from 'lodash/sortedIndex';
+import * as React from 'react';
 
 import type {TransferDirection} from '@shared/types/TransferData';
 

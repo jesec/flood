@@ -1,5 +1,5 @@
 import {FormattedMessage} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import {Form, FormRow, Textbox} from '../../../ui';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';

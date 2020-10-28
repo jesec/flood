@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import {Checkbox, Form, FormRow, Textbox} from '../../../ui';
@@ -27,7 +27,7 @@ interface AddTorrentsByCreationStates {
   trackerTextboxes: Array<{id: number; value: string}>;
 }
 
-class AddTorrentsByCreation extends React.Component<WrappedComponentProps, AddTorrentsByCreationStates> {
+class AddTorrentsByCreation extends Component<WrappedComponentProps, AddTorrentsByCreationStates> {
   formRef: Form | null = null;
 
   constructor(props: WrappedComponentProps) {

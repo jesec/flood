@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import {DndProvider} from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import SortableListItem from './SortableListItem';
 

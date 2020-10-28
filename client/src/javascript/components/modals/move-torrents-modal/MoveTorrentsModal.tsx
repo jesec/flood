@@ -1,5 +1,5 @@
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import type {MoveTorrentsOptions} from '@shared/types/api/torrents';
 

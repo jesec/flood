@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Clipboard from 'clipboard';
+import {Component} from 'react';
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import {Button} from '../../../ui';
 import ClipboardIcon from '../../icons/ClipboardIcon';
@@ -31,7 +31,7 @@ interface TorrentMediainfoStates {
   copiedToClipboard: boolean;
 }
 
-class TorrentMediainfo extends React.Component<WrappedComponentProps, TorrentMediainfoStates> {
+class TorrentMediainfo extends Component<WrappedComponentProps, TorrentMediainfoStates> {
   mediainfo: string | null = null;
   isFetchingMediainfo = true;
   fetchMediainfoError: Error | null = null;

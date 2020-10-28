@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import Checkmark from '../icons/Checkmark';
 import ToggleInput from './ToggleInput';

@@ -1,5 +1,5 @@
-import React from 'react';
 import {defineMessages, WrappedComponentProps} from 'react-intl';
+import * as React from 'react';
 
 import ArrowIcon from '../../icons/ArrowIcon';
 import File from '../../icons/File';

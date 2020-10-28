@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, {PureComponent} from 'react';
+import {PureComponent} from 'react';
 
 interface PanelFooterProps {
   hasBorder?: boolean;

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import React, {Component} from 'react';
+import * as React from 'react';
 
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
@@ -20,7 +20,7 @@ type TextboxProps = Pick<
   wrapperClassName?: string;
 };
 
-export default class Textbox extends Component<TextboxProps> {
+export default class Textbox extends React.Component<TextboxProps> {
   static defaultProps = {
     type: 'text',
   };

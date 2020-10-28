@@ -1,6 +1,6 @@
 import CSSTransition from 'react-transition-group/CSSTransition';
 import classnames from 'classnames';
-import React from 'react';
+import * as React from 'react';
 
 import Overlay from './Overlay';
 import transitionTimeouts from '../constants/transitionTimeouts';

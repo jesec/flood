@@ -1,7 +1,7 @@
+import {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {observable, runInAction} from 'mobx';
 import {observer} from 'mobx-react';
-import React from 'react';
 
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 
@@ -10,7 +10,7 @@ import TorrentActions from '../../../actions/TorrentActions';
 import UIStore from '../../../stores/UIStore';
 
 @observer
-class TorrentTrackers extends React.Component<unknown> {
+class TorrentTrackers extends Component<unknown> {
   trackers = observable.array<TorrentTracker>([]);
 
   constructor(props: unknown) {

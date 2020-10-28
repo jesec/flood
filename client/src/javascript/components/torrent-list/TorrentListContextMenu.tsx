@@ -1,5 +1,5 @@
 import {IntlShape} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 

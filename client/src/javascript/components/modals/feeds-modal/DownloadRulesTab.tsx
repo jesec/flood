@@ -1,7 +1,7 @@
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
-import React from 'react';
 import throttle from 'lodash/throttle';
+import * as React from 'react';
 
 import type {AddRuleOptions} from '@shared/types/api/feed-monitor';
 import type {Rule} from '@shared/types/Feed';

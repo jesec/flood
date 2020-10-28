@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import SettingsIcon from '../icons/SettingsIcon';
 import Tooltip from '../general/Tooltip';
@@ -11,7 +11,7 @@ const MESSAGES = defineMessages({
   },
 });
 
-class SettingsButton extends React.Component<WrappedComponentProps> {
+class SettingsButton extends Component<WrappedComponentProps> {
   tooltipRef: Tooltip | null = null;
 
   constructor(props: WrappedComponentProps) {

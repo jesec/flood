@@ -1,5 +1,5 @@
 import {useIntl} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import AddTorrentsByFile from './AddTorrentsByFile';
 import AddTorrentsByURL from './AddTorrentsByURL';

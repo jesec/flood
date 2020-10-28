@@ -1,5 +1,5 @@
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
+import {PureComponent} from 'react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -28,7 +28,7 @@ interface SortDropdownProps extends WrappedComponentProps {
   onSortChange: (sortBy: FloodSettings['sortTorrents']) => void;
 }
 
-class SortDropdown extends React.PureComponent<SortDropdownProps> {
+class SortDropdown extends PureComponent<SortDropdownProps> {
   constructor(props: SortDropdownProps) {
     super(props);
 

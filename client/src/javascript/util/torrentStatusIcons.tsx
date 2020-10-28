@@ -1,5 +1,3 @@
-import React from 'react';
-
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 import ErrorIcon from '../components/icons/ErrorIcon';

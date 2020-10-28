@@ -1,8 +1,8 @@
 import classnames from 'classnames';
+import {Component} from 'react';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
 import {reaction} from 'mobx';
-import React from 'react';
 
 import type {Notification} from '@shared/types/Notification';
 
@@ -63,7 +63,7 @@ const MESSAGES = defineMessages({
 const NOTIFICATIONS_PER_PAGE = 10;
 
 @observer
-class NotificationsButton extends React.Component<WrappedComponentProps, NotificationsButtonStates> {
+class NotificationsButton extends Component<WrappedComponentProps, NotificationsButtonStates> {
   tooltipRef: Tooltip | null = null;
 
   constructor(props: WrappedComponentProps) {

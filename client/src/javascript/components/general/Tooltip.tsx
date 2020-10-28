@@ -1,6 +1,6 @@
 import classnames from 'classnames';
-import React from 'react';
 import ReactDOM from 'react-dom';
+import * as React from 'react';
 
 type Align = 'start' | 'center' | 'end';
 

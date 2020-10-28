@@ -1,4 +1,4 @@
-import React from 'react';
+import {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
@@ -16,7 +16,7 @@ interface MountPointsListStates {
   diskItems: Array<ListItem>;
 }
 
-class MountPointsList extends React.Component<MountPointsListProps, MountPointsListStates> {
+class MountPointsList extends Component<MountPointsListProps, MountPointsListStates> {
   constructor(props: MountPointsListProps) {
     super(props);
 

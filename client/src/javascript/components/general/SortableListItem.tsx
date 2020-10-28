@@ -1,8 +1,8 @@
 import classnames from 'classnames';
+import {Component} from 'react';
 import {DragElementWrapper, DragPreviewOptions, DragSource, DragSourceOptions, DropTarget} from 'react-dnd';
 import flow from 'lodash/flow';
 import {getEmptyImage} from 'react-dnd-html5-backend';
-import React from 'react';
 
 import LockIcon from '../icons/LockIcon';
 
@@ -21,7 +21,7 @@ interface SortableListItemProps {
   connectDropTarget: DragElementWrapper<never>;
 }
 
-class SortableListItem extends React.Component<SortableListItemProps> {
+class SortableListItem extends Component<SortableListItemProps> {
   componentDidMount() {
     const {connectDragPreview} = this.props;
     // Replace the native drag preview with an empty image.

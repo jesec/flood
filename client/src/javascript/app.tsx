@@ -1,8 +1,8 @@
 import {observer} from 'mobx-react';
 import {Router} from 'react-router-dom';
 import {Route, Switch} from 'react-router';
-import React from 'react';
 import ReactDOM from 'react-dom';
+import * as React from 'react';
 
 import AsyncIntlProvider from './i18n/languages';
 import AppWrapper from './components/AppWrapper';

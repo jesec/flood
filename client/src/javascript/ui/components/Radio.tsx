@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import Circle from '../icons/Circle';
 import ToggleInput from './ToggleInput';

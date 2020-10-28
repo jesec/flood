@@ -1,6 +1,6 @@
 import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';

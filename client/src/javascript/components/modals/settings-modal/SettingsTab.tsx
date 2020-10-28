@@ -1,5 +1,5 @@
-import React from 'react';
 import {WrappedComponentProps} from 'react-intl';
+import * as React from 'react';
 
 import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';

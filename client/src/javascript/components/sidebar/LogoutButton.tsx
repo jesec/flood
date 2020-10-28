@@ -1,5 +1,4 @@
 import {useIntl} from 'react-intl';
-import React from 'react';
 
 import AuthActions from '../../actions/AuthActions';
 import ConfigStore from '../../stores/ConfigStore';

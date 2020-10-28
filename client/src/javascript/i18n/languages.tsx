@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import {IntlProvider} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
+
 import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/en';
 

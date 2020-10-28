@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {observer} from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 

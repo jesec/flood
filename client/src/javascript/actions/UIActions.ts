@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import React from 'react';
+import * as React from 'react';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 

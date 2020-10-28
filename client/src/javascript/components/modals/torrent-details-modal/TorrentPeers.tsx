@@ -1,7 +1,7 @@
 import {FormattedMessage} from 'react-intl';
 import {observable, runInAction} from 'mobx';
 import {observer} from 'mobx-react';
-import React from 'react';
+import {Component, Suspense} from 'react';
 
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 
@@ -16,7 +16,7 @@ import TorrentActions from '../../../actions/TorrentActions';
 import UIStore from '../../../stores/UIStore';
 
 @observer
-class TorrentPeers extends React.Component<unknown> {
+class TorrentPeers extends Component<unknown> {
   peers = observable.array<TorrentPeer>([]);
   polling = setInterval(() => this.fetchPeers(), ConfigStore.pollInterval);
 
@@ -52,9 +52,9 @@ class TorrentPeers extends React.Component<unknown> {
         <tr key={peer.address}>
           <td>
             <span className="peers-list__flag">
-              <React.Suspense fallback={<SpinnerIcon />}>
+              <Suspense fallback={<SpinnerIcon />}>
                 <CountryFlagIcon countryCode={countryCode} />
-              </React.Suspense>
+              </Suspense>
               <span className="peers-list__flag__text">{countryCode}</span>
             </span>
             {peer.address}

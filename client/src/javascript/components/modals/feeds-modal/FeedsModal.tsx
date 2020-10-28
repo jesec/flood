@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import DownloadRulesTab from './DownloadRulesTab';
 import FeedActions from '../../../actions/FeedActions';
@@ -7,7 +7,7 @@ import FeedStore from '../../../stores/FeedStore';
 import FeedsTab from './FeedsTab';
 import Modal from '../Modal';
 
-class FeedsModal extends React.Component<WrappedComponentProps> {
+class FeedsModal extends Component<WrappedComponentProps> {
   componentDidMount() {
     FeedActions.fetchFeedMonitors();
   }

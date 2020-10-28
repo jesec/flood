@@ -1,5 +1,5 @@
 import {useIntl} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import Modal from '../Modal';
 import TorrentMediainfo from './TorrentMediainfo';

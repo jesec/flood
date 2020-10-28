@@ -1,5 +1,3 @@
-import React from 'react';
-
 import ApplicationView from '../layout/ApplicationView';
 import AuthForm from '../auth/AuthForm';
 

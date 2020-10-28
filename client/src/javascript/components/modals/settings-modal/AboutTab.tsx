@@ -1,8 +1,8 @@
-import React from 'react';
+import {lazy, Suspense} from 'react';
 
 import {version} from '../../../../../../package.json';
 
-const AboutMarkdown = React.lazy(() =>
+const AboutMarkdown = lazy(() =>
   import(/* webpackChunkName: 'about' */ '../../../../../../ABOUT.md').then((module) => ({default: module.react})),
 );
 
@@ -10,7 +10,7 @@ const FLOOD_PROJECT_URL = 'https://github.com/jesec/flood';
 
 const AboutTab = () => {
   return (
-    <React.Suspense fallback={null}>
+    <Suspense fallback={null}>
       <AboutMarkdown
         FloodVersion={() => version}
         CommitBadge={() =>
@@ -30,7 +30,7 @@ const AboutTab = () => {
           )
         }
       />
-    </React.Suspense>
+    </Suspense>
   );
 };
 

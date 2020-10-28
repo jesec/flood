@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {when} from 'mobx';
-import React from 'react';
+import * as React from 'react';
 
 import {Checkbox, ContextMenu, FormElementAddon, FormRow, FormRowGroup, Portal, Textbox} from '../../../ui';
 import FilesystemBrowser from './FilesystemBrowser';

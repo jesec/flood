@@ -1,6 +1,6 @@
 import {useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import {compute, getTranslationString} from '../../util/size';
 import TransferDataStore from '../../stores/TransferDataStore';

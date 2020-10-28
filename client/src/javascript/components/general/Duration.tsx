@@ -1,5 +1,5 @@
 import {FormattedMessage} from 'react-intl';
-import React from 'react';
+import * as React from 'react';
 
 import type {Duration as DurationType} from '@shared/types/Torrent';
 

@@ -1,6 +1,6 @@
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {observer} from 'mobx-react';
-import React from 'react';
+import * as React from 'react';
 
 import Alert from './Alert';
 import AlertStore from '../../stores/AlertStore';

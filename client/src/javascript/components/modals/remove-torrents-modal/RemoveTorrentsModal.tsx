@@ -1,5 +1,5 @@
+import {Component} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import React from 'react';
 
 import {Checkbox, Form, FormRow} from '../../../ui';
 import Modal from '../Modal';
@@ -10,7 +10,7 @@ import TorrentStore from '../../../stores/TorrentStore';
 
 import type {ModalAction} from '../../../stores/UIStore';
 
-class RemoveTorrentsModal extends React.Component<WrappedComponentProps> {
+class RemoveTorrentsModal extends Component<WrappedComponentProps> {
   formRef?: Form | null;
 
   getActions(torrentCount: number): Array<ModalAction> {

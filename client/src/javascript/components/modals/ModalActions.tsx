@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import {Button, Checkbox} from '../../ui';
 import UIActions from '../../actions/UIActions';
