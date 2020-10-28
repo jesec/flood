@@ -13,7 +13,7 @@ const getFlag = (countryCode?: string): string | null => {
 
   const loadFlag = async () => {
     let flag: string | null = null;
-    await import(`../../../images/flags/${countryCode.toLowerCase()}.png`)
+    await import(/* webpackChunkName: 'flag' */ `../../../images/flags/${countryCode.toLowerCase()}.png`)
       .then(
         ({default: image}: {default: string}) => {
           flag = image;

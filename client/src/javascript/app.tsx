@@ -17,7 +17,7 @@ import '../sass/style.scss';
 const Login = React.lazy(() => import(/* webpackPrefetch: true */ './components/views/Login'));
 const Register = React.lazy(() => import(/* webpackPrefetch: true */ './components/views/Register'));
 const TorrentClientOverview = React.lazy(
-  () => import(/* webpackPrefetch: true */ './components/views/TorrentClientOverview'),
+  () => import(/* webpackPreload: true */ './components/views/TorrentClientOverview'),
 );
 
 const initialize = async (): Promise<void> => {

@@ -3,7 +3,7 @@ import React from 'react';
 import {version} from '../../../../../../package.json';
 
 const AboutMarkdown = React.lazy(() =>
-  import('../../../../../../ABOUT.md').then((module) => ({default: module.react})),
+  import(/* webpackChunkName: 'about' */ '../../../../../../ABOUT.md').then((module) => ({default: module.react})),
 );
 
 const FLOOD_PROJECT_URL = 'https://github.com/jesec/flood';

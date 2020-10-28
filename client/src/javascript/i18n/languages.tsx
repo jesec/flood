@@ -28,12 +28,13 @@ function loadTranslator() {
 
 async function loadMessages(locale: Exclude<Language, 'auto'>) {
   const messages: Record<string, MessageFormatElement[]> = await import(
+    /* webpackChunkName: 'i18n' */
     `./compiled/${locale === 'translate' ? 'en' : locale}.json`
   );
   messagesCache[locale] = messages;
 
   if (locale !== 'translate') {
-    await import(`dayjs/locale/${dayjsLocale}.js`);
+    await import(/* webpackChunkName: 'i18n' */ `dayjs/locale/${dayjsLocale}.js`);
   }
 
   return messages;
