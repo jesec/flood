@@ -125,8 +125,7 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
    * Sets priority of contents of a torrent
    *
    * @param {string} hash - Hash of the torrent.
-   * @param {Array<number>} indices - Indices of contents to be altered.
-   * @param {number} priority - Target priority.
+   * @param {SetTorrentContentsPropertiesOptions} options - An object of options...
    * @return {Promise<void>} - Rejects with error.
    */
   abstract setTorrentContentsPriority(hash: string, options: SetTorrentContentsPropertiesOptions): Promise<void>;
