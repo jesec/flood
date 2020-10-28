@@ -1,3 +1,4 @@
+import childProcess from 'child_process';
 import createTorrent from 'create-torrent';
 import express from 'express';
 import fs from 'fs';
@@ -23,7 +24,6 @@ import {
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ajaxUtil from '../../util/ajaxUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
-import mediainfo from '../../util/mediainfo';
 
 const router = express.Router();
 
@@ -530,8 +530,46 @@ router.get('/:hash/details', async (req, res) => {
  * @param {string} hash.path
  * @return {{output: string}} - 200 - success response - application/json
  */
-router.get('/:hash/mediainfo', (req, res) => {
-  mediainfo.getMediainfo(req.services, req.params.hash, ajaxUtil.getResponseFn(res));
+router.get('/:hash/mediainfo', async (req, res) => {
+  const {hash} = req.params;
+  const callback = ajaxUtil.getResponseFn(res);
+  const {torrentService} = req.services || {};
+
+  if (typeof hash !== 'string' || torrentService == null) {
+    callback(null, new Error());
+    return;
+  }
+
+  const torrent = torrentService.getTorrent(hash);
+
+  if (torrent == null) {
+    callback(null, new Error());
+    return;
+  }
+
+  try {
+    const mediainfoProcess = childProcess.execFile(
+      'mediainfo',
+      [torrent.basePath],
+      {maxBuffer: 1024 * 2000},
+      (error, stdout, stderr) => {
+        if (error) {
+          callback(null, error);
+          return;
+        }
+
+        if (stderr) {
+          callback(null, Error(stderr));
+          return;
+        }
+
+        callback({output: stdout});
+      },
+    );
+    req.on('close', () => mediainfoProcess.kill('SIGTERM'));
+  } catch (childProcessError) {
+    callback(null, Error(childProcessError));
+  }
 });
 
 /**
