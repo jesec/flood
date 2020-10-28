@@ -305,6 +305,12 @@
       "value": "Uživatelské jméno nemůže být prázdné."
     }
   ],
+  "auth.input.clear": [
+    {
+      "type": 0,
+      "value": "Vyčistit"
+    }
+  ],
   "auth.log.in": [
     {
       "type": 0,
@@ -1019,6 +1025,12 @@
     {
       "type": 0,
       "value": "Automaticky"
+    }
+  ],
+  "locale.language.translate": [
+    {
+      "type": 0,
+      "value": "Začít překládat"
     }
   ],
   "mediainfo.execError": [
@@ -2461,28 +2473,6 @@
     {
       "type": 0,
       "value": "let"
-    }
-  ],
-  "window.title": [
-    {
-      "type": 0,
-      "value": "↓ "
-    },
-    {
-      "type": 1,
-      "value": "down"
-    },
-    {
-      "type": 0,
-      "value": " ↑ "
-    },
-    {
-      "type": 1,
-      "value": "up"
-    },
-    {
-      "type": 0,
-      "value": " - Flood"
     }
   ]
 }
