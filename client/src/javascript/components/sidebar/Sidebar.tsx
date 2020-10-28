@@ -1,3 +1,6 @@
+import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
+
+import DiskUsage from './DiskUsage';
 import FeedsButton from './FeedsButton';
 import LogoutButton from './LogoutButton';
 import NotificationsButton from './NotificationsButton';
@@ -9,11 +12,11 @@ import StatusFilters from './StatusFilters';
 import TagFilters from './TagFilters';
 import TrackerFilters from './TrackerFilters';
 import TransferData from './TransferData';
-import DiskUsage from './DiskUsage';
 
 const Sidebar = () => {
   return (
-    <div className="application__sidebar">
+    <OverlayScrollbarsComponent
+      options={{scrollbars: {autoHide: 'leave', autoHideDelay: 0}, className: 'application__sidebar os-theme-thin'}}>
       <SidebarActions>
         <SpeedLimitDropdown />
         <SettingsButton />
@@ -27,7 +30,7 @@ const Sidebar = () => {
       <TagFilters />
       <TrackerFilters />
       <DiskUsage />
-    </div>
+    </OverlayScrollbarsComponent>
   );
 };
 

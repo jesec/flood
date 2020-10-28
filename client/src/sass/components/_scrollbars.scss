@@ -1,45 +1,127 @@
-$scrollbar--thumb--background--inactive: rgba(#1a2f3d, 0.3);
-$scrollbar--thumb--background--hover: rgba(#1a2f3d, 0.6);
-$scrollbar--thumb--background--inverted--inactive: rgba(#e9eef2, 0.3);
-$scrollbar--thumb--background--inverted--hover: rgba(#e9eef2, 0.6);
+* {
+  scrollbar-width: thin;
+}
 
-.scrollbars {
-  &__thumb {
-    background: $scrollbar--thumb--background--inactive;
-    border-radius: 10px;
-    cursor: pointer;
-    opacity: 0;
-    transition: background 0.25s, opacity 0.5s;
-    z-index: 2;
+::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
 
-    &:active {
-      opacity: 1;
-    }
+::-webkit-scrollbar-corner {
+  background: none;
+}
 
-    &:hover,
-    &:active {
-      background: $scrollbar--thumb--background--hover;
-    }
+::-webkit-scrollbar-track {
+  opacity: 0;
+}
 
-    &--surrogate {
-      display: block;
-      height: 100%;
-      width: 100%;
-    }
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: #8d8d8d;
+}
 
-    .is-inverted & {
-      background: $scrollbar--thumb--background--inverted--inactive;
+::-webkit-scrollbar-thumb:hover {
+  border-radius: 4px;
+  background: lighten(#8d8d8d, 10%);
+}
 
-      &:hover,
-      &:active {
-        background: $scrollbar--thumb--background--inverted--hover;
-      }
-    }
-  }
+.os-theme-thin > .os-scrollbar-horizontal {
+  right: 14px;
+  height: 14px;
+  padding: 0px 6px;
+}
 
-  &:hover {
-    .scrollbars__thumb {
-      opacity: 1;
-    }
-  }
+.os-theme-thin > .os-scrollbar-vertical {
+  bottom: 14px;
+  width: 14px;
+  padding: 6px 0px;
+}
+
+.os-theme-thin.os-host-rtl > .os-scrollbar-horizontal {
+  left: 14px;
+  right: 0;
+}
+
+.os-theme-thin > .os-scrollbar-corner {
+  height: 14px;
+  width: 14px;
+  background-color: transparent;
+}
+
+.os-theme-thin > .os-scrollbar > .os-scrollbar-track {
+  background: transparent;
+}
+
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track:before,
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track:before {
+  content: '';
+  display: block;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track:before,
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle:before {
+  left: 0;
+  right: 0;
+  height: 2px;
+  top: 50%;
+  margin-top: -1px;
+}
+
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track:before,
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:before {
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  left: 50%;
+  margin-left: -1px;
+}
+
+.os-theme-thin > .os-scrollbar > .os-scrollbar-track > .os-scrollbar-handle:before {
+  content: '';
+  display: block;
+  position: absolute;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+}
+
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle:hover:before,
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle.active:before {
+  height: 4px;
+  margin-top: -2px;
+}
+
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:hover:before,
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle.active:before {
+  width: 4px;
+  margin-left: -2px;
+}
+
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle:hover:before,
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:hover:before {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle.active:before,
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle.active:before {
+  background: #fff;
+}
+
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle {
+  height: 100%;
+  min-width: 30px;
+}
+
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle {
+  width: 100%;
+  min-height: 30px;
+}
+
+.os-theme-thin.os-host-transition > .os-scrollbar-horizontal > .os-scrollbar-track > .os-scrollbar-handle:before {
+  transition: height 0.3s, margin-top 0.3s, background 0.2s;
+}
+
+.os-theme-thin.os-host-transition > .os-scrollbar-vertical > .os-scrollbar-track > .os-scrollbar-handle:before {
+  transition: width 0.3s, margin-left 0.3s, background 0.2s;
 }

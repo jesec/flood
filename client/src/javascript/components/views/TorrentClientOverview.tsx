@@ -8,6 +8,8 @@ import FloodActions from '../../actions/FloodActions';
 import Sidebar from '../sidebar/Sidebar';
 import TorrentList from '../torrent-list/TorrentList';
 
+import 'overlayscrollbars/css/OverlayScrollbars.css';
+
 const Alerts = lazy(() => import('../alerts/Alerts'));
 const Modals = lazy(() => import('../modals/Modals'));
 
