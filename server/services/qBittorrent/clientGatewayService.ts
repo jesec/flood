@@ -289,7 +289,6 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .getTransferInfo()
       .then(this.processClientRequestSuccess, this.processClientRequestError)
       .then((info) => {
-        this.emit('PROCESS_TRANSFER_RATE_START');
         return {
           downRate: info.dl_info_speed,
           downThrottle: info.dl_rate_limit,

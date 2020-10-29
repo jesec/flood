@@ -596,7 +596,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((response) => {
-          this.emit('PROCESS_TRANSFER_RATE_START');
           return processMethodCallResponse(response, configs);
         }) || Promise.reject()
     );

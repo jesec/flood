@@ -27,7 +27,6 @@ interface ClientGatewayServiceEvents {
   PROCESS_TORRENT_LIST_START: () => void;
   PROCESS_TORRENT_LIST_END: (torrentListSummary: TorrentListSummary) => void;
   PROCESS_TORRENT: (torrentProperties: TorrentProperties) => void;
-  PROCESS_TRANSFER_RATE_START: () => void;
 }
 
 abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
