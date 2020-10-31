@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {Component} from 'react';
+import {Component, createRef} from 'react';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
 import {reaction} from 'mobx';
@@ -17,6 +17,7 @@ import Tooltip from '../general/Tooltip';
 interface NotificationsButtonStates {
   isLoading: boolean;
   paginationStart: number;
+  prevHeight: number;
 }
 
 const loadingIndicatorIcon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
@@ -65,6 +66,7 @@ const NOTIFICATIONS_PER_PAGE = 10;
 @observer
 class NotificationsButton extends Component<WrappedComponentProps, NotificationsButtonStates> {
   tooltipRef: Tooltip | null = null;
+  notificationsListRef = createRef<HTMLUListElement>();
 
   constructor(props: WrappedComponentProps) {
     super(props);
@@ -74,6 +76,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
     this.state = {
       isLoading: false,
       paginationStart: 0,
+      prevHeight: 0,
     };
   }
 
@@ -220,7 +223,10 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
       <div className={notificationsWrapperClasses}>
         {this.getTopToolbar()}
         <div className="notifications__loading-indicator">{loadingIndicatorIcon}</div>
-        <ul className="notifications__list tooltip__content--padding-surrogate">
+        <ul
+          className="notifications__list tooltip__content--padding-surrogate"
+          ref={this.notificationsListRef}
+          style={{minHeight: this.state.prevHeight}}>
           {notifications.map(this.getNotification)}
         </ul>
         {this.getBottomToolbar()}
@@ -243,6 +249,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
   handleClearNotificationsClick = () => {
     this.setState({
       paginationStart: 0,
+      prevHeight: 0,
     });
 
     FloodActions.clearNotifications({
@@ -268,6 +275,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
         const paginationStart = state.paginationStart - NOTIFICATIONS_PER_PAGE;
         return {
           paginationStart,
+          prevHeight: this.notificationsListRef.current?.clientHeight || 0,
         };
       }, this.fetchNotifications);
     }
@@ -281,6 +289,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
         const paginationStart = state.paginationStart + NOTIFICATIONS_PER_PAGE;
         return {
           paginationStart,
+          prevHeight: this.notificationsListRef.current?.clientHeight || 0,
         };
       }, this.fetchNotifications);
     }
