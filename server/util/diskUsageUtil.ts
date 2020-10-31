@@ -14,11 +14,17 @@ export const isPlatformSupported = (): boolean => {
   return PLATFORMS_SUPPORTED.includes(process.platform as SupportedPlatform);
 };
 
-const filterMountPoint =
-  config.diskUsageService && config.diskUsageService.watchMountPoints
-    ? // if user has configured watchMountPoints, filter each line output for given array
-      (mountpoint: string) => config.diskUsageService.watchMountPoints.includes(mountpoint)
-    : () => true; // include all mounted file systems by default
+const filterMountPoint = (mountpoint: string) => {
+  const {watchMountPoints} = config;
+
+  if (watchMountPoints != null) {
+    // if user has configured watchMountPoints, filter each line output for given array
+    return watchMountPoints.includes(mountpoint);
+  }
+
+  // include all mounted file systems by default
+  return true;
+};
 
 const MAX_BUFFER_SIZE = 65536;
 export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<Disk>>>> = {

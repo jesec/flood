@@ -39,9 +39,7 @@ By default, Flood uses a command line configuration interface. If you installed 
 
 Run `flood --help`, `npx flood --help` or `npm run start -- --help` to get help about command line arguments.
 
-If you want to know more about configurations, check `config.template.js`.
-
-If static configuration is preferred, copy `config.template.js` to `config.js` and edit it.
+If you want to know more about configurations, check `config.d.ts`.
 
 When Flood's builtin user management is enabled (default), you will be prompted to configure the connection to rTorrent when loading the web interface.
 
@@ -103,7 +101,6 @@ Access the UI in your browser. With default settings, go to `http://localhost:30
 ### Updating
 
 1. To update, run `git pull` in this repository's directory.
-1. Check `config.template.js` for configuration changes.
 1. Kill the currently running Flood server.
 1. Run `npm install` to update dependencies.
 1. Run `npm run build` to transpile and bundle static assets.

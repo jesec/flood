@@ -224,7 +224,7 @@ const CONFIG = {
   ssl: argv.ssl,
   sslKey: argv.sslkey || path.resolve(path.join(argv.rundir, 'key.pem')),
   sslCert: argv.sslcert || path.resolve(path.join(argv.rundir, 'fullchain.pem')),
-  allowedPaths: argv.allowedpath ? [].concat(argv.allowedpath) : null,
+  allowedPaths: argv.allowedpath ? [].concat(argv.allowedpath) : undefined,
 };
 
 module.exports = CONFIG;
