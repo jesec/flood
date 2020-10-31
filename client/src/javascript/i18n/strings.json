@@ -41,6 +41,7 @@
   "connection.settings.rtorrent": "rTorrent",
   "connection.settings.rtorrent.type": "Connection Type",
   "connection.settings.rtorrent.type.tcp": "TCP",
+  "connection.settings.rtorrent.type.tcp.warning": "Exposing rTorrent via TCP may allow privilege escalation.",
   "connection.settings.rtorrent.type.socket": "Socket",
   "connection.settings.rtorrent.host": "Host",
   "connection.settings.rtorrent.host.input.placeholder": "Hostname or IP",

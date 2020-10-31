@@ -7,7 +7,7 @@ import type {
   RTorrentTCPConnectionSettings,
 } from '@shared/schema/ClientConnectionSettings';
 
-import {FormGroup, FormRow, Radio, Textbox} from '../../../ui';
+import {FormError, FormGroup, FormRow, FormRowGroup, Radio, Textbox} from '../../../ui';
 
 export interface RTorrentConnectionSettingsProps {
   intl: IntlShape;
@@ -94,24 +94,33 @@ class RTorrentConnectionSettingsForm extends React.Component<
 
     if (type === 'tcp') {
       return (
-        <FormRow>
-          <Textbox
-            onChange={(e) => this.handleFormChange(e, 'host')}
-            id="host"
-            label={<FormattedMessage id="connection.settings.rtorrent.host" />}
-            placeholder={intl.formatMessage({
-              id: 'connection.settings.rtorrent.host.input.placeholder',
-            })}
-          />
-          <Textbox
-            onChange={(e) => this.handleFormChange(e, 'port')}
-            id="port"
-            label={<FormattedMessage id="connection.settings.rtorrent.port" />}
-            placeholder={intl.formatMessage({
-              id: 'connection.settings.rtorrent.port.input.placeholder',
-            })}
-          />
-        </FormRow>
+        <FormRowGroup>
+          <FormRow>
+            <FormError>
+              {intl.formatMessage({
+                id: 'connection.settings.rtorrent.type.tcp.warning',
+              })}
+            </FormError>
+          </FormRow>
+          <FormRow>
+            <Textbox
+              onChange={(e) => this.handleFormChange(e, 'host')}
+              id="host"
+              label={<FormattedMessage id="connection.settings.rtorrent.host" />}
+              placeholder={intl.formatMessage({
+                id: 'connection.settings.rtorrent.host.input.placeholder',
+              })}
+            />
+            <Textbox
+              onChange={(e) => this.handleFormChange(e, 'port')}
+              id="port"
+              label={<FormattedMessage id="connection.settings.rtorrent.port" />}
+              placeholder={intl.formatMessage({
+                id: 'connection.settings.rtorrent.port.input.placeholder',
+              })}
+            />
+          </FormRow>
+        </FormRowGroup>
       );
     }
 
