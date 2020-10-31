@@ -10,6 +10,9 @@
 // Plus, such duplications and conditionals are error-prone.
 //
 // Use CLI if you don't want to check and change the config.js whenever Flood is updated.
+// CLI also supports passing through arguments via environment variables. For example,
+// env variable FLOOD_OPTION_port=80 is equivalent to argument --port 80. Use ',' to split
+// for arguments that take multiple inputs such as --allowedpath.
 
 import type {AuthMethod} from '@shared/schema/Auth';
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
