@@ -27,7 +27,7 @@ class RTorrentConnectionSettingsForm extends React.Component<
   constructor(props: RTorrentConnectionSettingsProps) {
     super(props);
     this.state = {
-      type: 'tcp',
+      type: 'socket',
     };
   }
 
@@ -145,18 +145,18 @@ class RTorrentConnectionSettingsForm extends React.Component<
                 <Radio
                   onChange={(e) => this.handleFormChange(e, 'type')}
                   groupID="type"
-                  id="tcp"
-                  grow={false}
-                  checked={type === 'tcp'}>
-                  <FormattedMessage id="connection.settings.rtorrent.type.tcp" />
-                </Radio>
-                <Radio
-                  onChange={(e) => this.handleFormChange(e, 'type')}
-                  groupID="type"
                   id="socket"
                   grow={false}
                   checked={type === 'socket'}>
                   <FormattedMessage id="connection.settings.rtorrent.type.socket" />
+                </Radio>
+                <Radio
+                  onChange={(e) => this.handleFormChange(e, 'type')}
+                  groupID="type"
+                  id="tcp"
+                  grow={false}
+                  checked={type === 'tcp'}>
+                  <FormattedMessage id="connection.settings.rtorrent.type.tcp" />
                 </Radio>
               </FormRow>
             </FormGroup>
