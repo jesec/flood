@@ -370,22 +370,41 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
     );
   }
 
-  getRulesList() {
+  getRulesList(): [React.ReactNode, React.ReactNode] {
     const {rules} = FeedStore;
 
     if (rules.length === 0) {
-      return (
-        <ul className="interactive-list">
+      return [
+        <ul className="interactive-list" key="before-editing">
           <li className="interactive-list__item">
             <FormattedMessage id="feeds.no.rules.defined" />
           </li>
-        </ul>
-      );
+        </ul>,
+        null,
+      ];
     }
 
     const rulesList = rules.map((rule) => this.getRulesListItem(rule));
 
-    return <ul className="interactive-list">{rulesList}</ul>;
+    if (this.state.currentlyEditingRule == null || this.state.currentlyEditingRule === defaultRule) {
+      return [
+        <ul className="interactive-list" key="before-editing">
+          {rulesList}
+        </ul>,
+        null,
+      ];
+    }
+
+    const editingRuleIndex = rules.indexOf(this.state.currentlyEditingRule as Rule);
+
+    return [
+      <ul className="interactive-list" key="before-editing">
+        {rulesList.slice(0, editingRuleIndex + 1)}
+      </ul>,
+      <ul className="interactive-list" key="after-editing">
+        {rulesList.slice(editingRuleIndex + 1)}
+      </ul>,
+    ];
   }
 
   handleFormChange = ({
@@ -500,6 +519,8 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
       });
     }
 
+    const [listBeforeEditingRule, listAfterEditingRule] = this.getRulesList();
+
     return (
       <Form
         className="inverse"
@@ -512,10 +533,18 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
           <FormattedMessage id="feeds.existing.rules" />
         </ModalFormSectionHeader>
         {errors}
-        <FormRow>
-          <FormRowItem>{this.getRulesList()}</FormRowItem>
-        </FormRow>
-        {this.state.currentlyEditingRule ? (
+        {listAfterEditingRule == null ? (
+          <FormRow>
+            <FormRowItem>{listBeforeEditingRule}</FormRowItem>
+          </FormRow>
+        ) : (
+          <FormRowGroup>
+            <FormRow>{listBeforeEditingRule}</FormRow>
+            {this.getModifyRuleForm(this.state.currentlyEditingRule as Partial<Rule>)}
+            <FormRow>{listAfterEditingRule}</FormRow>
+          </FormRowGroup>
+        )}
+        {this.state.currentlyEditingRule && listAfterEditingRule == null ? (
           this.getModifyRuleForm(this.state.currentlyEditingRule)
         ) : (
           <FormRow>
