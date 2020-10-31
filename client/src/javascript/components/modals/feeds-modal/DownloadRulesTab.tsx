@@ -41,6 +41,8 @@ interface DownloadRulesTabStates {
   errors?: {
     [field in ValidatedFields]?: string;
   };
+  isSubmitting: boolean;
+  isFormChanged: boolean;
   currentlyEditingRule: Partial<Rule> | null;
   doesPatternMatchTest: boolean;
 }
@@ -136,6 +138,8 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
 
     this.state = {
       errors: {},
+      isSubmitting: false,
+      isFormChanged: false,
       currentlyEditingRule: null,
       doesPatternMatchTest: false,
     };
@@ -280,7 +284,7 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
           <Button onClick={() => this.setState({currentlyEditingRule: null})}>
             <FormattedMessage id="button.cancel" />
           </Button>
-          <Button type="submit">
+          <Button type="submit" isLoading={this.state.isSubmitting}>
             <FormattedMessage id="button.save.feed" />
           </Button>
         </FormRow>
@@ -424,10 +428,13 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
       ruleFormData.exclude != null ? ruleFormData.exclude : defaultRule.exclude,
       ruleFormData.check != null ? ruleFormData.check : '',
     );
+    this.setState({isFormChanged: true});
   };
 
-  handleFormSubmit = () => {
+  handleFormSubmit = async () => {
     const {errors, isValid} = this.validateForm();
+
+    this.setState({isSubmitting: true});
 
     if (!isValid) {
       this.setState({errors});
@@ -435,11 +442,11 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
       const currentRule = this.state.currentlyEditingRule;
       const formData = this.getAmendedFormData();
 
-      if (formData != null) {
+      if (formData != null && this.state.isFormChanged) {
         if (currentRule !== null && currentRule !== defaultRule && currentRule._id != null) {
-          FeedActions.removeFeedMonitor(currentRule._id);
+          await FeedActions.removeFeedMonitor(currentRule._id);
         }
-        FeedActions.addRule(formData);
+        await FeedActions.addRule(formData);
       }
 
       if (this.formRef != null) {
@@ -448,6 +455,8 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
 
       this.setState({currentlyEditingRule: null});
     }
+
+    this.setState({isSubmitting: false});
   };
 
   handleAddRuleClick = () => {
