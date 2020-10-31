@@ -192,7 +192,7 @@
     "source-map-loader": "^1.1.1",
     "spdy": "^4.0.2",
     "style-loader": "^2.0.0",
-    "supertest": "^5.0.0",
+    "supertest": "^6.0.0",
     "tar": "^6.0.5",
     "terser-webpack-plugin": "^4.2.3",
     "ts-jest": "^26.4.1",
