@@ -61,7 +61,7 @@
   "feeds.add.feed": "Add Feed",
   "feeds.applicable.feed": "Applicable Feed",
   "feeds.apply.tags": "Apply Tags",
-  "feeds.check": "Test Match Pattern",
+  "feeds.check": "Validate the rule by trying it out. Not saved or sent.",
   "feeds.exclude.pattern": "Exclude Pattern",
   "feeds.existing.feeds": "Existing Feeds",
   "feeds.existing.rules": "Existing Rules",

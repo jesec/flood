@@ -235,6 +235,8 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
             defaultValue={rule.exclude}
             width="three-eighths"
           />
+        </FormRow>
+        <FormRow>
           <Textbox
             addonPlacement="after"
             id="check"

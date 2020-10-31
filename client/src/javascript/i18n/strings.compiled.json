@@ -650,7 +650,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Test Match Pattern"
+      "value": "Validate the rule by trying it out. Not saved or sent."
     }
   ],
   "feeds.exclude": [
