@@ -207,6 +207,13 @@ if (argv.noauth || argv.auth === 'none') {
   authMethod = 'none';
 }
 
+let allowedPaths = [];
+if (typeof argv.allowedpath === 'string') {
+  allowedPaths = allowedPaths.concat(argv.allowedpath.split(','));
+} else if (Array.isArray(argv.allowedpath)) {
+  allowedPaths = allowedPaths.concat(argv.allowedpath);
+}
+
 const CONFIG = {
   baseURI: argv.baseuri,
   dbCleanInterval: argv.dbclean,
@@ -224,7 +231,7 @@ const CONFIG = {
   ssl: argv.ssl,
   sslKey: argv.sslkey || path.resolve(path.join(argv.rundir, 'key.pem')),
   sslCert: argv.sslcert || path.resolve(path.join(argv.rundir, 'fullchain.pem')),
-  allowedPaths: argv.allowedpath ? [].concat(argv.allowedpath) : undefined,
+  allowedPaths: allowedPaths.length > 0 ? allowedPaths : undefined,
 };
 
 module.exports = CONFIG;
