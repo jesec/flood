@@ -28,8 +28,6 @@ const authToken = `jwt=${getAuthToken('_config')}`;
 
 const tempDirectory = getTempPath('download');
 
-fs.mkdirSync(tempDirectory, {recursive: true});
-
 jest.setTimeout(20000);
 
 const torrentFiles = [
@@ -242,7 +240,11 @@ describe('POST /api/torrents/create', () => {
   };
 
   const dummyFilePath = path.join(tempDirectory, 'dummy');
-  fs.writeFileSync(dummyFilePath, 'test');
+
+  beforeAll(() => {
+    fs.mkdirSync(tempDirectory, {recursive: true});
+    fs.writeFileSync(dummyFilePath, 'test');
+  });
 
   it('Creates a multi-file torrent', (done) => {
     const torrentAdded = watchTorrentList('add');
