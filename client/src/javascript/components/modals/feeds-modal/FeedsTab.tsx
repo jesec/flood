@@ -26,11 +26,6 @@ import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import UIActions from '../../../actions/UIActions';
 import * as validators from '../../../util/validators';
 
-interface IntervalMultiplier {
-  displayName: string;
-  value: number;
-}
-
 type ValidatedFields = 'url' | 'label' | 'interval';
 
 interface FeedFormData extends Feed {
@@ -44,7 +39,6 @@ interface FeedsTabStates {
   errors?: {
     [field in ValidatedFields]?: string;
   };
-  intervalMultipliers: Array<IntervalMultiplier>;
   currentlyEditingFeed: Partial<Feed> | null;
   selectedFeedID: string | null;
 }
@@ -84,6 +78,21 @@ const MESSAGES = defineMessages({
     id: 'feeds.search',
   },
 });
+
+const INTERVAL_MULTIPLIERS = [
+  {
+    message: MESSAGES.min,
+    value: 1,
+  },
+  {
+    message: MESSAGES.hr,
+    value: 60,
+  },
+  {
+    message: MESSAGES.day,
+    value: 1440,
+  },
+] as const;
 
 const defaultFeed = {
   label: '',
@@ -130,20 +139,6 @@ class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
 
     this.state = {
       errors: {},
-      intervalMultipliers: [
-        {
-          displayName: this.props.intl.formatMessage(MESSAGES.min),
-          value: 1,
-        },
-        {
-          displayName: this.props.intl.formatMessage(MESSAGES.hr),
-          value: 60,
-        },
-        {
-          displayName: this.props.intl.formatMessage(MESSAGES.day),
-          value: 1440,
-        },
-      ],
       currentlyEditingFeed: null,
       selectedFeedID: null,
     };
@@ -170,19 +165,30 @@ class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
   }
 
   getIntervalSelectOptions() {
-    return this.state.intervalMultipliers.map((interval: IntervalMultiplier) => (
+    return INTERVAL_MULTIPLIERS.map((interval) => (
       <SelectItem key={interval.value} id={interval.value}>
-        {interval.displayName}
+        {this.props.intl.formatMessage(interval.message)}
       </SelectItem>
     ));
   }
 
   getModifyFeedForm(feed: Partial<Feed>) {
     const feedInterval = feed.interval || defaultFeed.interval;
-    const isDayInterval = feedInterval % 1440;
-    const minutesDivisor = feedInterval % 60 ? 1 : 60;
-    const defaultIntervalTextValue = feedInterval / isDayInterval ? minutesDivisor : 1440;
-    const defaultIntervalMultiplierId = isDayInterval ? minutesDivisor : 1440;
+
+    let defaultIntervalTextValue = feedInterval;
+    let defaultIntervalMultiplier = 1;
+
+    INTERVAL_MULTIPLIERS.forEach((interval) => {
+      const intervalMultiplier = interval.value;
+
+      if (feedInterval % intervalMultiplier === 0) {
+        defaultIntervalTextValue = feedInterval / intervalMultiplier;
+        defaultIntervalMultiplier = intervalMultiplier;
+        return true;
+      }
+
+      return false;
+    });
 
     return (
       <FormRowGroup>
@@ -202,7 +208,7 @@ class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
             defaultValue={defaultIntervalTextValue}
             width="one-eighth"
           />
-          <Select labelOffset defaultID={defaultIntervalMultiplierId} id="intervalMultiplier" width="one-eighth">
+          <Select labelOffset defaultID={defaultIntervalMultiplier} id="intervalMultiplier" width="one-eighth">
             {this.getIntervalSelectOptions()}
           </Select>
         </FormRow>
