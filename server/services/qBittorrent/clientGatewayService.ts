@@ -103,7 +103,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         const peer = peers[ip_and_port];
 
         // Only displays connected peers
-        if (!peer.flags.includes('D')) {
+        if (!peer.flags.includes('D') && !peer.flags.includes('U')) {
           return accumulator;
         }
 
