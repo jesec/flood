@@ -23,8 +23,9 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
 
   const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
 
+  const {status, upRate, downRate} = TorrentStore.torrents?.[hash] || {};
   const torrentClasses = torrentStatusClasses(
-    TorrentStore.torrents?.[hash].status,
+    {status, upRate, downRate},
     classnames({
       'torrent--is-selected': TorrentStore.selectedTorrents.includes(hash),
       'torrent--is-condensed': isCondensed,

@@ -70,14 +70,6 @@ export const getTorrentStatusFromProperties = (
     torrentStatus.push('error');
   }
 
-  if (upRate !== 0) {
-    torrentStatus.push('activelyUploading');
-  }
-
-  if (downRate !== 0) {
-    torrentStatus.push('activelyDownloading');
-  }
-
   if (upRate !== 0 || downRate !== 0) {
     torrentStatus.push('active');
   } else {

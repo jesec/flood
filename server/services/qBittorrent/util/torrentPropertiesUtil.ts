@@ -40,7 +40,6 @@ export const getTorrentStatusFromState = (state: QBittorrentTorrentState): Torre
       statuses.push('complete');
       statuses.push('active');
       statuses.push('seeding');
-      statuses.push('activelyUploading');
       break;
     case 'pausedUP':
       statuses.push('complete');
@@ -66,7 +65,6 @@ export const getTorrentStatusFromState = (state: QBittorrentTorrentState): Torre
     case 'downloading':
       statuses.push('active');
       statuses.push('downloading');
-      statuses.push('activelyDownloading');
       break;
     case 'pausedDL':
       statuses.push('inactive');

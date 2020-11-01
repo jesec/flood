@@ -43,7 +43,10 @@ class TorrentHeading extends Component {
       return null;
     }
 
-    const torrentClasses = torrentStatusClasses(torrent.status, 'torrent-details__header');
+    const torrentClasses = torrentStatusClasses(
+      {status: torrent.status, upRate: torrent.upRate, downRate: torrent.downRate},
+      'torrent-details__header',
+    );
     const torrentStatusIcon = torrentStatusIcons(torrent.status);
     this.torrentStatus = getCurrentStatus(torrent.status);
 

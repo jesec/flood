@@ -4,8 +4,6 @@ const torrentStatusMap = [
   'paused',
   'complete',
   'downloading',
-  'activelyDownloading',
-  'activelyUploading',
   'stopped',
   'error',
   'inactive',
