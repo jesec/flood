@@ -121,7 +121,6 @@
     "d3-scale": "^3.2.3",
     "d3-selection": "^2.0.0",
     "d3-shape": "^2.0.0",
-    "dayjs": "^1.9.3",
     "debug": "^4.2.0",
     "eslint": "^7.11.0",
     "eslint-config-airbnb": "^18.2.0",

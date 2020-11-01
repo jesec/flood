@@ -21,7 +21,6 @@ import Close from '../../icons/Close';
 import Edit from '../../icons/Edit';
 import FeedActions from '../../../actions/FeedActions';
 import FeedStore from '../../../stores/FeedStore';
-import {minToHumanReadable} from '../../../i18n/languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import UIActions from '../../../actions/UIActions';
 import * as validators from '../../../util/validators';
@@ -184,10 +183,7 @@ class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
       if (feedInterval % intervalMultiplier === 0) {
         defaultIntervalTextValue = feedInterval / intervalMultiplier;
         defaultIntervalMultiplier = intervalMultiplier;
-        return true;
       }
-
-      return false;
     });
 
     return (
@@ -233,7 +229,19 @@ class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
   }
 
   getFeedsListItem(feed: Feed) {
+    const {intl} = this.props;
     const matchedCount = feed.count || 0;
+
+    let intervalText = `${feed.interval}`;
+    let intervalMultiplierMessage = INTERVAL_MULTIPLIERS[0].message;
+
+    INTERVAL_MULTIPLIERS.forEach((interval) => {
+      if (feed.interval % interval.value === 0) {
+        intervalText = `${feed.interval / interval.value}`;
+        intervalMultiplierMessage = interval.message;
+      }
+    });
+
     return (
       <li className="interactive-list__item interactive-list__item--stacked-content feed-list__feed" key={feed._id}>
         <div className="interactive-list__label">
@@ -261,7 +269,7 @@ class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
             <li
               className="interactive-list__detail-list__item
               interactive-list__detail interactive-list__detail--tertiary">
-              {minToHumanReadable(feed.interval)}
+              {`${intervalText} ${intl.formatMessage(intervalMultiplierMessage)}`}
             </li>
             <li
               className="interactive-list__detail-list__item

@@ -1,8 +1,6 @@
 import classnames from 'classnames';
 import {Component} from 'react';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
 import {observer} from 'mobx-react';
 
 import type {TransferDirection} from '@shared/types/TransferData';
@@ -74,7 +72,7 @@ class TransferRateDetails extends Component<TransferRateDetailsProps> {
         <div className={timestampClasses}>
           <Duration
             suffix={intl.formatMessage(messages.ago)}
-            value={dayjs.duration(dayjs(Date.now()).diff(dayjs(inspectorPoint.nearestTimestamp))).asSeconds()}
+            value={Math.trunc((Date.now() - inspectorPoint.nearestTimestamp) / 1000)}
           />
         </div>
       );
@@ -116,7 +114,5 @@ class TransferRateDetails extends Component<TransferRateDetailsProps> {
     );
   }
 }
-
-dayjs.extend(duration);
 
 export default injectIntl(TransferRateDetails);
