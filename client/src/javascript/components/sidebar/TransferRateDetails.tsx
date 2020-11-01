@@ -3,7 +3,6 @@ import {Component} from 'react';
 import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import formatUtil from '@shared/util/formatUtil';
 import {observer} from 'mobx-react';
 
 import type {TransferDirection} from '@shared/types/TransferData';
@@ -71,14 +70,12 @@ class TransferRateDetails extends Component<TransferRateDetailsProps> {
     });
 
     if (inspectorPoint?.nearestTimestamp != null) {
-      const currentTime = dayjs(Date.now());
-      const durationSummary = formatUtil.secondsToDuration(
-        dayjs.duration(currentTime.diff(dayjs(inspectorPoint.nearestTimestamp))).asSeconds(),
-      );
-
       timestamp = (
         <div className={timestampClasses}>
-          <Duration suffix={intl.formatMessage(messages.ago)} value={durationSummary} />
+          <Duration
+            suffix={intl.formatMessage(messages.ago)}
+            value={dayjs.duration(dayjs(Date.now()).diff(dayjs(inspectorPoint.nearestTimestamp))).asSeconds()}
+          />
         </div>
       );
     }

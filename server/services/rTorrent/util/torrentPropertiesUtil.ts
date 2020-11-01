@@ -1,4 +1,3 @@
-import formatUtil from '../../../../shared/util/formatUtil';
 import truncateTo from './numberUtils';
 
 import type {TorrentProperties} from '../../../../shared/types/Torrent';
@@ -14,7 +13,7 @@ export const getTorrentETAFromProperties = (
   }
 
   if (downRate > 0) {
-    return formatUtil.secondsToDuration((sizeBytes - bytesDone) / downRate);
+    return (sizeBytes - bytesDone) / downRate;
   }
 
   return -1;

@@ -1,17 +1,17 @@
 import {FormattedMessage} from 'react-intl';
 import * as React from 'react';
 
-import type {Duration as DurationType} from '@shared/types/Torrent';
+import formatUtil from '@shared/util/formatUtil';
 
 interface DurationProps {
   suffix?: React.ReactNode;
-  value: -1 | DurationType;
+  value: number;
 }
 
 const Duration: React.FC<DurationProps> = (props: DurationProps) => {
-  const {suffix, value: duration} = props;
+  const {suffix, value} = props;
 
-  if (duration == null) {
+  if (value == null) {
     return null;
   }
 
@@ -21,6 +21,8 @@ const Duration: React.FC<DurationProps> = (props: DurationProps) => {
   if (suffix) {
     suffixElement = <span className="duration--segment">{suffix}</span>;
   }
+
+  const duration = value === -1 ? -1 : formatUtil.secondsToDuration(value);
 
   if (duration === -1) {
     content = <FormattedMessage id="unit.time.infinity" />;

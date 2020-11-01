@@ -27,7 +27,7 @@ function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<Flood
           if (p.eta === -1) {
             return Infinity;
           }
-          return p.eta.cumSeconds;
+          return p.eta;
         },
       } as SortRule);
       break;

@@ -36,7 +36,8 @@ export interface TorrentProperties {
   directory: string;
   downRate: number;
   downTotal: number;
-  eta: -1 | Duration;
+  // Torrent ETA (seconds), -1 means infinity
+  eta: number;
   hash: string;
   isMultiFile: boolean;
   isPrivate: boolean;

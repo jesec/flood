@@ -24,7 +24,6 @@ import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
-import formatUtil from '../../../shared/util/formatUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import {
   getTorrentPeerPropertiesFromFlags,
@@ -244,7 +243,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 directory: info.save_path,
                 downRate: info.dlspeed,
                 downTotal: info.downloaded,
-                eta: info.eta === -1 ? -1 : formatUtil.secondsToDuration(info.eta),
+                eta: info.eta,
                 hash: info.hash,
                 isMultiFile: false,
                 isPrivate: false,
