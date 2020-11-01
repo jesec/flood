@@ -1,33 +1,16 @@
 import {numberTransformer, stringTransformer, stringArrayTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const clientSettingMethodCallConfigs = {
+  dht: {
+    methodCall: 'dht.statistics',
+    transformValue: (value: unknown): boolean => {
+      const [stats] = value as Array<Record<string, string>>;
+      return stats.dht !== 'disable';
+    },
+  },
   dhtPort: {
     methodCall: 'dht.port',
     transformValue: numberTransformer,
-  },
-  dhtStats: {
-    methodCall: 'dht.statistics',
-    transformValue: (value: unknown) => {
-      const [stats] = value as Array<Record<string, string>>;
-      return {
-        active: Number(stats.active),
-        buckets: Number(stats.buckets),
-        bytes_read: Number(stats.bytes_read),
-        bytes_written: Number(stats.bytes_written),
-        cycle: Number(stats.cycle),
-        dht: stats.dht,
-        errors_caught: Number(stats.errors_caught),
-        errors_received: Number(stats.errors_received),
-        nodes: Number(stats.nodes),
-        peers: Number(stats.peers),
-        peers_max: Number(stats.peers_max),
-        queries_received: Number(stats.queries_received),
-        queries_sent: Number(stats.queries_sent),
-        replies_received: Number(stats.replies_received),
-        throttle: Number(stats.throttle),
-        torrents: Number(stats.torrents),
-      };
-    },
   },
   directoryDefault: {
     methodCall: 'directory.default',
@@ -110,20 +93,12 @@ const clientSettingMethodCallConfigs = {
     methodCall: 'throttle.max_downloads',
     transformValue: numberTransformer,
   },
-  throttleMaxDownloadsDiv: {
-    methodCall: 'throttle.max_downloads.div',
-    transformValue: numberTransformer,
-  },
   throttleMaxDownloadsGlobal: {
     methodCall: 'throttle.max_downloads.global',
     transformValue: numberTransformer,
   },
   throttleMaxUploads: {
     methodCall: 'throttle.max_uploads',
-    transformValue: numberTransformer,
-  },
-  throttleMaxUploadsDiv: {
-    methodCall: 'throttle.max_uploads.div',
     transformValue: numberTransformer,
   },
   throttleMaxUploadsGlobal: {

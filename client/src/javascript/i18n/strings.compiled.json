@@ -1159,12 +1159,6 @@
       "value": "About Flood"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Download Slots Divider"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1181,12 +1175,6 @@
     {
       "type": 0,
       "value": "Slot Availability"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Upload Slots Divider"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [

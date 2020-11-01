@@ -99,11 +99,6 @@ export default class BandwidthTab extends SettingsTab {
             id="throttleMaxUploads"
           />
           <Textbox
-            defaultValue={this.getChangedClientSetting('throttleMaxUploadsDiv')}
-            label={<FormattedMessage id="settings.bandwidth.slots.upload.divider.label" />}
-            id="throttleMaxUploadsDiv"
-          />
-          <Textbox
             defaultValue={this.getChangedClientSetting('throttleMaxUploadsGlobal')}
             label={<FormattedMessage id="settings.bandwidth.slots.upload.global.label" />}
             id="throttleMaxUploadsGlobal"
@@ -114,11 +109,6 @@ export default class BandwidthTab extends SettingsTab {
             defaultValue={this.getChangedClientSetting('throttleMaxDownloads')}
             label={<FormattedMessage id="settings.bandwidth.slots.download.label" />}
             id="throttleMaxDownloads"
-          />
-          <Textbox
-            defaultValue={this.getChangedClientSetting('throttleMaxDownloadsDiv')}
-            label={<FormattedMessage id="settings.bandwidth.slots.download.divider.label" />}
-            id="throttleMaxDownloadsDiv"
           />
           <Textbox
             defaultValue={this.getChangedClientSetting('throttleMaxDownloadsGlobal')}

@@ -616,12 +616,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((response) => {
           return processMethodCallResponse(response, configs);
-        })
-        .then((processedResponse) => {
-          return {
-            dht: processedResponse.dhtStats.dht !== 'disable',
-            ...processedResponse,
-          };
         }) || Promise.reject()
     );
   }
