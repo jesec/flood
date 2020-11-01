@@ -455,6 +455,12 @@
       "value": "crwdns3558:0crwdne3558:0"
     }
   ],
+  "connection.settings.rtorrent.type.tcp.warning": [
+    {
+      "type": 0,
+      "value": "crwdns3652:0crwdne3652:0"
+    }
+  ],
   "connectivity.modal.content": [
     {
       "type": 0,
@@ -530,7 +536,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "crwdns3522:0crwdne3522:0"
+      "value": "crwdns3650:0crwdne3650:0"
     }
   ],
   "feeds.exclude": [
