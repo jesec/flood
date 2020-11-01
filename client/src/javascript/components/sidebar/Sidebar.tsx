@@ -16,7 +16,10 @@ import TransferData from './TransferData';
 const Sidebar = () => {
   return (
     <OverlayScrollbarsComponent
-      options={{scrollbars: {autoHide: 'leave', autoHideDelay: 0}, className: 'application__sidebar os-theme-thin'}}>
+      options={{
+        scrollbars: {autoHide: 'scroll', clickScrolling: false, dragScrolling: false},
+        className: 'application__sidebar os-theme-thin',
+      }}>
       <SidebarActions>
         <SpeedLimitDropdown />
         <SettingsButton />
