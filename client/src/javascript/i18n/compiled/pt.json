@@ -571,6 +571,12 @@
       "value": "TCP"
     }
   ],
+  "connection.settings.rtorrent.type.tcp.warning": [
+    {
+      "type": 0,
+      "value": "Exposing rTorrent via TCP may allow privilege escalation."
+    }
+  ],
   "connectivity.modal.content": [
     {
       "type": 0,
@@ -646,7 +652,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Padrão de Teste de Partida"
+      "value": "Validate the rule by trying it out. Not saved or sent."
     }
   ],
   "feeds.exclude": [
