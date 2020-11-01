@@ -554,7 +554,7 @@
   "connection.settings.rtorrent.type.tcp.warning": [
     {
       "type": 0,
-      "value": "Exposing rTorrent via TCP may allow privilege escalation."
+      "value": "Vystavení rTorrentu prostřednictvím TCP může umožnit eskalaci práv."
     }
   ],
   "connectivity.modal.content": [
@@ -632,7 +632,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Validate the rule by trying it out. Not saved or sent."
+      "value": "Ověřte pravidlo vyzkoušením. Neuloženo ani neodesláno."
     }
   ],
   "feeds.exclude": [
