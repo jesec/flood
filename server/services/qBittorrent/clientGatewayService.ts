@@ -46,111 +46,130 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
     // TODO: qBittorrent does not have capability to add tags during add torrents.
 
-    return this.clientRequestManager.torrentsAddFiles(fileBuffers, {
-      savepath: destination,
-      paused: !start,
-      root_folder: !isBasePath,
-    });
+    return this.clientRequestManager
+      .torrentsAddFiles(fileBuffers, {
+        savepath: destination,
+        paused: !start,
+        root_folder: !isBasePath,
+      })
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async addTorrentsByURL({urls, destination, isBasePath, start}: AddTorrentByURLOptions): Promise<void> {
     // TODO: qBittorrent does not have capability to add tags during add torrents.
 
-    return this.clientRequestManager.torrentsAddURLs(urls, {
-      savepath: destination,
-      paused: !start,
-      root_folder: !isBasePath,
-    });
+    return this.clientRequestManager
+      .torrentsAddURLs(urls, {
+        savepath: destination,
+        paused: !start,
+        root_folder: !isBasePath,
+      })
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {
-    return this.clientRequestManager.torrentsRecheck(hashes);
+    return this.clientRequestManager
+      .torrentsRecheck(hashes)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
-    return this.clientRequestManager.getTorrentContents(hash).then((contents) => {
-      return contents.map((content, index) => {
-        let priority = TorrentContentPriority.NORMAL;
+    return this.clientRequestManager
+      .getTorrentContents(hash)
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((contents) => {
+        return contents.map((content, index) => {
+          let priority = TorrentContentPriority.NORMAL;
 
-        switch (content.priority) {
-          case QBittorrentTorrentContentPriority.DO_NOT_DOWNLOAD:
-            priority = TorrentContentPriority.DO_NOT_DOWNLOAD;
-            break;
-          case QBittorrentTorrentContentPriority.HIGH:
-          case QBittorrentTorrentContentPriority.MAXIMUM:
-            priority = TorrentContentPriority.HIGH;
-            break;
-          default:
-            break;
-        }
+          switch (content.priority) {
+            case QBittorrentTorrentContentPriority.DO_NOT_DOWNLOAD:
+              priority = TorrentContentPriority.DO_NOT_DOWNLOAD;
+              break;
+            case QBittorrentTorrentContentPriority.HIGH:
+            case QBittorrentTorrentContentPriority.MAXIMUM:
+              priority = TorrentContentPriority.HIGH;
+              break;
+            default:
+              break;
+          }
 
-        return {
-          index,
-          path: content.name,
-          filename: content.name.split('/').pop() || '',
-          percentComplete: Math.trunc(content.progress * 100),
-          priority,
-          sizeBytes: content.size,
-        };
+          return {
+            index,
+            path: content.name,
+            filename: content.name.split('/').pop() || '',
+            percentComplete: Math.trunc(content.progress * 100),
+            priority,
+            sizeBytes: content.size,
+          };
+        });
       });
-    });
   }
 
   async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
-    return this.clientRequestManager.syncTorrentPeers(hash).then((peers) => {
-      return Object.keys(peers).reduce((accumulator: Array<TorrentPeer>, ip_and_port) => {
-        const peer = peers[ip_and_port];
+    return this.clientRequestManager
+      .syncTorrentPeers(hash)
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((peers) => {
+        return Object.keys(peers).reduce((accumulator: Array<TorrentPeer>, ip_and_port) => {
+          const peer = peers[ip_and_port];
 
-        // Only displays connected peers
-        if (!peer.flags.includes('D') && !peer.flags.includes('U')) {
+          // Only displays connected peers
+          if (!peer.flags.includes('D') && !peer.flags.includes('U')) {
+            return accumulator;
+          }
+
+          const properties = getTorrentPeerPropertiesFromFlags(peer.flags);
+          accumulator.push({
+            country: peer.country_code,
+            address: peer.ip,
+            completedPercent: Math.trunc(peer.progress * 100),
+            clientVersion: peer.client,
+            downloadRate: peer.dl_speed,
+            downloadTotal: peer.downloaded,
+            uploadRate: peer.up_speed,
+            uploadTotal: peer.uploaded,
+            id: crypto.createHash('sha1').update(ip_and_port).digest('base64'),
+            peerRate: 0,
+            peerTotal: 0,
+            isEncrypted: properties.isEncrypted,
+            isIncoming: properties.isIncoming,
+          });
+
           return accumulator;
-        }
-
-        const properties = getTorrentPeerPropertiesFromFlags(peer.flags);
-        accumulator.push({
-          country: peer.country_code,
-          address: peer.ip,
-          completedPercent: Math.trunc(peer.progress * 100),
-          clientVersion: peer.client,
-          downloadRate: peer.dl_speed,
-          downloadTotal: peer.downloaded,
-          uploadRate: peer.up_speed,
-          uploadTotal: peer.uploaded,
-          id: crypto.createHash('sha1').update(ip_and_port).digest('base64'),
-          peerRate: 0,
-          peerTotal: 0,
-          isEncrypted: properties.isEncrypted,
-          isIncoming: properties.isIncoming,
-        });
-
-        return accumulator;
-      }, []);
-    });
+        }, []);
+      });
   }
 
   async getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
-    return this.clientRequestManager.getTorrentTrackers(hash).then((trackers) => {
-      return trackers.map((tracker, index) => {
-        return {
-          index,
-          id: crypto.createHash('sha1').update(tracker.url).digest('base64'),
-          url: tracker.url,
-          type: getTorrentTrackerTypeFromURL(tracker.url),
-          group: tracker.tier,
-          minInterval: 0,
-          normalInterval: 0,
-          isEnabled: tracker.status !== QBittorrentTorrentTrackerStatus.DISABLED,
-        };
+    return this.clientRequestManager
+      .getTorrentTrackers(hash)
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((trackers) => {
+        return trackers.map((tracker, index) => {
+          return {
+            index,
+            id: crypto.createHash('sha1').update(tracker.url).digest('base64'),
+            url: tracker.url,
+            type: getTorrentTrackerTypeFromURL(tracker.url),
+            group: tracker.tier,
+            minInterval: 0,
+            normalInterval: 0,
+            isEnabled: tracker.status !== QBittorrentTorrentTrackerStatus.DISABLED,
+          };
+        });
       });
-    });
   }
 
   async moveTorrents({hashes, destination}: MoveTorrentsOptions): Promise<void> {
-    return this.clientRequestManager.torrentsSetLocation(hashes, destination);
+    return this.clientRequestManager
+      .torrentsSetLocation(hashes, destination)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async removeTorrents({hashes, deleteData}: DeleteTorrentsOptions): Promise<void> {
-    return this.clientRequestManager.torrentsDelete(hashes, deleteData || false);
+    return this.clientRequestManager
+      .torrentsDelete(hashes, deleteData || false)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async setTorrentsPriority({hashes, priority}: SetTorrentsPriorityOptions): Promise<void> {
@@ -159,16 +178,22 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       case TorrentPriority.DO_NOT_DOWNLOAD:
         return this.stopTorrents({hashes});
       case TorrentPriority.LOW:
-        return this.clientRequestManager.torrentsSetBottomPrio(hashes);
+        return this.clientRequestManager
+          .torrentsSetBottomPrio(hashes)
+          .then(this.processClientRequestSuccess, this.processClientRequestError);
       case TorrentPriority.HIGH:
-        return this.clientRequestManager.torrentsSetTopPrio(hashes);
+        return this.clientRequestManager
+          .torrentsSetTopPrio(hashes)
+          .then(this.processClientRequestSuccess, this.processClientRequestError);
       default:
         return undefined;
     }
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
-    return this.clientRequestManager.torrentsAddTags(hashes, tags);
+    return this.clientRequestManager
+      .torrentsAddTags(hashes, tags)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions): Promise<void> {
@@ -176,6 +201,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       hashes.map((hash) => {
         return this.clientRequestManager
           .torrentsAddTrackers(hash, trackers)
+          .then(this.processClientRequestSuccess, this.processClientRequestError)
           .then(() => delete this.cachedTrackerURIs[hash]);
       }),
     );
@@ -198,15 +224,21 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         break;
     }
 
-    return this.clientRequestManager.torrentsFilePrio(hash, indices, qbFilePriority);
+    return this.clientRequestManager
+      .torrentsFilePrio(hash, indices, qbFilePriority)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async startTorrents({hashes}: StartTorrentsOptions): Promise<void> {
-    return this.clientRequestManager.torrentsResume(hashes);
+    return this.clientRequestManager
+      .torrentsResume(hashes)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async stopTorrents({hashes}: StopTorrentsOptions): Promise<void> {
-    return this.clientRequestManager.torrentsPause(hashes);
+    return this.clientRequestManager
+      .torrentsPause(hashes)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async fetchTorrentList(): Promise<TorrentListSummary> {
@@ -215,6 +247,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError)
       .then(async (infos) => {
         this.emit('PROCESS_TORRENT_LIST_START');
+
         const torrentList: TorrentList = Object.assign(
           {},
           ...(await Promise.all(
@@ -333,29 +366,31 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   }
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
-    return this.clientRequestManager.setAppPreferences({
-      dht: settings.dht,
-      save_path: settings.directoryDefault,
-      max_connec: settings.networkHttpMaxOpen,
-      announce_ip: settings.networkLocalAddress ? settings.networkLocalAddress[0] : undefined,
-      random_port: settings.networkPortRandom,
-      listen_port: settings.networkPortRange ? Number(settings.networkPortRange?.split('-')[0]) : undefined,
-      pex: settings.protocolPex,
-      dl_limit: settings.throttleGlobalDownMax,
-      up_limit: settings.throttleGlobalUpMax,
-      max_uploads_per_torrent: settings.throttleMaxUploads,
-      max_uploads: settings.throttleMaxUploadsGlobal,
-    });
+    return this.clientRequestManager
+      .setAppPreferences({
+        dht: settings.dht,
+        save_path: settings.directoryDefault,
+        max_connec: settings.networkHttpMaxOpen,
+        announce_ip: settings.networkLocalAddress ? settings.networkLocalAddress[0] : undefined,
+        random_port: settings.networkPortRandom,
+        listen_port: settings.networkPortRange ? Number(settings.networkPortRange?.split('-')[0]) : undefined,
+        pex: settings.protocolPex,
+        dl_limit: settings.throttleGlobalDownMax,
+        up_limit: settings.throttleGlobalUpMax,
+        max_uploads_per_torrent: settings.throttleMaxUploads,
+        max_uploads: settings.throttleMaxUploadsGlobal,
+      })
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async testGateway(clientSettings?: ClientConnectionSettings): Promise<void> {
     if (clientSettings != null && clientSettings.client !== 'qBittorrent') {
-      return;
-    }
-
-    if (!(await this.clientRequestManager.authenticate(clientSettings))) {
       throw new Error();
     }
+
+    return this.clientRequestManager
+      .updateAuthCookie(clientSettings)
+      .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
   }
 }
 

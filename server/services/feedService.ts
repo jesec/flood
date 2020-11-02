@@ -247,7 +247,7 @@ class FeedService extends BaseService {
           itemsToDownload.map(
             async (item): Promise<Array<string>> => {
               const {urls, destination, start, tags, ruleID} = item;
-              await this?.services?.clientGatewayService
+              await this.services?.clientGatewayService
                 ?.addTorrentsByURL({
                   urls,
                   destination,

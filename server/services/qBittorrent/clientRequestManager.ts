@@ -15,43 +15,42 @@ import type {
 } from './types/QBittorrentTorrentsMethods';
 
 class ClientRequestManager {
-  connectionSettings: QBittorrentConnectionSettings;
-  apiBase: string;
-  authCookie?: Promise<string | undefined>;
+  private connectionSettings: QBittorrentConnectionSettings;
+  private apiBase: string;
+  private authCookie?: Promise<string | undefined>;
 
-  async authenticate(connectionSettings?: QBittorrentConnectionSettings): Promise<boolean> {
-    let {url, username, password} = this.connectionSettings;
+  async authenticate(connectionSettings = this.connectionSettings): Promise<string | undefined> {
+    const {url, username, password} = connectionSettings;
 
-    if (connectionSettings != null) {
-      url = connectionSettings.url;
-      username = connectionSettings.username;
-      password = connectionSettings.password;
-    }
+    return axios.get(`${url}/api/v2/auth/login?username=${username}&password=${password}`).then((res) => {
+      const cookies: Array<string> = res.headers['set-cookie'];
 
-    this.authCookie = axios.get(`${url}/api/v2/auth/login?username=${username}&password=${password}`).then(
-      (res) => {
-        const cookies: Array<string> = res.headers['set-cookie'];
+      if (Array.isArray(cookies)) {
+        return cookies.filter((cookie) => cookie.includes('SID='))[0];
+      }
 
-        if (Array.isArray(cookies)) {
-          return cookies.filter((cookie) => cookie.includes('SID='))[0];
-        }
+      return undefined;
+    });
+  }
 
-        return undefined;
-      },
-      () => {
-        return undefined;
-      },
-    );
+  async updateAuthCookie(connectionSettings?: QBittorrentConnectionSettings): Promise<void> {
+    let authFailed = false;
+
+    this.authCookie = new Promise((resolve) => {
+      this.authenticate(connectionSettings).then(
+        (authCookie) => {
+          resolve(authCookie);
+        },
+        () => {
+          authFailed = true;
+          resolve(undefined);
+        },
+      );
+    });
 
     await this.authCookie;
 
-    if (this.authCookie != null) {
-      return true;
-    }
-
-    setTimeout(this.authenticate, 5000);
-
-    return false;
+    return authFailed ? Promise.reject() : Promise.resolve();
   }
 
   async getAppPreferences(): Promise<QBittorrentAppPreferences> {
@@ -262,8 +261,7 @@ class ClientRequestManager {
   constructor(connectionSettings: QBittorrentConnectionSettings) {
     this.connectionSettings = connectionSettings;
     this.apiBase = `${connectionSettings.url}/api/v2`;
-
-    this.authenticate();
+    this.updateAuthCookie().catch(() => undefined);
   }
 }
 

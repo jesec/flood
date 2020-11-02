@@ -676,26 +676,27 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     if (clientSettings == null) {
       return this.clientRequestManager
         .methodCall('system.methodExist', ['system.multicall'])
-        .then(this.processClientRequestSuccess)
-        .catch(this.processClientRequestError);
+        .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
     }
 
     if (clientSettings.client !== 'rTorrent') {
       return Promise.reject();
     }
 
-    return scgiUtil.methodCall(
-      clientSettings.type === 'socket'
-        ? {
-            socketPath: clientSettings.socket,
-          }
-        : {
-            host: clientSettings.host,
-            port: clientSettings.port,
-          },
-      'system.methodExist',
-      ['system.multicall'],
-    );
+    return scgiUtil
+      .methodCall(
+        clientSettings.type === 'socket'
+          ? {
+              socketPath: clientSettings.socket,
+            }
+          : {
+              host: clientSettings.host,
+              port: clientSettings.port,
+            },
+        'system.methodExist',
+        ['system.multicall'],
+      )
+      .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
   }
 }
 
