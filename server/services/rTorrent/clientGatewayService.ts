@@ -64,7 +64,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     start,
   }: AddTorrentByFileOptions): Promise<void> {
     if (!Array.isArray(files)) {
-      throw new Error();
+      return Promise.reject();
     }
 
     const torrentPaths = await Promise.all(
@@ -249,16 +249,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    await this.stopTorrents({hashes}).catch((e) => {
-      throw e;
-    });
-
-    await this.clientRequestManager
-      .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
-      .catch((e) => {
-        throw e;
-      });
+    try {
+      await this.stopTorrents({hashes});
+      await this.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError);
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
     if (moveFiles) {
       hashes.forEach((hash) => {
@@ -266,7 +264,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         const baseFileName = this.services?.torrentService.getTorrent(hash).baseFilename;
 
         if (sourceBasePath == null || baseFileName == null) {
-          throw new Error();
+          return;
         }
 
         const destinationFilePath = path.join(destination, baseFileName);
@@ -282,9 +280,11 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     }
 
     if (isCheckHash) {
-      await this.checkTorrents({hashes}).catch((e) => {
-        throw e;
-      });
+      try {
+        await this.checkTorrents({hashes});
+      } catch (e) {
+        return Promise.reject(e);
+      }
     }
 
     return this.startTorrents({hashes: hashesToRestart});

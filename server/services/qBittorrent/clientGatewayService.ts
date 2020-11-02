@@ -385,7 +385,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
   async testGateway(clientSettings?: ClientConnectionSettings): Promise<void> {
     if (clientSettings != null && clientSettings.client !== 'qBittorrent') {
-      throw new Error();
+      return Promise.reject();
     }
 
     return this.clientRequestManager
