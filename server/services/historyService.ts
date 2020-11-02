@@ -103,6 +103,8 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
     }
+
+    super.destroy();
   }
 
   fetchCurrentTransferSummary = () => {
