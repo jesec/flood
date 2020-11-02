@@ -22,7 +22,7 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
 
   const serviceInstances = services.getAllServices(user);
   const serverEvent = new ServerEvent(res);
-  const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList()?.catch((e) => console.error(e));
+  const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();
 
   if (serviceInstances.clientGatewayService == null) {
     return;
@@ -82,7 +82,7 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
     const {timestamps: lastTimestamps} = snapshot || {timestamps: []};
     const lastTimestamp = lastTimestamps[lastTimestamps.length - 1];
 
-    if (error == null && snapshot != null) {
+    if (error == null && snapshot != null && lastTimestamp != null) {
       serverEvent.emit(lastTimestamp, 'TRANSFER_HISTORY_FULL_UPDATE', snapshot);
     }
   });

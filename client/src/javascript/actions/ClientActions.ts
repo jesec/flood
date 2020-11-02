@@ -63,14 +63,9 @@ const ClientActions = {
     axios
       .get(`${baseURI}api/client/connection-test`)
       .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+      .then(() => {
+        // do nothing.
+      }),
 } as const;
 
 export default ClientActions;

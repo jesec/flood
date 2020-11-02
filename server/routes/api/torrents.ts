@@ -40,7 +40,13 @@ router.get('/', (req, res) => {
 
   req.services?.torrentService
     .fetchTorrentList()
-    .then(callback)
+    .then((data) => {
+      if (data == null) {
+        callback(null, new Error());
+      } else {
+        callback(data);
+      }
+    })
     .catch((err) => {
       callback(null, err);
     });

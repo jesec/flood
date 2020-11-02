@@ -407,6 +407,12 @@
       "value": "No"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -425,16 +431,22 @@
       "value": "Adding..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Test"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Yes"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -443,22 +455,16 @@
       "value": "Cannot connect to the client"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "Connection could not be verified."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Connection successful"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Let's verify your connection settings."
     }
   ],
   "connection.settings.client.select": [
