@@ -21,16 +21,18 @@ import type {
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import BaseService from '../BaseService';
+import config from '../../../config';
 
 interface ClientGatewayServiceEvents {
-  CLIENT_CONNECTION_STATE_CHANGE: () => void;
+  CLIENT_CONNECTION_STATE_CHANGE: (isConnected: boolean) => void;
   PROCESS_TORRENT_LIST_START: () => void;
   PROCESS_TORRENT_LIST_END: (torrentListSummary: TorrentListSummary) => void;
   PROCESS_TORRENT: (torrentProperties: TorrentProperties) => void;
 }
 
 abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
-  hasError = false;
+  errorCount = 0;
+  retryTimer: NodeJS.Timeout | null = null;
 
   /**
    * Adds torrents by file
@@ -89,7 +91,7 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
   abstract moveTorrents(options: MoveTorrentsOptions): Promise<void>;
 
   /**
-   * Removes torrents from rTorrent's session. Optionally deletes data of torrents.
+   * Removes torrents. Optionally deletes data of torrents.
    *
    * @param {DeleteTorrentsOptions} options - An object of options...
    * @return {Promise<void>} - Rejects with error.
@@ -161,14 +163,14 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
   abstract fetchTransferSummary(): Promise<TransferSummary>;
 
   /**
-   * Gets settings of rTorrent
+   * Gets settings of the torrent client
    *
    * @return {Promise<ClientSettings>} - Resolves with ClientSettings or rejects with error.
    */
   abstract getClientSettings(): Promise<ClientSettings>;
 
   /**
-   * Sets settings of rTorrent
+   * Sets settings of the torrent client
    *
    * @param {SetClientSettingsOptions} - Settings to be set.
    * @return {Promise<void>} - Rejects with error.
@@ -177,22 +179,48 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
 
   abstract testGateway(clientSettings?: ClientConnectionSettings): Promise<void>;
 
+  destroyTimer() {
+    if (this.retryTimer != null) {
+      clearTimeout(this.retryTimer);
+      this.retryTimer = null;
+    }
+  }
+
+  destroy() {
+    this.destroyTimer();
+    super.destroy();
+  }
+
+  startTimer() {
+    if (this.retryTimer == null) {
+      this.retryTimer = setTimeout(() => {
+        this.errorCount += 1;
+        this.destroyTimer();
+        this.testGateway().catch(() => undefined);
+      }, config.torrentClientPollInterval * this.errorCount);
+    }
+  }
+
   processClientRequestSuccess = <T>(response: T): T => {
-    if (this.hasError == null || this.hasError === true) {
-      this.hasError = false;
-      this.emit('CLIENT_CONNECTION_STATE_CHANGE');
+    this.destroyTimer();
+
+    if (this.errorCount !== 0) {
+      this.errorCount = 0;
+      this.emit('CLIENT_CONNECTION_STATE_CHANGE', true);
     }
 
     return response;
   };
 
   processClientRequestError = (error: Error) => {
-    if (!this.hasError) {
-      this.hasError = true;
-      this.emit('CLIENT_CONNECTION_STATE_CHANGE');
+    if (this.errorCount === 0) {
+      this.errorCount += 1;
+      this.emit('CLIENT_CONNECTION_STATE_CHANGE', false);
     }
 
-    return Promise.reject(error);
+    this.startTimer();
+
+    throw error;
   };
 }
 

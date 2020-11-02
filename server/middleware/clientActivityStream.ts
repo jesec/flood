@@ -42,7 +42,7 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
 
   // Emit current state immediately on connection.
   serverEvent.emit(Date.now(), 'CLIENT_CONNECTIVITY_STATUS_CHANGE', {
-    isConnected: !serviceInstances.clientGatewayService.hasError,
+    isConnected: serviceInstances.clientGatewayService.errorCount === 0,
   });
 
   // Disk usage change event
@@ -66,13 +66,13 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
     serviceInstances.notificationService.getNotificationCount(),
   );
 
-  handleEvents(serviceInstances.clientGatewayService, 'CLIENT_CONNECTION_STATE_CHANGE', () => {
+  handleEvents(serviceInstances.clientGatewayService, 'CLIENT_CONNECTION_STATE_CHANGE', (isConnected: boolean) => {
     serverEvent.emit(Date.now(), 'CLIENT_CONNECTIVITY_STATUS_CHANGE', {
-      isConnected: !serviceInstances.clientGatewayService?.hasError,
+      isConnected,
     });
   });
 
-  if (serviceInstances.clientGatewayService.hasError) {
+  if (serviceInstances.clientGatewayService.errorCount !== 0) {
     serviceInstances.clientGatewayService.testGateway().catch(console.error);
   }
 
