@@ -1,4 +1,3 @@
-import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
@@ -177,7 +176,7 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
    */
   abstract setClientSettings(settings: SetClientSettingsOptions): Promise<void>;
 
-  abstract testGateway(clientSettings?: ClientConnectionSettings): Promise<void>;
+  abstract testGateway(): Promise<void>;
 
   destroyTimer() {
     if (this.retryTimer != null) {

@@ -1,6 +1,5 @@
 import express from 'express';
 
-import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
@@ -23,27 +22,6 @@ const router = express.Router();
 router.get('/connection-test', (req, res) => {
   req.services?.clientGatewayService
     ?.testGateway()
-    .then(() => {
-      res.status(200).json({isConnected: true});
-    })
-    .catch(() => {
-      res.status(500).json({isConnected: false});
-    });
-});
-
-/**
- * POST /api/client/connection-test
- * @summary Tests connection to the torrent client with supplied new settings
- * @tags Client
- * @security Administrator
- * @param {ClientConnectionSettings} request.body.required - settings - application/json
- * @return {{isConnected: true}} 200 - success response - application/json
- * @return {{isConnected: false}} 500 - failure response - application/json
- */
-router.post('/connection-test', requireAdmin);
-router.post<unknown, unknown, ClientConnectionSettings>('/connection-test', (req, res) => {
-  req.services?.clientGatewayService
-    ?.testGateway(req.body)
     .then(() => {
       res.status(200).json({isConnected: true});
     })

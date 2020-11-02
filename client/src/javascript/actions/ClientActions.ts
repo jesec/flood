@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
-import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ConfigStore from '../stores/ConfigStore';
@@ -59,9 +58,6 @@ const ClientActions = {
   saveSetting: async <T extends ClientSetting>(property: T, data: ClientSettings[T]): Promise<void> => {
     return ClientActions.saveSettings({[property]: data});
   },
-
-  testClientConnectionSettings: async (connectionSettings: ClientConnectionSettings): Promise<{isConnected: boolean}> =>
-    axios.post(`${baseURI}api/client/connection-test`, connectionSettings).then((json) => json.data),
 
   testConnection: async (): Promise<void> =>
     axios

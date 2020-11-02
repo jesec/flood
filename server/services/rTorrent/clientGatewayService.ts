@@ -5,7 +5,7 @@ import path from 'path';
 import sanitize from 'sanitize-filename';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {ClientConnectionSettings, RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
@@ -29,7 +29,6 @@ import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import {createDirectory} from '../../util/fileUtil';
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
-import scgiUtil from './util/scgiUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {fetchURLToTempFile, saveBufferToTempFile} from '../../util/tempFileUtil';
 import {setCompleted, setTrackers} from '../../util/torrentFileUtil';
@@ -672,30 +671,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     );
   }
 
-  async testGateway(clientSettings?: ClientConnectionSettings): Promise<void> {
-    if (clientSettings == null) {
-      return this.clientRequestManager
-        .methodCall('system.methodExist', ['system.multicall'])
-        .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
-    }
-
-    if (clientSettings.client !== 'rTorrent') {
-      return Promise.reject();
-    }
-
-    return scgiUtil
-      .methodCall(
-        clientSettings.type === 'socket'
-          ? {
-              socketPath: clientSettings.socket,
-            }
-          : {
-              host: clientSettings.host,
-              port: clientSettings.port,
-            },
-        'system.methodExist',
-        ['system.multicall'],
-      )
+  async testGateway(): Promise<void> {
+    return this.clientRequestManager
+      .methodCall('system.methodExist', ['system.multicall'])
       .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
   }
 }

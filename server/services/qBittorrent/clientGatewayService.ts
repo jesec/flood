@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {ClientConnectionSettings, QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
@@ -383,13 +383,9 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  async testGateway(clientSettings?: ClientConnectionSettings): Promise<void> {
-    if (clientSettings != null && clientSettings.client !== 'qBittorrent') {
-      return Promise.reject();
-    }
-
+  async testGateway(): Promise<void> {
     return this.clientRequestManager
-      .updateAuthCookie(clientSettings)
+      .updateAuthCookie()
       .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
   }
 }
