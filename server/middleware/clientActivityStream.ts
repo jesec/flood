@@ -9,6 +9,7 @@ import ServerEvent from '../models/ServerEvent';
 import services from '../services';
 
 import type {DiskUsageSummary} from '../models/DiskUsage';
+import type {TransferHistory} from '../../shared/types/TransferData';
 
 export default async (req: Request<unknown, unknown, unknown, {historySnapshot: HistorySnapshot}>, res: Response) => {
   const {
@@ -76,7 +77,6 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
     serviceInstances.clientGatewayService.testGateway().catch(console.error);
   }
 
-  // TODO: Handle empty or sub-optimal history states.
   // Get user's specified history snapshot current history.
   serviceInstances.historyService.getHistory({snapshot: historySnapshot}, (snapshot, error) => {
     const {timestamps: lastTimestamps} = snapshot || {timestamps: []};
@@ -84,6 +84,9 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
 
     if (error == null && snapshot != null && lastTimestamp != null) {
       serverEvent.emit(lastTimestamp, 'TRANSFER_HISTORY_FULL_UPDATE', snapshot);
+    } else {
+      const fallbackHistory: TransferHistory = {download: [0], upload: [0], timestamps: [Date.now()]};
+      serverEvent.emit(Date.now(), 'TRANSFER_HISTORY_FULL_UPDATE', fallbackHistory);
     }
   });
 
