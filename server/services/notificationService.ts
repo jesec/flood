@@ -1,5 +1,4 @@
 import Datastore from 'nedb';
-import debounce from 'lodash/debounce';
 import path from 'path';
 
 import type {Notification, NotificationCount, NotificationFetchOptions} from '@shared/types/Notification';
@@ -19,8 +18,6 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
-
-    this.emitUpdate = debounce(this.emitUpdate.bind(this), 100);
 
     this.onServicesUpdated = () => {
       this.countNotifications();
@@ -77,12 +74,12 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
     });
   }
 
-  emitUpdate() {
+  emitUpdate = () => {
     this.emit('NOTIFICATION_COUNT_CHANGE', {
       id: Date.now(),
       data: this.count,
     });
-  }
+  };
 
   getNotificationCount() {
     return this.count;

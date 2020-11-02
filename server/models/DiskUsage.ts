@@ -37,7 +37,7 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
     // start polling disk usage when the first listener is added
     this.on('newListener', (event) => {
       if (this.listenerCount('DISK_USAGE_CHANGE') === 0 && event === 'DISK_USAGE_CHANGE') {
-        this.updateInterval = setInterval(this.updateDisks.bind(this), INTERVAL_UPDATE);
+        this.updateInterval = setInterval(this.updateDisks, INTERVAL_UPDATE);
       }
     });
 
@@ -53,7 +53,7 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
     });
   }
 
-  updateDisks() {
+  updateDisks = () => {
     if (!isPlatformSupported()) {
       return Promise.reject();
     }
@@ -64,7 +64,7 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
         this.emit('DISK_USAGE_CHANGE', this.getDiskUsage());
       }
     });
-  }
+  };
 
   getDiskUsage(): DiskUsageSummary {
     return {

@@ -22,11 +22,6 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
 
-    this.fetchTorrentList = this.fetchTorrentList.bind(this);
-    this.handleTorrentProcessed = this.handleTorrentProcessed.bind(this);
-    this.handleFetchTorrentListSuccess = this.handleFetchTorrentListSuccess.bind(this);
-    this.handleFetchTorrentListError = this.handleFetchTorrentListError.bind(this);
-
     this.onServicesUpdated = () => {
       if (this.services?.clientGatewayService == null) {
         return;
@@ -67,7 +62,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     }
   }
 
-  fetchTorrentList() {
+  fetchTorrentList = () => {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
     }
@@ -78,7 +73,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
         .then(this.handleFetchTorrentListSuccess)
         .catch(this.handleFetchTorrentListError) || Promise.reject()
     );
-  }
+  };
 
   getTorrent(hash: TorrentProperties['hash']) {
     return this.torrentListSummary.torrents[hash];
@@ -92,14 +87,14 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     return this.torrentListSummary;
   }
 
-  handleFetchTorrentListError() {
+  handleFetchTorrentListError = () => {
     this.deferFetchTorrentList();
 
     this.emit('FETCH_TORRENT_LIST_ERROR');
     return null;
-  }
+  };
 
-  handleFetchTorrentListSuccess(nextTorrentListSummary: this['torrentListSummary']) {
+  handleFetchTorrentListSuccess = (nextTorrentListSummary: this['torrentListSummary']) => {
     const diff = jsonpatch.compare(this.torrentListSummary.torrents, nextTorrentListSummary.torrents);
     if (diff.length > 0) {
       this.emit('TORRENT_LIST_DIFF_CHANGE', {diff, id: nextTorrentListSummary.id});
@@ -111,9 +106,9 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
 
     this.emit('FETCH_TORRENT_LIST_SUCCESS');
     return this.torrentListSummary;
-  }
+  };
 
-  handleTorrentProcessed(nextTorrentProperties: TorrentProperties) {
+  handleTorrentProcessed = (nextTorrentProperties: TorrentProperties) => {
     const prevTorrentProperties = this.torrentListSummary.torrents[nextTorrentProperties.hash];
 
     if (hasTorrentFinished(prevTorrentProperties, nextTorrentProperties)) {
@@ -124,7 +119,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
         },
       ]);
     }
-  }
+  };
 }
 
 export default TorrentService;

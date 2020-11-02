@@ -40,7 +40,7 @@ class HistoryEra {
       cleanupInterval = config.dbCleanInterval;
     }
 
-    this.startAutoCleanup(cleanupInterval, this.db);
+    this.autoCleanupInterval = setInterval(this.cleanup, cleanupInterval);
   }
 
   loadDatabase(userId: UserInDatabase['_id'], dbName: string) {
@@ -91,10 +91,10 @@ class HistoryEra {
     }
   }
 
-  cleanup(db: this['db']) {
-    this.removeOutdatedData(db);
-    db.persistence.compactDatafile();
-  }
+  cleanup = () => {
+    this.removeOutdatedData(this.db);
+    this.db.persistence.compactDatafile();
+  };
 
   getData(callback: (snapshots: Array<TransferSnapshot> | null, error?: Error) => void) {
     const minTimestamp = Date.now() - this.opts.maxTime;
@@ -147,40 +147,18 @@ class HistoryEra {
     }
 
     if (nextEraUpdateInterval) {
-      this.startNextEraUpdate(nextEraUpdateInterval, this.db);
+      this.nextEraUpdateInterval = setInterval(this.updateNextEra, nextEraUpdateInterval);
     }
   }
 
-  startAutoCleanup(interval: number, db: this['db']): void {
-    this.autoCleanupInterval = setInterval(this.cleanup.bind(this, db), interval);
-  }
-
-  startNextEraUpdate(interval: number, currentDB: this['db']): void {
-    this.nextEraUpdateInterval = setInterval(this.updateNextEra.bind(this, currentDB), interval);
-  }
-
-  stopAutoCleanup(): void {
-    if (this.autoCleanupInterval != null) {
-      clearInterval(this.autoCleanupInterval);
-      delete this.autoCleanupInterval;
-    }
-  }
-
-  stopNextEraUpdate(): void {
-    if (this.nextEraUpdateInterval != null) {
-      clearInterval(this.nextEraUpdateInterval);
-      delete this.nextEraUpdateInterval;
-    }
-  }
-
-  updateNextEra(currentDB: this['db']): void {
+  updateNextEra = (): void => {
     if (this.opts.nextEraUpdateInterval == null) {
       return;
     }
 
     const minTimestamp = Date.now() - this.opts.nextEraUpdateInterval;
 
-    currentDB.find({timestamp: {$gte: minTimestamp}}, (err: Error, snapshots: Array<TransferSnapshot>) => {
+    this.db.find({timestamp: {$gte: minTimestamp}}, (err: Error, snapshots: Array<TransferSnapshot>) => {
       if (err || this.opts.nextEra == null) {
         return;
       }
@@ -198,7 +176,7 @@ class HistoryEra {
         upload: Number(Number(upTotal / snapshots.length).toFixed(1)),
       });
     });
-  }
+  };
 }
 
 export default HistoryEra;

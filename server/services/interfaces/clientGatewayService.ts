@@ -32,13 +32,6 @@ interface ClientGatewayServiceEvents {
 abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
   hasError = false;
 
-  constructor(...args: ConstructorParameters<typeof BaseService>) {
-    super(...args);
-
-    this.processClientRequestError = this.processClientRequestError.bind(this);
-    this.processClientRequestSuccess = this.processClientRequestSuccess.bind(this);
-  }
-
   /**
    * Adds torrents by file
    *
@@ -184,23 +177,23 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
 
   abstract testGateway(clientSettings?: ClientConnectionSettings): Promise<void>;
 
-  processClientRequestSuccess<T>(response: T): T {
+  processClientRequestSuccess = <T>(response: T): T => {
     if (this.hasError == null || this.hasError === true) {
       this.hasError = false;
       this.emit('CLIENT_CONNECTION_STATE_CHANGE');
     }
 
     return response;
-  }
+  };
 
-  processClientRequestError(error: Error) {
+  processClientRequestError = (error: Error) => {
     if (!this.hasError) {
       this.hasError = true;
       this.emit('CLIENT_CONNECTION_STATE_CHANGE');
     }
 
     return Promise.reject(error);
-  }
+  };
 }
 
 export default ClientGatewayService;

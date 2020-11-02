@@ -35,7 +35,7 @@ class FeedReader {
     return this.items;
   }
 
-  handleFeedItems(items: Array<FeedItem>) {
+  handleFeedItems = (items: Array<FeedItem>) => {
     const nextLength = this.items.length + items.length;
     if (nextLength >= this.options.maxHistory) {
       const diff = nextLength - this.options.maxHistory;
@@ -45,7 +45,7 @@ class FeedReader {
     this.items = this.items.concat(items);
 
     this.options.onNewItems(this.options, items);
-  }
+  };
 
   initReader() {
     this.reader = new FeedSub(this.options.url, {
@@ -56,7 +56,7 @@ class FeedReader {
       forceInterval: true,
     });
 
-    this.reader.on('items', this.handleFeedItems.bind(this));
+    this.reader.on('items', this.handleFeedItems);
     this.reader.on('error', (error) => {
       console.log('Feed reader error:', error);
     });

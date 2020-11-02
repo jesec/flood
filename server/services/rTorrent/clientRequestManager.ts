@@ -19,9 +19,6 @@ class ClientRequestManager {
 
   constructor(connectionSettings: RTorrentConnectionSettings) {
     this.connectionSettings = connectionSettings;
-    this.sendDeferredMethodCall = this.sendDeferredMethodCall.bind(this);
-    this.sendMethodCall = this.sendMethodCall.bind(this);
-    this.methodCall = this.methodCall.bind(this);
   }
 
   handleRequestEnd() {
@@ -42,7 +39,7 @@ class ClientRequestManager {
     }
   }
 
-  sendDeferredMethodCall() {
+  sendDeferredMethodCall = () => {
     const nextRequest = this.pendingRequests.shift();
     if (nextRequest == null) {
       return;
@@ -50,9 +47,9 @@ class ClientRequestManager {
 
     this.isRequestPending = true;
     this.sendMethodCall(nextRequest.methodName, nextRequest.parameters).then(nextRequest.resolve, nextRequest.reject);
-  }
+  };
 
-  sendMethodCall(methodName: string, parameters: MethodCallParameters) {
+  sendMethodCall = (methodName: string, parameters: MethodCallParameters) => {
     const connectionMethod =
       this.connectionSettings.type === 'socket'
         ? {
@@ -73,9 +70,9 @@ class ClientRequestManager {
         throw error;
       },
     );
-  }
+  };
 
-  methodCall(methodName: string, parameters: MethodCallParameters) {
+  methodCall = (methodName: string, parameters: MethodCallParameters) => {
     // We only allow one request at a time.
     if (this.isRequestPending) {
       return new Promise(
@@ -91,7 +88,7 @@ class ClientRequestManager {
     }
     this.isRequestPending = true;
     return this.sendMethodCall(methodName, parameters);
-  }
+  };
 }
 
 export default ClientRequestManager;

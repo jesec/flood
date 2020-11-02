@@ -227,7 +227,7 @@ class FeedService extends BaseService {
     });
   }
 
-  handleNewItems(feedReaderOptions: FeedReaderOptions, feedItems: Array<FeedItem>): void {
+  handleNewItems = (feedReaderOptions: FeedReaderOptions, feedItems: Array<FeedItem>): void => {
     this.getPreviouslyMatchedUrls()
       .then((previouslyMatchedUrls) => {
         const {feedID, feedLabel} = feedReaderOptions;
@@ -285,9 +285,9 @@ class FeedService extends BaseService {
         });
       })
       .catch(console.error);
-  }
+  };
 
-  init() {
+  private init() {
     this.db.find({}, (err: Error, docs: Array<Feed | Rule>) => {
       if (err) {
         return;
@@ -348,7 +348,7 @@ class FeedService extends BaseService {
     });
   }
 
-  loadDatabase(): Datastore {
+  private loadDatabase(): Datastore {
     if (this.db != null) {
       return this.db;
     }
@@ -389,7 +389,7 @@ class FeedService extends BaseService {
     });
   }
 
-  startNewFeed(feed: Feed) {
+  private startNewFeed(feed: Feed) {
     const {_id: feedID, label: feedLabel, url, interval} = feed;
 
     if (typeof feedID !== 'string' || typeof url !== 'string') {
@@ -401,7 +401,7 @@ class FeedService extends BaseService {
     }
 
     this.feedReaders.push(
-      new FeedReader({feedID, feedLabel, url, interval, maxHistory: 100, onNewItems: this.handleNewItems.bind(this)}),
+      new FeedReader({feedID, feedLabel, url, interval, maxHistory: 100, onNewItems: this.handleNewItems}),
     );
 
     return true;

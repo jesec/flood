@@ -23,10 +23,6 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
 
-    this.handleProcessTorrent = this.handleProcessTorrent.bind(this);
-    this.handleProcessTorrentListStart = this.handleProcessTorrentListStart.bind(this);
-    this.handleProcessTorrentListEnd = this.handleProcessTorrentListEnd.bind(this);
-
     this.onServicesUpdated = () => {
       if (this.services?.clientGatewayService == null) {
         return;
@@ -59,7 +55,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     };
   }
 
-  handleProcessTorrentListStart() {
+  handleProcessTorrentListStart = () => {
     this.lastTaxonomy = {
       statusCounts: {...this.taxonomy.statusCounts},
       tagCounts: {...this.taxonomy.tagCounts},
@@ -73,9 +69,9 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     this.taxonomy.statusCounts[''] = 0;
     this.taxonomy.tagCounts = {'': 0, untagged: 0};
     this.taxonomy.trackerCounts = {'': 0};
-  }
+  };
 
-  handleProcessTorrentListEnd({torrents}: {torrents: TorrentList}) {
+  handleProcessTorrentListEnd = ({torrents}: {torrents: TorrentList}) => {
     const {length} = Object.keys(torrents);
 
     this.taxonomy.statusCounts[''] = length;
@@ -90,13 +86,13 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
         id: Date.now(),
       });
     }
-  }
+  };
 
-  handleProcessTorrent(torrentProperties: TorrentProperties) {
+  handleProcessTorrent = (torrentProperties: TorrentProperties) => {
     this.incrementStatusCounts(torrentProperties.status);
     this.incrementTagCounts(torrentProperties.tags);
     this.incrementTrackerCounts(torrentProperties.trackerURIs);
-  }
+  };
 
   incrementStatusCounts(statuses: Array<TorrentStatus>) {
     statuses.forEach((status) => {
