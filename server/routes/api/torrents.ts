@@ -495,8 +495,15 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
         return res.download(file);
       }
 
+      const archiveRootFolder = sanitizePath(selectedTorrent.directory);
+      const relativeFilePaths = filePathsToDownload.map((filePath) =>
+        filePath.replace(`${archiveRootFolder}${path.sep}`, ''),
+      );
+
       res.attachment(`${selectedTorrent.name}.tar`);
-      return tar.c({}, filePathsToDownload).pipe(res);
+      return tar
+        .c({cwd: archiveRootFolder, follow: false, noDirRecurse: true, portable: true}, relativeFilePaths)
+        .pipe(res);
     });
   } catch (error) {
     return res.status(500).json(error);
