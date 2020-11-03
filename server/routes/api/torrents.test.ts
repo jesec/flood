@@ -15,6 +15,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   CreateTorrentOptions,
+  MoveTorrentsOptions,
   SetTorrentsTrackersOptions,
 } from '../../../shared/types/api/torrents';
 import type {TorrentContent} from '../../../shared/types/TorrentContent';
@@ -51,6 +52,7 @@ const testTrackers = [
 ];
 
 let torrentHash = '';
+let createdTorrentHash = '';
 
 const activityStream = new stream.PassThrough();
 const rl = readline.createInterface({input: activityStream});
@@ -304,6 +306,7 @@ describe('POST /api/torrents/create', () => {
 
         await Promise.all(
           addedTorrents.map(async (torrent) => {
+            createdTorrentHash = torrent.hash;
             expect(torrent.isPrivate).toBe(createTorrentOptions.isPrivate);
             expect(torrent.percentComplete).toBe(100);
           }),
@@ -391,6 +394,57 @@ describe('GET /api/torrents/{hash}/contents', () => {
         const contents: Array<TorrentContent> = res.body;
 
         expect(Array.isArray(contents)).toBe(true);
+
+        done();
+      });
+  });
+});
+
+describe('POST /api/torrents/move', () => {
+  const destDirectory = path.join(tempDirectory, 'moved');
+
+  it('Moves torrent', (done) => {
+    const moveTorrentsOptions: MoveTorrentsOptions = {
+      hashes: [createdTorrentHash],
+      destination: destDirectory,
+      moveFiles: true,
+      isBasePath: true,
+      isCheckHash: true,
+    };
+
+    request
+      .post('/api/torrents/move')
+      .send(moveTorrentsOptions)
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .end((err, _res) => {
+        if (err) done(err);
+
+        expect(fs.existsSync(path.join(destDirectory, 'dummy'))).toBe(true);
+
+        done();
+      });
+  });
+
+  it('GET /api/torrents to verify torrent is moved', (done) => {
+    request
+      .get('/api/torrents')
+      .send()
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end(async (err, res) => {
+        if (err) done(err);
+
+        expect(res.body.torrents == null).toBe(false);
+        const torrentList: TorrentList = res.body.torrents;
+        const torrent = torrentList[createdTorrentHash];
+
+        expect(torrent).not.toBe(null);
+        expect(torrent.directory).toBe(destDirectory);
+        expect(torrent.percentComplete).toBe(100);
 
         done();
       });
