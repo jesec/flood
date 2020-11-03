@@ -55,19 +55,14 @@ class TorrentContents extends React.Component<WrappedComponentProps> {
     event.preventDefault();
     const {baseURI} = ConfigStore;
     const link = document.createElement('a');
-    const {name} = TorrentStore.torrents[hash] || {};
 
-    if (name == null) {
-      return;
-    }
-
-    link.download = `${name}.tar`;
+    link.download = '';
     link.href = `${baseURI}api/torrents/${hash}/contents/${this.selectedIndices.join(',')}/data`;
     link.style.display = 'none';
 
-    document.body.appendChild(link); // Fix for Firefox 58+
-
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   };
 
   handleFormChange = (hash: string, {event}: {event: Event | React.FormEvent<HTMLFormElement>}): void => {

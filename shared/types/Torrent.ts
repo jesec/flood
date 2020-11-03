@@ -39,7 +39,6 @@ export interface TorrentProperties {
   // Torrent ETA (seconds), -1 means infinity
   eta: number;
   hash: string;
-  isMultiFile: boolean;
   isPrivate: boolean;
   message: string;
   name: string;

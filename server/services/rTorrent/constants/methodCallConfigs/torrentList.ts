@@ -26,10 +26,6 @@ const torrentListMethodCallConfigs = {
     methodCall: 'd.complete=',
     transformValue: booleanTransformer,
   },
-  isMultiFile: {
-    methodCall: 'd.is_multi_file=',
-    transformValue: booleanTransformer,
-  },
   isPrivate: {
     methodCall: 'd.is_private=',
     transformValue: booleanTransformer,

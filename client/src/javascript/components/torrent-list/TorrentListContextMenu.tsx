@@ -28,11 +28,14 @@ const handleTorrentDownload = (torrent: TorrentProperties, event: React.MouseEve
   event.preventDefault();
   const {baseURI} = ConfigStore;
   const link = document.createElement('a');
-  link.download = torrent.isMultiFile ? `${torrent.name}.tar` : torrent.name;
+
+  link.download = '';
   link.href = `${baseURI}api/torrents/${torrent.hash}/contents/all/data`;
   link.style.display = 'none';
+
   document.body.appendChild(link);
   link.click();
+  document.body.removeChild(link);
 };
 
 const handleItemClick = (action: TorrentContextMenuAction, event: React.MouseEvent): void => {

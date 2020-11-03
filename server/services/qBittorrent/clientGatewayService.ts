@@ -278,7 +278,6 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 downTotal: info.downloaded,
                 eta: info.eta >= 8640000 ? -1 : info.eta,
                 hash: info.hash,
-                isMultiFile: false,
                 isPrivate: false,
                 message: '', // in tracker method
                 name: info.name,
