@@ -103,14 +103,6 @@ class TorrentMediainfo extends Component<WrappedComponentProps, TorrentMediainfo
   };
 
   render() {
-    if (this.isFetchingMediainfo) {
-      return (
-        <div className="torrent-details__section mediainfo">
-          <FormattedMessage id={MESSAGES.fetching.id} />
-        </div>
-      );
-    }
-
     if (this.fetchMediainfoError) {
       return (
         <div className="torrent-details__section mediainfo">
@@ -129,25 +121,31 @@ class TorrentMediainfo extends Component<WrappedComponentProps, TorrentMediainfo
     }
 
     return (
-      <div className="torrent-details__section mediainfo">
+      <div className="torrent-details__section mediainfo modal__content--nested-scroll__content">
         <div className="mediainfo__toolbar">
           <div className="mediainfo__toolbar__item">
             <span className="torrent-details__table__heading--tertiary">
-              <FormattedMessage id={MESSAGES.heading.id} />
+              {this.isFetchingMediainfo ? (
+                <FormattedMessage id={MESSAGES.fetching.id} />
+              ) : (
+                <FormattedMessage id={MESSAGES.heading.id} />
+              )}
             </span>
           </div>
-          <Tooltip
-            content={tooltipText}
-            onMouseLeave={this.handleCopyButtonMouseLeave}
-            wrapperClassName="tooltip__wrapper mediainfo__toolbar__item">
-            <Button
-              priority="tertiary"
-              buttonRef={(ref) => {
-                this.copyButtonRef = ref;
-              }}>
-              <ClipboardIcon />
-            </Button>
-          </Tooltip>
+          {this.isFetchingMediainfo || (
+            <Tooltip
+              content={tooltipText}
+              onMouseLeave={this.handleCopyButtonMouseLeave}
+              wrapperClassName="tooltip__wrapper mediainfo__toolbar__item">
+              <Button
+                priority="tertiary"
+                buttonRef={(ref) => {
+                  this.copyButtonRef = ref;
+                }}>
+                <ClipboardIcon />
+              </Button>
+            </Tooltip>
+          )}
         </div>
         <pre className="mediainfo__output">{this.mediainfo}</pre>
       </div>

@@ -1,5 +1,6 @@
-import {Component} from 'react';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {FC, useState} from 'react';
+import {useIntl} from 'react-intl';
+import {useMediaQuery} from '@react-hook/media-query';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
@@ -17,165 +18,135 @@ import SettingActions from '../../../actions/SettingActions';
 import UITab from './UITab';
 import UIStore from '../../../stores/UIStore';
 
-import type {ModalAction} from '../../../stores/UIStore';
+const SettingsModal: FC = () => {
+  const intl = useIntl();
+  const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
-interface SettingsModalStates {
-  isSavingSettings: boolean;
-  changedClientSettings: Partial<ClientSettings>;
-  changedFloodSettings: Partial<FloodSettings>;
-}
+  const [changedClientSettings, setChangedClientSettings] = useState<Partial<ClientSettings>>({});
+  const [changedFloodSettings, setChangedFloodSettings] = useState<Partial<FloodSettings>>({});
+  const [isSavingSettings, setSavingSettings] = useState<boolean>(false);
 
-class SettingsModal extends Component<WrappedComponentProps, SettingsModalStates> {
-  constructor(props: WrappedComponentProps) {
-    super(props);
-
-    this.state = {
-      isSavingSettings: false,
-      changedClientSettings: {},
-      changedFloodSettings: {},
-    };
-  }
-
-  getActions(): Array<ModalAction> {
-    return [
-      {
-        clickHandler: null,
-        content: this.props.intl.formatMessage({
-          id: 'button.cancel',
-        }),
-        triggerDismiss: true,
-        type: 'tertiary',
-      },
-      {
-        clickHandler: this.handleSaveSettingsClick,
-        isLoading: this.state.isSavingSettings,
-        content: this.props.intl.formatMessage({
-          id: 'button.save',
-        }),
-        triggerDismiss: false,
-        type: 'primary',
-      },
-    ];
-  }
-
-  handleSaveSettingsClick = () => {
-    this.setState({isSavingSettings: true}, () => {
-      Promise.all([
-        SettingActions.saveSettings(this.state.changedFloodSettings, {
-          alert: true,
-        }),
-        ClientActions.saveSettings(this.state.changedClientSettings, {
-          alert: true,
-        }),
-      ]).then(() => {
-        this.setState({isSavingSettings: false});
-        UIStore.dismissModal();
-      });
+  const handleClientSettingsChange = (changedSettings: Partial<ClientSettings>) => {
+    setChangedClientSettings({
+      ...changedClientSettings,
+      ...changedSettings,
     });
   };
 
-  handleFloodSettingsChange = (changedSettings: Partial<FloodSettings>) => {
-    this.setState((state) => {
-      const changedFloodSettings = {
-        ...state.changedFloodSettings,
-        ...changedSettings,
-      };
-
-      return {changedFloodSettings};
+  const handleFloodSettingsChange = (changedSettings: Partial<FloodSettings>) => {
+    setChangedFloodSettings({
+      ...changedFloodSettings,
+      ...changedSettings,
     });
   };
 
-  handleClientSettingsChange = (changedSettings: Partial<ClientSettings>) => {
-    this.setState((state) => {
-      const changedClientSettings = {
-        ...state.changedClientSettings,
-        ...changedSettings,
-      };
-
-      return {changedClientSettings};
-    });
+  const tabs = {
+    bandwidth: {
+      content: BandwidthTab,
+      props: {
+        onClientSettingsChange: handleClientSettingsChange,
+        onSettingsChange: handleFloodSettingsChange,
+      },
+      label: intl.formatMessage({
+        id: 'settings.tabs.bandwidth',
+      }),
+    },
+    connectivity: {
+      content: ConnectivityTab,
+      props: {
+        onClientSettingsChange: handleClientSettingsChange,
+      },
+      label: intl.formatMessage({
+        id: 'settings.tabs.connectivity',
+      }),
+    },
+    resources: {
+      content: ResourcesTab,
+      props: {
+        onClientSettingsChange: handleClientSettingsChange,
+      },
+      label: intl.formatMessage({
+        id: 'settings.tabs.resources',
+      }),
+    },
+    ...(ConfigStore.authMethod !== 'none'
+      ? {
+          authentication: {
+            content: AuthTab,
+            label: intl.formatMessage({
+              id: 'settings.tabs.authentication',
+            }),
+          },
+        }
+      : {}),
+    ui: {
+      content: UITab,
+      label: intl.formatMessage({
+        id: 'settings.tabs.userinterface',
+      }),
+      props: {
+        onSettingsChange: handleFloodSettingsChange,
+      },
+    },
+    diskusage: {
+      content: DiskUsageTab,
+      label: intl.formatMessage({
+        id: 'settings.tabs.diskusage',
+      }),
+      props: {
+        onSettingsChange: handleFloodSettingsChange,
+      },
+    },
+    about: {
+      content: AboutTab,
+      label: intl.formatMessage({
+        id: 'settings.tabs.about',
+      }),
+    },
   };
 
-  render() {
-    const {intl} = this.props;
-
-    const tabs = {
-      bandwidth: {
-        content: BandwidthTab,
-        props: {
-          onClientSettingsChange: this.handleClientSettingsChange,
-          onSettingsChange: this.handleFloodSettingsChange,
+  return (
+    <Modal
+      actions={[
+        {
+          clickHandler: null,
+          content: intl.formatMessage({
+            id: 'button.cancel',
+          }),
+          triggerDismiss: true,
+          type: 'tertiary',
         },
-        label: intl.formatMessage({
-          id: 'settings.tabs.bandwidth',
-        }),
-      },
-      connectivity: {
-        content: ConnectivityTab,
-        props: {
-          onClientSettingsChange: this.handleClientSettingsChange,
-        },
-        label: intl.formatMessage({
-          id: 'settings.tabs.connectivity',
-        }),
-      },
-      resources: {
-        content: ResourcesTab,
-        props: {
-          onClientSettingsChange: this.handleClientSettingsChange,
-        },
-        label: intl.formatMessage({
-          id: 'settings.tabs.resources',
-        }),
-      },
-      ...(ConfigStore.authMethod !== 'none'
-        ? {
-            authentication: {
-              content: AuthTab,
-              label: intl.formatMessage({
-                id: 'settings.tabs.authentication',
+        {
+          clickHandler: () => {
+            setSavingSettings(true);
+            Promise.all([
+              SettingActions.saveSettings(changedFloodSettings, {
+                alert: true,
               }),
-            },
-          }
-        : {}),
-      ui: {
-        content: UITab,
-        label: intl.formatMessage({
-          id: 'settings.tabs.userinterface',
-        }),
-        props: {
-          onSettingsChange: this.handleFloodSettingsChange,
+              ClientActions.saveSettings(changedClientSettings, {
+                alert: true,
+              }),
+            ]).then(() => {
+              setSavingSettings(false);
+              UIStore.dismissModal();
+            });
+          },
+          isLoading: isSavingSettings,
+          content: intl.formatMessage({
+            id: 'button.save',
+          }),
+          triggerDismiss: false,
+          type: 'primary',
         },
-      },
-      diskusage: {
-        content: DiskUsageTab,
-        label: intl.formatMessage({
-          id: 'settings.tabs.diskusage',
-        }),
-        props: {
-          onSettingsChange: this.handleFloodSettingsChange,
-        },
-      },
-      about: {
-        content: AboutTab,
-        label: intl.formatMessage({
-          id: 'settings.tabs.about',
-        }),
-      },
-    };
+      ]}
+      size="large"
+      heading={intl.formatMessage({
+        id: 'settings.tabs.heading',
+      })}
+      orientation={isSmallScreen ? 'horizontal' : 'vertical'}
+      tabs={tabs}
+    />
+  );
+};
 
-    return (
-      <Modal
-        actions={this.getActions()}
-        size="large"
-        heading={this.props.intl.formatMessage({
-          id: 'settings.tabs.heading',
-        })}
-        orientation={window.matchMedia('(max-width: 720px)').matches ? 'horizontal' : 'vertical'}
-        tabs={tabs}
-      />
-    );
-  }
-}
-
-export default injectIntl(SettingsModal);
+export default SettingsModal;

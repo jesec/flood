@@ -1,6 +1,7 @@
 .mediainfo {
   display: flex;
   flex-direction: column;
+  overflow: auto;
 
   &__toolbar {
     display: flex;
@@ -34,6 +35,6 @@
 
   &__output {
     flex: 1 1 auto;
-    overflow: auto;
+    width: max-content;
   }
 }

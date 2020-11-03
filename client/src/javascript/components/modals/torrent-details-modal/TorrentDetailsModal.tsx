@@ -1,4 +1,5 @@
 import {useIntl} from 'react-intl';
+import {useMediaQuery} from '@react-hook/media-query';
 import * as React from 'react';
 
 import Modal from '../Modal';
@@ -11,6 +12,7 @@ import TorrentTrackers from './TorrentTrackers';
 
 const TorrentDetailsModal: React.FC = () => {
   const intl = useIntl();
+  const isSmallScreen = useMediaQuery('(max-width: 720px)');
 
   const tabs = {
     'torrent-details': {
@@ -43,6 +45,7 @@ const TorrentDetailsModal: React.FC = () => {
       label: intl.formatMessage({
         id: 'torrents.details.mediainfo',
       }),
+      modalContentClasses: 'modal__content--nested-scroll',
     },
   };
 
@@ -51,8 +54,8 @@ const TorrentDetailsModal: React.FC = () => {
       heading={<TorrentHeading key="torrent-heading" />}
       size="large"
       tabs={tabs}
-      orientation={window.matchMedia('(max-width: 720px)').matches ? 'horizontal' : 'vertical'}
-      {...(window.matchMedia('(max-width: 720px)').matches ? [] : {tabsInBody: true})}
+      orientation={isSmallScreen ? 'horizontal' : 'vertical'}
+      tabsInBody={!isSmallScreen}
     />
   );
 };
