@@ -35,8 +35,13 @@ class TableHeading extends React.Component<TableHeadingProps> {
         return accumulator;
       }
 
+      const labelID = TorrentListColumns[id]?.id;
+      if (labelID == null) {
+        return accumulator;
+      }
+
       let handle = null;
-      const width = SettingStore.floodSettings.torrentListColumnWidths[id];
+      const width = SettingStore.floodSettings.torrentListColumnWidths[id] || 100;
 
       if (!this.isPointerDown) {
         handle = (
@@ -55,16 +60,14 @@ class TableHeading extends React.Component<TableHeadingProps> {
         [`table__heading--direction--${SettingStore.floodSettings.sortTorrents.direction}`]: isSortActive,
       });
 
-      const label = <FormattedMessage id={TorrentListColumns[id].id} />;
-
       accumulator.push(
         <div className={classes} key={id} onClick={() => onCellClick(id)} style={{width: `${width}px`}}>
           <span
             className="table__heading__label"
             title={intl.formatMessage({
-              id: TorrentListColumns[id].id,
+              id: labelID,
             })}>
-            {label}
+            <FormattedMessage id={labelID} />
           </span>
           {handle}
         </div>,

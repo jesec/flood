@@ -6,6 +6,7 @@ import ProgressBar from '../general/ProgressBar';
 import SettingStore from '../../stores/SettingStore';
 import Size from '../general/Size';
 import TorrentListCell from './TorrentListCell';
+import TorrentListColumns from '../../constants/TorrentListColumns';
 import torrentStatusIcons from '../../util/torrentStatusIcons';
 
 interface TorrentListRowExpandedProps {
@@ -81,7 +82,7 @@ const TorrentListRowExpanded = React.forwardRef<HTMLLIElement, TorrentListRowExp
     for (let index = 0; index < columns.length; index += 1) {
       const {id, visible} = columns[index];
 
-      if (visible) {
+      if (TorrentListColumns[id] != null && visible) {
         switch (id) {
           case 'name':
             break;

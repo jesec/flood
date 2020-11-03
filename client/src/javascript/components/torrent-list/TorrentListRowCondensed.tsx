@@ -4,6 +4,7 @@ import * as React from 'react';
 import ProgressBar from '../general/ProgressBar';
 import SettingStore from '../../stores/SettingStore';
 import TorrentListCell from './TorrentListCell';
+import TorrentListColumns from '../../constants/TorrentListColumns';
 import torrentStatusIcons from '../../util/torrentStatusIcons';
 
 interface TorrentListRowCondensedProps {
@@ -33,6 +34,10 @@ const TorrentListRowCondensed = React.forwardRef<HTMLLIElement, TorrentListRowCo
   ) => {
     const torrentListColumns = SettingStore.floodSettings.torrentListColumns.reduce(
       (accumulator: React.ReactNodeArray, {id, visible}) => {
+        if (TorrentListColumns[id] == null) {
+          return accumulator;
+        }
+
         if (!visible) {
           return accumulator;
         }
