@@ -163,6 +163,75 @@ export interface QBittorrentTorrentContent {
 
 export type QBittorrentTorrentContents = Array<QBittorrentTorrentContent>;
 
+export interface QBittorrentTorrentProperties {
+  // Torrent save path
+  save_path: string;
+  // Torrent creation date (Unix timestamp)
+  creation_date: number;
+  // Torrent piece size (bytes)
+  piece_size: number;
+  // Torrent comment
+  comment: string;
+  // Total data wasted for torrent (bytes)
+  total_wasted: number;
+  // Total data uploaded for torrent (bytes)
+  total_uploaded: number;
+  // Total data uploaded this session (bytes)
+  total_uploaded_session: number;
+  // Total data downloaded for torrent (bytes)
+  total_downloaded: number;
+  // Total data downloaded this session (bytes)
+  total_downloaded_session: number;
+  // Torrent upload limit (bytes/s)
+  up_limit: number;
+  // Torrent download limit (bytes/s)
+  dl_limit: number;
+  // Torrent elapsed time (seconds)
+  time_elapsed: number;
+  // Torrent elapsed time while complete (seconds)
+  seeding_time: number;
+  // Torrent connection count
+  nb_connections: number;
+  // Torrent connection count limit
+  nb_connections_limit: number;
+  // Torrent share ratio
+  share_ratio: number;
+  // When this torrent was added (unix timestamp)
+  addition_date: number;
+  // Torrent completion date (unix timestamp)
+  completion_date: number;
+  // Torrent creator
+  created_by: string;
+  // Torrent average download speed (bytes/second)
+  dl_speed_avg: number;
+  // Torrent download speed (bytes/second)
+  dl_speed: number;
+  // Torrent ETA (seconds)
+  eta: number;
+  // Last seen complete date (unix timestamp)
+  last_seen: number;
+  // Number of peers connected to
+  peers: number;
+  // Number of peers in the swarm
+  peers_total: number;
+  // Number of pieces owned
+  pieces_have: number;
+  // Number of pieces of the torrent
+  pieces_num: number;
+  // Number of seconds until the next announce
+  reannounce: number;
+  // Number of seeds connected to
+  seeds: number;
+  // Number of seeds in the swarm
+  seeds_total: number;
+  // Torrent total size (bytes)
+  total_size: number;
+  // Torrent average upload speed (bytes/second)
+  up_speed_avg: number;
+  // Torrent upload speed (bytes/second)
+  up_speed: number;
+}
+
 export enum QBittorrentTorrentTrackerStatus {
   // Tracker is disabled (used for DHT, PeX, and LSD)
   DISABLED = 0,

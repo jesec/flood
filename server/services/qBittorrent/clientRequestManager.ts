@@ -10,6 +10,7 @@ import type {
   QBittorrentTorrentContentPriority,
   QBittorrentTorrentContents,
   QBittorrentTorrentInfos,
+  QBittorrentTorrentProperties,
   QBittorrentTorrentsAddOptions,
   QBittorrentTorrentTrackers,
 } from './types/QBittorrentTorrentsMethods';
@@ -82,6 +83,14 @@ class ClientRequestManager {
   async getTorrentContents(hash: string): Promise<QBittorrentTorrentContents> {
     return axios
       .get(`${this.apiBase}/torrents/files?hash=${hash}`, {
+        headers: {Cookie: await this.authCookie},
+      })
+      .then((json) => json.data);
+  }
+
+  async getTorrentProperties(hash: string): Promise<QBittorrentTorrentProperties> {
+    return axios
+      .get(`${this.apiBase}/torrents/properties?hash=${hash}`, {
         headers: {Cookie: await this.authCookie},
       })
       .then((json) => json.data);

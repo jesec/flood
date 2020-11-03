@@ -37,7 +37,7 @@ import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 
 class QBittorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
-  cachedTrackerURIs: Record<string, Array<string>> = {};
+  cachedProperties: Record<string, Pick<TorrentProperties, 'dateCreated' | 'isPrivate' | 'trackerURIs'>> = {};
 
   async addTorrentsByFile({files, destination, isBasePath, start}: AddTorrentByFileOptions): Promise<void> {
     const fileBuffers = files.map((file) => {
@@ -202,7 +202,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         return this.clientRequestManager
           .torrentsAddTrackers(hash, trackers)
           .then(this.processClientRequestSuccess, this.processClientRequestError)
-          .then(() => delete this.cachedTrackerURIs[hash]);
+          .then(() => delete this.cachedProperties[hash]);
       }),
     );
   }
@@ -252,30 +252,37 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
           {},
           ...(await Promise.all(
             infos.map(async (info) => {
-              if (this.cachedTrackerURIs[info.hash] == null) {
-                const trackerURLs =
-                  (await this.getTorrentTrackers(info.hash).then(
-                    (trackers) =>
+              if (this.cachedProperties[info.hash] == null) {
+                const properties = await this.clientRequestManager
+                  .getTorrentProperties(info.hash)
+                  .catch(() => undefined);
+                const trackers = await this.clientRequestManager.getTorrentTrackers(info.hash).catch(() => undefined);
+
+                if (properties != null && trackers != null && Array.isArray(trackers)) {
+                  this.cachedProperties[info.hash] = {
+                    dateCreated: properties?.creation_date,
+                    isPrivate: trackers[0]?.msg.includes('is private'),
+                    trackerURIs: getDomainsFromURLs(
                       trackers
-                        .filter((tracker) => tracker.type !== TorrentTrackerType.DHT)
-                        .map((tracker) => tracker.url),
-                    () => {
-                      // do nothing.
-                    },
-                  )) || [];
-                this.cachedTrackerURIs[info.hash] = getDomainsFromURLs(trackerURLs);
+                        .map((tracker) => tracker.url)
+                        .filter((url) => getTorrentTrackerTypeFromURL(url) !== TorrentTrackerType.DHT),
+                    ),
+                  };
+                }
               }
+
+              const {dateCreated = 0, isPrivate = false, trackerURIs = []} = this.cachedProperties[info.hash] || {};
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
                 dateAdded: info.added_on,
-                dateCreated: 0, // need properties
+                dateCreated,
                 directory: info.save_path,
                 downRate: info.dlspeed,
                 downTotal: info.downloaded,
                 eta: info.eta >= 8640000 ? -1 : info.eta,
                 hash: info.hash,
-                isPrivate: false,
+                isPrivate,
                 message: '', // in tracker method
                 name: info.name,
                 peersConnected: info.num_leechs,
@@ -288,7 +295,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 sizeBytes: info.size,
                 status: getTorrentStatusFromState(info.state),
                 tags: info.tags === '' ? [] : info.tags.split(','),
-                trackerURIs: this.cachedTrackerURIs[info.hash] || [],
+                trackerURIs,
                 upRate: info.upspeed,
                 upTotal: info.uploaded,
               };
