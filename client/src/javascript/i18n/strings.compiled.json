@@ -2179,12 +2179,6 @@
       "value": "Set Torrent Location"
     }
   ],
-  "torrents.properties.base.path": [
-    {
-      "type": 0,
-      "value": "Base Path"
-    }
-  ],
   "torrents.properties.comment": [
     {
       "type": 0,
@@ -2201,6 +2195,12 @@
     {
       "type": 0,
       "value": "Added"
+    }
+  ],
+  "torrents.properties.directory": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "torrents.properties.download.speed": [

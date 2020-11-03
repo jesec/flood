@@ -18,13 +18,8 @@ interface MoveTorrentsStates {
   originalSource?: string;
 }
 
-const getSuggestedPath = (sources: Array<string>, filenames: Array<string>): string | undefined => {
-  let commonPath = sources[0].substring(0, sources[0].length - filenames[0].length);
-
-  // Remove trailing slash
-  if (commonPath.charAt(commonPath.length - 1) === '/' || commonPath.charAt(commonPath.length - 1) === '\\') {
-    commonPath = commonPath.substring(0, commonPath.length - 1);
-  }
+const getSuggestedPath = (sources: Array<string>): string | undefined => {
+  const commonPath = sources[0];
 
   if (
     !sources.some((path) => {
@@ -50,8 +45,7 @@ class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsSt
     this.state = {
       isSettingDownloadPath: false,
       originalSource: getSuggestedPath(
-        TorrentStore.selectedTorrents.map((hash: string) => TorrentStore.torrents[hash].basePath),
-        TorrentStore.selectedTorrents.map((hash: string) => TorrentStore.torrents[hash].baseFilename),
+        TorrentStore.selectedTorrents.map((hash: string) => TorrentStore.torrents[hash].directory),
       ),
     };
   }

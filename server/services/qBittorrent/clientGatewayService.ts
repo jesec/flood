@@ -267,9 +267,6 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
               }
 
               const torrentProperties: TorrentProperties = {
-                baseDirectory: info.save_path,
-                baseFilename: info.name,
-                basePath: info.save_path,
                 bytesDone: info.completed,
                 dateAdded: info.added_on,
                 dateCreated: 0, // need properties

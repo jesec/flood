@@ -38,7 +38,7 @@ function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<Flood
         },
       } as SortRule);
       break;
-    case 'basePath':
+    case 'directory':
     case 'hash':
     case 'message':
     case 'name':

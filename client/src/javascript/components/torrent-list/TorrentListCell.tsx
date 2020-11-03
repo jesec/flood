@@ -30,7 +30,7 @@ const TorrentListCell: React.FC<TorrentListCellProps> = ({
   width,
   showIcon,
 }: TorrentListCellProps) => {
-  const icon = showIcon ? torrentPropertyIcons[column as keyof typeof torrentPropertyIcons] : null;
+  const icon = showIcon ? torrentPropertyIcons[column] : null;
 
   return (
     <div

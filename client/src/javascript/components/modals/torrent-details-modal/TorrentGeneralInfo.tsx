@@ -71,7 +71,7 @@ const TorrentGeneralInfo: React.FC = () => {
             <td className="torrent-details__detail__label">
               <FormattedMessage id="torrents.details.general.location" />
             </td>
-            <td className="torrent-details__detail__value">{torrent.basePath}</td>
+            <td className="torrent-details__detail__value">{torrent.directory}</td>
           </tr>
           <tr className="torrent-details__detail torrent-details__detail--tags">
             <td className="torrent-details__detail__label">

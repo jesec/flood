@@ -139,7 +139,7 @@ describe('POST /api/torrents/add-urls', () => {
 
         await Promise.all(
           addedTorrents.map(async (torrent) => {
-            expect(torrent.baseDirectory).toBe(addTorrentByURLOptions.destination);
+            expect(torrent.directory).toBe(addTorrentByURLOptions.destination);
 
             const expectedStatuses: Array<TorrentStatus> = addTorrentByURLOptions.start
               ? ['downloading']

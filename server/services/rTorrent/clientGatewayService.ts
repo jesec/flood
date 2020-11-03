@@ -233,8 +233,63 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions): Promise<void> {
-    const hashesToRestart: Array<string> = [];
+    try {
+      await this.stopTorrents({hashes});
+    } catch (e) {
+      return Promise.reject(e);
+    }
 
+    if (moveFiles) {
+      const isMultiFile = await this.clientRequestManager
+        .methodCall('system.multicall', [
+          hashes.map((hash) => {
+            return {
+              methodName: 'd.is_multi_file',
+              params: [hash],
+            };
+          }),
+        ])
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then((responses: string[][]) => {
+          return responses.map((response) => {
+            const [value] = response;
+            return value === '1';
+          });
+        })
+        .catch(() => undefined);
+
+      if (isMultiFile == null || isMultiFile.length !== hashes.length) {
+        return Promise.reject();
+      }
+
+      hashes.forEach((hash, index) => {
+        const {directory, name} = this.services?.torrentService.getTorrent(hash) || {};
+
+        if (directory == null || name == null) {
+          return;
+        }
+
+        const sourceDirectory = path.resolve(directory);
+        const destDirectory = isMultiFile[index]
+          ? path.resolve(isBasePath ? destination : path.join(destination, name))
+          : path.resolve(destination);
+
+        if (sourceDirectory !== destDirectory) {
+          try {
+            if (isMultiFile[index]) {
+              moveSync(sourceDirectory, destDirectory, {overwrite: true});
+            } else {
+              moveSync(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
+            }
+          } catch (err) {
+            console.error(`Failed to move files to ${destDirectory}.`);
+            console.error(err);
+          }
+        }
+      });
+    }
+
+    const hashesToRestart: Array<string> = [];
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
         methodName: isBasePath ? 'd.directory_base.set' : 'd.directory.set',
@@ -249,33 +304,11 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     }, []);
 
     try {
-      await this.stopTorrents({hashes});
       await this.clientRequestManager
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError);
     } catch (e) {
       return Promise.reject(e);
-    }
-
-    if (moveFiles) {
-      hashes.forEach((hash) => {
-        const sourceBasePath = this.services?.torrentService.getTorrent(hash).basePath;
-        const baseFileName = this.services?.torrentService.getTorrent(hash).baseFilename;
-
-        if (sourceBasePath == null || baseFileName == null) {
-          return;
-        }
-
-        const destinationFilePath = path.join(destination, baseFileName);
-        if (sourceBasePath !== destinationFilePath) {
-          try {
-            moveSync(sourceBasePath, destinationFilePath, {overwrite: true});
-          } catch (err) {
-            console.error(`Failed to move files to ${destination}.`);
-            console.error(err);
-          }
-        }
-      });
     }
 
     if (isCheckHash) {
@@ -322,44 +355,47 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     }, []);
 
     return (
-      this.clientRequestManager.methodCall('system.multicall', [methodCalls]).then((response) => {
-        if (deleteData === true) {
-          const torrentCount = hashes.length;
-          const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
-            const fileList = (response as string[][][][][])[hashIndex][0];
-            const directoryBase = (response as string[][])[hashIndex + torrentCount][0];
+      this.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then((response) => {
+          if (deleteData === true) {
+            const torrentCount = hashes.length;
+            const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
+              const fileList = (response as string[][][][][])[hashIndex][0];
+              const directoryBase = (response as string[][])[hashIndex + torrentCount][0];
 
-            const torrentFilesToDelete = fileList.reduce((fileListAccumulator, file) => {
-              // We only look at the first path component returned because
-              // if it's a directory within the torrent, then we'll remove
-              // the entire directory.
-              const filePath = path.join(directoryBase, file[0][0]);
+              const torrentFilesToDelete = fileList.reduce((fileListAccumulator, file) => {
+                // We only look at the first path component returned because
+                // if it's a directory within the torrent, then we'll remove
+                // the entire directory.
+                const filePath = path.join(directoryBase, file[0][0]);
 
-              // filePath might be a directory, so it may have already been
-              // added. If not, we add it.
-              if (!fileListAccumulator.includes(filePath)) {
-                fileListAccumulator.push(filePath);
-              }
+                // filePath might be a directory, so it may have already been
+                // added. If not, we add it.
+                if (!fileListAccumulator.includes(filePath)) {
+                  fileListAccumulator.push(filePath);
+                }
 
-              return fileListAccumulator;
+                return fileListAccumulator;
+              }, [] as Array<string>);
+
+              return accumulator.concat(torrentFilesToDelete);
             }, [] as Array<string>);
 
-            return accumulator.concat(torrentFilesToDelete);
-          }, [] as Array<string>);
-
-          filesToDelete.forEach((file) => {
-            try {
-              if (fs.lstatSync(file).isDirectory()) {
-                fs.rmdirSync(file, {recursive: true});
-              } else {
-                fs.unlinkSync(file);
+            filesToDelete.forEach((file) => {
+              try {
+                if (fs.lstatSync(file).isDirectory()) {
+                  fs.rmdirSync(file, {recursive: true});
+                } else {
+                  fs.unlinkSync(file);
+                }
+              } catch (error) {
+                console.error(`Error deleting file: ${file}\n${error}`);
               }
-            } catch (error) {
-              console.error(`Error deleting file: ${file}\n${error}`);
-            }
-          });
-        }
-      }, this.processClientRequestError) || Promise.reject()
+            });
+          }
+        }) || Promise.reject()
     );
   }
 

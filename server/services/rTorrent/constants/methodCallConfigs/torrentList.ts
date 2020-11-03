@@ -78,18 +78,6 @@ const torrentListMethodCallConfigs = {
     methodCall: 'd.directory=',
     transformValue: stringTransformer,
   },
-  basePath: {
-    methodCall: 'd.base_path=',
-    transformValue: stringTransformer,
-  },
-  baseFilename: {
-    methodCall: 'd.base_filename=',
-    transformValue: stringTransformer,
-  },
-  baseDirectory: {
-    methodCall: 'd.directory_base=',
-    transformValue: stringTransformer,
-  },
   dateAdded: {
     methodCall: 'd.custom=addtime',
     transformValue: numberTransformer,

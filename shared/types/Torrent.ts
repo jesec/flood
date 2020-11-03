@@ -27,9 +27,6 @@ export enum TorrentPriority {
 }
 
 export interface TorrentProperties {
-  baseDirectory: string;
-  baseFilename: string;
-  basePath: string;
   bytesDone: number;
   dateAdded: number;
   dateCreated: number;

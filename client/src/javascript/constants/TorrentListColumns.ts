@@ -41,8 +41,8 @@ const TorrentListColumns = {
   dateCreated: {
     id: 'torrents.properties.creation.date',
   },
-  basePath: {
-    id: 'torrents.properties.base.path',
+  directory: {
+    id: 'torrents.properties.directory',
   },
   hash: {
     id: 'torrents.properties.hash',

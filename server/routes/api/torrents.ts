@@ -553,17 +553,19 @@ router.get('/:hash/mediainfo', async (req, res) => {
     return;
   }
 
-  const torrent = torrentService.getTorrent(hash);
+  const {directory, name} = torrentService.getTorrent(hash);
 
-  if (torrent == null) {
+  if (directory == null || name == null) {
     callback(null, new Error());
     return;
   }
 
+  const contentPath = fs.existsSync(path.join(directory, name)) ? path.join(directory, name) : directory;
+
   try {
     const mediainfoProcess = childProcess.execFile(
       'mediainfo',
-      [torrent.basePath],
+      [contentPath],
       {maxBuffer: 1024 * 2000},
       (error, stdout, stderr) => {
         if (error) {

@@ -13,11 +13,13 @@ import SeedsIcon from '../components/icons/SeedsIcon';
 import TrackerMessageIcon from '../components/icons/TrackerMessageIcon';
 import UploadThickIcon from '../components/icons/UploadThickIcon';
 
-const ICONS = {
+import type {TorrentListColumn} from '../constants/TorrentListColumns';
+
+const ICONS: Partial<Record<TorrentListColumn, JSX.Element>> = {
   eta: <ClockIcon />,
   sizeBytes: <DiskIcon />,
   downRate: <DownloadThickIcon />,
-  basePath: <FolderClosedSolid />,
+  directory: <FolderClosedSolid />,
   hash: <HashIcon />,
   dateAdded: <CalendarIcon />,
   dateCreated: <CalendarCreatedIcon />,
