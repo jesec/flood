@@ -23,9 +23,6 @@ interface NotificationsButtonStates {
 const loadingIndicatorIcon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
 
 const MESSAGES = defineMessages({
-  notifications: {
-    id: 'sidebar.button.notifications',
-  },
   'notification.torrent.finished.heading': {
     id: 'notification.torrent.finished.heading',
   },
@@ -43,6 +40,9 @@ const MESSAGES = defineMessages({
   },
   'notification.feed.torrent.added.body': {
     id: 'notification.feed.torrent.added.body',
+  },
+  noNotification: {
+    id: 'notification.no.notification',
   },
   clearAll: {
     id: 'notification.clear.all',
@@ -83,7 +83,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
   getBottomToolbar = () => {
     const {notificationCount} = NotificationStore;
 
-    if (notificationCount != null && notificationCount.total > 0) {
+    if (notificationCount.total > 0) {
       const newerButtonClass = classnames(
         'toolbar__item toolbar__item--button',
         'tooltip__content--padding-surrogate',
@@ -169,7 +169,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
 
     const {notificationCount} = NotificationStore;
 
-    if (notificationCount != null && notificationCount.total > NOTIFICATIONS_PER_PAGE) {
+    if (notificationCount.total > NOTIFICATIONS_PER_PAGE) {
       let countStart = paginationStart + 1;
       let countEnd = paginationStart + NOTIFICATIONS_PER_PAGE;
 
@@ -199,40 +199,6 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
 
     return null;
   }
-
-  getTooltipContent = () => {
-    const {isLoading} = this.state;
-
-    const {notifications, notificationCount} = NotificationStore;
-
-    if (notificationCount == null || notificationCount.total === 0) {
-      return (
-        <div
-          className="notifications notifications--empty
-          tooltip__content--padding-surrogate">
-          {this.props.intl.formatMessage(MESSAGES.notifications)}
-        </div>
-      );
-    }
-
-    const notificationsWrapperClasses = classnames('notifications', {
-      'notifications--is-loading': isLoading,
-    });
-
-    return (
-      <div className={notificationsWrapperClasses}>
-        {this.getTopToolbar()}
-        <div className="notifications__loading-indicator">{loadingIndicatorIcon}</div>
-        <ul
-          className="notifications__list tooltip__content--padding-surrogate"
-          ref={this.notificationsListRef}
-          style={{minHeight: this.state.prevHeight}}>
-          {notifications.map(this.getNotification)}
-        </ul>
-        {this.getBottomToolbar()}
-      </div>
-    );
-  };
 
   fetchNotifications = () => {
     this.setState({isLoading: true});
@@ -284,7 +250,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
   handleOlderNotificationsClick = () => {
     const {notificationCount} = NotificationStore;
 
-    if (notificationCount != null && notificationCount.total > this.state.paginationStart + NOTIFICATIONS_PER_PAGE) {
+    if (notificationCount.total > this.state.paginationStart + NOTIFICATIONS_PER_PAGE) {
       this.setState((state) => {
         const paginationStart = state.paginationStart + NOTIFICATIONS_PER_PAGE;
         return {
@@ -295,32 +261,49 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
     }
   };
 
-  handleTooltipOpen = () => {
-    this.fetchNotifications();
-  };
-
   render() {
-    const {notificationCount} = NotificationStore;
+    const {intl} = this.props;
+    const {isLoading, prevHeight} = this.state;
+    const {notifications, notificationCount} = NotificationStore;
 
-    const hasNotifications = notificationCount != null && notificationCount.total !== 0;
+    const hasNotifications = notificationCount.total !== 0;
 
     return (
       <Tooltip
         contentClassName="tooltip__content tooltip__content--no-padding"
-        content={hasNotifications ? this.getTooltipContent() : null}
-        interactive={hasNotifications}
-        onOpen={this.handleTooltipOpen}
+        content={
+          hasNotifications ? (
+            <div
+              className={classnames('notifications', {
+                'notifications--is-loading': isLoading,
+              })}>
+              {this.getTopToolbar()}
+              <div className="notifications__loading-indicator">{loadingIndicatorIcon}</div>
+              <ul
+                className="notifications__list tooltip__content--padding-surrogate"
+                ref={this.notificationsListRef}
+                style={{minHeight: prevHeight}}>
+                {notifications.map(this.getNotification)}
+              </ul>
+              {this.getBottomToolbar()}
+            </div>
+          ) : (
+            <div className="notifications tooltip__content--padding-surrogate" style={{textAlign: 'center'}}>
+              {intl.formatMessage(MESSAGES.noNotification)}
+            </div>
+          )
+        }
+        interactive
+        onOpen={() => this.fetchNotifications()}
         ref={(ref) => {
           this.tooltipRef = ref;
         }}
-        width={notificationCount == null || notificationCount.total === 0 ? undefined : 340}
+        width={340}
         position="bottom"
         wrapperClassName="sidebar__action sidebar__icon-button
           tooltip__wrapper">
         <NotificationIcon />
-        {notificationCount != null && notificationCount.total > 0 ? (
-          <span className="notifications__badge">{notificationCount.total}</span>
-        ) : null}
+        {hasNotifications ? <span className="notifications__badge">{notificationCount.total}</span> : null}
       </Tooltip>
     );
   }

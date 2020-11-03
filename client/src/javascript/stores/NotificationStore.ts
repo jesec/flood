@@ -18,7 +18,7 @@ class NotificationStore {
   }
 
   handleNotificationCountChange(notificationCount: NotificationCount) {
-    this.notificationCount = notificationCount;
+    this.notificationCount = notificationCount == null ? INITIAL_COUNT_STATE : notificationCount;
   }
 
   handleNotificationsFetchSuccess(data: NotificationState) {

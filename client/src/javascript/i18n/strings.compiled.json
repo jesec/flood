@@ -1105,6 +1105,12 @@
       "value": "Feed Item Queued"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1493,12 +1499,6 @@
     {
       "type": 0,
       "value": "Log Out"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Notifications"
     }
   ],
   "sidebar.button.settings": [
