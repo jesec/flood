@@ -407,6 +407,12 @@
       "value": "Non"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -425,16 +431,22 @@
       "value": "Ajout..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Tester"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Oui"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -443,22 +455,16 @@
       "value": "Impossible de se connecter au client"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "La connexion n'a pas pu être établie."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Connexion réussie"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Vérifions vos paramètres de connexion."
     }
   ],
   "connection.settings.client.select": [
@@ -1110,6 +1116,12 @@
       "value": "Élément de flux en file d'attente"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1170,12 +1182,6 @@
       "value": "À propos de Flood"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Diviseur pour slots de téléchargement"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1192,12 +1198,6 @@
     {
       "type": 0,
       "value": "Configuration des slots"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Diviseur pour slots d'essaimage"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1510,12 +1510,6 @@
     {
       "type": 0,
       "value": "Déconnexion"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Notifications"
     }
   ],
   "sidebar.button.settings": [

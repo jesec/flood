@@ -359,6 +359,12 @@
       "value": "いいえ"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -377,16 +383,22 @@
       "value": "追加中..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "テスト"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "はい"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -395,22 +407,16 @@
       "value": "クライアントに接続できません"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "接続を確認できませんでした。"
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "接続に成功しました"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "接続設定を確認してみましょう。"
     }
   ],
   "connection.settings.client.select": [
@@ -1051,6 +1057,12 @@
       "value": "フィードアイテムがキューに追加されました"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1111,12 +1123,6 @@
       "value": "洪水について"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "スロット分割線をダウンロード"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1133,12 +1139,6 @@
     {
       "type": 0,
       "value": "スロットの在庫状況"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "スロット分割線をアップロード"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1451,12 +1451,6 @@
     {
       "type": 0,
       "value": "ログアウト"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "通知"
     }
   ],
   "sidebar.button.settings": [

@@ -407,6 +407,12 @@
       "value": "Ні"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -425,16 +431,22 @@
       "value": "Додаємо..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Тест"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Так"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -443,22 +455,16 @@
       "value": "Не вдається підключитися до клієнта"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "Неможливо перевірити підключення."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "З'єднання успішне"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Давайте перевіримо ваші параметри підключення."
     }
   ],
   "connection.settings.client.select": [
@@ -1099,6 +1105,12 @@
       "value": "Черга RSS Feed'у"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1159,12 +1171,6 @@
       "value": "Про Flood"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Завантажити розділювач слотів"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1181,12 +1187,6 @@
     {
       "type": 0,
       "value": "Наявність слоту"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Завантажити розділювач слотів"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1499,12 +1499,6 @@
     {
       "type": 0,
       "value": "Вийти з системи"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Сповіщення"
     }
   ],
   "sidebar.button.settings": [

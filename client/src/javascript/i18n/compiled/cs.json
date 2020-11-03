@@ -383,6 +383,12 @@
       "value": "Ne"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -401,16 +407,22 @@
       "value": "Přidávání..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Zkouška"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Ano"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -419,22 +431,16 @@
       "value": "Nelze se připojit ke klientu"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "Nelze ověřit spojení."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Připojení bylo úspěšné"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Pojďme ověřit nastavení připojení."
     }
   ],
   "connection.settings.client.select": [
@@ -1075,6 +1081,12 @@
       "value": "Položka kanálu zařazena do fronty"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1135,12 +1147,6 @@
       "value": "O záplavách"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Stáhnout Slot Divider"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1157,12 +1163,6 @@
     {
       "type": 0,
       "value": "Dostupnost slotu"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Nahrát rozdělovač slotů"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1475,12 +1475,6 @@
     {
       "type": 0,
       "value": "Odhlásit se"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Oznámení"
     }
   ],
   "sidebar.button.settings": [

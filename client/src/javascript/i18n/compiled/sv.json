@@ -395,6 +395,12 @@
       "value": "Nej"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -413,16 +419,22 @@
       "value": "Lägger till..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Testa"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Ja"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -431,22 +443,16 @@
       "value": "Kan inte ansluta till klienten"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "Anslutningen kunde inte verifieras."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Anslutningen lyckades"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Låt oss verifiera dina anslutningsinställningar."
     }
   ],
   "connection.settings.client.select": [
@@ -1087,6 +1093,12 @@
       "value": "Feed objekt köad"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1147,12 +1159,6 @@
       "value": "Om översvämning"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Hämta Slots Delare"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1169,12 +1175,6 @@
     {
       "type": 0,
       "value": "Tillgänglighet för Slot"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Ladda upp Slots Delare"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1487,12 +1487,6 @@
     {
       "type": 0,
       "value": "Logga ut"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Aviseringar"
     }
   ],
   "sidebar.button.settings": [
