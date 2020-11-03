@@ -9,14 +9,10 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-// Ensure environment variables are read.
-require('../config/env');
-
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const paths = require('../../shared/config/paths');
 const config = require('../config/webpack.config.prod');
@@ -49,26 +45,10 @@ const build = (previousFileSizes) => {
       if (err) {
         return reject(err);
       }
-      const messages = formatWebpackMessages(stats.toJson({}, true));
-      if (messages.errors.length) {
-        return reject(new Error(messages.errors.join('\n\n')));
-      }
-      if (
-        process.env.CI &&
-        (typeof process.env.CI !== 'string' || process.env.CI.toLowerCase() !== 'false') &&
-        messages.warnings.length
-      ) {
-        console.log(
-          chalk.yellow(
-            '\nTreating warnings as errors because process.env.CI = true.\n Most CI servers set it automatically.\n',
-          ),
-        );
-        return reject(new Error(messages.warnings.join('\n\n')));
-      }
+
       return resolve({
         stats,
         previousFileSizes,
-        warnings: messages.warnings,
       });
     });
   });
@@ -87,14 +67,13 @@ measureFileSizesBeforeBuild(paths.appBuild)
     return build(previousFileSizes);
   })
   .then(
-    ({stats, previousFileSizes, warnings}) => {
-      if (warnings.length) {
+    ({stats, previousFileSizes}) => {
+      if (stats.compilation.warnings.length !== 0) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
-        console.log(warnings.join('\n\n'));
-        console.log(`\nSearch for the ${chalk.underline(chalk.yellow('keywords'))} to learn more about each warning.`);
-        console.log(`To ignore, add ${chalk.cyan('// eslint-disable-next-line')} to the line before.\n`);
-      } else {
-        console.log(chalk.green('Compiled successfully.\n'));
+
+        stats.compilation.warnings.forEach((warning) => {
+          console.warn(warning);
+        });
       }
 
       console.log('File sizes after gzip:\n');

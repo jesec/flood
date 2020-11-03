@@ -1,6 +1,6 @@
 import {lazy, Suspense} from 'react';
 
-import {version} from '../../../../../../package.json';
+import packageJSON from '../../../../../../package.json';
 
 const AboutMarkdown = lazy(() =>
   import(/* webpackChunkName: 'about' */ '../../../../../../ABOUT.md').then((module) => ({default: module.react})),
@@ -12,9 +12,9 @@ const AboutTab = () => {
   return (
     <Suspense fallback={null}>
       <AboutMarkdown
-        FloodVersion={() => version}
+        FloodVersion={() => packageJSON.version}
         CommitBadge={() =>
-          version.length > 8 ? (
+          packageJSON.version.length > 8 ? (
             // If user is on a rolling build, display latest version of rolling build.
             <a href={FLOOD_PROJECT_URL}>
               <img alt="Latest version of rolling build" src="https://img.shields.io/npm/v/@jesec/flood?label=HEAD" />
@@ -24,7 +24,7 @@ const AboutTab = () => {
             <a href={FLOOD_PROJECT_URL}>
               <img
                 alt="Commits since user's version"
-                src={`https://img.shields.io/github/commits-since/jesec/flood/v${version}`}
+                src={`https://img.shields.io/github/commits-since/jesec/flood/v${packageJSON.version}`}
               />
             </a>
           )

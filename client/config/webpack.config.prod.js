@@ -3,24 +3,19 @@ const path = require('path');
 const webpack = require('webpack');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
-const getClientEnvironment = require('./env');
 const paths = require('../../shared/config/paths');
-
-const env = getClientEnvironment();
 
 // Assert this just to be safe.
 // Development builds of React are slow and not intended for production.
-if (env.stringified['process.env'].NODE_ENV !== '"production"') {
+if (process.env.NODE_ENV !== 'production') {
   throw new Error('Production builds must have NODE_ENV=production.');
 }
 
 module.exports = {
-  mode: process.env.NODE_ENV,
+  mode: 'production',
   module: {
     rules: [
       {
@@ -156,11 +151,6 @@ module.exports = {
     devtoolModuleFilenameTemplate: (info) => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   plugins: [
-    // Makes some environment variables available in index.html.
-    // The base URI is available as %BASE_URI% in index.html, e.g.:
-    // <link rel="shortcut icon" href="%BASE_URI%/favicon.ico">
-    // In development, this will be an empty string.
-    new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
@@ -178,16 +168,9 @@ module.exports = {
         minifyURLs: true,
       },
     }),
-    new webpack.DefinePlugin(env.stringified),
-    // Generate a manifest file which contains a mapping of all asset filenames
-    // to their corresponding output file so that tools can pick it up without
-    // having to parse `index.html`.
-    new ManifestPlugin({
-      fileName: 'asset-manifest.json',
-    }),
     new MiniCssExtractPlugin({
-      filename: 'static/css/[name].[hash].css',
-      chunkFilename: 'static/css/[id].[hash].css',
+      filename: 'static/css/[name].[contenthash].css',
+      chunkFilename: 'static/css/[id].[contenthash].css',
     }),
     new webpack.optimize.MinChunkSizePlugin({
       minChunkSize: 10000,

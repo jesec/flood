@@ -3,17 +3,13 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const WebpackBar = require('webpackbar');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
-const getClientEnvironment = require('./env');
 const paths = require('../../shared/config/paths');
 
-const env = getClientEnvironment();
-
 module.exports = {
-  mode: process.env.NODE_ENV,
+  mode: 'development',
   module: {
     rules: [
       {
@@ -160,21 +156,11 @@ module.exports = {
     chunkFilename: 'static/js/[name].chunk.js',
   },
   plugins: [
-    // Makes some environment variables available in index.html.
-    // The base URI is available as %BASE_URI% in index.html, e.g.:
-    // <link rel="shortcut icon" href="%BASE_URI%/favicon.ico">
-    // In development, this will be an empty string.
-    new InterpolateHtmlPlugin(HtmlWebpackPlugin, env.raw),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,
     }),
-    // Add module names to factory functions so they appear in browser profiler.
-    new webpack.NamedModulesPlugin(),
-    // Makes some environment variables available to the JS code, for example:
-    // if (process.env.NODE_ENV === 'development') { ... }. See `./env.js`.
-    new webpack.DefinePlugin(env.stringified),
     // This is necessary to emit hot updates (currently CSS only):
     new webpack.HotModuleReplacementPlugin(),
     // Watcher doesn't work well if you mistype casing in a path so we use
@@ -189,4 +175,7 @@ module.exports = {
     new WebpackBar(),
   ],
   devtool: 'source-map',
+  optimization: {
+    moduleIds: 'named',
+  },
 };

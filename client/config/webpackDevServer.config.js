@@ -1,4 +1,3 @@
-const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const config = require('./webpack.config.dev');
 const paths = require('../../shared/config/paths');
 
@@ -26,9 +25,6 @@ const generateConfig = (proxy, allowedHost) => {
     disableHostCheck: !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true',
     // Enable gzip compression of generated files.
     compress: true,
-    // Silence WebpackDevServer's own logs since they're generally not useful.
-    // It will still show compile warnings and errors with this setting.
-    clientLogLevel: 'none',
     // By default WebpackDevServer serves physical files from current directory
     // in addition to all the virtual build products that it serves from memory.
     // This is confusing because those files won’t automatically be available in
@@ -55,9 +51,6 @@ const generateConfig = (proxy, allowedHost) => {
     // It is important to tell WebpackDevServer to use the same "root" path
     // as we specified in the config. In development, we always serve from /.
     publicPath: config.output.publicPath,
-    // WebpackDevServer is noisy by default so we emit custom message instead
-    // by listening to the compiler events with `compiler.plugin` calls above.
-    quiet: true,
     // Reportedly, this avoids CPU overload on some systems.
     // https://github.com/facebookincubator/create-react-app/issues/293
     watchOptions: {
@@ -75,10 +68,6 @@ const generateConfig = (proxy, allowedHost) => {
     // },
     public: allowedHost,
     proxy,
-    setup(app) {
-      // This lets us open files from the runtime error overlay.
-      app.use(errorOverlayMiddleware());
-    },
   };
 };
 
