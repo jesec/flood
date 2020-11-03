@@ -368,6 +368,12 @@
       "value": "Нет"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -386,16 +392,22 @@
       "value": "Добавление..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Тест"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Да"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -404,22 +416,16 @@
       "value": "Не удается подключиться к клиенту"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "Соединение не может быть проверено."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Успешное подключение"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Давайте проверим настройки подключения."
     }
   ],
   "connection.settings.client.select": [
@@ -1060,6 +1066,12 @@
       "value": "Предмет в очереди"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1120,12 +1132,6 @@
       "value": "О Flood"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Скачать Слоты Разделителя"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1142,12 +1148,6 @@
     {
       "type": 0,
       "value": "Доступность слота"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Разделитель слотов загрузки"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1460,12 +1460,6 @@
     {
       "type": 0,
       "value": "Выйти"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Уведомления"
     }
   ],
   "sidebar.button.settings": [

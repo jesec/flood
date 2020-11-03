@@ -287,6 +287,12 @@
       "value": "crwdns2966:0crwdne2966:0"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "crwdns3654:0crwdne3654:0"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -305,16 +311,22 @@
       "value": "crwdns2974:0crwdne2974:0"
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "crwdns2972:0crwdne2972:0"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "crwdns2976:0crwdne2976:0"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "crwdns3658:0crwdne3658:0"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "crwdns3656:0crwdne3656:0"
     }
   ],
   "connection-interruption.heading": [
@@ -323,22 +335,16 @@
       "value": "crwdns3580:0crwdne3580:0"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "crwdns3660:0crwdne3660:0"
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "crwdns3492:0crwdne3492:0"
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "crwdns3494:0crwdne3494:0"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "crwdns3490:0crwdne3490:0"
     }
   ],
   "connection.settings.client.select": [
@@ -969,6 +975,12 @@
       "value": "crwdns3616:0crwdne3616:0"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "crwdns3662:0crwdne3662:0"
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1045,12 +1057,6 @@
       "value": "crwdns3232:0crwdne3232:0"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "crwdns3126:0crwdne3126:0"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1067,12 +1073,6 @@
     {
       "type": 0,
       "value": "crwdns3132:0crwdne3132:0"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "crwdns3134:0crwdne3134:0"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1385,12 +1385,6 @@
     {
       "type": 0,
       "value": "crwdns3242:0crwdne3242:0"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "crwdns3236:0crwdne3236:0"
     }
   ],
   "sidebar.button.settings": [

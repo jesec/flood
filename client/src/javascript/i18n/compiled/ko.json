@@ -383,6 +383,12 @@
       "value": "아니오"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -401,16 +407,22 @@
       "value": "추가 중..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "테스트"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "예"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -419,22 +431,16 @@
       "value": "Cannot connect to the client"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "연결을 검증하지 못했습니다."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "연결 성공"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "연결 설정을 검증해보겠습니다."
     }
   ],
   "connection.settings.client.select": [
@@ -1083,6 +1089,12 @@
       "value": "Feed Item Queued"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1143,12 +1155,6 @@
       "value": "About Flood"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "다운로드 슬롯 나눌 값"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1165,12 +1171,6 @@
     {
       "type": 0,
       "value": "가용 슬롯"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "업로드 슬롯 나눌 값"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1483,12 +1483,6 @@
     {
       "type": 0,
       "value": "로그아웃"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "알림"
     }
   ],
   "sidebar.button.settings": [

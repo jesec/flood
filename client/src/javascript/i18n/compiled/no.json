@@ -379,6 +379,12 @@
       "value": "Nei"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -397,16 +403,22 @@
       "value": "Legge til..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Prøve"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Ja"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -415,22 +427,16 @@
       "value": "Kan ikke koble til klienten"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "Tilkobling kunne ikke verifiseres."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Tilkobling vellykket"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "La oss verifisere dine tilkoblingsinnstillinger."
     }
   ],
   "connection.settings.client.select": [
@@ -1071,6 +1077,12 @@
       "value": "Strøm enhet i kø"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1131,12 +1143,6 @@
       "value": "Om Flood"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Last ned loddrett divider"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1153,12 +1159,6 @@
     {
       "type": 0,
       "value": "Spor tilgjengelighet"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Last opp loddretting divider"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1471,12 +1471,6 @@
     {
       "type": 0,
       "value": "Logg ut"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Varsler"
     }
   ],
   "sidebar.button.settings": [

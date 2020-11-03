@@ -239,6 +239,12 @@
       "value": "否"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -257,16 +263,22 @@
       "value": "新增中..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "測試"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "是"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -275,22 +287,16 @@
       "value": "Cannot connect to the client"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "無法建立連線。"
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "連線成功"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "檢查連線設定。"
     }
   ],
   "connection.settings.client.select": [
@@ -931,6 +937,12 @@
       "value": "Feed Item Queued"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -991,12 +1003,6 @@
       "value": "關於Flood"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "下載數間隔"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1013,12 +1019,6 @@
     {
       "type": 0,
       "value": "傳輸個數限制"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "上傳數間隔"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1331,12 +1331,6 @@
     {
       "type": 0,
       "value": "登出"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "通知"
     }
   ],
   "sidebar.button.settings": [

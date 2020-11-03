@@ -407,6 +407,12 @@
       "value": "Nie"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -425,16 +431,22 @@
       "value": "Dodawanie..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Badanie"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Tak"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -443,22 +455,16 @@
       "value": "Nie można połączyć się z klientem"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "Nie można zweryfikować połączenia."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Połączenie udane"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Sprawdźmy ustawienia połączenia."
     }
   ],
   "connection.settings.client.select": [
@@ -1099,6 +1105,12 @@
       "value": "Element RSS w kolejce"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1159,12 +1171,6 @@
       "value": "O powodzie"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Pobierz dzielnik slotów"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1181,12 +1187,6 @@
     {
       "type": 0,
       "value": "Dostępność miejsca"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Prześlij Dziedzictwo Slotów"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1499,12 +1499,6 @@
     {
       "type": 0,
       "value": "Wyloguj"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Powiadomienia"
     }
   ],
   "sidebar.button.settings": [

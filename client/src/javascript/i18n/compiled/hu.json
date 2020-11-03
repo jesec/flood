@@ -395,6 +395,12 @@
       "value": "Nem"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -413,16 +419,22 @@
       "value": "Hozzáadás..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Teszt"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Igen"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -431,22 +443,16 @@
       "value": "Cannot connect to the client"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "A kapcsolatot nem sikerült ellenőrizni."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Sikeres kapcsolódás"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Ellenőrizd a kapcsolat beállításait."
     }
   ],
   "connection.settings.client.select": [
@@ -1090,6 +1096,12 @@
       "value": "Feed Item Queued"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1150,12 +1162,6 @@
       "value": "A Flood-ról"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Download Slots Divider"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1172,12 +1178,6 @@
     {
       "type": 0,
       "value": "Átviteli szálak meghatározása"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Upload Slots Divider"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1490,12 +1490,6 @@
     {
       "type": 0,
       "value": "Kijelentkezés"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Értesítések"
     }
   ],
   "sidebar.button.settings": [

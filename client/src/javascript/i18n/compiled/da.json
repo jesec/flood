@@ -407,6 +407,12 @@
       "value": "Nej"
     }
   ],
+  "button.retry": [
+    {
+      "type": 0,
+      "value": "Retry"
+    }
+  ],
   "button.save": [
     {
       "type": 0,
@@ -425,16 +431,22 @@
       "value": "Tilføjer..."
     }
   ],
-  "button.test": [
-    {
-      "type": 0,
-      "value": "Test"
-    }
-  ],
   "button.yes": [
     {
       "type": 0,
       "value": "Ja"
+    }
+  ],
+  "connection-interruption.action.selection.config": [
+    {
+      "type": 0,
+      "value": "Update client connection settings"
+    }
+  ],
+  "connection-interruption.action.selection.retry": [
+    {
+      "type": 0,
+      "value": "Retry with current client connection settings"
     }
   ],
   "connection-interruption.heading": [
@@ -443,22 +455,16 @@
       "value": "Kan ikke oprette forbindelse til klienten"
     }
   ],
+  "connection-interruption.not.admin": [
+    {
+      "type": 0,
+      "value": "Please contact your Flood administrator if this continues."
+    }
+  ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
       "value": "Forbindelsen kunne ikke verificeres."
-    }
-  ],
-  "connection-interruption.verification-success": [
-    {
-      "type": 0,
-      "value": "Forbindelse vellykket"
-    }
-  ],
-  "connection-interruption.verify-settings-prompt": [
-    {
-      "type": 0,
-      "value": "Lad os bekræfte dine forbindelsesindstillinger."
     }
   ],
   "connection.settings.client.select": [
@@ -1099,6 +1105,12 @@
       "value": "Feed Element I Køen"
     }
   ],
+  "notification.no.notification": [
+    {
+      "type": 0,
+      "value": "No notification to display."
+    }
+  ],
   "notification.showing": [
     {
       "type": 0,
@@ -1159,12 +1171,6 @@
       "value": "Om Oversvømmelse"
     }
   ],
-  "settings.bandwidth.slots.download.divider.label": [
-    {
-      "type": 0,
-      "value": "Download Slots Divider"
-    }
-  ],
   "settings.bandwidth.slots.download.global.label": [
     {
       "type": 0,
@@ -1181,12 +1187,6 @@
     {
       "type": 0,
       "value": "Tilgængelighed På Slot"
-    }
-  ],
-  "settings.bandwidth.slots.upload.divider.label": [
-    {
-      "type": 0,
-      "value": "Upload Slots Divider"
     }
   ],
   "settings.bandwidth.slots.upload.global.label": [
@@ -1499,12 +1499,6 @@
     {
       "type": 0,
       "value": "Log Ud"
-    }
-  ],
-  "sidebar.button.notifications": [
-    {
-      "type": 0,
-      "value": "Notifikationer"
     }
   ],
   "sidebar.button.settings": [
