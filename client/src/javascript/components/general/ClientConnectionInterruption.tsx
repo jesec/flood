@@ -28,18 +28,6 @@ const ClientConnectionInterruption: React.FC = () => {
   const [selection, setSelection] = React.useState<React.ReactText>('retry');
   const settingsFormRef = React.useRef<ClientConnectionSettingsFormType>(null);
 
-  if (!AuthStore.currentUser.isAdmin) {
-    return (
-      <Panel spacing="large">
-        <PanelHeader>
-          <h1>
-            <FormattedMessage id="connection-interruption.heading" />
-          </h1>
-        </PanelHeader>
-      </Panel>
-    );
-  }
-
   return (
     <Panel spacing="large">
       <Form
