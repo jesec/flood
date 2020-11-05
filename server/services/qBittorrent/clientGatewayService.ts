@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {TorrentContent} from '@shared/types/TorrentContent';
@@ -120,17 +118,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
           const properties = getTorrentPeerPropertiesFromFlags(peer.flags);
           accumulator.push({
-            country: peer.country_code,
             address: peer.ip,
-            completedPercent: Math.trunc(peer.progress * 100),
+            country: peer.country_code,
             clientVersion: peer.client,
+            completedPercent: Math.trunc(peer.progress * 100),
             downloadRate: peer.dl_speed,
-            downloadTotal: peer.downloaded,
             uploadRate: peer.up_speed,
-            uploadTotal: peer.uploaded,
-            id: crypto.createHash('sha1').update(ip_and_port).digest('base64'),
-            peerRate: 0,
-            peerTotal: 0,
             isEncrypted: properties.isEncrypted,
             isIncoming: properties.isIncoming,
           });
@@ -145,18 +138,14 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .getTorrentTrackers(hash)
       .then(this.processClientRequestSuccess, this.processClientRequestError)
       .then((trackers) => {
-        return trackers.map((tracker, index) => {
-          return {
-            index,
-            id: crypto.createHash('sha1').update(tracker.url).digest('base64'),
-            url: tracker.url,
-            type: getTorrentTrackerTypeFromURL(tracker.url),
-            group: tracker.tier,
-            minInterval: 0,
-            normalInterval: 0,
-            isEnabled: tracker.status !== QBittorrentTorrentTrackerStatus.DISABLED,
-          };
-        });
+        return trackers
+          .filter((tracker) => tracker.status !== QBittorrentTorrentTrackerStatus.DISABLED)
+          .map((tracker) => {
+            return {
+              url: tracker.url,
+              type: getTorrentTrackerTypeFromURL(tracker.url),
+            };
+          });
       });
   }
 

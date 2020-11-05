@@ -5,12 +5,6 @@ export enum TorrentTrackerType {
 }
 
 export interface TorrentTracker {
-  index: number;
-  id: string;
   url: string;
   type: TorrentTrackerType;
-  group: number;
-  minInterval: number;
-  normalInterval: number;
-  isEnabled: boolean;
 }

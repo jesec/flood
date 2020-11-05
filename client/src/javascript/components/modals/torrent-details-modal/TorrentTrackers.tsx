@@ -20,7 +20,7 @@ class TorrentTrackers extends Component<unknown> {
       TorrentActions.fetchTorrentTrackers(UIStore.activeModal?.hash).then((trackers) => {
         if (trackers != null) {
           runInAction(() => {
-            this.trackers.replace(trackers.filter((tracker) => tracker.isEnabled));
+            this.trackers.replace(trackers);
           });
         }
       });

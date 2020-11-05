@@ -225,10 +225,18 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .methodCall('t.multicall', [hash, ''].concat(getMethodCalls(configs)))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
-          return Promise.all(
-            responses.map((response) => processMethodCallResponse(response, configs) as Promise<TorrentTracker>),
-          );
-        }) || Promise.reject()
+          return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
+        })
+        .then((processedResponses) =>
+          processedResponses
+            .filter((processedResponse) => processedResponse.isEnabled)
+            .map((processedResponse) => {
+              return {
+                url: processedResponse.url,
+                type: processedResponse.type,
+              };
+            }),
+        ) || Promise.reject()
     );
   }
 

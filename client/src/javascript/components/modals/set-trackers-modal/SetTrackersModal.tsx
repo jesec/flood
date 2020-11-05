@@ -3,6 +3,8 @@ import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {observable, runInAction} from 'mobx';
 import {observer} from 'mobx-react';
 
+import {TorrentTrackerType} from '@shared/types/TorrentTracker';
+
 import {Form, FormRow, Textbox} from '../../../ui';
 import Modal from '../Modal';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
@@ -29,10 +31,7 @@ class SetTrackersModal extends Component<WrappedComponentProps, SetTrackersModal
       if (trackers != null) {
         runInAction(() => {
           this.trackerURLs.replace(
-            trackers
-              .filter((tracker) => tracker.isEnabled)
-              .map((tracker) => tracker.url)
-              .filter((url) => url.startsWith('http') || url.startsWith('udp')),
+            trackers.filter((tracker) => tracker.type !== TorrentTrackerType.DHT).map((tracker) => tracker.url),
           );
           this.setState({isLoadingTrackers: false});
         });
