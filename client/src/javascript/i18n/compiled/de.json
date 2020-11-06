@@ -64,7 +64,7 @@
     },
     {
       "type": 0,
-      "value": "hinzugefügt."
+      "value": " erfolgreich hinzugefügt."
     }
   ],
   "alert.torrent.add.failed": [
@@ -112,7 +112,7 @@
     },
     {
       "type": 0,
-      "value": " erfolgreich verschoben "
+      "value": " "
     },
     {
       "offset": 0,
@@ -140,7 +140,7 @@
     },
     {
       "type": 0,
-      "value": "."
+      "value": " erfolgreich verschoben."
     }
   ],
   "alert.torrent.move.failed": [
@@ -188,7 +188,7 @@
     },
     {
       "type": 0,
-      "value": " erfolgreich entfernt "
+      "value": " "
     },
     {
       "offset": 0,
@@ -216,13 +216,13 @@
     },
     {
       "type": 0,
-      "value": "."
+      "value": " erfolgreich entfernt."
     }
   ],
   "alert.torrent.remove.failed": [
     {
       "type": 0,
-      "value": "Fehler beim Entfernen von "
+      "value": "Entfernen von "
     },
     {
       "type": 1,
@@ -255,12 +255,16 @@
       "pluralType": "cardinal",
       "type": 6,
       "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " fehlgeschlagen."
     }
   ],
   "auth.add.user": [
     {
       "type": 0,
-      "value": "Neuer Benutzer"
+      "value": "Benutzer hinzufügen"
     }
   ],
   "auth.admin": [
@@ -308,7 +312,7 @@
   "auth.input.clear": [
     {
       "type": 0,
-      "value": "Clear"
+      "value": "Löschen"
     }
   ],
   "auth.log.in": [
@@ -386,7 +390,7 @@
   "button.retry": [
     {
       "type": 0,
-      "value": "Retry"
+      "value": "Erneut versuchen"
     }
   ],
   "button.save": [
@@ -416,13 +420,13 @@
   "connection-interruption.action.selection.config": [
     {
       "type": 0,
-      "value": "Update client connection settings"
+      "value": "Clientverbindungseinstellungen aktualisieren"
     }
   ],
   "connection-interruption.action.selection.retry": [
     {
       "type": 0,
-      "value": "Retry with current client connection settings"
+      "value": "Mit aktuellen Clientverbindungseinstellungen neu versuchen"
     }
   ],
   "connection-interruption.heading": [
@@ -561,6 +565,48 @@
     {
       "type": 0,
       "value": "Exposing rTorrent via TCP may allow privilege escalation."
+    }
+  ],
+  "connection.settings.transmission": [
+    {
+      "type": 0,
+      "value": "Transmission"
+    }
+  ],
+  "connection.settings.transmission.password": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.transmission.password.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.transmission.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "connection.settings.transmission.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "URL to Transmission RPC interface"
+    }
+  ],
+  "connection.settings.transmission.username": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
+  "connection.settings.transmission.username.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Username"
     }
   ],
   "connectivity.modal.content": [
@@ -1528,7 +1574,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Kostenlos"
+      "value": "Frei"
     }
   ],
   "status.diskusage.title": [
@@ -1546,7 +1592,7 @@
   "status.diskusage.used": [
     {
       "type": 0,
-      "value": "Verwendet"
+      "value": "Belegt"
     }
   ],
   "torrent.list.peers": [
@@ -2155,12 +2201,6 @@
       "value": "Torrent-Standort festlegen"
     }
   ],
-  "torrents.properties.base.path": [
-    {
-      "type": 0,
-      "value": "Basispfad"
-    }
-  ],
   "torrents.properties.comment": [
     {
       "type": 0,
@@ -2177,6 +2217,12 @@
     {
       "type": 0,
       "value": "Hinzugefügt"
+    }
+  ],
+  "torrents.properties.directory": [
+    {
+      "type": 0,
+      "value": "Standort"
     }
   ],
   "torrents.properties.download.speed": [

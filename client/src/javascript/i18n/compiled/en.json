@@ -467,6 +467,48 @@
       "value": "crwdns3652:0crwdne3652:0"
     }
   ],
+  "connection.settings.transmission": [
+    {
+      "type": 0,
+      "value": "crwdns3666:0crwdne3666:0"
+    }
+  ],
+  "connection.settings.transmission.password": [
+    {
+      "type": 0,
+      "value": "crwdns3676:0crwdne3676:0"
+    }
+  ],
+  "connection.settings.transmission.password.input.placeholder": [
+    {
+      "type": 0,
+      "value": "crwdns3678:0crwdne3678:0"
+    }
+  ],
+  "connection.settings.transmission.url": [
+    {
+      "type": 0,
+      "value": "crwdns3668:0crwdne3668:0"
+    }
+  ],
+  "connection.settings.transmission.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "crwdns3670:0crwdne3670:0"
+    }
+  ],
+  "connection.settings.transmission.username": [
+    {
+      "type": 0,
+      "value": "crwdns3672:0crwdne3672:0"
+    }
+  ],
+  "connection.settings.transmission.username.input.placeholder": [
+    {
+      "type": 0,
+      "value": "crwdns3674:0crwdne3674:0"
+    }
+  ],
   "connectivity.modal.content": [
     {
       "type": 0,
@@ -2065,12 +2107,6 @@
       "value": "crwdns3426:0crwdne3426:0"
     }
   ],
-  "torrents.properties.base.path": [
-    {
-      "type": 0,
-      "value": "crwdns3430:0crwdne3430:0"
-    }
-  ],
   "torrents.properties.comment": [
     {
       "type": 0,
@@ -2087,6 +2123,12 @@
     {
       "type": 0,
       "value": "crwdns3428:0crwdne3428:0"
+    }
+  ],
+  "torrents.properties.directory": [
+    {
+      "type": 0,
+      "value": "crwdns3664:0crwdne3664:0"
     }
   ],
   "torrents.properties.download.speed": [
