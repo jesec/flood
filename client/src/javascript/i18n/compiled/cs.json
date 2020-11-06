@@ -386,7 +386,7 @@
   "button.retry": [
     {
       "type": 0,
-      "value": "Retry"
+      "value": "Opakovat"
     }
   ],
   "button.save": [
@@ -416,13 +416,13 @@
   "connection-interruption.action.selection.config": [
     {
       "type": 0,
-      "value": "Update client connection settings"
+      "value": "Aktualizovat nastavení připojení klienta"
     }
   ],
   "connection-interruption.action.selection.retry": [
     {
       "type": 0,
-      "value": "Retry with current client connection settings"
+      "value": "Opakovat s nastavením připojení aktuálního klienta"
     }
   ],
   "connection-interruption.heading": [
@@ -434,7 +434,7 @@
   "connection-interruption.not.admin": [
     {
       "type": 0,
-      "value": "Please contact your Flood administrator if this continues."
+      "value": "Pokud problém přetrvává, prosím kontaktujte administrátora."
     }
   ],
   "connection-interruption.verification-error": [
@@ -561,6 +561,48 @@
     {
       "type": 0,
       "value": "Vystavení rTorrentu prostřednictvím TCP může umožnit eskalaci práv."
+    }
+  ],
+  "connection.settings.transmission": [
+    {
+      "type": 0,
+      "value": "Transmission"
+    }
+  ],
+  "connection.settings.transmission.password": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.transmission.password.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.transmission.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "connection.settings.transmission.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "URL to Transmission RPC interface"
+    }
+  ],
+  "connection.settings.transmission.username": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
+  "connection.settings.transmission.username.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Username"
     }
   ],
   "connectivity.modal.content": [
@@ -1084,7 +1126,7 @@
   "notification.no.notification": [
     {
       "type": 0,
-      "value": "No notification to display."
+      "value": "Žádné oznámení k zobrazení."
     }
   ],
   "notification.showing": [
@@ -2155,12 +2197,6 @@
       "value": "Nastavit umístění Torrentu"
     }
   ],
-  "torrents.properties.base.path": [
-    {
-      "type": 0,
-      "value": "Základní cesta"
-    }
-  ],
   "torrents.properties.comment": [
     {
       "type": 0,
@@ -2177,6 +2213,12 @@
     {
       "type": 0,
       "value": "Přidáno"
+    }
+  ],
+  "torrents.properties.directory": [
+    {
+      "type": 0,
+      "value": "Poloha"
     }
   ],
   "torrents.properties.download.speed": [

@@ -563,6 +563,48 @@
       "value": "Exposing rTorrent via TCP may allow privilege escalation."
     }
   ],
+  "connection.settings.transmission": [
+    {
+      "type": 0,
+      "value": "Transmission"
+    }
+  ],
+  "connection.settings.transmission.password": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.transmission.password.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Password"
+    }
+  ],
+  "connection.settings.transmission.url": [
+    {
+      "type": 0,
+      "value": "URL"
+    }
+  ],
+  "connection.settings.transmission.url.input.placeholder": [
+    {
+      "type": 0,
+      "value": "URL to Transmission RPC interface"
+    }
+  ],
+  "connection.settings.transmission.username": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
+  "connection.settings.transmission.username.input.placeholder": [
+    {
+      "type": 0,
+      "value": "Username"
+    }
+  ],
   "connectivity.modal.content": [
     {
       "type": 0,
@@ -2167,12 +2209,6 @@
       "value": "토렌트 경로 지정"
     }
   ],
-  "torrents.properties.base.path": [
-    {
-      "type": 0,
-      "value": "기본 경로"
-    }
-  ],
   "torrents.properties.comment": [
     {
       "type": 0,
@@ -2189,6 +2225,12 @@
     {
       "type": 0,
       "value": "추가한 날"
+    }
+  ],
+  "torrents.properties.directory": [
+    {
+      "type": 0,
+      "value": "Location"
     }
   ],
   "torrents.properties.download.speed": [
