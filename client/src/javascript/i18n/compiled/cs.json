@@ -572,13 +572,13 @@
   "connection.settings.transmission.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Heslo"
     }
   ],
   "connection.settings.transmission.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Heslo"
     }
   ],
   "connection.settings.transmission.url": [
@@ -596,13 +596,13 @@
   "connection.settings.transmission.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Uživatelské jméno"
     }
   ],
   "connection.settings.transmission.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Uživatelské jméno"
     }
   ],
   "connectivity.modal.content": [
