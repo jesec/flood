@@ -332,7 +332,7 @@
   "auth.input.clear": [
     {
       "type": 0,
-      "value": "Clear"
+      "value": "Effacer"
     }
   ],
   "auth.log.in": [
@@ -410,7 +410,7 @@
   "button.retry": [
     {
       "type": 0,
-      "value": "Retry"
+      "value": "Réessayer"
     }
   ],
   "button.save": [
@@ -440,13 +440,13 @@
   "connection-interruption.action.selection.config": [
     {
       "type": 0,
-      "value": "Update client connection settings"
+      "value": "Mettre à jour les paramètres de connexion client"
     }
   ],
   "connection-interruption.action.selection.retry": [
     {
       "type": 0,
-      "value": "Retry with current client connection settings"
+      "value": "Réessayer avec les paramètres de connexion actuels du client"
     }
   ],
   "connection-interruption.heading": [
@@ -458,7 +458,7 @@
   "connection-interruption.not.admin": [
     {
       "type": 0,
-      "value": "Please contact your Flood administrator if this continues."
+      "value": "Veuillez contacter votre administrateur Flood si cela persiste."
     }
   ],
   "connection-interruption.verification-error": [
@@ -584,7 +584,7 @@
   "connection.settings.rtorrent.type.tcp.warning": [
     {
       "type": 0,
-      "value": "Exposing rTorrent via TCP may allow privilege escalation."
+      "value": "Exposer rTorrent via TCP peut permettre une élévation des privilèges."
     }
   ],
   "connection.settings.transmission": [
@@ -596,13 +596,13 @@
   "connection.settings.transmission.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Mot de passe"
     }
   ],
   "connection.settings.transmission.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Mot de passe"
     }
   ],
   "connection.settings.transmission.url": [
@@ -614,19 +614,19 @@
   "connection.settings.transmission.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to Transmission RPC interface"
+      "value": "URL de l'interface RPC de Transmission"
     }
   ],
   "connection.settings.transmission.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Nom d'utilisateur"
     }
   ],
   "connection.settings.transmission.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Nom d'utilisateur"
     }
   ],
   "connectivity.modal.content": [
@@ -704,7 +704,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Validate the rule by trying it out. Not saved or sent."
+      "value": "Valider la règle en l'essayant. Non enregistré ou envoyé."
     }
   ],
   "feeds.exclude": [
@@ -1119,7 +1119,7 @@
   "locale.language.translate": [
     {
       "type": 0,
-      "value": "Start to translate"
+      "value": "Commencer à traduire"
     }
   ],
   "mediainfo.execError": [
@@ -1161,7 +1161,7 @@
   "notification.no.notification": [
     {
       "type": 0,
-      "value": "No notification to display."
+      "value": "Aucune notification à afficher."
     }
   ],
   "notification.showing": [
@@ -2257,7 +2257,7 @@
   "torrents.properties.directory": [
     {
       "type": 0,
-      "value": "Location"
+      "value": "Emplacement"
     }
   ],
   "torrents.properties.download.speed": [
