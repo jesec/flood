@@ -1,7 +1,7 @@
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import Dropzone from 'react-dropzone';
 import {observer} from 'mobx-react';
 import {observable, reaction} from 'mobx';
+import {useDropzone} from 'react-dropzone';
 import * as React from 'react';
 
 import type {FixedSizeList, ListChildComponentProps} from 'react-window';
@@ -26,6 +26,45 @@ import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
 import type {TorrentListColumn} from '../../constants/TorrentListColumns';
+
+const TorrentDropzone: React.FC<{children: React.ReactNode}> = ({children}: {children: React.ReactNode}) => {
+  const handleFileDrop = (files: Array<File>) => {
+    const filesData: Array<string> = [];
+
+    const callback = (data: string) => {
+      filesData.push(data);
+
+      if (filesData.length === files.length) {
+        TorrentActions.addTorrentsByFiles({
+          files: filesData,
+          destination:
+            SettingStore.floodSettings.torrentDestination || SettingStore.clientSettings?.directoryDefault || '',
+          isBasePath: false,
+          start: SettingStore.floodSettings.startTorrentsOnLoad,
+        });
+      }
+    };
+
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result != null && typeof e.target.result === 'string') {
+          callback(e.target.result.split('base64,')[1]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+  const {getRootProps, isDragActive} = useDropzone({onDrop: handleFileDrop, noClick: true, noKeyboard: true});
+
+  return (
+    <div
+      {...getRootProps({onClick: (evt) => evt.preventDefault()})}
+      className={`dropzone dropzone--with-overlay torrents ${isDragActive ? 'dropzone--is-dragging' : ''}`}>
+      {children}
+    </div>
+  );
+};
 
 const getEmptyTorrentListNotification = (): React.ReactNode => {
   let clearFilters = null;
@@ -59,7 +98,6 @@ const handleDoubleClick = (hash: string) => TorrentListContextMenu.handleDetails
 
 @observer
 class TorrentList extends React.Component<WrappedComponentProps> {
-  listContainer: HTMLDivElement | null = null;
   listHeaderRef: HTMLDivElement | null = null;
   listViewportRef = React.createRef<FixedSizeList>();
 
@@ -113,34 +151,6 @@ class TorrentList extends React.Component<WrappedComponentProps> {
 
         return !torrentContextMenuActions.some((action) => action.id === item.action && action.visible === false);
       }),
-    });
-  };
-
-  handleFileDrop = (files: Array<File>) => {
-    const filesData: Array<string> = [];
-
-    const callback = (data: string) => {
-      filesData.concat(data);
-
-      if (filesData.length === files.length) {
-        TorrentActions.addTorrentsByFiles({
-          files: filesData,
-          destination:
-            SettingStore.floodSettings.torrentDestination || SettingStore.clientSettings?.directoryDefault || '',
-          isBasePath: false,
-          start: SettingStore.floodSettings.startTorrentsOnLoad,
-        });
-      }
-    };
-
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target?.result != null && typeof e.target.result === 'string') {
-          callback(e.target.result.split('base64,')[1]);
-        }
-      };
-      reader.readAsDataURL(file);
     });
   };
 
@@ -239,30 +249,21 @@ class TorrentList extends React.Component<WrappedComponentProps> {
     }
 
     return (
-      <Dropzone onDrop={this.handleFileDrop} noClick noKeyboard>
-        {({getRootProps, isDragActive}) => (
-          <div
-            {...getRootProps({onClick: (evt) => evt.preventDefault()})}
-            className={`dropzone dropzone--with-overlay torrents ${isDragActive ? 'dropzone--is-dragging' : ''}`}
-            ref={(ref) => {
-              this.listContainer = ref;
-            }}>
-            <div className="torrent__list__wrapper">
-              <GlobalContextMenuMountPoint id="torrent-list-item" />
-              {torrentListHeading}
-              {content}
+      <TorrentDropzone>
+        <div className="torrent__list__wrapper">
+          <GlobalContextMenuMountPoint id="torrent-list-item" />
+          {torrentListHeading}
+          {content}
+        </div>
+        <div className="dropzone__overlay">
+          <div className="dropzone__copy">
+            <div className="dropzone__icon">
+              <Files />
             </div>
-            <div className="dropzone__overlay">
-              <div className="dropzone__copy">
-                <div className="dropzone__icon">
-                  <Files />
-                </div>
-                <FormattedMessage id="torrents.list.drop" />
-              </div>
-            </div>
+            <FormattedMessage id="torrents.list.drop" />
           </div>
-        )}
-      </Dropzone>
+        </div>
+      </TorrentDropzone>
     );
   }
 }
