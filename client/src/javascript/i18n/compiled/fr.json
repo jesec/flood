@@ -1035,7 +1035,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Essaimage"
+      "value": "En source"
     }
   ],
   "filter.status.stopped": [
@@ -1245,7 +1245,7 @@
   "settings.bandwidth.slots.upload.global.label": [
     {
       "type": 0,
-      "value": "Slots d'essaimage globaux"
+      "value": "Slots d'envoi global"
     }
   ],
   "settings.bandwidth.slots.upload.label": [
@@ -1263,7 +1263,7 @@
   "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
     {
       "type": 0,
-      "value": "Pré-réglages des vitesses : essaimage"
+      "value": "Pré-réglages des vitesses : Envoi"
     }
   ],
   "settings.bandwidth.transferrate.global.throttle.download": [
@@ -1275,7 +1275,7 @@
   "settings.bandwidth.transferrate.global.throttle.upload": [
     {
       "type": 0,
-      "value": "Limite globale d'essaimage"
+      "value": "Limite globale d'envoi"
     }
   ],
   "settings.bandwidth.transferrate.heading": [
@@ -1353,7 +1353,7 @@
   "settings.connectivity.peers.seeding.max.label": [
     {
       "type": 0,
-      "value": "Limite de pairs en essaimage"
+      "value": "Seuil maximum de pairs en source"
     }
   ],
   "settings.connectivity.peers.seeding.min.label": [
@@ -1581,7 +1581,7 @@
   "sidebar.speedlimits.upload": [
     {
       "type": 0,
-      "value": "ESSAIMAGE"
+      "value": "ENVOI"
     }
   ],
   "sidebar.transferdata.downloaded": [
@@ -1593,7 +1593,7 @@
   "sidebar.transferdata.uploaded": [
     {
       "type": 0,
-      "value": "Essaimé"
+      "value": "Envoyé"
     }
   ],
   "speed.unlimited": [
@@ -1997,7 +1997,7 @@
   "torrents.details.general.seeds": [
     {
       "type": 0,
-      "value": "Essaimeurs"
+      "value": "Sources"
     }
   ],
   "torrents.details.general.size": [
@@ -2329,7 +2329,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Essaimeurs"
+      "value": "Sources"
     }
   ],
   "torrents.properties.size": [
@@ -2359,13 +2359,13 @@
   "torrents.properties.upload.speed": [
     {
       "type": 0,
-      "value": "Vitesse d'essaimage"
+      "value": "Vitesse d'Envoi"
     }
   ],
   "torrents.properties.upload.total": [
     {
       "type": 0,
-      "value": "Essaimé"
+      "value": "Données envoyées"
     }
   ],
   "torrents.remove": [
