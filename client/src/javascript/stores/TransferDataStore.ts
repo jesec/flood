@@ -14,10 +14,8 @@ class TransferDataStore {
 
   transferSummary: TransferSummary = {
     downRate: 0,
-    downThrottle: 0,
     downTotal: 0,
     upRate: 0,
-    upThrottle: 0,
     upTotal: 0,
   };
 

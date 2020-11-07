@@ -1,15 +1,11 @@
 export interface TransferSummary {
-  // Global download rate
+  // Global download rate in B/s
   downRate: number;
-  // Download rate limit
-  downThrottle: number;
-  // Data downloaded this session
+  // Data downloaded this session in bytes
   downTotal: number;
-  // Global upload rate
+  // Global upload rate in B/s
   upRate: number;
-  // Upload rate limit
-  upThrottle: number;
-  // Data uploaded this session
+  // Data uploaded this session in bytes
   upTotal: number;
 }
 

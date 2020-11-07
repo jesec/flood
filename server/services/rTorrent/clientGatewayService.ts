@@ -681,6 +681,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           break;
         case 'throttleGlobalDownMax':
         case 'throttleGlobalUpMax':
+          // Kb/s to B/s
           methodName = `${configs[property].methodCall}.set`;
           param = (param as ClientSettings[typeof property]) * 1024;
           break;

@@ -360,45 +360,17 @@ class TransmissionClientGatewayService extends ClientGatewayService {
   }
 
   async fetchTransferSummary(): Promise<TransferSummary> {
-    const statsRequest = this.clientRequestManager
+    return this.clientRequestManager
       .getSessionStats()
       .then(this.processClientRequestSuccess, this.processClientRequestError)
-      .catch(() => undefined);
-
-    const speedLimitRequest = this.clientRequestManager
-      .getSessionProperties([
-        'speed-limit-down',
-        'speed-limit-down-enabled',
-        'speed-limit-up',
-        'speed-limit-up-enabled',
-      ])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
-      .catch(() => undefined);
-
-    const stats = await statsRequest;
-    const properties = await speedLimitRequest;
-
-    if (stats == null || properties == null) {
-      return Promise.reject();
-    }
-
-    const {
-      'speed-limit-down': speedLimitDown,
-      'speed-limit-down-enabled': speedLimitDownEnabled,
-      'speed-limit-up': speedLimitUp,
-      'speed-limit-up-enabled': speedLimitUpEnabled,
-    } = properties;
-
-    const transferSummary: TransferSummary = {
-      downRate: stats.downloadSpeed,
-      downThrottle: speedLimitDownEnabled ? speedLimitDown * 1024 : 0,
-      downTotal: stats['current-stats'].downloadedBytes,
-      upRate: stats.uploadSpeed,
-      upThrottle: speedLimitUpEnabled ? speedLimitUp * 1024 : 0,
-      upTotal: stats['current-stats'].uploadedBytes,
-    };
-
-    return transferSummary;
+      .then((stats) => {
+        return {
+          downRate: stats.downloadSpeed,
+          downTotal: stats['current-stats'].downloadedBytes,
+          upRate: stats.uploadSpeed,
+          upTotal: stats['current-stats'].uploadedBytes,
+        };
+      });
   }
 
   async getClientSettings(): Promise<ClientSettings> {
@@ -459,11 +431,9 @@ class TransmissionClientGatewayService extends ClientGatewayService {
         'peer-port-random-on-start': settings.networkPortRandom,
         'pex-enabled': settings.protocolPex,
         'speed-limit-down-enabled': settings.throttleGlobalDownMax !== 0,
-        'speed-limit-down':
-          settings.throttleGlobalDownMax != null ? Math.trunc(settings.throttleGlobalDownMax / 1024) : undefined,
+        'speed-limit-down': settings.throttleGlobalDownMax,
         'speed-limit-up-enabled': settings.throttleGlobalUpMax !== 0,
-        'speed-limit-up':
-          settings.throttleGlobalUpMax != null ? Math.trunc(settings.throttleGlobalUpMax / 1024) : undefined,
+        'speed-limit-up': settings.throttleGlobalUpMax,
         'seed-queue-enabled': settings.throttleMaxUploadsGlobal !== 0,
         'seed-queue-size': settings.throttleMaxUploadsGlobal,
       })

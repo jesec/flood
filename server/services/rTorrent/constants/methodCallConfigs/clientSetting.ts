@@ -72,13 +72,15 @@ const clientSettingMethodCallConfigs = {
   throttleGlobalDownMax: {
     methodCall: 'throttle.global_down.max_rate',
     transformValue: (value: unknown) => {
-      return Number(value) / 1024;
+      // B/s to Kb/s
+      return Math.trunc(Number(value) / 1024);
     },
   },
   throttleGlobalUpMax: {
     methodCall: 'throttle.global_up.max_rate',
     transformValue: (value: unknown) => {
-      return Number(value) / 1024;
+      // B/s to Kb/s
+      return Math.trunc(Number(value) / 1024);
     },
   },
   throttleMaxPeersNormal: {

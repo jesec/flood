@@ -6,15 +6,15 @@ import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import SettingStore from '../../../stores/SettingStore';
 import SettingsTab from './SettingsTab';
 
-const processSpeedsForDisplay = (speeds: number[]) => {
+const processSpeedsForDisplay = (speeds: number[]): string | undefined => {
   if (!speeds || speeds.length === 0) {
     return undefined;
   }
 
-  return speeds.map((speed) => Number(speed) / 1024).join(', ');
+  return speeds.join(', ');
 };
 
-const processSpeedsForSave = (speeds = '') => {
+const processSpeedsForSave = (speeds = ''): number[] => {
   if (speeds === '') {
     return [];
   }
@@ -22,7 +22,7 @@ const processSpeedsForSave = (speeds = '') => {
   return speeds
     .replace(/\s/g, '')
     .split(',')
-    .map((speed) => Number(speed) * 1024);
+    .map((speed) => Number(speed));
 };
 
 export default class BandwidthTab extends SettingsTab {

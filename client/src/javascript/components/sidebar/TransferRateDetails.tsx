@@ -9,6 +9,7 @@ import ClientStatusStore from '../../stores/ClientStatusStore';
 import Download from '../icons/Download';
 import Duration from '../general/Duration';
 import InfinityIcon from '../icons/InfinityIcon';
+import SettingStore from '../../stores/SettingStore';
 import Size from '../general/Size';
 import TransferDataStore from '../../stores/TransferDataStore';
 import Upload from '../icons/Upload';
@@ -35,21 +36,23 @@ const icons = {
 class TransferRateDetails extends Component<TransferRateDetailsProps> {
   getCurrentTransferRate(direction: TransferDirection, options: {showHoverDuration?: boolean} = {}) {
     const {inspectorPoint, intl} = this.props;
+    const {throttleGlobalDownMax = 0, throttleGlobalUpMax = 0} = SettingStore.clientSettings || {};
     const {transferSummary} = TransferDataStore;
 
     const throttles = {
-      download: transferSummary != null ? transferSummary.downThrottle : 0,
-      upload: transferSummary != null ? transferSummary.upThrottle : 0,
+      // Kb/s to B/s
+      download: throttleGlobalDownMax * 1024,
+      upload: throttleGlobalUpMax * 1024,
     };
-    let timestamp = null;
+
     const transferTotals = {
-      download: transferSummary != null ? transferSummary.downTotal : 0,
-      upload: transferSummary != null ? transferSummary.upTotal : 0,
+      download: transferSummary.downTotal,
+      upload: transferSummary.upTotal,
     };
 
     let transferRates = {
-      download: transferSummary != null ? transferSummary.downRate : 0,
-      upload: transferSummary != null ? transferSummary.upRate : 0,
+      download: transferSummary.downRate,
+      upload: transferSummary.upRate,
     };
 
     if (inspectorPoint != null) {
@@ -67,6 +70,7 @@ class TransferRateDetails extends Component<TransferRateDetailsProps> {
       'is-visible': inspectorPoint != null && options.showHoverDuration,
     });
 
+    let timestamp = null;
     if (inspectorPoint?.nearestTimestamp != null) {
       timestamp = (
         <div className={timestampClasses}>
