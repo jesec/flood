@@ -590,7 +590,7 @@
   "connection.settings.transmission.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to Transmission RPC interface"
+      "value": "URL pro Transmission RPC rozhraní"
     }
   ],
   "connection.settings.transmission.username": [
