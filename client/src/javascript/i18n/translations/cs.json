@@ -62,7 +62,7 @@
   "connection.settings.qbittorrent.password.input.placeholder": "Heslo",
   "connection.settings.transmission": "Transmission",
   "connection.settings.transmission.url": "URL",
-  "connection.settings.transmission.url.input.placeholder": "URL to Transmission RPC interface",
+  "connection.settings.transmission.url.input.placeholder": "URL pro Transmission RPC rozhraní",
   "connection.settings.transmission.username": "Uživatelské jméno",
   "connection.settings.transmission.username.input.placeholder": "Uživatelské jméno",
   "connection.settings.transmission.password": "Heslo",
