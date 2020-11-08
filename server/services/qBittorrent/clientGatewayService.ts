@@ -340,9 +340,8 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
           piecesHashOnCompletion: false,
           piecesMemoryMax: 0,
           protocolPex: preferences.pex,
-          // B/s to Kb/s
-          throttleGlobalDownMax: preferences.dl_limit / 1024,
-          throttleGlobalUpMax: preferences.up_limit / 1024,
+          throttleGlobalDownSpeed: preferences.dl_limit,
+          throttleGlobalUpSpeed: preferences.up_limit,
           throttleMaxPeersNormal: 0,
           throttleMaxPeersSeed: 0,
           throttleMaxDownloads: 0,
@@ -366,9 +365,8 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         random_port: settings.networkPortRandom,
         listen_port: settings.networkPortRange ? Number(settings.networkPortRange?.split('-')[0]) : undefined,
         pex: settings.protocolPex,
-        // Kb/s to B/s
-        dl_limit: settings.throttleGlobalDownMax != null ? settings.throttleGlobalDownMax * 1024 : undefined,
-        up_limit: settings.throttleGlobalUpMax != null ? settings.throttleGlobalUpMax * 1024 : undefined,
+        dl_limit: settings.throttleGlobalDownSpeed,
+        up_limit: settings.throttleGlobalUpSpeed,
         max_uploads_per_torrent: settings.throttleMaxUploads,
         max_uploads: settings.throttleMaxUploadsGlobal,
       })

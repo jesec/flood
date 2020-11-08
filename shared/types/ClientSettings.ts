@@ -11,10 +11,10 @@ export interface ClientSettings {
   piecesHashOnCompletion: boolean;
   piecesMemoryMax: number;
   protocolPex: boolean;
-  // Kb/s
-  throttleGlobalDownMax: number;
-  // Kb/s
-  throttleGlobalUpMax: number;
+  // B/s
+  throttleGlobalDownSpeed: number;
+  // B/s
+  throttleGlobalUpSpeed: number;
   throttleMaxPeersNormal: number;
   throttleMaxPeersSeed: number;
   throttleMaxDownloads: number;

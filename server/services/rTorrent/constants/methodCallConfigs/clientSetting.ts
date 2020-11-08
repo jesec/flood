@@ -69,19 +69,13 @@ const clientSettingMethodCallConfigs = {
       return protocolPex === '1';
     },
   },
-  throttleGlobalDownMax: {
+  throttleGlobalDownSpeed: {
     methodCall: 'throttle.global_down.max_rate',
-    transformValue: (value: unknown) => {
-      // B/s to Kb/s
-      return Math.trunc(Number(value) / 1024);
-    },
+    transformValue: numberTransformer,
   },
-  throttleGlobalUpMax: {
+  throttleGlobalUpSpeed: {
     methodCall: 'throttle.global_up.max_rate',
-    transformValue: (value: unknown) => {
-      // B/s to Kb/s
-      return Math.trunc(Number(value) / 1024);
-    },
+    transformValue: numberTransformer,
   },
   throttleMaxPeersNormal: {
     methodCall: 'throttle.max_peers.normal',

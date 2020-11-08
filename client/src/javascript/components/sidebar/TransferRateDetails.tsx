@@ -36,13 +36,12 @@ const icons = {
 class TransferRateDetails extends Component<TransferRateDetailsProps> {
   getCurrentTransferRate(direction: TransferDirection, options: {showHoverDuration?: boolean} = {}) {
     const {inspectorPoint, intl} = this.props;
-    const {throttleGlobalDownMax = 0, throttleGlobalUpMax = 0} = SettingStore.clientSettings || {};
+    const {throttleGlobalDownSpeed = 0, throttleGlobalUpSpeed = 0} = SettingStore.clientSettings || {};
     const {transferSummary} = TransferDataStore;
 
     const throttles = {
-      // Kb/s to B/s
-      download: throttleGlobalDownMax * 1024,
-      upload: throttleGlobalUpMax * 1024,
+      download: throttleGlobalDownSpeed,
+      upload: throttleGlobalUpSpeed,
     };
 
     const transferTotals = {

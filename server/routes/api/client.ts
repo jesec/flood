@@ -7,7 +7,7 @@ import ajaxUtil from '../../util/ajaxUtil';
 import requireAdmin from '../../middleware/requireAdmin';
 
 // Those settings don't require administrator access.
-const SAFE_CLIENT_SETTINGS: Array<keyof ClientSettings> = ['throttleGlobalDownMax', 'throttleGlobalUpMax'];
+const SAFE_CLIENT_SETTINGS: Array<keyof ClientSettings> = ['throttleGlobalDownSpeed', 'throttleGlobalUpSpeed'];
 
 const router = express.Router();
 

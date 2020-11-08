@@ -32,13 +32,11 @@ const MESSAGES = defineMessages({
 @observer
 class SpeedLimitDropdown extends React.Component<WrappedComponentProps> {
   static handleItemSelect(item: DropdownItem<TransferDirection>) {
-    const bytes = item.value;
-    if (bytes != null) {
-      const kb = Math.trunc(bytes / 1024);
+    if (item.value != null) {
       if (item.property === 'download') {
-        ClientActions.saveSetting('throttleGlobalDownMax', kb);
+        ClientActions.saveSetting('throttleGlobalDownSpeed', item.value);
       } else if (item.property === 'upload') {
-        ClientActions.saveSetting('throttleGlobalUpMax', kb);
+        ClientActions.saveSetting('throttleGlobalUpSpeed', item.value);
       }
     }
   }
@@ -83,7 +81,7 @@ class SpeedLimitDropdown extends React.Component<WrappedComponentProps> {
 
   getSpeedList(direction: TransferDirection): Array<DropdownItem<TransferDirection>> {
     const {speedLimits} = SettingStore.floodSettings;
-    const {throttleGlobalDownMax = 0, throttleGlobalUpMax = 0} = SettingStore.clientSettings || {};
+    const {throttleGlobalDownSpeed = 0, throttleGlobalUpSpeed = 0} = SettingStore.clientSettings || {};
 
     const heading = {
       className: `dropdown__label dropdown__label--${direction}`,
@@ -95,12 +93,11 @@ class SpeedLimitDropdown extends React.Component<WrappedComponentProps> {
     };
 
     const currentThrottle: Record<TransferDirection, number> = {
-      // Kb/s to B/s
-      download: throttleGlobalDownMax * 1024,
-      upload: throttleGlobalUpMax * 1024,
+      download: throttleGlobalDownSpeed,
+      upload: throttleGlobalUpSpeed,
     };
 
-    const speeds: number[] = speedLimits[direction].map((kb) => kb * 1024);
+    const speeds: number[] = speedLimits[direction];
 
     let insertCurrentThrottle = true;
     const items: Array<DropdownItem<TransferDirection>> = speeds.map((bytes) => {

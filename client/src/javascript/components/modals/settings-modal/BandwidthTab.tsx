@@ -79,14 +79,14 @@ export default class BandwidthTab extends SettingsTab {
         </FormRow>
         <FormRow>
           <Textbox
-            defaultValue={this.getChangedClientSetting('throttleGlobalDownMax')}
+            defaultValue={this.getChangedClientSetting('throttleGlobalDownSpeed')}
             label={<FormattedMessage id="settings.bandwidth.transferrate.global.throttle.download" />}
-            id="throttleGlobalDownMax"
+            id="throttleGlobalDownSpeed"
           />
           <Textbox
-            defaultValue={this.getChangedClientSetting('throttleGlobalUpMax')}
+            defaultValue={this.getChangedClientSetting('throttleGlobalUpSpeed')}
             label={<FormattedMessage id="settings.bandwidth.transferrate.global.throttle.upload" />}
-            id="throttleGlobalUpMax"
+            id="throttleGlobalUpSpeed"
           />
         </FormRow>
         <ModalFormSectionHeader>
