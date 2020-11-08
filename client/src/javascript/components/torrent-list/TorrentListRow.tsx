@@ -20,6 +20,8 @@ interface TorrentListRowProps {
 
 const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProps) => {
   const {style, hash, handleClick, handleDoubleClick, handleRightClick} = props;
+  const [rowLocation, setRowLocation] = React.useState<number>(0);
+  const rowRef = React.createRef<HTMLLIElement>();
 
   const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
 
@@ -36,13 +38,16 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
 
   const longPressBind = useLongPress(
     (e) => {
-      if (e != null) {
+      if (e != null && rowRef.current?.getBoundingClientRect().top === rowLocation) {
         handleRightClick(hash, e);
       }
     },
     {
       captureEvent: true,
       detect: LongPressDetectEvents.TOUCH,
+      onStart: () => {
+        setRowLocation(rowRef.current?.getBoundingClientRect().top || 0);
+      },
       onFinish: (e) => ((e as unknown) as TouchEvent)?.preventDefault(),
     },
   );
@@ -51,6 +56,7 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
     return (
       <TorrentListRowCondensed
         className={torrentClasses}
+        ref={rowRef}
         style={style}
         hash={hash}
         handleClick={handleClick}
@@ -65,6 +71,7 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
   return (
     <TorrentListRowExpanded
       className={torrentClasses}
+      ref={rowRef}
       style={style}
       hash={hash}
       handleClick={handleClick}
