@@ -28,8 +28,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: git for-each-ref ${{ github.ref }} --format="%(contents)" > body
-
       - name: Create Release
         uses: actions/create-release@v1
         env:
@@ -37,7 +35,6 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body_path: body
 
   release-docker:
     runs-on: ubuntu-latest
@@ -51,4 +48,5 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           semver_higher: true
+          tag_extra: latest
           tag_semver: fail
