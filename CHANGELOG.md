@@ -1,4 +1,33 @@
-# Change Log
+# Changelog
+
+## [4.0.0] (November 9, 2020)
+* Experimental multi-client support
+  * qBittorrent
+  * Transmission
+* Stabilized and documented public API endpoints
+* Defined and documented internal interfaces, data structures and APIs
+* Better documentation for users and developers
+* Full migration to TypeScript
+* Reasonable test coverages for API endpoints
+* Torrent creation support
+* Add torrents as completed
+* Dropdown selector for existing tags
+* Seeding status in status filter
+* Set tracker URLs of torrents
+* Improved handling of rendering, updating and scrolling of torrent list
+  * Preliminary tests show that Flood can now handle 500,000 torrents at least in the frontend.
+  * Note: real-world performance depends on other factors such as method call and deserialization operations in the backend and data transfer between backend and frontend.
+* Better performance, less memory and CPU consumption in both frontend and backend
+* New translations
+  * Chinese (Traditional), thanks to @vongola12324
+  * Czech, thanks to Jan Březina
+  * French, thanks to @Zopieux and @Mystere98
+  * German, thanks to @chint95
+* Bug fixes
+* Security enhancements
+* Dockerfile revamp
+* Native build tools no longer needed as native dependency is replaced with WebAssembly variant
+* Server is packed before distribution, reduced number of dependencies in production, faster installation
 
 ## [3.1.0] (September 4, 2020)
 * Allow to replace main tracker of torrents
@@ -109,3 +138,4 @@
 [2.0.0]:https://github.com/jesec/flood/compare/v1.0.0...v2.0.0
 [3.0.0]:https://github.com/jesec/flood/compare/v2.0.0...v3.0.0
 [3.1.0]:https://github.com/jesec/flood/compare/v3.0.0...v3.1.0
+[4.0.0]:https://github.com/jesec/flood/compare/v3.1.0...v4.0.0
