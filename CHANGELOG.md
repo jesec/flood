@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.0.1] (November 10, 2020)
+* Fix the unreliable clear all notification button
+* Bump dependencies
+
 ## [4.0.0] (November 9, 2020)
 * Experimental multi-client support
   * qBittorrent
@@ -139,3 +143,4 @@
 [3.0.0]:https://github.com/jesec/flood/compare/v2.0.0...v3.0.0
 [3.1.0]:https://github.com/jesec/flood/compare/v3.0.0...v3.1.0
 [4.0.0]:https://github.com/jesec/flood/compare/v3.1.0...v4.0.0
+[4.0.1]:https://github.com/jesec/flood/compare/v4.0.0...v4.0.1
