@@ -218,15 +218,15 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
       prevHeight: 0,
     });
 
+    if (this.tooltipRef != null) {
+      this.tooltipRef.dismissTooltip();
+    }
+
     FloodActions.clearNotifications({
       id: 'notification-tooltip',
       limit: NOTIFICATIONS_PER_PAGE,
       start: 0,
     });
-
-    if (this.tooltipRef != null) {
-      this.tooltipRef.dismissTooltip();
-    }
   };
 
   handleNotificationCountChange = () => {
