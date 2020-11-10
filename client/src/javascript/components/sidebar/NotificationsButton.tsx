@@ -71,7 +71,12 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
   constructor(props: WrappedComponentProps) {
     super(props);
 
-    reaction(() => NotificationStore.notificationCount, this.handleNotificationCountChange);
+    reaction(
+      () => NotificationStore.notificationCount,
+      (count) => {
+        if (count.total > 0 && this.tooltipRef?.isOpen()) this.fetchNotifications();
+      },
+    );
 
     this.state = {
       isLoading: false,
@@ -223,12 +228,6 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
     }
 
     FloodActions.clearNotifications();
-  };
-
-  handleNotificationCountChange = () => {
-    if (this.tooltipRef != null && this.tooltipRef.isOpen()) {
-      this.fetchNotifications();
-    }
   };
 
   handleNewerNotificationsClick = () => {
