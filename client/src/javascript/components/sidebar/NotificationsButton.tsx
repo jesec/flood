@@ -264,15 +264,13 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
   render() {
     const {intl} = this.props;
     const {isLoading, prevHeight} = this.state;
-    const {notifications, notificationCount} = NotificationStore;
-
-    const hasNotifications = notificationCount.total !== 0;
+    const {hasNotification, notifications, notificationCount} = NotificationStore;
 
     return (
       <Tooltip
         contentClassName="tooltip__content tooltip__content--no-padding"
         content={
-          hasNotifications ? (
+          hasNotification ? (
             <div
               className={classnames('notifications', {
                 'notifications--is-loading': isLoading,
@@ -303,7 +301,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
         wrapperClassName="sidebar__action sidebar__icon-button
           tooltip__wrapper">
         <NotificationIcon />
-        {hasNotifications ? <span className="notifications__badge">{notificationCount.total}</span> : null}
+        {hasNotification ? <span className="notifications__badge">{notificationCount.total}</span> : null}
       </Tooltip>
     );
   }
