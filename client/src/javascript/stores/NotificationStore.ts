@@ -7,7 +7,6 @@ const INITIAL_COUNT_STATE: NotificationCount = {total: 0, unread: 0, read: 0};
 class NotificationStore {
   notifications: Array<Notification> = [];
   notificationCount: NotificationCount = INITIAL_COUNT_STATE;
-  ongoingPolls = {};
 
   constructor() {
     makeAutoObservable(this);
@@ -15,6 +14,7 @@ class NotificationStore {
 
   clearAll() {
     this.notifications = [];
+    this.notificationCount = INITIAL_COUNT_STATE;
   }
 
   handleNotificationCountChange(notificationCount: NotificationCount) {
