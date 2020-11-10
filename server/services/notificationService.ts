@@ -47,11 +47,10 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
       }
 
       this.count = {read: 0, total: 0, unread: 0};
+      this.emitUpdate();
 
       callback();
     });
-
-    this.emitUpdate();
   }
 
   countNotifications() {
