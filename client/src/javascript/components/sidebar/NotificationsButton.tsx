@@ -222,11 +222,7 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
       this.tooltipRef.dismissTooltip();
     }
 
-    FloodActions.clearNotifications({
-      id: 'notification-tooltip',
-      limit: NOTIFICATIONS_PER_PAGE,
-      start: 0,
-    });
+    FloodActions.clearNotifications();
   };
 
   handleNotificationCountChange = () => {

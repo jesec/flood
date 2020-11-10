@@ -72,14 +72,14 @@ const ServerEventHandlers: Record<keyof ServerEvents, (event: unknown) => void> 
 } as const;
 
 const FloodActions = {
-  clearNotifications: (options: NotificationFetchOptions) => {
+  clearNotifications: () => {
     NotificationStore.clearAll();
     return axios
       .delete(`${baseURI}api/notifications`)
       .then((json) => json.data)
       .then(
         () => {
-          FloodActions.fetchNotifications(options);
+          // do nothing.
         },
         () => {
           // do nothing.
