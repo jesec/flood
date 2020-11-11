@@ -1,5 +1,10 @@
 # Changelog
 
+## [4.0.2] (November 11, 2020)
+* New translations
+  * German, thanks to @chint95
+  * Romanian, thanks to @T-z3P
+
 ## [4.0.1] (November 10, 2020)
 * Fix the unreliable clear all notification button
 * Bump dependencies
@@ -144,3 +149,4 @@
 [3.1.0]:https://github.com/jesec/flood/compare/v3.0.0...v3.1.0
 [4.0.0]:https://github.com/jesec/flood/compare/v3.1.0...v4.0.0
 [4.0.1]:https://github.com/jesec/flood/compare/v4.0.0...v4.0.1
+[4.0.2]:https://github.com/jesec/flood/compare/v4.0.1...v4.0.2
