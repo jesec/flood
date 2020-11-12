@@ -36,11 +36,13 @@ const grepRecursive = (folder: string, match: string) => {
 const enforcePrerequisites = () =>
   new Promise<void>((resolve, reject: (error: Error) => void) => {
     if (!doFilesExist(staticAssets)) {
-      reject(
-        new Error(
-          `Static assets (index.html) are missing. Please check the 'Compiling assets and starting the server' section of README.md.`,
-        ),
-      );
+      reject(new Error(`Static assets (index.html) are missing.`));
+      return;
+    }
+
+    // Ensures that WebAssembly support is present
+    if (typeof WebAssembly === 'undefined') {
+      reject(new Error('WebAssembly is not supported in this environment!'));
       return;
     }
 
