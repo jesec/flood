@@ -252,7 +252,7 @@ describe('POST /api/torrents/add-files', () => {
 
         await Promise.all(
           addedTorrents.map(async (torrent) => {
-            expect(torrent.directory.startsWith(addTorrentByFileOptions.destination)).toBe(true);
+            expect(torrent.directory.startsWith(addTorrentByFileOptions.destination as string)).toBe(true);
           }),
         );
 

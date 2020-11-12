@@ -9,7 +9,7 @@ export const addTorrentByURLSchema = object({
   // Cookies to attach to requests, arrays of strings in the format "name=value" with domain as key
   cookies: record(array(string())).optional(),
   // Path of destination
-  destination: string(),
+  destination: string().optional(),
   // Tags
   tags: array(string()).optional(),
   // Whether destination is the base path [default: false]
@@ -27,7 +27,7 @@ export const addTorrentByFileSchema = object({
   // Torrent files in base64
   files: array(string()).nonempty(),
   // Path of destination
-  destination: string(),
+  destination: string().optional(),
   // Tags
   tags: array(string()).optional(),
   // Whether destination is the base path [default: false]

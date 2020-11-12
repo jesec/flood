@@ -43,7 +43,7 @@ export const isAllowedPath = (resolvedPath: string) => {
   });
 };
 
-export const sanitizePath = (input: string): string => {
+export const sanitizePath = (input?: string): string => {
   if (typeof input !== 'string') {
     throw accessDeniedError();
   }

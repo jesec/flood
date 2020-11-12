@@ -25,10 +25,33 @@ import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUti
 import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 
-const getDestination = (destination: string): string | undefined => {
+const getDestination = async (
+  services: Express.Request['services'],
+  {destination}: {destination?: string},
+): Promise<string | undefined> => {
+  let autoDestination = destination === '' ? undefined : destination;
+
+  // Use default destination of torrent client
+  if (autoDestination == null) {
+    const {directoryDefault} = (await services?.clientGatewayService?.getClientSettings().catch(() => undefined)) || {};
+    autoDestination = directoryDefault;
+  }
+
+  // Use last download destination
+  if (autoDestination == null) {
+    await services?.settingService.get('torrentDestination').then(
+      ({torrentDestination}) => {
+        if (torrentDestination != null) {
+          autoDestination = torrentDestination;
+        }
+      },
+      () => undefined,
+    );
+  }
+
   let sanitizedPath: string | null = null;
   try {
-    sanitizedPath = sanitizePath(destination);
+    sanitizedPath = sanitizePath(autoDestination);
     if (!isAllowedPath(sanitizedPath)) {
       return undefined;
     }
@@ -75,7 +98,7 @@ router.get('/', (req, res) => {
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) => {
+router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, res) => {
   const callback = getResponseFn(res);
 
   const parsedResult = addTorrentByURLSchema.safeParse(req.body);
@@ -87,7 +110,9 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) =>
 
   const {urls, cookies, destination, tags, isBasePath, isCompleted, start} = parsedResult.data;
 
-  const finalDestination = getDestination(destination);
+  const finalDestination = await getDestination(req.services, {
+    destination,
+  });
 
   if (finalDestination == null) {
     callback(null, accessDeniedError());
@@ -123,7 +148,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) =>
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) => {
+router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req, res) => {
   const callback = getResponseFn(res);
 
   const parsedResult = addTorrentByFileSchema.safeParse(req.body);
@@ -135,7 +160,9 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) 
 
   const {files, destination, tags, isBasePath, isCompleted, start} = parsedResult.data;
 
-  const finalDestination = getDestination(destination);
+  const finalDestination = await getDestination(req.services, {
+    destination,
+  });
 
   if (finalDestination == null) {
     callback(null, accessDeniedError());

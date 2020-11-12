@@ -29,7 +29,7 @@ class SettingService extends BaseService<SettingServiceEvents> {
     return database;
   }
 
-  async get(property: string | null): Promise<Partial<FloodSettings>> {
+  async get(property: keyof FloodSettings | null): Promise<Partial<FloodSettings>> {
     return new Promise((resolve, reject) => {
       this.db
         .find(
