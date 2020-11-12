@@ -1,12 +1,12 @@
+import {FC} from 'react';
 import {useIntl} from 'react-intl';
-import * as React from 'react';
 
 import AddTorrentsByFile from './AddTorrentsByFile';
 import AddTorrentsByURL from './AddTorrentsByURL';
 import Modal from '../Modal';
 import AddTorrentsByCreation from './AddTorrentsByCreation';
 
-const AddTorrentsModal: React.FC = () => {
+const AddTorrentsModal: FC = () => {
   const intl = useIntl();
 
   const tabs = {
