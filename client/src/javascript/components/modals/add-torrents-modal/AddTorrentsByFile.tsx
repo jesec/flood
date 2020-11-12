@@ -73,10 +73,12 @@ const AddTorrentsByFile: FC = () => {
             return;
           }
 
+          const tagsArray = tags != null ? tags.split(',') : undefined;
+
           TorrentActions.addTorrentsByFiles({
             files: filesData as [string, ...string[]],
             destination,
-            tags: tags != null ? tags.split(',') : undefined,
+            tags: tagsArray,
             isBasePath,
             isCompleted,
             start,
@@ -87,6 +89,7 @@ const AddTorrentsByFile: FC = () => {
           saveAddTorrentsUserPreferences({
             start,
             destination,
+            tags: tagsArray,
             tab: 'by-file',
           });
         }}

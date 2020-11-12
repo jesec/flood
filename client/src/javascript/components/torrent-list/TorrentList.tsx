@@ -36,7 +36,7 @@ const TorrentDropzone: FC<{children: ReactNode}> = ({children}: {children: React
         TorrentActions.addTorrentsByFiles({
           files: filesData as [string, ...string[]],
           destination:
-            SettingStore.floodSettings.torrentDestination || SettingStore.clientSettings?.directoryDefault || '',
+            SettingStore.floodSettings.torrentDestinations?.[''] ?? SettingStore.clientSettings?.directoryDefault ?? '',
           isBasePath: false,
           start: SettingStore.floodSettings.startTorrentsOnLoad,
         });

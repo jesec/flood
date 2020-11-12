@@ -27,26 +27,24 @@ import {getTempPath} from '../../models/TemporaryStorage';
 
 const getDestination = async (
   services: Express.Request['services'],
-  {destination}: {destination?: string},
+  {destination, tags}: {destination?: string; tags?: Array<string>},
 ): Promise<string | undefined> => {
   let autoDestination = destination === '' ? undefined : destination;
+
+  // Use preferred destination of the first tag
+  if (autoDestination == null) {
+    await services?.settingService.get('torrentDestinations').then(
+      ({torrentDestinations}) => {
+        autoDestination = torrentDestinations?.[tags?.[0] ?? ''];
+      },
+      () => undefined,
+    );
+  }
 
   // Use default destination of torrent client
   if (autoDestination == null) {
     const {directoryDefault} = (await services?.clientGatewayService?.getClientSettings().catch(() => undefined)) || {};
     autoDestination = directoryDefault;
-  }
-
-  // Use last download destination
-  if (autoDestination == null) {
-    await services?.settingService.get('torrentDestination').then(
-      ({torrentDestination}) => {
-        if (torrentDestination != null) {
-          autoDestination = torrentDestination;
-        }
-      },
-      () => undefined,
-    );
   }
 
   let sanitizedPath: string | null = null;
@@ -112,6 +110,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
 
   const finalDestination = await getDestination(req.services, {
     destination,
+    tags,
   });
 
   if (finalDestination == null) {
@@ -162,6 +161,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
 
   const finalDestination = await getDestination(req.services, {
     destination,
+    tags,
   });
 
   if (finalDestination == null) {

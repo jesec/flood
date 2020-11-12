@@ -1,14 +1,18 @@
 import type {FloodSettings} from '@shared/types/FloodSettings';
+import type {TorrentProperties} from '@shared/types/Torrent';
 
 import SettingActions from '../actions/SettingActions';
+import SettingStore from '../stores/SettingStore';
 
 export const saveAddTorrentsUserPreferences = ({
   start,
   destination,
+  tags,
   tab,
 }: {
   start?: FloodSettings['startTorrentsOnLoad'];
-  destination?: FloodSettings['torrentDestination'];
+  destination?: string;
+  tags?: TorrentProperties['tags'];
   tab?: FloodSettings['UITorrentsAddTab'];
 }) => {
   const changedSettings: Partial<FloodSettings> = {};
@@ -18,7 +22,15 @@ export const saveAddTorrentsUserPreferences = ({
   }
 
   if (destination != null && destination !== '') {
-    changedSettings.torrentDestination = destination;
+    if (changedSettings.torrentDestinations == null) {
+      changedSettings.torrentDestinations = SettingStore.floodSettings.torrentDestinations || {};
+    }
+
+    if (typeof tags?.[0] === 'string') {
+      changedSettings.torrentDestinations[tags[0]] = destination;
+    } else {
+      changedSettings.torrentDestinations[''] = destination;
+    }
   }
 
   if (tab != null) {
