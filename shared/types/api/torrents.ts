@@ -1,43 +1,6 @@
 import type {TorrentPriority, TorrentProperties} from '../Torrent';
 import type {TorrentContentPriority} from '../TorrentContent';
 
-// POST /api/torrents/add-urls
-export interface AddTorrentByURLOptions {
-  // URLs to download torrents from
-  urls: Array<string>;
-  // Cookies to attach to requests
-  cookies?: {
-    // An array of strings in the format "name=value";
-    [domain: string]: Array<string>;
-  };
-  // Path of destination
-  destination: string;
-  // Tags
-  tags?: Array<string>;
-  // Whether destination is the base path [default: false]
-  isBasePath?: boolean;
-  // Whether destination contains completed contents [default: false]
-  isCompleted?: boolean;
-  // Whether to start torrent [default: false]
-  start?: boolean;
-}
-
-// POST /api/torrents/add-files
-export interface AddTorrentByFileOptions {
-  // Torrent files in base64
-  files: Array<string>;
-  // Path of destination
-  destination: string;
-  // Tags
-  tags?: Array<string>;
-  // Whether destination is the base path [default: false]
-  isBasePath?: boolean;
-  // Whether destination contains completed contents [default: false]
-  isCompleted?: boolean;
-  // Whether to start torrent [default: false]
-  start?: boolean;
-}
-
 // POST /api/torrents/create
 export interface CreateTorrentOptions {
   // Name of the torrent:

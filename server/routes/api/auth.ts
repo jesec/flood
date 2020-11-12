@@ -5,7 +5,6 @@ import rateLimit from 'express-rate-limit';
 
 import type {Response} from 'express';
 
-import ajaxUtil from '../../util/ajaxUtil';
 import {
   authAuthenticationSchema,
   authRegistrationSchema,
@@ -13,6 +12,7 @@ import {
   AuthVerificationPreloadConfigs,
 } from '../../../shared/schema/api/auth';
 import config from '../../../config';
+import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import requireAdmin from '../../middleware/requireAdmin';
 import services from '../../services';
 import Users from '../../models/Users';
@@ -71,13 +71,6 @@ const sendAuthenticationResponse = (
   };
 
   res.json(response);
-};
-
-const validationError = (res: Response, err: Error) => {
-  res.status(422).json({
-    message: 'Validation error.',
-    error: err,
-  });
 };
 
 const preloadConfigs: AuthVerificationPreloadConfigs = {
@@ -185,14 +178,14 @@ router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/regis
       services.bootstrapServicesForUser(user);
 
       if (req.query.cookie === 'false') {
-        ajaxUtil.getResponseFn(res)({username: user.username});
+        getResponseFn(res)({username: user.username});
         return;
       }
 
       sendAuthenticationResponse(res, credentials);
     },
     (err) => {
-      ajaxUtil.getResponseFn(res)({username: credentials.username}, err);
+      getResponseFn(res)({username: credentials.username}, err);
     },
   );
 });
@@ -303,7 +296,7 @@ router.use('/users', (_req, res, next) => {
  * @return {Array<UserInDatabase>} 200 - success response - application/json
  */
 router.get('/users', (_req, res) => {
-  Users.listUsers(ajaxUtil.getResponseFn(res));
+  Users.listUsers(getResponseFn(res));
 });
 
 /**
@@ -317,7 +310,7 @@ router.get('/users', (_req, res) => {
  * @return {{username: string}} 200 - success response - application/json
  */
 router.delete('/users/:username', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
   Users.removeUser(req.params.username, (id, err) => {
     if (err || id == null) {
       callback(null, err || new Error());

@@ -1,15 +1,7 @@
 import geoip from 'geoip-country';
 
-import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
-import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
-import type {TorrentPeer} from '@shared/types/TorrentPeer';
-import type {TorrentTracker} from '@shared/types/TorrentTracker';
-import type {TransferSummary} from '@shared/types/TransferData';
-import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
 import type {
-  AddTorrentByFileOptions,
-  AddTorrentByURLOptions,
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
@@ -20,6 +12,13 @@ import type {
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
+import type {ClientSettings} from '@shared/types/ClientSettings';
+import type {TorrentContent} from '@shared/types/TorrentContent';
+import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentPeer} from '@shared/types/TorrentPeer';
+import type {TorrentTracker} from '@shared/types/TorrentTracker';
+import type {TransferSummary} from '@shared/types/TransferData';
+import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ClientGatewayService from '../interfaces/clientGatewayService';
@@ -34,7 +33,7 @@ import {TransmissionPriority, TransmissionTorrentsSetArguments} from './types/Tr
 class TransmissionClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as TransmissionConnectionSettings);
 
-  async addTorrentsByFile({files, destination, tags, start}: AddTorrentByFileOptions): Promise<void> {
+  async addTorrentsByFile({files, destination, tags, start}: Required<AddTorrentByFileOptions>): Promise<void> {
     const addedTorrents: Array<string> = (
       await Promise.all(
         files.map(async (file) => {
@@ -48,12 +47,12 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       )
     ).filter((hash) => hash != null) as Array<string>;
 
-    if (tags?.length) {
+    if (tags.length > 0) {
       await this.setTorrentsTags({hashes: addedTorrents, tags});
     }
   }
 
-  async addTorrentsByURL({urls, cookies, destination, tags, start}: AddTorrentByURLOptions): Promise<void> {
+  async addTorrentsByURL({urls, cookies, destination, tags, start}: Required<AddTorrentByURLOptions>): Promise<void> {
     const addedTorrents: Array<string> = (
       await Promise.all(
         urls.map(async (url) => {
@@ -62,7 +61,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
             (await this.clientRequestManager
               .addTorrent({
                 filename: url,
-                cookies: cookies?.[domain] != null ? `${cookies[domain].join('; ')};` : undefined,
+                cookies: cookies[domain] != null ? `${cookies[domain].join('; ')};` : undefined,
                 'download-dir': destination,
                 paused: !start,
               })
@@ -73,7 +72,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       )
     ).filter((hash) => hash != null) as Array<string>;
 
-    if (tags?.length) {
+    if (tags.length > 0) {
       await this.setTorrentsTags({hashes: addedTorrents, tags});
     }
   }

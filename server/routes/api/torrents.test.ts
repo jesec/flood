@@ -11,9 +11,8 @@ import {getAuthToken} from './auth';
 import {getTempPath} from '../../models/TemporaryStorage';
 import paths from '../../../shared/config/paths';
 
+import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
 import type {
-  AddTorrentByFileOptions,
-  AddTorrentByURLOptions,
   CreateTorrentOptions,
   MoveTorrentsOptions,
   SetTorrentsTrackersOptions,
@@ -34,9 +33,9 @@ jest.setTimeout(20000);
 const torrentFiles = [
   path.join(paths.appSrc, 'fixtures/single.torrent'),
   path.join(paths.appSrc, 'fixtures/multi.torrent'),
-].map((torrentPath) => Buffer.from(fs.readFileSync(torrentPath)).toString('base64'));
+].map((torrentPath) => Buffer.from(fs.readFileSync(torrentPath)).toString('base64')) as [string, ...string[]];
 
-const torrentURLs = [
+const torrentURLs: [string, ...string[]] = [
   'https://releases.ubuntu.com/20.04/ubuntu-20.04.1-live-server-amd64.iso.torrent',
   'https://flood.js.org/api/test-cookie',
 ];
@@ -81,6 +80,21 @@ describe('POST /api/torrents/add-urls', () => {
     isBasePath: false,
     start: false,
   };
+
+  it('Adds torrents via URLs with incorrect options', (done) => {
+    request
+      .post('/api/torrents/add-urls')
+      .send({...addTorrentByURLOptions, nonExistingOption: 1})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(422)
+      .expect('Content-Type', /json/)
+      .end((err, _res) => {
+        if (err) done(err);
+
+        done();
+      });
+  });
 
   it('Adds torrents to disallowed path via URLs', (done) => {
     request
@@ -165,6 +179,21 @@ describe('POST /api/torrents/add-files', () => {
     isBasePath: false,
     start: false,
   };
+
+  it('Adds torrents via files with incorrect options', (done) => {
+    request
+      .post('/api/torrents/add-files')
+      .send({...addTorrentByFileOptions, destination: []})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(422)
+      .expect('Content-Type', /json/)
+      .end((err, _res) => {
+        if (err) done(err);
+
+        done();
+      });
+  });
 
   it('Adds torrents to disallowed path via files', (done) => {
     request

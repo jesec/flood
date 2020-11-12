@@ -51,7 +51,7 @@ class AddTorrentsByURL extends Component<WrappedComponentProps, AddTorrentsByURL
 
     const urls = getTextArray(formData, 'urls').filter((url) => url !== '');
 
-    if (urls.length === 0 || formData.destination == null) {
+    if (urls[0] == null || formData.destination == null) {
       this.setState({isAddingTorrents: false});
       return;
     }
@@ -67,7 +67,7 @@ class AddTorrentsByURL extends Component<WrappedComponentProps, AddTorrentsByURL
       : undefined;
 
     TorrentActions.addTorrentsByUrls({
-      urls,
+      urls: urls as [string, ...string[]],
       cookies: processedCookies,
       destination: formData.destination,
       isBasePath: formData.isBasePath,

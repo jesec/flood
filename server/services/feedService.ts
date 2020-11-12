@@ -250,9 +250,12 @@ class FeedService extends BaseService {
               await this.services?.clientGatewayService
                 ?.addTorrentsByURL({
                   urls,
+                  cookies: {},
                   destination,
-                  start,
                   tags,
+                  start,
+                  isBasePath: false,
+                  isCompleted: false,
                 })
                 .then(() => {
                   this.db.update({_id: feedID}, {$inc: {count: 1}}, {upsert: true});

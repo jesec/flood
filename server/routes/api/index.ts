@@ -7,13 +7,13 @@ import type {NotificationFetchOptions} from '@shared/types/Notification';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
 
 import appendUserServices from '../../middleware/appendUserServices';
-import ajaxUtil from '../../util/ajaxUtil';
 import authRoutes from './auth';
 import clientRoutes from './client';
 import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
 import {getDirectoryList} from '../../util/fileUtil';
+import {getResponseFn} from '../../util/ajaxUtil';
 import torrentsRoutes from './torrents';
 
 const router = express.Router();
@@ -40,7 +40,7 @@ router.use('/torrents', torrentsRoutes);
 router.get('/activity-stream', eventStream, clientActivityStream);
 
 router.get<unknown, unknown, unknown, {path: string}>('/directory-list', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
   getDirectoryList(req.query.path)
     .then((data) => {
       callback(data);
@@ -51,15 +51,15 @@ router.get<unknown, unknown, unknown, {path: string}>('/directory-list', (req, r
 });
 
 router.get<unknown, unknown, unknown, {snapshot: HistorySnapshot}>('/history', (req, res) => {
-  req.services?.historyService.getHistory(req.query, ajaxUtil.getResponseFn(res));
+  req.services?.historyService.getHistory(req.query, getResponseFn(res));
 });
 
 router.get<unknown, unknown, unknown, NotificationFetchOptions>('/notifications', (req, res) => {
-  req.services?.notificationService.getNotifications(req.query, ajaxUtil.getResponseFn(res));
+  req.services?.notificationService.getNotifications(req.query, getResponseFn(res));
 });
 
 router.delete('/notifications', (req, res) => {
-  req.services?.notificationService.clearNotifications(ajaxUtil.getResponseFn(res));
+  req.services?.notificationService.clearNotifications(getResponseFn(res));
 });
 
 /**
@@ -71,7 +71,7 @@ router.delete('/notifications', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.get('/settings', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.settingService
     .get(null)
@@ -92,8 +92,8 @@ router.get('/settings', (req, res) => {
  * @return {Partial<FloodSettings>} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get('/settings/:property', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+router.get<{property: keyof FloodSettings}>('/settings/:property', (req, res) => {
+  const callback = getResponseFn(res);
 
   req.services?.settingService
     .get(req.params.property)
@@ -115,7 +115,7 @@ router.get('/settings/:property', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<unknown, unknown, SetFloodSettingsOptions>('/settings', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.settingService
     .set(req.body)

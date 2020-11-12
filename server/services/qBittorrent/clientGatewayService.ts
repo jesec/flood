@@ -1,13 +1,5 @@
-import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
-import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
-import type {TorrentPeer} from '@shared/types/TorrentPeer';
-import type {TorrentTracker} from '@shared/types/TorrentTracker';
-import type {TransferSummary} from '@shared/types/TransferData';
+import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
 import type {
-  AddTorrentByFileOptions,
-  AddTorrentByURLOptions,
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
@@ -18,6 +10,13 @@ import type {
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
+import type {ClientSettings} from '@shared/types/ClientSettings';
+import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {TorrentContent} from '@shared/types/TorrentContent';
+import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentPeer} from '@shared/types/TorrentPeer';
+import type {TorrentTracker} from '@shared/types/TorrentTracker';
+import type {TransferSummary} from '@shared/types/TransferData';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ClientGatewayService from '../interfaces/clientGatewayService';
@@ -37,7 +36,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
   cachedProperties: Record<string, Pick<TorrentProperties, 'dateCreated' | 'isPrivate' | 'trackerURIs'>> = {};
 
-  async addTorrentsByFile({files, destination, isBasePath, start}: AddTorrentByFileOptions): Promise<void> {
+  async addTorrentsByFile({files, destination, isBasePath, start}: Required<AddTorrentByFileOptions>): Promise<void> {
     const fileBuffers = files.map((file) => {
       return Buffer.from(file, 'base64');
     });
@@ -53,7 +52,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  async addTorrentsByURL({urls, destination, isBasePath, start}: AddTorrentByURLOptions): Promise<void> {
+  async addTorrentsByURL({urls, destination, isBasePath, start}: Required<AddTorrentByURLOptions>): Promise<void> {
     // TODO: qBittorrent does not have capability to add tags during add torrents.
 
     return this.clientRequestManager

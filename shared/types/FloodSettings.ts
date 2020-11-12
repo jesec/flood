@@ -22,12 +22,16 @@ export interface FloodSettings {
     download: Array<number>;
     upload: Array<number>;
   };
-  startTorrentsOnLoad: boolean;
   mountPoints: Array<string>;
 
-  // Below: default setting is not specified
+  // Last selection state of "Delete data" toggle
+  deleteTorrentData: boolean;
+
+  // Last selection state of "Start Torrent" toggle
+  startTorrentsOnLoad: boolean;
+
+  // Last used download destination
   torrentDestination?: string;
-  deleteTorrentData?: boolean;
 }
 
 export type FloodSetting = keyof FloodSettings;

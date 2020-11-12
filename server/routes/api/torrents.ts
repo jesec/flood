@@ -6,9 +6,8 @@ import path from 'path';
 import sanitize from 'sanitize-filename';
 import tar from 'tar';
 
-import {
-  AddTorrentByFileOptions,
-  AddTorrentByURLOptions,
+import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
+import type {
   CheckTorrentsOptions,
   CreateTorrentOptions,
   DeleteTorrentsOptions,
@@ -21,9 +20,24 @@ import {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 
+import {addTorrentByFileSchema, addTorrentByURLSchema} from '../../../shared/schema/api/torrents';
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import ajaxUtil from '../../util/ajaxUtil';
+import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
+
+const getDestination = (destination: string): string | undefined => {
+  let sanitizedPath: string | null = null;
+  try {
+    sanitizedPath = sanitizePath(destination);
+    if (!isAllowedPath(sanitizedPath)) {
+      return undefined;
+    }
+  } catch (e) {
+    return undefined;
+  }
+
+  return sanitizedPath;
+};
 
 const router = express.Router();
 
@@ -36,7 +50,7 @@ const router = express.Router();
  * @return {Error} 500 - failure response - application/json
  */
 router.get('/', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.torrentService
     .fetchTorrentList()
@@ -62,22 +76,34 @@ router.get('/', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
-  let sanitizedPath: string | null = null;
-  try {
-    sanitizedPath = sanitizePath(req.body.destination);
-    if (!isAllowedPath(sanitizedPath)) {
-      callback(null, accessDeniedError());
-      return;
-    }
-  } catch (e) {
-    callback(null, e);
+  const parsedResult = addTorrentByURLSchema.safeParse(req.body);
+
+  if (!parsedResult.success) {
+    validationError(res, parsedResult.error);
+    return;
+  }
+
+  const {urls, cookies, destination, tags, isBasePath, isCompleted, start} = parsedResult.data;
+
+  const finalDestination = getDestination(destination);
+
+  if (finalDestination == null) {
+    callback(null, accessDeniedError());
     return;
   }
 
   req.services?.clientGatewayService
-    ?.addTorrentsByURL({...req.body, destination: sanitizedPath})
+    ?.addTorrentsByURL({
+      urls,
+      cookies: cookies != null ? cookies : {},
+      destination: finalDestination,
+      tags: tags ?? [],
+      isBasePath: isBasePath ?? false,
+      isCompleted: isCompleted ?? false,
+      start: start ?? false,
+    })
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -98,22 +124,33 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', (req, res) =>
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
-  let sanitizedPath: string | null = null;
-  try {
-    sanitizedPath = sanitizePath(req.body.destination);
-    if (!isAllowedPath(sanitizedPath)) {
-      callback(null, accessDeniedError());
-      return;
-    }
-  } catch (e) {
-    callback(null, e);
+  const parsedResult = addTorrentByFileSchema.safeParse(req.body);
+
+  if (!parsedResult.success) {
+    validationError(res, parsedResult.error);
+    return;
+  }
+
+  const {files, destination, tags, isBasePath, isCompleted, start} = parsedResult.data;
+
+  const finalDestination = getDestination(destination);
+
+  if (finalDestination == null) {
+    callback(null, accessDeniedError());
     return;
   }
 
   req.services?.clientGatewayService
-    ?.addTorrentsByFile({...req.body, destination: sanitizedPath})
+    ?.addTorrentsByFile({
+      files,
+      destination: finalDestination,
+      tags: tags ?? [],
+      isBasePath: isBasePath ?? false,
+      isCompleted: isCompleted ?? false,
+      start: start ?? false,
+    })
     .then((response) => {
       req.services?.torrentService.fetchTorrentList();
       return response;
@@ -135,7 +172,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', (req, res) 
  */
 router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) => {
   const {name, sourcePath, trackers, comment, infoSource, isPrivate, tags, start} = req.body;
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   if (typeof sourcePath !== 'string') {
     callback(null, accessDeniedError());
@@ -184,7 +221,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
           ?.addTorrentsByFile({
             files: [torrent.toString('base64')],
             destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
-            tags,
+            tags: tags ?? [],
             isBasePath: true,
             isCompleted: true,
             start: start || false,
@@ -207,7 +244,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, StartTorrentsOptions>('/start', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.startTorrents(req.body)
@@ -231,7 +268,7 @@ router.post<unknown, unknown, StartTorrentsOptions>('/start', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, StopTorrentsOptions>('/stop', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.stopTorrents(req.body)
@@ -255,7 +292,7 @@ router.post<unknown, unknown, StopTorrentsOptions>('/stop', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, CheckTorrentsOptions>('/check-hash', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.checkTorrents(req.body)
@@ -279,7 +316,7 @@ router.post<unknown, unknown, CheckTorrentsOptions>('/check-hash', (req, res) =>
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   let sanitizedPath: string | null = null;
   try {
@@ -315,7 +352,7 @@ router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.removeTorrents(req.body)
@@ -339,7 +376,7 @@ router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.setTorrentsPriority(req.body)
@@ -363,7 +400,7 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, re
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.setTorrentsTags(req.body)
@@ -387,7 +424,7 @@ router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<unknown, unknown, SetTorrentsTrackersOptions>('/trackers', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.setTorrentsTrackers(req.body)
@@ -424,7 +461,7 @@ router.patch<unknown, unknown, SetTorrentsTrackersOptions>('/trackers', (req, re
  * @param {string} hash.path
  */
 router.get('/:hash/contents', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.getTorrentContents(req.params.hash)
@@ -445,7 +482,7 @@ router.get('/:hash/contents', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:hash/contents', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.setTorrentContentsPriority(req.params.hash, req.body)
@@ -518,7 +555,7 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
  * @param {string} hash.path
  */
 router.get('/:hash/details', async (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   try {
     const contents = req.services?.clientGatewayService?.getTorrentContents(req.params.hash);
@@ -545,7 +582,7 @@ router.get('/:hash/details', async (req, res) => {
  */
 router.get('/:hash/mediainfo', async (req, res) => {
   const {hash} = req.params;
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
   const {torrentService} = req.services || {};
 
   if (typeof hash !== 'string' || torrentService == null) {
@@ -595,7 +632,7 @@ router.get('/:hash/mediainfo', async (req, res) => {
  * @param {string} hash.path
  */
 router.get('/:hash/peers', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.getTorrentPeers(req.params.hash)
@@ -615,7 +652,7 @@ router.get('/:hash/peers', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.get('/:hash/trackers', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.getTorrentTrackers(req.params.hash)

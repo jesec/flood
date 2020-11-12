@@ -2,10 +2,11 @@ import type {FeedItem} from 'feedsub';
 
 import regEx from '../../shared/util/regEx';
 
-import type {AddTorrentByURLOptions} from '../../shared/types/api/torrents';
+import type {AddTorrentByURLOptions} from '../../shared/schema/api/torrents';
 import type {Rule} from '../../shared/types/Feed';
 
-interface PendingDownloadItems extends AddTorrentByURLOptions {
+interface PendingDownloadItems
+  extends Required<Pick<AddTorrentByURLOptions, 'urls' | 'destination' | 'tags' | 'start'>> {
   matchTitle: string;
   ruleID: string;
   ruleLabel: string;
@@ -69,9 +70,9 @@ export const getFeedItemsMatchingRules = (
           torrentUrls.every((url) => matchedItem.urls.includes(url)),
         );
 
-        if (!isAlreadyDownloaded) {
+        if (!isAlreadyDownloaded && torrentUrls[0] != null) {
           matchedItems.push({
-            urls: torrentUrls,
+            urls: torrentUrls as [string, ...string[]],
             tags: rule.tags,
             matchTitle: feedItem.title as string,
             ruleID: rule._id,

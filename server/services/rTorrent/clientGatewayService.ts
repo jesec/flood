@@ -4,16 +4,8 @@ import {moveSync} from 'fs-extra';
 import path from 'path';
 import sanitize from 'sanitize-filename';
 
-import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
-import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
-import type {TorrentPeer} from '@shared/types/TorrentPeer';
-import type {TorrentTracker} from '@shared/types/TorrentTracker';
-import type {TransferSummary} from '@shared/types/TransferData';
+import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
 import type {
-  AddTorrentByFileOptions,
-  AddTorrentByURLOptions,
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
@@ -24,6 +16,13 @@ import type {
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
+import type {ClientSettings} from '@shared/types/ClientSettings';
+import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {TorrentContent} from '@shared/types/TorrentContent';
+import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentPeer} from '@shared/types/TorrentPeer';
+import type {TorrentTracker} from '@shared/types/TorrentTracker';
+import type {TransferSummary} from '@shared/types/TransferData';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import {createDirectory} from '../../util/fileUtil';
@@ -61,18 +60,26 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isBasePath,
     isCompleted,
     start,
-  }: AddTorrentByFileOptions): Promise<void> {
-    if (!Array.isArray(files)) {
-      return Promise.reject();
-    }
-
+  }: Required<AddTorrentByFileOptions>): Promise<void> {
     const torrentPaths = await Promise.all(
       files.map(async (file) => {
         return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent');
       }),
     );
 
-    return this.addTorrentsByURL({urls: torrentPaths, destination, tags, isBasePath, isCompleted, start});
+    if (torrentPaths[0] != null) {
+      return this.addTorrentsByURL({
+        urls: torrentPaths as [string, ...string[]],
+        cookies: {},
+        destination,
+        tags,
+        isBasePath,
+        isCompleted,
+        start,
+      });
+    }
+
+    return Promise.reject();
   }
 
   async addTorrentsByURL({
@@ -83,7 +90,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isBasePath,
     isCompleted,
     start,
-  }: AddTorrentByURLOptions): Promise<void> {
+  }: Required<AddTorrentByURLOptions>): Promise<void> {
     await createDirectory(destination);
 
     const torrentPaths: Array<string> = (
@@ -93,11 +100,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             const domain = url.split('/')[2];
 
             // TODO: properly handle error and let frontend know
-            const torrentPath = await fetchURLToTempFile(
-              url,
-              cookies ? cookies[domain] : undefined,
-              'torrent',
-            ).catch((e) => console.error(e));
+            const torrentPath = await fetchURLToTempFile(url, cookies[domain], 'torrent').catch((e) =>
+              console.error(e),
+            );
 
             if (typeof torrentPath === 'string') {
               return torrentPath;
@@ -130,7 +135,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
       additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destination}"`);
 
-      if (Array.isArray(tags)) {
+      if (tags.length > 0) {
         additionalCalls.push(`d.custom1.set=${encodeTags(tags)}`);
       }
 

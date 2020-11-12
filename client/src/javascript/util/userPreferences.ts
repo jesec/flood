@@ -9,7 +9,7 @@ export const saveAddTorrentsUserPreferences = ({start, destination}: {start?: bo
     changedSettings.startTorrentsOnLoad = start;
   }
 
-  if (destination != null) {
+  if (destination != null && destination !== '') {
     changedSettings.torrentDestination = destination;
   }
 
@@ -17,5 +17,7 @@ export const saveAddTorrentsUserPreferences = ({start, destination}: {start?: bo
 };
 
 export const saveDeleteTorrentsUserPreferences = ({deleteData}: {deleteData?: boolean}) => {
-  SettingActions.saveSetting('deleteTorrentData', deleteData);
+  if (deleteData != null) {
+    SettingActions.saveSetting('deleteTorrentData', deleteData);
+  }
 };

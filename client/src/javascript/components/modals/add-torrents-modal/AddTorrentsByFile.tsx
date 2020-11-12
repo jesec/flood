@@ -145,13 +145,13 @@ class AddTorrentsByFile extends Component<WrappedComponentProps, AddTorrentsByFi
       filesData.push(file.data);
     });
 
-    if (filesData.length === 0 || destination == null) {
+    if (filesData[0] == null || destination == null) {
       this.setState({isAddingTorrents: false});
       return;
     }
 
     TorrentActions.addTorrentsByFiles({
-      files: filesData,
+      files: filesData as [string, ...string[]],
       destination,
       tags: tags != null ? tags.split(',') : undefined,
       isBasePath,

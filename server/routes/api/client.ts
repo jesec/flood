@@ -3,7 +3,7 @@ import express from 'express';
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import ajaxUtil from '../../util/ajaxUtil';
+import {getResponseFn} from '../../util/ajaxUtil';
 import requireAdmin from '../../middleware/requireAdmin';
 
 // Those settings don't require administrator access.
@@ -39,7 +39,7 @@ router.get('/connection-test', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.get('/settings', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.getClientSettings()
@@ -71,7 +71,7 @@ router.patch('/settings', (req, res, next) => {
   }
 });
 router.patch<unknown, unknown, SetClientSettingsOptions>('/settings', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.clientGatewayService
     ?.setClientSettings(req.body)

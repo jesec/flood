@@ -3,7 +3,7 @@ import express from 'express';
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '@shared/types/api/feed-monitor';
 
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import ajaxUtil from '../../util/ajaxUtil';
+import {getResponseFn} from '../../util/ajaxUtil';
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ const router = express.Router();
  * @return {Error} 500 - failure response - application/json
  */
 router.get('/', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.feedService
     .getAll()
@@ -38,7 +38,7 @@ router.get('/', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.delete<{id: string}>('/:id', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.feedService
     .removeItem(req.params.id)
@@ -60,7 +60,7 @@ router.delete<{id: string}>('/:id', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.get<{id?: string}>('/feeds/:id?', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.feedService
     .getFeeds(req.params.id)
@@ -82,7 +82,7 @@ router.get<{id?: string}>('/feeds/:id?', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.put<unknown, unknown, AddFeedOptions>('/feeds', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.feedService
     .addFeed(req.body)
@@ -105,7 +105,7 @@ router.put<unknown, unknown, AddFeedOptions>('/feeds', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<{id: string}, unknown, ModifyFeedOptions>('/feeds/:id', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.feedService
     .modifyFeed(req.params.id, req.body)
@@ -128,7 +128,7 @@ router.patch<{id: string}, unknown, ModifyFeedOptions>('/feeds/:id', (req, res) 
  * @return {Error} 500 - failure response - application/json
  */
 router.get<{id: string}, unknown, ModifyFeedOptions, {search: string}>('/feeds/:id/items', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.feedService
     .getItems(req.params.id, req.query.search)
@@ -149,7 +149,7 @@ router.get<{id: string}, unknown, ModifyFeedOptions, {search: string}>('/feeds/:
  * @return {Error} 500 - failure response - application/json
  */
 router.get('/rules', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   req.services?.feedService
     .getRules()
@@ -171,7 +171,7 @@ router.get('/rules', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.put<unknown, unknown, AddRuleOptions>('/rules', (req, res) => {
-  const callback = ajaxUtil.getResponseFn(res);
+  const callback = getResponseFn(res);
 
   let sanitizedPath: string | null = null;
   try {

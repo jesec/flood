@@ -1,12 +1,5 @@
-import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
-import type {TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
-import type {TorrentPeer} from '@shared/types/TorrentPeer';
-import type {TorrentTracker} from '@shared/types/TorrentTracker';
-import type {TransferSummary} from '@shared/types/TransferData';
+import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
 import type {
-  AddTorrentByFileOptions,
-  AddTorrentByURLOptions,
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
@@ -17,7 +10,13 @@ import type {
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
+import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
+import type {TorrentContent} from '@shared/types/TorrentContent';
+import type {TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentPeer} from '@shared/types/TorrentPeer';
+import type {TorrentTracker} from '@shared/types/TorrentTracker';
+import type {TransferSummary} from '@shared/types/TransferData';
 
 import BaseService from '../BaseService';
 import config from '../../../config';
@@ -36,18 +35,18 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
   /**
    * Adds torrents by file
    *
-   * @param {AddTorrentByFileOptions} options - An object of options...
+   * @param {Required<AddTorrentByFileOptions>} options - An object of options...
    * @return {Promise<void>} - Rejects with error.
    */
-  abstract addTorrentsByFile(options: AddTorrentByFileOptions): Promise<void>;
+  abstract addTorrentsByFile(options: Required<AddTorrentByFileOptions>): Promise<void>;
 
   /**
    * Adds torrents by URL
    *
-   * @param {AddTorrentByURLOptions} options - An object of options...
+   * @param {Required<AddTorrentByURLOptions>} options - An object of options...
    * @return {Promise<void>} - Rejects with error.
    */
-  abstract addTorrentsByURL(options: AddTorrentByURLOptions): Promise<void>;
+  abstract addTorrentsByURL(options: Required<AddTorrentByURLOptions>): Promise<void>;
 
   /**
    * Checks torrents
