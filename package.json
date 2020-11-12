@@ -30,7 +30,7 @@
   "scripts": {
     "build": "npm run build-assets && npm run build-ts",
     "build-assets": "node client/scripts/build.js",
-    "build-ts": "ncc build server/bin/start.ts -m -t -e argon2-browser -e geoip-country",
+    "build-ts": "ncc build server/bin/start.ts -m -t -e geoip-country",
     "build-docs": "jsdoc -c ./.jsdoc.json",
     "build-i18n": "formatjs compile --ast --format simple client/src/javascript/i18n/strings.json --out-file client/src/javascript/i18n/strings.compiled.json && formatjs compile-folder --ast --format simple client/src/javascript/i18n/translations client/src/javascript/i18n/compiled",
     "deprecated-warning": "node client/scripts/deprecated-warning.js && sleep 10",
@@ -51,7 +51,6 @@
     "test:client": "FLOOD_OPTION_port=4200 start-server-and-test start 4200 'cypress run'"
   },
   "dependencies": {
-    "argon2-browser": "^1.15.2",
     "geoip-country": "^4.0.42"
   },
   "devDependencies": {
@@ -65,7 +64,6 @@
     "@formatjs/cli": "^2.13.11",
     "@react-hook/media-query": "^1.1.1",
     "@react-hook/window-size": "^3.0.7",
-    "@types/argon2-browser": "^1.12.0",
     "@types/async": "^3.2.3",
     "@types/bencode": "^2.0.0",
     "@types/body-parser": "^1.19.0",
@@ -148,6 +146,7 @@
     "fs-extra": "^9.0.1",
     "get-user-locale": "^1.4.0",
     "glob": "^7.1.6",
+    "hash-wasm": "^4.4.0",
     "html-webpack-plugin": "^5.0.0-alpha.10",
     "http-errors": "^1.8.0",
     "jest": "^26.6.3",

@@ -72,16 +72,13 @@ const migration = () => {
                 return;
               }
 
-              Users.createUser(
-                userV2,
-                (_username, errCreation) => {
-                  if (errCreation) {
-                    migrationError(errCreation);
-                  }
-
+              Users.createUser(userV2, false).then(
+                () => {
                   migratedResolve();
                 },
-                false,
+                (errCreation) => {
+                  migrationError(errCreation);
+                },
               );
             });
           });

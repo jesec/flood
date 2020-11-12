@@ -1,4 +1,4 @@
-import argon2 from 'argon2-browser';
+import {argon2id, argon2Verify} from 'hash-wasm';
 import crypto from 'crypto';
 import Datastore from 'nedb';
 import fs from 'fs';
@@ -45,69 +45,99 @@ class Users {
     });
   }
 
-  comparePassword(
-    credentials: Pick<Credentials, 'username' | 'password'>,
-    callback: (isMatch: boolean, level: Credentials['level'] | null, err?: Error) => void,
-  ) {
-    this.db.findOne({username: credentials.username}, (err: Error | null, user: UserInDatabase): void => {
-      if (err) {
-        return callback(false, null, err);
-      }
+  /**
+   * Validates the provided password against the hashed password in database
+   *
+   * @param {Pick<Credentials, 'username' | 'password'>} credentials - Username and password
+   * @return {Promise<AccessLevel>} - Returns access level of the user if matched or rejects with error.
+   */
+  async comparePassword(credentials: Pick<Credentials, 'username' | 'password'>): Promise<AccessLevel> {
+    return new Promise((resolve, reject) => {
+      this.db.findOne({username: credentials.username}, (err: Error | null, user: UserInDatabase): void => {
+        if (err) {
+          reject(err);
+          return;
+        }
 
-      // Wrong data provided
-      if (credentials?.password == null) {
-        return callback(false, null, new Error());
-      }
+        // Wrong data provided
+        if (credentials?.password == null) {
+          reject(new Error());
+          return;
+        }
 
-      // Username not found.
-      if (user == null) {
-        return callback(false, null, user);
-      }
+        // Username not found.
+        if (user == null) {
+          reject(new Error());
+          return;
+        }
 
-      argon2
-        .verify({pass: credentials.password, encoded: user.password})
-        .then(() => callback(true, user.level))
-        .catch((e) => callback(false, null, e));
-
-      return undefined;
+        argon2Verify({password: credentials.password, hash: user.password}).then(
+          (isMatch) => {
+            if (isMatch) {
+              resolve(user.level);
+            } else {
+              reject(new Error());
+            }
+          },
+          (verifyErr) => {
+            reject(verifyErr);
+          },
+        );
+      });
     });
   }
 
-  createUser(
-    credentials: Credentials,
-    callback: (user: UserInDatabase | null, error?: Error) => void,
-    shouldHash = true,
-  ): void {
-    if (this.db == null) {
-      return callback(null, new Error('Users database is not ready.'));
+  /**
+   * Creates a new user.
+   * Note that validation function always expects an argon2 hash.
+   *
+   * @param {Credentials} credentials - Full credentials of a user.
+   * @param {boolean} shouldHash - Should the password be hashed or stored as-is.
+   * @return {Promise<UserInDatabase>} - Returns the created user or rejects with error.
+   */
+  async createUser(credentials: Credentials, shouldHash = true): Promise<UserInDatabase> {
+    const hashed = shouldHash
+      ? await argon2id({
+          password: credentials.password,
+          salt: crypto.randomBytes(16),
+          parallelism: 1,
+          iterations: 256,
+          memorySize: 512,
+          hashLength: 32,
+          outputType: 'encoded',
+        }).catch(() => undefined)
+      : credentials.password;
+
+    if (this.db == null || hashed == null) {
+      return Promise.reject(new Error());
     }
 
-    argon2
-      .hash({pass: credentials.password, salt: crypto.randomBytes(16).toString('hex')})
-      .then((hash) => {
-        this.db.insert(
-          {
-            ...credentials,
-            password: shouldHash ? hash.encoded : credentials.password,
-          },
-          (error, user) => {
-            if (error) {
-              if (error.message.includes('violates the unique constraint')) {
-                return callback(null, new Error('Username already exists.'));
-              }
-
-              return callback(null, error);
+    return new Promise((resolve, reject) => {
+      this.db.insert(
+        {
+          ...credentials,
+          password: hashed,
+        },
+        (error, user) => {
+          if (error) {
+            if (error.message.includes('violates the unique constraint')) {
+              reject(new Error('Username already exists.'));
+              return;
             }
 
-            return callback(user as UserInDatabase);
-          },
-        );
-      })
-      .catch((error) => {
-        callback(null, error);
-      });
+            reject(new Error());
+            return;
+          }
 
-    return undefined;
+          if (user == null) {
+            reject(new Error());
+            return;
+          }
+
+          resolve(user as UserInDatabase);
+        },
+      );
+    });
   }
 
   removeUser(

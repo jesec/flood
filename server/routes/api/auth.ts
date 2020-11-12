@@ -112,20 +112,20 @@ router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', (req, 
 
   const credentials = parsedResult.data;
 
-  Users.comparePassword(credentials, (isMatch, level, _err) => {
-    if (isMatch === true && level != null) {
+  Users.comparePassword(credentials).then(
+    (level) => {
       sendAuthenticationResponse(res, {
         ...credentials,
         level,
       });
-      return;
-    }
-
-    // Incorrect username or password.
-    res.status(401).json({
-      message: failedLoginResponse,
-    });
-  });
+    },
+    () => {
+      // Incorrect username or password.
+      res.status(401).json({
+        message: failedLoginResponse,
+      });
+    },
+  );
 });
 
 // Allow unauthenticated registration if no users are currently registered.
@@ -180,21 +180,21 @@ router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/regis
   const credentials = parsedResult.data;
 
   // Attempt to save the user
-  Users.createUser(credentials, (user, error) => {
-    if (error || user == null) {
-      ajaxUtil.getResponseFn(res)({username: credentials.username}, error);
-      return;
-    }
+  Users.createUser(credentials).then(
+    (user) => {
+      services.bootstrapServicesForUser(user);
 
-    services.bootstrapServicesForUser(user);
+      if (req.query.cookie === 'false') {
+        ajaxUtil.getResponseFn(res)({username: user.username});
+        return;
+      }
 
-    if (req.query.cookie === 'false') {
-      ajaxUtil.getResponseFn(res)({username: user.username});
-      return;
-    }
-
-    sendAuthenticationResponse(res, credentials);
-  });
+      sendAuthenticationResponse(res, credentials);
+    },
+    (err) => {
+      ajaxUtil.getResponseFn(res)({username: credentials.username}, err);
+    },
+  );
 });
 
 // Allow unauthenticated verification if no users are currently registered.
