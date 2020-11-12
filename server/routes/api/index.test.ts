@@ -11,7 +11,9 @@ const authToken = `jwt=${getAuthToken('_config')}`;
 
 const settings: Partial<FloodSettings> = {
   startTorrentsOnLoad: false,
-  torrentDestination: '/home/download/test',
+  torrentDestinations: {
+    '': '/home/download/test',
+  },
 };
 
 describe('PATCH /api/settings', () => {

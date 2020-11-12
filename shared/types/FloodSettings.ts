@@ -30,8 +30,10 @@ export interface FloodSettings {
   // Last selection state of "Start Torrent" toggle
   startTorrentsOnLoad: boolean;
 
-  // Last used download destination
-  torrentDestination?: string;
+  // Preferred download destinations by tags
+  // currently set to the last used download destinations
+  // value of property '' is the default preferred destination
+  torrentDestinations?: Record<string, string>;
 
   // Tag selector preference
   UITagSelectorMode?: 'single' | 'multi';

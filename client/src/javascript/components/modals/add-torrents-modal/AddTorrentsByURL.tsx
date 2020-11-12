@@ -93,6 +93,8 @@ const AddTorrentsByURL: FC = () => {
               }
             : undefined;
 
+          const tags = formData.tags != null ? formData.tags.split(',') : undefined;
+
           TorrentActions.addTorrentsByUrls({
             urls: urls as [string, ...string[]],
             cookies: processedCookies,
@@ -100,7 +102,7 @@ const AddTorrentsByURL: FC = () => {
             isBasePath: formData.isBasePath,
             isCompleted: formData.isCompleted,
             start: formData.start,
-            tags: formData.tags != null ? formData.tags.split(',') : undefined,
+            tags,
           }).then(() => {
             UIStore.dismissModal();
           });
@@ -108,6 +110,7 @@ const AddTorrentsByURL: FC = () => {
           saveAddTorrentsUserPreferences({
             start: formData.start,
             destination: formData.destination,
+            tags,
             tab: 'by-url',
           });
         }}
