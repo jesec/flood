@@ -168,7 +168,7 @@ describe('POST /api/torrents/add-files', () => {
 
   it('Adds torrents to disallowed path via files', (done) => {
     request
-      .post('/api/torrents/add-urls')
+      .post('/api/torrents/add-files')
       .send({...addTorrentByFileOptions, destination: path.join(os.tmpdir(), 'notAllowed')})
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
