@@ -4,6 +4,7 @@ import {useIntl} from 'react-intl';
 import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
 import {Form} from '../../../ui';
 import Modal from '../Modal';
+import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 import UIStore from '../../../stores/UIStore';
@@ -65,42 +66,44 @@ const MoveTorrents: FC = () => {
               )}
               showBasePathToggle
             />
+            <ModalActions
+              actions={[
+                {
+                  checked: true,
+                  content: intl.formatMessage({
+                    id: 'torrents.move.data.label',
+                  }),
+                  id: 'moveFiles',
+                  type: 'checkbox',
+                },
+                {
+                  checked: false,
+                  content: intl.formatMessage({
+                    id: 'torrents.move.check_hash.label',
+                  }),
+                  id: 'isCheckHash',
+                  type: 'checkbox',
+                },
+                {
+                  content: intl.formatMessage({
+                    id: 'button.cancel',
+                  }),
+                  triggerDismiss: true,
+                  type: 'tertiary',
+                },
+                {
+                  content: intl.formatMessage({
+                    id: 'torrents.move.button.set.location',
+                  }),
+                  isLoading: isSettingDownloadPath,
+                  submit: true,
+                  type: 'primary',
+                },
+              ]}
+            />
           </Form>
         </div>
       }
-      actions={[
-        {
-          checked: true,
-          content: intl.formatMessage({
-            id: 'torrents.move.data.label',
-          }),
-          id: 'moveFiles',
-          type: 'checkbox',
-        },
-        {
-          checked: false,
-          content: intl.formatMessage({
-            id: 'torrents.move.check_hash.label',
-          }),
-          id: 'isCheckHash',
-          type: 'checkbox',
-        },
-        {
-          content: intl.formatMessage({
-            id: 'button.cancel',
-          }),
-          triggerDismiss: true,
-          type: 'tertiary',
-        },
-        {
-          content: intl.formatMessage({
-            id: 'torrents.move.button.set.location',
-          }),
-          isLoading: isSettingDownloadPath,
-          submit: true,
-          type: 'primary',
-        },
-      ]}
     />
   );
 };

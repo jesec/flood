@@ -1,16 +1,18 @@
-import {FC, useRef} from 'react';
+import {FC, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
 import {Form, FormRow} from '../../../ui';
 import Modal from '../Modal';
+import ModalActions from '../ModalActions';
 import {saveDeleteTorrentsUserPreferences} from '../../../util/userPreferences';
 import SettingStore from '../../../stores/SettingStore';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
+import UIStore from '../../../stores/UIStore';
 
 const RemoveTorrentsModal: FC = () => {
-  const formRef = useRef<Form>(null);
   const intl = useIntl();
+  const [isRemoving, setIsRemoving] = useState<boolean>(false);
   const {selectedTorrents} = TorrentStore;
 
   if (selectedTorrents.length === 0) {
@@ -48,52 +50,56 @@ const RemoveTorrentsModal: FC = () => {
         id: 'torrents.remove',
       })}
       content={
-        <div className="modal__content inverse">
-          <Form ref={formRef}>
+        <div className="modal__content">
+          <Form
+            className="inverse"
+            onSubmit={({formData}) => {
+              setIsRemoving(true);
+
+              const deleteData = formData.deleteData as boolean;
+
+              TorrentActions.deleteTorrents({
+                hashes: TorrentStore.selectedTorrents,
+                deleteData,
+              }).then(() => {
+                setIsRemoving(false);
+                saveDeleteTorrentsUserPreferences({deleteData});
+                UIStore.dismissModal();
+              });
+            }}>
             <FormRow>
               <FormattedMessage id="torrents.remove.are.you.sure" values={{count: selectedTorrents.length}} />
             </FormRow>
+            <ModalActions
+              actions={[
+                {
+                  checked: SettingStore.floodSettings.deleteTorrentData,
+                  content: intl.formatMessage({
+                    id: 'torrents.remove.delete.data',
+                  }),
+                  id: 'deleteData',
+                  type: 'checkbox',
+                },
+                {
+                  content: intl.formatMessage({
+                    id: 'button.no',
+                  }),
+                  triggerDismiss: true,
+                  type: 'tertiary',
+                },
+                {
+                  content: intl.formatMessage({
+                    id: 'button.yes',
+                  }),
+                  isLoading: isRemoving,
+                  submit: true,
+                  type: 'primary',
+                },
+              ]}
+            />
           </Form>
         </div>
       }
-      actions={[
-        {
-          checked: SettingStore.floodSettings.deleteTorrentData,
-          content: intl.formatMessage({
-            id: 'torrents.remove.delete.data',
-          }),
-          id: 'deleteData',
-          type: 'checkbox',
-        },
-        {
-          clickHandler: null,
-          content: intl.formatMessage({
-            id: 'button.no',
-          }),
-          triggerDismiss: true,
-          type: 'tertiary',
-        },
-        {
-          clickHandler: () => {
-            let deleteData = false;
-            if (formRef.current != null) {
-              deleteData = formRef.current.getFormData().deleteData as boolean;
-            }
-
-            TorrentActions.deleteTorrents({
-              hashes: TorrentStore.selectedTorrents,
-              deleteData,
-            });
-
-            saveDeleteTorrentsUserPreferences({deleteData});
-          },
-          content: intl.formatMessage({
-            id: 'button.yes',
-          }),
-          triggerDismiss: true,
-          type: 'primary',
-        },
-      ]}
     />
   );
 };
