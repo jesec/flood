@@ -27,11 +27,9 @@ const {baseURI} = ConfigStore;
 
 const emitTorrentAddedAlert = (count: number) => {
   AlertStore.add({
-    accumulation: {
-      id: 'alert.torrent.add',
-      value: count,
-    },
     id: 'alert.torrent.add',
+    type: 'success',
+    count,
   });
 };
 
@@ -80,20 +78,16 @@ const TorrentActions = {
       .then(
         () => {
           AlertStore.add({
-            accumulation: {
-              id: 'alert.torrent.remove',
-              value: options.hashes.length,
-            },
             id: 'alert.torrent.remove',
+            type: 'success',
+            count: options.hashes.length,
           });
         },
         () => {
           AlertStore.add({
-            accumulation: {
-              id: 'alert.torrent.remove.failed',
-              value: options.hashes.length,
-            },
             id: 'alert.torrent.remove.failed',
+            type: 'error',
+            count: options.hashes.length,
           });
         },
       ),
@@ -160,20 +154,16 @@ const TorrentActions = {
       .then(
         () => {
           AlertStore.add({
-            accumulation: {
-              id: 'alert.torrent.move',
-              value: options.hashes.length,
-            },
             id: 'alert.torrent.move',
+            type: 'success',
+            count: options.hashes.length,
           });
         },
         () => {
           AlertStore.add({
-            accumulation: {
-              id: 'alert.torrent.move.failed',
-              value: options.hashes.length,
-            },
             id: 'alert.torrent.move.failed',
+            type: 'error',
+            count: options.hashes.length,
           });
         },
       );

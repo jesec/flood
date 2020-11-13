@@ -1,18 +1,23 @@
 import {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
+import {observer} from 'mobx-react';
 
+import AlertStore from '../../stores/AlertStore';
 import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
 import CircleExclamationIcon from '../icons/CircleExclamationIcon';
 
 interface AlertProps {
   id: string;
-  count?: number;
-  type?: 'success' | 'error';
 }
 
-const Alert: FC<AlertProps> = (props: AlertProps) => {
-  const {id, count, type} = props;
+const Alert: FC<AlertProps> = observer((props: AlertProps) => {
+  const {id} = props;
+  const {count, type} = AlertStore.alerts[id] || {};
+
+  if (id == null || count == null || type == null) {
+    return null;
+  }
 
   const alertClasses = classnames('alert', {
     'is-success': type === 'success',
@@ -38,11 +43,6 @@ const Alert: FC<AlertProps> = (props: AlertProps) => {
       </span>
     </li>
   );
-};
-
-Alert.defaultProps = {
-  count: 0,
-  type: 'success',
-};
+});
 
 export default Alert;

@@ -1,87 +1,55 @@
-import {makeAutoObservable} from 'mobx';
-
-interface Accumulation {
-  id: string;
-  value: number;
-}
+import {computed, extendObservable, makeAutoObservable} from 'mobx';
+import sort from 'fast-sort';
 
 export interface Alert {
   id: string;
-  accumulation?: Accumulation;
+  type: 'success' | 'error';
   count?: number;
   duration?: number;
+  timer: number;
+  updated: number;
 }
 
 const DEFAULT_DURATION = 5 * 1000;
 
 class AlertStore {
-  accumulation: Record<string, number> = {};
-
   alerts: Record<string, Alert> = {};
+
+  @computed get sortedAlerts(): Array<Alert> {
+    return sort(Object.values(this.alerts)).asc((alert) => alert.updated);
+  }
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  accumulate(alert: Alert) {
-    if (alert.accumulation == null) {
-      return;
-    }
+  add(alert: Pick<Alert, 'id' | 'type' | 'count' | 'duration'>) {
+    const curAlert = this.alerts[alert.id];
 
-    const {id, value} = alert.accumulation;
+    if (curAlert != null) {
+      clearTimeout(curAlert.timer);
 
-    if (this.accumulation[id] == null) {
-      this.accumulation[id] = value;
-    } else {
-      this.accumulation[id] += value;
-    }
-  }
-
-  add(alert: Alert) {
-    const newAlert: Alert = {
-      ...alert,
-      id: alert.id || `${Date.now()}`,
-      duration: alert.duration || DEFAULT_DURATION,
-    };
-
-    this.accumulate(newAlert);
-
-    this.scheduleCleanse(newAlert);
-
-    this.alerts[newAlert.id] = newAlert;
-  }
-
-  removeExpired = (alert: Alert) => {
-    const {accumulation} = alert;
-
-    if (accumulation) {
-      this.removeAccumulation(alert);
-
-      if (this.accumulation[accumulation.id] === 0) {
-        delete this.accumulation[accumulation.id];
-        delete this.alerts[alert.id];
+      if (alert.count != null) {
+        curAlert.count = (curAlert.count ?? 0) + alert.count;
       }
+
+      curAlert.timer = this.scheduleClose(alert.id, alert.duration);
+      curAlert.updated = Date.now();
     } else {
-      delete this.alerts[alert.id];
+      extendObservable(this.alerts, {
+        [alert.id]: {
+          ...alert,
+          timer: this.scheduleClose(alert.id, alert.duration),
+          updated: Date.now(),
+        },
+      });
     }
-  };
-
-  removeAccumulation(alert: Alert) {
-    if (alert.accumulation == null) {
-      return;
-    }
-
-    const {id, value} = alert.accumulation;
-
-    if (this.accumulation[id] == null) {
-      return;
-    }
-
-    this.accumulation[id] -= value;
   }
 
-  scheduleCleanse(alert: Alert) {
-    setTimeout(() => this.removeExpired(alert), alert.duration);
+  scheduleClose(id: string, duration = DEFAULT_DURATION): number {
+    return window.setTimeout(() => {
+      delete this.alerts[id];
+    }, duration);
   }
 }
 

@@ -46,9 +46,11 @@ const SettingActions = {
           err
             ? {
                 id: 'general.error.unknown',
+                type: 'error',
               }
             : {
                 id: 'alert.settings.saved',
+                type: 'success',
               },
         );
       }
