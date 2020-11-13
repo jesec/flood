@@ -1,7 +1,7 @@
 import {Component} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 
-import {Checkbox, Form, FormRow} from '../../../ui';
+import {Form, FormRow} from '../../../ui';
 import Modal from '../Modal';
 import {saveDeleteTorrentsUserPreferences} from '../../../util/userPreferences';
 import SettingStore from '../../../stores/SettingStore';
@@ -14,63 +14,61 @@ class RemoveTorrentsModal extends Component<WrappedComponentProps> {
   formRef?: Form | null;
 
   getActions(torrentCount: number): Array<ModalAction> {
-    if (torrentCount === 0) {
-      return [
-        {
-          clickHandler: null,
-          content: 'OK',
-          triggerDismiss: true,
-          type: 'primary',
-        },
-      ];
-    }
+    const {intl} = this.props;
 
-    return [
-      {
-        clickHandler: null,
-        content: this.props.intl.formatMessage({
-          id: 'button.no',
-        }),
-        triggerDismiss: true,
-        type: 'tertiary',
-      },
-      {
-        clickHandler: this.handleRemovalConfirmation,
-        content: this.props.intl.formatMessage({
-          id: 'button.yes',
-        }),
-        triggerDismiss: true,
-        type: 'primary',
-      },
-    ];
+    return torrentCount === 0
+      ? [
+          {
+            clickHandler: null,
+            content: intl.formatMessage({
+              id: 'button.ok',
+            }),
+            triggerDismiss: true,
+            type: 'primary',
+          },
+        ]
+      : [
+          {
+            checked: SettingStore.floodSettings.deleteTorrentData,
+            content: intl.formatMessage({
+              id: 'torrents.remove.delete.data',
+            }),
+            id: 'deleteData',
+            type: 'checkbox',
+          },
+          {
+            clickHandler: null,
+            content: intl.formatMessage({
+              id: 'button.no',
+            }),
+            triggerDismiss: true,
+            type: 'tertiary',
+          },
+          {
+            clickHandler: this.handleRemovalConfirmation,
+            content: intl.formatMessage({
+              id: 'button.yes',
+            }),
+            triggerDismiss: true,
+            type: 'primary',
+          },
+        ];
   }
 
   getContent(torrentCount: number) {
-    let modalContent = null;
-    let deleteDataContent = null;
-
-    if (torrentCount === 0) {
-      modalContent = <FormattedMessage id="torrents.remove.error.no.torrents.selected" />;
-    } else {
-      modalContent = <FormattedMessage id="torrents.remove.are.you.sure" values={{count: torrentCount}} />;
-
-      deleteDataContent = (
-        <FormRow>
-          <Checkbox id="deleteData" checked={SettingStore.floodSettings.deleteTorrentData}>
-            <FormattedMessage id="torrents.remove.delete.data" />
-          </Checkbox>
-        </FormRow>
-      );
-    }
-
     return (
       <div className="modal__content inverse">
         <Form
           ref={(ref) => {
             this.formRef = ref;
           }}>
-          <FormRow>{modalContent}</FormRow>
-          {deleteDataContent}
+          <FormRow>
+            {torrentCount === 0 ? (
+              <FormattedMessage id="torrents.remove.error.no.torrents.selected" />
+            ) : (
+              <FormattedMessage id="torrents.remove.are.you.sure" values={{count: torrentCount}} />
+            )}
+          </FormRow>
         </Form>
       </div>
     );
