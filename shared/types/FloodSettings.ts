@@ -32,6 +32,9 @@ export interface FloodSettings {
 
   // Last used download destination
   torrentDestination?: string;
+
+  // Last used "Add Torrents" tab
+  UITorrentsAddTab?: 'by-url' | 'by-file' | 'by-creation';
 }
 
 export type FloodSetting = keyof FloodSettings;

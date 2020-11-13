@@ -18,10 +18,23 @@ interface ModalProps {
   inverse?: boolean;
   actions?: Array<ModalAction>;
   tabs?: Record<string, Tab>;
+  initialTabId?: string;
 }
 
 const Modal: FC<ModalProps> = (props: ModalProps) => {
-  const {alignment, size, orientation, tabsInBody, inverse, className, content, heading, tabs, actions} = props;
+  const {
+    alignment,
+    size,
+    orientation,
+    tabsInBody,
+    inverse,
+    initialTabId,
+    className,
+    content,
+    heading,
+    tabs,
+    actions,
+  } = props;
 
   const contentWrapperClasses = classnames(
     'modal__content__wrapper',
@@ -47,7 +60,7 @@ const Modal: FC<ModalProps> = (props: ModalProps) => {
   let headerTabs;
 
   if (tabs) {
-    const [activeTabId, setActiveTabId] = useState(Object.keys(tabs)[0]);
+    const [activeTabId, setActiveTabId] = useState(initialTabId ?? Object.keys(tabs)[0]);
 
     const activeTab = tabs[activeTabId];
     const contentClasses = classnames('modal__content', activeTab.modalContentClasses);
@@ -114,6 +127,7 @@ Modal.defaultProps = {
   content: undefined,
   actions: undefined,
   tabs: undefined,
+  initialTabId: undefined,
 };
 
 export default Modal;

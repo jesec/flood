@@ -84,7 +84,7 @@ const AddTorrentsByFile: FC = () => {
             UIStore.dismissModal();
           });
 
-          saveAddTorrentsUserPreferences({start, destination});
+          saveAddTorrentsUserPreferences({start, destination, tab: 'by-file'});
         }}
         isAddingTorrents={isAddingTorrents}
       />

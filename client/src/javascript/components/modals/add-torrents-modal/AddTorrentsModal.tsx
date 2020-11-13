@@ -1,10 +1,11 @@
 import {FC} from 'react';
 import {useIntl} from 'react-intl';
 
+import AddTorrentsByCreation from './AddTorrentsByCreation';
 import AddTorrentsByFile from './AddTorrentsByFile';
 import AddTorrentsByURL from './AddTorrentsByURL';
 import Modal from '../Modal';
-import AddTorrentsByCreation from './AddTorrentsByCreation';
+import SettingStore from '../../../stores/SettingStore';
 
 const AddTorrentsModal: FC = () => {
   const intl = useIntl();
@@ -36,6 +37,7 @@ const AddTorrentsModal: FC = () => {
         id: 'torrents.add.heading',
       })}
       tabs={tabs}
+      initialTabId={SettingStore.floodSettings.UITorrentsAddTab}
     />
   );
 };
