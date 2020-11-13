@@ -99,7 +99,6 @@ class RemoveTorrentsModal extends Component<WrappedComponentProps> {
     return (
       <Modal
         actions={this.getActions(selectedTorrents.length)}
-        alignment="center"
         content={this.getContent(selectedTorrents.length)}
         heading={modalHeading}
       />

@@ -11,14 +11,7 @@ const ConfirmModal: FC = observer(() => {
 
   const {actions, content, heading} = UIStore.activeModal || {};
 
-  return (
-    <Modal
-      actions={actions}
-      alignment="center"
-      content={<div className="modal__content">{content}</div>}
-      heading={heading}
-    />
-  );
+  return <Modal actions={actions} content={<div className="modal__content">{content}</div>} heading={heading} />;
 });
 
 export default ConfirmModal;
