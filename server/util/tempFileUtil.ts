@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
 import crypto from 'crypto';
-import fs from 'fs';
+import fs, {WriteFileOptions} from 'fs';
 
 import {getTempPath} from '../models/TemporaryStorage';
 
@@ -33,10 +33,14 @@ const delayedDelete = (tempPath: string): void => {
  * @param {string} extension - file extension of temp file
  * @return {string} - path of saved temporary file. deleted after 5 minutes.
  */
-export const saveBufferToTempFile = async (buffer: Buffer, extension?: string): Promise<string> => {
+export const saveBufferToTempFile = async (
+  buffer: Buffer,
+  extension?: string,
+  options?: WriteFileOptions,
+): Promise<string> => {
   const tempPath = getTempFilePath(extension);
 
-  fs.writeFileSync(tempPath, buffer);
+  fs.writeFileSync(tempPath, buffer, options);
 
   delayedDelete(tempPath);
 

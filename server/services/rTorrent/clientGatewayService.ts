@@ -63,7 +63,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }: Required<AddTorrentByFileOptions>): Promise<void> {
     const torrentPaths = await Promise.all(
       files.map(async (file) => {
-        return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent');
+        return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent', {mode: 0o664});
       }),
     );
 
