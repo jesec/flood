@@ -1,6 +1,6 @@
+import {FC} from 'react';
 import {FormattedMessage, FormattedNumber, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
@@ -16,7 +16,9 @@ const getTags = (tags: TorrentProperties['tags']) => {
   ));
 };
 
-const TorrentGeneralInfo: React.FC = () => {
+const TorrentGeneralInfo: FC = observer(() => {
+  const intl = useIntl();
+
   if (UIStore.activeModal?.id !== 'torrent-details') {
     return null;
   }
@@ -25,8 +27,6 @@ const TorrentGeneralInfo: React.FC = () => {
   if (torrent == null) {
     return null;
   }
-
-  const intl = useIntl();
 
   let dateAdded = null;
   if (torrent.dateAdded) {
@@ -189,6 +189,6 @@ const TorrentGeneralInfo: React.FC = () => {
       </table>
     </div>
   );
-};
+});
 
-export default observer(TorrentGeneralInfo);
+export default TorrentGeneralInfo;

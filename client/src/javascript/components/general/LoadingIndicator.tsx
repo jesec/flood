@@ -1,11 +1,11 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC} from 'react';
 
 interface LoadingIndicatorProps {
   inverse?: boolean;
 }
 
-const LoadingIndicator: React.FC<LoadingIndicatorProps> = (props: LoadingIndicatorProps) => {
+const LoadingIndicator: FC<LoadingIndicatorProps> = (props: LoadingIndicatorProps) => {
   const {inverse} = props;
 
   const classes = classnames('loading-indicator', {

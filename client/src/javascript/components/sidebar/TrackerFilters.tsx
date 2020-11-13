@@ -1,12 +1,12 @@
+import {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
-const TrackerFilters: React.FC = () => {
+const TrackerFilters: FC = observer(() => {
   const trackers = Object.keys(TorrentFilterStore.taxonomy.trackerCounts);
 
   if (trackers.length === 1 && trackers[0] === '') {
@@ -43,6 +43,6 @@ const TrackerFilters: React.FC = () => {
       {filterElements}
     </ul>
   );
-};
+});
 
-export default observer(TrackerFilters);
+export default TrackerFilters;

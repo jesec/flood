@@ -1,5 +1,5 @@
 import {defineMessages, useIntl} from 'react-intl';
-import * as React from 'react';
+import {FC, useRef} from 'react';
 
 import SettingsIcon from '../icons/SettingsIcon';
 import Tooltip from '../general/Tooltip';
@@ -11,10 +11,10 @@ const MESSAGES = defineMessages({
   },
 });
 
-const SettingsButton: React.FC = () => {
+const SettingsButton: FC = () => {
   const intl = useIntl();
   const label = intl.formatMessage(MESSAGES.settings);
-  const tooltipRef = React.useRef<Tooltip>(null);
+  const tooltipRef = useRef<Tooltip>(null);
 
   return (
     <Tooltip

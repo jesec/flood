@@ -1,10 +1,10 @@
+import {Component, createRef, FC, MouseEvent, ReactNode, TouchEvent} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
 import {observable, reaction} from 'mobx';
 import {useDropzone} from 'react-dropzone';
-import * as React from 'react';
 
-import type {FixedSizeList, ListChildComponentProps} from 'react-window';
+import type {FixedSizeList} from 'react-window';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
@@ -27,7 +27,7 @@ import UIActions from '../../actions/UIActions';
 
 import type {TorrentListColumn} from '../../constants/TorrentListColumns';
 
-const TorrentDropzone: React.FC<{children: React.ReactNode}> = ({children}: {children: React.ReactNode}) => {
+const TorrentDropzone: FC<{children: ReactNode}> = ({children}: {children: ReactNode}) => {
   const handleFileDrop = (files: Array<File>) => {
     const filesData: Array<string> = [];
 
@@ -66,7 +66,7 @@ const TorrentDropzone: React.FC<{children: React.ReactNode}> = ({children}: {chi
   );
 };
 
-const getEmptyTorrentListNotification = (): React.ReactNode => {
+const getEmptyTorrentListNotification = (): ReactNode => {
   let clearFilters = null;
 
   if (TorrentFilterStore.isFilterActive) {
@@ -93,13 +93,13 @@ const getEmptyTorrentListNotification = (): React.ReactNode => {
   );
 };
 
-const handleClick = (hash: string, event: React.MouseEvent) => UIActions.handleTorrentClick({hash, event});
+const handleClick = (hash: string, event: MouseEvent) => UIActions.handleTorrentClick({hash, event});
 const handleDoubleClick = (hash: string) => TorrentListContextMenu.handleDetailsClick(hash);
 
 @observer
-class TorrentList extends React.Component<WrappedComponentProps> {
+class TorrentList extends Component<WrappedComponentProps> {
   listHeaderRef: HTMLDivElement | null = null;
-  listViewportRef = React.createRef<FixedSizeList>();
+  listViewportRef = createRef<FixedSizeList>();
 
   torrentListViewportSize = observable.object<{width: number; height: number}>({
     width: window.innerWidth,
@@ -121,7 +121,7 @@ class TorrentList extends React.Component<WrappedComponentProps> {
     });
   };
 
-  handleContextMenuClick = (hash: string, event: React.MouseEvent | React.TouchEvent) => {
+  handleContextMenuClick = (hash: string, event: MouseEvent | TouchEvent) => {
     if (event.cancelable === true) {
       event.preventDefault();
     }
@@ -166,21 +166,6 @@ class TorrentList extends React.Component<WrappedComponentProps> {
     }
   };
 
-  renderListItem: React.FC<ListChildComponentProps> = observer(({index, style}) => {
-    const torrent = TorrentStore.filteredTorrents[index];
-
-    return (
-      <TorrentListRow
-        handleClick={handleClick}
-        handleDoubleClick={handleDoubleClick}
-        handleRightClick={this.handleContextMenuClick}
-        key={torrent.hash}
-        style={style}
-        hash={torrent.hash}
-      />
-    );
-  });
-
   render() {
     const torrents = TorrentStore.filteredTorrents;
     const {torrentListViewSize = 'condensed'} = SettingStore.floodSettings;
@@ -188,8 +173,8 @@ class TorrentList extends React.Component<WrappedComponentProps> {
     const isCondensed = torrentListViewSize === 'condensed';
     const isListEmpty = torrents == null || torrents.length === 0;
 
-    let content: React.ReactNode = null;
-    let torrentListHeading: React.ReactNode = null;
+    let content: ReactNode = null;
+    let torrentListHeading: ReactNode = null;
     if (!ClientStatusStore.isConnected) {
       content = (
         <div className="torrents__alert__wrapper">
@@ -232,7 +217,20 @@ class TorrentList extends React.Component<WrappedComponentProps> {
       content = (
         <ListViewport
           className="torrent__list__viewport"
-          itemRenderer={this.renderListItem}
+          itemRenderer={({index, style}) => {
+            const {hash} = TorrentStore.filteredTorrents[index];
+
+            return (
+              <TorrentListRow
+                handleClick={handleClick}
+                handleDoubleClick={handleDoubleClick}
+                handleRightClick={this.handleContextMenuClick}
+                key={hash}
+                style={style}
+                hash={hash}
+              />
+            );
+          }}
           itemSize={isCondensed ? 30 : 70}
           listLength={torrents.length}
           ref={this.listViewportRef}

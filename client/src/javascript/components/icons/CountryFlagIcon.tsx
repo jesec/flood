@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {FC} from 'react';
 
 const flagsCache: Record<string, string | null> = {};
 
@@ -36,7 +36,7 @@ interface CountryFlagIconProps {
   countryCode: string;
 }
 
-const CountryFlagIcon: React.FC<CountryFlagIconProps> = ({countryCode}: CountryFlagIconProps) => {
+const CountryFlagIcon: FC<CountryFlagIconProps> = ({countryCode}: CountryFlagIconProps) => {
   const flag = getFlag(countryCode);
   if (flag == null) {
     return null;

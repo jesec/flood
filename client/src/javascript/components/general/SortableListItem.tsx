@@ -1,13 +1,13 @@
 import classnames from 'classnames';
 import {DragElementWrapper, DragPreviewOptions, DragSource, DragSourceOptions, DropTarget} from 'react-dnd';
+import {FC, ReactNode, useEffect} from 'react';
 import flow from 'lodash/flow';
 import {getEmptyImage} from 'react-dnd-html5-backend';
-import * as React from 'react';
 
 import LockIcon from '../icons/LockIcon';
 
 interface SortableListItemProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   list: string;
   id: string;
   index: number;
@@ -22,10 +22,10 @@ interface SortableListItemProps {
   connectDropTarget: DragElementWrapper<never>;
 }
 
-const SortableListItem: React.FC<SortableListItemProps> = (props: SortableListItemProps) => {
+const SortableListItem: FC<SortableListItemProps> = (props: SortableListItemProps) => {
   const {children, isDragging, isLocked, connectDragPreview, connectDragSource, connectDropTarget} = props;
 
-  React.useEffect(() => {
+  useEffect(() => {
     connectDragPreview(getEmptyImage(), {
       captureDraggingState: true,
     });

@@ -1,22 +1,12 @@
-import {injectIntl, WrappedComponentProps} from 'react-intl';
-import * as React from 'react';
-
-import type {MoveTorrentsOptions} from '@shared/types/api/torrents';
+import {FC, useState} from 'react';
+import {useIntl} from 'react-intl';
 
 import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
 import {Form} from '../../../ui';
 import Modal from '../Modal';
-import ModalActions from '../ModalActions';
 import TorrentActions from '../../../actions/TorrentActions';
 import TorrentStore from '../../../stores/TorrentStore';
 import UIStore from '../../../stores/UIStore';
-
-import type {ModalAction} from '../../../stores/UIStore';
-
-interface MoveTorrentsStates {
-  isSettingDownloadPath: boolean;
-  originalSource?: string;
-}
 
 const getSuggestedPath = (sources: Array<string>): string | undefined => {
   const commonPath = sources[0];
@@ -38,101 +28,81 @@ const getSuggestedPath = (sources: Array<string>): string | undefined => {
   return undefined;
 };
 
-class MoveTorrents extends React.Component<WrappedComponentProps, MoveTorrentsStates> {
-  constructor(props: WrappedComponentProps) {
-    super(props);
+const MoveTorrents: FC = () => {
+  const intl = useIntl();
+  const [isSettingDownloadPath, setIsSettingDownloadPath] = useState<boolean>(false);
 
-    this.state = {
-      isSettingDownloadPath: false,
-      originalSource: getSuggestedPath(
-        TorrentStore.selectedTorrents.map((hash: string) => TorrentStore.torrents[hash].directory),
-      ),
-    };
-  }
+  return (
+    <Modal
+      heading={intl.formatMessage({
+        id: 'torrents.move.heading',
+      })}
+      content={
+        <div className="modal__content">
+          <Form
+            className="inverse"
+            onSubmit={({formData}) => {
+              const hashes = TorrentStore.selectedTorrents;
+              if (hashes.length > 0) {
+                setIsSettingDownloadPath(true);
+                TorrentActions.moveTorrents({
+                  hashes,
+                  destination: formData.destination as string,
+                  isBasePath: formData.isBasePath as boolean,
+                  moveFiles: formData.moveFiles as boolean,
+                  isCheckHash: formData.isCheckHash as boolean,
+                }).then(() => {
+                  UIStore.dismissModal();
+                  setIsSettingDownloadPath(false);
+                });
+              }
+            }}>
+            <FilesystemBrowserTextbox
+              id="destination"
+              selectable="directories"
+              suggested={getSuggestedPath(
+                TorrentStore.selectedTorrents.map((hash: string) => TorrentStore.torrents[hash].directory),
+              )}
+              showBasePathToggle
+            />
+          </Form>
+        </div>
+      }
+      actions={[
+        {
+          checked: true,
+          content: intl.formatMessage({
+            id: 'torrents.move.data.label',
+          }),
+          id: 'moveFiles',
+          type: 'checkbox',
+        },
+        {
+          checked: false,
+          content: intl.formatMessage({
+            id: 'torrents.move.check_hash.label',
+          }),
+          id: 'isCheckHash',
+          type: 'checkbox',
+        },
+        {
+          content: intl.formatMessage({
+            id: 'button.cancel',
+          }),
+          triggerDismiss: true,
+          type: 'tertiary',
+        },
+        {
+          content: intl.formatMessage({
+            id: 'torrents.move.button.set.location',
+          }),
+          isLoading: isSettingDownloadPath,
+          submit: true,
+          type: 'primary',
+        },
+      ]}
+    />
+  );
+};
 
-  getActions(): Array<ModalAction> {
-    return [
-      {
-        checked: true,
-        content: this.props.intl.formatMessage({
-          id: 'torrents.move.data.label',
-        }),
-        id: 'moveFiles',
-        type: 'checkbox',
-      },
-      {
-        checked: false,
-        content: this.props.intl.formatMessage({
-          id: 'torrents.move.check_hash.label',
-        }),
-        id: 'isCheckHash',
-        type: 'checkbox',
-      },
-      {
-        content: this.props.intl.formatMessage({
-          id: 'button.cancel',
-        }),
-        triggerDismiss: true,
-        type: 'tertiary',
-      },
-      {
-        content: this.props.intl.formatMessage({
-          id: 'torrents.move.button.set.location',
-        }),
-        isLoading: this.state.isSettingDownloadPath,
-        submit: true,
-        type: 'primary',
-      },
-    ];
-  }
-
-  getContent(): React.ReactNode {
-    return (
-      <div className="modal__content">
-        <Form
-          className="inverse"
-          onSubmit={({event: _e, formData}) => {
-            return this.handleFormSubmit((formData as unknown) as MoveTorrentsOptions);
-          }}>
-          <FilesystemBrowserTextbox
-            id="destination"
-            selectable="directories"
-            suggested={this.state.originalSource}
-            showBasePathToggle
-          />
-          <ModalActions actions={this.getActions()} />
-        </Form>
-      </div>
-    );
-  }
-
-  handleFormSubmit = (formData: MoveTorrentsOptions) => {
-    const hashes = TorrentStore.selectedTorrents;
-    if (hashes.length > 0) {
-      this.setState({isSettingDownloadPath: true});
-      TorrentActions.moveTorrents({
-        hashes,
-        destination: formData.destination,
-        isBasePath: formData.isBasePath,
-        moveFiles: formData.moveFiles,
-        isCheckHash: formData.isCheckHash,
-      }).then(() => {
-        UIStore.dismissModal();
-        this.setState({isSettingDownloadPath: false});
-      });
-    }
-  };
-
-  render() {
-    return (
-      <Modal
-        content={this.getContent()}
-        heading={this.props.intl.formatMessage({
-          id: 'torrents.move.heading',
-        })}
-      />
-    );
-  }
-}
-
-export default injectIntl(MoveTorrents);
+export default MoveTorrents;

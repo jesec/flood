@@ -1,6 +1,6 @@
+import {FC, ReactText, useRef, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import {
   Button,
@@ -22,11 +22,11 @@ import FloodActions from '../../actions/FloodActions';
 
 import type {ClientConnectionSettingsFormType} from './connection-settings/ClientConnectionSettingsForm';
 
-const ClientConnectionInterruption: React.FC = () => {
-  const [error, setError] = React.useState<string | null>(null);
-  const [isSubmitting, setSubmitting] = React.useState<boolean>(false);
-  const [selection, setSelection] = React.useState<React.ReactText>('retry');
-  const settingsFormRef = React.useRef<ClientConnectionSettingsFormType>(null);
+const ClientConnectionInterruption: FC = observer(() => {
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setSubmitting] = useState<boolean>(false);
+  const [selection, setSelection] = useState<ReactText>('retry');
+  const settingsFormRef = useRef<ClientConnectionSettingsFormType>(null);
 
   return (
     <Panel spacing="large">
@@ -117,6 +117,6 @@ const ClientConnectionInterruption: React.FC = () => {
       </Form>
     </Panel>
   );
-};
+});
 
-export default observer(ClientConnectionInterruption);
+export default ClientConnectionInterruption;

@@ -1,12 +1,12 @@
+import {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
-const TagFilters: React.FC = () => {
+const TagFilters: FC = observer(() => {
   const tags = Object.keys(TorrentFilterStore.taxonomy.tagCounts);
 
   if ((tags.length === 1 && tags[0] === '') || (tags.length === 2 && tags[1] === 'untagged')) {
@@ -44,6 +44,6 @@ const TagFilters: React.FC = () => {
       {filterElements}
     </ul>
   );
-};
+});
 
-export default observer(TagFilters);
+export default TagFilters;

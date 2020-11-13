@@ -1,14 +1,14 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 interface ApplicationContentProps {
-  children: React.ReactNode;
+  children: ReactNode;
   baseClassName?: string;
   className: string;
   modifier: string;
 }
 
-const ApplicationContent: React.FC<ApplicationContentProps> = (props: ApplicationContentProps) => {
+const ApplicationContent: FC<ApplicationContentProps> = (props: ApplicationContentProps) => {
   const {children, baseClassName, className, modifier} = props;
 
   const classes = classnames(baseClassName, {

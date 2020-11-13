@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
 import {useIntl} from 'react-intl';
-import {useMediaQuery} from '@react-hook/media-query';
+import {useMedia} from 'react-use';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
@@ -20,7 +20,7 @@ import UIStore from '../../../stores/UIStore';
 
 const SettingsModal: FC = () => {
   const intl = useIntl();
-  const isSmallScreen = useMediaQuery('(max-width: 720px)');
+  const isSmallScreen = useMedia('(max-width: 720px)');
 
   const [changedClientSettings, setChangedClientSettings] = useState<Partial<ClientSettings>>({});
   const [changedFloodSettings, setChangedFloodSettings] = useState<Partial<FloodSettings>>({});

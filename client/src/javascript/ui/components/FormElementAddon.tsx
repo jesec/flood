@@ -1,17 +1,17 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, HTMLAttributes, ReactNode} from 'react';
 
 interface FormElementAddonProps {
-  children: React.ReactNode;
+  children: ReactNode;
   addonPlacement?: 'before' | 'after';
   addonIndex?: number;
   className?: string;
   isInteractive?: boolean;
   type?: 'icon';
-  onClick?: React.HTMLAttributes<HTMLDivElement>['onClick'];
+  onClick?: HTMLAttributes<HTMLDivElement>['onClick'];
 }
 
-const FormElementAddon: React.FC<FormElementAddonProps> = ({
+const FormElementAddon: FC<FormElementAddonProps> = ({
   children,
   type,
   addonPlacement,

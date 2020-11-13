@@ -1,3 +1,4 @@
+import {FC, MouseEvent} from 'react';
 import {makeAutoObservable} from 'mobx';
 
 import type {TorrentContextMenuAction} from '../constants/TorrentContextMenuActions';
@@ -7,9 +8,9 @@ export type ContextMenuItem =
       type: 'action';
       action: TorrentContextMenuAction;
       label: string;
-      labelAction?: React.FC;
-      labelSecondary?: React.FC;
-      clickHandler(action: TorrentContextMenuAction, event: React.MouseEvent<HTMLLIElement>): void;
+      labelAction?: FC;
+      labelSecondary?: FC;
+      clickHandler(action: TorrentContextMenuAction, event: MouseEvent<HTMLLIElement>): void;
       dismissMenu?: boolean;
     }
   | {

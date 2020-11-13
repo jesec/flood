@@ -1,6 +1,6 @@
+import {FC} from 'react';
 import {useIntl} from 'react-intl';
-import {useMediaQuery} from '@react-hook/media-query';
-import * as React from 'react';
+import {useMedia} from 'react-use';
 
 import Modal from '../Modal';
 import TorrentMediainfo from './TorrentMediainfo';
@@ -10,9 +10,9 @@ import TorrentHeading from './TorrentHeading';
 import TorrentPeers from './TorrentPeers';
 import TorrentTrackers from './TorrentTrackers';
 
-const TorrentDetailsModal: React.FC = () => {
+const TorrentDetailsModal: FC = () => {
   const intl = useIntl();
-  const isSmallScreen = useMediaQuery('(max-width: 720px)');
+  const isSmallScreen = useMedia('(max-width: 720px)');
 
   const tabs = {
     'torrent-details': {

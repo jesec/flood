@@ -1,10 +1,10 @@
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 interface BadgeProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const Badge: React.FC<BadgeProps> = ({children}: BadgeProps) => {
+const Badge: FC<BadgeProps> = ({children}: BadgeProps) => {
   return <div className="badge">{children}</div>;
 };
 

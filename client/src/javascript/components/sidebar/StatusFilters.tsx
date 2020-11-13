@@ -1,6 +1,6 @@
+import {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
@@ -17,7 +17,7 @@ import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 import UploadSmall from '../icons/UploadSmall';
 
-const StatusFilters: React.FC = () => {
+const StatusFilters: FC = observer(() => {
   const intl = useIntl();
 
   const filters: Array<{
@@ -110,6 +110,6 @@ const StatusFilters: React.FC = () => {
       {filterElements}
     </ul>
   );
-};
+});
 
-export default observer(StatusFilters);
+export default StatusFilters;

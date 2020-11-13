@@ -1,13 +1,13 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 interface SidebarItemProps {
-  children: React.ReactNode;
+  children: ReactNode;
   baseClassName?: string;
   modifier: string;
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({children, baseClassName, modifier}: SidebarItemProps) => {
+const SidebarItem: FC<SidebarItemProps> = ({children, baseClassName, modifier}: SidebarItemProps) => {
   const classes = classnames(baseClassName, {
     [`${baseClassName}--${modifier}`]: modifier,
   });

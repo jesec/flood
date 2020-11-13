@@ -1,6 +1,7 @@
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import {FC} from 'react';
 import {observer} from 'mobx-react';
-import * as React from 'react';
+import {useKeyPressEvent} from 'react-use';
 
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
 import ConfirmModal from './confirm-modal/ConfirmModal';
@@ -41,47 +42,29 @@ const createModal = (id: Modal['id']): React.ReactNode => {
   }
 };
 
-const dismissModal = () => {
-  UIActions.dismissModal();
-};
+const Modals: FC = observer(() => {
+  const {id} = UIStore.activeModal || {};
 
-@observer
-class Modals extends React.Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyPress);
+  useKeyPressEvent('Escape', () => UIActions.dismissModal());
+
+  let modal;
+  if (id != null) {
+    modal = (
+      <CSSTransition key={id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
+        <div className="modal">
+          <div
+            className="modal__overlay"
+            onClick={() => {
+              UIActions.dismissModal();
+            }}
+          />
+          {createModal(id)}
+        </div>
+      </CSSTransition>
+    );
   }
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyPress);
-  }
-
-  handleKeyPress = (event: KeyboardEvent) => {
-    if (UIStore.activeModal != null && event.key === 'Escape') {
-      dismissModal();
-    }
-  };
-
-  handleOverlayClick = () => {
-    dismissModal();
-  };
-
-  render() {
-    const id = UIStore.activeModal?.id;
-
-    let modal;
-    if (id != null) {
-      modal = (
-        <CSSTransition key={id} classNames="modal__animation" timeout={{enter: 500, exit: 500}}>
-          <div className="modal">
-            <div className="modal__overlay" onClick={this.handleOverlayClick} />
-            {createModal(id)}
-          </div>
-        </CSSTransition>
-      );
-    }
-
-    return <TransitionGroup>{modal}</TransitionGroup>;
-  }
-}
+  return <TransitionGroup>{modal}</TransitionGroup>;
+});
 
 export default Modals;

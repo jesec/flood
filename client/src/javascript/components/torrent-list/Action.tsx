@@ -1,17 +1,17 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 import Tooltip from '../general/Tooltip';
 
 interface ActionProps {
   clickHandler: () => void;
-  icon: React.ReactNode;
-  label: React.ReactNode;
+  icon: ReactNode;
+  label: ReactNode;
   slug: string;
   noTip?: boolean;
 }
 
-const Action: React.FC<ActionProps> = (props: ActionProps) => {
+const Action: FC<ActionProps> = (props: ActionProps) => {
   const {clickHandler, icon, label, slug, noTip} = props;
   const classes = classnames('action tooltip__wrapper', {
     [`action--${slug}`]: slug != null,

@@ -68,7 +68,15 @@ measureFileSizesBeforeBuild(paths.appBuild)
   })
   .then(
     ({stats, previousFileSizes}) => {
-      if (stats.compilation.warnings.length !== 0) {
+      if (stats.hasErrors()) {
+        stats.compilation.errors.forEach((err) => {
+          console.error(err);
+        });
+
+        process.exit(1);
+      }
+
+      if (stats.hasWarnings()) {
         console.log(chalk.yellow('Compiled with warnings.\n'));
 
         stats.compilation.warnings.forEach((warning) => {

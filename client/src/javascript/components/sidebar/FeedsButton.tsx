@@ -1,5 +1,5 @@
 import {defineMessages, useIntl} from 'react-intl';
-import * as React from 'react';
+import {FC, useRef} from 'react';
 
 import FeedIcon from '../icons/FeedIcon';
 import Tooltip from '../general/Tooltip';
@@ -11,10 +11,10 @@ const MESSAGES = defineMessages({
   },
 });
 
-const FeedsButton: React.FC = () => {
+const FeedsButton: FC = () => {
   const intl = useIntl();
   const label = intl.formatMessage(MESSAGES.feeds);
-  const tooltipRef = React.useRef<Tooltip>(null);
+  const tooltipRef = useRef<Tooltip>(null);
 
   return (
     <Tooltip

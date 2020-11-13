@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, ReactNode, useState} from 'react';
 
 import ModalActions from './ModalActions';
 import ModalTabs from './ModalTabs';
@@ -8,8 +8,8 @@ import type {ModalAction} from '../../stores/UIStore';
 import type {Tab} from './ModalTabs';
 
 interface ModalProps {
-  heading: React.ReactNode;
-  content?: React.ReactNode;
+  heading: ReactNode;
+  content?: ReactNode;
   className?: string | null;
   alignment?: 'left' | 'center';
   size?: 'medium' | 'large';
@@ -20,7 +20,7 @@ interface ModalProps {
   tabs?: Record<string, Tab>;
 }
 
-const Modal: React.FC<ModalProps> = (props: ModalProps) => {
+const Modal: FC<ModalProps> = (props: ModalProps) => {
   const {alignment, size, orientation, tabsInBody, inverse, className, content, heading, tabs, actions} = props;
 
   const contentWrapperClasses = classnames(
@@ -47,12 +47,12 @@ const Modal: React.FC<ModalProps> = (props: ModalProps) => {
   let headerTabs;
 
   if (tabs) {
-    const [activeTabId, setActiveTabId] = React.useState(Object.keys(tabs)[0]);
+    const [activeTabId, setActiveTabId] = useState(Object.keys(tabs)[0]);
 
     const activeTab = tabs[activeTabId];
     const contentClasses = classnames('modal__content', activeTab.modalContentClasses);
 
-    const ModalContentComponent = activeTab.content as React.FunctionComponent;
+    const ModalContentComponent = activeTab.content as FC;
     const modalContentData = activeTab.props;
 
     const modalTabs = (

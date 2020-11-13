@@ -1,10 +1,10 @@
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 interface SidebarActionsProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const SidebarActions: React.FC<SidebarActionsProps> = ({children}: SidebarActionsProps) => {
+const SidebarActions: FC<SidebarActionsProps> = ({children}: SidebarActionsProps) => {
   return <div className="sidebar__actions">{children}</div>;
 };
 

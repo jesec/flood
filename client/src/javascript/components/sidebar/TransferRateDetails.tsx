@@ -1,6 +1,6 @@
 import classnames from 'classnames';
-import {Component} from 'react';
-import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
+import {defineMessages, useIntl} from 'react-intl';
+import {FC} from 'react';
 import {observer} from 'mobx-react';
 
 import type {TransferDirection} from '@shared/types/TransferData';
@@ -16,10 +16,6 @@ import Upload from '../icons/Upload';
 
 import type {TransferRateGraphInspectorPoint} from './TransferRateGraph';
 
-interface TransferRateDetailsProps extends WrappedComponentProps {
-  inspectorPoint: TransferRateGraphInspectorPoint | null;
-}
-
 const messages = defineMessages({
   ago: {
     id: 'general.ago',
@@ -32,10 +28,14 @@ const icons = {
   upload: <Upload />,
 };
 
-@observer
-class TransferRateDetails extends Component<TransferRateDetailsProps> {
-  getCurrentTransferRate(direction: TransferDirection, options: {showHoverDuration?: boolean} = {}) {
-    const {inspectorPoint, intl} = this.props;
+interface TransferRateDetailsProps {
+  inspectorPoint: TransferRateGraphInspectorPoint | null;
+}
+
+const TransferRateDetails: FC<TransferRateDetailsProps> = observer(({inspectorPoint}: TransferRateDetailsProps) => {
+  const intl = useIntl();
+
+  const getCurrentTransferRate = (direction: TransferDirection, options: {showHoverDuration?: boolean} = {}) => {
     const {throttleGlobalDownSpeed = 0, throttleGlobalUpSpeed = 0} = SettingStore.clientSettings || {};
     const {transferSummary} = TransferDataStore;
 
@@ -106,16 +106,14 @@ class TransferRateDetails extends Component<TransferRateDetailsProps> {
         </div>
       </div>
     );
-  }
+  };
 
-  render() {
-    return (
-      <div className="client-stats__rates">
-        {this.getCurrentTransferRate('download', {showHoverDuration: true})}
-        {this.getCurrentTransferRate('upload')}
-      </div>
-    );
-  }
-}
+  return (
+    <div className="client-stats__rates">
+      {getCurrentTransferRate('download', {showHoverDuration: true})}
+      {getCurrentTransferRate('upload')}
+    </div>
+  );
+});
 
-export default injectIntl(TransferRateDetails);
+export default TransferRateDetails;

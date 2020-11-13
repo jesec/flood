@@ -1,15 +1,15 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, MouseEvent, ReactNode} from 'react';
 
 export interface OverlayProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
   additionalClassNames?: string;
   isInteractive?: boolean;
   isTransparent?: boolean;
-  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
-const Overlay: React.FC<OverlayProps> = ({
+const Overlay: FC<OverlayProps> = ({
   children,
   additionalClassNames,
   onClick,

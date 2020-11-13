@@ -1,6 +1,6 @@
 import classnames from 'classnames';
+import {FC} from 'react';
 import {useIntl} from 'react-intl';
-import * as React from 'react';
 
 import Checkmark from '../icons/Checkmark';
 import LoadingIndicator from './LoadingIndicator';
@@ -15,7 +15,7 @@ interface LoadingOverlayProps {
   dependencies?: Dependencies;
 }
 
-const LoadingOverlay: React.FC<LoadingOverlayProps> = (props: LoadingOverlayProps) => {
+const LoadingOverlay: FC<LoadingOverlayProps> = (props: LoadingOverlayProps) => {
   const {dependencies} = props;
 
   return (

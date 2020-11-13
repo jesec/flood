@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import {LongPressDetectEvents, useLongPress} from 'use-long-press';
+import {CSSProperties, FC, MouseEvent, TouchEvent, useRef, useState} from 'react';
 import {observer} from 'mobx-react';
-import * as React from 'react';
+import {useLongPress} from 'react-use';
 
 import SettingStore from '../../stores/SettingStore';
 import torrentStatusClasses from '../../util/torrentStatusClasses';
@@ -11,17 +11,17 @@ import TorrentListRowCondensed from './TorrentListRowCondensed';
 import TorrentListRowExpanded from './TorrentListRowExpanded';
 
 interface TorrentListRowProps {
-  style: React.CSSProperties;
+  style: CSSProperties;
   hash: string;
-  handleClick: (hash: string, event: React.MouseEvent) => void;
-  handleDoubleClick: (hash: string, event: React.MouseEvent) => void;
-  handleRightClick: (hash: string, event: React.MouseEvent | React.TouchEvent) => void;
+  handleClick: (hash: string, event: MouseEvent) => void;
+  handleDoubleClick: (hash: string, event: MouseEvent) => void;
+  handleRightClick: (hash: string, event: MouseEvent | TouchEvent) => void;
 }
 
-const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProps) => {
+const TorrentListRow: FC<TorrentListRowProps> = observer((props: TorrentListRowProps) => {
   const {style, hash, handleClick, handleDoubleClick, handleRightClick} = props;
-  const [rowLocation, setRowLocation] = React.useState<number>(0);
-  const rowRef = React.createRef<HTMLLIElement>();
+  const [rowLocation, setRowLocation] = useState<number>(0);
+  const rowRef = useRef<HTMLLIElement>(null);
 
   const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
 
@@ -36,21 +36,19 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
     'torrent',
   );
 
-  const longPressBind = useLongPress(
+  const {onTouchStart, onTouchEnd} = useLongPress(
     (e) => {
       if (e != null && rowRef.current?.getBoundingClientRect().top === rowLocation) {
-        handleRightClick(hash, e);
+        handleRightClick(hash, (e as unknown) as TouchEvent);
       }
     },
-    {
-      captureEvent: true,
-      detect: LongPressDetectEvents.TOUCH,
-      onStart: () => {
-        setRowLocation(rowRef.current?.getBoundingClientRect().top || 0);
-      },
-      onFinish: (e) => ((e as unknown) as TouchEvent)?.preventDefault(),
-    },
+    {isPreventDefault: true},
   );
+
+  const onTouchStartHooked = (e: TouchEvent) => {
+    setRowLocation(rowRef.current?.getBoundingClientRect().top || 0);
+    onTouchStart(e);
+  };
 
   if (isCondensed) {
     return (
@@ -62,8 +60,8 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
         handleClick={handleClick}
         handleDoubleClick={handleDoubleClick}
         handleRightClick={handleRightClick}
-        handleTouchStart={longPressBind.onTouchStart}
-        handleTouchEnd={longPressBind.onTouchEnd}
+        handleTouchStart={onTouchStartHooked}
+        handleTouchEnd={onTouchEnd}
       />
     );
   }
@@ -77,10 +75,10 @@ const TorrentListRow: React.FC<TorrentListRowProps> = (props: TorrentListRowProp
       handleClick={handleClick}
       handleDoubleClick={handleDoubleClick}
       handleRightClick={handleRightClick}
-      handleTouchStart={longPressBind.onTouchStart}
-      handleTouchEnd={longPressBind.onTouchEnd}
+      handleTouchStart={onTouchStartHooked}
+      handleTouchEnd={onTouchEnd}
     />
   );
-};
+});
 
-export default observer(TorrentListRow);
+export default TorrentListRow;

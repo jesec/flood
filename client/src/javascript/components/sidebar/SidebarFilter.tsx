@@ -1,6 +1,6 @@
 import classnames from 'classnames';
+import {FC} from 'react';
 import {useIntl} from 'react-intl';
-import * as React from 'react';
 
 import Badge from '../general/Badge';
 
@@ -13,7 +13,7 @@ interface SidebarFilterProps {
   handleClick: (slug: string) => void;
 }
 
-const SidebarFilter: React.FC<SidebarFilterProps> = (props: SidebarFilterProps) => {
+const SidebarFilter: FC<SidebarFilterProps> = (props: SidebarFilterProps) => {
   const {isActive, count, slug, icon, handleClick} = props;
   const intl = useIntl();
 

@@ -1,5 +1,5 @@
+import {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
-import * as React from 'react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -27,7 +27,7 @@ interface SortDropdownProps {
   onSortChange: (sortBy: FloodSettings['sortTorrents']) => void;
 }
 
-const SortDropdown: React.FC<SortDropdownProps> = (props: SortDropdownProps) => {
+const SortDropdown: FC<SortDropdownProps> = (props: SortDropdownProps) => {
   const {direction, selectedProperty, onSortChange} = props;
   const intl = useIntl();
 
@@ -75,11 +75,9 @@ const SortDropdown: React.FC<SortDropdownProps> = (props: SortDropdownProps) => 
           return;
         }
 
-        let nextDirection = direction;
+        let nextDirection: 'asc' | 'desc' = 'asc';
         if (selectedProperty === property) {
           nextDirection = direction === 'asc' ? 'desc' : 'asc';
-        } else {
-          nextDirection = 'asc';
         }
 
         onSortChange({direction: nextDirection, property});

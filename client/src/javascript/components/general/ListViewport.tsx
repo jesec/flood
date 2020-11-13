@@ -1,66 +1,63 @@
+import {ComponentProps, FC, forwardRef, RefCallback, UIEvent, useEffect, useRef} from 'react';
 import {FixedSizeList} from 'react-window';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
-import {useMediaQuery} from '@react-hook/media-query';
-import {useWindowSize} from '@react-hook/window-size';
-import * as React from 'react';
+import {useMedia, useWindowSize} from 'react-use';
 
 import type {ListChildComponentProps} from 'react-window';
 
-const Overflow = React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(
-  (props: React.ComponentProps<'div'>, ref) => {
-    const {children, className, onScroll} = props;
-    const osRef = React.useRef<OverlayScrollbarsComponent>(null);
+const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: ComponentProps<'div'>, ref) => {
+  const {children, className, onScroll} = props;
+  const osRef = useRef<OverlayScrollbarsComponent>(null);
 
-    React.useEffect(() => {
-      const scrollbarRef = osRef.current;
+  useEffect(() => {
+    const scrollbarRef = osRef.current;
 
-      if (scrollbarRef == null) {
-        return () => {
-          // do nothing.
-        };
-      }
-
-      const viewport = scrollbarRef.osInstance()?.getElements().viewport as HTMLDivElement;
-
-      const refCallback = ref as React.RefCallback<HTMLDivElement>;
-      refCallback(viewport);
-
-      if (onScroll) {
-        viewport.addEventListener('scroll', (e) => onScroll((e as unknown) as React.UIEvent<HTMLDivElement>), {
-          passive: true,
-        });
-      }
-
+    if (scrollbarRef == null) {
       return () => {
-        if (onScroll) {
-          viewport.removeEventListener('scroll', (e) => onScroll((e as unknown) as React.UIEvent<HTMLDivElement>));
-        }
+        // do nothing.
       };
-    }, [onScroll]);
+    }
 
-    return (
-      <OverlayScrollbarsComponent
-        {...props}
-        options={{scrollbars: {autoHide: 'leave', clickScrolling: true}, className}}
-        ref={osRef}>
-        {children}
-      </OverlayScrollbarsComponent>
-    );
-  },
-);
+    const viewport = scrollbarRef.osInstance()?.getElements().viewport as HTMLDivElement;
+
+    const refCallback = ref as RefCallback<HTMLDivElement>;
+    refCallback(viewport);
+
+    if (onScroll) {
+      viewport.addEventListener('scroll', (e) => onScroll((e as unknown) as UIEvent<HTMLDivElement>), {
+        passive: true,
+      });
+    }
+
+    return () => {
+      if (onScroll) {
+        viewport.removeEventListener('scroll', (e) => onScroll((e as unknown) as UIEvent<HTMLDivElement>));
+      }
+    };
+  }, [onScroll]);
+
+  return (
+    <OverlayScrollbarsComponent
+      {...props}
+      options={{scrollbars: {autoHide: 'leave', clickScrolling: true}, className}}
+      ref={osRef}>
+      {children}
+    </OverlayScrollbarsComponent>
+  );
+});
 
 interface ListViewportProps {
   className: string;
-  itemRenderer: React.FC<ListChildComponentProps>;
+  itemRenderer: FC<ListChildComponentProps>;
   itemSize: number;
   listLength: number;
-  outerRef?: React.RefCallback<HTMLDivElement>;
+  outerRef?: RefCallback<HTMLDivElement>;
 }
 
-const ListViewport = React.forwardRef<FixedSizeList, ListViewportProps>((props: ListViewportProps, ref) => {
+const ListViewport = forwardRef<FixedSizeList, ListViewportProps>((props: ListViewportProps, ref) => {
   const {className, itemRenderer, itemSize, listLength, outerRef} = props;
-  const [windowWidth, windowHeight] = useWindowSize();
-  const isDarkTheme = useMediaQuery('(prefers-color-scheme: dark)');
+  const {height: windowHeight, width: windowWidth} = useWindowSize();
+  const isDarkTheme = useMedia('(prefers-color-scheme: dark)');
 
   return (
     <FixedSizeList

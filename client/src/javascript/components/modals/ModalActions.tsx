@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {FC} from 'react';
 
 import {Button, Checkbox} from '../../ui';
 import UIActions from '../../actions/UIActions';
@@ -9,7 +9,7 @@ interface ModalActionsProps {
   actions: Array<ModalAction>;
 }
 
-const ModalActions: React.FC<ModalActionsProps> = (props: ModalActionsProps) => {
+const ModalActions: FC<ModalActionsProps> = (props: ModalActionsProps) => {
   const {actions} = props;
 
   const buttons = actions.map((action, index) => {

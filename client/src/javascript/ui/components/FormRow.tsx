@@ -1,14 +1,14 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 interface FormRowProps {
-  children: React.ReactNode;
+  children: ReactNode;
   align?: 'start' | 'center' | 'end';
   justify?: 'start' | 'center' | 'end';
   wrap?: boolean;
 }
 
-const FormRow: React.FC<FormRowProps> = ({children, align, justify, wrap}: FormRowProps) => {
+const FormRow: FC<FormRowProps> = ({children, align, justify, wrap}: FormRowProps) => {
   const classes = classnames('form__row', {
     'form__row--wrap': wrap,
     [`form__row--justify--${justify}`]: justify,

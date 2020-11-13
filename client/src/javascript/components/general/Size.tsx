@@ -1,5 +1,5 @@
+import {FC} from 'react';
 import {FormattedNumber, useIntl} from 'react-intl';
-import * as React from 'react';
 
 import {compute, getTranslationString} from '../../util/size';
 
@@ -18,7 +18,7 @@ interface SizeProps {
   className?: string;
 }
 
-const Size: React.FC<SizeProps> = ({value, isSpeed, className, precision}: SizeProps) => {
+const Size: FC<SizeProps> = ({value, isSpeed, className, precision}: SizeProps) => {
   const computed = compute(value, precision);
   const intl = useIntl();
 

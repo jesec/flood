@@ -1,6 +1,6 @@
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import AuthStore from '../stores/AuthStore';
 import ConfigStore from '../stores/ConfigStore';
@@ -11,13 +11,13 @@ import WindowTitle from './general/WindowTitle';
 import LoadingOverlay from './general/LoadingOverlay';
 
 interface AppWrapperProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const AppWrapper: React.FC<AppWrapperProps> = (props: AppWrapperProps) => {
+const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
   const {children} = props;
 
-  let overlay: React.ReactNode = null;
+  let overlay: ReactNode = null;
   if (!AuthStore.isAuthenticating || (AuthStore.isAuthenticated && !UIStore.haveUIDependenciesResolved)) {
     overlay = <LoadingOverlay dependencies={UIStore.dependencies} />;
   }
@@ -45,6 +45,6 @@ const AppWrapper: React.FC<AppWrapperProps> = (props: AppWrapperProps) => {
       {children}
     </div>
   );
-};
+});
 
-export default observer(AppWrapper);
+export default AppWrapper;

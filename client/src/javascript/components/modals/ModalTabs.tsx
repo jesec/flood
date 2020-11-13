@@ -1,10 +1,10 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, ReactNode, ReactNodeArray} from 'react';
 
 export interface Tab {
   id?: string;
-  label: React.ReactNode;
-  content: React.ReactNode | React.FunctionComponent;
+  label: ReactNode;
+  content: ReactNode | FC;
   props?: Record<string, unknown>;
   modalContentClasses?: string;
 }
@@ -15,10 +15,10 @@ interface ModalTabsProps {
   onTabChange: (tab: Tab) => void;
 }
 
-const ModalTabs: React.FC<ModalTabsProps> = (props: ModalTabsProps) => {
+const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
   const {activeTabId, tabs = {}, onTabChange} = props;
 
-  const tabNodes: React.ReactNodeArray = Object.keys(tabs).map((tabId) => {
+  const tabNodes: ReactNodeArray = Object.keys(tabs).map((tabId) => {
     const currentTab = tabs[tabId];
 
     currentTab.id = tabId;

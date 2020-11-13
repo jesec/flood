@@ -1,10 +1,10 @@
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 interface ModalFormSectionHeaderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const ModalFormSectionHeader: React.FC<ModalFormSectionHeaderProps> = ({children}: ModalFormSectionHeaderProps) => {
+const ModalFormSectionHeader: FC<ModalFormSectionHeaderProps> = ({children}: ModalFormSectionHeaderProps) => {
   return <h2 className="h4">{children}</h2>;
 };
 

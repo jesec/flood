@@ -1,12 +1,12 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 interface ApplicationViewProps {
-  children: React.ReactNode;
+  children: ReactNode;
   modifier?: string;
 }
 
-const ApplicationView: React.FC<ApplicationViewProps> = (props: ApplicationViewProps) => {
+const ApplicationView: FC<ApplicationViewProps> = (props: ApplicationViewProps) => {
   const {children, modifier} = props;
 
   const classes = classnames('application__view', {

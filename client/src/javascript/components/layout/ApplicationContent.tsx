@@ -1,10 +1,10 @@
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 interface ApplicationContentProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const ApplicationContent: React.FC<ApplicationContentProps> = ({children}: ApplicationContentProps) => {
+const ApplicationContent: FC<ApplicationContentProps> = ({children}: ApplicationContentProps) => {
   return <div className="application__content">{children}</div>;
 };
 

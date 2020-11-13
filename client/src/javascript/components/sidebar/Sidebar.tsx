@@ -1,3 +1,4 @@
+import {FC} from 'react';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 
 import DiskUsage from './DiskUsage';
@@ -13,7 +14,7 @@ import TagFilters from './TagFilters';
 import TrackerFilters from './TrackerFilters';
 import TransferData from './TransferData';
 
-const Sidebar = () => {
+const Sidebar: FC = () => {
   return (
     <OverlayScrollbarsComponent
       options={{

@@ -1,10 +1,10 @@
+import {FC} from 'react';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import Modal from '../Modal';
 import UIStore from '../../../stores/UIStore';
 
-const ConfirmModal: React.FC = () => {
+const ConfirmModal: FC = observer(() => {
   if (UIStore.activeModal?.id !== 'confirm') {
     return null;
   }
@@ -19,6 +19,6 @@ const ConfirmModal: React.FC = () => {
       heading={heading}
     />
   );
-};
+});
 
-export default observer(ConfirmModal);
+export default ConfirmModal;

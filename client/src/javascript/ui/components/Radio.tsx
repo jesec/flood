@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {FC} from 'react';
 
 import Circle from '../icons/Circle';
 import ToggleInput from './ToggleInput';
@@ -10,7 +10,7 @@ type RadioProps = Omit<ToggleInputProps, 'icon' | 'id' | 'type' | 'value'> & {
   groupID: Required<ToggleInputProps['groupID']>;
 };
 
-const Radio: React.FC<RadioProps> = (props: RadioProps) => {
+const Radio: FC<RadioProps> = (props: RadioProps) => {
   const {groupID, id} = props;
   return <ToggleInput {...props} icon={<Circle />} id={groupID} type="radio" value={id} />;
 };

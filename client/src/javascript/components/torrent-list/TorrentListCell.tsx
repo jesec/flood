@@ -1,6 +1,6 @@
 import classnames from 'classnames';
+import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
@@ -14,33 +14,29 @@ import type {TorrentListColumn} from '../../constants/TorrentListColumns';
 interface TorrentListCellProps {
   hash: string;
   column: TorrentListColumn;
-  content?: (torrent: TorrentProperties, column: TorrentListColumn) => React.ReactNode;
+  content?: (torrent: TorrentProperties, column: TorrentListColumn) => ReactNode;
   className?: string;
   classNameOverride?: boolean;
   width?: number;
   showIcon?: boolean;
 }
 
-const TorrentListCell: React.FC<TorrentListCellProps> = ({
-  hash,
-  content,
-  column,
-  className,
-  classNameOverride,
-  width,
-  showIcon,
-}: TorrentListCellProps) => {
-  const icon = showIcon ? torrentPropertyIcons[column] : null;
+const TorrentListCell: FC<TorrentListCellProps> = observer(
+  ({hash, content, column, className, classNameOverride, width, showIcon}: TorrentListCellProps) => {
+    const icon = showIcon ? torrentPropertyIcons[column] : null;
 
-  return (
-    <div
-      className={classNameOverride ? className : classnames('torrent__detail', `torrent__detail--${column}`, className)}
-      style={{width: `${width}px`}}>
-      {icon}
-      {content?.(TorrentStore.torrents[hash], column) || <DetailNotAvailableIcon />}
-    </div>
-  );
-};
+    return (
+      <div
+        className={
+          classNameOverride ? className : classnames('torrent__detail', `torrent__detail--${column}`, className)
+        }
+        style={{width: `${width}px`}}>
+        {icon}
+        {content?.(TorrentStore.torrents[hash], column) || <DetailNotAvailableIcon />}
+      </div>
+    );
+  },
+);
 
 TorrentListCell.defaultProps = {
   className: undefined,
@@ -50,4 +46,4 @@ TorrentListCell.defaultProps = {
   showIcon: false,
 };
 
-export default observer(TorrentListCell);
+export default TorrentListCell;

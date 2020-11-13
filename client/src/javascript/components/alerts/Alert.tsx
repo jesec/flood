@@ -1,6 +1,6 @@
+import {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
-import * as React from 'react';
 
 import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
 import CircleExclamationIcon from '../icons/CircleExclamationIcon';
@@ -11,7 +11,7 @@ interface AlertProps {
   type?: 'success' | 'error';
 }
 
-const Alert: React.FC<AlertProps> = (props: AlertProps) => {
+const Alert: FC<AlertProps> = (props: AlertProps) => {
   const {id, count, type} = props;
 
   const alertClasses = classnames('alert', {

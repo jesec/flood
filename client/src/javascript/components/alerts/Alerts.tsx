@@ -1,11 +1,11 @@
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import {FC} from 'react';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import Alert from './Alert';
 import AlertStore from '../../stores/AlertStore';
 
-const Alerts: React.FC = () => {
+const Alerts: FC = observer(() => {
   const {alerts, accumulation} = AlertStore;
 
   const sortedAlerts = Object.keys(alerts)
@@ -33,6 +33,6 @@ const Alerts: React.FC = () => {
       ) : null}
     </TransitionGroup>
   );
-};
+});
 
-export default observer(Alerts);
+export default Alerts;

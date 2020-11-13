@@ -1,4 +1,4 @@
-import {lazy, Component} from 'react';
+import {FC, lazy, useEffect} from 'react';
 
 import ActionBar from '../torrent-list/ActionBar';
 import ApplicationContent from '../layout/ApplicationContent';
@@ -13,24 +13,24 @@ import 'overlayscrollbars/css/OverlayScrollbars.css';
 const Alerts = lazy(() => import('../alerts/Alerts'));
 const Modals = lazy(() => import('../modals/Modals'));
 
-export default class TorrentClientOverview extends Component {
-  async componentDidMount() {
+const TorrentClientOverview: FC = () => {
+  useEffect(() => {
     FloodActions.startActivityStream();
-  }
+  }, []);
 
-  render() {
-    return (
-      <ApplicationView>
-        <Sidebar />
-        <ApplicationContent>
-          <ApplicationPanel modifier="torrent-list" className="view--torrent-list">
-            <ActionBar />
-            <TorrentList />
-          </ApplicationPanel>
-          <Modals />
-          <Alerts />
-        </ApplicationContent>
-      </ApplicationView>
-    );
-  }
-}
+  return (
+    <ApplicationView>
+      <Sidebar />
+      <ApplicationContent>
+        <ApplicationPanel modifier="torrent-list" className="view--torrent-list">
+          <ActionBar />
+          <TorrentList />
+        </ApplicationPanel>
+        <Modals />
+        <Alerts />
+      </ApplicationContent>
+    </ApplicationView>
+  );
+};
+
+export default TorrentClientOverview;

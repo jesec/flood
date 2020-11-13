@@ -1,14 +1,14 @@
+import {FC, ReactNode} from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as React from 'react';
 
 import formatUtil from '@shared/util/formatUtil';
 
 interface DurationProps {
-  suffix?: React.ReactNode;
+  suffix?: ReactNode;
   value: number;
 }
 
-const Duration: React.FC<DurationProps> = (props: DurationProps) => {
+const Duration: FC<DurationProps> = (props: DurationProps) => {
   const {suffix, value} = props;
 
   if (value == null) {

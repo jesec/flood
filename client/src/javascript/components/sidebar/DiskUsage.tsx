@@ -1,6 +1,6 @@
+import {FC, ReactNode, ReactNodeArray} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import type {Disk} from '@shared/types/DiskUsage';
 
@@ -11,11 +11,11 @@ import ProgressBar from '../general/ProgressBar';
 import SettingStore from '../../stores/SettingStore';
 
 interface DiskUsageTooltipItemProps {
-  label: React.ReactNode;
+  label: ReactNode;
   value: number;
 }
 
-const DiskUsageTooltipItem: React.FC<DiskUsageTooltipItemProps> = ({label, value}: DiskUsageTooltipItemProps) => {
+const DiskUsageTooltipItem: FC<DiskUsageTooltipItemProps> = ({label, value}: DiskUsageTooltipItemProps) => {
   return (
     <li className="diskusage__details-list__item">
       <label className="diskusage__details-list__label">{label}</label>
@@ -24,7 +24,7 @@ const DiskUsageTooltipItem: React.FC<DiskUsageTooltipItemProps> = ({label, value
   );
 };
 
-const DiskUsage: React.FC = () => {
+const DiskUsage: FC = observer(() => {
   const {disks} = DiskUsageStore;
   const {mountPoints} = SettingStore.floodSettings;
 
@@ -39,7 +39,7 @@ const DiskUsage: React.FC = () => {
     };
   }, {});
 
-  const diskNodes: React.ReactNodeArray = mountPoints
+  const diskNodes: ReactNodeArray = mountPoints
     .filter((target) => target in diskMap)
     .map((target) => diskMap[target])
     .map((d) => {
@@ -77,6 +77,6 @@ const DiskUsage: React.FC = () => {
       {diskNodes}
     </ul>
   );
-};
+});
 
-export default observer(DiskUsage);
+export default DiskUsage;

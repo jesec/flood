@@ -1,11 +1,11 @@
+import {FC} from 'react';
 import {useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import {compute, getTranslationString} from '../../util/size';
 import TransferDataStore from '../../stores/TransferDataStore';
 
-const WindowTitle: React.FC = () => {
+const WindowTitle: FC = observer(() => {
   const {transferSummary: summary} = TransferDataStore;
   const intl = useIntl();
 
@@ -41,6 +41,6 @@ const WindowTitle: React.FC = () => {
   document.title = title;
 
   return null;
-};
+});
 
-export default observer(WindowTitle);
+export default WindowTitle;

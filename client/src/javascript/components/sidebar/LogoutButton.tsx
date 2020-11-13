@@ -1,3 +1,4 @@
+import {FC} from 'react';
 import {useIntl} from 'react-intl';
 
 import AuthActions from '../../actions/AuthActions';
@@ -5,12 +6,12 @@ import ConfigStore from '../../stores/ConfigStore';
 import Logout from '../icons/Logout';
 import Tooltip from '../general/Tooltip';
 
-const LogoutButton = () => {
+const LogoutButton: FC = () => {
+  const intl = useIntl();
+
   if (ConfigStore.authMethod === 'none') {
     return null;
   }
-
-  const intl = useIntl();
 
   return (
     <Tooltip

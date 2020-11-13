@@ -1,5 +1,5 @@
+import {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as React from 'react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -11,7 +11,7 @@ interface DiskUsageTabProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
 }
 
-const DiskUsageTab: React.FC<DiskUsageTabProps> = (props: DiskUsageTabProps) => {
+const DiskUsageTab: FC<DiskUsageTabProps> = (props: DiskUsageTabProps) => {
   return (
     <Form>
       <ModalFormSectionHeader>

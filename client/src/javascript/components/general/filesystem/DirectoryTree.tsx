@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {FC, ReactNode} from 'react';
 
 import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
@@ -16,17 +16,17 @@ interface DirectoryTreeProps {
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
 
-const DirectoryTree: React.FC<DirectoryTreeProps> = (props: DirectoryTreeProps) => {
+const DirectoryTree: FC<DirectoryTreeProps> = (props: DirectoryTreeProps) => {
   const {depth = 0, itemsTree, hash, path, onItemSelect} = props;
   const {files, directories} = itemsTree;
   const childDepth = depth + 1;
 
-  const directoryNodes: Array<React.ReactNode> =
+  const directoryNodes: Array<ReactNode> =
     directories != null
       ? Object.keys(directories)
           .sort((a, b) => a.localeCompare(b))
           .map(
-            (directoryName, index): React.ReactNode => {
+            (directoryName, index): ReactNode => {
               const subSelectedItems = itemsTree.directories && itemsTree.directories[directoryName];
 
               const id = `${index}${childDepth}${directoryName}`;
@@ -53,7 +53,7 @@ const DirectoryTree: React.FC<DirectoryTreeProps> = (props: DirectoryTreeProps) 
           )
       : [];
 
-  const fileList: React.ReactNode =
+  const fileList: ReactNode =
     files != null && Object.keys(files).length > 0 ? (
       <DirectoryFileList
         depth={childDepth}
