@@ -52,16 +52,18 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
       ) : null}
       <Dropzone
         onDrop={(addedFiles: Array<File>) => {
+          const processedFiles: ProcessedFiles = [];
           addedFiles.forEach((file) => {
             const reader = new FileReader();
             reader.onload = (e) => {
               if (e.target?.result != null && typeof e.target.result === 'string') {
-                setFiles(
-                  files.concat({
-                    name: file.name,
-                    data: e.target.result.split('base64,')[1],
-                  }),
-                );
+                processedFiles.push({
+                  name: file.name,
+                  data: e.target.result.split('base64,')[1],
+                });
+              }
+              if (processedFiles.length === addedFiles.length) {
+                setFiles(processedFiles);
               }
             };
             reader.readAsDataURL(file);
