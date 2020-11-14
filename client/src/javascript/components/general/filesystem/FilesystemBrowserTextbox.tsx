@@ -26,7 +26,7 @@ interface FilesystemBrowserTextboxStates {
 
 class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxProps, FilesystemBrowserTextboxStates> {
   formRowRef = React.createRef<HTMLDivElement>();
-  textboxRef: HTMLInputElement | null = null;
+  textboxRef = React.createRef<HTMLInputElement>();
 
   constructor(props: FilesystemBrowserTextboxProps) {
     super(props);
@@ -77,11 +77,11 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
   /* eslint-disable react/sort-comp */
   handleDestinationInputChange = debounce(
     () => {
-      if (this.textboxRef == null) {
+      if (this.textboxRef.current == null) {
         return;
       }
 
-      const destination = this.textboxRef.value;
+      const destination = this.textboxRef.current.value;
 
       if (this.props.onChange) {
         this.props.onChange(destination);
@@ -105,8 +105,8 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
   };
 
   handleItemSelection = (destination: string, isDirectory = true) => {
-    if (this.textboxRef != null) {
-      this.textboxRef.value = destination;
+    if (this.textboxRef.current != null) {
+      this.textboxRef.current.value = destination;
     }
     this.setState({destination, isDirectoryListOpen: isDirectory});
   };
@@ -178,9 +178,7 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
             placeholder={intl.formatMessage({
               id: 'torrents.add.destination.placeholder',
             })}
-            setRef={(ref) => {
-              this.textboxRef = ref;
-            }}>
+            ref={this.textboxRef}>
             <FormElementAddon onClick={this.handleDirectoryListButtonClick}>
               <Search />
             </FormElementAddon>

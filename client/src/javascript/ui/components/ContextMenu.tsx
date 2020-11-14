@@ -1,6 +1,6 @@
 import CSSTransition from 'react-transition-group/CSSTransition';
 import classnames from 'classnames';
-import {CSSProperties, forwardRef, MouseEvent, ReactNode} from 'react';
+import {CSSProperties, forwardRef, MouseEvent, ReactNode, RefObject} from 'react';
 
 import Overlay from './Overlay';
 import transitionTimeouts from '../constants/transitionTimeouts';
@@ -18,7 +18,7 @@ interface ContextMenuProps {
     x: number;
     y: number;
   };
-  triggerRef?: Element | null;
+  triggerRef?: RefObject<Element>;
   matchTriggerWidth?: boolean;
   padding?: boolean;
   scrolling?: boolean;
@@ -47,8 +47,8 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     const dropdownStyle: CSSProperties = {};
     let shouldRenderAbove = false;
 
-    if (triggerRef) {
-      const buttonBoundingRect = triggerRef.getBoundingClientRect();
+    if (triggerRef?.current) {
+      const buttonBoundingRect = triggerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       const spaceAbove = buttonBoundingRect.top;
       const spaceBelow = windowHeight - buttonBoundingRect.bottom;

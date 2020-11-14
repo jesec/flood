@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {Children, cloneElement, forwardRef, ReactElement} from 'react';
 
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
@@ -8,40 +8,23 @@ import type {FormRowItemProps} from './FormRowItem';
 
 type TextboxProps = Pick<
   React.InputHTMLAttributes<HTMLInputElement>,
-  'defaultValue' | 'placeholder' | 'onChange' | 'onClick' | 'autoComplete'
+  'children' | 'defaultValue' | 'placeholder' | 'onChange' | 'onClick' | 'autoComplete'
 > & {
   id: string;
   label?: React.ReactNode;
   type?: 'text' | 'password';
   width?: FormRowItemProps['width'];
-  setRef?: React.Ref<HTMLInputElement>;
   addonPlacement?: 'before' | 'after';
   labelOffset?: boolean;
   wrapperClassName?: string;
 };
 
-export default class Textbox extends React.Component<TextboxProps> {
-  static defaultProps = {
-    type: 'text',
-  };
-
-  getLabel(): React.ReactNode {
-    const {id, label} = this.props;
-
-    if (label) {
-      return (
-        <label className="form__element__label" htmlFor={id}>
-          {label}
-        </label>
-      );
-    }
-    return undefined;
-  }
-
-  render() {
-    const {
+const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
+  (
+    {
       children,
       id,
+      label,
       addonPlacement,
       labelOffset,
       wrapperClassName,
@@ -50,17 +33,17 @@ export default class Textbox extends React.Component<TextboxProps> {
       placeholder,
       autoComplete,
       type,
-      setRef,
       onChange,
       onClick,
-    } = this.props;
-
+    }: TextboxProps,
+    ref,
+  ) => {
     let addonCount = 0;
-    const childElements = React.Children.map(children, (child) => {
-      const childAsElement = child as React.ReactElement;
+    const childElements = Children.map(children, (child) => {
+      const childAsElement = child as ReactElement;
       if (childAsElement && childAsElement.type === FormElementAddon) {
         addonCount += 1;
-        return React.cloneElement(childAsElement, {
+        return cloneElement(childAsElement, {
           addonIndex: addonCount,
           addonPlacement,
         });
@@ -78,7 +61,11 @@ export default class Textbox extends React.Component<TextboxProps> {
 
     return (
       <FormRowItem width={width}>
-        {this.getLabel()}
+        {label ?? (
+          <label className="form__element__label" htmlFor={id}>
+            {label}
+          </label>
+        )}
         <div className={wrapperClasses}>
           <input
             className={inputClasses}
@@ -87,7 +74,7 @@ export default class Textbox extends React.Component<TextboxProps> {
             name={id}
             onChange={onChange}
             onClick={onClick}
-            ref={setRef}
+            ref={ref}
             tabIndex={0}
             type={type}
             autoComplete={autoComplete}
@@ -96,5 +83,16 @@ export default class Textbox extends React.Component<TextboxProps> {
         </div>
       </FormRowItem>
     );
-  }
-}
+  },
+);
+
+Textbox.defaultProps = {
+  label: undefined,
+  type: 'text',
+  width: undefined,
+  addonPlacement: undefined,
+  labelOffset: undefined,
+  wrapperClassName: undefined,
+};
+
+export default Textbox;

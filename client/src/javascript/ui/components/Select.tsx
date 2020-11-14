@@ -41,9 +41,9 @@ interface SelectStates {
 export default class Select extends Component<SelectProps, SelectStates> {
   menuRef = createRef<HTMLDivElement>();
 
-  inputRef: HTMLInputElement | null = null;
+  inputRef = createRef<HTMLInputElement>();
 
-  triggerRef: HTMLButtonElement | null = null;
+  triggerRef = createRef<HTMLButtonElement>();
 
   static defaultProps = {
     persistentPlaceholder: false,
@@ -167,9 +167,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
     return (
       <Button
         additionalClassNames="select__button"
-        buttonRef={(ref) => {
-          this.triggerRef = ref;
-        }}
+        buttonRef={this.triggerRef}
         addonPlacement="after"
         onClick={this.handleTriggerClick}
         priority={priority}
@@ -194,8 +192,8 @@ export default class Select extends Component<SelectProps, SelectStates> {
         this.props.onSelect(id);
       }
 
-      if (this.inputRef) {
-        dispatchChangeEvent(this.inputRef);
+      if (this.inputRef.current) {
+        dispatchChangeEvent(this.inputRef.current);
       }
     });
   };
@@ -258,9 +256,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
             name={`${id}`}
             onChange={noop}
             tabIndex={-1}
-            ref={(ref) => {
-              this.inputRef = ref;
-            }}
+            ref={this.inputRef}
             type="text"
             value={selectedID}
           />

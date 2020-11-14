@@ -1,7 +1,8 @@
 import classnames from 'classnames';
-import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {forwardRef, MutableRefObject, ReactNodeArray, useRef, useState} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
+import {useEnsuredForwardedRef} from 'react-use';
 
 import TorrentListColumns, {TorrentListColumn} from '../../constants/TorrentListColumns';
 import SettingStore from '../../stores/SettingStore';
@@ -12,153 +13,132 @@ const pointerDownStyles = `
   * { cursor: col-resize !important; }
 `;
 
-interface TableHeadingProps extends WrappedComponentProps {
+interface TableHeadingProps {
   onCellClick: (column: TorrentListColumn) => void;
   onWidthsChange: (column: TorrentListColumn, width: number) => void;
-  setRef?: React.RefCallback<HTMLDivElement>;
 }
 
-@observer
-class TableHeading extends React.Component<TableHeadingProps> {
-  focusedCell: TorrentListColumn | null = null;
-  focusedCellWidth: number | null = null;
-  isPointerDown = false;
-  lastPointerX: number | null = null;
-  tableHeading: HTMLDivElement | null = null;
-  resizeLine: HTMLDivElement | null = null;
+const TableHeading = observer(
+  forwardRef<HTMLDivElement, TableHeadingProps>(({onCellClick, onWidthsChange}: TableHeadingProps, ref) => {
+    const [isPointerDown, setIsPointerDown] = useState<boolean>(false);
 
-  getHeadingElements() {
-    const {intl, onCellClick} = this.props;
+    const focusedCell = useRef<TorrentListColumn>();
+    const focusedCellWidth = useRef<number>();
+    const lastPointerX = useRef<number>();
+    const tableHeading = useEnsuredForwardedRef<HTMLDivElement>(ref as MutableRefObject<HTMLDivElement>);
+    const resizeLine = useRef<HTMLDivElement>(null);
 
-    return SettingStore.floodSettings.torrentListColumns.reduce((accumulator: React.ReactNodeArray, {id, visible}) => {
-      if (!visible) {
-        return accumulator;
+    const intl = useIntl();
+
+    const handlePointerMove = (event: PointerEvent) => {
+      let widthDelta = 0;
+      if (lastPointerX.current != null) {
+        widthDelta = event.clientX - lastPointerX.current;
       }
 
-      const labelID = TorrentListColumns[id]?.id;
-      if (labelID == null) {
-        return accumulator;
+      let nextCellWidth = 20;
+      if (focusedCellWidth.current != null) {
+        nextCellWidth = focusedCellWidth.current + widthDelta;
       }
 
-      let handle = null;
-      const width = SettingStore.floodSettings.torrentListColumnWidths[id] || 100;
+      if (nextCellWidth > 20) {
+        focusedCellWidth.current = nextCellWidth;
+        lastPointerX.current = event.clientX;
+        if (resizeLine.current != null && tableHeading.current != null) {
+          resizeLine.current.style.transform = `translate(${Math.max(0, event.clientX)}px, ${
+            tableHeading.current.getBoundingClientRect().top
+          }px)`;
+        }
+      }
+    };
 
-      if (!this.isPointerDown) {
-        handle = (
-          <span
-            className="table__heading__handle"
-            onPointerDown={(event) => {
-              this.handlePointerDown(event, id, width);
-            }}
-          />
-        );
+    const handlePointerUp = () => {
+      UIStore.removeGlobalStyle(pointerDownStyles);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointermove', handlePointerMove);
+
+      setIsPointerDown(false);
+      lastPointerX.current = undefined;
+
+      if (resizeLine.current != null) {
+        resizeLine.current.style.opacity = '0';
       }
 
-      const isSortActive = id === SettingStore.floodSettings.sortTorrents.property;
-      const classes = classnames('table__cell table__heading', {
-        'table__heading--is-sorted': isSortActive,
-        [`table__heading--direction--${SettingStore.floodSettings.sortTorrents.direction}`]: isSortActive,
-      });
-
-      accumulator.push(
-        <div className={classes} key={id} onClick={() => onCellClick(id)} style={{width: `${width}px`}}>
-          <span
-            className="table__heading__label"
-            title={intl.formatMessage({
-              id: labelID,
-            })}>
-            <FormattedMessage id={labelID} />
-          </span>
-          {handle}
-        </div>,
-      );
-
-      return accumulator;
-    }, []);
-  }
-
-  handlePointerMove = (event: PointerEvent) => {
-    let widthDelta = 0;
-    if (this.lastPointerX != null) {
-      widthDelta = event.clientX - this.lastPointerX;
-    }
-
-    let nextCellWidth = 20;
-    if (this.focusedCellWidth != null) {
-      nextCellWidth = this.focusedCellWidth + widthDelta;
-    }
-
-    if (nextCellWidth > 20) {
-      this.focusedCellWidth = nextCellWidth;
-      this.lastPointerX = event.clientX;
-      if (this.resizeLine != null && this.tableHeading != null) {
-        this.resizeLine.style.transform = `translate(${Math.max(0, event.clientX)}px, ${
-          this.tableHeading.getBoundingClientRect().top
-        }px)`;
+      if (focusedCell.current != null && focusedCellWidth.current != null) {
+        onWidthsChange(focusedCell.current, focusedCellWidth.current);
       }
-    }
-  };
 
-  handlePointerUp = () => {
-    UIStore.removeGlobalStyle(pointerDownStyles);
-    global.document.removeEventListener('pointerup', this.handlePointerUp);
-    global.document.removeEventListener('pointermove', (e) => this.handlePointerMove(e));
-
-    this.isPointerDown = false;
-    this.lastPointerX = null;
-
-    if (this.resizeLine != null) {
-      this.resizeLine.style.opacity = '0';
-    }
-
-    if (this.focusedCell != null && this.focusedCellWidth != null) {
-      this.props.onWidthsChange(this.focusedCell, this.focusedCellWidth);
-    }
-
-    this.focusedCell = null;
-    this.focusedCellWidth = null;
-  };
-
-  handlePointerDown = (event: React.PointerEvent, slug: TorrentListColumn, width: number) => {
-    if (!this.isPointerDown && this.resizeLine != null && this.tableHeading != null) {
-      global.document.addEventListener('pointerup', this.handlePointerUp);
-      global.document.addEventListener('pointermove', this.handlePointerMove);
-      UIStore.addGlobalStyle(pointerDownStyles);
-
-      this.focusedCell = slug;
-      this.focusedCellWidth = width;
-      this.isPointerDown = true;
-      this.lastPointerX = event.clientX;
-      this.resizeLine.style.transform = `translate(${Math.max(0, event.clientX)}px, ${
-        this.tableHeading.getBoundingClientRect().top
-      }px)`;
-      this.resizeLine.style.opacity = '1';
-    }
-  };
-
-  render() {
-    const {setRef} = this.props;
+      focusedCell.current = undefined;
+      focusedCellWidth.current = undefined;
+    };
 
     return (
-      <div
-        className="table__row table__row--heading"
-        ref={(ref) => {
-          this.tableHeading = ref;
-          if (setRef != null) {
-            setRef(ref);
+      <div className="table__row table__row--heading" ref={tableHeading}>
+        {SettingStore.floodSettings.torrentListColumns.reduce((accumulator: ReactNodeArray, {id, visible}) => {
+          if (!visible) {
+            return accumulator;
           }
-        }}>
-        {this.getHeadingElements()}
+
+          const labelID = TorrentListColumns[id]?.id;
+          if (labelID == null) {
+            return accumulator;
+          }
+
+          let handle = null;
+          const width = SettingStore.floodSettings.torrentListColumnWidths[id] || 100;
+
+          if (!isPointerDown) {
+            handle = (
+              <span
+                className="table__heading__handle"
+                onPointerDown={(event) => {
+                  if (!isPointerDown && resizeLine.current != null && tableHeading.current != null) {
+                    setIsPointerDown(true);
+
+                    focusedCell.current = id;
+                    focusedCellWidth.current = width;
+                    lastPointerX.current = event.clientX;
+
+                    window.addEventListener('pointerup', handlePointerUp);
+                    window.addEventListener('pointermove', handlePointerMove);
+                    UIStore.addGlobalStyle(pointerDownStyles);
+
+                    resizeLine.current.style.transform = `translate(${Math.max(0, event.clientX)}px, ${
+                      tableHeading.current.getBoundingClientRect().top
+                    }px)`;
+                    resizeLine.current.style.opacity = '1';
+                  }
+                }}
+              />
+            );
+          }
+
+          const isSortActive = id === SettingStore.floodSettings.sortTorrents.property;
+          const classes = classnames('table__cell table__heading', {
+            'table__heading--is-sorted': isSortActive,
+            [`table__heading--direction--${SettingStore.floodSettings.sortTorrents.direction}`]: isSortActive,
+          });
+
+          accumulator.push(
+            <div className={classes} key={id} onClick={() => onCellClick(id)} style={{width: `${width}px`}}>
+              <span
+                className="table__heading__label"
+                title={intl.formatMessage({
+                  id: labelID,
+                })}>
+                <FormattedMessage id={labelID} />
+              </span>
+              {handle}
+            </div>,
+          );
+
+          return accumulator;
+        }, [])}
         <div className="table__cell table__heading table__heading--fill" />
-        <div
-          className="table__heading__resize-line"
-          ref={(ref) => {
-            this.resizeLine = ref;
-          }}
-        />
+        <div className="table__heading__resize-line" ref={resizeLine} />
       </div>
     );
-  }
-}
+  }),
+);
 
-export default injectIntl(TableHeading);
+export default TableHeading;

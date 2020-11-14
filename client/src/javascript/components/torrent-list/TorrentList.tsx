@@ -93,7 +93,7 @@ const getEmptyTorrentListNotification = (): ReactNode => {
 
 @observer
 class TorrentList extends Component<WrappedComponentProps> {
-  listHeaderRef: HTMLDivElement | null = null;
+  listHeaderRef = createRef<HTMLDivElement>();
   listViewportRef = createRef<FixedSizeList>();
 
   torrentListViewportSize = observable.object<{width: number; height: number}>({
@@ -123,8 +123,8 @@ class TorrentList extends Component<WrappedComponentProps> {
   };
 
   handleViewportScroll = (scrollLeft: number) => {
-    if (this.listHeaderRef != null) {
-      this.listHeaderRef.scrollLeft = scrollLeft;
+    if (this.listHeaderRef.current != null) {
+      this.listHeaderRef.current.scrollLeft = scrollLeft;
     }
   };
 
@@ -168,9 +168,7 @@ class TorrentList extends Component<WrappedComponentProps> {
               SettingActions.saveSetting('sortTorrents', sortBy);
             }}
             onWidthsChange={this.handleColumnWidthChange}
-            setRef={(ref) => {
-              this.listHeaderRef = ref;
-            }}
+            ref={this.listHeaderRef}
           />
         );
       }

@@ -23,7 +23,7 @@ interface TagSelectStates {
 export default class TagSelect extends React.Component<TagSelectProps, TagSelectStates> {
   formRowRef = React.createRef<HTMLDivElement>();
   menuRef = React.createRef<HTMLDivElement>();
-  textboxRef: HTMLInputElement | null = null;
+  textboxRef = React.createRef<HTMLInputElement>();
 
   tagMenuItems = Object.keys(TorrentFilterStore.taxonomy.tagCounts).reduce((accumulator: React.ReactNodeArray, tag) => {
     if (tag === '') {
@@ -115,8 +115,8 @@ export default class TagSelect extends React.Component<TagSelectProps, TagSelect
     }
 
     this.setState({selectedTags}, () => {
-      if (this.textboxRef != null) {
-        this.textboxRef.value = selectedTags.join();
+      if (this.textboxRef.current != null) {
+        this.textboxRef.current.value = selectedTags.join();
       }
     });
   };
@@ -161,9 +161,7 @@ export default class TagSelect extends React.Component<TagSelectProps, TagSelect
             addonPlacement="after"
             defaultValue={defaultValue}
             placeholder={placeholder}
-            setRef={(ref) => {
-              this.textboxRef = ref;
-            }}>
+            ref={this.textboxRef}>
             <FormElementAddon onClick={this.toggleOpenState} className="select__indicator">
               <Chevron />
             </FormElementAddon>
