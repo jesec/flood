@@ -73,14 +73,12 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
     'torrent',
   );
 
-  const {onTouchStart, onTouchEnd} = useLongPress(
-    (e) => {
-      if (e != null && rowRef.current?.getBoundingClientRect().top === rowLocation) {
-        displayContextMenu(hash, (e as unknown) as TouchEvent);
-      }
-    },
-    {isPreventDefault: true},
-  );
+  const {onTouchStart, onTouchEnd} = useLongPress((e) => {
+    const curRowLocation = rowRef.current?.getBoundingClientRect().top;
+    if (e != null && curRowLocation != null && Math.abs(curRowLocation - rowLocation) < 25) {
+      displayContextMenu(hash, (e as unknown) as TouchEvent);
+    }
+  });
 
   const onTouchStartHooked = (e: TouchEvent) => {
     if (!TorrentStore.selectedTorrents.includes(hash)) {
