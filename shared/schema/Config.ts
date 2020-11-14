@@ -76,7 +76,7 @@ export const configSchema = object({
   // CLI argument: --proxy
   // Used for development only. Not used in production.
   // See the "Local Development" section of README.md for detail.
-  floodServerProxy: string().url(),
+  floodServerProxy: string().url().optional(),
 
   // CLI argument: --maxhistorystates
   // Flood keeps a history of torrent download and upload speeds.
@@ -107,7 +107,7 @@ export const configSchema = object({
 
   // CLI argument: --ssl
   // Configuration for SSL, if using SSL with the Flood service directly. [default: false]
-  ssl: boolean(),
+  ssl: boolean().optional(),
 
   // CLI argument: --sslkey
   // Path to the SSL private key. [default: '<rundir>/key.pem']

@@ -31,7 +31,7 @@ const normalizePort = (val: string | number): string | number => {
 const startWebServer = () => {
   const port = normalizePort(config.floodServerPort);
   const host = config.floodServerHost;
-  const useSSL = config.ssl;
+  const useSSL = config.ssl ?? false;
 
   app.set('port', port);
   app.set('host', host);
