@@ -61,11 +61,11 @@ const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
 
     return (
       <FormRowItem width={width}>
-        {label ?? (
+        {label != null ? (
           <label className="form__element__label" htmlFor={id}>
             {label}
           </label>
-        )}
+        ) : undefined}
         <div className={wrapperClasses}>
           <input
             className={inputClasses}
