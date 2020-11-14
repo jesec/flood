@@ -7,12 +7,14 @@ export interface OverlayProps {
   isInteractive?: boolean;
   isTransparent?: boolean;
   onClick?: (event: MouseEvent<HTMLDivElement>) => void;
+  onContextMenu?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 const Overlay: FC<OverlayProps> = ({
   children,
   additionalClassNames,
   onClick,
+  onContextMenu,
   isInteractive,
   isTransparent,
 }: OverlayProps) => {
@@ -22,7 +24,7 @@ const Overlay: FC<OverlayProps> = ({
   });
 
   return (
-    <div className={classes} onClickCapture={onClick}>
+    <div className={classes} onClickCapture={onClick} onContextMenuCapture={onContextMenu}>
       {children}
     </div>
   );

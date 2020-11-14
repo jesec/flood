@@ -25,6 +25,7 @@ interface ContextMenuProps {
   overlayProps?: OverlayProps;
   onClick?: (event: MouseEvent<HTMLDivElement>) => void;
   onOverlayClick?: (event: MouseEvent<HTMLDivElement>) => void;
+  onOverlayRightClick?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
 const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
@@ -40,6 +41,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       triggerCoordinates,
       onClick,
       onOverlayClick,
+      onOverlayRightClick,
       overlayProps,
     }: ContextMenuProps,
     ref,
@@ -123,6 +125,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
           <Overlay
             additionalClassNames="context-menu__overlay"
             onClick={onOverlayClick}
+            onContextMenu={onOverlayRightClick}
             isTransparent
             {...overlayProps}
           />
@@ -148,6 +151,7 @@ ContextMenu.defaultProps = {
   },
   onClick: undefined,
   onOverlayClick: undefined,
+  onOverlayRightClick: undefined,
 };
 
 export default ContextMenu;
