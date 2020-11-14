@@ -15,9 +15,10 @@ interface TagSelectProps {
   label?: ReactNode;
   defaultValue?: TorrentProperties['tags'];
   placeholder?: string;
+  onTagSelected?: (tags: TorrentProperties['tags']) => void;
 }
 
-const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label}: TagSelectProps) => {
+const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, onTagSelected}: TagSelectProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedTags, setSelectedTags] = useState<Array<string>>(defaultValue ?? []);
   const formRowRef = useRef<HTMLDivElement>(null);
@@ -51,7 +52,10 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label}: T
     if (textboxRef.current != null) {
       textboxRef.current.value = selectedTags.join();
     }
-  }, [selectedTags]);
+    if (onTagSelected) {
+      onTagSelected(selectedTags);
+    }
+  }, [selectedTags, onTagSelected]);
 
   return (
     <FormRowItem ref={formRowRef}>
@@ -62,6 +66,24 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label}: T
           id={id || 'tags'}
           addonPlacement="after"
           defaultValue={defaultValue}
+          onChange={() => {
+            if (textboxRef.current != null) {
+              let selectedTagsArray = textboxRef.current.value
+                .split(',')
+                .map((tag) => tag.trim())
+                .filter((tag) => tag.length > 0);
+
+              if (textboxRef.current.value.trimEnd().endsWith(',')) {
+                // Ensures that the trailing ',' does not get removed automatically.
+                selectedTagsArray.push('');
+
+                // Deduplicate
+                selectedTagsArray = [...new Set(selectedTagsArray)];
+              }
+
+              setSelectedTags(selectedTagsArray);
+            }
+          }}
           placeholder={placeholder}
           ref={textboxRef}>
           <FormElementAddon
@@ -82,30 +104,33 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label}: T
               overlayProps={{isInteractive: false}}
               ref={menuRef}
               triggerRef={textboxRef}>
-              {Object.keys(TorrentFilterStore.taxonomy.tagCounts).reduce((accumulator: ReactNodeArray, tag) => {
-                if (tag === '') {
-                  return accumulator;
-                }
+              {[...new Set([...Object.keys(TorrentFilterStore.taxonomy.tagCounts), ...selectedTags])].reduce(
+                (accumulator: ReactNodeArray, tag) => {
+                  if (tag === '') {
+                    return accumulator;
+                  }
 
-                accumulator.push(
-                  <SelectItem
-                    id={tag}
-                    key={tag}
-                    isSelected={selectedTags.includes(tag)}
-                    onClick={() => {
-                      if (tag === 'untagged') {
-                        setSelectedTags([]);
-                      } else if (selectedTags.includes(tag)) {
-                        setSelectedTags(selectedTags.filter((key) => key !== tag));
-                      } else {
-                        setSelectedTags([...selectedTags, tag]);
-                      }
-                    }}>
-                    {tag === 'untagged' ? <FormattedMessage id="filter.untagged" /> : tag}
-                  </SelectItem>,
-                );
-                return accumulator;
-              }, [])}
+                  accumulator.push(
+                    <SelectItem
+                      id={tag}
+                      key={tag}
+                      isSelected={selectedTags.includes(tag)}
+                      onClick={() => {
+                        if (tag === 'untagged') {
+                          setSelectedTags([]);
+                        } else if (selectedTags.includes(tag)) {
+                          setSelectedTags(selectedTags.filter((key) => key !== tag && key !== ''));
+                        } else {
+                          setSelectedTags([...selectedTags.filter((key) => key !== ''), tag]);
+                        }
+                      }}>
+                      {tag === 'untagged' ? <FormattedMessage id="filter.untagged" /> : tag}
+                    </SelectItem>,
+                  );
+                  return accumulator;
+                },
+                [],
+              )}
             </ContextMenu>
           </Portal>
         </Textbox>
@@ -119,6 +144,7 @@ TagSelect.defaultProps = {
   label: undefined,
   defaultValue: undefined,
   placeholder: undefined,
+  onTagSelected: undefined,
 };
 
 export default TagSelect;
