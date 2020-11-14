@@ -55,9 +55,9 @@ interface TorrentListRowProps {
   style: CSSProperties;
 }
 
-const TorrentListRow: FC<TorrentListRowProps> = observer((props: TorrentListRowProps) => {
-  const {hash, style} = props;
+const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: TorrentListRowProps) => {
   const [rowLocation, setRowLocation] = useState<number>(0);
+  const shouldDisplayTorrentDetails = useRef<boolean>(false);
   const rowRef = useRef<HTMLLIElement>(null);
 
   const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
@@ -83,10 +83,17 @@ const TorrentListRow: FC<TorrentListRowProps> = observer((props: TorrentListRowP
   );
 
   const onTouchStartHooked = (e: TouchEvent) => {
-    if (TorrentStore.selectedTorrents.includes(hash)) {
+    if (!TorrentStore.selectedTorrents.includes(hash)) {
+      selectTorrent(hash, e);
+    }
+
+    if (shouldDisplayTorrentDetails.current) {
       displayTorrentDetails(hash);
     } else {
-      selectTorrent(hash, e);
+      shouldDisplayTorrentDetails.current = true;
+      setTimeout(() => {
+        shouldDisplayTorrentDetails.current = false;
+      }, 200);
     }
 
     setRowLocation(rowRef.current?.getBoundingClientRect().top || 0);
