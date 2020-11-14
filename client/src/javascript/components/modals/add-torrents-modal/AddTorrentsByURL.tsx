@@ -5,6 +5,7 @@ import AddTorrentsActions from './AddTorrentsActions';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import {Form, FormRow} from '../../../ui';
 import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
+import SettingStore from '../../../stores/SettingStore';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 import TorrentActions from '../../../actions/TorrentActions';
@@ -24,8 +25,10 @@ type AddTorrentsByURLFormData = {
 
 const AddTorrentsByURL: FC = () => {
   const formRef = useRef<Form>(null);
-  const intl = useIntl();
+  const textboxRef = useRef<HTMLInputElement>(null);
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
+
+  const intl = useIntl();
 
   return (
     <Form className="inverse" ref={formRef}>
@@ -50,23 +53,33 @@ const AddTorrentsByURL: FC = () => {
           id: 'torrents.add.cookies.input.placeholder',
         })}
       />
-      <FilesystemBrowserTextbox
-        id="destination"
-        label={intl.formatMessage({
-          id: 'torrents.add.destination.label',
-        })}
-        selectable="directories"
-        showBasePathToggle
-        showCompletedToggle
-      />
       <FormRow>
         <TagSelect
           id="tags"
           label={intl.formatMessage({
             id: 'torrents.add.tags',
           })}
+          onTagSelected={(tags) => {
+            if (textboxRef.current != null) {
+              const suggestedPath = SettingStore.floodSettings.torrentDestinations?.[tags[0]];
+              if (typeof suggestedPath === 'string' && textboxRef.current != null) {
+                textboxRef.current.value = suggestedPath;
+                textboxRef.current.dispatchEvent(new Event('input', {bubbles: true}));
+              }
+            }
+          }}
         />
       </FormRow>
+      <FilesystemBrowserTextbox
+        id="destination"
+        label={intl.formatMessage({
+          id: 'torrents.add.destination.label',
+        })}
+        ref={textboxRef}
+        selectable="directories"
+        showBasePathToggle
+        showCompletedToggle
+      />
       <AddTorrentsActions
         onAddTorrentsClick={() => {
           if (formRef.current == null) {
@@ -93,7 +106,7 @@ const AddTorrentsByURL: FC = () => {
               }
             : undefined;
 
-          const tags = formData.tags != null ? formData.tags.split(',') : undefined;
+          const tags = formData.tags != null ? formData.tags.split(',').filter((tag) => tag.length > 0) : undefined;
 
           TorrentActions.addTorrentsByUrls({
             urls: urls as [string, ...string[]],
