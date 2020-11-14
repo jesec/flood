@@ -5,11 +5,11 @@ import fs from 'fs';
 import path from 'path';
 
 import {AccessLevel} from '../../shared/schema/constants/Auth';
-
-import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
-
 import config from '../../config';
 import services from '../services';
+
+import type {ClientConnectionSettings} from '../../shared/schema/ClientConnectionSettings';
+import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
 
 class Users {
   db = Users.loadDatabase();
@@ -17,7 +17,7 @@ class Users {
     _id: '_config',
     username: '_config',
     password: '',
-    client: config.configUser,
+    client: config.configUser as ClientConnectionSettings,
     level: AccessLevel.ADMINISTRATOR,
   };
 

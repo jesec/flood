@@ -1,6 +1,6 @@
 # Flood
 
-[![Flood logo](flood.png)](https://flood.js.org)
+[![Flood logo](https://github.com/jesec/flood/raw/master/flood.png)](https://flood.js.org)
 
 [![Github Actions build status badge](https://github.com/jesec/flood/workflows/Build/badge.svg?branch=master&event=push)](https://github.com/jesec/flood/actions) [![Crowdin](https://badges.crowdin.net/flood/localized.svg)](https://crowdin.com/project/flood) [![Discord server badge](https://img.shields.io/discord/418267176873623553.svg?style=flat-square)](https://discord.gg/Z7yR5Uf)
 
@@ -44,7 +44,7 @@ By default, Flood uses a command line configuration interface. If you installed 
 
 Run `flood --help`, `npx flood --help` or `npm run start -- --help` to get help about command line arguments.
 
-If you want to know more about configurations, check `config.d.ts`.
+If you want to know more about configurations, check [shared/schema/Config.ts](https://github.com/jesec/flood/blob/master/shared/schema/Config.ts).
 
 When Flood's builtin user management is enabled (default), you will be prompted to configure the connection to rTorrent when loading the web interface.
 

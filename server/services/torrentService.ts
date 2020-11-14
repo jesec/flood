@@ -53,7 +53,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   }
 
   deferFetchTorrentList() {
-    this.pollTimeout = setTimeout(this.fetchTorrentList, this.pollInterval || 2000);
+    this.pollTimeout = setTimeout(this.fetchTorrentList, this.pollInterval);
   }
 
   destroy() {

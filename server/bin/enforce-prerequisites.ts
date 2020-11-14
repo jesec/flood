@@ -2,8 +2,9 @@ import fs from 'fs';
 import glob from 'glob';
 import path from 'path';
 
-import {secret} from '../../config';
 import {appDist} from '../../shared/config/paths';
+import config from '../../config';
+import {configSchema} from '../../shared/schema/Config';
 
 const staticAssets = [path.join(appDist, 'index.html')];
 
@@ -46,8 +47,16 @@ const enforcePrerequisites = () =>
       return;
     }
 
+    // Ensures that there is a proper configuration
+    const result = configSchema.safeParse(config);
+    if (!result.success) {
+      console.error(result.error.message);
+      reject(new Error('Invalid configuration.'));
+      return;
+    }
+
     // Ensures that server secret is not served to user
-    if (grepRecursive(appDist, secret)) {
+    if (grepRecursive(appDist, config.secret)) {
       reject(new Error(`Secret is included in static assets. Please ensure that secret is unique.`));
       return;
     }

@@ -93,7 +93,7 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     };
   }
 
-  deferFetchTransferSummary(interval = config.torrentClientPollInterval || 2000) {
+  deferFetchTransferSummary(interval = config.torrentClientPollInterval) {
     this.pollTimeout = setTimeout(this.fetchCurrentTransferSummary, interval);
   }
 
@@ -166,7 +166,7 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
   };
 
   handleFetchTransferSummaryError = () => {
-    let nextInterval = config.torrentClientPollInterval || 2000;
+    let nextInterval = config.torrentClientPollInterval;
 
     // If more than 2 consecutive errors have occurred, then we delay the next request.
     this.errorCount += 1;
