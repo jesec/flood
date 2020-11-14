@@ -93,9 +93,6 @@ const getEmptyTorrentListNotification = (): ReactNode => {
   );
 };
 
-const handleClick = (hash: string, event: MouseEvent) => UIActions.handleTorrentClick({hash, event});
-const handleDoubleClick = (hash: string) => TorrentListContextMenu.handleDetailsClick(hash);
-
 @observer
 class TorrentList extends Component<WrappedComponentProps> {
   listHeaderRef: HTMLDivElement | null = null;
@@ -112,16 +109,7 @@ class TorrentList extends Component<WrappedComponentProps> {
     reaction(() => TorrentFilterStore.filters, this.handleTorrentFilterChange);
   }
 
-  handleColumnWidthChange = (column: TorrentListColumn, width: number) => {
-    const {torrentListColumnWidths = defaultFloodSettings.torrentListColumnWidths} = SettingStore.floodSettings;
-
-    SettingActions.saveSetting('torrentListColumnWidths', {
-      ...torrentListColumnWidths,
-      [column]: width,
-    });
-  };
-
-  handleContextMenuClick = (hash: string, event: MouseEvent | TouchEvent) => {
+  displayContextMenu = (hash: string, event: MouseEvent | TouchEvent) => {
     if (event.cancelable === true) {
       event.preventDefault();
     }
@@ -151,6 +139,15 @@ class TorrentList extends Component<WrappedComponentProps> {
 
         return !torrentContextMenuActions.some((action) => action.id === item.action && action.visible === false);
       }),
+    });
+  };
+
+  handleColumnWidthChange = (column: TorrentListColumn, width: number) => {
+    const {torrentListColumnWidths = defaultFloodSettings.torrentListColumnWidths} = SettingStore.floodSettings;
+
+    SettingActions.saveSetting('torrentListColumnWidths', {
+      ...torrentListColumnWidths,
+      [column]: width,
     });
   };
 
@@ -220,16 +217,7 @@ class TorrentList extends Component<WrappedComponentProps> {
           itemRenderer={({index, style}) => {
             const {hash} = TorrentStore.filteredTorrents[index];
 
-            return (
-              <TorrentListRow
-                handleClick={handleClick}
-                handleDoubleClick={handleDoubleClick}
-                handleRightClick={this.handleContextMenuClick}
-                key={hash}
-                style={style}
-                hash={hash}
-              />
-            );
+            return <TorrentListRow key={hash} style={style} hash={hash} displayContextMenu={this.displayContextMenu} />;
           }}
           itemSize={isCondensed ? 30 : 70}
           listLength={torrents.length}

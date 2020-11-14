@@ -7,19 +7,22 @@ import SettingStore from '../../stores/SettingStore';
 import torrentStatusClasses from '../../util/torrentStatusClasses';
 import TorrentStore from '../../stores/TorrentStore';
 
+import TorrentListContextMenu from './TorrentListContextMenu';
 import TorrentListRowCondensed from './TorrentListRowCondensed';
 import TorrentListRowExpanded from './TorrentListRowExpanded';
+import UIActions from '../../actions/UIActions';
+
+const displayTorrentDetails = (hash: string) => TorrentListContextMenu.handleDetailsClick(hash);
+const selectTorrent = (hash: string, event: MouseEvent | TouchEvent) => UIActions.handleTorrentClick({hash, event});
 
 interface TorrentListRowProps {
-  style: CSSProperties;
   hash: string;
-  handleClick: (hash: string, event: MouseEvent) => void;
-  handleDoubleClick: (hash: string, event: MouseEvent) => void;
-  handleRightClick: (hash: string, event: MouseEvent | TouchEvent) => void;
+  style: CSSProperties;
+  displayContextMenu: (hash: string, event: MouseEvent | TouchEvent) => void;
 }
 
 const TorrentListRow: FC<TorrentListRowProps> = observer((props: TorrentListRowProps) => {
-  const {style, hash, handleClick, handleDoubleClick, handleRightClick} = props;
+  const {hash, style, displayContextMenu} = props;
   const [rowLocation, setRowLocation] = useState<number>(0);
   const rowRef = useRef<HTMLLIElement>(null);
 
@@ -39,14 +42,21 @@ const TorrentListRow: FC<TorrentListRowProps> = observer((props: TorrentListRowP
   const {onTouchStart, onTouchEnd} = useLongPress(
     (e) => {
       if (e != null && rowRef.current?.getBoundingClientRect().top === rowLocation) {
-        handleRightClick(hash, (e as unknown) as TouchEvent);
+        displayContextMenu(hash, (e as unknown) as TouchEvent);
       }
     },
     {isPreventDefault: true},
   );
 
   const onTouchStartHooked = (e: TouchEvent) => {
+    if (TorrentStore.selectedTorrents.includes(hash)) {
+      displayTorrentDetails(hash);
+    } else {
+      selectTorrent(hash, e);
+    }
+
     setRowLocation(rowRef.current?.getBoundingClientRect().top || 0);
+
     onTouchStart(e);
   };
 
@@ -57,9 +67,9 @@ const TorrentListRow: FC<TorrentListRowProps> = observer((props: TorrentListRowP
         ref={rowRef}
         style={style}
         hash={hash}
-        handleClick={handleClick}
-        handleDoubleClick={handleDoubleClick}
-        handleRightClick={handleRightClick}
+        handleClick={selectTorrent}
+        handleDoubleClick={displayTorrentDetails}
+        handleRightClick={displayContextMenu}
         handleTouchStart={onTouchStartHooked}
         handleTouchEnd={onTouchEnd}
       />
@@ -72,9 +82,9 @@ const TorrentListRow: FC<TorrentListRowProps> = observer((props: TorrentListRowP
       ref={rowRef}
       style={style}
       hash={hash}
-      handleClick={handleClick}
-      handleDoubleClick={handleDoubleClick}
-      handleRightClick={handleRightClick}
+      handleClick={selectTorrent}
+      handleDoubleClick={displayTorrentDetails}
+      handleRightClick={displayContextMenu}
       handleTouchStart={onTouchStartHooked}
       handleTouchEnd={onTouchEnd}
     />
