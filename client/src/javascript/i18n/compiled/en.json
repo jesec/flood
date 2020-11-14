@@ -287,6 +287,12 @@
       "value": "crwdns2966:0crwdne2966:0"
     }
   ],
+  "button.ok": [
+    {
+      "type": 0,
+      "value": "crwdns3680:0crwdne3680:0"
+    }
+  ],
   "button.retry": [
     {
       "type": 0,

@@ -383,6 +383,12 @@
       "value": "لا"
     }
   ],
+  "button.ok": [
+    {
+      "type": 0,
+      "value": "OK"
+    }
+  ],
   "button.retry": [
     {
       "type": 0,
