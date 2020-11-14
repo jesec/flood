@@ -1,5 +1,4 @@
-import {IntlShape} from 'react-intl';
-import * as React from 'react';
+import {createRef, RefObject} from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
@@ -12,25 +11,16 @@ import UIActions from '../../actions/UIActions';
 
 import type {ContextMenuItem} from '../../stores/UIStore';
 import type {PriorityMeterType} from '../general/filesystem/PriorityMeter';
-import type {TorrentContextMenuAction} from '../../constants/TorrentContextMenuActions';
 
-const priorityMeterRef: React.RefObject<PriorityMeterType> = React.createRef();
+const priorityMeterRef: RefObject<PriorityMeterType> = createRef();
 let prioritySelected = 1;
 
-const handleDetailsClick = (hash: string): void => {
-  UIActions.displayModal({
-    id: 'torrent-details',
-    hash,
-  });
-};
-
-const handleTorrentDownload = (torrent: TorrentProperties, event: React.MouseEvent): void => {
-  event.preventDefault();
+const handleTorrentDownload = (hash: TorrentProperties['hash']): void => {
   const {baseURI} = ConfigStore;
   const link = document.createElement('a');
 
   link.download = '';
-  link.href = `${baseURI}api/torrents/${torrent.hash}/contents/all/data`;
+  link.href = `${baseURI}api/torrents/${hash}/contents/all/data`;
   link.style.display = 'none';
 
   document.body.appendChild(link);
@@ -38,83 +28,45 @@ const handleTorrentDownload = (torrent: TorrentProperties, event: React.MouseEve
   document.body.removeChild(link);
 };
 
-const handleItemClick = (action: TorrentContextMenuAction, event: React.MouseEvent): void => {
-  const {selectedTorrents} = TorrentStore;
-  switch (action) {
-    case 'checkHash':
-      TorrentActions.checkHash({
-        hashes: selectedTorrents,
-      });
-      break;
-    case 'setTaxonomy':
-      UIActions.displayModal({id: 'set-taxonomy'});
-      break;
-    case 'setTrackers':
-      UIActions.displayModal({id: 'set-trackers'});
-      break;
-    case 'start':
-      TorrentActions.startTorrents({
-        hashes: selectedTorrents,
-      });
-      break;
-    case 'stop':
-      TorrentActions.stopTorrents({
-        hashes: selectedTorrents,
-      });
-      break;
-    case 'remove':
-      UIActions.displayModal({id: 'remove-torrents'});
-      break;
-    case 'move':
-      UIActions.displayModal({id: 'move-torrents'});
-      break;
-    case 'torrentDetails':
-      handleDetailsClick(selectedTorrents[selectedTorrents.length - 1]);
-      break;
-    case 'torrentDownload':
-      handleTorrentDownload(TorrentStore.torrents[selectedTorrents[selectedTorrents.length - 1]], event);
-      break;
-    case 'setPriority':
-      if (priorityMeterRef.current != null) {
-        priorityMeterRef.current.handleClick();
-      }
-      TorrentActions.setPriority({
-        hashes: selectedTorrents,
-        priority: prioritySelected,
-      });
-      break;
-    default:
-      break;
-  }
-};
-
-const getContextMenuItems = (intl: IntlShape, torrent: TorrentProperties): Array<ContextMenuItem> => {
-  const clickHandler = handleItemClick;
-
+const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem> => {
   return [
     {
       type: 'action',
       action: 'start',
-      label: intl.formatMessage(TorrentContextMenuActions.start),
-      clickHandler,
+      label: TorrentContextMenuActions.start.id,
+      clickHandler: () => {
+        TorrentActions.startTorrents({
+          hashes: TorrentStore.selectedTorrents,
+        });
+      },
     },
     {
       type: 'action',
       action: 'stop',
-      label: intl.formatMessage(TorrentContextMenuActions.stop),
-      clickHandler,
+      label: TorrentContextMenuActions.stop.id,
+      clickHandler: () => {
+        TorrentActions.stopTorrents({
+          hashes: TorrentStore.selectedTorrents,
+        });
+      },
     },
     {
       type: 'action',
       action: 'remove',
-      label: intl.formatMessage(TorrentContextMenuActions.remove),
-      clickHandler,
+      label: TorrentContextMenuActions.remove.id,
+      clickHandler: () => {
+        UIActions.displayModal({id: 'remove-torrents'});
+      },
     },
     {
       type: 'action',
       action: 'checkHash',
-      label: intl.formatMessage(TorrentContextMenuActions.checkHash),
-      clickHandler,
+      label: TorrentContextMenuActions.checkHash.id,
+      clickHandler: () => {
+        TorrentActions.checkHash({
+          hashes: TorrentStore.selectedTorrents,
+        });
+      },
     },
     {
       type: 'separator',
@@ -122,20 +74,26 @@ const getContextMenuItems = (intl: IntlShape, torrent: TorrentProperties): Array
     {
       type: 'action',
       action: 'setTaxonomy',
-      label: intl.formatMessage(TorrentContextMenuActions.setTaxonomy),
-      clickHandler,
+      label: TorrentContextMenuActions.setTaxonomy.id,
+      clickHandler: () => {
+        UIActions.displayModal({id: 'set-taxonomy'});
+      },
     },
     {
       type: 'action',
       action: 'move',
-      label: intl.formatMessage(TorrentContextMenuActions.move),
-      clickHandler,
+      label: TorrentContextMenuActions.move.id,
+      clickHandler: () => {
+        UIActions.displayModal({id: 'move-torrents'});
+      },
     },
     {
       type: 'action',
       action: 'setTrackers',
-      label: intl.formatMessage(TorrentContextMenuActions.setTrackers),
-      clickHandler,
+      label: TorrentContextMenuActions.setTrackers.id,
+      clickHandler: () => {
+        UIActions.displayModal({id: 'set-trackers'});
+      },
     },
     {
       type: 'separator',
@@ -143,20 +101,38 @@ const getContextMenuItems = (intl: IntlShape, torrent: TorrentProperties): Array
     {
       type: 'action',
       action: 'torrentDetails',
-      label: intl.formatMessage(TorrentContextMenuActions.torrentDetails),
-      clickHandler,
+      label: TorrentContextMenuActions.torrentDetails.id,
+      clickHandler: () => {
+        const {selectedTorrents} = TorrentStore;
+        UIActions.displayModal({
+          id: 'torrent-details',
+          hash: selectedTorrents[selectedTorrents.length - 1],
+        });
+      },
     },
     {
       type: 'action',
       action: 'torrentDownload',
-      label: intl.formatMessage(TorrentContextMenuActions.torrentDownload),
-      clickHandler,
+      label: TorrentContextMenuActions.torrentDownload.id,
+      clickHandler: (e) => {
+        const {selectedTorrents} = TorrentStore;
+        e.preventDefault();
+        handleTorrentDownload(selectedTorrents[selectedTorrents.length - 1]);
+      },
     },
     {
       type: 'action',
       action: 'setPriority',
-      label: intl.formatMessage(TorrentContextMenuActions.setPriority),
-      clickHandler,
+      label: TorrentContextMenuActions.setPriority.id,
+      clickHandler: () => {
+        if (priorityMeterRef.current != null) {
+          priorityMeterRef.current.handleClick();
+        }
+        TorrentActions.setPriority({
+          hashes: TorrentStore.selectedTorrents,
+          priority: prioritySelected,
+        });
+      },
       dismissMenu: false,
       labelAction: () => (
         <PriorityMeter
@@ -179,5 +155,4 @@ const getContextMenuItems = (intl: IntlShape, torrent: TorrentProperties): Array
 
 export default {
   getContextMenuItems,
-  handleDetailsClick,
 };

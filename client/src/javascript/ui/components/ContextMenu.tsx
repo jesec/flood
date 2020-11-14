@@ -1,6 +1,6 @@
 import CSSTransition from 'react-transition-group/CSSTransition';
 import classnames from 'classnames';
-import * as React from 'react';
+import {CSSProperties, forwardRef, MouseEvent, ReactNode} from 'react';
 
 import Overlay from './Overlay';
 import transitionTimeouts from '../constants/transitionTimeouts';
@@ -11,41 +11,25 @@ const minPreferableBottomSpace = 150;
 const minPreferableHorizontalSpace = 200;
 
 interface ContextMenuProps {
+  children: ReactNode;
+  isIn: boolean;
   menuAlign?: 'left' | 'right';
   triggerCoordinates?: {
     x: number;
     y: number;
   };
   triggerRef?: Element | null;
-  setRef?: React.Ref<HTMLDivElement>;
-  overlayProps?: OverlayProps;
-  onClick?: (event: React.MouseEvent<HTMLDivElement>) => void;
-  onOverlayClick?: () => void;
   matchTriggerWidth?: boolean;
   padding?: boolean;
   scrolling?: boolean;
-  isIn?: boolean;
+  overlayProps?: OverlayProps;
+  onClick?: (event: MouseEvent<HTMLDivElement>) => void;
+  onOverlayClick?: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
-export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
-  dropdownStyle?: React.CSSProperties;
-
-  static defaultProps = {
-    matchTriggerWidth: true,
-    menuAlign: 'left',
-    overlayProps: {},
-    padding: true,
-    scrolling: true,
-  };
-
-  handleOverlayClick = () => {
-    if (this.props.onOverlayClick) {
-      this.props.onOverlayClick();
-    }
-  };
-
-  render() {
-    const {
+const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
+  (
+    {
       children,
       isIn,
       matchTriggerWidth,
@@ -54,11 +38,13 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
       scrolling,
       triggerRef,
       triggerCoordinates,
-      setRef,
       onClick,
+      onOverlayClick,
       overlayProps,
-    } = this.props;
-    const dropdownStyle: React.CSSProperties = {};
+    }: ContextMenuProps,
+    ref,
+  ) => {
+    const dropdownStyle: CSSProperties = {};
     let shouldRenderAbove = false;
 
     if (triggerRef) {
@@ -87,8 +73,6 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
       } else {
         dropdownStyle.left = buttonBoundingRect.left;
       }
-
-      this.dropdownStyle = dropdownStyle;
     } else if (triggerCoordinates) {
       const windowHeight = window.innerHeight;
       const windowWidth = window.innerWidth;
@@ -111,8 +95,6 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
       } else {
         dropdownStyle.left = triggerCoordinates.x;
       }
-
-      this.dropdownStyle = dropdownStyle;
     }
 
     const classes = classnames('context-menu__items', {
@@ -140,15 +122,32 @@ export default class ContextMenu extends React.PureComponent<ContextMenuProps> {
         <div className="context-menu" onClick={onClick}>
           <Overlay
             additionalClassNames="context-menu__overlay"
-            onClick={this.handleOverlayClick}
+            onClick={onOverlayClick}
             isTransparent
             {...overlayProps}
           />
-          <div className={classes} ref={setRef} style={dropdownStyle}>
+          <div className={classes} ref={ref} style={dropdownStyle}>
             {children}
           </div>
         </div>
       </CSSTransition>
     );
-  }
-}
+  },
+);
+
+ContextMenu.defaultProps = {
+  matchTriggerWidth: true,
+  menuAlign: 'left',
+  overlayProps: {},
+  padding: true,
+  scrolling: true,
+  triggerRef: undefined,
+  triggerCoordinates: {
+    x: 0,
+    y: 0,
+  },
+  onClick: undefined,
+  onOverlayClick: undefined,
+};
+
+export default ContextMenu;

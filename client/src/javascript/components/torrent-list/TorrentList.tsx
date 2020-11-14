@@ -1,4 +1,4 @@
-import {Component, createRef, FC, MouseEvent, ReactNode, TouchEvent} from 'react';
+import {Component, createRef, FC, ReactNode} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 import {observer} from 'mobx-react';
 import {observable, reaction} from 'mobx';
@@ -12,18 +12,16 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import {Button} from '../../ui';
 import ClientStatusStore from '../../stores/ClientStatusStore';
+import ContextMenuMountPoint from '../general/ContextMenuMountPoint';
 import Files from '../icons/Files';
-import GlobalContextMenuMountPoint from '../general/GlobalContextMenuMountPoint';
 import ListViewport from '../general/ListViewport';
 import SettingActions from '../../actions/SettingActions';
 import SettingStore from '../../stores/SettingStore';
 import TableHeading from './TableHeading';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
-import TorrentListContextMenu from './TorrentListContextMenu';
 import TorrentListRow from './TorrentListRow';
 import TorrentStore from '../../stores/TorrentStore';
-import UIActions from '../../actions/UIActions';
 
 import type {TorrentListColumn} from '../../constants/TorrentListColumns';
 
@@ -109,39 +107,6 @@ class TorrentList extends Component<WrappedComponentProps> {
     reaction(() => TorrentFilterStore.filters, this.handleTorrentFilterChange);
   }
 
-  displayContextMenu = (hash: string, event: MouseEvent | TouchEvent) => {
-    if (event.cancelable === true) {
-      event.preventDefault();
-    }
-
-    const mouseClientX = ((event as unknown) as MouseEvent).clientX;
-    const mouseClientY = ((event as unknown) as MouseEvent).clientY;
-    const touchClientX = ((event as unknown) as TouchEvent).touches?.[0].clientX;
-    const touchClientY = ((event as unknown) as TouchEvent).touches?.[0].clientY;
-
-    if (!TorrentStore.selectedTorrents.includes(hash)) {
-      UIActions.handleTorrentClick({hash, event});
-    }
-
-    const {torrentContextMenuActions = defaultFloodSettings.torrentContextMenuActions} = SettingStore.floodSettings;
-    const torrent = TorrentStore.torrents[hash];
-
-    UIActions.displayContextMenu({
-      id: 'torrent-list-item',
-      clickPosition: {
-        x: mouseClientX || touchClientX || 0,
-        y: mouseClientY || touchClientY || 0,
-      },
-      items: TorrentListContextMenu.getContextMenuItems(this.props.intl, torrent).filter((item) => {
-        if (item.type === 'separator') {
-          return true;
-        }
-
-        return !torrentContextMenuActions.some((action) => action.id === item.action && action.visible === false);
-      }),
-    });
-  };
-
   handleColumnWidthChange = (column: TorrentListColumn, width: number) => {
     const {torrentListColumnWidths = defaultFloodSettings.torrentListColumnWidths} = SettingStore.floodSettings;
 
@@ -217,7 +182,7 @@ class TorrentList extends Component<WrappedComponentProps> {
           itemRenderer={({index, style}) => {
             const {hash} = TorrentStore.filteredTorrents[index];
 
-            return <TorrentListRow key={hash} style={style} hash={hash} displayContextMenu={this.displayContextMenu} />;
+            return <TorrentListRow key={hash} style={style} hash={hash} />;
           }}
           itemSize={isCondensed ? 30 : 70}
           listLength={torrents.length}
@@ -237,7 +202,7 @@ class TorrentList extends Component<WrappedComponentProps> {
     return (
       <TorrentDropzone>
         <div className="torrent__list__wrapper">
-          <GlobalContextMenuMountPoint id="torrent-list-item" />
+          <ContextMenuMountPoint id="torrent-list-item" />
           {torrentListHeading}
           {content}
         </div>

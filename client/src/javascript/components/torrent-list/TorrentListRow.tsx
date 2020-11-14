@@ -3,26 +3,60 @@ import {CSSProperties, FC, MouseEvent, TouchEvent, useRef, useState} from 'react
 import {observer} from 'mobx-react';
 import {useLongPress} from 'react-use';
 
-import SettingStore from '../../stores/SettingStore';
-import torrentStatusClasses from '../../util/torrentStatusClasses';
-import TorrentStore from '../../stores/TorrentStore';
+import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
+import SettingStore from '../../stores/SettingStore';
 import TorrentListContextMenu from './TorrentListContextMenu';
 import TorrentListRowCondensed from './TorrentListRowCondensed';
 import TorrentListRowExpanded from './TorrentListRowExpanded';
+import torrentStatusClasses from '../../util/torrentStatusClasses';
+import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
-const displayTorrentDetails = (hash: string) => TorrentListContextMenu.handleDetailsClick(hash);
+const displayContextMenu = (hash: string, event: MouseEvent | TouchEvent) => {
+  if (event.cancelable === true) {
+    event.preventDefault();
+  }
+
+  const mouseClientX = ((event as unknown) as MouseEvent).clientX;
+  const mouseClientY = ((event as unknown) as MouseEvent).clientY;
+  const touchClientX = ((event as unknown) as TouchEvent).touches?.[0].clientX;
+  const touchClientY = ((event as unknown) as TouchEvent).touches?.[0].clientY;
+
+  if (!TorrentStore.selectedTorrents.includes(hash)) {
+    UIActions.handleTorrentClick({hash, event});
+  }
+
+  const {torrentContextMenuActions = defaultFloodSettings.torrentContextMenuActions} = SettingStore.floodSettings;
+  const torrent = TorrentStore.torrents[hash];
+
+  UIActions.displayContextMenu({
+    id: 'torrent-list-item',
+    clickPosition: {
+      x: mouseClientX || touchClientX || 0,
+      y: mouseClientY || touchClientY || 0,
+    },
+    items: TorrentListContextMenu.getContextMenuItems(torrent).filter((item) => {
+      if (item.type === 'separator') {
+        return true;
+      }
+
+      return !torrentContextMenuActions.some((action) => action.id === item.action && action.visible === false);
+    }),
+  });
+};
+
+const displayTorrentDetails = (hash: string) => UIActions.displayModal({id: 'torrent-details', hash});
+
 const selectTorrent = (hash: string, event: MouseEvent | TouchEvent) => UIActions.handleTorrentClick({hash, event});
 
 interface TorrentListRowProps {
   hash: string;
   style: CSSProperties;
-  displayContextMenu: (hash: string, event: MouseEvent | TouchEvent) => void;
 }
 
 const TorrentListRow: FC<TorrentListRowProps> = observer((props: TorrentListRowProps) => {
-  const {hash, style, displayContextMenu} = props;
+  const {hash, style} = props;
   const [rowLocation, setRowLocation] = useState<number>(0);
   const rowRef = useRef<HTMLLIElement>(null);
 

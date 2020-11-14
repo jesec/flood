@@ -25,8 +25,6 @@ interface FilesystemBrowserTextboxStates {
 }
 
 class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxProps, FilesystemBrowserTextboxStates> {
-  contextMenuInstanceRef: ContextMenu | null = null;
-  contextMenuNodeRef: HTMLDivElement | null = null;
   formRowRef = React.createRef<HTMLDivElement>();
   textboxRef: HTMLInputElement | null = null;
 
@@ -192,12 +190,6 @@ class FilesystemBrowserTextbox extends React.Component<FilesystemBrowserTextboxP
                 onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
                 overlayProps={{isInteractive: false}}
                 padding={false}
-                ref={(ref) => {
-                  this.contextMenuInstanceRef = ref;
-                }}
-                setRef={(ref) => {
-                  this.contextMenuNodeRef = ref;
-                }}
                 triggerRef={this.textboxRef}>
                 <FilesystemBrowser
                   directory={destination}

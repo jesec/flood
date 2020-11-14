@@ -7,10 +7,10 @@ import TorrentFilterStore from '../stores/TorrentFilterStore';
 import TorrentStore from '../stores/TorrentStore';
 import UIStore from '../stores/UIStore';
 
-import type {ContextMenu, Modal} from '../stores/UIStore';
+import type {ActiveContextMenu, Modal} from '../stores/UIStore';
 
 const UIActions = {
-  displayContextMenu: (contextMenu: ContextMenu) => {
+  displayContextMenu: (contextMenu: ActiveContextMenu) => {
     UIStore.setActiveContextMenu(contextMenu);
   },
 

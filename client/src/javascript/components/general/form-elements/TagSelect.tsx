@@ -22,7 +22,7 @@ interface TagSelectStates {
 
 export default class TagSelect extends React.Component<TagSelectProps, TagSelectStates> {
   formRowRef = React.createRef<HTMLDivElement>();
-  menuRef: HTMLDivElement | null = null;
+  menuRef = React.createRef<HTMLDivElement>();
   textboxRef: HTMLInputElement | null = null;
 
   tagMenuItems = Object.keys(TorrentFilterStore.taxonomy.tagCounts).reduce((accumulator: React.ReactNodeArray, tag) => {
@@ -130,7 +130,7 @@ export default class TagSelect extends React.Component<TagSelectProps, TagSelect
   };
 
   handleWindowScroll = (event: Event) => {
-    if (this.menuRef && !this.menuRef.contains(event.target as Node)) {
+    if (this.menuRef.current && !this.menuRef.current.contains(event.target as Node)) {
       if (this.state.isOpen) {
         this.setState({isOpen: false});
       }
@@ -172,9 +172,7 @@ export default class TagSelect extends React.Component<TagSelectProps, TagSelect
                 isIn={isOpen}
                 onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
                 overlayProps={{isInteractive: false}}
-                setRef={(ref) => {
-                  this.menuRef = ref;
-                }}
+                ref={this.menuRef}
                 triggerRef={this.textboxRef}>
                 {this.getItemList(this.tagMenuItems)}
               </ContextMenu>

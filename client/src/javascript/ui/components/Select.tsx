@@ -1,6 +1,6 @@
 import noop from 'lodash/noop';
 import classnames from 'classnames';
-import * as React from 'react';
+import {Component, cloneElement, createRef, ReactElement, ReactNode, ReactNodeArray, Children} from 'react';
 
 import Button from './Button';
 import ContextMenu from './ContextMenu';
@@ -23,7 +23,7 @@ interface SelectProps {
   onOpen?: () => void;
   onClose?: () => void;
   onSelect?: (id: this['id']) => void;
-  label?: React.ReactNode;
+  label?: ReactNode;
   menuAlign?: 'left' | 'right';
   disabled?: boolean;
   persistentPlaceholder?: boolean;
@@ -38,8 +38,8 @@ interface SelectStates {
   selectedID: string | number;
 }
 
-export default class Select extends React.Component<SelectProps, SelectStates> {
-  menuRef: HTMLDivElement | null = null;
+export default class Select extends Component<SelectProps, SelectStates> {
+  menuRef = createRef<HTMLDivElement>();
 
   inputRef: HTMLInputElement | null = null;
 
@@ -91,7 +91,7 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
       return defaultID;
     }
 
-    const childArray = children as React.ReactNodeArray;
+    const childArray = children as ReactNodeArray;
     if (childArray != null) {
       const item = childArray.find((child) => {
         return (child as SelectItem).props.id != null;
@@ -105,8 +105,8 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
     return '';
   }
 
-  getItemList(children: React.ReactNodeArray) {
-    return children.reduce((accumulator: Array<React.ReactElement>, child) => {
+  getItemList(children: ReactNodeArray) {
+    return children.reduce((accumulator: Array<ReactElement>, child) => {
       const item = child as SelectItem;
 
       if (item.props.placeholder) {
@@ -116,7 +116,7 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
       const {selectedID} = this.state;
 
       accumulator.push(
-        React.cloneElement(child as React.ReactElement, {
+        cloneElement(child as ReactElement, {
           onClick: this.handleItemClick,
           isSelected: item.props.id === selectedID,
         }),
@@ -126,7 +126,7 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
     }, []);
   }
 
-  getLabel(): React.ReactNode {
+  getLabel(): ReactNode {
     const {id, label} = this.props;
 
     if (label) {
@@ -140,7 +140,7 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
     return undefined;
   }
 
-  getSelectedItem(children: React.ReactNodeArray): React.ReactElement | undefined {
+  getSelectedItem(children: ReactNodeArray): ReactElement | undefined {
     const {persistentPlaceholder} = this.props;
     const {selectedID} = this.state;
 
@@ -154,13 +154,13 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
     });
 
     if (selectedItem) {
-      return React.cloneElement(selectedItem as React.ReactElement, {isTrigger: true});
+      return cloneElement(selectedItem as ReactElement, {isTrigger: true});
     }
 
     return undefined;
   }
 
-  getTrigger(selectItems: React.ReactNodeArray) {
+  getTrigger(selectItems: ReactNodeArray) {
     const {priority} = this.props;
     const selectedItem = this.getSelectedItem(selectItems);
 
@@ -213,7 +213,7 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
   };
 
   handleWindowScroll = (event: Event) => {
-    if (this.menuRef && !this.menuRef.contains(event.target as Node)) {
+    if (this.menuRef.current && !this.menuRef.current.contains(event.target as Node)) {
       if (this.state.isOpen) {
         this.setState({isOpen: false});
       }
@@ -242,7 +242,7 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
     } = this.props;
     const {isOpen, selectedID} = this.state;
 
-    const selectItems = React.Children.toArray(children);
+    const selectItems = Children.toArray(children);
     const classes = classnames('select form__element', additionalClassNames, {
       'form__element--disabled': disabled,
       'form__element--label-offset': labelOffset,
@@ -271,9 +271,7 @@ export default class Select extends React.Component<SelectProps, SelectStates> {
               isIn={isOpen}
               matchTriggerWidth={matchTriggerWidth}
               menuAlign={menuAlign}
-              setRef={(ref) => {
-                this.menuRef = ref;
-              }}
+              ref={this.menuRef}
               triggerRef={this.triggerRef}>
               {this.getItemList(selectItems)}
             </ContextMenu>

@@ -1,5 +1,5 @@
-import {FC, MouseEvent} from 'react';
 import {makeAutoObservable} from 'mobx';
+import {FC, MouseEvent} from 'react';
 
 import type {TorrentContextMenuAction} from '../constants/TorrentContextMenuActions';
 
@@ -10,14 +10,14 @@ export type ContextMenuItem =
       label: string;
       labelAction?: FC;
       labelSecondary?: FC;
-      clickHandler(action: TorrentContextMenuAction, event: MouseEvent<HTMLLIElement>): void;
+      clickHandler(event: MouseEvent<HTMLLIElement>): void;
       dismissMenu?: boolean;
     }
   | {
       type: 'separator';
     };
 
-export interface ContextMenu {
+export interface ActiveContextMenu {
   id: string;
   clickPosition: {
     x: number;
@@ -75,7 +75,7 @@ export type Modal =
     };
 
 class UIStore {
-  activeContextMenu: ContextMenu | null = null;
+  activeContextMenu: ActiveContextMenu | null = null;
   activeDropdownMenu: string | null = null;
   activeModal: Modal | null = null;
   dependencies: Dependencies = {};
@@ -123,7 +123,7 @@ class UIStore {
     return this.styleElement;
   }
 
-  dismissContextMenu(menuID: ContextMenu['id']) {
+  dismissContextMenu(menuID: ActiveContextMenu['id']) {
     if (this.activeContextMenu != null && this.activeContextMenu.id === menuID) {
       this.activeContextMenu = null;
     }
