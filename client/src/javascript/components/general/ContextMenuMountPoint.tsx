@@ -95,6 +95,9 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
               }
 
               return false;
+            }}
+            onContextMenu={(event) => {
+              event.preventDefault();
             }}>
             {menuItemContent}
           </li>
