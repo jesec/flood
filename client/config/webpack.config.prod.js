@@ -52,9 +52,6 @@ module.exports = {
             },
           },
           {
-            loader: require.resolve('../scripts/typed-css-modules-loader'),
-          },
-          {
             loader: 'postcss-loader',
             options: {
               sourceMap: true,

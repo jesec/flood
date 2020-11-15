@@ -1,4 +1,3 @@
-const autoprefixer = require('autoprefixer');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -52,18 +51,6 @@ module.exports = {
               modules: {
                 mode: 'global',
                 localIdentName: '[name]_[local]__[hash:base64:5]',
-              },
-            },
-          },
-          {
-            loader: require.resolve('../scripts/typed-css-modules-loader'),
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true,
-              postcssOptions: {
-                plugins: () => [autoprefixer()],
               },
             },
           },
