@@ -57,7 +57,7 @@ Run `flood --help`, `npx flood --help` or `npm run start -- --help` to get help 
 
 If you want to know more about configurations, check [shared/schema/Config.ts](https://github.com/jesec/flood/blob/master/shared/schema/Config.ts).
 
-When Flood's builtin user management is enabled (default), you will be prompted to configure the connection to rTorrent when loading the web interface.
+When Flood's builtin user management is enabled (default), you will be prompted to configure the connection to torrent client when loading the web interface.
 
 **What to configure**
 
@@ -93,7 +93,7 @@ Note that you have to let Docker know which port should be exposed (e.g. `-p 300
 
 Don't forget to pay attention to `flood`'s arguments like `--port` and `--allowedpath`.
 
-Currently Docker images of this project don't bundle `rTorrent` (yet). Its usefulness is limited as a result. You have to install `rTorrent` inside the container or make it possible for Flood inside Docker to interact with your rTorrent instance.
+Currently Docker images of this project don't bundle a torrent client (yet). Its usefulness is limited as a result. You have to install a torrent client inside the container or make it possible for Flood inside Docker to interact with your torrent client.
 
 Filesystem parts in [Troubleshooting](https://github.com/jesec/flood#troubleshooting) are especially important for containers.
 
