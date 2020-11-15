@@ -120,7 +120,11 @@ const AddTorrentsByCreation: FC = () => {
             UIStore.dismissModal();
           });
 
-          saveAddTorrentsUserPreferences({start: formData.start, destination: formData.sourcePath, tab: 'by-creation'});
+          saveAddTorrentsUserPreferences({
+            start: formData.start,
+            destination: formData.sourcePath,
+            tab: 'by-creation',
+          });
         }}
         isAddingTorrents={isCreatingTorrents}
       />

@@ -51,7 +51,9 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
       };
     });
 
-    this.props.onSettingsChange({torrentListColumns: changedTorrentListColumns});
+    this.props.onSettingsChange({
+      torrentListColumns: changedTorrentListColumns,
+    });
     this.setState({torrentListColumns: changedTorrentListColumns});
   };
 

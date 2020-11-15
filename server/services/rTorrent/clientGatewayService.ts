@@ -48,7 +48,9 @@ import {
 
 import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 
-const filePathMethodCalls = getMethodCalls({pathComponents: torrentContentMethodCallConfigs.pathComponents});
+const filePathMethodCalls = getMethodCalls({
+  pathComponents: torrentContentMethodCallConfigs.pathComponents,
+});
 
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
@@ -63,7 +65,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }: Required<AddTorrentByFileOptions>): Promise<void> {
     const torrentPaths = await Promise.all(
       files.map(async (file) => {
-        return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent', {mode: 0o664});
+        return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent', {
+          mode: 0o664,
+        });
       }),
     );
 

@@ -81,7 +81,9 @@ class UIStore {
   dependencies: Dependencies = {};
   globalStyles: Array<string> = [];
   haveUIDependenciesResolved = false;
-  styleElement: HTMLStyleElement & {styleSheet?: {cssText: string}} = this.createStyleElement();
+  styleElement: HTMLStyleElement & {
+    styleSheet?: {cssText: string};
+  } = this.createStyleElement();
 
   constructor() {
     makeAutoObservable(this);

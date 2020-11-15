@@ -11,36 +11,38 @@ const ICONS = {
   satisfied: <Checkmark />,
 };
 
-interface LoadingOverlayProps {
-  dependencies?: Dependencies;
-}
+const LoadingDependencyList: FC<{dependencies: Dependencies}> = ({dependencies}: {dependencies: Dependencies}) => {
+  const intl = useIntl();
 
-const LoadingOverlay: FC<LoadingOverlayProps> = (props: LoadingOverlayProps) => {
+  return (
+    <ul className="dependency-list">
+      {Object.keys(dependencies).map((id: string) => {
+        const {message, satisfied} = dependencies[id];
+        const statusIcon = ICONS.satisfied;
+        const classes = classnames('dependency-list__dependency', {
+          'dependency-list__dependency--satisfied': satisfied,
+        });
+
+        return (
+          <li className={classes} key={id}>
+            {satisfied != null ? <span className="dependency-list__dependency__icon">{statusIcon}</span> : null}
+            <span className="dependency-list__dependency__message">
+              {typeof message === 'string' ? message : intl.formatMessage(message)}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
+
+const LoadingOverlay: FC<{dependencies?: Dependencies}> = (props: {dependencies?: Dependencies}) => {
   const {dependencies} = props;
 
   return (
     <div className="application__loading-overlay">
       <LoadingIndicator inverse />
-      <ul className="dependency-list">
-        {dependencies != null
-          ? Object.keys(dependencies).map((id: string) => {
-              const {message, satisfied} = dependencies[id];
-              const statusIcon = ICONS.satisfied;
-              const classes = classnames('dependency-list__dependency', {
-                'dependency-list__dependency--satisfied': satisfied,
-              });
-
-              return (
-                <li className={classes} key={id}>
-                  {satisfied != null ? <span className="dependency-list__dependency__icon">{statusIcon}</span> : null}
-                  <span className="dependency-list__dependency__message">
-                    {typeof message === 'string' ? message : useIntl().formatMessage(message)}
-                  </span>
-                </li>
-              );
-            })
-          : null}
-      </ul>
+      {dependencies != null ? <LoadingDependencyList dependencies={dependencies} /> : null}
     </div>
   );
 };

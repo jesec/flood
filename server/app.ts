@@ -50,7 +50,9 @@ app.use(`${paths.servedPath}api`, apiRoutes);
 app.use(paths.servedPath, express.static(paths.appDist));
 
 // Client app routes, serve index.html and client js will figure it out
-const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {encoding: 'utf8'});
+const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {
+  encoding: 'utf8',
+});
 
 app.get(`${paths.servedPath}login`, (_req, res) => {
   res.send(html);

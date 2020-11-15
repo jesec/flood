@@ -86,7 +86,13 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
 
   getNotifications(
     query: NotificationFetchOptions,
-    callback: (data: {notifications: Notification[][]; count: NotificationCount} | null, err?: Error) => void,
+    callback: (
+      data: {
+        notifications: Notification[][];
+        count: NotificationCount;
+      } | null,
+      err?: Error,
+    ) => void,
   ) {
     const sortedNotifications = this.db.find({}).sort({ts: -1});
     const queryCallback = (err: Error | null, notifications: Notification[][]) => {

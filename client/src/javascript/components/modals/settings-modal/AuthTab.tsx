@@ -98,7 +98,10 @@ class AuthTab extends React.Component<WrappedComponentProps, AuthTabStates> {
         level: this.formData.isAdmin === true ? AccessLevel.ADMINISTRATOR : AccessLevel.USER,
       })
         .then(AuthActions.fetchUsers, (error) => {
-          this.setState({addUserError: error.response.data.message, isAddingUser: false});
+          this.setState({
+            addUserError: error.response.data.message,
+            isAddingUser: false,
+          });
         })
         .then(() => {
           if (this.formRef != null) {

@@ -18,7 +18,7 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
 
   useEffect(() => {
     onFilesChanged(files);
-  }, [files]);
+  }, [files, onFilesChanged]);
 
   return (
     <FormRowItem>

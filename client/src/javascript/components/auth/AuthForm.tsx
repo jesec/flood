@@ -76,12 +76,18 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
     const formData = submission.formData as Partial<LoginFormData> | Partial<RegisterFormData>;
 
     if (formData.username == null || formData.username === '') {
-      this.setState({isSubmitting: false, errorMessage: intl.formatMessage({id: 'auth.error.username.empty'})});
+      this.setState({
+        isSubmitting: false,
+        errorMessage: intl.formatMessage({id: 'auth.error.username.empty'}),
+      });
       return;
     }
 
     if (formData.password == null || formData.password === '') {
-      this.setState({isSubmitting: false, errorMessage: intl.formatMessage({id: 'auth.error.password.empty'})});
+      this.setState({
+        isSubmitting: false,
+        errorMessage: intl.formatMessage({id: 'auth.error.password.empty'}),
+      });
       return;
     }
 
@@ -102,13 +108,23 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
       const config = formData as RegisterFormData;
 
       if (this.settingsFormRef.current == null) {
-        this.setState({isSubmitting: false, errorMessage: intl.formatMessage({id: 'connection.settings.error.empty'})});
+        this.setState({
+          isSubmitting: false,
+          errorMessage: intl.formatMessage({
+            id: 'connection.settings.error.empty',
+          }),
+        });
         return;
       }
 
       const connectionSettings = this.settingsFormRef.current.getConnectionSettings();
       if (connectionSettings == null) {
-        this.setState({isSubmitting: false, errorMessage: intl.formatMessage({id: 'connection.settings.error.empty'})});
+        this.setState({
+          isSubmitting: false,
+          errorMessage: intl.formatMessage({
+            id: 'connection.settings.error.empty',
+          }),
+        });
         return;
       }
 

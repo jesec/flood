@@ -18,7 +18,11 @@ const Sidebar: FC = () => {
   return (
     <OverlayScrollbarsComponent
       options={{
-        scrollbars: {autoHide: 'scroll', clickScrolling: false, dragScrolling: false},
+        scrollbars: {
+          autoHide: 'scroll',
+          clickScrolling: false,
+          dragScrolling: false,
+        },
         className: 'application__sidebar os-theme-thin',
       }}>
       <SidebarActions>

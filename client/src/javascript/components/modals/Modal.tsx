@@ -59,9 +59,8 @@ const Modal: FC<ModalProps> = (props: ModalProps) => {
   let footer;
   let headerTabs;
 
+  const [activeTabId, setActiveTabId] = useState<string>(initialTabId ?? Object.keys(tabs || {})[0]);
   if (tabs) {
-    const [activeTabId, setActiveTabId] = useState(initialTabId ?? Object.keys(tabs)[0]);
-
     const activeTab = tabs[activeTabId];
     const contentClasses = classnames('modal__content', activeTab.modalContentClasses);
 

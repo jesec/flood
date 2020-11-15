@@ -1,0 +1,21 @@
+{
+  "extends": "../.eslintrc.json",
+
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["**/client/**/*"]
+      }
+    ],
+    "no-restricted-modules": [
+      "error",
+      {
+        "patterns": ["**/client/**/*"]
+      }
+    ],
+    // TODO: Explicit return type
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/explicit-module-boundary-types": 0
+  }
+}

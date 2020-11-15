@@ -39,7 +39,11 @@ class TransmissionClientGatewayService extends ClientGatewayService {
         files.map(async (file) => {
           const {hashString} =
             (await this.clientRequestManager
-              .addTorrent({metainfo: file, 'download-dir': destination, paused: !start})
+              .addTorrent({
+                metainfo: file,
+                'download-dir': destination,
+                paused: !start,
+              })
               .then(this.processClientRequestSuccess, this.processClientRequestError)
               .catch(() => undefined)) || {};
           return hashString;
@@ -197,7 +201,10 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     }
 
     return this.clientRequestManager
-      .setTorrentsProperties({ids: hashes, bandwidthPriority: transmissionPriority})
+      .setTorrentsProperties({
+        ids: hashes,
+        bandwidthPriority: transmissionPriority,
+      })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 

@@ -85,7 +85,11 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
     if (error == null && snapshot != null && lastTimestamp != null) {
       serverEvent.emit(lastTimestamp, 'TRANSFER_HISTORY_FULL_UPDATE', snapshot);
     } else {
-      const fallbackHistory: TransferHistory = {download: [0], upload: [0], timestamps: [Date.now()]};
+      const fallbackHistory: TransferHistory = {
+        download: [0],
+        upload: [0],
+        timestamps: [Date.now()],
+      };
       serverEvent.emit(Date.now(), 'TRANSFER_HISTORY_FULL_UPDATE', fallbackHistory);
     }
   });

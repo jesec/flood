@@ -144,7 +144,11 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
 
   getNotification = (notification: Notification, index: number) => {
     const {intl} = this.props;
-    const date = intl.formatDate(notification.ts, {year: 'numeric', month: 'long', day: '2-digit'});
+    const date = intl.formatDate(notification.ts, {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+    });
     const time = intl.formatTime(notification.ts);
 
     return (
@@ -160,7 +164,9 @@ class NotificationsButton extends Component<WrappedComponentProps, Notifications
         </div>
         <div className="notification__message">
           {intl.formatMessage(
-            MESSAGES[`${notification.id}.body` as keyof typeof MESSAGES] || {id: 'general.error.unknown'},
+            MESSAGES[`${notification.id}.body` as keyof typeof MESSAGES] || {
+              id: 'general.error.unknown',
+            },
             notification.data,
           )}
         </div>

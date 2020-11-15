@@ -352,7 +352,11 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
             <li
               className="interactive-list__detail-list__item
               interactive-list__detail interactive-list__detail--tertiary"
-              style={{maxWidth: '50%', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+              style={{
+                maxWidth: '50%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}>
               <FormattedMessage id="feeds.match" />
               {': '}
               {rule.match}
@@ -489,7 +493,10 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
     this.setState({doesPatternMatchTest});
   }
 
-  validateForm(): {errors?: DownloadRulesTabStates['errors']; isValid: boolean} {
+  validateForm(): {
+    errors?: DownloadRulesTabStates['errors'];
+    isValid: boolean;
+  } {
     const formData = this.getAmendedFormData();
 
     if (formData == null) {

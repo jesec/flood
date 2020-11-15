@@ -266,7 +266,10 @@ class ClientRequestManager {
     return axios
       .post(
         this.rpcURL,
-        {method: 'torrent-set-location', arguments: torrentsSetLocationArguments},
+        {
+          method: 'torrent-set-location',
+          arguments: torrentsSetLocationArguments,
+        },
         {
           headers: await this.getRequestHeaders(),
         },

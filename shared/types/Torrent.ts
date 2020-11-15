@@ -3,16 +3,6 @@ import type {TorrentPeer} from './TorrentPeer';
 import type {TorrentStatus} from '../constants/torrentStatusMap';
 import type {TorrentTracker} from './TorrentTracker';
 
-export interface Duration {
-  years?: number;
-  weeks?: number;
-  days?: number;
-  hours?: number;
-  minutes?: number;
-  seconds?: number;
-  cumSeconds: number;
-}
-
 export interface TorrentDetails {
   contents: Array<TorrentContent>;
   peers: Array<TorrentPeer>;

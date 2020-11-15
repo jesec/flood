@@ -333,12 +333,12 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
   };
 
   addScrollListener(): void {
-    this.container.addEventListener('scroll', (_e) => this.dismissTooltip());
+    this.container.addEventListener('scroll', () => this.dismissTooltip());
   }
 
   removeScrollListener(): void {
     if (this.container) {
-      this.container.removeEventListener('scroll', (_e) => this.dismissTooltip());
+      this.container.removeEventListener('scroll', () => this.dismissTooltip());
     }
   }
 
@@ -403,8 +403,8 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
       <div
         className={wrapperClassName}
         onClick={onClick}
-        onMouseEnter={(_e) => this.handleMouseEnter()}
-        onMouseLeave={(_e) => this.handleMouseLeave()}
+        onMouseEnter={() => this.handleMouseEnter()}
+        onMouseLeave={() => this.handleMouseLeave()}
         ref={(ref) => {
           this.triggerNode = ref;
         }}>

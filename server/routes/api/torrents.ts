@@ -566,7 +566,15 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
 
       res.attachment(`${selectedTorrent.name}.tar`);
       return tar
-        .c({cwd: archiveRootFolder, follow: false, noDirRecurse: true, portable: true}, relativeFilePaths)
+        .c(
+          {
+            cwd: archiveRootFolder,
+            follow: false,
+            noDirRecurse: true,
+            portable: true,
+          },
+          relativeFilePaths,
+        )
         .pipe(res);
     });
   } catch (error) {

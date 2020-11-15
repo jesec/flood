@@ -20,7 +20,7 @@ const delayedDelete = (tempPath: string): void => {
   setTimeout(() => {
     try {
       fs.unlinkSync(tempPath);
-    } catch (_e) {
+    } catch {
       // do nothing.
     }
   }, 1000 * 60 * 5);

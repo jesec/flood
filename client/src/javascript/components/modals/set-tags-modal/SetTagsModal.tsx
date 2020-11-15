@@ -56,7 +56,10 @@ const SetTagsModal: FC = () => {
             const tags = formData.tags ? formData.tags.split(',') : [];
 
             setIsSettingTags(true);
-            TorrentActions.setTags({hashes: TorrentStore.selectedTorrents, tags});
+            TorrentActions.setTags({
+              hashes: TorrentStore.selectedTorrents,
+              tags,
+            });
           },
           isLoading: isSettingTags,
           triggerDismiss: false,

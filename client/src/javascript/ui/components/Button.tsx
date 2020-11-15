@@ -39,7 +39,13 @@ export default class Button extends React.Component<ButtonProps> {
   getButtonContent() {
     const {children, addonPlacement} = this.props;
     const buttonContent = React.Children.toArray(children).reduce(
-      (accumulator: {addonNodes: Array<React.ReactNode>; childNodes: Array<React.ReactNode>}, child) => {
+      (
+        accumulator: {
+          addonNodes: Array<React.ReactNode>;
+          childNodes: Array<React.ReactNode>;
+        },
+        child,
+      ) => {
         const childAsElement = child as React.ReactElement;
         if (childAsElement.type === FormElementAddon) {
           accumulator.addonNodes.push(

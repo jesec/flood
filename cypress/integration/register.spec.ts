@@ -84,9 +84,12 @@ context('Register', () => {
     cy.get('.input--text[name="socket"]').type('/data/rtorrent.sock');
 
     cy.server();
-    cy.route({method: 'POST', url: 'http://127.0.0.1:4200/api/auth/register', response: {}, status: 500}).as(
-      'register-request',
-    );
+    cy.route({
+      method: 'POST',
+      url: 'http://127.0.0.1:4200/api/auth/register',
+      response: {},
+      status: 500,
+    }).as('register-request');
 
     cy.get('.button[type="submit"]').click();
 

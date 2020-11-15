@@ -1,7 +1,8 @@
 ---
-name: "🎙️ Discussion"
-about: "Start a discussion here"
+name: '🎙️ Discussion'
+about: 'Start a discussion here'
 ---
+
 Type: Discussion
 
 ## Discussion

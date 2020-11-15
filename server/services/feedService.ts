@@ -297,7 +297,10 @@ class FeedService extends BaseService {
       }
 
       // Create two arrays, one for feeds and one for rules.
-      const feedsSummary: {feeds: Array<Feed>; rules: Array<Rule>} = docs.reduce(
+      const feedsSummary: {
+        feeds: Array<Feed>;
+        rules: Array<Rule>;
+      } = docs.reduce(
         (accumulator: {feeds: Array<Feed>; rules: Array<Rule>}, doc) => {
           if (doc.type === 'feed') {
             accumulator.feeds.push(doc);
@@ -404,7 +407,14 @@ class FeedService extends BaseService {
     }
 
     this.feedReaders.push(
-      new FeedReader({feedID, feedLabel, url, interval, maxHistory: 100, onNewItems: this.handleNewItems}),
+      new FeedReader({
+        feedID,
+        feedLabel,
+        url,
+        interval,
+        maxHistory: 100,
+        onNewItems: this.handleNewItems,
+      }),
     );
 
     return true;

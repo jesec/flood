@@ -500,7 +500,10 @@ class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
     const feedBrowseForm = input.formData as {feedID: string; search: string};
     if ((input.event.target as HTMLInputElement).type !== 'checkbox') {
       this.setState({selectedFeedID: feedBrowseForm.feedID});
-      FeedActions.fetchItems({id: feedBrowseForm.feedID, search: feedBrowseForm.search});
+      FeedActions.fetchItems({
+        id: feedBrowseForm.feedID,
+        search: feedBrowseForm.search,
+      });
     }
   };
 
@@ -516,7 +519,10 @@ class FeedsTab extends React.Component<WrappedComponentProps, FeedsTabStates> {
       .filter((_item, index) => formData[index])
       .map((item, index) => ({id: index, value: item.urls[0]}));
 
-    UIActions.displayModal({id: 'add-torrents', initialURLs: torrentsToDownload});
+    UIActions.displayModal({
+      id: 'add-torrents',
+      initialURLs: torrentsToDownload,
+    });
   };
 
   validateForm(): {errors?: FeedsTabStates['errors']; isValid: boolean} {

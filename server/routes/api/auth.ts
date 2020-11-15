@@ -50,7 +50,11 @@ export const getAuthToken = (username: string, res?: Response): string => {
   });
 
   if (res != null) {
-    res.cookie('jwt', token, {expires: new Date(cookieExpiration), httpOnly: true, sameSite: 'strict'});
+    res.cookie('jwt', token, {
+      expires: new Date(cookieExpiration),
+      httpOnly: true,
+      sameSite: 'strict',
+    });
   }
 
   return token;

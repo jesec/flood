@@ -1,0 +1,29 @@
+{
+  "extends": ["plugin:@typescript-eslint/recommended", "prettier", "prettier/@typescript-eslint"],
+
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+
+  "env": {
+    "browser": false,
+    "node": true
+  },
+
+  "rules": {
+    "import/no-extraneous-dependencies": 0,
+    "no-underscore-dangle": [2, {"allow": ["_id"]}],
+    "@typescript-eslint/lines-between-class-members": ["error", "always", {"exceptAfterSingleLine": true}],
+    "@typescript-eslint/no-unused-vars": ["error", {"argsIgnorePattern": "^_"}]
+  },
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "extends": ["prettier", "prettier/react"],
+      "parser": "babel-eslint",
+      "rules": {
+        "@typescript-eslint/no-var-requires": 0
+      }
+    }
+  ]
+}

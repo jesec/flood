@@ -76,9 +76,13 @@ class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps
         <FormRow>
           <Select
             id="client"
-            label={intl.formatMessage({id: 'connection.settings.client.select'})}
+            label={intl.formatMessage({
+              id: 'connection.settings.client.select',
+            })}
             onSelect={(selectedClient) => {
-              this.setState({client: selectedClient as ClientConnectionSettings['client']});
+              this.setState({
+                client: selectedClient as ClientConnectionSettings['client'],
+              });
             }}
             defaultID={DEFAULT_SELECTION}>
             {getClientSelectItems()}

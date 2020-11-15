@@ -71,7 +71,10 @@ class Users {
           return;
         }
 
-        argon2Verify({password: credentials.password, hash: user.password}).then(
+        argon2Verify({
+          password: credentials.password,
+          hash: user.password,
+        }).then(
           (isMatch) => {
             if (isMatch) {
               resolve(user.level);

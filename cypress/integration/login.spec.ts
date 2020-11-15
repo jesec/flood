@@ -1,9 +1,12 @@
 context('Login', () => {
   beforeEach(() => {
     cy.server();
-    cy.route({method: 'GET', url: 'http://127.0.0.1:4200/api/auth/verify?*', response: {}, status: 401}).as(
-      'verify-request',
-    );
+    cy.route({
+      method: 'GET',
+      url: 'http://127.0.0.1:4200/api/auth/verify?*',
+      response: {},
+      status: 401,
+    }).as('verify-request');
     cy.visit('http://127.0.0.1:4200/login');
     cy.url().should('include', 'login');
   });

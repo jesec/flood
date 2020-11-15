@@ -5,7 +5,9 @@ import type {UserInDatabase} from '@shared/schema/Auth';
 
 import type {UserServices} from '.';
 
-class BaseService<E = unknown> extends (EventEmitter as {new <T>(): TypedEmitter<T>})<E> {
+class BaseService<E = unknown> extends (EventEmitter as {
+  new <T>(): TypedEmitter<T>;
+})<E> {
   user: UserInDatabase;
   services?: UserServices;
 

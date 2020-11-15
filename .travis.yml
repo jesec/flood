@@ -1,16 +1,14 @@
-dist: trusty
+dist: focal
 language: node_js
 node_js:
-  - '10'
-  - '12'
+  - 'node'
+  - 'lts/*'
   - '13'
 matrix:
   fast_finish: true
-  allow_failures:
-    - node_js: 10
 script:
   - npm run check-source-formatting
   - npm run lint
   - npm run check-types
-  - npm run test
   - npm run build
+  - npm run test

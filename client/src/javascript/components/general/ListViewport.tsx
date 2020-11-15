@@ -34,12 +34,15 @@ const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: Compo
         viewport.removeEventListener('scroll', (e) => onScroll((e as unknown) as UIEvent<HTMLDivElement>));
       }
     };
-  }, [onScroll]);
+  }, [onScroll, ref]);
 
   return (
     <OverlayScrollbarsComponent
       {...props}
-      options={{scrollbars: {autoHide: 'leave', clickScrolling: true}, className}}
+      options={{
+        scrollbars: {autoHide: 'leave', clickScrolling: true},
+        className,
+      }}
       ref={osRef}>
       {children}
     </OverlayScrollbarsComponent>

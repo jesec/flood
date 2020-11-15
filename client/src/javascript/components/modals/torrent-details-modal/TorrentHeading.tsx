@@ -30,14 +30,18 @@ const TorrentHeading: FC = observer(() => {
     } else {
       setTorrentStatus('start');
     }
-  }, []);
+  }, [torrent?.status]);
 
   if (torrent == null) {
     return null;
   }
 
   const torrentClasses = torrentStatusClasses(
-    {status: torrent.status, upRate: torrent.upRate, downRate: torrent.downRate},
+    {
+      status: torrent.status,
+      upRate: torrent.upRate,
+      downRate: torrent.downRate,
+    },
     'torrent-details__header',
   );
   const torrentStatusIcon = torrentStatusIcons(torrent.status);
@@ -76,7 +80,10 @@ const TorrentHeading: FC = observer(() => {
               maxLevel={3}
               priorityType="torrent"
               onChange={(hash, level) => {
-                TorrentActions.setPriority({hashes: [`${hash}`], priority: level});
+                TorrentActions.setPriority({
+                  hashes: [`${hash}`],
+                  priority: level,
+                });
               }}
             />
           </li>

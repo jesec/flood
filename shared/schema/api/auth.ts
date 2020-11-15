@@ -8,7 +8,10 @@ import type {AuthMethod} from '../Auth';
 // All auth requests are schema validated to ensure security.
 
 // POST /api/auth/authenticate
-export const authAuthenticationSchema = credentialsSchema.pick({username: true, password: true});
+export const authAuthenticationSchema = credentialsSchema.pick({
+  username: true,
+  password: true,
+});
 export type AuthAuthenticationOptions = Required<zodInfer<typeof authAuthenticationSchema>>;
 
 // POST /api/auth/authenticate - success response

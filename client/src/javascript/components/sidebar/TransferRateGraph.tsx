@@ -49,7 +49,13 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
       inspectPoint?: Selection<SVGCircleElement, unknown, HTMLElement, unknown>;
       rateLine?: Selection<SVGPathElement, unknown, HTMLElement, unknown>;
     }
-  > = {graph: null, areDefined: false, isHovered: false, download: {}, upload: {}};
+  > = {
+    graph: null,
+    areDefined: false,
+    isHovered: false,
+    download: {},
+    upload: {},
+  };
 
   static defaultProps = {
     width: 240,

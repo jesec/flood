@@ -42,7 +42,9 @@ class UITab extends SettingsTab {
 
     if (inputElement.type === 'radio') {
       this.torrentListViewSize = formData['ui-torrent-size'] as FloodSettings['torrentListViewSize'];
-      this.props.onSettingsChange({torrentListViewSize: this.torrentListViewSize});
+      this.props.onSettingsChange({
+        torrentListViewSize: this.torrentListViewSize,
+      });
     }
 
     if (inputElement.name === 'language') {

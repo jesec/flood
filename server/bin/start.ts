@@ -11,7 +11,7 @@ enforcePrerequisites()
   .then(migrateData)
   .then(() => {
     // We do this because we don't want the side effects of importing server functions before migration is completed.
-    const startWebServer = require('./web-server').default; // eslint-disable-line global-require
+    const startWebServer = require('./web-server').default; // eslint-disable-line @typescript-eslint/no-var-requires
     return startWebServer();
   })
   .catch((error) => {

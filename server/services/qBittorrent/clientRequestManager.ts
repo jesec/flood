@@ -205,7 +205,10 @@ class ClientRequestManager {
       form.append(property, `${options[property]}`);
     });
 
-    const headers = form.getHeaders({Cookie: await this.authCookie, 'Content-Length': form.getLengthSync()});
+    const headers = form.getHeaders({
+      Cookie: await this.authCookie,
+      'Content-Length': form.getLengthSync(),
+    });
 
     axios
       .post(`${this.apiBase}/torrents/add`, form, {
@@ -226,7 +229,10 @@ class ClientRequestManager {
       form.append(property, `${options[property]}`);
     });
 
-    const headers = form.getHeaders({Cookie: await this.authCookie, 'Content-Length': form.getLengthSync()});
+    const headers = form.getHeaders({
+      Cookie: await this.authCookie,
+      'Content-Length': form.getLengthSync(),
+    });
 
     axios
       .post(`${this.apiBase}/torrents/add`, form, {

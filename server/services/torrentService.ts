@@ -99,7 +99,10 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   handleFetchTorrentListSuccess = (nextTorrentListSummary: this['torrentListSummary']) => {
     const diff = jsonpatch.compare(this.torrentListSummary.torrents, nextTorrentListSummary.torrents);
     if (diff.length > 0) {
-      this.emit('TORRENT_LIST_DIFF_CHANGE', {diff, id: nextTorrentListSummary.id});
+      this.emit('TORRENT_LIST_DIFF_CHANGE', {
+        diff,
+        id: nextTorrentListSummary.id,
+      });
     }
 
     this.torrentListSummary = nextTorrentListSummary;

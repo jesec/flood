@@ -7,8 +7,9 @@
 Flood is a monitoring service for various torrent clients. It's a Node.js service that communicates with your favorite torrent client and serves a decent web UI for administration. This project is based on the [original Flood project](https://github.com/Flood-UI/flood).
 
 #### Supported Clients
+
 | Client                                                       | Support                              |
-|--------------------------------------------------------------|--------------------------------------|
+| ------------------------------------------------------------ | ------------------------------------ |
 | [rTorrent](https://github.com/rakshasa/rtorrent)             | Stable and Tested :white_check_mark: |
 | [qBittorrent](https://github.com/qbittorrent/qBittorrent)    | Experimental :alembic:               |
 | [Transmission](https://github.com/transmission/transmission) | Experimental :alembic:               |
@@ -26,6 +27,7 @@ Check out the [Wiki](https://github.com/jesec/flood/wiki) for more information.
 ### Pre-Requisites
 
 Install [Node.js runtime](https://nodejs.org/). Flood tracks `Current` and provides support to `Active LTS` as well.
+
 - Debian, Ubuntu and RHEL-based distributions users can install latest `nodejs` from [NodeSource](https://github.com/nodesource/distributions) software repository.
 - Windows and MacOS users may use installer.
 

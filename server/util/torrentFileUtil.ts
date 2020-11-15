@@ -11,7 +11,7 @@ const openAndDecodeTorrent = async (torrentPath: string): Promise<TorrentFile | 
 
   try {
     torrentData = bencode.decode(fs.readFileSync(torrentPath));
-  } catch (_e) {
+  } catch {
     return null;
   }
 
@@ -59,7 +59,7 @@ export const setTrackers = async (torrent: string, trackers: Array<string>): Pro
 
   try {
     fs.writeFileSync(torrent, bencode.encode(torrentData));
-  } catch (_e) {
+  } catch {
     return false;
   }
 
@@ -140,7 +140,7 @@ export const setCompleted = async (torrent: string, destination: string, isBaseP
 
   try {
     fs.writeFileSync(torrent, bencode.encode(torrentDataWithResume));
-  } catch (_e) {
+  } catch {
     return false;
   }
 

@@ -4,7 +4,10 @@ import FormRowItem from './FormRowItem';
 
 import type {FormRowItemProps} from './FormRowItem';
 
-export default class FormRowItemGroup extends React.Component<{label?: string; width?: FormRowItemProps['width']}> {
+export default class FormRowItemGroup extends React.Component<{
+  label?: string;
+  width?: FormRowItemProps['width'];
+}> {
   getLabel(): React.ReactNode {
     const {label} = this.props;
 

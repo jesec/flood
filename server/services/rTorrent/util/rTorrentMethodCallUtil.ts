@@ -7,7 +7,10 @@ export type MethodCallConfigs = Readonly<{
   [propLabel: string]: MethodCallConfig;
 }>;
 
-export type MultiMethodCalls = Array<{methodName: string; params: Array<string | Buffer>}>;
+export type MultiMethodCalls = Array<{
+  methodName: string;
+  params: Array<string | Buffer>;
+}>;
 
 export const stringTransformer = (value: unknown): string => {
   return value as string;

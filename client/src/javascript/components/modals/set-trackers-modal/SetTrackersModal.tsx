@@ -14,7 +14,10 @@ const SetTrackersModal: FC = () => {
   const formRef = useRef<Form>(null);
   const intl = useIntl();
   const [isSettingTrackers, setIsSettingTrackers] = useState<boolean>(false);
-  const [trackerState, setTrackerState] = useState<{isLoadingTrackers: boolean; trackerURLs: Array<string>}>({
+  const [trackerState, setTrackerState] = useState<{
+    isLoadingTrackers: boolean;
+    trackerURLs: Array<string>;
+  }>({
     isLoadingTrackers: false,
     trackerURLs: [],
   });
@@ -58,7 +61,10 @@ const SetTrackersModal: FC = () => {
                 defaultValues={
                   trackerState.trackerURLs.length === 0
                     ? undefined
-                    : trackerState.trackerURLs.map((url, index) => ({id: index, value: url}))
+                    : trackerState.trackerURLs.map((url, index) => ({
+                        id: index,
+                        value: url,
+                      }))
                 }
               />
             )}
@@ -85,7 +91,10 @@ const SetTrackersModal: FC = () => {
             const formData = formRef.current.getFormData() as Record<string, string>;
             const trackers = getTextArray(formData, 'trackers').filter((tracker) => tracker !== '');
 
-            TorrentActions.setTrackers({hashes: TorrentStore.selectedTorrents, trackers}).then(() => {
+            TorrentActions.setTrackers({
+              hashes: TorrentStore.selectedTorrents,
+              trackers,
+            }).then(() => {
               setIsSettingTrackers(false);
               UIStore.dismissModal();
             });

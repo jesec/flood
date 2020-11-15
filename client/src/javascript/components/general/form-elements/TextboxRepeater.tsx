@@ -61,7 +61,10 @@ const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, pl
                   idCounter.current += 1;
 
                   const newTextboxes = textboxes.slice();
-                  newTextboxes.splice(index + 1, 0, {id: idCounter.current, value: ''});
+                  newTextboxes.splice(index + 1, 0, {
+                    id: idCounter.current,
+                    value: '',
+                  });
                   setTextboxes(newTextboxes);
                 }}>
                 <AddMini size="mini" />

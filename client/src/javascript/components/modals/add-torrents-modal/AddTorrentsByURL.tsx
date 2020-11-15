@@ -105,7 +105,11 @@ const AddTorrentsByURL: FC = () => {
             UIStore.dismissModal();
           });
 
-          saveAddTorrentsUserPreferences({start: formData.start, destination: formData.destination, tab: 'by-url'});
+          saveAddTorrentsUserPreferences({
+            start: formData.start,
+            destination: formData.destination,
+            tab: 'by-url',
+          });
         }}
         isAddingTorrents={isAddingTorrents}
       />

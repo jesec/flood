@@ -22,7 +22,9 @@ const Size: FC<SizeProps> = ({value, isSpeed, className, precision}: SizeProps) 
   const computed = compute(value, precision);
   const intl = useIntl();
 
-  let translatedUnit = intl.formatMessage({id: getTranslationString(computed.unit)});
+  let translatedUnit = intl.formatMessage({
+    id: getTranslationString(computed.unit),
+  });
 
   if (isSpeed) {
     translatedUnit = intl.formatMessage(

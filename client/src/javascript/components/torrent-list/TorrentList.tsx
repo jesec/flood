@@ -53,7 +53,11 @@ const TorrentDropzone: FC<{children: ReactNode}> = ({children}: {children: React
       reader.readAsDataURL(file);
     });
   };
-  const {getRootProps, isDragActive} = useDropzone({onDrop: handleFileDrop, noClick: true, noKeyboard: true});
+  const {getRootProps, isDragActive} = useDropzone({
+    onDrop: handleFileDrop,
+    noClick: true,
+    noKeyboard: true,
+  });
 
   return (
     <div
@@ -96,7 +100,10 @@ class TorrentList extends Component<WrappedComponentProps> {
   listHeaderRef = createRef<HTMLDivElement>();
   listViewportRef = createRef<FixedSizeList>();
 
-  torrentListViewportSize = observable.object<{width: number; height: number}>({
+  torrentListViewportSize = observable.object<{
+    width: number;
+    height: number;
+  }>({
     width: window.innerWidth,
     height: window.innerHeight,
   });

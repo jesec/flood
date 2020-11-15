@@ -45,7 +45,9 @@ const ClientConnectionInterruption: FC = observer(() => {
             }
 
             try {
-              await AuthActions.updateUser(currentUsername, {client: connectionSettings})
+              await AuthActions.updateUser(currentUsername, {
+                client: connectionSettings,
+              })
                 .then(() => {
                   // do nothing.
                 })
