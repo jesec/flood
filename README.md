@@ -37,9 +37,17 @@ Or use `@jesec/flood` for cutting-edge builds.
 
 Or [build from source](https://github.com/jesec/flood#Building-Flood).
 
+### Run
+
+`flood` or `npx flood` if you installed Flood via `npm`.
+
+`npm run start` if you compiled Flood from source.
+
+Check [Wiki](https://github.com/jesec/flood/wiki) for how to install Flood as a service.
+
 ### Configuration
 
-By default, Flood uses a command line configuration interface. If you installed Flood via `npm`, you should be able to use `flood` or `npx flood` to launch Flood. If you compile Flood from source, you will be able to use `npm run start` to execute Flood.
+Flood uses a command line configuration interface.
 
 Run `flood --help`, `npx flood --help` or `npm run start -- --help` to get help about command line arguments.
 
@@ -51,7 +59,7 @@ When Flood's builtin user management is enabled (default), you will be prompted 
 
 1. If you are proxying requests to Flood from your own web server, configure Flood's path from the host at the `--baseuri` (or `baseURI`) property. All requests will be prefixed with this value.
    - For example, if serving Flood from `https://foo.bar/apps/flood`, you would set `baseURI` to `/apps/flood`. If serving flood from `https://foo.bar`, you do not need to configure `baseURI`.
-   - [Read more about proxying requests to Flood on the Wiki](https://github.com/jesec/flood/wiki), this is a common pain-point for users.
+   - Read more about proxying requests to Flood in the [Wiki](https://github.com/jesec/flood/wiki).
 1. Check [Wiki](https://github.com/jesec/flood/wiki), especially `Security` sections.
 
 ### Upgrade
