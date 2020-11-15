@@ -1,4 +1,4 @@
-import {computed, extendObservable, makeAutoObservable} from 'mobx';
+import {computed, extendObservable, makeAutoObservable, runInAction} from 'mobx';
 import sort from 'fast-sort';
 
 export interface Alert {
@@ -48,7 +48,9 @@ class AlertStore {
 
   scheduleClose(id: string, duration = DEFAULT_DURATION): number {
     return window.setTimeout(() => {
-      delete this.alerts[id];
+      runInAction(() => {
+        delete this.alerts[id];
+      });
     }, duration);
   }
 }
