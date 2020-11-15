@@ -82,28 +82,6 @@ module.exports = {
         enforce: 'pre',
       },
       {
-        enforce: 'pre',
-        test: /\.svg$/,
-        issuer: /\.(ts|js)x?$/,
-        use: [
-          {
-            loader: 'babel-loader',
-            options: {
-              babelrc: true,
-            },
-          },
-          {
-            loader: 'svg-sprite-loader',
-            options: {
-              runtimeGenerator: require.resolve('../scripts/svg-react-component-generator'),
-              runtimeOptions: {
-                iconModule: require.resolve('../src/javascript/components/general/Icon.tsx'),
-              },
-            },
-          },
-        ],
-      },
-      {
         test: /\.md$/,
         loader: 'frontmatter-markdown-loader',
         options: {mode: ['react-component']},
