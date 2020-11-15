@@ -25,10 +25,9 @@ Check out the [Wiki](https://github.com/jesec/flood/wiki) for more information.
 
 ### Pre-Requisites
 
-1. [rTorrent](https://github.com/rakshasa/rtorrent) needs to be installed and running **with XMLRPC** configuration.
-   - For Linux & OS X, check out [rTorrent's installation wiki](https://github.com/rakshasa/rtorrent/wiki/Installing#compilation-help) and/or [this third-party tutorial](https://jes.sc/kb/rTorrent+ruTorrent-Seedbox-Guide.php#Install-Dependencies). When you run `./configure`, be sure to run with the `--with-xmlrpc-c` flag.
-   - For Windows, try [this guide](https://rtwi.jmk.hu/wiki/rTorrentOnWindows).
-1. Install [NodeJS](https://nodejs.org/) version `Current` (you might want to manage different Node versions with [nodenv](https://github.com/nodenv/nodenv) or [nvm](https://github.com/creationix/nvm) or [n](https://github.com/tj/n)). Flood tracks latest NodeJS release and does NOT provide support to legacy NodeJS versions.
+Install [Node.js runtime](https://nodejs.org/). Flood tracks `Current` and provides support to `Active LTS` as well.
+- Debian, Ubuntu and RHEL-based distributions users can install latest `nodejs` from [NodeSource](https://github.com/nodesource/distributions) software repository.
+- Windows and MacOS users may use installer.
 
 ### Installation
 
@@ -61,10 +60,13 @@ Run the installation command again.
 
 ### Troubleshooting
 
-- Debian, Ubuntu and RHEL-based distributions users can install latest `nodejs` from [NodeSource](https://github.com/nodesource/distributions).
 - Flood and filesystem:
   - Flood server performs file operations itself. As such, Flood needs to have permissions/access to the files.
   - Flood only uses the path provided by the torrent client so it needs to have the same filesystem context as the torrent client. If a file is "/path/to/a/file" to the torrent client, it has to be "/path/to/a/file" to Flood in order to get file operations working. It can't be "/mnt/some/different/path/file".
+- rTorrent:
+  - Linux or MacOS users can use package managers such as `apt`, `yum`, `pacman`, `brew` of the platform to install rTorrent.
+  - Windows users can use [Cygwin](https://www.cygwin.com/) to install rTorrent.
+  - [Compile](https://github.com/rakshasa/rtorrent/wiki/Installing): XMLRPC support flag (`--with-xmlrpc-c`) is required during compilation.
 - Ask for help in the [Flood Discord server](https://discord.gg/Z7yR5Uf).
 
 ### Docker
