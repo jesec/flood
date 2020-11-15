@@ -27,11 +27,24 @@
   "bin": {
     "flood": "dist/index.js"
   },
+  "pkg": {
+    "assets": [
+      "dist/assets/**/*",
+      "dist/geoip-country.dat",
+      "dist/geoip-country6.dat"
+    ],
+    "targets": [
+      "node14-linux-x64",
+      "node14-macos-x64",
+      "node14-win-x64"
+    ]
+  },
   "scripts": {
     "build": "npm run build-assets && npm run build-ts",
     "build-assets": "node client/scripts/build.js",
     "build-ts": "ncc build server/bin/start.ts -m -t -e geoip-country",
     "build-i18n": "formatjs compile --ast --format simple client/src/javascript/i18n/strings.json --out-file client/src/javascript/i18n/strings.compiled.json && formatjs compile-folder --ast --format simple client/src/javascript/i18n/translations client/src/javascript/i18n/compiled",
+    "build-pkg": "rm -rf dist && npm run build && pkg . --out-path dist-pkg",
     "format-source": "prettier -w .",
     "check-compiled-i18n": "npm run build-i18n && npm run format-source && git diff --quiet client/src/javascript/i18n/compiled",
     "check-source-formatting": "prettier -c .",

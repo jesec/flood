@@ -49,6 +49,7 @@ config.js
 
 # Distribution files
 dist/
+dist-pkg/
 
 # Runtime files
 run/

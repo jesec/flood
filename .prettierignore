@@ -1,5 +1,6 @@
 # Distribution files
 dist/
+dist-pkg/
 
 # Coverage reports
 coverage/
