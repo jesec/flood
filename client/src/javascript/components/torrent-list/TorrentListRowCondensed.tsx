@@ -51,7 +51,7 @@ const TorrentListRowCondensed = observer(
                 hash={hash}
                 column={id}
                 content={(torrent) => (
-                  <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
+                  <ProgressBar percent={Math.ceil(torrent.percentComplete)} icon={torrentStatusIcons(torrent.status)} />
                 )}
                 width={SettingStore.floodSettings.torrentListColumnWidths[id]}
               />,

@@ -1,16 +1,34 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import throttle from 'lodash/throttle';
+import {FC, MouseEvent, ReactNode, useRef} from 'react';
+import {observer} from 'mobx-react';
 import uniqueId from 'lodash/uniqueId';
-import {when} from 'mobx';
-import * as React from 'react';
+import {useKeyPressEvent} from 'react-use';
 
 import UIActions from '../../../actions/UIActions';
 import UIStore from '../../../stores/UIStore';
 
+interface DropdownButtonProps {
+  className?: string;
+  label: ReactNode;
+  onClick: (event: MouseEvent<HTMLDivElement>) => void;
+}
+
+const DropdownButton: FC<DropdownButtonProps> = ({className, label, onClick}: DropdownButtonProps) => {
+  return (
+    <div className={className} onClick={onClick}>
+      {label}
+    </div>
+  );
+};
+
+DropdownButton.defaultProps = {
+  className: undefined,
+};
+
 export interface DropdownItem<T extends string = string> {
   className?: string;
-  displayName: React.ReactNode;
+  displayName: ReactNode;
   selectable?: boolean;
   selected?: boolean;
   property?: T;
@@ -20,8 +38,8 @@ export interface DropdownItem<T extends string = string> {
 type DropdownItems<T extends string = string> = Array<DropdownItem<T>>;
 
 interface DropdownProps<T extends string = string> {
-  header: React.ReactNode;
-  trigger?: React.ReactNode;
+  header: ReactNode;
+  trigger?: ReactNode;
   dropdownButtonClass?: string;
   menuItems: Array<DropdownItems<T>>;
   handleItemSelect: (item: DropdownItem<T>) => void;
@@ -35,153 +53,23 @@ interface DropdownProps<T extends string = string> {
   noWrap?: boolean;
 }
 
-interface DropdownStates {
-  isOpen: boolean;
-}
-
-class Dropdown<T extends string = string> extends React.Component<DropdownProps<T>, DropdownStates> {
-  id = uniqueId('dropdown_');
-
-  static defaultProps = {
-    baseClassName: 'dropdown',
-    direction: 'down',
-    dropdownWrapperClass: 'dropdown',
-    dropdownButtonClass: 'dropdown__trigger',
-    matchButtonWidth: false,
-    noWrap: false,
-  };
-
-  constructor(props: DropdownProps<T>) {
-    super(props);
-
-    this.handleKeyPress = throttle(this.handleKeyPress, 200);
-
-    this.state = {
-      isOpen: false,
-    };
-
-    when(
-      () => this.state.isOpen && UIStore.activeDropdownMenu !== this.id,
-      () => this.closeDropdown,
-    );
-  }
-
-  private getDropdownButton(options: {header?: boolean; trigger?: boolean} = {}) {
-    const {header, trigger, dropdownButtonClass} = this.props;
-
-    let label = header;
-    if (options.trigger && !!trigger) {
-      label = trigger;
-    }
-
-    return (
-      <div className={dropdownButtonClass} onClick={this.handleDropdownClick}>
-        {label}
-      </div>
-    );
-  }
-
-  private getDropdownMenu(items: Array<DropdownItems<T>>) {
-    const {direction} = this.props;
-
-    // TODO: Rewrite this function, wtf was I thinking
-    const arrayMethod = direction === 'up' ? 'unshift' : 'push';
-    const content = [
-      <div className="dropdown__header" key="dropdown-header">
-        {this.getDropdownButton({header: true, trigger: false})}
-      </div>,
-    ];
-    const dropdownLists = items.map((itemList, index) => (
-      // TODO: Find a better key
-      // eslint-disable-next-line react/no-array-index-key
-      <div className="dropdown__list" key={index}>
-        {this.getDropdownMenuItems(itemList)}
-      </div>
-    ));
-
-    content[arrayMethod](
-      <ul className="dropdown__items" key="dropdown-items">
-        {dropdownLists}
-      </ul>,
-    );
-
-    return (
-      <CSSTransition classNames="menu" timeout={{enter: 250, exit: 250}}>
-        <div className="dropdown__content menu">{content}</div>
-      </CSSTransition>
-    );
-  }
-
-  private getDropdownMenuItems(listItems: DropdownItems<T>) {
-    return listItems.map((item) => {
-      const classes = classnames('dropdown__item menu__item', item.className, {
-        'is-selectable': item.selectable !== false,
-        'is-selected': item.selected,
-      });
-
-      return (
-        <li
-          className={classes}
-          key={item.property}
-          onClick={item.selectable === false ? undefined : () => this.handleItemSelect(item)}>
-          {item.displayName}
-        </li>
-      );
-    });
-  }
-
-  closeDropdown = () => {
-    window.removeEventListener('keydown', this.handleKeyPress);
-    window.removeEventListener('click', this.closeDropdown);
-
-    this.setState({isOpen: false});
-  };
-
-  openDropdown = () => {
-    window.addEventListener('keydown', this.handleKeyPress);
-    window.addEventListener('click', this.closeDropdown);
-
-    this.setState({isOpen: true});
-
-    const {onOpen} = this.props;
-
-    if (onOpen) {
-      onOpen();
-    }
-
-    UIActions.displayDropdownMenu(this.id);
-  };
-
-  handleDropdownClick = (event: React.MouseEvent<HTMLDivElement>): void => {
-    event.stopPropagation();
-
-    const {isOpen} = this.state;
-
-    if (isOpen) {
-      this.closeDropdown();
-    } else {
-      this.openDropdown();
-    }
-  };
-
-  handleItemSelect = (item: DropdownItem<T>): void => {
-    const {handleItemSelect} = this.props;
-
-    this.closeDropdown();
-    handleItemSelect(item);
-  };
-
-  handleKeyPress = (event: KeyboardEvent): void => {
-    const {isOpen} = this.state;
-    if (isOpen && event.keyCode === 27) {
-      this.closeDropdown();
-    }
-  };
-
-  render() {
-    const {baseClassName, dropdownWrapperClass, direction, matchButtonWidth, menuItems, noWrap, width} = this.props;
-    const {isOpen} = this.state;
-
+const Dropdown = observer(
+  <T extends string = string>({
+    baseClassName,
+    dropdownWrapperClass,
+    dropdownButtonClass,
+    direction,
+    header,
+    matchButtonWidth,
+    menuItems,
+    noWrap,
+    trigger,
+    width,
+    handleItemSelect,
+    onOpen,
+  }: DropdownProps<T>) => {
+    const id = useRef<string>(uniqueId('dropdown_'));
+    const isOpen = UIStore.activeDropdownMenu === id.current;
     const dropdownWrapperClassName = classnames(dropdownWrapperClass, `${baseClassName}--direction-${direction}`, {
       [`${baseClassName}--match-button-width`]: matchButtonWidth,
       [`${baseClassName}--width-${width}`]: width != null,
@@ -189,19 +77,100 @@ class Dropdown<T extends string = string> extends React.Component<DropdownProps<
       'is-expanded': isOpen,
     });
 
-    let menu: React.ReactNode = null;
+    const closeDropdown = () => {
+      window.removeEventListener('click', closeDropdown);
 
+      UIActions.displayDropdownMenu(null);
+    };
+
+    useKeyPressEvent('Escape', () => closeDropdown());
+
+    const openDropdown = () => {
+      window.addEventListener('click', closeDropdown);
+
+      if (onOpen) {
+        onOpen();
+      }
+
+      UIActions.displayDropdownMenu(id.current);
+    };
+
+    const handleDropdownClick = (event: MouseEvent<HTMLDivElement>): void => {
+      event.stopPropagation();
+
+      if (isOpen) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    };
+
+    let contentElement: ReactNode;
     if (isOpen) {
-      menu = this.getDropdownMenu(menuItems);
+      const headerElement = (
+        <div className="dropdown__header" key="dropdown-header">
+          <DropdownButton className={dropdownButtonClass} label={header} onClick={handleDropdownClick} />
+        </div>
+      );
+
+      const listElement = (
+        <ul className="dropdown__items" key="dropdown-items">
+          {menuItems.map((items, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div className="dropdown__list" key={index}>
+              {items.map((item, itemIndex) => {
+                const classes = classnames('dropdown__item menu__item', item.className, {
+                  'is-selectable': item.selectable !== false,
+                  'is-selected': item.selected,
+                });
+
+                return (
+                  <li
+                    className={classes}
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={itemIndex}
+                    onClick={
+                      item.selectable === false
+                        ? undefined
+                        : () => {
+                            closeDropdown();
+                            handleItemSelect(item);
+                          }
+                    }>
+                    {item.displayName}
+                  </li>
+                );
+              })}
+            </div>
+          ))}
+        </ul>
+      );
+
+      contentElement = (
+        <CSSTransition classNames="menu" timeout={{enter: 250, exit: 250}}>
+          <div className="dropdown__content menu">
+            {direction === 'up' ? [listElement, headerElement] : [headerElement, listElement]}
+          </div>
+        </CSSTransition>
+      );
     }
 
     return (
       <div className={dropdownWrapperClassName}>
-        {this.getDropdownButton({header: false, trigger: true})}
-        <TransitionGroup>{menu}</TransitionGroup>
+        <DropdownButton className={dropdownButtonClass} label={trigger ?? header} onClick={handleDropdownClick} />
+        <TransitionGroup>{contentElement}</TransitionGroup>
       </div>
     );
-  }
-}
+  },
+);
+
+(Dropdown as FC<DropdownProps>).defaultProps = {
+  baseClassName: 'dropdown',
+  direction: 'down',
+  dropdownWrapperClass: 'dropdown',
+  dropdownButtonClass: 'dropdown__trigger',
+  matchButtonWidth: false,
+  noWrap: false,
+};
 
 export default Dropdown;

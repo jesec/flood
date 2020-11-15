@@ -72,7 +72,7 @@ const TorrentListRowExpanded = observer(
           hash={hash}
           column="percentComplete"
           content={(torrent) => (
-            <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcons(torrent.status)} />
+            <ProgressBar percent={Math.ceil(torrent.percentComplete)} icon={torrentStatusIcons(torrent.status)} />
           )}
           className="torrent__details__section torrent__details__section--quaternary"
           classNameOverride

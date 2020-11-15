@@ -1,4 +1,4 @@
-import {PureComponent} from 'react';
+import {FC, useRef, useState} from 'react';
 
 import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '../../../ui';
 import AddMini from '../../icons/AddMini';
@@ -16,85 +16,69 @@ export const getTextArray = (formData: Record<string, string | undefined>, id: s
   }, []);
 };
 
+type Textboxes = Array<{id: number; value: string}>;
+
 interface TextboxRepeaterProps {
-  defaultValues?: Array<{id: number; value: string}>;
+  defaultValues?: Textboxes;
   id: number | string;
   label?: string;
   placeholder?: string;
 }
 
-interface TextboxRepeaterStates {
-  textboxes: Array<{id: number; value: string}>;
-}
+const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, placeholder}: TextboxRepeaterProps) => {
+  const idCounter = useRef<number>(0);
+  const [textboxes, setTextboxes] = useState<Textboxes>(defaultValues ?? [{id: 0, value: ''}]);
 
-export default class TextboxRepeater extends PureComponent<TextboxRepeaterProps, TextboxRepeaterStates> {
-  idCounter = 0;
+  return (
+    <FormRowGroup>
+      {textboxes.map((textbox, index) => {
+        let removeButton = null;
 
-  constructor(props: TextboxRepeaterProps) {
-    super(props);
-    this.state = {
-      textboxes: this.props.defaultValues || [{id: 0, value: ''}],
-    };
-  }
-
-  getID() {
-    this.idCounter += 1;
-    return this.idCounter;
-  }
-
-  getTextboxes = () =>
-    this.state.textboxes.map((textbox, index) => {
-      let removeButton = null;
-
-      if (index > 0) {
-        removeButton = (
-          <FormElementAddon
-            onClick={() => {
-              this.handleTextboxRemove(index);
-            }}>
-            <RemoveMini size="mini" />
-          </FormElementAddon>
-        );
-      }
-
-      return (
-        <FormRow key={textbox.id}>
-          <Textbox
-            addonPlacement="after"
-            id={`${this.props.id}-${textbox.id}`}
-            defaultValue={textbox.value}
-            label={index === 0 && this.props.label}
-            placeholder={this.props.placeholder}
-            wrapperClassName="textbox-repeater">
+        if (index > 0) {
+          removeButton = (
             <FormElementAddon
               onClick={() => {
-                this.handleTextboxAdd(index);
+                const newTextboxes = textboxes.slice();
+                newTextboxes.splice(index, 1);
+                setTextboxes(newTextboxes);
               }}>
-              <AddMini size="mini" />
+              <RemoveMini size="mini" />
             </FormElementAddon>
-            {removeButton}
-          </Textbox>
-        </FormRow>
-      );
-    });
+          );
+        }
 
-  handleTextboxAdd = (index: number) => {
-    this.setState((state) => {
-      const textboxes = Object.assign([], state.textboxes);
-      textboxes.splice(index + 1, 0, {id: this.getID(), value: ''});
-      return {textboxes};
-    });
-  };
+        return (
+          <FormRow key={textbox.id}>
+            <Textbox
+              addonPlacement="after"
+              id={`${id}-${textbox.id}`}
+              defaultValue={textbox.value}
+              label={index === 0 && label}
+              placeholder={placeholder}
+              wrapperClassName="textbox-repeater">
+              <FormElementAddon
+                onClick={() => {
+                  idCounter.current += 1;
 
-  handleTextboxRemove = (index: number) => {
-    this.setState((state) => {
-      const textboxes = Object.assign([], state.textboxes);
-      textboxes.splice(index, 1);
-      return {textboxes};
-    });
-  };
+                  const newTextboxes = textboxes.slice();
+                  newTextboxes.splice(index + 1, 0, {id: idCounter.current, value: ''});
+                  setTextboxes(newTextboxes);
+                }}>
+                <AddMini size="mini" />
+              </FormElementAddon>
+              {removeButton}
+            </Textbox>
+          </FormRow>
+        );
+      })}
+    </FormRowGroup>
+  );
+};
 
-  render() {
-    return <FormRowGroup>{this.getTextboxes()}</FormRowGroup>;
-  }
-}
+TextboxRepeater.defaultProps = {
+  defaultValues: undefined,
+  label: undefined,
+  placeholder: undefined,
+};
+
+export default TextboxRepeater;

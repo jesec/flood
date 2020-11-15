@@ -14,7 +14,7 @@ const UIActions = {
     UIStore.setActiveContextMenu(contextMenu);
   },
 
-  displayDropdownMenu: (id: string) => {
+  displayDropdownMenu: (id: string | null) => {
     UIStore.setActiveDropdownMenu(id);
   },
 

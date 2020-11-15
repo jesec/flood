@@ -110,7 +110,7 @@ const TorrentHeading: FC = observer(() => {
           </li>
         </ul>
       </div>
-      <ProgressBar percent={torrent.percentComplete} icon={torrentStatusIcon} />
+      <ProgressBar percent={Math.ceil(torrent.percentComplete)} icon={torrentStatusIcon} />
     </div>
   );
 });

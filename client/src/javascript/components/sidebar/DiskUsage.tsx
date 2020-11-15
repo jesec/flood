@@ -59,7 +59,7 @@ const DiskUsage: FC = observer(() => {
               {d.target}
               <span>{Math.round((100 * d.used) / d.size)}%</span>
             </div>
-            <ProgressBar percent={(100 * d.used) / d.size} />
+            <ProgressBar percent={Math.round((100 * d.used) / d.size)} />
           </Tooltip>
         </li>
       );

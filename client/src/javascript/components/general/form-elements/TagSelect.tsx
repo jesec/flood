@@ -1,6 +1,7 @@
 import classnames from 'classnames';
+import {FC, ReactNode, ReactNodeArray, useEffect, useRef, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as React from 'react';
+import {useKeyPressEvent} from 'react-use';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
@@ -10,174 +11,108 @@ import TorrentFilterStore from '../../../stores/TorrentFilterStore';
 
 interface TagSelectProps {
   id?: string;
-  label?: React.ReactNode;
+  label?: ReactNode;
   defaultValue?: TorrentProperties['tags'];
   placeholder?: string;
 }
 
-interface TagSelectStates {
-  isOpen: boolean;
-  selectedTags: TorrentProperties['tags'];
-}
+const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label}: TagSelectProps) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedTags, setSelectedTags] = useState<Array<string>>(defaultValue ?? []);
+  const formRowRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const textboxRef = useRef<HTMLInputElement>(null);
 
-export default class TagSelect extends React.Component<TagSelectProps, TagSelectStates> {
-  formRowRef = React.createRef<HTMLDivElement>();
-  menuRef = React.createRef<HTMLDivElement>();
-  textboxRef = React.createRef<HTMLInputElement>();
+  const classes = classnames('select form__element', {
+    'select--is-open': isOpen,
+  });
 
-  tagMenuItems = Object.keys(TorrentFilterStore.taxonomy.tagCounts).reduce((accumulator: React.ReactNodeArray, tag) => {
-    if (tag === '') {
-      return accumulator;
-    }
+  useKeyPressEvent('Escape', (e) => {
+    e.preventDefault();
+    setIsOpen(false);
+  });
 
-    if (tag === 'untagged') {
-      accumulator.push(
-        <SelectItem id={tag} key={tag}>
-          <FormattedMessage id="filter.untagged" />
-        </SelectItem>,
-      );
-      return accumulator;
-    }
-
-    accumulator.push(
-      <SelectItem id={tag} key={tag}>
-        {tag}
-      </SelectItem>,
-    );
-    return accumulator;
-  }, []);
-
-  constructor(props: TagSelectProps) {
-    super(props);
-
-    const {defaultValue} = this.props;
-
-    this.state = {
-      isOpen: false,
-      selectedTags: defaultValue != null ? defaultValue : [],
-    };
-  }
-
-  componentDidUpdate(_prevProps: TagSelectProps, prevState: TagSelectStates) {
-    const {isOpen} = this.state;
-
-    if (isOpen && !prevState.isOpen) {
-      window.addEventListener('keydown', this.handleKeyDown);
-      window.addEventListener('scroll', this.handleWindowScroll, {
-        capture: true,
-      });
-      document.addEventListener('click', this.handleDocumentClick);
-    } else if (!isOpen && prevState.isOpen) {
-      window.addEventListener('keydown', this.handleKeyDown);
-      window.removeEventListener('scroll', this.handleWindowScroll, {
-        capture: true,
-      });
-      document.removeEventListener('click', this.handleDocumentClick);
-    }
-  }
-
-  getItemList(children: React.ReactNodeArray) {
-    return children.reduce((accumulator: Array<React.ReactElement>, child) => {
-      const item = child as SelectItem;
-
-      if (item.props.placeholder) {
-        return accumulator;
-      }
-
-      const {selectedTags} = this.state;
-
-      accumulator.push(
-        React.cloneElement(child as React.ReactElement, {
-          onClick: this.handleItemClick,
-          isSelected: selectedTags.includes(item.props.id as string),
-        }),
-      );
-
-      return accumulator;
-    }, []);
-  }
-
-  handleDocumentClick = (e: Event) => {
-    if (!this.formRowRef.current?.contains((e.target as unknown) as Node)) {
-      this.toggleOpenState();
+  const handleDocumentClick = (e: Event) => {
+    if (!formRowRef.current?.contains((e.target as unknown) as Node)) {
+      setIsOpen(false);
     }
   };
 
-  handleItemClick = (tag: string) => {
-    let {selectedTags} = this.state;
-
-    if (tag === 'untagged') {
-      selectedTags = [];
-    } else if (selectedTags.includes(tag)) {
-      selectedTags = selectedTags.filter((key) => key !== tag);
+  useEffect(() => {
+    if (isOpen) {
+      document.addEventListener('click', handleDocumentClick);
     } else {
-      selectedTags.push(tag);
+      document.removeEventListener('click', handleDocumentClick);
     }
+  }, [isOpen]);
 
-    this.setState({selectedTags}, () => {
-      if (this.textboxRef.current != null) {
-        this.textboxRef.current.value = selectedTags.join();
-      }
-    });
-  };
-
-  handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-
-      this.setState({isOpen: false});
+  useEffect(() => {
+    if (textboxRef.current != null) {
+      textboxRef.current.value = selectedTags.join();
     }
-  };
+  }, [selectedTags]);
 
-  handleWindowScroll = (event: Event) => {
-    if (this.menuRef.current && !this.menuRef.current.contains(event.target as Node)) {
-      if (this.state.isOpen) {
-        this.setState({isOpen: false});
-      }
-    }
-  };
+  return (
+    <FormRowItem ref={formRowRef}>
+      <label className="form__element__label">{label}</label>
+      <div className={classes}>
+        <Textbox
+          id={id || 'tags'}
+          addonPlacement="after"
+          defaultValue={defaultValue}
+          placeholder={placeholder}
+          ref={textboxRef}>
+          <FormElementAddon
+            onClick={() => {
+              setIsOpen(!isOpen);
+            }}
+            className="select__indicator">
+            <Chevron />
+          </FormElementAddon>
+          <Portal>
+            <ContextMenu
+              isIn={isOpen}
+              onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
+              overlayProps={{isInteractive: false}}
+              ref={menuRef}
+              triggerRef={textboxRef}>
+              {Object.keys(TorrentFilterStore.taxonomy.tagCounts).reduce((accumulator: ReactNodeArray, tag) => {
+                if (tag === '') {
+                  return accumulator;
+                }
 
-  toggleOpenState = () => {
-    const wasOpen = this.state.isOpen;
-    this.setState({
-      isOpen: !wasOpen,
-    });
-  };
+                accumulator.push(
+                  <SelectItem
+                    id={tag}
+                    key={tag}
+                    isSelected={selectedTags.includes(tag)}
+                    onClick={() => {
+                      if (tag === 'untagged') {
+                        setSelectedTags([]);
+                      } else if (selectedTags.includes(tag)) {
+                        setSelectedTags(selectedTags.filter((key) => key !== tag));
+                      } else {
+                        setSelectedTags([...selectedTags, tag]);
+                      }
+                    }}>
+                    {tag === 'untagged' ? <FormattedMessage id="filter.untagged" /> : tag}
+                  </SelectItem>,
+                );
+                return accumulator;
+              }, [])}
+            </ContextMenu>
+          </Portal>
+        </Textbox>
+      </div>
+    </FormRowItem>
+  );
+};
 
-  render() {
-    const {defaultValue, placeholder, id, label} = this.props;
-    const {isOpen} = this.state;
+TagSelect.defaultProps = {
+  id: 'tags',
+  label: undefined,
+  defaultValue: undefined,
+  placeholder: undefined,
+};
 
-    const classes = classnames('select form__element', {
-      'select--is-open': isOpen,
-    });
-
-    return (
-      <FormRowItem ref={this.formRowRef}>
-        <label className="form__element__label">{label}</label>
-        <div className={classes}>
-          <Textbox
-            id={id || 'tags'}
-            addonPlacement="after"
-            defaultValue={defaultValue}
-            placeholder={placeholder}
-            ref={this.textboxRef}>
-            <FormElementAddon onClick={this.toggleOpenState} className="select__indicator">
-              <Chevron />
-            </FormElementAddon>
-            <Portal>
-              <ContextMenu
-                isIn={isOpen}
-                onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
-                overlayProps={{isInteractive: false}}
-                ref={this.menuRef}
-                triggerRef={this.textboxRef}>
-                {this.getItemList(this.tagMenuItems)}
-              </ContextMenu>
-            </Portal>
-          </Textbox>
-        </div>
-      </FormRowItem>
-    );
-  }
-}
+export default TagSelect;
