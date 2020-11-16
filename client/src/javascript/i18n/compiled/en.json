@@ -1381,6 +1381,24 @@
       "value": "crwdns3210:0crwdne3210:0"
     }
   ],
+  "settings.ui.tag.selector.mode": [
+    {
+      "type": 0,
+      "value": "crwdns3682:0crwdne3682:0"
+    }
+  ],
+  "settings.ui.tag.selector.mode.multi": [
+    {
+      "type": 0,
+      "value": "crwdns3686:0crwdne3686:0"
+    }
+  ],
+  "settings.ui.tag.selector.mode.single": [
+    {
+      "type": 0,
+      "value": "crwdns3684:0crwdne3684:0"
+    }
+  ],
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,

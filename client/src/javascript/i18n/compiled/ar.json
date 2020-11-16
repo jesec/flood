@@ -1471,6 +1471,24 @@
       "value": "محلي"
     }
   ],
+  "settings.ui.tag.selector.mode": [
+    {
+      "type": 0,
+      "value": "Tag Selector Preference"
+    }
+  ],
+  "settings.ui.tag.selector.mode.multi": [
+    {
+      "type": 0,
+      "value": "Multi Selection"
+    }
+  ],
+  "settings.ui.tag.selector.mode.single": [
+    {
+      "type": 0,
+      "value": "Single Selection"
+    }
+  ],
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
