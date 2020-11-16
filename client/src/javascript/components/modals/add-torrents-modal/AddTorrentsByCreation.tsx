@@ -3,7 +3,7 @@ import {useIntl} from 'react-intl';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import {Checkbox, Form, FormRow, Textbox} from '../../../ui';
-import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
+import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';

@@ -24,7 +24,7 @@ import Close from '../../icons/Close';
 import Edit from '../../icons/Edit';
 import FeedActions from '../../../actions/FeedActions';
 import FeedStore from '../../../stores/FeedStore';
-import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
+import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import TagSelect from '../../general/form-elements/TagSelect';
 import * as validators from '../../../util/validators';

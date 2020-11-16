@@ -3,7 +3,7 @@ import {useIntl} from 'react-intl';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import FileDropzone from '../../general/form-elements/FileDropzone';
-import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
+import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import {Form, FormRow} from '../../../ui';
 import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';

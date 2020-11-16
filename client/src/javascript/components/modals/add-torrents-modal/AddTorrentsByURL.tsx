@@ -2,7 +2,7 @@ import {FC, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 
 import AddTorrentsActions from './AddTorrentsActions';
-import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
+import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import {Form, FormRow} from '../../../ui';
 import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';

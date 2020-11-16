@@ -1,7 +1,7 @@
 import {FC, useState} from 'react';
 import {useIntl} from 'react-intl';
 
-import FilesystemBrowserTextbox from '../../general/filesystem/FilesystemBrowserTextbox';
+import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import {Form} from '../../../ui';
 import Modal from '../Modal';
 import ModalActions from '../ModalActions';
