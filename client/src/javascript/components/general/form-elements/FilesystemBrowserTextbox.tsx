@@ -76,6 +76,7 @@ const FilesystemBrowserTextbox: FC<FilesystemBrowserTextboxProps> = ({
     <FormRowGroup ref={formRowRef}>
       <FormRow>
         <Textbox
+          autoComplete={isDirectoryListOpen ? 'off' : undefined}
           addonPlacement="after"
           defaultValue={destination}
           id={id}

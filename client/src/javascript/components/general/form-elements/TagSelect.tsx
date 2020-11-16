@@ -58,6 +58,7 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label}: T
       <label className="form__element__label">{label}</label>
       <div className={classes}>
         <Textbox
+          autoComplete={isOpen ? 'off' : undefined}
           id={id || 'tags'}
           addonPlacement="after"
           defaultValue={defaultValue}
