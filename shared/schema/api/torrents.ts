@@ -5,7 +5,7 @@ import type {infer as zodInfer} from 'zod';
 // POST /api/torrents/add-urls
 export const addTorrentByURLSchema = object({
   // URLs to download torrents from
-  urls: array(string().url()).nonempty(),
+  urls: array(string()).nonempty(),
   // Cookies to attach to requests, arrays of strings in the format "name=value" with domain as key
   cookies: record(array(string())).optional(),
   // Path of destination
