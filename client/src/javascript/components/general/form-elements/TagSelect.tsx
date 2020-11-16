@@ -7,6 +7,7 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {ContextMenu, FormElementAddon, FormRowItem, Portal, SelectItem, Textbox} from '../../../ui';
 import Chevron from '../../../ui/icons/Chevron';
+import SettingStore from '../../../stores/SettingStore';
 import TorrentFilterStore from '../../../stores/TorrentFilterStore';
 
 interface TagSelectProps {
@@ -72,7 +73,11 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label}: T
           <Portal>
             <ContextMenu
               isIn={isOpen}
-              onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
+              onClick={(event) => {
+                if (SettingStore.floodSettings.UITagSelectorMode !== 'single') {
+                  event.nativeEvent.stopImmediatePropagation();
+                }
+              }}
               overlayProps={{isInteractive: false}}
               ref={menuRef}
               triggerRef={textboxRef}>

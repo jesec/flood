@@ -16,6 +16,7 @@ import type {Language} from '../../../constants/Languages';
 class UITab extends SettingsTab {
   torrentListViewSize = SettingStore.floodSettings.torrentListViewSize;
   selectedLanguage = SettingStore.floodSettings.language;
+  UITagSelectorMode = SettingStore.floodSettings.UITagSelectorMode;
 
   getLanguageSelectOptions() {
     return Object.keys(Languages).map((languageID) => {
@@ -42,8 +43,10 @@ class UITab extends SettingsTab {
 
     if (inputElement.type === 'radio') {
       this.torrentListViewSize = formData['ui-torrent-size'] as FloodSettings['torrentListViewSize'];
+      this.UITagSelectorMode = formData['ui-tag-selector-mode'] as FloodSettings['UITagSelectorMode'];
       this.props.onSettingsChange({
         torrentListViewSize: this.torrentListViewSize,
+        UITagSelectorMode: this.UITagSelectorMode,
       });
     }
 
@@ -71,6 +74,17 @@ class UITab extends SettingsTab {
             label={<FormattedMessage id="settings.ui.language" />}>
             {this.getLanguageSelectOptions()}
           </Select>
+        </FormRow>
+        <ModalFormSectionHeader>
+          <FormattedMessage id="settings.ui.tag.selector.mode" />
+        </ModalFormSectionHeader>
+        <FormRow>
+          <Radio checked={this.UITagSelectorMode === 'single'} groupID="ui-tag-selector-mode" id="single" width="auto">
+            <FormattedMessage id="settings.ui.tag.selector.mode.single" />
+          </Radio>
+          <Radio checked={this.UITagSelectorMode === 'multi'} groupID="ui-tag-selector-mode" id="multi" width="auto">
+            <FormattedMessage id="settings.ui.tag.selector.mode.multi" />
+          </Radio>
         </FormRow>
         <ModalFormSectionHeader>
           <FormattedMessage id="settings.ui.torrent.list" />
