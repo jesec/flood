@@ -4,13 +4,11 @@ import sort from 'fast-sort';
 export interface Alert {
   id: string;
   type: 'success' | 'error';
-  count?: number;
-  duration?: number;
+  count: number;
+  duration: number;
   timer: number;
   updated: number;
 }
-
-const DEFAULT_DURATION = 5 * 1000;
 
 class AlertStore {
   alerts: Record<string, Alert> = {};
@@ -23,30 +21,39 @@ class AlertStore {
     makeAutoObservable(this);
   }
 
-  add(alert: Pick<Alert, 'id' | 'type' | 'count' | 'duration'>) {
-    const curAlert = this.alerts[alert.id];
+  add({
+    id,
+    type = 'success',
+    count = 0,
+    duration = 5 * 1000,
+  }: {
+    id: string;
+    type?: Alert['type'];
+    count?: number;
+    duration?: number;
+  }) {
+    const curAlert = this.alerts[id];
 
     if (curAlert != null) {
       clearTimeout(curAlert.timer);
 
-      if (alert.count != null) {
-        curAlert.count = (curAlert.count ?? 0) + alert.count;
-      }
-
-      curAlert.timer = this.scheduleClose(alert.id, alert.duration);
+      curAlert.count += count;
+      curAlert.timer = this.scheduleClose(id, duration);
       curAlert.updated = Date.now();
     } else {
-      extendObservable(this.alerts, {
-        [alert.id]: {
-          ...alert,
-          timer: this.scheduleClose(alert.id, alert.duration),
-          updated: Date.now(),
-        },
-      });
+      const newAlert: Alert = {
+        id,
+        type,
+        count,
+        duration,
+        timer: this.scheduleClose(id, duration),
+        updated: Date.now(),
+      };
+      extendObservable(this.alerts, {[id]: newAlert});
     }
   }
 
-  scheduleClose(id: string, duration = DEFAULT_DURATION): number {
+  scheduleClose(id: string, duration: number): number {
     return window.setTimeout(() => {
       runInAction(() => {
         delete this.alerts[id];
