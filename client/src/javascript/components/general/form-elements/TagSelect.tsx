@@ -32,19 +32,19 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label}: T
     setIsOpen(false);
   });
 
-  const handleDocumentClick = (e: Event) => {
-    if (!formRowRef.current?.contains((e.target as unknown) as Node)) {
-      setIsOpen(false);
-    }
-  };
-
   useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('click', handleDocumentClick);
-    } else {
+    const handleDocumentClick = (e: Event) => {
+      if (!formRowRef.current?.contains((e.target as unknown) as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleDocumentClick);
+
+    return () => {
       document.removeEventListener('click', handleDocumentClick);
-    }
-  }, [isOpen]);
+    };
+  }, []);
 
   useEffect(() => {
     if (textboxRef.current != null) {

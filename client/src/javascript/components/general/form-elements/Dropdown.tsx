@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import {FC, MouseEvent, ReactNode, useRef} from 'react';
+import {FC, MouseEvent, ReactNode, useCallback, useRef} from 'react';
 import {observer} from 'mobx-react';
 import uniqueId from 'lodash/uniqueId';
 import {useKeyPressEvent} from 'react-use';
@@ -77,15 +77,15 @@ const Dropdown = observer(
       'is-expanded': isOpen,
     });
 
-    const closeDropdown = () => {
+    const closeDropdown = useCallback(() => {
       window.removeEventListener('click', closeDropdown);
 
       UIActions.displayDropdownMenu(null);
-    };
+    }, []);
 
     useKeyPressEvent('Escape', () => closeDropdown());
 
-    const openDropdown = () => {
+    const openDropdown = useCallback(() => {
       window.addEventListener('click', closeDropdown);
 
       if (onOpen) {
@@ -93,7 +93,7 @@ const Dropdown = observer(
       }
 
       UIActions.displayDropdownMenu(id.current);
-    };
+    }, [closeDropdown, onOpen]);
 
     const handleDropdownClick = (event: MouseEvent<HTMLDivElement>): void => {
       event.stopPropagation();
