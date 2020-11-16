@@ -6,7 +6,7 @@ import {observer} from 'mobx-react';
 import ClockIcon from '../../icons/ClockIcon';
 import DownloadThickIcon from '../../icons/DownloadThickIcon';
 import Duration from '../../general/Duration';
-import PriorityMeter from '../../general/filesystem/PriorityMeter';
+import PriorityMeter from '../../general/PriorityMeter';
 import ProgressBar from '../../general/ProgressBar';
 import RatioIcon from '../../icons/RatioIcon';
 import Size from '../../general/Size';

@@ -6,7 +6,7 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Checkbox} from '../../../ui';
 import FileIcon from '../../icons/File';
-import PriorityMeter from './PriorityMeter';
+import PriorityMeter from '../PriorityMeter';
 import Size from '../Size';
 import TorrentActions from '../../../actions/TorrentActions';
 

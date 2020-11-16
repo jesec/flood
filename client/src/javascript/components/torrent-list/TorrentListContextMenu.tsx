@@ -1,19 +1,15 @@
-import {createRef, RefObject} from 'react';
+import {createRef, MutableRefObject} from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import ConfigStore from '../../stores/ConfigStore';
-import PriorityMeter from '../general/filesystem/PriorityMeter';
+import PriorityMeter from '../general/PriorityMeter';
 import TorrentActions from '../../actions/TorrentActions';
 import TorrentContextMenuActions from '../../constants/TorrentContextMenuActions';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
 import type {ContextMenuItem} from '../../stores/UIStore';
-import type {PriorityMeterType} from '../general/filesystem/PriorityMeter';
-
-const priorityMeterRef: RefObject<PriorityMeterType> = createRef();
-let prioritySelected = 1;
 
 const handleTorrentDownload = (hash: TorrentProperties['hash']): void => {
   const {baseURI} = ConfigStore;
@@ -29,6 +25,8 @@ const handleTorrentDownload = (hash: TorrentProperties['hash']): void => {
 };
 
 const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem> => {
+  const changePriorityFuncRef = createRef<() => number>();
+
   return [
     {
       type: 'action',
@@ -125,27 +123,24 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       action: 'setPriority',
       label: TorrentContextMenuActions.setPriority.id,
       clickHandler: () => {
-        if (priorityMeterRef.current != null) {
-          priorityMeterRef.current.handleClick();
+        if (changePriorityFuncRef.current != null) {
+          TorrentActions.setPriority({
+            hashes: TorrentStore.selectedTorrents,
+            priority: changePriorityFuncRef.current(),
+          });
         }
-        TorrentActions.setPriority({
-          hashes: TorrentStore.selectedTorrents,
-          priority: prioritySelected,
-        });
       },
       dismissMenu: false,
       labelAction: () => (
         <PriorityMeter
           id={torrent.hash}
           key={torrent.hash}
-          ref={priorityMeterRef}
           level={torrent.priority}
           maxLevel={3}
+          onChange={() => undefined}
           priorityType="torrent"
-          onChange={(_id, level) => {
-            prioritySelected = level;
-          }}
           showLabel={false}
+          changePriorityFuncRef={changePriorityFuncRef as MutableRefObject<() => number>}
           clickHandled
         />
       ),
