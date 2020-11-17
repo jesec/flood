@@ -238,31 +238,26 @@ class TransmissionClientGatewayService extends ClientGatewayService {
   }
 
   async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions): Promise<void> {
-    const torrentsProcessed: Array<string> = [];
-
     // Remove existing trackers
     await this.clientRequestManager
       .getTorrents(hashes, ['trackers'])
       .then(this.processClientRequestSuccess, this.processClientRequestError)
       .then((torrents) =>
-        torrents.forEach((torrent, index) => {
-          const hash = hashes[index];
-          this.clientRequestManager
-            .setTorrentsProperties({
-              ids: hash,
-              trackerRemove: torrent.trackers.map((tracker) => tracker.id),
-            })
-            .then(
-              () => {
-                torrentsProcessed.push(hash);
-              },
-              () => undefined,
-            );
-        }),
+        Promise.all(
+          torrents.map(async (torrent, index) => {
+            await this.clientRequestManager
+              .setTorrentsProperties({
+                ids: hashes[index],
+                trackerRemove: torrent.trackers.map((tracker) => tracker.id),
+              })
+              .then(this.processClientRequestSuccess, this.processClientRequestError)
+              .catch(() => undefined);
+          }),
+        ),
       );
 
     return this.clientRequestManager
-      .setTorrentsProperties({ids: torrentsProcessed, trackerAdd: trackers})
+      .setTorrentsProperties({ids: hashes, trackerAdd: trackers})
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
