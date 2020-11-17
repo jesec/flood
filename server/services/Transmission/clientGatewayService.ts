@@ -33,7 +33,13 @@ import {TransmissionPriority, TransmissionTorrentsSetArguments} from './types/Tr
 class TransmissionClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as TransmissionConnectionSettings);
 
-  async addTorrentsByFile({files, destination, tags, start}: Required<AddTorrentByFileOptions>): Promise<void> {
+  async addTorrentsByFile({
+    files,
+    destination,
+    tags,
+    isCompleted,
+    start,
+  }: Required<AddTorrentByFileOptions>): Promise<void> {
     const addedTorrents: Array<string> = (
       await Promise.all(
         files.map(async (file) => {
@@ -54,9 +60,21 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     if (tags.length > 0) {
       await this.setTorrentsTags({hashes: addedTorrents, tags});
     }
+
+    if (isCompleted) {
+      // Transmission doesn't support skipping verification
+      this.checkTorrents({hashes: addedTorrents}).catch(() => undefined);
+    }
   }
 
-  async addTorrentsByURL({urls, cookies, destination, tags, start}: Required<AddTorrentByURLOptions>): Promise<void> {
+  async addTorrentsByURL({
+    urls,
+    cookies,
+    destination,
+    tags,
+    isCompleted,
+    start,
+  }: Required<AddTorrentByURLOptions>): Promise<void> {
     const addedTorrents: Array<string> = (
       await Promise.all(
         urls.map(async (url) => {
@@ -78,6 +96,11 @@ class TransmissionClientGatewayService extends ClientGatewayService {
 
     if (tags.length > 0) {
       await this.setTorrentsTags({hashes: addedTorrents, tags});
+    }
+
+    if (isCompleted) {
+      // Transmission doesn't support skipping verification
+      this.checkTorrents({hashes: addedTorrents}).catch(() => undefined);
     }
   }
 
