@@ -167,7 +167,7 @@ class ClientRequestManager {
         if (res.data.result !== 'success') {
           throw new Error();
         }
-        return res.data.arguments;
+        return res.data.arguments['torrent-added'];
       });
   }
 
