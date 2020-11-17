@@ -9,6 +9,8 @@ const request = supertest(app);
 
 const authToken = `jwt=${getAuthToken('_config')}`;
 
+jest.setTimeout(20000);
+
 describe('GET /api/client/connection-test', () => {
   it('Checks connection status', (done) => {
     request

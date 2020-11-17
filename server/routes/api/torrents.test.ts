@@ -130,9 +130,16 @@ describe('POST /api/torrents/add-urls', () => {
 
         // Continue after 15 seconds even if torrentAdded is not resolved to let the next step
         // determine if the torrents have been successfully added.
-        Promise.race([torrentAdded, new Promise((r) => setTimeout(r, 1000 * 15))]).then(() => {
-          done();
-        });
+        Promise.race([torrentAdded, new Promise((r) => setTimeout(r, 1000 * 15))])
+          .then(async () => {
+            if (process.argv.includes('--trurl')) {
+              // Torrents added to Transmission will be in checking status for a while.
+              await new Promise((r) => setTimeout(r, 1000 * 3));
+            }
+          })
+          .then(() => {
+            done();
+          });
       });
   });
 
@@ -343,6 +350,12 @@ describe('POST /api/torrents/create', () => {
           addedTorrents.map(async (torrent) => {
             createdTorrentHash = torrent.hash;
             expect(torrent.isPrivate).toBe(createTorrentOptions.isPrivate);
+
+            if (process.argv.includes('--trurl')) {
+              // TODO: Test skipped as Transmission does not support isCompleted and isBasePath
+              return;
+            }
+
             expect(torrent.percentComplete).toBe(100);
           }),
         );
