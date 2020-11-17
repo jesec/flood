@@ -34,7 +34,6 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
       }}
       onOverlayRightClick={(e) => {
         e.preventDefault();
-        UIActions.dismissContextMenu(id);
       }}
       isIn={isOpen}>
       {items.map((item, index) => {
