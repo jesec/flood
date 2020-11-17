@@ -1,6 +1,6 @@
 # Changelog
 
-## [4.1.0] (November 11, 2020)
+## [4.1.0] (November 17, 2020)
 
 ⚠️ Changes that may require manual attention: ⚠️
 
