@@ -63,7 +63,7 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
                 });
               }
               if (processedFiles.length === addedFiles.length) {
-                setFiles(processedFiles);
+                setFiles(files.concat(processedFiles));
               }
             };
             reader.readAsDataURL(file);
