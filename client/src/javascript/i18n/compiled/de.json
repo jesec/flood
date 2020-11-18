@@ -368,7 +368,7 @@
   "button.add": [
     {
       "type": 0,
-      "value": "Neu"
+      "value": "Hinzufügen"
     }
   ],
   "button.cancel": [
@@ -452,13 +452,13 @@
   "connection-interruption.not.admin": [
     {
       "type": 0,
-      "value": "Bitte kontaktieren Sie Ihren Flut-Administrator, wenn dies weiterhin geschieht."
+      "value": "Bitte kontaktieren Sie Ihren Flood-Administrator, wenn dies weiterhin geschieht."
     }
   ],
   "connection-interruption.verification-error": [
     {
       "type": 0,
-      "value": "Verbindung konnte nicht verifiziert werden."
+      "value": "Verbindung konnte nicht hergestellt werden."
     }
   ],
   "connection.settings.client.select": [
@@ -698,7 +698,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Überprüfung der Regel durch ausprobieren. Wird weder gespeichert noch gesendet."
+      "value": "Überprüfe die Regel durch ausprobieren. Wird weder gespeichert noch gesendet."
     }
   ],
   "feeds.exclude": [
@@ -796,7 +796,7 @@
   "feeds.no.items.matching": [
     {
       "type": 0,
-      "value": "Keine Artikel passend zum Suchbegriff."
+      "value": "Keine Artikel stimmen mit dem Suchbegriff überein."
     }
   ],
   "feeds.no.rules.defined": [
@@ -1294,7 +1294,7 @@
   "settings.connectivity.ip.hostname.label": [
     {
       "type": 0,
-      "value": "IP/Hostname"
+      "value": "Gemeldete/r IP/Hostname"
     }
   ],
   "settings.connectivity.max.http.connections": [
@@ -1486,19 +1486,19 @@
   "settings.ui.tag.selector.mode": [
     {
       "type": 0,
-      "value": "Tag Selector Preference"
+      "value": "Bevorzugte Tag-Auswahl"
     }
   ],
   "settings.ui.tag.selector.mode.multi": [
     {
       "type": 0,
-      "value": "Multi Selection"
+      "value": "Mehrfachauswahl"
     }
   ],
   "settings.ui.tag.selector.mode.single": [
     {
       "type": 0,
-      "value": "Single Selection"
+      "value": "Einzelauswahl"
     }
   ],
   "settings.ui.torrent.context.menu.items.show": [
@@ -2374,7 +2374,7 @@
   "torrents.remove.are.you.sure": [
     {
       "type": 0,
-      "value": "Wollen Sie "
+      "value": "Wollen Sie wirklich "
     },
     {
       "offset": 0,
@@ -2382,17 +2382,16 @@
         "=1": {
           "value": [
             {
+              "type": 7
+            },
+            {
               "type": 0,
-              "value": "dieses Torrent wirklich"
+              "value": " Torrent"
             }
           ]
         },
         "other": {
           "value": [
-            {
-              "type": 0,
-              "value": "wirklich "
-            },
             {
               "type": 7
             },
