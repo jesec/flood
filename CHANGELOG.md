@@ -1,5 +1,16 @@
 # Changelog
 
+## [4.1.1] (November 18, 2020)
+
+- Transmission fixes:
+  - Set tags while adding torrents
+  - Set trackers
+- New translations
+  - Czech, thanks to Jan Březina
+  - French, thanks to @Carryozor
+  - German, thanks to @chint95
+  - Romanian, thanks to @T-z3P
+
 ## [4.1.0] (November 17, 2020)
 
 ⚠️ Changes that may require manual attention: ⚠️
