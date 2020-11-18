@@ -31,7 +31,7 @@ Install [Node.js runtime](https://nodejs.org/). Flood tracks `Current` and provi
 - Debian, Ubuntu and RHEL-based distributions users can install latest `nodejs` from [NodeSource](https://github.com/nodesource/distributions) software repository.
 - Windows and MacOS users may use installer.
 
-**EXPERIMENTAL**: You can download a single-executable rolling build of Flood from [Github Actions](https://github.com/jesec/flood/actions?query=workflow%3A%22Publish+rolling+build%22). It bundles `Node.js` and supports `Linux`, `MacOS` and `Windows`.
+**EXPERIMENTAL**: You can download a single-executable build from [Releases](https://github.com/jesec/flood/releases) (or rolling build from [Actions](https://github.com/jesec/flood/actions?query=workflow%3A%22Publish+rolling+build%22)). It bundles `Node.js` and supports `Linux`, `MacOS` and `Windows`.
 
 ### Installation
 
