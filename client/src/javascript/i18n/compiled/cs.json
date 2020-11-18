@@ -1474,19 +1474,19 @@
   "settings.ui.tag.selector.mode": [
     {
       "type": 0,
-      "value": "Tag Selector Preference"
+      "value": "Předvolby výběru štítků"
     }
   ],
   "settings.ui.tag.selector.mode.multi": [
     {
       "type": 0,
-      "value": "Multi Selection"
+      "value": "Výběr více možností"
     }
   ],
   "settings.ui.tag.selector.mode.single": [
     {
       "type": 0,
-      "value": "Single Selection"
+      "value": "Výběr jedné možnosti"
     }
   ],
   "settings.ui.torrent.context.menu.items.show": [
