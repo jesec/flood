@@ -33,12 +33,16 @@ jobs:
       - run: git fetch origin ${{ github.ref }}
       - run: git for-each-ref ${{ github.ref }} --format="%(contents)" > body
 
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release ${{ github.ref }}
+          name: Release ${{ steps.get_version.outputs.VERSION }}
           body_path: body
           files: |
             dist-pkg/flood-linux
