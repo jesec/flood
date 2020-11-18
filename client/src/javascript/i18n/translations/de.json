@@ -70,7 +70,7 @@
   "connection.settings.transmission.password.input.placeholder": "Passwort",
   "connectivity.modal.title": "Verbindungsproblem",
   "connectivity.modal.content": "Keine Verbindung zum Client. Bitte Verbindungseinstellungen aktualisieren.",
-  "feeds.add.automatic.download.rule": "Download-Regel hinzufügen",
+  "feeds.add.automatic.download.rule": "Downloadregel hinzufügen",
   "feeds.add.feed": "Feed hinzufügen",
   "feeds.applicable.feed": "Zutreffender Feed",
   "feeds.apply.tags": "Tags anwenden",
