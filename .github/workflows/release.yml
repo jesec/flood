@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - 'v*'
 
 jobs:
   release:
@@ -25,19 +25,37 @@ jobs:
       - run: sudo npm i -g pkg
       - run: npm ci
 
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - run: npm run build-pkg
-      - run: git fetch origin refs/tags/v4.1.1
-      - run: git for-each-ref refs/tags/v4.1.1 --format="%(contents)" > body
+      - run: git fetch origin ${{ github.ref }}
+      - run: git for-each-ref ${{ github.ref }} --format="%(contents)" > body
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release v4.1.1
-          tag_name: refs/tags/v4.1.1
+          name: Release ${{ github.ref }}
           body_path: body
           files: |
             dist-pkg/flood-linux
             dist-pkg/flood-macos
             dist-pkg/flood-win.exe
+
+  release-docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Publish to Docker Hub
+        uses: sergeysova/docker-publish-action@v1
+        with:
+          image: jesec/flood
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          semver_higher: true
+          tag_extra: latest
+          tag_semver: fail
