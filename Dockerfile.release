@@ -6,7 +6,8 @@ RUN npm i -g flood --unsafe-perm
 
 # Install runtime dependencies
 RUN apk --no-cache add \
-    mediainfo
+    mediainfo \
+    tzdata
 
 # Create "download" user
 RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
