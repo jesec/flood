@@ -22,6 +22,7 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
+      - run: sudo npm i -g pkg
       - run: npm ci
 
       - run: npm publish --access public
