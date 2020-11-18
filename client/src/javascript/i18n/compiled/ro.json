@@ -1490,19 +1490,19 @@
   "settings.ui.tag.selector.mode": [
     {
       "type": 0,
-      "value": "Tag Selector Preference"
+      "value": "Preferința selectorului de etichete"
     }
   ],
   "settings.ui.tag.selector.mode.multi": [
     {
       "type": 0,
-      "value": "Multi Selection"
+      "value": "Selecție multiplă"
     }
   ],
   "settings.ui.tag.selector.mode.single": [
     {
       "type": 0,
-      "value": "Single Selection"
+      "value": "Selecție unică"
     }
   ],
   "settings.ui.torrent.context.menu.items.show": [
