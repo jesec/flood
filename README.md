@@ -89,7 +89,7 @@ Or `jesec/flood:master` for cutting-edge builds.
 
 To upgrade, `docker pull jesec/flood`.
 
-Note that you have to let Docker know which port should be exposed (e.g. `-p 3000:3000`) and folder mapping (e.g. `-v /data:/data`).
+Note that you have to let Docker know which port should be exposed (e.g. `-p 3000:3000`), folder mapping (e.g. `-v /data:/data`) and optionally timezone (e.g. `-e TZ=America/New_York`)
 
 Don't forget to pay attention to `flood`'s arguments like `--port` and `--allowedpath`.
 
