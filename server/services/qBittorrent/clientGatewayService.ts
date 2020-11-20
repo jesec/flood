@@ -179,9 +179,11 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
-    return this.clientRequestManager
-      .torrentsAddTags(hashes, tags)
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+    return this.clientRequestManager.torrentsRemoveTags(hashes).then(() => {
+      this.clientRequestManager
+        .torrentsAddTags(hashes, tags)
+        .then(this.processClientRequestSuccess, this.processClientRequestError);
+    });
   }
 
   async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions): Promise<void> {
