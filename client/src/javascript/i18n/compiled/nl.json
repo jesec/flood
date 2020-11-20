@@ -332,7 +332,7 @@
   "auth.input.clear": [
     {
       "type": 0,
-      "value": "Clear"
+      "value": "Wissen"
     }
   ],
   "auth.log.in": [
@@ -416,7 +416,7 @@
   "button.retry": [
     {
       "type": 0,
-      "value": "Retry"
+      "value": "Opnieuw"
     }
   ],
   "button.save": [
@@ -446,13 +446,13 @@
   "connection-interruption.action.selection.config": [
     {
       "type": 0,
-      "value": "Update client connection settings"
+      "value": "Update clientverbindingsinstellingen"
     }
   ],
   "connection-interruption.action.selection.retry": [
     {
       "type": 0,
-      "value": "Retry with current client connection settings"
+      "value": "Probeer opnieuw met huidige clientverbindinginstellingen"
     }
   ],
   "connection-interruption.heading": [
@@ -464,7 +464,7 @@
   "connection-interruption.not.admin": [
     {
       "type": 0,
-      "value": "Please contact your Flood administrator if this continues."
+      "value": "Neem contact op met uw Flood beheerder als dit zo blijft."
     }
   ],
   "connection-interruption.verification-error": [
@@ -590,7 +590,7 @@
   "connection.settings.rtorrent.type.tcp.warning": [
     {
       "type": 0,
-      "value": "Exposing rTorrent via TCP may allow privilege escalation."
+      "value": "Het blootstellen van rTorrent via TCP kan leiden tot privilege-escalatie."
     }
   ],
   "connection.settings.transmission": [
@@ -602,13 +602,13 @@
   "connection.settings.transmission.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Wachtwoord"
     }
   ],
   "connection.settings.transmission.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Wachtwoord"
     }
   ],
   "connection.settings.transmission.url": [
@@ -620,19 +620,19 @@
   "connection.settings.transmission.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to Transmission RPC interface"
+      "value": "URL naar Transmission RPC interface"
     }
   ],
   "connection.settings.transmission.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Gebruikersnaam"
     }
   ],
   "connection.settings.transmission.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Gebruikersnaam"
     }
   ],
   "connectivity.modal.content": [
@@ -710,7 +710,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Validate the rule by trying it out. Not saved or sent."
+      "value": "Valideer de regel door het uit te proberen. Niet opgeslagen of verzonden."
     }
   ],
   "feeds.exclude": [
@@ -1122,7 +1122,7 @@
   "locale.language.translate": [
     {
       "type": 0,
-      "value": "Start to translate"
+      "value": "Help mee met vertalen"
     }
   ],
   "mediainfo.execError": [
@@ -1164,7 +1164,7 @@
   "notification.no.notification": [
     {
       "type": 0,
-      "value": "No notification to display."
+      "value": "Je hebt nog geen meldingen."
     }
   ],
   "notification.showing": [
@@ -1506,19 +1506,19 @@
   "settings.ui.tag.selector.mode": [
     {
       "type": 0,
-      "value": "Tag Selector Preference"
+      "value": "Voorkeur Label Selector"
     }
   ],
   "settings.ui.tag.selector.mode.multi": [
     {
       "type": 0,
-      "value": "Multi Selection"
+      "value": "Meerdvoudige selectie"
     }
   ],
   "settings.ui.tag.selector.mode.single": [
     {
       "type": 0,
-      "value": "Single Selection"
+      "value": "Enkelvoudige selectie"
     }
   ],
   "settings.ui.torrent.context.menu.items.show": [
@@ -1548,7 +1548,7 @@
   "settings.ui.torrent.size": [
     {
       "type": 0,
-      "value": "Torrent Grootte"
+      "value": "Torrentgrootte"
     }
   ],
   "settings.ui.torrent.size.condensed": [
@@ -1774,7 +1774,7 @@
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Basis naam"
+      "value": "Basisnaam"
     }
   ],
   "torrents.create.comment.input.placeholder": [
@@ -2036,7 +2036,7 @@
   "torrents.details.general.tracker.message": [
     {
       "type": 0,
-      "value": "Bericht van tracker"
+      "value": "Trackerbericht"
     }
   ],
   "torrents.details.general.type": [
@@ -2274,7 +2274,7 @@
   "torrents.properties.directory": [
     {
       "type": 0,
-      "value": "Location"
+      "value": "Downloadlocatie"
     }
   ],
   "torrents.properties.download.speed": [
