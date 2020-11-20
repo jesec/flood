@@ -1,5 +1,13 @@
 # Changelog
 
+## [4.1.2] (November 21, 2020)
+
+- qBittorrent fixes:
+  - Remove existing tags
+- New translations
+  - Dutch, thanks to @vain4us
+  - German, thanks to @chint95
+
 ## [4.1.1] (November 18, 2020)
 
 - Transmission fixes:
@@ -211,3 +219,4 @@ Other changes:
 [4.0.2]: https://github.com/jesec/flood/compare/v4.0.1...v4.0.2
 [4.1.0]: https://github.com/jesec/flood/compare/v4.0.2...v4.1.0
 [4.1.1]: https://github.com/jesec/flood/compare/v4.1.0...v4.1.1
+[4.1.2]: https://github.com/jesec/flood/compare/v4.1.1...v4.1.2
