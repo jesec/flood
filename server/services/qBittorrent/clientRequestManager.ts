@@ -253,6 +253,20 @@ class ClientRequestManager {
       });
   }
 
+  async torrentsRemoveTags(hashes: Array<string>, tags?: Array<string>): Promise<void> {
+    return axios
+      .get(`${this.apiBase}/torrents/removeTags`, {
+        params: {
+          hashes: hashes.join('|'),
+          tags: tags?.join(','),
+        },
+        headers: {Cookie: await this.authCookie},
+      })
+      .then(() => {
+        // returns nothing
+      });
+  }
+
   async torrentsAddTrackers(hash: string, urls: Array<string>): Promise<void> {
     return axios
       .get(`${this.apiBase}/torrents/addTrackers?hash=${hash}&urls=${urls.join('|')}`, {
