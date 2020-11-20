@@ -668,7 +668,7 @@
   "feeds.add.automatic.download.rule": [
     {
       "type": 0,
-      "value": "Download-Regel hinzufügen"
+      "value": "Downloadregel hinzufügen"
     }
   ],
   "feeds.add.feed": [
