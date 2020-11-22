@@ -37,16 +37,13 @@ RUN rm /tmp/*.tgz
 
 # Install runtime dependencies
 RUN apk --no-cache add \
-    mediainfo
-
-# Create "download" user
-RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
-
-# Run as "download" user
-USER download
+    mediainfo su-exec
 
 # Expose port 3000
 EXPOSE 3000
 
+# Copy docker entrypoint script
+COPY docker-entrypoint.sh /
+
 # Flood
-ENTRYPOINT ["flood", "--host=0.0.0.0"]
+ENTRYPOINT ["/docker-entrypoint.sh", "flood", "--host=0.0.0.0"]
