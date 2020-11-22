@@ -422,7 +422,7 @@
   "button.save": [
     {
       "type": 0,
-      "value": "Enregistrer"
+      "value": "Enregistrer les paramètres"
     }
   ],
   "button.save.feed": [
