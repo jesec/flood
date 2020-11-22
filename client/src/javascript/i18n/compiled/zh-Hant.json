@@ -164,7 +164,7 @@
   "auth.input.clear": [
     {
       "type": 0,
-      "value": "Clear"
+      "value": "清除"
     }
   ],
   "auth.log.in": [
@@ -242,13 +242,13 @@
   "button.ok": [
     {
       "type": 0,
-      "value": "OK"
+      "value": "確定"
     }
   ],
   "button.retry": [
     {
       "type": 0,
-      "value": "Retry"
+      "value": "重試"
     }
   ],
   "button.save": [
@@ -278,13 +278,13 @@
   "connection-interruption.action.selection.config": [
     {
       "type": 0,
-      "value": "Update client connection settings"
+      "value": "更新連線設定"
     }
   ],
   "connection-interruption.action.selection.retry": [
     {
       "type": 0,
-      "value": "Retry with current client connection settings"
+      "value": "用目前的連線設定重試"
     }
   ],
   "connection-interruption.heading": [
@@ -296,7 +296,7 @@
   "connection-interruption.not.admin": [
     {
       "type": 0,
-      "value": "Please contact your Flood administrator if this continues."
+      "value": "如果這個錯誤持續發生，請聯繫Flood的管理員。"
     }
   ],
   "connection-interruption.verification-error": [
@@ -308,13 +308,13 @@
   "connection.settings.client.select": [
     {
       "type": 0,
-      "value": "Client"
+      "value": "用戶端"
     }
   ],
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "連線設定不可以是空白的。"
     }
   ],
   "connection.settings.qbittorrent": [
@@ -326,37 +326,37 @@
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "密碼"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "密碼"
     }
   ],
   "connection.settings.qbittorrent.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "網址"
     }
   ],
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "qBittorrent Web API 網址"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "使用者名稱"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "使用者名稱"
     }
   ],
   "connection.settings.rtorrent": [
@@ -368,43 +368,43 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "主機"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "主機名稱或IP"
     }
   ],
   "connection.settings.rtorrent.port": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "連接埠"
     }
   ],
   "connection.settings.rtorrent.port.input.placeholder": [
     {
       "type": 0,
-      "value": "Port"
+      "value": "連接埠"
     }
   ],
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "路徑"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "Socket路徑"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "連線類型"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -422,7 +422,7 @@
   "connection.settings.rtorrent.type.tcp.warning": [
     {
       "type": 0,
-      "value": "Exposing rTorrent via TCP may allow privilege escalation."
+      "value": "透過TCP曝露rTorrent可能會會有特權提升問題。"
     }
   ],
   "connection.settings.transmission": [
@@ -434,43 +434,43 @@
   "connection.settings.transmission.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "密碼"
     }
   ],
   "connection.settings.transmission.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "密碼"
     }
   ],
   "connection.settings.transmission.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "網址"
     }
   ],
   "connection.settings.transmission.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to Transmission RPC interface"
+      "value": "Transmission RPC 介面網址"
     }
   ],
   "connection.settings.transmission.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "使用者名稱"
     }
   ],
   "connection.settings.transmission.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "使用者名稱"
     }
   ],
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "無法連線到用戶端，請更新您的連線設定。"
     }
   ],
   "connectivity.modal.title": [
@@ -542,7 +542,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Validate the rule by trying it out. Not saved or sent."
+      "value": "此為規則驗證，不會保存或送出。"
     }
   ],
   "feeds.exclude": [
@@ -802,7 +802,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "發生未知錯誤，請再試一次。"
     }
   ],
   "filesystem.fetching": [
@@ -922,7 +922,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "發生未知的錯誤"
     }
   ],
   "general.of": [
@@ -982,7 +982,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "已排入佇列"
     }
   ],
   "notification.no.notification": [
@@ -1336,13 +1336,13 @@
   "settings.ui.tag.selector.mode.multi": [
     {
       "type": 0,
-      "value": "Multi Selection"
+      "value": "複選"
     }
   ],
   "settings.ui.tag.selector.mode.single": [
     {
       "type": 0,
-      "value": "Single Selection"
+      "value": "單選"
     }
   ],
   "settings.ui.torrent.context.menu.items.show": [
@@ -1500,7 +1500,7 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "(選填) cookie-name=cookie-value"
     }
   ],
   "torrents.add.cookies.label": [
@@ -1536,7 +1536,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "建立"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1590,7 +1590,7 @@
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "名稱"
     }
   ],
   "torrents.create.comment.input.placeholder": [
@@ -1626,7 +1626,7 @@
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "來源"
     }
   ],
   "torrents.create.tags.input.placeholder": [
@@ -1638,7 +1638,7 @@
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "Tracker URL"
+      "value": "Tracker 網址"
     }
   ],
   "torrents.create.trackers.label": [
