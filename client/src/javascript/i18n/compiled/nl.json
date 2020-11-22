@@ -1690,7 +1690,7 @@
   "torrents.add.cookies.label": [
     {
       "type": 0,
-      "value": "Koekjes"
+      "value": "Cookies"
     }
   ],
   "torrents.add.destination.label": [
@@ -2166,7 +2166,7 @@
   "torrents.list.context.move": [
     {
       "type": 0,
-      "value": "Downloadlocatie..."
+      "value": "Downloadlocatie instellen"
     }
   ],
   "torrents.list.context.pause": [
@@ -2250,7 +2250,7 @@
   "torrents.move.heading": [
     {
       "type": 0,
-      "value": "Wijzig downloadlocatie"
+      "value": "Wijzig torrentlocatie"
     }
   ],
   "torrents.properties.comment": [
