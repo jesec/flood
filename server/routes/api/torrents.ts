@@ -1,4 +1,5 @@
 import childProcess from 'child_process';
+import contentDisposition from 'content-disposition';
 import createTorrent from 'create-torrent';
 import express from 'express';
 import fs from 'fs';
@@ -555,8 +556,17 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
         const file = filePathsToDownload[0];
         if (!fs.existsSync(file)) return res.status(404).json({error: 'File not found.'});
 
-        res.attachment(path.basename(file));
-        return res.download(file);
+        const filename = path.basename(file);
+
+        // Browsers don't support MKV streaming. However, browsers do support WebM which is a
+        // subset of MKV. Chromium supports MKV when encoded in selected codecs.
+        res.type(filename.endsWith('.mkv') ? 'video/webm' : filename);
+
+        // Allow browsers to display the content inline when only a single content is requested.
+        // This is useful for texts, videos and audios. Users can still download them if needed.
+        res.setHeader('content-disposition', contentDisposition(filename, {type: 'inline'}));
+
+        return res.sendFile(file);
       }
 
       const archiveRootFolder = sanitizePath(selectedTorrent.directory);
