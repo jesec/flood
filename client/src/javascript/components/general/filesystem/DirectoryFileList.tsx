@@ -5,6 +5,7 @@ import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTre
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 import {Checkbox} from '../../../ui';
+import ConfigStore from '../../../stores/ConfigStore';
 import FileIcon from '../../icons/File';
 import PriorityMeter from '../PriorityMeter';
 import Size from '../Size';
@@ -73,7 +74,7 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
   };
 
   render() {
-    const {items} = this.props;
+    const {items, hash} = this.props;
 
     if (items == null) {
       return null;
@@ -95,7 +96,16 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
           <div className={classes} key={file.filename} title={file.filename}>
             <div className="file__label file__detail">
               {this.getIcon(file, isSelected)}
-              <div className="file__name">{file.filename}</div>
+              <div className="file__name">
+                {/* TODO: Add a WebAssembly decoding player if the feature is popular */}
+                <a
+                  href={`${ConfigStore.baseURI}api/torrents/${hash}/contents/${file.index}/data`}
+                  style={{textDecoration: 'none'}}
+                  target="_blank"
+                  rel="noreferrer">
+                  {file.filename}
+                </a>
+              </div>
             </div>
             <div className="file__detail file__detail--secondary">
               <Size value={file.sizeBytes} precision={1} />
