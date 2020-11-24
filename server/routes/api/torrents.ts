@@ -556,15 +556,29 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
         const file = filePathsToDownload[0];
         if (!fs.existsSync(file)) return res.status(404).json({error: 'File not found.'});
 
-        const filename = path.basename(file);
+        const fileName = path.basename(file);
+        const fileExt = path.extname(file);
 
-        // Browsers don't support MKV streaming. However, browsers do support WebM which is a
-        // subset of MKV. Chromium supports MKV when encoded in selected codecs.
-        res.type(filename.endsWith('.mkv') ? 'video/webm' : filename);
+        let processedType: string = fileExt;
+        switch (fileExt) {
+          // Browsers don't support MKV streaming. However, browsers do support WebM which is a
+          // subset of MKV. Chromium supports MKV when encoded in selected codecs.
+          case '.mkv':
+            processedType = 'video/webm';
+            break;
+          // MIME database uses x-flac which is not recognized by browsers as streamable audio.
+          case '.flac':
+            processedType = 'audio/flac';
+            break;
+          default:
+            break;
+        }
+
+        res.type(processedType);
 
         // Allow browsers to display the content inline when only a single content is requested.
         // This is useful for texts, videos and audios. Users can still download them if needed.
-        res.setHeader('content-disposition', contentDisposition(filename, {type: 'inline'}));
+        res.setHeader('content-disposition', contentDisposition(fileName, {type: 'inline'}));
 
         return res.sendFile(file);
       }
