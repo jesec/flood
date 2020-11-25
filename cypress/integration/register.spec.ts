@@ -15,7 +15,7 @@ context('Register', () => {
     cy.get('.select').click();
     cy.get('.context-menu').should('be.visible');
     cy.get('.select__item').contains('qBittorrent').click();
-    cy.get('.context-menu').should('not.be.visible');
+    cy.get('.context-menu').should('not.exist');
     cy.get('.input[name="client"]').should('have.value', 'qBittorrent');
     cy.get('.input--text[name="url"]').should('be.visible');
     cy.get('.input--text[name="qbt-username"]').should('be.visible');
@@ -28,13 +28,13 @@ context('Register', () => {
     cy.get('.toggle-input__element[value="socket"]').should('not.be.checked');
     cy.get('.input--text[name="host"]').should('be.visible');
     cy.get('.input--text[name="port"]').should('be.visible');
-    cy.get('.input--text[name="socket"]').should('not.be.visible');
+    cy.get('.input--text[name="socket"]').should('not.exist');
 
     cy.get('.toggle-input__label').contains('Socket').click();
     cy.get('.toggle-input__element[value="tcp"]').should('not.be.checked');
     cy.get('.toggle-input__element[value="socket"]').should('be.checked');
-    cy.get('.input--text[name="host"]').should('not.be.visible');
-    cy.get('.input--text[name="port"]').should('not.be.visible');
+    cy.get('.input--text[name="host"]').should('not.exist');
+    cy.get('.input--text[name="port"]').should('not.exist');
     cy.get('.input--text[name="socket"]').should('be.visible');
   });
 
@@ -46,8 +46,8 @@ context('Register', () => {
     cy.get('.input--text[name="socket"]').type('/data/rtorrent.sock');
     cy.get('.button[type="submit"]').click();
     cy.get('.application__view--auth-form').should('be.visible');
-    cy.get('.application__content').should('not.be.visible');
-    cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.application__content').should('not.exist');
+    cy.get('.application__loading-overlay').should('not.exist');
     cy.get('.error').should('be.visible');
   });
 
@@ -60,8 +60,8 @@ context('Register', () => {
     cy.get('.input--text[name="port"]').type('5000');
     cy.get('.button[type="submit"]').click();
     cy.get('.application__view--auth-form').should('be.visible');
-    cy.get('.application__content').should('not.be.visible');
-    cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.application__content').should('not.exist');
+    cy.get('.application__loading-overlay').should('not.exist');
     cy.get('.error').should('be.visible');
   });
 
@@ -70,8 +70,8 @@ context('Register', () => {
     cy.get('.input[name="password"]').type('test');
     cy.get('.button[type="submit"]').click();
     cy.get('.application__view--auth-form').should('be.visible');
-    cy.get('.application__content').should('not.be.visible');
-    cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.application__content').should('not.exist');
+    cy.get('.application__loading-overlay').should('not.exist');
     cy.get('.error').should('be.visible');
   });
 
@@ -94,8 +94,8 @@ context('Register', () => {
     cy.get('.button[type="submit"]').click();
 
     cy.get('.application__view--auth-form').should('be.visible');
-    cy.get('.application__content').should('not.be.visible');
-    cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.application__content').should('not.exist');
+    cy.get('.application__loading-overlay').should('not.exist');
 
     cy.get('.error').should('be.visible');
   });

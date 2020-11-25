@@ -15,8 +15,8 @@ context('Login', () => {
     cy.get('.input[name="password"]').type('test');
     cy.get('.button[type="submit"]').click();
     cy.get('.application__view--auth-form').should('be.visible');
-    cy.get('.application__content').should('not.be.visible');
-    cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.application__content').should('not.exist');
+    cy.get('.application__loading-overlay').should('not.exist');
     cy.get('.error').should('be.visible');
   });
 
@@ -24,8 +24,8 @@ context('Login', () => {
     cy.get('.input[name="username"]').type('test');
     cy.get('.button[type="submit"]').click();
     cy.get('.application__view--auth-form').should('be.visible');
-    cy.get('.application__content').should('not.be.visible');
-    cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.application__content').should('not.exist');
+    cy.get('.application__loading-overlay').should('not.exist');
     cy.get('.error').should('be.visible');
   });
 
@@ -43,8 +43,8 @@ context('Login', () => {
 
     cy.get('.button[type="submit"]').click();
     cy.get('.application__view--auth-form').should('be.visible');
-    cy.get('.application__content').should('not.be.visible');
-    cy.get('.application__loading-overlay').should('not.be.visible');
+    cy.get('.application__content').should('not.exist');
+    cy.get('.application__loading-overlay').should('not.exist');
     cy.get('.error').should('be.visible');
   });
 
