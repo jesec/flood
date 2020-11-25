@@ -10,6 +10,7 @@
     "strict": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": true,

@@ -14,7 +14,7 @@ const migrationError = (err?: Error) => {
 };
 
 const migration = () => {
-  return new Promise((resolve, _reject) => {
+  return new Promise<void>((resolve, _reject) => {
     Users.listUsers((users, err) => {
       if (users == null || err) {
         return;
@@ -22,7 +22,7 @@ const migration = () => {
 
       Promise.all(
         users.map((user) => {
-          return new Promise((migratedResolve, _migratedReject) => {
+          return new Promise<void>((migratedResolve, _migratedReject) => {
             if (user.client != null) {
               // No need to migrate.
               migratedResolve();
