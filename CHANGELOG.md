@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.2.0] (November 25, 2020)
+
+- Allow content of a torrent to be streamed directly if supported by browser
+- New translations
+  - Chinese (Traditional), thanks to @vongola12324
+  - Dutch, thanks to @vain4us
+  - French, thanks to @Coosos
+- Bump dependencies
+
 ## [4.1.2] (November 21, 2020)
 
 - qBittorrent fixes:
@@ -220,3 +229,4 @@ Other changes:
 [4.1.0]: https://github.com/jesec/flood/compare/v4.0.2...v4.1.0
 [4.1.1]: https://github.com/jesec/flood/compare/v4.1.0...v4.1.1
 [4.1.2]: https://github.com/jesec/flood/compare/v4.1.1...v4.1.2
+[4.2.0]: https://github.com/jesec/flood/compare/v4.1.2...v4.2.0
