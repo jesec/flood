@@ -48,6 +48,11 @@ const getDestination = async (
     autoDestination = directoryDefault;
   }
 
+  // Use temporary directory of Flood
+  if (autoDestination == null || typeof autoDestination !== 'string') {
+    autoDestination = getTempPath('download/');
+  }
+
   let sanitizedPath: string | null = null;
   try {
     sanitizedPath = sanitizePath(autoDestination);
