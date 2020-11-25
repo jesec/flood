@@ -210,7 +210,7 @@ class ClientRequestManager {
       'Content-Length': form.getLengthSync(),
     });
 
-    axios
+    return axios
       .post(`${this.apiBase}/torrents/add`, form, {
         headers,
       })
@@ -234,7 +234,7 @@ class ClientRequestManager {
       'Content-Length': form.getLengthSync(),
     });
 
-    axios
+    return axios
       .post(`${this.apiBase}/torrents/add`, form, {
         headers,
       })
