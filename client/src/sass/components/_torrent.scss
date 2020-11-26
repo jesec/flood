@@ -423,6 +423,7 @@ $more-info--border: $textbox-repeater--button--border;
         }
 
         &--isPrivate {
+          text-overflow: clip;
           width: 25px;
         }
 
