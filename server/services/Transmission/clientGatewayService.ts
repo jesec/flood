@@ -139,7 +139,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
             index,
             path: file.name,
             filename: file.name.split('/').pop() as string,
-            percentComplete: Math.trunc(file.bytesCompleted / file.length),
+            percentComplete: file.bytesCompleted / file.length,
             priority,
             sizeBytes: file.length,
           };
@@ -165,7 +165,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
             address: peer.address,
             country: geoip.lookup(peer.address)?.country || '',
             clientVersion: peer.clientName,
-            completedPercent: Math.trunc(peer.progress * 100),
+            completedPercent: peer.progress * 100,
             downloadRate: peer.rateToClient,
             uploadRate: peer.rateToPeer,
             isEncrypted: peer.isEncrypted,
@@ -332,7 +332,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
           {},
           ...(await Promise.all(
             torrents.map(async (torrent) => {
-              const percentComplete = Math.trunc((torrent.haveValid / torrent.totalSize) * 100);
+              const percentComplete = (torrent.haveValid / torrent.totalSize) * 100;
               const ratio = torrent.downloadedEver === 0 ? -1 : torrent.uploadedEver / torrent.downloadedEver;
               const trackerURIs = getDomainsFromURLs(torrent.trackers.map((tracker) => tracker.announce));
               const status = torrentPropertiesUtil.getTorrentStatus(torrent);

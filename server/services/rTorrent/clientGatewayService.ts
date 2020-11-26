@@ -196,7 +196,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
               index,
               path: content.path,
               filename: content.path.split('/').pop() || '',
-              percentComplete: Math.trunc((content.completedChunks / content.sizeChunks) * 100),
+              percentComplete: (content.completedChunks / content.sizeChunks) * 100,
               priority: content.priority,
               sizeBytes: content.sizeBytes,
             };
