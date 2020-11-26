@@ -57,7 +57,7 @@ const TorrentListRowExpanded = observer(
           column="percentComplete"
           content={(torrent) => (
             <span>
-              <FormattedNumber value={torrent.percentComplete} />
+              <FormattedNumber value={torrent.percentComplete} maximumFractionDigits={1} />
               <em className="unit">%</em>
               &nbsp;&mdash;&nbsp;
               <Size value={torrent.downTotal} />

@@ -110,7 +110,7 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
             <div className="file__detail file__detail--secondary">
               <Size value={file.sizeBytes} precision={1} />
             </div>
-            <div className="file__detail file__detail--secondary">{file.percentComplete}%</div>
+            <div className="file__detail file__detail--secondary">{Math.trunc(file.percentComplete)}%</div>
             <div
               className="file__detail file__detail--secondary
             file__detail--priority">
