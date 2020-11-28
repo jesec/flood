@@ -3,9 +3,10 @@
 # secrets, uncommitted changes or other sensitive information. DO NOT
 # publish the result image unless it was composed in a clean environment.
 
+ARG BUILDPLATFORM=amd64
 ARG NODE_IMAGE=node:alpine
 
-FROM ${NODE_IMAGE} as nodebuild
+FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} as nodebuild
 
 WORKDIR /usr/src/app/
 
