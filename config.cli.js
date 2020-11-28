@@ -161,6 +161,13 @@ if (argv.rtorrent) {
 
   const rTorrentProcess = spawn('rtorrent', args.concat(['-o', opts]));
 
+  rTorrentProcess.on('close', () => {
+    process.exit();
+  });
+  rTorrentProcess.on('error', () => {
+    process.exit();
+  });
+
   process.on('exit', () => {
     console.log('Killing rTorrent daemon...');
     rTorrentProcess.kill('SIGTERM');
