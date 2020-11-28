@@ -134,6 +134,12 @@ const {argv} = require('yargs')
     hidden: true,
     type: 'boolean',
   })
+  .option('rtconfig', {
+    describe: 'ADVANCED: rtorrent.rc for managed rTorrent daemon',
+    implies: 'rtorrent',
+    hidden: true,
+    type: 'string',
+  })
   .option('proxy', {
     default: 'http://127.0.0.1:3000',
     describe: 'DEV ONLY: See the "Local Development" section of README.md',
@@ -145,7 +151,16 @@ const {argv} = require('yargs')
   .help();
 
 if (argv.rtorrent) {
-  const rTorrentProcess = spawn('rtorrent', ['-o', 'system.daemon.set=true']);
+  const args = [];
+  let opts = 'system.daemon.set=true';
+
+  if (typeof argv.rtconfig === 'string' && argv.rtconfig.length > 0) {
+    args.push('-n');
+    opts += `,import=${argv.rtconfig}`;
+  }
+
+  const rTorrentProcess = spawn('rtorrent', args.concat(['-o', opts]));
+
   process.on('exit', () => {
     console.log('Killing rTorrent daemon...');
     rTorrentProcess.kill('SIGTERM');
