@@ -161,6 +161,12 @@ if (argv.rtorrent) {
 
   const rTorrentProcess = spawn('rtorrent', args.concat(['-o', opts]));
 
+  rTorrentProcess.stderr.on('data', (data) => {
+    console.error(`${data}`);
+  });
+  rTorrentProcess.stdout.on('data', (data) => {
+    console.log(`${data}`);
+  });
   rTorrentProcess.on('close', () => {
     process.exit();
   });
