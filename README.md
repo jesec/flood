@@ -93,8 +93,6 @@ Note that you have to let Docker know which port should be exposed (e.g. `-p 300
 
 Don't forget to pay attention to `flood`'s arguments like `--port` and `--allowedpath`.
 
-Currently Docker images of this project don't bundle a torrent client (yet). Its usefulness is limited as a result. You have to install a torrent client inside the container or make it possible for Flood inside Docker to interact with your torrent client.
-
 Filesystem parts in [Troubleshooting](https://github.com/jesec/flood#troubleshooting) are especially important for containers.
 
 ## Building Flood
