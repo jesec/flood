@@ -73,7 +73,7 @@ const TorrentPeers: FC = () => {
                 <td>
                   <Size value={peer.uploadRate} isSpeed />
                 </td>
-                <td>{`${peer.completedPercent}%`}</td>
+                <td>{`${Math.ceil(peer.completedPercent)}%`}</td>
                 <td>{peer.clientVersion}</td>
                 <td className="peers-list__encryption">{encryptedIcon}</td>
                 <td className="peers-list__incoming">{incomingIcon}</td>
