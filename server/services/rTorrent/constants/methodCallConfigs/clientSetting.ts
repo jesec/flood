@@ -1,4 +1,4 @@
-import {numberTransformer, stringTransformer, stringArrayTransformer} from '../../util/rTorrentMethodCallUtil';
+import {numberTransformer, stringArrayTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const clientSettingMethodCallConfigs = {
   dht: {
@@ -14,7 +14,10 @@ const clientSettingMethodCallConfigs = {
   },
   directoryDefault: {
     methodCall: 'directory.default',
-    transformValue: stringTransformer,
+    transformValue: (value: unknown) => {
+      const [directory] = value as Array<string>;
+      return directory;
+    },
   },
   networkHttpMaxOpen: {
     methodCall: 'network.http.max_open',
