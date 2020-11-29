@@ -6,21 +6,20 @@ about: 'Report a general bug in flood'
 Type: Bug Report
 
 - [ ] Try to follow the update procedure described in the README and try again before opening this issue.
-- [ ] Please check the [F.A.Q.](https://github.com/Flood-UI/flood/wiki/F.A.Q.).
-- [ ] Please check the [Troubleshooting](https://github.com/Flood-UI/flood/wiki/Troubleshooting) wiki section.
 
 ## Your Environment
 
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 
 - Version used:
-  - Version (stable release) `git --no-pager tag`
+  - Version (stable release)
   - Commit ID (development release) `git --no-pager log -1`
 - Environment name and version:
   - Node.js version `node --version`
   - npm version `npm --version`
   - Web browser `name and version`
-- Operating System and version:
+- Operating system and version:
+- Torrent client and version:
 
 ## Summary
 

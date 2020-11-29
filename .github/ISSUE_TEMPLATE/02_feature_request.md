@@ -5,7 +5,7 @@ about: 'Suggest an idea for this project'
 
 Type: Feature Request
 
-- [ ] If you want to contribute to the project please review the [contributing guidelines](https://github.com/Flood-UI/flood/blob/master/.github/CONTRIBUTING.md).
+- [ ] If you want to contribute to the project please review the [contributing guidelines](https://github.com/jesec/flood/blob/master/.github/CONTRIBUTING.md).
 
 ## Summary
 
