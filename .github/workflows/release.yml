@@ -50,16 +50,42 @@ jobs:
             dist-pkg/flood-win.exe
 
   release-docker:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
 
-      - name: Publish to Docker Hub
-        uses: sergeysova/docker-publish-action@v1
+      - name: Parse semantic version
+        id: parse_semver
+        run: |
+          full_version=`echo ${GITHUB_REF/refs\/tags\/v/}`
+          major_version=`echo $full_version | cut -d'.' -f1`
+          minor_version=`echo $full_version | cut -d'.' -f2`
+          major_minor=`echo $major_version.$minor_version`
+          echo ::set-output name=MAJOR_VERSION::$major_version
+          echo ::set-output name=MAJOR_MINOR::$major_minor
+          echo ::set-output name=FULL_VERSION::$full_version
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
-          image: jesec/flood
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          semver_higher: true
-          tag_extra: latest
-          tag_semver: fail
+
+      - name: Publish to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          tags: |
+            jesec/flood:latest
+            jesec/flood:${{ steps.parse_semver.outputs.MAJOR_VERSION }}
+            jesec/flood:${{ steps.parse_semver.outputs.MAJOR_MINOR }}
+            jesec/flood:${{ steps.parse_semver.outputs.FULL_VERSION }}
