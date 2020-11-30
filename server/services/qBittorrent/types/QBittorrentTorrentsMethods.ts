@@ -117,6 +117,8 @@ export interface QBittorrentTorrentsAddOptions {
   cookie?: string;
   // Category for the torrent
   category?: string;
+  // Tags for the torrent, split by ','
+  tags?: string;
   // Skip hash checking. Possible values are true, false (default)
   skip_checking?: boolean;
   // Add torrents in the paused state. Possible values are true, false (default)

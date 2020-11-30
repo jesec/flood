@@ -36,28 +36,38 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
   cachedProperties: Record<string, Pick<TorrentProperties, 'dateCreated' | 'isPrivate' | 'trackerURIs'>> = {};
 
-  async addTorrentsByFile({files, destination, isBasePath, start}: Required<AddTorrentByFileOptions>): Promise<void> {
+  async addTorrentsByFile({
+    files,
+    destination,
+    tags,
+    isBasePath,
+    start,
+  }: Required<AddTorrentByFileOptions>): Promise<void> {
     const fileBuffers = files.map((file) => {
       return Buffer.from(file, 'base64');
     });
 
-    // TODO: qBittorrent does not have capability to add tags during add torrents.
-
     return this.clientRequestManager
       .torrentsAddFiles(fileBuffers, {
         savepath: destination,
+        tags: tags.join(','),
         paused: !start,
         root_folder: !isBasePath,
       })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  async addTorrentsByURL({urls, destination, isBasePath, start}: Required<AddTorrentByURLOptions>): Promise<void> {
-    // TODO: qBittorrent does not have capability to add tags during add torrents.
-
+  async addTorrentsByURL({
+    urls,
+    destination,
+    tags,
+    isBasePath,
+    start,
+  }: Required<AddTorrentByURLOptions>): Promise<void> {
     return this.clientRequestManager
       .torrentsAddURLs(urls, {
         savepath: destination,
+        tags: tags.join(','),
         paused: !start,
         root_folder: !isBasePath,
       })
