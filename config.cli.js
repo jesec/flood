@@ -146,9 +146,27 @@ const {argv} = require('yargs')
     hidden: true,
     type: 'string',
   })
+  .option('test', {
+    default: false,
+    describe: 'DEV ONLY: Test setup',
+    hidden: true,
+    type: 'boolean',
+  })
   .version(require('./package.json').version)
   .alias('v', 'version')
   .help();
+
+process.on('SIGINT', () => {
+  process.exit();
+});
+
+try {
+  fs.mkdirSync(path.join(argv.rundir, 'db'), {recursive: true});
+  fs.mkdirSync(path.join(argv.rundir, 'temp'), {recursive: true});
+} catch (error) {
+  console.error('Failed to access runtime directory');
+  process.exit(1);
+}
 
 if (argv.rtorrent) {
   const args = [];
@@ -161,29 +179,21 @@ if (argv.rtorrent) {
 
   const rTorrentProcess = spawn('rtorrent', args.concat(['-o', opts]), {stdio: 'inherit'});
 
-  rTorrentProcess.on('close', () => {
-    process.exit(1);
-  });
-  rTorrentProcess.on('error', () => {
-    process.exit(1);
-  });
+  fs.writeFileSync(path.join(argv.rundir, 'rtorrent.pid'), `${rTorrentProcess.pid}`);
+
+  if (!argv.test) {
+    rTorrentProcess.on('close', () => {
+      process.exit(1);
+    });
+    rTorrentProcess.on('error', () => {
+      process.exit(1);
+    });
+  }
 
   process.on('exit', () => {
     console.log('Killing rTorrent daemon...');
     rTorrentProcess.kill('SIGTERM');
   });
-}
-
-process.on('SIGINT', () => {
-  process.exit();
-});
-
-try {
-  fs.mkdirSync(path.join(argv.rundir, 'db'), {recursive: true});
-  fs.mkdirSync(path.join(argv.rundir, 'temp'), {recursive: true});
-} catch (error) {
-  console.error('Failed to access runtime directory');
-  process.exit(1);
 }
 
 const DEFAULT_SECRET_PATH = path.join(argv.rundir, 'flood.secret');

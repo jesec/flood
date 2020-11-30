@@ -26,8 +26,10 @@ process.argv.push('--rtsocket', rTorrentSocket);
 process.argv.push('--allowedpath', temporaryRuntimeDirectory);
 process.argv.push('--rtorrent');
 process.argv.push('--rtconfig', `${temporaryRuntimeDirectory}/rtorrent.rc`);
+process.argv.push('--test');
 
 afterAll((done) => {
+  process.kill(Number(fs.readFileSync(`${temporaryRuntimeDirectory}/rtorrent.pid`).toString()));
   if (process.env.CI !== 'true') {
     // TODO: This leads to test flakiness caused by ENOENT error
     // NeDB provides no method to close database connection
