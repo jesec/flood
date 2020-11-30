@@ -159,19 +159,13 @@ if (argv.rtorrent) {
     opts += `,import=${argv.rtconfig}`;
   }
 
-  const rTorrentProcess = spawn('rtorrent', args.concat(['-o', opts]));
+  const rTorrentProcess = spawn('rtorrent', args.concat(['-o', opts]), {stdio: 'inherit'});
 
-  rTorrentProcess.stderr.on('data', (data) => {
-    console.error(`${data}`);
-  });
-  rTorrentProcess.stdout.on('data', (data) => {
-    console.log(`${data}`);
-  });
   rTorrentProcess.on('close', () => {
-    process.exit();
+    process.exit(1);
   });
   rTorrentProcess.on('error', () => {
-    process.exit();
+    process.exit(1);
   });
 
   process.on('exit', () => {
