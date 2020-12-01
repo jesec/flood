@@ -18,7 +18,7 @@ const SetTrackersModal: FC = () => {
     isLoadingTrackers: boolean;
     trackerURLs: Array<string>;
   }>({
-    isLoadingTrackers: false,
+    isLoadingTrackers: true,
     trackerURLs: [],
   });
 
