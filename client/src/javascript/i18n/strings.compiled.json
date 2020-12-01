@@ -1579,6 +1579,18 @@
       "value": "Speed Limits"
     }
   ],
+  "sidebar.button.theme.dark": [
+    {
+      "type": 0,
+      "value": "Dark Theme"
+    }
+  ],
+  "sidebar.button.theme.light": [
+    {
+      "type": 0,
+      "value": "Light Theme"
+    }
+  ],
   "sidebar.search.placeholder": [
     {
       "type": 0,

@@ -1,9 +1,11 @@
 import {ComponentProps, FC, forwardRef, RefCallback, UIEvent, useEffect, useRef} from 'react';
 import {FixedSizeList} from 'react-window';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
-import {useMedia, useWindowSize} from 'react-use';
+import {useWindowSize} from 'react-use';
 
 import type {ListChildComponentProps} from 'react-window';
+
+import ConfigStore from '../../stores/ConfigStore';
 
 const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: ComponentProps<'div'>, ref) => {
   const {children, className, onScroll} = props;
@@ -60,11 +62,10 @@ interface ListViewportProps {
 const ListViewport = forwardRef<FixedSizeList, ListViewportProps>((props: ListViewportProps, ref) => {
   const {className, itemRenderer, itemSize, listLength, outerRef} = props;
   const {height: windowHeight, width: windowWidth} = useWindowSize();
-  const isDarkTheme = useMedia('(prefers-color-scheme: dark)');
 
   return (
     <FixedSizeList
-      className={`${className} ${isDarkTheme ? 'os-theme-light' : 'os-theme-dark'}`}
+      className={`${className} ${ConfigStore.preferDark ? 'os-theme-light' : 'os-theme-dark'}`}
       height={Math.max(itemSize * 30, windowHeight * 1.5)}
       itemCount={listLength}
       itemSize={itemSize}

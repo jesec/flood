@@ -3,12 +3,14 @@ import {observer} from 'mobx-react';
 import {Router} from 'react-router-dom';
 import {Route, Switch} from 'react-router';
 import ReactDOM from 'react-dom';
+import {useMedia} from 'react-use';
 
 import AsyncIntlProvider from './i18n/languages';
 import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
 import history from './util/history';
 import LoadingOverlay from './components/general/LoadingOverlay';
+import ConfigStore from './stores/ConfigStore';
 import SettingStore from './stores/SettingStore';
 import UIStore from './stores/UIStore';
 
@@ -66,11 +68,16 @@ const FloodApp: FC = observer(() => {
     );
   }, []);
 
+  const isDarkTheme = useMedia('(prefers-color-scheme: dark)');
+  useEffect(() => {
+    ConfigStore.systemPreferDark = isDarkTheme;
+  }, [isDarkTheme]);
+
   return (
     <Suspense fallback={<LoadingOverlay />}>
       <AsyncIntlProvider locale={SettingStore.floodSettings.language}>
         <Router history={history}>
-          <AppWrapper>
+          <AppWrapper className={ConfigStore.preferDark ? 'dark' : undefined}>
             <Switch>
               <Route path="/login" component={Login} />
               <Route path="/register" component={Register} />

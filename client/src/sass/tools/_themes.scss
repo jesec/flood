@@ -15,7 +15,7 @@
 
   @include themeProperty($light, $property, $color, $additionalPropertiesPositionIsFront, $additionalProperties);
 
-  @media (prefers-color-scheme: dark) {
+  .dark & {
     @include themeProperty($dark, $property, $color, $additionalPropertiesPositionIsFront, $additionalProperties);
   }
 }
