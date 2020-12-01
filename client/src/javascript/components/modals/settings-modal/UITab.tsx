@@ -64,14 +64,10 @@ class UITab extends SettingsTab {
     return (
       <Form onChange={this.handleFormChange}>
         <ModalFormSectionHeader key="locale-header">
-          <FormattedMessage id="settings.ui.locale" />
+          <FormattedMessage id="settings.ui.language" />
         </ModalFormSectionHeader>
         <FormRow key="locale-selection">
-          <Select
-            disabled={this.selectedLanguage === 'translate'}
-            defaultID={this.selectedLanguage}
-            id="language"
-            label={<FormattedMessage id="settings.ui.language" />}>
+          <Select disabled={this.selectedLanguage === 'translate'} defaultID={this.selectedLanguage} id="language">
             {this.getLanguageSelectOptions()}
           </Select>
         </FormRow>
