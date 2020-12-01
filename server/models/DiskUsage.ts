@@ -57,13 +57,19 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
     if (!isPlatformSupported()) {
       return Promise.reject();
     }
-    return diskUsage[process.platform as SupportedPlatform]().then((disks) => {
-      if (disks.length !== this.disks.length || disks.some((d, i) => d.used !== this.disks[i].used)) {
-        this.tLastChange = Date.now();
-        this.disks = disks;
-        this.emit('DISK_USAGE_CHANGE', this.getDiskUsage());
-      }
-    });
+
+    return diskUsage[process.platform as SupportedPlatform]()
+      .then((disks) => {
+        // Mountpoints with a very long path are unlikely to be useful.
+        return disks.filter((disk) => disk.target.length < 30);
+      })
+      .then((disks) => {
+        if (disks.length !== this.disks.length || disks.some((d, i) => d.used !== this.disks[i].used)) {
+          this.tLastChange = Date.now();
+          this.disks = disks;
+          this.emit('DISK_USAGE_CHANGE', this.getDiskUsage());
+        }
+      });
   };
 
   getDiskUsage(): DiskUsageSummary {
