@@ -30,8 +30,13 @@ class TorrentContextMenuActionsList extends Component<
   constructor(props: TorrentContextMenuActionsListProps) {
     super(props);
 
+    const {torrentContextMenuActions} = SettingStore.floodSettings;
+
     this.state = {
-      torrentContextMenuActions: SettingStore.floodSettings.torrentContextMenuActions,
+      torrentContextMenuActions: Object.keys(TorrentContextMenuActions).map((key) => ({
+        id: key,
+        visible: torrentContextMenuActions.some((setting) => setting.id === key && setting.visible),
+      })) as FloodSettings['torrentContextMenuActions'],
     };
   }
 
@@ -92,16 +97,11 @@ class TorrentContextMenuActionsList extends Component<
   };
 
   render() {
-    const torrentContextMenuActions = Object.keys(TorrentContextMenuActions).map((key) => ({
-      id: key,
-      visible: this.state.torrentContextMenuActions.some((setting) => setting.id === key && setting.visible),
-    }));
-
     return (
       <SortableList
         id="torrent-context-menu-items"
         className="sortable-list--torrent-context-menu-items"
-        items={torrentContextMenuActions}
+        items={this.state.torrentContextMenuActions}
         lockedIDs={lockedIDs}
         isDraggable={false}
         onMouseDown={this.handleMouseDown}

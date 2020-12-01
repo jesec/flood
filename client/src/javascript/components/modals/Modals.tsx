@@ -6,6 +6,7 @@ import {useKeyPressEvent} from 'react-use';
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
 import ConfirmModal from './confirm-modal/ConfirmModal';
 import FeedsModal from './feeds-modal/FeedsModal';
+import GenerateMagnetModal from './generate-magnet-modal/GenerateMagnetModal';
 import MoveTorrentsModal from './move-torrents-modal/MoveTorrentsModal';
 import RemoveTorrentsModal from './remove-torrents-modal/RemoveTorrentsModal';
 import SetTagsModal from './set-tags-modal/SetTagsModal';
@@ -25,6 +26,8 @@ const createModal = (id: Modal['id']): React.ReactNode => {
       return <ConfirmModal />;
     case 'feeds':
       return <FeedsModal />;
+    case 'generate-magnet':
+      return <GenerateMagnetModal />;
     case 'move-torrents':
       return <MoveTorrentsModal />;
     case 'remove-torrents':

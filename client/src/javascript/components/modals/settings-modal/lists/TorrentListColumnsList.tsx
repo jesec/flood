@@ -28,8 +28,25 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
   constructor(props: TorrentListColumnsListProps) {
     super(props);
 
+    const {torrentListColumns} = SettingStore.floodSettings;
+
+    const torrentListColumnItems: ListItem[] = torrentListColumns
+      .filter((column) => TorrentListColumns[column.id] != null)
+      .slice();
+
+    const newTorrentListColumnItems: ListItem[] = Object.keys(TorrentListColumns)
+      .filter((key) => torrentListColumns.every((column) => column.id !== key))
+      .map((newColumn) => {
+        return {
+          id: newColumn,
+          visible: false,
+        };
+      });
+
     this.state = {
-      torrentListColumns: SettingStore.floodSettings.torrentListColumns,
+      torrentListColumns: torrentListColumnItems.concat(
+        newTorrentListColumnItems,
+      ) as FloodSettings['torrentListColumns'],
     };
   }
 
@@ -125,24 +142,11 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
   render(): React.ReactNode {
     const lockedIDs = this.getLockedIDs();
 
-    const torrentListColumnItems: ListItem[] = this.state.torrentListColumns
-      .filter((column) => TorrentListColumns[column.id] != null)
-      .slice();
-
-    const newTorrentListColumnItems: ListItem[] = Object.keys(TorrentListColumns)
-      .filter((key) => this.state.torrentListColumns.every((column) => column.id !== key))
-      .map((newColumn) => {
-        return {
-          id: newColumn,
-          visible: false,
-        };
-      });
-
     return (
       <SortableList
         id="torrent-details"
         className="sortable-list--torrent-details"
-        items={torrentListColumnItems.concat(newTorrentListColumnItems)}
+        items={this.state.torrentListColumns}
         lockedIDs={lockedIDs}
         onMouseDown={this.handleMouseDown}
         onDrop={this.handleMove}

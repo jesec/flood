@@ -58,6 +58,7 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
     {id: 'setTrackers', visible: false},
     {id: 'torrentDetails', visible: true},
     {id: 'torrentDownload', visible: true},
+    {id: 'generateMagnet', visible: false},
     {id: 'setPriority', visible: false},
   ],
   torrentListViewSize: 'condensed',
