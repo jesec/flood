@@ -269,6 +269,12 @@
       "value": "crwdns2964:0crwdne2964:0"
     }
   ],
+  "button.close": [
+    {
+      "type": 0,
+      "value": "crwdns3692:0crwdne3692:0"
+    }
+  ],
   "button.download": [
     {
       "type": 0,
@@ -1465,6 +1471,18 @@
       "value": "crwdns3240:0crwdne3240:0"
     }
   ],
+  "sidebar.button.theme.dark": [
+    {
+      "type": 0,
+      "value": "crwdns3688:0crwdne3688:0"
+    }
+  ],
+  "sidebar.button.theme.light": [
+    {
+      "type": 0,
+      "value": "crwdns3690:0crwdne3690:0"
+    }
+  ],
   "sidebar.search.placeholder": [
     {
       "type": 0,
@@ -2011,6 +2029,36 @@
       "value": "crwdns3382:0crwdne3382:0"
     }
   ],
+  "torrents.generate.magnet.heading": [
+    {
+      "type": 0,
+      "value": "crwdns3694:0crwdne3694:0"
+    }
+  ],
+  "torrents.generate.magnet.loading.trackers": [
+    {
+      "type": 0,
+      "value": "crwdns3696:0crwdne3696:0"
+    }
+  ],
+  "torrents.generate.magnet.magnet": [
+    {
+      "type": 0,
+      "value": "crwdns3700:0crwdne3700:0"
+    }
+  ],
+  "torrents.generate.magnet.magnet.with.trackers": [
+    {
+      "type": 0,
+      "value": "crwdns3702:0crwdne3702:0"
+    }
+  ],
+  "torrents.generate.magnet.private.torrent": [
+    {
+      "type": 0,
+      "value": "crwdns3698:0crwdne3698:0"
+    }
+  ],
   "torrents.list.cannot.connect": [
     {
       "type": 0,
@@ -2039,6 +2087,12 @@
     {
       "type": 0,
       "value": "crwdns3396:0crwdne3396:0"
+    }
+  ],
+  "torrents.list.context.generate.magnet": [
+    {
+      "type": 0,
+      "value": "crwdns3704:0crwdne3704:0"
     }
   ],
   "torrents.list.context.move": [
