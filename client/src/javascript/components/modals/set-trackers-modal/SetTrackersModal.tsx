@@ -50,6 +50,7 @@ const SetTrackersModal: FC = () => {
                   placeholder={intl.formatMessage({
                     id: 'torrents.set.trackers.loading.trackers',
                   })}
+                  disabled
                 />
               </FormRow>
             ) : (
