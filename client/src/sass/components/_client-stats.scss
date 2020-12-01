@@ -85,6 +85,8 @@ $client-stats--timestamp--foreground: #526780;
     }
 
     &__data {
+      user-select: none;
+
       &--secondary,
       &--timestamp {
         font-size: 0.8em;
