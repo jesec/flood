@@ -1,5 +1,34 @@
 # Changelog
 
+## [4.3.0] (December 1, 2020)
+
+- Generate magnet link from torrent
+- Add a button to allow user to switch color scheme
+- Multi architecture Docker images
+  - linux/amd64
+  - linux/arm64 (new)
+  - linux/arm/v7 (new)
+- Allow to display precise percentage
+  - Expanded view: 1 decimal place
+  - Details: 3 decimal places
+- Mountpoints with very long paths are ignored by disk usage
+- Tags can be attached while adding torrents to qBittorrent (needs qbittorrent/qBittorrent#13882)
+- Bug fixes:
+  - Download destination fallback to rTorrent default destination (Mika-/torrent-control#105)
+  - Properly catch errors of AddFiles and AddURLs when using qBittorrent
+  - Display existing trackers in set trackers modal
+- New translations
+  - Spanish, thanks to @vain4us
+- Bump dependencies
+
+Side note:
+
+I am starting to maintain a distribution of rTorrent, available at [jesec/rtorrent](https://github.com/jesec/rtorrent). It is optimized and small. It uses modern CMake and Bazel build systems. Bazel can also be used for dependency management and to produce statically linked reproducible builds.
+
+Static binaries (amd64, arm64) can be downloaded via [Github Actions](https://github.com/jesec/rtorrent/actions?query=workflow%3A%22Publish+rolling+build%22). Docker images are also available at [jesec/rtorrent](https://hub.docker.com/r/jesec/rtorrent).
+
+I made a simple [Dockerfile](https://github.com/jesec/flood/blob/5cc56067c3be6c91ccf94f71d4784be99c2823f8/Dockerfile.rtorrent) to demonstrate how to integrate rTorrent with Flood.
+
 ## [4.2.0] (November 25, 2020)
 
 - Allow content of a torrent to be streamed directly if supported by browser
@@ -230,3 +259,4 @@ Other changes:
 [4.1.1]: https://github.com/jesec/flood/compare/v4.1.0...v4.1.1
 [4.1.2]: https://github.com/jesec/flood/compare/v4.1.1...v4.1.2
 [4.2.0]: https://github.com/jesec/flood/compare/v4.1.2...v4.2.0
+[4.3.0]: https://github.com/jesec/flood/compare/v4.2.0...v4.3.0

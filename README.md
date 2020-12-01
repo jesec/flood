@@ -76,7 +76,7 @@ Run the installation command again.
   - Flood server performs file operations itself. As such, Flood needs to have permissions/access to the files.
   - Flood only uses the path provided by the torrent client so it needs to have the same filesystem context as the torrent client. If a file is "/path/to/a/file" to the torrent client, it has to be "/path/to/a/file" to Flood in order to get file operations working. It can't be "/mnt/some/different/path/file".
 - rTorrent:
-  - Linux or MacOS users can use package managers such as `apt`, `yum`, `pacman`, `brew` of the platform to install rTorrent.
+  - Linux or MacOS users can use package managers such as `apt`, `yum`, `pacman`, `brew` of the platform to install rTorrent. Alternatively, download latest static binary (available for `linux/amd64` and `linux/arm64`) from [Github Actions](https://github.com/jesec/rtorrent/actions?query=workflow%3A%22Publish+rolling+build%22).
   - Windows users can use [Cygwin](https://www.cygwin.com/) to install rTorrent.
   - [Compile](https://github.com/rakshasa/rtorrent/wiki/Installing): XMLRPC support flag (`--with-xmlrpc-c`) is required during compilation.
 - Ask for help in the [Flood Discord server](https://discord.gg/Z7yR5Uf).
@@ -92,6 +92,8 @@ To upgrade, `docker pull jesec/flood`.
 Note that you have to let Docker know which port should be exposed (e.g. `-p 3000:3000`) and folder mapping (e.g. `-v /data:/data`).
 
 Don't forget to pay attention to `flood`'s arguments like `--port` and `--allowedpath`.
+
+Checkout [Dockerfile.rtorrent](https://github.com/jesec/flood/blob/master/Dockerfile.rtorrent) for a simple example of Flood-rTorrent Docker integration.
 
 Filesystem parts in [Troubleshooting](https://github.com/jesec/flood#troubleshooting) are especially important for containers.
 
