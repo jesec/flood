@@ -213,6 +213,8 @@
   "sidebar.button.feeds": "Feeds",
   "sidebar.button.settings": "Settings",
   "sidebar.button.speedlimits": "Speed Limits",
+  "sidebar.button.theme.dark": "Dark Theme",
+  "sidebar.button.theme.light": "Light Theme",
   "sidebar.button.log.out": "Log Out",
   "sidebar.search.placeholder": "Search torrents",
   "sidebar.transferdata.downloaded": "Downloaded",

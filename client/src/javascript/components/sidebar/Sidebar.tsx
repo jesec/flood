@@ -11,6 +11,7 @@ import SidebarActions from './SidebarActions';
 import SpeedLimitDropdown from './SpeedLimitDropdown';
 import StatusFilters from './StatusFilters';
 import TagFilters from './TagFilters';
+import ThemeSwitchButton from './ThemeSwitchButton';
 import TrackerFilters from './TrackerFilters';
 import TransferData from './TransferData';
 
@@ -38,6 +39,9 @@ const Sidebar: FC = () => {
       <TagFilters />
       <TrackerFilters />
       <DiskUsage />
+      <SidebarActions>
+        <ThemeSwitchButton />
+      </SidebarActions>
     </OverlayScrollbarsComponent>
   );
 };

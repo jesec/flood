@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import {PureComponent} from 'react';
 
 interface BaseIconProps {
   className?: string;
@@ -6,7 +6,7 @@ interface BaseIconProps {
   viewBox?: string;
 }
 
-export default class BaseIcon extends Component<BaseIconProps> {
+export default class BaseIcon extends PureComponent<BaseIconProps> {
   static defaultProps = {
     className: '',
     viewBox: '0 0 60 60',

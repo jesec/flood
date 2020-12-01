@@ -1,3 +1,4 @@
+import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react';
@@ -12,10 +13,11 @@ import LoadingOverlay from './general/LoadingOverlay';
 
 interface AppWrapperProps {
   children: ReactNode;
+  className?: string;
 }
 
 const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
-  const {children} = props;
+  const {children, className} = props;
 
   let overlay: ReactNode = null;
   if (!AuthStore.isAuthenticating || (AuthStore.isAuthenticated && !UIStore.haveUIDependenciesResolved)) {
@@ -33,7 +35,7 @@ const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
   }
 
   return (
-    <div className="application">
+    <div className={classnames('application', className)}>
       <WindowTitle />
       <TransitionGroup>
         {overlay != null ? (
@@ -46,5 +48,9 @@ const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
     </div>
   );
 });
+
+AppWrapper.defaultProps = {
+  className: undefined,
+};
 
 export default AppWrapper;
