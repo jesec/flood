@@ -38,6 +38,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
     line-height: $tooltip-line-height;
     padding: $tooltip-padding-vertical $tooltip-padding-horizontal;
     position: relative;
+    user-select: none;
 
     &--no-padding {
       padding: 0;
