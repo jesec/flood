@@ -120,6 +120,14 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     },
     {
       type: 'action',
+      action: 'generateMagnet',
+      label: TorrentContextMenuActions.generateMagnet.id,
+      clickHandler: () => {
+        UIActions.displayModal({id: 'generate-magnet'});
+      },
+    },
+    {
+      type: 'action',
       action: 'setPriority',
       label: TorrentContextMenuActions.setPriority.id,
       clickHandler: () => {

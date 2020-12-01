@@ -26,6 +26,9 @@ const TorrentContextMenuActions = {
   torrentDownload: {
     id: 'torrents.list.context.download',
   },
+  generateMagnet: {
+    id: 'torrents.list.context.generate.magnet',
+  },
   setPriority: {
     id: 'torrents.list.context.priority',
   },

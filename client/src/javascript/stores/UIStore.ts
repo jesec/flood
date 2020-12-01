@@ -57,7 +57,14 @@ export type ModalAction = CheckboxModalAction | ButtonModalAction;
 
 export type Modal =
   | {
-      id: 'feeds' | 'move-torrents' | 'remove-torrents' | 'set-taxonomy' | 'set-trackers' | 'settings';
+      id:
+        | 'feeds'
+        | 'generate-magnet'
+        | 'move-torrents'
+        | 'remove-torrents'
+        | 'set-taxonomy'
+        | 'set-trackers'
+        | 'settings';
     }
   | {
       id: 'add-torrents';
