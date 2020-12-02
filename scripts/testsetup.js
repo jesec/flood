@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const crypto = require('crypto');
 const fs = require('fs');
 const os = require('os');
@@ -5,6 +6,8 @@ const path = require('path');
 const {spawn} = require('child_process');
 
 const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
+
+console.log(chalk.cyan(`Temporary runtime directory: ${temporaryRuntimeDirectory}\n`));
 
 const rTorrentSession = path.join(temporaryRuntimeDirectory, '.session');
 const rTorrentSocket = path.join(temporaryRuntimeDirectory, 'rtorrent.sock');
@@ -54,6 +57,10 @@ const closeProcesses = () => {
 };
 
 startFlood();
+
+process.on('SIGINT', () => {
+  process.exit();
+});
 
 process.on('exit', () => {
   closeProcesses();
