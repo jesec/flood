@@ -52,9 +52,9 @@
     "lint": "NODE_ENV=development eslint --max-warnings 0 . --ext .js --ext .jsx --ext .ts --ext .tsx",
     "prepack": "rm -rf dist && npm run build",
     "start": "node --use_strict dist/index.js",
-    "start:development": "UPDATED_SCRIPT=start:development:server npm run deprecated-warning && npm run start:development:server",
     "start:development:client": "node client/scripts/start.js",
     "start:development:server": "NODE_ENV=development TS_NODE_PROJECT=server/tsconfig.json ts-node-dev --transpile-only server/bin/start.ts",
+    "start:test:rtorrent": "node scripts/testsetup.js",
     "test": "jest --forceExit",
     "test:watch": "jest --watchAll --forceExit",
     "test:client": "FLOOD_OPTION_port=4200 start-server-and-test start 4200 'cypress run'"
