@@ -1,3 +1,6 @@
+import {AuthAuthenticationResponse} from '../../shared/schema/api/auth';
+import {AccessLevel} from '../../shared/schema/constants/Auth';
+
 context('Register', () => {
   beforeEach(() => {
     cy.server();
@@ -109,6 +112,24 @@ context('Register', () => {
     cy.get('.input--text[name="qbt-username"]').type('admin');
     cy.get('.input--text[name="qbt-password"]').type('adminadmin');
 
+    cy.server();
+
+    const response: AuthAuthenticationResponse = {
+      success: true,
+      username: 'test',
+      level: AccessLevel.ADMINISTRATOR,
+    };
+
+    cy.route({
+      method: 'POST',
+      url: 'http://127.0.0.1:4200/api/auth/register',
+      response,
+      status: 200,
+    }).as('register-request');
+
     cy.get('.button[type="submit"]').click();
+
+    cy.get('.application__view--auth-form').should('not.exist');
+    cy.get('.application__content').should('be.visible');
   });
 });

@@ -27,8 +27,8 @@ jobs:
 
       - run: npm ci
       - run: npm run build
-      - run: npm run start -- -p 4200 &
 
+      - run: node scripts/testsetup.js -p 4200 & echo $! > testenv.pid
       - run: wait-on tcp:4200
 
       - run: npm link cypress
