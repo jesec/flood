@@ -152,19 +152,19 @@ class RTorrentConnectionSettingsForm extends React.Component<
               })}>
               <FormRow>
                 <Radio
-                  onChange={(e) => this.handleFormChange(e, 'type')}
+                  onClick={(e) => this.handleFormChange(e, 'type')}
                   groupID="type"
                   id="socket"
                   grow={false}
-                  checked={type === 'socket'}>
+                  defaultChecked={type === 'socket'}>
                   <FormattedMessage id="connection.settings.rtorrent.type.socket" />
                 </Radio>
                 <Radio
-                  onChange={(e) => this.handleFormChange(e, 'type')}
+                  onClick={(e) => this.handleFormChange(e, 'type')}
                   groupID="type"
                   id="tcp"
                   grow={false}
-                  checked={type === 'tcp'}>
+                  defaultChecked={type === 'tcp'}>
                   <FormattedMessage id="connection.settings.rtorrent.type.tcp" />
                 </Radio>
               </FormRow>

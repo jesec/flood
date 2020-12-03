@@ -62,7 +62,7 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
         <div
           className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <Checkbox checked={isSelected} id={id} onChange={this.handleDirectorySelection} useProps />
+          <Checkbox checked={isSelected} id={id} onClick={this.handleDirectorySelection} />
         </div>
         <div
           className="directory-tree__checkbox__item

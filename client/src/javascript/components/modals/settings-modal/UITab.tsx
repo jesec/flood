@@ -75,10 +75,18 @@ class UITab extends SettingsTab {
           <FormattedMessage id="settings.ui.tag.selector.mode" />
         </ModalFormSectionHeader>
         <FormRow>
-          <Radio checked={this.UITagSelectorMode === 'single'} groupID="ui-tag-selector-mode" id="single" width="auto">
+          <Radio
+            defaultChecked={this.UITagSelectorMode === 'single'}
+            groupID="ui-tag-selector-mode"
+            id="single"
+            width="auto">
             <FormattedMessage id="settings.ui.tag.selector.mode.single" />
           </Radio>
-          <Radio checked={this.UITagSelectorMode === 'multi'} groupID="ui-tag-selector-mode" id="multi" width="auto">
+          <Radio
+            defaultChecked={this.UITagSelectorMode === 'multi'}
+            groupID="ui-tag-selector-mode"
+            id="multi"
+            width="auto">
             <FormattedMessage id="settings.ui.tag.selector.mode.multi" />
           </Radio>
         </FormRow>
@@ -86,11 +94,15 @@ class UITab extends SettingsTab {
           <FormattedMessage id="settings.ui.torrent.list" />
         </ModalFormSectionHeader>
         <FormRow>
-          <Radio checked={this.torrentListViewSize === 'expanded'} groupID="ui-torrent-size" id="expanded" width="auto">
+          <Radio
+            defaultChecked={this.torrentListViewSize === 'expanded'}
+            groupID="ui-torrent-size"
+            id="expanded"
+            width="auto">
             <FormattedMessage id="settings.ui.torrent.size.expanded" />
           </Radio>
           <Radio
-            checked={this.torrentListViewSize === 'condensed'}
+            defaultChecked={this.torrentListViewSize === 'condensed'}
             groupID="ui-torrent-size"
             id="condensed"
             width="auto">

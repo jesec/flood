@@ -37,12 +37,7 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
         <div
           className="directory-tree__checkbox__item
           directory-tree__checkbox__item--checkbox">
-          <Checkbox
-            checked={isSelected}
-            id={`${file.index}`}
-            onChange={() => this.handleFileSelect(file, isSelected)}
-            useProps
-          />
+          <Checkbox checked={isSelected} id={`${file.index}`} onClick={() => this.handleFileSelect(file, isSelected)} />
         </div>
         <div
           className="directory-tree__checkbox__item

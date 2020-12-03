@@ -19,7 +19,7 @@ export default class ConnectivityTab extends SettingsTab {
             width="one-quarter"
           />
           <Checkbox
-            checked={this.getChangedClientSetting('networkPortRandom')}
+            defaultChecked={this.getChangedClientSetting('networkPortRandom')}
             grow={false}
             id="networkPortRandom"
             labelOffset
@@ -27,7 +27,7 @@ export default class ConnectivityTab extends SettingsTab {
             <FormattedMessage id="settings.connectivity.port.randomize.label" />
           </Checkbox>
           <Checkbox
-            checked={this.getChangedClientSetting('networkPortOpen')}
+            defaultChecked={this.getChangedClientSetting('networkPortOpen')}
             grow={false}
             id="networkPortOpen"
             labelOffset
@@ -57,11 +57,16 @@ export default class ConnectivityTab extends SettingsTab {
             label={<FormattedMessage id="settings.connectivity.dht.port.label" />}
             width="one-quarter"
           />
-          <Checkbox checked={this.getChangedClientSetting('dht')} grow={false} id="dht" labelOffset matchTextboxHeight>
+          <Checkbox
+            defaultChecked={this.getChangedClientSetting('dht')}
+            grow={false}
+            id="dht"
+            labelOffset
+            matchTextboxHeight>
             <FormattedMessage id="settings.connectivity.dht.label" />
           </Checkbox>
           <Checkbox
-            checked={this.getChangedClientSetting('protocolPex')}
+            defaultChecked={this.getChangedClientSetting('protocolPex')}
             grow={false}
             id="protocolPex"
             labelOffset

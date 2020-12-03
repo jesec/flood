@@ -278,7 +278,7 @@ class DownloadRulesTab extends React.Component<WrappedComponentProps, DownloadRu
         </FormRow>
         <FormRow>
           <br />
-          <Checkbox id="startOnLoad" checked={rule.startOnLoad} matchTextboxHeight>
+          <Checkbox id="startOnLoad" defaultChecked={rule.startOnLoad} matchTextboxHeight>
             <FormattedMessage id="feeds.start.on.load" />
           </Checkbox>
           <Button onClick={() => this.setState({currentlyEditingRule: null})}>

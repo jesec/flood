@@ -95,8 +95,8 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
       checkbox = (
         <span className="sortable-list__content sortable-list__content--secondary">
           <Checkbox
-            checked={visible}
-            onChange={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
+            defaultChecked={visible}
+            onClick={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
             <FormattedMessage id="settings.ui.torrent.details.enabled" />
           </Checkbox>
         </span>

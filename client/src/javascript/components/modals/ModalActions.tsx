@@ -26,10 +26,10 @@ const ModalActions: FC<ModalActionsProps> = (props: ModalActionsProps) => {
     if (action.type === 'checkbox') {
       return (
         <Checkbox
-          checked={action.checked}
+          defaultChecked={action.checked}
           id={action.id}
           key={index} // eslint-disable-line react/no-array-index-key
-          onChange={(event) => {
+          onClick={(event) => {
             if (action.clickHandler != null) {
               action.clickHandler(event);
             }

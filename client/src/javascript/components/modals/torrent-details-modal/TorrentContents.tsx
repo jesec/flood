@@ -113,7 +113,7 @@ class TorrentContents extends React.Component<WrappedComponentProps> {
             className="directory-tree__checkbox__item
             directory-tree__checkbox__item--checkbox">
             <FormRow>
-              <Checkbox checked={allSelected} onChange={this.handleSelectAllClick} useProps />
+              <Checkbox checked={allSelected} onClick={this.handleSelectAllClick} />
             </FormRow>
           </div>
           <div

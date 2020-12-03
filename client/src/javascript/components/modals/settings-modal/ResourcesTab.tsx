@@ -26,7 +26,7 @@ export default class ResourcesTab extends SettingsTab {
             width="one-half"
           />
           <Checkbox
-            checked={this.getChangedClientSetting('piecesHashOnCompletion')}
+            defaultChecked={this.getChangedClientSetting('piecesHashOnCompletion')}
             grow={false}
             id="piecesHashOnCompletion"
             labelOffset
