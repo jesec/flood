@@ -80,7 +80,7 @@ module.exports = {
         options: {mode: ['react-component']},
       },
       {
-        test: [/\.eot$/, /\.ttf$/, /\.woff$/, /\.woff2$/],
+        test: [/\.woff2$/],
         loader: require.resolve('file-loader'),
         options: {
           name: 'static/media/[name].[hash:8].[ext]',
