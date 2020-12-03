@@ -41,7 +41,7 @@ const CountryFlagIcon: FC<CountryFlagIconProps> = ({countryCode}: CountryFlagIco
   if (flag == null) {
     return null;
   }
-  return <img alt={countryCode} className="peers-list__flag__image" src={flag} />;
+  return <img alt={countryCode} title={countryCode} className="peers-list__flag__image" src={flag} />;
 };
 
 export default CountryFlagIcon;
