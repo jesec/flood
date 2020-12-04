@@ -1,4 +1,4 @@
-import {FC, ReactNode} from 'react';
+import {FC} from 'react';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 
 import DiskUsage from './DiskUsage';
@@ -14,15 +14,6 @@ import TagFilters from './TagFilters';
 import ThemeSwitchButton from './ThemeSwitchButton';
 import TrackerFilters from './TrackerFilters';
 import TransferData from './TransferData';
-
-const BottomContainer: FC<{children: ReactNode}> = ({children}: {children: ReactNode}) => {
-  return (
-    <div style={{display: 'flex', flexDirection: 'column', flexGrow: 1}}>
-      <div style={{flexGrow: 1}} />
-      {children}
-    </div>
-  );
-};
 
 const Sidebar: FC = () => {
   return (
@@ -48,11 +39,10 @@ const Sidebar: FC = () => {
       <TagFilters />
       <TrackerFilters />
       <DiskUsage />
-      <BottomContainer>
-        <SidebarActions>
-          <ThemeSwitchButton />
-        </SidebarActions>
-      </BottomContainer>
+      <div style={{flexGrow: 1}} />
+      <SidebarActions>
+        <ThemeSwitchButton />
+      </SidebarActions>
     </OverlayScrollbarsComponent>
   );
 };

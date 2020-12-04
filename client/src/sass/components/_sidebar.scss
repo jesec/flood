@@ -64,6 +64,7 @@
   }
 
   &__actions {
+    min-height: max-content;
     display: flex;
     padding: $spacing-unit * 1/5;
     justify-content: flex-start;
