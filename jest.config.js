@@ -5,8 +5,7 @@ module.exports = {
   projects: [
     '<rootDir>/server/.jest/auth.config.js',
     '<rootDir>/server/.jest/rtorrent.config.js',
-    // TODO: qBittorrent tests are disabled at the moment.
-    // '<rootDir>/server/.jest/qbittorrent.config.js',
+    '<rootDir>/server/.jest/qbittorrent.config.js',
     '<rootDir>/server/.jest/transmission.config.js',
   ],
 };
