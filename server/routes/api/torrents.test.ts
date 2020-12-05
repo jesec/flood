@@ -132,10 +132,8 @@ describe('POST /api/torrents/add-urls', () => {
         // determine if the torrents have been successfully added.
         Promise.race([torrentAdded, new Promise((r) => setTimeout(r, 1000 * 15))])
           .then(async () => {
-            if (process.argv.includes('--trurl')) {
-              // Torrents added to Transmission will be in checking status for a while.
-              await new Promise((r) => setTimeout(r, 1000 * 3));
-            }
+            // Wait a while
+            await new Promise((r) => setTimeout(r, 1000 * 3));
           })
           .then(() => {
             done();
@@ -466,8 +464,11 @@ describe('POST /api/torrents/move', () => {
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .end((err, _res) => {
+      .end(async (err, _res) => {
         if (err) done(err);
+
+        // Wait a while
+        await new Promise((r) => setTimeout(r, 1000 * 2));
 
         expect(fs.existsSync(path.join(destDirectory, 'dummy'))).toBe(true);
 
