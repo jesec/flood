@@ -139,7 +139,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
             index,
             path: file.name,
             filename: file.name.split('/').pop() as string,
-            percentComplete: file.bytesCompleted / file.length,
+            percentComplete: (file.bytesCompleted / file.length) * 100,
             priority,
             sizeBytes: file.length,
           };
