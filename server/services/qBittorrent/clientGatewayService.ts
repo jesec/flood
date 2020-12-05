@@ -199,14 +199,20 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   }
 
   async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions): Promise<void> {
-    await Promise.all(
-      hashes.map((hash) => {
+    return Promise.all(
+      hashes.map(async (hash) => {
+        const currentTrackerURLs = await this.getTorrentTrackers(hash).then((currentTrackers) =>
+          currentTrackers.filter((tracker) => tracker.type !== TorrentTrackerType.DHT).map((tracker) => tracker.url),
+        );
+
+        await this.clientRequestManager.torrentsRemoveTrackers(hash, currentTrackerURLs);
+
         return this.clientRequestManager
           .torrentsAddTrackers(hash, trackers)
           .then(this.processClientRequestSuccess, this.processClientRequestError)
           .then(() => delete this.cachedProperties[hash]);
       }),
-    );
+    ).then(() => undefined);
   }
 
   async setTorrentContentsPriority(
