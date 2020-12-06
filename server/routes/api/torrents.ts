@@ -676,7 +676,7 @@ router.get('/:hash/mediainfo', async (req, res) => {
     const mediainfoProcess = childProcess.execFile(
       'mediainfo',
       [contentPath],
-      {maxBuffer: 1024 * 2000},
+      {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
       (error, stdout, stderr) => {
         if (error) {
           callback(null, error);
