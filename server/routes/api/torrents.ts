@@ -4,6 +4,7 @@ import createTorrent from 'create-torrent';
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
+import rateLimit from 'express-rate-limit';
 import sanitize from 'sanitize-filename';
 import tar from 'tar';
 
@@ -650,52 +651,61 @@ router.get('/:hash/details', async (req, res) => {
  * @param {string} hash.path
  * @return {{output: string}} - 200 - success response - application/json
  */
-router.get('/:hash/mediainfo', async (req, res) => {
-  const {hash} = req.params;
-  const callback = getResponseFn(res);
-  const {torrentService} = req.services || {};
+router.get(
+  '/:hash/mediainfo',
+  // This operation is resource-intensive
+  // Limit each IP to 30 requests every 5 minutes
+  rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 30,
+  }),
+  async (req, res) => {
+    const {hash} = req.params;
+    const callback = getResponseFn(res);
+    const {torrentService} = req.services || {};
 
-  if (typeof hash !== 'string' || torrentService == null) {
-    callback(null, new Error());
-    return;
-  }
+    if (typeof hash !== 'string' || torrentService == null) {
+      callback(null, new Error());
+      return;
+    }
 
-  const {directory, name} = torrentService.getTorrent(hash);
+    const {directory, name} = torrentService.getTorrent(hash);
 
-  if (directory == null || name == null) {
-    callback(null, new Error());
-    return;
-  }
+    if (directory == null || name == null) {
+      callback(null, new Error());
+      return;
+    }
 
-  const contentPath = fs.existsSync(path.join(directory, name)) ? path.join(directory, name) : directory;
-  if (!isAllowedPath(contentPath)) {
-    callback(null, accessDeniedError());
-  }
+    const contentPath = fs.existsSync(path.join(directory, name)) ? path.join(directory, name) : directory;
+    if (!isAllowedPath(contentPath)) {
+      callback(null, accessDeniedError());
+    }
 
-  try {
-    const mediainfoProcess = childProcess.execFile(
-      'mediainfo',
-      [contentPath],
-      {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
-      (error, stdout, stderr) => {
-        if (error) {
-          callback(null, error);
-          return;
-        }
+    try {
+      const mediainfoProcess = childProcess.execFile(
+        'mediainfo',
+        [contentPath],
+        {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
+        (error, stdout, stderr) => {
+          if (error) {
+            callback(null, error);
+            return;
+          }
 
-        if (stderr) {
-          callback(null, Error(stderr));
-          return;
-        }
+          if (stderr) {
+            callback(null, Error(stderr));
+            return;
+          }
 
-        callback({output: stdout});
-      },
-    );
-    req.on('close', () => mediainfoProcess.kill('SIGTERM'));
-  } catch (childProcessError) {
-    callback(null, Error(childProcessError));
-  }
-});
+          callback({output: stdout});
+        },
+      );
+      req.on('close', () => mediainfoProcess.kill('SIGTERM'));
+    } catch (childProcessError) {
+      callback(null, Error(childProcessError));
+    }
+  },
+);
 
 /**
  * GET /api/torrents/{hash}/peers
