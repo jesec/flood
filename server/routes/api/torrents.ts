@@ -541,7 +541,9 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
     if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
     return req.services?.clientGatewayService?.getTorrentContents(hash).then((contents) => {
-      if (!contents) return res.status(404).json({error: 'Torrent contents not found'});
+      if (!contents || contents.length < 1) {
+        return res.status(404).json({error: 'Torrent contents not found'});
+      }
 
       let indices: Array<number>;
       if (!stringIndices || stringIndices === 'all') {
@@ -556,6 +558,10 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
           return sanitizePath(path.join(selectedTorrent.directory, content.path));
         })
         .filter((filePath) => isAllowedPath(filePath));
+
+      if (filePathsToDownload.length < 1) {
+        return res.status(403).json(accessDeniedError());
+      }
 
       if (filePathsToDownload.length === 1) {
         const file = filePathsToDownload[0];
