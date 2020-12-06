@@ -679,6 +679,7 @@ router.get(
     const contentPath = fs.existsSync(path.join(directory, name)) ? path.join(directory, name) : directory;
     if (!isAllowedPath(contentPath)) {
       callback(null, accessDeniedError());
+      return;
     }
 
     try {
