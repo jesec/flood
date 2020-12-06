@@ -668,6 +668,9 @@ router.get('/:hash/mediainfo', async (req, res) => {
   }
 
   const contentPath = fs.existsSync(path.join(directory, name)) ? path.join(directory, name) : directory;
+  if (!isAllowedPath(contentPath)) {
+    callback(null, accessDeniedError());
+  }
 
   try {
     const mediainfoProcess = childProcess.execFile(
