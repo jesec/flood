@@ -1,30 +1,16 @@
 const path = require('path');
 const webpack = require('webpack');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const WebpackBar = require('webpackbar');
-const eslintFormatter = require('react-dev-utils/eslintFormatter');
 const paths = require('../../shared/config/paths');
 
 module.exports = {
   mode: 'development',
   module: {
     rules: [
-      {
-        enforce: 'pre',
-        test: /\.(ts|js)x?$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'eslint-loader',
-            options: {
-              formatter: eslintFormatter,
-              emitWarning: true,
-            },
-          },
-        ],
-      },
       {
         test: /\.(ts|js)x?$/,
         exclude: /node_modules/,
@@ -119,6 +105,11 @@ module.exports = {
     chunkFilename: 'static/js/[name].chunk.js',
   },
   plugins: [
+    new ESLintPlugin({
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      emitWarning: true,
+      threads: true,
+    }),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
