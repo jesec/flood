@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const WebpackBar = require('webpackbar');
 const paths = require('../../shared/config/paths');
@@ -19,6 +20,7 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               babelrc: true,
+              plugins: [require.resolve('react-refresh/babel')],
             },
           },
         ],
@@ -117,6 +119,7 @@ module.exports = {
     }),
     // This is necessary to emit hot updates (currently CSS only):
     new webpack.HotModuleReplacementPlugin(),
+    new ReactRefreshWebpackPlugin(),
     // Watcher doesn't work well if you mistype casing in a path so we use
     // a plugin that prints an error when you attempt to do this.
     // See https://github.com/facebookincubator/create-react-app/issues/240
