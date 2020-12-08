@@ -7,8 +7,8 @@ import type {ToggleInputProps} from './ToggleInput';
 
 type CheckboxProps = Omit<ToggleInputProps, 'type' | 'icon'>;
 
-const Checkbox: FC<CheckboxProps> = (props: CheckboxProps) => {
-  return <ToggleInput {...props} type="checkbox" icon={<Checkmark />} />;
-};
+const Checkbox: FC<CheckboxProps> = (props: CheckboxProps) => (
+  <ToggleInput {...props} type="checkbox" icon={<Checkmark />} />
+);
 
 export default Checkbox;

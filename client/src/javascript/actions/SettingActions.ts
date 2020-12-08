@@ -57,9 +57,8 @@ const SettingActions = {
     }
   },
 
-  saveSetting: async <T extends FloodSetting>(property: T, data: FloodSettings[T]): Promise<void> => {
-    return SettingActions.saveSettings({[property]: data});
-  },
+  saveSetting: async <T extends FloodSetting>(property: T, data: FloodSettings[T]): Promise<void> =>
+    SettingActions.saveSettings({[property]: data}),
 } as const;
 
 export default SettingActions;

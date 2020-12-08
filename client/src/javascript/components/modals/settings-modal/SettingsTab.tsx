@@ -44,14 +44,12 @@ class SettingsTab extends React.Component<SettingsTabProps, SettingsTabStates> {
       changedClientSetting = {[property]: value};
     }
 
-    this.setState((prev) => {
-      return {
-        changedClientSettings: {
-          ...prev.changedClientSettings,
-          changedClientSetting,
-        },
-      };
-    });
+    this.setState((prev) => ({
+      changedClientSettings: {
+        ...prev.changedClientSettings,
+        changedClientSetting,
+      },
+    }));
     this.props.onClientSettingsChange(changedClientSetting);
   }
 }

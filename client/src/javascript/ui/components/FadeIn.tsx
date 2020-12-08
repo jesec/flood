@@ -6,12 +6,10 @@ interface FadeInProps {
   isIn: CSSTransitionProps['in'];
 }
 
-const FadeIn: FC<FadeInProps> = ({children, isIn}: FadeInProps) => {
-  return (
-    <CSSTransition classNames="fade" mountOnEnter timeout={375} in={isIn}>
-      {children}
-    </CSSTransition>
-  );
-};
+const FadeIn: FC<FadeInProps> = ({children, isIn}: FadeInProps) => (
+  <CSSTransition classNames="fade" mountOnEnter timeout={375} in={isIn}>
+    {children}
+  </CSSTransition>
+);
 
 export default FadeIn;

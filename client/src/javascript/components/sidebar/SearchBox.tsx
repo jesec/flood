@@ -44,12 +44,10 @@ class SearchBox extends React.Component<WrappedComponentProps, SearchBoxStates> 
   };
 
   resetSearch = () => {
-    this.setState((state) => {
-      return {
-        inputFieldKey: state.inputFieldKey + 1,
-        isSearchActive: false,
-      };
-    });
+    this.setState((state) => ({
+      inputFieldKey: state.inputFieldKey + 1,
+      isSearchActive: false,
+    }));
   };
 
   render() {

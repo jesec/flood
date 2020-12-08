@@ -14,13 +14,11 @@ interface DropdownButtonProps {
   onClick: (event: MouseEvent<HTMLDivElement>) => void;
 }
 
-const DropdownButton: FC<DropdownButtonProps> = ({className, label, onClick}: DropdownButtonProps) => {
-  return (
-    <div className={className} onClick={onClick}>
-      {label}
-    </div>
-  );
-};
+const DropdownButton: FC<DropdownButtonProps> = ({className, label, onClick}: DropdownButtonProps) => (
+  <div className={className} onClick={onClick}>
+    {label}
+  </div>
+);
 
 DropdownButton.defaultProps = {
   className: undefined,

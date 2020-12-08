@@ -109,12 +109,10 @@ const FloodActions = {
         params: options,
       })
       .then((json) => json.data)
-      .then((response) => {
-        return {
-          ...options,
-          ...response,
-        };
-      }),
+      .then((response) => ({
+        ...options,
+        ...response,
+      })),
 
   fetchNotifications: (options: NotificationFetchOptions) =>
     axios

@@ -19,17 +19,15 @@ class UITab extends SettingsTab {
   UITagSelectorMode = SettingStore.floodSettings.UITagSelectorMode;
 
   getLanguageSelectOptions() {
-    return Object.keys(Languages).map((languageID) => {
-      return (
-        <SelectItem key={languageID} id={languageID}>
-          {Languages[languageID as 'auto'].id != null
-            ? this.props.intl.formatMessage({
-                id: Languages[languageID as 'auto'].id,
-              })
-            : Languages[languageID as Language]}
-        </SelectItem>
-      );
-    });
+    return Object.keys(Languages).map((languageID) => (
+      <SelectItem key={languageID} id={languageID}>
+        {Languages[languageID as 'auto'].id != null
+          ? this.props.intl.formatMessage({
+              id: Languages[languageID as 'auto'].id,
+            })
+          : Languages[languageID as Language]}
+      </SelectItem>
+    ));
   }
 
   handleFormChange = ({

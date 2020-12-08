@@ -1,8 +1,6 @@
 import regEx from '@shared/util/regEx';
 
-export const isNotEmpty = (value: string) => {
-  return value != null && value !== '';
-};
+export const isNotEmpty = (value: string) => value != null && value !== '';
 
 export const isRegExValid = (regExToCheck: string) => {
   try {
@@ -15,9 +13,7 @@ export const isRegExValid = (regExToCheck: string) => {
   return true;
 };
 
-export const isURLValid = (url: string) => {
-  return url != null && url !== '' && url.match(regEx.url) !== null;
-};
+export const isURLValid = (url: string) => url != null && url !== '' && url.match(regEx.url) !== null;
 
 export const isPositiveInteger = (value: number | string) => {
   if (value === null || value === '') return false;

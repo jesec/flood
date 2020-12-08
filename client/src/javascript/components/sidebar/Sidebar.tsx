@@ -15,36 +15,34 @@ import ThemeSwitchButton from './ThemeSwitchButton';
 import TrackerFilters from './TrackerFilters';
 import TransferData from './TransferData';
 
-const Sidebar: FC = () => {
-  return (
-    <OverlayScrollbarsComponent
-      options={{
-        scrollbars: {
-          autoHide: 'scroll',
-          clickScrolling: false,
-          dragScrolling: false,
-        },
-        className: 'application__sidebar os-theme-thin',
-      }}>
-      <SidebarActions>
-        <SpeedLimitDropdown />
-        <SettingsButton />
-        <FeedsButton />
-        <NotificationsButton />
-        <LogoutButton />
-      </SidebarActions>
-      <TransferData />
-      <SearchBox />
-      <StatusFilters />
-      <TagFilters />
-      <TrackerFilters />
-      <DiskUsage />
-      <div style={{flexGrow: 1}} />
-      <SidebarActions>
-        <ThemeSwitchButton />
-      </SidebarActions>
-    </OverlayScrollbarsComponent>
-  );
-};
+const Sidebar: FC = () => (
+  <OverlayScrollbarsComponent
+    options={{
+      scrollbars: {
+        autoHide: 'scroll',
+        clickScrolling: false,
+        dragScrolling: false,
+      },
+      className: 'application__sidebar os-theme-thin',
+    }}>
+    <SidebarActions>
+      <SpeedLimitDropdown />
+      <SettingsButton />
+      <FeedsButton />
+      <NotificationsButton />
+      <LogoutButton />
+    </SidebarActions>
+    <TransferData />
+    <SearchBox />
+    <StatusFilters />
+    <TagFilters />
+    <TrackerFilters />
+    <DiskUsage />
+    <div style={{flexGrow: 1}} />
+    <SidebarActions>
+      <ThemeSwitchButton />
+    </SidebarActions>
+  </OverlayScrollbarsComponent>
+);
 
 export default Sidebar;

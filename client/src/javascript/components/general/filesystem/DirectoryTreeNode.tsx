@@ -96,11 +96,9 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
   }
 
   handleDirectoryClick = (): void => {
-    this.setState((state) => {
-      return {
-        expanded: !state.expanded,
-      };
-    });
+    this.setState((state) => ({
+      expanded: !state.expanded,
+    }));
   };
 
   handleDirectorySelection = (): void => {

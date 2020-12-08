@@ -23,11 +23,9 @@ class MountPointsList extends Component<MountPointsListProps, MountPointsListSta
     const {mountPoints} = SettingStore.floodSettings;
     const disks = Object.assign(
       {},
-      ...DiskUsageStore.disks.map((disk) => {
-        return {
-          [disk.target]: disk,
-        };
-      }),
+      ...DiskUsageStore.disks.map((disk) => ({
+        [disk.target]: disk,
+      })),
     );
 
     // assemble disk items from saved "mountPoints" and list of disks "disks"

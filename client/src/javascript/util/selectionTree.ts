@@ -1,42 +1,40 @@
 import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 
-const selectAll = (tree: TorrentContentSelectionTree, isSelected: boolean): TorrentContentSelectionTree => {
-  return {
-    ...tree,
-    ...(tree.directories != null
-      ? {
-          directories: Object.assign(
-            {},
-            ...Object.keys(tree.directories).map((directory) => {
-              return tree.directories != null
-                ? {
-                    [directory]: selectAll(tree.directories[directory], isSelected),
-                  }
-                : {};
-            }),
+const selectAll = (tree: TorrentContentSelectionTree, isSelected: boolean): TorrentContentSelectionTree => ({
+  ...tree,
+  ...(tree.directories != null
+    ? {
+        directories: Object.assign(
+          {},
+          ...Object.keys(tree.directories).map((directory) =>
+            tree.directories != null
+              ? {
+                  [directory]: selectAll(tree.directories[directory], isSelected),
+                }
+              : {},
           ),
-        }
-      : {}),
-    ...(tree.files != null
-      ? {
-          files: Object.assign(
-            {},
-            ...Object.keys(tree.files).map((file) => {
-              return tree.files != null
-                ? {
-                    [file]: {
-                      ...tree.files[file],
-                      isSelected,
-                    },
-                  }
-                : {};
-            }),
+        ),
+      }
+    : {}),
+  ...(tree.files != null
+    ? {
+        files: Object.assign(
+          {},
+          ...Object.keys(tree.files).map((file) =>
+            tree.files != null
+              ? {
+                  [file]: {
+                    ...tree.files[file],
+                    isSelected,
+                  },
+                }
+              : {},
           ),
-        }
-      : {}),
-    isSelected,
-  };
-};
+        ),
+      }
+    : {}),
+  isSelected,
+});
 
 const applySelection = (
   tree: TorrentContentSelectionTree,

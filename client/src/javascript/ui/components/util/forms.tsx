@@ -19,8 +19,8 @@ export const dispatchChangeEvent = (element: HTMLInputElement) => {
   dispatchEvent('flood-form-change', element);
 };
 
-export const getDataFromForm = (form: HTMLFormElement) => {
-  return Array.from(form.elements).reduce((formData: Record<string, unknown>, element) => {
+export const getDataFromForm = (form: HTMLFormElement) =>
+  Array.from(form.elements).reduce((formData: Record<string, unknown>, element) => {
     const inputElement = element as HTMLInputElement;
     const {name, type, value} = inputElement;
     const retForm = formData;
@@ -41,10 +41,9 @@ export const getDataFromForm = (form: HTMLFormElement) => {
 
     return retForm;
   }, {});
-};
 
-export const resetFormData = (form: HTMLFormElement) => {
-  return Array.from(form.elements).forEach((element) => {
+export const resetFormData = (form: HTMLFormElement) =>
+  Array.from(form.elements).forEach((element) => {
     const inputElement = element as HTMLInputElement;
     // getAttribute is supposedly faster than using the dataset API.
     const defaultValue = inputElement.getAttribute('data-initial-value');
@@ -61,4 +60,3 @@ export const resetFormData = (form: HTMLFormElement) => {
       inputElement.value = '';
     }
   });
-};

@@ -47,12 +47,10 @@ class TorrentContextMenuActionsList extends Component<
   handleCheckboxValueChange = (id: string, value: boolean) => {
     let {torrentContextMenuActions} = this.state;
 
-    torrentContextMenuActions = torrentContextMenuActions.map((setting) => {
-      return {
-        id: setting.id,
-        visible: setting.id === id ? value : setting.visible,
-      };
-    });
+    torrentContextMenuActions = torrentContextMenuActions.map((setting) => ({
+      id: setting.id,
+      visible: setting.id === id ? value : setting.visible,
+    }));
 
     this.props.onSettingsChange({torrentContextMenuActions});
     this.setState({torrentContextMenuActions});

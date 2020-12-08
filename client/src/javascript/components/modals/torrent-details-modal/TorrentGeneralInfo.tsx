@@ -8,13 +8,12 @@ import Size from '../../general/Size';
 import TorrentStore from '../../../stores/TorrentStore';
 import UIStore from '../../../stores/UIStore';
 
-const getTags = (tags: TorrentProperties['tags']) => {
-  return tags.map((tag) => (
+const getTags = (tags: TorrentProperties['tags']) =>
+  tags.map((tag) => (
     <span className="tag" key={tag}>
       {tag}
     </span>
   ));
-};
 
 const TorrentGeneralInfo: FC = observer(() => {
   const intl = useIntl();

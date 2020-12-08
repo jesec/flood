@@ -17,9 +17,7 @@ class FeedStore {
       return;
     }
 
-    this.feeds = [...feeds].sort((a, b) => {
-      return a.label.localeCompare(b.label);
-    });
+    this.feeds = [...feeds].sort((a, b) => a.label.localeCompare(b.label));
   }
 
   setRules(rules: Array<Rule>): void {
@@ -28,9 +26,7 @@ class FeedStore {
       return;
     }
 
-    this.rules = [...rules].sort((a, b) => {
-      return a.label.localeCompare(b.label);
-    });
+    this.rules = [...rules].sort((a, b) => a.label.localeCompare(b.label));
   }
 
   handleFeedMonitorsFetchSuccess(feedMonitors: {feeds: Array<Feed>; rules: Array<Rule>}): void {

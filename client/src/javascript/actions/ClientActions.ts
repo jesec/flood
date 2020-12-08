@@ -57,9 +57,8 @@ const ClientActions = {
     }
   },
 
-  saveSetting: async <T extends ClientSetting>(property: T, data: ClientSettings[T]): Promise<void> => {
-    return ClientActions.saveSettings({[property]: data});
-  },
+  saveSetting: async <T extends ClientSetting>(property: T, data: ClientSettings[T]): Promise<void> =>
+    ClientActions.saveSettings({[property]: data}),
 
   testConnection: async (): Promise<void> =>
     axios

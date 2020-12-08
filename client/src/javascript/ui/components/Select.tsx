@@ -93,9 +93,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
 
     const childArray = children as ReactNodeArray;
     if (childArray != null) {
-      const item = childArray.find((child) => {
-        return (child as SelectItem).props.id != null;
-      }) as SelectItem;
+      const item = childArray.find((child) => (child as SelectItem).props.id != null) as SelectItem;
 
       if (item?.props?.id != null) {
         return item.props.id;

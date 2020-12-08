@@ -36,12 +36,10 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
 
     const newTorrentListColumnItems: ListItem[] = Object.keys(TorrentListColumns)
       .filter((key) => torrentListColumns.every((column) => column.id !== key))
-      .map((newColumn) => {
-        return {
-          id: newColumn,
-          visible: false,
-        };
-      });
+      .map((newColumn) => ({
+        id: newColumn,
+        visible: false,
+      }));
 
     this.state = {
       torrentListColumns: torrentListColumnItems.concat(
@@ -61,12 +59,10 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
   handleCheckboxValueChange = (id: string, value: boolean): void => {
     const {torrentListColumns} = this.state;
 
-    const changedTorrentListColumns = torrentListColumns.map((column) => {
-      return {
-        id: column.id,
-        visible: column.id === id ? value : column.visible,
-      };
-    });
+    const changedTorrentListColumns = torrentListColumns.map((column) => ({
+      id: column.id,
+      visible: column.id === id ? value : column.visible,
+    }));
 
     this.props.onSettingsChange({
       torrentListColumns: changedTorrentListColumns,

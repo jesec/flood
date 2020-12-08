@@ -113,12 +113,8 @@ const TorrentActions = {
       .get(`${baseURI}api/torrents/${hash}/contents`)
       .then<Array<TorrentContent>>((json) => json.data)
       .then(
-        (contents) => {
-          return contents;
-        },
-        () => {
-          return null;
-        },
+        (contents) => contents,
+        () => null,
       ),
 
   fetchTorrentPeers: (hash: TorrentProperties['hash']): Promise<Array<TorrentPeer> | null> =>
@@ -126,12 +122,8 @@ const TorrentActions = {
       .get(`${baseURI}api/torrents/${hash}/peers`)
       .then<Array<TorrentPeer>>((json) => json.data)
       .then(
-        (peers) => {
-          return peers;
-        },
-        () => {
-          return null;
-        },
+        (peers) => peers,
+        () => null,
       ),
 
   fetchTorrentTrackers: (hash: TorrentProperties['hash']): Promise<Array<TorrentTracker> | null> =>
@@ -139,16 +131,12 @@ const TorrentActions = {
       .get(`${baseURI}api/torrents/${hash}/trackers`)
       .then<Array<TorrentTracker>>((json) => json.data)
       .then(
-        (trackers) => {
-          return trackers;
-        },
-        () => {
-          return null;
-        },
+        (trackers) => trackers,
+        () => null,
       ),
 
-  moveTorrents: (options: MoveTorrentsOptions) => {
-    return axios
+  moveTorrents: (options: MoveTorrentsOptions) =>
+    axios
       .post(`${baseURI}api/torrents/move`, options)
       .then((json) => json.data)
       .then(
@@ -166,8 +154,7 @@ const TorrentActions = {
             count: options.hashes.length,
           });
         },
-      );
-  },
+      ),
 
   startTorrents: (options: StartTorrentsOptions) =>
     axios

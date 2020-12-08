@@ -59,12 +59,10 @@ class QBittorrentConnectionSettingsForm extends React.Component<
     const {value} = inputElement;
 
     if (this.state[field] !== value) {
-      this.setState((prev) => {
-        return {
-          ...prev,
-          [field]: value,
-        };
-      });
+      this.setState((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
     }
   };
 

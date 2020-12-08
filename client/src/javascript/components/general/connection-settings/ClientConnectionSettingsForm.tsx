@@ -12,15 +12,12 @@ import {FormRow, Select, SelectItem} from '../../../ui';
 
 const DEFAULT_SELECTION: ClientConnectionSettings['client'] = 'rTorrent' as const;
 
-const getClientSelectItems = (): React.ReactNodeArray => {
-  return SUPPORTED_CLIENTS.map((client) => {
-    return (
-      <SelectItem key={client} id={client}>
-        <FormattedMessage id={`connection.settings.${client.toLowerCase()}`} />
-      </SelectItem>
-    );
-  });
-};
+const getClientSelectItems = (): React.ReactNodeArray =>
+  SUPPORTED_CLIENTS.map((client) => (
+    <SelectItem key={client} id={client}>
+      <FormattedMessage id={`connection.settings.${client.toLowerCase()}`} />
+    </SelectItem>
+  ));
 
 type ConnectionSettingsForm =
   | QBittorrentConnectionSettingsForm

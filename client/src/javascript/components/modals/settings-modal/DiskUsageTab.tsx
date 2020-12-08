@@ -11,17 +11,15 @@ interface DiskUsageTabProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
 }
 
-const DiskUsageTab: FC<DiskUsageTabProps> = (props: DiskUsageTabProps) => {
-  return (
-    <Form>
-      <ModalFormSectionHeader>
-        <FormattedMessage id="settings.diskusage.mount.points" />
-      </ModalFormSectionHeader>
-      <FormRow>
-        <MountPointsList onSettingsChange={props.onSettingsChange} />
-      </FormRow>
-    </Form>
-  );
-};
+const DiskUsageTab: FC<DiskUsageTabProps> = (props: DiskUsageTabProps) => (
+  <Form>
+    <ModalFormSectionHeader>
+      <FormattedMessage id="settings.diskusage.mount.points" />
+    </ModalFormSectionHeader>
+    <FormRow>
+      <MountPointsList onSettingsChange={props.onSettingsChange} />
+    </FormRow>
+  </Form>
+);
 
 export default DiskUsageTab;

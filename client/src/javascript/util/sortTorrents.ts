@@ -33,9 +33,7 @@ function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<Flood
       break;
     case 'tags':
       sortRules.push({
-        [sortBy.direction]: (p: TorrentProperties) => {
-          return p[property].join(',').toLowerCase();
-        },
+        [sortBy.direction]: (p: TorrentProperties) => p[property].join(',').toLowerCase(),
       } as SortRule);
       break;
     case 'directory':
@@ -44,9 +42,7 @@ function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<Flood
     case 'name':
       // Those fields are strings. We want case-insensitive sorting.
       sortRules.push({
-        [sortBy.direction]: (p: TorrentProperties) => {
-          return p[property].toLowerCase();
-        },
+        [sortBy.direction]: (p: TorrentProperties) => p[property].toLowerCase(),
       } as SortRule);
       break;
     default:

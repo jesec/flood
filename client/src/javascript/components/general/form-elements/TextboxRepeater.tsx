@@ -4,8 +4,8 @@ import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '../../../ui';
 import AddMini from '../../icons/AddMini';
 import RemoveMini from '../../icons/RemoveMini';
 
-export const getTextArray = (formData: Record<string, string | undefined>, id: string) => {
-  return Object.keys(formData).reduce((accumulator: Array<string>, formItemKey: string) => {
+export const getTextArray = (formData: Record<string, string | undefined>, id: string) =>
+  Object.keys(formData).reduce((accumulator: Array<string>, formItemKey: string) => {
     if (formItemKey.startsWith(id)) {
       const text = formData[formItemKey];
       if (text != null) {
@@ -14,7 +14,6 @@ export const getTextArray = (formData: Record<string, string | undefined>, id: s
     }
     return accumulator;
   }, []);
-};
 
 type Textboxes = Array<{id: number; value: string}>;
 

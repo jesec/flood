@@ -43,13 +43,13 @@ const AuthActions = {
           throw new Error(errorMessage);
         },
       )
-      .then(() => {
-        return Promise.all([
+      .then(() =>
+        Promise.all([
           ClientActions.fetchSettings(),
           SettingActions.fetchSettings(),
           FloodActions.restartActivityStream(),
-        ]);
-      }),
+        ]),
+      ),
 
   createUser: (options: AuthRegistrationOptions) =>
     axios
@@ -127,9 +127,7 @@ const AuthActions = {
         (data: AuthVerificationResponse) => {
           AuthStore.handleAuthVerificationSuccess(data);
 
-          return Promise.all([ClientActions.fetchSettings(), SettingActions.fetchSettings()]).then(() => {
-            return data;
-          });
+          return Promise.all([ClientActions.fetchSettings(), SettingActions.fetchSettings()]).then(() => data);
         },
         (error) => {
           AuthStore.handleAuthVerificationError();
