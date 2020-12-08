@@ -23,7 +23,13 @@ const generateConfig = (proxy, allowedHost) => {
     overlay: false,
     historyApiFallback: true,
     public: allowedHost,
-    proxy,
+    proxy: {
+      '/api': {
+        target: proxy,
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   };
 };
 
