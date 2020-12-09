@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 💡 Feature Request
+    url: https://github.com/jesec/flood/discussions/new
+    about: Share ideas for new features
+  - name: ❓ Question
+    url: https://github.com/jesec/flood/discussions/new
+    about: General questions
+  - name: 🎙️ Discussion
+    url: https://github.com/jesec/flood/discussions/new
+    about: Start a discussion here
+  - name: 🆘 Support
+    url: https://discord.gg/Z7yR5Uf
+    about: Join Discord for real-time support
