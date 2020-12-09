@@ -1,6 +1,6 @@
 import {argon2id, argon2Verify} from 'hash-wasm';
 import crypto from 'crypto';
-import Datastore from 'nedb';
+import Datastore from 'nedb-promises';
 import fs from 'fs';
 import path from 'path';
 
@@ -12,17 +12,8 @@ import type {ClientConnectionSettings} from '../../shared/schema/ClientConnectio
 import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
 
 class Users {
-  db = Users.loadDatabase();
-  configUser: UserInDatabase = {
-    _id: '_config',
-    username: '_config',
-    password: '',
-    client: config.configUser as ClientConnectionSettings,
-    level: AccessLevel.ADMINISTRATOR,
-  };
-
-  static loadDatabase(): Datastore {
-    const db = new Datastore({
+  private db = (() => {
+    const db = Datastore.create({
       autoload: true,
       filename: path.join(config.dbPath, 'users.db'),
     });
@@ -30,19 +21,24 @@ class Users {
     db.ensureIndex({fieldName: 'username', unique: true});
 
     return db;
-  }
+  })();
+
+  private configUser: UserInDatabase = {
+    _id: '_config',
+    username: '_config',
+    password: '',
+    client: config.configUser as ClientConnectionSettings,
+    level: AccessLevel.ADMINISTRATOR,
+  };
 
   getConfigUser(): Readonly<UserInDatabase> {
     return this.configUser;
   }
 
-  bootstrapServicesForAllUsers() {
-    this.listUsers((users, err) => {
-      if (err) throw err;
-      if (users && users.length) {
-        users.forEach(services.bootstrapServicesForUser);
-      }
-    });
+  async bootstrapServicesForAllUsers(): Promise<void> {
+    return this.listUsers()
+      .then((users) => Promise.all(users.map((user) => services.bootstrapServicesForUser(user))))
+      .then(() => undefined);
   }
 
   /**
@@ -52,42 +48,30 @@ class Users {
    * @return {Promise<AccessLevel>} - Returns access level of the user if matched or rejects with error.
    */
   async comparePassword(credentials: Pick<Credentials, 'username' | 'password'>): Promise<AccessLevel> {
-    return new Promise((resolve, reject) => {
-      this.db.findOne({username: credentials.username}, (err: Error | null, user: UserInDatabase): void => {
-        if (err) {
-          reject(err);
-          return;
-        }
-
+    return this.db
+      .findOne<Credentials>({username: credentials.username})
+      .then((user) => {
         // Wrong data provided
         if (credentials?.password == null) {
-          reject(new Error());
-          return;
+          throw new Error();
         }
 
         // Username not found.
         if (user == null) {
-          reject(new Error());
-          return;
+          throw new Error();
         }
 
-        argon2Verify({
+        return argon2Verify({
           password: credentials.password,
           hash: user.password,
-        }).then(
-          (isMatch) => {
-            if (isMatch) {
-              resolve(user.level);
-            } else {
-              reject(new Error());
-            }
-          },
-          (verifyErr) => {
-            reject(verifyErr);
-          },
-        );
+        }).then((isMatch) => {
+          if (isMatch) {
+            return user.level;
+          } else {
+            throw new Error();
+          }
+        });
       });
-    });
   }
 
   /**
@@ -112,125 +96,94 @@ class Users {
       : credentials.password;
 
     if (this.db == null || hashed == null) {
-      return Promise.reject(new Error());
+      throw new Error();
     }
 
-    return new Promise((resolve, reject) => {
-      this.db.insert(
-        {
-          ...credentials,
-          password: hashed,
-        },
-        (error, user) => {
-          if (error) {
-            if (error.message.includes('violates the unique constraint')) {
-              reject(new Error('Username already exists.'));
-              return;
-            }
-
-            reject(new Error());
-            return;
-          }
-
-          if (user == null) {
-            reject(new Error());
-            return;
-          }
-
-          resolve(user as UserInDatabase);
-        },
-      );
-    });
-  }
-
-  removeUser(
-    username: Credentials['username'],
-    callback: (userId: UserInDatabase['_id'] | null, error?: Error) => void,
-  ): void {
-    this.db.findOne({username}, (findError: Error | null, user: UserInDatabase): void => {
-      if (findError) {
-        return callback(null, findError);
-      }
-
-      // Username not found.
-      if (user?._id == null) {
-        return callback(null, new Error('User not found.'));
-      }
-
-      const userId = user._id;
-      this.db.remove({username}, {}, (removeError) => {
-        if (removeError) {
-          return callback(null, removeError);
+    return this.db
+      .insert({
+        ...credentials,
+        password: hashed,
+      })
+      .catch((err) => {
+        if (err.message.includes('violates the unique constraint')) {
+          throw new Error('Username already exists.');
         }
 
-        fs.rmdirSync(path.join(config.dbPath, user._id), {recursive: true});
-
-        return callback(userId);
+        throw new Error();
       });
-
-      return undefined;
-    });
   }
 
-  updateUser(
-    username: Credentials['username'],
-    userRecordPatch: Partial<Credentials>,
-    callback: (newUsername: Credentials['username'] | null, updateUserError?: Error | null) => void,
-  ): void {
-    this.db.update({username}, {$set: userRecordPatch}, {}, (err: Error | null, numUsersUpdated: number): void => {
-      if (err) {
-        return callback(null, err);
-      }
+  /**
+   * Removes a user.
+   *
+   * @param {string} username - Name of the user to be removed.
+   * @return {Promise<string>} - Returns ID of removed user or rejects with error.
+   */
+  async removeUser(username: string): Promise<string> {
+    return this.db
+      .findOne<Credentials>({username})
+      .then(async (user) => {
+        await this.db.remove({username}, {});
+        fs.rmdirSync(path.join(config.dbPath, user._id), {recursive: true});
+        return user._id;
+      });
+  }
 
-      // Username not found.
+  /**
+   * Updates a user.
+   *
+   * @param {string} username - Name of the user to be updated.
+   * @param {Partial<Credentials>} userRecordPatch - Changes to the user.
+   * @return {Promise<string>} - Returns new username of updated user or rejects with error.
+   */
+  async updateUser(username: string, userRecordPatch: Partial<Credentials>): Promise<string> {
+    return this.db.update({username}, {$set: userRecordPatch}, {}).then((numUsersUpdated) => {
       if (numUsersUpdated === 0) {
-        return callback(null, err);
+        throw new Error();
       }
 
-      return callback(userRecordPatch.username || username);
+      return userRecordPatch.username || username;
     });
   }
 
-  initialUserGate(handlers: {handleInitialUser: () => void; handleSubsequentUser: () => void}) {
-    this.db.find({}, (_err: Error | null, users: Array<UserInDatabase>): void => {
-      if (users && users.length > 0) {
-        return handlers.handleSubsequentUser();
-      }
-
-      return handlers.handleInitialUser();
-    });
-  }
-
-  lookupUser(username: string, callback: (err: Error | null, user?: UserInDatabase) => void): void {
+  /**
+   * Looks up a user.
+   *
+   * @param {string} username - Name of the user to be updated.
+   * @return {Promise<UserInDatabase>} - Returns a user or rejects with error.
+   */
+  async lookupUser(username: string): Promise<UserInDatabase> {
     if (config.authMethod === 'none') {
-      return callback(null, this.getConfigUser());
+      return this.getConfigUser();
     }
 
-    this.db.findOne({username}, (err: Error | null, user: UserInDatabase): void => {
-      if (err) {
-        return callback(err);
-      }
-
-      return callback(null, user);
-    });
-
-    return undefined;
+    return this.db.findOne<Credentials>({username});
   }
 
-  listUsers(callback: (users: Array<UserInDatabase> | null, err?: Error) => void): void {
+  /**
+   * Lists users.
+   *
+   * @return {Promise<UserInDatabase[]>} - Returns users or rejects with error.
+   */
+  async listUsers(): Promise<UserInDatabase[]> {
     if (config.authMethod === 'none') {
-      return callback([this.getConfigUser()]);
+      return [this.getConfigUser()];
     }
 
-    this.db.find({}, (err: Error | null, users: Array<UserInDatabase>): void => {
-      if (err) {
-        return callback(null, err);
-      }
+    return this.db.find<Credentials>({});
+  }
 
-      return callback(users);
-    });
+  /**
+   * Gets the number of users and route to appropriate handler.
+   */
+  async initialUserGate(handlers: {handleInitialUser: () => void; handleSubsequentUser: () => void}): Promise<void> {
+    const userCount = await this.db.count({});
 
-    return undefined;
+    if (userCount && userCount > 0) {
+      return handlers.handleSubsequentUser();
+    }
+
+    return handlers.handleInitialUser();
   }
 }
 

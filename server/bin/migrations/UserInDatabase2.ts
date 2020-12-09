@@ -14,78 +14,50 @@ const migrationError = (err?: Error) => {
 };
 
 const migration = () => {
-  return new Promise<void>((resolve, _reject) => {
-    Users.listUsers((users, err) => {
-      if (users == null || err) {
-        return;
-      }
+  return Users.listUsers().then((users) => {
+    return Promise.all(
+      users.map(async (user) => {
+        if (user.client != null) {
+          // No need to migrate.
+          return;
+        }
 
-      Promise.all(
-        users.map((user) => {
-          return new Promise<void>((migratedResolve, _migratedReject) => {
-            if (user.client != null) {
-              // No need to migrate.
-              migratedResolve();
-              return;
-            }
+        const userV1 = (user as unknown) as UserInDatabase1;
 
-            const userV1 = (user as unknown) as UserInDatabase1;
+        let connectionSettings: RTorrentConnectionSettings | null = null;
+        if (userV1.socketPath != null) {
+          connectionSettings = {
+            client: 'rTorrent',
+            type: 'socket',
+            version: 1,
+            socket: userV1.socketPath,
+          };
+        } else if (userV1.host != null && userV1.port != null) {
+          connectionSettings = {
+            client: 'rTorrent',
+            type: 'tcp',
+            version: 1,
+            host: userV1.host,
+            port: userV1.port,
+          };
+        }
 
-            let connectionSettings: RTorrentConnectionSettings | null = null;
-            if (userV1.socketPath != null) {
-              connectionSettings = {
-                client: 'rTorrent',
-                type: 'socket',
-                version: 1,
-                socket: userV1.socketPath,
-              };
-            } else if (userV1.host != null && userV1.port != null) {
-              connectionSettings = {
-                client: 'rTorrent',
-                type: 'tcp',
-                version: 1,
-                host: userV1.host,
-                port: userV1.port,
-              };
-            }
+        if (connectionSettings == null) {
+          throw new Error('Corrupted client connection settings.');
+        }
 
-            if (connectionSettings == null) {
-              migrationError(new Error('Corrupted client connection settings.'));
-              return;
-            }
+        const userV2: Credentials = {
+          username: userV1.username,
+          password: userV1.password,
+          client: connectionSettings,
+          level: userV1.isAdmin ? AccessLevel.ADMINISTRATOR : AccessLevel.USER,
+        };
 
-            const userV2: Credentials = {
-              username: userV1.username,
-              password: userV1.password,
-              client: connectionSettings,
-              level: userV1.isAdmin ? AccessLevel.ADMINISTRATOR : AccessLevel.USER,
-            };
-
-            Users.removeUser(userV1.username, (id, errRemoval) => {
-              if (errRemoval) {
-                migrationError(errRemoval);
-                return;
-              }
-
-              if (id == null) {
-                migrationError(new Error('Wrong user ID'));
-                return;
-              }
-
-              Users.createUser(userV2, false).then(
-                () => {
-                  migratedResolve();
-                },
-                (errCreation) => {
-                  migrationError(errCreation);
-                },
-              );
-            });
-          });
-        }),
-      ).then(() => {
-        resolve();
-      });
+        await Users.removeUser(userV1.username);
+        await Users.createUser(userV2, false);
+      }),
+    ).catch((err) => {
+      migrationError(err);
     });
   });
 };

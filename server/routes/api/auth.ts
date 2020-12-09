@@ -297,10 +297,19 @@ router.use('/users', (_req, res, next) => {
  * @security Administrator
  * @return {string} 401 - not authenticated or token expired
  * @return {string} 403 - user is not authorized to list users
- * @return {Array<UserInDatabase>} 200 - success response - application/json
+ * @return {Array<Pick<UserInDatabase, 'username' | 'level'>>} 200 - success response - application/json
  */
 router.get('/users', (_req, res) => {
-  Users.listUsers(getResponseFn(res));
+  Users.listUsers().then(
+    (users) =>
+      res.json(
+        users.map((user) => ({
+          username: user.username,
+          level: user.level,
+        })),
+      ),
+    () => res.status(500).json(new Error()),
+  );
 });
 
 /**
@@ -314,17 +323,14 @@ router.get('/users', (_req, res) => {
  * @return {{username: string}} 200 - success response - application/json
  */
 router.delete('/users/:username', (req, res) => {
-  const callback = getResponseFn(res);
-  Users.removeUser(req.params.username, (id, err) => {
-    if (err || id == null) {
-      callback(null, err || new Error());
-      return;
-    }
-
-    services.destroyUserServices(id);
-
-    callback({username: req.params.username});
-  });
+  Users.removeUser(req.params.username)
+    .then((id) => {
+      services.destroyUserServices(id);
+      res.json({username: req.params.username});
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
 });
 
 /**
@@ -351,26 +357,17 @@ router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions
 
   const patch = parsedResult.data;
 
-  Users.updateUser(username, patch, (newUsername, err) => {
-    if (err || newUsername == null) {
-      res.status(500).json({error: err});
-      return;
-    }
-
-    Users.lookupUser(newUsername, (errLookup, user) => {
-      if (errLookup) {
-        res.status(500).json({error: errLookup});
-        return;
-      }
-
-      if (user != null) {
+  Users.updateUser(username, patch)
+    .then((newUsername) => {
+      return Users.lookupUser(newUsername).then((user) => {
         services.destroyUserServices(user._id);
         services.bootstrapServicesForUser(user);
-      }
-
-      res.send();
+        res.send();
+      });
+    })
+    .catch((err) => {
+      res.status(500).json(err);
     });
-  });
 });
 
 export default router;

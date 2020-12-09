@@ -23,17 +23,14 @@ export default (passport: PassportStatic) => {
 
   passport.use(
     new Strategy(options, (jwtPayload, callback) => {
-      Users.lookupUser(jwtPayload.username, (err, user) => {
-        if (err) {
-          return callback(err, false);
-        }
-
-        if (user) {
-          return callback(null, user);
-        }
-
-        return callback(null, false);
-      });
+      Users.lookupUser(jwtPayload.username).then(
+        (user) => {
+          callback(null, user);
+        },
+        (err) => {
+          callback(err, false);
+        },
+      );
     }),
   );
 };
