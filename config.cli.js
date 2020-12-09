@@ -104,6 +104,12 @@ const {argv} = require('yargs')
     describe: 'Allowed path for file operations, can be called multiple times',
     type: 'string',
   })
+  .option('assets', {
+    default: true,
+    describe: 'ADVANCED: Serve static assets',
+    hidden: true,
+    type: 'boolean',
+  })
   .option('dbclean', {
     default: 1000 * 60 * 60,
     describe: 'ADVANCED: Interval between database purge',
@@ -285,6 +291,7 @@ const CONFIG = {
   sslKey: argv.sslkey || path.resolve(path.join(argv.rundir, 'key.pem')),
   sslCert: argv.sslcert || path.resolve(path.join(argv.rundir, 'fullchain.pem')),
   allowedPaths: allowedPaths.length > 0 ? allowedPaths : undefined,
+  serveAssets: argv.assets,
 };
 
 module.exports = CONFIG;

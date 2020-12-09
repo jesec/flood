@@ -1,5 +1,4 @@
 import fs from 'fs';
-import glob from 'glob';
 import path from 'path';
 
 import {appDist} from '../../shared/config/paths';
@@ -20,27 +19,8 @@ const doFilesExist = (files: Array<string>) => {
   }
 };
 
-const grepRecursive = (folder: string, match: string) => {
-  return glob.sync(folder.concat('/**/*')).some((file) => {
-    try {
-      if (!fs.lstatSync(file).isDirectory()) {
-        return fs.readFileSync(file, {encoding: 'utf8'}).includes(match);
-      }
-      return false;
-    } catch (error) {
-      console.error(`Error reading file: ${file}\n${error}`);
-      return false;
-    }
-  });
-};
-
 const enforcePrerequisites = () =>
   new Promise<void>((resolve, reject: (error: Error) => void) => {
-    if (!doFilesExist(staticAssets)) {
-      reject(new Error(`Static assets (index.html) are missing.`));
-      return;
-    }
-
     // Ensures that WebAssembly support is present
     if (typeof WebAssembly === 'undefined') {
       reject(new Error('WebAssembly is not supported in this environment!'));
@@ -55,9 +35,9 @@ const enforcePrerequisites = () =>
       return;
     }
 
-    // Ensures that server secret is not served to user
-    if (grepRecursive(appDist, config.secret)) {
-      reject(new Error(`Secret is included in static assets. Please ensure that secret is unique.`));
+    // Ensure static assets exist if they need to be served
+    if (!doFilesExist(staticAssets) && config.serveAssets !== false) {
+      reject(new Error(`Static assets are missing.`));
       return;
     }
 

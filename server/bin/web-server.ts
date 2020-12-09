@@ -6,6 +6,7 @@ import spdy from 'spdy';
 
 import app from '../app';
 import config from '../../config';
+import packageJSON from '../../package.json';
 
 const debugFloodServer = debug('flood:server');
 
@@ -25,7 +26,6 @@ const normalizePort = (val: string | number): string | number => {
 
   console.error('Unexpected port or pipe');
   process.exit(1);
-  return 0;
 };
 
 const startWebServer = () => {
@@ -68,11 +68,9 @@ const startWebServer = () => {
       case 'EACCES':
         console.error(`${bind} requires elevated privileges`);
         process.exit(1);
-        break;
       case 'EADDRINUSE':
         console.error(`${bind} is already in use`);
         process.exit(1);
-        break;
       default:
         throw error;
     }
@@ -101,10 +99,14 @@ const startWebServer = () => {
 
   const address = chalk.underline(`${useSSL ? 'https' : 'http'}://${host}:${port}`);
 
-  console.log(chalk.green(`Flood server starting on ${address}.\n`));
+  console.log(chalk.green(`Flood server ${packageJSON.version} starting on ${address}\n`));
 
   if (config.authMethod === 'none') {
     console.log(chalk.yellow('Starting without builtin authentication\n'));
+  }
+
+  if (config.serveAssets === false) {
+    console.log(chalk.blue('Static assets not served\n'));
   }
 };
 

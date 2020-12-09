@@ -26,6 +26,7 @@ process.argv.push('--auth', 'none');
 process.argv.push('--qburl', `http://127.0.0.1:${qbtPort}`);
 process.argv.push('--qbuser', 'admin');
 process.argv.push('--qbpass', 'adminadmin');
+process.argv.push('--assets', 'false');
 
 afterAll(() => {
   qBittorrentDaemon.kill('SIGKILL');

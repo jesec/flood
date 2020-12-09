@@ -39,6 +39,7 @@ process.argv.push('--auth', 'none');
 process.argv.push('--trurl', `http://127.0.0.1:${rpcPort}/transmission/rpc`);
 process.argv.push('--truser', 'transmission');
 process.argv.push('--trpass', 'transmission');
+process.argv.push('--assets', 'false');
 
 afterAll((done) => {
   transmissionProcess.on('close', () => {

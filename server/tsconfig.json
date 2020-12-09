@@ -8,6 +8,7 @@
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "baseUrl": "../",
     "paths": {
       "@shared/*": ["shared/*"]

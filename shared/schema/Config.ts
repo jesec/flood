@@ -124,6 +124,12 @@ export const configSchema = object({
   // CLI argument: --allowedpath, can be called multiple times
   // Allowed paths for file operations. "undefined" means everything. [default: undefined]
   allowedPaths: array(string()).optional(),
+
+  // CLI argument: --assets
+  // Whether Flood should serve static assets.
+  // Users may prefer to serve static assets via a "professional" web server such as nginx to
+  // increase performance or have more flexibility on compression or other options. [default: true]
+  serveAssets: boolean().optional(),
 })
   .refine(
     (config) => {

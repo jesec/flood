@@ -27,6 +27,7 @@ process.argv.push('--allowedpath', temporaryRuntimeDirectory);
 process.argv.push('--rtorrent');
 process.argv.push('--rtconfig', `${temporaryRuntimeDirectory}/rtorrent.rc`);
 process.argv.push('--test');
+process.argv.push('--assets', 'false');
 
 afterAll((done) => {
   process.kill(Number(fs.readFileSync(`${temporaryRuntimeDirectory}/rtorrent.pid`).toString()));
