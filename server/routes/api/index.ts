@@ -50,8 +50,24 @@ router.get<unknown, unknown, unknown, {path: string}>('/directory-list', (req, r
     });
 });
 
+/**
+ * GET /api/history
+ * @summary Gets transfer history in the given interval
+ * @tags Flood
+ * @security User
+ * @param {HistorySnapshot} snapshot.query - interval
+ * @return {TransferHistory} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
 router.get<unknown, unknown, unknown, {snapshot: HistorySnapshot}>('/history', (req, res) => {
-  req.services?.historyService.getHistory(req.query, getResponseFn(res));
+  req.services?.historyService.getHistory(req.query).then(
+    (snapshot) => {
+      res.json(snapshot);
+    },
+    (err) => {
+      res.status(500).json(err);
+    },
+  );
 });
 
 router.get<unknown, unknown, unknown, NotificationFetchOptions>('/notifications', (req, res) => {

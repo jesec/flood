@@ -1,7 +1,7 @@
 import type {UserInDatabase} from '@shared/schema/Auth';
 import type {TransferData, TransferSnapshot} from '@shared/types/TransferData';
 
-import Datastore from 'nedb';
+import Datastore from 'nedb-promises';
 import path from 'path';
 
 import config from '../../config';
@@ -19,20 +19,40 @@ const CUMULATIVE_DATA_BUFFER_DIFF = 500; // 500 milliseconds
 
 class HistoryEra {
   data = [];
-  ready = false;
+  ready: Promise<void>;
   lastUpdate = 0;
   startedAt = Date.now();
   opts: HistoryEraOpts;
-  db: Datastore<TransferSnapshot>;
+  db: Datastore;
   autoCleanupInterval?: NodeJS.Timeout;
   nextEraUpdateInterval?: NodeJS.Timeout;
 
   constructor(user: UserInDatabase, opts: HistoryEraOpts) {
     this.opts = opts;
-    this.db = this.loadDatabase(user._id, opts.name);
+    this.db = Datastore.create({
+      autoload: true,
+      filename: path.join(config.dbPath, user._id, 'history', `${opts.name}.db`),
+    });
+    this.ready = this.prepareDatabase();
+  }
 
-    this.setLastUpdate(this.db);
-    this.removeOutdatedData(this.db);
+  private async prepareDatabase(): Promise<void> {
+    let lastUpdate = 0;
+
+    await this.db.find<TransferSnapshot>({}).then(
+      (snapshots) => {
+        snapshots.forEach((snapshot) => {
+          if (snapshot.timestamp > lastUpdate) {
+            lastUpdate = snapshot.timestamp;
+          }
+        });
+
+        this.lastUpdate = lastUpdate;
+      },
+      () => undefined,
+    );
+
+    await this.removeOutdatedData();
 
     let cleanupInterval = this.opts.maxTime;
 
@@ -40,104 +60,100 @@ class HistoryEra {
       cleanupInterval = config.dbCleanInterval;
     }
 
-    this.autoCleanupInterval = setInterval(this.cleanup, cleanupInterval);
+    this.autoCleanupInterval = setInterval(this.removeOutdatedData, cleanupInterval);
   }
 
-  loadDatabase(userId: UserInDatabase['_id'], dbName: string) {
-    const db = new Datastore({
-      autoload: true,
-      filename: path.join(config.dbPath, userId, 'history', `${dbName}.db`),
-    });
+  private removeOutdatedData = async (): Promise<void> => {
+    if (this.opts.maxTime > 0) {
+      const minTimestamp = Date.now() - this.opts.maxTime;
+      return this.db.remove({timestamp: {$lt: minTimestamp}}, {multi: true}).then(
+        () => undefined,
+        () => undefined,
+      );
+    }
+  };
 
-    this.ready = true;
-    return db;
-  }
-
-  addData(data: TransferData) {
-    if (!this.ready) {
-      console.error('database is not ready');
+  private updateNextEra = async (): Promise<void> => {
+    if (this.opts.nextEraUpdateInterval == null) {
       return;
     }
+
+    const minTimestamp = Date.now() - this.opts.nextEraUpdateInterval;
+
+    return this.db
+      .find<TransferSnapshot>({timestamp: {$gte: minTimestamp}})
+      .then((snapshots) => {
+        if (this.opts.nextEra == null) {
+          return;
+        }
+
+        let downTotal = 0;
+        let upTotal = 0;
+
+        snapshots.forEach((snapshot) => {
+          downTotal += Number(snapshot.download);
+          upTotal += Number(snapshot.upload);
+        });
+
+        this.opts.nextEra.addData({
+          download: Number(Number(downTotal / snapshots.length).toFixed(1)),
+          upload: Number(Number(upTotal / snapshots.length).toFixed(1)),
+        });
+      });
+  };
+
+  async addData(data: TransferData): Promise<void> {
+    await this.ready;
 
     const currentTime = Date.now();
 
     if (currentTime - this.lastUpdate >= this.opts.interval - CUMULATIVE_DATA_BUFFER_DIFF) {
       this.lastUpdate = currentTime;
-      this.db.insert({
-        timestamp: currentTime,
-        ...data,
-      });
+      await this.db
+        .insert({
+          timestamp: currentTime,
+          ...data,
+        })
+        .catch(() => undefined);
     } else {
-      this.db.find({timestamp: this.lastUpdate}, (err: Error, snapshots: Array<TransferSnapshot>) => {
-        if (err) {
-          return;
-        }
+      await this.db
+        .find<TransferSnapshot>({timestamp: this.lastUpdate})
+        .then(
+          async (snapshots) => {
+            if (snapshots.length !== 0) {
+              const snapshot = snapshots[0];
+              const numUpdates = snapshot.numUpdates || 1;
 
-        if (snapshots.length !== 0) {
-          const snapshot = snapshots[0];
-          const numUpdates = snapshot.numUpdates || 1;
+              // calculate average and update
+              const updatedSnapshot: TransferSnapshot = {
+                timestamp: this.lastUpdate,
+                upload: Number(((snapshot.upload * numUpdates + data.upload) / (numUpdates + 1)).toFixed(1)),
+                download: Number(((snapshot.download * numUpdates + data.download) / (numUpdates + 1)).toFixed(1)),
+                numUpdates: numUpdates + 1,
+              };
 
-          // calculate average and update
-          const updatedSnapshot: TransferSnapshot = {
-            timestamp: this.lastUpdate,
-            upload: Number(((snapshot.upload * numUpdates + data.upload) / (numUpdates + 1)).toFixed(1)),
-            download: Number(((snapshot.download * numUpdates + data.download) / (numUpdates + 1)).toFixed(1)),
-            numUpdates: numUpdates + 1,
-          };
-
-          this.db.update({timestamp: this.lastUpdate}, updatedSnapshot);
-        }
-      });
+              await this.db.update({timestamp: this.lastUpdate}, updatedSnapshot).catch(() => undefined);
+            }
+          },
+          () => undefined,
+        );
     }
   }
 
-  cleanup = () => {
-    this.removeOutdatedData(this.db);
-    this.db.persistence.compactDatafile();
-  };
+  async getData(): Promise<TransferSnapshot[]> {
+    await this.ready;
 
-  getData(callback: (snapshots: Array<TransferSnapshot> | null, error?: Error) => void) {
     const minTimestamp = Date.now() - this.opts.maxTime;
 
-    this.db
-      .find({timestamp: {$gte: minTimestamp}})
+    return this.db
+      .find<TransferSnapshot>({timestamp: {$gte: minTimestamp}})
       .sort({timestamp: 1})
-      .exec((err, snapshots: Array<TransferSnapshot>) => {
-        if (err) {
-          callback(null, err);
-          return;
-        }
-
-        callback(snapshots.slice(snapshots.length - config.maxHistoryStates));
-      });
+      .then((snapshots) => snapshots.slice(snapshots.length - config.maxHistoryStates));
   }
 
-  removeOutdatedData(db: this['db']) {
-    if (this.opts.maxTime > 0) {
-      const minTimestamp = Date.now() - this.opts.maxTime;
-      db.remove({timestamp: {$lt: minTimestamp}}, {multi: true});
-    }
-  }
+  async setNextEra(nextEra: HistoryEra): Promise<void> {
+    await this.ready;
 
-  setLastUpdate(db: this['db']): void {
-    let lastUpdate = 0;
-
-    db.find({}, (err: Error, snapshots: Array<TransferSnapshot>) => {
-      if (err) {
-        return;
-      }
-
-      snapshots.forEach((snapshot) => {
-        if (snapshot.timestamp > lastUpdate) {
-          lastUpdate = snapshot.timestamp;
-        }
-      });
-
-      this.lastUpdate = lastUpdate;
-    });
-  }
-
-  setNextEra(nextEra: HistoryEra): void {
     this.opts.nextEra = nextEra;
 
     let {nextEraUpdateInterval} = this.opts;
@@ -150,33 +166,6 @@ class HistoryEra {
       this.nextEraUpdateInterval = setInterval(this.updateNextEra, nextEraUpdateInterval);
     }
   }
-
-  updateNextEra = (): void => {
-    if (this.opts.nextEraUpdateInterval == null) {
-      return;
-    }
-
-    const minTimestamp = Date.now() - this.opts.nextEraUpdateInterval;
-
-    this.db.find({timestamp: {$gte: minTimestamp}}, (err: Error, snapshots: Array<TransferSnapshot>) => {
-      if (err || this.opts.nextEra == null) {
-        return;
-      }
-
-      let downTotal = 0;
-      let upTotal = 0;
-
-      snapshots.forEach((snapshot) => {
-        downTotal += Number(snapshot.download);
-        upTotal += Number(snapshot.upload);
-      });
-
-      this.opts.nextEra.addData({
-        download: Number(Number(downTotal / snapshots.length).toFixed(1)),
-        upload: Number(Number(upTotal / snapshots.length).toFixed(1)),
-      });
-    });
-  };
 }
 
 export default HistoryEra;

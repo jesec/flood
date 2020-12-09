@@ -93,19 +93,7 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     };
   }
 
-  deferFetchTransferSummary(interval = config.torrentClientPollInterval) {
-    this.pollTimeout = setTimeout(this.fetchCurrentTransferSummary, interval);
-  }
-
-  destroy() {
-    if (this.pollTimeout != null) {
-      clearTimeout(this.pollTimeout);
-    }
-
-    super.destroy();
-  }
-
-  fetchCurrentTransferSummary = () => {
+  private fetchCurrentTransferSummary = () => {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
     }
@@ -116,36 +104,11 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
       .catch(this.handleFetchTransferSummaryError);
   };
 
-  getTransferSummary() {
-    return {
-      id: Date.now(),
-      transferSummary: this.transferSummary,
-    } as const;
+  private deferFetchTransferSummary(interval = config.torrentClientPollInterval) {
+    this.pollTimeout = setTimeout(this.fetchCurrentTransferSummary, interval);
   }
 
-  getHistory({snapshot}: {snapshot: HistorySnapshot}, callback: (data: TransferHistory | null, error?: Error) => void) {
-    this.snapshots[snapshot]?.getData((transferSnapshots, error) => {
-      if (error || transferSnapshots == null) {
-        callback(null, error);
-        return;
-      }
-
-      callback(
-        transferSnapshots.reduce(
-          (history, transferSnapshot) => {
-            history.download.push(transferSnapshot.download);
-            history.upload.push(transferSnapshot.upload);
-            history.timestamps.push(transferSnapshot.timestamp);
-
-            return history;
-          },
-          {upload: [], download: [], timestamps: []} as TransferHistory,
-        ),
-      );
-    });
-  }
-
-  handleFetchTransferSummarySuccess = (nextTransferSummary: TransferSummary) => {
+  private handleFetchTransferSummarySuccess = async (nextTransferSummary: TransferSummary): Promise<void> => {
     const summaryDiff = jsonpatch.compare(this.transferSummary, nextTransferSummary);
 
     this.emit('TRANSFER_SUMMARY_DIFF_CHANGE', {
@@ -155,7 +118,8 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
 
     this.errorCount = 0;
     this.transferSummary = nextTransferSummary;
-    this.snapshots.FIVE_MINUTE.addData({
+
+    await this.snapshots.FIVE_MINUTE.addData({
       upload: nextTransferSummary.upRate,
       download: nextTransferSummary.downRate,
     });
@@ -165,7 +129,7 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     this.emit('FETCH_TRANSFER_SUMMARY_SUCCESS');
   };
 
-  handleFetchTransferSummaryError = () => {
+  private handleFetchTransferSummaryError = () => {
     let nextInterval = config.torrentClientPollInterval;
 
     // If more than 2 consecutive errors have occurred, then we delay the next request.
@@ -178,6 +142,36 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
 
     this.emit('FETCH_TRANSFER_SUMMARY_ERROR');
   };
+
+  destroy() {
+    if (this.pollTimeout != null) {
+      clearTimeout(this.pollTimeout);
+    }
+
+    super.destroy();
+  }
+
+  getTransferSummary() {
+    return {
+      id: Date.now(),
+      transferSummary: this.transferSummary,
+    } as const;
+  }
+
+  async getHistory({snapshot}: {snapshot: HistorySnapshot}): Promise<TransferHistory> {
+    return this.snapshots[snapshot]?.getData().then((transferSnapshots) =>
+      transferSnapshots.reduce(
+        (history, transferSnapshot) => {
+          history.download.push(transferSnapshot.download);
+          history.upload.push(transferSnapshot.upload);
+          history.timestamps.push(transferSnapshot.timestamp);
+
+          return history;
+        },
+        {upload: [], download: [], timestamps: []} as TransferHistory,
+      ),
+    );
+  }
 }
 
 export default HistoryService;

@@ -167,6 +167,7 @@
     "mobx-react": "^7.0.5",
     "morgan": "^1.10.0",
     "nedb": "^1.8.0",
+    "nedb-promises": "^4.1.0",
     "node-sass": "^5.0.0",
     "overlayscrollbars": "^1.13.0",
     "overlayscrollbars-react": "^0.2.2",
