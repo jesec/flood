@@ -368,7 +368,7 @@
   "button.close": [
     {
       "type": 0,
-      "value": "Close"
+      "value": "Zavřít"
     }
   ],
   "button.download": [
@@ -1564,13 +1564,13 @@
   "sidebar.button.theme.dark": [
     {
       "type": 0,
-      "value": "Dark Theme"
+      "value": "Tmavý motiv"
     }
   ],
   "sidebar.button.theme.light": [
     {
       "type": 0,
-      "value": "Light Theme"
+      "value": "Světlý motiv"
     }
   ],
   "sidebar.search.placeholder": [
@@ -2122,31 +2122,31 @@
   "torrents.generate.magnet.heading": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "Vygenerovat magnet odkaz"
     }
   ],
   "torrents.generate.magnet.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Načítání trackerů..."
     }
   ],
   "torrents.generate.magnet.magnet": [
     {
       "type": 0,
-      "value": "Magnet Link"
+      "value": "Magnet odkaz"
     }
   ],
   "torrents.generate.magnet.magnet.with.trackers": [
     {
       "type": 0,
-      "value": "Magnet Link with Trackers"
+      "value": "Magnet odkaz s trackery"
     }
   ],
   "torrents.generate.magnet.private.torrent": [
     {
       "type": 0,
-      "value": "This is a private torrent."
+      "value": "Toto je soukromý torrent."
     }
   ],
   "torrents.list.cannot.connect": [
@@ -2182,7 +2182,7 @@
   "torrents.list.context.generate.magnet": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "Vygenerovat magnet odkaz"
     }
   ],
   "torrents.list.context.move": [
