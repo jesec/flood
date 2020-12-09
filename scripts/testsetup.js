@@ -40,7 +40,10 @@ const startFlood = () => {
     return;
   }
 
-  floodProcess = spawn(`${path.join(__dirname, '../dist/index.js')}`, argv, {stdio: 'inherit'});
+  floodProcess = spawn('npm', ['run', 'start:development:server', '--'].concat(argv), {
+    cwd: path.join(__dirname, '..'),
+    stdio: 'inherit',
+  });
 };
 
 const closeProcesses = () => {
