@@ -537,11 +537,12 @@ router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:ha
  */
 router.get('/:hash/contents/:indices/data', (req, res) => {
   const {hash, indices: stringIndices} = req.params;
-  try {
-    const selectedTorrent = req.services?.torrentService.getTorrent(hash);
-    if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
+  const selectedTorrent = req.services?.torrentService.getTorrent(hash);
+  if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
-    return req.services?.clientGatewayService?.getTorrentContents(hash).then((contents) => {
+  req.services?.clientGatewayService
+    ?.getTorrentContents(hash)
+    .then((contents) => {
       if (!contents || contents.length < 1) {
         return res.status(404).json({error: 'Torrent contents not found'});
       }
@@ -555,18 +556,16 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
 
       const filePathsToDownload = contents
         .filter((content) => indices.includes(content.index))
-        .map((content) => {
-          return sanitizePath(path.join(selectedTorrent.directory, content.path));
-        })
-        .filter((filePath) => isAllowedPath(filePath));
+        .map((content) => sanitizePath(path.join(selectedTorrent.directory, content.path)))
+        .filter((filePath) => isAllowedPath(filePath))
+        .filter((filePath) => fs.existsSync(filePath));
 
       if (filePathsToDownload.length < 1) {
-        return res.status(403).json(accessDeniedError());
+        return res.status(404).json({error: 'File not found.'});
       }
 
       if (filePathsToDownload.length === 1) {
         const file = filePathsToDownload[0];
-        if (!fs.existsSync(file)) return res.status(404).json({error: 'File not found.'});
 
         const fileName = path.basename(file);
         const fileExt = path.extname(file);
@@ -612,10 +611,10 @@ router.get('/:hash/contents/:indices/data', (req, res) => {
           relativeFilePaths,
         )
         .pipe(res);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
     });
-  } catch (error) {
-    return res.status(500).json(error);
-  }
 });
 
 /**
