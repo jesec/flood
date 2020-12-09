@@ -15,6 +15,7 @@ export const getResponseFn = (res: Response) => <D extends unknown>(data: D, err
 
     if (typeof error === 'string') {
       res.status(500).json(Error(error));
+      return;
     }
 
     res.status(500).json(error);
