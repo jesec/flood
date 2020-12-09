@@ -2,7 +2,7 @@
   "actionbar.button.add.torrent": [
     {
       "type": 0,
-      "value": "Adaugă Torent"
+      "value": "Adaugă torent"
     }
   ],
   "actionbar.button.remove.torrent": [
@@ -678,13 +678,13 @@
   "feeds.add.automatic.download.rule": [
     {
       "type": 0,
-      "value": "Adaugă Regulă de Descărcare"
+      "value": "Adaugă regulă de descărcare"
     }
   ],
   "feeds.add.feed": [
     {
       "type": 0,
-      "value": "Adaugă Flux"
+      "value": "Adaugă flux"
     }
   ],
   "feeds.applicable.feed": [
@@ -1532,7 +1532,7 @@
   "settings.ui.torrent.list": [
     {
       "type": 0,
-      "value": "Afișare listă torrent"
+      "value": "Afișare listă torrente"
     }
   ],
   "settings.ui.torrent.size": [
@@ -1544,7 +1544,7 @@
   "settings.ui.torrent.size.condensed": [
     {
       "type": 0,
-      "value": "Vedere Condensată"
+      "value": "Vedere compactă"
     }
   ],
   "settings.ui.torrent.size.expanded": [
@@ -1680,7 +1680,7 @@
   "torrents.add.button.add": [
     {
       "type": 0,
-      "value": "Adaugă Torent"
+      "value": "Adaugă torent"
     }
   ],
   "torrents.add.cookies.input.placeholder": [
@@ -1710,7 +1710,7 @@
   "torrents.add.heading": [
     {
       "type": 0,
-      "value": "Adaugă Torente"
+      "value": "Adaugă torente"
     }
   ],
   "torrents.add.start.label": [
@@ -1836,7 +1836,7 @@
   "torrents.destination.base_path": [
     {
       "type": 0,
-      "value": "Folosiți ca cale de bază"
+      "value": "Folosiți ca și cale de bază"
     }
   ],
   "torrents.destination.completed": [
@@ -2038,7 +2038,7 @@
   "torrents.details.general.tracker.message": [
     {
       "type": 0,
-      "value": "Mesaj de urmărire"
+      "value": "Mesaj tracker"
     }
   ],
   "torrents.details.general.type": [
@@ -2318,7 +2318,7 @@
   "torrents.properties.download.speed": [
     {
       "type": 0,
-      "value": "Viteza de Descărcare"
+      "value": "Viteza de descărcare"
     }
   ],
   "torrents.properties.download.total": [
@@ -2402,7 +2402,7 @@
   "torrents.properties.tracker.message": [
     {
       "type": 0,
-      "value": "Mesaj de urmărire"
+      "value": "Mesaj tracker"
     }
   ],
   "torrents.properties.trackers": [
@@ -2414,7 +2414,7 @@
   "torrents.properties.upload.speed": [
     {
       "type": 0,
-      "value": "Viteza de Încărcare"
+      "value": "Viteza de încărcare"
     }
   ],
   "torrents.properties.upload.total": [
