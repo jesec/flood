@@ -242,28 +242,28 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
         return;
       }
 
-      fs.writeFile(torrentPath, torrent, (writeErr) => {
-        if (writeErr) {
+      fs.promises.writeFile(torrentPath, torrent).then(
+        () => {
+          res.attachment(torrentFileName);
+          res.download(torrentPath);
+
+          req.services?.clientGatewayService
+            ?.addTorrentsByFile({
+              files: [torrent.toString('base64')],
+              destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
+              tags: tags ?? [],
+              isBasePath: true,
+              isCompleted: true,
+              start: start || false,
+            })
+            .catch(() => {
+              // do nothing.
+            });
+        },
+        (writeErr) => {
           callback(null, writeErr);
-          return;
-        }
-
-        res.attachment(torrentFileName);
-        res.download(torrentPath);
-
-        req.services?.clientGatewayService
-          ?.addTorrentsByFile({
-            files: [torrent.toString('base64')],
-            destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
-            tags: tags ?? [],
-            isBasePath: true,
-            isCompleted: true,
-            start: start || false,
-          })
-          .catch(() => {
-            // do nothing.
-          });
-      });
+        },
+      );
     },
   );
 });

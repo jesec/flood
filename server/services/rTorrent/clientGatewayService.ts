@@ -25,7 +25,6 @@ import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import {createDirectory} from '../../util/fileUtil';
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
@@ -95,7 +94,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isCompleted,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<void> {
-    await createDirectory(destination);
+    await fs.promises.mkdir(destination, {recursive: true});
 
     const torrentPaths: Array<string> = (
       await Promise.all(
