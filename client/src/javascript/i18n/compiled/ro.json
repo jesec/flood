@@ -8,19 +8,19 @@
   "actionbar.button.remove.torrent": [
     {
       "type": 0,
-      "value": "Elimină Torentul"
+      "value": "Șterge torentul"
     }
   ],
   "actionbar.button.start.torrent": [
     {
       "type": 0,
-      "value": "Pornește Torentul"
+      "value": "Pornește torentul"
     }
   ],
   "actionbar.button.stop.torrent": [
     {
       "type": 0,
-      "value": "Oprește Torentul"
+      "value": "Oprește torentul"
     }
   ],
   "alert.settings.saved": [
@@ -31,8 +31,32 @@
   ],
   "alert.torrent.add": [
     {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "A fost adăugat"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Au fost adăugate"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
       "type": 0,
-      "value": "Ai adăugat cu succes "
+      "value": " cu succes "
     },
     {
       "type": 1,
@@ -49,7 +73,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrente"
+              "value": "torent"
             }
           ]
         },
@@ -57,7 +81,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrente"
+              "value": "torente"
             }
           ]
         }
@@ -65,20 +89,16 @@
       "pluralType": "cardinal",
       "type": 6,
       "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
     }
   ],
   "alert.torrent.add.failed": [
     {
       "type": 0,
-      "value": "Nu s-a putut adăuga "
-    },
-    {
-      "type": 1,
-      "value": "countElement"
-    },
-    {
-      "type": 0,
-      "value": " "
+      "value": "Nu "
     },
     {
       "offset": 0,
@@ -87,7 +107,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrent"
+              "value": "s-a"
             }
           ]
         },
@@ -95,7 +115,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrente"
+              "value": "s-au"
             }
           ]
         }
@@ -103,12 +123,10 @@
       "pluralType": "cardinal",
       "type": 6,
       "value": "count"
-    }
-  ],
-  "alert.torrent.move": [
+    },
     {
       "type": 0,
-      "value": "A fost mutat cu succes "
+      "value": " putut adăuga "
     },
     {
       "type": 1,
@@ -125,7 +143,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrent"
+              "value": "torent"
             }
           ]
         },
@@ -133,7 +151,73 @@
           "value": [
             {
               "type": 0,
-              "value": "torrente"
+              "value": "torente"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": "."
+    }
+  ],
+  "alert.torrent.move": [
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "A fost mutat"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Au fost mutate"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " cu succes "
+    },
+    {
+      "type": 1,
+      "value": "countElement"
+    },
+    {
+      "type": 0,
+      "value": " "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torent"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "torente"
             }
           ]
         }
@@ -150,7 +234,35 @@
   "alert.torrent.move.failed": [
     {
       "type": 0,
-      "value": "Nu s-a reușit mutarea "
+      "value": "Nu "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "s-a"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "s-au"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " mutat "
     },
     {
       "type": 1,
@@ -167,7 +279,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrent"
+              "value": "torent"
             }
           ]
         },
@@ -191,8 +303,32 @@
   ],
   "alert.torrent.remove": [
     {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "A fost șters"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "Au fost șterse"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
       "type": 0,
-      "value": "Ai eliminat cu succes "
+      "value": " cu succes "
     },
     {
       "type": 1,
@@ -209,7 +345,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrent"
+              "value": "torent"
             }
           ]
         },
@@ -217,7 +353,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrente"
+              "value": "torente"
             }
           ]
         }
@@ -234,7 +370,35 @@
   "alert.torrent.remove.failed": [
     {
       "type": 0,
-      "value": "Nu s-a reușit ștergerea a "
+      "value": "Nu "
+    },
+    {
+      "offset": 0,
+      "options": {
+        "=1": {
+          "value": [
+            {
+              "type": 0,
+              "value": "s-a"
+            }
+          ]
+        },
+        "other": {
+          "value": [
+            {
+              "type": 0,
+              "value": "s-au"
+            }
+          ]
+        }
+      },
+      "pluralType": "cardinal",
+      "type": 6,
+      "value": "count"
+    },
+    {
+      "type": 0,
+      "value": " șters "
     },
     {
       "type": 1,
@@ -251,7 +415,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrent"
+              "value": "torent"
             }
           ]
         },
@@ -259,7 +423,7 @@
           "value": [
             {
               "type": 0,
-              "value": "torrente"
+              "value": "torente"
             }
           ]
         }
@@ -372,7 +536,7 @@
   "button.add": [
     {
       "type": 0,
-      "value": "Adăugare"
+      "value": "Adaugă"
     }
   ],
   "button.cancel": [
@@ -384,7 +548,7 @@
   "button.close": [
     {
       "type": 0,
-      "value": "Close"
+      "value": "Închide"
     }
   ],
   "button.download": [
@@ -432,7 +596,7 @@
   "button.state.adding": [
     {
       "type": 0,
-      "value": "Adăugare..."
+      "value": "Se adaugă..."
     }
   ],
   "button.yes": [
@@ -504,13 +668,13 @@
   "connection.settings.qbittorrent.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "Adresă"
     }
   ],
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL către qBittorrent Web API"
+      "value": "Adresă către qBittorrent Web API"
     }
   ],
   "connection.settings.qbittorrent.username": [
@@ -546,13 +710,13 @@
   "connection.settings.rtorrent.port": [
     {
       "type": 0,
-      "value": "Portul"
+      "value": "Port"
     }
   ],
   "connection.settings.rtorrent.port.input.placeholder": [
     {
       "type": 0,
-      "value": "Portul"
+      "value": "Port"
     }
   ],
   "connection.settings.rtorrent.socket": [
@@ -612,13 +776,13 @@
   "connection.settings.transmission.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "Adresă"
     }
   ],
   "connection.settings.transmission.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL pentru interfața Transmission RPC"
+      "value": "Adresă către interfața Transmission RPC"
     }
   ],
   "connection.settings.transmission.username": [
@@ -636,7 +800,7 @@
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Nu se poate conecta la client. Actualizați setările conexiunii."
+      "value": "Nu se poate conecta la client. Actualizează setările conexiunii."
     }
   ],
   "connectivity.modal.title": [
@@ -654,13 +818,13 @@
   "dependency.loading.torrent.list": [
     {
       "type": 0,
-      "value": "Lista de Torente"
+      "value": "Lista de torente"
     }
   ],
   "dependency.loading.torrent.taxonomy": [
     {
       "type": 0,
-      "value": "Taxonomie Torrent"
+      "value": "Taxonomia torentului"
     }
   ],
   "dependency.loading.transfer.history": [
@@ -714,7 +878,7 @@
   "feeds.exclude": [
     {
       "type": 0,
-      "value": "Excludere"
+      "value": "Exclude"
     }
   ],
   "feeds.exclude.pattern": [
@@ -788,7 +952,7 @@
   "feeds.match.pattern": [
     {
       "type": 0,
-      "value": "Model de potrivire"
+      "value": "Potrivire model"
     }
   ],
   "feeds.no.feeds.available": [
@@ -824,19 +988,19 @@
   "feeds.search": [
     {
       "type": 0,
-      "value": "Termenul de căutare"
+      "value": "Termen de căutare"
     }
   ],
   "feeds.search.term": [
     {
       "type": 0,
-      "value": "Termenul de căutare"
+      "value": "Termen de căutare"
     }
   ],
   "feeds.select.feed": [
     {
       "type": 0,
-      "value": "Selectare flux"
+      "value": "Selectează flux"
     }
   ],
   "feeds.select.interval": [
@@ -902,13 +1066,13 @@
   "feeds.torrent.destination": [
     {
       "type": 0,
-      "value": "Destinația Torentului"
+      "value": "Destinația torentului"
     }
   ],
   "feeds.url": [
     {
       "type": 0,
-      "value": "URL"
+      "value": "Adresă"
     }
   ],
   "feeds.validation.interval.not.positive": [
@@ -944,7 +1108,7 @@
   "feeds.validation.must.specify.valid.feed.url": [
     {
       "type": 0,
-      "value": "Trebuie să specifici un URL de flux valid."
+      "value": "Trebuie să specifici o adresă de flux validă."
     }
   ],
   "filesystem.empty.directory": [
@@ -980,7 +1144,7 @@
   "filesystem.parent.directory": [
     {
       "type": 0,
-      "value": "Director Părinte"
+      "value": "Director părinte"
     }
   ],
   "filter.all": [
@@ -998,19 +1162,19 @@
   "filter.status.checking": [
     {
       "type": 0,
-      "value": "Verificare"
+      "value": "Se verifică"
     }
   ],
   "filter.status.completed": [
     {
       "type": 0,
-      "value": "Complete"
+      "value": "Complet"
     }
   ],
   "filter.status.downloading": [
     {
       "type": 0,
-      "value": "Descărcare"
+      "value": "Descărcând"
     }
   ],
   "filter.status.error": [
@@ -1028,7 +1192,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "Donând"
     }
   ],
   "filter.status.stopped": [
@@ -1052,7 +1216,7 @@
   "filter.tracker.title": [
     {
       "type": 0,
-      "value": "Filtrează după Tracker"
+      "value": "Filtrează după tracker"
     }
   ],
   "filter.untagged": [
@@ -1082,7 +1246,7 @@
   "general.clipboard.copy": [
     {
       "type": 0,
-      "value": "Copiază"
+      "value": "Copie"
     }
   ],
   "general.error.unknown": [
@@ -1124,7 +1288,7 @@
   "mediainfo.fetching": [
     {
       "type": 0,
-      "value": "Preluare..."
+      "value": "Se preia..."
     }
   ],
   "mediainfo.heading": [
@@ -1148,7 +1312,7 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Element Feed în așteptare"
+      "value": "Element din flux în așteptare"
     }
   ],
   "notification.no.notification": [
@@ -1196,13 +1360,13 @@
   "priority.high": [
     {
       "type": 0,
-      "value": "Ridicat"
+      "value": "Ridicată"
     }
   ],
   "priority.low": [
     {
       "type": 0,
-      "value": "Scăzut"
+      "value": "Scazută"
     }
   ],
   "priority.normal": [
@@ -1214,7 +1378,7 @@
   "settings.about.flood": [
     {
       "type": 0,
-      "value": "Despre Inundații"
+      "value": "Despre Flood"
     }
   ],
   "settings.bandwidth.slots.download.global.label": [
@@ -1226,7 +1390,7 @@
   "settings.bandwidth.slots.download.label": [
     {
       "type": 0,
-      "value": "Sloturi per torent pentru descărcare"
+      "value": "Sloturi pentru descărcare per torent"
     }
   ],
   "settings.bandwidth.slots.heading": [
@@ -1244,31 +1408,31 @@
   "settings.bandwidth.slots.upload.label": [
     {
       "type": 0,
-      "value": "Sloturi per torent pentru încărcare"
+      "value": "Sloturi pentru încărcare per torent"
     }
   ],
   "settings.bandwidth.transferrate.dropdown.preset.download.label": [
     {
       "type": 0,
-      "value": "Presetări derulante: Descărcare"
+      "value": "Presetări dropdown: Descărcare"
     }
   ],
   "settings.bandwidth.transferrate.dropdown.preset.upload.label": [
     {
       "type": 0,
-      "value": "Presetări derulante: Încărcare"
+      "value": "Presetări dropdown: Încărcare"
     }
   ],
   "settings.bandwidth.transferrate.global.throttle.download": [
     {
       "type": 0,
-      "value": "Globală Rata de Descărcare"
+      "value": "Rata globală de descărcare"
     }
   ],
   "settings.bandwidth.transferrate.global.throttle.upload": [
     {
       "type": 0,
-      "value": "Zbor pentru rata globală de încărcare"
+      "value": "Rata globală de încărcare"
     }
   ],
   "settings.bandwidth.transferrate.heading": [
@@ -1292,7 +1456,7 @@
   "settings.connectivity.dpd.heading": [
     {
       "type": 0,
-      "value": "Descoperirea descentralizată a partenerului"
+      "value": "Descoperirea descentralizată a partenerilor"
     }
   ],
   "settings.connectivity.incoming.heading": [
@@ -1310,7 +1474,7 @@
   "settings.connectivity.max.http.connections": [
     {
       "type": 0,
-      "value": "Maxim conexiuni HTTP"
+      "value": "Conexiuni HTTP maxime"
     }
   ],
   "settings.connectivity.peer.exchange.label": [
@@ -1334,31 +1498,31 @@
   "settings.connectivity.peers.max.label": [
     {
       "type": 0,
-      "value": "Maxim Parteneri"
+      "value": "Nr. maxim de parteneri"
     }
   ],
   "settings.connectivity.peers.min.label": [
     {
       "type": 0,
-      "value": "Minim Parteneri"
+      "value": "Nr. minim de parteneri"
     }
   ],
   "settings.connectivity.peers.seeding.max.label": [
     {
       "type": 0,
-      "value": "Seeding Maxim Parteneri"
+      "value": "Nr. maxim de parteneri donatori"
     }
   ],
   "settings.connectivity.peers.seeding.min.label": [
     {
       "type": 0,
-      "value": "Minim Seeding-ul Partenerilor"
+      "value": "Nr. minim de parteneri donatori"
     }
   ],
   "settings.connectivity.port.open.label": [
     {
       "type": 0,
-      "value": "Deschide portul"
+      "value": "Port deschis"
     }
   ],
   "settings.connectivity.port.randomize.label": [
@@ -1376,7 +1540,7 @@
   "settings.diskusage.mount.points": [
     {
       "type": 0,
-      "value": "Puncte de folosire disc"
+      "value": "Puncte de montare pentru utilizarea discului"
     }
   ],
   "settings.diskusage.show": [
@@ -1388,7 +1552,7 @@
   "settings.resources.disk.check.hash.label": [
     {
       "type": 0,
-      "value": "Verifică Hash la Finalizare"
+      "value": "Verifică hash-ul la finalizare"
     }
   ],
   "settings.resources.disk.download.location.label": [
@@ -1406,7 +1570,7 @@
   "settings.resources.max.open.files": [
     {
       "type": 0,
-      "value": "Maximul de fişiere deschise"
+      "value": "Nr. maxim de fişiere deschise"
     }
   ],
   "settings.resources.memory.heading": [
@@ -1466,7 +1630,7 @@
   "settings.tabs.userinterface": [
     {
       "type": 0,
-      "value": "Interfață utilizator"
+      "value": "Interfața cu utilizatorul"
     }
   ],
   "settings.ui.displayed.context.menu.items": [
@@ -1478,7 +1642,7 @@
   "settings.ui.displayed.details": [
     {
       "type": 0,
-      "value": "Coloane Torent Detaliu"
+      "value": "Coloane cu detalii ale torentelor"
     }
   ],
   "settings.ui.language": [
@@ -1514,7 +1678,7 @@
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Afișare"
+      "value": "Arată"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1526,19 +1690,19 @@
   "settings.ui.torrent.details.tags.placement": [
     {
       "type": 0,
-      "value": "În vizualizarea extinsă, etichetele funcționează cel mai bine la sfârșitul listei."
+      "value": "În vederea extinsă, etichetele funcționează cel mai bine la sfârșitul listei."
     }
   ],
   "settings.ui.torrent.list": [
     {
       "type": 0,
-      "value": "Afișare listă torrente"
+      "value": "Afișare listă torente"
     }
   ],
   "settings.ui.torrent.size": [
     {
       "type": 0,
-      "value": "Mărimea Torentului"
+      "value": "Mărimea torentului"
     }
   ],
   "settings.ui.torrent.size.condensed": [
@@ -1550,7 +1714,7 @@
   "settings.ui.torrent.size.expanded": [
     {
       "type": 0,
-      "value": "Vizualizare extinsă"
+      "value": "Vedere extinsă"
     }
   ],
   "sidebar.button.feeds": [
@@ -1580,13 +1744,13 @@
   "sidebar.button.theme.dark": [
     {
       "type": 0,
-      "value": "Dark Theme"
+      "value": "Temă întunecată"
     }
   ],
   "sidebar.button.theme.light": [
     {
       "type": 0,
-      "value": "Light Theme"
+      "value": "Temă luminată"
     }
   ],
   "sidebar.search.placeholder": [
@@ -1598,7 +1762,7 @@
   "sidebar.speedlimits.download": [
     {
       "type": 0,
-      "value": "DESCARCĂ"
+      "value": "DESCĂRCARE"
     }
   ],
   "sidebar.speedlimits.upload": [
@@ -1628,7 +1792,7 @@
   "status.diskusage.free": [
     {
       "type": 0,
-      "value": "Gratuit"
+      "value": "Liber"
     }
   ],
   "status.diskusage.title": [
@@ -1686,7 +1850,7 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=valoarea cookie-value"
+      "value": "cookie-name = cookie-value"
     }
   ],
   "torrents.add.cookies.label": [
@@ -1716,7 +1880,7 @@
   "torrents.add.start.label": [
     {
       "type": 0,
-      "value": "Pornește Torentul"
+      "value": "Pornește torentul"
     }
   ],
   "torrents.add.tab.create.title": [
@@ -1728,13 +1892,13 @@
   "torrents.add.tab.file.browse": [
     {
       "type": 0,
-      "value": "sau faceţi clic pentru a naviga"
+      "value": "sau fă clic pentru a naviga"
     }
   ],
   "torrents.add.tab.file.drop": [
     {
       "type": 0,
-      "value": "Pune niște fișiere aici,"
+      "value": "Pune câteva fișiere aici,"
     }
   ],
   "torrents.add.tab.file.title": [
@@ -1746,13 +1910,13 @@
   "torrents.add.tab.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL-ul torrent-ului sau link-ul Magnet"
+      "value": "Adresa torentului sau adresa magnet"
     }
   ],
   "torrents.add.tab.url.title": [
     {
       "type": 0,
-      "value": "După URL"
+      "value": "După adresă"
     }
   ],
   "torrents.add.tags": [
@@ -1770,7 +1934,7 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Nume opțional de bază sau director al torentului"
+      "value": "Numele fișierului de bază sau numele directorului torentului"
     }
   ],
   "torrents.create.base.name.label": [
@@ -1782,7 +1946,7 @@
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Comentariu opțional în fișierul torent"
+      "value": "Comentariu în fișierul torent"
     }
   ],
   "torrents.create.comment.label": [
@@ -1794,13 +1958,13 @@
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Intrare sursă opțională în infohash"
+      "value": "Intrare sursă în infohash"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Sursă de informații"
+      "value": "Sursa de informații"
     }
   ],
   "torrents.create.is.private.label": [
@@ -1818,43 +1982,43 @@
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Etichete în inundații. Nu s-a adăugat la torentul creat."
+      "value": "Etichete în Flood. Nu se adăugă la torentul creat."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
     {
       "type": 0,
-      "value": "URL urmaritor"
+      "value": "Adresă tracker"
     }
   ],
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackeri"
+      "value": "Trackere"
     }
   ],
   "torrents.destination.base_path": [
     {
       "type": 0,
-      "value": "Folosiți ca și cale de bază"
+      "value": "Folosește ca și cale de bază"
     }
   ],
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completat"
+      "value": "Finalizat"
     }
   ],
   "torrents.details.actions.pause": [
     {
       "type": 0,
-      "value": "Întrerupeți"
+      "value": "Întrerupe"
     }
   ],
   "torrents.details.actions.start": [
     {
       "type": 0,
-      "value": "Pornire"
+      "value": "Pornește"
     }
   ],
   "torrents.details.actions.stop": [
@@ -1920,7 +2084,7 @@
     },
     {
       "type": 0,
-      "value": " conectat din "
+      "value": " conectați din "
     },
     {
       "type": 1,
@@ -1972,7 +2136,7 @@
   "torrents.details.general.heading.tracker": [
     {
       "type": 0,
-      "value": "Urmaritor"
+      "value": "Tracker"
     }
   ],
   "torrents.details.general.heading.transfer": [
@@ -1984,7 +2148,7 @@
   "torrents.details.general.location": [
     {
       "type": 0,
-      "value": "Locaţie"
+      "value": "Locație"
     }
   ],
   "torrents.details.general.none": [
@@ -2002,7 +2166,7 @@
   "torrents.details.general.scheduler": [
     {
       "type": 0,
-      "value": "Programator"
+      "value": "Planificator"
     }
   ],
   "torrents.details.general.scheduler.ignored": [
@@ -2014,13 +2178,13 @@
   "torrents.details.general.scheduler.obeyed": [
     {
       "type": 0,
-      "value": "Dincolo"
+      "value": "Respectat"
     }
   ],
   "torrents.details.general.seeds": [
     {
       "type": 0,
-      "value": "Semințe"
+      "value": "Parteneri"
     }
   ],
   "torrents.details.general.size": [
@@ -2056,7 +2220,7 @@
   "torrents.details.general.type.public": [
     {
       "type": 0,
-      "value": "Publice"
+      "value": "Public"
     }
   ],
   "torrents.details.mediainfo": [
@@ -2089,7 +2253,7 @@
             },
             {
               "type": 0,
-              "value": " a selectat fişierul"
+              "value": " fișier selectat"
             }
           ]
         },
@@ -2101,7 +2265,7 @@
             },
             {
               "type": 0,
-              "value": " fişierele selectate"
+              "value": " fișiere selectate"
             }
           ]
         }
@@ -2114,13 +2278,13 @@
   "torrents.details.selected.files.set.priority": [
     {
       "type": 0,
-      "value": "Setare prioritate"
+      "value": "Setează prioritate"
     }
   ],
   "torrents.details.trackers": [
     {
       "type": 0,
-      "value": "Trackeri"
+      "value": "Trackere"
     }
   ],
   "torrents.details.trackers.no.data": [
@@ -2138,31 +2302,31 @@
   "torrents.generate.magnet.heading": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "Generează adresă magnet"
     }
   ],
   "torrents.generate.magnet.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Se încarcă trackerele..."
     }
   ],
   "torrents.generate.magnet.magnet": [
     {
       "type": 0,
-      "value": "Magnet Link"
+      "value": "Adresă magnet"
     }
   ],
   "torrents.generate.magnet.magnet.with.trackers": [
     {
       "type": 0,
-      "value": "Magnet Link with Trackers"
+      "value": "Adresă magnet cu trackere"
     }
   ],
   "torrents.generate.magnet.private.torrent": [
     {
       "type": 0,
-      "value": "This is a private torrent."
+      "value": "Acesta este un torent privat."
     }
   ],
   "torrents.list.cannot.connect": [
@@ -2180,37 +2344,37 @@
   "torrents.list.context.check.hash": [
     {
       "type": 0,
-      "value": "Verifică Hash"
+      "value": "Verifică hash-ul"
     }
   ],
   "torrents.list.context.details": [
     {
       "type": 0,
-      "value": "Detalii Torent"
+      "value": "Detalii torent"
     }
   ],
   "torrents.list.context.download": [
     {
       "type": 0,
-      "value": "Descărcare"
+      "value": "Descarcă"
     }
   ],
   "torrents.list.context.generate.magnet": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "Generează adresă magnet"
     }
   ],
   "torrents.list.context.move": [
     {
       "type": 0,
-      "value": "Setează Locația Torentului"
+      "value": "Setează locația torentului"
     }
   ],
   "torrents.list.context.pause": [
     {
       "type": 0,
-      "value": "Întrerupeți"
+      "value": "Întrerupe"
     }
   ],
   "torrents.list.context.priority": [
@@ -2222,25 +2386,25 @@
   "torrents.list.context.remove": [
     {
       "type": 0,
-      "value": "Elimină"
+      "value": "Șterge"
     }
   ],
   "torrents.list.context.set.tags": [
     {
       "type": 0,
-      "value": "Setare etichete"
+      "value": "Setează etichete"
     }
   ],
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Setează Trackeri"
+      "value": "Setează trackere"
     }
   ],
   "torrents.list.context.start": [
     {
       "type": 0,
-      "value": "Pornire"
+      "value": "Pornește"
     }
   ],
   "torrents.list.context.stop": [
@@ -2270,25 +2434,25 @@
   "torrents.move.button.state.setting": [
     {
       "type": 0,
-      "value": "Setare..."
+      "value": "Se setează..."
     }
   ],
   "torrents.move.check_hash.label": [
     {
       "type": 0,
-      "value": "Verifică hash"
+      "value": "Verifică hash-ul"
     }
   ],
   "torrents.move.data.label": [
     {
       "type": 0,
-      "value": "Mutați datele"
+      "value": "Mută datele"
     }
   ],
   "torrents.move.heading": [
     {
       "type": 0,
-      "value": "Setează Locația Torentului"
+      "value": "Setează locația torentului"
     }
   ],
   "torrents.properties.comment": [
@@ -2312,7 +2476,7 @@
   "torrents.properties.directory": [
     {
       "type": 0,
-      "value": "Locaţie"
+      "value": "Locație"
     }
   ],
   "torrents.properties.download.speed": [
@@ -2330,7 +2494,7 @@
   "torrents.properties.eta": [
     {
       "type": 0,
-      "value": "ETA"
+      "value": "Timp rămas"
     }
   ],
   "torrents.properties.free.disk.space": [
@@ -2372,7 +2536,7 @@
   "torrents.properties.percentage": [
     {
       "type": 0,
-      "value": "Procent complet"
+      "value": "Procentaj completare"
     }
   ],
   "torrents.properties.ratio": [
@@ -2384,7 +2548,7 @@
   "torrents.properties.seeds": [
     {
       "type": 0,
-      "value": "Semințe"
+      "value": "Donatori"
     }
   ],
   "torrents.properties.size": [
@@ -2408,7 +2572,7 @@
   "torrents.properties.trackers": [
     {
       "type": 0,
-      "value": "Trackeri"
+      "value": "Trackere"
     }
   ],
   "torrents.properties.upload.speed": [
@@ -2426,7 +2590,7 @@
   "torrents.remove": [
     {
       "type": 0,
-      "value": "Elimină Torentele"
+      "value": "Elimină torente"
     }
   ],
   "torrents.remove.are.you.sure": [
@@ -2444,7 +2608,7 @@
             },
             {
               "type": 0,
-              "value": " torrente"
+              "value": " torent"
             }
           ]
         },
@@ -2472,7 +2636,7 @@
   "torrents.remove.delete.data": [
     {
       "type": 0,
-      "value": "Ștergere date"
+      "value": "Ștergere datele"
     }
   ],
   "torrents.remove.error.no.torrents.selected": [
@@ -2484,7 +2648,7 @@
   "torrents.set.tags.button.set": [
     {
       "type": 0,
-      "value": "Setare etichete"
+      "value": "Setează etichete"
     }
   ],
   "torrents.set.tags.enter.tags": [
@@ -2502,19 +2666,19 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Setează Trackeri"
+      "value": "Setează trackere"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Introduceți un tracker"
+      "value": "Introdu un tracker"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Setează Trackeri"
+      "value": "Setare trackere"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
