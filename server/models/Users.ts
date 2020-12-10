@@ -11,6 +11,18 @@ import services from '../services';
 import type {ClientConnectionSettings} from '../../shared/schema/ClientConnectionSettings';
 import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
 
+const hashPassword = async (password: string): Promise<string> => {
+  return argon2id({
+    password: password,
+    salt: crypto.randomBytes(16),
+    parallelism: 1,
+    iterations: 256,
+    memorySize: 512,
+    hashLength: 32,
+    outputType: 'encoded',
+  });
+};
+
 class Users {
   private db = (() => {
     const db = Datastore.create({
@@ -83,17 +95,7 @@ class Users {
    * @return {Promise<UserInDatabase>} - Returns the created user or rejects with error.
    */
   async createUser(credentials: Credentials, shouldHash = true): Promise<UserInDatabase> {
-    const hashed = shouldHash
-      ? await argon2id({
-          password: credentials.password,
-          salt: crypto.randomBytes(16),
-          parallelism: 1,
-          iterations: 256,
-          memorySize: 512,
-          hashLength: 32,
-          outputType: 'encoded',
-        }).catch(() => undefined)
-      : credentials.password;
+    const hashed = shouldHash ? await hashPassword(credentials.password).catch(() => undefined) : credentials.password;
 
     if (this.db == null || hashed == null) {
       throw new Error();
@@ -137,7 +139,13 @@ class Users {
    * @return {Promise<string>} - Returns new username of updated user or rejects with error.
    */
   async updateUser(username: string, userRecordPatch: Partial<Credentials>): Promise<string> {
-    return this.db.update({username}, {$set: userRecordPatch}, {}).then((numUsersUpdated) => {
+    const patch = userRecordPatch;
+
+    if (patch.password != null) {
+      patch.password = await hashPassword(patch.password);
+    }
+
+    return this.db.update({username}, {$set: patch}, {}).then((numUsersUpdated) => {
       if (numUsersUpdated === 0) {
         throw new Error();
       }
