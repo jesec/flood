@@ -836,7 +836,7 @@
   "dependency.loading.transfer.rate.details": [
     {
       "type": 0,
-      "value": "Detaliile ratei transferului de date"
+      "value": "Detaliile ratei de transfer ale datelor"
     }
   ],
   "feeds.add.automatic.download.rule": [
@@ -1042,7 +1042,7 @@
   "feeds.test.match": [
     {
       "type": 0,
-      "value": "Testează modelul potrivirii"
+      "value": "Testează modelul de potrivire"
     }
   ],
   "feeds.time.day": [
@@ -1546,7 +1546,7 @@
   "settings.diskusage.show": [
     {
       "type": 0,
-      "value": "Afișare"
+      "value": "Arată"
     }
   ],
   "settings.resources.disk.check.hash.label": [
@@ -1582,7 +1582,7 @@
   "settings.resources.memory.max.label": [
     {
       "type": 0,
-      "value": "Utilizare maximă memorie"
+      "value": "Utilizarea maximă a memoriei"
     }
   ],
   "settings.tabs.about": [
@@ -1600,7 +1600,7 @@
   "settings.tabs.bandwidth": [
     {
       "type": 0,
-      "value": "Lățimea benzii"
+      "value": "Lățime de bandă"
     }
   ],
   "settings.tabs.connectivity": [
@@ -1636,13 +1636,13 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Elemente meniu contextual"
+      "value": "Elementele meniu contextual"
     }
   ],
   "settings.ui.displayed.details": [
     {
       "type": 0,
-      "value": "Coloane cu detalii ale torentelor"
+      "value": "Coloane cu detaliile torentelor"
     }
   ],
   "settings.ui.language": [
@@ -2566,7 +2566,7 @@
   "torrents.properties.tracker.message": [
     {
       "type": 0,
-      "value": "Mesaj tracker"
+      "value": "Mesajul trackerului"
     }
   ],
   "torrents.properties.trackers": [
@@ -2590,7 +2590,7 @@
   "torrents.remove": [
     {
       "type": 0,
-      "value": "Elimină torente"
+      "value": "Șterge torentele"
     }
   ],
   "torrents.remove.are.you.sure": [
@@ -2696,25 +2696,25 @@
   "unit.size.byte": [
     {
       "type": 0,
-      "value": "p"
+      "value": "B"
     }
   ],
   "unit.size.gigabyte": [
     {
       "type": 0,
-      "value": "GO"
+      "value": "GB"
     }
   ],
   "unit.size.kilobyte": [
     {
       "type": 0,
-      "value": "KO"
+      "value": "kB"
     }
   ],
   "unit.size.megabyte": [
     {
       "type": 0,
-      "value": "MO"
+      "value": "MB"
     }
   ],
   "unit.size.terabyte": [
@@ -2760,7 +2760,7 @@
   "unit.time.second": [
     {
       "type": 0,
-      "value": "S"
+      "value": "s"
     }
   ],
   "unit.time.week": [
