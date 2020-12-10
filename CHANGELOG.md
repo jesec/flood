@@ -1,5 +1,31 @@
 # Changelog
 
+## [4.3.1] (December 10, 2020)
+
+- Make theme button always at the bottom of sidebar
+- Remove legacy font formats from static assets
+- Slightly tweak styles of country flags in peer list
+  - Better accommodate longer flags
+  - Display country code on hover
+- qBittorrent fixes:
+  - Attach cookies to URL downloads
+  - Set trackers
+- Transmission fixes:
+  - Percentage downloaded of contents of a torrent
+- Bug fixes:
+  - API call to get peer list of a non-existent torrent no longer crash Flood server
+  - Handle file not exist and access denied cases in content download
+  - Properly handle API call to update password of a user
+- Security enhancements:
+  - Rate limit resource-intensive mediainfo request
+  - Ensure path is allowed for mediainfo request
+  - API call to list users no longer receive hashed passwords and client connection settings
+    - Note: only an authenticated admin user may list users
+- New translations
+  - Czech, thanks to @brezinajn
+  - Romanian, thanks to @T-z3P
+- Bump dependencies
+
 ## [4.3.0] (December 1, 2020)
 
 - Generate magnet link from torrent
@@ -260,3 +286,4 @@ Other changes:
 [4.1.2]: https://github.com/jesec/flood/compare/v4.1.1...v4.1.2
 [4.2.0]: https://github.com/jesec/flood/compare/v4.1.2...v4.2.0
 [4.3.0]: https://github.com/jesec/flood/compare/v4.2.0...v4.3.0
+[4.3.1]: https://github.com/jesec/flood/compare/v4.3.0...v4.3.1
