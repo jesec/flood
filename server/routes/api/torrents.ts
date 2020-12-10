@@ -632,6 +632,8 @@ router.get('/:hash/details', async (req, res) => {
     const peers = req.services?.clientGatewayService?.getTorrentPeers(req.params.hash);
     const trackers = req.services?.clientGatewayService?.getTorrentTrackers(req.params.hash);
 
+    await Promise.all([contents, peers, trackers]);
+
     callback({
       contents: await contents,
       peers: await peers,
