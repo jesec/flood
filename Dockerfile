@@ -24,8 +24,8 @@ RUN npm ci --no-optional
 RUN cp config.cli.js config.js
 RUN npm pack
 
-# Now get the clean image
-FROM ${NODE_IMAGE} as flood
+# Now get the clean Node.js image
+FROM ${NODE_IMAGE} as install
 
 # Copy package built
 COPY --from=nodebuild /usr/src/app/flood-*.tgz /tmp/
@@ -50,6 +50,11 @@ RUN rm -rf /opt/*
 
 # Remove Node.js development files
 RUN rm -rf /usr/local/include/node
+
+# Get the scratch image
+FROM scratch as flood
+
+COPY --from=install / /
 
 # Create "download" user
 RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
