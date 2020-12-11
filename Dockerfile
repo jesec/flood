@@ -25,36 +25,17 @@ RUN cp config.cli.js config.js
 RUN npm pack
 
 # Now get the clean Node.js image
-FROM ${NODE_IMAGE} as install
+FROM ${NODE_IMAGE} as flood
 
 # Copy package built
 COPY --from=nodebuild /usr/src/app/flood-*.tgz /tmp/
 
-# Install package
-RUN npm i -g /tmp/flood-*.tgz
+# Install package and then remove caches
+RUN npm i -g /tmp/flood-*.tgz && rm -rf /tmp/* /root/*
 
 # Install runtime dependencies
 RUN apk --no-cache add \
     mediainfo
-
-# Remove temporary files and caches
-RUN rm -rf /tmp/* /root/*
-
-# Cleanups below are destructive
-# Let the maintainer know if there is a usecase that requires extension to this image
-
-# Remove apk, npm and yarn
-RUN rm -rf /lib/apk /sbin/apk
-RUN rm -rf /usr/local/lib/node_modules/npm
-RUN rm -rf /opt/*
-
-# Remove Node.js development files
-RUN rm -rf /usr/local/include/node
-
-# Get the scratch image
-FROM scratch as flood
-
-COPY --from=install / /
 
 # Create "download" user
 RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
