@@ -63,15 +63,30 @@ jobs:
           git config --local user.name "github-actions[bot]"
           npm version --no-git-tag-version 0.0.0-master.`git rev-parse --short HEAD`
 
-      - name: Publish to Docker Hub
+      - name: Publish jesec/flood to Docker Hub
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
+          tags: jesec/flood:master
+
+      - run: sleep 10
+
+      - name: Publish jesec/rtorrent-flood to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.rtorrent
+          platforms: linux/amd64,linux/arm64
+          push: true
           tags: |
-            jesec/flood:master
+            jesec/rtorrent-flood:master
+            jesec/rtorrent-flood:latest
+          build-args: |
+            FLOOD_VERSION=master
+            RTORRENT_VERSION=master
 
   pkg:
     runs-on: ubuntu-20.04
