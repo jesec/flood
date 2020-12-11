@@ -28,10 +28,11 @@ RUN npm pack
 FROM ${NODE_IMAGE} as flood
 
 # Copy package built
-COPY --from=nodebuild /usr/src/app/flood-*.tgz /tmp/
+RUN rm -rf /tmp/*
+COPY --from=nodebuild /usr/src/app/*.tgz /tmp/
 
 # Install package and then remove caches
-RUN npm i -g /tmp/flood-*.tgz && rm -rf /tmp/* /root/*
+RUN npm i -g /tmp/*.tgz && rm -rf /tmp/* /root/*
 
 # Install runtime dependencies
 RUN apk --no-cache add \
