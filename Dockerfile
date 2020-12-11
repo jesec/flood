@@ -18,27 +18,38 @@ RUN apk --no-cache add \
     python build-base
 
 # Fetch dependencies from npm
-RUN npm set unsafe-perm true
-RUN npm install
+RUN npm ci --no-optional
 
 # Build package
 RUN cp config.cli.js config.js
-RUN npm run build
-RUN npm pack --ignore-scripts
+RUN npm pack
 
 # Now get the clean image
 FROM ${NODE_IMAGE} as flood
 
 # Copy package built
-COPY --from=nodebuild /usr/src/app/*.tgz /tmp/
+COPY --from=nodebuild /usr/src/app/flood-*.tgz /tmp/
 
 # Install package
-RUN npm i -g /tmp/*.tgz --unsafe-perm
-RUN rm /tmp/*.tgz
+RUN npm i -g /tmp/flood-*.tgz
 
 # Install runtime dependencies
 RUN apk --no-cache add \
     mediainfo
+
+# Remove temporary files and caches
+RUN rm -rf /tmp/* /root/*
+
+# Cleanups below are destructive
+# Let the maintainer know if there is a usecase that requires extension to this image
+
+# Remove apk, npm and yarn
+RUN rm -rf /lib/apk /sbin/apk
+RUN rm -rf /usr/local/lib/node_modules/npm
+RUN rm -rf /opt/*
+
+# Remove Node.js development files
+RUN rm -rf /usr/local/include/node
 
 # Create "download" user
 RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
