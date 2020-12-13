@@ -13,6 +13,11 @@
     <script type="text/javascript">
       var _jipt = [];
       _jipt.push(['project', 'flood']);
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('service-worker.js');
+        });
+      }
     </script>
     <title>Flood</title>
   </head>

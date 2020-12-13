@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
+const WorkboxPlugin = require('workbox-webpack-plugin');
 const paths = require('../../shared/config/paths');
 
 // Assert this just to be safe.
@@ -151,6 +152,7 @@ module.exports = {
     new webpack.optimize.MinChunkSizePlugin({
       minChunkSize: 10000,
     }),
+    new WorkboxPlugin.GenerateSW(),
     new WebpackBar(),
   ],
   optimization: {
