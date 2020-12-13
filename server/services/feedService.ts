@@ -1,7 +1,7 @@
 import path from 'path';
 import Datastore from 'nedb';
 
-import type {FeedItem} from 'feedsub';
+import type {FeedItem} from 'feedme';
 
 import BaseService from './BaseService';
 import config from '../../config';

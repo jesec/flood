@@ -1,4 +1,6 @@
-import FeedSub, {FeedItem} from 'feedsub';
+import FeedSub from 'feedsub';
+
+import type {FeedItem} from 'feedme';
 
 export interface FeedReaderOptions {
   feedID: string;

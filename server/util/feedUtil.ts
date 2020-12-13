@@ -1,4 +1,4 @@
-import type {FeedItem} from 'feedsub';
+import type {FeedItem} from 'feedme';
 
 import regEx from '../../shared/util/regEx';
 
@@ -22,10 +22,10 @@ interface RSSEnclosure {
 export const getTorrentUrlsFromFeedItem = (feedItem: FeedItem): Array<string> => {
   // If we've got an Array of enclosures, we'll iterate over the values and
   // look for the url key.
-  const RSSEnclosures = feedItem.enclosures as Array<RSSEnclosure> | undefined;
+  const RSSEnclosures = (feedItem.enclosures as unknown) as Array<RSSEnclosure> | undefined;
   if (RSSEnclosures && Array.isArray(RSSEnclosures)) {
     return RSSEnclosures.reduce((urls: Array<string>, enclosure) => {
-      if (enclosure.url) {
+      if (typeof enclosure.url === 'string') {
         urls.push(enclosure.url);
       }
 
@@ -35,7 +35,7 @@ export const getTorrentUrlsFromFeedItem = (feedItem: FeedItem): Array<string> =>
 
   // If we've got a Object of enclosures, use url key
   const RSSEnclosure = feedItem.enclosure as RSSEnclosure | undefined;
-  if (RSSEnclosure?.url) {
+  if (typeof RSSEnclosure?.url === 'string') {
     return [RSSEnclosure.url];
   }
 
