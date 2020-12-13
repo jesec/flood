@@ -1,4 +1,4 @@
-import type {FeedItem} from 'feedme';
+import type {FeedItem} from 'feedsub';
 
 import regEx from '../../shared/util/regEx';
 
