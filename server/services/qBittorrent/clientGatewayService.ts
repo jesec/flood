@@ -67,7 +67,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   }: Required<AddTorrentByURLOptions>): Promise<void> {
     return this.clientRequestManager
       .torrentsAddURLs(urls, {
-        cookie: cookies != null ? Object.values(cookies)[0][0] : undefined,
+        cookie: cookies != null ? Object.values(cookies)[0]?.[0] : undefined,
         savepath: destination,
         tags: tags.join(','),
         paused: !start,
