@@ -219,6 +219,11 @@
     "npm": ">=6.0.0"
   },
   "browserslist": [
-    "> 5%"
+    "> 2%",
+    "last 10 chrome version",
+    "last 5 firefox version",
+    "last 5 edge version",
+    "last 2 iOS version",
+    "last 2 Safari version"
   ]
 }
