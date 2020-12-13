@@ -156,31 +156,39 @@ const TorrentActions = {
         },
       ),
 
-  startTorrents: (options: StartTorrentsOptions) =>
-    axios
-      .post(`${baseURI}api/torrents/start`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+  startTorrents: async (options: StartTorrentsOptions): Promise<void> => {
+    if (options.hashes.length > 0) {
+      return axios
+        .post(`${baseURI}api/torrents/start`, options)
+        .then((json) => json.data)
+        .then(
+          () => {
+            // do nothing.
+          },
+          () => {
+            // do nothing.
+          },
+        );
+    }
+    return undefined;
+  },
 
-  stopTorrents: (options: StopTorrentsOptions) =>
-    axios
-      .post(`${baseURI}api/torrents/stop`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+  stopTorrents: async (options: StopTorrentsOptions): Promise<void> => {
+    if (options.hashes.length > 0) {
+      return axios
+        .post(`${baseURI}api/torrents/stop`, options)
+        .then((json) => json.data)
+        .then(
+          () => {
+            // do nothing.
+          },
+          () => {
+            // do nothing.
+          },
+        );
+    }
+    return undefined;
+  },
 
   setPriority: (options: SetTorrentsPriorityOptions) =>
     axios
