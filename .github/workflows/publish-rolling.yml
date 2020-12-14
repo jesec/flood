@@ -70,7 +70,6 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
-          no-cache: true
           tags: jesec/flood:master
 
       - run: sleep 10

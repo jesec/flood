@@ -28,6 +28,7 @@ RUN npm pack
 FROM ${NODE_IMAGE} as flood
 
 # Copy package built
+RUN rm -rf /tmp/*
 COPY --from=nodebuild /usr/src/app/*.tgz /tmp/
 
 # Install package and then remove caches
