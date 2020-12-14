@@ -8,6 +8,7 @@ import EN from './strings.compiled.json';
 import Languages from '../constants/Languages';
 
 import type {Language} from '../constants/Languages';
+import type {LocaleConfig} from '../util/detectLocale';
 
 const messagesCache: Partial<Record<Exclude<Language, 'auto'>, Record<string, MessageFormatElement[]>>> = {en: EN};
 
@@ -45,28 +46,31 @@ function getMessages(locale: Exclude<Language, 'auto'>) {
 }
 
 interface AsyncIntlProviderProps {
-  locale?: Language;
+  language?: Language;
   children: React.ReactNode;
 }
 
-const AsyncIntlProvider: React.FC<AsyncIntlProviderProps> = ({locale, children}: AsyncIntlProviderProps) => {
-  let validatedLocale: Exclude<Language, 'auto'>;
-  if (locale == null || locale === 'auto' || !Object.prototype.hasOwnProperty.call(Languages, locale)) {
+const AsyncIntlProvider: React.FC<AsyncIntlProviderProps> = ({language, children}: AsyncIntlProviderProps) => {
+  let validatedLocale: LocaleConfig;
+  if (language == null || language === 'auto' || !Object.prototype.hasOwnProperty.call(Languages, language)) {
     validatedLocale = detectLocale();
   } else {
-    validatedLocale = locale;
+    validatedLocale = {
+      locale: language,
+      language,
+    };
   }
 
-  const messages = getMessages(validatedLocale);
+  const messages = getMessages(validatedLocale.language);
   return (
-    <IntlProvider locale={validatedLocale === 'translate' ? 'en' : validatedLocale} messages={messages}>
+    <IntlProvider locale={validatedLocale.language === 'translate' ? 'en' : validatedLocale.locale} messages={messages}>
       {children}
     </IntlProvider>
   );
 };
 
 AsyncIntlProvider.defaultProps = {
-  locale: 'en',
+  language: 'en',
 };
 
 export default AsyncIntlProvider;

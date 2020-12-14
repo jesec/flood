@@ -75,7 +75,7 @@ const FloodApp: FC = observer(() => {
 
   return (
     <Suspense fallback={<LoadingOverlay />}>
-      <AsyncIntlProvider locale={SettingStore.floodSettings.language}>
+      <AsyncIntlProvider language={SettingStore.floodSettings.language}>
         <Router history={history}>
           <AppWrapper className={ConfigStore.preferDark ? 'dark' : undefined}>
             <Switch>
