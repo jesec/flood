@@ -1,3 +1,4 @@
+const path = require('path');
 const paths = require('../../shared/config/paths');
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
@@ -6,12 +7,12 @@ const host = process.env.HOST || '0.0.0.0';
 const generateConfig = (proxy, allowedHost) => {
   return {
     firewall: false,
-    compress: true,
+    compress: false,
     static: [
       {
-        directory: paths.appPublic,
+        directory: path.resolve(paths.appPublic),
         staticOptions: {},
-        publicPath: paths.appBuild,
+        publicPath: '/',
         serveIndex: true,
         watch: {
           ignored: /node_modules/,
@@ -24,7 +25,7 @@ const generateConfig = (proxy, allowedHost) => {
     historyApiFallback: true,
     public: allowedHost,
     proxy: {
-      '/api': {
+      '/api/': {
         target: proxy,
         changeOrigin: true,
         secure: false,
