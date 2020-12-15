@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "從檔案",
   "torrents.add.tab.url.input.placeholder": "種子網址或磁力連結",
   "torrents.add.tab.url.title": "從網址",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "建立",
   "torrents.add.torrents.label": "種子",
   "torrents.add.tags": "標籤",

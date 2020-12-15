@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "По файлу",
   "torrents.add.tab.url.input.placeholder": "Торрент URL или Magnet ссылка",
   "torrents.add.tab.url.title": "По URL",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "Создать",
   "torrents.add.torrents.label": "Торренты",
   "torrents.add.tags": "Теги",

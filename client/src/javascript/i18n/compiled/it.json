@@ -1733,6 +1733,12 @@
       "value": "Url Torrent o Magnet Link"
     }
   ],
+  "torrents.add.tab.url.register.magnet.handler": [
+    {
+      "type": 0,
+      "value": "Register to handle magnet links"
+    }
+  ],
   "torrents.add.tab.url.title": [
     {
       "type": 0,

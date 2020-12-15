@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "Von Datei",
   "torrents.add.tab.url.input.placeholder": "Torrent-URL oder Magnet-Link",
   "torrents.add.tab.url.title": "Von URL",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "Erstellen",
   "torrents.add.torrents.label": "Torrents",
   "torrents.add.tags": "Tags",
