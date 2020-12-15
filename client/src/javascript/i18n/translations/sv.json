@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "Efter fil",
   "torrents.add.tab.url.input.placeholder": "Torrent URL eller Magnet länk",
   "torrents.add.tab.url.title": "Efter URL",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "Skapa",
   "torrents.add.torrents.label": "Torrents",
   "torrents.add.tags": "Taggar",

@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "Por Arquivo",
   "torrents.add.tab.url.input.placeholder": "URL do Torrent ou Link Magnet",
   "torrents.add.tab.url.title": "Por URL",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "Crio",
   "torrents.add.torrents.label": "Torrentes",
   "torrents.add.tags": "Etiquetas",

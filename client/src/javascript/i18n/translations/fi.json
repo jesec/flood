@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "Tiedoston Mukaan",
   "torrents.add.tab.url.input.placeholder": "Torrent- URL tai Magnet- linkki",
   "torrents.add.tab.url.title": "URL:n Mukaan",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "Luo",
   "torrents.add.torrents.label": "Torrentit",
   "torrents.add.tags": "Tunnisteet",

@@ -1651,6 +1651,12 @@
       "value": "crwdns3298:0crwdne3298:0"
     }
   ],
+  "torrents.add.tab.url.register.magnet.handler": [
+    {
+      "type": 0,
+      "value": "crwdns3706:0crwdne3706:0"
+    }
+  ],
   "torrents.add.tab.url.title": [
     {
       "type": 0,

@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "După fișier",
   "torrents.add.tab.url.input.placeholder": "Adresa torentului sau adresa magnet",
   "torrents.add.tab.url.title": "După adresă",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "Crează",
   "torrents.add.torrents.label": "Torente",
   "torrents.add.tags": "Etichete",

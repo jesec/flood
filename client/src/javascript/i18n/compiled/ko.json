@@ -1741,6 +1741,12 @@
       "value": "토렌트 URL 또는 마그넷 주소"
     }
   ],
+  "torrents.add.tab.url.register.magnet.handler": [
+    {
+      "type": 0,
+      "value": "Register to handle magnet links"
+    }
+  ],
   "torrents.add.tab.url.title": [
     {
       "type": 0,

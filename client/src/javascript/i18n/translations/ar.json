@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "حسب الملف",
   "torrents.add.tab.url.input.placeholder": "رابط تورينت أو رابط الـ Magnet",
   "torrents.add.tab.url.title": "حسب عنوان URL",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "إنشاء",
   "torrents.add.torrents.label": "تورينتس",
   "torrents.add.tags": "الوسوم",

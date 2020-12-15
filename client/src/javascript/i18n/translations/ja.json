@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "ファイル順",
   "torrents.add.tab.url.input.placeholder": "Torrent URL または Magnet リンク",
   "torrents.add.tab.url.title": "URL順",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "作成",
   "torrents.add.torrents.label": "Torrent",
   "torrents.add.tags": "タグ",

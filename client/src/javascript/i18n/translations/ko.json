@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "파일",
   "torrents.add.tab.url.input.placeholder": "토렌트 URL 또는 마그넷 주소",
   "torrents.add.tab.url.title": "By URL",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "Create",
   "torrents.add.torrents.label": "토렌트",
   "torrents.add.tags": "Tags",

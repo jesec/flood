@@ -248,6 +248,7 @@
   "torrents.add.tab.file.title": "上传文件",
   "torrents.add.tab.url.input.placeholder": "种子网址或磁力链接",
   "torrents.add.tab.url.title": "从网址",
+  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
   "torrents.add.tab.create.title": "创建",
   "torrents.add.torrents.label": "种子",
   "torrents.add.tags": "标签",
