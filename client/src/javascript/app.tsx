@@ -1,5 +1,6 @@
-import {FC, lazy, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react';
+import {QueryParamProvider} from 'use-query-params';
+import {FC, lazy, Suspense, useEffect} from 'react';
 import {Router} from 'react-router-dom';
 import {Route, Switch} from 'react-router';
 import ReactDOM from 'react-dom';
@@ -77,13 +78,15 @@ const FloodApp: FC = observer(() => {
     <Suspense fallback={<LoadingOverlay />}>
       <AsyncIntlProvider language={SettingStore.floodSettings.language}>
         <Router history={history}>
-          <AppWrapper className={ConfigStore.preferDark ? 'dark' : undefined}>
-            <Switch>
-              <Route path="/login" component={Login} />
-              <Route path="/register" component={Register} />
-              <Route path="/overview" component={TorrentClientOverview} />
-            </Switch>
-          </AppWrapper>
+          <QueryParamProvider ReactRouterRoute={Route}>
+            <AppWrapper className={ConfigStore.preferDark ? 'dark' : undefined}>
+              <Switch>
+                <Route path="/login" component={Login} />
+                <Route path="/register" component={Register} />
+                <Route path="/overview" component={TorrentClientOverview} />
+              </Switch>
+            </AppWrapper>
+          </QueryParamProvider>
         </Router>
       </AsyncIntlProvider>
     </Suspense>

@@ -2,6 +2,7 @@ import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react';
+import {useQueryParams, StringParam} from 'use-query-params';
 
 import AuthStore from '../stores/AuthStore';
 import ConfigStore from '../stores/ConfigStore';
@@ -18,6 +19,19 @@ interface AppWrapperProps {
 
 const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
   const {children, className} = props;
+
+  const [query] = useQueryParams({action: StringParam, url: StringParam});
+
+  if (query.action) {
+    if (query.action === 'add-urls') {
+      if (query.url) {
+        UIStore.setActiveModal({
+          id: 'add-torrents',
+          initialURLs: [{id: 0, value: query.url}],
+        });
+      }
+    }
+  }
 
   let overlay: ReactNode = null;
   if (!AuthStore.isAuthenticating || (AuthStore.isAuthenticated && !UIStore.haveUIDependenciesResolved)) {

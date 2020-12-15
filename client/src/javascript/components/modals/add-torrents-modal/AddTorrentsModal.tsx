@@ -6,6 +6,7 @@ import AddTorrentsByFile from './AddTorrentsByFile';
 import AddTorrentsByURL from './AddTorrentsByURL';
 import Modal from '../Modal';
 import SettingStore from '../../../stores/SettingStore';
+import UIStore from '../../../stores/UIStore';
 
 const AddTorrentsModal: FC = () => {
   const intl = useIntl();
@@ -31,13 +32,22 @@ const AddTorrentsModal: FC = () => {
     },
   };
 
+  if (UIStore.activeModal?.id !== 'add-torrents') {
+    return null;
+  }
+
+  let initialTabId: keyof typeof tabs = 'by-url';
+  if (!UIStore.activeModal.initialURLs?.length) {
+    initialTabId = SettingStore.floodSettings.UITorrentsAddTab ?? initialTabId;
+  }
+
   return (
     <Modal
       heading={intl.formatMessage({
         id: 'torrents.add.heading',
       })}
       tabs={tabs}
-      initialTabId={SettingStore.floodSettings.UITorrentsAddTab}
+      initialTabId={initialTabId}
     />
   );
 };
