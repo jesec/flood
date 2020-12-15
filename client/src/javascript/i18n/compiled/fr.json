@@ -1768,6 +1768,12 @@
       "value": "URL du torrent ou lien magnet"
     }
   ],
+  "torrents.add.tab.url.register.magnet.handler": [
+    {
+      "type": 0,
+      "value": "S'enregistrer pour gérer les liens magnet"
+    }
+  ],
   "torrents.add.tab.url.title": [
     {
       "type": 0,
