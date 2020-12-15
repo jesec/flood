@@ -1,11 +1,14 @@
-import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
+import type {
+  AddTorrentByFileOptions,
+  AddTorrentByURLOptions,
+  SetTorrentsTagsOptions,
+} from '@shared/schema/api/torrents';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
-  SetTorrentsTagsOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,

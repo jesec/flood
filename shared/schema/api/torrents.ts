@@ -1,6 +1,11 @@
 import {array, boolean, object, record, string} from 'zod';
+import {noComma} from '../../util/regEx';
 
 import type {infer as zodInfer} from 'zod';
+
+const TAG_NO_COMMA_MESSAGE = {
+  message: 'Tag must not contain comma',
+};
 
 // POST /api/torrents/add-urls
 export const addTorrentByURLSchema = object({
@@ -11,7 +16,7 @@ export const addTorrentByURLSchema = object({
   // Path of destination
   destination: string().optional(),
   // Tags
-  tags: array(string()).optional(),
+  tags: array(string().regex(noComma, TAG_NO_COMMA_MESSAGE)).optional(),
   // Whether destination is the base path [default: false]
   isBasePath: boolean().optional(),
   // Whether destination contains completed contents [default: false]
@@ -29,7 +34,7 @@ export const addTorrentByFileSchema = object({
   // Path of destination
   destination: string().optional(),
   // Tags
-  tags: array(string()).optional(),
+  tags: array(string().regex(noComma, TAG_NO_COMMA_MESSAGE)).optional(),
   // Whether destination is the base path [default: false]
   isBasePath: boolean().optional(),
   // Whether destination contains completed contents [default: false]
@@ -39,3 +44,13 @@ export const addTorrentByFileSchema = object({
 });
 
 export type AddTorrentByFileOptions = zodInfer<typeof addTorrentByFileSchema>;
+
+// PATCH /api/torrents/tags
+export const setTorrentsTagsSchema = object({
+  // An array of string representing hashes of torrents to operate on
+  hashes: array(string()).nonempty(),
+  // An array of string representing tags
+  tags: array(string().regex(noComma, TAG_NO_COMMA_MESSAGE)),
+});
+
+export type SetTorrentsTagsOptions = zodInfer<typeof setTorrentsTagsSchema>;

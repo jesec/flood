@@ -8,7 +8,11 @@ import rateLimit from 'express-rate-limit';
 import sanitize from 'sanitize-filename';
 import tar from 'tar';
 
-import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
+import type {
+  AddTorrentByFileOptions,
+  AddTorrentByURLOptions,
+  SetTorrentsTagsOptions,
+} from '@shared/schema/api/torrents';
 import type {
   CheckTorrentsOptions,
   CreateTorrentOptions,
@@ -16,13 +20,16 @@ import type {
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
-  SetTorrentsTagsOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 
-import {addTorrentByFileSchema, addTorrentByURLSchema} from '../../../shared/schema/api/torrents';
+import {
+  addTorrentByFileSchema,
+  addTorrentByURLSchema,
+  setTorrentsTagsSchema,
+} from '../../../shared/schema/api/torrents';
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
@@ -434,18 +441,22 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, re
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
-  const callback = getResponseFn(res);
+  const parsedResult = setTorrentsTagsSchema.safeParse(req.body);
 
-  req.services?.clientGatewayService
-    ?.setTorrentsTags(req.body)
-    .then((response) => {
+  if (!parsedResult.success) {
+    validationError(res, parsedResult.error);
+    return;
+  }
+
+  req.services?.clientGatewayService?.setTorrentsTags(parsedResult.data).then(
+    (response) => {
       req.services?.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
+      res.status(200).json(response);
+    },
+    (err) => {
+      res.status(500).json(err);
+    },
+  );
 });
 
 /**

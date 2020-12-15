@@ -1,13 +1,16 @@
 import geoip from 'geoip-country';
 
-import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
+import type {
+  AddTorrentByFileOptions,
+  AddTorrentByURLOptions,
+  SetTorrentsTagsOptions,
+} from '@shared/schema/api/torrents';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
-  SetTorrentsTagsOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
@@ -40,22 +43,27 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     isCompleted,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<void> {
-    const addedTorrents: Array<string> = (
-      await Promise.all(
-        files.map(async (file) => {
-          const {hashString} =
-            (await this.clientRequestManager
-              .addTorrent({
-                metainfo: file,
-                'download-dir': destination,
-                paused: !start,
-              })
-              .then(this.processClientRequestSuccess, this.processClientRequestError)
-              .catch(() => undefined)) || {};
-          return hashString;
-        }),
-      )
-    ).filter((hash) => hash != null) as Array<string>;
+    const addedTorrents: [string, ...string[]] = await Promise.all(
+      files.map(async (file) => {
+        const {hashString} =
+          (await this.clientRequestManager
+            .addTorrent({
+              metainfo: file,
+              'download-dir': destination,
+              paused: !start,
+            })
+            .then(this.processClientRequestSuccess, this.processClientRequestError)
+            .catch(() => undefined)) || {};
+        return hashString;
+      }),
+    )
+      .then((results) => results.filter((hash) => hash != null) as string[])
+      .then((hashes) => {
+        if (hashes.length < 1) {
+          throw new Error();
+        }
+        return hashes as [string, ...string[]];
+      });
 
     if (tags.length > 0) {
       await this.setTorrentsTags({hashes: addedTorrents, tags});
@@ -75,24 +83,29 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     isCompleted,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<void> {
-    const addedTorrents: Array<string> = (
-      await Promise.all(
-        urls.map(async (url) => {
-          const domain = url.split('/')[2];
-          const {hashString} =
-            (await this.clientRequestManager
-              .addTorrent({
-                filename: url,
-                cookies: cookies[domain] != null ? `${cookies[domain].join('; ')};` : undefined,
-                'download-dir': destination,
-                paused: !start,
-              })
-              .then(this.processClientRequestSuccess, this.processClientRequestError)
-              .catch(() => undefined)) || {};
-          return hashString;
-        }),
-      )
-    ).filter((hash) => hash != null) as Array<string>;
+    const addedTorrents: [string, ...string[]] = await Promise.all(
+      urls.map(async (url) => {
+        const domain = url.split('/')[2];
+        const {hashString} =
+          (await this.clientRequestManager
+            .addTorrent({
+              filename: url,
+              cookies: cookies[domain] != null ? `${cookies[domain].join('; ')};` : undefined,
+              'download-dir': destination,
+              paused: !start,
+            })
+            .then(this.processClientRequestSuccess, this.processClientRequestError)
+            .catch(() => undefined)) || {};
+        return hashString;
+      }),
+    )
+      .then((results) => results.filter((hash) => hash != null) as string[])
+      .then((hashes) => {
+        if (hashes.length < 1) {
+          throw new Error();
+        }
+        return hashes as [string, ...string[]];
+      });
 
     if (tags.length > 0) {
       await this.setTorrentsTags({hashes: addedTorrents, tags});

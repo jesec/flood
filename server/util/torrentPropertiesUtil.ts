@@ -1,4 +1,4 @@
-import regEx from '../../shared/util/regEx';
+import {domainName as matchDomainName} from '../../shared/util/regEx';
 
 import type {TorrentProperties} from '../../shared/types/Torrent';
 
@@ -25,7 +25,7 @@ export const getDomainsFromURLs = (urls: Array<string>): Array<string> => {
   const domains: Array<string> = [];
 
   urls.forEach((url) => {
-    const regexMatched = regEx.domainName.exec(url);
+    const regexMatched = matchDomainName.exec(url);
 
     if (regexMatched != null && regexMatched[1]) {
       let domain = regexMatched[1];

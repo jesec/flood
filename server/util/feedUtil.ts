@@ -1,6 +1,6 @@
 import type {FeedItem} from 'feedsub';
 
-import regEx from '../../shared/util/regEx';
+import {cdata as matchCDATA} from '../../shared/util/regEx';
 
 import type {AddTorrentByURLOptions} from '../../shared/schema/api/torrents';
 import type {Rule} from '../../shared/types/Feed';
@@ -42,7 +42,7 @@ export const getTorrentUrlsFromFeedItem = (feedItem: FeedItem): Array<string> =>
   // If there are no enclosures, then use the link tag instead
   if (feedItem.link) {
     // remove CDATA tags around links
-    const cdata = regEx.cdata.exec(feedItem.link as string);
+    const cdata = matchCDATA.exec(feedItem.link as string);
 
     if (cdata && cdata[1]) {
       return [cdata[1]];

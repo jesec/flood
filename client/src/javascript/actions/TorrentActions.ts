@@ -1,7 +1,11 @@
 import axios, {CancelToken} from 'axios';
 import download from 'js-file-download';
 
-import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
+import type {
+  AddTorrentByFileOptions,
+  AddTorrentByURLOptions,
+  SetTorrentsTagsOptions,
+} from '@shared/schema/api/torrents';
 import type {
   CheckTorrentsOptions,
   CreateTorrentOptions,
@@ -9,7 +13,6 @@ import type {
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
-  SetTorrentsTagsOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,

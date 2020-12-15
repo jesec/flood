@@ -4,14 +4,17 @@ import {moveSync} from 'fs-extra';
 import path from 'path';
 import sanitize from 'sanitize-filename';
 
-import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '@shared/schema/api/torrents';
+import type {
+  AddTorrentByFileOptions,
+  AddTorrentByURLOptions,
+  SetTorrentsTagsOptions,
+} from '@shared/schema/api/torrents';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
-  SetTorrentsTagsOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,

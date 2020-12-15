@@ -17,6 +17,7 @@ fs.mkdirSync(rTorrentSession, {recursive: true});
 fs.writeFileSync(
   `${temporaryRuntimeDirectory}/rtorrent.rc`,
   `
+execute.nothrow = rm,-rf,${rTorrentSession}/rtorrent.lock
 directory.default.set = "${temporaryRuntimeDirectory}"
 session.path.set = "${rTorrentSession}"
 network.scgi.open_local = "${rTorrentSocket}"

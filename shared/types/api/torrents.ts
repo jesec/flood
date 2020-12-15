@@ -71,14 +71,6 @@ export interface SetTorrentsPriorityOptions {
   priority: TorrentPriority;
 }
 
-// PATCH /api/torrents/tags
-export interface SetTorrentsTagsOptions {
-  // An array of string representing hashes of torrents to operate on
-  hashes: Array<TorrentProperties['hash']>;
-  // An array of string representing tags
-  tags: TorrentProperties['tags'];
-}
-
 // PATCH /api/torrents/trackers
 export interface SetTorrentsTrackersOptions {
   // An array of string representing hashes of torrents to operate on
