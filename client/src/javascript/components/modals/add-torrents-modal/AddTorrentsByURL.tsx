@@ -2,6 +2,7 @@ import {FC, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 
 import AddTorrentsActions from './AddTorrentsActions';
+import ConfigStore from '../../../stores/ConfigStore';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import {Form, FormRow} from '../../../ui';
 import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
@@ -34,9 +35,28 @@ const AddTorrentsByURL: FC = () => {
     <Form className="inverse" ref={formRef}>
       <TextboxRepeater
         id="urls"
-        label={intl.formatMessage({
-          id: 'torrents.add.torrents.label',
-        })}
+        label={
+          <div>
+            {intl.formatMessage({
+              id: 'torrents.add.torrents.label',
+            })}
+            <em
+              style={{cursor: 'pointer', fontSize: '0.8em', float: 'right'}}
+              onClick={() => {
+                if (typeof navigator.registerProtocolHandler === 'function') {
+                  navigator.registerProtocolHandler(
+                    'magnet',
+                    `${ConfigStore.baseURI}?action=add-urls&url=%s`,
+                    'Magnet -> Flood',
+                  );
+                }
+              }}>
+              {intl.formatMessage({
+                id: 'torrents.add.tab.url.register.magnet.handler',
+              })}
+            </em>
+          </div>
+        }
         placeholder={intl.formatMessage({
           id: 'torrents.add.tab.url.input.placeholder',
         })}

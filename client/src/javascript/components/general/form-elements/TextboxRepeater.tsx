@@ -1,4 +1,4 @@
-import {FC, useRef, useState} from 'react';
+import {FC, ReactNode, useRef, useState} from 'react';
 
 import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '../../../ui';
 import AddMini from '../../icons/AddMini';
@@ -20,7 +20,7 @@ type Textboxes = Array<{id: number; value: string}>;
 interface TextboxRepeaterProps {
   defaultValues?: Textboxes;
   id: number | string;
-  label?: string;
+  label?: ReactNode;
   placeholder?: string;
 }
 
