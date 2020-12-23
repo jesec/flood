@@ -1736,7 +1736,7 @@
   "torrents.add.tab.url.register.magnet.handler": [
     {
       "type": 0,
-      "value": "Register to handle magnet links"
+      "value": "Registrujte zpracování magnet linků"
     }
   ],
   "torrents.add.tab.url.title": [
