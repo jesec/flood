@@ -9,6 +9,7 @@ import type {
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
+  SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
@@ -44,8 +45,11 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     destination,
     tags,
     isBasePath,
+    isSequential,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<void> {
+    // TODO: isCompleted not implemented
+
     const fileBuffers = files.map((file) => {
       return Buffer.from(file, 'base64');
     });
@@ -56,6 +60,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         tags: tags.join(','),
         paused: !start,
         root_folder: !isBasePath,
+        sequentialDownload: isSequential,
       })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
@@ -66,8 +71,11 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     destination,
     tags,
     isBasePath,
+    isSequential,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<void> {
+    // TODO: isCompleted not implemented
+
     return this.clientRequestManager
       .torrentsAddURLs(urls, {
         cookie: cookies != null ? Object.values(cookies)[0]?.[0] : undefined,
@@ -75,6 +83,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         tags: tags.join(','),
         paused: !start,
         root_folder: !isBasePath,
+        sequentialDownload: isSequential,
       })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
@@ -193,9 +202,19 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     }
   }
 
-  async setTorrentsSequential(): Promise<void> {
-    // TODO: not implemented
-    throw new Error();
+  async setTorrentsSequential({hashes, isSequential}: SetTorrentsSequentialOptions): Promise<void> {
+    // qBittorrent API is not idempotent...
+    // get torrent list so we know if the state needs to be flipped
+    const {torrents} = await this.fetchTorrentList();
+
+    const flipNeeded: Array<string> = hashes.filter((hash) => {
+      const currentIsSequential = torrents[hash]?.isSequential;
+      return currentIsSequential != null && currentIsSequential !== isSequential;
+    });
+
+    return this.clientRequestManager
+      .torrentsToggleSequentialDownload(flipNeeded)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
@@ -299,7 +318,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 eta: info.eta >= 8640000 ? -1 : info.eta,
                 hash: info.hash,
                 isPrivate,
-                isSequential: false, // TODO: not implemented
+                isSequential: info.seq_dl,
                 message: '', // in tracker method
                 name: info.name,
                 peersConnected: info.num_leechs,
