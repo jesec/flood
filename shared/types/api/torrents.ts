@@ -71,6 +71,14 @@ export interface SetTorrentsPriorityOptions {
   priority: TorrentPriority;
 }
 
+// PATCH /api/torrents/sequential
+export interface SetTorrentsSequentialOptions {
+  // An array of string representing hashes of torrents to operate on
+  hashes: Array<TorrentProperties['hash']>;
+  // If sequential download is enabled
+  isSequential: boolean;
+}
+
 // PATCH /api/torrents/trackers
 export interface SetTorrentsTrackersOptions {
   // An array of string representing hashes of torrents to operate on

@@ -244,6 +244,11 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
+  async setTorrentsSequential(): Promise<void> {
+    // Transmission maintainers rejected the feature.
+    throw new Error('Transmission does not support this feature.');
+  }
+
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
     return this.clientRequestManager
       .setTorrentsProperties({ids: hashes, labels: tags})
@@ -363,6 +368,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
                 upTotal: torrent.uploadedEver,
                 eta: torrent.eta,
                 isPrivate: torrent.isPrivate,
+                isSequential: false,
                 message: torrent.errorString,
                 peersConnected: torrent.peersGettingFromUs,
                 peersTotal: torrent.peersGettingFromUs,

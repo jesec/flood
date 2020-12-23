@@ -9,6 +9,7 @@ import type {
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
+  SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
@@ -106,6 +107,14 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
    * @return {Promise<void>} - Rejects with error.
    */
   abstract setTorrentsPriority(options: SetTorrentsPriorityOptions): Promise<void>;
+
+  /**
+   * Sets sequential mode of torrents
+   *
+   * @param {SetTorrentsSequentialOptions} options - An object of options...
+   * @return {Promise<void>} - Rejects with error.
+   */
+  abstract setTorrentsSequential(options: SetTorrentsSequentialOptions): Promise<void>;
 
   /**
    * Sets tags of torrents

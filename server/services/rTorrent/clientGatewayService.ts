@@ -63,6 +63,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     tags,
     isBasePath,
     isCompleted,
+    isSequential,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<void> {
     const torrentPaths = await Promise.all(
@@ -81,6 +82,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         tags,
         isBasePath,
         isCompleted,
+        isSequential,
         start,
       });
     }
@@ -433,6 +435,11 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     );
   }
 
+  async setTorrentsSequential(): Promise<void> {
+    // TODO: not implemented
+    throw new Error();
+  }
+
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
@@ -601,6 +608,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
               processedResponses.map(async (response) => {
                 const torrentProperties: TorrentProperties = {
                   ...response,
+                  isSequential: false, // TODO: not implemented
                   status: getTorrentStatusFromProperties(response),
                   percentComplete: getTorrentPercentCompleteFromProperties(response),
                   eta: getTorrentETAFromProperties(response),
