@@ -15,6 +15,7 @@ import type {
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
+  SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
@@ -97,6 +98,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     tags,
     isBasePath,
     isCompleted,
+    isSequential,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<void> {
     await fs.promises.mkdir(destination, {recursive: true});
@@ -148,6 +150,10 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       }
 
       additionalCalls.push(`d.custom.set=addtime,${Math.round(Date.now() / 1000)}`);
+
+      if (isSequential) {
+        additionalCalls.push(`d.down.sequential.set=1`);
+      }
 
       return {
         methodName: start ? 'load.start' : 'load.normal',
@@ -435,9 +441,20 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     );
   }
 
-  async setTorrentsSequential(): Promise<void> {
-    // TODO: not implemented
-    throw new Error();
+  async setTorrentsSequential({hashes, isSequential}: SetTorrentsSequentialOptions): Promise<void> {
+    const methodCalls: MultiMethodCalls = hashes.map((hash) => ({
+      methodName: 'd.down.sequential.set',
+      params: [hash, isSequential ? '1' : '0'],
+    }));
+
+    return (
+      this.clientRequestManager
+        .methodCall('system.multicall', [methodCalls])
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          // returns nothing.
+        }) || Promise.reject()
+    );
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
@@ -608,7 +625,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
               processedResponses.map(async (response) => {
                 const torrentProperties: TorrentProperties = {
                   ...response,
-                  isSequential: false, // TODO: not implemented
                   status: getTorrentStatusFromProperties(response),
                   percentComplete: getTorrentPercentCompleteFromProperties(response),
                   eta: getTorrentETAFromProperties(response),

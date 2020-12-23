@@ -30,6 +30,10 @@ const torrentListMethodCallConfigs = {
     methodCall: 'd.is_private=',
     transformValue: booleanTransformer,
   },
+  isSequential: {
+    methodCall: 'd.down.sequential=',
+    transformValue: booleanTransformer,
+  },
   isOpen: {
     methodCall: 'd.is_open=',
     transformValue: booleanTransformer,
