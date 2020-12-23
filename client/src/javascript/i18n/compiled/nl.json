@@ -392,7 +392,7 @@
   "button.close": [
     {
       "type": 0,
-      "value": "Close"
+      "value": "Sluiten"
     }
   ],
   "button.download": [
@@ -1596,13 +1596,13 @@
   "sidebar.button.theme.dark": [
     {
       "type": 0,
-      "value": "Dark Theme"
+      "value": "Donker Thema"
     }
   ],
   "sidebar.button.theme.light": [
     {
       "type": 0,
-      "value": "Light Theme"
+      "value": "Licht Thema"
     }
   ],
   "sidebar.search.placeholder": [
@@ -1768,7 +1768,7 @@
   "torrents.add.tab.url.register.magnet.handler": [
     {
       "type": 0,
-      "value": "Register to handle magnet links"
+      "value": "Registreer om magnet links te verwerken"
     }
   ],
   "torrents.add.tab.url.title": [
@@ -2160,13 +2160,13 @@
   "torrents.generate.magnet.heading": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "Genereer Magnet Link"
     }
   ],
   "torrents.generate.magnet.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Trackers laden..."
     }
   ],
   "torrents.generate.magnet.magnet": [
@@ -2178,13 +2178,13 @@
   "torrents.generate.magnet.magnet.with.trackers": [
     {
       "type": 0,
-      "value": "Magnet Link with Trackers"
+      "value": "Magnet Link met Trackers"
     }
   ],
   "torrents.generate.magnet.private.torrent": [
     {
       "type": 0,
-      "value": "This is a private torrent."
+      "value": "Deze torrent is privé."
     }
   ],
   "torrents.list.cannot.connect": [
@@ -2220,7 +2220,7 @@
   "torrents.list.context.generate.magnet": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "Genereer Magnet Link"
     }
   ],
   "torrents.list.context.move": [
