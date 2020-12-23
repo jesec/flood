@@ -299,6 +299,21 @@ class ClientRequestManager {
     }
   }
 
+  async torrentsToggleSequentialDownload(hashes: Array<string>): Promise<void> {
+    if (hashes.length > 0) {
+      return axios
+        .get(`${this.apiBase}/torrents/toggleSequentialDownload`, {
+          params: {
+            hashes: hashes.join('|'),
+          },
+          headers: {Cookie: await this.authCookie},
+        })
+        .then(() => {
+          // returns nothing
+        });
+    }
+  }
+
   async torrentsFilePrio(hash: string, ids: Array<number>, priority: QBittorrentTorrentContentPriority) {
     return axios
       .get(`${this.apiBase}/torrents/filePrio?hash=${hash}&id=${ids.join('|')}&priority=${priority}`, {
