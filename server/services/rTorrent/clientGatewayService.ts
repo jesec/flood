@@ -57,6 +57,7 @@ const filePathMethodCalls = getMethodCalls({
 
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
+  availableMethodCalls = this.fetchAvailableMethodCalls(true);
 
   async addTorrentsByFile({
     files,
@@ -192,13 +193,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
-    const configs = torrentContentMethodCallConfigs;
     return (
       this.clientRequestManager
-        .methodCall('f.multicall', [hash, ''].concat(getMethodCalls(configs)))
+        .methodCall('f.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentContent))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
-          return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
+          return Promise.all(
+            responses.map((response) => processMethodCallResponse(response, torrentContentMethodCallConfigs)),
+          );
         })
         .then((processedResponses) => {
           return processedResponses.map((content, index) => {
@@ -216,13 +218,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
-    const configs = torrentPeerMethodCallConfigs;
     return (
       this.clientRequestManager
-        .methodCall('p.multicall', [hash, ''].concat(getMethodCalls(configs)))
+        .methodCall('p.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentPeer))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
-          return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
+          return Promise.all(
+            responses.map((response) => processMethodCallResponse(response, torrentPeerMethodCallConfigs)),
+          );
         })
         .then((processedResponses) => {
           return Promise.all(
@@ -238,13 +241,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
-    const configs = torrentTrackerMethodCallConfigs;
     return (
       this.clientRequestManager
-        .methodCall('t.multicall', [hash, ''].concat(getMethodCalls(configs)))
+        .methodCall('t.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentTracker))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
-          return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
+          return Promise.all(
+            responses.map((response) => processMethodCallResponse(response, torrentTrackerMethodCallConfigs)),
+          );
         })
         .then((processedResponses) =>
           processedResponses
@@ -609,14 +613,15 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async fetchTorrentList(): Promise<TorrentListSummary> {
-    const configs = torrentListMethodCallConfigs;
     return (
       this.clientRequestManager
-        .methodCall('d.multicall2', ['', 'main'].concat(getMethodCalls(configs)))
+        .methodCall('d.multicall2', ['', 'main'].concat((await this.availableMethodCalls).torrentList))
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((responses: string[][]) => {
           this.emit('PROCESS_TORRENT_LIST_START');
-          return Promise.all(responses.map((response) => processMethodCallResponse(response, configs)));
+          return Promise.all(
+            responses.map((response) => processMethodCallResponse(response, torrentListMethodCallConfigs)),
+          );
         })
         .then(async (processedResponses) => {
           const torrentList: TorrentList = Object.assign(
@@ -651,8 +656,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async fetchTransferSummary(): Promise<TransferSummary> {
-    const configs = transferSummaryMethodCallConfigs;
-    const methodCalls: MultiMethodCalls = getMethodCalls(configs).map((methodCall) => {
+    const methodCalls: MultiMethodCalls = (await this.availableMethodCalls).transferSummary.map((methodCall) => {
       return {
         methodName: methodCall,
         params: [],
@@ -664,14 +668,13 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((response) => {
-          return processMethodCallResponse(response, configs);
+          return processMethodCallResponse(response, transferSummaryMethodCallConfigs);
         }) || Promise.reject()
     );
   }
 
   async getClientSettings(): Promise<ClientSettings> {
-    const configs = clientSettingMethodCallConfigs;
-    const methodCalls: MultiMethodCalls = getMethodCalls(configs).map((methodCall) => {
+    const methodCalls: MultiMethodCalls = (await this.availableMethodCalls).clientSetting.map((methodCall) => {
       return {
         methodName: methodCall,
         params: [],
@@ -683,7 +686,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .methodCall('system.multicall', [methodCalls])
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then((response) => {
-          return processMethodCallResponse(response, configs);
+          return processMethodCallResponse(response, clientSettingMethodCallConfigs);
         }) || Promise.reject()
     );
   }
@@ -736,9 +739,44 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async testGateway(): Promise<void> {
-    return this.clientRequestManager
-      .methodCall('system.methodExist', ['system.multicall'])
-      .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
+    const availableMethodCalls = await this.fetchAvailableMethodCalls();
+    this.availableMethodCalls = Promise.resolve(availableMethodCalls);
+  }
+
+  async fetchAvailableMethodCalls(
+    fallback = false,
+  ): Promise<{
+    clientSetting: string[];
+    torrentContent: string[];
+    torrentList: string[];
+    torrentPeer: string[];
+    torrentTracker: string[];
+    transferSummary: string[];
+  }> {
+    const methodList: Array<string> = await this.clientRequestManager
+      .methodCall('system.listMethods', [])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .catch((e) => {
+        if (!fallback) {
+          throw e;
+        }
+      });
+
+    const getAvailableMethodCalls =
+      methodList?.length > 0
+        ? (methodCalls: Array<string>) => {
+            return methodCalls.map((method) => (methodList.includes(method.split('=')[0]) ? method : 'false='));
+          }
+        : (methodCalls: Array<string>) => methodCalls;
+
+    return {
+      clientSetting: getAvailableMethodCalls(getMethodCalls(clientSettingMethodCallConfigs)),
+      torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
+      torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
+      torrentPeer: getAvailableMethodCalls(getMethodCalls(torrentPeerMethodCallConfigs)),
+      torrentTracker: getAvailableMethodCalls(getMethodCalls(torrentTrackerMethodCallConfigs)),
+      transferSummary: getAvailableMethodCalls(getMethodCalls(transferSummaryMethodCallConfigs)),
+    };
   }
 }
 
