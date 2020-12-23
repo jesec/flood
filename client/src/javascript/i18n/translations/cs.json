@@ -248,7 +248,7 @@
   "torrents.add.tab.file.title": "Podle souboru",
   "torrents.add.tab.url.input.placeholder": "Torrent URL nebo Magnet odkaz",
   "torrents.add.tab.url.title": "Podle URL",
-  "torrents.add.tab.url.register.magnet.handler": "Register to handle magnet links",
+  "torrents.add.tab.url.register.magnet.handler": "Registrujte zpracování magnet linků",
   "torrents.add.tab.create.title": "Vytvořit",
   "torrents.add.torrents.label": "Torrenty",
   "torrents.add.tags": "Štítky",
