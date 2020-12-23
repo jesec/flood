@@ -256,6 +256,7 @@ class FeedService extends BaseService {
                   start,
                   isBasePath: false,
                   isCompleted: false,
+                  isSequential: false,
                 })
                 .then(() => {
                   this.db.update({_id: feedID}, {$inc: {count: 1}}, {upsert: true});

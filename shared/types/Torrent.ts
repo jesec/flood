@@ -27,6 +27,8 @@ export interface TorrentProperties {
   eta: number;
   hash: string;
   isPrivate: boolean;
+  // If sequential download is enabled
+  isSequential: boolean;
   message: string;
   name: string;
   peersConnected: number;

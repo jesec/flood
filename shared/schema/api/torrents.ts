@@ -21,6 +21,8 @@ export const addTorrentByURLSchema = object({
   isBasePath: boolean().optional(),
   // Whether destination contains completed contents [default: false]
   isCompleted: boolean().optional(),
+  // Whether contents of a torrent should be downloaded sequentially [default: false]
+  isSequential: boolean().optional(),
   // Whether to start torrent [default: false]
   start: boolean().optional(),
 });
@@ -39,6 +41,8 @@ export const addTorrentByFileSchema = object({
   isBasePath: boolean().optional(),
   // Whether destination contains completed contents [default: false]
   isCompleted: boolean().optional(),
+  // Whether contents of a torrent should be downloaded sequentially [default: false]
+  isSequential: boolean().optional(),
   // Whether to start torrent [default: false]
   start: boolean().optional(),
 });

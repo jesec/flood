@@ -20,6 +20,7 @@ import type {
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
+  SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
@@ -120,7 +121,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
     return;
   }
 
-  const {urls, cookies, destination, tags, isBasePath, isCompleted, start} = parsedResult.data;
+  const {urls, cookies, destination, tags, isBasePath, isCompleted, isSequential, start} = parsedResult.data;
 
   const finalDestination = await getDestination(req.services, {
     destination,
@@ -140,6 +141,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
       tags: tags ?? [],
       isBasePath: isBasePath ?? false,
       isCompleted: isCompleted ?? false,
+      isSequential: isSequential ?? false,
       start: start ?? false,
     })
     .then((response) => {
@@ -171,7 +173,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
     return;
   }
 
-  const {files, destination, tags, isBasePath, isCompleted, start} = parsedResult.data;
+  const {files, destination, tags, isBasePath, isCompleted, isSequential, start} = parsedResult.data;
 
   const finalDestination = await getDestination(req.services, {
     destination,
@@ -190,6 +192,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
       tags: tags ?? [],
       isBasePath: isBasePath ?? false,
       isCompleted: isCompleted ?? false,
+      isSequential: isSequential ?? false,
       start: start ?? false,
     })
     .then((response) => {
@@ -261,6 +264,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
               tags: tags ?? [],
               isBasePath: true,
               isCompleted: true,
+              isSequential: false,
               start: start || false,
             })
             .catch(() => {
@@ -429,6 +433,27 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, re
     .catch((err) => {
       callback(null, err);
     });
+});
+
+/**
+ * PATCH /api/torrents/sequential
+ * @summary Sets sequential mode of torrents.
+ * @tags Torrent
+ * @security User
+ * @param {SetTorrentsSequentialOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.patch<unknown, unknown, SetTorrentsSequentialOptions>('/sequential', (req, res) => {
+  req.services?.clientGatewayService?.setTorrentsSequential(req.body).then(
+    (response) => {
+      req.services?.torrentService.fetchTorrentList();
+      res.status(200).json(response);
+    },
+    (err) => {
+      res.status(500).json(err);
+    },
+  );
 });
 
 /**

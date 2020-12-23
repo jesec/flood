@@ -193,6 +193,11 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     }
   }
 
+  async setTorrentsSequential(): Promise<void> {
+    // TODO: not implemented
+    throw new Error();
+  }
+
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
     return this.clientRequestManager.torrentsRemoveTags(hashes).then(() => {
       this.clientRequestManager
@@ -294,6 +299,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 eta: info.eta >= 8640000 ? -1 : info.eta,
                 hash: info.hash,
                 isPrivate,
+                isSequential: false, // TODO: not implemented
                 message: '', // in tracker method
                 name: info.name,
                 peersConnected: info.num_leechs,
