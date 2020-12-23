@@ -629,10 +629,31 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             ...(await Promise.all(
               processedResponses.map(async (response) => {
                 const torrentProperties: TorrentProperties = {
-                  ...response,
-                  status: getTorrentStatusFromProperties(response),
-                  percentComplete: getTorrentPercentCompleteFromProperties(response),
+                  bytesDone: response.bytesDone,
+                  dateAdded: response.dateAdded,
+                  dateCreated: response.dateCreated,
+                  directory: response.directory,
+                  downRate: response.downRate,
+                  downTotal: response.downTotal,
                   eta: getTorrentETAFromProperties(response),
+                  hash: response.hash,
+                  isPrivate: response.isPrivate,
+                  isSequential: response.isSequential,
+                  message: response.message,
+                  name: response.name,
+                  peersConnected: response.peersConnected,
+                  peersTotal: response.peersTotal,
+                  percentComplete: getTorrentPercentCompleteFromProperties(response),
+                  priority: response.priority,
+                  ratio: response.ratio,
+                  seedsConnected: response.seedsConnected,
+                  seedsTotal: response.seedsTotal,
+                  sizeBytes: response.sizeBytes,
+                  status: getTorrentStatusFromProperties(response),
+                  tags: response.tags,
+                  trackerURIs: response.trackerURIs,
+                  upRate: response.upRate,
+                  upTotal: response.upTotal,
                 };
 
                 this.emit('PROCESS_TORRENT', torrentProperties);
