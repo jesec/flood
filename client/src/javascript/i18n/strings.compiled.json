@@ -2239,6 +2239,12 @@
       "value": "Remove"
     }
   ],
+  "torrents.list.context.sequential": [
+    {
+      "type": 0,
+      "value": "Sequential"
+    }
+  ],
   "torrents.list.context.set.tags": [
     {
       "type": 0,

@@ -13,6 +13,7 @@ import type {
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsPriorityOptions,
+  SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
@@ -196,6 +197,19 @@ const TorrentActions = {
   setPriority: (options: SetTorrentsPriorityOptions) =>
     axios
       .patch(`${baseURI}api/torrents/priority`, options)
+      .then((json) => json.data)
+      .then(
+        () => {
+          // do nothing.
+        },
+        () => {
+          // do nothing.
+        },
+      ),
+
+  setSequential: (options: SetTorrentsSequentialOptions) =>
+    axios
+      .patch(`${baseURI}api/torrents/sequential`, options)
       .then((json) => json.data)
       .then(
         () => {

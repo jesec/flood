@@ -318,6 +318,7 @@
   "torrents.list.context.download": "Download",
   "torrents.list.context.priority": "Priority",
   "torrents.list.context.remove": "Remove",
+  "torrents.list.context.sequential": "Sequential",
   "torrents.list.context.set.tags": "Set Tags",
   "torrents.list.context.set.trackers": "Set Trackers",
   "torrents.list.context.start": "Start",
