@@ -29,6 +29,9 @@ const TorrentContextMenuActions = {
   generateMagnet: {
     id: 'torrents.list.context.generate.magnet',
   },
+  setSequential: {
+    id: 'torrents.list.context.sequential',
+  },
   setPriority: {
     id: 'torrents.list.context.priority',
   },

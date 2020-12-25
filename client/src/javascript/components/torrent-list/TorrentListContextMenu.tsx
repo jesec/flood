@@ -1,7 +1,9 @@
-import {createRef, MutableRefObject} from 'react';
+import {createRef, FC, MutableRefObject} from 'react';
+import {observer} from 'mobx-react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
+import Checkmark from '../../ui/icons/Checkmark';
 import ConfigStore from '../../stores/ConfigStore';
 import PriorityMeter from '../general/PriorityMeter';
 import TorrentActions from '../../actions/TorrentActions';
@@ -10,6 +12,27 @@ import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
 import type {ContextMenuItem} from '../../stores/UIStore';
+
+// TODO: need to create a generic component if there are more menu items like this.
+const InlineSequentialCheckbox: FC = observer(() => {
+  const {selectedTorrents} = TorrentStore;
+
+  return (
+    <label className="toggle-input checkbox" style={{display: 'inline'}}>
+      <div className="toggle-input__indicator">
+        <div
+          className="toggle-input__indicator__icon"
+          style={{
+            opacity: TorrentStore.torrents[selectedTorrents[selectedTorrents.length - 1]].isSequential
+              ? '1'
+              : undefined,
+          }}>
+          <Checkmark />
+        </div>
+      </div>
+    </label>
+  );
+});
 
 const handleTorrentDownload = (hash: TorrentProperties['hash']): void => {
   const {baseURI} = ConfigStore;
@@ -125,6 +148,20 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       clickHandler: () => {
         UIActions.displayModal({id: 'generate-magnet'});
       },
+    },
+    {
+      type: 'action',
+      action: 'setSequential',
+      label: TorrentContextMenuActions.setSequential.id,
+      clickHandler: () => {
+        const {selectedTorrents} = TorrentStore;
+        TorrentActions.setSequential({
+          hashes: selectedTorrents,
+          isSequential: !TorrentStore.torrents[selectedTorrents[selectedTorrents.length - 1]].isSequential,
+        });
+      },
+      dismissMenu: false,
+      labelAction: () => <InlineSequentialCheckbox />,
     },
     {
       type: 'action',
