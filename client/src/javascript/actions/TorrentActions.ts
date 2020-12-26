@@ -12,6 +12,7 @@ import type {
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
+  SetTorrentsInitialSeedingOptions,
   SetTorrentsPriorityOptions,
   SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
@@ -193,6 +194,19 @@ const TorrentActions = {
     }
     return undefined;
   },
+
+  setInitialSeeding: (options: SetTorrentsInitialSeedingOptions) =>
+    axios
+      .patch(`${baseURI}api/torrents/initial-seeding`, options)
+      .then((json) => json.data)
+      .then(
+        () => {
+          // do nothing.
+        },
+        () => {
+          // do nothing.
+        },
+      ),
 
   setPriority: (options: SetTorrentsPriorityOptions) =>
     axios

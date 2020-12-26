@@ -2221,6 +2221,12 @@
       "value": "Generate Magnet Link"
     }
   ],
+  "torrents.list.context.initial.seeding": [
+    {
+      "type": 0,
+      "value": "Initial Seeding"
+    }
+  ],
   "torrents.list.context.move": [
     {
       "type": 0,

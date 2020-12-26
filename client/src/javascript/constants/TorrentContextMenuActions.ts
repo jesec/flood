@@ -29,6 +29,9 @@ const TorrentContextMenuActions = {
   generateMagnet: {
     id: 'torrents.list.context.generate.magnet',
   },
+  setInitialSeeding: {
+    id: 'torrents.list.context.initial.seeding',
+  },
   setSequential: {
     id: 'torrents.list.context.sequential',
   },
