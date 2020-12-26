@@ -20,6 +20,7 @@ type AddTorrentsByURLFormData = {
   destination: string;
   isBasePath: boolean;
   isCompleted: boolean;
+  isSequential: boolean;
   start: boolean;
   tags: string;
 };
@@ -99,6 +100,7 @@ const AddTorrentsByURL: FC = () => {
         selectable="directories"
         showBasePathToggle
         showCompletedToggle
+        showSequentialToggle
       />
       <AddTorrentsActions
         onAddTorrentsClick={() => {
@@ -134,6 +136,7 @@ const AddTorrentsByURL: FC = () => {
             destination: formData.destination,
             isBasePath: formData.isBasePath,
             isCompleted: formData.isCompleted,
+            isSequential: formData.isSequential,
             start: formData.start,
             tags,
           }).then(() => {

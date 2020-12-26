@@ -19,6 +19,7 @@ interface AddTorrentsByFileFormData {
   tags: string;
   isBasePath: boolean;
   isCompleted: boolean;
+  isSequential: boolean;
 }
 
 const AddTorrentsByFile: FC = () => {
@@ -64,6 +65,7 @@ const AddTorrentsByFile: FC = () => {
         selectable="directories"
         showBasePathToggle
         showCompletedToggle
+        showSequentialToggle
       />
       <AddTorrentsActions
         onAddTorrentsClick={() => {
@@ -74,7 +76,14 @@ const AddTorrentsByFile: FC = () => {
           const formData = formRef.current?.getFormData();
           setIsAddingTorrents(true);
 
-          const {destination, start, tags, isBasePath, isCompleted} = formData as Partial<AddTorrentsByFileFormData>;
+          const {
+            destination,
+            start,
+            tags,
+            isBasePath,
+            isCompleted,
+            isSequential,
+          } = formData as Partial<AddTorrentsByFileFormData>;
 
           const filesData: Array<string> = [];
           filesRef.current.forEach((file) => {
@@ -94,6 +103,7 @@ const AddTorrentsByFile: FC = () => {
             tags: tagsArray,
             isBasePath,
             isCompleted,
+            isSequential,
             start,
           }).then(() => {
             UIStore.dismissModal();

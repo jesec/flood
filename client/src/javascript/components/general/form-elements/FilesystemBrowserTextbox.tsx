@@ -15,6 +15,7 @@ interface FilesystemBrowserTextboxProps {
   suggested?: string;
   showBasePathToggle?: boolean;
   showCompletedToggle?: boolean;
+  showSequentialToggle?: boolean;
   onChange?: (destination: string) => void;
 }
 
@@ -27,6 +28,7 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
       suggested,
       showBasePathToggle,
       showCompletedToggle,
+      showSequentialToggle,
       onChange,
     }: FilesystemBrowserTextboxProps,
     ref,
@@ -76,6 +78,14 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
       toggles.push(
         <Checkbox grow={false} id="isCompleted" key="isCompleted">
           <FormattedMessage id="torrents.destination.completed" />
+        </Checkbox>,
+      );
+    }
+    if (showSequentialToggle) {
+      // TODO: this is getting bloated. toggles can be moved to their own elements...
+      toggles.push(
+        <Checkbox grow={false} id="isSequential" key="isSequential">
+          <FormattedMessage id="torrents.destination.sequential" />
         </Checkbox>,
       );
     }
@@ -156,6 +166,7 @@ FilesystemBrowserTextbox.defaultProps = {
   suggested: undefined,
   showBasePathToggle: false,
   showCompletedToggle: false,
+  showSequentialToggle: false,
   onChange: undefined,
 };
 
