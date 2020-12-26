@@ -8,6 +8,7 @@ import type {
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
+  SetTorrentsInitialSeedingOptions,
   SetTorrentsPriorityOptions,
   SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
@@ -99,6 +100,14 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
    * @return {Promise<void>} - Rejects with error.
    */
   abstract removeTorrents(options: DeleteTorrentsOptions): Promise<void>;
+
+  /**
+   * Sets initial seeding mode of torrents
+   *
+   * @param {SetTorrentsInitialSeedingOptions} options - An object of options...
+   * @return {Promise<void>} - Rejects with error.
+   */
+  abstract setTorrentsInitialSeeding(options: SetTorrentsInitialSeedingOptions): Promise<void>;
 
   /**
    * Sets priority of torrents

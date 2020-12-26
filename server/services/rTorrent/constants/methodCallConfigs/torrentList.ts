@@ -30,6 +30,12 @@ const torrentListMethodCallConfigs = {
     methodCall: 'd.is_private=',
     transformValue: booleanTransformer,
   },
+  isInitialSeeding: {
+    methodCall: 'd.connection_seed=',
+    transformValue: (value: unknown): boolean => {
+      return value === 'initial_seed';
+    },
+  },
   isSequential: {
     methodCall: 'd.down.sequential=',
     transformValue: booleanTransformer,

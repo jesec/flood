@@ -8,6 +8,7 @@ import type {
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
+  SetTorrentsInitialSeedingOptions,
   SetTorrentsPriorityOptions,
   SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
@@ -48,7 +49,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     isSequential,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<void> {
-    // TODO: isCompleted not implemented
+    // TODO: isCompleted and isInitialSeeding not implemented
 
     const fileBuffers = files.map((file) => {
       return Buffer.from(file, 'base64');
@@ -74,7 +75,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     isSequential,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<void> {
-    // TODO: isCompleted not implemented
+    // TODO: isCompleted and isInitialSeeding not implemented
 
     return this.clientRequestManager
       .torrentsAddURLs(urls, {
@@ -181,6 +182,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   async removeTorrents({hashes, deleteData}: DeleteTorrentsOptions): Promise<void> {
     return this.clientRequestManager
       .torrentsDelete(hashes, deleteData || false)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
+  }
+
+  async setTorrentsInitialSeeding({hashes, isInitialSeeding}: SetTorrentsInitialSeedingOptions): Promise<void> {
+    return this.clientRequestManager
+      .torrentsSetSuperSeeding(hashes, isInitialSeeding)
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
@@ -318,6 +325,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 eta: info.eta >= 8640000 ? -1 : info.eta,
                 hash: info.hash,
                 isPrivate,
+                isInitialSeeding: info.super_seeding,
                 isSequential: info.seq_dl,
                 message: '', // in tracker method
                 name: info.name,

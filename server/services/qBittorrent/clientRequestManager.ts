@@ -299,6 +299,22 @@ class ClientRequestManager {
     }
   }
 
+  async torrentsSetSuperSeeding(hashes: Array<string>, value: boolean): Promise<void> {
+    if (hashes.length > 0) {
+      return axios
+        .get(`${this.apiBase}/torrents/setSuperSeeding`, {
+          params: {
+            hashes: hashes.join('|'),
+            value: value ? 'true' : 'false',
+          },
+          headers: {Cookie: await this.authCookie},
+        })
+        .then(() => {
+          // returns nothing
+        });
+    }
+  }
+
   async torrentsToggleSequentialDownload(hashes: Array<string>): Promise<void> {
     if (hashes.length > 0) {
       return axios

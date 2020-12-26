@@ -27,6 +27,8 @@ export interface TorrentProperties {
   eta: number;
   hash: string;
   isPrivate: boolean;
+  // If initial seeding mode (aka super seeding) is enabled
+  isInitialSeeding: boolean;
   // If sequential download is enabled
   isSequential: boolean;
   message: string;

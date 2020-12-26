@@ -14,6 +14,7 @@ import type {
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
+  SetTorrentsInitialSeedingOptions,
   SetTorrentsPriorityOptions,
   SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
@@ -66,6 +67,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isBasePath,
     isCompleted,
     isSequential,
+    isInitialSeeding,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<void> {
     const torrentPaths = await Promise.all(
@@ -85,6 +87,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         isBasePath,
         isCompleted,
         isSequential,
+        isInitialSeeding,
         start,
       });
     }
@@ -100,6 +103,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isBasePath,
     isCompleted,
     isSequential,
+    isInitialSeeding,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<void> {
     await fs.promises.mkdir(destination, {recursive: true});
@@ -154,6 +158,10 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
       if (isSequential) {
         additionalCalls.push(`d.down.sequential.set=1`);
+      }
+
+      if (isInitialSeeding) {
+        additionalCalls.push(`d.connection_seed.set=initial_seed`);
       }
 
       return {
@@ -420,6 +428,28 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     );
   }
 
+  async setTorrentsInitialSeeding({hashes, isInitialSeeding}: SetTorrentsInitialSeedingOptions): Promise<void> {
+    const hashesToRestart: Array<string> = hashes.filter(
+      (hash) => !this.services?.torrentService.getTorrent(hash).status.includes('stopped'),
+    );
+
+    await this.stopTorrents({hashes});
+
+    await this.clientRequestManager
+      .methodCall('system.multicall', [
+        hashes.map((hash) => ({
+          methodName: 'd.connection_seed.set',
+          params: [hash, isInitialSeeding ? 'initial_seed' : 'seed'],
+        })),
+      ])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
+
+    await this.startTorrents({hashes: hashesToRestart});
+  }
+
   async setTorrentsPriority({hashes, priority}: SetTorrentsPriorityOptions): Promise<void> {
     const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
       accumulator.push({
@@ -638,6 +668,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
                   eta: getTorrentETAFromProperties(response),
                   hash: response.hash,
                   isPrivate: response.isPrivate,
+                  isInitialSeeding: response.isInitialSeeding,
                   isSequential: response.isSequential,
                   message: response.message,
                   name: response.name,

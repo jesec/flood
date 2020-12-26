@@ -19,6 +19,7 @@ import type {
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
+  SetTorrentsInitialSeedingOptions,
   SetTorrentsPriorityOptions,
   SetTorrentsSequentialOptions,
   SetTorrentsTrackersOptions,
@@ -121,7 +122,17 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
     return;
   }
 
-  const {urls, cookies, destination, tags, isBasePath, isCompleted, isSequential, start} = parsedResult.data;
+  const {
+    urls,
+    cookies,
+    destination,
+    tags,
+    isBasePath,
+    isCompleted,
+    isSequential,
+    isInitialSeeding,
+    start,
+  } = parsedResult.data;
 
   const finalDestination = await getDestination(req.services, {
     destination,
@@ -142,6 +153,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
       isBasePath: isBasePath ?? false,
       isCompleted: isCompleted ?? false,
       isSequential: isSequential ?? false,
+      isInitialSeeding: isInitialSeeding ?? false,
       start: start ?? false,
     })
     .then((response) => {
@@ -173,7 +185,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
     return;
   }
 
-  const {files, destination, tags, isBasePath, isCompleted, isSequential, start} = parsedResult.data;
+  const {files, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} = parsedResult.data;
 
   const finalDestination = await getDestination(req.services, {
     destination,
@@ -193,6 +205,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
       isBasePath: isBasePath ?? false,
       isCompleted: isCompleted ?? false,
       isSequential: isSequential ?? false,
+      isInitialSeeding: isInitialSeeding ?? false,
       start: start ?? false,
     })
     .then((response) => {
@@ -215,7 +228,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) => {
-  const {name, sourcePath, trackers, comment, infoSource, isPrivate, tags, start} = req.body;
+  const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = req.body;
   const callback = getResponseFn(res);
 
   if (typeof sourcePath !== 'string') {
@@ -265,6 +278,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
               isBasePath: true,
               isCompleted: true,
               isSequential: false,
+              isInitialSeeding: isInitialSeeding ?? false,
               start: start || false,
             })
             .catch(() => {
@@ -409,6 +423,27 @@ router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
     .catch((err) => {
       callback(null, err);
     });
+});
+
+/**
+ * PATCH /api/torrents/initial-seeding
+ * @summary Sets initial seeding mode of torrents.
+ * @tags Torrent
+ * @security User
+ * @param {SetTorrentsInitialSeedingOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.patch<unknown, unknown, SetTorrentsInitialSeedingOptions>('/initial-seeding', (req, res) => {
+  req.services?.clientGatewayService?.setTorrentsInitialSeeding(req.body).then(
+    (response) => {
+      req.services?.torrentService.fetchTorrentList();
+      res.status(200).json(response);
+    },
+    (err) => {
+      res.status(500).json(err);
+    },
+  );
 });
 
 /**
