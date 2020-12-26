@@ -220,6 +220,10 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
+  async setTorrentsInitialSeeding(): Promise<void> {
+    throw new Error('Transmission does not support this feature.');
+  }
+
   async setTorrentsPriority({hashes, priority}: SetTorrentsPriorityOptions): Promise<void> {
     let transmissionPriority = TransmissionPriority.TR_PRI_NORMAL;
 
@@ -368,6 +372,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
                 upTotal: torrent.uploadedEver,
                 eta: torrent.eta,
                 isPrivate: torrent.isPrivate,
+                isInitialSeeding: false,
                 isSequential: false,
                 message: torrent.errorString,
                 peersConnected: torrent.peersGettingFromUs,

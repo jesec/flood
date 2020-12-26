@@ -17,6 +17,8 @@ export interface CreateTorrentOptions {
   infoSource?: string;
   // Whether the torrent is private
   isPrivate: boolean;
+  // Whether to use initial seeding mode
+  isInitialSeeding?: boolean;
   // Whether to start torrent
   start?: boolean;
   // Tags, not added to torrent file
@@ -61,6 +63,14 @@ export interface StartTorrentsOptions {
 export interface StopTorrentsOptions {
   // An array of string representing hashes of torrents to be stopped
   hashes: Array<TorrentProperties['hash']>;
+}
+
+// PATCH /api/torrents/initial-seeding
+export interface SetTorrentsInitialSeedingOptions {
+  // An array of string representing hashes of torrents to operate on
+  hashes: Array<TorrentProperties['hash']>;
+  // If initial seeding mode (aka super seeding) is enabled
+  isInitialSeeding: boolean;
 }
 
 // PATCH /api/torrents/priority
