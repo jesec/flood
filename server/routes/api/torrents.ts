@@ -544,6 +544,60 @@ router.patch<unknown, unknown, SetTorrentsTrackersOptions>('/trackers', (req, re
 });
 
 /**
+ * GET /api/torrents/{hash(, hash2, ...)}/metainfo
+ * @summary Gets meta-info (.torrent) files of torrents
+ * @tags Torrents
+ * @security User
+ * @param {string} hashes.path - Hash of a torrent, or hashes of torrents (split by ,)
+ * @return {object} 200 - single torrent - application/x-bittorrent
+ * @return {object} 200 - torrents archived in .tar - application/x-tar
+ * @return {Error} 422 - hash not provided - application/json
+ * @return {Error} 500 - other failure responses - application/json
+ */
+router.get<{hashes: string}>('/:hashes/metainfo', async (req, res) => {
+  const hashes: Array<string> = req.params.hashes?.split(',').map((hash) => sanitize(hash));
+  if (!Array.isArray(hashes) || hashes?.length < 1) {
+    res.status(422).json(new Error('Hash not provided.'));
+    return;
+  }
+
+  const sessionDirectory = await req.services?.clientGatewayService?.getClientSessionDirectory().catch(() => undefined);
+  if (sessionDirectory == null || !fs.existsSync(sessionDirectory)) {
+    res.status(500).json(new Error('Failed to get session directory.'));
+    return;
+  }
+
+  const torrentFileNames = hashes.map((hash) => `${hash}.torrent`);
+
+  if (hashes.length < 2) {
+    res.attachment(torrentFileNames[0]);
+    res.download(path.join(sessionDirectory, torrentFileNames[0]));
+    return;
+  }
+
+  try {
+    torrentFileNames.forEach((torrentFileName) =>
+      fs.accessSync(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
+    );
+  } catch {
+    res.status(500).json('Failed to access torrent files.');
+  }
+
+  res.attachment(`torrents-${Date.now()}.tar`);
+  tar
+    .c(
+      {
+        cwd: sessionDirectory,
+        follow: false,
+        noDirRecurse: true,
+        portable: true,
+      },
+      torrentFileNames,
+    )
+    .pipe(res);
+});
+
+/**
  *
  * APIs below operate on a single torrent.
  *

@@ -1,4 +1,5 @@
 import geoip from 'geoip-country';
+import path from 'path';
 
 import type {
   AddTorrentByFileOptions,
@@ -419,6 +420,13 @@ class TransmissionClientGatewayService extends ClientGatewayService {
           upTotal: stats['current-stats'].uploadedBytes,
         };
       });
+  }
+
+  async getClientSessionDirectory(): Promise<string> {
+    return this.clientRequestManager
+      .getSessionProperties(['config-dir'])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((properties) => path.join(properties['config-dir'], 'torrents'));
   }
 
   async getClientSettings(): Promise<ClientSettings> {

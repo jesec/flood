@@ -170,14 +170,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       };
     }, []);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {
@@ -190,85 +188,77 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
-    return (
-      this.clientRequestManager
-        .methodCall('f.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentContent))
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then((responses: string[][]) => {
-          return Promise.all(
-            responses.map((response) => processMethodCallResponse(response, torrentContentMethodCallConfigs)),
-          );
-        })
-        .then((processedResponses) => {
-          return processedResponses.map((content, index) => {
-            return {
-              index,
-              path: content.path,
-              filename: content.path.split('/').pop() || '',
-              percentComplete: (content.completedChunks / content.sizeChunks) * 100,
-              priority: content.priority,
-              sizeBytes: content.sizeBytes,
-            };
-          });
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('f.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentContent))
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((responses: string[][]) => {
+        return Promise.all(
+          responses.map((response) => processMethodCallResponse(response, torrentContentMethodCallConfigs)),
+        );
+      })
+      .then((processedResponses) => {
+        return processedResponses.map((content, index) => {
+          return {
+            index,
+            path: content.path,
+            filename: content.path.split('/').pop() || '',
+            percentComplete: (content.completedChunks / content.sizeChunks) * 100,
+            priority: content.priority,
+            sizeBytes: content.sizeBytes,
+          };
+        });
+      });
   }
 
   async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
-    return (
-      this.clientRequestManager
-        .methodCall('p.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentPeer))
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then((responses: string[][]) => {
-          return Promise.all(
-            responses.map((response) => processMethodCallResponse(response, torrentPeerMethodCallConfigs)),
-          );
-        })
-        .then((processedResponses) => {
-          return Promise.all(
-            processedResponses.map(async (processedResponse) => {
-              return {
-                ...processedResponse,
-                country: geoip.lookup(processedResponse.address)?.country || '',
-              };
-            }),
-          );
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('p.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentPeer))
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((responses: string[][]) => {
+        return Promise.all(
+          responses.map((response) => processMethodCallResponse(response, torrentPeerMethodCallConfigs)),
+        );
+      })
+      .then((processedResponses) => {
+        return Promise.all(
+          processedResponses.map(async (processedResponse) => {
+            return {
+              ...processedResponse,
+              country: geoip.lookup(processedResponse.address)?.country || '',
+            };
+          }),
+        );
+      });
   }
 
   async getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
-    return (
-      this.clientRequestManager
-        .methodCall('t.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentTracker))
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then((responses: string[][]) => {
-          return Promise.all(
-            responses.map((response) => processMethodCallResponse(response, torrentTrackerMethodCallConfigs)),
-          );
-        })
-        .then((processedResponses) =>
-          processedResponses
-            .filter((processedResponse) => processedResponse.isEnabled)
-            .map((processedResponse) => {
-              return {
-                url: processedResponse.url,
-                type: processedResponse.type,
-              };
-            }),
-        ) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('t.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentTracker))
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((responses: string[][]) => {
+        return Promise.all(
+          responses.map((response) => processMethodCallResponse(response, torrentTrackerMethodCallConfigs)),
+        );
+      })
+      .then((processedResponses) =>
+        processedResponses
+          .filter((processedResponse) => processedResponse.isEnabled)
+          .map((processedResponse) => {
+            return {
+              url: processedResponse.url,
+              type: processedResponse.type,
+            };
+          }),
+      );
   }
 
   async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions): Promise<void> {
@@ -383,49 +373,47 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then((response) => {
-          if (deleteData === true) {
-            const torrentCount = hashes.length;
-            const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
-              const fileList = (response as string[][][][][])[hashIndex][0];
-              const directoryBase = (response as string[][])[hashIndex + torrentCount][0];
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((response) => {
+        if (deleteData === true) {
+          const torrentCount = hashes.length;
+          const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
+            const fileList = (response as string[][][][][])[hashIndex][0];
+            const directoryBase = (response as string[][])[hashIndex + torrentCount][0];
 
-              const torrentFilesToDelete = fileList.reduce((fileListAccumulator, file) => {
-                // We only look at the first path component returned because
-                // if it's a directory within the torrent, then we'll remove
-                // the entire directory.
-                const filePath = path.join(directoryBase, file[0][0]);
+            const torrentFilesToDelete = fileList.reduce((fileListAccumulator, file) => {
+              // We only look at the first path component returned because
+              // if it's a directory within the torrent, then we'll remove
+              // the entire directory.
+              const filePath = path.join(directoryBase, file[0][0]);
 
-                // filePath might be a directory, so it may have already been
-                // added. If not, we add it.
-                if (!fileListAccumulator.includes(filePath)) {
-                  fileListAccumulator.push(filePath);
-                }
+              // filePath might be a directory, so it may have already been
+              // added. If not, we add it.
+              if (!fileListAccumulator.includes(filePath)) {
+                fileListAccumulator.push(filePath);
+              }
 
-                return fileListAccumulator;
-              }, [] as Array<string>);
-
-              return accumulator.concat(torrentFilesToDelete);
+              return fileListAccumulator;
             }, [] as Array<string>);
 
-            filesToDelete.forEach((file) => {
-              try {
-                if (fs.lstatSync(file).isDirectory()) {
-                  fs.rmdirSync(file, {recursive: true});
-                } else {
-                  fs.unlinkSync(file);
-                }
-              } catch (error) {
-                console.error(`Error deleting file: ${file}\n${error}`);
+            return accumulator.concat(torrentFilesToDelete);
+          }, [] as Array<string>);
+
+          filesToDelete.forEach((file) => {
+            try {
+              if (fs.lstatSync(file).isDirectory()) {
+                fs.rmdirSync(file, {recursive: true});
+              } else {
+                fs.unlinkSync(file);
               }
-            });
-          }
-        }) || Promise.reject()
-    );
+            } catch (error) {
+              console.error(`Error deleting file: ${file}\n${error}`);
+            }
+          });
+        }
+      });
   }
 
   async setTorrentsInitialSeeding({hashes, isInitialSeeding}: SetTorrentsInitialSeedingOptions): Promise<void> {
@@ -465,14 +453,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async setTorrentsSequential({hashes, isSequential}: SetTorrentsSequentialOptions): Promise<void> {
@@ -481,14 +467,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       params: [hash, isSequential ? '1' : '0'],
     }));
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
@@ -501,66 +485,49 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions): Promise<void> {
-    const methodCalls = hashes.reduce(
-      (accumulator: MultiMethodCalls, hash) => {
-        // Disable existing trackers
+    const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash) => {
+      // Disable existing trackers
+      accumulator.push({
+        methodName: 't.multicall',
+        params: [hash, '', 't.disable='],
+      });
+
+      // Insert new trackers
+      trackers.forEach((tracker) => {
         accumulator.push({
-          methodName: 't.multicall',
-          params: [hash, '', 't.disable='],
+          methodName: 'd.tracker.insert',
+          params: [hash, '0', tracker],
         });
+      });
 
-        // Insert new trackers
-        trackers.forEach((tracker) => {
-          accumulator.push({
-            methodName: 'd.tracker.insert',
-            params: [hash, '0', tracker],
-          });
-        });
+      // Save full session to apply tracker change
+      accumulator.push({
+        methodName: 'd.save_full_session',
+        params: [hash],
+      });
 
-        // Save full session to apply tracker change
-        accumulator.push({
-          methodName: 'd.save_full_session',
-          params: [hash],
-        });
+      return accumulator;
+    }, []);
 
-        return accumulator;
-      },
-      [
-        {
-          methodName: 'session.path',
-          params: [],
-        },
-      ],
-    );
+    await this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(async (response: string[][]) => {
-          const [session] = response.shift() as string[];
+    const sessionDirectory = await this.getClientSessionDirectory();
 
-          if (typeof session === 'string') {
-            // Deduplicate hashes via Set() to avoid file ops on the same files
-            await Promise.all(
-              [...new Set(hashes)].map(async (hash) => {
-                const torrent = path.join(session, sanitize(`${hash}.torrent`));
-                return setTrackers(torrent, trackers);
-              }),
-            );
-          }
-        }) || Promise.reject()
+    await Promise.all(
+      [...new Set(hashes)].map(async (hash) =>
+        setTrackers(path.join(sessionDirectory, sanitize(`${hash}.torrent`)), trackers),
+      ),
     );
   }
 
@@ -582,14 +549,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       params: [hash],
     });
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async startTorrents({hashes}: StartTorrentsOptions): Promise<void> {
@@ -607,14 +572,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async stopTorrents({hashes}: StopTorrentsOptions): Promise<void> {
@@ -632,79 +595,75 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async fetchTorrentList(): Promise<TorrentListSummary> {
-    return (
-      this.clientRequestManager
-        .methodCall('d.multicall2', ['', 'main'].concat((await this.availableMethodCalls).torrentList))
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then((responses: string[][]) => {
-          this.emit('PROCESS_TORRENT_LIST_START');
-          return Promise.all(
-            responses.map((response) => processMethodCallResponse(response, torrentListMethodCallConfigs)),
-          );
-        })
-        .then(async (processedResponses) => {
-          const torrentList: TorrentList = Object.assign(
-            {},
-            ...(await Promise.all(
-              processedResponses.map(async (response) => {
-                const torrentProperties: TorrentProperties = {
-                  bytesDone: response.bytesDone,
-                  dateAdded: response.dateAdded,
-                  dateCreated: response.dateCreated,
-                  directory: response.directory,
-                  downRate: response.downRate,
-                  downTotal: response.downTotal,
-                  eta: getTorrentETAFromProperties(response),
-                  hash: response.hash,
-                  isPrivate: response.isPrivate,
-                  isInitialSeeding: response.isInitialSeeding,
-                  isSequential: response.isSequential,
-                  message: response.message,
-                  name: response.name,
-                  peersConnected: response.peersConnected,
-                  peersTotal: response.peersTotal,
-                  percentComplete: getTorrentPercentCompleteFromProperties(response),
-                  priority: response.priority,
-                  ratio: response.ratio,
-                  seedsConnected: response.seedsConnected,
-                  seedsTotal: response.seedsTotal,
-                  sizeBytes: response.sizeBytes,
-                  status: getTorrentStatusFromProperties(response),
-                  tags: response.tags,
-                  trackerURIs: response.trackerURIs,
-                  upRate: response.upRate,
-                  upTotal: response.upTotal,
-                };
+    return this.clientRequestManager
+      .methodCall('d.multicall2', ['', 'main'].concat((await this.availableMethodCalls).torrentList))
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((responses: string[][]) => {
+        this.emit('PROCESS_TORRENT_LIST_START');
+        return Promise.all(
+          responses.map((response) => processMethodCallResponse(response, torrentListMethodCallConfigs)),
+        );
+      })
+      .then(async (processedResponses) => {
+        const torrentList: TorrentList = Object.assign(
+          {},
+          ...(await Promise.all(
+            processedResponses.map(async (response) => {
+              const torrentProperties: TorrentProperties = {
+                bytesDone: response.bytesDone,
+                dateAdded: response.dateAdded,
+                dateCreated: response.dateCreated,
+                directory: response.directory,
+                downRate: response.downRate,
+                downTotal: response.downTotal,
+                eta: getTorrentETAFromProperties(response),
+                hash: response.hash,
+                isPrivate: response.isPrivate,
+                isInitialSeeding: response.isInitialSeeding,
+                isSequential: response.isSequential,
+                message: response.message,
+                name: response.name,
+                peersConnected: response.peersConnected,
+                peersTotal: response.peersTotal,
+                percentComplete: getTorrentPercentCompleteFromProperties(response),
+                priority: response.priority,
+                ratio: response.ratio,
+                seedsConnected: response.seedsConnected,
+                seedsTotal: response.seedsTotal,
+                sizeBytes: response.sizeBytes,
+                status: getTorrentStatusFromProperties(response),
+                tags: response.tags,
+                trackerURIs: response.trackerURIs,
+                upRate: response.upRate,
+                upTotal: response.upTotal,
+              };
 
-                this.emit('PROCESS_TORRENT', torrentProperties);
+              this.emit('PROCESS_TORRENT', torrentProperties);
 
-                return {
-                  [response.hash]: torrentProperties,
-                };
-              }),
-            )),
-          );
+              return {
+                [response.hash]: torrentProperties,
+              };
+            }),
+          )),
+        );
 
-          const torrentListSummary = {
-            id: Date.now(),
-            torrents: torrentList,
-          };
+        const torrentListSummary = {
+          id: Date.now(),
+          torrents: torrentList,
+        };
 
-          this.emit('PROCESS_TORRENT_LIST_END', torrentListSummary);
-          return torrentListSummary;
-        }) || Promise.reject()
-    );
+        this.emit('PROCESS_TORRENT_LIST_END', torrentListSummary);
+        return torrentListSummary;
+      });
   }
 
   async fetchTransferSummary(): Promise<TransferSummary> {
@@ -715,14 +674,18 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       };
     });
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then((response) => {
-          return processMethodCallResponse(response, transferSummaryMethodCallConfigs);
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((response) => {
+        return processMethodCallResponse(response, transferSummaryMethodCallConfigs);
+      });
+  }
+
+  async getClientSessionDirectory(): Promise<string> {
+    return this.clientRequestManager
+      .methodCall('session.path', [])
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async getClientSettings(): Promise<ClientSettings> {
@@ -733,14 +696,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       };
     });
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then((response) => {
-          return processMethodCallResponse(response, clientSettingMethodCallConfigs);
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((response) => {
+        return processMethodCallResponse(response, clientSettingMethodCallConfigs);
+      });
   }
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
@@ -780,14 +741,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    return (
-      this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
-        .then(() => {
-          // returns nothing.
-        }) || Promise.reject()
-    );
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async testGateway(): Promise<void> {
