@@ -1753,6 +1753,12 @@
       "value": "crwdns3612:0crwdne3612:0"
     }
   ],
+  "torrents.destination.sequential": [
+    {
+      "type": 0,
+      "value": "crwdns3708:0crwdne3708:0"
+    }
+  ],
   "torrents.details.actions.pause": [
     {
       "type": 0,
@@ -2101,6 +2107,12 @@
       "value": "crwdns3704:0crwdne3704:0"
     }
   ],
+  "torrents.list.context.initial.seeding": [
+    {
+      "type": 0,
+      "value": "crwdns3712:0crwdne3712:0"
+    }
+  ],
   "torrents.list.context.move": [
     {
       "type": 0,
@@ -2123,6 +2135,12 @@
     {
       "type": 0,
       "value": "crwdns3400:0crwdne3400:0"
+    }
+  ],
+  "torrents.list.context.sequential": [
+    {
+      "type": 0,
+      "value": "crwdns3710:0crwdne3710:0"
     }
   ],
   "torrents.list.context.set.tags": [

@@ -1811,6 +1811,12 @@
       "value": "完了"
     }
   ],
+  "torrents.destination.sequential": [
+    {
+      "type": 0,
+      "value": "Sequential Download"
+    }
+  ],
   "torrents.details.actions.pause": [
     {
       "type": 0,
@@ -2171,6 +2177,12 @@
       "value": "Generate Magnet Link"
     }
   ],
+  "torrents.list.context.initial.seeding": [
+    {
+      "type": 0,
+      "value": "Initial Seeding"
+    }
+  ],
   "torrents.list.context.move": [
     {
       "type": 0,
@@ -2193,6 +2205,12 @@
     {
       "type": 0,
       "value": "削除"
+    }
+  ],
+  "torrents.list.context.sequential": [
+    {
+      "type": 0,
+      "value": "Sequential"
     }
   ],
   "torrents.list.context.set.tags": [
