@@ -265,6 +265,7 @@
   "torrents.create.tags.input.placeholder": "Tags in Flood. Not added to created torrent.",
   "torrents.destination.base_path": "Use as Base Path",
   "torrents.destination.completed": "Completed",
+  "torrents.destination.sequential": "Sequential Download",
   "torrents.details.actions.pause": "Pause",
   "torrents.details.actions.start": "Start",
   "torrents.details.actions.stop": "Stop",
