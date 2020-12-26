@@ -317,6 +317,7 @@
   "torrents.list.context.move": "Set Torrent Location",
   "torrents.list.context.pause": "Pause",
   "torrents.list.context.download": "Download",
+  "torrents.list.context.initial.seeding": "Initial Seeding",
   "torrents.list.context.priority": "Priority",
   "torrents.list.context.remove": "Remove",
   "torrents.list.context.sequential": "Sequential",

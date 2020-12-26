@@ -13,26 +13,23 @@ import UIActions from '../../actions/UIActions';
 
 import type {ContextMenuItem} from '../../stores/UIStore';
 
-// TODO: need to create a generic component if there are more menu items like this.
-const InlineSequentialCheckbox: FC = observer(() => {
-  const {selectedTorrents} = TorrentStore;
+const getLastSelectedTorrent = (): string => TorrentStore.selectedTorrents[TorrentStore.selectedTorrents.length - 1];
 
-  return (
+const InlineTorrentPropertyCheckbox: FC<{property: keyof TorrentProperties}> = observer(
+  ({property}: {property: keyof TorrentProperties}) => (
     <label className="toggle-input checkbox" style={{display: 'inline'}}>
       <div className="toggle-input__indicator">
         <div
           className="toggle-input__indicator__icon"
           style={{
-            opacity: TorrentStore.torrents[selectedTorrents[selectedTorrents.length - 1]].isSequential
-              ? '1'
-              : undefined,
+            opacity: TorrentStore.torrents[getLastSelectedTorrent()][property] ? '1' : undefined,
           }}>
           <Checkmark />
         </div>
       </div>
     </label>
-  );
-});
+  ),
+);
 
 const handleTorrentDownload = (hash: TorrentProperties['hash']): void => {
   const {baseURI} = ConfigStore;
@@ -124,10 +121,9 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       action: 'torrentDetails',
       label: TorrentContextMenuActions.torrentDetails.id,
       clickHandler: () => {
-        const {selectedTorrents} = TorrentStore;
         UIActions.displayModal({
           id: 'torrent-details',
-          hash: selectedTorrents[selectedTorrents.length - 1],
+          hash: getLastSelectedTorrent(),
         });
       },
     },
@@ -136,9 +132,8 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       action: 'torrentDownload',
       label: TorrentContextMenuActions.torrentDownload.id,
       clickHandler: (e) => {
-        const {selectedTorrents} = TorrentStore;
         e.preventDefault();
-        handleTorrentDownload(selectedTorrents[selectedTorrents.length - 1]);
+        handleTorrentDownload(getLastSelectedTorrent());
       },
     },
     {
@@ -151,17 +146,31 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     },
     {
       type: 'action',
+      action: 'setInitialSeeding',
+      label: TorrentContextMenuActions.setInitialSeeding.id,
+      clickHandler: () => {
+        const {selectedTorrents} = TorrentStore;
+        TorrentActions.setInitialSeeding({
+          hashes: selectedTorrents,
+          isInitialSeeding: !TorrentStore.torrents[getLastSelectedTorrent()].isInitialSeeding,
+        });
+      },
+      dismissMenu: false,
+      labelAction: () => <InlineTorrentPropertyCheckbox property="isInitialSeeding" />,
+    },
+    {
+      type: 'action',
       action: 'setSequential',
       label: TorrentContextMenuActions.setSequential.id,
       clickHandler: () => {
         const {selectedTorrents} = TorrentStore;
         TorrentActions.setSequential({
           hashes: selectedTorrents,
-          isSequential: !TorrentStore.torrents[selectedTorrents[selectedTorrents.length - 1]].isSequential,
+          isSequential: !TorrentStore.torrents[getLastSelectedTorrent()].isSequential,
         });
       },
       dismissMenu: false,
-      labelAction: () => <InlineSequentialCheckbox />,
+      labelAction: () => <InlineTorrentPropertyCheckbox property="isSequential" />,
     },
     {
       type: 'action',
