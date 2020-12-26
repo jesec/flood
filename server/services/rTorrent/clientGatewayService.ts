@@ -252,11 +252,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async moveTorrents({hashes, destination, moveFiles, isBasePath, isCheckHash}: MoveTorrentsOptions): Promise<void> {
-    try {
-      await this.stopTorrents({hashes});
-    } catch (e) {
-      return Promise.reject(e);
-    }
+    await this.stopTorrents({hashes});
+
+    await fs.promises.mkdir(destination, {recursive: true});
 
     if (moveFiles) {
       const isMultiFile = await this.clientRequestManager
@@ -322,20 +320,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return accumulator;
     }, []);
 
-    try {
-      await this.clientRequestManager
-        .methodCall('system.multicall', [methodCalls])
-        .then(this.processClientRequestSuccess, this.processClientRequestError);
-    } catch (e) {
-      return Promise.reject(e);
-    }
+    await this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
 
     if (isCheckHash) {
-      try {
-        await this.checkTorrents({hashes});
-      } catch (e) {
-        return Promise.reject(e);
-      }
+      await this.checkTorrents({hashes});
     }
 
     return this.startTorrents({hashes: hashesToRestart});
