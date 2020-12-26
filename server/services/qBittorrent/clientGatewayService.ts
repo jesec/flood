@@ -1,3 +1,6 @@
+import {homedir} from 'os';
+import path from 'path';
+
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
@@ -381,6 +384,22 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
           upTotal: info.up_info_data,
         };
       });
+  }
+
+  async getClientSessionDirectory(): Promise<string> {
+    // qBittorrent API does not provide session directory.
+    // We can only guess with the common locations here.
+    switch (process.platform) {
+      case 'win32':
+        if (process.env.LOCALAPPDATA) {
+          return path.join(process.env.LOCALAPPDATA, '\\qBittorrent\\BT_backup');
+        }
+        return path.join(homedir(), '\\AppData\\Local\\qBittorrent\\BT_backup');
+      case 'darwin':
+        return path.join(homedir(), '/Library/Application Support/qBittorrent/BT_backup');
+      default:
+        return path.join(homedir(), '/.local/share/data/qBittorrent/BT_backup');
+    }
   }
 
   async getClientSettings(): Promise<ClientSettings> {

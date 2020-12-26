@@ -181,6 +181,13 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
   abstract fetchTransferSummary(): Promise<TransferSummary>;
 
   /**
+   * Gets session directory (where .torrent files are stored) of the torrent client
+   *
+   * @return {Promise<string>} - Resolves with path of session directory or rejects with error.
+   */
+  abstract getClientSessionDirectory(): Promise<string>;
+
+  /**
    * Gets settings of the torrent client
    *
    * @return {Promise<ClientSettings>} - Resolves with ClientSettings or rejects with error.
