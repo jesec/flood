@@ -1873,7 +1873,7 @@
   "torrents.destination.sequential": [
     {
       "type": 0,
-      "value": "Sequential Download"
+      "value": "Téléchargement séquentiel"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2239,7 +2239,7 @@
   "torrents.list.context.initial.seeding": [
     {
       "type": 0,
-      "value": "Initial Seeding"
+      "value": "Sources initiales"
     }
   ],
   "torrents.list.context.move": [
@@ -2269,7 +2269,7 @@
   "torrents.list.context.sequential": [
     {
       "type": 0,
-      "value": "Sequential"
+      "value": "Séquentiel"
     }
   ],
   "torrents.list.context.set.tags": [
