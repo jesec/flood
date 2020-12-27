@@ -46,10 +46,11 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     destination,
     tags,
     isBasePath,
+    isCompleted,
     isSequential,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<void> {
-    // TODO: isCompleted and isInitialSeeding not implemented
+    // TODO: isInitialSeeding not implemented
 
     const fileBuffers = files.map((file) => {
       return Buffer.from(file, 'base64');
@@ -62,6 +63,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         paused: !start,
         root_folder: !isBasePath,
         sequentialDownload: isSequential,
+        skip_checking: isCompleted,
       })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
@@ -72,10 +74,11 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     destination,
     tags,
     isBasePath,
+    isCompleted,
     isSequential,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<void> {
-    // TODO: isCompleted and isInitialSeeding not implemented
+    // TODO: isInitialSeeding not implemented
 
     return this.clientRequestManager
       .torrentsAddURLs(urls, {
@@ -85,6 +88,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         paused: !start,
         root_folder: !isBasePath,
         sequentialDownload: isSequential,
+        skip_checking: isCompleted,
       })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
