@@ -125,6 +125,8 @@ export interface QBittorrentTorrentsAddOptions {
   paused?: boolean;
   // Create the root folder. Possible values are true, false, unset (default)
   root_folder?: boolean;
+  // Content layout mode, replaces root_folder
+  contentLayout?: 'Original' | 'Subfolder' | 'NoSubfolder';
   // Rename torrent
   rename?: string;
   // Set torrent upload speed limit. Unit in bytes/second

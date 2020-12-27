@@ -62,6 +62,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         tags: tags.join(','),
         paused: !start,
         root_folder: !isBasePath,
+        contentLayout: isBasePath ? 'NoSubfolder' : undefined,
         sequentialDownload: isSequential,
         skip_checking: isCompleted,
       })
@@ -87,6 +88,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         tags: tags.join(','),
         paused: !start,
         root_folder: !isBasePath,
+        contentLayout: isBasePath ? 'NoSubfolder' : undefined,
         sequentialDownload: isSequential,
         skip_checking: isCompleted,
       })
