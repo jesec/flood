@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import {FC, ReactNode, ReactNodeArray, useEffect, useRef, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
+import sort from 'fast-sort';
 import {useKeyPressEvent} from 'react-use';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
@@ -104,33 +105,36 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
               overlayProps={{isInteractive: false}}
               ref={menuRef}
               triggerRef={textboxRef}>
-              {[...new Set([...Object.keys(TorrentFilterStore.taxonomy.tagCounts), ...selectedTags])].reduce(
-                (accumulator: ReactNodeArray, tag) => {
-                  if (tag === '') {
-                    return accumulator;
-                  }
-
-                  accumulator.push(
-                    <SelectItem
-                      id={tag}
-                      key={tag}
-                      isSelected={selectedTags.includes(tag)}
-                      onClick={() => {
-                        if (tag === 'untagged') {
-                          setSelectedTags([]);
-                        } else if (selectedTags.includes(tag)) {
-                          setSelectedTags(selectedTags.filter((key) => key !== tag && key !== ''));
-                        } else {
-                          setSelectedTags([...selectedTags.filter((key) => key !== ''), tag]);
-                        }
-                      }}>
-                      {tag === 'untagged' ? <FormattedMessage id="filter.untagged" /> : tag}
-                    </SelectItem>,
-                  );
+              {[
+                ...new Set([
+                  'untagged',
+                  ...sort(Object.keys(TorrentFilterStore.taxonomy.tagCounts)).asc(),
+                  ...selectedTags,
+                ]),
+              ].reduce((accumulator: ReactNodeArray, tag) => {
+                if (tag === '') {
                   return accumulator;
-                },
-                [],
-              )}
+                }
+
+                accumulator.push(
+                  <SelectItem
+                    id={tag}
+                    key={tag}
+                    isSelected={selectedTags.includes(tag)}
+                    onClick={() => {
+                      if (tag === 'untagged') {
+                        setSelectedTags([]);
+                      } else if (selectedTags.includes(tag)) {
+                        setSelectedTags(selectedTags.filter((key) => key !== tag && key !== ''));
+                      } else {
+                        setSelectedTags([...selectedTags.filter((key) => key !== ''), tag]);
+                      }
+                    }}>
+                    {tag === 'untagged' ? <FormattedMessage id="filter.untagged" /> : tag}
+                  </SelectItem>,
+                );
+                return accumulator;
+              }, [])}
             </ContextMenu>
           </Portal>
         </Textbox>
