@@ -54,7 +54,7 @@ const getDestination = async (
 
   // Use default destination of torrent client
   if (autoDestination == null) {
-    const {directoryDefault} = (await services?.clientGatewayService?.getClientSettings().catch(() => undefined)) || {};
+    const {directoryDefault} = (await services?.clientGatewayService?.getClientSettings().catch(() => undefined)) ?? {};
     autoDestination = directoryDefault;
   }
 
@@ -242,7 +242,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
     return;
   }
 
-  const torrentFileName = sanitize(name || sanitizedPath.split(path.sep).pop() || `${Date.now()}`).concat('.torrent');
+  const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat('.torrent');
   const torrentPath = getTempPath(torrentFileName);
 
   createTorrent(
@@ -279,7 +279,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
               isCompleted: true,
               isSequential: false,
               isInitialSeeding: isInitialSeeding ?? false,
-              start: start || false,
+              start: start ?? false,
             })
             .catch(() => {
               // do nothing.
@@ -734,7 +734,7 @@ router.get(
   async (req, res) => {
     const {hash} = req.params;
     const callback = getResponseFn(res);
-    const {torrentService} = req.services || {};
+    const {torrentService} = req.services ?? {};
 
     if (typeof hash !== 'string' || torrentService == null) {
       callback(null, new Error());
