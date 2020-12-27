@@ -276,7 +276,7 @@ describe('POST /api/torrents/create', () => {
     const multiDirectoryPath = path.join(tempDirectory, '/multi');
 
     fs.mkdirSync(multiDirectoryPath, {recursive: true});
-    fs.writeFileSync(path.join(multiDirectoryPath, 'dummy1'), 'test');
+    fs.writeFileSync(path.join(multiDirectoryPath, 'dummy'), 'test');
     fs.writeFileSync(path.join(multiDirectoryPath, 'dummy2'), 'test');
 
     request
