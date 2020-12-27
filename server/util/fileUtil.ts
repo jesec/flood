@@ -5,13 +5,13 @@ import path from 'path';
 import config from '../../config';
 
 export const accessDeniedError = () => {
-  const error = new Error() as NodeJS.ErrnoException;
+  const error = new Error('Permission denied') as NodeJS.ErrnoException;
   error.code = 'EACCES';
   return error;
 };
 
 export const fileNotFoundError = () => {
-  const error = new Error() as NodeJS.ErrnoException;
+  const error = new Error('No such file or directory') as NodeJS.ErrnoException;
   error.code = 'ENOENT';
   return error;
 };

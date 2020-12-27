@@ -106,7 +106,7 @@ describe('POST /api/torrents/add-urls', () => {
       .end((err, res) => {
         if (err) done(err);
 
-        expect(res.body).toEqual({code: 'EACCES'});
+        expect(res.body).toMatchObject({code: 'EACCES'});
 
         done();
       });
@@ -213,7 +213,7 @@ describe('POST /api/torrents/add-files', () => {
       .end((err, res) => {
         if (err) done(err);
 
-        expect(res.body).toEqual({code: 'EACCES'});
+        expect(res.body).toMatchObject({code: 'EACCES'});
 
         done();
       });
