@@ -12,11 +12,7 @@ import {getTempPath} from '../../models/TemporaryStorage';
 import paths from '../../../shared/config/paths';
 
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
-import type {
-  CreateTorrentOptions,
-  MoveTorrentsOptions,
-  SetTorrentsTrackersOptions,
-} from '../../../shared/types/api/torrents';
+import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
 import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentList} from '../../../shared/types/Torrent';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
@@ -273,26 +269,25 @@ describe('POST /api/torrents/add-files', () => {
 });
 
 describe('POST /api/torrents/create', () => {
-  const createTorrentOptions: CreateTorrentOptions = {
-    sourcePath: tempDirectory,
-    tags: ['testCreate'],
-    trackers: testTrackers,
-    start: true,
-    isPrivate: false,
-  };
-
-  const dummyFilePath = path.join(tempDirectory, 'dummy');
-
-  beforeAll(() => {
-    fs.mkdirSync(tempDirectory, {recursive: true});
-    fs.writeFileSync(dummyFilePath, 'test');
-  });
+  const createdTorrentTags = ['testCreate'];
 
   it('Creates a multi-file torrent', (done) => {
     const torrentAdded = watchTorrentList('add');
+    const multiDirectoryPath = path.join(tempDirectory, '/multi');
+
+    fs.mkdirSync(multiDirectoryPath, {recursive: true});
+    fs.writeFileSync(path.join(multiDirectoryPath, 'dummy1'), 'test');
+    fs.writeFileSync(path.join(multiDirectoryPath, 'dummy2'), 'test');
+
     request
       .post('/api/torrents/create')
-      .send(createTorrentOptions)
+      .send({
+        sourcePath: multiDirectoryPath,
+        tags: createdTorrentTags,
+        trackers: testTrackers,
+        start: true,
+        isPrivate: false,
+      })
       .set('Cookie', [authToken])
       .set('Accept', 'application/x-bittorrent')
       .expect(200)
@@ -308,9 +303,21 @@ describe('POST /api/torrents/create', () => {
 
   it('Creates a single-file torrent', (done) => {
     const torrentAdded = watchTorrentList('add');
+    const singleDirectoryPath = path.join(tempDirectory, '/single');
+    const singleFilePath = path.join(singleDirectoryPath, 'dummy');
+
+    fs.mkdirSync(singleDirectoryPath, {recursive: true});
+    fs.writeFileSync(singleFilePath, 'test');
+
     request
       .post('/api/torrents/create')
-      .send({...createTorrentOptions, sourcePath: dummyFilePath})
+      .send({
+        sourcePath: singleFilePath,
+        tags: createdTorrentTags,
+        trackers: testTrackers,
+        start: true,
+        isPrivate: false,
+      })
       .set('Cookie', [authToken])
       .set('Accept', 'application/x-bittorrent')
       .expect(200)
@@ -339,7 +346,7 @@ describe('POST /api/torrents/create', () => {
         const torrentList: TorrentList = res.body.torrents;
 
         const addedTorrents = Object.values(torrentList).filter((torrent) =>
-          createTorrentOptions.tags?.every((tag) => torrent.tags.includes(tag)),
+          createdTorrentTags.every((tag) => torrent.tags.includes(tag)),
         );
 
         expect(addedTorrents).toHaveLength(2);
@@ -347,7 +354,7 @@ describe('POST /api/torrents/create', () => {
         await Promise.all(
           addedTorrents.map(async (torrent) => {
             createdTorrentHash = torrent.hash;
-            expect(torrent.isPrivate).toBe(createTorrentOptions.isPrivate);
+            expect(torrent.isPrivate).toBe(false);
 
             if (process.argv.includes('--trurl')) {
               // TODO: Test skipped as Transmission does not support isCompleted and isBasePath
