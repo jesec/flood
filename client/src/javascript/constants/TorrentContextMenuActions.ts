@@ -23,8 +23,11 @@ const TorrentContextMenuActions = {
   torrentDetails: {
     id: 'torrents.list.context.details',
   },
-  torrentDownload: {
-    id: 'torrents.list.context.download',
+  downloadContents: {
+    id: 'torrents.list.context.download.contents',
+  },
+  downloadMetainfo: {
+    id: 'torrents.list.context.download.metainfo',
   },
   generateMagnet: {
     id: 'torrents.list.context.generate.magnet',
