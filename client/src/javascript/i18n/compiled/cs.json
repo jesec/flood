@@ -2185,10 +2185,16 @@
       "value": "Podrobnosti Torrentu"
     }
   ],
-  "torrents.list.context.download": [
+  "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "Stáhnout"
+      "value": "Download Contents"
+    }
+  ],
+  "torrents.list.context.download.metainfo": [
+    {
+      "type": 0,
+      "value": "Download .torrent"
     }
   ],
   "torrents.list.context.generate.magnet": [
