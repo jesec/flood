@@ -2095,10 +2095,16 @@
       "value": "crwdns3390:0crwdne3390:0"
     }
   ],
-  "torrents.list.context.download": [
+  "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "crwdns3396:0crwdne3396:0"
+      "value": "crwdns3714:0crwdne3714:0"
+    }
+  ],
+  "torrents.list.context.download.metainfo": [
+    {
+      "type": 0,
+      "value": "crwdns3716:0crwdne3716:0"
     }
   ],
   "torrents.list.context.generate.magnet": [
