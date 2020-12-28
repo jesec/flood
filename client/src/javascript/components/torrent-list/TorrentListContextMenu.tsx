@@ -31,19 +31,6 @@ const InlineTorrentPropertyCheckbox: FC<{property: keyof TorrentProperties}> = o
   ),
 );
 
-const handleTorrentDownload = (hash: TorrentProperties['hash']): void => {
-  const {baseURI} = ConfigStore;
-  const link = document.createElement('a');
-
-  link.download = '';
-  link.href = `${baseURI}api/torrents/${hash}/contents/all/data`;
-  link.style.display = 'none';
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
-
 const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem> => {
   const changePriorityFuncRef = createRef<() => number>();
 
@@ -129,11 +116,38 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     },
     {
       type: 'action',
-      action: 'torrentDownload',
-      label: TorrentContextMenuActions.torrentDownload.id,
+      action: 'downloadContents',
+      label: TorrentContextMenuActions.downloadContents.id,
       clickHandler: (e) => {
         e.preventDefault();
-        handleTorrentDownload(getLastSelectedTorrent());
+
+        const link = document.createElement('a');
+
+        link.download = '';
+        link.href = `${ConfigStore.baseURI}api/torrents/${getLastSelectedTorrent()}/contents/all/data`;
+        link.style.display = 'none';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      },
+    },
+    {
+      type: 'action',
+      action: 'downloadMetainfo',
+      label: TorrentContextMenuActions.downloadMetainfo.id,
+      clickHandler: (e) => {
+        e.preventDefault();
+
+        const link = document.createElement('a');
+
+        link.download = '';
+        link.href = `${ConfigStore.baseURI}api/torrents/${TorrentStore.selectedTorrents.join(',')}/metainfo`;
+        link.style.display = 'none';
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       },
     },
     {
