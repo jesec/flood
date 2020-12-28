@@ -554,48 +554,59 @@ router.patch<unknown, unknown, SetTorrentsTrackersOptions>('/trackers', (req, re
  * @return {Error} 422 - hash not provided - application/json
  * @return {Error} 500 - other failure responses - application/json
  */
-router.get<{hashes: string}>('/:hashes/metainfo', async (req, res) => {
-  const hashes: Array<string> = req.params.hashes?.split(',').map((hash) => sanitize(hash));
-  if (!Array.isArray(hashes) || hashes?.length < 1) {
-    res.status(422).json(new Error('Hash not provided.'));
-    return;
-  }
+router.get<{hashes: string}>(
+  '/:hashes/metainfo',
+  // This operation is resource-intensive
+  // Limit each IP to 60 requests every 5 minutes
+  rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 60,
+  }),
+  async (req, res) => {
+    const hashes: Array<string> = req.params.hashes?.split(',').map((hash) => sanitize(hash));
+    if (!Array.isArray(hashes) || hashes?.length < 1) {
+      res.status(422).json(new Error('Hash not provided.'));
+      return;
+    }
 
-  const sessionDirectory = await req.services?.clientGatewayService?.getClientSessionDirectory().catch(() => undefined);
-  if (sessionDirectory == null || !fs.existsSync(sessionDirectory)) {
-    res.status(500).json(new Error('Failed to get session directory.'));
-    return;
-  }
+    const sessionDirectory = await req.services?.clientGatewayService
+      ?.getClientSessionDirectory()
+      .catch(() => undefined);
+    if (sessionDirectory == null || !fs.existsSync(sessionDirectory)) {
+      res.status(500).json(new Error('Failed to get session directory.'));
+      return;
+    }
 
-  const torrentFileNames = hashes.map((hash) => `${hash}.torrent`);
+    const torrentFileNames = hashes.map((hash) => `${hash}.torrent`);
 
-  if (hashes.length < 2) {
-    res.attachment(torrentFileNames[0]);
-    res.download(path.join(sessionDirectory, torrentFileNames[0]));
-    return;
-  }
+    if (hashes.length < 2) {
+      res.attachment(torrentFileNames[0]);
+      res.download(path.join(sessionDirectory, torrentFileNames[0]));
+      return;
+    }
 
-  try {
-    torrentFileNames.forEach((torrentFileName) =>
-      fs.accessSync(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
-    );
-  } catch {
-    res.status(500).json('Failed to access torrent files.');
-  }
+    try {
+      torrentFileNames.forEach((torrentFileName) =>
+        fs.accessSync(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
+      );
+    } catch {
+      res.status(500).json('Failed to access torrent files.');
+    }
 
-  res.attachment(`torrents-${Date.now()}.tar`);
-  tar
-    .c(
-      {
-        cwd: sessionDirectory,
-        follow: false,
-        noDirRecurse: true,
-        portable: true,
-      },
-      torrentFileNames,
-    )
-    .pipe(res);
-});
+    res.attachment(`torrents-${Date.now()}.tar`);
+    tar
+      .c(
+        {
+          cwd: sessionDirectory,
+          follow: false,
+          noDirRecurse: true,
+          portable: true,
+        },
+        torrentFileNames,
+      )
+      .pipe(res);
+  },
+);
 
 /**
  *
@@ -660,87 +671,96 @@ router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:ha
  * @param {string} indices.path - 'all' or indices of selected contents separated by ','
  * @return {object} 200 - contents archived in .tar - application/x-tar
  */
-router.get('/:hash/contents/:indices/data', (req, res) => {
-  const {hash, indices: stringIndices} = req.params;
-  const selectedTorrent = req.services?.torrentService.getTorrent(hash);
-  if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
+router.get(
+  '/:hash/contents/:indices/data',
+  // This operation is resource-intensive
+  // Limit each IP to 60 requests every 5 minutes
+  rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 60,
+  }),
+  (req, res) => {
+    const {hash, indices: stringIndices} = req.params;
+    const selectedTorrent = req.services?.torrentService.getTorrent(hash);
+    if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
 
-  req.services?.clientGatewayService
-    ?.getTorrentContents(hash)
-    .then((contents) => {
-      if (!contents || contents.length < 1) {
-        return res.status(404).json({error: 'Torrent contents not found'});
-      }
-
-      let indices: Array<number>;
-      if (!stringIndices || stringIndices === 'all') {
-        indices = contents.map((x) => x.index);
-      } else {
-        indices = stringIndices.split(',').map((value) => Number(value));
-      }
-
-      const filePathsToDownload = contents
-        .filter((content) => indices.includes(content.index))
-        .map((content) => sanitizePath(path.join(selectedTorrent.directory, content.path)))
-        .filter((filePath) => isAllowedPath(filePath))
-        .filter((filePath) => fs.existsSync(filePath));
-
-      if (filePathsToDownload.length < 1) {
-        return res.status(404).json({error: 'File not found.'});
-      }
-
-      if (filePathsToDownload.length === 1) {
-        const file = filePathsToDownload[0];
-
-        const fileName = path.basename(file);
-        const fileExt = path.extname(file);
-
-        let processedType: string = fileExt;
-        switch (fileExt) {
-          // Browsers don't support MKV streaming. However, browsers do support WebM which is a
-          // subset of MKV. Chromium supports MKV when encoded in selected codecs.
-          case '.mkv':
-            processedType = 'video/webm';
-            break;
-          // MIME database uses x-flac which is not recognized by browsers as streamable audio.
-          case '.flac':
-            processedType = 'audio/flac';
-            break;
-          default:
-            break;
+    req.services?.clientGatewayService
+      ?.getTorrentContents(hash)
+      .then((contents) => {
+        if (!contents || contents.length < 1) {
+          return res.status(404).json({error: 'Torrent contents not found'});
         }
 
-        res.type(processedType);
+        let indices: Array<number>;
+        if (!stringIndices || stringIndices === 'all') {
+          indices = contents.map((x) => x.index);
+        } else {
+          indices = stringIndices.split(',').map((value) => Number(value));
+        }
 
-        // Allow browsers to display the content inline when only a single content is requested.
-        // This is useful for texts, videos and audios. Users can still download them if needed.
-        res.setHeader('content-disposition', contentDisposition(fileName, {type: 'inline'}));
+        const filePathsToDownload = contents
+          .filter((content) => indices.includes(content.index))
+          .map((content) => sanitizePath(path.join(selectedTorrent.directory, content.path)))
+          .filter((filePath) => isAllowedPath(filePath))
+          .filter((filePath) => fs.existsSync(filePath));
 
-        return res.sendFile(file);
-      }
+        if (filePathsToDownload.length < 1) {
+          return res.status(404).json({error: 'File not found.'});
+        }
 
-      const archiveRootFolder = sanitizePath(selectedTorrent.directory);
-      const relativeFilePaths = filePathsToDownload.map((filePath) =>
-        filePath.replace(`${archiveRootFolder}${path.sep}`, ''),
-      );
+        if (filePathsToDownload.length === 1) {
+          const file = filePathsToDownload[0];
 
-      res.attachment(`${selectedTorrent.name}.tar`);
-      return tar
-        .c(
-          {
-            cwd: archiveRootFolder,
-            follow: false,
-            noDirRecurse: true,
-            portable: true,
-          },
-          relativeFilePaths,
-        )
-        .pipe(res);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
+          const fileName = path.basename(file);
+          const fileExt = path.extname(file);
+
+          let processedType: string = fileExt;
+          switch (fileExt) {
+            // Browsers don't support MKV streaming. However, browsers do support WebM which is a
+            // subset of MKV. Chromium supports MKV when encoded in selected codecs.
+            case '.mkv':
+              processedType = 'video/webm';
+              break;
+            // MIME database uses x-flac which is not recognized by browsers as streamable audio.
+            case '.flac':
+              processedType = 'audio/flac';
+              break;
+            default:
+              break;
+          }
+
+          res.type(processedType);
+
+          // Allow browsers to display the content inline when only a single content is requested.
+          // This is useful for texts, videos and audios. Users can still download them if needed.
+          res.setHeader('content-disposition', contentDisposition(fileName, {type: 'inline'}));
+
+          return res.sendFile(file);
+        }
+
+        const archiveRootFolder = sanitizePath(selectedTorrent.directory);
+        const relativeFilePaths = filePathsToDownload.map((filePath) =>
+          filePath.replace(`${archiveRootFolder}${path.sep}`, ''),
+        );
+
+        res.attachment(`${selectedTorrent.name}.tar`);
+        return tar
+          .c(
+            {
+              cwd: archiveRootFolder,
+              follow: false,
+              noDirRecurse: true,
+              portable: true,
+            },
+            relativeFilePaths,
+          )
+          .pipe(res);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
+  },
+);
 
 /**
  * GET /api/torrents/{hash}/details
