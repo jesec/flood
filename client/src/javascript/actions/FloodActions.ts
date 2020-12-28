@@ -117,10 +117,7 @@ const FloodActions = {
   fetchNotifications: (options: NotificationFetchOptions) =>
     axios
       .get(`${baseURI}api/notifications`, {
-        params: {
-          limit: options.limit,
-          start: options.start,
-        },
+        params: options,
       })
       .then((json) => json.data)
       .then(

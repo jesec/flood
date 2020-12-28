@@ -1,4 +1,4 @@
-import Datastore from 'nedb';
+import Datastore from 'nedb-promises';
 import path from 'path';
 
 import type {Notification, NotificationCount, NotificationFetchOptions} from '@shared/types/Notification';
@@ -14,50 +14,18 @@ const DEFAULT_QUERY_LIMIT = 20;
 
 class NotificationService extends BaseService<NotificationServiceEvents> {
   count: NotificationCount = {read: 0, total: 0, unread: 0};
-  db = this.loadDatabase();
+  db = Datastore.create({
+    autoload: true,
+    filename: path.join(config.dbPath, this.user._id, 'notifications.db'),
+  });
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
 
-    this.onServicesUpdated = () => {
-      this.countNotifications();
-    };
-  }
+    (async () => {
+      const notifications = await this.db.find<Notification>({}).catch(() => undefined);
 
-  addNotification(notifications: Array<Pick<Notification, 'id' | 'data'>>) {
-    this.count.total += notifications.length;
-    this.count.unread += notifications.length;
-
-    const timestamp = Date.now();
-    const notificationsToInsert = notifications.map((notification) => ({
-      ts: timestamp,
-      data: notification.data,
-      id: notification.id,
-      read: false,
-    })) as Notification[];
-
-    this.db.insert(notificationsToInsert, () => this.emitUpdate());
-  }
-
-  clearNotifications(callback: (data?: null, err?: Error) => void) {
-    this.db.remove({}, {multi: true}, (err) => {
-      if (err) {
-        callback(null, err);
-        return;
-      }
-
-      this.count = {read: 0, total: 0, unread: 0};
-      this.emitUpdate();
-
-      callback();
-    });
-  }
-
-  countNotifications() {
-    this.db.find({}, (err: Error, notifications: Array<Notification>) => {
-      if (err) {
-        this.count = {read: 0, total: 0, unread: 0};
-      } else {
+      if (notifications != null) {
         notifications.forEach((notification) => {
           if (notification.read) {
             this.count.read += 1;
@@ -70,7 +38,7 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
       }
 
       this.emitUpdate();
-    });
+    })();
   }
 
   emitUpdate = () => {
@@ -84,49 +52,77 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
     return this.count;
   }
 
-  getNotifications(
-    query: NotificationFetchOptions,
-    callback: (
-      data: {
-        notifications: Notification[][];
-        count: NotificationCount;
-      } | null,
-      err?: Error,
-    ) => void,
-  ) {
-    const sortedNotifications = this.db.find({}).sort({ts: -1});
-    const queryCallback = (err: Error | null, notifications: Notification[][]) => {
-      if (err) {
-        callback(null, err);
-        return;
-      }
+  /**
+   * Adds notifications
+   *
+   * @param {Array<Notification>} notifications - Notifications to add
+   * @return {Promise<void>} - Rejects with error.
+   */
+  async addNotification(notifications: Array<Pick<Notification, 'id' | 'data'>>): Promise<void> {
+    this.count.total += notifications.length;
+    this.count.unread += notifications.length;
 
-      callback({notifications, count: this.count});
-    };
+    await this.db
+      .insert(
+        notifications.map((notification) => ({
+          ts: Date.now(),
+          data: notification.data,
+          id: notification.id,
+          read: false,
+        })),
+      )
+      .catch(() => undefined);
 
-    if (query.allNotifications) {
-      sortedNotifications.exec(queryCallback);
-    } else if (query.start != null) {
-      sortedNotifications
-        .skip(Number(query.start))
-        .limit(Number(query.limit) || DEFAULT_QUERY_LIMIT)
-        .exec(queryCallback);
-    } else {
-      sortedNotifications.limit(Number(query.limit) || DEFAULT_QUERY_LIMIT).exec(queryCallback);
-    }
+    this.emitUpdate();
   }
 
-  loadDatabase(): Datastore<Array<Notification>> {
-    if (this.db != null) {
-      return this.db;
+  /**
+   * Clears notifications
+   *
+   * @return {Promise<void>} - Rejects with error.
+   */
+  async clearNotifications(): Promise<void> {
+    await this.db.remove({}, {multi: true});
+
+    this.count = {read: 0, total: 0, unread: 0};
+    this.emitUpdate();
+  }
+
+  /**
+   * Gets notifications
+   *
+   * @param {NotificationFetchOptions} - options - An object of options...
+   * @return {Promise<{Notification[][], NotificationCount}>} - Resolves with notifications and counts or rejects with error.
+   */
+  async getNotifications({
+    allNotifications,
+    start,
+    limit,
+  }: NotificationFetchOptions): Promise<{
+    notifications: Notification[][];
+    count: NotificationCount;
+  }> {
+    const sortedNotifications = this.db.find<Notification>({}).sort({ts: -1});
+
+    if (allNotifications) {
+      return {
+        notifications: await sortedNotifications.exec(),
+        count: this.count,
+      };
+    } else if (start != null) {
+      return {
+        notifications: await sortedNotifications
+          .skip(Number(start))
+          .limit(Number(limit) || DEFAULT_QUERY_LIMIT)
+          .exec(),
+        count: this.count,
+      };
+    } else {
+      return {
+        notifications: await sortedNotifications.limit(Number(limit) || DEFAULT_QUERY_LIMIT).exec(),
+        count: this.count,
+      };
     }
-
-    const db = new Datastore({
-      autoload: true,
-      filename: path.join(config.dbPath, this.user._id, 'notifications.db'),
-    });
-
-    return db;
   }
 }
 

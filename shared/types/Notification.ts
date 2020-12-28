@@ -34,7 +34,7 @@ export interface NotificationState {
 }
 
 export interface NotificationFetchOptions {
-  id: string;
+  id?: string;
   limit: number;
   start: number;
   allNotifications?: boolean;

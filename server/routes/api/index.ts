@@ -70,12 +70,43 @@ router.get<unknown, unknown, unknown, {snapshot: HistorySnapshot}>('/history', (
   );
 });
 
+/**
+ * GET /api/notifications
+ * @summary Gets notifications
+ * @tags Flood
+ * @security User
+ * @param {NotificationFetchOptions} queries - options
+ * @return {{Notification[][], NotificationCount}} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
 router.get<unknown, unknown, unknown, NotificationFetchOptions>('/notifications', (req, res) => {
-  req.services?.notificationService.getNotifications(req.query, getResponseFn(res));
+  req.services?.notificationService.getNotifications(req.query).then(
+    (notifications) => {
+      res.status(200).json(notifications);
+    },
+    (err: Error) => {
+      res.status(500).json({message: err.message});
+    },
+  );
 });
 
+/**
+ * DELETE /api/notifications
+ * @summary Clears notifications
+ * @tags Flood
+ * @security User
+ * @return 200 - success response
+ * @return {Error} 500 - failure response - application/json
+ */
 router.delete('/notifications', (req, res) => {
-  req.services?.notificationService.clearNotifications(getResponseFn(res));
+  req.services?.notificationService.clearNotifications().then(
+    () => {
+      res.status(200).send();
+    },
+    (err: Error) => {
+      res.status(500).json({message: err.message});
+    },
+  );
 });
 
 /**
