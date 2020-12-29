@@ -151,7 +151,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destination}"`);
 
       if (tags.length > 0) {
-        additionalCalls.push(`d.custom1.set=${encodeTags(tags)}`);
+        additionalCalls.push(`d.custom1.set="${encodeTags(tags)}"`);
       }
 
       additionalCalls.push(`d.custom.set=addtime,${Math.round(Date.now() / 1000)}`);
