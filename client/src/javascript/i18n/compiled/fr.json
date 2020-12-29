@@ -2227,13 +2227,13 @@
   "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "Download Contents"
+      "value": "Télécharger le contenu"
     }
   ],
   "torrents.list.context.download.metainfo": [
     {
       "type": 0,
-      "value": "Download .torrent"
+      "value": "Télécharger le .torrent"
     }
   ],
   "torrents.list.context.generate.magnet": [
