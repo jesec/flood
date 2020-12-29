@@ -8,7 +8,7 @@ const Languages = {
   es: 'Español',
   fr: 'Français',
   it: 'italiano',
-  hu: 'magyar nyelv',
+  hu: 'Magyar',
   nl: 'Nederlands',
   no: 'norsk',
   pl: 'Polskie',
