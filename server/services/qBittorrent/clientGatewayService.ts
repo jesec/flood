@@ -224,7 +224,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     const {torrents} = await this.fetchTorrentList();
 
     const flipNeeded: Array<string> = hashes.filter((hash) => {
-      const currentIsSequential = torrents[hash]?.isSequential;
+      const currentIsSequential = torrents[hash.toUpperCase()]?.isSequential;
       return currentIsSequential != null && currentIsSequential !== isSequential;
     });
 
@@ -253,7 +253,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         return this.clientRequestManager
           .torrentsAddTrackers(hash, trackers)
           .then(this.processClientRequestSuccess, this.processClientRequestError)
-          .then(() => delete this.cachedProperties[hash]);
+          .then(() => delete this.cachedProperties[hash.toUpperCase()]);
       }),
     ).then(() => undefined);
   }
@@ -303,14 +303,14 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
           {},
           ...(await Promise.all(
             infos.map(async (info) => {
-              if (this.cachedProperties[info.hash] == null) {
-                const properties = await this.clientRequestManager
-                  .getTorrentProperties(info.hash)
-                  .catch(() => undefined);
-                const trackers = await this.clientRequestManager.getTorrentTrackers(info.hash).catch(() => undefined);
+              const hash = info.hash.toUpperCase();
+
+              if (this.cachedProperties[hash] == null) {
+                const properties = await this.clientRequestManager.getTorrentProperties(hash).catch(() => undefined);
+                const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
 
                 if (properties != null && trackers != null && Array.isArray(trackers)) {
-                  this.cachedProperties[info.hash] = {
+                  this.cachedProperties[hash] = {
                     dateCreated: properties?.creation_date,
                     isPrivate: trackers[0]?.msg.includes('is private'),
                     trackerURIs: getDomainsFromURLs(
@@ -322,7 +322,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 }
               }
 
-              const {dateCreated = 0, isPrivate = false, trackerURIs = []} = this.cachedProperties[info.hash] || {};
+              const {dateCreated = 0, isPrivate = false, trackerURIs = []} = this.cachedProperties[hash] || {};
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
@@ -332,7 +332,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 downRate: info.dlspeed,
                 downTotal: info.downloaded,
                 eta: info.eta >= 8640000 ? -1 : info.eta,
-                hash: info.hash,
+                hash,
                 isPrivate,
                 isInitialSeeding: info.super_seeding,
                 isSequential: info.seq_dl,

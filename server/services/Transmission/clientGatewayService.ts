@@ -361,7 +361,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
               const status = torrentPropertiesUtil.getTorrentStatus(torrent);
 
               const torrentProperties: TorrentProperties = {
-                hash: torrent.hashString,
+                hash: torrent.hashString.toUpperCase(),
                 name: torrent.name,
                 bytesDone: torrent.haveValid,
                 dateAdded: torrent.addedDate,

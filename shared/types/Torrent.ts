@@ -25,6 +25,7 @@ export interface TorrentProperties {
   downTotal: number;
   // Torrent ETA (seconds), -1 means infinity
   eta: number;
+  // Upper-case hash of info section of the torrent
   hash: string;
   isPrivate: boolean;
   // If initial seeding mode (aka super seeding) is enabled
