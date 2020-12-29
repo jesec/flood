@@ -1838,7 +1838,7 @@
   "torrents.destination.sequential": [
     {
       "type": 0,
-      "value": "Sequential Download"
+      "value": "Sekvenční stahování"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2188,13 +2188,13 @@
   "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "Download Contents"
+      "value": "Stáhnout obsah"
     }
   ],
   "torrents.list.context.download.metainfo": [
     {
       "type": 0,
-      "value": "Download .torrent"
+      "value": "Stáhnout .torrent"
     }
   ],
   "torrents.list.context.generate.magnet": [
@@ -2206,7 +2206,7 @@
   "torrents.list.context.initial.seeding": [
     {
       "type": 0,
-      "value": "Initial Seeding"
+      "value": "Počáteční seeding"
     }
   ],
   "torrents.list.context.move": [
@@ -2236,7 +2236,7 @@
   "torrents.list.context.sequential": [
     {
       "type": 0,
-      "value": "Sequential"
+      "value": "Sekvenční"
     }
   ],
   "torrents.list.context.set.tags": [
