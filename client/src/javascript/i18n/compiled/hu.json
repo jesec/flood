@@ -308,7 +308,7 @@
   "auth.error.password.empty": [
     {
       "type": 0,
-      "value": "Password cannot be empty."
+      "value": "A jelszó mező nem lehet üres."
     }
   ],
   "auth.error.username.empty": [
@@ -320,7 +320,7 @@
   "auth.input.clear": [
     {
       "type": 0,
-      "value": "Clear"
+      "value": "Törlés"
     }
   ],
   "auth.log.in": [
@@ -380,7 +380,7 @@
   "button.close": [
     {
       "type": 0,
-      "value": "Close"
+      "value": "Bezárás"
     }
   ],
   "button.download": [
@@ -410,7 +410,7 @@
   "button.retry": [
     {
       "type": 0,
-      "value": "Retry"
+      "value": "Újra"
     }
   ],
   "button.save": [
@@ -440,25 +440,25 @@
   "connection-interruption.action.selection.config": [
     {
       "type": 0,
-      "value": "Update client connection settings"
+      "value": "Klies beállítások módosítása"
     }
   ],
   "connection-interruption.action.selection.retry": [
     {
       "type": 0,
-      "value": "Retry with current client connection settings"
+      "value": "Újrapróbál a jelenlegi kliens beállításokkal"
     }
   ],
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "Nem tudok csatlakozni a klienshez"
     }
   ],
   "connection-interruption.not.admin": [
     {
       "type": 0,
-      "value": "Please contact your Flood administrator if this continues."
+      "value": "Vedd fel a kapcsolatot az Adminnal, amennyiben a probléma továbbra is fennáll."
     }
   ],
   "connection-interruption.verification-error": [
@@ -470,13 +470,13 @@
   "connection.settings.client.select": [
     {
       "type": 0,
-      "value": "Client"
+      "value": "Kliens"
     }
   ],
   "connection.settings.error.empty": [
     {
       "type": 0,
-      "value": "Connection settings can not be empty."
+      "value": "A kapcsolati beállítás nem maradhat üresen."
     }
   ],
   "connection.settings.qbittorrent": [
@@ -488,13 +488,13 @@
   "connection.settings.qbittorrent.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Jelszó"
     }
   ],
   "connection.settings.qbittorrent.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Jelszó"
     }
   ],
   "connection.settings.qbittorrent.url": [
@@ -506,19 +506,19 @@
   "connection.settings.qbittorrent.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to qBittorrent Web API"
+      "value": "URL a qBittorrent Web API-hoz"
     }
   ],
   "connection.settings.qbittorrent.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Felhasználónév"
     }
   ],
   "connection.settings.qbittorrent.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Felhasználónév"
     }
   ],
   "connection.settings.rtorrent": [
@@ -530,13 +530,13 @@
   "connection.settings.rtorrent.host": [
     {
       "type": 0,
-      "value": "Host"
+      "value": "Kiszolgáló"
     }
   ],
   "connection.settings.rtorrent.host.input.placeholder": [
     {
       "type": 0,
-      "value": "Hostname or IP"
+      "value": "Kiszolgálónév vagy IP cím"
     }
   ],
   "connection.settings.rtorrent.port": [
@@ -554,19 +554,19 @@
   "connection.settings.rtorrent.socket": [
     {
       "type": 0,
-      "value": "Path"
+      "value": "Elérési út"
     }
   ],
   "connection.settings.rtorrent.socket.input.placeholder": [
     {
       "type": 0,
-      "value": "Path to socket"
+      "value": "Socket elérési útja"
     }
   ],
   "connection.settings.rtorrent.type": [
     {
       "type": 0,
-      "value": "Connection Type"
+      "value": "Kapcsolat típusa"
     }
   ],
   "connection.settings.rtorrent.type.socket": [
@@ -584,7 +584,7 @@
   "connection.settings.rtorrent.type.tcp.warning": [
     {
       "type": 0,
-      "value": "Exposing rTorrent via TCP may allow privilege escalation."
+      "value": "Az rTorrent TCP-n keresztüli elérése biztonsági kockázatot jelenthet."
     }
   ],
   "connection.settings.transmission": [
@@ -596,13 +596,13 @@
   "connection.settings.transmission.password": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Jelszó"
     }
   ],
   "connection.settings.transmission.password.input.placeholder": [
     {
       "type": 0,
-      "value": "Password"
+      "value": "Jelszó"
     }
   ],
   "connection.settings.transmission.url": [
@@ -614,25 +614,25 @@
   "connection.settings.transmission.url.input.placeholder": [
     {
       "type": 0,
-      "value": "URL to Transmission RPC interface"
+      "value": "URL a Transmission RPC interfészhez"
     }
   ],
   "connection.settings.transmission.username": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Felhasználónév"
     }
   ],
   "connection.settings.transmission.username.input.placeholder": [
     {
       "type": 0,
-      "value": "Username"
+      "value": "Felhasználónév"
     }
   ],
   "connectivity.modal.content": [
     {
       "type": 0,
-      "value": "Cannot connect to the client. Please update connection settings."
+      "value": "Nem tudok csatlakozni a klienshez. Kérlek módosítsd a kapcsolati beállításokat."
     }
   ],
   "connectivity.modal.title": [
@@ -686,7 +686,7 @@
   "feeds.applicable.feed": [
     {
       "type": 0,
-      "value": "Applicable Feed"
+      "value": "Felhasznált hírcsatorna"
     }
   ],
   "feeds.apply.tags": [
@@ -704,7 +704,7 @@
   "feeds.check": [
     {
       "type": 0,
-      "value": "Validate the rule by trying it out. Not saved or sent."
+      "value": "Ellenőrizheted az egyezési mintát az itt megadott szövegen (Ez a mező nem kerül elmentésre)."
     }
   ],
   "feeds.exclude": [
@@ -967,7 +967,7 @@
   "filesystem.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred. Please try again."
+      "value": "Ismeretlen hiba történt. Kérlek próbáld meg újra."
     }
   ],
   "filesystem.fetching": [
@@ -1027,7 +1027,7 @@
   "filter.status.seeding": [
     {
       "type": 0,
-      "value": "Seeding"
+      "value": "Seedelés alatt"
     }
   ],
   "filter.status.stopped": [
@@ -1069,7 +1069,7 @@
   "general.at": [
     {
       "type": 0,
-      "value": "-kor"
+      "value": "at"
     }
   ],
   "general.clipboard.copied": [
@@ -1087,7 +1087,7 @@
   "general.error.unknown": [
     {
       "type": 0,
-      "value": "An unknown error occurred"
+      "value": "Ismeretlen hiba történt"
     }
   ],
   "general.of": [
@@ -1111,7 +1111,7 @@
   "locale.language.translate": [
     {
       "type": 0,
-      "value": "Start to translate"
+      "value": "Segíts a fordításban"
     }
   ],
   "mediainfo.execError": [
@@ -1147,13 +1147,13 @@
   "notification.feed.torrent.added.heading": [
     {
       "type": 0,
-      "value": "Feed Item Queued"
+      "value": "Hírcsatorna eleme hozzáadva"
     }
   ],
   "notification.no.notification": [
     {
       "type": 0,
-      "value": "No notification to display."
+      "value": "Nincs megjelenítendő üzenet."
     }
   ],
   "notification.showing": [
@@ -1375,7 +1375,7 @@
   "settings.diskusage.mount.points": [
     {
       "type": 0,
-      "value": "Disk Usage Mount Points"
+      "value": "Csatolási pontok lemezhasználata"
     }
   ],
   "settings.diskusage.show": [
@@ -1471,13 +1471,13 @@
   "settings.ui.displayed.context.menu.items": [
     {
       "type": 0,
-      "value": "Context Menu Items"
+      "value": "Kontextus menü elemei"
     }
   ],
   "settings.ui.displayed.details": [
     {
       "type": 0,
-      "value": "Torrent Detail Columns"
+      "value": "Torrent lista oszlopai"
     }
   ],
   "settings.ui.language": [
@@ -1495,25 +1495,25 @@
   "settings.ui.tag.selector.mode": [
     {
       "type": 0,
-      "value": "Tag Selector Preference"
+      "value": "Címke választás módja"
     }
   ],
   "settings.ui.tag.selector.mode.multi": [
     {
       "type": 0,
-      "value": "Multi Selection"
+      "value": "Egyszerre akár több is"
     }
   ],
   "settings.ui.tag.selector.mode.single": [
     {
       "type": 0,
-      "value": "Single Selection"
+      "value": "Csak egy"
     }
   ],
   "settings.ui.torrent.context.menu.items.show": [
     {
       "type": 0,
-      "value": "Show"
+      "value": "Megjelenítés"
     }
   ],
   "settings.ui.torrent.details.enabled": [
@@ -1579,19 +1579,19 @@
   "sidebar.button.theme.dark": [
     {
       "type": 0,
-      "value": "Dark Theme"
+      "value": "Sötét téma"
     }
   ],
   "sidebar.button.theme.light": [
     {
       "type": 0,
-      "value": "Light Theme"
+      "value": "Világos téma"
     }
   ],
   "sidebar.search.placeholder": [
     {
       "type": 0,
-      "value": "Torrentek keresése"
+      "value": "Torrent keresése"
     }
   ],
   "sidebar.speedlimits.download": [
@@ -1685,13 +1685,13 @@
   "torrents.add.cookies.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional cookie-name=cookie-value"
+      "value": "Optionális cookie-name=cookie-value"
     }
   ],
   "torrents.add.cookies.label": [
     {
       "type": 0,
-      "value": "Cookies"
+      "value": "Cookie-k"
     }
   ],
   "torrents.add.destination.label": [
@@ -1721,7 +1721,7 @@
   "torrents.add.tab.create.title": [
     {
       "type": 0,
-      "value": "Create"
+      "value": "Létrehozás"
     }
   ],
   "torrents.add.tab.file.browse": [
@@ -1775,55 +1775,55 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "Opcionális fájlnév vagy könyvtárnév"
     }
   ],
   "torrents.create.base.name.label": [
     {
       "type": 0,
-      "value": "Base Name"
+      "value": "Megnevezés"
     }
   ],
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "Opcionális megjegyzés a torrenthez"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "Megjegyzés"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "Opcionális forrás bejegyzés az infohash-ben"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "Info forrás"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "Privát"
     }
   ],
   "torrents.create.source.path.label": [
     {
       "type": 0,
-      "value": "Source"
+      "value": "Forrás"
     }
   ],
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Saját címke a Flood-ban. Nem lesz hozzáadva a torrent fájlhoz."
     }
   ],
   "torrents.create.tracker.input.placeholder": [
@@ -1835,7 +1835,7 @@
   "torrents.create.trackers.label": [
     {
       "type": 0,
-      "value": "Trackers"
+      "value": "Tracker-ek"
     }
   ],
   "torrents.destination.base_path": [
@@ -1847,13 +1847,13 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "Befejezve"
     }
   ],
   "torrents.destination.sequential": [
     {
       "type": 0,
-      "value": "Sequential Download"
+      "value": "Egymás utáni letöltés"
     }
   ],
   "torrents.details.actions.pause": [
@@ -1954,7 +1954,7 @@
   "torrents.details.general.date.created": [
     {
       "type": 0,
-      "value": "Létrehozás dátuma"
+      "value": "Létrehozva"
     }
   ],
   "torrents.details.general.downloaded": [
@@ -2056,7 +2056,7 @@
   "torrents.details.general.tracker.message": [
     {
       "type": 0,
-      "value": "Tracker üzenete"
+      "value": "Tracker üzenet"
     }
   ],
   "torrents.details.general.type": [
@@ -2159,13 +2159,13 @@
   "torrents.generate.magnet.heading": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "Magnet Link generálás"
     }
   ],
   "torrents.generate.magnet.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Tracker-ek betöltése..."
     }
   ],
   "torrents.generate.magnet.magnet": [
@@ -2177,19 +2177,19 @@
   "torrents.generate.magnet.magnet.with.trackers": [
     {
       "type": 0,
-      "value": "Magnet Link with Trackers"
+      "value": "Magnet Link Tracker-ekkel együtt"
     }
   ],
   "torrents.generate.magnet.private.torrent": [
     {
       "type": 0,
-      "value": "This is a private torrent."
+      "value": "Ez egy privát torrent."
     }
   ],
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "Nem tudok csatlakozni a klienshez."
     }
   ],
   "torrents.list.clear.filters": [
@@ -2213,25 +2213,25 @@
   "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "Download Contents"
+      "value": "Tartalom letöltése"
     }
   ],
   "torrents.list.context.download.metainfo": [
     {
       "type": 0,
-      "value": "Download .torrent"
+      "value": ".torrent letöltése"
     }
   ],
   "torrents.list.context.generate.magnet": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "Magnet Link generálása"
     }
   ],
   "torrents.list.context.initial.seeding": [
     {
       "type": 0,
-      "value": "Initial Seeding"
+      "value": "Kezdő Seeder"
     }
   ],
   "torrents.list.context.move": [
@@ -2273,7 +2273,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Tracker hozzáadása"
     }
   ],
   "torrents.list.context.start": [
@@ -2291,7 +2291,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "Húzd ide a fájlokat a hozzáadáshoz."
     }
   ],
   "torrents.list.no.torrents": [
@@ -2303,7 +2303,7 @@
   "torrents.move.button.set.location": [
     {
       "type": 0,
-      "value": "Set Location"
+      "value": "Hely beállítása"
     }
   ],
   "torrents.move.button.state.setting": [
@@ -2339,7 +2339,7 @@
   "torrents.properties.creation.date": [
     {
       "type": 0,
-      "value": "Létrehozás dátuma"
+      "value": "Létrehozva"
     }
   ],
   "torrents.properties.date.added": [
@@ -2351,13 +2351,13 @@
   "torrents.properties.directory": [
     {
       "type": 0,
-      "value": "Location"
+      "value": "Elérési út"
     }
   ],
   "torrents.properties.download.speed": [
     {
       "type": 0,
-      "value": "Letöltési sebesség"
+      "value": "Letöltés"
     }
   ],
   "torrents.properties.download.total": [
@@ -2429,7 +2429,7 @@
   "torrents.properties.size": [
     {
       "type": 0,
-      "value": "Fájlméret"
+      "value": "Méret"
     }
   ],
   "torrents.properties.tags": [
@@ -2441,7 +2441,7 @@
   "torrents.properties.tracker.message": [
     {
       "type": 0,
-      "value": "Tracker üzenete"
+      "value": "Tracker üzenet"
     }
   ],
   "torrents.properties.trackers": [
@@ -2453,7 +2453,7 @@
   "torrents.properties.upload.speed": [
     {
       "type": 0,
-      "value": "Feltöltési sebesség"
+      "value": "Feltöltés"
     }
   ],
   "torrents.properties.upload.total": [
@@ -2544,25 +2544,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Tracker hozzáadása"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "Adj meg egy Tracker-t"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "Tracker hozzáadása"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Tracker-ek betöltése..."
     }
   ],
   "torrents.sort.title": [
