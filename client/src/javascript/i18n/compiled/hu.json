@@ -440,7 +440,7 @@
   "connection-interruption.action.selection.config": [
     {
       "type": 0,
-      "value": "Klies beállítások módosítása"
+      "value": "Kliens beállítások módosítása"
     }
   ],
   "connection-interruption.action.selection.retry": [
@@ -1045,13 +1045,13 @@
   "filter.tag.title": [
     {
       "type": 0,
-      "value": "Szűrés Címke alapján"
+      "value": "Szűrés címke alapján"
     }
   ],
   "filter.tracker.title": [
     {
       "type": 0,
-      "value": "Szűrés Tracker alapján"
+      "value": "Szűrés tracker alapján"
     }
   ],
   "filter.untagged": [
@@ -1357,7 +1357,7 @@
   "settings.connectivity.port.open.label": [
     {
       "type": 0,
-      "value": "Nyitott port"
+      "value": "Port megnyitása"
     }
   ],
   "settings.connectivity.port.randomize.label": [
@@ -1751,7 +1751,7 @@
   "torrents.add.tab.url.register.magnet.handler": [
     {
       "type": 0,
-      "value": "Register to handle magnet links"
+      "value": "Flood hozzárendelése Magnet Linkekhez"
     }
   ],
   "torrents.add.tab.url.title": [
@@ -1841,19 +1841,19 @@
   "torrents.destination.base_path": [
     {
       "type": 0,
-      "value": "Használd kiindulási pontként"
+      "value": "Ez legyen a szülőkönyvtár"
     }
   ],
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Befejezve"
+      "value": "Befejezett"
     }
   ],
   "torrents.destination.sequential": [
     {
       "type": 0,
-      "value": "Egymás utáni letöltés"
+      "value": "Szekvenciális letöltés"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2002,7 +2002,7 @@
   "torrents.details.general.location": [
     {
       "type": 0,
-      "value": "Tartózkodási hely"
+      "value": "Elérési út"
     }
   ],
   "torrents.details.general.none": [
@@ -2032,7 +2032,7 @@
   "torrents.details.general.scheduler.obeyed": [
     {
       "type": 0,
-      "value": "Obeyed"
+      "value": "Teljesítve"
     }
   ],
   "torrents.details.general.seeds": [
@@ -2261,7 +2261,7 @@
   "torrents.list.context.sequential": [
     {
       "type": 0,
-      "value": "Sequential"
+      "value": "Szekvenciális"
     }
   ],
   "torrents.list.context.set.tags": [
