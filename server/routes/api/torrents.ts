@@ -797,7 +797,7 @@ router.get('/:hash/details', async (req, res) => {
  * @param {string} hash.path
  * @return {{output: string}} - 200 - success response - application/json
  */
-router.get(
+router.get<{hash: string}>(
   '/:hash/mediainfo',
   // This operation is resource-intensive
   // Limit each IP to 30 requests every 5 minutes
@@ -806,32 +806,25 @@ router.get(
     max: 30,
   }),
   async (req, res) => {
-    const {hash} = req.params;
     const callback = getResponseFn(res);
-    const {torrentService} = req.services ?? {};
 
-    if (typeof hash !== 'string' || torrentService == null) {
-      callback(null, new Error());
-      return;
-    }
+    const torrentDirectory = req.services?.torrentService.getTorrent(req.params.hash)?.directory;
+    const torrentContents = await req.services?.clientGatewayService
+      ?.getTorrentContents(req.params.hash)
+      .catch(() => undefined);
 
-    const {directory, name} = torrentService.getTorrent(hash);
-
-    if (directory == null || name == null) {
-      callback(null, new Error());
-      return;
-    }
-
-    const contentPath = fs.existsSync(path.join(directory, name)) ? path.join(directory, name) : directory;
-    if (!isAllowedPath(contentPath)) {
-      callback(null, accessDeniedError());
+    if (torrentDirectory == null || torrentContents == null || torrentContents.length < 1) {
+      callback(null, new Error('Failed to fetch info of torrent.'));
       return;
     }
 
     try {
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        [contentPath],
+        torrentContents
+          ?.map((content) => sanitizePath(path.join(torrentDirectory, content.path)))
+          .filter((contentPath) => isAllowedPath(contentPath))
+          .filter((contentPath) => fs.existsSync(contentPath)),
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
         (error, stdout, stderr) => {
           if (error) {
