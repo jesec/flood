@@ -32,7 +32,7 @@ import {
   addTorrentByURLSchema,
   setTorrentsTagsSchema,
 } from '../../../shared/schema/api/torrents';
-import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 
@@ -819,12 +819,25 @@ router.get<{hash: string}>(
     }
 
     try {
+      let torrentContentPaths = torrentContents?.map((content) =>
+        sanitizePath(path.join(torrentDirectory, content.path)),
+      );
+
+      torrentContentPaths = torrentContentPaths.filter((contentPath) => isAllowedPath(contentPath));
+      if (torrentContentPaths.length < 1) {
+        callback(null, accessDeniedError());
+        return;
+      }
+
+      torrentContentPaths = torrentContentPaths.filter((contentPath) => fs.existsSync(contentPath));
+      if (torrentContentPaths.length < 1) {
+        callback(null, fileNotFoundError());
+        return;
+      }
+
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        torrentContents
-          ?.map((content) => sanitizePath(path.join(torrentDirectory, content.path)))
-          .filter((contentPath) => isAllowedPath(contentPath))
-          .filter((contentPath) => fs.existsSync(contentPath)),
+        torrentContentPaths,
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
         (error, stdout, stderr) => {
           if (error) {
@@ -833,16 +846,17 @@ router.get<{hash: string}>(
           }
 
           if (stderr) {
-            callback(null, Error(stderr));
+            callback(null, stderr);
             return;
           }
 
           callback({output: stdout});
         },
       );
+
       req.on('close', () => mediainfoProcess.kill('SIGTERM'));
-    } catch (childProcessError) {
-      callback(null, Error(childProcessError));
+    } catch (error) {
+      callback(null, error);
     }
   },
 );
