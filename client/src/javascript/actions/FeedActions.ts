@@ -38,14 +38,9 @@ const FeedActions = {
     axios
       .put(`${baseURI}api/feed-monitor/rules`, options)
       .then((json) => json.data)
-      .then(
-        () => {
-          FeedActions.fetchFeedMonitors();
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+      .then(() => {
+        FeedActions.fetchFeedMonitors();
+      }),
 
   fetchFeedMonitors: () =>
     axios

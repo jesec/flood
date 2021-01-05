@@ -1,6 +1,6 @@
 import {url as matchURL} from '@shared/util/regEx';
 
-export const isNotEmpty = (value: string) => value != null && value !== '';
+export const isNotEmpty = (value: string | undefined): value is string => value != null && value !== '';
 
 export const isRegExValid = (regExToCheck: string) => {
   try {
