@@ -1,108 +1,80 @@
-import {observer} from 'mobx-react';
+import {FC, useState, useRef, useEffect} from 'react';
 import Measure from 'react-measure';
-import * as React from 'react';
+import {observer} from 'mobx-react';
+import {reaction} from 'mobx';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
+import TransferDataStore from '../../stores/TransferDataStore';
 import TransferRateDetails from './TransferRateDetails';
 import TransferRateGraph from './TransferRateGraph';
 
 import type {TransferRateGraphInspectorPoint} from './TransferRateGraph';
 
-interface TransferDataStates {
-  graphInspectorPoint: TransferRateGraphInspectorPoint | null;
-  sidebarWidth: number;
-}
+const TransferData: FC = observer(() => {
+  const [graphInspectorPoint, setGraphInspectorPoint] = useState<TransferRateGraphInspectorPoint | null>(null);
+  const [sidebarWidth, setSidebarWidth] = useState<number>(0);
+  const rateGraphRef = useRef<TransferRateGraph>(null);
 
-@observer
-class TransferData extends React.Component<unknown, TransferDataStates> {
-  rateGraphRef: TransferRateGraph | null = null;
-
-  constructor(props: unknown) {
-    super(props);
-
-    this.state = {
-      graphInspectorPoint: null,
-      sidebarWidth: 0,
-    };
-  }
-
-  handleGraphHover = (graphInspectorPoint: TransferDataStates['graphInspectorPoint']) => {
-    this.setState({graphInspectorPoint});
-  };
-
-  handleGraphMouseOut = () => {
-    this.setState({graphInspectorPoint: null});
-  };
-
-  handleMouseMove = (event: React.MouseEvent) => {
-    if (
-      this.rateGraphRef != null &&
-      ClientStatusStore.isConnected &&
-      event &&
-      event.nativeEvent &&
-      event.nativeEvent.clientX != null
-    ) {
-      this.rateGraphRef.handleMouseMove(event.nativeEvent.clientX);
-    }
-  };
-
-  handleMouseOut = () => {
-    if (this.rateGraphRef != null && ClientStatusStore.isConnected) {
-      this.rateGraphRef.handleMouseOut();
-    }
-  };
-
-  handleMouseOver = () => {
-    if (this.rateGraphRef != null && ClientStatusStore.isConnected) {
-      this.rateGraphRef.handleMouseOver();
-    }
-  };
-
-  renderTransferRateGraph() {
-    const {sidebarWidth} = this.state;
-
-    if (!ClientStatusStore.isConnected) return null;
-
-    return (
-      <TransferRateGraph
-        height={150}
-        id="transfer-rate-graph"
-        onMouseOut={this.handleGraphMouseOut}
-        onHover={this.handleGraphHover}
-        ref={(ref) => {
-          this.rateGraphRef = ref;
-        }}
-        width={sidebarWidth}
-      />
+  useEffect(() => {
+    const dispose = reaction(
+      () => TransferDataStore.transferRates,
+      () => {
+        if (rateGraphRef.current != null) {
+          rateGraphRef.current.handleTransferHistoryChange();
+        }
+      },
     );
-  }
 
-  render() {
-    const {graphInspectorPoint} = this.state;
+    return dispose;
+  }, []);
 
-    return (
-      <Measure
-        offset
-        onResize={(contentRect) => {
-          if (contentRect.offset != null) {
-            this.setState({sidebarWidth: contentRect.offset.width});
-          }
-        }}>
-        {({measureRef}) => (
-          <div ref={measureRef} className="client-stats__wrapper sidebar__item">
-            <div
-              className="client-stats"
-              onMouseMove={this.handleMouseMove}
-              onMouseOut={this.handleMouseOut}
-              onMouseOver={this.handleMouseOver}>
-              <TransferRateDetails inspectorPoint={graphInspectorPoint} />
-              {this.renderTransferRateGraph()}
-            </div>
+  return (
+    <Measure
+      offset
+      onResize={(contentRect) => {
+        if (contentRect.offset != null) {
+          setSidebarWidth(contentRect.offset.width);
+        }
+      }}>
+      {({measureRef}) => (
+        <div ref={measureRef} className="client-stats__wrapper sidebar__item">
+          <div
+            className="client-stats"
+            onMouseMove={(event) => {
+              if (rateGraphRef.current != null && event?.nativeEvent?.clientX != null) {
+                rateGraphRef.current.handleMouseMove(event.nativeEvent.clientX);
+              }
+            }}
+            onMouseOut={() => {
+              if (rateGraphRef.current != null) {
+                rateGraphRef.current.handleMouseOut();
+              }
+            }}
+            onMouseOver={() => {
+              if (rateGraphRef.current != null) {
+                rateGraphRef.current.handleMouseOver();
+              }
+            }}>
+            <TransferRateDetails inspectorPoint={graphInspectorPoint} />
+            {ClientStatusStore.isConnected && (
+              <TransferRateGraph
+                height={150}
+                id="transfer-rate-graph"
+                onMouseOut={() => {
+                  setGraphInspectorPoint(null);
+                }}
+                onHover={(inspectorPoint) => {
+                  setGraphInspectorPoint(inspectorPoint);
+                }}
+                ref={rateGraphRef}
+                width={sidebarWidth}
+              />
+            )}
           </div>
-        )}
-      </Measure>
-    );
-  }
-}
+        </div>
+      )}
+    </Measure>
+  );
+});
 
 export default TransferData;

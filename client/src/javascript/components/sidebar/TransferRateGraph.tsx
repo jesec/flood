@@ -1,14 +1,19 @@
 import {area, curveMonotoneX, line} from 'd3-shape';
+import {Component, FC} from 'react';
 import {max} from 'd3-array';
-import {observer} from 'mobx-react';
-import {reaction} from 'mobx';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 import {Selection, select} from 'd3-selection';
-import * as React from 'react';
 
 import type {TransferDirection} from '@shared/types/TransferData';
 
 import TransferDataStore, {TRANSFER_DIRECTIONS} from '../../stores/TransferDataStore';
+
+const TransferRateGraphGradient: FC<{direction: TransferDirection}> = ({direction}: {direction: TransferDirection}) => (
+  <linearGradient id={`graph__gradient--${direction}`} x1="0%" y1="0%" x2="0%" y2="100%">
+    <stop className={`graph__gradient--top graph__gradient--top--${direction}`} offset="0%" />
+    <stop className={`graph__gradient--bottom graph__gradient--bottom--${direction}`} offset="100%" />
+  </linearGradient>
+);
 
 export interface TransferRateGraphInspectorPoint {
   uploadSpeed: number;
@@ -24,17 +29,7 @@ interface TransferRateGraphProps {
   onMouseOut: () => void;
 }
 
-@observer
-class TransferRateGraph extends React.Component<TransferRateGraphProps> {
-  private static getGradient(slug: TransferDirection): React.ReactNode {
-    return (
-      <linearGradient id={`graph__gradient--${slug}`} x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop className={`graph__gradient--top graph__gradient--top--${slug}`} offset="0%" />
-        <stop className={`graph__gradient--bottom graph__gradient--bottom--${slug}`} offset="100%" />
-      </linearGradient>
-    );
-  }
-
+class TransferRateGraph extends Component<TransferRateGraphProps> {
   lastMouseX?: number;
   xScale?: ScaleLinear<number, number>;
   yScale?: ScaleLinear<number, number>;
@@ -60,17 +55,6 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
   static defaultProps = {
     width: 240,
   };
-
-  constructor(props: TransferRateGraphProps) {
-    super(props);
-
-    reaction(
-      () => TransferDataStore.transferRates,
-      () => {
-        this.handleTransferHistoryChange();
-      },
-    );
-  }
 
   componentDidMount(): void {
     this.renderGraphData();
@@ -263,8 +247,8 @@ class TransferRateGraph extends React.Component<TransferRateGraphProps> {
           this.graphRefs.graph = ref;
         }}>
         <defs>
-          {TransferRateGraph.getGradient('upload')}
-          {TransferRateGraph.getGradient('download')}
+          <TransferRateGraphGradient direction="upload" />
+          <TransferRateGraphGradient direction="download" />
         </defs>
       </svg>
     );
