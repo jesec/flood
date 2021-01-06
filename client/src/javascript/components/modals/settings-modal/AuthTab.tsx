@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {FC, useEffect, useRef, useState} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
-import * as React from 'react';
 
 import {AccessLevel} from '@shared/schema/constants/Auth';
 import type {Credentials} from '@shared/schema/Auth';
@@ -22,229 +22,182 @@ interface AuthTabFormData {
   isAdmin: boolean;
 }
 
-interface AuthTabStates {
-  addUserError: string | null;
-  hasFetchedUserList: boolean;
-  isAddingUser: boolean;
-}
+const AuthTab: FC = observer(() => {
+  const formRef = useRef<Form>(null);
+  const settingsFormRef = useRef<ClientConnectionSettingsFormType>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isUserListFetched, setIsUserListFetched] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const intl = useIntl();
 
-@observer
-class AuthTab extends React.Component<WrappedComponentProps, AuthTabStates> {
-  formData?: Partial<AuthTabFormData>;
-
-  formRef?: Form | null = null;
-
-  settingsFormRef: React.RefObject<ClientConnectionSettingsFormType> = React.createRef();
-
-  constructor(props: WrappedComponentProps) {
-    super(props);
-
-    this.state = {
-      addUserError: null,
-      hasFetchedUserList: false,
-      isAddingUser: false,
-    };
-  }
-
-  componentDidMount() {
-    if (!AuthStore.currentUser.isAdmin) {
-      return;
-    }
-
-    AuthActions.fetchUsers().then(() => {
-      this.setState({hasFetchedUserList: true});
-    });
-  }
-
-  handleFormChange = ({formData}: {formData: Record<string, unknown>}) => {
-    this.formData = formData as Partial<AuthTabFormData>;
-  };
-
-  handleFormSubmit = () => {
-    if (this.formData == null || this.settingsFormRef.current == null) {
-      return;
-    }
-
-    if (this.formData.username == null || this.formData.username === '') {
-      this.setState({
-        addUserError: this.props.intl.formatMessage({
-          id: 'auth.error.username.empty',
-        }),
+  useEffect(() => {
+    if (AuthStore.currentUser.isAdmin) {
+      AuthActions.fetchUsers().then(() => {
+        setIsUserListFetched(true);
       });
-    } else if (this.formData.password == null || this.formData.password === '') {
-      this.setState({
-        addUserError: this.props.intl.formatMessage({
-          id: 'auth.error.password.empty',
-        }),
-      });
-    } else {
-      this.setState({isAddingUser: true});
-
-      const connectionSettings = this.settingsFormRef.current.getConnectionSettings();
-      if (connectionSettings == null) {
-        this.setState({
-          addUserError: this.props.intl.formatMessage({
-            id: 'connection.settings.error.empty',
-          }),
-          isAddingUser: false,
-        });
-        return;
-      }
-
-      AuthActions.createUser({
-        username: this.formData.username,
-        password: this.formData.password,
-        client: connectionSettings,
-        level: this.formData.isAdmin === true ? AccessLevel.ADMINISTRATOR : AccessLevel.USER,
-      })
-        .then(AuthActions.fetchUsers, (error) => {
-          this.setState({
-            addUserError: error.response.data.message,
-            isAddingUser: false,
-          });
-        })
-        .then(() => {
-          if (this.formRef != null) {
-            this.formRef.resetForm();
-          }
-          this.setState({addUserError: null, isAddingUser: false});
-        });
     }
-  };
+  }, []);
 
-  render() {
-    const {addUserError, hasFetchedUserList} = this.state;
-
-    if (!AuthStore.currentUser.isAdmin) {
-      return (
-        <Form>
-          <ModalFormSectionHeader>
-            <FormattedMessage id="auth.user.accounts" />
-          </ModalFormSectionHeader>
-          <FormRow>
-            <FormError>
-              <FormattedMessage id="auth.message.not.admin" />
-            </FormError>
-          </FormRow>
-        </Form>
-      );
-    }
-
-    const isLoading = !hasFetchedUserList && AuthStore.users.length === 0;
-    const interactiveListClasses = classnames('interactive-list', {
-      'interactive-list--loading': isLoading,
-    });
-    let errorElement = null;
-    let loadingIndicator = null;
-
-    if (addUserError) {
-      errorElement = (
-        <FormRow>
-          <FormError>{addUserError}</FormError>
-        </FormRow>
-      );
-    }
-
-    if (isLoading) {
-      loadingIndicator = (
-        <CSSTransition classNames="interactive-list__loading-indicator" timeout={{enter: 250, exit: 250}}>
-          <div className="interactive-list__loading-indicator" key="loading-indicator">
-            <LoadingRing />
-          </div>
-        </CSSTransition>
-      );
-    }
-
+  if (!AuthStore.currentUser.isAdmin) {
     return (
-      <Form
-        onChange={this.handleFormChange}
-        onSubmit={this.handleFormSubmit}
-        ref={(ref) => {
-          this.formRef = ref;
-        }}>
+      <Form>
         <ModalFormSectionHeader>
           <FormattedMessage id="auth.user.accounts" />
         </ModalFormSectionHeader>
         <FormRow>
-          <FormRowItem>
-            <ul className={interactiveListClasses}>
-              <TransitionGroup>{loadingIndicator}</TransitionGroup>
-              {AuthStore.users
-                .slice()
-                .sort((a: Credentials, b: Credentials) => a.username.localeCompare(b.username))
-                .map((user: Credentials) => {
-                  const isCurrentUser = user.username === AuthStore.currentUser.username;
-                  let badge = null;
-                  let removeIcon = null;
-
-                  if (!isCurrentUser) {
-                    removeIcon = (
-                      <span
-                        className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-                        onClick={() => AuthActions.deleteUser(user.username).then(AuthActions.fetchUsers)}>
-                        <Close />
-                      </span>
-                    );
-                  } else {
-                    badge = (
-                      <span className="interactive-list__label__tag tag">
-                        <FormattedMessage id="auth.current.user" />
-                      </span>
-                    );
-                  }
-
-                  const classes = classnames('interactive-list__item', {
-                    'interactive-list__item--disabled': isCurrentUser,
-                  });
-
-                  return (
-                    <li className={classes} key={user.username}>
-                      <span className="interactive-list__label">
-                        <div className="interactive-list__label__text">{user.username}</div>
-                        {badge}
-                      </span>
-                      {removeIcon}
-                    </li>
-                  );
-                })}
-            </ul>
-          </FormRowItem>
-        </FormRow>
-        <ModalFormSectionHeader>
-          <FormattedMessage id="auth.add.user" />
-        </ModalFormSectionHeader>
-        {errorElement}
-        <FormRow>
-          <Textbox
-            id="username"
-            label={<FormattedMessage id="auth.username" />}
-            placeholder={this.props.intl.formatMessage({
-              id: 'auth.username',
-            })}
-            autoComplete="username"
-          />
-          <Textbox
-            id="password"
-            label={<FormattedMessage id="auth.password" />}
-            placeholder={this.props.intl.formatMessage({
-              id: 'auth.password',
-            })}
-            autoComplete="new-password"
-          />
-          <Checkbox grow={false} id="isAdmin" labelOffset matchTextboxHeight>
-            <FormattedMessage id="auth.admin" />
-          </Checkbox>
-        </FormRow>
-        <ClientConnectionSettingsForm ref={this.settingsFormRef} />
-        <p />
-        <FormRow justify="end">
-          <Button isLoading={this.state.isAddingUser} priority="primary" type="submit">
-            <FormattedMessage id="button.add" />
-          </Button>
+          <FormError>
+            <FormattedMessage id="auth.message.not.admin" />
+          </FormError>
         </FormRow>
       </Form>
     );
   }
-}
 
-export default injectIntl(AuthTab);
+  const isLoading = !isUserListFetched && AuthStore.users.length === 0;
+  const interactiveListClasses = classnames('interactive-list', {
+    'interactive-list--loading': isLoading,
+  });
+
+  return (
+    <Form
+      onSubmit={() => {
+        if (formRef.current == null || settingsFormRef.current == null) {
+          return;
+        }
+
+        const formData = formRef.current.getFormData() as Partial<AuthTabFormData>;
+
+        if (formData.username == null || formData.username === '') {
+          setError('auth.error.username.empty');
+        } else if (formData.password == null || formData.password === '') {
+          setError('auth.error.password.empty');
+        } else {
+          setIsSubmitting(true);
+
+          const connectionSettings = settingsFormRef.current.getConnectionSettings();
+          if (connectionSettings == null) {
+            setError('connection.settings.error.empty');
+            setIsSubmitting(false);
+            return;
+          }
+
+          AuthActions.createUser({
+            username: formData.username,
+            password: formData.password,
+            client: connectionSettings,
+            level: formData.isAdmin === true ? AccessLevel.ADMINISTRATOR : AccessLevel.USER,
+          })
+            .then(
+              () => {
+                if (formRef.current != null) {
+                  formRef.current.resetForm();
+                }
+                setError(null);
+                setIsSubmitting(false);
+              },
+              () => {
+                setError('general.error.unknown');
+                setIsSubmitting(false);
+              },
+            )
+            .then(AuthActions.fetchUsers);
+        }
+      }}
+      ref={formRef}>
+      <ModalFormSectionHeader>
+        <FormattedMessage id="auth.user.accounts" />
+      </ModalFormSectionHeader>
+      <FormRow>
+        <FormRowItem>
+          <ul className={interactiveListClasses}>
+            <TransitionGroup>
+              {isLoading && (
+                <CSSTransition classNames="interactive-list__loading-indicator" timeout={{enter: 250, exit: 250}}>
+                  <div className="interactive-list__loading-indicator" key="loading-indicator">
+                    <LoadingRing />
+                  </div>
+                </CSSTransition>
+              )}
+            </TransitionGroup>
+            {AuthStore.users
+              .slice()
+              .sort((a: Credentials, b: Credentials) => a.username.localeCompare(b.username))
+              .map((user: Credentials) => {
+                const isCurrentUser = user.username === AuthStore.currentUser.username;
+                let badge = null;
+                let removeIcon = null;
+
+                if (!isCurrentUser) {
+                  removeIcon = (
+                    <span
+                      className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
+                      onClick={() => AuthActions.deleteUser(user.username).then(AuthActions.fetchUsers)}>
+                      <Close />
+                    </span>
+                  );
+                } else {
+                  badge = (
+                    <span className="interactive-list__label__tag tag">
+                      <FormattedMessage id="auth.current.user" />
+                    </span>
+                  );
+                }
+
+                const classes = classnames('interactive-list__item', {
+                  'interactive-list__item--disabled': isCurrentUser,
+                });
+
+                return (
+                  <li className={classes} key={user.username}>
+                    <span className="interactive-list__label">
+                      <div className="interactive-list__label__text">{user.username}</div>
+                      {badge}
+                    </span>
+                    {removeIcon}
+                  </li>
+                );
+              })}
+          </ul>
+        </FormRowItem>
+      </FormRow>
+      <ModalFormSectionHeader>
+        <FormattedMessage id="auth.add.user" />
+      </ModalFormSectionHeader>
+      {error && (
+        <FormRow>
+          <FormError>{intl.formatMessage({id: error})}</FormError>
+        </FormRow>
+      )}
+      <FormRow>
+        <Textbox
+          id="username"
+          label={<FormattedMessage id="auth.username" />}
+          placeholder={intl.formatMessage({
+            id: 'auth.username',
+          })}
+          autoComplete="username"
+        />
+        <Textbox
+          id="password"
+          label={<FormattedMessage id="auth.password" />}
+          placeholder={intl.formatMessage({
+            id: 'auth.password',
+          })}
+          autoComplete="new-password"
+        />
+        <Checkbox grow={false} id="isAdmin" labelOffset matchTextboxHeight>
+          <FormattedMessage id="auth.admin" />
+        </Checkbox>
+      </FormRow>
+      <ClientConnectionSettingsForm ref={settingsFormRef} />
+      <p />
+      <FormRow justify="end">
+        <Button isLoading={isSubmitting} priority="primary" type="submit">
+          <FormattedMessage id="button.add" />
+        </Button>
+      </FormRow>
+    </Form>
+  );
+});
+
+export default AuthTab;
