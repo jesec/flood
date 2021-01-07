@@ -224,7 +224,7 @@
   "button.close": [
     {
       "type": 0,
-      "value": "Close"
+      "value": "關閉"
     }
   ],
   "button.download": [
@@ -296,7 +296,7 @@
   "connection-interruption.heading": [
     {
       "type": 0,
-      "value": "Cannot connect to the client"
+      "value": "無法連線到客戶端"
     }
   ],
   "connection-interruption.not.admin": [
@@ -952,7 +952,7 @@
   "locale.language.translate": [
     {
       "type": 0,
-      "value": "Start to translate"
+      "value": "開始翻譯"
     }
   ],
   "mediainfo.execError": [
@@ -994,7 +994,7 @@
   "notification.no.notification": [
     {
       "type": 0,
-      "value": "No notification to display."
+      "value": "沒有通知。"
     }
   ],
   "notification.showing": [
@@ -1336,7 +1336,7 @@
   "settings.ui.tag.selector.mode": [
     {
       "type": 0,
-      "value": "Tag Selector Preference"
+      "value": "標籤選取工具選項"
     }
   ],
   "settings.ui.tag.selector.mode.multi": [
@@ -1420,13 +1420,13 @@
   "sidebar.button.theme.dark": [
     {
       "type": 0,
-      "value": "Dark Theme"
+      "value": "深色主題"
     }
   ],
   "sidebar.button.theme.light": [
     {
       "type": 0,
-      "value": "Light Theme"
+      "value": "淺色主題"
     }
   ],
   "sidebar.search.placeholder": [
@@ -1584,7 +1584,7 @@
   "torrents.add.tab.url.register.magnet.handler": [
     {
       "type": 0,
-      "value": "Register to handle magnet links"
+      "value": "註冊以處理磁力連結"
     }
   ],
   "torrents.add.tab.url.title": [
@@ -1608,7 +1608,7 @@
   "torrents.create.base.name.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional base file or directory name of the torrent"
+      "value": "(選填) 種子的檔案或目錄名稱"
     }
   ],
   "torrents.create.base.name.label": [
@@ -1620,31 +1620,31 @@
   "torrents.create.comment.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional comment in torrent file"
+      "value": "(選填) 種子的評論"
     }
   ],
   "torrents.create.comment.label": [
     {
       "type": 0,
-      "value": "Comment"
+      "value": "評論"
     }
   ],
   "torrents.create.info.source.input.placeholder": [
     {
       "type": 0,
-      "value": "Optional source entry in infohash"
+      "value": "(選填) Infohash中的來源項目"
     }
   ],
   "torrents.create.info.source.label": [
     {
       "type": 0,
-      "value": "Info Source"
+      "value": "Info 來源"
     }
   ],
   "torrents.create.is.private.label": [
     {
       "type": 0,
-      "value": "Private"
+      "value": "私有"
     }
   ],
   "torrents.create.source.path.label": [
@@ -1656,7 +1656,7 @@
   "torrents.create.tags.input.placeholder": [
     {
       "type": 0,
-      "value": "Tags in Flood. Not added to created torrent."
+      "value": "Flood中的標籤，不會新增到已建立的種子。"
     }
   ],
   "torrents.create.tracker.input.placeholder": [
@@ -1680,13 +1680,13 @@
   "torrents.destination.completed": [
     {
       "type": 0,
-      "value": "Completed"
+      "value": "已完成"
     }
   ],
   "torrents.destination.sequential": [
     {
       "type": 0,
-      "value": "Sequential Download"
+      "value": "依序下載"
     }
   ],
   "torrents.details.actions.pause": [
@@ -1946,37 +1946,37 @@
   "torrents.generate.magnet.heading": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "產生磁力連結"
     }
   ],
   "torrents.generate.magnet.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Tracker 讀取中..."
     }
   ],
   "torrents.generate.magnet.magnet": [
     {
       "type": 0,
-      "value": "Magnet Link"
+      "value": "磁力連結"
     }
   ],
   "torrents.generate.magnet.magnet.with.trackers": [
     {
       "type": 0,
-      "value": "Magnet Link with Trackers"
+      "value": "包含Tracker的磁力連結"
     }
   ],
   "torrents.generate.magnet.private.torrent": [
     {
       "type": 0,
-      "value": "This is a private torrent."
+      "value": "這是一個私有的種子。"
     }
   ],
   "torrents.list.cannot.connect": [
     {
       "type": 0,
-      "value": "Cannot connect to the client."
+      "value": "無法連線到客戶端。"
     }
   ],
   "torrents.list.clear.filters": [
@@ -2000,25 +2000,25 @@
   "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "Download Contents"
+      "value": "下載檔案"
     }
   ],
   "torrents.list.context.download.metainfo": [
     {
       "type": 0,
-      "value": "Download .torrent"
+      "value": "下載 .torrent 文件"
     }
   ],
   "torrents.list.context.generate.magnet": [
     {
       "type": 0,
-      "value": "Generate Magnet Link"
+      "value": "產生磁力連結"
     }
   ],
   "torrents.list.context.initial.seeding": [
     {
       "type": 0,
-      "value": "Initial Seeding"
+      "value": "初始做種中"
     }
   ],
   "torrents.list.context.move": [
@@ -2048,7 +2048,7 @@
   "torrents.list.context.sequential": [
     {
       "type": 0,
-      "value": "Sequential"
+      "value": "順序"
     }
   ],
   "torrents.list.context.set.tags": [
@@ -2060,7 +2060,7 @@
   "torrents.list.context.set.trackers": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "設定Tracker"
     }
   ],
   "torrents.list.context.start": [
@@ -2078,7 +2078,7 @@
   "torrents.list.drop": [
     {
       "type": 0,
-      "value": "Drop files here to add them."
+      "value": "將檔案拖曳到這裡來新增。"
     }
   ],
   "torrents.list.no.torrents": [
@@ -2138,7 +2138,7 @@
   "torrents.properties.directory": [
     {
       "type": 0,
-      "value": "Location"
+      "value": "位置"
     }
   ],
   "torrents.properties.download.speed": [
@@ -2294,25 +2294,25 @@
   "torrents.set.trackers.button.set": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "設定Tracker"
     }
   ],
   "torrents.set.trackers.enter.tracker": [
     {
       "type": 0,
-      "value": "Enter a tracker"
+      "value": "輸入Tracker地址"
     }
   ],
   "torrents.set.trackers.heading": [
     {
       "type": 0,
-      "value": "Set Trackers"
+      "value": "設定Tracker"
     }
   ],
   "torrents.set.trackers.loading.trackers": [
     {
       "type": 0,
-      "value": "Loading trackers..."
+      "value": "Tracker 讀取中..."
     }
   ],
   "torrents.sort.title": [
