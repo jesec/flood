@@ -41,21 +41,23 @@ const AddTorrentsByURL: FC = () => {
             {intl.formatMessage({
               id: 'torrents.add.torrents.label',
             })}
-            <em
-              style={{cursor: 'pointer', fontSize: '0.8em', float: 'right'}}
-              onClick={() => {
-                if (typeof navigator.registerProtocolHandler === 'function') {
-                  navigator.registerProtocolHandler(
-                    'magnet',
-                    `${ConfigStore.baseURI}?action=add-urls&url=%s`,
-                    'Magnet -> Flood',
-                  );
-                }
-              }}>
-              {intl.formatMessage({
-                id: 'torrents.add.tab.url.register.magnet.handler',
-              })}
-            </em>
+            {typeof navigator.registerProtocolHandler === 'function' && (
+              <em
+                style={{cursor: 'pointer', fontSize: '0.8em', float: 'right'}}
+                onClick={() => {
+                  if (typeof navigator.registerProtocolHandler === 'function') {
+                    navigator.registerProtocolHandler(
+                      'magnet',
+                      `${ConfigStore.baseURI}?action=add-urls&url=%s`,
+                      'Magnet -> Flood',
+                    );
+                  }
+                }}>
+                {intl.formatMessage({
+                  id: 'torrents.add.tab.url.register.magnet.handler',
+                })}
+              </em>
+            )}
           </div>
         }
         placeholder={intl.formatMessage({
