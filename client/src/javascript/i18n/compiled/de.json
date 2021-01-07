@@ -1748,7 +1748,7 @@
   "torrents.add.tab.url.register.magnet.handler": [
     {
       "type": 0,
-      "value": "Register to handle magnet links"
+      "value": "Registrieren um Magnetlinks zu bearbeiten"
     }
   ],
   "torrents.add.tab.url.title": [
@@ -1850,7 +1850,7 @@
   "torrents.destination.sequential": [
     {
       "type": 0,
-      "value": "Sequential Download"
+      "value": "Sequenzieller Download"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2200,7 +2200,7 @@
   "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "Download Contents"
+      "value": "Inhalte herunterladen"
     }
   ],
   "torrents.list.context.download.metainfo": [
@@ -2248,7 +2248,7 @@
   "torrents.list.context.sequential": [
     {
       "type": 0,
-      "value": "Sequential"
+      "value": "Sequentiell"
     }
   ],
   "torrents.list.context.set.tags": [
