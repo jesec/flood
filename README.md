@@ -8,11 +8,11 @@ Flood is a monitoring service for various torrent clients. It's a Node.js servic
 
 #### Supported Clients
 
-| Client                                                          | Support                              |
-| --------------------------------------------------------------- | ------------------------------------ |
-| [rTorrent](https://github.com/rakshasa/rtorrent)                | Stable and Tested :white_check_mark: |
-| [qBittorrent](https://github.com/qbittorrent/qBittorrent) v4.1+ | Experimental :alembic:               |
-| [Transmission](https://github.com/transmission/transmission)    | Experimental :alembic:               |
+| Client                                                          | Support                                                                                                     |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| [rTorrent](https://github.com/rakshasa/rtorrent)                | :white_check_mark: ([tests](https://github.com/jesec/flood/blob/master/server/.jest/rtorrent.setup.js))     |
+| [qBittorrent](https://github.com/qbittorrent/qBittorrent) v4.1+ | :white_check_mark: ([tests](https://github.com/jesec/flood/blob/master/server/.jest/qbittorrent.setup.js))  |
+| [Transmission](https://github.com/transmission/transmission)    | :white_check_mark: ([tests](https://github.com/jesec/flood/blob/master/server/.jest/transmission.setup.js)) |
 
 #### Feedback
 
