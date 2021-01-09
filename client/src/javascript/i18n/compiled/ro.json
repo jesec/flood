@@ -1916,7 +1916,7 @@
   "torrents.add.tab.url.register.magnet.handler": [
     {
       "type": 0,
-      "value": "Register to handle magnet links"
+      "value": "Înregistrează-te pentru a gestiona link-urile magnet"
     }
   ],
   "torrents.add.tab.url.title": [
@@ -2018,7 +2018,7 @@
   "torrents.destination.sequential": [
     {
       "type": 0,
-      "value": "Sequential Download"
+      "value": "Descărcare secvențială"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2368,13 +2368,13 @@
   "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "Download Contents"
+      "value": "Descarcă conținut"
     }
   ],
   "torrents.list.context.download.metainfo": [
     {
       "type": 0,
-      "value": "Download .torrent"
+      "value": "Descarcă .torrent"
     }
   ],
   "torrents.list.context.generate.magnet": [
@@ -2386,7 +2386,7 @@
   "torrents.list.context.initial.seeding": [
     {
       "type": 0,
-      "value": "Initial Seeding"
+      "value": "Donare inițială"
     }
   ],
   "torrents.list.context.move": [
@@ -2416,7 +2416,7 @@
   "torrents.list.context.sequential": [
     {
       "type": 0,
-      "value": "Sequential"
+      "value": "Secvenţial"
     }
   ],
   "torrents.list.context.set.tags": [
