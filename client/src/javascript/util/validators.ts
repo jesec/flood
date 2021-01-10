@@ -13,9 +13,10 @@ export const isRegExValid = (regExToCheck: string) => {
   return true;
 };
 
-export const isURLValid = (url: string) => url != null && url !== '' && url.match(matchURL) !== null;
+export const isURLValid = (url: string | undefined): url is string =>
+  url != null && url !== '' && url.match(matchURL) !== null;
 
-export const isPositiveInteger = (value: number | string) => {
+export const isPositiveInteger = (value: number | string | undefined) => {
   if (value === null || value === '') return false;
 
   const number = parseInt(`${value}`, 10);

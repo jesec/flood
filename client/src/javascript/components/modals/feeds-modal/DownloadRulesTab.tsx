@@ -7,8 +7,8 @@ import type {Rule} from '@shared/types/Feed';
 import {Button, Form, FormError, FormRow, FormRowItem} from '../../../ui';
 import DownloadRuleForm from './DownloadRuleForm';
 import FeedActions from '../../../actions/FeedActions';
+import {isNotEmpty, isRegExValid} from '../../../util/validators';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import * as validators from '../../../util/validators';
 import DownloadRuleList from './DownloadRuleList';
 
 const initialRule: AddRuleOptions = {
@@ -23,25 +23,25 @@ const initialRule: AddRuleOptions = {
 
 const validatedFields = {
   destination: {
-    isValid: validators.isNotEmpty,
+    isValid: isNotEmpty,
     error: 'feeds.validation.must.specify.destination',
   },
   feedID: {
-    isValid: (value: string | undefined) => validators.isNotEmpty(value) && value !== 'placeholder',
+    isValid: (value: string | undefined) => isNotEmpty(value) && value !== 'placeholder',
     error: 'feeds.validation.must.select.feed',
   },
   label: {
-    isValid: validators.isNotEmpty,
+    isValid: isNotEmpty,
     error: 'feeds.validation.must.specify.label',
   },
   match: {
-    isValid: (value: string | undefined) => validators.isNotEmpty(value) && validators.isRegExValid(value),
+    isValid: (value: string | undefined) => isNotEmpty(value) && isRegExValid(value),
     error: 'feeds.validation.invalid.regular.expression',
   },
   exclude: {
     isValid: (value: string | undefined) => {
-      if (validators.isNotEmpty(value)) {
-        return validators.isRegExValid(value);
+      if (isNotEmpty(value)) {
+        return isRegExValid(value);
       }
 
       return true;
@@ -55,10 +55,17 @@ type ValidatedField = keyof typeof validatedFields;
 const validateField = (validatedField: ValidatedField, value: string | undefined): string | undefined =>
   validatedFields[validatedField]?.isValid(value) ? undefined : validatedFields[validatedField]?.error;
 
-interface RuleFormData extends Omit<Rule, 'tags' | 'feedIDs'> {
+interface RuleFormData {
   check: string;
+  exclude: string;
+  destination: string;
+  field: string;
   feedID: string;
+  label: string;
+  match: string;
   tags: string;
+  isBasePath: boolean;
+  startOnLoad: boolean;
 }
 
 const DownloadRulesTab: FC = () => {
@@ -88,7 +95,7 @@ const DownloadRulesTab: FC = () => {
           (() => {
             const {check, match = '', exclude = ''} = ruleFormData;
 
-            if (validators.isNotEmpty(check) && validators.isRegExValid(match) && validators.isRegExValid(exclude)) {
+            if (isNotEmpty(check) && isRegExValid(match) && isRegExValid(exclude)) {
               const isMatched = new RegExp(match, 'gi').test(check);
               const isExcluded = exclude !== '' && new RegExp(exclude, 'gi').test(check);
               return isMatched && !isExcluded;
@@ -107,21 +114,21 @@ const DownloadRulesTab: FC = () => {
 
         const formData = formRef.current.getFormData() as Partial<RuleFormData>;
 
-        setIsSubmitting(true);
-        setErrors(
-          Object.keys(validatedFields).reduce((memo, key) => {
-            const validatedField = key as ValidatedField;
+        const currentErrors = Object.keys(validatedFields).reduce((memo, key) => {
+          const validatedField = key as ValidatedField;
 
-            return {
-              ...memo,
-              [validatedField]: validateField(validatedField, formData[validatedField]),
-            };
-          }, {} as Record<string, string | undefined>),
-        );
+          return {
+            ...memo,
+            [validatedField]: validateField(validatedField, formData[validatedField]),
+          };
+        }, {} as Record<string, string | undefined>);
+        setErrors(currentErrors);
 
-        const isFormValid = Object.keys(errors).every((key) => errors[key] === undefined);
+        const isFormValid = Object.keys(currentErrors).every((key) => currentErrors[key] === undefined);
 
         if (isFormChanged && isFormValid) {
+          setIsSubmitting(true);
+
           if (currentRule?._id != null) {
             await FeedActions.removeFeedMonitor(currentRule._id);
           }
@@ -139,17 +146,17 @@ const DownloadRulesTab: FC = () => {
           }).then(
             () => {
               formRef.current?.resetForm();
-              setCurrentRule(null);
               setErrors({});
+              setCurrentRule(null);
               setIsEditing(false);
             },
-            (err: Error) => {
-              setErrors({backend: err.message});
+            () => {
+              setErrors({backend: 'general.error.unknown'});
             },
           );
-        }
 
-        setIsSubmitting(false);
+          setIsSubmitting(false);
+        }
       }}
       ref={formRef}>
       <ModalFormSectionHeader>
@@ -158,7 +165,7 @@ const DownloadRulesTab: FC = () => {
       {Object.keys(errors).reduce((memo: ReactNodeArray, key) => {
         if (errors[key as ValidatedField] != null) {
           memo.push(
-            <FormRow key={key}>
+            <FormRow key={`error-${key}`}>
               <FormError>{intl.formatMessage({id: errors?.[key as ValidatedField]})}</FormError>
             </FormRow>,
           );

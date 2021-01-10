@@ -12,27 +12,17 @@ const FeedActions = {
     axios
       .put(`${baseURI}api/feed-monitor/feeds`, options)
       .then((json) => json.data)
-      .then(
-        () => {
-          FeedActions.fetchFeedMonitors();
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+      .then(() => {
+        FeedActions.fetchFeedMonitors();
+      }),
 
   modifyFeed: (id: string, options: ModifyFeedOptions) =>
     axios
       .patch(`${baseURI}api/feed-monitor/feeds/${id}`, options)
       .then((json) => json.data)
-      .then(
-        () => {
-          FeedActions.fetchFeedMonitors();
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+      .then(() => {
+        FeedActions.fetchFeedMonitors();
+      }),
 
   addRule: (options: AddRuleOptions) =>
     axios

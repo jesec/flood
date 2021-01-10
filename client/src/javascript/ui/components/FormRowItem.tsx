@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import * as React from 'react';
 
 export interface FormRowItemProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 
   className?: string;
   type?: string;
