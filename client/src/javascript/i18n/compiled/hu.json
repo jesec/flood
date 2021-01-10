@@ -446,7 +446,7 @@
   "connection-interruption.action.selection.retry": [
     {
       "type": 0,
-      "value": "Újrapróbál a jelenlegi kliens beállításokkal"
+      "value": "Próbálja újra a jelenlegi kliens beállításokkal"
     }
   ],
   "connection-interruption.heading": [
@@ -1841,7 +1841,7 @@
   "torrents.destination.base_path": [
     {
       "type": 0,
-      "value": "Ez legyen a szülőkönyvtár"
+      "value": "Ne készítsen alkönyvtárat"
     }
   ],
   "torrents.destination.completed": [
