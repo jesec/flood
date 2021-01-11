@@ -32,6 +32,7 @@ import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
+import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {fetchURLToTempFile, saveBufferToTempFile} from '../../util/tempFileUtil';
 import {setCompleted, setTrackers} from '../../util/torrentFileUtil';
@@ -51,10 +52,6 @@ import {
 } from './constants/methodCallConfigs';
 
 import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
-
-const filePathMethodCalls = getMethodCalls({
-  pathComponents: torrentContentMethodCallConfigs.pathComponents,
-});
 
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
@@ -342,78 +339,76 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async removeTorrents({hashes, deleteData}: DeleteTorrentsOptions): Promise<void> {
-    const methodCalls = hashes.reduce((accumulator: MultiMethodCalls, hash, index) => {
-      let eraseFileMethodCallIndex = index;
+    // Stop torrents
+    await this.stopTorrents({hashes});
 
-      // If we're deleting files, we grab each torrents' file list before we remove them.
-      if (deleteData === true) {
-        // We offset the indices of these method calls so that we know exactly
-        // where to retrieve the responses in the future.
-        const directoryBaseMethodCallIndex = index + hashes.length;
-        // We also need to ensure that the erase method call occurs after
-        // our request for information.
-        eraseFileMethodCallIndex = index + hashes.length * 2;
+    // Fetch paths of contents of torrents
+    const directoryPaths = new Set<string>();
+    const contentPaths = new Set<string>();
 
-        accumulator[index] = {
-          methodName: 'f.multicall',
-          params: [hash, ''].concat(filePathMethodCalls),
-        };
+    if (deleteData) {
+      await Promise.all(
+        hashes.map((hash) => {
+          const {directory} = this.services?.torrentService.getTorrent(hash) || {};
 
-        accumulator[directoryBaseMethodCallIndex] = {
-          methodName: 'd.directory_base',
-          params: [hash],
-        };
-      }
+          if (directory == null) {
+            throw new Error();
+          }
 
-      accumulator[eraseFileMethodCallIndex] = {
-        methodName: 'd.erase',
-        params: [hash],
-      };
+          return this.getTorrentContents(hash).then((contents) => {
+            if (contents.length > 1) {
+              contents.map((content) => {
+                const relativePathSegments = path.normalize(content.path).split(path.sep);
 
-      return accumulator;
-    }, []);
+                // Remove last segment (filename)
+                relativePathSegments.pop();
 
-    return this.clientRequestManager
-      .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
-      .then((response) => {
-        if (deleteData === true) {
-          const torrentCount = hashes.length;
-          const filesToDelete = hashes.reduce((accumulator, _hash, hashIndex) => {
-            const fileList = (response as string[][][][][])[hashIndex][0];
-            const directoryBase = (response as string[][])[hashIndex + torrentCount][0];
+                while (relativePathSegments.length) {
+                  directoryPaths.add(path.resolve(directory, ...relativePathSegments));
+                  relativePathSegments.pop();
+                }
+              });
 
-            const torrentFilesToDelete = fileList.reduce((fileListAccumulator, file) => {
-              // We only look at the first path component returned because
-              // if it's a directory within the torrent, then we'll remove
-              // the entire directory.
-              const filePath = path.join(directoryBase, file[0][0]);
-
-              // filePath might be a directory, so it may have already been
-              // added. If not, we add it.
-              if (!fileListAccumulator.includes(filePath)) {
-                fileListAccumulator.push(filePath);
-              }
-
-              return fileListAccumulator;
-            }, [] as Array<string>);
-
-            return accumulator.concat(torrentFilesToDelete);
-          }, [] as Array<string>);
-
-          filesToDelete.forEach((file) => {
-            try {
-              if (fs.lstatSync(file).isDirectory()) {
-                fs.rmdirSync(file, {recursive: true});
-              } else {
-                fs.unlinkSync(file);
-              }
-            } catch (error) {
-              console.error(`Error deleting file: ${file}\n${error}`);
+              directoryPaths.add(path.resolve(directory));
             }
+
+            contents
+              .map((content) => sanitizePath(path.resolve(directory, content.path)))
+              .filter((contentPath) => fs.existsSync(contentPath))
+              .filter((contentPath) => isAllowedPath(contentPath))
+              .forEach((contentPath) => contentPaths.add(contentPath));
           });
-        }
-      });
+        }),
+      );
+    }
+
+    // Remove torrents from rTorrent session
+    await this.clientRequestManager
+      .methodCall('system.multicall', [
+        hashes.map((hash) => ({
+          methodName: 'd.erase',
+          params: [hash],
+        })),
+      ])
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
+
+    // Delete contents of torrents
+    contentPaths.forEach((contentPath) => {
+      try {
+        fs.unlinkSync(contentPath);
+      } catch (error) {
+        console.error(`Error deleting file: ${contentPath}\n${error}`);
+      }
+    });
+
+    // Try to remove empty directories
+    directoryPaths.forEach((directoryPath) => {
+      try {
+        fs.rmdirSync(directoryPath);
+      } catch (error) {
+        console.error(`Error removing directory: ${directoryPath}\n${error}`);
+      }
+    });
   }
 
   async setTorrentsInitialSeeding({hashes, isInitialSeeding}: SetTorrentsInitialSeedingOptions): Promise<void> {
