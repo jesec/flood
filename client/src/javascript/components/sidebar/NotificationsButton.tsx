@@ -1,8 +1,7 @@
 import classnames from 'classnames';
-import {Component, createRef} from 'react';
-import {defineMessages, injectIntl, WrappedComponentProps} from 'react-intl';
+import {defineMessages, useIntl} from 'react-intl';
+import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react';
-import {reaction} from 'mobx';
 
 import type {Notification} from '@shared/types/Notification';
 
@@ -14,13 +13,14 @@ import NotificationIcon from '../icons/NotificationIcon';
 import NotificationStore from '../../stores/NotificationStore';
 import Tooltip from '../general/Tooltip';
 
-interface NotificationsButtonStates {
-  isLoading: boolean;
-  paginationStart: number;
-  prevHeight: number;
-}
+const NOTIFICATIONS_PER_PAGE = 10;
 
-const loadingIndicatorIcon = <LoadingIndicatorDots viewBox="0 0 32 32" />;
+const fetchNotifications = (paginationStart: number) =>
+  FloodActions.fetchNotifications({
+    id: 'notification-tooltip',
+    limit: NOTIFICATIONS_PER_PAGE,
+    start: paginationStart,
+  });
 
 const MESSAGES = defineMessages({
   'notification.torrent.finished.heading': {
@@ -41,271 +41,248 @@ const MESSAGES = defineMessages({
   'notification.feed.torrent.added.body': {
     id: 'notification.feed.torrent.added.body',
   },
-  noNotification: {
-    id: 'notification.no.notification',
-  },
-  clearAll: {
-    id: 'notification.clear.all',
-  },
-  showing: {
-    id: 'notification.showing',
-  },
-  at: {
-    id: 'general.at',
-  },
-  to: {
-    id: 'general.to',
-  },
-  of: {
-    id: 'general.of',
-  },
 });
 
-const NOTIFICATIONS_PER_PAGE = 10;
-
-@observer
-class NotificationsButton extends Component<WrappedComponentProps, NotificationsButtonStates> {
-  tooltipRef: Tooltip | null = null;
-  notificationsListRef = createRef<HTMLUListElement>();
-
-  constructor(props: WrappedComponentProps) {
-    super(props);
-
-    reaction(
-      () => NotificationStore.notificationCount,
-      (count) => {
-        if (count.total > 0 && this.tooltipRef?.isOpen()) this.fetchNotifications();
-      },
-    );
-
-    this.state = {
-      isLoading: false,
-      paginationStart: 0,
-      prevHeight: 0,
-    };
-  }
-
-  getBottomToolbar = () => {
-    const {notificationCount} = NotificationStore;
-
-    if (notificationCount.total > 0) {
-      const newerButtonClass = classnames(
-        'toolbar__item toolbar__item--button',
-        'tooltip__content--padding-surrogate',
-        {
-          'is-disabled': this.state.paginationStart === 0,
-        },
-      );
-      const olderButtonClass = classnames(
-        'toolbar__item toolbar__item--button',
-        'tooltip__content--padding-surrogate',
-        {
-          'is-disabled': this.state.paginationStart + NOTIFICATIONS_PER_PAGE >= notificationCount.total,
-        },
-      );
-
-      const olderFrom = this.state.paginationStart + NOTIFICATIONS_PER_PAGE + 1;
-      let olderTo = this.state.paginationStart + NOTIFICATIONS_PER_PAGE * 2;
-      let newerFrom = this.state.paginationStart - NOTIFICATIONS_PER_PAGE;
-      const newerTo = this.state.paginationStart;
-
-      if (olderTo > notificationCount.total) {
-        olderTo = notificationCount.total;
-      }
-
-      if (newerFrom < 0) {
-        newerFrom = 0;
-      }
-
-      return (
-        <ul
-          className="notifications__toolbar toolbar toolbar--dark
-          toolbar--bottom">
-          <li className={newerButtonClass} onClick={this.handleNewerNotificationsClick}>
-            <ChevronLeftIcon />
-            {`${newerFrom + 1} - ${newerTo}`}
-          </li>
-          <li
-            className="toolbar__item toolbar__item--button
-            tooltip__content--padding-surrogate"
-            onClick={this.handleClearNotificationsClick}>
-            {this.props.intl.formatMessage(MESSAGES.clearAll)}
-          </li>
-          <li className={olderButtonClass} onClick={this.handleOlderNotificationsClick}>
-            {`${olderFrom} - ${olderTo}`}
-            <ChevronRightIcon />
-          </li>
-        </ul>
-      );
-    }
-
-    return null;
-  };
-
-  getNotification = (notification: Notification, index: number) => {
-    const {intl} = this.props;
-    const date = intl.formatDate(notification.ts, {
-      year: 'numeric',
-      month: 'long',
-      day: '2-digit',
-    });
-    const time = intl.formatTime(notification.ts);
-
-    return (
-      <li className="notifications__list__item" key={index}>
-        <div className="notification__heading">
-          <span className="notification__category">
-            {intl.formatMessage(
-              MESSAGES[`${notification.id}.heading` as keyof typeof MESSAGES] || {id: 'general.error.unknown'},
-            )}
-          </span>
-          {' — '}
-          <span className="notification__timestamp">{`${date} ${intl.formatMessage(MESSAGES.at)} ${time}`}</span>
-        </div>
-        <div className="notification__message">
-          {intl.formatMessage(
-            MESSAGES[`${notification.id}.body` as keyof typeof MESSAGES] || {
-              id: 'general.error.unknown',
-            },
-            notification.data,
-          )}
-        </div>
-      </li>
-    );
-  };
-
-  getTopToolbar() {
-    const {intl} = this.props;
-    const {paginationStart} = this.state;
-
-    const {notificationCount} = NotificationStore;
-
-    if (notificationCount.total > NOTIFICATIONS_PER_PAGE) {
-      let countStart = paginationStart + 1;
-      let countEnd = paginationStart + NOTIFICATIONS_PER_PAGE;
-
-      if (countStart > notificationCount.total) {
-        countStart = notificationCount.total;
-      }
-
-      if (countEnd > notificationCount.total) {
-        countEnd = notificationCount.total;
-      }
-
-      return (
-        <div className="toolbar toolbar--dark toolbar--top tooltip__toolbar tooltip__content--padding-surrogate">
-          <span className="toolbar__item toolbar__item--label">
-            {`${intl.formatMessage(MESSAGES.showing)} `}
-            <strong>
-              {countStart}
-              {` ${intl.formatMessage(MESSAGES.to)} `}
-              {countEnd}
-            </strong>
-            {` ${intl.formatMessage(MESSAGES.of)} `}
-            <strong>{notificationCount.total}</strong>
-          </span>
-        </div>
-      );
-    }
-
-    return null;
-  }
-
-  fetchNotifications = () => {
-    this.setState({isLoading: true});
-
-    FloodActions.fetchNotifications({
-      id: 'notification-tooltip',
-      limit: NOTIFICATIONS_PER_PAGE,
-      start: this.state.paginationStart,
-    }).then(() => {
-      this.setState({isLoading: false});
-    });
-  };
-
-  handleClearNotificationsClick = () => {
-    this.setState({
-      paginationStart: 0,
-      prevHeight: 0,
-    });
-
-    if (this.tooltipRef != null) {
-      this.tooltipRef.dismissTooltip();
-    }
-
-    FloodActions.clearNotifications();
-  };
-
-  handleNewerNotificationsClick = () => {
-    if (this.state.paginationStart - NOTIFICATIONS_PER_PAGE >= 0) {
-      this.setState((state) => {
-        const paginationStart = state.paginationStart - NOTIFICATIONS_PER_PAGE;
-        return {
-          paginationStart,
-          prevHeight: this.notificationsListRef.current?.clientHeight || 0,
-        };
-      }, this.fetchNotifications);
-    }
-  };
-
-  handleOlderNotificationsClick = () => {
-    const {notificationCount} = NotificationStore;
-
-    if (notificationCount.total > this.state.paginationStart + NOTIFICATIONS_PER_PAGE) {
-      this.setState((state) => {
-        const paginationStart = state.paginationStart + NOTIFICATIONS_PER_PAGE;
-        return {
-          paginationStart,
-          prevHeight: this.notificationsListRef.current?.clientHeight || 0,
-        };
-      }, this.fetchNotifications);
-    }
-  };
-
-  render() {
-    const {intl} = this.props;
-    const {isLoading, prevHeight} = this.state;
-    const {hasNotification, notifications, notificationCount} = NotificationStore;
-
-    return (
-      <Tooltip
-        contentClassName="tooltip__content tooltip__content--no-padding"
-        content={
-          hasNotification ? (
-            <div
-              className={classnames('notifications', {
-                'notifications--is-loading': isLoading,
-              })}>
-              {this.getTopToolbar()}
-              <div className="notifications__loading-indicator">{loadingIndicatorIcon}</div>
-              <ul
-                className="notifications__list tooltip__content--padding-surrogate"
-                ref={this.notificationsListRef}
-                style={{minHeight: prevHeight}}>
-                {notifications.map(this.getNotification)}
-              </ul>
-              {this.getBottomToolbar()}
-            </div>
-          ) : (
-            <div className="notifications tooltip__content--padding-surrogate" style={{textAlign: 'center'}}>
-              {intl.formatMessage(MESSAGES.noNotification)}
-            </div>
-          )
-        }
-        interactive
-        onOpen={() => this.fetchNotifications()}
-        ref={(ref) => {
-          this.tooltipRef = ref;
-        }}
-        width={340}
-        position="bottom"
-        wrapperClassName="sidebar__action sidebar__icon-button
-          tooltip__wrapper">
-        <NotificationIcon />
-        {hasNotification ? <span className="notifications__badge">{notificationCount.total}</span> : null}
-      </Tooltip>
-    );
-  }
+interface NotificationTopToolbarProps {
+  paginationStart: number;
+  notificationTotal: number;
 }
 
-export default injectIntl(NotificationsButton);
+const NotificationTopToolbar: FC<NotificationTopToolbarProps> = ({
+  paginationStart,
+  notificationTotal,
+}: NotificationTopToolbarProps) => {
+  const intl = useIntl();
+
+  if (notificationTotal > NOTIFICATIONS_PER_PAGE) {
+    let countStart = paginationStart + 1;
+    let countEnd = paginationStart + NOTIFICATIONS_PER_PAGE;
+
+    if (countStart > notificationTotal) {
+      countStart = notificationTotal;
+    }
+
+    if (countEnd > notificationTotal) {
+      countEnd = notificationTotal;
+    }
+
+    return (
+      <div className="toolbar toolbar--dark toolbar--top tooltip__toolbar tooltip__content--padding-surrogate">
+        <span className="toolbar__item toolbar__item--label">
+          {`${intl.formatMessage({
+            id: 'notification.showing',
+          })} `}
+          <strong>
+            {countStart}
+            {` ${intl.formatMessage({
+              id: 'general.to',
+            })} `}
+            {countEnd}
+          </strong>
+          {` ${intl.formatMessage({
+            id: 'general.of',
+          })} `}
+          <strong>{notificationTotal}</strong>
+        </span>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+interface NotificationItemProps {
+  index: number;
+  notification: Notification;
+}
+
+const NotificationItem: FC<NotificationItemProps> = ({index, notification}: NotificationItemProps) => {
+  const intl = useIntl();
+  const date = intl.formatDate(notification.ts, {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+  });
+  const time = intl.formatTime(notification.ts);
+
+  return (
+    <li className="notifications__list__item" key={index}>
+      <div className="notification__heading">
+        <span className="notification__category">
+          {intl.formatMessage(
+            MESSAGES[`${notification.id}.heading` as keyof typeof MESSAGES] || {id: 'general.error.unknown'},
+          )}
+        </span>
+        {' — '}
+        <span className="notification__timestamp">{`${date} ${intl.formatMessage({
+          id: 'general.at',
+        })} ${time}`}</span>
+      </div>
+      <div className="notification__message">
+        {intl.formatMessage(
+          MESSAGES[`${notification.id}.body` as keyof typeof MESSAGES] || {
+            id: 'general.error.unknown',
+          },
+          notification.data,
+        )}
+      </div>
+    </li>
+  );
+};
+
+interface NotificationBottomToolbarProps {
+  paginationStart: number;
+  notificationTotal: number;
+  onPrevClick: () => void;
+  onNextClick: () => void;
+  onClearClick: () => void;
+}
+
+const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
+  paginationStart,
+  notificationTotal,
+  onPrevClick,
+  onClearClick,
+  onNextClick,
+}: NotificationBottomToolbarProps) => {
+  const intl = useIntl();
+
+  if (notificationTotal > 0) {
+    const newerButtonClass = classnames('toolbar__item toolbar__item--button', 'tooltip__content--padding-surrogate', {
+      'is-disabled': paginationStart === 0,
+    });
+    const olderButtonClass = classnames('toolbar__item toolbar__item--button', 'tooltip__content--padding-surrogate', {
+      'is-disabled': paginationStart + NOTIFICATIONS_PER_PAGE >= notificationTotal,
+    });
+
+    const olderFrom = paginationStart + NOTIFICATIONS_PER_PAGE + 1;
+    let olderTo = paginationStart + NOTIFICATIONS_PER_PAGE * 2;
+    let newerFrom = paginationStart - NOTIFICATIONS_PER_PAGE;
+    const newerTo = paginationStart;
+
+    if (olderTo > notificationTotal) {
+      olderTo = notificationTotal;
+    }
+
+    if (newerFrom < 0) {
+      newerFrom = 0;
+    }
+
+    return (
+      <ul
+        className="notifications__toolbar toolbar toolbar--dark
+        toolbar--bottom">
+        <li className={newerButtonClass} onClick={onPrevClick}>
+          <ChevronLeftIcon />
+          {`${newerFrom + 1} - ${newerTo}`}
+        </li>
+        <li
+          className="toolbar__item toolbar__item--button
+          tooltip__content--padding-surrogate"
+          onClick={onClearClick}>
+          {intl.formatMessage({
+            id: 'notification.clear.all',
+          })}
+        </li>
+        <li className={olderButtonClass} onClick={onNextClick}>
+          {`${olderFrom} - ${olderTo}`}
+          <ChevronRightIcon />
+        </li>
+      </ul>
+    );
+  }
+
+  return null;
+};
+
+const NotificationsButton: FC = observer(() => {
+  const intl = useIntl();
+
+  const tooltipRef = useRef<Tooltip>(null);
+  const notificationsListRef = useRef<HTMLUListElement>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [paginationStart, setPaginationStart] = useState<number>(0);
+  const [prevHeight, setPrevHeight] = useState<number>(0);
+
+  const {hasNotification, notifications, notificationCount} = NotificationStore;
+
+  useEffect(() => {
+    if (notificationCount.total > 0 && tooltipRef.current?.isOpen()) {
+      setIsLoading(true);
+      fetchNotifications(paginationStart).finally(() => setIsLoading(false));
+    }
+  }, [notificationCount, paginationStart]);
+
+  return (
+    <Tooltip
+      contentClassName="tooltip__content tooltip__content--no-padding"
+      content={
+        hasNotification ? (
+          <div
+            className={classnames('notifications', {
+              'notifications--is-loading': isLoading,
+            })}>
+            <NotificationTopToolbar paginationStart={paginationStart} notificationTotal={notificationCount.total} />
+            <div className="notifications__loading-indicator">
+              <LoadingIndicatorDots viewBox="0 0 32 32" />
+            </div>
+            <ul
+              className="notifications__list tooltip__content--padding-surrogate"
+              ref={notificationsListRef}
+              style={{minHeight: prevHeight}}>
+              {notifications.map((notification, index) => (
+                <NotificationItem index={index} notification={notification} />
+              ))}
+            </ul>
+            <NotificationBottomToolbar
+              paginationStart={paginationStart}
+              notificationTotal={notificationCount.total}
+              onPrevClick={() => {
+                const newPaginationStart = paginationStart - NOTIFICATIONS_PER_PAGE;
+                if (newPaginationStart >= 0) {
+                  setPrevHeight(notificationsListRef.current?.clientHeight || 0);
+                  setPaginationStart(newPaginationStart);
+                }
+              }}
+              onClearClick={() => {
+                if (tooltipRef.current != null) {
+                  tooltipRef.current.dismissTooltip();
+                }
+
+                FloodActions.clearNotifications();
+
+                setPrevHeight(0);
+                setPaginationStart(0);
+              }}
+              onNextClick={() => {
+                const newPaginationStart = paginationStart + NOTIFICATIONS_PER_PAGE;
+                if (notificationCount.total > newPaginationStart) {
+                  setPrevHeight(notificationsListRef.current?.clientHeight || 0);
+                  setPaginationStart(newPaginationStart);
+                }
+              }}
+            />
+          </div>
+        ) : (
+          <div className="notifications tooltip__content--padding-surrogate" style={{textAlign: 'center'}}>
+            {intl.formatMessage({
+              id: 'notification.no.notification',
+            })}
+          </div>
+        )
+      }
+      interactive
+      onOpen={() => fetchNotifications(paginationStart)}
+      ref={tooltipRef}
+      width={340}
+      position="bottom"
+      wrapperClassName="sidebar__action sidebar__icon-button
+          tooltip__wrapper">
+      <NotificationIcon />
+      {hasNotification ? <span className="notifications__badge">{notificationCount.total}</span> : null}
+    </Tooltip>
+  );
+});
+
+export default NotificationsButton;
