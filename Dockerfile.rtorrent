@@ -1,8 +1,7 @@
+ARG FLOOD_VERSION=latest
 ARG RTORRENT_VERSION=latest
 
 FROM jesec/rtorrent:$RTORRENT_VERSION as rtorrent
-
-ARG FLOOD_VERSION=latest
 
 FROM jesec/flood:$FLOOD_VERSION as flood
 
