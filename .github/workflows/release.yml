@@ -50,6 +50,7 @@ jobs:
             dist-pkg/flood-win.exe
 
   release-docker:
+    needs: release
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
@@ -77,11 +78,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Wait until the package is available
+        uses: nick-invision/retry@v2
+        with:
+          command: curl -f -s https://registry.npmjs.org/flood/${{ steps.parse_semver.outputs.FULL_VERSION }} &>/dev/null
+          timeout_minutes: 30
+          max_attempts: 15
+          retry_wait_seconds: 15
+
       - name: Publish to Docker Hub
         uses: docker/build-push-action@v2
         with:
+          build-args: VERSION=${{ steps.parse_semver.outputs.FULL_VERSION }}
           context: .
-          file: ./Dockerfile
+          file: ./Dockerfile.release
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: |
