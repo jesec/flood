@@ -1,8 +1,14 @@
 # Use node alpine docker image
 FROM node:alpine
 
-# Get the latest release from npm
-RUN npm i -g flood --unsafe-perm
+ARG PACKAGE=flood
+ARG VERSION=latest
+
+# Get specified version from npm
+RUN npm i -g "${PACKAGE}"@"${VERSION}" &&\
+    node --version &&\
+    npm ls --global &&\
+    npm cache clean --force
 
 # Install runtime dependencies
 RUN apk --no-cache add \
