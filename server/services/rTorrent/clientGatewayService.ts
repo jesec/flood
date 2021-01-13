@@ -517,11 +517,17 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processClientRequestError);
 
-    const sessionDirectory = await this.getClientSessionDirectory();
+    const {path: sessionDirectory, case: torrentCase} = await this.getClientSessionDirectory();
 
     await Promise.all(
       [...new Set(hashes)].map(async (hash) =>
-        setTrackers(path.join(sessionDirectory, sanitize(`${hash}.torrent`)), trackers),
+        setTrackers(
+          path.join(
+            sessionDirectory,
+            sanitize(`${torrentCase === 'lower' ? hash.toLowerCase() : hash.toUpperCase()}.torrent`),
+          ),
+          trackers,
+        ),
       ),
     );
   }
@@ -677,10 +683,11 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       });
   }
 
-  async getClientSessionDirectory(): Promise<string> {
+  async getClientSessionDirectory(): Promise<{path: string; case: 'lower' | 'upper'}> {
     return this.clientRequestManager
       .methodCall('session.path', [])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((response) => ({path: response, case: 'upper'}));
   }
 
   async getClientSettings(): Promise<ClientSettings> {

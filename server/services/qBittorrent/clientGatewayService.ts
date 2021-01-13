@@ -386,19 +386,19 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       });
   }
 
-  async getClientSessionDirectory(): Promise<string> {
+  async getClientSessionDirectory(): Promise<{path: string; case: 'lower' | 'upper'}> {
     // qBittorrent API does not provide session directory.
     // We can only guess with the common locations here.
     switch (process.platform) {
       case 'win32':
         if (process.env.LOCALAPPDATA) {
-          return path.join(process.env.LOCALAPPDATA, '\\qBittorrent\\BT_backup');
+          return {path: path.join(process.env.LOCALAPPDATA, '\\qBittorrent\\BT_backup'), case: 'lower'};
         }
-        return path.join(homedir(), '\\AppData\\Local\\qBittorrent\\BT_backup');
+        return {path: path.join(homedir(), '\\AppData\\Local\\qBittorrent\\BT_backup'), case: 'lower'};
       case 'darwin':
-        return path.join(homedir(), '/Library/Application Support/qBittorrent/BT_backup');
+        return {path: path.join(homedir(), '/Library/Application Support/qBittorrent/BT_backup'), case: 'lower'};
       default:
-        return path.join(homedir(), '/.local/share/data/qBittorrent/BT_backup');
+        return {path: path.join(homedir(), '/.local/share/data/qBittorrent/BT_backup'), case: 'lower'};
     }
   }
 

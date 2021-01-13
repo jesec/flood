@@ -569,15 +569,17 @@ router.get<{hashes: string}>(
       return;
     }
 
-    const sessionDirectory = await req.services?.clientGatewayService
-      ?.getClientSessionDirectory()
-      .catch(() => undefined);
+    const {path: sessionDirectory, case: torrentCase} =
+      (await req.services?.clientGatewayService?.getClientSessionDirectory().catch(() => undefined)) || {};
+
     if (sessionDirectory == null || !fs.existsSync(sessionDirectory)) {
       res.status(500).json(new Error('Failed to get session directory.'));
       return;
     }
 
-    const torrentFileNames = hashes.map((hash) => `${hash}.torrent`);
+    const torrentFileNames = hashes.map(
+      (hash) => `${torrentCase === 'lower' ? hash.toLowerCase() : hash.toUpperCase()}.torrent`,
+    );
 
     if (hashes.length < 2) {
       res.attachment(torrentFileNames[0]);
@@ -590,7 +592,8 @@ router.get<{hashes: string}>(
         fs.accessSync(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
       );
     } catch {
-      res.status(500).json('Failed to access torrent files.');
+      res.status(404).json('Failed to access torrent files.');
+      return;
     }
 
     res.attachment(`torrents-${Date.now()}.tar`);

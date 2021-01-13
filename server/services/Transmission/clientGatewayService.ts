@@ -422,11 +422,11 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       });
   }
 
-  async getClientSessionDirectory(): Promise<string> {
+  async getClientSessionDirectory(): Promise<{path: string; case: 'lower' | 'upper'}> {
     return this.clientRequestManager
       .getSessionProperties(['config-dir'])
       .then(this.processClientRequestSuccess, this.processClientRequestError)
-      .then((properties) => path.join(properties['config-dir'], 'torrents'));
+      .then((properties) => ({path: path.join(properties['config-dir'], 'torrents'), case: 'lower'}));
   }
 
   async getClientSettings(): Promise<ClientSettings> {
