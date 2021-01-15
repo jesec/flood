@@ -9,23 +9,31 @@
 ARG BUILDPLATFORM=amd64
 ARG NODE_IMAGE=node:alpine
 
-FROM --platform=$BUILDPLATFORM ${NODE_IMAGE}
+FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} as nodebuild
 
 WORKDIR /usr/src/app/
 
 # Copy project files
 COPY . ./
 
-# Install dependencies
-RUN apk --no-cache add \
-    python build-base mediainfo
-
 # Fetch dependencies from npm
-RUN npm ci --no-optional && npm cache clean --force
+RUN npm ci --no-optional
 
 # Build assets
 RUN cp config.cli.js config.js
 RUN npm run build-assets
+
+# Now get the clean Node.js image
+FROM ${NODE_IMAGE} as flood
+
+WORKDIR /usr/src/app/
+
+# Copy sources
+COPY --from=nodebuild /usr/src/app ./
+
+# Install runtime dependencies
+RUN apk --no-cache add \
+    mediainfo
 
 # Create "download" user
 RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
