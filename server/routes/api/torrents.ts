@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import rateLimit from 'express-rate-limit';
 import sanitize from 'sanitize-filename';
-import tar from 'tar';
+import tar, {Pack} from 'tar-fs';
 
 import type {
   AddTorrentByFileOptions,
@@ -598,15 +598,11 @@ router.get<{hashes: string}>(
 
     res.attachment(`torrents-${Date.now()}.tar`);
     tar
-      .c(
-        {
-          cwd: sessionDirectory,
-          follow: false,
-          noDirRecurse: true,
-          portable: true,
-        },
-        torrentFileNames,
-      )
+      .pack(sessionDirectory, {
+        entries: torrentFileNames,
+        strict: true,
+        dereference: false,
+      })
       .pipe(res);
   },
 );
@@ -684,14 +680,19 @@ router.get(
   }),
   (req, res) => {
     const {hash, indices: stringIndices} = req.params;
+
     const selectedTorrent = req.services?.torrentService.getTorrent(hash);
-    if (!selectedTorrent) return res.status(404).json({error: 'Torrent not found.'});
+    if (!selectedTorrent) {
+      res.status(404).json({error: 'Torrent not found.'});
+      return;
+    }
 
     req.services?.clientGatewayService
       ?.getTorrentContents(hash)
       .then((contents) => {
         if (!contents || contents.length < 1) {
-          return res.status(404).json({error: 'Torrent contents not found'});
+          res.status(404).json({error: 'Torrent contents not found'});
+          return;
         }
 
         let indices: Array<number>;
@@ -708,7 +709,8 @@ router.get(
           .filter((filePath) => fs.existsSync(filePath));
 
         if (filePathsToDownload.length < 1) {
-          return res.status(404).json({error: 'File not found.'});
+          res.status(404).json({error: 'File not found.'});
+          return;
         }
 
         if (filePathsToDownload.length === 1) {
@@ -738,7 +740,9 @@ router.get(
           // This is useful for texts, videos and audios. Users can still download them if needed.
           res.setHeader('content-disposition', contentDisposition(fileName, {type: 'inline'}));
 
-          return res.sendFile(file);
+          res.sendFile(file);
+
+          return;
         }
 
         const archiveRootFolder = sanitizePath(selectedTorrent.directory);
@@ -747,17 +751,40 @@ router.get(
         );
 
         res.attachment(`${selectedTorrent.name}.tar`);
-        return tar
-          .c(
-            {
-              cwd: archiveRootFolder,
-              follow: false,
-              noDirRecurse: true,
-              portable: true,
-            },
-            relativeFilePaths,
-          )
-          .pipe(res);
+
+        const tarOptions: tar.PackOptions = {
+          strict: true,
+          dereference: false,
+        };
+
+        // Append file one by one to avoid OOM
+        const appendEntry = (prevPack: Pack) => {
+          const entry = relativeFilePaths.shift();
+
+          if (entry == null) {
+            prevPack.finalize();
+          } else {
+            tar.pack(archiveRootFolder, {
+              pack: prevPack,
+              entries: [entry],
+              ...tarOptions,
+              finalize: false,
+              finish: appendEntry,
+            });
+          }
+        };
+
+        const tarStream = tar.pack(archiveRootFolder, {
+          entries: [relativeFilePaths.shift() as string],
+          ...tarOptions,
+          finalize: false,
+          finish: appendEntry,
+        });
+
+        tarStream.pipe(res).once('close', () => {
+          tarStream.unpipe(res);
+          res.destroy();
+        });
       })
       .catch((err) => {
         res.status(500).json(err);
