@@ -51,8 +51,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
-        with:
-          buildkitd-flags: --debug
 
       - name: Login to DockerHub
         uses: docker/login-action@v1
@@ -73,7 +71,7 @@ jobs:
           max_attempts: 15
           retry_wait_seconds: 15
 
-      - name: Publish flood to Docker Hub
+      - name: Publish flood:master to Docker Hub
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -99,6 +97,48 @@ jobs:
             jesec/rtorrent-flood:latest
           build-args: |
             FLOOD_VERSION=master
+            RTORRENT_VERSION=master
+
+  docker-dbg:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Publish flood:master-dbg to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          push: true
+          tags: jesec/flood:master-dbg
+
+      - run: sleep 10
+
+      - name: Publish rtorrent-flood to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile.rtorrent
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            jesec/rtorrent-flood:master-dbg
+          build-args: |
+            FLOOD_VERSION=master-dbg
             RTORRENT_VERSION=master
 
   pkg:
