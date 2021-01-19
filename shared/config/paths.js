@@ -19,14 +19,20 @@ const ensureSlash = (questionablePath, needsSlash) => {
 
 const getAppDist = () => {
   // In production, assets are in assets/.
-  const appDist = path.resolve(path.join(__dirname, 'assets'));
+  let appDist = path.resolve(path.join(__dirname, 'assets'));
+
   if (!fs.existsSync(appDist)) {
     // In development, assets are in ${appDirectory}/dist/assets/.
-    const appBuild = resolveApp('dist/assets');
-    if (fs.existsSync(appBuild)) {
-      return appBuild;
-    }
+    appDist = resolveApp('dist/assets');
   }
+
+  if (!fs.existsSync(appDist)) {
+    // Assets are placed to /usr when Flood is managed by package
+    // managers other than npm. This allows users to serve static
+    // assets from web server directly if they want.
+    appDist = path.resolve('/usr/share/flood/assets');
+  }
+
   return appDist;
 };
 
