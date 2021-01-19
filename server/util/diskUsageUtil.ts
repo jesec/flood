@@ -1,11 +1,20 @@
-import {execFile} from 'child_process';
-import util from 'util';
+import {spawnSync, SpawnSyncOptions} from 'child_process';
 
 import type {Disk} from '@shared/types/DiskUsage';
 
 import config from '../../config';
 
-const execFileAsync = util.promisify(execFile);
+const spawnAsync = (cmd: string, args: string[], options: SpawnSyncOptions): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const {stdout, error} = spawnSync(cmd, args, options);
+
+    if (error) {
+      reject(error);
+      return;
+    }
+
+    resolve(stdout.toString('utf-8'));
+  });
 
 const PLATFORMS_SUPPORTED = ['darwin', 'linux', 'freebsd', 'win32'] as const;
 export type SupportedPlatform = Extract<NodeJS.Platform, typeof PLATFORMS_SUPPORTED[number]>;
@@ -27,15 +36,17 @@ const filterMountPoint = (mountpoint: string) => {
 };
 
 const MAX_BUFFER_SIZE = 65536;
+const EXEC_TIMEOUT = 2000;
 export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<Disk>>>> = {
   linux: () =>
-    execFileAsync('df -T | tail -n+2', {
-      shell: true,
+    spawnAsync('df', ['-T'], {
       maxBuffer: MAX_BUFFER_SIZE,
-    }).then(({stdout}) =>
+      timeout: EXEC_TIMEOUT,
+    }).then((stdout) =>
       stdout
         .trim()
         .split('\n')
+        .slice(1)
         .map((disk) => disk.split(/\s+/))
         .filter((disk) => filterMountPoint(disk[6]))
         .filter((disk) => disk[1] !== 'devtmpfs' && disk[1] !== 'squashfs' && disk[1] !== 'tmpfs')
@@ -49,13 +60,14 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
         }),
     ),
   freebsd: () =>
-    execFileAsync('df | tail -n+2', {
-      shell: true,
+    spawnAsync('df', [], {
       maxBuffer: MAX_BUFFER_SIZE,
-    }).then(({stdout}) =>
+      timeout: EXEC_TIMEOUT,
+    }).then((stdout) =>
       stdout
         .trim()
         .split('\n')
+        .slice(1)
         .map((disk) => disk.split(/\s+/))
         .filter((disk) => filterMountPoint(disk[5]))
         .map(([_dev, size, used, avail, _pcent, target]) => {
@@ -68,13 +80,14 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
         }),
     ),
   darwin: () =>
-    execFileAsync('df -kl | tail -n+2', {
-      shell: true,
+    spawnAsync('df', ['-kl'], {
       maxBuffer: MAX_BUFFER_SIZE,
-    }).then(({stdout}) =>
+      timeout: EXEC_TIMEOUT,
+    }).then((stdout) =>
       stdout
         .trim()
         .split('\n')
+        .slice(1)
         .map((disk) => disk.split(/\s+/))
         .filter((disk) => filterMountPoint(disk[8]))
         .map(([_dev, size, used, avail, _pcent, _iused, _ifree, _piused, target]) => {
@@ -87,10 +100,10 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
         }),
     ),
   win32: () =>
-    execFileAsync('wmic logicaldisk', {
-      shell: true,
+    spawnAsync('wmic', ['logicaldisk'], {
       maxBuffer: MAX_BUFFER_SIZE,
-    }).then(({stdout}) =>
+      timeout: EXEC_TIMEOUT,
+    }).then((stdout) =>
       stdout
         .trim()
         .split('\n')
