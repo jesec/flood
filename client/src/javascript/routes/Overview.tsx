@@ -13,7 +13,7 @@ import 'overlayscrollbars/css/OverlayScrollbars.css';
 const Alerts = lazy(() => import('@client/components/alerts/Alerts'));
 const Modals = lazy(() => import('@client/components/modals/Modals'));
 
-const TorrentClientOverview: FC = () => {
+const Overview: FC = () => {
   useEffect(() => {
     FloodActions.startActivityStream();
   }, []);
@@ -33,4 +33,4 @@ const TorrentClientOverview: FC = () => {
   );
 };
 
-export default TorrentClientOverview;
+export default Overview;

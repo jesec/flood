@@ -18,8 +18,8 @@ import history from './util/history';
 import '../sass/style.scss';
 
 const Login = lazy(() => import(/* webpackPrefetch: true */ './routes/Login'));
+const Overview = lazy(() => import(/* webpackPreload: true */ './routes/Overview'));
 const Register = lazy(() => import(/* webpackPrefetch: true */ './routes/Register'));
-const TorrentClientOverview = lazy(() => import(/* webpackPreload: true */ './routes/TorrentClientOverview'));
 
 const FloodApp: FC = observer(() => {
   useEffect(() => {
@@ -82,8 +82,8 @@ const FloodApp: FC = observer(() => {
             <AppWrapper className={ConfigStore.preferDark ? 'dark' : undefined}>
               <Switch>
                 <Route path="/login" component={Login} />
+                <Route path="/overview" component={Overview} />
                 <Route path="/register" component={Register} />
-                <Route path="/overview" component={TorrentClientOverview} />
               </Switch>
             </AppWrapper>
           </QueryParamProvider>
