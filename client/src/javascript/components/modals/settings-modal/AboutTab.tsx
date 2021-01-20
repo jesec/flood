@@ -1,4 +1,4 @@
-import {lazy, Suspense} from 'react';
+import {FC, lazy, Suspense} from 'react';
 
 import packageJSON from '../../../../../../package.json';
 
@@ -8,7 +8,7 @@ const AboutMarkdown = lazy(() =>
 
 const FLOOD_PROJECT_URL = 'https://github.com/jesec/flood';
 
-const AboutTab = () => (
+const AboutTab: FC = () => (
   <Suspense fallback={null}>
     <AboutMarkdown
       FloodVersion={() => packageJSON.version}
