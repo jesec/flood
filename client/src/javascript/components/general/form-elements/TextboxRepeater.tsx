@@ -41,7 +41,7 @@ const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, pl
                 newTextboxes.splice(index, 1);
                 setTextboxes(newTextboxes);
               }}>
-              <RemoveMini size="mini" />
+              <RemoveMini />
             </FormElementAddon>
           );
         }
@@ -66,7 +66,7 @@ const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, pl
                   });
                   setTextboxes(newTextboxes);
                 }}>
-                <AddMini size="mini" />
+                <AddMini />
               </FormElementAddon>
               {removeButton}
             </Textbox>

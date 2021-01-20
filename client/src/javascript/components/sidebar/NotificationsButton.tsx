@@ -225,7 +225,7 @@ const NotificationsButton: FC = observer(() => {
             })}>
             <NotificationTopToolbar paginationStart={paginationStart} notificationTotal={notificationCount.total} />
             <div className="notifications__loading-indicator">
-              <LoadingIndicatorDots viewBox="0 0 32 32" />
+              <LoadingIndicatorDots />
             </div>
             <ul
               className="notifications__list tooltip__content--padding-surrogate"

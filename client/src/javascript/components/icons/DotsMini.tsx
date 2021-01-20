@@ -1,13 +1,20 @@
-import BaseIcon from './BaseIcon';
+import classnames from 'classnames';
+import {FC, memo} from 'react';
 
-export default class DotsMini extends BaseIcon {
-  render() {
-    return (
-      <svg className={`icon icon--dots-mini ${this.props.className}`} viewBox={this.getViewBox()}>
-        <circle cx="0.9" cy="4" r="0.9" />
-        <circle cx="4" cy="4" r="0.9" />
-        <circle cx="7.1" cy="4" r="0.9" />
-      </svg>
-    );
-  }
+interface DotsMiniProps {
+  className?: string;
 }
+
+const DotsMini: FC<DotsMiniProps> = memo(({className}: DotsMiniProps) => (
+  <svg className={classnames('icon', 'icon--dots-mini', className)} viewBox="0 0 60 60">
+    <circle cx="0.9" cy="4" r="0.9" />
+    <circle cx="4" cy="4" r="0.9" />
+    <circle cx="7.1" cy="4" r="0.9" />
+  </svg>
+));
+
+DotsMini.defaultProps = {
+  className: undefined,
+};
+
+export default DotsMini;

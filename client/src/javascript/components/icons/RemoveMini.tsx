@@ -1,11 +1,18 @@
-import BaseIcon from './BaseIcon';
+import classnames from 'classnames';
+import {FC, memo} from 'react';
 
-export default class RemoveMini extends BaseIcon {
-  render() {
-    return (
-      <svg className={`icon icon--remove-mini ${this.props.className}`} viewBox={this.getViewBox()}>
-        <rect y="3.5" width="8" height="1" />
-      </svg>
-    );
-  }
+interface RemoveMiniProps {
+  className?: string;
 }
+
+const RemoveMini: FC<RemoveMiniProps> = memo(({className}: RemoveMiniProps) => (
+  <svg className={classnames('icon', 'icon--remove-mini', className)} viewBox="0 0 8 8">
+    <rect y="3.5" width="8" height="1" />
+  </svg>
+));
+
+RemoveMini.defaultProps = {
+  className: undefined,
+};
+
+export default RemoveMini;
