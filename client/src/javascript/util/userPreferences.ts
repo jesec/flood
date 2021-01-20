@@ -1,8 +1,8 @@
+import SettingActions from '@client/actions/SettingActions';
+import SettingStore from '@client/stores/SettingStore';
+
 import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {TorrentProperties} from '@shared/types/Torrent';
-
-import SettingActions from '../actions/SettingActions';
-import SettingStore from '../stores/SettingStore';
 
 export const saveAddTorrentsUserPreferences = ({
   start,

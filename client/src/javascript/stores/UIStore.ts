@@ -1,7 +1,7 @@
 import {makeAutoObservable} from 'mobx';
 import {FC, MouseEvent} from 'react';
 
-import type {TorrentContextMenuAction} from '../constants/TorrentContextMenuActions';
+import type {TorrentContextMenuAction} from '@client/constants/TorrentContextMenuActions';
 
 export type ContextMenuItem =
   | {

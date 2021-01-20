@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import * as React from 'react';
+import {MouseEvent, TouchEvent} from 'react';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
@@ -30,7 +30,7 @@ const UIActions = {
     UIStore.dismissModal();
   },
 
-  handleTorrentClick: (data: {event: React.MouseEvent | React.TouchEvent; hash: string}) => {
+  handleTorrentClick: (data: {event: MouseEvent | TouchEvent; hash: string}) => {
     TorrentStore.setSelectedTorrents(data);
   },
 

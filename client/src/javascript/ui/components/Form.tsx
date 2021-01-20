@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {Component, FormEvent} from 'react';
 
 import {getDataFromForm, resetFormData} from './util/forms';
 
@@ -8,19 +8,19 @@ interface FormProps {
     event,
     formData,
   }: {
-    event: Event | React.FormEvent<HTMLFormElement>;
+    event: Event | FormEvent<HTMLFormElement>;
     formData: Record<string, unknown>;
   }) => void;
   onSubmit?: ({
     event,
     formData,
   }: {
-    event: Event | React.FormEvent<HTMLFormElement>;
+    event: Event | FormEvent<HTMLFormElement>;
     formData: Record<string, unknown>;
   }) => void;
 }
 
-class Form extends React.Component<FormProps> {
+class Form extends Component<FormProps> {
   formRef?: HTMLFormElement | null = null;
   componentDidMount() {
     if (this.formRef != null) {
@@ -47,14 +47,14 @@ class Form extends React.Component<FormProps> {
     }
   };
 
-  handleFormChange = (event: Event | React.FormEvent<HTMLFormElement>) => {
+  handleFormChange = (event: Event | FormEvent<HTMLFormElement>) => {
     if (this.formRef != null && this.props.onChange) {
       const formData = getDataFromForm(this.formRef);
       this.props.onChange({event, formData});
     }
   };
 
-  handleFormSubmit = (event: Event | React.FormEvent<HTMLFormElement>) => {
+  handleFormSubmit = (event: Event | FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (this.props.onSubmit) {

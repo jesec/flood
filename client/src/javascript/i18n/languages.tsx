@@ -1,14 +1,15 @@
+import {FC, ReactNode} from 'react';
 import {IntlProvider} from 'react-intl';
-import * as React from 'react';
 
 import type {MessageFormatElement} from 'intl-messageformat-parser';
 
-import detectLocale from '../util/detectLocale';
-import EN from './strings.compiled.json';
-import Languages from '../constants/Languages';
+import detectLocale from '@client/util/detectLocale';
+import Languages from '@client/constants/Languages';
 
-import type {Language} from '../constants/Languages';
-import type {LocaleConfig} from '../util/detectLocale';
+import type {Language} from '@client/constants/Languages';
+import type {LocaleConfig} from '@client/util/detectLocale';
+
+import EN from './strings.compiled.json';
 
 const messagesCache: Partial<Record<Exclude<Language, 'auto'>, Record<string, MessageFormatElement[]>>> = {en: EN};
 
@@ -47,10 +48,10 @@ function getMessages(locale: Exclude<Language, 'auto'>) {
 
 interface AsyncIntlProviderProps {
   language?: Language;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const AsyncIntlProvider: React.FC<AsyncIntlProviderProps> = ({language, children}: AsyncIntlProviderProps) => {
+const AsyncIntlProvider: FC<AsyncIntlProviderProps> = ({language, children}: AsyncIntlProviderProps) => {
   let validatedLocale: LocaleConfig;
   if (language == null || language === 'auto' || !Object.prototype.hasOwnProperty.call(Languages, language)) {
     validatedLocale = detectLocale();

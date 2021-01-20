@@ -1,5 +1,5 @@
+import {Component, ChangeEvent, MouseEvent} from 'react';
 import {FormattedMessage, IntlShape} from 'react-intl';
-import * as React from 'react';
 
 import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
@@ -15,7 +15,7 @@ export interface TransmissionConnectionSettingsFormData {
   password: string;
 }
 
-class TransmissionConnectionSettingsForm extends React.Component<
+class TransmissionConnectionSettingsForm extends Component<
   TransmissionConnectionSettingsProps,
   TransmissionConnectionSettingsFormData
 > {
@@ -47,7 +47,7 @@ class TransmissionConnectionSettingsForm extends React.Component<
   };
 
   handleFormChange = (
-    event: React.MouseEvent<HTMLInputElement> | KeyboardEvent | React.ChangeEvent<HTMLInputElement>,
+    event: MouseEvent<HTMLInputElement> | KeyboardEvent | ChangeEvent<HTMLInputElement>,
     field: keyof TransmissionConnectionSettingsFormData,
   ): void => {
     const inputElement = event.target as HTMLInputElement;

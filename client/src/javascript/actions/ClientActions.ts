@@ -1,11 +1,11 @@
 import axios from 'axios';
 
+import ConfigStore from '@client/stores/ConfigStore';
+import SettingStore from '@client/stores/SettingStore';
+import AlertStore from '@client/stores/AlertStore';
+
 import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
-
-import ConfigStore from '../stores/ConfigStore';
-import SettingStore from '../stores/SettingStore';
-import AlertStore from '../stores/AlertStore';
 
 const {baseURI} = ConfigStore;
 

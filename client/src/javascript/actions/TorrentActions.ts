@@ -1,6 +1,10 @@
 import axios, {CancelToken} from 'axios';
 import download from 'js-file-download';
 
+import AlertStore from '@client/stores/AlertStore';
+import ConfigStore from '@client/stores/ConfigStore';
+import UIStore from '@client/stores/UIStore';
+
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
@@ -23,10 +27,6 @@ import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TorrentProperties} from '@shared/types/Torrent';
-
-import AlertStore from '../stores/AlertStore';
-import ConfigStore from '../stores/ConfigStore';
-import UIStore from '../stores/UIStore';
 
 const {baseURI} = ConfigStore;
 

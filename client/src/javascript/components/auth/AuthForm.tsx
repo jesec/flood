@@ -1,5 +1,5 @@
+import {Component, createRef, FormEvent, RefObject} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import * as React from 'react';
 
 import {AccessLevel} from '@shared/schema/constants/Auth';
 
@@ -24,9 +24,9 @@ interface AuthFormStates {
   errorMessage?: string;
 }
 
-class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
+class AuthForm extends Component<AuthFormProps, AuthFormStates> {
   formRef?: Form | null;
-  settingsFormRef: React.RefObject<ClientConnectionSettingsFormType> = React.createRef();
+  settingsFormRef: RefObject<ClientConnectionSettingsFormType> = createRef();
 
   constructor(props: AuthFormProps) {
     super(props);
@@ -63,10 +63,7 @@ class AuthForm extends React.Component<AuthFormProps, AuthFormStates> {
     });
   }
 
-  handleFormSubmit = (submission: {
-    event: Event | React.FormEvent<HTMLFormElement>;
-    formData: Record<string, unknown>;
-  }) => {
+  handleFormSubmit = (submission: {event: Event | FormEvent<HTMLFormElement>; formData: Record<string, unknown>}) => {
     submission.event.preventDefault();
 
     this.setState({isSubmitting: true});

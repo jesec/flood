@@ -1,25 +1,25 @@
 import {observer} from 'mobx-react';
-import {QueryParamProvider} from 'use-query-params';
 import {FC, lazy, Suspense, useEffect} from 'react';
-import {Router} from 'react-router-dom';
-import {Route, Switch} from 'react-router';
 import ReactDOM from 'react-dom';
+import {Route, Switch} from 'react-router';
+import {Router} from 'react-router-dom';
 import {useMedia} from 'react-use';
+import {QueryParamProvider} from 'use-query-params';
 
-import AsyncIntlProvider from './i18n/languages';
-import AppWrapper from './components/AppWrapper';
 import AuthActions from './actions/AuthActions';
-import history from './util/history';
+import AppWrapper from './components/AppWrapper';
 import LoadingOverlay from './components/general/LoadingOverlay';
+import AsyncIntlProvider from './i18n/languages';
 import ConfigStore from './stores/ConfigStore';
 import SettingStore from './stores/SettingStore';
 import UIStore from './stores/UIStore';
+import history from './util/history';
 
 import '../sass/style.scss';
 
-const Login = lazy(() => import(/* webpackPrefetch: true */ './components/views/Login'));
-const Register = lazy(() => import(/* webpackPrefetch: true */ './components/views/Register'));
-const TorrentClientOverview = lazy(() => import(/* webpackPreload: true */ './components/views/TorrentClientOverview'));
+const Login = lazy(() => import(/* webpackPrefetch: true */ './routes/Login'));
+const Register = lazy(() => import(/* webpackPrefetch: true */ './routes/Register'));
+const TorrentClientOverview = lazy(() => import(/* webpackPreload: true */ './routes/TorrentClientOverview'));
 
 const FloodApp: FC = observer(() => {
   useEffect(() => {

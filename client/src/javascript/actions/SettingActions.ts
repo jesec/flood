@@ -1,11 +1,11 @@
 import axios from 'axios';
 
+import AlertStore from '@client/stores/AlertStore';
+import ConfigStore from '@client/stores/ConfigStore';
+import SettingStore from '@client/stores/SettingStore';
+
 import type {FloodSetting, FloodSettings} from '@shared/types/FloodSettings';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
-
-import AlertStore from '../stores/AlertStore';
-import ConfigStore from '../stores/ConfigStore';
-import SettingStore from '../stores/SettingStore';
 
 const {baseURI} = ConfigStore;
 

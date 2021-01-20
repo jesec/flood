@@ -1,8 +1,8 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {forwardRef, ReactNode} from 'react';
 
 export interface FormRowItemProps {
-  children?: React.ReactNode;
+  children?: ReactNode;
 
   className?: string;
   type?: string;
@@ -20,7 +20,7 @@ export interface FormRowItemProps {
     | 'seven-eighths';
 }
 
-const FormRowItem = React.forwardRef<HTMLDivElement, FormRowItemProps>(
+const FormRowItem = forwardRef<HTMLDivElement, FormRowItemProps>(
   ({children, className, type, width, grow, shrink}: FormRowItemProps, ref) => {
     const classes = classnames('form__row__item', className, {
       [`form__row__item--${width}`]: width,

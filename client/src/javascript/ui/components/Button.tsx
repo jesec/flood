@@ -1,13 +1,13 @@
+import {ButtonHTMLAttributes, Children, cloneElement, Component, FC, ReactElement, ReactNodeArray, Ref} from 'react';
 import classnames from 'classnames';
-import * as React from 'react';
 
 import FadeIn from './FadeIn';
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
 import LoadingRing from '../icons/LoadingRing';
 
-export type ButtonProps = Pick<React.ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'onClick' | 'onChange'> & {
-  buttonRef?: React.Ref<HTMLButtonElement>;
+export type ButtonProps = Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'onClick' | 'onChange'> & {
+  buttonRef?: Ref<HTMLButtonElement>;
   isLoading?: boolean;
   additionalClassNames?: string;
   labelOffset?: boolean;
@@ -16,13 +16,13 @@ export type ButtonProps = Pick<React.ButtonHTMLAttributes<HTMLButtonElement>, 'd
   type?: 'submit' | 'button';
 
   wrap?: boolean;
-  wrapper?: string | React.FunctionComponent;
+  wrapper?: string | FC;
   wrapperProps?: Record<string, unknown>;
   grow?: boolean;
   shrink?: boolean;
 };
 
-export default class Button extends React.Component<ButtonProps> {
+export default class Button extends Component<ButtonProps> {
   static defaultProps = {
     additionalClassNames: '',
     disabled: false,
@@ -38,18 +38,18 @@ export default class Button extends React.Component<ButtonProps> {
 
   getButtonContent() {
     const {children, addonPlacement} = this.props;
-    const buttonContent = React.Children.toArray(children).reduce(
+    const buttonContent = Children.toArray(children).reduce(
       (
         accumulator: {
-          addonNodes: Array<React.ReactNode>;
-          childNodes: Array<React.ReactNode>;
+          addonNodes: ReactNodeArray;
+          childNodes: ReactNodeArray;
         },
         child,
       ) => {
-        const childAsElement = child as React.ReactElement;
+        const childAsElement = child as ReactElement;
         if (childAsElement.type === FormElementAddon) {
           accumulator.addonNodes.push(
-            React.cloneElement(childAsElement, {
+            cloneElement(childAsElement, {
               addonPlacement,
               key: childAsElement.props.className,
             }),
@@ -78,8 +78,8 @@ export default class Button extends React.Component<ButtonProps> {
 
   doesButtonContainIcon() {
     const {children} = this.props;
-    return React.Children.toArray(children).some((child) => {
-      const childAsElement = child as React.ReactElement;
+    return Children.toArray(children).some((child) => {
+      const childAsElement = child as ReactElement;
       return childAsElement.type === FormElementAddon;
     });
   }
@@ -129,7 +129,7 @@ export default class Button extends React.Component<ButtonProps> {
     );
 
     if (wrap) {
-      const WrapperComponent = wrapper as React.FunctionComponent;
+      const WrapperComponent = wrapper as FC;
       return (
         <WrapperComponent
           {...{

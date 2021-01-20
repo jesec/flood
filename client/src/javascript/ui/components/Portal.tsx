@@ -1,11 +1,11 @@
+import {Component, ReactNode} from 'react';
 import ReactDOM from 'react-dom';
-import * as React from 'react';
 
 interface PortalProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-class Portal extends React.Component<PortalProps> {
+class Portal extends Component<PortalProps> {
   mountPoint: HTMLDivElement | null = null;
 
   componentDidMount() {

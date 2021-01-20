@@ -1,5 +1,8 @@
 import axios, {AxiosError, AxiosResponse} from 'axios';
 
+import AuthStore from '@client/stores/AuthStore';
+import ConfigStore from '@client/stores/ConfigStore';
+
 import type {
   AuthAuthenticationOptions,
   AuthRegistrationOptions,
@@ -8,9 +11,7 @@ import type {
 } from '@shared/schema/api/auth';
 import type {Credentials} from '@shared/schema/Auth';
 
-import AuthStore from '../stores/AuthStore';
 import ClientActions from './ClientActions';
-import ConfigStore from '../stores/ConfigStore';
 import FloodActions from './FloodActions';
 import SettingActions from './SettingActions';
 

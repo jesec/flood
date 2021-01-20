@@ -1,6 +1,6 @@
+import {Component, CSSProperties, ReactNode} from 'react';
 import classnames from 'classnames';
 import ReactDOM from 'react-dom';
-import * as React from 'react';
 
 type Align = 'start' | 'center' | 'end';
 
@@ -29,7 +29,7 @@ interface TooltipProps {
   className?: string;
   contentClassName?: string;
   wrapperClassName?: string;
-  content: React.ReactNode;
+  content: ReactNode;
   onOpen: () => void;
   onClose: () => void;
   onClick: () => void;
@@ -139,7 +139,7 @@ const getAnchor = (
 
 const ARROW_SIZE = 7;
 
-class Tooltip extends React.Component<TooltipProps, TooltipStates> {
+class Tooltip extends Component<TooltipProps, TooltipStates> {
   container = window;
   triggerNode: HTMLDivElement | null = null;
   tooltipNode: HTMLDivElement | null = null;
@@ -342,7 +342,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
     }
   }
 
-  render(): React.ReactNode {
+  render(): ReactNode {
     const {
       anchor: defaultAnchor,
       position: defaultPosition,
@@ -359,7 +359,7 @@ class Tooltip extends React.Component<TooltipProps, TooltipStates> {
       onClick,
     } = this.props;
     const {anchor: stateAnchor, position: statePosition, coordinates, isOpen} = this.state;
-    let tooltipStyle: React.CSSProperties = {};
+    let tooltipStyle: CSSProperties = {};
 
     // Get the anchor and position from state if possible. If not, get it from
     // the props.

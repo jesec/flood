@@ -1,13 +1,14 @@
 import {applyPatch, Operation} from 'fast-json-patch';
 import {computed, makeAutoObservable} from 'mobx';
 
+import filterTorrents from '@client/util/filterTorrents';
+import searchTorrents from '@client/util/searchTorrents';
+import selectTorrents from '@client/util/selectTorrents';
+import sortTorrents from '@client/util/sortTorrents';
+
 import type {TorrentProperties, TorrentList} from '@shared/types/Torrent';
 
-import filterTorrents from '../util/filterTorrents';
-import searchTorrents from '../util/searchTorrents';
-import selectTorrents from '../util/selectTorrents';
 import SettingStore from './SettingStore';
-import sortTorrents from '../util/sortTorrents';
 import TorrentFilterStore from './TorrentFilterStore';
 
 class TorrentStore {

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {Component, ReactText} from 'react';
 
 import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
@@ -19,7 +19,7 @@ interface DirectoryFilesProps {
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
 
-class DirectoryFiles extends React.Component<DirectoryFilesProps> {
+class DirectoryFiles extends Component<DirectoryFilesProps> {
   static defaultProps = {
     path: [],
     items: {},
@@ -48,7 +48,7 @@ class DirectoryFiles extends React.Component<DirectoryFilesProps> {
     );
   }
 
-  handlePriorityChange = (fileIndex: React.ReactText, priorityLevel: number): void => {
+  handlePriorityChange = (fileIndex: ReactText, priorityLevel: number): void => {
     const {hash} = this.props;
 
     TorrentActions.setFilePriority(hash, {

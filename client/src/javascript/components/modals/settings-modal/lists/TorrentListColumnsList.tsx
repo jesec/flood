@@ -1,5 +1,5 @@
+import {Component, ReactNode} from 'react';
 import {FormattedMessage} from 'react-intl';
-import * as React from 'react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -22,7 +22,7 @@ interface TorrentListColumnsListStates {
   torrentListColumns: FloodSettings['torrentListColumns'];
 }
 
-class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps, TorrentListColumnsListStates> {
+class TorrentListColumnsList extends Component<TorrentListColumnsListProps, TorrentListColumnsListStates> {
   tooltipRef: Tooltip | null = null;
 
   constructor(props: TorrentListColumnsListProps) {
@@ -82,7 +82,7 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
     this.props.onSettingsChange({torrentListColumns: changedItems});
   };
 
-  renderItem = (item: ListItem, index: number): React.ReactNode => {
+  renderItem = (item: ListItem, index: number): ReactNode => {
     const {id, visible} = item as FloodSettings['torrentListColumns'][number];
     let checkbox = null;
     let warning = null;
@@ -135,7 +135,7 @@ class TorrentListColumnsList extends React.Component<TorrentListColumnsListProps
     return content;
   };
 
-  render(): React.ReactNode {
+  render(): ReactNode {
     const lockedIDs = this.getLockedIDs();
 
     return (

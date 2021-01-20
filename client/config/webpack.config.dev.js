@@ -93,6 +93,7 @@ module.exports = {
   resolve: {
     extensions: ['.cjs', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
+      '@client': path.resolve('./client/src/javascript'),
       '@shared': path.resolve('./shared'),
     },
   },

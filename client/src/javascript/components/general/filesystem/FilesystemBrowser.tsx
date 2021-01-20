@@ -1,5 +1,5 @@
 import {defineMessages, WrappedComponentProps} from 'react-intl';
-import * as React from 'react';
+import {PureComponent, ReactNodeArray} from 'react';
 
 import ArrowIcon from '../../icons/ArrowIcon';
 import File from '../../icons/File';
@@ -37,7 +37,7 @@ interface FilesystemBrowserStates {
   files?: Array<string>;
 }
 
-class FilesystemBrowser extends React.PureComponent<FilesystemBrowserProps, FilesystemBrowserStates> {
+class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, FilesystemBrowserStates> {
   constructor(props: FilesystemBrowserProps) {
     super(props);
 
@@ -150,7 +150,7 @@ class FilesystemBrowser extends React.PureComponent<FilesystemBrowserProps, File
     );
 
     if (shouldShowDirectoryList) {
-      const directoryList: React.ReactNodeArray =
+      const directoryList: ReactNodeArray =
         directories != null
           ? directories.map((directory, index) => (
               <li
@@ -167,7 +167,7 @@ class FilesystemBrowser extends React.PureComponent<FilesystemBrowserProps, File
             ))
           : [];
 
-      const filesList: React.ReactNodeArray =
+      const filesList: ReactNodeArray =
         files != null
           ? files.map((file, index) => (
               <li

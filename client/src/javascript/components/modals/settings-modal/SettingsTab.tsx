@@ -1,5 +1,5 @@
+import {Component, FormEvent} from 'react';
 import {WrappedComponentProps} from 'react-intl';
-import * as React from 'react';
 
 import type {ClientSetting, ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
@@ -15,7 +15,7 @@ interface SettingsTabStates {
   changedClientSettings: Partial<ClientSettings>;
 }
 
-class SettingsTab extends React.Component<SettingsTabProps, SettingsTabStates> {
+class SettingsTab extends Component<SettingsTabProps, SettingsTabStates> {
   constructor(props: SettingsTabProps) {
     super(props);
 
@@ -32,7 +32,7 @@ class SettingsTab extends React.Component<SettingsTabProps, SettingsTabStates> {
     return SettingStore.clientSettings?.[property];
   }
 
-  handleClientSettingChange(event: React.FormEvent<HTMLFormElement> | Event) {
+  handleClientSettingChange(event: FormEvent<HTMLFormElement> | Event) {
     const inputElement = event.target as HTMLInputElement;
     const property = inputElement.name as ClientSetting;
     const {value, type, checked} = inputElement;

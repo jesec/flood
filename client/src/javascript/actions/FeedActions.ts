@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '@shared/types/api/feed-monitor';
+import ConfigStore from '@client/stores/ConfigStore';
+import FeedStore from '@client/stores/FeedStore';
 
-import ConfigStore from '../stores/ConfigStore';
-import FeedStore from '../stores/FeedStore';
+import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '@shared/types/api/feed-monitor';
 
 const {baseURI} = ConfigStore;
 

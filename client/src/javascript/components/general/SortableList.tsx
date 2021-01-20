@@ -1,8 +1,8 @@
 import classnames from 'classnames';
+import {Component, MouseEvent} from 'react';
 import {DndProvider} from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
-import * as React from 'react';
 
 import SortableListItem from './SortableListItem';
 
@@ -18,7 +18,7 @@ interface SortableListProps extends WrappedComponentProps {
   items: Array<ListItem>;
   isDraggable?: boolean;
   renderItem: (item: ListItem, index: number) => void;
-  onMouseDown?: (event: React.MouseEvent<HTMLUListElement>) => void;
+  onMouseDown?: (event: MouseEvent<HTMLUListElement>) => void;
   onMove?: (items: this['items']) => void;
   onDrop?: (items: this['items']) => void;
 }
@@ -27,7 +27,7 @@ interface SortableListStates {
   items: SortableListProps['items'];
 }
 
-class SortableList extends React.Component<SortableListProps, SortableListStates> {
+class SortableList extends Component<SortableListProps, SortableListStates> {
   sortableListRef: HTMLUListElement | null = null;
 
   constructor(props: SortableListProps) {
@@ -77,7 +77,7 @@ class SortableList extends React.Component<SortableListProps, SortableListStates
     }
   };
 
-  handleMouseDown = (event: React.MouseEvent<HTMLUListElement>) => {
+  handleMouseDown = (event: MouseEvent<HTMLUListElement>) => {
     const {onMouseDown} = this.props;
     if (onMouseDown) {
       onMouseDown(event);

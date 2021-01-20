@@ -1,9 +1,9 @@
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
-import ErrorIcon from '../components/icons/ErrorIcon';
-import SpinnerIcon from '../components/icons/SpinnerIcon';
-import StartIcon from '../components/icons/StartIcon';
-import StopIcon from '../components/icons/StopIcon';
+import ErrorIcon from '@client/components/icons/ErrorIcon';
+import SpinnerIcon from '@client/components/icons/SpinnerIcon';
+import StartIcon from '@client/components/icons/StartIcon';
+import StopIcon from '@client/components/icons/StopIcon';
 
 const STATUS_ICON_MAP: Partial<Record<TorrentStatus, JSX.Element>> = {
   error: <ErrorIcon />,

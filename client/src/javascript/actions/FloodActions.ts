@@ -1,17 +1,17 @@
 import axios from 'axios';
 
+import ClientStatusStore from '@client/stores/ClientStatusStore';
+import ConfigStore from '@client/stores/ConfigStore';
+import DiskUsageStore from '@client/stores/DiskUsageStore';
+import NotificationStore from '@client/stores/NotificationStore';
+import TorrentFilterStore from '@client/stores/TorrentFilterStore';
+import TorrentStore from '@client/stores/TorrentStore';
+import TransferDataStore from '@client/stores/TransferDataStore';
+import UIStore from '@client/stores/UIStore';
+
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
 import type {ServerEvents} from '@shared/types/ServerEvents';
-
-import ClientStatusStore from '../stores/ClientStatusStore';
-import ConfigStore from '../stores/ConfigStore';
-import DiskUsageStore from '../stores/DiskUsageStore';
-import NotificationStore from '../stores/NotificationStore';
-import TorrentFilterStore from '../stores/TorrentFilterStore';
-import TorrentStore from '../stores/TorrentStore';
-import TransferDataStore from '../stores/TransferDataStore';
-import UIStore from '../stores/UIStore';
 
 interface ActivityStreamOptions {
   historySnapshot: HistorySnapshot;

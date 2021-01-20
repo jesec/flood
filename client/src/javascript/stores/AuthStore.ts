@@ -1,11 +1,11 @@
 import {makeAutoObservable} from 'mobx';
 
+import FloodActions from '@client/actions/FloodActions';
+
 import {AccessLevel} from '@shared/schema/constants/Auth';
 
 import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/schema/api/auth';
 import type {Credentials} from '@shared/schema/Auth';
-
-import FloodActions from '../actions/FloodActions';
 
 class AuthStore {
   isAuthenticating = false;

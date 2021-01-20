@@ -1,5 +1,5 @@
 import {FormattedMessage} from 'react-intl';
-import * as React from 'react';
+import {FormEvent} from 'react';
 
 import {Form, FormRow, Textbox} from '../../../ui';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
@@ -30,7 +30,7 @@ export default class BandwidthTab extends SettingsTab {
     event,
     formData,
   }: {
-    event: Event | React.FormEvent<HTMLFormElement>;
+    event: Event | FormEvent<HTMLFormElement>;
     formData: Record<string, unknown>;
   }) => {
     const inputElement = event.target as HTMLInputElement;

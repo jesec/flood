@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "sourceMap": true,
     "target": "esnext",
     "moduleResolution": "node",
@@ -16,6 +16,8 @@
     "useDefineForClassFields": true,
     "baseUrl": "./",
     "paths": {
+      "@client/*": ["client/src/javascript/*"],
+      "@server/*": ["server/*"],
       "@shared/*": ["shared/*"]
     }
   },

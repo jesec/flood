@@ -1,5 +1,5 @@
+import {Component, ChangeEvent, MouseEvent} from 'react';
 import {FormattedMessage, IntlShape} from 'react-intl';
-import * as React from 'react';
 
 import type {
   RTorrentConnectionSettings,
@@ -20,7 +20,7 @@ export interface RTorrentConnectionSettingsFormData {
   port?: string;
 }
 
-class RTorrentConnectionSettingsForm extends React.Component<
+class RTorrentConnectionSettingsForm extends Component<
   RTorrentConnectionSettingsProps,
   RTorrentConnectionSettingsFormData
 > {
@@ -67,7 +67,7 @@ class RTorrentConnectionSettingsForm extends React.Component<
   };
 
   handleFormChange = (
-    event: React.MouseEvent<HTMLInputElement> | KeyboardEvent | React.ChangeEvent<HTMLInputElement>,
+    event: MouseEvent<HTMLInputElement> | KeyboardEvent | ChangeEvent<HTMLInputElement>,
     field: keyof RTorrentConnectionSettingsFormData,
   ) => {
     const inputElement = event.target as HTMLInputElement;

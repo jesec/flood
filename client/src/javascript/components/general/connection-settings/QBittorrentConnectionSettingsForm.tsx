@@ -1,5 +1,5 @@
+import {Component, ChangeEvent, MouseEvent} from 'react';
 import {FormattedMessage, IntlShape} from 'react-intl';
-import * as React from 'react';
 
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
@@ -15,7 +15,7 @@ export interface QBittorrentConnectionSettingsFormData {
   password: string;
 }
 
-class QBittorrentConnectionSettingsForm extends React.Component<
+class QBittorrentConnectionSettingsForm extends Component<
   QBittorrentConnectionSettingsProps,
   QBittorrentConnectionSettingsFormData
 > {
@@ -47,7 +47,7 @@ class QBittorrentConnectionSettingsForm extends React.Component<
   };
 
   handleFormChange = (
-    event: React.MouseEvent<HTMLInputElement> | KeyboardEvent | React.ChangeEvent<HTMLInputElement>,
+    event: MouseEvent<HTMLInputElement> | KeyboardEvent | ChangeEvent<HTMLInputElement>,
     field: keyof QBittorrentConnectionSettingsFormData,
   ): void => {
     const inputElement = event.target as HTMLInputElement;

@@ -1,5 +1,5 @@
 import {FormattedMessage, injectIntl} from 'react-intl';
-import * as React from 'react';
+import {FormEvent} from 'react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -34,7 +34,7 @@ class UITab extends SettingsTab {
     event,
     formData,
   }: {
-    event: Event | React.FormEvent<HTMLFormElement>;
+    event: Event | FormEvent<HTMLFormElement>;
     formData: Record<string, unknown>;
   }) => {
     const inputElement = event.target as HTMLInputElement;

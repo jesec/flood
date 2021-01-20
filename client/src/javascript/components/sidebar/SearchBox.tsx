@@ -1,7 +1,7 @@
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {Component, ChangeEvent} from 'react';
 import classnames from 'classnames';
+import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {reaction} from 'mobx';
-import * as React from 'react';
 
 import Close from '../icons/Close';
 import Search from '../icons/Search';
@@ -13,7 +13,7 @@ interface SearchBoxStates {
   isSearchActive: boolean;
 }
 
-class SearchBox extends React.Component<WrappedComponentProps, SearchBoxStates> {
+class SearchBox extends Component<WrappedComponentProps, SearchBoxStates> {
   constructor(props: WrappedComponentProps) {
     super(props);
 
@@ -32,7 +32,7 @@ class SearchBox extends React.Component<WrappedComponentProps, SearchBoxStates> 
     };
   }
 
-  handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const {value} = event.target;
     this.setState({isSearchActive: value !== ''});
     UIActions.setTorrentsSearchFilter(value);

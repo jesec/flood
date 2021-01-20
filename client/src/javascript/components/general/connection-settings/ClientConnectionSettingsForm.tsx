@@ -1,5 +1,5 @@
+import {Component, createRef, ReactNode, ReactNodeArray, RefObject} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
-import * as React from 'react';
 
 import {SUPPORTED_CLIENTS} from '@shared/schema/constants/ClientConnectionSettings';
 
@@ -12,7 +12,7 @@ import {FormRow, Select, SelectItem} from '../../../ui';
 
 const DEFAULT_SELECTION: ClientConnectionSettings['client'] = 'rTorrent' as const;
 
-const getClientSelectItems = (): React.ReactNodeArray =>
+const getClientSelectItems = (): ReactNodeArray =>
   SUPPORTED_CLIENTS.map((client) => (
     <SelectItem key={client} id={client}>
       <FormattedMessage id={`connection.settings.${client.toLowerCase()}`} />
@@ -28,8 +28,8 @@ interface ClientConnectionSettingsFormStates {
   client: ClientConnectionSettings['client'];
 }
 
-class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps, ClientConnectionSettingsFormStates> {
-  settingsRef: React.RefObject<never> = React.createRef();
+class ClientConnectionSettingsForm extends Component<WrappedComponentProps, ClientConnectionSettingsFormStates> {
+  settingsRef: RefObject<never> = createRef();
 
   constructor(props: WrappedComponentProps) {
     super(props);
@@ -40,7 +40,7 @@ class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps
   }
 
   getConnectionSettings(): ClientConnectionSettings | null {
-    const settingsForm = this.settingsRef as React.RefObject<ConnectionSettingsForm>;
+    const settingsForm = this.settingsRef as RefObject<ConnectionSettingsForm>;
 
     if (settingsForm.current == null) {
       return null;
@@ -53,7 +53,7 @@ class ClientConnectionSettingsForm extends React.Component<WrappedComponentProps
     const {intl} = this.props;
     const {client} = this.state;
 
-    let settingsForm: React.ReactNode = null;
+    let settingsForm: ReactNode = null;
     switch (client) {
       case 'qBittorrent':
         settingsForm = <QBittorrentConnectionSettingsForm intl={intl} ref={this.settingsRef} />;

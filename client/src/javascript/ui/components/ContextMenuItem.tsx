@@ -1,9 +1,9 @@
 import classnames from 'classnames';
-import * as React from 'react';
+import {MouseEventHandler, PureComponent} from 'react';
 
-export default class ContextMenuItem extends React.PureComponent<{
+export default class ContextMenuItem extends PureComponent<{
   className?: string;
-  onClick: React.MouseEventHandler<HTMLDivElement>;
+  onClick: MouseEventHandler<HTMLDivElement>;
 }> {
   render() {
     const {onClick, children, className} = this.props;

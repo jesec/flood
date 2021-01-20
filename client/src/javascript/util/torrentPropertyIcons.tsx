@@ -1,19 +1,19 @@
-import CalendarCreatedIcon from '../components/icons/CalendarCreatedIcon';
-import CalendarIcon from '../components/icons/CalendarIcon';
-import ClockIcon from '../components/icons/ClockIcon';
-import DiskIcon from '../components/icons/DiskIcon';
-import DownloadThickIcon from '../components/icons/DownloadThickIcon';
-import HashIcon from '../components/icons/HashIcon';
-import FolderClosedSolid from '../components/icons/FolderClosedSolid';
-import PeersIcon from '../components/icons/PeersIcon';
-import LockIcon from '../components/icons/LockIcon';
-import RadarIcon from '../components/icons/RadarIcon';
-import RatioIcon from '../components/icons/RatioIcon';
-import SeedsIcon from '../components/icons/SeedsIcon';
-import TrackerMessageIcon from '../components/icons/TrackerMessageIcon';
-import UploadThickIcon from '../components/icons/UploadThickIcon';
+import CalendarCreatedIcon from '@client/components/icons/CalendarCreatedIcon';
+import CalendarIcon from '@client/components/icons/CalendarIcon';
+import ClockIcon from '@client/components/icons/ClockIcon';
+import DiskIcon from '@client/components/icons/DiskIcon';
+import DownloadThickIcon from '@client/components/icons/DownloadThickIcon';
+import HashIcon from '@client/components/icons/HashIcon';
+import FolderClosedSolid from '@client/components/icons/FolderClosedSolid';
+import PeersIcon from '@client/components/icons/PeersIcon';
+import LockIcon from '@client/components/icons/LockIcon';
+import RadarIcon from '@client/components/icons/RadarIcon';
+import RatioIcon from '@client/components/icons/RatioIcon';
+import SeedsIcon from '@client/components/icons/SeedsIcon';
+import TrackerMessageIcon from '@client/components/icons/TrackerMessageIcon';
+import UploadThickIcon from '@client/components/icons/UploadThickIcon';
 
-import type {TorrentListColumn} from '../constants/TorrentListColumns';
+import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 
 const ICONS: Partial<Record<TorrentListColumn, JSX.Element>> = {
   eta: <ClockIcon />,

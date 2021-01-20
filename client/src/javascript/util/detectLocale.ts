@@ -1,7 +1,7 @@
 import {getUserLocales} from 'get-user-locale';
-import Languages from '../constants/Languages';
 
-import type {Language} from '../constants/Languages';
+import Languages from '@client/constants/Languages';
+import type {Language} from '@client/constants/Languages';
 
 export interface LocaleConfig {
   locale: string;
