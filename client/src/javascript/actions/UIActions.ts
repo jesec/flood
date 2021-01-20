@@ -1,4 +1,3 @@
-import debounce from 'lodash/debounce';
 import {MouseEvent, TouchEvent} from 'react';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
@@ -46,13 +45,9 @@ const UIActions = {
     TorrentFilterStore.setTrackerFilter(tracker);
   },
 
-  setTorrentsSearchFilter: debounce(
-    (search: string) => {
-      TorrentFilterStore.setSearchFilter(search);
-    },
-    250,
-    {trailing: true},
-  ),
+  setTorrentsSearchFilter: (search: string) => {
+    TorrentFilterStore.setSearchFilter(search);
+  },
 } as const;
 
 export default UIActions;
