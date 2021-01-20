@@ -1,7 +1,8 @@
 import classnames from 'classnames';
 import {Component} from 'react';
 
-import Checkmark from '../icons/Checkmark';
+import {Checkmark} from '@client/ui/icons';
+
 import ContextMenuItem from './ContextMenuItem';
 
 interface SelectItemProps {

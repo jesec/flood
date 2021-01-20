@@ -1,9 +1,10 @@
 import {FormattedMessage} from 'react-intl';
 import {FormEvent} from 'react';
 
-import {Form, FormRow, Textbox} from '../../../ui';
+import {Form, FormRow, Textbox} from '@client/ui';
+import SettingStore from '@client/stores/SettingStore';
+
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import SettingStore from '../../../stores/SettingStore';
 import SettingsTab from './SettingsTab';
 
 const processSpeedsForDisplay = (speeds: number[]): string | undefined => {

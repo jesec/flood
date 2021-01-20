@@ -1,8 +1,9 @@
 import {FC} from 'react';
 import {useIntl} from 'react-intl';
 
-import ConfigStore from '../../stores/ConfigStore';
-import ThemeSwitchIcon from '../icons/ThemeSwitchIcon';
+import ConfigStore from '@client/stores/ConfigStore';
+import {ThemeSwitch} from '@client/ui/icons';
+
 import Tooltip from '../general/Tooltip';
 
 const ThemeSwitchButton: FC = () => {
@@ -17,7 +18,7 @@ const ThemeSwitchButton: FC = () => {
       position="bottom"
       wrapperClassName="sidebar__action sidebar__icon-button
           sidebar__icon-button--interactive tooltip__wrapper">
-      <ThemeSwitchIcon />
+      <ThemeSwitch />
     </Tooltip>
   );
 };

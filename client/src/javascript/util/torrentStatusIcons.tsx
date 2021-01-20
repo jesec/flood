@@ -1,20 +1,17 @@
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
-import ErrorIcon from '@client/components/icons/ErrorIcon';
-import SpinnerIcon from '@client/components/icons/SpinnerIcon';
-import StartIcon from '@client/components/icons/StartIcon';
-import StopIcon from '@client/components/icons/StopIcon';
+import {Error, Spinner, Start, Stop} from '@client/ui/icons';
 
 const STATUS_ICON_MAP: Partial<Record<TorrentStatus, JSX.Element>> = {
-  error: <ErrorIcon />,
-  checking: <SpinnerIcon />,
-  stopped: <StopIcon />,
-  downloading: <StartIcon />,
-  seeding: <StartIcon />,
+  error: <Error />,
+  checking: <Spinner />,
+  stopped: <Stop />,
+  downloading: <Start />,
+  seeding: <Start />,
 } as const;
 
 function torrentStatusIcons(statuses: Array<TorrentStatus>) {
-  let resultIcon: JSX.Element = <StopIcon />;
+  let resultIcon: JSX.Element = <Stop />;
   Object.entries(STATUS_ICON_MAP).some(([status, icon]) => {
     if (statuses.includes(status as TorrentStatus) && icon != null) {
       resultIcon = icon;

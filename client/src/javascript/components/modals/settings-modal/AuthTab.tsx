@@ -4,14 +4,15 @@ import {FC, useEffect, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
 
+import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '@client/ui';
+import {Close} from '@client/ui/icons';
+import AuthActions from '@client/actions/AuthActions';
+import AuthStore from '@client/stores/AuthStore';
+
 import {AccessLevel} from '@shared/schema/constants/Auth';
 import type {Credentials} from '@shared/schema/Auth';
 
-import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '../../../ui';
-import AuthActions from '../../../actions/AuthActions';
-import AuthStore from '../../../stores/AuthStore';
 import ClientConnectionSettingsForm from '../../general/connection-settings/ClientConnectionSettingsForm';
-import Close from '../../icons/Close';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 
 import type {ClientConnectionSettingsFormType} from '../../general/connection-settings/ClientConnectionSettingsForm';

@@ -1,9 +1,8 @@
 import {FC} from 'react';
 
-import Circle from '../icons/Circle';
-import ToggleInput from './ToggleInput';
+import {Circle} from '@client/ui/icons';
 
-import type {ToggleInputProps} from './ToggleInput';
+import ToggleInput, {ToggleInputProps} from './ToggleInput';
 
 type RadioProps = Omit<ToggleInputProps, 'icon' | 'id' | 'type' | 'value'> & {
   id: Required<ToggleInputProps['id']>;

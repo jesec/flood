@@ -1,11 +1,11 @@
 import classnames from 'classnames';
 import {FC, memo} from 'react';
 
-interface DiskIconProps {
+interface DiskFlatProps {
   className?: string;
 }
 
-const DiskIcon: FC<DiskIconProps> = memo(({className}: DiskIconProps) => (
+const DiskFlat: FC<DiskFlatProps> = memo(({className}: DiskFlatProps) => (
   <svg className={classnames('icon', 'icon--disk', className)} viewBox="0 0 60 60">
     <polygon points="51.8,0 51.8,0 51.8,3.7 51.8,56.3 8.2,56.3 8.2,3.7 8.2,0 8.2,0 4.5,0 4.5,60.1 55.5,60.1 55.5,0 	" />
     <rect x="18.4" y="8.9" width="23.1" height="3.8" />
@@ -23,8 +23,8 @@ const DiskIcon: FC<DiskIconProps> = memo(({className}: DiskIconProps) => (
   </svg>
 ));
 
-DiskIcon.defaultProps = {
+DiskFlat.defaultProps = {
   className: undefined,
 };
 
-export default DiskIcon;
+export default DiskFlat;

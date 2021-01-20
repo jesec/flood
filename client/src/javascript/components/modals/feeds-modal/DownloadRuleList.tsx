@@ -2,11 +2,11 @@ import {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
 
+import {Close, Edit} from '@client/ui/icons';
+
 import {Rule} from '@shared/types/Feed';
 
-import Close from '../../icons/Close';
-import Edit from '../../icons/Edit';
-import FeedStore from '../../../stores/FeedStore';
+import FeedStore from '@client/stores/FeedStore';
 
 interface DownloadRuleListProps {
   currentRule: Rule | null;

@@ -1,15 +1,15 @@
 import {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {Checkbox} from '@client/ui';
+import SettingStore from '@client/stores/SettingStore';
+import SortableList, {ListItem} from '@client/components/general/SortableList';
+import Tooltip from '@client/components/general/Tooltip';
+import TorrentContextMenuActions from '@client/constants/TorrentContextMenuActions';
+
+import type {TorrentContextMenuAction} from '@client/constants/TorrentContextMenuActions';
+
 import type {FloodSettings} from '@shared/types/FloodSettings';
-
-import {Checkbox} from '../../../../ui';
-import SettingStore from '../../../../stores/SettingStore';
-import SortableList, {ListItem} from '../../../general/SortableList';
-import Tooltip from '../../../general/Tooltip';
-import TorrentContextMenuActions from '../../../../constants/TorrentContextMenuActions';
-
-import type {TorrentContextMenuAction} from '../../../../constants/TorrentContextMenuActions';
 
 interface TorrentContextMenuActionsListProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;

@@ -1,14 +1,15 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 
+import {Form, FormRow, Textbox} from '@client/ui';
+import TorrentActions from '@client/actions/TorrentActions';
+import TorrentStore from '@client/stores/TorrentStore';
+import UIStore from '@client/stores/UIStore';
+
 import {TorrentTrackerType} from '@shared/types/TorrentTracker';
 
-import {Form, FormRow, Textbox} from '../../../ui';
 import Modal from '../Modal';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
-import TorrentActions from '../../../actions/TorrentActions';
-import TorrentStore from '../../../stores/TorrentStore';
-import UIStore from '../../../stores/UIStore';
 
 const SetTrackersModal: FC = () => {
   const formRef = useRef<Form>(null);

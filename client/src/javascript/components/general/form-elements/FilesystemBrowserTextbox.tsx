@@ -3,10 +3,11 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {forwardRef, MutableRefObject, ReactNode, useEffect, useRef, useState} from 'react';
 import {useEnsuredForwardedRef} from 'react-use';
 
-import {Checkbox, ContextMenu, FormElementAddon, FormRow, FormRowGroup, Portal, Textbox} from '../../../ui';
+import {Checkbox, ContextMenu, FormElementAddon, FormRow, FormRowGroup, Portal, Textbox} from '@client/ui';
+import {Search} from '@client/ui/icons';
+import SettingStore from '@client/stores/SettingStore';
+
 import FilesystemBrowser from '../filesystem/FilesystemBrowser';
-import Search from '../../icons/Search';
-import SettingStore from '../../../stores/SettingStore';
 
 interface FilesystemBrowserTextboxProps {
   id: string;

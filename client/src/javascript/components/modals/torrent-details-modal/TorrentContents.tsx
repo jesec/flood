@@ -3,16 +3,17 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
 import {FC, useEffect, useState} from 'react';
 
+import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from '@client/ui';
+import ConfigStore from '@client/stores/ConfigStore';
+import {Disk} from '@client/ui/icons';
+import selectionTree from '@client/util/selectionTree';
+import TorrentActions from '@client/actions/TorrentActions';
+import TorrentStore from '@client/stores/TorrentStore';
+import UIStore from '@client/stores/UIStore';
+
 import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 
-import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from '../../../ui';
-import ConfigStore from '../../../stores/ConfigStore';
-import Disk from '../../icons/Disk';
 import DirectoryTree from '../../general/filesystem/DirectoryTree';
-import selectionTree from '../../../util/selectionTree';
-import TorrentActions from '../../../actions/TorrentActions';
-import TorrentStore from '../../../stores/TorrentStore';
-import UIStore from '../../../stores/UIStore';
 
 const TorrentContents: FC = observer(() => {
   const [contents, setContents] = useState<TorrentContent[]>([]);

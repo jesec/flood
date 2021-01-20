@@ -4,12 +4,12 @@ import {FormattedMessage} from 'react-intl';
 import sort from 'fast-sort';
 import {useKeyPressEvent} from 'react-use';
 
-import type {TorrentProperties} from '@shared/types/Torrent';
+import {ContextMenu, FormElementAddon, FormRowItem, Portal, SelectItem, Textbox} from '@client/ui';
+import {Chevron} from '@client/ui/icons';
+import SettingStore from '@client/stores/SettingStore';
+import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 
-import {ContextMenu, FormElementAddon, FormRowItem, Portal, SelectItem, Textbox} from '../../../ui';
-import Chevron from '../../../ui/icons/Chevron';
-import SettingStore from '../../../stores/SettingStore';
-import TorrentFilterStore from '../../../stores/TorrentFilterStore';
+import type {TorrentProperties} from '@shared/types/Torrent';
 
 interface TagSelectProps {
   id?: string;

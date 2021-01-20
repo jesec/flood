@@ -3,15 +3,16 @@ import {observer} from 'mobx-react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
-import Checkmark from '../../ui/icons/Checkmark';
-import ConfigStore from '../../stores/ConfigStore';
-import PriorityMeter from '../general/PriorityMeter';
-import TorrentActions from '../../actions/TorrentActions';
-import TorrentContextMenuActions from '../../constants/TorrentContextMenuActions';
-import TorrentStore from '../../stores/TorrentStore';
-import UIActions from '../../actions/UIActions';
+import {Checkmark} from '@client/ui/icons';
+import ConfigStore from '@client/stores/ConfigStore';
+import TorrentActions from '@client/actions/TorrentActions';
+import TorrentContextMenuActions from '@client/constants/TorrentContextMenuActions';
+import TorrentStore from '@client/stores/TorrentStore';
+import UIActions from '@client/actions/UIActions';
 
-import type {ContextMenuItem} from '../../stores/UIStore';
+import type {ContextMenuItem} from '@client/stores/UIStore';
+
+import PriorityMeter from '../general/PriorityMeter';
 
 const getLastSelectedTorrent = (): string => TorrentStore.selectedTorrents[TorrentStore.selectedTorrents.length - 1];
 

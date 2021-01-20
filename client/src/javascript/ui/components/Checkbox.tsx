@@ -1,9 +1,8 @@
 import {FC} from 'react';
 
-import Checkmark from '../icons/Checkmark';
-import ToggleInput from './ToggleInput';
+import {Checkmark} from '@client/ui/icons';
 
-import type {ToggleInputProps} from './ToggleInput';
+import ToggleInput, {ToggleInputProps} from './ToggleInput';
 
 type CheckboxProps = Omit<ToggleInputProps, 'type' | 'icon'>;
 

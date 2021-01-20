@@ -2,13 +2,13 @@ import {FC, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
 
-import {Button, Form, FormRow, Select, SelectItem, Textbox} from '../../../ui';
+import {Button, Form, FormRow, Select, SelectItem, Textbox} from '@client/ui';
+import FeedActions from '@client/actions/FeedActions';
+import FeedStore from '@client/stores/FeedStore';
+import UIActions from '@client/actions/UIActions';
 
-import FeedActions from '../../../actions/FeedActions';
 import FeedItems from './FeedItems';
-import FeedStore from '../../../stores/FeedStore';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import UIActions from '../../../actions/UIActions';
 
 const FeedItemsForm: FC = observer(() => {
   const intl = useIntl();

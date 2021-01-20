@@ -4,7 +4,7 @@ import {FC, ReactNode, useEffect} from 'react';
 import flow from 'lodash/flow';
 import {getEmptyImage} from 'react-dnd-html5-backend';
 
-import LockIcon from '../icons/LockIcon';
+import {Lock} from '@client/ui/icons';
 
 interface SortableListItemProps {
   children?: ReactNode;
@@ -34,7 +34,7 @@ const SortableListItem: FC<SortableListItemProps> = (props: SortableListItemProp
   let lockedIcon = null;
 
   if (isLocked) {
-    lockedIcon = <LockIcon />;
+    lockedIcon = <Lock />;
   }
 
   const classes = classnames('sortable-list__item', {

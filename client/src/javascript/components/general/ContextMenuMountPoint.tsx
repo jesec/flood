@@ -4,11 +4,11 @@ import {observer} from 'mobx-react';
 import {useIntl} from 'react-intl';
 import {useKeyPressEvent} from 'react-use';
 
-import {ContextMenu} from '../../ui';
-import UIActions from '../../actions/UIActions';
-import UIStore from '../../stores/UIStore';
+import {ContextMenu} from '@client/ui';
+import UIActions from '@client/actions/UIActions';
+import UIStore from '@client/stores/UIStore';
 
-import type {ActiveContextMenu} from '../../stores/UIStore';
+import type {ActiveContextMenu} from '@client/stores/UIStore';
 
 interface ContextMenuMountPointProps {
   id: ActiveContextMenu['id'];

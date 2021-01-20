@@ -1,12 +1,12 @@
 import classnames from 'classnames';
 import {FC, memo} from 'react';
 
-interface ThemeSwitchIconProps {
+interface ThemeSwitchProps {
   className?: string;
 }
 
-// Material Design Icon: brightness_6 - Apache 2.0
-const ThemeSwitchIcon: FC<ThemeSwitchIconProps> = memo(({className}: ThemeSwitchIconProps) => (
+// Material Design : brightness_6 - Apache 2.0
+const ThemeSwitch: FC<ThemeSwitchProps> = memo(({className}: ThemeSwitchProps) => (
   <svg className={classnames('icon', 'icon--theme-switch', className)} viewBox="0 0 60 60">
     <path d="M0,0h60v60H0V0z" fill="none" />
     <path
@@ -16,8 +16,8 @@ z M30,45V15c8.3,0,15,6.7,15,15S38.3,45,30,45z"
   </svg>
 ));
 
-ThemeSwitchIcon.defaultProps = {
+ThemeSwitch.defaultProps = {
   className: undefined,
 };
 
-export default ThemeSwitchIcon;
+export default ThemeSwitch;

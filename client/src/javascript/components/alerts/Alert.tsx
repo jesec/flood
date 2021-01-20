@@ -3,9 +3,8 @@ import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import {observer} from 'mobx-react';
 
-import AlertStore from '../../stores/AlertStore';
-import CircleCheckmarkIcon from '../icons/CircleCheckmarkIcon';
-import CircleExclamationIcon from '../icons/CircleExclamationIcon';
+import AlertStore from '@client/stores/AlertStore';
+import {CircleCheckmark, CircleExclamation} from '@client/ui/icons';
 
 interface AlertProps {
   id: string;
@@ -24,9 +23,9 @@ const Alert: FC<AlertProps> = observer((props: AlertProps) => {
     'is-error': type === 'error',
   });
 
-  let icon = <CircleCheckmarkIcon />;
+  let icon = <CircleCheckmark />;
   if (type === 'error') {
-    icon = <CircleExclamationIcon />;
+    icon = <CircleExclamation />;
   }
 
   return (

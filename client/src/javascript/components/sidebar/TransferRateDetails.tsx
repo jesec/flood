@@ -3,16 +3,15 @@ import {defineMessages, useIntl} from 'react-intl';
 import {FC} from 'react';
 import {observer} from 'mobx-react';
 
+import ClientStatusStore from '@client/stores/ClientStatusStore';
+import {Download, InfinityIcon, Upload} from '@client/ui/icons';
+import SettingStore from '@client/stores/SettingStore';
+import TransferDataStore from '@client/stores/TransferDataStore';
+
 import type {TransferDirection} from '@shared/types/TransferData';
 
-import ClientStatusStore from '../../stores/ClientStatusStore';
-import Download from '../icons/Download';
 import Duration from '../general/Duration';
-import InfinityIcon from '../icons/InfinityIcon';
-import SettingStore from '../../stores/SettingStore';
 import Size from '../general/Size';
-import TransferDataStore from '../../stores/TransferDataStore';
-import Upload from '../icons/Upload';
 
 import type {TransferRateGraphInspectorPoint} from './TransferRateGraph';
 

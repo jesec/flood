@@ -2,9 +2,9 @@ import {FC, ReactNodeArray} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
 
-import {Checkbox, FormRow} from '../../../ui';
+import {Checkbox, FormRow} from '@client/ui';
 
-import FeedStore from '../../../stores/FeedStore';
+import FeedStore from '@client/stores/FeedStore';
 
 interface FeedItemsProps {
   selectedFeedID: string;

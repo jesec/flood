@@ -3,10 +3,9 @@ import classnames from 'classnames';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 import {reaction} from 'mobx';
 
-import Close from '../icons/Close';
-import Search from '../icons/Search';
-import TorrentFilterStore from '../../stores/TorrentFilterStore';
-import UIActions from '../../actions/UIActions';
+import {Close, Search} from '@client/ui/icons';
+import TorrentFilterStore from '@client/stores/TorrentFilterStore';
+import UIActions from '@client/actions/UIActions';
 
 interface SearchBoxStates {
   inputFieldKey: number;

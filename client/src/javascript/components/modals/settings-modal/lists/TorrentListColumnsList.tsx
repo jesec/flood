@@ -1,17 +1,19 @@
 import {Component, ReactNode} from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {Checkbox} from '@client/ui';
+import {Error} from '@client/ui/icons';
+import SettingStore from '@client/stores/SettingStore';
+import TorrentListColumns from '@client/constants/TorrentListColumns';
+
+import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
+
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
-import {Checkbox} from '../../../../ui';
-import ErrorIcon from '../../../icons/ErrorIcon';
-import SettingStore from '../../../../stores/SettingStore';
 import SortableList from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
-import TorrentListColumns from '../../../../constants/TorrentListColumns';
 
 import type {ListItem} from '../../../general/SortableList';
-import type {TorrentListColumn} from '../../../../constants/TorrentListColumns';
 
 interface TorrentListColumnsListProps {
   torrentListViewSize: FloodSettings['torrentListViewSize'];
@@ -117,7 +119,7 @@ class TorrentListColumnsList extends Component<TorrentListColumnsListProps, Torr
           width={200}
           wrapperClassName="sortable-list__content sortable-list__content--secondary tooltip__wrapper"
           wrapText>
-          <ErrorIcon />
+          <Error />
         </Tooltip>
       );
     }

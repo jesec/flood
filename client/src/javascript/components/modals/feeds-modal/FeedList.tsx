@@ -2,11 +2,11 @@ import {FC} from 'react';
 import {observer} from 'mobx-react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
+import {Close, Edit} from '@client/ui/icons';
+
 import type {Feed} from '@shared/types/Feed';
 
-import Close from '../../icons/Close';
-import Edit from '../../icons/Edit';
-import FeedStore from '../../../stores/FeedStore';
+import FeedStore from '@client/stores/FeedStore';
 
 interface FeedListProps {
   currentFeed: Feed | null;

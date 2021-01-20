@@ -3,14 +3,12 @@ import {defineMessages, useIntl} from 'react-intl';
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react';
 
+import FloodActions from '@client/actions/FloodActions';
+import {ChevronLeft, ChevronRight, LoadingIndicatorDots, Notification as NotificationIcon} from '@client/ui/icons';
+import NotificationStore from '@client/stores/NotificationStore';
+
 import type {Notification} from '@shared/types/Notification';
 
-import FloodActions from '../../actions/FloodActions';
-import ChevronLeftIcon from '../icons/ChevronLeftIcon';
-import ChevronRightIcon from '../icons/ChevronRightIcon';
-import LoadingIndicatorDots from '../icons/LoadingIndicatorDots';
-import NotificationIcon from '../icons/NotificationIcon';
-import NotificationStore from '../../stores/NotificationStore';
 import Tooltip from '../general/Tooltip';
 
 const NOTIFICATIONS_PER_PAGE = 10;
@@ -173,7 +171,7 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
         className="notifications__toolbar toolbar toolbar--dark
         toolbar--bottom">
         <li className={newerButtonClass} onClick={onPrevClick}>
-          <ChevronLeftIcon />
+          <ChevronLeft />
           {`${newerFrom + 1} - ${newerTo}`}
         </li>
         <li
@@ -186,7 +184,7 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
         </li>
         <li className={olderButtonClass} onClick={onNextClick}>
           {`${olderFrom} - ${olderTo}`}
-          <ChevronRightIcon />
+          <ChevronRight />
         </li>
       </ul>
     );

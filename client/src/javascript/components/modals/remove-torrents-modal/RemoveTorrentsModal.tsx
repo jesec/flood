@@ -1,14 +1,15 @@
 import {FC, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import {Form, FormRow} from '../../../ui';
+import {Form, FormRow} from '@client/ui';
+import {saveDeleteTorrentsUserPreferences} from '@client/util/userPreferences';
+import SettingStore from '@client/stores/SettingStore';
+import TorrentActions from '@client/actions/TorrentActions';
+import TorrentStore from '@client/stores/TorrentStore';
+import UIStore from '@client/stores/UIStore';
+
 import Modal from '../Modal';
 import ModalActions from '../ModalActions';
-import {saveDeleteTorrentsUserPreferences} from '../../../util/userPreferences';
-import SettingStore from '../../../stores/SettingStore';
-import TorrentActions from '../../../actions/TorrentActions';
-import TorrentStore from '../../../stores/TorrentStore';
-import UIStore from '../../../stores/UIStore';
 
 const RemoveTorrentsModal: FC = () => {
   const intl = useIntl();

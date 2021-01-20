@@ -1,11 +1,11 @@
 import classnames from 'classnames';
 import {FC, memo} from 'react';
 
-interface TrackerMessageIconProps {
+interface TrackerMessageProps {
   className?: string;
 }
 
-const TrackerMessageIcon: FC<TrackerMessageIconProps> = memo(({className}: TrackerMessageIconProps) => (
+const TrackerMessage: FC<TrackerMessageProps> = memo(({className}: TrackerMessageProps) => (
   <svg className={classnames('icon', 'icon--seeds', className)} viewBox="0 0 60 60">
     <circle cx="11.08" cy="30" r="5.94" />
     <circle cx="30" cy="30" r="5.94" />
@@ -13,8 +13,8 @@ const TrackerMessageIcon: FC<TrackerMessageIconProps> = memo(({className}: Track
   </svg>
 ));
 
-TrackerMessageIcon.defaultProps = {
+TrackerMessage.defaultProps = {
   className: undefined,
 };
 
-export default TrackerMessageIcon;
+export default TrackerMessage;

@@ -1,11 +1,11 @@
 import classnames from 'classnames';
 import {FC, memo} from 'react';
 
-interface CircleCheckmarkIconProps {
+interface CircleCheckmarkProps {
   className?: string;
 }
 
-const CircleCheckmarkIcon: FC<CircleCheckmarkIconProps> = memo(({className}: CircleCheckmarkIconProps) => (
+const CircleCheckmark: FC<CircleCheckmarkProps> = memo(({className}: CircleCheckmarkProps) => (
   <svg className={classnames('icon', 'icon--circle-checkmark', className)} viewBox="0 0 60 60">
     <path fillOpacity="0.05" d="M30,0A30,30,0,1,1,0,30,30,30,0,0,1,30,0Z" />
     <path
@@ -16,8 +16,8 @@ const CircleCheckmarkIcon: FC<CircleCheckmarkIconProps> = memo(({className}: Cir
   </svg>
 ));
 
-CircleCheckmarkIcon.defaultProps = {
+CircleCheckmark.defaultProps = {
   className: undefined,
 };
 
-export default CircleCheckmarkIcon;
+export default CircleCheckmark;

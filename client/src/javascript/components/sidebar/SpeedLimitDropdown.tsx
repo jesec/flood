@@ -3,12 +3,13 @@ import {FormattedMessage, IntlShape, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
 import sortedIndex from 'lodash/sortedIndex';
 
+import ClientActions from '@client/actions/ClientActions';
+import {Limits} from '@client/ui/icons';
+import SettingStore from '@client/stores/SettingStore';
+
 import type {TransferDirection} from '@shared/types/TransferData';
 
-import ClientActions from '../../actions/ClientActions';
 import Dropdown from '../general/form-elements/Dropdown';
-import LimitsIcon from '../icons/Limits';
-import SettingStore from '../../stores/SettingStore';
 import Size from '../general/Size';
 import Tooltip from '../general/Tooltip';
 
@@ -120,7 +121,7 @@ const SpeedLimitDropdown: FC = observer(() => {
         sidebar__icon-button--limits"
           title={label}
           type="button">
-          <LimitsIcon />
+          <Limits />
           {label}
         </button>
       }
@@ -139,7 +140,7 @@ const SpeedLimitDropdown: FC = observer(() => {
           position="bottom"
           ref={tooltipRef}
           wrapperClassName="sidebar__icon-button tooltip__wrapper">
-          <LimitsIcon />
+          <Limits />
         </Tooltip>
       }
     />

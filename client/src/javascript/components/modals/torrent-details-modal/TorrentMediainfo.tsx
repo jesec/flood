@@ -3,11 +3,12 @@ import Clipboard from 'clipboard';
 import {Component} from 'react';
 import {defineMessages, FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 
-import {Button} from '../../../ui';
-import ClipboardIcon from '../../icons/ClipboardIcon';
+import {Button} from '@client/ui';
+import {Clipboard as ClipboardIcon} from '@client/ui/icons';
+import TorrentActions from '@client/actions/TorrentActions';
+import UIStore from '@client/stores/UIStore';
+
 import Tooltip from '../../general/Tooltip';
-import TorrentActions from '../../../actions/TorrentActions';
-import UIStore from '../../../stores/UIStore';
 
 const MESSAGES = defineMessages({
   copy: {

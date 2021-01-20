@@ -1,6 +1,6 @@
 import {FormattedDate, FormattedMessage, FormattedNumber} from 'react-intl';
 
-import Checkmark from '@client/components/icons/Checkmark';
+import {CheckmarkThick} from '@client/ui/icons';
 import Duration from '@client/components/general/Duration';
 import Size from '@client/components/general/Size';
 
@@ -9,7 +9,7 @@ import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 const booleanTransformer = (value: boolean) =>
-  value ? <Checkmark className="torrent__detail__icon torrent__detail__icon--checkmark" /> : null;
+  value ? <CheckmarkThick className="torrent__detail__icon torrent__detail__icon--checkmark" /> : null;
 const dateTransformer = (date: number) => <FormattedDate value={date * 1000} />;
 const peersTransformer = (peersConnected: number, totalPeers: number) => (
   <FormattedMessage

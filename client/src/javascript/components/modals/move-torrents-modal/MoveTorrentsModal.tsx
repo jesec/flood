@@ -1,13 +1,14 @@
 import {FC, useState} from 'react';
 import {useIntl} from 'react-intl';
 
+import {Form} from '@client/ui';
+import TorrentActions from '@client/actions/TorrentActions';
+import TorrentStore from '@client/stores/TorrentStore';
+import UIStore from '@client/stores/UIStore';
+
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
-import {Form} from '../../../ui';
 import Modal from '../Modal';
 import ModalActions from '../ModalActions';
-import TorrentActions from '../../../actions/TorrentActions';
-import TorrentStore from '../../../stores/TorrentStore';
-import UIStore from '../../../stores/UIStore';
 
 const getSuggestedPath = (sources: Array<string>): string | undefined => {
   const commonPath = sources[0];

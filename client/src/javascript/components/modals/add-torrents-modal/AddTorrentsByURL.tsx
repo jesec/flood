@@ -1,16 +1,17 @@
 import {FC, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 
+import ConfigStore from '@client/stores/ConfigStore';
+import {Form, FormRow} from '@client/ui';
+import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
+import SettingStore from '@client/stores/SettingStore';
+import TorrentActions from '@client/actions/TorrentActions';
+import UIStore from '@client/stores/UIStore';
+
 import AddTorrentsActions from './AddTorrentsActions';
-import ConfigStore from '../../../stores/ConfigStore';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
-import {Form, FormRow} from '../../../ui';
-import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
-import SettingStore from '../../../stores/SettingStore';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
-import TorrentActions from '../../../actions/TorrentActions';
-import UIStore from '../../../stores/UIStore';
 
 type AddTorrentsByURLFormData = {
   [urls: string]: string;

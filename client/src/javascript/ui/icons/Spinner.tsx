@@ -2,11 +2,11 @@ import classnames from 'classnames';
 import {FC} from 'react';
 import uniqueId from 'lodash/uniqueId';
 
-interface SpinnerIconProps {
+interface SpinnerProps {
   className?: string;
 }
 
-const SpinnerIcon: FC<SpinnerIconProps> = ({className}: SpinnerIconProps) => {
+const Spinner: FC<SpinnerProps> = ({className}: SpinnerProps) => {
   const id = uniqueId();
   const maskID = `icon--spinner__mask-id--${id}`;
 
@@ -30,8 +30,8 @@ const SpinnerIcon: FC<SpinnerIconProps> = ({className}: SpinnerIconProps) => {
   );
 };
 
-SpinnerIcon.defaultProps = {
+Spinner.defaultProps = {
   className: undefined,
 };
 
-export default SpinnerIcon;
+export default Spinner;

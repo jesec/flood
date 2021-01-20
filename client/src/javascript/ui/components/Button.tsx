@@ -1,10 +1,11 @@
 import {ButtonHTMLAttributes, Children, cloneElement, Component, FC, ReactElement, ReactNodeArray, Ref} from 'react';
 import classnames from 'classnames';
 
+import {LoadingRing} from '@client/ui/icons';
+
 import FadeIn from './FadeIn';
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
-import LoadingRing from '../icons/LoadingRing';
 
 export type ButtonProps = Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'onClick' | 'onChange'> & {
   buttonRef?: Ref<HTMLButtonElement>;

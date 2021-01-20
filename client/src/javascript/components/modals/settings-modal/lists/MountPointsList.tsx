@@ -1,12 +1,12 @@
 import {Component} from 'react';
 import {FormattedMessage} from 'react-intl';
 
-import type {FloodSettings} from '@shared/types/FloodSettings';
+import {Checkbox} from '@client/ui';
+import DiskUsageStore from '@client/stores/DiskUsageStore';
+import SettingStore from '@client/stores/SettingStore';
+import SortableList, {ListItem} from '@client/components/general/SortableList';
 
-import {Checkbox} from '../../../../ui';
-import DiskUsageStore from '../../../../stores/DiskUsageStore';
-import SettingStore from '../../../../stores/SettingStore';
-import SortableList, {ListItem} from '../../../general/SortableList';
+import type {FloodSettings} from '@shared/types/FloodSettings';
 
 interface MountPointsListProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;

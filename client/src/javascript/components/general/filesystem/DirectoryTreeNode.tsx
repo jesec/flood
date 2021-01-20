@@ -1,12 +1,12 @@
 import classnames from 'classnames';
 import {Component} from 'react';
 
+import {Checkbox} from '@client/ui';
+import {FolderClosedSolid, FolderOpenSolid} from '@client/ui/icons';
+
 import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
-import {Checkbox} from '../../../ui';
-import FolderClosedSolid from '../../icons/FolderClosedSolid';
-import FolderOpenSolid from '../../icons/FolderOpenSolid';
 // TODO: Fix this circular dependency
 // eslint-disable-next-line import/no-cycle
 import DirectoryTree from './DirectoryTree';

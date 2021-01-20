@@ -1,14 +1,14 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 
+import {CheckmarkThick, Clipboard} from '@client/ui/icons';
+import {Form, FormElementAddon, FormError, FormRow, Textbox} from '@client/ui';
+import TorrentActions from '@client/actions/TorrentActions';
+import TorrentStore from '@client/stores/TorrentStore';
+
 import {TorrentTrackerType} from '@shared/types/TorrentTracker';
 
-import Checkmark from '../../icons/Checkmark';
-import ClipboardIcon from '../../icons/ClipboardIcon';
-import {Form, FormElementAddon, FormError, FormRow, Textbox} from '../../../ui';
 import Modal from '../Modal';
-import TorrentActions from '../../../actions/TorrentActions';
-import TorrentStore from '../../../stores/TorrentStore';
 
 const generateMagnet = (hash: string, trackers?: Array<string>): string => {
   let result = `magnet:?xt=urn:btih:${hash}`;
@@ -86,7 +86,7 @@ const GenerateMagnetModal: FC = () => {
                       setIsMagnetCopied(true);
                     }
                   }}>
-                  {isMagnetCopied ? <Checkmark /> : <ClipboardIcon />}
+                  {isMagnetCopied ? <CheckmarkThick /> : <Clipboard />}
                 </FormElementAddon>
               </Textbox>
             </FormRow>
@@ -120,7 +120,7 @@ const GenerateMagnetModal: FC = () => {
                         setIsMagnetTrackersCopied(true);
                       }
                     }}>
-                    {isMagnetTrackersCopied ? <Checkmark /> : <ClipboardIcon />}
+                    {isMagnetTrackersCopied ? <CheckmarkThick /> : <Clipboard />}
                   </FormElementAddon>
                 </Textbox>
               )}

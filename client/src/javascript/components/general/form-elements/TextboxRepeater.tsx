@@ -1,8 +1,7 @@
 import {FC, ReactNode, useRef, useState} from 'react';
 
-import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '../../../ui';
-import AddMini from '../../icons/AddMini';
-import RemoveMini from '../../icons/RemoveMini';
+import {AddMini, RemoveMini} from '@client/ui/icons';
+import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '@client/ui';
 
 export const getTextArray = (formData: Record<string, string | undefined>, id: string) =>
   Object.keys(formData).reduce((accumulator: Array<string>, formItemKey: string) => {

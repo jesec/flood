@@ -1,17 +1,18 @@
 import {FormattedMessage, injectIntl} from 'react-intl';
 import {FormEvent} from 'react';
 
+import {Form, FormRow, Select, SelectItem, Radio} from '@client/ui';
+import Languages from '@client/constants/Languages';
+import SettingStore from '@client/stores/SettingStore';
+
+import type {Language} from '@client/constants/Languages';
+
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
-import {Form, FormRow, Select, SelectItem, Radio} from '../../../ui';
-import Languages from '../../../constants/Languages';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-import SettingStore from '../../../stores/SettingStore';
 import SettingsTab from './SettingsTab';
 import TorrentContextMenuActionsList from './lists/TorrentContextMenuActionsList';
 import TorrentListColumnsList from './lists/TorrentListColumnsList';
-
-import type {Language} from '../../../constants/Languages';
 
 class UITab extends SettingsTab {
   torrentListViewSize = SettingStore.floodSettings.torrentListViewSize;

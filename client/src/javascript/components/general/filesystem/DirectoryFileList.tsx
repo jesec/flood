@@ -1,15 +1,16 @@
 import classnames from 'classnames';
 import {Component, ReactText} from 'react';
 
+import {Checkbox} from '@client/ui';
+import ConfigStore from '@client/stores/ConfigStore';
+import {File as FileIcon} from '@client/ui/icons';
+import TorrentActions from '@client/actions/TorrentActions';
+
 import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
 import type {TorrentProperties} from '@shared/types/Torrent';
 
-import {Checkbox} from '../../../ui';
-import ConfigStore from '../../../stores/ConfigStore';
-import FileIcon from '../../icons/File';
 import PriorityMeter from '../PriorityMeter';
 import Size from '../Size';
-import TorrentActions from '../../../actions/TorrentActions';
 
 interface DirectoryFilesProps {
   depth: number;

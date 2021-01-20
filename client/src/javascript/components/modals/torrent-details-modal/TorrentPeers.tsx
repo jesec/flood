@@ -2,17 +2,15 @@ import {FC, Suspense, useEffect, useState} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useInterval} from 'react-use';
 
+import {CheckmarkThick, CountryFlag, Lock, Spinner} from '@client/ui/icons';
+import ConfigStore from '@client/stores/ConfigStore';
+import TorrentActions from '@client/actions/TorrentActions';
+import UIStore from '@client/stores/UIStore';
+
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 
 import Badge from '../../general/Badge';
-import ConfigStore from '../../../stores/ConfigStore';
-import CountryFlagIcon from '../../icons/CountryFlagIcon';
 import Size from '../../general/Size';
-import Checkmark from '../../icons/Checkmark';
-import LockIcon from '../../icons/LockIcon';
-import SpinnerIcon from '../../icons/SpinnerIcon';
-import TorrentActions from '../../../actions/TorrentActions';
-import UIStore from '../../../stores/UIStore';
 
 const TorrentPeers: FC = () => {
   const [peers, setPeers] = useState<Array<TorrentPeer>>([]);
@@ -53,15 +51,15 @@ const TorrentPeers: FC = () => {
         <tbody>
           {peers.map((peer) => {
             const {country: countryCode} = peer;
-            const encryptedIcon = peer.isEncrypted ? <LockIcon /> : null;
-            const incomingIcon = peer.isIncoming ? <Checkmark /> : null;
+            const encryptedIcon = peer.isEncrypted ? <Lock /> : null;
+            const incomingIcon = peer.isIncoming ? <CheckmarkThick /> : null;
 
             return (
               <tr key={peer.address}>
                 <td>
                   <span className="peers-list__flag">
-                    <Suspense fallback={<SpinnerIcon />}>
-                      <CountryFlagIcon countryCode={countryCode} />
+                    <Suspense fallback={<Spinner />}>
+                      <CountryFlag countryCode={countryCode} />
                     </Suspense>
                     <span className="peers-list__flag__text">{countryCode}</span>
                   </span>

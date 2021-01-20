@@ -1,11 +1,11 @@
 import classnames from 'classnames';
 import {FC, memo} from 'react';
 
-interface InformationIconProps {
+interface InformationProps {
   className?: string;
 }
 
-const InformationIcon: FC<InformationIconProps> = memo(({className}: InformationIconProps) => (
+const Information: FC<InformationProps> = memo(({className}: InformationProps) => (
   <svg className={classnames('icon', 'icon--information', className)} viewBox="0 0 60 60">
     <path
       className="icon--information__gylph"
@@ -19,8 +19,8 @@ const InformationIcon: FC<InformationIconProps> = memo(({className}: Information
   </svg>
 ));
 
-InformationIcon.defaultProps = {
+Information.defaultProps = {
   className: undefined,
 };
 
-export default InformationIcon;
+export default Information;

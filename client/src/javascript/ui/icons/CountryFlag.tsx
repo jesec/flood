@@ -32,11 +32,11 @@ const getFlag = (countryCode?: string): string | null => {
   throw loadFlag();
 };
 
-interface CountryFlagIconProps {
+interface CountryFlagProps {
   countryCode: string;
 }
 
-const CountryFlagIcon: FC<CountryFlagIconProps> = ({countryCode}: CountryFlagIconProps) => {
+const CountryFlag: FC<CountryFlagProps> = ({countryCode}: CountryFlagProps) => {
   const flag = getFlag(countryCode);
   if (flag == null) {
     return null;
@@ -44,4 +44,4 @@ const CountryFlagIcon: FC<CountryFlagIconProps> = ({countryCode}: CountryFlagIco
   return <img alt={countryCode} title={countryCode} className="peers-list__flag__image" src={flag} />;
 };
 
-export default CountryFlagIcon;
+export default CountryFlag;

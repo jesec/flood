@@ -1,9 +1,10 @@
 import {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 
+import {Form, FormRow} from '@client/ui';
+
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
-import {Form, FormRow} from '../../../ui';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import MountPointsList from './lists/MountPointsList';
 

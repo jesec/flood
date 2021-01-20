@@ -1,9 +1,10 @@
 import {defineMessages, useIntl} from 'react-intl';
 import {FC, useRef} from 'react';
 
-import FeedIcon from '../icons/FeedIcon';
+import {Feed} from '@client/ui/icons';
+import UIActions from '@client/actions/UIActions';
+
 import Tooltip from '../general/Tooltip';
-import UIActions from '../../actions/UIActions';
 
 const MESSAGES = defineMessages({
   feeds: {
@@ -30,7 +31,7 @@ const FeedsButton: FC = () => {
       position="bottom"
       wrapperClassName="sidebar__action sidebar__icon-button
           sidebar__icon-button--interactive tooltip__wrapper">
-      <FeedIcon />
+      <Feed />
     </Tooltip>
   );
 };

@@ -1,15 +1,16 @@
 import {FC, ReactNodeArray, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
+import {Button, Form, FormError, FormRow, FormRowItem} from '@client/ui';
+import FeedActions from '@client/actions/FeedActions';
+import {isNotEmpty, isPositiveInteger, isURLValid} from '@client/util/validators';
+
 import type {AddFeedOptions} from '@shared/types/api/feed-monitor';
 import type {Feed} from '@shared/types/Feed';
 
-import {Button, Form, FormError, FormRow, FormRowItem} from '../../../ui';
-import FeedActions from '../../../actions/FeedActions';
 import FeedForm from './FeedForm';
 import FeedItemsForm from './FeedItemsForm';
 import FeedList from './FeedList';
-import {isNotEmpty, isPositiveInteger, isURLValid} from '../../../util/validators';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 
 const validatedFields = {

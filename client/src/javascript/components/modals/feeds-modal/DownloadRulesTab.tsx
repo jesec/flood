@@ -1,13 +1,14 @@
 import {FC, ReactNodeArray, useRef, useState} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
+import {Button, Form, FormError, FormRow, FormRowItem} from '@client/ui';
+import FeedActions from '@client/actions/FeedActions';
+import {isNotEmpty, isRegExValid} from '@client/util/validators';
+
 import type {AddRuleOptions} from '@shared/types/api/feed-monitor';
 import type {Rule} from '@shared/types/Feed';
 
-import {Button, Form, FormError, FormRow, FormRowItem} from '../../../ui';
 import DownloadRuleForm from './DownloadRuleForm';
-import FeedActions from '../../../actions/FeedActions';
-import {isNotEmpty, isRegExValid} from '../../../util/validators';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 import DownloadRuleList from './DownloadRuleList';
 

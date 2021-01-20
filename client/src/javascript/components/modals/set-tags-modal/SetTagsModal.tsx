@@ -1,11 +1,12 @@
 import {FC, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 
-import {Form, FormRow} from '../../../ui';
+import {Form, FormRow} from '@client/ui';
+import TorrentActions from '@client/actions/TorrentActions';
+import TorrentStore from '@client/stores/TorrentStore';
+
 import Modal from '../Modal';
 import TagSelect from '../../general/form-elements/TagSelect';
-import TorrentActions from '../../../actions/TorrentActions';
-import TorrentStore from '../../../stores/TorrentStore';
 
 const SetTagsModal: FC = () => {
   const formRef = useRef<Form>(null);

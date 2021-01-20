@@ -5,24 +5,25 @@ import {reaction} from 'mobx';
 
 import type {FixedSizeList} from 'react-window';
 
+import {Button} from '@client/ui';
+import {Files} from '@client/ui/icons';
+import ClientStatusStore from '@client/stores/ClientStatusStore';
+import SettingActions from '@client/actions/SettingActions';
+import SettingStore from '@client/stores/SettingStore';
+import TorrentFilterStore from '@client/stores/TorrentFilterStore';
+import TorrentStore from '@client/stores/TorrentStore';
+
+import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
+
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
-import {Button} from '../../ui';
-import ClientStatusStore from '../../stores/ClientStatusStore';
 import ContextMenuMountPoint from '../general/ContextMenuMountPoint';
-import Files from '../icons/Files';
 import ListViewport from '../general/ListViewport';
-import SettingActions from '../../actions/SettingActions';
-import SettingStore from '../../stores/SettingStore';
 import TableHeading from './TableHeading';
-import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import TorrentListDropzone from './TorrentListDropzone';
 import TorrentListRow from './TorrentListRow';
-import TorrentStore from '../../stores/TorrentStore';
-
-import type {TorrentListColumn} from '../../constants/TorrentListColumns';
 
 const TorrentList: FC = observer(() => {
   const listHeaderRef = useRef<HTMLDivElement>(null);

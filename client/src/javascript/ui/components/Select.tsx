@@ -2,11 +2,12 @@ import noop from 'lodash/noop';
 import classnames from 'classnames';
 import {Component, cloneElement, createRef, ReactElement, ReactNode, ReactNodeArray, Children} from 'react';
 
+import {Chevron} from '@client/ui/icons';
+
 import Button from './Button';
 import ContextMenu from './ContextMenu';
 import {dispatchChangeEvent} from './util/forms';
 import FormElementAddon from './FormElementAddon';
-import Chevron from '../icons/Chevron';
 import FormRowItem from './FormRowItem';
 import Portal from './Portal';
 import SelectItem from './SelectItem';

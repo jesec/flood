@@ -1,9 +1,10 @@
 import {FC} from 'react';
 import {useIntl} from 'react-intl';
 
-import AuthActions from '../../actions/AuthActions';
-import ConfigStore from '../../stores/ConfigStore';
-import Logout from '../icons/Logout';
+import AuthActions from '@client/actions/AuthActions';
+import ConfigStore from '@client/stores/ConfigStore';
+import {Logout} from '@client/ui/icons';
+
 import Tooltip from '../general/Tooltip';
 
 const LogoutButton: FC = () => {

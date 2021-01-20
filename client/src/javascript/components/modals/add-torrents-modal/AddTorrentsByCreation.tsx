@@ -1,14 +1,15 @@
 import {FC, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 
+import {Checkbox, Form, FormRow, Textbox} from '@client/ui';
+import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
+import TorrentActions from '@client/actions/TorrentActions';
+import UIStore from '@client/stores/UIStore';
+
 import AddTorrentsActions from './AddTorrentsActions';
-import {Checkbox, Form, FormRow, Textbox} from '../../../ui';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
-import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
-import TorrentActions from '../../../actions/TorrentActions';
-import UIStore from '../../../stores/UIStore';
 
 type AddTorrentsByCreationFormData = {
   [trackers: string]: string;

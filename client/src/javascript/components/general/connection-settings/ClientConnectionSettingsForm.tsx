@@ -1,6 +1,8 @@
 import {Component, createRef, ReactNode, ReactNodeArray, RefObject} from 'react';
 import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
 
+import {FormRow, Select, SelectItem} from '@client/ui';
+
 import {SUPPORTED_CLIENTS} from '@shared/schema/constants/ClientConnectionSettings';
 
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
@@ -8,7 +10,6 @@ import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSett
 import QBittorrentConnectionSettingsForm from './QBittorrentConnectionSettingsForm';
 import RTorrentConnectionSettingsForm from './RTorrentConnectionSettingsForm';
 import TransmissionConnectionSettingsForm from './TransmissionConnectionSettingsForm';
-import {FormRow, Select, SelectItem} from '../../../ui';
 
 const DEFAULT_SELECTION: ClientConnectionSettings['client'] = 'rTorrent' as const;
 

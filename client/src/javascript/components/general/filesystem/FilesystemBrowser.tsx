@@ -1,10 +1,8 @@
 import {defineMessages, WrappedComponentProps} from 'react-intl';
 import {PureComponent, ReactNodeArray} from 'react';
 
-import ArrowIcon from '../../icons/ArrowIcon';
-import File from '../../icons/File';
-import FolderClosedSolid from '../../icons/FolderClosedSolid';
-import FloodActions from '../../../actions/FloodActions';
+import {Arrow, File, FolderClosedSolid} from '@client/ui/icons';
+import FloodActions from '@client/actions/FloodActions';
 
 const MESSAGES = defineMessages({
   EACCES: {
@@ -142,7 +140,7 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
       <li
         className="filesystem__directory-list__item filesystem__directory-list__item--parent"
         onClick={this.handleParentDirectoryClick}>
-        <ArrowIcon />
+        <Arrow />
         {intl.formatMessage({
           id: 'filesystem.parent.directory',
         })}

@@ -1,13 +1,13 @@
 import {Component, ChangeEvent, MouseEvent} from 'react';
 import {FormattedMessage, IntlShape} from 'react-intl';
 
+import {FormError, FormGroup, FormRow, FormRowGroup, Radio, Textbox} from '@client/ui';
+
 import type {
   RTorrentConnectionSettings,
   RTorrentSocketConnectionSettings,
   RTorrentTCPConnectionSettings,
 } from '@shared/schema/ClientConnectionSettings';
-
-import {FormError, FormGroup, FormRow, FormRowGroup, Radio, Textbox} from '../../../ui';
 
 export interface RTorrentConnectionSettingsProps {
   intl: IntlShape;

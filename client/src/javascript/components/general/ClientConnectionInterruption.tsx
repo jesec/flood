@@ -13,12 +13,13 @@ import {
   PanelFooter,
   Select,
   SelectItem,
-} from '../../ui';
-import AuthActions from '../../actions/AuthActions';
-import AuthStore from '../../stores/AuthStore';
-import ClientActions from '../../actions/ClientActions';
+} from '@client/ui';
+import AuthActions from '@client/actions/AuthActions';
+import AuthStore from '@client/stores/AuthStore';
+import ClientActions from '@client/actions/ClientActions';
+import FloodActions from '@client/actions/FloodActions';
+
 import ClientConnectionSettingsForm from './connection-settings/ClientConnectionSettingsForm';
-import FloodActions from '../../actions/FloodActions';
 
 import type {ClientConnectionSettingsFormType} from './connection-settings/ClientConnectionSettingsForm';
 

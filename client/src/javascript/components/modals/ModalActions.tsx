@@ -1,9 +1,9 @@
 import {FC} from 'react';
 
-import {Button, Checkbox} from '../../ui';
-import UIActions from '../../actions/UIActions';
+import {Button, Checkbox} from '@client/ui';
+import UIActions from '@client/actions/UIActions';
 
-import type {ModalAction} from '../../stores/UIStore';
+import type {ModalAction} from '@client/stores/UIStore';
 
 interface ModalActionsProps {
   actions: Array<ModalAction>;

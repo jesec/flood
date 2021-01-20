@@ -2,13 +2,14 @@ import classnames from 'classnames';
 import {FC} from 'react';
 import {useIntl} from 'react-intl';
 
-import Checkmark from '../icons/Checkmark';
+import {CheckmarkThick} from '@client/ui/icons';
+
+import type {Dependencies} from '@client/stores/UIStore';
+
 import LoadingIndicator from './LoadingIndicator';
 
-import type {Dependencies} from '../../stores/UIStore';
-
 const ICONS = {
-  satisfied: <Checkmark />,
+  satisfied: <CheckmarkThick />,
 };
 
 const LoadingDependencyList: FC<{dependencies: Dependencies}> = ({dependencies}: {dependencies: Dependencies}) => {

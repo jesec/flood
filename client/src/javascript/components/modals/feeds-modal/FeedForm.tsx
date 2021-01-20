@@ -1,9 +1,9 @@
 import {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import type {Feed} from '@shared/types/Feed';
+import {Button, FormRow, FormRowGroup, Select, SelectItem, Textbox} from '@client/ui';
 
-import {Button, FormRow, FormRowGroup, Select, SelectItem, Textbox} from '../../../ui';
+import type {Feed} from '@shared/types/Feed';
 
 interface FeedFormProps {
   currentFeed: Feed | null;

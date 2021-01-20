@@ -2,10 +2,8 @@ import Dropzone from 'react-dropzone';
 import {FormattedMessage} from 'react-intl';
 import {FC, useEffect, useState} from 'react';
 
-import CloseIcon from '../../icons/Close';
-import FileIcon from '../../icons/File';
-import FilesIcon from '../../icons/Files';
-import {FormRowItem} from '../../../ui';
+import {Close, File, Files} from '@client/ui/icons';
+import {FormRowItem} from '@client/ui';
 
 export type ProcessedFiles = Array<{name: string; data: string}>;
 
@@ -34,7 +32,7 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
           {files.map((file, index) => (
             <li className="dropzone__selected-files__file interactive-list__item" key={file.name} title={file.name}>
               <span className="interactive-list__icon">
-                <FileIcon />
+                <File />
               </span>
               <span className="interactive-list__label">{file.name}</span>
               <span
@@ -44,7 +42,7 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
                   newArray.splice(index, 1);
                   setFiles(newArray);
                 }}>
-                <CloseIcon />
+                <Close />
               </span>
             </li>
           ))}
@@ -76,7 +74,7 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
             <input {...getInputProps()} />
             <div className="dropzone__copy">
               <div className="dropzone__icon">
-                <FilesIcon />
+                <Files />
               </div>
               <FormattedMessage id="torrents.add.tab.file.drop" />{' '}
               <span className="dropzone__browse-button">

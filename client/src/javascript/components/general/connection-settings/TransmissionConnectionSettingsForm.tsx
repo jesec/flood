@@ -1,9 +1,9 @@
 import {Component, ChangeEvent, MouseEvent} from 'react';
 import {FormattedMessage, IntlShape} from 'react-intl';
 
-import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import {FormGroup, FormRow, Textbox} from '@client/ui';
 
-import {FormGroup, FormRow, Textbox} from '../../../ui';
+import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 export interface TransmissionConnectionSettingsProps {
   intl: IntlShape;

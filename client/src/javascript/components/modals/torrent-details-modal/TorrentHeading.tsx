@@ -3,21 +3,17 @@ import {FC, useEffect, useState} from 'react';
 import {FormattedMessage, FormattedNumber} from 'react-intl';
 import {observer} from 'mobx-react';
 
-import ClockIcon from '../../icons/ClockIcon';
-import DownloadThickIcon from '../../icons/DownloadThickIcon';
+import {Clock, DownloadThick, Ratio, Start, Stop, UploadThick} from '@client/ui/icons';
+import TorrentActions from '@client/actions/TorrentActions';
+import torrentStatusClasses from '@client/util/torrentStatusClasses';
+import torrentStatusIcons from '@client/util/torrentStatusIcons';
+import TorrentStore from '@client/stores/TorrentStore';
+import UIStore from '@client/stores/UIStore';
+
 import Duration from '../../general/Duration';
 import PriorityMeter from '../../general/PriorityMeter';
 import ProgressBar from '../../general/ProgressBar';
-import RatioIcon from '../../icons/RatioIcon';
 import Size from '../../general/Size';
-import StartIcon from '../../icons/StartIcon';
-import StopIcon from '../../icons/StopIcon';
-import TorrentActions from '../../../actions/TorrentActions';
-import torrentStatusClasses from '../../../util/torrentStatusClasses';
-import torrentStatusIcons from '../../../util/torrentStatusIcons';
-import TorrentStore from '../../../stores/TorrentStore';
-import UploadThickIcon from '../../icons/UploadThickIcon';
-import UIStore from '../../../stores/UIStore';
 
 const TorrentHeading: FC = observer(() => {
   const torrent =
@@ -52,23 +48,23 @@ const TorrentHeading: FC = observer(() => {
       <div className="torrent-details__sub-heading">
         <ul className="torrent-details__sub-heading__secondary">
           <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--download">
-            <DownloadThickIcon />
+            <DownloadThick />
             <Size value={torrent.downRate} isSpeed />
             &nbsp;&mdash;&nbsp;
             <Size value={torrent.bytesDone} />
           </li>
           <li className="torrent-details__sub-heading__tertiary torrent-details__sub-heading__tertiary--upload">
-            <UploadThickIcon />
+            <UploadThick />
             <Size value={torrent.upRate} isSpeed />
             &nbsp;&mdash;&nbsp;
             <Size value={torrent.upTotal} />
           </li>
           <li className="torrent-details__sub-heading__tertiary">
-            <RatioIcon />
+            <Ratio />
             <FormattedNumber value={torrent.ratio} />
           </li>
           <li className="torrent-details__sub-heading__tertiary">
-            <ClockIcon />
+            <Clock />
             <Duration value={torrent.eta} />
           </li>
         </ul>
@@ -98,7 +94,7 @@ const TorrentHeading: FC = observer(() => {
                 hashes: [torrent.hash],
               });
             }}>
-            <StartIcon />
+            <Start />
             <FormattedMessage id="torrents.details.actions.start" />
           </li>
           <li
@@ -112,7 +108,7 @@ const TorrentHeading: FC = observer(() => {
                 hashes: [torrent.hash],
               });
             }}>
-            <StopIcon />
+            <Stop />
             <FormattedMessage id="torrents.details.actions.stop" />
           </li>
         </ul>

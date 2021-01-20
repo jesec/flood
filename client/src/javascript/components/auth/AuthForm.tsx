@@ -1,14 +1,15 @@
 import {Component, createRef, FormEvent, RefObject} from 'react';
 import {injectIntl, WrappedComponentProps} from 'react-intl';
 
+import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '@client/ui';
+import AuthActions from '@client/actions/AuthActions';
+import history from '@client/util/history';
+
 import {AccessLevel} from '@shared/schema/constants/Auth';
 
 import type {Credentials} from '@shared/schema/Auth';
 
-import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '../../ui';
-import AuthActions from '../../actions/AuthActions';
 import ClientConnectionSettingsForm from '../general/connection-settings/ClientConnectionSettingsForm';
-import history from '../../util/history';
 
 import type {ClientConnectionSettingsFormType} from '../general/connection-settings/ClientConnectionSettingsForm';
 

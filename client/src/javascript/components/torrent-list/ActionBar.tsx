@@ -3,18 +3,15 @@ import {FC} from 'react';
 import {observer} from 'mobx-react';
 import {useIntl} from 'react-intl';
 
+import {Add, Menu, Remove, Start, Stop} from '@client/ui/icons';
+import SettingActions from '@client/actions/SettingActions';
+import SettingStore from '@client/stores/SettingStore';
+import TorrentActions from '@client/actions/TorrentActions';
+import TorrentStore from '@client/stores/TorrentStore';
+import UIActions from '@client/actions/UIActions';
+
 import Action from './Action';
-import Add from '../icons/Add';
-import MenuIcon from '../icons/MenuIcon';
-import Remove from '../icons/Remove';
-import SettingActions from '../../actions/SettingActions';
-import SettingStore from '../../stores/SettingStore';
 import SortDropdown from './SortDropdown';
-import StartIcon from '../icons/StartIcon';
-import StopIcon from '../icons/StopIcon';
-import TorrentActions from '../../actions/TorrentActions';
-import TorrentStore from '../../stores/TorrentStore';
-import UIActions from '../../actions/UIActions';
 
 const ActionBar: FC = observer(() => {
   const intl = useIntl();
@@ -30,7 +27,7 @@ const ActionBar: FC = observer(() => {
         <Action
           label="actionbar.button.sidebar.expand.collapse"
           slug="sidebar-expand-collapse"
-          icon={<MenuIcon />}
+          icon={<Menu />}
           clickHandler={() => {
             const view = document.getElementsByClassName('application__view')[0];
             if (view != null) {
@@ -56,7 +53,7 @@ const ActionBar: FC = observer(() => {
               id: 'actionbar.button.start.torrent',
             })}
             slug="start-torrent"
-            icon={<StartIcon />}
+            icon={<Start />}
             clickHandler={() =>
               TorrentActions.startTorrents({
                 hashes: TorrentStore.selectedTorrents,
@@ -68,7 +65,7 @@ const ActionBar: FC = observer(() => {
               id: 'actionbar.button.stop.torrent',
             })}
             slug="stop-torrent"
-            icon={<StopIcon />}
+            icon={<Stop />}
             clickHandler={() =>
               TorrentActions.stopTorrents({
                 hashes: TorrentStore.selectedTorrents,

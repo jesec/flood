@@ -1,15 +1,16 @@
 import {FC, useRef, useState} from 'react';
 import {useIntl} from 'react-intl';
 
+import {Form, FormRow} from '@client/ui';
+import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
+import SettingStore from '@client/stores/SettingStore';
+import TorrentActions from '@client/actions/TorrentActions';
+import UIStore from '@client/stores/UIStore';
+
 import AddTorrentsActions from './AddTorrentsActions';
 import FileDropzone from '../../general/form-elements/FileDropzone';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
-import {Form, FormRow} from '../../../ui';
-import {saveAddTorrentsUserPreferences} from '../../../util/userPreferences';
-import SettingStore from '../../../stores/SettingStore';
 import TagSelect from '../../general/form-elements/TagSelect';
-import TorrentActions from '../../../actions/TorrentActions';
-import UIStore from '../../../stores/UIStore';
 
 import type {ProcessedFiles} from '../../general/form-elements/FileDropzone';
 

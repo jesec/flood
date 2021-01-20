@@ -2,20 +2,13 @@ import {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
 
+import {Active, All, Completed, DownloadSmall, Error, Inactive, Stop, Spinner, UploadSmall} from '@client/ui/icons';
+import TorrentFilterStore from '@client/stores/TorrentFilterStore';
+import UIActions from '@client/actions/UIActions';
+
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
-import Active from '../icons/Active';
-import All from '../icons/All';
-import Completed from '../icons/Completed';
-import DownloadSmall from '../icons/DownloadSmall';
-import ErrorIcon from '../icons/ErrorIcon';
-import Inactive from '../icons/Inactive';
 import SidebarFilter from './SidebarFilter';
-import StopIcon from '../icons/StopIcon';
-import SpinnerIcon from '../icons/SpinnerIcon';
-import TorrentFilterStore from '../../stores/TorrentFilterStore';
-import UIActions from '../../actions/UIActions';
-import UploadSmall from '../icons/UploadSmall';
 
 const StatusFilters: FC = observer(() => {
   const intl = useIntl();
@@ -51,7 +44,7 @@ const StatusFilters: FC = observer(() => {
         id: 'filter.status.checking',
       }),
       slug: 'checking',
-      icon: <SpinnerIcon />,
+      icon: <Spinner />,
     },
     {
       label: intl.formatMessage({
@@ -65,7 +58,7 @@ const StatusFilters: FC = observer(() => {
         id: 'filter.status.stopped',
       }),
       slug: 'stopped',
-      icon: <StopIcon />,
+      icon: <Stop />,
     },
     {
       label: intl.formatMessage({
@@ -86,7 +79,7 @@ const StatusFilters: FC = observer(() => {
         id: 'filter.status.error',
       }),
       slug: 'error',
-      icon: <ErrorIcon />,
+      icon: <Error />,
     },
   ];
 

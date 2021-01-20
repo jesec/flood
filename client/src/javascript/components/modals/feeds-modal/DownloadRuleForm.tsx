@@ -1,8 +1,6 @@
 import {FC} from 'react';
 import {FormattedMessage, useIntl} from 'react-intl';
 
-import type {AddRuleOptions} from '@shared/types/api/feed-monitor';
-
 import {
   Button,
   Checkbox,
@@ -13,9 +11,12 @@ import {
   Select,
   SelectItem,
   Textbox,
-} from '../../../ui';
-import Checkmark from '../../icons/Checkmark';
-import FeedStore from '../../../stores/FeedStore';
+} from '@client/ui';
+import {CheckmarkThick} from '@client/ui/icons';
+import FeedStore from '@client/stores/FeedStore';
+
+import type {AddRuleOptions} from '@shared/types/api/feed-monitor';
+
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import TagSelect from '../../general/form-elements/TagSelect';
 
@@ -113,7 +114,7 @@ const DownloadRuleForm: FC<DownloadRuleFormProps> = ({
           })}>
           {isPatternMatched && (
             <FormElementAddon>
-              <Checkmark />
+              <CheckmarkThick />
             </FormElementAddon>
           )}
         </Textbox>
