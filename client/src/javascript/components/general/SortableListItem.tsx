@@ -12,9 +12,9 @@ interface SortableListItemProps {
   id: string;
   index: number;
   isVisible: boolean;
-  isDragging: boolean;
-  isLocked: boolean;
-  isDraggable: boolean;
+  isDragging?: boolean;
+  isLocked?: boolean;
+  isDraggable?: boolean;
   onDrop: () => void;
   onMove: (sourceIndex: number, targetIndex: number) => void;
   connectDragPreview: DragElementWrapper<DragPreviewOptions>;
@@ -108,4 +108,6 @@ export default flow([
       connectDropTarget: connect.dropTarget(),
     }),
   ),
-])(SortableListItem);
+])(SortableListItem) as FC<
+  Omit<SortableListItemProps, 'connectDragPreview' | 'connectDragSource' | 'connectDropTarget'>
+>;
