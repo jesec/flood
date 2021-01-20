@@ -22,16 +22,23 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
-      - run: sudo npm i -g pkg
+      - run: sudo npm i -g @jesec/pkg
       - run: npm ci
 
       - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - run: sudo apt install --reinstall -y qemu-user-static
+
       - run: npm run build-pkg
       - run: git fetch origin ${{ github.ref }}
       - run: git for-each-ref ${{ github.ref }} --format="%(contents)" > body
+
+      - name: Rename linuxstatic to linux
+        run: |
+          mv dist-pkg/flood-linuxstatic-x64 dist-pkg/flood-linux-x64
+          mv dist-pkg/flood-linuxstatic-arm64 dist-pkg/flood-linux-arm64
 
       - name: Get the version
         id: get_version
@@ -45,9 +52,11 @@ jobs:
           name: Release ${{ steps.get_version.outputs.VERSION }}
           body_path: body
           files: |
-            dist-pkg/flood-linux
-            dist-pkg/flood-macos
-            dist-pkg/flood-win.exe
+            dist-pkg/flood-linux-x64
+            dist-pkg/flood-linux-arm64
+            dist-pkg/flood-macos-x64
+            dist-pkg/flood-win-x64.exe
+            dist-pkg/flood-win-arm64.exe
 
   release-docker:
     needs: release

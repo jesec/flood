@@ -163,8 +163,10 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
+      - run: sudo apt install --reinstall -y qemu-user-static
+
       - run: npm ci --no-optional
-      - run: sudo npm install -g pkg
+      - run: sudo npm install -g @jesec/pkg
 
       - name: Tag rolling release
         run: |
@@ -174,20 +176,37 @@ jobs:
         run: |
           npm run build-pkg
 
-      - name: 'Upload executable: Linux'
-        uses: actions/upload-artifact@v2
-        with:
-          name: flood-linux
-          path: dist-pkg/flood-linux
+      - name: Rename linuxstatic to linux
+        run: |
+          mv dist-pkg/flood-linuxstatic-x64 dist-pkg/flood-linux-x64
+          mv dist-pkg/flood-linuxstatic-arm64 dist-pkg/flood-linux-arm64
 
-      - name: 'Upload executable: MacOS'
+      - name: 'Upload executable: Linux x64'
         uses: actions/upload-artifact@v2
         with:
-          name: flood-macos
-          path: dist-pkg/flood-macos
+          name: flood-linux-x64
+          path: dist-pkg/flood-linux-x64
 
-      - name: 'Upload executable: Windows'
+      - name: 'Upload executable: Linux arm64'
         uses: actions/upload-artifact@v2
         with:
-          name: flood-win
-          path: dist-pkg/flood-win.exe
+          name: flood-linux-arm64
+          path: dist-pkg/flood-linux-arm64
+
+      - name: 'Upload executable: MacOS x64'
+        uses: actions/upload-artifact@v2
+        with:
+          name: flood-macos-x64
+          path: dist-pkg/flood-macos-x64
+
+      - name: 'Upload executable: Windows x64'
+        uses: actions/upload-artifact@v2
+        with:
+          name: flood-win-x64.exe
+          path: dist-pkg/flood-win-x64.exe
+
+      - name: 'Upload executable: Windows arm64'
+        uses: actions/upload-artifact@v2
+        with:
+          name: flood-win-arm64.exe
+          path: dist-pkg/flood-win-arm64.exe
