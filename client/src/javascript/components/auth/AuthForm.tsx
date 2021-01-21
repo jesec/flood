@@ -1,5 +1,5 @@
-import {Component, createRef, FormEvent, RefObject} from 'react';
-import {injectIntl, WrappedComponentProps} from 'react-intl';
+import {FC, useRef, useState} from 'react';
+import {useIntl} from 'react-intl';
 
 import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '@client/ui';
 import AuthActions from '@client/actions/AuthActions';
@@ -16,201 +16,165 @@ import type {ClientConnectionSettingsFormType} from '../general/connection-setti
 type LoginFormData = Pick<Credentials, 'username' | 'password'>;
 type RegisterFormData = Pick<Credentials, 'username' | 'password'>;
 
-interface AuthFormProps extends WrappedComponentProps {
+interface AuthFormProps {
   mode: 'login' | 'register';
 }
 
-interface AuthFormStates {
-  isSubmitting: boolean;
-  errorMessage?: string;
-}
+const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
+  const intl = useIntl();
+  const formRef = useRef<Form>(null);
+  const settingsFormRef = useRef<ClientConnectionSettingsFormType>(null);
+  const [errorMessage, setErrorMessage] = useState<string | {id: string} | undefined>(undefined);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-class AuthForm extends Component<AuthFormProps, AuthFormStates> {
-  formRef?: Form | null;
-  settingsFormRef: RefObject<ClientConnectionSettingsFormType> = createRef();
+  const isLoginMode = mode === 'login';
 
-  constructor(props: AuthFormProps) {
-    super(props);
-    this.state = {
-      isSubmitting: false,
-    };
-  }
+  return (
+    <div className="application__entry-barrier">
+      <Panel spacing="large">
+        <Form
+          onSubmit={(submission) => {
+            submission.event.preventDefault();
 
-  getHeaderText() {
-    const {mode, intl} = this.props;
+            setIsSubmitting(true);
 
-    if (mode === 'login') {
-      return intl.formatMessage({
-        id: 'auth.login',
-      });
-    }
+            const formData = submission.formData as Partial<LoginFormData> | Partial<RegisterFormData>;
 
-    return intl.formatMessage({
-      id: 'auth.create.an.account',
-    });
-  }
+            if (formData.username == null || formData.username === '') {
+              setIsSubmitting(false);
+              setErrorMessage({id: 'auth.error.username.empty'});
+              return;
+            }
 
-  getIntroText() {
-    const {mode, intl} = this.props;
+            if (formData.password == null || formData.password === '') {
+              setIsSubmitting(false);
+              setErrorMessage({id: 'auth.error.password.empty'});
+              return;
+            }
 
-    if (mode === 'login') {
-      return intl.formatMessage({
-        id: 'auth.login.intro',
-      });
-    }
+            if (isLoginMode) {
+              const credentials = formData as LoginFormData;
 
-    return intl.formatMessage({
-      id: 'auth.create.an.account.intro',
-    });
-  }
+              AuthActions.authenticate({
+                username: credentials.username,
+                password: credentials.password,
+              })
+                .then(() => {
+                  setIsSubmitting(false);
+                  history.replace('overview');
+                })
+                .catch((error: Error) => {
+                  setIsSubmitting(false);
+                  setErrorMessage(error.message);
+                  history.replace('login');
+                });
+            } else {
+              const config = formData as RegisterFormData;
 
-  handleFormSubmit = (submission: {event: Event | FormEvent<HTMLFormElement>; formData: Record<string, unknown>}) => {
-    submission.event.preventDefault();
+              if (settingsFormRef.current == null) {
+                setIsSubmitting(false);
+                setErrorMessage({id: 'connection.settings.error.empty'});
+                return;
+              }
 
-    this.setState({isSubmitting: true});
+              const connectionSettings = settingsFormRef.current.getConnectionSettings();
+              if (connectionSettings == null) {
+                setIsSubmitting(false);
+                setErrorMessage({id: 'connection.settings.error.empty'});
+                return;
+              }
 
-    const {intl, mode} = this.props;
-
-    const formData = submission.formData as Partial<LoginFormData> | Partial<RegisterFormData>;
-
-    if (formData.username == null || formData.username === '') {
-      this.setState({
-        isSubmitting: false,
-        errorMessage: intl.formatMessage({id: 'auth.error.username.empty'}),
-      });
-      return;
-    }
-
-    if (formData.password == null || formData.password === '') {
-      this.setState({
-        isSubmitting: false,
-        errorMessage: intl.formatMessage({id: 'auth.error.password.empty'}),
-      });
-      return;
-    }
-
-    if (mode === 'login') {
-      const credentials = formData as LoginFormData;
-
-      AuthActions.authenticate({
-        username: credentials.username,
-        password: credentials.password,
-      })
-        .then(() => {
-          this.setState({isSubmitting: false}, () => history.replace('overview'));
-        })
-        .catch((error: Error) => {
-          this.setState({isSubmitting: false, errorMessage: error.message}, () => history.replace('login'));
-        });
-    } else {
-      const config = formData as RegisterFormData;
-
-      if (this.settingsFormRef.current == null) {
-        this.setState({
-          isSubmitting: false,
-          errorMessage: intl.formatMessage({
-            id: 'connection.settings.error.empty',
-          }),
-        });
-        return;
-      }
-
-      const connectionSettings = this.settingsFormRef.current.getConnectionSettings();
-      if (connectionSettings == null) {
-        this.setState({
-          isSubmitting: false,
-          errorMessage: intl.formatMessage({
-            id: 'connection.settings.error.empty',
-          }),
-        });
-        return;
-      }
-
-      AuthActions.register({
-        username: config.username,
-        password: config.password,
-        client: connectionSettings,
-        level: AccessLevel.ADMINISTRATOR,
-      }).then(
-        () => {
-          this.setState({isSubmitting: false}, () => history.replace('overview'));
-        },
-        (error: Error) => {
-          this.setState({isSubmitting: false, errorMessage: error.message});
-        },
-      );
-    }
-  };
-
-  render() {
-    const {errorMessage, isSubmitting} = this.state;
-    const {intl, mode} = this.props;
-    const isLoginMode = mode === 'login';
-
-    return (
-      <div className="application__entry-barrier">
-        <Panel spacing="large">
-          <Form
-            onSubmit={this.handleFormSubmit}
-            ref={(ref) => {
-              this.formRef = ref;
-            }}>
-            <PanelHeader>
-              <h1>{this.getHeaderText()}</h1>
-            </PanelHeader>
-            <PanelContent>
-              <p className="copy--lead">{this.getIntroText()}</p>
-              {errorMessage != null ? (
-                <FormRow>
-                  <FormError isLoading={isSubmitting}>{errorMessage}</FormError>
-                </FormRow>
-              ) : null}
-              <FormRow>
-                <Textbox placeholder="Username" id="username" autoComplete="username" />
-              </FormRow>
-              <FormRow>
-                <Textbox
-                  placeholder="Password"
-                  id="password"
-                  type="password"
-                  autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-                />
-              </FormRow>
-            </PanelContent>
-            {isLoginMode ? null : (
-              <PanelContent hasBorder>
-                <ClientConnectionSettingsForm ref={this.settingsFormRef} />
-              </PanelContent>
-            )}
-            <PanelFooter hasBorder>
-              <FormRow justify="end">
-                <Button
-                  priority="tertiary"
-                  onClick={() => {
-                    if (this.formRef != null) {
-                      this.formRef.resetForm();
-                    }
-                  }}>
-                  {intl.formatMessage({
-                    id: 'auth.input.clear',
+              AuthActions.register({
+                username: config.username,
+                password: config.password,
+                client: connectionSettings,
+                level: AccessLevel.ADMINISTRATOR,
+              }).then(
+                () => {
+                  setIsSubmitting(false);
+                  history.replace('overview');
+                },
+                (error: Error) => {
+                  setIsSubmitting(false);
+                  setErrorMessage(error.message);
+                },
+              );
+            }
+          }}
+          ref={formRef}>
+          <PanelHeader>
+            <h1>
+              {isLoginMode
+                ? intl.formatMessage({
+                    id: 'auth.login',
+                  })
+                : intl.formatMessage({
+                    id: 'auth.create.an.account',
                   })}
-                </Button>
-                <Button isLoading={isSubmitting} type="submit">
-                  {isLoginMode
-                    ? intl.formatMessage({
-                        id: 'auth.log.in',
-                      })
-                    : intl.formatMessage({
-                        id: 'auth.create.account',
-                      })}
-                </Button>
+            </h1>
+          </PanelHeader>
+          <PanelContent>
+            <p className="copy--lead">
+              {isLoginMode
+                ? intl.formatMessage({
+                    id: 'auth.login.intro',
+                  })
+                : intl.formatMessage({
+                    id: 'auth.create.an.account.intro',
+                  })}
+            </p>
+            {errorMessage != null ? (
+              <FormRow>
+                <FormError isLoading={isSubmitting}>
+                  {typeof errorMessage === 'string' ? errorMessage : intl.formatMessage(errorMessage)}
+                </FormError>
               </FormRow>
-            </PanelFooter>
-          </Form>
-        </Panel>
-      </div>
-    );
-  }
-}
+            ) : null}
+            <FormRow>
+              <Textbox placeholder="Username" id="username" autoComplete="username" />
+            </FormRow>
+            <FormRow>
+              <Textbox
+                placeholder="Password"
+                id="password"
+                type="password"
+                autoComplete={isLoginMode ? 'current-password' : 'new-password'}
+              />
+            </FormRow>
+          </PanelContent>
+          {isLoginMode ? null : (
+            <PanelContent hasBorder>
+              <ClientConnectionSettingsForm ref={settingsFormRef} />
+            </PanelContent>
+          )}
+          <PanelFooter hasBorder>
+            <FormRow justify="end">
+              <Button
+                priority="tertiary"
+                onClick={() => {
+                  if (formRef.current != null) {
+                    formRef.current.resetForm();
+                  }
+                }}>
+                {intl.formatMessage({
+                  id: 'auth.input.clear',
+                })}
+              </Button>
+              <Button isLoading={isSubmitting} type="submit">
+                {isLoginMode
+                  ? intl.formatMessage({
+                      id: 'auth.log.in',
+                    })
+                  : intl.formatMessage({
+                      id: 'auth.create.account',
+                    })}
+              </Button>
+            </FormRow>
+          </PanelFooter>
+        </Form>
+      </Panel>
+    </div>
+  );
+};
 
-export default injectIntl(AuthForm);
+export default AuthForm;
