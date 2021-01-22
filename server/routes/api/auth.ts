@@ -1,5 +1,4 @@
 import express from 'express';
-import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import rateLimit from 'express-rate-limit';
 
@@ -12,6 +11,7 @@ import {
   AuthVerificationPreloadConfigs,
 } from '../../../shared/schema/api/auth';
 import config from '../../../config';
+import {getAuthToken, getCookieOptions} from '../../util/authUtil';
 import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import requireAdmin from '../../middleware/requireAdmin';
 import services from '../../services';
@@ -40,33 +40,13 @@ router.use(
   }),
 );
 
-export const getAuthToken = (username: string, res?: Response): string => {
-  const expirationSeconds = 60 * 60 * 24 * 7; // one week
-  const cookieExpiration = Date.now() + expirationSeconds * 1000;
-
-  // Create token if the password matched and no error was thrown.
-  const token = jwt.sign({username}, config.secret, {
-    expiresIn: expirationSeconds,
-  });
-
-  if (res != null) {
-    res.cookie('jwt', token, {
-      expires: new Date(cookieExpiration),
-      httpOnly: true,
-      sameSite: 'strict',
-    });
-  }
-
-  return token;
-};
-
 const sendAuthenticationResponse = (
   res: Response,
   credentials: Required<Pick<Credentials, 'username' | 'level'>>,
 ): void => {
   const {username, level} = credentials;
 
-  getAuthToken(username, res);
+  res.cookie('jwt', getAuthToken(username), getCookieOptions());
 
   const response: AuthAuthenticationResponse = {
     success: true,
@@ -200,7 +180,7 @@ router.use('/verify', (req, res, next) => {
   if (config.authMethod === 'none') {
     const {username, level} = Users.getConfigUser();
 
-    getAuthToken(username, res);
+    res.cookie('jwt', getAuthToken(username), getCookieOptions());
 
     const response: AuthVerificationResponse = {
       initialUser: false,

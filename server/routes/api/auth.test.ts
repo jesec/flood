@@ -4,7 +4,7 @@ import supertest from 'supertest';
 import {AccessLevel} from '../../../shared/schema/constants/Auth';
 
 import app from '../../app';
-import {getAuthToken} from './auth';
+import {getAuthToken} from '../../util/authUtil';
 
 import type {
   AuthRegistrationOptions,

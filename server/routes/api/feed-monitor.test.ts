@@ -2,7 +2,7 @@ import fs from 'fs';
 import supertest from 'supertest';
 
 import app from '../../app';
-import {getAuthToken} from './auth';
+import {getAuthToken} from '../../util/authUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '../../../shared/types/api/feed-monitor';
