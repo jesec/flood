@@ -36,7 +36,7 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
   '/torrents/:hash/contents/:indices/data',
   rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 60,
+    max: 100,
   }),
   async (req, _res, next) => {
     const {token} = req.query;
