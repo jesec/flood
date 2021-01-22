@@ -705,10 +705,10 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
 router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
   '/:hash/contents/:indices/data',
   // This operation is resource-intensive
-  // Limit each IP to 60 requests every 5 minutes
+  // Limit each IP to 200 requests every 5 minutes
   rateLimit({
     windowMs: 5 * 60 * 1000,
-    max: 60,
+    max: 200,
   }),
   (req, res) => {
     const {hash, indices: stringIndices} = req.params;
