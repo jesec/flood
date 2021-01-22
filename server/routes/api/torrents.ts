@@ -11,6 +11,7 @@ import tar, {Pack} from 'tar-fs';
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
+  ContentToken,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {
@@ -35,6 +36,7 @@ import {
 import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
+import {getToken} from '../../util/authUtil';
 
 const getDestination = async (
   services: Express.Request['services'],
@@ -670,7 +672,7 @@ router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:ha
  * @param {string} indices.path - 'all' or indices of selected contents separated by ','
  * @return {object} 200 - contents archived in .tar - application/x-tar
  */
-router.get(
+router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
   '/:hash/contents/:indices/data',
   // This operation is resource-intensive
   // Limit each IP to 60 requests every 5 minutes
@@ -680,6 +682,17 @@ router.get(
   }),
   (req, res) => {
     const {hash, indices: stringIndices} = req.params;
+
+    if (req.user != null && req.query.token == null) {
+      res.redirect(
+        `?token=${getToken<ContentToken>({
+          username: req.user.username,
+          hash,
+          indices: stringIndices,
+        })}`,
+      );
+      return;
+    }
 
     const selectedTorrent = req.services?.torrentService.getTorrent(hash);
     if (!selectedTorrent) {

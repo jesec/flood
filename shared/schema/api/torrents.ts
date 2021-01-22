@@ -1,4 +1,4 @@
-import {array, boolean, object, record, string} from 'zod';
+import {array, boolean, number, object, record, string} from 'zod';
 import {noComma} from '../../util/regEx';
 
 import type {infer as zodInfer} from 'zod';
@@ -62,3 +62,16 @@ export const setTorrentsTagsSchema = object({
 });
 
 export type SetTorrentsTagsOptions = zodInfer<typeof setTorrentsTagsSchema>;
+
+// GET /api/torrents/{hash}/contents/{indices}/data
+export const contentTokenSchema = object({
+  username: string(),
+  hash: string(),
+  indices: string(),
+  // issued at
+  iat: number(),
+  // expiration
+  exp: number(),
+});
+
+export type ContentToken = zodInfer<typeof contentTokenSchema>;
