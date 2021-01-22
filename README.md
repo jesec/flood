@@ -8,11 +8,11 @@ Flood is a monitoring service for various torrent clients. It's a Node.js servic
 
 #### Supported Clients
 
-| Client                                                          | Support                                                                                                     |
-| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| [rTorrent](https://github.com/rakshasa/rtorrent)                | :white_check_mark: ([tests](https://github.com/jesec/flood/blob/master/server/.jest/rtorrent.setup.js))     |
-| [qBittorrent](https://github.com/qbittorrent/qBittorrent) v4.1+ | :white_check_mark: ([tests](https://github.com/jesec/flood/blob/master/server/.jest/qbittorrent.setup.js))  |
-| [Transmission](https://github.com/transmission/transmission)    | :white_check_mark: ([tests](https://github.com/jesec/flood/blob/master/server/.jest/transmission.setup.js)) |
+| Client                                                          | Support                                                                                                      |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| [rTorrent](https://github.com/rakshasa/rtorrent)                | :white_check_mark: ([tested](https://github.com/jesec/flood/blob/master/server/.jest/rtorrent.setup.js))     |
+| [qBittorrent](https://github.com/qbittorrent/qBittorrent) v4.1+ | :white_check_mark: ([tested](https://github.com/jesec/flood/blob/master/server/.jest/qbittorrent.setup.js))  |
+| [Transmission](https://github.com/transmission/transmission)    | :white_check_mark: ([tested](https://github.com/jesec/flood/blob/master/server/.jest/transmission.setup.js)) |
 
 #### Feedback
 
@@ -28,14 +28,16 @@ Check out the [Wiki](https://github.com/jesec/flood/wiki) for more information.
 
 Install [Node.js runtime](https://nodejs.org/). Flood tracks `Current` and provides support to `Active LTS` as well.
 
-- Debian, Ubuntu and RHEL-based distributions users can install latest `nodejs` from [NodeSource](https://github.com/nodesource/distributions) software repository.
-- Windows and MacOS users may use installer.
+- Debian, Ubuntu (`apt`/`.deb`) and Enterprise Linux (`yum`/`dnf`/`.rpm`) -based distributions users can install `nodejs` from [NodeSource](https://github.com/nodesource/distributions) software repository.
+- Windows users can use [winget](https://docs.microsoft.com/en-us/windows/package-manager/winget), [Chocolatey](https://chocolatey.org/packages/nodejs) or installer.
+- macOS users can use [brew](https://brew.sh/) or installer.
+- Check [Node.js website](https://nodejs.org/en/download/package-manager) for more.
 
-**EXPERIMENTAL**: You can download a single-executable build from [Releases](https://github.com/jesec/flood/releases) (or rolling build from [Actions](https://github.com/jesec/flood/actions?query=workflow%3A%22Publish+rolling+build%22)). It bundles `Node.js` and supports `Linux`, `MacOS` and `Windows`.
+**EXPERIMENTAL**: You can download a single-executable build from [Releases](https://github.com/jesec/flood/releases) (or rolling build from [Actions](https://nightly.link/jesec/flood/workflows/publish-rolling/master)). It bundles `Node.js` and supports `Linux`, `macOS` and `Windows`.
 
 ### Installation
 
-`sudo npm i -g flood` or `npx flood`
+(sudo) `npm install --global flood` or `npx flood`
 
 Or use `@jesec/flood` for cutting-edge builds.
 
@@ -77,8 +79,7 @@ Run the installation command again.
   - Flood only uses the path provided by the torrent client so it needs to have the same filesystem context as the torrent client. If a file is "/path/to/a/file" to the torrent client, it has to be "/path/to/a/file" to Flood in order to get file operations working. It can't be "/mnt/some/different/path/file".
 - rTorrent:
   - Linux users can download the latest static executable (available for `amd64` and `arm64`) from [jesec/rtorrent](https://github.com/jesec/rtorrent). Alternatively, use package managers such as `apt`, `yum`, `pacman` of the platform to install rTorrent.
-  - MacOS users can use `brew` to install rTorrent.
-  - Windows users can use [Cygwin](https://www.cygwin.com/) to install rTorrent.
+  - macOS users can use `brew` to install rTorrent.
   - [Compile](https://github.com/rakshasa/rtorrent/wiki/Installing): XMLRPC support flag (`--with-xmlrpc-c`) is required during compilation.
   - Certain features (sequential download, initial seeding, etc.) are not available in vanilla rTorrent.
   - rTorrent needs to have read access to files of temporary directory of Flood (`<rundir>/temp`) as Flood adds torrents to rTorrent by local file path ([96c754dd](https://github.com/jesec/flood/commit/96c754ddeb614b45a565e8307c9985ee85bcb7fa)). This is because rTorrent uses a rather antique XML-RPC interface, which usually has certain limitations (size of body) and is unreliable in handling large binary objects ([Flood-UI/flood#164](https://github.com/Flood-UI/flood/issues/164), [Flood-UI/flood#741](https://github.com/Flood-UI/flood/issues/741), [Flood-UI/flood#773](https://github.com/Flood-UI/flood/issues/773)). See [#86](https://github.com/jesec/flood/discussions/86).
