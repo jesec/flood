@@ -702,14 +702,23 @@ router.get(
           indices = stringIndices.split(',').map((value) => Number(value));
         }
 
-        const filePathsToDownload = contents
+        let filePathsToDownload = contents
           .filter((content) => indices.includes(content.index))
-          .map((content) => sanitizePath(path.join(selectedTorrent.directory, content.path)))
-          .filter((filePath) => isAllowedPath(filePath))
-          .filter((filePath) => fs.existsSync(filePath));
+          .map((content) => sanitizePath(path.join(selectedTorrent.directory, content.path)));
 
-        if (filePathsToDownload.length < 1) {
-          res.status(404).json({error: 'File not found.'});
+        filePathsToDownload = filePathsToDownload.filter((filePath) => isAllowedPath(filePath));
+
+        if (filePathsToDownload.length !== indices.length) {
+          const {code, message} = accessDeniedError();
+          res.status(403).json({code, message});
+          return;
+        }
+
+        filePathsToDownload = filePathsToDownload.filter((filePath) => fs.existsSync(filePath));
+
+        if (filePathsToDownload.length < 1 || filePathsToDownload.length !== indices.length) {
+          const {code, message} = fileNotFoundError();
+          res.status(404).json({code, message});
           return;
         }
 
