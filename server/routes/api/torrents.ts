@@ -664,6 +664,36 @@ router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:ha
 });
 
 /**
+ * GET /api/torrents/{hash}/contents/{indices}/token
+ * @summary Gets retrieval token of contents of a torrent.
+ * @tags Torrent
+ * @security User
+ * @param {string} hash.path
+ * @param {string} indices.path - 'all' or indices of selected contents separated by ','
+ * @return {string} 200 - token - text/plain
+ */
+router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
+  '/:hash/contents/:indices/token',
+  // This operation performs authentication operations.
+  rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 200,
+  }),
+  (req, res) => {
+    if (req.user) {
+      const {hash, indices} = req.params;
+      res.status(200).send(
+        getToken<ContentToken>({
+          username: req.user.username,
+          hash,
+          indices,
+        }),
+      );
+    }
+  },
+);
+
+/**
  * GET /api/torrents/{hash}/contents/{indices}/data
  * @summary Gets downloaded data of contents of a torrent.
  * @tags Torrent
