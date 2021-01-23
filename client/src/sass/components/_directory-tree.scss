@@ -214,6 +214,16 @@ $selection-toolbar--height: $spacing-unit * 1.5;
           }
         }
 
+        &--clipboard {
+          outline: none;
+          .icon {
+            fill: currentColor;
+            height: auto;
+            margin-top: 2px;
+            width: 12px;
+          }
+        }
+
         &:last-child {
           padding-right: 0;
         }

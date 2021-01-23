@@ -2,8 +2,8 @@ import classnames from 'classnames';
 import {Component, ReactText} from 'react';
 
 import {Checkbox} from '@client/ui';
+import {Checkmark, Clipboard, File as FileIcon} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';
-import {File as FileIcon} from '@client/ui/icons';
 import TorrentActions from '@client/actions/TorrentActions';
 
 import type {TorrentContent, TorrentContentSelection, TorrentContentSelectionTree} from '@shared/types/TorrentContent';
@@ -20,11 +20,25 @@ interface DirectoryFilesProps {
   onItemSelect: (selection: TorrentContentSelection) => void;
 }
 
-class DirectoryFiles extends Component<DirectoryFilesProps> {
+interface DirectoryFilesStates {
+  copiedToClipboard: number | null;
+}
+
+class DirectoryFiles extends Component<DirectoryFilesProps, DirectoryFilesStates> {
+  contentPermalinks: Record<number, string | null> = {};
+
   static defaultProps = {
     path: [],
     items: {},
   };
+
+  constructor(props: DirectoryFilesProps) {
+    super(props);
+
+    this.state = {
+      copiedToClipboard: null,
+    };
+  }
 
   getCurrentPath(file: TorrentContent) {
     const {path} = this.props;
@@ -119,6 +133,56 @@ class DirectoryFiles extends Component<DirectoryFilesProps> {
                 priorityType="file"
               />
             </div>
+            {typeof navigator.clipboard?.writeText === 'function' && (
+              <button
+                className="file__detail file__detail--secondary file__detail--clipboard"
+                type="button"
+                onClick={() => {
+                  const copy = (link: string): void => {
+                    if (link !== '') {
+                      if (typeof navigator.share === 'function') {
+                        navigator
+                          .share({
+                            title: file.filename,
+                            url: link,
+                          })
+                          .then(() => {
+                            this.setState({
+                              copiedToClipboard: file.index,
+                            });
+                          });
+                      } else {
+                        navigator.clipboard.writeText(link).then(() => {
+                          this.setState({
+                            copiedToClipboard: file.index,
+                          });
+                        });
+                      }
+                    }
+                  };
+                  // Safari does not support async operations inside "user gesture" handler.
+                  // Otherwise the write to clipboard will be rejected for "security reasons".
+                  // As such, we cache the token, so next click can be synchronous. Incompatible
+                  // morons make everyone's life hard.
+                  const link = this.contentPermalinks[file.index];
+                  if (link != null) {
+                    copy(link);
+                  } else {
+                    this.contentPermalinks[file.index] = '';
+                    TorrentActions.getTorrentContentsDataPermalink(hash, [file.index]).then(
+                      (url) => {
+                        this.contentPermalinks[file.index] = url;
+                        copy(url);
+                      },
+                      () => {
+                        this.contentPermalinks[file.index] = null;
+                      },
+                    );
+                  }
+                }}>
+                {this.state.copiedToClipboard === file.index ? <Checkmark /> : <Clipboard />}
+              </button>
+            )}
           </div>
         );
       });
