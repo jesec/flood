@@ -68,7 +68,7 @@ const FeedItemsForm: FC = observer(() => {
           width="three-eighths">
           {!feeds.length
             ? [
-                <SelectItem key="empty" id="placeholder" placeholder>
+                <SelectItem key="empty" id="placeholder" isPlaceholder>
                   <em>
                     <FormattedMessage id="feeds.no.feeds.available" />
                   </em>
@@ -87,7 +87,7 @@ const FeedItemsForm: FC = observer(() => {
                   );
                 },
                 [
-                  <SelectItem key="select-feed" id="placeholder" placeholder>
+                  <SelectItem key="select-feed" id="placeholder" isPlaceholder>
                     <em>
                       <FormattedMessage id="feeds.select.feed" />
                     </em>

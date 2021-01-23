@@ -162,7 +162,7 @@ const TorrentContents: FC = observer(() => {
             />
           </Button>
           <Select id="file-priority" persistentPlaceholder shrink={false} defaultID="">
-            <SelectItem placeholder>
+            <SelectItem id={-1} isPlaceholder>
               <FormattedMessage id="torrents.details.selected.files.set.priority" />
             </SelectItem>
             <SelectItem id={0}>

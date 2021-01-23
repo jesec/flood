@@ -1,4 +1,3 @@
-import noop from 'lodash/noop';
 import classnames from 'classnames';
 import {Component, cloneElement, createRef, ReactElement, ReactNode, ReactNodeArray, Children} from 'react';
 
@@ -10,10 +9,10 @@ import {dispatchChangeEvent} from './util/forms';
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
 import Portal from './Portal';
-import SelectItem from './SelectItem';
 
 import type {FormRowItemProps} from './FormRowItem';
 import type {ButtonProps} from './Button';
+import type {SelectItemProps} from './SelectItem';
 
 interface SelectProps {
   id: string | number;
@@ -94,7 +93,9 @@ export default class Select extends Component<SelectProps, SelectStates> {
 
     const childArray = children as ReactNodeArray;
     if (childArray != null) {
-      const item = childArray.find((child) => (child as SelectItem).props.id != null) as SelectItem;
+      const item = childArray.find(
+        (child) => (child as ReactElement<SelectItemProps>).props.id != null,
+      ) as ReactElement<SelectItemProps>;
 
       if (item?.props?.id != null) {
         return item.props.id;
@@ -106,9 +107,9 @@ export default class Select extends Component<SelectProps, SelectStates> {
 
   getItemList(children: ReactNodeArray) {
     return children.reduce((accumulator: Array<ReactElement>, child) => {
-      const item = child as SelectItem;
+      const item = child as ReactElement<SelectItemProps>;
 
-      if (item.props.placeholder) {
+      if (item.props.isPlaceholder) {
         return accumulator;
       }
 
@@ -144,9 +145,9 @@ export default class Select extends Component<SelectProps, SelectStates> {
     const {selectedID} = this.state;
 
     const selectedItem = children.find((child, index) => {
-      const item = child as SelectItem;
+      const item = child as ReactElement<SelectItemProps>;
       return (
-        (persistentPlaceholder && item.props.placeholder) ||
+        (persistentPlaceholder && item.props.isPlaceholder) ||
         (!selectedID && index === 0) ||
         item.props.id === selectedID
       );
@@ -253,7 +254,7 @@ export default class Select extends Component<SelectProps, SelectStates> {
           <input
             className="input input--hidden"
             name={`${id}`}
-            onChange={noop}
+            onChange={() => undefined}
             tabIndex={-1}
             ref={this.inputRef}
             type="text"
