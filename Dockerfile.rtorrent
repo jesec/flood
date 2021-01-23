@@ -6,12 +6,7 @@ FROM jesec/rtorrent:$RTORRENT_VERSION as rtorrent
 FROM jesec/flood:$FLOOD_VERSION as flood
 
 # Install rTorrent
-COPY --from=rtorrent /usr/local/bin/rtorrent /usr/local/bin/
-
-# Default rTorrent configuration
-# SCGI socket is exposed to $HOME/.local/share/rtorrent/rtorrent.sock
-# With "download" user, /home/download/.local/share/rtorrent/rtorrent.sock
-COPY --from=rtorrent /etc/rtorrent/rtorrent.rc /etc/rtorrent/
+COPY --from=rtorrent / /
 
 # Flood with managed rTorrent daemon
 ENTRYPOINT ["flood", "--host=0.0.0.0", "--rtorrent"]
