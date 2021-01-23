@@ -10,12 +10,12 @@ import AuthActions from '@client/actions/AuthActions';
 import AuthStore from '@client/stores/AuthStore';
 
 import {AccessLevel} from '@shared/schema/constants/Auth';
+
 import type {Credentials} from '@shared/schema/Auth';
+import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 import ClientConnectionSettingsForm from '../../general/connection-settings/ClientConnectionSettingsForm';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
-
-import type {ClientConnectionSettingsFormType} from '../../general/connection-settings/ClientConnectionSettingsForm';
 
 interface AuthTabFormData {
   username: string;
@@ -25,7 +25,7 @@ interface AuthTabFormData {
 
 const AuthTab: FC = observer(() => {
   const formRef = useRef<Form>(null);
-  const settingsFormRef = useRef<ClientConnectionSettingsFormType>(null);
+  const clientConnectionSettingsRef = useRef<ClientConnectionSettings | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isUserListFetched, setIsUserListFetched] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -62,7 +62,7 @@ const AuthTab: FC = observer(() => {
   return (
     <Form
       onSubmit={() => {
-        if (formRef.current == null || settingsFormRef.current == null) {
+        if (formRef.current == null || clientConnectionSettingsRef.current == null) {
           return;
         }
 
@@ -75,7 +75,7 @@ const AuthTab: FC = observer(() => {
         } else {
           setIsSubmitting(true);
 
-          const connectionSettings = settingsFormRef.current.getConnectionSettings();
+          const connectionSettings = clientConnectionSettingsRef.current;
           if (connectionSettings == null) {
             setError('connection.settings.error.empty');
             setIsSubmitting(false);
@@ -190,7 +190,11 @@ const AuthTab: FC = observer(() => {
           <FormattedMessage id="auth.admin" />
         </Checkbox>
       </FormRow>
-      <ClientConnectionSettingsForm ref={settingsFormRef} />
+      <ClientConnectionSettingsForm
+        onSettingsChange={(settings) => {
+          clientConnectionSettingsRef.current = settings;
+        }}
+      />
       <p />
       <FormRow justify="end">
         <Button isLoading={isSubmitting} priority="primary" type="submit">

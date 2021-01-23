@@ -1,110 +1,79 @@
-import {Component, ChangeEvent, MouseEvent} from 'react';
-import {FormattedMessage, IntlShape} from 'react-intl';
+import {FC, useState} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {FormGroup, FormRow, Textbox} from '@client/ui';
 
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 export interface QBittorrentConnectionSettingsProps {
-  intl: IntlShape;
+  onSettingsChange: (settings: QBittorrentConnectionSettings | null) => void;
 }
 
-export interface QBittorrentConnectionSettingsFormData {
-  url: string;
-  username: string;
-  password: string;
-}
+const QBittorrentConnectionSettingsForm: FC<QBittorrentConnectionSettingsProps> = ({
+  onSettingsChange,
+}: QBittorrentConnectionSettingsProps) => {
+  const intl = useIntl();
+  const [settings, setSettings] = useState<QBittorrentConnectionSettings>({
+    client: 'qBittorrent',
+    type: 'web',
+    version: 1,
+    url: '',
+    username: '',
+    password: '',
+  });
 
-class QBittorrentConnectionSettingsForm extends Component<
-  QBittorrentConnectionSettingsProps,
-  QBittorrentConnectionSettingsFormData
-> {
-  constructor(props: QBittorrentConnectionSettingsProps) {
-    super(props);
-
-    this.state = {
-      url: '',
-      username: '',
-      password: '',
-    };
-  }
-
-  getConnectionSettings = (): QBittorrentConnectionSettings | null => {
-    if (this.state.url == null || this.state.url === '') {
-      return null;
-    }
-
-    const settings: QBittorrentConnectionSettings = {
-      client: 'qBittorrent',
-      type: 'web',
-      version: 1,
-      url: this.state.url,
-      username: this.state.username || '',
-      password: this.state.password || '',
+  const handleFormChange = (field: 'url' | 'username' | 'password', value: string): void => {
+    const newSettings = {
+      ...settings,
+      [field]: value,
     };
 
-    return settings;
-  };
-
-  handleFormChange = (
-    event: MouseEvent<HTMLInputElement> | KeyboardEvent | ChangeEvent<HTMLInputElement>,
-    field: keyof QBittorrentConnectionSettingsFormData,
-  ): void => {
-    const inputElement = event.target as HTMLInputElement;
-
-    if (inputElement == null) {
-      return;
+    if (newSettings.url == null || newSettings.url === '') {
+      onSettingsChange(null);
+    } else {
+      onSettingsChange(newSettings);
     }
 
-    const {value} = inputElement;
-
-    if (this.state[field] !== value) {
-      this.setState((prev) => ({
-        ...prev,
-        [field]: value,
-      }));
-    }
+    setSettings(newSettings);
   };
 
-  render() {
-    return (
-      <FormRow>
-        <FormGroup>
-          <FormRow>
-            <Textbox
-              onChange={(e) => this.handleFormChange(e, 'url')}
-              id="url"
-              label={<FormattedMessage id="connection.settings.qbittorrent.url" />}
-              placeholder={this.props.intl.formatMessage({
-                id: 'connection.settings.qbittorrent.url.input.placeholder',
-              })}
-            />
-          </FormRow>
-          <FormRow>
-            <Textbox
-              onChange={(e) => this.handleFormChange(e, 'username')}
-              id="qbt-username"
-              label={<FormattedMessage id="connection.settings.qbittorrent.username" />}
-              placeholder={this.props.intl.formatMessage({
-                id: 'connection.settings.qbittorrent.username.input.placeholder',
-              })}
-              autoComplete="off"
-            />
-            <Textbox
-              onChange={(e) => this.handleFormChange(e, 'password')}
-              id="qbt-password"
-              label={<FormattedMessage id="connection.settings.qbittorrent.password" />}
-              placeholder={this.props.intl.formatMessage({
-                id: 'connection.settings.qbittorrent.password.input.placeholder',
-              })}
-              autoComplete="off"
-              type="password"
-            />
-          </FormRow>
-        </FormGroup>
-      </FormRow>
-    );
-  }
-}
+  return (
+    <FormRow>
+      <FormGroup>
+        <FormRow>
+          <Textbox
+            onChange={(e) => handleFormChange('url', e.target.value)}
+            id="url"
+            label={<FormattedMessage id="connection.settings.qbittorrent.url" />}
+            placeholder={intl.formatMessage({
+              id: 'connection.settings.qbittorrent.url.input.placeholder',
+            })}
+          />
+        </FormRow>
+        <FormRow>
+          <Textbox
+            onChange={(e) => handleFormChange('username', e.target.value)}
+            id="qbt-username"
+            label={<FormattedMessage id="connection.settings.qbittorrent.username" />}
+            placeholder={intl.formatMessage({
+              id: 'connection.settings.qbittorrent.username.input.placeholder',
+            })}
+            autoComplete="off"
+          />
+          <Textbox
+            onChange={(e) => handleFormChange('password', e.target.value)}
+            id="qbt-password"
+            label={<FormattedMessage id="connection.settings.qbittorrent.password" />}
+            placeholder={intl.formatMessage({
+              id: 'connection.settings.qbittorrent.password.input.placeholder',
+            })}
+            autoComplete="off"
+            type="password"
+          />
+        </FormRow>
+      </FormGroup>
+    </FormRow>
+  );
+};
 
 export default QBittorrentConnectionSettingsForm;

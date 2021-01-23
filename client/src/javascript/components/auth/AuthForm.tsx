@@ -8,10 +8,9 @@ import history from '@client/util/history';
 import {AccessLevel} from '@shared/schema/constants/Auth';
 
 import type {Credentials} from '@shared/schema/Auth';
+import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 import ClientConnectionSettingsForm from '../general/connection-settings/ClientConnectionSettingsForm';
-
-import type {ClientConnectionSettingsFormType} from '../general/connection-settings/ClientConnectionSettingsForm';
 
 type LoginFormData = Pick<Credentials, 'username' | 'password'>;
 type RegisterFormData = Pick<Credentials, 'username' | 'password'>;
@@ -23,7 +22,7 @@ interface AuthFormProps {
 const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
   const intl = useIntl();
   const formRef = useRef<Form>(null);
-  const settingsFormRef = useRef<ClientConnectionSettingsFormType>(null);
+  const clientConnectionSettingsRef = useRef<ClientConnectionSettings | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | {id: string} | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
@@ -71,13 +70,13 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
             } else {
               const config = formData as RegisterFormData;
 
-              if (settingsFormRef.current == null) {
+              if (clientConnectionSettingsRef.current == null) {
                 setIsSubmitting(false);
                 setErrorMessage({id: 'connection.settings.error.empty'});
                 return;
               }
 
-              const connectionSettings = settingsFormRef.current.getConnectionSettings();
+              const connectionSettings = clientConnectionSettingsRef.current;
               if (connectionSettings == null) {
                 setIsSubmitting(false);
                 setErrorMessage({id: 'connection.settings.error.empty'});
@@ -144,7 +143,11 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
           </PanelContent>
           {isLoginMode ? null : (
             <PanelContent hasBorder>
-              <ClientConnectionSettingsForm ref={settingsFormRef} />
+              <ClientConnectionSettingsForm
+                onSettingsChange={(settings) => {
+                  clientConnectionSettingsRef.current = settings;
+                }}
+              />
             </PanelContent>
           )}
           <PanelFooter hasBorder>
