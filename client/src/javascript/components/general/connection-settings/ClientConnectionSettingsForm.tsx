@@ -1,5 +1,5 @@
-import {Component, createRef, ReactNode, ReactNodeArray, RefObject} from 'react';
-import {FormattedMessage, injectIntl, WrappedComponentProps} from 'react-intl';
+import {FC, ReactNode, useEffect, useState} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {FormRow, Select, SelectItem} from '@client/ui';
 
@@ -13,85 +13,57 @@ import TransmissionConnectionSettingsForm from './TransmissionConnectionSettings
 
 const DEFAULT_SELECTION: ClientConnectionSettings['client'] = 'rTorrent' as const;
 
-const getClientSelectItems = (): ReactNodeArray =>
-  SUPPORTED_CLIENTS.map((client) => (
-    <SelectItem key={client} id={client}>
-      <FormattedMessage id={`connection.settings.${client.toLowerCase()}`} />
-    </SelectItem>
-  ));
-
-type ConnectionSettingsForm =
-  | QBittorrentConnectionSettingsForm
-  | RTorrentConnectionSettingsForm
-  | TransmissionConnectionSettingsForm;
-
-interface ClientConnectionSettingsFormStates {
-  client: ClientConnectionSettings['client'];
+interface ClientConnectionSettingsFormProps {
+  onSettingsChange: (settings: ClientConnectionSettings | null) => void;
 }
 
-class ClientConnectionSettingsForm extends Component<WrappedComponentProps, ClientConnectionSettingsFormStates> {
-  settingsRef: RefObject<never> = createRef();
+const ClientConnectionSettingsForm: FC<ClientConnectionSettingsFormProps> = ({
+  onSettingsChange,
+}: ClientConnectionSettingsFormProps) => {
+  const intl = useIntl();
+  const [selectedClient, setSelectedClient] = useState<ClientConnectionSettings['client']>(DEFAULT_SELECTION);
 
-  constructor(props: WrappedComponentProps) {
-    super(props);
+  useEffect(() => {
+    onSettingsChange(null);
+  }, [selectedClient, onSettingsChange]);
 
-    this.state = {
-      client: DEFAULT_SELECTION,
-    };
+  let settingsForm: ReactNode = null;
+  switch (selectedClient) {
+    case 'qBittorrent':
+      settingsForm = <QBittorrentConnectionSettingsForm onSettingsChange={onSettingsChange} />;
+      break;
+    case 'rTorrent':
+      settingsForm = <RTorrentConnectionSettingsForm onSettingsChange={onSettingsChange} />;
+      break;
+    case 'Transmission':
+      settingsForm = <TransmissionConnectionSettingsForm onSettingsChange={onSettingsChange} />;
+      break;
+    default:
+      break;
   }
 
-  getConnectionSettings(): ClientConnectionSettings | null {
-    const settingsForm = this.settingsRef as RefObject<ConnectionSettingsForm>;
+  return (
+    <div>
+      <FormRow>
+        <Select
+          id="client"
+          label={intl.formatMessage({
+            id: 'connection.settings.client.select',
+          })}
+          onSelect={(newSelectedClient) => {
+            setSelectedClient(newSelectedClient as ClientConnectionSettings['client']);
+          }}
+          defaultID={DEFAULT_SELECTION}>
+          {SUPPORTED_CLIENTS.map((client) => (
+            <SelectItem key={client} id={client}>
+              <FormattedMessage id={`connection.settings.${client.toLowerCase()}`} />
+            </SelectItem>
+          ))}
+        </Select>
+      </FormRow>
+      {settingsForm}
+    </div>
+  );
+};
 
-    if (settingsForm.current == null) {
-      return null;
-    }
-
-    return settingsForm.current.getConnectionSettings();
-  }
-
-  render() {
-    const {intl} = this.props;
-    const {client} = this.state;
-
-    let settingsForm: ReactNode = null;
-    switch (client) {
-      case 'qBittorrent':
-        settingsForm = <QBittorrentConnectionSettingsForm intl={intl} ref={this.settingsRef} />;
-        break;
-      case 'rTorrent':
-        settingsForm = <RTorrentConnectionSettingsForm intl={intl} ref={this.settingsRef} />;
-        break;
-      case 'Transmission':
-        settingsForm = <TransmissionConnectionSettingsForm intl={intl} ref={this.settingsRef} />;
-        break;
-      default:
-        break;
-    }
-
-    return (
-      <div>
-        <FormRow>
-          <Select
-            id="client"
-            label={intl.formatMessage({
-              id: 'connection.settings.client.select',
-            })}
-            onSelect={(selectedClient) => {
-              this.setState({
-                client: selectedClient as ClientConnectionSettings['client'],
-              });
-            }}
-            defaultID={DEFAULT_SELECTION}>
-            {getClientSelectItems()}
-          </Select>
-        </FormRow>
-        {settingsForm}
-      </div>
-    );
-  }
-}
-
-export type ClientConnectionSettingsFormType = ClientConnectionSettingsForm;
-
-export default injectIntl(ClientConnectionSettingsForm, {forwardRef: true});
+export default ClientConnectionSettingsForm;

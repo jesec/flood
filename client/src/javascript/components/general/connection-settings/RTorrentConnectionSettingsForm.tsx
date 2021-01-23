@@ -1,178 +1,123 @@
-import {Component, ChangeEvent, MouseEvent} from 'react';
-import {FormattedMessage, IntlShape} from 'react-intl';
+import {FC, useState} from 'react';
+import {FormattedMessage, useIntl} from 'react-intl';
 
 import {FormError, FormGroup, FormRow, FormRowGroup, Radio, Textbox} from '@client/ui';
 
-import type {
-  RTorrentConnectionSettings,
-  RTorrentSocketConnectionSettings,
-  RTorrentTCPConnectionSettings,
-} from '@shared/schema/ClientConnectionSettings';
+import type {RTorrentConnectionSettings, RTorrentTCPConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 export interface RTorrentConnectionSettingsProps {
-  intl: IntlShape;
+  onSettingsChange: (settings: RTorrentConnectionSettings | null) => void;
 }
 
-export interface RTorrentConnectionSettingsFormData {
-  type?: string;
-  socket?: string;
-  host?: string;
-  port?: string;
-}
+const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
+  onSettingsChange,
+}: RTorrentConnectionSettingsProps) => {
+  const intl = useIntl();
+  const [type, setType] = useState<'tcp' | 'socket'>('socket');
+  const [settings, setSettings] = useState<RTorrentConnectionSettings | null>(null);
 
-class RTorrentConnectionSettingsForm extends Component<
-  RTorrentConnectionSettingsProps,
-  RTorrentConnectionSettingsFormData
-> {
-  constructor(props: RTorrentConnectionSettingsProps) {
-    super(props);
-    this.state = {
-      type: 'socket',
-    };
-  }
+  const handleFormChange = (field: 'host' | 'port' | 'socket', value: string | number): void => {
+    let newSettings: RTorrentConnectionSettings | null = null;
 
-  getConnectionSettings = (): RTorrentConnectionSettings | null => {
-    const {type, socket, host, port} = this.state;
-
-    switch (type) {
-      case 'socket': {
-        if (socket == null) {
-          return null;
-        }
-        const settings: RTorrentSocketConnectionSettings = {
-          client: 'rTorrent',
-          type: 'socket',
-          version: 1,
-          socket,
-        };
-        return settings;
-      }
-      case 'tcp': {
-        const portAsNumber = Number(port);
-        if (host == null || portAsNumber == null) {
-          return null;
-        }
-        const settings: RTorrentTCPConnectionSettings = {
-          client: 'rTorrent',
-          type: 'tcp',
-          version: 1,
-          host,
-          port: portAsNumber,
-        };
-        return settings;
-      }
-      default:
-        return null;
+    if (field === 'host' || field === 'port') {
+      newSettings = {
+        client: 'rTorrent',
+        type: 'tcp',
+        version: 1,
+        host: (settings as RTorrentTCPConnectionSettings)?.host ?? '',
+        port: (settings as RTorrentTCPConnectionSettings)?.port ?? 5000,
+        ...{[field]: value},
+      };
     }
+
+    if (field === 'socket') {
+      newSettings = {
+        client: 'rTorrent',
+        type: 'socket',
+        version: 1,
+        socket: value as string,
+      };
+    }
+
+    onSettingsChange(newSettings);
+    setSettings(newSettings);
   };
 
-  handleFormChange = (
-    event: MouseEvent<HTMLInputElement> | KeyboardEvent | ChangeEvent<HTMLInputElement>,
-    field: keyof RTorrentConnectionSettingsFormData,
-  ) => {
-    const inputElement = event.target as HTMLInputElement;
-
-    if (inputElement == null) {
-      return;
-    }
-
-    const {value} = inputElement;
-
-    if (this.state[field] !== value) {
-      this.setState((prev) => ({
-        ...prev,
-        [field]: value,
-      }));
-    }
-  };
-
-  renderConnectionOptions() {
-    const {intl} = this.props;
-    const {type} = this.state;
-
-    if (type === 'tcp') {
-      return (
-        <FormRowGroup>
-          <FormRow>
-            <FormError>
-              {intl.formatMessage({
-                id: 'connection.settings.rtorrent.type.tcp.warning',
-              })}
-            </FormError>
-          </FormRow>
+  return (
+    <FormRow>
+      <FormGroup>
+        <FormRow>
+          <FormGroup
+            label={intl.formatMessage({
+              id: 'connection.settings.rtorrent.type',
+            })}>
+            <FormRow>
+              <Radio
+                onClick={() => {
+                  setType('socket');
+                }}
+                groupID="type"
+                id="socket"
+                grow={false}
+                defaultChecked={type === 'socket'}>
+                <FormattedMessage id="connection.settings.rtorrent.type.socket" />
+              </Radio>
+              <Radio
+                onClick={() => {
+                  setType('tcp');
+                }}
+                groupID="type"
+                id="tcp"
+                grow={false}
+                defaultChecked={type === 'tcp'}>
+                <FormattedMessage id="connection.settings.rtorrent.type.tcp" />
+              </Radio>
+            </FormRow>
+          </FormGroup>
+        </FormRow>
+        {type === 'tcp' ? (
+          <FormRowGroup>
+            <FormRow>
+              <FormError>
+                {intl.formatMessage({
+                  id: 'connection.settings.rtorrent.type.tcp.warning',
+                })}
+              </FormError>
+            </FormRow>
+            <FormRow>
+              <Textbox
+                onChange={(e) => handleFormChange('host', e.target.value)}
+                id="host"
+                label={<FormattedMessage id="connection.settings.rtorrent.host" />}
+                placeholder={intl.formatMessage({
+                  id: 'connection.settings.rtorrent.host.input.placeholder',
+                })}
+              />
+              <Textbox
+                onChange={(e) => handleFormChange('port', Number(e.target.value))}
+                id="port"
+                label={<FormattedMessage id="connection.settings.rtorrent.port" />}
+                placeholder={intl.formatMessage({
+                  id: 'connection.settings.rtorrent.port.input.placeholder',
+                })}
+              />
+            </FormRow>
+          </FormRowGroup>
+        ) : (
           <FormRow>
             <Textbox
-              onChange={(e) => this.handleFormChange(e, 'host')}
-              id="host"
-              label={<FormattedMessage id="connection.settings.rtorrent.host" />}
+              onChange={(e) => handleFormChange('socket', e.target.value)}
+              id="socket"
+              label={<FormattedMessage id="connection.settings.rtorrent.socket" />}
               placeholder={intl.formatMessage({
-                id: 'connection.settings.rtorrent.host.input.placeholder',
-              })}
-            />
-            <Textbox
-              onChange={(e) => this.handleFormChange(e, 'port')}
-              id="port"
-              label={<FormattedMessage id="connection.settings.rtorrent.port" />}
-              placeholder={intl.formatMessage({
-                id: 'connection.settings.rtorrent.port.input.placeholder',
+                id: 'connection.settings.rtorrent.socket.input.placeholder',
               })}
             />
           </FormRow>
-        </FormRowGroup>
-      );
-    }
-
-    return (
-      <FormRow>
-        <Textbox
-          onChange={(e) => this.handleFormChange(e, 'socket')}
-          id="socket"
-          label={<FormattedMessage id="connection.settings.rtorrent.socket" />}
-          placeholder={intl.formatMessage({
-            id: 'connection.settings.rtorrent.socket.input.placeholder',
-          })}
-        />
-      </FormRow>
-    );
-  }
-
-  render() {
-    const {intl} = this.props;
-    const {type} = this.state;
-
-    return (
-      <FormRow>
-        <FormGroup>
-          <FormRow>
-            <FormGroup
-              label={intl.formatMessage({
-                id: 'connection.settings.rtorrent.type',
-              })}>
-              <FormRow>
-                <Radio
-                  onClick={(e) => this.handleFormChange(e, 'type')}
-                  groupID="type"
-                  id="socket"
-                  grow={false}
-                  defaultChecked={type === 'socket'}>
-                  <FormattedMessage id="connection.settings.rtorrent.type.socket" />
-                </Radio>
-                <Radio
-                  onClick={(e) => this.handleFormChange(e, 'type')}
-                  groupID="type"
-                  id="tcp"
-                  grow={false}
-                  defaultChecked={type === 'tcp'}>
-                  <FormattedMessage id="connection.settings.rtorrent.type.tcp" />
-                </Radio>
-              </FormRow>
-            </FormGroup>
-          </FormRow>
-          {this.renderConnectionOptions()}
-        </FormGroup>
-      </FormRow>
-    );
-  }
-}
+        )}
+      </FormGroup>
+    </FormRow>
+  );
+};
 
 export default RTorrentConnectionSettingsForm;

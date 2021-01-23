@@ -19,15 +19,15 @@ import AuthStore from '@client/stores/AuthStore';
 import ClientActions from '@client/actions/ClientActions';
 import FloodActions from '@client/actions/FloodActions';
 
-import ClientConnectionSettingsForm from './connection-settings/ClientConnectionSettingsForm';
+import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
-import type {ClientConnectionSettingsFormType} from './connection-settings/ClientConnectionSettingsForm';
+import ClientConnectionSettingsForm from './connection-settings/ClientConnectionSettingsForm';
 
 const ClientConnectionInterruption: FC = observer(() => {
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setSubmitting] = useState<boolean>(false);
   const [selection, setSelection] = useState<ReactText>('retry');
-  const settingsFormRef = useRef<ClientConnectionSettingsFormType>(null);
+  const clientConnectionSettingsRef = useRef<ClientConnectionSettings | null>(null);
 
   return (
     <Panel spacing="large">
@@ -37,7 +37,7 @@ const ClientConnectionInterruption: FC = observer(() => {
 
           if (selection === 'config') {
             const currentUsername = AuthStore.currentUser.username;
-            const connectionSettings = settingsFormRef.current?.getConnectionSettings();
+            const connectionSettings = clientConnectionSettingsRef.current;
 
             if (currentUsername == null || connectionSettings == null) {
               setError('connection.settings.error.empty');
@@ -101,7 +101,13 @@ const ClientConnectionInterruption: FC = observer(() => {
               <FormattedMessage id="connection-interruption.not.admin" />
             </p>
           )}
-          {selection === 'config' && <ClientConnectionSettingsForm ref={settingsFormRef} />}
+          {selection === 'config' && (
+            <ClientConnectionSettingsForm
+              onSettingsChange={(settings) => {
+                clientConnectionSettingsRef.current = settings;
+              }}
+            />
+          )}
         </PanelContent>
         <PanelFooter hasBorder>
           <FormRow justify="end">
