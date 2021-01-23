@@ -1,18 +1,24 @@
 import classnames from 'classnames';
-import {MouseEventHandler, PureComponent} from 'react';
+import {FC, MouseEventHandler, ReactNode} from 'react';
 
-export default class ContextMenuItem extends PureComponent<{
+interface ContextMenuItemProps {
+  children: ReactNode;
   className?: string;
   onClick: MouseEventHandler<HTMLDivElement>;
-}> {
-  render() {
-    const {onClick, children, className} = this.props;
-    const classes = classnames('context-menu__item', className);
-
-    return (
-      <div className={classes} onClick={onClick}>
-        {children}
-      </div>
-    );
-  }
 }
+
+const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick}: ContextMenuItemProps) => {
+  const classes = classnames('context-menu__item', className);
+
+  return (
+    <div className={classes} onClick={onClick}>
+      {children}
+    </div>
+  );
+};
+
+ContextMenuItem.defaultProps = {
+  className: undefined,
+};
+
+export default ContextMenuItem;

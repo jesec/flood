@@ -1,25 +1,25 @@
 import classnames from 'classnames';
-import {PureComponent} from 'react';
+import {FC, ReactNode} from 'react';
 
 interface PanelProps {
+  children: ReactNode;
   theme?: 'light' | 'dark';
   spacing?: 'small' | 'medium' | 'large';
   transparent?: boolean;
 }
 
-class Panel extends PureComponent<PanelProps> {
-  static defaultProps = {
-    spacing: 'medium',
-    theme: 'light',
-  };
+const Panel: FC<PanelProps> = ({children, theme, spacing, transparent}: PanelProps) => {
+  const classes = classnames(`panel panel--${theme}`, `panel--${spacing}`, {
+    'panel--transparent': transparent,
+  });
 
-  render() {
-    const classes = classnames(`panel panel--${this.props.theme}`, `panel--${this.props.spacing}`, {
-      'panel--transparent': this.props.transparent,
-    });
+  return <div className={classes}>{children}</div>;
+};
 
-    return <div className={classes}>{this.props.children}</div>;
-  }
-}
+Panel.defaultProps = {
+  theme: 'light',
+  spacing: 'medium',
+  transparent: false,
+};
 
 export default Panel;

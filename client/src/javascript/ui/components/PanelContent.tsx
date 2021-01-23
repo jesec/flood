@@ -1,22 +1,23 @@
 import classnames from 'classnames';
-import {PureComponent} from 'react';
+import {FC, ReactNode} from 'react';
 
 interface PanelContentProps {
+  children: ReactNode;
   hasBorder?: boolean;
   borderPosition?: string;
 }
 
-export default class PanelContent extends PureComponent<PanelContentProps> {
-  static defaultProps = {
-    hasBorder: false,
-    borderPosition: 'top',
-  };
+const PanelContent: FC<PanelContentProps> = ({children, hasBorder, borderPosition}: PanelContentProps) => {
+  const classes = classnames(`panel__content`, {
+    [`panel__content--has-border--${borderPosition}`]: hasBorder,
+  });
 
-  render() {
-    const classes = classnames(`panel__content`, {
-      [`panel__content--has-border--${this.props.borderPosition}`]: this.props.hasBorder,
-    });
+  return <div className={classes}>{children}</div>;
+};
 
-    return <div className={classes}>{this.props.children}</div>;
-  }
-}
+PanelContent.defaultProps = {
+  hasBorder: false,
+  borderPosition: 'top',
+};
+
+export default PanelContent;

@@ -1,16 +1,21 @@
 import classnames from 'classnames';
-import {PureComponent} from 'react';
+import {FC, ReactNode} from 'react';
 
 interface PanelFooterProps {
+  children: ReactNode;
   hasBorder?: boolean;
 }
 
-export default class PanelFooter extends PureComponent<PanelFooterProps> {
-  render() {
-    const classes = classnames('panel__footer', {
-      'panel__footer--has-border': this.props.hasBorder,
-    });
+const PanelFooter: FC<PanelFooterProps> = ({children, hasBorder}: PanelFooterProps) => {
+  const classes = classnames('panel__footer', {
+    'panel__footer--has-border': hasBorder,
+  });
 
-    return <div className={classes}>{this.props.children}</div>;
-  }
-}
+  return <div className={classes}>{children}</div>;
+};
+
+PanelFooter.defaultProps = {
+  hasBorder: false,
+};
+
+export default PanelFooter;

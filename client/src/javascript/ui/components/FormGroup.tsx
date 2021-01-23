@@ -1,30 +1,25 @@
-import {Component, ReactNode} from 'react';
+import {FC, ReactNode} from 'react';
 
 import FormRowItem from './FormRowItem';
 
 import type {FormRowItemProps} from './FormRowItem';
 
-export default class FormRowItemGroup extends Component<{
+interface FormRowItemGroupProps {
+  children: ReactNode;
   label?: string;
   width?: FormRowItemProps['width'];
-}> {
-  getLabel(): ReactNode {
-    const {label} = this.props;
-
-    if (label) {
-      return <label className="form__element__label">{label}</label>;
-    }
-    return undefined;
-  }
-
-  render() {
-    const {children, width} = this.props;
-
-    return (
-      <FormRowItem className="form__group" width={width}>
-        {this.getLabel()}
-        {children}
-      </FormRowItem>
-    );
-  }
 }
+
+const FormRowItemGroup: FC<FormRowItemGroupProps> = ({children, label, width}: FormRowItemGroupProps) => (
+  <FormRowItem className="form__group" width={width}>
+    {label ? <label className="form__element__label">{label}</label> : undefined}
+    {children}
+  </FormRowItem>
+);
+
+FormRowItemGroup.defaultProps = {
+  label: undefined,
+  width: 'auto',
+};
+
+export default FormRowItemGroup;

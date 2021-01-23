@@ -55,7 +55,7 @@ const DownloadRuleForm: FC<DownloadRuleFormProps> = ({
           defaultID={rule.feedIDs?.[0]}>
           {feeds.length === 0
             ? [
-                <SelectItem key="empty" id="placeholder" placeholder>
+                <SelectItem key="empty" id="placeholder" isPlaceholder>
                   <em>
                     <FormattedMessage id="feeds.no.feeds.available" />
                   </em>
@@ -69,7 +69,7 @@ const DownloadRuleForm: FC<DownloadRuleFormProps> = ({
                     </SelectItem>,
                   ),
                 [
-                  <SelectItem key="select-feed" id="placeholder" placeholder>
+                  <SelectItem key="select-feed" id="placeholder" isPlaceholder>
                     <em>
                       <FormattedMessage id="feeds.select.feed" />
                     </em>

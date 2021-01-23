@@ -1,22 +1,23 @@
 import classnames from 'classnames';
-import {PureComponent} from 'react';
+import {FC, ReactNode} from 'react';
 
 interface PanelHeaderProps {
+  children: ReactNode;
   hasBorder?: boolean;
   level?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 
-export default class PanelHeader extends PureComponent<PanelHeaderProps> {
-  static defaultProps = {
-    hasBorder: false,
-    level: 1,
-  };
+const PanelHeader: FC<PanelHeaderProps> = ({children, hasBorder, level}: PanelHeaderProps) => {
+  const classes = classnames(`panel__header panel__header--level-${level}`, {
+    'panel__header--has-border': hasBorder,
+  });
 
-  render() {
-    const classes = classnames(`panel__header panel__header--level-${this.props.level}`, {
-      'panel__header--has-border': this.props.hasBorder,
-    });
+  return <div className={classes}>{children}</div>;
+};
 
-    return <div className={classes}>{this.props.children}</div>;
-  }
-}
+PanelHeader.defaultProps = {
+  hasBorder: false,
+  level: 1,
+};
+
+export default PanelHeader;

@@ -1,49 +1,57 @@
 import classnames from 'classnames';
-import {Component} from 'react';
+import {FC, ReactNode} from 'react';
 
 import {Checkmark} from '@client/ui/icons';
 
 import ContextMenuItem from './ContextMenuItem';
 
-interface SelectItemProps {
-  id?: string | number;
+export interface SelectItemProps {
+  children: ReactNode;
+  id: string | number;
+  isPlaceholder?: boolean;
   isSelected?: boolean;
   isTrigger?: boolean;
-  placeholder?: boolean;
   onClick?: (id: this['id']) => void;
 }
 
-export default class SelectItem extends Component<SelectItemProps> {
-  static defaultProps = {
-    isTrigger: false,
-  };
-
-  handleClick = () => {
-    if (!this.props.onClick) {
-      return;
-    }
-
-    this.props.onClick(this.props.id);
-  };
-
-  render() {
-    const {children, isTrigger, isSelected} = this.props;
-
-    let icon = null;
-    if (!isTrigger && isSelected) {
-      icon = <Checkmark />;
-    }
-
-    const classes = classnames({
-      'select__item context-menu__item': !isTrigger,
-      'select__item--is-selected': isSelected,
-    });
-
-    return (
-      <ContextMenuItem className={classes} onClick={this.handleClick}>
-        {icon}
-        {children}
-      </ContextMenuItem>
-    );
+const SelectItem: FC<SelectItemProps> = ({
+  children,
+  id,
+  isPlaceholder,
+  isTrigger,
+  isSelected,
+  onClick,
+}: SelectItemProps) => {
+  let icon = null;
+  if (!isTrigger && isSelected) {
+    icon = <Checkmark />;
   }
-}
+
+  const classes = classnames({
+    'select__item context-menu__item': !isTrigger,
+    'select__item--is-placeholder': isPlaceholder,
+    'select__item--is-selected': isSelected,
+  });
+
+  return (
+    <ContextMenuItem
+      className={classes}
+      onClick={() => {
+        if (typeof onClick === 'function') {
+          onClick(id);
+        }
+      }}>
+      {icon}
+      {children}
+    </ContextMenuItem>
+  );
+};
+
+SelectItem.defaultProps = {
+  isPlaceholder: false,
+  isSelected: false,
+  isTrigger: false,
+  onClick: undefined,
+};
+
+export default SelectItem;
