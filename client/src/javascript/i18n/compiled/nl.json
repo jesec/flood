@@ -1870,7 +1870,7 @@
   "torrents.destination.sequential": [
     {
       "type": 0,
-      "value": "Sequential Download"
+      "value": "Opeenvolgend downloaden"
     }
   ],
   "torrents.details.actions.pause": [
@@ -2220,7 +2220,7 @@
   "torrents.list.context.download.contents": [
     {
       "type": 0,
-      "value": "Download Contents"
+      "value": "Inhoud downloaden"
     }
   ],
   "torrents.list.context.download.metainfo": [
@@ -2238,7 +2238,7 @@
   "torrents.list.context.initial.seeding": [
     {
       "type": 0,
-      "value": "Initial Seeding"
+      "value": "Initiële Seed"
     }
   ],
   "torrents.list.context.move": [
@@ -2268,7 +2268,7 @@
   "torrents.list.context.sequential": [
     {
       "type": 0,
-      "value": "Sequential"
+      "value": "Opeenvolgend"
     }
   ],
   "torrents.list.context.set.tags": [
