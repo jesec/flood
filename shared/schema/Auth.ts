@@ -1,4 +1,4 @@
-import {literal, nativeEnum, object, string, union} from 'zod';
+import {literal, nativeEnum, number, object, string, union} from 'zod';
 import type {infer as zodInfer} from 'zod';
 
 import {AccessLevel} from './constants/Auth';
@@ -18,3 +18,13 @@ export const credentialsSchema = object({
 export type Credentials = zodInfer<typeof credentialsSchema>;
 
 export type UserInDatabase = Required<Credentials> & {_id: string};
+
+export const authTokenSchema = object({
+  username: string(),
+  // issued at
+  iat: number(),
+  // expiration
+  exp: number(),
+});
+
+export type AuthToken = zodInfer<typeof authTokenSchema>;
