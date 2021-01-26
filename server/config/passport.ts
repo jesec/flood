@@ -26,7 +26,11 @@ export default (passport: PassportStatic) => {
 
       Users.lookupUser(parsedResult.data.username).then(
         (user) => {
-          callback(null, user);
+          if (user?.timestamp <= parsedResult.data.iat + 10) {
+            callback(null, user);
+          } else {
+            callback(new Error(), false);
+          }
         },
         (err) => {
           callback(err, false);

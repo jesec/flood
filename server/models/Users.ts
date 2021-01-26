@@ -37,6 +37,7 @@ class Users {
 
   private configUser: UserInDatabase = {
     _id: '_config',
+    timestamp: 0,
     username: '_config',
     password: '',
     client: config.configUser as ClientConnectionSettings,
@@ -105,6 +106,7 @@ class Users {
       .insert({
         ...credentials,
         password: hashed,
+        timestamp: Math.ceil(Date.now() / 1000),
       })
       .catch((err) => {
         if (err.message.includes('violates the unique constraint')) {
@@ -139,11 +141,13 @@ class Users {
    * @return {Promise<string>} - Returns new username of updated user or rejects with error.
    */
   async updateUser(username: string, userRecordPatch: Partial<Credentials>): Promise<string> {
-    const patch = userRecordPatch;
+    const patch: Omit<Partial<UserInDatabase>, '_id'> = userRecordPatch;
 
     if (patch.password != null) {
       patch.password = await hashPassword(patch.password);
     }
+
+    patch.timestamp = Math.ceil(Date.now() / 1000);
 
     return this.db.update({username}, {$set: patch}, {}).then((numUsersUpdated) => {
       if (numUsersUpdated === 0) {
@@ -165,7 +169,7 @@ class Users {
       return this.getConfigUser();
     }
 
-    return this.db.findOne<Credentials>({username});
+    return this.db.findOne<UserInDatabase>({username});
   }
 
   /**
@@ -178,7 +182,7 @@ class Users {
       return [this.getConfigUser()];
     }
 
-    return this.db.find<Credentials>({});
+    return this.db.find<UserInDatabase>({});
   }
 
   /**

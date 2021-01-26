@@ -17,7 +17,7 @@ export const credentialsSchema = object({
 
 export type Credentials = zodInfer<typeof credentialsSchema>;
 
-export type UserInDatabase = Required<Credentials> & {_id: string};
+export type UserInDatabase = Required<Credentials> & {_id: string; timestamp: number};
 
 export const authTokenSchema = object({
   username: string(),
