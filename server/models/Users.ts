@@ -147,7 +147,9 @@ class Users {
       patch.password = await hashPassword(patch.password);
     }
 
-    patch.timestamp = Math.ceil(Date.now() / 1000);
+    if (Object.keys(patch).length > 1 || patch.client == null) {
+      patch.timestamp = Math.ceil(Date.now() / 1000);
+    }
 
     return this.db.update({username}, {$set: patch}, {}).then((numUsersUpdated) => {
       if (numUsersUpdated === 0) {
