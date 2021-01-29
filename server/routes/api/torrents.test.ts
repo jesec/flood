@@ -159,7 +159,7 @@ describe('POST /api/torrents/add-urls', () => {
 
         await Promise.all(
           addedTorrents.map(async (torrent) => {
-            expect(torrent.directory).toBe(addTorrentByURLOptions.destination);
+            expect(torrent.directory.startsWith(addTorrentByURLOptions.destination as string)).toBe(true);
 
             const expectedStatuses: Array<TorrentStatus> = addTorrentByURLOptions.start
               ? ['downloading']
@@ -499,7 +499,7 @@ describe('POST /api/torrents/move', () => {
         const torrent = torrentList[createdTorrentHash];
 
         expect(torrent).not.toBe(null);
-        expect(torrent.directory).toBe(destDirectory);
+        expect(torrent.directory.startsWith(destDirectory)).toBe(true);
         expect(torrent.percentComplete).toBe(100);
 
         done();
