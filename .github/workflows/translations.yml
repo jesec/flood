@@ -1,0 +1,32 @@
+name: Sync translations
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [master]
+  schedule:
+    - cron: '0 */6 * * *'
+
+jobs:
+  synchronize-with-crowdin:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Crowdin Action
+        uses: crowdin/github-action@1.0.17
+        with:
+          config: 'crowdin.yml'
+          localization_branch_name: integration/translations
+          create_pull_request: true
+          pull_request_title: 'i18n: new translations'
+          pull_request_labels: 'translations, automatic'
+          upload_sources: true
+          download_translations: true
+          push_translations: true
+          commit_message: 'i18n: new translations'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+          CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
