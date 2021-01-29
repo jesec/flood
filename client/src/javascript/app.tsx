@@ -71,7 +71,7 @@ const FloodApp: FC = observer(() => {
 
   const isDarkTheme = useMedia('(prefers-color-scheme: dark)');
   useEffect(() => {
-    ConfigStore.systemPreferDark = isDarkTheme;
+    ConfigStore.setSystemPreferDark(isDarkTheme);
   }, [isDarkTheme]);
 
   return (

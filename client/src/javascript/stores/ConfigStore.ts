@@ -34,6 +34,10 @@ class ConfigStore {
     makeAutoObservable(this);
   }
 
+  setSystemPreferDark(preference: boolean): void {
+    this.systemPreferDark = preference;
+  }
+
   setUserPreferDark(preference: boolean | null): void {
     this.userPreferDark = preference;
     if (preference == null) {
