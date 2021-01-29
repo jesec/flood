@@ -95,6 +95,8 @@ jobs:
           max_attempts: 15
           retry_wait_seconds: 15
 
+      - run: sleep 120
+
       - name: Publish to Docker Hub
         uses: docker/build-push-action@v2
         with:
