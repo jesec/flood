@@ -64,7 +64,7 @@ const AsyncIntlProvider: FC<AsyncIntlProviderProps> = observer(({children}: Asyn
       } else {
         i18n.loadLocaleData(validatedLocale.locale, {plurals: plurals[validatedLocale.language]});
       }
-      i18n.load(validatedLocale.locale, await getMessages(validatedLocale.language));
+      i18n.load(validatedLocale.locale, {...EN, ...(await getMessages(validatedLocale.language))});
       i18n.activate(validatedLocale.locale);
     })();
   }, [language]);
