@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -29,7 +29,7 @@ interface SortDropdownProps {
 
 const SortDropdown: FC<SortDropdownProps> = (props: SortDropdownProps) => {
   const {direction, selectedProperty, onSortChange} = props;
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   if (selectedProperty == null) {
     return null;
@@ -38,10 +38,10 @@ const SortDropdown: FC<SortDropdownProps> = (props: SortDropdownProps) => {
   const header = (
     <button className="dropdown__button" type="button">
       <label className="dropdown__label">
-        <FormattedMessage id="torrents.sort.title" />
+        <Trans id="torrents.sort.title" />
       </label>
       <span className="dropdown__value">
-        <FormattedMessage id={TorrentListColumns[selectedProperty]?.id || TorrentListColumns.dateAdded.id} />
+        <Trans id={TorrentListColumns[selectedProperty]} />
       </span>
     </button>
   );
@@ -56,7 +56,7 @@ const SortDropdown: FC<SortDropdownProps> = (props: SortDropdownProps) => {
       return {
         displayName: (
           <div className="sort-dropdown__item">
-            {intl.formatMessage(TorrentListColumns[sortProp])}
+            {i18n._(TorrentListColumns[sortProp])}
             {directionIndicator}
           </div>
         ),

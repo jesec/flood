@@ -1,5 +1,5 @@
 import {FC, ReactNode} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 
 const secondsToDuration = (
   cumSeconds: number,
@@ -59,19 +59,19 @@ const Duration: FC<DurationProps> = (props: DurationProps) => {
   const duration = value === -1 ? -1 : secondsToDuration(value);
 
   if (duration === -1) {
-    content = <FormattedMessage id="unit.time.infinity" />;
+    content = <Trans id="unit.time.infinity" />;
   } else if (duration.years != null && duration.years > 0) {
     content = [
       <span className="duration--segment" key="years">
         {duration.years}
         <em className="unit">
-          <FormattedMessage id="unit.time.year" />
+          <Trans id="unit.time.year" />
         </em>
       </span>,
       <span className="duration--segment" key="weeks">
         {duration.weeks}
         <em className="unit">
-          <FormattedMessage id="unit.time.week" />
+          <Trans id="unit.time.week" />
         </em>
       </span>,
     ];
@@ -80,13 +80,13 @@ const Duration: FC<DurationProps> = (props: DurationProps) => {
       <span className="duration--segment" key="weeks">
         {duration.weeks}
         <em className="unit">
-          <FormattedMessage id="unit.time.week" />
+          <Trans id="unit.time.week" />
         </em>
       </span>,
       <span className="duration--segment" key="days">
         {duration.days}
         <em className="unit">
-          <FormattedMessage id="unit.time.day" />
+          <Trans id="unit.time.day" />
         </em>
       </span>,
     ];
@@ -95,13 +95,13 @@ const Duration: FC<DurationProps> = (props: DurationProps) => {
       <span className="duration--segment" key="days">
         {duration.days}
         <em className="unit">
-          <FormattedMessage id="unit.time.day" />
+          <Trans id="unit.time.day" />
         </em>
       </span>,
       <span className="duration--segment" key="hours">
         {duration.hours}
         <em className="unit">
-          <FormattedMessage id="unit.time.hour" />
+          <Trans id="unit.time.hour" />
         </em>
       </span>,
     ];
@@ -110,13 +110,13 @@ const Duration: FC<DurationProps> = (props: DurationProps) => {
       <span className="duration--segment" key="hours">
         {duration.hours}
         <em className="unit">
-          <FormattedMessage id="unit.time.hour" />
+          <Trans id="unit.time.hour" />
         </em>
       </span>,
       <span className="duration--segment" key="minutes">
         {duration.minutes}
         <em className="unit">
-          <FormattedMessage id="unit.time.minute" />
+          <Trans id="unit.time.minute" />
         </em>
       </span>,
     ];
@@ -125,13 +125,13 @@ const Duration: FC<DurationProps> = (props: DurationProps) => {
       <span className="duration--segment" key="minutes">
         {duration.minutes}
         <em className="unit">
-          <FormattedMessage id="unit.time.minute" />
+          <Trans id="unit.time.minute" />
         </em>
       </span>,
       <span className="duration--segment" key="seconds">
         {duration.seconds}
         <em className="unit">
-          <FormattedMessage id="unit.time.second" />
+          <Trans id="unit.time.second" />
         </em>
       </span>,
     ];
@@ -140,7 +140,7 @@ const Duration: FC<DurationProps> = (props: DurationProps) => {
       <span className="duration--segment">
         {duration.seconds}
         <em className="unit">
-          <FormattedMessage id="unit.time.second" />
+          <Trans id="unit.time.second" />
         </em>
       </span>
     );

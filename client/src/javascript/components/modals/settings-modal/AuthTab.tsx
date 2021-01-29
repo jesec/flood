@@ -1,8 +1,8 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FC, useEffect, useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '@client/ui';
 import {Close} from '@client/ui/icons';
@@ -29,7 +29,7 @@ const AuthTab: FC = observer(() => {
   const [error, setError] = useState<string | null>(null);
   const [isUserListFetched, setIsUserListFetched] = useState<boolean>(false);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   useEffect(() => {
     if (AuthStore.currentUser.isAdmin) {
@@ -43,11 +43,11 @@ const AuthTab: FC = observer(() => {
     return (
       <Form>
         <ModalFormSectionHeader>
-          <FormattedMessage id="auth.user.accounts" />
+          <Trans id="auth.user.accounts" />
         </ModalFormSectionHeader>
         <FormRow>
           <FormError>
-            <FormattedMessage id="auth.message.not.admin" />
+            <Trans id="auth.message.not.admin" />
           </FormError>
         </FormRow>
       </Form>
@@ -106,7 +106,7 @@ const AuthTab: FC = observer(() => {
       }}
       ref={formRef}>
       <ModalFormSectionHeader>
-        <FormattedMessage id="auth.user.accounts" />
+        <Trans id="auth.user.accounts" />
       </ModalFormSectionHeader>
       <FormRow>
         <FormRowItem>
@@ -139,7 +139,7 @@ const AuthTab: FC = observer(() => {
                 } else {
                   badge = (
                     <span className="interactive-list__label__tag tag">
-                      <FormattedMessage id="auth.current.user" />
+                      <Trans id="auth.current.user" />
                     </span>
                   );
                 }
@@ -162,32 +162,28 @@ const AuthTab: FC = observer(() => {
         </FormRowItem>
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="auth.add.user" />
+        <Trans id="auth.add.user" />
       </ModalFormSectionHeader>
       {error && (
         <FormRow>
-          <FormError>{intl.formatMessage({id: error})}</FormError>
+          <FormError>{i18n._(error)}</FormError>
         </FormRow>
       )}
       <FormRow>
         <Textbox
           id="username"
-          label={<FormattedMessage id="auth.username" />}
-          placeholder={intl.formatMessage({
-            id: 'auth.username',
-          })}
+          label={<Trans id="auth.username" />}
+          placeholder={i18n._('auth.username')}
           autoComplete="username"
         />
         <Textbox
           id="password"
-          label={<FormattedMessage id="auth.password" />}
-          placeholder={intl.formatMessage({
-            id: 'auth.password',
-          })}
+          label={<Trans id="auth.password" />}
+          placeholder={i18n._('auth.password')}
           autoComplete="new-password"
         />
         <Checkbox grow={false} id="isAdmin" labelOffset matchTextboxHeight>
-          <FormattedMessage id="auth.admin" />
+          <Trans id="auth.admin" />
         </Checkbox>
       </FormRow>
       <ClientConnectionSettingsForm
@@ -198,7 +194,7 @@ const AuthTab: FC = observer(() => {
       <p />
       <FormRow justify="end">
         <Button isLoading={isSubmitting} priority="primary" type="submit">
-          <FormattedMessage id="button.add" />
+          <Trans id="button.add" />
         </Button>
       </FormRow>
     </Form>

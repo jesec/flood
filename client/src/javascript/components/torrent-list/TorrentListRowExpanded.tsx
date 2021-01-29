@@ -1,6 +1,6 @@
-import {FormattedNumber} from 'react-intl';
 import {forwardRef} from 'react';
 import {observer} from 'mobx-react';
+import {useLingui} from '@lingui/react';
 
 import ProgressBar from '../general/ProgressBar';
 import SettingStore from '../../stores/SettingStore';
@@ -35,6 +35,7 @@ const TorrentListRowExpanded = observer(
       }: TorrentListRowExpandedProps,
       ref,
     ) => {
+      const {i18n} = useLingui();
       const columns = SettingStore.floodSettings.torrentListColumns;
 
       const primarySection: React.ReactNodeArray = [
@@ -57,7 +58,7 @@ const TorrentListRowExpanded = observer(
           column="percentComplete"
           content={(torrent) => (
             <span>
-              <FormattedNumber value={torrent.percentComplete} maximumFractionDigits={1} />
+              {i18n.number(torrent.percentComplete, {maximumFractionDigits: 1})}
               <em className="unit">%</em>
               &nbsp;&mdash;&nbsp;
               <Size value={torrent.downTotal} />

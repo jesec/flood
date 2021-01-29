@@ -1,5 +1,5 @@
 import {Component} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 
 import {Checkbox} from '@client/ui';
 import DiskUsageStore from '@client/stores/DiskUsageStore';
@@ -88,7 +88,7 @@ class MountPointsList extends Component<MountPointsListProps, MountPointsListSta
         <Checkbox
           defaultChecked={visible}
           onClick={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
-          <FormattedMessage id="settings.diskusage.show" />
+          <Trans id="settings.diskusage.show" />
         </Checkbox>
       </span>
     );

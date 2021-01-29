@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {forwardRef, MutableRefObject, ReactNodeArray, useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans, useLingui} from '@lingui/react';
 import {useEnsuredForwardedRef} from 'react-use';
 
 import TorrentListColumns, {TorrentListColumn} from '../../constants/TorrentListColumns';
@@ -28,7 +28,7 @@ const TableHeading = observer(
     const tableHeading = useEnsuredForwardedRef<HTMLDivElement>(ref as MutableRefObject<HTMLDivElement>);
     const resizeLine = useRef<HTMLDivElement>(null);
 
-    const intl = useIntl();
+    const {i18n} = useLingui();
 
     const handlePointerMove = (event: PointerEvent) => {
       let widthDelta = 0;
@@ -79,7 +79,7 @@ const TableHeading = observer(
             return accumulator;
           }
 
-          const labelID = TorrentListColumns[id]?.id;
+          const labelID = TorrentListColumns[id];
           if (labelID == null) {
             return accumulator;
           }
@@ -121,12 +121,8 @@ const TableHeading = observer(
 
           accumulator.push(
             <div className={classes} key={id} onClick={() => onCellClick(id)} style={{width: `${width}px`}}>
-              <span
-                className="table__heading__label"
-                title={intl.formatMessage({
-                  id: labelID,
-                })}>
-                <FormattedMessage id={labelID} />
+              <span className="table__heading__label" title={i18n._(labelID)}>
+                <Trans id={labelID} />
               </span>
               {handle}
             </div>,

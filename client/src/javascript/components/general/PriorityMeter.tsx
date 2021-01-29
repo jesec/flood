@@ -1,5 +1,5 @@
 import {FC, ReactNode, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import PriorityLevels from '../../constants/PriorityLevels';
 
@@ -24,7 +24,7 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   changePriorityFuncRef,
   onChange,
 }: PriorityMeterProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [priorityLevel, setPriorityLevel] = useState<number>(level);
 
   const changePriority = () => {
@@ -54,24 +54,16 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
     let priorityLevelElement: ReactNode;
     switch (priorityLevels[priorityLevel as keyof typeof priorityLevels]) {
       case 'DONT_DOWNLOAD':
-        priorityLevelElement = intl.formatMessage({
-          id: 'priority.dont.download',
-        });
+        priorityLevelElement = i18n._('priority.dont.download');
         break;
       case 'HIGH':
-        priorityLevelElement = intl.formatMessage({
-          id: 'priority.high',
-        });
+        priorityLevelElement = i18n._('priority.high');
         break;
       case 'LOW':
-        priorityLevelElement = intl.formatMessage({
-          id: 'priority.low',
-        });
+        priorityLevelElement = i18n._('priority.low');
         break;
       default:
-        priorityLevelElement = intl.formatMessage({
-          id: 'priority.normal',
-        });
+        priorityLevelElement = i18n._('priority.normal');
         break;
     }
 

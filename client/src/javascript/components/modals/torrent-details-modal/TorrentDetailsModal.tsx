@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 import {useMedia} from 'react-use';
 
 import Modal from '../Modal';
@@ -11,40 +11,30 @@ import TorrentPeers from './TorrentPeers';
 import TorrentTrackers from './TorrentTrackers';
 
 const TorrentDetailsModal: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const isSmallScreen = useMedia('(max-width: 720px)');
 
   const tabs = {
     'torrent-details': {
       content: TorrentGeneralInfo,
-      label: intl.formatMessage({
-        id: 'torrents.details.details',
-      }),
+      label: i18n._('torrents.details.details'),
     },
     'torrent-contents': {
       content: TorrentContents,
-      label: intl.formatMessage({
-        id: 'torrents.details.files',
-      }),
+      label: i18n._('torrents.details.files'),
       modalContentClasses: 'modal__content--nested-scroll',
     },
     'torrent-peers': {
       content: TorrentPeers,
-      label: intl.formatMessage({
-        id: 'torrents.details.peers',
-      }),
+      label: i18n._('torrents.details.peers'),
     },
     'torrent-trackers': {
       content: TorrentTrackers,
-      label: intl.formatMessage({
-        id: 'torrents.details.trackers',
-      }),
+      label: i18n._('torrents.details.trackers'),
     },
     'torrent-mediainfo': {
       content: TorrentMediainfo,
-      label: intl.formatMessage({
-        id: 'torrents.details.mediainfo',
-      }),
+      label: i18n._('torrents.details.mediainfo'),
       modalContentClasses: 'modal__content--nested-scroll',
     },
   };

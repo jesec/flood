@@ -1,14 +1,14 @@
 import classnames from 'classnames';
 import {FC, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {Close, Search} from '@client/ui/icons';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import UIActions from '@client/actions/UIActions';
 
 const SearchBox: FC = observer(() => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const {searchFilter} = TorrentFilterStore.filters;
@@ -48,9 +48,7 @@ const SearchBox: FC = observer(() => {
         className="textbox"
         ref={inputRef}
         type="text"
-        placeholder={intl.formatMessage({
-          id: 'sidebar.search.placeholder',
-        })}
+        placeholder={i18n._('sidebar.search.placeholder')}
         onChange={(event) => {
           UIActions.setTorrentsSearchFilter(event.target.value);
         }}

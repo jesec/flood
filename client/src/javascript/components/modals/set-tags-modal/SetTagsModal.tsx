@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {Form, FormRow} from '@client/ui';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -10,14 +10,12 @@ import TagSelect from '../../general/form-elements/TagSelect';
 
 const SetTagsModal: FC = () => {
   const formRef = useRef<Form>(null);
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [isSettingTags, setIsSettingTags] = useState<boolean>(false);
 
   return (
     <Modal
-      heading={intl.formatMessage({
-        id: 'torrents.set.tags.heading',
-      })}
+      heading={i18n._('torrents.set.tags.heading')}
       content={
         <div className="modal__content inverse">
           <Form ref={formRef}>
@@ -27,9 +25,7 @@ const SetTagsModal: FC = () => {
                   .map((hash: string) => TorrentStore.torrents[hash].tags)[0]
                   .slice()}
                 id="tags"
-                placeholder={intl.formatMessage({
-                  id: 'torrents.set.tags.enter.tags',
-                })}
+                placeholder={i18n._('torrents.set.tags.enter.tags')}
               />
             </FormRow>
           </Form>
@@ -37,17 +33,13 @@ const SetTagsModal: FC = () => {
       }
       actions={[
         {
-          content: intl.formatMessage({
-            id: 'button.cancel',
-          }),
+          content: i18n._('button.cancel'),
           clickHandler: null,
           triggerDismiss: true,
           type: 'tertiary',
         },
         {
-          content: intl.formatMessage({
-            id: 'torrents.set.tags.button.set',
-          }),
+          content: i18n._('torrents.set.tags.button.set'),
           clickHandler: () => {
             if (formRef.current == null) {
               return;

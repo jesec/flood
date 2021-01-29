@@ -39,7 +39,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'start',
-      label: TorrentContextMenuActions.start.id,
+      label: TorrentContextMenuActions.start,
       clickHandler: () => {
         TorrentActions.startTorrents({
           hashes: TorrentStore.selectedTorrents,
@@ -49,7 +49,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'stop',
-      label: TorrentContextMenuActions.stop.id,
+      label: TorrentContextMenuActions.stop,
       clickHandler: () => {
         TorrentActions.stopTorrents({
           hashes: TorrentStore.selectedTorrents,
@@ -59,7 +59,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'remove',
-      label: TorrentContextMenuActions.remove.id,
+      label: TorrentContextMenuActions.remove,
       clickHandler: () => {
         UIActions.displayModal({id: 'remove-torrents'});
       },
@@ -67,7 +67,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'checkHash',
-      label: TorrentContextMenuActions.checkHash.id,
+      label: TorrentContextMenuActions.checkHash,
       clickHandler: () => {
         TorrentActions.checkHash({
           hashes: TorrentStore.selectedTorrents,
@@ -80,7 +80,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'setTaxonomy',
-      label: TorrentContextMenuActions.setTaxonomy.id,
+      label: TorrentContextMenuActions.setTaxonomy,
       clickHandler: () => {
         UIActions.displayModal({id: 'set-taxonomy'});
       },
@@ -88,7 +88,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'move',
-      label: TorrentContextMenuActions.move.id,
+      label: TorrentContextMenuActions.move,
       clickHandler: () => {
         UIActions.displayModal({id: 'move-torrents'});
       },
@@ -96,7 +96,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'setTrackers',
-      label: TorrentContextMenuActions.setTrackers.id,
+      label: TorrentContextMenuActions.setTrackers,
       clickHandler: () => {
         UIActions.displayModal({id: 'set-trackers'});
       },
@@ -107,7 +107,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'torrentDetails',
-      label: TorrentContextMenuActions.torrentDetails.id,
+      label: TorrentContextMenuActions.torrentDetails,
       clickHandler: () => {
         UIActions.displayModal({
           id: 'torrent-details',
@@ -118,7 +118,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'downloadContents',
-      label: TorrentContextMenuActions.downloadContents.id,
+      label: TorrentContextMenuActions.downloadContents,
       clickHandler: (e) => {
         e.preventDefault();
 
@@ -136,7 +136,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'downloadMetainfo',
-      label: TorrentContextMenuActions.downloadMetainfo.id,
+      label: TorrentContextMenuActions.downloadMetainfo,
       clickHandler: (e) => {
         e.preventDefault();
 
@@ -154,7 +154,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'generateMagnet',
-      label: TorrentContextMenuActions.generateMagnet.id,
+      label: TorrentContextMenuActions.generateMagnet,
       clickHandler: () => {
         UIActions.displayModal({id: 'generate-magnet'});
       },
@@ -162,7 +162,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'setInitialSeeding',
-      label: TorrentContextMenuActions.setInitialSeeding.id,
+      label: TorrentContextMenuActions.setInitialSeeding,
       clickHandler: () => {
         const {selectedTorrents} = TorrentStore;
         TorrentActions.setInitialSeeding({
@@ -176,7 +176,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'setSequential',
-      label: TorrentContextMenuActions.setSequential.id,
+      label: TorrentContextMenuActions.setSequential,
       clickHandler: () => {
         const {selectedTorrents} = TorrentStore;
         TorrentActions.setSequential({
@@ -190,7 +190,7 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     {
       type: 'action',
       action: 'setPriority',
-      label: TorrentContextMenuActions.setPriority.id,
+      label: TorrentContextMenuActions.setPriority,
       clickHandler: () => {
         if (changePriorityFuncRef.current != null) {
           TorrentActions.setPriority({

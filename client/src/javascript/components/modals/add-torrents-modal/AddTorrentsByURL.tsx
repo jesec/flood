@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import ConfigStore from '@client/stores/ConfigStore';
 import {Form, FormRow} from '@client/ui';
@@ -31,7 +31,7 @@ const AddTorrentsByURL: FC = () => {
   const textboxRef = useRef<HTMLInputElement>(null);
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
 
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   return (
     <Form className="inverse" ref={formRef}>
@@ -39,9 +39,7 @@ const AddTorrentsByURL: FC = () => {
         id="urls"
         label={
           <div>
-            {intl.formatMessage({
-              id: 'torrents.add.torrents.label',
-            })}
+            {i18n._('torrents.add.torrents.label')}
             {typeof navigator.registerProtocolHandler === 'function' && (
               <em
                 style={{cursor: 'pointer', fontSize: '0.8em', float: 'right'}}
@@ -54,35 +52,25 @@ const AddTorrentsByURL: FC = () => {
                     );
                   }
                 }}>
-                {intl.formatMessage({
-                  id: 'torrents.add.tab.url.register.magnet.handler',
-                })}
+                {i18n._('torrents.add.tab.url.register.magnet.handler')}
               </em>
             )}
           </div>
         }
-        placeholder={intl.formatMessage({
-          id: 'torrents.add.tab.url.input.placeholder',
-        })}
+        placeholder={i18n._('torrents.add.tab.url.input.placeholder')}
         defaultValues={
           (UIStore.activeModal?.id === 'add-torrents' && UIStore.activeModal?.initialURLs) || [{id: 0, value: ''}]
         }
       />
       <TextboxRepeater
         id="cookies"
-        label={intl.formatMessage({
-          id: 'torrents.add.cookies.label',
-        })}
-        placeholder={intl.formatMessage({
-          id: 'torrents.add.cookies.input.placeholder',
-        })}
+        label={i18n._('torrents.add.cookies.label')}
+        placeholder={i18n._('torrents.add.cookies.input.placeholder')}
       />
       <FormRow>
         <TagSelect
           id="tags"
-          label={intl.formatMessage({
-            id: 'torrents.add.tags',
-          })}
+          label={i18n._('torrents.add.tags')}
           onTagSelected={(tags) => {
             if (textboxRef.current != null) {
               const suggestedPath = SettingStore.floodSettings.torrentDestinations?.[tags[0]];
@@ -96,9 +84,7 @@ const AddTorrentsByURL: FC = () => {
       </FormRow>
       <FilesystemBrowserTextbox
         id="destination"
-        label={intl.formatMessage({
-          id: 'torrents.add.destination.label',
-        })}
+        label={i18n._('torrents.add.destination.label')}
         ref={textboxRef}
         selectable="directories"
         showBasePathToggle

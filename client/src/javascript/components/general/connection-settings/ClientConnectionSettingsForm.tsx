@@ -1,5 +1,5 @@
 import {FC, ReactNode, useEffect, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {FormRow, Select, SelectItem} from '@client/ui';
 
@@ -20,7 +20,7 @@ interface ClientConnectionSettingsFormProps {
 const ClientConnectionSettingsForm: FC<ClientConnectionSettingsFormProps> = ({
   onSettingsChange,
 }: ClientConnectionSettingsFormProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [selectedClient, setSelectedClient] = useState<ClientConnectionSettings['client']>(DEFAULT_SELECTION);
 
   useEffect(() => {
@@ -47,16 +47,14 @@ const ClientConnectionSettingsForm: FC<ClientConnectionSettingsFormProps> = ({
       <FormRow>
         <Select
           id="client"
-          label={intl.formatMessage({
-            id: 'connection.settings.client.select',
-          })}
+          label={i18n._('connection.settings.client.select')}
           onSelect={(newSelectedClient) => {
             setSelectedClient(newSelectedClient as ClientConnectionSettings['client']);
           }}
           defaultID={DEFAULT_SELECTION}>
           {SUPPORTED_CLIENTS.map((client) => (
             <SelectItem key={client} id={client}>
-              <FormattedMessage id={`connection.settings.${client.toLowerCase()}`} />
+              <Trans id={`connection.settings.${client.toLowerCase()}`} />
             </SelectItem>
           ))}
         </Select>

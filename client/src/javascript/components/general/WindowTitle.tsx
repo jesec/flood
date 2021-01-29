@@ -1,13 +1,13 @@
 import {FC} from 'react';
-import {useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
+import {useLingui} from '@lingui/react';
 
 import {compute, getTranslationString} from '../../util/size';
 import TransferDataStore from '../../stores/TransferDataStore';
 
 const WindowTitle: FC = observer(() => {
   const {transferSummary: summary} = TransferDataStore;
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   let title = 'Flood';
 
@@ -15,25 +15,15 @@ const WindowTitle: FC = observer(() => {
     const down = compute(summary.downRate);
     const up = compute(summary.upRate);
 
-    const formattedDownSpeed = intl.formatNumber(down.value);
-    const formattedUpSpeed = intl.formatNumber(up.value);
+    const formattedDownSpeed = i18n.number(down.value);
+    const formattedUpSpeed = i18n.number(up.value);
 
-    const translatedDownUnit = intl.formatMessage(
-      {
-        id: 'unit.speed',
-      },
-      {
-        baseUnit: intl.formatMessage({id: getTranslationString(down.unit)}),
-      },
-    );
-    const translatedUpUnit = intl.formatMessage(
-      {
-        id: 'unit.speed',
-      },
-      {
-        baseUnit: intl.formatMessage({id: getTranslationString(up.unit)}),
-      },
-    );
+    const translatedDownUnit = i18n._('unit.speed', {
+      baseUnit: i18n._(getTranslationString(down.unit)),
+    });
+    const translatedUpUnit = i18n._('unit.speed', {
+      baseUnit: i18n._(getTranslationString(up.unit)),
+    });
 
     title = `↓ ${formattedDownSpeed} ${translatedDownUnit} ↑ ${formattedUpSpeed} ${translatedUpUnit} - Flood`;
   }

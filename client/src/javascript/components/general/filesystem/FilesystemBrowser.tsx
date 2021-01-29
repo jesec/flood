@@ -1,28 +1,15 @@
-import {defineMessages, WrappedComponentProps} from 'react-intl';
 import {PureComponent, ReactNodeArray} from 'react';
+import {Trans} from '@lingui/react';
 
 import {Arrow, File, FolderClosedSolid} from '@client/ui/icons';
 import FloodActions from '@client/actions/FloodActions';
 
-const MESSAGES = defineMessages({
-  EACCES: {
-    id: 'filesystem.error.eacces',
-  },
-  ENOENT: {
-    id: 'filesystem.error.enoent',
-  },
-  emptyDirectory: {
-    id: 'filesystem.empty.directory',
-  },
-  fetching: {
-    id: 'filesystem.fetching',
-  },
-  unknownError: {
-    id: 'filesystem.error.unknown',
-  },
-});
+const MESSAGES = {
+  EACCES: 'filesystem.error.eacces',
+  ENOENT: 'filesystem.error.enoent',
+};
 
-interface FilesystemBrowserProps extends WrappedComponentProps {
+interface FilesystemBrowserProps {
   selectable?: 'files' | 'directories';
   directory: string;
   onItemSelection?: (newDestination: string, isDirectory?: boolean) => void;
@@ -108,7 +95,7 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
   };
 
   render() {
-    const {intl, selectable} = this.props;
+    const {selectable} = this.props;
     const {directories, errorResponse, files} = this.state;
     let errorMessage = null;
     let listItems = null;
@@ -119,7 +106,9 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
       shouldShowDirectoryList = false;
       errorMessage = (
         <div className="filesystem__directory-list__item filesystem__directory-list__item--message">
-          <em>{intl.formatMessage(MESSAGES.fetching)}</em>
+          <em>
+            <Trans id="filesystem.fetching" />
+          </em>
         </div>
       );
     }
@@ -127,11 +116,11 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
     if (errorResponse && errorResponse.data && errorResponse.data.code) {
       shouldShowDirectoryList = false;
 
-      const messageConfig = MESSAGES[errorResponse.data.code as keyof typeof MESSAGES] || MESSAGES.unknownError;
-
       errorMessage = (
         <div className="filesystem__directory-list__item filesystem__directory-list__item--message">
-          <em>{intl.formatMessage(messageConfig)}</em>
+          <em>
+            <Trans id={MESSAGES[errorResponse.data.code as keyof typeof MESSAGES] || 'filesystem.error.unknown'} />
+          </em>
         </div>
       );
     }
@@ -141,9 +130,7 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
         className="filesystem__directory-list__item filesystem__directory-list__item--parent"
         onClick={this.handleParentDirectoryClick}>
         <Arrow />
-        {intl.formatMessage({
-          id: 'filesystem.parent.directory',
-        })}
+        <Trans id="filesystem.parent.directory" />
       </li>
     );
 
@@ -188,7 +175,9 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
     if ((!listItems || listItems.length === 0) && !errorMessage) {
       errorMessage = (
         <div className="filesystem__directory-list__item filesystem__directory-list__item--message">
-          <em>{intl.formatMessage(MESSAGES.emptyDirectory)}</em>
+          <em>
+            <Trans id="filesystem.empty.directory" />
+          </em>
         </div>
       );
     }

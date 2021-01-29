@@ -1,5 +1,5 @@
 import {Component} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 
 import {Checkbox} from '@client/ui';
 import SettingStore from '@client/stores/SettingStore';
@@ -76,7 +76,7 @@ class TorrentContextMenuActionsList extends Component<
           <Checkbox
             defaultChecked={visible}
             onClick={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
-            <FormattedMessage id="settings.ui.torrent.context.menu.items.show" />
+            <Trans id="settings.ui.torrent.context.menu.items.show" />
           </Checkbox>
         </span>
       );
@@ -85,7 +85,7 @@ class TorrentContextMenuActionsList extends Component<
     const content = (
       <div className="sortable-list__content sortable-list__content__wrapper">
         <span className="sortable-list__content sortable-list__content--primary">
-          <FormattedMessage id={TorrentContextMenuActions[id].id} />
+          <Trans id={TorrentContextMenuActions[id]} />
         </span>
         {checkbox}
       </div>

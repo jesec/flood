@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import {defineMessages, useIntl} from 'react-intl';
 import {FC} from 'react';
 import {observer} from 'mobx-react';
+import {useLingui} from '@lingui/react';
 
 import ClientStatusStore from '@client/stores/ClientStatusStore';
 import {Download, InfinityIcon, Upload} from '@client/ui/icons';
@@ -15,12 +15,6 @@ import Size from '../general/Size';
 
 import type {TransferRateGraphInspectorPoint} from './TransferRateGraph';
 
-const messages = defineMessages({
-  ago: {
-    id: 'general.ago',
-  },
-});
-
 const icons = {
   download: <Download />,
   infinity: <InfinityIcon />,
@@ -32,7 +26,7 @@ interface TransferRateDetailsProps {
 }
 
 const TransferRateDetails: FC<TransferRateDetailsProps> = observer(({inspectorPoint}: TransferRateDetailsProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   const getCurrentTransferRate = (direction: TransferDirection, options: {showHoverDuration?: boolean} = {}) => {
     const {throttleGlobalDownSpeed = 0, throttleGlobalUpSpeed = 0} = SettingStore.clientSettings || {};
@@ -73,7 +67,7 @@ const TransferRateDetails: FC<TransferRateDetailsProps> = observer(({inspectorPo
       timestamp = (
         <div className={timestampClasses}>
           <Duration
-            suffix={intl.formatMessage(messages.ago)}
+            suffix={i18n._('general.ago')}
             value={Math.trunc((Date.now() - inspectorPoint.nearestTimestamp) / 1000)}
           />
         </div>

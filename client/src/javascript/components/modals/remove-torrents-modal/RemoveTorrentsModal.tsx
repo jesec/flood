@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Form, FormRow} from '@client/ui';
 import {saveDeleteTorrentsUserPreferences} from '@client/util/userPreferences';
@@ -12,21 +12,19 @@ import Modal from '../Modal';
 import ModalActions from '../ModalActions';
 
 const RemoveTorrentsModal: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [isRemoving, setIsRemoving] = useState<boolean>(false);
   const {selectedTorrents} = TorrentStore;
 
   if (selectedTorrents.length === 0) {
     return (
       <Modal
-        heading={intl.formatMessage({
-          id: 'torrents.remove',
-        })}
+        heading={i18n._('torrents.remove')}
         content={
           <div className="modal__content inverse">
             <Form>
               <FormRow>
-                <FormattedMessage id="torrents.remove.error.no.torrents.selected" />
+                <Trans id="torrents.remove.error.no.torrents.selected" />
               </FormRow>
             </Form>
           </div>
@@ -34,9 +32,7 @@ const RemoveTorrentsModal: FC = () => {
         actions={[
           {
             clickHandler: null,
-            content: intl.formatMessage({
-              id: 'button.ok',
-            }),
+            content: i18n._('button.ok'),
             triggerDismiss: true,
             type: 'primary',
           },
@@ -47,9 +43,7 @@ const RemoveTorrentsModal: FC = () => {
 
   return (
     <Modal
-      heading={intl.formatMessage({
-        id: 'torrents.remove',
-      })}
+      heading={i18n._('torrents.remove')}
       content={
         <div className="modal__content">
           <Form
@@ -69,29 +63,23 @@ const RemoveTorrentsModal: FC = () => {
               });
             }}>
             <FormRow>
-              <FormattedMessage id="torrents.remove.are.you.sure" values={{count: selectedTorrents.length}} />
+              <Trans id="torrents.remove.are.you.sure" values={{count: selectedTorrents.length}} />
             </FormRow>
             <ModalActions
               actions={[
                 {
                   checked: SettingStore.floodSettings.deleteTorrentData,
-                  content: intl.formatMessage({
-                    id: 'torrents.remove.delete.data',
-                  }),
+                  content: i18n._('torrents.remove.delete.data'),
                   id: 'deleteData',
                   type: 'checkbox',
                 },
                 {
-                  content: intl.formatMessage({
-                    id: 'button.no',
-                  }),
+                  content: i18n._('button.no'),
                   triggerDismiss: true,
                   type: 'tertiary',
                 },
                 {
-                  content: intl.formatMessage({
-                    id: 'button.yes',
-                  }),
+                  content: i18n._('button.yes'),
                   isLoading: isRemoving,
                   submit: true,
                   type: 'primary',

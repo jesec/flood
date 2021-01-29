@@ -1,6 +1,6 @@
 import {FC, ReactNodeArray} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans} from '@lingui/react';
 
 import {Checkbox, FormRow} from '@client/ui';
 
@@ -42,7 +42,7 @@ const FeedItems: FC<FeedItemsProps> = observer(({selectedFeedID}: FeedItemsProps
         <ul className="interactive-list">
           <li className="interactive-list__item">
             <div className="interactive-list__label">
-              <FormattedMessage id="feeds.no.items.matching" />
+              <Trans id="feeds.no.items.matching" />
             </div>
           </li>
         </ul>

@@ -1,7 +1,7 @@
 import {FC, ReactNode, useEffect, useRef} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
 import {reaction} from 'mobx';
+import {Trans} from '@lingui/react';
 
 import type {FixedSizeList} from 'react-window';
 
@@ -54,7 +54,7 @@ const TorrentList: FC = observer(() => {
     content = (
       <div className="torrents__alert__wrapper">
         <div className="torrents__alert">
-          <FormattedMessage id="torrents.list.cannot.connect" />
+          <Trans id="torrents.list.cannot.connect" />
         </div>
       </div>
     );
@@ -62,7 +62,7 @@ const TorrentList: FC = observer(() => {
     content = (
       <div className="torrents__alert__wrapper">
         <div className="torrents__alert">
-          <FormattedMessage id="torrents.list.no.torrents" />
+          <Trans id="torrents.list.no.torrents" />
         </div>
         {TorrentFilterStore.isFilterActive && (
           <div className="torrents__alert__action">
@@ -71,7 +71,7 @@ const TorrentList: FC = observer(() => {
                 TorrentFilterStore.clearAllFilters();
               }}
               priority="tertiary">
-              <FormattedMessage id="torrents.list.clear.filters" />
+              <Trans id="torrents.list.clear.filters" />
             </Button>
           </div>
         )}
@@ -148,7 +148,7 @@ const TorrentList: FC = observer(() => {
           <div className="dropzone__icon">
             <Files />
           </div>
-          <FormattedMessage id="torrents.list.drop" />
+          <Trans id="torrents.list.drop" />
         </div>
       </div>
     </TorrentListDropzone>

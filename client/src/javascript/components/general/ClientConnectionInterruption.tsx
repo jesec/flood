@@ -1,6 +1,6 @@
 import {FC, ReactText, useRef, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans} from '@lingui/react';
 
 import {
   Button,
@@ -74,14 +74,14 @@ const ClientConnectionInterruption: FC = observer(() => {
         }}>
         <PanelHeader>
           <h1>
-            <FormattedMessage id="connection-interruption.heading" />
+            <Trans id="connection-interruption.heading" />
           </h1>
         </PanelHeader>
         <PanelContent>
           {error && (
             <FormRow>
               <FormError>
-                <FormattedMessage id={error} />
+                <Trans id={error} />
               </FormError>
             </FormRow>
           )}
@@ -89,16 +89,16 @@ const ClientConnectionInterruption: FC = observer(() => {
             <FormRow>
               <Select id="action" onSelect={setSelection} defaultID="retry">
                 <SelectItem key="retry" id="retry">
-                  <FormattedMessage id="connection-interruption.action.selection.retry" />
+                  <Trans id="connection-interruption.action.selection.retry" />
                 </SelectItem>
                 <SelectItem key="config" id="config">
-                  <FormattedMessage id="connection-interruption.action.selection.config" />
+                  <Trans id="connection-interruption.action.selection.config" />
                 </SelectItem>
               </Select>
             </FormRow>
           ) : (
             <p className="copy--lead">
-              <FormattedMessage id="connection-interruption.not.admin" />
+              <Trans id="connection-interruption.not.admin" />
             </p>
           )}
           {selection === 'config' && (
@@ -113,12 +113,12 @@ const ClientConnectionInterruption: FC = observer(() => {
           <FormRow justify="end">
             {selection === 'retry' && (
               <Button type="submit" isLoading={isSubmitting}>
-                <FormattedMessage id="button.retry" />
+                <Trans id="button.retry" />
               </Button>
             )}
             {selection === 'config' && (
               <Button type="submit" isLoading={isSubmitting}>
-                <FormattedMessage id="button.save" />
+                <Trans id="button.save" />
               </Button>
             )}
           </FormRow>

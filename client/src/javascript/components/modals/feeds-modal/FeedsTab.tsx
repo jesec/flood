@@ -1,5 +1,5 @@
 import {FC, ReactNodeArray, useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Button, Form, FormError, FormRow, FormRowItem} from '@client/ui';
 import FeedActions from '@client/actions/FeedActions';
@@ -63,7 +63,7 @@ const defaultFeed: AddFeedOptions = {
 
 const FeedsTab: FC = () => {
   const formRef = useRef<Form>(null);
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [currentFeed, setCurrentFeed] = useState<Feed | null>(null);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -134,13 +134,13 @@ const FeedsTab: FC = () => {
         }}
         ref={formRef}>
         <ModalFormSectionHeader>
-          <FormattedMessage id="feeds.existing.feeds" />
+          <Trans id="feeds.existing.feeds" />
         </ModalFormSectionHeader>
         {Object.keys(errors).reduce((memo: ReactNodeArray, key) => {
           if (errors[key as ValidatedField] != null) {
             memo.push(
               <FormRow key={`error-${key}`}>
-                <FormError>{intl.formatMessage({id: errors?.[key as ValidatedField]})}</FormError>
+                <FormError>{i18n._(errors?.[key as ValidatedField] as string)}</FormError>
               </FormRow>,
             );
           }
@@ -192,7 +192,7 @@ const FeedsTab: FC = () => {
               onClick={() => {
                 setIsEditing(true);
               }}>
-              <FormattedMessage id="button.new" />
+              <Trans id="button.new" />
             </Button>
           </FormRow>
         )}

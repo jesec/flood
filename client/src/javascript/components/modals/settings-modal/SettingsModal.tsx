@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 import {useMedia} from 'react-use';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
@@ -19,7 +19,7 @@ import UITab from './UITab';
 import UIStore from '../../../stores/UIStore';
 
 const SettingsModal: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const isSmallScreen = useMedia('(max-width: 720px)');
 
   const [changedClientSettings, setChangedClientSettings] = useState<Partial<ClientSettings>>({});
@@ -47,61 +47,47 @@ const SettingsModal: FC = () => {
         onClientSettingsChange: handleClientSettingsChange,
         onSettingsChange: handleFloodSettingsChange,
       },
-      label: intl.formatMessage({
-        id: 'settings.tabs.bandwidth',
-      }),
+      label: i18n._('settings.tabs.bandwidth'),
     },
     connectivity: {
       content: ConnectivityTab,
       props: {
         onClientSettingsChange: handleClientSettingsChange,
       },
-      label: intl.formatMessage({
-        id: 'settings.tabs.connectivity',
-      }),
+      label: i18n._('settings.tabs.connectivity'),
     },
     resources: {
       content: ResourcesTab,
       props: {
         onClientSettingsChange: handleClientSettingsChange,
       },
-      label: intl.formatMessage({
-        id: 'settings.tabs.resources',
-      }),
+      label: i18n._('settings.tabs.resources'),
     },
     ...(ConfigStore.authMethod !== 'none'
       ? {
           authentication: {
             content: AuthTab,
-            label: intl.formatMessage({
-              id: 'settings.tabs.authentication',
-            }),
+            label: i18n._('settings.tabs.authentication'),
           },
         }
       : {}),
     ui: {
       content: UITab,
-      label: intl.formatMessage({
-        id: 'settings.tabs.userinterface',
-      }),
+      label: i18n._('settings.tabs.userinterface'),
       props: {
         onSettingsChange: handleFloodSettingsChange,
       },
     },
     diskusage: {
       content: DiskUsageTab,
-      label: intl.formatMessage({
-        id: 'settings.tabs.diskusage',
-      }),
+      label: i18n._('settings.tabs.diskusage'),
       props: {
         onSettingsChange: handleFloodSettingsChange,
       },
     },
     about: {
       content: AboutTab,
-      label: intl.formatMessage({
-        id: 'settings.tabs.about',
-      }),
+      label: i18n._('settings.tabs.about'),
     },
   };
 
@@ -110,9 +96,7 @@ const SettingsModal: FC = () => {
       actions={[
         {
           clickHandler: null,
-          content: intl.formatMessage({
-            id: 'button.cancel',
-          }),
+          content: i18n._('button.cancel'),
           triggerDismiss: true,
           type: 'tertiary',
         },
@@ -132,17 +116,13 @@ const SettingsModal: FC = () => {
             });
           },
           isLoading: isSavingSettings,
-          content: intl.formatMessage({
-            id: 'button.save',
-          }),
+          content: i18n._('button.save'),
           triggerDismiss: false,
           type: 'primary',
         },
       ]}
       size="large"
-      heading={intl.formatMessage({
-        id: 'settings.tabs.heading',
-      })}
+      heading={i18n._('settings.tabs.heading')}
       orientation={isSmallScreen ? 'horizontal' : 'vertical'}
       tabs={tabs}
     />

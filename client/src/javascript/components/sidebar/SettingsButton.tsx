@@ -1,25 +1,18 @@
-import {defineMessages, useIntl} from 'react-intl';
 import {FC, useRef} from 'react';
+import {useLingui} from '@lingui/react';
 
 import {Settings} from '@client/ui/icons';
 import UIActions from '@client/actions/UIActions';
 
 import Tooltip from '../general/Tooltip';
 
-const MESSAGES = defineMessages({
-  settings: {
-    id: 'sidebar.button.settings',
-  },
-});
-
 const SettingsButton: FC = () => {
-  const intl = useIntl();
-  const label = intl.formatMessage(MESSAGES.settings);
+  const {i18n} = useLingui();
   const tooltipRef = useRef<Tooltip>(null);
 
   return (
     <Tooltip
-      content={label}
+      content={i18n._('sidebar.button.settings')}
       onClick={() => {
         if (tooltipRef.current != null) {
           tooltipRef.current.dismissTooltip();

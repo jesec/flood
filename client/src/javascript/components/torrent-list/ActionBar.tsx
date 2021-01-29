@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {FC} from 'react';
 import {observer} from 'mobx-react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {Add, Menu, Remove, Start, Stop} from '@client/ui/icons';
 import SettingActions from '@client/actions/SettingActions';
@@ -14,7 +14,7 @@ import Action from './Action';
 import SortDropdown from './SortDropdown';
 
 const ActionBar: FC = observer(() => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const {sortTorrents: sortBy, torrentListViewSize} = SettingStore.floodSettings;
 
   const classes = classnames('action-bar', {
@@ -49,9 +49,7 @@ const ActionBar: FC = observer(() => {
       <div className="actions action-bar__item action-bar__item--torrent-operations">
         <div className="action-bar__group">
           <Action
-            label={intl.formatMessage({
-              id: 'actionbar.button.start.torrent',
-            })}
+            label={i18n._('actionbar.button.start.torrent')}
             slug="start-torrent"
             icon={<Start />}
             clickHandler={() =>
@@ -61,9 +59,7 @@ const ActionBar: FC = observer(() => {
             }
           />
           <Action
-            label={intl.formatMessage({
-              id: 'actionbar.button.stop.torrent',
-            })}
+            label={i18n._('actionbar.button.stop.torrent')}
             slug="stop-torrent"
             icon={<Stop />}
             clickHandler={() =>
@@ -75,17 +71,13 @@ const ActionBar: FC = observer(() => {
         </div>
         <div className="action-bar__group action-bar__group--has-divider">
           <Action
-            label={intl.formatMessage({
-              id: 'actionbar.button.add.torrent',
-            })}
+            label={i18n._('actionbar.button.add.torrent')}
             slug="add-torrent"
             icon={<Add />}
             clickHandler={() => UIActions.displayModal({id: 'add-torrents'})}
           />
           <Action
-            label={intl.formatMessage({
-              id: 'actionbar.button.remove.torrent',
-            })}
+            label={i18n._('actionbar.button.remove.torrent')}
             slug="remove-torrent"
             icon={<Remove />}
             clickHandler={() =>

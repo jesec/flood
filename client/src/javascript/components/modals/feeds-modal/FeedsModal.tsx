@@ -1,5 +1,5 @@
 import {FC, useEffect} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import DownloadRulesTab from './DownloadRulesTab';
 import FeedActions from '../../../actions/FeedActions';
@@ -7,7 +7,7 @@ import FeedsTab from './FeedsTab';
 import Modal from '../Modal';
 
 const FeedsModal: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   useEffect(() => {
     FeedActions.fetchFeedMonitors();
@@ -16,28 +16,15 @@ const FeedsModal: FC = () => {
   const tabs = {
     feeds: {
       content: FeedsTab,
-      label: intl.formatMessage({
-        id: 'feeds.tabs.feeds',
-      }),
+      label: i18n._('feeds.tabs.feeds'),
     },
     downloadRules: {
       content: DownloadRulesTab,
-      label: intl.formatMessage({
-        id: 'feeds.tabs.download.rules',
-      }),
+      label: i18n._('feeds.tabs.download.rules'),
     },
   };
 
-  return (
-    <Modal
-      heading={intl.formatMessage({
-        id: 'feeds.tabs.heading',
-      })}
-      orientation="horizontal"
-      size="large"
-      tabs={tabs}
-    />
-  );
+  return <Modal heading={i18n._('feeds.tabs.heading')} orientation="horizontal" size="large" tabs={tabs} />;
 };
 
 export default FeedsModal;

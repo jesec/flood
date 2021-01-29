@@ -1,15 +1,7 @@
 import {FC} from 'react';
-import {FormattedNumber, useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {compute, getTranslationString} from '../../util/size';
-
-const renderNumber = (computedNumber: ReturnType<typeof compute>) => {
-  if (Number.isNaN(computedNumber.value)) {
-    return '—';
-  }
-
-  return <FormattedNumber value={computedNumber.value} />;
-};
 
 interface SizeProps {
   value: number;
@@ -20,26 +12,19 @@ interface SizeProps {
 
 const Size: FC<SizeProps> = ({value, isSpeed, className, precision}: SizeProps) => {
   const computed = compute(value, precision);
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
-  let translatedUnit = intl.formatMessage({
-    id: getTranslationString(computed.unit),
-  });
+  let translatedUnit = i18n._(getTranslationString(computed.unit));
 
   if (isSpeed) {
-    translatedUnit = intl.formatMessage(
-      {
-        id: 'unit.speed',
-      },
-      {
-        baseUnit: translatedUnit,
-      },
-    );
+    translatedUnit = i18n._('unit.speed', {
+      baseUnit: translatedUnit,
+    });
   }
 
   return (
     <span className={className}>
-      {renderNumber(computed)}
+      {Number.isNaN(computed.value) ? '—' : i18n.number(computed.value)}
       <em className="unit">{translatedUnit}</em>
     </span>
   );

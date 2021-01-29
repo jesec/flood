@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Close, Edit} from '@client/ui/icons';
 
@@ -18,13 +18,13 @@ interface FeedListProps {
 const FeedList: FC<FeedListProps> = observer(
   ({currentFeed, intervalMultipliers, onSelect, onRemove}: FeedListProps) => {
     const {feeds} = FeedStore;
-    const intl = useIntl();
+    const {i18n} = useLingui();
 
     if (feeds.length === 0) {
       return (
         <ul className="interactive-list">
           <li className="interactive-list__item">
-            <FormattedMessage id="feeds.no.feeds.defined" />
+            <Trans id="feeds.no.feeds.defined" />
           </li>
         </ul>
       );
@@ -60,7 +60,7 @@ const FeedList: FC<FeedListProps> = observer(
                     className="interactive-list__detail-list__item
                 interactive-list__detail-list__item--overflow
                 interactive-list__detail interactive-list__detail--secondary">
-                    <FormattedMessage id="feeds.match.count" values={{count: matchedCount}} />
+                    <Trans id="feeds.match.count" values={{count: matchedCount}} />
                   </li>
                   {feed === currentFeed && (
                     <li
@@ -74,7 +74,7 @@ const FeedList: FC<FeedListProps> = observer(
                   <li
                     className="interactive-list__detail-list__item
                 interactive-list__detail interactive-list__detail--tertiary">
-                    {`${intervalText} ${intl.formatMessage({id: intervalMultiplierMessage})}`}
+                    {`${intervalText} ${i18n._(intervalMultiplierMessage)}`}
                   </li>
                   <li
                     className="interactive-list__detail-list__item

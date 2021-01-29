@@ -1,5 +1,5 @@
-import {FormattedMessage, useIntl} from 'react-intl';
 import {FC, useState} from 'react';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Form, FormRow, Select, SelectItem, Radio} from '@client/ui';
 import Languages from '@client/constants/Languages';
@@ -18,7 +18,7 @@ interface UITabProps {
 }
 
 const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [torrentListViewSize, setTorrentListViewSize] = useState(SettingStore.floodSettings.torrentListViewSize);
   const [selectedLanguage, setSelectedLanguage] = useState(SettingStore.floodSettings.language);
   const [UITagSelectorMode, setUITagSelectorMode] = useState(SettingStore.floodSettings.UITagSelectorMode);
@@ -46,55 +46,53 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
         }
       }}>
       <ModalFormSectionHeader key="locale-header">
-        <FormattedMessage id="settings.ui.language" />
+        <Trans id="settings.ui.language" />
       </ModalFormSectionHeader>
       <FormRow key="locale-selection">
         <Select defaultID={selectedLanguage} id="language">
           {Object.keys(Languages).map((languageID) => (
             <SelectItem key={languageID} id={languageID}>
               {Languages[languageID as 'auto'].id != null
-                ? intl.formatMessage({
-                    id: Languages[languageID as 'auto'].id,
-                  })
+                ? i18n._(Languages[languageID as 'auto'].id)
                 : Languages[languageID as Language]}
             </SelectItem>
           ))}
         </Select>
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.ui.tag.selector.mode" />
+        <Trans id="settings.ui.tag.selector.mode" />
       </ModalFormSectionHeader>
       <FormRow>
         <Radio defaultChecked={UITagSelectorMode === 'single'} groupID="ui-tag-selector-mode" id="single" width="auto">
-          <FormattedMessage id="settings.ui.tag.selector.mode.single" />
+          <Trans id="settings.ui.tag.selector.mode.single" />
         </Radio>
         <Radio defaultChecked={UITagSelectorMode === 'multi'} groupID="ui-tag-selector-mode" id="multi" width="auto">
-          <FormattedMessage id="settings.ui.tag.selector.mode.multi" />
+          <Trans id="settings.ui.tag.selector.mode.multi" />
         </Radio>
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.ui.torrent.list" />
+        <Trans id="settings.ui.torrent.list" />
       </ModalFormSectionHeader>
       <FormRow>
         <Radio defaultChecked={torrentListViewSize === 'expanded'} groupID="ui-torrent-size" id="expanded" width="auto">
-          <FormattedMessage id="settings.ui.torrent.size.expanded" />
+          <Trans id="settings.ui.torrent.size.expanded" />
         </Radio>
         <Radio
           defaultChecked={torrentListViewSize === 'condensed'}
           groupID="ui-torrent-size"
           id="condensed"
           width="auto">
-          <FormattedMessage id="settings.ui.torrent.size.condensed" />
+          <Trans id="settings.ui.torrent.size.condensed" />
         </Radio>
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.ui.displayed.details" />
+        <Trans id="settings.ui.displayed.details" />
       </ModalFormSectionHeader>
       <FormRow>
         <TorrentListColumnsList torrentListViewSize={torrentListViewSize} onSettingsChange={onSettingsChange} />
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.ui.displayed.context.menu.items" />
+        <Trans id="settings.ui.displayed.context.menu.items" />
       </ModalFormSectionHeader>
       <FormRow>
         <TorrentContextMenuActionsList onSettingsChange={onSettingsChange} />

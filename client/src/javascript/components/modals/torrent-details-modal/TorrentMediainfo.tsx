@@ -1,6 +1,6 @@
 import axios, {CancelTokenSource} from 'axios';
 import {FC, useEffect, useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Button} from '@client/ui';
 import {Checkmark, Clipboard} from '@client/ui/icons';
@@ -10,7 +10,7 @@ import UIStore from '@client/stores/UIStore';
 import Tooltip from '../../general/Tooltip';
 
 const TorrentMediainfo: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const cancelToken = useRef<CancelTokenSource>(axios.CancelToken.source());
   const clipboardRef = useRef<HTMLInputElement>(null);
   const [mediainfo, setMediainfo] = useState<string | null>(null);
@@ -53,14 +53,12 @@ const TorrentMediainfo: FC = () => {
       <div className="mediainfo__toolbar">
         <div className="mediainfo__toolbar__item">
           <span className="torrent-details__table__heading--tertiary">
-            <FormattedMessage id={headingMessageId} />
+            <Trans id={headingMessageId} />
           </span>
         </div>
         {mediainfo && (
           <Tooltip
-            content={intl.formatMessage({
-              id: isCopiedToClipboard ? 'general.clipboard.copied' : 'general.clipboard.copy',
-            })}
+            content={i18n._(isCopiedToClipboard ? 'general.clipboard.copied' : 'general.clipboard.copy')}
             wrapperClassName="tooltip__wrapper mediainfo__toolbar__item">
             <Button
               priority="tertiary"

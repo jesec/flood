@@ -1,6 +1,6 @@
 import {FC, useRef, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Button, Form, FormRow, Select, SelectItem, Textbox} from '@client/ui';
 import FeedActions from '@client/actions/FeedActions';
@@ -11,7 +11,7 @@ import FeedItems from './FeedItems';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
 
 const FeedItemsForm: FC = observer(() => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const manualAddingFormRef = useRef<Form>(null);
   const [selectedFeedID, setSelectedFeedID] = useState<string | null>(null);
 
@@ -55,22 +55,20 @@ const FeedItemsForm: FC = observer(() => {
       }}
       ref={manualAddingFormRef}>
       <ModalFormSectionHeader>
-        <FormattedMessage id="feeds.browse.feeds" />
+        <Trans id="feeds.browse.feeds" />
       </ModalFormSectionHeader>
       <FormRow>
         <Select
           disabled={!feeds.length}
           grow={false}
           id="feedID"
-          label={intl.formatMessage({
-            id: 'feeds.select.feed',
-          })}
+          label={i18n._('feeds.select.feed')}
           width="three-eighths">
           {!feeds.length
             ? [
                 <SelectItem key="empty" id="placeholder" isPlaceholder>
                   <em>
-                    <FormattedMessage id="feeds.no.feeds.available" />
+                    <Trans id="feeds.no.feeds.available" />
                   </em>
                 </SelectItem>,
               ]
@@ -89,26 +87,18 @@ const FeedItemsForm: FC = observer(() => {
                 [
                   <SelectItem key="select-feed" id="placeholder" isPlaceholder>
                     <em>
-                      <FormattedMessage id="feeds.select.feed" />
+                      <Trans id="feeds.select.feed" />
                     </em>
                   </SelectItem>,
                 ],
               )}
         </Select>
         {selectedFeedID && (
-          <Textbox
-            id="search"
-            label={intl.formatMessage({
-              id: 'feeds.search.term',
-            })}
-            placeholder={intl.formatMessage({
-              id: 'feeds.search',
-            })}
-          />
+          <Textbox id="search" label={i18n._('feeds.search.term')} placeholder={i18n._('feeds.search')} />
         )}
         {selectedFeedID && (
           <Button key="button" type="submit" labelOffset>
-            <FormattedMessage id="button.download" />
+            <Trans id="button.download" />
           </Button>
         )}
       </FormRow>

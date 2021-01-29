@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {FormGroup, FormRow, Textbox} from '@client/ui';
 
@@ -12,7 +12,7 @@ export interface TransmissionConnectionSettingsProps {
 const TransmissionConnectionSettingsForm: FC<TransmissionConnectionSettingsProps> = ({
   onSettingsChange,
 }: TransmissionConnectionSettingsProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [settings, setSettings] = useState<TransmissionConnectionSettings>({
     client: 'Transmission',
     type: 'rpc',
@@ -44,29 +44,23 @@ const TransmissionConnectionSettingsForm: FC<TransmissionConnectionSettingsProps
           <Textbox
             onChange={(e) => handleFormChange('url', e.target.value)}
             id="url"
-            label={<FormattedMessage id="connection.settings.transmission.url" />}
-            placeholder={intl.formatMessage({
-              id: 'connection.settings.transmission.url.input.placeholder',
-            })}
+            label={<Trans id="connection.settings.transmission.url" />}
+            placeholder={i18n._('connection.settings.transmission.url.input.placeholder')}
           />
         </FormRow>
         <FormRow>
           <Textbox
             onChange={(e) => handleFormChange('username', e.target.value)}
             id="transmission-username"
-            label={<FormattedMessage id="connection.settings.transmission.username" />}
-            placeholder={intl.formatMessage({
-              id: 'connection.settings.transmission.username.input.placeholder',
-            })}
+            label={<Trans id="connection.settings.transmission.username" />}
+            placeholder={i18n._('connection.settings.transmission.username.input.placeholder')}
             autoComplete="off"
           />
           <Textbox
             onChange={(e) => handleFormChange('password', e.target.value)}
             id="transmission-password"
-            label={<FormattedMessage id="connection.settings.transmission.password" />}
-            placeholder={intl.formatMessage({
-              id: 'connection.settings.transmission.password.input.placeholder',
-            })}
+            label={<Trans id="connection.settings.transmission.password" />}
+            placeholder={i18n._('connection.settings.transmission.password.input.placeholder')}
             autoComplete="off"
             type="password"
           />

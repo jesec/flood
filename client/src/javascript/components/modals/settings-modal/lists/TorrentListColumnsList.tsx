@@ -1,5 +1,5 @@
 import {Component, ReactNode} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 
 import {Checkbox} from '@client/ui';
 import {Error} from '@client/ui/icons';
@@ -95,7 +95,7 @@ class TorrentListColumnsList extends Component<TorrentListColumnsListProps, Torr
           <Checkbox
             defaultChecked={visible}
             onClick={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
-            <FormattedMessage id="settings.ui.torrent.details.enabled" />
+            <Trans id="settings.ui.torrent.details.enabled" />
           </Checkbox>
         </span>
       );
@@ -106,7 +106,7 @@ class TorrentListColumnsList extends Component<TorrentListColumnsListProps, Torr
       this.props.torrentListViewSize === 'expanded' &&
       index < this.state.torrentListColumns.length - 1
     ) {
-      const tooltipContent = <FormattedMessage id="settings.ui.torrent.details.tags.placement" />;
+      const tooltipContent = <Trans id="settings.ui.torrent.details.tags.placement" />;
 
       warning = (
         <Tooltip
@@ -128,7 +128,7 @@ class TorrentListColumnsList extends Component<TorrentListColumnsListProps, Torr
       <div className="sortable-list__content sortable-list__content__wrapper">
         {warning}
         <span className="sortable-list__content sortable-list__content--primary">
-          <FormattedMessage id={TorrentListColumns[id].id} />
+          <Trans id={TorrentListColumns[id]} />
         </span>
         {checkbox}
       </div>

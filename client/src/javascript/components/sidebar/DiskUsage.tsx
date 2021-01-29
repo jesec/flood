@@ -1,6 +1,6 @@
 import {FC, ReactNode, ReactNodeArray} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans} from '@lingui/react';
 
 import type {Disk} from '@shared/types/DiskUsage';
 
@@ -46,9 +46,9 @@ const DiskUsage: FC = observer(() => {
         <Tooltip
           content={
             <ul className="diskusage__details-list">
-              <DiskUsageTooltipItem value={d.used} label={<FormattedMessage id="status.diskusage.used" />} />
-              <DiskUsageTooltipItem value={d.avail} label={<FormattedMessage id="status.diskusage.free" />} />
-              <DiskUsageTooltipItem value={d.size} label={<FormattedMessage id="status.diskusage.total" />} />
+              <DiskUsageTooltipItem value={d.used} label={<Trans id="status.diskusage.used" />} />
+              <DiskUsageTooltipItem value={d.avail} label={<Trans id="status.diskusage.free" />} />
+              <DiskUsageTooltipItem value={d.size} label={<Trans id="status.diskusage.total" />} />
             </ul>
           }
           position="top"
@@ -69,7 +69,7 @@ const DiskUsage: FC = observer(() => {
   return (
     <ul className="sidebar-filter sidebar__item">
       <li className="sidebar-filter__item sidebar-filter__item--heading">
-        <FormattedMessage id="status.diskusage.title" />
+        <Trans id="status.diskusage.title" />
       </li>
       {diskNodes}
     </ul>

@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Button, FormRow, FormRowGroup, Select, SelectItem, Textbox} from '@client/ui';
 
@@ -20,7 +20,7 @@ const FeedForm: FC<FeedFormProps> = ({
   isSubmitting,
   onCancel,
 }: FeedFormProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const feedInterval = currentFeed?.interval ?? defaultFeed.interval;
 
   let defaultIntervalTextValue = feedInterval;
@@ -40,29 +40,21 @@ const FeedForm: FC<FeedFormProps> = ({
       <FormRow>
         <Textbox
           id="label"
-          label={intl.formatMessage({
-            id: 'feeds.label',
-          })}
-          placeholder={intl.formatMessage({
-            id: 'feeds.label',
-          })}
+          label={i18n._('feeds.label')}
+          placeholder={i18n._('feeds.label')}
           defaultValue={currentFeed?.label ?? defaultFeed.label}
         />
         <Textbox
           id="interval"
-          label={intl.formatMessage({
-            id: 'feeds.select.interval',
-          })}
-          placeholder={intl.formatMessage({
-            id: 'feeds.interval',
-          })}
+          label={i18n._('feeds.select.interval')}
+          placeholder={i18n._('feeds.interval')}
           defaultValue={defaultIntervalTextValue}
           width="one-eighth"
         />
         <Select labelOffset defaultID={defaultIntervalMultiplier} id="intervalMultiplier" width="one-eighth">
           {intervalMultipliers.map((interval) => (
             <SelectItem key={interval.value} id={interval.value}>
-              {intl.formatMessage({id: interval.message})}
+              {i18n._(interval.message)}
             </SelectItem>
           ))}
         </Select>
@@ -70,17 +62,15 @@ const FeedForm: FC<FeedFormProps> = ({
       <FormRow>
         <Textbox
           id="url"
-          label={intl.formatMessage({
-            id: 'feeds.url',
-          })}
-          placeholder={intl.formatMessage({id: 'feeds.url'})}
+          label={i18n._('feeds.url')}
+          placeholder={i18n._('feeds.url')}
           defaultValue={currentFeed?.url ?? defaultFeed?.url}
         />
         <Button labelOffset onClick={onCancel}>
-          <FormattedMessage id="button.cancel" />
+          <Trans id="button.cancel" />
         </Button>
         <Button labelOffset type="submit" isLoading={isSubmitting}>
-          <FormattedMessage id="button.save.feed" />
+          <Trans id="button.save.feed" />
         </Button>
       </FormRow>
     </FormRowGroup>

@@ -1,6 +1,6 @@
 import {FC} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans} from '@lingui/react';
 
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
@@ -38,7 +38,7 @@ const TrackerFilters: FC = observer(() => {
   return (
     <ul className="sidebar-filter sidebar__item">
       <li className="sidebar-filter__item sidebar-filter__item--heading">
-        <FormattedMessage id="filter.tracker.title" />
+        <Trans id="filter.tracker.title" />
       </li>
       {filterElements}
     </ul>

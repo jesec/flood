@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
-import {FormattedMessage, useIntl} from 'react-intl';
 import {forwardRef, MutableRefObject, ReactNode, useEffect, useRef, useState} from 'react';
+import {Trans, useLingui} from '@lingui/react';
 import {useEnsuredForwardedRef} from 'react-use';
 
 import {Checkbox, ContextMenu, FormElementAddon, FormRow, FormRowGroup, Portal, Textbox} from '@client/ui';
@@ -45,7 +45,7 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
     const formRowRef = useRef<HTMLDivElement>(null);
     const textboxRef = useEnsuredForwardedRef(ref as MutableRefObject<HTMLInputElement>);
 
-    const intl = useIntl();
+    const {i18n} = useLingui();
 
     useEffect(() => {
       const closeDirectoryList = (): void => {
@@ -71,14 +71,14 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
     if (showBasePathToggle) {
       toggles.push(
         <Checkbox grow={false} id="isBasePath" key="isBasePath">
-          <FormattedMessage id="torrents.destination.base_path" />
+          <Trans id="torrents.destination.base_path" />
         </Checkbox>,
       );
     }
     if (showCompletedToggle) {
       toggles.push(
         <Checkbox grow={false} id="isCompleted" key="isCompleted">
-          <FormattedMessage id="torrents.destination.completed" />
+          <Trans id="torrents.destination.completed" />
         </Checkbox>,
       );
     }
@@ -86,7 +86,7 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
       // TODO: this is getting bloated. toggles can be moved to their own elements...
       toggles.push(
         <Checkbox grow={false} id="isSequential" key="isSequential">
-          <FormattedMessage id="torrents.destination.sequential" />
+          <Trans id="torrents.destination.sequential" />
         </Checkbox>,
       );
     }
@@ -118,9 +118,7 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
               {leading: true},
             )}
             onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
-            placeholder={intl.formatMessage({
-              id: 'torrents.add.destination.placeholder',
-            })}
+            placeholder={i18n._('torrents.add.destination.placeholder')}
             ref={textboxRef}>
             <FormElementAddon
               onClick={() => {
@@ -140,7 +138,6 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
                 triggerRef={textboxRef}>
                 <FilesystemBrowser
                   directory={destination}
-                  intl={intl}
                   selectable={selectable}
                   onItemSelection={(newDestination: string, isDirectory = true) => {
                     if (textboxRef.current != null) {

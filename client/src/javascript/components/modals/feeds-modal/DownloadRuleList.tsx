@@ -1,6 +1,6 @@
 import {FC} from 'react';
-import {FormattedMessage} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans} from '@lingui/react';
 
 import {Close, Edit} from '@client/ui/icons';
 
@@ -22,7 +22,7 @@ const DownloadRuleList: FC<DownloadRuleListProps> = observer(
       return (
         <ul className="interactive-list">
           <li className="interactive-list__item">
-            <FormattedMessage id="feeds.no.rules.defined" />
+            <Trans id="feeds.no.rules.defined" />
           </li>
         </ul>
       );
@@ -40,7 +40,7 @@ const DownloadRuleList: FC<DownloadRuleListProps> = observer(
               <li
                 className="interactive-list__detail-list__item
         interactive-list__detail interactive-list__detail--tertiary">
-                <FormattedMessage id="feeds.exclude" />
+                <Trans id="feeds.exclude" />
                 {': '}
                 {rule.exclude}
               </li>
@@ -56,7 +56,7 @@ const DownloadRuleList: FC<DownloadRuleListProps> = observer(
 
             tags = (
               <li className="interactive-list__detail-list__item interactive-list__detail interactive-list__detail--tertiary">
-                <FormattedMessage id="feeds.tags" />
+                <Trans id="feeds.tags" />
                 {': '}
                 {tagNodes}
               </li>
@@ -76,7 +76,7 @@ const DownloadRuleList: FC<DownloadRuleListProps> = observer(
                     className="interactive-list__detail-list__item
             interactive-list__detail-list__item--overflow
             interactive-list__detail interactive-list__detail--secondary">
-                    <FormattedMessage id="feeds.match.count" values={{count: matchedCount}} />
+                    <Trans id="feeds.match.count" values={{count: matchedCount}} />
                   </li>
                   {rule === currentRule && (
                     <li
@@ -95,7 +95,7 @@ const DownloadRuleList: FC<DownloadRuleListProps> = observer(
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                     }}>
-                    <FormattedMessage id="feeds.match" />
+                    <Trans id="feeds.match" />
                     {': '}
                     {rule.match}
                   </li>
