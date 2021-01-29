@@ -31,11 +31,6 @@
     "zh-Hant"
   ],
   "sourceLocale": "en",
-  "fallbackLocales": {
-    "zh-Hans": "zh-Hant",
-    "zh-Hant": "zh-Hans",
-    "default": "en"
-  },
   "catalogs": [
     {
       "path": "client/src/javascript/i18n/strings/{locale}",
