@@ -39,21 +39,17 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
 
         if (inputElement.name === 'language') {
           const newSelectedLanguage = formData.language as FloodSettings['language'];
-          if (newSelectedLanguage === 'translate') {
-            SettingStore.saveFloodSettings({language: 'translate'});
-          } else {
-            setSelectedLanguage(newSelectedLanguage);
-            onSettingsChange({
-              language: selectedLanguage,
-            });
-          }
+          setSelectedLanguage(newSelectedLanguage);
+          onSettingsChange({
+            language: selectedLanguage,
+          });
         }
       }}>
       <ModalFormSectionHeader key="locale-header">
         <FormattedMessage id="settings.ui.language" />
       </ModalFormSectionHeader>
       <FormRow key="locale-selection">
-        <Select disabled={selectedLanguage === 'translate'} defaultID={selectedLanguage} id="language">
+        <Select defaultID={selectedLanguage} id="language">
           {Object.keys(Languages).map((languageID) => (
             <SelectItem key={languageID} id={languageID}>
               {Languages[languageID as 'auto'].id != null

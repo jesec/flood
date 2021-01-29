@@ -13,19 +13,10 @@ import EN from './strings.compiled.json';
 
 const messagesCache: Partial<Record<Exclude<Language, 'auto'>, Record<string, MessageFormatElement[]>>> = {en: EN};
 
-const inContextTranslator = document.createElement('script');
-inContextTranslator.src = '//cdn.crowdin.com/jipt/jipt.js';
-
-function loadTranslator() {
-  if (!document.head.contains(inContextTranslator)) {
-    document.head.appendChild(inContextTranslator);
-  }
-}
-
 async function loadMessages(locale: Exclude<Language, 'auto'>) {
   const messages: Record<string, MessageFormatElement[]> = await import(
     /* webpackChunkName: 'i18n' */
-    `./compiled/${locale === 'translate' ? 'en' : locale}.json`
+    `./compiled/${locale}.json`
   );
 
   messagesCache[locale] = messages;
@@ -34,10 +25,6 @@ async function loadMessages(locale: Exclude<Language, 'auto'>) {
 }
 
 function getMessages(locale: Exclude<Language, 'auto'>) {
-  if (locale === 'translate') {
-    loadTranslator();
-  }
-
   if (messagesCache[locale]) {
     return messagesCache[locale];
   }
@@ -64,7 +51,7 @@ const AsyncIntlProvider: FC<AsyncIntlProviderProps> = ({language, children}: Asy
 
   const messages = getMessages(validatedLocale.language);
   return (
-    <IntlProvider locale={validatedLocale.language === 'translate' ? 'en' : validatedLocale.locale} messages={messages}>
+    <IntlProvider locale={validatedLocale.language} messages={messages}>
       {children}
     </IntlProvider>
   );
