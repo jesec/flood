@@ -1,0 +1,22 @@
+{
+  "name": "Flood development container",
+  "context": "..",
+  "dockerFile": "./Dockerfile",
+  "runArgs": ["--init", "--privileged"],
+  "postCreateCommand": "/usr/local/share/docker-init.sh",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/zsh"
+  },
+  "extensions": [
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "github.vscode-pull-request-github",
+    "ms-azuretools.vscode-docker",
+    "ms-vscode.vscode-typescript-next",
+    "orta.vscode-jest",
+    "streetsidesoftware.code-spell-checker",
+    "visualstudioexptteam.vscodeintellicode"
+  ],
+  "forwardPorts": [3000, 4200]
+}
