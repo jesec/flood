@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 
 import {Checkbox, Form, FormRow, Textbox} from '@client/ui';
 
@@ -27,13 +27,13 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
         onClientSettingsChange(newChangedClientSettings);
       }}>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.connectivity.incoming.heading" />
+        <Trans id="settings.connectivity.incoming.heading" />
       </ModalFormSectionHeader>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'networkPortRange')}
           id="networkPortRange"
-          label={<FormattedMessage id="settings.connectivity.port.range.label" />}
+          label={<Trans id="settings.connectivity.port.range.label" />}
           width="one-quarter"
         />
         <Checkbox
@@ -42,7 +42,7 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
           id="networkPortRandom"
           labelOffset
           matchTextboxHeight>
-          <FormattedMessage id="settings.connectivity.port.randomize.label" />
+          <Trans id="settings.connectivity.port.randomize.label" />
         </Checkbox>
         <Checkbox
           defaultChecked={getChangedClientSetting(changedClientSettings, 'networkPortOpen')}
@@ -50,29 +50,29 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
           id="networkPortOpen"
           labelOffset
           matchTextboxHeight>
-          <FormattedMessage id="settings.connectivity.port.open.label" />
+          <Trans id="settings.connectivity.port.open.label" />
         </Checkbox>
       </FormRow>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'networkLocalAddress')}
           id="networkLocalAddress"
-          label={<FormattedMessage id="settings.connectivity.ip.hostname.label" />}
+          label={<Trans id="settings.connectivity.ip.hostname.label" />}
         />
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'networkHttpMaxOpen')}
           id="networkHttpMaxOpen"
-          label={<FormattedMessage id="settings.connectivity.max.http.connections" />}
+          label={<Trans id="settings.connectivity.max.http.connections" />}
         />
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.connectivity.dpd.heading" />
+        <Trans id="settings.connectivity.dpd.heading" />
       </ModalFormSectionHeader>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'dhtPort')}
           id="dhtPort"
-          label={<FormattedMessage id="settings.connectivity.dht.port.label" />}
+          label={<Trans id="settings.connectivity.dht.port.label" />}
           width="one-quarter"
         />
         <Checkbox
@@ -81,7 +81,7 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
           id="dht"
           labelOffset
           matchTextboxHeight>
-          <FormattedMessage id="settings.connectivity.dht.label" />
+          <Trans id="settings.connectivity.dht.label" />
         </Checkbox>
         <Checkbox
           defaultChecked={getChangedClientSetting(changedClientSettings, 'protocolPex')}
@@ -89,41 +89,41 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
           id="protocolPex"
           labelOffset
           matchTextboxHeight>
-          <FormattedMessage id="settings.connectivity.peer.exchange.label" />
+          <Trans id="settings.connectivity.peer.exchange.label" />
         </Checkbox>
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.connectivity.peers.heading" />
+        <Trans id="settings.connectivity.peers.heading" />
       </ModalFormSectionHeader>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleMinPeersNormal')}
           id="throttleMinPeersNormal"
-          label={<FormattedMessage id="settings.connectivity.peers.min.label" />}
+          label={<Trans id="settings.connectivity.peers.min.label" />}
         />
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleMaxPeersNormal')}
           id="throttleMaxPeersNormal"
-          label={<FormattedMessage id="settings.connectivity.peers.max.label" />}
+          label={<Trans id="settings.connectivity.peers.max.label" />}
         />
       </FormRow>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleMinPeersSeed')}
           id="throttleMinPeersSeed"
-          label={<FormattedMessage id="settings.connectivity.peers.seeding.min.label" />}
+          label={<Trans id="settings.connectivity.peers.seeding.min.label" />}
         />
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleMaxPeersSeed')}
           id="throttleMaxPeersSeed"
-          label={<FormattedMessage id="settings.connectivity.peers.seeding.max.label" />}
+          label={<Trans id="settings.connectivity.peers.seeding.max.label" />}
         />
       </FormRow>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'trackersNumWant')}
           id="trackersNumWant"
-          label={<FormattedMessage id="settings.connectivity.peers.desired.label" />}
+          label={<Trans id="settings.connectivity.peers.desired.label" />}
           width="one-half"
         />
       </FormRow>

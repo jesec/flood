@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {Form, FormRow, Textbox} from '@client/ui';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -13,7 +13,7 @@ import TextboxRepeater, {getTextArray} from '../../general/form-elements/Textbox
 
 const SetTrackersModal: FC = () => {
   const formRef = useRef<Form>(null);
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [isSettingTrackers, setIsSettingTrackers] = useState<boolean>(false);
   const [trackerState, setTrackerState] = useState<{
     isLoadingTrackers: boolean;
@@ -38,28 +38,18 @@ const SetTrackersModal: FC = () => {
 
   return (
     <Modal
-      heading={intl.formatMessage({
-        id: 'torrents.set.trackers.heading',
-      })}
+      heading={i18n._('torrents.set.trackers.heading')}
       content={
         <div className="modal__content inverse">
           <Form ref={formRef}>
             {trackerState.isLoadingTrackers ? (
               <FormRow>
-                <Textbox
-                  id="loading"
-                  placeholder={intl.formatMessage({
-                    id: 'torrents.set.trackers.loading.trackers',
-                  })}
-                  disabled
-                />
+                <Textbox id="loading" placeholder={i18n._('torrents.set.trackers.loading.trackers')} disabled />
               </FormRow>
             ) : (
               <TextboxRepeater
                 id="trackers"
-                placeholder={intl.formatMessage({
-                  id: 'torrents.set.trackers.enter.tracker',
-                })}
+                placeholder={i18n._('torrents.set.trackers.enter.tracker')}
                 defaultValues={
                   trackerState.trackerURLs.length === 0
                     ? undefined
@@ -76,9 +66,7 @@ const SetTrackersModal: FC = () => {
       actions={[
         {
           clickHandler: null,
-          content: intl.formatMessage({
-            id: 'button.cancel',
-          }),
+          content: i18n._('button.cancel'),
           triggerDismiss: true,
           type: 'tertiary',
         },
@@ -101,9 +89,7 @@ const SetTrackersModal: FC = () => {
               UIStore.dismissModal();
             });
           },
-          content: intl.formatMessage({
-            id: 'torrents.set.trackers.button.set',
-          }),
+          content: i18n._('torrents.set.trackers.button.set'),
           isLoading: isSettingTrackers || trackerState.isLoadingTrackers,
           triggerDismiss: false,
           type: 'primary',

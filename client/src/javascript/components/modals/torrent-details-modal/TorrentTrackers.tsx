@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 
@@ -36,11 +36,11 @@ const TorrentTrackers: FC = () => {
         <thead className="torrent-details__table__heading">
           <tr>
             <th className="torrent-details__table__heading--primary">
-              <FormattedMessage id="torrents.details.trackers" />
+              <Trans id="torrents.details.trackers" />
               <Badge>{trackerCount}</Badge>
             </th>
             <th className="torrent-details__table__heading--secondary">
-              <FormattedMessage id="torrents.details.trackers.type" />
+              <Trans id="torrents.details.trackers.type" />
             </th>
           </tr>
         </thead>

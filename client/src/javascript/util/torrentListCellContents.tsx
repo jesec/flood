@@ -1,4 +1,5 @@
-import {FormattedDate, FormattedMessage, FormattedNumber} from 'react-intl';
+import {i18n} from '@lingui/core';
+import {Trans} from '@lingui/react';
 
 import {CheckmarkThick} from '@client/ui/icons';
 import Duration from '@client/components/general/Duration';
@@ -10,18 +11,18 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 const booleanTransformer = (value: boolean) =>
   value ? <CheckmarkThick className="torrent__detail__icon torrent__detail__icon--checkmark" /> : null;
-const dateTransformer = (date: number) => <FormattedDate value={date * 1000} />;
+const dateTransformer = (date: number) => i18n.date(new Date(date * 1000));
 const peersTransformer = (peersConnected: number, totalPeers: number) => (
-  <FormattedMessage
+  <Trans
     id="torrent.list.peers"
     values={{
-      connected: <FormattedNumber value={peersConnected} />,
+      connected: i18n.number(peersConnected),
       of: (
         <em className="unit">
-          <FormattedMessage id="torrent.list.peers.of" />
+          <Trans id="torrent.list.peers.of" />
         </em>
       ),
-      total: <FormattedNumber value={totalPeers} />,
+      total: i18n.number(totalPeers),
     }}
   />
 );
@@ -45,7 +46,7 @@ export const torrentListCellTransformers = {
       ))}
     </ul>
   ),
-  ratio: (ratio: TorrentProperties['ratio']) => <FormattedNumber value={ratio} maximumFractionDigits={2} />,
+  ratio: (ratio: TorrentProperties['ratio']) => i18n.number(ratio, {maximumFractionDigits: 2}),
   sizeBytes: sizeTransformer,
   trackerURIs: (trackers: TorrentProperties['trackerURIs']) => trackers.join(', '),
   upRate: speedTransformer,

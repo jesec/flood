@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import {FormattedMessage, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
 import {FC, useEffect, useState} from 'react';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Button, Checkbox, Form, FormRow, FormRowItem, Select, SelectItem} from '@client/ui';
 import ConfigStore from '@client/stores/ConfigStore';
@@ -19,7 +19,7 @@ const TorrentContents: FC = observer(() => {
   const [contents, setContents] = useState<TorrentContent[]>([]);
   const [itemsTree, setItemsTree] = useState<TorrentContentSelectionTree>({});
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   useEffect(() => {
     if (UIStore.activeModal?.id === 'torrent-details') {
@@ -85,7 +85,7 @@ const TorrentContents: FC = observer(() => {
     directoryHeadingIconContent = <Disk />;
     fileDetailContent = (
       <div className="directory-tree__node directory-tree__node--file">
-        <FormattedMessage id="torrents.details.files.loading" />
+        <Trans id="torrents.details.files.loading" />
       </div>
     );
   }
@@ -128,7 +128,7 @@ const TorrentContents: FC = observer(() => {
       <div className="directory-tree__selection-toolbar">
         <FormRow align="center">
           <FormRowItem width="one-quarter" grow={false} shrink={false}>
-            <FormattedMessage
+            <Trans
               id="torrents.details.selected.files"
               values={{
                 count: selectedIndices.length,
@@ -154,7 +154,7 @@ const TorrentContents: FC = observer(() => {
             }}
             grow={false}
             shrink={false}>
-            <FormattedMessage
+            <Trans
               id="torrents.details.files.download.file"
               values={{
                 count: selectedIndices.length,
@@ -163,23 +163,11 @@ const TorrentContents: FC = observer(() => {
           </Button>
           <Select id="file-priority" persistentPlaceholder shrink={false} defaultID="">
             <SelectItem id={-1} isPlaceholder>
-              <FormattedMessage id="torrents.details.selected.files.set.priority" />
+              <Trans id="torrents.details.selected.files.set.priority" />
             </SelectItem>
-            <SelectItem id={0}>
-              {intl.formatMessage({
-                id: 'priority.dont.download',
-              })}
-            </SelectItem>
-            <SelectItem id={1}>
-              {intl.formatMessage({
-                id: 'priority.normal',
-              })}
-            </SelectItem>
-            <SelectItem id={2}>
-              {intl.formatMessage({
-                id: 'priority.high',
-              })}
-            </SelectItem>
+            <SelectItem id={0}>{i18n._('priority.dont.download')}</SelectItem>
+            <SelectItem id={1}>{i18n._('priority.normal')}</SelectItem>
+            <SelectItem id={2}>{i18n._('priority.high')}</SelectItem>
           </Select>
         </FormRow>
       </div>

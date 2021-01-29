@@ -111,7 +111,6 @@ module.exports = {
   resolve: {
     extensions: ['.cjs', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
     alias: {
-      'react-intl': 'react-intl/react-intl-no-parser.umd.min.js',
       '@client': path.resolve('./client/src/javascript'),
       '@shared': path.resolve('./shared'),
     },

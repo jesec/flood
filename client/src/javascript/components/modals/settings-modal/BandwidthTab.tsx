@@ -1,5 +1,5 @@
-import {FormattedMessage} from 'react-intl';
 import {FC, FormEvent, useState} from 'react';
+import {Trans} from '@lingui/react';
 
 import {Form, FormRow, Textbox} from '@client/ui';
 import SettingStore from '@client/stores/SettingStore';
@@ -62,7 +62,7 @@ const BandwidthTab: FC<BandwidthTabProps> = ({onSettingsChange, onClientSettings
         onClientSettingsChange(newChangedClientSettings);
       }}>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.bandwidth.transferrate.heading" />
+        <Trans id="settings.bandwidth.transferrate.heading" />
       </ModalFormSectionHeader>
       <FormRow>
         <Textbox
@@ -71,7 +71,7 @@ const BandwidthTab: FC<BandwidthTabProps> = ({onSettingsChange, onClientSettings
               ? processSpeedsForDisplay(SettingStore.floodSettings.speedLimits.download)
               : 0
           }
-          label={<FormattedMessage id="settings.bandwidth.transferrate.dropdown.preset.download.label" />}
+          label={<Trans id="settings.bandwidth.transferrate.dropdown.preset.download.label" />}
           id="dropdownPresetDownload"
         />
       </FormRow>
@@ -82,46 +82,46 @@ const BandwidthTab: FC<BandwidthTabProps> = ({onSettingsChange, onClientSettings
               ? processSpeedsForDisplay(SettingStore.floodSettings.speedLimits.upload)
               : 0
           }
-          label={<FormattedMessage id="settings.bandwidth.transferrate.dropdown.preset.upload.label" />}
+          label={<Trans id="settings.bandwidth.transferrate.dropdown.preset.upload.label" />}
           id="dropdownPresetUpload"
         />
       </FormRow>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleGlobalDownSpeed')}
-          label={<FormattedMessage id="settings.bandwidth.transferrate.global.throttle.download" />}
+          label={<Trans id="settings.bandwidth.transferrate.global.throttle.download" />}
           id="throttleGlobalDownSpeed"
         />
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleGlobalUpSpeed')}
-          label={<FormattedMessage id="settings.bandwidth.transferrate.global.throttle.upload" />}
+          label={<Trans id="settings.bandwidth.transferrate.global.throttle.upload" />}
           id="throttleGlobalUpSpeed"
         />
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.bandwidth.slots.heading" />
+        <Trans id="settings.bandwidth.slots.heading" />
       </ModalFormSectionHeader>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleMaxUploads')}
-          label={<FormattedMessage id="settings.bandwidth.slots.upload.label" />}
+          label={<Trans id="settings.bandwidth.slots.upload.label" />}
           id="throttleMaxUploads"
         />
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleMaxUploadsGlobal')}
-          label={<FormattedMessage id="settings.bandwidth.slots.upload.global.label" />}
+          label={<Trans id="settings.bandwidth.slots.upload.global.label" />}
           id="throttleMaxUploadsGlobal"
         />
       </FormRow>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleMaxDownloads')}
-          label={<FormattedMessage id="settings.bandwidth.slots.download.label" />}
+          label={<Trans id="settings.bandwidth.slots.download.label" />}
           id="throttleMaxDownloads"
         />
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleMaxDownloadsGlobal')}
-          label={<FormattedMessage id="settings.bandwidth.slots.download.global.label" />}
+          label={<Trans id="settings.bandwidth.slots.download.global.label" />}
           id="throttleMaxDownloadsGlobal"
         />
       </FormRow>

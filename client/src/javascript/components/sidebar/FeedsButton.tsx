@@ -1,25 +1,18 @@
-import {defineMessages, useIntl} from 'react-intl';
 import {FC, useRef} from 'react';
+import {useLingui} from '@lingui/react';
 
 import {Feed} from '@client/ui/icons';
 import UIActions from '@client/actions/UIActions';
 
 import Tooltip from '../general/Tooltip';
 
-const MESSAGES = defineMessages({
-  feeds: {
-    id: 'sidebar.button.feeds',
-  },
-});
-
 const FeedsButton: FC = () => {
-  const intl = useIntl();
-  const label = intl.formatMessage(MESSAGES.feeds);
+  const {i18n} = useLingui();
   const tooltipRef = useRef<Tooltip>(null);
 
   return (
     <Tooltip
-      content={label}
+      content={i18n._('sidebar.button.feeds')}
       onClick={() => {
         if (tooltipRef.current != null) {
           tooltipRef.current.dismissTooltip();

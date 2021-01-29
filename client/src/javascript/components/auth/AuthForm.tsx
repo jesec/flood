@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '@client/ui';
 import AuthActions from '@client/actions/AuthActions';
@@ -20,7 +20,7 @@ interface AuthFormProps {
 }
 
 const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const formRef = useRef<Form>(null);
   const clientConnectionSettingsRef = useRef<ClientConnectionSettings | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | {id: string} | undefined>(undefined);
@@ -102,30 +102,16 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
           }}
           ref={formRef}>
           <PanelHeader>
-            <h1>
-              {isLoginMode
-                ? intl.formatMessage({
-                    id: 'auth.login',
-                  })
-                : intl.formatMessage({
-                    id: 'auth.create.an.account',
-                  })}
-            </h1>
+            <h1>{isLoginMode ? i18n._('auth.login') : i18n._('auth.create.an.account')}</h1>
           </PanelHeader>
           <PanelContent>
             <p className="copy--lead">
-              {isLoginMode
-                ? intl.formatMessage({
-                    id: 'auth.login.intro',
-                  })
-                : intl.formatMessage({
-                    id: 'auth.create.an.account.intro',
-                  })}
+              {isLoginMode ? i18n._('auth.login.intro') : i18n._('auth.create.an.account.intro')}
             </p>
             {errorMessage != null ? (
               <FormRow>
                 <FormError isLoading={isSubmitting}>
-                  {typeof errorMessage === 'string' ? errorMessage : intl.formatMessage(errorMessage)}
+                  {typeof errorMessage === 'string' ? errorMessage : i18n._(errorMessage)}
                 </FormError>
               </FormRow>
             ) : null}
@@ -159,18 +145,10 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
                     formRef.current.resetForm();
                   }
                 }}>
-                {intl.formatMessage({
-                  id: 'auth.input.clear',
-                })}
+                {i18n._('auth.input.clear')}
               </Button>
               <Button isLoading={isSubmitting} type="submit">
-                {isLoginMode
-                  ? intl.formatMessage({
-                      id: 'auth.log.in',
-                    })
-                  : intl.formatMessage({
-                      id: 'auth.create.account',
-                    })}
+                {isLoginMode ? i18n._('auth.log.in') : i18n._('auth.create.account')}
               </Button>
             </FormRow>
           </PanelFooter>

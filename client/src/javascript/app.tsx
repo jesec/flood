@@ -11,7 +11,6 @@ import AppWrapper from './components/AppWrapper';
 import LoadingOverlay from './components/general/LoadingOverlay';
 import AsyncIntlProvider from './i18n/languages';
 import ConfigStore from './stores/ConfigStore';
-import SettingStore from './stores/SettingStore';
 import UIStore from './stores/UIStore';
 import history from './util/history';
 
@@ -76,7 +75,7 @@ const FloodApp: FC = observer(() => {
 
   return (
     <Suspense fallback={<LoadingOverlay />}>
-      <AsyncIntlProvider language={SettingStore.floodSettings.language}>
+      <AsyncIntlProvider>
         <Router history={history}>
           <QueryParamProvider ReactRouterRoute={Route}>
             <AppWrapper className={ConfigStore.preferDark ? 'dark' : undefined}>

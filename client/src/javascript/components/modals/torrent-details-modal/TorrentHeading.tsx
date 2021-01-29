@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {FC, useEffect, useState} from 'react';
-import {FormattedMessage, FormattedNumber} from 'react-intl';
 import {observer} from 'mobx-react';
+import {Trans, useLingui} from '@lingui/react';
 
 import {Clock, DownloadThick, Ratio, Start, Stop, UploadThick} from '@client/ui/icons';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -16,6 +16,7 @@ import ProgressBar from '../../general/ProgressBar';
 import Size from '../../general/Size';
 
 const TorrentHeading: FC = observer(() => {
+  const {i18n} = useLingui();
   const torrent =
     UIStore.activeModal?.id === 'torrent-details' ? TorrentStore.torrents[UIStore.activeModal.hash] : undefined;
   const [torrentStatus, setTorrentStatus] = useState<'start' | 'stop'>('stop');
@@ -61,7 +62,7 @@ const TorrentHeading: FC = observer(() => {
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Ratio />
-            <FormattedNumber value={torrent.ratio} />
+            {i18n.number(torrent.ratio)}
           </li>
           <li className="torrent-details__sub-heading__tertiary">
             <Clock />
@@ -95,7 +96,7 @@ const TorrentHeading: FC = observer(() => {
               });
             }}>
             <Start />
-            <FormattedMessage id="torrents.details.actions.start" />
+            <Trans id="torrents.details.actions.start" />
           </li>
           <li
             className={classnames('torrent-details__sub-heading__tertiary', 'torrent-details__action', {
@@ -109,7 +110,7 @@ const TorrentHeading: FC = observer(() => {
               });
             }}>
             <Stop />
-            <FormattedMessage id="torrents.details.actions.stop" />
+            <Trans id="torrents.details.actions.stop" />
           </li>
         </ul>
       </div>

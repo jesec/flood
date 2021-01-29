@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import AuthActions from '@client/actions/AuthActions';
 import ConfigStore from '@client/stores/ConfigStore';
@@ -8,7 +8,7 @@ import {Logout} from '@client/ui/icons';
 import Tooltip from '../general/Tooltip';
 
 const LogoutButton: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   if (ConfigStore.authMethod === 'none') {
     return null;
@@ -16,9 +16,7 @@ const LogoutButton: FC = () => {
 
   return (
     <Tooltip
-      content={intl.formatMessage({
-        id: 'sidebar.button.log.out',
-      })}
+      content={i18n._('sidebar.button.log.out')}
       onClick={() =>
         AuthActions.logout().then(() => {
           window.location.reload();

@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {FC} from 'react';
 import {observer} from 'mobx-react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 import {useKeyPressEvent} from 'react-use';
 
 import {ContextMenu} from '@client/ui';
@@ -22,7 +22,7 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
     y: 0,
   };
 
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   useKeyPressEvent('Escape', () => UIActions.dismissContextMenu(id));
 
@@ -51,7 +51,7 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
                   className={classnames('menu__item__label--primary', {
                     'has-action': item.labelAction,
                   })}>
-                  <span className="menu__item__label">{intl.formatMessage({id: item.label})}</span>
+                  <span className="menu__item__label">{i18n._(item.label)}</span>
                   {item.labelAction ? (
                     <span className="menu__item__label__action">
                       <item.labelAction />

@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {FormError, FormGroup, FormRow, FormRowGroup, Radio, Textbox} from '@client/ui';
 
@@ -12,7 +12,7 @@ export interface RTorrentConnectionSettingsProps {
 const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
   onSettingsChange,
 }: RTorrentConnectionSettingsProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [type, setType] = useState<'tcp' | 'socket'>('socket');
   const [settings, setSettings] = useState<RTorrentConnectionSettings | null>(null);
 
@@ -47,10 +47,7 @@ const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
     <FormRow>
       <FormGroup>
         <FormRow>
-          <FormGroup
-            label={intl.formatMessage({
-              id: 'connection.settings.rtorrent.type',
-            })}>
+          <FormGroup label={i18n._('connection.settings.rtorrent.type')}>
             <FormRow>
               <Radio
                 onClick={() => {
@@ -60,7 +57,7 @@ const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
                 id="socket"
                 grow={false}
                 defaultChecked={type === 'socket'}>
-                <FormattedMessage id="connection.settings.rtorrent.type.socket" />
+                <Trans id="connection.settings.rtorrent.type.socket" />
               </Radio>
               <Radio
                 onClick={() => {
@@ -70,7 +67,7 @@ const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
                 id="tcp"
                 grow={false}
                 defaultChecked={type === 'tcp'}>
-                <FormattedMessage id="connection.settings.rtorrent.type.tcp" />
+                <Trans id="connection.settings.rtorrent.type.tcp" />
               </Radio>
             </FormRow>
           </FormGroup>
@@ -78,28 +75,20 @@ const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
         {type === 'tcp' ? (
           <FormRowGroup>
             <FormRow>
-              <FormError>
-                {intl.formatMessage({
-                  id: 'connection.settings.rtorrent.type.tcp.warning',
-                })}
-              </FormError>
+              <FormError>{i18n._('connection.settings.rtorrent.type.tcp.warning')}</FormError>
             </FormRow>
             <FormRow>
               <Textbox
                 onChange={(e) => handleFormChange('host', e.target.value)}
                 id="host"
-                label={<FormattedMessage id="connection.settings.rtorrent.host" />}
-                placeholder={intl.formatMessage({
-                  id: 'connection.settings.rtorrent.host.input.placeholder',
-                })}
+                label={<Trans id="connection.settings.rtorrent.host" />}
+                placeholder={i18n._('connection.settings.rtorrent.host.input.placeholder')}
               />
               <Textbox
                 onChange={(e) => handleFormChange('port', Number(e.target.value))}
                 id="port"
-                label={<FormattedMessage id="connection.settings.rtorrent.port" />}
-                placeholder={intl.formatMessage({
-                  id: 'connection.settings.rtorrent.port.input.placeholder',
-                })}
+                label={<Trans id="connection.settings.rtorrent.port" />}
+                placeholder={i18n._('connection.settings.rtorrent.port.input.placeholder')}
               />
             </FormRow>
           </FormRowGroup>
@@ -108,10 +97,8 @@ const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
             <Textbox
               onChange={(e) => handleFormChange('socket', e.target.value)}
               id="socket"
-              label={<FormattedMessage id="connection.settings.rtorrent.socket" />}
-              placeholder={intl.formatMessage({
-                id: 'connection.settings.rtorrent.socket.input.placeholder',
-              })}
+              label={<Trans id="connection.settings.rtorrent.socket" />}
+              placeholder={i18n._('connection.settings.rtorrent.socket.input.placeholder')}
             />
           </FormRow>
         )}

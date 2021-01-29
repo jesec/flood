@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import ConfigStore from '@client/stores/ConfigStore';
 import {ThemeSwitch} from '@client/ui/icons';
@@ -7,13 +7,11 @@ import {ThemeSwitch} from '@client/ui/icons';
 import Tooltip from '../general/Tooltip';
 
 const ThemeSwitchButton: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   return (
     <Tooltip
-      content={intl.formatMessage({
-        id: ConfigStore.preferDark ? 'sidebar.button.theme.light' : 'sidebar.button.theme.dark',
-      })}
+      content={i18n._(ConfigStore.preferDark ? 'sidebar.button.theme.light' : 'sidebar.button.theme.dark')}
       onClick={() => ConfigStore.setUserPreferDark(!ConfigStore.preferDark)}
       position="bottom"
       wrapperClassName="sidebar__action sidebar__icon-button

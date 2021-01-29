@@ -1,5 +1,5 @@
 import {FC, Suspense, useEffect, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 import {useInterval} from 'react-use';
 
 import {CheckmarkThick, CountryFlag, Lock, Spinner} from '@client/ui/icons';
@@ -37,7 +37,7 @@ const TorrentPeers: FC = () => {
         <thead className="torrent-details__table__heading">
           <tr>
             <th className="torrent-details__table__heading--primary">
-              <FormattedMessage id="torrents.details.peers" />
+              <Trans id="torrents.details.peers" />
               <Badge>{peers.length}</Badge>
             </th>
             <th className="torrent-details__table__heading--secondary">DL</th>

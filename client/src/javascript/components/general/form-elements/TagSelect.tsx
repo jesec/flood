@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {FC, ReactNode, ReactNodeArray, useEffect, useRef, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
 import sort from 'fast-sort';
+import {Trans} from '@lingui/react';
 import {useKeyPressEvent} from 'react-use';
 
 import {ContextMenu, FormElementAddon, FormRowItem, Portal, SelectItem, Textbox} from '@client/ui';
@@ -130,7 +130,7 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
                         setSelectedTags([...selectedTags.filter((key) => key !== ''), tag]);
                       }
                     }}>
-                    {tag === 'untagged' ? <FormattedMessage id="filter.untagged" /> : tag}
+                    {tag === 'untagged' ? <Trans id="filter.untagged" /> : tag}
                   </SelectItem>,
                 );
                 return accumulator;

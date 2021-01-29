@@ -1,7 +1,9 @@
 import {FC, useRef} from 'react';
-import {FormattedMessage, IntlShape, useIntl} from 'react-intl';
 import {observer} from 'mobx-react';
 import sortedIndex from 'lodash/sortedIndex';
+import {Trans, useLingui} from '@lingui/react';
+
+import type {I18n} from '@lingui/core';
 
 import ClientActions from '@client/actions/ClientActions';
 import {Limits} from '@client/ui/icons';
@@ -16,16 +18,16 @@ import Tooltip from '../general/Tooltip';
 import type {DropdownItem} from '../general/form-elements/Dropdown';
 
 const HumanReadableSpeed: FC<{bytes: number}> = ({bytes}: {bytes: number}) =>
-  bytes === 0 ? <FormattedMessage id="speed.unlimited" /> : <Size value={bytes} isSpeed precision={1} />;
+  bytes === 0 ? <Trans id="speed.unlimited" /> : <Size value={bytes} isSpeed precision={1} />;
 
 const getSpeedList = ({
-  intl,
+  i18n,
   direction,
   speedLimits,
   throttleGlobalDownSpeed,
   throttleGlobalUpSpeed,
 }: {
-  intl: IntlShape;
+  i18n: I18n;
   direction: TransferDirection;
   speedLimits: {
     download: Array<number>;
@@ -37,8 +39,8 @@ const getSpeedList = ({
   const heading = {
     className: `dropdown__label dropdown__label--${direction}`,
     ...(direction === 'download'
-      ? {displayName: intl.formatMessage({id: 'sidebar.speedlimits.download'})}
-      : {displayName: intl.formatMessage({id: 'sidebar.speedlimits.upload'})}),
+      ? {displayName: i18n._('sidebar.speedlimits.download')}
+      : {displayName: i18n._('sidebar.speedlimits.upload')}),
     selectable: false,
     value: null,
   };
@@ -92,12 +94,12 @@ const getSpeedList = ({
 };
 
 const SpeedLimitDropdown: FC = observer(() => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const tooltipRef = useRef<Tooltip>(null);
 
-  const label = intl.formatMessage({id: 'sidebar.button.speedlimits'});
+  const label = i18n._('sidebar.button.speedlimits');
   const speedListOptions = {
-    intl,
+    i18n,
     speedLimits: SettingStore.floodSettings.speedLimits,
     throttleGlobalDownSpeed: SettingStore.clientSettings?.throttleGlobalDownSpeed ?? 0,
     throttleGlobalUpSpeed: SettingStore.clientSettings?.throttleGlobalUpSpeed ?? 0,

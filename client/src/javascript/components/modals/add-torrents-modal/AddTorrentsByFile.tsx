@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {Form, FormRow} from '@client/ui';
 import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
@@ -29,7 +29,7 @@ const AddTorrentsByFile: FC = () => {
   const textboxRef = useRef<HTMLInputElement>(null);
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
 
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   return (
     <Form className="inverse" ref={formRef}>
@@ -42,9 +42,7 @@ const AddTorrentsByFile: FC = () => {
       </FormRow>
       <FormRow>
         <TagSelect
-          label={intl.formatMessage({
-            id: 'torrents.add.tags',
-          })}
+          label={i18n._('torrents.add.tags')}
           id="tags"
           onTagSelected={(tags) => {
             if (textboxRef.current != null) {
@@ -59,9 +57,7 @@ const AddTorrentsByFile: FC = () => {
       </FormRow>
       <FilesystemBrowserTextbox
         id="destination"
-        label={intl.formatMessage({
-          id: 'torrents.add.destination.label',
-        })}
+        label={i18n._('torrents.add.destination.label')}
         ref={textboxRef}
         selectable="directories"
         showBasePathToggle

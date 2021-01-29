@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 
 import {Form, FormRow} from '@client/ui';
 
@@ -15,7 +15,7 @@ interface DiskUsageTabProps {
 const DiskUsageTab: FC<DiskUsageTabProps> = (props: DiskUsageTabProps) => (
   <Form>
     <ModalFormSectionHeader>
-      <FormattedMessage id="settings.diskusage.mount.points" />
+      <Trans id="settings.diskusage.mount.points" />
     </ModalFormSectionHeader>
     <FormRow>
       <MountPointsList onSettingsChange={props.onSettingsChange} />

@@ -1,0 +1,51 @@
+{
+  "locales": [
+    "af",
+    "ar",
+    "ca",
+    "cs",
+    "da",
+    "de",
+    "el",
+    "en",
+    "es",
+    "fi",
+    "fr",
+    "he",
+    "hu",
+    "it",
+    "ja",
+    "ko",
+    "nl",
+    "no",
+    "pl",
+    "pt",
+    "ro",
+    "ru",
+    "sr",
+    "sv",
+    "tr",
+    "uk",
+    "vi",
+    "zh-Hans",
+    "zh-Hant"
+  ],
+  "sourceLocale": "en",
+  "fallbackLocales": {
+    "zh-Hans": "zh-Hant",
+    "zh-Hant": "zh-Hans",
+    "default": "en"
+  },
+  "catalogs": [
+    {
+      "path": "client/src/javascript/i18n/strings/{locale}",
+      "include": [
+        "<rootDir>/client/src/javascript"
+      ],
+      "exclude": [
+        "**/node_modules/**"
+      ]
+    }
+  ],
+  "format": "minimal"
+}

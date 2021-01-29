@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {FormattedMessage, useIntl} from 'react-intl';
+import {Trans, useLingui} from '@lingui/react';
 
 import {FormGroup, FormRow, Textbox} from '@client/ui';
 
@@ -12,7 +12,7 @@ export interface QBittorrentConnectionSettingsProps {
 const QBittorrentConnectionSettingsForm: FC<QBittorrentConnectionSettingsProps> = ({
   onSettingsChange,
 }: QBittorrentConnectionSettingsProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [settings, setSettings] = useState<QBittorrentConnectionSettings>({
     client: 'qBittorrent',
     type: 'web',
@@ -44,29 +44,23 @@ const QBittorrentConnectionSettingsForm: FC<QBittorrentConnectionSettingsProps> 
           <Textbox
             onChange={(e) => handleFormChange('url', e.target.value)}
             id="url"
-            label={<FormattedMessage id="connection.settings.qbittorrent.url" />}
-            placeholder={intl.formatMessage({
-              id: 'connection.settings.qbittorrent.url.input.placeholder',
-            })}
+            label={<Trans id="connection.settings.qbittorrent.url" />}
+            placeholder={i18n._('connection.settings.qbittorrent.url.input.placeholder')}
           />
         </FormRow>
         <FormRow>
           <Textbox
             onChange={(e) => handleFormChange('username', e.target.value)}
             id="qbt-username"
-            label={<FormattedMessage id="connection.settings.qbittorrent.username" />}
-            placeholder={intl.formatMessage({
-              id: 'connection.settings.qbittorrent.username.input.placeholder',
-            })}
+            label={<Trans id="connection.settings.qbittorrent.username" />}
+            placeholder={i18n._('connection.settings.qbittorrent.username.input.placeholder')}
             autoComplete="off"
           />
           <Textbox
             onChange={(e) => handleFormChange('password', e.target.value)}
             id="qbt-password"
-            label={<FormattedMessage id="connection.settings.qbittorrent.password" />}
-            placeholder={intl.formatMessage({
-              id: 'connection.settings.qbittorrent.password.input.placeholder',
-            })}
+            label={<Trans id="connection.settings.qbittorrent.password" />}
+            placeholder={i18n._('connection.settings.qbittorrent.password.input.placeholder')}
             autoComplete="off"
             type="password"
           />

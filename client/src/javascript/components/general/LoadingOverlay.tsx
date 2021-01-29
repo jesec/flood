@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {FC} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {CheckmarkThick} from '@client/ui/icons';
 
@@ -13,7 +13,7 @@ const ICONS = {
 };
 
 const LoadingDependencyList: FC<{dependencies: Dependencies}> = ({dependencies}: {dependencies: Dependencies}) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   return (
     <ul className="dependency-list">
@@ -28,7 +28,7 @@ const LoadingDependencyList: FC<{dependencies: Dependencies}> = ({dependencies}:
           <li className={classes} key={id}>
             {satisfied != null ? <span className="dependency-list__dependency__icon">{statusIcon}</span> : null}
             <span className="dependency-list__dependency__message">
-              {typeof message === 'string' ? message : intl.formatMessage(message)}
+              {typeof message === 'string' ? message : i18n._(message)}
             </span>
           </li>
         );

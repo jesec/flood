@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {Checkbox, Form, FormRow, Textbox} from '@client/ui';
 import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
@@ -25,74 +25,49 @@ type AddTorrentsByCreationFormData = {
 
 const AddTorrentsByCreation: FC = () => {
   const formRef = useRef<Form>(null);
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [isCreatingTorrents, setIsCreatingTorrents] = useState<boolean>(false);
 
   return (
     <Form className="inverse" ref={formRef}>
-      <FilesystemBrowserTextbox
-        id="sourcePath"
-        label={intl.formatMessage({
-          id: 'torrents.create.source.path.label',
-        })}
-      />
+      <FilesystemBrowserTextbox id="sourcePath" label={i18n._('torrents.create.source.path.label')} />
       <TextboxRepeater
         id="trackers"
-        label={intl.formatMessage({
-          id: 'torrents.create.trackers.label',
-        })}
-        placeholder={intl.formatMessage({
-          id: 'torrents.create.tracker.input.placeholder',
-        })}
+        label={i18n._('torrents.create.trackers.label')}
+        placeholder={i18n._('torrents.create.tracker.input.placeholder')}
         defaultValues={[{id: 0, value: ''}]}
       />
       <FormRow>
         <Textbox
           id="name"
-          label={intl.formatMessage({
-            id: 'torrents.create.base.name.label',
-          })}
-          placeholder={intl.formatMessage({
-            id: 'torrents.create.base.name.input.placeholder',
-          })}
+          label={i18n._('torrents.create.base.name.label')}
+          placeholder={i18n._('torrents.create.base.name.input.placeholder')}
         />
       </FormRow>
       <FormRow>
         <Textbox
           id="comment"
-          label={intl.formatMessage({
-            id: 'torrents.create.comment.label',
-          })}
-          placeholder={intl.formatMessage({
-            id: 'torrents.create.comment.input.placeholder',
-          })}
+          label={i18n._('torrents.create.comment.label')}
+          placeholder={i18n._('torrents.create.comment.input.placeholder')}
         />
       </FormRow>
       <FormRow>
         <Textbox
           id="infoSource"
-          label={intl.formatMessage({
-            id: 'torrents.create.info.source.label',
-          })}
-          placeholder={intl.formatMessage({
-            id: 'torrents.create.info.source.input.placeholder',
-          })}
+          label={i18n._('torrents.create.info.source.label')}
+          placeholder={i18n._('torrents.create.info.source.input.placeholder')}
         />
       </FormRow>
       <FormRow>
         <Checkbox grow={false} id="isPrivate">
-          {intl.formatMessage({id: 'torrents.create.is.private.label'})}
+          {i18n._('torrents.create.is.private.label')}
         </Checkbox>
       </FormRow>
       <FormRow>
         <TagSelect
           id="tags"
-          label={intl.formatMessage({
-            id: 'torrents.add.tags',
-          })}
-          placeholder={intl.formatMessage({
-            id: 'torrents.create.tags.input.placeholder',
-          })}
+          label={i18n._('torrents.add.tags')}
+          placeholder={i18n._('torrents.create.tags.input.placeholder')}
         />
       </FormRow>
       <AddTorrentsActions

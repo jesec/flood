@@ -1,6 +1,6 @@
 import Dropzone from 'react-dropzone';
-import {FormattedMessage} from 'react-intl';
 import {FC, useEffect, useState} from 'react';
+import {Trans} from '@lingui/react';
 
 import {Close, File, Files} from '@client/ui/icons';
 import {FormRowItem} from '@client/ui';
@@ -21,7 +21,7 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
   return (
     <FormRowItem>
       <label className="form__element__label">
-        <FormattedMessage id="torrents.add.torrents.label" />
+        <Trans id="torrents.add.torrents.label" />
       </label>
       {files.length > 0 ? (
         <ul
@@ -76,9 +76,9 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
               <div className="dropzone__icon">
                 <Files />
               </div>
-              <FormattedMessage id="torrents.add.tab.file.drop" />{' '}
+              <Trans id="torrents.add.tab.file.drop" />{' '}
               <span className="dropzone__browse-button">
-                <FormattedMessage id="torrents.add.tab.file.browse" />
+                <Trans id="torrents.add.tab.file.browse" />
               </span>
               .
             </div>

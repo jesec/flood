@@ -1,7 +1,7 @@
 import classnames from 'classnames';
-import {defineMessages, useIntl} from 'react-intl';
 import {FC, useEffect, useRef, useState} from 'react';
 import {observer} from 'mobx-react';
+import {useLingui} from '@lingui/react';
 
 import FloodActions from '@client/actions/FloodActions';
 import {ChevronLeft, ChevronRight, LoadingIndicatorDots, Notification as NotificationIcon} from '@client/ui/icons';
@@ -20,27 +20,6 @@ const fetchNotifications = (paginationStart: number) =>
     start: paginationStart,
   });
 
-const MESSAGES = defineMessages({
-  'notification.torrent.finished.heading': {
-    id: 'notification.torrent.finished.heading',
-  },
-  'notification.torrent.finished.body': {
-    id: 'notification.torrent.finished.body',
-  },
-  'notification.torrent.errored.heading': {
-    id: 'notification.torrent.errored.heading',
-  },
-  'notification.torrent.errored.body': {
-    id: 'notification.torrent.errored.body',
-  },
-  'notification.feed.torrent.added.heading': {
-    id: 'notification.feed.torrent.added.heading',
-  },
-  'notification.feed.torrent.added.body': {
-    id: 'notification.feed.torrent.added.body',
-  },
-});
-
 interface NotificationTopToolbarProps {
   paginationStart: number;
   notificationTotal: number;
@@ -50,7 +29,7 @@ const NotificationTopToolbar: FC<NotificationTopToolbarProps> = ({
   paginationStart,
   notificationTotal,
 }: NotificationTopToolbarProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   if (notificationTotal > NOTIFICATIONS_PER_PAGE) {
     let countStart = paginationStart + 1;
@@ -67,19 +46,13 @@ const NotificationTopToolbar: FC<NotificationTopToolbarProps> = ({
     return (
       <div className="toolbar toolbar--dark toolbar--top tooltip__toolbar tooltip__content--padding-surrogate">
         <span className="toolbar__item toolbar__item--label">
-          {`${intl.formatMessage({
-            id: 'notification.showing',
-          })} `}
+          {`${i18n._('notification.showing')} `}
           <strong>
             {countStart}
-            {` ${intl.formatMessage({
-              id: 'general.to',
-            })} `}
+            {` ${i18n._('general.to')} `}
             {countEnd}
           </strong>
-          {` ${intl.formatMessage({
-            id: 'general.of',
-          })} `}
+          {` ${i18n._('general.of')} `}
           <strong>{notificationTotal}</strong>
         </span>
       </div>
@@ -95,35 +68,24 @@ interface NotificationItemProps {
 }
 
 const NotificationItem: FC<NotificationItemProps> = ({index, notification}: NotificationItemProps) => {
-  const intl = useIntl();
-  const date = intl.formatDate(notification.ts, {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-  });
-  const time = intl.formatTime(notification.ts);
+  const {i18n} = useLingui();
 
   return (
     <li className="notifications__list__item" key={index}>
       <div className="notification__heading">
-        <span className="notification__category">
-          {intl.formatMessage(
-            MESSAGES[`${notification.id}.heading` as keyof typeof MESSAGES] || {id: 'general.error.unknown'},
-          )}
-        </span>
+        <span className="notification__category">{i18n._(`${notification.id}.heading`)}</span>
         {' — '}
-        <span className="notification__timestamp">{`${date} ${intl.formatMessage({
-          id: 'general.at',
-        })} ${time}`}</span>
+        <span className="notification__timestamp">
+          {i18n.date(new Date(notification.ts), {
+            year: 'numeric',
+            month: 'long',
+            day: '2-digit',
+            hour: 'numeric',
+            minute: 'numeric',
+          })}
+        </span>
       </div>
-      <div className="notification__message">
-        {intl.formatMessage(
-          MESSAGES[`${notification.id}.body` as keyof typeof MESSAGES] || {
-            id: 'general.error.unknown',
-          },
-          notification.data,
-        )}
-      </div>
+      <div className="notification__message">{i18n._(`${notification.id}.body`, notification.data)}</div>
     </li>
   );
 };
@@ -143,7 +105,7 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
   onClearClick,
   onNextClick,
 }: NotificationBottomToolbarProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   if (notificationTotal > 0) {
     const newerButtonClass = classnames('toolbar__item toolbar__item--button', 'tooltip__content--padding-surrogate', {
@@ -178,9 +140,7 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
           className="toolbar__item toolbar__item--button
           tooltip__content--padding-surrogate"
           onClick={onClearClick}>
-          {intl.formatMessage({
-            id: 'notification.clear.all',
-          })}
+          {i18n._('notification.clear.all')}
         </li>
         <li className={olderButtonClass} onClick={onNextClick}>
           {`${olderFrom} - ${olderTo}`}
@@ -194,7 +154,7 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
 };
 
 const NotificationsButton: FC = observer(() => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   const tooltipRef = useRef<Tooltip>(null);
   const notificationsListRef = useRef<HTMLUListElement>(null);
@@ -264,9 +224,7 @@ const NotificationsButton: FC = observer(() => {
           </div>
         ) : (
           <div className="notifications tooltip__content--padding-surrogate" style={{textAlign: 'center'}}>
-            {intl.formatMessage({
-              id: 'notification.no.notification',
-            })}
+            {i18n._('notification.no.notification')}
           </div>
         )
       }

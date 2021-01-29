@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {FormattedMessage} from 'react-intl';
+import {Trans} from '@lingui/react';
 
 import {Checkbox, Form, FormRow, Textbox} from '@client/ui';
 
@@ -27,20 +27,20 @@ const ResourcesTab: FC<ResourcesTabProps> = ({onClientSettingsChange}: Resources
         onClientSettingsChange(newChangedClientSettings);
       }}>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.resources.disk.heading" />
+        <Trans id="settings.resources.disk.heading" />
       </ModalFormSectionHeader>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'directoryDefault')}
           id="directoryDefault"
-          label={<FormattedMessage id="settings.resources.disk.download.location.label" />}
+          label={<Trans id="settings.resources.disk.download.location.label" />}
         />
       </FormRow>
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'networkMaxOpenFiles')}
           id="networkMaxOpenFiles"
-          label={<FormattedMessage id="settings.resources.max.open.files" />}
+          label={<Trans id="settings.resources.max.open.files" />}
           width="one-half"
         />
         <Checkbox
@@ -49,11 +49,11 @@ const ResourcesTab: FC<ResourcesTabProps> = ({onClientSettingsChange}: Resources
           id="piecesHashOnCompletion"
           labelOffset
           matchTextboxHeight>
-          <FormattedMessage id="settings.resources.disk.check.hash.label" />
+          <Trans id="settings.resources.disk.check.hash.label" />
         </Checkbox>
       </FormRow>
       <ModalFormSectionHeader>
-        <FormattedMessage id="settings.resources.memory.heading" />
+        <Trans id="settings.resources.memory.heading" />
       </ModalFormSectionHeader>
       <FormRow>
         <Textbox
@@ -61,7 +61,7 @@ const ResourcesTab: FC<ResourcesTabProps> = ({onClientSettingsChange}: Resources
           id="piecesMemoryMax"
           label={
             <div>
-              <FormattedMessage id="settings.resources.memory.max.label" /> <em className="unit">(MB)</em>
+              <Trans id="settings.resources.memory.max.label" /> <em className="unit">(MB)</em>
             </div>
           }
           width="one-half"

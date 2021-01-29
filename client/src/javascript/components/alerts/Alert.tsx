@@ -1,7 +1,7 @@
 import {FC} from 'react';
-import {FormattedMessage} from 'react-intl';
 import classnames from 'classnames';
 import {observer} from 'mobx-react';
+import {Trans} from '@lingui/react';
 
 import AlertStore from '@client/stores/AlertStore';
 import {CircleCheckmark, CircleExclamation} from '@client/ui/icons';
@@ -32,7 +32,7 @@ const Alert: FC<AlertProps> = observer((props: AlertProps) => {
     <li className={alertClasses}>
       {icon}
       <span className="alert__content">
-        <FormattedMessage
+        <Trans
           id={id}
           values={{
             count,

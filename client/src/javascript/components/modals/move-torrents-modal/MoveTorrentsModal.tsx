@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {Form} from '@client/ui';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -31,14 +31,12 @@ const getSuggestedPath = (sources: Array<string>): string | undefined => {
 };
 
 const MoveTorrents: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   const [isSettingDownloadPath, setIsSettingDownloadPath] = useState<boolean>(false);
 
   return (
     <Modal
-      heading={intl.formatMessage({
-        id: 'torrents.move.heading',
-      })}
+      heading={i18n._('torrents.move.heading')}
       content={
         <div className="modal__content">
           <Form
@@ -71,31 +69,23 @@ const MoveTorrents: FC = () => {
               actions={[
                 {
                   checked: true,
-                  content: intl.formatMessage({
-                    id: 'torrents.move.data.label',
-                  }),
+                  content: i18n._('torrents.move.data.label'),
                   id: 'moveFiles',
                   type: 'checkbox',
                 },
                 {
                   checked: false,
-                  content: intl.formatMessage({
-                    id: 'torrents.move.check_hash.label',
-                  }),
+                  content: i18n._('torrents.move.check_hash.label'),
                   id: 'isCheckHash',
                   type: 'checkbox',
                 },
                 {
-                  content: intl.formatMessage({
-                    id: 'button.cancel',
-                  }),
+                  content: i18n._('button.cancel'),
                   triggerDismiss: true,
                   type: 'tertiary',
                 },
                 {
-                  content: intl.formatMessage({
-                    id: 'torrents.move.button.set.location',
-                  }),
+                  content: i18n._('torrents.move.button.set.location'),
                   isLoading: isSettingDownloadPath,
                   submit: true,
                   type: 'primary',

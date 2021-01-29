@@ -1,5 +1,5 @@
 import {FC, useEffect, useRef, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import {CheckmarkThick, Clipboard} from '@client/ui/icons';
 import {Form, FormElementAddon, FormError, FormRow, Textbox} from '@client/ui';
@@ -25,7 +25,7 @@ const generateMagnet = (hash: string, trackers?: Array<string>): string => {
 const GenerateMagnetModal: FC = () => {
   const magnetTextboxRef = useRef<HTMLInputElement>(null);
   const magnetTrackersTextboxRef = useRef<HTMLInputElement>(null);
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   const [isMagnetCopied, setIsMagnetCopied] = useState<boolean>(false);
   const [isMagnetTrackersCopied, setIsMagnetTrackersCopied] = useState<boolean>(false);
@@ -55,15 +55,13 @@ const GenerateMagnetModal: FC = () => {
 
   return (
     <Modal
-      heading={intl.formatMessage({
-        id: 'torrents.generate.magnet.heading',
-      })}
+      heading={i18n._('torrents.generate.magnet.heading')}
       content={
         <div className="modal__content inverse">
           <Form>
             {TorrentStore.torrents[TorrentStore.selectedTorrents[0]]?.isPrivate ? (
               <FormRow>
-                <FormError>{intl.formatMessage({id: 'torrents.generate.magnet.private.torrent'})}</FormError>
+                <FormError>{i18n._('torrents.generate.magnet.private.torrent')}</FormError>
               </FormRow>
             ) : null}
             <FormRow>
@@ -71,7 +69,7 @@ const GenerateMagnetModal: FC = () => {
                 id="magnet"
                 ref={magnetTextboxRef}
                 addonPlacement="after"
-                label={intl.formatMessage({id: 'torrents.generate.magnet.magnet'})}
+                label={i18n._('torrents.generate.magnet.magnet')}
                 defaultValue={magnetLink}
                 readOnly>
                 <FormElementAddon
@@ -94,10 +92,8 @@ const GenerateMagnetModal: FC = () => {
               {trackerState.isLoadingTrackers ? (
                 <Textbox
                   id="loading"
-                  label={intl.formatMessage({id: 'torrents.generate.magnet.magnet.with.trackers'})}
-                  placeholder={intl.formatMessage({
-                    id: 'torrents.generate.magnet.loading.trackers',
-                  })}
+                  label={i18n._('torrents.generate.magnet.magnet.with.trackers')}
+                  placeholder={i18n._('torrents.generate.magnet.loading.trackers')}
                   disabled
                 />
               ) : (
@@ -105,7 +101,7 @@ const GenerateMagnetModal: FC = () => {
                   id="magnet-trackers"
                   ref={magnetTrackersTextboxRef}
                   addonPlacement="after"
-                  label={intl.formatMessage({id: 'torrents.generate.magnet.magnet.with.trackers'})}
+                  label={i18n._('torrents.generate.magnet.magnet.with.trackers')}
                   defaultValue={trackerState.magnetTrackersLink}
                   readOnly>
                   <FormElementAddon
@@ -131,9 +127,7 @@ const GenerateMagnetModal: FC = () => {
       actions={[
         {
           clickHandler: null,
-          content: intl.formatMessage({
-            id: 'button.close',
-          }),
+          content: i18n._('button.close'),
           triggerDismiss: true,
           type: 'tertiary',
         },

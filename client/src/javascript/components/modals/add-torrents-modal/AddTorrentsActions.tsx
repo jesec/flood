@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 
 import ModalActions from '../ModalActions';
 import SettingStore from '../../../stores/SettingStore';
@@ -13,33 +13,27 @@ const AddTorrentsActions: FC<AddTorrentsActionsProps> = ({
   isAddingTorrents,
   onAddTorrentsClick,
 }: AddTorrentsActionsProps) => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
   return (
     <ModalActions
       actions={[
         {
           checked: Boolean(SettingStore.floodSettings.startTorrentsOnLoad),
           clickHandler: null,
-          content: intl.formatMessage({
-            id: 'torrents.add.start.label',
-          }),
+          content: i18n._('torrents.add.start.label'),
           id: 'start',
           triggerDismiss: false,
           type: 'checkbox',
         },
         {
           clickHandler: null,
-          content: intl.formatMessage({
-            id: 'button.cancel',
-          }),
+          content: i18n._('button.cancel'),
           triggerDismiss: true,
           type: 'tertiary',
         },
         {
           clickHandler: onAddTorrentsClick,
-          content: intl.formatMessage({
-            id: 'torrents.add.button.add',
-          }),
+          content: i18n._('torrents.add.button.add'),
           isLoading: isAddingTorrents,
           submit: true,
           triggerDismiss: false,
