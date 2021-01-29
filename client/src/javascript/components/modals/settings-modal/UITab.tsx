@@ -41,7 +41,7 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
           const newSelectedLanguage = formData.language as FloodSettings['language'];
           setSelectedLanguage(newSelectedLanguage);
           onSettingsChange({
-            language: selectedLanguage,
+            language: newSelectedLanguage,
           });
         }
       }}>
