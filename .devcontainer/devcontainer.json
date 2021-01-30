@@ -3,8 +3,11 @@
   "context": "..",
   "dockerFile": "./Dockerfile",
   "runArgs": ["--init"],
-  "initializeCommand": "umask 077 && mkdir -p ~/.docker ~/.gnupg ~/.ssh && umask 177 && touch ~/.git-credentials ~/.npmrc ~/.zsh_history",
+  "initializeCommand": "umask 077 && mkdir -p ${localEnv:HOME}/.docker ${localEnv:HOME}/.gnupg ${localEnv:HOME}/.ssh && umask 177 && touch ${localEnv:HOME}/.git-credentials ${localEnv:HOME}/.npmrc ${localEnv:HOME}/.zsh_history",
   "postCreateCommand": "npm install && bash /usr/local/share/docker-init.sh",
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/node_modules/.bin"
+  },
   "settings": {
     "terminal.integrated.shell.linux": "/bin/zsh"
   },
