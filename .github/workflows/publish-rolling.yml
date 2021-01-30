@@ -238,6 +238,8 @@ jobs:
           name: flood-linux-x64
           path: dist-pkg
 
+      - run: find .
+
       - name: Publish flood:master-distroless to Docker Hub
         uses: docker/build-push-action@v2
         with:

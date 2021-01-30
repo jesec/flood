@@ -6,7 +6,7 @@ WORKDIR /root
 
 # Install Flood and dependencies to /bin
 RUN mkdir -p /root/sysroot/bin
-COPY dist-pkg dist-pkg
+COPY ./dist-pkg dist-pkg
 RUN if [[ `uname -m` == "aarch64" ]]; \
     then mv dist-pkg/flood-linux-arm64 flood; \
     elif [[ `uname -m` == "x86_64" ]]; \
