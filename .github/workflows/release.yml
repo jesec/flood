@@ -102,7 +102,7 @@ jobs:
         with:
           build-args: VERSION=${{ steps.parse_semver.outputs.FULL_VERSION }}
           context: .
-          file: ./Dockerfile.release
+          file: ./distribution/containers/Dockerfile.release
           platforms: linux/amd64,linux/arm64,linux/arm/v7
           push: true
           tags: |

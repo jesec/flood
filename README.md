@@ -97,7 +97,7 @@ Note that you have to let Docker know which port should be exposed (e.g. `-p 300
 
 Don't forget to pay attention to `flood`'s arguments like `--port` and `--allowedpath`.
 
-Checkout [Dockerfile.rtorrent](https://github.com/jesec/flood/blob/master/Dockerfile.rtorrent) for a simple example of Flood-rTorrent Docker integration.
+Checkout [Run Flood (and torrent clients) in containers](https://github.com/jesec/flood/discussions/120) discussion.
 
 Filesystem parts in [Troubleshooting](https://github.com/jesec/flood#troubleshooting) are especially important for containers.
 
