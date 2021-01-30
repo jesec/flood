@@ -26,7 +26,6 @@ COPY . ./
 RUN npm ci --no-optional
 
 # Build assets
-RUN cp config.cli.js config.js
 RUN npm run build-assets
 
 # Now get the clean Node.js image

@@ -1,12 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 
-import {tempPath} from '../../config';
+import config from '../../config';
 
-fs.mkdirSync(tempPath, {recursive: true});
+fs.mkdirSync(config.tempPath, {recursive: true});
 
 export const getTempPath = (filename: string): string => {
-  return path.join(tempPath, filename);
+  return path.join(config.tempPath, filename);
 };
 
 export const deleteFile = (filename: string): void => {

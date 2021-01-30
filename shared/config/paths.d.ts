@@ -9,7 +9,6 @@ declare const PATHS: {
   clientSrc: string;
   testsSetup: string;
   appNodeModules: string;
-  servedPath: string;
 };
 
 export = PATHS;

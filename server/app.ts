@@ -23,9 +23,10 @@ declare global {
   }
 }
 
-const app = express();
-
 Users.bootstrapServicesForAllUsers();
+
+const app = express();
+const servedPath = config.baseURI.endsWith('/') ? config.baseURI : `${config.baseURI}/`;
 
 // Remove Express header
 if (process.env.NODE_ENV !== 'development') {
@@ -45,22 +46,22 @@ if (config.serveAssets !== false) {
   app.use(compression());
 
   // Static assets
-  app.use(paths.servedPath, express.static(paths.appDist));
+  app.use(servedPath, express.static(paths.appDist));
 
   // Client app routes, serve index.html and client js will figure it out
   const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {
     encoding: 'utf8',
   });
 
-  app.get(`${paths.servedPath}login`, (_req, res) => {
+  app.get(`${servedPath}login`, (_req, res) => {
     res.send(html);
   });
 
-  app.get(`${paths.servedPath}register`, (_req, res) => {
+  app.get(`${servedPath}register`, (_req, res) => {
     res.send(html);
   });
 
-  app.get(`${paths.servedPath}overview`, (_req, res) => {
+  app.get(`${servedPath}overview`, (_req, res) => {
     res.send(html);
   });
 } else {
@@ -80,6 +81,6 @@ app.use(cookieParser());
 
 passportConfig(passport);
 
-app.use(`${paths.servedPath}api`, apiRoutes);
+app.use(`${servedPath}api`, apiRoutes);
 
 export default app;

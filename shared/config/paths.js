@@ -1,21 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const userConfig = require('../../config');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
 const appDirectory = path.resolve(path.join(__dirname, '../..'));
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
-const ensureSlash = (questionablePath, needsSlash) => {
-  const hasSlash = questionablePath.endsWith('/');
-  if (hasSlash && !needsSlash) {
-    return questionablePath.substr(questionablePath, questionablePath.length - 1);
-  }
-  if (!hasSlash && needsSlash) {
-    return `${questionablePath}/`;
-  }
-  return questionablePath;
-};
 
 const getAppDist = () => {
   // In production, assets are in assets/.
@@ -47,7 +36,6 @@ const PATHS = {
   clientSrc: resolveApp('client/src'),
   testsSetup: resolveApp('tests/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
-  servedPath: ensureSlash(userConfig.baseURI || '/', true),
 };
 
 module.exports = PATHS;

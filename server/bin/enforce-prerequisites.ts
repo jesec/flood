@@ -3,7 +3,6 @@ import path from 'path';
 
 import {appDist} from '../../shared/config/paths';
 import config from '../../config';
-import {configSchema} from '../../shared/schema/Config';
 
 const staticAssets = [path.join(appDist, 'index.html')];
 
@@ -24,14 +23,6 @@ const enforcePrerequisites = () =>
     // Ensures that WebAssembly support is present
     if (typeof WebAssembly === 'undefined') {
       reject(new Error('WebAssembly is not supported in this environment!'));
-      return;
-    }
-
-    // Ensures that there is a proper configuration
-    const result = configSchema.safeParse(config);
-    if (!result.success) {
-      console.error(result.error.message);
-      reject(new Error('Invalid configuration.'));
       return;
     }
 

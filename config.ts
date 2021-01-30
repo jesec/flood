@@ -1,9 +1,18 @@
-const {spawn} = require('child_process');
-const crypto = require('crypto');
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const {argv} = require('yargs')
+import {spawn} from 'child_process';
+import crypto from 'crypto';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import yargs from 'yargs';
+
+import {configSchema} from '@shared/schema/Config';
+
+import type {Config} from '@shared/schema/Config';
+import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+
+import {version} from './package.json';
+
+const {argv} = yargs
   .env('FLOOD_OPTION_')
   .option('baseuri', {
     default: '/',
@@ -158,7 +167,7 @@ const {argv} = require('yargs')
     hidden: true,
     type: 'boolean',
   })
-  .version(require('./package.json').version)
+  .version(version)
   .alias('v', 'version')
   .help();
 
@@ -203,7 +212,7 @@ if (argv.rtorrent) {
 }
 
 const DEFAULT_SECRET_PATH = path.join(argv.rundir, 'flood.secret');
-let secret;
+let secret: string;
 
 if (!argv.secret) {
   try {
@@ -223,7 +232,7 @@ if (!argv.secret) {
   ({secret} = argv);
 }
 
-let connectionSettings;
+let connectionSettings: Partial<ClientConnectionSettings> | undefined;
 if (argv.rtsocket != null || argv.rthost != null) {
   if (argv.rtsocket != null) {
     connectionSettings = {
@@ -261,19 +270,19 @@ if (argv.rtsocket != null || argv.rthost != null) {
   };
 }
 
-let authMethod = 'default';
+let authMethod: Config['authMethod'] = 'default';
 if (argv.noauth || argv.auth === 'none') {
   authMethod = 'none';
 }
 
-let allowedPaths = [];
+let allowedPaths: string[] = [];
 if (typeof argv.allowedpath === 'string') {
   allowedPaths = allowedPaths.concat(argv.allowedpath.split(','));
 } else if (Array.isArray(argv.allowedpath)) {
   allowedPaths = allowedPaths.concat(argv.allowedpath);
 }
 
-const CONFIG = {
+const result = configSchema.safeParse({
   baseURI: argv.baseuri,
   dbCleanInterval: argv.dbclean,
   dbPath: path.resolve(path.join(argv.rundir, 'db')),
@@ -292,6 +301,11 @@ const CONFIG = {
   sslCert: argv.sslcert || path.resolve(path.join(argv.rundir, 'fullchain.pem')),
   allowedPaths: allowedPaths.length > 0 ? allowedPaths : undefined,
   serveAssets: argv.assets,
-};
+});
 
-module.exports = CONFIG;
+if (!result.success) {
+  console.error(`Invalid configuration: ${result.error.message}`);
+  process.exit(1);
+}
+
+export default result.data;
