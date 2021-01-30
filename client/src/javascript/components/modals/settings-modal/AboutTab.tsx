@@ -3,7 +3,7 @@ import {FC, lazy, Suspense} from 'react';
 import packageJSON from '../../../../../../package.json';
 
 const AboutMarkdown = lazy(() =>
-  import(/* webpackChunkName: 'about' */ '../../../../../../ABOUT.md').then((module) => ({default: module.react})),
+  import(/* webpackChunkName: 'about' */ '../../../../ABOUT.md').then((module) => ({default: module.react})),
 );
 
 const FLOOD_PROJECT_URL = 'https://github.com/jesec/flood';
