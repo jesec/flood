@@ -13,8 +13,6 @@
 ARG BUILDPLATFORM=amd64
 ARG NODE_IMAGE=node:alpine
 
-FROM jesec/rtorrent:master as rtorrent
-
 FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} as nodebuild
 
 WORKDIR /usr/src/app/
@@ -36,9 +34,6 @@ WORKDIR /usr/src/app/
 # Copy sources
 COPY --from=nodebuild /usr/src/app ./
 
-# Copy rTorrent
-COPY --from=rtorrent / /
-
 # Install runtime dependencies
 RUN apk --no-cache add \
     mediainfo
@@ -58,3 +53,12 @@ ENTRYPOINT ["npm", "--prefix=/usr/src/app/", "run", "start:development:server", 
 
 # Then, to start a debugging session of frontend:
 # docker exec -it ${container_id} npm --prefix=/usr/src/app/ run start:development:client
+
+# rtorrent-flood image
+FROM jesec/rtorrent:master as rtorrent
+FROM flood as rtorrent-flood
+
+# Copy rTorrent
+COPY --from=rtorrent / /
+
+ENTRYPOINT ["npm", "--prefix=/usr/src/app/", "run", "start:development:server", "--", "--host=0.0.0.0", "--rtorrent"]
