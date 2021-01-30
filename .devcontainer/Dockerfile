@@ -40,6 +40,8 @@ RUN apt install -y \
 # Configure Docker-from-Docker
 COPY ./.devcontainer/library-scripts /tmp/library-scripts/
 RUN /bin/bash /tmp/library-scripts/docker-debian.sh true "/var/run/docker-host.sock" "/var/run/docker.sock" vscode false
+ENTRYPOINT ["/usr/local/share/docker-init.sh"]
+CMD ["sleep", "infinity"]
 
 # Run as vscode user
 USER vscode
