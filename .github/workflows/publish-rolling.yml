@@ -198,3 +198,52 @@ jobs:
         with:
           name: flood-win-arm64.exe
           path: dist-pkg/flood-win-arm64.exe
+
+  docker-distroless:
+    needs: pkg
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: flood-linux-arm64
+          path: dist-pkg
+      
+      - uses: actions/download-artifact@v2
+        with:
+          name: flood-linux-x64
+          path: dist-pkg
+
+      - name: Publish flood:master-distroless to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./distribution/containers/Dockerfile.distroless
+          target: flood
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: jesec/flood:master-distroless
+
+      - name: Publish rtorrent-flood:master-distroless to Docker Hub
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./distribution/containers/Dockerfile.distroless
+          target: rtorrent-flood
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: jesec/rtorrent-flood:master-distroless
