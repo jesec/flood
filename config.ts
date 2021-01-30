@@ -155,12 +155,6 @@ const {argv} = yargs
     hidden: true,
     type: 'string',
   })
-  .option('proxy', {
-    default: 'http://127.0.0.1:3000',
-    describe: 'DEV ONLY: See the "Local Development" section of README.md',
-    hidden: true,
-    type: 'string',
-  })
   .option('test', {
     default: false,
     describe: 'DEV ONLY: Test setup',
@@ -291,7 +285,6 @@ const result = configSchema.safeParse({
   configUser: connectionSettings,
   floodServerHost: argv.host,
   floodServerPort: argv.port,
-  floodServerProxy: argv.proxy,
   maxHistoryStates: argv.maxhistorystates,
   torrentClientPollInterval: argv.clientpoll,
   torrentClientPollIntervalIdle: argv.clientpollidle,

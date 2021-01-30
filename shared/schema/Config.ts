@@ -73,11 +73,6 @@ export const configSchema = object({
   // The port that Flood should listen for web connections on. [default: 3000]
   floodServerPort: number().int().positive(),
 
-  // CLI argument: --proxy
-  // Used for development only. Not used in production.
-  // See the "Local Development" section of README.md for detail.
-  floodServerProxy: string().url().optional(),
-
   // CLI argument: --maxhistorystates
   // Flood keeps a history of torrent download and upload speeds.
   // This value dictates the number of individual records per period to keep.
