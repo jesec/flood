@@ -37,9 +37,9 @@ RUN apt install -y \
 RUN apt install -y \
     mediainfo
 
-# Configure Docker-in-Docker
+# Configure Docker-from-Docker
 COPY ./.devcontainer/library-scripts /tmp/library-scripts/
-RUN /bin/bash /tmp/library-scripts/docker-in-docker-debian.sh true vscode false
+RUN /bin/bash /tmp/library-scripts/docker-debian.sh true "/var/run/docker-host.sock" "/var/run/docker.sock" vscode false
 
 # Run as vscode user
 USER vscode
