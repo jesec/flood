@@ -3,7 +3,7 @@
   "context": "..",
   "dockerFile": "./Dockerfile",
   "runArgs": ["--init"],
-  "initializeCommand": "if [ '$CODESPACES' != 'true' ]; then umask 077 && mkdir -p ~/.docker ~/.gnupg ~/.ssh && umask 177 && touch ~/.git-credentials ~/.npmrc ~/.zsh_history; fi",
+  "initializeCommand": "if [ \"${CODESPACES}\" != \"true\" ]; then umask 077 && mkdir -p ~/.docker ~/.gnupg ~/.ssh && umask 177 && touch ~/.git-credentials ~/.npmrc ~/.zsh_history; fi",
   "postCreateCommand": "npm install && bash /usr/local/share/docker-init.sh",
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/node_modules/.bin"
