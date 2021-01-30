@@ -6,11 +6,11 @@ WORKDIR /root
 
 # Install Flood and dependencies to /bin
 RUN mkdir -p /root/sysroot/bin
-COPY ./dist-pkg dist-pkg
+COPY ./artifacts artifacts
 RUN if [[ `uname -m` == "aarch64" ]]; \
-    then mv dist-pkg/flood-linux-arm64 flood; \
+    then mv artifacts/flood-linux-arm64 flood; \
     elif [[ `uname -m` == "x86_64" ]]; \
-    then mv dist-pkg/flood-linux-x64 flood; \
+    then mv artifacts/flood-linux-x64 flood; \
     fi
 RUN mv flood /root/sysroot/bin/flood
 COPY --from=busybox /bin/busybox_DF /root/sysroot/bin/df

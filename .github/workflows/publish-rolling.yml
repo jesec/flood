@@ -231,12 +231,12 @@ jobs:
       - uses: actions/download-artifact@v2
         with:
           name: flood-linux-arm64
-          path: dist-pkg
+          path: artifacts
 
       - uses: actions/download-artifact@v2
         with:
           name: flood-linux-x64
-          path: dist-pkg
+          path: artifacts
 
       - run: find .
 
