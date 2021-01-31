@@ -41,17 +41,17 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
    * Adds torrents by file
    *
    * @param {Required<AddTorrentByFileOptions>} options - An object of options...
-   * @return {Promise<void>} - Rejects with error.
+   * @return {Promise<string[]>} - Resolves with an array of hashes of added torrents or rejects with error.
    */
-  abstract addTorrentsByFile(options: Required<AddTorrentByFileOptions>): Promise<void>;
+  abstract addTorrentsByFile(options: Required<AddTorrentByFileOptions>): Promise<string[]>;
 
   /**
    * Adds torrents by URL
    *
    * @param {Required<AddTorrentByURLOptions>} options - An object of options...
-   * @return {Promise<void>} - Rejects with error.
+   * @return {Promise<string[]>} - Resolves with an array of hashes of added torrents or rejects with error.
    */
-  abstract addTorrentsByURL(options: Required<AddTorrentByURLOptions>): Promise<void>;
+  abstract addTorrentsByURL(options: Required<AddTorrentByURLOptions>): Promise<string[]>;
 
   /**
    * Checks torrents

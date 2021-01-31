@@ -1,4 +1,5 @@
 import {homedir} from 'os';
+import parseTorrent from 'parse-torrent';
 import path from 'path';
 
 import type {
@@ -50,16 +51,34 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     tags,
     isBasePath,
     isCompleted,
+    isInitialSeeding,
     isSequential,
     start,
-  }: Required<AddTorrentByFileOptions>): Promise<void> {
-    // TODO: isInitialSeeding not implemented
+  }: Required<AddTorrentByFileOptions>): Promise<string[]> {
+    const fileBuffers: Buffer[] = [];
 
-    const fileBuffers = files.map((file) => {
-      return Buffer.from(file, 'base64');
-    });
+    const torrentHashes: string[] = (
+      await Promise.all(
+        files.map(async (file) => {
+          try {
+            const fileBuffer = Buffer.from(file, 'base64');
 
-    return this.clientRequestManager
+            const {infoHash} = parseTorrent(fileBuffer);
+            fileBuffers.push(fileBuffer);
+
+            return infoHash;
+          } catch {
+            return;
+          }
+        }),
+      )
+    ).filter((hash) => hash) as string[];
+
+    if (torrentHashes[0] == null) {
+      throw new Error();
+    }
+
+    await this.clientRequestManager
       .torrentsAddFiles(fileBuffers, {
         savepath: destination,
         tags: tags.join(','),
@@ -70,6 +89,10 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         skip_checking: isCompleted,
       })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
+
+    await this.setTorrentsInitialSeeding({hashes: torrentHashes, isInitialSeeding});
+
+    return torrentHashes;
   }
 
   async addTorrentsByURL({
@@ -81,10 +104,10 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     isCompleted,
     isSequential,
     start,
-  }: Required<AddTorrentByURLOptions>): Promise<void> {
+  }: Required<AddTorrentByURLOptions>): Promise<string[]> {
     // TODO: isInitialSeeding not implemented
 
-    return this.clientRequestManager
+    await this.clientRequestManager
       .torrentsAddURLs(urls, {
         cookie: cookies != null ? Object.values(cookies)[0]?.[0] : undefined,
         savepath: destination,
@@ -96,6 +119,8 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         skip_checking: isCompleted,
       })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
+
+    return [];
   }
 
   async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {

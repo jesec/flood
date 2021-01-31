@@ -43,8 +43,8 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     tags,
     isCompleted,
     start,
-  }: Required<AddTorrentByFileOptions>): Promise<void> {
-    const addedTorrents: [string, ...string[]] = await Promise.all(
+  }: Required<AddTorrentByFileOptions>): Promise<string[]> {
+    const addedTorrents = await Promise.all(
       files.map(async (file) => {
         const {hashString} =
           (await this.clientRequestManager
@@ -57,23 +57,22 @@ class TransmissionClientGatewayService extends ClientGatewayService {
             .catch(() => undefined)) || {};
         return hashString;
       }),
-    )
-      .then((results) => results.filter((hash) => hash != null) as string[])
-      .then((hashes) => {
-        if (hashes.length < 1) {
-          throw new Error();
-        }
-        return hashes as [string, ...string[]];
-      });
+    ).then((results) => results.filter((hash) => hash) as string[]);
+
+    if (addedTorrents[0] == null) {
+      throw new Error();
+    }
 
     if (tags.length > 0) {
-      await this.setTorrentsTags({hashes: addedTorrents, tags});
+      await this.setTorrentsTags({hashes: addedTorrents as [string, ...string[]], tags});
     }
 
     if (isCompleted) {
       // Transmission doesn't support skipping verification
       this.checkTorrents({hashes: addedTorrents}).catch(() => undefined);
     }
+
+    return addedTorrents;
   }
 
   async addTorrentsByURL({
@@ -81,10 +80,9 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     cookies,
     destination,
     tags,
-    isCompleted,
     start,
-  }: Required<AddTorrentByURLOptions>): Promise<void> {
-    const addedTorrents: [string, ...string[]] = await Promise.all(
+  }: Required<AddTorrentByURLOptions>): Promise<string[]> {
+    const addedTorrents = await Promise.all(
       urls.map(async (url) => {
         const domain = url.split('/')[2];
         const {hashString} =
@@ -99,23 +97,17 @@ class TransmissionClientGatewayService extends ClientGatewayService {
             .catch(() => undefined)) || {};
         return hashString;
       }),
-    )
-      .then((results) => results.filter((hash) => hash != null) as string[])
-      .then((hashes) => {
-        if (hashes.length < 1) {
-          throw new Error();
-        }
-        return hashes as [string, ...string[]];
-      });
+    ).then((results) => results.filter((hash) => hash) as string[]);
+
+    if (addedTorrents[0] == null) {
+      throw new Error();
+    }
 
     if (tags.length > 0) {
-      await this.setTorrentsTags({hashes: addedTorrents, tags});
+      await this.setTorrentsTags({hashes: addedTorrents as [string, ...string[]], tags});
     }
 
-    if (isCompleted) {
-      // Transmission doesn't support skipping verification
-      this.checkTorrents({hashes: addedTorrents}).catch(() => undefined);
-    }
+    return addedTorrents;
   }
 
   async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {

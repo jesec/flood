@@ -111,12 +111,13 @@ router.get('/', (req, res) => {
  * @tags Torrents
  * @security User
  * @param {AddTorrentByURLOptions} request.body.required - options - application/json
- * @return {object} 200 - success response - application/json
+ * @return {object} 200 - all torrents added - application/json
+ * @return {object} 202 - requests sent to torrent client - application/json
+ * @return {object} 207 - some succeed, some failed - application/json
+ * @return {Error} 403 - illegal destination - application/json
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, res) => {
-  const callback = getResponseFn(res);
-
   const parsedResult = addTorrentByURLSchema.safeParse(req.body);
 
   if (!parsedResult.success) {
@@ -142,7 +143,8 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
   });
 
   if (finalDestination == null) {
-    callback(null, accessDeniedError());
+    const {code, message} = accessDeniedError();
+    res.status(403).json({code, message});
     return;
   }
 
@@ -158,14 +160,21 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
       isInitialSeeding: isInitialSeeding ?? false,
       start: start ?? false,
     })
-    .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
+    .then(
+      (response) => {
+        req.services?.torrentService.fetchTorrentList();
+        if (response.length === 0) {
+          res.status(202).json(response);
+        } else if (response.length < urls.length) {
+          res.status(207).json(response);
+        } else {
+          res.status(200).json(response);
+        }
+      },
+      ({code, message}) => {
+        res.status(500).json({code, message});
+      },
+    );
 });
 
 /**
@@ -174,12 +183,13 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
  * @tags Torrents
  * @security User
  * @param {AddTorrentByFileOptions} request.body.required - options - application/json
- * @return {object} 200 - success response - application/json
+ * @return {object} 200 - all torrents added - application/json
+ * @return {object} 202 - requests sent to torrent client - application/json
+ * @return {object} 207 - some succeed, some failed - application/json
+ * @return {Error} 403 - illegal destination - application/json
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req, res) => {
-  const callback = getResponseFn(res);
-
   const parsedResult = addTorrentByFileSchema.safeParse(req.body);
 
   if (!parsedResult.success) {
@@ -195,7 +205,8 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
   });
 
   if (finalDestination == null) {
-    callback(null, accessDeniedError());
+    const {code, message} = accessDeniedError();
+    res.status(403).json({code, message});
     return;
   }
 
@@ -210,14 +221,21 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
       isInitialSeeding: isInitialSeeding ?? false,
       start: start ?? false,
     })
-    .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
+    .then(
+      (response) => {
+        req.services?.torrentService.fetchTorrentList();
+        if (response.length === 0) {
+          res.status(202).json(response);
+        } else if (response.length < files.length) {
+          res.status(207).json(response);
+        } else {
+          res.status(200).json(response);
+        }
+      },
+      ({code, message}) => {
+        res.status(500).json({code, message});
+      },
+    );
 });
 
 /**

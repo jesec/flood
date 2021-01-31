@@ -2,6 +2,7 @@ import fs from 'fs';
 import geoip from 'geoip-country';
 import {moveSync} from 'fs-extra';
 import path from 'path';
+import parseTorrent from 'parse-torrent';
 import sanitize from 'sanitize-filename';
 
 import type {
@@ -66,7 +67,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isSequential,
     isInitialSeeding,
     start,
-  }: Required<AddTorrentByFileOptions>): Promise<void> {
+  }: Required<AddTorrentByFileOptions>): Promise<string[]> {
     const torrentPaths = await Promise.all(
       files.map(async (file) => {
         return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent', {
@@ -75,21 +76,17 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       }),
     );
 
-    if (torrentPaths[0] != null) {
-      return this.addTorrentsByURL({
-        urls: torrentPaths as [string, ...string[]],
-        cookies: {},
-        destination,
-        tags,
-        isBasePath,
-        isCompleted,
-        isSequential,
-        isInitialSeeding,
-        start,
-      });
-    }
-
-    return Promise.reject();
+    return this.addTorrentsByURL({
+      urls: torrentPaths as [string, ...string[]],
+      cookies: {},
+      destination,
+      tags,
+      isBasePath,
+      isCompleted,
+      isSequential,
+      isInitialSeeding,
+      start,
+    });
   }
 
   async addTorrentsByURL({
@@ -102,7 +99,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isSequential,
     isInitialSeeding,
     start,
-  }: Required<AddTorrentByURLOptions>): Promise<void> {
+  }: Required<AddTorrentByURLOptions>): Promise<string[]> {
     await fs.promises.mkdir(destination, {recursive: true});
 
     const torrentPaths: Array<string> = (
@@ -123,23 +120,39 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             return '';
           }
 
-          // TODO: handle potential other types of downloads
-
           return url;
         }),
       )
     ).filter((torrentPath) => torrentPath !== '');
 
-    if (isCompleted) {
+    const torrentHashes: string[] = (
       await Promise.all(
-        torrentPaths.map((torrentPath) => {
-          if (!fs.existsSync(torrentPath)) {
-            return false;
-          }
+        torrentPaths.map(
+          async (torrentPath): Promise<string | undefined> => {
+            try {
+              if (torrentPath.startsWith('magnet:')) {
+                return parseTorrent(torrentPath).infoHash;
+              }
 
-          return setCompleted(torrentPath, destination, isBasePath);
-        }),
-      );
+              if (!fs.existsSync(torrentPath)) {
+                return;
+              }
+
+              if (isCompleted) {
+                await setCompleted(torrentPath, destination, isBasePath);
+              }
+
+              return parseTorrent(fs.readFileSync(torrentPath)).infoHash;
+            } catch {
+              return;
+            }
+          },
+        ),
+      )
+    ).filter((torrentHash) => torrentHash) as string[];
+
+    if (torrentHashes[0] == null) {
+      throw new Error();
     }
 
     const methodCalls: MultiMethodCalls = torrentPaths.map((torrentPath) => {
@@ -167,12 +180,11 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       };
     }, []);
 
-    return this.clientRequestManager
+    await this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
-      .then(() => {
-        // returns nothing.
-      });
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
+
+    return torrentHashes;
   }
 
   async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {
