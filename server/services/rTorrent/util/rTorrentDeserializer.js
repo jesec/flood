@@ -80,6 +80,7 @@ const closeTag = (elementName) => {
 
     // unused - we ignore
     case 'data':
+    case 'fault':
     case 'params':
     case 'param':
     case 'member':
@@ -103,22 +104,31 @@ const initParser = () => {
   parserInit = true;
 };
 
-const deserialize = (data, resolve, reject) => {
-  stackMarks = [];
-  dataStack = [];
-  tmpData = [];
-  dataIsVal = false;
-  endOfResponse = false;
-  rejectCallback = reject;
+const deserialize = (data) =>
+  new Promise((resolve, reject) => {
+    stackMarks = [];
+    dataStack = [];
+    tmpData = [];
+    dataIsVal = false;
+    endOfResponse = false;
+    rejectCallback = reject;
 
-  initParser();
-  parser.parse(data);
+    initParser();
+    parser.parse(data);
 
-  if (endOfResponse) {
-    return resolve(dataStack[0]);
-  }
+    if (endOfResponse) {
+      if (dataStack[0]?.faultString) {
+        return reject(new Error(dataStack[0].faultString));
+      }
 
-  return reject('truncated response was received');
-};
+      if (dataStack[0]?.[0]?.faultString) {
+        return reject(new Error(dataStack[0][0].faultString));
+      }
+
+      return resolve(dataStack[0]);
+    }
+
+    return reject('truncated response was received');
+  });
 
 export default {deserialize};

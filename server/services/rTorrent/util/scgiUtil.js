@@ -34,10 +34,8 @@ const methodCall = (connectionMethod, methodName, parameters) =>
     stream.end(`${headerLength}:${headerItems.join('')},${xml}`);
 
     bufferStream(stream)
-      .then((data) => {
-        rTorrentDeserializer.deserialize(data, resolve, reject);
-      })
-      .catch(reject);
+      .then((data) => rTorrentDeserializer.deserialize(data))
+      .then(resolve, reject);
   });
 
 export default {methodCall};
