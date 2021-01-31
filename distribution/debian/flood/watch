@@ -1,0 +1,5 @@
+version=3
+opts=\
+dversionmangle=s/\+(debian|dfsg|ds|deb)(\.\d+)?$//,\
+filenamemangle=s/.*\/v?([\d\.-]+)\.tar\.gz/flood-$1.tar.gz/ \
+ https://github.com/jesec/flood/tags .*/archive/v?([\d\.]+).tar.gz

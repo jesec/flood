@@ -1,0 +1,26 @@
+# Maintainer: Jesse Chan <jc@linux.com>
+# Contributor: Jesse Chan <jc@linux.com>
+_npmname=flood
+_npmver=4.3.1
+pkgname=flood
+pkgver=$_npmver
+pkgrel=0
+pkgdesc="A modern web UI for various torrent clients"
+arch="noarch !mips !mips64" # blocked by nodejs
+url="https://flood.js.org"
+license="GPL-3.0-only"
+depends="nodejs"
+makedepends="npm"
+source="https://registry.npmjs.org/$_npmname/-/$_npmname-$_npmver.tgz"
+options="!check"
+builddir="$srcdir/package"
+
+unpack() {
+	# skipping unpacking, installing archive directly
+	verify
+}
+
+package() {
+	npm install -g --user root --prefix "$pkgdir"/usr "$srcdir"/$_npmname-$_npmver.tgz
+	chown -R root "$pkgdir"
+}

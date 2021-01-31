@@ -1,0 +1,25 @@
+Source: flood
+Maintainer: Jesse Chan <jc@linux.com>
+Uploaders: Jesse Chan <jc@linux.com>
+Section: javascript
+Priority: optional
+Testsuite: autopkgtest-pkg-nodejs
+Build-Depends: debhelper-compat (= 12),
+               pkg-js-tools (>= 0.9.20~)
+Standards-Version: 4.5.0
+Vcs-Browser: https://github.com/jesec/flood
+Vcs-Git: https://github.com/jesec/flood.git
+Homepage: https://github.com/jesec/flood
+Rules-Requires-Root: no
+
+Package: flood
+Architecture: all
+Depends: ${misc:Depends},
+         nodejs
+Recommends: mediainfo
+Description: modern web user interface for various torrent clients
+ Flood is a modern web user interface for various torrent clients
+ with a Node.js backend and React frontend.
+ .
+ Flood uses a command line interface for configuration. Run Flood
+ with --help argument for more details.
