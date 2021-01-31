@@ -22,7 +22,11 @@
     "url": "https://github.com/jesec/flood/issues"
   },
   "files": [
-    "dist"
+    "dist",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "SECURITY.md"
   ],
   "bin": {
     "flood": "dist/index.js"
