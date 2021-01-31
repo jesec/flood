@@ -1,21 +1,23 @@
 Source: flood
-Maintainer: Jesse Chan <jc@linux.com>
-Uploaders: Jesse Chan <jc@linux.com>
 Section: javascript
 Priority: optional
+Maintainer: Debian Javascript Maintainers <pkg-javascript-devel@lists.alioth.debian.org>
+Uploaders: Jesse Chan <jc@linux.com>
 Testsuite: autopkgtest-pkg-nodejs
-Build-Depends: debhelper-compat (= 12),
-               pkg-js-tools (>= 0.9.20~)
-Standards-Version: 4.5.0
-Vcs-Browser: https://github.com/jesec/flood
-Vcs-Git: https://github.com/jesec/flood.git
-Homepage: https://github.com/jesec/flood
-Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 11)
+ , nodejs (>= 10)
+ , pkg-js-tools (>= 0.8.10)
+Standards-Version: 4.5.1
+Homepage: https://github.com/jesec/flood#readme
+Vcs-Git: https://salsa.debian.org/js-team/flood.git
+Vcs-Browser: https://salsa.debian.org/js-team/flood
 
 Package: flood
 Architecture: all
-Depends: ${misc:Depends},
-         nodejs
+Depends:
+ ${misc:Depends}
+ , nodejs (>= 10)
 Recommends: mediainfo
 Description: modern web user interface for various torrent clients
  Flood is a modern web user interface for various torrent clients

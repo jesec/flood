@@ -1,5 +1,4 @@
-version=3
-opts=\
-dversionmangle=s/\+(debian|dfsg|ds|deb)(\.\d+)?$//,\
-filenamemangle=s/.*\/v?([\d\.-]+)\.tar\.gz/flood-$1.tar.gz/ \
- https://github.com/jesec/flood/tags .*/archive/v?([\d\.]+).tar.gz
+version=4
+opts="searchmode=plain,pgpmode=none" \
+ https://registry.npmjs.org/flood \
+ https://registry.npmjs.org/flood/-/flood-(\d[\d\.]*)@ARCHIVE_EXT@
