@@ -200,7 +200,7 @@ const GenerateMagnetModal: FC = () => {
               )}
 
               <FormRowItem width="seven-eighths">
-                <ProgressBar percent={(100 * currentTime) / duration} />
+                <ProgressBar percent={isMediaLoaded ? (100 * currentTime) / duration : 0} />
               </FormRowItem>
             </FormRow>
           </Form>
