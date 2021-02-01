@@ -163,6 +163,17 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
     },
     {
       type: 'action',
+      action: 'chromecast',
+      label: TorrentContextMenuActions.chromecast,
+      clickHandler: () => {
+        UIActions.displayModal({
+          id: 'chromecast',
+          hash: getLastSelectedTorrent(),
+        });
+      },
+    },
+    {
+      type: 'action',
       action: 'generateMagnet',
       label: TorrentContextMenuActions.generateMagnet,
       clickHandler: () => {

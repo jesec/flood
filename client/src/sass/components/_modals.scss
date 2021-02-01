@@ -388,4 +388,34 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
       }
     }
   }
+
+  &__icon-button {
+    @include theme('color', 'sidebar--icon-button--foreground');
+    display: block;
+    font-size: 0.8em;
+    line-height: 1;
+    position: relative;
+    transition: color 0.25s;
+
+    &--interactive {
+      cursor: pointer;
+
+      &:hover {
+        @include theme('color', 'sidebar--icon-button--foreground--hover');
+
+        .icon {
+          @include theme('fill', 'sidebar--icon-button--fill--hover');
+        }
+      }
+    }
+
+    .icon {
+      @include theme('fill', 'sidebar--icon-button--fill');
+      height: 30px;
+      transition: fill 0.25s;
+      position: relative;
+      vertical-align: middle;
+      width: 30px;
+    }
+  }
 }

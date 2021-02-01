@@ -60,6 +60,7 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
     {id: 'torrentDetails', visible: true},
     {id: 'downloadContents', visible: true},
     {id: 'downloadMetainfo', visible: false},
+    {id: 'chromecast', visible: false},
     {id: 'generateMagnet', visible: false},
     {id: 'setInitialSeeding', visible: false},
     {id: 'setSequential', visible: false},

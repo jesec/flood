@@ -174,6 +174,14 @@ const TorrentActions = {
           }api/torrents/${hash}/contents/${indices.join(',')}/data?token=${res.data}`,
       ),
 
+  getTorrentContentsSubtitlePermalink: (hash: TorrentProperties['hash'], index: number) =>
+    axios
+      .get(`${ConfigStore.baseURI}api/torrents/${hash}/contents/${index}/token`)
+      .then(
+        (res) =>
+          `${window.location.protocol}//${window.location.host}${ConfigStore.baseURI}api/torrents/${hash}/contents/${index}/subtitles?token=${res.data}`,
+      ),
+
   moveTorrents: (options: MoveTorrentsOptions) =>
     axios
       .post(`${baseURI}api/torrents/move`, options)

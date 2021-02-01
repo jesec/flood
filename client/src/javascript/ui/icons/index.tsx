@@ -47,6 +47,7 @@ export {default as Lock} from './Lock';
 export {default as Logout} from './Logout';
 export {default as Menu} from './Menu';
 export {default as Notification} from './Notification';
+export {default as Pause} from './Pause';
 export {default as Peers} from './Peers';
 export {default as Radar} from './Radar';
 export {default as RadioDot} from './RadioDot';
