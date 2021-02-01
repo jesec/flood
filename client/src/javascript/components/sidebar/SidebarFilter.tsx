@@ -38,7 +38,7 @@ const SidebarFilter: FC<SidebarFilterProps> = (props: SidebarFilterProps) => {
   }
 
   return (
-    <li className={classNames} onClick={() => handleClick(slug)}>
+    <li className={classNames} onClick={() => handleClick(slug)} role="menuitem">
       {icon}
       {name}
       <Badge>{count}</Badge>
