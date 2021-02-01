@@ -59,7 +59,7 @@ However, there might be more recent ones in user-contributed [wiki](https://gith
 
 ### License
 
-Notwithstanding GPL 3 license applied to other parts of this project, files in this folder are licensed under BSD 0-Clause License (SPDX: 0BSD), which is a public domain equivalent license.
+Notwithstanding GPL 3 license applied to other parts of this project, files in this folder are licensed under [BSD 0-Clause License](https://choosealicense.com/licenses/0bsd) (SPDX: [0BSD](https://spdx.org/licenses/0BSD.html)), which is a [public domain equivalent license](https://en.wikipedia.org/wiki/Public-domain-equivalent_license).
 
 ```
 Permission to use, copy, modify, and/or distribute this software for any
