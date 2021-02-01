@@ -46,7 +46,7 @@ Other distribution methods may rely on generated standalone executables.
 
 ### Misc
 
-`shared` folder hosts files that may be useful in a package, in addition to:
+`shared` folder hosts files that may be useful in a package, in addition to (at the root of project):
 
 ```
 CHANGELOG.md
@@ -80,4 +80,10 @@ TBD.
 
 ### Contributing
 
-Contributions are welcome.
+Contributions are welcome. There are many ways to contribute. For instance:
+
+Add a link here if you are maintaining a package of Flood in the official repository of your distribution/platform, so people know there is such an option and may assist with your efforts.
+
+Contribute the files needed to build a package for your distribution.
+
+Tweak or add continuous integration workflows to support your distribution.
