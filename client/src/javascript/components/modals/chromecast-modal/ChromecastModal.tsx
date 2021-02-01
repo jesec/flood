@@ -1,5 +1,5 @@
 import {FC, useEffect, useState} from 'react';
-import {useIntl} from 'react-intl';
+import {useLingui} from '@lingui/react';
 import {CastButton, useCast, useCastPlayer} from 'react-cast-sender';
 import classNames from 'classnames';
 
@@ -17,7 +17,7 @@ import {getChromecastContentType, isFileChromecastable, isFileSubtitles} from '.
 type Subtitles = number | 'none';
 
 const GenerateMagnetModal: FC = () => {
-  const intl = useIntl();
+  const {i18n} = useLingui();
 
   const {connected, initialized} = useCast();
   const {loadMedia, currentTime, duration, isPaused, isMediaLoaded, togglePlay} = useCastPlayer();
@@ -39,12 +39,8 @@ const GenerateMagnetModal: FC = () => {
   if (!initialized)
     return (
       <Modal
-        heading={intl.formatMessage({
-          id: 'chromecast.modal.title',
-        })}
-        content={
-          <div className="modal__content inverse">{intl.formatMessage({id: 'chromecast.modal.notSupported'})}</div>
-        }
+        heading={i18n._('chromecast.modal.title')}
+        content={<div className="modal__content inverse">{i18n._('chromecast.modal.notSupported')}</div>}
         actions={[
           {
             clickHandler: null,
@@ -171,7 +167,7 @@ const GenerateMagnetModal: FC = () => {
 
               <FormRowItem width="one-sixteenth">
                 <Tooltip
-                  content={intl.formatMessage({id: isMediaLoaded ? 'chromecast.modal.stop' : 'chromecast.modal.start'})}
+                  content={i18n._(isMediaLoaded ? 'chromecast.modal.stop' : 'chromecast.modal.start')}
                   onClick={isMediaLoaded ? stopCasting : beginCasting}
                   suppress={!connected}
                   interactive={connected}
@@ -186,7 +182,7 @@ const GenerateMagnetModal: FC = () => {
               {isMediaLoaded && (
                 <FormRowItem width="one-sixteenth">
                   <Tooltip
-                    content={intl.formatMessage({id: isPaused ? 'chromecast.modal.play' : 'chromecast.modal.pause'})}
+                    content={i18n._(isPaused ? 'chromecast.modal.play' : 'chromecast.modal.pause')}
                     onClick={togglePlay}
                     suppress={!connected}
                     interactive={connected}
@@ -209,9 +205,7 @@ const GenerateMagnetModal: FC = () => {
       actions={[
         {
           clickHandler: null,
-          content: intl.formatMessage({
-            id: 'button.close',
-          }),
+          content: i18n._('button.close'),
           triggerDismiss: true,
           type: 'tertiary',
         },
