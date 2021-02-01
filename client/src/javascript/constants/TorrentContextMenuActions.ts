@@ -10,6 +10,7 @@ const TorrentContextMenuActions = {
   torrentDetails: 'torrents.list.context.details',
   downloadContents: 'torrents.list.context.download.contents',
   downloadMetainfo: 'torrents.list.context.download.metainfo',
+  chromecast: 'torrents.list.context.chromecast',
   generateMagnet: 'torrents.list.context.generate.magnet',
   setInitialSeeding: 'torrents.list.context.initial.seeding',
   setSequential: 'torrents.list.context.sequential',
