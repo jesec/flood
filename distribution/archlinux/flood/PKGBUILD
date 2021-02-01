@@ -1,5 +1,5 @@
-# Maintainer: Jesse Chan <jc@linux.com>
-# Contributor: Jesse Chan <jc@linux.com>
+# Maintainer: replace with your name <to-be-determined@tbd>
+# Contributor: replace with your name <to-be-determined@tbd>
 _npmname=flood
 _npmver=4.3.1
 pkgname=flood
