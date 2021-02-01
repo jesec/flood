@@ -402,6 +402,8 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
     return (
       <div
         className={wrapperClassName}
+        role="button"
+        tabIndex={0}
         onClick={onClick}
         onMouseEnter={() => this.handleMouseEnter()}
         onMouseLeave={() => this.handleMouseLeave()}
