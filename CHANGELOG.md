@@ -1,5 +1,88 @@
 # Changelog
 
+## [4.4.0] (February 2, 2021)
+
+- Return a portable link when torrent content is requested
+  - Allow sharing of links to other people
+  - Allow casting (Chromecast, Airplay) of content to devices which can't authenticate with Flood
+  - Allow copying the link and paste it to a player application so more formats can be streamed
+  - Allow external downloaders to use the link
+- Allow to register to handle magnet links in "Add by URL" panel
+  - Support for "add-urls" frontend query action is added
+  - e.g. `http://localhost:3000/?action=add-urls&url=magnet:?xt=`
+- Allow to download .torrent file of a torrent
+- Add sequential downloading support for applicable clients
+  - rTorrent: requires "d.down.sequential(.set)" commands, see [jesec/rtorrent@bd904e3](https://github.com/jesec/rtorrent/commit/bd904e366367cb9cbe007381089eea066253c9e9)
+  - qBittorrent: supported
+  - Transmission: rejected, see [https://trac.transmissionbt.com/ticket/452](https://trac.transmissionbt.com/ticket/452)
+- Add initial seeding (aka superseeding) support for applicable clients
+  - [BEP16](https://www.bittorrent.org/beps/bep_0016.html)
+    - Saves bandwidth for initial seeder and quickly kicks off a healthy swarm
+    - NOT recommended for non-initial seeders
+  - rTorrent: not exposed to RPC interface, requires [jesec/rtorrent@657089d](https://github.com/jesec/rtorrent/commit/657089d438f917714c2386c28ce9d01a6e6a2737)
+  - qBittorrent: supported
+  - Transmission: not supported, see [https://trac.transmissionbt.com/ticket/1691](https://trac.transmissionbt.com/ticket/1691)
+- Display existing tags in alphabetical order in tag selector
+- Optionally skip assets serving with `--assets=false`
+  - May be useful for users who serve static assets from their own servers
+  - Or developers who don't want to build assets before starting a server instance
+- Refresh manifest and assets related to PWA (Progressive Web Application) support
+- Separate locale and language when using "Automatic" language setting
+  - Deal with minor locale differences (e.g. date formats) between language variants
+  - See [#123](https://github.com/jesec/flood/issues/123)
+- Remove inconsistency of clients by normalizing hashes in API responses to upper case
+- Explicitly pass paths of contents to mediainfo
+  - So unrelated files in the same folder won't be processed by mediainfo
+- Remove dependency on shell in disk usage functions
+  - New distribution-less (distroless) Docker image is now available, which has smaller size and allows maximum security
+- Standalone executable:
+  - Now available for `linux-arm64` and `win-arm64`
+  - Bundled Node.js runtime bumped to 14.15.4
+  - Linux binaries are now fully static
+  - Customized Node.js runtime with smaller size and memory consumption
+- rTorrent fixes:
+  - Create destination directory structure before moving torrent
+  - Flood API responses no longer mixes with unprocessed rTorrent method call responses
+  - Properly handle multi tags while adding
+  - Remove torrents (with data) can delete empty directories
+- qBittorrent fixes:
+  - Fix "isBasePath" for newer versions
+  - Implement "isCompleted" (skip_checking)
+  - Trim whitespace in `tags` property
+  - Optionally set website cookie for torrent fetching (add by URL)
+- Security enhancements:
+  - Don't leak details of internal errors
+  - Rate limits /data API endpoint
+- Bug fixes:
+  - Pack torrent contents one by one to avoid out-of-memory during batch downloading
+  - Potential crashes related to disk usage functions in rare Docker environments
+  - Disallow comma in tag
+- New translations
+  - Chinese (Traditional), thanks to @vongola12324
+  - Czech, thanks to @brezinajn
+  - Dutch, thanks to @vain4us
+  - French, thanks to @Carryozor
+  - German, thanks to @Ben-Wallner
+  - Hungarian, thanks to @sfu420
+  - Romanian, thanks to @T-z3P
+  - Spanish, thanks to @almontegil
+- Bump dependencies
+
+Additionally, Sonarr [#4159](https://github.com/Sonarr/Sonarr/pull/4159) and Radarr [#5552](https://github.com/Radarr/Radarr/pull/5552) now supports Flood natively.
+
+**Notes about sequential downloading:**
+
+Drawbacks:
+
+- https://wiki.vuze.com/w/Sequential_downloading_is_bad
+
+Benefits:
+
+- Sequential downloading helps with I/O performance and lowers resource consumption and cost of hardware. It enables predictable I/O patterns and efficient caching. My hard disk is really noisy while downloading a torrent. But with sequential downloading, it does not make a sound. Speed is much better as well. Sequential I/O patterns also eliminate disk fragmentation problem that damages performance/lifespan of hard disks in long-term, which is a headache for long seeders.
+- "It is bad for swarms." That's correct for unhealthy swarms. However, for private torrent users, in most cases, the seeder/leecher relationship is "many seeder, single/little leecher". Plus, with the incentives/punishments of tracker sites, there is little to no risk of "draining". As such, it makes more sense to protect hardware of everyone in the swarm. Predictable I/O patterns also allow seeders to seed many torrents more efficiently: if leechers use sequential download, the read patterns become predictably sequential, which allows better I/O performance and reduces the failure rate of hard disks.
+- For seedbox users: seedboxes are virtual machines. That means many users share the same physical machine. Random chunk downloading is extremely taxing on disks. As a result, usually the speeds are limited by I/O more than bandwidth. If the swarm pattern is usually "many seeder, single leecher", sequential downloading can help a lot.
+- Widely known "self" benefits: stream early, stream while downloading, organize episodes quick and unpack some files before finish, etc.
+
 ## [4.3.1] (December 10, 2020)
 
 - Make theme button always at the bottom of sidebar
