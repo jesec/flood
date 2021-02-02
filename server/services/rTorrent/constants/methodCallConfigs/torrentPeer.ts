@@ -3,7 +3,10 @@ import {stringTransformer, booleanTransformer, numberTransformer} from '../../ut
 const torrentPeerMethodCallConfigs = {
   address: {
     methodCall: 'p.address=',
-    transformValue: stringTransformer,
+    transformValue: (value: unknown) => {
+      const address = value as string;
+      return address.startsWith('[') ? address.slice(1, -1) : address;
+    },
   },
   clientVersion: {
     methodCall: 'p.client_version=',
