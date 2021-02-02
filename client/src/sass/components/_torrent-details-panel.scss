@@ -163,6 +163,13 @@ $torrent-details--tags--foreground: #1a2028;
         font-weight: 700;
       }
     }
+
+    td {
+      max-width: 140px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 
   &__section {
