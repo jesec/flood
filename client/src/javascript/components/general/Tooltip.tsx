@@ -402,6 +402,11 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
     return (
       <div
         className={wrapperClassName}
+        css={{
+          ':focus': {
+            outline: 'none',
+          },
+        }}
         role="button"
         tabIndex={0}
         onClick={onClick}
