@@ -17,9 +17,11 @@
     "eamodio.gitlens",
     "esbenp.prettier-vscode",
     "github.vscode-pull-request-github",
+    "gencer.html-slim-scss-css-class-completion",
     "ms-azuretools.vscode-docker",
     "ms-vscode.vscode-typescript-next",
     "orta.vscode-jest",
+    "pucelle.vscode-css-navigation",
     "streetsidesoftware.code-spell-checker",
     "visualstudioexptteam.vscodeintellicode"
   ],
