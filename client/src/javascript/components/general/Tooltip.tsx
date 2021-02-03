@@ -405,6 +405,7 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
         css={{
           ':focus': {
             outline: 'none',
+            WebkitTapHighlightColor: 'transparent',
           },
           ':focus-visible': {
             outline: 'dashed',
