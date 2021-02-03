@@ -74,6 +74,8 @@
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.12.13",
+    "@emotion/babel-plugin": "^11.1.2",
+    "@emotion/react": "^11.1.4",
     "@lingui/loader": "^3.5.0",
     "@lingui/react": "^3.5.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
