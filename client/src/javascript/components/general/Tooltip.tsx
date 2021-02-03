@@ -406,6 +406,9 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
           ':focus': {
             outline: 'none',
           },
+          ':focus-visible': {
+            outline: 'dashed',
+          },
         }}
         role="button"
         tabIndex={0}
