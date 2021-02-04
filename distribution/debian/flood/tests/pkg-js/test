@@ -1,5 +1,5 @@
-if [ -d bin ]; then
-    ./bin/flood --version
+if [ -d dist ]; then
+    ./dist/index.js --version
 else
     flood --version
 fi

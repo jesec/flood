@@ -6,7 +6,7 @@ Uploaders: replace with your name <to-be-determined@tbd>
 Testsuite: autopkgtest-pkg-nodejs
 Build-Depends:
  debhelper-compat (= 11)
- , nodejs (>= 10)
+ , nodejs (>= 12)
  , pkg-js-tools (>= 0.8.10)
 Standards-Version: 4.5.1
 Homepage: https://github.com/jesec/flood#readme
@@ -17,7 +17,7 @@ Package: flood
 Architecture: all
 Depends:
  ${misc:Depends}
- , nodejs (>= 10)
+ , nodejs (>= 12)
 Recommends: mediainfo
 Description: modern web user interface for various torrent clients
  Flood is a modern web user interface for various torrent clients

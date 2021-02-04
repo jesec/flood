@@ -6,3 +6,6 @@
 
 %:
 	dh $@ --with nodejs
+
+override_dh_fixperms:
+	dh_fixperms -Xdist/index.js
