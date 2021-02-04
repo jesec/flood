@@ -18,7 +18,7 @@ WORKDIR /home/${AUR_USER}
 
 RUN mkdir .ssh
 RUN curl https://gitlab.archlinux.org/archlinux/infrastructure/-/raw/master/docs/ssh-known_hosts.txt?inline=false > .ssh/known_hosts
-RUN echo "${AUR_KEY}" > .ssh/id_rsa
+RUN echo ${AUR_KEY} > .ssh/id_rsa
 RUN chmod 0400 .ssh/id_rsa
 
 RUN git config --global user.name ${COMMIT_USERNAME}
