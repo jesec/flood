@@ -23,6 +23,7 @@
   },
   "files": [
     "dist",
+    "node_modules",
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
@@ -222,6 +223,9 @@
     "yargs": "^16.2.0",
     "zod": "^1.11.11"
   },
+  "bundledDependencies": [
+    "geoip-country"
+  ],
   "engines": {
     "node": ">=12.0.0",
     "npm": ">=6.0.0"
