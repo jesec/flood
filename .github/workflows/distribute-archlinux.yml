@@ -1,0 +1,39 @@
+name: Distribute for Arch Linux
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Release']
+    types:
+      - completed
+
+jobs:
+  aur:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update PKGBUILD for AUR
+        run: |
+          sed -i 's/pkgname=flood/pkgname=nodejs-flood/' ./distribution/archlinux/flood/PKGBUILD
+          sed -i 's/replace-with-your-name/Jesse Chan/' ./distribution/archlinux/flood/PKGBUILD
+          sed -i 's/to-be-determined@tbd/jc@linux.com/' ./distribution/archlinux/flood/PKGBUILD
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Publish to AUR
+        uses: docker/build-push-action@v2
+        with:
+          build-args: |
+            AUR_FINGERPRINT="aur.archlinux.org ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLMiLrP8pVi5BFX2i3vepSUnpedeiewE5XptnUnau+ZoeUOPkpoCgZZuYfpaIQfhhJJI5qgnjJmr4hyJbe/zxow="
+            AUR_FOLDER=./flood
+            AUR_REPO=ssh://aur@aur.archlinux.org/nodejs-flood.git
+            AUR_USER="jesec"
+            COMMIT_USERNAME="github-actions[bot]"
+            COMMIT_EMAIL="41898282+github-actions[bot]@users.noreply.github.com"
+            COMMIT_MESSAGE="Automatic update"
+            "AUR_KEY=${{ secrets.AUR_KEY }}"
+          context: ./distribution/archlinux
+          file: ./distribution/archlinux/Dockerfile.aur
+          platforms: linux/amd64

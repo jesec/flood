@@ -1,0 +1,40 @@
+FROM archlinux
+
+ARG AUR_FINGERPRINT
+ARG AUR_FOLDER
+ARG AUR_REPO
+ARG AUR_KEY
+ARG AUR_USER
+ARG COMMIT_USERNAME
+ARG COMMIT_EMAIL
+ARG COMMIT_MESSAGE
+
+RUN pacman -Sy --noconfirm base-devel openssh git pacman-contrib
+
+RUN useradd -m ${AUR_USER}
+
+USER ${AUR_USER}
+
+WORKDIR /home/${AUR_USER}
+
+RUN mkdir .ssh
+RUN echo "${AUR_FINGERPRINT}" > .ssh/known_hosts
+RUN echo "${AUR_KEY}" > .ssh/id_rsa
+RUN chmod 0400 .ssh/id_rsa
+
+RUN git config --global user.name ${COMMIT_USERNAME}
+RUN git config --global user.email ${COMMIT_EMAIL}
+RUN git clone ${AUR_REPO} aur
+
+WORKDIR /home/${AUR_USER}/aur
+
+RUN rm -rf *
+COPY --chown=${AUR_USER}:${AUR_USER} ${AUR_FOLDER}/* ./
+RUN ls -la
+
+RUN updpkgsums
+RUN makepkg --printsrcinfo > .SRCINFO
+
+RUN git add .
+RUN git diff --staged --quiet || git commit -m "${COMMIT_MESSAGE}"
+RUN git push
