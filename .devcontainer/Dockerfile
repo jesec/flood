@@ -10,12 +10,22 @@
 
 FROM jesec/rtorrent:master as rtorrent
 
-FROM mcr.microsoft.com/vscode/devcontainers/base:focal as flood
+FROM ubuntu:focal as flood
+
+COPY ./.devcontainer/library-scripts /tmp/library-scripts/
+
+# Configure base container
+RUN /bin/bash /tmp/library-scripts/common-debian.sh true vscode 1000 1000 true
+
+# Configure Docker-from-Docker
+RUN /bin/bash /tmp/library-scripts/docker-debian.sh true "/var/run/docker-host.sock" "/var/run/docker.sock" vscode false
+ENTRYPOINT ["/usr/local/share/docker-init.sh"]
+CMD ["sleep", "infinity"]
 
 # Install prerequisites
 RUN apt update
 RUN apt install -y \
-    apt-transport-https curl software-properties-common
+    software-properties-common
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_15.x | bash -
@@ -36,12 +46,6 @@ RUN apt install -y \
 # Install runtime dependencies
 RUN apt install -y \
     mediainfo
-
-# Configure Docker-from-Docker
-COPY ./.devcontainer/library-scripts /tmp/library-scripts/
-RUN /bin/bash /tmp/library-scripts/docker-debian.sh true "/var/run/docker-host.sock" "/var/run/docker.sock" vscode false
-ENTRYPOINT ["/usr/local/share/docker-init.sh"]
-CMD ["sleep", "infinity"]
 
 # Run as vscode user
 USER vscode
