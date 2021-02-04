@@ -1,6 +1,5 @@
 FROM archlinux
 
-ARG AUR_FINGERPRINT
 ARG AUR_FOLDER
 ARG AUR_REPO
 ARG AUR_KEY
@@ -9,7 +8,7 @@ ARG COMMIT_USERNAME
 ARG COMMIT_EMAIL
 ARG COMMIT_MESSAGE
 
-RUN pacman -Sy --noconfirm base-devel openssh git pacman-contrib
+RUN pacman -Sy --noconfirm base-devel curl openssh git pacman-contrib
 
 RUN useradd -m ${AUR_USER}
 
@@ -18,7 +17,7 @@ USER ${AUR_USER}
 WORKDIR /home/${AUR_USER}
 
 RUN mkdir .ssh
-RUN echo "${AUR_FINGERPRINT}" > .ssh/known_hosts
+RUN curl https://gitlab.archlinux.org/archlinux/infrastructure/-/raw/master/docs/ssh-known_hosts.txt?inline=false > .ssh/known_hosts
 RUN echo "${AUR_KEY}" > .ssh/id_rsa
 RUN chmod 0400 .ssh/id_rsa
 
