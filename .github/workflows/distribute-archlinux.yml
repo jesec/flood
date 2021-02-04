@@ -27,9 +27,9 @@ jobs:
         with:
           build-args: |
             AUR_FOLDER=./flood
+            AUR_REPO=ssh://aur@aur.archlinux.org/nodejs-flood.git
+            AUR_USER=jesec
             "AUR_FINGERPRINT=""aur.archlinux.org ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBLMiLrP8pVi5BFX2i3vepSUnpedeiewE5XptnUnau+ZoeUOPkpoCgZZuYfpaIQfhhJJI5qgnjJmr4hyJbe/zxow="""
-            "AUR_REPO=""ssh://aur@aur.archlinux.org/nodejs-flood.git"""
-            "AUR_USER=""jesec"""
             "COMMIT_USERNAME=""github-actions[bot]"""
             "COMMIT_EMAIL=""41898282+github-actions[bot]@users.noreply.github.com"""
             "COMMIT_MESSAGE=""Automatic update"""
