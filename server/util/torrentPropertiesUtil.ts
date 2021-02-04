@@ -1,5 +1,3 @@
-import {domainName as matchDomainName} from '../../shared/util/regEx';
-
 import type {TorrentProperties} from '../../shared/types/Torrent';
 
 export const hasTorrentFinished = (
@@ -22,31 +20,20 @@ export const hasTorrentFinished = (
 };
 
 export const getDomainsFromURLs = (urls: Array<string>): Array<string> => {
-  const domains: Array<string> = [];
+  return [
+    ...urls.reduce((memo: Set<string>, url: string) => {
+      const fqdn = url.split('/')[2]?.split(':')[0];
 
-  urls.forEach((url) => {
-    const regexMatched = matchDomainName.exec(url);
+      if (fqdn?.length > 0) {
+        const domainLastParts = fqdn.split('.').slice(-2);
 
-    if (regexMatched != null && regexMatched[1]) {
-      let domain = regexMatched[1];
-
-      const minSubsetLength = 3;
-      const domainSubsets = domain.split('.');
-      let desiredSubsets = 2;
-
-      if (domainSubsets.length > desiredSubsets) {
-        const lastDesiredSubset = domainSubsets[domainSubsets.length - desiredSubsets];
-        if (lastDesiredSubset.length <= minSubsetLength) {
-          desiredSubsets += 1;
+        // ignore IP addresses. RFC 952: first char of a valid TLD must be an alpha char
+        if (!'0123456789'.includes(domainLastParts[domainLastParts.length - 1]?.[0])) {
+          memo.add(domainLastParts.join('.'));
         }
       }
 
-      domain = domainSubsets.slice(desiredSubsets * -1).join('.');
-
-      domains.push(domain);
-    }
-  });
-
-  // Deduplicate
-  return [...new Set(domains)];
+      return memo;
+    }, new Set()),
+  ];
 };
