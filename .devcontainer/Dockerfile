@@ -17,15 +17,15 @@ COPY ./.devcontainer/library-scripts /tmp/library-scripts/
 # Configure base container
 RUN /bin/bash /tmp/library-scripts/common-debian.sh true vscode 1000 1000 true
 
+# Install prerequisites
+RUN apt update
+RUN apt install -y \
+    dpkg-dev software-properties-common
+
 # Configure Docker-from-Docker
 RUN /bin/bash /tmp/library-scripts/docker-debian.sh true "/var/run/docker-host.sock" "/var/run/docker.sock" vscode false
 ENTRYPOINT ["/usr/local/share/docker-init.sh"]
 CMD ["sleep", "infinity"]
-
-# Install prerequisites
-RUN apt update
-RUN apt install -y \
-    software-properties-common
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_15.x | bash -
