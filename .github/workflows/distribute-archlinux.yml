@@ -33,7 +33,7 @@ jobs:
             COMMIT_USERNAME="github-actions[bot]"
             COMMIT_EMAIL="41898282+github-actions[bot]@users.noreply.github.com"
             COMMIT_MESSAGE="Automatic update"
-            "AUR_KEY=${{ secrets.AUR_KEY }}"
+            AUR_KEY="${{ secrets.AUR_KEY }}"
           context: ./distribution/archlinux
           file: ./distribution/archlinux/Dockerfile.aur
           platforms: linux/amd64
