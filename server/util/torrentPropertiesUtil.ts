@@ -1,3 +1,5 @@
+import {getDomain} from 'tldts';
+
 import type {TorrentProperties} from '../../shared/types/Torrent';
 
 export const hasTorrentFinished = (
@@ -22,15 +24,10 @@ export const hasTorrentFinished = (
 export const getDomainsFromURLs = (urls: Array<string>): Array<string> => {
   return [
     ...urls.reduce((memo: Set<string>, url: string) => {
-      const fqdn = url.split('/')[2]?.split(':')[0];
+      const domain = getDomain(url);
 
-      if (fqdn?.length > 0) {
-        const domainLastParts = fqdn.split('.').slice(-2);
-
-        // ignore IP addresses. RFC 952: first char of a valid TLD must be an alpha char
-        if (!'0123456789'.includes(domainLastParts[domainLastParts.length - 1]?.[0])) {
-          memo.add(domainLastParts.join('.'));
-        }
+      if (domain != null) {
+        memo.add(domain);
       }
 
       return memo;
