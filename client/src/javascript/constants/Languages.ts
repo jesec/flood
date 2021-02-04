@@ -15,6 +15,7 @@ const Languages = {
   pt: 'português',
   ru: 'русский язык',
   ro: 'Romanian',
+  fi: 'suomi',
   sv: 'svenska',
   uk: 'українська мова',
   ko: '한국어',
