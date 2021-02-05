@@ -32,7 +32,7 @@ const torrentFiles = [
 ].map((torrentPath) => Buffer.from(fs.readFileSync(torrentPath)).toString('base64')) as [string, ...string[]];
 
 const torrentURLs: [string, ...string[]] = [
-  'https://releases.ubuntu.com/20.04/ubuntu-20.04.1-live-server-amd64.iso.torrent',
+  'https://releases.ubuntu.com/20.04/ubuntu-20.04.2-live-server-amd64.iso.torrent',
   'https://flood.js.org/api/test-cookie',
 ];
 
