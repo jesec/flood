@@ -25,17 +25,22 @@ jobs:
       - run: npm ci --no-optional
 
       - name: Tag rolling release
+        id: tag_release
         run: |
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          npm version --no-git-tag-version 0.0.0-master.`git rev-parse --short HEAD`
+          build_version=0.0.0-master.`git rev-parse --short HEAD`
+          npm version --no-git-tag-version $build_version
+          echo ::set-output name=BUILD_VERSION::$build_version
 
       - name: Use @${{ github.actor }} scope
         run: |
           jq '.name = "@${{ github.actor }}/flood"' package.json > package.new.json
           mv package.new.json package.json
 
-      - run: npm publish --access public
+      - run: npm pack
+
+      - run: npm publish --access public ./*.tgz
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
@@ -44,11 +49,12 @@ jobs:
         with:
           name: flood
           path: ./*.tgz
+          if-no-files-found: error
 
       - name: Wait until the package is available
         uses: nick-invision/retry@v2
         with:
-          command: curl -f -s https://registry.npmjs.org/@jesec/flood/${{ steps.parse_version.outputs.BUILD_VERSION }} &>/dev/null
+          command: curl -f -s https://registry.npmjs.org/@jesec/flood/${{ steps.tag_release.outputs.BUILD_VERSION }} &>/dev/null
           timeout_minutes: 30
           max_attempts: 15
           retry_wait_seconds: 15
@@ -192,30 +198,35 @@ jobs:
         with:
           name: flood-linux-x64
           path: dist-pkg/flood-linux-x64
+          if-no-files-found: error
 
       - name: 'Upload executable: Linux arm64'
         uses: actions/upload-artifact@v2
         with:
           name: flood-linux-arm64
           path: dist-pkg/flood-linux-arm64
+          if-no-files-found: error
 
       - name: 'Upload executable: MacOS x64'
         uses: actions/upload-artifact@v2
         with:
           name: flood-macos-x64
           path: dist-pkg/flood-macos-x64
+          if-no-files-found: error
 
       - name: 'Upload executable: Windows x64'
         uses: actions/upload-artifact@v2
         with:
           name: flood-win-x64.exe
           path: dist-pkg/flood-win-x64.exe
+          if-no-files-found: error
 
       - name: 'Upload executable: Windows arm64'
         uses: actions/upload-artifact@v2
         with:
           name: flood-win-arm64.exe
           path: dist-pkg/flood-win-arm64.exe
+          if-no-files-found: error
 
   docker-distroless:
     needs: pkg
