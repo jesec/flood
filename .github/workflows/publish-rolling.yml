@@ -39,6 +39,22 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Upload tarball
+        uses: actions/upload-artifact@v2
+        with:
+          name: flood
+          path: ./*.tgz
+
+      - name: Wait until the package is available
+        uses: nick-invision/retry@v2
+        with:
+          command: curl -f -s https://registry.npmjs.org/@jesec/flood/${{ steps.parse_version.outputs.BUILD_VERSION }} &>/dev/null
+          timeout_minutes: 30
+          max_attempts: 15
+          retry_wait_seconds: 15
+
+      - run: sleep 20
+
   docker:
     needs: npm
     runs-on: ubuntu-20.04
@@ -62,16 +78,6 @@ jobs:
         id: parse_version
         run: |
           echo ::set-output name=BUILD_VERSION::0.0.0-master.`git rev-parse --short HEAD`
-
-      - name: Wait until the package is available
-        uses: nick-invision/retry@v2
-        with:
-          command: curl -f -s https://registry.npmjs.org/@jesec/flood/${{ steps.parse_version.outputs.BUILD_VERSION }} &>/dev/null
-          timeout_minutes: 30
-          max_attempts: 15
-          retry_wait_seconds: 15
-
-      - run: sleep 20
 
       - name: Publish flood:master to Docker Hub
         uses: docker/build-push-action@v2
@@ -146,6 +152,7 @@ jobs:
           tags: jesec/rtorrent-flood:master-dbg
 
   pkg:
+    needs: npm
     runs-on: ubuntu-20.04
 
     strategy:
@@ -153,8 +160,6 @@ jobs:
         node: [15]
 
     steps:
-      - uses: actions/checkout@v2
-
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v1
         with:
@@ -163,16 +168,19 @@ jobs:
 
       - run: sudo apt install --reinstall -y qemu-user-static
 
-      - run: npm ci --no-optional
       - run: sudo npm install -g @jesec/pkg
 
-      - name: Tag rolling release
+      - uses: actions/download-artifact@v2
+        with:
+          name: flood
+
+      - name: Extract tarball
         run: |
-          npm version --no-git-tag-version 0.0.0-master.`git rev-parse --short HEAD`
+          tar xvf *.tgz --strip-components=1
 
       - name: Build executables
         run: |
-          npm run build-pkg
+          pkg . --out-path dist-pkg
 
       - name: Rename linuxstatic to linux
         run: |
