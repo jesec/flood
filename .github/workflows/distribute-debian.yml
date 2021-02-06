@@ -50,7 +50,8 @@ jobs:
 
       - name: Package .deb
         run: |
-          bazel build flood-deb-arm64 flood-deb-x64
+          mkdir ~/.pkg-cache
+          bazel build flood-deb-arm64 flood-deb-x64 --sandbox_writable_path=`printf ~/.pkg-cache`
           cp -L bazel-bin/flood-deb-arm64.deb flood-linux-arm64.deb
           cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
 
