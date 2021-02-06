@@ -1,10 +1,10 @@
 # Maintainer: replace with your name <to-be-determined@tbd>
 # Contributor: replace with your name <to-be-determined@tbd>
 _npmname=flood
-_npmver=4.3.1
+_npmver=4.4.0
 pkgname=flood
 pkgver=$_npmver
-pkgrel=0
+pkgrel=1
 pkgdesc="A modern web UI for various torrent clients"
 arch="noarch !mips !mips64" # blocked by nodejs
 url="https://flood.js.org"
