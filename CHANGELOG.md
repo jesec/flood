@@ -1,5 +1,24 @@
 # Changelog
 
+## [4.4.1] (February 6, 2021)
+
+- Better handle tracker domain conversion and grouping
+- Wrap texts (e.g. long IPv6 addresses and peer client versions) in tables of torrent details if necessary
+- Distribution:
+  - CI now publishes releases to AUR (Arch Linux User Repository)
+  - CI now publishes Debian (`.deb`) packages to Github Releases
+  - Contributions are welcome. See [distribution/README.md](https://github.com/jesec/flood/blob/v4.4.1/distribution/README.md).
+- rTorrent fixes:
+  - Remove [] from IPv6 addresses in peer list
+- Bug fixes:
+  - Remove ugly outline and highlight of focused button caused by an a11y change
+  - Try to workaround potential index.html caching issues
+    - Browser uses a fully cached asset tree in some cases, which defeats cache busting by asset hashes
+- New translations
+  - Finnish, thanks to @hyvamiesh
+  - German, thanks to @chint95
+- Bump dependencies
+
 ## [4.4.0] (February 2, 2021)
 
 - Return a portable link when torrent content is requested
@@ -371,3 +390,4 @@ Other changes:
 [4.3.0]: https://github.com/jesec/flood/compare/v4.2.0...v4.3.0
 [4.3.1]: https://github.com/jesec/flood/compare/v4.3.0...v4.3.1
 [4.4.0]: https://github.com/jesec/flood/compare/v4.3.1...v4.4.0
+[4.4.1]: https://github.com/jesec/flood/compare/v4.4.0...v4.4.1

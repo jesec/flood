@@ -1,6 +1,6 @@
 {
   "name": "flood",
-  "version": "4.4.0",
+  "version": "4.4.1",
   "description": "A modern Web UI for various torrent clients with multi-user and multi-client support",
   "keywords": [
     "typescript",
@@ -224,9 +224,6 @@
     "yargs": "^16.2.0",
     "zod": "^1.11.11"
   },
-  "bundledDependencies": [
-    "geoip-country"
-  ],
   "engines": {
     "node": ">=12.0.0",
     "npm": ">=6.0.0"
@@ -238,5 +235,8 @@
     "last 5 edge version",
     "last 2 iOS version",
     "last 2 Safari version"
+  ],
+  "bundleDependencies": [
+    "geoip-country"
   ]
 }
