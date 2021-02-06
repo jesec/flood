@@ -53,15 +53,26 @@ if (config.serveAssets !== false) {
     encoding: 'utf8',
   });
 
+  // Prohibit caching of index.html as browser can use a fully cached asset
+  // tree in some cases, which defeats cache busting by asset hashes.
+  const headers = {
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    Pragma: 'no-cache',
+    Expires: '0',
+  };
+
   app.get(`${servedPath}login`, (_req, res) => {
+    res.set(headers);
     res.send(html);
   });
 
   app.get(`${servedPath}register`, (_req, res) => {
+    res.set(headers);
     res.send(html);
   });
 
   app.get(`${servedPath}overview`, (_req, res) => {
+    res.set(headers);
     res.send(html);
   });
 } else {
