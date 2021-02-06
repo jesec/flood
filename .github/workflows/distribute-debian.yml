@@ -1,0 +1,66 @@
+name: Distribute for Debian
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ['Release']
+    types:
+      - completed
+
+jobs:
+  flood-bin:
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        node: [15]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - run: sudo apt install --reinstall -y qemu-user-static
+
+      - run: sudo npm install -g @jesec/pkg
+
+      - name: Install Bazel
+        run: |
+          sudo wget https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 -O /usr/local/bin/bazel
+          sudo chmod +x /usr/local/bin/bazel
+
+      - name: Copy flood-bin distribution files
+        run: cp -rf distribution/debian/flood-bin/* .
+
+      - name: Update BUILD
+        run: sed -i 's/replace-with-your-name <to-be-determined@tbd>/Jesse Chan <jc@linux.com>/' ./BUILD
+
+      - name: Parse version
+        id: parse_version
+        run: echo ::set-output name=VERSION::`grep "VERSION = " ./BUILD | cut -d"\"" -f2 | cut -d"-" -f1`
+
+      - name: Extract Flood tarball
+        run: |
+          npm pack flood@${{ steps.parse_version.outputs.VERSION }}
+          tar xvf flood-*.tgz --strip-components=1
+
+      - name: Package .deb
+        run: |
+          bazel build flood-deb-arm64 flood-deb-x64
+          cp -L bazel-bin/flood-deb-arm64.deb flood-linux-arm64.deb
+          cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
+
+      - name: Upload packages to Release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: Release v${{ steps.parse_version.outputs.VERSION }}
+          tag_name: v${{ steps.parse_version.outputs.VERSION }}
+          files: |
+            flood-linux-arm64.deb
+            flood-linux-x64.deb
