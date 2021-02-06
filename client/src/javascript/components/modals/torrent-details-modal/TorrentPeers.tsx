@@ -33,7 +33,16 @@ const TorrentPeers: FC = () => {
 
   return (
     <div className="torrent-details__section torrent-details__section--peers">
-      <table className="torrent-details__table table">
+      <table
+        className="torrent-details__table table"
+        css={{
+          td: {
+            maxWidth: '140px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          },
+        }}>
         <thead className="torrent-details__table__heading">
           <tr>
             <th className="torrent-details__table__heading--primary">
