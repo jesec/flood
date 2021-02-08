@@ -35,9 +35,9 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
     ref,
   ) => {
     const [destination, setDestination] = useState<string>(
-      suggested ??
-        SettingStore.floodSettings.torrentDestinations?.[''] ??
-        SettingStore.clientSettings?.directoryDefault ??
+      suggested ||
+        SettingStore.floodSettings.torrentDestinations?.[''] ||
+        SettingStore.clientSettings?.directoryDefault ||
         '',
     );
     const [isDirectoryListOpen, setIsDirectoryListOpen] = useState<boolean>(false);
