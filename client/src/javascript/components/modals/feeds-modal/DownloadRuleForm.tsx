@@ -116,7 +116,7 @@ const DownloadRuleForm: FC<DownloadRuleFormProps> = ({
           defaultValue={rule.tags}
         />
       </FormRow>
-      <FormRow>
+      <FormRow align="end" justify="end">
         <br />
         <Checkbox id="startOnLoad" defaultChecked={rule.startOnLoad} matchTextboxHeight>
           <Trans id="feeds.start.on.load" />

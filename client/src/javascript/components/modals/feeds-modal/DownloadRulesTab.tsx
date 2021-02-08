@@ -206,7 +206,7 @@ const DownloadRulesTab: FC = () => {
           }}
         />
       ) : (
-        <FormRow>
+        <FormRow align="end" justify="end">
           <br />
           <Button
             onClick={() => {
