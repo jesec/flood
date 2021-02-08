@@ -1,6 +1,6 @@
 import {FC, useState} from 'react';
+import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
-import {useMedia} from 'react-use';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {FloodSettings} from '@shared/types/FloodSettings';
@@ -18,9 +18,8 @@ import SettingActions from '../../../actions/SettingActions';
 import UITab from './UITab';
 import UIStore from '../../../stores/UIStore';
 
-const SettingsModal: FC = () => {
+const SettingsModal: FC = observer(() => {
   const {i18n} = useLingui();
-  const isSmallScreen = useMedia('(max-width: 720px)');
 
   const [changedClientSettings, setChangedClientSettings] = useState<Partial<ClientSettings>>({});
   const [changedFloodSettings, setChangedFloodSettings] = useState<Partial<FloodSettings>>({});
@@ -123,10 +122,10 @@ const SettingsModal: FC = () => {
       ]}
       size="large"
       heading={i18n._('settings.tabs.heading')}
-      orientation={isSmallScreen ? 'horizontal' : 'vertical'}
+      orientation={ConfigStore.isSmallScreen ? 'horizontal' : 'vertical'}
       tabs={tabs}
     />
   );
-};
+});
 
 export default SettingsModal;

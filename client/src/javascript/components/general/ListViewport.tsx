@@ -65,7 +65,7 @@ const ListViewport = forwardRef<FixedSizeList, ListViewportProps>((props: ListVi
 
   return (
     <FixedSizeList
-      className={`${className} ${ConfigStore.preferDark ? 'os-theme-light' : 'os-theme-dark'}`}
+      className={`${className} ${ConfigStore.isPreferDark ? 'os-theme-light' : 'os-theme-dark'}`}
       height={Math.max(itemSize * 30, windowHeight * 1.5)}
       itemCount={listLength}
       itemSize={itemSize}

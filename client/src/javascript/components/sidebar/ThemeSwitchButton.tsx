@@ -11,8 +11,8 @@ const ThemeSwitchButton: FC = () => {
 
   return (
     <Tooltip
-      content={i18n._(ConfigStore.preferDark ? 'sidebar.button.theme.light' : 'sidebar.button.theme.dark')}
-      onClick={() => ConfigStore.setUserPreferDark(!ConfigStore.preferDark)}
+      content={i18n._(ConfigStore.isPreferDark ? 'sidebar.button.theme.light' : 'sidebar.button.theme.dark')}
+      onClick={() => ConfigStore.setUserPreferDark(!ConfigStore.isPreferDark)}
       position="bottom"
       wrapperClassName="sidebar__action sidebar__icon-button
           sidebar__icon-button--interactive tooltip__wrapper">

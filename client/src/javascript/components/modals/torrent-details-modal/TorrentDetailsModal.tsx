@@ -1,6 +1,8 @@
 import {FC} from 'react';
+import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
-import {useMedia} from 'react-use';
+
+import ConfigStore from '@client/stores/ConfigStore';
 
 import Modal from '../Modal';
 import TorrentMediainfo from './TorrentMediainfo';
@@ -10,9 +12,9 @@ import TorrentHeading from './TorrentHeading';
 import TorrentPeers from './TorrentPeers';
 import TorrentTrackers from './TorrentTrackers';
 
-const TorrentDetailsModal: FC = () => {
+const TorrentDetailsModal: FC = observer(() => {
   const {i18n} = useLingui();
-  const isSmallScreen = useMedia('(max-width: 720px)');
+  const {isSmallScreen} = ConfigStore;
 
   const tabs = {
     'torrent-details': {
@@ -48,6 +50,6 @@ const TorrentDetailsModal: FC = () => {
       tabsInBody={!isSmallScreen}
     />
   );
-};
+});
 
 export default TorrentDetailsModal;

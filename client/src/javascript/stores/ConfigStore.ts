@@ -24,22 +24,28 @@ class ConfigStore {
   authMethod: AuthMethod = 'default';
   pollInterval = 2000;
 
-  systemPreferDark = false;
-  userPreferDark: boolean | null = queryUserPreferDark();
-  @computed get preferDark(): boolean {
-    return this.userPreferDark ?? this.systemPreferDark;
+  isSmallScreen = false;
+
+  isSystemPreferDark = false;
+  isUserPreferDark: boolean | null = queryUserPreferDark();
+  @computed get isPreferDark(): boolean {
+    return this.isUserPreferDark ?? this.isSystemPreferDark;
   }
 
   constructor() {
     makeAutoObservable(this);
   }
 
+  setSmallScreen(preference: boolean): void {
+    this.isSmallScreen = preference;
+  }
+
   setSystemPreferDark(preference: boolean): void {
-    this.systemPreferDark = preference;
+    this.isSystemPreferDark = preference;
   }
 
   setUserPreferDark(preference: boolean | null): void {
-    this.userPreferDark = preference;
+    this.isUserPreferDark = preference;
     if (preference == null) {
       window.localStorage.removeItem('userPreferDark');
     } else {

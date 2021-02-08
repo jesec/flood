@@ -68,17 +68,23 @@ const FloodApp: FC = observer(() => {
     );
   }, []);
 
-  const isDarkTheme = useMedia('(prefers-color-scheme: dark)');
+  const isSystemPreferDark = useMedia('(prefers-color-scheme: dark)');
   useEffect(() => {
-    ConfigStore.setSystemPreferDark(isDarkTheme);
-  }, [isDarkTheme]);
+    ConfigStore.setSystemPreferDark(isSystemPreferDark);
+  }, [isSystemPreferDark]);
+
+  // max-width here must sync with CSS
+  const isSmallScreen = useMedia('(max-width: 720px)');
+  useEffect(() => {
+    ConfigStore.setSmallScreen(isSmallScreen);
+  }, [isSmallScreen]);
 
   return (
     <Suspense fallback={<LoadingOverlay />}>
       <AsyncIntlProvider>
         <Router history={history}>
           <QueryParamProvider ReactRouterRoute={Route}>
-            <AppWrapper className={ConfigStore.preferDark ? 'dark' : undefined}>
+            <AppWrapper className={ConfigStore.isPreferDark ? 'dark' : undefined}>
               <Switch>
                 <Route path="/login" component={Login} />
                 <Route path="/overview" component={Overview} />
