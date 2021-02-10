@@ -1,6 +1,7 @@
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
+  ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {
@@ -92,6 +93,14 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
    * @return {Promise<void>} - Rejects with error.
    */
   abstract moveTorrents(options: MoveTorrentsOptions): Promise<void>;
+
+  /**
+   * Reannounces torrents to trackers
+   *
+   * @param {ReannounceTorrentsOptions} options - An object of options...
+   * @return {Promise<void>} - Rejects with error.
+   */
+  abstract reannounceTorrents({hashes}: ReannounceTorrentsOptions): Promise<void>;
 
   /**
    * Removes torrents. Optionally deletes data of torrents.

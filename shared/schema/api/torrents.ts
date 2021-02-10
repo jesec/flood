@@ -63,6 +63,14 @@ export const setTorrentsTagsSchema = object({
 
 export type SetTorrentsTagsOptions = zodInfer<typeof setTorrentsTagsSchema>;
 
+// POST /api/torrents/reannounce
+export const reannounceTorrentsSchema = object({
+  // An array of string representing hashes of torrents to be reannounced
+  hashes: array(string()).nonempty(),
+});
+
+export type ReannounceTorrentsOptions = zodInfer<typeof reannounceTorrentsSchema>;
+
 // GET /api/torrents/{hash}/contents/{indices}/data
 export const contentTokenSchema = object({
   username: string(),

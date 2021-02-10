@@ -12,6 +12,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ContentToken,
+  ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {
@@ -31,6 +32,7 @@ import type {
 import {
   addTorrentByFileSchema,
   addTorrentByURLSchema,
+  reannounceTorrentsSchema,
   setTorrentsTagsSchema,
 } from '../../../shared/schema/api/torrents';
 import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
@@ -437,9 +439,37 @@ router.post<unknown, unknown, DeleteTorrentsOptions>(
 );
 
 /**
+ * POST /api/torrents/reannounce
+ * @summary Reannounces torrents to trackers
+ * @tags Torrents
+ * @security User
+ * @param {ReannounceTorrentsOptions} - request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.post<unknown, unknown, ReannounceTorrentsOptions>(
+  '/reannounce',
+  async (req, res): Promise<Response> => {
+    const parsedResult = reannounceTorrentsSchema.safeParse(req.body);
+
+    if (!parsedResult.success) {
+      return res.status(422).json({message: 'Validation error.'});
+    }
+
+    return req.services.clientGatewayService.reannounceTorrents(parsedResult.data).then(
+      (response) => {
+        req.services.clientGatewayService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    );
+  },
+);
+
+/**
  * PATCH /api/torrents/initial-seeding
  * @summary Sets initial seeding mode of torrents.
- * @tags Torrent
+ * @tags Torrents
  * @security User
  * @param {SetTorrentsInitialSeedingOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
@@ -460,7 +490,7 @@ router.patch<unknown, unknown, SetTorrentsInitialSeedingOptions>(
 /**
  * PATCH /api/torrents/priority
  * @summary Sets priority of torrents.
- * @tags Torrent
+ * @tags Torrents
  * @security User
  * @param {SetTorrentsPriorityOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
@@ -481,7 +511,7 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>(
 /**
  * PATCH /api/torrents/sequential
  * @summary Sets sequential mode of torrents.
- * @tags Torrent
+ * @tags Torrents
  * @security User
  * @param {SetTorrentsSequentialOptions} request.body.required - options - application/json
  * @return {object} 200 - success response - application/json
