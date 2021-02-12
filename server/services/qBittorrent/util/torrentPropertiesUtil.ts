@@ -63,6 +63,7 @@ export const getTorrentStatusFromState = (state: QBittorrentTorrentState): Torre
       break;
     case 'metaDL':
     case 'downloading':
+    case 'forcedDL':
       statuses.push('active');
       statuses.push('downloading');
       break;
@@ -72,7 +73,6 @@ export const getTorrentStatusFromState = (state: QBittorrentTorrentState): Torre
       break;
     case 'queuedDL':
     case 'stalledDL':
-    case 'forceDL':
       statuses.push('inactive');
       statuses.push('downloading');
       break;

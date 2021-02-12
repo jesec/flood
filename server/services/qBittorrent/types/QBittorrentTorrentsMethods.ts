@@ -14,7 +14,7 @@ export type QBittorrentTorrentState =
   | 'queuedDL'
   | 'stalledDL'
   | 'checkingDL'
-  | 'forceDL'
+  | 'forcedDL'
   | 'checkingResumeData'
   | 'moving'
   | 'unknown';
