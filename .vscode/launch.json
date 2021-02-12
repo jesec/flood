@@ -11,7 +11,7 @@
         "TS_NODE_PROJECT": "${workspaceFolder}/server/tsconfig.json"
       },
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/ts-node-dev",
-      "runtimeArgs": ["--respawn", "--inspect", "--transpile-only"],
+      "runtimeArgs": ["--respawn", "--inspect", "--transpile-only", "-r", "tsconfig-paths/register"],
       "program": "server/bin/start.ts",
       "args": []
     },
