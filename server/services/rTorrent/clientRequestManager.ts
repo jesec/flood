@@ -1,4 +1,4 @@
-import {homedir} from 'os';
+import {sanitizePath} from '../../util/fileUtil';
 
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
@@ -23,7 +23,7 @@ class ClientRequestManager {
     if (connectionSettings.type === 'socket') {
       this.connectionSettings = {
         ...connectionSettings,
-        socket: connectionSettings.socket.replace(/^~/, homedir()),
+        socket: sanitizePath(connectionSettings.socket),
       };
     } else {
       this.connectionSettings = connectionSettings;

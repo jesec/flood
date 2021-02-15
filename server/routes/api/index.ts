@@ -1,5 +1,7 @@
-import express from 'express';
+import express, {Response} from 'express';
+import fs from 'fs';
 import passport from 'passport';
+import path from 'path';
 import rateLimit from 'express-rate-limit';
 
 import {contentTokenSchema} from '@shared/schema/api/torrents';
@@ -9,6 +11,7 @@ import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
 
+import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import appendUserServices from '../../middleware/appendUserServices';
 import authRoutes from './auth';
 import clientRoutes from './client';
@@ -16,7 +19,6 @@ import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
 import {getAuthToken, verifyToken} from '../../util/authUtil';
-import {getDirectoryList} from '../../util/fileUtil';
 import {getResponseFn} from '../../util/ajaxUtil';
 import torrentsRoutes from './torrents';
 
@@ -88,16 +90,56 @@ router.use('/torrents', torrentsRoutes);
  */
 router.get('/activity-stream', eventStream, clientActivityStream);
 
-router.get<unknown, unknown, unknown, {path: string}>('/directory-list', (req, res) => {
-  const callback = getResponseFn(res);
-  getDirectoryList(req.query.path)
-    .then((data) => {
-      callback(data);
-    })
-    .catch((error) => {
-      callback(null, error);
+/**
+ * GET /api/directory-list
+ * @summary Lists a directory
+ * @tags Flood
+ * @security User
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 403 - access denied - application/json
+ * @return {Error} 404 - entity not found - application/json
+ */
+router.get<unknown, unknown, unknown, {path: string}>(
+  '/directory-list',
+  (req, res): Response<unknown> => {
+    const {path: inputPath} = req.query;
+
+    if (typeof inputPath !== 'string' || !inputPath) {
+      const {code, message} = fileNotFoundError();
+      return res.status(404).json({code, message});
+    }
+
+    const resolvedPath = sanitizePath(inputPath);
+    if (!isAllowedPath(resolvedPath)) {
+      const {code, message} = accessDeniedError();
+      return res.status(403).json({code, message});
+    }
+
+    const directories: Array<string> = [];
+    const files: Array<string> = [];
+
+    fs.readdirSync(resolvedPath).forEach((item) => {
+      const joinedPath = path.join(resolvedPath, item);
+      if (fs.existsSync(joinedPath)) {
+        if (fs.statSync(joinedPath).isDirectory()) {
+          directories.push(item);
+        } else {
+          files.push(item);
+        }
+      }
     });
-});
+
+    const hasParent = /^.{0,}:?(\/|\\){1,1}\S{1,}/.test(resolvedPath);
+
+    return res.status(200).json({
+      directories,
+      files,
+      hasParent,
+      path: resolvedPath,
+      separator: path.sep,
+    });
+  },
+);
 
 /**
  * GET /api/history
