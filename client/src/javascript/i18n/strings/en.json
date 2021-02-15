@@ -122,6 +122,7 @@
   "filesystem.empty.directory": "Empty directory.",
   "filesystem.error.eacces": "Flood does not have permission to read this directory.",
   "filesystem.error.enoent": "This path does not exist. It will be created.",
+  "filesystem.error.no.input": "Please enter the path.",
   "filesystem.error.unknown": "An unknown error occurred. Please try again.",
   "filesystem.fetching": "Fetching directory structure...",
   "filesystem.parent.directory": "Parent Directory",
