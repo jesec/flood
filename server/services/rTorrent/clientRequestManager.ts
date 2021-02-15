@@ -1,3 +1,5 @@
+import {homedir} from 'os';
+
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 import scgiUtil from './util/scgiUtil';
@@ -18,7 +20,14 @@ class ClientRequestManager {
   }> = [];
 
   constructor(connectionSettings: RTorrentConnectionSettings) {
-    this.connectionSettings = connectionSettings;
+    if (connectionSettings.type === 'socket') {
+      this.connectionSettings = {
+        ...connectionSettings,
+        socket: connectionSettings.socket.replace(/^~/, homedir()),
+      };
+    } else {
+      this.connectionSettings = connectionSettings;
+    }
   }
 
   handleRequestEnd() {
