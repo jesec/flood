@@ -6,6 +6,7 @@
   "alert.settings.saved": "Successfully saved settings.",
   "alert.torrent.add": "Successfully added {countElement} {count, plural, =1 {torrent} other {torrents}}.",
   "alert.torrent.add.failed": "Failed to add {countElement} {count, plural, =1 {torrent} other {torrents}}.",
+  "alert.torrent.add.sent": "{countElement} {count, plural, =1 {request} other {requests}} sent to the torrent client.",
   "alert.torrent.move": "Successfully moved {countElement} {count, plural, =1 {torrent} other {torrents}}.",
   "alert.torrent.move.failed": "Failed to move {countElement} {count, plural, =1 {torrent} other {torrents}}.",
   "alert.torrent.remove": "Successfully removed {countElement} {count, plural, =1 {torrent} other {torrents}}.",

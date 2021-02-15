@@ -30,10 +30,25 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 const {baseURI} = ConfigStore;
 
+const emitRequestSentAlert = (count: number) => {
+  AlertStore.add({
+    id: 'alert.torrent.add.sent',
+    count,
+  });
+};
+
 const emitTorrentAddedAlert = (count: number) => {
   AlertStore.add({
     id: 'alert.torrent.add',
     type: 'success',
+    count,
+  });
+};
+
+const emitFailedToAddTorrentAlert = (count: number) => {
+  AlertStore.add({
+    id: 'alert.torrent.add.failed',
+    type: 'error',
     count,
   });
 };
@@ -44,11 +59,15 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/add-urls`, options)
       .then((json) => json.data)
       .then(
-        () => {
-          emitTorrentAddedAlert(options.urls.length);
+        (response) => {
+          if (response.length) {
+            emitTorrentAddedAlert(response.length);
+          } else {
+            emitRequestSentAlert(options.urls.length);
+          }
         },
         () => {
-          // do nothing.
+          emitFailedToAddTorrentAlert(options.urls.length);
         },
       ),
 
@@ -57,11 +76,15 @@ const TorrentActions = {
       .post(`${baseURI}api/torrents/add-files`, options)
       .then((json) => json.data)
       .then(
-        () => {
-          emitTorrentAddedAlert(options.files.length);
+        (response) => {
+          if (response.length) {
+            emitTorrentAddedAlert(response.length);
+          } else {
+            emitRequestSentAlert(options.files.length);
+          }
         },
         () => {
-          // do nothing.
+          emitFailedToAddTorrentAlert(options.files.length);
         },
       ),
 
@@ -72,7 +95,7 @@ const TorrentActions = {
         emitTorrentAddedAlert(1);
       },
       () => {
-        // do nothing.
+        emitFailedToAddTorrentAlert(1);
       },
     ),
 
