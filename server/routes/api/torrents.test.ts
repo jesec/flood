@@ -119,8 +119,12 @@ describe('POST /api/torrents/add-urls', () => {
       .send(addTorrentByURLOptions)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
-      .expect(200)
       .expect('Content-Type', /json/)
+      .expect((res) => {
+        if (res.status !== 200 && res.status !== 202) {
+          throw new Error('Failed to add torrents');
+        }
+      })
       .end((err, _res) => {
         if (err) done(err);
 
@@ -226,8 +230,12 @@ describe('POST /api/torrents/add-files', () => {
       .send(addTorrentByFileOptions)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
-      .expect(200)
       .expect('Content-Type', /json/)
+      .expect((res) => {
+        if (res.status !== 200 && res.status !== 202) {
+          throw new Error('Failed to add torrents');
+        }
+      })
       .end((err, _res) => {
         if (err) done(err);
 
