@@ -58,7 +58,11 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
   fetchDirectoryListForCurrentDirectory = (): void => {
     const {directory} = this.props;
 
-    FloodActions.fetchDirectoryList({path: directory})
+    if (!directory) {
+      return;
+    }
+
+    FloodActions.fetchDirectoryList(directory)
       .then((response) => {
         this.setState({
           ...response,

@@ -11,7 +11,7 @@ import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
 
-import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import appendUserServices from '../../middleware/appendUserServices';
 import authRoutes from './auth';
 import clientRoutes from './client';
@@ -98,6 +98,8 @@ router.get('/activity-stream', eventStream, clientActivityStream);
  * @return {object} 200 - success response - application/json
  * @return {Error} 403 - access denied - application/json
  * @return {Error} 404 - entity not found - application/json
+ * @return {Error} 422 - invalid argument - application/json
+ * @return {Error} 500 - other errors - application/json
  */
 router.get<unknown, unknown, unknown, {path: string}>(
   '/directory-list',
@@ -105,8 +107,7 @@ router.get<unknown, unknown, unknown, {path: string}>(
     const {path: inputPath} = req.query;
 
     if (typeof inputPath !== 'string' || !inputPath) {
-      const {code, message} = fileNotFoundError();
-      return res.status(404).json({code, message});
+      return res.status(422).json({code: 'EINVAL', message: 'Invalid argument'});
     }
 
     const resolvedPath = sanitizePath(inputPath);
@@ -118,25 +119,30 @@ router.get<unknown, unknown, unknown, {path: string}>(
     const directories: Array<string> = [];
     const files: Array<string> = [];
 
-    fs.readdirSync(resolvedPath).forEach((item) => {
-      const joinedPath = path.join(resolvedPath, item);
-      if (fs.existsSync(joinedPath)) {
-        if (fs.statSync(joinedPath).isDirectory()) {
-          directories.push(item);
-        } else {
-          files.push(item);
+    try {
+      fs.readdirSync(resolvedPath, {withFileTypes: true}).forEach((dirent) => {
+        if (dirent.isDirectory()) {
+          directories.push(dirent.name);
+        } else if (dirent.isFile()) {
+          files.push(dirent.name);
         }
+      });
+    } catch (e) {
+      const {code, message} = e as NodeJS.ErrnoException;
+      if (code === 'ENOENT') {
+        return res.status(404).json({code, message});
+      } else if (code === 'EACCES') {
+        return res.status(403).json({code, message});
+      } else {
+        return res.status(500).json({code, message});
       }
-    });
-
-    const hasParent = /^.{0,}:?(\/|\\){1,1}\S{1,}/.test(resolvedPath);
+    }
 
     return res.status(200).json({
-      directories,
-      files,
-      hasParent,
       path: resolvedPath,
       separator: path.sep,
+      directories,
+      files,
     });
   },
 );
