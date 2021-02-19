@@ -125,6 +125,17 @@ router.get<unknown, unknown, unknown, {path: string}>(
           directories.push(dirent.name);
         } else if (dirent.isFile()) {
           files.push(dirent.name);
+        } else if (dirent.isSymbolicLink()) {
+          try {
+            const stats = fs.statSync(path.join(resolvedPath, dirent.name));
+            if (stats.isDirectory()) {
+              directories.push(dirent.name);
+            } else if (stats.isFile()) {
+              files.push(dirent.name);
+            }
+          } catch {
+            // do nothing.
+          }
         }
       });
     } catch (e) {
