@@ -330,6 +330,21 @@ class ClientRequestManager {
     }
   }
 
+  async torrentsReannounce(hashes: Array<string>): Promise<void> {
+    if (hashes.length > 0) {
+      return axios
+        .get(`${this.apiBase}/torrents/reannounce`, {
+          params: {
+            hashes: hashes.join('|'),
+          },
+          headers: {Cookie: await this.authCookie},
+        })
+        .then(() => {
+          // returns nothing
+        });
+    }
+  }
+
   async torrentsRemoveTrackers(hash: string, urls: Array<string>): Promise<void> {
     if (urls.length > 0) {
       return axios

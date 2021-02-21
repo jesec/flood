@@ -5,6 +5,7 @@ import path from 'path';
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
+  ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {
@@ -210,6 +211,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   async moveTorrents({hashes, destination}: MoveTorrentsOptions): Promise<void> {
     return this.clientRequestManager
       .torrentsSetLocation(hashes, destination)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
+  }
+
+  async reannounceTorrents({hashes}: ReannounceTorrentsOptions): Promise<void> {
+    return this.clientRequestManager
+      .torrentsReannounce(hashes)
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
