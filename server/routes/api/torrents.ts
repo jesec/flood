@@ -46,7 +46,7 @@ const getDestination = async (
 
   // Use preferred destination of the first tag
   if (autoDestination == null) {
-    await services?.settingService.get('torrentDestinations').then(
+    await services.settingService.get('torrentDestinations').then(
       ({torrentDestinations}) => {
         autoDestination = torrentDestinations?.[tags?.[0] ?? ''];
       },
@@ -56,7 +56,7 @@ const getDestination = async (
 
   // Use default destination of torrent client
   if (autoDestination == null) {
-    const {directoryDefault} = (await services?.clientGatewayService?.getClientSettings().catch(() => undefined)) ?? {};
+    const {directoryDefault} = (await services.clientGatewayService.getClientSettings().catch(() => undefined)) ?? {};
     autoDestination = directoryDefault;
   }
 
@@ -91,7 +91,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.torrentService
+  req.services.torrentService
     .fetchTorrentList()
     .then((data) => {
       if (data == null) {
@@ -148,8 +148,8 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
     return;
   }
 
-  req.services?.clientGatewayService
-    ?.addTorrentsByURL({
+  req.services.clientGatewayService
+    .addTorrentsByURL({
       urls,
       cookies: cookies != null ? cookies : {},
       destination: finalDestination,
@@ -162,7 +162,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
     })
     .then(
       (response) => {
-        req.services?.torrentService.fetchTorrentList();
+        req.services.torrentService.fetchTorrentList();
         if (response.length === 0) {
           res.status(202).json(response);
         } else if (response.length < urls.length) {
@@ -210,8 +210,8 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
     return;
   }
 
-  req.services?.clientGatewayService
-    ?.addTorrentsByFile({
+  req.services.clientGatewayService
+    .addTorrentsByFile({
       files,
       destination: finalDestination,
       tags: tags ?? [],
@@ -223,7 +223,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
     })
     .then(
       (response) => {
-        req.services?.torrentService.fetchTorrentList();
+        req.services.torrentService.fetchTorrentList();
         if (response.length === 0) {
           res.status(202).json(response);
         } else if (response.length < files.length) {
@@ -290,8 +290,8 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
           res.attachment(torrentFileName);
           res.download(torrentPath);
 
-          req.services?.clientGatewayService
-            ?.addTorrentsByFile({
+          req.services.clientGatewayService
+            .addTorrentsByFile({
               files: [torrent.toString('base64')],
               destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
               tags: tags ?? [],
@@ -325,10 +325,10 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
 router.post<unknown, unknown, StartTorrentsOptions>('/start', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.startTorrents(req.body)
+  req.services.clientGatewayService
+    .startTorrents(req.body)
     .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       return response;
     })
     .then(callback)
@@ -349,10 +349,10 @@ router.post<unknown, unknown, StartTorrentsOptions>('/start', (req, res) => {
 router.post<unknown, unknown, StopTorrentsOptions>('/stop', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.stopTorrents(req.body)
+  req.services.clientGatewayService
+    .stopTorrents(req.body)
     .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       return response;
     })
     .then(callback)
@@ -373,10 +373,10 @@ router.post<unknown, unknown, StopTorrentsOptions>('/stop', (req, res) => {
 router.post<unknown, unknown, CheckTorrentsOptions>('/check-hash', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.checkTorrents(req.body)
+  req.services.clientGatewayService
+    .checkTorrents(req.body)
     .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       return response;
     })
     .then(callback)
@@ -409,10 +409,10 @@ router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
     return;
   }
 
-  req.services?.clientGatewayService
-    ?.moveTorrents({...req.body, destination: sanitizedPath})
+  req.services.clientGatewayService
+    .moveTorrents({...req.body, destination: sanitizedPath})
     .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       return response;
     })
     .then(callback)
@@ -433,10 +433,10 @@ router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
 router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.removeTorrents(req.body)
+  req.services.clientGatewayService
+    .removeTorrents(req.body)
     .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       return response;
     })
     .then(callback)
@@ -455,9 +455,9 @@ router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<unknown, unknown, SetTorrentsInitialSeedingOptions>('/initial-seeding', (req, res) => {
-  req.services?.clientGatewayService?.setTorrentsInitialSeeding(req.body).then(
+  req.services.clientGatewayService.setTorrentsInitialSeeding(req.body).then(
     (response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       res.status(200).json(response);
     },
     (err) => {
@@ -478,10 +478,10 @@ router.patch<unknown, unknown, SetTorrentsInitialSeedingOptions>('/initial-seedi
 router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.setTorrentsPriority(req.body)
+  req.services.clientGatewayService
+    .setTorrentsPriority(req.body)
     .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       return response;
     })
     .then(callback)
@@ -500,9 +500,9 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, re
  * @return {Error} 500 - failure response - application/json
  */
 router.patch<unknown, unknown, SetTorrentsSequentialOptions>('/sequential', (req, res) => {
-  req.services?.clientGatewayService?.setTorrentsSequential(req.body).then(
+  req.services.clientGatewayService.setTorrentsSequential(req.body).then(
     (response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       res.status(200).json(response);
     },
     (err) => {
@@ -528,9 +528,9 @@ router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
     return;
   }
 
-  req.services?.clientGatewayService?.setTorrentsTags(parsedResult.data).then(
+  req.services.clientGatewayService.setTorrentsTags(parsedResult.data).then(
     (response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       res.status(200).json(response);
     },
     (err) => {
@@ -551,10 +551,10 @@ router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
 router.patch<unknown, unknown, SetTorrentsTrackersOptions>('/trackers', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.setTorrentsTrackers(req.body)
+  req.services.clientGatewayService
+    .setTorrentsTrackers(req.body)
     .then((response) => {
-      req.services?.torrentService.fetchTorrentList();
+      req.services.torrentService.fetchTorrentList();
       return response;
     })
     .then(callback)
@@ -590,7 +590,7 @@ router.get<{hashes: string}>(
     }
 
     const {path: sessionDirectory, case: torrentCase} =
-      (await req.services?.clientGatewayService?.getClientSessionDirectory().catch(() => undefined)) || {};
+      (await req.services.clientGatewayService.getClientSessionDirectory().catch(() => undefined)) || {};
 
     if (sessionDirectory == null || !fs.existsSync(sessionDirectory)) {
       res.status(500).json(new Error('Failed to get session directory.'));
@@ -652,8 +652,8 @@ router.get<{hashes: string}>(
 router.get('/:hash/contents', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.getTorrentContents(req.params.hash)
+  req.services.clientGatewayService
+    .getTorrentContents(req.params.hash)
     .then(callback)
     .catch((err) => {
       callback(null, err);
@@ -673,8 +673,8 @@ router.get('/:hash/contents', (req, res) => {
 router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:hash/contents', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.setTorrentContentsPriority(req.params.hash, req.body)
+  req.services.clientGatewayService
+    .setTorrentContentsPriority(req.params.hash, req.body)
     .then(callback)
     .catch((err) => {
       callback(null, err);
@@ -745,14 +745,14 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
       }
     }
 
-    const selectedTorrent = req.services?.torrentService.getTorrent(hash);
+    const selectedTorrent = req.services.torrentService.getTorrent(hash);
     if (!selectedTorrent) {
       res.status(404).json({error: 'Torrent not found.'});
       return;
     }
 
-    req.services?.clientGatewayService
-      ?.getTorrentContents(hash)
+    req.services.clientGatewayService
+      .getTorrentContents(hash)
       .then((contents) => {
         if (!contents || contents.length < 1) {
           res.status(404).json({error: 'Torrent contents not found'});
@@ -876,9 +876,9 @@ router.get('/:hash/details', async (req, res) => {
   const callback = getResponseFn(res);
 
   try {
-    const contents = req.services?.clientGatewayService?.getTorrentContents(req.params.hash);
-    const peers = req.services?.clientGatewayService?.getTorrentPeers(req.params.hash);
-    const trackers = req.services?.clientGatewayService?.getTorrentTrackers(req.params.hash);
+    const contents = req.services.clientGatewayService.getTorrentContents(req.params.hash);
+    const peers = req.services.clientGatewayService.getTorrentPeers(req.params.hash);
+    const trackers = req.services.clientGatewayService.getTorrentTrackers(req.params.hash);
 
     await Promise.all([contents, peers, trackers]);
 
@@ -911,9 +911,9 @@ router.get<{hash: string}>(
   async (req, res) => {
     const callback = getResponseFn(res);
 
-    const torrentDirectory = req.services?.torrentService.getTorrent(req.params.hash)?.directory;
-    const torrentContents = await req.services?.clientGatewayService
-      ?.getTorrentContents(req.params.hash)
+    const torrentDirectory = req.services.torrentService.getTorrent(req.params.hash)?.directory;
+    const torrentContents = await req.services.clientGatewayService
+      .getTorrentContents(req.params.hash)
       .catch(() => undefined);
 
     if (torrentDirectory == null || torrentContents == null || torrentContents.length < 1) {
@@ -974,8 +974,8 @@ router.get<{hash: string}>(
 router.get('/:hash/peers', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.getTorrentPeers(req.params.hash)
+  req.services.clientGatewayService
+    .getTorrentPeers(req.params.hash)
     .then(callback)
     .catch((err) => {
       callback(null, err);
@@ -994,8 +994,8 @@ router.get('/:hash/peers', (req, res) => {
 router.get('/:hash/trackers', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.getTorrentTrackers(req.params.hash)
+  req.services.clientGatewayService
+    .getTorrentTrackers(req.params.hash)
     .then(callback)
     .catch((err) => {
       callback(null, err);

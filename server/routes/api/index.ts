@@ -168,7 +168,7 @@ router.get<unknown, unknown, unknown, {path: string}>(
  * @return {Error} 500 - failure response - application/json
  */
 router.get<unknown, unknown, unknown, {snapshot: HistorySnapshot}>('/history', (req, res) => {
-  req.services?.historyService.getHistory(req.query).then(
+  req.services.historyService.getHistory(req.query).then(
     (snapshot) => {
       res.json(snapshot);
     },
@@ -188,7 +188,7 @@ router.get<unknown, unknown, unknown, {snapshot: HistorySnapshot}>('/history', (
  * @return {Error} 500 - failure response - application/json
  */
 router.get<unknown, unknown, unknown, NotificationFetchOptions>('/notifications', (req, res) => {
-  req.services?.notificationService.getNotifications(req.query).then(
+  req.services.notificationService.getNotifications(req.query).then(
     (notifications) => {
       res.status(200).json(notifications);
     },
@@ -207,7 +207,7 @@ router.get<unknown, unknown, unknown, NotificationFetchOptions>('/notifications'
  * @return {Error} 500 - failure response - application/json
  */
 router.delete('/notifications', (req, res) => {
-  req.services?.notificationService.clearNotifications().then(
+  req.services.notificationService.clearNotifications().then(
     () => {
       res.status(200).send();
     },
@@ -228,7 +228,7 @@ router.delete('/notifications', (req, res) => {
 router.get('/settings', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.settingService
+  req.services.settingService
     .get(null)
     .then((settings) => {
       callback(settings as FloodSettings);
@@ -250,7 +250,7 @@ router.get('/settings', (req, res) => {
 router.get<{property: keyof FloodSettings}>('/settings/:property', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.settingService
+  req.services.settingService
     .get(req.params.property)
     .then((settings) => {
       callback(settings);
@@ -272,7 +272,7 @@ router.get<{property: keyof FloodSettings}>('/settings/:property', (req, res) =>
 router.patch<unknown, unknown, SetFloodSettingsOptions>('/settings', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.settingService
+  req.services.settingService
     .set(req.body)
     .then((savedSettings) => {
       callback(savedSettings);

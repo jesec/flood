@@ -101,8 +101,8 @@ const getTorrentService = (user: UserInDatabase): TorrentService => {
 
 const getAllServices = (user: UserInDatabase) =>
   ({
-    get clientGatewayService() {
-      return getClientGatewayService(user);
+    get clientGatewayService(): ClientGatewayService {
+      return getClientGatewayService(user) as ClientGatewayService;
     },
 
     get feedService() {

@@ -18,7 +18,7 @@ const router = express.Router();
 router.get('/', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.feedService
+  req.services.feedService
     .getAll()
     .then((feedsAndRules) => {
       callback(feedsAndRules);
@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
 router.delete<{id: string}>('/:id', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.feedService
+  req.services.feedService
     .removeItem(req.params.id)
     .then(() => {
       callback(null);
@@ -62,7 +62,7 @@ router.delete<{id: string}>('/:id', (req, res) => {
 router.get<{id?: string}>('/feeds/:id?', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.feedService
+  req.services.feedService
     .getFeeds(req.params.id)
     .then((feeds) => {
       callback(feeds);
@@ -84,7 +84,7 @@ router.get<{id?: string}>('/feeds/:id?', (req, res) => {
 router.put<unknown, unknown, AddFeedOptions>('/feeds', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.feedService
+  req.services.feedService
     .addFeed(req.body)
     .then((feed) => {
       callback(feed);
@@ -107,7 +107,7 @@ router.put<unknown, unknown, AddFeedOptions>('/feeds', (req, res) => {
 router.patch<{id: string}, unknown, ModifyFeedOptions>('/feeds/:id', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.feedService
+  req.services.feedService
     .modifyFeed(req.params.id, req.body)
     .then(() => {
       callback(null);
@@ -130,7 +130,7 @@ router.patch<{id: string}, unknown, ModifyFeedOptions>('/feeds/:id', (req, res) 
 router.get<{id: string}, unknown, ModifyFeedOptions, {search: string}>('/feeds/:id/items', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.feedService
+  req.services.feedService
     .getItems(req.params.id, req.query.search)
     .then((items) => {
       callback(items);
@@ -151,7 +151,7 @@ router.get<{id: string}, unknown, ModifyFeedOptions, {search: string}>('/feeds/:
 router.get('/rules', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.feedService
+  req.services.feedService
     .getRules()
     .then((rules) => {
       callback(rules);
@@ -185,7 +185,7 @@ router.put<unknown, unknown, AddRuleOptions>('/rules', (req, res) => {
     return;
   }
 
-  req.services?.feedService
+  req.services.feedService
     .addRule({...req.body, destination: sanitizedPath})
     .then((rule) => {
       callback(rule);

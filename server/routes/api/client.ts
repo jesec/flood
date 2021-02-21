@@ -20,8 +20,8 @@ const router = express.Router();
  * @return {{isConnected: false}} 500 - failure response - application/json
  */
 router.get('/connection-test', (req, res) => {
-  req.services?.clientGatewayService
-    ?.testGateway()
+  req.services.clientGatewayService
+    .testGateway()
     .then(() => {
       res.status(200).json({isConnected: true});
     })
@@ -41,8 +41,8 @@ router.get('/connection-test', (req, res) => {
 router.get('/settings', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.getClientSettings()
+  req.services.clientGatewayService
+    .getClientSettings()
     .then(callback)
     .catch((e) => callback(null, e));
 });
@@ -73,8 +73,8 @@ router.patch('/settings', (req, res, next) => {
 router.patch<unknown, unknown, SetClientSettingsOptions>('/settings', (req, res) => {
   const callback = getResponseFn(res);
 
-  req.services?.clientGatewayService
-    ?.setClientSettings(req.body)
+  req.services.clientGatewayService
+    .setClientSettings(req.body)
     .then(callback)
     .catch((e) => callback(null, e));
 });
