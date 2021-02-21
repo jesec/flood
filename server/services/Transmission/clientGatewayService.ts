@@ -4,6 +4,7 @@ import path from 'path';
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
+  ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {
@@ -204,6 +205,12 @@ class TransmissionClientGatewayService extends ClientGatewayService {
   async moveTorrents({hashes, destination, moveFiles}: MoveTorrentsOptions): Promise<void> {
     return this.clientRequestManager
       .setTorrentsLocation(hashes, destination, moveFiles)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
+  }
+
+  async reannounceTorrents({hashes}: ReannounceTorrentsOptions): Promise<void> {
+    return this.clientRequestManager
+      .reannounceTorrents(hashes)
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
