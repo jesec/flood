@@ -324,6 +324,7 @@
   "torrents.list.context.move": "Set Torrent Location",
   "torrents.list.context.pause": "Pause",
   "torrents.list.context.priority": "Priority",
+  "torrents.list.context.reannounce": "Reannounce",
   "torrents.list.context.remove": "Remove",
   "torrents.list.context.sequential": "Sequential",
   "torrents.list.context.set.tags": "Set Tags",

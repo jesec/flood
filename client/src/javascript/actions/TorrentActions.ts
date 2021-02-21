@@ -8,6 +8,7 @@ import UIStore from '@client/stores/UIStore';
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
+  ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {
@@ -191,6 +192,19 @@ const TorrentActions = {
             type: 'error',
             count: options.hashes.length,
           });
+        },
+      ),
+
+  reannounce: (options: ReannounceTorrentsOptions) =>
+    axios
+      .post(`${baseURI}api/torrents/reannounce`, options)
+      .then((json) => json.data)
+      .then(
+        () => {
+          // do nothing.
+        },
+        () => {
+          // do nothing.
         },
       ),
 
