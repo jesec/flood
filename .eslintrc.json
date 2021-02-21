@@ -1,5 +1,5 @@
 {
-  "extends": ["plugin:@typescript-eslint/recommended", "prettier", "prettier/@typescript-eslint"],
+  "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
 
   "parserOptions": {
     "project": "./tsconfig.json"
@@ -19,7 +19,7 @@
   "overrides": [
     {
       "files": ["*.js", "*.jsx"],
-      "extends": ["prettier", "prettier/react"],
+      "extends": ["prettier"],
       "parser": "babel-eslint",
       "rules": {
         "@typescript-eslint/no-var-requires": 0
