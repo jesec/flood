@@ -1,9 +1,8 @@
-import express from 'express';
+import express, {Response} from 'express';
 
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '@shared/types/api/feed-monitor';
 
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import {getResponseFn} from '../../util/ajaxUtil';
 
 const router = express.Router();
 
@@ -15,18 +14,14 @@ const router = express.Router();
  * @return {{feeds: Array<Feed>; rules: Array<Rule>}} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get('/', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.feedService
-    .getAll()
-    .then((feedsAndRules) => {
-      callback(feedsAndRules);
-    })
-    .catch((error) => {
-      callback(null, error);
-    });
-});
+router.get(
+  '/',
+  async (req, res): Promise<Response> =>
+    req.services.feedService.getAll().then(
+      (feedsAndRules) => res.status(200).json(feedsAndRules),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * DELETE /api/feed-monitor/{id}
@@ -37,18 +32,14 @@ router.get('/', (req, res) => {
  * @return {} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.delete<{id: string}>('/:id', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.feedService
-    .removeItem(req.params.id)
-    .then(() => {
-      callback(null);
-    })
-    .catch((error) => {
-      callback(null, error);
-    });
-});
+router.delete<{id: string}>(
+  '/:id',
+  async (req, res): Promise<Response> =>
+    req.services.feedService.removeItem(req.params.id).then(
+      (response) => res.status(200).json(response),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * GET /api/feed-monitor/feeds/{id?}
@@ -59,18 +50,14 @@ router.delete<{id: string}>('/:id', (req, res) => {
  * @return {Array<Feed>}} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get<{id?: string}>('/feeds/:id?', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.feedService
-    .getFeeds(req.params.id)
-    .then((feeds) => {
-      callback(feeds);
-    })
-    .catch((error) => {
-      callback(null, error);
-    });
-});
+router.get<{id?: string}>(
+  '/feeds/:id?',
+  async (req, res): Promise<Response> =>
+    req.services.feedService.getFeeds(req.params.id).then(
+      (feeds) => res.status(200).json(feeds),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PUT /api/feed-monitor/feeds
@@ -81,18 +68,14 @@ router.get<{id?: string}>('/feeds/:id?', (req, res) => {
  * @return {Feed} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.put<unknown, unknown, AddFeedOptions>('/feeds', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.feedService
-    .addFeed(req.body)
-    .then((feed) => {
-      callback(feed);
-    })
-    .catch((error) => {
-      callback(null, error);
-    });
-});
+router.put<unknown, unknown, AddFeedOptions>(
+  '/feeds',
+  async (req, res): Promise<Response> =>
+    req.services.feedService.addFeed(req.body).then(
+      (feed) => res.status(200).json(feed),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PATCH /api/feed-monitor/feeds/{id}
@@ -104,18 +87,14 @@ router.put<unknown, unknown, AddFeedOptions>('/feeds', (req, res) => {
  * @return {} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<{id: string}, unknown, ModifyFeedOptions>('/feeds/:id', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.feedService
-    .modifyFeed(req.params.id, req.body)
-    .then(() => {
-      callback(null);
-    })
-    .catch((error) => {
-      callback(null, error);
-    });
-});
+router.patch<{id: string}, unknown, ModifyFeedOptions>(
+  '/feeds/:id',
+  async (req, res): Promise<Response> =>
+    req.services.feedService.modifyFeed(req.params.id, req.body).then(
+      (response) => res.status(200).json(response),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * GET /api/feed-monitor/feeds/{id}/items?search=<string>
@@ -127,18 +106,14 @@ router.patch<{id: string}, unknown, ModifyFeedOptions>('/feeds/:id', (req, res) 
  * @return {Array<Item>} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get<{id: string}, unknown, ModifyFeedOptions, {search: string}>('/feeds/:id/items', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.feedService
-    .getItems(req.params.id, req.query.search)
-    .then((items) => {
-      callback(items);
-    })
-    .catch((error) => {
-      callback(null, error);
-    });
-});
+router.get<{id: string}, unknown, ModifyFeedOptions, {search: string}>(
+  '/feeds/:id/items',
+  async (req, res): Promise<Response> =>
+    req.services.feedService.getItems(req.params.id, req.query.search).then(
+      (items) => res.status(200).json(items),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * GET /api/feed-monitor/rules
@@ -148,18 +123,14 @@ router.get<{id: string}, unknown, ModifyFeedOptions, {search: string}>('/feeds/:
  * @return {Array<Rule>}} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get('/rules', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.feedService
-    .getRules()
-    .then((rules) => {
-      callback(rules);
-    })
-    .catch((error) => {
-      callback(null, error);
-    });
-});
+router.get(
+  '/rules',
+  async (req, res): Promise<Response> =>
+    req.services.feedService.getRules().then(
+      (rules) => res.status(200).json(rules),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PUT /api/feed-monitor/rules
@@ -170,29 +141,25 @@ router.get('/rules', (req, res) => {
  * @return {Rule} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.put<unknown, unknown, AddRuleOptions>('/rules', (req, res) => {
-  const callback = getResponseFn(res);
-
-  let sanitizedPath: string | null = null;
-  try {
-    sanitizedPath = sanitizePath(req.body.destination);
-    if (!isAllowedPath(sanitizedPath)) {
-      callback(null, accessDeniedError());
-      return;
+router.put<unknown, unknown, AddRuleOptions>(
+  '/rules',
+  async (req, res): Promise<Response> => {
+    let sanitizedPath: string | null = null;
+    try {
+      sanitizedPath = sanitizePath(req.body.destination);
+      if (!isAllowedPath(sanitizedPath)) {
+        const {code, message} = accessDeniedError();
+        return res.status(403).json({code, message});
+      }
+    } catch ({code, message}) {
+      return res.status(403).json({code, message});
     }
-  } catch (e) {
-    callback(null, e);
-    return;
-  }
 
-  req.services.feedService
-    .addRule({...req.body, destination: sanitizedPath})
-    .then((rule) => {
-      callback(rule);
-    })
-    .catch((error) => {
-      callback(null, error);
-    });
-});
+    return req.services.feedService.addRule({...req.body, destination: sanitizedPath}).then(
+      (rule) => res.status(200).json(rule),
+      ({code, message}) => res.status(500).json({code, message}),
+    );
+  },
+);
 
 export default router;

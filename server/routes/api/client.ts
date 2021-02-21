@@ -1,9 +1,8 @@
-import express from 'express';
+import express, {Response} from 'express';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import {getResponseFn} from '../../util/ajaxUtil';
 import requireAdmin from '../../middleware/requireAdmin';
 
 // Those settings don't require administrator access.
@@ -19,16 +18,14 @@ const router = express.Router();
  * @return {{isConnected: true}} 200 - success response - application/json
  * @return {{isConnected: false}} 500 - failure response - application/json
  */
-router.get('/connection-test', (req, res) => {
-  req.services.clientGatewayService
-    .testGateway()
-    .then(() => {
-      res.status(200).json({isConnected: true});
-    })
-    .catch(() => {
-      res.status(500).json({isConnected: false});
-    });
-});
+router.get(
+  '/connection-test',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.testGateway().then(
+      () => res.status(200).json({isConnected: true}),
+      () => res.status(500).json({isConnected: false}),
+    ),
+);
 
 /**
  * GET /api/client/settings
@@ -38,14 +35,14 @@ router.get('/connection-test', (req, res) => {
  * @return {ClientSettings} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get('/settings', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .getClientSettings()
-    .then(callback)
-    .catch((e) => callback(null, e));
-});
+router.get(
+  '/settings',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.getClientSettings().then(
+      (settings) => res.status(200).json(settings),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PATCH /api/client/settings
@@ -70,13 +67,14 @@ router.patch('/settings', (req, res, next) => {
     next();
   }
 });
-router.patch<unknown, unknown, SetClientSettingsOptions>('/settings', (req, res) => {
-  const callback = getResponseFn(res);
 
-  req.services.clientGatewayService
-    .setClientSettings(req.body)
-    .then(callback)
-    .catch((e) => callback(null, e));
-});
+router.patch<unknown, unknown, SetClientSettingsOptions>(
+  '/settings',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.setClientSettings(req.body).then(
+      (response) => res.status(200).json(response),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 export default router;

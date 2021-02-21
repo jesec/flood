@@ -1,7 +1,7 @@
 import childProcess from 'child_process';
 import contentDisposition from 'content-disposition';
 import createTorrent from 'create-torrent';
-import express from 'express';
+import express, {Response} from 'express';
 import fs from 'fs';
 import path from 'path';
 import rateLimit from 'express-rate-limit';
@@ -34,7 +34,6 @@ import {
   setTorrentsTagsSchema,
 } from '../../../shared/schema/api/torrents';
 import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getToken} from '../../util/authUtil';
 
@@ -88,22 +87,19 @@ const router = express.Router();
  * @return {TorrentListSummary} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get('/', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.torrentService
-    .fetchTorrentList()
-    .then((data) => {
-      if (data == null) {
-        callback(null, new Error());
-      } else {
-        callback(data);
-      }
-    })
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.get(
+  '/',
+  async (req, res): Promise<Response> =>
+    req.services.torrentService
+      .fetchTorrentList()
+      .then((data) => {
+        if (data == null) {
+          throw new Error();
+        }
+        return res.status(200).json(data);
+      })
+      .catch(({code, message}) => res.status(500).json({code, message})),
+);
 
 /**
  * POST /api/torrents/add-urls
@@ -117,65 +113,64 @@ router.get('/', (req, res) => {
  * @return {Error} 403 - illegal destination - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, res) => {
-  const parsedResult = addTorrentByURLSchema.safeParse(req.body);
+router.post<unknown, unknown, AddTorrentByURLOptions>(
+  '/add-urls',
+  async (req, res): Promise<Response> => {
+    const parsedResult = addTorrentByURLSchema.safeParse(req.body);
 
-  if (!parsedResult.success) {
-    validationError(res, parsedResult.error);
-    return;
-  }
+    if (!parsedResult.success) {
+      return res.status(422).json({message: 'Validation error.'});
+    }
 
-  const {
-    urls,
-    cookies,
-    destination,
-    tags,
-    isBasePath,
-    isCompleted,
-    isSequential,
-    isInitialSeeding,
-    start,
-  } = parsedResult.data;
-
-  const finalDestination = await getDestination(req.services, {
-    destination,
-    tags,
-  });
-
-  if (finalDestination == null) {
-    const {code, message} = accessDeniedError();
-    res.status(403).json({code, message});
-    return;
-  }
-
-  req.services.clientGatewayService
-    .addTorrentsByURL({
+    const {
       urls,
-      cookies: cookies != null ? cookies : {},
-      destination: finalDestination,
-      tags: tags ?? [],
-      isBasePath: isBasePath ?? false,
-      isCompleted: isCompleted ?? false,
-      isSequential: isSequential ?? false,
-      isInitialSeeding: isInitialSeeding ?? false,
-      start: start ?? false,
-    })
-    .then(
-      (response) => {
-        req.services.torrentService.fetchTorrentList();
-        if (response.length === 0) {
-          res.status(202).json(response);
-        } else if (response.length < urls.length) {
-          res.status(207).json(response);
-        } else {
-          res.status(200).json(response);
-        }
-      },
-      ({code, message}) => {
-        res.status(500).json({code, message});
-      },
-    );
-});
+      cookies,
+      destination,
+      tags,
+      isBasePath,
+      isCompleted,
+      isSequential,
+      isInitialSeeding,
+      start,
+    } = parsedResult.data;
+
+    const finalDestination = await getDestination(req.services, {
+      destination,
+      tags,
+    });
+
+    if (finalDestination == null) {
+      const {code, message} = accessDeniedError();
+      return res.status(403).json({code, message});
+    }
+
+    return req.services.clientGatewayService
+      .addTorrentsByURL({
+        urls,
+        cookies: cookies != null ? cookies : {},
+        destination: finalDestination,
+        tags: tags ?? [],
+        isBasePath: isBasePath ?? false,
+        isCompleted: isCompleted ?? false,
+        isSequential: isSequential ?? false,
+        isInitialSeeding: isInitialSeeding ?? false,
+        start: start ?? false,
+      })
+      .then(
+        (response) => {
+          req.services.torrentService.fetchTorrentList();
+          if (response.length === 0) {
+            return res.status(202).json(response);
+          } else if (response.length < urls.length) {
+            return res.status(207).json(response);
+          } else {
+            return res.status(200).json(response);
+          }
+        },
+        ({code, message}) => res.status(500).json({code, message}),
+      );
+  },
+);
 
 /**
  * POST /api/torrents/add-files
@@ -189,54 +184,62 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
  * @return {Error} 403 - illegal destination - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req, res) => {
-  const parsedResult = addTorrentByFileSchema.safeParse(req.body);
+router.post<unknown, unknown, AddTorrentByFileOptions>(
+  '/add-files',
+  async (req, res): Promise<Response> => {
+    const parsedResult = addTorrentByFileSchema.safeParse(req.body);
 
-  if (!parsedResult.success) {
-    validationError(res, parsedResult.error);
-    return;
-  }
+    if (!parsedResult.success) {
+      return res.status(422).json({message: 'Validation error.'});
+    }
 
-  const {files, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} = parsedResult.data;
-
-  const finalDestination = await getDestination(req.services, {
-    destination,
-    tags,
-  });
-
-  if (finalDestination == null) {
-    const {code, message} = accessDeniedError();
-    res.status(403).json({code, message});
-    return;
-  }
-
-  req.services.clientGatewayService
-    .addTorrentsByFile({
+    const {
       files,
-      destination: finalDestination,
-      tags: tags ?? [],
-      isBasePath: isBasePath ?? false,
-      isCompleted: isCompleted ?? false,
-      isSequential: isSequential ?? false,
-      isInitialSeeding: isInitialSeeding ?? false,
-      start: start ?? false,
-    })
-    .then(
-      (response) => {
-        req.services.torrentService.fetchTorrentList();
-        if (response.length === 0) {
-          res.status(202).json(response);
-        } else if (response.length < files.length) {
-          res.status(207).json(response);
-        } else {
-          res.status(200).json(response);
-        }
-      },
-      ({code, message}) => {
-        res.status(500).json({code, message});
-      },
-    );
-});
+      destination,
+      tags,
+      isBasePath,
+      isCompleted,
+      isSequential,
+      isInitialSeeding,
+      start,
+    } = parsedResult.data;
+
+    const finalDestination = await getDestination(req.services, {
+      destination,
+      tags,
+    });
+
+    if (finalDestination == null) {
+      const {code, message} = accessDeniedError();
+      return res.status(403).json({code, message});
+    }
+
+    return req.services.clientGatewayService
+      .addTorrentsByFile({
+        files,
+        destination: finalDestination,
+        tags: tags ?? [],
+        isBasePath: isBasePath ?? false,
+        isCompleted: isCompleted ?? false,
+        isSequential: isSequential ?? false,
+        isInitialSeeding: isInitialSeeding ?? false,
+        start: start ?? false,
+      })
+      .then(
+        (response) => {
+          req.services.torrentService.fetchTorrentList();
+          if (response.length === 0) {
+            return res.status(202).json(response);
+          } else if (response.length < files.length) {
+            return res.status(207).json(response);
+          } else {
+            return res.status(200).json(response);
+          }
+        },
+        ({code, message}) => res.status(500).json({code, message}),
+      );
+  },
+);
 
 /**
  * POST /api/torrents/create
@@ -247,71 +250,74 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
  * @return {object} 200 - success response - application/x-bittorrent
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) => {
-  const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = req.body;
-  const callback = getResponseFn(res);
+router.post<unknown, unknown, CreateTorrentOptions>(
+  '/create',
+  async (req, res): Promise<Response> => {
+    const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = req.body;
 
-  if (typeof sourcePath !== 'string') {
-    callback(null, accessDeniedError());
-    return;
-  }
+    if (typeof sourcePath !== 'string') {
+      return res.status(422).json({message: 'Validation error.'});
+    }
 
-  const sanitizedPath = sanitizePath(sourcePath);
-  if (!isAllowedPath(sanitizedPath)) {
-    callback(null, accessDeniedError());
-    return;
-  }
+    const sanitizedPath = sanitizePath(sourcePath);
+    if (!isAllowedPath(sanitizedPath)) {
+      const {code, message} = accessDeniedError();
+      return res.status(403).json({code, message});
+    }
 
-  const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat('.torrent');
-  const torrentPath = getTempPath(torrentFileName);
+    const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat('.torrent');
+    const torrentPath = getTempPath(torrentFileName);
 
-  createTorrent(
-    sanitizedPath,
-    {
-      name,
-      comment,
-      createdBy: 'Flood - flood.js.org',
-      private: isPrivate,
-      announceList: [trackers],
-      info: infoSource
-        ? {
-            source: infoSource,
-          }
-        : undefined,
-    },
-    (err, torrent) => {
-      if (err) {
-        callback(null, err);
-        return;
-      }
-
-      fs.promises.writeFile(torrentPath, torrent).then(
-        () => {
-          res.attachment(torrentFileName);
-          res.download(torrentPath);
-
-          req.services.clientGatewayService
-            .addTorrentsByFile({
-              files: [torrent.toString('base64')],
-              destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
-              tags: tags ?? [],
-              isBasePath: true,
-              isCompleted: true,
-              isSequential: false,
-              isInitialSeeding: isInitialSeeding ?? false,
-              start: start ?? false,
-            })
-            .catch(() => {
-              // do nothing.
-            });
+    return new Promise<Response>((resolve) => {
+      createTorrent(
+        sanitizedPath,
+        {
+          name,
+          comment,
+          createdBy: 'Flood - flood.js.org',
+          private: isPrivate,
+          announceList: [trackers],
+          info: infoSource
+            ? {
+                source: infoSource,
+              }
+            : undefined,
         },
-        (writeErr) => {
-          callback(null, writeErr);
+        (err, torrent) => {
+          if (err) {
+            const {message} = err;
+            return resolve(res.status(500).json({message}));
+          }
+
+          fs.promises.writeFile(torrentPath, torrent).then(
+            () => {
+              res.attachment(torrentFileName);
+              res.download(torrentPath);
+
+              req.services.clientGatewayService
+                .addTorrentsByFile({
+                  files: [torrent.toString('base64')],
+                  destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
+                  tags: tags ?? [],
+                  isBasePath: true,
+                  isCompleted: true,
+                  isSequential: false,
+                  isInitialSeeding: isInitialSeeding ?? false,
+                  start: start ?? false,
+                })
+                .catch(() => {
+                  // do nothing.
+                });
+
+              resolve(res);
+            },
+            ({code, message}) => resolve(res.status(500).json({code, message})),
+          );
         },
       );
-    },
-  );
-});
+    });
+  },
+);
 
 /**
  * POST /api/torrents/start
@@ -322,20 +328,17 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res) 
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, StartTorrentsOptions>('/start', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .startTorrents(req.body)
-    .then((response) => {
-      req.services.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.post<unknown, unknown, StartTorrentsOptions>(
+  '/start',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.startTorrents(req.body).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * POST /api/torrents/stop
@@ -346,20 +349,17 @@ router.post<unknown, unknown, StartTorrentsOptions>('/start', (req, res) => {
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, StopTorrentsOptions>('/stop', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .stopTorrents(req.body)
-    .then((response) => {
-      req.services.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.post<unknown, unknown, StopTorrentsOptions>(
+  '/stop',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.stopTorrents(req.body).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * POST /api/torrents/check-hash
@@ -370,20 +370,17 @@ router.post<unknown, unknown, StopTorrentsOptions>('/stop', (req, res) => {
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, CheckTorrentsOptions>('/check-hash', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .checkTorrents(req.body)
-    .then((response) => {
-      req.services.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.post<unknown, unknown, CheckTorrentsOptions>(
+  '/check-hash',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.checkTorrents(req.body).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * POST /api/torrents/move
@@ -394,32 +391,29 @@ router.post<unknown, unknown, CheckTorrentsOptions>('/check-hash', (req, res) =>
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
-  const callback = getResponseFn(res);
-
-  let sanitizedPath: string | null = null;
-  try {
-    sanitizedPath = sanitizePath(req.body.destination);
-    if (!isAllowedPath(sanitizedPath)) {
-      callback(null, accessDeniedError());
-      return;
+router.post<unknown, unknown, MoveTorrentsOptions>(
+  '/move',
+  async (req, res): Promise<Response> => {
+    let sanitizedPath: string | null = null;
+    try {
+      sanitizedPath = sanitizePath(req.body.destination);
+      if (!isAllowedPath(sanitizedPath)) {
+        const {code, message} = accessDeniedError();
+        return res.status(403).json({code, message});
+      }
+    } catch ({code, message}) {
+      return res.status(403).json({code, message});
     }
-  } catch (e) {
-    callback(null, e);
-    return;
-  }
 
-  req.services.clientGatewayService
-    .moveTorrents({...req.body, destination: sanitizedPath})
-    .then((response) => {
-      req.services.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+    return req.services.clientGatewayService.moveTorrents({...req.body, destination: sanitizedPath}).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    );
+  },
+);
 
 /**
  * POST /api/torrents/delete
@@ -430,20 +424,17 @@ router.post<unknown, unknown, MoveTorrentsOptions>('/move', (req, res) => {
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .removeTorrents(req.body)
-    .then((response) => {
-      req.services.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.post<unknown, unknown, DeleteTorrentsOptions>(
+  '/delete',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.removeTorrents(req.body).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PATCH /api/torrents/initial-seeding
@@ -454,17 +445,17 @@ router.post<unknown, unknown, DeleteTorrentsOptions>('/delete', (req, res) => {
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<unknown, unknown, SetTorrentsInitialSeedingOptions>('/initial-seeding', (req, res) => {
-  req.services.clientGatewayService.setTorrentsInitialSeeding(req.body).then(
-    (response) => {
-      req.services.torrentService.fetchTorrentList();
-      res.status(200).json(response);
-    },
-    (err) => {
-      res.status(500).json(err);
-    },
-  );
-});
+router.patch<unknown, unknown, SetTorrentsInitialSeedingOptions>(
+  '/initial-seeding',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.setTorrentsInitialSeeding(req.body).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PATCH /api/torrents/priority
@@ -475,20 +466,17 @@ router.patch<unknown, unknown, SetTorrentsInitialSeedingOptions>('/initial-seedi
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .setTorrentsPriority(req.body)
-    .then((response) => {
-      req.services.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.patch<unknown, unknown, SetTorrentsPriorityOptions>(
+  '/priority',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.setTorrentsPriority(req.body).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PATCH /api/torrents/sequential
@@ -499,17 +487,17 @@ router.patch<unknown, unknown, SetTorrentsPriorityOptions>('/priority', (req, re
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<unknown, unknown, SetTorrentsSequentialOptions>('/sequential', (req, res) => {
-  req.services.clientGatewayService.setTorrentsSequential(req.body).then(
-    (response) => {
-      req.services.torrentService.fetchTorrentList();
-      res.status(200).json(response);
-    },
-    (err) => {
-      res.status(500).json(err);
-    },
-  );
-});
+router.patch<unknown, unknown, SetTorrentsSequentialOptions>(
+  '/sequential',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.setTorrentsSequential(req.body).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PATCH /api/torrents/tags
@@ -520,24 +508,24 @@ router.patch<unknown, unknown, SetTorrentsSequentialOptions>('/sequential', (req
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
-  const parsedResult = setTorrentsTagsSchema.safeParse(req.body);
+router.patch<unknown, unknown, SetTorrentsTagsOptions>(
+  '/tags',
+  async (req, res): Promise<Response> => {
+    const parsedResult = setTorrentsTagsSchema.safeParse(req.body);
 
-  if (!parsedResult.success) {
-    validationError(res, parsedResult.error);
-    return;
-  }
+    if (!parsedResult.success) {
+      return res.status(422).json({message: 'Validation error.'});
+    }
 
-  req.services.clientGatewayService.setTorrentsTags(parsedResult.data).then(
-    (response) => {
-      req.services.torrentService.fetchTorrentList();
-      res.status(200).json(response);
-    },
-    (err) => {
-      res.status(500).json(err);
-    },
-  );
-});
+    return req.services.clientGatewayService.setTorrentsTags(parsedResult.data).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    );
+  },
+);
 
 /**
  * PATCH /api/torrents/trackers
@@ -548,20 +536,17 @@ router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', (req, res) => {
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<unknown, unknown, SetTorrentsTrackersOptions>('/trackers', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .setTorrentsTrackers(req.body)
-    .then((response) => {
-      req.services.torrentService.fetchTorrentList();
-      return response;
-    })
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.patch<unknown, unknown, SetTorrentsTrackersOptions>(
+  '/trackers',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.setTorrentsTrackers(req.body).then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        return res.status(200).json(response);
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * GET /api/torrents/{hash(, hash2, ...)}/metainfo
@@ -582,19 +567,17 @@ router.get<{hashes: string}>(
     windowMs: 5 * 60 * 1000,
     max: 60,
   }),
-  async (req, res) => {
+  async (req, res): Promise<Response> => {
     const hashes: Array<string> = req.params.hashes?.split(',').map((hash) => sanitize(hash));
     if (!Array.isArray(hashes) || hashes?.length < 1) {
-      res.status(422).json(new Error('Hash not provided.'));
-      return;
+      return res.status(422).json(new Error('Hash not provided.'));
     }
 
     const {path: sessionDirectory, case: torrentCase} =
       (await req.services.clientGatewayService.getClientSessionDirectory().catch(() => undefined)) || {};
 
     if (sessionDirectory == null || !fs.existsSync(sessionDirectory)) {
-      res.status(500).json(new Error('Failed to get session directory.'));
-      return;
+      return res.status(500).json(new Error('Failed to get session directory.'));
     }
 
     const torrentFileNames = hashes.map(
@@ -604,7 +587,7 @@ router.get<{hashes: string}>(
     if (hashes.length < 2) {
       res.attachment(torrentFileNames[0]);
       res.download(path.join(sessionDirectory, torrentFileNames[0]));
-      return;
+      return res;
     }
 
     try {
@@ -612,12 +595,12 @@ router.get<{hashes: string}>(
         fs.accessSync(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
       );
     } catch {
-      res.status(404).json('Failed to access torrent files.');
-      return;
+      return res.status(404).json('Failed to access torrent files.');
     }
 
     res.attachment(`torrents-${Date.now()}.tar`);
-    tar
+
+    return tar
       .pack(sessionDirectory, {
         entries: torrentFileNames,
         strict: true,
@@ -648,17 +631,17 @@ router.get<{hashes: string}>(
  * @tags Torrent
  * @security User
  * @param {string} hash.path
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
  */
-router.get('/:hash/contents', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .getTorrentContents(req.params.hash)
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.get(
+  '/:hash/contents',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.getTorrentContents(req.params.hash).then(
+      (contents) => res.status(200).json(contents),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PATCH /api/torrents/{hash}/contents
@@ -670,16 +653,14 @@ router.get('/:hash/contents', (req, res) => {
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>('/:hash/contents', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .setTorrentContentsPriority(req.params.hash, req.body)
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.patch<{hash: string}, unknown, SetTorrentContentsPropertiesOptions>(
+  '/:hash/contents',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.setTorrentContentsPriority(req.params.hash, req.body).then(
+      (response) => res.status(200).json(response),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * GET /api/torrents/{hash}/contents/{indices}/token
@@ -697,17 +678,19 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
     windowMs: 5 * 60 * 1000,
     max: 200,
   }),
-  (req, res) => {
-    if (req.user) {
-      const {hash, indices} = req.params;
-      res.status(200).send(
-        getToken<ContentToken>({
-          username: req.user.username,
-          hash,
-          indices,
-        }),
-      );
+  async (req, res): Promise<Response> => {
+    if (!req.user) {
+      return res.status(500).json({message: 'User is not attached.'});
     }
+
+    const {hash, indices} = req.params;
+    return res.status(200).send(
+      getToken<ContentToken>({
+        username: req.user.username,
+        hash,
+        indices,
+      }),
+    );
   },
 );
 
@@ -728,7 +711,7 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
     windowMs: 5 * 60 * 1000,
     max: 200,
   }),
-  (req, res) => {
+  async (req, res): Promise<Response> => {
     const {hash, indices: stringIndices} = req.params;
 
     if (req.user != null && req.query.token == null) {
@@ -741,22 +724,20 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
             indices: stringIndices,
           })}`,
         );
-        return;
+        return res;
       }
     }
 
     const selectedTorrent = req.services.torrentService.getTorrent(hash);
     if (!selectedTorrent) {
-      res.status(404).json({error: 'Torrent not found.'});
-      return;
+      return res.status(404).json({error: 'Torrent not found.'});
     }
 
-    req.services.clientGatewayService
+    return req.services.clientGatewayService
       .getTorrentContents(hash)
       .then((contents) => {
         if (!contents || contents.length < 1) {
-          res.status(404).json({error: 'Torrent contents not found'});
-          return;
+          return res.status(404).json({error: 'Torrent contents not found'});
         }
 
         let indices: Array<number>;
@@ -774,16 +755,14 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
 
         if (filePathsToDownload.length !== indices.length) {
           const {code, message} = accessDeniedError();
-          res.status(403).json({code, message});
-          return;
+          return res.status(403).json({code, message});
         }
 
         filePathsToDownload = filePathsToDownload.filter((filePath) => fs.existsSync(filePath));
 
         if (filePathsToDownload.length < 1 || filePathsToDownload.length !== indices.length) {
           const {code, message} = fileNotFoundError();
-          res.status(404).json({code, message});
-          return;
+          return res.status(404).json({code, message});
         }
 
         if (filePathsToDownload.length === 1) {
@@ -815,7 +794,7 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
 
           res.sendFile(file);
 
-          return;
+          return res;
         }
 
         const archiveRootFolder = sanitizePath(selectedTorrent.directory);
@@ -858,10 +837,10 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
           tarStream.unpipe(res);
           res.destroy();
         });
+
+        return res;
       })
-      .catch((err) => {
-        res.status(500).json(err);
-      });
+      .catch(({code, message}) => res.status(500).json({code, message}));
   },
 );
 
@@ -872,25 +851,26 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
  * @security User
  * @param {string} hash.path
  */
-router.get('/:hash/details', async (req, res) => {
-  const callback = getResponseFn(res);
+router.get(
+  '/:hash/details',
+  async (req, res): Promise<Response> => {
+    try {
+      const contents = req.services.clientGatewayService.getTorrentContents(req.params.hash);
+      const peers = req.services.clientGatewayService.getTorrentPeers(req.params.hash);
+      const trackers = req.services.clientGatewayService.getTorrentTrackers(req.params.hash);
 
-  try {
-    const contents = req.services.clientGatewayService.getTorrentContents(req.params.hash);
-    const peers = req.services.clientGatewayService.getTorrentPeers(req.params.hash);
-    const trackers = req.services.clientGatewayService.getTorrentTrackers(req.params.hash);
+      await Promise.all([contents, peers, trackers]);
 
-    await Promise.all([contents, peers, trackers]);
-
-    callback({
-      contents: await contents,
-      peers: await peers,
-      trackers: await trackers,
-    });
-  } catch (e) {
-    callback(null, e);
-  }
-});
+      return res.status(200).json({
+        contents: await contents,
+        peers: await peers,
+        trackers: await trackers,
+      });
+    } catch ({code, message}) {
+      return res.status(500).json({code, message});
+    }
+  },
+);
 
 /**
  * GET /api/torrents/{hash}/mediainfo
@@ -908,17 +888,14 @@ router.get<{hash: string}>(
     windowMs: 5 * 60 * 1000,
     max: 30,
   }),
-  async (req, res) => {
-    const callback = getResponseFn(res);
-
+  async (req, res): Promise<Response> => {
     const torrentDirectory = req.services.torrentService.getTorrent(req.params.hash)?.directory;
     const torrentContents = await req.services.clientGatewayService
       .getTorrentContents(req.params.hash)
       .catch(() => undefined);
 
     if (torrentDirectory == null || torrentContents == null || torrentContents.length < 1) {
-      callback(null, new Error('Failed to fetch info of torrent.'));
-      return;
+      return res.status(404).json({message: 'Failed to fetch info of torrent.'});
     }
 
     try {
@@ -928,14 +905,14 @@ router.get<{hash: string}>(
 
       torrentContentPaths = torrentContentPaths.filter((contentPath) => isAllowedPath(contentPath));
       if (torrentContentPaths.length < 1) {
-        callback(null, accessDeniedError());
-        return;
+        const {code, message} = accessDeniedError();
+        return res.status(403).json({code, message});
       }
 
       torrentContentPaths = torrentContentPaths.filter((contentPath) => fs.existsSync(contentPath));
       if (torrentContentPaths.length < 1) {
-        callback(null, fileNotFoundError());
-        return;
+        const {code, message} = fileNotFoundError();
+        return res.status(404).json({code, message});
       }
 
       const mediainfoProcess = childProcess.execFile(
@@ -944,22 +921,22 @@ router.get<{hash: string}>(
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
         (error, stdout, stderr) => {
           if (error) {
-            callback(null, error);
-            return;
+            return res.status(500).json({message: error.message});
           }
 
           if (stderr) {
-            callback(null, stderr);
-            return;
+            return res.status(500).json({message: stderr});
           }
 
-          callback({output: stdout});
+          return res.status(200).json({output: stdout});
         },
       );
 
       req.on('close', () => mediainfoProcess.kill('SIGTERM'));
-    } catch (error) {
-      callback(null, error);
+
+      return res;
+    } catch ({code, message}) {
+      return res.status(500).json({code, message});
     }
   },
 );
@@ -971,16 +948,14 @@ router.get<{hash: string}>(
  * @security User
  * @param {string} hash.path
  */
-router.get('/:hash/peers', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .getTorrentPeers(req.params.hash)
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.get(
+  '/:hash/peers',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.getTorrentPeers(req.params.hash).then(
+      (peers) => res.status(200).json(peers),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * GET /api/torrents/{hash}/trackers
@@ -991,15 +966,13 @@ router.get('/:hash/peers', (req, res) => {
  * @return {Array<TorrentTracker>} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get('/:hash/trackers', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.clientGatewayService
-    .getTorrentTrackers(req.params.hash)
-    .then(callback)
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.get(
+  '/:hash/trackers',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.getTorrentTrackers(req.params.hash).then(
+      (trackers) => res.status(200).json(trackers),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 export default router;

@@ -12,7 +12,6 @@ import {
 } from '../../../shared/schema/api/auth';
 import config from '../../../config';
 import {getAuthToken, getCookieOptions} from '../../util/authUtil';
-import {getResponseFn, validationError} from '../../util/ajaxUtil';
 import requireAdmin from '../../middleware/requireAdmin';
 import services from '../../services';
 import Users from '../../models/Users';
@@ -43,7 +42,7 @@ router.use(
 const sendAuthenticationResponse = (
   res: Response,
   credentials: Required<Pick<Credentials, 'username' | 'level'>>,
-): void => {
+): Response => {
   const {username, level} = credentials;
 
   res.cookie('jwt', getAuthToken(username), getCookieOptions());
@@ -54,7 +53,7 @@ const sendAuthenticationResponse = (
     level,
   };
 
-  res.json(response);
+  return res.json(response);
 };
 
 const preloadConfigs: AuthVerificationPreloadConfigs = {
@@ -74,36 +73,34 @@ router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmi
  * @return {object} 401 - incorrect username or password - application/json
  * @return {AuthAuthenticationResponse} 200 - success response - application/json
  */
-router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', (req, res) => {
-  if (config.authMethod === 'none') {
-    sendAuthenticationResponse(res, Users.getConfigUser());
-    return;
-  }
+router.post<unknown, unknown, AuthAuthenticationOptions>(
+  '/authenticate',
+  async (req, res): Promise<Response> => {
+    if (config.authMethod === 'none') {
+      return sendAuthenticationResponse(res, Users.getConfigUser());
+    }
 
-  const parsedResult = authAuthenticationSchema.safeParse(req.body);
+    const parsedResult = authAuthenticationSchema.safeParse(req.body);
 
-  if (!parsedResult.success) {
-    validationError(res, parsedResult.error);
-    return;
-  }
+    if (!parsedResult.success) {
+      return res.status(422).json({message: 'Validation error.'});
+    }
 
-  const credentials = parsedResult.data;
+    const credentials = parsedResult.data;
 
-  Users.comparePassword(credentials).then(
-    (level) => {
-      sendAuthenticationResponse(res, {
-        ...credentials,
-        level,
-      });
-    },
-    () => {
-      // Incorrect username or password.
-      res.status(401).json({
-        message: failedLoginResponse,
-      });
-    },
-  );
-});
+    return Users.comparePassword(credentials).then(
+      (level) =>
+        sendAuthenticationResponse(res, {
+          ...credentials,
+          level,
+        }),
+      () =>
+        res.status(401).json({
+          message: failedLoginResponse,
+        }),
+    );
+  },
+);
 
 // Allow unauthenticated registration if no users are currently registered.
 router.use('/register', (req, res, next) => {
@@ -114,8 +111,7 @@ router.use('/register', (req, res, next) => {
     handleSubsequentUser: () => {
       passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
         if (err || !user) {
-          res.status(401).send('Unauthorized');
-          return;
+          return res.status(401).send('Unauthorized');
         }
         req.user = user;
         // Only admin users can create users
@@ -139,40 +135,38 @@ router.use('/register', (req, res, next) => {
  * @return {{username: string}} 200 - success response if cookie=false - application/json
  * @return {AuthAuthenticationResponse} 200 - success response - application/json
  */
-router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>('/register', (req, res) => {
-  // No user can be registered when authMethod is none
-  if (config.authMethod === 'none') {
-    // Return 404
-    res.status(404).send('Not found');
-    return;
-  }
+router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>(
+  '/register',
+  async (req, res): Promise<Response> => {
+    // No user can be registered when authMethod is none
+    if (config.authMethod === 'none') {
+      // Return 404
+      return res.status(404).send('Not found');
+    }
 
-  const parsedResult = authRegistrationSchema.safeParse(req.body);
+    const parsedResult = authRegistrationSchema.safeParse(req.body);
 
-  if (!parsedResult.success) {
-    validationError(res, parsedResult.error);
-    return;
-  }
+    if (!parsedResult.success) {
+      return res.status(422).json({message: 'Validation error.'});
+    }
 
-  const credentials = parsedResult.data;
+    const credentials = parsedResult.data;
 
-  // Attempt to save the user
-  Users.createUser(credentials).then(
-    (user) => {
-      services.bootstrapServicesForUser(user);
+    // Attempt to save the user
+    return Users.createUser(credentials).then(
+      (user) => {
+        services.bootstrapServicesForUser(user);
 
-      if (req.query.cookie === 'false') {
-        getResponseFn(res)({username: user.username});
-        return;
-      }
+        if (req.query.cookie === 'false') {
+          return res.status(200).json({username: user.username});
+        }
 
-      sendAuthenticationResponse(res, credentials);
-    },
-    (err) => {
-      getResponseFn(res)({username: credentials.username}, err);
-    },
-  );
-});
+        return sendAuthenticationResponse(res, credentials);
+      },
+      ({message}) => res.status(500).json({message}),
+    );
+  },
+);
 
 // Allow unauthenticated verification if no users are currently registered.
 router.use('/verify', (req, res, next) => {
@@ -226,21 +220,23 @@ router.use('/verify', (req, res, next) => {
  * @return {string} 500 - authenticated succeeded but user is unattached (this should NOT happen)
  * @return {AuthVerificationResponse} 200 - success response - application/json
  */
-router.get('/verify', (req, res) => {
-  if (req.user == null) {
-    res.status(500).send('Unattached user.');
-    return;
-  }
+router.get(
+  '/verify',
+  (req, res): Response => {
+    if (req.user == null) {
+      return res.status(500).send('Unattached user.');
+    }
 
-  const response: AuthVerificationResponse = {
-    initialUser: false,
-    username: req.user.username,
-    level: req.user.level,
-    configs: preloadConfigs,
-  };
+    const response: AuthVerificationResponse = {
+      initialUser: false,
+      username: req.user.username,
+      level: req.user.level,
+      configs: preloadConfigs,
+    };
 
-  res.json(response);
-});
+    return res.json(response);
+  },
+);
 
 // All subsequent routes are protected.
 router.use('/', passport.authenticate('jwt', {session: false}));
@@ -279,18 +275,21 @@ router.use('/users', (_req, res, next) => {
  * @return {string} 403 - user is not authorized to list users
  * @return {Array<Pick<UserInDatabase, 'username' | 'level'>>} 200 - success response - application/json
  */
-router.get('/users', (_req, res) => {
-  Users.listUsers().then(
-    (users) =>
-      res.json(
-        users.map((user) => ({
-          username: user.username,
-          level: user.level,
-        })),
-      ),
-    () => res.status(500).json(new Error()),
-  );
-});
+router.get(
+  '/users',
+  async (_req, res): Promise<Response> => {
+    return Users.listUsers().then(
+      (users) =>
+        res.json(
+          users.map((user) => ({
+            username: user.username,
+            level: user.level,
+          })),
+        ),
+      ({code, message}) => res.status(500).json({code, message}),
+    );
+  },
+);
 
 /**
  * DELETE /api/auth/users/{username}
@@ -302,16 +301,17 @@ router.get('/users', (_req, res) => {
  * @return {string} 403 - user is not authorized to delete user
  * @return {{username: string}} 200 - success response - application/json
  */
-router.delete('/users/:username', (req, res) => {
-  Users.removeUser(req.params.username)
-    .then((id) => {
-      services.destroyUserServices(id);
-      res.json({username: req.params.username});
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
+router.delete(
+  '/users/:username',
+  async (req, res): Promise<Response> => {
+    return Users.removeUser(req.params.username)
+      .then((id) => {
+        services.destroyUserServices(id);
+        return res.json({username: req.params.username});
+      })
+      .catch(({code, message}) => res.status(500).json({code, message}));
+  },
+);
 
 /**
  * PATCH /api/auth/users/{username}
@@ -325,29 +325,29 @@ router.delete('/users/:username', (req, res) => {
  * @return {object} 422 - request validation error - application/json
  * @return {} 200 - success response
  */
-router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions>('/users/:username', (req, res) => {
-  const {username} = req.params;
+router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions>(
+  '/users/:username',
+  async (req, res): Promise<Response> => {
+    const {username} = req.params;
 
-  const parsedResult = authUpdateUserSchema.safeParse(req.body);
+    const parsedResult = authUpdateUserSchema.safeParse(req.body);
 
-  if (!parsedResult.success) {
-    validationError(res, parsedResult.error);
-    return;
-  }
+    if (!parsedResult.success) {
+      return res.status(422).json({message: 'Validation error.'});
+    }
 
-  const patch = parsedResult.data;
+    const patch = parsedResult.data;
 
-  Users.updateUser(username, patch)
-    .then((newUsername) => {
-      return Users.lookupUser(newUsername).then((user) => {
-        services.destroyUserServices(user._id);
-        services.bootstrapServicesForUser(user);
-        res.send();
-      });
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
-});
+    return Users.updateUser(username, patch)
+      .then((newUsername) => {
+        return Users.lookupUser(newUsername).then((user) => {
+          services.destroyUserServices(user._id);
+          services.bootstrapServicesForUser(user);
+          return res.status(200).json({});
+        });
+      })
+      .catch(({code, message}) => res.status(500).json({code, message}));
+  },
+);
 
 export default router;

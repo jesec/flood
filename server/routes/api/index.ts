@@ -19,7 +19,6 @@ import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
 import {getAuthToken, verifyToken} from '../../util/authUtil';
-import {getResponseFn} from '../../util/ajaxUtil';
 import torrentsRoutes from './torrents';
 
 const router = express.Router();
@@ -172,8 +171,8 @@ router.get<unknown, unknown, unknown, {snapshot: HistorySnapshot}>('/history', (
     (snapshot) => {
       res.json(snapshot);
     },
-    (err) => {
-      res.status(500).json(err);
+    ({code, message}) => {
+      res.status(500).json({code, message});
     },
   );
 });
@@ -192,8 +191,8 @@ router.get<unknown, unknown, unknown, NotificationFetchOptions>('/notifications'
     (notifications) => {
       res.status(200).json(notifications);
     },
-    (err: Error) => {
-      res.status(500).json({message: err.message});
+    ({code, message}) => {
+      res.status(500).json({code, message});
     },
   );
 });
@@ -211,8 +210,8 @@ router.delete('/notifications', (req, res) => {
     () => {
       res.status(200).send();
     },
-    (err: Error) => {
-      res.status(500).json({message: err.message});
+    ({code, message}) => {
+      res.status(500).json({code, message});
     },
   );
 });
@@ -225,18 +224,14 @@ router.delete('/notifications', (req, res) => {
  * @return {FloodSettings} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get('/settings', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.settingService
-    .get(null)
-    .then((settings) => {
-      callback(settings as FloodSettings);
-    })
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.get(
+  '/settings',
+  async (req, res): Promise<Response> =>
+    req.services.settingService.get(null).then(
+      (settings) => res.status(200).json(settings),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * GET /api/settings/{property}
@@ -247,18 +242,14 @@ router.get('/settings', (req, res) => {
  * @return {Partial<FloodSettings>} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get<{property: keyof FloodSettings}>('/settings/:property', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.settingService
-    .get(req.params.property)
-    .then((settings) => {
-      callback(settings);
-    })
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.get<{property: keyof FloodSettings}>(
+  '/settings/:property',
+  async (req, res): Promise<Response> =>
+    req.services.settingService.get(req.params.property).then(
+      (setting) => res.status(200).json(setting),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * PATCH /api/settings
@@ -269,17 +260,13 @@ router.get<{property: keyof FloodSettings}>('/settings/:property', (req, res) =>
  * @return {Partial<FloodSettings>} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<unknown, unknown, SetFloodSettingsOptions>('/settings', (req, res) => {
-  const callback = getResponseFn(res);
-
-  req.services.settingService
-    .set(req.body)
-    .then((savedSettings) => {
-      callback(savedSettings);
-    })
-    .catch((err) => {
-      callback(null, err);
-    });
-});
+router.patch<unknown, unknown, SetFloodSettingsOptions>(
+  '/settings',
+  async (req, res): Promise<Response> =>
+    req.services.settingService.set(req.body).then(
+      (savedSettings) => res.status(200).json(savedSettings),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 export default router;
