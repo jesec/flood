@@ -75,6 +75,16 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       },
     },
     {
+      type: 'action',
+      action: 'reannounce',
+      label: TorrentContextMenuActions.reannounce,
+      clickHandler: () => {
+        TorrentActions.reannounce({
+          hashes: TorrentStore.selectedTorrents as [string, ...string[]],
+        });
+      },
+    },
+    {
       type: 'separator',
     },
     {
