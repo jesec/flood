@@ -8,6 +8,7 @@ import sanitize from 'sanitize-filename';
 import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
+  ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {
@@ -348,6 +349,20 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     }
 
     return this.startTorrents({hashes: hashesToRestart});
+  }
+
+  async reannounceTorrents({hashes}: ReannounceTorrentsOptions): Promise<void> {
+    const methodCalls = hashes.map((hash) => ({
+      methodName: 'd.tracker_announce',
+      params: [hash],
+    }));
+
+    return this.clientRequestManager
+      .methodCall('system.multicall', [methodCalls])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(() => {
+        // returns nothing.
+      });
   }
 
   async removeTorrents({hashes, deleteData}: DeleteTorrentsOptions): Promise<void> {
