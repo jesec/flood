@@ -1,6 +1,8 @@
 import {FC} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 
+import SortDirections from '@client/constants/SortDirections';
+
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import Dropdown from '../general/form-elements/Dropdown';
@@ -75,7 +77,7 @@ const SortDropdown: FC<SortDropdownProps> = (props: SortDropdownProps) => {
           return;
         }
 
-        let nextDirection: 'asc' | 'desc' = 'asc';
+        let nextDirection: 'asc' | 'desc' = SortDirections[property] ?? 'asc';
         if (selectedProperty === property) {
           nextDirection = direction === 'asc' ? 'desc' : 'asc';
         }

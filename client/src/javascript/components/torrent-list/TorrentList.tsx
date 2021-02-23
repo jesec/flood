@@ -13,11 +13,11 @@ import SettingStore from '@client/stores/SettingStore';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import TorrentStore from '@client/stores/TorrentStore';
 
+import SortDirections from '@client/constants/SortDirections';
+
 import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
-
-import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import ContextMenuMountPoint from '../general/ContextMenuMountPoint';
 import ListViewport from '../general/ListViewport';
@@ -84,7 +84,7 @@ const TorrentList: FC = observer(() => {
           onCellClick={(property: TorrentListColumn) => {
             const currentSort = SettingStore.floodSettings.sortTorrents;
 
-            let nextDirection: FloodSettings['sortTorrents']['direction'] = 'asc';
+            let nextDirection = SortDirections[property] ?? 'asc';
 
             if (currentSort.property === property) {
               nextDirection = currentSort.direction === 'asc' ? 'desc' : 'asc';
