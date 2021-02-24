@@ -57,6 +57,10 @@ export const setTrackers = async (torrent: string, trackers: Array<string>): Pro
     );
   }
 
+  if (trackers.length == 1 || torrentData['announce'] != null) {
+    torrentData['announce'] = Buffer.from(trackers[0]);
+  }
+
   try {
     fs.writeFileSync(torrent, bencode.encode(torrentData));
   } catch {
