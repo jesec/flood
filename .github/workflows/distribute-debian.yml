@@ -24,7 +24,10 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
-      - run: sudo apt install --reinstall -y qemu-user-static
+      - name: Set up QEMU
+        run: |
+          sudo apt update
+          sudo apt install --reinstall -y qemu-user-static
 
       - run: sudo npm install -g @jesec/pkg
 

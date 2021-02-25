@@ -69,7 +69,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up QEMU
-        run: sudo apt install --reinstall -y qemu-user-static
+        run: |
+          sudo apt update
+          sudo apt install --reinstall -y qemu-user-static
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -120,7 +122,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up QEMU
-        run: sudo apt install --reinstall -y qemu-user-static
+        run: |
+          sudo apt update
+          sudo apt install --reinstall -y qemu-user-static
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
@@ -172,7 +176,10 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
-      - run: sudo apt install --reinstall -y qemu-user-static
+      - name: Set up QEMU
+        run: |
+          sudo apt update
+          sudo apt install --reinstall -y qemu-user-static
 
       - run: sudo npm install -g @jesec/pkg
 
@@ -236,7 +243,9 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up QEMU
-        run: sudo apt install --reinstall -y qemu-user-static
+        run: |
+          sudo apt update
+          sudo apt install --reinstall -y qemu-user-static
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1

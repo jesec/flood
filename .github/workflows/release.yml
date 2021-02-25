@@ -29,7 +29,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - run: sudo apt install --reinstall -y qemu-user-static
+      - name: Set up QEMU
+        run: |
+          sudo apt update
+          sudo apt install --reinstall -y qemu-user-static
 
       - run: npm run build-pkg
       - run: git fetch origin ${{ github.ref }}
@@ -76,7 +79,9 @@ jobs:
           echo ::set-output name=FULL_VERSION::$full_version
 
       - name: Set up QEMU
-        run: sudo apt install --reinstall -y qemu-user-static
+        run: |
+          sudo apt update
+          sudo apt install --reinstall -y qemu-user-static
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
