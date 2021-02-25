@@ -82,7 +82,7 @@
   - Dutch, thanks to @vain4us
   - French, thanks to @Carryozor
   - German, thanks to @Ben-Wallner
-  - Hungarian, thanks to @sfu420
+  - Hungarian, thanks to @m3r3nix
   - Romanian, thanks to @T-z3P
   - Spanish, thanks to @almontegil
 - Bump dependencies
@@ -275,7 +275,7 @@ Other changes:
 - config.cli: make all configs configurable by options and env
 - styles: properly set width of clipboard icon (fixes #26)
 - client: hide logout button when auth is disabled
-- Hungarian support (#21), thanks to @sfu420
+- Hungarian support (#21), thanks to @m3r3nix
 - New translations:
   - Chinese Traditional, thanks to @vongola12324
   - Czech, thanks to @brezina.jn
