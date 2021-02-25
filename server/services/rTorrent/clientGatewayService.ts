@@ -32,9 +32,9 @@ import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
+import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
-import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {fetchURLToTempFile, saveBufferToTempFile} from '../../util/tempFileUtil';
 import {setCompleted, setTrackers} from '../../util/torrentFileUtil';
@@ -101,6 +101,19 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
+    // validate filesystem access
+    await this.clientRequestManager
+      .methodCall('import', [
+        '',
+        await saveBufferToTempFile(Buffer.from('#'), 'rc', {
+          mode: 0o664,
+        }),
+      ])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .catch(() => {
+        throw accessDeniedError();
+      });
+
     await fs.promises.mkdir(destination, {recursive: true});
 
     const torrentPaths: Array<string> = (
