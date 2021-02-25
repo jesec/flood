@@ -10,6 +10,12 @@ let rejectCallback;
 let parserInit = false;
 const parser = new Parser();
 
+const rTorrentError = (message, isFault) => {
+  const e = new Error(message);
+  e.isFault = isFault;
+  return e;
+};
+
 const unescapeXMLString = (value) =>
   value
     .replace(/&lt;/g, '<')
@@ -118,11 +124,11 @@ const deserialize = (data) =>
 
     if (endOfResponse) {
       if (dataStack[0]?.faultString) {
-        return reject(new Error(dataStack[0].faultString));
+        return reject(rTorrentError(dataStack[0].faultString, true));
       }
 
       if (dataStack[0]?.[0]?.faultString) {
-        return reject(new Error(dataStack[0][0].faultString));
+        return reject(rTorrentError(dataStack[0][0].faultString, true));
       }
 
       return resolve(dataStack[0]);

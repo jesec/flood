@@ -54,6 +54,7 @@ import {
 } from './constants/methodCallConfigs';
 
 import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
+import type {RTorrentError} from './types/RTorrentError';
 
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
@@ -109,7 +110,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           mode: 0o664,
         }),
       ])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .catch(() => {
         throw accessDeniedError();
       });
@@ -196,7 +197,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     await this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     return torrentHashes;
   }
@@ -213,7 +214,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -222,7 +223,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   async getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
     return this.clientRequestManager
       .methodCall('f.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentContent))
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((responses: string[][]) => {
         return Promise.all(
           responses.map((response) => processMethodCallResponse(response, torrentContentMethodCallConfigs)),
@@ -245,7 +246,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   async getTorrentPeers(hash: TorrentProperties['hash']): Promise<Array<TorrentPeer>> {
     return this.clientRequestManager
       .methodCall('p.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentPeer))
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((responses: string[][]) => {
         return Promise.all(
           responses.map((response) => processMethodCallResponse(response, torrentPeerMethodCallConfigs)),
@@ -266,7 +267,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   async getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
     return this.clientRequestManager
       .methodCall('t.multicall', [hash, ''].concat((await this.availableMethodCalls).torrentTracker))
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((responses: string[][]) => {
         return Promise.all(
           responses.map((response) => processMethodCallResponse(response, torrentTrackerMethodCallConfigs)),
@@ -299,7 +300,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             };
           }),
         ])
-        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
         .then((responses: string[][]) => {
           return responses.map((response) => {
             const [value] = response;
@@ -355,7 +356,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     await this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     if (isCheckHash) {
       await this.checkTorrents({hashes});
@@ -372,7 +373,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -430,7 +431,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           params: [hash],
         })),
       ])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     // Delete contents of torrents
     contentPaths.forEach((contentPath) => {
@@ -465,7 +466,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           params: [hash, isInitialSeeding ? 'initial_seed' : 'seed'],
         })),
       ])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -490,7 +491,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -504,7 +505,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -522,7 +523,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -555,7 +556,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     await this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     const {path: sessionDirectory, case: torrentCase} = await this.getClientSessionDirectory();
 
@@ -592,7 +593,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -615,7 +616,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -638,7 +639,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -647,7 +648,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   async fetchTorrentList(): Promise<TorrentListSummary> {
     return this.clientRequestManager
       .methodCall('d.multicall2', ['', 'main'].concat((await this.availableMethodCalls).torrentList))
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((responses: string[][]) => {
         this.emit('PROCESS_TORRENT_LIST_START');
         return Promise.all(
@@ -717,7 +718,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => {
         return processMethodCallResponse(response, transferSummaryMethodCallConfigs);
       });
@@ -726,7 +727,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   async getClientSessionDirectory(): Promise<{path: string; case: 'lower' | 'upper'}> {
     return this.clientRequestManager
       .methodCall('session.path', [])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => ({path: response, case: 'upper'}));
   }
 
@@ -740,7 +741,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => {
         return processMethodCallResponse(response, clientSettingMethodCallConfigs);
       });
@@ -785,7 +786,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     return this.clientRequestManager
       .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then(() => {
         // returns nothing.
       });
@@ -808,7 +809,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }> {
     const methodList: Array<string> = await this.clientRequestManager
       .methodCall('system.listMethods', [])
-      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .catch((e) => {
         if (!fallback) {
           throw e;
@@ -831,6 +832,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       transferSummary: getAvailableMethodCalls(getMethodCalls(transferSummaryMethodCallConfigs)),
     };
   }
+
+  processRTorrentRequestError = (error: RTorrentError) => {
+    if (!error?.isFault) {
+      return this.processClientRequestError(error);
+    }
+
+    throw error;
+  };
 }
 
 export default RTorrentClientGatewayService;
