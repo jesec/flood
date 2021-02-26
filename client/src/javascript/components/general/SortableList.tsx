@@ -1,7 +1,7 @@
 import classnames from 'classnames';
+import {HTML5toTouch} from 'rdndmb-html5-to-touch';
 import {DndProvider} from 'react-dnd-multi-backend';
 import {FC, MouseEvent, ReactNode, useState} from 'react';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 
 import SortableListItem from './SortableListItem';
 
