@@ -1,7 +1,8 @@
-import {sanitizePath} from '../../util/fileUtil';
+import type {NetConnectOpts} from 'net';
 
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
+import {sanitizePath} from '../../util/fileUtil';
 import scgiUtil from './util/scgiUtil';
 
 import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
@@ -59,17 +60,17 @@ class ClientRequestManager {
   };
 
   sendMethodCall = (methodName: string, parameters: MethodCallParameters) => {
-    const connectionMethod =
+    const connectionOptions: NetConnectOpts =
       this.connectionSettings.type === 'socket'
         ? {
-            socketPath: this.connectionSettings.socket,
+            path: this.connectionSettings.socket,
           }
         : {
             host: this.connectionSettings.host,
             port: this.connectionSettings.port,
           };
 
-    return scgiUtil.methodCall(connectionMethod, methodName, parameters).then(
+    return scgiUtil.methodCall(connectionOptions, methodName, parameters).then(
       (response) => {
         this.handleRequestEnd();
         return response;
