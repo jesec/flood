@@ -712,7 +712,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const methodCalls: MultiMethodCalls = (await this.availableMethodCalls).transferSummary.map((methodCall) => {
       return {
         methodName: methodCall,
-        params: [],
+        params: [''],
       };
     });
 
@@ -726,7 +726,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
   async getClientSessionDirectory(): Promise<{path: string; case: 'lower' | 'upper'}> {
     return this.clientRequestManager
-      .methodCall('session.path', [])
+      .methodCall('session.path', [''])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => ({path: response, case: 'upper'}));
   }
@@ -735,7 +735,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const methodCalls: MultiMethodCalls = (await this.availableMethodCalls).clientSetting.map((methodCall) => {
       return {
         methodName: methodCall,
-        params: [],
+        params: [''],
       };
     });
 
