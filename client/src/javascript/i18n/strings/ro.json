@@ -324,6 +324,7 @@
   "torrents.list.context.move": "Setează locația torentului",
   "torrents.list.context.pause": "Întrerupe",
   "torrents.list.context.priority": "Prioritate",
+  "torrents.list.context.reannounce": "Anunță din nou",
   "torrents.list.context.remove": "Șterge",
   "torrents.list.context.sequential": "Secvenţial",
   "torrents.list.context.set.tags": "Setează etichete",
