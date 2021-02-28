@@ -16,7 +16,7 @@ const torrentListMethodCallConfigs = {
   },
   state: {
     methodCall: 'd.state=',
-    transformValue: stringTransformer,
+    transformValue: booleanTransformer,
   },
   isActive: {
     methodCall: 'd.is_active=',
@@ -46,9 +46,7 @@ const torrentListMethodCallConfigs = {
   },
   isHashing: {
     methodCall: 'd.hashing=',
-    transformValue: (value: unknown): boolean => {
-      return value !== '0';
-    },
+    transformValue: booleanTransformer,
   },
   priority: {
     methodCall: 'd.priority=',

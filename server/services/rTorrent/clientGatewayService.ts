@@ -301,12 +301,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           }),
         ])
         .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
-        .then((responses: string[][]) => {
-          return responses.map((response) => {
-            const [value] = response;
-            return value === '1';
-          });
-        })
+        .then((responses: string[][]) =>
+          responses.map((response) => (typeof response === 'number' ? response : response?.[0])),
+        )
         .catch(() => undefined);
 
       if (isMultiFile == null || isMultiFile.length !== hashes.length) {

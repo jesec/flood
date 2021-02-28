@@ -1,11 +1,15 @@
-import {numberTransformer, stringArrayTransformer} from '../../util/rTorrentMethodCallUtil';
+import {numberTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const clientSettingMethodCallConfigs = {
   dht: {
     methodCall: 'dht.statistics',
     transformValue: (value: unknown): boolean => {
-      const [stats] = value as Array<Record<string, string>>;
-      return stats.dht !== 'disable';
+      if (Array.isArray(value)) {
+        const [stats] = value as Array<Record<string, string>>;
+        return stats.dht !== 'disable';
+      } else {
+        return (value as {dht: string})?.dht !== 'disable';
+      }
     },
   },
   dhtPort: {
@@ -14,9 +18,8 @@ const clientSettingMethodCallConfigs = {
   },
   directoryDefault: {
     methodCall: 'directory.default',
-    transformValue: (value: unknown) => {
-      const [directory] = value as Array<string>;
-      return directory;
+    transformValue: (value: unknown): string => {
+      return typeof value === 'string' ? value : (value as Array<string>)?.[0];
     },
   },
   networkHttpMaxOpen: {
@@ -25,7 +28,9 @@ const clientSettingMethodCallConfigs = {
   },
   networkLocalAddress: {
     methodCall: 'network.local_address',
-    transformValue: stringArrayTransformer,
+    transformValue: (value: unknown): string[] => {
+      return [typeof value === 'string' ? value : (value as Array<string>)?.[0]];
+    },
   },
   networkMaxOpenFiles: {
     methodCall: 'network.max_open_files',
@@ -33,30 +38,26 @@ const clientSettingMethodCallConfigs = {
   },
   networkPortOpen: {
     methodCall: 'network.port_open',
-    transformValue: (value: unknown) => {
-      const [portOpen] = value as Array<string>;
-      return portOpen === '1';
+    transformValue: (value: unknown): boolean => {
+      return value == 1 || (value as Array<string>)?.[0] === '1';
     },
   },
   networkPortRandom: {
     methodCall: 'network.port_random',
-    transformValue: (value: unknown) => {
-      const [portRandom] = value as Array<string>;
-      return portRandom === '1';
+    transformValue: (value: unknown): boolean => {
+      return value == 1 || (value as Array<string>)?.[0] === '1';
     },
   },
   networkPortRange: {
     methodCall: 'network.port_range',
-    transformValue: (value: unknown) => {
-      const [portRange] = value as Array<string>;
-      return portRange;
+    transformValue: (value: unknown): string => {
+      return typeof value === 'string' ? value : (value as Array<string>)?.[0];
     },
   },
   piecesHashOnCompletion: {
     methodCall: 'pieces.hash.on_completion',
-    transformValue: (value: unknown) => {
-      const [hashOnCompletion] = value as Array<string>;
-      return hashOnCompletion === '1';
+    transformValue: (value: unknown): boolean => {
+      return value == 1 || (value as Array<string>)?.[0] === '1';
     },
   },
   piecesMemoryMax: {
@@ -67,9 +68,8 @@ const clientSettingMethodCallConfigs = {
   },
   protocolPex: {
     methodCall: 'protocol.pex',
-    transformValue: (value: unknown) => {
-      const [protocolPex] = value as Array<string>;
-      return protocolPex === '1';
+    transformValue: (value: unknown): boolean => {
+      return value == 1 || (value as Array<string>)?.[0] === '1';
     },
   },
   throttleGlobalDownSpeed: {

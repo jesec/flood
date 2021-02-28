@@ -49,17 +49,17 @@ export const getTorrentStatusFromProperties = (
 
   if (isHashing) {
     torrentStatus.push('checking');
-  } else if (isComplete && isOpen && state === '1') {
+  } else if (isComplete && isOpen && state) {
     torrentStatus.push('complete');
     torrentStatus.push('seeding');
-  } else if (isComplete && isOpen && state === '0') {
+  } else if (isComplete && isOpen && !state) {
     torrentStatus.push('stopped');
   } else if (isComplete && !isOpen) {
     torrentStatus.push('stopped');
     torrentStatus.push('complete');
-  } else if (!isComplete && isOpen && state === '1') {
+  } else if (!isComplete && isOpen && state) {
     torrentStatus.push('downloading');
-  } else if (!isComplete && isOpen && state === '0') {
+  } else if (!isComplete && isOpen && !state) {
     torrentStatus.push('stopped');
   } else if (!isComplete && !isOpen) {
     torrentStatus.push('stopped');
