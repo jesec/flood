@@ -54,7 +54,7 @@ import {
 } from './constants/methodCallConfigs';
 
 import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
-import type {RTorrentError} from './types/RTorrentError';
+import type {RPCError} from './types/RPCError';
 
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
@@ -830,8 +830,8 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     };
   }
 
-  processRTorrentRequestError = (error: RTorrentError) => {
-    if (!error?.isFault) {
+  processRTorrentRequestError = (error: RPCError) => {
+    if (!error?.isRPCError) {
       return this.processClientRequestError(error);
     }
 

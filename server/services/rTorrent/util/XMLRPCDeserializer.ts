@@ -1,22 +1,22 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import {Parser} from 'saxen';
 
-let stackMarks;
-let dataStack;
-let tmpData;
-let dataIsVal;
+import {RPCError} from '../types/RPCError';
+
+type Value = Array<Value> | {[key: string]: Value} | number | string | boolean;
+
+let stackMarks: Array<Value>;
+let dataStack: Array<Value>;
+let tmpData: Array<Value>;
+let dataIsVal: boolean;
 let endOfResponse;
-let rejectCallback;
+let rejectCallback: (reason: Error) => void;
 
 let parserInit = false;
 const parser = new Parser();
 
-const XMLRPCFaultError = (message, isFault) => {
-  const e = new Error(message);
-  e.isFault = isFault;
-  return e;
-};
-
-const unescapeXMLString = (value) =>
+const unescapeXMLString = (value: string) =>
   value
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
@@ -24,7 +24,7 @@ const unescapeXMLString = (value) =>
     .replace(/&quot;/g, '"')
     .replace(/&amp;/g, '&');
 
-const openTag = (elementName) => {
+const openTag = (elementName: string) => {
   if (elementName === 'array' || elementName === 'struct') {
     stackMarks.push(dataStack.length);
   }
@@ -32,15 +32,15 @@ const openTag = (elementName) => {
   dataIsVal = elementName === 'value';
 };
 
-const onText = (value) => {
+const onText = (value: string) => {
   tmpData.push(unescapeXMLString(value));
 };
 
-const onError = (err) => {
+const onError = (err: Error) => {
   rejectCallback(err);
 };
 
-const closeTag = (elementName) => {
+const closeTag = (elementName: string) => {
   let stackMark;
   const tagValue = tmpData.join('');
   switch (elementName) {
@@ -65,17 +65,17 @@ const closeTag = (elementName) => {
       break;
 
     case 'array':
-      stackMark = stackMarks.pop();
+      stackMark = stackMarks.pop() as number;
       dataStack.splice(stackMark, dataStack.length - stackMark, dataStack.slice(stackMark));
       dataIsVal = false;
       break;
 
     case 'struct': {
-      stackMark = stackMarks.pop();
-      const struct = {};
+      stackMark = stackMarks.pop() as number;
+      const struct: Record<string, Value> = {};
       const items = dataStack.slice(stackMark);
       for (let i = 0; i < items.length; i += 2) {
-        struct[items[i]] = items[i + 1];
+        struct[items[i] as string] = items[i + 1];
       }
       dataStack.splice(stackMark, dataStack.length - stackMark, struct);
       dataIsVal = false;
@@ -108,7 +108,7 @@ const initParser = () => {
   parserInit = true;
 };
 
-const deserialize = (data) =>
+const deserialize = (data: string) =>
   new Promise((resolve, reject) => {
     stackMarks = [];
     dataStack = [];
@@ -121,12 +121,18 @@ const deserialize = (data) =>
     parser.parse(data);
 
     if (endOfResponse) {
-      if (dataStack[0]?.faultString) {
-        return reject(XMLRPCFaultError(dataStack[0].faultString, true));
-      }
-
-      if (dataStack[0]?.[0]?.faultString) {
-        return reject(XMLRPCFaultError(dataStack[0][0].faultString, true));
+      if (Array.isArray(dataStack[0])) {
+        dataStack[0].forEach((response) => {
+          const faultObject = (response as {faultString: string; faultCode: number}) || {};
+          if (faultObject.faultCode) {
+            return reject(RPCError(faultObject.faultString, faultObject.faultCode));
+          }
+        });
+      } else {
+        const faultObject = (dataStack[0] as {faultString: string; faultCode: number}) || {};
+        if (faultObject.faultCode) {
+          return reject(RPCError(faultObject.faultString, faultObject.faultCode));
+        }
       }
 
       return resolve(dataStack[0]);
