@@ -58,7 +58,7 @@ class ClientRequestManager {
 
     await this.authCookie;
 
-    return authFailed ? Promise.reject() : Promise.resolve();
+    return authFailed ? Promise.reject(new Error()) : Promise.resolve();
   }
 
   async getAppPreferences(): Promise<QBittorrentAppPreferences> {

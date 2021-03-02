@@ -55,7 +55,7 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
 
   updateDisks = () => {
     if (!isPlatformSupported()) {
-      return Promise.reject();
+      return Promise.reject(new Error());
     }
 
     return diskUsage[process.platform as SupportedPlatform]()

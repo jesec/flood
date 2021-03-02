@@ -124,12 +124,12 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       .then((torrents) => {
         const [torrent] = torrents;
         if (torrent == null) {
-          return Promise.reject();
+          throw new Error();
         }
 
         const {files, fileStats} = torrent;
         if (files.length !== fileStats.length) {
-          return Promise.reject();
+          throw new Error();
         }
 
         const torrentContents: Array<TorrentContent> = files.map((file, index) => {
@@ -163,7 +163,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       .then((torrents) => {
         const [torrent] = torrents;
         if (torrent == null) {
-          return Promise.reject();
+          throw new Error();
         }
 
         const torrentPeers: Array<TorrentPeer> = torrent.peers
@@ -190,7 +190,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       .then((torrents) => {
         const [torrent] = torrents;
         if (torrent == null) {
-          return Promise.reject();
+          throw new Error();
         }
 
         const torrentTrackers: Array<TorrentTracker> = torrent.trackerStats.map((tracker) => ({

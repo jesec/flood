@@ -60,7 +60,7 @@ class ClientRequestManager {
 
     await this.sessionID;
 
-    return authFailed ? Promise.reject() : Promise.resolve();
+    return authFailed ? Promise.reject(new Error()) : Promise.resolve();
   }
 
   async getRequestHeaders(): Promise<Record<string, string>> {

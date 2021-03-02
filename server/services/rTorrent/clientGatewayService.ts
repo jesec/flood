@@ -307,7 +307,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .catch(() => undefined);
 
       if (isMultiFile == null || isMultiFile.length !== hashes.length) {
-        return Promise.reject();
+        throw new Error();
       }
 
       hashes.forEach((hash, index) => {

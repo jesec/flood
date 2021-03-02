@@ -91,7 +91,7 @@ const closeTag = (elementName) => {
       break;
 
     default:
-      rejectCallback(`Unexpected XML-RPC Tag: ${elementName}`);
+      rejectCallback(new Error(`Unexpected XML-RPC Tag: ${elementName}`));
   }
 };
 
@@ -132,7 +132,7 @@ const deserialize = (data) =>
       return resolve(dataStack[0]);
     }
 
-    return reject('truncated response was received');
+    return reject(new Error('truncated response was received'));
   });
 
 export default {deserialize};
