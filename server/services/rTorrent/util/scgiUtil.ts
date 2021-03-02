@@ -4,9 +4,9 @@ import serializer, {XMLRPCValue} from './XMLRPCSerializer';
 
 const NULL_CHAR = String.fromCharCode(0);
 
-const bufferStream = (stream: net.Socket) => {
+const bufferStream = (stream: net.Socket): Promise<string> => {
   const chunks: Buffer[] = [];
-  return new Promise((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
     stream.on('error', reject);
     stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')));
