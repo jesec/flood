@@ -27,10 +27,21 @@ jobs:
 
       - run: sudo add-apt-repository -y ppa:qbittorrent-team/qbittorrent-unstable
       - run: sudo add-apt-repository -y ppa:transmissionbt/ppa
-      - run: sudo apt-get install -y rtorrent qbittorrent-nox transmission-daemon
+      - run: sudo apt-get install -y qbittorrent-nox transmission-daemon
+
+      - run: |
+          wget https://nightly.link/jesec/rtorrent/workflows/publish-rolling/master/rtorrent-deb-amd64.zip
+          unzip rtorrent-deb-amd64.zip
+          sudo dpkg -i rtorrent-deb.deb
 
       - run: npm ci --no-optional
       - run: npm test || npm test || npm test
 
       - uses: codecov/codecov-action@v1
         if: matrix.node == 15
+
+      - run: |
+          sudo apt-get remove --purge -y rtorrent
+          sudo apt-get install -y rtorrent
+
+      - run: npm test -- --selectProjects rtorrent
