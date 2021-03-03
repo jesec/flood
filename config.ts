@@ -201,7 +201,7 @@ if (argv.rtorrent) {
 
   process.on('exit', () => {
     console.log('Killing rTorrent daemon...');
-    rTorrentProcess.kill('SIGTERM');
+    rTorrentProcess.kill('SIGHUP');
   });
 }
 
