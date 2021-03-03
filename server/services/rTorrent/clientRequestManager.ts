@@ -2,8 +2,8 @@ import type {NetConnectOpts} from 'net';
 
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
+import {methodCallJSON, methodCallXML} from './util/scgiUtil';
 import {sanitizePath} from '../../util/fileUtil';
-import scgiUtil from './util/scgiUtil';
 
 import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 
@@ -11,6 +11,7 @@ type MethodCallParameters = Array<string | Buffer | MultiMethodCalls>;
 
 class ClientRequestManager {
   connectionSettings: RTorrentConnectionSettings;
+  isJSONCapable = false;
   isRequestPending = false;
   lastResponseTimestamp = 0;
   pendingRequests: Array<{
@@ -70,7 +71,11 @@ class ClientRequestManager {
             port: this.connectionSettings.port,
           };
 
-    return scgiUtil.methodCall(connectionOptions, methodName, parameters).then(
+    const methodCall = this.isJSONCapable
+      ? methodCallJSON(connectionOptions, methodName, parameters)
+      : methodCallXML(connectionOptions, methodName, parameters);
+
+    return methodCall.then(
       (response) => {
         this.handleRequestEnd();
         return response;

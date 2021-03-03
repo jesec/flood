@@ -1,6 +1,11 @@
 import net from 'net';
+
 import deserializer from './XMLRPCDeserializer';
-import serializer, {XMLRPCValue} from './XMLRPCSerializer';
+import serializer from './XMLRPCSerializer';
+import {RPCError} from '../types/RPCError';
+
+import type {MultiMethodCalls} from './rTorrentMethodCallUtil';
+import type {XMLRPCValue} from './XMLRPCSerializer';
 
 const NULL_CHAR = String.fromCharCode(0);
 
@@ -13,7 +18,7 @@ const bufferStream = (stream: net.Socket): Promise<string> => {
   });
 };
 
-const methodCall = (options: net.NetConnectOpts, methodName: string, params: XMLRPCValue[]) =>
+export const methodCallXML = (options: net.NetConnectOpts, methodName: string, params: XMLRPCValue[]) =>
   // TODO: better typings
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   new Promise<any>((resolve, reject) => {
@@ -39,4 +44,60 @@ const methodCall = (options: net.NetConnectOpts, methodName: string, params: XML
       .then(resolve, reject);
   });
 
-export default {methodCall};
+export const methodCallJSON = (options: net.NetConnectOpts, methodName: string, params: unknown[]) =>
+  // TODO: better typings
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  new Promise<any>((resolve, reject) => {
+    const stream = net.connect(options);
+    const request =
+      methodName == 'system.multicall'
+        ? (params[0] as MultiMethodCalls).map((call) => ({
+            jsonrpc: '2.0',
+            id: null,
+            method: call.methodName,
+            params: call.params,
+          }))
+        : {
+            jsonrpc: '2.0',
+            id: null,
+            method: methodName,
+            params,
+          };
+
+    const json = JSON.stringify(request);
+    const jsonLength = Buffer.byteLength(json, 'utf8');
+
+    stream.on('error', reject);
+    stream.setEncoding('UTF8');
+
+    const headerItems = [
+      `CONTENT_LENGTH${NULL_CHAR}${jsonLength}${NULL_CHAR}`,
+      `CONTENT_TYPE${NULL_CHAR}application/json${NULL_CHAR}`,
+      `SCGI${NULL_CHAR}1${NULL_CHAR}`,
+    ];
+
+    const headerLength = headerItems.reduce((accumulator, headerItem) => accumulator + headerItem.length, 0);
+
+    stream.end(`${headerLength}:${headerItems.join('')},${json}`);
+
+    bufferStream(stream)
+      .then((data: string) => {
+        const jsonResponse = JSON.parse(data.slice(data.lastIndexOf('\n')));
+        if (Array.isArray(jsonResponse)) {
+          return jsonResponse.map((response) => {
+            if (response.result == null) {
+              const {code, message} = response.error || {};
+              throw RPCError(code, message);
+            }
+            return response.result;
+          });
+        } else {
+          if (jsonResponse.result == null) {
+            const {code, message} = jsonResponse.error || {};
+            throw RPCError(code, message);
+          }
+          return jsonResponse.result;
+        }
+      })
+      .then(resolve, reject);
+  });
