@@ -87,14 +87,14 @@ export const methodCallJSON = (options: net.NetConnectOpts, methodName: string, 
           return jsonResponse.map((response) => {
             if (response.result == null) {
               const {code, message} = response.error || {};
-              throw RPCError(code, message);
+              throw RPCError(message, code);
             }
             return response.result;
           });
         } else {
           if (jsonResponse.result == null) {
             const {code, message} = jsonResponse.error || {};
-            throw RPCError(code, message);
+            throw RPCError(message, code);
           }
           return jsonResponse.result;
         }
