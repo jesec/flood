@@ -139,13 +139,13 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
                 <FilesystemBrowser
                   directory={destination}
                   selectable={selectable}
-                  onItemSelection={(newDestination: string, isDirectory = true) => {
+                  onItemSelection={(newDestination: string, shouldKeepOpen = true) => {
                     if (textboxRef.current != null) {
                       textboxRef.current.value = newDestination;
                     }
 
+                    setIsDirectoryListOpen(shouldKeepOpen);
                     setDestination(newDestination);
-                    setIsDirectoryListOpen(isDirectory);
                   }}
                 />
               </ContextMenu>
