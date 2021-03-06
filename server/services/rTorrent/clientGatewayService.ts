@@ -102,18 +102,22 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
+    const {hasLoadThrow} = await this.availableMethodCalls;
+
     // validate filesystem access
-    await this.clientRequestManager
-      .methodCall('import', [
-        '',
-        await saveBufferToTempFile(Buffer.from('#'), 'rc', {
-          mode: 0o664,
-        }),
-      ])
-      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
-      .catch(() => {
-        throw accessDeniedError();
-      });
+    if (!hasLoadThrow) {
+      await this.clientRequestManager
+        .methodCall('import', [
+          '',
+          await saveBufferToTempFile(Buffer.from('#'), 'rc', {
+            mode: 0o664,
+          }),
+        ])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+        .catch(() => {
+          throw accessDeniedError();
+        });
+    }
 
     await fs.promises.mkdir(destination, {recursive: true});
 
@@ -189,10 +193,15 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         additionalCalls.push(`d.connection_seed.set=initial_seed`);
       }
 
-      return {
-        methodName: start ? 'load.start' : 'load.normal',
-        params: ['', torrentPath].concat(additionalCalls),
-      };
+      return hasLoadThrow
+        ? {
+            methodName: start ? 'load.start_throw' : 'load.throw',
+            params: ['', torrentPath, ...additionalCalls],
+          }
+        : {
+            methodName: start ? 'load.start' : 'load.normal',
+            params: ['', torrentPath, ...additionalCalls],
+          };
     }, []);
 
     await this.clientRequestManager
@@ -797,6 +806,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   async fetchAvailableMethodCalls(
     fallback = false,
   ): Promise<{
+    hasLoadThrow: boolean;
     clientSetting: string[];
     torrentContent: string[];
     torrentList: string[];
@@ -836,6 +846,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         : (methodCalls: Array<string>) => methodCalls;
 
     return {
+      hasLoadThrow: methodList?.includes('load.throw') ?? false,
       clientSetting: getAvailableMethodCalls(getMethodCalls(clientSettingMethodCallConfigs)),
       torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
       torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
