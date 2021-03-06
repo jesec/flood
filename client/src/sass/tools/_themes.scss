@@ -91,18 +91,6 @@ $themes: (
     progress-bar--track--background--selected: rgba(#fff, 0.15),
     progress-bar--track--background--selected--stopped: rgba(#fff, 0.15),
     progress-bar--track--background--stopped: rgba(#e7ebee, 0.35),
-    progress-bar--track--background--checking:
-      linear-gradient(
-        -45deg,
-        rgba(rgba(#8899a8, 0.15), 0) 0,
-        rgba(rgba(#8899a8, 0.15), 0) 25%,
-        rgba(rgba(#8899a8, 0.15), 0.5) 25%,
-        rgba(rgba(#8899a8, 0.15), 0.5) 50%,
-        rgba(rgba(#8899a8, 0.15), 0) 50%,
-        rgba(rgba(#8899a8, 0.15), 0) 75%,
-        rgba(rgba(#8899a8, 0.15), 0.5) 75%,
-        rgba(rgba(#8899a8, 0.15), 0.5) 100%
-      ),
     sidebar--background: $sidebar--background,
     sidebar--foreground: $sidebar--foreground,
     sidebar--border: 1px 0 rgba(darken($sidebar--foreground, 40%), 0.3),
@@ -190,18 +178,6 @@ $themes: (
     progress-bar--track--background--selected: rgba(#fff, 0.15),
     progress-bar--track--background--selected--stopped: $md-text-dividers-dark,
     progress-bar--track--background--stopped: $md-text-dividers-dark,
-    progress-bar--track--background--checking:
-      linear-gradient(
-        -45deg,
-        rgba(rgba(#8899a8, 0.15), 0) 0,
-        rgba(rgba(#8899a8, 0.15), 0) 25%,
-        rgba(rgba(#8899a8, 0.15), 0.5) 25%,
-        rgba(rgba(#8899a8, 0.15), 0.5) 50%,
-        rgba(rgba(#8899a8, 0.15), 0) 50%,
-        rgba(rgba(#8899a8, 0.15), 0) 75%,
-        rgba(rgba(#8899a8, 0.15), 0.5) 75%,
-        rgba(rgba(#8899a8, 0.15), 0.5) 100%
-      ),
     sidebar--background: $md-surface-dark,
     sidebar--foreground: $md-text-secondary-dark,
     sidebar--border: 1px 0 $md-text-dividers-dark,
