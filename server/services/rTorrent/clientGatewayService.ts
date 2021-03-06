@@ -175,7 +175,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     }
 
     const methodCalls: MultiMethodCalls = torrentPaths.map((torrentPath) => {
-      const additionalCalls: Array<string> = [];
+      const additionalCalls: Array<string> = ['d.tied_to_file.set='];
 
       additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destination}"`);
 
