@@ -2,9 +2,9 @@ import {applyPatch, Operation} from 'fast-json-patch';
 import {computed, makeAutoObservable} from 'mobx';
 
 import filterTorrents from '@client/util/filterTorrents';
-import searchTorrents from '@client/util/searchTorrents';
 import selectTorrents from '@client/util/selectTorrents';
 import sortTorrents from '@client/util/sortTorrents';
+import termMatch from '@client/util/termMatch';
 
 import type {TorrentProperties, TorrentList} from '@shared/types/Torrent';
 
@@ -29,7 +29,7 @@ class TorrentStore {
     let filteredTorrents = Object.assign([], this.sortedTorrents) as Array<TorrentProperties>;
 
     if (searchFilter !== '') {
-      filteredTorrents = searchTorrents(filteredTorrents, searchFilter);
+      filteredTorrents = termMatch(filteredTorrents, (properties) => properties.name, searchFilter);
     }
 
     if (statusFilter !== '') {

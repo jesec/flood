@@ -1,6 +1,4 @@
-import type {TorrentProperties} from '@shared/types/Torrent';
-
-function searchTorrents(torrents: Array<TorrentProperties>, searchString: string): Array<TorrentProperties> {
+const termMatch = <T>(elements: Array<T>, sub: (element: T) => string, searchString: string): Array<T> => {
   if (searchString !== '') {
     const queries: Array<RegExp> = [];
     const searchTerms = searchString.replace(/,/g, ' ').split(' ');
@@ -9,9 +7,9 @@ function searchTorrents(torrents: Array<TorrentProperties>, searchString: string
       queries.push(new RegExp(searchTerms[i], 'gi'));
     }
 
-    return torrents.filter((torrent) => {
+    return elements.filter((element) => {
       for (let i = 0, len = queries.length; i < len; i += 1) {
-        if (!torrent.name.match(queries[i])) {
+        if (!sub(element).match(queries[i])) {
           return false;
         }
       }
@@ -19,7 +17,7 @@ function searchTorrents(torrents: Array<TorrentProperties>, searchString: string
     });
   }
 
-  return torrents;
-}
+  return elements;
+};
 
-export default searchTorrents;
+export default termMatch;
