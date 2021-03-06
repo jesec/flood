@@ -1,34 +1,29 @@
-import {Component, ReactNode} from 'react';
+import {FC, ReactNode, useEffect, useRef} from 'react';
 import ReactDOM from 'react-dom';
 
 interface PortalProps {
   children: ReactNode;
 }
 
-class Portal extends Component<PortalProps> {
-  mountPoint: HTMLDivElement | null = null;
+const Portal: FC<PortalProps> = ({children}: PortalProps) => {
+  const mountPoint = useRef<HTMLDivElement | null>(null);
 
-  componentDidMount() {
-    this.mountPoint = document.createElement('div');
-    this.mountPoint.classList.add('portal');
-    document.body.appendChild(this.mountPoint);
-  }
+  useEffect(() => {
+    mountPoint.current = document.createElement('div');
+    mountPoint.current.classList.add('portal');
+    document.body.appendChild(mountPoint.current);
 
-  componentWillUnmount() {
-    if (this.mountPoint == null) {
-      return;
-    }
-    ReactDOM.unmountComponentAtNode(this.mountPoint);
-    document.body.removeChild(this.mountPoint);
-  }
+    return () => {
+      if (mountPoint.current != null) {
+        ReactDOM.unmountComponentAtNode(mountPoint.current);
+        document.body.removeChild(mountPoint.current);
+      }
+    };
+  }, []);
 
-  render() {
-    if (this.mountPoint == null) return null;
+  if (mountPoint.current == null) return null;
 
-    const {children} = this.props;
-
-    return ReactDOM.createPortal(children, this.mountPoint);
-  }
-}
+  return ReactDOM.createPortal(children, mountPoint.current);
+};
 
 export default Portal;

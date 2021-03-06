@@ -1,5 +1,6 @@
 import classnames from 'classnames';
-import {Component, cloneElement, createRef, ReactElement, ReactNode, ReactNodeArray, Children} from 'react';
+import {cloneElement, ReactElement, ReactNode, ReactNodeArray, Children, useState, useEffect, useRef, FC} from 'react';
+import {useEvent, useKey} from 'react-use';
 
 import {Chevron} from '@client/ui/icons';
 
@@ -16,6 +17,7 @@ import type {SelectItemProps} from './SelectItem';
 
 interface SelectProps {
   id: string | number;
+  children: ReactNode;
   defaultID?: string | number;
   additionalClassNames?: string;
   width?: FormRowItemProps['width'];
@@ -33,247 +35,170 @@ interface SelectProps {
   labelOffset?: boolean;
 }
 
-interface SelectStates {
-  isOpen: boolean;
-  selectedID: string | number;
-}
+const Select: FC<SelectProps> = ({
+  additionalClassNames,
+  children,
+  defaultID,
+  disabled,
+  label,
+  labelOffset,
+  persistentPlaceholder,
+  priority,
+  shrink,
+  grow,
+  matchTriggerWidth,
+  width,
+  id,
+  menuAlign,
+  onOpen,
+  onClose,
+  onSelect,
+}: SelectProps) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
-export default class Select extends Component<SelectProps, SelectStates> {
-  menuRef = createRef<HTMLDivElement>();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedID, setSelectedID] = useState<string | number>(
+    defaultID ??
+      ((children as ReactNodeArray)?.find(
+        (child) => (child as ReactElement<SelectItemProps>)?.props?.id != null,
+      ) as ReactElement<SelectItemProps>)?.props.id ??
+      '',
+  );
 
-  inputRef = createRef<HTMLInputElement>();
+  const classes = classnames('select form__element', additionalClassNames, {
+    'form__element--disabled': disabled,
+    'form__element--label-offset': labelOffset,
+    'select--is-open': isOpen,
+  });
 
-  triggerRef = createRef<HTMLButtonElement>();
+  const selectedItem = Children.toArray(children).find((child, index) => {
+    const item = child as ReactElement<SelectItemProps>;
+    return (
+      (persistentPlaceholder && item.props.isPlaceholder) ||
+      (!selectedID && index === 0) ||
+      item.props.id === selectedID
+    );
+  });
 
-  static defaultProps = {
-    persistentPlaceholder: false,
-    priority: 'quaternary',
-  };
+  useKey('Escape', (event) => {
+    event.preventDefault();
+    setIsOpen(false);
+  });
 
-  constructor(props: SelectProps) {
-    super(props);
-
-    this.state = {
-      isOpen: false,
-      selectedID: this.getInitialSelectedID(),
-    };
-  }
-
-  componentDidUpdate(_prevProps: SelectProps, prevState: SelectStates) {
-    const {onOpen, onClose} = this.props;
-    const {isOpen} = this.state;
-
-    if (isOpen && !prevState.isOpen) {
-      window.addEventListener('keydown', this.handleKeyDown);
-      window.addEventListener('scroll', this.handleWindowScroll, {
-        capture: true,
-      });
-
-      if (onOpen) {
-        onOpen();
+  useEvent(
+    'scroll',
+    (event: Event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
       }
-    } else if (!isOpen && prevState.isOpen) {
-      window.addEventListener('keydown', this.handleKeyDown);
-      window.removeEventListener('scroll', this.handleWindowScroll, {
-        capture: true,
-      });
+    },
+    window,
+    {capture: true},
+  );
 
-      if (onClose) {
-        onClose();
-      }
+  useEffect(() => {
+    if (isOpen) {
+      onOpen?.();
+    } else {
+      onClose?.();
     }
-  }
+  }, [isOpen, onClose, onOpen]);
 
-  getInitialSelectedID(): string | number {
-    const {children, defaultID} = this.props;
+  useEffect(() => {
+    onSelect?.(selectedID);
 
-    if (defaultID != null) {
-      return defaultID;
+    if (inputRef.current != null) {
+      dispatchChangeEvent(inputRef.current);
     }
+  }, [onSelect, selectedID]);
 
-    const childArray = children as ReactNodeArray;
-    if (childArray != null) {
-      const item = childArray.find(
-        (child) => (child as ReactElement<SelectItemProps>).props.id != null,
-      ) as ReactElement<SelectItemProps>;
-
-      if (item?.props?.id != null) {
-        return item.props.id;
-      }
-    }
-
-    return '';
-  }
-
-  getItemList(children: ReactNodeArray) {
-    return children.reduce((accumulator: Array<ReactElement>, child) => {
-      const item = child as ReactElement<SelectItemProps>;
-
-      if (item.props.isPlaceholder) {
-        return accumulator;
-      }
-
-      const {selectedID} = this.state;
-
-      accumulator.push(
-        cloneElement(child as ReactElement, {
-          onClick: this.handleItemClick,
-          isSelected: item.props.id === selectedID,
-        }),
-      );
-
-      return accumulator;
-    }, []);
-  }
-
-  getLabel(): ReactNode {
-    const {id, label} = this.props;
-
-    if (label) {
-      return (
+  return (
+    <FormRowItem shrink={shrink} grow={grow} width={width}>
+      {label && (
         <label className="form__element__label" htmlFor={`${id}`}>
           {label}
         </label>
-      );
-    }
+      )}
+      <div className={classes}>
+        <input
+          className="input input--hidden"
+          name={`${id}`}
+          onChange={() => undefined}
+          tabIndex={-1}
+          ref={inputRef}
+          type="text"
+          value={selectedID}
+        />
+        <Button
+          additionalClassNames="select__button"
+          buttonRef={triggerRef}
+          addonPlacement="after"
+          onClick={() => {
+            if (!disabled) {
+              setIsOpen(!isOpen);
+            }
+          }}
+          priority={priority}
+          wrap={false}>
+          <FormElementAddon className="select__indicator">
+            <Chevron />
+          </FormElementAddon>
+          {selectedItem && cloneElement(selectedItem as ReactElement, {isTrigger: true})}
+        </Button>
+        <Portal>
+          <ContextMenu
+            onOverlayClick={() => {
+              setIsOpen(!isOpen);
+            }}
+            isIn={isOpen}
+            matchTriggerWidth={matchTriggerWidth}
+            menuAlign={menuAlign}
+            ref={menuRef}
+            triggerRef={triggerRef}>
+            {Children.toArray(children).reduce((accumulator: Array<ReactElement>, child) => {
+              const item = child as ReactElement<SelectItemProps>;
 
-    return undefined;
-  }
+              if (item.props.isPlaceholder) {
+                return accumulator;
+              }
 
-  getSelectedItem(children: ReactNodeArray): ReactElement | undefined {
-    const {persistentPlaceholder} = this.props;
-    const {selectedID} = this.state;
+              accumulator.push(
+                cloneElement(child as ReactElement, {
+                  onClick: (selection: string | number) => {
+                    setIsOpen(false);
+                    setSelectedID(selection);
+                  },
+                  isSelected: item.props.id === selectedID,
+                }),
+              );
 
-    const selectedItem = children.find((child, index) => {
-      const item = child as ReactElement<SelectItemProps>;
-      return (
-        (persistentPlaceholder && item.props.isPlaceholder) ||
-        (!selectedID && index === 0) ||
-        item.props.id === selectedID
-      );
-    });
+              return accumulator;
+            }, [])}
+          </ContextMenu>
+        </Portal>
+      </div>
+    </FormRowItem>
+  );
+};
 
-    if (selectedItem) {
-      return cloneElement(selectedItem as ReactElement, {isTrigger: true});
-    }
+Select.defaultProps = {
+  defaultID: undefined,
+  additionalClassNames: undefined,
+  width: undefined,
+  onOpen: undefined,
+  onClose: undefined,
+  onSelect: undefined,
+  label: undefined,
+  menuAlign: undefined,
+  disabled: undefined,
+  matchTriggerWidth: undefined,
+  shrink: undefined,
+  grow: undefined,
+  labelOffset: undefined,
+  persistentPlaceholder: false,
+  priority: 'quaternary',
+};
 
-    return undefined;
-  }
-
-  getTrigger(selectItems: ReactNodeArray) {
-    const {priority} = this.props;
-    const selectedItem = this.getSelectedItem(selectItems);
-
-    return (
-      <Button
-        additionalClassNames="select__button"
-        buttonRef={this.triggerRef}
-        addonPlacement="after"
-        onClick={this.handleTriggerClick}
-        priority={priority}
-        wrap={false}>
-        <FormElementAddon className="select__indicator">
-          <Chevron />
-        </FormElementAddon>
-        {selectedItem}
-      </Button>
-    );
-  }
-
-  handleTriggerClick = () => {
-    if (!this.props.disabled) {
-      this.toggleOpenState();
-    }
-  };
-
-  handleItemClick = (id: string | number) => {
-    this.setState({isOpen: false, selectedID: id}, () => {
-      if (this.props.onSelect) {
-        this.props.onSelect(id);
-      }
-
-      if (this.inputRef.current) {
-        dispatchChangeEvent(this.inputRef.current);
-      }
-    });
-  };
-
-  handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      event.preventDefault();
-
-      this.setState({isOpen: false});
-    }
-  };
-
-  handleOverlayClick = () => {
-    this.toggleOpenState();
-  };
-
-  handleWindowScroll = (event: Event) => {
-    if (this.menuRef.current && !this.menuRef.current.contains(event.target as Node)) {
-      if (this.state.isOpen) {
-        this.setState({isOpen: false});
-      }
-    }
-  };
-
-  toggleOpenState = () => {
-    const wasOpen = this.state.isOpen;
-    this.setState({
-      isOpen: !wasOpen,
-    });
-  };
-
-  render() {
-    const {
-      additionalClassNames,
-      children,
-      disabled,
-      labelOffset,
-      shrink,
-      grow,
-      matchTriggerWidth,
-      width,
-      id,
-      menuAlign,
-    } = this.props;
-    const {isOpen, selectedID} = this.state;
-
-    const selectItems = Children.toArray(children);
-    const classes = classnames('select form__element', additionalClassNames, {
-      'form__element--disabled': disabled,
-      'form__element--label-offset': labelOffset,
-      'select--is-open': isOpen,
-    });
-
-    return (
-      <FormRowItem shrink={shrink} grow={grow} width={width}>
-        {this.getLabel()}
-        <div className={classes}>
-          <input
-            className="input input--hidden"
-            name={`${id}`}
-            onChange={() => undefined}
-            tabIndex={-1}
-            ref={this.inputRef}
-            type="text"
-            value={selectedID}
-          />
-          {this.getTrigger(selectItems)}
-          <Portal>
-            <ContextMenu
-              onOverlayClick={this.handleOverlayClick}
-              isIn={isOpen}
-              matchTriggerWidth={matchTriggerWidth}
-              menuAlign={menuAlign}
-              ref={this.menuRef}
-              triggerRef={this.triggerRef}>
-              {this.getItemList(selectItems)}
-            </ContextMenu>
-          </Portal>
-        </div>
-      </FormRowItem>
-    );
-  }
-}
+export default Select;

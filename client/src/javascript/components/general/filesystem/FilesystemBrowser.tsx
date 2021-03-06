@@ -1,4 +1,4 @@
-import {PureComponent, ReactNodeArray} from 'react';
+import {FC, memo, ReactNodeArray, useEffect, useState} from 'react';
 import {Trans} from '@lingui/react';
 
 import {Arrow, File, FolderClosedSolid} from '@client/ui/icons';
@@ -15,95 +15,33 @@ interface FilesystemBrowserProps {
   onItemSelection?: (newDestination: string, isDirectory?: boolean) => void;
 }
 
-interface FilesystemBrowserStates {
-  errorResponse: {data?: NodeJS.ErrnoException} | null;
-  separator: string;
-  directories?: Array<string>;
-  files?: Array<string>;
-}
+const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
+  ({directory, selectable, onItemSelection}: FilesystemBrowserProps) => {
+    const [errorResponse, setErrorResponse] = useState<{data?: NodeJS.ErrnoException} | null>(null);
+    const [separator, setSeparator] = useState<string>('/');
+    const [directories, setDirectories] = useState<string[]>([]);
+    const [files, setFiles] = useState<string[]>([]);
 
-class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, FilesystemBrowserStates> {
-  constructor(props: FilesystemBrowserProps) {
-    super(props);
+    useEffect(() => {
+      if (!directory) {
+        return;
+      }
 
-    this.state = {
-      errorResponse: null,
-      separator: '/',
-    };
-  }
-
-  componentDidMount(): void {
-    this.fetchDirectoryListForCurrentDirectory();
-  }
-
-  componentDidUpdate(prevProps: FilesystemBrowserProps): void {
-    const {directory} = this.props;
-
-    if (prevProps.directory !== directory) {
-      this.fetchDirectoryListForCurrentDirectory();
-    }
-  }
-
-  getNewDestination(nextDirectorySegment: string): string {
-    const {separator} = this.state;
-    const {directory} = this.props;
-
-    if (directory?.endsWith(separator)) {
-      return `${directory}${nextDirectorySegment}`;
-    }
-
-    return `${directory}${separator}${nextDirectorySegment}`;
-  }
-
-  fetchDirectoryListForCurrentDirectory = (): void => {
-    const {directory} = this.props;
-
-    if (!directory) {
-      return;
-    }
-
-    FloodActions.fetchDirectoryList(directory)
-      .then((response) => {
-        this.setState({
-          ...response,
-          errorResponse: null,
+      FloodActions.fetchDirectoryList(directory)
+        .then(({files: fetchedFiles, directories: fetchedDirectories, separator: fetchedSeparator}) => {
+          setFiles(fetchedFiles);
+          setDirectories(fetchedDirectories);
+          setSeparator(fetchedSeparator);
+          setErrorResponse(null);
+        })
+        .catch(({response}) => {
+          setErrorResponse(response);
         });
-      })
-      .catch((error) => {
-        this.setState({errorResponse: error.response});
-      });
-  };
+    }, [directory]);
 
-  handleItemClick = (item: string, isDirectory = true) => {
-    if (this.props.onItemSelection) {
-      this.props.onItemSelection(this.getNewDestination(item), isDirectory);
-    }
-  };
-
-  handleParentDirectoryClick = () => {
-    const {separator} = this.state;
-    let {directory} = this.props;
-
-    if (directory.endsWith(separator)) {
-      directory = directory.substring(0, directory.length - 1);
-    }
-
-    const directoryArr = directory.split(separator);
-    directoryArr.pop();
-
-    directory = directoryArr.join(separator);
-
-    if (this.props.onItemSelection) {
-      this.props.onItemSelection(directory);
-    }
-  };
-
-  render() {
-    const {directory, selectable} = this.props;
-    const {directories, errorResponse, files} = this.state;
     let errorMessage = null;
     let listItems = null;
-    let parentDirectory = null;
+    let parentDirectoryElement = null;
     let shouldShowDirectoryList = true;
 
     if ((directories == null && selectable === 'directories') || (files == null && selectable === 'files')) {
@@ -129,10 +67,22 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
     }
 
     if (directory) {
-      parentDirectory = (
+      parentDirectoryElement = (
         <li
           className="filesystem__directory-list__item filesystem__directory-list__item--parent"
-          onClick={this.handleParentDirectoryClick}>
+          onClick={() => {
+            let parentDirectory = directory;
+
+            if (directory.endsWith(separator)) {
+              parentDirectory = directory.substring(0, directory.length - 1);
+            }
+
+            const directoryArr = directory.split(separator);
+            directoryArr.pop();
+            parentDirectory = directoryArr.join(separator);
+
+            onItemSelection?.(parentDirectory);
+          }}>
           <Arrow />
           <Trans id="filesystem.parent.directory" />
         </li>
@@ -150,40 +100,52 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
 
     if (shouldShowDirectoryList) {
       const directoryList: ReactNodeArray =
-        directories != null
-          ? directories.map((subDirectory, index) => (
-              <li
-                className={`${'filesystem__directory-list__item filesystem__directory-list__item--directory'.concat(
-                  selectable !== 'files' ? ' filesystem__directory-list__item--selectable' : '',
-                )}`}
-                // TODO: Find a better key
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                onClick={selectable !== 'files' ? () => this.handleItemClick(subDirectory) : undefined}>
-                <FolderClosedSolid />
-                {subDirectory}
-              </li>
-            ))
-          : [];
+        directories?.map((subDirectory) => (
+          <li
+            className={`${'filesystem__directory-list__item filesystem__directory-list__item--directory'.concat(
+              selectable !== 'files' ? ' filesystem__directory-list__item--selectable' : '',
+            )}`}
+            key={subDirectory}
+            onClick={
+              selectable !== 'files'
+                ? () => {
+                    onItemSelection?.(
+                      directory?.endsWith(separator)
+                        ? `${directory}${subDirectory}`
+                        : `${directory}${separator}${subDirectory}`,
+                      true,
+                    );
+                  }
+                : undefined
+            }>
+            <FolderClosedSolid />
+            {subDirectory}
+          </li>
+        )) ?? [];
 
       const filesList: ReactNodeArray =
-        files != null
-          ? files.map((file, index) => (
-              <li
-                className={`${'filesystem__directory-list__item filesystem__directory-list__item--file'.concat(
-                  selectable !== 'directories' ? ' filesystem__directory-list__item--selectable' : '',
-                )}`}
-                // TODO: Find a better key
-                // eslint-disable-next-line react/no-array-index-key
-                key={`file.${index}`}
-                onClick={selectable !== 'directories' ? () => this.handleItemClick(file, false) : undefined}>
-                <File />
-                {file}
-              </li>
-            ))
-          : [];
+        files?.map((file) => (
+          <li
+            className={`${'filesystem__directory-list__item filesystem__directory-list__item--file'.concat(
+              selectable !== 'directories' ? ' filesystem__directory-list__item--selectable' : '',
+            )}`}
+            key={file}
+            onClick={
+              selectable !== 'directories'
+                ? () => {
+                    onItemSelection?.(
+                      directory?.endsWith(separator) ? `${directory}${file}` : `${directory}${separator}${file}`,
+                      false,
+                    );
+                  }
+                : undefined
+            }>
+            <File />
+            {file}
+          </li>
+        )) ?? [];
 
-      listItems = directoryList.concat(filesList);
+      listItems = [...directoryList, ...filesList];
     }
 
     if ((!listItems || listItems.length === 0) && !errorMessage) {
@@ -198,12 +160,17 @@ class FilesystemBrowser extends PureComponent<FilesystemBrowserProps, Filesystem
 
     return (
       <div className="filesystem__directory-list context-menu__items__padding-surrogate">
-        {parentDirectory}
+        {parentDirectoryElement}
         {errorMessage}
         {listItems}
       </div>
     );
-  }
-}
+  },
+);
+
+FilesystemBrowser.defaultProps = {
+  selectable: undefined,
+  onItemSelection: undefined,
+};
 
 export default FilesystemBrowser;

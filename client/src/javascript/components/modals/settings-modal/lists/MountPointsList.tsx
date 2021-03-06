@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import {FC, useState} from 'react';
 import {Trans} from '@lingui/react';
 
 import {Checkbox} from '@client/ui';
@@ -12,114 +12,81 @@ interface MountPointsListProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
 }
 
-interface MountPointsListStates {
-  diskItems: Array<ListItem>;
-}
-
-class MountPointsList extends Component<MountPointsListProps, MountPointsListStates> {
-  constructor(props: MountPointsListProps) {
-    super(props);
-
-    const {mountPoints} = SettingStore.floodSettings;
-    const disks = Object.assign(
-      {},
-      ...DiskUsageStore.disks.map((disk) => ({
-        [disk.target]: disk,
-      })),
-    );
-
-    // assemble disk items from saved "mountPoints" and list of disks "disks"
-    // first targets saved in mountPoints that exist in disks
-    // then remaining targets from disks
-    const diskItems = mountPoints
-      .filter((target) => target in disks)
-      .map((target) => ({
-        id: target,
-        visible: true,
-      }))
-      .concat(
-        Object.keys(disks)
-          .filter((target) => !mountPoints.includes(target))
-          .map((target) => ({
-            id: target,
-            visible: false,
-          })),
+const MountPointsList: FC<MountPointsListProps> = ({onSettingsChange}: MountPointsListProps) => {
+  const [diskItems, setDiskItems] = useState<ListItem[]>(
+    ((): ListItem[] => {
+      const {mountPoints} = SettingStore.floodSettings;
+      const disks = Object.assign(
+        {},
+        ...DiskUsageStore.disks.map((disk) => ({
+          [disk.target]: disk,
+        })),
       );
 
-    this.state = {
-      diskItems,
-    };
-  }
+      return mountPoints
+        .filter((target) => target in disks)
+        .map((target) => ({
+          id: target,
+          visible: true,
+        }))
+        .concat(
+          Object.keys(disks)
+            .filter((target) => !mountPoints.includes(target))
+            .map((target) => ({
+              id: target,
+              visible: false,
+            })),
+        );
+    })(),
+  );
 
-  updateSettings = (diskItems: Array<ListItem>) => {
-    this.props.onSettingsChange({
-      mountPoints: diskItems.filter((item) => item.visible).map((item) => item.id),
-    });
-  };
+  return (
+    <SortableList
+      id="disks"
+      className="sortable-list--disks"
+      items={diskItems.slice()}
+      lockedIDs={[]}
+      onDrop={(items: Array<ListItem>): void => {
+        setDiskItems(items);
+      }}
+      renderItem={(item: ListItem) => {
+        const {id, visible} = item;
 
-  handleCheckboxValueChange = (id: string, value: boolean) => {
-    const {diskItems} = this.state;
+        const checkbox = (
+          <span className="sortable-list__content sortable-list__content--secondary">
+            <Checkbox
+              defaultChecked={visible}
+              onClick={(event) => {
+                const newItems = diskItems.map((disk) => {
+                  if (disk.id === id) {
+                    return {...disk, visible: (event.target as HTMLInputElement).checked};
+                  }
+                  return disk;
+                });
 
-    const newItems = diskItems.map((disk) => {
-      if (disk.id === id) {
-        return {...disk, visible: value};
-      }
-      return disk;
-    });
+                onSettingsChange({
+                  mountPoints: newItems.filter((newItem) => newItem.visible).map((newItem) => newItem.id),
+                });
+                setDiskItems(newItems);
+              }}>
+              <Trans id="settings.diskusage.show" />
+            </Checkbox>
+          </span>
+        );
 
-    this.setState({diskItems: newItems});
-    this.updateSettings(newItems);
-  };
+        const content = (
+          <div className="sortable-list__content sortable-list__content__wrapper">
+            <span className="sortable-list__content sortable-list__content--primary">
+              <div>{id}</div>
+            </span>
+            {checkbox}
+          </div>
+        );
 
-  handleMouseDown = () => {
-    // do nothing.
-  };
-
-  handleMove = (items: Array<ListItem>): void => {
-    this.setState({diskItems: items});
-    this.updateSettings(items);
-  };
-
-  renderItem = (item: ListItem) => {
-    const {id, visible} = item;
-
-    const checkbox = (
-      <span className="sortable-list__content sortable-list__content--secondary">
-        <Checkbox
-          defaultChecked={visible}
-          onClick={(event) => this.handleCheckboxValueChange(id, (event.target as HTMLInputElement).checked)}>
-          <Trans id="settings.diskusage.show" />
-        </Checkbox>
-      </span>
-    );
-
-    const content = (
-      <div className="sortable-list__content sortable-list__content__wrapper">
-        <span className="sortable-list__content sortable-list__content--primary">
-          <div>{id}</div>
-        </span>
-        {checkbox}
-      </div>
-    );
-
-    return content;
-  };
-
-  render() {
-    const {diskItems} = this.state;
-
-    return (
-      <SortableList
-        id="disks"
-        className="sortable-list--disks"
-        items={diskItems.slice()}
-        lockedIDs={[]}
-        onMouseDown={this.handleMouseDown}
-        onDrop={this.handleMove}
-        renderItem={this.renderItem}
-      />
-    );
-  }
-}
+        return content;
+      }}
+    />
+  );
+};
 
 export default MountPointsList;

@@ -1,4 +1,4 @@
-import {ButtonHTMLAttributes, Children, cloneElement, Component, FC, ReactElement, ReactNodeArray, Ref} from 'react';
+import {ButtonHTMLAttributes, Children, cloneElement, FC, ReactElement, ReactNode, ReactNodeArray, Ref} from 'react';
 import classnames from 'classnames';
 
 import {LoadingRing} from '@client/ui/icons';
@@ -8,6 +8,8 @@ import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
 
 export type ButtonProps = Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'disabled' | 'onClick' | 'onChange'> & {
+  children: ReactNode;
+
   buttonRef?: Ref<HTMLButtonElement>;
   isLoading?: boolean;
   additionalClassNames?: string;
@@ -23,126 +25,95 @@ export type ButtonProps = Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'disable
   shrink?: boolean;
 };
 
-export default class Button extends Component<ButtonProps> {
-  static defaultProps = {
-    additionalClassNames: '',
-    disabled: false,
-    grow: false,
-    labelOffset: false,
-    priority: 'primary',
-    shrink: false,
-    type: 'button',
-    wrap: true,
-    wrapper: FormRowItem,
-    wrapperProps: {width: 'auto'},
-  };
+const Button: FC<ButtonProps> = ({
+  children,
+  type,
+  additionalClassNames,
+  buttonRef,
+  labelOffset,
+  addonPlacement,
+  priority,
+  isLoading,
+  disabled,
+  wrap,
+  wrapper,
+  wrapperProps,
+  shrink,
+  grow,
+  onClick,
+}: ButtonProps) => {
+  const addonNodes: ReactNodeArray = [];
+  const childNodes: ReactNodeArray = [];
 
-  getButtonContent() {
-    const {children, addonPlacement} = this.props;
-    const buttonContent = Children.toArray(children).reduce(
-      (
-        accumulator: {
-          addonNodes: ReactNodeArray;
-          childNodes: ReactNodeArray;
-        },
-        child,
-      ) => {
-        const childAsElement = child as ReactElement;
-        if (childAsElement.type === FormElementAddon) {
-          accumulator.addonNodes.push(
-            cloneElement(childAsElement, {
-              addonPlacement,
-              key: childAsElement.props.className,
-            }),
-          );
-        } else {
-          accumulator.childNodes.push(child);
-        }
+  Children.toArray(children).forEach((child) => {
+    const childAsElement = child as ReactElement;
 
-        return accumulator;
-      },
-      {
-        addonNodes: [],
-        childNodes: [],
-      },
-    );
-
-    return {
-      childNode: (
-        <div className="button__content" key="button-content">
-          {buttonContent.childNodes}
-        </div>
-      ),
-      addonNodes: buttonContent.addonNodes,
-    };
-  }
-
-  doesButtonContainIcon() {
-    const {children} = this.props;
-    return Children.toArray(children).some((child) => {
-      const childAsElement = child as ReactElement;
-      return childAsElement.type === FormElementAddon;
-    });
-  }
-
-  render() {
-    const {
-      type,
-      additionalClassNames,
-      buttonRef,
-      labelOffset,
-      addonPlacement,
-      priority,
-      isLoading,
-      disabled,
-      wrap,
-      wrapper,
-      wrapperProps,
-      shrink,
-      grow,
-      onClick,
-    } = this.props;
-    const classes = classnames('button form__element', additionalClassNames, {
-      'form__element--label-offset': labelOffset,
-      'form__element--has-addon': addonPlacement,
-      [`form__element--has-addon--placed-${addonPlacement}`]: addonPlacement,
-      [`button--${priority}`]: priority,
-      'button--is-loading': isLoading,
-      'button--is-disabled': disabled,
-    });
-    const {addonNodes, childNode} = this.getButtonContent();
-
-    const content = (
-      <div className="form__element__wrapper">
-        <button
-          className={classes}
-          disabled={disabled}
-          onClick={onClick}
-          ref={buttonRef}
-          type={type === 'submit' ? 'submit' : 'button'}>
-          {childNode}
-          <FadeIn isIn={isLoading}>
-            <LoadingRing />
-          </FadeIn>
-        </button>
-        {addonNodes}
-      </div>
-    );
-
-    if (wrap) {
-      const WrapperComponent = wrapper as FC;
-      return (
-        <WrapperComponent
-          {...{
-            shrink,
-            grow,
-            ...wrapperProps,
-          }}>
-          {content}
-        </WrapperComponent>
+    if (childAsElement.type === FormElementAddon) {
+      addonNodes.push(
+        cloneElement(childAsElement, {
+          addonPlacement,
+          key: childAsElement.props.className,
+        }),
       );
+    } else {
+      childNodes.push(child);
     }
+  });
 
-    return content;
+  const content = (
+    <div className="form__element__wrapper">
+      <button
+        className={classnames('button form__element', additionalClassNames, {
+          'form__element--label-offset': labelOffset,
+          'form__element--has-addon': addonPlacement,
+          [`form__element--has-addon--placed-${addonPlacement}`]: addonPlacement,
+          [`button--${priority}`]: priority,
+          'button--is-loading': isLoading,
+          'button--is-disabled': disabled,
+        })}
+        disabled={disabled}
+        onClick={onClick}
+        ref={buttonRef}
+        type={type === 'submit' ? 'submit' : 'button'}>
+        <div className="button__content" key="button-content">
+          {childNodes}
+        </div>
+        <FadeIn isIn={isLoading}>
+          <LoadingRing />
+        </FadeIn>
+      </button>
+      {addonNodes}
+    </div>
+  );
+
+  if (wrap) {
+    const WrapperComponent = wrapper as FC;
+    return (
+      <WrapperComponent
+        {...{
+          shrink,
+          grow,
+          ...wrapperProps,
+        }}>
+        {content}
+      </WrapperComponent>
+    );
   }
-}
+
+  return content;
+};
+
+Button.defaultProps = {
+  additionalClassNames: '',
+  disabled: false,
+  grow: false,
+  labelOffset: false,
+  priority: 'primary',
+  shrink: false,
+  type: 'button',
+  wrap: true,
+  wrapper: FormRowItem,
+  wrapperProps: {width: 'auto'},
+};
+
+export default Button;
