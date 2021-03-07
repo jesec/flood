@@ -11,12 +11,22 @@ const Portal: FC<PortalProps> = ({children}: PortalProps) => {
   useEffect(() => {
     mountPoint.current = document.createElement('div');
     mountPoint.current.classList.add('portal');
-    document.body.appendChild(mountPoint.current);
+
+    const appElement = document.getElementById('app');
+    if (appElement == null) {
+      document.body.appendChild(mountPoint.current);
+    } else {
+      appElement.appendChild(mountPoint.current);
+    }
 
     return () => {
       if (mountPoint.current != null) {
         ReactDOM.unmountComponentAtNode(mountPoint.current);
-        document.body.removeChild(mountPoint.current);
+        if (appElement == null) {
+          document.body.removeChild(mountPoint.current);
+        } else {
+          appElement.removeChild(mountPoint.current);
+        }
       }
     };
   }, []);
