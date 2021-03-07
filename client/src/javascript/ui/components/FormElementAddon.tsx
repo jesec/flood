@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {FC, HTMLAttributes, ReactNode} from 'react';
+import {FC, ReactNode} from 'react';
 
 interface FormElementAddonProps {
   children: ReactNode;
@@ -8,7 +8,7 @@ interface FormElementAddonProps {
   className?: string;
   isInteractive?: boolean;
   type?: 'icon';
-  onClick?: HTMLAttributes<HTMLDivElement>['onClick'];
+  onClick?: () => void;
 }
 
 const FormElementAddon: FC<FormElementAddonProps> = ({
@@ -32,9 +32,18 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
   );
 
   return (
-    <div className={classes} onClick={onClick}>
+    <button
+      type="button"
+      className={classes}
+      css={{
+        '&:focus': {
+          outline: 'none',
+          WebkitTapHighlightColor: 'transparent',
+        },
+      }}
+      onClick={onClick}>
       {children}
-    </div>
+    </button>
   );
 };
 

@@ -90,6 +90,7 @@
         cursor: pointer;
         pointer-events: auto;
 
+        &:focus,
         &:hover {
           .icon {
             fill: $blue;
