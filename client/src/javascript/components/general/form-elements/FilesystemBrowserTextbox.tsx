@@ -147,6 +147,9 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
                     setIsDirectoryListOpen(shouldKeepOpen);
                     setDestination(newDestination);
                   }}
+                  onYieldFocus={() => {
+                    textboxRef.current?.focus();
+                  }}
                 />
               </ContextMenu>
             </Portal>
