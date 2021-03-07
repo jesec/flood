@@ -927,16 +927,16 @@ router.get(
           return;
         }
 
-        let index = stringIndex ? Number(stringIndex) : contents[0].index;
+        const index = stringIndex ? Number(stringIndex) : contents[0].index;
 
-        let subtitleSourceContent = contents.find((content) => index == content.index);
+        const subtitleSourceContent = contents.find((content) => index == content.index);
 
         if (!subtitleSourceContent) {
           res.status(404).json({error: 'Torrent contents not found'});
           return;
         }
 
-        let subtitleSourcePath = sanitizePath(path.join(selectedTorrent.directory, subtitleSourceContent.path));
+        const subtitleSourcePath = sanitizePath(path.join(selectedTorrent.directory, subtitleSourceContent.path));
 
         if (!isAllowedPath(subtitleSourcePath)) {
           const {code, message} = accessDeniedError();

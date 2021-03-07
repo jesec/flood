@@ -13,7 +13,7 @@
     "paths": {
       "@shared/*": ["shared/*"]
     },
-    "outDir": "../dist"
+    "outDir": "../dist",
   },
   "include": ["./**/*.ts", "../shared/**/*.ts", "../config.js", "../config.ts"]
 }

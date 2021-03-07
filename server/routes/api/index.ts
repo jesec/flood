@@ -10,6 +10,7 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions} from '@shared/types/Notification';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
+import type {RequestHandler} from 'express';
 
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import appendUserServices from '../../middleware/appendUserServices';
@@ -27,7 +28,7 @@ router.use('/auth', authRoutes);
 
 // Special routes that may bypass authentication when conditions matched
 
-const authenticateContentRequest = async (req, _res, next) => {
+const authenticateContentRequest: RequestHandler = async (req, _res, next) => {
   const {token} = req.query;
 
   if (typeof token === 'string' && token !== '') {

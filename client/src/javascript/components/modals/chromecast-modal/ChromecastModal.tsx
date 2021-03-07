@@ -36,6 +36,10 @@ const GenerateMagnetModal: FC = () => {
     }
   }, []);
 
+  if (UIStore.activeModal?.id !== 'chromecast') {
+    return null;
+  }
+
   if (!initialized)
     return (
       <Modal
@@ -44,9 +48,7 @@ const GenerateMagnetModal: FC = () => {
         actions={[
           {
             clickHandler: null,
-            content: intl.formatMessage({
-              id: 'button.close',
-            }),
+            content: i18n._('button.close'),
             triggerDismiss: true,
             type: 'tertiary',
           },
@@ -54,6 +56,7 @@ const GenerateMagnetModal: FC = () => {
       />
     );
 
+  const hash = UIStore.activeModal?.hash;
   const mediaFiles = contents.filter((file) => isFileChromecastable(file.filename));
   const selectedFileName = (contents[selectedFileIndex]?.filename || '').replace(/\.\w+$/, '');
   const subtitleSources: Subtitles[] = [
@@ -64,9 +67,8 @@ const GenerateMagnetModal: FC = () => {
   ];
 
   const beginCasting = async () => {
-    if (!UIStore.activeModal?.hash || !connected) return;
+    if (!connected) return;
 
-    const hash = UIStore.activeModal?.hash;
     const {filename} = contents[selectedFileIndex];
     const contentType = getChromecastContentType(filename);
     if (!contentType) return;
@@ -86,14 +88,14 @@ const GenerateMagnetModal: FC = () => {
       mediaInfo.textTrackStyle = new chrome.cast.media.TextTrackStyle();
       mediaInfo.textTrackStyle.backgroundColor = '#00000000';
       mediaInfo.textTrackStyle.edgeColor = '#000000FF';
-      mediaInfo.textTrackStyle.edgeType = 'DROP_SHADOW';
+      mediaInfo.textTrackStyle.edgeType = chrome.cast.media.TextTrackEdgeType.DROP_SHADOW;
       mediaInfo.textTrackStyle.fontFamily = 'SANS_SERIF';
       mediaInfo.textTrackStyle.fontScale = 1.0;
       mediaInfo.textTrackStyle.foregroundColor = '#FFFFFF';
 
-      const track = new chrome.cast.media.Track(0, 'TEXT');
+      const track = new chrome.cast.media.Track(0, chrome.cast.media.TrackType.TEXT);
       track.name = 'Text';
-      track.subtype = 'CAPTIONS';
+      track.subtype = chrome.cast.media.TextTrackType.CAPTIONS;
       track.trackContentId = await TorrentActions.getTorrentContentsSubtitlePermalink(hash, selectedSubtitles);
       track.trackContentType = 'text/vtt';
 
@@ -111,23 +113,23 @@ const GenerateMagnetModal: FC = () => {
     const media = castSession.getMediaSession();
     if (!media) return;
 
-    media.stop(new chrome.cast.media.StopRequest());
+    media.stop(
+      new chrome.cast.media.StopRequest(),
+      () => {},
+      () => {},
+    );
   };
 
   return (
     <Modal
-      heading={intl.formatMessage({
-        id: 'chromecast.modal.title',
-      })}
+      heading={i18n._('chromecast.modal.title')}
       content={
         <div className="modal__content inverse">
           <Form>
             <FormRow>
               <Select
                 id="fileIndex"
-                label={intl.formatMessage({
-                  id: 'chromecast.modal.file',
-                })}
+                label={i18n._('chromecast.modal.file')}
                 onSelect={(fileIndex) => {
                   setSelectedFileIndex(Number(fileIndex));
                   setSelectedSubtitles('none');
@@ -142,20 +144,14 @@ const GenerateMagnetModal: FC = () => {
             <FormRow>
               <Select
                 id="subtitleSource"
-                label={intl.formatMessage({
-                  id: 'chromecast.modal.subtitle',
-                })}
+                label={i18n._('chromecast.modal.subtitle')}
                 onSelect={(id) => {
                   if (id === 'none') setSelectedSubtitles('none');
                   else setSelectedSubtitles(Number(id));
                 }}>
                 {subtitleSources.map((source) => (
                   <SelectItem key={source} id={`${source}`}>
-                    {source === 'none'
-                      ? intl.formatMessage({
-                          id: 'chromecast.modal.subtitle.none',
-                        })
-                      : contents[source].filename}
+                    {source === 'none' ? i18n._('chromecast.modal.subtitle.none') : contents[source].filename}
                   </SelectItem>
                 ))}
               </Select>
