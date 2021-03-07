@@ -83,33 +83,6 @@ context('Form elements', () => {
     cy.get('.context-menu__item').should('not.exist');
   });
 
-  it('Filesystem browser', () => {
-    // Filesystem browser
-    cy.get('.input[name="destination"]').then((destinationElem) => {
-      const destination = Cypress.$(destinationElem).val();
-
-      // Open fs browser
-      cy.get('.form__element__addon .icon--search').parent().click();
-      cy.get('.filesystem__directory-list').should('be.visible');
-
-      // Go into the first directory
-      cy.get('.filesystem__directory-list__item--selectable').first().click();
-
-      // Expect destination to change
-      cy.get('.input[name="destination"]').should('not.have.value', destination);
-
-      // Go back
-      cy.get('.filesystem__directory-list__item--parent').click();
-
-      // Expect destination to match stored value
-      cy.get('.input[name="destination"]').should('have.value', destination);
-
-      // Close
-      cy.get('.form__element__addon .icon--search').parent().click();
-      cy.get('.filesystem__directory-list').should('not.exist');
-    });
-  });
-
   it('Toggle', () => {
     cy.get('input[name="start"]').then((startToggleElem) => {
       const start = Cypress.$(startToggleElem).attr('checked') != null ? true : false;
