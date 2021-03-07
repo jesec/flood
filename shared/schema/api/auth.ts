@@ -19,6 +19,7 @@ export interface AuthAuthenticationResponse {
   success: boolean;
   username: string;
   level: AccessLevel;
+  token: string;
 }
 
 // POST /api/auth/register

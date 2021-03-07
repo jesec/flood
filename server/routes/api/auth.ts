@@ -45,12 +45,14 @@ const sendAuthenticationResponse = (
 ): Response => {
   const {username, level} = credentials;
 
-  res.cookie('jwt', getAuthToken(username), getCookieOptions());
+  const token = getAuthToken(username);
+  res.cookie('jwt', token, getCookieOptions());
 
   const response: AuthAuthenticationResponse = {
     success: true,
     username,
     level,
+    token,
   };
 
   return res.json(response);

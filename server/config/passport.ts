@@ -1,4 +1,4 @@
-import {Strategy} from 'passport-jwt';
+import {Strategy,ExtractJwt} from 'passport-jwt';
 
 import type {PassportStatic} from 'passport';
 import type {Request} from 'express';
@@ -11,7 +11,7 @@ import Users from '../models/Users';
 // Setup work and export for the JWT passport strategy.
 export default (passport: PassportStatic) => {
   const options = {
-    jwtFromRequest: (req: Request) => req?.cookies?.jwt,
+    jwtFromRequest: (req: Request) => req?.cookies?.jwt || ExtractJwt.fromAuthHeaderAsBearerToken()(req),
     secretOrKey: config.secret,
   };
 
