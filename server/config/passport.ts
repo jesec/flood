@@ -1,4 +1,4 @@
-import {Strategy,ExtractJwt} from 'passport-jwt';
+import {Strategy, ExtractJwt} from 'passport-jwt';
 
 import type {PassportStatic} from 'passport';
 import type {Request} from 'express';
