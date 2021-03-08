@@ -58,7 +58,7 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
       return Promise.reject(new Error());
     }
 
-    return diskUsage[process.platform as SupportedPlatform]()
+    return diskUsage[process.platform as SupportedPlatform](INTERVAL_UPDATE / 2)
       .then((disks) => {
         // Mountpoints with a very long path are unlikely to be useful.
         return disks.filter((disk) => typeof disk.target === 'string' && disk.target.length < 30);

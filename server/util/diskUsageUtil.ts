@@ -36,12 +36,11 @@ const filterMountPoint = (mountpoint: string) => {
 };
 
 const MAX_BUFFER_SIZE = 65536;
-const EXEC_TIMEOUT = 2000;
-export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<Disk>>>> = {
-  linux: () =>
+export const diskUsage: Readonly<Record<SupportedPlatform, (timeout: number) => Promise<Array<Disk>>>> = {
+  linux: (timeout) =>
     spawnAsync('df', ['-T'], {
       maxBuffer: MAX_BUFFER_SIZE,
-      timeout: EXEC_TIMEOUT,
+      timeout: timeout,
     }).then((stdout) =>
       stdout
         .trim()
@@ -59,10 +58,10 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
           };
         }),
     ),
-  freebsd: () =>
+  freebsd: (timeout) =>
     spawnAsync('df', [], {
       maxBuffer: MAX_BUFFER_SIZE,
-      timeout: EXEC_TIMEOUT,
+      timeout: timeout,
     }).then((stdout) =>
       stdout
         .trim()
@@ -79,10 +78,10 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
           };
         }),
     ),
-  darwin: () =>
+  darwin: (timeout) =>
     spawnAsync('df', ['-kl'], {
       maxBuffer: MAX_BUFFER_SIZE,
-      timeout: EXEC_TIMEOUT,
+      timeout: timeout,
     }).then((stdout) =>
       stdout
         .trim()
@@ -99,10 +98,10 @@ export const diskUsage: Readonly<Record<SupportedPlatform, () => Promise<Array<D
           };
         }),
     ),
-  win32: () =>
+  win32: (timeout) =>
     spawnAsync('wmic', ['logicaldisk'], {
       maxBuffer: MAX_BUFFER_SIZE,
-      timeout: EXEC_TIMEOUT,
+      timeout: timeout,
     }).then((stdout) =>
       stdout
         .trim()
