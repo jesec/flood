@@ -30,9 +30,11 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
     super();
 
     if (!isPlatformSupported()) {
-      console.log(`warning: DiskUsageService does not support this platform`);
+      console.log('DiskUsage: this platform is not supported');
       return;
     }
+
+    this.updateDisks();
 
     // start polling disk usage when the first listener is added
     this.on('newListener', (event) => {
@@ -53,11 +55,7 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
     });
   }
 
-  updateDisks = () => {
-    if (!isPlatformSupported()) {
-      return Promise.reject(new Error());
-    }
-
+  private updateDisks = () => {
     return diskUsage[process.platform as SupportedPlatform](INTERVAL_UPDATE / 2)
       .then((disks) => {
         // Mountpoints with a very long path are unlikely to be useful.
@@ -69,6 +67,9 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
           this.disks = disks;
           this.emit('DISK_USAGE_CHANGE', this.getDiskUsage());
         }
+      })
+      .catch((e) => {
+        console.error(`DiskUsage: failed to update: ${e.code ? `${e.code}: ` : ''}${e.message}`);
       });
   };
 
