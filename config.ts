@@ -186,7 +186,7 @@ if (argv.rtorrent) {
     opts += `,import=${argv.rtconfig}`;
   }
 
-  const rTorrentProcess = spawn('rtorrent', args.concat(['-o', opts]), {stdio: 'inherit'});
+  const rTorrentProcess = spawn('rtorrent', args.concat(['-o', opts]));
 
   fs.writeFileSync(path.join(argv.rundir, 'rtorrent.pid'), `${rTorrentProcess.pid}`);
 
@@ -198,6 +198,14 @@ if (argv.rtorrent) {
       process.exit(1);
     });
   }
+
+  rTorrentProcess.stdout.on('data', (data) => {
+    console.log(`rtorrent: ${data}`);
+  });
+
+  rTorrentProcess.stderr.on('data', (data) => {
+    console.error(`rtorrent error: ${data}`);
+  });
 
   process.on('exit', () => {
     console.log('Killing rTorrent daemon...');
