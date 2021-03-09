@@ -5,6 +5,7 @@
     position: relative;
     text-align: left;
 
+    &:focus-visible,
     &:hover {
       .select {
         &__indicator {
@@ -47,6 +48,7 @@
     z-index: 1;
 
     .context-menu__items & {
+      &:focus-visible,
       &:hover {
         background: $light-grey--lighter;
       }

@@ -248,6 +248,7 @@ $tooltip-anchor-offset: $tooltip-arrow-offset + $tooltip-arrow-border-width;
       text-decoration: underline;
     }
 
+    &:focus-visible,
     &:hover {
       color: $tooltip-link-foreground;
     }

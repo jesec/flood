@@ -67,6 +67,7 @@ $interactive-list--detail-list--item--padding--vertical: 0;
       border-bottom: none;
     }
 
+    &:focus-within,
     &:hover {
       .interactive-list {
         &__icon {

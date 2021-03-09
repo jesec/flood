@@ -25,6 +25,7 @@
     box-shadow: form--element--box-shadow($blue);
     text-shadow: button--text-shadow($blue--hard);
 
+    &:focus-visible,
     &:hover {
       background: $blue--light;
     }
@@ -71,6 +72,7 @@
     box-shadow: form--element--box-shadow($green);
     text-shadow: button--text-shadow($green--hard);
 
+    &:focus-visible,
     &:hover {
       background: $green--light;
     }
@@ -116,6 +118,7 @@
     box-shadow: form--element--box-shadow($grey);
     text-shadow: button--text-shadow($grey--hard);
 
+    &:focus-visible,
     &:hover {
       background: $grey--light;
     }
@@ -161,6 +164,7 @@
     box-shadow: form--element--box-shadow($grey--lighter);
     color: $grey;
 
+    &:focus-visible,
     &:hover {
       border-color: $medium-grey;
       color: $grey--hard;

@@ -31,6 +31,7 @@ $table--heading--resize--indicator--width: 1px;
       border-right: none;
     }
 
+    &:focus-visible,
     &:hover {
       @include theme('color', 'table--heading--color--hover');
     }
@@ -52,6 +53,7 @@ $table--heading--resize--indicator--width: 1px;
       @include theme('color', 'table--heading--color--active');
       font-weight: 700;
 
+      &:focus-visible,
       &:hover {
         @include theme('color', 'table--heading--color--active--hover');
       }
@@ -106,6 +108,7 @@ $table--heading--resize--indicator--width: 1px;
         z-index: 10;
       }
 
+      &:focus-visible,
       &:hover {
         opacity: 1;
       }

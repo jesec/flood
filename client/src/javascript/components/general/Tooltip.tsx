@@ -1,6 +1,8 @@
-import {Component, CSSProperties, ReactNode} from 'react';
+import {Component, createRef, CSSProperties, ReactNode} from 'react';
 import classnames from 'classnames';
 import ReactDOM from 'react-dom';
+
+import type {SerializedStyles} from '@emotion/react';
 
 type Align = 'start' | 'center' | 'end';
 
@@ -29,10 +31,11 @@ interface TooltipProps {
   className?: string;
   contentClassName?: string;
   wrapperClassName?: string;
+  styles?: SerializedStyles | SerializedStyles[];
   content: ReactNode;
   onOpen: () => void;
   onClose: () => void;
-  onClick: () => void;
+  onClick?: () => void;
   onMouseLeave: () => void;
 }
 
@@ -44,7 +47,7 @@ interface TooltipStates {
   wasTriggeredClose: boolean;
 }
 
-const getNodeClearance = (domNode: HTMLDivElement) => {
+const getNodeClearance = (domNode: HTMLElement) => {
   const viewportHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
   const viewportWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
   const boundingRect = domNode.getBoundingClientRect();
@@ -141,14 +144,15 @@ const ARROW_SIZE = 7;
 
 class Tooltip extends Component<TooltipProps, TooltipStates> {
   container = window;
-  triggerNode: HTMLDivElement | null = null;
-  tooltipNode: HTMLDivElement | null = null;
+  triggerNode = createRef<HTMLButtonElement>();
+  tooltipNode = createRef<HTMLDivElement>();
 
   static defaultProps: Partial<TooltipProps> = {
     align: 'center',
     anchor: 'center',
     className: 'tooltip',
     contentClassName: 'tooltip__content',
+    styles: undefined,
     interactive: false,
     offset: 0,
     position: 'top',
@@ -233,7 +237,7 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
     position: Position;
     coordinates: Pick<Coordinates, 'left' | 'top'>;
   } {
-    if (this.triggerNode == null || this.tooltipNode == null || anchor == null) {
+    if (this.triggerNode.current == null || this.tooltipNode.current == null || anchor == null) {
       return {
         anchor,
         position,
@@ -241,8 +245,8 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
       };
     }
 
-    const clearance = getNodeClearance(this.triggerNode);
-    const tooltipRect = this.tooltipNode.getBoundingClientRect();
+    const clearance = getNodeClearance(this.triggerNode.current);
+    const tooltipRect = this.tooltipNode.current.getBoundingClientRect();
     const tooltipHeight = tooltipRect.height + ARROW_SIZE;
     const tooltipWidth = tooltipRect.width + ARROW_SIZE;
 
@@ -355,6 +359,7 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
       maxWidth,
       wrapperClassName,
       contentClassName,
+      styles,
       content,
       onClick,
     } = this.props;
@@ -400,32 +405,28 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
     }
 
     return (
-      <div
+      <button
         className={wrapperClassName}
-        css={{
-          ':focus': {
-            outline: 'none',
-            WebkitTapHighlightColor: 'transparent',
+        css={[
+          {
+            ':focus': {
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent',
+            },
           },
-          ':focus-visible': {
-            outline: 'dashed',
-          },
-        }}
-        role="button"
-        tabIndex={0}
+          styles,
+        ]}
+        tabIndex={onClick ? undefined : -1}
+        type="button"
         onClick={onClick}
         onMouseEnter={() => this.handleMouseEnter()}
         onMouseLeave={() => this.handleMouseLeave()}
-        ref={(ref) => {
-          this.triggerNode = ref;
-        }}>
+        ref={this.triggerNode}>
         {children}
         {ReactDOM.createPortal(
           <div
             className={tooltipClasses}
-            ref={(ref) => {
-              this.tooltipNode = ref;
-            }}
+            ref={this.tooltipNode}
             style={tooltipStyle}
             onMouseEnter={this.handleTooltipMouseEnter}
             onMouseLeave={this.handleTooltipMouseLeave}>
@@ -433,7 +434,7 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
           </div>,
           appElement,
         )}
-      </div>
+      </button>
     );
   }
 }

@@ -34,6 +34,7 @@
     position: relative;
     transition: color 0.25s;
 
+    &:focus-visible,
     &:hover {
       @include theme('color', 'sidebar--icon-button--foreground--hover');
 

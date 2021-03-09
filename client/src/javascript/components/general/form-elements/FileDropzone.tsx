@@ -20,33 +20,42 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
 
   return (
     <FormRowItem>
-      <label className="form__element__label">
+      <span className="form__element__label">
         <Trans id="torrents.add.torrents.label" />
-      </label>
+      </span>
       {files.length > 0 ? (
-        <ul
-          className="dropzone__selected-files interactive-list"
+        <div
           onClick={(event) => {
             event.stopPropagation();
-          }}>
-          {files.map((file, index) => (
-            <li className="dropzone__selected-files__file interactive-list__item" key={file.name} title={file.name}>
-              <span className="interactive-list__icon">
-                <File />
-              </span>
-              <span className="interactive-list__label">{file.name}</span>
-              <span
-                className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-                onClick={() => {
-                  const newArray = files.slice();
-                  newArray.splice(index, 1);
-                  setFiles(newArray);
-                }}>
-                <Close />
-              </span>
-            </li>
-          ))}
-        </ul>
+          }}
+          role="none">
+          <ul className="dropzone__selected-files interactive-list">
+            {files.map((file, index) => (
+              <li className="dropzone__selected-files__file interactive-list__item" key={file.name} title={file.name}>
+                <span className="interactive-list__icon">
+                  <File />
+                </span>
+                <span className="interactive-list__label">{file.name}</span>
+                <button
+                  className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
+                  css={{
+                    ':focus': {
+                      outline: 'none',
+                      WebkitTapHighlightColor: 'transparent',
+                    },
+                  }}
+                  type="button"
+                  onClick={() => {
+                    const newArray = files.slice();
+                    newArray.splice(index, 1);
+                    setFiles(newArray);
+                  }}>
+                  <Close />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       ) : null}
       <Dropzone
         onDrop={(addedFiles: Array<File>) => {

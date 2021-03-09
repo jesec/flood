@@ -10,7 +10,7 @@ export type ContextMenuItem =
       label: string;
       labelAction?: FC;
       labelSecondary?: FC;
-      clickHandler(event: MouseEvent<HTMLLIElement>): void;
+      clickHandler(event: MouseEvent): void;
       dismissMenu?: boolean;
     }
   | {

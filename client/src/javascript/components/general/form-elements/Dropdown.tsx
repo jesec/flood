@@ -11,13 +11,24 @@ import UIStore from '../../../stores/UIStore';
 interface DropdownButtonProps {
   className?: string;
   label: ReactNode;
-  onClick: (event: MouseEvent<HTMLDivElement>) => void;
+  onClick: (event: MouseEvent) => void;
 }
 
 const DropdownButton: FC<DropdownButtonProps> = ({className, label, onClick}: DropdownButtonProps) => (
-  <div className={className} onClick={onClick}>
+  <button
+    type="button"
+    className={className}
+    css={{
+      width: '100%',
+      height: '100%',
+      textAlign: 'left',
+      ':focus-visible': {
+        outline: 'dashed',
+      },
+    }}
+    onClick={onClick}>
     {label}
-  </div>
+  </button>
 );
 
 DropdownButton.defaultProps = {
@@ -93,7 +104,7 @@ const Dropdown = observer(
       UIActions.displayDropdownMenu(id.current);
     }, [closeDropdown, onOpen]);
 
-    const handleDropdownClick = (event: MouseEvent<HTMLDivElement>): void => {
+    const handleDropdownClick = (event: MouseEvent): void => {
       event.stopPropagation();
 
       if (isOpen) {
@@ -123,19 +134,21 @@ const Dropdown = observer(
                 });
 
                 return (
-                  <li
-                    className={classes}
-                    // eslint-disable-next-line react/no-array-index-key
-                    key={itemIndex}
-                    onClick={
-                      item.selectable === false
-                        ? undefined
-                        : () => {
-                            closeDropdown();
-                            handleItemSelect(item);
-                          }
-                    }>
-                    {item.displayName}
+                  // eslint-disable-next-line react/no-array-index-key
+                  <li className={classes} key={itemIndex}>
+                    <button
+                      type="button"
+                      disabled={item.selectable === false}
+                      onClick={
+                        item.selectable === false
+                          ? undefined
+                          : () => {
+                              closeDropdown();
+                              handleItemSelect(item);
+                            }
+                      }>
+                      {item.displayName}
+                    </button>
                   </li>
                 );
               })}

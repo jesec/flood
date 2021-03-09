@@ -78,12 +78,14 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 
     .modal {
       &__tab {
-        cursor: pointer;
         display: inline-block;
         margin-right: $spacing-unit * 2/5;
-        padding: $modal--tabs--padding--top $modal--tabs--padding--right $modal--tabs--padding--bottom
-          $modal--tabs--padding--left;
         position: relative;
+
+        > button {
+          padding: $modal--tabs--padding--top $modal--tabs--padding--right $modal--tabs--padding--bottom
+            $modal--tabs--padding--left;
+        }
 
         &:after {
           bottom: 0;
@@ -322,8 +324,13 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
           &__tab {
             display: block;
             margin-right: 0;
-            padding: $modal--tabs--padding--vertical--top $modal--tabs--padding--vertical--right
-              $modal--tabs--padding--vertical--bottom $modal--tabs--padding--vertical--left;
+
+            > button {
+              width: 100%;
+              padding: $modal--tabs--padding--vertical--top $modal--tabs--padding--vertical--right
+                $modal--tabs--padding--vertical--bottom $modal--tabs--padding--vertical--left;
+              text-align: left;
+            }
 
             &:after {
               bottom: 0;

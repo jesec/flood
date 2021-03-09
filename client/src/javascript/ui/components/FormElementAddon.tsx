@@ -36,7 +36,7 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
       type="button"
       className={classes}
       css={{
-        '&:focus': {
+        ':focus': {
           outline: 'none',
           WebkitTapHighlightColor: 'transparent',
         },

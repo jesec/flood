@@ -38,14 +38,14 @@ const SortDropdown: FC<SortDropdownProps> = (props: SortDropdownProps) => {
   }
 
   const header = (
-    <button className="dropdown__button" type="button">
-      <label className="dropdown__label">
+    <div className="dropdown__button">
+      <span className="dropdown__label">
         <Trans id="torrents.sort.title" />
-      </label>
+      </span>
       <span className="dropdown__value">
         <Trans id={TorrentListColumns[selectedProperty]} />
       </span>
-    </button>
+    </div>
   );
 
   const menuItems = [

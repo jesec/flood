@@ -45,8 +45,10 @@ const listItemActiveStyle = css({
   color: saturate(0.1, darken(0.15, foregroundColor)),
   background: rgba(foregroundColor, 0.1),
   button: {
-    outline: 'none',
-    WebkitTapHighlightColor: 'transparent',
+    ':focus': {
+      outline: 'none',
+      WebkitTapHighlightColor: 'transparent',
+    },
   },
 });
 

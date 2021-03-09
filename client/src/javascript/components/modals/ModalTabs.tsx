@@ -28,15 +28,25 @@ const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
     });
 
     return (
-      <li
-        className={classes}
-        key={tabId}
-        onClick={() => {
-          if (onTabChange) {
-            onTabChange(currentTab);
-          }
-        }}>
-        {currentTab.label}
+      <li className={classes} key={tabId}>
+        <button
+          css={{
+            ':focus': {
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent',
+            },
+            ':focus-visible': {
+              outline: 'dashed',
+            },
+          }}
+          type="button"
+          onClick={() => {
+            if (onTabChange) {
+              onTabChange(currentTab);
+            }
+          }}>
+          {currentTab.label}
+        </button>
       </li>
     );
   });

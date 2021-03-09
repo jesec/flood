@@ -121,7 +121,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
         mountOnEnter
         unmountOnExit
         timeout={transitionTimeouts.xFast}>
-        <div className="context-menu" onClick={onClick}>
+        <div className="context-menu" onClick={onClick} role="none">
           <Overlay
             additionalClassNames="context-menu__overlay"
             onClick={onOverlayClick}

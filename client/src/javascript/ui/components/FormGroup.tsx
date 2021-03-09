@@ -4,22 +4,22 @@ import FormRowItem from './FormRowItem';
 
 import type {FormRowItemProps} from './FormRowItem';
 
-interface FormRowItemGroupProps {
+interface FormGroupProps {
   children: ReactNode;
   label?: string;
   width?: FormRowItemProps['width'];
 }
 
-const FormRowItemGroup: FC<FormRowItemGroupProps> = ({children, label, width}: FormRowItemGroupProps) => (
+const FormGroup: FC<FormGroupProps> = ({children, label, width}: FormGroupProps) => (
   <FormRowItem className="form__group" width={width}>
-    {label ? <label className="form__element__label">{label}</label> : undefined}
+    {label ? <span className="form__element__label">{label}</span> : undefined}
     {children}
   </FormRowItem>
 );
 
-FormRowItemGroup.defaultProps = {
+FormGroup.defaultProps = {
   label: undefined,
   width: 'auto',
 };
 
-export default FormRowItemGroup;
+export default FormGroup;

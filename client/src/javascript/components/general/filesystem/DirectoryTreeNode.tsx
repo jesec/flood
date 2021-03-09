@@ -129,12 +129,27 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
 
     return (
       <div className={branchClasses}>
-        <div className={directoryClasses} onClick={this.handleDirectoryClick} title={directoryName}>
+        <button
+          className={directoryClasses}
+          css={{
+            width: '100%',
+            textAlign: 'left',
+            ':focus': {
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent',
+            },
+            ':focus-visible': {
+              outline: 'dashed',
+            },
+          }}
+          type="button"
+          onClick={this.handleDirectoryClick}
+          title={directoryName}>
           <div className="file__label">
             {this.getIcon()}
             <div className="file__name">{directoryName}</div>
           </div>
-        </div>
+        </button>
         {this.getSubTree()}
       </div>
     );

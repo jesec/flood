@@ -37,6 +37,8 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
     text-overflow: ellipsis;
     transition: background 0.25s, border 0.25s, color 0.25s;
     white-space: nowrap;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
   }
 
   &__button {
@@ -78,6 +80,14 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
     letter-spacing: 0.1em;
     line-height: 0.9em;
     text-transform: uppercase;
+
+    > button {
+      font-size: inherit;
+      font-weight: inherit;
+      letter-spacing: inherit;
+      line-height: inherit;
+      text-transform: inherit;
+    }
 
     .dropdown__button & {
       cursor: pointer;

@@ -75,30 +75,32 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
         }
 
         return (
-          <li
-            className={menuItemClasses}
-            key={item.type === 'action' ? item.action : `sep-${index}`}
-            onClick={(event) => {
-              if (item.type !== 'separator') {
-                if (item.dismissMenu === false) {
-                  event.nativeEvent.stopImmediatePropagation();
+          <li className={menuItemClasses} key={item.type === 'action' ? item.action : `sep-${index}`}>
+            <button
+              type="button"
+              disabled={item.type !== 'action' || !item.clickHandler}
+              onClick={(event) => {
+                if (item.type !== 'separator') {
+                  if (item.dismissMenu === false) {
+                    event.nativeEvent.stopImmediatePropagation();
+                  }
+
+                  if (item.clickHandler) {
+                    item.clickHandler(event);
+                  }
+
+                  if (item.dismissMenu !== false) {
+                    UIActions.dismissContextMenu(id);
+                  }
                 }
 
-                if (item.clickHandler) {
-                  item.clickHandler(event);
-                }
-
-                if (item.dismissMenu !== false) {
-                  UIActions.dismissContextMenu(id);
-                }
-              }
-
-              return false;
-            }}
-            onContextMenu={(event) => {
-              event.preventDefault();
-            }}>
-            {menuItemContent}
+                return false;
+              }}
+              onContextMenu={(event) => {
+                event.preventDefault();
+              }}>
+              {menuItemContent}
+            </button>
           </li>
         );
       })}

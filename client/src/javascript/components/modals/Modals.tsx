@@ -57,6 +57,7 @@ const Modals: FC = observer(() => {
         <div className="modal">
           <div
             className="modal__overlay"
+            role="none"
             onClick={() => {
               UIActions.dismissModal();
             }}

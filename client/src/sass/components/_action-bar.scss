@@ -117,6 +117,7 @@ $torrent-list--border: rgba($sidebar--background, 0.15);
   text-align: center;
   transition: background 0.25s, box-shadow 0.25s;
 
+  &:focus-visible,
   &:hover {
     background: $action--background--hover;
     box-shadow: 1px 0 $action--border--hover, -1px 0 $action--border--hover;

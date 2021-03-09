@@ -1,3 +1,4 @@
+import {css} from '@emotion/react';
 import {FC, ReactNode, ReactNodeArray} from 'react';
 import {observer} from 'mobx-react';
 import {Trans} from '@lingui/react';
@@ -17,7 +18,7 @@ interface DiskUsageTooltipItemProps {
 
 const DiskUsageTooltipItem: FC<DiskUsageTooltipItemProps> = ({label, value}: DiskUsageTooltipItemProps) => (
   <li className="diskusage__details-list__item">
-    <label className="diskusage__details-list__label">{label}</label>
+    <span className="diskusage__details-list__label">{label}</span>
     <Size className="diskuage__size-used" value={value} />
   </li>
 );
@@ -52,6 +53,9 @@ const DiskUsage: FC = observer(() => {
             </ul>
           }
           position="top"
+          styles={css({
+            width: '100%',
+          })}
           wrapperClassName="diskusage__item">
           <div className="diskusage__text-row">
             {d.target}

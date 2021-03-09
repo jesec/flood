@@ -34,13 +34,7 @@ const SelectItem: FC<SelectItemProps> = ({
   });
 
   return (
-    <ContextMenuItem
-      className={classes}
-      onClick={() => {
-        if (typeof onClick === 'function') {
-          onClick(id);
-        }
-      }}>
+    <ContextMenuItem className={classes} onClick={() => onClick?.(id)}>
       {icon}
       {children}
     </ContextMenuItem>

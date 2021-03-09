@@ -120,12 +120,26 @@ const TableHeading = observer(
           });
 
           accumulator.push(
-            <div className={classes} key={id} onClick={() => onCellClick(id)} style={{width: `${width}px`}}>
+            <button
+              className={classes}
+              css={{
+                textAlign: 'left',
+                ':focus': {
+                  outline: 'none',
+                  WebkitTapHighlightColor: 'transparent',
+                },
+              }}
+              type="button"
+              key={id}
+              onClick={() => onCellClick(id)}
+              style={{
+                width: `${width}px`,
+              }}>
               <span className="table__heading__label" title={i18n._(labelID)}>
                 <Trans id={labelID} />
               </span>
               {handle}
-            </div>,
+            </button>,
           );
 
           return accumulator;

@@ -21,8 +21,16 @@ $menu--item--separator--background: $menu--container--border;
   text-align: left;
 
   &__item {
-    font-size: 0.9em;
-    padding: 5px 15px;
+    > button {
+      height: 100%;
+      width: 100%;
+      text-align: left;
+      font-size: 0.9em;
+      padding: 5px 15px;
+      &:disabled {
+        pointer-events: none;
+      }
+    }
 
     &__label {
       &--primary {
@@ -58,10 +66,15 @@ $menu--item--separator--background: $menu--container--border;
     }
 
     &.is-selectable {
-      cursor: pointer;
       display: block;
       transition: background 0.25s, color 0.25s;
 
+      > button {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      &:focus-within,
       &:hover {
         background: $menu--item--background--hover;
         color: $menu--item--foreground--hover;

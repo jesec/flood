@@ -17,7 +17,7 @@ interface SortableListProps {
   items: Array<ListItem>;
   isDraggable?: boolean;
   renderItem: (item: ListItem, index: number) => ReactNode;
-  onMouseDown?: (event: MouseEvent<HTMLUListElement>) => void;
+  onMouseDown?: (event: MouseEvent) => void;
   onMove?: (items: this['items']) => void;
   onDrop?: (items: this['items']) => void;
 }
@@ -37,52 +37,55 @@ const SortableList: FC<SortableListProps> = ({
   const classes = classnames('sortable-list', className);
 
   return (
-    <DndProvider options={HTML5toTouch}>
-      <ul
-        className={classes}
-        onMouseDown={(event) => {
-          if (onMouseDown) {
-            onMouseDown(event);
-          }
-        }}>
-        {currentItems.map((item, index) => {
-          const {id, visible} = item;
-          return (
-            <SortableListItem
-              list={listID}
-              id={id}
-              index={index}
-              isLocked={lockedIDs.includes(id)}
-              isDraggable={isDraggable}
-              isVisible={visible}
-              key={id}
-              onDrop={() => {
-                if (onDrop) {
-                  onDrop(currentItems);
-                }
-              }}
-              onMove={(dragIndex, hoverIndex) => {
-                const draggedItem = currentItems[dragIndex];
+    <div
+      css={{width: '100%'}}
+      role="none"
+      onMouseDown={(event) => {
+        if (onMouseDown) {
+          onMouseDown(event);
+        }
+      }}>
+      <DndProvider options={HTML5toTouch}>
+        <ul className={classes}>
+          {currentItems.map((item, index) => {
+            const {id, visible} = item;
+            return (
+              <SortableListItem
+                list={listID}
+                id={id}
+                index={index}
+                isLocked={lockedIDs.includes(id)}
+                isDraggable={isDraggable}
+                isVisible={visible}
+                key={id}
+                onDrop={() => {
+                  if (onDrop) {
+                    onDrop(currentItems);
+                  }
+                }}
+                onMove={(dragIndex, hoverIndex) => {
+                  const draggedItem = currentItems[dragIndex];
 
-                const newItems = currentItems.slice();
+                  const newItems = currentItems.slice();
 
-                // Remove the item being dragged.
-                newItems.splice(dragIndex, 1);
-                // Add the item being dragged in its new position.
-                newItems.splice(hoverIndex, 0, draggedItem);
+                  // Remove the item being dragged.
+                  newItems.splice(dragIndex, 1);
+                  // Add the item being dragged in its new position.
+                  newItems.splice(hoverIndex, 0, draggedItem);
 
-                setCurrentItems(newItems);
+                  setCurrentItems(newItems);
 
-                if (onMove) {
-                  onMove(newItems);
-                }
-              }}>
-              {renderItem(item, index)}
-            </SortableListItem>
-          );
-        })}
-      </ul>
-    </DndProvider>
+                  if (onMove) {
+                    onMove(newItems);
+                  }
+                }}>
+                {renderItem(item, index)}
+              </SortableListItem>
+            );
+          })}
+        </ul>
+      </DndProvider>
+    </div>
   );
 };
 

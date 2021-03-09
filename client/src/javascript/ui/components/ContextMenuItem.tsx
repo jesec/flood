@@ -4,16 +4,27 @@ import {FC, MouseEventHandler, ReactNode} from 'react';
 interface ContextMenuItemProps {
   children: ReactNode;
   className?: string;
-  onClick: MouseEventHandler<HTMLDivElement>;
+  onClick: MouseEventHandler;
 }
 
 const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick}: ContextMenuItemProps) => {
   const classes = classnames('context-menu__item', className);
 
   return (
-    <div className={classes} onClick={onClick}>
+    <button
+      className={classes}
+      css={{
+        width: '100%',
+        textAlign: 'left',
+        ':focus': {
+          outline: 'none',
+          WebkitTapHighlightColor: 'transparent',
+        },
+      }}
+      type="button"
+      onClick={onClick}>
       {children}
-    </div>
+    </button>
   );
 };
 

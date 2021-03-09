@@ -71,18 +71,29 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   }
 
   return (
-    <div
+    <button
       className="priority-meter__wrapper"
+      css={{
+        ':focus': {
+          outline: 'none',
+          WebkitTapHighlightColor: 'transparent',
+        },
+        ':focus-visible': {
+          outline: 'dashed',
+        },
+      }}
+      type="button"
       onClick={
         clickHandled
           ? undefined
           : () => {
               changePriority();
             }
-      }>
+      }
+      disabled={clickHandled}>
       <div className={`priority-meter priority-meter--max-${maxLevel} priority-meter--level-${priorityLevel}`} />
       {labelElement}
-    </div>
+    </button>
   );
 };
 

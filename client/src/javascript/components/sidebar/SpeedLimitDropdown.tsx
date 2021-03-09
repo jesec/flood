@@ -118,14 +118,13 @@ const SpeedLimitDropdown: FC = observer(() => {
         }
       }}
       header={
-        <button
+        <div
           className="sidebar__icon-button sidebar__icon-button--interactive
         sidebar__icon-button--limits"
-          title={label}
-          type="button">
+          title={label}>
           <Limits />
           {label}
-        </button>
+        </div>
       }
       menuItems={[
         getSpeedList({direction: 'download', ...speedListOptions}),

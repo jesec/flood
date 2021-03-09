@@ -18,7 +18,7 @@ const getLastSelectedTorrent = (): string => TorrentStore.selectedTorrents[Torre
 
 const InlineTorrentPropertyCheckbox: FC<{property: keyof TorrentProperties}> = observer(
   ({property}: {property: keyof TorrentProperties}) => (
-    <label className="toggle-input checkbox" style={{display: 'inline'}}>
+    <span className="toggle-input checkbox" style={{display: 'inline'}}>
       <div className="toggle-input__indicator">
         <div
           className="toggle-input__indicator__icon"
@@ -28,7 +28,7 @@ const InlineTorrentPropertyCheckbox: FC<{property: keyof TorrentProperties}> = o
           <Checkmark />
         </div>
       </div>
-    </label>
+    </span>
   ),
 );
 

@@ -41,8 +41,18 @@ const AddTorrentsByURL: FC = () => {
           <div>
             {i18n._('torrents.add.torrents.label')}
             {typeof navigator.registerProtocolHandler === 'function' && (
-              <em
-                style={{cursor: 'pointer', fontSize: '0.8em', float: 'right'}}
+              <button
+                css={{
+                  float: 'right',
+                  ':focus': {
+                    outline: 'none',
+                    WebkitTapHighlightColor: 'transparent',
+                  },
+                  ':focus-visible': {
+                    outline: 'dashed',
+                  },
+                }}
+                type="button"
                 onClick={() => {
                   if (typeof navigator.registerProtocolHandler === 'function') {
                     navigator.registerProtocolHandler(
@@ -52,8 +62,8 @@ const AddTorrentsByURL: FC = () => {
                     );
                   }
                 }}>
-                {i18n._('torrents.add.tab.url.register.magnet.handler')}
-              </em>
+                <em css={{fontSize: '0.8em'}}>{i18n._('torrents.add.tab.url.register.magnet.handler')}</em>
+              </button>
             )}
           </div>
         }
