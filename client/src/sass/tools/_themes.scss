@@ -22,11 +22,17 @@
 
 $themes: (
   light: (
+    action--foreground: #8899a8,
+    action--foreground--hover: $action--foreground--hover,
+    action--background--hover: $action--background--hover,
+    action--border--hover: (
+      1px 0 $action--border--hover,
+      -1px 0 $action--border--hover,
+    ),
     torrent-view--background: #e9eef2,
     torrent-list--background: #fff,
     torrent-list--border: -1px 0 0 0 rgba($sidebar--background, 0.15),
     torrents-list--alert--foreground: rgba(#8899a8, 0.5),
-    action--foreground: #8899a8,
     table--heading--background: rgba(#f6f8fa, 0.6),
     table--heading--color: $table--heading--color,
     table--heading--color--hover: darken($table--heading--color, 10%),
@@ -109,11 +115,17 @@ $themes: (
     sidebar-filter--count--background--active: $blue,
   ),
   dark: (
+    action--foreground: $md-grey-500,
+    action--foreground--hover: $action--foreground--hover,
+    action--background--hover: lighten($md-surface-dark-e08, 4%),
+    action--border--hover: (
+      0px,
+      0px,
+    ),
     torrent-view--background: $md-surface-dark-e08,
     torrent-list--background: $md-surface-dark,
     torrent-list--border: -1px 0 0 0 rgba($sidebar--background, 0.15),
     torrents-list--alert--foreground: rgba(#8899a8, 0.5),
-    action--foreground: $md-grey-500,
     table--heading--background: $md-surface-dark-e01,
     table--heading--color: $md-text-disabled-dark,
     table--heading--color--hover: $md-text-secondary-dark,
