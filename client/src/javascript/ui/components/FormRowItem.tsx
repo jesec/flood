@@ -17,7 +17,8 @@ export interface FormRowItemProps {
     | 'one-half'
     | 'five-eighths'
     | 'three-quarters'
-    | 'seven-eighths';
+    | 'seven-eighths'
+    | 'one-sixteenth';
 }
 
 const FormRowItem = forwardRef<HTMLDivElement, FormRowItemProps>(

@@ -5,6 +5,7 @@ import {Route, Switch} from 'react-router';
 import {Router} from 'react-router-dom';
 import {useMedia} from 'react-use';
 import {QueryParamProvider} from 'use-query-params';
+import {CastProvider} from 'react-cast-sender';
 
 import AuthActions from './actions/AuthActions';
 import AppWrapper from './components/AppWrapper';
@@ -82,17 +83,19 @@ const FloodApp: FC = observer(() => {
   return (
     <Suspense fallback={<LoadingOverlay />}>
       <AsyncIntlProvider>
-        <Router history={history}>
-          <QueryParamProvider ReactRouterRoute={Route}>
-            <AppWrapper className={ConfigStore.isPreferDark ? 'dark' : undefined}>
-              <Switch>
-                <Route path="/login" component={Login} />
-                <Route path="/overview" component={Overview} />
-                <Route path="/register" component={Register} />
-              </Switch>
-            </AppWrapper>
-          </QueryParamProvider>
-        </Router>
+        <CastProvider receiverApplicationId="CC1AD845">
+          <Router history={history}>
+            <QueryParamProvider ReactRouterRoute={Route}>
+              <AppWrapper className={ConfigStore.isPreferDark ? 'dark' : undefined}>
+                <Switch>
+                  <Route path="/login" component={Login} />
+                  <Route path="/overview" component={Overview} />
+                  <Route path="/register" component={Register} />
+                </Switch>
+              </AppWrapper>
+            </QueryParamProvider>
+          </Router>
+        </CastProvider>
       </AsyncIntlProvider>
     </Suspense>
   );

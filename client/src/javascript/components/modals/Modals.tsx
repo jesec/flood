@@ -4,6 +4,7 @@ import {observer} from 'mobx-react';
 import {useKeyPressEvent} from 'react-use';
 
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';
+import ChromecastModal from './chromecast-modal/ChromecastModal';
 import ConfirmModal from './confirm-modal/ConfirmModal';
 import FeedsModal from './feeds-modal/FeedsModal';
 import GenerateMagnetModal from './generate-magnet-modal/GenerateMagnetModal';
@@ -22,6 +23,8 @@ const createModal = (id: Modal['id']): React.ReactNode => {
   switch (id) {
     case 'add-torrents':
       return <AddTorrentsModal />;
+    case 'chromecast':
+      return <ChromecastModal />;
     case 'confirm':
       return <ConfirmModal />;
     case 'feeds':

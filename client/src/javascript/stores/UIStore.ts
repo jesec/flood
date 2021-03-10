@@ -77,7 +77,7 @@ export type Modal =
       actions: Array<ModalAction>;
     }
   | {
-      id: 'torrent-details';
+      id: 'chromecast' | 'torrent-details';
       hash: string;
     };
 

@@ -7,6 +7,7 @@ import path from 'path';
 import rateLimit from 'express-rate-limit';
 import sanitize from 'sanitize-filename';
 import tar, {Pack} from 'tar-fs';
+import {SubtitleParser} from 'matroska-subtitles';
 
 import type {
   AddTorrentByFileOptions,
@@ -38,6 +39,7 @@ import {
 import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getToken} from '../../util/authUtil';
+import {subtitleExtensions} from '../../../shared/constants/chromecastableExtensions';
 
 const getDestination = async (
   services: Express.Request['services'],
@@ -822,6 +824,9 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
           // This is useful for texts, videos and audios. Users can still download them if needed.
           res.setHeader('content-disposition', contentDisposition(fileName, {type: 'inline'}));
 
+          // Chromecast requires that media and subtitle enable CORS
+          res.setHeader('Access-Control-Allow-Origin', '*');
+
           res.sendFile(file);
 
           return res;
@@ -871,6 +876,143 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
         return res;
       })
       .catch(({code, message}) => res.status(500).json({code, message}));
+  },
+);
+
+function convertTimeStamp(millis: number): string {
+  const hours = String(Math.floor(millis / (3600 * 1000))).padStart(2, '0');
+  const minutes = String(Math.floor(millis / (60 * 1000)) % 60).padStart(2, '0');
+  const seconds = String(Math.floor(millis / 1000) % 60).padStart(2, '0');
+  const mil = String(millis % 1000).padStart(3, '0');
+  return `${hours}:${minutes}:${seconds}.${mil}`;
+}
+
+function convertText(text: string): string {
+  return text.replace(/\\N/g, '\n');
+}
+
+const subtitleCache: Record<string, string> = {};
+
+/**
+ * GET /api/torrents/{hash}/contents/{index}/data
+ * @summary Extracts subtitle data from the downloaded contents of a torrent.
+ * @tags Torrent
+ * @security User
+ * @param {string} hash.path
+ * @param {string} index.path - index of selected content
+ * @return {object} 200 - subtitles in vtt - format text/vtt
+ */
+router.get(
+  '/:hash/contents/:index/subtitles',
+  // This operation is resource-intensive
+  // Limit each IP to 50 requests every 5 minutes
+  rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 50,
+  }),
+  (req, res) => {
+    const {hash, index: stringIndex} = req.params;
+
+    const selectedTorrent = req.services?.torrentService.getTorrent(hash);
+    if (!selectedTorrent) {
+      res.status(404).json({error: 'Torrent not found.'});
+      return;
+    }
+
+    req.services?.clientGatewayService
+      ?.getTorrentContents(hash)
+      .then(async (contents) => {
+        if (!contents || contents.length < 1) {
+          res.status(404).json({error: 'Torrent contents not found'});
+          return;
+        }
+
+        const index = stringIndex ? Number(stringIndex) : contents[0].index;
+
+        const subtitleSourceContent = contents.find((content) => index == content.index);
+
+        if (!subtitleSourceContent) {
+          res.status(404).json({error: 'Torrent contents not found'});
+          return;
+        }
+
+        const subtitleSourcePath = sanitizePath(path.join(selectedTorrent.directory, subtitleSourceContent.path));
+
+        if (!isAllowedPath(subtitleSourcePath)) {
+          const {code, message} = accessDeniedError();
+          res.status(403).json({code, message});
+          return;
+        }
+
+        if (!fs.existsSync(subtitleSourcePath)) {
+          const {code, message} = fileNotFoundError();
+          res.status(404).json({code, message});
+          return;
+        }
+
+        const fileExt = path.extname(subtitleSourcePath).substring(1);
+        if (!fileExt || !subtitleExtensions.includes(fileExt)) {
+          res.status(415).json({error: 'Cannot extract subtitles for this file.'});
+          return;
+        }
+
+        res.type('text/vtt');
+
+        // Chromecast requires that media and subtitle enale CORS
+        res.setHeader('Access-Control-Allow-Origin', '*');
+
+        if (subtitleSourcePath in subtitleCache) {
+          res.send(subtitleCache[subtitleSourcePath]);
+          return;
+        }
+
+        let subtitles = 'WEBVTT\n\n';
+
+        switch (fileExt) {
+          case 'mkv':
+            await new Promise<void>((resolve) => {
+              let line = 1;
+              let trackNum = 0;
+
+              const parser = new SubtitleParser();
+
+              parser.once('tracks', (tracks) => {
+                trackNum = tracks[0].number;
+              });
+
+              parser.on('subtitle', (subtitle: {text: string; time: number; duration: number}, trackNumber: number) => {
+                if (trackNumber != trackNum) return;
+                subtitles += `${line}
+${convertTimeStamp(subtitle.time)} --> ${convertTimeStamp(subtitle.time + subtitle.duration)}
+${convertText(subtitle.text)}\n\n`;
+                line++;
+              });
+
+              parser.on('finish', () => {
+                resolve();
+              });
+
+              fs.createReadStream(subtitleSourcePath).pipe(parser);
+            });
+
+            break;
+          case 'srt':
+            subtitles += String(fs.readFileSync(subtitleSourcePath)).replace(
+              /([0-9])+:([0-9]+):([0-9]+)[,\.]([0-9]+)/g,
+              '$1:$2:$3.$4',
+            );
+            break;
+          case 'vtt':
+            return res.sendFile(subtitleSourcePath);
+        }
+
+        subtitleCache[subtitleSourcePath] = subtitles;
+
+        res.send(subtitles);
+      })
+      .catch((err) => {
+        res.status(500).json(err);
+      });
   },
 );
 
