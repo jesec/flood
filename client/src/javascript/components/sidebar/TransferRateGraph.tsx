@@ -1,5 +1,5 @@
 import {area, curveMonotoneX, line} from 'd3-shape';
-import {Component, FC} from 'react';
+import {Component, FC, ReactNode} from 'react';
 import {max} from 'd3-array';
 import {ScaleLinear, scaleLinear} from 'd3-scale';
 import {Selection, select} from 'd3-selection';
@@ -236,7 +236,7 @@ class TransferRateGraph extends Component<TransferRateGraphProps> {
     });
   }
 
-  render() {
+  render(): ReactNode {
     const {id} = this.props;
 
     return (

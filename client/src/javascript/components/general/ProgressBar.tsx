@@ -1,8 +1,8 @@
-import {FC, memo} from 'react';
+import {FC, memo, ReactNode} from 'react';
 
 interface ProgressBarProps {
   percent: number;
-  icon?: JSX.Element;
+  icon?: ReactNode;
 }
 
 const ProgressBar: FC<ProgressBarProps> = memo(({percent, icon}: ProgressBarProps) => (

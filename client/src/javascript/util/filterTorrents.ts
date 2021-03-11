@@ -16,7 +16,10 @@ interface TagFilter {
   filter: string;
 }
 
-function filterTorrents(torrentList: Array<TorrentProperties>, opts: StatusFilter | TrackerFilter | TagFilter) {
+function filterTorrents(
+  torrentList: TorrentProperties[],
+  opts: StatusFilter | TrackerFilter | TagFilter,
+): TorrentProperties[] {
   const {type, filter} = opts;
 
   if (filter !== '') {

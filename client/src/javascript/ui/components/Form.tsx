@@ -1,4 +1,4 @@
-import {Component, FormEvent} from 'react';
+import {Component, FormEvent, ReactNode} from 'react';
 
 import {getDataFromForm, resetFormData} from './util/forms';
 
@@ -22,13 +22,13 @@ interface FormProps {
 
 class Form extends Component<FormProps> {
   formRef?: HTMLFormElement | null = null;
-  componentDidMount() {
+  componentDidMount(): void {
     if (this.formRef != null) {
       this.formRef.addEventListener('flood-form-change', this.handleFormChange);
     }
   }
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     if (this.formRef != null) {
       this.formRef.removeEventListener('flood-form-change', this.handleFormChange);
     }
@@ -41,33 +41,35 @@ class Form extends Component<FormProps> {
     return {};
   };
 
-  resetForm = () => {
+  resetForm = (): void => {
     if (this.formRef != null) {
       resetFormData(this.formRef);
     }
   };
 
-  handleFormChange = (event: Event | FormEvent<HTMLFormElement>) => {
-    if (this.formRef != null && this.props.onChange) {
+  handleFormChange = (event: Event | FormEvent<HTMLFormElement>): void => {
+    const {onChange} = this.props;
+    if (this.formRef != null && onChange) {
       const formData = getDataFromForm(this.formRef);
-      this.props.onChange({event, formData});
+      onChange({event, formData});
     }
   };
 
-  handleFormSubmit = (event: Event | FormEvent<HTMLFormElement>) => {
+  handleFormSubmit = (event: Event | FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    if (this.props.onSubmit) {
+    const {onSubmit} = this.props;
+    if (onSubmit) {
       const formData = getDataFromForm(event.target as HTMLFormElement);
-      this.props.onSubmit({event, formData});
+      onSubmit({event, formData});
     }
   };
 
-  setFormRef = (ref: HTMLFormElement) => {
+  setFormRef = (ref: HTMLFormElement): void => {
     this.formRef = ref;
   };
 
-  render() {
+  render(): ReactNode {
     const {children, className} = this.props;
 
     return (

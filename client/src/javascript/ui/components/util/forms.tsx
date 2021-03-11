@@ -2,7 +2,7 @@ export const dispatchEvent = (
   eventID: string,
   element: HTMLInputElement,
   options = {bubbles: true, cancelable: true},
-) => {
+): void => {
   let event;
 
   if (typeof Event === 'function') {
@@ -15,11 +15,11 @@ export const dispatchEvent = (
   element.dispatchEvent(event);
 };
 
-export const dispatchChangeEvent = (element: HTMLInputElement) => {
+export const dispatchChangeEvent = (element: HTMLInputElement): void => {
   dispatchEvent('flood-form-change', element);
 };
 
-export const getDataFromForm = (form: HTMLFormElement) =>
+export const getDataFromForm = (form: HTMLFormElement): Record<string, unknown> =>
   Array.from(form.elements).reduce((formData: Record<string, unknown>, element) => {
     const inputElement = element as HTMLInputElement;
     const {name, type, value} = inputElement;
@@ -42,7 +42,7 @@ export const getDataFromForm = (form: HTMLFormElement) =>
     return retForm;
   }, {});
 
-export const resetFormData = (form: HTMLFormElement) =>
+export const resetFormData = (form: HTMLFormElement): void =>
   Array.from(form.elements).forEach((element) => {
     const inputElement = element as HTMLInputElement;
     // getAttribute is supposedly faster than using the dataset API.

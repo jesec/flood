@@ -5,7 +5,7 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 function torrentStatusClasses(
   {status, downRate, upRate}: Pick<TorrentProperties, 'status' | 'downRate' | 'upRate'>,
   ...classes: Array<string>
-) {
+): string {
   return classnames(classes, {
     'torrent--has-error': status.includes('error'),
     'torrent--is-stopped': status.includes('stopped'),

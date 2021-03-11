@@ -9,7 +9,10 @@ type SortRule = {
     | ((p: TorrentProperties) => unknown);
 };
 
-function sortTorrents(torrents: Array<TorrentProperties>, sortBy: Readonly<FloodSettings['sortTorrents']>) {
+function sortTorrents(
+  torrents: TorrentProperties[],
+  sortBy: Readonly<FloodSettings['sortTorrents']>,
+): TorrentProperties[] {
   const {property} = sortBy;
   const sortRules: Array<SortRule> = [];
 

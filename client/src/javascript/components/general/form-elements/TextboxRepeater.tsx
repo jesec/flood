@@ -3,7 +3,7 @@ import {FC, ReactNode, useRef, useState} from 'react';
 import {AddMini, RemoveMini} from '@client/ui/icons';
 import {FormElementAddon, FormRow, FormRowGroup, Textbox} from '@client/ui';
 
-export const getTextArray = (formData: Record<string, string | undefined>, id: string) =>
+export const getTextArray = (formData: Record<string, string | undefined>, id: string): string[] =>
   Object.keys(formData).reduce((accumulator: Array<string>, formItemKey: string) => {
     if (formItemKey.startsWith(id)) {
       const text = formData[formItemKey];

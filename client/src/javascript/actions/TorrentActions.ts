@@ -55,7 +55,7 @@ const emitFailedToAddTorrentAlert = (count: number) => {
 };
 
 const TorrentActions = {
-  addTorrentsByUrls: (options: AddTorrentByURLOptions) =>
+  addTorrentsByUrls: (options: AddTorrentByURLOptions): Promise<void> =>
     axios
       .post(`${baseURI}api/torrents/add-urls`, options)
       .then((json) => json.data)
@@ -72,7 +72,7 @@ const TorrentActions = {
         },
       ),
 
-  addTorrentsByFiles: (options: AddTorrentByFileOptions) =>
+  addTorrentsByFiles: (options: AddTorrentByFileOptions): Promise<void> =>
     axios
       .post(`${baseURI}api/torrents/add-files`, options)
       .then((json) => json.data)
@@ -89,7 +89,7 @@ const TorrentActions = {
         },
       ),
 
-  createTorrent: (options: CreateTorrentOptions) =>
+  createTorrent: (options: CreateTorrentOptions): Promise<void> =>
     axios.post(`${baseURI}api/torrents/create`, options, {responseType: 'blob'}).then(
       (response) => {
         download(response.data, (options.name || `${Date.now()}`).concat('.torrent'));
@@ -100,7 +100,7 @@ const TorrentActions = {
       },
     ),
 
-  deleteTorrents: (options: DeleteTorrentsOptions) =>
+  deleteTorrents: (options: DeleteTorrentsOptions): Promise<void> =>
     axios
       .post(`${baseURI}api/torrents/delete`, options)
       .then((json) => json.data)
@@ -121,7 +121,7 @@ const TorrentActions = {
         },
       ),
 
-  checkHash: (options: CheckTorrentsOptions) =>
+  checkHash: (options: CheckTorrentsOptions): Promise<void> =>
     axios
       .post(`${baseURI}api/torrents/check-hash`, options)
       .then((json) => json.data)
@@ -174,7 +174,7 @@ const TorrentActions = {
           }api/torrents/${hash}/contents/${indices.join(',')}/data?token=${res.data}`,
       ),
 
-  moveTorrents: (options: MoveTorrentsOptions) =>
+  moveTorrents: (options: MoveTorrentsOptions): Promise<void> =>
     axios
       .post(`${baseURI}api/torrents/move`, options)
       .then((json) => json.data)
@@ -195,7 +195,7 @@ const TorrentActions = {
         },
       ),
 
-  reannounce: (options: ReannounceTorrentsOptions) =>
+  reannounce: (options: ReannounceTorrentsOptions): Promise<void> =>
     axios
       .post(`${baseURI}api/torrents/reannounce`, options)
       .then((json) => json.data)
@@ -242,7 +242,7 @@ const TorrentActions = {
     return undefined;
   },
 
-  setInitialSeeding: (options: SetTorrentsInitialSeedingOptions) =>
+  setInitialSeeding: (options: SetTorrentsInitialSeedingOptions): Promise<void> =>
     axios
       .patch(`${baseURI}api/torrents/initial-seeding`, options)
       .then((json) => json.data)
@@ -255,7 +255,7 @@ const TorrentActions = {
         },
       ),
 
-  setPriority: (options: SetTorrentsPriorityOptions) =>
+  setPriority: (options: SetTorrentsPriorityOptions): Promise<void> =>
     axios
       .patch(`${baseURI}api/torrents/priority`, options)
       .then((json) => json.data)
@@ -268,7 +268,7 @@ const TorrentActions = {
         },
       ),
 
-  setSequential: (options: SetTorrentsSequentialOptions) =>
+  setSequential: (options: SetTorrentsSequentialOptions): Promise<void> =>
     axios
       .patch(`${baseURI}api/torrents/sequential`, options)
       .then((json) => json.data)
@@ -281,7 +281,7 @@ const TorrentActions = {
         },
       ),
 
-  setFilePriority: (hash: TorrentProperties['hash'], options: SetTorrentContentsPropertiesOptions) =>
+  setFilePriority: (hash: TorrentProperties['hash'], options: SetTorrentContentsPropertiesOptions): Promise<void> =>
     axios
       .patch(`${baseURI}api/torrents/${hash}/contents`, options)
       .then((json) => json.data)
@@ -294,7 +294,7 @@ const TorrentActions = {
         },
       ),
 
-  setTags: (options: SetTorrentsTagsOptions) =>
+  setTags: (options: SetTorrentsTagsOptions): Promise<void> =>
     axios
       .patch(`${baseURI}api/torrents/tags`, options)
       .then((json) => json.data)
@@ -307,7 +307,7 @@ const TorrentActions = {
         },
       ),
 
-  setTrackers: (options: SetTorrentsTrackersOptions) =>
+  setTrackers: (options: SetTorrentsTrackersOptions): Promise<void> =>
     axios
       .patch(`${baseURI}api/torrents/trackers`, options)
       .then((json) => json.data)

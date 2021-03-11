@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {Component} from 'react';
+import {Component, ReactNode} from 'react';
 
 import {Checkbox} from '@client/ui';
 import {FolderClosedSolid, FolderOpenSolid} from '@client/ui/icons';
@@ -40,13 +40,13 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
     };
   }
 
-  getCurrentPath() {
+  getCurrentPath(): string[] {
     const {path, directoryName} = this.props;
 
     return [...path, directoryName];
   }
 
-  getIcon() {
+  getIcon(): ReactNode {
     const {id, isSelected} = this.props;
     const {expanded} = this.state;
 
@@ -73,7 +73,7 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
     );
   }
 
-  getSubTree() {
+  getSubTree(): ReactNode {
     const {depth, itemsTree, hash, onItemSelect} = this.props;
     const {expanded} = this.state;
 
@@ -112,7 +112,7 @@ class DirectoryTreeNode extends Component<DirectoryTreeNodeProps, DirectoryTreeN
     });
   };
 
-  render() {
+  render(): ReactNode {
     const {depth, directoryName, isSelected} = this.props;
     const {expanded} = this.state;
 

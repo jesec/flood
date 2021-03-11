@@ -1,6 +1,8 @@
 import {i18n} from '@lingui/core';
 import {Trans} from '@lingui/react';
 
+import type {ReactNode} from 'react';
+
 import {CheckmarkThick} from '@client/ui/icons';
 import Duration from '@client/components/general/Duration';
 import Size from '@client/components/general/Size';
@@ -9,10 +11,10 @@ import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
-const booleanTransformer = (value: boolean) =>
+const booleanTransformer = (value: boolean): ReactNode =>
   value ? <CheckmarkThick className="torrent__detail__icon torrent__detail__icon--checkmark" /> : null;
-const dateTransformer = (date: number) => i18n.date(new Date(date * 1000));
-const peersTransformer = (peersConnected: number, totalPeers: number) => (
+const dateTransformer = (date: number): ReactNode => i18n.date(new Date(date * 1000));
+const peersTransformer = (peersConnected: number, totalPeers: number): ReactNode => (
   <Trans
     id="torrent.list.peers"
     values={{
@@ -26,8 +28,8 @@ const peersTransformer = (peersConnected: number, totalPeers: number) => (
     }}
   />
 );
-const speedTransformer = (value: number) => <Size value={value} isSpeed />;
-const sizeTransformer = (value: number) => <Size value={value} />;
+const speedTransformer = (value: number): ReactNode => <Size value={value} isSpeed />;
+const sizeTransformer = (value: number): ReactNode => <Size value={value} />;
 
 export const torrentListCellTransformers = {
   dateAdded: dateTransformer,
@@ -37,7 +39,7 @@ export const torrentListCellTransformers = {
   isPrivate: booleanTransformer,
   peers: peersTransformer,
   seeds: peersTransformer,
-  tags: (tags: TorrentProperties['tags']) => (
+  tags: (tags: TorrentProperties['tags']): ReactNode => (
     <ul className="torrent__tags tag">
       {tags.map((tag) => (
         <li className="torrent__tag" key={tag}>
@@ -46,12 +48,12 @@ export const torrentListCellTransformers = {
       ))}
     </ul>
   ),
-  ratio: (ratio: TorrentProperties['ratio']) => i18n.number(ratio, {maximumFractionDigits: 2}),
+  ratio: (ratio: TorrentProperties['ratio']): ReactNode => i18n.number(ratio, {maximumFractionDigits: 2}),
   sizeBytes: sizeTransformer,
-  trackerURIs: (trackers: TorrentProperties['trackerURIs']) => trackers.join(', '),
+  trackerURIs: (trackers: TorrentProperties['trackerURIs']): ReactNode => trackers.join(', '),
   upRate: speedTransformer,
   upTotal: sizeTransformer,
-  eta: (eta: TorrentProperties['eta']) => {
+  eta: (eta: TorrentProperties['eta']): ReactNode => {
     if (!eta) {
       return null;
     }
@@ -60,7 +62,7 @@ export const torrentListCellTransformers = {
   },
 };
 
-export const getTorrentListCellContent = (torrent: TorrentProperties, column: TorrentListColumn) => {
+export const getTorrentListCellContent = (torrent: TorrentProperties, column: TorrentListColumn): ReactNode => {
   switch (column) {
     case 'dateAdded':
     case 'dateCreated':

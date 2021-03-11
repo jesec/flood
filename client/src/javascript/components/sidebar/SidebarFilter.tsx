@@ -1,12 +1,12 @@
 import classnames from 'classnames';
-import {FC} from 'react';
+import {FC, ReactNode} from 'react';
 import {useLingui} from '@lingui/react';
 
 import Badge from '../general/Badge';
 
 interface SidebarFilterProps {
   name: string;
-  icon?: JSX.Element;
+  icon?: ReactNode;
   isActive: boolean;
   slug: string;
   count: number;

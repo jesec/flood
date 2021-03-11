@@ -12,13 +12,13 @@ interface DiskUsageTabProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
 }
 
-const DiskUsageTab: FC<DiskUsageTabProps> = (props: DiskUsageTabProps) => (
+const DiskUsageTab: FC<DiskUsageTabProps> = ({onSettingsChange}: DiskUsageTabProps) => (
   <Form>
     <ModalFormSectionHeader>
       <Trans id="settings.diskusage.mount.points" />
     </ModalFormSectionHeader>
     <FormRow>
-      <MountPointsList onSettingsChange={props.onSettingsChange} />
+      <MountPointsList onSettingsChange={onSettingsChange} />
     </FormRow>
   </Form>
 );

@@ -14,7 +14,7 @@ export const saveAddTorrentsUserPreferences = ({
   destination?: string;
   tags?: TorrentProperties['tags'];
   tab?: FloodSettings['UITorrentsAddTab'];
-}) => {
+}): void => {
   const changedSettings: Partial<FloodSettings> = {};
 
   if (start != null) {
@@ -40,7 +40,7 @@ export const saveAddTorrentsUserPreferences = ({
   SettingActions.saveSettings(changedSettings);
 };
 
-export const saveDeleteTorrentsUserPreferences = ({deleteData}: {deleteData?: boolean}) => {
+export const saveDeleteTorrentsUserPreferences = ({deleteData}: {deleteData?: boolean}): void => {
   if (deleteData != null) {
     SettingActions.saveSetting('deleteTorrentData', deleteData);
   }

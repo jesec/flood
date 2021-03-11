@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {Component, ReactText} from 'react';
+import {Component, ReactNode, ReactText} from 'react';
 
 import {Checkbox} from '@client/ui';
 import {Checkmark, Clipboard, File as FileIcon} from '@client/ui/icons';
@@ -40,13 +40,13 @@ class DirectoryFiles extends Component<DirectoryFilesProps, DirectoryFilesStates
     };
   }
 
-  getCurrentPath(file: TorrentContent) {
+  getCurrentPath(file: TorrentContent): string[] {
     const {path} = this.props;
 
     return [...path, file.filename];
   }
 
-  getIcon(file: TorrentContent, isSelected: boolean) {
+  getIcon(file: TorrentContent, isSelected: boolean): ReactNode {
     return (
       <div className="file__checkbox directory-tree__checkbox">
         <div
@@ -83,7 +83,7 @@ class DirectoryFiles extends Component<DirectoryFilesProps, DirectoryFilesStates
     });
   };
 
-  render() {
+  render(): ReactNode {
     const {items, hash} = this.props;
 
     if (items == null) {
@@ -93,6 +93,8 @@ class DirectoryFiles extends Component<DirectoryFilesProps, DirectoryFilesStates
     const files = Object.values(items)
       .sort((a, b) => a.filename.localeCompare(b.filename))
       .map((file) => {
+        const {copiedToClipboard} = this.state;
+
         const isSelected = (items && items[file.filename] && items[file.filename].isSelected) || false;
         const classes = classnames(
           'directory-tree__node file',
@@ -180,7 +182,7 @@ class DirectoryFiles extends Component<DirectoryFilesProps, DirectoryFilesStates
                     );
                   }
                 }}>
-                {this.state.copiedToClipboard === file.index ? <Checkmark /> : <Clipboard />}
+                {copiedToClipboard === file.index ? <Checkmark /> : <Clipboard />}
               </button>
             )}
           </div>

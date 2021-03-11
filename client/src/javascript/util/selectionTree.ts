@@ -100,8 +100,8 @@ const applySelection = (
   return tree;
 };
 
-const getSelectedItems = (tree: TorrentContentSelectionTree) => {
-  const indices: Array<number> = [];
+const getSelectedItems = (tree: TorrentContentSelectionTree): number[] => {
+  const indices: number[] = [];
 
   if (tree.files != null) {
     const {files} = tree;
