@@ -1,18 +1,19 @@
 import classnames from 'classnames';
-import {FC, MouseEventHandler, ReactNode} from 'react';
+import {EventHandler, FC, ReactNode, SyntheticEvent} from 'react';
 
 interface ContextMenuItemProps {
   children: ReactNode;
   className?: string;
-  onClick: MouseEventHandler;
+  onClick: EventHandler<SyntheticEvent>;
 }
 
 const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick}: ContextMenuItemProps) => {
   const classes = classnames('context-menu__item', className);
 
   return (
-    <button
+    <div
       className={classes}
+      role="button"
       css={{
         width: '100%',
         textAlign: 'left',
@@ -21,10 +22,16 @@ const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick
           WebkitTapHighlightColor: 'transparent',
         },
       }}
-      type="button"
-      onClick={onClick}>
+      tabIndex={0}
+      onClick={onClick}
+      onKeyPress={(e) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          onClick?.(e);
+        }
+      }}>
       {children}
-    </button>
+    </div>
   );
 };
 

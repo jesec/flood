@@ -13,6 +13,7 @@
     padding: 3px 20px;
     transition: color 0.25s;
 
+    &:focus-visible,
     &:hover {
       @include theme('color', 'sidebar-filter--foreground--hover');
 
@@ -62,6 +63,7 @@
       text-transform: uppercase;
 
       &,
+      &:focus-visible,
       &:hover {
         @include theme('color', 'sidebar-filter--foreground--header');
       }

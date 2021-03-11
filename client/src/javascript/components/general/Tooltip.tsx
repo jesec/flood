@@ -144,7 +144,7 @@ const ARROW_SIZE = 7;
 
 class Tooltip extends Component<TooltipProps, TooltipStates> {
   container = window;
-  triggerNode = createRef<HTMLButtonElement>();
+  triggerNode = createRef<HTMLDivElement>();
   tooltipNode = createRef<HTMLDivElement>();
 
   static defaultProps: Partial<TooltipProps> = {
@@ -405,7 +405,8 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
     }
 
     return (
-      <button
+      <div
+        aria-label={typeof content === 'string' ? content : undefined}
         className={wrapperClassName}
         css={[
           {
@@ -416,9 +417,17 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
           },
           styles,
         ]}
-        tabIndex={onClick ? undefined : -1}
-        type="button"
+        tabIndex={0}
+        role="button"
         onClick={onClick}
+        onKeyPress={(e) => {
+          if (e.key === ' ' || e.key === 'Enter') {
+            e.preventDefault();
+            onClick?.();
+          }
+        }}
+        onFocus={() => this.handleMouseEnter()}
+        onBlur={() => this.handleMouseLeave()}
         onMouseEnter={() => this.handleMouseEnter()}
         onMouseLeave={() => this.handleMouseLeave()}
         ref={this.triggerNode}>
@@ -434,7 +443,7 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
           </div>,
           appElement,
         )}
-      </button>
+      </div>
     );
   }
 }

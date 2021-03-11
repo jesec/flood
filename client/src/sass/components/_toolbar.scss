@@ -45,7 +45,6 @@
     user-select: none;
 
     &--button {
-      cursor: pointer;
       flex: 1 1 auto;
       font-size: 0.65rem;
       opacity: 1;
@@ -54,6 +53,20 @@
       transition: color 0.25s, opacity 0.25s, visibility 0.25s;
       visibility: visible;
       z-index: 1;
+
+      > button {
+        font-size: inherit;
+        text-align: inherit;
+
+        &:focus {
+          outline: none;
+          -webkit-tap-highlight-color: transparent;
+        }
+
+        &:focus-visible {
+          outline: dashed;
+        }
+      }
 
       &.is-disabled {
         cursor: default;
@@ -75,6 +88,7 @@
       }
 
       .icon {
+        margin-bottom: 2px;
         margin-right: $spacing-unit * 1/5;
       }
     }

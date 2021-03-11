@@ -38,12 +38,6 @@ const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps
                 <span className="interactive-list__label">{file.name}</span>
                 <button
                   className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-                  css={{
-                    ':focus': {
-                      outline: 'none',
-                      WebkitTapHighlightColor: 'transparent',
-                    },
-                  }}
                   type="button"
                   onClick={() => {
                     const newArray = files.slice();

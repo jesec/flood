@@ -56,7 +56,7 @@ class TorrentStore {
     return filteredTorrents;
   }
 
-  setSelectedTorrents({event, hash}: {event: React.MouseEvent | React.TouchEvent; hash: string}) {
+  setSelectedTorrents({event, hash}: {event: React.KeyboardEvent | React.MouseEvent | React.TouchEvent; hash: string}) {
     this.selectedTorrents = selectTorrents({
       event,
       hash,

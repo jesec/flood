@@ -70,7 +70,6 @@ const ListViewport = forwardRef<FixedSizeList, ListViewportProps>((props: ListVi
       itemCount={listLength}
       itemSize={itemSize}
       width="100%"
-      innerElementType="ul"
       outerElementType={windowWidth > 720 ? Overflow : undefined} // Don't use custom scrollbar on smaller screens
       ref={ref}
       outerRef={outerRef}>

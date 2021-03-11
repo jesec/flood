@@ -60,6 +60,7 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
             <span className="sortable-list__content sortable-list__content--secondary">
               <Checkbox
                 defaultChecked={visible}
+                id={id}
                 onClick={(event) => {
                   const changedTorrentListColumns = torrentListColumns.map((column) => ({
                     id: column.id,

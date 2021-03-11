@@ -28,6 +28,7 @@ import TorrentListRow from './TorrentListRow';
 const TorrentList: FC = observer(() => {
   const listHeaderRef = useRef<HTMLDivElement>(null);
   const listViewportRef = useRef<FixedSizeList>(null);
+  const listViewportOuterRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const dispose = reaction(
@@ -96,6 +97,10 @@ const TorrentList: FC = observer(() => {
             };
 
             SettingActions.saveSetting('sortTorrents', sortBy);
+
+            if (listViewportOuterRef.current != null && listHeaderRef.current != null) {
+              listViewportOuterRef.current.scrollLeft = listHeaderRef.current.scrollLeft;
+            }
           }}
           onWidthsChange={(column: TorrentListColumn, width: number) => {
             const {torrentListColumnWidths = defaultFloodSettings.torrentListColumnWidths} = SettingStore.floodSettings;
@@ -131,6 +136,7 @@ const TorrentList: FC = observer(() => {
               }
             };
           }
+          listViewportOuterRef.current = viewportDiv;
         }}
       />
     );
@@ -138,7 +144,7 @@ const TorrentList: FC = observer(() => {
 
   return (
     <TorrentListDropzone>
-      <div className="torrent__list__wrapper">
+      <div className="torrent__list__wrapper" role="table">
         <ContextMenuMountPoint id="torrent-list-item" />
         {torrentListHeading}
         {content}

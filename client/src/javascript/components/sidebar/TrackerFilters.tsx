@@ -1,12 +1,14 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react';
-import {Trans} from '@lingui/react';
+import {useLingui} from '@lingui/react';
 
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 import UIActions from '../../actions/UIActions';
 
 const TrackerFilters: FC = observer(() => {
+  const {i18n} = useLingui();
+
   const trackers = Object.keys(TorrentFilterStore.taxonomy.trackerCounts);
 
   if (trackers.length === 1 && trackers[0] === '') {
@@ -35,10 +37,12 @@ const TrackerFilters: FC = observer(() => {
     />
   ));
 
+  const title = i18n._('filter.tracker.title');
+
   return (
-    <ul className="sidebar-filter sidebar__item">
-      <li className="sidebar-filter__item sidebar-filter__item--heading">
-        <Trans id="filter.tracker.title" />
+    <ul aria-label={title} className="sidebar-filter sidebar__item" role="menu">
+      <li className="sidebar-filter__item sidebar-filter__item--heading" role="none">
+        {title}
       </li>
       {filterElements}
     </ul>

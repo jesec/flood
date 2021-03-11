@@ -30,6 +30,7 @@ const TorrentListCell: FC<TorrentListCellProps> = observer(
         className={
           classNameOverride ? className : classnames('torrent__detail', `torrent__detail--${column}`, className)
         }
+        role="cell"
         style={{width: `${width}px`}}>
         {icon}
         {content?.(TorrentStore.torrents[hash], column) || <DetailNotAvailable />}

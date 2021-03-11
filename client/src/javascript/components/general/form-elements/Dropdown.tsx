@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import {FC, MouseEvent, ReactNode, useCallback, useRef} from 'react';
+import {EventHandler, FC, MutableRefObject, ReactNode, SyntheticEvent, useCallback, useRef} from 'react';
 import {observer} from 'mobx-react';
 import uniqueId from 'lodash/uniqueId';
 import {useKeyPressEvent} from 'react-use';
@@ -11,25 +11,31 @@ import UIStore from '../../../stores/UIStore';
 interface DropdownButtonProps {
   className?: string;
   label: ReactNode;
-  onClick: (event: MouseEvent) => void;
+  isFocusHandled: boolean;
+  onClick: EventHandler<SyntheticEvent>;
 }
 
-const DropdownButton: FC<DropdownButtonProps> = ({className, label, onClick}: DropdownButtonProps) => (
-  <button
-    type="button"
-    className={className}
-    css={{
-      width: '100%',
-      height: '100%',
-      textAlign: 'left',
-      ':focus-visible': {
-        outline: 'dashed',
-      },
-    }}
-    onClick={onClick}>
-    {label}
-  </button>
-);
+const DropdownButton: FC<DropdownButtonProps> = ({className, label, isFocusHandled, onClick}: DropdownButtonProps) =>
+  isFocusHandled ? (
+    <div role="none" className={className} onClick={onClick}>
+      {label}
+    </div>
+  ) : (
+    <button
+      type="button"
+      className={className}
+      css={{
+        width: '100%',
+        height: '100%',
+        textAlign: 'left',
+        ':focus-visible': {
+          outline: 'dashed',
+        },
+      }}
+      onClick={onClick}>
+      {label}
+    </button>
+  );
 
 DropdownButton.defaultProps = {
   className: undefined,
@@ -50,6 +56,7 @@ interface DropdownProps<T extends string = string> {
   header: ReactNode;
   trigger?: ReactNode;
   dropdownButtonClass?: string;
+  dropdownClickRef?: MutableRefObject<() => void>;
   menuItems: Array<DropdownItems<T>>;
   handleItemSelect: (item: DropdownItem<T>) => void;
   onOpen?: () => void;
@@ -60,6 +67,8 @@ interface DropdownProps<T extends string = string> {
   width?: 'small' | 'medium' | 'large';
   matchButtonWidth?: boolean;
   noWrap?: boolean;
+
+  isFocusHandled?: boolean;
 }
 
 const Dropdown = observer(
@@ -67,6 +76,7 @@ const Dropdown = observer(
     baseClassName,
     dropdownWrapperClass,
     dropdownButtonClass,
+    dropdownClickRef,
     direction,
     header,
     matchButtonWidth,
@@ -74,6 +84,7 @@ const Dropdown = observer(
     noWrap,
     trigger,
     width,
+    isFocusHandled,
     handleItemSelect,
     onOpen,
   }: DropdownProps<T>) => {
@@ -104,8 +115,8 @@ const Dropdown = observer(
       UIActions.displayDropdownMenu(id.current);
     }, [closeDropdown, onOpen]);
 
-    const handleDropdownClick = (event: MouseEvent): void => {
-      event.stopPropagation();
+    const handleDropdownClick = (event?: SyntheticEvent): void => {
+      event?.stopPropagation();
 
       if (isOpen) {
         closeDropdown();
@@ -114,11 +125,21 @@ const Dropdown = observer(
       }
     };
 
+    if (dropdownClickRef) {
+      // eslint-disable-next-line no-param-reassign
+      dropdownClickRef.current = handleDropdownClick;
+    }
+
     let contentElement: ReactNode;
     if (isOpen) {
       const headerElement = (
         <div className="dropdown__header" key="dropdown-header">
-          <DropdownButton className={dropdownButtonClass} label={header} onClick={handleDropdownClick} />
+          <DropdownButton
+            className={dropdownButtonClass}
+            label={header}
+            isFocusHandled={isFocusHandled ?? false}
+            onClick={handleDropdownClick}
+          />
         </div>
       );
 
@@ -168,7 +189,12 @@ const Dropdown = observer(
 
     return (
       <div className={dropdownWrapperClassName}>
-        <DropdownButton className={dropdownButtonClass} label={trigger ?? header} onClick={handleDropdownClick} />
+        <DropdownButton
+          className={dropdownButtonClass}
+          label={trigger ?? header}
+          isFocusHandled={isFocusHandled ?? false}
+          onClick={handleDropdownClick}
+        />
         <TransitionGroup>{contentElement}</TransitionGroup>
       </div>
     );
@@ -182,6 +208,7 @@ const Dropdown = observer(
   dropdownButtonClass: 'dropdown__trigger',
   matchButtonWidth: false,
   noWrap: false,
+  isFocusHandled: false,
 };
 
 export default Dropdown;

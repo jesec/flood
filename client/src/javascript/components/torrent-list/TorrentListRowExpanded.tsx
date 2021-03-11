@@ -1,27 +1,29 @@
-import {forwardRef} from 'react';
+import {CSSProperties, forwardRef, KeyboardEvent, MouseEvent, ReactNodeArray, TouchEvent} from 'react';
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
+import SettingStore from '@client/stores/SettingStore';
+import TorrentListColumns from '@client/constants/TorrentListColumns';
+import torrentStatusIcons from '@client/util/torrentStatusIcons';
+
 import ProgressBar from '../general/ProgressBar';
-import SettingStore from '../../stores/SettingStore';
 import Size from '../general/Size';
 import TorrentListCell from './TorrentListCell';
-import TorrentListColumns from '../../constants/TorrentListColumns';
-import torrentStatusIcons from '../../util/torrentStatusIcons';
 
 interface TorrentListRowExpandedProps {
   className: string;
-  style: React.CSSProperties;
+  style: CSSProperties;
   hash: string;
-  handleClick: (hash: string, event: React.MouseEvent) => void;
-  handleDoubleClick: (hash: string, event: React.MouseEvent) => void;
-  handleRightClick: (hash: string, event: React.MouseEvent) => void;
-  handleTouchStart: (event: React.TouchEvent) => void;
-  handleTouchEnd: (event: React.TouchEvent) => void;
+  handleClick: (hash: string, event: KeyboardEvent | MouseEvent) => void;
+  handleDoubleClick: (hash: string) => void;
+  handleRightClick: (hash: string, event: KeyboardEvent | MouseEvent) => void;
+  handleTouchStart: (event: TouchEvent) => void;
+  handleTouchEnd: (event: TouchEvent) => void;
+  handleKeyPress: (event: KeyboardEvent) => void;
 }
 
 const TorrentListRowExpanded = observer(
-  forwardRef<HTMLLIElement, TorrentListRowExpandedProps>(
+  forwardRef<HTMLDivElement, TorrentListRowExpandedProps>(
     (
       {
         className,
@@ -32,13 +34,14 @@ const TorrentListRowExpanded = observer(
         handleRightClick,
         handleTouchStart,
         handleTouchEnd,
+        handleKeyPress,
       }: TorrentListRowExpandedProps,
       ref,
     ) => {
       const {i18n} = useLingui();
       const columns = SettingStore.floodSettings.torrentListColumns;
 
-      const primarySection: React.ReactNodeArray = [
+      const primarySection: ReactNodeArray = [
         <TorrentListCell
           key="name"
           hash={hash}
@@ -46,12 +49,12 @@ const TorrentListRowExpanded = observer(
           className="torrent__details__section torrent__details__section--primary"
         />,
       ];
-      const secondarySection: React.ReactNodeArray = [
+      const secondarySection: ReactNodeArray = [
         <TorrentListCell key="eta" hash={hash} column="eta" showIcon />,
         <TorrentListCell key="downRate" hash={hash} column="downRate" showIcon />,
         <TorrentListCell key="upRate" hash={hash} column="upRate" showIcon />,
       ];
-      const tertiarySection: React.ReactNodeArray = [
+      const tertiarySection: ReactNodeArray = [
         <TorrentListCell
           key="percentComplete"
           hash={hash}
@@ -67,7 +70,7 @@ const TorrentListRowExpanded = observer(
           showIcon
         />,
       ];
-      const quaternarySection: React.ReactNodeArray = [
+      const quaternarySection: ReactNodeArray = [
         <TorrentListCell
           key="percentBar"
           hash={hash}
@@ -103,14 +106,17 @@ const TorrentListRowExpanded = observer(
       }
 
       return (
-        <li
+        <div
           className={className}
+          role="row"
           style={style}
+          tabIndex={0}
           onClick={(e) => handleClick(hash, e)}
           onContextMenu={(e) => handleRightClick(hash, e)}
-          onDoubleClick={(e) => handleDoubleClick(hash, e)}
+          onDoubleClick={() => handleDoubleClick(hash)}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
+          onKeyPress={handleKeyPress}
           ref={ref}>
           <div className="torrent__details__section__wrapper">
             {primarySection}
@@ -118,7 +124,7 @@ const TorrentListRowExpanded = observer(
           </div>
           <div className="torrent__details__section torrent__details__section--tertiary">{tertiarySection}</div>
           {quaternarySection}
-        </li>
+        </div>
       );
     },
   ),

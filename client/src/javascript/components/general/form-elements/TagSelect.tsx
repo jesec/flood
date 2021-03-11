@@ -60,13 +60,13 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
 
   return (
     <FormRowItem ref={formRowRef}>
-      <label className="form__element__label">{label}</label>
       <div className={classes}>
         <Textbox
           autoComplete={isOpen ? 'off' : undefined}
           id={id || 'tags'}
           addonPlacement="after"
           defaultValue={defaultValue}
+          label={label}
           onChange={() => {
             if (textboxRef.current != null) {
               let selectedTagsArray = textboxRef.current.value

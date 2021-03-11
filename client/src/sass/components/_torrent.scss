@@ -16,18 +16,13 @@ $more-info--border: $textbox-repeater--button--border;
     z-index: -1;
   }
 
-  &:hover {
-    &:after {
-      @include theme('background', 'torrent--background--hover');
-    }
+  &:focus {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+  }
 
-    .torrent {
-      &__more-info {
-        opacity: 1;
-        pointer-events: auto;
-        transform: translateX(0);
-      }
-    }
+  &:focus-visible {
+    outline: dashed;
   }
 
   &__detail {

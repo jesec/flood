@@ -1,3 +1,4 @@
+import {css} from '@emotion/react';
 import {FC, ReactNode, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
@@ -51,47 +52,53 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   if (showLabel) {
     const priorityLevels = PriorityLevels[priorityType];
 
-    let priorityLevelElement: ReactNode;
+    let priorityLabelElement: ReactNode;
     switch (priorityLevels[priorityLevel as keyof typeof priorityLevels]) {
       case 'DONT_DOWNLOAD':
-        priorityLevelElement = i18n._('priority.dont.download');
+        priorityLabelElement = i18n._('priority.dont.download');
         break;
       case 'HIGH':
-        priorityLevelElement = i18n._('priority.high');
+        priorityLabelElement = i18n._('priority.high');
         break;
       case 'LOW':
-        priorityLevelElement = i18n._('priority.low');
+        priorityLabelElement = i18n._('priority.low');
         break;
       default:
-        priorityLevelElement = i18n._('priority.normal');
+        priorityLabelElement = i18n._('priority.normal');
         break;
     }
 
-    labelElement = <span className="priority-meter__label">{priorityLevelElement}</span>;
+    labelElement = <span className="priority-meter__label">{priorityLabelElement}</span>;
   }
 
-  return (
+  const levelElement = (
+    <div className={`priority-meter priority-meter--max-${maxLevel} priority-meter--level-${priorityLevel}`} />
+  );
+
+  const styles = css({
+    ':focus': {
+      outline: 'none',
+      WebkitTapHighlightColor: 'transparent',
+    },
+    ':focus-visible': {
+      outline: 'dashed',
+    },
+  });
+
+  return clickHandled ? (
+    <div className="priority-meter__wrapper" css={styles}>
+      {levelElement}
+      {labelElement}
+    </div>
+  ) : (
     <button
       className="priority-meter__wrapper"
-      css={{
-        ':focus': {
-          outline: 'none',
-          WebkitTapHighlightColor: 'transparent',
-        },
-        ':focus-visible': {
-          outline: 'dashed',
-        },
-      }}
+      css={styles}
       type="button"
-      onClick={
-        clickHandled
-          ? undefined
-          : () => {
-              changePriority();
-            }
-      }
-      disabled={clickHandled}>
-      <div className={`priority-meter priority-meter--max-${maxLevel} priority-meter--level-${priorityLevel}`} />
+      onClick={() => {
+        changePriority();
+      }}>
+      {levelElement}
       {labelElement}
     </button>
   );

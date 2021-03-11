@@ -52,6 +52,7 @@ const TorrentContents: FC = observer(() => {
           <FormRow>
             <Checkbox
               checked={allSelected}
+              id="select-all"
               onClick={() => {
                 // select or deselect all
                 const newItemsTree = selectionTree.getSelectionTree(contents, selectedIndices.length < contents.length);

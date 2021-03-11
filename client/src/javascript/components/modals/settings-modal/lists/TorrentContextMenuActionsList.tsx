@@ -44,6 +44,7 @@ const TorrentContextMenuActionsList: FC<TorrentContextMenuActionsListProps> = ({
             <span className="sortable-list__content sortable-list__content--secondary">
               <Checkbox
                 defaultChecked={visible}
+                id={id}
                 onClick={(event) => {
                   const newTorrentContextMenuActions = torrentContextMenuActions.map((setting) => ({
                     id: setting.id,

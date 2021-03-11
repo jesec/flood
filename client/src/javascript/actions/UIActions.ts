@@ -1,4 +1,4 @@
-import {MouseEvent, TouchEvent} from 'react';
+import {KeyboardEvent, MouseEvent, TouchEvent} from 'react';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
@@ -29,7 +29,7 @@ const UIActions = {
     UIStore.dismissModal();
   },
 
-  handleTorrentClick: (data: {event: MouseEvent | TouchEvent; hash: string}) => {
+  handleTorrentClick: (data: {event: KeyboardEvent | MouseEvent | TouchEvent; hash: string}) => {
     TorrentStore.setSelectedTorrents(data);
   },
 

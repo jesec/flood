@@ -32,18 +32,25 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
   );
 
   return (
-    <button
-      type="button"
+    <div
       className={classes}
+      role="button"
       css={{
         ':focus': {
           outline: 'none',
           WebkitTapHighlightColor: 'transparent',
         },
       }}
-      onClick={onClick}>
+      tabIndex={0}
+      onClick={onClick}
+      onKeyPress={(e) => {
+        if (e.key === ' ' || e.key === 'Enter') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}>
       {children}
-    </button>
+    </div>
   );
 };
 

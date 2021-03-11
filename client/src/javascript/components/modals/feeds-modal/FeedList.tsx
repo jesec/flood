@@ -86,20 +86,18 @@ const FeedList: FC<FeedListProps> = observer(
                   </li>
                 </ul>
               </div>
-              <span
+              <button
                 className="interactive-list__icon interactive-list__icon--action"
-                onClick={() => {
-                  onSelect(feed);
-                }}>
+                type="button"
+                onClick={() => onSelect(feed)}>
                 <Edit />
-              </span>
-              <span
+              </button>
+              <button
                 className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
-                onClick={() => {
-                  onRemove(feed);
-                }}>
+                type="button"
+                onClick={() => onRemove(feed)}>
                 <Close />
-              </span>
+              </button>
             </li>
           );
         })}

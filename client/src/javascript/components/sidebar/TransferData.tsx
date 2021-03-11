@@ -41,20 +41,14 @@ const TransferData: FC = observer(() => {
           <div
             className="client-stats"
             onMouseMove={(event) => {
-              if (rateGraphRef.current != null && event?.nativeEvent?.clientX != null) {
-                rateGraphRef.current.handleMouseMove(event.nativeEvent.clientX);
+              if (event?.nativeEvent?.clientX != null) {
+                rateGraphRef.current?.handleMouseMove(event.nativeEvent.clientX);
               }
             }}
-            onMouseOut={() => {
-              if (rateGraphRef.current != null) {
-                rateGraphRef.current.handleMouseOut();
-              }
-            }}
-            onMouseOver={() => {
-              if (rateGraphRef.current != null) {
-                rateGraphRef.current.handleMouseOver();
-              }
-            }}>
+            onMouseOver={() => rateGraphRef.current?.handleMouseOver()}
+            onMouseOut={() => rateGraphRef.current?.handleMouseOut()}
+            onFocus={() => rateGraphRef.current?.handleMouseOver()}
+            onBlur={() => rateGraphRef.current?.handleMouseOut()}>
             <TransferRateDetails inspectorPoint={graphInspectorPoint} />
             {ClientStatusStore.isConnected && (
               <TransferRateGraph

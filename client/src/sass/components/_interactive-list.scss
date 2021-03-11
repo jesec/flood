@@ -67,26 +67,6 @@ $interactive-list--detail-list--item--padding--vertical: 0;
       border-bottom: none;
     }
 
-    &:focus-within,
-    &:hover {
-      .interactive-list {
-        &__icon {
-          &--action {
-            background: $darkest-grey--hard;
-
-            &--warning {
-              background: $red;
-            }
-
-            .icon {
-              filter: drop-shadow(0 1px 0 rgba($darkest-grey, 0.8));
-              fill: $interactive-list--item--icon--fill--hover;
-            }
-          }
-        }
-      }
-    }
-
     &--stacked-content {
       align-items: center;
 
@@ -163,31 +143,34 @@ $interactive-list--detail-list--item--padding--vertical: 0;
     width: $spacing--large;
 
     .icon {
-      cursor: pointer;
+      height: 12px;
+      width: 12px;
       fill: $interactive-list--item--icon--fill;
-      left: 50%;
-      position: absolute;
-      top: 50%;
-      transform: translate(-50%, -50%);
       transition: fill $speed--x-fast;
-
-      &--close {
-        height: 12px;
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 12px;
-      }
     }
 
     &--action {
-      cursor: pointer;
       transition: background $speed--xx-fast;
 
+      &:focus {
+        outline: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      &:focus-visible,
       &:hover {
+        background: $darkest-grey--hard;
+
         .icon {
+          filter: drop-shadow(0 1px 0 rgba($darkest-grey, 0.8));
           fill: $interactive-list--item--icon--fill--hover;
+        }
+      }
+
+      &--warning {
+        &:focus-visible,
+        &:hover {
+          background: $red;
         }
       }
 

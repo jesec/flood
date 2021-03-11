@@ -38,10 +38,22 @@ const SidebarFilter: FC<SidebarFilterProps> = (props: SidebarFilterProps) => {
   }
 
   return (
-    <li className={classNames} onClick={() => handleClick(slug)} role="menuitem">
-      {icon}
-      {name}
-      <Badge>{count}</Badge>
+    <li>
+      <button
+        className={classNames}
+        css={{
+          ':focus': {
+            outline: 'none',
+            WebkitTapHighlightColor: 'transparent',
+          },
+        }}
+        type="button"
+        onClick={() => handleClick(slug)}
+        role="menuitem">
+        {icon}
+        {name}
+        <Badge>{count}</Badge>
+      </button>
     </li>
   );
 };

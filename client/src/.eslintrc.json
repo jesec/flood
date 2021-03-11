@@ -30,14 +30,6 @@
         "patterns": ["**/config", "**/server/**/*"]
       }
     ],
-    // TODO: Enable a11y features
-    "jsx-a11y/click-events-have-key-events": 0,
-    "jsx-a11y/control-has-associated-label": 0,
-    "jsx-a11y/label-has-associated-control": 0,
-    "jsx-a11y/label-has-for": 0,
-    "jsx-a11y/mouse-events-have-key-events": 0,
-    "jsx-a11y/no-noninteractive-element-interactions": 0,
-    "jsx-a11y/no-static-element-interactions": 0,
     "no-console": [2, {"allow": ["warn", "error"]}],
     "no-underscore-dangle": [2, {"allow": ["_id"]}],
     "react/jsx-props-no-spreading": 0,

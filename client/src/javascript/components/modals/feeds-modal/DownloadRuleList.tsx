@@ -104,14 +104,18 @@ const DownloadRuleList: FC<DownloadRuleListProps> = observer(
                   {tags}
                 </ul>
               </div>
-              <span className="interactive-list__icon interactive-list__icon--action" onClick={() => onSelect(rule)}>
+              <button
+                className="interactive-list__icon interactive-list__icon--action"
+                type="button"
+                onClick={() => onSelect(rule)}>
                 <Edit />
-              </span>
-              <span
+              </button>
+              <button
                 className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
+                type="button"
                 onClick={() => onRemove(rule)}>
                 <Close />
-              </span>
+              </button>
             </li>
           );
         })}

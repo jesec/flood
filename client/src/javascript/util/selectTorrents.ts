@@ -1,9 +1,9 @@
-import {MouseEvent, TouchEvent} from 'react';
+import {KeyboardEvent, MouseEvent, TouchEvent} from 'react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 interface SelectTorrentOptions {
-  event: MouseEvent | TouchEvent;
+  event: KeyboardEvent | MouseEvent | TouchEvent;
   hash: string;
   selectedTorrents: Array<string>;
   torrentList: Array<TorrentProperties>;

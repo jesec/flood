@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {observer} from 'mobx-react';
-import {Trans, useLingui} from '@lingui/react';
+import {useLingui} from '@lingui/react';
 
 import {Active, All, Completed, DownloadSmall, Error, Inactive, Stop, Spinner, UploadSmall} from '@client/ui/icons';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
@@ -77,10 +77,12 @@ const StatusFilters: FC = observer(() => {
     />
   ));
 
+  const title = i18n._('filter.status.title');
+
   return (
-    <ul className="sidebar-filter sidebar__item">
-      <li className="sidebar-filter__item sidebar-filter__item--heading">
-        <Trans id="filter.status.title" />
+    <ul aria-label={title} className="sidebar-filter sidebar__item" role="menu">
+      <li className="sidebar-filter__item sidebar-filter__item--heading" role="none">
+        {title}
       </li>
       {filterElements}
     </ul>

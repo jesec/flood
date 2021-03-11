@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {CSSProperties, FC, MouseEvent, TouchEvent, useRef, useState} from 'react';
+import {CSSProperties, FC, KeyboardEvent, MouseEvent, TouchEvent, useRef, useState} from 'react';
 import {observer} from 'mobx-react';
 import {useLongPress} from 'react-use';
 
@@ -13,7 +13,7 @@ import torrentStatusClasses from '../../util/torrentStatusClasses';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 
-const displayContextMenu = (hash: string, event: MouseEvent | TouchEvent) => {
+const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) => {
   if (event.cancelable === true) {
     event.preventDefault();
   }
@@ -48,7 +48,8 @@ const displayContextMenu = (hash: string, event: MouseEvent | TouchEvent) => {
 
 const displayTorrentDetails = (hash: string) => UIActions.displayModal({id: 'torrent-details', hash});
 
-const selectTorrent = (hash: string, event: MouseEvent | TouchEvent) => UIActions.handleTorrentClick({hash, event});
+const selectTorrent = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) =>
+  UIActions.handleTorrentClick({hash, event});
 
 interface TorrentListRowProps {
   hash: string;
@@ -58,7 +59,7 @@ interface TorrentListRowProps {
 const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: TorrentListRowProps) => {
   const [rowLocation, setRowLocation] = useState<number>(0);
   const shouldDisplayTorrentDetails = useRef<boolean>(false);
-  const rowRef = useRef<HTMLLIElement>(null);
+  const rowRef = useRef<HTMLDivElement>(null);
 
   const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
 
@@ -99,6 +100,21 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
     onTouchStart(e);
   };
 
+  const onKeyPress = (e: KeyboardEvent) => {
+    if (e.key === ' ' || e.key === 'Enter' || e.key === 'ContextMenu') {
+      e.preventDefault();
+      if (TorrentStore.selectedTorrents.includes(hash)) {
+        if (e.key === 'Enter') {
+          displayTorrentDetails(hash);
+        } else if (e.key === 'ContextMenu') {
+          displayContextMenu(hash, e);
+        }
+      } else {
+        selectTorrent(hash, e);
+      }
+    }
+  };
+
   if (isCondensed) {
     return (
       <TorrentListRowCondensed
@@ -111,6 +127,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
         handleRightClick={displayContextMenu}
         handleTouchStart={onTouchStartHooked}
         handleTouchEnd={onTouchEnd}
+        handleKeyPress={onKeyPress}
       />
     );
   }
@@ -126,6 +143,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
       handleRightClick={displayContextMenu}
       handleTouchStart={onTouchStartHooked}
       handleTouchEnd={onTouchEnd}
+      handleKeyPress={onKeyPress}
     />
   );
 });

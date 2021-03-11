@@ -84,33 +84,37 @@ const TorrentHeading: FC = observer(() => {
               }}
             />
           </li>
-          <li
-            className={classnames('torrent-details__sub-heading__tertiary', 'torrent-details__action', {
-              'is-active': torrentStatus === 'start',
-            })}
-            key="start"
-            onClick={() => {
-              setTorrentStatus('start');
-              TorrentActions.startTorrents({
-                hashes: [torrent.hash],
-              });
-            }}>
-            <Start />
-            <Trans id="torrents.details.actions.start" />
+          <li className="torrent-details__sub-heading__tertiary" key="start">
+            <button
+              className={classnames('torrent-details__action', {
+                'is-active': torrentStatus === 'start',
+              })}
+              type="button"
+              onClick={() => {
+                setTorrentStatus('start');
+                TorrentActions.startTorrents({
+                  hashes: [torrent.hash],
+                });
+              }}>
+              <Start />
+              <Trans id="torrents.details.actions.start" />
+            </button>
           </li>
-          <li
-            className={classnames('torrent-details__sub-heading__tertiary', 'torrent-details__action', {
-              'is-active': torrentStatus === 'stop',
-            })}
-            key="stop"
-            onClick={() => {
-              setTorrentStatus('stop');
-              TorrentActions.stopTorrents({
-                hashes: [torrent.hash],
-              });
-            }}>
-            <Stop />
-            <Trans id="torrents.details.actions.stop" />
+          <li className="torrent-details__sub-heading__tertiary" key="stop">
+            <button
+              className={classnames('torrent-details__action', {
+                'is-active': torrentStatus === 'stop',
+              })}
+              type="button"
+              onClick={() => {
+                setTorrentStatus('stop');
+                TorrentActions.stopTorrents({
+                  hashes: [torrent.hash],
+                });
+              }}>
+              <Stop />
+              <Trans id="torrents.details.actions.stop" />
+            </button>
           </li>
         </ul>
       </div>

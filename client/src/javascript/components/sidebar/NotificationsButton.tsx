@@ -108,17 +108,8 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
   const {i18n} = useLingui();
 
   if (notificationTotal > 0) {
-    const newerButtonClass = classnames('toolbar__item toolbar__item--button', 'tooltip__content--padding-surrogate', {
-      'is-disabled': paginationStart === 0,
-    });
-    const olderButtonClass = classnames('toolbar__item toolbar__item--button', 'tooltip__content--padding-surrogate', {
-      'is-disabled': paginationStart + NOTIFICATIONS_PER_PAGE >= notificationTotal,
-    });
-
-    const olderFrom = paginationStart + NOTIFICATIONS_PER_PAGE + 1;
     let olderTo = paginationStart + NOTIFICATIONS_PER_PAGE * 2;
     let newerFrom = paginationStart - NOTIFICATIONS_PER_PAGE;
-    const newerTo = paginationStart;
 
     if (olderTo > notificationTotal) {
       olderTo = notificationTotal;
@@ -132,19 +123,28 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
       <ul
         className="notifications__toolbar toolbar toolbar--dark
         toolbar--bottom">
-        <li className={newerButtonClass} onClick={onPrevClick}>
-          <ChevronLeft />
-          {`${newerFrom + 1} - ${newerTo}`}
+        <li
+          className={classnames('toolbar__item toolbar__item--button', {
+            'is-disabled': paginationStart === 0,
+          })}>
+          <button className="tooltip__content--padding-surrogate" type="button" onClick={onPrevClick}>
+            <ChevronLeft />
+            {`${newerFrom + 1} - ${paginationStart}`}
+          </button>
+        </li>
+        <li className="toolbar__item toolbar__item--button">
+          <button className="tooltip__content--padding-surrogate" type="button" onClick={onClearClick}>
+            {i18n._('notification.clear.all')}
+          </button>
         </li>
         <li
-          className="toolbar__item toolbar__item--button
-          tooltip__content--padding-surrogate"
-          onClick={onClearClick}>
-          {i18n._('notification.clear.all')}
-        </li>
-        <li className={olderButtonClass} onClick={onNextClick}>
-          {`${olderFrom} - ${olderTo}`}
-          <ChevronRight />
+          className={classnames('toolbar__item toolbar__item--button', {
+            'is-disabled': paginationStart + NOTIFICATIONS_PER_PAGE >= notificationTotal,
+          })}>
+          <button className="tooltip__content--padding-surrogate" type="button" onClick={onNextClick}>
+            {`${paginationStart + NOTIFICATIONS_PER_PAGE + 1} - ${olderTo}`}
+            <ChevronRight />
+          </button>
         </li>
       </ul>
     );

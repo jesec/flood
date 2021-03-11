@@ -73,7 +73,7 @@ const TableHeading = observer(
     };
 
     return (
-      <div className="table__row table__row--heading" ref={tableHeading}>
+      <div className="table__row table__row--heading" role="rowheader" ref={tableHeading}>
         {SettingStore.floodSettings.torrentListColumns.reduce((accumulator: ReactNodeArray, {id, visible}) => {
           if (!visible) {
             return accumulator;

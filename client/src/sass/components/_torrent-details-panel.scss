@@ -125,11 +125,19 @@ $torrent-details--tags--foreground: #1a2028;
   }
 
   &__action {
-    cursor: pointer;
     transition: color 0.25s;
 
     .icon {
       transition: fill 0.25s;
+    }
+
+    &:focus {
+      outline: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    &:focus-visible {
+      outline: dashed;
     }
 
     &.is-active {
