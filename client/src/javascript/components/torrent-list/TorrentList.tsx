@@ -3,7 +3,7 @@ import {observer} from 'mobx-react';
 import {reaction} from 'mobx';
 import {Trans} from '@lingui/react';
 
-import type {FixedSizeList} from 'react-window';
+import type {FixedSizeList, ListChildComponentProps} from 'react-window';
 
 import {Button} from '@client/ui';
 import {Files} from '@client/ui/icons';
@@ -24,6 +24,10 @@ import ListViewport from '../general/ListViewport';
 import TableHeading from './TableHeading';
 import TorrentListDropzone from './TorrentListDropzone';
 import TorrentListRow from './TorrentListRow';
+
+const TorrentListRowRenderer: FC<ListChildComponentProps> = observer(({index, style}) => (
+  <TorrentListRow hash={TorrentStore.filteredTorrents[index].hash} style={style} />
+));
 
 const TorrentList: FC = observer(() => {
   const listHeaderRef = useRef<HTMLDivElement>(null);
@@ -119,13 +123,10 @@ const TorrentList: FC = observer(() => {
     content = (
       <ListViewport
         className="torrent__list__viewport"
-        itemRenderer={({index, style}) => {
-          const {hash} = TorrentStore.filteredTorrents[index];
-
-          return <TorrentListRow key={hash} style={style} hash={hash} />;
-        }}
+        itemCount={torrents.length}
+        itemKey={(index) => TorrentStore.filteredTorrents[index].hash}
+        itemRenderer={TorrentListRowRenderer}
         itemSize={isCondensed ? 30 : 70}
-        listLength={torrents.length}
         ref={listViewportRef}
         outerRef={(ref) => {
           const viewportDiv = ref;

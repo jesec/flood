@@ -1,11 +1,12 @@
 import {ComponentProps, FC, forwardRef, RefCallback, UIEvent, useEffect, useRef} from 'react';
 import {FixedSizeList} from 'react-window';
+import {observer} from 'mobx-react';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 import {useWindowSize} from 'react-use';
 
-import type {ListChildComponentProps} from 'react-window';
+import type {FixedSizeListProps, ListChildComponentProps} from 'react-window';
 
-import ConfigStore from '../../stores/ConfigStore';
+import ConfigStore from '@client/stores/ConfigStore';
 
 const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: ComponentProps<'div'>, ref) => {
   const {children, className, onScroll} = props;
@@ -51,35 +52,30 @@ const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: Compo
   );
 });
 
-interface ListViewportProps {
-  className: string;
+interface ListViewportProps
+  extends Pick<FixedSizeListProps, 'className' | 'itemCount' | 'itemKey' | 'itemSize' | 'outerRef'> {
   itemRenderer: FC<ListChildComponentProps>;
-  itemSize: number;
-  listLength: number;
-  outerRef?: RefCallback<HTMLDivElement>;
 }
 
 const ListViewport = forwardRef<FixedSizeList, ListViewportProps>((props: ListViewportProps, ref) => {
-  const {className, itemRenderer, itemSize, listLength, outerRef} = props;
-  const {height: windowHeight, width: windowWidth} = useWindowSize();
+  const {className, itemCount, itemKey, itemRenderer, itemSize, outerRef} = props;
+  const {height: windowHeight} = useWindowSize();
 
   return (
     <FixedSizeList
       className={`${className} ${ConfigStore.isPreferDark ? 'os-theme-light' : 'os-theme-dark'}`}
-      height={Math.max(itemSize * 30, windowHeight * 1.5)}
-      itemCount={listLength}
+      height={Math.max(itemSize * 30, windowHeight)}
+      itemCount={itemCount}
+      itemKey={itemKey}
       itemSize={itemSize}
       width="100%"
-      outerElementType={windowWidth > 720 ? Overflow : undefined} // Don't use custom scrollbar on smaller screens
+      outerElementType={ConfigStore.isSmallScreen ? undefined : Overflow} // Don't use custom scrollbar on smaller screens
       ref={ref}
+      overscanCount={30}
       outerRef={outerRef}>
       {itemRenderer}
     </FixedSizeList>
   );
 });
 
-ListViewport.defaultProps = {
-  outerRef: undefined,
-};
-
-export default ListViewport;
+export default observer(ListViewport);

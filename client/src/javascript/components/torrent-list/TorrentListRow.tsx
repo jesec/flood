@@ -51,6 +51,21 @@ const displayTorrentDetails = (hash: string) => UIActions.displayModal({id: 'tor
 const selectTorrent = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) =>
   UIActions.handleTorrentClick({hash, event});
 
+const onKeyPress = (hash: string, e: KeyboardEvent) => {
+  if (e.key === ' ' || e.key === 'Enter' || e.key === 'ContextMenu') {
+    e.preventDefault();
+    if (TorrentStore.selectedTorrents.includes(hash)) {
+      if (e.key === 'Enter') {
+        displayTorrentDetails(hash);
+      } else if (e.key === 'ContextMenu') {
+        displayContextMenu(hash, e);
+      }
+    } else {
+      selectTorrent(hash, e);
+    }
+  }
+};
+
 interface TorrentListRowProps {
   hash: string;
   style: CSSProperties;
@@ -100,21 +115,6 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
     onTouchStart(e);
   };
 
-  const onKeyPress = (e: KeyboardEvent) => {
-    if (e.key === ' ' || e.key === 'Enter' || e.key === 'ContextMenu') {
-      e.preventDefault();
-      if (TorrentStore.selectedTorrents.includes(hash)) {
-        if (e.key === 'Enter') {
-          displayTorrentDetails(hash);
-        } else if (e.key === 'ContextMenu') {
-          displayContextMenu(hash, e);
-        }
-      } else {
-        selectTorrent(hash, e);
-      }
-    }
-  };
-
   if (isCondensed) {
     return (
       <TorrentListRowCondensed
@@ -127,7 +127,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
         handleRightClick={displayContextMenu}
         handleTouchStart={onTouchStartHooked}
         handleTouchEnd={onTouchEnd}
-        handleKeyPress={onKeyPress}
+        handleKeyPress={(e) => onKeyPress(hash, e)}
       />
     );
   }
@@ -143,7 +143,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
       handleRightClick={displayContextMenu}
       handleTouchStart={onTouchStartHooked}
       handleTouchEnd={onTouchEnd}
-      handleKeyPress={onKeyPress}
+      handleKeyPress={(e) => onKeyPress(hash, e)}
     />
   );
 });
