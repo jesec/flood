@@ -40,21 +40,19 @@ const ToggleInput: FC<ToggleInputProps> = ({
   onClick,
 }: ToggleInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const elementId = `${groupID}-${id}`;
 
   return (
     <FormRowItem shrink={shrink} grow={grow} width={width}>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label
         className={classnames('form__element toggle-input', type, {
           'form__element--match-textbox-height': matchTextboxHeight,
           'form__element--label-offset': labelOffset,
-        })}
-        htmlFor={elementId}>
+        })}>
         <input
           defaultChecked={defaultChecked}
           checked={checked}
           className="toggle-input__element"
-          id={elementId}
           name={type === 'radio' ? groupID : id}
           onClick={(event) => {
             if (inputRef.current != null) {
