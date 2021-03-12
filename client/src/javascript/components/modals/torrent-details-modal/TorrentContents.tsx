@@ -79,6 +79,7 @@ const TorrentContents: FC = observer(() => {
           setSelectedIndices(selectionTree.getSelectedItems(newItemsTree));
         }}
         hash={hash}
+        path={[]}
         itemsTree={itemsTree}
       />
     );

@@ -9,8 +9,8 @@ import DirectoryFileList from './DirectoryFileList';
 import DirectoryTreeNode from './DirectoryTreeNode';
 
 interface DirectoryTreeProps {
-  depth?: number;
-  path?: Array<string>;
+  depth: number;
+  path: Array<string>;
   hash: TorrentProperties['hash'];
   itemsTree: TorrentContentSelectionTree;
   onItemSelect: (selection: TorrentContentSelection) => void;
@@ -66,11 +66,6 @@ const DirectoryTree: FC<DirectoryTreeProps> = (props: DirectoryTreeProps) => {
     ) : null;
 
   return <div className="directory-tree__tree">{directoryNodes.concat(fileList)}</div>;
-};
-
-DirectoryTree.defaultProps = {
-  depth: 0,
-  path: [],
 };
 
 export default DirectoryTree;
