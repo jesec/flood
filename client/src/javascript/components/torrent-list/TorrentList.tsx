@@ -86,6 +86,11 @@ const TorrentList: FC = observer(() => {
     if (isCondensed) {
       torrentListHeading = (
         <TableHeading
+          onCellFocus={() => {
+            if (listViewportOuterRef.current != null && listHeaderRef.current != null) {
+              listViewportOuterRef.current.scrollLeft = listHeaderRef.current.scrollLeft;
+            }
+          }}
           onCellClick={(property: TorrentListColumn) => {
             const currentSort = SettingStore.floodSettings.sortTorrents;
 
@@ -101,10 +106,6 @@ const TorrentList: FC = observer(() => {
             };
 
             SettingActions.saveSetting('sortTorrents', sortBy);
-
-            if (listViewportOuterRef.current != null && listHeaderRef.current != null) {
-              listViewportOuterRef.current.scrollLeft = listHeaderRef.current.scrollLeft;
-            }
           }}
           onWidthsChange={(column: TorrentListColumn, width: number) => {
             const {torrentListColumnWidths = defaultFloodSettings.torrentListColumnWidths} = SettingStore.floodSettings;
