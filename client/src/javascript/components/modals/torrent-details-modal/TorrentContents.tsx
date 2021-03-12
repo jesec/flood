@@ -118,7 +118,7 @@ const TorrentContents: FC = observer(() => {
       onChange={({event}) => {
         if (event.target != null && (event.target as HTMLInputElement).name === 'file-priority') {
           const inputElement = event.target as HTMLInputElement;
-          if (inputElement.name === 'file-priority') {
+          if (inputElement.value) {
             TorrentActions.setFilePriority(hash, {
               indices: selectedIndices,
               priority: Number(inputElement.value),
