@@ -1,5 +1,33 @@
 # Changelog
 
+## [4.5.0] (March 14, 2021)
+
+- Reannounce. Typically torrent clients do that automatically, but in some cases you may want to do it manually. It is available as a context menu action.
+- Redesigned filesystem browser. Allow searching in the current directory and eliminate unnecessary requests sent to server. Additionally, navigation via arrow keys is implemented (mainly for accessibility but could be useful for anyone). 
+- Major accessibility enhancements. All elements are now navigable by keyboard.
+- Improve scrolling performance by overscanning 30 rows.
+- rTorrent:
+  - JSON-RPC support for eligible versions. Preliminary tests showed that, when compared with XMLRPC, JSON-RPC yields 2x performance, 15% lower total CPU time in rTorrent process, 33% lower total CPU time in Flood process.
+  - `load.throw` command support for eligible versions. Definitive response when you add torrents, so Flood won't display success when the operation actually fails.
+  - Better handle command failures.
+  - Verify filesystem access and respond with errors when necessary.
+- Bug fixes:
+  - Fix French mistranslation
+  - Fix button location in download rules tab of feed modal
+  - Fix "Set tracker" of single tracker torrents in rTorrent
+  - Fix "Checking" bar selected style for dark color scheme
+  - Recognize qBittorrent's "Forced" state
+  - Disk usage service errors are no longer fatal
+- New translations
+  - Chinese (Simplified), thanks to @MeetWq
+  - Chinese (Traditional), thanks to @vongola12324
+  - Czech, thanks to @brezinajn
+  - French, thanks to @Carryozor and @foXaCe
+  - German, thanks to @chint95
+  - Hungarian, thanks to @m3r3nix
+  - Romanian, thanks to @T-z3P
+- Bump dependencies
+
 ## [4.4.1] (February 6, 2021)
 
 - Better handle tracker domain conversion and grouping
@@ -391,3 +419,4 @@ Other changes:
 [4.3.1]: https://github.com/jesec/flood/compare/v4.3.0...v4.3.1
 [4.4.0]: https://github.com/jesec/flood/compare/v4.3.1...v4.4.0
 [4.4.1]: https://github.com/jesec/flood/compare/v4.4.0...v4.4.1
+[4.5.0]: https://github.com/jesec/flood/compare/v4.4.1...v4.5.0
