@@ -21,7 +21,7 @@ export const stringArrayTransformer = (value: unknown): string[] => {
 };
 
 export const booleanTransformer = (value: unknown): boolean => {
-  return value === 1 || value === '1';
+  return value !== 0 && value !== '0';
 };
 
 export const numberTransformer = (value: unknown): number => {
