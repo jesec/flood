@@ -3,7 +3,7 @@
 ## [4.5.0] (March 14, 2021)
 
 - Reannounce. Typically torrent clients do that automatically, but in some cases you may want to do it manually. It is available as a context menu action.
-- Redesigned filesystem browser. Allow searching in the current directory and eliminate unnecessary requests sent to server. Additionally, navigation via arrow keys is implemented (mainly for accessibility but could be useful for anyone). 
+- Redesigned filesystem browser. Allow searching in the current directory and eliminate unnecessary requests sent to server. Additionally, navigation via arrow keys is implemented (mainly for accessibility but could be useful for anyone).
 - Major accessibility enhancements. All elements are now navigable by keyboard.
 - Improve scrolling performance by overscanning 30 rows.
 - rTorrent:
