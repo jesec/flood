@@ -310,8 +310,8 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           }),
         ])
         .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
-        .then((responses: string[][]) =>
-          responses.map((response) => (typeof response === 'number' ? response : response?.[0])),
+        .then((responses: string[][]): boolean[] =>
+          responses.map((response) => (typeof response === 'number' ? response !== 0 : response?.[0] !== '0')),
         )
         .catch(() => undefined);
 
