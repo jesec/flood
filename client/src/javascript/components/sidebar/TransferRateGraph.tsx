@@ -1,10 +1,10 @@
 import {area, curveMonotoneX, line} from 'd3-shape';
-import {Component, FC, ReactNode} from 'react';
+import {FC, MutableRefObject, useRef, useState} from 'react';
 import {max} from 'd3-array';
-import {ScaleLinear, scaleLinear} from 'd3-scale';
-import {Selection, select} from 'd3-selection';
+import {observer} from 'mobx-react';
+import {scaleLinear} from 'd3-scale';
 
-import type {TransferDirection} from '@shared/types/TransferData';
+import type {TransferDirection, TransferHistory} from '@shared/types/TransferData';
 
 import TransferDataStore, {TRANSFER_DIRECTIONS} from '../../stores/TransferDataStore';
 
@@ -15,244 +15,118 @@ const TransferRateGraphGradient: FC<{direction: TransferDirection}> = ({directio
   </linearGradient>
 );
 
+export interface TransferRateGraphEventHandlers {
+  handleMouseMove: (mouseX: number) => void;
+  handleMouseOut: () => void;
+  handleMouseOver: () => void;
+}
+
 export interface TransferRateGraphInspectorPoint {
-  uploadSpeed: number;
-  downloadSpeed: number;
-  nearestTimestamp: number;
+  upload: number;
+  download: number;
+  timestamp: number;
 }
 
 interface TransferRateGraphProps {
   id: string;
   height: number;
   width: number;
+  handlerRefs: MutableRefObject<TransferRateGraphEventHandlers | null>;
   onHover: (inspectorPoint: TransferRateGraphInspectorPoint) => void;
   onMouseOut: () => void;
 }
 
-class TransferRateGraph extends Component<TransferRateGraphProps> {
-  lastMouseX?: number;
-  xScale?: ScaleLinear<number, number>;
-  yScale?: ScaleLinear<number, number>;
-  graphRefs: {
-    graph: SVGSVGElement | null;
-    areDefined: boolean;
-    isHovered: boolean;
-  } & Record<
-    TransferDirection,
-    {
-      graphArea?: Selection<SVGPathElement, unknown, HTMLElement, unknown>;
-      inspectPoint?: Selection<SVGCircleElement, unknown, HTMLElement, unknown>;
-      rateLine?: Selection<SVGPathElement, unknown, HTMLElement, unknown>;
-    }
-  > = {
-    graph: null,
-    areDefined: false,
-    isHovered: false,
-    download: {},
-    upload: {},
-  };
+const getSpeedAtHoverPoint = (history: TransferHistory, direction: TransferDirection, hoverPoint: number) => {
+  const upperSpeed = history[direction][Math.ceil(hoverPoint)];
+  const lowerSpeed = history[direction][Math.floor(hoverPoint)];
+  return lowerSpeed + (upperSpeed - lowerSpeed) * (hoverPoint % 1);
+};
 
-  static defaultProps = {
-    width: 240,
-  };
+const TransferRateGraph: FC<TransferRateGraphProps> = observer(
+  ({id, height, width, handlerRefs, onHover, onMouseOut}: TransferRateGraphProps) => {
+    const [isHovered, setIsHovered] = useState<boolean>(false);
 
-  componentDidMount(): void {
-    this.renderGraphData();
-  }
-
-  componentDidUpdate(): void {
-    this.renderGraphData();
-  }
-
-  private setInspectorCoordinates(slug: TransferDirection, hoverPoint: number): number {
-    const {
-      graphRefs: {
-        [slug]: {inspectPoint},
-      },
-      xScale,
-      yScale,
-    } = this;
-
-    if (xScale == null || yScale == null || inspectPoint == null) {
-      return 0;
-    }
+    const hoverPoint = useRef<number>(0);
+    const inspectorPoint = useRef<TransferRateGraphInspectorPoint>({download: 0, upload: 0, timestamp: 0});
 
     const historicalData = TransferDataStore.transferRates;
-    const upperSpeed = historicalData[slug][Math.ceil(hoverPoint)];
-    const lowerSpeed = historicalData[slug][Math.floor(hoverPoint)];
 
-    const delta = upperSpeed - lowerSpeed;
-    const speedAtHoverPoint = lowerSpeed + delta * (hoverPoint % 1);
-
-    const coordinates = {x: xScale(hoverPoint), y: yScale(speedAtHoverPoint)};
-
-    inspectPoint.attr('transform', `translate(${coordinates.x},${coordinates.y})`);
-
-    return speedAtHoverPoint;
-  }
-
-  handleMouseMove = (mouseX: number): void => {
-    this.lastMouseX = mouseX;
-    this.renderPrecisePointInspectors();
-  };
-
-  handleMouseOut = (): void => {
-    const {graphRefs, props} = this;
-
-    graphRefs.isHovered = false;
-
-    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
-      const {inspectPoint} = graphRefs[direction];
-      if (inspectPoint != null) {
-        graphRefs[direction].inspectPoint = inspectPoint.style('opacity', 0);
-      }
-    });
-
-    if (props.onMouseOut) {
-      props.onMouseOut();
-    }
-  };
-
-  handleMouseOver = (): void => {
-    this.graphRefs.isHovered = true;
-
-    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
-      const {inspectPoint} = this.graphRefs[direction];
-      if (inspectPoint != null) {
-        this.graphRefs[direction].inspectPoint = inspectPoint.style('opacity', 1);
-      }
-    });
-  };
-
-  handleTransferHistoryChange = (): void => {
-    this.updateGraph();
-  };
-
-  private initGraph(): void {
-    if (this.graphRefs.areDefined === true) {
-      return;
-    }
-
-    const {id} = this.props;
-
-    const graph = select(`#${id}`);
-    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
-      // appendEmptyGraphShapes
-      this.graphRefs[direction].graphArea = graph
-        .append('path')
-        .attr('class', 'graph__area')
-        .attr('fill', `url('#graph__gradient--${direction}')`);
-
-      // appendEmptyGraphLines
-      this.graphRefs[direction].rateLine = graph.append('path').attr('class', `graph__line graph__line--${direction}`);
-
-      // appendGraphCircles
-      this.graphRefs[direction].inspectPoint = graph
-        .append('circle')
-        .attr('class', `graph__circle graph__circle--${direction}`)
-        .attr('r', 2.5);
-    });
-
-    this.graphRefs.areDefined = true;
-  }
-
-  private updateGraph() {
-    this.renderGraphData();
-
-    if (this.graphRefs.isHovered) {
-      this.renderPrecisePointInspectors();
-    }
-  }
-
-  private renderPrecisePointInspectors(): void {
-    const {
-      lastMouseX,
-      props: {onHover},
-      xScale,
-    } = this;
-
-    if (xScale == null || lastMouseX == null) {
-      return;
-    }
-
-    const historicalData = TransferDataStore.transferRates;
-    const hoverPoint = xScale.invert(lastMouseX);
-    const uploadSpeed = this.setInspectorCoordinates('upload', hoverPoint);
-    const downloadSpeed = this.setInspectorCoordinates('download', hoverPoint);
-    const nearestTimestamp = historicalData.timestamps[Math.round(hoverPoint)];
-
-    if (onHover) {
-      onHover({
-        uploadSpeed,
-        downloadSpeed,
-        nearestTimestamp,
-      });
-    }
-  }
-
-  private renderGraphData(): void {
-    const historicalData = TransferDataStore.transferRates;
-    const {height, width} = this.props;
-    const margin = {bottom: 10, top: 10};
-
-    this.xScale = scaleLinear()
+    const xScale = scaleLinear()
       .domain([0, historicalData.download.length - 1])
       .range([0, width]);
 
-    this.yScale = scaleLinear()
+    const yScale = scaleLinear()
       .domain([
         0,
         max(historicalData.download, (dataPoint, index) => Math.max(dataPoint, historicalData.upload[index])) as number,
       ])
-      .range([height - margin.top, margin.bottom]);
+      .range([height - 10, 10]);
 
-    this.initGraph();
+    // eslint-disable-next-line no-param-reassign
+    handlerRefs.current = {
+      handleMouseMove: (mouseX: number) => {
+        hoverPoint.current = xScale.invert(mouseX);
+        onHover(inspectorPoint.current);
+      },
+      handleMouseOut: () => {
+        setIsHovered(false);
+        onMouseOut();
+      },
+      handleMouseOver: () => {
+        setIsHovered(true);
+      },
+    };
+
+    if (isHovered) {
+      inspectorPoint.current = {
+        download: getSpeedAtHoverPoint(historicalData, 'download', hoverPoint.current),
+        upload: getSpeedAtHoverPoint(historicalData, 'upload', hoverPoint.current),
+        timestamp: historicalData.timestamps[Math.round(hoverPoint.current)],
+      };
+    }
 
     const interpolation = curveMonotoneX;
-    TRANSFER_DIRECTIONS.forEach(<T extends TransferDirection>(direction: T) => {
-      const {xScale, yScale} = this;
-      const {graphArea, rateLine} = this.graphRefs[direction];
-
-      if (rateLine == null || graphArea == null || xScale == null || yScale == null) {
-        return;
-      }
-
-      this.graphRefs[direction].rateLine = rateLine.attr(
-        'd',
-        line<number>()
-          .x((_dataPoint, index) => xScale(index) || 0)
-          .y((dataPoint) => yScale(dataPoint) || 0)
-          .curve(interpolation)(historicalData[direction]) as string,
-      );
-
-      this.graphRefs[direction].graphArea = graphArea.attr(
-        'd',
-        area<number>()
-          .x((_dataPoint, index) => xScale(index) || 0)
-          .y0(height)
-          .y1((dataPoint) => yScale(dataPoint) || 0)
-          .curve(interpolation)(historicalData[direction]) as string,
-      );
-    });
-  }
-
-  render(): ReactNode {
-    const {id} = this.props;
 
     return (
-      <svg
-        className="graph"
-        id={id}
-        ref={(ref) => {
-          this.graphRefs.graph = ref;
-        }}>
+      <svg className="graph" id={id}>
         <defs>
           <TransferRateGraphGradient direction="upload" />
           <TransferRateGraphGradient direction="download" />
         </defs>
+        {TRANSFER_DIRECTIONS.map((direction) => [
+          <path
+            className="graph__area"
+            key={`area-${direction}`}
+            fill={`url('#graph__gradient--${direction}')`}
+            d={
+              area<number>()
+                .x((_dataPoint, index) => xScale(index) || 0)
+                .y0(height)
+                .y1((dataPoint) => yScale(dataPoint) || 0)
+                .curve(interpolation)(historicalData[direction]) as string
+            }
+          />,
+          <path
+            className={`graph__line graph__line--${direction}`}
+            key={`line-${direction}`}
+            d={
+              line<number>()
+                .x((_dataPoint, index) => xScale(index) || 0)
+                .y((dataPoint) => yScale(dataPoint) || 0)
+                .curve(interpolation)(historicalData[direction]) as string
+            }
+          />,
+          <circle
+            className={`graph__circle graph__circle--${direction}`}
+            key={`point-${direction}`}
+            r={2.5}
+            style={{opacity: isHovered ? 1 : 0}}
+            transform={`translate(${xScale(hoverPoint.current)},${yScale(inspectorPoint.current[direction])})`}
+          />,
+        ])}
       </svg>
     );
-  }
-}
+  },
+);
 
 export default TransferRateGraph;

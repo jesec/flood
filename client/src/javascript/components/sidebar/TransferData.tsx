@@ -1,32 +1,17 @@
-import {FC, useState, useRef, useEffect} from 'react';
+import {FC, useState, useRef} from 'react';
 import Measure from 'react-measure';
 import {observer} from 'mobx-react';
-import {reaction} from 'mobx';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
-import TransferDataStore from '../../stores/TransferDataStore';
 import TransferRateDetails from './TransferRateDetails';
 import TransferRateGraph from './TransferRateGraph';
 
-import type {TransferRateGraphInspectorPoint} from './TransferRateGraph';
+import type {TransferRateGraphEventHandlers, TransferRateGraphInspectorPoint} from './TransferRateGraph';
 
 const TransferData: FC = observer(() => {
   const [graphInspectorPoint, setGraphInspectorPoint] = useState<TransferRateGraphInspectorPoint | null>(null);
   const [sidebarWidth, setSidebarWidth] = useState<number>(0);
-  const rateGraphRef = useRef<TransferRateGraph>(null);
-
-  useEffect(() => {
-    const dispose = reaction(
-      () => TransferDataStore.transferRates,
-      () => {
-        if (rateGraphRef.current != null) {
-          rateGraphRef.current.handleTransferHistoryChange();
-        }
-      },
-    );
-
-    return dispose;
-  }, []);
+  const rateGraphHandlerRefs = useRef<TransferRateGraphEventHandlers>(null);
 
   return (
     <Measure
@@ -42,13 +27,13 @@ const TransferData: FC = observer(() => {
             className="client-stats"
             onMouseMove={(event) => {
               if (event?.nativeEvent?.clientX != null) {
-                rateGraphRef.current?.handleMouseMove(event.nativeEvent.clientX);
+                rateGraphHandlerRefs.current?.handleMouseMove(event.nativeEvent.clientX);
               }
             }}
-            onMouseOver={() => rateGraphRef.current?.handleMouseOver()}
-            onMouseOut={() => rateGraphRef.current?.handleMouseOut()}
-            onFocus={() => rateGraphRef.current?.handleMouseOver()}
-            onBlur={() => rateGraphRef.current?.handleMouseOut()}>
+            onMouseOver={() => rateGraphHandlerRefs.current?.handleMouseOver()}
+            onMouseOut={() => rateGraphHandlerRefs.current?.handleMouseOut()}
+            onFocus={() => rateGraphHandlerRefs.current?.handleMouseOver()}
+            onBlur={() => rateGraphHandlerRefs.current?.handleMouseOut()}>
             <TransferRateDetails inspectorPoint={graphInspectorPoint} />
             {ClientStatusStore.isConnected && (
               <TransferRateGraph
@@ -60,7 +45,7 @@ const TransferData: FC = observer(() => {
                 onHover={(inspectorPoint) => {
                   setGraphInspectorPoint(inspectorPoint);
                 }}
-                ref={rateGraphRef}
+                handlerRefs={rateGraphHandlerRefs}
                 width={sidebarWidth}
               />
             )}

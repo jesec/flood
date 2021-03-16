@@ -22,7 +22,7 @@ const icons = {
 };
 
 interface TransferRateDetailsProps {
-  inspectorPoint: TransferRateGraphInspectorPoint | null;
+  inspectorPoint?: TransferRateGraphInspectorPoint | null;
 }
 
 const TransferRateDetails: FC<TransferRateDetailsProps> = observer(({inspectorPoint}: TransferRateDetailsProps) => {
@@ -49,8 +49,8 @@ const TransferRateDetails: FC<TransferRateDetailsProps> = observer(({inspectorPo
 
     if (inspectorPoint != null) {
       transferRates = {
-        upload: inspectorPoint.uploadSpeed,
-        download: inspectorPoint.downloadSpeed,
+        upload: inspectorPoint.upload,
+        download: inspectorPoint.download,
       };
     }
 
@@ -63,13 +63,10 @@ const TransferRateDetails: FC<TransferRateDetailsProps> = observer(({inspectorPo
     });
 
     let timestamp = null;
-    if (inspectorPoint?.nearestTimestamp != null) {
+    if (inspectorPoint?.timestamp != null) {
       timestamp = (
         <div className={timestampClasses}>
-          <Duration
-            suffix={i18n._('general.ago')}
-            value={Math.trunc((Date.now() - inspectorPoint.nearestTimestamp) / 1000)}
-          />
+          <Duration suffix={i18n._('general.ago')} value={Math.trunc((Date.now() - inspectorPoint.timestamp) / 1000)} />
         </div>
       );
     }
