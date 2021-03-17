@@ -6,6 +6,7 @@
   "alert.settings.saved": "Nastavení bylo úspěšně uloženo.",
   "alert.torrent.add": "Úspěšně přidáno {countElement} {count, plural, =1 {torrent} other {torrenty}}",
   "alert.torrent.add.failed": "Nepodařilo se přidat {countElement} {count, plural, =1 {torrent} other {torrenty}}",
+  "alert.torrent.add.sent": "{countElement} {count, plural, =1 {požadavek odeslán} few {požadavky odeslány} other {požadavků odesláno}} do torrent klienta.",
   "alert.torrent.move": "Úspěšně přesunuto {countElement} {count, plural, =1 {torrent} other {torrenty}}",
   "alert.torrent.move.failed": "Nepodařilo se přesunout {countElement} {count, plural, =1 {torrent} other {torrenty}}",
   "alert.torrent.remove": "Úspěšně odstraněno {countElement} {count, plural, =1 {torrent} other {torrenty}}",
