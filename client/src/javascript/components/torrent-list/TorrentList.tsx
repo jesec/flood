@@ -1,7 +1,8 @@
-import {FC, ReactNode, useEffect, useRef} from 'react';
+import {FC, KeyboardEvent, ReactNode, useEffect, useRef} from 'react';
 import {observer} from 'mobx-react';
 import {reaction} from 'mobx';
 import {Trans} from '@lingui/react';
+import {useEvent} from 'react-use';
 
 import type {FixedSizeList, ListChildComponentProps} from 'react-window';
 
@@ -12,6 +13,7 @@ import SettingActions from '@client/actions/SettingActions';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import TorrentStore from '@client/stores/TorrentStore';
+import UIActions from '@client/actions/UIActions';
 
 import SortDirections from '@client/constants/SortDirections';
 
@@ -46,6 +48,24 @@ const TorrentList: FC = observer(() => {
 
     return dispose;
   }, []);
+
+  useEvent('keydown', (e: KeyboardEvent) => {
+    const {ctrlKey, key, metaKey, repeat, target} = e;
+
+    const tagName = (target as HTMLElement)?.tagName.toUpperCase();
+    if (tagName === 'INPUT' || tagName === 'TEXTAREA') {
+      return;
+    }
+
+    if (repeat) {
+      return;
+    }
+
+    if ((metaKey || ctrlKey) && key === 'a') {
+      e.preventDefault();
+      UIActions.selectAllTorrents();
+    }
+  });
 
   const torrents = TorrentStore.filteredTorrents;
   const {torrentListViewSize = 'condensed'} = SettingStore.floodSettings;
