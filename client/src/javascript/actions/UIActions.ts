@@ -33,6 +33,10 @@ const UIActions = {
     TorrentStore.setSelectedTorrents(data);
   },
 
+  selectAllTorrents: () => {
+    TorrentStore.selectAllTorrents();
+  },
+
   setTorrentStatusFilter: (status: TorrentStatus) => {
     TorrentFilterStore.setStatusFilter(status);
   },

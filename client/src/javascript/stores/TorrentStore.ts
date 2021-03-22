@@ -65,6 +65,10 @@ class TorrentStore {
     });
   }
 
+  selectAllTorrents() {
+    this.selectedTorrents = this.filteredTorrents.map((v) => v.hash);
+  }
+
   handleTorrentListDiffChange(torrentListDiffs: Operation[]) {
     applyPatch(this.torrents, torrentListDiffs);
   }
