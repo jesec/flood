@@ -14,7 +14,6 @@ interface SortableListItemProps {
   isVisible: boolean;
   isDragging?: boolean;
   isLocked?: boolean;
-  isDraggable?: boolean;
   onDrop: () => void;
   onMove: (sourceIndex: number, targetIndex: number) => void;
   connectDragPreview: DragElementWrapper<DragPreviewOptions>;
@@ -31,21 +30,14 @@ const SortableListItem: FC<SortableListItemProps> = (props: SortableListItemProp
     });
   });
 
-  let lockedIcon = null;
-
-  if (isLocked) {
-    lockedIcon = <Lock />;
-  }
-
-  const classes = classnames('sortable-list__item', {
-    'sortable-list__item--is-dragging': isDragging,
-    'sortable-list__item--is-locked': isLocked,
-  });
-
   return connectDragSource(
     connectDropTarget(
-      <div className={classes}>
-        {lockedIcon}
+      <div
+        className={classnames('sortable-list__item', {
+          'sortable-list__item--is-dragging': isDragging,
+          'sortable-list__item--is-locked': isLocked,
+        })}>
+        {isLocked ? <Lock /> : null}
         {children}
       </div>,
     ),
@@ -60,11 +52,7 @@ export default flow([
         return {list, id, index, isVisible};
       },
 
-      canDrag({isLocked, isDraggable}: SortableListItemProps) {
-        if (isDraggable != null) {
-          return isDraggable;
-        }
-
+      canDrag({isLocked}: SortableListItemProps) {
         if (isLocked) {
           return false;
         }

@@ -118,10 +118,4 @@ $sortable-list--item--border--preview: darken($sortable-list--item--border, 3%);
       }
     }
   }
-
-  &--torrent-context-menu-items {
-    .sortable-list__item {
-      cursor: default;
-    }
-  }
 }

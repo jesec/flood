@@ -1,12 +1,12 @@
-import {FC, useState} from 'react';
-import {Trans} from '@lingui/react';
+import {FC, useRef} from 'react';
 
-import {Checkbox} from '@client/ui';
 import SettingStore from '@client/stores/SettingStore';
-import SortableList, {ListItem} from '@client/components/general/SortableList';
+import ToggleList from '@client/components/general/ToggleList';
 import TorrentContextMenuActions from '@client/constants/TorrentContextMenuActions';
 
 import type {TorrentContextMenuAction} from '@client/constants/TorrentContextMenuActions';
+
+import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -14,65 +14,35 @@ interface TorrentContextMenuActionsListProps {
   onSettingsChange: (changedSettings: Partial<FloodSettings>) => void;
 }
 
-const lockedIDs: Array<TorrentContextMenuAction> = ['start', 'stop', 'setTaxonomy', 'torrentDetails'];
-
 const TorrentContextMenuActionsList: FC<TorrentContextMenuActionsListProps> = ({
   onSettingsChange,
 }: TorrentContextMenuActionsListProps) => {
-  const [torrentContextMenuActions, setTorrentContextMenuActions] = useState(
-    Object.keys(TorrentContextMenuActions).map((key) => ({
-      id: key,
-      visible: SettingStore.floodSettings.torrentContextMenuActions.some(
-        (setting) => setting.id === key && setting.visible,
-      ),
+  const changedTorrentContextMenuActionsRef = useRef<FloodSettings['torrentContextMenuActions']>(
+    defaultFloodSettings.torrentContextMenuActions.map(({id, visible: defaultVisible}) => ({
+      id,
+      visible:
+        SettingStore.floodSettings.torrentContextMenuActions.find((setting) => setting.id === id)?.visible ??
+        defaultVisible,
     })),
   );
 
   return (
-    <SortableList
-      id="torrent-context-menu-items"
-      className="sortable-list--torrent-context-menu-items"
-      items={torrentContextMenuActions}
-      lockedIDs={lockedIDs}
-      isDraggable={false}
-      renderItem={(item: ListItem) => {
-        const {id, visible} = item as FloodSettings['torrentContextMenuActions'][number];
-        let checkbox = null;
-
-        if (!lockedIDs.includes(id)) {
-          checkbox = (
-            <span className="sortable-list__content sortable-list__content--secondary">
-              <Checkbox
-                defaultChecked={visible}
-                id={id}
-                onClick={(event) => {
-                  const newTorrentContextMenuActions = torrentContextMenuActions.map((setting) => ({
-                    id: setting.id,
-                    visible: setting.id === id ? (event.target as HTMLInputElement).checked : setting.visible,
-                  }));
-
-                  onSettingsChange({
-                    torrentContextMenuActions: newTorrentContextMenuActions as FloodSettings['torrentContextMenuActions'],
-                  });
-                  setTorrentContextMenuActions(newTorrentContextMenuActions);
-                }}>
-                <Trans id="settings.ui.torrent.context.menu.items.show" />
-              </Checkbox>
-            </span>
-          );
-        }
-
-        const content = (
-          <div className="sortable-list__content sortable-list__content__wrapper">
-            <span className="sortable-list__content sortable-list__content--primary">
-              <Trans id={TorrentContextMenuActions[id]} />
-            </span>
-            {checkbox}
-          </div>
-        );
-
-        return content;
-      }}
+    <ToggleList
+      checkboxLabel="settings.ui.torrent.context.menu.items.show"
+      items={Object.keys(TorrentContextMenuActions).map((action) => ({
+        label: TorrentContextMenuActions[action as TorrentContextMenuAction],
+        isLocked: action === 'start' || action === 'stop' || action === 'setTaxonomy' || action === 'torrentDetails',
+        defaultChecked: changedTorrentContextMenuActionsRef.current.some(
+          (setting) => setting.id === action && setting.visible,
+        ),
+        onClick: () => {
+          const currentSetting = changedTorrentContextMenuActionsRef.current.find((setting) => setting.id === action);
+          if (currentSetting != null) {
+            currentSetting.visible = !currentSetting.visible;
+          }
+          onSettingsChange({torrentContextMenuActions: changedTorrentContextMenuActionsRef.current});
+        },
+      }))}
     />
   );
 };
