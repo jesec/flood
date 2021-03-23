@@ -29,6 +29,11 @@ const StatusFilters: FC = observer(() => {
       icon: <DownloadSmall />,
     },
     {
+      label: i18n._('filter.status.paused'),
+      slug: 'paused',
+      icon: <UploadSmall />,
+    },
+    {
       label: i18n._('filter.status.seeding'),
       slug: 'seeding',
       icon: <UploadSmall />,
