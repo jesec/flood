@@ -4,11 +4,11 @@ import {useLingui} from '@lingui/react';
 
 import SettingStore from '@client/stores/SettingStore';
 import TorrentListColumns from '@client/constants/TorrentListColumns';
-import torrentStatusIcons from '@client/util/torrentStatusIcons';
 
 import ProgressBar from '../general/ProgressBar';
 import Size from '../general/Size';
 import TorrentListCell from './TorrentListCell';
+import TorrentStatusIcon from '../general/TorrentStatusIcon';
 
 interface TorrentListRowExpandedProps {
   className: string;
@@ -59,7 +59,7 @@ const TorrentListRowExpanded = observer(
           key="percentComplete"
           hash={hash}
           column="percentComplete"
-          content={(torrent) => (
+          content={({torrent}) => (
             <span>
               {i18n.number(torrent.percentComplete, {maximumFractionDigits: 1})}
               <em className="unit">%</em>
@@ -75,8 +75,11 @@ const TorrentListRowExpanded = observer(
           key="percentBar"
           hash={hash}
           column="percentComplete"
-          content={(torrent) => (
-            <ProgressBar percent={Math.ceil(torrent.percentComplete)} icon={torrentStatusIcons(torrent.status)} />
+          content={({torrent}) => (
+            <ProgressBar
+              percent={Math.ceil(torrent.percentComplete)}
+              icon={<TorrentStatusIcon statuses={torrent.status} />}
+            />
           )}
           className="torrent__details__section torrent__details__section--quaternary"
           classNameOverride

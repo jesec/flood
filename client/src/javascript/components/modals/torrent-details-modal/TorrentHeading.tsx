@@ -6,13 +6,13 @@ import {Trans, useLingui} from '@lingui/react';
 import {Clock, DownloadThick, Ratio, Start, Stop, UploadThick} from '@client/ui/icons';
 import TorrentActions from '@client/actions/TorrentActions';
 import torrentStatusClasses from '@client/util/torrentStatusClasses';
-import torrentStatusIcons from '@client/util/torrentStatusIcons';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIStore from '@client/stores/UIStore';
 
 import Duration from '../../general/Duration';
 import PriorityMeter from '../../general/PriorityMeter';
 import ProgressBar from '../../general/ProgressBar';
+import TorrentStatusIcon from '../../general/TorrentStatusIcon';
 import Size from '../../general/Size';
 
 const TorrentHeading: FC = observer(() => {
@@ -41,7 +41,6 @@ const TorrentHeading: FC = observer(() => {
     },
     'torrent-details__header',
   );
-  const torrentStatusIcon = torrentStatusIcons(torrent.status);
 
   return (
     <div className={torrentClasses}>
@@ -118,7 +117,10 @@ const TorrentHeading: FC = observer(() => {
           </li>
         </ul>
       </div>
-      <ProgressBar percent={Math.ceil(torrent.percentComplete)} icon={torrentStatusIcon} />
+      <ProgressBar
+        percent={Math.ceil(torrent.percentComplete)}
+        icon={<TorrentStatusIcon statuses={torrent.status} />}
+      />
     </div>
   );
 });
