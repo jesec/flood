@@ -56,6 +56,8 @@ import {
 import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 import type {RPCError} from './types/RPCError';
 
+const hashDateAddedMap = {};
+
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
   availableMethodCalls = this.fetchAvailableMethodCalls(true);
@@ -668,7 +670,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             processedResponses.map(async (response) => {
               const torrentProperties: TorrentProperties = {
                 bytesDone: response.bytesDone,
-                dateAdded: response.dateAdded,
+                dateAdded: response.dateAdded || hashDateAddedMap[response.hash],
                 dateCreated: response.dateCreated,
                 directory: response.directory,
                 downRate: response.downRate,
@@ -694,6 +696,18 @@ class RTorrentClientGatewayService extends ClientGatewayService {
                 upRate: response.upRate,
                 upTotal: response.upTotal,
               };
+
+              if (!response.dateAdded && !hashDateAddedMap[response.hash]) {
+                fs.promises.stat(response.directory)
+                  .then(result => {
+                    if (!hashDateAddedMap[response.hash]) {
+                      hashDateAddedMap[response.hash] = result.ctimeMs / 1000;
+                    }
+                  })
+                  .catch(err => {
+                    console.error(err);
+                  });
+              }
 
               this.emit('PROCESS_TORRENT', torrentProperties);
 
