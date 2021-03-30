@@ -21,7 +21,6 @@ const generateConfig = (proxy, allowedHost) => {
     ],
     https: protocol === 'https',
     host,
-    overlay: false,
     historyApiFallback: true,
     public: allowedHost,
     proxy: {
