@@ -427,7 +427,11 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
           }
         }}
         onFocus={() => this.handleMouseEnter()}
-        onBlur={() => this.handleMouseLeave()}
+        onBlur={() => {
+          if (!interactive) {
+            this.handleMouseLeave();
+          }
+        }}
         onMouseEnter={() => this.handleMouseEnter()}
         onMouseLeave={() => this.handleMouseLeave()}
         ref={this.triggerNode}>
