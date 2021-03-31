@@ -1,5 +1,18 @@
 # Changelog
 
+## [4.5.1] (March 31, 2021)
+
+- Allow to press Ctrl-A or Command-A to select all torrents
+- Enlarge width of "Torrent Details" modal
+- Bug fixes:
+  - Fix multi-file "Move torrents" of rTorrent (XMLRPC)
+  - Don't close the notification panel when a button is clicked
+- New translations
+  - Czech, thanks to @brezinajn
+  - Italian, thanks to @gmcinalli
+  - Korean, thanks to @Kiina and @m4ximuel
+- Bump dependencies
+
 ## [4.5.0] (March 14, 2021)
 
 - Reannounce. Typically torrent clients do that automatically, but in some cases you may want to do it manually. It is available as a context menu action.
@@ -420,3 +433,4 @@ Other changes:
 [4.4.0]: https://github.com/jesec/flood/compare/v4.3.1...v4.4.0
 [4.4.1]: https://github.com/jesec/flood/compare/v4.4.0...v4.4.1
 [4.5.0]: https://github.com/jesec/flood/compare/v4.4.1...v4.5.0
+[4.5.1]: https://github.com/jesec/flood/compare/v4.5.0...v4.5.1
