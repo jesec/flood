@@ -12,7 +12,8 @@ RUN npm i -g "${PACKAGE}"@"${VERSION}" &&\
 
 # Install runtime dependencies
 RUN apk --no-cache add \
-    mediainfo
+    mediainfo \
+    tini
 
 # Create "download" user
 RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
@@ -24,4 +25,5 @@ USER download
 EXPOSE 3000
 
 # Flood
-ENTRYPOINT ["flood", "--host=0.0.0.0"]
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["flood", "--host=0.0.0.0"]
