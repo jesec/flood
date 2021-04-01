@@ -6,6 +6,7 @@ WORKDIR /root
 
 # Install Flood and dependencies to /bin
 RUN mkdir -p /root/sysroot/bin
+
 COPY ./artifacts artifacts
 RUN if [[ `uname -m` == "aarch64" ]]; \
     then mv artifacts/flood-linux-arm64 flood; \
@@ -13,7 +14,12 @@ RUN if [[ `uname -m` == "aarch64" ]]; \
     then mv artifacts/flood-linux-x64 flood; \
     fi
 RUN mv flood /root/sysroot/bin/flood
+
 COPY --from=busybox /bin/busybox_DF /root/sysroot/bin/df
+
+RUN apk --no-cache add tini-static
+RUN cp /sbin/tini-static /root/sysroot/bin/tini
+
 RUN chmod 0555 /root/sysroot/bin/*
 
 # Create 1001:1001 user
@@ -33,7 +39,8 @@ USER 1001:1001
 EXPOSE 3000
 
 # Flood
-ENTRYPOINT ["flood", "--host=0.0.0.0"]
+ENV FLOOD_OPTION_HOST="0.0.0.0"
+ENTRYPOINT ["/bin/tini", "--", "flood"]
 
 # rtorrent-flood image
 FROM jesec/rtorrent:master as rtorrent
@@ -43,4 +50,4 @@ FROM flood as rtorrent-flood
 COPY --from=rtorrent / /
 
 # Flood with managed rTorrent daemon
-ENTRYPOINT ["flood", "--host=0.0.0.0", "--rtorrent"]
+ENV FLOOD_OPTION_RTORRENT="true"
