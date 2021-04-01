@@ -5,12 +5,8 @@ FROM jesec/rtorrent:$RTORRENT_VERSION as rtorrent
 
 FROM jesec/flood:$FLOOD_VERSION as flood
 
-ENV FLOOD_OPTION_HOST="0.0.0.0"
-ENV FLOOD_OPTION_PORT="3000"
-ENV FLOOD_OPTION_RTORRENT="true"
-
 # Install rTorrent
 COPY --from=rtorrent / /
 
 # Flood with managed rTorrent daemon
-ENTRYPOINT ["/sbin/tini", "--", "flood"]
+ENV FLOOD_OPTION_RTORRENT="true"
