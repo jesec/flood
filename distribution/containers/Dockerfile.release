@@ -21,7 +21,6 @@ RUN adduser -h /home/download -s /sbin/nologin --disabled-password download
 # Run as "download" user
 USER download
 
-ENV HOME=/home/download
 ENV FLOOD_OPTION_HOST="0.0.0.0"
 ENV FLOOD_OPTION_PORT="3000"
 
