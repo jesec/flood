@@ -5,11 +5,10 @@ FROM jesec/rtorrent:$RTORRENT_VERSION as rtorrent
 
 FROM jesec/flood:$FLOOD_VERSION as flood
 
-ENV \
-    HOME=/home/download \
-    FLOOD_OPTION_HOST="0.0.0.0" \
-    FLOOD_OPTION_PORT="3000" \
-    FLOOD_OPTION_RTORRENT="true"
+ENV HOME=/home/download
+ENV FLOOD_OPTION_HOST="0.0.0.0"
+ENV FLOOD_OPTION_PORT="3000"
+ENV FLOOD_OPTION_RTORRENT="true"
 
 # Install rTorrent
 COPY --from=rtorrent / /

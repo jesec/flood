@@ -29,10 +29,9 @@ COPY --from=build /root/sysroot /
 COPY --from=build /sbin/tini /sbin/tini
 
 # Run as 1001:1001 user
-ENV \
-    HOME=/home/download \
-    FLOOD_OPTION_HOST="0.0.0.0" \
-    FLOOD_OPTION_PORT="3000"
+ENV HOME=/home/download
+ENV FLOOD_OPTION_HOST="0.0.0.0"
+ENV FLOOD_OPTION_PORT="3000"
 USER 1001:1001
 
 # Expose port 3000
@@ -51,11 +50,10 @@ COPY --from=rtorrent / /
 # Install tini
 COPY --from=build /sbin/tini /sbin/tini
 
-ENV \
-    HOME=/home/download \
-    FLOOD_OPTION_HOST="0.0.0.0" \
-    FLOOD_OPTION_PORT="3000" \
-    FLOOD_OPTION_RTORRENT="true"
+ENV HOME=/home/download
+ENV FLOOD_OPTION_HOST="0.0.0.0"
+ENV FLOOD_OPTION_PORT="3000"
+ENV FLOOD_OPTION_RTORRENT="true"
 
 # Flood with managed rTorrent daemon
 ENTRYPOINT ["/sbin/tini", "--", "flood"]
