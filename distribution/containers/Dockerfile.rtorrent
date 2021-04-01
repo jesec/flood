@@ -15,5 +15,4 @@ ENV \
 COPY --from=rtorrent / /
 
 # Flood with managed rTorrent daemon
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["flood"]
+ENTRYPOINT ["/sbin/tini", "--", "flood"]

@@ -39,8 +39,7 @@ USER 1001:1001
 EXPOSE 3000
 
 # Flood
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["flood"]
+ENTRYPOINT ["/sbin/tini", "--", "flood"]
 
 # rtorrent-flood image
 FROM jesec/rtorrent:master as rtorrent
@@ -59,5 +58,4 @@ ENV \
     FLOOD_OPTION_RTORRENT="true"
 
 # Flood with managed rTorrent daemon
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["flood"]
+ENTRYPOINT ["/sbin/tini", "--", "flood"]
