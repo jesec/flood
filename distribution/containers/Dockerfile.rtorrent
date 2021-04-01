@@ -9,5 +9,4 @@ FROM jesec/flood:$FLOOD_VERSION as flood
 COPY --from=rtorrent / /
 
 # Flood with managed rTorrent daemon
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["flood", "--host=0.0.0.0", "--rtorrent"]
+ENTRYPOINT ["/sbin/tini", "--", "flood", "--host=0.0.0.0", "--rtorrent"]

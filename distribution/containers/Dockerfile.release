@@ -25,5 +25,4 @@ USER download
 EXPOSE 3000
 
 # Flood
-ENTRYPOINT ["/sbin/tini", "--"]
-CMD ["flood", "--host=0.0.0.0"]
+ENTRYPOINT ["/sbin/tini", "--", "flood", "--host=0.0.0.0"]
