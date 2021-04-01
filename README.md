@@ -97,6 +97,10 @@ Note that you have to let Docker know which port should be exposed (e.g. `-p 300
 
 Don't forget to pay attention to `flood`'s environment variables like `FLOOD_OPTION_PORT` and `FLOOD_OPTION_ALLOWEDPATH` (e.g. `-e FLOOD_OPTION_PORT="3000"`) To view more available environment options see [here](https://github.com/jesec/flood/blob/master/config.ts).
 
+It is also possible to pass in arguments to the docker run command (e.g. `docker run jesec/flood flood --port="3000"`)
+
+Don't forget to pay attention to `flood`'s arguments like `--port` and `--allowedpath`.
+
 Checkout [Run Flood (and torrent clients) in containers](https://github.com/jesec/flood/discussions/120) discussion.
 
 Filesystem parts in [Troubleshooting](https://github.com/jesec/flood#troubleshooting) are especially important for containers.
