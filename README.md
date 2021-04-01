@@ -95,7 +95,7 @@ To upgrade, `docker pull jesec/flood`.
 
 Note that you have to let Docker know which port should be exposed (e.g. `-p 3000:3000`) and folder mapping (e.g. `-v /data:/data`).
 
-Don't forget to pay attention to `flood`'s arguments like `--port` and `--allowedpath`.
+Don't forget to pay attention to `flood`'s environment variables like `FLOOD_OPTION_PORT` and `FLOOD_OPTION_ALLOWEDPATH` (e.g. `-e FLOOD_OPTION_PORT="3000"`) To view more available environment options see [here](https://github.com/jesec/flood/blob/master/config.ts).
 
 Checkout [Run Flood (and torrent clients) in containers](https://github.com/jesec/flood/discussions/120) discussion.
 

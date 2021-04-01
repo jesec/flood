@@ -4,6 +4,11 @@ FROM node:alpine
 ARG PACKAGE=flood
 ARG VERSION=latest
 
+ENV \
+    HOME=/home/download \
+    FLOOD_OPTION_HOST="0.0.0.0" \
+    FLOOD_OPTION_PORT="3000"
+
 # Get specified version from npm
 RUN npm i -g "${PACKAGE}"@"${VERSION}" &&\
     node --version &&\
@@ -25,4 +30,5 @@ USER download
 EXPOSE 3000
 
 # Flood
-ENTRYPOINT ["/sbin/tini", "--", "flood", "--host=0.0.0.0"]
+ENTRYPOINT ["/sbin/tini", "--", 
+CMD ["flood"]
