@@ -23,10 +23,19 @@ const value = (value: XMLRPCValue): string => {
   if (Array.isArray(value)) {
     type = 'array';
     value = data(value);
-  } else if (Number.isInteger(value)) type = 'i4';
-  else if (typeof value === 'number') type = 'double';
-  else if (typeof value === 'string') type = 'string';
-  else if (typeof value === 'boolean') {
+  } else if (Number.isInteger(value)) {
+    type = 'i4';
+  } else if (typeof value === 'number') {
+    type = 'double';
+  } else if (typeof value === 'string') {
+    type = 'string';
+    value = value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  } else if (typeof value === 'boolean') {
     type = 'boolean';
     value = value ? '1' : '0';
   } else if (value instanceof Date) {
