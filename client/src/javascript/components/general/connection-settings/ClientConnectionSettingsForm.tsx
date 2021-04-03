@@ -1,5 +1,6 @@
-import {FC, ReactNode, useEffect, useState} from 'react';
+import {FC, ReactNode, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
+import {usePrevious} from 'react-use';
 
 import {FormRow, Select, SelectItem} from '@client/ui';
 
@@ -23,9 +24,11 @@ const ClientConnectionSettingsForm: FC<ClientConnectionSettingsFormProps> = ({
   const {i18n} = useLingui();
   const [selectedClient, setSelectedClient] = useState<ClientConnectionSettings['client']>(DEFAULT_SELECTION);
 
-  useEffect(() => {
+  const prevSelectedClient = usePrevious(selectedClient);
+
+  if (selectedClient !== prevSelectedClient) {
     onSettingsChange(null);
-  }, [selectedClient, onSettingsChange]);
+  }
 
   let settingsForm: ReactNode = null;
   switch (selectedClient) {
