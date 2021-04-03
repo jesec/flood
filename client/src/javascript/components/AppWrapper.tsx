@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import {css} from '@emotion/css';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react';
@@ -11,6 +12,7 @@ import ClientStatusStore from '../stores/ClientStatusStore';
 import UIStore from '../stores/UIStore';
 import WindowTitle from './general/WindowTitle';
 import LoadingOverlay from './general/LoadingOverlay';
+import LogoutButton from './sidebar/LogoutButton';
 
 interface AppWrapperProps {
   children: ReactNode;
@@ -42,6 +44,7 @@ const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
     overlay = (
       <div className="application__loading-overlay">
         <div className="application__entry-barrier">
+          <LogoutButton className={css({position: 'absolute', left: '5px', top: '5px'})} />
           <ClientConnectionInterruption />
         </div>
       </div>

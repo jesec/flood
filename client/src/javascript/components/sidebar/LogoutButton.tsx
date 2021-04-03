@@ -1,3 +1,4 @@
+import {ClassNamesArg, cx} from '@emotion/css';
 import {FC} from 'react';
 import {useLingui} from '@lingui/react';
 
@@ -7,7 +8,11 @@ import {Logout} from '@client/ui/icons';
 
 import Tooltip from '../general/Tooltip';
 
-const LogoutButton: FC = () => {
+interface LogoutButtonProps {
+  className?: ClassNamesArg;
+}
+
+const LogoutButton: FC<LogoutButtonProps> = ({className}: LogoutButtonProps) => {
   const {i18n} = useLingui();
 
   if (ConfigStore.authMethod === 'none') {
@@ -23,12 +28,21 @@ const LogoutButton: FC = () => {
         })
       }
       position="bottom"
-      wrapperClassName="sidebar__action sidebar__action--last
-          sidebar__icon-button sidebar__icon-button--interactive
-          tooltip__wrapper">
+      wrapperClassName={cx(
+        'sidebar__action',
+        'sidebar__action--last',
+        'sidebar__icon-button',
+        'sidebar__icon-button--interactive',
+        'tooltip__wrapper',
+        className,
+      )}>
       <Logout />
     </Tooltip>
   );
+};
+
+LogoutButton.defaultProps = {
+  className: undefined,
 };
 
 export default LogoutButton;
