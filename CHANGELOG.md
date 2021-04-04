@@ -1,5 +1,14 @@
 # Changelog
 
+## [4.5.2] (April 4, 2021)
+
+- Add "Log Out" button to connection interrupted page
+- Add "tini" init process to containers (#260, @onedr0p)
+- Bug fixes:
+  - No longer fails to add some URLs to rTorrent with XMLRPC
+  - Fix `Connection settings can not be empty.` after submit
+- Bump dependencies
+
 ## [4.5.1] (March 31, 2021)
 
 - Allow to press Ctrl-A or Command-A to select all torrents
@@ -434,3 +443,4 @@ Other changes:
 [4.4.1]: https://github.com/jesec/flood/compare/v4.4.0...v4.4.1
 [4.5.0]: https://github.com/jesec/flood/compare/v4.4.1...v4.5.0
 [4.5.1]: https://github.com/jesec/flood/compare/v4.5.0...v4.5.1
+[4.5.2]: https://github.com/jesec/flood/compare/v4.5.1...v4.5.2
