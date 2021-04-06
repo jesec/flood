@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {FC, memo} from 'react';
+import {FC} from 'react';
 import {observer} from 'mobx-react';
 import {Trans, useLingui} from '@lingui/react';
 
@@ -48,19 +48,19 @@ const ICONS: Partial<Record<TorrentListColumn, JSX.Element>> = {
   upTotal: <UploadThick />,
 } as const;
 
-const BooleanCell: FC<{value: boolean}> = memo(({value}: {value: boolean}) =>
+const BooleanCell: FC<{value: boolean}> = observer(({value}: {value: boolean}) =>
   value ? <CheckmarkThick className="torrent__detail__icon torrent__detail__icon--checkmark" /> : null,
 );
 
-const DateCell: FC<{date: number}> = memo(({date}: {date: number}) => {
+const DateCell: FC<{date: number}> = observer(({date}: {date: number}) => {
   const {i18n} = useLingui();
 
   return <span>{i18n.date(new Date(date * 1000))}</span>;
 });
 
-const ETACell: FC<{eta: number}> = memo(({eta}: {eta: number}) => (eta ? <Duration value={eta} /> : null));
+const ETACell: FC<{eta: number}> = observer(({eta}: {eta: number}) => (eta ? <Duration value={eta} /> : null));
 
-const PeerCell: FC<{peersConnected: number; totalPeers: number}> = memo(
+const PeerCell: FC<{peersConnected: number; totalPeers: number}> = observer(
   ({peersConnected, totalPeers}: {peersConnected: number; totalPeers: number}) => {
     const {i18n} = useLingui();
 
@@ -81,13 +81,13 @@ const PeerCell: FC<{peersConnected: number; totalPeers: number}> = memo(
   },
 );
 
-const RatioCell: FC<{ratio: number}> = memo(({ratio}: {ratio: number}) => {
+const RatioCell: FC<{ratio: number}> = observer(({ratio}: {ratio: number}) => {
   const {i18n} = useLingui();
 
   return <span>{i18n.number(ratio, {maximumFractionDigits: 2})}</span>;
 });
 
-const TagsCell: FC<{tags: string[]}> = memo(({tags}: {tags: string[]}) => (
+const TagsCell: FC<{tags: string[]}> = observer(({tags}: {tags: string[]}) => (
   <ul className="torrent__tags tag">
     {tags.map((tag) => (
       <li className="torrent__tag" key={tag}>
@@ -97,7 +97,7 @@ const TagsCell: FC<{tags: string[]}> = memo(({tags}: {tags: string[]}) => (
   </ul>
 ));
 
-const TrackersCell: FC<{trackers: string[]}> = memo(({trackers}: {trackers: string[]}) => (
+const TrackersCell: FC<{trackers: string[]}> = observer(({trackers}: {trackers: string[]}) => (
   <span>{trackers.join(', ')}</span>
 ));
 
