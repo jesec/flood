@@ -11,6 +11,7 @@
     cursor: pointer;
     font-weight: 400;
     padding: 3px 20px;
+    text-align: start;
     transition: color 0.25s;
 
     &:focus-visible,
@@ -36,6 +37,20 @@
       }
     }
 
+    &--heading {
+      cursor: default;
+      font-size: 0.8em;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+
+      &,
+      &:focus-visible,
+      &:hover {
+        @include theme('color', 'sidebar-filter--foreground--header');
+      }
+    }
+
     .icon {
       display: inline-block;
       @include theme('fill', 'sidebar-filter--foreground');
@@ -50,23 +65,5 @@
   .badge {
     @include theme('background', 'sidebar-filter--count--background');
     @include theme('color', 'sidebar-filter--count--foreground');
-  }
-}
-
-.sidebar-filter {
-  &__item {
-    &--heading {
-      cursor: default;
-      font-size: 0.8em;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-
-      &,
-      &:focus-visible,
-      &:hover {
-        @include theme('color', 'sidebar-filter--foreground--header');
-      }
-    }
   }
 }
