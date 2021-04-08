@@ -314,7 +314,7 @@
   "torrents.properties.creation.date": "Creado en",
   "torrents.properties.date.added": "Agregado en",
   "torrents.properties.directory": "Ubicación",
-  "torrents.properties.download.speed": "Velocidad de Descarga",
+  "torrents.properties.download.speed": "Vel. Descarga",
   "torrents.properties.download.total": "Descargado",
   "torrents.properties.free.disk.space": "Espacio Libre en Disco",
   "torrents.properties.ignore.schedule": "Ignorar planificador",
@@ -327,7 +327,7 @@
   "torrents.properties.tags": "Etiquetas",
   "torrents.properties.tracker.message": "Mensaje de Tracker",
   "torrents.properties.trackers": "Rastreadores",
-  "torrents.properties.upload.speed": "Velocidad de Subida",
+  "torrents.properties.upload.speed": "Vel. Subida",
   "torrents.properties.upload.total": "Cant. Subida",
   "torrents.remove": "Eliminar Torrents",
   "torrents.remove.are.you.sure": "¿Seguro que quiere eliminar {count, plural, =0 {cero torrents} =1 {un torrent} other {# torrents}}?",
@@ -342,7 +342,7 @@
   "torrents.set.trackers.loading.trackers": "Cargando rastreadores...",
   "torrents.sort.title": "Ordenar Por",
   "unit.size.gigabyte": "GB",
-  "unit.size.megabyte": "Mb",
+  "unit.size.megabyte": "MB",
   "unit.time.hour": "h",
   "unit.time.year": "año"
 }
