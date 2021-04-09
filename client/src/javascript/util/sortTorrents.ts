@@ -1,4 +1,4 @@
-import sort from 'fast-sort';
+import {sort} from 'fast-sort';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {TorrentProperties} from '@shared/types/Torrent';

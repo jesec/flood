@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {FC, ReactNode, ReactNodeArray, useEffect, useRef, useState} from 'react';
-import sort from 'fast-sort';
+import {sort} from 'fast-sort';
 import {Trans} from '@lingui/react';
 import {useKeyPressEvent} from 'react-use';
 

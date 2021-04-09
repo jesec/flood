@@ -1,5 +1,5 @@
 import {computed, extendObservable, makeAutoObservable, runInAction} from 'mobx';
-import sort from 'fast-sort';
+import {sort} from 'fast-sort';
 
 export interface Alert {
   id: string;

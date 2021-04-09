@@ -1,7 +1,7 @@
 import {css} from '@emotion/react';
 import {darken, lighten, rgba, saturate} from 'polished';
 import {FC, memo, ReactNodeArray, useEffect, useRef, useState} from 'react';
-import sort from 'fast-sort';
+import {sort} from 'fast-sort';
 import {Trans} from '@lingui/react';
 import {useKey} from 'react-use';
 
