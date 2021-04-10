@@ -47,6 +47,7 @@ $torrent-details--tags--foreground: #1a2028;
     font-weight: inherit;
     margin-top: 0;
     margin-bottom: $spacing--x-small;
+    overflow-wrap: anywhere;
   }
 
   &__sub-heading {
