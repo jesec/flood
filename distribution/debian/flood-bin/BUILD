@@ -10,7 +10,7 @@ PACKAGE = "flood"
 
 RECOMMENDS = ["mediainfo"]
 
-VERSION = "4.5.2-0"
+VERSION = "4.5.3-0"
 
 genrule(
     name = "flood-pkg-arm64",

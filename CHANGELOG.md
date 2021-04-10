@@ -1,5 +1,19 @@
 # Changelog
 
+## [4.5.3] (April 10, 2021)
+
+- Bug fixes:
+  - Tags need a F5 refresh to be displayed after being set (#266)
+  - Torrents with long names get truncated in torrent detail modal (#273)
+  - qBittorrent: allow .torrent download with new session directory path (#275, @angristan)
+- New translations
+  - French, thanks to @foXaCe
+  - Hungarian, thanks to @m3r3nix
+  - Japanese, thanks to @Kiina
+  - Korean, thanks to @Kiina
+  - Spanish, thanks to @Shutruk
+- Bump dependencies
+
 ## [4.5.2] (April 4, 2021)
 
 - Add "Log Out" button to connection interrupted page
@@ -444,3 +458,4 @@ Other changes:
 [4.5.0]: https://github.com/jesec/flood/compare/v4.4.1...v4.5.0
 [4.5.1]: https://github.com/jesec/flood/compare/v4.5.0...v4.5.1
 [4.5.2]: https://github.com/jesec/flood/compare/v4.5.1...v4.5.2
+[4.5.3]: https://github.com/jesec/flood/compare/v4.5.2...v4.5.3
