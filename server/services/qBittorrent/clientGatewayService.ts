@@ -1,3 +1,4 @@
+import fs from 'fs';
 import {homedir} from 'os';
 import parseTorrent from 'parse-torrent';
 import path from 'path';
@@ -430,7 +431,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       case 'darwin':
         return {path: path.join(homedir(), '/Library/Application Support/qBittorrent/BT_backup'), case: 'lower'};
       default:
-        return {path: path.join(homedir(), '/.local/share/data/qBittorrent/BT_backup'), case: 'lower'};
+        const legacyPath = path.join(homedir(), '/.local/share/data/qBittorrent/BT_backup');
+        if (fs.existsSync(legacyPath)) {
+          return {path: legacyPath, case: 'lower'};
+        } else {
+          return {path: path.join(homedir(), '/.local/share/qBittorrent/BT_backup'), case: 'lower'};
+        }
     }
   }
 
