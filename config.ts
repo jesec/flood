@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
-import yargs from 'yargs';
+import yargs from 'yargs/yargs';
 
 import {configSchema} from '@shared/schema/Config';
 
@@ -12,7 +12,7 @@ import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSett
 
 import {version} from './package.json';
 
-const {argv} = yargs
+const {argv} = yargs()
   .env('FLOOD_OPTION_')
   .option('baseuri', {
     default: '/',

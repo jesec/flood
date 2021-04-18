@@ -12,7 +12,7 @@ import type {Language} from '@client/constants/Languages';
 import type {LocaleConfig} from '@client/util/detectLocale';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import {messages as EN} from '@lingui/loader!./strings/en.json';
+import {messages as EN} from '@lingui/loader!./strings/en.json?raw-lingui';
 
 const messagesCache: Partial<Record<Exclude<Language, 'auto'>, Record<string, string[]>>> = {en: EN};
 
@@ -23,7 +23,7 @@ i18n.activate('en');
 async function loadMessages(locale: Exclude<Language, 'auto'>) {
   const {messages} = await import(
     /* webpackChunkName: 'i18n' */
-    `@lingui/loader!./strings/${locale}.json`
+    `@lingui/loader!./strings/${locale}.json?raw-lingui`
   );
 
   messagesCache[locale] = messages;

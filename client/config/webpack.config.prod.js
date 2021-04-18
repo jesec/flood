@@ -105,6 +105,11 @@ module.exports = {
           name: 'static/media/[name].[hash:8].[ext]',
         },
       },
+      // https://github.com/lingui/js-lingui/issues/1048
+      {
+        resourceQuery: /raw-lingui/,
+        type: 'javascript/auto',
+      },
     ],
   },
   entry: paths.appIndex,
