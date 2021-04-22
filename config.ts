@@ -12,7 +12,7 @@ import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSett
 
 import {version} from './package.json';
 
-const {argv} = yargs()
+const {argv} = yargs(process.argv.slice(2))
   .env('FLOOD_OPTION_')
   .option('baseuri', {
     default: '/',
