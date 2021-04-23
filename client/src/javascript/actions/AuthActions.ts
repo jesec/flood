@@ -32,6 +32,8 @@ const AuthActions = {
           data.username = parsed.name;
           data.password = parsed.pass;
 
+          AuthStore.handleHTTPBasicSuccess(data);
+
           return { hasHTTPBasicAuth: true };
         },
       (error: AxiosError) => {

@@ -144,7 +144,7 @@ const AuthForm: FC<AuthFormProps> = ({mode, hasHTTPBasicAuth}: AuthFormProps) =>
                 placeholder="Password"
                 id="password"
                 type="password"
-                defaultValue={isAutoLogin ? httpAuthCredentials.password : ''}
+                defaultValue={isAutoLogin  ? httpAuthCredentials.password : ''}
                 disabled={isAutoLogin}
                 autoComplete={isLoginMode ? 'current-password' : 'new-password'}
               />
