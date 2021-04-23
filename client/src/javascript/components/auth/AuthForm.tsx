@@ -53,7 +53,7 @@ const AuthForm: FC<AuthFormProps> = ({mode, hasHTTPBasicAuth}: AuthFormProps) =>
     password: AuthStore.getHTTPAuthPassword(),
   }
 
-  if (isAutoLogin) {
+  if (isAutoLogin && isLoginMode) {
     submitLoginForm(httpAuthCredentials)
   }
 
