@@ -94,14 +94,14 @@ router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmi
  * @return {HTTPBasicAuthResponse} 200 - success response - application/json
  */
 router.get<unknown, unknown>('/httpbasicauth', (req, res) => {
-  if (config.authMethod === 'httpbasic') {
-    return res.status(422).json({message: 'Wrong auth method. Validation error.'});
+  if (config.authMethod !== 'httpbasic') {
+    return res.status(422).json({message: 'Validation error.'});
     return;
   }
 
   const parsedResult = authHTTPBasicCredentialsSchema(req);
   if (!parsedResult.success) {
-    return res.status(422).json({message: 'Cannot parse auth. Validation error.'});
+    return res.status(422).json({message: 'Validation error.'});
     return;
   }
 
