@@ -16,7 +16,6 @@ import FloodActions from './FloodActions';
 import SettingActions from './SettingActions';
 
 const {baseURI} = ConfigStore;
-const baseURI = ConfigStore.getBaseURI();
 const httpBasicAuth = require('basic-auth')
 
 const AuthActions = {

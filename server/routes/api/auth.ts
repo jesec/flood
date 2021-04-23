@@ -1,7 +1,6 @@
 import express from 'express';
 import passport from 'passport';
 import rateLimit from 'express-rate-limit';
-import * as z from 'zod';
 
 import type {Response} from 'express';
 
