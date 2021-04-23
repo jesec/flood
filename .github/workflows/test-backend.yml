@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [14, 15]
+        node: [14, 16]
       fail-fast: false
 
     steps:
@@ -38,7 +38,7 @@ jobs:
       - run: npm test || npm test || npm test
 
       - uses: codecov/codecov-action@v1
-        if: matrix.node == 15
+        if: matrix.node == 16
 
       - run: |
           sudo apt-get remove --purge -y rtorrent

@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [15]
+        node: [16]
         check: [check-source-formatting, check-types, lint]
 
     steps:
