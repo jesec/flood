@@ -251,7 +251,9 @@ router.use('/verify', (req, res, next) => {
       if (config.authMethod === 'httpbasic') {
         const parsedResult = authHTTPBasicAuthenticationSchema(req);
         if (!parsedResult.success || res.cookie.toString().indexOf('jwt') === -1) {
-          res.status(403).send('Wait.');
+          res.status(403).json({
+            configs: preloadConfigs,
+          });
           return;
         }
       }
