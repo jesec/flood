@@ -275,6 +275,10 @@ if (argv.noauth || argv.auth === 'none') {
   authMethod = 'none';
 }
 
+if (argv.httpauth) {
+  authMethod = 'httpbasic';
+}
+
 let allowedPaths: string[] = [];
 if (typeof argv.allowedpath === 'string') {
   allowedPaths = allowedPaths.concat(argv.allowedpath.split(','));

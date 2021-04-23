@@ -95,7 +95,7 @@ router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmi
  * @return {HTTPBasicAuthResponse} 200 - success response - application/json
  */
 router.get<unknown, unknown>('/httpbasicauth', (req, res) => {
-  if (!config.enableUsersHTTPBasicAuthHandler) {
+  if (config.authMethod === 'httpbasic') {
     return res.status(422).json({message: 'Validation error.'});
     return;
   }
@@ -129,7 +129,7 @@ router.post<unknown, unknown, AuthAuthenticationOptions>(
     }
 
     let parsedResult = authAuthenticationSchema.safeParse(null);
-    if (config.enableUsersHTTPBasicAuthHandler) {
+    if (config.authMethod === 'httpbasic') {
       parsedResult = authHTTPBasicAuthenticationSchema(req);
     } else {
       parsedResult = authAuthenticationSchema.safeParse(req.body);
@@ -249,7 +249,14 @@ router.use('/verify', (req, res, next) => {
       res.json(response);
     },
     handleSubsequentUser: () => {
-<<<<<<< HEAD
+      if (config.authMethod === 'httpbasic') {
+        const parsedResult = authHTTPBasicAuthenticationSchema(req);
+        if (!parsedResult.success || res.cookie.toString().indexOf('jwt') === -1) {
+          res.status(403).send('Wait.');
+          return;
+        }
+      }
+
       passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
         if (err || !user) {
           res.status(401).json({
@@ -261,17 +268,6 @@ router.use('/verify', (req, res, next) => {
         req.user = user;
         next();
       })(req, res, next);
-=======
-      if (config.enableUsersHTTPBasicAuthHandler) {
-        const parsedResult = authHTTPBasicAuthenticationSchema(req);
-        if (!parsedResult.success || res.cookie.toString().indexOf('jwt') === -1) {
-          res.status(403).send('Wait.');
-          return;
-        }
-      }
-
-      passport.authenticate('jwt', {session: false})(req, res, next);
->>>>>>> f45aa7c4... HTTP_BASIC_AUTH_HANDLER
     },
   });
 });
