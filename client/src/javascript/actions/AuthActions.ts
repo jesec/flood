@@ -32,11 +32,6 @@ const AuthActions = {
           data.username = parsed.name;
           data.password = parsed.pass;
 
-          AppDispatcher.dispatchServerAction({
-            type: 'AUTH_HTTPBASIC_SUCCESS',
-            data,
-          })
-
           return { hasHTTPBasicAuth: true };
         },
       (error: AxiosError) => {
