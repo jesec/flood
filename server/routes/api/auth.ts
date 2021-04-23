@@ -250,7 +250,7 @@ router.use('/verify', (req, res, next) => {
     handleSubsequentUser: () => {
       if (config.authMethod === 'httpbasic') {
         const parsedResult = authHTTPBasicAuthenticationSchema(req);
-        if (!parsedResult.success || req.cookie.toString().indexOf('jwt') === -1) {
+        if (!parsedResult.success || req.header("cookie").toString().indexOf('jwt') === -1) {
           res.status(403).json({
             configs: preloadConfigs,
           });
