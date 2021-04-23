@@ -17,11 +17,11 @@ class AuthStore {
   users: Array<Credentials> = [];
   optimisticUsers: Array<{username: string}> = [];
   httpAuthUser: {
-    username: string | null;
-    password: string | null;
+    username: string;
+    password: string;
   } = {
-    username: null,
-    password: null,
+    username: '',
+    password: '',
   };
 
   currentUser: {
@@ -38,14 +38,21 @@ class AuthStore {
     makeAutoObservable(this);
   }
 
+  getHTTPAuthUsername(): this['httpAuthUser']['username'] {
+    return this.httpAuthUser.username;
+  }
+
+  getHTTPAuthPassword(): this['httpAuthUser']['password'] {
+    return this.httpAuthUser.password;
+  }
 
   handleCreateUserSuccess({username}: {username: Credentials['username']}): void {
     this.optimisticUsers.push({username});
   }
 
   handleHTTPBasicSuccess(response: AuthHTTPBasicResponse): void {
-    this.httpAuthUser.username = response.username;
-    this.httpAuthUser.password = response.password;
+    this.httpAuthUser.username = response.username ? response.username : '';
+    this.httpAuthUser.password = response.password ? response.password : '';
   }
 
   handleListUsersSuccess(nextUserList: Array<Credentials>): void {

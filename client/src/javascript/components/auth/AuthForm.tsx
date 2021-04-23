@@ -11,6 +11,7 @@ import type {Credentials} from '@shared/schema/Auth';
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 import ClientConnectionSettingsForm from '../general/connection-settings/ClientConnectionSettingsForm';
+import AuthStore from '@client/stores/AuthStore';
 
 type LoginFormData = Pick<Credentials, 'username' | 'password'>;
 type RegisterFormData = Pick<Credentials, 'username' | 'password'>;
@@ -20,7 +21,7 @@ interface AuthFormProps {
   hasHTTPBasicAuth: boolean;
 }
 
-const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
+const AuthForm: FC<AuthFormProps> = ({mode, hasHTTPBasicAuth}: AuthFormProps) => {
   const {i18n} = useLingui();
   const formRef = useRef<Form>(null);
   const clientConnectionSettingsRef = useRef<ClientConnectionSettings | null>(null);
@@ -28,6 +29,33 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const isLoginMode = mode === 'login';
+  const isAutoLogin = hasHTTPBasicAuth;
+
+  let submitLoginForm = (credentials: Pick<Credentials, 'username' | 'password'>) => {
+    AuthActions.authenticate({
+      username: credentials.username,
+      password: credentials.password,
+    })
+      .then(() => {
+        setIsSubmitting(false);
+        history.replace('overview');
+      })
+      .catch((error: Error) => {
+        setIsSubmitting(false);
+        setErrorMessage(error.message);
+        history.replace('login');
+      });
+
+  }
+
+  if (isAutoLogin) {
+    const credentials = {
+      username: AuthStore.getHTTPAuthUsername(),
+      password: AuthStore.getHTTPAuthPassword(),
+    }
+
+    submitLoginForm(credentials)
+  }
 
   return (
     <div className="application__entry-barrier">
@@ -39,7 +67,6 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
             setIsSubmitting(true);
 
             const formData = submission.formData as Partial<LoginFormData> | Partial<RegisterFormData>;
-
             if (formData.username == null || formData.username === '') {
               setIsSubmitting(false);
               setErrorMessage({id: 'auth.error.username.empty'});
@@ -54,20 +81,7 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
 
             if (isLoginMode) {
               const credentials = formData as LoginFormData;
-
-              AuthActions.authenticate({
-                username: credentials.username,
-                password: credentials.password,
-              })
-                .then(() => {
-                  setIsSubmitting(false);
-                  history.replace('overview');
-                })
-                .catch((error: Error) => {
-                  setIsSubmitting(false);
-                  setErrorMessage(error.message);
-                  history.replace('login');
-                });
+              submitLoginForm(credentials)
             } else {
               const config = formData as RegisterFormData;
 

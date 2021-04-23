@@ -55,6 +55,7 @@ const FloodApp: FC = observer(() => {
       },
     ]);
 
+
     AuthActions.verify().then(
       ({initialUser}: {initialUser?: boolean}): void => {
         if (initialUser) {
@@ -64,7 +65,14 @@ const FloodApp: FC = observer(() => {
         }
       },
       (): void => {
-        history.replace('login');
+        AuthActions.httpbasicauth().then(
+          ({hasHTTPBasicAuth}: {hasHTTPBasicAuth: boolean}): void => {
+            if (hasHTTPBasicAuth) {
+              history.replace('autologin');
+            } else {
+              history.replace('login');
+            }
+          })
       },
     );
   }, []);
@@ -88,6 +96,7 @@ const FloodApp: FC = observer(() => {
             <AppWrapper className={ConfigStore.isPreferDark ? 'dark' : undefined}>
               <Switch>
                 <Route path="/login" component={Login} />
+                <Route path="/autologin" component={Autologin} />
                 <Route path="/overview" component={Overview} />
                 <Route path="/register" component={Register} />
               </Switch>
