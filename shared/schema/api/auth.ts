@@ -17,9 +17,7 @@ export const authAuthenticationSchema = credentialsSchema.pick({
 export type AuthAuthenticationOptions = Required<zodInfer<typeof authAuthenticationSchema>>;
 
 export const authHTTPBasicAuthenticationSchema = (req: any) => {
-  console.error(4, JSON.stringify(req.header('authorization'), null, 2))
   const parsed = httpBasicAuth.parse(req.header('authorization'));
-  console.error(3, JSON.stringify(parsed, null, 2))
   if (parsed === undefined) {
     return authAuthenticationSchema.safeParse({})
   }

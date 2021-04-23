@@ -17,6 +17,7 @@ import history from './util/history';
 import '../sass/style.scss';
 
 const Autologin = lazy(() => import(/* webpackPrefetch: true */ './routes/Autologin'));
+const Autoregister = lazy(() => import(/* webpackPrefetch: true */ './routes/Autoregister'));
 const Login = lazy(() => import(/* webpackPrefetch: true */ './routes/Login'));
 const Overview = lazy(() => import(/* webpackPreload: true */ './routes/Overview'));
 const Register = lazy(() => import(/* webpackPrefetch: true */ './routes/Register'));
@@ -59,7 +60,14 @@ const FloodApp: FC = observer(() => {
     AuthActions.verify().then(
       ({initialUser}: {initialUser?: boolean}): void => {
         if (initialUser) {
-          history.replace('register');
+          AuthActions.httpbasicauth().then(
+            ({hasHTTPBasicAuth}: {hasHTTPBasicAuth: boolean}): void => {
+              if (hasHTTPBasicAuth) {
+                history.replace('autoregister');
+              } else {
+                history.replace('register');
+              }
+            })
         } else {
           history.replace('overview');
         }
@@ -99,6 +107,7 @@ const FloodApp: FC = observer(() => {
                 <Route path="/autologin" component={Autologin} />
                 <Route path="/overview" component={Overview} />
                 <Route path="/register" component={Register} />
+                <Route path="/autoregister" component={Autoregister} />
               </Switch>
             </AppWrapper>
           </QueryParamProvider>

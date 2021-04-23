@@ -5,7 +5,7 @@ import ApplicationView from '@client/components/layout/ApplicationView';
 
 const LoginView: FC = () => (
   <ApplicationView modifier="auth-form">
-    <AuthForm mode="register" />
+    <AuthForm hasHTTPBasicAuth={false} mode="register" />
   </ApplicationView>
 );
 

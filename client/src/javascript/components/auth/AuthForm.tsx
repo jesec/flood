@@ -48,13 +48,13 @@ const AuthForm: FC<AuthFormProps> = ({mode, hasHTTPBasicAuth}: AuthFormProps) =>
 
   }
 
-  if (isAutoLogin) {
-    const credentials = {
-      username: AuthStore.getHTTPAuthUsername(),
-      password: AuthStore.getHTTPAuthPassword(),
-    }
+  const httpAuthCredentials = {
+    username: AuthStore.getHTTPAuthUsername(),
+    password: AuthStore.getHTTPAuthPassword(),
+  }
 
-    submitLoginForm(credentials)
+  if (isAutoLogin) {
+    submitLoginForm(httpAuthCredentials)
   }
 
   return (
@@ -131,13 +131,21 @@ const AuthForm: FC<AuthFormProps> = ({mode, hasHTTPBasicAuth}: AuthFormProps) =>
               </FormRow>
             ) : null}
             <FormRow>
-              <Textbox placeholder="Username" id="username" autoComplete="username" />
+              <Textbox
+                placeholder="Username"
+                id="username"
+                defaultValue={isAutoLogin ? httpAuthCredentials.username : ''}
+                disabled={isAutoLogin}
+                autoComplete="username"
+              />
             </FormRow>
             <FormRow>
               <Textbox
                 placeholder="Password"
                 id="password"
                 type="password"
+                defaultValue={isAutoLogin ? httpAuthCredentials.password : ''}
+                disabled={isAutoLogin}
                 autoComplete={isLoginMode ? 'current-password' : 'new-password'}
               />
             </FormRow>
