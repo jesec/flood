@@ -70,22 +70,22 @@ export const setTrackers = async (torrent: string, trackers: Array<string>): Pro
   return true;
 };
 
-export const setCompleted = async (torrent: string, destination: string, isBasePath = true): Promise<boolean> => {
-  const torrentData = await openAndDecodeTorrent(torrent);
+export const setCompleted = async (torrent: Buffer, destination: string, isBasePath = true): Promise<Buffer | null> => {
+  const torrentData: TorrentFile | null = await bencode.decode(torrent);
 
   if (torrentData == null) {
-    return false;
+    return null;
   }
 
   const {info} = torrentData;
   if (info == null) {
-    return false;
+    return null;
   }
 
   const contentSize = await getContentSize(info);
   const pieceSize = Number(info['piece length']);
   if (contentSize === 0 || pieceSize == null || pieceSize === 0) {
-    return false;
+    return null;
   }
 
   const contentPathsWithLengths: Array<[string, number]> = [];
@@ -103,7 +103,7 @@ export const setCompleted = async (torrent: string, destination: string, isBaseP
       ]);
     });
   } else {
-    return false;
+    return null;
   }
 
   const completedFileResumeTree: LibTorrentResume['files'] = contentPathsWithLengths.map((contentPathWithLength) => {
@@ -143,10 +143,8 @@ export const setCompleted = async (torrent: string, destination: string, isBaseP
   });
 
   try {
-    fs.writeFileSync(torrent, bencode.encode(torrentDataWithResume));
+    return bencode.encode(torrentDataWithResume);
   } catch {
-    return false;
+    return null;
   }
-
-  return true;
 };
