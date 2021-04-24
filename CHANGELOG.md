@@ -1,5 +1,15 @@
 # Changelog
 
+## [4.5.4] (April 24, 2021)
+
+- Bug fixes:
+  - "Torrents with long names get truncated in torrent detail modal (#273)" on Safari
+- New translations
+  - Chinese (Simplified), thanks to @coxde
+  - Dutch, thanks to John Willemsen
+  - Italian, thanks to Simone De Nadai
+- Bump dependencies
+
 ## [4.5.3] (April 10, 2021)
 
 - Bug fixes:
@@ -459,3 +469,4 @@ Other changes:
 [4.5.1]: https://github.com/jesec/flood/compare/v4.5.0...v4.5.1
 [4.5.2]: https://github.com/jesec/flood/compare/v4.5.1...v4.5.2
 [4.5.3]: https://github.com/jesec/flood/compare/v4.5.2...v4.5.3
+[4.5.4]: https://github.com/jesec/flood/compare/v4.5.3...v4.5.4
