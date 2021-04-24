@@ -1,8 +1,8 @@
+import axios, {AxiosError, AxiosResponse} from 'axios';
 import fs from 'fs';
 import geoip from 'geoip-country';
 import {moveSync} from 'fs-extra';
 import path from 'path';
-import parseTorrent from 'parse-torrent';
 import sanitize from 'sanitize-filename';
 
 import type {
@@ -32,14 +32,14 @@ import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
-import {fetchURLToTempFile, saveBufferToTempFile} from '../../util/tempFileUtil';
 import {setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import {
   encodeTags,
+  getAddTorrentPropertiesCalls,
   getTorrentETAFromProperties,
   getTorrentPercentCompleteFromProperties,
   getTorrentStatusFromProperties,
@@ -70,29 +70,63 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<string[]> {
-    const torrentPaths = await Promise.all(
-      files.map(async (file) => {
-        return saveBufferToTempFile(Buffer.from(file, 'base64'), 'torrent', {
-          mode: 0o664,
-        });
-      }),
-    );
+    const {hasLoadThrow} = await this.availableMethodCalls;
 
-    return this.addTorrentsByURL({
-      urls: torrentPaths as [string, ...string[]],
-      cookies: {},
+    await fs.promises.mkdir(destination, {recursive: true});
+
+    let processedFiles: string[] = files;
+    if (isCompleted) {
+      processedFiles = (
+        await Promise.all(
+          files.map(async (file) => {
+            return (await setCompleted(Buffer.from(file, 'base64'), destination, isBasePath))?.toString('base64');
+          }),
+        )
+      ).filter((file) => file) as string[];
+    }
+
+    if (!processedFiles[0]) {
+      throw new Error();
+    }
+
+    const additionalCalls = getAddTorrentPropertiesCalls({
       destination,
-      tags,
       isBasePath,
-      isCompleted,
       isSequential,
       isInitialSeeding,
-      start,
+      tags,
     });
+
+    const result: string[] = [];
+
+    if (hasLoadThrow && this.clientRequestManager.isJSONCapable) {
+      await this.clientRequestManager
+        .methodCall('system.multicall', [
+          processedFiles.map((file) => ({
+            methodName: start ? 'load.start_throw' : 'load.throw',
+            params: ['', `data:applications/x-bittorrent;base64,${file}`, ...additionalCalls],
+          })),
+        ])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+        .then((response: Array<Array<string | number>>) => {
+          const hashes = response.flat(2).filter((value) => typeof value === 'string') as string[];
+          result.push(...hashes);
+        });
+    } else {
+      await Promise.all(
+        processedFiles.map(async (file) => {
+          await this.clientRequestManager
+            .methodCall(start ? 'load.raw_start' : 'load.raw', ['', Buffer.from(file, 'base64'), ...additionalCalls])
+            .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+        }),
+      );
+    }
+
+    return result;
   }
 
   async addTorrentsByURL({
-    urls,
+    urls: inputUrls,
     cookies,
     destination,
     tags,
@@ -104,111 +138,98 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
     const {hasLoadThrow} = await this.availableMethodCalls;
 
-    // validate filesystem access
-    if (!hasLoadThrow) {
-      await this.clientRequestManager
-        .methodCall('import', [
-          '',
-          await saveBufferToTempFile(Buffer.from('#'), 'rc', {
-            mode: 0o664,
-          }),
-        ])
-        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
-        .catch(() => {
-          throw accessDeniedError();
-        });
-    }
-
     await fs.promises.mkdir(destination, {recursive: true});
 
-    const torrentPaths: Array<string> = (
-      await Promise.all(
-        urls.map(async (url) => {
-          if (/^(http|https):\/\//.test(url)) {
-            const domain = url.split('/')[2];
+    const files: string[] = [];
+    const urls: string[] = [];
 
-            // TODO: properly handle error and let frontend know
-            const torrentPath = await fetchURLToTempFile(url, cookies[domain], 'torrent').catch((e) =>
-              console.error(e),
-            );
+    await Promise.all(
+      inputUrls.map(async (url) => {
+        if (url.startsWith('http:') || url.startsWith('https:')) {
+          const domain = url.split('/')[2];
 
-            if (typeof torrentPath === 'string') {
-              return torrentPath;
-            }
+          const file = await axios({
+            method: 'GET',
+            url,
+            responseType: 'arraybuffer',
+            headers: cookies?.[domain]
+              ? {
+                  Cookie: cookies[domain].join('; ').concat(';'),
+                }
+              : undefined,
+          }).then(
+            (res: AxiosResponse) => res.data,
+            (e: AxiosError) => console.error(e),
+          );
 
-            return '';
+          if (file instanceof Buffer) {
+            files.push(file.toString('base64'));
           }
 
-          return url;
-        }),
-      )
-    ).filter((torrentPath) => torrentPath !== '');
+          return;
+        }
 
-    const torrentHashes: string[] = (
-      await Promise.all(
-        torrentPaths.map(
-          async (torrentPath): Promise<string | undefined> => {
-            try {
-              if (torrentPath.startsWith('magnet:')) {
-                return parseTorrent(torrentPath).infoHash;
-              }
+        if (fs.existsSync(url) && isAllowedPath(path.resolve(url))) {
+          try {
+            files.push(fs.readFileSync(url).toString('base64'));
+            return;
+          } catch {
+            // do nothing.
+          }
+        }
 
-              if (!fs.existsSync(torrentPath)) {
-                return;
-              }
+        urls.push(url);
+      }),
+    );
 
-              if (isCompleted) {
-                await setCompleted(torrentPath, destination, isBasePath);
-              }
-
-              return parseTorrent(fs.readFileSync(torrentPath)).infoHash;
-            } catch {
-              return;
-            }
-          },
-        ),
-      )
-    ).filter((torrentHash) => torrentHash) as string[];
-
-    if (torrentHashes[0] == null) {
+    if (!files[0] && !urls[0]) {
       throw new Error();
     }
 
-    const methodCalls: MultiMethodCalls = torrentPaths.map((torrentPath) => {
-      const additionalCalls: Array<string> = ['d.tied_to_file.set='];
+    const result: string[] = [];
 
-      additionalCalls.push(`${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destination}"`);
-
-      if (tags.length > 0) {
-        additionalCalls.push(`d.custom1.set="${encodeTags(tags)}"`);
+    if (urls[0]) {
+      let methodName: string;
+      if (hasLoadThrow) {
+        methodName = start ? 'load.start_throw' : 'load.throw';
+      } else {
+        methodName = start ? 'load.start' : 'load.normal';
       }
 
-      additionalCalls.push(`d.custom.set=addtime,${Math.round(Date.now() / 1000)}`);
+      await this.clientRequestManager
+        .methodCall('system.multicall', [
+          urls.map((url) => ({
+            methodName,
+            params: [
+              '',
+              url,
+              ...getAddTorrentPropertiesCalls({destination, isBasePath, isSequential, isInitialSeeding, tags}),
+            ],
+          })),
+        ])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+        .then((response: Array<Array<string | number>>) => {
+          const hashes = response.flat(2).filter((value) => typeof value === 'string') as string[];
+          result.push(...hashes);
+        });
+    }
 
-      if (isSequential) {
-        additionalCalls.push(`d.down.sequential.set=1`);
-      }
+    if (files[0]) {
+      await this.addTorrentsByFile({
+        files: files as [string, ...string[]],
+        destination,
+        tags,
+        isBasePath,
+        isCompleted,
+        isSequential,
+        isInitialSeeding,
+        start,
+      }).then((hashes) => {
+        result.push(...hashes);
+      });
+    }
 
-      if (isInitialSeeding) {
-        additionalCalls.push(`d.connection_seed.set=initial_seed`);
-      }
-
-      return hasLoadThrow
-        ? {
-            methodName: start ? 'load.start_throw' : 'load.throw',
-            params: ['', torrentPath, ...additionalCalls],
-          }
-        : {
-            methodName: start ? 'load.start' : 'load.normal',
-            params: ['', torrentPath, ...additionalCalls],
-          };
-    }, []);
-
-    await this.clientRequestManager
-      .methodCall('system.multicall', [methodCalls])
-      .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
-
-    return torrentHashes;
+    return result;
   }
 
   async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {

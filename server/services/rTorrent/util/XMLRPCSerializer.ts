@@ -6,14 +6,7 @@
 // Copyright (C) 2021, Contributors to the Flood project
 // Imported and modified for the Flood project
 
-export type XMLRPCValue =
-  | Array<XMLRPCValue>
-  | {[key: string]: XMLRPCValue}
-  | number
-  | string
-  | boolean
-  | Date
-  | ArrayBuffer;
+export type XMLRPCValue = Array<XMLRPCValue> | {[key: string]: XMLRPCValue} | number | string | boolean | Date | Buffer;
 
 const value = (value: XMLRPCValue): string => {
   if (value == null) return '';
@@ -41,9 +34,9 @@ const value = (value: XMLRPCValue): string => {
   } else if (value instanceof Date) {
     type = 'dateTime.iso8601';
     value = value.toISOString();
-  } else if (value instanceof ArrayBuffer) {
+  } else if (value instanceof Buffer) {
     type = 'base64';
-    value = btoa(String.fromCharCode(...new Uint8Array(value)));
+    value = value.toString('base64');
   } else {
     type = 'struct';
     value = members(value);

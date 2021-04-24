@@ -1,7 +1,8 @@
 import truncateTo from './numberUtils';
 
-import type {TorrentProperties} from '../../../../shared/types/Torrent';
-import type {TorrentStatus} from '../../../../shared/constants/torrentStatusMap';
+import type {AddTorrentByFileOptions} from '@shared/schema/api/torrents';
+import type {TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 export const getTorrentETAFromProperties = (
   processingTorrentProperties: Record<string, unknown>,
@@ -90,4 +91,34 @@ export const encodeTags = (tags: TorrentProperties['tags']): string => {
       return accumulator;
     }, [])
     .join(',');
+};
+
+export const getAddTorrentPropertiesCalls = ({
+  destination,
+  isBasePath,
+  isSequential,
+  isInitialSeeding,
+  tags,
+}: Required<
+  Pick<AddTorrentByFileOptions, 'destination' | 'isBasePath' | 'isSequential' | 'isInitialSeeding' | 'tags'>
+>) => {
+  const result: Array<string> = [
+    'd.tied_to_file.set=',
+    `d.custom.set=addtime,${Math.round(Date.now() / 1000)}`,
+    `${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destination}"`,
+  ];
+
+  if (tags.length > 0) {
+    result.push(`d.custom1.set="${encodeTags(tags)}"`);
+  }
+
+  if (isSequential) {
+    result.push(`d.down.sequential.set=1`);
+  }
+
+  if (isInitialSeeding) {
+    result.push(`d.connection_seed.set=initial_seed`);
+  }
+
+  return result;
 };
