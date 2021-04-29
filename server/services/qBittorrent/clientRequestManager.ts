@@ -4,7 +4,7 @@ import FormData from 'form-data';
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 import type {QBittorrentAppPreferences} from './types/QBittorrentAppMethods';
-import type {QBittorrentSyncTorrentPeers} from './types/QBittorrentSyncMethods';
+import type {QBittorrentSyncTorrentPeers, QBittorrentTorrentPeers} from './types/QBittorrentSyncMethods';
 import type {QBittorrentTransferInfo} from './types/QBittorrentTransferMethods';
 import type {
   QBittorrentTorrentContentPriority,
@@ -19,6 +19,16 @@ class ClientRequestManager {
   private connectionSettings: QBittorrentConnectionSettings;
   private apiBase: string;
   private authCookie?: Promise<string | undefined>;
+
+  private syncRids: {
+    torrentPeers: Record<string, Promise<number>>;
+  } = {
+    torrentPeers: {},
+  };
+
+  private syncStates: {
+    torrentPeers: Record<string, QBittorrentTorrentPeers>;
+  } = {torrentPeers: {}};
 
   async authenticate(connectionSettings = this.connectionSettings): Promise<string | undefined> {
     const {url, username, password} = connectionSettings;
@@ -128,16 +138,49 @@ class ClientRequestManager {
       .then((json) => json.data);
   }
 
-  async syncTorrentPeers(hash: string): Promise<QBittorrentSyncTorrentPeers> {
-    return axios
-      .get(`${this.apiBase}/sync/torrentPeers`, {
-        params: {
-          hash,
-          rid: 0,
-        },
-        headers: {Cookie: await this.authCookie},
-      })
-      .then((json) => json.data.peers);
+  async syncTorrentPeers(hash: string): Promise<QBittorrentTorrentPeers> {
+    const Cookie = await this.authCookie;
+
+    this.syncRids.torrentPeers[hash] = (this.syncRids.torrentPeers[hash] ?? Promise.resolve(0)).then((rid) =>
+      axios
+        .get<QBittorrentSyncTorrentPeers>(`${this.apiBase}/sync/torrentPeers`, {
+          params: {
+            hash,
+            rid,
+          },
+          headers: {Cookie},
+        })
+        .then(({data}) => {
+          const {peers = {}, peers_removed = [], rid: newRid = 0} = data;
+
+          if (this.syncStates.torrentPeers[hash] == null) {
+            this.syncStates.torrentPeers[hash] = {};
+          }
+
+          Object.keys(peers).forEach((ip_and_port) => {
+            this.syncStates.torrentPeers[hash][ip_and_port] = {
+              ...this.syncStates.torrentPeers[hash][ip_and_port],
+              ...peers[ip_and_port],
+            };
+          });
+
+          peers_removed.forEach((ip_and_port) => {
+            delete this.syncStates.torrentPeers[hash][ip_and_port];
+          });
+
+          return newRid;
+        }),
+    );
+
+    try {
+      await this.syncRids.torrentPeers[hash];
+    } catch (e) {
+      delete this.syncRids.torrentPeers[hash];
+      delete this.syncStates.torrentPeers[hash];
+      throw e;
+    }
+
+    return this.syncStates.torrentPeers[hash];
   }
 
   async torrentsPause(hashes: Array<string>): Promise<void> {

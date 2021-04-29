@@ -1,4 +1,4 @@
-export interface QBittorrentSyncTorrentPeer {
+export interface QBittorrentTorrentPeer {
   client: string;
   connection: string;
   country: string;
@@ -16,6 +16,12 @@ export interface QBittorrentSyncTorrentPeer {
   relevance: number;
 }
 
-export type QBittorrentSyncTorrentPeers = {
-  [ip_and_port: string]: QBittorrentSyncTorrentPeer;
-};
+export interface QBittorrentSyncTorrentPeers {
+  rid: number;
+  peers?: {
+    [ip_and_port: string]: QBittorrentTorrentPeer;
+  };
+  peers_removed?: string[];
+}
+
+export type QBittorrentTorrentPeers = Exclude<QBittorrentSyncTorrentPeers['peers'], undefined>;
