@@ -39,15 +39,12 @@ class ClientRequestManager {
 
   private syncRids: {
     mainData: Promise<number>;
-    torrentPeers: Record<string, Promise<number>>;
   } = {
     mainData: Promise.resolve(0),
-    torrentPeers: {},
   };
 
   private syncStates: {
     mainData: QBittorrentMainData;
-    torrentPeers: Record<string, QBittorrentTorrentPeers>;
   } = {
     mainData: {
       categories: {},
@@ -56,7 +53,6 @@ class ClientRequestManager {
       torrents: {},
       trackers: {},
     },
-    torrentPeers: {},
   };
 
   async authenticate(connectionSettings = this.connectionSettings): Promise<string | undefined> {
@@ -266,48 +262,15 @@ class ClientRequestManager {
   }
 
   async syncTorrentPeers(hash: string): Promise<QBittorrentTorrentPeers> {
-    const Cookie = await this.authCookie;
-
-    this.syncRids.torrentPeers[hash] = (this.syncRids.torrentPeers[hash] ?? Promise.resolve(0)).then((rid) =>
-      axios
-        .get<QBittorrentSyncTorrentPeers>(`${this.apiBase}/sync/torrentPeers`, {
-          params: {
-            hash,
-            rid,
-          },
-          headers: {Cookie},
-        })
-        .then(({data}) => {
-          const {peers = {}, peers_removed = [], rid: newRid = 0} = data;
-
-          if (this.syncStates.torrentPeers[hash] == null) {
-            this.syncStates.torrentPeers[hash] = {};
-          }
-
-          Object.keys(peers).forEach((ip_and_port) => {
-            this.syncStates.torrentPeers[hash][ip_and_port] = {
-              ...this.syncStates.torrentPeers[hash][ip_and_port],
-              ...peers[ip_and_port],
-            };
-          });
-
-          peers_removed.forEach((ip_and_port) => {
-            delete this.syncStates.torrentPeers[hash][ip_and_port];
-          });
-
-          return newRid;
-        }),
-    );
-
-    try {
-      await this.syncRids.torrentPeers[hash];
-    } catch (e) {
-      delete this.syncRids.torrentPeers[hash];
-      delete this.syncStates.torrentPeers[hash];
-      throw e;
-    }
-
-    return this.syncStates.torrentPeers[hash];
+    return axios
+      .get<QBittorrentSyncTorrentPeers>(`${this.apiBase}/sync/torrentPeers`, {
+        params: {
+          hash,
+          rid: 0,
+        },
+        headers: {Cookie: await this.authCookie},
+      })
+      .then(({data}) => data.peers as QBittorrentTorrentPeers);
   }
 
   async torrentsPause(hashes: Array<string>): Promise<void> {
