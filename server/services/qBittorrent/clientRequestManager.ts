@@ -4,7 +4,12 @@ import FormData from 'form-data';
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 import type {QBittorrentAppPreferences} from './types/QBittorrentAppMethods';
-import type {QBittorrentSyncTorrentPeers, QBittorrentTorrentPeers} from './types/QBittorrentSyncMethods';
+import type {
+  QBittorrentMainData,
+  QBittorrentSyncMainData,
+  QBittorrentSyncTorrentPeers,
+  QBittorrentTorrentPeers,
+} from './types/QBittorrentSyncMethods';
 import type {QBittorrentTransferInfo} from './types/QBittorrentTransferMethods';
 import type {
   QBittorrentTorrentContentPriority,
@@ -15,20 +20,44 @@ import type {
   QBittorrentTorrentTrackers,
 } from './types/QBittorrentTorrentsMethods';
 
+const EMPTY_SERVER_STATE = {
+  dl_info_speed: 0,
+  dl_info_data: 0,
+  up_info_speed: 0,
+  up_info_data: 0,
+  dl_rate_limit: 0,
+  up_rate_limit: 0,
+  dht_nodes: 0,
+  connection_status: 'disconnected',
+} as const;
+
 class ClientRequestManager {
   private connectionSettings: QBittorrentConnectionSettings;
   private apiBase: string;
   private authCookie?: Promise<string | undefined>;
+  private isMainDataPending = false;
 
   private syncRids: {
+    mainData: Promise<number>;
     torrentPeers: Record<string, Promise<number>>;
   } = {
+    mainData: Promise.resolve(0),
     torrentPeers: {},
   };
 
   private syncStates: {
+    mainData: QBittorrentMainData;
     torrentPeers: Record<string, QBittorrentTorrentPeers>;
-  } = {torrentPeers: {}};
+  } = {
+    mainData: {
+      categories: {},
+      server_state: EMPTY_SERVER_STATE,
+      tags: [],
+      torrents: {},
+      trackers: {},
+    },
+    torrentPeers: {},
+  };
 
   async authenticate(connectionSettings = this.connectionSettings): Promise<string | undefined> {
     const {url, username, password} = connectionSettings;
@@ -136,6 +165,104 @@ class ClientRequestManager {
         headers: {Cookie: await this.authCookie},
       })
       .then((json) => json.data);
+  }
+
+  async syncMainData(): Promise<QBittorrentMainData> {
+    const Cookie = await this.authCookie;
+
+    if (this.isMainDataPending == false) {
+      this.isMainDataPending = true;
+      this.syncRids.mainData = this.syncRids.mainData.then((rid) =>
+        axios
+          .get<QBittorrentSyncMainData>(`${this.apiBase}/sync/maindata`, {
+            params: {
+              rid,
+            },
+            headers: {Cookie},
+          })
+          .then(({data}) => {
+            const {
+              rid: newRid = 0,
+              full_update = false,
+              categories = {},
+              categories_removed = [],
+              server_state = EMPTY_SERVER_STATE,
+              tags = [],
+              tags_removed = [],
+              torrents = {},
+              torrents_removed = [],
+              trackers = {},
+              trackers_removed = [],
+            } = data;
+
+            if (full_update) {
+              this.syncStates.mainData = {
+                categories,
+                server_state,
+                tags,
+                torrents,
+                trackers,
+              };
+            } else {
+              // categories
+              Object.keys(categories).forEach((category) => {
+                this.syncStates.mainData.categories[category] = {
+                  ...this.syncStates.mainData.categories[category],
+                  ...categories[category],
+                };
+              });
+
+              categories_removed.forEach((category) => {
+                delete this.syncStates.mainData.categories[category];
+              });
+
+              // tags
+              this.syncStates.mainData.tags.push(...tags);
+              this.syncStates.mainData.tags = this.syncStates.mainData.tags.filter(
+                (tag) => !tags_removed.includes(tag),
+              );
+
+              // torrents
+              Object.keys(torrents).forEach((torrent) => {
+                this.syncStates.mainData.torrents[torrent] = {
+                  ...this.syncStates.mainData.torrents[torrent],
+                  ...torrents[torrent],
+                };
+              });
+
+              torrents_removed.forEach((torrent) => {
+                delete this.syncStates.mainData.torrents[torrent];
+              });
+
+              // trackers
+              Object.keys(trackers).forEach((tracker) => {
+                this.syncStates.mainData.trackers[tracker] = {
+                  ...this.syncStates.mainData.trackers[tracker],
+                  ...trackers[tracker],
+                };
+              });
+
+              trackers_removed.forEach((tracker) => {
+                delete this.syncStates.mainData.trackers[tracker];
+              });
+            }
+
+            return newRid;
+          })
+          .finally(() => {
+            this.isMainDataPending = false;
+          }),
+      );
+    }
+
+    try {
+      await this.syncRids.mainData;
+    } catch (e) {
+      this.syncRids.mainData = Promise.resolve(0);
+      throw e;
+    }
+
+    return this.syncStates.mainData;
   }
 
   async syncTorrentPeers(hash: string): Promise<QBittorrentTorrentPeers> {

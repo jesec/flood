@@ -1,3 +1,11 @@
+import {QBittorrentTorrentInfo} from './QBittorrentTorrentsMethods';
+import {QBittorrentTransferInfo} from './QBittorrentTransferMethods';
+
+export interface QBittorrentCategory {
+  name: string;
+  savePath: string;
+}
+
 export interface QBittorrentTorrentPeer {
   client: string;
   connection: string;
@@ -15,6 +23,30 @@ export interface QBittorrentTorrentPeer {
   progress: number;
   relevance: number;
 }
+
+export interface QBittorrentSyncMainData {
+  rid: number;
+  full_update?: boolean;
+  categories?: {
+    [name: string]: QBittorrentCategory;
+  };
+  categories_removed?: string[];
+  server_state?: QBittorrentTransferInfo;
+  tags?: string[];
+  tags_removed?: string[];
+  torrents?: {
+    [hash: string]: QBittorrentTorrentInfo;
+  };
+  torrents_removed?: string[];
+  trackers?: {
+    [url: string]: string[];
+  };
+  trackers_removed: string[];
+}
+
+export type QBittorrentMainData = Required<
+  Pick<QBittorrentSyncMainData, 'categories' | 'server_state' | 'tags' | 'torrents' | 'trackers'>
+>;
 
 export interface QBittorrentSyncTorrentPeers {
   rid: number;
