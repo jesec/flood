@@ -44,8 +44,8 @@ import {TorrentPriority} from '../../../shared/types/Torrent';
 import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 
 class QBittorrentClientGatewayService extends ClientGatewayService {
-  clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
-  cachedProperties: Record<string, Pick<TorrentProperties, 'dateCreated' | 'isPrivate' | 'trackerURIs'>> = {};
+  private clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
+  private cachedProperties: Record<string, Pick<TorrentProperties, 'dateCreated' | 'isPrivate' | 'trackerURIs'>> = {};
 
   async addTorrentsByFile({
     files,
@@ -286,7 +286,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         return this.clientRequestManager
           .torrentsAddTrackers(hash, trackers)
           .then(this.processClientRequestSuccess, this.processClientRequestError)
-          .then(() => delete this.cachedProperties[hash.toUpperCase()]);
+          .then(() => delete this.cachedProperties[hash.toLowerCase()]);
       }),
     ).then(() => undefined);
   }
@@ -332,30 +332,31 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .then(async (infos) => {
         this.emit('PROCESS_TORRENT_LIST_START');
 
+        // qBittorrent can not handle requests in a highly concurrent way.
+        for await (const {hash} of infos) {
+          if (this.cachedProperties[hash] == null) {
+            const properties = await this.clientRequestManager.getTorrentProperties(hash).catch(() => undefined);
+            const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
+
+            if (properties != null && trackers != null && Array.isArray(trackers)) {
+              this.cachedProperties[hash] = {
+                dateCreated: properties?.creation_date,
+                isPrivate: trackers[0]?.msg.includes('is private'),
+                trackerURIs: getDomainsFromURLs(
+                  trackers
+                    .map((tracker) => tracker.url)
+                    .filter((url) => getTorrentTrackerTypeFromURL(url) !== TorrentTrackerType.DHT),
+                ),
+              };
+            }
+          }
+        }
+
         const torrentList: TorrentList = Object.assign(
           {},
           ...(await Promise.all(
             infos.map(async (info) => {
-              const hash = info.hash.toUpperCase();
-
-              if (this.cachedProperties[hash] == null) {
-                const properties = await this.clientRequestManager.getTorrentProperties(hash).catch(() => undefined);
-                const trackers = await this.clientRequestManager.getTorrentTrackers(hash).catch(() => undefined);
-
-                if (properties != null && trackers != null && Array.isArray(trackers)) {
-                  this.cachedProperties[hash] = {
-                    dateCreated: properties?.creation_date,
-                    isPrivate: trackers[0]?.msg.includes('is private'),
-                    trackerURIs: getDomainsFromURLs(
-                      trackers
-                        .map((tracker) => tracker.url)
-                        .filter((url) => getTorrentTrackerTypeFromURL(url) !== TorrentTrackerType.DHT),
-                    ),
-                  };
-                }
-              }
-
-              const {dateCreated = 0, isPrivate = false, trackerURIs = []} = this.cachedProperties[hash] || {};
+              const {dateCreated = 0, isPrivate = false, trackerURIs = []} = this.cachedProperties[info.hash] || {};
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
@@ -365,7 +366,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 downRate: info.dlspeed,
                 downTotal: info.downloaded,
                 eta: info.eta >= 8640000 ? -1 : info.eta,
-                hash,
+                hash: info.hash.toUpperCase(),
                 isPrivate,
                 isInitialSeeding: info.super_seeding,
                 isSequential: info.seq_dl,
