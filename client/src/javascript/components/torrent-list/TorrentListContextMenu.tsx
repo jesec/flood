@@ -132,15 +132,17 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       clickHandler: (e) => {
         e.preventDefault();
 
-        const link = document.createElement('a');
+        TorrentStore.selectedTorrents.forEach((hash) => {
+          const link = document.createElement('a');
 
-        link.download = '';
-        link.href = `${ConfigStore.baseURI}api/torrents/${getLastSelectedTorrent()}/contents/all/data`;
-        link.style.display = 'none';
+          link.download = '';
+          link.href = `${ConfigStore.baseURI}api/torrents/${hash}/contents/all/data`;
+          link.style.display = 'none';
 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        });
       },
     },
     {
