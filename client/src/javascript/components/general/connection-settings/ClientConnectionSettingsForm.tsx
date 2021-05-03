@@ -8,6 +8,7 @@ import {SUPPORTED_CLIENTS} from '@shared/schema/constants/ClientConnectionSettin
 
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
+import DelugeConnectionSettingsForm from './DelugeConnectionSettingsForm';
 import QBittorrentConnectionSettingsForm from './QBittorrentConnectionSettingsForm';
 import RTorrentConnectionSettingsForm from './RTorrentConnectionSettingsForm';
 import TransmissionConnectionSettingsForm from './TransmissionConnectionSettingsForm';
@@ -32,6 +33,9 @@ const ClientConnectionSettingsForm: FC<ClientConnectionSettingsFormProps> = ({
 
   let settingsForm: ReactNode = null;
   switch (selectedClient) {
+    case 'Deluge':
+      settingsForm = <DelugeConnectionSettingsForm onSettingsChange={onSettingsChange} />;
+      break;
     case 'qBittorrent':
       settingsForm = <QBittorrentConnectionSettingsForm onSettingsChange={onSettingsChange} />;
       break;

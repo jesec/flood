@@ -1,1 +1,1 @@
-export const SUPPORTED_CLIENTS = ['qBittorrent', 'rTorrent', 'Transmission'] as const;
+export const SUPPORTED_CLIENTS = ['Deluge', 'qBittorrent', 'rTorrent', 'Transmission'] as const;
