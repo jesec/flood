@@ -3,9 +3,11 @@ import type {infer as zodInfer} from 'zod';
 
 const delugeConnectionSettingsSchema = object({
   client: literal('Deluge'),
-  type: literal('web'),
+  type: literal('rpc'),
   version: literal(1),
-  url: string().url(),
+  host: string(),
+  port: number(),
+  username: string(),
   password: string(),
 });
 
@@ -60,6 +62,7 @@ const transmissionConnectionSettingsSchema = object({
 export type TransmissionConnectionSettings = zodInfer<typeof transmissionConnectionSettingsSchema>;
 
 export const clientConnectionSettingsSchema = union([
+  delugeConnectionSettingsSchema,
   qBittorrentConnectionSettingsSchema,
   rTorrentConnectionSettingsSchema,
   transmissionConnectionSettingsSchema,

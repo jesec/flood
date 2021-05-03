@@ -8,6 +8,7 @@ import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
 import TorrentService from './torrentService';
 
+import DelugeClientGatewayService from './Deluge/clientGatewayService';
 import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService';
 import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
 import TransmissionClientGatewayService from './Transmission/clientGatewayService';
@@ -26,6 +27,8 @@ const serviceInstances: Record<string, ServiceInstances> = {};
 
 const newClientGatewayService = (user: UserInDatabase): ClientGatewayService => {
   switch (user.client.client) {
+    case 'Deluge':
+      return new DelugeClientGatewayService(user);
     case 'qBittorrent':
       return new QBittorrentClientGatewayService(user);
     case 'rTorrent':
