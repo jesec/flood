@@ -3,13 +3,13 @@ import type TypedEmitter from 'typed-emitter';
 
 import type {UserInDatabase} from '@shared/schema/Auth';
 
-import type {UserServices} from '.';
+import type {ServiceInstances} from '.';
 
 class BaseService<E = unknown> extends (EventEmitter as {
   new <T>(): TypedEmitter<T>;
 })<E> {
   user: UserInDatabase;
-  services?: UserServices;
+  services?: ServiceInstances;
 
   constructor(user: UserInDatabase) {
     super();
@@ -28,7 +28,7 @@ class BaseService<E = unknown> extends (EventEmitter as {
     this.user = user;
   }
 
-  updateServices(service?: UserServices) {
+  updateServices(service?: ServiceInstances) {
     this.services = service;
     this.onServicesUpdated();
   }

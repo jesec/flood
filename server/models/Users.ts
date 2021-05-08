@@ -6,7 +6,7 @@ import path from 'path';
 
 import {AccessLevel} from '../../shared/schema/constants/Auth';
 import config from '../../config';
-import services from '../services';
+import {bootstrapServicesForUser} from '../services';
 
 import type {ClientConnectionSettings} from '../../shared/schema/ClientConnectionSettings';
 import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
@@ -50,7 +50,7 @@ class Users {
 
   async bootstrapServicesForAllUsers(): Promise<void> {
     return this.listUsers()
-      .then((users) => Promise.all(users.map((user) => services.bootstrapServicesForUser(user))))
+      .then((users) => Promise.all(users.map((user) => bootstrapServicesForUser(user))))
       .then(() => undefined);
   }
 

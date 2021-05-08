@@ -23,6 +23,7 @@ import type {TorrentListSummary, TorrentProperties} from '@shared/types/Torrent'
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
+import type {UserInDatabase} from '@shared/schema/Auth';
 
 import BaseService from '../BaseService';
 import config from '../../../config';
@@ -36,7 +37,7 @@ interface ClientGatewayServiceEvents {
 
 abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
   errorCount = 0;
-  retryTimer: NodeJS.Timeout | null = null;
+  retryTimer?: NodeJS.Timeout | null = null;
 
   /**
    * Adds torrents by file
@@ -213,6 +214,14 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
 
   abstract testGateway(): Promise<void>;
 
+  constructor(user: UserInDatabase) {
+    super(user);
+
+    this.testGateway()
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .catch(() => undefined);
+  }
+
   destroyTimer() {
     if (this.retryTimer != null) {
       clearTimeout(this.retryTimer);
@@ -222,11 +231,12 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
 
   destroy() {
     this.destroyTimer();
+    this.retryTimer = undefined;
     super.destroy();
   }
 
   startTimer() {
-    if (this.retryTimer == null) {
+    if (this.retryTimer === null) {
       this.retryTimer = setTimeout(() => {
         this.errorCount += 1;
         this.destroyTimer();

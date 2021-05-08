@@ -1,12 +1,14 @@
 import type {Request, Response, NextFunction} from 'express';
 
-import services from '../services';
+import {getAllServices} from '../services';
+
+import type {ServiceInstances} from '../services';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
-      services: ReturnType<typeof services['getAllServices']>;
+      services: ServiceInstances;
     }
   }
 }
@@ -20,7 +22,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     return failedInitializeResponse(res);
   }
 
-  req.services = services.getAllServices(req.user);
+  req.services = getAllServices(req.user);
   if (req.services?.clientGatewayService == null) {
     return failedInitializeResponse(res);
   }

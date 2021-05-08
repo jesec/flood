@@ -1,6 +1,5 @@
 import type {UserInDatabase} from '@shared/schema/Auth';
 
-import BaseService from './BaseService';
 import ClientGatewayService from './interfaces/clientGatewayService';
 import FeedService from './feedService';
 import HistoryService from './historyService';
@@ -13,171 +12,65 @@ import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService'
 import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
 import TransmissionClientGatewayService from './Transmission/clientGatewayService';
 
-type ClientGatewayServiceImpl = typeof ClientGatewayService & {
-  new (...args: ConstructorParameters<typeof BaseService>):
-    | QBittorrentClientGatewayService
-    | RTorrentClientGatewayService
-    | TransmissionClientGatewayService;
-};
+export interface ServiceInstances {
+  clientGatewayService: ClientGatewayService;
+  feedService: FeedService;
+  historyService: HistoryService;
+  notificationService: NotificationService;
+  settingService: SettingService;
+  taxonomyService: TaxonomyService;
+  torrentService: TorrentService;
+}
 
-type Service =
-  | ClientGatewayServiceImpl
-  | typeof FeedService
-  | typeof HistoryService
-  | typeof NotificationService
-  | typeof SettingService
-  | typeof TaxonomyService
-  | typeof TorrentService;
+const serviceInstances: Record<string, ServiceInstances> = {};
 
-const serviceInstances: {
-  clientGatewayServices: Record<string, ClientGatewayService>;
-  feedServices: Record<string, FeedService>;
-  historyServices: Record<string, HistoryService>;
-  notificationServices: Record<string, NotificationService>;
-  settingServices: Record<string, SettingService>;
-  taxonomyServices: Record<string, TaxonomyService>;
-  torrentServices: Record<string, TorrentService>;
-} = {
-  clientGatewayServices: {},
-  feedServices: {},
-  historyServices: {},
-  notificationServices: {},
-  settingServices: {},
-  taxonomyServices: {},
-  torrentServices: {},
-};
-
-type ServiceMap = keyof typeof serviceInstances;
-
-const getService = <S extends Service>(servicesMap: ServiceMap, Service: S, user: UserInDatabase): InstanceType<S> => {
-  // if a service instance for user exists, return it
-  const serviceInstance = serviceInstances[servicesMap][user._id];
-  if (serviceInstance != null) {
-    return serviceInstance as InstanceType<S>;
-  }
-
-  // otherwise, create a new service instance and return it
-  const newInstance = new Service(user) as InstanceType<S>;
-  serviceInstances[servicesMap][user._id] = newInstance;
-  return newInstance;
-};
-
-const getClientGatewayService = (user: UserInDatabase): ClientGatewayService | undefined => {
+const newClientGatewayService = (user: UserInDatabase): ClientGatewayService => {
   switch (user.client.client) {
     case 'qBittorrent':
-      return getService('clientGatewayServices', QBittorrentClientGatewayService, user);
+      return new QBittorrentClientGatewayService(user);
     case 'rTorrent':
-      return getService('clientGatewayServices', RTorrentClientGatewayService, user);
+      return new RTorrentClientGatewayService(user);
     case 'Transmission':
-      return getService('clientGatewayServices', TransmissionClientGatewayService, user);
-    default:
-      return undefined;
+      return new TransmissionClientGatewayService(user);
   }
 };
 
-const getFeedService = (user: UserInDatabase): FeedService => {
-  return getService('feedServices', FeedService, user);
+export const getAllServices = ({_id}: UserInDatabase) => {
+  return serviceInstances[_id];
 };
 
-const getHistoryService = (user: UserInDatabase): HistoryService => {
-  return getService('historyServices', HistoryService, user);
-};
-
-const getNotificationService = (user: UserInDatabase): NotificationService => {
-  return getService('notificationServices', NotificationService, user);
-};
-
-const getSettingService = (user: UserInDatabase): SettingService => {
-  return getService('settingServices', SettingService, user);
-};
-
-const getTaxonomyService = (user: UserInDatabase): TaxonomyService => {
-  return getService('taxonomyServices', TaxonomyService, user);
-};
-
-const getTorrentService = (user: UserInDatabase): TorrentService => {
-  return getService('torrentServices', TorrentService, user);
-};
-
-const getAllServices = (user: UserInDatabase) =>
-  ({
-    get clientGatewayService(): ClientGatewayService {
-      return getClientGatewayService(user) as ClientGatewayService;
-    },
-
-    get feedService() {
-      return getFeedService(user);
-    },
-
-    get historyService() {
-      return getHistoryService(user);
-    },
-
-    get notificationService() {
-      return getNotificationService(user);
-    },
-
-    get settingService() {
-      return getSettingService(user);
-    },
-
-    get taxonomyService() {
-      return getTaxonomyService(user);
-    },
-
-    get torrentService() {
-      return getTorrentService(user);
-    },
-  } as const);
-
-const createUserServices = (user: UserInDatabase): boolean => {
-  return !Object.values(getAllServices(user)).some((service) => {
-    if (service == null) {
-      return true;
-    }
-    return false;
+export const destroyUserServices = (userId: UserInDatabase['_id']) => {
+  const userServiceInstances = serviceInstances[userId];
+  delete serviceInstances[userId];
+  Object.keys(userServiceInstances).forEach((key) => {
+    const serviceName = key as keyof ServiceInstances;
+    userServiceInstances[serviceName].destroy();
   });
 };
 
-const destroyUserServices = (userId: UserInDatabase['_id']) => {
-  Object.keys(serviceInstances).forEach((key) => {
-    const serviceMap = key as keyof typeof serviceInstances;
-    const userService = serviceInstances[serviceMap][userId];
-    if (userService != null) {
-      delete serviceInstances[serviceMap][userId];
-      userService.destroy();
-    }
-  });
-};
+export const bootstrapServicesForUser = (user: UserInDatabase) => {
+  const {_id} = user;
 
-const linkUserServices = (user: UserInDatabase) => {
-  Object.keys(serviceInstances).forEach((key) => {
-    const serviceMap = key as ServiceMap;
-    const service = serviceInstances[serviceMap][user._id];
-    if (service != null) {
-      service.updateServices(getAllServices(user));
-    }
-  });
-};
-
-const bootstrapServicesForUser = (user: UserInDatabase) => {
-  if (createUserServices(user) === false) {
-    console.error(`Failed to initialize services for user ${user.username}`);
-    return;
+  if (serviceInstances[_id] != null) {
+    destroyUserServices(_id);
   }
-  linkUserServices(user);
-};
 
-export type UserServices = ReturnType<typeof getAllServices>;
+  const userServiceInstances = {
+    clientGatewayService: newClientGatewayService(user),
+    feedService: new FeedService(user),
+    historyService: new HistoryService(user),
+    notificationService: new NotificationService(user),
+    settingService: new SettingService(user),
+    taxonomyService: new TaxonomyService(user),
+    torrentService: new TorrentService(user),
+  };
 
-export default {
-  bootstrapServicesForUser,
-  destroyUserServices,
-  getAllServices,
-  getClientGatewayService,
-  getHistoryService,
-  getNotificationService,
-  getSettingService,
-  getTaxonomyService,
-  getTorrentService,
+  Object.keys(userServiceInstances).forEach((key) => {
+    const serviceName = key as keyof ServiceInstances;
+    if (userServiceInstances[serviceName] != null) {
+      userServiceInstances[serviceName].updateServices(userServiceInstances);
+    }
+  });
+
+  serviceInstances[_id] = userServiceInstances;
 };

@@ -5,8 +5,8 @@ import type TypedEmitter from 'typed-emitter';
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 
 import DiskUsage from '../models/DiskUsage';
+import {getAllServices} from '../services';
 import ServerEvent from '../models/ServerEvent';
-import services from '../services';
 
 import type {DiskUsageSummary} from '../models/DiskUsage';
 import type {TransferHistory} from '../../shared/types/TransferData';
@@ -21,7 +21,7 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
     return;
   }
 
-  const serviceInstances = services.getAllServices(user);
+  const serviceInstances = getAllServices(user);
   const serverEvent = new ServerEvent(res);
   const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();
 

@@ -10,10 +10,10 @@ import {
   authUpdateUserSchema,
   AuthVerificationPreloadConfigs,
 } from '../../../shared/schema/api/auth';
+import {bootstrapServicesForUser, destroyUserServices} from '../../services';
 import config from '../../../config';
 import {getAuthToken, getCookieOptions} from '../../util/authUtil';
 import requireAdmin from '../../middleware/requireAdmin';
-import services from '../../services';
 import Users from '../../models/Users';
 
 import type {
@@ -155,7 +155,7 @@ router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>(
     // Attempt to save the user
     return Users.createUser(credentials).then(
       (user) => {
-        services.bootstrapServicesForUser(user);
+        bootstrapServicesForUser(user);
 
         if (req.query.cookie === 'false') {
           return res.status(200).json({username: user.username});
@@ -306,7 +306,7 @@ router.delete(
   async (req, res): Promise<Response> => {
     return Users.removeUser(req.params.username)
       .then((id) => {
-        services.destroyUserServices(id);
+        destroyUserServices(id);
         return res.json({username: req.params.username});
       })
       .catch(({code, message}) => res.status(500).json({code, message}));
@@ -341,8 +341,8 @@ router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions
     return Users.updateUser(username, patch)
       .then((newUsername) => {
         return Users.lookupUser(newUsername).then((user) => {
-          services.destroyUserServices(user._id);
-          services.bootstrapServicesForUser(user);
+          destroyUserServices(user._id);
+          bootstrapServicesForUser(user);
           return res.status(200).json({});
         });
       })
