@@ -173,7 +173,11 @@ class DelugeClientGatewayService extends ClientGatewayService {
   }
 
   async testGateway(): Promise<void> {
-    return;
+    await this.clientRequestManager
+      .daemonGetMethodList()
+      .then(this.processClientRequestSuccess, () =>
+        this.clientRequestManager.reconnect().then(this.processClientRequestSuccess, this.processClientRequestError),
+      );
   }
 }
 
