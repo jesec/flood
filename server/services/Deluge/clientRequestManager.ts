@@ -10,6 +10,14 @@ import type {DelugeConnectionSettings} from '@shared/schema/ClientConnectionSett
 
 import type {RencodableArray, RencodableData, RencodableObject} from './util/rencode';
 
+import type {
+  DelugeCorePreferences,
+  DelugeCoreSessionStatuses,
+  DelugeCoreTorrentOptions,
+  DelugeCoreTorrentStatuses,
+  DelugeCoreTorrentTracker,
+} from './types/DelugeCoreMethods';
+
 const DELUGE_RPC_PROTOCOL_VERSION = 0x01;
 const protocolVerBuf = Buffer.alloc(1);
 protocolVerBuf[0] = DELUGE_RPC_PROTOCOL_VERSION;
@@ -132,6 +140,94 @@ class ClientRequestManager {
         resolve(tlsSocket);
       });
     });
+  }
+
+  async coreAddTorrentFile(
+    filename: string,
+    filedump: string,
+    options: Partial<DelugeCoreTorrentOptions>,
+  ): Promise<string> {
+    return this.methodCall(['core.add_torrent_file', [filename, filedump, options], {}]) as Promise<string>;
+  }
+
+  async coreAddTorrentMagnet(uri: string, options: Partial<DelugeCoreTorrentOptions>): Promise<string> {
+    return this.methodCall(['core.add_torrent_magnet', [uri, options], {}]) as Promise<string>;
+  }
+
+  async coreForceReannounce(torrent_ids: string[]): Promise<void> {
+    await this.methodCall(['core.force_reannounce', [torrent_ids.map((id) => id.toLowerCase())], {}]);
+  }
+
+  async coreForceRecheck(torrent_ids: string[]): Promise<void> {
+    await this.methodCall(['core.force_recheck', [torrent_ids.map((id) => id.toLowerCase())], {}]);
+  }
+
+  async coreGetConfigValues<T extends keyof DelugeCorePreferences>(
+    keys: Array<T>,
+  ): Promise<Pick<DelugeCorePreferences, T>> {
+    return this.methodCall(['core.get_config_values', [keys], {}]) as Promise<Pick<DelugeCorePreferences, T>>;
+  }
+
+  async coreGetListenPort(): Promise<string> {
+    return this.methodCall(['core.get_listen_port', [], {}]) as Promise<string>;
+  }
+
+  async coreGetSessionStatus<T extends keyof DelugeCoreSessionStatuses>(
+    keys: Array<T>,
+  ): Promise<Pick<DelugeCoreSessionStatuses, T>> {
+    return this.methodCall(['core.get_session_status', [keys], {}]) as Promise<Pick<DelugeCoreSessionStatuses, T>>;
+  }
+
+  async coreGetTorrentStatus<T extends keyof DelugeCoreTorrentStatuses>(
+    torrent_id: string,
+    keys: Array<T>,
+    diff = false,
+  ): Promise<Pick<DelugeCoreTorrentStatuses, T>> {
+    return this.methodCall(['core.get_torrent_status', [torrent_id.toLowerCase(), keys, diff], {}]) as Promise<
+      Pick<DelugeCoreTorrentStatuses, T>
+    >;
+  }
+
+  async coreGetTorrentsStatus<T extends keyof DelugeCoreTorrentStatuses>(
+    keys: Array<T>,
+    filter_dict = {},
+    diff = false,
+  ): Promise<Record<string, Pick<DelugeCoreTorrentStatuses, T>>> {
+    return this.methodCall(['core.get_torrents_status', [filter_dict, keys, diff], {}]) as Promise<
+      Record<string, Pick<DelugeCoreTorrentStatuses, T>>
+    >;
+  }
+
+  async coreMoveStorage(torrent_ids: string[], dest: string): Promise<void> {
+    await this.methodCall(['core.move_storage', [torrent_ids.map((id) => id.toLowerCase()), dest], {}]);
+  }
+
+  async corePauseTorrents(torrent_ids: string[]): Promise<void> {
+    await this.methodCall(['core.pause_torrents', [torrent_ids.map((id) => id.toLowerCase())], {}]);
+  }
+
+  async coreRemoveTorrents(torrent_ids: string[], remove_data: boolean): Promise<void> {
+    await this.methodCall(['core.remove_torrents', [torrent_ids.map((id) => id.toLowerCase()), remove_data], {}]);
+  }
+
+  async coreResumeTorrents(torrent_ids: string[]): Promise<void> {
+    await this.methodCall(['core.resume_torrents', [torrent_ids.map((id) => id.toLowerCase())], {}]);
+  }
+
+  async coreSetConfig(config: Partial<DelugeCorePreferences>): Promise<void> {
+    await this.methodCall(['core.set_config', [config], {}]);
+  }
+
+  async coreSetTorrentOptions(torrent_ids: string[], options: Partial<DelugeCoreTorrentOptions>): Promise<void> {
+    await this.methodCall(['core.set_torrent_options', [torrent_ids.map((id) => id.toLowerCase()), options], {}]);
+  }
+
+  async coreSetTorrentTrackers(torrent_ids: string[], trackers: DelugeCoreTorrentTracker[]): Promise<void> {
+    await this.methodCall([
+      'core.set_torrent_trackers',
+      [torrent_ids.map((id) => id.toLowerCase()), (trackers as unknown) as RencodableObject[]],
+      {},
+    ]);
   }
 
   async daemonInfo(): Promise<string> {
