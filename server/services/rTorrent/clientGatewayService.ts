@@ -1,4 +1,3 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
 import fs from 'fs';
 import geoip from 'geoip-country';
 import {moveSync} from 'fs-extra';
@@ -35,6 +34,7 @@ import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
+import {fetchUrls} from '../../util/fetchUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
 import {setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import {
@@ -140,47 +140,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     await fs.promises.mkdir(destination, {recursive: true});
 
-    const files: string[] = [];
-    const urls: string[] = [];
-
-    await Promise.all(
-      inputUrls.map(async (url) => {
-        if (url.startsWith('http:') || url.startsWith('https:')) {
-          const domain = url.split('/')[2];
-
-          const file = await axios({
-            method: 'GET',
-            url,
-            responseType: 'arraybuffer',
-            headers: cookies?.[domain]
-              ? {
-                  Cookie: cookies[domain].join('; ').concat(';'),
-                }
-              : undefined,
-          }).then(
-            (res: AxiosResponse) => res.data,
-            (e: AxiosError) => console.error(e),
-          );
-
-          if (file instanceof Buffer) {
-            files.push(file.toString('base64'));
-          }
-
-          return;
-        }
-
-        if (fs.existsSync(url) && isAllowedPath(path.resolve(url))) {
-          try {
-            files.push(fs.readFileSync(url).toString('base64'));
-            return;
-          } catch {
-            // do nothing.
-          }
-        }
-
-        urls.push(url);
-      }),
-    );
+    const {files, urls} = await fetchUrls(inputUrls, cookies);
 
     if (!files[0] && !urls[0]) {
       throw new Error();
@@ -216,7 +176,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     if (files[0]) {
       await this.addTorrentsByFile({
-        files: files as [string, ...string[]],
+        files: files.map((file) => file.toString('base64')) as [string, ...string[]],
         destination,
         tags,
         isBasePath,
