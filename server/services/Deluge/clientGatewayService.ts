@@ -286,6 +286,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
         'download_location',
         'download_payload_rate',
         'eta',
+        'finished_time',
         'message',
         'name',
         'num_peers',
@@ -310,6 +311,8 @@ class DelugeClientGatewayService extends ClientGatewayService {
       .then(async (torrentsStatus) => {
         this.emit('PROCESS_TORRENT_LIST_START');
 
+        const dateNowSeconds = Math.ceil(Date.now() / 1000);
+
         const torrentList: TorrentList = Object.assign(
           {},
           ...(await Promise.all(
@@ -320,6 +323,8 @@ class DelugeClientGatewayService extends ClientGatewayService {
                 bytesDone: status.total_done,
                 dateAdded: status.time_added,
                 dateCreated: 0,
+                dateFinished:
+                  status.finished_time > 0 ? Math.ceil((dateNowSeconds - status.finished_time) / 10) * 10 : 0,
                 directory: status.download_location,
                 downRate: status.download_payload_rate,
                 downTotal: status.total_payload_download,

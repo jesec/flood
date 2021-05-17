@@ -20,6 +20,7 @@ export interface TorrentProperties {
   bytesDone: number;
   dateAdded: number;
   dateCreated: number;
+  dateFinished: number;
   directory: string;
   downRate: number;
   downTotal: number;

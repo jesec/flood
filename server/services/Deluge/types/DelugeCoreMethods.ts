@@ -104,7 +104,7 @@ export type DelugeCoreTorrentStorageMode = 'sparse' | 'allocate';
 export interface DelugeCoreTorrentStatuses {
   active_time: unknown;
   seeding_time: unknown;
-  finished_time: unknown;
+  finished_time: number;
   all_time_download: unknown;
   storage_mode: DelugeCoreTorrentStorageMode;
   distributed_copies: unknown;
