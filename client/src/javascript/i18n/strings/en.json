@@ -280,6 +280,7 @@
   "torrents.details.general.connected": "{connected} connected of {total}",
   "torrents.details.general.date.added": "Added",
   "torrents.details.general.date.created": "Creation Date",
+  "torrents.details.general.date.finished": "Finished",
   "torrents.details.general.downloaded": "Downloaded",
   "torrents.details.general.free.disk.space": "Free Disk Space",
   "torrents.details.general.hash": "Hash",
