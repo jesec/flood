@@ -95,7 +95,6 @@ Run the installation command again.
   - macOS users can use `brew` to install rTorrent.
   - [Compile](https://github.com/rakshasa/rtorrent/wiki/Installing): XMLRPC support flag (`--with-xmlrpc-c`) is required during compilation.
   - Certain features (sequential download, initial seeding, etc.) are not available in vanilla rTorrent.
-  - rTorrent needs to have read access to files of temporary directory of Flood (`<rundir>/temp`) as Flood adds torrents to rTorrent by local file path ([96c754dd](https://github.com/jesec/flood/commit/96c754ddeb614b45a565e8307c9985ee85bcb7fa)). This is because rTorrent uses a rather antique XML-RPC interface, which usually has certain limitations (size of body) and is unreliable in handling large binary objects ([Flood-UI/flood#164](https://github.com/Flood-UI/flood/issues/164), [Flood-UI/flood#741](https://github.com/Flood-UI/flood/issues/741), [Flood-UI/flood#773](https://github.com/Flood-UI/flood/issues/773)). See [#86](https://github.com/jesec/flood/discussions/86).
 - Ask for help in the [Flood Discord server](https://discord.gg/Z7yR5Uf).
 
 ### Docker
