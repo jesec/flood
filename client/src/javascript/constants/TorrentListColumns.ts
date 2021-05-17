@@ -12,7 +12,7 @@ const TorrentListColumns = {
   tags: 'torrents.properties.tags',
   upRate: 'torrents.properties.upload.speed',
   upTotal: 'torrents.properties.upload.total',
-  dateCreated: 'torrents.properties.creation.date',
+  dateCreated: 'torrents.properties.date.created',
   directory: 'torrents.properties.directory',
   hash: 'torrents.properties.hash',
   isPrivate: 'torrents.properties.is.private',
