@@ -3,17 +3,17 @@ import {observer} from 'mobx-react';
 import sortedIndex from 'lodash/sortedIndex';
 import {Trans, useLingui} from '@lingui/react';
 
-import type {I18n} from '@lingui/core';
-
 import ClientActions from '@client/actions/ClientActions';
 import {Limits} from '@client/ui/icons';
 import SettingStore from '@client/stores/SettingStore';
 
-import type {TransferDirection} from '@shared/types/TransferData';
-
 import Dropdown from '../general/form-elements/Dropdown';
 import Size from '../general/Size';
 import Tooltip from '../general/Tooltip';
+
+import type {I18n} from '@lingui/core';
+
+import type {TransferDirection} from '@shared/types/TransferData';
 
 import type {DropdownItem} from '../general/form-elements/Dropdown';
 

@@ -785,9 +785,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     this.availableMethodCalls = Promise.resolve(availableMethodCalls);
   }
 
-  async fetchAvailableMethodCalls(
-    fallback = false,
-  ): Promise<{
+  async fetchAvailableMethodCalls(fallback = false): Promise<{
     hasLoadThrow: boolean;
     clientSetting: string[];
     torrentContent: string[];

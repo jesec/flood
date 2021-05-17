@@ -22,7 +22,7 @@ const migration = () => {
           return;
         }
 
-        const userV1 = (user as unknown) as UserInDatabase1;
+        const userV1 = user as unknown as UserInDatabase1;
 
         let connectionSettings: RTorrentConnectionSettings | null = null;
         if (userV1.socketPath != null) {

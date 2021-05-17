@@ -18,10 +18,10 @@ const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | To
     event.preventDefault();
   }
 
-  const mouseClientX = ((event as unknown) as MouseEvent).clientX;
-  const mouseClientY = ((event as unknown) as MouseEvent).clientY;
-  const touchClientX = ((event as unknown) as TouchEvent).touches?.[0].clientX;
-  const touchClientY = ((event as unknown) as TouchEvent).touches?.[0].clientY;
+  const mouseClientX = (event as unknown as MouseEvent).clientX;
+  const mouseClientY = (event as unknown as MouseEvent).clientY;
+  const touchClientX = (event as unknown as TouchEvent).touches?.[0].clientX;
+  const touchClientY = (event as unknown as TouchEvent).touches?.[0].clientY;
 
   if (!TorrentStore.selectedTorrents.includes(hash)) {
     UIActions.handleTorrentClick({hash, event});
@@ -92,7 +92,7 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
   const {onTouchStart, onTouchEnd} = useLongPress((e) => {
     const curRowLocation = rowRef.current?.getBoundingClientRect().top;
     if (e != null && curRowLocation != null && Math.abs(curRowLocation - rowLocation) < 25) {
-      displayContextMenu(hash, (e as unknown) as TouchEvent);
+      displayContextMenu(hash, e as unknown as TouchEvent);
     }
   });
 

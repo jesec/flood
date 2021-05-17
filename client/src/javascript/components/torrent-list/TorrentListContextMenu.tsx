@@ -1,8 +1,6 @@
 import {createRef, FC, MutableRefObject} from 'react';
 import {observer} from 'mobx-react';
 
-import type {TorrentProperties} from '@shared/types/Torrent';
-
 import {Checkmark} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -10,9 +8,11 @@ import TorrentContextMenuActions from '@client/constants/TorrentContextMenuActio
 import TorrentStore from '@client/stores/TorrentStore';
 import UIActions from '@client/actions/UIActions';
 
+import PriorityMeter from '../general/PriorityMeter';
+
 import type {ContextMenuItem} from '@client/stores/UIStore';
 
-import PriorityMeter from '../general/PriorityMeter';
+import type {TorrentProperties} from '@shared/types/Torrent';
 
 const getLastSelectedTorrent = (): string => TorrentStore.selectedTorrents[TorrentStore.selectedTorrents.length - 1];
 

@@ -80,26 +80,24 @@ class HistoryEra {
 
     const minTimestamp = Date.now() - this.opts.nextEraUpdateInterval;
 
-    return this.db
-      .find<TransferSnapshot>({timestamp: {$gte: minTimestamp}})
-      .then((snapshots) => {
-        if (this.opts.nextEra == null) {
-          return;
-        }
+    return this.db.find<TransferSnapshot>({timestamp: {$gte: minTimestamp}}).then((snapshots) => {
+      if (this.opts.nextEra == null) {
+        return;
+      }
 
-        let downTotal = 0;
-        let upTotal = 0;
+      let downTotal = 0;
+      let upTotal = 0;
 
-        snapshots.forEach((snapshot) => {
-          downTotal += Number(snapshot.download);
-          upTotal += Number(snapshot.upload);
-        });
-
-        this.opts.nextEra.addData({
-          download: Number(Number(downTotal / snapshots.length).toFixed(1)),
-          upload: Number(Number(upTotal / snapshots.length).toFixed(1)),
-        });
+      snapshots.forEach((snapshot) => {
+        downTotal += Number(snapshot.download);
+        upTotal += Number(snapshot.upload);
       });
+
+      this.opts.nextEra.addData({
+        download: Number(Number(downTotal / snapshots.length).toFixed(1)),
+        upload: Number(Number(upTotal / snapshots.length).toFixed(1)),
+      });
+    });
   };
 
   async addData(data: TransferData): Promise<void> {
@@ -116,27 +114,25 @@ class HistoryEra {
         })
         .catch(() => undefined);
     } else {
-      await this.db
-        .find<TransferSnapshot>({timestamp: this.lastUpdate})
-        .then(
-          async (snapshots) => {
-            if (snapshots.length !== 0) {
-              const snapshot = snapshots[0];
-              const numUpdates = snapshot.numUpdates || 1;
+      await this.db.find<TransferSnapshot>({timestamp: this.lastUpdate}).then(
+        async (snapshots) => {
+          if (snapshots.length !== 0) {
+            const snapshot = snapshots[0];
+            const numUpdates = snapshot.numUpdates || 1;
 
-              // calculate average and update
-              const updatedSnapshot: TransferSnapshot = {
-                timestamp: this.lastUpdate,
-                upload: Number(((snapshot.upload * numUpdates + data.upload) / (numUpdates + 1)).toFixed(1)),
-                download: Number(((snapshot.download * numUpdates + data.download) / (numUpdates + 1)).toFixed(1)),
-                numUpdates: numUpdates + 1,
-              };
+            // calculate average and update
+            const updatedSnapshot: TransferSnapshot = {
+              timestamp: this.lastUpdate,
+              upload: Number(((snapshot.upload * numUpdates + data.upload) / (numUpdates + 1)).toFixed(1)),
+              download: Number(((snapshot.download * numUpdates + data.download) / (numUpdates + 1)).toFixed(1)),
+              numUpdates: numUpdates + 1,
+            };
 
-              await this.db.update({timestamp: this.lastUpdate}, updatedSnapshot).catch(() => undefined);
-            }
-          },
-          () => undefined,
-        );
+            await this.db.update({timestamp: this.lastUpdate}, updatedSnapshot).catch(() => undefined);
+          }
+        },
+        () => undefined,
+      );
     }
   }
 

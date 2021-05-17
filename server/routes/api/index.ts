@@ -8,7 +8,7 @@ import {contentTokenSchema} from '@shared/schema/api/torrents';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
-import type {NotificationFetchOptions} from '@shared/types/Notification';
+import type {NotificationFetchOptions, NotificationState} from '@shared/types/Notification';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
 
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
@@ -100,62 +100,59 @@ router.get('/activity-stream', eventStream, clientActivityStream);
  * @return {Error} 422 - invalid argument - application/json
  * @return {Error} 500 - other errors - application/json
  */
-router.get<unknown, unknown, unknown, {path: string}>(
-  '/directory-list',
-  (req, res): Response<unknown> => {
-    const {path: inputPath} = req.query;
+router.get<unknown, unknown, unknown, {path: string}>('/directory-list', (req, res): Response<unknown> => {
+  const {path: inputPath} = req.query;
 
-    if (typeof inputPath !== 'string' || !inputPath) {
-      return res.status(422).json({code: 'EINVAL', message: 'Invalid argument'});
-    }
+  if (typeof inputPath !== 'string' || !inputPath) {
+    return res.status(422).json({code: 'EINVAL', message: 'Invalid argument'});
+  }
 
-    const resolvedPath = sanitizePath(inputPath);
-    if (!isAllowedPath(resolvedPath)) {
-      const {code, message} = accessDeniedError();
-      return res.status(403).json({code, message});
-    }
+  const resolvedPath = sanitizePath(inputPath);
+  if (!isAllowedPath(resolvedPath)) {
+    const {code, message} = accessDeniedError();
+    return res.status(403).json({code, message});
+  }
 
-    const directories: Array<string> = [];
-    const files: Array<string> = [];
+  const directories: Array<string> = [];
+  const files: Array<string> = [];
 
-    try {
-      fs.readdirSync(resolvedPath, {withFileTypes: true}).forEach((dirent) => {
-        if (dirent.isDirectory()) {
-          directories.push(dirent.name);
-        } else if (dirent.isFile()) {
-          files.push(dirent.name);
-        } else if (dirent.isSymbolicLink()) {
-          try {
-            const stats = fs.statSync(path.join(resolvedPath, dirent.name));
-            if (stats.isDirectory()) {
-              directories.push(dirent.name);
-            } else if (stats.isFile()) {
-              files.push(dirent.name);
-            }
-          } catch {
-            // do nothing.
+  try {
+    fs.readdirSync(resolvedPath, {withFileTypes: true}).forEach((dirent) => {
+      if (dirent.isDirectory()) {
+        directories.push(dirent.name);
+      } else if (dirent.isFile()) {
+        files.push(dirent.name);
+      } else if (dirent.isSymbolicLink()) {
+        try {
+          const stats = fs.statSync(path.join(resolvedPath, dirent.name));
+          if (stats.isDirectory()) {
+            directories.push(dirent.name);
+          } else if (stats.isFile()) {
+            files.push(dirent.name);
           }
+        } catch {
+          // do nothing.
         }
-      });
-    } catch (e) {
-      const {code, message} = e as NodeJS.ErrnoException;
-      if (code === 'ENOENT') {
-        return res.status(404).json({code, message});
-      } else if (code === 'EACCES') {
-        return res.status(403).json({code, message});
-      } else {
-        return res.status(500).json({code, message});
       }
-    }
-
-    return res.status(200).json({
-      path: resolvedPath,
-      separator: path.sep,
-      directories,
-      files,
     });
-  },
-);
+  } catch (e) {
+    const {code, message} = e as NodeJS.ErrnoException;
+    if (code === 'ENOENT') {
+      return res.status(404).json({code, message});
+    } else if (code === 'EACCES') {
+      return res.status(403).json({code, message});
+    } else {
+      return res.status(500).json({code, message});
+    }
+  }
+
+  return res.status(200).json({
+    path: resolvedPath,
+    separator: path.sep,
+    directories,
+    files,
+  });
+});
 
 /**
  * GET /api/history
@@ -183,19 +180,17 @@ router.get<unknown, unknown, unknown, {snapshot: HistorySnapshot}>('/history', (
  * @tags Flood
  * @security User
  * @param {NotificationFetchOptions} queries - options
- * @return {{Notification[][], NotificationCount}} 200 - success response - application/json
+ * @return {NotificationState} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.get<unknown, unknown, unknown, NotificationFetchOptions>('/notifications', (req, res) => {
-  req.services.notificationService.getNotifications(req.query).then(
-    (notifications) => {
-      res.status(200).json(notifications);
-    },
-    ({code, message}) => {
-      res.status(500).json({code, message});
-    },
-  );
-});
+router.get<unknown, NotificationState | {code: number; message: string}, unknown, NotificationFetchOptions>(
+  '/notifications',
+  (req, res): Promise<Response> =>
+    req.services.notificationService.getNotifications(req.query).then(
+      (notifications) => res.status(200).json(notifications),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * DELETE /api/notifications

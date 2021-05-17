@@ -115,64 +115,52 @@ router.get(
  * @return {Error} 403 - illegal destination - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, AddTorrentByURLOptions>(
-  '/add-urls',
-  async (req, res): Promise<Response> => {
-    const parsedResult = addTorrentByURLSchema.safeParse(req.body);
+router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, res): Promise<Response> => {
+  const parsedResult = addTorrentByURLSchema.safeParse(req.body);
 
-    if (!parsedResult.success) {
-      return res.status(422).json({message: 'Validation error.'});
-    }
+  if (!parsedResult.success) {
+    return res.status(422).json({message: 'Validation error.'});
+  }
 
-    const {
+  const {urls, cookies, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
+    parsedResult.data;
+
+  const finalDestination = await getDestination(req.services, {
+    destination,
+    tags,
+  });
+
+  if (finalDestination == null) {
+    const {code, message} = accessDeniedError();
+    return res.status(403).json({code, message});
+  }
+
+  return req.services.clientGatewayService
+    .addTorrentsByURL({
       urls,
-      cookies,
-      destination,
-      tags,
-      isBasePath,
-      isCompleted,
-      isSequential,
-      isInitialSeeding,
-      start,
-    } = parsedResult.data;
-
-    const finalDestination = await getDestination(req.services, {
-      destination,
-      tags,
-    });
-
-    if (finalDestination == null) {
-      const {code, message} = accessDeniedError();
-      return res.status(403).json({code, message});
-    }
-
-    return req.services.clientGatewayService
-      .addTorrentsByURL({
-        urls,
-        cookies: cookies != null ? cookies : {},
-        destination: finalDestination,
-        tags: tags ?? [],
-        isBasePath: isBasePath ?? false,
-        isCompleted: isCompleted ?? false,
-        isSequential: isSequential ?? false,
-        isInitialSeeding: isInitialSeeding ?? false,
-        start: start ?? false,
-      })
-      .then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          if (response.length === 0) {
-            return res.status(202).json(response);
-          } else if (response.length < urls.length) {
-            return res.status(207).json(response);
-          } else {
-            return res.status(200).json(response);
-          }
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      );
-  },
-);
+      cookies: cookies != null ? cookies : {},
+      destination: finalDestination,
+      tags: tags ?? [],
+      isBasePath: isBasePath ?? false,
+      isCompleted: isCompleted ?? false,
+      isSequential: isSequential ?? false,
+      isInitialSeeding: isInitialSeeding ?? false,
+      start: start ?? false,
+    })
+    .then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        if (response.length === 0) {
+          return res.status(202).json(response);
+        } else if (response.length < urls.length) {
+          return res.status(207).json(response);
+        } else {
+          return res.status(200).json(response);
+        }
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    );
+});
 
 /**
  * POST /api/torrents/add-files
@@ -186,62 +174,50 @@ router.post<unknown, unknown, AddTorrentByURLOptions>(
  * @return {Error} 403 - illegal destination - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, AddTorrentByFileOptions>(
-  '/add-files',
-  async (req, res): Promise<Response> => {
-    const parsedResult = addTorrentByFileSchema.safeParse(req.body);
+router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req, res): Promise<Response> => {
+  const parsedResult = addTorrentByFileSchema.safeParse(req.body);
 
-    if (!parsedResult.success) {
-      return res.status(422).json({message: 'Validation error.'});
-    }
+  if (!parsedResult.success) {
+    return res.status(422).json({message: 'Validation error.'});
+  }
 
-    const {
+  const {files, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} = parsedResult.data;
+
+  const finalDestination = await getDestination(req.services, {
+    destination,
+    tags,
+  });
+
+  if (finalDestination == null) {
+    const {code, message} = accessDeniedError();
+    return res.status(403).json({code, message});
+  }
+
+  return req.services.clientGatewayService
+    .addTorrentsByFile({
       files,
-      destination,
-      tags,
-      isBasePath,
-      isCompleted,
-      isSequential,
-      isInitialSeeding,
-      start,
-    } = parsedResult.data;
-
-    const finalDestination = await getDestination(req.services, {
-      destination,
-      tags,
-    });
-
-    if (finalDestination == null) {
-      const {code, message} = accessDeniedError();
-      return res.status(403).json({code, message});
-    }
-
-    return req.services.clientGatewayService
-      .addTorrentsByFile({
-        files,
-        destination: finalDestination,
-        tags: tags ?? [],
-        isBasePath: isBasePath ?? false,
-        isCompleted: isCompleted ?? false,
-        isSequential: isSequential ?? false,
-        isInitialSeeding: isInitialSeeding ?? false,
-        start: start ?? false,
-      })
-      .then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          if (response.length === 0) {
-            return res.status(202).json(response);
-          } else if (response.length < files.length) {
-            return res.status(207).json(response);
-          } else {
-            return res.status(200).json(response);
-          }
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      );
-  },
-);
+      destination: finalDestination,
+      tags: tags ?? [],
+      isBasePath: isBasePath ?? false,
+      isCompleted: isCompleted ?? false,
+      isSequential: isSequential ?? false,
+      isInitialSeeding: isInitialSeeding ?? false,
+      start: start ?? false,
+    })
+    .then(
+      (response) => {
+        req.services.torrentService.fetchTorrentList();
+        if (response.length === 0) {
+          return res.status(202).json(response);
+        } else if (response.length < files.length) {
+          return res.status(207).json(response);
+        } else {
+          return res.status(200).json(response);
+        }
+      },
+      ({code, message}) => res.status(500).json({code, message}),
+    );
+});
 
 /**
  * POST /api/torrents/create
@@ -252,74 +228,71 @@ router.post<unknown, unknown, AddTorrentByFileOptions>(
  * @return {object} 200 - success response - application/x-bittorrent
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, CreateTorrentOptions>(
-  '/create',
-  async (req, res): Promise<Response> => {
-    const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = req.body;
+router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res): Promise<Response> => {
+  const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = req.body;
 
-    if (typeof sourcePath !== 'string') {
-      return res.status(422).json({message: 'Validation error.'});
-    }
+  if (typeof sourcePath !== 'string') {
+    return res.status(422).json({message: 'Validation error.'});
+  }
 
-    const sanitizedPath = sanitizePath(sourcePath);
-    if (!isAllowedPath(sanitizedPath)) {
-      const {code, message} = accessDeniedError();
-      return res.status(403).json({code, message});
-    }
+  const sanitizedPath = sanitizePath(sourcePath);
+  if (!isAllowedPath(sanitizedPath)) {
+    const {code, message} = accessDeniedError();
+    return res.status(403).json({code, message});
+  }
 
-    const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat('.torrent');
-    const torrentPath = getTempPath(torrentFileName);
+  const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat('.torrent');
+  const torrentPath = getTempPath(torrentFileName);
 
-    return new Promise<Response>((resolve) => {
-      createTorrent(
-        sanitizedPath,
-        {
-          name,
-          comment,
-          createdBy: 'Flood - flood.js.org',
-          private: isPrivate,
-          announceList: [trackers],
-          info: infoSource
-            ? {
-                source: infoSource,
-              }
-            : undefined,
-        },
-        (err, torrent) => {
-          if (err) {
-            const {message} = err;
-            return resolve(res.status(500).json({message}));
-          }
+  return new Promise<Response>((resolve) => {
+    createTorrent(
+      sanitizedPath,
+      {
+        name,
+        comment,
+        createdBy: 'Flood - flood.js.org',
+        private: isPrivate,
+        announceList: [trackers],
+        info: infoSource
+          ? {
+              source: infoSource,
+            }
+          : undefined,
+      },
+      (err, torrent) => {
+        if (err) {
+          const {message} = err;
+          return resolve(res.status(500).json({message}));
+        }
 
-          fs.promises.writeFile(torrentPath, torrent).then(
-            () => {
-              res.attachment(torrentFileName);
-              res.download(torrentPath);
+        fs.promises.writeFile(torrentPath, torrent).then(
+          () => {
+            res.attachment(torrentFileName);
+            res.download(torrentPath);
 
-              req.services.clientGatewayService
-                .addTorrentsByFile({
-                  files: [torrent.toString('base64')],
-                  destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
-                  tags: tags ?? [],
-                  isBasePath: true,
-                  isCompleted: true,
-                  isSequential: false,
-                  isInitialSeeding: isInitialSeeding ?? false,
-                  start: start ?? false,
-                })
-                .catch(() => {
-                  // do nothing.
-                });
+            req.services.clientGatewayService
+              .addTorrentsByFile({
+                files: [torrent.toString('base64')],
+                destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
+                tags: tags ?? [],
+                isBasePath: true,
+                isCompleted: true,
+                isSequential: false,
+                isInitialSeeding: isInitialSeeding ?? false,
+                start: start ?? false,
+              })
+              .catch(() => {
+                // do nothing.
+              });
 
-              resolve(res);
-            },
-            ({code, message}) => resolve(res.status(500).json({code, message})),
-          );
-        },
-      );
-    });
-  },
-);
+            resolve(res);
+          },
+          ({code, message}) => resolve(res.status(500).json({code, message})),
+        );
+      },
+    );
+  });
+});
 
 /**
  * POST /api/torrents/start
@@ -393,29 +366,26 @@ router.post<unknown, unknown, CheckTorrentsOptions>(
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, MoveTorrentsOptions>(
-  '/move',
-  async (req, res): Promise<Response> => {
-    let sanitizedPath: string | null = null;
-    try {
-      sanitizedPath = sanitizePath(req.body.destination);
-      if (!isAllowedPath(sanitizedPath)) {
-        const {code, message} = accessDeniedError();
-        return res.status(403).json({code, message});
-      }
-    } catch ({code, message}) {
+router.post<unknown, unknown, MoveTorrentsOptions>('/move', async (req, res): Promise<Response> => {
+  let sanitizedPath: string | null = null;
+  try {
+    sanitizedPath = sanitizePath(req.body.destination);
+    if (!isAllowedPath(sanitizedPath)) {
+      const {code, message} = accessDeniedError();
       return res.status(403).json({code, message});
     }
+  } catch ({code, message}) {
+    return res.status(403).json({code, message});
+  }
 
-    return req.services.clientGatewayService.moveTorrents({...req.body, destination: sanitizedPath}).then(
-      (response) => {
-        req.services.torrentService.fetchTorrentList();
-        return res.status(200).json(response);
-      },
-      ({code, message}) => res.status(500).json({code, message}),
-    );
-  },
-);
+  return req.services.clientGatewayService.moveTorrents({...req.body, destination: sanitizedPath}).then(
+    (response) => {
+      req.services.torrentService.fetchTorrentList();
+      return res.status(200).json(response);
+    },
+    ({code, message}) => res.status(500).json({code, message}),
+  );
+});
 
 /**
  * POST /api/torrents/delete
@@ -447,24 +417,21 @@ router.post<unknown, unknown, DeleteTorrentsOptions>(
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.post<unknown, unknown, ReannounceTorrentsOptions>(
-  '/reannounce',
-  async (req, res): Promise<Response> => {
-    const parsedResult = reannounceTorrentsSchema.safeParse(req.body);
+router.post<unknown, unknown, ReannounceTorrentsOptions>('/reannounce', async (req, res): Promise<Response> => {
+  const parsedResult = reannounceTorrentsSchema.safeParse(req.body);
 
-    if (!parsedResult.success) {
-      return res.status(422).json({message: 'Validation error.'});
-    }
+  if (!parsedResult.success) {
+    return res.status(422).json({message: 'Validation error.'});
+  }
 
-    return req.services.clientGatewayService.reannounceTorrents(parsedResult.data).then(
-      (response) => {
-        req.services.clientGatewayService.fetchTorrentList();
-        return res.status(200).json(response);
-      },
-      ({code, message}) => res.status(500).json({code, message}),
-    );
-  },
-);
+  return req.services.clientGatewayService.reannounceTorrents(parsedResult.data).then(
+    (response) => {
+      req.services.clientGatewayService.fetchTorrentList();
+      return res.status(200).json(response);
+    },
+    ({code, message}) => res.status(500).json({code, message}),
+  );
+});
 
 /**
  * PATCH /api/torrents/initial-seeding
@@ -538,24 +505,21 @@ router.patch<unknown, unknown, SetTorrentsSequentialOptions>(
  * @return {object} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.patch<unknown, unknown, SetTorrentsTagsOptions>(
-  '/tags',
-  async (req, res): Promise<Response> => {
-    const parsedResult = setTorrentsTagsSchema.safeParse(req.body);
+router.patch<unknown, unknown, SetTorrentsTagsOptions>('/tags', async (req, res): Promise<Response> => {
+  const parsedResult = setTorrentsTagsSchema.safeParse(req.body);
 
-    if (!parsedResult.success) {
-      return res.status(422).json({message: 'Validation error.'});
-    }
+  if (!parsedResult.success) {
+    return res.status(422).json({message: 'Validation error.'});
+  }
 
-    return req.services.clientGatewayService.setTorrentsTags(parsedResult.data).then(
-      (response) => {
-        req.services.torrentService.fetchTorrentList();
-        return res.status(200).json(response);
-      },
-      ({code, message}) => res.status(500).json({code, message}),
-    );
-  },
-);
+  return req.services.clientGatewayService.setTorrentsTags(parsedResult.data).then(
+    (response) => {
+      req.services.torrentService.fetchTorrentList();
+      return res.status(200).json(response);
+    },
+    ({code, message}) => res.status(500).json({code, message}),
+  );
+});
 
 /**
  * PATCH /api/torrents/trackers
@@ -881,26 +845,23 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
  * @security User
  * @param {string} hash.path
  */
-router.get(
-  '/:hash/details',
-  async (req, res): Promise<Response> => {
-    try {
-      const contents = req.services.clientGatewayService.getTorrentContents(req.params.hash);
-      const peers = req.services.clientGatewayService.getTorrentPeers(req.params.hash);
-      const trackers = req.services.clientGatewayService.getTorrentTrackers(req.params.hash);
+router.get('/:hash/details', async (req, res): Promise<Response> => {
+  try {
+    const contents = req.services.clientGatewayService.getTorrentContents(req.params.hash);
+    const peers = req.services.clientGatewayService.getTorrentPeers(req.params.hash);
+    const trackers = req.services.clientGatewayService.getTorrentTrackers(req.params.hash);
 
-      await Promise.all([contents, peers, trackers]);
+    await Promise.all([contents, peers, trackers]);
 
-      return res.status(200).json({
-        contents: await contents,
-        peers: await peers,
-        trackers: await trackers,
-      });
-    } catch ({code, message}) {
-      return res.status(500).json({code, message});
-    }
-  },
-);
+    return res.status(200).json({
+      contents: await contents,
+      peers: await peers,
+      trackers: await trackers,
+    });
+  } catch ({code, message}) {
+    return res.status(500).json({code, message});
+  }
+});
 
 /**
  * GET /api/torrents/{hash}/mediainfo

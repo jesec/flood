@@ -37,7 +37,7 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
 
   useEffect(() => {
     const handleDocumentClick = (e: Event) => {
-      if (!formRowRef.current?.contains((e.target as unknown) as Node)) {
+      if (!formRowRef.current?.contains(e.target as unknown as Node)) {
         setIsOpen(false);
       }
     };

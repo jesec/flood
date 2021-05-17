@@ -3,10 +3,9 @@ import {observer} from 'mobx-react';
 import {Trans, useLingui} from '@lingui/react';
 
 import {Close, Edit} from '@client/ui/icons';
+import FeedStore from '@client/stores/FeedStore';
 
 import type {Feed} from '@shared/types/Feed';
-
-import FeedStore from '@client/stores/FeedStore';
 
 interface FeedListProps {
   currentFeed: Feed | null;

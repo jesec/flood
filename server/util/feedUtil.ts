@@ -22,7 +22,7 @@ interface RSSEnclosure {
 export const getTorrentUrlsFromFeedItem = (feedItem: FeedItem): Array<string> => {
   // If we've got an Array of enclosures, we'll iterate over the values and
   // look for the url key.
-  const RSSEnclosures = (feedItem.enclosures as unknown) as Array<RSSEnclosure> | undefined;
+  const RSSEnclosures = feedItem.enclosures as unknown as Array<RSSEnclosure> | undefined;
   if (RSSEnclosures && Array.isArray(RSSEnclosures)) {
     return RSSEnclosures.reduce((urls: Array<string>, enclosure) => {
       if (typeof enclosure.url === 'string') {

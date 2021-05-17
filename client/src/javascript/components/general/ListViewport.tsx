@@ -4,9 +4,9 @@ import {observer} from 'mobx-react';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 import {useWindowSize} from 'react-use';
 
-import type {FixedSizeListProps, ListChildComponentProps} from 'react-window';
-
 import ConfigStore from '@client/stores/ConfigStore';
+
+import type {FixedSizeListProps, ListChildComponentProps} from 'react-window';
 
 const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: ComponentProps<'div'>, ref) => {
   const {children, className, onScroll} = props;
@@ -27,14 +27,14 @@ const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: Compo
     refCallback(viewport);
 
     if (onScroll) {
-      viewport.addEventListener('scroll', (e) => onScroll((e as unknown) as UIEvent<HTMLDivElement>), {
+      viewport.addEventListener('scroll', (e) => onScroll(e as unknown as UIEvent<HTMLDivElement>), {
         passive: true,
       });
     }
 
     return () => {
       if (onScroll) {
-        viewport.removeEventListener('scroll', (e) => onScroll((e as unknown) as UIEvent<HTMLDivElement>));
+        viewport.removeEventListener('scroll', (e) => onScroll(e as unknown as UIEvent<HTMLDivElement>));
       }
     };
   }, [onScroll, ref]);

@@ -73,14 +73,8 @@ const AddTorrentsByFile: FC = () => {
           const formData = formRef.current?.getFormData();
           setIsAddingTorrents(true);
 
-          const {
-            destination,
-            start,
-            tags,
-            isBasePath,
-            isCompleted,
-            isSequential,
-          } = formData as Partial<AddTorrentsByFileFormData>;
+          const {destination, start, tags, isBasePath, isCompleted, isSequential} =
+            formData as Partial<AddTorrentsByFileFormData>;
 
           const filesData: Array<string> = [];
           filesRef.current.forEach((file) => {

@@ -1,8 +1,8 @@
 import {FC, memo} from 'react';
 
-import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
-
 import {Error, Spinner, Start, Stop} from '@client/ui/icons';
+
+import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 const STATUS_ICON_MAP: Partial<Record<TorrentStatus, JSX.Element>> = {
   error: <Error />,

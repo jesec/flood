@@ -141,25 +141,22 @@ router.get(
  * @return {Rule} 200 - success response - application/json
  * @return {Error} 500 - failure response - application/json
  */
-router.put<unknown, unknown, AddRuleOptions>(
-  '/rules',
-  async (req, res): Promise<Response> => {
-    let sanitizedPath: string | null = null;
-    try {
-      sanitizedPath = sanitizePath(req.body.destination);
-      if (!isAllowedPath(sanitizedPath)) {
-        const {code, message} = accessDeniedError();
-        return res.status(403).json({code, message});
-      }
-    } catch ({code, message}) {
+router.put<unknown, unknown, AddRuleOptions>('/rules', async (req, res): Promise<Response> => {
+  let sanitizedPath: string | null = null;
+  try {
+    sanitizedPath = sanitizePath(req.body.destination);
+    if (!isAllowedPath(sanitizedPath)) {
+      const {code, message} = accessDeniedError();
       return res.status(403).json({code, message});
     }
+  } catch ({code, message}) {
+    return res.status(403).json({code, message});
+  }
 
-    return req.services.feedService.addRule({...req.body, destination: sanitizedPath}).then(
-      (rule) => res.status(200).json(rule),
-      ({code, message}) => res.status(500).json({code, message}),
-    );
-  },
-);
+  return req.services.feedService.addRule({...req.body, destination: sanitizedPath}).then(
+    (rule) => res.status(200).json(rule),
+    ({code, message}) => res.status(500).json({code, message}),
+  );
+});
 
 export default router;

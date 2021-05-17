@@ -53,7 +53,7 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
       };
 
       const handleDocumentClick = (e: Event): void => {
-        if (!formRowRef.current?.contains((e.target as unknown) as Node)) {
+        if (!formRowRef.current?.contains(e.target as unknown as Node)) {
           closeDirectoryList();
         }
       };

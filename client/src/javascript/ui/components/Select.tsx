@@ -61,9 +61,11 @@ const Select: FC<SelectProps> = ({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedID, setSelectedID] = useState<string | number>(
     defaultID ??
-      ((children as ReactNodeArray)?.find(
-        (child) => (child as ReactElement<SelectItemProps>)?.props?.id != null,
-      ) as ReactElement<SelectItemProps>)?.props.id ??
+      (
+        (children as ReactNodeArray)?.find(
+          (child) => (child as ReactElement<SelectItemProps>)?.props?.id != null,
+        ) as ReactElement<SelectItemProps>
+      )?.props.id ??
       '',
   );
 

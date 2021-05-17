@@ -22,19 +22,8 @@ interface ModalProps {
 }
 
 const Modal: FC<ModalProps> = (props: ModalProps) => {
-  const {
-    alignment,
-    size,
-    orientation,
-    tabsInBody,
-    inverse,
-    initialTabId,
-    className,
-    content,
-    heading,
-    tabs,
-    actions,
-  } = props;
+  const {alignment, size, orientation, tabsInBody, inverse, initialTabId, className, content, heading, tabs, actions} =
+    props;
 
   const contentWrapperClasses = classnames(
     'modal__content__wrapper',

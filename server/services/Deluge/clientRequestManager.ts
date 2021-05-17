@@ -225,7 +225,7 @@ class ClientRequestManager {
   async coreSetTorrentTrackers(torrent_ids: string[], trackers: DelugeCoreTorrentTracker[]): Promise<void> {
     await this.methodCall([
       'core.set_torrent_trackers',
-      [torrent_ids.map((id) => id.toLowerCase()), (trackers as unknown) as RencodableObject[]],
+      [torrent_ids.map((id) => id.toLowerCase()), trackers as unknown as RencodableObject[]],
       {},
     ]);
   }

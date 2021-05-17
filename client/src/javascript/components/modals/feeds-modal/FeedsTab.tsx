@@ -75,7 +75,7 @@ const FeedsTab: FC = () => {
         className="inverse"
         onChange={({event, formData}) => {
           const validatedField = (event.target as HTMLInputElement).name as ValidatedField;
-          const feedForm = (formData as unknown) as FeedFormData;
+          const feedForm = formData as unknown as FeedFormData;
 
           setErrors({
             ...errors,
@@ -83,7 +83,7 @@ const FeedsTab: FC = () => {
           });
         }}
         onSubmit={async () => {
-          const feedForm = (formRef.current?.getFormData() as unknown) as FeedFormData;
+          const feedForm = formRef.current?.getFormData() as unknown as FeedFormData;
           if (formRef.current == null || feedForm == null) {
             return;
           }

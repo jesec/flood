@@ -25,32 +25,30 @@ const DirectoryTree: FC<DirectoryTreeProps> = (props: DirectoryTreeProps) => {
     directories != null
       ? Object.keys(directories)
           .sort((a, b) => a.localeCompare(b))
-          .map(
-            (directoryName, index): ReactNode => {
-              const subSelectedItems = itemsTree.directories && itemsTree.directories[directoryName];
+          .map((directoryName, index): ReactNode => {
+            const subSelectedItems = itemsTree.directories && itemsTree.directories[directoryName];
 
-              const id = `${index}${childDepth}${directoryName}`;
-              const isSelected = (subSelectedItems && subSelectedItems.isSelected) || false;
+            const id = `${index}${childDepth}${directoryName}`;
+            const isSelected = (subSelectedItems && subSelectedItems.isSelected) || false;
 
-              if (subSelectedItems == null) {
-                return null;
-              }
+            if (subSelectedItems == null) {
+              return null;
+            }
 
-              return (
-                <DirectoryTreeNode
-                  depth={childDepth}
-                  directoryName={directoryName}
-                  hash={hash}
-                  id={id}
-                  isSelected={isSelected}
-                  key={id}
-                  itemsTree={subSelectedItems}
-                  onItemSelect={onItemSelect}
-                  path={path}
-                />
-              );
-            },
-          )
+            return (
+              <DirectoryTreeNode
+                depth={childDepth}
+                directoryName={directoryName}
+                hash={hash}
+                id={id}
+                isSelected={isSelected}
+                key={id}
+                itemsTree={subSelectedItems}
+                onItemSelect={onItemSelect}
+                path={path}
+              />
+            );
+          })
       : [];
 
   const fileList: ReactNode =
