@@ -117,12 +117,16 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     const prevTorrentProperties = this.torrentListSummary.torrents[nextTorrentProperties.hash];
 
     if (hasTorrentFinished(prevTorrentProperties, nextTorrentProperties)) {
-      this.services?.notificationService.addNotification([
-        {
-          id: 'notification.torrent.finished',
-          data: {name: nextTorrentProperties.name},
-        },
-      ]);
+      const {dateFinished} = nextTorrentProperties;
+      this.services?.notificationService.addNotification(
+        [
+          {
+            id: 'notification.torrent.finished',
+            data: {name: nextTorrentProperties.name},
+          },
+        ],
+        dateFinished > 0 ? dateFinished * 1000 : undefined,
+      );
     }
   };
 }
