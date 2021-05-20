@@ -14,13 +14,13 @@
 // env variable FLOOD_OPTION_port=80 is equivalent to argument --port 80. Use ',' to split
 // for arguments that take multiple inputs such as --allowedpath.
 
-import {array, boolean, number, object, string} from 'zod';
+import {array, boolean, number, strictObject, string} from 'zod';
 import type {infer as zodInfer} from 'zod';
 
 import {authMethodSchema} from './Auth';
 import {clientConnectionSettingsSchema} from './ClientConnectionSettings';
 
-export const configSchema = object({
+export const configSchema = strictObject({
   // CLI argument: --baseuri
   // This URI will prefix all of Flood's HTTP requests.
   // For example, if you intend to serve from http://example.com/flood, set this to

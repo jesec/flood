@@ -1,4 +1,4 @@
-import {array, boolean, number, object, record, string} from 'zod';
+import {array, boolean, number, record, strictObject, string} from 'zod';
 import {noComma} from '../../util/regEx';
 
 import type {infer as zodInfer} from 'zod';
@@ -8,7 +8,7 @@ const TAG_NO_COMMA_MESSAGE = {
 };
 
 // POST /api/torrents/add-urls
-export const addTorrentByURLSchema = object({
+export const addTorrentByURLSchema = strictObject({
   // URLs to download torrents from
   urls: array(string()).nonempty(),
   // Cookies to attach to requests, arrays of strings in the format "name=value" with domain as key
@@ -32,7 +32,7 @@ export const addTorrentByURLSchema = object({
 export type AddTorrentByURLOptions = zodInfer<typeof addTorrentByURLSchema>;
 
 // POST /api/torrents/add-files
-export const addTorrentByFileSchema = object({
+export const addTorrentByFileSchema = strictObject({
   // Torrent files in base64
   files: array(string()).nonempty(),
   // Path of destination
@@ -54,7 +54,7 @@ export const addTorrentByFileSchema = object({
 export type AddTorrentByFileOptions = zodInfer<typeof addTorrentByFileSchema>;
 
 // PATCH /api/torrents/tags
-export const setTorrentsTagsSchema = object({
+export const setTorrentsTagsSchema = strictObject({
   // An array of string representing hashes of torrents to operate on
   hashes: array(string()).nonempty(),
   // An array of string representing tags
@@ -64,7 +64,7 @@ export const setTorrentsTagsSchema = object({
 export type SetTorrentsTagsOptions = zodInfer<typeof setTorrentsTagsSchema>;
 
 // POST /api/torrents/reannounce
-export const reannounceTorrentsSchema = object({
+export const reannounceTorrentsSchema = strictObject({
   // An array of string representing hashes of torrents to be reannounced
   hashes: array(string()).nonempty(),
 });
@@ -72,7 +72,7 @@ export const reannounceTorrentsSchema = object({
 export type ReannounceTorrentsOptions = zodInfer<typeof reannounceTorrentsSchema>;
 
 // GET /api/torrents/{hash}/contents/{indices}/data
-export const contentTokenSchema = object({
+export const contentTokenSchema = strictObject({
   username: string(),
   hash: string(),
   indices: string(),
