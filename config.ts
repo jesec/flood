@@ -204,8 +204,8 @@ process.on('SIGINT', () => {
 
 try {
   fs.mkdirSync(path.join(argv.rundir), {recursive: true, mode: 0o700});
-  fs.mkdirSync(path.join(argv.rundir, 'db'));
-  fs.mkdirSync(path.join(argv.rundir, 'temp'));
+  fs.mkdirSync(path.join(argv.rundir, 'db'), {recursive: true});
+  fs.mkdirSync(path.join(argv.rundir, 'temp'), {recursive: true});
 } catch (error) {
   console.error('Failed to access runtime directory');
   process.exit(1);
