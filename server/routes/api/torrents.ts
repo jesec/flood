@@ -242,56 +242,50 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res):
   }
 
   const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat('.torrent');
-  const torrentPath = getTempPath(torrentFileName);
 
-  return new Promise<Response>((resolve) => {
-    createTorrent(
-      sanitizedPath,
-      {
-        name,
-        comment,
-        createdBy: 'Flood - flood.js.org',
-        private: isPrivate,
-        announceList: [trackers],
-        info: infoSource
-          ? {
-              source: infoSource,
-            }
-          : undefined,
-      },
-      (err, torrent) => {
-        if (err) {
-          const {message} = err;
-          return resolve(res.status(500).json({message}));
-        }
+  let torrent: Buffer;
+  try {
+    torrent = await new Promise<Buffer>((resolve, reject) => {
+      createTorrent(
+        sanitizedPath,
+        {
+          name,
+          comment,
+          createdBy: 'Flood - flood.js.org',
+          private: isPrivate,
+          announceList: [trackers],
+          info: infoSource
+            ? {
+                source: infoSource,
+              }
+            : undefined,
+        },
+        (err, torrent) => (err ? reject(err) : resolve(torrent)),
+      );
+    });
+  } catch ({message}) {
+    return res.status(500).json({message});
+  }
 
-        fs.promises.writeFile(torrentPath, torrent).then(
-          () => {
-            res.attachment(torrentFileName);
-            res.download(torrentPath);
+  await req.services.clientGatewayService
+    .addTorrentsByFile({
+      files: [torrent.toString('base64')],
+      destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
+      tags: tags ?? [],
+      isBasePath: true,
+      isCompleted: true,
+      isSequential: false,
+      isInitialSeeding: isInitialSeeding ?? false,
+      start: start ?? false,
+    })
+    .catch(() => {
+      // do nothing.
+    });
 
-            req.services.clientGatewayService
-              .addTorrentsByFile({
-                files: [torrent.toString('base64')],
-                destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
-                tags: tags ?? [],
-                isBasePath: true,
-                isCompleted: true,
-                isSequential: false,
-                isInitialSeeding: isInitialSeeding ?? false,
-                start: start ?? false,
-              })
-              .catch(() => {
-                // do nothing.
-              });
+  res.attachment(torrentFileName);
+  res.contentType('application/x-bittorrent');
 
-            resolve(res);
-          },
-          ({code, message}) => resolve(res.status(500).json({code, message})),
-        );
-      },
-    );
-  });
+  return res.status(200).send(torrent);
 });
 
 /**
