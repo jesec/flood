@@ -19,5 +19,4 @@ export interface ServerEvents {
   TORRENT_LIST_DIFF_CHANGE: Operation[];
   TRANSFER_HISTORY_FULL_UPDATE: TransferHistory;
   TRANSFER_SUMMARY_FULL_UPDATE: TransferSummary;
-  TRANSFER_SUMMARY_DIFF_CHANGE: Operation[];
 }

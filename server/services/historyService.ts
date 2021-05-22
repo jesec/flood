@@ -1,5 +1,3 @@
-import jsonpatch, {Operation} from 'fast-json-patch';
-
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {TransferHistory, TransferSummary} from '@shared/types/TransferData';
 
@@ -8,7 +6,7 @@ import config from '../../config';
 import HistoryEra from '../models/HistoryEra';
 
 interface HistoryServiceEvents {
-  TRANSFER_SUMMARY_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
+  TRANSFER_SUMMARY_FULL_UPDATE: (payload: {id: number; summary: TransferSummary}) => void;
   FETCH_TRANSFER_SUMMARY_SUCCESS: () => void;
   FETCH_TRANSFER_SUMMARY_ERROR: () => void;
 }
@@ -109,10 +107,8 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
   }
 
   private handleFetchTransferSummarySuccess = async (nextTransferSummary: TransferSummary): Promise<void> => {
-    const summaryDiff = jsonpatch.compare(this.transferSummary, nextTransferSummary);
-
-    this.emit('TRANSFER_SUMMARY_DIFF_CHANGE', {
-      diff: summaryDiff,
+    this.emit('TRANSFER_SUMMARY_FULL_UPDATE', {
+      summary: nextTransferSummary,
       id: Date.now(),
     });
 

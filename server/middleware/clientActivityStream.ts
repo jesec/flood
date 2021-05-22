@@ -108,13 +108,9 @@ export default async (req: Request<unknown, unknown, unknown, {historySnapshot: 
   // Transfer summary
   const transferSummary = serviceInstances.historyService.getTransferSummary();
   serverEvent.emit(transferSummary.id, 'TRANSFER_SUMMARY_FULL_UPDATE', transferSummary.transferSummary);
-  handleEvents(
-    serviceInstances.historyService,
-    'TRANSFER_SUMMARY_DIFF_CHANGE',
-    ({id, diff}: {id: number; diff: Operation[]}) => {
-      serverEvent.emit(id, 'TRANSFER_SUMMARY_DIFF_CHANGE', diff);
-    },
-  );
+  handleEvents(serviceInstances.historyService, 'TRANSFER_SUMMARY_FULL_UPDATE', ({id, summary}) => {
+    serverEvent.emit(id, 'TRANSFER_SUMMARY_FULL_UPDATE', summary);
+  });
 
   // Notifications
   serverEvent.emit(

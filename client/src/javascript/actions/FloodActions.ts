@@ -56,10 +56,6 @@ const ServerEventHandlers: Record<keyof ServerEvents, (event: unknown) => void> 
     UIStore.satisfyDependency('torrent-taxonomy');
   },
 
-  TRANSFER_SUMMARY_DIFF_CHANGE: (event: unknown) => {
-    TransferDataStore.handleTransferSummaryDiffChange(JSON.parse((event as {data: string}).data));
-  },
-
   TRANSFER_SUMMARY_FULL_UPDATE: (event: unknown) => {
     TransferDataStore.handleTransferSummaryFullUpdate(JSON.parse((event as {data: string}).data));
     UIStore.satisfyDependency('transfer-data');

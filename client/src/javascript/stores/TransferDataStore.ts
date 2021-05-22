@@ -1,4 +1,3 @@
-import jsonpatch, {Operation} from 'fast-json-patch';
 import {makeAutoObservable} from 'mobx';
 
 import type {TransferDirection, TransferHistory, TransferSummary} from '@shared/types/TransferData';
@@ -43,11 +42,6 @@ class TransferDataStore {
 
   handleFetchTransferHistorySuccess(transferData: TransferHistory) {
     this.transferRates = transferData;
-  }
-
-  handleTransferSummaryDiffChange(diff: Operation[]) {
-    jsonpatch.applyPatch(this.transferSummary, diff);
-    this.appendCurrentTransferRateToHistory();
   }
 
   handleTransferSummaryFullUpdate(transferSummary: TransferSummary) {
