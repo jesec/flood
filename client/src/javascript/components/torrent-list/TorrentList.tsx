@@ -4,6 +4,8 @@ import {reaction} from 'mobx';
 import {Trans} from '@lingui/react';
 import {useEvent} from 'react-use';
 
+import type {FixedSizeList, ListChildComponentProps} from 'react-window';
+
 import {Button} from '@client/ui';
 import {Files} from '@client/ui/icons';
 import ClientStatusStore from '@client/stores/ClientStatusStore';
@@ -14,6 +16,8 @@ import TorrentStore from '@client/stores/TorrentStore';
 import UIActions from '@client/actions/UIActions';
 import SortDirections from '@client/constants/SortDirections';
 
+import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
+
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
 import ContextMenuMountPoint from '../general/ContextMenuMountPoint';
@@ -21,10 +25,6 @@ import ListViewport from '../general/ListViewport';
 import TableHeading from './TableHeading';
 import TorrentListDropzone from './TorrentListDropzone';
 import TorrentListRow from './TorrentListRow';
-
-import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
-
-import type {FixedSizeList, ListChildComponentProps} from 'react-window';
 
 const TorrentListRowRenderer: FC<ListChildComponentProps> = observer(({index, style}) => (
   <TorrentListRow hash={TorrentStore.filteredTorrents[index].hash} style={style} />

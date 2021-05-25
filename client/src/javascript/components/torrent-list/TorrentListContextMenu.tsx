@@ -8,11 +8,11 @@ import TorrentContextMenuActions from '@client/constants/TorrentContextMenuActio
 import TorrentStore from '@client/stores/TorrentStore';
 import UIActions from '@client/actions/UIActions';
 
-import PriorityMeter from '../general/PriorityMeter';
-
 import type {ContextMenuItem} from '@client/stores/UIStore';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
+
+import PriorityMeter from '../general/PriorityMeter';
 
 const getLastSelectedTorrent = (): string => TorrentStore.selectedTorrents[TorrentStore.selectedTorrents.length - 1];
 
