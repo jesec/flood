@@ -1,22 +1,27 @@
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
 .dependency-list {
-  margin-top: $spacing-unit;
+  margin-top: variables.$spacing-unit;
   width: auto;
 
   &__dependency {
-    color: $foreground;
+    color: colors.$foreground;
     display: flex;
     opacity: 0.5;
     transition: opacity 0.25s;
     white-space: nowrap;
 
     &__icon {
-      fill: $green;
-      flex: 0 0 $spacing-unit * 2/5;
-      height: $spacing-unit * 2/5;
-      margin-right: $spacing-unit * 1/5;
+      fill: colors.$green;
+      flex: 0 0 math.div(variables.$spacing-unit * 2, 5);
+      height: math.div(variables.$spacing-unit * 2, 5);
+      margin-right: math.div(variables.$spacing-unit * 1, 5);
       opacity: 0;
       transition: opacity 0.25s;
-      width: $spacing-unit * 2/5;
+      width: math.div(variables.$spacing-unit * 2, 5);
 
       .icon {
         height: 10px;

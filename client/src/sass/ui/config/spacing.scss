@@ -1,13 +1,15 @@
+@use "sass:math";
+
 $spacing: 12px;
 
-$spacing--xx-small: $spacing * 1/4;
-$spacing--x-small: $spacing * 2/4;
-$spacing--small: $spacing * 3/4;
-$spacing--medium: $spacing * 5/4;
-$spacing--large: $spacing * 6/4;
-$spacing--x-large: $spacing * 7/4;
-$spacing--xx-large: $spacing * 8/4;
-$spacing--xxx-large: $spacing * 12/4;
+$spacing--xx-small: math.div($spacing, 4);
+$spacing--x-small: math.div($spacing * 2, 4);
+$spacing--small: math.div($spacing * 3, 4);
+$spacing--medium: math.div($spacing * 5, 4);
+$spacing--large: math.div($spacing * 6, 4);
+$spacing--x-large: math.div($spacing * 7, 4);
+$spacing--xx-large: math.div($spacing * 8, 4);
+$spacing--xxx-large: math.div($spacing * 12, 4);
 
 // Specifics
 $app-panel--padding--x: $spacing--large;

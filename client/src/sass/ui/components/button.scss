@@ -1,212 +1,220 @@
+@use "sass:color";
+
+@use '../../tools/colors';
+
+@use '../config/variables.scss';
+@use '../config/speed.scss';
+
 @function button--text-shadow($color) {
-  @return 0 1px 0 darken($color, 5%), 0 1px 2px rgba(darken($color, 10%), 0.8);
+  @return 0 1px 0 color.adjust($color, $lightness: -5%), 0 1px 2px rgba(color.adjust($color, $lightness: -10%), 0.8);
 }
 
 @function button--svg-shadow($color) {
-  @return drop-shadow(0 1px 0 darken($color, 5%)) drop-shadow(0 1px 2px rgba(darken($color, 10%), 0.8));
+  @return drop-shadow(0 1px 0 color.adjust($color, $lightness: -5%))
+    drop-shadow(0 1px 2px rgba(color.adjust($color, $lightness: -10%), 0.8));
 }
 
 .button {
-  border: $form--element--border-width solid currentColor;
+  border: variables.$form--element--border-width solid currentColor;
   cursor: pointer;
-  color: $white;
+  color: colors.$white;
   font-weight: 500;
   line-height: 1.5;
   position: relative;
   user-select: none;
 
   &:active {
-    color: rgba($white, 0.8);
+    color: rgba(colors.$white, 0.8);
   }
 
   &--primary {
-    background: $blue;
-    border-color: $blue--hard;
-    box-shadow: form--element--box-shadow($blue);
-    text-shadow: button--text-shadow($blue--hard);
+    background: colors.$blue;
+    border-color: colors.$blue--hard;
+    box-shadow: form--element--box-shadow(colors.$blue);
+    text-shadow: button--text-shadow(colors.$blue--hard);
 
     &:focus-visible,
     &:hover {
-      background: $blue--light;
+      background: colors.$blue--light;
     }
 
     &:active,
     &:focus {
-      box-shadow: form--element--box-shadow--active($blue--hard);
+      box-shadow: form--element--box-shadow--active(colors.$blue--hard);
     }
 
     &:active {
-      background: $blue--hard;
-      border-color: darken($blue--hard, 5%);
-      box-shadow: form--element--box-shadow--active($blue--hard);
+      background: colors.$blue--hard;
+      border-color: color.adjust(colors.$blue--hard, $lightness: -5%);
+      box-shadow: form--element--box-shadow--active(colors.$blue--hard);
     }
 
     .inverse & {
-      border-color: $blue;
+      border-color: colors.$blue;
 
       &:focus,
       &:hover {
-        background: $blue--light;
-        border-color: $blue--light;
+        background: colors.$blue--light;
+        border-color: colors.$blue--light;
       }
 
       &:active,
       &:focus {
-        box-shadow: form--element--inverse--box-shadow--active($blue--light);
+        box-shadow: form--element--inverse--box-shadow--active(colors.$blue--light);
       }
 
       &:active {
-        background: $blue;
-        border-color: $blue;
+        background: colors.$blue;
+        border-color: colors.$blue;
       }
     }
 
     svg {
-      filter: button--svg-shadow($blue--hard);
+      filter: button--svg-shadow(colors.$blue--hard);
     }
   }
 
   &--secondary {
-    background: $green;
-    border-color: $green--hard;
-    box-shadow: form--element--box-shadow($green);
-    text-shadow: button--text-shadow($green--hard);
+    background: colors.$green;
+    border-color: colors.$green--hard;
+    box-shadow: form--element--box-shadow(colors.$green);
+    text-shadow: button--text-shadow(colors.$green--hard);
 
     &:focus-visible,
     &:hover {
-      background: $green--light;
+      background: colors.$green--light;
     }
 
     &:active,
     &:focus {
-      box-shadow: form--element--box-shadow--active($green);
+      box-shadow: form--element--box-shadow--active(colors.$green);
     }
 
     &:active {
-      background: $green--hard;
-      border-color: darken($green--hard, 5%);
+      background: colors.$green--hard;
+      border-color: color.adjust(colors.$green--hard, $lightness: -5%);
     }
 
     .inverse & {
-      border-color: $green;
+      border-color: colors.$green;
 
       &:focus,
       &:hover {
-        background: $green--light;
-        border-color: $green--light;
+        background: colors.$green--light;
+        border-color: colors.$green--light;
       }
 
       &:active,
       &:focus {
-        box-shadow: form--element--inverse--box-shadow--active($green--light);
+        box-shadow: form--element--inverse--box-shadow--active(colors.$green--light);
       }
 
       &:active {
-        background: $green;
-        border-color: $green;
+        background: colors.$green;
+        border-color: colors.$green;
       }
     }
 
     svg {
-      filter: button--svg-shadow($green--hard);
+      filter: button--svg-shadow(colors.$green--hard);
     }
   }
 
   &--tertiary {
-    background: $grey;
-    border-color: $grey--harder;
-    box-shadow: form--element--box-shadow($grey);
-    text-shadow: button--text-shadow($grey--hard);
+    background: colors.$grey;
+    border-color: colors.$grey--harder;
+    box-shadow: form--element--box-shadow(colors.$grey);
+    text-shadow: button--text-shadow(colors.$grey--hard);
 
     &:focus-visible,
     &:hover {
-      background: $grey--light;
+      background: colors.$grey--light;
     }
 
     &:active,
     &:focus {
-      box-shadow: form--element--box-shadow--active($grey);
+      box-shadow: form--element--box-shadow--active(colors.$grey);
     }
 
     &:active {
-      background: $grey--hard;
-      border-color: darken($grey--hard, 5%);
+      background: colors.$grey--hard;
+      border-color: color.adjust(colors.$grey--hard, $lightness: -5%);
     }
 
     .inverse & {
-      border-color: $grey;
+      border-color: colors.$grey;
 
       &:focus,
       &:hover {
-        background: $grey--light;
-        border-color: $grey--light;
+        background: colors.$grey--light;
+        border-color: colors.$grey--light;
       }
 
       &:active,
       &:focus {
-        box-shadow: form--element--inverse--box-shadow--active($grey--light);
+        box-shadow: form--element--inverse--box-shadow--active(colors.$grey--light);
       }
 
       &:active {
-        background: $grey;
-        border-color: $grey;
+        background: colors.$grey;
+        border-color: colors.$grey;
       }
     }
 
     svg {
-      filter: button--svg-shadow($grey--hard);
+      filter: button--svg-shadow(colors.$grey--hard);
     }
   }
 
   &--quaternary {
-    background: $white;
-    border-color: $grey--lighter;
-    box-shadow: form--element--box-shadow($grey--lighter);
-    color: $grey;
+    background: colors.$white;
+    border-color: colors.$grey--lighter;
+    box-shadow: form--element--box-shadow(colors.$grey--lighter);
+    color: colors.$grey;
 
     &:focus-visible,
     &:hover {
-      border-color: $medium-grey;
-      color: $grey--hard;
+      border-color: colors.$medium-grey;
+      color: colors.$grey--hard;
     }
 
     &:active,
     &:focus {
-      border-color: $blue;
-      box-shadow: form--element--box-shadow--active($blue);
-      color: desaturate($blue--darker, 25%);
+      border-color: colors.$blue;
+      box-shadow: form--element--box-shadow--active(colors.$blue);
+      color: color.adjust(colors.$blue--darker, $saturation: -25%);
     }
 
     &:active {
-      background-color: $blue--soft;
+      background-color: colors.$blue--soft;
     }
 
     .inverse & {
-      background: $input--inverse--background;
-      border-color: $input--inverse--border;
-      box-shadow: $form--element--inverse--box-shadow;
-      color: $input--inverse--foreground;
+      background: variables.$input--inverse--background;
+      border-color: variables.$input--inverse--border;
+      box-shadow: variables.$form--element--inverse--box-shadow;
+      color: variables.$input--inverse--foreground;
 
       &:focus,
       &:hover {
-        border-color: $input--inverse--border--hover;
-        color: $input--inverse--foreground--hover;
+        border-color: variables.$input--inverse--border--hover;
+        color: variables.$input--inverse--foreground--hover;
       }
 
       &:active,
       &:focus {
-        border-color: $blue;
-        box-shadow: form--element--box-shadow--active($blue);
-        color: $input--inverse--foreground--active;
+        border-color: colors.$blue;
+        box-shadow: form--element--box-shadow--active(colors.$blue);
+        color: variables.$input--inverse--foreground--active;
       }
 
       &:active {
-        background-color: rgba($blue--soft, 0.15);
+        background-color: rgba(colors.$blue--soft, 0.15);
       }
     }
 
     svg {
-      filter: button--svg-shadow($grey--lighter);
+      filter: button--svg-shadow(colors.$grey--lighter);
     }
   }
 
@@ -231,16 +239,16 @@
   // }
 
   &--is-disabled {
-    box-shadow: form--element--box-shadow($blue);
-    color: $grey--light;
+    box-shadow: form--element--box-shadow(colors.$blue);
+    color: colors.$grey--light;
     text-shadow: none;
 
     &,
     &:hover,
     &:focus,
     &:active {
-      background: $light-grey;
-      border-color: $light-grey--hard;
+      background: colors.$light-grey;
+      border-color: colors.$light-grey--hard;
       box-shadow: none;
       cursor: not-allowed;
     }
@@ -252,7 +260,7 @@
     opacity: 1;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: opacity $speed--x-fast;
+    transition: opacity speed.$speed--x-fast;
     white-space: nowrap;
   }
 
@@ -269,7 +277,7 @@
       position: absolute;
       top: 50%;
       transform: translate(-50%, -50%);
-      transition: opacity $speed--fast;
+      transition: opacity speed.$speed--fast;
     }
   }
 

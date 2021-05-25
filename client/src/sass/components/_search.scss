@@ -1,17 +1,17 @@
-$sidebar--foreground: #53718a;
+@use '../tools/colors';
 
 $search-torrents--base: #091824;
 $search-torrents--background: rgba($search-torrents--base, 0.3);
-$search-torrents--background--active: rgba($blue, 0.25);
+$search-torrents--background--active: rgba(colors.$blue, 0.25);
 $search-torrents--border: rgba($search-torrents--background, 0.4);
-$search-torrents--border--active: rgba($blue, 0.3);
-$search-torrents--foreground: $sidebar--foreground;
-$search-torrents--foreground--active: $blue;
-$search-torrents--placeholder: rgba($sidebar--foreground, 0.4);
-$search-torrents--placeholder--active: rgba($blue, 0.4);
+$search-torrents--border--active: rgba(colors.$blue, 0.3);
+$search-torrents--foreground: colors.$sidebar--foreground;
+$search-torrents--foreground--active: colors.$blue;
+$search-torrents--placeholder: rgba(colors.$sidebar--foreground, 0.4);
+$search-torrents--placeholder--active: rgba(colors.$blue, 0.4);
 
-$search-torrents--icon--foreground: $sidebar--foreground;
-$search-torrents--icon--foreground--active: $blue;
+$search-torrents--icon--foreground: colors.$sidebar--foreground;
+$search-torrents--icon--foreground--active: colors.$blue;
 
 .search {
   position: relative;

@@ -1,3 +1,5 @@
+@use '../tools/variables';
+
 html,
 body {
   height: 100%;
@@ -92,13 +94,13 @@ body {
       z-index: 2;
 
       &.is-open {
-        transform: translateX($torrent-details--width);
+        transform: translateX(variables.$torrent-details--width);
       }
     }
 
     &--torrent-details {
-      right: 100% - $torrent-details--width;
-      width: $torrent-details--width;
+      right: 100% - variables.$torrent-details--width;
+      width: variables.$torrent-details--width;
       z-index: 1;
     }
   }

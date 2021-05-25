@@ -1,4 +1,10 @@
-$dropdown--background: $menu--background;
+@use "sass:math";
+
+@use '../tools/variables';
+
+@use './base-menu';
+
+$dropdown--background: base-menu.$menu--background;
 
 $dropdown--button--padding--bottom: 7px;
 $dropdown--button--padding--left: 15px;
@@ -8,20 +14,20 @@ $dropdown--button--padding--top: 12px;
 $dropdown--arrow--margin: 8px;
 $dropdown--arrow--width: 8px;
 
-$dropdown--container--border: $menu--container--border;
-$dropdown--container--shadow: $menu--container--shadow;
+$dropdown--container--border: base-menu.$menu--container--border;
+$dropdown--container--shadow: base-menu.$menu--container--shadow;
 
-$dropdown--label: $menu--label;
+$dropdown--label: base-menu.$menu--label;
 
-$dropdown--value: $menu--value;
-$dropdown--value--active: $menu--value--active;
+$dropdown--value: base-menu.$menu--value;
+$dropdown--value--active: base-menu.$menu--value--active;
 
-$dropdown--header--border: $menu--header--border;
+$dropdown--header--border: base-menu.$menu--header--border;
 
-$dropdown--item--foreground: $menu--item--foreground;
-$dropdown--item--background--hover: $menu--item--background--hover;
-$dropdown--item--foreground--hover: $menu--item--foreground--hover;
-$dropdown--item--foreground--active: $menu--item--foreground--active;
+$dropdown--item--foreground: base-menu.$menu--item--foreground;
+$dropdown--item--background--hover: base-menu.$menu--item--background--hover;
+$dropdown--item--foreground--hover: base-menu.$menu--item--foreground--hover;
+$dropdown--item--foreground--active: base-menu.$menu--item--foreground--active;
 
 .dropdown {
   display: inline-block;
@@ -107,8 +113,8 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
 
     &:after {
       border-top: 5px solid $dropdown--value;
-      border-left: $dropdown--arrow--width / 2 solid transparent;
-      border-right: $dropdown--arrow--width / 2 solid transparent;
+      border-left: math.div($dropdown--arrow--width, 2) solid transparent;
+      border-right: math.div($dropdown--arrow--width, 2) solid transparent;
       content: '';
       right: $dropdown--button--padding--right;
       position: absolute;
@@ -162,7 +168,7 @@ $dropdown--item--foreground--active: $menu--item--foreground--active;
   }
 
   &--width-small {
-    min-width: $spacing-unit * 5;
+    min-width: variables.$spacing-unit * 5;
   }
 
   &.is-expanded {

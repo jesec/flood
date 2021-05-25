@@ -1,13 +1,21 @@
-$dropzone--background: $textbox--background;
-$dropzone--foreground: $textbox--foreground;
-$dropzone--foreground--dragging: $blue;
-$dropzone--border: $textbox--border;
-$dropzone--border--hover: darken($dropzone--border, 20%);
-$dropzone--border--dragging: $blue;
-$dropzone--browse--foreground: $blue;
+@use "sass:color";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
+@use '../ui/config/font-size.scss';
+@use '../ui/config/variables.scss' as config-variables;
+
+$dropzone--background: colors.$textbox--background;
+$dropzone--foreground: colors.$textbox--foreground;
+$dropzone--foreground--dragging: colors.$blue;
+$dropzone--border: colors.$textbox--border;
+$dropzone--border--hover: color.adjust($dropzone--border, $lightness: -20%);
+$dropzone--border--dragging: colors.$blue;
+$dropzone--browse--foreground: colors.$blue;
 $dropzone--icon--fill: rgba($dropzone--foreground, 0.5);
-$dropzone--icon--fill--hover: $blue;
-$dropzone--icon--fill--dragging: $blue;
+$dropzone--icon--fill--hover: colors.$blue;
+$dropzone--icon--fill--dragging: colors.$blue;
 
 $dropzone--file--foreground: $dropzone--foreground;
 
@@ -19,7 +27,7 @@ $dropzone--file--foreground: $dropzone--foreground;
   z-index: 2;
 
   &:hover {
-    border-color: $input--inverse--border--hover;
+    border-color: config-variables.$input--inverse--border--hover;
 
     .dropzone__icon {
       .icon {
@@ -63,8 +71,8 @@ $dropzone--file--foreground: $dropzone--foreground;
   &__copy {
     cursor: pointer;
     flex: 1;
-    font-size: $font-size--x-small;
-    padding: $spacing-unit;
+    font-size: font-size.$font-size--x-small;
+    padding: variables.$spacing-unit;
     width: 100%;
   }
 
@@ -74,7 +82,7 @@ $dropzone--file--foreground: $dropzone--foreground;
   }
 
   &__selected-files {
-    font-size: $font-size--small;
+    font-size: font-size.$font-size--small;
     margin-bottom: -1px;
     position: relative;
     width: 100%;

@@ -1,9 +1,14 @@
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
 .peers-list {
   &__flag {
     display: inline-block;
     height: 10px;
     overflow: hidden;
-    margin-right: $spacing-unit * 1/5;
+    margin-right: math.div(variables.$spacing-unit * 1, 5);
     position: relative;
     width: 20px;
     vertical-align: baseline;
@@ -32,7 +37,7 @@
 
   &__encryption {
     .icon {
-      fill: $green;
+      fill: colors.$green;
       height: 12px;
       width: 12px;
     }
@@ -40,7 +45,7 @@
 
   &__incoming {
     .icon {
-      fill: $green;
+      fill: colors.$green;
       height: 12px;
       width: 12px;
     }

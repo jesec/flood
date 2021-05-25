@@ -1,63 +1,71 @@
+@use "sass:color";
+
+@use '../../tools/colors';
+
+@use '../config/spacing.scss';
+@use '../config/speed.scss';
+@use '../config/variables.scss';
+
 .input {
-  background: $input--background;
-  color: $input--foreground;
-  border: $form--element--border-width solid $input--border;
-  box-shadow: $form--element--box-shadow;
+  background: variables.$input--background;
+  color: variables.$input--foreground;
+  border: variables.$form--element--border-width solid variables.$input--border;
+  box-shadow: variables.$form--element--box-shadow;
 
   &::placeholder {
-    color: $input--foreground--placeholder;
-    transition: color $speed--xx-fast;
+    color: variables.$input--foreground--placeholder;
+    transition: color speed.$speed--xx-fast;
   }
 
   &:hover {
-    border-color: $input--border--hover;
-    color: $input--foreground--hover;
+    border-color: variables.$input--border--hover;
+    color: variables.$input--foreground--hover;
 
     &::placeholder {
-      color: $input--foreground--placeholder--hover;
+      color: variables.$input--foreground--placeholder--hover;
     }
   }
 
   &:active,
   &:focus {
-    background-color: $blue--soft;
-    color: desaturate($blue--darker, 25%);
-    border-color: $blue;
-    box-shadow: form--element--box-shadow--active($blue);
+    background-color: colors.$blue--soft;
+    color: color.adjust(colors.$blue--darker, $saturation: -25%);
+    border-color: colors.$blue;
+    box-shadow: form--element--box-shadow--active(colors.$blue);
 
     &::placeholder {
-      color: rgba($blue--light, 0.5);
+      color: rgba(colors.$blue--light, 0.5);
     }
   }
 
   .inverse & {
-    background: $input--inverse--background;
-    border: $form--element--border-width solid $input--inverse--border;
-    box-shadow: $form--element--inverse--box-shadow;
-    color: $input--inverse--foreground;
+    background: variables.$input--inverse--background;
+    border: variables.$form--element--border-width solid variables.$input--inverse--border;
+    box-shadow: variables.$form--element--inverse--box-shadow;
+    color: variables.$input--inverse--foreground;
 
     &::placeholder {
-      color: $input--inverse--foreground--placeholder;
+      color: variables.$input--inverse--foreground--placeholder;
     }
 
     &:hover {
-      border-color: $input--inverse--border--hover;
-      color: $input--inverse--foreground--hover;
+      border-color: variables.$input--inverse--border--hover;
+      color: variables.$input--inverse--foreground--hover;
 
       &::placeholder {
-        color: $input--inverse--foreground--placeholder--hover;
+        color: variables.$input--inverse--foreground--placeholder--hover;
       }
     }
 
     &:active,
     &:focus {
-      background-color: rgba($blue--soft, 0.15);
-      color: $input--inverse--foreground--active;
-      border-color: $blue;
-      box-shadow: form--element--box-shadow--active($blue);
+      background-color: rgba(colors.$blue--soft, 0.15);
+      color: variables.$input--inverse--foreground--active;
+      border-color: colors.$blue;
+      box-shadow: form--element--box-shadow--active(colors.$blue);
 
       &::placeholder {
-        color: $input--inverse--foreground--placeholder--active;
+        color: variables.$input--inverse--foreground--placeholder--active;
       }
     }
   }
@@ -76,25 +84,26 @@
   cursor: pointer;
   display: flex;
   outline: none;
-  padding: $form--element--padding--y 0 $form--element--padding--y $toggle-input--width + $spacing--x-small;
+  padding: variables.$form--element--padding--y 0 variables.$form--element--padding--y variables.$toggle-input--width +
+    spacing.$spacing--x-small;
   position: relative;
-  transition: all $speed--x-fast;
+  transition: all speed.$speed--x-fast;
   user-select: none;
 
   &:hover {
-    transition: all $speed--xx-fast;
+    transition: all speed.$speed--xx-fast;
 
     .toggle-input {
       &__indicator {
-        border-color: $input--border--hover;
+        border-color: variables.$input--border--hover;
 
         .inverse & {
-          border-color: $input--inverse--border--hover;
+          border-color: variables.$input--inverse--border--hover;
         }
 
         &,
         &__icon {
-          transition: all $speed--xx-fast;
+          transition: all speed.$speed--xx-fast;
         }
 
         &__icon {
@@ -109,24 +118,24 @@
 
   &:focus,
   &:active {
-    color: $blue;
+    color: colors.$blue;
 
     .toggle-input {
       &__indicator {
-        border-color: $blue;
-        box-shadow: form--element--box-shadow--active($blue);
+        border-color: colors.$blue;
+        box-shadow: form--element--box-shadow--active(colors.$blue);
 
         .inverse & {
-          border-color: $blue;
-          box-shadow: form--element--box-shadow--active($blue);
+          border-color: colors.$blue;
+          box-shadow: form--element--box-shadow--active(colors.$blue);
         }
 
         &,
         &__icon {
-          transition: all $speed--xx-fast;
+          transition: all speed.$speed--xx-fast;
 
           .icon {
-            fill: $blue;
+            fill: colors.$blue;
           }
         }
       }
@@ -137,12 +146,12 @@
   &--is-active {
     .toggle-input {
       &__indicator {
-        background-color: rgba($blue, 0.1);
-        color: rgba($blue, 0.8);
+        background-color: rgba(colors.$blue, 0.1);
+        color: rgba(colors.$blue, 0.8);
 
         .inverse & {
-          background-color: rgba($blue, 0.1);
-          color: rgba($blue, 0.8);
+          background-color: rgba(colors.$blue, 0.1);
+          color: rgba(colors.$blue, 0.8);
         }
 
         &__icon {
@@ -172,21 +181,21 @@
   }
 
   &__indicator {
-    background: $input--background;
-    border: $form--element--border-width solid $input--border;
-    box-shadow: $form--element--box-shadow;
+    background: variables.$input--background;
+    border: variables.$form--element--border-width solid variables.$input--border;
+    box-shadow: variables.$form--element--box-shadow;
     display: inline-block;
-    height: $toggle-input--height;
+    height: variables.$toggle-input--height;
     left: 0;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    transition: all $speed--x-fast;
-    width: $toggle-input--width;
+    transition: all speed.$speed--x-fast;
+    width: variables.$toggle-input--width;
 
     &__icon {
       opacity: 0;
-      transition: all $speed--x-fast;
+      transition: all speed.$speed--x-fast;
 
       &,
       .icon {
@@ -195,22 +204,22 @@
       }
 
       .icon {
-        fill: $grey;
-        transition: all $speed--x-fast;
+        fill: colors.$grey;
+        transition: all speed.$speed--x-fast;
       }
     }
 
     .inverse & {
-      background: $input--inverse--background;
-      border: $form--element--border-width solid $input--inverse--border;
-      box-shadow: $form--element--inverse--box-shadow;
+      background: variables.$input--inverse--background;
+      border: variables.$form--element--border-width solid variables.$input--inverse--border;
+      box-shadow: variables.$form--element--inverse--box-shadow;
     }
   }
 
   &.checkbox {
     .toggle-input {
       &__indicator {
-        border-radius: $form--element--border-radius;
+        border-radius: variables.$form--element--border-radius;
       }
     }
   }

@@ -1,4 +1,11 @@
-$selection-toolbar--height: $spacing-unit * 1.5;
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
+@use '../ui/config/spacing.scss';
+
+$selection-toolbar--height: variables.$spacing-unit * 1.5;
 
 .directory-tree {
   flex: 1 1 100%;
@@ -32,13 +39,13 @@ $selection-toolbar--height: $spacing-unit * 1.5;
 
   &__selection-toolbar {
     align-items: center;
-    background: $another-grey;
+    background: colors.$another-grey;
     bottom: 0;
     display: flex;
     flex: 0 0 $selection-toolbar--height;
     justify-content: space-between;
     min-height: $selection-toolbar--height;
-    padding: $spacing--small;
+    padding: spacing.$spacing--small;
     order: 2;
     position: absolute;
     transform: translateY(100%);
@@ -55,17 +62,17 @@ $selection-toolbar--height: $spacing-unit * 1.5;
     }
 
     &__item-count {
-      color: $blue;
+      color: colors.$blue;
       font-weight: bold;
     }
 
     .button {
       line-height: inherit;
-      padding: $spacing-unit * 1/5;
+      padding: math.div(variables.$spacing-unit * 1, 5);
 
       &--download {
         margin-left: auto;
-        margin-right: $spacing-unit * 2/5;
+        margin-right: math.div(variables.$spacing-unit * 2, 5);
       }
     }
 
@@ -201,7 +208,7 @@ $selection-toolbar--height: $spacing-unit * 1.5;
 
       &__detail {
         flex: 1 1 auto;
-        padding-right: $spacing-unit * 1/4;
+        padding-right: math.div(variables.$spacing-unit * 1, 4);
 
         &--secondary {
           flex: 0 0 auto;

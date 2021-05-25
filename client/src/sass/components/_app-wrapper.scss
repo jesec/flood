@@ -1,7 +1,9 @@
+@use '../tools/colors';
+
 .application {
   &__loading-overlay {
     align-items: center;
-    background: $light-blue;
+    background: colors.$light-blue;
     display: flex;
     flex-direction: column;
     font-size: 0.8em;

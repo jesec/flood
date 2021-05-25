@@ -1,3 +1,6 @@
+@use '../tools/colors';
+@use '../tools/themes';
+
 @keyframes candy-stripe {
   0% {
     background-position: 0 0;
@@ -21,7 +24,7 @@ $progress-bar--height: 3px;
     padding-right: 5px;
 
     .icon {
-      color: $green;
+      color: colors.$green;
       display: block;
       fill: currentColor;
       height: 12px;
@@ -29,93 +32,93 @@ $progress-bar--height: 3px;
       width: 12px;
 
       .torrent--is-seeding & {
-        @include theme('color', 'progress-bar--fill--completed');
+        @include themes.theme('color', 'progress-bar--fill--completed');
       }
 
       .torrent--is-stopped & {
-        @include theme('color', 'progress-bar--fill--stopped');
+        @include themes.theme('color', 'progress-bar--fill--stopped');
       }
 
       .torrent--has-error & {
-        @include theme('color', 'progress-bar--fill--error');
+        @include themes.theme('color', 'progress-bar--fill--error');
       }
 
       .torrent--is-checking & {
-        @include theme('color', 'progress-bar--fill--checking');
+        @include themes.theme('color', 'progress-bar--fill--checking');
       }
 
       .torrent--is-selected & {
-        @include theme('color', 'progress-bar--fill--selected');
+        @include themes.theme('color', 'progress-bar--fill--selected');
       }
 
       .torrent--is-selected.torrent--is-stopped & {
-        @include theme('color', 'progress-bar--fill--selected--stopped');
+        @include themes.theme('color', 'progress-bar--fill--selected--stopped');
       }
 
       .torrent--has-error.torrent--is-stopped & {
-        @include theme('color', 'progress-bar--fill--error--stopped');
+        @include themes.theme('color', 'progress-bar--fill--error--stopped');
       }
     }
   }
 
   &__fill {
-    @include theme('background', 'progress-bar--fill');
+    @include themes.theme('background', 'progress-bar--fill');
     display: block;
     height: $progress-bar--height;
     width: 100%;
 
     .torrent--is-seeding & {
-      @include theme('background', 'progress-bar--fill--completed');
+      @include themes.theme('background', 'progress-bar--fill--completed');
     }
 
     .torrent--is-stopped & {
-      @include theme('background', 'progress-bar--fill--stopped');
+      @include themes.theme('background', 'progress-bar--fill--stopped');
     }
 
     .torrent--has-error & {
-      @include theme('background', 'progress-bar--fill--error');
+      @include themes.theme('background', 'progress-bar--fill--error');
     }
 
     .torrent--is-checking & {
-      @include theme('background', 'progress-bar--fill--checking');
+      @include themes.theme('background', 'progress-bar--fill--checking');
     }
 
     .torrent--is-selected & {
-      @include theme('background', 'progress-bar--fill--selected');
+      @include themes.theme('background', 'progress-bar--fill--selected');
     }
 
     .torrent--is-selected.torrent--is-stopped & {
-      @include theme('background', 'progress-bar--fill--selected--stopped');
+      @include themes.theme('background', 'progress-bar--fill--selected--stopped');
     }
 
     .torrent--has-error.torrent--is-stopped & {
-      @include theme('background', 'progress-bar--fill--error--stopped');
+      @include themes.theme('background', 'progress-bar--fill--error--stopped');
     }
 
     &__wrapper {
-      @include theme('background', 'progress-bar--track--background');
+      @include themes.theme('background', 'progress-bar--track--background');
       flex: 1 1 auto;
       position: relative;
       height: $progress-bar--height;
 
       .torrent--is-stopped & {
-        @include theme('background', 'progress-bar--track--background--stopped');
+        @include themes.theme('background', 'progress-bar--track--background--stopped');
       }
 
       .torrent--has-error & {
-        @include theme('background', 'progress-bar--track--background--error');
+        @include themes.theme('background', 'progress-bar--track--background--error');
       }
 
       .torrent--is-selected & {
-        @include theme('background', 'progress-bar--track--background--selected');
+        @include themes.theme('background', 'progress-bar--track--background--selected');
       }
 
       .torrent--has-error.torrent--is-stopped & {
-        @include theme('background', 'progress-bar--track--background--error--stopped');
+        @include themes.theme('background', 'progress-bar--track--background--error--stopped');
       }
 
       .torrent--is-selected.torrent--is-stopped & {
-        @include theme('background', 'progress-bar--track--background--selected--stopped');
+        @include themes.theme('background', 'progress-bar--track--background--selected--stopped');
         opacity: 1;
       }
 

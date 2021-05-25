@@ -1,6 +1,12 @@
+@use "sass:color";
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
 $tooltip-background: #0f151c;
-$tooltip-background--error: $red;
-$tooltip-foreground: lighten(#7189a8, 3%);
+$tooltip-background--error: colors.$red;
+$tooltip-foreground: color.adjust(#7189a8, $lightness: 3%);
 $tooltip-foreground--error: #fff;
 $tooltip-link-foreground: #92aac9;
 
@@ -8,8 +14,8 @@ $tooltip-border-radius: 3px;
 $tooltip-font-size: 0.8rem;
 $tooltip-line-height: 1rem;
 
-$tooltip-padding-vertical: $spacing-unit * 3/10;
-$tooltip-padding-horizontal: $spacing-unit * 1/2;
+$tooltip-padding-vertical: math.div(variables.$spacing-unit * 3, 10);
+$tooltip-padding-horizontal: math.div(variables.$spacing-unit * 1, 2);
 
 $tooltip-arrow-border-width: 7px;
 $tooltip-arrow-offset: 8px;

@@ -1,5 +1,12 @@
+@use '../../tools/colors';
+
+@use '../config/font-size.scss';
+@use '../config/spacing.scss';
+@use '../config/speed.scss';
+@use '../config/variables.scss';
+
 .context-menu {
-  font-size: $font-size--small;
+  font-size: font-size.$font-size--small;
   height: 100vh;
   left: 0;
   width: 100vw;
@@ -51,20 +58,20 @@
   }
 
   &__items {
-    background: $white;
-    border-radius: $form--element--border-radius;
-    box-shadow: form--element--box-shadow($darkest-grey, 0.05, 0.1), 0 0 0 1px rgba($darkest-grey, 0.1);
+    background: colors.$white;
+    border-radius: variables.$form--element--border-radius;
+    box-shadow: form--element--box-shadow(colors.$darkest-grey, 0.05, 0.1), 0 0 0 1px rgba(colors.$darkest-grey, 0.1);
     max-width: 200px;
     overflow-x: hidden;
     overflow-y: auto;
     position: fixed;
     transform-origin: 50% -5px;
-    transition: opacity $speed--xx-fast, transform $speed--xx-fast;
+    transition: opacity speed.$speed--xx-fast, transform speed.$speed--xx-fast;
     z-index: 101;
 
     &,
     &__padding-surrogate {
-      padding: $spacing--small 0;
+      padding: spacing.$spacing--small 0;
     }
 
     &--is-up {

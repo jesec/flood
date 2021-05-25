@@ -1,4 +1,10 @@
-$notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
+@use "sass:color";
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
+$notification--sub-heading--color: color.adjust(color.adjust(#7189a8, $lightness: 5%), $saturation: 5%);
 
 .notifications {
   &--empty {
@@ -18,14 +24,14 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
   }
 
   &__badge {
-    background: $blue;
+    background: colors.$blue;
     border-radius: 30px;
-    color: $dark-blue;
+    color: colors.$dark-blue;
     font-size: 0.5rem;
     font-weight: 700;
     left: 18px;
     line-height: 9px;
-    padding: 0 $spacing-unit * 1/10;
+    padding: 0 math.div(variables.$spacing-unit * 1, 10);
     position: absolute;
     top: 6px;
     vertical-align: baseline;
@@ -40,7 +46,7 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
     word-wrap: break-word;
 
     &__item {
-      margin-bottom: $spacing-unit * 3/10;
+      margin-bottom: math.div(variables.$spacing-unit * 3, 10);
 
       &:last-child {
         margin-bottom: 0;
@@ -88,7 +94,7 @@ $notification--sub-heading--color: saturate(lighten(#7189a8, 5%), 5%);
   }
 
   &__category {
-    color: $blue;
+    color: colors.$blue;
     font-weight: 600;
   }
 

@@ -1,6 +1,13 @@
+@use "sass:math";
+
+@use '../tools/themes';
+@use '../tools/variables';
+
+@use './action-bar';
+
 .torrents {
-  @include theme('background', 'torrent-list--background');
-  @include theme('box-shadow', 'torrent-list--border');
+  @include themes.theme('background', 'torrent-list--background');
+  @include themes.theme('box-shadow', 'torrent-list--border');
   display: flex;
   flex: 1 1 0px;
   flex-direction: column;
@@ -15,7 +22,7 @@
   }
 
   &__alert {
-    @include theme('color', 'torrents-list--alert--foreground');
+    @include themes.theme('color', 'torrents-list--alert--foreground');
     text-align: center;
 
     &__wrapper {
@@ -31,7 +38,7 @@
     }
 
     &__action {
-      margin-top: $spacing-unit * 1/5;
+      margin-top: math.div(variables.$spacing-unit * 1, 5);
     }
   }
 }
@@ -101,8 +108,8 @@
 
 .view {
   &--torrent-list {
-    @include theme('background', 'torrent-view--background');
-    box-shadow: -1px 0 $torrent-list--border;
+    @include themes.theme('background', 'torrent-view--background');
+    box-shadow: -1px 0 action-bar.$torrent-list--border;
     display: flex;
     flex-direction: column;
     flex: 0 1 100%;

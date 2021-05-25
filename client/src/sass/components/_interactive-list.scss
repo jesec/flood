@@ -1,51 +1,65 @@
+@use "sass:color";
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables' as tools-variables;
+
+@use '../ui/config/speed.scss';
+@use '../ui/config/variables.scss';
+@use '../ui/config/border-radius.scss';
+@use '../ui/config/spacing.scss';
+
 $interactive-list--padding--vertical: 0;
 $interactive-list--padding--horizontal: 0;
 
-$interactive-list--item--foreground: $textbox--foreground;
+$interactive-list--item--foreground: colors.$textbox--foreground;
 
-$interactive-list--item--detail--tertiary--foreground: darken($interactive-list--item--foreground, 10%);
+$interactive-list--item--detail--tertiary--foreground: color.adjust(
+  $interactive-list--item--foreground,
+  $lightness: -10%
+);
 
 $interactive-list--item--icon--fill: rgba($interactive-list--item--foreground, 0.5);
 $interactive-list--item--icon--fill--hover: #fff;
 
-$interactive-list--item--padding--horizontal: $form--element--padding--x;
-$interactive-list--item--padding--vertical: $spacing-unit * 3/10;
+$interactive-list--item--padding--horizontal: variables.$form--element--padding--x;
+$interactive-list--item--padding--vertical: math.div(tools-variables.$spacing-unit * 3, 10);
 
-$interactive-list--detail-list--item--padding--horizontal: $spacing-unit * 1/5;
+$interactive-list--detail-list--item--padding--horizontal: math.div(tools-variables.$spacing-unit * 1, 5);
 $interactive-list--detail-list--item--padding--vertical: 0;
 
 .interactive-list {
   appearance: none;
   outline: none;
-  background: $input--inverse--background;
-  border: $form--element--border-width solid $input--inverse--border;
-  border-radius: $form--element--border-radius;
-  box-shadow: $form--element--inverse--box-shadow;
-  color: $input--inverse--foreground;
+  background: variables.$input--inverse--background;
+  border: variables.$form--element--border-width solid variables.$input--inverse--border;
+  border-radius: variables.$form--element--border-radius;
+  box-shadow: variables.$form--element--inverse--box-shadow;
+  color: variables.$input--inverse--foreground;
   display: block;
   height: auto;
   padding: $interactive-list--padding--vertical $interactive-list--padding--horizontal;
-  transition: all $speed--x-fast;
+  transition: all speed.$speed--x-fast;
   width: 100%;
 
   &::placeholder {
-    color: $textbox--placeholder;
+    color: colors.$textbox--placeholder;
     font-style: italic;
     transition: color 0.25s;
   }
 
   &::selection {
-    color: $textbox--selection--foreground;
-    background: $textbox--selection--background;
+    color: colors.$textbox--selection--foreground;
+    background: colors.$textbox--selection--background;
   }
 
   &:focus {
-    background: $textbox--active--background;
-    border-color: $textbox--active--border;
-    color: $textbox--active--foreground;
+    background: colors.$textbox--active--background;
+    border-color: colors.$textbox--active--border;
+    color: colors.$textbox--active--foreground;
 
     &::placeholder {
-      color: $textbox--active--placeholder;
+      color: colors.$textbox--active--placeholder;
     }
   }
 
@@ -54,12 +68,12 @@ $interactive-list--detail-list--item--padding--vertical: 0;
   }
 
   &__item {
-    border-bottom: 1px solid darken($input--inverse--background, 3%);
+    border-bottom: 1px solid color.adjust(variables.$input--inverse--background, $lightness: -3%);
     display: flex;
     overflow: hidden;
     padding: $interactive-list--item--padding--vertical $interactive-list--item--padding--horizontal;
     text-overflow: ellipsis;
-    transition: background $speed--x-fast;
+    transition: background speed.$speed--x-fast;
     white-space: nowrap;
     width: 100%;
 
@@ -95,10 +109,10 @@ $interactive-list--detail-list--item--padding--vertical: 0;
       flex: 0 0 auto;
 
       &.tag {
-        color: lighten($darkest-grey--hard, 50%);
+        color: color.adjust(colors.$darkest-grey--hard, $lightness: 50%);
         margin-right: 0;
-        padding-bottom: $spacing--xx-small / 2;
-        padding-top: $spacing--xx-small / 2;
+        padding-bottom: math.div(spacing.$spacing--xx-small, 2);
+        padding-top: math.div(spacing.$spacing--xx-small, 2);
       }
     }
   }
@@ -136,21 +150,21 @@ $interactive-list--detail-list--item--padding--vertical: 0;
   }
 
   &__icon {
-    border-radius: $border-radius--small;
+    border-radius: border-radius.$border-radius--small;
     flex: 0 0 auto;
-    height: $spacing--large;
+    height: spacing.$spacing--large;
     position: relative;
-    width: $spacing--large;
+    width: spacing.$spacing--large;
 
     .icon {
       height: 12px;
       width: 12px;
       fill: $interactive-list--item--icon--fill;
-      transition: fill $speed--x-fast;
+      transition: fill speed.$speed--x-fast;
     }
 
     &--action {
-      transition: background $speed--xx-fast;
+      transition: background speed.$speed--xx-fast;
 
       &:focus {
         outline: none;
@@ -159,10 +173,10 @@ $interactive-list--detail-list--item--padding--vertical: 0;
 
       &:focus-visible,
       &:hover {
-        background: $darkest-grey--hard;
+        background: colors.$darkest-grey--hard;
 
         .icon {
-          filter: drop-shadow(0 1px 0 rgba($darkest-grey, 0.8));
+          filter: drop-shadow(0 1px 0 rgba(colors.$darkest-grey, 0.8));
           fill: $interactive-list--item--icon--fill--hover;
         }
       }
@@ -170,12 +184,12 @@ $interactive-list--detail-list--item--padding--vertical: 0;
       &--warning {
         &:focus-visible,
         &:hover {
-          background: $red;
+          background: colors.$red;
         }
       }
 
       & + .interactive-list__icon--action {
-        margin-left: $spacing--x-small;
+        margin-left: spacing.$spacing--x-small;
       }
     }
   }

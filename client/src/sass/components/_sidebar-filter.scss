@@ -1,3 +1,5 @@
+@use '../tools/themes';
+
 .sidebar-filter {
   font-size: 0.85em;
   padding: 30px 0;
@@ -7,7 +9,7 @@
   }
 
   &__item {
-    @include theme('color', 'sidebar-filter--foreground');
+    @include themes.theme('color', 'sidebar-filter--foreground');
     cursor: pointer;
     font-weight: 400;
     padding: 3px 20px;
@@ -16,24 +18,24 @@
 
     &:focus-visible,
     &:hover {
-      @include theme('color', 'sidebar-filter--foreground--hover');
+      @include themes.theme('color', 'sidebar-filter--foreground--hover');
 
       .icon {
-        @include theme('fill', 'sidebar-filter--foreground--hover');
+        @include themes.theme('fill', 'sidebar-filter--foreground--hover');
       }
     }
 
     &.is-active {
-      @include theme('color', 'sidebar-filter--foreground--active');
+      @include themes.theme('color', 'sidebar-filter--foreground--active');
       font-weight: 700;
 
       .badge {
-        @include theme('background', 'sidebar-filter--count--background--active');
-        @include theme('color', 'sidebar-filter--count--foreground--active');
+        @include themes.theme('background', 'sidebar-filter--count--background--active');
+        @include themes.theme('color', 'sidebar-filter--count--foreground--active');
       }
 
       .icon {
-        @include theme('fill', 'sidebar-filter--foreground--active');
+        @include themes.theme('fill', 'sidebar-filter--foreground--active');
       }
     }
 
@@ -47,13 +49,13 @@
       &,
       &:focus-visible,
       &:hover {
-        @include theme('color', 'sidebar-filter--foreground--header');
+        @include themes.theme('color', 'sidebar-filter--foreground--header');
       }
     }
 
     .icon {
       display: inline-block;
-      @include theme('fill', 'sidebar-filter--foreground');
+      @include themes.theme('fill', 'sidebar-filter--foreground');
       height: 14px;
       margin-right: 7px;
       transition: fill 0.25s;
@@ -63,7 +65,7 @@
   }
 
   .badge {
-    @include theme('background', 'sidebar-filter--count--background');
-    @include theme('color', 'sidebar-filter--count--foreground');
+    @include themes.theme('background', 'sidebar-filter--count--background');
+    @include themes.theme('color', 'sidebar-filter--count--foreground');
   }
 }

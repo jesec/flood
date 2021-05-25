@@ -1,16 +1,21 @@
-$alert--background: rgba($sidebar--background, 0.95);
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
+$alert--background: rgba(colors.$sidebar--background, 0.95);
 $alert--foreground: #8fa2b2;
 
 .alerts {
   &__list {
     background: $alert--background;
     border-radius: 3px;
-    bottom: $spacing-unit * 1/5;
+    bottom: math.div(variables.$spacing-unit * 1, 5);
     color: $alert--foreground;
     font-size: 0.85rem;
-    padding: $spacing-unit * 2/5 $spacing-unit * 3/5;
+    padding: math.div(variables.$spacing-unit * 2, 5) math.div(variables.$spacing-unit * 3, 5);
     position: fixed;
-    right: $spacing-unit * 1/5;
+    right: math.div(variables.$spacing-unit * 1, 5);
     transition: opacity 0.25s;
     width: 250px;
     z-index: 99;
@@ -41,30 +46,30 @@ $alert--foreground: #8fa2b2;
 
   &.is-success {
     .icon {
-      fill: $green;
+      fill: colors.$green;
     }
 
     .alert {
       &__count {
-        color: $green;
+        color: colors.$green;
       }
     }
   }
 
   &.is-error {
     .icon {
-      fill: $red;
+      fill: colors.$red;
     }
 
     .alert {
       &__count {
-        color: $red;
+        color: colors.$red;
       }
     }
   }
 
   & + .alert {
-    margin-top: $spacing-unit * 2/5;
+    margin-top: math.div(variables.$spacing-unit * 2, 5);
   }
 
   &__content {
@@ -81,7 +86,7 @@ $alert--foreground: #8fa2b2;
     fill: currentColor;
     flex: 0 0 auto;
     height: 20px;
-    margin-right: $spacing-unit * 1/4;
+    margin-right: math.div(variables.$spacing-unit * 1, 4);
     width: 20px;
     vertical-align: middle;
   }

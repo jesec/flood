@@ -1,5 +1,7 @@
+@use '../tools/colors';
+
 body {
-  background: $background;
+  background: colors.$background;
 }
 
 ul {

@@ -1,3 +1,5 @@
+@use '../tools/colors';
+
 @keyframes loading-indicator-dots-pulse {
   0% {
     fill-opacity: 0.2;
@@ -60,7 +62,7 @@
       &--dots {
         &__dot {
           animation: loading-indicator-dots-pulse 0.6s linear alternate infinite;
-          fill: $white;
+          fill: colors.$white;
 
           &--center {
             animation-delay: 0.2s;

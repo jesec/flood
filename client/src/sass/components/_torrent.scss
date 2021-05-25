@@ -1,4 +1,12 @@
-$more-info--border: $textbox-repeater--button--border;
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/themes';
+@use '../tools/variables';
+
+@use './floating-action';
+
+$more-info--border: floating-action.$textbox-repeater--button--border;
 
 .torrent {
   cursor: default;
@@ -26,18 +34,18 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &__detail {
-    @include theme('color', 'torrent--secondary--foreground');
+    @include themes.theme('color', 'torrent--secondary--foreground');
 
     &--name {
-      @include theme('color', 'torrent--primary--foreground');
-      @include theme('font-weight', 'torrent--primary--font-weight');
+      @include themes.theme('color', 'torrent--primary--foreground');
+      @include themes.theme('font-weight', 'torrent--primary--font-weight');
     }
 
     &--tags {
       .torrent {
         &__tag {
           display: inline-block;
-          margin-right: $spacing-unit * 3/10;
+          margin-right: math.div(variables.$spacing-unit * 3, 10);
 
           &:last-child {
             margin-right: 0;
@@ -46,8 +54,8 @@ $more-info--border: $textbox-repeater--button--border;
       }
 
       .tag {
-        @include theme('background', 'torrent--tags--background');
-        @include theme('color', 'torrent--tags--foreground');
+        @include themes.theme('background', 'torrent--tags--background');
+        @include themes.theme('color', 'torrent--tags--foreground');
       }
     }
 
@@ -70,11 +78,11 @@ $more-info--border: $textbox-repeater--button--border;
   &__details {
     &__section {
       &--secondary {
-        @include theme('color', 'torrent--secondary--foreground');
+        @include themes.theme('color', 'torrent--secondary--foreground');
       }
 
       &--tertiary {
-        @include theme('color', 'torrent--tertiary--foreground');
+        @include themes.theme('color', 'torrent--tertiary--foreground');
       }
     }
   }
@@ -84,20 +92,20 @@ $more-info--border: $textbox-repeater--button--border;
       &__details {
         &__section {
           &--secondary {
-            @include theme('color', 'torrent--secondary--foreground--stopped');
+            @include themes.theme('color', 'torrent--secondary--foreground--stopped');
           }
 
           &--tertiary {
-            @include theme('color', 'torrent--tertiary--foreground--stopped');
+            @include themes.theme('color', 'torrent--tertiary--foreground--stopped');
           }
         }
       }
 
       &__detail {
-        @include theme('color', 'torrent--secondary--foreground--stopped');
+        @include themes.theme('color', 'torrent--secondary--foreground--stopped');
 
         &--name {
-          @include theme('color', 'torrent--primary--foreground--stopped');
+          @include themes.theme('color', 'torrent--primary--foreground--stopped');
           font-weight: 400;
         }
 
@@ -114,7 +122,7 @@ $more-info--border: $textbox-repeater--button--border;
         .torrent {
           &__detail {
             &--name {
-              @include theme('color', 'torrent--primary--foreground--error--stopped');
+              @include themes.theme('color', 'torrent--primary--foreground--error--stopped');
             }
           }
         }
@@ -124,13 +132,13 @@ $more-info--border: $textbox-repeater--button--border;
     .torrent {
       &__detail {
         &--name {
-          @include theme('color', 'torrent--primary--foreground--error');
+          @include themes.theme('color', 'torrent--primary--foreground--error');
         }
       }
     }
 
     &:after {
-      @include theme('background', 'torrent--background--error');
+      @include themes.theme('background', 'torrent--background--error');
     }
   }
 
@@ -139,7 +147,7 @@ $more-info--border: $textbox-repeater--button--border;
       .torrent {
         &__detail {
           &--downRate {
-            color: $green;
+            color: colors.$green;
             font-weight: 500;
           }
         }
@@ -149,10 +157,10 @@ $more-info--border: $textbox-repeater--button--border;
         &__sub-heading {
           &__tertiary {
             &--download {
-              color: $green;
+              color: colors.$green;
 
               .icon {
-                fill: $green;
+                fill: colors.$green;
               }
             }
           }
@@ -166,7 +174,7 @@ $more-info--border: $textbox-repeater--button--border;
       .torrent {
         &__detail {
           &--upRate {
-            color: $blue;
+            color: colors.$blue;
             font-weight: 500;
           }
         }
@@ -176,10 +184,10 @@ $more-info--border: $textbox-repeater--button--border;
         &__sub-heading {
           &__tertiary {
             &--upload {
-              color: $blue;
+              color: colors.$blue;
 
               .icon {
-                fill: $blue;
+                fill: colors.$blue;
               }
             }
           }
@@ -194,19 +202,19 @@ $more-info--border: $textbox-repeater--button--border;
         .torrent {
           &__detail {
             &--name {
-              @include theme('color', 'torrent--primary--foreground--selected--error');
+              @include themes.theme('color', 'torrent--primary--foreground--selected--error');
             }
 
             &--tags {
               .tag {
-                @include theme('background', 'torrent--tags--background--selected--has-error');
-                @include theme('color', 'torrent--tags--foreground--has-error');
+                @include themes.theme('background', 'torrent--tags--background--selected--has-error');
+                @include themes.theme('color', 'torrent--tags--foreground--has-error');
               }
             }
 
             &--downRate,
             &--upRate {
-              @include theme('color', 'torrent--speed--foreground--selected--has-error');
+              @include themes.theme('color', 'torrent--speed--foreground--selected--has-error');
             }
           }
         }
@@ -214,7 +222,7 @@ $more-info--border: $textbox-repeater--button--border;
         &,
         &:hover {
           &:after {
-            @include theme('background', 'torrent--background--error');
+            @include themes.theme('background', 'torrent--background--error');
           }
         }
       }
@@ -225,7 +233,7 @@ $more-info--border: $textbox-repeater--button--border;
             .torrent {
               &__detail {
                 &--name {
-                  @include theme('color', 'torrent--primary--foreground--error--stopped--selected');
+                  @include themes.theme('color', 'torrent--primary--foreground--error--stopped--selected');
                 }
               }
             }
@@ -234,15 +242,15 @@ $more-info--border: $textbox-repeater--button--border;
 
         .torrent {
           &__detail {
-            @include theme('color', 'torrent--secondary--foreground--selected--stopped');
+            @include themes.theme('color', 'torrent--secondary--foreground--selected--stopped');
 
             &--name {
-              @include theme('color', 'torrent--primary--foreground--selected--stopped');
+              @include themes.theme('color', 'torrent--primary--foreground--selected--stopped');
             }
 
             &--downRate,
             &--upRate {
-              @include theme('color', 'torrent--tertiary--foreground--selected--stopped');
+              @include themes.theme('color', 'torrent--tertiary--foreground--selected--stopped');
             }
 
             &--tags {
@@ -253,11 +261,11 @@ $more-info--border: $textbox-repeater--button--border;
           &__details {
             &__section {
               &--secondary {
-                @include theme('color', 'torrent--secondary--foreground--selected--stopped');
+                @include themes.theme('color', 'torrent--secondary--foreground--selected--stopped');
               }
 
               &--tertiary {
-                @include theme('color', 'torrent--tertiary--foreground--selected--stopped');
+                @include themes.theme('color', 'torrent--tertiary--foreground--selected--stopped');
               }
             }
           }
@@ -268,28 +276,28 @@ $more-info--border: $textbox-repeater--button--border;
     &,
     &:hover {
       &:after {
-        @include theme('background', 'torrent--background--selected');
+        @include themes.theme('background', 'torrent--background--selected');
         opacity: 1;
       }
     }
 
     .torrent {
       &__detail {
-        @include theme('color', 'torrent--secondary--foreground--selected');
+        @include themes.theme('color', 'torrent--secondary--foreground--selected');
 
         &--name {
-          @include theme('color', 'torrent--primary--foreground--selected');
+          @include themes.theme('color', 'torrent--primary--foreground--selected');
         }
 
         &--downRate,
         &--upRate {
-          @include theme('color', 'torrent--speed--foreground--selected');
+          @include themes.theme('color', 'torrent--speed--foreground--selected');
         }
 
         &--tags {
           .tag {
-            @include theme('background', 'torrent--tags--background--selected');
-            @include theme('color', 'torrent--tags--foreground--selected');
+            @include themes.theme('background', 'torrent--tags--background--selected');
+            @include themes.theme('color', 'torrent--tags--foreground--selected');
           }
         }
       }
@@ -297,11 +305,11 @@ $more-info--border: $textbox-repeater--button--border;
       &__details {
         &__section {
           &--secondary {
-            @include theme('color', 'torrent--secondary--foreground--selected');
+            @include themes.theme('color', 'torrent--secondary--foreground--selected');
           }
 
           &--tertiary {
-            @include theme('color', 'torrent--tertiary--foreground--selected');
+            @include themes.theme('color', 'torrent--tertiary--foreground--selected');
           }
         }
       }
@@ -468,7 +476,7 @@ $more-info--border: $textbox-repeater--button--border;
 
   &--is-condensed {
     align-items: center;
-    @include theme('border-top', 'torrent--border');
+    @include themes.theme('border-top', 'torrent--border');
     display: flex;
     height: 30px;
     min-width: max-content;
@@ -483,7 +491,7 @@ $more-info--border: $textbox-repeater--button--border;
       &--is-stopped {
         .torrent {
           &__detail {
-            @include theme('color', 'torrent--secondary--foreground--stopped');
+            @include themes.theme('color', 'torrent--secondary--foreground--stopped');
           }
         }
       }
@@ -491,21 +499,21 @@ $more-info--border: $textbox-repeater--button--border;
       &--is-selected {
         &,
         & + .torrent {
-          @include theme('border-color', 'torrent--border--selected');
+          @include themes.theme('border-color', 'torrent--border--selected');
         }
 
         &.torrent {
           &--has-error {
             &,
             & + .torrent {
-              @include theme('border-color', 'torrent--border--selected--error');
+              @include themes.theme('border-color', 'torrent--border--selected--error');
             }
           }
 
           &--is-stopped {
             .torrent {
               &__detail {
-                @include theme('color', 'torrent--tertiary--foreground--selected--stopped');
+                @include themes.theme('color', 'torrent--tertiary--foreground--selected--stopped');
               }
             }
           }
@@ -513,7 +521,7 @@ $more-info--border: $textbox-repeater--button--border;
 
         .torrent {
           &__detail {
-            @include theme('color', 'torrent--secondary--foreground--selected');
+            @include themes.theme('color', 'torrent--secondary--foreground--selected');
           }
         }
       }
@@ -550,9 +558,9 @@ $more-info--border: $textbox-repeater--button--border;
   }
 
   &__more-info {
-    @include theme('background', 'more-info--background');
+    @include themes.theme('background', 'more-info--background');
     border-radius: 32px 0 0 32px;
-    @include theme('box-shadow', 'more-info--box-shadow');
+    @include themes.theme('box-shadow', 'more-info--box-shadow');
     height: 32px;
     margin-top: -16px;
     position: absolute;
@@ -566,7 +574,7 @@ $more-info--border: $textbox-repeater--button--border;
     z-index: 1;
 
     .icon {
-      fill: rgba($foreground, 0.5);
+      fill: rgba(colors.$foreground, 0.5);
       position: absolute;
       height: 16px;
       left: 16px;
@@ -574,11 +582,11 @@ $more-info--border: $textbox-repeater--button--border;
     }
 
     &:hover {
-      @include theme('background', 'more-info--background--hover');
-      @include theme('box-shadow', 'more-info--box-shadow--hover');
+      @include themes.theme('background', 'more-info--background--hover');
+      @include themes.theme('box-shadow', 'more-info--box-shadow--hover');
 
       .icon {
-        fill: $blue;
+        fill: colors.$blue;
       }
     }
   }

@@ -1,5 +1,7 @@
+@use '../../tools/colors';
+
 .overlay {
-  background: rgba($darker-grey, 0.95);
+  background: rgba(colors.$darker-grey, 0.95);
   bottom: 0;
   left: 0;
   position: fixed;

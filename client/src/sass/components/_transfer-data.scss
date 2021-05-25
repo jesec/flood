@@ -1,5 +1,7 @@
-$transfer-data--download: $green;
-$transfer-data--upload: $blue;
+@use '../tools/colors';
+
+$transfer-data--download: colors.$green;
+$transfer-data--upload: colors.$blue;
 
 .transfer-data {
   &--download {

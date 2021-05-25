@@ -1,3 +1,8 @@
+@use '../../tools/colors';
+
+@use '../config/spacing.scss';
+@use '../config/speed.scss';
+
 .select {
   position: relative;
 
@@ -10,7 +15,7 @@
       .select {
         &__indicator {
           .icon {
-            fill: $grey--hard;
+            fill: colors.$grey--hard;
           }
         }
       }
@@ -21,8 +26,8 @@
       .select {
         &__indicator {
           .icon {
-            fill: $blue;
-            transition: all $speed--xx-fast;
+            fill: colors.$blue;
+            transition: all speed.$speed--xx-fast;
           }
         }
       }
@@ -42,36 +47,36 @@
 
   &__item {
     cursor: pointer;
-    padding: $spacing--x-small $spacing--small;
+    padding: spacing.$spacing--x-small spacing.$spacing--small;
     position: relative;
-    transition: all $speed--xx-fast;
+    transition: all speed.$speed--xx-fast;
     z-index: 1;
 
     .context-menu__items & {
       &:focus-visible,
       &:hover {
-        background: $light-grey--lighter;
+        background: colors.$light-grey--lighter;
       }
     }
 
     .icon {
-      fill: $grey;
+      fill: colors.$grey;
       height: 14px;
-      right: $spacing--small;
+      right: spacing.$spacing--small;
       opacity: 0;
       position: absolute;
       top: 50%;
       transform: translateY(-60%);
-      transition: all $speed--xx-fast;
+      transition: all speed.$speed--xx-fast;
       width: 14px;
     }
 
     &--is-selected {
-      color: $blue;
+      color: colors.$blue;
       font-weight: 500;
 
       .icon {
-        fill: $blue;
+        fill: colors.$blue;
         opacity: 1;
       }
     }

@@ -1,23 +1,33 @@
+@use "sass:math";
+
+@use '../../tools/colors';
+
+@use '../config/border-radius.scss';
+@use '../config/font-size.scss';
+@use '../config/spacing.scss';
+@use '../config/speed.scss';
+@use '../config/variables.scss';
+
 .input,
 .button {
   appearance: none;
-  border-radius: $form--element--border-radius;
-  font-size: $font-size--small;
-  height: $form--element--height;
+  border-radius: variables.$form--element--border-radius;
+  font-size: font-size.$font-size--small;
+  height: variables.$form--element--height;
   outline: none;
-  padding: $form--element--padding--y $form--element--padding--x;
-  transition: all $speed--x-fast;
+  padding: variables.$form--element--padding--y variables.$form--element--padding--x;
+  transition: all speed.$speed--x-fast;
 
   &:focus,
   &:active {
-    transition: all $speed--xx-fast;
+    transition: all speed.$speed--xx-fast;
   }
 }
 
 .form {
   &__row {
     display: flex;
-    margin-bottom: $form__row--margin--vertical;
+    margin-bottom: variables.$form__row--margin--vertical;
     width: 100%;
 
     &:last-child,
@@ -59,7 +69,7 @@
 
     &__item {
       flex: 0 0 auto;
-      margin: 0 $spacing--x-small;
+      margin: 0 spacing.$spacing--x-small;
       min-width: 1px;
       position: relative;
       width: auto;
@@ -120,12 +130,12 @@
       }
 
       .error {
-        background: $red--alpha--light;
-        border: 1px solid $red--alpha--medium;
-        border-radius: $border-radius--small;
-        color: $red;
-        padding: $form--element--padding--x * 2/3 $form--element--padding--x;
-        transition: opacity $speed--x-fast;
+        background: colors.$red--alpha--light;
+        border: 1px solid colors.$red--alpha--medium;
+        border-radius: border-radius.$border-radius--small;
+        color: colors.$red;
+        padding: math.div(variables.$form--element--padding--x * 2, 3) variables.$form--element--padding--x;
+        transition: opacity speed.$speed--x-fast;
 
         &--is-loading {
           opacity: 0.4;
@@ -137,9 +147,9 @@
   &__element {
     &__label {
       display: block;
-      font-size: $font-size--x-small;
+      font-size: font-size.$font-size--x-small;
       line-height: 1rem;
-      margin-bottom: $spacing--xx-small;
+      margin-bottom: spacing.$spacing--xx-small;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -150,11 +160,11 @@
     }
 
     &--label-offset {
-      margin-top: calc(#{$spacing--xx-small} + 1rem);
+      margin-top: calc(#{spacing.$spacing--xx-small} + 1rem);
     }
 
     &--match-textbox-height {
-      height: $form--element--height;
+      height: variables.$form--element--height;
     }
   }
 }

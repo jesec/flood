@@ -1,7 +1,9 @@
+@use '../tools/colors';
+
 $loading-indicator--bar--background: #e9eef2;
 $loading-indicator--bar--background--inverse: rgba(#38586d, 0.7);
-$loading-indicator--tick--background: rgba($blue, 0.75);
-$loading-indicator--tick--background--inverse: rgba($blue, 0.75);
+$loading-indicator--tick--background: rgba(colors.$blue, 0.75);
+$loading-indicator--tick--background--inverse: rgba(colors.$blue, 0.75);
 
 @keyframes loading-indicator-swipe {
   0% {

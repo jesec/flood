@@ -1,8 +1,14 @@
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/themes';
+@use '../tools/variables';
+
 .application {
   &__sidebar {
-    @include theme('background', 'sidebar--background');
-    @include theme('box-shadow', 'sidebar--border');
-    @include theme('color', 'sidebar--foreground');
+    @include themes.theme('background', 'sidebar--background');
+    @include themes.theme('box-shadow', 'sidebar--border');
+    @include themes.theme('color', 'sidebar--foreground');
     flex: 1;
     min-width: 240px;
     max-width: 250px;
@@ -26,20 +32,20 @@
 
 .sidebar {
   &__icon-button {
-    @include theme('color', 'sidebar--icon-button--foreground');
+    @include themes.theme('color', 'sidebar--icon-button--foreground');
     display: block;
     font-size: 0.8em;
     line-height: 1;
-    padding: $spacing-unit * 2/5;
+    padding: math.div(variables.$spacing-unit * 2, 5);
     position: relative;
     transition: color 0.25s;
 
     &:focus-visible,
     &:hover {
-      @include theme('color', 'sidebar--icon-button--foreground--hover');
+      @include themes.theme('color', 'sidebar--icon-button--foreground--hover');
 
       .icon {
-        @include theme('fill', 'sidebar--icon-button--fill--hover');
+        @include themes.theme('fill', 'sidebar--icon-button--fill--hover');
       }
     }
 
@@ -48,7 +54,7 @@
     }
 
     .icon {
-      @include theme('fill', 'sidebar--icon-button--fill');
+      @include themes.theme('fill', 'sidebar--icon-button--fill');
       height: 13px;
       transition: fill 0.25s;
       position: relative;
@@ -67,7 +73,7 @@
   &__actions {
     min-height: max-content;
     display: flex;
-    padding: $spacing-unit * 1/5;
+    padding: math.div(variables.$spacing-unit * 1, 5);
     justify-content: flex-start;
   }
 
@@ -76,10 +82,10 @@
       display: none;
     }
     .progress-bar__fill__wrapper {
-      @include theme('background', 'sidebar-filter--foreground--fill');
+      @include themes.theme('background', 'sidebar-filter--foreground--fill');
     }
     .progress-bar__fill {
-      @include theme('background', 'sidebar-filter--foreground');
+      @include themes.theme('background', 'sidebar-filter--foreground');
     }
   }
 }
@@ -104,7 +110,7 @@
     }
 
     &__label {
-      color: $dark-grey;
+      color: colors.$dark-grey;
       display: block;
       font-size: 0.9em;
       font-weight: 600;
@@ -120,10 +126,10 @@
 
         .sidebar {
           &__icon-button {
-            padding: $spacing-unit * 2/5;
+            padding: math.div(variables.$spacing-unit * 2, 5);
 
             .icon {
-              margin-right: $spacing-unit * 1/5;
+              margin-right: math.div(variables.$spacing-unit * 1, 5);
             }
           }
         }

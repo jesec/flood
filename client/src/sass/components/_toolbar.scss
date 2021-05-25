@@ -1,3 +1,9 @@
+@use "sass:color";
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
 .toolbar {
   display: flex;
   flex-direction: row;
@@ -7,31 +13,31 @@
   &--dark {
     &.toolbar {
       &--bottom {
-        border-top: 1px solid $dark-blue;
+        border-top: 1px solid colors.$dark-blue;
       }
 
       &--top {
-        border-bottom: 1px solid $dark-blue;
+        border-bottom: 1px solid colors.$dark-blue;
       }
     }
 
     .toolbar {
       &__item {
         &--button {
-          color: darken($foreground, 10%);
+          color: color.adjust(colors.$foreground, $lightness: -10%);
 
           &:hover {
-            color: lighten($foreground, 10%);
+            color: color.adjust(colors.$foreground, $lightness: 10%);
 
             .icon {
-              fill: lighten($foreground, 10%);
+              fill: color.adjust(colors.$foreground, $lightness: 10%);
             }
           }
         }
 
         .icon {
           display: inline-block;
-          fill: darken($foreground, 15%);
+          fill: color.adjust(colors.$foreground, $lightness: -15%);
           height: 10px;
           transition: fill 0.25s;
           vertical-align: middle;
@@ -82,14 +88,14 @@
         text-align: right;
 
         .icon {
-          margin-left: $spacing-unit * 1/5;
+          margin-left: math.div(variables.$spacing-unit * 1, 5);
           margin-right: 0;
         }
       }
 
       .icon {
         margin-bottom: 2px;
-        margin-right: $spacing-unit * 1/5;
+        margin-right: math.div(variables.$spacing-unit * 1, 5);
       }
     }
 

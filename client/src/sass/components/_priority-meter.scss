@@ -1,11 +1,13 @@
+@use '../tools/colors';
+
 $priority-meter--track--level-0--background: rgba(#436076, 0.2);
 $priority-meter--bar--level-0--background: #436076;
-$priority-meter--track--level-1--background: rgba($blue, 0.2);
-$priority-meter--bar--level-1--background: $blue;
-$priority-meter--track--level-2--background: rgba($green, 0.2);
-$priority-meter--bar--level-2--background: $green;
-$priority-meter--track--level-3--background: rgba($red, 0.2);
-$priority-meter--bar--level-3--background: $red;
+$priority-meter--track--level-1--background: rgba(colors.$blue, 0.2);
+$priority-meter--bar--level-1--background: colors.$blue;
+$priority-meter--track--level-2--background: rgba(colors.$green, 0.2);
+$priority-meter--bar--level-2--background: colors.$green;
+$priority-meter--track--level-3--background: rgba(colors.$red, 0.2);
+$priority-meter--bar--level-3--background: colors.$red;
 
 .priority-meter {
   height: 8px;

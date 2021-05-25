@@ -1,9 +1,11 @@
+@use "sass:math";
+
 $base-font-size: 16px;
 
-$font-size--xx-large: (1 + 3/8) + 0rem;
-$font-size--x-large: (1 + 1/4) + 0rem;
-$font-size--large: (1 + 1/8) + 0rem;
+$font-size--xx-large: (1 + math.div(3, 8)) + 0rem;
+$font-size--x-large: (1 + math.div(1, 4)) + 0rem;
+$font-size--large: (1 + math.div(1, 8)) + 0rem;
 $font-size--medium: 1rem;
-$font-size--small: (7/8) + 0rem;
-$font-size--x-small: (3/4) + 0rem;
-$font-size--xx-small: (5/8) + 0rem;
+$font-size--small: math.div(7, 8) + 0rem;
+$font-size--x-small: math.div(3, 4) + 0rem;
+$font-size--xx-small: math.div(5, 8) + 0rem;

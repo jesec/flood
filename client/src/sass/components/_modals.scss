@@ -1,17 +1,26 @@
-$modal--background: $another-grey;
+@use "sass:color";
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
+$modal--background: colors.$another-grey;
 
 $modal--heading--foreground: #e6f0ff;
 
-$modal--sub-heading--foreground: desaturate(darken($modal--heading--foreground, 15%), 15%);
+$modal--sub-heading--foreground: color.adjust(
+  color.adjust($modal--heading--foreground, $lightness: -15%),
+  $saturation: -15%
+);
 
 $modal--transition--duration: 0.2s;
 $modal--transition--scale: 0.85;
 
-$modal--body--foreground: lighten(#6c7e92, 6%);
+$modal--body--foreground: color.adjust(#6c7e92, $lightness: 6%);
 
 $modal--tab--foreground: #abc2e2;
-$modal--tab--foreground--active: $blue--lighter;
-$modal--tab--border--active: $blue--lighter;
+$modal--tab--foreground--active: colors.$blue--lighter;
+$modal--tab--border--active: colors.$blue--lighter;
 
 $modal--overlay--base: #0b1014;
 $modal--overlay: rgba($modal--overlay--base, 0.95);
@@ -20,34 +29,34 @@ $modal--content--shadow: #05080a;
 
 $modal--border: #363e48;
 $modal--border-radius: 3px;
-$modal--padding--horizontal: $spacing-unit;
-$modal--padding--vertical: $modal--padding--horizontal * 4/5;
+$modal--padding--horizontal: variables.$spacing-unit;
+$modal--padding--vertical: math.div($modal--padding--horizontal * 4, 5);
 
-$modal--content--padding--top: $spacing-unit * 4/5;
-$modal--content--padding--right: $spacing-unit;
-$modal--content--padding--bottom: $spacing-unit * 4/5;
-$modal--content--padding--left: $spacing-unit;
+$modal--content--padding--top: math.div(variables.$spacing-unit * 4, 5);
+$modal--content--padding--right: variables.$spacing-unit;
+$modal--content--padding--bottom: math.div(variables.$spacing-unit * 4, 5);
+$modal--content--padding--left: variables.$spacing-unit;
 
-$modal--actions--margin--top: $spacing-unit;
+$modal--actions--margin--top: variables.$spacing-unit;
 
-$modal--tabs--margin--top: $spacing-unit * 1/5;
-$modal--tabs--margin--right: $spacing-unit * -1/5;
+$modal--tabs--margin--top: math.div(variables.$spacing-unit * 1, 5);
+$modal--tabs--margin--right: math.div(variables.$spacing-unit * -1, 5);
 $modal--tabs--margin--bottom: 0;
-$modal--tabs--margin--left: $spacing-unit * -1/5;
+$modal--tabs--margin--left: math.div(variables.$spacing-unit * -1, 5);
 
-$modal--vertical--tabs--margin--top: $spacing-unit * 1/5;
+$modal--vertical--tabs--margin--top: math.div(variables.$spacing-unit * 1, 5);
 $modal--vertical--tabs--margin--right: 0;
 $modal--vertical--tabs--margin--bottom: 0;
 $modal--vertical--tabs--margin--left: $modal--padding--horizontal * -1;
 
-$modal--tabs--padding--top: $spacing-unit * 1/5;
-$modal--tabs--padding--right: $spacing-unit * 1/5;
-$modal--tabs--padding--bottom: $spacing-unit * 2/5;
-$modal--tabs--padding--left: $spacing-unit * 1/5;
+$modal--tabs--padding--top: math.div(variables.$spacing-unit * 1, 5);
+$modal--tabs--padding--right: math.div(variables.$spacing-unit * 1, 5);
+$modal--tabs--padding--bottom: math.div(variables.$spacing-unit * 2, 5);
+$modal--tabs--padding--left: math.div(variables.$spacing-unit * 1, 5);
 
-$modal--tabs--padding--vertical--top: $spacing-unit * 1/5;
-$modal--tabs--padding--vertical--right: $spacing-unit * 2/5;
-$modal--tabs--padding--vertical--bottom: $spacing-unit * 1/5;
+$modal--tabs--padding--vertical--top: math.div(variables.$spacing-unit * 1, 5);
+$modal--tabs--padding--vertical--right: math.div(variables.$spacing-unit * 2, 5);
+$modal--tabs--padding--vertical--bottom: math.div(variables.$spacing-unit * 1, 5);
 $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
 
 .modal {
@@ -79,7 +88,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
     .modal {
       &__tab {
         display: inline-block;
-        margin-right: $spacing-unit * 2/5;
+        margin-right: math.div(variables.$spacing-unit * 2, 5);
         position: relative;
 
         > button {
@@ -286,7 +295,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
             flex: 1 0 auto;
 
             & + .modal__footer {
-              margin-top: $spacing-unit * 3/5;
+              margin-top: math.div(variables.$spacing-unit * 3, 5);
             }
           }
         }

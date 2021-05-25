@@ -1,15 +1,19 @@
+@use "sass:color";
+
+@use '../tools/colors';
+
 $menu--background: rgba(#fff, 0.98);
-$menu--container--border: rgba($sidebar--background, 0.075);
-$menu--container--shadow: rgba($sidebar--background, 0.15);
+$menu--container--border: rgba(colors.$sidebar--background, 0.075);
+$menu--container--shadow: rgba(colors.$sidebar--background, 0.15);
 $menu--label: #abbac7;
 $menu--value: #8899a8;
 $menu--value--active: #4e6a7c;
-$menu--header--border: rgba($sidebar--background, 0.05);
-$menu--item--background--hover: rgba($main-content--background, 0.4);
+$menu--header--border: rgba(colors.$sidebar--background, 0.05);
+$menu--item--background--hover: rgba(colors.$main-content--background, 0.4);
 $menu--item--foreground: #526780;
-$menu--item--foreground--hover: darken($menu--item--foreground, 10%);
-$menu--item--secondary--foreground: lighten($menu--item--foreground, 20%);
-$menu--item--foreground--active: $blue;
+$menu--item--foreground--hover: color.adjust($menu--item--foreground, $lightness: -10%);
+$menu--item--secondary--foreground: color.adjust($menu--item--foreground, $lightness: 20%);
+$menu--item--foreground--active: colors.$blue;
 $menu--item--separator--background: $menu--container--border;
 
 .menu {

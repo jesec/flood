@@ -1,12 +1,32 @@
-$sortable-list--item--background: $input--inverse--background;
-$sortable-list--item--background--hover: saturate(darken($sortable-list--item--background, 2%), 3%);
-$sortable-list--item--background--dragging: desaturate(lighten($sortable-list--item--background, 2%), 1%);
-$sortable-list--item--background--preview: saturate(darken($sortable-list--item--background, 3%), 3%);
-$sortable-list--item--border: saturate(darken($sortable-list--item--background, 4%), 5%);
-$sortable-list--item--border--preview: darken($sortable-list--item--border, 3%);
+@use "sass:color";
+@use "sass:math";
+
+@use '../tools/colors';
+@use '../tools/variables';
+
+@use '../ui/config/variables.scss' as config-variables;
+
+$sortable-list--item--background: config-variables.$input--inverse--background;
+$sortable-list--item--background--hover: color.adjust(
+  color.adjust($sortable-list--item--background, $lightness: -2%),
+  $saturation: 3%
+);
+$sortable-list--item--background--dragging: color.adjust(
+  color.adjust($sortable-list--item--background, $lightness: 2%),
+  $saturation: -1%
+);
+$sortable-list--item--background--preview: color.adjust(
+  color.adjust($sortable-list--item--background, $lightness: -3%),
+  $saturation: 3%
+);
+$sortable-list--item--border: color.adjust(
+  color.adjust($sortable-list--item--background, $lightness: -4%),
+  $saturation: 5%
+);
+$sortable-list--item--border--preview: color.adjust($sortable-list--item--border, $lightness: -3%);
 
 .sortable-list {
-  box-shadow: $form--element--inverse--box-shadow;
+  box-shadow: config-variables.$form--element--inverse--box-shadow;
   flex: 1 1 auto;
   font-size: 0.9em;
   position: relative;
@@ -18,7 +38,7 @@ $sortable-list--item--border--preview: darken($sortable-list--item--border, 3%);
     cursor: move;
     display: flex;
     height: 30px;
-    padding: 0 $spacing-unit * 1/5;
+    padding: 0 math.div(variables.$spacing-unit * 1, 5);
 
     &:first-child {
       border-top-left-radius: 3px;
@@ -50,7 +70,7 @@ $sortable-list--item--border--preview: darken($sortable-list--item--border, 3%);
       background: $sortable-list--item--background--preview;
       border: 1px solid $sortable-list--item--border--preview;
       border-radius: 0;
-      color: $white;
+      color: colors.$white;
       font-weight: 500;
       left: 0;
       position: absolute;
@@ -66,8 +86,8 @@ $sortable-list--item--border--preview: darken($sortable-list--item--border, 3%);
 
     .toggle-input {
       &__indicator {
-        background: darken($input--inverse--background, 5%);
-        border-color: darken($input--inverse--background, 8%);
+        background: color.adjust(config-variables.$input--inverse--background, $lightness: -5%);
+        border-color: color.adjust(config-variables.$input--inverse--background, $lightness: -8%);
       }
     }
 
@@ -81,14 +101,14 @@ $sortable-list--item--border--preview: darken($sortable-list--item--border, 3%);
       }
 
       &--error {
-        fill: $red;
+        fill: colors.$red;
       }
     }
   }
 
   &__content {
     flex: 0 0 auto;
-    margin-left: $spacing-unit * 1/5;
+    margin-left: math.div(variables.$spacing-unit * 1, 5);
 
     &:first-child {
       margin-left: 0;

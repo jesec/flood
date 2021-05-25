@@ -1,3 +1,7 @@
+@use "sass:math";
+
+@use '../tools/variables';
+
 .mediainfo {
   display: flex;
   flex-direction: column;
@@ -7,7 +11,7 @@
     display: flex;
     flex: 0 0 auto;
     justify-content: space-between;
-    padding-bottom: $spacing-unit * 2/5;
+    padding-bottom: math.div(variables.$spacing-unit * 2, 5);
     position: relative;
 
     .tooltip__wrapper {

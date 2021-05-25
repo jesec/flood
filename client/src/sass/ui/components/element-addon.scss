@@ -1,19 +1,26 @@
+@use '../../tools/colors';
+
+@use '../config/speed.scss';
+@use '../config/variables.scss';
+
+@use './icon.scss';
+
 .form {
   &__element {
     &--has-addon {
       &--placed-before {
-        padding-left: $button--has-addon--padding--left;
+        padding-left: variables.$button--has-addon--padding--left;
 
         &.form__element--has-addon--count-2 {
-          padding-left: $button--has-two-addons--padding--left;
+          padding-left: variables.$button--has-two-addons--padding--left;
         }
       }
 
       &--placed-after {
-        padding-right: $button--has-addon--padding--right;
+        padding-right: variables.$button--has-addon--padding--right;
 
         &.form__element--has-addon--count-2 {
-          padding-right: $button--has-two-addons--padding--right;
+          padding-right: variables.$button--has-two-addons--padding--right;
         }
       }
     }
@@ -21,46 +28,46 @@
     &__addon {
       border-width: 0;
       border-style: solid;
-      border-color: $grey--soft;
+      border-color: colors.$grey--soft;
       bottom: 0;
       pointer-events: none;
       position: absolute;
-      transition: all $speed--x-fast;
+      transition: all speed.$speed--x-fast;
       top: 0;
 
       .inverse & {
-        border-color: $darkest-grey--darker;
+        border-color: colors.$darkest-grey--darker;
       }
 
       .form__element:focus ~ &,
       .form__element:active ~ & {
-        border-color: rgba($blue, 0.15);
-        transition: all $speed--xx-fast;
+        border-color: rgba(colors.$blue, 0.15);
+        transition: all speed.$speed--xx-fast;
 
         .icon {
-          fill: $blue;
-          transition: all $speed--xx-fast;
+          fill: colors.$blue;
+          transition: all speed.$speed--xx-fast;
 
           &--stroke {
             fill: none;
-            stroke: $blue;
+            stroke: colors.$blue;
           }
         }
       }
 
       .icon {
         @extend .icon--small;
-        fill: $grey;
+        fill: colors.$grey;
         position: absolute;
         left: 50%;
         top: 50%;
         transform-origin: 50% 50%;
         transform: translate(-50%, -50%);
-        transition: all $speed--x-fast;
+        transition: all speed.$speed--x-fast;
 
         &--stroke {
           fill: none;
-          stroke: $grey;
+          stroke: colors.$grey;
         }
       }
 
@@ -69,7 +76,7 @@
         left: 0;
 
         &.form__element__addon--index-2 {
-          left: $button--addon--width;
+          left: variables.$button--addon--width;
         }
       }
 
@@ -78,12 +85,12 @@
         right: 0;
 
         &.form__element__addon--index-2 {
-          right: $button--addon--width;
+          right: variables.$button--addon--width;
         }
       }
 
       &--is-icon {
-        width: $button--addon--width;
+        width: variables.$button--addon--width;
       }
 
       &--is-interactive {
@@ -93,8 +100,8 @@
         &:focus,
         &:hover {
           .icon {
-            fill: $blue;
-            transition: all $speed--xx-fast;
+            fill: colors.$blue;
+            transition: all speed.$speed--xx-fast;
           }
         }
       }

@@ -1,3 +1,5 @@
+@use "sass:color";
+
 * {
   scrollbar-width: thin;
 }
@@ -22,7 +24,7 @@
 
 ::-webkit-scrollbar-thumb:hover {
   border-radius: 4px;
-  background: lighten(#8d8d8d, 10%);
+  background: color.adjust(#8d8d8d, $lightness: 10%);
 }
 
 .os-theme-thin > .os-scrollbar-horizontal {

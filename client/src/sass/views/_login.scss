@@ -1,17 +1,20 @@
+@use '../tools/colors';
+@use '../tools/variables';
+
 $authentication--form--border: #d4dbe0;
-$authentication--form--padding: $spacing-unit * 1.25;
+$authentication--form--padding: variables.$spacing-unit * 1.25;
 
 $authentication--textbox--background: #122430;
 $authentication--textbox--border: #e9edef;
 $authentication--textbox--placeholder: #c1c9cf;
 
-$authentication--header--foreground: $white;
+$authentication--header--foreground: colors.$white;
 $authentication--label--foreground: #3a5567;
 
 .application {
   &__view {
     &--auth-form {
-      background: $light-blue;
+      background: colors.$light-blue;
     }
   }
 }
@@ -23,13 +26,13 @@ $authentication--label--foreground: #3a5567;
 
     .form {
       &__wrapper {
-        background: $white;
+        background: colors.$white;
         border: 1px solid $authentication--form--border;
         padding: $authentication--form--padding;
       }
 
       &__header {
-        background: $blue;
+        background: colors.$blue;
         margin: $authentication--form--padding * -1 $authentication--form--padding * -1 0 $authentication--form--padding *
           -1;
         padding: $authentication--form--padding * 0.75 $authentication--form--padding;
@@ -55,7 +58,7 @@ $authentication--label--foreground: #3a5567;
 
       &__row {
         &--error {
-          color: $red;
+          color: colors.$red;
           font-size: 0.75em;
         }
       }
@@ -75,7 +78,7 @@ $authentication--label--foreground: #3a5567;
 
       &:active,
       &:focus {
-        border-bottom: 1px solid $blue;
+        border-bottom: 1px solid colors.$blue;
       }
 
       &::placeholder {

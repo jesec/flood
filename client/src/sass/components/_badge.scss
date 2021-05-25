@@ -1,7 +1,9 @@
+@use '../tools/themes';
+
 .badge {
-  @include theme('background', 'sidebar-filter--count--background');
+  @include themes.theme('background', 'sidebar-filter--count--background');
   border-radius: 100px;
-  @include theme('color', 'sidebar-filter--count--foreground');
+  @include themes.theme('color', 'sidebar-filter--count--foreground');
   display: inline-block;
   font-size: 0.75rem;
   font-weight: 700;

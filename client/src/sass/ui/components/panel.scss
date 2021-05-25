@@ -1,13 +1,18 @@
-$panel--spacing--horizontal--medium: $spacing--x-large;
-$panel--spacing--vertical--medium: $spacing--medium;
+@use '../../tools/colors';
 
-$panel--spacing--horizontal--large: $spacing--xxx-large;
-$panel--spacing--vertical--large: $spacing--xx-large;
+@use '../config/border-radius.scss';
+@use '../config/spacing.scss';
+
+$panel--spacing--horizontal--medium: spacing.$spacing--x-large;
+$panel--spacing--vertical--medium: spacing.$spacing--medium;
+
+$panel--spacing--horizontal--large: spacing.$spacing--xxx-large;
+$panel--spacing--vertical--large: spacing.$spacing--xx-large;
 
 .panel {
-  border: 1px solid $grey--lighter;
-  border-radius: $border-radius--medium;
-  box-shadow: panel--box-shadow($grey--lighter);
+  border: 1px solid colors.$grey--lighter;
+  border-radius: border-radius.$border-radius--medium;
+  box-shadow: panel--box-shadow(colors.$grey--lighter);
   overflow: hidden;
 
   &--medium {
@@ -64,7 +69,7 @@ $panel--spacing--vertical--large: $spacing--xx-large;
 
   &__header {
     &--has-border {
-      border-bottom: 1px solid $grey--soft;
+      border-bottom: 1px solid colors.$grey--soft;
     }
 
     h1,
@@ -86,18 +91,18 @@ $panel--spacing--vertical--large: $spacing--xx-large;
   &__content {
     &--has-border {
       &--top {
-        border-top: 1px solid $grey--soft;
+        border-top: 1px solid colors.$grey--soft;
       }
 
       &--bottom {
-        border-bottom: 1px solid $grey--soft;
+        border-bottom: 1px solid colors.$grey--soft;
       }
     }
   }
 
   &__footer {
     &--has-border {
-      border-top: 1px solid $grey--soft;
+      border-top: 1px solid colors.$grey--soft;
     }
   }
 
