@@ -17,6 +17,9 @@ pids
 # Dependency directories
 node_modules/
 
+# Node version
+.nvmrc
+
 # Optional npm cache directory
 .npm
 
