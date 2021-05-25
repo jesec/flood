@@ -28,6 +28,7 @@ import type {
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
+import type {TorrentListSummary} from '@shared/types/Torrent';
 
 import {
   addTorrentByFileSchema,
@@ -542,6 +543,7 @@ router.patch<unknown, unknown, SetTorrentsTrackersOptions>(
  * @tags Torrents
  * @security User
  * @param {string} hashes.path - Hash of a torrent, or hashes of torrents (split by ,)
+ * @param {string} human-name - Save as human name instead of hash name
  * @return {object} 200 - single torrent - application/x-bittorrent
  * @return {object} 200 - torrents archived in .tar - application/x-tar
  * @return {Error} 422 - hash not provided - application/json
@@ -557,6 +559,8 @@ router.get<{hashes: string}>(
   }),
   async (req, res): Promise<Response> => {
     const hashes: Array<string> = req.params.hashes?.split(',').map((hash) => sanitize(hash));
+    const isHumanName = req.query['human-name'] === '1';
+
     if (!Array.isArray(hashes) || hashes?.length < 1) {
       return res.status(422).json(new Error('Hash not provided.'));
     }
@@ -572,9 +576,15 @@ router.get<{hashes: string}>(
       (hash) => `${torrentCase === 'lower' ? hash.toLowerCase() : hash.toUpperCase()}.torrent`,
     );
 
+    let torrentList: TorrentListSummary | null = null;
+    if (isHumanName) {
+      torrentList = await req.services.torrentService.fetchTorrentList();
+    }
+
     if (hashes.length < 2) {
-      res.attachment(torrentFileNames[0]);
-      res.download(path.join(sessionDirectory, torrentFileNames[0]));
+      const name = torrentList ? `${torrentList.torrents[hashes[0]].name}.torrent` : torrentFileNames[0];
+      res.attachment(name);
+      res.download(path.join(sessionDirectory, torrentFileNames[0]), name);
       return res;
     }
 
@@ -593,6 +603,13 @@ router.get<{hashes: string}>(
         entries: torrentFileNames,
         strict: true,
         dereference: false,
+        map: function (header) {
+          if (torrentList) {
+            const torrent = torrentList.torrents[`${header.name.replace(/\.torrent$/, '')}`];
+            header.name = `${torrent.name}.torrent`;
+          }
+          return header;
+        },
       })
       .pipe(res);
   },
