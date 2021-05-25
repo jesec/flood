@@ -10,7 +10,7 @@ const EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // one week
 export const getCookieOptions = (): CookieOptions => ({
   expires: new Date(Date.now() + EXPIRATION_SECONDS * 1000),
   httpOnly: true,
-  sameSite: 'strict',
+  sameSite: 'lax',
 });
 
 export const getAuthToken = (username: string, iat?: number): string => {
