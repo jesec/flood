@@ -22,10 +22,6 @@ RUN cp /sbin/tini-static /root/sysroot/bin/tini
 
 RUN chmod 0555 /root/sysroot/bin/*
 
-# Create /tmp
-RUN mkdir -p /root/sysroot/tmp
-RUN chmod 1777 /root/sysroot/tmp
-
 # Create 1001:1001 user
 RUN mkdir -p /root/sysroot/home/download
 RUN chown 1001:1001 /root/sysroot/home/download
