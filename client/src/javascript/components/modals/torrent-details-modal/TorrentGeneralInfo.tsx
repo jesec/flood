@@ -132,6 +132,30 @@ const TorrentGeneralInfo: FC = observer(() => {
               />
             </td>
           </tr>
+          <tr className="torrent-details__detail torrent-details__detail--dateActive">
+            <td className="torrent-details__detail__label">
+              <Trans id="torrents.details.general.date.active" />
+            </td>
+            <td className="torrent-details__detail__value">
+              {(() => {
+                if (torrent.dateActive === 0) {
+                  return VALUE_NOT_AVAILABLE;
+                }
+
+                if (torrent.dateActive === -1) {
+                  return i18n._('torrents.details.general.date.active.now');
+                }
+
+                return i18n.date(new Date(torrent.dateActive * 1000), {
+                  year: 'numeric',
+                  month: 'long',
+                  day: '2-digit',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                });
+              })()}
+            </td>
+          </tr>
           <tr className="torrent-details__table__heading">
             <td className="torrent-details__table__heading--tertiary" colSpan={2}>
               <Trans id="torrents.details.general.heading.torrent" />
