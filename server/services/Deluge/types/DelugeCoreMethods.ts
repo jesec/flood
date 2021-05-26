@@ -102,7 +102,7 @@ export type DelugeCoreTorrentState = 'Downloading' | 'Seeding' | 'Paused' | 'Che
 export type DelugeCoreTorrentStorageMode = 'sparse' | 'allocate';
 
 export interface DelugeCoreTorrentStatuses {
-  active_time: unknown;
+  active_time: number;
   seeding_time: unknown;
   finished_time: number;
   all_time_download: unknown;

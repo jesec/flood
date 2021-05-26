@@ -283,6 +283,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
   async fetchTorrentList(): Promise<TorrentListSummary> {
     return this.clientRequestManager
       .coreGetTorrentsStatus([
+        'active_time',
         'download_location',
         'download_payload_rate',
         'eta',
@@ -321,6 +322,8 @@ class DelugeClientGatewayService extends ClientGatewayService {
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: status.total_done,
+                dateActive:
+                  status.download_payload_rate > 0 || status.upload_payload_rate > 0 ? -1 : status.active_time,
                 dateAdded: status.time_added,
                 dateCreated: 0,
                 dateFinished:

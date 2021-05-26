@@ -360,6 +360,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
+                dateActive: info.dlspeed > 0 || info.upspeed > 0 ? -1 : info.last_activity,
                 dateAdded: info.added_on,
                 dateCreated,
                 dateFinished: info.completion_on,

@@ -649,6 +649,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             processedResponses.map(async (response) => {
               const torrentProperties: TorrentProperties = {
                 bytesDone: response.bytesDone,
+                dateActive: response.downRate > 0 || response.upRate > 0 ? -1 : response.dateActive,
                 dateAdded: response.dateAdded,
                 dateCreated: response.dateCreated,
                 dateFinished: response.dateFinished,
