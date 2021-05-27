@@ -278,6 +278,8 @@
   "torrents.details.files.loading": "Fájl adatainak betöltése...",
   "torrents.details.general.comment": "Megjegyzés",
   "torrents.details.general.connected": "Csatlakozva {connected} / {total}",
+  "torrents.details.general.date.active": "Utoljára aktív",
+  "torrents.details.general.date.active.now": "Most",
   "torrents.details.general.date.added": "Hozzáadva",
   "torrents.details.general.date.created": "Létrehozva",
   "torrents.details.general.date.finished": "Befejezve",
