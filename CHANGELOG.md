@@ -1,5 +1,32 @@
 # Changelog
 
+## [4.6.0] (May 28, 2021)
+
+- Experimental Deluge support
+  - caveat: tags are not supported at the moment
+- Add "last active date" and "finished date" to the torrent properties
+- Migrate stylesheets to SCSS module system
+- Ditch inefficient "TRANSFER_SUMMARY_DIFF_CHANGE" SSE event
+- Allow to download contents of multiple selected torrents
+- Update base Node.js versions of single-executable builds
+- rTorrent:
+  - Add torrents to rTorrent via socket
+- qBittorrent:
+  - Improve performance by throttling concurrent requests
+- Bug fixes:
+  - Fix memory leak and unreliability when the settings of a user is updated by simplifying service manager
+  - Pipe created torrent to response directly
+- Security enhancements:
+  - Forbid non-owner access to runtime directory by default
+- New translations
+  - Chinese (Simplified), thanks to @coxde
+  - Czech, thanks to @brezinajn
+  - German, thanks to @chint95
+  - Hungarian, thanks to @m3r3nix
+  - Korean, thanks to @Kiina
+  - Spanish, thanks to Zagon
+- Bump dependencies
+
 ## [4.5.4] (April 24, 2021)
 
 - Bug fixes:
@@ -470,3 +497,4 @@ Other changes:
 [4.5.2]: https://github.com/jesec/flood/compare/v4.5.1...v4.5.2
 [4.5.3]: https://github.com/jesec/flood/compare/v4.5.2...v4.5.3
 [4.5.4]: https://github.com/jesec/flood/compare/v4.5.3...v4.5.4
+[4.6.0]: https://github.com/jesec/flood/compare/v4.5.4...v4.6.0
