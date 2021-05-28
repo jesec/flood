@@ -559,7 +559,8 @@ router.get<{hashes: string}>(
   }),
   async (req, res): Promise<Response> => {
     const hashes: Array<string> = req.params.hashes?.split(',').map((hash) => sanitize(hash));
-    const isHumanName = req.query['human-name'] === '1';
+    // const isHumanName = req.query['human-name'] === '1';
+    const isHumanName = true;
 
     if (!Array.isArray(hashes) || hashes?.length < 1) {
       return res.status(422).json(new Error('Hash not provided.'));
