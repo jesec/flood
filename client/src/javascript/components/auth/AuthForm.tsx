@@ -116,11 +116,11 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
               </FormRow>
             ) : null}
             <FormRow>
-              <Textbox placeholder="Username" id="username" autoComplete="username" />
+              <Textbox placeholder={i18n._('auth.username')} id="username" autoComplete="username" />
             </FormRow>
             <FormRow>
               <Textbox
-                placeholder="Password"
+                placeholder={i18n._('auth.password')}
                 id="password"
                 type="password"
                 autoComplete={isLoginMode ? 'current-password' : 'new-password'}
