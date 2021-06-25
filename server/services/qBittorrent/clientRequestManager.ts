@@ -126,7 +126,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/files`, {
         params: {
-          hash,
+          hash: hash.toLowerCase(),
         },
         headers: {Cookie: await this.authCookie},
       })
@@ -137,7 +137,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/properties`, {
         params: {
-          hash,
+          hash: hash.toLowerCase(),
         },
         headers: {Cookie: await this.authCookie},
       })
@@ -148,7 +148,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/trackers`, {
         params: {
-          hash,
+          hash: hash.toLowerCase(),
         },
         headers: {Cookie: await this.authCookie},
       })
@@ -265,7 +265,7 @@ class ClientRequestManager {
     return axios
       .get<QBittorrentSyncTorrentPeers>(`${this.apiBase}/sync/torrentPeers`, {
         params: {
-          hash,
+          hash: hash.toLowerCase(),
           rid: 0,
         },
         headers: {Cookie: await this.authCookie},
@@ -277,7 +277,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/pause`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
         },
         headers: {Cookie: await this.authCookie},
       })
@@ -290,7 +290,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/resume`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
         },
         headers: {Cookie: await this.authCookie},
       })
@@ -303,7 +303,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/delete`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
           deleteFiles: deleteFiles ? 'true' : 'false',
         },
         headers: {Cookie: await this.authCookie},
@@ -317,7 +317,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/recheck`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
         },
         headers: {Cookie: await this.authCookie},
       })
@@ -330,7 +330,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/setLocation`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
           location,
         },
         headers: {Cookie: await this.authCookie},
@@ -344,7 +344,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/topPrio`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
         },
         headers: {Cookie: await this.authCookie},
       })
@@ -357,7 +357,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/bottomPrio`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
         },
         headers: {Cookie: await this.authCookie},
       })
@@ -423,7 +423,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/addTags`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
           tags: tags.join(','),
         },
         headers: {Cookie: await this.authCookie},
@@ -437,7 +437,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/removeTags`, {
         params: {
-          hashes: hashes.join('|'),
+          hashes: hashes.join('|').toLowerCase(),
           tags: tags?.join(','),
         },
         headers: {Cookie: await this.authCookie},
@@ -452,7 +452,7 @@ class ClientRequestManager {
       return axios
         .get(`${this.apiBase}/torrents/addTrackers`, {
           params: {
-            hash,
+            hash: hash.toLowerCase(),
             urls: urls.join('\n'),
           },
           headers: {Cookie: await this.authCookie},
@@ -468,7 +468,7 @@ class ClientRequestManager {
       return axios
         .get(`${this.apiBase}/torrents/reannounce`, {
           params: {
-            hashes: hashes.join('|'),
+            hashes: hashes.join('|').toLowerCase(),
           },
           headers: {Cookie: await this.authCookie},
         })
@@ -483,7 +483,7 @@ class ClientRequestManager {
       return axios
         .get(`${this.apiBase}/torrents/removeTrackers`, {
           params: {
-            hash,
+            hash: hash.toLowerCase(),
             urls: urls.join('|'),
           },
           headers: {Cookie: await this.authCookie},
@@ -499,7 +499,7 @@ class ClientRequestManager {
       return axios
         .get(`${this.apiBase}/torrents/setSuperSeeding`, {
           params: {
-            hashes: hashes.join('|'),
+            hashes: hashes.join('|').toLowerCase(),
             value: value ? 'true' : 'false',
           },
           headers: {Cookie: await this.authCookie},
@@ -515,7 +515,7 @@ class ClientRequestManager {
       return axios
         .get(`${this.apiBase}/torrents/toggleSequentialDownload`, {
           params: {
-            hashes: hashes.join('|'),
+            hashes: hashes.join('|').toLowerCase(),
           },
           headers: {Cookie: await this.authCookie},
         })
@@ -529,7 +529,7 @@ class ClientRequestManager {
     return axios
       .get(`${this.apiBase}/torrents/filePrio`, {
         params: {
-          hash,
+          hash: hash.toLowerCase(),
           id: ids.join('|'),
           priority,
         },
