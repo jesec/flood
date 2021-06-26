@@ -270,7 +270,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res):
   await req.services.clientGatewayService
     .addTorrentsByFile({
       files: [torrent.toString('base64')],
-      destination: fs.lstatSync(sanitizedPath).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
+      destination: (await fs.promises.lstat(sanitizedPath)).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
       tags: tags ?? [],
       isBasePath: true,
       isCompleted: true,
@@ -564,7 +564,7 @@ router.get<{hashes: string}>(
     const {path: sessionDirectory, case: torrentCase} =
       (await req.services.clientGatewayService.getClientSessionDirectory().catch(() => undefined)) || {};
 
-    if (sessionDirectory == null || !fs.existsSync(sessionDirectory)) {
+    if (sessionDirectory == null) {
       return res.status(500).json(new Error('Failed to get session directory.'));
     }
 
@@ -572,18 +572,21 @@ router.get<{hashes: string}>(
       (hash) => `${torrentCase === 'lower' ? hash.toLowerCase() : hash.toUpperCase()}.torrent`,
     );
 
+    try {
+      await Promise.all(
+        torrentFileNames.map(
+          async (torrentFileName) =>
+            await fs.promises.access(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
+        ),
+      );
+    } catch {
+      return res.status(404).json('Failed to access torrent files.');
+    }
+
     if (hashes.length < 2) {
       res.attachment(torrentFileNames[0]);
       res.download(path.join(sessionDirectory, torrentFileNames[0]));
       return res;
-    }
-
-    try {
-      torrentFileNames.forEach((torrentFileName) =>
-        fs.accessSync(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
-      );
-    } catch {
-      return res.status(404).json('Failed to access torrent files.');
     }
 
     res.attachment(`torrents-${Date.now()}.tar`);

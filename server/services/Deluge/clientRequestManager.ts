@@ -263,8 +263,7 @@ class ClientRequestManager {
     if ((host === 'localhost' || host === '127.0.0.1' || host === '::1') && password === '') {
       try {
         actualPassword =
-          fs
-            .readFileSync(path.join(os.homedir(), '.config/deluge/auth'))
+          (await fs.promises.readFile(path.join(os.homedir(), '.config/deluge/auth')))
             .toString('utf-8')
             .split(os.EOL)
             .find((entry) => entry.split(':')[0] === username)

@@ -1,19 +1,41 @@
-import {spawnSync, SpawnSyncOptions} from 'child_process';
+import {spawn, SpawnOptions} from 'child_process';
 
 import type {Disk} from '@shared/types/DiskUsage';
 
 import config from '../../config';
 
-const spawnAsync = (cmd: string, args: string[], options: SpawnSyncOptions): Promise<string> =>
+const spawnAsync = (cmd: string, args: string[], options: SpawnOptions, maxBuffer: number): Promise<string> =>
   new Promise((resolve, reject) => {
-    const {stdout, error} = spawnSync(cmd, args, options);
+    const child = spawn(cmd, args, options);
 
-    if (error) {
-      reject(error);
-      return;
-    }
+    let stdout = '';
+    let stderr = '';
 
-    resolve(stdout.toString('utf-8'));
+    child.once('error', (err) => {
+      reject(err);
+    });
+
+    child.stdout?.on('data', (chunk) => {
+      stdout += chunk.toString('utf-8');
+      if (stdout.length > maxBuffer) {
+        child.kill(9);
+      }
+    });
+
+    child.stderr?.on('data', (chunk) => {
+      stderr += chunk.toString('utf-8');
+      if (stderr.length > maxBuffer) {
+        child.kill(9);
+      }
+    });
+
+    child.on('close', (code) => {
+      if (code == 0) {
+        resolve(stdout);
+      } else {
+        reject(new Error(stderr));
+      }
+    });
   });
 
 const PLATFORMS_SUPPORTED = ['darwin', 'linux', 'freebsd', 'win32'] as const;
@@ -38,10 +60,14 @@ const filterMountPoint = (mountpoint: string) => {
 const MAX_BUFFER_SIZE = 65536;
 export const diskUsage: Readonly<Record<SupportedPlatform, (timeout: number) => Promise<Array<Disk>>>> = {
   linux: (timeout) =>
-    spawnAsync('df', ['-T'], {
-      maxBuffer: MAX_BUFFER_SIZE,
-      timeout: timeout,
-    }).then((stdout) =>
+    spawnAsync(
+      'df',
+      ['-T'],
+      {
+        timeout: timeout,
+      },
+      MAX_BUFFER_SIZE,
+    ).then((stdout) =>
       stdout
         .trim()
         .split('\n')
@@ -59,10 +85,14 @@ export const diskUsage: Readonly<Record<SupportedPlatform, (timeout: number) => 
         }),
     ),
   freebsd: (timeout) =>
-    spawnAsync('df', [], {
-      maxBuffer: MAX_BUFFER_SIZE,
-      timeout: timeout,
-    }).then((stdout) =>
+    spawnAsync(
+      'df',
+      [],
+      {
+        timeout: timeout,
+      },
+      MAX_BUFFER_SIZE,
+    ).then((stdout) =>
       stdout
         .trim()
         .split('\n')
@@ -79,10 +109,14 @@ export const diskUsage: Readonly<Record<SupportedPlatform, (timeout: number) => 
         }),
     ),
   darwin: (timeout) =>
-    spawnAsync('df', ['-kl'], {
-      maxBuffer: MAX_BUFFER_SIZE,
-      timeout: timeout,
-    }).then((stdout) =>
+    spawnAsync(
+      'df',
+      ['-kl'],
+      {
+        timeout: timeout,
+      },
+      MAX_BUFFER_SIZE,
+    ).then((stdout) =>
       stdout
         .trim()
         .split('\n')
@@ -99,10 +133,14 @@ export const diskUsage: Readonly<Record<SupportedPlatform, (timeout: number) => 
         }),
     ),
   win32: (timeout) =>
-    spawnAsync('wmic', ['logicaldisk'], {
-      maxBuffer: MAX_BUFFER_SIZE,
-      timeout: timeout,
-    }).then((stdout) =>
+    spawnAsync(
+      'wmic',
+      ['logicaldisk'],
+      {
+        timeout: timeout,
+      },
+      MAX_BUFFER_SIZE,
+    ).then((stdout) =>
       stdout
         .trim()
         .split('\n')

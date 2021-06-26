@@ -1,6 +1,6 @@
 import fs from 'fs';
 import geoip from 'geoip-country';
-import {moveSync} from 'fs-extra';
+import {move} from 'fs-extra';
 import path from 'path';
 import sanitize from 'sanitize-filename';
 
@@ -300,31 +300,33 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         throw new Error();
       }
 
-      hashes.forEach((hash, index) => {
-        const {directory, name} = this.services?.torrentService.getTorrent(hash) || {};
+      await Promise.all(
+        hashes.map(async (hash, index) => {
+          const {directory, name} = this.services?.torrentService.getTorrent(hash) || {};
 
-        if (directory == null || name == null) {
-          return;
-        }
-
-        const sourceDirectory = path.resolve(directory);
-        const destDirectory = isMultiFile[index]
-          ? path.resolve(isBasePath ? destination : path.join(destination, name))
-          : path.resolve(destination);
-
-        if (sourceDirectory !== destDirectory) {
-          try {
-            if (isMultiFile[index]) {
-              moveSync(sourceDirectory, destDirectory, {overwrite: true});
-            } else {
-              moveSync(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
-            }
-          } catch (err) {
-            console.error(`Failed to move files to ${destDirectory}.`);
-            console.error(err);
+          if (directory == null || name == null) {
+            return;
           }
-        }
-      });
+
+          const sourceDirectory = path.resolve(directory);
+          const destDirectory = isMultiFile[index]
+            ? path.resolve(isBasePath ? destination : path.join(destination, name))
+            : path.resolve(destination);
+
+          if (sourceDirectory !== destDirectory) {
+            try {
+              if (isMultiFile[index]) {
+                await move(sourceDirectory, destDirectory, {overwrite: true});
+              } else {
+                await move(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
+              }
+            } catch (err) {
+              console.error(`Failed to move files to ${destDirectory}.`);
+              console.error(err);
+            }
+          }
+        }),
+      );
     }
 
     const hashesToRestart: Array<string> = [];
@@ -421,22 +423,22 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     // Delete contents of torrents
-    contentPaths.forEach((contentPath) => {
+    for await (const contentPath of contentPaths) {
       try {
-        fs.unlinkSync(contentPath);
+        await fs.promises.unlink(contentPath);
       } catch (error) {
         console.error(`Error deleting file: ${contentPath}\n${error}`);
       }
-    });
+    }
 
     // Try to remove empty directories
-    directoryPaths.forEach((directoryPath) => {
+    for await (const directoryPath of directoryPaths) {
       try {
-        fs.rmdirSync(directoryPath);
+        await fs.promises.rmdir(directoryPath);
       } catch (error) {
         console.error(`Error removing directory: ${directoryPath}\n${error}`);
       }
-    });
+    }
   }
 
   async setTorrentsInitialSeeding({hashes, isInitialSeeding}: SetTorrentsInitialSeedingOptions): Promise<void> {

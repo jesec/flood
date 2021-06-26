@@ -435,9 +435,10 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         return {path: path.join(homedir(), '/Library/Application Support/qBittorrent/BT_backup'), case: 'lower'};
       default:
         const legacyPath = path.join(homedir(), '/.local/share/data/qBittorrent/BT_backup');
-        if (fs.existsSync(legacyPath)) {
+        try {
+          await fs.promises.access(legacyPath);
           return {path: legacyPath, case: 'lower'};
-        } else {
+        } catch {
           return {path: path.join(homedir(), '/.local/share/qBittorrent/BT_backup'), case: 'lower'};
         }
     }

@@ -10,7 +10,7 @@ const openAndDecodeTorrent = async (torrentPath: string): Promise<TorrentFile | 
   let torrentData: TorrentFile | null = null;
 
   try {
-    torrentData = bencode.decode(fs.readFileSync(torrentPath));
+    torrentData = bencode.decode(await fs.promises.readFile(torrentPath));
   } catch {
     return null;
   }
@@ -62,7 +62,7 @@ export const setTrackers = async (torrent: string, trackers: Array<string>): Pro
   }
 
   try {
-    fs.writeFileSync(torrent, bencode.encode(torrentData));
+    await fs.promises.writeFile(torrent, bencode.encode(torrentData));
   } catch {
     return false;
   }
@@ -106,32 +106,35 @@ export const setCompleted = async (torrent: Buffer, destination: string, isBaseP
     return null;
   }
 
-  const completedFileResumeTree: LibTorrentResume['files'] = contentPathsWithLengths.map((contentPathWithLength) => {
-    const [contentPath, contentLength] = contentPathWithLength;
+  const completedFileResumeTree: LibTorrentResume['files'] = await Promise.all(
+    contentPathsWithLengths.map(async (contentPathWithLength) => {
+      const [contentPath, contentLength] = contentPathWithLength;
 
-    if (!fs.existsSync(contentPath)) {
-      return {
-        completed: 0,
-        mtime: 0,
-        priority: LibTorrentFilePriority.NORMAL,
-      };
-    }
+      try {
+        const fileStat = await fs.promises.lstat(contentPath);
 
-    const fileStat = fs.lstatSync(contentPath);
-    if (!fileStat.isFile() || fileStat.size !== contentLength) {
-      return {
-        completed: 0,
-        mtime: 0,
-        priority: LibTorrentFilePriority.OFF,
-      };
-    }
+        if (!fileStat.isFile() || fileStat.size !== contentLength) {
+          return {
+            completed: 0,
+            mtime: 0,
+            priority: LibTorrentFilePriority.OFF,
+          };
+        }
 
-    return {
-      completed: Math.ceil(contentLength / pieceSize),
-      mtime: Math.trunc(fileStat.mtimeMs / 1000),
-      priority: LibTorrentFilePriority.OFF,
-    };
-  });
+        return {
+          completed: Math.ceil(contentLength / pieceSize),
+          mtime: Math.trunc(fileStat.mtimeMs / 1000),
+          priority: LibTorrentFilePriority.OFF,
+        };
+      } catch {
+        return {
+          completed: 0,
+          mtime: 0,
+          priority: LibTorrentFilePriority.NORMAL,
+        };
+      }
+    }),
+  );
 
   const completedResume: LibTorrentResume = {
     bitfield: Math.ceil(contentSize / pieceSize),

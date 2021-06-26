@@ -39,7 +39,7 @@ export const fetchUrls = async (
 
       if (fs.existsSync(url) && isAllowedPath(path.resolve(url))) {
         try {
-          files.push(fs.readFileSync(url));
+          files.push(await fs.promises.readFile(url));
           return;
         } catch {
           // do nothing.

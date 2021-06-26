@@ -124,7 +124,7 @@ class Users {
   async removeUser(username: string): Promise<string> {
     return this.db.findOne<Credentials>({username}).then(async (user) => {
       await this.db.remove({username}, {});
-      fs.rmdirSync(path.join(config.dbPath, user._id), {recursive: true});
+      await fs.promises.rmdir(path.join(config.dbPath, user._id), {recursive: true});
       return user._id;
     });
   }
