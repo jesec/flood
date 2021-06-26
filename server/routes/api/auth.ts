@@ -294,10 +294,7 @@ router.get('/users', async (_req, res): Promise<Response> => {
  */
 router.delete('/users/:username', async (req, res): Promise<Response> => {
   return Users.removeUser(req.params.username)
-    .then((id) => {
-      destroyUserServices(id);
-      return res.json({username: req.params.username});
-    })
+    .then(() => res.json({username: req.params.username}))
     .catch(({code, message}) => res.status(500).json({code, message}));
 });
 

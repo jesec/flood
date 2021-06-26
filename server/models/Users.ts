@@ -6,7 +6,7 @@ import path from 'path';
 
 import {AccessLevel} from '../../shared/schema/constants/Auth';
 import config from '../../config';
-import {bootstrapServicesForUser} from '../services';
+import {bootstrapServicesForUser, destroyUserServices} from '../services';
 
 import type {ClientConnectionSettings} from '../../shared/schema/ClientConnectionSettings';
 import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
@@ -122,10 +122,13 @@ class Users {
    * @return {Promise<string>} - Returns ID of removed user or rejects with error.
    */
   async removeUser(username: string): Promise<string> {
-    return this.db.findOne<Credentials>({username}).then(async (user) => {
+    return this.db.findOne<Credentials>({username}).then(async ({_id}) => {
+      destroyUserServices(_id);
+
       await this.db.remove({username}, {});
-      await fs.promises.rmdir(path.join(config.dbPath, user._id), {recursive: true});
-      return user._id;
+      await fs.promises.rmdir(path.join(config.dbPath, _id), {recursive: true}).catch(() => undefined);
+
+      return _id;
     });
   }
 
