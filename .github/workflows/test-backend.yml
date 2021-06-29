@@ -44,4 +44,5 @@ jobs:
           sudo apt-get remove --purge -y rtorrent
           sudo apt-get install -y rtorrent
 
-      - run: npm test -- --selectProjects rtorrent
+      - run: npm test -- --selectProjects rtorrent || npm test -- --selectProjects rtorrent || npm test -- --selectProjects rtorrent
+        if: matrix['node'] == '16'
