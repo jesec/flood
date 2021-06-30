@@ -121,7 +121,7 @@ const TorrentListRowExpanded = observer(
           onTouchEnd={handleTouchEnd}
           onKeyPress={handleKeyPress}
           ref={ref}>
-          <div className="torrent__details__section__wrapper">
+          <div css={{alignItems: 'center', display: 'flex'}}>
             {primarySection}
             <div className="torrent__details__section torrent__details__section--secondary">{secondarySection}</div>
           </div>

@@ -170,6 +170,7 @@ const TorrentListCell: FC<TorrentListCellProps> = observer(
         className={
           classNameOverride ? className : classnames('torrent__detail', `torrent__detail--${column}`, className)
         }
+        css={{pointerEvents: 'none', userSelect: 'none'}}
         role="cell"
         style={{width: `${width}px`}}>
         {icon}
