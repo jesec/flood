@@ -278,6 +278,8 @@
   "torrents.details.files.loading": "Lade Dateidetails...",
   "torrents.details.general.comment": "Kommentar",
   "torrents.details.general.connected": "{connected} verbunden von {total}",
+  "torrents.details.general.date.active": "Letzte Aktivität",
+  "torrents.details.general.date.active.now": "Jetzt",
   "torrents.details.general.date.added": "Hinzugefügt",
   "torrents.details.general.date.created": "Erstellt",
   "torrents.details.general.date.finished": "Abgeschlossen",
