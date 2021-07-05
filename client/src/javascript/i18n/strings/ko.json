@@ -270,6 +270,7 @@
   "torrents.details.general.date.active": "마지막 활동",
   "torrents.details.general.date.active.now": "현재",
   "torrents.details.general.date.added": "추가한 날",
+  "torrents.details.general.date.created": "생성한 날",
   "torrents.details.general.date.finished": "완료",
   "torrents.details.general.downloaded": "다운로드한 크기",
   "torrents.details.general.free.disk.space": "남은 디스크 공간",
