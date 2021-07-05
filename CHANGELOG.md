@@ -1,5 +1,23 @@
 # Changelog
 
+## [4.6.1] (July 5, 2021)
+
+- DiskUsage: skip mount points of "overlayfs" type (#341, @Trim21)
+- Deluge:
+  - Avoid crashing Flood when there is a connection error
+  - Note again that Deluge support is still experimental
+- Bug fixes:
+  - Cleanup synchronous patterns (#340)
+  - AuthForm: add missing i18n for "Username" and "Password" (#336)
+  - server: destroy user services before cleaning up data
+  - TorrentListCell: passthrough clicks
+- New translations
+  - French, thanks to @foXaCe
+  - German, thanks to @chint95
+  - Korean, thanks to @Kiina
+  - Romanian, thanks to @T-z3P
+- Bump dependencies
+
 ## [4.6.0] (May 28, 2021)
 
 - Experimental Deluge support
@@ -498,3 +516,4 @@ Other changes:
 [4.5.3]: https://github.com/jesec/flood/compare/v4.5.2...v4.5.3
 [4.5.4]: https://github.com/jesec/flood/compare/v4.5.3...v4.5.4
 [4.6.0]: https://github.com/jesec/flood/compare/v4.5.4...v4.6.0
+[4.6.1]: https://github.com/jesec/flood/compare/v4.6.0...v4.6.1
