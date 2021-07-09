@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import {computed} from 'mobx';
 import {CSSProperties, FC, KeyboardEvent, MouseEvent, TouchEvent, useRef, useState} from 'react';
 import {observer} from 'mobx-react';
 import {useLongPress} from 'react-use';
@@ -77,12 +78,13 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
   const rowRef = useRef<HTMLDivElement>(null);
 
   const isCondensed = SettingStore.floodSettings.torrentListViewSize === 'condensed';
+  const isSelected = computed(() => TorrentStore.selectedTorrents.includes(hash)).get();
 
   const {status, upRate, downRate} = TorrentStore.torrents?.[hash] || {};
   const torrentClasses = torrentStatusClasses(
     {status, upRate, downRate},
     classnames({
-      'torrent--is-selected': TorrentStore.selectedTorrents.includes(hash),
+      'torrent--is-selected': isSelected,
       'torrent--is-condensed': isCondensed,
       'torrent--is-expanded': !isCondensed,
     }),
