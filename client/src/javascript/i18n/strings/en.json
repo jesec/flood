@@ -134,6 +134,7 @@
   "filter.status.checking": "Checking",
   "filter.status.completed": "Complete",
   "filter.status.downloading": "Downloading",
+  "filter.status.paused": "Paused",
   "filter.status.error": "Error",
   "filter.status.inactive": "Inactive",
   "filter.status.seeding": "Seeding",

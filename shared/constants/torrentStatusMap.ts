@@ -1,6 +1,7 @@
 const torrentStatusMap = [
   'checking',
   'seeding',
+  'paused',
   'complete',
   'downloading',
   'stopped',

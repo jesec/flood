@@ -10,6 +10,7 @@ function torrentStatusClasses(
     'torrent--has-error': status.includes('error'),
     'torrent--is-stopped': status.includes('stopped'),
     'torrent--is-downloading': status.includes('downloading'),
+    'torrent--is-paused':  status.includes('paused'),
     'torrent--is-downloading--actively': downRate > 0,
     'torrent--is-uploading--actively': upRate > 0,
     'torrent--is-seeding': status.includes('seeding'),
