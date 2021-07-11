@@ -10,7 +10,7 @@ import SettingStore from '../../stores/SettingStore';
 import TorrentListContextMenu from './TorrentListContextMenu';
 import TorrentListRowCondensed from './TorrentListRowCondensed';
 import TorrentListRowExpanded from './TorrentListRowExpanded';
-import torrentStatusClasses from '../../util/torrentStatusClasses';
+import {torrentStatusClasses} from '../../util/torrentStatus';
 import TorrentStore from '../../stores/TorrentStore';
 import UIActions from '../../actions/UIActions';
 

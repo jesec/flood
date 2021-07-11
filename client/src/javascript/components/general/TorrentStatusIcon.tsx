@@ -4,34 +4,23 @@ import {Error, Spinner, Start, Stop} from '@client/ui/icons';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
-const STATUS_ICON_MAP: Partial<Record<TorrentStatus, JSX.Element>> = {
-  error: <Error />,
-  checking: <Spinner />,
-  stopped: <Stop />,
-  downloading: <Start />,
-  seeding: <Start />,
-} as const;
-
 interface TorrentStatusIconProps {
-  statuses: TorrentStatus[];
+  status: TorrentStatus;
 }
 
-const TorrentStatusIcon: FC<TorrentStatusIconProps> = ({statuses}: TorrentStatusIconProps) => {
-  let resultIcon = <Stop />;
+const TorrentStatusIcon: FC<TorrentStatusIconProps> = memo(({status}: TorrentStatusIconProps) => {
+  switch (status) {
+    case 'error':
+      return <Error />;
+    case 'checking':
+      return <Spinner />;
+    case 'downloading':
+      return <Start />;
+    case 'seeding':
+      return <Start />;
+    default:
+      return <Stop />;
+  }
+});
 
-  Object.keys(STATUS_ICON_MAP).some((key) => {
-    const status = key as TorrentStatus;
-    if (statuses.includes(status)) {
-      const icon = STATUS_ICON_MAP[status];
-      if (icon != null) {
-        resultIcon = icon;
-        return true;
-      }
-    }
-    return false;
-  });
-
-  return resultIcon;
-};
-
-export default memo(TorrentStatusIcon);
+export default TorrentStatusIcon;

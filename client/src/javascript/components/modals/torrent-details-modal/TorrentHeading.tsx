@@ -1,18 +1,18 @@
 import classnames from 'classnames';
+import {computed} from 'mobx';
 import {FC, useEffect, useState} from 'react';
 import {observer} from 'mobx-react';
 import {Trans, useLingui} from '@lingui/react';
 
 import {Clock, DownloadThick, Ratio, Start, Stop, UploadThick} from '@client/ui/icons';
 import TorrentActions from '@client/actions/TorrentActions';
-import torrentStatusClasses from '@client/util/torrentStatusClasses';
+import {torrentStatusClasses, torrentStatusEffective} from '@client/util/torrentStatus';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIStore from '@client/stores/UIStore';
 
 import Duration from '../../general/Duration';
 import PriorityMeter from '../../general/PriorityMeter';
 import ProgressBar from '../../general/ProgressBar';
-import TorrentStatusIcon from '../../general/TorrentStatusIcon';
 import Size from '../../general/Size';
 
 const TorrentHeading: FC = observer(() => {
@@ -118,8 +118,8 @@ const TorrentHeading: FC = observer(() => {
         </ul>
       </div>
       <ProgressBar
-        percent={Math.ceil(torrent.percentComplete)}
-        icon={<TorrentStatusIcon statuses={torrent.status} />}
+        percent={computed(() => Math.ceil(torrent.percentComplete)).get()}
+        status={computed(() => torrentStatusEffective(torrent.status)).get()}
       />
     </div>
   );

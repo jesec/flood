@@ -1,4 +1,5 @@
 import classnames from 'classnames';
+import {computed} from 'mobx';
 import {FC} from 'react';
 import {observer} from 'mobx-react';
 import {Trans, useLingui} from '@lingui/react';
@@ -22,7 +23,9 @@ import {
   UploadThick,
 } from '@client/ui/icons';
 import Duration from '@client/components/general/Duration';
+import ProgressBar from '@client/components/general/ProgressBar';
 import Size from '@client/components/general/Size';
+import {torrentStatusEffective} from '@client/util/torrentStatus';
 import TorrentStore from '@client/stores/TorrentStore';
 
 import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
@@ -101,7 +104,7 @@ const TrackersCell: FC<{trackers: string[]}> = observer(({trackers}: {trackers: 
   <span>{trackers.join(', ')}</span>
 ));
 
-interface TorrentListCellContentProps {
+export interface TorrentListCellContentProps {
   torrent: TorrentProperties;
   column: TorrentListColumn;
 }
@@ -137,6 +140,13 @@ const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
         return <PeerCell peersConnected={torrent.seedsConnected} totalPeers={torrent.seedsTotal} />;
       case 'peers':
         return <PeerCell peersConnected={torrent.peersConnected} totalPeers={torrent.peersTotal} />;
+      case 'percentComplete':
+        return (
+          <ProgressBar
+            percent={computed(() => Math.ceil(torrent.percentComplete)).get()}
+            status={computed(() => torrentStatusEffective(torrent.status)).get()}
+          />
+        );
       default:
         return <span>{torrent[column]}</span>;
     }

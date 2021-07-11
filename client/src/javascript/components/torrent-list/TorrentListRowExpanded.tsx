@@ -1,14 +1,14 @@
-import {CSSProperties, forwardRef, KeyboardEvent, MouseEvent, ReactNodeArray, TouchEvent} from 'react';
+import {CSSProperties, FC, forwardRef, KeyboardEvent, MouseEvent, ReactNodeArray, TouchEvent} from 'react';
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
 import SettingStore from '@client/stores/SettingStore';
 import TorrentListColumns from '@client/constants/TorrentListColumns';
 
-import ProgressBar from '../general/ProgressBar';
 import Size from '../general/Size';
 import TorrentListCell from './TorrentListCell';
-import TorrentStatusIcon from '../general/TorrentStatusIcon';
+
+import type {TorrentListCellContentProps} from './TorrentListCell';
 
 interface TorrentListRowExpandedProps {
   className: string;
@@ -21,6 +21,20 @@ interface TorrentListRowExpandedProps {
   handleTouchEnd: (event: TouchEvent) => void;
   handleKeyPress: (event: KeyboardEvent) => void;
 }
+
+const TorrentListCellPercentageNumber: FC<TorrentListCellContentProps> = observer(
+  ({torrent}: TorrentListCellContentProps) => {
+    const {i18n} = useLingui();
+    return (
+      <span>
+        {i18n.number(torrent.percentComplete, {maximumFractionDigits: 1})}
+        <em className="unit">%</em>
+        &nbsp;&mdash;&nbsp;
+        <Size value={torrent.downTotal} />
+      </span>
+    );
+  },
+);
 
 const TorrentListRowExpanded = observer(
   forwardRef<HTMLDivElement, TorrentListRowExpandedProps>(
@@ -38,7 +52,6 @@ const TorrentListRowExpanded = observer(
       }: TorrentListRowExpandedProps,
       ref,
     ) => {
-      const {i18n} = useLingui();
       const columns = SettingStore.floodSettings.torrentListColumns;
 
       const primarySection: ReactNodeArray = [
@@ -59,14 +72,7 @@ const TorrentListRowExpanded = observer(
           key="percentComplete"
           hash={hash}
           column="percentComplete"
-          content={({torrent}) => (
-            <span>
-              {i18n.number(torrent.percentComplete, {maximumFractionDigits: 1})}
-              <em className="unit">%</em>
-              &nbsp;&mdash;&nbsp;
-              <Size value={torrent.downTotal} />
-            </span>
-          )}
+          content={TorrentListCellPercentageNumber}
           showIcon
         />,
       ];
@@ -75,12 +81,6 @@ const TorrentListRowExpanded = observer(
           key="percentBar"
           hash={hash}
           column="percentComplete"
-          content={({torrent}) => (
-            <ProgressBar
-              percent={Math.ceil(torrent.percentComplete)}
-              icon={<TorrentStatusIcon statuses={torrent.status} />}
-            />
-          )}
           className="torrent__details__section torrent__details__section--quaternary"
           classNameOverride
         />,

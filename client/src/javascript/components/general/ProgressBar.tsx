@@ -1,13 +1,18 @@
-import {FC, memo, ReactNode} from 'react';
+import {FC} from 'react';
+import {observer} from 'mobx-react';
+
+import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
+
+import TorrentStatusIcon from './TorrentStatusIcon';
 
 interface ProgressBarProps {
   percent: number;
-  icon?: ReactNode;
+  status?: TorrentStatus;
 }
 
-const ProgressBar: FC<ProgressBarProps> = memo(({percent, icon}: ProgressBarProps) => (
+const ProgressBar: FC<ProgressBarProps> = observer(({percent, status}: ProgressBarProps) => (
   <div className="progress-bar">
-    <div className="progress-bar__icon">{icon}</div>
+    <div className="progress-bar__icon">{status && <TorrentStatusIcon status={status} />}</div>
     <div className="progress-bar__fill__wrapper">
       <div className="progress-bar__fill" style={{width: `${percent}%`}} />
     </div>
@@ -15,7 +20,7 @@ const ProgressBar: FC<ProgressBarProps> = memo(({percent, icon}: ProgressBarProp
 ));
 
 ProgressBar.defaultProps = {
-  icon: undefined,
+  status: undefined,
 };
 
 export default ProgressBar;

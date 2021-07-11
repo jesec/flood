@@ -1,11 +1,9 @@
 import {CSSProperties, forwardRef, KeyboardEvent, MouseEvent, ReactNodeArray, TouchEvent} from 'react';
 import {observer} from 'mobx-react';
 
-import ProgressBar from '../general/ProgressBar';
 import SettingStore from '../../stores/SettingStore';
 import TorrentListCell from './TorrentListCell';
 import TorrentListColumns from '../../constants/TorrentListColumns';
-import TorrentStatusIcon from '../general/TorrentStatusIcon';
 
 interface TorrentListRowCondensedProps {
   className: string;
@@ -42,26 +40,6 @@ const TorrentListRowCondensed = observer(
           }
 
           if (!visible) {
-            return accumulator;
-          }
-
-          if (id === 'percentComplete') {
-            accumulator.push(
-              <TorrentListCell
-                className="table__cell"
-                key={id}
-                hash={hash}
-                column={id}
-                content={({torrent}) => (
-                  <ProgressBar
-                    percent={Math.ceil(torrent.percentComplete)}
-                    icon={<TorrentStatusIcon statuses={torrent.status} />}
-                  />
-                )}
-                width={SettingStore.floodSettings.torrentListColumnWidths[id]}
-              />,
-            );
-
             return accumulator;
           }
 
