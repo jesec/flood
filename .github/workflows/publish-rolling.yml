@@ -181,6 +181,11 @@ jobs:
           sudo apt update
           sudo apt install --reinstall -y qemu-user-static
 
+      - name: Install ldid
+        run: |
+          sudo wget https://github.com/jesec/ldid-static/releases/download/v2.1.4/ldid-amd64 -O /usr/local/bin/ldid
+          sudo chmod +x /usr/local/bin/ldid
+
       - run: sudo npm install -g pkg
 
       - uses: actions/download-artifact@v2
@@ -219,6 +224,13 @@ jobs:
         with:
           name: flood-macos-x64
           path: dist-pkg/flood-macos-x64
+          if-no-files-found: error
+
+      - name: 'Upload executable: MacOS arm64'
+        uses: actions/upload-artifact@v2
+        with:
+          name: flood-macos-arm64
+          path: dist-pkg/flood-macos-arm64
           if-no-files-found: error
 
       - name: 'Upload executable: Windows x64'

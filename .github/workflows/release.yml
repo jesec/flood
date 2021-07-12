@@ -34,6 +34,11 @@ jobs:
           sudo apt update
           sudo apt install --reinstall -y qemu-user-static
 
+      - name: Install ldid
+        run: |
+          sudo wget https://github.com/jesec/ldid-static/releases/download/v2.1.4/ldid-amd64 -O /usr/local/bin/ldid
+          sudo chmod +x /usr/local/bin/ldid
+
       - run: npm run build-pkg
       - run: git fetch origin ${{ github.ref }}
       - run: git for-each-ref ${{ github.ref }} --format="%(contents)" > body
@@ -58,6 +63,7 @@ jobs:
             dist-pkg/flood-linux-x64
             dist-pkg/flood-linux-arm64
             dist-pkg/flood-macos-x64
+            dist-pkg/flood-macos-arm64
             dist-pkg/flood-win-x64.exe
             dist-pkg/flood-win-arm64.exe
 
