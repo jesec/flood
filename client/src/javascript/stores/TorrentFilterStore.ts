@@ -20,7 +20,9 @@ class TorrentFilterStore {
   taxonomy: Taxonomy = {
     statusCounts: {},
     tagCounts: {},
+    tagSizes: {},
     trackerCounts: {},
+    trackerSizes: {},
   };
 
   @computed get isFilterActive() {

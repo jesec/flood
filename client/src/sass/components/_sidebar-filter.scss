@@ -15,6 +15,9 @@
     padding: 3px 20px;
     text-align: start;
     transition: color 0.25s;
+    display: flex;
+    align-items: center;
+    width: 100%;
 
     &:focus-visible,
     &:hover {
@@ -53,6 +56,13 @@
       }
     }
 
+    .name {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      max-width: 100px;
+    }
+
     .icon {
       display: inline-block;
       @include themes.theme('fill', 'sidebar-filter--foreground');
@@ -61,6 +71,10 @@
       transition: fill 0.25s;
       vertical-align: middle;
       width: auto;
+    }
+
+    .size {
+      margin-left: auto;
     }
   }
 
