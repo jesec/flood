@@ -35,6 +35,7 @@ const TagFilters: FC = observer(() => {
       isActive={filter === TorrentFilterStore.filters.tagFilter}
       name={filter}
       slug={filter}
+      size={TorrentFilterStore.taxonomy.tagSizes[filter]}
     />
   ));
 

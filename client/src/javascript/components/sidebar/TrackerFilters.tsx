@@ -34,6 +34,7 @@ const TrackerFilters: FC = observer(() => {
       isActive={filter === TorrentFilterStore.filters.trackerFilter}
       name={filter}
       slug={filter}
+      size={TorrentFilterStore.taxonomy.trackerSizes[filter]}
     />
   ));
 
