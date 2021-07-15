@@ -100,6 +100,10 @@
 }
 
 .diskusage {
+  &__item {
+    width: 100%;
+  }
+
   &__details-list {
     display: flex;
 
