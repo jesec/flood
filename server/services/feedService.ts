@@ -330,6 +330,10 @@ class FeedService extends BaseService {
       this.feedReaders.splice(feedReaderToRemoveIndex, 1);
     }
 
+    for (const [key, rule] of Object.entries(this.rules)) {
+      this.rules[key] = rule.filter((rule) => rule._id !== id);
+    }
+
     return this.db.remove({_id: id}, {}).then(() => undefined);
   }
 }
