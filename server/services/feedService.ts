@@ -1,6 +1,5 @@
 import path from 'path';
 import Datastore from 'nedb-promises';
-import {remove} from 'lodash';
 
 import type {FeedItem} from 'feedsub';
 
@@ -331,8 +330,8 @@ class FeedService extends BaseService {
       this.feedReaders.splice(feedReaderToRemoveIndex, 1);
     }
 
-    for (const rule of Object.values(this.rules)) {
-      remove(rule, (v) => v._id === id);
+    for (const [key, rule] of Object.entries(this.rules)) {
+      this.rules[key] = rule.filter((rule) => rule._id !== id);
     }
 
     return this.db.remove({_id: id}, {}).then(() => undefined);
