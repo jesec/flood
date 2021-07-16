@@ -44,14 +44,22 @@ class Users {
     level: AccessLevel.ADMINISTRATOR,
   };
 
+  private servicesBootstrapped = false;
+
   getConfigUser(): Readonly<UserInDatabase> {
     return this.configUser;
   }
 
-  async bootstrapServicesForAllUsers(): Promise<void> {
-    return this.listUsers()
-      .then((users) => Promise.all(users.map((user) => bootstrapServicesForUser(user))))
-      .then(() => undefined);
+  async bootstrapServicesForAllUsers(force = false): Promise<void> {
+    if (this.servicesBootstrapped && !force) {
+      throw new Error('Services already bootstrapped.');
+    }
+
+    await this.listUsers().then((users) => {
+      Promise.all(users.map((user) => bootstrapServicesForUser(user)));
+    });
+
+    this.servicesBootstrapped = true;
   }
 
   /**

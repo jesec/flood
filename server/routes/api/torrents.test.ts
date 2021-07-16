@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import fastify from 'fastify';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -6,7 +7,7 @@ import readline from 'readline';
 import stream from 'stream';
 import supertest from 'supertest';
 
-import app from '../../app';
+import constructRoutes from '..';
 import {getAuthToken} from '../../util/authUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 import paths from '../../../shared/config/paths';
@@ -18,9 +19,23 @@ import type {TorrentList} from '../../../shared/types/Torrent';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
 
-const request = supertest(app);
+const app = fastify();
+let request: supertest.SuperTest<supertest.Test>;
 
+const activityStream = new stream.PassThrough();
 const authToken = `jwt=${getAuthToken('_config')}`;
+const rl = readline.createInterface({input: activityStream});
+
+beforeAll(async () => {
+  await constructRoutes(app);
+  await app.ready();
+  request = supertest(app.server);
+  request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
+});
+
+afterAll(async () => {
+  await app.close();
+});
 
 const tempDirectory = getTempPath('download');
 
@@ -48,10 +63,6 @@ const testTrackers = [
 
 let torrentHash = '';
 let createdTorrentHash = '';
-
-const activityStream = new stream.PassThrough();
-const rl = readline.createInterface({input: activityStream});
-request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
 
 const watchTorrentList = (op: 'add' | 'remove' | 'replace' | 'move' | 'copy' | 'test'): Promise<void> => {
   return new Promise((resolve) => {

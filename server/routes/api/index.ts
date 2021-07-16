@@ -1,5 +1,8 @@
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
 import express, {Response} from 'express';
 import fs from 'fs';
+import morgan from 'morgan';
 import passport from 'passport';
 import path from 'path';
 import rateLimit from 'express-rate-limit';
@@ -10,6 +13,7 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions, NotificationState} from '@shared/types/Notification';
 import type {SetFloodSettingsOptions} from '@shared/types/api/index';
+import type {UserInDatabase} from '@shared/schema/Auth';
 
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import appendUserServices from '../../middleware/appendUserServices';
@@ -19,9 +23,26 @@ import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
 import {getAuthToken, verifyToken} from '../../util/authUtil';
+import passportConfig from '../../config/passport';
 import torrentsRoutes from './torrents';
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace Express {
+    // eslint-disable-next-line @typescript-eslint/no-empty-interface
+    interface User extends UserInDatabase {}
+  }
+}
+
 const router = express.Router();
+
+router.use(morgan('dev'));
+router.use(passport.initialize());
+router.use(bodyParser.json({limit: '50mb'}));
+router.use(bodyParser.urlencoded({extended: false, limit: '50mb'}));
+router.use(cookieParser());
+
+passportConfig(passport);
 
 router.use('/auth', authRoutes);
 
