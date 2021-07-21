@@ -6,7 +6,7 @@ const host = process.env.HOST || '0.0.0.0';
 
 const generateConfig = (proxy, allowedHost) => {
   return {
-    firewall: false,
+    allowedHosts: allowedHost,
     compress: false,
     static: [
       {
@@ -22,7 +22,6 @@ const generateConfig = (proxy, allowedHost) => {
     https: protocol === 'https',
     host,
     historyApiFallback: true,
-    public: allowedHost,
     proxy: {
       '/api/': {
         target: proxy,
