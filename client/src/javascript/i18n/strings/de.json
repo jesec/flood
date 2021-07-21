@@ -149,7 +149,7 @@
   "general.of": "von",
   "general.to": "zu",
   "locale.language.auto": "Automatisch",
-  "mediainfo.execError": "Beim Ausführen von mediainfo auf dem Server ist ein Fehler aufgetreten. Überprüfen Sie, ob mediainfo installiert ist und im PATH to Flood verfügbar ist.",
+  "mediainfo.execError": "Beim Ausführen von mediainfo auf dem Server ist ein Fehler aufgetreten. Überprüfen Sie, ob mediainfo installiert ist und im PATH für Flood verfügbar ist.",
   "mediainfo.fetching": "Abrufen...",
   "mediainfo.heading": "Ausgabe von Mediainfo",
   "notification.clear.all": "Alle löschen",
