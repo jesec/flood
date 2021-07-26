@@ -51,7 +51,7 @@
   "connection.settings.qbittorrent.url.input.placeholder": "por ejemplo: http://localhost:8080",
   "connection.settings.qbittorrent.username": "Usuario",
   "connection.settings.qbittorrent.username.input.placeholder": "Usuario",
-  "connection.settings.rtorrent": "rótula",
+  "connection.settings.rtorrent": "rTorrent",
   "connection.settings.rtorrent.host": "Anfitrión",
   "connection.settings.rtorrent.host.input.placeholder": "Nombre de host o IP",
   "connection.settings.rtorrent.port": "Puerto",
