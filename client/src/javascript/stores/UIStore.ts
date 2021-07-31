@@ -8,6 +8,7 @@ export type ContextMenuItem =
       type: 'action';
       action: TorrentContextMenuAction;
       label: string;
+      labelComp?: FC;
       labelAction?: FC;
       labelSecondary?: FC;
       clickHandler(event: MouseEvent): void;
@@ -15,6 +16,7 @@ export type ContextMenuItem =
     }
   | {
       type: 'separator';
+      forAction?: string;
     };
 
 export interface ActiveContextMenu {

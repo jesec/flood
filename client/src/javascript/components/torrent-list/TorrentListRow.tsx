@@ -39,6 +39,9 @@ const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | To
     },
     items: TorrentListContextMenu.getContextMenuItems(torrent).filter((item) => {
       if (item.type === 'separator') {
+        if (item.forAction) {
+          return torrentContextMenuActions.some((action) => action.id === item.forAction && action.visible);
+        }
         return true;
       }
 

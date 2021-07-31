@@ -56,6 +56,14 @@ class TorrentStore {
     return filteredTorrents;
   }
 
+  @computed get selectedCount(): number {
+    return this.selectedTorrents.length;
+  }
+
+  @computed get selectedSize(): number {
+    return this.selectedTorrents.reduce((sum, hash) => sum + this.torrents[hash].sizeBytes, 0);
+  }
+
   setSelectedTorrents({event, hash}: {event: React.KeyboardEvent | React.MouseEvent | React.TouchEvent; hash: string}) {
     this.selectedTorrents = selectTorrents({
       event,

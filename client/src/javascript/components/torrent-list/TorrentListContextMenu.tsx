@@ -1,5 +1,6 @@
 import {createRef, FC, MutableRefObject} from 'react';
 import {observer} from 'mobx-react';
+import {Trans} from '@lingui/react';
 
 import {Checkmark} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';
@@ -7,6 +8,8 @@ import TorrentActions from '@client/actions/TorrentActions';
 import TorrentContextMenuActions from '@client/constants/TorrentContextMenuActions';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIActions from '@client/actions/UIActions';
+
+import Size from '@client/components/general/Size';
 
 import type {ContextMenuItem} from '@client/stores/UIStore';
 
@@ -35,7 +38,7 @@ const InlineTorrentPropertyCheckbox: FC<{property: keyof TorrentProperties}> = o
 const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem> => {
   const changePriorityFuncRef = createRef<() => number>();
 
-  return [
+  const items: Array<ContextMenuItem> = [
     {
       type: 'action',
       action: 'start',
@@ -227,6 +230,27 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       ),
     },
   ];
+
+  if (TorrentStore.selectedCount > 1) {
+    items.unshift(
+      {
+        type: 'action',
+        action: 'selectedCount',
+        label: TorrentContextMenuActions.selectedCount,
+        labelComp: () => (
+          <Trans id="torrents.list.context.selected.count.text" values={{count: TorrentStore.selectedCount}} />
+        ),
+        labelAction: () => <Size value={TorrentStore.selectedSize} className="size" />,
+        clickHandler: () => null,
+      },
+      {
+        type: 'separator',
+        forAction: 'selectedCount',
+      },
+    );
+  }
+
+  return items;
 };
 
 export default {

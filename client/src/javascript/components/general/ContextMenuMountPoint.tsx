@@ -51,7 +51,7 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
                   className={classnames('menu__item__label--primary', {
                     'has-action': item.labelAction,
                   })}>
-                  <span className="menu__item__label">{i18n._(item.label)}</span>
+                  <span className="menu__item__label">{item.labelComp ? <item.labelComp /> : i18n._(item.label)}</span>
                   {item.labelAction ? (
                     <span className="menu__item__label__action">
                       <item.labelAction />
