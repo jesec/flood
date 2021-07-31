@@ -39,13 +39,16 @@ const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | To
     },
     items: TorrentListContextMenu.getContextMenuItems(torrent).filter((item) => {
       if (item.type === 'separator') {
-        if (item.forAction) {
-          return torrentContextMenuActions.some((action) => action.id === item.forAction && action.visible);
-        }
         return true;
       }
 
-      return torrentContextMenuActions.some((action) => action.id === item.action && action.visible === true);
+      return torrentContextMenuActions.some((action) => {
+        const visible = action.id === item.action && action.visible === true;
+        if (item.action === 'selectedCount') {
+          return visible && TorrentStore.selectedCount > 1;
+        }
+        return visible;
+      });
     }),
   });
 };
