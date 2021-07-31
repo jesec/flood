@@ -49,6 +49,7 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
     tags: 100,
   },
   torrentContextMenuActions: [
+    {id: 'selectedCount', visible: false},
     {id: 'start', visible: true},
     {id: 'stop', visible: true},
     {id: 'remove', visible: true},
@@ -64,7 +65,6 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
     {id: 'setInitialSeeding', visible: false},
     {id: 'setSequential', visible: false},
     {id: 'setPriority', visible: false},
-    {id: 'selectedCount', visible: false},
   ],
   torrentListViewSize: 'condensed',
   speedLimits: {
