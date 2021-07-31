@@ -50,6 +50,9 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       clickHandler: () => null,
     },
     {
+      type: 'separator',
+    },
+    {
       type: 'action',
       action: 'start',
       label: TorrentContextMenuActions.start,

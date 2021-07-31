@@ -31,25 +31,30 @@ const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | To
   const {torrentContextMenuActions = defaultFloodSettings.torrentContextMenuActions} = SettingStore.floodSettings;
   const torrent = TorrentStore.torrents[hash];
 
+  const items = TorrentListContextMenu.getContextMenuItems(torrent).filter((item) => {
+    if (item.type === 'separator') {
+      return true;
+    }
+
+    return torrentContextMenuActions.some((action) => {
+      const visible = action.id === item.action && action.visible === true;
+      if (item.action === 'selectedCount') {
+        return visible && TorrentStore.selectedCount > 1;
+      }
+      return visible;
+    });
+  });
+  if (items[0].type === 'separator') {
+    items.shift();
+  }
+
   UIActions.displayContextMenu({
     id: 'torrent-list-item',
     clickPosition: {
       x: mouseClientX || touchClientX || 0,
       y: mouseClientY || touchClientY || 0,
     },
-    items: TorrentListContextMenu.getContextMenuItems(torrent).filter((item) => {
-      if (item.type === 'separator') {
-        return true;
-      }
-
-      return torrentContextMenuActions.some((action) => {
-        const visible = action.id === item.action && action.visible === true;
-        if (item.action === 'selectedCount') {
-          return visible && TorrentStore.selectedCount > 1;
-        }
-        return visible;
-      });
-    }),
+    items,
   });
 };
 
