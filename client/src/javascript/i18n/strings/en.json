@@ -336,6 +336,8 @@
   "torrents.list.context.stop": "Stop",
   "torrents.list.context.selected.count.label": "Selected Count",
   "torrents.list.context.selected.count.text": "{count} Selected",
+  "torrents.list.context.select.all": "Select All",
+  "torrents.list.context.deselect.all": "Deselect All",
   "torrents.list.drop": "Drop files here to add them.",
   "torrents.list.no.torrents": "No torrents to display.",
   "torrents.move.button.set.location": "Set Location",
