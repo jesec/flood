@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {FC} from 'react';
 import {observer} from 'mobx-react';
-import {useLingui} from '@lingui/react';
+import {useLingui, Trans} from '@lingui/react';
 
 import {Add, Menu, Remove, Start, Stop} from '@client/ui/icons';
 import SettingActions from '@client/actions/SettingActions';
@@ -10,6 +10,7 @@ import TorrentActions from '@client/actions/TorrentActions';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIActions from '@client/actions/UIActions';
 
+import Size from '@client/components/general/Size';
 import Action from './Action';
 import SortDropdown from './SortDropdown';
 
@@ -46,6 +47,14 @@ const ActionBar: FC = observer(() => {
           selectedProperty={sortBy != null ? sortBy.property : 'dateAdded'}
         />
       </div>
+      {TorrentStore.selectedCount > 0 && (
+        <div className="actions action-bar__item action-bar__item--selected-status">
+          <span>
+            <Trans id="actionbar.label.selected.count" values={{count: TorrentStore.selectedCount}} />
+          </span>
+          <Size className="size" value={TorrentStore.selectedSize} />
+        </div>
+      )}
       <div className="actions action-bar__item action-bar__item--torrent-operations">
         <div className="action-bar__group">
           <Action

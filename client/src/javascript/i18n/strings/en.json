@@ -3,6 +3,7 @@
   "actionbar.button.remove.torrent": "Remove Torrent",
   "actionbar.button.start.torrent": "Start Torrent",
   "actionbar.button.stop.torrent": "Stop Torrent",
+  "actionbar.label.selected.count": "{count} Items",
   "alert.settings.saved": "Successfully saved settings.",
   "alert.torrent.add": "Successfully added {countElement} {count, plural, =1 {torrent} other {torrents}}.",
   "alert.torrent.add.failed": "Failed to add {countElement} {count, plural, =1 {torrent} other {torrents}}.",
