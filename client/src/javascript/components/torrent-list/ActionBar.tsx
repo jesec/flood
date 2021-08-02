@@ -47,7 +47,7 @@ const ActionBar: FC = observer(() => {
           selectedProperty={sortBy != null ? sortBy.property : 'dateAdded'}
         />
       </div>
-      {TorrentStore.selectedCount > 0 && (
+      {TorrentStore.selectedCount > 1 && (
         <div className="actions action-bar__item action-bar__item--selected-status">
           <span>
             <Trans id="actionbar.label.selected.count" values={{count: TorrentStore.selectedCount}} />
