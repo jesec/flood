@@ -56,6 +56,10 @@ class TorrentStore {
     return filteredTorrents;
   }
 
+  @computed get isAllSelected(): boolean {
+    return this.selectedTorrents.length === this.filteredTorrents.length;
+  }
+
   setSelectedTorrents({event, hash}: {event: React.KeyboardEvent | React.MouseEvent | React.TouchEvent; hash: string}) {
     this.selectedTorrents = selectTorrents({
       event,
@@ -67,6 +71,10 @@ class TorrentStore {
 
   selectAllTorrents() {
     this.selectedTorrents = this.filteredTorrents.map((v) => v.hash);
+  }
+
+  deselectAllTorrents() {
+    this.selectedTorrents = [];
   }
 
   handleTorrentListDiffChange(torrentListDiffs: Operation[]) {

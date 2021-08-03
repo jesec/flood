@@ -55,6 +55,7 @@ export {default as Remove} from './Remove';
 export {default as RemoveMini} from './RemoveMini';
 export {default as Search} from './Search';
 export {default as Seeds} from './Seeds';
+export {default as Select} from './Select';
 export {default as Settings} from './Settings';
 export {default as Spinner} from './Spinner';
 export {default as Start} from './Start';

@@ -2,6 +2,7 @@
   "actionbar.button.add.torrent": "Add Torrent",
   "actionbar.button.remove.torrent": "Remove Torrent",
   "actionbar.button.start.torrent": "Start Torrent",
+  "actionbar.button.select.torrent": "Select Torrents",
   "actionbar.button.stop.torrent": "Stop Torrent",
   "alert.settings.saved": "Successfully saved settings.",
   "alert.torrent.add": "Successfully added {countElement} {count, plural, =1 {torrent} other {torrents}}.",

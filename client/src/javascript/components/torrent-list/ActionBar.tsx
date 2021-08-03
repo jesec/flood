@@ -3,7 +3,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
-import {Add, Menu, Remove, Start, Stop} from '@client/ui/icons';
+import {Add, Menu, Remove, Start, Stop, Select} from '@client/ui/icons';
 import SettingActions from '@client/actions/SettingActions';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -48,6 +48,14 @@ const ActionBar: FC = observer(() => {
       </div>
       <div className="actions action-bar__item action-bar__item--torrent-operations">
         <div className="action-bar__group">
+          <Action
+            label={i18n._('actionbar.button.select.torrent')}
+            slug="select-torrent"
+            icon={<Select />}
+            clickHandler={() =>
+              TorrentStore.isAllSelected ? UIActions.deselectAllTorrents() : UIActions.selectAllTorrents()
+            }
+          />
           <Action
             label={i18n._('actionbar.button.start.torrent')}
             slug="start-torrent"
