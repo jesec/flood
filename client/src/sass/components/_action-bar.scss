@@ -56,10 +56,17 @@ $torrent-list--border: rgba(colors.$sidebar--background, 0.15);
       align-items: center;
       gap: 3px;
       color: #8899a8;
-      font-size: 0.8rem;
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+
+      .action-bar--is-condensed & {
+        font-size: 0.8rem;
+      }
+
+      @media (max-width: 375px) {
+        display: none;
+      }
 
       .size {
         &::before {
