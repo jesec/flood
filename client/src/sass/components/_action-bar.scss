@@ -136,6 +136,12 @@ $torrent-list--border: rgba(colors.$sidebar--background, 0.15);
     }
   }
 
+  @media (min-width: 769px) {
+    &.action--select-torrent {
+      display: none;
+    }
+  }
+
   .action-bar--is-condensed & {
     height: 30px;
     width: 46px;
