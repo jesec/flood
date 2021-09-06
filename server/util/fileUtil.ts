@@ -27,7 +27,7 @@ export const isAllowedPath = (resolvedPath: string) => {
     try {
       realPath = fs.realpathSync(parentPath);
     } catch (e) {
-      if (e.code === 'ENOENT') {
+      if ((e as NodeJS.ErrnoException).code === 'ENOENT') {
         parentPath = path.resolve(parentPath, '..');
       } else {
         return false;

@@ -3,7 +3,6 @@ import classnames from 'classnames';
 import {CSSProperties, forwardRef, MouseEvent, ReactNode, RefObject} from 'react';
 
 import Overlay from './Overlay';
-import transitionTimeouts from '../constants/transitionTimeouts';
 
 import type {OverlayProps} from './Overlay';
 
@@ -120,7 +119,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
         in={isIn}
         mountOnEnter
         unmountOnExit
-        timeout={transitionTimeouts.xFast}>
+        timeout={250}>
         <div className="context-menu" onClick={onClick} role="none">
           <Overlay
             additionalClassNames="context-menu__overlay"

@@ -32,7 +32,7 @@ const InlineTorrentPropertyCheckbox: FC<{property: keyof TorrentProperties}> = o
   ),
 );
 
-const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem> => {
+export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem> => {
   const changePriorityFuncRef = createRef<() => number>();
 
   return [
@@ -227,8 +227,4 @@ const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMenuItem>
       ),
     },
   ];
-};
-
-export default {
-  getContextMenuItems,
 };

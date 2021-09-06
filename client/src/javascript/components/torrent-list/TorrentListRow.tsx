@@ -6,8 +6,8 @@ import {useLongPress} from 'react-use';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
+import {getContextMenuItems} from './TorrentListContextMenu';
 import SettingStore from '../../stores/SettingStore';
-import TorrentListContextMenu from './TorrentListContextMenu';
 import TorrentListRowCondensed from './TorrentListRowCondensed';
 import TorrentListRowExpanded from './TorrentListRowExpanded';
 import {torrentStatusClasses} from '../../util/torrentStatus';
@@ -37,7 +37,7 @@ const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | To
       x: mouseClientX || touchClientX || 0,
       y: mouseClientY || touchClientY || 0,
     },
-    items: TorrentListContextMenu.getContextMenuItems(torrent).filter((item) => {
+    items: getContextMenuItems(torrent).filter((item) => {
       if (item.type === 'separator') {
         return true;
       }
