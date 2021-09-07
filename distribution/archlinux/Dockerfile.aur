@@ -1,4 +1,4 @@
-FROM archlinux
+FROM docker.io/archlinux
 
 ARG AUR_FOLDER
 ARG AUR_REPO

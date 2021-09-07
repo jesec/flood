@@ -8,9 +8,9 @@
 #
 # Sources should be mounted to /workspaces/flood.
 
-FROM jesec/rtorrent:master as rtorrent
+FROM docker.io/jesec/rtorrent:master as rtorrent
 
-FROM ubuntu:focal as flood
+FROM docker.io/ubuntu:focal as flood
 
 COPY ./.devcontainer/library-scripts /tmp/library-scripts/
 
