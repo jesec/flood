@@ -29,7 +29,8 @@ const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick
           e.preventDefault();
           onClick?.(e);
         }
-      }}>
+      }}
+    >
       {children}
     </div>
   );

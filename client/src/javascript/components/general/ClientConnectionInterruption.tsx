@@ -71,7 +71,8 @@ const ClientConnectionInterruption: FC = observer(() => {
             });
 
           setSubmitting(false);
-        }}>
+        }}
+      >
         <PanelHeader>
           <h1>
             <Trans id="connection-interruption.heading" />

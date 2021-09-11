@@ -46,7 +46,8 @@ const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: Compo
         scrollbars: {autoHide: 'leave', clickScrolling: true},
         className,
       }}
-      ref={osRef}>
+      ref={osRef}
+    >
       {children}
     </OverlayScrollbarsComponent>
   );
@@ -72,7 +73,8 @@ const ListViewport = forwardRef<FixedSizeList, ListViewportProps>((props: ListVi
       outerElementType={ConfigStore.isSmallScreen ? undefined : Overflow} // Don't use custom scrollbar on smaller screens
       ref={ref}
       overscanCount={30}
-      outerRef={outerRef}>
+      outerRef={outerRef}
+    >
       {itemRenderer}
     </FixedSizeList>
   );

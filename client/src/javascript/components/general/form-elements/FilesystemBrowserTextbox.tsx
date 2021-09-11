@@ -119,14 +119,16 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
             )}
             onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
             placeholder={i18n._('torrents.add.destination.placeholder')}
-            ref={textboxRef}>
+            ref={textboxRef}
+          >
             <FormElementAddon
               onClick={() => {
                 if (textboxRef.current != null) {
                   setDestination(textboxRef.current.value);
                 }
                 setIsDirectoryListOpen(!isDirectoryListOpen);
-              }}>
+              }}
+            >
               <Search />
             </FormElementAddon>
             <Portal>
@@ -135,7 +137,8 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
                 onClick={(event) => event.nativeEvent.stopImmediatePropagation()}
                 overlayProps={{isInteractive: false}}
                 padding={false}
-                triggerRef={textboxRef}>
+                triggerRef={textboxRef}
+              >
                 <FilesystemBrowser
                   directory={destination}
                   selectable={selectable}

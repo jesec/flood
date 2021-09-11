@@ -182,7 +182,8 @@ const TorrentListCell: FC<TorrentListCellProps> = observer(
         }
         css={{pointerEvents: 'none', userSelect: 'none'}}
         role="cell"
-        style={{width: `${width}px`}}>
+        style={{width: `${width}px`}}
+      >
         {icon}
         {TorrentListCellContent ? (
           <TorrentListCellContent torrent={TorrentStore.torrents[hash]} column={column} />

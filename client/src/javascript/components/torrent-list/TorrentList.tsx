@@ -94,7 +94,8 @@ const TorrentList: FC = observer(() => {
               onClick={() => {
                 TorrentFilterStore.clearAllFilters();
               }}
-              priority="tertiary">
+              priority="tertiary"
+            >
               <Trans id="torrents.list.clear.filters" />
             </Button>
           </div>

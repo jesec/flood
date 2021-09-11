@@ -86,12 +86,14 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
             }
           }}
           placeholder={placeholder}
-          ref={textboxRef}>
+          ref={textboxRef}
+        >
           <FormElementAddon
             onClick={() => {
               setIsOpen(!isOpen);
             }}
-            className="select__indicator">
+            className="select__indicator"
+          >
             <Chevron />
           </FormElementAddon>
           <Portal>
@@ -104,7 +106,8 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
               }}
               overlayProps={{isInteractive: false}}
               ref={menuRef}
-              triggerRef={textboxRef}>
+              triggerRef={textboxRef}
+            >
               {[
                 ...new Set([
                   'untagged',
@@ -129,7 +132,8 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
                       } else {
                         setSelectedTags([...selectedTags.filter((key) => key !== ''), tag]);
                       }
-                    }}>
+                    }}
+                  >
                     {tag === 'untagged' ? <Trans id="filter.untagged" /> : tag}
                   </SelectItem>,
                 );

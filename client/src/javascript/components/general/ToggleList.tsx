@@ -25,7 +25,8 @@ const ToggleList: FC<ToggleListProps> = ({className, checkboxLabel, items}: Togg
         '.sortable-list__item': {
           cursor: 'default',
         },
-      }}>
+      }}
+    >
       {items.map((item) => {
         const {id, label, isLocked = false, defaultChecked, onClick} = item;
         return (
@@ -33,7 +34,8 @@ const ToggleList: FC<ToggleListProps> = ({className, checkboxLabel, items}: Togg
             className={classnames('sortable-list__item', {
               'sortable-list__item--is-locked': isLocked,
             })}
-            key={id || label}>
+            key={id || label}
+          >
             {isLocked ? <Lock /> : null}
             <div className="sortable-list__content sortable-list__content__wrapper">
               <span className="sortable-list__content sortable-list__content--primary">
@@ -44,7 +46,8 @@ const ToggleList: FC<ToggleListProps> = ({className, checkboxLabel, items}: Togg
                   <Checkbox
                     defaultChecked={defaultChecked}
                     id={id}
-                    onClick={(event) => onClick?.((event.target as HTMLInputElement).checked)}>
+                    onClick={(event) => onClick?.((event.target as HTMLInputElement).checked)}
+                  >
                     {checkboxLabel && <Trans id={checkboxLabel} />}
                   </Checkbox>
                 </span>

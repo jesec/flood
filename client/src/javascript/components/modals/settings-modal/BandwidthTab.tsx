@@ -60,7 +60,8 @@ const BandwidthTab: FC<BandwidthTabProps> = ({onSettingsChange, onClientSettings
 
         setChangedClientSettings(newChangedClientSettings);
         onClientSettingsChange(newChangedClientSettings);
-      }}>
+      }}
+    >
       <ModalFormSectionHeader>
         <Trans id="settings.bandwidth.transferrate.heading" />
       </ModalFormSectionHeader>

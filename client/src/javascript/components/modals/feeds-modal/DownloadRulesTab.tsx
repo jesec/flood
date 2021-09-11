@@ -159,7 +159,8 @@ const DownloadRulesTab: FC = () => {
           setIsSubmitting(false);
         }
       }}
-      ref={formRef}>
+      ref={formRef}
+    >
       <ModalFormSectionHeader>
         <Trans id="feeds.existing.rules" />
       </ModalFormSectionHeader>
@@ -211,7 +212,8 @@ const DownloadRulesTab: FC = () => {
           <Button
             onClick={() => {
               setIsEditing(true);
-            }}>
+            }}
+          >
             <Trans id="button.new" />
           </Button>
         </FormRow>

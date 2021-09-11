@@ -36,7 +36,8 @@ const SortableListItem: FC<SortableListItemProps> = (props: SortableListItemProp
         className={classnames('sortable-list__item', {
           'sortable-list__item--is-dragging': isDragging,
           'sortable-list__item--is-locked': isLocked,
-        })}>
+        })}
+      >
         {isLocked ? <Lock /> : null}
         {children}
       </div>,

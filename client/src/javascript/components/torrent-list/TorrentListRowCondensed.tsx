@@ -70,7 +70,8 @@ const TorrentListRowCondensed = observer(
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onKeyPress={handleKeyPress}
-          ref={ref}>
+          ref={ref}
+        >
           {torrentListColumns}
         </div>
       );

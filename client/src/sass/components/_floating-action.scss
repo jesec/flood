@@ -1,4 +1,4 @@
-@use "sass:color";
+@use 'sass:color';
 
 $textbox-repeater--button--background: #3e4959;
 $textbox-repeater--button--background--hover: color.adjust($textbox-repeater--button--background, $lightness: 7%);

@@ -48,7 +48,8 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
           e.preventDefault();
           onClick?.();
         }
-      }}>
+      }}
+    >
       {children}
     </div>
   );

@@ -48,7 +48,8 @@ const ToggleInput: FC<ToggleInputProps> = ({
         className={classnames('form__element toggle-input', type, {
           'form__element--match-textbox-height': matchTextboxHeight,
           'form__element--label-offset': labelOffset,
-        })}>
+        })}
+      >
         <input
           defaultChecked={defaultChecked}
           checked={checked}

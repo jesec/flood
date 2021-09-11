@@ -58,7 +58,8 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
         }}
         type="button"
         onClick={() => handleClick(slug)}
-        role="menuitem">
+        role="menuitem"
+      >
         {icon}
         <span className="name">{name}</span>
         <Badge>{count}</Badge>

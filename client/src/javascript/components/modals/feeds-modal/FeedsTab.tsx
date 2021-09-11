@@ -132,7 +132,8 @@ const FeedsTab: FC = () => {
 
           setIsSubmitting(false);
         }}
-        ref={formRef}>
+        ref={formRef}
+      >
         <ModalFormSectionHeader>
           <Trans id="feeds.existing.feeds" />
         </ModalFormSectionHeader>
@@ -191,7 +192,8 @@ const FeedsTab: FC = () => {
             <Button
               onClick={() => {
                 setIsEditing(true);
-              }}>
+              }}
+            >
               <Trans id="button.new" />
             </Button>
           </FormRow>

@@ -71,7 +71,8 @@ const GenerateMagnetModal: FC = () => {
                 addonPlacement="after"
                 label={i18n._('torrents.generate.magnet.magnet')}
                 defaultValue={magnetLink}
-                readOnly>
+                readOnly
+              >
                 <FormElementAddon
                   onClick={() => {
                     if (typeof navigator.clipboard?.writeText === 'function') {
@@ -83,7 +84,8 @@ const GenerateMagnetModal: FC = () => {
                       document.execCommand('copy');
                       setIsMagnetCopied(true);
                     }
-                  }}>
+                  }}
+                >
                   {isMagnetCopied ? <CheckmarkThick /> : <Clipboard />}
                 </FormElementAddon>
               </Textbox>
@@ -103,7 +105,8 @@ const GenerateMagnetModal: FC = () => {
                   addonPlacement="after"
                   label={i18n._('torrents.generate.magnet.magnet.with.trackers')}
                   defaultValue={trackerState.magnetTrackersLink}
-                  readOnly>
+                  readOnly
+                >
                   <FormElementAddon
                     onClick={() => {
                       if (typeof navigator.clipboard?.writeText === 'function') {
@@ -115,7 +118,8 @@ const GenerateMagnetModal: FC = () => {
                         document.execCommand('copy');
                         setIsMagnetTrackersCopied(true);
                       }
-                    }}>
+                    }}
+                  >
                     {isMagnetTrackersCopied ? <CheckmarkThick /> : <Clipboard />}
                   </FormElementAddon>
                 </Textbox>

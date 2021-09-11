@@ -39,7 +39,8 @@ const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, pl
                 const newTextboxes = textboxes.slice();
                 newTextboxes.splice(index, 1);
                 setTextboxes(newTextboxes);
-              }}>
+              }}
+            >
               <RemoveMini />
             </FormElementAddon>
           );
@@ -53,7 +54,8 @@ const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, pl
               defaultValue={textbox.value}
               label={index === 0 && label}
               placeholder={placeholder}
-              wrapperClassName="textbox-repeater">
+              wrapperClassName="textbox-repeater"
+            >
               <FormElementAddon
                 onClick={() => {
                   idCounter.current += 1;
@@ -64,7 +66,8 @@ const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, pl
                     value: '',
                   });
                   setTextboxes(newTextboxes);
-                }}>
+                }}
+              >
                 <AddMini />
               </FormElementAddon>
               {removeButton}

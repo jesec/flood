@@ -42,7 +42,8 @@ const TorrentListDropzone: FC<{children: ReactNode}> = ({children}: {children: R
   return (
     <div
       {...getRootProps({onClick: (evt) => evt.preventDefault()})}
-      className={`dropzone dropzone--with-overlay torrents ${isDragActive ? 'dropzone--is-dragging' : ''}`}>
+      className={`dropzone dropzone--with-overlay torrents ${isDragActive ? 'dropzone--is-dragging' : ''}`}
+    >
       {children}
     </div>
   );

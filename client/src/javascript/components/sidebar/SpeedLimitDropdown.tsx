@@ -125,7 +125,8 @@ const SpeedLimitDropdown: FC = observer(() => {
         <div
           className="sidebar__icon-button sidebar__icon-button--interactive
         sidebar__icon-button--limits"
-          title={label}>
+          title={label}
+        >
           <Limits />
           {label}
         </div>
@@ -145,7 +146,8 @@ const SpeedLimitDropdown: FC = observer(() => {
           position="bottom"
           ref={tooltipRef}
           wrapperClassName="sidebar__icon-button tooltip__wrapper"
-          onClick={() => dropdownClickRef.current?.()}>
+          onClick={() => dropdownClickRef.current?.()}
+        >
           <Limits />
         </Tooltip>
       }

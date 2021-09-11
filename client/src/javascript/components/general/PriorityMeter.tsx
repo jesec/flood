@@ -97,7 +97,8 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
       type="button"
       onClick={() => {
         changePriority();
-      }}>
+      }}
+    >
       {levelElement}
       {labelElement}
     </button>

@@ -137,7 +137,8 @@ const TableHeading = observer(
                 onFocus={() => onCellFocus()}
                 style={{
                   width: `${width}px`,
-                }}>
+                }}
+              >
                 <span className="table__heading__label" title={i18n._(labelID)}>
                   <Trans id={labelID} />
                 </span>

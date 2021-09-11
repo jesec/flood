@@ -32,7 +32,8 @@ const DropdownButton: FC<DropdownButtonProps> = ({className, label, isFocusHandl
           outline: 'dashed',
         },
       }}
-      onClick={onClick}>
+      onClick={onClick}
+    >
       {label}
     </button>
   );
@@ -167,7 +168,8 @@ const Dropdown = observer(
                               closeDropdown();
                               handleItemSelect(item);
                             }
-                      }>
+                      }
+                    >
                       {item.displayName}
                     </button>
                   </li>

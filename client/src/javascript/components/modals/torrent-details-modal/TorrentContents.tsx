@@ -48,7 +48,8 @@ const TorrentContents: FC = observer(() => {
       <div className="file__checkbox directory-tree__checkbox">
         <div
           className="directory-tree__checkbox__item
-            directory-tree__checkbox__item--checkbox">
+            directory-tree__checkbox__item--checkbox"
+        >
           <FormRow>
             <Checkbox
               checked={allSelected}
@@ -65,7 +66,8 @@ const TorrentContents: FC = observer(() => {
         </div>
         <div
           className="directory-tree__checkbox__item
-            directory-tree__checkbox__item--icon">
+            directory-tree__checkbox__item--icon"
+        >
           <Disk />
         </div>
       </div>
@@ -126,7 +128,8 @@ const TorrentContents: FC = observer(() => {
             });
           }
         }
-      }}>
+      }}
+    >
       <div className="directory-tree__selection-toolbar">
         <FormRow align="center">
           <FormRowItem width="one-quarter" grow={false} shrink={false}>
@@ -155,7 +158,8 @@ const TorrentContents: FC = observer(() => {
               document.body.removeChild(link);
             }}
             grow={false}
-            shrink={false}>
+            shrink={false}
+          >
             <Trans
               id="torrents.details.files.download.file"
               values={{

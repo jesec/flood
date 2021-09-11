@@ -56,7 +56,8 @@ const MoveTorrents: FC = () => {
                   setIsSettingDownloadPath(false);
                 });
               }
-            }}>
+            }}
+          >
             <FilesystemBrowserTextbox
               id="destination"
               selectable="directories"

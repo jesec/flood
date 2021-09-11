@@ -56,7 +56,8 @@ const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
                 groupID="type"
                 id="socket"
                 grow={false}
-                defaultChecked={type === 'socket'}>
+                defaultChecked={type === 'socket'}
+              >
                 <Trans id="connection.settings.rtorrent.type.socket" />
               </Radio>
               <Radio
@@ -66,7 +67,8 @@ const RTorrentConnectionSettingsForm: FC<RTorrentConnectionSettingsProps> = ({
                 groupID="type"
                 id="tcp"
                 grow={false}
-                defaultChecked={type === 'tcp'}>
+                defaultChecked={type === 'tcp'}
+              >
                 <Trans id="connection.settings.rtorrent.type.tcp" />
               </Radio>
             </FormRow>

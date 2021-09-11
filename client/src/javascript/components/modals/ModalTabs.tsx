@@ -44,7 +44,8 @@ const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
             if (onTabChange) {
               onTabChange(currentTab);
             }
-          }}>
+          }}
+        >
           {currentTab.label}
         </button>
       </li>

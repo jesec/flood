@@ -35,11 +35,9 @@ export const getMethodCalls = (configs: MethodCallConfigs) => {
 export const processMethodCallResponse = async <T extends MethodCallConfigs, P extends keyof T>(
   response: Array<Parameters<T[P]['transformValue']>[0]>,
   configs: T,
-): Promise<
-  {
-    [propLabel in P]: ReturnType<T[propLabel]['transformValue']>;
-  }
-> => {
+): Promise<{
+  [propLabel in P]: ReturnType<T[propLabel]['transformValue']>;
+}> => {
   return Object.assign(
     {},
     ...(await Promise.all(

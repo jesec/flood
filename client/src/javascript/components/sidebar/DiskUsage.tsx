@@ -58,7 +58,8 @@ const DiskUsage: FC = observer(() => {
           styles={css({
             cursor: 'default',
           })}
-          wrapperClassName="diskusage__item">
+          wrapperClassName="diskusage__item"
+        >
           <div className="diskusage__text-row">
             {d.target}
             <span>{Math.round((100 * d.used) / d.size)}%</span>

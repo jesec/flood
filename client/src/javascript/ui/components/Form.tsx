@@ -78,7 +78,8 @@ class Form extends Component<FormProps> {
         onChange={this.handleFormChange}
         onInput={this.handleFormChange}
         onSubmit={this.handleFormSubmit}
-        ref={this.setFormRef}>
+        ref={this.setFormRef}
+      >
         {children}
       </form>
     );

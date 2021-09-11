@@ -61,7 +61,8 @@ const RemoveTorrentsModal: FC = () => {
                 saveDeleteTorrentsUserPreferences({deleteData});
                 UIStore.dismissModal();
               });
-            }}>
+            }}
+          >
             <FormRow>
               <Trans id="torrents.remove.are.you.sure" values={{count: selectedTorrents.length}} />
             </FormRow>

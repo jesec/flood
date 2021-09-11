@@ -24,7 +24,8 @@ const InlineTorrentPropertyCheckbox: FC<{property: keyof TorrentProperties}> = o
           className="toggle-input__indicator__icon"
           style={{
             opacity: TorrentStore.torrents[getLastSelectedTorrent()][property] ? '1' : undefined,
-          }}>
+          }}
+        >
           <Checkmark />
         </div>
       </div>

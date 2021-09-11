@@ -25,7 +25,8 @@ const ResourcesTab: FC<ResourcesTabProps> = ({onClientSettingsChange}: Resources
 
         setChangedClientSettings(newChangedClientSettings);
         onClientSettingsChange(newChangedClientSettings);
-      }}>
+      }}
+    >
       <ModalFormSectionHeader>
         <Trans id="settings.resources.disk.heading" />
       </ModalFormSectionHeader>
@@ -48,7 +49,8 @@ const ResourcesTab: FC<ResourcesTabProps> = ({onClientSettingsChange}: Resources
           grow={false}
           id="piecesHashOnCompletion"
           labelOffset
-          matchTextboxHeight>
+          matchTextboxHeight
+        >
           <Trans id="settings.resources.disk.check.hash.label" />
         </Checkbox>
       </FormRow>

@@ -42,7 +42,8 @@ const TorrentPeers: FC = () => {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
           },
-        }}>
+        }}
+      >
         <thead className="torrent-details__table__heading">
           <tr>
             <th className="torrent-details__table__heading--primary">

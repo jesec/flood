@@ -122,11 +122,13 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
     return (
       <ul
         className="notifications__toolbar toolbar toolbar--dark
-        toolbar--bottom">
+        toolbar--bottom"
+      >
         <li
           className={classnames('toolbar__item toolbar__item--button', {
             'is-disabled': paginationStart === 0,
-          })}>
+          })}
+        >
           <button className="tooltip__content--padding-surrogate" type="button" onClick={onPrevClick}>
             <ChevronLeft />
             {`${newerFrom + 1} - ${paginationStart}`}
@@ -140,7 +142,8 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
         <li
           className={classnames('toolbar__item toolbar__item--button', {
             'is-disabled': paginationStart + NOTIFICATIONS_PER_PAGE >= notificationTotal,
-          })}>
+          })}
+        >
           <button className="tooltip__content--padding-surrogate" type="button" onClick={onNextClick}>
             {`${paginationStart + NOTIFICATIONS_PER_PAGE + 1} - ${olderTo}`}
             <ChevronRight />
@@ -180,7 +183,8 @@ const NotificationsButton: FC = observer(() => {
           <div
             className={classnames('notifications', {
               'notifications--is-loading': isLoading,
-            })}>
+            })}
+          >
             <NotificationTopToolbar paginationStart={paginationStart} notificationTotal={notificationCount.total} />
             <div className="notifications__loading-indicator">
               <LoadingIndicatorDots />
@@ -188,7 +192,8 @@ const NotificationsButton: FC = observer(() => {
             <ul
               className="notifications__list tooltip__content--padding-surrogate"
               ref={notificationsListRef}
-              style={{minHeight: prevHeight}}>
+              style={{minHeight: prevHeight}}
+            >
               {notifications.map((notification, index) => (
                 <NotificationItem index={index} notification={notification} />
               ))}
@@ -234,7 +239,8 @@ const NotificationsButton: FC = observer(() => {
       width={340}
       position="bottom"
       wrapperClassName="sidebar__action sidebar__icon-button
-          tooltip__wrapper">
+          tooltip__wrapper"
+    >
       <NotificationIcon />
       {hasNotification ? <span className="notifications__badge">{notificationCount.total}</span> : null}
     </Tooltip>

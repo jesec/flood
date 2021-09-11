@@ -53,7 +53,8 @@ const FeedItemsForm: FC = observer(() => {
           initialURLs: torrentsToDownload,
         });
       }}
-      ref={manualAddingFormRef}>
+      ref={manualAddingFormRef}
+    >
       <ModalFormSectionHeader>
         <Trans id="feeds.browse.feeds" />
       </ModalFormSectionHeader>
@@ -63,7 +64,8 @@ const FeedItemsForm: FC = observer(() => {
           grow={false}
           id="feedID"
           label={i18n._('feeds.select.feed')}
-          width="three-eighths">
+          width="three-eighths"
+        >
           {!feeds.length
             ? [
                 <SelectItem key="empty" id="placeholder" isPlaceholder>

@@ -74,7 +74,8 @@ const Button: FC<ButtonProps> = ({
         disabled={disabled}
         onClick={onClick}
         ref={buttonRef}
-        type={type === 'submit' ? 'submit' : 'button'}>
+        type={type === 'submit' ? 'submit' : 'button'}
+      >
         <div className="button__content" key="button-content">
           {childNodes}
         </div>
@@ -94,7 +95,8 @@ const Button: FC<ButtonProps> = ({
           shrink,
           grow,
           ...wrapperProps,
-        }}>
+        }}
+      >
         {content}
       </WrapperComponent>
     );

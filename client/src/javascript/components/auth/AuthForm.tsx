@@ -100,7 +100,8 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
               );
             }
           }}
-          ref={formRef}>
+          ref={formRef}
+        >
           <PanelHeader>
             <h1>{isLoginMode ? i18n._('auth.login') : i18n._('auth.create.an.account')}</h1>
           </PanelHeader>
@@ -144,7 +145,8 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
                   if (formRef.current != null) {
                     formRef.current.resetForm();
                   }
-                }}>
+                }}
+              >
                 {i18n._('auth.input.clear')}
               </Button>
               <Button isLoading={isSubmitting} type="submit">

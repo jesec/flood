@@ -23,7 +23,8 @@ const FeedsButton: FC = () => {
       ref={tooltipRef}
       position="bottom"
       wrapperClassName="sidebar__action sidebar__icon-button
-          sidebar__icon-button--interactive tooltip__wrapper">
+          sidebar__icon-button--interactive tooltip__wrapper"
+    >
       <Feed />
     </Tooltip>
   );

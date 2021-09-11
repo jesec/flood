@@ -20,7 +20,8 @@ const TransferData: FC = observer(() => {
         if (contentRect.offset != null) {
           setSidebarWidth(contentRect.offset.width);
         }
-      }}>
+      }}
+    >
       {({measureRef}) => (
         <div ref={measureRef} className="client-stats__wrapper sidebar__item">
           <div
@@ -33,7 +34,8 @@ const TransferData: FC = observer(() => {
             onMouseOver={() => rateGraphHandlerRefs.current?.handleMouseOver()}
             onMouseOut={() => rateGraphHandlerRefs.current?.handleMouseOut()}
             onFocus={() => rateGraphHandlerRefs.current?.handleMouseOver()}
-            onBlur={() => rateGraphHandlerRefs.current?.handleMouseOut()}>
+            onBlur={() => rateGraphHandlerRefs.current?.handleMouseOut()}
+          >
             <TransferRateDetails inspectorPoint={graphInspectorPoint} />
             {ClientStatusStore.isConnected && (
               <TransferRateGraph

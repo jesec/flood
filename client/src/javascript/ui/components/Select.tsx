@@ -143,7 +143,8 @@ const Select: FC<SelectProps> = ({
             }
           }}
           priority={priority}
-          wrap={false}>
+          wrap={false}
+        >
           <FormElementAddon className="select__indicator">
             <Chevron />
           </FormElementAddon>
@@ -158,7 +159,8 @@ const Select: FC<SelectProps> = ({
             matchTriggerWidth={matchTriggerWidth}
             menuAlign={menuAlign}
             ref={menuRef}
-            triggerRef={triggerRef}>
+            triggerRef={triggerRef}
+          >
             {Children.toArray(children).reduce((accumulator: Array<ReactElement>, child) => {
               const item = child as ReactElement<SelectItemProps>;
 

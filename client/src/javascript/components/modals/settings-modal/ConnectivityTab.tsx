@@ -25,7 +25,8 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
 
         setChangedClientSettings(newChangedClientSettings);
         onClientSettingsChange(newChangedClientSettings);
-      }}>
+      }}
+    >
       <ModalFormSectionHeader>
         <Trans id="settings.connectivity.incoming.heading" />
       </ModalFormSectionHeader>
@@ -41,7 +42,8 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
           grow={false}
           id="networkPortRandom"
           labelOffset
-          matchTextboxHeight>
+          matchTextboxHeight
+        >
           <Trans id="settings.connectivity.port.randomize.label" />
         </Checkbox>
         <Checkbox
@@ -49,7 +51,8 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
           grow={false}
           id="networkPortOpen"
           labelOffset
-          matchTextboxHeight>
+          matchTextboxHeight
+        >
           <Trans id="settings.connectivity.port.open.label" />
         </Checkbox>
       </FormRow>
@@ -80,7 +83,8 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
           grow={false}
           id="dht"
           labelOffset
-          matchTextboxHeight>
+          matchTextboxHeight
+        >
           <Trans id="settings.connectivity.dht.label" />
         </Checkbox>
         <Checkbox
@@ -88,7 +92,8 @@ const ConnectivityTab: FC<ConnectivityTabProps> = ({onClientSettingsChange}: Con
           grow={false}
           id="protocolPex"
           labelOffset
-          matchTextboxHeight>
+          matchTextboxHeight
+        >
           <Trans id="settings.connectivity.peer.exchange.label" />
         </Checkbox>
       </FormRow>

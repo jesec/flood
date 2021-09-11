@@ -94,7 +94,8 @@ const TorrentHeading: FC = observer(() => {
                 TorrentActions.startTorrents({
                   hashes: [torrent.hash],
                 });
-              }}>
+              }}
+            >
               <Start />
               <Trans id="torrents.details.actions.start" />
             </button>
@@ -110,7 +111,8 @@ const TorrentHeading: FC = observer(() => {
                 TorrentActions.stopTorrents({
                   hashes: [torrent.hash],
                 });
-              }}>
+              }}
+            >
               <Stop />
               <Trans id="torrents.details.actions.stop" />
             </button>

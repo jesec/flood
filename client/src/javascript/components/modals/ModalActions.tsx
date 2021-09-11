@@ -34,7 +34,8 @@ const ModalActions: FC<ModalActionsProps> = (props: ModalActionsProps) => {
               action.clickHandler(event);
             }
             dismissIfNeeded();
-          }}>
+          }}
+        >
           {action.content}
         </Checkbox>
       );
@@ -51,7 +52,8 @@ const ModalActions: FC<ModalActionsProps> = (props: ModalActionsProps) => {
         }}
         priority={action.type}
         key={index} // eslint-disable-line react/no-array-index-key
-        type={action.submit ? 'submit' : 'button'}>
+        type={action.submit ? 'submit' : 'button'}
+      >
         {action.content}
       </Button>
     );

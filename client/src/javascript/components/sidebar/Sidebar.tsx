@@ -24,7 +24,8 @@ const Sidebar: FC = () => (
         dragScrolling: false,
       },
       className: 'application__sidebar os-theme-thin',
-    }}>
+    }}
+  >
     <SidebarActions>
       <SpeedLimitDropdown />
       <SettingsButton />

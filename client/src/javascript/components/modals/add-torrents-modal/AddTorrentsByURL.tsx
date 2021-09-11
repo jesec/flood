@@ -57,7 +57,8 @@ const AddTorrentsByURL: FC = () => {
                   if (typeof navigator.registerProtocolHandler === 'function') {
                     navigator.registerProtocolHandler('magnet', `${ConfigStore.baseURI}?action=add-urls&url=%s`);
                   }
-                }}>
+                }}
+              >
                 <em css={{fontSize: '0.8em'}}>{i18n._('torrents.add.tab.url.register.magnet.handler')}</em>
               </button>
             )}

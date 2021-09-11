@@ -42,7 +42,8 @@ const SortableList: FC<SortableListProps> = ({
         if (onMouseDown) {
           onMouseDown(event);
         }
-      }}>
+      }}
+    >
       <DndProvider options={HTML5toTouch}>
         <ul className={classes}>
           {currentItems.map((item, index) => {
@@ -75,7 +76,8 @@ const SortableList: FC<SortableListProps> = ({
                   if (onMove) {
                     onMove(newItems);
                   }
-                }}>
+                }}
+              >
                 {renderItem(item, index)}
               </SortableListItem>
             );

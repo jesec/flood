@@ -44,7 +44,8 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
             language: newSelectedLanguage,
           });
         }
-      }}>
+      }}
+    >
       <ModalFormSectionHeader key="locale-header">
         <Trans id="settings.ui.language" />
       </ModalFormSectionHeader>
@@ -81,7 +82,8 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
           defaultChecked={torrentListViewSize === 'condensed'}
           groupID="ui-torrent-size"
           id="condensed"
-          width="auto">
+          width="auto"
+        >
           <Trans id="settings.ui.torrent.size.condensed" />
         </Radio>
       </FormRow>

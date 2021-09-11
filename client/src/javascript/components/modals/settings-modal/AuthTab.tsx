@@ -104,7 +104,8 @@ const AuthTab: FC = observer(() => {
             .then(AuthActions.fetchUsers);
         }
       }}
-      ref={formRef}>
+      ref={formRef}
+    >
       <ModalFormSectionHeader>
         <Trans id="auth.user.accounts" />
       </ModalFormSectionHeader>
@@ -133,7 +134,8 @@ const AuthTab: FC = observer(() => {
                     <button
                       className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
                       type="button"
-                      onClick={() => AuthActions.deleteUser(user.username).then(AuthActions.fetchUsers)}>
+                      onClick={() => AuthActions.deleteUser(user.username).then(AuthActions.fetchUsers)}
+                    >
                       <Close />
                     </button>
                   );

@@ -44,7 +44,8 @@ const DownloadRuleForm: FC<DownloadRuleFormProps> = ({
           disabled={!feeds.length}
           id="feedID"
           label={i18n._('feeds.applicable.feed')}
-          defaultID={rule.feedIDs?.[0]}>
+          defaultID={rule.feedIDs?.[0]}
+        >
           {feeds.length === 0
             ? [
                 <SelectItem key="empty" id="placeholder" isPlaceholder>
@@ -91,7 +92,8 @@ const DownloadRuleForm: FC<DownloadRuleFormProps> = ({
           addonPlacement="after"
           id="check"
           label={i18n._('feeds.test.match')}
-          placeholder={i18n._('feeds.check')}>
+          placeholder={i18n._('feeds.check')}
+        >
           {isPatternMatched && (
             <FormElementAddon>
               <CheckmarkThick />

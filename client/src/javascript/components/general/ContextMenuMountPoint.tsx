@@ -35,7 +35,8 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
       onOverlayRightClick={(e) => {
         e.preventDefault();
       }}
-      isIn={isOpen}>
+      isIn={isOpen}
+    >
       {items.map((item, index) => {
         let menuItemContent;
         let menuItemClasses;
@@ -50,7 +51,8 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
                 <span
                   className={classnames('menu__item__label--primary', {
                     'has-action': item.labelAction,
-                  })}>
+                  })}
+                >
                   <span className="menu__item__label">{i18n._(item.label)}</span>
                   {item.labelAction ? (
                     <span className="menu__item__label__action">
@@ -98,7 +100,8 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
               }}
               onContextMenu={(event) => {
                 event.preventDefault();
-              }}>
+              }}
+            >
               {menuItemContent}
             </button>
           </li>

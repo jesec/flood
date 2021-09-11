@@ -35,7 +35,8 @@ const LogoutButton: FC<LogoutButtonProps> = ({className}: LogoutButtonProps) => 
         'sidebar__icon-button--interactive',
         'tooltip__wrapper',
         className,
-      )}>
+      )}
+    >
       <Logout />
     </Tooltip>
   );

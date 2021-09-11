@@ -1,4 +1,4 @@
-@use "sass:color";
+@use 'sass:color';
 
 @function harden($color, $modifier: 1) {
   @return color.adjust($color, $lightness: - (6% * $modifier));

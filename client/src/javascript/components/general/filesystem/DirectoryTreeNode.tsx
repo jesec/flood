@@ -39,7 +39,8 @@ const DirectoryTreeNode: FC<DirectoryTreeNodeProps> = ({
     <div
       className={classnames('directory-tree__branch', `directory-tree__branch--depth-${depth}`, {
         'directory-tree__node--selected': isSelected,
-      })}>
+      })}
+    >
       <button
         className={classnames(
           'directory-tree__node',
@@ -61,12 +62,14 @@ const DirectoryTreeNode: FC<DirectoryTreeNodeProps> = ({
         }}
         type="button"
         onClick={() => setExpanded(!expanded)}
-        title={directoryName}>
+        title={directoryName}
+      >
         <div className="file__label">
           <div className="file__checkbox directory-tree__checkbox">
             <div
               className="directory-tree__checkbox__item
-          directory-tree__checkbox__item--checkbox">
+          directory-tree__checkbox__item--checkbox"
+            >
               <Checkbox
                 checked={isSelected}
                 id={id}
@@ -82,7 +85,8 @@ const DirectoryTreeNode: FC<DirectoryTreeNodeProps> = ({
             </div>
             <div
               className="directory-tree__checkbox__item
-          directory-tree__checkbox__item--icon">
+          directory-tree__checkbox__item--icon"
+            >
               {expanded ? <FolderOpenSolid /> : <FolderClosedSolid />}
             </div>
           </div>

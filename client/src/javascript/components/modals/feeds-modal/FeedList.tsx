@@ -47,24 +47,28 @@ const FeedList: FC<FeedListProps> = observer(
           return (
             <li
               className="interactive-list__item interactive-list__item--stacked-content feed-list__feed"
-              key={feed._id}>
+              key={feed._id}
+            >
               <div className="interactive-list__label">
                 <ul className="interactive-list__detail-list">
                   <li
                     className="interactive-list__detail-list__item
-                interactive-list__detail--primary">
+                interactive-list__detail--primary"
+                  >
                     {feed.label}
                   </li>
                   <li
                     className="interactive-list__detail-list__item
                 interactive-list__detail-list__item--overflow
-                interactive-list__detail interactive-list__detail--secondary">
+                interactive-list__detail interactive-list__detail--secondary"
+                  >
                     <Trans id="feeds.match.count" values={{count: matchedCount}} />
                   </li>
                   {feed === currentFeed && (
                     <li
                       className="interactive-list__detail-list__item
-                interactive-list__detail--primary">
+                interactive-list__detail--primary"
+                    >
                       Modifying
                     </li>
                   )}
@@ -72,13 +76,15 @@ const FeedList: FC<FeedListProps> = observer(
                 <ul className="interactive-list__detail-list">
                   <li
                     className="interactive-list__detail-list__item
-                interactive-list__detail interactive-list__detail--tertiary">
+                interactive-list__detail interactive-list__detail--tertiary"
+                  >
                     {`${intervalText} ${i18n._(intervalMultiplierMessage)}`}
                   </li>
                   <li
                     className="interactive-list__detail-list__item
                 interactive-list__detail-list__item--overflow
-                interactive-list__detail interactive-list__detail--tertiary">
+                interactive-list__detail interactive-list__detail--tertiary"
+                  >
                     <a href={feed.url} rel="noopener noreferrer" target="_blank">
                       {feed.url}
                     </a>
@@ -88,13 +94,15 @@ const FeedList: FC<FeedListProps> = observer(
               <button
                 className="interactive-list__icon interactive-list__icon--action"
                 type="button"
-                onClick={() => onSelect(feed)}>
+                onClick={() => onSelect(feed)}
+              >
                 <Edit />
               </button>
               <button
                 className="interactive-list__icon interactive-list__icon--action interactive-list__icon--action--warning"
                 type="button"
-                onClick={() => onRemove(feed)}>
+                onClick={() => onRemove(feed)}
+              >
                 <Close />
               </button>
             </li>

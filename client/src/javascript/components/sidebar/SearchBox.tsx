@@ -29,7 +29,8 @@ const SearchBox: FC = observer(() => {
         sidebar__item: true, // eslint-disable-line
         search: true,
         'is-in-use': isSearchActive,
-      })}>
+      })}
+    >
       {isSearchActive && (
         <button
           className="button search__reset-button"
@@ -39,7 +40,8 @@ const SearchBox: FC = observer(() => {
               inputRef.current.blur();
             }
           }}
-          type="button">
+          type="button"
+        >
           <Close />
         </button>
       )}

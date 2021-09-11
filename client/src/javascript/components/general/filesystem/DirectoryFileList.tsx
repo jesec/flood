@@ -68,7 +68,8 @@ const DirectoryFiles: FC<DirectoryFilesProps> = ({depth, items, hash, path, onIt
                 href={`${ConfigStore.baseURI}api/torrents/${hash}/contents/${file.index}/data`}
                 style={{textDecoration: 'none'}}
                 target="_blank"
-                rel="noreferrer">
+                rel="noreferrer"
+              >
                 {file.filename}
               </a>
             </div>
@@ -79,7 +80,8 @@ const DirectoryFiles: FC<DirectoryFilesProps> = ({depth, items, hash, path, onIt
           <div className="file__detail file__detail--secondary">{Math.trunc(file.percentComplete)}%</div>
           <div
             className="file__detail file__detail--secondary
-            file__detail--priority">
+            file__detail--priority"
+          >
             <PriorityMeter
               key={`${file.index}-${file.filename}`}
               level={file.priority}
@@ -132,7 +134,8 @@ const DirectoryFiles: FC<DirectoryFilesProps> = ({depth, items, hash, path, onIt
                     },
                   );
                 }
-              }}>
+              }}
+            >
               {copiedToClipboard === file.index ? <Checkmark /> : <Clipboard />}
             </button>
           )}

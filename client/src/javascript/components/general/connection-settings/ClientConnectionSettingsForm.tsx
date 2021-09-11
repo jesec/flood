@@ -58,7 +58,8 @@ const ClientConnectionSettingsForm: FC<ClientConnectionSettingsFormProps> = ({
           onSelect={(newSelectedClient) => {
             setSelectedClient(newSelectedClient as ClientConnectionSettings['client']);
           }}
-          defaultID={DEFAULT_SELECTION}>
+          defaultID={DEFAULT_SELECTION}
+        >
           {SUPPORTED_CLIENTS.map((client) => (
             <SelectItem key={client} id={client}>
               <Trans id={`connection.settings.${client.toLowerCase()}`} />

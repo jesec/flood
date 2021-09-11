@@ -69,7 +69,8 @@ const MountPointsList: FC<MountPointsListProps> = ({onSettingsChange}: MountPoin
                   mountPoints: newItems.filter((newItem) => newItem.visible).map((newItem) => newItem.id),
                 });
                 setDiskItems(newItems);
-              }}>
+              }}
+            >
               <Trans id="settings.diskusage.show" />
             </Checkbox>
           </span>

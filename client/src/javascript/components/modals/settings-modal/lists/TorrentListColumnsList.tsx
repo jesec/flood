@@ -70,7 +70,8 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
                     torrentListColumns: changedTorrentListColumns as FloodSettings['torrentListColumns'],
                   });
                   setTorrentListColumns(changedTorrentListColumns);
-                }}>
+                }}
+              >
                 <Trans id="settings.ui.torrent.details.enabled" />
               </Checkbox>
             </span>
@@ -88,7 +89,8 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
               ref={tooltipRef}
               width={200}
               wrapperClassName="sortable-list__content sortable-list__content--secondary tooltip__wrapper"
-              wrapText>
+              wrapText
+            >
               <Error />
             </Tooltip>
           );

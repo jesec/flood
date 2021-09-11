@@ -59,7 +59,8 @@ const TorrentMediainfo: FC = () => {
         {mediainfo && (
           <Tooltip
             content={i18n._(isCopiedToClipboard ? 'general.clipboard.copied' : 'general.clipboard.copy')}
-            wrapperClassName="tooltip__wrapper mediainfo__toolbar__item">
+            wrapperClassName="tooltip__wrapper mediainfo__toolbar__item"
+          >
             <Button
               priority="tertiary"
               onClick={() => {
@@ -75,7 +76,8 @@ const TorrentMediainfo: FC = () => {
                     setIsCopiedToClipboard(true);
                   }
                 }
-              }}>
+              }}
+            >
               {isCopiedToClipboard ? <Checkmark /> : <Clipboard />}
             </Button>
           </Tooltip>
