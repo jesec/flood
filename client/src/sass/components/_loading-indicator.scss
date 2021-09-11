@@ -20,9 +20,12 @@ $loading-indicator--tick--background--inverse: rgba(colors.$blue, 0.75);
 }
 
 .loading-indicator {
-  height: 18px;
-  position: relative;
   width: 32px;
+  height: 19px; // 3 * 3px bar height + 2 * 5px margin
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   &.is-inverse {
     .loading-indicator {
@@ -40,10 +43,7 @@ $loading-indicator--tick--background--inverse: rgba(colors.$blue, 0.75);
     background: $loading-indicator--bar--background;
     border-radius: 10px;
     height: 3px;
-    left: 0;
     overflow: hidden;
-    position: absolute;
-    transform: translateY(0);
     width: 100%;
 
     &:after {
@@ -57,22 +57,13 @@ $loading-indicator--tick--background--inverse: rgba(colors.$blue, 0.75);
       width: 25%;
     }
 
-    &--1 {
-      top: 0;
-    }
-
     &--2 {
-      top: 50%;
-      transform: translateY(-50%);
-
       &:after {
         animation-delay: 0.5s;
       }
     }
 
     &--3 {
-      bottom: 0;
-
       &:after {
         animation-delay: 1s;
       }
