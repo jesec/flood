@@ -66,11 +66,14 @@ const StatusFilters: FC = observer(() => {
 
   const filterElements = filters.map((filter) => (
     <SidebarFilter
-      handleClick={(selection) => TorrentFilterStore.setStatusFilter(selection as TorrentStatus)}
+      handleClick={(selection, event) => TorrentFilterStore.setStatusFilters(selection as TorrentStatus, event)}
       count={TorrentFilterStore.taxonomy.statusCounts[filter.slug] || 0}
       key={filter.slug}
       icon={filter.icon}
-      isActive={filter.slug === TorrentFilterStore.filters.statusFilter}
+      isActive={
+        (filter.slug === '' && !TorrentFilterStore.filters.statusFilter.length) ||
+        TorrentFilterStore.filters.statusFilter.includes(filter.slug as TorrentStatus)
+      }
       name={filter.label}
       slug={filter.slug}
     />

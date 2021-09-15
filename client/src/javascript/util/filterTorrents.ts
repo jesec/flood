@@ -3,40 +3,38 @@ import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 interface StatusFilter {
   type: 'status';
-  filter: TorrentStatus;
+  filter: TorrentStatus[];
 }
 
 interface TrackerFilter {
   type: 'tracker';
-  filter: string;
+  filter: string[];
 }
 
 interface TagFilter {
   type: 'tag';
-  filter: string;
+  filter: string[];
 }
 
 function filterTorrents(
   torrentList: TorrentProperties[],
   opts: StatusFilter | TrackerFilter | TagFilter,
 ): TorrentProperties[] {
-  const {type, filter} = opts;
-
-  if (filter !== '') {
-    if (type === 'status') {
-      return torrentList.filter((torrent) => torrent.status.includes(filter as TorrentStatus));
+  if (opts.filter.length) {
+    if (opts.type === 'status') {
+      return torrentList.filter((torrent) => torrent.status.some((status) => opts.filter.includes(status)));
     }
-    if (type === 'tracker') {
-      return torrentList.filter((torrent) => torrent.trackerURIs.includes(filter));
-    }
-    if (type === 'tag') {
-      return torrentList.filter((torrent) => {
-        if (filter === 'untagged') {
-          return torrent.tags.length === 0;
-        }
 
-        return torrent.tags.includes(filter);
-      });
+    if (opts.type === 'tracker') {
+      return torrentList.filter((torrent) => torrent.trackerURIs.some((uri) => opts.filter.includes(uri)));
+    }
+
+    if (opts.type === 'tag') {
+      const includeUntagged = opts.filter.includes('untagged');
+      return torrentList.filter(
+        (torrent) =>
+          (includeUntagged && torrent.tags.length === 0) || torrent.tags.some((tag) => opts.filter.includes(tag)),
+      );
     }
   }
 

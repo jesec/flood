@@ -27,10 +27,13 @@ const TrackerFilters: FC = observer(() => {
 
   const filterElements = filterItems.map((filter) => (
     <SidebarFilter
-      handleClick={(tracker) => TorrentFilterStore.setTrackerFilter(tracker)}
+      handleClick={(tracker, event) => TorrentFilterStore.setTrackerFilters(tracker, event)}
       count={TorrentFilterStore.taxonomy.trackerCounts[filter] || 0}
       key={filter}
-      isActive={filter === TorrentFilterStore.filters.trackerFilter}
+      isActive={
+        (filter === '' && !TorrentFilterStore.filters.trackerFilter.length) ||
+        TorrentFilterStore.filters.trackerFilter.includes(filter)
+      }
       name={filter}
       slug={filter}
       size={TorrentFilterStore.taxonomy.trackerSizes[filter]}

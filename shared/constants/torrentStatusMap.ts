@@ -1,12 +1,12 @@
 const torrentStatusMap = [
-  'checking',
-  'seeding',
-  'complete',
   'downloading',
+  'seeding',
+  'checking',
+  'complete',
   'stopped',
-  'error',
-  'inactive',
   'active',
+  'inactive',
+  'error',
 ] as const;
 
 export type TorrentStatus = typeof torrentStatusMap[number];
