@@ -136,6 +136,7 @@
   "filter.status.downloading": "Downloading",
   "filter.status.error": "Error",
   "filter.status.inactive": "Inactive",
+  "filter.status.queued": "Queued",
   "filter.status.seeding": "Seeding",
   "filter.status.stopped": "Stopped",
   "filter.status.title": "Filter by Status",

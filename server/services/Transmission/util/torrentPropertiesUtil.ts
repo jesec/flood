@@ -26,7 +26,7 @@ const getTorrentStatus = (
       }
       break;
     case TransmissionTorrentStatus.TR_STATUS_DOWNLOAD_WAIT:
-      statuses.push('downloading', 'queued');
+      statuses.push('queued', 'inactive');
       break;
     case TransmissionTorrentStatus.TR_STATUS_SEED:
     case TransmissionTorrentStatus.TR_STATUS_SEED_WAIT:
