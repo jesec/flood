@@ -169,6 +169,14 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
   abstract startTorrents(options: StartTorrentsOptions): Promise<void>;
 
   /**
+   * Starts torrents and bypasses download queueing
+   * 
+   * @param options  {StartTorrentsOptions} options - an object of options...
+   * @return {Promise<void>} - Rejects with error.
+   */
+  abstract startTorrentsNow(options: StartTorrentsOptions): Promise<void>;
+
+  /**
    * Stops torrents
    *
    * @param {StopTorrentsOptions} options - An object of options...

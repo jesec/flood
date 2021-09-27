@@ -219,6 +219,22 @@ class ClientRequestManager {
       });
   }
 
+  async startTorrentsNow(ids: TransmissionTorrentIDs): Promise<void> {
+    return axios
+      .post(
+        this.rpcURL,
+        {method: 'torrent-start-now', arguments: {ids}},
+        {
+          headers: await this.getRequestHeaders(),
+        },
+      )
+      .then((res) => {
+        if (res.data.result !== 'success') {
+          throw new Error();
+        }
+      });
+  }
+
   async stopTorrents(ids: TransmissionTorrentIDs): Promise<void> {
     return axios
       .post(
