@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
-import {Active, All, Completed, DownloadSmall, Error, Inactive, Stop, Spinner, UploadSmall} from '@client/ui/icons';
+import {Active, All, Completed, DownloadSmall, QueuedSmall, Error, Inactive, Stop, Spinner, UploadSmall} from '@client/ui/icons';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import UIActions from '@client/actions/UIActions';
 
@@ -27,6 +27,11 @@ const StatusFilters: FC = observer(() => {
       label: i18n._('filter.status.downloading'),
       slug: 'downloading',
       icon: <DownloadSmall />,
+    },
+    {
+      label: i18n._('filter.status.queued'),
+      slug: 'queued',
+      icon: <QueuedSmall />,
     },
     {
       label: i18n._('filter.status.seeding'),

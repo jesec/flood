@@ -42,6 +42,10 @@
       }
     }
 
+    &.queued {
+      margin-left: 60px;
+    }
+
     &--heading {
       cursor: default;
       font-size: 0.8em;

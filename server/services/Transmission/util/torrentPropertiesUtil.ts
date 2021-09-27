@@ -18,13 +18,15 @@ const getTorrentStatus = (
       statuses.push('checking');
       break;
     case TransmissionTorrentStatus.TR_STATUS_DOWNLOAD:
-    case TransmissionTorrentStatus.TR_STATUS_DOWNLOAD_WAIT:
       statuses.push('downloading');
       if (rateDownload > 0) {
         statuses.push('active');
       } else {
         statuses.push('inactive');
       }
+      break;
+    case TransmissionTorrentStatus.TR_STATUS_DOWNLOAD_WAIT:
+      statuses.push('downloading', 'queued');
       break;
     case TransmissionTorrentStatus.TR_STATUS_SEED:
     case TransmissionTorrentStatus.TR_STATUS_SEED_WAIT:

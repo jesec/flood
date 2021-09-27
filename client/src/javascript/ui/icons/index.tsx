@@ -48,6 +48,7 @@ export {default as Logout} from './Logout';
 export {default as Menu} from './Menu';
 export {default as Notification} from './Notification';
 export {default as Peers} from './Peers';
+export {default as QueuedSmall} from './QueuedSmall';
 export {default as Radar} from './Radar';
 export {default as RadioDot} from './RadioDot';
 export {default as Ratio} from './Ratio';
