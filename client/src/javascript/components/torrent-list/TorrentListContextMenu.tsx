@@ -49,6 +49,17 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
     },
     {
       type: 'action',
+      action: 'startNow',
+      label: TorrentContextMenuActions.startNow,
+      clickHandler: () => {
+        TorrentActions.startTorrents({
+          hashes: TorrentStore.selectedTorrents,
+          force: true,
+        });
+      },
+    },
+    {
+      type: 'action',
       action: 'stop',
       label: TorrentContextMenuActions.stop,
       clickHandler: () => {

@@ -334,6 +334,7 @@
   "torrents.list.context.set.tags": "Set Tags",
   "torrents.list.context.set.trackers": "Set Trackers",
   "torrents.list.context.start": "Start",
+  "torrents.list.context.startNow": "Start Now",
   "torrents.list.context.stop": "Stop",
   "torrents.list.drop": "Drop files here to add them.",
   "torrents.list.no.torrents": "No torrents to display.",

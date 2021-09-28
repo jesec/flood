@@ -57,6 +57,7 @@ export interface MoveTorrentsOptions {
 export interface StartTorrentsOptions {
   // An array of string representing hashes of torrents to be started
   hashes: Array<TorrentProperties['hash']>;
+  force?: boolean;
 }
 
 // POST /api/torrents/stop

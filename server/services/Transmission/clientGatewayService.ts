@@ -310,15 +310,9 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  async startTorrents({hashes}: StartTorrentsOptions): Promise<void> {
+  async startTorrents({hashes, force}: StartTorrentsOptions): Promise<void> {
     return this.clientRequestManager
-      .startTorrents(hashes)
-      .then(this.processClientRequestSuccess, this.processClientRequestError);
-  }
-
-  async startTorrentsNow({hashes}: StartTorrentsOptions): Promise<void> {
-    return this.clientRequestManager
-      .startTorrentsNow(hashes)
+      .startTorrents(hashes, force)
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
