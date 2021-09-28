@@ -21,7 +21,7 @@ export const torrentStatusClasses = (
 export const torrentStatusEffective = (status: TorrentProperties['status']): TorrentProperties['status'][number] => {
   let result: TorrentProperties['status'][number] = 'stopped';
 
-  ['error', 'checking', 'stopped', 'downloading', 'seeding'].some((state) => {
+  ['error', 'checking', 'stopped', 'downloading', 'queued', 'seeding'].some((state) => {
     if (status.includes(state as TorrentProperties['status'][number])) {
       result = state as TorrentProperties['status'][number];
       return true;
