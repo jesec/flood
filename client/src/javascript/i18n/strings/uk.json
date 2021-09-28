@@ -272,6 +272,7 @@
   "torrents.list.context.set.tags": "Встановити позначки",
   "torrents.list.context.set.trackers": "Встановити трекери",
   "torrents.list.context.start": "Старт",
+  "torrents.list.context.startNow": "стартувати зараз",
   "torrents.list.context.stop": "Зупинити",
   "torrents.list.drop": "Перетягніть файли сюди, щоб додати їх.",
   "torrents.list.no.torrents": "Немає торентів для відображення.",
