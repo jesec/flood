@@ -78,7 +78,7 @@ const StatusFilters: FC = observer(() => {
   const filterElements = filters.map((filter) => (
     <SidebarFilter
       handleClick={(selection) => UIActions.setTorrentStatusFilter(selection as TorrentStatus)}
-      count={TorrentFilterStore.taxonomy.statusCounts[filter.slug] || 0}
+      count={TorrentFilterStore.taxonomy.statusCounts[filter.slug] - (filter.slug === 'downloading' || filter.slug === 'seeding' ? TorrentFilterStore.taxonomy.statusCounts[filter.slug + '-queued'] || 0 : 0) || 0}
       key={filter.slug}
       icon={filter.icon}
       isActive={filter.slug === TorrentFilterStore.filters.statusFilter}
