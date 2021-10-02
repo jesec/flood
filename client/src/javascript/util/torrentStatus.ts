@@ -16,12 +16,13 @@ export const torrentStatusClasses = (
     'torrent--is-completed': status.includes('complete'),
     'torrent--is-checking': status.includes('checking'),
     'torrent--is-inactive': status.includes('inactive'),
+    'torrent--is-queued': status.includes('downloading-queued') || status.includes('seeding-queued'),
   });
 
 export const torrentStatusEffective = (status: TorrentProperties['status']): TorrentProperties['status'][number] => {
   let result: TorrentProperties['status'][number] = 'stopped';
 
-  ['error', 'checking', 'stopped', 'downloading', 'queued', 'seeding'].some((state) => {
+  ['error', 'checking', 'stopped', 'downloading', 'downloading-queued', 'seeding', 'seeding-queued'].some((state) => {
     if (status.includes(state as TorrentProperties['status'][number])) {
       result = state as TorrentProperties['status'][number];
       return true;

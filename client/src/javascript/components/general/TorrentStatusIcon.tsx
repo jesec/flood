@@ -16,7 +16,8 @@ const TorrentStatusIcon: FC<TorrentStatusIconProps> = memo(({status}: TorrentSta
       return <Spinner />;
     case 'downloading':
       return <Start />;
-    case 'queued':
+    case 'downloading-queued':
+    case 'seeding-queued':
       return <Queued />;
     case 'seeding':
       return <Start />;

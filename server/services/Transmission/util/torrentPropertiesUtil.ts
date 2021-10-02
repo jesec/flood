@@ -17,6 +17,8 @@ const getTorrentStatus = (
     case TransmissionTorrentStatus.TR_STATUS_CHECK_WAIT:
       statuses.push('checking');
       break;
+    case TransmissionTorrentStatus.TR_STATUS_DOWNLOAD_WAIT:
+      statuses.push('downloading-queued');
     case TransmissionTorrentStatus.TR_STATUS_DOWNLOAD:
       statuses.push('downloading');
       if (rateDownload > 0) {
@@ -25,11 +27,9 @@ const getTorrentStatus = (
         statuses.push('inactive');
       }
       break;
-    case TransmissionTorrentStatus.TR_STATUS_DOWNLOAD_WAIT:
-      statuses.push('queued', 'inactive');
-      break;
-    case TransmissionTorrentStatus.TR_STATUS_SEED:
     case TransmissionTorrentStatus.TR_STATUS_SEED_WAIT:
+      statuses.push('seeding-queued');
+    case TransmissionTorrentStatus.TR_STATUS_SEED:
       statuses.push('seeding');
       if (rateUpload > 0) {
         statuses.push('active');

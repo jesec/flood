@@ -30,13 +30,18 @@ const StatusFilters: FC = observer(() => {
     },
     {
       label: i18n._('filter.status.queued'),
-      slug: 'queued',
+      slug: 'downloading-queued',
       icon: <Queued />,
     },
     {
       label: i18n._('filter.status.seeding'),
       slug: 'seeding',
       icon: <UploadSmall />,
+    },
+    {
+      label: i18n._('filter.status.queued'),
+      slug: 'seeding-queued',
+      icon: <Queued />,
     },
     {
       label: i18n._('filter.status.checking'),

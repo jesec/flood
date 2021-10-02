@@ -10,6 +10,7 @@ import type {TorrentProperties, TorrentList} from '@shared/types/Torrent';
 
 import SettingStore from './SettingStore';
 import TorrentFilterStore from './TorrentFilterStore';
+import { TorrentStatus } from '@shared/constants/torrentStatusMap';
 
 class TorrentStore {
   selectedTorrents: Array<string> = [];
@@ -37,6 +38,14 @@ class TorrentStore {
         type: 'status',
         filter: statusFilter,
       });
+      if (statusFilter === 'downloading' || statusFilter === 'seeding') {
+        const queuedStatus = statusFilter + '-queued' as TorrentStatus;
+        filteredTorrents = filterTorrents(filteredTorrents, {
+          type: 'status',
+          filter: queuedStatus,
+          negated: true,
+        });
+      }
     }
 
     if (tagFilter !== '') {

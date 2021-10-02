@@ -28,7 +28,7 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
 
   const classNames = classnames('sidebar-filter__item', {
     'is-active': isActive,
-    'queued': slug === 'queued',
+    'queued': slug === 'downloading-queued' || slug === 'seeding-queued',
   });
 
   let name = _name;
@@ -41,7 +41,7 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
     name = i18n._('filter.untagged');
   }
 
-  if (slug === 'checking' || slug === 'error' || slug === 'queued') {
+  if (slug === 'checking' || slug === 'error' || slug === 'downloading-queued' || slug === 'seeding-queued') {
     if (count === 0) {
       return null;
     }
