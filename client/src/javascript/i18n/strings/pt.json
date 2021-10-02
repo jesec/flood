@@ -269,7 +269,6 @@
   "torrents.list.context.set.tags": "Definir Tags",
   "torrents.list.context.set.trackers": "Definir Rastreadores",
   "torrents.list.context.start": "Iniciar",
-  "torrents.list.context.startNow": "Iniciar agora",
   "torrents.list.context.stop": "Interromper",
   "torrents.list.drop": "Arraste arquivos aqui para adicioná-los.",
   "torrents.list.no.torrents": "Não há torrents para exibir.",
