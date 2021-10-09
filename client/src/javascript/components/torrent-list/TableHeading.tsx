@@ -75,7 +75,7 @@ const TableHeading = observer(
       };
 
       return (
-        <div className="table__row table__row--heading" role="rowheader" ref={tableHeading}>
+        <div className="table__row table__row--heading" role="row" ref={tableHeading}>
           {SettingStore.floodSettings.torrentListColumns.reduce((accumulator: ReactNodeArray, {id, visible}) => {
             if (!visible) {
               return accumulator;
@@ -131,6 +131,14 @@ const TableHeading = observer(
                     WebkitTapHighlightColor: 'transparent',
                   },
                 }}
+                role="columnheader"
+                aria-sort={
+                  isSortActive
+                    ? SettingStore.floodSettings.sortTorrents.direction === 'asc'
+                      ? 'ascending'
+                      : 'descending'
+                    : 'none'
+                }
                 type="button"
                 key={id}
                 onClick={() => onCellClick(id)}
