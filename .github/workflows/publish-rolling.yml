@@ -118,8 +118,18 @@ jobs:
   docker-dbg:
     runs-on: ubuntu-20.04
 
+    strategy:
+      matrix:
+        node: [16]
+
     steps:
       - uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Set up QEMU
         run: |
