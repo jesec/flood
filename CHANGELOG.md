@@ -1,5 +1,23 @@
 # Changelog
 
+## [4.7.0] (October 9, 2021)
+
+- Display total size by tag or tracker of torrents on sidebar (#369, @sabersalv)
+- Improve memoization of "TorrentListRow" and "ProgressBar" components
+- Fix loading indicator bar alignment (#396, @DopyConqueror)
+- New translations
+  - Arabic, thanks to yngams
+  - Chinese Simplified, thanks to @davidxuang
+  - Czech, thanks to @Kedlub
+  - Italian, thanks to @GiorgioBrux
+  - German, thanks to @Kiina
+  - Japanese, thanks to @Kuri0421 and @Kiina
+  - Korean, thanks to @Kiina
+  - Polish, thanks to @retmas-gh
+  - Spanish, thanks to @oaknuggins
+  - Norwegian, thanks to Daddie0
+- Bump dependencies
+
 ## [4.6.1] (July 5, 2021)
 
 - DiskUsage: skip mount points of "overlayfs" type (#341, @Trim21)
@@ -517,3 +535,4 @@ Other changes:
 [4.5.4]: https://github.com/jesec/flood/compare/v4.5.3...v4.5.4
 [4.6.0]: https://github.com/jesec/flood/compare/v4.5.4...v4.6.0
 [4.6.1]: https://github.com/jesec/flood/compare/v4.6.0...v4.6.1
+[4.7.0]: https://github.com/jesec/flood/compare/v4.6.1...v4.7.0
