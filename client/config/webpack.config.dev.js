@@ -3,7 +3,6 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const WebpackBar = require('webpackbar');
 const paths = require('../../shared/config/paths');
 
@@ -118,11 +117,6 @@ module.exports = {
     // a plugin that prints an error when you attempt to do this.
     // See https://github.com/facebookincubator/create-react-app/issues/240
     new CaseSensitivePathsPlugin(),
-    // If you require a missing module and then `npm install` it, you still have
-    // to restart the development server for Webpack to discover it. This plugin
-    // makes the discovery automatic so you don't have to restart.
-    // See https://github.com/facebookincubator/create-react-app/issues/186
-    new WatchMissingNodeModulesPlugin(paths.appNodeModules),
     new WebpackBar(),
   ],
   devtool: 'source-map',
