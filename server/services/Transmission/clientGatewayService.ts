@@ -374,7 +374,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
                 downTotal: torrent.downloadedEver,
                 upRate: torrent.rateUpload,
                 upTotal: torrent.uploadedEver,
-                eta: torrent.eta,
+                eta: torrent.eta < 0 ? -1 : torrent.eta,
                 isPrivate: torrent.isPrivate,
                 isInitialSeeding: false,
                 isSequential: false,
