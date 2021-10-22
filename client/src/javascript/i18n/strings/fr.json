@@ -169,7 +169,7 @@
   "settings.bandwidth.slots.download.label": "Slots de téléchargement par torrent",
   "settings.bandwidth.slots.heading": "Configuration des slots",
   "settings.bandwidth.slots.upload.global.label": "Slots d'envoi global",
-  "settings.bandwidth.slots.upload.label": "Slots d'essaimage par torrent",
+  "settings.bandwidth.slots.upload.label": "Slots d'envoi par Torrent",
   "settings.bandwidth.transferrate.dropdown.preset.download.label": "Pré-réglages des vitesses : téléchargement",
   "settings.bandwidth.transferrate.dropdown.preset.upload.label": "Pré-réglages des vitesses : Envoi",
   "settings.bandwidth.transferrate.global.throttle.download": "Limite globale de téléchargement",
