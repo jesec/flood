@@ -50,6 +50,7 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
   },
   torrentContextMenuActions: [
     {id: 'start', visible: true},
+    {id: 'startNow', visible: true},
     {id: 'stop', visible: true},
     {id: 'remove', visible: true},
     {id: 'checkHash', visible: true},

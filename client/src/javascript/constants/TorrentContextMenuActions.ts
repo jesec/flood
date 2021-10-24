@@ -1,5 +1,6 @@
 const TorrentContextMenuActions = {
   start: 'torrents.list.context.start',
+  startNow: 'torrents.list.context.startNow',
   stop: 'torrents.list.context.stop',
   remove: 'torrents.list.context.remove',
   checkHash: 'torrents.list.context.check.hash',

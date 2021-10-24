@@ -2,7 +2,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
-import {Active, All, Completed, DownloadSmall, Error, Inactive, Stop, Spinner, UploadSmall} from '@client/ui/icons';
+import {Active, All, Completed, DownloadSmall, Queued, Error, Inactive, Stop, Spinner, UploadSmall} from '@client/ui/icons';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import UIActions from '@client/actions/UIActions';
 
@@ -29,9 +29,19 @@ const StatusFilters: FC = observer(() => {
       icon: <DownloadSmall />,
     },
     {
+      label: i18n._('filter.status.queued'),
+      slug: 'downloading-queued',
+      icon: <Queued />,
+    },
+    {
       label: i18n._('filter.status.seeding'),
       slug: 'seeding',
       icon: <UploadSmall />,
+    },
+    {
+      label: i18n._('filter.status.queued'),
+      slug: 'seeding-queued',
+      icon: <Queued />,
     },
     {
       label: i18n._('filter.status.checking'),
@@ -68,7 +78,7 @@ const StatusFilters: FC = observer(() => {
   const filterElements = filters.map((filter) => (
     <SidebarFilter
       handleClick={(selection) => UIActions.setTorrentStatusFilter(selection as TorrentStatus)}
-      count={TorrentFilterStore.taxonomy.statusCounts[filter.slug] || 0}
+      count={TorrentFilterStore.taxonomy.statusCounts[filter.slug] - (filter.slug === 'downloading' || filter.slug === 'seeding' ? TorrentFilterStore.taxonomy.statusCounts[filter.slug + '-queued'] || 0 : 0) || 0}
       key={filter.slug}
       icon={filter.icon}
       isActive={filter.slug === TorrentFilterStore.filters.statusFilter}

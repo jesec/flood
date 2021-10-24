@@ -1,6 +1,6 @@
 import {FC, memo} from 'react';
 
-import {Error, Spinner, Start, Stop} from '@client/ui/icons';
+import {Error, Queued, Spinner, Start, Stop} from '@client/ui/icons';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
@@ -16,6 +16,9 @@ const TorrentStatusIcon: FC<TorrentStatusIconProps> = memo(({status}: TorrentSta
       return <Spinner />;
     case 'downloading':
       return <Start />;
+    case 'downloading-queued':
+    case 'seeding-queued':
+      return <Queued />;
     case 'seeding':
       return <Start />;
     default:
