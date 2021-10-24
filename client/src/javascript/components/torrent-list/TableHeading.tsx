@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {forwardRef, MutableRefObject, ReactNodeArray, useRef, useState} from 'react';
+import {forwardRef, MutableRefObject, ReactElement, useRef, useState} from 'react';
 import {observer} from 'mobx-react';
 import {Trans, useLingui} from '@lingui/react';
 import {useEnsuredForwardedRef} from 'react-use';
@@ -76,7 +76,7 @@ const TableHeading = observer(
 
       return (
         <div className="table__row table__row--heading" role="row" ref={tableHeading}>
-          {SettingStore.floodSettings.torrentListColumns.reduce((accumulator: ReactNodeArray, {id, visible}) => {
+          {SettingStore.floodSettings.torrentListColumns.reduce((accumulator: Array<ReactElement>, {id, visible}) => {
             if (!visible) {
               return accumulator;
             }

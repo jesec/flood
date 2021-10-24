@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import {forwardRef, MutableRefObject, ReactNode, useEffect, useRef, useState} from 'react';
+import {forwardRef, MutableRefObject, ReactElement, ReactNode, useEffect, useRef, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 import {useEnsuredForwardedRef} from 'react-use';
 
@@ -67,7 +67,7 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
       };
     }, []);
 
-    const toggles: React.ReactNodeArray = [];
+    const toggles: Array<ReactElement> = [];
     if (showBasePathToggle) {
       toggles.push(
         <Checkbox grow={false} id="isBasePath" key="isBasePath">

@@ -11,7 +11,7 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
-import type {
+import {
   CheckTorrentsOptions,
   CreateTorrentOptions,
   DeleteTorrentsOptions,
@@ -23,6 +23,8 @@ import type {
   SetTorrentsTrackersOptions,
   StartTorrentsOptions,
   StopTorrentsOptions,
+  TorrentAddResponse,
+  TorrentMediainfoResponse,
 } from '@shared/types/api/torrents';
 import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
@@ -56,43 +58,37 @@ const emitFailedToAddTorrentAlert = (count: number) => {
 
 const TorrentActions = {
   addTorrentsByUrls: (options: AddTorrentByURLOptions): Promise<void> =>
-    axios
-      .post(`${baseURI}api/torrents/add-urls`, options)
-      .then((json) => json.data)
-      .then(
-        (response) => {
-          if (response.length) {
-            emitTorrentAddedAlert(response.length);
-          } else {
-            emitRequestSentAlert(options.urls.length);
-          }
-        },
-        () => {
-          emitFailedToAddTorrentAlert(options.urls.length);
-        },
-      ),
+    axios.post<TorrentAddResponse>(`${baseURI}api/torrents/add-urls`, options).then(
+      ({data}) => {
+        if (data.length) {
+          emitTorrentAddedAlert(data.length);
+        } else {
+          emitRequestSentAlert(options.urls.length);
+        }
+      },
+      () => {
+        emitFailedToAddTorrentAlert(options.urls.length);
+      },
+    ),
 
   addTorrentsByFiles: (options: AddTorrentByFileOptions): Promise<void> =>
-    axios
-      .post(`${baseURI}api/torrents/add-files`, options)
-      .then((json) => json.data)
-      .then(
-        (response) => {
-          if (response.length) {
-            emitTorrentAddedAlert(response.length);
-          } else {
-            emitRequestSentAlert(options.files.length);
-          }
-        },
-        () => {
-          emitFailedToAddTorrentAlert(options.files.length);
-        },
-      ),
+    axios.post<TorrentAddResponse>(`${baseURI}api/torrents/add-files`, options).then(
+      ({data}) => {
+        if (data.length) {
+          emitTorrentAddedAlert(data.length);
+        } else {
+          emitRequestSentAlert(options.files.length);
+        }
+      },
+      () => {
+        emitFailedToAddTorrentAlert(options.files.length);
+      },
+    ),
 
   createTorrent: (options: CreateTorrentOptions): Promise<void> =>
-    axios.post(`${baseURI}api/torrents/create`, options, {responseType: 'blob'}).then(
-      (response) => {
-        download(response.data, (options.name || `${Date.now()}`).concat('.torrent'));
+    axios.post<Blob>(`${baseURI}api/torrents/create`, options, {responseType: 'blob'}).then(
+      ({data}) => {
+        download(data, (options.name || `${Date.now()}`).concat('.torrent'));
         emitTorrentAddedAlert(1);
       },
       () => {
@@ -101,68 +97,53 @@ const TorrentActions = {
     ),
 
   deleteTorrents: (options: DeleteTorrentsOptions): Promise<void> =>
-    axios
-      .post(`${baseURI}api/torrents/delete`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          AlertStore.add({
-            id: 'alert.torrent.remove',
-            type: 'success',
-            count: options.hashes.length,
-          });
-        },
-        () => {
-          AlertStore.add({
-            id: 'alert.torrent.remove.failed',
-            type: 'error',
-            count: options.hashes.length,
-          });
-        },
-      ),
+    axios.post(`${baseURI}api/torrents/delete`, options).then(
+      () =>
+        AlertStore.add({
+          id: 'alert.torrent.remove',
+          type: 'success',
+          count: options.hashes.length,
+        }),
+      () =>
+        AlertStore.add({
+          id: 'alert.torrent.remove.failed',
+          type: 'error',
+          count: options.hashes.length,
+        }),
+    ),
 
   checkHash: (options: CheckTorrentsOptions): Promise<void> =>
-    axios
-      .post(`${baseURI}api/torrents/check-hash`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.post(`${baseURI}api/torrents/check-hash`, options).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 
   fetchMediainfo: (hash: TorrentProperties['hash'], cancelToken?: CancelToken): Promise<{output: string}> =>
-    axios.get(`${baseURI}api/torrents/${hash}/mediainfo`, {cancelToken}).then<{output: string}>((json) => json.data),
+    axios
+      .get<TorrentMediainfoResponse>(`${baseURI}api/torrents/${hash}/mediainfo`, {cancelToken})
+      .then<{output: string}>((res) => res.data),
 
   fetchTorrentContents: (hash: TorrentProperties['hash']): Promise<Array<TorrentContent> | null> =>
-    axios
-      .get(`${baseURI}api/torrents/${hash}/contents`)
-      .then<Array<TorrentContent>>((json) => json.data)
-      .then(
-        (contents) => contents,
-        () => null,
-      ),
+    axios.get<Array<TorrentContent>>(`${baseURI}api/torrents/${hash}/contents`).then(
+      (res) => res.data,
+      () => null,
+    ),
 
   fetchTorrentPeers: (hash: TorrentProperties['hash']): Promise<Array<TorrentPeer> | null> =>
-    axios
-      .get(`${baseURI}api/torrents/${hash}/peers`)
-      .then<Array<TorrentPeer>>((json) => json.data)
-      .then(
-        (peers) => peers,
-        () => null,
-      ),
+    axios.get<Array<TorrentPeer>>(`${baseURI}api/torrents/${hash}/peers`).then(
+      (res) => res.data,
+      () => null,
+    ),
 
   fetchTorrentTrackers: (hash: TorrentProperties['hash']): Promise<Array<TorrentTracker> | null> =>
-    axios
-      .get(`${baseURI}api/torrents/${hash}/trackers`)
-      .then<Array<TorrentTracker>>((json) => json.data)
-      .then(
-        (trackers) => trackers,
-        () => null,
-      ),
+    axios.get<Array<TorrentTracker>>(`${baseURI}api/torrents/${hash}/trackers`).then(
+      (res) => res.data,
+      () => null,
+    ),
 
   getTorrentContentsDataPermalink: (hash: TorrentProperties['hash'], indices: number[]): Promise<string> =>
     axios
@@ -175,150 +156,116 @@ const TorrentActions = {
       ),
 
   moveTorrents: (options: MoveTorrentsOptions): Promise<void> =>
-    axios
-      .post(`${baseURI}api/torrents/move`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          AlertStore.add({
-            id: 'alert.torrent.move',
-            type: 'success',
-            count: options.hashes.length,
-          });
-        },
-        () => {
-          AlertStore.add({
-            id: 'alert.torrent.move.failed',
-            type: 'error',
-            count: options.hashes.length,
-          });
-        },
-      ),
+    axios.post(`${baseURI}api/torrents/move`, options).then(
+      () =>
+        AlertStore.add({
+          id: 'alert.torrent.move',
+          type: 'success',
+          count: options.hashes.length,
+        }),
+      () =>
+        AlertStore.add({
+          id: 'alert.torrent.move.failed',
+          type: 'error',
+          count: options.hashes.length,
+        }),
+    ),
 
   reannounce: (options: ReannounceTorrentsOptions): Promise<void> =>
-    axios
-      .post(`${baseURI}api/torrents/reannounce`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.post(`${baseURI}api/torrents/reannounce`, options).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 
   startTorrents: async (options: StartTorrentsOptions): Promise<void> => {
     if (options.hashes.length > 0) {
-      return axios
-        .post(`${baseURI}api/torrents/start`, options)
-        .then((json) => json.data)
-        .then(
-          () => {
-            // do nothing.
-          },
-          () => {
-            // do nothing.
-          },
-        );
+      return axios.post(`${baseURI}api/torrents/start`, options).then(
+        () => {
+          // do nothing.
+        },
+        () => {
+          // do nothing.
+        },
+      );
     }
     return undefined;
   },
 
   stopTorrents: async (options: StopTorrentsOptions): Promise<void> => {
     if (options.hashes.length > 0) {
-      return axios
-        .post(`${baseURI}api/torrents/stop`, options)
-        .then((json) => json.data)
-        .then(
-          () => {
-            // do nothing.
-          },
-          () => {
-            // do nothing.
-          },
-        );
+      return axios.post(`${baseURI}api/torrents/stop`, options).then(
+        () => {
+          // do nothing.
+        },
+        () => {
+          // do nothing.
+        },
+      );
     }
     return undefined;
   },
 
   setInitialSeeding: (options: SetTorrentsInitialSeedingOptions): Promise<void> =>
-    axios
-      .patch(`${baseURI}api/torrents/initial-seeding`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.patch(`${baseURI}api/torrents/initial-seeding`, options).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 
   setPriority: (options: SetTorrentsPriorityOptions): Promise<void> =>
-    axios
-      .patch(`${baseURI}api/torrents/priority`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.patch(`${baseURI}api/torrents/priority`, options).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 
   setSequential: (options: SetTorrentsSequentialOptions): Promise<void> =>
-    axios
-      .patch(`${baseURI}api/torrents/sequential`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.patch(`${baseURI}api/torrents/sequential`, options).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 
   setFilePriority: (hash: TorrentProperties['hash'], options: SetTorrentContentsPropertiesOptions): Promise<void> =>
-    axios
-      .patch(`${baseURI}api/torrents/${hash}/contents`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.patch(`${baseURI}api/torrents/${hash}/contents`, options).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 
   setTags: (options: SetTorrentsTagsOptions): Promise<void> =>
-    axios
-      .patch(`${baseURI}api/torrents/tags`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          UIStore.handleSetTaxonomySuccess();
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.patch(`${baseURI}api/torrents/tags`, options).then(
+      () => UIStore.handleSetTaxonomySuccess(),
+      () => {
+        // do nothing.
+      },
+    ),
 
   setTrackers: (options: SetTorrentsTrackersOptions): Promise<void> =>
-    axios
-      .patch(`${baseURI}api/torrents/trackers`, options)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.patch(`${baseURI}api/torrents/trackers`, options).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 };
 
 export default TorrentActions;

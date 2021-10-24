@@ -4,7 +4,11 @@ import FloodActions from '@client/actions/FloodActions';
 
 import {AccessLevel} from '@shared/schema/constants/Auth';
 
-import type {AuthAuthenticationResponse, AuthVerificationResponse} from '@shared/schema/api/auth';
+import type {
+  AuthAuthenticationResponse,
+  AuthRegistrationResponse,
+  AuthVerificationResponse,
+} from '@shared/schema/api/auth';
 import type {Credentials} from '@shared/schema/Auth';
 
 class AuthStore {
@@ -26,7 +30,7 @@ class AuthStore {
     makeAutoObservable(this);
   }
 
-  handleCreateUserSuccess({username}: {username: Credentials['username']}): void {
+  handleCreateUserSuccess({username}: AuthRegistrationResponse): void {
     this.optimisticUsers.push({username});
   }
 
@@ -37,9 +41,9 @@ class AuthStore {
     this.users = nextUserList;
   }
 
-  handleLoginSuccess(response: AuthAuthenticationResponse): void {
-    this.currentUser.username = response.username;
-    this.currentUser.isAdmin = response.level === AccessLevel.ADMINISTRATOR;
+  handleLoginSuccess({username, level}: AuthAuthenticationResponse): void {
+    this.currentUser.username = username;
+    this.currentUser.isAdmin = level === AccessLevel.ADMINISTRATOR;
     this.currentUser.isInitialUser = false;
     this.isAuthenticating = true;
     this.isAuthenticated = true;
@@ -50,21 +54,23 @@ class AuthStore {
     this.isAuthenticating = true;
   }
 
-  handleRegisterSuccess(response: AuthAuthenticationResponse): void {
-    this.currentUser.username = response.username;
-    this.currentUser.isAdmin = response.level === AccessLevel.ADMINISTRATOR;
+  handleRegisterSuccess({username, level}: AuthRegistrationResponse): void {
+    this.currentUser.username = username;
+    this.currentUser.isAdmin = level === AccessLevel.ADMINISTRATOR;
     this.currentUser.isInitialUser = false;
     FloodActions.restartActivityStream();
   }
 
   handleAuthVerificationSuccess(response: AuthVerificationResponse): void {
     if (response.initialUser === true) {
-      this.currentUser.isInitialUser = response.initialUser;
+      this.currentUser.isInitialUser = true;
     } else {
+      const {username, level} = response;
+
       this.currentUser = {
-        username: response.username,
-        isAdmin: response.level === AccessLevel.ADMINISTRATOR,
-        isInitialUser: response.initialUser,
+        username: username,
+        isAdmin: level === AccessLevel.ADMINISTRATOR,
+        isInitialUser: false,
       };
     }
 

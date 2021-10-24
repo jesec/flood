@@ -1,4 +1,4 @@
-import {CSSProperties, forwardRef, KeyboardEvent, MouseEvent, ReactNodeArray, TouchEvent} from 'react';
+import {CSSProperties, forwardRef, KeyboardEvent, MouseEvent, ReactElement, TouchEvent} from 'react';
 import {observer} from 'mobx-react';
 
 import SettingStore from '../../stores/SettingStore';
@@ -34,7 +34,7 @@ const TorrentListRowCondensed = observer(
       ref,
     ) => {
       const torrentListColumns = SettingStore.floodSettings.torrentListColumns.reduce(
-        (accumulator: ReactNodeArray, {id, visible}) => {
+        (accumulator: Array<ReactElement>, {id, visible}) => {
           if (TorrentListColumns[id] == null) {
             return accumulator;
           }

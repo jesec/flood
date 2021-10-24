@@ -1,4 +1,4 @@
-import {FC, ReactNodeArray} from 'react';
+import {FC, ReactElement} from 'react';
 import {observer} from 'mobx-react';
 import {Trans} from '@lingui/react';
 
@@ -13,7 +13,7 @@ interface FeedItemsProps {
 const FeedItems: FC<FeedItemsProps> = observer(({selectedFeedID}: FeedItemsProps) => {
   const {items} = FeedStore;
 
-  const itemElements: ReactNodeArray = [];
+  const itemElements: Array<ReactElement> = [];
   if (selectedFeedID) {
     const titleOccurrences: Record<string, number> = {};
     items.forEach((item, index) => {

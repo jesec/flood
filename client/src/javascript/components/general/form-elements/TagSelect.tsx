@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {FC, ReactNode, ReactNodeArray, useEffect, useRef, useState} from 'react';
+import {FC, ReactElement, ReactNode, useEffect, useRef, useState} from 'react';
 import {sort} from 'fast-sort';
 import {Trans} from '@lingui/react';
 import {useKeyPressEvent} from 'react-use';
@@ -114,7 +114,7 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
                   ...sort(Object.keys(TorrentFilterStore.taxonomy.tagCounts)).asc(),
                   ...selectedTags,
                 ]),
-              ].reduce((accumulator: ReactNodeArray, tag) => {
+              ].reduce((accumulator: Array<ReactElement>, tag) => {
                 if (tag === '') {
                   return accumulator;
                 }

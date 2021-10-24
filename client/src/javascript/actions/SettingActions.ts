@@ -11,46 +11,35 @@ const {baseURI} = ConfigStore;
 
 const SettingActions = {
   fetchSettings: async (): Promise<void> =>
-    axios
-      .get(`${baseURI}api/settings`)
-      .then((json) => json.data)
-      .then(
-        (data) => {
-          SettingStore.handleSettingsFetchSuccess(data);
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.get<FloodSettings>(`${baseURI}api/settings`).then(
+      ({data}) => {
+        SettingStore.handleSettingsFetchSuccess(data);
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 
   saveSettings: async (settings: SetFloodSettingsOptions, options?: {alert?: boolean}): Promise<void> => {
     if (Object.keys(settings).length > 0) {
       SettingStore.saveFloodSettings(settings);
 
-      let err = false;
-      await axios
-        .patch(`${baseURI}api/settings`, settings)
-        .then((json) => json.data)
-        .then(
-          () => {
-            // do nothing.
-          },
-          () => {
-            err = true;
-          },
-        );
+      const success = await axios.patch(`${baseURI}api/settings`, settings).then(
+        () => true,
+        () => false,
+      );
 
       if (options?.alert) {
         // TODO: More precise error message.
         AlertStore.add(
-          err
+          success
             ? {
-                id: 'general.error.unknown',
-                type: 'error',
-              }
-            : {
                 id: 'alert.settings.saved',
                 type: 'success',
+              }
+            : {
+                id: 'general.error.unknown',
+                type: 'error',
               },
         );
       }

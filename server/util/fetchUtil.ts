@@ -1,4 +1,4 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
+import axios, {AxiosError} from 'axios';
 import fs from 'fs';
 import path from 'path';
 
@@ -26,7 +26,7 @@ export const fetchUrls = async (
               }
             : undefined,
         }).then(
-          (res: AxiosResponse) => res.data,
+          (res) => res.data,
           (e: AxiosError) => console.error(e),
         );
 

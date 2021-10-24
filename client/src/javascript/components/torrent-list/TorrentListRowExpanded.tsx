@@ -1,4 +1,4 @@
-import {CSSProperties, FC, forwardRef, KeyboardEvent, MouseEvent, ReactNodeArray, TouchEvent} from 'react';
+import {CSSProperties, FC, forwardRef, KeyboardEvent, MouseEvent, ReactElement, TouchEvent} from 'react';
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
@@ -54,7 +54,7 @@ const TorrentListRowExpanded = observer(
     ) => {
       const columns = SettingStore.floodSettings.torrentListColumns;
 
-      const primarySection: ReactNodeArray = [
+      const primarySection: Array<ReactElement> = [
         <TorrentListCell
           key="name"
           hash={hash}
@@ -62,12 +62,12 @@ const TorrentListRowExpanded = observer(
           className="torrent__details__section torrent__details__section--primary"
         />,
       ];
-      const secondarySection: ReactNodeArray = [
+      const secondarySection: Array<ReactElement> = [
         <TorrentListCell key="eta" hash={hash} column="eta" showIcon />,
         <TorrentListCell key="downRate" hash={hash} column="downRate" showIcon />,
         <TorrentListCell key="upRate" hash={hash} column="upRate" showIcon />,
       ];
-      const tertiarySection: ReactNodeArray = [
+      const tertiarySection: Array<ReactElement> = [
         <TorrentListCell
           key="percentComplete"
           hash={hash}
@@ -76,7 +76,7 @@ const TorrentListRowExpanded = observer(
           showIcon
         />,
       ];
-      const quaternarySection: ReactNodeArray = [
+      const quaternarySection: Array<ReactElement> = [
         <TorrentListCell
           key="percentBar"
           hash={hash}

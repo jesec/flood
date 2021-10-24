@@ -50,7 +50,7 @@ export type QBittorrentMainData = Required<
 
 export interface QBittorrentSyncTorrentPeers {
   rid: number;
-  peers?: {
+  peers: {
     [ip_and_port: string]: QBittorrentTorrentPeer;
   };
   peers_removed?: string[];

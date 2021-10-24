@@ -1,11 +1,13 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
+import axios, {AxiosError} from 'axios';
 
 import AuthStore from '@client/stores/AuthStore';
 import ConfigStore from '@client/stores/ConfigStore';
 
 import type {
   AuthAuthenticationOptions,
+  AuthAuthenticationResponse,
   AuthRegistrationOptions,
+  AuthRegistrationResponse,
   AuthUpdateUserOptions,
   AuthVerificationResponse,
 } from '@shared/schema/api/auth';
@@ -20,10 +22,9 @@ const {baseURI} = ConfigStore;
 const AuthActions = {
   authenticate: (options: AuthAuthenticationOptions) =>
     axios
-      .post(`${baseURI}api/auth/authenticate`, options)
-      .then((json) => json.data)
+      .post<AuthAuthenticationResponse>(`${baseURI}api/auth/authenticate`, options)
       .then(
-        (data) => {
+        ({data}) => {
           AuthStore.handleLoginSuccess(data);
         },
         (error) => {
@@ -53,36 +54,27 @@ const AuthActions = {
       ),
 
   createUser: (options: AuthRegistrationOptions) =>
-    axios
-      .post(`${baseURI}api/auth/register?cookie=false`, options)
-      .then((json) => json.data)
-      .then((data) => {
-        AuthStore.handleCreateUserSuccess(data);
-      }),
+    axios.post<AuthRegistrationResponse>(`${baseURI}api/auth/register?cookie=false`, options).then(({data}) => {
+      AuthStore.handleCreateUserSuccess(data);
+    }),
 
   updateUser: (username: Credentials['username'], options: AuthUpdateUserOptions) =>
-    axios.patch(`${baseURI}api/auth/users/${encodeURIComponent(username)}`, options).then((json) => json.data),
+    axios.patch(`${baseURI}api/auth/users/${encodeURIComponent(username)}`, options).then((res) => res.data),
 
   deleteUser: (username: Credentials['username']) =>
-    axios
-      .delete(`${baseURI}api/auth/users/${encodeURIComponent(username)}`)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      ),
+    axios.delete(`${baseURI}api/auth/users/${encodeURIComponent(username)}`).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    ),
 
   fetchUsers: () =>
-    axios
-      .get(`${baseURI}api/auth/users`)
-      .then((json) => json.data)
-      .then((data) => {
-        AuthStore.handleListUsersSuccess(data);
-      }),
+    axios.get<Array<Credentials>>(`${baseURI}api/auth/users`).then(({data}) => {
+      AuthStore.handleListUsersSuccess(data);
+    }),
 
   logout: () =>
     axios.get(`${baseURI}api/auth/logout`).then(
@@ -95,47 +87,42 @@ const AuthActions = {
     ),
 
   register: (options: AuthRegistrationOptions) =>
-    axios
-      .post(`${baseURI}api/auth/register`, options)
-      .then((json) => json.data)
-      .then(
-        (data) => {
-          AuthStore.handleRegisterSuccess(data);
-        },
-        (error: AxiosError) => {
-          throw error;
-        },
-      ),
+    axios.post<AuthRegistrationResponse>(`${baseURI}api/auth/register`, options).then(
+      ({data}) => {
+        AuthStore.handleRegisterSuccess(data);
+      },
+      (error: AxiosError) => {
+        throw error;
+      },
+    ),
 
   verify: () =>
     axios
-      .get(`${baseURI}api/auth/verify?${Date.now()}`)
+      .get<AuthVerificationResponse>(`${baseURI}api/auth/verify?${Date.now()}`)
       .then(
-        (res: AxiosResponse) => {
-          if (res.data.configs != null) {
-            ConfigStore.handlePreloadConfigs(res.data.configs);
+        ({data}) => {
+          if (data.configs != null) {
+            ConfigStore.handlePreloadConfigs(data.configs);
           }
-          return res.data;
+          return data;
         },
-        (error: AxiosError) => {
+        (error: AxiosError<AuthVerificationResponse>) => {
           if (error.response?.data?.configs != null) {
             ConfigStore.handlePreloadConfigs(error.response.data.configs);
           }
           throw error;
         },
       )
-      .then(
-        (data: AuthVerificationResponse) => {
-          AuthStore.handleAuthVerificationSuccess(data);
+      .then((data) => {
+        AuthStore.handleAuthVerificationSuccess(data);
 
-          return Promise.all([ClientActions.fetchSettings(), SettingActions.fetchSettings()]).then(() => data);
-        },
-        (error) => {
-          AuthStore.handleAuthVerificationError();
+        return Promise.all([ClientActions.fetchSettings(), SettingActions.fetchSettings()]).then(() => data);
+      })
+      .catch((error) => {
+        AuthStore.handleAuthVerificationError();
 
-          throw error;
-        },
-      ),
+        throw error;
+      }),
 } as const;
 
 export default AuthActions;

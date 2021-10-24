@@ -1,4 +1,4 @@
-import {ButtonHTMLAttributes, Children, cloneElement, FC, ReactElement, ReactNode, ReactNodeArray, Ref} from 'react';
+import {ButtonHTMLAttributes, Children, cloneElement, FC, ReactElement, ReactNode, Ref} from 'react';
 import classnames from 'classnames';
 
 import {LoadingRing} from '@client/ui/icons';
@@ -42,8 +42,8 @@ const Button: FC<ButtonProps> = ({
   grow,
   onClick,
 }: ButtonProps) => {
-  const addonNodes: ReactNodeArray = [];
-  const childNodes: ReactNodeArray = [];
+  const addonNodes: Array<ReactElement> = [];
+  const childNodes: Array<ReactElement> = [];
 
   Children.toArray(children).forEach((child) => {
     const childAsElement = child as ReactElement;
@@ -56,7 +56,7 @@ const Button: FC<ButtonProps> = ({
         }),
       );
     } else {
-      childNodes.push(child);
+      childNodes.push(childAsElement);
     }
   });
 

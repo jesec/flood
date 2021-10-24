@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {FC, ReactNode, ReactNodeArray} from 'react';
+import {FC, ReactNode} from 'react';
 
 export interface Tab {
   id?: string;
@@ -18,41 +18,43 @@ interface ModalTabsProps {
 const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
   const {activeTabId, tabs = {}, onTabChange} = props;
 
-  const tabNodes: ReactNodeArray = Object.keys(tabs).map((tabId) => {
-    const currentTab = tabs[tabId];
+  return (
+    <ul className="modal__tabs">
+      {Object.keys(tabs).map((tabId) => {
+        const currentTab = tabs[tabId];
 
-    currentTab.id = tabId;
+        currentTab.id = tabId;
 
-    const classes = classnames('modal__tab', {
-      'is-active': tabId === activeTabId,
-    });
+        const classes = classnames('modal__tab', {
+          'is-active': tabId === activeTabId,
+        });
 
-    return (
-      <li className={classes} key={tabId}>
-        <button
-          css={{
-            ':focus': {
-              outline: 'none',
-              WebkitTapHighlightColor: 'transparent',
-            },
-            ':focus-visible': {
-              outline: 'dashed',
-            },
-          }}
-          type="button"
-          onClick={() => {
-            if (onTabChange) {
-              onTabChange(currentTab);
-            }
-          }}
-        >
-          {currentTab.label}
-        </button>
-      </li>
-    );
-  });
-
-  return <ul className="modal__tabs">{tabNodes}</ul>;
+        return (
+          <li className={classes} key={tabId}>
+            <button
+              css={{
+                ':focus': {
+                  outline: 'none',
+                  WebkitTapHighlightColor: 'transparent',
+                },
+                ':focus-visible': {
+                  outline: 'dashed',
+                },
+              }}
+              type="button"
+              onClick={() => {
+                if (onTabChange) {
+                  onTabChange(currentTab);
+                }
+              }}
+            >
+              {currentTab.label}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
 };
 
 ModalTabs.defaultProps = {

@@ -18,49 +18,50 @@ import {
   TransmissionTorrentsSetLocationArguments,
 } from './types/TransmissionTorrentsMethods';
 
+type TransmissionRPCResponse<T = undefined> = {
+  result: 'success';
+  arguments: T;
+} & {
+  result: string;
+};
+
 class ClientRequestManager {
   private rpcURL: string;
   private authHeader: string;
   private sessionID?: Promise<string | undefined>;
 
   async fetchSessionID(url = this.rpcURL, authHeader = this.authHeader): Promise<string | undefined> {
-    return axios
+    let id: string | undefined = undefined;
+
+    await axios
       .get(url, {
         headers: {
           Authorization: authHeader,
         },
       })
-      .then<string | undefined>(
-        () => {
-          return undefined;
-        },
-        (err: AxiosError) => {
-          if (err.response?.status === 409) {
-            return err.response?.headers['x-transmission-session-id'];
-          }
+      .catch((err: AxiosError) => {
+        if (err.response?.status !== 409) {
           throw err;
-        },
-      );
+        }
+        id = err.response?.headers['x-transmission-session-id'];
+      });
+
+    return id;
   }
 
   async updateSessionID(url = this.rpcURL, authHeader = this.authHeader): Promise<void> {
     let authFailed = false;
 
-    this.sessionID = new Promise((resolve) => {
-      this.fetchSessionID(url, authHeader).then(
-        (sessionID) => {
-          resolve(sessionID);
-        },
-        () => {
-          authFailed = true;
-          resolve(undefined);
-        },
-      );
+    this.sessionID = this.fetchSessionID(url, authHeader).catch(() => {
+      authFailed = true;
+      return undefined;
     });
 
     await this.sessionID;
 
-    return authFailed ? Promise.reject(new Error()) : Promise.resolve();
+    if (authFailed) {
+      throw new Error();
+    }
   }
 
   async getRequestHeaders(): Promise<Record<string, string>> {
@@ -74,18 +75,18 @@ class ClientRequestManager {
 
   async getSessionStats(): Promise<TransmissionSessionStats> {
     return axios
-      .post(
+      .post<TransmissionRPCResponse<TransmissionSessionStats>>(
         this.rpcURL,
         {method: 'session-stats'},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
-        return res.data.arguments;
+        return data.arguments;
       });
   }
 
@@ -95,32 +96,32 @@ class ClientRequestManager {
     const sessionGetArguments: TransmissionSessionGetArguments = {fields};
 
     return axios
-      .post(
+      .post<TransmissionRPCResponse<Pick<TransmissionSessionProperties, T[number]>>>(
         this.rpcURL,
         {method: 'session-get', arguments: sessionGetArguments},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
-        return res.data.arguments;
+        return data.arguments;
       });
   }
 
   async setSessionProperties(properties: TransmissionSessionSetArguments): Promise<void> {
     return axios
-      .post(
+      .post<TransmissionRPCResponse>(
         this.rpcURL,
         {method: 'session-set', arguments: properties},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
       });
@@ -137,18 +138,18 @@ class ClientRequestManager {
     };
 
     return axios
-      .post(
+      .post<TransmissionRPCResponse<{torrents: Array<Pick<TransmissionTorrentProperties, T[number]>>}>>(
         this.rpcURL,
         {method: 'torrent-get', arguments: torrentsGetArguments},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success' || res.data.arguments.torrents == null) {
+      .then(({data}) => {
+        if (data.result !== 'success' || data.arguments.torrents == null) {
           throw new Error();
         }
-        return res.data.arguments.torrents;
+        return data.arguments.torrents;
       });
   }
 
@@ -156,32 +157,34 @@ class ClientRequestManager {
     args: TransmissionTorrentAddArguments,
   ): Promise<Pick<TransmissionTorrentProperties, 'id' | 'name' | 'hashString'>> {
     return axios
-      .post(
+      .post<
+        TransmissionRPCResponse<{'torrent-added'?: Pick<TransmissionTorrentProperties, 'id' | 'name' | 'hashString'>}>
+      >(
         this.rpcURL,
         {method: 'torrent-add', arguments: args},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success' || !data.arguments['torrent-added']) {
           throw new Error();
         }
-        return res.data.arguments['torrent-added'];
+        return data.arguments['torrent-added'];
       });
   }
 
   async reannounceTorrents(ids: TransmissionTorrentIDs): Promise<void> {
     return axios
-      .post(
+      .post<TransmissionRPCResponse>(
         this.rpcURL,
         {method: 'torrent-reannounce', arguments: {ids}},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
       });
@@ -189,15 +192,15 @@ class ClientRequestManager {
 
   async setTorrentsProperties(args: TransmissionTorrentsSetArguments): Promise<void> {
     return axios
-      .post(
+      .post<TransmissionRPCResponse>(
         this.rpcURL,
         {method: 'torrent-set', arguments: args},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
       });
@@ -205,15 +208,15 @@ class ClientRequestManager {
 
   async startTorrents(ids: TransmissionTorrentIDs): Promise<void> {
     return axios
-      .post(
+      .post<TransmissionRPCResponse>(
         this.rpcURL,
         {method: 'torrent-start-now', arguments: {ids}},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
       });
@@ -221,15 +224,15 @@ class ClientRequestManager {
 
   async stopTorrents(ids: TransmissionTorrentIDs): Promise<void> {
     return axios
-      .post(
+      .post<TransmissionRPCResponse>(
         this.rpcURL,
         {method: 'torrent-stop', arguments: {ids}},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
       });
@@ -237,15 +240,15 @@ class ClientRequestManager {
 
   async verifyTorrents(ids: TransmissionTorrentIDs): Promise<void> {
     return axios
-      .post(
+      .post<TransmissionRPCResponse>(
         this.rpcURL,
         {method: 'torrent-verify', arguments: {ids}},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
       });
@@ -258,15 +261,15 @@ class ClientRequestManager {
     };
 
     return axios
-      .post(
+      .post<TransmissionRPCResponse>(
         this.rpcURL,
         {method: 'torrent-remove', arguments: removeTorrentsArguments},
         {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
       });
@@ -280,7 +283,7 @@ class ClientRequestManager {
     };
 
     return axios
-      .post(
+      .post<TransmissionRPCResponse>(
         this.rpcURL,
         {
           method: 'torrent-set-location',
@@ -290,8 +293,8 @@ class ClientRequestManager {
           headers: await this.getRequestHeaders(),
         },
       )
-      .then((res) => {
-        if (res.data.result !== 'success') {
+      .then(({data}) => {
+        if (data.result !== 'success') {
           throw new Error();
         }
       });

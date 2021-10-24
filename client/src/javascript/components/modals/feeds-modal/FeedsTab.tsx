@@ -1,4 +1,4 @@
-import {FC, ReactNodeArray, useRef, useState} from 'react';
+import {FC, ReactElement, useRef, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 
 import {Button, Form, FormError, FormRow, FormRowItem} from '@client/ui';
@@ -137,7 +137,7 @@ const FeedsTab: FC = () => {
         <ModalFormSectionHeader>
           <Trans id="feeds.existing.feeds" />
         </ModalFormSectionHeader>
-        {Object.keys(errors).reduce((memo: ReactNodeArray, key) => {
+        {Object.keys(errors).reduce((memo: Array<ReactElement>, key) => {
           if (errors[key as ValidatedField] != null) {
             memo.push(
               <FormRow key={`error-${key}`}>

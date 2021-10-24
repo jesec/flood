@@ -9,8 +9,9 @@ import TorrentStore from '@client/stores/TorrentStore';
 import TransferDataStore from '@client/stores/TransferDataStore';
 import UIStore from '@client/stores/UIStore';
 
+import type {DirectoryListResponse} from '@shared/types/api';
 import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
-import type {NotificationFetchOptions} from '@shared/types/Notification';
+import type {NotificationFetchOptions, NotificationState} from '@shared/types/Notification';
 import type {ServerEvents} from '@shared/types/ServerEvents';
 
 interface ActivityStreamOptions {
@@ -70,17 +71,14 @@ const ServerEventHandlers: Record<keyof ServerEvents, (event: unknown) => void> 
 const FloodActions = {
   clearNotifications: () => {
     NotificationStore.clearAll();
-    return axios
-      .delete(`${baseURI}api/notifications`)
-      .then((json) => json.data)
-      .then(
-        () => {
-          // do nothing.
-        },
-        () => {
-          // do nothing.
-        },
-      );
+    return axios.delete(`${baseURI}api/notifications`).then(
+      () => {
+        // do nothing.
+      },
+      () => {
+        // do nothing.
+      },
+    );
   },
 
   closeActivityStream() {
@@ -101,19 +99,18 @@ const FloodActions = {
 
   fetchDirectoryList: (path: string) =>
     axios
-      .get(`${baseURI}api/directory-list`, {
+      .get<DirectoryListResponse>(`${baseURI}api/directory-list`, {
         params: {path},
       })
-      .then((json) => json.data),
+      .then((res) => res.data),
 
   fetchNotifications: (options: NotificationFetchOptions) =>
     axios
-      .get(`${baseURI}api/notifications`, {
+      .get<NotificationState>(`${baseURI}api/notifications`, {
         params: options,
       })
-      .then((json) => json.data)
       .then(
-        (data) => {
+        ({data}) => {
           NotificationStore.handleNotificationsFetchSuccess(data);
         },
         () => {

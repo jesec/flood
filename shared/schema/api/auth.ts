@@ -25,6 +25,12 @@ export interface AuthAuthenticationResponse {
 export const authRegistrationSchema = credentialsSchema;
 export type AuthRegistrationOptions = Required<zodInfer<typeof authRegistrationSchema>>;
 
+// POST /api/auth/register - success response
+export interface AuthRegistrationResponse {
+  username: string;
+  level: AccessLevel;
+}
+
 // PATCH /api/auth/users/{username}
 export const authUpdateUserSchema = credentialsSchema.partial();
 export type AuthUpdateUserOptions = zodInfer<typeof authUpdateUserSchema>;

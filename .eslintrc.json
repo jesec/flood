@@ -20,7 +20,7 @@
     {
       "files": ["*.js", "*.jsx"],
       "extends": ["prettier"],
-      "parser": "babel-eslint",
+      "parser": "@babel/eslint-parser",
       "rules": {
         "@typescript-eslint/no-var-requires": 0
       }

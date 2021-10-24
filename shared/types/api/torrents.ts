@@ -104,3 +104,13 @@ export interface SetTorrentContentsPropertiesOptions {
   // Number representing priority
   priority: TorrentContentPriority;
 }
+
+// GET /api/torrents/{hash}/mediainfo - success response
+export interface TorrentMediainfoResponse {
+  output: string;
+}
+
+// POST /api/torrents/add-urls - success response
+// POST /api/torrents/add-files - success response
+// hashes of torrents added
+export type TorrentAddResponse = string[];

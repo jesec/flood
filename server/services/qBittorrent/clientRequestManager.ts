@@ -34,7 +34,7 @@ const EMPTY_SERVER_STATE = {
 class ClientRequestManager {
   private connectionSettings: QBittorrentConnectionSettings;
   private apiBase: string;
-  private authCookie?: Promise<string | undefined>;
+  private authCookie: Promise<string | undefined> = Promise.resolve(undefined);
   private isMainDataPending = false;
 
   private syncRids: {
@@ -66,7 +66,7 @@ class ClientRequestManager {
         },
       })
       .then((res) => {
-        const cookies: Array<string> = res.headers['set-cookie'];
+        const cookies = res.headers['set-cookie'];
 
         if (Array.isArray(cookies)) {
           return cookies.filter((cookie) => cookie.includes('SID='))[0];
@@ -79,35 +79,37 @@ class ClientRequestManager {
   async updateAuthCookie(connectionSettings?: QBittorrentConnectionSettings): Promise<void> {
     let authFailed = false;
 
-    this.authCookie = new Promise((resolve) => {
-      this.authenticate(connectionSettings).then(
-        (authCookie) => {
-          resolve(authCookie);
-        },
-        () => {
-          authFailed = true;
-          resolve(undefined);
-        },
-      );
+    this.authCookie = this.authenticate(connectionSettings).catch(() => {
+      authFailed = true;
+      return undefined;
     });
 
     await this.authCookie;
 
-    return authFailed ? Promise.reject(new Error()) : Promise.resolve();
+    if (authFailed) {
+      throw new Error();
+    }
+  }
+
+  async getRequestHeaders(): Promise<Record<string, string>> {
+    const Cookie = await this.authCookie;
+    return {
+      ...(Cookie == null ? {} : {Cookie}),
+    };
   }
 
   async getAppPreferences(): Promise<QBittorrentAppPreferences> {
     return axios
-      .get(`${this.apiBase}/app/preferences`, {
-        headers: {Cookie: await this.authCookie},
+      .get<QBittorrentAppPreferences>(`${this.apiBase}/app/preferences`, {
+        headers: await this.getRequestHeaders(),
       })
-      .then((json) => json.data);
+      .then((res) => res.data);
   }
 
   async setAppPreferences(preferences: Partial<QBittorrentAppPreferences>): Promise<void> {
     return axios
       .post(`${this.apiBase}/app/setPreferences`, `json=${JSON.stringify(preferences)}`, {
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -116,55 +118,55 @@ class ClientRequestManager {
 
   async getTorrentInfos(): Promise<QBittorrentTorrentInfos> {
     return axios
-      .get(`${this.apiBase}/torrents/info`, {
-        headers: {Cookie: await this.authCookie},
+      .get<QBittorrentTorrentInfos>(`${this.apiBase}/torrents/info`, {
+        headers: await this.getRequestHeaders(),
       })
-      .then((json) => json.data);
+      .then((res) => res.data);
   }
 
   async getTorrentContents(hash: string): Promise<QBittorrentTorrentContents> {
     return axios
-      .get(`${this.apiBase}/torrents/files`, {
+      .get<QBittorrentTorrentContents>(`${this.apiBase}/torrents/files`, {
         params: {
           hash: hash.toLowerCase(),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
-      .then((json) => json.data);
+      .then((res) => res.data);
   }
 
   async getTorrentProperties(hash: string): Promise<QBittorrentTorrentProperties> {
     return axios
-      .get(`${this.apiBase}/torrents/properties`, {
+      .get<QBittorrentTorrentProperties>(`${this.apiBase}/torrents/properties`, {
         params: {
           hash: hash.toLowerCase(),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
-      .then((json) => json.data);
+      .then((res) => res.data);
   }
 
   async getTorrentTrackers(hash: string): Promise<QBittorrentTorrentTrackers> {
     return axios
-      .get(`${this.apiBase}/torrents/trackers`, {
+      .get<QBittorrentTorrentTrackers>(`${this.apiBase}/torrents/trackers`, {
         params: {
           hash: hash.toLowerCase(),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
-      .then((json) => json.data);
+      .then((res) => res.data);
   }
 
   async getTransferInfo(): Promise<QBittorrentTransferInfo> {
     return axios
-      .get(`${this.apiBase}/transfer/info`, {
-        headers: {Cookie: await this.authCookie},
+      .get<QBittorrentTransferInfo>(`${this.apiBase}/transfer/info`, {
+        headers: await this.getRequestHeaders(),
       })
-      .then((json) => json.data);
+      .then((res) => res.data);
   }
 
   async syncMainData(): Promise<QBittorrentMainData> {
-    const Cookie = await this.authCookie;
+    const headers = await this.getRequestHeaders();
 
     if (this.isMainDataPending == false) {
       this.isMainDataPending = true;
@@ -174,7 +176,7 @@ class ClientRequestManager {
             params: {
               rid,
             },
-            headers: {Cookie},
+            headers,
           })
           .then(({data}) => {
             const {
@@ -268,9 +270,9 @@ class ClientRequestManager {
           hash: hash.toLowerCase(),
           rid: 0,
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
-      .then(({data}) => data.peers as QBittorrentTorrentPeers);
+      .then(({data}) => data.peers);
   }
 
   async torrentsPause(hashes: Array<string>): Promise<void> {
@@ -279,7 +281,7 @@ class ClientRequestManager {
         params: {
           hashes: hashes.join('|').toLowerCase(),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -292,7 +294,7 @@ class ClientRequestManager {
         params: {
           hashes: hashes.join('|').toLowerCase(),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -306,7 +308,7 @@ class ClientRequestManager {
           hashes: hashes.join('|').toLowerCase(),
           deleteFiles: deleteFiles ? 'true' : 'false',
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -319,7 +321,7 @@ class ClientRequestManager {
         params: {
           hashes: hashes.join('|').toLowerCase(),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -333,7 +335,7 @@ class ClientRequestManager {
           hashes: hashes.join('|').toLowerCase(),
           location,
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -346,7 +348,7 @@ class ClientRequestManager {
         params: {
           hashes: hashes.join('|').toLowerCase(),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -359,7 +361,7 @@ class ClientRequestManager {
         params: {
           hashes: hashes.join('|').toLowerCase(),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -426,7 +428,7 @@ class ClientRequestManager {
           hashes: hashes.join('|').toLowerCase(),
           tags: tags.join(','),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -440,7 +442,7 @@ class ClientRequestManager {
           hashes: hashes.join('|').toLowerCase(),
           tags: tags?.join(','),
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing
@@ -455,7 +457,7 @@ class ClientRequestManager {
             hash: hash.toLowerCase(),
             urls: urls.join('\n'),
           },
-          headers: {Cookie: await this.authCookie},
+          headers: await this.getRequestHeaders(),
         })
         .then(() => {
           // returns nothing
@@ -470,7 +472,7 @@ class ClientRequestManager {
           params: {
             hashes: hashes.join('|').toLowerCase(),
           },
-          headers: {Cookie: await this.authCookie},
+          headers: await this.getRequestHeaders(),
         })
         .then(() => {
           // returns nothing
@@ -486,7 +488,7 @@ class ClientRequestManager {
             hash: hash.toLowerCase(),
             urls: urls.join('|'),
           },
-          headers: {Cookie: await this.authCookie},
+          headers: await this.getRequestHeaders(),
         })
         .then(() => {
           // returns nothing
@@ -502,7 +504,7 @@ class ClientRequestManager {
             hashes: hashes.join('|').toLowerCase(),
             value: value ? 'true' : 'false',
           },
-          headers: {Cookie: await this.authCookie},
+          headers: await this.getRequestHeaders(),
         })
         .then(() => {
           // returns nothing
@@ -517,7 +519,7 @@ class ClientRequestManager {
           params: {
             hashes: hashes.join('|').toLowerCase(),
           },
-          headers: {Cookie: await this.authCookie},
+          headers: await this.getRequestHeaders(),
         })
         .then(() => {
           // returns nothing
@@ -533,7 +535,7 @@ class ClientRequestManager {
           id: ids.join('|'),
           priority,
         },
-        headers: {Cookie: await this.authCookie},
+        headers: await this.getRequestHeaders(),
       })
       .then(() => {
         // returns nothing

@@ -907,13 +907,9 @@ router.get<{hash: string}>(
         'mediainfo',
         torrentContentPaths,
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
-        (error, stdout, stderr) => {
+        (error, stdout) => {
           if (error) {
-            return res.status(500).json({message: error.message});
-          }
-
-          if (stderr) {
-            return res.status(500).json({message: stderr});
+            return res.status(500).json({code: error.code, message: error.message});
           }
 
           return res.status(200).json({output: stdout});
