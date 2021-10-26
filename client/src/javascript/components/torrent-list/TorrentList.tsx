@@ -13,7 +13,6 @@ import SettingActions from '@client/actions/SettingActions';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import TorrentStore from '@client/stores/TorrentStore';
-import UIActions from '@client/actions/UIActions';
 import SortDirections from '@client/constants/SortDirections';
 
 import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
@@ -62,7 +61,7 @@ const TorrentList: FC = observer(() => {
 
     if ((metaKey || ctrlKey) && key === 'a') {
       e.preventDefault();
-      UIActions.selectAllTorrents();
+      TorrentStore.selectAllTorrents();
     }
   });
 

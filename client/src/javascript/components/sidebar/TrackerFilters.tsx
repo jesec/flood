@@ -4,7 +4,6 @@ import {useLingui} from '@lingui/react';
 
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
-import UIActions from '../../actions/UIActions';
 
 const TrackerFilters: FC = observer(() => {
   const {i18n} = useLingui();
@@ -28,7 +27,7 @@ const TrackerFilters: FC = observer(() => {
 
   const filterElements = filterItems.map((filter) => (
     <SidebarFilter
-      handleClick={UIActions.setTorrentTrackerFilter}
+      handleClick={TorrentFilterStore.setTrackerFilter}
       count={TorrentFilterStore.taxonomy.trackerCounts[filter] || 0}
       key={filter}
       isActive={filter === TorrentFilterStore.filters.trackerFilter}

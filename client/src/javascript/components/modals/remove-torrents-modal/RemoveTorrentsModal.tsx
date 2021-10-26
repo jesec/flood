@@ -59,7 +59,7 @@ const RemoveTorrentsModal: FC = () => {
               }).then(() => {
                 setIsRemoving(false);
                 saveDeleteTorrentsUserPreferences({deleteData});
-                UIStore.dismissModal();
+                UIStore.setActiveModal(null);
               });
             }}
           >

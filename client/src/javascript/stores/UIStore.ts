@@ -138,13 +138,9 @@ class UIStore {
     }
   }
 
-  dismissModal() {
-    this.setActiveModal(null);
-  }
-
   handleSetTaxonomySuccess() {
     if (this.activeModal != null && this.activeModal.id === 'set-taxonomy') {
-      this.dismissModal();
+      this.setActiveModal(null);
     }
   }
 

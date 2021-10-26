@@ -5,8 +5,7 @@ import {observer} from 'mobx-react';
 import uniqueId from 'lodash/uniqueId';
 import {useKeyPressEvent} from 'react-use';
 
-import UIActions from '../../../actions/UIActions';
-import UIStore from '../../../stores/UIStore';
+import UIStore from '@client/stores/UIStore';
 
 interface DropdownButtonProps {
   className?: string;
@@ -101,7 +100,7 @@ const Dropdown = observer(
     const closeDropdown = useCallback(() => {
       window.removeEventListener('click', closeDropdown);
 
-      UIActions.displayDropdownMenu(null);
+      UIStore.setActiveDropdownMenu(null);
     }, []);
 
     useKeyPressEvent('Escape', () => closeDropdown());
@@ -113,7 +112,7 @@ const Dropdown = observer(
         onOpen();
       }
 
-      UIActions.displayDropdownMenu(id.current);
+      UIStore.setActiveDropdownMenu(id.current);
     }, [closeDropdown, onOpen]);
 
     const handleDropdownClick = (event?: SyntheticEvent): void => {

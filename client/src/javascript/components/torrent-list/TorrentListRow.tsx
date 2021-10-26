@@ -6,13 +6,14 @@ import {useLongPress} from 'react-use';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
+import SettingStore from '@client/stores/SettingStore';
+import {torrentStatusClasses} from '@client/util/torrentStatus';
+import TorrentStore from '@client/stores/TorrentStore';
+import UIStore from '@client/stores/UIStore';
+
 import {getContextMenuItems} from './TorrentListContextMenu';
-import SettingStore from '../../stores/SettingStore';
 import TorrentListRowCondensed from './TorrentListRowCondensed';
 import TorrentListRowExpanded from './TorrentListRowExpanded';
-import {torrentStatusClasses} from '../../util/torrentStatus';
-import TorrentStore from '../../stores/TorrentStore';
-import UIActions from '../../actions/UIActions';
 
 const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) => {
   if (event.cancelable === true) {
@@ -25,13 +26,13 @@ const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | To
   const touchClientY = (event as unknown as TouchEvent).touches?.[0].clientY;
 
   if (!TorrentStore.selectedTorrents.includes(hash)) {
-    UIActions.handleTorrentClick({hash, event});
+    TorrentStore.setSelectedTorrents({hash, event});
   }
 
   const {torrentContextMenuActions = defaultFloodSettings.torrentContextMenuActions} = SettingStore.floodSettings;
   const torrent = TorrentStore.torrents[hash];
 
-  UIActions.displayContextMenu({
+  UIStore.setActiveContextMenu({
     id: 'torrent-list-item',
     clickPosition: {
       x: mouseClientX || touchClientX || 0,
@@ -47,10 +48,10 @@ const displayContextMenu = (hash: string, event: KeyboardEvent | MouseEvent | To
   });
 };
 
-const displayTorrentDetails = (hash: string) => UIActions.displayModal({id: 'torrent-details', hash});
+const displayTorrentDetails = (hash: string) => UIStore.setActiveModal({id: 'torrent-details', hash});
 
 const selectTorrent = (hash: string, event: KeyboardEvent | MouseEvent | TouchEvent) =>
-  UIActions.handleTorrentClick({hash, event});
+  TorrentStore.setSelectedTorrents({hash, event});
 
 const onKeyPress = (hash: string, e: KeyboardEvent) => {
   if (e.key === ' ' || e.key === 'Enter' || e.key === 'ContextMenu') {

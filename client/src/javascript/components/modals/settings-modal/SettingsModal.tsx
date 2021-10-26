@@ -111,7 +111,7 @@ const SettingsModal: FC = observer(() => {
               }),
             ]).then(() => {
               setSavingSettings(false);
-              UIStore.dismissModal();
+              UIStore.setActiveModal(null);
             });
           },
           isLoading: isSavingSettings,

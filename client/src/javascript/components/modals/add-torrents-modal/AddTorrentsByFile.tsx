@@ -97,7 +97,7 @@ const AddTorrentsByFile: FC = () => {
             isSequential,
             start,
           }).then(() => {
-            UIStore.dismissModal();
+            UIStore.setActiveModal(null);
           });
 
           saveAddTorrentsUserPreferences({

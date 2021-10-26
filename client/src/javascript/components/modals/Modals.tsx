@@ -13,7 +13,6 @@ import SetTagsModal from './set-tags-modal/SetTagsModal';
 import SetTrackersModal from './set-trackers-modal/SetTrackersModal';
 import SettingsModal from './settings-modal/SettingsModal';
 import TorrentDetailsModal from './torrent-details-modal/TorrentDetailsModal';
-import UIActions from '../../actions/UIActions';
 import UIStore from '../../stores/UIStore';
 
 import type {Modal} from '../../stores/UIStore';
@@ -48,7 +47,7 @@ const createModal = (id: Modal['id']): React.ReactNode => {
 const Modals: FC = observer(() => {
   const {id} = UIStore.activeModal || {};
 
-  useKeyPressEvent('Escape', () => UIActions.dismissModal());
+  useKeyPressEvent('Escape', () => UIStore.setActiveModal(null));
 
   let modal;
   if (id != null) {
@@ -59,7 +58,7 @@ const Modals: FC = observer(() => {
             className="modal__overlay"
             role="none"
             onClick={() => {
-              UIActions.dismissModal();
+              UIStore.setActiveModal(null);
             }}
           />
           {createModal(id)}

@@ -2,7 +2,7 @@ import {FC, useRef} from 'react';
 import {useLingui} from '@lingui/react';
 
 import {Feed} from '@client/ui/icons';
-import UIActions from '@client/actions/UIActions';
+import UIStore from '@client/stores/UIStore';
 
 import Tooltip from '../general/Tooltip';
 
@@ -18,7 +18,7 @@ const FeedsButton: FC = () => {
           tooltipRef.current.dismissTooltip();
         }
 
-        UIActions.displayModal({id: 'feeds'});
+        UIStore.setActiveModal({id: 'feeds'});
       }}
       ref={tooltipRef}
       position="bottom"

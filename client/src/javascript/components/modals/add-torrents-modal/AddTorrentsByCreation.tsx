@@ -93,7 +93,7 @@ const AddTorrentsByCreation: FC = () => {
             start: formData.start || false,
             tags: formData.tags != null ? formData.tags.split(',') : undefined,
           }).then(() => {
-            UIStore.dismissModal();
+            UIStore.setActiveModal(null);
           });
 
           saveAddTorrentsUserPreferences({

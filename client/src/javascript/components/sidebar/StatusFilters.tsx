@@ -4,7 +4,6 @@ import {useLingui} from '@lingui/react';
 
 import {Active, All, Completed, DownloadSmall, Error, Inactive, Stop, Spinner, UploadSmall} from '@client/ui/icons';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
-import UIActions from '@client/actions/UIActions';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
@@ -67,7 +66,7 @@ const StatusFilters: FC = observer(() => {
 
   const filterElements = filters.map((filter) => (
     <SidebarFilter
-      handleClick={(selection) => UIActions.setTorrentStatusFilter(selection as TorrentStatus)}
+      handleClick={(selection) => TorrentFilterStore.setStatusFilter(selection as TorrentStatus)}
       count={TorrentFilterStore.taxonomy.statusCounts[filter.slug] || 0}
       key={filter.slug}
       icon={filter.icon}

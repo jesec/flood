@@ -8,7 +8,7 @@ import SettingActions from '@client/actions/SettingActions';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentActions from '@client/actions/TorrentActions';
 import TorrentStore from '@client/stores/TorrentStore';
-import UIActions from '@client/actions/UIActions';
+import UIStore from '@client/stores/UIStore';
 
 import Action from './Action';
 import SortDropdown from './SortDropdown';
@@ -74,14 +74,14 @@ const ActionBar: FC = observer(() => {
             label={i18n._('actionbar.button.add.torrent')}
             slug="add-torrent"
             icon={<Add />}
-            clickHandler={() => UIActions.displayModal({id: 'add-torrents'})}
+            clickHandler={() => UIStore.setActiveModal({id: 'add-torrents'})}
           />
           <Action
             label={i18n._('actionbar.button.remove.torrent')}
             slug="remove-torrent"
             icon={<Remove />}
             clickHandler={() =>
-              UIActions.displayModal({
+              UIStore.setActiveModal({
                 id: 'remove-torrents',
               })
             }

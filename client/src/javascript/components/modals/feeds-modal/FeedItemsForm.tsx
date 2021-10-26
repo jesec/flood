@@ -5,7 +5,7 @@ import {Trans, useLingui} from '@lingui/react';
 import {Button, Form, FormRow, Select, SelectItem, Textbox} from '@client/ui';
 import FeedActions from '@client/actions/FeedActions';
 import FeedStore from '@client/stores/FeedStore';
-import UIActions from '@client/actions/UIActions';
+import UIStore from '@client/stores/UIStore';
 
 import FeedItems from './FeedItems';
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
@@ -48,7 +48,7 @@ const FeedItemsForm: FC = observer(() => {
           .filter((_item, index) => formData[index])
           .map((item, index) => ({id: index, value: item.urls[0]}));
 
-        UIActions.displayModal({
+        UIStore.setActiveModal({
           id: 'add-torrents',
           initialURLs: torrentsToDownload,
         });

@@ -5,7 +5,6 @@ import {useLingui} from '@lingui/react';
 import {useKeyPressEvent} from 'react-use';
 
 import {ContextMenu} from '@client/ui';
-import UIActions from '@client/actions/UIActions';
 import UIStore from '@client/stores/UIStore';
 
 import type {ActiveContextMenu} from '@client/stores/UIStore';
@@ -24,13 +23,13 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
 
   const {i18n} = useLingui();
 
-  useKeyPressEvent('Escape', () => UIActions.dismissContextMenu(id));
+  useKeyPressEvent('Escape', () => UIStore.dismissContextMenu(id));
 
   return (
     <ContextMenu
       triggerCoordinates={triggerCoordinates}
       onOverlayClick={() => {
-        UIActions.dismissContextMenu(id);
+        UIStore.dismissContextMenu(id);
       }}
       onOverlayRightClick={(e) => {
         e.preventDefault();
@@ -92,7 +91,7 @@ const ContextMenuMountPoint: FC<ContextMenuMountPointProps> = observer(({id}: Co
                   }
 
                   if (item.dismissMenu !== false) {
-                    UIActions.dismissContextMenu(id);
+                    UIStore.dismissContextMenu(id);
                   }
                 }
 

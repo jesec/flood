@@ -136,7 +136,7 @@ const AddTorrentsByURL: FC = () => {
             start: formData.start,
             tags,
           }).then(() => {
-            UIStore.dismissModal();
+            UIStore.setActiveModal(null);
           });
 
           saveAddTorrentsUserPreferences({

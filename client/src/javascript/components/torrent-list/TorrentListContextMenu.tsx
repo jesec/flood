@@ -6,7 +6,7 @@ import ConfigStore from '@client/stores/ConfigStore';
 import TorrentActions from '@client/actions/TorrentActions';
 import TorrentContextMenuActions from '@client/constants/TorrentContextMenuActions';
 import TorrentStore from '@client/stores/TorrentStore';
-import UIActions from '@client/actions/UIActions';
+import UIStore from '@client/stores/UIStore';
 
 import type {ContextMenuItem} from '@client/stores/UIStore';
 
@@ -62,7 +62,7 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
       action: 'remove',
       label: TorrentContextMenuActions.remove,
       clickHandler: () => {
-        UIActions.displayModal({id: 'remove-torrents'});
+        UIStore.setActiveModal({id: 'remove-torrents'});
       },
     },
     {
@@ -93,7 +93,7 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
       action: 'setTaxonomy',
       label: TorrentContextMenuActions.setTaxonomy,
       clickHandler: () => {
-        UIActions.displayModal({id: 'set-taxonomy'});
+        UIStore.setActiveModal({id: 'set-taxonomy'});
       },
     },
     {
@@ -101,7 +101,7 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
       action: 'move',
       label: TorrentContextMenuActions.move,
       clickHandler: () => {
-        UIActions.displayModal({id: 'move-torrents'});
+        UIStore.setActiveModal({id: 'move-torrents'});
       },
     },
     {
@@ -109,7 +109,7 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
       action: 'setTrackers',
       label: TorrentContextMenuActions.setTrackers,
       clickHandler: () => {
-        UIActions.displayModal({id: 'set-trackers'});
+        UIStore.setActiveModal({id: 'set-trackers'});
       },
     },
     {
@@ -120,7 +120,7 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
       action: 'torrentDetails',
       label: TorrentContextMenuActions.torrentDetails,
       clickHandler: () => {
-        UIActions.displayModal({
+        UIStore.setActiveModal({
           id: 'torrent-details',
           hash: getLastSelectedTorrent(),
         });
@@ -169,7 +169,7 @@ export const getContextMenuItems = (torrent: TorrentProperties): Array<ContextMe
       action: 'generateMagnet',
       label: TorrentContextMenuActions.generateMagnet,
       clickHandler: () => {
-        UIActions.displayModal({id: 'generate-magnet'});
+        UIStore.setActiveModal({id: 'generate-magnet'});
       },
     },
     {

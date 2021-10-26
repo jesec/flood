@@ -86,7 +86,7 @@ const SetTrackersModal: FC = () => {
               trackers,
             }).then(() => {
               setIsSettingTrackers(false);
-              UIStore.dismissModal();
+              UIStore.setActiveModal(null);
             });
           },
           content: i18n._('torrents.set.trackers.button.set'),

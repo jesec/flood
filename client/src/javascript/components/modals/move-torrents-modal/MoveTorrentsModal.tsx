@@ -52,7 +52,7 @@ const MoveTorrents: FC = () => {
                   moveFiles: formData.moveFiles as boolean,
                   isCheckHash: formData.isCheckHash as boolean,
                 }).then(() => {
-                  UIStore.dismissModal();
+                  UIStore.setActiveModal(null);
                   setIsSettingDownloadPath(false);
                 });
               }
