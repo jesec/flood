@@ -28,7 +28,7 @@ const TagFilters: FC = observer(() => {
 
   const filterElements = filterItems.map((filter) => (
     <SidebarFilter
-      handleClick={TorrentFilterStore.setTagFilter}
+      handleClick={(tag) => TorrentFilterStore.setTagFilter(tag)}
       count={TorrentFilterStore.taxonomy.tagCounts[filter] || 0}
       key={filter}
       isActive={filter === TorrentFilterStore.filters.tagFilter}
