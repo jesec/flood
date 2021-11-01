@@ -10,7 +10,7 @@ const SearchBox: FC = observer(() => {
   const {i18n} = useLingui();
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const {searchFilter} = TorrentFilterStore.filters;
+  const {searchFilter} = TorrentFilterStore;
 
   useEffect(() => {
     if (inputRef.current != null) {

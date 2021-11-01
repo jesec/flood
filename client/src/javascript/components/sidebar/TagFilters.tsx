@@ -32,8 +32,7 @@ const TagFilters: FC = observer(() => {
       count={TorrentFilterStore.taxonomy.tagCounts[filter] || 0}
       key={filter}
       isActive={
-        (filter === '' && !TorrentFilterStore.filters.tagFilter.length) ||
-        TorrentFilterStore.filters.tagFilter.includes(filter)
+        (filter === '' && !TorrentFilterStore.tagFilter.length) || TorrentFilterStore.tagFilter.includes(filter)
       }
       name={filter}
       slug={filter}

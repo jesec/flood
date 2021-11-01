@@ -31,8 +31,7 @@ const TrackerFilters: FC = observer(() => {
       count={TorrentFilterStore.taxonomy.trackerCounts[filter] || 0}
       key={filter}
       isActive={
-        (filter === '' && !TorrentFilterStore.filters.trackerFilter.length) ||
-        TorrentFilterStore.filters.trackerFilter.includes(filter)
+        (filter === '' && !TorrentFilterStore.trackerFilter.length) || TorrentFilterStore.trackerFilter.includes(filter)
       }
       name={filter}
       slug={filter}

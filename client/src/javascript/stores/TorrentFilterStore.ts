@@ -6,17 +6,12 @@ import type {Taxonomy} from '@shared/types/Taxonomy';
 import torrentStatusMap, {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 class TorrentFilterStore {
-  filters: {
-    searchFilter: string;
-    statusFilter: Array<TorrentStatus>;
-    tagFilter: Array<string>;
-    trackerFilter: Array<string>;
-  } = {
-    searchFilter: '',
-    statusFilter: [],
-    tagFilter: [],
-    trackerFilter: [],
-  };
+  searchFilter = '';
+  statusFilter: Array<TorrentStatus> = [];
+  tagFilter: Array<string> = [];
+  trackerFilter: Array<string> = [];
+
+  filterTrigger = false;
 
   taxonomy: Taxonomy = {
     statusCounts: {},
@@ -27,12 +22,7 @@ class TorrentFilterStore {
   };
 
   @computed get isFilterActive() {
-    return (
-      this.filters.searchFilter !== '' ||
-      this.filters.statusFilter.length ||
-      this.filters.tagFilter.length ||
-      this.filters.trackerFilter.length
-    );
+    return this.searchFilter !== '' || this.statusFilter.length || this.tagFilter.length || this.trackerFilter.length;
   }
 
   constructor() {
@@ -40,12 +30,11 @@ class TorrentFilterStore {
   }
 
   clearAllFilters() {
-    this.filters = {
-      searchFilter: '',
-      statusFilter: [],
-      tagFilter: [],
-      trackerFilter: [],
-    };
+    this.searchFilter = '';
+    this.statusFilter = [];
+    this.tagFilter = [];
+    this.trackerFilter = [];
+    this.filterTrigger = !this.filterTrigger;
   }
 
   handleTorrentTaxonomyDiffChange(diff: Operation[]) {
@@ -57,14 +46,13 @@ class TorrentFilterStore {
   }
 
   setSearchFilter(filter: string) {
-    this.filters = {
-      ...this.filters,
-      searchFilter: filter,
-    };
+    this.searchFilter = filter;
+    this.filterTrigger = !this.filterTrigger;
   }
 
   setStatusFilters(filter: TorrentStatus | '', event: KeyboardEvent | MouseEvent | TouchEvent) {
-    this.computeFilters(torrentStatusMap, this.filters.statusFilter, filter, event);
+    this.computeFilters(torrentStatusMap, this.statusFilter, filter, event);
+    this.filterTrigger = !this.filterTrigger;
   }
 
   setTagFilters(filter: string, event: KeyboardEvent | MouseEvent | TouchEvent) {
@@ -78,13 +66,15 @@ class TorrentFilterStore {
     tags.splice(tags.indexOf('untagged'), 1);
     tags.splice(1, 0, 'untagged');
 
-    this.computeFilters(tags, this.filters.tagFilter, filter, event);
+    this.computeFilters(tags, this.tagFilter, filter, event);
+    this.filterTrigger = !this.filterTrigger;
   }
 
   setTrackerFilters(filter: string, event: KeyboardEvent | MouseEvent | TouchEvent) {
     const trackers = Object.keys(this.taxonomy.trackerCounts).sort((a, b) => a.localeCompare(b));
 
-    this.computeFilters(trackers, this.filters.trackerFilter, filter, event);
+    this.computeFilters(trackers, this.trackerFilter, filter, event);
+    this.filterTrigger = !this.filterTrigger;
   }
 
   private computeFilters<T extends TorrentStatus | string>(
@@ -107,7 +97,7 @@ class TorrentFilterStore {
 
         // from the previously selected index to the currently selected index,
         // add all filters to the selected array.
-        // if the newly selcted index is larger than the previous, start from
+        // if the newly selected index is larger than the previous, start from
         // the newly selected index and work backwards. otherwise go forwards.
         const increment = currentKeyIndex > lastKeyIndex ? -1 : 1;
 

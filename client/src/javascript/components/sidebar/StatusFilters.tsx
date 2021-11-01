@@ -71,8 +71,8 @@ const StatusFilters: FC = observer(() => {
       key={filter.slug}
       icon={filter.icon}
       isActive={
-        (filter.slug === '' && !TorrentFilterStore.filters.statusFilter.length) ||
-        TorrentFilterStore.filters.statusFilter.includes(filter.slug as TorrentStatus)
+        (filter.slug === '' && !TorrentFilterStore.statusFilter.length) ||
+        TorrentFilterStore.statusFilter.includes(filter.slug as TorrentStatus)
       }
       name={filter.label}
       slug={filter.slug}

@@ -36,7 +36,7 @@ const TorrentList: FC = observer(() => {
 
   useEffect(() => {
     const dispose = reaction(
-      () => TorrentFilterStore.filters,
+      () => TorrentFilterStore.filterTrigger,
       () => {
         if (listViewportRef.current != null) {
           listViewportRef.current.scrollTo(0);
