@@ -1,6 +1,7 @@
 @use 'sass:color';
 
 @use '../tools/colors';
+@use '../tools/themes';
 @use '../tools/variables';
 
 @use '../ui/config/font-size.scss';
@@ -134,7 +135,7 @@ $dropzone--file--foreground: $dropzone--foreground;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #fff;
+      @include themes.theme('background', 'torrent-list--background');
       z-index: 2;
       text-align: center;
       opacity: 0;
