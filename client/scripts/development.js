@@ -72,6 +72,7 @@ choosePort(HOST, DEFAULT_PORT)
             secure: false,
           },
         },
+        port,
       },
       compiler,
     );
@@ -81,10 +82,7 @@ choosePort(HOST, DEFAULT_PORT)
     });
 
     // Launch WebpackDevServer.
-    return devServer.start(port, HOST, (err) => {
-      if (err) {
-        return console.log(err);
-      }
+    return devServer.start().then(() => {
       if (isInteractive) {
         clearConsole();
       }
