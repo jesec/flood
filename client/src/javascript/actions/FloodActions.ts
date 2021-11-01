@@ -10,18 +10,12 @@ import TransferDataStore from '@client/stores/TransferDataStore';
 import UIStore from '@client/stores/UIStore';
 
 import type {DirectoryListResponse} from '@shared/types/api';
-import type {HistorySnapshot} from '@shared/constants/historySnapshotTypes';
 import type {NotificationFetchOptions, NotificationState} from '@shared/types/Notification';
 import type {ServerEvents} from '@shared/types/ServerEvents';
-
-interface ActivityStreamOptions {
-  historySnapshot: HistorySnapshot;
-}
 
 const {baseURI} = ConfigStore;
 
 let activityStreamEventSource: EventSource | null = null;
-let lastActivityStreamOptions: ActivityStreamOptions;
 let visibilityChangeTimeout: NodeJS.Timeout;
 
 // TODO: Use standard Event interfaces
@@ -120,26 +114,14 @@ const FloodActions = {
 
   restartActivityStream() {
     this.closeActivityStream();
-    this.startActivityStream(lastActivityStreamOptions);
+    this.startActivityStream();
   },
 
-  startActivityStream(options: ActivityStreamOptions = {historySnapshot: 'FIVE_MINUTE'}) {
-    const {historySnapshot} = options;
-    const didHistorySnapshotChange =
-      lastActivityStreamOptions && lastActivityStreamOptions.historySnapshot !== historySnapshot;
-
-    lastActivityStreamOptions = options;
-
-    // When the user requests a new history snapshot during an open session,
-    // we need to close and re-open the event stream.
-    if (didHistorySnapshotChange && activityStreamEventSource != null) {
-      this.closeActivityStream();
-    }
-
+  startActivityStream() {
     // If the user requested a new history snapshot, or the event source has not
     // alraedy been created, we open the event stream.
-    if (didHistorySnapshotChange || activityStreamEventSource == null) {
-      activityStreamEventSource = new EventSource(`${baseURI}api/activity-stream?historySnapshot=${historySnapshot}`);
+    if (activityStreamEventSource == null) {
+      activityStreamEventSource = new EventSource(`${baseURI}api/activity-stream`);
 
       Object.entries(ServerEventHandlers).forEach(([event, handler]) => {
         if (activityStreamEventSource != null) {
@@ -162,7 +144,7 @@ const handleWindowVisibilityChange = () => {
     global.clearTimeout(visibilityChangeTimeout);
 
     if (activityStreamEventSource == null) {
-      FloodActions.startActivityStream(lastActivityStreamOptions);
+      FloodActions.startActivityStream();
     }
   }
 };
