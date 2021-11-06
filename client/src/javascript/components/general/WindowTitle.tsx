@@ -3,15 +3,17 @@ import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
 import {compute, getTranslationString} from '../../util/size';
+import SettingStore from '../../stores/SettingStore';
 import TransferDataStore from '../../stores/TransferDataStore';
 
 const WindowTitle: FC = observer(() => {
+  const {UIPageTitleSpeedEnabled: enabled} = SettingStore.floodSettings;
   const {transferSummary: summary} = TransferDataStore;
   const {i18n} = useLingui();
 
   let title = 'Flood';
 
-  if (summary != null && Object.keys(summary).length > 0) {
+  if (enabled && summary != null && Object.keys(summary).length > 0) {
     const down = compute(summary.downRate);
     const up = compute(summary.upRate);
 

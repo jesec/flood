@@ -210,6 +210,8 @@
   "settings.ui.displayed.context.menu.items": "Context Menu Items",
   "settings.ui.displayed.details": "Torrent Detail Columns",
   "settings.ui.language": "Language",
+  "settings.ui.misc": "Miscellaneous",
+  "settings.ui.page.title.speed": "Display upload and download speed in page title",
   "settings.ui.locale": "Locale",
   "settings.ui.tag.selector.mode": "Tag Selector Preference",
   "settings.ui.tag.selector.mode.multi": "Multi Selection",

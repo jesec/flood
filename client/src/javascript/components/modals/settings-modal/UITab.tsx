@@ -10,6 +10,7 @@ import type {Language} from '@client/constants/Languages';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import ModalFormSectionHeader from '../ModalFormSectionHeader';
+import MiscUISettingsList from './lists/MiscUISettingsList';
 import TorrentContextMenuActionsList from './lists/TorrentContextMenuActionsList';
 import TorrentListColumnsList from './lists/TorrentListColumnsList';
 
@@ -98,6 +99,12 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
       </ModalFormSectionHeader>
       <FormRow>
         <TorrentContextMenuActionsList onSettingsChange={onSettingsChange} />
+      </FormRow>
+      <ModalFormSectionHeader>
+        <Trans id="settings.ui.misc" />
+      </ModalFormSectionHeader>
+      <FormRow>
+        <MiscUISettingsList onSettingsChange={onSettingsChange} />
       </FormRow>
     </Form>
   );

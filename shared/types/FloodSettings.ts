@@ -40,6 +40,9 @@ export interface FloodSettings {
 
   // Last used "Add Torrents" tab
   UITorrentsAddTab?: 'by-url' | 'by-file' | 'by-creation';
+
+  // Display upload and download speed in page title
+  UIPageTitleSpeedEnabled: boolean;
 }
 
 export type FloodSetting = keyof FloodSettings;

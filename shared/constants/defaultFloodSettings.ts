@@ -74,6 +74,7 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
   mountPoints: [],
   deleteTorrentData: true,
   startTorrentsOnLoad: true,
+  UIPageTitleSpeedEnabled: true,
 };
 
 export default defaultFloodSettings;
