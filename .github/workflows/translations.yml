@@ -9,6 +9,7 @@ on:
 
 jobs:
   synchronize-with-crowdin:
+    if: github.repository_owner == 'jesec'
     runs-on: ubuntu-20.04
 
     steps:
