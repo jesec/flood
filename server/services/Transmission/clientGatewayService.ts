@@ -28,6 +28,7 @@ import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
+import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
 import {TorrentPriority} from '../../../shared/types/Torrent';
@@ -77,38 +78,62 @@ class TransmissionClientGatewayService extends ClientGatewayService {
   }
 
   async addTorrentsByURL({
-    urls,
+    urls: inputUrls,
     cookies,
     destination,
     tags,
+    isBasePath,
+    isCompleted,
+    isInitialSeeding,
+    isSequential,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
-    const addedTorrents = await Promise.all(
-      urls.map(async (url) => {
-        const domain = url.split('/')[2];
-        const {hashString} =
-          (await this.clientRequestManager
-            .addTorrent({
-              filename: url,
-              cookies: cookies[domain] != null ? `${cookies[domain].join('; ')};` : undefined,
-              'download-dir': destination,
-              paused: !start,
-            })
-            .then(this.processClientRequestSuccess, this.processClientRequestError)
-            .catch(() => undefined)) || {};
-        return hashString;
-      }),
-    ).then((results) => results.filter((hash) => hash) as string[]);
+    const {files, urls} = await fetchUrls(inputUrls, cookies);
 
-    if (addedTorrents[0] == null) {
+    if (!files[0] && !urls[0]) {
       throw new Error();
     }
 
-    if (tags.length > 0) {
-      await this.setTorrentsTags({hashes: addedTorrents as [string, ...string[]], tags});
+    const result: string[] = [];
+
+    if (urls[0]) {
+      result.push(
+        ...(await Promise.all(
+          urls.map((url) =>
+            this.clientRequestManager
+              .addTorrent({
+                filename: url,
+                'download-dir': destination,
+                paused: !start,
+              })
+              .then(this.processClientRequestSuccess, this.processClientRequestError)
+              .catch(() => undefined)
+              .then((result) => result?.hashString),
+          ),
+        ).then((hashes) => hashes.filter((hash) => hash) as string[])),
+      );
     }
 
-    return addedTorrents;
+    if (result[0] && tags.length > 0) {
+      await this.setTorrentsTags({hashes: result as [string, ...string[]], tags});
+    }
+
+    if (files[0]) {
+      result.push(
+        ...(await this.addTorrentsByFile({
+          files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+          destination,
+          tags,
+          isBasePath,
+          isCompleted,
+          isInitialSeeding,
+          isSequential,
+          start,
+        })),
+      );
+    }
+
+    return result;
   }
 
   async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {

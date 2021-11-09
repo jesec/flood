@@ -32,6 +32,7 @@ import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import ClientGatewayService from '../interfaces/clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
+import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import {
   getTorrentPeerPropertiesFromFlags,
@@ -98,20 +99,24 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   }
 
   async addTorrentsByURL({
-    urls,
+    urls: inputUrls,
     cookies,
     destination,
     tags,
     isBasePath,
     isCompleted,
+    isInitialSeeding,
     isSequential,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
-    // TODO: isInitialSeeding not implemented
+    const {files, urls} = await fetchUrls(inputUrls, cookies);
+
+    if (!files[0] && !urls[0]) {
+      throw new Error();
+    }
 
     await this.clientRequestManager
       .torrentsAddURLs(urls, {
-        cookie: cookies != null ? Object.values(cookies)[0]?.[0] : undefined,
         savepath: destination,
         tags: tags.join(','),
         paused: !start,
@@ -121,6 +126,19 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
         skip_checking: isCompleted,
       })
       .then(this.processClientRequestSuccess, this.processClientRequestError);
+
+    if (files[0]) {
+      return this.addTorrentsByFile({
+        files: files.map((file) => file.toString('base64')) as [string, ...string[]],
+        destination,
+        tags,
+        isBasePath,
+        isCompleted,
+        isInitialSeeding,
+        isSequential,
+        start,
+      });
+    }
 
     return [];
   }
