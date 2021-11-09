@@ -192,6 +192,7 @@ describe('POST /api/torrents/add-urls', () => {
 });
 
 describe('POST /api/torrents/delete', () => {
+  const torrentDeleted = watchTorrentList('remove');
   it('Deletes added torrents', (done) => {
     request
       .post('/api/torrents/delete')
@@ -202,7 +203,15 @@ describe('POST /api/torrents/delete', () => {
       .expect('Content-Type', /json/)
       .end((err, _res) => {
         if (err) done(err);
-        done();
+
+        Promise.race([torrentDeleted, new Promise((r) => setTimeout(r, 1000 * 15))])
+          .then(async () => {
+            // Wait a while
+            await new Promise((r) => setTimeout(r, 1000 * 3));
+          })
+          .then(() => {
+            done();
+          });
       });
   });
 });
