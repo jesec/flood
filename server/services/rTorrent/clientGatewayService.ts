@@ -424,20 +424,12 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     // Delete contents of torrents
     for await (const contentPath of contentPaths) {
-      try {
-        await fs.promises.unlink(contentPath);
-      } catch (error) {
-        console.error(`Error deleting file: ${contentPath}\n${error}`);
-      }
+      await fs.promises.unlink(contentPath).catch(() => undefined);
     }
 
     // Try to remove empty directories
     for await (const directoryPath of directoryPaths) {
-      try {
-        await fs.promises.rmdir(directoryPath);
-      } catch (error) {
-        console.error(`Error removing directory: ${directoryPath}\n${error}`);
-      }
+      await fs.promises.rmdir(directoryPath).catch(() => undefined);
     }
   }
 
