@@ -108,6 +108,7 @@ module.exports = {
     alias: {
       '@client': path.resolve('./client/src/javascript'),
       '@shared': path.resolve('./shared'),
+      '@styles': path.resolve('./client/src/sass/modules'),
     },
   },
   output: {

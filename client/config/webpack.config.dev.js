@@ -24,7 +24,30 @@ module.exports = {
         ],
       },
       {
+        test: /\.module\.s?css$/,
+        use: [
+          {
+            loader: 'style-loader',
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              sourceMap: true,
+              modules: true,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: true,
+            },
+          },
+        ],
+      },
+      {
         test: /\.s?css$/,
+        exclude: /\.module\.s?css$/,
         use: [
           {
             loader: 'style-loader',
@@ -84,10 +107,11 @@ module.exports = {
   },
   entry: paths.appIndex,
   resolve: {
-    extensions: ['.cjs', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.json'],
+    extensions: ['.cjs', '.mjs', '.js', '.jsx', '.ts', '.tsx', '.scss', '.json'],
     alias: {
       '@client': path.resolve('./client/src/javascript'),
       '@shared': path.resolve('./shared'),
+      '@styles': path.resolve('./client/src/sass/modules'),
     },
   },
   output: {

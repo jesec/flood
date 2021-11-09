@@ -14,7 +14,6 @@
 @import 'base/typography';
 
 @import 'components/action-bar';
-@import 'components/app-wrapper';
 @import 'components/alerts';
 @import 'components/attached-panel';
 @import 'components/badge';
@@ -44,13 +43,11 @@
 @import 'components/sortable-list';
 @import 'components/table';
 @import 'components/tags';
-@import 'components/textbox-repeater';
 @import 'components/toolbar';
 @import 'components/tooltip';
 @import 'components/torrent-details-panel';
 @import 'components/torrents';
 @import 'components/torrent';
-@import 'components/transfer-data';
 
 @import 'views/login';
 @import 'views/feeds';

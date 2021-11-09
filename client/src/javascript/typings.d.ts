@@ -7,3 +7,8 @@ declare module '*.md' {
 declare module '@lingui/loader!*.json?raw-lingui' {
   export const messages: Record<string, string[]>;
 }
+
+declare module '*.module.scss' {
+  const classes: { [key: string]: string };
+  export default classes;
+}

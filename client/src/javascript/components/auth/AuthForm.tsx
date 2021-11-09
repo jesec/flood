@@ -10,6 +10,8 @@ import {AccessLevel} from '@shared/schema/constants/Auth';
 import type {Credentials} from '@shared/schema/Auth';
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
+import AppWrapperStyles from '@styles/app-wrapper.module.scss';
+
 import ClientConnectionSettingsForm from '../general/connection-settings/ClientConnectionSettingsForm';
 
 type LoginFormData = Pick<Credentials, 'username' | 'password'>;
@@ -29,7 +31,7 @@ const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
   const isLoginMode = mode === 'login';
 
   return (
-    <div className="application__entry-barrier">
+    <div className={AppWrapperStyles['loading-overlay']}>
       <Panel spacing="large">
         <Form
           onSubmit={(submission) => {
