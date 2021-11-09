@@ -79,6 +79,23 @@ const watchTorrentList = (op: 'add' | 'remove' | 'replace' | 'move' | 'copy' | '
   });
 };
 
+beforeAll((done) => {
+  request
+    .get('/api/client/connection-test')
+    .send()
+    .set('Cookie', [authToken])
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+    .end((err, res) => {
+      if (err) done(err);
+
+      expect(res.body).toMatchObject({isConnected: true});
+
+      done();
+    });
+});
+
 describe('POST /api/torrents/add-urls', () => {
   const addTorrentByURLOptions: AddTorrentByURLOptions = {
     urls: torrentURLs,
