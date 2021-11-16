@@ -1,8 +1,11 @@
-import UserInDatabase2 from './00-UserInDatabase2';
-import UserInDatabase3 from './01-UserInDatabase3';
-import HistoryEra from './02-HistoryEra';
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-const migrations = [UserInDatabase2, UserInDatabase3, HistoryEra];
+const migrations = [
+  () => require('./03-Database2').default(),
+  () => require('./00-UserInDatabase2').default(),
+  () => require('./01-UserInDatabase3').default(),
+  () => require('./02-HistoryEra').default(),
+];
 
 const migrate = async () => {
   for await (const migrate of migrations) {
