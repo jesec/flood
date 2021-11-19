@@ -3,13 +3,17 @@ import {css} from '@emotion/css';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react';
-import {useQueryParams, StringParam} from 'use-query-params';
+import {useEffectOnce} from 'react-use';
+import {useNavigate} from 'react-router';
+import {useSearchParams} from 'react-router-dom';
 
-import AuthStore from '../stores/AuthStore';
-import ConfigStore from '../stores/ConfigStore';
+import AuthActions from '@client/actions/AuthActions';
+import AuthStore from '@client/stores/AuthStore';
+import ConfigStore from '@client/stores/ConfigStore';
+import ClientStatusStore from '@client/stores/ClientStatusStore';
+import UIStore from '@client/stores/UIStore';
+
 import ClientConnectionInterruption from './general/ClientConnectionInterruption';
-import ClientStatusStore from '../stores/ClientStatusStore';
-import UIStore from '../stores/UIStore';
 import WindowTitle from './general/WindowTitle';
 import LoadingOverlay from './general/LoadingOverlay';
 import LogoutButton from './sidebar/LogoutButton';
@@ -19,17 +23,32 @@ interface AppWrapperProps {
   className?: string;
 }
 
-const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
-  const {children, className} = props;
+const AppWrapper: FC<AppWrapperProps> = observer(({children, className}: AppWrapperProps) => {
+  const navigate = useNavigate();
 
-  const [query] = useQueryParams({action: StringParam, url: StringParam});
+  const [searchParams] = useSearchParams();
 
-  if (query.action) {
-    if (query.action === 'add-urls') {
-      if (query.url) {
+  useEffectOnce(() => {
+    AuthActions.verify().then(
+      ({initialUser}: {initialUser?: boolean}): void => {
+        if (initialUser) {
+          navigate('/register', {replace: true});
+        } else {
+          navigate('/overview', {replace: true});
+        }
+      },
+      (): void => {
+        navigate('/login', {replace: true});
+      },
+    );
+  });
+
+  if (searchParams.has('action')) {
+    if (searchParams.get('action') === 'add-urls') {
+      if (searchParams.has('url')) {
         UIStore.setActiveModal({
           id: 'add-torrents',
-          initialURLs: [{id: 0, value: query.url}],
+          initialURLs: [{id: 0, value: searchParams.get('url') as string}],
         });
       }
     }

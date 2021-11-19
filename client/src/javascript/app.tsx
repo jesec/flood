@@ -1,18 +1,17 @@
-import {observer} from 'mobx-react';
+import {BrowserRouter} from 'react-router-dom';
 import {FC, lazy, Suspense, useEffect} from 'react';
+import {observer} from 'mobx-react';
 import ReactDOM from 'react-dom';
-import {Route, Switch} from 'react-router';
-import {Router} from 'react-router-dom';
+import {Route, Routes} from 'react-router';
 import {useMedia} from 'react-use';
-import {QueryParamProvider} from 'use-query-params';
 
-import AuthActions from './actions/AuthActions';
 import AppWrapper from './components/AppWrapper';
 import LoadingOverlay from './components/general/LoadingOverlay';
 import AsyncIntlProvider from './i18n/languages';
 import ConfigStore from './stores/ConfigStore';
 import UIStore from './stores/UIStore';
-import history from './util/history';
+
+import stringUtil from '@shared/util/stringUtil';
 
 import '../sass/style.scss';
 
@@ -53,19 +52,6 @@ const FloodApp: FC = observer(() => {
         message: {id: 'dependency.loading.torrent.list'},
       },
     ]);
-
-    AuthActions.verify().then(
-      ({initialUser}: {initialUser?: boolean}): void => {
-        if (initialUser) {
-          history.replace('register');
-        } else {
-          history.replace('overview');
-        }
-      },
-      (): void => {
-        history.replace('login');
-      },
-    );
   }, []);
 
   const isSystemPreferDark = useMedia('(prefers-color-scheme: dark)');
@@ -82,17 +68,15 @@ const FloodApp: FC = observer(() => {
   return (
     <Suspense fallback={<LoadingOverlay />}>
       <AsyncIntlProvider>
-        <Router history={history}>
-          <QueryParamProvider ReactRouterRoute={Route}>
-            <AppWrapper className={ConfigStore.isPreferDark ? 'dark' : undefined}>
-              <Switch>
-                <Route path="/login" component={Login} />
-                <Route path="/overview" component={Overview} />
-                <Route path="/register" component={Register} />
-              </Switch>
-            </AppWrapper>
-          </QueryParamProvider>
-        </Router>
+        <BrowserRouter basename={stringUtil.withoutTrailingSlash(ConfigStore.baseURI)}>
+          <AppWrapper className={ConfigStore.isPreferDark ? 'dark' : undefined}>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/overview" element={<Overview />} />
+              <Route path="/register" element={<Register />} />
+            </Routes>
+          </AppWrapper>
+        </BrowserRouter>
       </AsyncIntlProvider>
     </Suspense>
   );
