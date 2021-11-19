@@ -6,8 +6,6 @@ import {CheckmarkThick} from '@client/ui/icons';
 
 import type {Dependencies} from '@client/stores/UIStore';
 
-import AppWrapperStyles from '@styles/app-wrapper.module.scss';
-
 import LoadingIndicator from './LoadingIndicator';
 
 const ICONS = {
@@ -43,7 +41,7 @@ const LoadingOverlay: FC<{dependencies?: Dependencies}> = (props: {dependencies?
   const {dependencies} = props;
 
   return (
-    <div className={AppWrapperStyles['loading-overlay']}>
+    <div className="application__loading-overlay">
       <LoadingIndicator inverse />
       {dependencies != null ? <LoadingDependencyList dependencies={dependencies} /> : null}
     </div>

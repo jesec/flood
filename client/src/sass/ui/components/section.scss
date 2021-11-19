@@ -1,0 +1,20 @@
+@use '../../tools/colors';
+
+@use '../config/spacing.scss';
+
+.section {
+  margin-bottom: spacing.$spacing--xxx-large;
+
+  &__heading {
+    margin-bottom: spacing.$spacing;
+    margin-top: 0;
+  }
+
+  &.inverse {
+    background: colors.$another-grey;
+  }
+
+  &.padded {
+    padding: spacing.$spacing--large spacing.$spacing--x-large;
+  }
+}

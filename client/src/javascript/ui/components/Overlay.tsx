@@ -1,4 +1,4 @@
-import {rgba} from 'polished';
+import classnames from 'classnames';
 import {FC, MouseEvent, ReactNode} from 'react';
 
 export interface OverlayProps {
@@ -17,32 +17,18 @@ const Overlay: FC<OverlayProps> = ({
   onContextMenu,
   isInteractive,
   isTransparent,
-}: OverlayProps) => (
-  <div
-    css={[
-      {
-        background: rgba('#1d2938', 0.95),
-        bottom: 0,
-        left: 0,
-        position: 'fixed',
-        right: 0,
-        top: 0,
-        zIndex: 100,
-      },
-      isInteractive || {
-        pointerEvents: 'none',
-      },
-      isTransparent && {
-        background: 'transparent',
-      },
-      additionalClassNames,
-    ]}
-    onClickCapture={onClick}
-    onContextMenuCapture={onContextMenu}
-  >
-    {children}
-  </div>
-);
+}: OverlayProps) => {
+  const classes = classnames('overlay', additionalClassNames, {
+    'overlay--no-interaction': !isInteractive,
+    'overlay--transparent': isTransparent,
+  });
+
+  return (
+    <div className={classes} onClickCapture={onClick} onContextMenuCapture={onContextMenu}>
+      {children}
+    </div>
+  );
+};
 
 Overlay.defaultProps = {
   additionalClassNames: undefined,

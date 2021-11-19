@@ -1,4 +1,3 @@
-import {css} from '@emotion/css';
 import {FC, ReactNode, useRef, useState} from 'react';
 
 import {AddMini, RemoveMini} from '@client/ui/icons';
@@ -55,12 +54,7 @@ const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, pl
               defaultValue={textbox.value}
               label={index === 0 && label}
               placeholder={placeholder}
-              wrapperClassName={css({
-                '.icon': {
-                  height: '12px',
-                  width: '12px',
-                },
-              })}
+              wrapperClassName="textbox-repeater"
             >
               <FormElementAddon
                 onClick={() => {

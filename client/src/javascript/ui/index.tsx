@@ -1,5 +1,6 @@
 export {default as Button} from './components/Button';
 export {default as Checkbox} from './components/Checkbox';
+export {default as Container} from './components/Container';
 export {default as ContextMenu} from './components/ContextMenu';
 export {default as Form} from './components/Form';
 export {default as FormElementAddon} from './components/FormElementAddon';

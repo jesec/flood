@@ -6,6 +6,11 @@ body {
   overflow: hidden;
 }
 
+.container {
+  height: 100%;
+  width: 100%;
+}
+
 #app,
 .application,
 .application__view {

@@ -14,8 +14,6 @@ import WindowTitle from './general/WindowTitle';
 import LoadingOverlay from './general/LoadingOverlay';
 import LogoutButton from './sidebar/LogoutButton';
 
-import AppWrapperStyles from '@styles/app-wrapper.module.scss';
-
 interface AppWrapperProps {
   children: ReactNode;
   className?: string;
@@ -44,8 +42,8 @@ const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
 
   if (AuthStore.isAuthenticated && !ClientStatusStore.isConnected && ConfigStore.authMethod !== 'none') {
     overlay = (
-      <div className={AppWrapperStyles['loading-overlay']}>
-        <div className={AppWrapperStyles['entry-barrier']}>
+      <div className="application__loading-overlay">
+        <div className="application__entry-barrier">
           <LogoutButton className={css({position: 'absolute', left: '5px', top: '5px'})} />
           <ClientConnectionInterruption />
         </div>
@@ -58,7 +56,7 @@ const AppWrapper: FC<AppWrapperProps> = observer((props: AppWrapperProps) => {
       <WindowTitle />
       <TransitionGroup>
         {overlay != null ? (
-          <CSSTransition timeout={{enter: 1000, exit: 1000}} classNames={AppWrapperStyles['loading-overlay']}>
+          <CSSTransition timeout={{enter: 1000, exit: 1000}} classNames="application__loading-overlay">
             {overlay}
           </CSSTransition>
         ) : null}

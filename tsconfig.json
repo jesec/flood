@@ -19,10 +19,8 @@
     "paths": {
       "@client/*": ["client/src/javascript/*"],
       "@server/*": ["server/*"],
-      "@shared/*": ["shared/*"],
-      "@styles/*": ["client/src/sass/modules/*"]
-    },
-    "plugins": [{"name": "typescript-plugin-css-modules"}]
+      "@shared/*": ["shared/*"]
+    }
   },
   "include": ["./client/**/*.ts", "./client/**/*.tsx", "./server/**/*.ts", "./server/**/*.tsx"],
   "exclude": ["node_modules"]
