@@ -34,7 +34,7 @@ jobs:
           unzip rtorrent-deb-amd64.zip
           sudo dpkg -i rtorrent-deb.deb
 
-      - run: npm ci --no-optional
+      - run: npm ci
       - run: npm test || npm test || npm test
 
       - uses: codecov/codecov-action@v1

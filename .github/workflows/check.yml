@@ -26,5 +26,5 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
-      - run: npm ci --no-optional
+      - run: npm ci
       - run: npm run ${{ matrix.check }}

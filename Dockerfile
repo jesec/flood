@@ -21,7 +21,7 @@ WORKDIR /usr/src/app/
 COPY . ./
 
 # Fetch dependencies from npm
-RUN npm ci --no-optional
+RUN npm ci
 
 # Build assets
 RUN npm run build-assets
