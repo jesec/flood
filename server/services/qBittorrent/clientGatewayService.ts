@@ -30,7 +30,7 @@ import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import ClientGatewayService from '../interfaces/clientGatewayService';
+import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';

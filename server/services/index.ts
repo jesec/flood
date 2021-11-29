@@ -1,6 +1,6 @@
 import type {UserInDatabase} from '@shared/schema/Auth';
 
-import ClientGatewayService from './interfaces/clientGatewayService';
+import ClientGatewayService from './clientGatewayService';
 import FeedService from './feedService';
 import HistoryService from './historyService';
 import NotificationService from './notificationService';

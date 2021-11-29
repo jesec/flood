@@ -6,13 +6,17 @@ import fs from 'fs';
 import morgan from 'morgan';
 import passport from 'passport';
 import path from 'path';
+import {Strategy} from 'passport-jwt';
+
+import type {Request} from 'express';
+
+import {authTokenSchema} from '@shared/schema/Auth';
+import paths from '@shared/config/paths';
 
 import type {UserInDatabase} from '@shared/schema/Auth';
 
 import apiRoutes from './routes/api';
 import config from '../config';
-import passportConfig from './config/passport';
-import paths from '../shared/config/paths';
 import Users from './models/Users';
 
 declare global {
@@ -90,7 +94,35 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({extended: false, limit: '50mb'}));
 app.use(cookieParser());
 
-passportConfig(passport);
+passport.use(
+  new Strategy(
+    {
+      jwtFromRequest: (req: Request) => req?.cookies?.jwt,
+      secretOrKey: config.secret,
+    },
+    (payload, callback) => {
+      const parsedResult = authTokenSchema.safeParse(payload);
+
+      if (!parsedResult.success) {
+        callback(parsedResult.error, false);
+        return;
+      }
+
+      Users.lookupUser(parsedResult.data.username).then(
+        (user) => {
+          if (user?.timestamp <= parsedResult.data.iat + 10) {
+            callback(null, user);
+          } else {
+            callback(new Error(), false);
+          }
+        },
+        (err) => {
+          callback(err, false);
+        },
+      );
+    },
+  ),
+);
 
 app.use(`${servedPath}api`, apiRoutes);
 

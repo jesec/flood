@@ -32,7 +32,7 @@ import type {TransferSummary} from '@shared/types/TransferData';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import ClientGatewayService from '../interfaces/clientGatewayService';
+import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';

@@ -34,7 +34,7 @@ import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getTorrentStatusFromStatuses} from './util/torrentPropertiesUtil';
 
-import ClientGatewayService from '../interfaces/clientGatewayService';
+import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {DelugeCoreTorrentFilePriority} from './types/DelugeCoreMethods';
 
