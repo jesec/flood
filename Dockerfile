@@ -24,7 +24,7 @@ COPY . ./
 RUN npm ci
 
 # Build assets
-RUN npm run build-assets
+RUN npm run build
 
 # Now get the clean Node.js image
 FROM ${NODE_IMAGE} as flood
