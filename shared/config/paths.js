@@ -31,11 +31,8 @@ const PATHS = {
   appPublic: resolveApp('client/src/public/'),
   appHtml: resolveApp('client/src/index.html'),
   appIndex: resolveApp('client/src/javascript/app.tsx'),
-  appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('./'),
-  clientSrc: resolveApp('client/src'),
-  testsSetup: resolveApp('tests/setupTests.js'),
-  appNodeModules: resolveApp('node_modules'),
+  dist: resolveApp('dist'),
 };
 
 module.exports = PATHS;

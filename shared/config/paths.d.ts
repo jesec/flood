@@ -4,11 +4,8 @@ declare const PATHS: {
   appPublic: string;
   appHtml: string;
   appIndex: string;
-  appPackageJson: string;
   appSrc: string;
-  clientSrc: string;
-  testsSetup: string;
-  appNodeModules: string;
+  dist: string;
 };
 
 export = PATHS;

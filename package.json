@@ -48,9 +48,7 @@
     ]
   },
   "scripts": {
-    "build": "npm run build-assets && npm run build-ts",
-    "build-assets": "node client/scripts/build.js",
-    "build-ts": "ncc build server/bin/start.ts -m -t -e geoip-country",
+    "build": "node scripts/build.js",
     "build-pkg": "rm -rf dist && npm run build && pkg . --out-path dist-pkg",
     "format-source": "prettier -w .",
     "check-source-formatting": "prettier -c .",
@@ -116,7 +114,7 @@
     "@types/tar-fs": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
-    "@vercel/ncc": "^0.32.0",
+    "@vercel/webpack-asset-relocator-loader": "^1.7.0",
     "autoprefixer": "^10.4.0",
     "axios": "^0.24.0",
     "axios-mock-adapter": "^1.20.0",
@@ -205,6 +203,7 @@
     "terser-webpack-plugin": "^5.2.5",
     "tldts": "^5.7.53",
     "ts-jest": "^27.0.7",
+    "ts-loader": "^9.2.6",
     "ts-node-dev": "^1.1.8",
     "tsconfig-paths": "^3.12.0",
     "typed-emitter": "^1.4.0",

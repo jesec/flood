@@ -14,8 +14,9 @@ const fs = require('fs-extra');
 const webpack = require('webpack');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
-const paths = require('../../shared/config/paths');
-const config = require('../config/webpack.config.prod');
+const paths = require('../shared/config/paths');
+const clientConfig = require('../client/config/webpack.config.prod');
+const serverConfig = require('../server/config/webpack.config.prod');
 
 const {measureFileSizesBeforeBuild, printFileSizesAfterBuild} = FileSizeReporter;
 
@@ -39,7 +40,7 @@ const copyPublicFolder = () => {
 const build = (previousFileSizes) => {
   console.log('Creating an optimized production build...');
 
-  const compiler = webpack(config);
+  const compiler = webpack([clientConfig, serverConfig]);
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       if (err) {
@@ -60,7 +61,7 @@ measureFileSizesBeforeBuild(paths.appBuild)
   .then((previousFileSizes) => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.appBuild);
+    fs.emptyDirSync(paths.dist);
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build
@@ -68,25 +69,20 @@ measureFileSizesBeforeBuild(paths.appBuild)
   })
   .then(
     ({stats, previousFileSizes}) => {
-      if (stats.hasErrors()) {
-        stats.compilation.errors.forEach((err) => {
-          console.error(err);
-        });
+      console.log(
+        stats.toString({
+          chunks: false,
+          colors: true,
+        }),
+      );
 
+      if (stats.hasErrors()) {
         process.exit(1);
       }
 
-      if (stats.hasWarnings()) {
-        console.log(chalk.yellow('Compiled with warnings.\n'));
-
-        stats.compilation.warnings.forEach((warning) => {
-          console.warn(warning);
-        });
-      }
-
-      console.log('File sizes after gzip:\n');
+      console.log('\nClient file sizes after gzip:\n');
       printFileSizesAfterBuild(
-        stats,
+        stats.stats[0],
         previousFileSizes,
         paths.appBuild,
         WARN_AFTER_BUNDLE_GZIP_SIZE,

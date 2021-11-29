@@ -5,10 +5,7 @@ import chalk from 'chalk';
 import enforcePrerequisites from './enforce-prerequisites';
 import migrateData from './migrations/run';
 
-if (process.env.NODE_ENV !== 'development') {
-  // Use production mode by default
-  process.env.NODE_ENV = 'production';
-
+if (process.env.NODE_ENV == 'production') {
   // Catch unhandled rejections and exceptions
   // Traces are pretty useless with minimized production codes
   // This avoids printing a large section of junk
