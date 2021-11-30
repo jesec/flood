@@ -1,4 +1,5 @@
 const path = require('path');
+const ShebangPlugin = require('webpack-shebang-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
 
@@ -63,7 +64,7 @@ module.exports = {
       }),
     ],
   },
-  plugins: [new WebpackBar({name: 'server'})],
+  plugins: [new WebpackBar({name: 'server'}), new ShebangPlugin()],
   target: 'node',
   ignoreWarnings: [
     {
