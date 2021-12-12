@@ -178,6 +178,7 @@ const FeedsTab: FC = () => {
           <FeedForm
             currentFeed={currentFeed}
             defaultFeed={defaultFeed}
+            key={currentFeed?._id || 'initial'}
             intervalMultipliers={INTERVAL_MULTIPLIERS}
             isSubmitting={isSubmitting}
             onCancel={() => {
