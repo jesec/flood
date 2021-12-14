@@ -198,6 +198,7 @@ const DownloadRulesTab: FC = () => {
       </FormRow>
       {isEditing ? (
         <DownloadRuleForm
+          key={currentRule?._id || 'initial'}
           rule={currentRule ?? initialRule}
           isPatternMatched={isPatternMatched}
           isSubmitting={isSubmitting}
