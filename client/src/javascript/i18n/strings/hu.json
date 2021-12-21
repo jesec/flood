@@ -210,6 +210,8 @@
   "settings.ui.displayed.context.menu.items": "Kontextus menü elemei",
   "settings.ui.displayed.details": "Torrent lista oszlopai",
   "settings.ui.language": "Nyelv",
+  "settings.ui.misc": "Egyéb",
+  "settings.ui.page.title.speed": "Le/feltöltési sebesség mutatása a lapfülön",
   "settings.ui.locale": "Területi beállítások",
   "settings.ui.tag.selector.mode": "Címke választás módja",
   "settings.ui.tag.selector.mode.multi": "Egyszerre akár többet is",
