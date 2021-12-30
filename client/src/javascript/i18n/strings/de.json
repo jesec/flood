@@ -210,6 +210,8 @@
   "settings.ui.displayed.context.menu.items": "Einträge des Kontextmenüs",
   "settings.ui.displayed.details": "Detailspalten der Torrent-Liste",
   "settings.ui.language": "Sprache",
+  "settings.ui.misc": "Sonstiges",
+  "settings.ui.page.title.speed": "Upload- und Downloadgeschwindigkeit im Seitentitel anzeigen",
   "settings.ui.locale": "Lokalisierung",
   "settings.ui.tag.selector.mode": "Bevorzugte Tag-Auswahl",
   "settings.ui.tag.selector.mode.multi": "Mehrfachauswahl",
