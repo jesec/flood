@@ -210,6 +210,8 @@
   "settings.ui.displayed.context.menu.items": "右键菜单项",
   "settings.ui.displayed.details": "种子详情列表",
   "settings.ui.language": "语言",
+  "settings.ui.misc": "杂项",
+  "settings.ui.page.title.speed": "在网页标题中显示上传和下载速度",
   "settings.ui.locale": "本地化",
   "settings.ui.tag.selector.mode": "标签选择偏好设置",
   "settings.ui.tag.selector.mode.multi": "多选",
