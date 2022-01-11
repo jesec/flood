@@ -210,6 +210,8 @@
   "settings.ui.displayed.context.menu.items": "Éléments du menu contextuel",
   "settings.ui.displayed.details": "Colonnes de détails du torrent",
   "settings.ui.language": "Langue",
+  "settings.ui.misc": "Divers",
+  "settings.ui.page.title.speed": "Afficher la vitesse de chargement et de téléchargement dans le titre de la page",
   "settings.ui.locale": "Paramètres régionaux",
   "settings.ui.tag.selector.mode": "Sélecteur de Préférence",
   "settings.ui.tag.selector.mode.multi": "Sélection Multiple",
