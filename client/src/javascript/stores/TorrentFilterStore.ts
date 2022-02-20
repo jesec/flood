@@ -6,6 +6,7 @@ import type {Taxonomy} from '@shared/types/Taxonomy';
 import torrentStatusMap, {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
 class TorrentFilterStore {
+  locationFilter: Array<string> = [];
   searchFilter = '';
   statusFilter: Array<TorrentStatus> = [];
   tagFilter: Array<string> = [];
@@ -14,6 +15,9 @@ class TorrentFilterStore {
   filterTrigger = false;
 
   taxonomy: Taxonomy = {
+    locationCounts: {},
+    locationSizes: {},
+    locationTree: [],
     statusCounts: {},
     tagCounts: {},
     tagSizes: {},
@@ -22,7 +26,13 @@ class TorrentFilterStore {
   };
 
   @computed get isFilterActive() {
-    return this.searchFilter !== '' || this.statusFilter.length || this.tagFilter.length || this.trackerFilter.length;
+    return (
+      this.locationFilter.length ||
+      this.searchFilter !== '' ||
+      this.statusFilter.length ||
+      this.tagFilter.length ||
+      this.trackerFilter.length
+    );
   }
 
   constructor() {
@@ -30,6 +40,7 @@ class TorrentFilterStore {
   }
 
   clearAllFilters() {
+    this.locationFilter = [];
     this.searchFilter = '';
     this.statusFilter = [];
     this.tagFilter = [];
@@ -47,6 +58,13 @@ class TorrentFilterStore {
 
   setSearchFilter(filter: string) {
     this.searchFilter = filter;
+    this.filterTrigger = !this.filterTrigger;
+  }
+
+  setLocationFilters(filter: string | '', event: KeyboardEvent | MouseEvent | TouchEvent) {
+    const locations = Object.keys(this.taxonomy.locationCounts).sort((a, b) => a.localeCompare(b));
+
+    this.computeFilters(locations, this.locationFilter, filter, event);
     this.filterTrigger = !this.filterTrigger;
   }
 
