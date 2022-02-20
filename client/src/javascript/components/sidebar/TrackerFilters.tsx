@@ -49,8 +49,8 @@ const TrackerFilters: FC = observer(() => {
 
   return (
     <ul aria-label={title} className="sidebar-filter sidebar__item" role="menu">
-      <li className="sidebar-filter__item sidebar-filter__item--heading" role="none">
-        <Expando className="sidebar-filter__item--expando" expanded={expanded} handleClick={expandoClick}>
+      <li className="sidebar-filter__item" role="none">
+        <Expando className="sidebar-filter__item--heading" expanded={expanded} handleClick={expandoClick}>
           {title}
         </Expando>
       </li>
