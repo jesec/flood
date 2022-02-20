@@ -45,7 +45,7 @@ const TrackerFilters: FC = observer(() => {
   const [expanded, setExpanded] = useState<boolean>(true);
   const expandoClick = () => {
     setExpanded(!expanded);
-  }
+  };
 
   return (
     <ul aria-label={title} className="sidebar-filter sidebar__item" role="menu">

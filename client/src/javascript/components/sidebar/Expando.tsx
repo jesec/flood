@@ -11,7 +11,7 @@ interface ExpandoProps {
 const Expando: FC<ExpandoProps> = ({children, className, expanded, handleClick}: ExpandoProps) => (
   <button className={className} onClick={(event) => handleClick(event)}>
     {children}
-    {expanded ? <Chevron css={{transform:"scaleY(-1)"}} /> : <Chevron />}
+    {expanded ? <Chevron css={{transform: 'scaleY(-1)'}} /> : <Chevron />}
   </button>
 );
 
