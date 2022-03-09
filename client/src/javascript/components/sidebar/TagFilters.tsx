@@ -8,6 +8,7 @@ import TorrentFilterStore from '../../stores/TorrentFilterStore';
 
 const TagFilters: FC = observer(() => {
   const {i18n} = useLingui();
+  const [expanded, setExpanded] = useState<boolean>(true);
 
   const tags = Object.keys(TorrentFilterStore.taxonomy.tagCounts);
 
@@ -43,7 +44,6 @@ const TagFilters: FC = observer(() => {
 
   const title = i18n._('filter.tag.title');
 
-  const [expanded, setExpanded] = useState<boolean>(true);
   const expandoClick = () => {
     setExpanded(!expanded);
   };
