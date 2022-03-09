@@ -8,6 +8,7 @@ import TorrentFilterStore from '../../stores/TorrentFilterStore';
 
 const TrackerFilters: FC = observer(() => {
   const {i18n} = useLingui();
+  const [expanded, setExpanded] = useState<boolean>(true);
 
   const trackers = Object.keys(TorrentFilterStore.taxonomy.trackerCounts);
 
@@ -42,7 +43,6 @@ const TrackerFilters: FC = observer(() => {
 
   const title = i18n._('filter.tracker.title');
 
-  const [expanded, setExpanded] = useState<boolean>(true);
   const expandoClick = () => {
     setExpanded(!expanded);
   };
