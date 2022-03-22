@@ -14,10 +14,12 @@ import SettingStore from '@client/stores/SettingStore';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import TorrentStore from '@client/stores/TorrentStore';
 import SortDirections from '@client/constants/SortDirections';
+import TorrentActions from '@client/actions/TorrentActions';
 
 import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
+import {magnet as matchMagnet} from '@shared/util/regEx';
 
 import ContextMenuMountPoint from '../general/ContextMenuMountPoint';
 import ListViewport from '../general/ListViewport';
@@ -62,6 +64,22 @@ const TorrentList: FC = observer(() => {
     if ((metaKey || ctrlKey) && key === 'a') {
       e.preventDefault();
       TorrentStore.selectAllTorrents();
+    }
+  });
+
+  useEvent('paste', (e: ClipboardEvent) => {
+    const clipboard = e.clipboardData?.getData('text/plain').trim() || '';
+    const matchRegex = clipboard.matchAll(new RegExp(matchMagnet, 'gm'));
+    const magnetUrls = Array.from(matchRegex, ([url]) => url) as [string];
+
+    if (magnetUrls.length) {
+      TorrentActions.addTorrentsByUrls({
+        urls: magnetUrls,
+        destination:
+          SettingStore.floodSettings.torrentDestinations?.[''] ?? SettingStore.clientSettings?.directoryDefault ?? '',
+        isBasePath: false,
+        start: SettingStore.floodSettings.startTorrentsOnLoad,
+      });
     }
   });
 
