@@ -87,7 +87,7 @@ const TorrentList: FC = observer(() => {
         <div className="torrents__alert">
           <Trans id="torrents.list.no.torrents" />
         </div>
-        {TorrentFilterStore.isFilterActive && (
+        {TorrentFilterStore.isFilterActive ? (
           <div className="torrents__alert__action">
             <Button
               onClick={() => {
@@ -98,7 +98,7 @@ const TorrentList: FC = observer(() => {
               <Trans id="torrents.list.clear.filters" />
             </Button>
           </div>
-        )}
+        ) : null}
       </div>
     );
   } else {
