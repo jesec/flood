@@ -10,14 +10,14 @@ import type {TransferRateGraphEventHandlers, TransferRateGraphInspectorPoint} fr
 
 const TransferData: FC = observer(() => {
   const [graphInspectorPoint, setGraphInspectorPoint] = useState<TransferRateGraphInspectorPoint | null>(null);
-  const [sidebarWidth, setSidebarWidth] = useState<number>(0);
+  const [sidebarWidth, setSidebarWidth] = useState<number>(250);
   const rateGraphHandlerRefs = useRef<TransferRateGraphEventHandlers>(null);
 
   return (
     <Measure
       offset
       onResize={(contentRect) => {
-        if (contentRect.offset != null) {
+        if (contentRect.offset?.width) {
           setSidebarWidth(contentRect.offset.width);
         }
       }}

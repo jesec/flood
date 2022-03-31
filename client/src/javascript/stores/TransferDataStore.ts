@@ -6,9 +6,9 @@ export const TRANSFER_DIRECTIONS: Readonly<Array<TransferDirection>> = ['downloa
 
 class TransferDataStore {
   transferRates: TransferHistory = {
-    download: new Array(30).fill(0),
-    upload: new Array(30).fill(0),
-    timestamps: new Array(30).fill(Date.now()),
+    download: [0, 0],
+    upload: [0, 0],
+    timestamps: [Date.now() - 5000, Date.now()],
   };
 
   transferSummary: TransferSummary = {
@@ -41,7 +41,9 @@ class TransferDataStore {
   }
 
   handleFetchTransferHistorySuccess(transferData: TransferHistory) {
-    this.transferRates = transferData;
+    if (transferData.timestamps.length > 1) {
+      this.transferRates = transferData;
+    }
   }
 
   handleTransferSummaryFullUpdate(transferSummary: TransferSummary) {
