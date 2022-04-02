@@ -65,7 +65,7 @@ const DirectoryFiles: FC<DirectoryFilesProps> = ({depth, items, hash, path, onIt
             <div className="file__name">
               {/* TODO: Add a WebAssembly decoding player if the feature is popular */}
               <a
-                href={`${ConfigStore.baseURI}api/torrents/${hash}/contents/${file.index}/data`}
+                href={`${ConfigStore.baseURI}api/torrents/${hash}/contents/${file.index}/data?streaming`}
                 style={{textDecoration: 'none'}}
                 target="_blank"
                 rel="noreferrer"
