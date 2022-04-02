@@ -706,17 +706,14 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
     const {hash, indices: stringIndices} = req.params;
 
     if (req.user != null && req.query.token == null) {
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1689018
-      if (req.headers?.['user-agent']?.includes('Firefox/') !== true) {
-        res.redirect(
-          `?token=${getToken<ContentToken>({
-            username: req.user.username,
-            hash,
-            indices: stringIndices,
-          })}`,
-        );
-        return res;
-      }
+      res.redirect(
+        `?token=${getToken<ContentToken>({
+          username: req.user.username,
+          hash,
+          indices: stringIndices,
+        })}`,
+      );
+      return res;
     }
 
     const selectedTorrent = req.services.torrentService.getTorrent(hash);
