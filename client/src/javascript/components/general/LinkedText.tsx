@@ -6,7 +6,7 @@ interface LinkedTextProps {
 }
 
 function isValidHttpUrl(s: string) {
-  var url;
+  let url;
 
   try {
     url = new URL(s);
@@ -20,7 +20,7 @@ function isValidHttpUrl(s: string) {
 const LinkedText: FC<LinkedTextProps> = ({text, className}: LinkedTextProps) => {
   const nodes = text.split(/(?<=\s)(?!\s)(?:\b|\B)/).map((s) =>
     isValidHttpUrl(s.trimEnd()) ? (
-      <a href={s.trimEnd()} target="_blank">
+      <a href={s.trimEnd()} target="_blank" rel="noopener noreferrer">
         {s}
       </a>
     ) : (
