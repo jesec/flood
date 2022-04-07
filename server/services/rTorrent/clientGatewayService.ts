@@ -36,7 +36,7 @@ import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
-import {setCompleted, setTrackers} from '../../util/torrentFileUtil';
+import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import {
   encodeTags,
   getAddTorrentPropertiesCalls,
@@ -59,6 +59,15 @@ import type {RPCError} from './types/RPCError';
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
   availableMethodCalls = this.fetchAvailableMethodCalls(true);
+
+  async appendTorrentCommentCall(file: string, additionalCalls: string[]) {
+    const comment = await getComment(Buffer.from(file, 'base64'));
+    if (comment && comment.length > 0) {
+      // VRS24mrker is used for compatability with ruTorrent
+      return [...additionalCalls, `d.custom2.set="VRS24mrker${encodeURIComponent(comment)}"`];
+    }
+    return additionalCalls;
+  }
 
   async addTorrentsByFile({
     files,
@@ -102,10 +111,16 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     if (hasLoadThrow && this.clientRequestManager.isJSONCapable) {
       await this.clientRequestManager
         .methodCall('system.multicall', [
-          processedFiles.map((file) => ({
-            methodName: start ? 'load.start_throw' : 'load.throw',
-            params: ['', `data:applications/x-bittorrent;base64,${file}`, ...additionalCalls],
-          })),
+          await Promise.all(
+            processedFiles.map(async (file) => ({
+              methodName: start ? 'load.start_throw' : 'load.throw',
+              params: [
+                '',
+                `data:applications/x-bittorrent;base64,${file}`,
+                ...(await this.appendTorrentCommentCall(file, additionalCalls)),
+              ],
+            })),
+          ),
         ])
         .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
         .then((response: Array<Array<string | number>>) => {
@@ -116,7 +131,11 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       await Promise.all(
         processedFiles.map(async (file) => {
           await this.clientRequestManager
-            .methodCall(start ? 'load.raw_start' : 'load.raw', ['', Buffer.from(file, 'base64'), ...additionalCalls])
+            .methodCall(start ? 'load.raw_start' : 'load.raw', [
+              '',
+              Buffer.from(file, 'base64'),
+              ...(await this.appendTorrentCommentCall(file, additionalCalls)),
+            ])
             .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
         }),
       );
@@ -643,6 +662,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             processedResponses.map(async (response) => {
               const torrentProperties: TorrentProperties = {
                 bytesDone: response.bytesDone,
+                comment: response.comment,
                 dateActive: response.downRate > 0 || response.upRate > 0 ? -1 : response.dateActive,
                 dateAdded: response.dateAdded,
                 dateCreated: response.dateCreated,

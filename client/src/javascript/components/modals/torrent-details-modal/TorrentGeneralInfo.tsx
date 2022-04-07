@@ -4,6 +4,7 @@ import {Trans, useLingui} from '@lingui/react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';
 
+import LinkedText from '../../general/LinkedText';
 import Size from '../../general/Size';
 import TorrentStore from '../../../stores/TorrentStore';
 import UIStore from '../../../stores/UIStore';
@@ -199,6 +200,14 @@ const TorrentGeneralInfo: FC = observer(() => {
               {torrent.isPrivate
                 ? i18n._('torrents.details.general.type.private')
                 : i18n._('torrents.details.general.type.public')}
+            </td>
+          </tr>
+          <tr className="torrent-details__detail torrent-details__detail--comment">
+            <td className="torrent-details__detail__label">
+              <Trans id="torrents.details.general.comment" />
+            </td>
+            <td className="torrent-details_detail__value">
+              <LinkedText text={torrent.comment} />
             </td>
           </tr>
           <tr className="torrent-details__table__heading">
