@@ -22,6 +22,16 @@ const openAndDecodeTorrent = async (torrentPath: string): Promise<TorrentFile | 
   return torrentData;
 };
 
+export const getComment = async (torrent: Buffer): Promise<string | undefined> => {
+  const torrentData: TorrentFile | null = await bencode.decode(torrent);
+
+  if (torrentData == null) {
+    return;
+  }
+
+  return torrentData.comment?.toString();
+};
+
 export const getContentSize = async (info: TorrentFile['info']): Promise<number> => {
   if (info.length != null) {
     // Single file torrent

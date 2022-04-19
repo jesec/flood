@@ -18,6 +18,17 @@ const torrentListMethodCallConfigs = {
     methodCall: 'd.state=',
     transformValue: booleanTransformer,
   },
+  comment: {
+    methodCall: 'd.custom2=',
+    transformValue: (value: unknown): string => {
+      // ruTorrent sets VRS24mrkr as a comment prefix, so we use it as well for compatability
+      if (value === '' || typeof value !== 'string' || value.indexOf('VRS24mrker') !== 0) {
+        return '';
+      }
+
+      return decodeURIComponent(value.substring(10));
+    },
+  },
   isActive: {
     methodCall: 'd.is_active=',
     transformValue: booleanTransformer,

@@ -151,7 +151,7 @@ export interface DelugeCoreTorrentStatuses {
   trackers: Array<DelugeCoreTorrentTrackerStatuses>;
   tracker_status: unknown;
   upload_payload_rate: number;
-  comment: unknown;
+  comment: string;
   creator: unknown;
   num_files: unknown;
   num_pieces: unknown;
