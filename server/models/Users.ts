@@ -1,6 +1,6 @@
 import {argon2id, argon2Verify} from 'hash-wasm';
 import crypto from 'crypto';
-import Datastore from 'nedb-promises';
+import Datastore from '@seald-io/nedb';
 import fs from 'fs';
 import path from 'path';
 
@@ -25,7 +25,7 @@ const hashPassword = async (password: string): Promise<string> => {
 
 class Users {
   private db = (() => {
-    const db = Datastore.create({
+    const db = new Datastore({
       autoload: true,
       filename: path.join(config.dbPath, 'users.db'),
     });
@@ -61,7 +61,7 @@ class Users {
    * @return {Promise<AccessLevel>} - Returns access level of the user if matched or rejects with error.
    */
   async comparePassword(credentials: Pick<Credentials, 'username' | 'password'>): Promise<AccessLevel> {
-    return this.db.findOne<Credentials>({username: credentials.username}).then((user) => {
+    return this.db.findOneAsync<Credentials>({username: credentials.username}).then((user) => {
       // Wrong data provided
       if (credentials?.password == null) {
         throw new Error();
@@ -101,7 +101,7 @@ class Users {
     }
 
     return this.db
-      .insert({
+      .insertAsync<Omit<UserInDatabase, '_id'>>({
         ...credentials,
         password: hashed,
         timestamp: Math.ceil(Date.now() / 1000),
@@ -112,7 +112,7 @@ class Users {
         }
 
         throw new Error();
-      });
+      }) as Promise<UserInDatabase>;
   }
 
   /**
@@ -122,7 +122,7 @@ class Users {
    * @return {Promise<string>} - Returns ID of removed user or rejects with error.
    */
   async removeUser(username: string): Promise<string> {
-    return this.db.findOne<Credentials>({username}).then(async ({_id}) => {
+    return this.db.findOneAsync<UserInDatabase>({username}).then(async ({_id}) => {
       destroyUserServices(_id);
 
       await this.db.remove({username}, {});
@@ -150,7 +150,7 @@ class Users {
       patch.timestamp = Math.ceil(Date.now() / 1000);
     }
 
-    return this.db.update({username}, {$set: patch}, {}).then((numUsersUpdated) => {
+    return this.db.updateAsync({username}, {$set: patch}, {}).then(({numAffected: numUsersUpdated}) => {
       if (numUsersUpdated === 0) {
         throw new Error();
       }
@@ -170,7 +170,7 @@ class Users {
       return this.getConfigUser();
     }
 
-    return this.db.findOne<UserInDatabase>({username});
+    return this.db.findOneAsync<UserInDatabase>({username});
   }
 
   /**
@@ -183,14 +183,14 @@ class Users {
       return [this.getConfigUser()];
     }
 
-    return this.db.find<UserInDatabase>({});
+    return this.db.findAsync<UserInDatabase>({});
   }
 
   /**
    * Gets the number of users and route to appropriate handler.
    */
   async initialUserGate(handlers: {handleInitialUser: () => void; handleSubsequentUser: () => void}): Promise<void> {
-    const userCount = await this.db.count({});
+    const userCount = await this.db.countAsync({});
 
     if (userCount && userCount > 0) {
       return handlers.handleSubsequentUser();

@@ -1,5 +1,5 @@
 import path from 'path';
-import Datastore from 'nedb-promises';
+import Datastore from '@seald-io/nedb';
 
 import type {FeedItem} from 'feedsub';
 
@@ -15,7 +15,7 @@ import type {FeedReaderOptions} from '../models/FeedReader';
 class FeedService extends BaseService {
   rules: Record<string, Array<Rule>> = {};
   feedReaders: Array<FeedReader> = [];
-  db = Datastore.create({
+  db = new Datastore({
     autoload: true,
     filename: path.join(config.dbPath, this.user._id, 'settings', 'feeds.db'),
   });
@@ -28,7 +28,7 @@ class FeedService extends BaseService {
       this.onServicesUpdated = () => undefined;
 
       // Loads state from database.
-      const docs = await this.db.find<Feed | Rule | MatchedTorrents>({}).catch(() => undefined);
+      const docs = await this.db.findAsync<Feed | Rule | MatchedTorrents>({}).catch(() => undefined);
 
       if (docs == null) {
         return;
@@ -128,7 +128,7 @@ class FeedService extends BaseService {
       throw new Error();
     }
 
-    const newFeed = await this.db.insert<Omit<Feed, '_id'>>({type: 'feed', url, label, interval});
+    const newFeed = (await this.db.insertAsync<Omit<Feed, '_id'>>({type: 'feed', url, label, interval})) as Feed;
 
     this.startNewFeed(newFeed);
 
@@ -167,12 +167,12 @@ class FeedService extends BaseService {
     modifiedFeedReader.modify(JSON.parse(JSON.stringify({feedLabel: label, url, interval})));
 
     return this.db
-      .update({_id: id}, {$set: JSON.parse(JSON.stringify({label, url, interval}))}, {})
+      .updateAsync({_id: id}, {$set: JSON.parse(JSON.stringify({label, url, interval}))}, {})
       .then(() => undefined);
   }
 
   async addRule(options: AddRuleOptions): Promise<Rule> {
-    const newRule = await this.db.insert<Omit<Rule, '_id'>>({type: 'rule', ...options});
+    const newRule = (await this.db.insertAsync<Omit<Rule, '_id'>>({type: 'rule', ...options})) as Rule;
 
     if (this.rules[newRule.feedIDs[0]] == null) {
       this.rules[newRule.feedIDs[0]] = [];
@@ -192,7 +192,7 @@ class FeedService extends BaseService {
   }
 
   async getAll(): Promise<{feeds: Array<Feed>; rules: Array<Rule>}> {
-    return this.db.find<Feed | Rule>({}).then((docs) =>
+    return this.db.findAsync<Feed | Rule>({}).then((docs) =>
       docs.reduce(
         (memo: {feeds: Array<Feed>; rules: Array<Rule>}, item) => {
           if (item.type === 'feed') {
@@ -211,7 +211,7 @@ class FeedService extends BaseService {
   }
 
   async getFeeds(id?: string): Promise<Array<Feed>> {
-    return this.db.find<Feed>(id ? {_id: id} : {type: 'feed'});
+    return this.db.findAsync<Feed>(id ? {_id: id} : {type: 'feed'});
   }
 
   async getItems(id: string, search: string): Promise<Array<Item>> {
@@ -242,12 +242,12 @@ class FeedService extends BaseService {
 
   async getPreviouslyMatchedUrls(): Promise<Array<string>> {
     return this.db
-      .find<MatchedTorrents>({type: 'matchedTorrents'})
+      .findAsync<MatchedTorrents>({type: 'matchedTorrents'})
       .then((docs) => docs.reduce((matchedUrls: Array<string>, doc) => matchedUrls.concat(doc.urls), []));
   }
 
   async getRules(): Promise<Array<Rule>> {
-    return this.db.find<Rule>({type: 'rule'});
+    return this.db.findAsync<Rule>({type: 'rule'});
   }
 
   handleNewItems = (feedReaderOptions: FeedReaderOptions, feedItems: Array<FeedItem>): void => {
@@ -334,7 +334,7 @@ class FeedService extends BaseService {
       this.rules[key] = rule.filter((rule) => rule._id !== id);
     }
 
-    return this.db.remove({_id: id}, {}).then(() => undefined);
+    return this.db.removeAsync({_id: id}, {}).then(() => undefined);
   }
 }
 
