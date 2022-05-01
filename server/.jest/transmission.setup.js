@@ -43,11 +43,7 @@ process.argv.push('--assets', 'false');
 
 afterAll((done) => {
   transmissionProcess.on('close', () => {
-    if (process.env.CI !== 'true') {
-      // TODO: This leads to test flakiness caused by ENOENT error
-      // NeDB provides no method to close database connection
-      fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
-    }
+    fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
     done();
   });
 
