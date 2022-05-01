@@ -83,12 +83,16 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     this.emit('FETCH_TRANSFER_SUMMARY_ERROR');
   };
 
-  destroy() {
+  async destroy(drop: boolean) {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
     }
 
-    super.destroy();
+    if (drop) {
+      await this.snapshot.dropDB();
+    }
+
+    return super.destroy(drop);
   }
 
   getTransferSummary() {

@@ -56,12 +56,12 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
     this.pollTimeout = setTimeout(this.fetchTorrentList, this.pollInterval);
   }
 
-  destroy() {
+  destroy(drop: boolean) {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
     }
 
-    super.destroy();
+    return super.destroy(drop);
   }
 
   fetchTorrentList = () => {

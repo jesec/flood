@@ -21,6 +21,14 @@ class SettingService extends BaseService<SettingServiceEvents> {
     filename: path.join(config.dbPath, this.user._id, 'settings', 'settings.db'),
   });
 
+  async destroy(drop: boolean) {
+    if (drop) {
+      await this.db.dropDatabaseAsync();
+    }
+
+    return super.destroy(drop);
+  }
+
   async get(property: keyof FloodSettings | null): Promise<Partial<FloodSettings>> {
     const docs = await this.db
       .findAsync<SettingRecord>(

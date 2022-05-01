@@ -39,6 +39,10 @@ class HistoryEra {
     );
   };
 
+  async dropDB(): Promise<void> {
+    return this.db.dropDatabaseAsync();
+  }
+
   async addData(data: TransferData): Promise<void> {
     const currentTime = Date.now();
 

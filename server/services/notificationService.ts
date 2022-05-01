@@ -46,6 +46,14 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
     })();
   }
 
+  async destroy(drop: boolean) {
+    if (drop) {
+      await this.db.dropDatabaseAsync();
+    }
+
+    return super.destroy(drop);
+  }
+
   emitUpdate = () => {
     this.emit('NOTIFICATION_COUNT_CHANGE', {
       id: Date.now(),

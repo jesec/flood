@@ -123,7 +123,7 @@ class Users {
    */
   async removeUser(username: string): Promise<string> {
     return this.db.findOneAsync<UserInDatabase>({username}).then(async ({_id}) => {
-      destroyUserServices(_id);
+      await destroyUserServices(_id, true);
 
       await this.db.remove({username}, {});
       await fs.promises.rmdir(path.join(config.dbPath, _id), {recursive: true}).catch(() => undefined);

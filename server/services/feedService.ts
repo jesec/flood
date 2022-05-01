@@ -92,6 +92,14 @@ class FeedService extends BaseService {
     };
   }
 
+  async destroy(drop: boolean) {
+    if (drop) {
+      await this.db.dropDatabaseAsync();
+    }
+
+    return super.destroy(drop);
+  }
+
   private startNewFeed(feed: Feed) {
     const {_id: feedID, label: feedLabel, url, interval} = feed;
 

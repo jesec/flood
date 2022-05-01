@@ -38,7 +38,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     };
   }
 
-  destroy() {
+  async destroy(drop: boolean) {
     if (this.services?.clientGatewayService == null) {
       return;
     }
@@ -49,7 +49,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     clientGatewayService.removeListener('PROCESS_TORRENT_LIST_END', this.handleProcessTorrentListEnd);
     clientGatewayService.removeListener('PROCESS_TORRENT', this.handleProcessTorrent);
 
-    super.destroy();
+    super.destroy(drop);
   }
 
   getTaxonomy() {

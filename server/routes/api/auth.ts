@@ -325,8 +325,8 @@ router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions
 
     return Users.updateUser(username, patch)
       .then((newUsername) => {
-        return Users.lookupUser(newUsername).then((user) => {
-          destroyUserServices(user._id);
+        return Users.lookupUser(newUsername).then(async (user) => {
+          await destroyUserServices(user._id);
           bootstrapServicesForUser(user);
           return res.status(200).json({});
         });

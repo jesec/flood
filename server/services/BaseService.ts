@@ -16,7 +16,7 @@ class BaseService<E = unknown> extends (EventEmitter as {
     this.user = user;
   }
 
-  destroy() {
+  async destroy(_drop: boolean): Promise<void> {
     delete this.services;
   }
 

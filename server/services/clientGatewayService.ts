@@ -229,10 +229,11 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
     }
   }
 
-  destroy() {
+  destroy(drop: boolean) {
     this.destroyTimer();
     this.retryTimer = undefined;
-    super.destroy();
+
+    return super.destroy(drop);
   }
 
   startTimer() {
