@@ -64,7 +64,7 @@
     "test:client": "FLOOD_OPTION_port=4200 start-server-and-test start 4200 'cypress run'"
   },
   "dependencies": {
-    "geoip-country": "^4.1.2"
+    "geoip-country": "^4.1.3"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
@@ -85,7 +85,7 @@
     "@types/bencode": "^2.0.1",
     "@types/body-parser": "^1.19.2",
     "@types/compression": "^1.7.2",
-    "@types/content-disposition": "^0.5.4",
+    "@types/content-disposition": "^0.5.5",
     "@types/cookie-parser": "^1.4.3",
     "@types/create-torrent": "^5.0.0",
     "@types/d3": "^7.1.0",
@@ -95,7 +95,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/geoip-country": "^4.0.0",
     "@types/http-errors": "^1.8.2",
-    "@types/jest": "^27.4.1",
+    "@types/jest": "^27.5.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/lodash": "^4.14.182",
     "@types/morgan": "^1.9.3",
@@ -104,7 +104,7 @@
     "@types/parse-torrent": "^5.8.4",
     "@types/passport": "^1.0.7",
     "@types/passport-jwt": "^3.0.6",
-    "@types/react": "^17.0.44",
+    "@types/react": "^17.0.45",
     "@types/react-dom": "^17.0.16",
     "@types/react-measure": "^2.0.8",
     "@types/react-router-dom": "^5.3.3",
@@ -113,10 +113,10 @@
     "@types/spdy": "^3.4.5",
     "@types/supertest": "^2.0.12",
     "@types/tar-fs": "^2.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.21.0",
-    "@typescript-eslint/parser": "^5.21.0",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.2",
-    "autoprefixer": "^10.4.5",
+    "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
     "axios-mock-adapter": "^1.20.0",
     "babel-loader": "^8.2.5",
@@ -136,7 +136,7 @@
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.1.0",
     "debug": "^4.3.4",
-    "eslint": "^8.14.0",
+    "eslint": "^8.15.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^16.2.0",
     "eslint-config-prettier": "^8.5.0",
@@ -162,7 +162,7 @@
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.6.0",
     "mobx": "^6.5.0",
-    "mobx-react": "^7.3.0",
+    "mobx-react": "^7.4.0",
     "morgan": "^1.10.0",
     "overlayscrollbars": "^1.13.1",
     "overlayscrollbars-react": "^0.2.3",
@@ -209,11 +209,11 @@
     "typed-emitter": "^1.4.0",
     "typescript": "~4.6.4",
     "webpack": "^5.72.0",
-    "webpack-dev-server": "^4.8.1",
+    "webpack-dev-server": "^4.9.0",
     "webpack-shebang-plugin": "^1.1.7",
     "webpackbar": "^5.0.2",
     "yargs": "^17.4.1",
-    "zod": "^3.14.4"
+    "zod": "^3.15.1"
   },
   "engines": {
     "node": ">=12.0.0",
