@@ -11,9 +11,9 @@ import type {
 import BaseService from './BaseService';
 import config from '../../config';
 
-interface NotificationServiceEvents {
+type NotificationServiceEvents = {
   NOTIFICATION_COUNT_CHANGE: (payload: {id: number; data: NotificationCount}) => void;
-}
+};
 
 const DEFAULT_QUERY_LIMIT = 20;
 

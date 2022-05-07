@@ -28,12 +28,12 @@ import type {UserInDatabase} from '@shared/schema/Auth';
 import BaseService from './BaseService';
 import config from '../../config';
 
-interface ClientGatewayServiceEvents {
+type ClientGatewayServiceEvents = {
   CLIENT_CONNECTION_STATE_CHANGE: (isConnected: boolean) => void;
   PROCESS_TORRENT_LIST_START: () => void;
   PROCESS_TORRENT_LIST_END: (torrentListSummary: TorrentListSummary) => void;
   PROCESS_TORRENT: (torrentProperties: TorrentProperties) => void;
-}
+};
 
 abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEvents> {
   errorCount = 0;

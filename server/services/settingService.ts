@@ -11,9 +11,9 @@ interface SettingRecord {
   data: unknown;
 }
 
-interface SettingServiceEvents {
+type SettingServiceEvents = {
   SETTINGS_CHANGE: (changeSettings: Partial<FloodSettings>) => void;
-}
+};
 
 class SettingService extends BaseService<SettingServiceEvents> {
   db = new Datastore({

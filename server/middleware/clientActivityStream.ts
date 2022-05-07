@@ -1,3 +1,4 @@
+import type {EventMap} from 'typed-emitter';
 import type {Operation} from 'fast-json-patch';
 import type {Request, Response} from 'express';
 import type TypedEmitter from 'typed-emitter';
@@ -21,7 +22,7 @@ export default async (req: Request, res: Response) => {
   const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();
 
   // Hook into events and stop listening when connection is closed
-  const handleEvents = <T extends TypedEmitter<Record<string, unknown>>>(
+  const handleEvents = <T extends TypedEmitter<EventMap>>(
     emitter: T,
     event: Parameters<T['on']>[0],
     handler: Parameters<T['on']>[1],

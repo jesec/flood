@@ -6,13 +6,13 @@ import BaseService from './BaseService';
 import config from '../../config';
 import {hasTorrentFinished} from '../util/torrentPropertiesUtil';
 
-interface TorrentServiceEvents {
+type TorrentServiceEvents = {
   FETCH_TORRENT_LIST_SUCCESS: () => void;
   FETCH_TORRENT_LIST_ERROR: () => void;
   TORRENT_LIST_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
   newListener: (event: keyof Omit<TorrentServiceEvents, 'newListener' | 'removeListener'>) => void;
   removeListener: (event: keyof Omit<TorrentServiceEvents, 'newListener' | 'removeListener'>) => void;
-}
+};
 
 class TorrentService extends BaseService<TorrentServiceEvents> {
   pollInterval = config.torrentClientPollIntervalIdle;

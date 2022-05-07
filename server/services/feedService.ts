@@ -12,7 +12,7 @@ import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '../../shar
 import type {Feed, Item, MatchedTorrents, Rule} from '../../shared/types/Feed';
 import type {FeedReaderOptions} from '../models/FeedReader';
 
-class FeedService extends BaseService {
+class FeedService extends BaseService<Record<string, never>> {
   rules: Record<string, Array<Rule>> = {};
   feedReaders: Array<FeedReader> = [];
   db = new Datastore({
