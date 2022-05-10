@@ -190,7 +190,7 @@
     "react-transition-group": "^4.4.2",
     "react-use": "^17.3.2",
     "react-window": "^1.8.7",
-    "ress": "^5.0.2",
+    "ress": "^4.0.0",
     "sanitize-filename": "^1.6.3",
     "sass": "^1.51.0",
     "sass-loader": "^12.6.0",
