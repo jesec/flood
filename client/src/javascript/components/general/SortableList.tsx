@@ -1,42 +1,38 @@
+import {arrayMove, SortableContext, verticalListSortingStrategy} from '@dnd-kit/sortable';
 import classnames from 'classnames';
-import {HTML5toTouch} from 'rdndmb-html5-to-touch';
-import {DndProvider} from 'react-dnd-multi-backend';
+import {DndContext, KeyboardSensor, MouseSensor, TouchSensor, useSensor} from '@dnd-kit/core';
 import {FC, MouseEvent, ReactNode, useState} from 'react';
+import {restrictToParentElement, restrictToVerticalAxis} from '@dnd-kit/modifiers';
 
 import SortableListItem from './SortableListItem';
 
-export type ListItem = {
-  id: string;
-  visible: boolean;
-};
-
 interface SortableListProps {
-  id: string;
   className: string;
   lockedIDs: Array<string>;
-  items: Array<ListItem>;
-  renderItem: (item: ListItem, index: number) => ReactNode;
+  items: string[];
+  renderItem: (id: string, index: number) => ReactNode;
   onMouseDown?: (event: MouseEvent) => void;
-  onMove?: (items: this['items']) => void;
   onDrop?: (items: this['items']) => void;
 }
 
 const SortableList: FC<SortableListProps> = ({
   className,
-  id: listID,
   items,
   lockedIDs,
   renderItem,
   onMouseDown,
-  onMove,
   onDrop,
 }: SortableListProps) => {
   const [currentItems, setCurrentItems] = useState(items);
   const classes = classnames('sortable-list', className);
 
+  const keyboardSensor = useSensor(KeyboardSensor);
+  const mouseSensor = useSensor(MouseSensor, {activationConstraint: {distance: 10}});
+  const touchSensor = useSensor(TouchSensor, {activationConstraint: {distance: 10}});
+
   return (
     <div
-      css={{width: '100%'}}
+      css={{width: '100%', touchAction: 'none'}}
       role="none"
       onMouseDown={(event) => {
         if (onMouseDown) {
@@ -44,53 +40,50 @@ const SortableList: FC<SortableListProps> = ({
         }
       }}
     >
-      <DndProvider options={HTML5toTouch}>
-        <ul className={classes}>
-          {currentItems.map((item, index) => {
-            const {id, visible} = item;
-            return (
-              <SortableListItem
-                list={listID}
-                id={id}
-                index={index}
-                isLocked={lockedIDs.includes(id)}
-                isVisible={visible}
-                key={id}
-                onDrop={() => {
-                  if (onDrop) {
-                    onDrop(currentItems);
-                  }
-                }}
-                onMove={(dragIndex, hoverIndex) => {
-                  const draggedItem = currentItems[dragIndex];
+      <DndContext
+        sensors={[keyboardSensor, mouseSensor, touchSensor]}
+        onDragEnd={({active, over}) => {
+          if (over == null) {
+            return;
+          }
 
-                  const newItems = currentItems.slice();
+          if (active.id === over.id) {
+            return;
+          }
 
-                  // Remove the item being dragged.
-                  newItems.splice(dragIndex, 1);
-                  // Add the item being dragged in its new position.
-                  newItems.splice(hoverIndex, 0, draggedItem);
+          const newItems = arrayMove(
+            items,
+            items.findIndex((id) => id === active.id),
+            items.findIndex((id) => id === over.id),
+          );
 
-                  setCurrentItems(newItems);
+          setCurrentItems(newItems);
 
-                  if (onMove) {
-                    onMove(newItems);
-                  }
-                }}
-              >
-                {renderItem(item, index)}
-              </SortableListItem>
-            );
-          })}
-        </ul>
-      </DndProvider>
+          if (onDrop) {
+            onDrop(newItems);
+          }
+        }}
+        modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+        autoScroll={false}
+      >
+        <SortableContext items={currentItems} strategy={verticalListSortingStrategy}>
+          <ul className={classes}>
+            {currentItems.map((id, index) => {
+              return (
+                <SortableListItem id={id} disabled={lockedIDs.includes(id)} key={id}>
+                  {renderItem(id, index)}
+                </SortableListItem>
+              );
+            })}
+          </ul>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 };
 
 SortableList.defaultProps = {
   onMouseDown: undefined,
-  onMove: undefined,
   onDrop: undefined,
 };
 
