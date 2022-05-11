@@ -4,7 +4,7 @@ import {Trans} from '@lingui/react';
 import {Checkbox} from '@client/ui';
 import DiskUsageStore from '@client/stores/DiskUsageStore';
 import SettingStore from '@client/stores/SettingStore';
-import SortableList, {ListItem} from '@client/components/general/SortableList';
+import SortableList from '@client/components/general/SortableList';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
@@ -13,8 +13,8 @@ interface MountPointsListProps {
 }
 
 const MountPointsList: FC<MountPointsListProps> = ({onSettingsChange}: MountPointsListProps) => {
-  const [diskItems, setDiskItems] = useState<ListItem[]>(
-    ((): ListItem[] => {
+  const [diskItems, setDiskItems] = useState(
+    (() => {
       const {mountPoints} = SettingStore.floodSettings;
       const disks = Object.assign(
         {},
@@ -40,24 +40,28 @@ const MountPointsList: FC<MountPointsListProps> = ({onSettingsChange}: MountPoin
     })(),
   );
 
+  const diskItemVisiblity = diskItems.reduce((memo, {id, visible}) => {
+    memo[id] = visible;
+    return memo;
+  }, {} as Record<string, boolean>);
+
   return (
     <SortableList
-      id="disks"
       className="sortable-list--disks"
-      items={diskItems.slice()}
+      items={diskItems.map(({id}) => id)}
       lockedIDs={[]}
-      onDrop={(items: Array<ListItem>): void => {
-        setDiskItems(items);
+      onDrop={(items) => {
+        setDiskItems(items.map((id) => ({id, visible: diskItemVisiblity[id]})));
       }}
-      renderItem={(item: ListItem) => {
-        const {id, visible} = item;
-
+      renderItem={(id) => {
         const checkbox = (
           <span className="sortable-list__content sortable-list__content--secondary">
             <Checkbox
-              defaultChecked={visible}
+              defaultChecked={diskItemVisiblity[id]}
               id={id}
               onClick={(event) => {
+                diskItemVisiblity[id] = (event.target as HTMLInputElement).checked;
+
                 const newItems = diskItems.map((disk) => {
                   if (disk.id === id) {
                     return {...disk, visible: (event.target as HTMLInputElement).checked};

@@ -1,4 +1,4 @@
-import {FC, ReactNode, useRef, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 import {Trans} from '@lingui/react';
 
 import {Checkbox} from '@client/ui';
@@ -7,11 +7,10 @@ import SettingStore from '@client/stores/SettingStore';
 import TorrentListColumns from '@client/constants/TorrentListColumns';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
+import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 
 import SortableList from '../../../general/SortableList';
 import Tooltip from '../../../general/Tooltip';
-
-import type {ListItem} from '../../../general/SortableList';
 
 interface TorrentListColumnsListProps {
   torrentListViewSize: FloodSettings['torrentListViewSize'];
@@ -23,6 +22,7 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
   onSettingsChange,
 }: TorrentListColumnsListProps) => {
   const tooltipRef = useRef<Tooltip>(null);
+
   const [torrentListColumns, setTorrentListColumns] = useState([
     ...SettingStore.floodSettings.torrentListColumns.filter((column) => TorrentListColumns[column.id] != null).slice(),
     ...Object.keys(TorrentListColumns)
@@ -33,25 +33,28 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
       })),
   ]);
 
+  const torrentListColumnVisiblity = torrentListColumns.reduce((memo, {id, visible}) => {
+    memo[id] = visible;
+    return memo;
+  }, {} as Record<string, boolean>);
+
   const lockedIDs =
     torrentListViewSize === 'expanded' ? ['name', 'eta', 'downRate', 'percentComplete', 'downTotal', 'upRate'] : [];
 
   return (
     <SortableList
-      id="torrent-details"
       className="sortable-list--torrent-details"
-      items={torrentListColumns}
+      items={torrentListColumns.map(({id}) => id)}
       lockedIDs={lockedIDs}
       onMouseDown={(): void => {
         tooltipRef.current?.dismissTooltip();
       }}
-      onDrop={(items: Array<ListItem>): void => {
-        const newItems = items.slice();
+      onDrop={(items) => {
+        const newItems = items.map((id) => ({id, visible: torrentListColumnVisiblity[id]}));
         onSettingsChange({torrentListColumns: newItems as FloodSettings['torrentListColumns']});
         setTorrentListColumns(newItems);
       }}
-      renderItem={(item: ListItem, index: number): ReactNode => {
-        const {id, visible} = item as FloodSettings['torrentListColumns'][number];
+      renderItem={(id, index) => {
         let checkbox = null;
         let warning = null;
 
@@ -59,17 +62,20 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
           checkbox = (
             <span className="sortable-list__content sortable-list__content--secondary">
               <Checkbox
-                defaultChecked={visible}
+                defaultChecked={torrentListColumnVisiblity[id]}
                 id={id}
                 onClick={(event) => {
+                  torrentListColumnVisiblity[id] = (event.target as HTMLInputElement).checked;
+
                   const changedTorrentListColumns = torrentListColumns.map((column) => ({
                     id: column.id,
                     visible: column.id === id ? (event.target as HTMLInputElement).checked : column.visible,
                   }));
+
+                  setTorrentListColumns(changedTorrentListColumns);
                   onSettingsChange({
                     torrentListColumns: changedTorrentListColumns as FloodSettings['torrentListColumns'],
                   });
-                  setTorrentListColumns(changedTorrentListColumns);
                 }}
               >
                 <Trans id="settings.ui.torrent.details.enabled" />
@@ -100,7 +106,7 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
           <div className="sortable-list__content sortable-list__content__wrapper">
             {warning}
             <span className="sortable-list__content sortable-list__content--primary">
-              <Trans id={TorrentListColumns[id]} />
+              <Trans id={TorrentListColumns[id as TorrentListColumn]} />
             </span>
             {checkbox}
           </div>
