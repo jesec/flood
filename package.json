@@ -64,7 +64,7 @@
     "test:client": "FLOOD_OPTION_port=4200 start-server-and-test start 4200 'cypress run'"
   },
   "dependencies": {
-    "geoip-country": "^4.1.3"
+    "geoip-country": "^4.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
@@ -83,7 +83,7 @@
     "@emotion/react": "^11.9.0",
     "@lingui/loader": "^3.13.3",
     "@lingui/react": "^3.13.3",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.6",
     "@seald-io/nedb": "^3.0.0",
     "@types/bencode": "^2.0.1",
     "@types/body-parser": "^1.19.2",
@@ -101,7 +101,7 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/lodash": "^4.14.182",
     "@types/morgan": "^1.9.3",
-    "@types/node": "^12.20.50",
+    "@types/node": "^12.20.51",
     "@types/overlayscrollbars": "^1.12.1",
     "@types/parse-torrent": "^5.8.4",
     "@types/passport": "^1.0.7",
@@ -116,8 +116,8 @@
     "@types/supertest": "^2.0.12",
     "@types/tar-fs": "^2.0.1",
     "@types/yargs": "^17.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.2",
     "autoprefixer": "^10.4.7",
     "axios": "^0.27.2",
@@ -200,13 +200,13 @@
     "tar-fs": "^2.1.1",
     "terser-webpack-plugin": "^5.3.1",
     "tldts": "^5.7.77",
-    "ts-jest": "^28.0.1",
+    "ts-jest": "^28.0.2",
     "ts-loader": "^9.3.0",
     "ts-node-dev": "^1.1.8",
     "tsconfig-paths": "^4.0.0",
     "typed-emitter": "^2.1.0",
     "typescript": "~4.6.4",
-    "webpack": "^5.72.0",
+    "webpack": "^5.72.1",
     "webpack-dev-server": "^4.9.0",
     "webpack-shebang-plugin": "^1.1.7",
     "webpackbar": "^5.0.2",
