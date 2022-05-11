@@ -21,7 +21,7 @@ WORKDIR /usr/src/app/
 COPY . ./
 
 # Fetch dependencies from npm
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # Build assets
 RUN npm run build
