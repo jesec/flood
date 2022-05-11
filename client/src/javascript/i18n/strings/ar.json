@@ -289,6 +289,7 @@
   "torrents.move.heading": "تعيين موقع التورنت",
   "torrents.properties.comment": "تعليق",
   "torrents.properties.date.added": "أضيف",
+  "torrents.properties.date.created": "تم الإنشاء",
   "torrents.properties.directory": "الموقع",
   "torrents.properties.download.speed": "سرعة التنزيل",
   "torrents.properties.download.total": "تم التحميل",
