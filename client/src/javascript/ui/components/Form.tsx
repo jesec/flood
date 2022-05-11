@@ -3,6 +3,7 @@ import {Component, FormEvent, ReactNode} from 'react';
 import {getDataFromForm, resetFormData} from './util/forms';
 
 interface FormProps {
+  children?: React.ReactNode;
   className?: string;
   onChange?: ({
     event,

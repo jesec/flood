@@ -18,6 +18,7 @@ type Clearance = Coordinates & {
 };
 
 interface TooltipProps {
+  children?: React.ReactNode;
   align?: Align;
   anchor?: Align;
   position?: Position;

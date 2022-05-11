@@ -53,7 +53,7 @@ const Modal: FC<ModalProps> = (props: ModalProps) => {
     const activeTab = tabs[activeTabId];
     const contentClasses = classnames('modal__content', activeTab.modalContentClasses);
 
-    const ModalContentComponent = activeTab.content as FC;
+    const ModalContentComponent = activeTab.content;
     const modalContentData = activeTab.props;
 
     const modalTabs = (

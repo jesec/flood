@@ -54,9 +54,7 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
         <Select defaultID={selectedLanguage} id="language">
           {Object.keys(Languages).map((languageID) => (
             <SelectItem key={languageID} id={languageID}>
-              {Languages[languageID as 'auto'].id != null
-                ? i18n._(Languages[languageID as 'auto'].id)
-                : Languages[languageID as Language]}
+              {languageID === 'auto' ? i18n._(Languages[languageID].id) : (Languages[languageID as Language] as string)}
             </SelectItem>
           ))}
         </Select>
