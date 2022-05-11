@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import debug from 'debug';
 import fs from 'fs';
 import http from 'http';
-import spdy from 'spdy';
+import https from 'https';
 
 import app from '../app';
 import config from '../../config';
@@ -37,7 +37,7 @@ const startWebServer = () => {
   app.set('host', host);
 
   // Create HTTP or HTTPS server.
-  let server: http.Server | spdy.Server;
+  let server: http.Server | https.Server;
 
   if (useSSL) {
     if (!config.sslKey || !config.sslCert) {
@@ -45,7 +45,7 @@ const startWebServer = () => {
       process.exit(1);
     }
 
-    server = spdy.createServer(
+    server = https.createServer(
       {
         key: fs.readFileSync(config.sslKey),
         cert: fs.readFileSync(config.sslCert),
