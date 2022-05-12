@@ -438,6 +438,83 @@ class TransmissionClientGatewayService extends ClientGatewayService {
       });
   }
 
+  async fetchTorrent(hash: TorrentProperties['hash']): Promise<TorrentProperties> {
+    return this.clientRequestManager
+      .getTorrents(hash, [
+        'hashString',
+        'downloadDir',
+        'name',
+        'comment',
+        'haveValid',
+        'addedDate',
+        'dateCreated',
+        'doneDate',
+        'rateDownload',
+        'rateUpload',
+        'downloadedEver',
+        'uploadedEver',
+        'eta',
+        'isPrivate',
+        'error',
+        'errorString',
+        'peersGettingFromUs',
+        'peersSendingToUs',
+        'status',
+        'totalSize',
+        'trackers',
+        'labels',
+        'activityDate',
+      ])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((torrents) => {
+        const [torrent] = torrents;
+        if (torrent == null) {
+          throw new Error();
+        }
+
+        const percentComplete = (torrent.haveValid / torrent.totalSize) * 100;
+        const ratio = torrent.downloadedEver === 0 ? -1 : torrent.uploadedEver / torrent.downloadedEver;
+        const trackerURIs = getDomainsFromURLs(torrent.trackers.map((tracker) => tracker.announce));
+        const status = torrentPropertiesUtil.getTorrentStatus(torrent);
+
+        const torrentProperties: TorrentProperties = {
+          hash: torrent.hashString.toUpperCase(),
+          name: torrent.name,
+          comment: torrent.comment,
+          bytesDone: torrent.haveValid,
+          dateActive: torrent.rateDownload > 0 || torrent.rateUpload > 0 ? -1 : torrent.activityDate,
+          dateAdded: torrent.addedDate,
+          dateCreated: torrent.dateCreated,
+          dateFinished: torrent.doneDate,
+          directory: torrent.downloadDir,
+          downRate: torrent.rateDownload,
+          downTotal: torrent.downloadedEver,
+          upRate: torrent.rateUpload,
+          upTotal: torrent.uploadedEver,
+          eta: torrent.eta > 0 ? torrent.eta : -1,
+          isPrivate: torrent.isPrivate,
+          isInitialSeeding: false,
+          isSequential: false,
+          message: torrent.errorString,
+          peersConnected: torrent.peersGettingFromUs,
+          peersTotal: torrent.peersGettingFromUs,
+          percentComplete,
+          priority: TorrentPriority.NORMAL,
+          ratio,
+          seedsConnected: torrent.peersSendingToUs,
+          seedsTotal: torrent.peersSendingToUs,
+          sizeBytes: torrent.totalSize,
+          status,
+          tags: torrent.labels || [],
+          trackerURIs,
+        };
+
+        this.emit('PROCESS_TORRENT', torrentProperties);
+
+        return torrentProperties;
+      });
+  }
+
   async fetchTransferSummary(): Promise<TransferSummary> {
     return this.clientRequestManager
       .getSessionStats()

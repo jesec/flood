@@ -711,6 +711,56 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       });
   }
 
+  async fetchTorrent(hash: TorrentProperties['hash']): Promise<TorrentProperties> {
+    return this.clientRequestManager
+      .methodCall('d.multicall2', [hash, ''].concat((await this.availableMethodCalls).torrentList))
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
+      .then((responses: string[][]) => {
+        return Promise.all(
+          responses.map((response) => processMethodCallResponse(response, torrentListMethodCallConfigs)),
+        );
+      })
+      .then((processedResponses) => {
+        const [response] = processedResponses;
+
+        const torrentProperties: TorrentProperties = {
+          bytesDone: response.bytesDone,
+          comment: response.comment,
+          dateActive: response.downRate > 0 || response.upRate > 0 ? -1 : response.dateActive,
+          dateAdded: response.dateAdded,
+          dateCreated: response.dateCreated,
+          dateFinished: response.dateFinished,
+          directory: response.directory,
+          downRate: response.downRate,
+          downTotal: response.downTotal,
+          eta: getTorrentETAFromProperties(response),
+          hash: response.hash,
+          isPrivate: response.isPrivate,
+          isInitialSeeding: response.isInitialSeeding,
+          isSequential: response.isSequential,
+          message: response.message,
+          name: response.name,
+          peersConnected: response.peersConnected,
+          peersTotal: response.peersTotal,
+          percentComplete: getTorrentPercentCompleteFromProperties(response),
+          priority: response.priority,
+          ratio: response.ratio,
+          seedsConnected: response.seedsConnected,
+          seedsTotal: response.seedsTotal,
+          sizeBytes: response.sizeBytes,
+          status: getTorrentStatusFromProperties(response),
+          tags: response.tags,
+          trackerURIs: response.trackerURIs,
+          upRate: response.upRate,
+          upTotal: response.upTotal,
+        };
+
+        this.emit('PROCESS_TORRENT', torrentProperties);
+
+        return torrentProperties;
+      });
+  }
+
   async fetchTransferSummary(): Promise<TransferSummary> {
     const methodCalls: MultiMethodCalls = (await this.availableMethodCalls).transferSummary.map((methodCall) => {
       return {

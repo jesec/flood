@@ -374,6 +374,77 @@ class DelugeClientGatewayService extends ClientGatewayService {
       });
   }
 
+  async fetchTorrent(hash: string): Promise<TorrentProperties> {
+    return this.clientRequestManager
+      .coreGetTorrentStatus(hash, [
+        'active_time',
+        'comment',
+        'download_location',
+        'download_payload_rate',
+        'eta',
+        'finished_time',
+        'message',
+        'name',
+        'num_peers',
+        'num_seeds',
+        'private',
+        'progress',
+        'ratio',
+        'sequential_download',
+        'state',
+        'super_seeding',
+        'time_added',
+        'total_done',
+        'total_payload_download',
+        'total_payload_upload',
+        'total_peers',
+        'total_size',
+        'total_seeds',
+        'tracker_host',
+        'upload_payload_rate',
+      ])
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((status) => {
+        const dateNowSeconds = Math.ceil(Date.now() / 1000);
+
+        const torrentProperties: TorrentProperties = {
+          bytesDone: status.total_done,
+          comment: status.comment,
+          dateActive: status.download_payload_rate > 0 || status.upload_payload_rate > 0 ? -1 : status.active_time,
+          dateAdded: status.time_added,
+          dateCreated: 0,
+          dateFinished: status.finished_time > 0 ? Math.ceil((dateNowSeconds - status.finished_time) / 10) * 10 : 0,
+          directory: status.download_location,
+          downRate: status.download_payload_rate,
+          downTotal: status.total_payload_download,
+          eta: status.eta === 0 ? -1 : status.eta,
+          hash: hash.toUpperCase(),
+          isPrivate: status.private,
+          isInitialSeeding: status.super_seeding,
+          isSequential: status.sequential_download,
+          message: status.message,
+          name: status.name,
+          peersConnected: status.num_peers,
+          peersTotal: status.total_peers < 0 ? 0 : status.total_peers,
+          percentComplete: status.progress,
+          priority: 1,
+          ratio: status.ratio,
+          seedsConnected: status.num_seeds,
+          seedsTotal: status.total_seeds < 0 ? 0 : status.total_seeds,
+          sizeBytes: status.total_size,
+          status: getTorrentStatusFromStatuses(status),
+          tags: [],
+          trackerURIs: [status.tracker_host],
+          upRate: status.upload_payload_rate,
+          upTotal: status.total_payload_upload,
+        };
+
+        this.emit('PROCESS_TORRENT', torrentProperties);
+
+        return torrentProperties;
+      });
+  }
+
   async fetchTransferSummary(): Promise<TransferSummary> {
     return this.clientRequestManager
       .coreGetSessionStatus([
