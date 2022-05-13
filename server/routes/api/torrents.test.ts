@@ -43,9 +43,14 @@ mock
   .onGet('https://www.torrents/multi.torrent')
   .reply(200, fs.readFileSync(path.join(paths.appSrc, 'fixtures/multi.torrent')));
 
+mock
+  .onGet('https://www.torrents/single with space.torrent')
+  .reply(200, fs.readFileSync(path.join(paths.appSrc, 'fixtures/single.torrent')));
+
 const torrentURLs: [string, ...string[]] = [
   'https://www.torrents/single.torrent',
   'https://www.torrents/multi.torrent',
+  'https://www.torrents/single with space.torrent',
 ];
 
 const torrentCookies = {
