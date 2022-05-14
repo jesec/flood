@@ -79,8 +79,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<string[]> {
-    const {hasLoadThrow} = await this.availableMethodCalls;
-
     await fs.promises.mkdir(destination, {recursive: true});
 
     let processedFiles: string[] = files;
@@ -108,7 +106,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     const result: string[] = [];
 
-    if (hasLoadThrow && this.clientRequestManager.isJSONCapable) {
+    if (this.clientRequestManager.isJSONCapable) {
       await this.clientRequestManager
         .methodCall('system.multicall', [
           await Promise.all(
@@ -155,8 +153,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
-    const {hasLoadThrow} = await this.availableMethodCalls;
-
     await fs.promises.mkdir(destination, {recursive: true});
 
     const {files, urls} = await fetchUrls(inputUrls, cookies);
@@ -169,7 +165,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     if (urls[0]) {
       let methodName: string;
-      if (hasLoadThrow) {
+      if (this.clientRequestManager.isJSONCapable) {
         methodName = start ? 'load.start_throw' : 'load.throw';
       } else {
         methodName = start ? 'load.start' : 'load.normal';
@@ -801,7 +797,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async fetchAvailableMethodCalls(fallback = false): Promise<{
-    hasLoadThrow: boolean;
     clientSetting: string[];
     torrentContent: string[];
     torrentList: string[];
@@ -841,7 +836,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         : (methodCalls: Array<string>) => methodCalls;
 
     return {
-      hasLoadThrow: methodList?.includes('load.throw') ?? false,
       clientSetting: getAvailableMethodCalls(getMethodCalls(clientSettingMethodCallConfigs)),
       torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
       torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
