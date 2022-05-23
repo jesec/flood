@@ -346,6 +346,7 @@
   "torrents.properties.comment": "Comment",
   "torrents.properties.date.added": "Added",
   "torrents.properties.date.created": "Created",
+  "torrents.properties.date.finished": "Completed",
   "torrents.properties.directory": "Location",
   "torrents.properties.download.speed": "Download Speed",
   "torrents.properties.download.total": "Downloaded",

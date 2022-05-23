@@ -1,5 +1,6 @@
 const TorrentListColumns = {
   dateAdded: 'torrents.properties.date.added',
+  dateFinished: 'torrents.properties.date.finished',
   downRate: 'torrents.properties.download.speed',
   downTotal: 'torrents.properties.download.total',
   eta: 'torrents.properties.eta',

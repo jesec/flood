@@ -40,6 +40,7 @@ const ICONS: Partial<Record<TorrentListColumn, JSX.Element>> = {
   hash: <Hash />,
   dateAdded: <Calendar />,
   dateCreated: <CalendarCreated />,
+  dateFinished: <Calendar />,
   isPrivate: <Lock />,
   message: <TrackerMessage />,
   percentComplete: <DownloadThick />,
@@ -116,6 +117,8 @@ const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
         return <DateCell date={torrent[column]} />;
       case 'dateCreated':
         return <DateCell date={torrent[column]} />;
+      case 'dateFinished':
+          return <DateCell date={torrent[column]} />;
       case 'downRate':
         return <Size value={torrent[column]} isSpeed />;
       case 'upRate':
