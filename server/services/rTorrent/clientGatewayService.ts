@@ -329,15 +329,10 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             : path.resolve(destination);
 
           if (sourceDirectory !== destDirectory) {
-            try {
-              if (isMultiFile[index]) {
-                await move(sourceDirectory, destDirectory, {overwrite: true});
-              } else {
-                await move(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
-              }
-            } catch (err) {
-              console.error(`Failed to move files to ${destDirectory}.`);
-              console.error(err);
+            if (isMultiFile[index]) {
+              await move(sourceDirectory, destDirectory, {overwrite: true});
+            } else {
+              await move(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
             }
           }
         }),
