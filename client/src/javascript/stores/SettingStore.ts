@@ -47,6 +47,10 @@ class SettingStore {
   }
 
   saveClientSettings(settings: Partial<ClientSettings>) {
+    if (this.clientSettings == null) {
+      return;
+    }
+
     Object.assign(this.clientSettings, settings);
   }
 }
