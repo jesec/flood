@@ -296,6 +296,7 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
               itemPadding,
               {
                 whiteSpace: 'pre-wrap',
+                wordBreak: 'break-all',
                 '.icon': {
                   transform: 'scale(0.9)',
                   marginTop: '-2px !important',
