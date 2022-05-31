@@ -1,31 +1,25 @@
 import {FC, ReactNode} from 'react';
 import {useDropzone} from 'react-dropzone';
 
-import SettingStore from '../../stores/SettingStore';
-import TorrentActions from '../../actions/TorrentActions';
+import UIStore from '@client/stores/UIStore';
+
+import type {ProcessedFiles} from '@client/components/general/form-elements/FileDropzone';
 
 const handleFileDrop = (files: Array<File>) => {
-  const filesData: Array<string> = [];
-
-  const callback = (data: string) => {
-    filesData.push(data);
-
-    if (filesData.length === files.length && filesData[0] != null) {
-      TorrentActions.addTorrentsByFiles({
-        files: filesData as [string, ...string[]],
-        destination:
-          SettingStore.floodSettings.torrentDestinations?.[''] ?? SettingStore.clientSettings?.directoryDefault ?? '',
-        isBasePath: false,
-        start: SettingStore.floodSettings.startTorrentsOnLoad,
-      });
-    }
-  };
+  const processedFiles: ProcessedFiles = [];
 
   files.forEach((file) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       if (e.target?.result != null && typeof e.target.result === 'string') {
-        callback(e.target.result.split('base64,')[1]);
+        processedFiles.push({
+          name: file.name,
+          data: e.target.result.split('base64,')[1],
+        });
+      }
+
+      if (processedFiles.length === files.length && processedFiles[0] != null) {
+        UIStore.setActiveModal({id: 'add-torrents', tab: 'by-file', files: processedFiles});
       }
     };
     reader.readAsDataURL(file);

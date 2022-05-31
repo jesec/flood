@@ -66,7 +66,9 @@ const AddTorrentsByURL: FC = () => {
         }
         placeholder={i18n._('torrents.add.tab.url.input.placeholder')}
         defaultValues={
-          (UIStore.activeModal?.id === 'add-torrents' && UIStore.activeModal?.initialURLs) || [{id: 0, value: ''}]
+          (UIStore.activeModal?.id === 'add-torrents' &&
+            UIStore.activeModal?.tab === 'by-url' &&
+            UIStore.activeModal?.urls) || [{id: 0, value: ''}]
         }
       />
       <TextboxRepeater

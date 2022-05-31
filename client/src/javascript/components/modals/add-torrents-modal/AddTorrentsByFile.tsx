@@ -35,6 +35,12 @@ const AddTorrentsByFile: FC = () => {
     <Form className="inverse" ref={formRef}>
       <FormRow>
         <FileDropzone
+          initialFiles={
+            (UIStore.activeModal?.id === 'add-torrents' &&
+              UIStore.activeModal?.tab === 'by-file' &&
+              UIStore.activeModal?.files) ||
+            []
+          }
           onFilesChanged={(files) => {
             filesRef.current = files;
           }}

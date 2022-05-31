@@ -30,12 +30,13 @@ const AddTorrentsModal: FC = () => {
     return null;
   }
 
-  let initialTabId: keyof typeof tabs = 'by-url';
-  if (!UIStore.activeModal.initialURLs?.length) {
-    initialTabId = SettingStore.floodSettings.UITorrentsAddTab ?? initialTabId;
-  }
-
-  return <Modal heading={i18n._('torrents.add.heading')} tabs={tabs} initialTabId={initialTabId} />;
+  return (
+    <Modal
+      heading={i18n._('torrents.add.heading')}
+      tabs={tabs}
+      initialTabId={UIStore.activeModal.tab ?? SettingStore.floodSettings.UITorrentsAddTab ?? 'by-url'}
+    />
+  );
 };
 
 export default AddTorrentsModal;

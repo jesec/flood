@@ -48,7 +48,8 @@ const AppWrapper: FC<AppWrapperProps> = observer(({children, className}: AppWrap
       if (searchParams.has('url')) {
         UIStore.setActiveModal({
           id: 'add-torrents',
-          initialURLs: [{id: 0, value: searchParams.get('url') as string}],
+          tab: 'by-url',
+          urls: [{id: 0, value: searchParams.get('url') as string}],
         });
       }
     }

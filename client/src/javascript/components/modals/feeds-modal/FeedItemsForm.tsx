@@ -50,7 +50,8 @@ const FeedItemsForm: FC = observer(() => {
 
         UIStore.setActiveModal({
           id: 'add-torrents',
-          initialURLs: torrentsToDownload,
+          tab: 'by-url',
+          urls: torrentsToDownload,
         });
       }}
       ref={manualAddingFormRef}
