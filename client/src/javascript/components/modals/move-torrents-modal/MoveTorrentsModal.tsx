@@ -11,19 +11,20 @@ import Modal from '../Modal';
 import ModalActions from '../ModalActions';
 
 const getSuggestedPath = (sources: Array<string>): string | undefined => {
-  const commonPath = sources[0];
+  let commonPath = '';
 
-  if (
-    !sources.some((path) => {
-      if (!path.includes(commonPath)) {
-        // Bail out if at least one selected torrent doesn't match.
-        return true;
+  for (let i = 0; i < sources[0].length; i += 1) {
+    for (let j = 1; j < sources.length; j += 1) {
+      if (sources[0][i] !== sources[j][i]) {
+        commonPath = sources[0].slice(0, i);
       }
-      return false;
-    })
-  ) {
-    // If every selected torrent shares a common path, suggest it.
-    return commonPath;
+    }
+  }
+
+  for (let i = commonPath.length - 1; i >= 0; i -= 1) {
+    if (commonPath[i] === '/') {
+      return commonPath.slice(0, i + 1);
+    }
   }
 
   // Fallback to default download location.
