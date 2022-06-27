@@ -3,6 +3,7 @@ export {default as Add} from './Add';
 export {default as AddMini} from './AddMini';
 export {default as All} from './All';
 export {default as Arrow} from './Arrow';
+export {default as CalendarFinished} from './CalendarFinished';
 export {default as CalendarCreated} from './CalendarCreated';
 export {default as Calendar} from './Calendar';
 export {default as Checkmark} from './Checkmark';
