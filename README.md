@@ -111,7 +111,7 @@ Don't forget to pay attention to `flood`'s arguments like `--port` and `--allowe
 
 Alternatively, you can pass in environment variables instead (e.g. `-e FLOOD_OPTION_port=3000`).
 
-Checkout [Run Flood (and torrent clients) in containers](https://github.com/jesec/flood/discussions/120) discussion.
+Check out [Run Flood (and torrent clients) in containers](https://github.com/jesec/flood/discussions/120) discussion.
 
 Filesystem parts in [Troubleshooting](https://github.com/jesec/flood#troubleshooting) are especially important for containers.
 
@@ -148,7 +148,7 @@ Access the UI in your browser. With default settings, go to `http://localhost:30
 1. Run `npm install`.
 1. Run `npm run start:development:server` and `npm run start:development:client` in separate terminal instances.
    - `npm run start:development:server` uses [ts-node-dev](https://www.npmjs.com/package/ts-node-dev) to watch for changes to the server-side source. Or open the folder with VS code and then `Run -> Start Debugging`. You may use a [Javascript IDE](https://code.visualstudio.com/) to debug server codes.
-   - `npm run start:development:client` watches for changes in the client-side source. Access the UI in your browser. Defaults to `localhost:4200`. You may use browser's [DevTools](https://developers.google.com/web/tools/chrome-devtools) to debug client codes.
+   - `npm run start:development:client` watches for changes in the client-side source. Access the UI in your browser. Defaults to `localhost:4200`. You may use your browser's [DevTools](https://developers.google.com/web/tools/chrome-devtools) to debug client codes.
 
 `--help --show-hidden` shows advanced arguments.
 
