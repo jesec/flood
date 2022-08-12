@@ -78,7 +78,7 @@ class TorrentService extends BaseService<TorrentServiceEvents> {
   };
 
   getTorrent(hash: TorrentProperties['hash']) {
-    return this.torrentListSummary.torrents[hash];
+    return this.torrentListSummary.torrents[hash.toUpperCase()];
   }
 
   getTorrentList() {
