@@ -239,6 +239,7 @@
   "torrents.details.files.loading": "تحميل تفاصيل الملف...",
   "torrents.details.general.comment": "تعليق",
   "torrents.details.general.connected": "{connected} متصل بـ {total}",
+  "torrents.details.general.date.active.now": "الآن",
   "torrents.details.general.date.added": "أضيف",
   "torrents.details.general.date.finished": "منتهى",
   "torrents.details.general.downloaded": "تم التحميل",

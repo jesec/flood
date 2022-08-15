@@ -346,6 +346,7 @@
   "torrents.properties.comment": "备注",
   "torrents.properties.date.added": "添加时间",
   "torrents.properties.date.created": "创建时间",
+  "torrents.properties.date.finished": "完成时间",
   "torrents.properties.directory": "位置",
   "torrents.properties.download.speed": "下载速度",
   "torrents.properties.download.total": "已下载",
