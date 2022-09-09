@@ -1,3 +1,5 @@
+import {URLSearchParams} from 'url';
+
 import axios from 'axios';
 import FormData from 'form-data';
 
@@ -59,12 +61,13 @@ class ClientRequestManager {
     const {url, username, password} = connectionSettings;
 
     return axios
-      .get(`${url}/api/v2/auth/login`, {
-        params: {
+      .post(
+        `${url}/api/v2/auth/login`,
+        new URLSearchParams({
           username,
           password,
-        },
-      })
+        }),
+      )
       .then((res) => {
         const cookies = res.headers['set-cookie'];
 
