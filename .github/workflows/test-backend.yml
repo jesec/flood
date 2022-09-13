@@ -30,9 +30,8 @@ jobs:
       - run: sudo apt-get install -y qbittorrent-nox transmission-daemon
 
       - run: |
-          wget https://nightly.link/jesec/rtorrent/workflows/publish-rolling/master/rtorrent-deb-amd64.zip
-          unzip rtorrent-deb-amd64.zip
-          sudo dpkg -i rtorrent-deb.deb
+          wget https://github.com/jesec/rtorrent/releases/latest/download/rtorrent-linux-amd64.deb
+          sudo dpkg -i rtorrent-linux-amd64.deb
 
       - run: npm ci
       - run: npm test || npm test || npm test
