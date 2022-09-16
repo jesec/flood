@@ -51,8 +51,15 @@
       "name": "Torrent",
       "action": "/?action=add-files",
       "accept": {
-        "application/x-bittorrent": [".torrent"]
+        "application/x-bittorrent": ".torrent"
       },
+      "icons": [
+        {
+          "src": "icon_144x144.png",
+          "sizes": "144x144",
+          "type": "image/png"
+        }
+      ],
       "launch_type": "single-client"
     }
   ],
