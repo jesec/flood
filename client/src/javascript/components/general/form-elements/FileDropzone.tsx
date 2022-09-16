@@ -5,7 +5,8 @@ import {Trans} from '@lingui/react';
 import {Close, File, Files} from '@client/ui/icons';
 import {FormRowItem} from '@client/ui';
 
-export type ProcessedFiles = Array<{name: string; data: string}>;
+import type { ProcessedFiles } from '@client/util/fileProcessor';
+import { processFiles } from '@client/util/fileProcessor'
 
 interface FileDropzoneProps {
   initialFiles?: ProcessedFiles;
@@ -55,23 +56,11 @@ const FileDropzone: FC<FileDropzoneProps> = ({initialFiles, onFilesChanged}: Fil
         </div>
       ) : null}
       <Dropzone
-        onDrop={(addedFiles: Array<File>) => {
-          const processedFiles: ProcessedFiles = [];
-          addedFiles.forEach((file) => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-              if (e.target?.result != null && typeof e.target.result === 'string') {
-                processedFiles.push({
-                  name: file.name,
-                  data: e.target.result.split('base64,')[1],
-                });
-              }
-              if (processedFiles.length === addedFiles.length) {
-                setFiles(files.concat(processedFiles));
-              }
-            };
-            reader.readAsDataURL(file);
-          });
+        onDrop={async (addedFiles: Array<File>) => {
+          const processedFiles = await processFiles(addedFiles);
+          if (processedFiles.length) {
+            setFiles(files.concat(processedFiles));
+          }
         }}
       >
         {({getRootProps, getInputProps, isDragActive}) => (

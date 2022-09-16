@@ -40,7 +40,26 @@
   "name": "Flood",
   "short_name": "Flood",
   "display": "standalone",
-  "start_url": "./index.html",
+  "protocol_handlers": [
+    {
+      "protocol": "magnet",
+      "url": "/?action=add-urls&url=%s"
+    }
+  ],
+  "file_handlers": [
+    {
+      "name": "Torrent",
+      "action": "/?action=add-files",
+      "accept": {
+        "application/x-bittorrent": [".torrent"]
+      },
+      "launch_type": "single-client"
+    }
+  ],
+  "launch_handler": {
+    "route_to": "existing-client-navigate"
+  },
+  "start_url": "/",
   "description": "Web UI for torrent clients",
   "background_color": "#ffffff",
   "theme_color": "#349cf4"
