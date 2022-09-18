@@ -437,6 +437,10 @@ $more-info--border: floating-action.$textbox-repeater--button--border;
           width: 70px;
         }
 
+        &--directory {
+          width: auto;
+        }
+
         &--tags {
           &:last-child {
             margin-left: auto;
