@@ -18,7 +18,7 @@ export const fetchUrls = async (
 
         const file = await axios({
           method: 'GET',
-          url,
+          url: encodeURI(url),
           responseType: 'arraybuffer',
           headers: cookies?.[domain]
             ? {
