@@ -6,27 +6,45 @@ import {CheckmarkThick, CountryFlag, Lock, Spinner} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';
 import TorrentActions from '@client/actions/TorrentActions';
 import UIStore from '@client/stores/UIStore';
+import SettingStore from "@client/stores/SettingStore";
+import SettingActions from "@client/actions/SettingActions";
 
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';
+import sortPeers from "@client/util/sortPeers";
 
 const TorrentPeers: FC = () => {
   const [peers, setPeers] = useState<Array<TorrentPeer>>([]);
   const [pollingDelay, setPollingDelay] = useState<number | null>(null);
 
   const fetchPeers = () => {
+
+    const {sortPeers: sortBy} = SettingStore.floodSettings;
+
     setPollingDelay(null);
     if (UIStore.activeModal?.id === 'torrent-details') {
       TorrentActions.fetchTorrentPeers(UIStore.activeModal?.hash).then((data) => {
         if (data != null) {
-          setPeers(data);
+          const sortedData = sortPeers(data, sortBy);
+          setPeers(sortedData);
         }
       });
     }
     setPollingDelay(ConfigStore.pollInterval);
   };
+
+  const sortPeerByProperty = (property: string) => {
+    const {sortPeers: sortBy} = SettingStore.floodSettings;
+    const nextDirection: 'desc' | 'asc' = sortBy.direction === 'asc' ? 'desc': 'asc';
+    const newSortBy = {
+      direction: nextDirection,
+      property
+    };
+    SettingActions.saveSetting('sortPeers', newSortBy);
+    fetchPeers();
+  }
 
   useEffect(() => fetchPeers(), []);
   useInterval(() => fetchPeers(), pollingDelay);
@@ -46,11 +64,17 @@ const TorrentPeers: FC = () => {
       >
         <thead className="torrent-details__table__heading">
           <tr>
-            <th className="torrent-details__table__heading--primary">
+            <th className="torrent-details__table__heading--primary"
+                onClick={() => {
+                  sortPeerByProperty('address');
+                }}>
               <Trans id="torrents.details.peers" />
               <Badge>{peers.length}</Badge>
             </th>
-            <th className="torrent-details__table__heading--secondary">DL</th>
+            <th className="torrent-details__table__heading--secondary"
+                onClick={() => {
+                  sortPeerByProperty('downloadRate');
+                }}>DL</th>
             <th className="torrent-details__table__heading--secondary">UL</th>
             <th className="torrent-details__table__heading--secondary">%</th>
             <th className="torrent-details__table__heading--secondary">Client</th>

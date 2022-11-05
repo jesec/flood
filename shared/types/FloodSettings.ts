@@ -8,6 +8,10 @@ export interface FloodSettings {
     direction: 'desc' | 'asc';
     property: TorrentListColumn;
   };
+  sortPeers: {
+    direction: 'desc' | 'asc';
+    property: string;
+  };
   torrentListColumns: Array<{
     id: TorrentListColumn;
     visible: boolean;
