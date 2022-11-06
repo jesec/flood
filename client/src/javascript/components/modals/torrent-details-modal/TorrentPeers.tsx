@@ -10,6 +10,7 @@ import SettingStore from "@client/stores/SettingStore";
 import SettingActions from "@client/actions/SettingActions";
 
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
+import type {TorrentPeerListColumn} from "@shared/types/TorrentPeer";
 
 import Badge from '../../general/Badge';
 import Size from '../../general/Size';
@@ -35,7 +36,7 @@ const TorrentPeers: FC = () => {
     setPollingDelay(ConfigStore.pollInterval);
   };
 
-  const sortPeerByProperty = (event, property: string) => {
+  const sortPeerByProperty = (event, property: TorrentPeerListColumn) => {
     const {sortPeers: sortBy} = SettingStore.floodSettings;
     const nextDirection: 'desc' | 'asc' = sortBy.direction === 'asc' ? 'desc': 'asc';
     const newSortBy = {

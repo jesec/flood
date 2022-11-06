@@ -1,6 +1,7 @@
 import type {Language} from '../../client/src/javascript/constants/Languages';
 import type {TorrentContextMenuAction} from '../../client/src/javascript/constants/TorrentContextMenuActions';
 import type {TorrentListColumn} from '../../client/src/javascript/constants/TorrentListColumns';
+import type {TorrentPeerListColumn} from "@shared/types/TorrentPeer";
 
 export interface FloodSettings {
   language: Language;
@@ -10,7 +11,7 @@ export interface FloodSettings {
   };
   sortPeers: {
     direction: 'desc' | 'asc';
-    property: string;
+    property: TorrentPeerListColumn;
   };
   torrentListColumns: Array<{
     id: TorrentListColumn;

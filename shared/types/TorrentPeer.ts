@@ -8,3 +8,4 @@ export interface TorrentPeer {
   isEncrypted: boolean;
   isIncoming: boolean;
 }
+export type TorrentPeerListColumn = keyof TorrentPeer;
