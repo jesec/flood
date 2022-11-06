@@ -17,6 +17,22 @@ function sortPeers(
     const sortRules: Array<SortRule> = [];
 
     switch (property) {
+
+        // we sort numerically by the first IP block
+        case 'address':
+            const sortedData = peers.sort((p1: TorrentPeer, p2: TorrentPeer) => {
+                return p1.address.split('.')[0] - p2.address.split('.')[0];
+            })
+            return sortBy.direction === 'asc' ? sortedData : sortedData.reverse();
+
+        // we sort clients as case-insensitive
+        case 'clientVersion':
+            sortRules.push({
+                [sortBy.direction]: (p: TorrentPeer) => p.clientVersion.toLowerCase(),
+            } as SortRule);
+            break;
+
+        // default alphabetically
         default:
             sortRules.push({[sortBy.direction]: property} as SortRule);
             break;

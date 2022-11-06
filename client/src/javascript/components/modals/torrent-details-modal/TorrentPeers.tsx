@@ -35,7 +35,7 @@ const TorrentPeers: FC = () => {
     setPollingDelay(ConfigStore.pollInterval);
   };
 
-  const sortPeerByProperty = (property: string) => {
+  const sortPeerByProperty = (event, property: string) => {
     const {sortPeers: sortBy} = SettingStore.floodSettings;
     const nextDirection: 'desc' | 'asc' = sortBy.direction === 'asc' ? 'desc': 'asc';
     const newSortBy = {
@@ -43,6 +43,17 @@ const TorrentPeers: FC = () => {
       property
     };
     SettingActions.saveSetting('sortPeers', newSortBy);
+
+    const clickedColumn = event.target
+
+    // clean classes linked to the sorting on every 'th'
+    clickedColumn.parentElement.querySelectorAll('th').forEach(th => {
+        th.classList.remove('table__heading', 'table__heading--is-sorted', 'table__heading--direction--asc', 'table__heading--direction--desc');
+    });
+
+    // then show the sorting arrow on the selected column
+    clickedColumn.classList.add('table__heading', 'table__heading--is-sorted', `table__heading--direction--${nextDirection}`);
+
     fetchPeers();
   }
 
@@ -62,24 +73,49 @@ const TorrentPeers: FC = () => {
           },
         }}
       >
-        <thead className="torrent-details__table__heading">
-          <tr>
+        <thead className="table__row torrent-details__table__heading">
+          <tr css={{
+              cursor: 'pointer',
+          }}
+          >
             <th className="torrent-details__table__heading--primary"
-                onClick={() => {
-                  sortPeerByProperty('address');
+                onClick={(event) => {
+                  sortPeerByProperty(event, 'address');
                 }}>
               <Trans id="torrents.details.peers" />
               <Badge>{peers.length}</Badge>
             </th>
-            <th className="torrent-details__table__heading--secondary"
-                onClick={() => {
-                  sortPeerByProperty('downloadRate');
-                }}>DL</th>
-            <th className="torrent-details__table__heading--secondary">UL</th>
-            <th className="torrent-details__table__heading--secondary">%</th>
-            <th className="torrent-details__table__heading--secondary">Client</th>
-            <th className="torrent-details__table__heading--secondary">Enc</th>
-            <th className="torrent-details__table__heading--secondary">In</th>
+            <th className="torrent-details__table__heading--primary"
+                onClick={(event) => {
+                  sortPeerByProperty(event, 'downloadRate');
+                }}
+            >DL
+            </th>
+            <th className="torrent-details__table__heading--primary"
+                onClick={(event) => {
+                  sortPeerByProperty(event, 'uploadRate');
+                }}
+            >UL</th>
+            <th className="torrent-details__table__heading--primary"
+                onClick={(event) => {
+                  sortPeerByProperty(event, 'completedPercent');
+                }}
+            >%</th>
+            <th className="torrent-details__table__heading--primary"
+                onClick={(event) => {
+                  sortPeerByProperty(event, 'clientVersion');
+                }}
+            >Client</th>
+            <th className="torrent-details__table__heading--primary"
+                onClick={(event) => {
+                  sortPeerByProperty(event, 'isEncrypted');
+                }}
+            >Enc</th>
+            <th className="torrent-details__table__heading--primary"
+                onClick={(event) => {
+                  sortPeerByProperty(event, 'isIncoming');
+                }}
+            >In</th>
           </tr>
         </thead>
         <tbody>
