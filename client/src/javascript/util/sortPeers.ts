@@ -18,11 +18,25 @@ function sortPeers(
 
     switch (property) {
 
-        // we sort numerically by the first IP block
+        // we sort numerically for IPv4 and alphabetically for IPv6 using the first IP block
         case 'address':
-            const sortedData = peers.sort((p1: TorrentPeer, p2: TorrentPeer) => {
+
+            // prepare arrays
+            const ipv4 = peers.filter((value) => value.address.includes('.'));
+            const ipv6 = peers.filter((value) => value.address.includes(':'));
+
+            // sort v4
+            const sortedIpv4 = ipv4.sort((p1: TorrentPeer, p2: TorrentPeer) => {
                 return p1.address.split('.')[0] - p2.address.split('.')[0];
             })
+
+            // sort v6
+            const sortedIpv6 = ipv6.sort((p1: TorrentPeer, p2: TorrentPeer) => {
+                return (p1.address.split(':')[0] < p2.address.split(':')[0]) ? -1 : 1;
+            })
+
+            // then return sorted data
+            const sortedData = sortedIpv4.concat(sortedIpv6);
             return sortBy.direction === 'asc' ? sortedData : sortedData.reverse();
 
         // we sort clients as case-insensitive
