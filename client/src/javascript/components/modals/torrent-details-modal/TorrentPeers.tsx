@@ -80,42 +80,28 @@ const TorrentPeers: FC = () => {
           }}
           >
             <th className="torrent-details__table__heading--primary"
-                onClick={(event) => {
-                  sortPeerByProperty(event, 'address');
-                }}>
+                onClick={(event) => sortPeerByProperty(event, 'address')}
+            >
               <Trans id="torrents.details.peers" />
               <Badge>{peers.length}</Badge>
             </th>
             <th className="torrent-details__table__heading--primary"
-                onClick={(event) => {
-                  sortPeerByProperty(event, 'downloadRate');
-                }}
-            >DL
-            </th>
+                onClick={(event) => sortPeerByProperty(event, 'downloadRate')}
+            >DL</th>
             <th className="torrent-details__table__heading--primary"
-                onClick={(event) => {
-                  sortPeerByProperty(event, 'uploadRate');
-                }}
+                onClick={(event) => sortPeerByProperty(event, 'uploadRate')}
             >UL</th>
             <th className="torrent-details__table__heading--primary"
-                onClick={(event) => {
-                  sortPeerByProperty(event, 'completedPercent');
-                }}
+                onClick={(event) => sortPeerByProperty(event, 'completedPercent')}
             >%</th>
             <th className="torrent-details__table__heading--primary"
-                onClick={(event) => {
-                  sortPeerByProperty(event, 'clientVersion');
-                }}
+                onClick={(event) => sortPeerByProperty(event, 'clientVersion')}
             >Client</th>
             <th className="torrent-details__table__heading--primary"
-                onClick={(event) => {
-                  sortPeerByProperty(event, 'isEncrypted');
-                }}
+                onClick={(event) => sortPeerByProperty(event, 'isEncrypted')}
             >Enc</th>
             <th className="torrent-details__table__heading--primary"
-                onClick={(event) => {
-                  sortPeerByProperty(event, 'isIncoming');
-                }}
+                onClick={(event) => sortPeerByProperty(event, 'isIncoming')}
             >In</th>
           </tr>
         </thead>
