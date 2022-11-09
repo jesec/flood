@@ -54,6 +54,7 @@ const TorrentPeers: FC = () => {
 
     // then show the sorting arrow on the selected column
     clickedColumn.classList.add('table__heading', 'table__heading--is-sorted', `table__heading--direction--${nextDirection}`);
+    clickedColumn.style.border = 'none'; // hide border from the 'table__heading' class
 
     fetchPeers();
   }
