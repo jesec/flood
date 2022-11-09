@@ -54,7 +54,6 @@ const TorrentPeers: FC = () => {
 
     // then show the sorting arrow on the selected column
     clickedColumn.classList.add('table__heading', 'table__heading--is-sorted', `table__heading--direction--${nextDirection}`);
-    clickedColumn.style.border = 'none'; // hide border from the 'table__heading' class
 
     fetchPeers();
   }
@@ -80,28 +79,28 @@ const TorrentPeers: FC = () => {
               cursor: 'pointer',
           }}
           >
-            <th className="torrent-details__table__heading--primary"
+            <th className="torrent-details__table__heading--primary table__heading--no-border"
                 onClick={(event) => sortPeerByProperty(event, 'address')}
             >
               <Trans id="torrents.details.peers" />
               <Badge>{peers.length}</Badge>
             </th>
-            <th className="torrent-details__table__heading--primary"
+            <th className="torrent-details__table__heading--primary table__heading--no-border"
                 onClick={(event) => sortPeerByProperty(event, 'downloadRate')}
             >DL</th>
-            <th className="torrent-details__table__heading--primary"
+            <th className="torrent-details__table__heading--primary table__heading--no-border"
                 onClick={(event) => sortPeerByProperty(event, 'uploadRate')}
             >UL</th>
-            <th className="torrent-details__table__heading--primary"
+            <th className="torrent-details__table__heading--primary table__heading--no-border"
                 onClick={(event) => sortPeerByProperty(event, 'completedPercent')}
             >%</th>
-            <th className="torrent-details__table__heading--primary"
+            <th className="torrent-details__table__heading--primary table__heading--no-border"
                 onClick={(event) => sortPeerByProperty(event, 'clientVersion')}
             >Client</th>
-            <th className="torrent-details__table__heading--primary"
+            <th className="torrent-details__table__heading--primary table__heading--no-border"
                 onClick={(event) => sortPeerByProperty(event, 'isEncrypted')}
             >Enc</th>
-            <th className="torrent-details__table__heading--primary"
+            <th className="torrent-details__table__heading--primary table__heading--no-border"
                 onClick={(event) => sortPeerByProperty(event, 'isIncoming')}
             >In</th>
           </tr>
