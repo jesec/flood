@@ -37,6 +37,10 @@ const TorrentPeers: FC = () => {
   };
 
   const sortPeerByProperty = (event, property: TorrentPeerListColumn) => {
+
+    // don't do sorting when clicking on children elements
+    if (event.target !== event.currentTarget) return;
+
     const {sortPeers: sortBy} = SettingStore.floodSettings;
     const nextDirection: 'desc' | 'asc' = sortBy.direction === 'asc' ? 'desc': 'asc';
     const newSortBy = {
