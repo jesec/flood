@@ -64,7 +64,7 @@
     }
   ],
   "launch_handler": {
-    "route_to": "existing-client-navigate"
+    "client_mode": "navigate-existing"
   },
   "start_url": "/",
   "description": "Web UI for torrent clients",
