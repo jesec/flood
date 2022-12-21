@@ -250,7 +250,7 @@
   "torrents.details.trackers.type": "Typ",
   "torrents.list.cannot.connect": "Kan inte ansluta till klienten.",
   "torrents.list.clear.filters": "Rensa filter",
-  "torrents.list.context.check.hash": "Kontrollera hasch",
+  "torrents.list.context.check.hash": "Kontrollera hash",
   "torrents.list.context.details": "Torrent Detaljer",
   "torrents.list.context.move": "Ange torrentplats",
   "torrents.list.context.pause": "Pausa",
