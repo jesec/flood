@@ -905,7 +905,7 @@ router.get<{hash: string}>(
 
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        torrentContentPaths,
+        `"${torrentContentPaths}"`,
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
         (error, stdout) => {
           if (error) {
