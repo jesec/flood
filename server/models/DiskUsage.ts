@@ -61,7 +61,7 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
       .then((disks) => {
         // Mountpoints with a very long path are unlikely to be useful.
         return disks.filter(
-          (disk) => typeof disk.target === 'string' && ((disk.target.length < 30) || isAllowedPath(disk.target)),
+          (disk) => typeof disk.target === 'string' && (disk.target.length < 30 || isAllowedPath(disk.target)),
         );
       })
       .then((disks) => {
