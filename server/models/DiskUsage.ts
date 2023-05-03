@@ -6,7 +6,7 @@ import type {Disks} from '@shared/types/DiskUsage';
 import {isPlatformSupported, diskUsage} from '../util/diskUsageUtil';
 
 import type {SupportedPlatform} from '../util/diskUsageUtil';
-import {isAllowedPath} from "../util/fileUtil";
+import {isAllowedPath} from '../util/fileUtil';
 
 export interface DiskUsageSummary {
   id: number;
@@ -60,7 +60,9 @@ class DiskUsage extends (EventEmitter as new () => TypedEmitter<DiskUsageEvents>
     return diskUsage[process.platform as SupportedPlatform](INTERVAL_UPDATE / 2)
       .then((disks) => {
         // Mountpoints with a very long path are unlikely to be useful.
-        return disks.filter((disk) => typeof disk.target === 'string' && (disk.target.length < 30) || isAllowedPath(disk.target));
+        return disks.filter(
+          (disk) => (typeof disk.target === 'string' && disk.target.length < 30) || isAllowedPath(disk.target),
+        );
       })
       .then((disks) => {
         if (disks.length !== this.disks.length || disks.some((d, i) => d.used !== this.disks[i].used)) {
