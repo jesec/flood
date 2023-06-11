@@ -199,6 +199,7 @@
     "tar-fs": "^2.1.1",
     "terser-webpack-plugin": "^5.3.9",
     "tldts": "^5.7.112",
+    "ts-jest": "^28.0.8",
     "ts-loader": "^9.4.3",
     "tsconfig-paths": "^4.2.0",
     "tsx": "^3.12.7",
