@@ -4,6 +4,91 @@
 @use '../tools/themes';
 @use '../tools/variables';
 
+.os-theme-thin {
+  &.os-scrollbar {
+    .os-scrollbar-track {
+      background: transparent;
+    }
+
+    .os-scrollbar-track:before {
+      content: '';
+      display: block;
+      position: absolute;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .os-scrollbar-handle:before {
+      content: '';
+      display: block;
+      position: absolute;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 10px;
+    }
+
+    .os-scrollbar-handle:hover:before,
+    .os-scrollbar-handle.active:before {
+      background: #fff;
+    }
+  }
+
+  &.os-scrollbar-horizontal {
+    right: 14px;
+    height: 14px;
+    padding: 0px 6px;
+
+    &.os-scrollbar-rtl {
+      left: 14px;
+      right: 0;
+    }
+
+    .os-scrollbar-track:before,
+    .os-scrollbar-handle:before {
+      left: 0;
+      right: 0;
+      height: 2px;
+      top: 50%;
+      margin-top: -1px;
+    }
+
+    .os-scrollbar-handle:hover:before,
+    .os-scrollbar-handle.active:before {
+      height: 4px;
+      margin-top: -2px;
+    }
+
+    .os-scrollbar-handle {
+      height: 100%;
+      min-width: 30px;
+    }
+  }
+
+  &.os-scrollbar-vertical {
+    bottom: 14px;
+    width: 14px;
+    padding: 6px 0px;
+
+    .os-scrollbar-track:before,
+    .os-scrollbar-handle:before {
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      left: 50%;
+      margin-left: -1px;
+    }
+
+    .os-scrollbar-handle:hover:before,
+    .os-scrollbar-handle.active:before {
+      width: 4px;
+      margin-left: -2px;
+    }
+
+    .os-scrollbar-handle {
+      width: 100%;
+      min-height: 30px;
+    }
+  }
+}
+
 .application {
   &__sidebar {
     @include themes.theme('background', 'sidebar--background');
@@ -13,16 +98,9 @@
     min-width: 240px;
     max-width: 250px;
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: overlay;
     position: relative;
     z-index: 2;
     transition: transform 0.2s;
-
-    .os-content {
-      display: flex;
-      flex-direction: column;
-    }
 
     @media (max-width: 720px) {
       transform: translateX(-120px);
