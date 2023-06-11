@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [16]
+        node: [20]
 
     steps:
       - uses: actions/checkout@v3
@@ -120,7 +120,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [16]
+        node: [20]
 
     steps:
       - uses: actions/checkout@v3
@@ -177,7 +177,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [16]
+        node: [20]
 
     steps:
       - name: Use Node.js ${{ matrix.node }}
