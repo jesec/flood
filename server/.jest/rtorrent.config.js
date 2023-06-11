@@ -11,9 +11,12 @@ module.exports = {
   testEnvironment: 'node',
   testPathIgnorePatterns: ['auth.test.ts'],
   setupFilesAfterEnv: ['<rootDir>/.jest/rtorrent.setup.js'],
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-    },
+  transform: {
+    '^.+\\.(t|j)sx?$': [
+      'esbuild-jest',
+      {
+        format: 'cjs',
+      },
+    ],
   },
 };

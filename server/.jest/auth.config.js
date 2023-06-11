@@ -11,9 +11,12 @@ module.exports = {
   testEnvironment: 'node',
   testMatch: ['<rootDir>/routes/api/auth.test.ts'],
   setupFilesAfterEnv: ['<rootDir>/.jest/auth.setup.js'],
-  globals: {
-    'ts-jest': {
-      isolatedModules: true,
-    },
+  transform: {
+    '^.+\\.(t|j)sx?$': [
+      'esbuild-jest',
+      {
+        format: 'cjs',
+      },
+    ],
   },
 };
