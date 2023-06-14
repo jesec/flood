@@ -77,6 +77,7 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
   deleteTorrentData: true,
   startTorrentsOnLoad: true,
   UIPageTitleSpeedEnabled: true,
+  UITagSelectorMode: 'multi',
 };
 
 export default defaultFloodSettings;

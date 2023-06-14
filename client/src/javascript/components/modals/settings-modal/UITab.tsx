@@ -23,7 +23,7 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
   const [torrentListViewSize, setTorrentListViewSize] = useState(SettingStore.floodSettings.torrentListViewSize);
   const [selectedLanguage, setSelectedLanguage] = useState(SettingStore.floodSettings.language);
   const [UITagSelectorMode, setUITagSelectorMode] = useState(SettingStore.floodSettings.UITagSelectorMode);
-
+  const tagModeChangeDisabled = SettingStore.clientSettings?.tagSupport !== 'multi';
   return (
     <Form
       onChange={({event, formData}) => {
@@ -63,11 +63,32 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
         <Trans id="settings.ui.tag.selector.mode" />
       </ModalFormSectionHeader>
       <FormRow>
-        <Radio defaultChecked={UITagSelectorMode === 'single'} groupID="ui-tag-selector-mode" id="single" width="auto">
+        <Radio 
+          disabled={tagModeChangeDisabled} 
+          defaultChecked={UITagSelectorMode === 'single'} 
+          groupID="ui-tag-selector-mode" 
+          id="single" 
+          width="auto"
+        >
           <Trans id="settings.ui.tag.selector.mode.single" />
         </Radio>
-        <Radio defaultChecked={UITagSelectorMode === 'multi'} groupID="ui-tag-selector-mode" id="multi" width="auto">
+        <Radio 
+          disabled={tagModeChangeDisabled}
+          defaultChecked={UITagSelectorMode === 'multi'}
+          groupID="ui-tag-selector-mode"
+          id="multi"
+          width="auto"
+        >
           <Trans id="settings.ui.tag.selector.mode.multi" />
+        </Radio>
+        <Radio
+          defaultChecked={UITagSelectorMode === 'singleStrict'}
+          groupID="ui-tag-selector-mode"
+          id="singleStrict"
+          width="auto"
+        >
+          {/* <Trans id="settings.ui.tag.selector.mode.multi" /> */}
+          single strict
         </Radio>
       </FormRow>
       <ModalFormSectionHeader>

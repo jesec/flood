@@ -40,6 +40,8 @@ import {DelugeCoreTorrentFilePriority} from './types/DelugeCoreMethods';
 
 class DelugeClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as DelugeConnectionSettings);
+  
+  private availableTags = this.clientRequestManager.labelGetLabels();
 
   async addTorrentsByFile({
     files,
@@ -226,8 +228,29 @@ class DelugeClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  async setTorrentsTags({}: SetTorrentsTagsOptions): Promise<void> {
-    return;
+  async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
+    const available = await this.availableTags;
+    if (available.indexOf(tags[0]) == -1) {
+      console.log("adding tag" + tags[0])
+      return this.clientRequestManager
+        .labelAdd(tags[0])
+        .then(this.processClientRequestSuccess, this.processClientRequestError)
+        .then(() => {
+          this.availableTags = Promise.resolve([tags[0], ...available]);
+          return Promise.all(hashes.map((hash) => 
+            this.clientRequestManager
+              .labelAddTorrent(hash, tags[0])
+              .then(this.processClientRequestSuccess, this.processClientRequestError)))
+            .then();
+        })
+    }
+    else {
+      return Promise.all(hashes.map((hash) =>  
+        this.clientRequestManager
+          .labelAddTorrent(hash, tags[0])
+          .then(this.processClientRequestSuccess, this.processClientRequestError)))
+        .then();
+    }
   }
 
   async setTorrentsTrackers({hashes, trackers}: SetTorrentsTrackersOptions): Promise<void> {
@@ -289,6 +312,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
         'download_payload_rate',
         'eta',
         'finished_time',
+        'label',
         'message',
         'name',
         'num_peers',
@@ -306,6 +330,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
         'total_peers',
         'total_size',
         'total_seeds',
+        'total_uploaded',
         'tracker_host',
         'upload_payload_rate',
       ])
@@ -332,7 +357,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
                   status.finished_time > 0 ? Math.ceil((dateNowSeconds - status.finished_time) / 10) * 10 : 0,
                 directory: status.download_location,
                 downRate: status.download_payload_rate,
-                downTotal: status.total_payload_download,
+                downTotal: status.total_done,
                 eta: status.eta === 0 ? -1 : status.eta,
                 hash: hash.toUpperCase(),
                 isPrivate: status.private,
@@ -349,10 +374,10 @@ class DelugeClientGatewayService extends ClientGatewayService {
                 seedsTotal: status.total_seeds < 0 ? 0 : status.total_seeds,
                 sizeBytes: status.total_size,
                 status: getTorrentStatusFromStatuses(status),
-                tags: [],
+                tags: status.label !== undefined && status.label !== '' ? [status.label] : [],
                 trackerURIs: [status.tracker_host],
                 upRate: status.upload_payload_rate,
-                upTotal: status.total_payload_upload,
+                upTotal: status.total_uploaded,
               };
 
               this.emit('PROCESS_TORRENT', torrentProperties);
@@ -433,6 +458,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
         piecesHashOnCompletion: false,
         piecesMemoryMax: -1,
         protocolPex: response.utpex,
+        tagSupport: 'single', //TODO: check for tag support
         throttleGlobalDownSpeed: response.max_download_speed,
         throttleGlobalUpSpeed: response.max_upload_speed,
         throttleMaxPeersNormal: -1,

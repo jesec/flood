@@ -178,6 +178,22 @@
         }
       }
     }
+
+    &:disabled {
+      & ~ .toggle-input__label {
+        color: colors.$grey--soft
+      }
+      & ~ .toggle-input__indicator {
+        background-color: colors.$grey--soft;
+        box-shadow: none;
+        border-color: colors.$darkest-grey--hard;
+        .inverse & {
+          background-color: colors.$grey--soft;
+          box-shadow: none;
+          border-color: colors.$darkest-grey--hard;
+        }
+      }
+    }
   }
 
   &__indicator {

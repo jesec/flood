@@ -34,6 +34,10 @@ class SettingStore {
 
   handleClientSettingsFetchSuccess(settings: ClientSettings) {
     this.fetchStatus.clientSettingsFetched = true;
+    console.log(settings.tagSupport)
+    if (settings.tagSupport === 'single') {
+      this.floodSettings.UITagSelectorMode = 'singleStrict';
+    }
     this.clientSettings = settings;
   }
 

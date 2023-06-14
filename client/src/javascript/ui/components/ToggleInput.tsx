@@ -14,6 +14,7 @@ export interface ToggleInputProps {
   value?: InputHTMLAttributes<HTMLInputElement>['value'];
   defaultChecked?: InputHTMLAttributes<HTMLInputElement>['defaultChecked'];
   checked?: InputHTMLAttributes<HTMLInputElement>['checked'];
+  disabled?: InputHTMLAttributes<HTMLInputElement>['disabled'];
   shrink?: FormRowItemProps['shrink'];
   grow?: FormRowItemProps['grow'];
   width?: FormRowItemProps['width'];
@@ -31,6 +32,7 @@ const ToggleInput: FC<ToggleInputProps> = ({
   value,
   defaultChecked,
   checked,
+  disabled,
   shrink,
   grow,
   width,
@@ -53,6 +55,7 @@ const ToggleInput: FC<ToggleInputProps> = ({
         <input
           defaultChecked={defaultChecked}
           checked={checked}
+          disabled={disabled}
           className="toggle-input__element"
           name={type === 'radio' ? groupID : id}
           onClick={(event) => {

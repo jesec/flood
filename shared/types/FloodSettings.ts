@@ -36,7 +36,7 @@ export interface FloodSettings {
   torrentDestinations?: Record<string, string>;
 
   // Tag selector preference
-  UITagSelectorMode?: 'single' | 'multi';
+  UITagSelectorMode?: 'single' | 'multi' | 'singleStrict';
 
   // Last used "Add Torrents" tab
   UITorrentsAddTab?: 'by-url' | 'by-file' | 'by-creation';

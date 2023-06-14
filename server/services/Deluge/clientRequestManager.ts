@@ -276,6 +276,18 @@ class ClientRequestManager {
     await this.methodCall(['daemon.login', [username, actualPassword], {client_version}], false);
   }
 
+  async labelAdd(label: string): Promise<void> {
+    await this.methodCall(['label.add', [label], {}]);
+  }
+
+  async labelAddTorrent(torrent_id: string, label: string): Promise<void> {
+    await this.methodCall(['label.set_torrent', [torrent_id.toLowerCase(), label], {}]);
+  }
+
+  async labelGetLabels(): Promise<string[]> {
+    return this.methodCall(['label.get_labels', [], {}]) as Promise<string[]>;
+  }
+
   async reconnect(): Promise<void> {
     await (this.rpcWithAuth = (this.rpc = this.connect()).then((rpc) => this.daemonLogin().then(() => rpc)));
   }

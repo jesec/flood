@@ -100,7 +100,7 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
             <ContextMenu
               isIn={isOpen}
               onClick={(event) => {
-                if (SettingStore.floodSettings.UITagSelectorMode !== 'single') {
+                if (SettingStore.floodSettings.UITagSelectorMode === 'multi') {
                   event.nativeEvent.stopImmediatePropagation();
                 }
               }}
@@ -125,12 +125,22 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
                     key={tag}
                     isSelected={selectedTags.includes(tag)}
                     onClick={() => {
-                      if (tag === 'untagged') {
-                        setSelectedTags([]);
-                      } else if (selectedTags.includes(tag)) {
-                        setSelectedTags(selectedTags.filter((key) => key !== tag && key !== ''));
-                      } else {
-                        setSelectedTags([...selectedTags.filter((key) => key !== ''), tag]);
+                      if (SettingStore.floodSettings.UITagSelectorMode === 'singleStrict') {
+                        if (tag === 'untagged' || selectedTags.includes(tag)) {
+                          setSelectedTags([]);
+                        } 
+                        else {
+                          setSelectedTags([tag]);
+                        }
+                      }
+                      else {
+                        if (tag === 'untagged') {
+                          setSelectedTags([]);
+                        } else if (selectedTags.includes(tag)) {
+                          setSelectedTags(selectedTags.filter((key) => key !== tag && key !== ''));
+                        } else {
+                          setSelectedTags([...selectedTags.filter((key) => key !== ''), tag]);
+                        }
                       }
                     }}
                   >

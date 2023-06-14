@@ -491,6 +491,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
           piecesHashOnCompletion: false,
           piecesMemoryMax: 0,
           protocolPex: properties['pex-enabled'],
+          tagSupport: 'multi',
           throttleGlobalDownSpeed: properties['speed-limit-down-enabled'] ? properties['speed-limit-down'] * 1024 : 0,
           throttleGlobalUpSpeed: properties['speed-limit-up-enabled'] ? properties['speed-limit-up'] * 1024 : 0,
           throttleMaxPeersNormal: 0,

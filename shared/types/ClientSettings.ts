@@ -11,6 +11,7 @@ export interface ClientSettings {
   piecesHashOnCompletion: boolean;
   piecesMemoryMax: number;
   protocolPex: boolean;
+  tagSupport: false | "single" | "multi"
   // B/s
   throttleGlobalDownSpeed: number;
   // B/s

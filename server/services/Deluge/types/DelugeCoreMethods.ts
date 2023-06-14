@@ -114,6 +114,7 @@ export interface DelugeCoreTorrentStatuses {
   auto_managed: unknown;
   is_auto_managed: unknown;
   is_finished: unknown;
+  label: string | undefined;
   max_connections: unknown;
   max_download_speed: unknown;
   max_upload_slots: unknown;
@@ -143,7 +144,7 @@ export interface DelugeCoreTorrentStatuses {
   total_payload_upload: number;
   total_peers: number;
   total_seeds: number;
-  total_uploaded: unknown;
+  total_uploaded: number;
   total_wanted: unknown;
   total_remaining: unknown;
   tracker: unknown;

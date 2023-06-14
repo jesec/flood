@@ -490,6 +490,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
           piecesHashOnCompletion: false,
           piecesMemoryMax: 0,
           protocolPex: preferences.pex,
+          tagSupport: 'multi',
           throttleGlobalDownSpeed: preferences.dl_limit,
           throttleGlobalUpSpeed: preferences.up_limit,
           throttleMaxPeersNormal: 0,

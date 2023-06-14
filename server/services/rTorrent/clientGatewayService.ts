@@ -737,8 +737,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       .methodCall('system.multicall', [methodCalls])
       .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
       .then((response) => {
-        return processMethodCallResponse(response, clientSettingMethodCallConfigs);
-      });
+        return processMethodCallResponse(response, clientSettingMethodCallConfigs)
+      })
+      .then((settings) => {return {tagSupport: 'multi', ...settings}});
   }
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
@@ -753,6 +754,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       }
 
       switch (property) {
+        // can't change tagSupport since it's a readonly setting
+        case 'tagSupport':
+          return accumulator;
         case 'dht':
           methodName = 'dht.mode.set';
           param = (param as ClientSettings[typeof property]) ? 'auto' : 'disable';
