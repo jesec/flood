@@ -63,6 +63,14 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
         <Trans id="settings.ui.tag.selector.mode" />
       </ModalFormSectionHeader>
       <FormRow>
+        <Radio
+          defaultChecked={UITagSelectorMode === 'singleStrict'}
+          groupID="ui-tag-selector-mode"
+          id="singleStrict"
+          width="auto"
+        >
+          <Trans id="settings.ui.tag.selector.mode.singleStrict" />
+        </Radio>
         <Radio 
           disabled={tagModeChangeDisabled} 
           defaultChecked={UITagSelectorMode === 'single'} 
@@ -80,15 +88,6 @@ const UITab: FC<UITabProps> = ({onSettingsChange}: UITabProps) => {
           width="auto"
         >
           <Trans id="settings.ui.tag.selector.mode.multi" />
-        </Radio>
-        <Radio
-          defaultChecked={UITagSelectorMode === 'singleStrict'}
-          groupID="ui-tag-selector-mode"
-          id="singleStrict"
-          width="auto"
-        >
-          {/* <Trans id="settings.ui.tag.selector.mode.multi" /> */}
-          single strict
         </Radio>
       </FormRow>
       <ModalFormSectionHeader>

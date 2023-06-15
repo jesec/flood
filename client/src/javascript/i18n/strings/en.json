@@ -216,6 +216,7 @@
   "settings.ui.tag.selector.mode": "Tag Selector Preference",
   "settings.ui.tag.selector.mode.multi": "Multi Selection",
   "settings.ui.tag.selector.mode.single": "Single Selection",
+  "settings.ui.tag.selector.mode.singleStrict": "Strict Single Selection",
   "settings.ui.torrent.context.menu.items.show": "Show",
   "settings.ui.torrent.details.enabled": "Enabled",
   "settings.ui.torrent.details.tags.placement": "In the expanded view, tags work best at the end of the list.",
