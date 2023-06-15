@@ -235,11 +235,9 @@ class DelugeClientGatewayService extends ClientGatewayService {
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
-    console.log(hashes, tags)
     const available = await this.availableTags;
     if (available === undefined) {
       // Label plugin disabled, do nothing
-      console.log("skip")
       return
     }
     const tag = tags[0] ?? '';

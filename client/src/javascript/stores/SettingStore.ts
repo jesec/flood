@@ -34,7 +34,6 @@ class SettingStore {
 
   handleClientSettingsFetchSuccess(settings: ClientSettings) {
     this.fetchStatus.clientSettingsFetched = true;
-    console.log(settings.tagSupport)
     if (settings.tagSupport === 'single') {
       this.floodSettings.UITagSelectorMode = 'singleStrict';
     }
@@ -43,6 +42,9 @@ class SettingStore {
 
   handleSettingsFetchSuccess(settings: Partial<FloodSettings>): void {
     this.fetchStatus.floodSettingsFetched = true;
+    if (this.clientSettings?.tagSupport === 'single') {
+      settings.UITagSelectorMode = 'singleStrict';
+    }
     Object.assign(this.floodSettings, settings);
   }
 
