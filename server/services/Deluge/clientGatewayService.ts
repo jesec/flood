@@ -40,8 +40,14 @@ import {DelugeCoreTorrentFilePriority} from './types/DelugeCoreMethods';
 
 class DelugeClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as DelugeConnectionSettings);
-  
-  private availableTags = this.clientRequestManager.labelGetLabels();
+
+  private availableTags: Promise<string[] | undefined> = this.clientRequestManager.daemonGetMethodList()
+    .then((methods) => {
+      if (methods.indexOf("label.get_labels") != -1) {
+        return this.clientRequestManager.labelGetLabels();
+      }
+      return undefined
+    });
 
   async addTorrentsByFile({
     files,
@@ -229,17 +235,23 @@ class DelugeClientGatewayService extends ClientGatewayService {
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
+    console.log(hashes, tags)
     const available = await this.availableTags;
-    if (available.indexOf(tags[0]) == -1) {
-      console.log("adding tag" + tags[0])
+    if (available === undefined) {
+      // Label plugin disabled, do nothing
+      console.log("skip")
+      return
+    }
+    const tag = tags[0] ?? '';
+    if (tag !== '' && available.indexOf(tag) == -1) {
       return this.clientRequestManager
-        .labelAdd(tags[0])
+        .labelAdd(tag)
         .then(this.processClientRequestSuccess, this.processClientRequestError)
         .then(() => {
-          this.availableTags = Promise.resolve([tags[0], ...available]);
+          this.availableTags = Promise.resolve([tag, ...available]);
           return Promise.all(hashes.map((hash) => 
             this.clientRequestManager
-              .labelAddTorrent(hash, tags[0])
+              .labelAddTorrent(hash, tag)
               .then(this.processClientRequestSuccess, this.processClientRequestError)))
             .then();
         })
@@ -247,7 +259,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
     else {
       return Promise.all(hashes.map((hash) =>  
         this.clientRequestManager
-          .labelAddTorrent(hash, tags[0])
+          .labelAddTorrent(hash, tag)
           .then(this.processClientRequestSuccess, this.processClientRequestError)))
         .then();
     }
