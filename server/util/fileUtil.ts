@@ -1,6 +1,7 @@
 import fs from 'fs';
 import {homedir} from 'os';
 import path from 'path';
+import * as fsp from 'node:fs/promises';
 
 import config from '../../config';
 
@@ -42,6 +43,46 @@ export const isAllowedPath = (resolvedPath: string) => {
     return false;
   });
 };
+
+export async function isAllowedPathAsync(resolvedPath: string) {
+  if (config.allowedPaths == null) {
+    return true;
+  }
+
+  let realPath: string | null = null;
+  let parentPath: string = resolvedPath;
+  while (realPath == null) {
+    try {
+      realPath = await fsp.realpath(parentPath);
+    } catch (e) {
+      if ((e as NodeJS.ErrnoException).code === 'ENOENT') {
+        parentPath = path.resolve(parentPath, '..');
+      } else {
+        return false;
+      }
+    }
+  }
+
+  return config.allowedPaths.some((allowedPath) => {
+    if (realPath?.startsWith(allowedPath)) {
+      return true;
+    }
+    return false;
+  });
+}
+
+export async function existAsync(path: string): Promise<boolean> {
+  try {
+    await fsp.stat(path);
+  } catch (err: unknown) {
+    if ((err as {code?: string}).code === 'ENOENT') {
+      return false;
+    }
+    throw err;
+  }
+
+  return true;
+}
 
 export const sanitizePath = (input?: string): string => {
   if (typeof input !== 'string') {
