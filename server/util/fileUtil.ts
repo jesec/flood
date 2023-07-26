@@ -75,7 +75,7 @@ export async function existAsync(path: string): Promise<boolean> {
   try {
     await fsp.stat(path);
   } catch (err: unknown) {
-    if ((err as {code?: string}).code === 'ENOENT') {
+    if ((err as NodeJS.ErrnoException).code === 'ENOENT') {
       return false;
     }
     throw err;
