@@ -7,7 +7,6 @@ import path from 'path';
 import rateLimit from 'express-rate-limit';
 import sanitize from 'sanitize-filename';
 import tar, {Pack} from 'tar-fs';
-import * as fsp from 'node:fs/promises';
 
 import type {
   AddTorrentByFileOptions,
