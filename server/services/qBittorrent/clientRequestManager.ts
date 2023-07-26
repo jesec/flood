@@ -483,7 +483,7 @@ class ClientRequestManager {
         new URLSearchParams({
           hashes: hashes.join('|').toLowerCase(),
           tags: tags?.join(','),
-        }),
+        } as Record<string, string>),
         {
           headers: await this.getRequestHeaders(),
         },
