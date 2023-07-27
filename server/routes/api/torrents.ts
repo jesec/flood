@@ -905,9 +905,9 @@ router.get<{hash: string}>(
 
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        ['.'],
+        torrentContentPaths.map((x) => path.relative(torrentDirectory, x)),
         {maxBuffer: 1024 * 2000, timeout: 1000 * 30, cwd: torrentDirectory},
-        (error, stdout, stderr) => {
+        (error, stdout) => {
           if (error) {
             return res.status(500).json({code: error.code, message: error.message});
           }
@@ -915,7 +915,6 @@ router.get<{hash: string}>(
           return res.status(200).json({output: stdout});
         },
       );
-
 
       req.on('close', () => mediainfoProcess.kill('SIGTERM'));
 
