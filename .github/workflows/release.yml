@@ -17,10 +17,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
 
       - run: sudo npm i -g pkg
       - run: npm ci
