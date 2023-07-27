@@ -129,6 +129,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
