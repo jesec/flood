@@ -1,8 +1,14 @@
 export async function asyncFilter<T>(
-  arr: Array<T>,
+  array: Array<T>,
   predicate: (item: T, index: number) => Promise<boolean>,
 ): Promise<Array<T>> {
-  const results = await Promise.all(arr.map(predicate));
+  const results: T[] = [];
 
-  return arr.filter((_v, index) => results[index]);
+  for (const [index, item] of array.entries()) {
+    if (await predicate(item, index)) {
+      results.push(item);
+    }
+  }
+
+  return results;
 }
