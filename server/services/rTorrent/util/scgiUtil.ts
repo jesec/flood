@@ -27,7 +27,7 @@ export const methodCallXML = (options: net.NetConnectOpts, methodName: string, p
     const xmlLength = Buffer.byteLength(xml, 'utf8');
 
     stream.on('error', reject);
-    stream.setEncoding('utf-8');
+    stream.setEncoding('UTF8');
 
     const headerItems = [
       `CONTENT_LENGTH${NULL_CHAR}${xmlLength}${NULL_CHAR}`,
@@ -68,7 +68,7 @@ export const methodCallJSON = (options: net.NetConnectOpts, methodName: string, 
     const jsonLength = Buffer.byteLength(json, 'utf8');
 
     stream.on('error', reject);
-    stream.setEncoding('utf-8');
+    stream.setEncoding('UTF8');
 
     const headerItems = [
       `CONTENT_LENGTH${NULL_CHAR}${jsonLength}${NULL_CHAR}`,
