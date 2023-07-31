@@ -6,7 +6,7 @@ import {getAuthToken} from '../../util/authUtil';
 
 import type {FloodSettings} from '../../../shared/types/FloodSettings';
 
-const app = fastify();
+const app = fastify({disableRequestLogging: true, logger: false});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {
