@@ -33,7 +33,9 @@ beforeAll(async () => {
   await app.ready();
   console.timeLog('before all', 'ready');
   request = supertest(app.server);
+  console.timeLog('before all', 'create supertest client');
   request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
+  console.timeLog('before all', 'pipe stream');
 });
 
 afterAll(async () => {
