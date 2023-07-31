@@ -34,18 +34,6 @@ beforeAll(async () => {
   request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
 });
 
-afterAll(async () => {
-  await new Promise<void>((resolve, reject) => {
-    app.server.close((err) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve();
-    });
-  });
-  await app.close();
-});
-
 const tempDirectory = getTempPath('download');
 
 jest.setTimeout(20000);
