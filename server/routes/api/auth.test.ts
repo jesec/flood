@@ -37,7 +37,7 @@ const testNonAdminUser = {
 } as const;
 let testNonAdminUserToken = '';
 
-const app = fastify();
+const app = fastify({disableRequestLogging: true, logger: false});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {
