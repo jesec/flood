@@ -6,7 +6,7 @@ import {getAuthToken} from '../../util/authUtil';
 
 import type {ClientSettings} from '../../../shared/types/ClientSettings';
 
-const app = fastify();
+const app = fastify({disableRequestLogging: true, logger: true});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {

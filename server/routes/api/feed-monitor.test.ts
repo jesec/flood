@@ -9,7 +9,7 @@ import {getTempPath} from '../../models/TemporaryStorage';
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '../../../shared/types/api/feed-monitor';
 import type {Feed, Rule} from '../../../shared/types/Feed';
 
-const app = fastify();
+const app = fastify({disableRequestLogging: true, logger: false});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {
