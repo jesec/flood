@@ -112,8 +112,8 @@ const startWebServer = async () => {
        * @tags Flood
        * @security User
        */
-      app.get('/api/settings', {}, async function (req): Promise<FloodSettings> {
-        return (await req.services.settingService.get(null)) as FloodSettings;
+      app.get('/api/settings', {}, async function (req): Promise<Partial<FloodSettings>> {
+        return await req.services.settingService.get(null);
       });
 
       /**
