@@ -39,7 +39,9 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
+  console.time('afterAll');
   await app.close();
+  console.timeLog('afterAll', 'after all');
 });
 
 const tempDirectory = getTempPath('download');
