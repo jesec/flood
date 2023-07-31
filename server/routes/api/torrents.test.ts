@@ -29,19 +29,21 @@ const rl = readline.createInterface({input: activityStream});
 beforeAll(async () => {
   console.time('before all');
   await constructRoutes(app);
-  console.timeLog('before all', 'constructRoutes');
   await app.ready();
-  console.timeLog('before all', 'ready');
   request = supertest(app.server);
-  console.timeLog('before all', 'create supertest client');
   request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
-  console.timeLog('before all', 'pipe stream');
 });
 
 afterAll(async () => {
-  console.time('afterAll');
+  await new Promise<void>((resolve, reject) => {
+    app.server.close((err) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
+    });
+  });
   await app.close();
-  console.timeLog('afterAll', 'after all');
 });
 
 const tempDirectory = getTempPath('download');
