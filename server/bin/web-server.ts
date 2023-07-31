@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import fastify, {FastifyRequest} from 'fastify';
+import fastify, {FastifyHttpsOptions, FastifyRequest, FastifyServerOptions} from 'fastify';
 import fs from 'fs';
 
 import type {FastifyInstance} from 'fastify';
@@ -17,6 +17,9 @@ import {FloodSettings} from '@shared/types/FloodSettings';
 import {getAllServices, ServiceInstances} from '../services';
 import {FailedInitializeResponseError} from '../routes/error';
 import {ClientSettings} from '@shared/types/ClientSettings';
+import * as https from 'https';
+import {setupApiRouters} from '../routes/api/index2';
+import {setupClientRoutes} from '../routes/api/client2';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -26,34 +29,9 @@ declare module 'fastify' {
   interface PassportUser extends UserInDatabase {}
 }
 
-const startWebServer = async () => {
+export async function createWebApp(opt: FastifyServerOptions = {}): Promise<FastifyInstance> {
   await Users.bootstrapServicesForAllUsers();
-  const {ssl = false, floodServerHost: host, floodServerPort: port} = config;
-
-  let instance: FastifyInstance;
-
-  if (ssl) {
-    if (!config.sslKey || !config.sslCert) {
-      console.error('Cannot start HTTPS server, `sslKey` or `sslCert` is missing in config.js.');
-      process.exit(1);
-    }
-
-    instance = fastify({
-      bodyLimit: 100 * 1024 * 1024,
-      trustProxy: 'loopback',
-      http2: true,
-      https: {
-        allowHTTP1: true,
-        key: fs.readFileSync(config.sslKey),
-        cert: fs.readFileSync(config.sslCert),
-      },
-    }) as unknown as FastifyInstance;
-  } else {
-    instance = fastify({
-      bodyLimit: 100 * 1024 * 1024,
-      trustProxy: 'loopback',
-    });
-  }
+  let instance = fastify(opt);
 
   const servedPath = config.baseURI.endsWith('/') ? config.baseURI.slice(0, config.baseURI.length - 1) : config.baseURI;
 
@@ -106,33 +84,47 @@ const startWebServer = async () => {
         }
       });
 
-      /**
-       * GET /api/settings
-       * @summary Gets all Flood's settings
-       * @tags Flood
-       * @security User
-       */
-      app.get('/api/settings', {}, async function (req): Promise<Partial<FloodSettings>> {
-        return await req.services.settingService.get(null);
-      });
-
-      /**
-       * GET /api/client/settings
-       * @summary Gets settings of torrent client managed by Flood.
-       * @tags Client
-       * @security User
-       */
-      app.get('/api/client/settings', async (req): Promise<ClientSettings> => {
-        return await req.services.clientGatewayService.getClientSettings();
-      });
+      await app.register(setupApiRouters);
+      await app.register(setupClientRoutes);
     },
     {prefix: servedPath},
   );
 
-  await constructRoutes(instance as FastifyInstance);
+  await constructRoutes(instance);
 
-  await instance.listen({port, host});
+  return instance;
+}
 
+const startWebServer = async () => {
+  const {ssl = false, floodServerHost: host, floodServerPort: port} = config;
+
+  const opt: FastifyServerOptions & {
+    http2?: boolean;
+  } & Partial<Pick<FastifyHttpsOptions<https.Server>, 'https'>> = {
+    bodyLimit: 100 * 1024 * 1024,
+    trustProxy: 'loopback',
+  };
+
+  if (ssl) {
+    if (!config.sslKey || !config.sslCert) {
+      console.error('Cannot start HTTPS server, `sslKey` or `sslCert` is missing in config.js.');
+      process.exit(1);
+    }
+
+    opt.http2 = true;
+    opt.https = {
+      key: fs.readFileSync(config.sslKey),
+      cert: fs.readFileSync(config.sslCert),
+      // this option is documented but not typed
+      // https://nodejs.org/api/http2.html#http2createsecureserveroptions-onrequesthandler
+      // @ts-ignore
+      allowHTTP1: true,
+    };
+  }
+
+  const app = await createWebApp(opt);
+
+  await app.listen({port, host});
   const address = chalk.underline(`${ssl ? 'https' : 'http'}://${host}:${port}`);
 
   console.log(chalk.green(`Flood server ${packageJSON.version} starting on ${address}\n`));
