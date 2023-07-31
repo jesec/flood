@@ -40,7 +40,9 @@ const constructRoutes = async (fastify: FastifyInstance) => {
   app.set('strict routing', true);
   app.set('trust proxy', 'loopback');
 
-  app.use(morgan('dev'));
+  if (process.env.NODE_ENV !== 'test') {
+    app.use(morgan('dev'));
+  }
 
   if (config.serveAssets !== false) {
     // Disable ETag

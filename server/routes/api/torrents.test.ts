@@ -19,7 +19,7 @@ import type {TorrentList} from '../../../shared/types/Torrent';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
 
-const app = fastify({bodyLimit: 100 * 1024 * 1024 * 1024, disableRequestLogging: true, logger: false});
+const app = fastify({bodyLimit: 100 * 1024 * 1024 * 1024, disableRequestLogging: true});
 let request: supertest.SuperTest<supertest.Test>;
 
 const activityStream = new stream.PassThrough();
