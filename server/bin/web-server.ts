@@ -11,7 +11,7 @@ import constructRoutes from '../routes';
 import packageJSON from '../../package.json';
 
 const startWebServer = async () => {
-  const {ssl, floodServerHost: host, floodServerPort: port} = config;
+  const {ssl = false, floodServerHost: host, floodServerPort: port} = config;
 
   let instance: FastifyInstance<Http2SecureServer> | FastifyInstance<Server>;
 
