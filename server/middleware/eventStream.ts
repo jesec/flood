@@ -17,6 +17,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
   // Keep the connection open by sending a message every so often.
   const keepAliveTimeout = setInterval(() => {
     res.write(':keep-alive\n\n');
+    res.flush();
   }, 500);
 
   // cleanup on close

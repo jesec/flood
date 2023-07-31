@@ -13,6 +13,7 @@ class ServerEvent {
     this.res.write(`id:${id}\n`);
     this.res.write(`event:${eventType}\n`);
     this.res.write(`data:${JSON.stringify(data)}\n\n`);
+    this.res.flush();
   }
 }
 
