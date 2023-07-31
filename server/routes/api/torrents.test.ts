@@ -27,8 +27,11 @@ const authToken = `jwt=${getAuthToken('_config')}`;
 const rl = readline.createInterface({input: activityStream});
 
 beforeAll(async () => {
+  console.time('before all');
   await constructRoutes(app);
+  console.timeLog('before all', 'constructRoutes');
   await app.ready();
+  console.timeLog('before all', 'ready');
   request = supertest(app.server);
   request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
 });
@@ -39,7 +42,7 @@ afterAll(async () => {
 
 const tempDirectory = getTempPath('download');
 
-jest.setTimeout(60000);
+jest.setTimeout(20000);
 
 const torrentFiles = [
   path.join(paths.appSrc, 'fixtures/single.torrent'),
