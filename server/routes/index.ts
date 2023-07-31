@@ -127,8 +127,6 @@ const constructRoutes = async (fastify: FastifyInstance) => {
   app.use(`${servedPath}api`, apiRoutes);
 
   await fastify.register(fastifyExpress);
-  fastify.use(express.urlencoded({extended: false})); // for Postman x-www-form-urlencoded
-  fastify.use(express.json());
   fastify.use(app);
 
   return app;
