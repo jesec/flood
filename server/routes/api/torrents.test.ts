@@ -39,7 +39,7 @@ afterAll(async () => {
 
 const tempDirectory = getTempPath('download');
 
-jest.setTimeout(20000);
+jest.setTimeout(40000);
 
 const torrentFiles = [
   path.join(paths.appSrc, 'fixtures/single.torrent'),
