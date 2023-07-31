@@ -214,23 +214,6 @@ router.delete('/notifications', (req, res) => {
 });
 
 /**
- * GET /api/settings
- * @summary Gets all Flood's settings
- * @tags Flood
- * @security User
- * @return {FloodSettings} 200 - success response - application/json
- * @return {Error} 500 - failure response - application/json
- */
-router.get(
-  '/settings',
-  async (req, res): Promise<Response> =>
-    req.services.settingService.get(null).then(
-      (settings) => res.status(200).json(settings),
-      ({code, message}) => res.status(500).json({code, message}),
-    ),
-);
-
-/**
  * GET /api/settings/{property}
  * @summary Gets Flood's settings
  * @tags Flood

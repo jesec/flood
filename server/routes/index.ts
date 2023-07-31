@@ -27,8 +27,6 @@ declare global {
 }
 
 const constructRoutes = async (fastify: FastifyInstance) => {
-  await Users.bootstrapServicesForAllUsers();
-
   const app = express();
   const servedPath = config.baseURI.endsWith('/') ? config.baseURI : `${config.baseURI}/`;
 

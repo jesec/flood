@@ -27,22 +27,6 @@ router.get(
     ),
 );
 
-/**
- * GET /api/client/settings
- * @summary Gets settings of torrent client managed by Flood.
- * @tags Client
- * @security User
- * @return {ClientSettings} 200 - success response - application/json
- * @return {Error} 500 - failure response - application/json
- */
-router.get(
-  '/settings',
-  async (req, res): Promise<Response> =>
-    req.services.clientGatewayService.getClientSettings().then(
-      (settings) => res.status(200).json(settings),
-      ({code, message}) => res.status(500).json({code, message}),
-    ),
-);
 
 /**
  * PATCH /api/client/settings
