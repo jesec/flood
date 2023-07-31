@@ -22,6 +22,7 @@ const startWebServer = async () => {
     }
 
     instance = fastify({
+      bodyLimit: 100 * 1024 * 1024,
       trustProxy: 'loopback',
       http2: true,
       https: {
@@ -31,7 +32,10 @@ const startWebServer = async () => {
       },
     });
   } else {
-    instance = fastify({trustProxy: 'loopback'});
+    instance = fastify({
+      bodyLimit: 100 * 1024 * 1024,
+      trustProxy: 'loopback',
+    });
   }
 
   await constructRoutes(instance as FastifyInstance);
