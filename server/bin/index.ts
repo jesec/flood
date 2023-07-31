@@ -6,7 +6,7 @@ import enforcePrerequisites from './enforce-prerequisites';
 import migrateData from './migrations/run';
 import startWebServer from './web-server';
 
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV == 'production') {
   // Catch unhandled rejections and exceptions
   // Traces are pretty useless with minimized production codes
   // This avoids printing a large section of junk

@@ -97,7 +97,7 @@ const constructRoutes = async (fastify: FastifyInstance) => {
   passport.use(
     new Strategy(
       {
-        jwtFromRequest: (req: Request) => req?.cookies?.jwt,
+        jwtFromRequest: (req: express.Request) => req?.cookies?.jwt,
         secretOrKey: config.secret,
       },
       (payload, callback) => {
