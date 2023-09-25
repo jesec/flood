@@ -1,9 +1,9 @@
 const UNIT_TO_STRING_ID = {
   B: 'unit.size.byte',
-  kB: 'unit.size.kilobyte',
-  MB: 'unit.size.megabyte',
-  GB: 'unit.size.gigabyte',
-  TB: 'unit.size.terabyte',
+  kiB: 'unit.size.kilobyte',
+  MiB: 'unit.size.megabyte',
+  GiB: 'unit.size.gigabyte',
+  TiB: 'unit.size.terabyte',
 } as const;
 
 type Unit = keyof typeof UNIT_TO_STRING_ID;
@@ -22,16 +22,16 @@ export function compute(bytes: number, precision = 2): {value: number; unit: Uni
 
   if (bytes >= terabyte) {
     value = bytes / terabyte;
-    unit = 'TB';
+    unit = 'TiB';
   } else if (bytes >= gigabyte) {
     value = bytes / gigabyte;
-    unit = 'GB';
+    unit = 'GiB';
   } else if (bytes >= megabyte) {
     value = bytes / megabyte;
-    unit = 'MB';
+    unit = 'MiB';
   } else if (bytes >= kilobyte) {
     value = bytes / kilobyte;
-    unit = 'kB';
+    unit = 'kiB';
   } else {
     value = bytes;
     unit = 'B';
