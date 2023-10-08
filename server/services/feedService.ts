@@ -70,6 +70,7 @@ class FeedService extends BaseService<Record<string, never>> {
                 field: rule.field,
                 match: rule.match,
                 exclude: rule.exclude,
+                script: rule.script,
                 startOnLoad: rule.startOnLoad,
                 isBasePath: rule.isBasePath,
               });
@@ -260,12 +261,12 @@ class FeedService extends BaseService<Record<string, never>> {
 
   handleNewItems = (feedReaderOptions: FeedReaderOptions, feedItems: Array<FeedItem>): void => {
     this.getPreviouslyMatchedUrls()
-      .then((previouslyMatchedUrls) => {
+      .then(async (previouslyMatchedUrls) => {
         const {feedID, feedLabel} = feedReaderOptions;
         const applicableRules = this.rules[feedID];
         if (!applicableRules) return;
 
-        const itemsMatchingRules = getFeedItemsMatchingRules(feedItems, applicableRules);
+        const itemsMatchingRules = await getFeedItemsMatchingRules(feedItems, applicableRules);
         const itemsToDownload = itemsMatchingRules.filter((item) =>
           item.urls.some((url) => !previouslyMatchedUrls.includes(url)),
         );
