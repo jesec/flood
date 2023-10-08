@@ -17,6 +17,7 @@ const initialRule: AddRuleOptions = {
   feedIDs: [],
   match: '',
   exclude: '',
+  script: '',
   tags: [],
   destination: '',
   startOnLoad: false,
@@ -36,7 +37,12 @@ const validatedFields = {
     error: 'feeds.validation.must.specify.label',
   },
   match: {
-    isValid: (value: string | undefined) => isNotEmpty(value) && isRegExValid(value),
+    isValid: (value: string | undefined) => {
+      if (isNotEmpty(value)) {
+        return isRegExValid(value);
+      }
+      return true;
+    },
     error: 'feeds.validation.invalid.regular.expression',
   },
   exclude: {
@@ -64,6 +70,7 @@ interface RuleFormData {
   feedID: string;
   label: string;
   match: string;
+  script: string;
   tags: string;
   isBasePath: boolean;
   startOnLoad: boolean;
@@ -140,6 +147,7 @@ const DownloadRulesTab: FC = () => {
             field: formData.field,
             match: formData.match ?? initialRule.match,
             exclude: formData.exclude ?? initialRule.exclude,
+            script: formData.script ?? initialRule.script,
             destination: formData.destination ?? initialRule.destination,
             tags: formData.tags?.split(',') ?? initialRule.tags,
             startOnLoad: formData.startOnLoad ?? initialRule.startOnLoad,
