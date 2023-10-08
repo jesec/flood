@@ -102,6 +102,7 @@
   "feeds.no.items.matching": "No items matching search term.",
   "feeds.no.rules.defined": "No rules defined.",
   "feeds.regEx": "RegEx",
+  "feeds.script": "Script",
   "feeds.search": "Search term",
   "feeds.search.term": "Search term",
   "feeds.select.feed": "Select Feed",

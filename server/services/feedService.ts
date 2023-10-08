@@ -70,6 +70,7 @@ class FeedService extends BaseService<Record<string, never>> {
                 field: rule.field,
                 match: rule.match,
                 exclude: rule.exclude,
+                script: rule.script,
                 startOnLoad: rule.startOnLoad,
                 isBasePath: rule.isBasePath,
               });
@@ -259,22 +260,22 @@ class FeedService extends BaseService<Record<string, never>> {
   }
 
   handleNewItems = (feedReaderOptions: FeedReaderOptions, feedItems: Array<FeedItem>): void => {
-    this.getPreviouslyMatchedUrls()
-      .then((previouslyMatchedUrls) => {
-        const {feedID, feedLabel} = feedReaderOptions;
-        const applicableRules = this.rules[feedID];
-        if (!applicableRules) return;
+    this.getPreviouslyMatchedUrls().then(async (previouslyMatchedUrls) => {
+      const {feedID, feedLabel} = feedReaderOptions;
+      const applicableRules = this.rules[feedID];
+      if (!applicableRules) return;
 
-        const itemsMatchingRules = getFeedItemsMatchingRules(feedItems, applicableRules);
-        const itemsToDownload = itemsMatchingRules.filter((item) =>
-          item.urls.some((url) => !previouslyMatchedUrls.includes(url)),
-        );
+      const itemsMatchingRules = await getFeedItemsMatchingRules(feedItems, applicableRules);
+      const itemsToDownload = itemsMatchingRules.filter((item) =>
+        item.urls.some((url) => !previouslyMatchedUrls.includes(url)),
+      );
 
-        if (itemsToDownload.length === 0) {
-          return;
-        }
+      if (itemsToDownload.length === 0) {
+        return;
+      }
 
-        Promise.all(
+      try {
+        const ArrayOfURLArrays = await Promise.all(
           itemsToDownload.map(async (item): Promise<Array<string>> => {
             const {urls, destination, start, tags, ruleID} = item;
 
@@ -298,28 +299,29 @@ class FeedService extends BaseService<Record<string, never>> {
 
             return urls;
           }),
-        ).then((ArrayOfURLArrays) => {
-          const addedURLs = ArrayOfURLArrays.reduce(
-            (URLArray: Array<string>, urls: Array<string>) => URLArray.concat(urls),
-            [],
-          );
+        );
+        const addedURLs = ArrayOfURLArrays.reduce(
+          (URLArray: Array<string>, urls: Array<string>) => URLArray.concat(urls),
+          [],
+        );
 
-          this.db.update({type: 'matchedTorrents'}, {$push: {urls: {$each: addedURLs}}}, {upsert: true});
+        this.db.update({type: 'matchedTorrents'}, {$push: {urls: {$each: addedURLs}}}, {upsert: true});
 
-          this.services?.notificationService.addNotification(
-            itemsToDownload.map((item) => ({
-              id: 'notification.feed.torrent.added',
-              data: {
-                title: item.matchTitle,
-                feedLabel,
-                ruleLabel: item.ruleLabel,
-              },
-            })),
-          );
-          this.services?.torrentService.fetchTorrentList();
-        });
-      })
-      .catch(console.error);
+        this.services?.notificationService.addNotification(
+          itemsToDownload.map((item) => ({
+            id: 'notification.feed.torrent.added',
+            data: {
+              title: item.matchTitle,
+              feedLabel,
+              ruleLabel: item.ruleLabel,
+            },
+          })),
+        );
+        this.services?.torrentService.fetchTorrentList();
+      } catch (e) {
+        console.error(e);
+      }
+    });
   };
 
   async removeItem(id: string): Promise<void> {

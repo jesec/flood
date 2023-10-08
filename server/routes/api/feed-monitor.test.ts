@@ -220,6 +220,7 @@ describe('PUT /api/feed-monitor/rules', () => {
     feedIDs: [''],
     match: '',
     exclude: '.*',
+    script: '',
     destination: tempDirectory,
     tags: ['FeedItem'],
     startOnLoad: false,
