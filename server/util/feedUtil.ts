@@ -1,3 +1,5 @@
+import {spawn} from 'node:child_process';
+
 import type {FeedItem} from 'feedsub';
 
 import type {AddTorrentByURLOptions} from '../../shared/schema/api/torrents';
@@ -53,36 +55,58 @@ export const getTorrentUrlsFromFeedItem = (feedItem: FeedItem): Array<string> =>
   return [];
 };
 
-export const getFeedItemsMatchingRules = (
+const execAsync = (...command: string[]) => {
+  const p = spawn(command[0], command.slice(1));
+  return new Promise((resolveFunc) => {
+    p.stdout.on('data', (x) => {
+      process.stdout.write(x.toString());
+    });
+    p.stderr.on('data', (x) => {
+      process.stderr.write(x.toString());
+    });
+    p.on('exit', (code) => {
+      resolveFunc(code);
+    });
+  });
+};
+
+export const getFeedItemsMatchingRules = async (
   feedItems: Array<FeedItem>,
   rules: Array<Rule>,
-): Array<PendingDownloadItems> => {
-  return feedItems.reduce((matchedItems: Array<PendingDownloadItems>, feedItem) => {
-    rules.forEach((rule) => {
-      const matchField = rule.field ? (feedItem[rule.field] as string) : (feedItem.title as string);
-      const isMatched = new RegExp(rule.match, 'gi').test(matchField);
-      const isExcluded = rule.exclude !== '' && new RegExp(rule.exclude, 'gi').test(matchField);
+): Promise<Array<PendingDownloadItems>> => {
+  const matchedItems: Array<PendingDownloadItems> = [];
 
-      if (isMatched && !isExcluded) {
-        const torrentUrls = getTorrentUrlsFromFeedItem(feedItem);
-        const isAlreadyDownloaded = matchedItems.some((matchedItem) =>
-          torrentUrls.every((url) => matchedItem.urls.includes(url)),
-        );
+  await Promise.all(
+    feedItems.map(async (feedItem) => {
+      await Promise.all(
+        rules.map(async (rule) => {
+          const matchField = rule.field ? (feedItem[rule.field] as string) : (feedItem.title as string);
+          const isMatched = rule.match === '' || new RegExp(rule.match, 'gi').test(matchField);
+          const isExcluded = rule.exclude !== '' && new RegExp(rule.exclude, 'gi').test(matchField);
+          const scriptMatch = rule.script === '' || (await execAsync(rule.script, matchField)) === 80;
 
-        if (!isAlreadyDownloaded && torrentUrls[0] != null) {
-          matchedItems.push({
-            urls: torrentUrls as [string, ...string[]],
-            tags: rule.tags,
-            matchTitle: feedItem.title as string,
-            ruleID: rule._id,
-            ruleLabel: rule.label,
-            destination: rule.destination,
-            start: rule.startOnLoad,
-          });
-        }
-      }
-    });
+          if (isMatched && !isExcluded && scriptMatch) {
+            const torrentUrls = getTorrentUrlsFromFeedItem(feedItem);
+            const isAlreadyDownloaded = matchedItems.some((matchedItem) =>
+              torrentUrls.every((url) => matchedItem.urls.includes(url)),
+            );
 
-    return matchedItems;
-  }, []);
+            if (!isAlreadyDownloaded && torrentUrls[0] != null) {
+              matchedItems.push({
+                urls: torrentUrls as [string, ...string[]],
+                tags: rule.tags,
+                matchTitle: feedItem.title as string,
+                ruleID: rule._id,
+                ruleLabel: rule.label,
+                destination: rule.destination,
+                start: rule.startOnLoad,
+              });
+            }
+          }
+        }),
+      );
+    }),
+  );
+
+  return matchedItems;
 };
