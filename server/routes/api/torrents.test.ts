@@ -16,7 +16,7 @@ import paths from '../../../shared/config/paths';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
 import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
 import type {TorrentContent} from '../../../shared/types/TorrentContent';
-import type {TorrentList} from '../../../shared/types/Torrent';
+import type {TorrentList, TorrentProperties} from '../../../shared/types/Torrent';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
 
@@ -488,6 +488,27 @@ describe('PATCH /api/torrents/trackers', () => {
         expect(trackers.filter((tracker) => testTrackers.includes(tracker.url)).length).toBeGreaterThanOrEqual(
           testTrackers.length,
         );
+
+        done();
+      });
+  });
+});
+
+describe('GET /api/torrents/{hash}', () => {
+  it('Gets torrent information', (done) => {
+    request
+      .get(`/api/torrents/${torrentHashes[0]}`)
+      .send()
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end((err, res) => {
+        if (err) done(err);
+
+        const contents: TorrentProperties = res.body;
+
+        expect(contents.hash).toBe(torrentHashes[0]);
 
         done();
       });

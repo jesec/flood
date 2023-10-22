@@ -38,6 +38,7 @@ import {
 import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getToken} from '../../util/authUtil';
+import {TorrentProperties} from '@shared/types/Torrent';
 
 const getDestination = async (
   services: Express.Request['services'],
@@ -608,13 +609,22 @@ router.get<{hashes: string}>(
  */
 
 /**
- * TODO: API not yet implemented
  * GET /api/torrents/{hash}
  * @summary Gets information of a torrent.
  * @tags Torrent
  * @security User
  * @param {string} hash.path - Hash of a torrent
+ * @return {TorrentProperties} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
  */
+router.get(
+  '/:hash',
+  async (req, res): Promise<Response> =>
+    req.services.clientGatewayService.fetchTorrent(req.params.hash).then(
+      (contents) => res.status(200).json(contents),
+      ({code, message}) => res.status(500).json({code, message}),
+    ),
+);
 
 /**
  * GET /api/torrents/{hash}/contents

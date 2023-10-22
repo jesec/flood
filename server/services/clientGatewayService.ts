@@ -184,6 +184,14 @@ abstract class ClientGatewayService extends BaseService<ClientGatewayServiceEven
   abstract fetchTorrentList(): Promise<TorrentListSummary>;
 
   /**
+   * Fetches a torrent
+   *
+   * @param {string} hash - Hash of torrent
+   * @return {Promise<TorrentProperties>} - Resolves with TorrentProperties or rejects with error.
+   */
+  abstract fetchTorrent(hash: TorrentProperties['hash']): Promise<TorrentProperties>;
+
+  /**
    * Fetches the transfer summary
    *
    * @return {Promise<TransferSummary>} - Resolves with TransferSummary or rejects with error.
