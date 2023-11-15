@@ -207,7 +207,7 @@ const TorrentGeneralInfo: FC = observer(() => {
               <Trans id="torrents.details.general.comment" />
             </td>
             <td className="torrent-details__detail__value">
-              {torrent.comment ? <LinkedText text={torrent.comment} /> : VALUE_NOT_AVAILABLE}
+              {torrent.comment ? <LinkedText text={torrent.comment.trim()} /> : VALUE_NOT_AVAILABLE}
             </td>
           </tr>
           <tr className="torrent-details__table__heading">
