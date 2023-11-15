@@ -18,15 +18,19 @@ function isValidHttpUrl(s: string) {
 }
 
 const LinkedText: FC<LinkedTextProps> = ({text, className}: LinkedTextProps) => {
-  const nodes = text.split(/\s/).map((s) =>
-    isValidHttpUrl(s.trimEnd()) ? (
-      <a href={s.trimEnd()} target="_blank" rel="noopener noreferrer">
-        {s}
-      </a>
-    ) : (
-      s
-    ),
-  );
+  const nodes = text.split(/([ \n])/).map((s) => {
+    if (s === '\n') {
+      return <br />;
+    }
+    if (isValidHttpUrl(s)) {
+      return (
+        <a href={s.trimEnd()} target="_blank" rel="noopener noreferrer">
+          {s}
+        </a>
+      );
+    }
+    return s;
+  });
 
   return <span className={className}>{nodes}</span>;
 };
