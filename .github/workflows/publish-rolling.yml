@@ -69,15 +69,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up QEMU
-        run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -88,11 +86,11 @@ jobs:
           echo ::set-output name=BUILD_VERSION::0.0.0-master.`git rev-parse --short HEAD`
 
       - name: Publish flood:master to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./distribution/containers/Dockerfile.release
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: jesec/flood:master
           build-args: |
@@ -102,7 +100,7 @@ jobs:
       - run: sleep 10
 
       - name: Publish rtorrent-flood to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./distribution/containers/Dockerfile.rtorrent
@@ -132,15 +130,13 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Set up QEMU
-        run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -152,7 +148,7 @@ jobs:
           npm version --no-git-tag-version 0.0.0-master.`git rev-parse --short HEAD`
 
       - name: Publish flood:master-dbg to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
@@ -162,7 +158,7 @@ jobs:
           tags: jesec/flood:master-dbg
 
       - name: Publish rtorrent-flood:master-dbg to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
@@ -265,15 +261,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up QEMU
-        run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -291,7 +285,7 @@ jobs:
       - run: find .
 
       - name: Publish flood:master-distroless to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./distribution/containers/Dockerfile.distroless
@@ -301,7 +295,7 @@ jobs:
           tags: jesec/flood:master-distroless
 
       - name: Publish rtorrent-flood:master-distroless to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./distribution/containers/Dockerfile.distroless
