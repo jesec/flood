@@ -96,8 +96,11 @@ const startWebServer = () => {
 
   server.on('error', handleError);
   server.on('listening', handleListening);
+  process.on('exit', () => {
+    server.close();
+  });
 
-  const address = chalk.underline(`${useSSL ? 'https' : 'http'}://${host}:${port}`);
+  const address = chalk.underline(typeof port === 'string' ? port : `${useSSL ? 'https' : 'http'}://${host}:${port}`);
 
   console.log(chalk.green(`Flood server ${packageJSON.version} starting on ${address}\n`));
 

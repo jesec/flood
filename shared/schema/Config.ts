@@ -67,11 +67,11 @@ export const configSchema = strictObject({
   // CLI argument: --host / -h
   // The host that Flood should listen for web connections on.
   // To listen on all interfaces, change to `floodServerHost: '0.0.0.0'`. [default: '127.0.0.1']
-  floodServerHost: string(),
+  floodServerHost: string().optional(),
 
   // CLI argument: --port / -p
-  // The port that Flood should listen for web connections on. [default: 3000]
-  floodServerPort: number().int().positive(),
+  // The port or path that Flood should listen for web connections on. [default: 3000]
+  floodServerPort: number().int().positive().or(string()),
 
   // CLI argument: --maxhistorystates
   // Flood keeps a history of torrent download and upload speeds.
