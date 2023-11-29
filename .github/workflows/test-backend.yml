@@ -10,11 +10,11 @@ on:
 
 jobs:
   test-backend:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       matrix:
-        node: ['18.18.2', '20.9.0']
+        node: ['18', '20']
       fail-fast: false
 
     steps:
