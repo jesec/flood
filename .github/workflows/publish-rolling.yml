@@ -34,9 +34,9 @@ jobs:
           npm version --no-git-tag-version $build_version
           echo ::set-output name=BUILD_VERSION::$build_version
 
-      - name: Use @${{ github.actor }} scope
+      - name: Use @jesec scope
         run: |
-          jq '.name = "@${{ github.actor }}/flood"' package.json > package.new.json
+          jq '.name = "@jesec/flood"' package.json > package.new.json
           mv package.new.json package.json
 
       - run: npm pack
