@@ -1,9 +1,10 @@
 import crypto from 'crypto';
+import fastify from 'fastify';
 import supertest from 'supertest';
 
 import {AccessLevel} from '../../../shared/schema/constants/Auth';
 
-import app from '../../app';
+import constructRoutes from '..';
 import {getAuthToken} from '../../util/authUtil';
 
 import type {
@@ -12,8 +13,6 @@ import type {
   AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
 import type {ClientConnectionSettings} from '../../../shared/schema/ClientConnectionSettings';
-
-const request = supertest(app);
 
 const testConnectionSettings: ClientConnectionSettings = {
   client: 'rTorrent',
@@ -37,6 +36,19 @@ const testNonAdminUser = {
   level: AccessLevel.USER,
 } as const;
 let testNonAdminUserToken = '';
+
+const app = fastify({disableRequestLogging: true, logger: false});
+let request: supertest.SuperTest<supertest.Test>;
+
+beforeAll(async () => {
+  await constructRoutes(app);
+  await app.ready();
+  request = supertest(app.server);
+});
+
+afterAll(async () => {
+  await app.close();
+});
 
 describe('GET /api/auth/verify (initial)', () => {
   it('Verify without credential', (done) => {

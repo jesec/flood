@@ -3,7 +3,7 @@ module.exports = {
   transform: {
     // transform ESM only package to CommonJS
     '^.+\\.(t|j)sx?$': [
-      'esbuild-jest',
+      'jest-esbuild',
       {
         format: 'cjs',
       },
