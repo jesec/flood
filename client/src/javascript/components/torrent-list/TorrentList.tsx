@@ -14,6 +14,7 @@ import SettingStore from '@client/stores/SettingStore';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import TorrentStore from '@client/stores/TorrentStore';
 import SortDirections from '@client/constants/SortDirections';
+import UIStore from '@client/stores/UIStore';
 
 import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 
@@ -50,7 +51,7 @@ const TorrentList: FC = observer(() => {
   useEvent('keydown', (e: KeyboardEvent) => {
     const {ctrlKey, key, metaKey, repeat, target} = e;
 
-    const tagName = (target as HTMLElement)?.tagName.toUpperCase();
+    const tagName = (target as HTMLElement)?.tagName?.toUpperCase();
     if (tagName === 'INPUT' || tagName === 'TEXTAREA') {
       return;
     }
@@ -62,6 +63,18 @@ const TorrentList: FC = observer(() => {
     if ((metaKey || ctrlKey) && key === 'a') {
       e.preventDefault();
       TorrentStore.selectAllTorrents();
+    }
+
+    if ((metaKey || ctrlKey) && key === 'v') {
+      (async () => {
+        const text = await navigator?.clipboard?.readText();
+        const isMagnetLink = text?.startsWith('magnet:?');
+        const isTorrentLink = text?.startsWith('http') && text?.endsWith('.torrent');
+        if (isMagnetLink || isTorrentLink) {
+          e.preventDefault();
+          UIStore.setActiveModal({id: 'add-torrents', tab: 'by-url', urls: [{id: 0, value: text}]});
+        }
+      })();
     }
   });
 
