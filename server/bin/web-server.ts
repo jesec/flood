@@ -40,10 +40,10 @@ const startWebServer = async () => {
 
   await constructRoutes(instance as FastifyInstance);
 
-  if (typeof port === 'string') {
+  if (typeof port === 'string' && !/^\d+$/.test(port)) {
     await instance.listen({path: port});
   } else {
-    await instance.listen({port, host});
+    await instance.listen({port: Number(port), host});
   }
   const address = chalk.underline(`${ssl ? 'https' : 'http'}://${host}:${port}`);
 
