@@ -17,10 +17,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
 
       - run: npm ci
 
@@ -33,9 +34,9 @@ jobs:
           npm version --no-git-tag-version $build_version
           echo ::set-output name=BUILD_VERSION::$build_version
 
-      - name: Use @${{ github.actor }} scope
+      - name: Use @jesec scope
         run: |
-          jq '.name = "@${{ github.actor }}/flood"' package.json > package.new.json
+          jq '.name = "@jesec/flood"' package.json > package.new.json
           mv package.new.json package.json
 
       - run: npm pack
@@ -124,10 +125,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -177,7 +179,7 @@ jobs:
 
     steps:
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'

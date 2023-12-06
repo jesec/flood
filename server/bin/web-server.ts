@@ -2,16 +2,16 @@ import chalk from 'chalk';
 import fastify from 'fastify';
 import fs from 'fs';
 
-import type {FastifyInstance} from 'fastify';
-import type {Http2SecureServer} from 'http2';
-import type {Server} from 'http';
+import type { FastifyInstance } from 'fastify';
+import type { Http2SecureServer } from 'http2';
+import type { Server } from 'http';
 
 import config from '../../config';
 import constructRoutes from '../routes';
 import packageJSON from '../../package.json';
 
 const startWebServer = async () => {
-  const {ssl = false, floodServerHost: host, floodServerPort: port} = config;
+  const { ssl = false, floodServerHost: host, floodServerPort: port } = config;
 
   let instance: FastifyInstance<Http2SecureServer> | FastifyInstance<Server>;
 
@@ -40,8 +40,11 @@ const startWebServer = async () => {
 
   await constructRoutes(instance as FastifyInstance);
 
-  await instance.listen({port, host});
-
+  if (typeof port === 'string') {
+    await instance.listen({ path: port })
+  } else {
+    await instance.listen({ port, host });
+  }
   const address = chalk.underline(`${ssl ? 'https' : 'http'}://${host}:${port}`);
 
   console.log(chalk.green(`Flood server ${packageJSON.version} starting on ${address}\n`));
