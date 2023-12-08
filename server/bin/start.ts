@@ -21,6 +21,7 @@ if (process.env.NODE_ENV == 'production') {
   process.on('uncaughtException', (error) => {
     console.error(message);
     console.error(`Uncaught exception: ${error.name}: ${error.message}`);
+    console.error(`stack trace: ${error.stack}`);
     process.exit(1);
   });
 }
