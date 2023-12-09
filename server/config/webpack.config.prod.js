@@ -35,7 +35,7 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
-        parser: {amd: false},
+        parser: { amd: false },
         use: {
           loader: '@vercel/webpack-asset-relocator-loader',
           options: {
@@ -51,6 +51,7 @@ module.exports = {
     filename: 'index.js',
     libraryTarget: 'commonjs2',
   },
+  devtool: 'inline-source-map',
   optimization: {
     minimize: true,
     minimizer: [
@@ -64,7 +65,7 @@ module.exports = {
       }),
     ],
   },
-  plugins: [new WebpackBar({name: 'server'}), new ShebangPlugin()],
+  plugins: [new WebpackBar({ name: 'server' }), new ShebangPlugin()],
   target: 'node',
   ignoreWarnings: [
     {
