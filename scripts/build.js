@@ -17,6 +17,8 @@ const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
 const paths = require('../shared/config/paths');
 const clientConfig = require('../client/config/webpack.config.prod');
 const serverConfig = require('../server/config/webpack.config.prod');
+const esbuild = require('esbuild');
+const path = require('path');
 
 const {measureFileSizesBeforeBuild, printFileSizesAfterBuild} = FileSizeReporter;
 
@@ -37,10 +39,21 @@ const copyPublicFolder = () => {
 };
 
 // Create the production build and print the deployment instructions.
-const build = (previousFileSizes) => {
+const build = async (previousFileSizes) => {
   console.log('Creating an optimized production build...');
+  console.log('building server...');
 
-  const compiler = webpack([clientConfig, serverConfig]);
+  await esbuild.build({
+    entryPoints: [path.resolve(__dirname, '..', 'server/bin/start.ts')],
+    outfile: path.resolve(__dirname, '..', 'dist/index.js'),
+    platform: 'node',
+    target: 'node12',
+    bundle: true,
+    external: ['geoip-country', 'mime'],
+  });
+  console.log('building client...');
+
+  const compiler = webpack([clientConfig]);
   return new Promise((resolve, reject) => {
     compiler.run((err, stats) => {
       if (err) {
