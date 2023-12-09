@@ -48,7 +48,7 @@ const build = async (previousFileSizes) => {
     platform: 'node',
     target: 'node12',
     bundle: true,
-    external: ['geoip-country', 'mime'],
+    external: ['geoip-country'],
   });
   console.log('building client...');
 
