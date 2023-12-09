@@ -51,7 +51,6 @@ module.exports = {
     filename: 'index.js',
     libraryTarget: 'commonjs2',
   },
-  devtool: 'inline-source-map',
   optimization: {
     minimize: true,
     minimizer: [

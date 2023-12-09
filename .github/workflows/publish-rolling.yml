@@ -206,7 +206,7 @@ jobs:
 
       - name: Build executables
         run: |
-          pkg . --out-path dist-pkg --no-bytecode --public --options=enable-source-maps
+          pkg . --out-path dist-pkg
 
       - name: Rename linuxstatic to linux
         run: |
