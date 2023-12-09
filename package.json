@@ -137,7 +137,6 @@
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.2.0",
     "esbuild": "^0.19.8",
-    "esbuild-node-externals": "^1.11.0",
     "eslint": "^8.42.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
