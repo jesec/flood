@@ -35,6 +35,7 @@
   "pkg": {
     "assets": [
       "dist/assets/**/*",
+      "dist/**/*.map",
       "dist/geoip-country.dat",
       "dist/geoip-country6.dat"
     ],
