@@ -6,6 +6,8 @@ import path from 'path';
 import readline from 'readline';
 import stream from 'stream';
 import supertest from 'supertest';
+import axios from 'axios';
+import MockAdapter from 'axios-mock-adapter';
 
 import constructRoutes from '..';
 import {getAuthToken} from '../../util/authUtil';
@@ -43,10 +45,22 @@ const torrentFiles = [
   path.join(paths.appSrc, 'fixtures/multi.torrent'),
 ].map((torrentPath) => Buffer.from(fs.readFileSync(torrentPath)).toString('base64')) as [string, ...string[]];
 
+const mock = new MockAdapter(axios, {onNoMatch: 'passthrough'});
+
+mock
+  .onGet('https://www.torrents/single.torrent')
+  .reply(200, fs.readFileSync(path.join(paths.appSrc, 'fixtures/single.torrent')));
+
+mock
+  .onGet('https://www.torrents/multi.torrent')
+  .reply(200, fs.readFileSync(path.join(paths.appSrc, 'fixtures/multi.torrent')));
+
 const torrentURLs: [string, ...string[]] = [
-  'https://releases.ubuntu.com/focal/ubuntu-20.04.6-live-server-amd64.iso.torrent',
-  'https://flood.js.org/api/test-cookie',
+  'https://www.torrents/single.torrent',
+  'https://www.torrents/multi.torrent',
 ];
+
+const torrentHashes: string[] = [];
 
 const torrentCookies = {
   'flood.js.org': ['test=test'],
@@ -178,11 +192,37 @@ describe('POST /api/torrents/add-urls', () => {
               : ['stopped', 'inactive'];
             expect(torrent.status).toEqual(expect.arrayContaining(expectedStatuses));
 
+            torrentHashes.push(torrent.hash);
             torrentHash = torrent.hash;
           }),
         );
 
         done();
+      });
+  });
+});
+
+describe('POST /api/torrents/delete', () => {
+  const torrentDeleted = watchTorrentList('remove');
+  it('Deletes added torrents', (done) => {
+    request
+      .post('/api/torrents/delete')
+      .send({hashes: torrentHashes, deleteData: true})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end((err, _res) => {
+        if (err) done(err);
+
+        Promise.race([torrentDeleted, new Promise((r) => setTimeout(r, 1000 * 15))])
+          .then(async () => {
+            // Wait a while
+            await new Promise((r) => setTimeout(r, 1000 * 3));
+          })
+          .then(() => {
+            done();
+          });
       });
   });
 });
@@ -241,7 +281,7 @@ describe('POST /api/torrents/add-files', () => {
       .expect('Content-Type', /json/)
       .expect((res) => {
         if (res.status !== 200 && res.status !== 202) {
-          throw new Error('Failed to add torrents');
+          throw new Error(`Failed to add torrents ${JSON.stringify(res.body)}`);
         }
       })
       .end((err, _res) => {
