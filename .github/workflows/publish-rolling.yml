@@ -205,8 +205,7 @@ jobs:
           tar xvf *.tgz --strip-components=1
 
       - name: Build executables
-        run: |
-          pkg . --out-path dist-pkg
+        run: npm run pkg
 
       - name: Rename linuxstatic to linux
         run: |
