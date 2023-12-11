@@ -199,6 +199,31 @@ describe('POST /api/torrents/add-urls', () => {
   });
 });
 
+describe('POST /api/torrents/delete', () => {
+  const torrentDeleted = watchTorrentList('remove');
+  it('Deletes added torrents', (done) => {
+    request
+      .post('/api/torrents/delete')
+      .send({hashes: torrentHashes, deleteData: true})
+      .set('Cookie', [authToken])
+      .set('Accept', 'application/json')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .end((err, _res) => {
+        if (err) done(err);
+
+        Promise.race([torrentDeleted, new Promise((r) => setTimeout(r, 1000 * 15))])
+          .then(async () => {
+            // Wait a while
+            await new Promise((r) => setTimeout(r, 1000 * 3));
+          })
+          .then(() => {
+            done();
+          });
+      });
+  });
+});
+
 describe('POST /api/torrents/add-files', () => {
   const addTorrentByFileOptions: AddTorrentByFileOptions = {
     files: torrentFiles,
