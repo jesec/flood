@@ -19,6 +19,7 @@ import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentList} from '../../../shared/types/Torrent';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
+import axios from "axios";
 
 const app = fastify({bodyLimit: 100 * 1024 * 1024 * 1024, disableRequestLogging: true, forceCloseConnections: true});
 let request: supertest.SuperTest<supertest.Test>;
