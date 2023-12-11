@@ -253,7 +253,7 @@ describe('POST /api/torrents/add-files', () => {
       .expect('Content-Type', /json/)
       .expect((res) => {
         if (res.status !== 200 && res.status !== 202) {
-          throw new Error(`Failed to add torrents ${res.body}`);
+          throw new Error(`Failed to add torrents ${JSON.stringify(res.body)}`);
         }
       })
       .end((err, _res) => {
