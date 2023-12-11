@@ -47,10 +47,8 @@ const constructRoutes = async (fastify: FastifyInstance) => {
 
   if (config.serveAssets !== false) {
     // Disable ETag
-    // app.set('etag', false);
+    app.set('etag', false);
 
-    // Enable compression
-    // app.use(compression());
     app.use((_req, res, next) => {
       res.flush = () => {
         // do nothing.
