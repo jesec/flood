@@ -6,6 +6,7 @@ import path from 'path';
 import readline from 'readline';
 import stream from 'stream';
 import supertest from 'supertest';
+import MockAdapter from 'axios-mock-adapter';
 
 import constructRoutes from '..';
 import {getAuthToken} from '../../util/authUtil';
@@ -43,9 +44,19 @@ const torrentFiles = [
   path.join(paths.appSrc, 'fixtures/multi.torrent'),
 ].map((torrentPath) => Buffer.from(fs.readFileSync(torrentPath)).toString('base64')) as [string, ...string[]];
 
+const mock = new MockAdapter(axios, {onNoMatch: 'passthrough'});
+
+mock
+  .onGet('https://www.torrents/single.torrent')
+  .reply(200, fs.readFileSync(path.join(paths.appSrc, 'fixtures/single.torrent')));
+
+mock
+  .onGet('https://www.torrents/multi.torrent')
+  .reply(200, fs.readFileSync(path.join(paths.appSrc, 'fixtures/multi.torrent')));
+
 const torrentURLs: [string, ...string[]] = [
-  'https://releases.ubuntu.com/focal/ubuntu-20.04.6-live-server-amd64.iso.torrent',
-  'https://flood.js.org/api/test-cookie',
+  'https://www.torrents/single.torrent',
+  'https://www.torrents/multi.torrent',
 ];
 
 const torrentCookies = {
