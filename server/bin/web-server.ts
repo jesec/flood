@@ -25,7 +25,6 @@ const startWebServer = async () => {
       bodyLimit: 100 * 1024 * 1024,
       trustProxy: 'loopback',
       https: {
-        allowHTTP1: true,
         key: fs.readFileSync(config.sslKey),
         cert: fs.readFileSync(config.sslCert),
       },
