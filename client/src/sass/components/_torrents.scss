@@ -26,11 +26,12 @@
     text-align: center;
 
     &__wrapper {
-      justify-content: center;
-      align-items: center;
-      // bottom: 0;
       display: flex;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: math.div(variables.$spacing-unit * 1, 3);
+      // bottom: 0;
       // left: $torrent-list--offset;
       // position: absolute;
       // right: 0;
