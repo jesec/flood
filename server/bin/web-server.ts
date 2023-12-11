@@ -24,7 +24,6 @@ const startWebServer = async () => {
     instance = fastify({
       bodyLimit: 100 * 1024 * 1024,
       trustProxy: 'loopback',
-      http2: false,
       https: {
         allowHTTP1: true,
         key: fs.readFileSync(config.sslKey),
