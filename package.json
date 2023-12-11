@@ -57,7 +57,7 @@
     "check-types": "tsc",
     "lint": "NODE_ENV=development eslint --max-warnings 0 . --ext .js --ext .jsx --ext .ts --ext .tsx",
     "prepack": "rm -rf dist && npm run build",
-    "start": "node --use_strict dist/index.js",
+    "start": "node --enable-source-maps --use_strict dist/index.js",
     "start:development:client": "node client/scripts/development.js",
     "start:development:server": "NODE_ENV=development tsx watch server/bin/start.ts",
     "start:test:rtorrent": "node scripts/testsetup.js",
