@@ -11,16 +11,17 @@ jobs:
 
     strategy:
       matrix:
-        node: [16]
+        node: [20]
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
 
       - run: npm ci
 
@@ -33,9 +34,9 @@ jobs:
           npm version --no-git-tag-version $build_version
           echo ::set-output name=BUILD_VERSION::$build_version
 
-      - name: Use @${{ github.actor }} scope
+      - name: Use @jesec scope
         run: |
-          jq '.name = "@${{ github.actor }}/flood"' package.json > package.new.json
+          jq '.name = "@jesec/flood"' package.json > package.new.json
           mv package.new.json package.json
 
       - run: npm pack
@@ -69,15 +70,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up QEMU
-        run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -88,11 +87,11 @@ jobs:
           echo ::set-output name=BUILD_VERSION::0.0.0-master.`git rev-parse --short HEAD`
 
       - name: Publish flood:master to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./distribution/containers/Dockerfile.release
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: jesec/flood:master
           build-args: |
@@ -102,7 +101,7 @@ jobs:
       - run: sleep 10
 
       - name: Publish rtorrent-flood to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./distribution/containers/Dockerfile.rtorrent
@@ -120,27 +119,26 @@ jobs:
 
     strategy:
       matrix:
-        node: [16]
+        node: [20]
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
 
       - name: Set up QEMU
-        run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -152,7 +150,7 @@ jobs:
           npm version --no-git-tag-version 0.0.0-master.`git rev-parse --short HEAD`
 
       - name: Publish flood:master-dbg to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
@@ -162,7 +160,7 @@ jobs:
           tags: jesec/flood:master-dbg
 
       - name: Publish rtorrent-flood:master-dbg to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./Dockerfile
@@ -177,11 +175,11 @@ jobs:
 
     strategy:
       matrix:
-        node: [16]
+        node: [20]
 
     steps:
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
@@ -207,8 +205,7 @@ jobs:
           tar xvf *.tgz --strip-components=1
 
       - name: Build executables
-        run: |
-          pkg . --out-path dist-pkg
+        run: npm run pkg
 
       - name: Rename linuxstatic to linux
         run: |
@@ -265,15 +262,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Set up QEMU
-        run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
-      - name: Login to DockerHub
-        uses: docker/login-action@v1
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -291,7 +286,7 @@ jobs:
       - run: find .
 
       - name: Publish flood:master-distroless to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./distribution/containers/Dockerfile.distroless
@@ -301,7 +296,7 @@ jobs:
           tags: jesec/flood:master-distroless
 
       - name: Publish rtorrent-flood:master-distroless to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./distribution/containers/Dockerfile.distroless

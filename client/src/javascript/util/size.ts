@@ -52,6 +52,6 @@ export function compute(bytes: number, precision = 2): {value: number; unit: Uni
   };
 }
 
-export function getTranslationString(unit: Unit): typeof UNIT_TO_STRING_ID[Unit] {
+export function getTranslationString(unit: Unit): (typeof UNIT_TO_STRING_ID)[Unit] {
   return UNIT_TO_STRING_ID[unit] || UNIT_TO_STRING_ID.B;
 }

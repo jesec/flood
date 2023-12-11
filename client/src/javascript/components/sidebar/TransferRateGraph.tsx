@@ -88,7 +88,7 @@ const TransferRateGraph: FC<TransferRateGraphProps> = observer(
     const interpolation = curveMonotoneX;
 
     return (
-      <svg className="graph" id={id}>
+      <svg className="graph" id={id} height="100%" width="100%">
         <defs>
           <TransferRateGraphGradient direction="upload" />
           <TransferRateGraphGradient direction="download" />

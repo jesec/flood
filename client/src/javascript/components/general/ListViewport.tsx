@@ -6,11 +6,12 @@ import {useWindowSize} from 'react-use';
 
 import ConfigStore from '@client/stores/ConfigStore';
 
+import type {OverlayScrollbarsComponentRef} from 'overlayscrollbars-react';
 import type {FixedSizeListProps, ListChildComponentProps} from 'react-window';
 
 const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: ComponentProps<'div'>, ref) => {
-  const {children, className, onScroll} = props;
-  const osRef = useRef<OverlayScrollbarsComponent>(null);
+  const {children, onScroll} = props;
+  const osRef = useRef<OverlayScrollbarsComponentRef>(null);
 
   useEffect(() => {
     const scrollbarRef = osRef.current;
@@ -21,7 +22,7 @@ const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: Compo
       };
     }
 
-    const viewport = scrollbarRef.osInstance()?.getElements().viewport as HTMLDivElement;
+    const viewport = scrollbarRef.osInstance()?.elements().viewport as HTMLDivElement;
 
     const refCallback = ref as RefCallback<HTMLDivElement>;
     refCallback(viewport);
@@ -43,8 +44,11 @@ const Overflow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props: Compo
     <OverlayScrollbarsComponent
       {...props}
       options={{
-        scrollbars: {autoHide: 'leave', clickScrolling: true},
-        className,
+        scrollbars: {
+          autoHide: 'leave',
+          clickScroll: true,
+          theme: `os-theme-${ConfigStore.isPreferDark ? 'light' : 'dark'}`,
+        },
       }}
       ref={osRef}
     >
@@ -64,7 +68,7 @@ const ListViewport = forwardRef<FixedSizeList, ListViewportProps>((props: ListVi
 
   return (
     <FixedSizeList
-      className={`${className} ${ConfigStore.isPreferDark ? 'os-theme-light' : 'os-theme-dark'}`}
+      className={className}
       height={Math.max(itemSize * 30, windowHeight)}
       itemCount={itemCount}
       itemKey={itemKey}

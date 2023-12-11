@@ -17,6 +17,12 @@
   },
 
   "rules": {
+    "import/no-anonymous-default-export": [
+      "error",
+      {
+        "allowNew": true
+      }
+    ],
     "import/no-extraneous-dependencies": 0,
     "no-restricted-imports": [
       "error",

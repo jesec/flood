@@ -9,5 +9,5 @@ const torrentStatusMap = [
   'error',
 ] as const;
 
-export type TorrentStatus = typeof torrentStatusMap[number];
+export type TorrentStatus = (typeof torrentStatusMap)[number];
 export default torrentStatusMap;
