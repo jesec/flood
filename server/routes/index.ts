@@ -12,11 +12,12 @@ import Users from '../models/Users';
 import {authTokenSchema, UserInDatabase} from '@shared/schema/Auth';
 import express from 'express';
 import morgan from 'morgan';
-import compression from 'compression';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import {fastifyExpress} from '@fastify/express';
+import fastifyCompress from '@fastify/compress';
+import fastifyStatic from '@fastify/static';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -48,11 +49,9 @@ const constructRoutes = async (fastify: FastifyInstance) => {
     // Disable ETag
     app.set('etag', false);
 
-    // Enable compression
-    app.use(compression());
-
     // Static assets
-    app.use(servedPath, express.static(paths.appDist));
+    // app.use(servedPath, express.static(paths.appDist));
+    fastify.register(fastifyStatic, {root: paths.appDist, prefix: servedPath});
 
     // Client app routes, serve index.html and client js will figure it out
     const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {
@@ -65,29 +64,22 @@ const constructRoutes = async (fastify: FastifyInstance) => {
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       Pragma: 'no-cache',
       Expires: '0',
+      'content-type': 'html',
     };
 
-    app.get(`${servedPath}login`, (_req, res) => {
-      res.set(headers);
+    fastify.get(`${servedPath}login`, (_req, res) => {
+      res.headers(headers);
       res.send(html);
     });
 
-    app.get(`${servedPath}register`, (_req, res) => {
-      res.set(headers);
+    fastify.get(`${servedPath}register`, (_req, res) => {
+      res.headers(headers);
       res.send(html);
     });
 
-    app.get(`${servedPath}overview`, (_req, res) => {
-      res.set(headers);
+    fastify.get(`${servedPath}overview`, (_req, res) => {
+      res.headers(headers);
       res.send(html);
-    });
-  } else {
-    // no-op res.flush() as compression is not handled by Express
-    app.use((_req, res, next) => {
-      res.flush = () => {
-        // do nothing.
-      };
-      next();
     });
   }
 
@@ -128,6 +120,7 @@ const constructRoutes = async (fastify: FastifyInstance) => {
 
   app.use(`${servedPath}api`, apiRoutes);
 
+  await fastify.register(fastifyCompress);
   await fastify.register(fastifyExpress);
   fastify.use(app);
 
