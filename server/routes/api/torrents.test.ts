@@ -60,6 +60,8 @@ const torrentURLs: [string, ...string[]] = [
   'https://www.torrents/multi.torrent',
 ];
 
+const torrentHashes: string[] = [];
+
 const torrentCookies = {
   'flood.js.org': ['test=test'],
 };
@@ -190,6 +192,7 @@ describe('POST /api/torrents/add-urls', () => {
               : ['stopped', 'inactive'];
             expect(torrent.status).toEqual(expect.arrayContaining(expectedStatuses));
 
+            torrentHashes.push(torrent.hash)
             torrentHash = torrent.hash;
           }),
         );
