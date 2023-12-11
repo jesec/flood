@@ -49,13 +49,6 @@ const constructRoutes = async (fastify: FastifyInstance) => {
     // Disable ETag
     app.set('etag', false);
 
-    app.use((_req, res, next) => {
-      res.flush = () => {
-        // do nothing.
-      };
-      next();
-    });
-
     // Static assets
     // app.use(servedPath, express.static(paths.appDist));
     fastify.register(fastifyStatic, {root: paths.appDist, prefix: servedPath});
@@ -87,14 +80,6 @@ const constructRoutes = async (fastify: FastifyInstance) => {
     fastify.get(`${servedPath}overview`, (_req, res) => {
       res.headers(headers);
       res.send(html);
-    });
-  } else {
-    // no-op res.flush() as compression is not handled by Express
-    app.use((_req, res, next) => {
-      res.flush = () => {
-        // do nothing.
-      };
-      next();
     });
   }
 
