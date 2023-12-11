@@ -63,15 +63,14 @@ const NotificationTopToolbar: FC<NotificationTopToolbarProps> = ({
 };
 
 interface NotificationItemProps {
-  index: number;
   notification: Notification;
 }
 
-const NotificationItem: FC<NotificationItemProps> = ({index, notification}: NotificationItemProps) => {
+const NotificationItem: FC<NotificationItemProps> = ({notification}: NotificationItemProps) => {
   const {i18n} = useLingui();
 
   return (
-    <li className="notifications__list__item" key={index}>
+    <li className="notifications__list__item">
       <div className="notification__heading">
         <span className="notification__category">{i18n._(`${notification.id}.heading`)}</span>
         {' — '}
@@ -195,7 +194,7 @@ const NotificationsButton: FC = observer(() => {
               style={{minHeight: prevHeight}}
             >
               {notifications.map((notification, index) => (
-                <NotificationItem index={index} notification={notification} />
+                <NotificationItem key={index} notification={notification} />
               ))}
             </ul>
             <NotificationBottomToolbar
