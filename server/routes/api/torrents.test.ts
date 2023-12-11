@@ -192,7 +192,7 @@ describe('POST /api/torrents/add-urls', () => {
               : ['stopped', 'inactive'];
             expect(torrent.status).toEqual(expect.arrayContaining(expectedStatuses));
 
-            torrentHashes.push(torrent.hash)
+            torrentHashes.push(torrent.hash);
             torrentHash = torrent.hash;
           }),
         );
