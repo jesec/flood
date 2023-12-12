@@ -64,7 +64,7 @@ const constructRoutes = async (fastify: FastifyInstance) => {
       'Cache-Control': 'no-cache, no-store, must-revalidate',
       Pragma: 'no-cache',
       Expires: '0',
-      'content-type': 'html',
+      'content-type': 'text/html; charset=UTF-8',
     };
 
     fastify.get(`${servedPath}login`, (_req, res) => {
