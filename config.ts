@@ -211,7 +211,7 @@ try {
   fs.mkdirSync(path.join(argv.rundir, 'db'), {recursive: true});
   fs.mkdirSync(path.join(argv.rundir, 'temp'), {recursive: true});
 } catch (error) {
-  console.error('Failed to access runtime directory');
+  console.error('Failed to access runtime directory', error);
   process.exit(1);
 }
 
