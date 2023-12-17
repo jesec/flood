@@ -46,7 +46,7 @@ Install [Node.js runtime](https://nodejs.org/). Flood tracks `Current` and provi
 - macOS users can use [brew](https://brew.sh/) or installer.
 - Check [Node.js website](https://nodejs.org/en/download/package-manager) for more.
 
-**EXPERIMENTAL**: You can download a single-executable build from [Releases](https://github.com/jesec/flood/releases) (or rolling build from [Actions](https://nightly.link/jesec/flood/workflows/publish-rolling/master)). It bundles `Node.js` and supports `Linux`, `macOS` and `Windows`.
+Alternatively, download a single-executable build from [Releases](https://github.com/jesec/flood/releases) (or rolling build from [Actions](https://nightly.link/jesec/flood/workflows/publish-rolling/master)). It bundles `Node.js` and supports `Linux`, `macOS` and `Windows`.
 
 ### Installation
 

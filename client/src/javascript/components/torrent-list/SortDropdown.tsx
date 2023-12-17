@@ -21,6 +21,7 @@ const SORT_PROPERTIES = [
   'upTotal',
   'sizeBytes',
   'dateAdded',
+  'dateFinished',
 ] as const;
 
 interface SortDropdownProps {

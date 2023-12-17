@@ -106,7 +106,7 @@ router.use('/register', (req, res, next) => {
       next();
     },
     handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
+      passport.authenticate('jwt', {session: false}, (err: unknown, user: UserInDatabase) => {
         if (err || !user) {
           return res.status(401).send('Unauthorized');
         }
@@ -193,7 +193,7 @@ router.use('/verify', (req, res, next) => {
       res.json(response);
     },
     handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
+      passport.authenticate('jwt', {session: false}, (err: unknown, user: UserInDatabase) => {
         if (err || !user) {
           res.status(401).json({
             configs: preloadConfigs,

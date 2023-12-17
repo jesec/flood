@@ -346,6 +346,7 @@
   "torrents.properties.comment": "Комментарий",
   "torrents.properties.date.added": "Добавлено",
   "torrents.properties.date.created": "Создан",
+  "torrents.properties.date.finished": "Завершено",
   "torrents.properties.directory": "Местоположение",
   "torrents.properties.download.speed": "Скорость скачивания",
   "torrents.properties.download.total": "Загружено",

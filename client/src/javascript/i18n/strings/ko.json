@@ -346,6 +346,7 @@
   "torrents.properties.comment": "설명",
   "torrents.properties.date.added": "추가한 날",
   "torrents.properties.date.created": "생성한 날",
+  "torrents.properties.date.finished": "끝난",
   "torrents.properties.directory": "위치",
   "torrents.properties.download.speed": "다운로드 속도",
   "torrents.properties.download.total": "다운로드한 크기",
