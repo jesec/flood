@@ -155,7 +155,6 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
       height: auto;
       left: 50%;
       max-height: 80%;
-      width: 500px;
       max-width: 80%;
       overflow: hidden;
       position: absolute;
@@ -163,6 +162,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
       transition: transform $modal--transition--duration;
       transform: translate(-50%, 0);
       transform-origin: 50% 50%;
+      min-width: 500px;
 
       @media (max-width: 720px) {
         max-width: 100%;
