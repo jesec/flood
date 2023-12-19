@@ -155,6 +155,8 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
       height: auto;
       left: 50%;
       max-height: 80%;
+      width: 500px;
+      min-width: max-content;
       max-width: 80%;
       overflow: hidden;
       position: absolute;
@@ -162,7 +164,6 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
       transition: transform $modal--transition--duration;
       transform: translate(-50%, 0);
       transform-origin: 50% 50%;
-      min-width: 500px;
 
       @media (max-width: 720px) {
         max-width: 100%;
@@ -170,6 +171,7 @@ $modal--tabs--padding--vertical--left: $modal--padding--horizontal;
         width: 100%;
         top: unset;
         bottom: 0%;
+        min-width: unset;
       }
     }
 
