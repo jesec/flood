@@ -8,11 +8,12 @@ import {FormRowItem} from '@client/ui';
 export type ProcessedFiles = Array<{name: string; data: string}>;
 
 interface FileDropzoneProps {
+  initialFiles?: ProcessedFiles;
   onFilesChanged: (files: ProcessedFiles) => void;
 }
 
-const FileDropzone: FC<FileDropzoneProps> = ({onFilesChanged}: FileDropzoneProps) => {
-  const [files, setFiles] = useState<ProcessedFiles>([]);
+const FileDropzone: FC<FileDropzoneProps> = ({initialFiles, onFilesChanged}: FileDropzoneProps) => {
+  const [files, setFiles] = useState<ProcessedFiles>(initialFiles ?? []);
 
   useEffect(() => {
     onFilesChanged(files);

@@ -1,12 +1,13 @@
 import {EventEmitter} from 'events';
+import type {EventMap} from 'typed-emitter';
 import type TypedEmitter from 'typed-emitter';
 
 import type {UserInDatabase} from '@shared/schema/Auth';
 
 import type {ServiceInstances} from '.';
 
-class BaseService<E = unknown> extends (EventEmitter as {
-  new <T>(): TypedEmitter<T>;
+class BaseService<E extends EventMap> extends (EventEmitter as {
+  new <T extends EventMap>(): TypedEmitter<T>;
 })<E> {
   user: UserInDatabase;
   services?: ServiceInstances;
@@ -16,7 +17,7 @@ class BaseService<E = unknown> extends (EventEmitter as {
     this.user = user;
   }
 
-  destroy() {
+  async destroy(_drop: boolean): Promise<void> {
     delete this.services;
   }
 

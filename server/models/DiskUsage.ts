@@ -12,11 +12,11 @@ export interface DiskUsageSummary {
   disks: Disks;
 }
 
-interface DiskUsageEvents {
+type DiskUsageEvents = {
   DISK_USAGE_CHANGE: (usage: DiskUsageSummary) => void;
   newListener: (event: keyof Omit<DiskUsageEvents, 'newListener' | 'removeListener'>) => void;
   removeListener: (event: keyof Omit<DiskUsageEvents, 'newListener' | 'removeListener'>) => void;
-}
+};
 
 const INTERVAL_UPDATE = 10000;
 

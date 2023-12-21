@@ -1,6 +1,6 @@
 import type {TransferData, TransferSnapshot} from '@shared/types/TransferData';
 
-import Datastore from 'nedb-promises';
+import Datastore from '@seald-io/nedb';
 import {setInterval} from 'timers';
 
 import config from '../../config';
@@ -20,7 +20,7 @@ class HistoryEra {
 
   constructor(opts: HistoryEraOpts) {
     this.opts = opts;
-    this.db = Datastore.create();
+    this.db = new Datastore();
 
     let cleanupInterval = this.opts.maxTime;
 
@@ -33,11 +33,15 @@ class HistoryEra {
 
   private removeOutdatedData = (): Promise<void> => {
     const minTimestamp = Date.now() - this.opts.maxTime;
-    return this.db.remove({timestamp: {$lt: minTimestamp}}, {multi: true}).then(
+    return this.db.removeAsync({timestamp: {$lt: minTimestamp}}, {multi: true}).then(
       () => undefined,
       () => undefined,
     );
   };
+
+  async dropDB(): Promise<void> {
+    return this.db.dropDatabaseAsync();
+  }
 
   async addData(data: TransferData): Promise<void> {
     const currentTime = Date.now();
@@ -45,13 +49,13 @@ class HistoryEra {
     if (currentTime - this.lastUpdate >= this.opts.interval - CUMULATIVE_DATA_BUFFER_DIFF) {
       this.lastUpdate = currentTime;
       await this.db
-        .insert({
+        .insertAsync({
           timestamp: currentTime,
           ...data,
         })
         .catch(() => undefined);
     } else {
-      await this.db.find<TransferSnapshot>({timestamp: this.lastUpdate}).then(
+      await this.db.findAsync<TransferSnapshot>({timestamp: this.lastUpdate}).then(
         async (snapshots) => {
           if (snapshots.length !== 0) {
             const snapshot = snapshots[0];
@@ -65,7 +69,7 @@ class HistoryEra {
               numUpdates: numUpdates + 1,
             };
 
-            await this.db.update({timestamp: this.lastUpdate}, updatedSnapshot).catch(() => undefined);
+            await this.db.updateAsync({timestamp: this.lastUpdate}, updatedSnapshot).catch(() => undefined);
           }
         },
         () => undefined,
@@ -77,7 +81,7 @@ class HistoryEra {
     const minTimestamp = Date.now() - this.opts.maxTime;
 
     return this.db
-      .find<TransferSnapshot>({timestamp: {$gte: minTimestamp}})
+      .findAsync<TransferSnapshot>({timestamp: {$gte: minTimestamp}})
       .sort({timestamp: 1})
       .then((snapshots) => snapshots.slice(snapshots.length - config.maxHistoryStates));
   }

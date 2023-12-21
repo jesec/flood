@@ -346,6 +346,7 @@
   "torrents.properties.comment": "Megjegyzés",
   "torrents.properties.date.added": "Hozzáadva",
   "torrents.properties.date.created": "Létrehozva",
+  "torrents.properties.date.finished": "Befejezve",
   "torrents.properties.directory": "Elérési út",
   "torrents.properties.download.speed": "Letöltés",
   "torrents.properties.download.total": "Letöltve",

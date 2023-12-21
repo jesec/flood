@@ -46,7 +46,10 @@ import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 
 class QBittorrentClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
-  private cachedProperties: Record<string, Pick<TorrentProperties, 'dateCreated' | 'isPrivate' | 'trackerURIs'>> = {};
+  private cachedProperties: Record<
+    string,
+    Pick<TorrentProperties, 'comment' | 'dateCreated' | 'isPrivate' | 'trackerURIs'>
+  > = {};
 
   async addTorrentsByFile({
     files,
@@ -358,6 +361,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
             if (properties != null && trackers != null && Array.isArray(trackers)) {
               this.cachedProperties[hash] = {
+                comment: properties?.comment,
                 dateCreated: properties?.creation_date,
                 isPrivate: trackers[0]?.msg.includes('is private'),
                 trackerURIs: getDomainsFromURLs(
@@ -374,10 +378,16 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
           {},
           ...(await Promise.all(
             infos.map(async (info) => {
-              const {dateCreated = 0, isPrivate = false, trackerURIs = []} = this.cachedProperties[info.hash] || {};
+              const {
+                comment = '',
+                dateCreated = 0,
+                isPrivate = false,
+                trackerURIs = [],
+              } = this.cachedProperties[info.hash] || {};
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
+                comment: comment,
                 dateActive: info.dlspeed > 0 || info.upspeed > 0 ? -1 : info.last_activity,
                 dateAdded: info.added_on,
                 dateCreated,

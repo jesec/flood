@@ -1,1 +1,22 @@
-{}
+{
+  "actionbar.button.add.torrent": "Afegir torrent",
+  "actionbar.button.remove.torrent": "Eliminar torrent",
+  "actionbar.button.start.torrent": "Començar torrent",
+  "actionbar.button.stop.torrent": "Aturar torrent",
+  "alert.settings.saved": "Configuració desada correctament.",
+  "alert.torrent.add": "{countElement} {count, plural, =1 {torrent afegit} other {torrents afegits}} amb èxit.",
+  "alert.torrent.add.failed": "{countElement} {count, plural, =1 {torrent no s'ha} other {torrents no s'han}} pogut afegir.",
+  "alert.torrent.add.sent": "{countElement} {count, plural, =1 {petició enviada} other {peticions enviades}} al client torrent.",
+  "alert.torrent.move": "{countElement} {count, plural, =1 {torrent mogut} other {torrents moguts}} amb èxit.",
+  "alert.torrent.move.failed": "{countElement} {count, plural, =1 {torrent no s'ha} other {torrents no s'han}} pogut moure.",
+  "alert.torrent.remove": "{countElement} {count, plural, =1 {torrent eliminat} other {torrents eliminat}} amb èxit.",
+  "alert.torrent.remove.failed": "{countElement} {count, plural, =1 {torrent no s'ha} other {torrents no s'han}} pogut eliminar.",
+  "auth.add.user": "Afegir usuari",
+  "auth.admin": "Administardor",
+  "auth.create.account": "Crear un compte",
+  "auth.create.an.account": "Creeu un compte",
+  "auth.create.an.account.intro": "Benvingut a Flood!",
+  "auth.current.user": "Usuari actual",
+  "auth.error.password.empty": "La contrasenya no pot estar buida.",
+  "auth.error.username.empty": "El nom d'usuari no pot estar buit."
+}

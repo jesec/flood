@@ -1,4 +1,4 @@
-import Datastore from 'nedb-promises';
+import Datastore from '@seald-io/nedb';
 import path from 'path';
 
 import type {FloodSettings} from '@shared/types/FloodSettings';
@@ -11,26 +11,34 @@ interface SettingRecord {
   data: unknown;
 }
 
-interface SettingServiceEvents {
+type SettingServiceEvents = {
   SETTINGS_CHANGE: (changeSettings: Partial<FloodSettings>) => void;
-}
+};
 
 class SettingService extends BaseService<SettingServiceEvents> {
-  db = Datastore.create({
+  db = new Datastore({
     autoload: true,
     filename: path.join(config.dbPath, this.user._id, 'settings', 'settings.db'),
   });
 
+  async destroy(drop: boolean) {
+    if (drop) {
+      await this.db.dropDatabaseAsync();
+    }
+
+    return super.destroy(drop);
+  }
+
   async get(property: keyof FloodSettings | null): Promise<Partial<FloodSettings>> {
     const docs = await this.db
-      .find<SettingRecord>(
+      .findAsync<SettingRecord>(
         property
           ? {
               id: property,
             }
           : {},
       )
-      .exec();
+      .execAsync();
 
     return Object.assign(
       {},
@@ -51,7 +59,7 @@ class SettingService extends BaseService<SettingServiceEvents> {
           const property = key as keyof FloodSettings;
           const value = changedSettings[property];
 
-          await this.db.update<SettingRecord>({id: property}, {$set: {data: value}}, {upsert: true});
+          await this.db.updateAsync<SettingRecord>({id: property}, {$set: {data: value}}, {upsert: true});
 
           Object.assign(savedSettings, {
             [property]: value,

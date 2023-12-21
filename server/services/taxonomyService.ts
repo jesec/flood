@@ -7,9 +7,9 @@ import type {Taxonomy} from '../../shared/types/Taxonomy';
 import type {TorrentStatus} from '../../shared/constants/torrentStatusMap';
 import type {TorrentProperties, TorrentList} from '../../shared/types/Torrent';
 
-interface TaxonomyServiceEvents {
+type TaxonomyServiceEvents = {
   TAXONOMY_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
-}
+};
 
 class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   taxonomy: Taxonomy = {
@@ -38,7 +38,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     };
   }
 
-  destroy() {
+  async destroy(drop: boolean) {
     if (this.services?.clientGatewayService == null) {
       return;
     }
@@ -49,7 +49,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     clientGatewayService.removeListener('PROCESS_TORRENT_LIST_END', this.handleProcessTorrentListEnd);
     clientGatewayService.removeListener('PROCESS_TORRENT', this.handleProcessTorrent);
 
-    super.destroy();
+    super.destroy(drop);
   }
 
   getTaxonomy() {

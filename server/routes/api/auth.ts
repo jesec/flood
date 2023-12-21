@@ -106,7 +106,7 @@ router.use('/register', (req, res, next) => {
       next();
     },
     handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
+      passport.authenticate('jwt', {session: false}, (err: unknown, user: UserInDatabase) => {
         if (err || !user) {
           return res.status(401).send('Unauthorized');
         }
@@ -193,7 +193,7 @@ router.use('/verify', (req, res, next) => {
       res.json(response);
     },
     handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (err, user: UserInDatabase) => {
+      passport.authenticate('jwt', {session: false}, (err: unknown, user: UserInDatabase) => {
         if (err || !user) {
           res.status(401).json({
             configs: preloadConfigs,
@@ -325,8 +325,8 @@ router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions
 
     return Users.updateUser(username, patch)
       .then((newUsername) => {
-        return Users.lookupUser(newUsername).then((user) => {
-          destroyUserServices(user._id);
+        return Users.lookupUser(newUsername).then(async (user) => {
+          await destroyUserServices(user._id);
           bootstrapServicesForUser(user);
           return res.status(200).json({});
         });

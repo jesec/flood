@@ -103,7 +103,7 @@ export const getAddTorrentPropertiesCalls = ({
   Pick<AddTorrentByFileOptions, 'destination' | 'isBasePath' | 'isSequential' | 'isInitialSeeding' | 'tags'>
 >) => {
   const result: Array<string> = [
-    'd.tied_to_file.set=',
+    'd.tied_to_file.set=""',
     `d.custom.set=addtime,${Math.round(Date.now() / 1000)}`,
     `${isBasePath ? 'd.directory_base.set' : 'd.directory.set'}="${destination}"`,
   ];

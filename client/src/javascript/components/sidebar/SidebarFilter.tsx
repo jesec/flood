@@ -63,7 +63,7 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
         {icon}
         <span className="name">{name}</span>
         <Badge>{count}</Badge>
-        {size && <Size value={size} className="size" />}
+        {size != null && <Size value={size} className="size" />}
       </button>
     </li>
   );

@@ -88,7 +88,7 @@ const Button: FC<ButtonProps> = ({
   );
 
   if (wrap) {
-    const WrapperComponent = wrapper as FC;
+    const WrapperComponent = wrapper as FC<{children?: React.ReactNode}>;
     return (
       <WrapperComponent
         {...{

@@ -1,7 +1,7 @@
 import {BrowserRouter} from 'react-router-dom';
+import {createRoot} from 'react-dom/client';
 import {FC, lazy, Suspense, useEffect} from 'react';
 import {observer} from 'mobx-react';
-import ReactDOM from 'react-dom';
 import {Route, Routes} from 'react-router';
 import {useMedia} from 'react-use';
 
@@ -82,4 +82,7 @@ const FloodApp: FC = observer(() => {
   );
 });
 
-ReactDOM.render(<FloodApp />, document.getElementById('app'));
+const container = document.getElementById('app') as HTMLElement;
+const root = createRoot(container);
+
+root.render(<FloodApp />);

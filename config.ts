@@ -12,7 +12,7 @@ import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSett
 
 import {version} from './package.json';
 
-const {argv} = yargs(process.argv.slice(2))
+const {argv: argvObj} = yargs(process.argv.slice(2))
   .env('FLOOD_OPTION_')
   .option('baseuri', {
     default: '/',
@@ -35,7 +35,7 @@ const {argv} = yargs(process.argv.slice(2))
     alias: 'p',
     default: 3000,
     describe: 'The port that Flood should listen for web connections on',
-    type: 'number',
+    type: 'string',
   })
   .option('secret', {
     alias: 's',
@@ -198,6 +198,10 @@ const {argv} = yargs(process.argv.slice(2))
   .alias('v', 'version')
   .help();
 
+// HACK: pending yargs/yargs#2175
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const argv = argvObj as Record<string, any>;
+
 process.on('SIGINT', () => {
   process.exit();
 });
@@ -207,7 +211,7 @@ try {
   fs.mkdirSync(path.join(argv.rundir, 'db'), {recursive: true});
   fs.mkdirSync(path.join(argv.rundir, 'temp'), {recursive: true});
 } catch (error) {
-  console.error('Failed to access runtime directory');
+  console.error('Failed to access runtime directory', error);
   process.exit(1);
 }
 

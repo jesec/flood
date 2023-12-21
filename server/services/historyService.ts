@@ -4,11 +4,11 @@ import BaseService from './BaseService';
 import config from '../../config';
 import HistoryEra from '../models/HistoryEra';
 
-interface HistoryServiceEvents {
+type HistoryServiceEvents = {
   TRANSFER_SUMMARY_FULL_UPDATE: (payload: {id: number; summary: TransferSummary}) => void;
   FETCH_TRANSFER_SUMMARY_SUCCESS: () => void;
   FETCH_TRANSFER_SUMMARY_ERROR: () => void;
-}
+};
 
 class HistoryService extends BaseService<HistoryServiceEvents> {
   private errorCount = 0;
@@ -83,12 +83,16 @@ class HistoryService extends BaseService<HistoryServiceEvents> {
     this.emit('FETCH_TRANSFER_SUMMARY_ERROR');
   };
 
-  destroy() {
+  async destroy(drop: boolean) {
     if (this.pollTimeout != null) {
       clearTimeout(this.pollTimeout);
     }
 
-    super.destroy();
+    if (drop) {
+      await this.snapshot.dropDB();
+    }
+
+    return super.destroy(drop);
   }
 
   getTransferSummary() {

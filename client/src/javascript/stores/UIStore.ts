@@ -1,6 +1,7 @@
 import {makeAutoObservable} from 'mobx';
 import {FC, MouseEvent} from 'react';
 
+import type {ProcessedFiles} from '@client/components/general/form-elements/FileDropzone';
 import type {TorrentContextMenuAction} from '@client/constants/TorrentContextMenuActions';
 
 export type ContextMenuItem =
@@ -68,7 +69,13 @@ export type Modal =
     }
   | {
       id: 'add-torrents';
-      initialURLs?: Array<{id: number; value: string}>;
+      tab?: 'by-url';
+      urls?: Array<{id: number; value: string}>;
+    }
+  | {
+      id: 'add-torrents';
+      tab: 'by-file';
+      files: ProcessedFiles;
     }
   | {
       id: 'confirm';

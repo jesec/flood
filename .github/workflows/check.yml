@@ -15,16 +15,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [16]
+        node: [20]
         check: [check-source-formatting, check-types, lint]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: npm
 
       - run: npm ci
       - run: npm run ${{ matrix.check }}

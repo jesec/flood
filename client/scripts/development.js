@@ -9,13 +9,10 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const chalk = require('chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const clearConsole = require('react-dev-utils/clearConsole');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const {choosePort, prepareUrls} = require('react-dev-utils/WebpackDevServerUtils');
-const openBrowser = require('react-dev-utils/openBrowser');
 const path = require('path');
 const paths = require('../../shared/config/paths');
 const config = require('../config/webpack.config.dev');
@@ -24,8 +21,6 @@ const {proxy: floodServerProxy} = require('yargs').env('FLOOD_OPTION_').option('
   default: 'http://127.0.0.1:3000',
   type: 'string',
 }).argv;
-
-const isInteractive = process.stdout.isTTY;
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndex])) {
@@ -82,13 +77,7 @@ choosePort(HOST, DEFAULT_PORT)
     });
 
     // Launch WebpackDevServer.
-    return devServer.start().then(() => {
-      if (isInteractive) {
-        clearConsole();
-      }
-      console.log(chalk.cyan('Starting the development server...\n'));
-      openBrowser(urls.localUrlForBrowser);
-    });
+    return devServer.start();
   })
   .catch((err) => {
     if (err && err.message) {

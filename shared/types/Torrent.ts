@@ -18,6 +18,7 @@ export enum TorrentPriority {
 
 export interface TorrentProperties {
   bytesDone: number;
+  comment: string;
   // Last time the torrent is active, -1 means currently active, 0 means data unavailable
   dateActive: number;
   dateAdded: number;

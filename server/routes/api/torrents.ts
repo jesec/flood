@@ -35,9 +35,17 @@ import {
   reannounceTorrentsSchema,
   setTorrentsTagsSchema,
 } from '../../../shared/schema/api/torrents';
-import {accessDeniedError, fileNotFoundError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {
+  accessDeniedError,
+  existAsync,
+  fileNotFoundError,
+  isAllowedPath,
+  isAllowedPathAsync,
+  sanitizePath,
+} from '../../util/fileUtil';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getToken} from '../../util/authUtil';
+import {asyncFilter} from '../../util/async';
 
 const getDestination = async (
   services: Express.Request['services'],
@@ -891,13 +899,13 @@ router.get<{hash: string}>(
         sanitizePath(path.join(torrentDirectory, content.path)),
       );
 
-      torrentContentPaths = torrentContentPaths.filter((contentPath) => isAllowedPath(contentPath));
+      torrentContentPaths = await asyncFilter(torrentContentPaths, (contentPath) => isAllowedPathAsync(contentPath));
       if (torrentContentPaths.length < 1) {
         const {code, message} = accessDeniedError();
         return res.status(403).json({code, message});
       }
 
-      torrentContentPaths = torrentContentPaths.filter((contentPath) => fs.existsSync(contentPath));
+      torrentContentPaths = await asyncFilter(torrentContentPaths, (contentPath) => existAsync(contentPath));
       if (torrentContentPaths.length < 1) {
         const {code, message} = fileNotFoundError();
         return res.status(404).json({code, message});
@@ -905,8 +913,8 @@ router.get<{hash: string}>(
 
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        torrentContentPaths,
-        {maxBuffer: 1024 * 2000, timeout: 1000 * 10},
+        torrentContentPaths.map((x) => path.relative(torrentDirectory, x)),
+        {maxBuffer: 1024 * 2000, timeout: 1000 * 10, cwd: torrentDirectory},
         (error, stdout) => {
           if (error) {
             return res.status(500).json({code: error.code, message: error.message});

@@ -11,16 +11,17 @@ jobs:
 
     strategy:
       matrix:
-        node: [16]
+        node: [20]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
+          cache: npm
 
       - run: sudo npm i -g pkg
       - run: npm ci
@@ -71,7 +72,7 @@ jobs:
     needs: release
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Parse semantic version
         id: parse_semver
@@ -90,10 +91,10 @@ jobs:
           sudo apt install --reinstall -y qemu-user-static
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Login to DockerHub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -109,12 +110,12 @@ jobs:
       - run: sleep 120
 
       - name: Publish to Docker Hub
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v4
         with:
           build-args: VERSION=${{ steps.parse_semver.outputs.FULL_VERSION }}
           context: .
           file: ./distribution/containers/Dockerfile.release
-          platforms: linux/amd64,linux/arm64,linux/arm/v7
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
             jesec/flood:latest

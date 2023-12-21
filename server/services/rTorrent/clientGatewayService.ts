@@ -36,7 +36,7 @@ import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
-import {setCompleted, setTrackers} from '../../util/torrentFileUtil';
+import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import {
   encodeTags,
   getAddTorrentPropertiesCalls,
@@ -60,6 +60,15 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
   availableMethodCalls = this.fetchAvailableMethodCalls(true);
 
+  async appendTorrentCommentCall(file: string, additionalCalls: string[]) {
+    const comment = await getComment(Buffer.from(file, 'base64'));
+    if (comment && comment.length > 0) {
+      // VRS24mrker is used for compatability with ruTorrent
+      return [...additionalCalls, `d.custom2.set="VRS24mrker${encodeURIComponent(comment)}"`];
+    }
+    return additionalCalls;
+  }
+
   async addTorrentsByFile({
     files,
     destination,
@@ -70,8 +79,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<string[]> {
-    const {hasLoadThrow} = await this.availableMethodCalls;
-
     await fs.promises.mkdir(destination, {recursive: true});
 
     let processedFiles: string[] = files;
@@ -99,13 +106,19 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     const result: string[] = [];
 
-    if (hasLoadThrow && this.clientRequestManager.isJSONCapable) {
+    if (this.clientRequestManager.isJSONCapable) {
       await this.clientRequestManager
         .methodCall('system.multicall', [
-          processedFiles.map((file) => ({
-            methodName: start ? 'load.start_throw' : 'load.throw',
-            params: ['', `data:applications/x-bittorrent;base64,${file}`, ...additionalCalls],
-          })),
+          await Promise.all(
+            processedFiles.map(async (file) => ({
+              methodName: start ? 'load.start_throw' : 'load.throw',
+              params: [
+                '',
+                `data:applications/x-bittorrent;base64,${file}`,
+                ...(await this.appendTorrentCommentCall(file, additionalCalls)),
+              ],
+            })),
+          ),
         ])
         .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
         .then((response: Array<Array<string | number>>) => {
@@ -116,7 +129,11 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       await Promise.all(
         processedFiles.map(async (file) => {
           await this.clientRequestManager
-            .methodCall(start ? 'load.raw_start' : 'load.raw', ['', Buffer.from(file, 'base64'), ...additionalCalls])
+            .methodCall(start ? 'load.raw_start' : 'load.raw', [
+              '',
+              Buffer.from(file, 'base64'),
+              ...(await this.appendTorrentCommentCall(file, additionalCalls)),
+            ])
             .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
         }),
       );
@@ -136,8 +153,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
-    const {hasLoadThrow} = await this.availableMethodCalls;
-
     await fs.promises.mkdir(destination, {recursive: true});
 
     const {files, urls} = await fetchUrls(inputUrls, cookies);
@@ -150,7 +165,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     if (urls[0]) {
       let methodName: string;
-      if (hasLoadThrow) {
+      if (this.clientRequestManager.isJSONCapable) {
         methodName = start ? 'load.start_throw' : 'load.throw';
       } else {
         methodName = start ? 'load.start' : 'load.normal';
@@ -314,15 +329,10 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             : path.resolve(destination);
 
           if (sourceDirectory !== destDirectory) {
-            try {
-              if (isMultiFile[index]) {
-                await move(sourceDirectory, destDirectory, {overwrite: true});
-              } else {
-                await move(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
-              }
-            } catch (err) {
-              console.error(`Failed to move files to ${destDirectory}.`);
-              console.error(err);
+            if (isMultiFile[index]) {
+              await move(sourceDirectory, destDirectory, {overwrite: true});
+            } else {
+              await move(path.join(sourceDirectory, name), path.join(destDirectory, name), {overwrite: true});
             }
           }
         }),
@@ -643,6 +653,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             processedResponses.map(async (response) => {
               const torrentProperties: TorrentProperties = {
                 bytesDone: response.bytesDone,
+                comment: response.comment,
                 dateActive: response.downRate > 0 || response.upRate > 0 ? -1 : response.dateActive,
                 dateAdded: response.dateAdded,
                 dateCreated: response.dateCreated,
@@ -781,7 +792,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   }
 
   async fetchAvailableMethodCalls(fallback = false): Promise<{
-    hasLoadThrow: boolean;
     clientSetting: string[];
     torrentContent: string[];
     torrentList: string[];
@@ -821,7 +831,6 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         : (methodCalls: Array<string>) => methodCalls;
 
     return {
-      hasLoadThrow: methodList?.includes('load.throw') ?? false,
       clientSetting: getAvailableMethodCalls(getMethodCalls(clientSettingMethodCallConfigs)),
       torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
       torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),

@@ -39,7 +39,7 @@ const spawnAsync = (cmd: string, args: string[], options: SpawnOptions, maxBuffe
   });
 
 const PLATFORMS_SUPPORTED = ['darwin', 'linux', 'freebsd', 'win32'] as const;
-export type SupportedPlatform = Extract<NodeJS.Platform, typeof PLATFORMS_SUPPORTED[number]>;
+export type SupportedPlatform = Extract<NodeJS.Platform, (typeof PLATFORMS_SUPPORTED)[number]>;
 
 export const isPlatformSupported = (): boolean => {
   return PLATFORMS_SUPPORTED.includes(process.platform as SupportedPlatform);

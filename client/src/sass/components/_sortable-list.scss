@@ -122,6 +122,7 @@ $sortable-list--item--border--preview: color.adjust($sortable-list--item--border
 
     &--primary {
       flex: 1 1 auto;
+      user-select: none;
     }
 
     &--secondary {
