@@ -1,10 +1,23 @@
 import classnames from 'classnames';
-import {FC, ReactNode, KeyboardEvent, MouseEvent, TouchEvent, useState} from 'react';
+import {createRef, FC, ReactNode, KeyboardEvent, MouseEvent, RefObject, TouchEvent, useEffect, useState} from 'react';
 import {useLingui} from '@lingui/react';
 import {Start} from '@client/ui/icons';
 
 import Badge from '../general/Badge';
 import Size from '../general/Size';
+
+const useRefTextOverflowed = (ref: RefObject<HTMLElement>) => {
+  const [overflowed, setOverflowed] = useState(false);
+
+  useEffect(() => {
+    if (ref.current) {
+      const {current} = ref;
+      setOverflowed(current.scrollWidth > current.clientWidth);
+    }
+  }, [ref, ref?.current?.scrollWidth, ref?.current?.clientWidth]);
+
+  return overflowed;
+};
 
 interface SidebarFilterProps {
   children?: ReactNode[];
@@ -27,6 +40,9 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
   size,
   handleClick,
 }: SidebarFilterProps) => {
+  const nameSpanRef = createRef<HTMLSpanElement>();
+  const overflowed = useRefTextOverflowed(nameSpanRef);
+
   const {i18n} = useLingui();
 
   const [expanded, setExpanded] = useState(false);
@@ -67,17 +83,6 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
     }
   }
 
-  const setTitleForOverflowedName = (event: MouseEvent) => {
-    const target = event.target as HTMLSpanElement;
-    const overflowed = target.scrollWidth > target.clientWidth;
-    target.title = overflowed ? target.textContent || '' : '';
-  };
-
-  const unsetTitle = (event: MouseEvent) => {
-    const target = event.target as HTMLSpanElement;
-    target.title = '';
-  };
-
   return (
     <li>
       <div css={flexCss}>
@@ -101,7 +106,7 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
           role="menuitem"
         >
           {icon}
-          <span className="name" onMouseOver={setTitleForOverflowedName} onMouseOut={unsetTitle}>
+          <span className="name" ref={nameSpanRef} title={overflowed ? name || '' : undefined}>
             {name}
           </span>
           <Badge>{count}</Badge>
