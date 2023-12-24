@@ -99,7 +99,15 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
       }
 
       // Order slashes before similar paths with different symbols, eg. /files/PC/ should come before /files/PC-98/ for treeing
-      return a.replace(/[^\\/\w]/g, '~').localeCompare(b.replace(/[^\\/\w]/g, '~'));
+      const aa = a.replace(/[^\\/\w]/g, '~');
+      const bb = b.replace(/[^\\/\w]/g, '~');
+      if (aa < bb) {
+        return -1;
+      }
+      if (aa == bb) {
+        return 0;
+      }
+      return 1;
     });
 
     const separator = sortedLocations.length < 2 || sortedLocations[1].includes('/') ? '/' : '\\';
