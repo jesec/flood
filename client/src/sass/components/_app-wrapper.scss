@@ -1,9 +1,10 @@
 @use '../tools/colors';
+@use '../tools/themes';
 
 .application {
   &__loading-overlay {
     align-items: center;
-    background: colors.$light-blue;
+    @include themes.theme('background', 'loading--background');
     display: flex;
     flex-direction: column;
     font-size: 0.8em;
