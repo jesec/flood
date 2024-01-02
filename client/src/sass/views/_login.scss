@@ -1,4 +1,5 @@
 @use '../tools/colors';
+@use '../tools/themes';
 @use '../tools/variables';
 
 $authentication--form--border: #d4dbe0;
@@ -14,7 +15,7 @@ $authentication--label--foreground: #3a5567;
 .application {
   &__view {
     &--auth-form {
-      background: colors.$light-blue;
+      @include themes.theme('background', 'auth-form--background');
     }
   }
 }
