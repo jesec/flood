@@ -2,7 +2,6 @@ import jsonpatch, {Operation} from 'fast-json-patch';
 
 import BaseService from './BaseService';
 import torrentStatusMap from '../../shared/constants/torrentStatusMap';
-import {isInsensitiveOs} from '../util/fileUtil';
 
 import type {Taxonomy, LocationTreeNode} from '@shared/types/Taxonomy';
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
@@ -113,7 +112,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     directory: TorrentProperties['directory'],
     sizeBytes: TorrentProperties['sizeBytes'],
   ) {
-    const separator = directory.includes('\\') ? '\\' : '/';
+    const separator = directory.includes('/') ? '/' : '\\';
 
     const countSizeAndBytesForHierarchy = (parent: LocationTreeNode, pathSplit: string[]) => {
       const [nodeName, ...restOfPath] = pathSplit;
@@ -136,8 +135,9 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
       }
     };
 
-    const path = isInsensitiveOs() ? directory.toLocaleLowerCase() : directory;
-    const pathSplit = path.startsWith(separator) ? path.split(separator).slice(1) : path.split(separator);
+    const pathSplit = directory.startsWith(separator)
+      ? directory.split(separator).slice(1)
+      : directory.split(separator);
 
     countSizeAndBytesForHierarchy(this.taxonomy.locationTree, pathSplit);
     this.taxonomy.locationTree.containedCount += 1;

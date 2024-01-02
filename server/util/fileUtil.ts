@@ -1,6 +1,6 @@
 import fs from 'fs';
 import {promises as fsp} from 'fs';
-import {homedir, platform} from 'os';
+import {homedir} from 'os';
 import path from 'path';
 
 import config from '../../config';
@@ -88,5 +88,3 @@ export const sanitizePath = (input?: string): string => {
 
   return path.resolve(input.replace(/^~/, homedir()).replace(controlRe, ''));
 };
-
-export const isInsensitiveOs = (): boolean => ['darwin', 'win32'].includes(platform());

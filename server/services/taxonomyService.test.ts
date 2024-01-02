@@ -1,7 +1,6 @@
 import {LocationTreeNode} from '@shared/types/Taxonomy';
 import TaxonomyService from '../../server/services/taxonomyService';
 import {UserInDatabase} from '@shared/schema/Auth';
-import os from 'os';
 
 type LocationRecord = {[key: string]: LocationRecord | null};
 const toTreeNodes = (locations: LocationRecord, separator = '/', basePath = '') =>
@@ -61,43 +60,12 @@ describe('taxonomyService', () => {
     ]) {
       const {locations, expected} = locationsAndExpected;
 
-      it(`builds Linux-style case-sensitive location tree correctly from ${locations}`, () => {
+      it(`builds case-sensitive location tree correctly from ${locations}`, () => {
         const taxonomyService = new TaxonomyService({} as UserInDatabase);
-        const mock = jest.spyOn(os, 'platform');
-        mock.mockImplementation(() => 'linux');
 
         for (const location of locations) taxonomyService.incrementLocationCountsAndSizes(location, 10);
 
         expect(taxonomyService.taxonomy.locationTree).toMatchObject(expected);
-
-        mock.mockRestore();
-      });
-    }
-
-    for (const locationsAndExpected of [
-      // Multiple roots including overlapping case
-      {
-        locations: ['/mnt/file1', '/mnt/file2', '/mount/directory1/file3', '/Mount/directory2/file4'],
-        expected: toTreeNodes({
-          '': {
-            mnt: {file1: null, file2: null},
-            mount: {directory1: {file3: null}, directory2: {file4: null}},
-          },
-        })[0],
-      },
-    ]) {
-      const {locations, expected} = locationsAndExpected;
-
-      it(`builds Mac-style case-insensitive location tree correctly from ${locations}`, () => {
-        const taxonomyService = new TaxonomyService({} as UserInDatabase);
-        const mock = jest.spyOn(os, 'platform');
-        mock.mockImplementation(() => 'darwin');
-
-        for (const location of locations) taxonomyService.incrementLocationCountsAndSizes(location, 10);
-
-        expect(taxonomyService.taxonomy.locationTree).toMatchObject(expected);
-
-        mock.mockRestore();
       });
     }
   });
