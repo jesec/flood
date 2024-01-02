@@ -6,52 +6,46 @@ import {LocationTreeNode} from '@shared/types/Taxonomy';
 import SidebarFilter from './SidebarFilter';
 import TorrentFilterStore from '../../stores/TorrentFilterStore';
 
+const buildLocationFilterTree = (location: LocationTreeNode): ReactNode => {
+  if (location.children.length === 1 && location.containedCount === location.children[0].containedCount) {
+    const onlyChild = location.children[0];
+    const separator = onlyChild.fullPath.includes('/') ? '/' : '\\';
+    return buildLocationFilterTree({
+      ...onlyChild,
+      directoryName: location.directoryName + separator + onlyChild.directoryName,
+    });
+  }
+
+  const children = location.children.map(buildLocationFilterTree);
+
+  return (
+    <SidebarFilter
+      handleClick={(filter: string | '', event: KeyboardEvent | MouseEvent | TouchEvent) =>
+        TorrentFilterStore.setLocationFilters(filter, event)
+      }
+      count={location.containedCount}
+      key={location.fullPath}
+      isActive={
+        (location.fullPath === '' && !TorrentFilterStore.locationFilter.length) ||
+        TorrentFilterStore.locationFilter.includes(location.fullPath)
+      }
+      name={location.directoryName}
+      slug={location.fullPath}
+      size={location.containedSize}
+    >
+      {(children.length && children) || undefined}
+    </SidebarFilter>
+  );
+};
+
 const LocationFilters: FC = observer(() => {
   const {i18n} = useLingui();
 
-  const locations = Object.keys(TorrentFilterStore.taxonomy.locationCounts);
-
-  if (locations.length === 1 && locations[0] === '') {
+  if (TorrentFilterStore.taxonomy.locationTree.containedCount === 0) {
     return null;
   }
 
-  const buildLocationFilterTree = (location: LocationTreeNode): ReactNode => {
-    if (
-      location.children.length === 1 &&
-      TorrentFilterStore.taxonomy.locationCounts[location.fullPath] ===
-        TorrentFilterStore.taxonomy.locationCounts[location.children[0].fullPath]
-    ) {
-      const onlyChild = location.children[0];
-      const separator = onlyChild.fullPath.includes('/') ? '/' : '\\';
-      return buildLocationFilterTree({
-        ...onlyChild,
-        directoryName: location.directoryName + separator + onlyChild.directoryName,
-      });
-    }
-
-    const children = location.children.map(buildLocationFilterTree);
-
-    return (
-      <SidebarFilter
-        handleClick={(filter: string | '', event: KeyboardEvent | MouseEvent | TouchEvent) =>
-          TorrentFilterStore.setLocationFilters(filter, event)
-        }
-        count={TorrentFilterStore.taxonomy.locationCounts[location.fullPath] || 0}
-        key={location.fullPath}
-        isActive={
-          (location.fullPath === '' && !TorrentFilterStore.locationFilter.length) ||
-          TorrentFilterStore.locationFilter.includes(location.fullPath)
-        }
-        name={location.directoryName}
-        slug={location.fullPath}
-        size={TorrentFilterStore.taxonomy.locationSizes[location.fullPath]}
-      >
-        {(children.length && children) || undefined}
-      </SidebarFilter>
-    );
-  };
-
-  const filterElements = TorrentFilterStore.taxonomy.locationTree.map(buildLocationFilterTree);
+  const filterElements = buildLocationFilterTree(TorrentFilterStore.taxonomy.locationTree);
 
   const title = i18n._('filter.location.title');
 

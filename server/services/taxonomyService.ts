@@ -2,10 +2,11 @@ import jsonpatch, {Operation} from 'fast-json-patch';
 
 import BaseService from './BaseService';
 import torrentStatusMap from '../../shared/constants/torrentStatusMap';
+import {isInsensitiveOs} from '../util/fileUtil';
 
-import type {Taxonomy, LocationTreeNode} from '../../shared/types/Taxonomy';
-import type {TorrentStatus} from '../../shared/constants/torrentStatusMap';
-import type {TorrentProperties, TorrentList} from '../../shared/types/Torrent';
+import type {Taxonomy, LocationTreeNode} from '@shared/types/Taxonomy';
+import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
+import type {TorrentProperties, TorrentList} from '@shared/types/Torrent';
 
 type TaxonomyServiceEvents = {
   TAXONOMY_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
@@ -13,9 +14,7 @@ type TaxonomyServiceEvents = {
 
 class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   taxonomy: Taxonomy = {
-    locationCounts: {'': 0},
-    locationSizes: {},
-    locationTree: [],
+    locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
     statusCounts: {'': 0},
     tagCounts: {'': 0, untagged: 0},
     tagSizes: {},
@@ -64,9 +63,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
 
   handleProcessTorrentListStart = () => {
     this.lastTaxonomy = {
-      locationCounts: {...this.taxonomy.locationCounts},
-      locationSizes: {...this.taxonomy.locationCounts},
-      locationTree: [...this.taxonomy.locationTree],
+      locationTree: {...this.taxonomy.locationTree},
       statusCounts: {...this.taxonomy.statusCounts},
       tagCounts: {...this.taxonomy.tagCounts},
       tagSizes: {...this.taxonomy.tagSizes},
@@ -78,9 +75,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
       this.taxonomy.statusCounts[status] = 0;
     });
 
-    this.taxonomy.locationCounts = {'': 0};
-    this.taxonomy.locationSizes = {};
-    this.taxonomy.locationTree = [];
+    this.taxonomy.locationTree = {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0};
     this.taxonomy.statusCounts[''] = 0;
     this.taxonomy.tagCounts = {'': 0, untagged: 0};
     this.taxonomy.tagSizes = {};
@@ -88,70 +83,9 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     this.taxonomy.trackerSizes = {};
   };
 
-  buildLocationTree = () => {
-    const locations = Object.keys(this.taxonomy.locationCounts);
-    const sortedLocations = locations.slice().sort((a, b) => {
-      if (a === '') {
-        return -1;
-      }
-      if (b === '') {
-        return 1;
-      }
-
-      // Order slashes before similar paths with different symbols, eg. /files/PC/ should come before /files/PC-98/ for treeing
-      const aa = a.replace(/[^\\/\w]/g, '~');
-      const bb = b.replace(/[^\\/\w]/g, '~');
-      if (aa < bb) {
-        return -1;
-      }
-      if (aa == bb) {
-        return 0;
-      }
-      return 1;
-    });
-
-    const separator = sortedLocations.length < 2 || sortedLocations[1].includes('/') ? '/' : '\\';
-    let previousLocation: LocationTreeNode;
-    this.taxonomy.locationTree = sortedLocations.reduce((tree, filter) => {
-      const directory = filter.split(separator).slice(-1)[0];
-      const parentPath = filter.substring(0, filter.lastIndexOf(separator + directory));
-      const location: LocationTreeNode = {directoryName: directory, fullPath: filter, children: []};
-      while (previousLocation) {
-        // Move up the tree to a matching parent
-        if (!previousLocation.parent || previousLocation.fullPath === parentPath) {
-          break;
-        }
-        previousLocation = previousLocation.parent;
-      }
-      if (previousLocation && previousLocation.fullPath === parentPath && parentPath !== '') {
-        // Child
-        location.parent = previousLocation;
-        previousLocation.children.push(location);
-      } else if (previousLocation && previousLocation.parent && previousLocation.parent.fullPath === parentPath) {
-        // Sibling
-        location.parent = previousLocation.parent;
-        previousLocation.parent.children.push(location);
-      } else {
-        // Root
-        tree.push(location);
-      }
-      previousLocation = location;
-      return tree;
-    }, [] as LocationTreeNode[]);
-  };
-
-  cleanLocationTree = (location: LocationTreeNode) => {
-    location.parent = undefined;
-    location.children.forEach(this.cleanLocationTree);
-  };
-
   handleProcessTorrentListEnd = ({torrents}: {torrents: TorrentList}) => {
     const {length} = Object.keys(torrents);
 
-    this.buildLocationTree();
-    this.taxonomy.locationTree.forEach(this.cleanLocationTree);
-
-    this.taxonomy.locationCounts[''] = length;
     this.taxonomy.statusCounts[''] = length;
     this.taxonomy.tagCounts[''] = length;
     this.taxonomy.trackerCounts[''] = length;
@@ -179,34 +113,35 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     directory: TorrentProperties['directory'],
     sizeBytes: TorrentProperties['sizeBytes'],
   ) {
-    const separator = directory.includes('/') ? '/' : '\\';
-    const parts = directory.startsWith(separator) ? directory.split(separator).slice(1) : directory.split(separator);
-    let heirarchy = '';
+    const separator = directory.includes('\\') ? '\\' : '/';
 
-    if (this.taxonomy.locationCounts[heirarchy] != null) {
-      this.taxonomy.locationCounts[heirarchy] += 1;
-    } else {
-      this.taxonomy.locationCounts[heirarchy] = 1;
-    }
-    if (this.taxonomy.locationSizes[heirarchy] != null) {
-      this.taxonomy.locationSizes[heirarchy] += sizeBytes;
-    } else {
-      this.taxonomy.locationSizes[heirarchy] = sizeBytes;
-    }
+    const countSizeAndBytesForHierarchy = (parent: LocationTreeNode, pathSplit: string[]) => {
+      const [nodeName, ...restOfPath] = pathSplit;
+      let nodeRoot = parent.children.find((treeNode) => treeNode.directoryName === nodeName);
+      if (!nodeRoot) {
+        nodeRoot = {
+          directoryName: nodeName,
+          fullPath: parent.fullPath + separator + nodeName,
+          children: [],
+          containedCount: 0,
+          containedSize: 0,
+        };
+        parent.children.push(nodeRoot);
+      }
+      nodeRoot.containedCount += 1;
+      nodeRoot.containedSize += sizeBytes;
 
-    parts.forEach((part) => {
-      heirarchy += separator + part;
-      if (this.taxonomy.locationCounts[heirarchy] != null) {
-        this.taxonomy.locationCounts[heirarchy] += 1;
-      } else {
-        this.taxonomy.locationCounts[heirarchy] = 1;
+      if (restOfPath.length) {
+        countSizeAndBytesForHierarchy(nodeRoot, restOfPath);
       }
-      if (this.taxonomy.locationSizes[heirarchy] != null) {
-        this.taxonomy.locationSizes[heirarchy] += sizeBytes;
-      } else {
-        this.taxonomy.locationSizes[heirarchy] = sizeBytes;
-      }
-    });
+    };
+
+    const path = isInsensitiveOs() ? directory.toLocaleLowerCase() : directory;
+    const pathSplit = path.startsWith(separator) ? path.split(separator).slice(1) : path.split(separator);
+
+    countSizeAndBytesForHierarchy(this.taxonomy.locationTree, pathSplit);
+    this.taxonomy.locationTree.containedCount += 1;
+    this.taxonomy.locationTree.containedSize += sizeBytes;
   }
 
   incrementStatusCounts(statuses: Array<TorrentStatus>) {

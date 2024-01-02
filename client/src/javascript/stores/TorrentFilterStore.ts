@@ -15,9 +15,7 @@ class TorrentFilterStore {
   filterTrigger = false;
 
   taxonomy: Taxonomy = {
-    locationCounts: {},
-    locationSizes: {},
-    locationTree: [],
+    locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
     statusCounts: {},
     tagCounts: {},
     tagSizes: {},
@@ -62,9 +60,8 @@ class TorrentFilterStore {
   }
 
   setLocationFilters(filter: string | '', event: KeyboardEvent | MouseEvent | TouchEvent) {
-    const locations = Object.keys(this.taxonomy.locationCounts).sort((a, b) => a.localeCompare(b));
-
-    this.computeFilters(locations, this.locationFilter, filter, event);
+    // keys: [] to disable shift-clicking as it doesn't make sense in a tree
+    this.computeFilters([], this.locationFilter, filter, event);
     this.filterTrigger = !this.filterTrigger;
   }
 
@@ -103,7 +100,7 @@ class TorrentFilterStore {
   ) {
     if (newFilter === ('' as T)) {
       currentFilters.splice(0);
-    } else if (event.shiftKey) {
+    } else if (event.shiftKey && keys.length) {
       if (currentFilters.length) {
         const lastKey = currentFilters[currentFilters.length - 1];
         const lastKeyIndex = keys.indexOf(lastKey);

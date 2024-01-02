@@ -2,13 +2,12 @@ export interface LocationTreeNode {
   directoryName: string;
   fullPath: string;
   children: LocationTreeNode[];
-  parent?: LocationTreeNode;
+  containedCount: number;
+  containedSize: number;
 }
 
 export interface Taxonomy {
-  locationCounts: Record<string, number>;
-  locationSizes: Record<string, number>;
-  locationTree: LocationTreeNode[];
+  locationTree: LocationTreeNode;
   statusCounts: Record<string, number>;
   tagCounts: Record<string, number>;
   tagSizes: Record<string, number>;
