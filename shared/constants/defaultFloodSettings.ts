@@ -6,6 +6,10 @@ const defaultFloodSettings: Readonly<FloodSettings> = {
     direction: 'desc',
     property: 'dateAdded',
   },
+  sortPeers: {
+    direction: 'asc',
+    property: 'address',
+  },
   torrentListColumns: [
     {id: 'name', visible: true},
     {id: 'percentComplete', visible: true},
