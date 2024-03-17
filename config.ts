@@ -194,6 +194,8 @@ const {argv: argvObj} = yargs(process.argv.slice(2))
     hidden: true,
     type: 'boolean',
   })
+  .config()
+  .alias('c', 'config')
   .version(version)
   .alias('v', 'version')
   .help();
