@@ -37,10 +37,7 @@ export const isAllowedPath = (resolvedPath: string) => {
   }
 
   return config.allowedPaths.some((allowedPath) => {
-    if (realPath?.startsWith(allowedPath)) {
-      return true;
-    }
-    return false;
+    return !!realPath?.startsWith(allowedPath);
   });
 };
 
@@ -64,10 +61,7 @@ export async function isAllowedPathAsync(resolvedPath: string) {
   }
 
   return config.allowedPaths.some((allowedPath) => {
-    if (realPath?.startsWith(allowedPath)) {
-      return true;
-    }
-    return false;
+    return !!realPath?.startsWith(allowedPath);
   });
 }
 

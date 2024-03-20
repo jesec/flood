@@ -8,6 +8,7 @@
     padding-top: 0;
   }
 
+  &__expander,
   &__item {
     @include themes.theme('color', 'sidebar-filter--foreground');
     cursor: pointer;
@@ -75,7 +76,22 @@
 
     .size {
       margin-left: auto;
+      white-space: nowrap;
     }
+  }
+
+  &__expander {
+    display: block;
+    width: 14px;
+    padding: 0 0 0 20px;
+
+    &.expanded svg {
+      transform: rotate(90deg);
+    }
+  }
+
+  &__nested {
+    margin-left: 8px;
   }
 
   .badge {
