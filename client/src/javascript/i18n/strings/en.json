@@ -390,5 +390,11 @@
   "unit.time.minute": "m",
   "unit.time.second": "s",
   "unit.time.week": "wk",
-  "unit.time.year": "yr"
+  "unit.time.year": "yr",
+  "watches.tabs.watches": "Watches",
+  "watches.tabs.heading": "Directory Watching",
+  "sidebar.button.watches": "Watches",
+  "watches.existing.watches": "Existing Watched Directories",
+  "watches.dir": "Watch Directory",
+  "watches.no.watches.defined": "No Watched Directories defined."
 }

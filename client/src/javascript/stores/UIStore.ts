@@ -60,6 +60,7 @@ export type Modal =
   | {
       id:
         | 'feeds'
+        | 'watches'
         | 'generate-magnet'
         | 'move-torrents'
         | 'remove-torrents'

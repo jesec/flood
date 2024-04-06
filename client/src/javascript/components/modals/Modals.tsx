@@ -16,6 +16,7 @@ import TorrentDetailsModal from './torrent-details-modal/TorrentDetailsModal';
 import UIStore from '../../stores/UIStore';
 
 import type {Modal} from '../../stores/UIStore';
+import WatchesModal from '@client/components/modals/fwatch-modal/WatchesModal';
 
 const createModal = (id: Modal['id']): React.ReactNode => {
   switch (id) {
@@ -25,6 +26,8 @@ const createModal = (id: Modal['id']): React.ReactNode => {
       return <ConfirmModal />;
     case 'feeds':
       return <FeedsModal />;
+    case 'watches':
+      return <WatchesModal />;
     case 'generate-magnet':
       return <GenerateMagnetModal />;
     case 'move-torrents':
