@@ -197,7 +197,7 @@
     "saxen": "^8.1.2",
     "source-map-loader": "^4.0.1",
     "style-loader": "^3.3.3",
-    "supertest": "^6.3.3",
+    "supertest": "^7.0.0",
     "tar-fs": "^2.1.1",
     "terser-webpack-plugin": "^5.3.9",
     "tldts": "^5.7.112",
