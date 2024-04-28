@@ -4,7 +4,6 @@ import createTorrent from 'create-torrent';
 import express, {Response} from 'express';
 import fs from 'fs';
 import path from 'path';
-import rateLimit from 'express-rate-limit';
 import sanitize from 'sanitize-filename';
 import tar, {Pack} from 'tar-fs';
 
@@ -46,6 +45,7 @@ import {
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getToken} from '../../util/authUtil';
 import {asyncFilter} from '../../util/async';
+import {rateLimit} from '../utils';
 
 const getDestination = async (
   services: Express.Request['services'],
