@@ -125,6 +125,10 @@ export const configSchema = strictObject({
   // Users may prefer to serve static assets via a "professional" web server such as nginx to
   // increase performance or have more flexibility on compression or other options. [default: true]
   serveAssets: boolean().optional(),
+
+  // CLI argument: --disable-rate-limit
+  // Disable api request limit except for login
+  disableRateLimit: boolean(),
 })
   .refine(
     (config) => {

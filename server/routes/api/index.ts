@@ -2,7 +2,6 @@ import express, {Response} from 'express';
 import fs from 'fs';
 import passport from 'passport';
 import path from 'path';
-import rateLimit from 'express-rate-limit';
 
 import {contentTokenSchema} from '@shared/schema/api/torrents';
 
@@ -19,6 +18,7 @@ import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
 import {getAuthToken, verifyToken} from '../../util/authUtil';
 import torrentsRoutes from './torrents';
+import {rateLimit} from '../utils';
 
 const router = express.Router();
 
