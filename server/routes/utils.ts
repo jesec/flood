@@ -1,6 +1,6 @@
 import config from '../../config';
 
-import expressRateLimit, {Options, RateLimitRequestHandler} from 'express-rate-limit';
+import expressRateLimit, {Options} from 'express-rate-limit';
 import {RequestHandler} from 'express';
 
 export function rateLimit(passedOptions?: Partial<Options>): RequestHandler {
