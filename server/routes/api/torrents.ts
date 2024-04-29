@@ -588,7 +588,7 @@ router.get<{hashes: string}>(
         ),
       );
     } catch {
-      return res.status(404).json('Failed to access torrent files.');
+      return res.status(404).json({code: 404, message: 'Failed to access torrent files.'});
     }
 
     if (hashes.length < 2) {
