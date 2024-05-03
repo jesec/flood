@@ -918,19 +918,26 @@ router.get<{hash: string}>(
         return res.status(404).json({code, message});
       }
 
+      const args = torrentContentPaths.filter((x) => {
+        const fn = x.toLowerCase();
+        for (const ext of ['.mp4', '.mkv', '.ts', '.avi', '.rmvb', '.dat', '.wmv', '.iso']) {
+          if (fn.endsWith(ext)) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      if (args.length < 1) {
+        return res.status(200).json({
+          output:
+            'no video file found.\nIf this is a error, please create a issue at https://github.com/jesec/flood/issues',
+        });
+      }
+
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        torrentContentPaths
-          .filter((x) => {
-            const fn = x.toLowerCase();
-            for (const ext of ['.mp4', '.mkv', '.ts', '.avi', '.rmvb', '.dat', '.wmv', '.iso']) {
-              if (fn.endsWith(ext)) {
-                return true;
-              }
-            }
-            return false;
-          })
-          .map((x) => path.relative(torrentDirectory, x)),
+        args.map((x) => path.relative(torrentDirectory, x)),
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10, cwd: torrentDirectory},
         (error, stdout) => {
           if (error) {
