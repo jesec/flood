@@ -916,7 +916,7 @@ router.get<{hash: string}>(
         torrentContentPaths
           .filter((x) => {
             const fn = x.toLowerCase();
-            for (const ext of ['.mp4', '.mkv', '.ts', '.avi', '.rmvb', '.dat', '.wmv']) {
+            for (const ext of ['.mp4', '.mkv', '.ts', '.avi', '.rmvb', '.dat', '.wmv', '.iso']) {
               if (fn.endsWith(ext)) {
                 return true;
               }
