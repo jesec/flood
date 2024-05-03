@@ -931,7 +931,7 @@ router.get<{hash: string}>(
       if (args.length < 1) {
         return res.status(200).json({
           output:
-            'no video file found.\n If this is a error, please create a issue at https://github.com/jesec/flood/issues',
+            'no video file found.\nIf this is a error, please create a issue at https://github.com/jesec/flood/issues',
         });
       }
 
