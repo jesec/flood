@@ -913,7 +913,17 @@ router.get<{hash: string}>(
 
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        torrentContentPaths.map((x) => path.relative(torrentDirectory, x)),
+        torrentContentPaths
+          .filter((x) => {
+            const fn = x.toLowerCase();
+            for (const ext of ['.mp4', '.mkv', '.ts']) {
+              if (fn.endsWith(ext)) {
+                return true;
+              }
+            }
+            return false;
+          })
+          .map((x) => path.relative(torrentDirectory, x)),
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10, cwd: torrentDirectory},
         (error, stdout) => {
           if (error) {
