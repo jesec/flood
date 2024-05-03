@@ -587,8 +587,15 @@ router.get<{hashes: string}>(
             await fs.promises.access(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
         ),
       );
-    } catch {
-      return res.status(404).json({code: 404, message: 'Failed to access torrent files.'});
+    } catch (e) {
+      const err = e as NodeJS.ErrnoException;
+      if (err.code === 'ENOENT') {
+        return res.status(404).json({code: err.code, message: err.message});
+      }
+      return res.status(500).json({
+        code: err.code,
+        message: `Failed to access torrent files: ${e}`,
+      });
     }
 
     if (hashes.length < 2) {
