@@ -32,7 +32,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           build_version=0.0.0-master.`git rev-parse --short HEAD`
           npm version --no-git-tag-version $build_version
-          echo name=BUILD_VERSION::$build_version >> $GITHUB_OUTPUT
+          echo BUILD_VERSION=$build_version >> $GITHUB_OUTPUT
 
       - name: Use @jesec scope
         run: |
@@ -84,7 +84,7 @@ jobs:
       - name: Parse version
         id: parse_version
         run: |
-          echo name=BUILD_VERSION::0.0.0-master.`git rev-parse --short HEAD` >> $GITHUB_OUTPUT
+          echo BUILD_VERSION=0.0.0-master.`git rev-parse --short HEAD` >> $GITHUB_OUTPUT
 
       - name: Publish flood:master to Docker Hub
         uses: docker/build-push-action@v4

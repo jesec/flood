@@ -45,7 +45,7 @@ jobs:
 
       - name: Parse version
         id: parse_version
-        run: echo name=VERSION::`grep "VERSION = " ./BUILD | cut -d"\"" -f2 | cut -d"-" -f1` >> $GITHUB_OUTPUT
+        run: echo VERSION=`grep "VERSION = " ./BUILD | cut -d"\"" -f2 | cut -d"-" -f1` >> $GITHUB_OUTPUT
 
       - name: Extract Flood tarball
         run: |

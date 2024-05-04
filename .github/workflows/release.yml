@@ -51,7 +51,7 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo name=VERSION::${GITHUB_REF/refs\/tags\//} >> $GITHUB_OUTPUT
+        run: echo VERSION=${GITHUB_REF/refs\/tags\//} >> $GITHUB_OUTPUT
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -81,9 +81,9 @@ jobs:
           major_version=`echo $full_version | cut -d'.' -f1`
           minor_version=`echo $full_version | cut -d'.' -f2`
           major_minor=`echo $major_version.$minor_version`
-          echo name=MAJOR_VERSION::$major_version >> $GITHUB_OUTPUT
-          echo name=MAJOR_MINOR::$major_minor >> $GITHUB_OUTPUT
-          echo name=FULL_VERSION::$full_version >> $GITHUB_OUTPUT
+          echo MAJOR_VERSION=$major_version >> $GITHUB_OUTPUT
+          echo MAJOR_MINOR=$major_minor >> $GITHUB_OUTPUT
+          echo FULL_VERSION=$full_version >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
         run: |
