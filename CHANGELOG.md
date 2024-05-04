@@ -2,9 +2,9 @@
 
 ## [4.8.1] (May 4, 204)
 
--  feat: new args `--disable-rate-limit` to disable rate limit on api except login (#737)
--  fix: only generate mediainfo for video file (#741)
--  fix: `/metainfo` json response for error (#740)
+- feat: new args `--disable-rate-limit` to disable rate limit on api except login (#737)
+- fix: only generate mediainfo for video file (#741)
+- fix: `/metainfo` json response for error (#740)
 
 ## [4.8.0] (April 24, 2024)
 
