@@ -1,5 +1,9 @@
 # Changelog
 
+## [4.8.2] (May 4, 204)
+
+nothing new, just a new release to for deb files.
+
 ## [4.8.1] (May 4, 204)
 
 - feat: new args `--disable-rate-limit` to disable rate limit on api except login (#737)
@@ -607,3 +611,4 @@ Other changes:
 [4.7.0]: https://github.com/jesec/flood/compare/v4.6.1...v4.7.0
 [4.8.0]: https://github.com/jesec/flood/compare/v4.7.0...v4.8.0
 [4.8.1]: https://github.com/jesec/flood/compare/v4.8.0...v4.8.1
+[4.8.2]: https://github.com/jesec/flood/compare/v4.8.1...v4.8.2
