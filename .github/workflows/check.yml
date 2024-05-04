@@ -19,7 +19,7 @@ jobs:
         check: [check-source-formatting, check-types, lint]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
