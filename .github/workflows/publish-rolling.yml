@@ -248,7 +248,7 @@ jobs:
           if-no-files-found: error
 
       - name: 'Upload executable: Windows arm64'
-        uses: actions/upload-artifact@v4d
+        uses: actions/upload-artifact@v4
         with:
           name: flood-win-arm64.exe
           path: dist-pkg/flood-win-arm64.exe
