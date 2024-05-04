@@ -16,7 +16,7 @@ jobs:
         node: [20]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
@@ -45,7 +45,7 @@ jobs:
 
       - name: Parse version
         id: parse_version
-        run: echo ::set-output name=VERSION::`grep "VERSION = " ./BUILD | cut -d"\"" -f2 | cut -d"-" -f1`
+        run: echo VERSION=`grep "VERSION = " ./BUILD | cut -d"\"" -f2 | cut -d"-" -f1` >> $GITHUB_OUTPUT
 
       - name: Extract Flood tarball
         run: |
@@ -60,7 +60,7 @@ jobs:
           cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
 
       - name: Upload packages to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

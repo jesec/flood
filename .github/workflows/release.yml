@@ -14,7 +14,7 @@ jobs:
         node: [20]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
@@ -51,10 +51,10 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+        run: echo VERSION=${GITHUB_REF/refs\/tags\//} >> $GITHUB_OUTPUT
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -72,7 +72,7 @@ jobs:
     needs: release
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Parse semantic version
         id: parse_semver
@@ -81,9 +81,9 @@ jobs:
           major_version=`echo $full_version | cut -d'.' -f1`
           minor_version=`echo $full_version | cut -d'.' -f2`
           major_minor=`echo $major_version.$minor_version`
-          echo ::set-output name=MAJOR_VERSION::$major_version
-          echo ::set-output name=MAJOR_MINOR::$major_minor
-          echo ::set-output name=FULL_VERSION::$full_version
+          echo MAJOR_VERSION=$major_version >> $GITHUB_OUTPUT
+          echo MAJOR_MINOR=$major_minor >> $GITHUB_OUTPUT
+          echo FULL_VERSION=$full_version >> $GITHUB_OUTPUT
 
       - name: Set up QEMU
         run: |

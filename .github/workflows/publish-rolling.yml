@@ -14,7 +14,7 @@ jobs:
         node: [20]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
@@ -32,7 +32,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           build_version=0.0.0-master.`git rev-parse --short HEAD`
           npm version --no-git-tag-version $build_version
-          echo ::set-output name=BUILD_VERSION::$build_version
+          echo BUILD_VERSION=$build_version >> $GITHUB_OUTPUT
 
       - name: Use @jesec scope
         run: |
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -84,7 +84,7 @@ jobs:
       - name: Parse version
         id: parse_version
         run: |
-          echo ::set-output name=BUILD_VERSION::0.0.0-master.`git rev-parse --short HEAD`
+          echo BUILD_VERSION=0.0.0-master.`git rev-parse --short HEAD` >> $GITHUB_OUTPUT
 
       - name: Publish flood:master to Docker Hub
         uses: docker/build-push-action@v4
@@ -122,7 +122,7 @@ jobs:
         node: [20]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
@@ -259,7 +259,7 @@ jobs:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
