@@ -1,10 +1,10 @@
 # Changelog
 
-## [4.8.2] (May 4, 204)
+## [4.8.2] (May 4, 2024)
 
 nothing new, just a new release to for deb files.
 
-## [4.8.1] (May 4, 204)
+## [4.8.1] (May 4, 2024)
 
 - feat: new args `--disable-rate-limit` to disable rate limit on api except login (#737)
 - fix: only generate mediainfo for video file (#741)
