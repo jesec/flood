@@ -15,7 +15,7 @@ RUN mv flood /root/sysroot/bin/flood
 
 
 RUN apk --no-cache add tini-static coreutils
-COPY /bin/df /root/sysroot/bin/df
+RUN cp /bin/df /root/sysroot/bin/df
 RUN cp /sbin/tini-static /root/sysroot/bin/tini
 
 RUN chmod 0555 /root/sysroot/bin/*
