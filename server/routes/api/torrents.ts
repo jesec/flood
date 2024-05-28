@@ -902,7 +902,7 @@ router.get<{hash: string}>(
     }
 
     try {
-      let torrentContentPaths = torrentContents?.map((content) =>
+      let torrentContentPaths = torrentContents.map((content) =>
         sanitizePath(path.join(torrentDirectory, content.path)),
       );
 
@@ -937,7 +937,7 @@ router.get<{hash: string}>(
 
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        args.map((x) => path.relative(torrentDirectory, x)),
+        args.slice(0, 1).map((x) => path.relative(torrentDirectory, x)),
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10, cwd: torrentDirectory},
         (error, stdout) => {
           if (error) {
