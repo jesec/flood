@@ -383,7 +383,7 @@
   "unit.size.kilobyte": "kB",
   "unit.size.megabyte": "MB",
   "unit.size.terabyte": "TB",
-  "unit.speed": "초당 {baseUnit}",
+  "unit.speed": "{baseUnit}/s",
   "unit.time.day": "일",
   "unit.time.hour": "시간",
   "unit.time.infinity": "∞",
