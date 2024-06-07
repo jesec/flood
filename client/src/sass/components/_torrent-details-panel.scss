@@ -347,4 +347,11 @@ $torrent-details--tags--foreground: #1a2028;
       white-space: nowrap;
     }
   }
+
+  &__trackers {
+    &--url {
+      overflow-wrap: anywhere;
+      text-wrap: balance;
+    }
+  }
 }
