@@ -14,6 +14,7 @@ import TagFilters from './TagFilters';
 import ThemeSwitchButton from './ThemeSwitchButton';
 import TrackerFilters from './TrackerFilters';
 import TransferData from './TransferData';
+import WatchesButton from '@client/components/sidebar/WatchesButton';
 
 const Sidebar: FC = () => (
   <OverlayScrollbarsComponent
@@ -36,6 +37,7 @@ const Sidebar: FC = () => (
         <SpeedLimitDropdown />
         <SettingsButton />
         <FeedsButton />
+        <WatchesButton />
         <NotificationsButton />
         <LogoutButton />
       </SidebarActions>

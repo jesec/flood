@@ -6,7 +6,7 @@ import {LibTorrentFilePriority} from '../../shared/types/TorrentFile';
 
 import type {LibTorrentResume, RTorrentFile, TorrentFile} from '../../shared/types/TorrentFile';
 
-const openAndDecodeTorrent = async (torrentPath: string): Promise<TorrentFile | null> => {
+export const openAndDecodeTorrent = async (torrentPath: string): Promise<TorrentFile | null> => {
   let torrentData: TorrentFile | null = null;
 
   try {

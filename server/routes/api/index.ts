@@ -16,6 +16,7 @@ import clientRoutes from './client';
 import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
 import feedMonitorRoutes from './feed-monitor';
+import watchMonitorRoutes from './watch-monitor';
 import {getAuthToken, verifyToken} from '../../util/authUtil';
 import torrentsRoutes from './torrents';
 import {rateLimit} from '../utils';
@@ -78,6 +79,7 @@ router.use('/feed-monitor', feedMonitorRoutes);
 
 router.use('/torrents', torrentsRoutes);
 
+router.use('/watch-monitor', watchMonitorRoutes);
 /**
  * GET /api/activity-stream
  * @summary Subscribes to activity stream
