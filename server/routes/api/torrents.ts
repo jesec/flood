@@ -3,6 +3,7 @@ import contentDisposition from 'content-disposition';
 import createTorrent from 'create-torrent';
 import express, {Response} from 'express';
 import fs from 'fs';
+import qs from 'qs';
 import path from 'path';
 import sanitize from 'sanitize-filename';
 import tar, {Pack} from 'tar-fs';
@@ -707,9 +708,10 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
  * @security User
  * @param {string} hash.path
  * @param {string} indices.path - 'all' or indices of selected contents separated by ','
- * @return {object} 200 - contents archived in .tar - application/x-tar
+ * @param {string} streaming - if present with a single index will try to make browsers display the data
+ * @return {object} 200 - file data for a single index or multiple files archived in .tar - application/x-tar
  */
-router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
+router.get<{hash: string; indices: string}, unknown, unknown, {token: string; streaming?: string}>(
   '/:hash/contents/:indices/data',
   // This operation is resource-intensive
   // Limit each IP to 200 requests every 5 minutes
@@ -721,17 +723,13 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
     const {hash, indices: stringIndices} = req.params;
 
     if (req.user != null && req.query.token == null) {
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=1689018
-      if (req.headers?.['user-agent']?.includes('Firefox/') !== true) {
-        res.redirect(
-          `?token=${getToken<ContentToken>({
-            username: req.user.username,
-            hash,
-            indices: stringIndices,
-          })}`,
-        );
-        return res;
-      }
+      const token = getToken<ContentToken>({
+        username: req.user.username,
+        hash,
+        indices: stringIndices,
+      });
+      res.redirect('?' + qs.stringify({...req.query, token}));
+      return res;
     }
 
     const selectedTorrent = req.services.torrentService.getTorrent(hash);
@@ -778,26 +776,25 @@ router.get<{hash: string; indices: string}, unknown, unknown, {token: string}>(
           const fileExt = path.extname(file);
 
           let processedType: string = fileExt;
-          switch (fileExt) {
-            // Browsers don't support MKV streaming. However, browsers do support WebM which is a
-            // subset of MKV. Chromium supports MKV when encoded in selected codecs.
-            case '.mkv':
-              processedType = 'video/webm';
-              break;
-            // MIME database uses x-flac which is not recognized by browsers as streamable audio.
-            case '.flac':
-              processedType = 'audio/flac';
-              break;
-            default:
-              break;
+          let contentDispositionType = 'attachment';
+
+          if (req.query.streaming !== undefined) {
+            processedType =
+              {
+                // Browsers don't support MKV streaming. However, browsers do support WebM which is a
+                // subset of MKV. Chromium supports MKV when encoded in selected codecs.
+                '.mkv': 'video/webm',
+                // MIME database uses x-flac which is not recognized by browsers as streamable audio.
+                '.flac': 'audio/flac',
+              }[fileExt] ?? fileExt;
+
+            // Allow browsers to display the content inline when only a single content is requested.
+            // This is useful for texts, videos and audios. Users can still download them if needed.
+            contentDispositionType = 'inline';
           }
 
           res.type(processedType);
-
-          // Allow browsers to display the content inline when only a single content is requested.
-          // This is useful for texts, videos and audios. Users can still download them if needed.
-          res.setHeader('content-disposition', contentDisposition(fileName, {type: 'inline'}));
-
+          res.setHeader('content-disposition', contentDisposition(fileName, {type: contentDispositionType}));
           res.sendFile(file);
 
           return res;

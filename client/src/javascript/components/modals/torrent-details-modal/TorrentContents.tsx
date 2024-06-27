@@ -143,29 +143,17 @@ const TorrentContents: FC = observer(() => {
               }}
             />
           </FormRowItem>
-          <Button
-            onClick={(event) => {
-              event.preventDefault();
-              const {baseURI} = ConfigStore;
-              const link = document.createElement('a');
-
-              link.download = '';
-              link.href = `${baseURI}api/torrents/${hash}/contents/${selectedIndices.join(',')}/data`;
-              link.style.display = 'none';
-
-              document.body.appendChild(link);
-              link.click();
-              document.body.removeChild(link);
-            }}
-            grow={false}
-            shrink={false}
-          >
-            <Trans
-              id="torrents.details.files.download.file"
-              values={{
-                count: selectedIndices.length,
-              }}
-            />
+          <Button>
+            <a
+              href={`${ConfigStore.baseURI}api/torrents/${hash}/contents/${selectedIndices.join(',')}/data`}
+              style={{textDecoration: 'none'}}
+              download
+            >
+              <Trans
+                id="torrents.details.files.download.file"
+                values={{count: selectedIndices.length}}
+              />
+            </a>
           </Button>
           <Select id="file-priority" persistentPlaceholder shrink={false} defaultID="">
             <SelectItem id={-1} isPlaceholder>
