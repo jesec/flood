@@ -526,7 +526,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     }
 
     if (typeof settings.throttleGlobalUpSpeed !== 'undefined') {
-      req['speed-limit-down-enabled'] = settings.throttleGlobalUpSpeed !== 0;
+      req['speed-limit-up-enabled'] = settings.throttleGlobalUpSpeed !== 0;
       req['speed-limit-up'] = settings.throttleGlobalUpSpeed / 1024;
     }
 
