@@ -509,21 +509,34 @@ class TransmissionClientGatewayService extends ClientGatewayService {
   }
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
+    const req: Record<string, any> = {
+      'dht-enabled': settings.dht,
+      'download-dir': settings.directoryDefault,
+      'peer-port-random-on-start': settings.networkPortRandom,
+      'pex-enabled': settings.protocolPex,
+    };
+
+    if (typeof settings.networkPortRandom !== 'undefined') {
+      req['peer-port'] = Number(settings.networkPortRange?.split('-')[0]);
+    }
+
+    if (typeof settings.throttleMaxUploadsGlobal === 'undefined') {
+      req['seed-queue-enabled'] = settings.throttleMaxUploadsGlobal !== 0;
+      req['seed-queue-size'] = settings.throttleMaxUploadsGlobal;
+    }
+
+    if (typeof settings.throttleGlobalUpSpeed !== 'undefined') {
+      req['speed-limit-down-enabled'] = settings.throttleGlobalUpSpeed !== 0;
+      req['speed-limit-up'] = settings.throttleGlobalUpSpeed / 1024;
+    }
+
+    if (typeof settings.throttleGlobalDownSpeed !== 'undefined') {
+      req['speed-limit-down-enabled'] = settings.throttleGlobalDownSpeed !== 0;
+      req['speed-limit-down'] = settings.throttleGlobalDownSpeed / 1024;
+    }
+
     return this.clientRequestManager
-      .setSessionProperties({
-        'dht-enabled': settings.dht,
-        'download-dir': settings.directoryDefault,
-        'peer-port': settings.networkPortRange ? Number(settings.networkPortRange?.split('-')[0]) : undefined,
-        'peer-port-random-on-start': settings.networkPortRandom,
-        'pex-enabled': settings.protocolPex,
-        'speed-limit-down-enabled': settings.throttleGlobalDownSpeed !== 0,
-        'speed-limit-down':
-          settings.throttleGlobalDownSpeed != null ? settings.throttleGlobalDownSpeed / 1024 : undefined,
-        'speed-limit-up-enabled': settings.throttleGlobalUpSpeed !== 0,
-        'speed-limit-up': settings.throttleGlobalUpSpeed != null ? settings.throttleGlobalUpSpeed / 1024 : undefined,
-        'seed-queue-enabled': settings.throttleMaxUploadsGlobal !== 0,
-        'seed-queue-size': settings.throttleMaxUploadsGlobal,
-      })
+      .setSessionProperties(req)
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
