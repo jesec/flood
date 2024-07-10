@@ -509,7 +509,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
   }
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
-    const req: Record<string, any> = {
+    const req: Record<string, string | number | boolean | undefined> = {
       'dht-enabled': settings.dht,
       'download-dir': settings.directoryDefault,
       'peer-port-random-on-start': settings.networkPortRandom,
