@@ -1,4 +1,5 @@
 import FeedSub, {FeedItem} from 'feedsub';
+import Miniget from "miniget";
 
 export interface FeedReaderOptions {
   feedID: string;
@@ -54,6 +55,11 @@ class FeedReader {
       maxHistory: this.options.maxHistory,
       interval: this.options.interval,
       forceInterval: true,
+      requestOpts: {
+        headers: {
+          "User-Agent": "flood",
+        }
+      }
     });
 
     this.reader.on('items', this.handleFeedItems);

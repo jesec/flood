@@ -4,6 +4,7 @@ import {cdata as matchCDATA} from '../../shared/util/regEx';
 
 import type {AddTorrentByURLOptions} from '../../shared/schema/api/torrents';
 import type {Rule} from '../../shared/types/Feed';
+import { spawn } from 'child_process';
 
 interface PendingDownloadItems
   extends Required<Pick<AddTorrentByURLOptions, 'urls' | 'destination' | 'tags' | 'start'>> {
@@ -54,17 +55,39 @@ export const getTorrentUrlsFromFeedItem = (feedItem: FeedItem): Array<string> =>
   return [];
 };
 
-export const getFeedItemsMatchingRules = (
+const execAsync = (...command: string[]) => {
+  try {
+    const p = spawn(command[0], command.slice(1));
+    return new Promise((resolveFunc) => {
+      p.stdout.on("data", (x) => {
+        process.stdout.write(x.toString());
+      });
+      p.stderr.on("data", (x) => {
+        process.stderr.write(x.toString());
+      });
+      p.on("exit", (code) => {
+        resolveFunc(code);
+      });
+    });
+  } catch (e) {
+    console.error(`Could not run rss script '${command.join(" ")}'`, e);
+    return 2;
+  }
+}
+
+export const getFeedItemsMatchingRules = async (
   feedItems: Array<FeedItem>,
   rules: Array<Rule>,
-): Array<PendingDownloadItems> => {
-  return feedItems.reduce((matchedItems: Array<PendingDownloadItems>, feedItem) => {
-    rules.forEach((rule) => {
+): Promise<Array<PendingDownloadItems>> => {
+  const matchedItems: Array<PendingDownloadItems> = [];
+  for (const feedItem of feedItems) {
+    for (const rule of rules) {
       const matchField = rule.field ? (feedItem[rule.field] as string) : (feedItem.title as string);
-      const isMatched = new RegExp(rule.match, 'gi').test(matchField);
+      const isMatched = rule.match === '' || new RegExp(rule.match, 'gi').test(matchField);
       const isExcluded = rule.exclude !== '' && new RegExp(rule.exclude, 'gi').test(matchField);
+      const scriptMatch = rule.script === '' || await execAsync(rule.script, matchField) === 80;
 
-      if (isMatched && !isExcluded) {
+      if (isMatched && !isExcluded && scriptMatch) {
         const torrentUrls = getTorrentUrlsFromFeedItem(feedItem);
         const isAlreadyDownloaded = matchedItems.some((matchedItem) =>
           torrentUrls.every((url) => matchedItem.urls.includes(url)),
@@ -82,8 +105,7 @@ export const getFeedItemsMatchingRules = (
           });
         }
       }
-    });
-
-    return matchedItems;
-  }, []);
+    }
+  }
+  return matchedItems;
 };
