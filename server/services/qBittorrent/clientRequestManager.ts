@@ -422,7 +422,7 @@ class ClientRequestManager {
     });
 
     const headers = form.getHeaders({
-      Cookie: await this.authCookie,
+      ...(await this.getRequestHeaders()),
       'Content-Length': form.getLengthSync(),
     });
 
