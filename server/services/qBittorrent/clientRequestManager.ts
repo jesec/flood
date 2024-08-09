@@ -422,7 +422,7 @@ class ClientRequestManager {
     });
 
     const headers = form.getHeaders({
-      Cookie: await this.authCookie,
+      ...(await this.getRequestHeaders()),
       'Content-Length': form.getLengthSync(),
     });
 
@@ -482,7 +482,7 @@ class ClientRequestManager {
         `${this.apiBase}/torrents/removeTags`,
         new URLSearchParams({
           hashes: hashes.join('|').toLowerCase(),
-          tags: tags?.join(','),
+          tags: tags?.join(',') ?? '',
         }),
         {
           headers: await this.getRequestHeaders(),
