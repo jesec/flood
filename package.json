@@ -89,6 +89,7 @@
     "@fastify/compress": "^6.5.0",
     "@fastify/express": "^2.3.0",
     "@fastify/static": "^6.10.2",
+    "@lingui/core": "^3.17.2",
     "@lingui/loader": "^3.17.2",
     "@lingui/react": "^3.17.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
