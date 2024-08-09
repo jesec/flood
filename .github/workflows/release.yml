@@ -16,15 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v2
+
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
-          cache: npm
+          cache: 'pnpm'
 
       - run: sudo npm i -g pkg
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
       - run: npm publish --access public
         env:
