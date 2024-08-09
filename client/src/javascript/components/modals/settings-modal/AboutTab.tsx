@@ -2,7 +2,7 @@ import {ComponentType, FC, lazy, Suspense} from 'react';
 
 import packageJSON from '../../../../../../package.json';
 
-const AboutMarkdown = lazy<ComponentType<any>>(() =>
+const AboutMarkdown = lazy<ComponentType<unknown>>(() =>
   import(/* webpackChunkName: 'about' */ '../../../../ABOUT.md').then((module) => ({default: module.react})),
 );
 
