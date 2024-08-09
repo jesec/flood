@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -16,15 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: ${{ matrix.node + 2 }}
           registry-url: 'https://registry.npmjs.org'
-          cache: npm
+          cache: 'pnpm'
 
       - run: sudo npm i -g pkg
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
       - run: npm publish --access public
         env:
@@ -70,7 +72,7 @@ jobs:
 
   release-docker:
     needs: release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 

@@ -1,8 +1,8 @@
-import {FC, lazy, Suspense} from 'react';
+import {ComponentType, FC, lazy, Suspense} from 'react';
 
 import packageJSON from '../../../../../../package.json';
 
-const AboutMarkdown = lazy(() =>
+const AboutMarkdown = lazy<ComponentType<{FloodVersion: unknown; CommitBadge: unknown}>>(() =>
   import(/* webpackChunkName: 'about' */ '../../../../ABOUT.md').then((module) => ({default: module.react})),
 );
 

@@ -1,6 +1,7 @@
-import {ClassNamesArg, cx} from '@emotion/css';
+import {cx} from '@emotion/css';
 import {FC} from 'react';
 import {useLingui} from '@lingui/react';
+import {ClassNamesArg} from '@emotion/react';
 
 import AuthActions from '@client/actions/AuthActions';
 import ConfigStore from '@client/stores/ConfigStore';

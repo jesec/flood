@@ -7,23 +7,25 @@ on:
 
 jobs:
   npm:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [20]
+        node: ['22']
 
     steps:
       - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
 
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
       - name: Tag rolling release
         id: tag_release
@@ -64,7 +66,7 @@ jobs:
 
   docker:
     needs: npm
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -115,11 +117,11 @@ jobs:
             RTORRENT_VERSION=master
 
   docker-dbg:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [20]
+        node: ['22']
 
     steps:
       - uses: actions/checkout@v4
@@ -129,7 +131,7 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
-          cache: npm
+          cache: 'pnpm'
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -171,11 +173,11 @@ jobs:
 
   pkg:
     needs: npm
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [20]
+        node: ['22']
 
     steps:
       - name: Use Node.js ${{ matrix.node }}
@@ -256,7 +258,7 @@ jobs:
 
   docker-distroless:
     needs: pkg
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
