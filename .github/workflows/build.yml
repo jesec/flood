@@ -10,11 +10,11 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [18, 20]
+        node: ['20', '22']
       fail-fast: false
 
     steps:

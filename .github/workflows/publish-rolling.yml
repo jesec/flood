@@ -7,11 +7,11 @@ on:
 
 jobs:
   npm:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [20]
+        node: ['22']
 
     steps:
       - uses: actions/checkout@v4
@@ -64,7 +64,7 @@ jobs:
 
   docker:
     needs: npm
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4
@@ -115,11 +115,11 @@ jobs:
             RTORRENT_VERSION=master
 
   docker-dbg:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [20]
+        node: ['22']
 
     steps:
       - uses: actions/checkout@v4
@@ -171,11 +171,11 @@ jobs:
 
   pkg:
     needs: npm
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [20]
+        node: ['22']
 
     steps:
       - name: Use Node.js ${{ matrix.node }}
@@ -256,7 +256,7 @@ jobs:
 
   docker-distroless:
     needs: pkg
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     steps:
       - uses: actions/checkout@v4

@@ -40,12 +40,12 @@
       "dist/geoip-country6.dat"
     ],
     "targets": [
-      "node18-linuxstatic-x64",
-      "node18-linuxstatic-arm64",
-      "node18-macos-x64",
-      "node18-macos-arm64",
-      "node18-win-x64",
-      "node18-win-arm64"
+      "node20-linuxstatic-x64",
+      "node20-linuxstatic-arm64",
+      "node20-macos-x64",
+      "node20-macos-arm64",
+      "node20-win-x64",
+      "node20-win-arm64"
     ]
   },
   "scripts": {
@@ -106,11 +106,11 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/lodash": "^4.14.195",
     "@types/morgan": "^1.9.4",
-    "@types/node": "^12.20.55",
+    "@types/node": "^14.0.0",
     "@types/parse-torrent": "^5.8.4",
     "@types/passport": "^1.0.12",
     "@types/passport-jwt": "^3.0.9",
-    "@types/react": "^18.2.11",
+    "@types/react": "^18.3.3",
     "@types/react-dom": "^18.2.4",
     "@types/react-measure": "^2.0.8",
     "@types/react-router-dom": "^5.3.3",
@@ -219,8 +219,7 @@
     "zod": "^3.21.4"
   },
   "engines": {
-    "node": ">=12.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=16.0.0"
   },
   "browserslist": [
     "> 2%",
@@ -235,5 +234,6 @@
   ],
   "lint-staged": {
     "*": "prettier --ignore-unknown -w"
-  }
+  },
+  "packageManager": "pnpm@9.7.0"
 }

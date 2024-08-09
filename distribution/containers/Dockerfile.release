@@ -1,5 +1,5 @@
 # Use node alpine docker image
-FROM docker.io/node:alpine
+FROM docker.io/node:22-alpine
 
 ARG PACKAGE=flood
 ARG VERSION=latest
