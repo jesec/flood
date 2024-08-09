@@ -20,8 +20,10 @@ WORKDIR /usr/src/app/
 # Copy project files
 COPY . ./
 
+RUN corepack enable && corepack install
+
 # Fetch dependencies from npm
-RUN pnpm install --frozen-lockfile --legacy-peer-deps
+RUN pnpm install --frozen-lockfile
 
 # Build assets
 RUN npm run build
