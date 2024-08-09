@@ -1,13 +1,13 @@
 import {cx} from '@emotion/css';
 import {FC} from 'react';
 import {useLingui} from '@lingui/react';
+import {ClassNamesArg} from '@emotion/react';
 
 import AuthActions from '@client/actions/AuthActions';
 import ConfigStore from '@client/stores/ConfigStore';
 import {Logout} from '@client/ui/icons';
 
 import Tooltip from '../general/Tooltip';
-import {ClassNamesArg} from '@emotion/react';
 
 interface LogoutButtonProps {
   className?: ClassNamesArg;
