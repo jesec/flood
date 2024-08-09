@@ -38,7 +38,7 @@ jobs:
 
     strategy:
       matrix:
-        node: ['20', '22']
+        node: ['18', '20']
       fail-fast: false
     steps:
       - run: echo pass
