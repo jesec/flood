@@ -7,6 +7,7 @@ import NotificationService from './notificationService';
 import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
 import TorrentService from './torrentService';
+import WatchService from './watchService';
 
 import DelugeClientGatewayService from './Deluge/clientGatewayService';
 import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService';
@@ -21,6 +22,7 @@ export interface ServiceInstances {
   settingService: SettingService;
   taxonomyService: TaxonomyService;
   torrentService: TorrentService;
+  watchService: WatchService;
 }
 
 const serviceInstances: Record<string, ServiceInstances> = {};
@@ -67,6 +69,7 @@ export const bootstrapServicesForUser = (user: UserInDatabase) => {
     settingService: new SettingService(user),
     taxonomyService: new TaxonomyService(user),
     torrentService: new TorrentService(user),
+    watchService: new WatchService(user)
   };
 
   Object.keys(userServiceInstances).forEach((key) => {
