@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  build:
+  build-real:
     runs-on: ubuntu-24.04
 
     strategy:
@@ -30,3 +30,15 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: npm run build
       - run: npm run start -- --help
+
+  build:
+    # so we do not need to update GitHub repo config
+    needs: build
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: ['20', '22']
+      fail-fast: false
+    steps:
+      - run: echo pass

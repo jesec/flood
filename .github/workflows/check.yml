@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  check:
+  check-real:
     runs-on: ubuntu-24.04
 
     strategy:
@@ -29,3 +29,16 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: npm run ${{ matrix.check }}
+
+  check:
+    # so we do not need to update GitHub repo config
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20']
+        check: [check-source-formatting, check-types, lint]
+    needs:
+      - check-real
+    steps:
+      - run: echo ok
