@@ -15,6 +15,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
+    "useUnknownInCatchVariables": false,
     "baseUrl": "./",
     "paths": {
       "@client/*": ["client/src/javascript/*"],

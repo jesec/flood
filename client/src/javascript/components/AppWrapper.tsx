@@ -5,6 +5,7 @@ import {FC, ReactNode} from 'react';
 import {observer} from 'mobx-react';
 import {useEffectOnce} from 'react-use';
 import {useNavigate} from 'react-router';
+// @ts-ignore not quiet sure that happened here
 import {useSearchParams} from 'react-router-dom';
 
 import AuthActions from '@client/actions/AuthActions';
