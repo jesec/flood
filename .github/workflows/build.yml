@@ -33,7 +33,7 @@ jobs:
 
   build:
     # so we do not need to update GitHub repo config
-    needs: build
+    needs: build-real
     runs-on: ubuntu-latest
 
     strategy:
