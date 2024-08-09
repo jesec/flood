@@ -9,6 +9,7 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
+    "useUnknownInCatchVariables": false,
     "baseUrl": "../",
     "paths": {
       "@shared/*": ["shared/*"]
