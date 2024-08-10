@@ -4,7 +4,7 @@
     "jsxImportSource": "@emotion/react",
     "sourceMap": true,
     "target": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "allowJs": true,
     "module": "esnext",
     "noEmit": true,
