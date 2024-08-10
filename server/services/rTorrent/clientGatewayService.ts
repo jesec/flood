@@ -1,5 +1,4 @@
 import fs from 'fs';
-import geoip from 'geoip-country';
 import {move} from 'fs-extra';
 import path from 'path';
 import sanitize from 'sanitize-filename';
@@ -31,6 +30,7 @@ import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
+import * as geoip from '../geoip';
 import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
@@ -262,7 +262,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           processedResponses.map(async (processedResponse) => {
             return {
               ...processedResponse,
-              country: geoip.lookup(processedResponse.address)?.country || '',
+              country: geoip.lookup(processedResponse.address),
             };
           }),
         );

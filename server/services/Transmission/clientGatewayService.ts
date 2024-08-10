@@ -1,4 +1,3 @@
-import geoip from 'geoip-country';
 import path from 'path';
 
 import type {
@@ -26,6 +25,7 @@ import type {TransferSummary} from '@shared/types/TransferData';
 import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
+import * as geoip from '../geoip';
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {fetchUrls} from '../../util/fetchUtil';
@@ -195,7 +195,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
           .filter((peer) => peer.isDownloadingFrom || peer.isUploadingTo)
           .map((peer) => ({
             address: peer.address,
-            country: geoip.lookup(peer.address)?.country || '',
+            country: geoip.lookup(peer.address),
             clientVersion: peer.clientName,
             completedPercent: peer.progress * 100,
             downloadRate: peer.rateToClient,
