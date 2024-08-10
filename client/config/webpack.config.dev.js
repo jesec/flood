@@ -44,6 +44,9 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
+              sassOptions: {
+                silenceDeprecations: ['mixed-decls'],
+              },
             },
           },
         ],
