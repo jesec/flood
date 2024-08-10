@@ -54,6 +54,11 @@ class FeedReader {
       maxHistory: this.options.maxHistory,
       interval: this.options.interval,
       forceInterval: true,
+      requestOpts: {
+        headers: {
+          'User-Agent': 'flood',
+        },
+      },
     });
 
     this.reader.on('items', this.handleFeedItems);
