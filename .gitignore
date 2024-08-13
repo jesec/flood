@@ -70,3 +70,6 @@ coverage/
 # Test results
 cypress/videos
 cypress/screenshots
+
+*.blob
+*.exe
