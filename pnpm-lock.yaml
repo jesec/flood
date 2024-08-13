@@ -21,9 +21,6 @@ importers:
       '@babel/plugin-proposal-decorators':
         specifier: ^7.22.5
         version: 7.24.7(@babel/core@7.25.2)
-      '@babel/plugin-proposal-optional-chaining':
-        specifier: ^7.21.0
-        version: 7.21.0(@babel/core@7.25.2)
       '@babel/preset-env':
         specifier: ^7.22.5
         version: 7.25.3(@babel/core@7.25.2)
