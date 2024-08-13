@@ -1,8 +1,8 @@
 import type {TransferHistory, TransferSummary} from '@shared/types/TransferData';
 
-import BaseService from './BaseService';
 import config from '../../config';
 import HistoryEra from '../models/HistoryEra';
+import BaseService from './BaseService';
 
 type HistoryServiceEvents = {
   TRANSFER_SUMMARY_FULL_UPDATE: (payload: {id: number; summary: TransferSummary}) => void;

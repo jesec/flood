@@ -14,8 +14,8 @@
 // env variable FLOOD_OPTION_port=80 is equivalent to argument --port 80. Use ',' to split
 // for arguments that take multiple inputs such as --allowedpath.
 
-import {array, boolean, number, strictObject, string} from 'zod';
 import type {infer as zodInfer} from 'zod';
+import {array, boolean, number, strictObject, string} from 'zod';
 
 import {authMethodSchema} from './Auth';
 import {clientConnectionSettingsSchema} from './ClientConnectionSettings';

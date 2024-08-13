@@ -1,4 +1,4 @@
-import {spawn, SpawnOptions} from 'child_process';
+import {spawn, SpawnOptions} from 'node:child_process';
 
 import type {Disk} from '@shared/types/DiskUsage';
 

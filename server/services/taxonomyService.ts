@@ -1,11 +1,10 @@
 import jsonpatch, {Operation} from 'fast-json-patch';
 
-import BaseService from './BaseService';
-import torrentStatusMap from '../../shared/constants/torrentStatusMap';
-
-import type {Taxonomy} from '../../shared/types/Taxonomy';
 import type {TorrentStatus} from '../../shared/constants/torrentStatusMap';
-import type {TorrentProperties, TorrentList} from '../../shared/types/Torrent';
+import torrentStatusMap from '../../shared/constants/torrentStatusMap';
+import type {Taxonomy} from '../../shared/types/Taxonomy';
+import type {TorrentList, TorrentProperties} from '../../shared/types/Torrent';
+import BaseService from './BaseService';
 
 type TaxonomyServiceEvents = {
   TAXONOMY_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;

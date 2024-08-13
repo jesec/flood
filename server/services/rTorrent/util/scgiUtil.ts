@@ -1,11 +1,10 @@
-import net from 'net';
+import net from 'node:net';
 
-import deserializer from './XMLRPCDeserializer';
-import serializer from './XMLRPCSerializer';
 import {RPCError} from '../types/RPCError';
-
 import type {MultiMethodCalls} from './rTorrentMethodCallUtil';
+import deserializer from './XMLRPCDeserializer';
 import type {XMLRPCValue} from './XMLRPCSerializer';
+import serializer from './XMLRPCSerializer';
 
 const NULL_CHAR = String.fromCharCode(0);
 
