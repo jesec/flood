@@ -1,6 +1,6 @@
+import type {TorrentStatus} from '../constants/torrentStatusMap';
 import type {TorrentContent} from './TorrentContent';
 import type {TorrentPeer} from './TorrentPeer';
-import type {TorrentStatus} from '../constants/torrentStatusMap';
 import type {TorrentTracker} from './TorrentTracker';
 
 export interface TorrentDetails {

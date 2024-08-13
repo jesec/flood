@@ -1,14 +1,10 @@
-import {deflate, inflate} from 'zlib';
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
-import tls from 'tls';
-
-import {decode, encode} from './util/rencode';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import tls from 'node:tls';
+import {deflate, inflate} from 'node:zlib';
 
 import type {DelugeConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-
-import type {RencodableArray, RencodableData, RencodableObject} from './util/rencode';
 
 import type {
   DelugeCorePreferences,
@@ -17,6 +13,8 @@ import type {
   DelugeCoreTorrentStatuses,
   DelugeCoreTorrentTracker,
 } from './types/DelugeCoreMethods';
+import type {RencodableArray, RencodableData, RencodableObject} from './util/rencode';
+import {decode, encode} from './util/rencode';
 
 const DELUGE_RPC_PROTOCOL_VERSION = 0x01;
 const protocolVerBuf = Buffer.alloc(1);

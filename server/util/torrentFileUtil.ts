@@ -1,10 +1,10 @@
-import bencode from 'bencode';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
-import {LibTorrentFilePriority} from '../../shared/types/TorrentFile';
+import bencode from 'bencode';
 
 import type {LibTorrentResume, RTorrentFile, TorrentFile} from '../../shared/types/TorrentFile';
+import {LibTorrentFilePriority} from '../../shared/types/TorrentFile';
 
 const openAndDecodeTorrent = async (torrentPath: string): Promise<TorrentFile | null> => {
   let torrentData: TorrentFile | null = null;

@@ -1,8 +1,8 @@
-import {literal, nativeEnum, number, string, strictObject, union} from 'zod';
 import type {infer as zodInfer} from 'zod';
+import {literal, nativeEnum, number, strictObject, string, union} from 'zod';
 
-import {AccessLevel} from './constants/Auth';
 import {clientConnectionSettingsSchema} from './ClientConnectionSettings';
+import {AccessLevel} from './constants/Auth';
 
 export const authMethodSchema = union([literal('default'), literal('none')]);
 

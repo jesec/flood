@@ -1,4 +1,4 @@
-import {stringTransformer, numberTransformer} from '../../util/rTorrentMethodCallUtil';
+import {numberTransformer, stringTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const torrentContentMethodCallConfigs = {
   path: {

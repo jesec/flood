@@ -1,4 +1,4 @@
-import path from 'path';
+import path from 'node:path';
 
 import type {
   AddTorrentByFileOptions,
@@ -6,6 +6,8 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
@@ -17,24 +19,22 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
-import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import * as geoip from '../geoip';
-import ClientGatewayService from '../clientGatewayService';
-import ClientRequestManager from './clientRequestManager';
+import {TorrentPriority} from '../../../shared/types/Torrent';
+import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
+import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
-import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
-import {TorrentPriority} from '../../../shared/types/Torrent';
-import torrentPropertiesUtil from './util/torrentPropertiesUtil';
-import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
+import ClientGatewayService from '../clientGatewayService';
+import * as geoip from '../geoip';
+import ClientRequestManager from './clientRequestManager';
 import {TransmissionPriority, TransmissionTorrentsSetArguments} from './types/TransmissionTorrentsMethods';
+import torrentPropertiesUtil from './util/torrentPropertiesUtil';
 
 class TransmissionClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as TransmissionConnectionSettings);

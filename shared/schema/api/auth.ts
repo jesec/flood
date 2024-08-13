@@ -1,9 +1,8 @@
 import type {infer as zodInfer} from 'zod';
 
-import {AccessLevel} from '../constants/Auth';
-import {credentialsSchema} from '../Auth';
-
 import type {AuthMethod} from '../Auth';
+import {credentialsSchema} from '../Auth';
+import {AccessLevel} from '../constants/Auth';
 
 // All auth requests are schema validated to ensure security.
 

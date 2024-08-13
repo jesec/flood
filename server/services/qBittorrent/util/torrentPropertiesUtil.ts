@@ -1,9 +1,8 @@
-import {TorrentPeer} from '../../../../shared/types/TorrentPeer';
-import {TorrentTrackerType} from '../../../../shared/types/TorrentTracker';
-
-import type {QBittorrentTorrentState} from '../types/QBittorrentTorrentsMethods';
 import type {TorrentProperties} from '../../../../shared/types/Torrent';
+import {TorrentPeer} from '../../../../shared/types/TorrentPeer';
 import type {TorrentTracker} from '../../../../shared/types/TorrentTracker';
+import {TorrentTrackerType} from '../../../../shared/types/TorrentTracker';
+import type {QBittorrentTorrentState} from '../types/QBittorrentTorrentsMethods';
 
 export const getTorrentPeerPropertiesFromFlags = (flags: string): Pick<TorrentPeer, 'isEncrypted' | 'isIncoming'> => {
   const flagsArray = flags.split(' ');

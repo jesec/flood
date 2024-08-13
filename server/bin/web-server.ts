@@ -1,14 +1,14 @@
-import chalk from 'chalk';
-import fastify from 'fastify';
-import fs from 'fs';
+import fs from 'node:fs';
+import type {Server} from 'node:http';
+import type {Http2SecureServer} from 'node:http2';
 
+import chalk from 'chalk';
 import type {FastifyInstance} from 'fastify';
-import type {Http2SecureServer} from 'http2';
-import type {Server} from 'http';
+import fastify from 'fastify';
 
 import config from '../../config';
-import constructRoutes from '../routes';
 import packageJSON from '../../package.json';
+import constructRoutes from '../routes';
 
 const startWebServer = async () => {
   const {ssl = false, floodServerHost: host, floodServerPort: port} = config;

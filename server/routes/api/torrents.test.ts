@@ -1,25 +1,25 @@
-import crypto from 'crypto';
-import fastify from 'fastify';
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
-import readline from 'readline';
-import stream from 'stream';
-import supertest from 'supertest';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import readline from 'node:readline';
+import stream from 'node:stream';
+
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import fastify from 'fastify';
+import supertest from 'supertest';
 
-import constructRoutes from '..';
-import {getAuthToken} from '../../util/authUtil';
-import {getTempPath} from '../../models/TemporaryStorage';
 import paths from '../../../shared/config/paths';
-
+import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
 import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
-import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentList} from '../../../shared/types/Torrent';
-import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
+import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
+import {getTempPath} from '../../models/TemporaryStorage';
+import {getAuthToken} from '../../util/authUtil';
+import constructRoutes from '..';
 
 const app = fastify({bodyLimit: 100 * 1024 * 1024 * 1024, disableRequestLogging: true, forceCloseConnections: true});
 let request: supertest.SuperTest<supertest.Test>;

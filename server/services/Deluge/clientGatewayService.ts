@@ -1,8 +1,5 @@
-import {homedir} from 'os';
-import path from 'path';
-
-import {TorrentContentPriority} from '@shared/types/TorrentContent';
-import {TorrentTrackerType} from '@shared/types/TorrentTracker';
+import {homedir} from 'node:os';
+import path from 'node:path';
 
 import type {
   AddTorrentByFileOptions,
@@ -10,6 +7,8 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {DelugeConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
@@ -23,20 +22,19 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {DelugeConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentContent} from '@shared/types/TorrentContent';
+import {TorrentContentPriority} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
+import {TorrentTrackerType} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
-import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
 import {fetchUrls} from '../../util/fetchUtil';
-import {getTorrentStatusFromStatuses} from './util/torrentPropertiesUtil';
-
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {DelugeCoreTorrentFilePriority} from './types/DelugeCoreMethods';
+import {getTorrentStatusFromStatuses} from './util/torrentPropertiesUtil';
 
 class DelugeClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as DelugeConnectionSettings);

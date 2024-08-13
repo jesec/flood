@@ -1,8 +1,8 @@
-import {EventEmitter} from 'events';
-import type {EventMap} from 'typed-emitter';
-import type TypedEmitter from 'typed-emitter';
+import {EventEmitter} from 'node:events';
 
 import type {UserInDatabase} from '@shared/schema/Auth';
+import type {EventMap} from 'typed-emitter';
+import type TypedEmitter from 'typed-emitter';
 
 import type {ServiceInstances} from '.';
 

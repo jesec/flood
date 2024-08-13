@@ -1,11 +1,10 @@
-import {EventEmitter} from 'events';
-import type TypedEmitter from 'typed-emitter';
+import {EventEmitter} from 'node:events';
 
 import type {Disks} from '@shared/types/DiskUsage';
-
-import {isPlatformSupported, diskUsage} from '../util/diskUsageUtil';
+import type TypedEmitter from 'typed-emitter';
 
 import type {SupportedPlatform} from '../util/diskUsageUtil';
+import {diskUsage, isPlatformSupported} from '../util/diskUsageUtil';
 
 export interface DiskUsageSummary {
   id: number;

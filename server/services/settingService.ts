@@ -1,6 +1,6 @@
-import Datastore from '@seald-io/nedb';
-import path from 'path';
+import path from 'node:path';
 
+import Datastore from '@seald-io/nedb';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import config from '../../config';

@@ -1,8 +1,8 @@
-import axios from 'axios';
-import FormData from 'form-data';
-import {URLSearchParams} from 'url';
+import {URLSearchParams} from 'node:url';
 
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import axios from 'axios';
+import FormData from 'form-data';
 
 import type {QBittorrentAppPreferences} from './types/QBittorrentAppMethods';
 import type {
@@ -11,7 +11,6 @@ import type {
   QBittorrentSyncTorrentPeers,
   QBittorrentTorrentPeers,
 } from './types/QBittorrentSyncMethods';
-import type {QBittorrentTransferInfo} from './types/QBittorrentTransferMethods';
 import type {
   QBittorrentTorrentContentPriority,
   QBittorrentTorrentContents,
@@ -20,6 +19,7 @@ import type {
   QBittorrentTorrentsAddOptions,
   QBittorrentTorrentTrackers,
 } from './types/QBittorrentTorrentsMethods';
+import type {QBittorrentTransferInfo} from './types/QBittorrentTransferMethods';
 
 const EMPTY_SERVER_STATE = {
   dl_info_speed: 0,

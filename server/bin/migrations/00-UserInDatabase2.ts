@@ -1,8 +1,7 @@
-import {AccessLevel} from '../../../shared/schema/constants/Auth';
-import Users from '../../models/Users';
-
 import type {Credentials} from '../../../shared/schema/Auth';
 import type {RTorrentConnectionSettings} from '../../../shared/schema/ClientConnectionSettings';
+import {AccessLevel} from '../../../shared/schema/constants/Auth';
+import Users from '../../models/Users';
 import type {UserInDatabase1} from './types/UserInDatabase1';
 
 const migrationError = (err?: Error) => {

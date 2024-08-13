@@ -1,14 +1,13 @@
-import {spawn} from 'child_process';
-import crypto from 'crypto';
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
-import yargs from 'yargs/yargs';
+import {spawn} from 'node:child_process';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
-import {configSchema} from '@shared/schema/Config';
-
-import type {Config} from '@shared/schema/Config';
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {Config} from '@shared/schema/Config';
+import {configSchema} from '@shared/schema/Config';
+import yargs from 'yargs/yargs';
 
 import {version} from './package.json';
 

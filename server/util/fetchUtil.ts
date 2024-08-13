@@ -1,6 +1,7 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import axios, {AxiosError} from 'axios';
-import fs from 'fs';
-import path from 'path';
 
 import {isAllowedPath} from './fileUtil';
 

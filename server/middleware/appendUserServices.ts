@@ -1,8 +1,7 @@
-import type {Request, Response, NextFunction} from 'express';
-
-import {getAllServices} from '../services';
+import type {NextFunction, Request, Response} from 'express';
 
 import type {ServiceInstances} from '../services';
+import {getAllServices} from '../services';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
