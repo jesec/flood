@@ -6,7 +6,7 @@ const buf = fs.readFileSync('server/geoip/GeoLite2-Country.mmdb');
 const compressed = zlib.brotliCompressSync(buf).toString('base64');
 
 fs.writeFileSync(
-  'server/geoip/data.mjs',
+  'server/geoip/data.ts',
   `
 import * as zlib from 'node:zlib';
 
