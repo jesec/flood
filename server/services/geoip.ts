@@ -1,10 +1,8 @@
-import * as zlib from 'node:zlib';
-
 import {Reader} from '@maxmind/geoip2-node';
 
 import * as data from '../geoip/data.mjs';
 
-const r = Reader.openBuffer(zlib.brotliDecompressSync(Buffer.from(data.data, 'base64')));
+const r = Reader.openBuffer(data.data);
 
 export function lookup(s: string): string {
   try {
