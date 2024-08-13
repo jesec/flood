@@ -18,9 +18,6 @@ importers:
       '@babel/eslint-parser':
         specifier: ^7.22.5
         version: 7.25.1(@babel/core@7.25.2)(eslint@8.57.0)
-      '@babel/plugin-proposal-class-properties':
-        specifier: ^7.18.6
-        version: 7.18.6(@babel/core@7.25.2)
       '@babel/plugin-proposal-decorators':
         specifier: ^7.22.5
         version: 7.24.7(@babel/core@7.25.2)
