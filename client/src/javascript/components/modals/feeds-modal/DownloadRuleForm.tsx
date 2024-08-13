@@ -102,6 +102,9 @@ const DownloadRuleForm: FC<DownloadRuleFormProps> = ({
         </Textbox>
       </FormRow>
       <FormRow>
+        <Textbox id="script" label={i18n._('feeds.script')} defaultValue={rule.script} />
+      </FormRow>
+      <FormRow>
         <FormRowItem>
           <FilesystemBrowserTextbox
             id="destination"
