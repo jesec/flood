@@ -1,6 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-import * as sea from 'node:sea';
 
 import {appDist} from '../../shared/config/paths';
 import config from '../../config';
@@ -27,12 +26,10 @@ const enforcePrerequisites = () =>
       return;
     }
 
-    if (!sea.isSea()) {
-      // Ensure static assets exist if they need to be served
-      if (!doFilesExist(staticAssets) && config.serveAssets !== false) {
-        reject(new Error(`Static assets are missing.`));
-        return;
-      }
+    // Ensure static assets exist if they need to be served
+    if (!doFilesExist(staticAssets) && config.serveAssets !== false) {
+      reject(new Error(`Static assets are missing.`));
+      return;
     }
 
     resolve();
