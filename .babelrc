@@ -4,9 +4,5 @@
     "@babel/typescript",
     ["@babel/react", {"runtime": "automatic", "importSource": "@emotion/react"}]
   ],
-  "plugins": [
-    ["@babel/plugin-proposal-decorators", {"legacy": true}],
-    ["@babel/plugin-proposal-class-properties", {"loose": false}],
-    "@emotion/babel-plugin"
-  ]
+  "plugins": [["@babel/plugin-proposal-decorators", {"legacy": true}], "@emotion/babel-plugin"]
 }
