@@ -1,10 +1,12 @@
 const path = require('node:path');
+
 const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const WebpackBar = require('webpackbar');
-const paths = require('../../shared/config/paths');
+
+const paths = require('./paths.cjs');
 
 module.exports = {
   mode: 'development',

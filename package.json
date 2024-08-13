@@ -2,6 +2,7 @@
   "name": "flood",
   "version": "4.8.2",
   "description": "A modern Web UI for various torrent clients with multi-user and multi-client support",
+  "type": "module",
   "keywords": [
     "typescript",
     "react",
@@ -47,7 +48,7 @@
     ]
   },
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "cross-env BABEL_ENV=production NODE_ENV=production node scripts/build.mjs",
     "build-pkg": "rm -rf dist && npm run build && npm run pkg",
     "pkg": "pkg . --out-path dist-pkg --no-bytecode --public --options=enable-source-maps",
     "format-source": "prettier -w .",
@@ -131,6 +132,7 @@
     "content-disposition": "^0.5.4",
     "cookie-parser": "^1.4.6",
     "create-torrent": "^5.0.9",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "d3-array": "^3.2.4",

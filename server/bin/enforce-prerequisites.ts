@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import config from '../../config';
-import {appDist} from '../../shared/config/paths';
+import {appDistPath} from '../services/paths';
 
-const staticAssets = [path.join(appDist, 'index.html')];
+const staticAssets = [path.join(appDistPath, 'index.html')];
 
 // Taken from react-scripts/check-required-files, but without console.logs.
 const doFilesExist = (files: Array<string>) => {

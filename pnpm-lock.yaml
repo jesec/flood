@@ -203,6 +203,9 @@ importers:
       create-torrent:
         specifier: ^5.0.9
         version: 5.0.9
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       css-loader:
         specifier: ^6.8.1
         version: 6.11.0(webpack@5.93.0(esbuild@0.19.12))
@@ -3027,6 +3030,11 @@ packages:
   create-torrent@5.0.9:
     resolution: {integrity: sha512-WQ/bMe+aCBSa5EonIkgw7CTM/1JnJDQuLJhA78omSWvuEbXDwaUy0rG3a+IYt+EiO+rdTLxdsBwrsn/wfWOMQA==}
     engines: {node: '>=12'}
+    hasBin: true
+
+  cross-env@7.0.3:
+    resolution: {integrity: sha512-+/HKd6EgcQCJGh2PSjZuUitQBQynKor4wrFbRg4DtAgS1aWO+gU52xpH7M9ScGgXSYmAVS9bIJ8EzuaGw0oNAw==}
+    engines: {node: '>=10.14', npm: '>=6', yarn: '>=1'}
     hasBin: true
 
   cross-spawn@7.0.3:
@@ -9902,6 +9910,10 @@ snapshots:
       queue-microtask: 1.2.3
       run-parallel: 1.2.0
       simple-sha1: 3.1.0
+
+  cross-env@7.0.3:
+    dependencies:
+      cross-spawn: 7.0.3
 
   cross-spawn@7.0.3:
     dependencies:

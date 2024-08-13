@@ -47,7 +47,7 @@
   "settings": {
     "import/resolver": {
       "webpack": {
-        "config": "client/config/webpack.config.dev.js"
+        "config": "client/config/webpack.config.dev.cjs"
       }
     }
   }

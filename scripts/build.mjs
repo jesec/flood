@@ -1,6 +1,22 @@
-// Do this as the first thing so that any code reading it knows the right env.
-process.env.BABEL_ENV = 'production';
-process.env.NODE_ENV = 'production';
+import * as url from 'url';
+import path from 'node:path';
+import esbuild from 'esbuild';
+import chalk from 'chalk';
+import fs from 'fs-extra';
+import webpack from 'webpack';
+import {createRequire} from 'node:module';
+
+import clientConfig from '../client/config/webpack.config.prod.cjs';
+import paths from '../client/config/paths.cjs';
+
+const require = createRequire(import.meta.url);
+
+const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles.js');
+const {measureFileSizesBeforeBuild, printFileSizesAfterBuild} = require('react-dev-utils/FileSizeReporter.js');
+
+// These sizes are pretty large. We'll warn for bundles exceeding them.
+const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
+const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 // Makes the script crash on unhandled rejections instead of silently
 // ignoring them. In the future, promise rejections that are not handled will
@@ -9,21 +25,7 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const path = require('node:path');
-const esbuild = require('esbuild');
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const webpack = require('webpack');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
-const paths = require('../shared/config/paths');
-const clientConfig = require('../client/config/webpack.config.prod');
-
-const {measureFileSizesBeforeBuild, printFileSizesAfterBuild} = FileSizeReporter;
-
-// These sizes are pretty large. We'll warn for bundles exceeding them.
-const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
-const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndex])) {
@@ -74,7 +76,7 @@ measureFileSizesBeforeBuild(paths.appBuild)
   .then((previousFileSizes) => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash
-    fs.emptyDirSync(paths.dist);
+    fs.emptyDirSync(path.resolve(__dirname, '../dist'));
     // Merge with the public folder
     copyPublicFolder();
     // Start the webpack build

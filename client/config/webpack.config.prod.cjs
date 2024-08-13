@@ -1,18 +1,14 @@
-const autoprefixer = require('autoprefixer');
 const path = require('node:path');
+
+const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackBar = require('webpackbar');
-const paths = require('../../shared/config/paths');
 
-// Assert this just to be safe.
-// Development builds of React are slow and not intended for production.
-if (process.env.NODE_ENV !== 'production') {
-  throw new Error('Production builds must have NODE_ENV=production.');
-}
+const paths = require('./paths.cjs');
 
 module.exports = {
   mode: 'production',
