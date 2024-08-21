@@ -383,7 +383,10 @@ class TransmissionClientGatewayService extends ClientGatewayService {
           ...(await Promise.all(
             torrents.map(async (torrent) => {
               const percentComplete = (torrent.haveValid / torrent.totalSize) * 100;
-              const ratio = torrent.totalSize === 0 ? -1 : torrent.uploadedEver / torrent.totalSize;
+              const ratio =
+                torrent.downloadedEver === 0
+                  ? torrent.uploadedEver / torrent.totalSize
+                  : torrent.uploadedEver / torrent.downloadedEver;
               const trackerURIs = getDomainsFromURLs(torrent.trackers.map((tracker) => tracker.announce));
               const status = torrentPropertiesUtil.getTorrentStatus(torrent);
 
