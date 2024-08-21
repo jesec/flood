@@ -10,7 +10,7 @@ export interface ExatorrentStatusApiResponse extends ExatorrentApiResponse {
 }
 
 export interface ExatorrentDataApiResponse extends ExatorrentApiResponse {
-  data: object | object[];
+  data: object | object[] | string;
 }
 
 export interface ExatorrentClientStats {

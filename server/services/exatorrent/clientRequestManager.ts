@@ -59,14 +59,16 @@ class ClientRequestManager {
   }
 
   async getTorrents(): Promise<ExatorrentTorrent[]> {
-    const response = (await this.sendCommandWithResponse('listtorrents', 'torrents', {
+    const response = (await this.sendCommandWithResponse('listalltorrents', 'torrentstream', {
       aop: 1,
     })) as ExatorrentDataApiResponse;
     return response.data as ExatorrentTorrent[];
   }
 
   async getStatus(): Promise<string> {
-    const response = (await this.sendCommandWithResponse('status', 'resp', {aop: 1})) as ExatorrentDataApiResponse;
+    const response = (await this.sendCommandWithResponse('torcstatus', 'torcstatus', {
+      aop: 1,
+    })) as ExatorrentDataApiResponse;
     return response.data as string;
   }
 
@@ -116,10 +118,12 @@ class ClientRequestManager {
         const response = JSON.parse(data.toString());
         resolved = true;
         if (response.state === 'error') {
+          console.error(response.message);
           reject(new Error(response.message));
         } else if (response.type === receiveType) {
           resolve(response);
         } else {
+          console.warn('Unexpected response type:', response.type, ' expected:', receiveType);
           resolved = false;
         }
         if (resolved) this.ws?.removeAllListeners('message');
