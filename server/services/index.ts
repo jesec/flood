@@ -11,6 +11,7 @@ import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
 import TorrentService from './torrentService';
 import TransmissionClientGatewayService from './Transmission/clientGatewayService';
+import ExatorrentClientGatewayService from './exatorrent/clientGatewayService';
 
 export interface ServiceInstances {
   clientGatewayService: ClientGatewayService;
@@ -28,6 +29,8 @@ const newClientGatewayService = (user: UserInDatabase): ClientGatewayService => 
   switch (user.client.client) {
     case 'Deluge':
       return new DelugeClientGatewayService(user);
+    case 'exatorrent':
+      return new ExatorrentClientGatewayService(user);
     case 'qBittorrent':
       return new QBittorrentClientGatewayService(user);
     case 'rTorrent':

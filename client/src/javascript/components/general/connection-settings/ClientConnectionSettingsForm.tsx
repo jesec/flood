@@ -9,6 +9,7 @@ import {SUPPORTED_CLIENTS} from '@shared/schema/constants/ClientConnectionSettin
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 
 import DelugeConnectionSettingsForm from './DelugeConnectionSettingsForm';
+import ExatorrentConnectionSettingsForm from './ExatorrentConnectionSettingsForm';
 import QBittorrentConnectionSettingsForm from './QBittorrentConnectionSettingsForm';
 import RTorrentConnectionSettingsForm from './RTorrentConnectionSettingsForm';
 import TransmissionConnectionSettingsForm from './TransmissionConnectionSettingsForm';
@@ -35,6 +36,9 @@ const ClientConnectionSettingsForm: FC<ClientConnectionSettingsFormProps> = ({
   switch (selectedClient) {
     case 'Deluge':
       settingsForm = <DelugeConnectionSettingsForm onSettingsChange={onSettingsChange} />;
+      break;
+    case 'exatorrent':
+      settingsForm = <ExatorrentConnectionSettingsForm onSettingsChange={onSettingsChange} />;
       break;
     case 'qBittorrent':
       settingsForm = <QBittorrentConnectionSettingsForm onSettingsChange={onSettingsChange} />;

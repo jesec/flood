@@ -13,6 +13,17 @@ const delugeConnectionSettingsSchema = strictObject({
 
 export type DelugeConnectionSettings = zodInfer<typeof delugeConnectionSettingsSchema>;
 
+const exatorrentConnectionSettingsSchema = strictObject({
+  client: literal('exatorrent'),
+  type: literal('tcp'),
+  host: string(),
+  port: number(),
+  username: string(),
+  password: string(),
+});
+
+export type ExatorrentConnectionSettings = zodInfer<typeof exatorrentConnectionSettingsSchema>;
+
 const qBittorrentConnectionSettingsSchema = strictObject({
   client: literal('qBittorrent'),
   type: literal('web'),
@@ -63,6 +74,7 @@ export type TransmissionConnectionSettings = zodInfer<typeof transmissionConnect
 
 export const clientConnectionSettingsSchema = union([
   delugeConnectionSettingsSchema,
+  exatorrentConnectionSettingsSchema,
   qBittorrentConnectionSettingsSchema,
   rTorrentConnectionSettingsSchema,
   transmissionConnectionSettingsSchema,

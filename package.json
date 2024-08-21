@@ -215,6 +215,7 @@
     "webpack-dev-server": "^4.15.1",
     "webpack-shebang-plugin": "^1.1.8",
     "webpackbar": "^5.0.2",
+    "ws": "^8.18.0",
     "yargs": "^17.7.2",
     "zod": "^3.21.4"
   },
