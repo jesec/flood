@@ -1,4 +1,5 @@
 import type {TorrentProperties} from '@shared/types/Torrent';
+
 import {ExatorrentTorrent} from '../types/ExatorrentCoreMethods';
 
 export const getTorrentStatuses = (torrent: ExatorrentTorrent): TorrentProperties['status'] => {

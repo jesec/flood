@@ -1,56 +1,80 @@
+import type {ExatorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import WebSocket from 'ws';
 
-import type {ExatorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import {ExatorrentPeerConn, ExatorrentTorrent, ExatorrentTorrentFile} from './types/ExatorrentCoreMethods';
+import {
+  ExatorrentApiResponse,
+  ExatorrentDataApiResponse,
+  ExatorrentPeerConn,
+  ExatorrentStatusApiResponse,
+  ExatorrentTorrent,
+  ExatorrentTorrentFile,
+} from './types/ExatorrentCoreMethods';
 
 class ClientRequestManager {
   private connectionSettings: ExatorrentConnectionSettings;
   private ws: WebSocket | null = null;
-  private mutex: Promise<any> = Promise.resolve();
+  private mutex: Promise<ExatorrentApiResponse> = Promise.resolve({} as ExatorrentApiResponse);
 
   constructor(connectionSettings: ExatorrentConnectionSettings) {
     this.connectionSettings = connectionSettings;
   }
 
   async addMagnet(magnet: string, dontStart: boolean): Promise<string> {
-    return (await this.methodCall('addmagnet', 'resp', {data1: magnet, data2: dontStart.toString()})).infohash;
+    const response = (await this.sendCommandWithResponse('addmagnet', 'resp', {
+      data1: magnet,
+      data2: dontStart.toString(),
+    })) as ExatorrentStatusApiResponse;
+    return response.infohash;
   }
 
   async addTorrent(torrent: string, dontStart: boolean): Promise<string> {
-    return (await this.methodCall('addtorrent', 'resp', {data1: torrent, data2: dontStart.toString()})).infohash;
+    const response = (await this.sendCommandWithResponse('addtorrent', 'resp', {
+      data1: torrent,
+      data2: dontStart.toString(),
+    })) as ExatorrentStatusApiResponse;
+    return response.infohash;
   }
 
   async startTorrent(hash: string): Promise<void> {
-    await this.methodCall('starttorrent', 'resp', {data1: hash, aop: 1});
+    await this.sendCommandWithResponse('starttorrent', 'resp', {data1: hash, aop: 1});
   }
 
   async stopTorrent(hash: string): Promise<void> {
-    await this.methodCall('stoptorrent', null, {data1: hash, aop: 1});
+    await this.sendCommand('stoptorrent', {data1: hash, aop: 1});
   }
 
   async deletetorrent(hash: string): Promise<void> {
-    await this.methodCall('deletetorrent', null, {data1: hash, aop: 1});
+    await this.sendCommand('deletetorrent', {data1: hash, aop: 1});
   }
 
   async removeTorrent(hash: string): Promise<void> {
-    await this.methodCall('removetorrent', null, {data1: hash, aop: 1});
+    await this.sendCommand('removetorrent', {data1: hash, aop: 1});
   }
 
   async getTorrentFiles(hash: string): Promise<ExatorrentTorrentFile[]> {
-    return (await this.methodCall('gettorrentfiles', 'torrentfiles', {data1: hash})).data as ExatorrentTorrentFile[];
+    const response = (await this.sendCommandWithResponse('gettorrentfiles', 'torrentfiles', {
+      data1: hash,
+    })) as ExatorrentDataApiResponse;
+    return response.data as ExatorrentTorrentFile[];
   }
 
   async getTorrents(): Promise<ExatorrentTorrent[]> {
-    return (await this.methodCall('listalltorrents', 'torrentstream', {aop: 1})).data as ExatorrentTorrent[];
+    const response = (await this.sendCommandWithResponse('listtorrents', 'torrents', {
+      aop: 1,
+    })) as ExatorrentDataApiResponse;
+    return response.data as ExatorrentTorrent[];
   }
 
   async getStatus(): Promise<string> {
-    return (await this.methodCall('torcstatus', 'torcstatus', {aop: 1})).data as string;
+    const response = (await this.sendCommandWithResponse('status', 'resp', {aop: 1})) as ExatorrentDataApiResponse;
+    return response.data as string;
   }
 
   async getTorrentPeerConns(hash: string): Promise<ExatorrentPeerConn[]> {
-    return (await this.methodCall('gettorrentpeerconns', 'torrentpeerconns', {data1: hash}))
-      .data as ExatorrentPeerConn[];
+    const response = (await this.sendCommandWithResponse('gettorrentpeerconns', 'torrentpeerconns', {
+      data1: hash,
+    })) as ExatorrentDataApiResponse;
+    return response.data as ExatorrentPeerConn[];
   }
 
   async reconnect(): Promise<void> {
@@ -64,9 +88,7 @@ class ClientRequestManager {
     }
   }
 
-  private async methodCall(command: string, receiveType: string | null, args: Object = {}): Promise<any> {
-    await this.mutex.catch(() => {});
-
+  private async sendCommand(command: string, args: object): Promise<void> {
     while (!this.ws?.readyState) {
       await this.reconnect();
     }
@@ -77,14 +99,20 @@ class ClientRequestManager {
     };
 
     this.ws.send(JSON.stringify(request));
+  }
 
-    if (receiveType === null) {
-      return;
-    }
+  private async sendCommandWithResponse(
+    command: string,
+    receiveType: string,
+    args: object,
+  ): Promise<ExatorrentApiResponse> {
+    await this.mutex.catch();
+
+    await this.sendCommand(command, args);
 
     this.mutex = new Promise((resolve, reject) => {
       let resolved = false;
-      this.ws!.on('message', (data) => {
+      this.ws?.on('message', (data) => {
         const response = JSON.parse(data.toString());
         resolved = true;
         if (response.state === 'error') {

@@ -1,3 +1,18 @@
+export interface ExatorrentApiResponse {
+  type: string;
+}
+
+export interface ExatorrentStatusApiResponse extends ExatorrentApiResponse {
+  type: 'resp';
+  state: 'success' | 'error';
+  message: string;
+  infohash: string;
+}
+
+export interface ExatorrentDataApiResponse extends ExatorrentApiResponse {
+  data: object | object[];
+}
+
 export interface ExatorrentClientStats {
   bytes_written: number;
   bytes_written_data: number;
@@ -33,7 +48,7 @@ export interface ExatorrentPeerConn {
   PeerExtensionsBytes: number[];
   PeerListenPort: number;
   LocalLtepProtocolMap: {Index: string[]; NumBuiltin: number};
-  PeerExtensionsIDs: Object;
+  PeerExtensionsIDs: Map<string, number>;
   PeerClientName: string;
 }
 

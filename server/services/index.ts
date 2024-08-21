@@ -2,6 +2,7 @@ import type {UserInDatabase} from '@shared/schema/Auth';
 
 import ClientGatewayService from './clientGatewayService';
 import DelugeClientGatewayService from './Deluge/clientGatewayService';
+import ExatorrentClientGatewayService from './exatorrent/clientGatewayService';
 import FeedService from './feedService';
 import HistoryService from './historyService';
 import NotificationService from './notificationService';
@@ -11,7 +12,6 @@ import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
 import TorrentService from './torrentService';
 import TransmissionClientGatewayService from './Transmission/clientGatewayService';
-import ExatorrentClientGatewayService from './exatorrent/clientGatewayService';
 
 export interface ServiceInstances {
   clientGatewayService: ClientGatewayService;

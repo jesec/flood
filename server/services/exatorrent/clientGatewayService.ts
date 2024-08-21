@@ -27,37 +27,36 @@ import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 
 import ClientGatewayService from '../clientGatewayService';
-import ClientRequestManager from './clientRequestManager';
-
-import {ExatorrentRateComputer} from './util/rates';
-import {parseClientStats} from './util/parse';
-import {getTorrentStatuses} from './util/torrentPropertiesUtil';
-import {ExatorrentTorrentFile} from './types/ExatorrentCoreMethods';
 import {lookup} from '../geoip';
+import ClientRequestManager from './clientRequestManager';
+import {ExatorrentTorrentFile} from './types/ExatorrentCoreMethods';
+import {parseClientStats} from './util/parse';
+import {ExatorrentRateComputer} from './util/rates';
+import {getTorrentStatuses} from './util/torrentPropertiesUtil';
 
 class ExatorrentClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as ExatorrentConnectionSettings);
   private rateComputer = new ExatorrentRateComputer();
 
-  addTorrentsByFile(options: Required<AddTorrentByFileOptions>): Promise<string[]> {
+  async addTorrentsByFile(options: Required<AddTorrentByFileOptions>): Promise<string[]> {
     return Promise.all(options.files.map((file) => this.clientRequestManager.addTorrent(file, !options.start))).then(
       this.processClientRequestSuccess,
       this.processClientRequestError,
     );
   }
 
-  addTorrentsByURL(options: Required<AddTorrentByURLOptions>): Promise<string[]> {
+  async addTorrentsByURL(options: Required<AddTorrentByURLOptions>): Promise<string[]> {
     return Promise.all(options.urls.map((url) => this.clientRequestManager.addMagnet(url, !options.start))).then(
       this.processClientRequestSuccess,
       this.processClientRequestError,
     );
   }
 
-  checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {
-    return Promise.resolve();
+  async checkTorrents({}: CheckTorrentsOptions): Promise<void> {
+    return;
   }
 
-  getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
+  async getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
     return this.clientRequestManager
       .getTorrentFiles(hash)
       .then(this.processClientRequestSuccess, this.processClientRequestError)
@@ -90,16 +89,16 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
     }));
   }
 
-  getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
-    return Promise.resolve([]);
+  async getTorrentTrackers(_hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
+    return [];
   }
 
-  moveTorrents(options: MoveTorrentsOptions): Promise<void> {
-    return Promise.resolve();
+  async moveTorrents(_options: MoveTorrentsOptions): Promise<void> {
+    return;
   }
 
-  reannounceTorrents({hashes}: ReannounceTorrentsOptions): Promise<void> {
-    return Promise.resolve();
+  async reannounceTorrents({}: ReannounceTorrentsOptions): Promise<void> {
+    return;
   }
 
   async removeTorrents(options: DeleteTorrentsOptions): Promise<void> {
@@ -112,28 +111,28 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
     ).then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  setTorrentContentsPriority(hash: string, options: SetTorrentContentsPropertiesOptions): Promise<void> {
-    return Promise.resolve();
+  async setTorrentContentsPriority(_hash: string, _options: SetTorrentContentsPropertiesOptions): Promise<void> {
+    return;
   }
 
-  setTorrentsInitialSeeding(options: SetTorrentsInitialSeedingOptions): Promise<void> {
-    return Promise.resolve();
+  async setTorrentsInitialSeeding(_options: SetTorrentsInitialSeedingOptions): Promise<void> {
+    return;
   }
 
-  setTorrentsPriority(options: SetTorrentsPriorityOptions): Promise<void> {
-    return Promise.resolve();
+  async setTorrentsPriority(_options: SetTorrentsPriorityOptions): Promise<void> {
+    return;
   }
 
-  setTorrentsSequential(options: SetTorrentsSequentialOptions): Promise<void> {
-    return Promise.resolve();
+  async setTorrentsSequential(_options: SetTorrentsSequentialOptions): Promise<void> {
+    return;
   }
 
-  setTorrentsTags(options: SetTorrentsTagsOptions): Promise<void> {
-    return Promise.resolve();
+  async setTorrentsTags(_options: SetTorrentsTagsOptions): Promise<void> {
+    return;
   }
 
-  setTorrentsTrackers(options: SetTorrentsTrackersOptions): Promise<void> {
-    return Promise.resolve();
+  async setTorrentsTrackers(_options: SetTorrentsTrackersOptions): Promise<void> {
+    return;
   }
 
   async startTorrents(options: StartTorrentsOptions): Promise<void> {
@@ -150,7 +149,7 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
     );
   }
 
-  fetchTorrentList(): Promise<TorrentListSummary> {
+  async fetchTorrentList(): Promise<TorrentListSummary> {
     return this.clientRequestManager
       .getTorrents()
       .then(this.processClientRequestSuccess, this.processClientRequestError)
@@ -221,7 +220,7 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
       });
   }
 
-  fetchTransferSummary(): Promise<TransferSummary> {
+  async fetchTransferSummary(): Promise<TransferSummary> {
     return this.clientRequestManager
       .getStatus()
       .then(parseClientStats)
@@ -270,12 +269,12 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
     });
   }
 
-  setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
-    return Promise.resolve();
+  async setClientSettings(_settings: SetClientSettingsOptions): Promise<void> {
+    return;
   }
 
-  testGateway(): Promise<void> {
-    return Promise.resolve();
+  async testGateway(): Promise<void> {
+    return;
   }
 }
 
