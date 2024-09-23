@@ -30,9 +30,10 @@ import ClientGatewayService from '../clientGatewayService';
 import {lookup} from '../geoip';
 import ClientRequestManager from './clientRequestManager';
 import {ExatorrentTorrentFile} from './types/ExatorrentCoreMethods';
-import {parseClientStats} from './util/parse';
 import {ExatorrentRateComputer} from './util/rates';
-import {getTorrentStatuses} from './util/torrentPropertiesUtil';
+import {getTorrentStatuses, getTrackerType} from './util/torrentPropertiesUtil';
+
+const DEFAULT_PATH = '/exa/exadir/';
 
 class ExatorrentClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as ExatorrentConnectionSettings);
@@ -52,8 +53,8 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
     );
   }
 
-  async checkTorrents({}: CheckTorrentsOptions): Promise<void> {
-    return;
+  async checkTorrents({hashes}: CheckTorrentsOptions): Promise<void> {
+    await Promise.all(hashes.map((hash) => this.clientRequestManager.verifyTorrent(hash)));
   }
 
   async getTorrentContents(hash: TorrentProperties['hash']): Promise<Array<TorrentContent>> {
@@ -77,20 +78,33 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
       .getTorrentPeerConns(hash)
       .then(this.processClientRequestSuccess, this.processClientRequestError);
 
-    return peers.map((peer) => ({
-      address: peer.RemoteAddr.IP,
-      country: lookup(peer.RemoteAddr.IP),
-      clientVersion: JSON.stringify(peer.PeerClientName),
-      completedPercent: 0,
-      downloadRate: 10,
-      uploadRate: 10,
-      isEncrypted: peer.PeerPreferEncryption,
-      isIncoming: false,
-    }));
+    return peers.map((peer) => {
+      const ip = peer.remoteaddr.includes('[')
+        ? peer.remoteaddr.split(']:')[0].slice(1)
+        : peer.remoteaddr.split(':')[0];
+      return {
+        address: peer.remoteaddr,
+        country: lookup(ip),
+        clientVersion: peer.peerclientname,
+        completedPercent: 0,
+        downloadRate: peer.downloadrate,
+        uploadRate: 0,
+        isEncrypted: peer.peerpreferencryption,
+        isIncoming: false,
+      };
+    });
   }
 
-  async getTorrentTrackers(_hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
-    return [];
+  async getTorrentTrackers(hash: TorrentProperties['hash']): Promise<Array<TorrentTracker>> {
+    return this.clientRequestManager
+      .getTorrent(hash)
+      .then(this.processClientRequestSuccess, this.processClientRequestError)
+      .then((torrent) => {
+        return torrent.announcelist.map((tracker) => ({
+          url: tracker,
+          type: getTrackerType(tracker),
+        }));
+      });
   }
 
   async moveTorrents(_options: MoveTorrentsOptions): Promise<void> {
@@ -131,8 +145,11 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
     return;
   }
 
-  async setTorrentsTrackers(_options: SetTorrentsTrackersOptions): Promise<void> {
-    return;
+  async setTorrentsTrackers(options: SetTorrentsTrackersOptions): Promise<void> {
+    await Promise.all(options.hashes.map((hash) => this.clientRequestManager.addTrackers(hash, options.trackers))).then(
+      this.processClientRequestSuccess,
+      this.processClientRequestError,
+    );
   }
 
   async startTorrents(options: StartTorrentsOptions): Promise<void> {
@@ -169,40 +186,44 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
                   dateNowSeconds,
                   torrent.bytescompleted,
                 );
+                const uploadRate = this.rateComputer.get_rate(
+                  torrent.infohash + 'up',
+                  dateNowSeconds,
+                  torrent.byteswritten,
+                );
                 const torrentProperties: TorrentProperties = {
                   bytesDone: torrent.bytescompleted,
                   comment: '',
-                  dateActive: 0,
-                  dateAdded: 0,
-                  dateCreated: 0,
+                  dateActive: torrent.starteddate || 0,
+                  dateAdded: torrent.addeddate || 0,
+                  dateCreated: torrent.creationdate,
                   dateFinished: 0,
                   directory: torrent.infohash,
                   downRate: downloadRate,
-                  downTotal: torrent.bytescompleted,
+                  downTotal: torrent.bytescompleted || 0,
                   eta: this.rateComputer.get_eta(downloadRate, torrent.bytescompleted, torrent.length),
                   hash: torrent.infohash.toUpperCase(),
-                  isPrivate: false,
+                  isPrivate: torrent.private,
                   isInitialSeeding: true,
                   isSequential: false,
                   message: '',
                   name: torrent.name,
-                  peersConnected: 0,
-                  peersTotal: 0,
+                  peersConnected: torrent.activepeers || 0,
+                  peersTotal: torrent.totalpeers || 0,
                   percentComplete: (torrent.bytescompleted / torrent.length) * 100,
                   priority: 1,
-                  ratio: 0,
-                  seedsConnected: 0,
+                  ratio: torrent.byteswritten / torrent.bytescompleted,
+                  seedsConnected: torrent.connectedseeders || 0,
                   seedsTotal: 0,
                   sizeBytes: torrent.length,
                   status: getTorrentStatuses(torrent),
                   tags: [],
-                  trackerURIs: [],
-                  upRate: 0,
-                  upTotal: 0,
+                  trackerURIs: torrent.announcelist || [],
+                  upRate: uploadRate,
+                  upTotal: torrent.byteswritten || 0,
                 };
 
                 this.emit('PROCESS_TORRENT', torrentProperties);
-
                 return {
                   [torrentProperties.hash]: torrentProperties,
                 };
@@ -222,30 +243,29 @@ class ExatorrentClientGatewayService extends ClientGatewayService {
 
   async fetchTransferSummary(): Promise<TransferSummary> {
     return this.clientRequestManager
-      .getStatus()
-      .then(parseClientStats)
+      .getNetworkStats()
       .then(this.processClientRequestSuccess, this.processClientRequestError)
       .then((stats) => {
         const dateNowSeconds = Math.ceil(Date.now() / 1000);
 
         return {
-          downRate: this.rateComputer.get_rate('totalDown', dateNowSeconds, stats.bytes_read),
-          downTotal: stats.bytes_read,
-          upRate: this.rateComputer.get_rate('totalUp', dateNowSeconds, stats.bytes_written),
-          upTotal: stats.bytes_written,
+          downRate: this.rateComputer.get_rate('totalDown', dateNowSeconds, stats.bytesread),
+          downTotal: stats.bytesread,
+          upRate: this.rateComputer.get_rate('totalUp', dateNowSeconds, stats.byteswritten),
+          upTotal: stats.byteswritten,
         };
       });
   }
 
   getClientSessionDirectory(): Promise<{path: string; case: 'lower' | 'upper'}> {
-    return Promise.resolve({case: 'lower', path: ''});
+    return Promise.resolve({case: 'lower', path: DEFAULT_PATH + 'cache'});
   }
 
   getClientSettings(): Promise<ClientSettings> {
     return Promise.resolve({
       dht: false,
       dhtPort: 0,
-      directoryDefault: '',
+      directoryDefault: DEFAULT_PATH + 'torrents',
       networkHttpMaxOpen: 0,
       networkLocalAddress: [],
       networkMaxOpenFiles: 0,

@@ -1,4 +1,5 @@
 import type {TorrentProperties} from '@shared/types/Torrent';
+import {TorrentTrackerType} from '@shared/types/TorrentTracker';
 
 import {ExatorrentTorrent} from '../types/ExatorrentCoreMethods';
 
@@ -28,4 +29,14 @@ export const getTorrentStatuses = (torrent: ExatorrentTorrent): TorrentPropertie
   }
 
   return result;
+};
+
+export const getTrackerType = (tracker: string): TorrentTrackerType => {
+  if (tracker.startsWith('http')) {
+    return TorrentTrackerType.HTTP;
+  } else if (tracker.startsWith('udp')) {
+    return TorrentTrackerType.UDP;
+  } else {
+    return TorrentTrackerType.DHT;
+  }
 };

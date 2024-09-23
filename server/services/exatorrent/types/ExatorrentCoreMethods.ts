@@ -13,20 +13,19 @@ export interface ExatorrentDataApiResponse extends ExatorrentApiResponse {
   data: object | object[] | string;
 }
 
-export interface ExatorrentClientStats {
-  bytes_written: number;
-  bytes_written_data: number;
-  bytes_read: number;
-  bytes_read_data: number;
-  bytes_read_useful_data: number;
-  bytes_read_useful_intended_data: number;
-  chunks_written: number;
-  chunks_read: number;
-  chunks_read_useful: number;
-  chunks_read_wasted: number;
-  metadata_chunks_read: number;
-  pieces_dirtied_good: number;
-  pieces_dirtied_bad: number;
+export interface ExatorrentNetworkStats {
+  activehalfopenattempts: number;
+  byteswritten: number;
+  byteswrittendata: number;
+  bytesread: number;
+  bytesreaddata: number;
+  bytesreadusefuldata: number;
+  bytesreadusefulintendeddata: number;
+  chunkswritten: number;
+  chunksread: number;
+  chunksreaduseful: number;
+  chunksreadwasted: number;
+  metadatachunksread: number;
 }
 
 export interface ExatorrentTorrentFile {
@@ -39,24 +38,26 @@ export interface ExatorrentTorrentFile {
 }
 
 export interface ExatorrentPeerConn {
-  Network: string;
-  RemoteAddr: {IP: string; Port: number; Zone: string};
-  Discovery: string;
-  PeerPreferEncryption: boolean;
-  PeerMaxRequests: number;
-  PeerID: number[];
-  PeerExtensionsBytes: number[];
-  PeerListenPort: number;
-  LocalLtepProtocolMap: {Index: string[]; NumBuiltin: number};
-  PeerExtensionsIDs: Map<string, number>;
-  PeerClientName: string;
+  remoteaddr: string;
+  peerclientname: string;
+  downloadrate: number;
+  peerpreferencryption: boolean;
 }
 
 export interface ExatorrentTorrent {
   infohash: string;
   name: string;
   bytescompleted: number;
+  byteswritten: number;
   length: number;
   state: string;
   seeding: boolean;
+  private: boolean;
+  creationdate: number;
+  addeddate: number;
+  starteddate: number;
+  totalpeers: number;
+  activepeers: number;
+  connectedseeders: number;
+  announcelist: string[];
 }

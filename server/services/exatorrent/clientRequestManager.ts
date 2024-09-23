@@ -4,6 +4,7 @@ import WebSocket from 'ws';
 import {
   ExatorrentApiResponse,
   ExatorrentDataApiResponse,
+  ExatorrentNetworkStats,
   ExatorrentPeerConn,
   ExatorrentStatusApiResponse,
   ExatorrentTorrent,
@@ -65,6 +66,13 @@ class ClientRequestManager {
     return response.data as ExatorrentTorrent[];
   }
 
+  async getTorrent(hash: string): Promise<ExatorrentTorrent> {
+    const response = (await this.sendCommandWithResponse('listtorrentinfo', 'torrentinfo', {
+      data1: hash,
+    })) as ExatorrentDataApiResponse;
+    return response.data as ExatorrentTorrent;
+  }
+
   async getStatus(): Promise<string> {
     const response = (await this.sendCommandWithResponse('torcstatus', 'torcstatus', {
       aop: 1,
@@ -77,6 +85,25 @@ class ClientRequestManager {
       data1: hash,
     })) as ExatorrentDataApiResponse;
     return response.data as ExatorrentPeerConn[];
+  }
+
+  async verifyTorrent(hash: string): Promise<void> {
+    await this.sendCommandWithResponse('verifytorrent', 'resp', {
+      data1: hash,
+      aop: 1,
+    });
+  }
+
+  async addTrackers(hash: string, trackers: string[]): Promise<void> {
+    await this.sendCommand('addtrackerstotorrent', {
+      data1: hash,
+      data2: Buffer.from(trackers.join('\n\n')).toString('base64'),
+    });
+  }
+
+  async getNetworkStats(): Promise<ExatorrentNetworkStats> {
+    const response = (await this.sendCommandWithResponse('networkstats', 'networkstats')) as ExatorrentDataApiResponse;
+    return response.data as ExatorrentNetworkStats;
   }
 
   async reconnect(): Promise<void> {
@@ -106,9 +133,9 @@ class ClientRequestManager {
   private async sendCommandWithResponse(
     command: string,
     receiveType: string,
-    args: object,
+    args: object = {},
   ): Promise<ExatorrentApiResponse> {
-    await this.mutex.catch();
+    await this.mutex.catch(() => undefined);
 
     await this.sendCommand(command, args);
 
