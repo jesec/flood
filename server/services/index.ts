@@ -2,6 +2,7 @@ import type {UserInDatabase} from '@shared/schema/Auth';
 
 import ClientGatewayService from './clientGatewayService';
 import DelugeClientGatewayService from './Deluge/clientGatewayService';
+import ExatorrentClientGatewayService from './exatorrent/clientGatewayService';
 import FeedService from './feedService';
 import HistoryService from './historyService';
 import NotificationService from './notificationService';
@@ -28,6 +29,8 @@ const newClientGatewayService = (user: UserInDatabase): ClientGatewayService => 
   switch (user.client.client) {
     case 'Deluge':
       return new DelugeClientGatewayService(user);
+    case 'exatorrent':
+      return new ExatorrentClientGatewayService(user);
     case 'qBittorrent':
       return new QBittorrentClientGatewayService(user);
     case 'rTorrent':
