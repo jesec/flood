@@ -20,6 +20,7 @@ import type {
   QBittorrentTorrentTrackers,
 } from './types/QBittorrentTorrentsMethods';
 import type {QBittorrentTransferInfo} from './types/QBittorrentTransferMethods';
+import {isApiVersionAtLeast} from './util/apiVersionCheck';
 
 const EMPTY_SERVER_STATE = {
   dl_info_speed: 0,
@@ -35,6 +36,7 @@ const EMPTY_SERVER_STATE = {
 class ClientRequestManager {
   private connectionSettings: QBittorrentConnectionSettings;
   private apiBase: string;
+  private apiVersion: string | null = null;
   private authCookie: Promise<string | undefined> = Promise.resolve(undefined);
   private isMainDataPending = false;
 
@@ -116,6 +118,17 @@ class ClientRequestManager {
       .then(() => {
         // returns nothing
       });
+  }
+
+  async getApiVersion(): Promise<void> {
+    try {
+      const {data} = await axios.get(`${this.apiBase}/app/webapiVersion`, {
+        headers: await this.getRequestHeaders(),
+      });
+      this.apiVersion = data;
+    } catch (error) {
+      this.apiVersion = null;
+    }
   }
 
   async getTorrentInfos(): Promise<QBittorrentTorrentInfos> {
@@ -293,9 +306,10 @@ class ClientRequestManager {
   }
 
   async torrentsPause(hashes: Array<string>): Promise<void> {
+    const method = isApiVersionAtLeast(this.apiVersion, '2.11.0') ? 'stop' : 'pause';
     return axios
       .post(
-        `${this.apiBase}/torrents/pause`,
+        `${this.apiBase}/torrents/${method}`,
         new URLSearchParams({
           hashes: hashes.join('|').toLowerCase(),
         }),
@@ -309,9 +323,10 @@ class ClientRequestManager {
   }
 
   async torrentsResume(hashes: Array<string>): Promise<void> {
+    const method = isApiVersionAtLeast(this.apiVersion, '2.11.0') ? 'start' : 'resume';
     return axios
       .post(
-        `${this.apiBase}/torrents/resume`,
+        `${this.apiBase}/torrents/${method}`,
         new URLSearchParams({
           hashes: hashes.join('|').toLowerCase(),
         }),
@@ -608,6 +623,7 @@ class ClientRequestManager {
     this.connectionSettings = connectionSettings;
     this.apiBase = `${connectionSettings.url}/api/v2`;
     this.updateAuthCookie().catch(() => undefined);
+    this.getApiVersion();
   }
 }
 
