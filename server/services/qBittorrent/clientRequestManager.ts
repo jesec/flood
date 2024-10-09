@@ -36,7 +36,7 @@ const EMPTY_SERVER_STATE = {
 class ClientRequestManager {
   private connectionSettings: QBittorrentConnectionSettings;
   private apiBase: string;
-  private apiVersion: string | null = null;
+  apiVersion: string | null = null;
   private authCookie: Promise<string | undefined> = Promise.resolve(undefined);
   private isMainDataPending = false;
 

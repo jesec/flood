@@ -123,6 +123,8 @@ export interface QBittorrentTorrentsAddOptions {
   skip_checking?: boolean;
   // Add torrents in the paused state. Possible values are true, false (default)
   paused?: boolean;
+  // Add torrents in the stopped state (using webapiVersion v2.11.0 or later). Possible values are true, false (default)
+  stopped?: boolean;
   // Create the root folder. Possible values are true, false, unset (default)
   root_folder?: boolean;
   // Content layout mode, replaces root_folder

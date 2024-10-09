@@ -38,6 +38,7 @@ import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {QBittorrentTorrentContentPriority, QBittorrentTorrentTrackerStatus} from './types/QBittorrentTorrentsMethods';
+import {isApiVersionAtLeast} from './util/apiVersionCheck';
 import {
   getTorrentPeerPropertiesFromFlags,
   getTorrentStatusFromState,
@@ -88,7 +89,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .torrentsAddFiles(fileBuffers, {
         savepath: destination,
         tags: tags.join(','),
-        paused: !start,
+        [isApiVersionAtLeast(this.clientRequestManager.apiVersion, '2.11.0') ? 'stopped' : 'paused']: !start,
         root_folder: !isBasePath,
         contentLayout: isBasePath ? 'NoSubfolder' : undefined,
         sequentialDownload: isSequential,
@@ -122,7 +123,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .torrentsAddURLs(urls, {
         savepath: destination,
         tags: tags.join(','),
-        paused: !start,
+        [isApiVersionAtLeast(this.clientRequestManager.apiVersion, '2.11.0') ? 'stopped' : 'paused']: !start,
         root_folder: !isBasePath,
         contentLayout: isBasePath ? 'NoSubfolder' : undefined,
         sequentialDownload: isSequential,
