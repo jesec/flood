@@ -1,10 +1,10 @@
-const fs = require('node:fs');
-const path = require('node:path');
-
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
+import path from 'node:path';
+import fs from 'node:fs';
+
 const appDirectory = path.resolve(path.join(__dirname, '../..'));
-const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
+const resolveApp = (relativePath: string) => path.resolve(appDirectory, relativePath);
 
 const getAppDist = () => {
   // In production, assets are in assets/.
@@ -25,14 +25,4 @@ const getAppDist = () => {
   return appDist;
 };
 
-const PATHS = {
-  appBuild: resolveApp('dist/assets'),
-  appDist: getAppDist(),
-  appPublic: resolveApp('client/src/public/'),
-  appHtml: resolveApp('client/src/index.html'),
-  appIndex: resolveApp('client/src/javascript/app.tsx'),
-  appSrc: resolveApp('./'),
-  dist: resolveApp('dist'),
-};
-
-module.exports = PATHS;
+export const appDistPath = getAppDist();
