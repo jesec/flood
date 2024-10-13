@@ -12,7 +12,7 @@ import FileDropzone from '../../general/form-elements/FileDropzone';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import TagSelect from '../../general/form-elements/TagSelect';
 
-import type {ProcessedFiles} from '../../general/form-elements/FileDropzone';
+import type {ProcessedFiles} from '@client/util/fileProcessor';
 
 interface AddTorrentsByFileFormData {
   destination: string;
