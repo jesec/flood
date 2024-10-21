@@ -1,23 +1,23 @@
 import classnames from 'classnames';
 import {FC, ReactNode} from 'react';
+import ConfigStore from '@client/stores/ConfigStore';
 
 interface PanelProps {
   children: ReactNode;
-  theme?: 'light' | 'dark';
   spacing?: 'small' | 'medium' | 'large';
   transparent?: boolean;
 }
 
-const Panel: FC<PanelProps> = ({children, theme, spacing, transparent}: PanelProps) => {
-  const classes = classnames(`panel panel--${theme}`, `panel--${spacing}`, {
+const Panel: FC<PanelProps> = ({children, spacing, transparent}: PanelProps) => {
+  const classes = classnames(`panel`, `panel--${spacing}`, {
     'panel--transparent': transparent,
+    inverse: ConfigStore.isPreferDark,
   });
 
   return <div className={classes}>{children}</div>;
 };
 
 Panel.defaultProps = {
-  theme: 'light',
   spacing: 'medium',
   transparent: false,
 };
