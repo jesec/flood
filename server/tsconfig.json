@@ -3,7 +3,7 @@
     "target": "es2020",
     "moduleResolution": "node",
     "allowJs": true,
-    "module": "commonjs",
+    "module": "ESNext",
     "sourceMap": false,
     "strict": true,
     "isolatedModules": true,
