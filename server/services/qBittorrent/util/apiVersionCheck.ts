@@ -1,4 +1,4 @@
-export function isApiVersionAtLeast(currentVersion: string | null, targetVersion: string): boolean {
+export function isApiVersionAtLeast(currentVersion: string | undefined, targetVersion: string): boolean {
   if (!currentVersion) {
     return false;
   }
