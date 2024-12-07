@@ -55,6 +55,7 @@ const closeTag = (elementName: string) => {
       break;
     case 'i4':
     case 'i8':
+    case 'int':
     case 'string':
     case 'name':
       dataStack.push(tagValue);
