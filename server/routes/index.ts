@@ -51,7 +51,6 @@ const constructRoutes = async (fastify: FastifyInstance) => {
 
     if (sea.isSea()) {
       fastify.get('/', (req, res) => {
-        console.log(req.routerPath);
         res.send(sea.getAssetAsBlob(req.routerPath));
       });
     } else {
