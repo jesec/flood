@@ -1,7 +1,7 @@
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
-import path from 'node:path';
 import fs from 'node:fs';
+import path from 'node:path';
 
 const appDirectory = path.resolve(path.join(__dirname, '../..'));
 const resolveApp = (relativePath: string) => path.resolve(appDirectory, relativePath);

@@ -15,8 +15,8 @@ import {Strategy} from 'passport-jwt';
 
 import config from '../../config';
 import Users from '../models/Users';
-import apiRoutes from './api';
 import {appDistPath} from '../services/paths';
+import apiRoutes from './api';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
