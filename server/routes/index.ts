@@ -4,7 +4,6 @@ import path from 'node:path';
 import fastifyCompress from '@fastify/compress';
 import {fastifyExpress} from '@fastify/express';
 import fastifyStatic from '@fastify/static';
-import paths from '@shared/config/paths';
 import {authTokenSchema, UserInDatabase} from '@shared/schema/Auth';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
@@ -16,6 +15,7 @@ import {Strategy} from 'passport-jwt';
 
 import config from '../../config';
 import Users from '../models/Users';
+import {appDistPath} from '../services/paths';
 import apiRoutes from './api';
 
 declare global {
@@ -50,10 +50,10 @@ const constructRoutes = async (fastify: FastifyInstance) => {
 
     // Static assets
     // app.use(servedPath, express.static(paths.appDist));
-    fastify.register(fastifyStatic, {root: paths.appDist, prefix: servedPath});
+    fastify.register(fastifyStatic, {root: appDistPath, prefix: servedPath});
 
     // Client app routes, serve index.html and client js will figure it out
-    const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {
+    const html = fs.readFileSync(path.join(appDistPath, 'index.html'), {
       encoding: 'utf8',
     });
 

@@ -2,6 +2,7 @@
   "name": "flood",
   "version": "4.8.4",
   "description": "A modern Web UI for various torrent clients with multi-user and multi-client support",
+  "type": "module",
   "keywords": [
     "typescript",
     "react",
@@ -30,7 +31,7 @@
     "SECURITY.md"
   ],
   "bin": {
-    "flood": "dist/index.js"
+    "flood": "dist/index.mjs"
   },
   "pkg": {
     "assets": [
@@ -47,7 +48,7 @@
     ]
   },
   "scripts": {
-    "build": "node scripts/build.js",
+    "build": "cross-env BABEL_ENV=production NODE_ENV=production node scripts/build.mjs",
     "build-pkg": "rm -rf dist && npm run build && npm run pkg",
     "pkg": "pkg . --out-path dist-pkg --no-bytecode --public --options=enable-source-maps",
     "format-source": "prettier -w .",
@@ -55,7 +56,7 @@
     "check-types": "tsc",
     "lint": "NODE_ENV=development eslint --max-warnings 0 . --ext .js --ext .jsx --ext .ts --ext .tsx",
     "prepack": "rm -rf dist && npm run build",
-    "start": "node --enable-source-maps --use_strict dist/index.js",
+    "start": "node --enable-source-maps --use_strict dist/index.mjs",
     "start:development:client": "node client/scripts/development.js",
     "start:development:server": "NODE_ENV=development tsx watch server/bin/start.ts",
     "start:test:rtorrent": "node scripts/testsetup.js",
@@ -88,7 +89,7 @@
     "@lingui/react": "^4.11.3",
     "@maxmind/geoip2-node": "^5.0.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
-    "@seald-io/nedb": "^3.1.0",
+    "@seald-io/nedb": "^4.0.4",
     "@types/bencode": "^2.0.1",
     "@types/body-parser": "^1.19.2",
     "@types/content-disposition": "^0.5.5",
@@ -105,7 +106,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/lodash": "^4.14.195",
     "@types/morgan": "^1.9.4",
-    "@types/node": "^16.18.105",
+    "@types/node": "^20.11.25",
     "@types/parse-torrent": "^5.8.4",
     "@types/passport": "^1.0.12",
     "@types/passport-jwt": "^3.0.9",
@@ -126,11 +127,12 @@
     "bencode": "^2.0.3",
     "body-parser": "^1.20.2",
     "case-sensitive-paths-webpack-plugin": "2.4.0",
-    "chalk": "^4.1.2",
+    "chalk": "^5.3.0",
     "classnames": "^2.3.2",
     "content-disposition": "^0.5.4",
     "cookie-parser": "^1.4.6",
     "create-torrent": "^5.0.9",
+    "cross-env": "^7.0.3",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "d3-array": "^3.2.4",
@@ -183,6 +185,7 @@
     "postcss": "^8.4.24",
     "postcss-loader": "^7.3.3",
     "prettier": "^2.8.8",
+    "punycode": "^2.3.1",
     "react": "^18.2.0",
     "react-dev-utils": "^12.0.1",
     "react-dom": "^18.2.0",
@@ -219,7 +222,7 @@
     "zod": "^3.21.4"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22.11.0"
   },
   "browserslist": [
     "> 2%",

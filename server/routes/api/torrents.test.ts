@@ -10,7 +10,6 @@ import MockAdapter from 'axios-mock-adapter';
 import fastify from 'fastify';
 import supertest from 'supertest';
 
-import paths from '../../../shared/config/paths';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
 import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
@@ -20,6 +19,8 @@ import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
+
+const appSrcPath = path.resolve(__dirname, '../../..');
 
 const app = fastify({bodyLimit: 100 * 1024 * 1024 * 1024, disableRequestLogging: true, forceCloseConnections: true});
 let request: supertest.SuperTest<supertest.Test>;
@@ -41,19 +42,19 @@ const tempDirectory = getTempPath('download');
 jest.setTimeout(20000);
 
 const torrentFiles = [
-  path.join(paths.appSrc, 'fixtures/single.torrent'),
-  path.join(paths.appSrc, 'fixtures/multi.torrent'),
+  path.join(appSrcPath, 'fixtures/single.torrent'),
+  path.join(appSrcPath, 'fixtures/multi.torrent'),
 ].map((torrentPath) => Buffer.from(fs.readFileSync(torrentPath)).toString('base64')) as [string, ...string[]];
 
 const mock = new MockAdapter(axios, {onNoMatch: 'passthrough'});
 
 mock
   .onGet('https://www.torrents/single.torrent')
-  .reply(200, fs.readFileSync(path.join(paths.appSrc, 'fixtures/single.torrent')));
+  .reply(200, fs.readFileSync(path.join(appSrcPath, 'fixtures/single.torrent')));
 
 mock
   .onGet('https://www.torrents/multi.torrent')
-  .reply(200, fs.readFileSync(path.join(paths.appSrc, 'fixtures/multi.torrent')));
+  .reply(200, fs.readFileSync(path.join(appSrcPath, 'fixtures/multi.torrent')));
 
 const torrentURLs: [string, ...string[]] = [
   'https://www.torrents/single.torrent',
