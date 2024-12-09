@@ -1,6 +1,6 @@
 import {Reader} from '@maxmind/geoip2-node';
 
-import * as data from '../geoip/data.mjs';
+import * as data from '../geoip/data';
 
 const r = Reader.openBuffer(data.data);
 

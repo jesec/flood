@@ -5,7 +5,6 @@ const common = require('./common');
 module.exports = {
   ...common,
   displayName: 'qbittorrent',
-  preset: 'ts-jest/presets/js-with-babel',
   rootDir: './../',
   moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
     prefix: '<rootDir>/..',
