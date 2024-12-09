@@ -186,10 +186,9 @@ jobs:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Set up QEMU
-        run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+      - uses: actions/download-artifact@v4
+        with:
+          name: flood
 
       - name: Extract tarball
         run: |
