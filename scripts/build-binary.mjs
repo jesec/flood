@@ -26,6 +26,10 @@ async function main() {
     assets[path.normalize(p)] = p;
   }
 
+  if (!Object.keys(assets).length) {
+    execSync('pnpm run build');
+  }
+
   fs.writeFileSync('sea-config.json', JSON.stringify({...data, assets}));
 
   execSync('node --experimental-sea-config sea-config.json');
