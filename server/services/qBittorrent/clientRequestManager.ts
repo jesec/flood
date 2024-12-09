@@ -20,6 +20,7 @@ import type {
   QBittorrentTorrentTrackers,
 } from './types/QBittorrentTorrentsMethods';
 import type {QBittorrentTransferInfo} from './types/QBittorrentTransferMethods';
+import {isApiVersionAtLeast} from './util/apiVersionCheck';
 
 const EMPTY_SERVER_STATE = {
   dl_info_speed: 0,
@@ -35,6 +36,7 @@ const EMPTY_SERVER_STATE = {
 class ClientRequestManager {
   private connectionSettings: QBittorrentConnectionSettings;
   private apiBase: string;
+  apiVersion: Promise<string | undefined> = Promise.resolve(undefined);
   private authCookie: Promise<string | undefined> = Promise.resolve(undefined);
   private isMainDataPending = false;
 
@@ -78,17 +80,27 @@ class ClientRequestManager {
       });
   }
 
-  async updateAuthCookie(connectionSettings?: QBittorrentConnectionSettings): Promise<void> {
-    let authFailed = false;
+  async updateConnection(connectionSettings?: QBittorrentConnectionSettings): Promise<void> {
+    let failed = false;
 
     this.authCookie = this.authenticate(connectionSettings).catch(() => {
-      authFailed = true;
+      failed = true;
       return undefined;
     });
 
-    await this.authCookie;
+    this.apiVersion = this.authCookie
+      .then(() => {
+        return !failed ? this.getApiVersion() : Promise.resolve(undefined);
+      })
+      .catch(() => {
+        failed = true;
+        return undefined;
+      });
 
-    if (authFailed) {
+    await this.authCookie;
+    await this.apiVersion;
+
+    if (failed) {
       throw new Error();
     }
   }
@@ -116,6 +128,14 @@ class ClientRequestManager {
       .then(() => {
         // returns nothing
       });
+  }
+
+  async getApiVersion(): Promise<string> {
+    return axios
+      .get<string>(`${this.apiBase}/app/webapiVersion`, {
+        headers: await this.getRequestHeaders(),
+      })
+      .then((res) => res.data);
   }
 
   async getTorrentInfos(): Promise<QBittorrentTorrentInfos> {
@@ -293,9 +313,10 @@ class ClientRequestManager {
   }
 
   async torrentsPause(hashes: Array<string>): Promise<void> {
+    const method = isApiVersionAtLeast(await this.apiVersion, '2.11.0') ? 'stop' : 'pause';
     return axios
       .post(
-        `${this.apiBase}/torrents/pause`,
+        `${this.apiBase}/torrents/${method}`,
         new URLSearchParams({
           hashes: hashes.join('|').toLowerCase(),
         }),
@@ -309,9 +330,10 @@ class ClientRequestManager {
   }
 
   async torrentsResume(hashes: Array<string>): Promise<void> {
+    const method = isApiVersionAtLeast(await this.apiVersion, '2.11.0') ? 'start' : 'resume';
     return axios
       .post(
-        `${this.apiBase}/torrents/resume`,
+        `${this.apiBase}/torrents/${method}`,
         new URLSearchParams({
           hashes: hashes.join('|').toLowerCase(),
         }),
@@ -607,7 +629,7 @@ class ClientRequestManager {
   constructor(connectionSettings: QBittorrentConnectionSettings) {
     this.connectionSettings = connectionSettings;
     this.apiBase = `${connectionSettings.url}/api/v2`;
-    this.updateAuthCookie().catch(() => undefined);
+    this.updateConnection().catch(() => undefined);
   }
 }
 

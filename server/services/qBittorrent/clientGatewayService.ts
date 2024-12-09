@@ -38,6 +38,7 @@ import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import ClientGatewayService from '../clientGatewayService';
 import ClientRequestManager from './clientRequestManager';
 import {QBittorrentTorrentContentPriority, QBittorrentTorrentTrackerStatus} from './types/QBittorrentTorrentsMethods';
+import {isApiVersionAtLeast} from './util/apiVersionCheck';
 import {
   getTorrentPeerPropertiesFromFlags,
   getTorrentStatusFromState,
@@ -84,11 +85,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       throw new Error();
     }
 
+    const method = isApiVersionAtLeast(await this.clientRequestManager.apiVersion, '2.11.0') ? 'stopped' : 'paused';
     await this.clientRequestManager
       .torrentsAddFiles(fileBuffers, {
         savepath: destination,
         tags: tags.join(','),
-        paused: !start,
+        [method]: !start,
         root_folder: !isBasePath,
         contentLayout: isBasePath ? 'NoSubfolder' : undefined,
         sequentialDownload: isSequential,
@@ -118,11 +120,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       throw new Error();
     }
 
+    const method = isApiVersionAtLeast(await this.clientRequestManager.apiVersion, '2.11.0') ? 'stopped' : 'paused';
     await this.clientRequestManager
       .torrentsAddURLs(urls, {
         savepath: destination,
         tags: tags.join(','),
-        paused: !start,
+        [method]: !start,
         root_folder: !isBasePath,
         contentLayout: isBasePath ? 'NoSubfolder' : undefined,
         sequentialDownload: isSequential,
@@ -525,7 +528,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
   async testGateway(): Promise<void> {
     return this.clientRequestManager
-      .updateAuthCookie()
+      .updateConnection()
       .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
   }
 }

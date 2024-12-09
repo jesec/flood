@@ -126,15 +126,18 @@ class ClientRequestManager {
       tlsSocket.on('secureConnect', () => {
         tlsSocket.on('data', (chunk: Buffer) => {
           if (rpcBuffer != null) {
-            rpcBuffer = Buffer.concat([rpcBuffer, chunk], rpcBufferSize);
+            rpcBuffer = Buffer.concat(
+              [rpcBuffer, chunk],
+              rpcBufferSize <= rpcBuffer.length + chunk.length ? rpcBufferSize : undefined,
+            );
           } else {
             if (chunk[0] !== DELUGE_RPC_PROTOCOL_VERSION) {
               handleError(new Error('Unexpected Deluge RPC version.'));
               return;
             }
 
-            rpcBufferSize = chunk.slice(1, 5).readUInt32BE(0);
-            rpcBuffer = chunk.slice(5);
+            rpcBufferSize = chunk.subarray(1, 5).readUInt32BE(0);
+            rpcBuffer = chunk.subarray(5);
           }
 
           if (rpcBuffer.length >= rpcBufferSize) {
