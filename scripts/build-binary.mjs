@@ -13,7 +13,7 @@ async function main() {
     return;
   }
 
-  execSync('npm run build');
+  fs.mkdirSync('dist-pkg', {recursive: true});
   const data = JSON.parse(fs.readFileSync('sea-config.tmpl.json').toString());
   const assets = {};
   for await (const p of walk('./dist/assets')) {
@@ -23,9 +23,9 @@ async function main() {
   fs.writeFileSync('sea-config.json', JSON.stringify({...data, assets}));
 
   execSync('node --experimental-sea-config sea-config.json');
-  fs.copyFileSync(process.execPath, 'flood.exe');
+  fs.copyFileSync(process.execPath, 'dist-pkg/flood');
   execSync(
-    'npx postject flood.exe NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
+    'npx postject dist-pkg/flood NODE_SEA_BLOB sea-prep.blob --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2',
   );
 }
 

@@ -172,11 +172,12 @@ jobs:
 
   pkg:
     needs: npm
-    runs-on: ubuntu-24.04
+    runs-on: '${{ matrix.os }}'
 
     strategy:
       matrix:
         node: ['22']
+        os: [macos-13, macos-14, windows-latest, ubuntu-24.04]
 
     steps:
       - name: Use Node.js ${{ matrix.node }}
@@ -189,17 +190,6 @@ jobs:
         run: |
           sudo apt update
           sudo apt install --reinstall -y qemu-user-static
-
-      - name: Install ldid
-        run: |
-          sudo wget https://github.com/jesec/ldid-static/releases/download/v2.1.4/ldid-amd64 -O /usr/local/bin/ldid
-          sudo chmod +x /usr/local/bin/ldid
-
-      - run: sudo npm install -g pkg
-
-      - uses: actions/download-artifact@v4
-        with:
-          name: flood
 
       - name: Extract tarball
         run: |
@@ -216,43 +206,8 @@ jobs:
       - name: 'Upload executable: Linux x64'
         uses: actions/upload-artifact@v4
         with:
-          name: flood-linux-x64
-          path: dist-pkg/flood-linux-x64
-          if-no-files-found: error
-
-      - name: 'Upload executable: Linux arm64'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flood-linux-arm64
-          path: dist-pkg/flood-linux-arm64
-          if-no-files-found: error
-
-      - name: 'Upload executable: MacOS x64'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flood-macos-x64
-          path: dist-pkg/flood-macos-x64
-          if-no-files-found: error
-
-      - name: 'Upload executable: MacOS arm64'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flood-macos-arm64
-          path: dist-pkg/flood-macos-arm64
-          if-no-files-found: error
-
-      - name: 'Upload executable: Windows x64'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flood-win-x64.exe
-          path: dist-pkg/flood-win-x64.exe
-          if-no-files-found: error
-
-      - name: 'Upload executable: Windows arm64'
-        uses: actions/upload-artifact@v4
-        with:
-          name: flood-win-arm64.exe
-          path: dist-pkg/flood-win-arm64.exe
+          name: flood-${{ runner.os }}-${{ runner.arch }}
+          path: dist-pkg/
           if-no-files-found: error
 
   docker-distroless:
