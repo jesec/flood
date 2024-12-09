@@ -1,5 +1,5 @@
 module.exports = {
-  transformIgnorePatterns: ['node_modules/.pnpm/(?!(p-queue|p-timeout).*/)', 'node:sea'],
+  transformIgnorePatterns: ['node_modules/.pnpm/(?!(p-queue|p-timeout).*/)'],
   transform: {
     // transform ESM only package to CommonJS
     '^.+\\.(t|j)sx?$': [
