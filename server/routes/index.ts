@@ -49,13 +49,14 @@ const constructRoutes = async (fastify: FastifyInstance) => {
     // Disable ETag
     app.set('etag', false);
 
+    // Static assets
     if (sea.isSea()) {
+      // serve from sea assert directly
       fastify.get('/', (req, res) => {
         res.send(sea.getAssetAsBlob(req.routerPath));
       });
     } else {
-      // Static assets
-      // app.use(servedPath, express.static(paths.appDist));
+      // serve from fs
       fastify.register(fastifyStatic, {root: paths.appDist, prefix: servedPath});
     }
 
