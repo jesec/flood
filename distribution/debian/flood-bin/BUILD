@@ -26,7 +26,7 @@ genrule(
 genrule(
     name = "flood-pkg-x64",
     srcs = [
-        "dist/index.js",
+        "dist/index.mjs",
         "package.json",
     ] + glob(["node_modules/**/*"]),
     outs = ["x64/flood"],
