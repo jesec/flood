@@ -1,1 +1,1 @@
-export const data: string;
+export const data: Buffer;

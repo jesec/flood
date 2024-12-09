@@ -91,7 +91,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/lodash": "^4.14.195",
     "@types/morgan": "^1.9.4",
-    "@types/node": "^22.2.0",
+    "@types/node": "^20.0.0",
     "@types/parse-torrent": "^5.8.4",
     "@types/passport": "^1.0.12",
     "@types/passport-jwt": "^3.0.9",
@@ -196,7 +196,7 @@
     "tsconfig-paths": "^4.2.0",
     "tsx": "^4.6.2",
     "typed-emitter": "^2.1.0",
-    "typescript": "~5.0.4",
+    "typescript": "~5.6.0",
     "webpack": "^5.86.0",
     "webpack-dev-server": "^4.15.1",
     "webpack-shebang-plugin": "^1.1.8",
@@ -205,7 +205,7 @@
     "zod": "^3.21.4"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "browserslist": [
     "> 2%",

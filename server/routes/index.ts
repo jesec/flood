@@ -11,7 +11,6 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import type {FastifyInstance} from 'fastify';
-import type {FastifyInstance} from 'fastify';
 import morgan from 'morgan';
 import passport from 'passport';
 import {Strategy} from 'passport-jwt';
@@ -53,7 +52,7 @@ const constructRoutes = async (fastify: FastifyInstance) => {
     if (sea.isSea()) {
       fastify.get('/', (req, res) => {
         console.log(req.routerPath);
-        res.send(sea.getAsset(req.routerPath));
+        res.send(sea.getAssetAsBlob(req.routerPath));
       });
     } else {
       // Static assets
