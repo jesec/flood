@@ -1,6 +1,5 @@
 declare module '*.md' {
-  export const react: any;
-  const value: any;
+  const value: string;
   export default value;
 }
 
