@@ -28,19 +28,13 @@ import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 import {move} from 'fs-extra';
-import {move} from 'fs-extra';
-import sanitize from 'sanitize-filename';
 import sanitize from 'sanitize-filename';
 
 import {fetchUrls} from '../../util/fetchUtil';
 import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
 import ClientGatewayService from '../clientGatewayService';
-import ClientGatewayService from '../clientGatewayService';
 import * as geoip from '../geoip';
-import * as geoip from '../geoip';
-import ClientRequestManager from './clientRequestManager';
 import ClientRequestManager from './clientRequestManager';
 import {
   clientSettingMethodCallConfigs,
