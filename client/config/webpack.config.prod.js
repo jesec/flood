@@ -79,8 +79,9 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        loader: 'frontmatter-markdown-loader',
-        options: {mode: ['react-component']},
+        loader: 'raw-loader',
+        //   loader: 'frontmatter-markdown-loader',
+        //   options: {mode: ['react-component']},
       },
       {
         test: [/\.woff2$/],

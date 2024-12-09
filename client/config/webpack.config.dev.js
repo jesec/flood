@@ -1,5 +1,5 @@
 const path = require('node:path');
-const ESLintPlugin = require('eslint-webpack-plugin');
+// const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
@@ -59,8 +59,8 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        loader: 'frontmatter-markdown-loader',
-        options: {mode: ['react-component']},
+        loader: 'raw-loader',
+        // options: {mode: ['react-component']},
       },
       {
         test: [/\.woff2$/],
@@ -105,11 +105,11 @@ module.exports = {
     assetModuleFilename: 'static/media/[name].[hash:8].[ext]',
   },
   plugins: [
-    new ESLintPlugin({
-      extensions: ['js', 'jsx', 'ts', 'tsx'],
-      emitWarning: true,
-      threads: true,
-    }),
+    // new ESLintPlugin({
+    //   extensions: ['js', 'jsx', 'ts', 'tsx'],
+    //   emitWarning: true,
+    //   threads: true,
+    // }),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,

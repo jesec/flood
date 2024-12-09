@@ -7,9 +7,9 @@ import * as path from 'node:path/posix';
 import {execSync} from 'node:child_process';
 
 async function main() {
-  const [major, minor, patch] = process.versions.node.split('.').map(Number);
-  if (major <= 22) {
-    console.error('need node22 to run this scripts');
+  const [major] = process.versions.node.split('.').map(Number);
+  if (major <= 20) {
+    console.error('need node20 to run this scripts');
     return;
   }
 
