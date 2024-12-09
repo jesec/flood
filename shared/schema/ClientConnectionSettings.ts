@@ -1,5 +1,5 @@
-import {literal, number, string, strictObject, union} from 'zod';
 import type {infer as zodInfer} from 'zod';
+import {literal, number, strictObject, string, union} from 'zod';
 
 const delugeConnectionSettingsSchema = strictObject({
   client: literal('Deluge'),

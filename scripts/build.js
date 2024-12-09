@@ -9,7 +9,7 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const path = require('path');
+const path = require('node:path');
 const esbuild = require('esbuild');
 const chalk = require('chalk');
 const fs = require('fs-extra');

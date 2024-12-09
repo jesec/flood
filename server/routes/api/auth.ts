@@ -1,21 +1,9 @@
-import express from 'express';
-import passport from 'passport';
-import rateLimit from 'express-rate-limit';
-
 import type {Response} from 'express';
+import express from 'express';
+import rateLimit from 'express-rate-limit';
+import passport from 'passport';
 
-import {
-  authAuthenticationSchema,
-  authRegistrationSchema,
-  authUpdateUserSchema,
-  AuthVerificationPreloadConfigs,
-} from '../../../shared/schema/api/auth';
-import {bootstrapServicesForUser, destroyUserServices} from '../../services';
 import config from '../../../config';
-import {getAuthToken, getCookieOptions} from '../../util/authUtil';
-import requireAdmin from '../../middleware/requireAdmin';
-import Users from '../../models/Users';
-
 import type {
   AuthAuthenticationOptions,
   AuthAuthenticationResponse,
@@ -23,7 +11,17 @@ import type {
   AuthUpdateUserOptions,
   AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
+import {
+  authAuthenticationSchema,
+  authRegistrationSchema,
+  authUpdateUserSchema,
+  AuthVerificationPreloadConfigs,
+} from '../../../shared/schema/api/auth';
 import type {Credentials, UserInDatabase} from '../../../shared/schema/Auth';
+import requireAdmin from '../../middleware/requireAdmin';
+import Users from '../../models/Users';
+import {bootstrapServicesForUser, destroyUserServices} from '../../services';
+import {getAuthToken, getCookieOptions} from '../../util/authUtil';
 
 const router = express.Router();
 

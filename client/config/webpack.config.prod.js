@@ -1,5 +1,5 @@
 const autoprefixer = require('autoprefixer');
-const path = require('path');
+const path = require('node:path');
 const webpack = require('webpack');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');

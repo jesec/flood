@@ -1,12 +1,11 @@
-import type {NetConnectOpts} from 'net';
+import type {NetConnectOpts} from 'node:net';
 
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-
-import {methodCallJSON, methodCallXML} from './util/scgiUtil';
-import {sanitizePath} from '../../util/fileUtil';
-
-import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 import PQueue from 'p-queue';
+
+import {sanitizePath} from '../../util/fileUtil';
+import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
+import {methodCallJSON, methodCallXML} from './util/scgiUtil';
 
 type MethodCallParameters = Array<string | Buffer | MultiMethodCalls>;
 

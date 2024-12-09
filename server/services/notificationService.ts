@@ -1,6 +1,6 @@
-import Datastore from '@seald-io/nedb';
-import path from 'path';
+import path from 'node:path';
 
+import Datastore from '@seald-io/nedb';
 import type {
   Notification,
   NotificationCount,
@@ -8,8 +8,8 @@ import type {
   NotificationState,
 } from '@shared/types/Notification';
 
-import BaseService from './BaseService';
 import config from '../../config';
+import BaseService from './BaseService';
 
 type NotificationServiceEvents = {
   NOTIFICATION_COUNT_CHANGE: (payload: {id: number; data: NotificationCount}) => void;

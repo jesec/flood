@@ -1,8 +1,8 @@
-import truncateTo from './numberUtils';
-
+import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions} from '@shared/schema/api/torrents';
 import type {TorrentProperties} from '@shared/types/Torrent';
-import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
+
+import truncateTo from './numberUtils';
 
 export const getTorrentETAFromProperties = (
   processingTorrentProperties: Record<string, unknown>,

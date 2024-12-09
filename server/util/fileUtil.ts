@@ -1,7 +1,7 @@
-import fs from 'fs';
-import {promises as fsp} from 'fs';
-import {homedir} from 'os';
-import path from 'path';
+import fs from 'node:fs';
+import {promises as fsp} from 'node:fs';
+import {homedir} from 'node:os';
+import path from 'node:path';
 
 import config from '../../config';
 

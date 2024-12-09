@@ -1,7 +1,6 @@
+import type {AuthToken} from '@shared/schema/Auth';
 import {CookieOptions} from 'express';
 import jwt from 'jsonwebtoken';
-
-import type {AuthToken} from '@shared/schema/Auth';
 
 import config from '../../config';
 

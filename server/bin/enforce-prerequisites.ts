@@ -1,9 +1,9 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import * as sea from 'node:sea';
 
-import {appDist} from '../../shared/config/paths';
 import config from '../../config';
+import {appDist} from '../../shared/config/paths';
 
 const staticAssets = [path.join(appDist, 'index.html')];
 
