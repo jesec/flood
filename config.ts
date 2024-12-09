@@ -7,7 +7,7 @@ import path from 'node:path';
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
 import type {Config} from '@shared/schema/Config';
 import {configSchema} from '@shared/schema/Config';
-import yargs from 'yargs/yargs';
+import yargs from 'yargs';
 
 import {version} from './package.json';
 

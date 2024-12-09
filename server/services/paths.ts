@@ -3,6 +3,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+const __dirname = import.meta.dirname;
+
 const appDirectory = path.resolve(path.join(__dirname, '../..'));
 const resolveApp = (relativePath: string) => path.resolve(appDirectory, relativePath);
 
