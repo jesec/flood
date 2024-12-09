@@ -1,4 +1,5 @@
 @use '../../tools/colors';
+@use '../../tools/themes';
 
 @use '../config/border-radius.scss';
 @use '../config/spacing.scss';
@@ -10,9 +11,11 @@ $panel--spacing--horizontal--large: spacing.$spacing--xxx-large;
 $panel--spacing--vertical--large: spacing.$spacing--xx-large;
 
 .panel {
-  border: 1px solid colors.$grey--lighter;
+  @include themes.theme('background', 'panel--background');
+  @include themes.theme('border', 'panel--border');
   border-radius: border-radius.$border-radius--medium;
   box-shadow: panel--box-shadow(colors.$grey--lighter);
+  @include themes.theme('color', 'panel--foreground');
   overflow: hidden;
 
   &--medium {
@@ -104,9 +107,5 @@ $panel--spacing--vertical--large: spacing.$spacing--xx-large;
     &--has-border {
       border-top: 1px solid colors.$grey--soft;
     }
-  }
-
-  &--light {
-    background: #fff;
   }
 }
