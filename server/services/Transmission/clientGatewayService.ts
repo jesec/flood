@@ -25,13 +25,13 @@ import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
 
+import {TorrentPriority} from '../../../shared/types/Torrent';
+import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
+import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
 import ClientGatewayService from '../clientGatewayService';
-import ClientGatewayService from '../clientGatewayService';
 import * as geoip from '../geoip';
-import * as geoip from '../geoip';
-import ClientRequestManager from './clientRequestManager';
 import ClientRequestManager from './clientRequestManager';
 import {TransmissionPriority, TransmissionTorrentsSetArguments} from './types/TransmissionTorrentsMethods';
 import torrentPropertiesUtil from './util/torrentPropertiesUtil';
