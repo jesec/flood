@@ -31,7 +31,7 @@
     "SECURITY.md"
   ],
   "bin": {
-    "flood": "dist/index.cjs"
+    "flood": "dist/index.mjs"
   },
   "pkg": {
     "assets": [

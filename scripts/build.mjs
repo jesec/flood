@@ -46,9 +46,10 @@ const build = async (previousFileSizes) => {
 
   await esbuild.build({
     entryPoints: [path.resolve(__dirname, '..', 'server/bin/start.ts')],
-    outfile: path.resolve(__dirname, '..', 'dist/index.cjs'),
+    outfile: path.resolve(__dirname, '..', 'dist/index.mjs'),
     platform: 'node',
-    target: 'node16',
+    format: 'esm',
+    target: 'node20',
     bundle: true,
     sourcemap: 'inline',
   });

@@ -15,7 +15,7 @@ VERSION = "4.8.2-0"
 genrule(
     name = "flood-pkg-arm64",
     srcs = [
-        "dist/index.js",
+        "dist/index.mjs",
         "package.json",
     ] + glob(["node_modules/**/*"]),
     outs = ["arm64/flood"],
