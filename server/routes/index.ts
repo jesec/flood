@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import * as sea from 'node:sea';
+import sea from 'node:sea';
 
 import fastifyCompress from '@fastify/compress';
 import {fastifyExpress} from '@fastify/express';
