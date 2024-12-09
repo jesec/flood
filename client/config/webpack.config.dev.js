@@ -60,7 +60,6 @@ module.exports = {
       {
         test: /\.md$/,
         loader: 'raw-loader',
-        // options: {mode: ['react-component']},
       },
       {
         test: [/\.woff2$/],

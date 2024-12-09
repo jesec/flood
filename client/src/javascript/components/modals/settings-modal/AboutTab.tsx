@@ -1,7 +1,6 @@
 import {FC, Suspense} from 'react';
 
 import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 
 import packageJSON from '../../../../../../package.json';
 
@@ -20,7 +19,7 @@ const versioned = AboutMarkdown.replaceAll('<FloodVersion />', packageJSON.versi
 
 const AboutTab: FC = () => (
   <Suspense fallback={null}>
-    <Markdown remarkPlugins={[remarkGfm]}>{versioned}</Markdown>
+    <Markdown>{versioned}</Markdown>
   </Suspense>
 );
 
