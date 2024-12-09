@@ -10,7 +10,7 @@ import config from '../../config';
 import packageJSON from '../../package.json';
 import constructRoutes from '../routes';
 
-export default async () => {
+const startWebServer = async () => {
   const {ssl = false, floodServerHost: host, floodServerPort: port} = config;
 
   let instance: FastifyInstance<Http2SecureServer> | FastifyInstance<Server>;
@@ -55,3 +55,5 @@ export default async () => {
     console.log(chalk.blue('Static assets not served\n'));
   }
 };
+
+export default startWebServer;
