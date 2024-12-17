@@ -46,6 +46,8 @@ export const destroyUserServices = async (userId: UserInDatabase['_id'], drop = 
 
   delete serviceInstances[userId];
 
+  if (userServiceInstances === undefined || userServiceInstances === null) return;
+
   return Promise.all(
     Object.keys(userServiceInstances).map((key) => userServiceInstances[key as keyof ServiceInstances].destroy(drop)),
   );
