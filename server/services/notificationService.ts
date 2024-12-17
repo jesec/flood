@@ -26,6 +26,7 @@ class NotificationService extends BaseService<NotificationServiceEvents> {
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
+    this.db.setAutocompactionInterval(config.dbCleanInterval);
 
     (async () => {
       const notifications = await this.db.findAsync<Notification>({}).catch(() => undefined);
