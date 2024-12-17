@@ -21,6 +21,11 @@ class SettingService extends BaseService<SettingServiceEvents> {
     filename: path.join(config.dbPath, this.user._id, 'settings', 'settings.db'),
   });
 
+  constructor(...args: ConstructorParameters<typeof BaseService>) {
+    super(...args);
+    this.db.setAutocompactionInterval(config.dbCleanInterval);
+  }
+
   async destroy(drop: boolean) {
     if (drop) {
       await this.db.dropDatabaseAsync();

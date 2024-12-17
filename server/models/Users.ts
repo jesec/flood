@@ -31,6 +31,7 @@ class Users {
     });
 
     db.ensureIndex({fieldName: 'username', unique: true});
+    db.setAutocompactionInterval(config.dbCleanInterval);
 
     return db;
   })();
