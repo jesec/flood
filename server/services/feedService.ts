@@ -21,6 +21,7 @@ class FeedService extends BaseService<Record<string, never>> {
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
+    this.db.setAutocompactionInterval(config.dbCleanInterval);
 
     this.onServicesUpdated = async () => {
       // Execute once only.
