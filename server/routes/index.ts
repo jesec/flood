@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import sea from 'node:sea';
 
 import fastifyCompress from '@fastify/compress';
 import {fastifyExpress} from '@fastify/express';
@@ -49,8 +50,15 @@ const constructRoutes = async (fastify: FastifyInstance) => {
     app.set('etag', false);
 
     // Static assets
-    // app.use(servedPath, express.static(paths.appDist));
-    fastify.register(fastifyStatic, {root: paths.appDist, prefix: servedPath});
+    if (sea.isSea()) {
+      // serve from sea assert directly
+      fastify.get('/', (req, res) => {
+        res.send(sea.getAssetAsBlob(req.routerPath));
+      });
+    } else {
+      // serve from fs
+      fastify.register(fastifyStatic, {root: paths.appDist, prefix: servedPath});
+    }
 
     // Client app routes, serve index.html and client js will figure it out
     const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {
