@@ -1,5 +1,5 @@
 const autoprefixer = require('autoprefixer');
-const path = require('path');
+const path = require('node:path');
 const webpack = require('webpack');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -64,6 +64,9 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
+              sassOptions: {
+                silenceDeprecations: ['mixed-decls'],
+              },
             },
           },
         ],
@@ -76,8 +79,7 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        loader: 'frontmatter-markdown-loader',
-        options: {mode: ['react-component']},
+        loader: 'raw-loader',
       },
       {
         test: [/\.woff2$/],

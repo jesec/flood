@@ -1,6 +1,5 @@
-import type {Response} from 'express';
-
 import type {ServerEvents} from '@shared/types/ServerEvents';
+import type {Response} from 'express';
 
 class ServerEvent {
   res: Response;
@@ -13,7 +12,6 @@ class ServerEvent {
     this.res.write(`id:${id}\n`);
     this.res.write(`event:${eventType}\n`);
     this.res.write(`data:${JSON.stringify(data)}\n\n`);
-    this.res.flush();
   }
 }
 

@@ -4,6 +4,7 @@ import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 import DiskUsage from './DiskUsage';
 import FeedsButton from './FeedsButton';
 import LogoutButton from './LogoutButton';
+import LocationFilters from './LocationFilters';
 import NotificationsButton from './NotificationsButton';
 import SearchBox from './SearchBox';
 import SettingsButton from './SettingsButton';
@@ -17,32 +18,40 @@ import TransferData from './TransferData';
 
 const Sidebar: FC = () => (
   <OverlayScrollbarsComponent
+    className="application__sidebar"
     options={{
       scrollbars: {
         autoHide: 'scroll',
-        clickScrolling: false,
-        dragScrolling: false,
+        clickScroll: false,
+        dragScroll: false,
+        theme: `os-theme-thin`,
       },
-      className: 'application__sidebar os-theme-thin',
+      overflow: {
+        x: 'hidden',
+        y: 'scroll',
+      },
     }}
   >
-    <SidebarActions>
-      <SpeedLimitDropdown />
-      <SettingsButton />
-      <FeedsButton />
-      <NotificationsButton />
-      <LogoutButton />
-    </SidebarActions>
-    <TransferData />
-    <SearchBox />
-    <StatusFilters />
-    <TagFilters />
-    <TrackerFilters />
-    <DiskUsage />
-    <div style={{flexGrow: 1}} />
-    <SidebarActions>
-      <ThemeSwitchButton />
-    </SidebarActions>
+    <div style={{display: 'flex', flexDirection: 'column'}}>
+      <SidebarActions>
+        <SpeedLimitDropdown />
+        <SettingsButton />
+        <FeedsButton />
+        <NotificationsButton />
+        <LogoutButton />
+      </SidebarActions>
+      <TransferData />
+      <SearchBox />
+      <StatusFilters />
+      <TagFilters />
+      <TrackerFilters />
+      <LocationFilters />
+      <DiskUsage />
+      <div style={{flexGrow: 1}} />
+      <SidebarActions>
+        <ThemeSwitchButton />
+      </SidebarActions>
+    </div>
   </OverlayScrollbarsComponent>
 );
 

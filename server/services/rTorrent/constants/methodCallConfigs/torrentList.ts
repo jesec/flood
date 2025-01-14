@@ -1,5 +1,5 @@
 import {getDomainsFromURLs} from '../../../../util/torrentPropertiesUtil';
-import {stringTransformer, booleanTransformer, numberTransformer} from '../../util/rTorrentMethodCallUtil';
+import {booleanTransformer, numberTransformer, stringTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const torrentListMethodCallConfigs = {
   hash: {
@@ -22,7 +22,7 @@ const torrentListMethodCallConfigs = {
     methodCall: 'd.custom2=',
     transformValue: (value: unknown): string => {
       // ruTorrent sets VRS24mrkr as a comment prefix, so we use it as well for compatability
-      if (value === '' || typeof value !== 'string' || value.indexOf('VRS24mrker') !== 0) {
+      if (value === '' || typeof value !== 'string' || !value.startsWith('VRS24mrker')) {
         return '';
       }
 

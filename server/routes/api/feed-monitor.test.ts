@@ -1,14 +1,26 @@
-import fs from 'fs';
-import supertest from 'supertest';
+import fs from 'node:fs';
 
-import app from '../../app';
-import {getAuthToken} from '../../util/authUtil';
-import {getTempPath} from '../../models/TemporaryStorage';
+import fastify from 'fastify';
+import supertest from 'supertest';
 
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '../../../shared/types/api/feed-monitor';
 import type {Feed, Rule} from '../../../shared/types/Feed';
+import {getTempPath} from '../../models/TemporaryStorage';
+import {getAuthToken} from '../../util/authUtil';
+import constructRoutes from '..';
 
-const request = supertest(app);
+const app = fastify({disableRequestLogging: true, logger: false});
+let request: supertest.SuperTest<supertest.Test>;
+
+beforeAll(async () => {
+  await constructRoutes(app);
+  await app.ready();
+  request = supertest(app.server);
+});
+
+afterAll(async () => {
+  await app.close();
+});
 
 const authToken = `jwt=${getAuthToken('_config')}`;
 

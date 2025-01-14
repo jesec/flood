@@ -14,8 +14,8 @@
 // env variable FLOOD_OPTION_port=80 is equivalent to argument --port 80. Use ',' to split
 // for arguments that take multiple inputs such as --allowedpath.
 
-import {array, boolean, number, strictObject, string} from 'zod';
 import type {infer as zodInfer} from 'zod';
+import {array, boolean, number, strictObject, string} from 'zod';
 
 import {authMethodSchema} from './Auth';
 import {clientConnectionSettingsSchema} from './ClientConnectionSettings';
@@ -67,11 +67,11 @@ export const configSchema = strictObject({
   // CLI argument: --host / -h
   // The host that Flood should listen for web connections on.
   // To listen on all interfaces, change to `floodServerHost: '0.0.0.0'`. [default: '127.0.0.1']
-  floodServerHost: string(),
+  floodServerHost: string().optional(),
 
   // CLI argument: --port / -p
-  // The port that Flood should listen for web connections on. [default: 3000]
-  floodServerPort: number().int().positive(),
+  // The port or path that Flood should listen for web connections on. [default: 3000]
+  floodServerPort: number().int().positive().or(string()),
 
   // CLI argument: --maxhistorystates
   // Flood keeps a history of torrent download and upload speeds.
@@ -125,6 +125,10 @@ export const configSchema = strictObject({
   // Users may prefer to serve static assets via a "professional" web server such as nginx to
   // increase performance or have more flexibility on compression or other options. [default: true]
   serveAssets: boolean().optional(),
+
+  // CLI argument: --disable-rate-limit
+  // Disable api request limit except for login
+  disableRateLimit: boolean(),
 })
   .refine(
     (config) => {

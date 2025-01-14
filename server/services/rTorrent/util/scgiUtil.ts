@@ -1,11 +1,10 @@
-import net from 'net';
+import net from 'node:net';
 
-import deserializer from './XMLRPCDeserializer';
-import serializer from './XMLRPCSerializer';
 import {RPCError} from '../types/RPCError';
-
 import type {MultiMethodCalls} from './rTorrentMethodCallUtil';
+import deserializer from './XMLRPCDeserializer';
 import type {XMLRPCValue} from './XMLRPCSerializer';
+import serializer from './XMLRPCSerializer';
 
 const NULL_CHAR = String.fromCharCode(0);
 
@@ -27,7 +26,7 @@ export const methodCallXML = (options: net.NetConnectOpts, methodName: string, p
     const xmlLength = Buffer.byteLength(xml, 'utf8');
 
     stream.on('error', reject);
-    stream.setEncoding('UTF8');
+    stream.setEncoding('utf8');
 
     const headerItems = [
       `CONTENT_LENGTH${NULL_CHAR}${xmlLength}${NULL_CHAR}`,
@@ -68,7 +67,7 @@ export const methodCallJSON = (options: net.NetConnectOpts, methodName: string, 
     const jsonLength = Buffer.byteLength(json, 'utf8');
 
     stream.on('error', reject);
-    stream.setEncoding('UTF8');
+    stream.setEncoding('utf8');
 
     const headerItems = [
       `CONTENT_LENGTH${NULL_CHAR}${jsonLength}${NULL_CHAR}`,

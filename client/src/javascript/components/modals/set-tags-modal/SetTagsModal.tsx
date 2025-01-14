@@ -47,7 +47,7 @@ const SetTagsModal: FC = () => {
 
             const {selectedTorrents} = TorrentStore;
             const formData = formRef.current.getFormData() as {tags: string};
-            const tags = formData.tags ? formData.tags.split(',') : [];
+            const tags = formData.tags ? formData.tags.split(',').filter((tag) => !!tag) : [];
 
             setIsSettingTags(true);
 

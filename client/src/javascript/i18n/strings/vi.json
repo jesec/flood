@@ -1,1 +1,17 @@
-{}
+{
+  "actionbar.button.add.torrent": "Thêm Torrent",
+  "actionbar.button.remove.torrent": "Xóa Torrent",
+  "actionbar.button.start.torrent": "Bắt đầu tải",
+  "actionbar.button.stop.torrent": "Dừng tải",
+  "alert.settings.saved": "Lưu thành công.",
+  "alert.torrent.add": "Thêm thành công {countElement} {count, plural, =1 {torrent} other {torrents}}.",
+  "alert.torrent.add.failed": "Không thể thêm {countElement} {count, plural, =1 {torrent} other {torrents}}.",
+  "alert.torrent.move": "Đã thành công chuyển {countElement} {count, plural, =1 {torrent} other {torrents}}.",
+  "alert.torrent.move.failed": "Không thể chuyển {countElement} {count, plural, =1 {torrent} other {torrents}}.",
+  "alert.torrent.remove": "Đã xóa {countElement} {count, plural, =1 {torrent} other {torrents}}.",
+  "alert.torrent.remove.failed": "Không thể xóa {countElement} {count, plural, =1 {torrent} other {torrents}}.",
+  "auth.add.user": "Thêm người dùng",
+  "auth.admin": "Admin",
+  "auth.create.account": "Tạo tài khoản",
+  "auth.create.an.account": "Tạo tài khoản"
+}

@@ -1,5 +1,3 @@
-FROM docker.io/jesec/busybox-applets as busybox
-
 FROM docker.io/alpine as build
 
 WORKDIR /root
@@ -15,9 +13,9 @@ RUN if [[ `uname -m` == "aarch64" ]]; \
     fi
 RUN mv flood /root/sysroot/bin/flood
 
-COPY --from=busybox /bin/busybox_DF /root/sysroot/bin/df
 
-RUN apk --no-cache add tini-static
+RUN apk --no-cache add tini-static coreutils
+RUN cp /bin/df /root/sysroot/bin/df
 RUN cp /sbin/tini-static /root/sysroot/bin/tini
 
 RUN chmod 0555 /root/sysroot/bin/*

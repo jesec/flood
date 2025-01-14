@@ -1,11 +1,22 @@
+import fastify from 'fastify';
 import supertest from 'supertest';
 
-import app from '../../app';
-import {getAuthToken} from '../../util/authUtil';
-
 import type {ClientSettings} from '../../../shared/types/ClientSettings';
+import {getAuthToken} from '../../util/authUtil';
+import constructRoutes from '..';
 
-const request = supertest(app);
+const app = fastify({disableRequestLogging: true, logger: true});
+let request: supertest.SuperTest<supertest.Test>;
+
+beforeAll(async () => {
+  await constructRoutes(app);
+  await app.ready();
+  request = supertest(app.server);
+});
+
+afterAll(async () => {
+  await app.close();
+});
 
 const authToken = `jwt=${getAuthToken('_config')}`;
 

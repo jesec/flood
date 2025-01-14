@@ -1,9 +1,8 @@
 import type {FeedItem} from 'feedsub';
 
-import {cdata as matchCDATA} from '../../shared/util/regEx';
-
 import type {AddTorrentByURLOptions} from '../../shared/schema/api/torrents';
 import type {Rule} from '../../shared/types/Feed';
+import {cdata as matchCDATA} from '../../shared/util/regEx';
 
 interface PendingDownloadItems
   extends Required<Pick<AddTorrentByURLOptions, 'urls' | 'destination' | 'tags' | 'start'>> {

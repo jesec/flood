@@ -1,28 +1,40 @@
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import readline from 'node:readline';
+import stream from 'node:stream';
+
 import axios from 'axios';
-import crypto from 'crypto';
-import fs from 'fs';
 import MockAdapter from 'axios-mock-adapter';
-import os from 'os';
-import path from 'path';
-import readline from 'readline';
-import stream from 'stream';
+import fastify from 'fastify';
 import supertest from 'supertest';
 
-import app from '../../app';
-import {getAuthToken} from '../../util/authUtil';
-import {getTempPath} from '../../models/TemporaryStorage';
 import paths from '../../../shared/config/paths';
-
+import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
 import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
-import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentList} from '../../../shared/types/Torrent';
-import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
+import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
+import {getTempPath} from '../../models/TemporaryStorage';
+import {getAuthToken} from '../../util/authUtil';
+import constructRoutes from '..';
 
-const request = supertest(app);
+const app = fastify({bodyLimit: 100 * 1024 * 1024 * 1024, disableRequestLogging: true, forceCloseConnections: true});
+let request: supertest.SuperTest<supertest.Test>;
 
+const activityStream = new stream.PassThrough();
 const authToken = `jwt=${getAuthToken('_config')}`;
+const rl = readline.createInterface({input: activityStream});
+
+beforeAll(async () => {
+  console.time('before all');
+  await constructRoutes(app);
+  await app.ready();
+  request = supertest(app.server);
+  request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
+});
 
 const tempDirectory = getTempPath('download');
 
@@ -48,6 +60,8 @@ const torrentURLs: [string, ...string[]] = [
   'https://www.torrents/multi.torrent',
 ];
 
+const torrentHashes: string[] = [];
+
 const torrentCookies = {
   'flood.js.org': ['test=test'],
 };
@@ -58,12 +72,8 @@ const testTrackers = [
   `http://${crypto.randomBytes(8).toString('hex')}.com/announce.php?key=test`,
 ];
 
-const torrentHashes: string[] = [];
-const createdTorrentHashes: string[] = [];
-
-const activityStream = new stream.PassThrough();
-const rl = readline.createInterface({input: activityStream});
-request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
+let torrentHash = '';
+let createdTorrentHash = '';
 
 const watchTorrentList = (op: 'add' | 'remove' | 'replace' | 'move' | 'copy' | 'test'): Promise<void> => {
   return new Promise((resolve) => {
@@ -78,23 +88,6 @@ const watchTorrentList = (op: 'add' | 'remove' | 'replace' | 'move' | 'copy' | '
     });
   });
 };
-
-beforeAll((done) => {
-  request
-    .get('/api/client/connection-test')
-    .send()
-    .set('Cookie', [authToken])
-    .set('Accept', 'application/json')
-    .expect(200)
-    .expect('Content-Type', /json/)
-    .end((err, res) => {
-      if (err) done(err);
-
-      expect(res.body).toMatchObject({isConnected: true});
-
-      done();
-    });
-});
 
 describe('POST /api/torrents/add-urls', () => {
   const addTorrentByURLOptions: AddTorrentByURLOptions = {
@@ -200,6 +193,7 @@ describe('POST /api/torrents/add-urls', () => {
             expect(torrent.status).toEqual(expect.arrayContaining(expectedStatuses));
 
             torrentHashes.push(torrent.hash);
+            torrentHash = torrent.hash;
           }),
         );
 
@@ -287,7 +281,7 @@ describe('POST /api/torrents/add-files', () => {
       .expect('Content-Type', /json/)
       .expect((res) => {
         if (res.status !== 200 && res.status !== 202) {
-          throw new Error('Failed to add torrents');
+          throw new Error(`Failed to add torrents ${JSON.stringify(res.body)}`);
         }
       })
       .end((err, _res) => {
@@ -415,7 +409,7 @@ describe('POST /api/torrents/create', () => {
 
         await Promise.all(
           addedTorrents.map(async (torrent) => {
-            createdTorrentHashes.push(torrent.hash);
+            createdTorrentHash = torrent.hash;
             expect(torrent.isPrivate).toBe(false);
 
             if (process.argv.includes('--trurl')) {
@@ -435,7 +429,7 @@ describe('POST /api/torrents/create', () => {
 describe('PATCH /api/torrents/trackers', () => {
   it('Sets single tracker', (done) => {
     const setTrackersOptions: SetTorrentsTrackersOptions = {
-      hashes: [torrentHashes[0]],
+      hashes: [torrentHash],
       trackers: [testTrackers[0]],
     };
 
@@ -455,7 +449,7 @@ describe('PATCH /api/torrents/trackers', () => {
 
   it('Sets multiple trackers', (done) => {
     const setTrackersOptions: SetTorrentsTrackersOptions = {
-      hashes: [torrentHashes[0]],
+      hashes: [torrentHash],
       trackers: testTrackers,
     };
 
@@ -475,7 +469,7 @@ describe('PATCH /api/torrents/trackers', () => {
 
   it('GET /api/torrents/{hash}/trackers', (done) => {
     request
-      .get(`/api/torrents/${torrentHashes[0]}/trackers`)
+      .get(`/api/torrents/${torrentHash}/trackers`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
@@ -497,7 +491,7 @@ describe('PATCH /api/torrents/trackers', () => {
 describe('GET /api/torrents/{hash}/contents', () => {
   it('Gets contents of torrents', (done) => {
     request
-      .get(`/api/torrents/${torrentHashes[0]}/contents`)
+      .get(`/api/torrents/${torrentHash}/contents`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
@@ -520,7 +514,7 @@ describe('POST /api/torrents/move', () => {
 
   it('Moves torrent', (done) => {
     const moveTorrentsOptions: MoveTorrentsOptions = {
-      hashes: [createdTorrentHashes[createdTorrentHashes.length - 1]],
+      hashes: [createdTorrentHash],
       destination: destDirectory,
       moveFiles: true,
       isBasePath: true,
@@ -558,7 +552,7 @@ describe('POST /api/torrents/move', () => {
 
         expect(res.body.torrents == null).toBe(false);
         const torrentList: TorrentList = res.body.torrents;
-        const torrent = torrentList[createdTorrentHashes[createdTorrentHashes.length - 1]];
+        const torrent = torrentList[createdTorrentHash];
 
         expect(torrent).not.toBe(null);
         expect(torrent.directory.startsWith(destDirectory)).toBe(true);

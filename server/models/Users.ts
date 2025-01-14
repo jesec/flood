@@ -1,15 +1,15 @@
-import {argon2id, argon2Verify} from 'hash-wasm';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
+
 import Datastore from '@seald-io/nedb';
-import fs from 'fs';
-import path from 'path';
+import {argon2id, argon2Verify} from 'hash-wasm';
 
-import {AccessLevel} from '../../shared/schema/constants/Auth';
 import config from '../../config';
-import {bootstrapServicesForUser, destroyUserServices} from '../services';
-
-import type {ClientConnectionSettings} from '../../shared/schema/ClientConnectionSettings';
 import type {Credentials, UserInDatabase} from '../../shared/schema/Auth';
+import type {ClientConnectionSettings} from '../../shared/schema/ClientConnectionSettings';
+import {AccessLevel} from '../../shared/schema/constants/Auth';
+import {bootstrapServicesForUser, destroyUserServices} from '../services';
 
 const hashPassword = async (password: string): Promise<string> => {
   return argon2id({
@@ -31,6 +31,7 @@ class Users {
     });
 
     db.ensureIndex({fieldName: 'username', unique: true});
+    db.setAutocompactionInterval(config.dbCleanInterval);
 
     return db;
   })();

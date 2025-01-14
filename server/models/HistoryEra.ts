@@ -1,7 +1,7 @@
-import type {TransferData, TransferSnapshot} from '@shared/types/TransferData';
+import {setInterval} from 'node:timers';
 
 import Datastore from '@seald-io/nedb';
-import {setInterval} from 'timers';
+import type {TransferData, TransferSnapshot} from '@shared/types/TransferData';
 
 import config from '../../config';
 
