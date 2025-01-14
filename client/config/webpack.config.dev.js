@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require('node:path');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -44,6 +44,9 @@ module.exports = {
             loader: 'sass-loader',
             options: {
               sourceMap: true,
+              sassOptions: {
+                silenceDeprecations: ['mixed-decls'],
+              },
             },
           },
         ],
@@ -56,8 +59,7 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        loader: 'frontmatter-markdown-loader',
-        options: {mode: ['react-component']},
+        loader: 'raw-loader',
       },
       {
         test: [/\.woff2$/],

@@ -1,7 +1,7 @@
 # Maintainer: replace with your name <to-be-determined@tbd>
 # Contributor: replace with your name <to-be-determined@tbd>
 _npmname=flood
-_npmver=4.7.0
+_npmver=4.8.2
 pkgname=flood
 pkgver=$_npmver
 pkgrel=1

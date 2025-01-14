@@ -9,21 +9,22 @@ on:
 
 jobs:
   flood-bin:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [20]
+        node: ['22']
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           registry-url: 'https://registry.npmjs.org'
-          cache: npm
+          cache: 'pnpm'
 
       - name: Set up QEMU
         run: |
@@ -45,7 +46,7 @@ jobs:
 
       - name: Parse version
         id: parse_version
-        run: echo ::set-output name=VERSION::`grep "VERSION = " ./BUILD | cut -d"\"" -f2 | cut -d"-" -f1`
+        run: echo VERSION=`grep "VERSION = " ./BUILD | cut -d"\"" -f2 | cut -d"-" -f1` >> $GITHUB_OUTPUT
 
       - name: Extract Flood tarball
         run: |
@@ -60,7 +61,7 @@ jobs:
           cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
 
       - name: Upload packages to Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:

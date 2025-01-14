@@ -1,14 +1,13 @@
-import type {EventMap} from 'typed-emitter';
-import type {Operation} from 'fast-json-patch';
 import type {Request, Response} from 'express';
+import type {Operation} from 'fast-json-patch';
+import type {EventMap} from 'typed-emitter';
 import type TypedEmitter from 'typed-emitter';
 
-import DiskUsage from '../models/DiskUsage';
-import {getAllServices} from '../services';
-import ServerEvent from '../models/ServerEvent';
-
-import type {DiskUsageSummary} from '../models/DiskUsage';
 import type {TransferHistory} from '../../shared/types/TransferData';
+import type {DiskUsageSummary} from '../models/DiskUsage';
+import DiskUsage from '../models/DiskUsage';
+import ServerEvent from '../models/ServerEvent';
+import {getAllServices} from '../services';
 
 export default async (req: Request, res: Response) => {
   const {user} = req;

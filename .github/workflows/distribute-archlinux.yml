@@ -9,9 +9,9 @@ on:
 
 jobs:
   aur:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Update PKGBUILD for AUR
         run: |
@@ -20,10 +20,10 @@ jobs:
           sed -i 's/to-be-determined@tbd/jc@linux.com/' ./distribution/archlinux/flood/PKGBUILD
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
       - name: Publish to AUR
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           build-args: |
             AUR_FOLDER=./flood

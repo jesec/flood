@@ -1,6 +1,5 @@
-import axios, {AxiosError} from 'axios';
-
 import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import axios, {AxiosError} from 'axios';
 
 import type {
   TransmissionSessionGetArguments,
@@ -9,9 +8,9 @@ import type {
   TransmissionSessionStats,
 } from './types/TransmissionSessionMethods';
 import {
+  TransmissionTorrentAddArguments,
   TransmissionTorrentIDs,
   TransmissionTorrentProperties,
-  TransmissionTorrentAddArguments,
   TransmissionTorrentsGetArguments,
   TransmissionTorrentsRemoveArguments,
   TransmissionTorrentsSetArguments,

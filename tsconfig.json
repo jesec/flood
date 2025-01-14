@@ -4,7 +4,7 @@
     "jsxImportSource": "@emotion/react",
     "sourceMap": true,
     "target": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "allowJs": true,
     "module": "esnext",
     "noEmit": true,
@@ -15,6 +15,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "useDefineForClassFields": true,
+    "useUnknownInCatchVariables": false,
     "baseUrl": "./",
     "paths": {
       "@client/*": ["client/src/javascript/*"],

@@ -1,4 +1,4 @@
-import {stringTransformer, booleanTransformer, numberTransformer} from '../../util/rTorrentMethodCallUtil';
+import {booleanTransformer, numberTransformer, stringTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const torrentPeerMethodCallConfigs = {
   address: {

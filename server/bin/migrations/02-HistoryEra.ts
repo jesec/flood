@@ -1,5 +1,6 @@
+import path from 'node:path';
+
 import fs from 'fs-extra';
-import path from 'path';
 
 import config from '../../../config';
 import Users from '../../models/Users';

@@ -1,4 +1,4 @@
-import {spawn, SpawnOptions} from 'child_process';
+import {spawn, SpawnOptions} from 'node:child_process';
 
 import type {Disk} from '@shared/types/DiskUsage';
 
@@ -62,7 +62,7 @@ export const diskUsage: Readonly<Record<SupportedPlatform, (timeout: number) => 
   linux: (timeout) =>
     spawnAsync(
       'df',
-      ['-T'],
+      ['--exclude-type=devtmpfs', '--exclude-type=squashfs', '--exclude-type=tmpfs', '--exclude-type=overlay'],
       {
         timeout: timeout,
       },
@@ -73,9 +73,8 @@ export const diskUsage: Readonly<Record<SupportedPlatform, (timeout: number) => 
         .split('\n')
         .slice(1)
         .map((disk) => disk.split(/\s+/))
-        .filter((disk) => filterMountPoint(disk[6]))
-        .filter((disk) => !['devtmpfs', 'squashfs', 'tmpfs', 'overlay'].includes(disk[1]))
-        .map(([_dev, _fs, size, used, avail, _pcent, target]) => {
+        .filter((disk) => filterMountPoint(disk[5]))
+        .map(([_dev, size, used, avail, _pcent, target]) => {
           return {
             size: Number.parseInt(size, 10) * 1024,
             used: Number.parseInt(used, 10) * 1024,

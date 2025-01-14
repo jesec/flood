@@ -1,7 +1,6 @@
-import express, {Response} from 'express';
-
-import type {ClientSettings} from '@shared/types/ClientSettings';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
+import type {ClientSettings} from '@shared/types/ClientSettings';
+import express, {Response} from 'express';
 
 import requireAdmin from '../../middleware/requireAdmin';
 

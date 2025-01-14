@@ -1,6 +1,11 @@
 import type {TorrentProperties} from '@shared/types/Torrent';
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
+interface LocationFilter {
+  type: 'location';
+  filter: string[];
+}
+
 interface StatusFilter {
   type: 'status';
   filter: TorrentStatus[];
@@ -18,9 +23,13 @@ interface TagFilter {
 
 function filterTorrents(
   torrentList: TorrentProperties[],
-  opts: StatusFilter | TrackerFilter | TagFilter,
+  opts: LocationFilter | StatusFilter | TrackerFilter | TagFilter,
 ): TorrentProperties[] {
   if (opts.filter.length) {
+    if (opts.type === 'location') {
+      return torrentList.filter((torrent) => opts.filter.some((directory) => torrent.directory.startsWith(directory)));
+    }
+
     if (opts.type === 'status') {
       return torrentList.filter((torrent) => torrent.status.some((status) => opts.filter.includes(status)));
     }

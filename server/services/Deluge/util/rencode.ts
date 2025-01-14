@@ -451,4 +451,4 @@ function loads(data: Buffer, decodeUTF8 = true): RencodableData {
   return decode(new Buff(data), decodeUTF8);
 }
 
-export {dumps as encode, dumps, loads as decode, loads};
+export {loads as decode, dumps, dumps as encode, loads};

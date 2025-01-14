@@ -1,11 +1,10 @@
+import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
+import type {LocationTreeNode, Taxonomy} from '@shared/types/Taxonomy';
+import type {TorrentList, TorrentProperties} from '@shared/types/Torrent';
 import jsonpatch, {Operation} from 'fast-json-patch';
 
-import BaseService from './BaseService';
 import torrentStatusMap from '../../shared/constants/torrentStatusMap';
-
-import type {Taxonomy} from '../../shared/types/Taxonomy';
-import type {TorrentStatus} from '../../shared/constants/torrentStatusMap';
-import type {TorrentProperties, TorrentList} from '../../shared/types/Torrent';
+import BaseService from './BaseService';
 
 type TaxonomyServiceEvents = {
   TAXONOMY_DIFF_CHANGE: (payload: {id: number; diff: Operation[]}) => void;
@@ -13,6 +12,7 @@ type TaxonomyServiceEvents = {
 
 class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   taxonomy: Taxonomy = {
+    locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
     statusCounts: {'': 0},
     tagCounts: {'': 0, untagged: 0},
     tagSizes: {},
@@ -61,6 +61,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
 
   handleProcessTorrentListStart = () => {
     this.lastTaxonomy = {
+      locationTree: {...this.taxonomy.locationTree},
       statusCounts: {...this.taxonomy.statusCounts},
       tagCounts: {...this.taxonomy.tagCounts},
       tagSizes: {...this.taxonomy.tagSizes},
@@ -72,6 +73,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
       this.taxonomy.statusCounts[status] = 0;
     });
 
+    this.taxonomy.locationTree = {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0};
     this.taxonomy.statusCounts[''] = 0;
     this.taxonomy.tagCounts = {'': 0, untagged: 0};
     this.taxonomy.tagSizes = {};
@@ -97,12 +99,49 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   };
 
   handleProcessTorrent = (torrentProperties: TorrentProperties) => {
+    this.incrementLocationCountsAndSizes(torrentProperties.directory, torrentProperties.sizeBytes);
     this.incrementStatusCounts(torrentProperties.status);
     this.incrementTagCounts(torrentProperties.tags);
     this.incrementTagSizes(torrentProperties.tags, torrentProperties.sizeBytes);
     this.incrementTrackerCounts(torrentProperties.trackerURIs);
     this.incrementTrackerSizes(torrentProperties.trackerURIs, torrentProperties.sizeBytes);
   };
+
+  incrementLocationCountsAndSizes(
+    directory: TorrentProperties['directory'],
+    sizeBytes: TorrentProperties['sizeBytes'],
+  ) {
+    const separator = directory.includes('/') ? '/' : '\\';
+
+    const countSizeAndBytesForHierarchy = (parent: LocationTreeNode, pathSplit: string[]) => {
+      const [nodeName, ...restOfPath] = pathSplit;
+      let nodeRoot = parent.children.find((treeNode) => treeNode.directoryName === nodeName);
+      if (!nodeRoot) {
+        nodeRoot = {
+          directoryName: nodeName,
+          fullPath: parent.fullPath + separator + nodeName,
+          children: [],
+          containedCount: 0,
+          containedSize: 0,
+        };
+        parent.children.push(nodeRoot);
+      }
+      nodeRoot.containedCount += 1;
+      nodeRoot.containedSize += sizeBytes;
+
+      if (restOfPath.length) {
+        countSizeAndBytesForHierarchy(nodeRoot, restOfPath);
+      }
+    };
+
+    const pathSplit = directory.startsWith(separator)
+      ? directory.split(separator).slice(1)
+      : directory.split(separator);
+
+    countSizeAndBytesForHierarchy(this.taxonomy.locationTree, pathSplit);
+    this.taxonomy.locationTree.containedCount += 1;
+    this.taxonomy.locationTree.containedSize += sizeBytes;
+  }
 
   incrementStatusCounts(statuses: Array<TorrentStatus>) {
     statuses.forEach((status) => {

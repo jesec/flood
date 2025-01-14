@@ -1,23 +1,22 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
-import type {FastifyInstance} from 'fastify';
-
+import fastifyCompress from '@fastify/compress';
+import {fastifyExpress} from '@fastify/express';
+import fastifyStatic from '@fastify/static';
 import paths from '@shared/config/paths';
-import {Strategy} from 'passport-jwt';
-
-import apiRoutes from './api';
-import config from '../../config';
-import Users from '../models/Users';
 import {authTokenSchema, UserInDatabase} from '@shared/schema/Auth';
-import express from 'express';
-import morgan from 'morgan';
-import passport from 'passport';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import {fastifyExpress} from '@fastify/express';
-import fastifyCompress from '@fastify/compress';
-import fastifyStatic from '@fastify/static';
+import express from 'express';
+import type {FastifyInstance} from 'fastify';
+import morgan from 'morgan';
+import passport from 'passport';
+import {Strategy} from 'passport-jwt';
+
+import config from '../../config';
+import Users from '../models/Users';
+import apiRoutes from './api';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

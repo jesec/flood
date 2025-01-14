@@ -1,10 +1,9 @@
+import type {TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
 import jsonpatch, {Operation} from 'fast-json-patch';
 
-import type {TorrentProperties, TorrentListSummary} from '@shared/types/Torrent';
-
-import BaseService from './BaseService';
 import config from '../../config';
 import {hasTorrentFinished} from '../util/torrentPropertiesUtil';
+import BaseService from './BaseService';
 
 type TorrentServiceEvents = {
   FETCH_TORRENT_LIST_SUCCESS: () => void;

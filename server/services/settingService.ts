@@ -1,6 +1,6 @@
-import Datastore from '@seald-io/nedb';
-import path from 'path';
+import path from 'node:path';
 
+import Datastore from '@seald-io/nedb';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 
 import config from '../../config';
@@ -20,6 +20,11 @@ class SettingService extends BaseService<SettingServiceEvents> {
     autoload: true,
     filename: path.join(config.dbPath, this.user._id, 'settings', 'settings.db'),
   });
+
+  constructor(...args: ConstructorParameters<typeof BaseService>) {
+    super(...args);
+    this.db.setAutocompactionInterval(config.dbCleanInterval);
+  }
 
   async destroy(drop: boolean) {
     if (drop) {

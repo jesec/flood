@@ -1,8 +1,5 @@
-import fs from 'fs';
-import geoip from 'geoip-country';
-import {move} from 'fs-extra';
-import path from 'path';
-import sanitize from 'sanitize-filename';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import type {
   AddTorrentByFileOptions,
@@ -10,6 +7,8 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
@@ -23,27 +22,20 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
-import type {SetClientSettingsOptions} from '@shared/types/api/client';
+import {move} from 'fs-extra';
+import sanitize from 'sanitize-filename';
 
-import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
-import ClientGatewayService from '../clientGatewayService';
-import ClientRequestManager from './clientRequestManager';
 import {fetchUrls} from '../../util/fetchUtil';
-import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
+import {isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import {getComment, setCompleted, setTrackers} from '../../util/torrentFileUtil';
-import {
-  encodeTags,
-  getAddTorrentPropertiesCalls,
-  getTorrentETAFromProperties,
-  getTorrentPercentCompleteFromProperties,
-  getTorrentStatusFromProperties,
-} from './util/torrentPropertiesUtil';
+import ClientGatewayService from '../clientGatewayService';
+import * as geoip from '../geoip';
+import ClientRequestManager from './clientRequestManager';
 import {
   clientSettingMethodCallConfigs,
   torrentContentMethodCallConfigs,
@@ -52,9 +44,16 @@ import {
   torrentTrackerMethodCallConfigs,
   transferSummaryMethodCallConfigs,
 } from './constants/methodCallConfigs';
-
-import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
 import type {RPCError} from './types/RPCError';
+import type {MultiMethodCalls} from './util/rTorrentMethodCallUtil';
+import {getMethodCalls, processMethodCallResponse} from './util/rTorrentMethodCallUtil';
+import {
+  encodeTags,
+  getAddTorrentPropertiesCalls,
+  getTorrentETAFromProperties,
+  getTorrentPercentCompleteFromProperties,
+  getTorrentStatusFromProperties,
+} from './util/torrentPropertiesUtil';
 
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
@@ -262,7 +261,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
           processedResponses.map(async (processedResponse) => {
             return {
               ...processedResponse,
-              country: geoip.lookup(processedResponse.address)?.country || '',
+              country: geoip.lookup(processedResponse.address),
             };
           }),
         );
