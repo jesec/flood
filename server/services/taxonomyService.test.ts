@@ -1,6 +1,7 @@
-import {LocationTreeNode} from '@shared/types/Taxonomy';
-import TaxonomyService from '../../server/services/taxonomyService';
 import {UserInDatabase} from '@shared/schema/Auth';
+import {LocationTreeNode} from '@shared/types/Taxonomy';
+
+import TaxonomyService from '../../server/services/taxonomyService';
 
 type LocationRecord = {[key: string]: LocationRecord | null};
 const toTreeNodes = (locations: LocationRecord, separator = '/', basePath = '') =>
