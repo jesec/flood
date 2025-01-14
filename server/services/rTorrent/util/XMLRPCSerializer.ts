@@ -46,7 +46,7 @@ const value = (value: XMLRPCValue): string => {
 };
 
 const data = (values: XMLRPCValue[]) => {
-  return `<data>${values.map(value)}</data>`;
+  return `<data>${values.map(value).join('')}</data>`;
 };
 
 const member = ([key, val]: [string, XMLRPCValue]) => {
@@ -64,7 +64,7 @@ const param = (param: XMLRPCValue) => {
 const sParams = (params: XMLRPCValue[]) => {
   if (!params?.length) return '';
 
-  return `<params>${params.map(param)}</params>`;
+  return `<params>${params.map(param).join('')}</params>`;
 };
 
 const serializeSync = (methodName: string, params: XMLRPCValue[]): string => {

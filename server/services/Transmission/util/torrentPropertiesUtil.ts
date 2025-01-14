@@ -1,7 +1,6 @@
-import {TransmissionTorrentError, TransmissionTorrentStatus} from '../types/TransmissionTorrentsMethods';
-
 import type {TorrentProperties} from '../../../../shared/types/Torrent';
 import type {TransmissionTorrentProperties} from '../types/TransmissionTorrentsMethods';
+import {TransmissionTorrentError, TransmissionTorrentStatus} from '../types/TransmissionTorrentsMethods';
 
 const getTorrentStatus = (
   properties: Pick<

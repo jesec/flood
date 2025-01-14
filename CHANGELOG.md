@@ -1,5 +1,78 @@
 # Changelog
 
+## [4.8.2] (May 4, 2024)
+
+nothing new, just a new release to for deb files.
+
+## [4.8.1] (May 4, 2024)
+
+- feat: new args `--disable-rate-limit` to disable rate limit on api except login (#737)
+- fix: only generate mediainfo for video file (#741)
+- fix: `/metainfo` json response for error (#740)
+
+## [4.8.0] (April 24, 2024)
+
+- fix(client): filter empty tags when setting/submitting tags (#715)
+- fix(client): modal overflow on mobile (#713)
+- fix(server): content-type on responding html (#708)
+- fix(client): allows modal to grow when inner width exceeds container (#597)
+- fix(client): misc styles (#691)
+- fix(server): `@fastify/express` doesn't work with http2 (#705)
+- fix(client): tracker filter size conditional render logic and react key prop (#702)
+- fix: log error trace (#697)
+- fix(server): handle number port (#692)
+- feat(client): detect magnet and torrent links from clipboard (#690)
+- server: remove port requirement, permit running on paths (#680)
+- perf: mediainfo router should use async/await to get file info (#656)
+- feat: use relative path in mediainfo info (#657)
+- TorrentGeneralInfo: drop leading and trailing whitespaces from comment (#674)
+- LinkedText: fix torrent comment line break (#667)
+- server: rTorrent: manage request queue with p-queue - fix memory leak (#650)
+- TransferRateGraph: explicitly declare width and height to 100%
+- server: qBittorrent: use POST method for API calls
+- server: qBittorrent: log in using POST method (#594)
+- server: torrentService: normalize case of hash during torrent lookup
+- TorrentListColumns: add "Finished" column (#565)
+- styles: sortable-list: disallow selecting text in a list
+- client: scripts: development: drop unnecessary browser popup
+- MoveTorrentsModal: suggest longest common prefix as path
+- server: rTorrent: throw error when file moving fails
+- FilesystemBrowser: line break unconditionally for long paths
+- TorrentListDropzone: pop up "Add Torrents" modal instead of adding directly
+- server: rTorrent: avoid relying on type coercion of RPC value
+- server: rTorrent: remove "hasLoadThrow" and fold into "isJSONCapable"
+- server: ditch unmaintained "spdy"
+- SortableList: switch to clauderic/dnd-kit
+- server: drop databases before removing user
+- server: switch to @seald/nedb
+- server: tests: replace "ts-jest/utils" with "ts-jest"
+- TorrentGeneralInfo: display "None" when there is no comment
+- LinkedText: drop RegEx incompatible with Safari
+- feature: display comment inside .torrent in torrent details (#541)
+- TransferRateGraph: fix blank graph in some cases
+- TorrentList: fix "a wild 0 appears"
+- client: Fix regression introduced in PR #519, fixes #522 (#523)
+- sidebar: make filter sections collapsible (#519)
+- client: add page title speed display preference
+- DownloadRulesTab, FeedsTab: force new component when editing
+- server: add shebang to bundled executable
+- Dockerfile: use the "npm run build" command
+- server: create production build with webpack directly
+- server: flatten directory structure a bit
+- server: tests: ensure connectivity to client before tests
+- server: tests: confirm deletion of torrents before continue
+- client: reformat "typings.d.ts", fixup ffcc5c8e0
+- server: tests: mock response to torrents fetch
+- server: normalize fetching of torrents added with URL
+- client: fix webpack devServer port selection
+- styles: apply dark theme to TorrentListDropzone
+- TorrentFilterStore: simplify and fix scroll to top on filter change
+- client: allow multi-select of filters with Ctrl and Shift keys
+- server: remove unused history snapshots and make it in-mem only
+- TagFilters, TrackerFilters: fix filtering by tag/tracker
+- client: remove unnecessary "UIActions" abstraction
+- server: Transmission: normalize "unknown" ETA (-2) to infinity (-1) (#432)
+
 ## [4.7.0] (October 9, 2021)
 
 - Display total size by tag or tracker of torrents on sidebar (#369, @sabersalv)
@@ -536,3 +609,6 @@ Other changes:
 [4.6.0]: https://github.com/jesec/flood/compare/v4.5.4...v4.6.0
 [4.6.1]: https://github.com/jesec/flood/compare/v4.6.0...v4.6.1
 [4.7.0]: https://github.com/jesec/flood/compare/v4.6.1...v4.7.0
+[4.8.0]: https://github.com/jesec/flood/compare/v4.7.0...v4.8.0
+[4.8.1]: https://github.com/jesec/flood/compare/v4.8.0...v4.8.1
+[4.8.2]: https://github.com/jesec/flood/compare/v4.8.1...v4.8.2

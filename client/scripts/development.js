@@ -13,7 +13,7 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const {choosePort, prepareUrls} = require('react-dev-utils/WebpackDevServerUtils');
-const path = require('path');
+const path = require('node:path');
 const paths = require('../../shared/config/paths');
 const config = require('../config/webpack.config.dev');
 

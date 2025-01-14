@@ -4,3 +4,4 @@ dist-pkg/
 
 # Coverage reports
 coverage/
+pnpm-lock.yaml

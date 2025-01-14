@@ -1,23 +1,22 @@
-import express, {Response} from 'express';
-import fs from 'fs';
-import passport from 'passport';
-import path from 'path';
-import rateLimit from 'express-rate-limit';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import {contentTokenSchema} from '@shared/schema/api/torrents';
-
+import type {DirectoryListQuery, DirectoryListResponse, SetFloodSettingsOptions} from '@shared/types/api/index';
 import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {NotificationFetchOptions, NotificationState} from '@shared/types/Notification';
-import type {DirectoryListQuery, DirectoryListResponse, SetFloodSettingsOptions} from '@shared/types/api/index';
+import express, {Response} from 'express';
+import passport from 'passport';
 
-import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 import appendUserServices from '../../middleware/appendUserServices';
-import authRoutes from './auth';
-import clientRoutes from './client';
 import clientActivityStream from '../../middleware/clientActivityStream';
 import eventStream from '../../middleware/eventStream';
-import feedMonitorRoutes from './feed-monitor';
 import {getAuthToken, verifyToken} from '../../util/authUtil';
+import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
+import {rateLimit} from '../utils';
+import authRoutes from './auth';
+import clientRoutes from './client';
+import feedMonitorRoutes from './feed-monitor';
 import torrentsRoutes from './torrents';
 
 const router = express.Router();

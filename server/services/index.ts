@@ -1,16 +1,15 @@
 import type {UserInDatabase} from '@shared/schema/Auth';
 
 import ClientGatewayService from './clientGatewayService';
+import DelugeClientGatewayService from './Deluge/clientGatewayService';
 import FeedService from './feedService';
 import HistoryService from './historyService';
 import NotificationService from './notificationService';
+import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService';
+import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
 import SettingService from './settingService';
 import TaxonomyService from './taxonomyService';
 import TorrentService from './torrentService';
-
-import DelugeClientGatewayService from './Deluge/clientGatewayService';
-import QBittorrentClientGatewayService from './qBittorrent/clientGatewayService';
-import RTorrentClientGatewayService from './rTorrent/clientGatewayService';
 import TransmissionClientGatewayService from './Transmission/clientGatewayService';
 
 export interface ServiceInstances {
@@ -46,6 +45,8 @@ export const destroyUserServices = async (userId: UserInDatabase['_id'], drop = 
   const userServiceInstances = serviceInstances[userId];
 
   delete serviceInstances[userId];
+
+  if (userServiceInstances === undefined || userServiceInstances === null) return;
 
   return Promise.all(
     Object.keys(userServiceInstances).map((key) => userServiceInstances[key as keyof ServiceInstances].destroy(drop)),

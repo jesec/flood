@@ -1,6 +1,5 @@
-import type {Response} from 'express';
-
 import type {ServerEvents} from '@shared/types/ServerEvents';
+import type {Response} from 'express';
 
 class ServerEvent {
   res: Response;

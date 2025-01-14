@@ -1,14 +1,13 @@
-import {spawn} from 'child_process';
-import crypto from 'crypto';
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
-import yargs from 'yargs/yargs';
+import {spawn} from 'node:child_process';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 
-import {configSchema} from '@shared/schema/Config';
-
-import type {Config} from '@shared/schema/Config';
 import type {ClientConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {Config} from '@shared/schema/Config';
+import {configSchema} from '@shared/schema/Config';
+import yargs from 'yargs/yargs';
 
 import {version} from './package.json';
 
@@ -52,6 +51,12 @@ const {argv: argvObj} = yargs(process.argv.slice(2))
     hidden: true,
     default: false,
     describe: "Disable Flood's builtin access control system, deprecated, use auth=none instead",
+    type: 'boolean',
+  })
+  .option('disable-rate-limit', {
+    default: false,
+    describe: 'disable api request limit except for login',
+    hidden: true,
     type: 'boolean',
   })
   .option('dehost', {
@@ -342,6 +347,7 @@ const result = configSchema.safeParse({
   sslCert: argv.sslcert || path.resolve(path.join(argv.rundir, 'fullchain.pem')),
   allowedPaths: allowedPaths.length > 0 ? allowedPaths : undefined,
   serveAssets: argv.assets,
+  disableRateLimit: argv.disableRateLimit,
 });
 
 if (!result.success) {

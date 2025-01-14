@@ -1,7 +1,7 @@
-import {array, boolean, number, record, strictObject, string} from 'zod';
-import {noComma} from '../../util/regEx';
-
 import type {infer as zodInfer} from 'zod';
+import {array, boolean, number, record, strictObject, string} from 'zod';
+
+import {noComma} from '../../util/regEx';
 
 const TAG_NO_COMMA_MESSAGE = {
   message: 'Tag must not contain comma',

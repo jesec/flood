@@ -13,21 +13,23 @@
 ARG BUILDPLATFORM=amd64
 ARG NODE_IMAGE=docker.io/node:alpine
 
-FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} as nodebuild
+FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} AS nodebuild
 
 WORKDIR /usr/src/app/
 
 # Copy project files
 COPY . ./
 
+RUN corepack enable && corepack install
+
 # Fetch dependencies from npm
-RUN npm ci --legacy-peer-deps
+RUN pnpm install --frozen-lockfile
 
 # Build assets
 RUN npm run build
 
 # Now get the clean Node.js image
-FROM ${NODE_IMAGE} as flood
+FROM ${NODE_IMAGE} AS flood
 
 WORKDIR /usr/src/app/
 
@@ -55,8 +57,8 @@ ENTRYPOINT ["npm", "--prefix=/usr/src/app/", "run", "start", "--", "--host=0.0.0
 # docker exec -it ${container_id} npm --prefix=/usr/src/app/ run start:development:client
 
 # rtorrent-flood image
-FROM docker.io/jesec/rtorrent:master as rtorrent
-FROM flood as rtorrent-flood
+FROM docker.io/jesec/rtorrent:master AS rtorrent
+FROM flood AS rtorrent-flood
 
 # Copy rTorrent
 COPY --from=rtorrent / /

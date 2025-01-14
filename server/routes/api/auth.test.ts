@@ -1,11 +1,7 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
+
 import fastify from 'fastify';
 import supertest from 'supertest';
-
-import {AccessLevel} from '../../../shared/schema/constants/Auth';
-
-import constructRoutes from '..';
-import {getAuthToken} from '../../util/authUtil';
 
 import type {
   AuthRegistrationOptions,
@@ -13,6 +9,9 @@ import type {
   AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
 import type {ClientConnectionSettings} from '../../../shared/schema/ClientConnectionSettings';
+import {AccessLevel} from '../../../shared/schema/constants/Auth';
+import {getAuthToken} from '../../util/authUtil';
+import constructRoutes from '..';
 
 const testConnectionSettings: ClientConnectionSettings = {
   client: 'rTorrent',

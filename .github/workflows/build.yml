@@ -9,23 +9,36 @@ on:
       - master
 
 jobs:
-  build:
-    runs-on: ubuntu-20.04
+  build-real:
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        node: [18, 20]
+        node: ['20', '22']
       fail-fast: false
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
       - name: Use Node.js ${{ matrix.node }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: 'npm'
+          cache: 'pnpm'
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
       - run: npm run build
       - run: npm run start -- --help
+
+  build:
+    # so we do not need to update GitHub repo config
+    needs: build-real
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: ['18', '20']
+      fail-fast: false
+    steps:
+      - run: echo pass

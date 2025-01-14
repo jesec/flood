@@ -1,7 +1,6 @@
-import fs from 'fs';
-import {homedir} from 'os';
-import parseTorrent from 'parse-torrent';
-import path from 'path';
+import fs from 'node:fs';
+import {homedir} from 'node:os';
+import path from 'node:path';
 
 import type {
   AddTorrentByFileOptions,
@@ -9,6 +8,8 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
@@ -22,27 +23,27 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
-import type {SetClientSettingsOptions} from '@shared/types/api/client';
+import parseTorrent from 'parse-torrent';
 
-import ClientGatewayService from '../clientGatewayService';
-import ClientRequestManager from './clientRequestManager';
+import {TorrentPriority} from '../../../shared/types/Torrent';
+import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
+import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
+import ClientGatewayService from '../clientGatewayService';
+import ClientRequestManager from './clientRequestManager';
+import {QBittorrentTorrentContentPriority, QBittorrentTorrentTrackerStatus} from './types/QBittorrentTorrentsMethods';
+import {isApiVersionAtLeast} from './util/apiVersionCheck';
 import {
   getTorrentPeerPropertiesFromFlags,
   getTorrentStatusFromState,
   getTorrentTrackerTypeFromURL,
 } from './util/torrentPropertiesUtil';
-import {QBittorrentTorrentContentPriority, QBittorrentTorrentTrackerStatus} from './types/QBittorrentTorrentsMethods';
-import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
-import {TorrentPriority} from '../../../shared/types/Torrent';
-import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 
 class QBittorrentClientGatewayService extends ClientGatewayService {
   private clientRequestManager = new ClientRequestManager(this.user.client as QBittorrentConnectionSettings);
@@ -84,11 +85,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       throw new Error();
     }
 
+    const method = isApiVersionAtLeast(await this.clientRequestManager.apiVersion, '2.11.0') ? 'stopped' : 'paused';
     await this.clientRequestManager
       .torrentsAddFiles(fileBuffers, {
         savepath: destination,
         tags: tags.join(','),
-        paused: !start,
+        [method]: !start,
         root_folder: !isBasePath,
         contentLayout: isBasePath ? 'NoSubfolder' : undefined,
         sequentialDownload: isSequential,
@@ -118,11 +120,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       throw new Error();
     }
 
+    const method = isApiVersionAtLeast(await this.clientRequestManager.apiVersion, '2.11.0') ? 'stopped' : 'paused';
     await this.clientRequestManager
       .torrentsAddURLs(urls, {
         savepath: destination,
         tags: tags.join(','),
-        paused: !start,
+        [method]: !start,
         root_folder: !isBasePath,
         contentLayout: isBasePath ? 'NoSubfolder' : undefined,
         sequentialDownload: isSequential,
@@ -525,7 +528,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
   async testGateway(): Promise<void> {
     return this.clientRequestManager
-      .updateAuthCookie()
+      .updateConnection()
       .then(() => this.processClientRequestSuccess(undefined), this.processClientRequestError);
   }
 }

@@ -1,10 +1,9 @@
 import fastify from 'fastify';
 import supertest from 'supertest';
 
-import constructRoutes from '..';
-import {getAuthToken} from '../../util/authUtil';
-
 import type {FloodSettings} from '../../../shared/types/FloodSettings';
+import {getAuthToken} from '../../util/authUtil';
+import constructRoutes from '..';
 
 const app = fastify({disableRequestLogging: true, logger: false});
 let request: supertest.SuperTest<supertest.Test>;

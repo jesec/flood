@@ -1,5 +1,4 @@
-import geoip from 'geoip-country';
-import path from 'path';
+import path from 'node:path';
 
 import type {
   AddTorrentByFileOptions,
@@ -7,6 +6,8 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
+import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
+import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {
   CheckTorrentsOptions,
   DeleteTorrentsOptions,
@@ -18,23 +19,22 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentList, TorrentListSummary, TorrentProperties} from '@shared/types/Torrent';
+import type {TorrentContent} from '@shared/types/TorrentContent';
 import type {TorrentPeer} from '@shared/types/TorrentPeer';
 import type {TorrentTracker} from '@shared/types/TorrentTracker';
 import type {TransferSummary} from '@shared/types/TransferData';
-import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
-import type {SetClientSettingsOptions} from '@shared/types/api/client';
 
-import ClientGatewayService from '../clientGatewayService';
-import ClientRequestManager from './clientRequestManager';
+import {TorrentPriority} from '../../../shared/types/Torrent';
+import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
+import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
 import {fetchUrls} from '../../util/fetchUtil';
 import {getDomainsFromURLs} from '../../util/torrentPropertiesUtil';
-import {TorrentContentPriority} from '../../../shared/types/TorrentContent';
-import {TorrentPriority} from '../../../shared/types/Torrent';
-import torrentPropertiesUtil from './util/torrentPropertiesUtil';
-import {TorrentTrackerType} from '../../../shared/types/TorrentTracker';
+import ClientGatewayService from '../clientGatewayService';
+import * as geoip from '../geoip';
+import ClientRequestManager from './clientRequestManager';
 import {TransmissionPriority, TransmissionTorrentsSetArguments} from './types/TransmissionTorrentsMethods';
+import torrentPropertiesUtil from './util/torrentPropertiesUtil';
 
 class TransmissionClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as TransmissionConnectionSettings);
@@ -195,7 +195,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
           .filter((peer) => peer.isDownloadingFrom || peer.isUploadingTo)
           .map((peer) => ({
             address: peer.address,
-            country: geoip.lookup(peer.address)?.country || '',
+            country: geoip.lookup(peer.address),
             clientVersion: peer.clientName,
             completedPercent: peer.progress * 100,
             downloadRate: peer.rateToClient,
@@ -383,7 +383,10 @@ class TransmissionClientGatewayService extends ClientGatewayService {
           ...(await Promise.all(
             torrents.map(async (torrent) => {
               const percentComplete = (torrent.haveValid / torrent.totalSize) * 100;
-              const ratio = torrent.downloadedEver === 0 ? -1 : torrent.uploadedEver / torrent.downloadedEver;
+              const ratio =
+                torrent.downloadedEver === 0
+                  ? torrent.uploadedEver / torrent.totalSize
+                  : torrent.uploadedEver / torrent.downloadedEver;
               const trackerURIs = getDomainsFromURLs(torrent.trackers.map((tracker) => tracker.announce));
               const status = torrentPropertiesUtil.getTorrentStatus(torrent);
 
@@ -509,21 +512,34 @@ class TransmissionClientGatewayService extends ClientGatewayService {
   }
 
   async setClientSettings(settings: SetClientSettingsOptions): Promise<void> {
+    const req: Record<string, string | number | boolean | undefined> = {
+      'dht-enabled': settings.dht,
+      'download-dir': settings.directoryDefault,
+      'peer-port-random-on-start': settings.networkPortRandom,
+      'pex-enabled': settings.protocolPex,
+    };
+
+    if (typeof settings.networkPortRandom !== 'undefined') {
+      req['peer-port'] = Number(settings.networkPortRange?.split('-')[0]);
+    }
+
+    if (typeof settings.throttleMaxUploadsGlobal === 'undefined') {
+      req['seed-queue-enabled'] = settings.throttleMaxUploadsGlobal !== 0;
+      req['seed-queue-size'] = settings.throttleMaxUploadsGlobal;
+    }
+
+    if (typeof settings.throttleGlobalUpSpeed !== 'undefined') {
+      req['speed-limit-up-enabled'] = settings.throttleGlobalUpSpeed !== 0;
+      req['speed-limit-up'] = settings.throttleGlobalUpSpeed / 1024;
+    }
+
+    if (typeof settings.throttleGlobalDownSpeed !== 'undefined') {
+      req['speed-limit-down-enabled'] = settings.throttleGlobalDownSpeed !== 0;
+      req['speed-limit-down'] = settings.throttleGlobalDownSpeed / 1024;
+    }
+
     return this.clientRequestManager
-      .setSessionProperties({
-        'dht-enabled': settings.dht,
-        'download-dir': settings.directoryDefault,
-        'peer-port': settings.networkPortRange ? Number(settings.networkPortRange?.split('-')[0]) : undefined,
-        'peer-port-random-on-start': settings.networkPortRandom,
-        'pex-enabled': settings.protocolPex,
-        'speed-limit-down-enabled': settings.throttleGlobalDownSpeed !== 0,
-        'speed-limit-down':
-          settings.throttleGlobalDownSpeed != null ? settings.throttleGlobalDownSpeed / 1024 : undefined,
-        'speed-limit-up-enabled': settings.throttleGlobalUpSpeed !== 0,
-        'speed-limit-up': settings.throttleGlobalUpSpeed != null ? settings.throttleGlobalUpSpeed / 1024 : undefined,
-        'seed-queue-enabled': settings.throttleMaxUploadsGlobal !== 0,
-        'seed-queue-size': settings.throttleMaxUploadsGlobal,
-      })
+      .setSessionProperties(req)
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 

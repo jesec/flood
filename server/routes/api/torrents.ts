@@ -1,12 +1,6 @@
-import childProcess from 'child_process';
-import contentDisposition from 'content-disposition';
-import createTorrent from 'create-torrent';
-import express, {Response} from 'express';
-import fs from 'fs';
-import path from 'path';
-import rateLimit from 'express-rate-limit';
-import sanitize from 'sanitize-filename';
-import tar, {Pack} from 'tar-fs';
+import childProcess from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import type {
   AddTorrentByFileOptions,
@@ -28,6 +22,11 @@ import type {
   StartTorrentsOptions,
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
+import contentDisposition from 'content-disposition';
+import createTorrent from 'create-torrent';
+import express, {Response} from 'express';
+import sanitize from 'sanitize-filename';
+import tar, {Pack} from 'tar-fs';
 
 import {
   addTorrentByFileSchema,
@@ -35,6 +34,9 @@ import {
   reannounceTorrentsSchema,
   setTorrentsTagsSchema,
 } from '../../../shared/schema/api/torrents';
+import {getTempPath} from '../../models/TemporaryStorage';
+import {asyncFilter} from '../../util/async';
+import {getToken} from '../../util/authUtil';
 import {
   accessDeniedError,
   existAsync,
@@ -43,9 +45,7 @@ import {
   isAllowedPathAsync,
   sanitizePath,
 } from '../../util/fileUtil';
-import {getTempPath} from '../../models/TemporaryStorage';
-import {getToken} from '../../util/authUtil';
-import {asyncFilter} from '../../util/async';
+import {rateLimit} from '../utils';
 
 const getDestination = async (
   services: Express.Request['services'],
@@ -587,8 +587,15 @@ router.get<{hashes: string}>(
             await fs.promises.access(path.join(sessionDirectory, torrentFileName), fs.constants.R_OK),
         ),
       );
-    } catch {
-      return res.status(404).json('Failed to access torrent files.');
+    } catch (e) {
+      const err = e as NodeJS.ErrnoException;
+      if (err.code === 'ENOENT') {
+        return res.status(404).json({code: err.code, message: err.message});
+      }
+      return res.status(500).json({
+        code: err.code,
+        message: `Failed to access torrent files: ${e}`,
+      });
     }
 
     if (hashes.length < 2) {
@@ -911,9 +918,26 @@ router.get<{hash: string}>(
         return res.status(404).json({code, message});
       }
 
+      const args = torrentContentPaths.filter((x) => {
+        const fn = x.toLowerCase();
+        for (const ext of ['.mp4', '.mkv', '.ts', '.avi', '.rmvb', '.dat', '.wmv', '.iso']) {
+          if (fn.endsWith(ext)) {
+            return true;
+          }
+        }
+        return false;
+      });
+
+      if (args.length < 1) {
+        return res.status(200).json({
+          output:
+            'no video file found.\nIf this is a error, please create a issue at https://github.com/jesec/flood/issues',
+        });
+      }
+
       const mediainfoProcess = childProcess.execFile(
         'mediainfo',
-        torrentContentPaths.map((x) => path.relative(torrentDirectory, x)),
+        args.map((x) => path.relative(torrentDirectory, x)),
         {maxBuffer: 1024 * 2000, timeout: 1000 * 10, cwd: torrentDirectory},
         (error, stdout) => {
           if (error) {

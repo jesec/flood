@@ -1,5 +1,6 @@
 {
   "extends": ["plugin:@typescript-eslint/recommended", "prettier"],
+  "plugins": ["simple-import-sort", "n"],
 
   "parserOptions": {
     "project": "./tsconfig.json"
@@ -11,6 +12,9 @@
   },
 
   "rules": {
+    "n/prefer-node-protocol": "error",
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
     "import/no-extraneous-dependencies": 0,
     "no-underscore-dangle": ["error", {"allow": ["_id"]}],
     "@typescript-eslint/lines-between-class-members": ["error", "always", {"exceptAfterSingleLine": true}],

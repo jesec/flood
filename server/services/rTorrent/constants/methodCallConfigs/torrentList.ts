@@ -1,5 +1,5 @@
 import {getDomainsFromURLs} from '../../../../util/torrentPropertiesUtil';
-import {stringTransformer, booleanTransformer, numberTransformer} from '../../util/rTorrentMethodCallUtil';
+import {booleanTransformer, numberTransformer, stringTransformer} from '../../util/rTorrentMethodCallUtil';
 
 const torrentListMethodCallConfigs = {
   hash: {

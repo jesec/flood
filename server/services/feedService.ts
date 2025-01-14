@@ -1,16 +1,15 @@
-import path from 'path';
-import Datastore from '@seald-io/nedb';
+import path from 'node:path';
 
+import Datastore from '@seald-io/nedb';
 import type {FeedItem} from 'feedsub';
 
-import BaseService from './BaseService';
 import config from '../../config';
-import FeedReader from '../models/FeedReader';
-import {getFeedItemsMatchingRules, getTorrentUrlsFromFeedItem} from '../util/feedUtil';
-
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '../../shared/types/api/feed-monitor';
 import type {Feed, Item, MatchedTorrents, Rule} from '../../shared/types/Feed';
 import type {FeedReaderOptions} from '../models/FeedReader';
+import FeedReader from '../models/FeedReader';
+import {getFeedItemsMatchingRules, getTorrentUrlsFromFeedItem} from '../util/feedUtil';
+import BaseService from './BaseService';
 
 class FeedService extends BaseService<Record<string, never>> {
   rules: Record<string, Array<Rule>> = {};
@@ -22,6 +21,7 @@ class FeedService extends BaseService<Record<string, never>> {
 
   constructor(...args: ConstructorParameters<typeof BaseService>) {
     super(...args);
+    this.db.setAutocompactionInterval(config.dbCleanInterval);
 
     this.onServicesUpdated = async () => {
       // Execute once only.

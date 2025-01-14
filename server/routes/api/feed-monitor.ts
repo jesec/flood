@@ -1,6 +1,5 @@
-import express, {Response} from 'express';
-
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '@shared/types/api/feed-monitor';
+import express, {Response} from 'express';
 
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
 
