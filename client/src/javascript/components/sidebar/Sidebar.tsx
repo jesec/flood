@@ -4,6 +4,7 @@ import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 import DiskUsage from './DiskUsage';
 import FeedsButton from './FeedsButton';
 import LogoutButton from './LogoutButton';
+import LocationFilters from './LocationFilters';
 import NotificationsButton from './NotificationsButton';
 import SearchBox from './SearchBox';
 import SettingsButton from './SettingsButton';
@@ -44,6 +45,7 @@ const Sidebar: FC = () => (
       <StatusFilters />
       <TagFilters />
       <TrackerFilters />
+      <LocationFilters />
       <DiskUsage />
       <div style={{flexGrow: 1}} />
       <SidebarActions>

@@ -24,9 +24,16 @@ class TorrentStore {
   }
 
   @computed get filteredTorrents(): Array<TorrentProperties> {
-    const {searchFilter, statusFilter, tagFilter, trackerFilter} = TorrentFilterStore;
+    const {locationFilter, searchFilter, statusFilter, tagFilter, trackerFilter} = TorrentFilterStore;
 
     let filteredTorrents = Object.assign([], this.sortedTorrents) as Array<TorrentProperties>;
+
+    if (locationFilter.length) {
+      filteredTorrents = filterTorrents(filteredTorrents, {
+        type: 'location',
+        filter: locationFilter,
+      });
+    }
 
     if (searchFilter !== '') {
       filteredTorrents = termMatch(filteredTorrents, (properties) => properties.name, searchFilter);
