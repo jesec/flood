@@ -15,7 +15,7 @@ Flood is a monitoring service for various torrent clients. It's a Node.js servic
 | [Transmission](https://github.com/transmission/transmission)    | :white_check_mark: ([tested](https://github.com/jesec/flood/blob/master/server/.jest/transmission.setup.js)) |
 | [Deluge](https://github.com/deluge-torrent/deluge) v2+          | :alembic: Experimental                                                                                       |
 
-##### RTorrent notes:
+##### RTorrent Notes
 
 For now, rakshasa/rtorrent and jesec/rtorrent are both supported.
 
