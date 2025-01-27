@@ -139,6 +139,7 @@
   "filter.status.seeding": "Seede",
   "filter.status.stopped": "Gestoppt",
   "filter.status.title": "Nach Status filtern",
+  "filter.location.title": "Nach Speicherort filtern",
   "filter.tag.title": "Nach Tag filtern",
   "filter.tracker.title": "Nach Tracker filtern",
   "filter.untagged": "Ohne Tag",
