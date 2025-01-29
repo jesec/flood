@@ -1,6 +1,7 @@
 # Flood
 
 [![Flood logo](https://github.com/jesec/flood/raw/master/flood.svg)](https://flood.js.org)
+
 [![Build](https://github.com/jesec/flood/actions/workflows/build.yml/badge.svg)](https://github.com/jesec/flood/actions/workflows/build.yml)
 [![Crowdin](https://badges.crowdin.net/flood/localized.svg)](https://crowdin.com/project/flood)
 [![Discord server badge](https://img.shields.io/discord/418267176873623553.svg?style=flat-square)](https://discord.gg/Z7yR5Uf)
