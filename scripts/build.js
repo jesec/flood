@@ -46,9 +46,8 @@ const build = async (previousFileSizes) => {
     entryPoints: [path.resolve(__dirname, '..', 'server/bin/start.ts')],
     outfile: path.resolve(__dirname, '..', 'dist/index.js'),
     platform: 'node',
-    target: 'node12',
+    target: 'node20',
     bundle: true,
-    external: ['geoip-country'],
     sourcemap: 'inline',
   });
   console.log('building client...');
