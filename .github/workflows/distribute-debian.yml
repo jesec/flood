@@ -63,13 +63,6 @@ jobs:
           cp -L bazel-bin/flood-deb-arm64.deb flood-linux-arm64.deb
           cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
 
-      - name: Upload packages to Release
-        uses: softprops/action-gh-release@v2
+      - run: gh release upload v${{ steps.parse_version.outputs.VERSION }} flood-linux-arm64.deb flood-linux-x64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          name: Release v${{ steps.parse_version.outputs.VERSION }}
-          tag_name: v${{ steps.parse_version.outputs.VERSION }}
-          files: |
-            flood-linux-arm64.deb
-            flood-linux-x64.deb
