@@ -187,8 +187,8 @@ jobs:
 
       - name: Set up QEMU
         run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+          sudo apt-get update
+          sudo apt-get install --reinstall -y qemu-user-static
 
       - name: Install ldid
         run: |
