@@ -13,11 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Parse version
+        id: parse_version
+        run: echo VERSION=`jq .version package.json -r` >> $GITHUB_OUTPUT
+
       - name: Update PKGBUILD for AUR
         run: |
           sed -i 's/pkgname=flood/pkgname=nodejs-flood/' ./distribution/archlinux/flood/PKGBUILD
           sed -i 's/replace-with-your-name/Jesse Chan/' ./distribution/archlinux/flood/PKGBUILD
           sed -i 's/to-be-determined@tbd/jc@linux.com/' ./distribution/archlinux/flood/PKGBUILD
+          sed -i 's/version-to-be-replaced/${{ steps.parse_version.outputs.VERSION }}/' ./distribution/archlinux/flood/PKGBUILD
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
