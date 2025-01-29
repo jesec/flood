@@ -32,8 +32,8 @@ jobs:
 
       - name: Set up QEMU
         run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+          sudo apt-get update -y
+          sudo apt-get install --reinstall -y qemu-user-static
 
       - run: sudo npm install -g pkg
 
