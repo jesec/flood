@@ -1,7 +1,6 @@
 name: Distribute for Debian
 
 on:
-  pull_request:
   workflow_dispatch:
   workflow_run:
     workflows: ['Release']
