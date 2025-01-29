@@ -6,7 +6,7 @@ Uploaders: replace with your name <to-be-determined@tbd>
 Testsuite: autopkgtest-pkg-nodejs
 Build-Depends:
  debhelper-compat (= 11)
- , nodejs (>= 12)
+ , nodejs (>= 16)
  , pkg-js-tools (>= 0.8.10)
 Standards-Version: 4.9.2
 Homepage: https://github.com/jesec/flood#readme
