@@ -44,7 +44,6 @@ jobs:
       - name: Copy flood-bin distribution files
         run: cp -rf distribution/debian/flood-bin/* .
 
-
       - name: Parse version
         id: parse_version
         run: echo VERSION=`jq .version package.json -r` >> $GITHUB_OUTPUT
