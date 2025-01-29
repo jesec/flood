@@ -11,6 +11,9 @@ jobs:
   flood-bin:
     runs-on: ubuntu-24.04
 
+    env:
+      USE_BAZEL_VERSION: '7.x'
+
     strategy:
       matrix:
         node: ['22']
@@ -28,8 +31,8 @@ jobs:
 
       - name: Set up QEMU
         run: |
-          sudo apt update
-          sudo apt install --reinstall -y qemu-user-static
+          sudo apt-get update -y
+          sudo apt-get install --reinstall -y qemu-user-static
 
       - run: sudo npm install -g pkg
 
