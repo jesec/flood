@@ -139,6 +139,7 @@
   "filter.status.seeding": "Wysyłanie",
   "filter.status.stopped": "Zatrzymano",
   "filter.status.title": "Filtruj według statusu",
+  "filter.location.title": "Filtruj według lokalizacji",
   "filter.tag.title": "Filtruj według tagu",
   "filter.tracker.title": "Filtruj według trackera",
   "filter.untagged": "Nieotagowane",

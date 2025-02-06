@@ -139,6 +139,7 @@
   "filter.status.seeding": "Gönderiliyor",
   "filter.status.stopped": "Durduruldu",
   "filter.status.title": "Duruma göre Filtrele",
+  "filter.location.title": "Konuma Göre Filtrele",
   "filter.tag.title": "Etikete göre filtrele",
   "filter.tracker.title": "Tracker'a göre filtrele",
   "filter.untagged": "Etiketlenmemiş",
