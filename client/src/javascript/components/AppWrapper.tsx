@@ -12,6 +12,7 @@ import AuthStore from '@client/stores/AuthStore';
 import ConfigStore from '@client/stores/ConfigStore';
 import ClientStatusStore from '@client/stores/ClientStatusStore';
 import UIStore from '@client/stores/UIStore';
+import { processFiles } from '@client/util/fileProcessor'
 
 import ClientConnectionInterruption from './general/ClientConnectionInterruption';
 import WindowTitle from './general/WindowTitle';
@@ -21,6 +22,16 @@ import LogoutButton from './sidebar/LogoutButton';
 interface AppWrapperProps {
   children: ReactNode;
   className?: string;
+}
+
+declare global {
+  interface Window {
+    launchQueue: {
+      setConsumer(consumer: (launchParams: {
+        files: FileSystemFileHandle[]
+      }) => any): void;
+    };
+  }
 }
 
 const AppWrapper: FC<AppWrapperProps> = observer(({children, className}: AppWrapperProps) => {
@@ -53,6 +64,17 @@ const AppWrapper: FC<AppWrapperProps> = observer(({children, className}: AppWrap
         });
       }
     }
+  }
+
+  if ('launchQueue' in window) {
+    window.launchQueue.setConsumer(async (launchParams) => {
+      if (launchParams.files && launchParams.files.length) {
+        const processedFiles = await processFiles(launchParams.files);
+        if (processedFiles.length) {
+          UIStore.setActiveModal({ id: 'add-torrents', tab: 'by-file', files: processedFiles });
+        }
+      }
+    });
   }
 
   let overlay: ReactNode = null;
