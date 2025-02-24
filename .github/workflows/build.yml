@@ -9,6 +9,25 @@ on:
       - master
 
 jobs:
+  build-pkg:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+      - run: sudo npm install -g @yao-pkg/pkg
+
+      - run: npm run build-pkg
+
+      - run: dist-pkg/flood-linuxstatic-x64 --help
+
   build-real:
     runs-on: ubuntu-24.04
 
@@ -33,7 +52,7 @@ jobs:
 
   build:
     # so we do not need to update GitHub repo config
-    needs: build-real
+    needs: [build-real, build-pkg]
     runs-on: ubuntu-latest
 
     strategy:
