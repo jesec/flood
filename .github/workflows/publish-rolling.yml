@@ -195,7 +195,7 @@ jobs:
           sudo wget https://github.com/jesec/ldid-static/releases/download/v2.1.4/ldid-amd64 -O /usr/local/bin/ldid
           sudo chmod +x /usr/local/bin/ldid
 
-      - run: sudo npm install -g pkg
+      - run: sudo npm install -g @yao-pkg/pkg
 
       - uses: actions/download-artifact@v4
         with:
