@@ -27,6 +27,8 @@ export interface Rule {
   match: string;
   // Regular expression to exclude items.
   exclude: string;
+  // Custom script to select if the item should be downloaded (exit with status 80 to download).
+  script: string;
   // Destination path where matched items are downloaded to.
   destination: string;
   // Tags to be added when items are queued for download.
