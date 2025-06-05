@@ -265,10 +265,10 @@ importers:
         version: 3.4.1
       fastify:
         specifier: ^4.29.0
-        version: 4.29.0
+        version: 4.29.1
       fastify-type-provider-zod:
         specifier: ^1.2.0
-        version: 1.2.0(fastify@4.29.0)(zod@3.24.1)
+        version: 1.2.0(fastify@4.29.1)(zod@3.24.1)
       feedsub:
         specifier: ^0.7.8
         version: 0.7.8
@@ -4076,11 +4076,14 @@ packages:
       fastify: ^4.0.0
       zod: ^3.14.2
 
-  fastify@4.29.0:
-    resolution: {integrity: sha512-MaaUHUGcCgC8fXQDsDtioaCcag1fmPJ9j64vAKunqZF4aSub040ZGi/ag8NGE2714yREPOKZuHCfpPzuUD3UQQ==}
+  fastify@4.29.1:
+    resolution: {integrity: sha512-m2kMNHIG92tSNWv+Z3UeTR9AWLLuo7KctC7mlFPtMEVrfjIhmQhkQnT9v15qA/BfVq3vvj134Y0jl9SBje3jXQ==}
 
   fastq@1.18.0:
     resolution: {integrity: sha512-QKHXPW0hD8g4UET03SdOdunzSouc9N4AuHdsX8XNcTsuz+yYFILVNIX4l9yHABMhiEI9Db0JTTIpu0wB+Y1QQw==}
+
+  fastq@1.19.1:
+    resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
 
   faye-websocket@0.11.4:
     resolution: {integrity: sha512-CzbClwlXAuiRQAlUyfqPgvPoNKTckTPGfwZV4ZdAhVcP2lh9KUxJg2b5GkE7XbjKQ3YJnQ9z6D9ntLAlB+tP8g==}
@@ -5787,8 +5790,8 @@ packages:
   pino-std-serializers@7.0.0:
     resolution: {integrity: sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==}
 
-  pino@9.6.0:
-    resolution: {integrity: sha512-i85pKRCt4qMjZ1+L7sy2Ag4t1atFcdbEt76+7iRJn1g2BvsnRMGu9p8pivl9fs63M2kF/A0OacFZhTub+m/qMg==}
+  pino@9.7.0:
+    resolution: {integrity: sha512-vnMCM6xZTb1WDmLvtG2lE/2p+t9hDEIvTWJsu6FejkE62vB7gDhvzrpFR4Cw2to+9JNQxVnkAKVPA1KPB98vWg==}
     hasBin: true
 
   pirates@4.0.6:
@@ -6051,8 +6054,8 @@ packages:
   process-warning@3.0.0:
     resolution: {integrity: sha512-mqn0kFRl0EoqhnL0GQ0veqFHyIN1yig9RHh/InzORTUiZHFRAur+aMtRkELNwGs9aNwKS6tg/An4NYBPGwvtzQ==}
 
-  process-warning@4.0.1:
-    resolution: {integrity: sha512-3c2LzQ3rY9d0hc1emcsHhfT9Jwz0cChib/QN89oME2R451w5fy3f0afAhERFZAwrbDU43wk12d0ORBpDVME50Q==}
+  process-warning@5.0.0:
+    resolution: {integrity: sha512-a39t9ApHNx2L4+HBnQKqxxHNs1r7KF+Intd8Q/g1bUh6q0WIp9voPXJ/x0j+ZL45KF1pJd9+q2jLIRMfvEshkA==}
 
   prompts@2.4.2:
     resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
@@ -6348,6 +6351,10 @@ packages:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
 
+  reusify@1.1.0:
+    resolution: {integrity: sha512-g6QUff04oZpHs0eG5p83rFLhHeV00ug/Yf9nZM6fLeUrPguBTkTQOdpAWWspMh55TZfVQDPaN3NQJfbVRAxdIw==}
+    engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
+
   rfdc@1.4.1:
     resolution: {integrity: sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA==}
 
@@ -6490,6 +6497,11 @@ packages:
 
   semver@7.7.0:
     resolution: {integrity: sha512-DrfFnPzblFmNrIZzg5RzHegbiRWg7KMR7btwi2yjHwx06zsUbO5g613sVwEV7FTwmzJu+Io0lJe2GJ3LxqpvBQ==}
+    engines: {node: '>=10'}
+    hasBin: true
+
+  semver@7.7.2:
+    resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -9566,7 +9578,7 @@ snapshots:
       debug: 4.4.0
       globby: 11.1.0
       is-glob: 4.0.3
-      semver: 7.7.0
+      semver: 7.7.2
       tsutils: 3.21.0(typescript@5.0.4)
     optionalDependencies:
       typescript: 5.0.4
@@ -9872,7 +9884,7 @@ snapshots:
   avvio@8.4.0:
     dependencies:
       '@fastify/error': 3.4.1
-      fastq: 1.18.0
+      fastq: 1.19.1
 
   axe-core@4.10.2: {}
 
@@ -11490,13 +11502,13 @@ snapshots:
 
   fastify-plugin@4.5.1: {}
 
-  fastify-type-provider-zod@1.2.0(fastify@4.29.0)(zod@3.24.1):
+  fastify-type-provider-zod@1.2.0(fastify@4.29.1)(zod@3.24.1):
     dependencies:
-      fastify: 4.29.0
+      fastify: 4.29.1
       zod: 3.24.1
       zod-to-json-schema: 3.24.1(zod@3.24.1)
 
-  fastify@4.29.0:
+  fastify@4.29.1:
     dependencies:
       '@fastify/ajv-compiler': 3.6.0
       '@fastify/error': 3.4.1
@@ -11507,17 +11519,21 @@ snapshots:
       fast-json-stringify: 5.16.1
       find-my-way: 8.2.2
       light-my-request: 5.14.0
-      pino: 9.6.0
+      pino: 9.7.0
       process-warning: 3.0.0
       proxy-addr: 2.0.7
       rfdc: 1.4.1
       secure-json-parse: 2.7.0
-      semver: 7.7.0
+      semver: 7.7.2
       toad-cache: 3.7.0
 
   fastq@1.18.0:
     dependencies:
       reusify: 1.0.4
+
+  fastq@1.19.1:
+    dependencies:
+      reusify: 1.1.0
 
   faye-websocket@0.11.4:
     dependencies:
@@ -11630,7 +11646,7 @@ snapshots:
       memfs: 3.5.3
       minimatch: 3.1.2
       schema-utils: 2.7.0
-      semver: 7.7.0
+      semver: 7.7.2
       tapable: 1.1.3
       typescript: 5.0.4
       webpack: 5.97.1(esbuild@0.25.0)
@@ -12536,7 +12552,7 @@ snapshots:
       jest-util: 28.1.3
       natural-compare: 1.4.0
       pretty-format: 28.1.3
-      semver: 7.7.0
+      semver: 7.7.2
     transitivePeerDependencies:
       - supports-color
 
@@ -12869,7 +12885,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.7.0
+      semver: 7.7.2
 
   make-error@1.3.6: {}
 
@@ -13544,14 +13560,14 @@ snapshots:
 
   pino-std-serializers@7.0.0: {}
 
-  pino@9.6.0:
+  pino@9.7.0:
     dependencies:
       atomic-sleep: 1.0.0
       fast-redact: 3.5.0
       on-exit-leak-free: 2.1.2
       pino-abstract-transport: 2.0.0
       pino-std-serializers: 7.0.0
-      process-warning: 4.0.1
+      process-warning: 5.0.0
       quick-format-unescaped: 4.0.4
       real-require: 0.2.0
       safe-stable-stringify: 2.5.0
@@ -13801,7 +13817,7 @@ snapshots:
 
   process-warning@3.0.0: {}
 
-  process-warning@4.0.1: {}
+  process-warning@5.0.0: {}
 
   prompts@2.4.2:
     dependencies:
@@ -14168,6 +14184,8 @@ snapshots:
 
   reusify@1.0.4: {}
 
+  reusify@1.1.0: {}
+
   rfdc@1.4.1: {}
 
   rimraf@3.0.2:
@@ -14303,6 +14321,8 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.7.0: {}
+
+  semver@7.7.2: {}
 
   send@0.19.0:
     dependencies:
