@@ -139,6 +139,7 @@
   "filter.status.seeding": "Donând",
   "filter.status.stopped": "Oprit",
   "filter.status.title": "Filtrare după stare",
+  "filter.location.title": "Filtrează după locație",
   "filter.tag.title": "Filtrare după etichetă",
   "filter.tracker.title": "Filtrează după tracker",
   "filter.untagged": "Neetichetat",
