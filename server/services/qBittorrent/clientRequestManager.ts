@@ -83,8 +83,8 @@ class ClientRequestManager {
   async updateConnection(connectionSettings?: QBittorrentConnectionSettings): Promise<void> {
     let failed = false;
 
-    this.authCookie = this.authenticate(connectionSettings).catch(() => {
-      failed = true;
+    this.authCookie = this.authenticate(connectionSettings).catch((reason) => {
+      failed = reason;
       return undefined;
     });
 
@@ -92,8 +92,8 @@ class ClientRequestManager {
       .then(() => {
         return !failed ? this.getApiVersion() : Promise.resolve(undefined);
       })
-      .catch(() => {
-        failed = true;
+      .catch((reason) => {
+        failed = reason;
         return undefined;
       });
 
@@ -101,7 +101,7 @@ class ClientRequestManager {
     await this.apiVersion;
 
     if (failed) {
-      throw new Error();
+      throw new Error(failed);
     }
   }
 
