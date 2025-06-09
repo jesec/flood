@@ -1,6 +1,6 @@
 {
   "name": "flood",
-  "version": "4.9.3",
+  "version": "4.9.5",
   "description": "A modern Web UI for various torrent clients with multi-user and multi-client support",
   "keywords": [
     "typescript",
@@ -213,7 +213,7 @@
     "typed-emitter": "^2.1.0",
     "typescript": "~5.0.4",
     "webpack": "^5.97.1",
-    "webpack-dev-server": "^4.15.2",
+    "webpack-dev-server": "^5.2.1",
     "webpack-shebang-plugin": "^1.1.8",
     "webpackbar": "^5.0.2",
     "yargs": "^17.7.2",
