@@ -37,9 +37,11 @@ const value = (value: XMLRPCValue): string => {
   } else if (value instanceof Buffer) {
     type = 'base64';
     value = value.toString('base64');
-  } else {
+  } else if (typeof value === 'object' && value !== null) {
     type = 'struct';
-    value = members(value);
+    value = members(value as {[key: string]: XMLRPCValue});
+  } else {
+    throw new Error(`Unsupported value type: ${typeof value}`);
   }
 
   return `<value><${type}>${value}</${type}></value>`;
