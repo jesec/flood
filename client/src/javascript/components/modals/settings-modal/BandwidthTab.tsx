@@ -90,12 +90,20 @@ const BandwidthTab: FC<BandwidthTabProps> = ({onSettingsChange, onClientSettings
       <FormRow>
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleGlobalDownSpeed')}
-          label={<Trans id="settings.bandwidth.transferrate.global.throttle.download" />}
+          label={
+            <div>
+              <Trans id="settings.bandwidth.transferrate.global.throttle.download" /> <em className="unit">(B/s)</em>
+            </div>
+          }
           id="throttleGlobalDownSpeed"
         />
         <Textbox
           defaultValue={getChangedClientSetting(changedClientSettings, 'throttleGlobalUpSpeed')}
-          label={<Trans id="settings.bandwidth.transferrate.global.throttle.upload" />}
+          label={
+            <div>
+              <Trans id="settings.bandwidth.transferrate.global.throttle.upload" /> <em className="unit">(B/s)</em>
+            </div>
+          }
           id="throttleGlobalUpSpeed"
         />
       </FormRow>
