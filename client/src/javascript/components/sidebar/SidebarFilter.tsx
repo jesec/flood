@@ -70,6 +70,11 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
   let name = _name;
   if (name === '') {
     name = i18n._('filter.all');
+  } else if (name === 'uncategorized') {
+    if (count === 0) {
+      return null;
+    }
+    name = i18n._('filter.uncategorized');
   } else if (name === 'untagged') {
     if (count === 0) {
       return null;

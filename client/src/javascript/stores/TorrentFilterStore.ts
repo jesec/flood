@@ -8,6 +8,7 @@ import torrentStatusMap, {TorrentStatus} from '@shared/constants/torrentStatusMa
 class TorrentFilterStore {
   locationFilter: Array<string> = [];
   searchFilter = '';
+  categoriesFilter: Array<string> = [];
   statusFilter: Array<TorrentStatus> = [];
   tagFilter: Array<string> = [];
   trackerFilter: Array<string> = [];
@@ -15,6 +16,8 @@ class TorrentFilterStore {
   filterTrigger = false;
 
   taxonomy: Taxonomy = {
+    categoriesCounts: {},
+    categoriesSizes: {},
     locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
     statusCounts: {},
     tagCounts: {},
@@ -25,6 +28,7 @@ class TorrentFilterStore {
 
   @computed get isFilterActive() {
     return (
+      this.categoriesFilter.length ||
       this.locationFilter.length ||
       this.searchFilter !== '' ||
       this.statusFilter.length ||
@@ -40,6 +44,7 @@ class TorrentFilterStore {
   clearAllFilters() {
     this.locationFilter = [];
     this.searchFilter = '';
+    this.categoriesFilter = [];
     this.statusFilter = [];
     this.tagFilter = [];
     this.trackerFilter = [];
@@ -56,6 +61,21 @@ class TorrentFilterStore {
 
   setSearchFilter(filter: string) {
     this.searchFilter = filter;
+    this.filterTrigger = !this.filterTrigger;
+  }
+
+  setCategoryFilters(filter: string, event: KeyboardEvent | MouseEvent | TouchEvent) {
+    const categories = Object.keys(this.taxonomy.categoriesCounts).sort((a, b) => {
+      if (a === 'uncategorized') return -1;
+      else if (b === 'uncategorized') return 1;
+      else return a.localeCompare(b);
+    });
+
+    // Put 'uncategorized' in the correct second position for shift click ordering
+    categories.splice(categories.indexOf('uncategorized'), 1);
+    categories.splice(1, 0, 'uncategorized');
+
+    this.computeFilters(categories, this.categoriesFilter, filter, event);
     this.filterTrigger = !this.filterTrigger;
   }
 

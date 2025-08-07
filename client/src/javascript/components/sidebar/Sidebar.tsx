@@ -1,6 +1,7 @@
 import {FC} from 'react';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 
+import CategoryFilters from './CategoryFilters';
 import DiskUsage from './DiskUsage';
 import FeedsButton from './FeedsButton';
 import LogoutButton from './LogoutButton';
@@ -43,6 +44,7 @@ const Sidebar: FC = () => (
       <TransferData />
       <SearchBox />
       <StatusFilters />
+      <CategoryFilters />
       <TagFilters />
       <TrackerFilters />
       <LocationFilters />

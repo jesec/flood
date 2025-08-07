@@ -321,6 +321,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: status.total_done,
+                category: '',
                 comment: status.comment,
                 dateActive:
                   status.download_payload_rate > 0 || status.upload_payload_rate > 0 ? -1 : status.active_time,

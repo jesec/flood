@@ -139,6 +139,8 @@
   "filter.status.seeding": "Seeding",
   "filter.status.stopped": "Stopped",
   "filter.status.title": "Filter by Status",
+  "filter.category.title": "Filter by Category",
+  "filter.uncategorized": "Uncategorized",
   "filter.location.title": "Filter by Location",
   "filter.tag.title": "Filter by Tag",
   "filter.tracker.title": "Filter by Tracker",
