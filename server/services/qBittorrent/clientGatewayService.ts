@@ -128,6 +128,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     await this.clientRequestManager
       .torrentsAddURLs(urls, {
         savepath: destination,
+        category: category,
         tags: tags.join(','),
         [method]: !start,
         root_folder: !isBasePath,
@@ -295,8 +296,10 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  async setTorrentsCategory({}: SetTorrentsCategoryOptions): Promise<void> {
-    return;
+  async setTorrentsCategory({hashes, category}: SetTorrentsCategoryOptions): Promise<void> {
+    return this.clientRequestManager
+      .torrentsSetCategory(hashes, category)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
@@ -399,7 +402,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
-                category: '',
+                category: info.category,
                 comment: comment,
                 dateActive: info.dlspeed > 0 || info.upspeed > 0 ? -1 : info.last_activity,
                 dateAdded: info.added_on,
