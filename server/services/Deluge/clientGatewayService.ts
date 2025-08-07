@@ -5,6 +5,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {DelugeConnectionSettings} from '@shared/schema/ClientConnectionSettings';
@@ -74,6 +75,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
     urls: inputUrls,
     cookies,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -111,6 +113,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
         ...(await this.addTorrentsByFile({
           files: files.map((file) => file.toString('base64')) as [string, ...string[]],
           destination,
+          category,
           tags,
           isBasePath,
           isCompleted,
@@ -222,6 +225,10 @@ class DelugeClientGatewayService extends ClientGatewayService {
     return this.clientRequestManager
       .coreSetTorrentOptions(hashes, {sequential_download: isSequential})
       .then(this.processClientRequestSuccess, this.processClientRequestError);
+  }
+
+  async setTorrentsCategory({}: SetTorrentsCategoryOptions): Promise<void> {
+    return;
   }
 
   async setTorrentsTags({}: SetTorrentsTagsOptions): Promise<void> {

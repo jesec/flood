@@ -5,6 +5,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {RTorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
@@ -145,6 +146,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     urls: inputUrls,
     cookies,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -192,6 +194,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       await this.addTorrentsByFile({
         files: files.map((file) => file.toString('base64')) as [string, ...string[]],
         destination,
+        category,
         tags,
         isBasePath,
         isCompleted,
@@ -499,6 +502,10 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       .then(() => {
         // returns nothing.
       });
+  }
+
+  async setTorrentsCategory({}: SetTorrentsCategoryOptions): Promise<void> {
+    return;
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {

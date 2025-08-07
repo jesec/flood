@@ -21,6 +21,8 @@ export interface CreateTorrentOptions {
   isInitialSeeding?: boolean;
   // Whether to start torrent
   start?: boolean;
+  // Category, not added to torrent file
+  category?: string;
   // Tags, not added to torrent file
   tags?: Array<string>;
 }

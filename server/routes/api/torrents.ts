@@ -7,6 +7,7 @@ import type {
   AddTorrentByURLOptions,
   ContentToken,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {
@@ -32,6 +33,7 @@ import {
   addTorrentByFileSchema,
   addTorrentByURLSchema,
   reannounceTorrentsSchema,
+  setTorrentsCategorySchema,
   setTorrentsTagsSchema,
 } from '../../../shared/schema/api/torrents';
 import {getTempPath} from '../../models/TemporaryStorage';
@@ -130,7 +132,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
     return res.status(422).json({message: 'Validation error.'});
   }
 
-  const {urls, cookies, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
+  const {urls, cookies, destination, category, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
     parsedResult.data;
 
   const finalDestination = await getDestination(req.services, {
@@ -148,6 +150,7 @@ router.post<unknown, unknown, AddTorrentByURLOptions>('/add-urls', async (req, r
       urls,
       cookies: cookies != null ? cookies : {},
       destination: finalDestination,
+      category: category ?? '',
       tags: tags ?? [],
       isBasePath: isBasePath ?? false,
       isCompleted: isCompleted ?? false,
@@ -189,7 +192,8 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
     return res.status(422).json({message: 'Validation error.'});
   }
 
-  const {files, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} = parsedResult.data;
+  const {files, destination, category, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
+    parsedResult.data;
 
   const finalDestination = await getDestination(req.services, {
     destination,
@@ -205,6 +209,7 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
     .addTorrentsByFile({
       files,
       destination: finalDestination,
+      category: category ?? '',
       tags: tags ?? [],
       isBasePath: isBasePath ?? false,
       isCompleted: isCompleted ?? false,
@@ -237,7 +242,8 @@ router.post<unknown, unknown, AddTorrentByFileOptions>('/add-files', async (req,
  * @return {Error} 500 - failure response - application/json
  */
 router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res): Promise<Response> => {
-  const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = req.body;
+  const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, category, tags, start} =
+    req.body;
 
   if (typeof sourcePath !== 'string') {
     return res.status(422).json({message: 'Validation error.'});
@@ -279,6 +285,7 @@ router.post<unknown, unknown, CreateTorrentOptions>('/create', async (req, res):
     .addTorrentsByFile({
       files: [torrent.toString('base64')],
       destination: (await fs.promises.lstat(sanitizedPath)).isDirectory() ? sanitizedPath : path.dirname(sanitizedPath),
+      category: category ?? '',
       tags: tags ?? [],
       isBasePath: true,
       isCompleted: true,
@@ -497,6 +504,31 @@ router.patch<unknown, unknown, SetTorrentsSequentialOptions>(
       ({code, message}) => res.status(500).json({code, message}),
     ),
 );
+
+/**
+ * PATCH /api/torrents/category
+ * @summary Sets category of torrents.
+ * @tags Torrents
+ * @security User
+ * @param {SetTorrentsCategoryOptions} request.body.required - options - application/json
+ * @return {object} 200 - success response - application/json
+ * @return {Error} 500 - failure response - application/json
+ */
+router.patch<unknown, unknown, SetTorrentsCategoryOptions>('/category', async (req, res): Promise<Response> => {
+  const parsedResult = setTorrentsCategorySchema.safeParse(req.body);
+
+  if (!parsedResult.success) {
+    return res.status(422).json({message: 'Validation error.'});
+  }
+
+  return req.services.clientGatewayService.setTorrentsCategory(parsedResult.data).then(
+    (response) => {
+      req.services.torrentService.fetchTorrentList();
+      return res.status(200).json(response);
+    },
+    ({code, message}) => res.status(500).json({code, message}),
+  );
+});
 
 /**
  * PATCH /api/torrents/tags

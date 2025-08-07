@@ -35,6 +35,11 @@ export interface FloodSettings {
   // value of property '' is the default preferred destination
   torrentDestinations?: Record<string, string>;
 
+  // Preferred download destinations by tags
+  // currently set to the last used download destinations
+  // value of property '' is the default preferred destination
+  torrentCategoryDestinations?: Record<string, string>;
+
   // Tag selector preference
   UITagSelectorMode?: 'single' | 'multi';
 

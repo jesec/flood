@@ -9,6 +9,7 @@ import UIStore from '@client/stores/UIStore';
 import AddTorrentsActions from './AddTorrentsActions';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import TagSelect from '../../general/form-elements/TagSelect';
+import CategorySelect from '../../general/form-elements/CategorySelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 
 type AddTorrentsByCreationFormData = {
@@ -20,6 +21,7 @@ type AddTorrentsByCreationFormData = {
   infoSource: string;
   isPrivate: boolean;
   start: boolean;
+  category: string;
   tags: string;
 };
 
@@ -64,6 +66,13 @@ const AddTorrentsByCreation: FC = () => {
         </Checkbox>
       </FormRow>
       <FormRow>
+        <CategorySelect
+          id="category"
+          label={i18n._('torrents.add.category')}
+          placeholder={i18n._('torrents.create.category.input.placeholder')}
+        />
+      </FormRow>
+      <FormRow>
         <TagSelect
           id="tags"
           label={i18n._('torrents.add.tags')}
@@ -91,6 +100,7 @@ const AddTorrentsByCreation: FC = () => {
             infoSource: formData.infoSource,
             isPrivate: formData.isPrivate || false,
             start: formData.start || false,
+            category: formData.category || '',
             tags: formData.tags != null ? formData.tags.split(',') : undefined,
           }).then(() => {
             UIStore.setActiveModal(null);

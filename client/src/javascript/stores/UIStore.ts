@@ -63,6 +63,7 @@ export type Modal =
         | 'generate-magnet'
         | 'move-torrents'
         | 'remove-torrents'
+        | 'set-category'
         | 'set-taxonomy'
         | 'set-trackers'
         | 'settings';
@@ -142,6 +143,12 @@ class UIStore {
   dismissContextMenu(menuID: ActiveContextMenu['id']) {
     if (this.activeContextMenu != null && this.activeContextMenu.id === menuID) {
       this.activeContextMenu = null;
+    }
+  }
+
+  handleSetCategorySuccess() {
+    if (this.activeModal != null && this.activeModal.id === 'set-category') {
+      this.setActiveModal(null);
     }
   }
 

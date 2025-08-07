@@ -4,6 +4,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {TransmissionConnectionSettings} from '@shared/schema/ClientConnectionSettings';
@@ -81,6 +82,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
     urls: inputUrls,
     cookies,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -123,6 +125,7 @@ class TransmissionClientGatewayService extends ClientGatewayService {
         ...(await this.addTorrentsByFile({
           files: files.map((file) => file.toString('base64')) as [string, ...string[]],
           destination,
+          category,
           tags,
           isBasePath,
           isCompleted,
@@ -276,6 +279,10 @@ class TransmissionClientGatewayService extends ClientGatewayService {
   async setTorrentsSequential(): Promise<void> {
     // Transmission maintainers rejected the feature.
     throw new Error('Transmission does not support this feature.');
+  }
+
+  async setTorrentsCategory({}: SetTorrentsCategoryOptions): Promise<void> {
+    return;
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {

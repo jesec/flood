@@ -6,6 +6,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
@@ -55,6 +56,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   async addTorrentsByFile({
     files,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -89,6 +91,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     await this.clientRequestManager
       .torrentsAddFiles(fileBuffers, {
         savepath: destination,
+        category: category,
         tags: tags.join(','),
         [method]: !start,
         root_folder: !isBasePath,
@@ -107,6 +110,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     urls: inputUrls,
     cookies,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -137,6 +141,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       return this.addTorrentsByFile({
         files: files.map((file) => file.toString('base64')) as [string, ...string[]],
         destination,
+        category,
         tags,
         isBasePath,
         isCompleted,
@@ -288,6 +293,10 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     return this.clientRequestManager
       .torrentsToggleSequentialDownload(flipNeeded)
       .then(this.processClientRequestSuccess, this.processClientRequestError);
+  }
+
+  async setTorrentsCategory({}: SetTorrentsCategoryOptions): Promise<void> {
+    return;
   }
 
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
