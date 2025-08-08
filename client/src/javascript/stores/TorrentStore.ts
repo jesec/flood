@@ -24,9 +24,16 @@ class TorrentStore {
   }
 
   @computed get filteredTorrents(): Array<TorrentProperties> {
-    const {locationFilter, searchFilter, statusFilter, tagFilter, trackerFilter} = TorrentFilterStore;
+    const {categoriesFilter, locationFilter, searchFilter, statusFilter, tagFilter, trackerFilter} = TorrentFilterStore;
 
     let filteredTorrents = Object.assign([], this.sortedTorrents) as Array<TorrentProperties>;
+
+    if (categoriesFilter.length) {
+      filteredTorrents = filterTorrents(filteredTorrents, {
+        type: 'category',
+        filter: categoriesFilter,
+      });
+    }
 
     if (locationFilter.length) {
       filteredTorrents = filterTorrents(filteredTorrents, {

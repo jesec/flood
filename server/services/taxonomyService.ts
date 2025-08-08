@@ -12,6 +12,8 @@ type TaxonomyServiceEvents = {
 
 class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   taxonomy: Taxonomy = {
+    categoriesCounts: {'': 0, uncategorized: 0},
+    categoriesSizes: {},
     locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
     statusCounts: {'': 0},
     tagCounts: {'': 0, untagged: 0},
@@ -61,6 +63,8 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
 
   handleProcessTorrentListStart = () => {
     this.lastTaxonomy = {
+      categoriesCounts: {...this.taxonomy.categoriesCounts},
+      categoriesSizes: {...this.taxonomy.categoriesSizes},
       locationTree: {...this.taxonomy.locationTree},
       statusCounts: {...this.taxonomy.statusCounts},
       tagCounts: {...this.taxonomy.tagCounts},
@@ -73,6 +77,8 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
       this.taxonomy.statusCounts[status] = 0;
     });
 
+    this.taxonomy.categoriesCounts = {'': 0, uncategorized: 0};
+    this.taxonomy.categoriesSizes = {};
     this.taxonomy.locationTree = {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0};
     this.taxonomy.statusCounts[''] = 0;
     this.taxonomy.tagCounts = {'': 0, untagged: 0};
@@ -84,6 +90,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   handleProcessTorrentListEnd = ({torrents}: {torrents: TorrentList}) => {
     const {length} = Object.keys(torrents);
 
+    this.taxonomy.categoriesCounts[''] = length;
     this.taxonomy.statusCounts[''] = length;
     this.taxonomy.tagCounts[''] = length;
     this.taxonomy.trackerCounts[''] = length;
@@ -99,6 +106,8 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   };
 
   handleProcessTorrent = (torrentProperties: TorrentProperties) => {
+    this.incrementCategoryCounts(torrentProperties.category);
+    this.incrementCategorySizes(torrentProperties.category, torrentProperties.sizeBytes);
     this.incrementLocationCountsAndSizes(torrentProperties.directory, torrentProperties.sizeBytes);
     this.incrementStatusCounts(torrentProperties.status);
     this.incrementTagCounts(torrentProperties.tags);
@@ -106,6 +115,32 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     this.incrementTrackerCounts(torrentProperties.trackerURIs);
     this.incrementTrackerSizes(torrentProperties.trackerURIs, torrentProperties.sizeBytes);
   };
+
+  incrementCategoryCounts(category: TorrentProperties['category']) {
+    if (category === '') {
+      this.taxonomy.categoriesCounts.uncategorized += 1;
+      return;
+    }
+
+    if (this.taxonomy.categoriesCounts[category] != null) {
+      this.taxonomy.categoriesCounts[category] += 1;
+    } else {
+      this.taxonomy.categoriesCounts[category] = 1;
+    }
+  }
+
+  incrementCategorySizes(category: TorrentProperties['category'], sizeBytes: TorrentProperties['sizeBytes']) {
+    /* Trim empty string as it is used as uncategorized torrent */
+    if (category === '') {
+      return;
+    }
+
+    if (this.taxonomy.categoriesSizes[category] != null) {
+      this.taxonomy.categoriesSizes[category] += sizeBytes;
+    } else {
+      this.taxonomy.categoriesSizes[category] = sizeBytes;
+    }
+  }
 
   incrementLocationCountsAndSizes(
     directory: TorrentProperties['directory'],
