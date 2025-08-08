@@ -139,6 +139,7 @@
   "filter.status.seeding": "Seeding",
   "filter.status.stopped": "Fermato",
   "filter.status.title": "Filtra per stato",
+  "filter.location.title": "Filtra per posizione",
   "filter.tag.title": "Filtra per Tag",
   "filter.tracker.title": "Filtra per Tracker",
   "filter.untagged": "Senza etichetta",

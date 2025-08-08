@@ -139,6 +139,7 @@
   "filter.status.seeding": "做种中",
   "filter.status.stopped": "已停止",
   "filter.status.title": "按状态筛选",
+  "filter.location.title": "按位置筛选",
   "filter.tag.title": "按标签筛选",
   "filter.tracker.title": "按 Tracker 筛选",
   "filter.untagged": "无标签",

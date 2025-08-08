@@ -139,6 +139,7 @@
   "filter.status.seeding": "Раздаются",
   "filter.status.stopped": "Остановленные",
   "filter.status.title": "Фильтр по статусу",
+  "filter.location.title": "Фильтр по расположению",
   "filter.tag.title": "Фильтр по тегу",
   "filter.tracker.title": "Фильтровать по трекеру",
   "filter.untagged": "Без тегов",

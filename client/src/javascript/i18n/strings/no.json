@@ -139,6 +139,7 @@
   "filter.status.seeding": "Seeder",
   "filter.status.stopped": "Stoppet",
   "filter.status.title": "Filtrer etter status",
+  "filter.location.title": "Filtrer etter sted",
   "filter.tag.title": "Filtrer etter tag",
   "filter.tracker.title": "Filtrer etter tracker",
   "filter.untagged": "Umerket",
