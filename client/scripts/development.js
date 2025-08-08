@@ -60,13 +60,14 @@ choosePort(HOST, DEFAULT_PORT)
           },
         ],
         historyApiFallback: true,
-        proxy: {
-          '/api/': {
+        proxy: [
+          {
+            context: ['/api'],
             target: floodServerProxy,
             changeOrigin: true,
             secure: false,
           },
-        },
+        ],
         port,
       },
       compiler,
