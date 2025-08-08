@@ -139,6 +139,7 @@
   "filter.status.seeding": "Lähetetään",
   "filter.status.stopped": "Pysäytetty",
   "filter.status.title": "Suodata tilan mukaan",
+  "filter.location.title": "Suodata sijainnin mukaan",
   "filter.tag.title": "Suodata tunnisteen mukaan",
   "filter.tracker.title": "Suodata seurantapalvelimen mukaan",
   "filter.untagged": "Merkitsemätön",

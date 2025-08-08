@@ -139,6 +139,7 @@
   "filter.status.seeding": "시딩",
   "filter.status.stopped": "중지",
   "filter.status.title": "필터: 상태",
+  "filter.location.title": "필터: 위치",
   "filter.tag.title": "필터: 태그",
   "filter.tracker.title": "필터: 트래커",
   "filter.untagged": "태그 없음",

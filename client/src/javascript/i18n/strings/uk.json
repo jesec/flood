@@ -139,6 +139,7 @@
   "filter.status.seeding": "Роздаються",
   "filter.status.stopped": "Зупинено",
   "filter.status.title": "Фільтр за станом",
+  "filter.location.title": "Фільтр за місцем розташування",
   "filter.tag.title": "Фільтр за міткою",
   "filter.tracker.title": "Фільтр по трекеру",
   "filter.untagged": "Без міток",

@@ -139,6 +139,7 @@
   "filter.status.seeding": "זורע",
   "filter.status.stopped": "נעצר",
   "filter.status.title": "סינון לפי מצב",
+  "filter.location.title": "סינון לפי מיקום",
   "filter.tag.title": "סינון לפי תג",
   "filter.tracker.title": "סינון לפי גשש",
   "filter.untagged": "לא מתויג",
