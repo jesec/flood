@@ -14,6 +14,7 @@ import UIStore from './stores/UIStore';
 import stringUtil from '@shared/util/stringUtil';
 
 import '../sass/style.scss';
+import '../sass/panda.css';
 
 const Login = lazy(() => import(/* webpackPrefetch: true */ './routes/Login'));
 const Overview = lazy(() => import(/* webpackPreload: true */ './routes/Overview'));

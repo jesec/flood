@@ -1,56 +1,65 @@
-@import '~ress';
+// Must match Panda's layers: reset, base, tokens, recipes, utilities
+@layer reset, base, tokens, recipes, utilities;
+
+// Import ress in the reset layer
+@layer reset {
+  @import '~ress';
+}
 
 @import 'tools/themes';
 
-@import 'ui/index';
+// Global styles in base layer
+@layer base {
+  @import 'ui/index';
 
-@import 'tools/variables';
-@import 'tools/reset';
+  @import 'tools/variables';
+  @import 'tools/reset';
 
-@import 'base/animations';
-@import 'base/font-families';
-@import 'base/layout';
-@import 'base/main';
-@import 'base/typography';
+  @import 'base/animations';
+  @import 'base/font-families';
+  @import 'base/layout';
+  @import 'base/main';
+  @import 'base/typography';
 
-@import 'components/action-bar';
-@import 'components/app-wrapper';
-@import 'components/alerts';
-@import 'components/attached-panel';
-@import 'components/badge';
-@import 'components/base-menu';
-@import 'components/client-stats';
-@import 'components/connection-status';
-@import 'components/dependency-list';
-@import 'components/directory-tree';
-@import 'components/dropdown';
-@import 'components/dropzone';
-@import 'components/duration';
-@import 'components/floating-action';
-@import 'components/icons';
-@import 'components/interactive-list';
-@import 'components/loading-indicator';
-@import 'components/mediainfo';
-@import 'components/modals';
-@import 'components/notifications';
-@import 'components/peers-list';
-@import 'components/priority-meter';
-@import 'components/progress-bar';
-@import 'components/scrollbars';
-@import 'components/search';
-@import 'components/sidebar';
-@import 'components/sidebar-filter';
-@import 'components/sort-dropdown';
-@import 'components/sortable-list';
-@import 'components/table';
-@import 'components/tags';
-@import 'components/textbox-repeater';
-@import 'components/toolbar';
-@import 'components/tooltip';
-@import 'components/torrent-details-panel';
-@import 'components/torrents';
-@import 'components/torrent';
-@import 'components/transfer-data';
+  @import 'components/action-bar';
+  @import 'components/app-wrapper';
+  @import 'components/alerts';
+  @import 'components/attached-panel';
+  @import 'components/badge';
+  @import 'components/base-menu';
+  @import 'components/client-stats';
+  @import 'components/connection-status';
+  @import 'components/dependency-list';
+  @import 'components/directory-tree';
+  @import 'components/dropdown';
+  @import 'components/dropzone';
+  @import 'components/duration';
+  @import 'components/floating-action';
+  @import 'components/icons';
+  @import 'components/interactive-list';
+  @import 'components/loading-indicator';
+  @import 'components/mediainfo';
+  @import 'components/modals';
+  @import 'components/notifications';
+  @import 'components/peers-list';
+  @import 'components/priority-meter';
+  @import 'components/progress-bar';
+  @import 'components/scrollbars';
+  @import 'components/search';
+  @import 'components/sidebar';
+  @import 'components/sidebar-filter';
+  @import 'components/sort-dropdown';
+  @import 'components/sortable-list';
+  @import 'components/table';
+  @import 'components/tags';
+  @import 'components/textbox-repeater';
+  @import 'components/toolbar';
+  @import 'components/tooltip';
+  @import 'components/torrent-details-panel';
+  @import 'components/torrents';
+  @import 'components/torrent';
+  @import 'components/transfer-data';
 
-@import 'views/login';
-@import 'views/feeds';
+  @import 'views/login';
+  @import 'views/feeds';
+}

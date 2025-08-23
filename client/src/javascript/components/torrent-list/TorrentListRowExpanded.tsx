@@ -2,6 +2,7 @@ import {CSSProperties, FC, forwardRef, KeyboardEvent, MouseEvent, ReactElement, 
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
+import {css} from '@client/styled-system/css';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentListColumns from '@client/constants/TorrentListColumns';
 
@@ -122,7 +123,7 @@ const TorrentListRowExpanded = observer(
           onKeyPress={handleKeyPress}
           ref={ref}
         >
-          <div css={{alignItems: 'center', display: 'flex'}}>
+          <div className={css({alignItems: 'center', display: 'flex'})}>
             {primarySection}
             <div className="torrent__details__section torrent__details__section--secondary">{secondarySection}</div>
           </div>

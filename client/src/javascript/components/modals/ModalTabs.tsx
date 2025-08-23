@@ -1,6 +1,8 @@
 import classnames from 'classnames';
 import {FC, ReactNode} from 'react';
 
+import {css} from '@client/styled-system/css';
+
 export interface Tab {
   id?: string;
   label: ReactNode;
@@ -33,15 +35,15 @@ const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
         return (
           <li className={classes} key={tabId}>
             <button
-              css={{
-                ':focus': {
+              className={css({
+                _focus: {
                   outline: 'none',
                   WebkitTapHighlightColor: 'transparent',
                 },
-                ':focus-visible': {
+                _focusVisible: {
                   outline: 'dashed',
                 },
-              }}
+              })}
               type="button"
               onClick={() => {
                 if (onTabChange) {

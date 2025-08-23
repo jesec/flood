@@ -32,12 +32,18 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1,
+              importLoaders: 2,
               sourceMap: true,
               modules: {
                 mode: 'global',
                 localIdentName: '[name]_[local]__[hash:base64:5]',
               },
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
             },
           },
           {

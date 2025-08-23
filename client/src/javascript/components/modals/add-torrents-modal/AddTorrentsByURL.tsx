@@ -1,6 +1,7 @@
 import {FC, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
+import {css} from '@client/styled-system/css';
 import ConfigStore from '@client/stores/ConfigStore';
 import {Form, FormRow} from '@client/ui';
 import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
@@ -42,16 +43,16 @@ const AddTorrentsByURL: FC = () => {
             {i18n._('torrents.add.torrents.label')}
             {typeof navigator.registerProtocolHandler === 'function' && (
               <button
-                css={{
+                className={css({
                   float: 'right',
-                  ':focus': {
+                  _focus: {
                     outline: 'none',
                     WebkitTapHighlightColor: 'transparent',
                   },
-                  ':focus-visible': {
+                  _focusVisible: {
                     outline: 'dashed',
                   },
-                }}
+                })}
                 type="button"
                 onClick={() => {
                   if (typeof navigator.registerProtocolHandler === 'function') {
@@ -59,7 +60,7 @@ const AddTorrentsByURL: FC = () => {
                   }
                 }}
               >
-                <em css={{fontSize: '0.8em'}}>{i18n._('torrents.add.tab.url.register.magnet.handler')}</em>
+                <em className={css({fontSize: '0.8em'})}>{i18n._('torrents.add.tab.url.register.magnet.handler')}</em>
               </button>
             )}
           </div>

@@ -1,7 +1,6 @@
-import {cx} from '@emotion/css';
 import {FC} from 'react';
 import {useLingui} from '@lingui/react';
-import {ClassNamesArg} from '@emotion/react';
+import classnames from 'classnames';
 
 import AuthActions from '@client/actions/AuthActions';
 import ConfigStore from '@client/stores/ConfigStore';
@@ -10,7 +9,7 @@ import {Logout} from '@client/ui/icons';
 import Tooltip from '../general/Tooltip';
 
 interface LogoutButtonProps {
-  className?: ClassNamesArg;
+  className?: string;
 }
 
 const LogoutButton: FC<LogoutButtonProps> = ({className}: LogoutButtonProps) => {
@@ -29,7 +28,7 @@ const LogoutButton: FC<LogoutButtonProps> = ({className}: LogoutButtonProps) => 
         })
       }
       position="bottom"
-      wrapperClassName={cx(
+      wrapperClassName={classnames(
         'sidebar__action',
         'sidebar__action--last',
         'sidebar__icon-button',

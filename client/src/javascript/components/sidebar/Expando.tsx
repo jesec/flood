@@ -1,4 +1,6 @@
 import {FC, KeyboardEvent, MouseEvent, ReactNode, TouchEvent} from 'react';
+
+import {css} from '@client/styled-system/css';
 import {Chevron} from '@client/ui/icons';
 
 interface ExpandoProps {
@@ -11,7 +13,7 @@ interface ExpandoProps {
 const Expando: FC<ExpandoProps> = ({children, className, expanded, handleClick}: ExpandoProps) => (
   <button className={className} onClick={(event) => handleClick(event)}>
     {children}
-    {expanded ? <Chevron css={{transform: 'scaleY(-1)'}} /> : <Chevron />}
+    {expanded ? <Chevron className={css({transform: 'scaleY(-1)'})} /> : <Chevron />}
   </button>
 );
 

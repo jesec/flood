@@ -11,7 +11,16 @@ import typescriptEslint from 'typescript-eslint';
 export default [
   // Global ignores
   {
-    ignores: ['dist/**', 'dist-pkg/**', 'node_modules/**', 'coverage/**', '*.min.js', 'cypress/**', '**/*.d.ts'],
+    ignores: [
+      'dist/**',
+      'dist-pkg/**',
+      'node_modules/**',
+      'coverage/**',
+      '*.min.js',
+      'cypress/**',
+      '**/*.d.ts',
+      '**/styled-system/**',
+    ],
   },
 
   // Base JavaScript config
@@ -123,7 +132,6 @@ export default [
       'react/prop-types': 'off', // We use TypeScript
       'react/no-deprecated': 'off', // For CRA parity
       'react/display-name': 'off', // Allow anonymous components
-      'react/no-unknown-property': ['error', {ignore: ['css']}], // Allow emotion css prop
     },
   },
 
