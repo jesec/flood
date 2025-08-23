@@ -28,7 +28,7 @@ const ModalActions: FC<ModalActionsProps> = (props: ModalActionsProps) => {
         <Checkbox
           defaultChecked={action.checked}
           id={action.id}
-          key={index} // eslint-disable-line react/no-array-index-key
+          key={index}
           onClick={(event) => {
             if (action.clickHandler != null) {
               action.clickHandler(event);
@@ -51,7 +51,7 @@ const ModalActions: FC<ModalActionsProps> = (props: ModalActionsProps) => {
           dismissIfNeeded();
         }}
         priority={action.type}
-        key={index} // eslint-disable-line react/no-array-index-key
+        key={index}
         type={action.submit ? 'submit' : 'button'}
       >
         {action.content}

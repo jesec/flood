@@ -38,7 +38,7 @@ class ClientRequestManager {
     switch (response[0]) {
       case DelugeRpcResponseType.RESPONSE: {
         const [, request_id, return_value] = response;
-        const [resolve] = this.requestQueue[request_id as number] ?? [,];
+        const [resolve] = this.requestQueue[request_id as number] ?? [];
 
         delete this.requestQueue[request_id as number];
         resolve?.(return_value);
@@ -47,7 +47,7 @@ class ClientRequestManager {
       }
       case DelugeRpcResponseType.ERROR: {
         const [, request_id, exception_type, exception_msg] = response;
-        const [, reject] = this.requestQueue[request_id as number] ?? [,];
+        const [, reject] = this.requestQueue[request_id as number] ?? [];
 
         delete this.requestQueue[request_id as number];
         reject?.(new Error(`${exception_type}: ${exception_msg}`));

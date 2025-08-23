@@ -7,7 +7,6 @@ import detectLocale from '@client/util/detectLocale';
 import Languages from '@client/constants/Languages';
 import SettingStore from '@client/stores/SettingStore';
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import {messages as EN} from '@lingui/loader!./strings/en.json?raw-lingui';
 
 import type {Language} from '@client/constants/Languages';

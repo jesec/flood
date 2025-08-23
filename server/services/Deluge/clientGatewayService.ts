@@ -214,7 +214,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  async setTorrentsPriority({}: SetTorrentsPriorityOptions): Promise<void> {
+  async setTorrentsPriority(_options: SetTorrentsPriorityOptions): Promise<void> {
     return;
   }
 
@@ -224,7 +224,7 @@ class DelugeClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
-  async setTorrentsTags({}: SetTorrentsTagsOptions): Promise<void> {
+  async setTorrentsTags(_options: SetTorrentsTagsOptions): Promise<void> {
     return;
   }
 

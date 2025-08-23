@@ -8,7 +8,6 @@ import type {TorrentContentSelection, TorrentContentSelectionTree} from '@shared
 import type {TorrentProperties} from '@shared/types/Torrent';
 
 // TODO: Fix this circular dependency
-// eslint-disable-next-line import/no-cycle
 import DirectoryTree from './DirectoryTree';
 
 interface DirectoryTreeNodeProps {

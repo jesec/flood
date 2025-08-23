@@ -4,9 +4,8 @@ export const isNotEmpty = (value: string | undefined): value is string => value 
 
 export const isRegExValid = (regExToCheck: string): boolean => {
   try {
-    // eslint-disable-next-line no-new
     new RegExp(regExToCheck);
-  } catch (err) {
+  } catch {
     return false;
   }
 

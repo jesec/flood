@@ -1,5 +1,5 @@
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {observer} from 'mobx-react';
 import {useKeyPressEvent} from 'react-use';
 

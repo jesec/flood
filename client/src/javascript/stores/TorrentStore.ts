@@ -1,5 +1,6 @@
 import {applyPatch, Operation} from 'fast-json-patch';
 import {computed, makeAutoObservable} from 'mobx';
+import type React from 'react';
 
 import filterTorrents from '@client/util/filterTorrents';
 import selectTorrents from '@client/util/selectTorrents';

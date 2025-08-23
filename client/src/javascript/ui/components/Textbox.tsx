@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {Children, cloneElement, forwardRef, ReactElement} from 'react';
+import React, {Children, cloneElement, forwardRef, ReactElement} from 'react';
 
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';

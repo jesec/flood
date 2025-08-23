@@ -1,5 +1,5 @@
-import * as zlib from 'node:zlib';
 import * as fs from 'node:fs';
+import * as zlib from 'node:zlib';
 
 const buf = fs.readFileSync('server/geoip/GeoLite2-Country.mmdb');
 

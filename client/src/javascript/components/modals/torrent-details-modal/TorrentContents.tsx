@@ -36,7 +36,7 @@ const TorrentContents: FC = observer(() => {
     return null;
   }
 
-  const {hash} = UIStore?.activeModal;
+  const {hash} = UIStore.activeModal;
 
   let directoryHeadingIconContent = null;
   let fileDetailContent = null;

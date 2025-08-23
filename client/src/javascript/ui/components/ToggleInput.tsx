@@ -43,7 +43,6 @@ const ToggleInput: FC<ToggleInputProps> = ({
 
   return (
     <FormRowItem shrink={shrink} grow={grow} width={width}>
-      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label
         className={classnames('form__element toggle-input', type, {
           'form__element--match-textbox-height': matchTextboxHeight,

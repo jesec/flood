@@ -25,7 +25,7 @@ const SearchBox: FC = observer(() => {
   return (
     <div
       className={classnames({
-        sidebar__item: true, // eslint-disable-line
+        sidebar__item: true,
         search: true,
         'is-in-use': isSearchActive,
       })}

@@ -3,8 +3,6 @@
  * Provides file size reporting for build output
  */
 
-'use strict';
-
 const fs = require('node:fs');
 const path = require('node:path');
 const zlib = require('node:zlib');
@@ -156,7 +154,7 @@ function measureFileSizesBeforeBuild(buildFolder) {
         root: buildFolder,
         sizes: sizes,
       });
-    } catch (err) {
+    } catch {
       // If directory doesn't exist or error reading, return empty sizes
       resolve({
         root: buildFolder,
