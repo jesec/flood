@@ -74,3 +74,8 @@ cypress/screenshots
 ## Panda
 styled-system
 styled-system-studio
+
+# Storybook
+css-snapshots/
+*storybook.log
+storybook-static

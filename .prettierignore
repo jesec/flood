@@ -5,3 +5,12 @@ dist-pkg/
 # Coverage reports
 coverage/
 pnpm-lock.yaml
+
+## Panda
+styled-system
+styled-system-studio
+
+# Storybook
+css-snapshots/
+*storybook.log
+storybook-static

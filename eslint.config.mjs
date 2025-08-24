@@ -5,6 +5,7 @@ import nodePlugin from 'eslint-plugin-n';
 import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import storybook from 'eslint-plugin-storybook';
 import globals from 'globals';
 import typescriptEslint from 'typescript-eslint';
 
@@ -20,6 +21,7 @@ export default [
       'cypress/**',
       '**/*.d.ts',
       '**/styled-system/**',
+      '**/storybook-static/**',
     ],
   },
 
@@ -34,6 +36,9 @@ export default [
 
   // Prettier config (disables conflicting rules)
   prettierConfig,
+
+  // Storybook
+  ...storybook.configs['flat/recommended'],
 
   // Global config for all files
   {

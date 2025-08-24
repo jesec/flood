@@ -1,0 +1,143 @@
+/* 
+ * Storybook Layout CSS
+ * 
+ * This file ensures proper layout hierarchy for Flood components in Storybook.
+ * It addresses the height cascade issue where the application expects 100% heights
+ * to propagate from html/body down through the component tree.
+ * 
+ * The real application has:
+ * - html, body { height: 100%; overflow: hidden; }
+ * - #app, .application, .application__view { height: 100%; width: 100%; }
+ * - .application__panel { position: absolute; top: 0; right: 0; bottom: 0; left: 0; }
+ * 
+ * In Storybook's iframe context, we need to ensure this hierarchy is maintained.
+ */
+
+/* Ensure Storybook's root has proper height */
+#storybook-root,
+#storybook-preview-wrapper {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* Reset any Storybook default styles that might interfere */
+.sb-show-main,
+.sb-main-padded {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 100%;
+}
+
+/* Ensure the story container fills the viewport */
+.sb-unstyled,
+.sb-unstyled > div {
+  height: 100%;
+  width: 100%;
+}
+
+/* The app root needs full height to cascade properly */
+#app {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  display: block;
+}
+
+/* Critical: Establish proper flexbox context for application */
+.application {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.application__view {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sidebar should maintain its flex properties */
+.application__sidebar {
+  display: flex;
+  flex: 1 1 0%;
+  position: relative;
+  height: 100%;
+  min-width: 240px;
+  max-width: 250px;
+}
+
+/* Content area needs proper flex growth */
+.application__content {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-width: 60px;
+}
+
+/* Panel with absolute positioning fills its container */
+.application__panel {
+  display: flex;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.application__panel--torrent-list {
+  flex-direction: column;
+  z-index: 2;
+}
+
+/* Torrents container needs proper flex */
+.torrents {
+  display: flex;
+  flex: 1 1 0px;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Torrent list wrapper fills available space */
+.torrent__list__wrapper {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+
+/* Viewport for scrolling */
+.torrent__list__viewport {
+  flex: 0 1 auto;
+  overflow-y: auto !important;
+  overflow-x: hidden;
+}
+
+/* Action bar should not expand */
+.action-bar {
+  flex: 0 0 auto;
+}
+
+/* 
+ * Future-proofing:
+ * - Uses CSS classes instead of inline styles
+ * - Maintains the same specificity as production CSS
+ * - Respects the flexbox and absolute positioning patterns
+ * - Can be easily updated if the application's layout changes
+ */

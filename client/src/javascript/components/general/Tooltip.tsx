@@ -399,7 +399,7 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
       tooltipStyle.maxWidth = maxWidth;
     }
 
-    const appElement = document.getElementById('app');
+    const appElement = document.getElementById('app') || document.getElementById('storybook-root') || document.body;
 
     if (appElement == null) {
       return null;
