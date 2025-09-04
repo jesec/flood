@@ -8,7 +8,8 @@ import FloodActions from '@client/actions/FloodActions';
 import Sidebar from '@client/components/sidebar/Sidebar';
 import TorrentList from '@client/components/torrent-list/TorrentList';
 
-import 'overlayscrollbars/overlayscrollbars.css';
+// Load OverlayScrollbars CSS into the third-party layer
+import '@client/util/loadOverlayScrollbars';
 
 const Alerts = lazy(() => import('@client/components/alerts/Alerts'));
 const Modals = lazy(() => import('@client/components/modals/Modals'));

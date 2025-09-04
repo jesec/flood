@@ -1,5 +1,6 @@
 // Must match Panda's layers: reset, base, tokens, recipes, utilities
-@layer reset, base, tokens, recipes, utilities;
+// third-party layer for vendor styles (higher priority than reset, lower than base)
+@layer reset, third-party, base, tokens, recipes, utilities;
 
 // Import ress in the reset layer
 @layer reset {
