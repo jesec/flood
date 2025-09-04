@@ -14,8 +14,8 @@ const esbuild = require('esbuild');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const webpack = require('webpack');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const FileSizeReporter = require('react-dev-utils/FileSizeReporter');
+const checkRequiredFiles = require('../client/scripts/utils/checkRequiredFiles');
+const FileSizeReporter = require('../client/scripts/utils/FileSizeReporter');
 const paths = require('../shared/config/paths');
 const clientConfig = require('../client/config/webpack.config.prod');
 
