@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {EventHandler, FC, MutableRefObject, ReactNode, SyntheticEvent, useCallback, useRef} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import uniqueId from 'lodash/uniqueId';
 import {useKeyPressEvent} from 'react-use';
 

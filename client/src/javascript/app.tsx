@@ -1,7 +1,7 @@
 import {BrowserRouter} from 'react-router-dom';
 import {createRoot} from 'react-dom/client';
 import {FC, lazy, Suspense, useEffect} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Route, Routes} from 'react-router';
 import {useMedia} from 'react-use';
 

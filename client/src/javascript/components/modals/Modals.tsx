@@ -1,6 +1,6 @@
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import React, {FC} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useKeyPressEvent} from 'react-use';
 
 import AddTorrentsModal from './add-torrents-modal/AddTorrentsModal';

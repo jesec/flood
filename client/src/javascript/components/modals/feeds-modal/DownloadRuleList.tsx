@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans} from '@lingui/react';
 
 import {Close, Edit} from '@client/ui/icons';

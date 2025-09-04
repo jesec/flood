@@ -1,5 +1,5 @@
 import {applyPatch, Operation} from 'fast-json-patch';
-import {computed, makeAutoObservable} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 import type React from 'react';
 
 import filterTorrents from '@client/util/filterTorrents';
@@ -20,11 +20,11 @@ class TorrentStore {
     makeAutoObservable(this);
   }
 
-  @computed get sortedTorrents(): Array<TorrentProperties> {
+  get sortedTorrents(): Array<TorrentProperties> {
     return sortTorrents(Object.values(this.torrents), SettingStore.floodSettings.sortTorrents);
   }
 
-  @computed get filteredTorrents(): Array<TorrentProperties> {
+  get filteredTorrents(): Array<TorrentProperties> {
     const {locationFilter, searchFilter, statusFilter, tagFilter, trackerFilter} = TorrentFilterStore;
 
     let filteredTorrents = Object.assign([], this.sortedTorrents) as Array<TorrentProperties>;

@@ -1,5 +1,5 @@
 import {CSSProperties, forwardRef, KeyboardEvent, MouseEvent, ReactElement, TouchEvent} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 import SettingStore from '../../stores/SettingStore';
 import TorrentListCell from './TorrentListCell';

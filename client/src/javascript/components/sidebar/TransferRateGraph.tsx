@@ -1,7 +1,7 @@
 import {area, curveMonotoneX, line} from 'd3-shape';
 import {FC, MutableRefObject, useRef, useState} from 'react';
 import {max} from 'd3-array';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {scaleLinear} from 'd3-scale';
 
 import type {TransferDirection, TransferHistory} from '@shared/types/TransferData';

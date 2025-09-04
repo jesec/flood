@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {computed} from 'mobx';
 import {FC} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
 import {css} from '@client/styled-system/css';
