@@ -4,11 +4,11 @@ import {useLingui} from '@lingui/react';
 import {Settings} from '@client/ui/icons';
 import UIStore from '@client/stores/UIStore';
 
-import Tooltip from '../general/Tooltip';
+import Tooltip, {TooltipHandle} from '../general/Tooltip';
 
 const SettingsButton: FC = () => {
   const {i18n} = useLingui();
-  const tooltipRef = useRef<Tooltip>(null);
+  const tooltipRef = useRef<TooltipHandle>(null);
 
   return (
     <Tooltip

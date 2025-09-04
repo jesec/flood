@@ -10,7 +10,7 @@ import type {FloodSettings} from '@shared/types/FloodSettings';
 import type {TorrentListColumn} from '@client/constants/TorrentListColumns';
 
 import SortableList from '../../../general/SortableList';
-import Tooltip from '../../../general/Tooltip';
+import Tooltip, {TooltipHandle} from '../../../general/Tooltip';
 
 interface TorrentListColumnsListProps {
   torrentListViewSize: FloodSettings['torrentListViewSize'];
@@ -21,7 +21,7 @@ const TorrentListColumnsList: FC<TorrentListColumnsListProps> = ({
   torrentListViewSize,
   onSettingsChange,
 }: TorrentListColumnsListProps) => {
-  const tooltipRef = useRef<Tooltip>(null);
+  const tooltipRef = useRef<TooltipHandle>(null);
 
   const [torrentListColumns, setTorrentListColumns] = useState([
     ...SettingStore.floodSettings.torrentListColumns.filter((column) => TorrentListColumns[column.id] != null).slice(),
