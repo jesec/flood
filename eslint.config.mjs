@@ -19,7 +19,7 @@ export default [
       '*.min.js',
       'cypress/**',
       '**/*.d.ts',
-      'client/src/javascript/styled-system/**',
+      '**/styled-system/**',
     ],
   },
 
@@ -132,7 +132,6 @@ export default [
       'react/prop-types': 'off', // We use TypeScript
       'react/no-deprecated': 'off', // For CRA parity
       'react/display-name': 'off', // Allow anonymous components
-      'react/no-unknown-property': ['error', {ignore: ['css']}], // Allow emotion css prop
     },
   },
 

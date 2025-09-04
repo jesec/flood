@@ -3,6 +3,7 @@ import classnames from 'classnames';
 import {DndContext, KeyboardSensor, MouseSensor, TouchSensor, useSensor} from '@dnd-kit/core';
 import {FC, MouseEvent, ReactNode, useState} from 'react';
 import {restrictToParentElement, restrictToVerticalAxis} from '@dnd-kit/modifiers';
+import {css} from '@client/styled-system/css';
 
 import SortableListItem from './SortableListItem';
 
@@ -32,7 +33,7 @@ const SortableList: FC<SortableListProps> = ({
 
   return (
     <div
-      css={{width: '100%', touchAction: 'none'}}
+      className={css({width: '100%', touchAction: 'none'})}
       role="none"
       onMouseDown={(event) => {
         if (onMouseDown) {

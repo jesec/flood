@@ -2,7 +2,7 @@ import React, {Component, createRef, CSSProperties, ReactNode} from 'react';
 import classnames from 'classnames';
 import ReactDOM from 'react-dom';
 
-import type {SerializedStyles} from '@emotion/react';
+import {css} from '@client/styled-system/css';
 
 type Align = 'start' | 'center' | 'end';
 
@@ -32,7 +32,7 @@ interface TooltipProps {
   className?: string;
   contentClassName?: string;
   wrapperClassName?: string;
-  styles?: SerializedStyles | SerializedStyles[];
+  styles?: string | string[];
   content: ReactNode;
   onOpen: () => void;
   onClose: () => void;
@@ -408,16 +408,16 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
     return (
       <div
         aria-label={typeof content === 'string' ? content : undefined}
-        className={wrapperClassName}
-        css={[
-          {
-            ':focus': {
+        className={classnames(
+          wrapperClassName,
+          css({
+            _focus: {
               outline: 'none',
               WebkitTapHighlightColor: 'transparent',
             },
-          },
-          styles,
-        ]}
+          }),
+          Array.isArray(styles) ? styles : styles ? [styles] : undefined,
+        )}
         tabIndex={0}
         role="button"
         onClick={onClick}

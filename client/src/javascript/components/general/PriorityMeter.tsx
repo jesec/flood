@@ -1,6 +1,6 @@
-import {css} from '@emotion/react';
 import React, {FC, ReactNode, useState} from 'react';
 import {useLingui} from '@lingui/react';
+import {css} from '@client/styled-system/css';
 
 import PriorityLevels from '../../constants/PriorityLevels';
 
@@ -75,24 +75,23 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   );
 
   const styles = css({
-    ':focus': {
+    _focus: {
       outline: 'none',
       WebkitTapHighlightColor: 'transparent',
     },
-    ':focus-visible': {
+    _focusVisible: {
       outline: 'dashed',
     },
   });
 
   return clickHandled ? (
-    <div className="priority-meter__wrapper" css={styles}>
+    <div className={`priority-meter__wrapper ${styles}`}>
       {levelElement}
       {labelElement}
     </div>
   ) : (
     <button
-      className="priority-meter__wrapper"
-      css={styles}
+      className={`priority-meter__wrapper ${styles}`}
       type="button"
       onClick={() => {
         changePriority();

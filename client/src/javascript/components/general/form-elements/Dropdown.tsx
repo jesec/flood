@@ -5,6 +5,7 @@ import {observer} from 'mobx-react';
 import uniqueId from 'lodash/uniqueId';
 import {useKeyPressEvent} from 'react-use';
 
+import {css} from '@client/styled-system/css';
 import UIStore from '@client/stores/UIStore';
 
 interface DropdownButtonProps {
@@ -22,15 +23,17 @@ const DropdownButton: FC<DropdownButtonProps> = ({className, label, isFocusHandl
   ) : (
     <button
       type="button"
-      className={className}
-      css={{
-        width: '100%',
-        height: '100%',
-        textAlign: 'left',
-        ':focus-visible': {
-          outline: 'dashed',
-        },
-      }}
+      className={classnames(
+        className,
+        css({
+          width: '100%',
+          height: '100%',
+          textAlign: 'left',
+          _focusVisible: {
+            outline: 'dashed',
+          },
+        }),
+      )}
       onClick={onClick}
     >
       {label}

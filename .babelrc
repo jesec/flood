@@ -1,8 +1,4 @@
 {
-  "presets": [
-    "@babel/env",
-    "@babel/typescript",
-    ["@babel/react", {"runtime": "automatic", "importSource": "@emotion/react"}]
-  ],
-  "plugins": [["@babel/plugin-proposal-decorators", {"legacy": true}], "@emotion/babel-plugin"]
+  "presets": ["@babel/env", "@babel/typescript", ["@babel/react", {"runtime": "automatic"}]],
+  "plugins": [["@babel/plugin-proposal-decorators", {"legacy": true}]]
 }
