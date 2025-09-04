@@ -76,3 +76,11 @@ taskfile.yaml
 ## Panda
 styled-system
 styled-system-studio
+
+# Playwright
+.playwright-mcp
+
+# Storybook
+css-snapshots/
+*storybook.log
+storybook-static
