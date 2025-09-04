@@ -1,6 +1,7 @@
+import {defineConfig} from '@lingui/cli';
 import {formatter} from '@lingui/format-json';
 
-export default {
+export default defineConfig({
   locales: [
     'af',
     'ar',
@@ -41,4 +42,4 @@ export default {
     },
   ],
   format: formatter({style: 'minimal'}),
-};
+});
