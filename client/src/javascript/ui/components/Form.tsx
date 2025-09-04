@@ -1,4 +1,4 @@
-import {Component, FormEvent, ReactNode} from 'react';
+import React, {Component, FormEvent, ReactNode} from 'react';
 
 import {getDataFromForm, resetFormData} from './util/forms';
 

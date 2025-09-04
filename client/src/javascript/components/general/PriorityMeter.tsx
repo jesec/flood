@@ -1,5 +1,5 @@
 import {css} from '@emotion/react';
-import {FC, ReactNode, useState} from 'react';
+import React, {FC, ReactNode, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
 import PriorityLevels from '../../constants/PriorityLevels';
@@ -44,7 +44,6 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   };
 
   if (changePriorityFuncRef != null) {
-    // eslint-disable-next-line no-param-reassign
     changePriorityFuncRef.current = changePriority;
   }
 

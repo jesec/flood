@@ -1,4 +1,4 @@
-import {Component, createRef, CSSProperties, ReactNode} from 'react';
+import React, {Component, createRef, CSSProperties, ReactNode} from 'react';
 import classnames from 'classnames';
 import ReactDOM from 'react-dom';
 
