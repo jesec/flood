@@ -3,7 +3,7 @@ import {useLingui} from '@lingui/react';
 
 import {css} from '@client/styled-system/css';
 import ConfigStore from '@client/stores/ConfigStore';
-import {Form, FormRow} from '@client/ui';
+import {Form, FormHandle, FormRow} from '@client/ui';
 import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -28,7 +28,7 @@ type AddTorrentsByURLFormData = {
 };
 
 const AddTorrentsByURL: FC = () => {
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const textboxRef = useRef<HTMLInputElement>(null);
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
 

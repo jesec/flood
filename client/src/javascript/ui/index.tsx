@@ -3,6 +3,7 @@ export {default as Checkbox} from './components/Checkbox';
 export {default as Container} from './components/Container';
 export {default as ContextMenu} from './components/ContextMenu';
 export {default as Form} from './components/Form';
+export type {FormHandle} from './components/Form';
 export {default as FormElementAddon} from './components/FormElementAddon';
 export {default as FormError} from './components/FormError';
 export {default as FormGroup} from './components/FormGroup';
