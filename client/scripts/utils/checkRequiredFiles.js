@@ -10,7 +10,7 @@ function checkRequiredFiles(files) {
       fs.accessSync(filePath, fs.constants.F_OK);
     });
     return true;
-  } catch (err) {
+  } catch {
     const dirName = path.dirname(currentFilePath);
     const fileName = path.basename(currentFilePath);
     console.log(chalk.red('Could not find a required file.'));

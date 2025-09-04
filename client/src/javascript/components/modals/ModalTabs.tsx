@@ -4,7 +4,7 @@ import {FC, ReactNode} from 'react';
 export interface Tab {
   id?: string;
   label: ReactNode;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   content: FC<any>;
   props?: Record<string, unknown>;
   modalContentClasses?: string;

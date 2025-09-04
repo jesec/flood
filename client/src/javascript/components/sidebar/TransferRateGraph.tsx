@@ -62,7 +62,6 @@ const TransferRateGraph: FC<TransferRateGraphProps> = observer(
       ])
       .range([height - 10, 10]);
 
-    // eslint-disable-next-line no-param-reassign
     handlerRefs.current = {
       handleMouseMove: (mouseX: number) => {
         hoverPoint.current = xScale.invert(mouseX);

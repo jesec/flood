@@ -108,6 +108,8 @@ module.exports = {
       extensions: ['js', 'jsx', 'ts', 'tsx'],
       emitWarning: true,
       threads: true,
+      configType: 'flat',
+      eslintPath: require.resolve('eslint'),
     }),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({

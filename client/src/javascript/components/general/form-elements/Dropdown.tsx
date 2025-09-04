@@ -126,7 +126,6 @@ const Dropdown = observer(
     };
 
     if (dropdownClickRef) {
-      // eslint-disable-next-line no-param-reassign
       dropdownClickRef.current = handleDropdownClick;
     }
 
@@ -146,7 +145,6 @@ const Dropdown = observer(
       const listElement = (
         <ul className="dropdown__items" key="dropdown-items">
           {menuItems.map((items, index) => (
-            // eslint-disable-next-line react/no-array-index-key
             <div className="dropdown__list" key={index}>
               {items.map((item, itemIndex) => {
                 const classes = classnames('dropdown__item menu__item', item.className, {
@@ -155,7 +153,6 @@ const Dropdown = observer(
                 });
 
                 return (
-                  // eslint-disable-next-line react/no-array-index-key
                   <li className={classes} key={itemIndex}>
                     <button
                       type="button"
