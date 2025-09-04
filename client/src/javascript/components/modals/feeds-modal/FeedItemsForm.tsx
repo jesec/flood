@@ -1,5 +1,5 @@
 import {FC, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
 import {Button, Form, FormHandle, FormRow, Select, SelectItem, Textbox} from '@client/ui';

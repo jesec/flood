@@ -1,6 +1,6 @@
 import {ComponentProps, FC, forwardRef, RefCallback, UIEvent, useEffect, useRef} from 'react';
 import {FixedSizeList} from 'react-window';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {OverlayScrollbarsComponent} from 'overlayscrollbars-react';
 import {useWindowSize} from 'react-use';
 

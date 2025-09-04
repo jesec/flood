@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {computed} from 'mobx';
 import {CSSProperties, FC, KeyboardEvent, MouseEvent, TouchEvent, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLongPress} from 'react-use';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';

@@ -1,5 +1,5 @@
 import {CSSProperties, FC, forwardRef, KeyboardEvent, MouseEvent, ReactElement, TouchEvent} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import {css} from '@client/styled-system/css';

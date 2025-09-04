@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {forwardRef, MutableRefObject, ReactElement, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 import {useEnsuredForwardedRef} from 'react-use';
 

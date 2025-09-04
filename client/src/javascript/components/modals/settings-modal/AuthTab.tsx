@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FC, useEffect, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
 import {Button, Checkbox, Form, FormHandle, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '@client/ui';

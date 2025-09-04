@@ -1,7 +1,7 @@
 import {FC, ReactNode, useEffect} from 'react';
 import {i18n} from '@lingui/core';
 import {I18nProvider} from '@lingui/react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 import detectLocale from '@client/util/detectLocale';
 import Languages from '@client/constants/Languages';

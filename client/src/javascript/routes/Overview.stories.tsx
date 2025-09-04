@@ -37,7 +37,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 // Direct component without router wrapper - Storybook provides the router
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 const OverviewWrapper = observer(() => <Overview />);
 

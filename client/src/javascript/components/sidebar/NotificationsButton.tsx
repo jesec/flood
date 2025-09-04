@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {FC, useEffect, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import FloodActions from '@client/actions/FloodActions';

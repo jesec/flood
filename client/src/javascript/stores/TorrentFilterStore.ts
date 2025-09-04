@@ -1,4 +1,4 @@
-import {computed, makeAutoObservable} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 import jsonpatch, {Operation} from 'fast-json-patch';
 import {KeyboardEvent, MouseEvent, TouchEvent} from 'react';
 
@@ -24,7 +24,7 @@ class TorrentFilterStore {
     trackerSizes: {},
   };
 
-  @computed get isFilterActive() {
+  get isFilterActive() {
     return (
       this.locationFilter.length ||
       this.searchFilter !== '' ||
