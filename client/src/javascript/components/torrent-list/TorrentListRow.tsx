@@ -118,6 +118,10 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
     onTouchStart(e);
   };
 
+  const torrent = TorrentStore.torrents?.[hash];
+  const torrentTestId = `torrent-${hash}`;
+  const torrentStatus = status?.join('-') || 'unknown';
+
   if (isCondensed) {
     return (
       <TorrentListRowCondensed
@@ -131,6 +135,11 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
         handleTouchStart={onTouchStartHooked}
         handleTouchEnd={onTouchEnd}
         handleKeyPress={(e) => onKeyPress(hash, e)}
+        data-testid={torrentTestId}
+        data-torrent-status={torrentStatus}
+        data-torrent-name={torrent?.name}
+        data-is-selected={isSelected}
+        data-view-size="condensed"
       />
     );
   }
@@ -147,6 +156,11 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
       handleTouchStart={onTouchStartHooked}
       handleTouchEnd={onTouchEnd}
       handleKeyPress={(e) => onKeyPress(hash, e)}
+      data-testid={torrentTestId}
+      data-torrent-status={torrentStatus}
+      data-torrent-name={torrent?.name}
+      data-is-selected={isSelected}
+      data-view-size="expanded"
     />
   );
 });

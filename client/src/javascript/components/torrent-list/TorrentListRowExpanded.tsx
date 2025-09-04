@@ -21,6 +21,11 @@ interface TorrentListRowExpandedProps {
   handleTouchStart: (event: TouchEvent) => void;
   handleTouchEnd: (event: TouchEvent) => void;
   handleKeyPress: (event: KeyboardEvent) => void;
+  'data-testid'?: string;
+  'data-torrent-status'?: string;
+  'data-torrent-name'?: string;
+  'data-is-selected'?: boolean;
+  'data-view-size'?: string;
 }
 
 const TorrentListCellPercentageNumber: FC<TorrentListCellContentProps> = observer(
@@ -50,6 +55,7 @@ const TorrentListRowExpanded = observer(
         handleTouchStart,
         handleTouchEnd,
         handleKeyPress,
+        ...dataAttributes
       }: TorrentListRowExpandedProps,
       ref,
     ) => {
@@ -122,6 +128,7 @@ const TorrentListRowExpanded = observer(
           onTouchEnd={handleTouchEnd}
           onKeyPress={handleKeyPress}
           ref={ref}
+          {...dataAttributes}
         >
           <div className={css({alignItems: 'center', display: 'flex'})}>
             {primarySection}
