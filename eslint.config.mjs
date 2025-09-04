@@ -11,7 +11,16 @@ import typescriptEslint from 'typescript-eslint';
 export default [
   // Global ignores
   {
-    ignores: ['dist/**', 'dist-pkg/**', 'node_modules/**', 'coverage/**', '*.min.js', 'cypress/**', '**/*.d.ts'],
+    ignores: [
+      'dist/**',
+      'dist-pkg/**',
+      'node_modules/**',
+      'coverage/**',
+      '*.min.js',
+      'cypress/**',
+      '**/*.d.ts',
+      'client/src/javascript/styled-system/**',
+    ],
   },
 
   // Base JavaScript config
