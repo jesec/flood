@@ -73,6 +73,7 @@ const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
             className={inputClasses}
             defaultValue={defaultValue}
             placeholder={placeholder}
+            id={id}
             name={id}
             onChange={onChange}
             onClick={onClick}
