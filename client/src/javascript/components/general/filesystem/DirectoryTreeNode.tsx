@@ -1,6 +1,7 @@
 import classnames from 'classnames';
 import {FC, useState} from 'react';
 
+import {css} from '@client/styled-system/css';
 import {Checkbox} from '@client/ui';
 import {FolderClosedSolid, FolderOpenSolid} from '@client/ui/icons';
 
@@ -44,21 +45,21 @@ const DirectoryTreeNode: FC<DirectoryTreeNodeProps> = ({
         className={classnames(
           'directory-tree__node',
           'directory-tree__node--selectable directory-tree__node--directory',
+          css({
+            width: '100%',
+            textAlign: 'left',
+            _focus: {
+              outline: 'none',
+              WebkitTapHighlightColor: 'transparent',
+            },
+            _focusVisible: {
+              outline: 'dashed',
+            },
+          }),
           {
             'is-expanded': expanded,
           },
         )}
-        css={{
-          width: '100%',
-          textAlign: 'left',
-          ':focus': {
-            outline: 'none',
-            WebkitTapHighlightColor: 'transparent',
-          },
-          ':focus-visible': {
-            outline: 'dashed',
-          },
-        }}
         type="button"
         onClick={() => setExpanded(!expanded)}
         title={directoryName}

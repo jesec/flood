@@ -72,3 +72,7 @@ cypress/videos
 cypress/screenshots
 
 taskfile.yaml
+
+## Panda
+styled-system
+styled-system-studio

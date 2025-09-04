@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
     "sourceMap": true,
     "target": "esnext",
     "moduleResolution": "Bundler",

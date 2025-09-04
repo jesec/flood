@@ -1,7 +1,7 @@
-import {css} from '@emotion/react';
 import {FC, ReactNode, ReactNodeArray} from 'react';
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
+import {css} from '@client/styled-system/css';
 
 import * as lodash from 'lodash';
 

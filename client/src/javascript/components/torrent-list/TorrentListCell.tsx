@@ -4,6 +4,7 @@ import {FC} from 'react';
 import {observer} from 'mobx-react';
 import {Trans, useLingui} from '@lingui/react';
 
+import {css} from '@client/styled-system/css';
 import {
   CalendarFinished,
   CalendarCreated,
@@ -189,9 +190,15 @@ const TorrentListCell: FC<TorrentListCellProps> = observer(
     return (
       <div
         className={
-          classNameOverride ? className : classnames('torrent__detail', `torrent__detail--${column}`, className)
+          classNameOverride
+            ? className
+            : classnames(
+                'torrent__detail',
+                `torrent__detail--${column}`,
+                className,
+                css({pointerEvents: 'none', userSelect: 'none'}),
+              )
         }
-        css={{pointerEvents: 'none', userSelect: 'none'}}
         role="cell"
         style={{width: `${width}px`}}
       >
