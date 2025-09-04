@@ -53,7 +53,9 @@ const ToggleInput: FC<ToggleInputProps> = ({
           defaultChecked={defaultChecked}
           checked={checked}
           className="toggle-input__element"
+          id={id}
           name={type === 'radio' ? groupID : id}
+          data-testid={`${type}-${id}`}
           onClick={(event) => {
             if (inputRef.current != null) {
               dispatchChangeEvent(inputRef.current);
