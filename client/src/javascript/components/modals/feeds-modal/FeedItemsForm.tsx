@@ -2,7 +2,7 @@ import {FC, useRef, useState} from 'react';
 import {observer} from 'mobx-react';
 import {Trans, useLingui} from '@lingui/react';
 
-import {Button, Form, FormRow, Select, SelectItem, Textbox} from '@client/ui';
+import {Button, Form, FormHandle, FormRow, Select, SelectItem, Textbox} from '@client/ui';
 import FeedActions from '@client/actions/FeedActions';
 import FeedStore from '@client/stores/FeedStore';
 import UIStore from '@client/stores/UIStore';
@@ -12,7 +12,7 @@ import ModalFormSectionHeader from '../ModalFormSectionHeader';
 
 const FeedItemsForm: FC = observer(() => {
   const {i18n} = useLingui();
-  const manualAddingFormRef = useRef<Form>(null);
+  const manualAddingFormRef = useRef<FormHandle>(null);
   const [selectedFeedID, setSelectedFeedID] = useState<string | null>(null);
 
   const {feeds} = FeedStore;

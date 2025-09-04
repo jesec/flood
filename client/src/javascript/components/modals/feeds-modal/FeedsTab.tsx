@@ -1,7 +1,7 @@
 import {FC, ReactElement, useRef, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 
-import {Button, Form, FormError, FormRow, FormRowItem} from '@client/ui';
+import {Button, Form, FormHandle, FormError, FormRow, FormRowItem} from '@client/ui';
 import FeedActions from '@client/actions/FeedActions';
 import {isNotEmpty, isPositiveInteger, isURLValid} from '@client/util/validators';
 
@@ -62,7 +62,7 @@ const defaultFeed: AddFeedOptions = {
 };
 
 const FeedsTab: FC = () => {
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const {i18n} = useLingui();
   const [currentFeed, setCurrentFeed] = useState<Feed | null>(null);
   const [errors, setErrors] = useState<Record<string, string | undefined>>({});
