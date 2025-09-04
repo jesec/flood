@@ -1,6 +1,15 @@
-import React, {Component, createRef, CSSProperties, ReactNode} from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useImperativeHandle,
+  forwardRef,
+  CSSProperties,
+  ReactNode,
+} from 'react';
 import classnames from 'classnames';
-import ReactDOM from 'react-dom';
+import {createPortal} from 'react-dom';
 
 import {css} from '@client/styled-system/css';
 
@@ -23,8 +32,8 @@ interface TooltipProps {
   anchor?: Align;
   position?: Position;
   offset?: number;
-  width: number;
-  maxWidth: number;
+  width?: number;
+  maxWidth?: number;
   interactive?: boolean;
   suppress?: boolean;
   stayOpen?: boolean;
@@ -34,10 +43,10 @@ interface TooltipProps {
   wrapperClassName?: string;
   styles?: string | string[];
   content: ReactNode;
-  onOpen: () => void;
-  onClose: () => void;
+  onOpen?: () => void;
+  onClose?: () => void;
   onClick?: () => void;
-  onMouseLeave: () => void;
+  onMouseLeave?: () => void;
 }
 
 interface TooltipStates {
@@ -46,6 +55,11 @@ interface TooltipStates {
   position?: Position;
   isOpen: boolean;
   wasTriggeredClose: boolean;
+}
+
+export interface TooltipHandle {
+  dismissTooltip: (forceClose?: boolean) => void;
+  isOpen: () => boolean;
 }
 
 const getNodeClearance = (domNode: HTMLElement) => {
@@ -143,251 +157,285 @@ const getAnchor = (
 
 const ARROW_SIZE = 7;
 
-class Tooltip extends Component<TooltipProps, TooltipStates> {
-  container = window;
-  triggerNode = createRef<HTMLDivElement>();
-  tooltipNode = createRef<HTMLDivElement>();
-
-  static defaultProps: Partial<TooltipProps> = {
-    align: 'center',
-    anchor: 'center',
-    className: 'tooltip',
-    contentClassName: 'tooltip__content',
-    styles: undefined,
-    interactive: false,
-    offset: 0,
-    position: 'top',
-    stayOpen: false,
-    suppress: false,
-    wrapperClassName: 'tooltip__wrapper',
-    wrapText: false,
-  };
-
-  constructor(props: TooltipProps) {
-    super(props);
-
-    this.state = {
-      isOpen: false,
-      wasTriggeredClose: false,
-    };
-  }
-
-  componentWillUnmount(): void {
-    this.removeScrollListener();
-  }
-
-  getCoordinates(
-    position: Position,
-    clearance: Clearance,
-    tooltipWidth: number,
-    tooltipHeight: number,
-  ): Pick<Coordinates, 'left' | 'top'> {
-    const {align, offset = 0} = this.props;
-    let top = null;
-
-    switch (position) {
-      case 'left':
-        return {
-          top: clearance.boundingRect.top + clearance.boundingRect.height / 2,
-          left: clearance.boundingRect.left - tooltipWidth + ARROW_SIZE + offset,
-        };
-      case 'right':
-        return {
-          top: clearance.boundingRect.top + clearance.boundingRect.height / 2,
-          left: clearance.boundingRect.right + offset,
-        };
-      case 'top':
-        top = clearance.boundingRect.top - tooltipHeight + ARROW_SIZE + offset;
-        break;
-      case 'bottom':
-        top = clearance.boundingRect.bottom + offset;
-        break;
-      default:
-    }
-
-    switch (align) {
-      case 'start':
-        return {
-          top: top as number,
-          left: clearance.boundingRect.left,
-        };
-      case 'center':
-        return {
-          top: top as number,
-          left: clearance.boundingRect.left + clearance.boundingRect.width / 2,
-        };
-      case 'end':
-        return {
-          top: top as number,
-          left: clearance.boundingRect.left + clearance.boundingRect.width - tooltipWidth,
-        };
-      default:
-    }
-
-    return {
-      top: 0,
-      left: 0,
-    };
-  }
-
-  getIdealLocation(
-    anchor: Align,
-    position: Position,
-  ): {
-    anchor: Align;
-    position: Position;
-    coordinates: Pick<Coordinates, 'left' | 'top'>;
-  } {
-    if (this.triggerNode.current == null || this.tooltipNode.current == null || anchor == null) {
-      return {
-        anchor,
-        position,
-        coordinates: {left: 0, top: 0},
-      };
-    }
-
-    const clearance = getNodeClearance(this.triggerNode.current);
-    const tooltipRect = this.tooltipNode.current.getBoundingClientRect();
-    const tooltipHeight = tooltipRect.height + ARROW_SIZE;
-    const tooltipWidth = tooltipRect.width + ARROW_SIZE;
-
-    const newPosition = getPosition(position, clearance, tooltipWidth, tooltipHeight);
-
-    return {
-      anchor: getAnchor(
-        newPosition !== 'left' && newPosition !== 'right',
-        anchor,
-        clearance,
-        tooltipWidth,
-        tooltipHeight,
-      ),
-      position: newPosition,
-      coordinates: this.getCoordinates(newPosition, clearance, tooltipWidth, tooltipHeight),
-    };
-  }
-
-  dismissTooltip = (forceClose?: boolean): void => {
-    const {stayOpen, onClose} = this.props;
-    const {isOpen} = this.state;
-
-    if ((!stayOpen || forceClose) && isOpen) {
-      this.setState({isOpen: false});
-      this.removeScrollListener();
-
-      if (onClose) {
-        onClose();
-      }
-    }
-  };
-
-  handleTooltipMouseEnter = (): void => {
-    const {interactive} = this.props;
-    const {wasTriggeredClose} = this.state;
-
-    if (interactive && !wasTriggeredClose) {
-      this.setState({isOpen: true});
-      this.addScrollListener();
-    }
-  };
-
-  handleTooltipMouseLeave = (): void => {
-    this.dismissTooltip();
-  };
-
-  handleMouseEnter = (forceOpen?: boolean): void => {
-    const {props} = this;
-
-    if (props.suppress && !forceOpen) {
-      return;
-    }
-
-    if (props.anchor == null || props.position == null) {
-      return;
-    }
-
-    const {anchor, position, coordinates} = this.getIdealLocation(props.anchor, props.position);
-
-    this.setState({
-      anchor,
-      isOpen: true,
-      position,
-      coordinates,
-      wasTriggeredClose: false,
-    });
-    this.addScrollListener();
-
-    if (props.onOpen) {
-      props.onOpen();
-    }
-  };
-
-  handleMouseLeave = (): void => {
-    this.dismissTooltip();
-
-    const {onMouseLeave} = this.props;
-
-    if (onMouseLeave) {
-      onMouseLeave();
-    }
-  };
-
-  isOpen = (): boolean => {
-    const {isOpen} = this.state;
-
-    return isOpen;
-  };
-
-  addScrollListener(): void {
-    this.container.addEventListener('scroll', () => this.dismissTooltip());
-  }
-
-  removeScrollListener(): void {
-    if (this.container) {
-      this.container.removeEventListener('scroll', () => this.dismissTooltip());
-    }
-  }
-
-  render(): ReactNode {
-    const {
-      anchor: defaultAnchor,
-      position: defaultPosition,
+const Tooltip = forwardRef<TooltipHandle, TooltipProps>(
+  (
+    {
       children,
-      align,
-      className,
-      interactive,
-      wrapText,
+      align = 'center',
+      anchor = 'center',
+      position = 'top',
+      offset = 0,
       width,
       maxWidth,
-      wrapperClassName,
-      contentClassName,
+      interactive = false,
+      suppress = false,
+      stayOpen = false,
+      wrapText = false,
+      className = 'tooltip',
+      contentClassName = 'tooltip__content',
+      wrapperClassName = 'tooltip__wrapper',
       styles,
       content,
+      onOpen,
+      onClose,
       onClick,
-    } = this.props;
-    const {anchor: stateAnchor, position: statePosition, coordinates, isOpen} = this.state;
-    let tooltipStyle: CSSProperties = {};
+      onMouseLeave,
+    },
+    ref,
+  ) => {
+    const [state, setState] = useState<TooltipStates>({
+      isOpen: false,
+      wasTriggeredClose: false,
+      anchor: undefined,
+      position: undefined,
+      coordinates: undefined,
+    });
 
-    // Get the anchor and position from state if possible. If not, get it from
-    // the props.
-    const anchor = stateAnchor || defaultAnchor;
-    const position = statePosition || defaultPosition;
+    const container = useRef<Window>(window);
+    const triggerNode = useRef<HTMLDivElement>(null);
+    const tooltipNode = useRef<HTMLDivElement>(null);
+    const scrollListenerRef = useRef<(() => void) | null>(null);
+
+    // Store refs to avoid stale closures
+    const stateRef = useRef(state);
+    const propsRef = useRef({stayOpen, onClose});
+
+    // Update refs when values change
+    useEffect(() => {
+      stateRef.current = state;
+    }, [state]);
+
+    useEffect(() => {
+      propsRef.current = {stayOpen, onClose};
+    }, [stayOpen, onClose]);
+
+    const getCoordinates = useCallback(
+      (
+        tooltipPosition: Position,
+        clearance: Clearance,
+        tooltipWidth: number,
+        tooltipHeight: number,
+      ): Pick<Coordinates, 'left' | 'top'> => {
+        let top = null;
+
+        switch (tooltipPosition) {
+          case 'left':
+            return {
+              top: clearance.boundingRect.top + clearance.boundingRect.height / 2,
+              left: clearance.boundingRect.left - tooltipWidth + ARROW_SIZE + offset,
+            };
+          case 'right':
+            return {
+              top: clearance.boundingRect.top + clearance.boundingRect.height / 2,
+              left: clearance.boundingRect.right + offset,
+            };
+          case 'top':
+            top = clearance.boundingRect.top - tooltipHeight + ARROW_SIZE + offset;
+            break;
+          case 'bottom':
+            top = clearance.boundingRect.bottom + offset;
+            break;
+          default:
+        }
+
+        switch (align) {
+          case 'start':
+            return {
+              top: top as number,
+              left: clearance.boundingRect.left,
+            };
+          case 'center':
+            return {
+              top: top as number,
+              left: clearance.boundingRect.left + clearance.boundingRect.width / 2,
+            };
+          case 'end':
+            return {
+              top: top as number,
+              left: clearance.boundingRect.left + clearance.boundingRect.width - tooltipWidth,
+            };
+          default:
+        }
+
+        return {
+          top: 0,
+          left: 0,
+        };
+      },
+      [align, offset],
+    );
+
+    const getIdealLocation = useCallback(
+      (anchorProp: Align, positionProp: Position) => {
+        if (triggerNode.current == null || tooltipNode.current == null || anchorProp == null) {
+          return {
+            anchor: anchorProp,
+            position: positionProp,
+            coordinates: {left: 0, top: 0},
+          };
+        }
+
+        const clearance = getNodeClearance(triggerNode.current);
+        const tooltipRect = tooltipNode.current.getBoundingClientRect();
+        const tooltipHeight = tooltipRect.height + ARROW_SIZE;
+        const tooltipWidth = tooltipRect.width + ARROW_SIZE;
+
+        const newPosition = getPosition(positionProp, clearance, tooltipWidth, tooltipHeight);
+
+        return {
+          anchor: getAnchor(
+            newPosition !== 'left' && newPosition !== 'right',
+            anchorProp,
+            clearance,
+            tooltipWidth,
+            tooltipHeight,
+          ),
+          position: newPosition,
+          coordinates: getCoordinates(newPosition, clearance, tooltipWidth, tooltipHeight),
+        };
+      },
+      [getCoordinates],
+    );
+
+    // Create a stable dismiss function that doesn't change
+    const dismissTooltipInternal = useCallback(() => {
+      const currentState = stateRef.current;
+      const currentProps = propsRef.current;
+
+      if (currentState.isOpen) {
+        setState((prevState) => ({...prevState, isOpen: false}));
+
+        // Remove scroll listener
+        if (scrollListenerRef.current && container.current) {
+          container.current.removeEventListener('scroll', scrollListenerRef.current);
+          scrollListenerRef.current = null;
+        }
+
+        if (currentProps.onClose) {
+          currentProps.onClose();
+        }
+      }
+    }, []);
+
+    const dismissTooltip = useCallback(
+      (forceClose?: boolean) => {
+        const currentProps = propsRef.current;
+
+        if (!currentProps.stayOpen || forceClose) {
+          dismissTooltipInternal();
+        }
+      },
+      [dismissTooltipInternal],
+    );
+
+    const handleTooltipMouseEnter = useCallback(() => {
+      if (interactive && !stateRef.current.wasTriggeredClose) {
+        setState((prevState) => ({...prevState, isOpen: true}));
+
+        // Add scroll listener if not already added
+        if (!scrollListenerRef.current && container.current) {
+          // Store the exact same function reference
+          const listener = () => dismissTooltipInternal();
+          scrollListenerRef.current = listener;
+          container.current.addEventListener('scroll', listener);
+        }
+      }
+    }, [interactive, dismissTooltipInternal]);
+
+    const handleTooltipMouseLeave = useCallback(() => {
+      dismissTooltip();
+    }, [dismissTooltip]);
+
+    const handleMouseEnter = useCallback(
+      (forceOpen?: boolean) => {
+        if (suppress && !forceOpen) {
+          return;
+        }
+
+        if (anchor == null || position == null) {
+          return;
+        }
+
+        const {anchor: newAnchor, position: newPosition, coordinates} = getIdealLocation(anchor, position);
+
+        setState({
+          anchor: newAnchor,
+          isOpen: true,
+          position: newPosition,
+          coordinates,
+          wasTriggeredClose: false,
+        });
+
+        // Add scroll listener if not already added
+        if (!scrollListenerRef.current && container.current) {
+          // Store the exact same function reference
+          const listener = () => dismissTooltipInternal();
+          scrollListenerRef.current = listener;
+          container.current.addEventListener('scroll', listener);
+        }
+
+        if (onOpen) {
+          onOpen();
+        }
+      },
+      [suppress, anchor, position, getIdealLocation, dismissTooltipInternal, onOpen],
+    );
+
+    const handleMouseLeave = useCallback(() => {
+      dismissTooltip();
+
+      if (onMouseLeave) {
+        onMouseLeave();
+      }
+    }, [dismissTooltip, onMouseLeave]);
+
+    const isOpen = useCallback(() => {
+      return stateRef.current.isOpen;
+    }, []);
+
+    // Expose methods via ref
+    useImperativeHandle(
+      ref,
+      () => ({
+        dismissTooltip,
+        isOpen,
+      }),
+      [dismissTooltip, isOpen],
+    );
+
+    // Cleanup on unmount
+    useEffect(() => {
+      const containerElement = container.current;
+      return () => {
+        if (scrollListenerRef.current && containerElement) {
+          containerElement.removeEventListener('scroll', scrollListenerRef.current);
+          scrollListenerRef.current = null;
+        }
+      };
+    }, []);
+
+    // Get the anchor and position from state if possible. If not, get it from the props.
+    const finalAnchor = state.anchor || anchor;
+    const finalPosition = state.position || position;
 
     const tooltipClasses = classnames(
       className,
-      `tooltip--anchor--${anchor}`,
-      `tooltip--position--${position}`,
+      `tooltip--anchor--${finalAnchor}`,
+      `tooltip--position--${finalPosition}`,
       `tooltip--align--${align}`,
       {
         'is-interactive': interactive,
-        'is-open': isOpen,
+        'is-open': state.isOpen,
         'tooltip--no-wrap': !wrapText,
       },
     );
 
-    if (coordinates) {
+    let tooltipStyle: CSSProperties = {};
+
+    if (state.coordinates) {
       tooltipStyle = {
-        left: coordinates.left,
-        top: coordinates.top,
+        left: state.coordinates.left,
+        top: state.coordinates.top,
       };
     }
 
@@ -420,6 +468,7 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
         )}
         tabIndex={0}
         role="button"
+        data-testid="tooltip-trigger"
         onClick={onClick}
         onKeyPress={(e) => {
           if (e.key === ' ' || e.key === 'Enter') {
@@ -427,24 +476,30 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
             onClick?.();
           }
         }}
-        onFocus={() => this.handleMouseEnter()}
+        onFocus={() => handleMouseEnter()}
         onBlur={() => {
           if (!interactive) {
-            this.handleMouseLeave();
+            handleMouseLeave();
           }
         }}
-        onMouseEnter={() => this.handleMouseEnter()}
-        onMouseLeave={() => this.handleMouseLeave()}
-        ref={this.triggerNode}
+        onMouseEnter={() => handleMouseEnter()}
+        onMouseLeave={() => handleMouseLeave()}
+        ref={triggerNode}
       >
         {children}
-        {ReactDOM.createPortal(
+        {createPortal(
           <div
             className={tooltipClasses}
-            ref={this.tooltipNode}
+            ref={tooltipNode}
             style={tooltipStyle}
-            onMouseEnter={this.handleTooltipMouseEnter}
-            onMouseLeave={this.handleTooltipMouseLeave}
+            role="tooltip"
+            data-testid="tooltip-content"
+            data-visible={state.isOpen ? 'true' : 'false'}
+            data-position={state.position || position}
+            data-align={align}
+            data-wrap={wrapText !== false ? 'true' : 'false'}
+            onMouseEnter={handleTooltipMouseEnter}
+            onMouseLeave={handleTooltipMouseLeave}
           >
             <div className={contentClassName}>{content}</div>
           </div>,
@@ -452,7 +507,9 @@ class Tooltip extends Component<TooltipProps, TooltipStates> {
         )}
       </div>
     );
-  }
-}
+  },
+);
+
+Tooltip.displayName = 'Tooltip';
 
 export default Tooltip;

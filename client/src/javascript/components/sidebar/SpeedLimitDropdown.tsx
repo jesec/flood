@@ -13,7 +13,7 @@ import type {TransferDirection} from '@shared/types/TransferData';
 
 import Dropdown from '../general/form-elements/Dropdown';
 import Size from '../general/Size';
-import Tooltip from '../general/Tooltip';
+import Tooltip, {TooltipHandle} from '../general/Tooltip';
 
 import type {DropdownItem} from '../general/form-elements/Dropdown';
 
@@ -95,7 +95,7 @@ const getSpeedList = ({
 
 const SpeedLimitDropdown: FC = observer(() => {
   const {i18n} = useLingui();
-  const tooltipRef = useRef<Tooltip>(null);
+  const tooltipRef = useRef<TooltipHandle>(null);
   const dropdownClickRef = useRef<() => void>(() => {
     // do nothing.
   });
