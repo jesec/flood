@@ -32,7 +32,7 @@ const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
       defaultValue,
       placeholder,
       autoComplete,
-      type,
+      type = 'text',
       disabled,
       readOnly,
       onChange,
@@ -90,14 +90,5 @@ const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
     );
   },
 );
-
-Textbox.defaultProps = {
-  label: undefined,
-  type: 'text',
-  width: undefined,
-  addonPlacement: undefined,
-  labelOffset: undefined,
-  wrapperClassName: undefined,
-};
 
 export default Textbox;

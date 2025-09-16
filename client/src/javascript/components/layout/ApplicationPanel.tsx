@@ -8,19 +8,18 @@ interface ApplicationContentProps {
   modifier: string;
 }
 
-const ApplicationContent: FC<ApplicationContentProps> = (props: ApplicationContentProps) => {
-  const {children, baseClassName, className, modifier} = props;
-
+const ApplicationContent: FC<ApplicationContentProps> = ({
+  children,
+  baseClassName = 'application__panel',
+  className,
+  modifier,
+}: ApplicationContentProps) => {
   const classes = classnames(baseClassName, {
     [`${baseClassName}--${modifier}`]: baseClassName,
     [className]: className,
   });
 
   return <div className={classes}>{children}</div>;
-};
-
-ApplicationContent.defaultProps = {
-  baseClassName: 'application__panel',
 };
 
 export default ApplicationContent;

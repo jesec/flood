@@ -113,9 +113,4 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
   );
 };
 
-SidebarFilter.defaultProps = {
-  icon: undefined,
-  size: undefined,
-};
-
 export default SidebarFilter;

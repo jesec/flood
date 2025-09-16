@@ -40,10 +40,6 @@ const DropdownButton: FC<DropdownButtonProps> = ({className, label, isFocusHandl
     </button>
   );
 
-DropdownButton.defaultProps = {
-  className: undefined,
-};
-
 export interface DropdownItem<T extends string = string> {
   className?: string;
   displayName: ReactNode;
@@ -76,18 +72,18 @@ interface DropdownProps<T extends string = string> {
 
 const Dropdown = observer(
   <T extends string = string>({
-    baseClassName,
-    dropdownWrapperClass,
-    dropdownButtonClass,
+    baseClassName = 'dropdown',
+    dropdownWrapperClass = 'dropdown',
+    dropdownButtonClass = 'dropdown__trigger',
     dropdownClickRef,
-    direction,
+    direction = 'down',
     header,
-    matchButtonWidth,
+    matchButtonWidth = false,
     menuItems,
-    noWrap,
+    noWrap = false,
     trigger,
     width,
-    isFocusHandled,
+    isFocusHandled = false,
     handleItemSelect,
     onOpen,
   }: DropdownProps<T>) => {
@@ -201,15 +197,5 @@ const Dropdown = observer(
     );
   },
 );
-
-(Dropdown as FC<DropdownProps>).defaultProps = {
-  baseClassName: 'dropdown',
-  direction: 'down',
-  dropdownWrapperClass: 'dropdown',
-  dropdownButtonClass: 'dropdown__trigger',
-  matchButtonWidth: false,
-  noWrap: false,
-  isFocusHandled: false,
-};
 
 export default Dropdown;

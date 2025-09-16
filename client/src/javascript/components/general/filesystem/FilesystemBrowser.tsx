@@ -310,10 +310,4 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
   },
 );
 
-FilesystemBrowser.defaultProps = {
-  selectable: undefined,
-  onItemSelection: undefined,
-  onYieldFocus: undefined,
-};
-
 export default FilesystemBrowser;

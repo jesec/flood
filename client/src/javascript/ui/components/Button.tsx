@@ -27,19 +27,19 @@ export type ButtonProps = Pick<ButtonHTMLAttributes<HTMLButtonElement>, 'disable
 
 const Button: FC<ButtonProps> = ({
   children,
-  type,
-  additionalClassNames,
+  type = 'button',
+  additionalClassNames = '',
   buttonRef,
-  labelOffset,
+  labelOffset = false,
   addonPlacement,
-  priority,
+  priority = 'primary',
   isLoading,
-  disabled,
-  wrap,
-  wrapper,
-  wrapperProps,
-  shrink,
-  grow,
+  disabled = false,
+  wrap = true,
+  wrapper = FormRowItem,
+  wrapperProps = {width: 'auto'},
+  shrink = false,
+  grow = false,
   onClick,
 }: ButtonProps) => {
   const addonNodes: Array<ReactElement> = [];
@@ -103,19 +103,6 @@ const Button: FC<ButtonProps> = ({
   }
 
   return content;
-};
-
-Button.defaultProps = {
-  additionalClassNames: '',
-  disabled: false,
-  grow: false,
-  labelOffset: false,
-  priority: 'primary',
-  shrink: false,
-  type: 'button',
-  wrap: true,
-  wrapper: FormRowItem,
-  wrapperProps: {width: 'auto'},
 };
 
 export default Button;

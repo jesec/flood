@@ -15,11 +15,11 @@ interface FormElementAddonProps {
 
 const FormElementAddon: FC<FormElementAddonProps> = ({
   children,
-  type,
+  type = 'icon',
   addonPlacement,
   addonIndex,
   className,
-  isInteractive,
+  isInteractive = false,
   onClick,
 }: FormElementAddonProps) => {
   const classes = classnames(
@@ -54,15 +54,6 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
       {children}
     </div>
   );
-};
-
-FormElementAddon.defaultProps = {
-  type: 'icon',
-  isInteractive: false,
-  addonPlacement: undefined,
-  addonIndex: undefined,
-  className: undefined,
-  onClick: undefined,
 };
 
 export default FormElementAddon;

@@ -42,8 +42,4 @@ const LogoutButton: FC<LogoutButtonProps> = ({className}: LogoutButtonProps) => 
   );
 };
 
-LogoutButton.defaultProps = {
-  className: undefined,
-};
-
 export default LogoutButton;

@@ -83,9 +83,4 @@ const SortableList: FC<SortableListProps> = ({
   );
 };
 
-SortableList.defaultProps = {
-  onMouseDown: undefined,
-  onDrop: undefined,
-};
-
 export default SortableList;

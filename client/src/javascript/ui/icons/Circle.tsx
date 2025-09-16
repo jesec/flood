@@ -5,7 +5,7 @@ interface CircleProps {
   className?: string;
 }
 
-const Circle: FC<CircleProps> = memo(({className}: CircleProps) => (
+const Circle: FC<CircleProps> = memo(({className}: CircleProps = {}) => (
   <svg
     className={classnames('icon', 'icon--circle', className)}
     width="18"
@@ -16,9 +16,5 @@ const Circle: FC<CircleProps> = memo(({className}: CircleProps) => (
     <circle cx="9" cy="9" r="4" />
   </svg>
 ));
-
-Circle.defaultProps = {
-  className: undefined,
-};
 
 export default Circle;
