@@ -91,8 +91,4 @@ const AppWrapper: FC<AppWrapperProps> = observer(({children, className}: AppWrap
   );
 });
 
-AppWrapper.defaultProps = {
-  className: undefined,
-};
-
 export default AppWrapper;

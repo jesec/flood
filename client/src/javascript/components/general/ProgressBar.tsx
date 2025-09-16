@@ -19,8 +19,4 @@ const ProgressBar: FC<ProgressBarProps> = observer(({percent, status}: ProgressB
   </div>
 ));
 
-ProgressBar.defaultProps = {
-  status: undefined,
-};
-
 export default ProgressBar;

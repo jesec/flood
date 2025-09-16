@@ -10,7 +10,7 @@ interface SizeProps {
   className?: string;
 }
 
-const Size: FC<SizeProps> = ({value, isSpeed, className, precision}: SizeProps) => {
+const Size: FC<SizeProps> = ({value, isSpeed = false, className, precision = 2}: SizeProps) => {
   const computed = compute(value, precision);
   const {i18n} = useLingui();
 
@@ -28,12 +28,6 @@ const Size: FC<SizeProps> = ({value, isSpeed, className, precision}: SizeProps) 
       <em className="unit">{translatedUnit}</em>
     </span>
   );
-};
-
-Size.defaultProps = {
-  isSpeed: false,
-  precision: 2,
-  className: undefined,
 };
 
 export default Size;

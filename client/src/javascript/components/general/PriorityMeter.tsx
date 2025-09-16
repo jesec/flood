@@ -20,8 +20,8 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   level,
   maxLevel,
   priorityType,
-  showLabel,
-  clickHandled,
+  showLabel = false,
+  clickHandled = false,
   changePriorityFuncRef,
   onChange,
 }: PriorityMeterProps) => {
@@ -101,12 +101,6 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
       {labelElement}
     </button>
   );
-};
-
-PriorityMeter.defaultProps = {
-  showLabel: false,
-  clickHandled: false,
-  changePriorityFuncRef: undefined,
 };
 
 export default PriorityMeter;

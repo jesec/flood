@@ -178,12 +178,12 @@ interface TorrentListCellProps {
 const TorrentListCell: FC<TorrentListCellProps> = observer(
   ({
     hash,
-    content: TorrentListCellContent,
+    content: TorrentListCellContent = DefaultTorrentListCellContent,
     column,
     className,
-    classNameOverride,
+    classNameOverride = false,
     width,
-    showIcon,
+    showIcon = false,
   }: TorrentListCellProps) => {
     const icon = showIcon ? ICONS[column] : null;
 
@@ -212,13 +212,5 @@ const TorrentListCell: FC<TorrentListCellProps> = observer(
     );
   },
 );
-
-TorrentListCell.defaultProps = {
-  className: undefined,
-  classNameOverride: false,
-  content: DefaultTorrentListCellContent,
-  width: undefined,
-  showIcon: false,
-};
 
 export default TorrentListCell;

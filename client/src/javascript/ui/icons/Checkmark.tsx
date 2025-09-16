@@ -5,7 +5,7 @@ interface CheckmarkProps {
   className?: string;
 }
 
-const Checkmark: FC<CheckmarkProps> = memo(({className}: CheckmarkProps) => (
+const Checkmark: FC<CheckmarkProps> = memo(({className}: CheckmarkProps = {}) => (
   <svg
     className={classnames('icon', 'icon--checkmark', className)}
     width="18"
@@ -19,9 +19,5 @@ const Checkmark: FC<CheckmarkProps> = memo(({className}: CheckmarkProps) => (
     />
   </svg>
 ));
-
-Checkmark.defaultProps = {
-  className: undefined,
-};
 
 export default Checkmark;

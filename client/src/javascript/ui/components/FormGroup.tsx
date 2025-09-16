@@ -10,16 +10,11 @@ interface FormGroupProps {
   width?: FormRowItemProps['width'];
 }
 
-const FormGroup: FC<FormGroupProps> = ({children, label, width}: FormGroupProps) => (
+const FormGroup: FC<FormGroupProps> = ({children, label, width = 'auto'}: FormGroupProps) => (
   <FormRowItem className="form__group" width={width}>
     {label ? <span className="form__element__label">{label}</span> : undefined}
     {children}
   </FormRowItem>
 );
-
-FormGroup.defaultProps = {
-  label: undefined,
-  width: 'auto',
-};
 
 export default FormGroup;

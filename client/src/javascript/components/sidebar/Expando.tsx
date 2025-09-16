@@ -17,8 +17,4 @@ const Expando: FC<ExpandoProps> = ({children, className, expanded, handleClick}:
   </button>
 );
 
-Expando.defaultProps = {
-  className: undefined,
-};
-
 export default Expando;

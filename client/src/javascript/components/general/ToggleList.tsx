@@ -64,9 +64,4 @@ const ToggleList: FC<ToggleListProps> = ({className, checkboxLabel, items}: Togg
   </div>
 );
 
-ToggleList.defaultProps = {
-  className: undefined,
-  checkboxLabel: undefined,
-};
-
 export default ToggleList;

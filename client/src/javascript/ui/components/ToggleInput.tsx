@@ -31,13 +31,15 @@ const ToggleInput: FC<ToggleInputProps> = ({
   value,
   defaultChecked,
   checked,
-  shrink,
-  grow,
+  shrink = false,
+  grow = false,
   width,
   icon,
   matchTextboxHeight,
   labelOffset,
-  onClick,
+  onClick = () => {
+    // do nothing.
+  },
 }: ToggleInputProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -78,14 +80,6 @@ const ToggleInput: FC<ToggleInputProps> = ({
       </label>
     </FormRowItem>
   );
-};
-
-ToggleInput.defaultProps = {
-  onClick: () => {
-    // do nothing.
-  },
-  grow: false,
-  shrink: false,
 };
 
 export default ToggleInput;

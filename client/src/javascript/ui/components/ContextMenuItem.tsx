@@ -37,8 +37,4 @@ const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick
   );
 };
 
-ContextMenuItem.defaultProps = {
-  className: undefined,
-};
-
 export default ContextMenuItem;

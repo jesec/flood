@@ -15,8 +15,8 @@ const Overlay: FC<OverlayProps> = ({
   additionalClassNames,
   onClick,
   onContextMenu,
-  isInteractive,
-  isTransparent,
+  isInteractive = true,
+  isTransparent = false,
 }: OverlayProps) => {
   const classes = classnames('overlay', additionalClassNames, {
     'overlay--no-interaction': !isInteractive,
@@ -28,13 +28,6 @@ const Overlay: FC<OverlayProps> = ({
       {children}
     </div>
   );
-};
-
-Overlay.defaultProps = {
-  additionalClassNames: undefined,
-  isInteractive: true,
-  isTransparent: false,
-  onClick: undefined,
 };
 
 export default Overlay;

@@ -35,8 +35,4 @@ const LinkedText: FC<LinkedTextProps> = ({text, className}: LinkedTextProps) => 
   return <span className={className}>{nodes}</span>;
 };
 
-LinkedText.defaultProps = {
-  className: undefined,
-};
-
 export default LinkedText;

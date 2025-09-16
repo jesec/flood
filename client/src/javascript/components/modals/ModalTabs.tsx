@@ -18,9 +18,7 @@ interface ModalTabsProps {
   onTabChange: (tab: Tab) => void;
 }
 
-const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
-  const {activeTabId, tabs = {}, onTabChange} = props;
-
+const ModalTabs: FC<ModalTabsProps> = ({activeTabId, tabs = {}, onTabChange}: ModalTabsProps) => {
   return (
     <ul className="modal__tabs">
       {Object.keys(tabs).map((tabId) => {
@@ -58,10 +56,6 @@ const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
       })}
     </ul>
   );
-};
-
-ModalTabs.defaultProps = {
-  tabs: {},
 };
 
 export default ModalTabs;

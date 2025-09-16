@@ -5,7 +5,7 @@ interface CircleCheckmarkProps {
   className?: string;
 }
 
-const CircleCheckmark: FC<CircleCheckmarkProps> = memo(({className}: CircleCheckmarkProps) => (
+const CircleCheckmark: FC<CircleCheckmarkProps> = memo(({className}: CircleCheckmarkProps = {}) => (
   <svg className={classnames('icon', 'icon--circle-checkmark', className)} viewBox="0 0 60 60">
     <path fillOpacity="0.05" d="M30,0A30,30,0,1,1,0,30,30,30,0,0,1,30,0Z" />
     <path
@@ -15,9 +15,5 @@ const CircleCheckmark: FC<CircleCheckmarkProps> = memo(({className}: CircleCheck
     <polygon points="43.93 19.51 27.64 35.46 19.07 27.07 16.5 29.58 27.64 40.5 46.5 22.03 43.93 19.51" />
   </svg>
 ));
-
-CircleCheckmark.defaultProps = {
-  className: undefined,
-};
 
 export default CircleCheckmark;
