@@ -17002,7 +17002,7 @@ snapshots:
 
   wait-on@7.2.0:
     dependencies:
-      axios: 1.11.0
+      axios: 1.12.2
       joi: 17.13.3
       lodash: 4.17.21
       minimist: 1.2.8

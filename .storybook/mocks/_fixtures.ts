@@ -376,6 +376,7 @@ export const MOCK_FLOOD_SETTINGS: FloodSettings = {
     ratio: 80,
     sizeBytes: 100,
     tags: 120,
+    dateActive: 100,
     dateAdded: 100,
     dateFinished: 100,
     downTotal: 100,
