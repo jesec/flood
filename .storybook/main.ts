@@ -1,7 +1,9 @@
-const path = require('path');
-const webpack = require('webpack');
+import path from 'node:path';
 
-const config = {
+import type {StorybookConfig} from '@storybook/react-webpack5';
+import webpack from 'webpack';
+
+const config: StorybookConfig = {
   stories: ['../client/src/javascript/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: ['@storybook/addon-onboarding', '@storybook/addon-webpack5-compiler-babel'],
   framework: {
@@ -182,4 +184,5 @@ const config = {
     return config;
   },
 };
-module.exports = config;
+
+export default config;
