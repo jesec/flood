@@ -415,6 +415,202 @@ class MockStateStore {
   clearNotifications(): void {
     this.state.notifications = [];
   }
+
+  /**
+   * Simulate torrent progress updates for downloading torrents
+   * This simulates realistic download progression
+   */
+  updateTorrentProgress(hash: string, deltaBytes: number, deltaTime: number): void {
+    const torrent = this.state.torrents[hash];
+    if (!torrent) return;
+
+    // Only update if torrent is downloading
+    if (!torrent.status.includes('downloading')) return;
+
+    const newBytesDone = Math.min(torrent.bytesDone + deltaBytes, torrent.sizeBytes);
+    const progress = (newBytesDone / torrent.sizeBytes) * 100;
+
+    // Calculate new ETA based on current download rate
+    const bytesRemaining = torrent.sizeBytes - newBytesDone;
+    const eta = torrent.downRate > 0 ? Math.floor(bytesRemaining / torrent.downRate) : -1;
+
+    // Calculate actual upload based on upRate and time
+    const uploadDelta = torrent.upRate * (deltaTime / 1000); // convert ms to seconds
+    const newUpTotal = torrent.upTotal + uploadDelta;
+    // downTotal should track total bytes downloaded (can't exceed file size)
+    const newDownTotal = Math.min(torrent.downTotal + deltaBytes, torrent.sizeBytes);
+
+    // Recalculate ratio (uploaded / downloaded)
+    // Use max(1, newDownTotal) to avoid division by zero
+    const ratio = newUpTotal / Math.max(1, newDownTotal);
+
+    this.setTorrent(hash, {
+      ...torrent,
+      bytesDone: newBytesDone,
+      percentComplete: Math.floor(progress),
+      eta: eta,
+      downTotal: newDownTotal,
+      upTotal: newUpTotal,
+      ratio: Math.round(ratio * 1000) / 1000, // Round to 3 decimal places
+    });
+  }
+
+  /**
+   * Simulate dynamic rate changes for active torrents
+   */
+  updateTorrentRates(hash: string, downRate?: number, upRate?: number): void {
+    const torrent = this.state.torrents[hash];
+    if (!torrent) return;
+
+    // Recalculate ETA if download rate changes and torrent is downloading
+    let eta = torrent.eta;
+    if (downRate !== undefined && torrent.status.includes('downloading')) {
+      const bytesRemaining = torrent.sizeBytes - torrent.bytesDone;
+      eta = downRate > 0 ? Math.floor(bytesRemaining / downRate) : -1;
+    }
+
+    this.setTorrent(hash, {
+      ...torrent,
+      ...(downRate !== undefined && {downRate}),
+      ...(upRate !== undefined && {upRate}),
+      eta,
+    });
+  }
+
+  /**
+   * Update transfer summary rates (global rates)
+   */
+  updateTransferRates(downRate: number, upRate: number): void {
+    this.state.transferSummary = {
+      ...this.state.transferSummary,
+      downRate,
+      upRate,
+    };
+
+    // Also update transfer history with new data point
+    const now = Date.now();
+    this.state.transferHistory.timestamps.push(now);
+    this.state.transferHistory.download.push(downRate);
+    this.state.transferHistory.upload.push(upRate);
+
+    // Keep only last 30 data points
+    if (this.state.transferHistory.timestamps.length > 30) {
+      this.state.transferHistory.timestamps.shift();
+      this.state.transferHistory.download.shift();
+      this.state.transferHistory.upload.shift();
+    }
+  }
+
+  /**
+   * Update seeding torrent's upload statistics
+   */
+  updateSeedingProgress(hash: string, deltaTime: number): void {
+    const torrent = this.state.torrents[hash];
+    if (!torrent) return;
+
+    // Only update if torrent is seeding
+    if (!torrent.status.includes('seeding')) return;
+
+    // Calculate upload based on upRate and time
+    const uploadDelta = torrent.upRate * (deltaTime / 1000); // convert ms to seconds
+    const newUpTotal = torrent.upTotal + uploadDelta;
+
+    // Recalculate ratio (uploaded / downloaded)
+    const ratio = newUpTotal / Math.max(1, torrent.downTotal);
+
+    this.setTorrent(hash, {
+      ...torrent,
+      upTotal: newUpTotal,
+      ratio: Math.round(ratio * 1000) / 1000, // Round to 3 decimal places
+    });
+  }
+
+  /**
+   * Complete a downloading torrent (transition to seeding)
+   */
+  completeTorrent(hash: string): void {
+    const torrent = this.state.torrents[hash];
+    if (!torrent) return;
+
+    // When complete, downTotal should equal the file size (we downloaded the whole file)
+    const finalDownTotal = torrent.sizeBytes;
+    // Keep existing upTotal or set a minimum based on what we uploaded during download
+    const finalUpTotal = torrent.upTotal || torrent.sizeBytes * 0.05;
+    // Recalculate ratio (uploaded / downloaded)
+    const finalRatio = finalUpTotal / Math.max(1, finalDownTotal);
+
+    this.setTorrent(hash, {
+      ...torrent,
+      status: ['seeding', 'complete', 'active'],
+      bytesDone: torrent.sizeBytes,
+      percentComplete: 100,
+      downRate: 0,
+      downTotal: finalDownTotal,
+      upRate: Math.floor(Math.random() * 3 + 1) * 1024 * 1024, // Start seeding at 1-4 MB/s randomly
+      upTotal: finalUpTotal,
+      ratio: Math.round(finalRatio * 1000) / 1000,
+      eta: -1,
+      dateFinished: Date.now(),
+      seedsConnected: 0,
+      seedsTotal: 10,
+      peersConnected: 5,
+      peersTotal: 20,
+    });
+
+    // Add a notification for completion
+    this.addNotification({
+      id: 'notification.torrent.finished' as const,
+      ts: Date.now(),
+      read: false,
+      data: {
+        name: torrent.name,
+      },
+    });
+  }
+
+  /**
+   * Add new torrent to the list
+   */
+  addTorrent(torrent: TorrentProperties): void {
+    this.state.torrents = {
+      ...this.state.torrents,
+      [torrent.hash]: torrent,
+    };
+
+    // Invalidate cache and recompute taxonomy
+    this.taxonomyCache = null;
+    this.lastTorrentHash = null;
+    this.state.taxonomy = this.computeTaxonomy(this.state.torrents);
+
+    // Add notification for new torrent
+    this.addNotification({
+      id: 'notification.feed.torrent.added' as const,
+      ts: Date.now(),
+      read: false,
+      data: {
+        title: torrent.name,
+        feedLabel: 'Manual',
+        ruleLabel: 'User Added',
+      },
+    });
+  }
+
+  /**
+   * Remove torrent from the list
+   */
+  removeTorrent(hash: string): void {
+    const torrent = this.state.torrents[hash];
+    if (!torrent) return;
+
+    const newTorrents = {...this.state.torrents};
+    delete newTorrents[hash];
+    this.state.torrents = newTorrents;
+
+    // Invalidate cache and recompute taxonomy
+    this.taxonomyCache = null;
+    this.lastTorrentHash = null;
+    this.state.taxonomy = this.computeTaxonomy(this.state.torrents);
+  }
 }
 
 // Export singleton instance

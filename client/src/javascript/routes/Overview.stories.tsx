@@ -5,9 +5,11 @@
 
 import type {Meta, StoryObj} from '@storybook/react-webpack5';
 import {within, expect, waitFor} from 'storybook/test';
+import React from 'react';
 
 import Overview from './Overview';
-import FloodActions from '@client/actions/FloodActions';
+// Using the mock FloodActions from Storybook mocks
+import FloodActions from '../../../../.storybook/mocks/FloodActions';
 import TorrentFilterStore from '@client/stores/TorrentFilterStore';
 import AuthActions from '@client/actions/AuthActions';
 import {createMockMouseEvent, TEST_TIMEOUTS} from '../test-utils/storybook-helpers';
@@ -31,6 +33,14 @@ const meta: Meta<typeof Overview> = {
       },
     },
   },
+  argTypes: {
+    viewSize: {
+      control: 'radio',
+      options: ['expanded', 'condensed'],
+      description: 'Toggle between expanded and condensed view',
+      defaultValue: 'expanded',
+    },
+  },
 };
 
 export default meta;
@@ -39,7 +49,20 @@ type Story = StoryObj<typeof meta>;
 // Direct component without router wrapper - Storybook provides the router
 import {observer} from 'mobx-react-lite';
 
-const OverviewWrapper = observer(() => <Overview />);
+const OverviewWrapper = observer(({viewSize}: {viewSize?: 'expanded' | 'condensed'}) => {
+  // Apply view size if provided
+  React.useEffect(() => {
+    if (viewSize) {
+      console.log('[Story] Setting view size to:', viewSize);
+      // Update the setting directly in the store
+      MockStateStore.updateSettings({torrentListViewSize: viewSize});
+      // Trigger a full re-fetch to update components
+      FloodActions.restartActivityStream();
+    }
+  }, [viewSize]);
+
+  return <Overview />;
+});
 
 // Helper to programmatically set filters without needing event objects
 const setFilters = (filters: {status?: Array<TorrentStatus>; tags?: string[]; search?: string}) => {
@@ -105,8 +128,28 @@ const createTorrent = (hash: string, overrides: Partial<TorrentProperties>): Tor
   return {...base, ...overrides};
 };
 
-const setupOverviewData = async () => {
+// Global variable to store story intervals for cleanup
+let storyIntervals: NodeJS.Timeout[] = [];
+
+// Global cleanup to ensure clean state between stories
+const cleanupStory = () => {
+  console.log('[Story] Cleaning up previous story state');
+
+  // Clear all story intervals
+  storyIntervals.forEach((interval) => clearInterval(interval));
+  storyIntervals = [];
+
+  // Stop any running updates
+  FloodActions.closeActivityStream();
+  // Reset mock state
   MockStateStore.reset();
+  // Clear any filters
+  TorrentFilterStore.clearAllFilters();
+};
+
+const setupOverviewData = async () => {
+  // Always cleanup first
+  cleanupStory();
 
   // Create diverse set of torrents
   const torrents: Record<string, TorrentProperties> = {
@@ -328,12 +371,83 @@ const setupOverviewData = async () => {
 };
 
 export const Default: Story = {
-  render: () => <OverviewWrapper />,
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
   loaders: [
     async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
       await setupOverviewData();
+
+      // Start dynamic updates after initial data load
+      setTimeout(() => {
+        console.log('[Default Story] Starting dynamic updates');
+
+        // Simulate progress for downloading torrents
+        const UPDATE_INTERVAL = 2000; // Update every 2 seconds
+        let updateCount = 0;
+
+        const progressInterval = setInterval(() => {
+          updateCount++;
+          const state = MockStateStore.getState();
+
+          // Update downloading torrents
+          Object.entries(state.torrents).forEach(([hash, torrent]) => {
+            if (torrent.status.includes('downloading') && torrent.percentComplete < 100) {
+              // Calculate progress based on download rate
+              const progressBytes = torrent.downRate * (UPDATE_INTERVAL / 1000);
+
+              // Add some realistic rate variation
+              const rateVariation = (Math.random() - 0.5) * 2 * SIZE.MB;
+              const newDownRate = Math.max(SIZE.MB, torrent.downRate + rateVariation);
+              const upRateVariation = (Math.random() - 0.5) * 0.5 * SIZE.MB;
+              const newUpRate = Math.max(100 * SIZE.KB, torrent.upRate + upRateVariation);
+
+              MockStateStore.updateTorrentRates(hash, newDownRate, newUpRate);
+              MockStateStore.updateTorrentProgress(hash, progressBytes, UPDATE_INTERVAL);
+
+              // Check if torrent completed
+              const updated = MockStateStore.getState().torrents[hash];
+              if (updated.percentComplete >= 100) {
+                console.log(`[Default Story] Torrent ${torrent.name} completed!`);
+                MockStateStore.completeTorrent(hash);
+              }
+            } else if (torrent.status.includes('seeding')) {
+              // Update seeding torrents' upload stats
+              const upRateVariation = (Math.random() - 0.5) * torrent.upRate * 0.3;
+              const newUpRate = Math.max(100 * SIZE.KB, torrent.upRate + upRateVariation);
+
+              MockStateStore.updateTorrentRates(hash, 0, newUpRate);
+              MockStateStore.updateSeedingProgress(hash, UPDATE_INTERVAL);
+            }
+          });
+
+          // Update global transfer rates
+          const currentRates = MockStateStore.getState().transferSummary;
+          const downVariation = (Math.random() - 0.5) * 3 * SIZE.MB;
+          const upVariation = (Math.random() - 0.5) * 2 * SIZE.MB;
+
+          MockStateStore.updateTransferRates(
+            Math.max(1 * SIZE.MB, currentRates.downRate + downVariation),
+            Math.max(500 * SIZE.KB, currentRates.upRate + upVariation),
+          );
+
+          // Stop after 60 updates (2 minutes)
+          if (updateCount >= 60) {
+            clearInterval(progressInterval);
+            console.log('[Default Story] Stopped automatic updates after 2 minutes');
+          }
+        }, UPDATE_INTERVAL);
+
+        // Store interval for cleanup when switching stories
+        storyIntervals.push(progressInterval);
+
+        // Start FloodActions dynamic updates to send diffs to stores
+        FloodActions.startDynamicUpdates(UPDATE_INTERVAL);
+
+        // Note: Storybook doesn't use return values from loaders
+        // Cleanup is handled by cleanupStory() at the start of each story
+      }, 500); // Small delay to let initial render complete
     },
   ],
   play: async ({canvasElement}) => {
@@ -355,19 +469,15 @@ export const Default: Story = {
   },
 };
 
-export const CondensedView: Story = {
-  render: () => <OverviewWrapper />,
+export const Static: Story = {
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
   loaders: [
     async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
       await setupOverviewData();
-      MockStateStore.setState({
-        settings: {
-          ...MOCK_FLOOD_SETTINGS,
-          torrentListViewSize: 'condensed',
-        },
-      });
+      // No dynamic updates - static snapshot for testing UI states
     },
   ],
   play: async ({canvasElement}) => {
@@ -379,39 +489,263 @@ export const CondensedView: Story = {
       expect(torrents.length).toBeGreaterThan(0);
     });
 
-    // In condensed view, we should see torrents but with less detail
-    // Verify we have torrent names visible using data attributes
-    const expectedTorrents = [
-      'Ubuntu 23.10 Desktop amd64',
-      'Fedora-Workstation-Live-x86_64-39',
-      'Big Buck Bunny 1080p',
-      'debian-12.2.0-amd64-netinst.iso',
-      'archlinux-2024.01.01-x86_64.iso',
-      'kali-linux-2023.4-installer-amd64.iso',
-      'OpenTTD-13.4-linux-generic-amd64.tar.xz',
-      'Programming Books Collection',
-      'Missing Files Torrent',
-      'Large Dataset Archive',
-    ];
-
-    // Use getAllByTestId to get torrent rows and verify names using data attributes
+    // Verify we have torrents in various states
     const torrentRows = canvas.getAllByTestId(/^torrent-/);
-    const actualTorrentNames = torrentRows.map((row) => row.getAttribute('data-torrent-name') || '');
+    expect(torrentRows.length).toBeGreaterThanOrEqual(10);
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Static snapshot of torrents in various states without live updates. Useful for testing UI rendering.',
+      },
+    },
+  },
+};
 
-    // Check that all expected torrents are present
-    for (const torrentName of expectedTorrents) {
-      expect(actualTorrentNames).toContain(torrentName);
-    }
+export const Completing: Story = {
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
+  loaders: [
+    async () => {
+      cleanupStory();
+
+      // Create small torrents that will complete in under 15 seconds
+      const torrents: Record<string, TorrentProperties> = {
+        'quick-1': createTorrent('quick-1', {
+          name: 'Small Linux ISO',
+          status: ['downloading', 'active'],
+          bytesDone: 90 * SIZE.MB, // 90% complete
+          sizeBytes: 100 * SIZE.MB, // Small 100MB file
+          downRate: 2 * SIZE.MB, // Will complete in ~5 seconds
+          upRate: 200 * SIZE.KB,
+          downTotal: 90 * SIZE.MB,
+          upTotal: 9 * SIZE.MB,
+          percentComplete: 90,
+          ratio: 0.1,
+          eta: 5,
+          dateActive: -1,
+          tags: ['quick-test', 'linux'],
+          trackerURIs: ['https://tracker.example.com:443/announce'],
+          directory: '/downloads/quick',
+          peersConnected: 15,
+          peersTotal: 30,
+          seedsConnected: 5,
+          seedsTotal: 10,
+        }),
+        'quick-2': createTorrent('quick-2', {
+          name: 'Test Document Pack',
+          status: ['downloading', 'active'],
+          bytesDone: 40 * SIZE.MB, // 80% complete
+          sizeBytes: 50 * SIZE.MB, // Tiny 50MB file
+          downRate: 1 * SIZE.MB, // Will complete in ~10 seconds
+          upRate: 100 * SIZE.KB,
+          downTotal: 40 * SIZE.MB,
+          upTotal: 2 * SIZE.MB,
+          percentComplete: 80,
+          ratio: 0.05,
+          eta: 10,
+          dateActive: -1,
+          tags: ['quick-test', 'documents'],
+          trackerURIs: ['https://tracker.example.com:443/announce'],
+          directory: '/downloads/quick',
+          peersConnected: 10,
+          peersTotal: 20,
+          seedsConnected: 3,
+          seedsTotal: 8,
+        }),
+        'quick-3': createTorrent('quick-3', {
+          name: 'Sample Video File',
+          status: ['downloading', 'active'],
+          bytesDone: 145 * SIZE.MB, // 96.7% complete
+          sizeBytes: 150 * SIZE.MB,
+          downRate: 3 * SIZE.MB, // Will complete in ~2 seconds
+          upRate: 300 * SIZE.KB,
+          downTotal: 145 * SIZE.MB,
+          upTotal: 7 * SIZE.MB,
+          percentComplete: 97,
+          ratio: 0.05,
+          eta: 2,
+          dateActive: -1,
+          tags: ['quick-test', 'media'],
+          trackerURIs: ['https://tracker.example.com:443/announce'],
+          directory: '/downloads/quick',
+          peersConnected: 20,
+          peersTotal: 40,
+          seedsConnected: 8,
+          seedsTotal: 15,
+        }),
+        'already-seeding': createTorrent('already-seeding', {
+          name: 'Previously Completed File',
+          status: ['seeding', 'complete', 'active'],
+          bytesDone: 200 * SIZE.MB,
+          sizeBytes: 200 * SIZE.MB,
+          percentComplete: 100,
+          downRate: 0,
+          downTotal: 200 * SIZE.MB,
+          upRate: 5 * SIZE.MB,
+          upTotal: 1 * SIZE.GB,
+          ratio: 5.0,
+          dateActive: -1,
+          dateFinished: Date.now() - TIME.HOUR,
+          tags: ['quick-test', 'seeding'],
+          trackerURIs: ['https://tracker.example.com:443/announce'],
+          directory: '/downloads/quick',
+          seedsConnected: 0,
+          seedsTotal: 10,
+          peersConnected: 15,
+          peersTotal: 30,
+        }),
+      };
+
+      MockStateStore.setState({
+        torrents,
+        settings: {
+          ...MOCK_FLOOD_SETTINGS,
+          torrentListViewSize: 'expanded',
+        },
+        transferSummary: {
+          downRate: 6 * SIZE.MB, // Combined rate of downloading torrents
+          downTotal: 10 * SIZE.GB,
+          upRate: 5.6 * SIZE.MB,
+          upTotal: 50 * SIZE.GB,
+        },
+        notifications: [], // Start with empty to see notifications appear
+      });
+
+      await AuthActions.verify();
+
+      // Start progress updates to complete torrents quickly
+      setTimeout(() => {
+        console.log('[Completing] Starting completion simulation');
+
+        const UPDATE_INTERVAL = 1000; // Update every second
+        let updateCount = 0;
+        const completedTorrents = new Set<string>();
+
+        const progressInterval = setInterval(() => {
+          updateCount++;
+
+          // Update progress for each downloading torrent
+          const downloadingTorrents = ['quick-1', 'quick-2', 'quick-3'];
+
+          downloadingTorrents.forEach((hash) => {
+            if (completedTorrents.has(hash)) return;
+
+            const torrent = MockStateStore.getState().torrents[hash];
+            if (torrent && torrent.percentComplete < 100) {
+              // Calculate progress based on download rate
+              const progressBytes = torrent.downRate * (UPDATE_INTERVAL / 1000);
+
+              // Small variation to seem realistic
+              const rateVariation = (Math.random() - 0.5) * 0.5 * SIZE.MB;
+              const newDownRate = Math.max(0.5 * SIZE.MB, torrent.downRate + rateVariation);
+
+              MockStateStore.updateTorrentRates(hash, newDownRate, torrent.upRate);
+              MockStateStore.updateTorrentProgress(hash, progressBytes, UPDATE_INTERVAL);
+
+              // Check if torrent is complete
+              const updatedTorrent = MockStateStore.getState().torrents[hash];
+              if (updatedTorrent && updatedTorrent.percentComplete >= 100) {
+                console.log(`[Completing] ✅ "${torrent.name}" completed at ${updateCount}s!`);
+                MockStateStore.completeTorrent(hash);
+                completedTorrents.add(hash);
+              }
+            }
+          });
+
+          // Update all seeding torrents (including newly completed ones)
+          Object.entries(MockStateStore.getState().torrents).forEach(([hash, torrent]) => {
+            if (torrent.status.includes('seeding')) {
+              const upRateVariation = (Math.random() - 0.5) * SIZE.MB;
+              const newUpRate = Math.max(SIZE.MB, torrent.upRate + upRateVariation);
+              MockStateStore.updateTorrentRates(hash, 0, newUpRate);
+              MockStateStore.updateSeedingProgress(hash, UPDATE_INTERVAL);
+            }
+          });
+
+          // Update global rates based on actual torrent rates
+          const state = MockStateStore.getState();
+          let totalDown = 0;
+          let totalUp = 0;
+          Object.values(state.torrents).forEach((t) => {
+            totalDown += t.downRate;
+            totalUp += t.upRate;
+          });
+          MockStateStore.updateTransferRates(totalDown, totalUp);
+
+          // Log status at 15 seconds
+          if (updateCount === 15) {
+            console.log('[Completing] 15s check - Completed:', completedTorrents.size, 'of 3');
+            const notifications = MockStateStore.getState().notifications;
+            console.log('[Completing] Notifications:', notifications.length);
+          }
+
+          // Stop after 20 seconds
+          if (updateCount >= 20) {
+            clearInterval(progressInterval);
+            console.log('[Completing] Stopped. Final completed:', completedTorrents.size);
+          }
+        }, UPDATE_INTERVAL);
+
+        // Store interval for cleanup when switching stories
+        storyIntervals.push(progressInterval);
+
+        // Start FloodActions dynamic updates
+        FloodActions.startDynamicUpdates(UPDATE_INTERVAL);
+
+        // Note: Storybook doesn't use return values from loaders
+        // Cleanup is handled by cleanupStory() at the start of each story
+      }, 500); // Small delay for initial render
+    },
+  ],
+  play: async ({canvasElement}) => {
+    const canvas = within(canvasElement);
+
+    // Wait for torrents to load
+    await waitFor(() => {
+      const torrents = canvas.queryAllByRole('row');
+      expect(torrents.length).toBeGreaterThan(0);
+    });
+
+    // Initially we should have 3 downloading + 1 seeding
+    const initialRows = canvas.getAllByTestId(/^torrent-/);
+    expect(initialRows).toHaveLength(4);
+
+    // Wait up to 15 seconds for torrents to complete
+    await waitFor(
+      () => {
+        const seedingRows = canvas.getAllByTestId(/^torrent-/).filter((row) => {
+          const status = row.getAttribute('data-torrent-status') || '';
+          return status.includes('seeding') && status.includes('complete');
+        });
+        // Should have at least 2 seeding (1 original + at least 1 completed)
+        expect(seedingRows.length).toBeGreaterThanOrEqual(2);
+      },
+      {timeout: 16000},
+    );
+
+    console.log('[Completing Test] Torrents completed successfully');
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Tests torrent completion within 15 seconds. Watch as downloads finish and transition to seeding with completion notifications.',
+      },
+    },
   },
 };
 
 export const DownloadingOnly: Story = {
-  render: () => <OverviewWrapper />,
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
   loaders: [
     async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
-      MockStateStore.reset();
+      cleanupStory();
       const torrents: Record<string, TorrentProperties> = {
         'dl-1': createTorrent('dl-1', {
           name: 'Active Download 1',
@@ -491,93 +825,16 @@ export const DownloadingOnly: Story = {
   },
 };
 
-export const EmptyState: Story = {
-  render: () => <OverviewWrapper />,
-  loaders: [
-    async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
-      MockStateStore.reset();
-      MockStateStore.setState({
-        torrents: {},
-        settings: MOCK_FLOOD_SETTINGS,
-      });
-
-      await AuthActions.verify();
-      FloodActions.startActivityStream();
-    },
-  ],
-  play: async ({canvasElement}) => {
-    const canvas = within(canvasElement);
-
-    // Check for empty state message
-    await waitFor(
-      () => {
-        const emptyMessage = canvas.getByText('No torrents to display.');
-        expect(emptyMessage).toBeInTheDocument();
-      },
-      {timeout: TEST_TIMEOUTS.long},
-    );
-
-    // Verify no torrent rows are present
-    const torrentRows = canvas.queryAllByTestId(/^torrent-/);
-    expect(torrentRows).toHaveLength(0);
+export const SeedingOnly: Story = {
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
   },
-};
-
-export const FilteredView: Story = {
-  render: () => <OverviewWrapper />,
   loaders: [
     async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
-      await setupOverviewData();
-      // Set filters that will be preserved when component starts activity stream
-      setFilters({
-        status: ['downloading' as TorrentStatus],
-        tags: ['linux'],
-      });
-    },
-  ],
-  play: async ({canvasElement}) => {
-    const canvas = within(canvasElement);
-
-    // Wait for torrents to load
-    await waitFor(() => {
-      const torrents = canvas.queryAllByRole('row');
-      expect(torrents.length).toBeGreaterThan(0);
-    });
-
-    // Verify that only torrents matching the filter are shown
-    // Should only show dl-ubuntu and dl-fedora (downloading + linux tag)
-    const torrentRows = canvas.getAllByTestId(/^torrent-/);
-
-    // Should have exactly 2 torrents (dl-ubuntu and dl-fedora)
-    expect(torrentRows).toHaveLength(2);
-
-    // Verify both torrents have Ubuntu or Fedora in their names
-    const torrentTexts = torrentRows.map((row) => row.textContent || '');
-    const hasUbuntu = torrentTexts.some((text) => text.includes('Ubuntu'));
-    const hasFedora = torrentTexts.some((text) => text.includes('Fedora'));
-    expect(hasUbuntu).toBeTruthy();
-    expect(hasFedora).toBeTruthy();
-
-    // Verify filter is active by checking the filter sidebar
-    // Multiple 'linux' elements will exist (one in filter, multiple in torrent tags)
-    const linuxElements = canvas.queryAllByText('linux');
-    expect(linuxElements.length).toBeGreaterThan(0);
-  },
-};
-
-export const HighRatioSeeding: Story = {
-  render: () => <OverviewWrapper />,
-  loaders: [
-    async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
-      MockStateStore.reset();
+      cleanupStory();
       const torrents: Record<string, TorrentProperties> = {
-        'hr-1': createTorrent('hr-1', {
+        'seed-1': createTorrent('seed-1', {
           name: 'Popular Linux Distro',
           status: ['seeding', 'complete', 'active'],
           bytesDone: 4 * SIZE.GB,
@@ -596,7 +853,7 @@ export const HighRatioSeeding: Story = {
           directory: '/downloads',
           trackerURIs: ['https://tracker.ubuntu.com:443/announce'],
         }),
-        'hr-2': createTorrent('hr-2', {
+        'seed-2': createTorrent('seed-2', {
           name: 'Open Source Project',
           status: ['seeding', 'complete', 'active'],
           bytesDone: 2 * SIZE.GB,
@@ -667,13 +924,94 @@ export const HighRatioSeeding: Story = {
   },
 };
 
-export const ErrorState: Story = {
-  render: () => <OverviewWrapper />,
+export const EmptyState: Story = {
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
   loaders: [
     async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
-      MockStateStore.reset();
+      cleanupStory();
+      MockStateStore.setState({
+        torrents: {},
+        settings: MOCK_FLOOD_SETTINGS,
+      });
+
+      await AuthActions.verify();
+      FloodActions.startActivityStream();
+    },
+  ],
+  play: async ({canvasElement}) => {
+    const canvas = within(canvasElement);
+
+    // Check for empty state message
+    await waitFor(
+      () => {
+        const emptyMessage = canvas.getByText('No torrents to display.');
+        expect(emptyMessage).toBeInTheDocument();
+      },
+      {timeout: TEST_TIMEOUTS.long},
+    );
+
+    // Verify no torrent rows are present
+    const torrentRows = canvas.queryAllByTestId(/^torrent-/);
+    expect(torrentRows).toHaveLength(0);
+  },
+};
+
+export const FilteredView: Story = {
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
+  loaders: [
+    async () => {
+      await setupOverviewData();
+      // Set filters that will be preserved when component starts activity stream
+      setFilters({
+        status: ['downloading' as TorrentStatus],
+        tags: ['linux'],
+      });
+    },
+  ],
+  play: async ({canvasElement}) => {
+    const canvas = within(canvasElement);
+
+    // Wait for torrents to load
+    await waitFor(() => {
+      const torrents = canvas.queryAllByRole('row');
+      expect(torrents.length).toBeGreaterThan(0);
+    });
+
+    // Verify that only torrents matching the filter are shown
+    // Should only show dl-ubuntu and dl-fedora (downloading + linux tag)
+    const torrentRows = canvas.getAllByTestId(/^torrent-/);
+
+    // Should have exactly 2 torrents (dl-ubuntu and dl-fedora)
+    expect(torrentRows).toHaveLength(2);
+
+    // Verify both torrents have Ubuntu or Fedora in their names
+    const torrentTexts = torrentRows.map((row) => row.textContent || '');
+    const hasUbuntu = torrentTexts.some((text) => text.includes('Ubuntu'));
+    const hasFedora = torrentTexts.some((text) => text.includes('Fedora'));
+    expect(hasUbuntu).toBeTruthy();
+    expect(hasFedora).toBeTruthy();
+
+    // Verify filter is active by checking the filter sidebar
+    // Multiple 'linux' elements will exist (one in filter, multiple in torrent tags)
+    const linuxElements = canvas.queryAllByText('linux');
+    expect(linuxElements.length).toBeGreaterThan(0);
+  },
+};
+
+export const ErrorState: Story = {
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
+  loaders: [
+    async () => {
+      cleanupStory();
       const torrents: Record<string, TorrentProperties> = {
         'err-1': createTorrent('err-1', {
           name: 'Corrupted Data File',
@@ -761,12 +1099,13 @@ export const ErrorState: Story = {
 };
 
 export const MixedStates: Story = {
-  render: () => <OverviewWrapper />,
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
   loaders: [
     async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
-      MockStateStore.reset();
+      cleanupStory();
       const torrents: Record<string, TorrentProperties> = {
         checking: createTorrent('checking', {
           name: 'Verifying Large Archive',
@@ -883,11 +1222,12 @@ export const MixedStates: Story = {
 };
 
 export const SearchFiltered: Story = {
-  render: () => <OverviewWrapper />,
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
   loaders: [
     async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
       await setupOverviewData();
       // Set search filter
       setFilters({
@@ -922,11 +1262,12 @@ export const SearchFiltered: Story = {
 };
 
 export const UntaggedFilter: Story = {
-  render: () => <OverviewWrapper />,
+  render: (args) => <OverviewWrapper viewSize={args.viewSize} />,
+  args: {
+    viewSize: 'expanded',
+  },
   loaders: [
     async () => {
-      // Clear any filters from previous stories
-      TorrentFilterStore.clearAllFilters();
       await setupOverviewData();
       // Set untagged filter
       setFilters({

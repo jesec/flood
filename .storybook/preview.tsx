@@ -24,6 +24,7 @@ const preview: Preview = {
         color: /(background|color)$/i,
         date: /Date$/,
       },
+      disableSaveFromUI: true, // Prevents users from saving control changes as new stories
     },
     viewport: {
       viewports: {
