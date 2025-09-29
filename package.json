@@ -61,7 +61,6 @@
     "start:test:rtorrent": "node scripts/testsetup.js",
     "test": "jest --forceExit",
     "test:watch": "jest --watchAll --forceExit",
-    "test:client": "FLOOD_OPTION_port=4200 start-server-and-test start 4200 'cypress run'",
     "lint-staged": "lint-staged",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
