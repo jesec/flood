@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Verileri taşı",
   "torrents.move.heading": "Torrent Konumunu Ayarla",
   "torrents.properties.comment": "Yorum",
+  "torrents.properties.date.active": "Son Etkinlik",
   "torrents.properties.date.added": "Eklenme",
   "torrents.properties.date.created": "Oluşturulma",
   "torrents.properties.date.finished": "Tamamlandı",

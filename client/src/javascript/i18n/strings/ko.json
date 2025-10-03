@@ -345,6 +345,7 @@
   "torrents.move.data.label": "데이터 이동",
   "torrents.move.heading": "토렌트 경로 지정",
   "torrents.properties.comment": "설명",
+  "torrents.properties.date.active": "마지막 활동",
   "torrents.properties.date.added": "추가한 날",
   "torrents.properties.date.created": "생성한 날",
   "torrents.properties.date.finished": "끝난",

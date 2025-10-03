@@ -335,6 +335,7 @@
   "torrents.move.data.label": "Премести податке",
   "torrents.move.heading": "Постави локацију торента",
   "torrents.properties.comment": "Коментар",
+  "torrents.properties.date.active": "Последња активност",
   "torrents.properties.date.added": "Додато",
   "torrents.properties.date.created": "Креирано",
   "torrents.properties.date.finished": "Завршено",

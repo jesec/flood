@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Siirrä tiedot",
   "torrents.move.heading": "Aseta Torrent- Sijainti",
   "torrents.properties.comment": "Kommentti",
+  "torrents.properties.date.active": "Viimeisin toiminta",
   "torrents.properties.date.added": "Lisätty",
   "torrents.properties.date.created": "Luotu",
   "torrents.properties.date.finished": "Valmis",
