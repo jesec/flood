@@ -19,6 +19,7 @@ const TorrentListColumns = {
   isPrivate: 'torrents.properties.is.private',
   message: 'torrents.properties.tracker.message',
   trackerURIs: 'torrents.properties.trackers',
+  dateActive: 'torrents.properties.date.active',
 } as const;
 
 export default TorrentListColumns;
