@@ -39,6 +39,7 @@ const ICONS: Partial<Record<TorrentListColumn, JSX.Element>> = {
   downRate: <DownloadThick />,
   directory: <FolderClosedSolid />,
   hash: <Hash />,
+  dateActive: <Clock />,
   dateAdded: <Calendar />,
   dateCreated: <CalendarCreated />,
   dateFinished: <CalendarFinished />,
@@ -59,6 +60,10 @@ const BooleanCell: FC<{value: boolean}> = observer(({value}: {value: boolean}) =
 
 const DateCell: FC<{date: number}> = observer(({date}: {date: number}) => {
   const {i18n} = useLingui();
+
+  if (date === 0) {
+    return null;
+  }
 
   return <span>{i18n.date(new Date(date * 1000))}</span>;
 });
@@ -114,6 +119,8 @@ export interface TorrentListCellContentProps {
 const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
   ({torrent, column}: TorrentListCellContentProps) => {
     switch (column) {
+      case 'dateActive':
+        return <DateCell date={torrent[column]} />;
       case 'dateAdded':
         return <DateCell date={torrent[column]} />;
       case 'dateCreated':

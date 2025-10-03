@@ -3,6 +3,8 @@ import {FC, ReactNode, ReactNodeArray} from 'react';
 import {observer} from 'mobx-react';
 import {useLingui} from '@lingui/react';
 
+import * as lodash from 'lodash';
+
 import type {Disk} from '@shared/types/DiskUsage';
 
 import DiskUsageStore from '../../stores/DiskUsageStore';
@@ -62,9 +64,9 @@ const DiskUsage: FC = observer(() => {
         >
           <div className="diskusage__text-row">
             {d.target}
-            <span>{Math.round((100 * d.used) / d.size)}%</span>
+            <span>{lodash.round((100 * d.used) / d.size, 2)}%</span>
           </div>
-          <ProgressBar percent={Math.round((100 * d.used) / d.size)} />
+          <ProgressBar percent={lodash.round((100 * d.used) / d.size, 2)} />
         </Tooltip>
       </li>
     ));

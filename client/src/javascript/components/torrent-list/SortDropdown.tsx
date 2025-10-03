@@ -22,6 +22,7 @@ const SORT_PROPERTIES = [
   'sizeBytes',
   'dateAdded',
   'dateFinished',
+  'dateActive',
 ] as const;
 
 interface SortDropdownProps {
