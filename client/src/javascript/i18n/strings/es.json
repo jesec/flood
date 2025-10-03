@@ -344,6 +344,7 @@
   "torrents.move.data.label": "Mover archivos",
   "torrents.move.heading": "Establecer ubicación de torrent",
   "torrents.properties.comment": "Comentario",
+  "torrents.properties.date.active": "Última actividad",
   "torrents.properties.date.added": "Agregado en",
   "torrents.properties.date.created": "Creado",
   "torrents.properties.date.finished": "Finalizado",
