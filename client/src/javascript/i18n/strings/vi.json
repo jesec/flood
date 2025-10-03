@@ -343,6 +343,7 @@
   "torrents.move.data.label": "Di chuyển dữ liệu",
   "torrents.move.heading": "Đặt vị trí Torrent",
   "torrents.properties.comment": "Bình luận",
+  "torrents.properties.date.active": "Hoạt động gần đây",
   "torrents.properties.date.added": "Đã thêm",
   "torrents.properties.date.created": "Đã tạo",
   "torrents.properties.date.finished": "Hoàn thành",

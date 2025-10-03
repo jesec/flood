@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Přesunout data",
   "torrents.move.heading": "Nastavit umístění Torrentu",
   "torrents.properties.comment": "Komentář",
+  "torrents.properties.date.active": "Poslední aktivita",
   "torrents.properties.date.added": "Přidáno",
   "torrents.properties.date.created": "Vytvořeno",
   "torrents.properties.date.finished": "Dokončeno",

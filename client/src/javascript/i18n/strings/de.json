@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Daten verschieben",
   "torrents.move.heading": "Speicherort des Torrents setzen",
   "torrents.properties.comment": "Kommentar",
+  "torrents.properties.date.active": "Letzte Aktivität",
   "torrents.properties.date.added": "Hinzugefügt",
   "torrents.properties.date.created": "Erstellt",
   "torrents.properties.date.finished": "Abgeschlossen",

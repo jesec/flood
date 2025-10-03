@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Flytt data",
   "torrents.move.heading": "Angi torrent plassering",
   "torrents.properties.comment": "Kommentar",
+  "torrents.properties.date.active": "Siste Aktivitet",
   "torrents.properties.date.added": "Lagt til",
   "torrents.properties.date.created": "Opprettet",
   "torrents.properties.date.finished": "Fullført",

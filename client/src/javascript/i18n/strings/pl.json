@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Przenieś dane",
   "torrents.move.heading": "Ustaw lokalizację torrenta",
   "torrents.properties.comment": "Komentarz",
+  "torrents.properties.date.active": "Ostatnia aktywność",
   "torrents.properties.date.added": "Dodano",
   "torrents.properties.date.created": "Utworzony",
   "torrents.properties.date.finished": "Zakończony",

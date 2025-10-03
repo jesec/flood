@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Переміщення даних",
   "torrents.move.heading": "Встановити розташування торентів",
   "torrents.properties.comment": "Коментар",
+  "torrents.properties.date.active": "Остання активність",
   "torrents.properties.date.added": "Додано",
   "torrents.properties.date.created": "Створено",
   "torrents.properties.date.finished": "Завершено",

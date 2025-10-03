@@ -344,6 +344,7 @@
   "torrents.move.data.label": "Flytta data",
   "torrents.move.heading": "Ange torrentplats",
   "torrents.properties.comment": "Kommentar",
+  "torrents.properties.date.active": "Senaste aktivitet",
   "torrents.properties.date.added": "Tillagd",
   "torrents.properties.date.created": "Skapad",
   "torrents.properties.date.finished": "Avslutad",

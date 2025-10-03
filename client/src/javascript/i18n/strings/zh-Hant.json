@@ -345,6 +345,7 @@
   "torrents.move.data.label": "移動資料",
   "torrents.move.heading": "設定下載位置",
   "torrents.properties.comment": "評論",
+  "torrents.properties.date.active": "最後活動",
   "torrents.properties.date.added": "新增日期",
   "torrents.properties.date.created": "建立時間",
   "torrents.properties.date.finished": "已完成",

@@ -335,6 +335,7 @@
   "torrents.move.data.label": "Μετακίνηση δεδομένων",
   "torrents.move.heading": "Ορισμός τοποθεσίας torrent",
   "torrents.properties.comment": "Σχόλιο",
+  "torrents.properties.date.active": "Τελευταία Δραστηριότητα",
   "torrents.properties.date.added": "Προστέθηκε",
   "torrents.properties.date.created": "Δημιουργήθηκε",
   "torrents.properties.date.finished": "Ολοκληρώθηκε",
