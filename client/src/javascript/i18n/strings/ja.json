@@ -345,6 +345,7 @@
   "torrents.move.data.label": "データを移動",
   "torrents.move.heading": "トレントの場所を設定",
   "torrents.properties.comment": "コメント",
+  "torrents.properties.date.active": "最後のアクティビティ",
   "torrents.properties.date.added": "追加しました",
   "torrents.properties.date.created": "作成済み",
   "torrents.properties.date.finished": "完了",

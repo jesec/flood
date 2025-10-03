@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Adat áthelyezése",
   "torrents.move.heading": "Torrent áthelyezése másik könyvtárba",
   "torrents.properties.comment": "Megjegyzés",
+  "torrents.properties.date.active": "Utoljára aktív",
   "torrents.properties.date.added": "Hozzáadva",
   "torrents.properties.date.created": "Létrehozva",
   "torrents.properties.date.finished": "Befejezve",

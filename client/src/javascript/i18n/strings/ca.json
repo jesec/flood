@@ -342,6 +342,7 @@
   "torrents.move.data.label": "Moure dades",
   "torrents.move.heading": "Establir ubicació del torrent",
   "torrents.properties.comment": "Comentari",
+  "torrents.properties.date.active": "Última activitat",
   "torrents.properties.date.added": "Afegit",
   "torrents.properties.date.created": "Creat",
   "torrents.properties.date.finished": "Acabat",

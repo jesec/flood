@@ -345,6 +345,7 @@
   "torrents.move.data.label": "הזזת מידע",
   "torrents.move.heading": "הגדרת מקום הטורנט",
   "torrents.properties.comment": "הערה",
+  "torrents.properties.date.active": "פעילות אחרונה",
   "torrents.properties.date.added": "נוסף",
   "torrents.properties.date.created": "נוצר",
   "torrents.properties.date.finished": "הסתיים",

@@ -344,6 +344,7 @@
   "torrents.move.data.label": "نقل البيانات",
   "torrents.move.heading": "تعيين موقع التورنت",
   "torrents.properties.comment": "تعليق",
+  "torrents.properties.date.active": "النشاط الأخير",
   "torrents.properties.date.added": "أضيف",
   "torrents.properties.date.created": "تم الإنشاء",
   "torrents.properties.date.finished": "منتهى",

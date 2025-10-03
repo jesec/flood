@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Flyt data",
   "torrents.move.heading": "Angiv Torrent Placering",
   "torrents.properties.comment": "Kommentar",
+  "torrents.properties.date.active": "Seneste aktivitet",
   "torrents.properties.date.added": "Tilføjet",
   "torrents.properties.date.created": "Oprettet",
   "torrents.properties.date.finished": "Afsluttet",

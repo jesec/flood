@@ -335,6 +335,7 @@
   "torrents.move.data.label": "Skuif data",
   "torrents.move.heading": "Stel Torrent Ligging",
   "torrents.properties.comment": "Opmerking",
+  "torrents.properties.date.active": "Laaste Aktiwiteit",
   "torrents.properties.date.added": "Bygevoeg",
   "torrents.properties.date.created": "Geskep",
   "torrents.properties.date.finished": "Voltooi",

@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Verplaats bestanden",
   "torrents.move.heading": "Wijzig torrentlocatie",
   "torrents.properties.comment": "Opmerking",
+  "torrents.properties.date.active": "Laatste activiteit",
   "torrents.properties.date.added": "Datum toegevoegd",
   "torrents.properties.date.created": "Aangemaakt",
   "torrents.properties.date.finished": "Voltooid",
