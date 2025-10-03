@@ -6,6 +6,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import type {QBittorrentConnectionSettings} from '@shared/schema/ClientConnectionSettings';
@@ -55,6 +56,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
   async addTorrentsByFile({
     files,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -89,6 +91,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     await this.clientRequestManager
       .torrentsAddFiles(fileBuffers, {
         savepath: destination,
+        category: category,
         tags: tags.join(','),
         [method]: !start,
         root_folder: !isBasePath,
@@ -107,6 +110,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     urls: inputUrls,
     cookies,
     destination,
+    category,
     tags,
     isBasePath,
     isCompleted,
@@ -124,6 +128,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
     await this.clientRequestManager
       .torrentsAddURLs(urls, {
         savepath: destination,
+        category: category,
         tags: tags.join(','),
         [method]: !start,
         root_folder: !isBasePath,
@@ -137,6 +142,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       return this.addTorrentsByFile({
         files: files.map((file) => file.toString('base64')) as [string, ...string[]],
         destination,
+        category,
         tags,
         isBasePath,
         isCompleted,
@@ -290,6 +296,12 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
       .then(this.processClientRequestSuccess, this.processClientRequestError);
   }
 
+  async setTorrentsCategory({hashes, category}: SetTorrentsCategoryOptions): Promise<void> {
+    return this.clientRequestManager
+      .torrentsSetCategory(hashes, category)
+      .then(this.processClientRequestSuccess, this.processClientRequestError);
+  }
+
   async setTorrentsTags({hashes, tags}: SetTorrentsTagsOptions): Promise<void> {
     return this.clientRequestManager.torrentsRemoveTags(hashes).then(() => {
       this.clientRequestManager
@@ -390,6 +402,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
 
               const torrentProperties: TorrentProperties = {
                 bytesDone: info.completed,
+                category: info.category,
                 comment: comment,
                 dateActive: info.dlspeed > 0 || info.upspeed > 0 ? -1 : info.last_activity,
                 dateAdded: info.added_on,
