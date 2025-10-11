@@ -43,9 +43,16 @@ const startWebServer = async () => {
   } else {
     await instance.listen({port: Number(port), host});
   }
-  const address = chalk.underline(`${ssl ? 'https' : 'http'}://${host}:${port}`);
 
-  console.log(chalk.green(`Flood server ${packageJSON.version} starting on ${address}\n`));
+  for (const addressObject of instance.addresses()) {
+    let hostname = addressObject.address;
+    if (addressObject.family == 'IPv6') {
+      hostname = `[${addressObject.address}]`;
+    }
+    const address = chalk.underline(`${ssl ? 'https' : 'http'}://${hostname}:${addressObject.port}`);
+
+    console.log(chalk.green(`Flood server ${packageJSON.version} starting on ${address}\n`));
+  }
 
   if (config.authMethod === 'none') {
     console.log(chalk.yellow('Starting without builtin authentication\n'));
