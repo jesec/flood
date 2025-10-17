@@ -7,11 +7,13 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 export const saveAddTorrentsUserPreferences = ({
   start,
   destination,
+  categories,
   tags,
   tab,
 }: {
   start?: FloodSettings['startTorrentsOnLoad'];
   destination?: string;
+  categories?: string;
   tags?: TorrentProperties['tags'];
   tab?: FloodSettings['UITorrentsAddTab'];
 }): void => {
@@ -26,10 +28,20 @@ export const saveAddTorrentsUserPreferences = ({
       changedSettings.torrentDestinations = SettingStore.floodSettings.torrentDestinations || {};
     }
 
+    if (changedSettings.torrentCategoryDestinations == null) {
+      changedSettings.torrentCategoryDestinations = SettingStore.floodSettings.torrentCategoryDestinations || {};
+    }
+
     if (typeof tags?.[0] === 'string') {
       changedSettings.torrentDestinations[tags[0]] = destination;
     } else {
       changedSettings.torrentDestinations[''] = destination;
+    }
+
+    if (typeof categories === 'string') {
+      changedSettings.torrentCategoryDestinations[categories] = destination;
+    } else {
+      changedSettings.torrentCategoryDestinations[''] = destination;
     }
   }
 
