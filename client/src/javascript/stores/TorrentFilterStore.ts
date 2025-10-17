@@ -17,6 +17,7 @@ class TorrentFilterStore {
   taxonomy: Taxonomy = {
     locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
     statusCounts: {},
+    statusSizes: {},
     tagCounts: {},
     tagSizes: {},
     trackerCounts: {},

@@ -70,3 +70,5 @@ coverage/
 # Test results
 cypress/videos
 cypress/screenshots
+
+taskfile.yaml
