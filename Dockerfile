@@ -11,7 +11,7 @@
 # publish the result image unless it was composed in a clean environment.
 
 ARG BUILDPLATFORM=amd64
-ARG NODE_IMAGE=docker.io/node:alpine
+ARG NODE_IMAGE=docker.io/node:24-alpine
 
 FROM --platform=$BUILDPLATFORM ${NODE_IMAGE} AS nodebuild
 
@@ -20,7 +20,7 @@ WORKDIR /usr/src/app/
 # Copy project files
 COPY . ./
 
-RUN corepack enable && corepack install
+RUN npm i -g corepack && corepack enable && corepack install
 
 # Fetch dependencies from npm
 RUN pnpm install --frozen-lockfile
