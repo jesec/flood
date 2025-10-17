@@ -77,6 +77,7 @@ const StatusFilters: FC = observer(() => {
       }
       name={filter.label}
       slug={filter.slug}
+      size={TorrentFilterStore.taxonomy.statusSizes[filter.slug] ?? 0}
     />
   ));
 
