@@ -110,7 +110,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .methodCall('system.multicall', [
           await Promise.all(
             processedFiles.map(async (file) => ({
-              methodName: start ? 'load.start_throw' : 'load.throw',
+              methodName: start ? 'load.start' : 'load.normal',
               params: [
                 '',
                 `data:applications/x-bittorrent;base64,${file}`,
