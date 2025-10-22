@@ -119,11 +119,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             })),
           ),
         ])
-        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
-        .then((response: Array<Array<string | number>>) => {
-          const hashes = response.flat(2).filter((value) => typeof value === 'string') as string[];
-          result.push(...hashes);
-        });
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
     } else {
       await Promise.all(
         processedFiles.map(async (file) => {
