@@ -32,12 +32,18 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1,
+              importLoaders: 2,
               sourceMap: true,
               modules: {
                 mode: 'global',
                 localIdentName: '[name]_[local]__[hash:base64:5]',
               },
+            },
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
             },
           },
           {
@@ -108,6 +114,8 @@ module.exports = {
       extensions: ['js', 'jsx', 'ts', 'tsx'],
       emitWarning: true,
       threads: true,
+      configType: 'flat',
+      eslintPath: require.resolve('eslint'),
     }),
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
@@ -117,7 +125,6 @@ module.exports = {
     new ReactRefreshWebpackPlugin(),
     // Watcher doesn't work well if you mistype casing in a path so we use
     // a plugin that prints an error when you attempt to do this.
-    // See https://github.com/facebookincubator/create-react-app/issues/240
     new CaseSensitivePathsPlugin(),
     new WebpackBar(),
   ],

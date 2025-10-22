@@ -7,17 +7,16 @@ interface PanelContentProps {
   borderPosition?: string;
 }
 
-const PanelContent: FC<PanelContentProps> = ({children, hasBorder, borderPosition}: PanelContentProps) => {
+const PanelContent: FC<PanelContentProps> = ({
+  children,
+  hasBorder = false,
+  borderPosition = 'top',
+}: PanelContentProps) => {
   const classes = classnames(`panel__content`, {
     [`panel__content--has-border--${borderPosition}`]: hasBorder,
   });
 
   return <div className={classes}>{children}</div>;
-};
-
-PanelContent.defaultProps = {
-  hasBorder: false,
-  borderPosition: 'top',
 };
 
 export default PanelContent;

@@ -5,7 +5,7 @@ interface LoadingRingProps {
   size?: string;
 }
 
-const LoadingRing: FC<LoadingRingProps> = ({size}: LoadingRingProps) => {
+const LoadingRing: FC<LoadingRingProps> = ({size = 'small'}: LoadingRingProps = {}) => {
   const classes = classnames('icon icon--loading icon--loading--ring', {
     'icon--small': size === 'small',
   });
@@ -28,10 +28,6 @@ const LoadingRing: FC<LoadingRingProps> = ({size}: LoadingRingProps) => {
       </div>
     </div>
   );
-};
-
-LoadingRing.defaultProps = {
-  size: 'small',
 };
 
 export default LoadingRing;

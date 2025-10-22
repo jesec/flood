@@ -8,7 +8,7 @@ interface FormErrorProps {
   isLoading?: boolean;
 }
 
-const FormError: FC<FormErrorProps> = ({children, isLoading}: FormErrorProps) => {
+const FormError: FC<FormErrorProps> = ({children, isLoading = false}: FormErrorProps) => {
   // Maybe add some classes later.
   const classes = classnames('form__element error', {
     'error--is-loading': isLoading,
@@ -19,10 +19,6 @@ const FormError: FC<FormErrorProps> = ({children, isLoading}: FormErrorProps) =>
       {children}
     </FormRowItem>
   );
-};
-
-FormError.defaultProps = {
-  isLoading: false,
 };
 
 export default FormError;

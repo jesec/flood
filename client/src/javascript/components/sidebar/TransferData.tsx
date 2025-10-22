@@ -1,6 +1,6 @@
 import {FC, useState, useRef} from 'react';
 import Measure from 'react-measure';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 import ClientStatusStore from '../../stores/ClientStatusStore';
 import TransferRateDetails from './TransferRateDetails';

@@ -5,9 +5,7 @@ interface LoadingIndicatorProps {
   inverse?: boolean;
 }
 
-const LoadingIndicator: FC<LoadingIndicatorProps> = (props: LoadingIndicatorProps) => {
-  const {inverse} = props;
-
+const LoadingIndicator: FC<LoadingIndicatorProps> = ({inverse = true}: LoadingIndicatorProps) => {
   const classes = classnames('loading-indicator', {
     'is-inverse': inverse,
   });
@@ -19,10 +17,6 @@ const LoadingIndicator: FC<LoadingIndicatorProps> = (props: LoadingIndicatorProp
       <div className="loading-indicator__bar loading-indicator__bar--3" />
     </div>
   );
-};
-
-LoadingIndicator.defaultProps = {
-  inverse: true,
 };
 
 export default LoadingIndicator;

@@ -5,7 +5,7 @@ interface DiskFlatProps {
   className?: string;
 }
 
-const DiskFlat: FC<DiskFlatProps> = memo(({className}: DiskFlatProps) => (
+const DiskFlat: FC<DiskFlatProps> = memo(({className}: DiskFlatProps = {}) => (
   <svg className={classnames('icon', 'icon--disk', className)} viewBox="0 0 60 60">
     <polygon points="51.8,0 51.8,0 51.8,3.7 51.8,56.3 8.2,56.3 8.2,3.7 8.2,0 8.2,0 4.5,0 4.5,60.1 55.5,60.1 55.5,0 	" />
     <rect x="18.4" y="8.9" width="23.1" height="3.8" />
@@ -22,9 +22,5 @@ const DiskFlat: FC<DiskFlatProps> = memo(({className}: DiskFlatProps) => (
     <rect x="28.2" y="0" width="3.5" height="3.8" />
   </svg>
 ));
-
-DiskFlat.defaultProps = {
-  className: undefined,
-};
 
 export default DiskFlat;

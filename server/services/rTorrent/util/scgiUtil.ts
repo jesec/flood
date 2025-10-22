@@ -19,7 +19,7 @@ const bufferStream = (stream: net.Socket): Promise<string> => {
 
 export const methodCallXML = (options: net.NetConnectOpts, methodName: string, params: XMLRPCValue[]) =>
   // TODO: better typings
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   new Promise<any>((resolve, reject) => {
     const stream = net.connect(options);
     const xml = serializer.serializeSync(methodName, params);
@@ -45,7 +45,7 @@ export const methodCallXML = (options: net.NetConnectOpts, methodName: string, p
 
 export const methodCallJSON = (options: net.NetConnectOpts, methodName: string, params: unknown[]) =>
   // TODO: better typings
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   new Promise<any>((resolve, reject) => {
     const stream = net.connect(options);
     const request =

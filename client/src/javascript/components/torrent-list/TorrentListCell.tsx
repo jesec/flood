@@ -1,9 +1,10 @@
 import classnames from 'classnames';
 import {computed} from 'mobx';
 import {FC} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
+import {css} from '@client/styled-system/css';
 import {
   CalendarFinished,
   CalendarCreated,
@@ -177,21 +178,27 @@ interface TorrentListCellProps {
 const TorrentListCell: FC<TorrentListCellProps> = observer(
   ({
     hash,
-    content: TorrentListCellContent,
+    content: TorrentListCellContent = DefaultTorrentListCellContent,
     column,
     className,
-    classNameOverride,
+    classNameOverride = false,
     width,
-    showIcon,
+    showIcon = false,
   }: TorrentListCellProps) => {
     const icon = showIcon ? ICONS[column] : null;
 
     return (
       <div
         className={
-          classNameOverride ? className : classnames('torrent__detail', `torrent__detail--${column}`, className)
+          classNameOverride
+            ? className
+            : classnames(
+                'torrent__detail',
+                `torrent__detail--${column}`,
+                className,
+                css({pointerEvents: 'none', userSelect: 'none'}),
+              )
         }
-        css={{pointerEvents: 'none', userSelect: 'none'}}
         role="cell"
         style={{width: `${width}px`}}
       >
@@ -205,13 +212,5 @@ const TorrentListCell: FC<TorrentListCellProps> = observer(
     );
   },
 );
-
-TorrentListCell.defaultProps = {
-  className: undefined,
-  classNameOverride: false,
-  content: DefaultTorrentListCellContent,
-  width: undefined,
-  showIcon: false,
-};
 
 export default TorrentListCell;

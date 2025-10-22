@@ -204,7 +204,7 @@ const {argv: argvObj} = yargs(process.argv.slice(2))
   .help();
 
 // HACK: pending yargs/yargs#2175
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 const argv = argvObj as Record<string, any>;
 
 process.on('SIGINT', () => {
@@ -215,8 +215,8 @@ try {
   fs.mkdirSync(path.join(argv.rundir), {recursive: true, mode: 0o700});
   fs.mkdirSync(path.join(argv.rundir, 'db'), {recursive: true});
   fs.mkdirSync(path.join(argv.rundir, 'temp'), {recursive: true});
-} catch (error) {
-  console.error('Failed to access runtime directory', error);
+} catch {
+  console.error('Failed to access runtime directory');
   process.exit(1);
 }
 
@@ -261,7 +261,7 @@ if (!argv.secret) {
       secret = buf.toString('hex');
       fs.writeFileSync(DEFAULT_SECRET_PATH, secret, {mode: 0o600});
     }
-  } catch (error) {
+  } catch {
     console.error('Failed to read or generate secret');
     process.exit(1);
   }

@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {Children, cloneElement, forwardRef, ReactElement} from 'react';
+import React, {Children, cloneElement, forwardRef, ReactElement} from 'react';
 
 import FormElementAddon from './FormElementAddon';
 import FormRowItem from './FormRowItem';
@@ -32,7 +32,7 @@ const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
       defaultValue,
       placeholder,
       autoComplete,
-      type,
+      type = 'text',
       disabled,
       readOnly,
       onChange,
@@ -73,6 +73,7 @@ const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
             className={inputClasses}
             defaultValue={defaultValue}
             placeholder={placeholder}
+            id={id}
             name={id}
             onChange={onChange}
             onClick={onClick}
@@ -89,14 +90,5 @@ const Textbox = forwardRef<HTMLInputElement, TextboxProps>(
     );
   },
 );
-
-Textbox.defaultProps = {
-  label: undefined,
-  type: 'text',
-  width: undefined,
-  addonPlacement: undefined,
-  labelOffset: undefined,
-  wrapperClassName: undefined,
-};
 
 export default Textbox;

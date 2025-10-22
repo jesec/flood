@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 import type {TorrentStatus} from '@shared/constants/torrentStatusMap';
 
@@ -18,9 +18,5 @@ const ProgressBar: FC<ProgressBarProps> = observer(({percent, status}: ProgressB
     </div>
   </div>
 ));
-
-ProgressBar.defaultProps = {
-  status: undefined,
-};
 
 export default ProgressBar;

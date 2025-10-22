@@ -1,7 +1,7 @@
 import {FC, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
-import {Checkbox, Form, FormRow, Textbox} from '@client/ui';
+import {Checkbox, Form, FormHandle, FormRow, Textbox} from '@client/ui';
 import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
 import TorrentActions from '@client/actions/TorrentActions';
 import UIStore from '@client/stores/UIStore';
@@ -24,7 +24,7 @@ type AddTorrentsByCreationFormData = {
 };
 
 const AddTorrentsByCreation: FC = () => {
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const {i18n} = useLingui();
   const [isCreatingTorrents, setIsCreatingTorrents] = useState<boolean>(false);
 
