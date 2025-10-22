@@ -1,5 +1,5 @@
 import {CSSProperties, forwardRef, KeyboardEvent, MouseEvent, ReactElement, TouchEvent} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 import SettingStore from '../../stores/SettingStore';
 import TorrentListCell from './TorrentListCell';
@@ -15,6 +15,11 @@ interface TorrentListRowCondensedProps {
   handleTouchStart: (event: TouchEvent) => void;
   handleTouchEnd: (event: TouchEvent) => void;
   handleKeyPress: (event: KeyboardEvent) => void;
+  'data-testid'?: string;
+  'data-torrent-status'?: string;
+  'data-torrent-name'?: string;
+  'data-is-selected'?: boolean;
+  'data-view-size'?: string;
 }
 
 const TorrentListRowCondensed = observer(
@@ -30,6 +35,7 @@ const TorrentListRowCondensed = observer(
         handleTouchStart,
         handleTouchEnd,
         handleKeyPress,
+        ...dataAttributes
       }: TorrentListRowCondensedProps,
       ref,
     ) => {
@@ -71,6 +77,7 @@ const TorrentListRowCondensed = observer(
           onTouchEnd={handleTouchEnd}
           onKeyPress={handleKeyPress}
           ref={ref}
+          {...dataAttributes}
         >
           {torrentListColumns}
         </div>

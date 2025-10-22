@@ -5,7 +5,7 @@ interface LoadingIndicatorDotsProps {
   className?: string;
 }
 
-const LoadingIndicatorDots: FC<LoadingIndicatorDotsProps> = memo(({className}: LoadingIndicatorDotsProps) => (
+const LoadingIndicatorDots: FC<LoadingIndicatorDotsProps> = memo(({className}: LoadingIndicatorDotsProps = {}) => (
   <svg className={classnames('icon', 'icon--loading-indicator loading-indicator--dots', className)} viewBox="0 0 32 32">
     <path
       className="loading-indicator--dots__dot loading-indicator--dots__dot--right"
@@ -21,9 +21,5 @@ const LoadingIndicatorDots: FC<LoadingIndicatorDotsProps> = memo(({className}: L
     />
   </svg>
 ));
-
-LoadingIndicatorDots.defaultProps = {
-  className: undefined,
-};
 
 export default LoadingIndicatorDots;

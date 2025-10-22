@@ -17,9 +17,9 @@ export interface SelectItemProps {
 const SelectItem: FC<SelectItemProps> = ({
   children,
   id,
-  isPlaceholder,
-  isTrigger,
-  isSelected,
+  isPlaceholder = false,
+  isTrigger = false,
+  isSelected = false,
   onClick,
 }: SelectItemProps) => {
   let icon = null;
@@ -39,13 +39,6 @@ const SelectItem: FC<SelectItemProps> = ({
       {children}
     </ContextMenuItem>
   );
-};
-
-SelectItem.defaultProps = {
-  isPlaceholder: false,
-  isSelected: false,
-  isTrigger: false,
-  onClick: undefined,
 };
 
 export default SelectItem;

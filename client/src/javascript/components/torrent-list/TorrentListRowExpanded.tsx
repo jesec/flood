@@ -1,7 +1,8 @@
 import {CSSProperties, FC, forwardRef, KeyboardEvent, MouseEvent, ReactElement, TouchEvent} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
+import {css} from '@client/styled-system/css';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentListColumns from '@client/constants/TorrentListColumns';
 
@@ -20,6 +21,11 @@ interface TorrentListRowExpandedProps {
   handleTouchStart: (event: TouchEvent) => void;
   handleTouchEnd: (event: TouchEvent) => void;
   handleKeyPress: (event: KeyboardEvent) => void;
+  'data-testid'?: string;
+  'data-torrent-status'?: string;
+  'data-torrent-name'?: string;
+  'data-is-selected'?: boolean;
+  'data-view-size'?: string;
 }
 
 const TorrentListCellPercentageNumber: FC<TorrentListCellContentProps> = observer(
@@ -49,6 +55,7 @@ const TorrentListRowExpanded = observer(
         handleTouchStart,
         handleTouchEnd,
         handleKeyPress,
+        ...dataAttributes
       }: TorrentListRowExpandedProps,
       ref,
     ) => {
@@ -121,8 +128,9 @@ const TorrentListRowExpanded = observer(
           onTouchEnd={handleTouchEnd}
           onKeyPress={handleKeyPress}
           ref={ref}
+          {...dataAttributes}
         >
-          <div css={{alignItems: 'center', display: 'flex'}}>
+          <div className={css({alignItems: 'center', display: 'flex'})}>
             {primarySection}
             <div className="torrent__details__section torrent__details__section--secondary">{secondarySection}</div>
           </div>

@@ -1,5 +1,5 @@
 import {FC, ReactElement} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans} from '@lingui/react';
 
 import {Checkbox, FormRow} from '@client/ui';

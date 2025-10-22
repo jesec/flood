@@ -1,11 +1,11 @@
 import classnames from 'classnames';
-import {css} from '@emotion/css';
 import {CSSTransition} from 'react-transition-group';
 import {FC, ReactNode} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useEffectOnce} from 'react-use';
 import {useNavigate} from 'react-router';
 import {useSearchParams} from 'react-router-dom';
+import {css} from '@client/styled-system/css';
 
 import AuthActions from '@client/actions/AuthActions';
 import AuthStore from '@client/stores/AuthStore';
@@ -90,9 +90,5 @@ const AppWrapper: FC<AppWrapperProps> = observer(({children, className}: AppWrap
     </div>
   );
 });
-
-AppWrapper.defaultProps = {
-  className: undefined,
-};
 
 export default AppWrapper;

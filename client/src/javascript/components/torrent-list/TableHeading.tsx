@@ -1,9 +1,10 @@
 import classnames from 'classnames';
 import {forwardRef, MutableRefObject, ReactElement, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 import {useEnsuredForwardedRef} from 'react-use';
 
+import {css} from '@client/styled-system/css';
 import TorrentListColumns, {TorrentListColumn} from '../../constants/TorrentListColumns';
 import SettingStore from '../../stores/SettingStore';
 import UIStore from '../../stores/UIStore';
@@ -123,14 +124,13 @@ const TableHeading = observer(
 
             accumulator.push(
               <button
-                className={classes}
-                css={{
+                className={`${classes} ${css({
                   textAlign: 'left',
-                  ':focus': {
+                  _focus: {
                     outline: 'none',
                     WebkitTapHighlightColor: 'transparent',
                   },
-                }}
+                })}`}
                 role="columnheader"
                 aria-sort={
                   isSortActive

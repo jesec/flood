@@ -1,10 +1,10 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {FC, useEffect, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
-import {Button, Checkbox, Form, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '@client/ui';
+import {Button, Checkbox, Form, FormHandle, FormError, FormRowItem, FormRow, LoadingRing, Textbox} from '@client/ui';
 import {Close} from '@client/ui/icons';
 import AuthActions from '@client/actions/AuthActions';
 import AuthStore from '@client/stores/AuthStore';
@@ -24,7 +24,7 @@ interface AuthTabFormData {
 }
 
 const AuthTab: FC = observer(() => {
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const clientConnectionSettingsRef = useRef<ClientConnectionSettings | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isUserListFetched, setIsUserListFetched] = useState<boolean>(false);

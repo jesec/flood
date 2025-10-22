@@ -6,7 +6,7 @@ interface ThemeSwitchProps {
 }
 
 // Material Design : brightness_6 - Apache 2.0
-const ThemeSwitch: FC<ThemeSwitchProps> = memo(({className}: ThemeSwitchProps) => (
+const ThemeSwitch: FC<ThemeSwitchProps> = memo(({className}: ThemeSwitchProps = {}) => (
   <svg className={classnames('icon', 'icon--theme-switch', className)} viewBox="0 0 60 60">
     <path d="M0,0h60v60H0V0z" fill="none" />
     <path
@@ -15,9 +15,5 @@ z M30,45V15c8.3,0,15,6.7,15,15S38.3,45,30,45z"
     />
   </svg>
 ));
-
-ThemeSwitch.defaultProps = {
-  className: undefined,
-};
 
 export default ThemeSwitch;

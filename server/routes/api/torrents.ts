@@ -80,7 +80,7 @@ const getDestination = async (
     if (!isAllowedPath(sanitizedPath)) {
       return undefined;
     }
-  } catch (e) {
+  } catch {
     return undefined;
   }
 

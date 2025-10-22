@@ -10,7 +10,7 @@ function isValidHttpUrl(s: string) {
 
   try {
     url = new URL(s);
-  } catch (_) {
+  } catch {
     return false;
   }
 
@@ -33,10 +33,6 @@ const LinkedText: FC<LinkedTextProps> = ({text, className}: LinkedTextProps) => 
   });
 
   return <span className={className}>{nodes}</span>;
-};
-
-LinkedText.defaultProps = {
-  className: undefined,
 };
 
 export default LinkedText;

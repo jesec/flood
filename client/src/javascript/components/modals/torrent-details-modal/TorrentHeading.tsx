@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {computed} from 'mobx';
 import {FC, useEffect, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
 import {Clock, DownloadThick, Ratio, Start, Stop, UploadThick} from '@client/ui/icons';

@@ -5,7 +5,7 @@ interface ETAProps {
   className?: string;
 }
 
-const ETA: FC<ETAProps> = memo(({className}: ETAProps) => (
+const ETA: FC<ETAProps> = memo(({className}: ETAProps = {}) => (
   <svg className={classnames('icon', 'icon--eta', className)} viewBox="0 0 60 60">
     <path
       className="icon__ring"
@@ -17,9 +17,5 @@ const ETA: FC<ETAProps> = memo(({className}: ETAProps) => (
     />
   </svg>
 ));
-
-ETA.defaultProps = {
-  className: undefined,
-};
 
 export default ETA;

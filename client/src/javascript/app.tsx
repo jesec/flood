@@ -1,7 +1,7 @@
 import {BrowserRouter} from 'react-router-dom';
 import {createRoot} from 'react-dom/client';
 import {FC, lazy, Suspense, useEffect} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Route, Routes} from 'react-router';
 import {useMedia} from 'react-use';
 
@@ -14,6 +14,7 @@ import UIStore from './stores/UIStore';
 import stringUtil from '@shared/util/stringUtil';
 
 import '../sass/style.scss';
+import '../sass/panda.css';
 
 const Login = lazy(() => import(/* webpackPrefetch: true */ './routes/Login'));
 const Overview = lazy(() => import(/* webpackPreload: true */ './routes/Overview'));

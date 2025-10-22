@@ -2,7 +2,18 @@ import {FC, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 import {useNavigate} from 'react-router';
 
-import {Button, Form, FormError, FormRow, Panel, PanelContent, PanelHeader, PanelFooter, Textbox} from '@client/ui';
+import {
+  Button,
+  Form,
+  FormHandle,
+  FormError,
+  FormRow,
+  Panel,
+  PanelContent,
+  PanelHeader,
+  PanelFooter,
+  Textbox,
+} from '@client/ui';
 import AuthActions from '@client/actions/AuthActions';
 
 import {AccessLevel} from '@shared/schema/constants/Auth';
@@ -21,7 +32,7 @@ interface AuthFormProps {
 
 const AuthForm: FC<AuthFormProps> = ({mode}: AuthFormProps) => {
   const {i18n} = useLingui();
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const clientConnectionSettingsRef = useRef<ClientConnectionSettings | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | {id: string} | undefined>(undefined);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

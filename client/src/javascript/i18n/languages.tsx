@@ -1,13 +1,12 @@
 import {FC, ReactNode, useEffect} from 'react';
 import {i18n} from '@lingui/core';
 import {I18nProvider} from '@lingui/react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 import detectLocale from '@client/util/detectLocale';
 import Languages from '@client/constants/Languages';
 import SettingStore from '@client/stores/SettingStore';
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
 import {messages as EN} from '@lingui/loader!./strings/en.json?raw-lingui';
 
 import type {Language} from '@client/constants/Languages';

@@ -19,7 +19,13 @@ interface TagSelectProps {
   onTagSelected?: (tags: TorrentProperties['tags']) => void;
 }
 
-const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, onTagSelected}: TagSelectProps) => {
+const TagSelect: FC<TagSelectProps> = ({
+  defaultValue,
+  placeholder,
+  id = 'tags',
+  label,
+  onTagSelected,
+}: TagSelectProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedTags, setSelectedTags] = useState<Array<string>>(defaultValue ?? []);
   const formRowRef = useRef<HTMLDivElement>(null);
@@ -145,14 +151,6 @@ const TagSelect: FC<TagSelectProps> = ({defaultValue, placeholder, id, label, on
       </div>
     </FormRowItem>
   );
-};
-
-TagSelect.defaultProps = {
-  id: 'tags',
-  label: undefined,
-  defaultValue: undefined,
-  placeholder: undefined,
-  onTagSelected: undefined,
 };
 
 export default TagSelect;

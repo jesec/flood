@@ -6,18 +6,12 @@ interface ApplicationViewProps {
   modifier?: string;
 }
 
-const ApplicationView: FC<ApplicationViewProps> = (props: ApplicationViewProps) => {
-  const {children, modifier} = props;
-
+const ApplicationView: FC<ApplicationViewProps> = ({children, modifier}: ApplicationViewProps) => {
   const classes = classnames('application__view', {
     [`application__view--${modifier}`]: modifier != null,
   });
 
   return <div className={classes}>{children}</div>;
-};
-
-ApplicationView.defaultProps = {
-  modifier: undefined,
 };
 
 export default ApplicationView;

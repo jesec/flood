@@ -8,18 +8,13 @@ interface PanelProps {
   transparent?: boolean;
 }
 
-const Panel: FC<PanelProps> = ({children, spacing, transparent}: PanelProps) => {
+const Panel: FC<PanelProps> = ({children, spacing = 'medium', transparent = false}: PanelProps) => {
   const classes = classnames(`panel`, `panel--${spacing}`, {
     'panel--transparent': transparent,
     inverse: ConfigStore.isPreferDark,
   });
 
   return <div className={classes}>{children}</div>;
-};
-
-Panel.defaultProps = {
-  spacing: 'medium',
-  transparent: false,
 };
 
 export default Panel;

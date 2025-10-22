@@ -21,10 +21,19 @@ interface ModalProps {
   initialTabId?: string;
 }
 
-const Modal: FC<ModalProps> = (props: ModalProps) => {
-  const {alignment, size, orientation, tabsInBody, inverse, initialTabId, className, content, heading, tabs, actions} =
-    props;
-
+const Modal: FC<ModalProps> = ({
+  alignment = 'left',
+  size = 'medium',
+  orientation = 'horizontal',
+  tabsInBody = false,
+  inverse = true,
+  initialTabId,
+  className = null,
+  content,
+  heading,
+  tabs,
+  actions,
+}: ModalProps) => {
   const contentWrapperClasses = classnames(
     'modal__content__wrapper',
     `modal--align-${alignment}`,
@@ -103,19 +112,6 @@ const Modal: FC<ModalProps> = (props: ModalProps) => {
       </div>
     </div>
   );
-};
-
-Modal.defaultProps = {
-  alignment: 'left',
-  className: null,
-  inverse: true,
-  size: 'medium',
-  orientation: 'horizontal',
-  tabsInBody: false,
-  content: undefined,
-  actions: undefined,
-  tabs: undefined,
-  initialTabId: undefined,
 };
 
 export default Modal;

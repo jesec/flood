@@ -1,7 +1,7 @@
 import {FC, useEffect, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
-import {Form, FormRow, Textbox} from '@client/ui';
+import {Form, FormHandle, FormRow, Textbox} from '@client/ui';
 import TorrentActions from '@client/actions/TorrentActions';
 import TorrentStore from '@client/stores/TorrentStore';
 import UIStore from '@client/stores/UIStore';
@@ -12,7 +12,7 @@ import Modal from '../Modal';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 
 const SetTrackersModal: FC = () => {
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const {i18n} = useLingui();
   const [isSettingTrackers, setIsSettingTrackers] = useState<boolean>(false);
   const [trackerState, setTrackerState] = useState<{

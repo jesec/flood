@@ -33,7 +33,7 @@ jobs:
 
     strategy:
       matrix:
-        node: ['20', '22']
+        node: ['20', '22', '24']
       fail-fast: false
 
     steps:
@@ -54,10 +54,5 @@ jobs:
     # so we do not need to update GitHub repo config
     needs: [build-real, build-pkg]
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node: ['18', '20']
-      fail-fast: false
     steps:
       - run: echo pass
