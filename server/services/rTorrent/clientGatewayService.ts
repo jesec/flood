@@ -58,6 +58,7 @@ import {
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
   availableMethodCalls = this.fetchAvailableMethodCalls(true);
+  private loadThrowSupported: boolean | undefined = undefined;
 
   async appendTorrentCommentCall(file: string, additionalCalls: string[]) {
     const comment = await getComment(Buffer.from(file, 'base64'));
@@ -66,6 +67,35 @@ class RTorrentClientGatewayService extends ClientGatewayService {
       return [...additionalCalls, `d.custom2.set="VRS24mrker${encodeURIComponent(comment)}"`];
     }
     return additionalCalls;
+  }
+
+  private async detectLoadThrowSupport(): Promise<boolean> {
+    if (this.loadThrowSupported !== undefined) {
+      return this.loadThrowSupported;
+    }
+
+    // Only JSON-RPC capable clients might support .throw methods
+    if (!this.clientRequestManager.isJSONCapable) {
+      this.loadThrowSupported = false;
+      return false;
+    }
+
+    try {
+      // Try using load.throw to detect support
+      // Use an invalid URL to avoid actually adding a torrent
+      await this.clientRequestManager.methodCall('load.throw', ['', '']);
+      this.loadThrowSupported = true;
+      return true;
+    } catch (error) {
+      // Check if error is "Method not found" (JSON-RPC error code -32601)
+      if ((error as RPCError).code === -32601) {
+        this.loadThrowSupported = false;
+        return false;
+      }
+      // For any other error (including invalid URL), assume .throw is supported
+      this.loadThrowSupported = true;
+      return true;
+    }
   }
 
   async addTorrentsByFile({
@@ -106,11 +136,18 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const result: string[] = [];
 
     if (this.clientRequestManager.isJSONCapable) {
+      const supportsThrow = await this.detectLoadThrowSupport();
       await this.clientRequestManager
         .methodCall('system.multicall', [
           await Promise.all(
             processedFiles.map(async (file) => ({
-              methodName: start ? 'load.start' : 'load.normal',
+              methodName: start
+                ? supportsThrow
+                  ? 'load.start_throw'
+                  : 'load.start'
+                : supportsThrow
+                ? 'load.throw'
+                : 'load.normal',
               params: [
                 '',
                 `data:applications/x-bittorrent;base64,${file}`,
@@ -159,7 +196,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const result: string[] = [];
 
     if (urls[0]) {
-      const methodName = start ? 'load.start' : 'load.normal';
+      const supportsThrow = await this.detectLoadThrowSupport();
+      const methodName = start
+        ? supportsThrow
+          ? 'load.start_throw'
+          : 'load.start'
+        : supportsThrow
+        ? 'load.throw'
+        : 'load.normal';
 
       await this.clientRequestManager
         .methodCall('system.multicall', [
