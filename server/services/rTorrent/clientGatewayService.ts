@@ -159,12 +159,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const result: string[] = [];
 
     if (urls[0]) {
-      let methodName: string;
-      if (this.clientRequestManager.isJSONCapable) {
-        methodName = start ? 'load.start_throw' : 'load.throw';
-      } else {
-        methodName = start ? 'load.start' : 'load.normal';
-      }
+      const methodName = start ? 'load.start' : 'load.normal';
 
       await this.clientRequestManager
         .methodCall('system.multicall', [
