@@ -23,6 +23,12 @@
   },
   "initializeCommand": "if [ \"${CODESPACES}\" != \"true\" ]; then umask 077 && mkdir -p ~/.docker ~/.gnupg ~/.ssh && umask 177 && touch ~/.git-credentials ~/.npmrc ~/.zsh_history; fi",
   "postCreateCommand": "pnpm install --frozen-lockfile",
+  "userEnvProbe": "loginInteractiveShell",
+  "dotfiles": {
+    "repository": "jesec/.dotfiles",
+    "targetPath": "~/.dotfiles",
+    "installCommand": "setup.sh"
+  },
   "overrideCommand": false,
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/node_modules/.bin"
