@@ -58,6 +58,7 @@ The dev container image is automatically built and published to GitHub Container
 ## 🔧 Configuration Files
 
 - **`devcontainer.json`**: Main dev container configuration
+
   - Features: docker-outside-of-docker, git, common-utils (zsh/oh-my-zsh)
   - Port forwarding: 3000 (Flood server), 4200 (webpack dev server), 6006 (Storybook)
   - Volume mounts: `.docker`, `.ssh`, `.npmrc`, etc. (for credential sharing)

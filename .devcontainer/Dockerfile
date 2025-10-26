@@ -8,9 +8,7 @@
 #
 # Sources should be mounted to /workspaces/flood.
 
-FROM docker.io/jesec/rtorrent:master as rtorrent
-
-FROM docker.io/ubuntu:jammy as flood
+FROM docker.io/ubuntu:jammy
 
 # Ensure apt is in non-interactive mode
 ENV DEBIAN_FRONTEND=noninteractive
@@ -22,6 +20,7 @@ RUN apt-get update && \
     curl \
     gnupg \
     software-properties-common \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js 22
@@ -33,8 +32,12 @@ RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
 # Install pnpm 9.7.0
 RUN npm install -g pnpm@9.7.0
 
-# Install rTorrent, qBittorrent and Transmission
-COPY --from=rtorrent / /
+# Install rTorrent from jesec's releases (same as CI)
+RUN wget -q https://github.com/jesec/rtorrent/releases/latest/download/rtorrent-linux-amd64.deb && \
+    dpkg -i rtorrent-linux-amd64.deb && \
+    rm rtorrent-linux-amd64.deb
+
+# Install qBittorrent and Transmission from PPAs
 RUN add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && \
     add-apt-repository -y ppa:transmissionbt/ppa && \
     apt-get update && \
