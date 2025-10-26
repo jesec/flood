@@ -58,6 +58,7 @@ import {
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
   availableMethodCalls = this.fetchAvailableMethodCalls(true);
+  private loadThrowSupported: boolean | undefined = undefined;
 
   async appendTorrentCommentCall(file: string, additionalCalls: string[]) {
     const comment = await getComment(Buffer.from(file, 'base64'));
@@ -106,11 +107,13 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const result: string[] = [];
 
     if (this.clientRequestManager.isJSONCapable) {
+      const methodName = await this.getLoadMethodName(start);
+
       await this.clientRequestManager
         .methodCall('system.multicall', [
           await Promise.all(
             processedFiles.map(async (file) => ({
-              methodName: start ? 'load.start' : 'load.normal',
+              methodName,
               params: [
                 '',
                 `data:applications/x-bittorrent;base64,${file}`,
@@ -159,12 +162,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const result: string[] = [];
 
     if (urls[0]) {
-      let methodName: string;
-      if (this.clientRequestManager.isJSONCapable) {
-        methodName = start ? 'load.start_throw' : 'load.throw';
-      } else {
-        methodName = start ? 'load.start' : 'load.normal';
-      }
+      const methodName = await this.getLoadMethodName(start);
 
       await this.clientRequestManager
         .methodCall('system.multicall', [
@@ -784,6 +782,50 @@ class RTorrentClientGatewayService extends ClientGatewayService {
   async testGateway(): Promise<void> {
     const availableMethodCalls = await this.fetchAvailableMethodCalls();
     this.availableMethodCalls = Promise.resolve(availableMethodCalls);
+    await this.detectLoadThrowSupport();
+  }
+
+  /**
+   * Detects if load.throw and load.start_throw methods are available.
+   * These methods provide better error reporting than load.normal/load.start,
+   * but were removed in newer rTorrent versions (>0.15.1).
+   *
+   * This detection runs once per service instance and caches the result.
+   * If load.throw is available, we assume load.start_throw is also available
+   * (they are typically defined together via method.redirect).
+   */
+  private async detectLoadThrowSupport(): Promise<boolean> {
+    if (this.loadThrowSupported !== undefined) {
+      return this.loadThrowSupported;
+    }
+
+    try {
+      const methodList = await this.clientRequestManager
+        .methodCall('system.listMethods', [])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+
+      // Check if load.throw exists in the method list
+      this.loadThrowSupported = Array.isArray(methodList) && methodList.includes('load.throw');
+    } catch {
+      // If we can't detect, assume not supported (safer default)
+      this.loadThrowSupported = false;
+    }
+
+    return this.loadThrowSupported;
+  }
+
+  /**
+   * Gets the appropriate load method name based on start flag and throw support.
+   * Prefers .throw variants when available for better error reporting.
+   */
+  private async getLoadMethodName(start: boolean): Promise<string> {
+    const throwSupported = await this.detectLoadThrowSupport();
+
+    if (throwSupported) {
+      return start ? 'load.start_throw' : 'load.throw';
+    }
+
+    return start ? 'load.start' : 'load.normal';
   }
 
   async fetchAvailableMethodCalls(fallback = false): Promise<{
