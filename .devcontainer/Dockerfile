@@ -10,7 +10,7 @@
 
 FROM docker.io/jesec/rtorrent:master as rtorrent
 
-FROM docker.io/ubuntu:noble as flood
+FROM docker.io/ubuntu:jammy as flood
 
 # Ensure apt is in non-interactive mode
 ENV DEBIAN_FRONTEND=noninteractive
