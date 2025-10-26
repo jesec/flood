@@ -2,7 +2,8 @@
   "name": "Flood development container",
   "build": {
     "dockerfile": "Dockerfile",
-    "context": ".."
+    "context": "..",
+    "cacheFrom": "ghcr.io/jesec/flood/devcontainer:latest"
   },
   "runArgs": ["--init"],
   "features": {

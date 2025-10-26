@@ -1,0 +1,64 @@
+name: Prebuild Dev Container
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '.devcontainer/**'
+      - '.github/workflows/devcontainer-prebuild.yml'
+  pull_request:
+    paths:
+      - '.devcontainer/**'
+      - '.github/workflows/devcontainer-prebuild.yml'
+  workflow_dispatch:
+  schedule:
+    # Rebuild weekly on Sundays at 00:00 UTC to keep dependencies fresh
+    - cron: '0 0 * * 0'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}/devcontainer
+
+jobs:
+  prebuild:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pre-build dev container image
+        uses: devcontainers/ci@v0.3
+        with:
+          imageName: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          cacheFrom: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          push: always
+          imageTag: latest
+
+      - name: Summary
+        if: success()
+        run: |
+          echo "### ✅ Dev Container Prebuild Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Benefits:**" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚀 Faster dev container startup (cached layers)" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 Consistent environment across all developers" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚡ Weekly rebuilds keep dependencies fresh" >> $GITHUB_STEP_SUMMARY
