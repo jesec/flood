@@ -46,7 +46,7 @@ jobs:
         with:
           imageName: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           cacheFrom: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          push: always
+          push: ${{ github.event_name != 'pull_request' && 'always' || 'never' }}
           imageTag: latest
 
       - name: Summary
@@ -58,7 +58,15 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Trigger:** ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Benefits:**" >> $GITHUB_STEP_SUMMARY
-          echo "- 🚀 Faster dev container startup (cached layers)" >> $GITHUB_STEP_SUMMARY
-          echo "- 📦 Consistent environment across all developers" >> $GITHUB_STEP_SUMMARY
-          echo "- ⚡ Weekly rebuilds keep dependencies fresh" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "**Status:** ✅ Build tested successfully (not pushed to registry)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "⚠️ **Security Note:** PRs only build/test the image. Push to master to publish." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "**Status:** ✅ Built and pushed to registry" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "**Benefits:**" >> $GITHUB_STEP_SUMMARY
+            echo "- 🚀 Faster dev container startup (cached layers)" >> $GITHUB_STEP_SUMMARY
+            echo "- 📦 Consistent environment across all developers" >> $GITHUB_STEP_SUMMARY
+            echo "- ⚡ Weekly rebuilds keep dependencies fresh" >> $GITHUB_STEP_SUMMARY
+          fi
