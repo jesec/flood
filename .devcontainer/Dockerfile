@@ -37,13 +37,15 @@ RUN wget -q https://github.com/jesec/rtorrent/releases/latest/download/rtorrent-
     apt-get install -y --no-install-recommends ./rtorrent-linux-amd64.deb && \
     rm rtorrent-linux-amd64.deb
 
-# Install qBittorrent and Transmission from PPAs
+# Install qBittorrent from PPA
 RUN add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && \
-    add-apt-repository -y ppa:transmissionbt/ppa && \
     apt-get update && \
-    apt-get install -y --no-install-recommends \
-    qbittorrent-nox \
-    transmission-daemon && \
+    apt-get install -y --no-install-recommends qbittorrent-nox && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Transmission from default repos (PPA not available for jammy)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends transmission-daemon && \
     rm -rf /var/lib/apt/lists/*
 
 # Install runtime dependencies
