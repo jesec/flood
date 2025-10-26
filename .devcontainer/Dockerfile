@@ -34,7 +34,7 @@ RUN npm install -g pnpm@9.7.0
 
 # Install rTorrent from jesec's releases (same as CI)
 RUN wget -q https://github.com/jesec/rtorrent/releases/latest/download/rtorrent-linux-amd64.deb && \
-    dpkg -i rtorrent-linux-amd64.deb && \
+    apt-get install -y --no-install-recommends ./rtorrent-linux-amd64.deb && \
     rm rtorrent-linux-amd64.deb
 
 # Install qBittorrent and Transmission from PPAs
