@@ -1,11 +1,11 @@
 # Changelog
 
-## [4.11.0] (October 17, 2024)
+## [4.11.0] (October 17, 2025)
 
 - feat: show size for status filter (#923)
 - fix: improve server startup message (#921)
 
-## [4.10.0] (October 3, 2024)
+## [4.10.0] (October 4, 2025)
 
 - feat: Add optional Last Activity column to torrent list (#906)
 - feat(client): add units of measure to throttle speeds (#899)
@@ -18,7 +18,7 @@
 - build(deps-dev): bump axios from 1.8.2 to 1.12.0 (#912)
 - build(deps-dev): bump tar-fs from 2.1.3 to 2.1.4 (#914)
 
-## [4.9.5] (June 8, 2024)
+## [4.9.5] (June 9, 2025)
 
 - ci: use new pkg (#891)
 - build(deps-dev): bump fastify from 4.29.0 to 4.29.1 (#881)
@@ -27,7 +27,7 @@
 - build(deps-dev): bump webpack-dev-server from 4.15.2 to 5.2.1 (#885)
 - i18n: new translations (#889)
 
-## [4.9.4] (May 27, 2024)
+## [4.9.4] (June 9, 2025)
 
 - build: add ghcr.io docker image
 - build(deps-dev): bump esbuild from 0.19.12 to 0.25.0 (#869)
@@ -35,22 +35,22 @@
 - i18n: new translations (#863)
 - ci: replace apt with apt-get (#860)
 
-## [4.9.3] (January 29, 2024)
+## [4.9.3] (January 30, 2025)
 
 - build: upgrade deps (#858)
 - docs: fix readme badge (#857)
 
-## [4.9.2] (January 29, 2024)
+## [4.9.2] (January 30, 2025)
 
 - ci: always use version from package.json from ci (#855)
 - ci: upload deb with gh cli to avoid override (#854)
 
-## [4.9.1] (January 29, 2024)
+## [4.9.1] (January 30, 2025)
 
 - i18n: new translations (#852)
 - ci: use bazel@7 to build deb (#851)
 
-## [4.9.0] (January 14, 2024)
+## [4.9.0] (January 15, 2025)
 
 - feat: add filter by filesystem location + bonus tooltip on overflowed filter names (#518)
 - fix(ui): some dark mode fixes (#714)
@@ -60,7 +60,7 @@
 - i18n: new translations (#848, #841)
 - build(deps): bump nanoid from 3.3.7 to 3.3.8 (#833)
 
-## [4.8.5] (December 9, 2023)
+## [4.8.5] (December 10, 2024)
 
 - fix(rTorrent): support xmlrpc int type (#829)
 - fix(rTorrent): prevent extra commas in serialized XML (#830)
@@ -72,7 +72,7 @@
 - i18n: new translations (#821)
 - ci: fix docker-dbg job (#822)
 
-## [4.8.4] (October 9, 2023)
+## [4.8.4] (October 9, 2024)
 
 - fix: add_paused changed to add_stopped in qbit 5 (#810)
 - ci: fix release workflow (#808)
@@ -81,7 +81,7 @@
 - build(deps): bump find-my-way from 8.2.0 to 8.2.2 (#807)
 - build(deps-dev): bump webpack from 5.93.0 to 5.94.0 (#806)
 
-## [4.8.3] (October 7, 2023)
+## [4.8.3] (October 8, 2024)
 
 - fix: resume and pause does not work with qbittorrent 5 (#801)
 - fix: changed transmission ratio calculation to total size instead of downloaded size (#791)
