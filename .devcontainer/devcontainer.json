@@ -1,39 +1,68 @@
 {
   "name": "Flood development container",
-  "context": "..",
-  "dockerFile": "./Dockerfile",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
   "runArgs": ["--init"],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "dockerDashComposeVersion": "v2"
+    },
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "installZsh": true,
+      "installOhMyZsh": true,
+      "upgradePackages": true,
+      "username": "vscode",
+      "uid": "1000",
+      "gid": "1000"
+    }
+  },
   "initializeCommand": "if [ \"${CODESPACES}\" != \"true\" ]; then umask 077 && mkdir -p ~/.docker ~/.gnupg ~/.ssh && umask 177 && touch ~/.git-credentials ~/.npmrc ~/.zsh_history; fi",
-  "postCreateCommand": "npm install",
+  "postCreateCommand": "pnpm install --frozen-lockfile",
   "overrideCommand": false,
   "remoteEnv": {
     "PATH": "${containerEnv:PATH}:${containerWorkspaceFolder}/node_modules/.bin"
   },
-  "settings": {
-    "terminal.integrated.shell.linux": "/bin/zsh"
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      },
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
+        "esbenp.prettier-vscode",
+        "github.vscode-pull-request-github",
+        "gencer.html-slim-scss-css-class-completion",
+        "ms-azuretools.vscode-docker",
+        "orta.vscode-jest",
+        "pucelle.vscode-css-navigation",
+        "streetsidesoftware.code-spell-checker",
+        "visualstudioexptteam.vscodeintellicode"
+      ]
+    }
   },
-  "extensions": [
-    "dbaeumer.vscode-eslint",
-    "eamodio.gitlens",
-    "esbenp.prettier-vscode",
-    "github.vscode-pull-request-github",
-    "gencer.html-slim-scss-css-class-completion",
-    "ms-azuretools.vscode-docker",
-    "ms-vscode.vscode-typescript-next",
-    "orta.vscode-jest",
-    "pucelle.vscode-css-navigation",
-    "streetsidesoftware.code-spell-checker",
-    "visualstudioexptteam.vscodeintellicode"
-  ],
-  "forwardPorts": [3000, 4200],
+  "forwardPorts": [3000, 4200, 6006],
+  "portsAttributes": {
+    "3000": {
+      "label": "Flood Server"
+    },
+    "4200": {
+      "label": "Webpack Dev Server"
+    },
+    "6006": {
+      "label": "Storybook"
+    }
+  },
   "remoteUser": "vscode",
   "mounts": [
-    "source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind",
-    "source=${localEnv:HOME}/.docker,target=/home/vscode/.docker,type=bind",
-    "source=${localEnv:HOME}/.gnupg,target=/home/vscode/.gnupg,type=bind",
-    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
-    "source=${localEnv:HOME}/.git-credentials,target=/home/vscode/.git-credentials,type=bind",
-    "source=${localEnv:HOME}/.npmrc,target=/home/vscode/.npmrc,type=bind",
-    "source=${localEnv:HOME}/.zsh_history,target=/home/vscode/.zsh_history,type=bind"
+    "source=${localEnv:HOME}/.docker,target=/home/vscode/.docker,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.gnupg,target=/home/vscode/.gnupg,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.git-credentials,target=/home/vscode/.git-credentials,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.npmrc,target=/home/vscode/.npmrc,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.zsh_history,target=/home/vscode/.zsh_history,type=bind,consistency=cached"
   ]
 }
