@@ -1,6 +1,8 @@
 import classnames from 'classnames';
 import {EventHandler, FC, ReactNode, SyntheticEvent} from 'react';
 
+import {css} from '@client/styled-system/css';
+
 interface ContextMenuItemProps {
   children: ReactNode;
   className?: string;
@@ -12,16 +14,15 @@ const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick
 
   return (
     <div
-      className={classes}
-      role="button"
-      css={{
+      className={`${classes} ${css({
         width: '100%',
         textAlign: 'left',
-        ':focus': {
+        _focus: {
           outline: 'none',
           WebkitTapHighlightColor: 'transparent',
         },
-      }}
+      })}`}
+      role="button"
       tabIndex={0}
       onClick={onClick}
       onKeyPress={(e) => {
@@ -34,10 +35,6 @@ const ContextMenuItem: FC<ContextMenuItemProps> = ({children, className, onClick
       {children}
     </div>
   );
-};
-
-ContextMenuItem.defaultProps = {
-  className: undefined,
 };
 
 export default ContextMenuItem;

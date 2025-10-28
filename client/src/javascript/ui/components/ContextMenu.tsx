@@ -32,16 +32,19 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     {
       children,
       isIn,
-      matchTriggerWidth,
-      menuAlign,
-      padding,
-      scrolling,
+      matchTriggerWidth = true,
+      menuAlign = 'left',
+      padding = true,
+      scrolling = true,
       triggerRef,
-      triggerCoordinates,
+      triggerCoordinates = {
+        x: 0,
+        y: 0,
+      },
       onClick,
       onOverlayClick,
       onOverlayRightClick,
-      overlayProps,
+      overlayProps = {},
     }: ContextMenuProps,
     ref,
   ) => {
@@ -137,21 +140,5 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     );
   },
 );
-
-ContextMenu.defaultProps = {
-  matchTriggerWidth: true,
-  menuAlign: 'left',
-  overlayProps: {},
-  padding: true,
-  scrolling: true,
-  triggerRef: undefined,
-  triggerCoordinates: {
-    x: 0,
-    y: 0,
-  },
-  onClick: undefined,
-  onOverlayClick: undefined,
-  onOverlayRightClick: undefined,
-};
 
 export default ContextMenu;

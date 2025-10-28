@@ -1,4 +1,3 @@
-const autoprefixer = require('autoprefixer');
 const path = require('node:path');
 const webpack = require('webpack');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -43,7 +42,7 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              importLoaders: 1,
+              importLoaders: 2,
               sourceMap: true,
               modules: {
                 mode: 'global',
@@ -55,9 +54,6 @@ module.exports = {
             loader: 'postcss-loader',
             options: {
               sourceMap: true,
-              postcssOptions: {
-                plugins: () => [autoprefixer()],
-              },
             },
           },
           {

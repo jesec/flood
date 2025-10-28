@@ -27,9 +27,9 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
       label,
       selectable,
       suggested,
-      showBasePathToggle,
-      showCompletedToggle,
-      showSequentialToggle,
+      showBasePathToggle = false,
+      showCompletedToggle = false,
+      showSequentialToggle = false,
       onChange,
     }: FilesystemBrowserTextboxProps,
     ref,
@@ -163,15 +163,5 @@ const FilesystemBrowserTextbox = forwardRef<HTMLInputElement, FilesystemBrowserT
     );
   },
 );
-
-FilesystemBrowserTextbox.defaultProps = {
-  label: undefined,
-  selectable: undefined,
-  suggested: undefined,
-  showBasePathToggle: false,
-  showCompletedToggle: false,
-  showSequentialToggle: false,
-  onChange: undefined,
-};
 
 export default FilesystemBrowserTextbox;

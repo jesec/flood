@@ -1,6 +1,6 @@
-import {css} from '@emotion/react';
-import {FC, ReactNode, useState} from 'react';
+import React, {FC, ReactNode, useState} from 'react';
 import {useLingui} from '@lingui/react';
+import {css} from '@client/styled-system/css';
 
 import PriorityLevels from '../../constants/PriorityLevels';
 
@@ -20,8 +20,8 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   level,
   maxLevel,
   priorityType,
-  showLabel,
-  clickHandled,
+  showLabel = false,
+  clickHandled = false,
   changePriorityFuncRef,
   onChange,
 }: PriorityMeterProps) => {
@@ -44,7 +44,6 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   };
 
   if (changePriorityFuncRef != null) {
-    // eslint-disable-next-line no-param-reassign
     changePriorityFuncRef.current = changePriority;
   }
 
@@ -76,24 +75,23 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
   );
 
   const styles = css({
-    ':focus': {
+    _focus: {
       outline: 'none',
       WebkitTapHighlightColor: 'transparent',
     },
-    ':focus-visible': {
+    _focusVisible: {
       outline: 'dashed',
     },
   });
 
   return clickHandled ? (
-    <div className="priority-meter__wrapper" css={styles}>
+    <div className={`priority-meter__wrapper ${styles}`}>
       {levelElement}
       {labelElement}
     </div>
   ) : (
     <button
-      className="priority-meter__wrapper"
-      css={styles}
+      className={`priority-meter__wrapper ${styles}`}
       type="button"
       onClick={() => {
         changePriority();
@@ -103,12 +101,6 @@ const PriorityMeter: FC<PriorityMeterProps> = ({
       {labelElement}
     </button>
   );
-};
-
-PriorityMeter.defaultProps = {
-  showLabel: false,
-  clickHandled: false,
-  changePriorityFuncRef: undefined,
 };
 
 export default PriorityMeter;

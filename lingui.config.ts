@@ -1,0 +1,45 @@
+import {defineConfig} from '@lingui/cli';
+import {formatter} from '@lingui/format-json';
+
+export default defineConfig({
+  locales: [
+    'af',
+    'ar',
+    'ca',
+    'cs',
+    'da',
+    'de',
+    'el',
+    'en',
+    'es',
+    'fi',
+    'fr',
+    'he',
+    'hu',
+    'it',
+    'ja',
+    'ko',
+    'nl',
+    'no',
+    'pl',
+    'pt',
+    'ro',
+    'ru',
+    'sr',
+    'sv',
+    'tr',
+    'uk',
+    'vi',
+    'zh-Hans',
+    'zh-Hant',
+  ],
+  sourceLocale: 'en',
+  catalogs: [
+    {
+      path: 'client/src/javascript/i18n/strings/{locale}',
+      include: ['<rootDir>/client/src/javascript'],
+      exclude: ['**/node_modules/**'],
+    },
+  ],
+  format: formatter({style: 'minimal'}),
+});

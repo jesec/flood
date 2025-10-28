@@ -7,16 +7,12 @@ interface SidebarItemProps {
   modifier: string;
 }
 
-const SidebarItem: FC<SidebarItemProps> = ({children, baseClassName, modifier}: SidebarItemProps) => {
+const SidebarItem: FC<SidebarItemProps> = ({children, baseClassName = 'sidebar__item', modifier}: SidebarItemProps) => {
   const classes = classnames(baseClassName, {
     [`${baseClassName}--${modifier}`]: modifier,
   });
 
   return <div className={classes}>{children}</div>;
-};
-
-SidebarItem.defaultProps = {
-  baseClassName: 'sidebar__item',
 };
 
 export default SidebarItem;

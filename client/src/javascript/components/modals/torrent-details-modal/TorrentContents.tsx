@@ -1,5 +1,5 @@
 import classnames from 'classnames';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {FC, useEffect, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 
@@ -36,7 +36,7 @@ const TorrentContents: FC = observer(() => {
     return null;
   }
 
-  const {hash} = UIStore?.activeModal;
+  const {hash} = UIStore.activeModal;
 
   let directoryHeadingIconContent = null;
   let fileDetailContent = null;

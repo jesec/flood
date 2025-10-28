@@ -6,7 +6,7 @@ interface SpinnerProps {
   className?: string;
 }
 
-const Spinner: FC<SpinnerProps> = ({className}: SpinnerProps) => {
+const Spinner: FC<SpinnerProps> = ({className}: SpinnerProps = {}) => {
   const id = uniqueId();
   const maskID = `icon--spinner__mask-id--${id}`;
 
@@ -28,10 +28,6 @@ const Spinner: FC<SpinnerProps> = ({className}: SpinnerProps) => {
       />
     </svg>
   );
-};
-
-Spinner.defaultProps = {
-  className: undefined,
 };
 
 export default Spinner;

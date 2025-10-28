@@ -1,0 +1,23 @@
+/* 
+ * Minimal Storybook Layout Setup
+ * 
+ * Only provides the essential setup for Storybook's root containers.
+ * Application styles handle everything else.
+ */
+
+/* Ensure layer order matches the application */
+@layer reset, third-party, base, tokens, recipes, utilities;
+
+/* Minimal Storybook-specific setup in base layer */
+@layer base {
+  /* Storybook root needs viewport height */
+  #storybook-root {
+    height: 100vh;
+    width: 100%;
+  }
+
+  /* Remove Storybook's default padding */
+  .sb-show-main.sb-main-padded {
+    padding: 0;
+  }
+}

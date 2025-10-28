@@ -1,10 +1,11 @@
 import classnames from 'classnames';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import {EventHandler, FC, MutableRefObject, ReactNode, SyntheticEvent, useCallback, useRef} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import uniqueId from 'lodash/uniqueId';
 import {useKeyPressEvent} from 'react-use';
 
+import {css} from '@client/styled-system/css';
 import UIStore from '@client/stores/UIStore';
 
 interface DropdownButtonProps {
@@ -22,24 +23,22 @@ const DropdownButton: FC<DropdownButtonProps> = ({className, label, isFocusHandl
   ) : (
     <button
       type="button"
-      className={className}
-      css={{
-        width: '100%',
-        height: '100%',
-        textAlign: 'left',
-        ':focus-visible': {
-          outline: 'dashed',
-        },
-      }}
+      className={classnames(
+        className,
+        css({
+          width: '100%',
+          height: '100%',
+          textAlign: 'left',
+          _focusVisible: {
+            outline: 'dashed',
+          },
+        }),
+      )}
       onClick={onClick}
     >
       {label}
     </button>
   );
-
-DropdownButton.defaultProps = {
-  className: undefined,
-};
 
 export interface DropdownItem<T extends string = string> {
   className?: string;
@@ -73,18 +72,18 @@ interface DropdownProps<T extends string = string> {
 
 const Dropdown = observer(
   <T extends string = string>({
-    baseClassName,
-    dropdownWrapperClass,
-    dropdownButtonClass,
+    baseClassName = 'dropdown',
+    dropdownWrapperClass = 'dropdown',
+    dropdownButtonClass = 'dropdown__trigger',
     dropdownClickRef,
-    direction,
+    direction = 'down',
     header,
-    matchButtonWidth,
+    matchButtonWidth = false,
     menuItems,
-    noWrap,
+    noWrap = false,
     trigger,
     width,
-    isFocusHandled,
+    isFocusHandled = false,
     handleItemSelect,
     onOpen,
   }: DropdownProps<T>) => {
@@ -126,7 +125,6 @@ const Dropdown = observer(
     };
 
     if (dropdownClickRef) {
-      // eslint-disable-next-line no-param-reassign
       dropdownClickRef.current = handleDropdownClick;
     }
 
@@ -146,7 +144,6 @@ const Dropdown = observer(
       const listElement = (
         <ul className="dropdown__items" key="dropdown-items">
           {menuItems.map((items, index) => (
-            // eslint-disable-next-line react/no-array-index-key
             <div className="dropdown__list" key={index}>
               {items.map((item, itemIndex) => {
                 const classes = classnames('dropdown__item menu__item', item.className, {
@@ -155,7 +152,6 @@ const Dropdown = observer(
                 });
 
                 return (
-                  // eslint-disable-next-line react/no-array-index-key
                   <li className={classes} key={itemIndex}>
                     <button
                       type="button"
@@ -201,15 +197,5 @@ const Dropdown = observer(
     );
   },
 );
-
-(Dropdown as FC<DropdownProps>).defaultProps = {
-  baseClassName: 'dropdown',
-  direction: 'down',
-  dropdownWrapperClass: 'dropdown',
-  dropdownButtonClass: 'dropdown__trigger',
-  matchButtonWidth: false,
-  noWrap: false,
-  isFocusHandled: false,
-};
 
 export default Dropdown;

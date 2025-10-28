@@ -13,7 +13,7 @@ const doFilesExist = (files: Array<string>) => {
       fs.accessSync(filename, fs.constants.F_OK);
     });
     return true;
-  } catch (err) {
+  } catch {
     return false;
   }
 };
