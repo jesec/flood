@@ -398,7 +398,7 @@ class QBittorrentClientGatewayService extends ClientGatewayService {
                 directory: info.save_path,
                 downRate: info.dlspeed,
                 downTotal: info.downloaded,
-                eta: info.eta >= 8640000 ? -1 : info.eta,
+                eta: info.dlspeed === 0 || info.eta >= 8640000 ? -1 : info.eta,
                 hash: info.hash.toUpperCase(),
                 isPrivate,
                 isInitialSeeding: info.super_seeding,
