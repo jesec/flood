@@ -84,3 +84,4 @@ styled-system-studio
 css-snapshots/
 *storybook.log
 storybook-static
+package-lock.json
