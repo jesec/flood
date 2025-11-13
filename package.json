@@ -137,7 +137,7 @@
     "concurrently": "^9.2.0",
     "content-disposition": "^0.5.4",
     "cookie-parser": "^1.4.7",
-    "create-torrent": "^5.0.9",
+    "create-torrent": "^6.1.0",
     "css-loader": "^6.11.0",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "d3-array": "^3.2.4",
