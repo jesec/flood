@@ -28,7 +28,6 @@ const getFlag = (countryCode?: string): string | null => {
     return flag;
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-throw-literal
   throw loadFlag();
 };
 

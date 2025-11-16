@@ -42,8 +42,8 @@ const Select: FC<SelectProps> = ({
   disabled,
   label,
   labelOffset,
-  persistentPlaceholder,
-  priority,
+  persistentPlaceholder = false,
+  priority = 'quaternary',
   shrink,
   grow,
   matchTriggerWidth,
@@ -185,24 +185,6 @@ const Select: FC<SelectProps> = ({
       </div>
     </FormRowItem>
   );
-};
-
-Select.defaultProps = {
-  defaultID: undefined,
-  additionalClassNames: undefined,
-  width: undefined,
-  onOpen: undefined,
-  onClose: undefined,
-  onSelect: undefined,
-  label: undefined,
-  menuAlign: undefined,
-  disabled: undefined,
-  matchTriggerWidth: undefined,
-  shrink: undefined,
-  grow: undefined,
-  labelOffset: undefined,
-  persistentPlaceholder: false,
-  priority: 'quaternary',
 };
 
 export default Select;

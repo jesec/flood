@@ -5,7 +5,7 @@ interface ChevronProps {
   className?: string;
 }
 
-const Chevron: FC<ChevronProps> = memo(({className}: ChevronProps) => (
+const Chevron: FC<ChevronProps> = memo(({className}: ChevronProps = {}) => (
   <svg
     className={classnames('icon', 'icon--chevron', className)}
     width="18"
@@ -20,9 +20,5 @@ const Chevron: FC<ChevronProps> = memo(({className}: ChevronProps) => (
     />
   </svg>
 ));
-
-Chevron.defaultProps = {
-  className: undefined,
-};
 
 export default Chevron;

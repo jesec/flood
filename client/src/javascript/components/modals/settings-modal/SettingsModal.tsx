@@ -1,5 +1,5 @@
 import {FC, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import type {ClientSettings} from '@shared/types/ClientSettings';

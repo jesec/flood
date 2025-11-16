@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "jsx": "react-jsx",
-    "jsxImportSource": "@emotion/react",
     "sourceMap": true,
     "target": "esnext",
     "moduleResolution": "Bundler",
@@ -13,7 +12,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "experimentalDecorators": true,
     "useDefineForClassFields": true,
     "useUnknownInCatchVariables": false,
     "baseUrl": "./",
@@ -23,6 +21,6 @@
       "@shared/*": ["shared/*"]
     }
   },
-  "include": ["./client/**/*.ts", "./client/**/*.tsx", "./server/**/*.ts", "./server/**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": ["./**/*.ts", "./**/*.tsx", "./.storybook/**/*.ts", "./.storybook/**/*.tsx"],
+  "exclude": ["node_modules", "cypress", "dist"]
 }

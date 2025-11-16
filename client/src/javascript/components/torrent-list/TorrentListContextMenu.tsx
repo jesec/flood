@@ -1,5 +1,5 @@
 import {createRef, FC, MutableRefObject} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 
 import {Checkmark} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';

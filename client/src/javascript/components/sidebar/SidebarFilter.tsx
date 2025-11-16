@@ -1,10 +1,19 @@
 import classnames from 'classnames';
 import {createRef, FC, ReactNode, KeyboardEvent, MouseEvent, RefObject, TouchEvent, useEffect, useState} from 'react';
 import {useLingui} from '@lingui/react';
+
+import {css} from '@client/styled-system/css';
 import {Start} from '@client/ui/icons';
 
 import Badge from '../general/Badge';
 import Size from '../general/Size';
+
+const focusStyle = css({
+  _focus: {
+    outline: 'none',
+    WebkitTapHighlightColor: 'transparent',
+  },
+});
 
 const useRefTextOverflowed = (ref: RefObject<HTMLElement>) => {
   const [overflowed, setOverflowed] = useState(false);
@@ -55,18 +64,6 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
     expanded: expanded,
   });
 
-  const flexCss = children
-    ? {
-        display: 'flex',
-      }
-    : {};
-  const focusCss = {
-    ':focus': {
-      outline: 'none',
-      WebkitTapHighlightColor: 'transparent',
-    },
-  };
-
   let name = _name;
   if (name === '') {
     name = i18n._('filter.all');
@@ -90,11 +87,10 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
 
   return (
     <li>
-      <div css={flexCss}>
+      <div className={children ? css({display: 'flex'}) : undefined}>
         {children && (
           <button
-            className={expanderClassNames}
-            css={focusCss}
+            className={`${expanderClassNames} ${focusStyle}`}
             type="button"
             onClick={() => setExpanded(!expanded)}
             role="switch"
@@ -104,8 +100,7 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
           </button>
         )}
         <button
-          className={classNames}
-          css={focusCss}
+          className={`${classNames} ${focusStyle}`}
           type="button"
           onClick={(event) => handleClick(slug, event)}
           role="menuitem"
@@ -121,11 +116,6 @@ const SidebarFilter: FC<SidebarFilterProps> = ({
       {children && expanded && <ul className="sidebar-filter__nested">{children}</ul>}
     </li>
   );
-};
-
-SidebarFilter.defaultProps = {
-  icon: undefined,
-  size: undefined,
 };
 
 export default SidebarFilter;

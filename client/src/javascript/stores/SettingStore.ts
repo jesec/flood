@@ -1,4 +1,4 @@
-import {computed, makeAutoObservable} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
 
@@ -16,7 +16,7 @@ class SettingStore {
   // Default settings are overridden by settings stored in database.
   floodSettings: FloodSettings = {...defaultFloodSettings};
 
-  @computed get totalCellWidth() {
+  get totalCellWidth() {
     return this.floodSettings.torrentListColumns.reduce((accumulator, {id, visible}) => {
       const width = Number(this.floodSettings.torrentListColumnWidths[id]);
 

@@ -1,4 +1,4 @@
-import {computed, makeAutoObservable} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 
 import type {Notification, NotificationCount, NotificationState} from '@shared/types/Notification';
 
@@ -8,7 +8,7 @@ class NotificationStore {
   notifications: Array<Notification> = [];
   notificationCount: NotificationCount = INITIAL_COUNT_STATE;
 
-  @computed get hasNotification() {
+  get hasNotification() {
     return this.notificationCount.total !== 0;
   }
 

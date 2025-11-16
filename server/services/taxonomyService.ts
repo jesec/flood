@@ -16,6 +16,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     categoriesSizes: {},
     locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
     statusCounts: {'': 0},
+    statusSizes: {'': 0},
     tagCounts: {'': 0, untagged: 0},
     tagSizes: {},
     trackerCounts: {'': 0},
@@ -67,6 +68,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
       categoriesSizes: {...this.taxonomy.categoriesSizes},
       locationTree: {...this.taxonomy.locationTree},
       statusCounts: {...this.taxonomy.statusCounts},
+      statusSizes: {...this.taxonomy.statusSizes},
       tagCounts: {...this.taxonomy.tagCounts},
       tagSizes: {...this.taxonomy.tagSizes},
       trackerCounts: {...this.taxonomy.trackerCounts},
@@ -75,12 +77,14 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
 
     torrentStatusMap.forEach((status) => {
       this.taxonomy.statusCounts[status] = 0;
+      this.taxonomy.statusSizes[status] = 0;
     });
 
     this.taxonomy.categoriesCounts = {'': 0, uncategorized: 0};
     this.taxonomy.categoriesSizes = {};
     this.taxonomy.locationTree = {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0};
     this.taxonomy.statusCounts[''] = 0;
+    this.taxonomy.statusSizes[''] = 0;
     this.taxonomy.tagCounts = {'': 0, untagged: 0};
     this.taxonomy.tagSizes = {};
     this.taxonomy.trackerCounts = {'': 0};
@@ -110,6 +114,7 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
     this.incrementCategorySizes(torrentProperties.category, torrentProperties.sizeBytes);
     this.incrementLocationCountsAndSizes(torrentProperties.directory, torrentProperties.sizeBytes);
     this.incrementStatusCounts(torrentProperties.status);
+    this.incrementStatusSizes(torrentProperties.status, torrentProperties.sizeBytes);
     this.incrementTagCounts(torrentProperties.tags);
     this.incrementTagSizes(torrentProperties.tags, torrentProperties.sizeBytes);
     this.incrementTrackerCounts(torrentProperties.trackerURIs);
@@ -181,6 +186,14 @@ class TaxonomyService extends BaseService<TaxonomyServiceEvents> {
   incrementStatusCounts(statuses: Array<TorrentStatus>) {
     statuses.forEach((status) => {
       this.taxonomy.statusCounts[status] += 1;
+    });
+  }
+
+  incrementStatusSizes(statuses: Array<TorrentStatus>, size: number) {
+    this.taxonomy.statusSizes[''] += size;
+
+    statuses.forEach((status) => {
+      this.taxonomy.statusSizes[status] += size;
     });
   }
 

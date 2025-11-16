@@ -345,6 +345,7 @@
   "torrents.move.data.label": "Mută datele",
   "torrents.move.heading": "Setează locația torentului",
   "torrents.properties.comment": "Comentariu",
+  "torrents.properties.date.active": "Ultima activitate",
   "torrents.properties.date.added": "Adăugat",
   "torrents.properties.date.created": "Creat",
   "torrents.properties.date.finished": "Finalizat",

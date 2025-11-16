@@ -1,4 +1,4 @@
-import {computed, makeAutoObservable} from 'mobx';
+import {makeAutoObservable} from 'mobx';
 
 import type {AuthMethod} from '@shared/schema/Auth';
 import type {AuthVerificationPreloadConfigs} from '@shared/schema/api/auth';
@@ -28,7 +28,7 @@ class ConfigStore {
 
   isSystemPreferDark = false;
   isUserPreferDark: boolean | null = queryUserPreferDark();
-  @computed get isPreferDark(): boolean {
+  get isPreferDark(): boolean {
     return this.isUserPreferDark ?? this.isSystemPreferDark;
   }
 

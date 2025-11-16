@@ -49,7 +49,23 @@ function filterTorrents(
     }
 
     if (opts.type === 'tracker') {
-      return torrentList.filter((torrent) => torrent.trackerURIs.some((uri) => opts.filter.includes(uri)));
+      return torrentList.filter((torrent) =>
+        torrent.trackerURIs.some((uri) => {
+          // Extract domain from tracker URI to match taxonomy computation
+          let domain = uri;
+          try {
+            if (uri.includes('://')) {
+              const url = new URL(uri);
+              domain = url.hostname;
+            } else {
+              domain = uri.split('/')[0].split(':')[0];
+            }
+          } catch {
+            // Use as-is if parsing fails
+          }
+          return opts.filter.includes(domain);
+        }),
+      );
     }
 
     if (opts.type === 'tag') {

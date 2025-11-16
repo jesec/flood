@@ -5,7 +5,7 @@ interface InformationProps {
   className?: string;
 }
 
-const Information: FC<InformationProps> = memo(({className}: InformationProps) => (
+const Information: FC<InformationProps> = memo(({className}: InformationProps = {}) => (
   <svg className={classnames('icon', 'icon--information', className)} viewBox="0 0 60 60">
     <path
       className="icon--information__gylph"
@@ -18,9 +18,5 @@ const Information: FC<InformationProps> = memo(({className}: InformationProps) =
     />
   </svg>
 ));
-
-Information.defaultProps = {
-  className: undefined,
-};
 
 export default Information;

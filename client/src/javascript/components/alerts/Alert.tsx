@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import classnames from 'classnames';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans} from '@lingui/react';
 
 import AlertStore from '@client/stores/AlertStore';

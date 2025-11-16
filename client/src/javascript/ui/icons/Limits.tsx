@@ -5,7 +5,7 @@ interface LimitsProps {
   className?: string;
 }
 
-const Limits: FC<LimitsProps> = memo(({className}: LimitsProps) => (
+const Limits: FC<LimitsProps> = memo(({className}: LimitsProps = {}) => (
   <svg className={classnames('icon', 'icon--limits', className)} viewBox="0 0 60 60">
     <path
       className="limits__bars--bottom"
@@ -28,9 +28,5 @@ const Limits: FC<LimitsProps> = memo(({className}: LimitsProps) => (
     />
   </svg>
 ));
-
-Limits.defaultProps = {
-  className: undefined,
-};
 
 export default Limits;

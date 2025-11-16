@@ -11,8 +11,8 @@ process.on('unhandledRejection', (err) => {
 
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const {choosePort, prepareUrls} = require('react-dev-utils/WebpackDevServerUtils');
+const checkRequiredFiles = require('./utils/checkRequiredFiles');
+const {choosePort, prepareUrls} = require('./utils/WebpackDevServerUtils');
 const path = require('node:path');
 const paths = require('../../shared/config/paths');
 const config = require('../config/webpack.config.dev');
@@ -60,13 +60,14 @@ choosePort(HOST, DEFAULT_PORT)
           },
         ],
         historyApiFallback: true,
-        proxy: {
-          '/api/': {
+        proxy: [
+          {
+            context: ['/api'],
             target: floodServerProxy,
             changeOrigin: true,
             secure: false,
           },
-        },
+        ],
         port,
       },
       compiler,

@@ -37,19 +37,13 @@ const LoadingDependencyList: FC<{dependencies: Dependencies}> = ({dependencies}:
   );
 };
 
-const LoadingOverlay: FC<{dependencies?: Dependencies}> = (props: {dependencies?: Dependencies}) => {
-  const {dependencies} = props;
-
+const LoadingOverlay: FC<{dependencies?: Dependencies}> = ({dependencies}: {dependencies?: Dependencies}) => {
   return (
     <div className="application__loading-overlay">
       <LoadingIndicator inverse />
       {dependencies != null ? <LoadingDependencyList dependencies={dependencies} /> : null}
     </div>
   );
-};
-
-LoadingOverlay.defaultProps = {
-  dependencies: undefined,
 };
 
 export default LoadingOverlay;

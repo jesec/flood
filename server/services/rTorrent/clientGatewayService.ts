@@ -111,7 +111,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .methodCall('system.multicall', [
           await Promise.all(
             processedFiles.map(async (file) => ({
-              methodName: start ? 'load.start_throw' : 'load.throw',
+              methodName: start ? 'load.start' : 'load.normal',
               params: [
                 '',
                 `data:applications/x-bittorrent;base64,${file}`,
@@ -120,11 +120,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
             })),
           ),
         ])
-        .then(this.processClientRequestSuccess, this.processRTorrentRequestError)
-        .then((response: Array<Array<string | number>>) => {
-          const hashes = response.flat(2).filter((value) => typeof value === 'string') as string[];
-          result.push(...hashes);
-        });
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
     } else {
       await Promise.all(
         processedFiles.map(async (file) => {

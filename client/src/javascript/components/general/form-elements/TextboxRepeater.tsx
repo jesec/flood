@@ -79,10 +79,4 @@ const TextboxRepeater: FC<TextboxRepeaterProps> = ({defaultValues, id, label, pl
   );
 };
 
-TextboxRepeater.defaultProps = {
-  defaultValues: undefined,
-  label: undefined,
-  placeholder: undefined,
-};
-
 export default TextboxRepeater;

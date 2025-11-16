@@ -1,5 +1,5 @@
 import {FC, KeyboardEvent, MouseEvent, ReactNode, TouchEvent} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 import {LocationTreeNode} from '@shared/types/Taxonomy';
 

@@ -1,7 +1,7 @@
 import classnames from 'classnames';
 import {computed} from 'mobx';
 import {CSSProperties, FC, KeyboardEvent, MouseEvent, TouchEvent, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLongPress} from 'react-use';
 
 import defaultFloodSettings from '@shared/constants/defaultFloodSettings';
@@ -118,6 +118,10 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
     onTouchStart(e);
   };
 
+  const torrent = TorrentStore.torrents?.[hash];
+  const torrentTestId = `torrent-${hash}`;
+  const torrentStatus = status?.join('-') || 'unknown';
+
   if (isCondensed) {
     return (
       <TorrentListRowCondensed
@@ -131,6 +135,11 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
         handleTouchStart={onTouchStartHooked}
         handleTouchEnd={onTouchEnd}
         handleKeyPress={(e) => onKeyPress(hash, e)}
+        data-testid={torrentTestId}
+        data-torrent-status={torrentStatus}
+        data-torrent-name={torrent?.name}
+        data-is-selected={isSelected}
+        data-view-size="condensed"
       />
     );
   }
@@ -147,6 +156,11 @@ const TorrentListRow: FC<TorrentListRowProps> = observer(({hash, style}: Torrent
       handleTouchStart={onTouchStartHooked}
       handleTouchEnd={onTouchEnd}
       handleKeyPress={(e) => onKeyPress(hash, e)}
+      data-testid={torrentTestId}
+      data-torrent-status={torrentStatus}
+      data-torrent-name={torrent?.name}
+      data-is-selected={isSelected}
+      data-view-size="expanded"
     />
   );
 });

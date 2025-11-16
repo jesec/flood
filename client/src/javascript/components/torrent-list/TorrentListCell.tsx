@@ -1,9 +1,10 @@
 import classnames from 'classnames';
 import {computed} from 'mobx';
 import {FC} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
+import {css} from '@client/styled-system/css';
 import {
   CalendarFinished,
   CalendarCreated,
@@ -39,6 +40,7 @@ const ICONS: Partial<Record<TorrentListColumn, JSX.Element>> = {
   downRate: <DownloadThick />,
   directory: <FolderClosedSolid />,
   hash: <Hash />,
+  dateActive: <Clock />,
   dateAdded: <Calendar />,
   dateCreated: <CalendarCreated />,
   dateFinished: <CalendarFinished />,
@@ -59,6 +61,10 @@ const BooleanCell: FC<{value: boolean}> = observer(({value}: {value: boolean}) =
 
 const DateCell: FC<{date: number}> = observer(({date}: {date: number}) => {
   const {i18n} = useLingui();
+
+  if (date === 0) {
+    return null;
+  }
 
   return <span>{i18n.date(new Date(date * 1000))}</span>;
 });
@@ -114,6 +120,8 @@ export interface TorrentListCellContentProps {
 const DefaultTorrentListCellContent: FC<TorrentListCellContentProps> = observer(
   ({torrent, column}: TorrentListCellContentProps) => {
     switch (column) {
+      case 'dateActive':
+        return <DateCell date={torrent[column]} />;
       case 'dateAdded':
         return <DateCell date={torrent[column]} />;
       case 'dateCreated':
@@ -170,21 +178,27 @@ interface TorrentListCellProps {
 const TorrentListCell: FC<TorrentListCellProps> = observer(
   ({
     hash,
-    content: TorrentListCellContent,
+    content: TorrentListCellContent = DefaultTorrentListCellContent,
     column,
     className,
-    classNameOverride,
+    classNameOverride = false,
     width,
-    showIcon,
+    showIcon = false,
   }: TorrentListCellProps) => {
     const icon = showIcon ? ICONS[column] : null;
 
     return (
       <div
         className={
-          classNameOverride ? className : classnames('torrent__detail', `torrent__detail--${column}`, className)
+          classNameOverride
+            ? className
+            : classnames(
+                'torrent__detail',
+                `torrent__detail--${column}`,
+                className,
+                css({pointerEvents: 'none', userSelect: 'none'}),
+              )
         }
-        css={{pointerEvents: 'none', userSelect: 'none'}}
         role="cell"
         style={{width: `${width}px`}}
       >
@@ -198,13 +212,5 @@ const TorrentListCell: FC<TorrentListCellProps> = observer(
     );
   },
 );
-
-TorrentListCell.defaultProps = {
-  className: undefined,
-  classNameOverride: false,
-  content: DefaultTorrentListCellContent,
-  width: undefined,
-  showIcon: false,
-};
 
 export default TorrentListCell;

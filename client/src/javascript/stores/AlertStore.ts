@@ -1,4 +1,4 @@
-import {computed, extendObservable, makeAutoObservable, runInAction} from 'mobx';
+import {extendObservable, makeAutoObservable, runInAction} from 'mobx';
 import {sort} from 'fast-sort';
 
 export interface Alert {
@@ -13,7 +13,7 @@ export interface Alert {
 class AlertStore {
   alerts: Record<string, Alert> = {};
 
-  @computed get sortedAlerts(): Array<Alert> {
+  get sortedAlerts(): Array<Alert> {
     return sort(Object.values(this.alerts)).asc((alert) => alert.updated);
   }
 

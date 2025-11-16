@@ -5,7 +5,7 @@ interface FilesProps {
   className?: string;
 }
 
-const Files: FC<FilesProps> = memo(({className}: FilesProps) => (
+const Files: FC<FilesProps> = memo(({className}: FilesProps = {}) => (
   <svg className={classnames('icon', 'icon--files', className)} viewBox="0 0 60 60">
     <path
       className="icon--files__file icon--files__file--front"
@@ -21,9 +21,5 @@ const Files: FC<FilesProps> = memo(({className}: FilesProps) => (
     />
   </svg>
 ));
-
-Files.defaultProps = {
-  className: undefined,
-};
 
 export default Files;

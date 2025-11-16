@@ -1,6 +1,8 @@
 import classnames from 'classnames';
 import {FC, ReactNode} from 'react';
 
+import {css} from '@client/styled-system/css';
+
 interface FormElementAddonProps {
   children: ReactNode;
   addonPlacement?: 'before' | 'after';
@@ -13,11 +15,11 @@ interface FormElementAddonProps {
 
 const FormElementAddon: FC<FormElementAddonProps> = ({
   children,
-  type,
+  type = 'icon',
   addonPlacement,
   addonIndex,
   className,
-  isInteractive,
+  isInteractive = false,
   onClick,
 }: FormElementAddonProps) => {
   const classes = classnames(
@@ -33,14 +35,13 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
 
   return (
     <div
-      className={classes}
-      role="button"
-      css={{
-        ':focus': {
+      className={`${classes} ${css({
+        _focus: {
           outline: 'none',
           WebkitTapHighlightColor: 'transparent',
         },
-      }}
+      })}`}
+      role="button"
       tabIndex={0}
       onClick={onClick}
       onKeyPress={(e) => {
@@ -53,15 +54,6 @@ const FormElementAddon: FC<FormElementAddonProps> = ({
       {children}
     </div>
   );
-};
-
-FormElementAddon.defaultProps = {
-  type: 'icon',
-  isInteractive: false,
-  addonPlacement: undefined,
-  addonIndex: undefined,
-  className: undefined,
-  onClick: undefined,
 };
 
 export default FormElementAddon;
