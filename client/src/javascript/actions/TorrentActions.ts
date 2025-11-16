@@ -9,6 +9,7 @@ import type {
   AddTorrentByFileOptions,
   AddTorrentByURLOptions,
   ReannounceTorrentsOptions,
+  SetTorrentsCategoryOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
 import {
@@ -244,6 +245,14 @@ const TorrentActions = {
       () => {
         // do nothing.
       },
+      () => {
+        // do nothing.
+      },
+    ),
+
+  setCategory: (options: SetTorrentsCategoryOptions): Promise<void> =>
+    axios.patch(`${baseURI}api/torrents/category`, options).then(
+      () => UIStore.handleSetCategorySuccess(),
       () => {
         // do nothing.
       },

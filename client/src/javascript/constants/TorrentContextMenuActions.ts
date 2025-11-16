@@ -4,6 +4,7 @@ const TorrentContextMenuActions = {
   remove: 'torrents.list.context.remove',
   checkHash: 'torrents.list.context.check.hash',
   reannounce: 'torrents.list.context.reannounce',
+  setCategory: 'torrents.list.context.set.category',
   setTaxonomy: 'torrents.list.context.set.tags',
   move: 'torrents.list.context.move',
   setTrackers: 'torrents.list.context.set.trackers',

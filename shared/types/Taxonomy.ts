@@ -7,6 +7,8 @@ export interface LocationTreeNode {
 }
 
 export interface Taxonomy {
+  categoriesCounts: Record<string, number>;
+  categoriesSizes: Record<string, number>;
   locationTree: LocationTreeNode;
   statusCounts: Record<string, number>;
   statusSizes: Record<string, number>;

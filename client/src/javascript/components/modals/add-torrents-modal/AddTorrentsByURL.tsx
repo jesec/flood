@@ -11,6 +11,7 @@ import UIStore from '@client/stores/UIStore';
 
 import AddTorrentsActions from './AddTorrentsActions';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
+import CategorySelect from '../../general/form-elements/CategorySelect';
 import TagSelect from '../../general/form-elements/TagSelect';
 import TextboxRepeater, {getTextArray} from '../../general/form-elements/TextboxRepeater';
 
@@ -24,6 +25,7 @@ type AddTorrentsByURLFormData = {
   isCompleted: boolean;
   isSequential: boolean;
   start: boolean;
+  category: string;
   tags: string;
 };
 
@@ -77,6 +79,21 @@ const AddTorrentsByURL: FC = () => {
         label={i18n._('torrents.add.cookies.label')}
         placeholder={i18n._('torrents.add.cookies.input.placeholder')}
       />
+      <FormRow>
+        <CategorySelect
+          label={i18n._('torrents.add.category')}
+          id="category"
+          onCategorySelected={(category) => {
+            if (textboxRef.current != null) {
+              const suggestedPath = SettingStore.floodSettings.torrentCategoryDestinations?.[category];
+              if (typeof suggestedPath === 'string' && textboxRef.current != null) {
+                textboxRef.current.value = suggestedPath;
+                textboxRef.current.dispatchEvent(new Event('input', {bubbles: true}));
+              }
+            }
+          }}
+        />
+      </FormRow>
       <FormRow>
         <TagSelect
           id="tags"
@@ -137,6 +154,7 @@ const AddTorrentsByURL: FC = () => {
             isCompleted: formData.isCompleted,
             isSequential: formData.isSequential,
             start: formData.start,
+            category: formData.category,
             tags,
           }).then(() => {
             UIStore.setActiveModal(null);
@@ -145,6 +163,7 @@ const AddTorrentsByURL: FC = () => {
           saveAddTorrentsUserPreferences({
             start: formData.start,
             destination: formData.destination,
+            categories: formData.category,
             tags,
             tab: 'by-url',
           });
