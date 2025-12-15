@@ -9,7 +9,6 @@ import type {DiskUsageSummary} from '../models/DiskUsage';
 import DiskUsage from '../models/DiskUsage';
 import ServerEvent from '../models/ServerEvent';
 import {getAllServices} from '../services';
-import eventStream from './eventStream';
 
 export default async (req: FastifyRequest, reply: FastifyReply) => {
   const {user} = req;
@@ -18,10 +17,8 @@ export default async (req: FastifyRequest, reply: FastifyReply) => {
     throw new UnauthorizedError();
   }
 
-  eventStream(reply);
-
   const serviceInstances = getAllServices(user);
-  const serverEvent = new ServerEvent(reply.raw);
+  const serverEvent = new ServerEvent(reply);
   const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();
 
   // Hook into events and stop listening when connection is closed

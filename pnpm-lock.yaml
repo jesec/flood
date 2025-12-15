@@ -47,6 +47,9 @@ importers:
       '@fastify/rate-limit':
         specifier: ^10.0.2
         version: 10.3.0
+      '@fastify/sse':
+        specifier: ^0.4.0
+        version: 0.4.0(fastify@5.6.2)
       '@fastify/static':
         specifier: ^8.3.0
         version: 8.3.0
@@ -1551,6 +1554,12 @@ packages:
 
   '@fastify/send@4.1.0':
     resolution: {integrity: sha512-TMYeQLCBSy2TOFmV95hQWkiTYgC/SEx7vMdV+wnZVX4tt8VBLKzmH8vV9OzJehV0+XBfg+WxPMt5wp+JBUKsVw==}
+
+  '@fastify/sse@0.4.0':
+    resolution: {integrity: sha512-bBV96iT2kHEw6h3i8IMkZGaqA7Gk81ugUzTNctXuE6N2BEC/qBnUuzlD/O17V43OkJP73h0/kf3Bp/asXlSuFA==}
+    engines: {node: '>=20'}
+    peerDependencies:
+      fastify: ^5.x
 
   '@fastify/static@8.3.0':
     resolution: {integrity: sha512-yKxviR5PH1OKNnisIzZKmgZSus0r2OZb8qCSbqmw34aolT4g3UlzYfeBRym+HJ1J471CR8e2ldNub4PubD1coA==}
@@ -9416,6 +9425,11 @@ snapshots:
       fast-decode-uri-component: 1.0.1
       http-errors: 2.0.0
       mime: 3.0.0
+
+  '@fastify/sse@0.4.0(fastify@5.6.2)':
+    dependencies:
+      fastify: 5.6.2
+      fastify-plugin: 5.1.0
 
   '@fastify/static@8.3.0':
     dependencies:

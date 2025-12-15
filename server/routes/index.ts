@@ -4,6 +4,7 @@ import path from 'node:path';
 import fastifyCompress from '@fastify/compress';
 import fastifyCookie from '@fastify/cookie';
 import fastifyRateLimit from '@fastify/rate-limit';
+import fastifySSE from '@fastify/sse';
 import fastifyStatic from '@fastify/static';
 import paths from '@shared/config/paths';
 import type {FastifyError, FastifyInstance, FastifyReply} from 'fastify';
@@ -39,6 +40,7 @@ const constructRoutes = async (fastify: FastifyInstance) => {
 
   await fastify.register(fastifyCookie);
   await fastify.register(fastifyCompress);
+  await fastify.register(fastifySSE);
 
   if (!config.disableRateLimit) {
     await fastify.register(fastifyRateLimit, {

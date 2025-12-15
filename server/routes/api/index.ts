@@ -41,7 +41,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
     protectedRoutes.register(feedMonitorRoutes, {prefix: '/feed-monitor'});
     protectedRoutes.register(torrentsRoutes, {prefix: '/torrents'});
 
-    protectedRoutes.get('/activity-stream', async (req, reply) => clientActivityStream(req, reply));
+    protectedRoutes.get('/activity-stream', {sse: true}, async (req, reply) => clientActivityStream(req, reply));
 
     protectedRoutes.get<{
       Querystring: DirectoryListQuery;
