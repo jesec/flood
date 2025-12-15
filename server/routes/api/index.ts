@@ -8,7 +8,7 @@ import type {NotificationFetchOptions, NotificationState} from '@shared/types/No
 import type {FastifyInstance, FastifyReply, FastifyRequest, RouteGenericInterface} from 'fastify';
 
 import appendUserServices from '../../middleware/appendUserServices';
-import {authenticateRequest} from '../../middleware/authenticate';
+import {authenticateHook} from '../../middleware/authenticate';
 import clientActivityStream from '../../middleware/clientActivityStream';
 import type {ServiceInstances} from '../../services';
 import {accessDeniedError, isAllowedPath, sanitizePath} from '../../util/fileUtil';
@@ -34,7 +34,7 @@ const apiRoutes = async (fastify: FastifyInstance) => {
   await fastify.register(authRoutes, {prefix: '/auth'});
 
   await fastify.register(async (protectedRoutes) => {
-    protectedRoutes.addHook('preHandler', authenticateRequest);
+    protectedRoutes.addHook('preHandler', authenticateHook);
     protectedRoutes.addHook('preHandler', appendUserServices);
 
     protectedRoutes.register(clientRoutes, {prefix: '/client'});

@@ -10,11 +10,7 @@ type AuthenticateOptions = {
   attachOnly?: boolean;
 };
 
-export const authenticateRequest = async (
-  request: FastifyRequest,
-  _reply: FastifyReply,
-  options?: AuthenticateOptions,
-) => {
+const authenticate = async (request: FastifyRequest, options?: AuthenticateOptions) => {
   const {attachOnly = false} = options ?? {};
 
   if (request.user != null) {
@@ -65,3 +61,8 @@ export const authenticateRequest = async (
   request.user = user;
   return true;
 };
+
+export const authenticateHook = async (request: FastifyRequest, _reply: FastifyReply) => authenticate(request);
+
+export const authenticateRequest = async (request: FastifyRequest, options?: AuthenticateOptions) =>
+  authenticate(request, options);

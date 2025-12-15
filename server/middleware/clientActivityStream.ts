@@ -4,10 +4,10 @@ import type {EventMap} from 'typed-emitter';
 import type TypedEmitter from 'typed-emitter';
 
 import type {TransferHistory} from '../../shared/types/TransferData';
+import {UnauthorizedError} from '../errors';
 import type {DiskUsageSummary} from '../models/DiskUsage';
 import DiskUsage from '../models/DiskUsage';
 import ServerEvent from '../models/ServerEvent';
-import {UnauthorizedError} from '../errors';
 import {getAllServices} from '../services';
 import eventStream from './eventStream';
 

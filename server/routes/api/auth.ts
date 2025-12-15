@@ -16,7 +16,7 @@ import {
 } from '../../../shared/schema/api/auth';
 import type {Credentials} from '../../../shared/schema/Auth';
 import {NotFoundError} from '../../errors';
-import {authenticateRequest} from '../../middleware/authenticate';
+import {authenticateHook, authenticateRequest} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
 import Users from '../../models/Users';
 import {bootstrapServicesForUser, destroyUserServices} from '../../services';
@@ -93,7 +93,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
     await Users.initialUserGate({
       handleInitialUser: () => undefined,
       handleSubsequentUser: async () => {
-        await authenticateRequest(req, reply);
+        await authenticateRequest(req);
         if (reply.sent) {
           return;
         }
@@ -170,7 +170,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
           reply.send(response);
         },
         handleSubsequentUser: async () => {
-          const isAuthenticated = await authenticateRequest(req, reply, {attachOnly: true});
+          const isAuthenticated = await authenticateRequest(req, {attachOnly: true});
 
           if (!isAuthenticated || req.user == null) {
             reply.status(401).send({
@@ -193,7 +193,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
   );
 
   await fastify.register(async (authenticatedRoutes) => {
-    authenticatedRoutes.addHook('preHandler', authenticateRequest);
+    authenticatedRoutes.addHook('preHandler', authenticateHook);
 
     authenticatedRoutes.get(
       '/logout',
@@ -208,7 +208,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
 
     await authenticatedRoutes.register(async (adminRoutes) => {
       adminRoutes.addHook('preHandler', requireAdmin);
-      adminRoutes.addHook('preHandler', async (req, reply) => {
+      adminRoutes.addHook('preHandler', async (_req, _reply) => {
         if (config.authMethod === 'none') {
           throw new NotFoundError();
         }
