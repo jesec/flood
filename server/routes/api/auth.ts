@@ -172,12 +172,9 @@ const authRoutes = async (fastify: FastifyInstance) => {
           reply.send(response);
         },
         handleSubsequentUser: async () => {
-          await authenticateRequest(req, reply);
-          if (reply.sent) {
-            return;
-          }
+          const isAuthenticated = await authenticateRequest(req, reply, {attachOnly: true});
 
-          if (req.user == null) {
+          if (!isAuthenticated || req.user == null) {
             reply.status(401).send({
               configs: preloadConfigs,
             });
