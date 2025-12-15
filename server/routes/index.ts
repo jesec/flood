@@ -6,7 +6,7 @@ import fastifyCookie from '@fastify/cookie';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifyStatic from '@fastify/static';
 import paths from '@shared/config/paths';
-import type {FastifyInstance, FastifyReply} from 'fastify';
+import type {FastifyError, FastifyInstance, FastifyReply} from 'fastify';
 import morgan from 'morgan';
 
 import config from '../../config';
@@ -17,6 +17,18 @@ const constructRoutes = async (fastify: FastifyInstance) => {
   await Users.bootstrapServicesForAllUsers();
 
   const servedPath = config.baseURI.endsWith('/') ? config.baseURI : `${config.baseURI}/`;
+
+  fastify.setErrorHandler((error: FastifyError, _request, reply) => {
+    const statusCode = error.statusCode ?? 500;
+    if (reply.sent) {
+      return;
+    }
+
+    reply.status(statusCode).send({
+      code: error.code ?? statusCode,
+      message: error.message,
+    });
+  });
 
   if (process.env.NODE_ENV !== 'test') {
     fastify.addHook('onRequest', (request, reply, done) => {

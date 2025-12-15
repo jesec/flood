@@ -125,20 +125,15 @@ const authRoutes = async (fastify: FastifyInstance) => {
 
       const credentials = parsedResult.data;
 
-      try {
-        const user = await Users.createUser(credentials);
-        bootstrapServicesForUser(user);
+      const user = await Users.createUser(credentials);
+      bootstrapServicesForUser(user);
 
-        if (req.query.cookie === 'false') {
-          reply.status(200).send({username: user.username});
-          return;
-        }
-
-        sendAuthenticationResponse(reply, credentials);
-      } catch (error) {
-        const {message} = error as {message?: string};
-        reply.status(500).send({message});
+      if (req.query.cookie === 'false') {
+        reply.status(200).send({username: user.username});
+        return;
       }
+
+      sendAuthenticationResponse(reply, credentials);
     },
   );
 
@@ -225,18 +220,13 @@ const authRoutes = async (fastify: FastifyInstance) => {
           ...(authRateLimitOptions ?? {}),
         },
         async (_req, reply): Promise<void> => {
-          try {
-            const users = await Users.listUsers();
-            reply.send(
-              users.map((user) => ({
-                username: user.username,
-                level: user.level,
-              })),
-            );
-          } catch (error) {
-            const {code, message} = error as {code?: number; message?: string};
-            reply.status(500).send({code, message});
-          }
+          const users = await Users.listUsers();
+          reply.send(
+            users.map((user) => ({
+              username: user.username,
+              level: user.level,
+            })),
+          );
         },
       );
 
@@ -248,13 +238,8 @@ const authRoutes = async (fastify: FastifyInstance) => {
           ...(authRateLimitOptions ?? {}),
         },
         async (req, reply): Promise<void> => {
-          try {
-            await Users.removeUser(req.params.username);
-            reply.send({username: req.params.username});
-          } catch (error) {
-            const {code, message} = error as {code?: number; message?: string};
-            reply.status(500).send({code, message});
-          }
+          await Users.removeUser(req.params.username);
+          reply.send({username: req.params.username});
         },
       );
 
@@ -278,16 +263,11 @@ const authRoutes = async (fastify: FastifyInstance) => {
 
           const patch = parsedResult.data;
 
-          try {
-            const newUsername = await Users.updateUser(username, patch);
-            const user = await Users.lookupUser(newUsername);
-            await destroyUserServices(user._id);
-            bootstrapServicesForUser(user);
-            reply.status(200).send({});
-          } catch (error) {
-            const {code, message} = error as {code?: number; message?: string};
-            reply.status(500).send({code, message});
-          }
+          const newUsername = await Users.updateUser(username, patch);
+          const user = await Users.lookupUser(newUsername);
+          await destroyUserServices(user._id);
+          bootstrapServicesForUser(user);
+          reply.status(200).send({});
         },
       );
     });
