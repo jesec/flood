@@ -1,68 +1,32 @@
+import type {CookieSerializeOptions} from '@fastify/cookie';
 import type {AuthToken} from '@shared/schema/Auth';
-import type {FastifyReply, FastifyRequest} from 'fastify';
+import type {FastifyReply} from 'fastify';
 import jwt from 'jsonwebtoken';
 
 import config from '../../config';
 
 const EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // one week
 
-type FloodCookieOptions = {
-  expires?: Date;
-  httpOnly?: boolean;
-  maxAge?: number;
-  path?: string;
-  sameSite?: 'lax' | 'strict' | 'none';
-};
-
-const serializeCookie = (name: string, value: string, options: FloodCookieOptions): string => {
-  const parts = [`${name}=${encodeURIComponent(value)}`];
-
-  if (options.expires) {
-    parts.push(`Expires=${options.expires.toUTCString()}`);
-  }
-  if (options.maxAge != null) {
-    parts.push(`Max-Age=${options.maxAge}`);
-  }
-
-  parts.push(`Path=${options.path ?? '/'}`);
-
-  if (options.httpOnly) {
-    parts.push('HttpOnly');
-  }
-
-  if (options.sameSite) {
-    parts.push(`SameSite=${options.sameSite.charAt(0).toUpperCase()}${options.sameSite.slice(1)}`);
-  }
-
-  return parts.join('; ');
-};
-
-export const getCookieOptions = (): FloodCookieOptions => ({
+export const getCookieOptions = (): CookieSerializeOptions => ({
+  path: '/',
   expires: new Date(Date.now() + EXPIRATION_SECONDS * 1000),
   httpOnly: true,
   sameSite: 'strict',
 });
 
-const getAuthCookie = (token: string): string => serializeCookie('jwt', token, {...getCookieOptions(), path: '/'});
-
 export const setAuthCookie = (reply: FastifyReply, token: string): void => {
-  reply.header('Set-Cookie', getAuthCookie(token));
+  reply.setCookie('jwt', token, getCookieOptions());
 };
 
 export const clearAuthCookie = (reply: FastifyReply): void => {
-  reply.header(
-    'Set-Cookie',
-    serializeCookie('jwt', '', {
-      path: '/',
-      expires: new Date(0),
-      maxAge: 0,
-      httpOnly: true,
-      sameSite: 'strict',
-    }),
-  );
+  reply.clearCookie('jwt', {
+    path: '/',
+    expires: new Date(0),
+    maxAge: 0,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
 };
-
-export const parseCookies = (request: FastifyRequest): Record<string, string | undefined> => request.cookies ?? {};
 
 export const getAuthToken = (username: string, iat?: number): string => {
   const authTokenPayload: Partial<AuthToken> = {

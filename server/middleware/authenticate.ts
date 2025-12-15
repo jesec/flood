@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 
 import config from '../../config';
 import Users from '../models/Users';
-import {parseCookies} from '../util/authUtil';
 
 const unauthorized = (reply: FastifyReply) => {
   reply.status(401).send('Unauthorized');
@@ -15,8 +14,7 @@ export const authenticateRequest = async (request: FastifyRequest, reply: Fastif
     return;
   }
 
-  const cookies = parseCookies(request);
-  const token = cookies.jwt;
+  const token = request.cookies?.jwt;
 
   if (typeof token !== 'string' || token.length === 0) {
     unauthorized(reply);
