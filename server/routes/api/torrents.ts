@@ -309,10 +309,11 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         // do nothing.
       });
 
-    reply.header('Content-Disposition', contentDisposition(torrentFileName));
-    reply.type('application/x-bittorrent');
-
-    return reply.status(200).send(torrent);
+    return reply
+      .header('Content-Disposition', contentDisposition(torrentFileName))
+      .type('application/x-bittorrent')
+      .status(200)
+      .send(torrent);
   });
 
   /**
