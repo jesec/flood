@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import fastifyCompress from '@fastify/compress';
+import fastifyCookie from '@fastify/cookie';
 import fastifyStatic from '@fastify/static';
 import paths from '@shared/config/paths';
 import type {FastifyInstance, FastifyReply} from 'fastify';
@@ -22,6 +23,7 @@ const constructRoutes = async (fastify: FastifyInstance) => {
     });
   }
 
+  await fastify.register(fastifyCookie);
   await fastify.register(fastifyCompress);
 
   fastify.addContentTypeParser('application/x-www-form-urlencoded', {parseAs: 'buffer'}, (_request, body, done) => {

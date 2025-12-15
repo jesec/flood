@@ -62,28 +62,7 @@ export const clearAuthCookie = (reply: FastifyReply): void => {
   );
 };
 
-export const parseCookies = (request: FastifyRequest): Record<string, string> => {
-  if (request.cookies != null) {
-    return request.cookies;
-  }
-
-  const header = request.headers.cookie;
-  const cookies: Record<string, string> = {};
-
-  if (header) {
-    header.split(';').forEach((part) => {
-      const [name, ...rest] = part.split('=');
-      const trimmedName = name.trim();
-      if (trimmedName.length === 0) {
-        return;
-      }
-      cookies[trimmedName] = decodeURIComponent(rest.join('=').trim());
-    });
-  }
-
-  request.cookies = cookies;
-  return cookies;
-};
+export const parseCookies = (request: FastifyRequest): Record<string, string> => request.cookies ?? {};
 
 export const getAuthToken = (username: string, iat?: number): string => {
   const authTokenPayload: Partial<AuthToken> = {

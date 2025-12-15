@@ -39,6 +39,7 @@ export function rateLimit(passedOptions: RateLimitOptions): (req: FastifyRequest
     state.count += 1;
     if (state.count > max) {
       reply.status(429).send({message: 'Too many requests'});
+      return;
     }
   };
 }
