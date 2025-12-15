@@ -1,11 +1,9 @@
-import type {NextFunction, Request, Response} from 'express';
+import type {FastifyReply, FastifyRequest} from 'fastify';
 
 import {AccessLevel} from '../../shared/schema/constants/Auth';
 
-export default (req: Request, res: Response, next: NextFunction) => {
+export default (req: FastifyRequest, reply: FastifyReply) => {
   if (req.user == null || req.user.level !== AccessLevel.ADMINISTRATOR) {
-    res.status(403).json({message: 'User is not admin.'}).send();
-    return;
+    reply.status(403).send({message: 'User is not admin.'});
   }
-  next();
 };

@@ -1,28 +1,25 @@
-import type {NextFunction, Request, Response} from 'express';
+import type {FastifyReply} from 'fastify';
 
-export default (req: Request, res: Response, next: NextFunction) => {
-  req.socket.setKeepAlive(true);
-  req.socket.setTimeout(0);
+export default (reply: FastifyReply) => {
+  reply.raw.socket?.setKeepAlive(true);
+  reply.raw.socket?.setTimeout(0);
 
-  res.set({
-    'Content-Type': 'text/event-stream',
+  reply.raw.writeHead(200, {
     'Cache-Control': 'no-cache',
     Connection: 'keep-alive',
+    'Content-Type': 'text/event-stream',
     'Cross-Origin-Resource-Policy': 'same-origin',
     'X-Accel-Buffering': 'no',
   });
-  res.status(200);
-  res.write('retry: 500\n\n');
 
-  // Keep the connection open by sending a message every so often.
+  reply.hijack();
+  reply.raw.write('retry: 500\n\n');
+
   const keepAliveTimeout = setInterval(() => {
-    res.write(':keep-alive\n\n');
+    reply.raw.write(':keep-alive\n\n');
   }, 500);
 
-  // cleanup on close
-  res.on('close', () => {
+  reply.raw.on('close', () => {
     clearInterval(keepAliveTimeout);
   });
-
-  next();
 };
