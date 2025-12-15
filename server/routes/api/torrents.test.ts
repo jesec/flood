@@ -108,7 +108,7 @@ describe('POST /api/torrents/add-urls', () => {
       .expect(422)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         done();
       });
@@ -126,7 +126,7 @@ describe('POST /api/torrents/add-urls', () => {
       .expect(403)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body).toMatchObject({code: 'EACCES'});
 
@@ -148,7 +148,7 @@ describe('POST /api/torrents/add-urls', () => {
         }
       })
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         // Continue after 15 seconds even if torrentAdded is not resolved to let the next step
         // determine if the torrents have been successfully added.
@@ -172,7 +172,7 @@ describe('POST /api/torrents/add-urls', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(async (err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body.torrents).not.toBeNull();
         const torrentList: TorrentList = res.body.torrents;
@@ -213,7 +213,7 @@ describe('POST /api/torrents/delete', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         Promise.race([torrentDeleted, new Promise((r) => setTimeout(r, 1000 * 15))])
           .then(async () => {
@@ -245,7 +245,7 @@ describe('POST /api/torrents/add-files', () => {
       .expect(422)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         done();
       });
@@ -263,7 +263,7 @@ describe('POST /api/torrents/add-files', () => {
       .expect(403)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body).toMatchObject({code: 'EACCES'});
 
@@ -285,7 +285,7 @@ describe('POST /api/torrents/add-files', () => {
         }
       })
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         torrentAdded.then(() => {
           done();
@@ -302,7 +302,7 @@ describe('POST /api/torrents/add-files', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(async (err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body.torrents == null).toBe(false);
         const torrentList: TorrentList = res.body.torrents;
@@ -349,7 +349,7 @@ describe('POST /api/torrents/create', () => {
       .expect(200)
       .expect('Content-Type', /x-bittorrent/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         torrentAdded.then(() => {
           done();
@@ -379,7 +379,7 @@ describe('POST /api/torrents/create', () => {
       .expect(200)
       .expect('Content-Type', /x-bittorrent/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         torrentAdded.then(() => {
           done();
@@ -396,7 +396,7 @@ describe('POST /api/torrents/create', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(async (err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body.torrents == null).toBe(false);
         const torrentList: TorrentList = res.body.torrents;
@@ -441,7 +441,7 @@ describe('PATCH /api/torrents/trackers', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         done();
       });
@@ -461,7 +461,7 @@ describe('PATCH /api/torrents/trackers', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         done();
       });
@@ -476,7 +476,7 @@ describe('PATCH /api/torrents/trackers', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const trackers: Array<TorrentTracker> = res.body;
         expect(trackers.filter((tracker) => testTrackers.includes(tracker.url)).length).toBeGreaterThanOrEqual(
@@ -498,7 +498,7 @@ describe('GET /api/torrents/{hash}/contents', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const contents: Array<TorrentContent> = res.body;
 
@@ -528,7 +528,7 @@ describe('POST /api/torrents/move', () => {
       .set('Accept', 'application/json')
       .expect(200)
       .end(async (err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         // Wait a while
         await new Promise((r) => setTimeout(r, 1000 * 2));
@@ -548,7 +548,7 @@ describe('POST /api/torrents/move', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end(async (err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body.torrents == null).toBe(false);
         const torrentList: TorrentList = res.body.torrents;
