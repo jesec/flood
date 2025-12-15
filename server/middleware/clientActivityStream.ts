@@ -7,6 +7,7 @@ import type {TransferHistory} from '../../shared/types/TransferData';
 import type {DiskUsageSummary} from '../models/DiskUsage';
 import DiskUsage from '../models/DiskUsage';
 import ServerEvent from '../models/ServerEvent';
+import {UnauthorizedError} from '../errors';
 import {getAllServices} from '../services';
 import eventStream from './eventStream';
 
@@ -14,8 +15,7 @@ export default async (req: FastifyRequest, reply: FastifyReply) => {
   const {user} = req;
 
   if (user == null) {
-    reply.status(401).send();
-    return;
+    throw new UnauthorizedError();
   }
 
   eventStream(reply);

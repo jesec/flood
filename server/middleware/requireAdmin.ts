@@ -1,12 +1,10 @@
-import type {FastifyReply, FastifyRequest, HookHandlerDoneFunction} from 'fastify';
+import type {FastifyReply, FastifyRequest} from 'fastify';
 
 import {AccessLevel} from '../../shared/schema/constants/Auth';
+import {AdminRequiredError} from '../errors';
 
-export default (req: FastifyRequest, reply: FastifyReply, done: HookHandlerDoneFunction) => {
+export default async (req: FastifyRequest, reply: FastifyReply): Promise<void> => {
   if (req.user == null || req.user.level !== AccessLevel.ADMINISTRATOR) {
-    reply.status(403).send({message: 'User is not admin.'});
-    return;
+    throw new AdminRequiredError();
   }
-
-  done();
 };

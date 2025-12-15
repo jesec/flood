@@ -1,13 +1,7 @@
 import type {UserInDatabase} from '@shared/schema/Auth';
 import type {SetClientSettingsOptions} from '@shared/types/api/client';
 import type {ClientSettings} from '@shared/types/ClientSettings';
-import type {
-  FastifyInstance,
-  FastifyReply,
-  FastifyRequest,
-  HookHandlerDoneFunction,
-  RouteGenericInterface,
-} from 'fastify';
+import type {FastifyInstance, FastifyReply, FastifyRequest, RouteGenericInterface} from 'fastify';
 
 import requireAdmin from '../../middleware/requireAdmin';
 import type {ServiceInstances} from '../../services';
@@ -43,10 +37,9 @@ const clientRoutes = async (fastify: FastifyInstance) => {
     }
   });
 
-  const enforceAdminForSensitiveSettings = (
+  const enforceAdminForSensitiveSettings = async (
     req: FastifyRequest<{Body: SetClientSettingsOptions}>,
     reply: FastifyReply,
-    done: HookHandlerDoneFunction,
   ) => {
     const authedReq = req as AuthedRequest<{Body: SetClientSettingsOptions}>;
     if (
@@ -54,7 +47,7 @@ const clientRoutes = async (fastify: FastifyInstance) => {
         return !SAFE_CLIENT_SETTINGS.includes(key as keyof ClientSettings);
       })
     ) {
-      requireAdmin(authedReq, reply, done);
+      await requireAdmin(authedReq, reply);
     }
   };
 

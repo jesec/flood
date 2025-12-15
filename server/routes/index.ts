@@ -20,13 +20,14 @@ const constructRoutes = async (fastify: FastifyInstance) => {
 
   fastify.setErrorHandler((error: FastifyError, _request, reply) => {
     const statusCode = error.statusCode ?? 500;
+
     if (reply.sent) {
       return;
     }
 
     reply.status(statusCode).send({
-      code: error.code ?? statusCode,
-      message: error.message,
+      code: error.code ?? 'INTERNAL_SERVER_ERROR',
+      message: error.message ?? 'Internal server error',
     });
   });
 

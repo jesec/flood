@@ -1,18 +1,16 @@
 import type {FastifyReply, FastifyRequest} from 'fastify';
 
+import {InitializationFailedError} from '../errors';
 import {getAllServices} from '../services';
 
-const failedInitializeResponse = (reply: FastifyReply) => {
-  reply.status(500).send({message: 'Flood server failed to initialze.'});
-};
-
-export default async (req: FastifyRequest, reply: FastifyReply) => {
+export default async (req: FastifyRequest, _reply: FastifyReply): Promise<void> => {
   if (req.user == null) {
-    return failedInitializeResponse(reply);
+    throw new InitializationFailedError();
   }
 
   req.services = getAllServices(req.user);
+
   if (req.services?.clientGatewayService == null) {
-    return failedInitializeResponse(reply);
+    throw new InitializationFailedError();
   }
 };

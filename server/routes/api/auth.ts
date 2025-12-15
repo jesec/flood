@@ -1,4 +1,4 @@
-import type {FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction} from 'fastify';
+import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
 
 import config from '../../../config';
 import type {
@@ -15,6 +15,7 @@ import {
   AuthVerificationPreloadConfigs,
 } from '../../../shared/schema/api/auth';
 import type {Credentials} from '../../../shared/schema/Auth';
+import {NotFoundError} from '../../errors';
 import {authenticateRequest} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
 import Users from '../../models/Users';
@@ -96,13 +97,8 @@ const authRoutes = async (fastify: FastifyInstance) => {
         if (reply.sent) {
           return;
         }
-        await new Promise<void>((resolve, reject) => {
-          requireAdmin(req, reply, () => {
-            resolve();
-          });
 
-          resolve();
-        });
+        await requireAdmin(req, reply);
       },
     });
   };
@@ -212,13 +208,10 @@ const authRoutes = async (fastify: FastifyInstance) => {
 
     await authenticatedRoutes.register(async (adminRoutes) => {
       adminRoutes.addHook('preHandler', requireAdmin);
-      adminRoutes.addHook('preHandler', (req, reply, done) => {
+      adminRoutes.addHook('preHandler', async (req, reply) => {
         if (config.authMethod === 'none') {
-          reply.status(404).send('Not found');
-          return;
+          throw new NotFoundError();
         }
-
-        done();
       });
 
       adminRoutes.get(
