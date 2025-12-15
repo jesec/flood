@@ -250,8 +250,6 @@ const authRoutes = async (fastify: FastifyInstance) => {
         },
       );
 
-      console.log('23333');
-
       adminRoutes.patch<{
         Body: AuthUpdateUserOptions;
         Params: {username: Credentials['username']};
@@ -261,36 +259,25 @@ const authRoutes = async (fastify: FastifyInstance) => {
         //   ...(authRateLimitOptions ?? {}),
         // },
         async (req, reply): Promise<void> => {
-          console.log(1);
           const {username} = req.params;
 
-          console.log(2);
           const parsedResult = authUpdateUserSchema.safeParse(req.body);
 
-          console.log(3);
           if (!parsedResult.success) {
-            console.log(4);
             reply.status(422).send({message: 'Validation error.'});
-            console.log(5);
             return;
           }
 
-          console.log(6);
           const patch = parsedResult.data;
 
-          console.log(7);
           const newUsername = await Users.updateUser(username, patch);
 
-          console.log(8);
           const user = await Users.lookupUser(newUsername);
 
-          console.log(9);
           await destroyUserServices(user._id);
 
-          console.log(10);
           bootstrapServicesForUser(user);
 
-          console.log(11);
           reply.status(200).send({});
         },
       );
