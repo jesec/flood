@@ -20,23 +20,28 @@ type AuthedRequest<T extends RouteGenericInterface = RouteGenericInterface> = Fa
 };
 
 const clientRoutes = async (fastify: FastifyInstance) => {
-  fastify.get(
-    '/connection-test',
-    async (req, reply: FastifyReply): Promise<void> =>
-      (req as AuthedRequest).services.clientGatewayService.testGateway().then(
-        () => reply.status(200).send({isConnected: true}),
-        () => reply.status(500).send({isConnected: false}),
-      ),
-  );
+  fastify.get('/connection-test', async (req, reply: FastifyReply): Promise<void> => {
+    const authedReq = req as AuthedRequest;
 
-  fastify.get(
-    '/settings',
-    async (req, reply: FastifyReply): Promise<void> =>
-      (req as AuthedRequest).services.clientGatewayService.getClientSettings().then(
-        (settings) => reply.status(200).send(settings),
-        ({code, message}) => reply.status(500).send({code, message}),
-      ),
-  );
+    try {
+      await authedReq.services.clientGatewayService.testGateway();
+      reply.status(200).send({isConnected: true});
+    } catch {
+      reply.status(500).send({isConnected: false});
+    }
+  });
+
+  fastify.get('/settings', async (req, reply: FastifyReply): Promise<void> => {
+    const authedReq = req as AuthedRequest;
+
+    try {
+      const settings = await authedReq.services.clientGatewayService.getClientSettings();
+      reply.status(200).send(settings);
+    } catch (error) {
+      const {code, message} = error as {code?: string; message?: string};
+      reply.status(500).send({code, message});
+    }
+  });
 
   const enforceAdminForSensitiveSettings = (
     req: FastifyRequest<{Body: SetClientSettingsOptions}>,
@@ -55,17 +60,17 @@ const clientRoutes = async (fastify: FastifyInstance) => {
 
   fastify.patch<{
     Body: SetClientSettingsOptions;
-  }>(
-    '/settings',
-    {preHandler: enforceAdminForSensitiveSettings},
-    async (req, reply: FastifyReply): Promise<void> =>
-      (req as AuthedRequest<{Body: SetClientSettingsOptions}>).services.clientGatewayService
-        .setClientSettings((req as AuthedRequest<{Body: SetClientSettingsOptions}>).body)
-        .then(
-          (response) => reply.status(200).send(response),
-          ({code, message}) => reply.status(500).send({code, message}),
-        ),
-  );
+  }>('/settings', {preHandler: enforceAdminForSensitiveSettings}, async (req, reply: FastifyReply): Promise<void> => {
+    const authedReq = req as AuthedRequest<{Body: SetClientSettingsOptions}>;
+
+    try {
+      const response = await authedReq.services.clientGatewayService.setClientSettings(authedReq.body);
+      reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = error as {code?: string; message?: string};
+      reply.status(500).send({code, message});
+    }
+  });
 };
 
 export default clientRoutes;
