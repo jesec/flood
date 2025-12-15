@@ -23,6 +23,14 @@ type AuthedRequest<T extends RouteGenericInterface = RouteGenericInterface> = Fa
 };
 
 const apiRoutes = async (fastify: FastifyInstance) => {
+  fastify.addHook('onSend', async (_req, reply, payload) => {
+    if (reply.getHeader('content-type') == null) {
+      reply.type('application/json; charset=utf-8');
+    }
+
+    return payload;
+  });
+
   await fastify.register(authRoutes, {prefix: '/auth'});
 
   await fastify.register(async (protectedRoutes) => {
