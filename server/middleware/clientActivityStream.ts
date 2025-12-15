@@ -17,6 +17,8 @@ export default async (req: FastifyRequest, reply: FastifyReply) => {
     throw new UnauthorizedError();
   }
 
+  reply.sse.keepAlive();
+
   const serviceInstances = getAllServices(user);
   const serverEvent = new ServerEvent(reply);
   const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();

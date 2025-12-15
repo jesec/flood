@@ -21,7 +21,7 @@ class ServerEvent {
       data: JSON.stringify(data),
     };
 
-    this.reply.sse.send(payload);
+    this.reply.sse.send(payload).catch(() => {});
   }
 }
 

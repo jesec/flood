@@ -24,7 +24,7 @@ import type {
 } from '@shared/types/api/torrents';
 import contentDisposition from 'content-disposition';
 import createTorrent from 'create-torrent';
-import type {FastifyInstance, FastifyReply, FastifyRequest, RouteGenericInterface} from 'fastify';
+import type {FastifyInstance, FastifyRequest, RouteGenericInterface} from 'fastify';
 import sanitize from 'sanitize-filename';
 import tar, {Pack} from 'tar-fs';
 
@@ -52,81 +52,6 @@ type FloodRequest<T extends RouteGenericInterface = RouteGenericInterface> = Fas
   services: NonNullable<FastifyRequest['services']>;
   user: NonNullable<FastifyRequest['user']>;
 };
-
-type ResponseFacade = {
-  attachment: (filename: string) => ResponseFacade;
-  contentType: (type: string) => ResponseFacade;
-  destroy: () => void;
-  download: (filePath: string) => FastifyReply;
-  headers: (headers: Record<string, string>) => ResponseFacade;
-  json: (payload: unknown) => FastifyReply;
-  redirect: (location: string) => FastifyReply;
-  send: (payload: unknown) => FastifyReply;
-  sendFile: (filePath: string) => FastifyReply;
-  set: (headers: Record<string, string>) => ResponseFacade;
-  setHeader: (name: string, value: unknown) => ResponseFacade;
-  status: (code: number) => ResponseFacade;
-  type: (type: string) => ResponseFacade;
-};
-
-const createResponseFacade = (reply: FastifyReply): ResponseFacade => ({
-  status(code: number) {
-    reply.status(code);
-    return this;
-  },
-  json(payload: unknown) {
-    return reply.send(payload);
-  },
-  send(payload: unknown) {
-    return reply.send(payload);
-  },
-  attachment(filename: string) {
-    reply.header('Content-Disposition', contentDisposition(filename));
-    return this;
-  },
-  contentType(type: string) {
-    reply.type(type);
-    return this;
-  },
-  type(type: string) {
-    reply.type(type);
-    return this;
-  },
-  setHeader(name: string, value: unknown) {
-    reply.header(name, value as string);
-    return this;
-  },
-  set(headers: Record<string, string>) {
-    reply.headers(headers);
-    return this;
-  },
-  headers(headers: Record<string, string>) {
-    reply.headers(headers);
-    return this;
-  },
-  redirect(location: string) {
-    return reply.redirect(location);
-  },
-  download(filePath: string) {
-    reply.header('Content-Disposition', contentDisposition(path.basename(filePath)));
-    return reply.send(fs.createReadStream(filePath));
-  },
-  sendFile(filePath: string) {
-    return reply.send(fs.createReadStream(filePath));
-  },
-  destroy() {
-    reply.raw.destroy();
-  },
-});
-
-const wrap =
-  <T extends RouteGenericInterface>(
-    handler: (req: FloodRequest<T>, res: ResponseFacade, reply: FastifyReply) => Promise<unknown> | unknown,
-  ) =>
-  async (req: FastifyRequest<T>, reply: FastifyReply) => {
-    const res = createResponseFacade(reply);
-    return handler(req as FloodRequest<T>, res, reply);
-  };
 
 const getDestination = async (
   services: ServiceInstances,
@@ -177,20 +102,20 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    * @return {TorrentListSummary} 200 - success response - application/json
    * @return {Error} 500 - failure response - application/json
    */
-  fastify.get(
-    '/',
-    wrap((req, res) =>
-      req.services.torrentService
-        .fetchTorrentList()
-        .then((data) => {
-          if (data == null) {
-            throw new Error();
-          }
-          return res.status(200).json(data);
-        })
-        .catch(({code, message}) => res.status(500).json({code, message})),
-    ),
-  );
+  fastify.get('/', async (req, reply) => {
+    const request = req as FloodRequest;
+
+    try {
+      const data = await request.services.torrentService.fetchTorrentList();
+      if (data == null) {
+        throw new Error();
+      }
+      return reply.status(200).send(data);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * POST /api/torrents/add-urls
@@ -206,55 +131,53 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: AddTorrentByURLOptions;
-  }>(
-    '/add-urls',
-    wrap(async (req, res) => {
-      const parsedResult = addTorrentByURLSchema.safeParse(req.body);
+  }>('/add-urls', async (req, reply) => {
+    const request = req as FloodRequest<{Body: AddTorrentByURLOptions}>;
+    const parsedResult = addTorrentByURLSchema.safeParse(request.body);
 
-      if (!parsedResult.success) {
-        return res.status(422).json({message: 'Validation error.'});
-      }
+    if (!parsedResult.success) {
+      return reply.status(422).send({message: 'Validation error.'});
+    }
 
-      const {urls, cookies, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
-        parsedResult.data;
+    const {urls, cookies, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
+      parsedResult.data;
 
-      const finalDestination = await getDestination(req.services, {
-        destination,
-        tags,
+    const finalDestination = await getDestination(request.services, {
+      destination,
+      tags,
+    });
+
+    if (finalDestination == null) {
+      const {code, message} = accessDeniedError();
+      return reply.status(403).send({code, message});
+    }
+
+    try {
+      const response = await request.services.clientGatewayService.addTorrentsByURL({
+        urls,
+        cookies: cookies != null ? cookies : {},
+        destination: finalDestination,
+        tags: tags ?? [],
+        isBasePath: isBasePath ?? false,
+        isCompleted: isCompleted ?? false,
+        isSequential: isSequential ?? false,
+        isInitialSeeding: isInitialSeeding ?? false,
+        start: start ?? false,
       });
 
-      if (finalDestination == null) {
-        const {code, message} = accessDeniedError();
-        return res.status(403).json({code, message});
+      request.services.torrentService.fetchTorrentList();
+      if (response.length === 0) {
+        return reply.status(202).send(response);
       }
-
-      return req.services.clientGatewayService
-        .addTorrentsByURL({
-          urls,
-          cookies: cookies != null ? cookies : {},
-          destination: finalDestination,
-          tags: tags ?? [],
-          isBasePath: isBasePath ?? false,
-          isCompleted: isCompleted ?? false,
-          isSequential: isSequential ?? false,
-          isInitialSeeding: isInitialSeeding ?? false,
-          start: start ?? false,
-        })
-        .then(
-          (response) => {
-            req.services.torrentService.fetchTorrentList();
-            if (response.length === 0) {
-              return res.status(202).json(response);
-            } else if (response.length < urls.length) {
-              return res.status(207).json(response);
-            } else {
-              return res.status(200).json(response);
-            }
-          },
-          ({code, message}) => res.status(500).json({code, message}),
-        );
-    }),
-  );
+      if (response.length < urls.length) {
+        return reply.status(207).send(response);
+      }
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * POST /api/torrents/add-files
@@ -270,54 +193,52 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: AddTorrentByFileOptions;
-  }>(
-    '/add-files',
-    wrap(async (req, res) => {
-      const parsedResult = addTorrentByFileSchema.safeParse(req.body);
+  }>('/add-files', async (req, reply) => {
+    const request = req as FloodRequest<{Body: AddTorrentByFileOptions}>;
+    const parsedResult = addTorrentByFileSchema.safeParse(request.body);
 
-      if (!parsedResult.success) {
-        return res.status(422).json({message: 'Validation error.'});
-      }
+    if (!parsedResult.success) {
+      return reply.status(422).send({message: 'Validation error.'});
+    }
 
-      const {files, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
-        parsedResult.data;
+    const {files, destination, tags, isBasePath, isCompleted, isSequential, isInitialSeeding, start} =
+      parsedResult.data;
 
-      const finalDestination = await getDestination(req.services, {
-        destination,
-        tags,
+    const finalDestination = await getDestination(request.services, {
+      destination,
+      tags,
+    });
+
+    if (finalDestination == null) {
+      const {code, message} = accessDeniedError();
+      return reply.status(403).send({code, message});
+    }
+
+    try {
+      const response = await request.services.clientGatewayService.addTorrentsByFile({
+        files,
+        destination: finalDestination,
+        tags: tags ?? [],
+        isBasePath: isBasePath ?? false,
+        isCompleted: isCompleted ?? false,
+        isSequential: isSequential ?? false,
+        isInitialSeeding: isInitialSeeding ?? false,
+        start: start ?? false,
       });
 
-      if (finalDestination == null) {
-        const {code, message} = accessDeniedError();
-        return res.status(403).json({code, message});
+      request.services.torrentService.fetchTorrentList();
+      if (response.length === 0) {
+        return reply.status(202).send(response);
       }
-
-      return req.services.clientGatewayService
-        .addTorrentsByFile({
-          files,
-          destination: finalDestination,
-          tags: tags ?? [],
-          isBasePath: isBasePath ?? false,
-          isCompleted: isCompleted ?? false,
-          isSequential: isSequential ?? false,
-          isInitialSeeding: isInitialSeeding ?? false,
-          start: start ?? false,
-        })
-        .then(
-          (response) => {
-            req.services.torrentService.fetchTorrentList();
-            if (response.length === 0) {
-              return res.status(202).json(response);
-            } else if (response.length < files.length) {
-              return res.status(207).json(response);
-            } else {
-              return res.status(200).json(response);
-            }
-          },
-          ({code, message}) => res.status(500).json({code, message}),
-        );
-    }),
-  );
+      if (response.length < files.length) {
+        return reply.status(207).send(response);
+      }
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * POST /api/torrents/create
@@ -330,72 +251,69 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: CreateTorrentOptions;
-  }>(
-    '/create',
-    wrap(async (req, res) => {
-      const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = req.body;
+  }>('/create', async (req, reply) => {
+    const request = req as FloodRequest<{Body: CreateTorrentOptions}>;
+    const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = request.body;
 
-      if (typeof sourcePath !== 'string') {
-        return res.status(422).json({message: 'Validation error.'});
-      }
+    if (typeof sourcePath !== 'string') {
+      return reply.status(422).send({message: 'Validation error.'});
+    }
 
-      const sanitizedPath = sanitizePath(sourcePath);
-      if (!isAllowedPath(sanitizedPath)) {
-        const {code, message} = accessDeniedError();
-        return res.status(403).json({code, message});
-      }
+    const sanitizedPath = sanitizePath(sourcePath);
+    if (!isAllowedPath(sanitizedPath)) {
+      const {code, message} = accessDeniedError();
+      return reply.status(403).send({code, message});
+    }
 
-      const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat(
-        '.torrent',
-      );
+    const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat('.torrent');
 
-      let torrent: Buffer;
-      try {
-        torrent = await new Promise<Buffer>((resolve, reject) => {
-          createTorrent(
-            sanitizedPath,
-            {
-              name,
-              comment,
-              createdBy: 'Flood - flood.js.org',
-              private: isPrivate,
-              announceList: [trackers],
-              info: infoSource
-                ? {
-                    source: infoSource,
-                  }
-                : undefined,
-            },
-            (err, torrent) => (err ? reject(err) : resolve(torrent)),
-          );
-        });
-      } catch ({message}) {
-        return res.status(500).json({message});
-      }
+    let torrent: Buffer;
+    try {
+      torrent = await new Promise<Buffer>((resolve, reject) => {
+        createTorrent(
+          sanitizedPath,
+          {
+            name,
+            comment,
+            createdBy: 'Flood - flood.js.org',
+            private: isPrivate,
+            announceList: [trackers],
+            info: infoSource
+              ? {
+                  source: infoSource,
+                }
+              : undefined,
+          },
+          (err, torrent) => (err ? reject(err) : resolve(torrent)),
+        );
+      });
+    } catch (error) {
+      const {message} = (error as {message?: string}) ?? {};
+      return reply.status(500).send({message});
+    }
 
-      await req.services.clientGatewayService
-        .addTorrentsByFile({
-          files: [torrent.toString('base64')],
-          destination: (await fs.promises.lstat(sanitizedPath)).isDirectory()
-            ? sanitizedPath
-            : path.dirname(sanitizedPath),
-          tags: tags ?? [],
-          isBasePath: true,
-          isCompleted: true,
-          isSequential: false,
-          isInitialSeeding: isInitialSeeding ?? false,
-          start: start ?? false,
-        })
-        .catch(() => {
-          // do nothing.
-        });
+    await request.services.clientGatewayService
+      .addTorrentsByFile({
+        files: [torrent.toString('base64')],
+        destination: (await fs.promises.lstat(sanitizedPath)).isDirectory()
+          ? sanitizedPath
+          : path.dirname(sanitizedPath),
+        tags: tags ?? [],
+        isBasePath: true,
+        isCompleted: true,
+        isSequential: false,
+        isInitialSeeding: isInitialSeeding ?? false,
+        start: start ?? false,
+      })
+      .catch(() => {
+        // do nothing.
+      });
 
-      res.attachment(torrentFileName);
-      res.contentType('application/x-bittorrent');
+    reply.header('Content-Disposition', contentDisposition(torrentFileName));
+    reply.type('application/x-bittorrent');
 
-      return res.status(200).send(torrent);
-    }),
-  );
+    return reply.status(200).send(torrent);
+  });
 
   /**
    * POST /api/torrents/start
@@ -408,18 +326,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: StartTorrentsOptions;
-  }>(
-    '/start',
-    wrap((req, res) =>
-      req.services.clientGatewayService.startTorrents(req.body).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/start', async (req, reply) => {
+    const request = req as FloodRequest<{Body: StartTorrentsOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.startTorrents(request.body);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * POST /api/torrents/stop
@@ -432,18 +350,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: StopTorrentsOptions;
-  }>(
-    '/stop',
-    wrap((req, res) =>
-      req.services.clientGatewayService.stopTorrents(req.body).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/stop', async (req, reply) => {
+    const request = req as FloodRequest<{Body: StopTorrentsOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.stopTorrents(request.body);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * POST /api/torrents/check-hash
@@ -456,18 +374,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: CheckTorrentsOptions;
-  }>(
-    '/check-hash',
-    wrap((req, res) =>
-      req.services.clientGatewayService.checkTorrents(req.body).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/check-hash', async (req, reply) => {
+    const request = req as FloodRequest<{Body: CheckTorrentsOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.checkTorrents(request.body);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * POST /api/torrents/move
@@ -480,29 +398,33 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: MoveTorrentsOptions;
-  }>(
-    '/move',
-    wrap(async (req, res) => {
-      let sanitizedPath: string | null = null;
-      try {
-        sanitizedPath = sanitizePath(req.body.destination);
-        if (!isAllowedPath(sanitizedPath)) {
-          const {code, message} = accessDeniedError();
-          return res.status(403).json({code, message});
-        }
-      } catch ({code, message}) {
-        return res.status(403).json({code, message});
-      }
+  }>('/move', async (req, reply) => {
+    const request = req as FloodRequest<{Body: MoveTorrentsOptions}>;
+    let sanitizedPath: string | null = null;
 
-      return req.services.clientGatewayService.moveTorrents({...req.body, destination: sanitizedPath}).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      );
-    }),
-  );
+    try {
+      sanitizedPath = sanitizePath(request.body.destination);
+      if (!isAllowedPath(sanitizedPath)) {
+        const {code, message} = accessDeniedError();
+        return reply.status(403).send({code, message});
+      }
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(403).send({code, message});
+    }
+
+    try {
+      const response = await request.services.clientGatewayService.moveTorrents({
+        ...request.body,
+        destination: sanitizedPath,
+      });
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * POST /api/torrents/delete
@@ -515,18 +437,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: DeleteTorrentsOptions;
-  }>(
-    '/delete',
-    wrap((req, res) =>
-      req.services.clientGatewayService.removeTorrents(req.body).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/delete', async (req, reply) => {
+    const request = req as FloodRequest<{Body: DeleteTorrentsOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.removeTorrents(request.body);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * POST /api/torrents/reannounce
@@ -539,24 +461,23 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.post<{
     Body: ReannounceTorrentsOptions;
-  }>(
-    '/reannounce',
-    wrap((req, res) => {
-      const parsedResult = reannounceTorrentsSchema.safeParse(req.body);
+  }>('/reannounce', async (req, reply) => {
+    const request = req as FloodRequest<{Body: ReannounceTorrentsOptions}>;
+    const parsedResult = reannounceTorrentsSchema.safeParse(request.body);
 
-      if (!parsedResult.success) {
-        return res.status(422).json({message: 'Validation error.'});
-      }
+    if (!parsedResult.success) {
+      return reply.status(422).send({message: 'Validation error.'});
+    }
 
-      return req.services.clientGatewayService.reannounceTorrents(parsedResult.data).then(
-        (response) => {
-          req.services.clientGatewayService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      );
-    }),
-  );
+    try {
+      const response = await request.services.clientGatewayService.reannounceTorrents(parsedResult.data);
+      request.services.clientGatewayService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * PATCH /api/torrents/initial-seeding
@@ -569,18 +490,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.patch<{
     Body: SetTorrentsInitialSeedingOptions;
-  }>(
-    '/initial-seeding',
-    wrap((req, res) =>
-      req.services.clientGatewayService.setTorrentsInitialSeeding(req.body).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/initial-seeding', async (req, reply) => {
+    const request = req as FloodRequest<{Body: SetTorrentsInitialSeedingOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.setTorrentsInitialSeeding(request.body);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * PATCH /api/torrents/priority
@@ -593,18 +514,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.patch<{
     Body: SetTorrentsPriorityOptions;
-  }>(
-    '/priority',
-    wrap((req, res) =>
-      req.services.clientGatewayService.setTorrentsPriority(req.body).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/priority', async (req, reply) => {
+    const request = req as FloodRequest<{Body: SetTorrentsPriorityOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.setTorrentsPriority(request.body);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * PATCH /api/torrents/sequential
@@ -617,18 +538,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.patch<{
     Body: SetTorrentsSequentialOptions;
-  }>(
-    '/sequential',
-    wrap((req, res) =>
-      req.services.clientGatewayService.setTorrentsSequential(req.body).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/sequential', async (req, reply) => {
+    const request = req as FloodRequest<{Body: SetTorrentsSequentialOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.setTorrentsSequential(request.body);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * PATCH /api/torrents/tags
@@ -641,24 +562,23 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.patch<{
     Body: SetTorrentsTagsOptions;
-  }>(
-    '/tags',
-    wrap((req, res) => {
-      const parsedResult = setTorrentsTagsSchema.safeParse(req.body);
+  }>('/tags', async (req, reply) => {
+    const request = req as FloodRequest<{Body: SetTorrentsTagsOptions}>;
+    const parsedResult = setTorrentsTagsSchema.safeParse(request.body);
 
-      if (!parsedResult.success) {
-        return res.status(422).json({message: 'Validation error.'});
-      }
+    if (!parsedResult.success) {
+      return reply.status(422).send({message: 'Validation error.'});
+    }
 
-      return req.services.clientGatewayService.setTorrentsTags(parsedResult.data).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      );
-    }),
-  );
+    try {
+      const response = await request.services.clientGatewayService.setTorrentsTags(parsedResult.data);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * PATCH /api/torrents/trackers
@@ -671,18 +591,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.patch<{
     Body: SetTorrentsTrackersOptions;
-  }>(
-    '/trackers',
-    wrap((req, res) =>
-      req.services.clientGatewayService.setTorrentsTrackers(req.body).then(
-        (response) => {
-          req.services.torrentService.fetchTorrentList();
-          return res.status(200).json(response);
-        },
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/trackers', async (req, reply) => {
+    const request = req as FloodRequest<{Body: SetTorrentsTrackersOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.setTorrentsTrackers(request.body);
+      request.services.torrentService.fetchTorrentList();
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * GET /api/torrents/{hash(, hash2, ...)}/metainfo
@@ -705,17 +625,18 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         max: 60,
       }) ?? {}),
     },
-    wrap(async (req, res) => {
-      const hashes: Array<string> = req.params.hashes?.split(',').map((hash) => sanitize(hash));
+    async (req, reply) => {
+      const request = req as FloodRequest<{Params: {hashes: string}}>;
+      const hashes: Array<string> = request.params.hashes?.split(',').map((hash) => sanitize(hash));
       if (!Array.isArray(hashes) || hashes?.length < 1) {
-        return res.status(422).json(new Error('Hash not provided.'));
+        return reply.status(422).send(new Error('Hash not provided.'));
       }
 
       const {path: sessionDirectory, case: torrentCase} =
-        (await req.services.clientGatewayService.getClientSessionDirectory().catch(() => undefined)) || {};
+        (await request.services.clientGatewayService.getClientSessionDirectory().catch(() => undefined)) || {};
 
       if (sessionDirectory == null) {
-        return res.status(500).json(new Error('Failed to get session directory.'));
+        return reply.status(500).send(new Error('Failed to get session directory.'));
       }
 
       const torrentFileNames = hashes.map(
@@ -732,30 +653,29 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
       } catch (e) {
         const err = e as NodeJS.ErrnoException;
         if (err.code === 'ENOENT') {
-          return res.status(404).json({code: err.code, message: err.message});
+          return reply.status(404).send({code: err.code, message: err.message});
         }
-        return res.status(500).json({
+        return reply.status(500).send({
           code: err.code,
           message: `Failed to access torrent files: ${e}`,
         });
       }
 
       if (hashes.length < 2) {
-        res.attachment(torrentFileNames[0]);
-        res.download(path.join(sessionDirectory, torrentFileNames[0]));
-        return res;
+        reply.header('Content-Disposition', contentDisposition(torrentFileNames[0]));
+        return reply.send(fs.createReadStream(path.join(sessionDirectory, torrentFileNames[0])));
       }
 
-      res.attachment(`torrents-${Date.now()}.tar`);
+      reply.header('Content-Disposition', contentDisposition(`torrents-${Date.now()}.tar`));
 
-      return res.send(
+      return reply.send(
         tar.pack(sessionDirectory, {
           entries: torrentFileNames,
           strict: true,
           dereference: false,
         }),
       );
-    }),
+    },
   );
 
   /**
@@ -784,15 +704,17 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.get<{
     Params: {hash: string};
-  }>(
-    '/:hash/contents',
-    wrap((req, res) =>
-      req.services.clientGatewayService.getTorrentContents(req.params.hash).then(
-        (contents) => res.status(200).json(contents),
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/:hash/contents', async (req, reply) => {
+    const request = req as FloodRequest<{Params: {hash: string}}>;
+
+    try {
+      const contents = await request.services.clientGatewayService.getTorrentContents(request.params.hash);
+      return reply.status(200).send(contents);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * PATCH /api/torrents/{hash}/contents
@@ -807,15 +729,20 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
   fastify.patch<{
     Params: {hash: string};
     Body: SetTorrentContentsPropertiesOptions;
-  }>(
-    '/:hash/contents',
-    wrap((req, res) =>
-      req.services.clientGatewayService.setTorrentContentsPriority(req.params.hash, req.body).then(
-        (response) => res.status(200).json(response),
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/:hash/contents', async (req, reply) => {
+    const request = req as FloodRequest<{Params: {hash: string}; Body: SetTorrentContentsPropertiesOptions}>;
+
+    try {
+      const response = await request.services.clientGatewayService.setTorrentContentsPriority(
+        request.params.hash,
+        request.body,
+      );
+      return reply.status(200).send(response);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * GET /api/torrents/{hash}/contents/{indices}/token
@@ -837,20 +764,22 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         max: 200,
       }) ?? {}),
     },
-    wrap((req, res) => {
-      if (!req.user) {
-        return res.status(500).json({message: 'User is not attached.'});
+    (req, reply) => {
+      const request = req as FloodRequest<{Params: {hash: string; indices: string}; Querystring: {token?: string}}>;
+
+      if (!request.user) {
+        return reply.status(500).send({message: 'User is not attached.'});
       }
 
-      const {hash, indices} = req.params;
-      return res.status(200).send(
+      const {hash, indices} = request.params;
+      return reply.status(200).send(
         getToken<ContentToken>({
-          username: req.user.username,
+          username: request.user.username,
           hash,
           indices,
         }),
       );
-    }),
+    },
   );
 
   /**
@@ -873,132 +802,125 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         max: 200,
       }) ?? {}),
     },
-    wrap(async (req, res) => {
-      const {hash, indices: stringIndices} = req.params;
+    async (req, reply) => {
+      const request = req as FloodRequest<{Params: {hash: string; indices: string}; Querystring: {token?: string}}>;
+      const {hash, indices: stringIndices} = request.params;
 
-      if (req.user != null && req.query.token == null) {
-        // https://bugzilla.mozilla.org/show_bug.cgi?id=1689018
-        if (req.headers?.['user-agent']?.includes('Firefox/') !== true) {
-          res.redirect(
+      if (request.user != null && request.query.token == null) {
+        if (request.headers?.['user-agent']?.includes('Firefox/') !== true) {
+          reply.redirect(
             `?token=${getToken<ContentToken>({
-              username: req.user.username,
+              username: request.user.username,
               hash,
               indices: stringIndices,
             })}`,
           );
-          return res;
+          return;
         }
       }
 
-      const selectedTorrent = req.services.torrentService.getTorrent(hash);
+      const selectedTorrent = request.services.torrentService.getTorrent(hash);
       if (!selectedTorrent) {
-        return res.status(404).json({error: 'Torrent not found.'});
+        return reply.status(404).send({error: 'Torrent not found.'});
       }
 
-      return req.services.clientGatewayService
-        .getTorrentContents(hash)
-        .then((contents) => {
-          if (!contents || contents.length < 1) {
-            return res.status(404).json({error: 'Torrent contents not found'});
+      try {
+        const contents = await request.services.clientGatewayService.getTorrentContents(hash);
+
+        if (!contents || contents.length < 1) {
+          return reply.status(404).send({error: 'Torrent contents not found'});
+        }
+
+        let indices: Array<number>;
+        if (!stringIndices || stringIndices === 'all') {
+          indices = contents.map((x) => x.index);
+        } else {
+          indices = stringIndices.split(',').map((value) => Number(value));
+        }
+
+        let filePathsToDownload = contents
+          .filter((content) => indices.includes(content.index))
+          .map((content) => sanitizePath(path.join(selectedTorrent.directory, content.path)));
+
+        filePathsToDownload = filePathsToDownload.filter((filePath) => isAllowedPath(filePath));
+
+        if (filePathsToDownload.length !== indices.length) {
+          const {code, message} = accessDeniedError();
+          return reply.status(403).send({code, message});
+        }
+
+        filePathsToDownload = filePathsToDownload.filter((filePath) => fs.existsSync(filePath));
+
+        if (filePathsToDownload.length < 1 || filePathsToDownload.length !== indices.length) {
+          const {code, message} = fileNotFoundError();
+          return reply.status(404).send({code, message});
+        }
+
+        if (filePathsToDownload.length === 1) {
+          const file = filePathsToDownload[0];
+
+          const fileName = path.basename(file);
+          const fileExt = path.extname(file);
+
+          let processedType: string = fileExt;
+          switch (fileExt) {
+            case '.mkv':
+              processedType = 'video/webm';
+              break;
+            case '.flac':
+              processedType = 'audio/flac';
+              break;
+            default:
+              break;
           }
 
-          let indices: Array<number>;
-          if (!stringIndices || stringIndices === 'all') {
-            indices = contents.map((x) => x.index);
+          reply.type(processedType);
+          reply.header('content-disposition', contentDisposition(fileName, {type: 'inline'}));
+
+          return reply.send(fs.createReadStream(file));
+        }
+
+        const archiveRootFolder = sanitizePath(selectedTorrent.directory);
+        const relativeFilePaths = filePathsToDownload.map((filePath) =>
+          filePath.replace(`${archiveRootFolder}${path.sep}`, ''),
+        );
+
+        reply.header('Content-Disposition', contentDisposition(`${selectedTorrent.name}.tar`));
+
+        const tarOptions: tar.PackOptions = {
+          strict: true,
+          dereference: false,
+        };
+
+        const appendEntry = (prevPack: Pack) => {
+          const entry = relativeFilePaths.shift();
+
+          if (entry == null) {
+            prevPack.finalize();
           } else {
-            indices = stringIndices.split(',').map((value) => Number(value));
+            tar.pack(archiveRootFolder, {
+              pack: prevPack,
+              entries: [entry],
+              ...tarOptions,
+              finalize: false,
+              finish: appendEntry,
+            });
           }
+        };
 
-          let filePathsToDownload = contents
-            .filter((content) => indices.includes(content.index))
-            .map((content) => sanitizePath(path.join(selectedTorrent.directory, content.path)));
+        const tarStream = tar.pack(archiveRootFolder, {
+          entries: [relativeFilePaths.shift() as string],
+          ...tarOptions,
+          finalize: false,
+          finish: appendEntry,
+        });
 
-          filePathsToDownload = filePathsToDownload.filter((filePath) => isAllowedPath(filePath));
-
-          if (filePathsToDownload.length !== indices.length) {
-            const {code, message} = accessDeniedError();
-            return res.status(403).json({code, message});
-          }
-
-          filePathsToDownload = filePathsToDownload.filter((filePath) => fs.existsSync(filePath));
-
-          if (filePathsToDownload.length < 1 || filePathsToDownload.length !== indices.length) {
-            const {code, message} = fileNotFoundError();
-            return res.status(404).json({code, message});
-          }
-
-          if (filePathsToDownload.length === 1) {
-            const file = filePathsToDownload[0];
-
-            const fileName = path.basename(file);
-            const fileExt = path.extname(file);
-
-            let processedType: string = fileExt;
-            switch (fileExt) {
-              // Browsers don't support MKV streaming. However, browsers do support WebM which is a
-              // subset of MKV. Chromium supports MKV when encoded in selected codecs.
-              case '.mkv':
-                processedType = 'video/webm';
-                break;
-              // MIME database uses x-flac which is not recognized by browsers as streamable audio.
-              case '.flac':
-                processedType = 'audio/flac';
-                break;
-              default:
-                break;
-            }
-
-            res.type(processedType);
-
-            // Allow browsers to display the content inline when only a single content is requested.
-            // This is useful for texts, videos and audios. Users can still download them if needed.
-            res.setHeader('content-disposition', contentDisposition(fileName, {type: 'inline'}));
-
-            res.sendFile(file);
-
-            return res;
-          }
-
-          const archiveRootFolder = sanitizePath(selectedTorrent.directory);
-          const relativeFilePaths = filePathsToDownload.map((filePath) =>
-            filePath.replace(`${archiveRootFolder}${path.sep}`, ''),
-          );
-
-          res.attachment(`${selectedTorrent.name}.tar`);
-
-          const tarOptions: tar.PackOptions = {
-            strict: true,
-            dereference: false,
-          };
-
-          // Append file one by one to avoid OOM
-          const appendEntry = (prevPack: Pack) => {
-            const entry = relativeFilePaths.shift();
-
-            if (entry == null) {
-              prevPack.finalize();
-            } else {
-              tar.pack(archiveRootFolder, {
-                pack: prevPack,
-                entries: [entry],
-                ...tarOptions,
-                finalize: false,
-                finish: appendEntry,
-              });
-            }
-          };
-
-          const tarStream = tar.pack(archiveRootFolder, {
-            entries: [relativeFilePaths.shift() as string],
-            ...tarOptions,
-            finalize: false,
-            finish: appendEntry,
-          });
-
-          return res.send(tarStream);
-        })
-        .catch(({code, message}) => res.status(500).json({code, message}));
-    }),
+        return reply.send(tarStream);
+      } catch (error) {
+        const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+        return reply.status(500).send({code, message});
+      }
+    },
   );
 
   /**
@@ -1010,26 +932,26 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.get<{
     Params: {hash: string};
-  }>(
-    '/:hash/details',
-    wrap(async (req, res) => {
-      try {
-        const contents = req.services.clientGatewayService.getTorrentContents(req.params.hash);
-        const peers = req.services.clientGatewayService.getTorrentPeers(req.params.hash);
-        const trackers = req.services.clientGatewayService.getTorrentTrackers(req.params.hash);
+  }>('/:hash/details', async (req, reply) => {
+    const request = req as FloodRequest<{Params: {hash: string}}>;
 
-        await Promise.all([contents, peers, trackers]);
+    try {
+      const contents = request.services.clientGatewayService.getTorrentContents(request.params.hash);
+      const peers = request.services.clientGatewayService.getTorrentPeers(request.params.hash);
+      const trackers = request.services.clientGatewayService.getTorrentTrackers(request.params.hash);
 
-        return res.status(200).json({
-          contents: await contents,
-          peers: await peers,
-          trackers: await trackers,
-        });
-      } catch ({code, message}) {
-        return res.status(500).json({code, message});
-      }
-    }),
-  );
+      await Promise.all([contents, peers, trackers]);
+
+      return reply.status(200).send({
+        contents: await contents,
+        peers: await peers,
+        trackers: await trackers,
+      });
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * GET /api/torrents/{hash}/mediainfo
@@ -1049,14 +971,15 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         max: 30,
       }) ?? {}),
     },
-    wrap(async (req, res) => {
-      const torrentDirectory = req.services.torrentService.getTorrent(req.params.hash)?.directory;
-      const torrentContents = await req.services.clientGatewayService
-        .getTorrentContents(req.params.hash)
+    async (req, reply) => {
+      const request = req as FloodRequest<{Params: {hash: string}}>;
+      const torrentDirectory = request.services.torrentService.getTorrent(request.params.hash)?.directory;
+      const torrentContents = await request.services.clientGatewayService
+        .getTorrentContents(request.params.hash)
         .catch(() => undefined);
 
       if (torrentDirectory == null || torrentContents == null || torrentContents.length < 1) {
-        return res.status(404).json({message: 'Failed to fetch info of torrent.'});
+        return reply.status(404).send({message: 'Failed to fetch info of torrent.'});
       }
 
       try {
@@ -1067,13 +990,13 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         torrentContentPaths = await asyncFilter(torrentContentPaths, (contentPath) => isAllowedPathAsync(contentPath));
         if (torrentContentPaths.length < 1) {
           const {code, message} = accessDeniedError();
-          return res.status(403).json({code, message});
+          return reply.status(403).send({code, message});
         }
 
         torrentContentPaths = await asyncFilter(torrentContentPaths, (contentPath) => existAsync(contentPath));
         if (torrentContentPaths.length < 1) {
           const {code, message} = fileNotFoundError();
-          return res.status(404).json({code, message});
+          return reply.status(404).send({code, message});
         }
 
         const args = torrentContentPaths.filter((x) => {
@@ -1087,7 +1010,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         });
 
         if (args.length < 1) {
-          return res.status(200).json({
+          return reply.status(200).send({
             output:
               'no video file found.\nIf this is a error, please create a issue at https://github.com/jesec/flood/issues',
           });
@@ -1099,20 +1022,21 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
           {maxBuffer: 1024 * 2000, timeout: 1000 * 10, cwd: torrentDirectory},
           (error, stdout) => {
             if (error) {
-              return res.status(500).json({code: error.code, message: error.message});
+              return reply.status(500).send({code: error.code, message: error.message});
             }
 
-            return res.status(200).json({output: stdout});
+            return reply.status(200).send({output: stdout});
           },
         );
 
-        req.raw.on('close', () => mediainfoProcess.kill('SIGTERM'));
+        request.raw.on('close', () => mediainfoProcess.kill('SIGTERM'));
 
-        return res;
-      } catch ({code, message}) {
-        return res.status(500).json({code, message});
+        return reply;
+      } catch (error) {
+        const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+        return reply.status(500).send({code, message});
       }
-    }),
+    },
   );
 
   /**
@@ -1124,15 +1048,17 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.get<{
     Params: {hash: string};
-  }>(
-    '/:hash/peers',
-    wrap((req, res) =>
-      req.services.clientGatewayService.getTorrentPeers(req.params.hash).then(
-        (peers) => res.status(200).json(peers),
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/:hash/peers', async (req, reply) => {
+    const request = req as FloodRequest<{Params: {hash: string}}>;
+
+    try {
+      const peers = await request.services.clientGatewayService.getTorrentPeers(request.params.hash);
+      return reply.status(200).send(peers);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 
   /**
    * GET /api/torrents/{hash}/trackers
@@ -1145,15 +1071,17 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    */
   fastify.get<{
     Params: {hash: string};
-  }>(
-    '/:hash/trackers',
-    wrap((req, res) =>
-      req.services.clientGatewayService.getTorrentTrackers(req.params.hash).then(
-        (trackers) => res.status(200).json(trackers),
-        ({code, message}) => res.status(500).json({code, message}),
-      ),
-    ),
-  );
+  }>('/:hash/trackers', async (req, reply) => {
+    const request = req as FloodRequest<{Params: {hash: string}}>;
+
+    try {
+      const trackers = await request.services.clientGatewayService.getTorrentTrackers(request.params.hash);
+      return reply.status(200).send(trackers);
+    } catch (error) {
+      const {code, message} = (error as {code?: unknown; message?: string}) ?? {};
+      return reply.status(500).send({code, message});
+    }
+  });
 };
 
 export default torrentsRoutes;
