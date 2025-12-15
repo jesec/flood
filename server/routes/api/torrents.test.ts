@@ -33,7 +33,12 @@ beforeAll(async () => {
   await constructRoutes(app);
   await app.ready();
   request = supertest(app.server);
-  request.get('/api/activity-stream').send().set('Cookie', [authToken]).pipe(activityStream);
+  request
+    .get('/api/activity-stream')
+    .send()
+    .set('Cookie', [authToken])
+    .accept('text/event-stream')
+    .pipe(activityStream);
 });
 
 const tempDirectory = getTempPath('download');
