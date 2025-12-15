@@ -84,7 +84,6 @@ const watchTorrentList = (op: 'add' | 'remove' | 'replace' | 'move' | 'copy' | '
   return new Promise((resolve) => {
     let eventDetected = false;
     rl.on('line', (input) => {
-      console.log(input);
       if (eventDetected && input.includes(`"op":"${op}"`)) {
         resolve();
       }
