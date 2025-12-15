@@ -1,4 +1,4 @@
-import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
+import type {FastifyInstance, FastifyReply, FastifyRequest, HookHandlerDoneFunction} from 'fastify';
 
 import config from '../../../config';
 import type {
@@ -96,7 +96,13 @@ const authRoutes = async (fastify: FastifyInstance) => {
         if (reply.sent) {
           return;
         }
-        await requireAdmin(req, reply);
+        await new Promise<void>((resolve, reject) => {
+          requireAdmin(req, reply, () => {
+            resolve();
+          });
+
+          resolve();
+        });
       },
     });
   };
