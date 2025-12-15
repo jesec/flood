@@ -62,7 +62,7 @@ export const clearAuthCookie = (reply: FastifyReply): void => {
   );
 };
 
-export const parseCookies = (request: FastifyRequest): Record<string, string> => request.cookies ?? {};
+export const parseCookies = (request: FastifyRequest): Record<string, string | undefined> => request.cookies ?? {};
 
 export const getAuthToken = (username: string, iat?: number): string => {
   const authTokenPayload: Partial<AuthToken> = {
