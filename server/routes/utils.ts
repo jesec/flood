@@ -1,4 +1,4 @@
-import type {FastifyReply, FastifyRequest} from 'fastify';
+import type {FastifyRateLimitOptions} from '@fastify/rate-limit';
 
 import config from '../../config';
 
@@ -7,39 +7,25 @@ type RateLimitOptions = {
   windowMs: number;
 };
 
-type RateLimitState = {
-  count: number;
-  expiresAt: number;
+type RateLimitConfig = {
+  config: {
+    rateLimit: FastifyRateLimitOptions;
+  };
 };
 
-const counters = new Map<string, RateLimitState>();
-
-export function rateLimit(passedOptions: RateLimitOptions): (req: FastifyRequest, reply: FastifyReply) => void {
+export function rateLimit(passedOptions: RateLimitOptions): RateLimitConfig | undefined {
   if (config.disableRateLimit) {
-    return function () {
-      return;
-    };
+    return undefined;
   }
 
   const {windowMs, max} = passedOptions;
 
-  return function (req, reply) {
-    const key = req.ip ?? req.socket?.remoteAddress ?? 'unknown';
-    const now = Date.now();
-    const state = counters.get(key);
-
-    if (state == null || state.expiresAt < now) {
-      counters.set(key, {
-        count: 1,
-        expiresAt: now + windowMs,
-      });
-      return;
-    }
-
-    state.count += 1;
-    if (state.count > max) {
-      reply.status(429).send({message: 'Too many requests'});
-      return;
-    }
+  return {
+    config: {
+      rateLimit: {
+        max,
+        timeWindow: windowMs,
+      },
+    },
   };
 }

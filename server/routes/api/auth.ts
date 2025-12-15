@@ -47,43 +47,46 @@ const preloadConfigs: AuthVerificationPreloadConfigs = {
 };
 
 const authRoutes = async (fastify: FastifyInstance) => {
-  fastify.addHook(
-    'preHandler',
-    rateLimit({
-      windowMs: 5 * 60 * 1000,
-      max: 200,
-    }),
-  );
+  const authRateLimitOptions = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 200,
+  });
 
   fastify.post<{
     Body: AuthAuthenticationOptions;
-  }>('/authenticate', async (req, reply): Promise<void> => {
-    if (config.authMethod === 'none') {
-      sendAuthenticationResponse(reply, Users.getConfigUser());
-      return;
-    }
+  }>(
+    '/authenticate',
+    {
+      ...(authRateLimitOptions ?? {}),
+    },
+    async (req, reply): Promise<void> => {
+      if (config.authMethod === 'none') {
+        sendAuthenticationResponse(reply, Users.getConfigUser());
+        return;
+      }
 
-    const parsedResult = authAuthenticationSchema.safeParse(req.body);
+      const parsedResult = authAuthenticationSchema.safeParse(req.body);
 
-    if (!parsedResult.success) {
-      reply.status(422).send({message: 'Validation error.'});
-      return;
-    }
+      if (!parsedResult.success) {
+        reply.status(422).send({message: 'Validation error.'});
+        return;
+      }
 
-    const credentials = parsedResult.data;
+      const credentials = parsedResult.data;
 
-    return Users.comparePassword(credentials).then(
-      (level) =>
-        sendAuthenticationResponse(reply, {
-          ...credentials,
-          level,
-        }),
-      () =>
-        reply.status(401).send({
-          message: failedLoginResponse,
-        }),
-    );
-  });
+      return Users.comparePassword(credentials).then(
+        (level) =>
+          sendAuthenticationResponse(reply, {
+            ...credentials,
+            level,
+          }),
+        () =>
+          reply.status(401).send({
+            message: failedLoginResponse,
+          }),
+      );
+    },
+  );
 
   const ensureRegistrationPermission = async (req: FastifyRequest, reply: FastifyReply) => {
     await Users.initialUserGate({
@@ -101,93 +104,112 @@ const authRoutes = async (fastify: FastifyInstance) => {
   fastify.post<{
     Body: AuthRegistrationOptions;
     Querystring: {cookie?: string};
-  }>('/register', {preHandler: ensureRegistrationPermission}, async (req, reply): Promise<void> => {
-    if (config.authMethod === 'none') {
-      reply.status(404).send('Not found');
-      return;
-    }
+  }>(
+    '/register',
+    {
+      ...(authRateLimitOptions ?? {}),
+      preHandler: ensureRegistrationPermission,
+    },
+    async (req, reply): Promise<void> => {
+      if (config.authMethod === 'none') {
+        reply.status(404).send('Not found');
+        return;
+      }
 
-    const parsedResult = authRegistrationSchema.safeParse(req.body);
+      const parsedResult = authRegistrationSchema.safeParse(req.body);
 
-    if (!parsedResult.success) {
-      reply.status(422).send({message: 'Validation error.'});
-      return;
-    }
+      if (!parsedResult.success) {
+        reply.status(422).send({message: 'Validation error.'});
+        return;
+      }
 
-    const credentials = parsedResult.data;
+      const credentials = parsedResult.data;
 
-    return Users.createUser(credentials).then(
-      (user) => {
-        bootstrapServicesForUser(user);
+      return Users.createUser(credentials).then(
+        (user) => {
+          bootstrapServicesForUser(user);
 
-        if (req.query.cookie === 'false') {
-          reply.status(200).send({username: user.username});
-          return;
-        }
+          if (req.query.cookie === 'false') {
+            reply.status(200).send({username: user.username});
+            return;
+          }
 
-        sendAuthenticationResponse(reply, credentials);
-      },
-      ({message}) => reply.status(500).send({message}),
-    );
-  });
+          sendAuthenticationResponse(reply, credentials);
+        },
+        ({message}) => reply.status(500).send({message}),
+      );
+    },
+  );
 
-  fastify.get('/verify', async (req, reply): Promise<void> => {
-    if (config.authMethod === 'none') {
-      const {username, level} = Users.getConfigUser();
+  fastify.get(
+    '/verify',
+    {
+      ...(authRateLimitOptions ?? {}),
+    },
+    async (req, reply): Promise<void> => {
+      if (config.authMethod === 'none') {
+        const {username, level} = Users.getConfigUser();
 
-      setAuthCookie(reply, getAuthToken(username));
-
-      const response: AuthVerificationResponse = {
-        initialUser: false,
-        username,
-        level,
-        configs: preloadConfigs,
-      };
-
-      reply.send(response);
-      return;
-    }
-
-    await Users.initialUserGate({
-      handleInitialUser: () => {
-        const response: AuthVerificationResponse = {
-          initialUser: true,
-          configs: preloadConfigs,
-        };
-        reply.send(response);
-      },
-      handleSubsequentUser: async () => {
-        await authenticateRequest(req, reply);
-        if (reply.sent) {
-          return;
-        }
-
-        if (req.user == null) {
-          reply.status(401).send({
-            configs: preloadConfigs,
-          });
-          return;
-        }
+        setAuthCookie(reply, getAuthToken(username));
 
         const response: AuthVerificationResponse = {
           initialUser: false,
-          username: req.user.username,
-          level: req.user.level,
+          username,
+          level,
           configs: preloadConfigs,
         };
 
         reply.send(response);
-      },
-    });
-  });
+        return;
+      }
+
+      await Users.initialUserGate({
+        handleInitialUser: () => {
+          const response: AuthVerificationResponse = {
+            initialUser: true,
+            configs: preloadConfigs,
+          };
+          reply.send(response);
+        },
+        handleSubsequentUser: async () => {
+          await authenticateRequest(req, reply);
+          if (reply.sent) {
+            return;
+          }
+
+          if (req.user == null) {
+            reply.status(401).send({
+              configs: preloadConfigs,
+            });
+            return;
+          }
+
+          const response: AuthVerificationResponse = {
+            initialUser: false,
+            username: req.user.username,
+            level: req.user.level,
+            configs: preloadConfigs,
+          };
+
+          reply.send(response);
+        },
+      });
+    },
+  );
 
   await fastify.register(async (authenticatedRoutes) => {
     authenticatedRoutes.addHook('preHandler', authenticateRequest);
 
-    authenticatedRoutes.get('/logout', (_req, reply) => {
-      clearAuthCookie(reply);
-      reply.send();
-    });
+    authenticatedRoutes.get(
+      '/logout',
+      {
+        ...(authRateLimitOptions ?? {}),
+      },
+      (_req, reply) => {
+        clearAuthCookie(reply);
+        reply.send();
+      },
+    );
 
     await authenticatedRoutes.register(async (adminRoutes) => {
       adminRoutes.addHook('preHandler', requireAdmin);
@@ -199,52 +221,70 @@ const authRoutes = async (fastify: FastifyInstance) => {
         done();
       });
 
-      adminRoutes.get('/users', async (_req, reply): Promise<void> => {
-        return Users.listUsers().then(
-          (users) =>
-            reply.send(
-              users.map((user) => ({
-                username: user.username,
-                level: user.level,
-              })),
-            ),
-          ({code, message}) => reply.status(500).send({code, message}),
-        );
-      });
+      adminRoutes.get(
+        '/users',
+        {
+          ...(authRateLimitOptions ?? {}),
+        },
+        async (_req, reply): Promise<void> => {
+          return Users.listUsers().then(
+            (users) =>
+              reply.send(
+                users.map((user) => ({
+                  username: user.username,
+                  level: user.level,
+                })),
+              ),
+            ({code, message}) => reply.status(500).send({code, message}),
+          );
+        },
+      );
 
       adminRoutes.delete<{
         Params: {username: Credentials['username']};
-      }>('/users/:username', async (req, reply): Promise<void> => {
-        return Users.removeUser(req.params.username)
-          .then(() => reply.send({username: req.params.username}))
-          .catch(({code, message}) => reply.status(500).send({code, message}));
-      });
+      }>(
+        '/users/:username',
+        {
+          ...(authRateLimitOptions ?? {}),
+        },
+        async (req, reply): Promise<void> => {
+          return Users.removeUser(req.params.username)
+            .then(() => reply.send({username: req.params.username}))
+            .catch(({code, message}) => reply.status(500).send({code, message}));
+        },
+      );
 
       adminRoutes.patch<{
         Body: AuthUpdateUserOptions;
         Params: {username: Credentials['username']};
-      }>('/users/:username', async (req, reply): Promise<void> => {
-        const {username} = req.params;
+      }>(
+        '/users/:username',
+        {
+          ...(authRateLimitOptions ?? {}),
+        },
+        async (req, reply): Promise<void> => {
+          const {username} = req.params;
 
-        const parsedResult = authUpdateUserSchema.safeParse(req.body);
+          const parsedResult = authUpdateUserSchema.safeParse(req.body);
 
-        if (!parsedResult.success) {
-          reply.status(422).send({message: 'Validation error.'});
-          return;
-        }
+          if (!parsedResult.success) {
+            reply.status(422).send({message: 'Validation error.'});
+            return;
+          }
 
-        const patch = parsedResult.data;
+          const patch = parsedResult.data;
 
-        return Users.updateUser(username, patch)
-          .then((newUsername) => {
-            return Users.lookupUser(newUsername).then(async (user) => {
-              await destroyUserServices(user._id);
-              bootstrapServicesForUser(user);
-              reply.status(200).send({});
-            });
-          })
-          .catch(({code, message}) => reply.status(500).send({code, message}));
-      });
+          return Users.updateUser(username, patch)
+            .then((newUsername) => {
+              return Users.lookupUser(newUsername).then(async (user) => {
+                await destroyUserServices(user._id);
+                bootstrapServicesForUser(user);
+                reply.status(200).send({});
+              });
+            })
+            .catch(({code, message}) => reply.status(500).send({code, message}));
+        },
+      );
     });
   });
 };

@@ -700,10 +700,10 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
   }>(
     '/:hashes/metainfo',
     {
-      preHandler: rateLimit({
+      ...(rateLimit({
         windowMs: 5 * 60 * 1000,
         max: 60,
-      }),
+      }) ?? {}),
     },
     wrap(async (req, res) => {
       const hashes: Array<string> = req.params.hashes?.split(',').map((hash) => sanitize(hash));
@@ -832,10 +832,10 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
   }>(
     '/:hash/contents/:indices/token',
     {
-      preHandler: rateLimit({
+      ...(rateLimit({
         windowMs: 5 * 60 * 1000,
         max: 200,
-      }),
+      }) ?? {}),
     },
     wrap((req, res) => {
       if (!req.user) {
@@ -868,10 +868,10 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
   }>(
     '/:hash/contents/:indices/data',
     {
-      preHandler: rateLimit({
+      ...(rateLimit({
         windowMs: 5 * 60 * 1000,
         max: 200,
-      }),
+      }) ?? {}),
     },
     wrap(async (req, res) => {
       const {hash, indices: stringIndices} = req.params;
@@ -1044,10 +1044,10 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
   }>(
     '/:hash/mediainfo',
     {
-      preHandler: rateLimit({
+      ...(rateLimit({
         windowMs: 5 * 60 * 1000,
         max: 30,
-      }),
+      }) ?? {}),
     },
     wrap(async (req, res) => {
       const torrentDirectory = req.services.torrentService.getTorrent(req.params.hash)?.directory;

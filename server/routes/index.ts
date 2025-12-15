@@ -3,6 +3,7 @@ import path from 'node:path';
 
 import fastifyCompress from '@fastify/compress';
 import fastifyCookie from '@fastify/cookie';
+import fastifyRateLimit from '@fastify/rate-limit';
 import fastifyStatic from '@fastify/static';
 import paths from '@shared/config/paths';
 import type {FastifyInstance, FastifyReply} from 'fastify';
@@ -25,6 +26,12 @@ const constructRoutes = async (fastify: FastifyInstance) => {
 
   await fastify.register(fastifyCookie);
   await fastify.register(fastifyCompress);
+
+  if (!config.disableRateLimit) {
+    await fastify.register(fastifyRateLimit, {
+      global: false,
+    });
+  }
 
   fastify.addContentTypeParser('application/x-www-form-urlencoded', {parseAs: 'buffer'}, (_request, body, done) => {
     try {
