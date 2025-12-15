@@ -205,14 +205,9 @@ Integration tests spawn actual torrent clients:
 - SSE stream testing via PassThrough streams
 - Mocks HTTP requests with axios-mock-adapter
 
-### Fastify + Express Hybrid
+### Fastify
 
-- Fastify handles static files and main routes
-- Express middleware via `@fastify/express` for:
-  - Passport authentication
-  - Body parsing
-  - Cookie parsing
-  - API routes
+- The backends use fastify as http framework.
 
 ## Non-Obvious Implementation Details
 

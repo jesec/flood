@@ -41,9 +41,6 @@ importers:
       '@fastify/compress':
         specifier: ^8.3.0
         version: 8.3.0
-      '@fastify/express':
-        specifier: ^4.0.2
-        version: 4.0.2
       '@fastify/static':
         specifier: ^8.3.0
         version: 8.3.0
@@ -116,9 +113,6 @@ importers:
       '@types/d3-shape':
         specifier: ^3.1.7
         version: 3.1.7
-      '@types/express':
-        specifier: ^4.17.23
-        version: 4.17.23
       '@types/fs-extra':
         specifier: ^9.0.13
         version: 9.0.13
@@ -263,12 +257,6 @@ importers:
       eslint-webpack-plugin:
         specifier: ^4.2.0
         version: 4.2.0(eslint@9.34.0(jiti@1.21.7))(webpack@5.101.3(@swc/core@1.13.4)(esbuild@0.25.9))
-      express:
-        specifier: ^4.21.2
-        version: 4.21.2
-      express-rate-limit:
-        specifier: ^6.11.2
-        version: 6.11.2(express@4.21.2)
       fast-json-patch:
         specifier: ^3.1.1
         version: 3.1.1
@@ -1536,9 +1524,6 @@ packages:
 
   '@fastify/error@4.2.0':
     resolution: {integrity: sha512-RSo3sVDXfHskiBZKBPRgnQTtIqpi/7zhJOEmAxCiBcM7d0uwdGdxLlsCaLzGs8v8NnxIRlfG0N51p5yFaOentQ==}
-
-  '@fastify/express@4.0.2':
-    resolution: {integrity: sha512-lzu9MLdjlsK4Q2RiqEAwTgwQPrWQVP0kmbgAi/w9rIUqtnacjKvj3EHVTR6PIvXDs6Ut1jnTHiGbuNxHTsZwHQ==}
 
   '@fastify/fast-json-stringify-compiler@5.0.3':
     resolution: {integrity: sha512-uik7yYHkLr6fxd8hJSZ8c+xF4WafPK+XzneQDPU+D10r5X19GW8lJcom2YijX2+qtFF1ENJlHXKFM9ouXNJYgQ==}
@@ -4339,12 +4324,6 @@ packages:
   expect@29.7.0:
     resolution: {integrity: sha512-2Zks0hf1VLFYI1kbh0I5jP3KHHyCHpkfyHBzsSXRFgl/Bg9mWYfMW8oD+PdMPlEwy5HNsR9JutYy6pMeOh61nw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-
-  express-rate-limit@6.11.2:
-    resolution: {integrity: sha512-a7uwwfNTh1U60ssiIkuLFWHt4hAC5yxlLGU2VP0X4YNlyEDZAqF4tK3GD3NSitVBrCQmQ0++0uOyFOgC2y4DDw==}
-    engines: {node: '>= 14'}
-    peerDependencies:
-      express: ^4 || ^5
 
   express@4.21.2:
     resolution: {integrity: sha512-28HqgMZAmih1Czt9ny7qr6ek2qddF4FclbMzwhCREB6OFfH+rXAnuNCwo1/wFvrtbgsQDb4kSbX9de9lFbrXnA==}
@@ -9388,13 +9367,6 @@ snapshots:
 
   '@fastify/error@4.2.0': {}
 
-  '@fastify/express@4.0.2':
-    dependencies:
-      express: 4.21.2
-      fastify-plugin: 5.1.0
-    transitivePeerDependencies:
-      - supports-color
-
   '@fastify/fast-json-stringify-compiler@5.0.3':
     dependencies:
       fast-json-stringify: 6.1.1
@@ -12920,10 +12892,6 @@ snapshots:
       jest-matcher-utils: 29.7.0
       jest-message-util: 29.7.0
       jest-util: 29.7.0
-
-  express-rate-limit@6.11.2(express@4.21.2):
-    dependencies:
-      express: 4.21.2
 
   express@4.21.2:
     dependencies:
