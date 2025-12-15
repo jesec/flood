@@ -12,14 +12,14 @@ Flood is a modern web UI for various torrent clients (rTorrent, qBittorrent, Tra
 
 ```bash
 # After EVERY few edits (catches issues immediately):
-npm run check-types             # TypeScript compilation check - RUN THIS OFTEN!
-npm run lint                    # ESLint with TypeScript rules (max warnings: 0)
+pnpm run check-types             # TypeScript compilation check - RUN THIS OFTEN!
+pnpm run lint                    # ESLint with TypeScript rules (max warnings: 0)
 
 # Before committing any changes:
-npm run format-source           # Prettier auto-fix all files (prettier -w .)
-npm run check-source-formatting # Verify formatting is correct (prettier -c .)
-npm run build                   # Ensure production build works (panda codegen + build)
-npm test                        # Run tests to catch regressions
+pnpm run format-source           # Prettier auto-fix all files (prettier -w .)
+pnpm run check-source-formatting # Verify formatting is correct (prettier -c .)
+pnpm run build                   # Ensure production build works (panda codegen + build)
+pnpm run test                        # Run tests to catch regressions
 
 # Note: lint-staged runs automatically on git commits via Husky hooks
 ```
@@ -34,9 +34,9 @@ npm test                        # Run tests to catch regressions
 ### Recommended Development Pattern
 
 1. Make small, focused changes (< 50 lines)
-2. Run `npm run check-types` immediately
+2. Run `pnpm run check-types` immediately
 3. Fix any type errors before continuing
-4. Run `npm run lint` after each component/function
+4. Run `pnpm run lint` after each component/function
 5. Test the specific feature you changed
 6. Only then move to the next change
 
@@ -70,17 +70,17 @@ npm run start:development:client  # Client webpack-dev-server (port 4200, with P
 ### Testing
 
 ```bash
-npm test                        # Run all Jest integration tests (spawns real torrent clients!)
-npm test:watch                  # Watch mode with Jest
-npm test -- server/.jest/rtorrent.test.ts  # Run specific test file
-npm run test:client             # Cypress E2E tests (requires server on port 4200)
-npm run test-storybook          # Run Storybook interaction tests
+pnpm test                        # Run all Jest integration tests (spawns real torrent clients!)
+pnpm test:watch                  # Watch mode with Jest
+pnpm test -- server/.jest/rtorrent.test.ts  # Run specific test file
+pnpm run test:client             # Cypress E2E tests (requires server on port 4200)
+pnpm run test-storybook          # Run Storybook interaction tests
 
 # Test specific torrent clients (runs relevant Jest project):
-npm test -- --selectProjects=rtorrent
-npm test -- --selectProjects=qbittorrent
-npm test -- --selectProjects=transmission
-npm test -- --selectProjects=auth
+pnpm test -- --selectProjects=rtorrent
+pnpm test -- --selectProjects=qbittorrent
+pnpm test -- --selectProjects=transmission
+pnpm test -- --selectProjects=auth
 ```
 
 ## Critical Architectural Patterns
@@ -269,44 +269,44 @@ For reverse proxy setups:
 
 1. Create `/server/services/NewClient/` directory
 2. Implement `clientGatewayService.ts` extending `BaseService`
-   - **Run `npm run check-types`** after implementing each method
+   - **Run `pnpm run check-types`** after implementing each method
 3. Add connection settings schema in `/shared/schema/ClientConnectionSettings.ts`
-   - **Run `npm run check-types`** to verify schema integration
+   - **Run `pnpm run check-types`** to verify schema integration
 4. Update service factory in `/server/services/index.ts`
-5. **Run `npm run build`** to ensure everything compiles
-6. **Run `npm test`** to verify no regressions
+5. **Run `pnpm run build`** to ensure everything compiles
+6. **Run `pnpm test`** to verify no regressions
 
 ### Adding API Endpoint
 
 1. Define Zod schema in `/shared/schema/api/`
-   - **Run `npm run check-types`** after schema definition
+   - **Run `pnpm run check-types`** after schema definition
 2. Add route handler in `/server/routes/api/`
-   - **Run `npm run lint`** to check route implementation
+   - **Run `pnpm run lint`** to check route implementation
 3. Create action in `/client/src/javascript/actions/`
-   - **Run `npm run check-types`** to verify client-server contract
+   - **Run `pnpm run check-types`** to verify client-server contract
 4. Update TypeScript types in `/shared/types/api/`
-5. **Run `npm run build`** before testing the endpoint
-6. Test the endpoint manually, then **run `npm test`**
+5. **Run `pnpm run build`** before testing the endpoint
+6. Test the endpoint manually, then **run `pnpm test`**
 
 ### Modifying Torrent Properties
 
 1. Update type in `/shared/types/Torrent.ts`
-   - **Run `npm run check-types`** immediately - this affects many files!
+   - **Run `pnpm run check-types`** immediately - this affects many files!
 2. Fix all TypeScript errors before proceeding
 3. Modify normalizers in each client's `torrentPropertiesUtil.ts`
-   - **Run `npm run check-types`** after each client adapter
+   - **Run `pnpm run check-types`** after each client adapter
 4. Update torrent list columns if needed
-5. **Run `npm run build`** to verify production build
-6. **Run `npm test`** to ensure client adapters still work
+5. **Run `pnpm run build`** to verify production build
+6. **Run `pnpm test`** to ensure client adapters still work
 
 ## Debugging Tips
 
 ### When Things Go Wrong
 
-- **TypeScript errors?** Run `npm run check-types` and fix from top to bottom
-- **Lint errors?** Run `npm run lint` - most are auto-fixable with `npm run format-source`
+- **TypeScript errors?** Run `pnpm run check-types` and fix from top to bottom
+- **Lint errors?** Run `pnpm run lint` - most are auto-fixable with `pnpm run format-source`
 - **Build fails?** Check both server (esbuild) and client (webpack) output
-- **Tests fail?** Run specific test file with `npm test -- path/to/test`
+- **Tests fail?** Run specific test file with `pnpm test -- path/to/test`
 - **Panda CSS issues?** Run `panda codegen` to regenerate styled-system
 
 ### Runtime Debugging
@@ -520,6 +520,6 @@ class Store {
 ## Final Reminders
 
 1. **Small changes, frequent validation** - This codebase has strict TypeScript
-2. **Run `npm run check-types` after every change** - Seriously, every change
+2. **Run `pnpm run check-types` after every change** - Seriously, every change
 3. **CI will reject your PR** if lint/types/tests fail
 4. **When in doubt, validate** - Better to check too often than debug for hours

@@ -36,7 +36,7 @@ jobs:
           sudo dpkg -i rtorrent-linux-amd64.deb
 
       - run: pnpm install --frozen-lockfile
-      - run: npm test || npm test || npm test
+      - run: pnpm run test || pnpm run test || pnpm run test
 
       - uses: codecov/codecov-action@v3
         if: matrix.node == 20
@@ -45,7 +45,7 @@ jobs:
           sudo apt-get remove --purge -y rtorrent
           sudo apt-get install -y rtorrent
 
-      - run: npm test -- --selectProjects rtorrent || npm test -- --selectProjects rtorrent || npm test -- --selectProjects rtorrent
+      - run: pnpm run test -- --selectProjects rtorrent || pnpm run test -- --selectProjects rtorrent || pnpm run test -- --selectProjects rtorrent
         if: matrix['node'] == '20'
 
   test-backend:
