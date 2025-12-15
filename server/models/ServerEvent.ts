@@ -1,10 +1,10 @@
 import type {ServerEvents} from '@shared/types/ServerEvents';
-import type {Response} from 'express';
+import type {ServerResponse} from 'node:http';
 
 class ServerEvent {
-  res: Response;
+  res: ServerResponse;
 
-  constructor(res: Response) {
+  constructor(res: ServerResponse) {
     this.res = res;
   }
 

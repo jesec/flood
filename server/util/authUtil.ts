@@ -1,12 +1,12 @@
 import type {AuthToken} from '@shared/schema/Auth';
-import {CookieOptions} from 'express';
+import type {CookieSerializeOptions} from '@fastify/cookie';
 import jwt from 'jsonwebtoken';
 
 import config from '../../config';
 
 const EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // one week
 
-export const getCookieOptions = (): CookieOptions => ({
+export const getCookieOptions = (): CookieSerializeOptions => ({
   expires: new Date(Date.now() + EXPIRATION_SECONDS * 1000),
   httpOnly: true,
   sameSite: 'strict',

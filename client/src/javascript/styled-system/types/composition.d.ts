@@ -1,13 +1,13 @@
 /* eslint-disable */
-import type {CompositionStyleObject} from './system-types';
+import type {  CompositionStyleObject  } from './system-types';
 
 interface Token<T> {
-  value: T;
-  description?: string;
+  value: T
+  description?: string
 }
 
 interface Recursive<T> {
-  [key: string]: Recursive<T> | T;
+  [key: string]: Recursive<T> | T
 }
 
 /* -----------------------------------------------------------------------------
@@ -69,11 +69,11 @@ type TextStyleProperty =
   | 'verticalAlign'
   | 'whiteSpace'
   | 'wordBreak'
-  | 'wordSpacing';
+  | 'wordSpacing'
 
-export type TextStyle = CompositionStyleObject<TextStyleProperty>;
+export type TextStyle = CompositionStyleObject<TextStyleProperty>
 
-export type TextStyles = Recursive<Token<TextStyle>>;
+export type TextStyles = Recursive<Token<TextStyle>>
 
 /* -----------------------------------------------------------------------------
  * Layer styles
@@ -89,13 +89,13 @@ type Placement =
   | 'InlineStart'
   | 'InlineEnd'
   | 'BlockStart'
-  | 'BlockEnd';
+  | 'BlockEnd'
 
 type Radius =
   | `Top${'Right' | 'Left'}`
   | `Bottom${'Right' | 'Left'}`
   | `Start${'Start' | 'End'}`
-  | `End${'Start' | 'End'}`;
+  | `End${'Start' | 'End'}`
 
 type LayerStyleProperty =
   | 'background'
@@ -126,11 +126,11 @@ type LayerStyleProperty =
   | `border${Placement}Color`
   | `border${Placement}Style`
   | 'padding'
-  | `padding${Placement}`;
+  | `padding${Placement}`
 
-export type LayerStyle = CompositionStyleObject<LayerStyleProperty>;
+export type LayerStyle = CompositionStyleObject<LayerStyleProperty>
 
-export type LayerStyles = Recursive<Token<LayerStyle>>;
+export type LayerStyles = Recursive<Token<LayerStyle>>
 
 /* -----------------------------------------------------------------------------
  * Motion styles
@@ -151,14 +151,14 @@ type AnimationStyleProperty =
   | 'animationRangeStart'
   | 'animationRangeEnd'
   | 'animationTimeline'
-  | 'transformOrigin';
+  | 'transformOrigin'
 
-export type AnimationStyle = CompositionStyleObject<AnimationStyleProperty>;
+export type AnimationStyle = CompositionStyleObject<AnimationStyleProperty>
 
-export type AnimationStyles = Recursive<Token<AnimationStyle>>;
+export type AnimationStyles = Recursive<Token<AnimationStyle>>
 
 export interface CompositionStyles {
-  textStyles: TextStyles;
-  layerStyles: LayerStyles;
-  animationStyles: AnimationStyles;
+  textStyles: TextStyles
+  layerStyles: LayerStyles
+  animationStyles: AnimationStyles
 }
