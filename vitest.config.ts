@@ -1,11 +1,14 @@
-import {defineConfig} from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
+import {defineConfig} from 'vitest/config';
+import type {UserConfig} from 'vitest/config';
 
-export const sharedConfig = {
-  plugins: [tsconfigPaths()],
+const sharedPlugins = [tsconfigPaths()] as NonNullable<UserConfig['plugins']>;
+
+export const sharedConfig: UserConfig = {
+  plugins: sharedPlugins,
   test: {
     globals: true,
-    environment: 'node' as const,
+    environment: 'node',
   },
 };
 

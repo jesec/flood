@@ -9,7 +9,16 @@ type ProjectOptions = {
   globalSetup?: string;
 };
 
-const sharedTestConfig = sharedConfig.test ?? {};
+type TestConfig = {
+  name?: string;
+  include?: string[];
+  exclude?: string[];
+  globalSetup?: string;
+  globals?: boolean;
+  environment?: string;
+};
+
+const sharedTestConfig: TestConfig = {...(sharedConfig.test as TestConfig)};
 const baseExclude = sharedTestConfig.exclude ?? [];
 
 const createServerProject = (options: ProjectOptions) =>
