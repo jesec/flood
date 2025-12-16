@@ -28,8 +28,6 @@ const constructRoutes = async (fastify: FastifyInstance) => {
       return;
     }
 
-    console.log(error);
-
     const statusCode = error.statusCode ?? 500;
 
     reply.status(statusCode).send({
