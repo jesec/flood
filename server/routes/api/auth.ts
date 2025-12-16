@@ -1,5 +1,6 @@
 import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
+import {array, literal, nativeEnum, number, strictObject, string, union, void as voidSchema} from 'zod';
 
 import config from '../../../config';
 import type {
@@ -14,7 +15,8 @@ import {
   authUpdateUserSchema,
   AuthVerificationPreloadConfigs,
 } from '../../../shared/schema/api/auth';
-import type {Credentials} from '../../../shared/schema/Auth';
+import {authMethodSchema, type Credentials, credentialsSchema} from '../../../shared/schema/Auth';
+import {AccessLevel} from '../../../shared/schema/constants/Auth';
 import {NotFoundError} from '../../errors';
 import {authenticateHook, authenticateRequest} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
@@ -47,17 +49,62 @@ const preloadConfigs: AuthVerificationPreloadConfigs = {
   pollInterval: config.torrentClientPollInterval,
 };
 
+const authenticationResponseSchema = strictObject({
+  success: literal(true),
+  username: string(),
+  level: nativeEnum(AccessLevel),
+});
+
+const registrationSuccessSchema = union([authenticationResponseSchema, strictObject({username: string()})]);
+
+const verificationConfigsSchema = strictObject({
+  authMethod: authMethodSchema,
+  pollInterval: number(),
+});
+
+const verificationResponseSchema = union([
+  strictObject({
+    initialUser: literal(true),
+    configs: verificationConfigsSchema,
+  }),
+  strictObject({
+    initialUser: literal(false),
+    username: string(),
+    level: nativeEnum(AccessLevel),
+    configs: verificationConfigsSchema,
+  }),
+]);
+
+const verificationUnauthorizedSchema = strictObject({configs: verificationConfigsSchema});
+
+const validationErrorSchema = strictObject({message: string()});
+
+const userSummarySchema = credentialsSchema.pick({
+  username: true,
+  level: true,
+});
+
+const usernameParamSchema = credentialsSchema.pick({username: true});
+
+const registrationQuerySchema = strictObject({cookie: string().optional()});
+
 const authRoutes = async (fastify: FastifyInstance) => {
   const authRateLimitOptions = rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 200,
   });
 
-  fastify.withTypeProvider<ZodTypeProvider>().post(
+  const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
+
+  typedFastify.post(
     '/authenticate',
     {
       schema: {
         body: authAuthenticationSchema,
+        response: {
+          200: authenticationResponseSchema,
+          401: validationErrorSchema,
+        },
       },
       ...(authRateLimitOptions ?? {}),
     },
@@ -69,10 +116,8 @@ const authRoutes = async (fastify: FastifyInstance) => {
 
       try {
         const level = await Users.comparePassword(credentials);
-        sendAuthenticationResponse(reply, {
-          ...credentials,
-          level,
-        });
+
+        sendAuthenticationResponse(reply, {username: credentials.username, level});
       } catch {
         reply.status(401).send({
           message: failedLoginResponse,
@@ -95,7 +140,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
     });
   };
 
-  fastify.post<{
+  typedFastify.post<{
     Body: AuthRegistrationOptions;
     Querystring: {cookie?: string};
   }>(
@@ -103,6 +148,15 @@ const authRoutes = async (fastify: FastifyInstance) => {
     {
       ...(authRateLimitOptions ?? {}),
       preHandler: ensureRegistrationPermission,
+      schema: {
+        body: authRegistrationSchema,
+        querystring: registrationQuerySchema,
+        response: {
+          200: registrationSuccessSchema,
+          404: literal('Not found'),
+          400: validationErrorSchema,
+        },
+      },
     },
     async (req, reply): Promise<void> => {
       if (config.authMethod === 'none') {
@@ -110,14 +164,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
         return;
       }
 
-      const parsedResult = authRegistrationSchema.safeParse(req.body);
-
-      if (!parsedResult.success) {
-        reply.status(422).send({message: 'Validation error.'});
-        return;
-      }
-
-      const credentials = parsedResult.data;
+      const credentials = req.body;
 
       const user = await Users.createUser(credentials);
       bootstrapServicesForUser(user);
@@ -135,6 +182,12 @@ const authRoutes = async (fastify: FastifyInstance) => {
     '/verify',
     {
       ...(authRateLimitOptions ?? {}),
+      schema: {
+        response: {
+          200: verificationResponseSchema,
+          401: verificationUnauthorizedSchema,
+        },
+      },
     },
     async (req, reply): Promise<void> => {
       if (config.authMethod === 'none') {
@@ -184,13 +237,20 @@ const authRoutes = async (fastify: FastifyInstance) => {
     },
   );
 
-  await fastify.register(async (authenticatedRoutes) => {
-    authenticatedRoutes.addHook('preHandler', authenticateHook);
+  await typedFastify.register(async (authenticatedRoutes) => {
+    const typedAuthenticatedRoutes = authenticatedRoutes.withTypeProvider<ZodTypeProvider>();
 
-    authenticatedRoutes.get(
+    typedAuthenticatedRoutes.addHook('preHandler', authenticateHook);
+
+    typedAuthenticatedRoutes.get(
       '/logout',
       {
         ...(authRateLimitOptions ?? {}),
+        schema: {
+          response: {
+            200: voidSchema(),
+          },
+        },
       },
       (_req, reply) => {
         clearAuthCookie(reply);
@@ -198,18 +258,25 @@ const authRoutes = async (fastify: FastifyInstance) => {
       },
     );
 
-    await authenticatedRoutes.register(async (adminRoutes) => {
-      adminRoutes.addHook('preHandler', requireAdmin);
-      adminRoutes.addHook('preHandler', async (_req, _reply) => {
+    await typedAuthenticatedRoutes.register(async (adminRoutes) => {
+      const typedAdminRoutes = adminRoutes.withTypeProvider<ZodTypeProvider>();
+
+      typedAdminRoutes.addHook('preHandler', requireAdmin);
+      typedAdminRoutes.addHook('preHandler', async (_req, _reply) => {
         if (config.authMethod === 'none') {
           throw new NotFoundError();
         }
       });
 
-      adminRoutes.get(
+      typedAdminRoutes.get(
         '/users',
         {
           ...(authRateLimitOptions ?? {}),
+          schema: {
+            response: {
+              200: array(userSummarySchema),
+            },
+          },
         },
         async (_req, reply): Promise<void> => {
           const users = await Users.listUsers();
@@ -222,12 +289,18 @@ const authRoutes = async (fastify: FastifyInstance) => {
         },
       );
 
-      adminRoutes.delete<{
+      typedAdminRoutes.delete<{
         Params: {username: Credentials['username']};
       }>(
         '/users/:username',
         {
           ...(authRateLimitOptions ?? {}),
+          schema: {
+            params: usernameParamSchema,
+            response: {
+              200: usernameParamSchema,
+            },
+          },
         },
         async (req, reply): Promise<void> => {
           await Users.removeUser(req.params.username);
@@ -235,25 +308,24 @@ const authRoutes = async (fastify: FastifyInstance) => {
         },
       );
 
-      adminRoutes.patch<{
+      typedAdminRoutes.patch<{
         Body: AuthUpdateUserOptions;
         Params: {username: Credentials['username']};
       }>(
         '/users/:username',
-        // {
-        //   ...(authRateLimitOptions ?? {}),
-        // },
+        {
+          schema: {
+            body: authUpdateUserSchema,
+            params: usernameParamSchema,
+            response: {
+              200: strictObject({}),
+              400: validationErrorSchema,
+            },
+          },
+        },
         async (req, reply): Promise<void> => {
           const {username} = req.params;
-
-          const parsedResult = authUpdateUserSchema.safeParse(req.body);
-
-          if (!parsedResult.success) {
-            reply.status(422).send({message: 'Validation error.'});
-            return;
-          }
-
-          const patch = parsedResult.data;
+          const patch = req.body;
 
           const newUsername = await Users.updateUser(username, patch);
 

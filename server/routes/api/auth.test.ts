@@ -194,7 +194,7 @@ describe('POST /api/auth/register', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(422)
+      .expect(400)
       .expect('Content-Type', /json/)
       .end((err, res) => {
         if (err) return done(err);
@@ -449,7 +449,7 @@ describe('PATCH /api/auth/users/{username}', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(422)
+      .expect(400)
       .end((err, _res) => {
         if (err) return done(err);
         done();
