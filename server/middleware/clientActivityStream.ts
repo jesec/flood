@@ -1,23 +1,26 @@
-import type {Request, Response} from 'express';
 import type {Operation} from 'fast-json-patch';
+import type {FastifyReply, FastifyRequest} from 'fastify';
 import type {EventMap} from 'typed-emitter';
 import type TypedEmitter from 'typed-emitter';
 
 import type {TransferHistory} from '../../shared/types/TransferData';
+import {UnauthorizedError} from '../errors';
 import type {DiskUsageSummary} from '../models/DiskUsage';
 import DiskUsage from '../models/DiskUsage';
 import ServerEvent from '../models/ServerEvent';
 import {getAllServices} from '../services';
 
-export default async (req: Request, res: Response) => {
+export default async (req: FastifyRequest, reply: FastifyReply) => {
   const {user} = req;
 
   if (user == null) {
-    return;
+    throw new UnauthorizedError();
   }
 
+  reply.sse.keepAlive();
+
   const serviceInstances = getAllServices(user);
-  const serverEvent = new ServerEvent(res);
+  const serverEvent = new ServerEvent(reply);
   const fetchTorrentList = serviceInstances.torrentService.fetchTorrentList();
 
   // Hook into events and stop listening when connection is closed
@@ -27,7 +30,7 @@ export default async (req: Request, res: Response) => {
     handler: Parameters<T['on']>[1],
   ) => {
     emitter.on(event, handler);
-    res.on('close', () => {
+    reply.raw.on('close', () => {
       emitter.removeListener(event, handler);
     });
   };

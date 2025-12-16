@@ -32,7 +32,7 @@ describe('GET /api/client/connection-test', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body).toMatchObject({isConnected: true});
 
@@ -56,7 +56,7 @@ describe('PATCH /api/client/settings', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -72,7 +72,7 @@ describe('GET /api/client/settings', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body).toMatchObject(settings);
 

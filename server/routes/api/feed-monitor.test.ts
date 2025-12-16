@@ -42,7 +42,7 @@ describe('GET /api/feed-monitor', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const expectedResponse = {
           feeds: [],
@@ -66,7 +66,7 @@ describe('PUT /api/feed-monitor/feeds', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const response: Feed = res.body;
 
@@ -90,7 +90,7 @@ describe('PUT /api/feed-monitor/feeds', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const expectedResponse = {
           feeds: [addedFeed],
@@ -112,7 +112,7 @@ describe('PUT /api/feed-monitor/feeds', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body).toStrictEqual([addedFeed]);
 
@@ -138,7 +138,7 @@ describe('PATCH /api/feed-monitor/feeds/{id}', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         done();
       });
@@ -156,7 +156,7 @@ describe('PATCH /api/feed-monitor/feeds/{id}', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         addedFeed = {...(addedFeed as Feed), ...modifyFeedOptions};
 
@@ -180,7 +180,7 @@ describe('GET /api/feed-monitor/feeds/{id}/items', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(Array.isArray(res.body)).toBe(true);
 
@@ -205,7 +205,7 @@ describe('GET /api/feed-monitor/rules', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(Array.isArray(res.body)).toBe(true);
 
@@ -238,7 +238,7 @@ describe('PUT /api/feed-monitor/rules', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const response: Rule = res.body;
 
@@ -262,7 +262,7 @@ describe('PUT /api/feed-monitor/rules', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body.rules).toStrictEqual([addedRule]);
 
@@ -279,7 +279,7 @@ describe('PUT /api/feed-monitor/rules', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body).toStrictEqual([addedRule]);
 
@@ -301,7 +301,7 @@ describe('DELETE /api/feed-monitor/{id}', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         done();
       });
@@ -316,7 +316,7 @@ describe('DELETE /api/feed-monitor/{id}', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         done();
       });
@@ -331,7 +331,7 @@ describe('DELETE /api/feed-monitor/{id}', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const expectedResponse = {
           feeds: [],

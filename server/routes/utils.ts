@@ -1,14 +1,31 @@
-import {RequestHandler} from 'express';
-import expressRateLimit, {Options} from 'express-rate-limit';
+import type {FastifyRateLimitOptions} from '@fastify/rate-limit';
 
 import config from '../../config';
 
-export function rateLimit(passedOptions?: Partial<Options>): RequestHandler {
+type RateLimitOptions = {
+  max: number;
+  windowMs: number;
+};
+
+type RateLimitConfig = {
+  config: {
+    rateLimit: FastifyRateLimitOptions;
+  };
+};
+
+export function rateLimit(passedOptions: RateLimitOptions): RateLimitConfig | undefined {
   if (config.disableRateLimit) {
-    return function (req, res, next) {
-      next();
-    };
+    return undefined;
   }
 
-  return expressRateLimit(passedOptions);
+  const {windowMs, max} = passedOptions;
+
+  return {
+    config: {
+      rateLimit: {
+        max,
+        timeWindow: windowMs,
+      },
+    },
+  };
 }

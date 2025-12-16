@@ -1,30 +1,16 @@
-import type {NextFunction, Request, Response} from 'express';
+import type {FastifyReply, FastifyRequest} from 'fastify';
 
-import type {ServiceInstances} from '../services';
+import {InitializationFailedError} from '../errors';
 import {getAllServices} from '../services';
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace Express {
-    interface Request {
-      services: ServiceInstances;
-    }
-  }
-}
-
-const failedInitializeResponse = (res: Response): Response => {
-  return res.status(500).json({message: 'Flood server failed to initialze.'});
-};
-
-export default (req: Request, res: Response, next: NextFunction) => {
+export default async (req: FastifyRequest, _reply: FastifyReply): Promise<void> => {
   if (req.user == null) {
-    return failedInitializeResponse(res);
+    throw new InitializationFailedError();
   }
 
   req.services = getAllServices(req.user);
-  if (req.services?.clientGatewayService == null) {
-    return failedInitializeResponse(res);
-  }
 
-  next();
+  if (req.services?.clientGatewayService == null) {
+    throw new InitializationFailedError();
+  }
 };
