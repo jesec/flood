@@ -14,9 +14,6 @@ const baseTestConfig = {
     reportsDirectory: 'coverage',
     clean: false,
   },
-  deps: {
-    inline: ['p-queue', 'p-timeout'],
-  },
   testTimeout: 60000,
   poolOptions: {
     threads: {
