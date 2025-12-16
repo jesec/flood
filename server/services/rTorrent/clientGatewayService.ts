@@ -800,7 +800,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     this.availableMethodCalls = Promise.resolve(availableMethodCalls);
   }
 
-  async fetchAvailableMethodCalls(): Promise<{
+  async fetchAvailableMethodCalls(fallback = false): Promise<{
     methodList: string[];
     clientSetting: string[];
     torrentContent: string[];
@@ -809,9 +809,29 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     torrentTracker: string[];
     transferSummary: string[];
   }> {
-    const methodList = await this.clientRequestManager
-      .methodCall('system.listMethods', [])
-      .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    let methodList: Array<string> = [];
+    const listMethods = () => {
+      return this.clientRequestManager
+        .methodCall('system.listMethods', [])
+        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
+    };
+
+    this.clientRequestManager.isJSONCapable = true;
+    methodList = await listMethods().catch((e: RPCError) => {
+      if (e.isRPCError || e.name == 'SyntaxError') {
+        this.clientRequestManager.isJSONCapable = false;
+      } else if (!fallback) {
+        throw e;
+      }
+    });
+
+    if (!this.clientRequestManager.isJSONCapable) {
+      methodList = await listMethods().catch((e) => {
+        if (!fallback) {
+          throw e;
+        }
+      });
+    }
 
     const getAvailableMethodCalls =
       methodList?.length > 0
