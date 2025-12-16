@@ -59,17 +59,17 @@ type FloodRequest<T extends RouteGenericInterface = RouteGenericInterface> = Fas
 
 const createTorrentAsync = promisify(createTorrent) as (
   input: string,
-  opts: {
-    name: string;
-    creationDate: Date;
-    comment: string;
-    createdBy: string;
-    private: boolean | number;
-    pieceLength: number;
-    maxPieceLength: number;
-    announceList: string[][];
-    urlList: string[];
-    info: any;
+  opts?: {
+    name?: string;
+    creationDate?: Date;
+    comment?: string;
+    createdBy?: string;
+    private?: boolean | number;
+    pieceLength?: number;
+    maxPieceLength?: number;
+    announceList?: string[][];
+    urlList?: string[];
+    info?: any;
     onProgress?: unknown;
   },
 ) => Promise<Buffer>;
