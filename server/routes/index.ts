@@ -24,11 +24,13 @@ const constructRoutes = async (fastify: FastifyInstance) => {
   const servedPath = config.baseURI.endsWith('/') ? config.baseURI : `${config.baseURI}/`;
 
   fastify.setErrorHandler((error: FastifyError, _request, reply) => {
-    const statusCode = error.statusCode ?? 500;
-
     if (reply.sent) {
       return;
     }
+
+    console.log(error);
+
+    const statusCode = error.statusCode ?? 500;
 
     reply.status(statusCode).send({
       code: error.code ?? 'INTERNAL_SERVER_ERROR',
