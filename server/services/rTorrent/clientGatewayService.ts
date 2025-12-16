@@ -57,7 +57,19 @@ import {
 
 class RTorrentClientGatewayService extends ClientGatewayService {
   clientRequestManager = new ClientRequestManager(this.user.client as RTorrentConnectionSettings);
-  availableMethodCalls = this.fetchAvailableMethodCalls(true);
+  availableMethodCalls = this.fetchAvailableMethodCalls();
+
+  async getPreferredMethod(methods: string[]): Promise<string> {
+    const {methodList} = await this.availableMethodCalls;
+
+    const matchedMethod = methods.find((method) => methodList.includes(method));
+
+    if (!matchedMethod) {
+      throw new Error(`None of the requested methods are available: ${methods.join(', ')}`);
+    }
+
+    return matchedMethod;
+  }
 
   async appendTorrentCommentCall(file: string, additionalCalls: string[]) {
     const comment = await getComment(Buffer.from(file, 'base64'));
@@ -106,11 +118,15 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const result: string[] = [];
 
     if (this.clientRequestManager.isJSONCapable) {
+      const methodName = await this.getPreferredMethod(
+        start ? ['load.start_throw', 'load.start'] : ['load.throw', 'load.normal'],
+      );
+
       await this.clientRequestManager
         .methodCall('system.multicall', [
           await Promise.all(
             processedFiles.map(async (file) => ({
-              methodName: start ? 'load.start' : 'load.normal',
+              methodName,
               params: [
                 '',
                 `data:applications/x-bittorrent;base64,${file}`,
@@ -159,12 +175,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const result: string[] = [];
 
     if (urls[0]) {
-      let methodName: string;
-      if (this.clientRequestManager.isJSONCapable) {
-        methodName = start ? 'load.start_throw' : 'load.throw';
-      } else {
-        methodName = start ? 'load.start' : 'load.normal';
-      }
+      const methodName = await this.getPreferredMethod(
+        start ? ['load.start_throw', 'load.start'] : ['load.throw', 'load.normal'],
+      );
 
       await this.clientRequestManager
         .methodCall('system.multicall', [
@@ -786,7 +799,8 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     this.availableMethodCalls = Promise.resolve(availableMethodCalls);
   }
 
-  async fetchAvailableMethodCalls(fallback = false): Promise<{
+  async fetchAvailableMethodCalls(): Promise<{
+    methodList: string[];
     clientSetting: string[];
     torrentContent: string[];
     torrentList: string[];
@@ -794,29 +808,9 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     torrentTracker: string[];
     transferSummary: string[];
   }> {
-    let methodList: Array<string> = [];
-    const listMethods = () => {
-      return this.clientRequestManager
-        .methodCall('system.listMethods', [])
-        .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
-    };
-
-    this.clientRequestManager.isJSONCapable = true;
-    methodList = await listMethods().catch((e: RPCError) => {
-      if (e.isRPCError || e.name == 'SyntaxError') {
-        this.clientRequestManager.isJSONCapable = false;
-      } else if (!fallback) {
-        throw e;
-      }
-    });
-
-    if (!this.clientRequestManager.isJSONCapable) {
-      methodList = await listMethods().catch((e) => {
-        if (!fallback) {
-          throw e;
-        }
-      });
-    }
+    const methodList = await this.clientRequestManager
+      .methodCall('system.listMethods', [])
+      .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
 
     const getAvailableMethodCalls =
       methodList?.length > 0
@@ -826,6 +820,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         : (methodCalls: Array<string>) => methodCalls;
 
     return {
+      methodList,
       clientSetting: getAvailableMethodCalls(getMethodCalls(clientSettingMethodCallConfigs)),
       torrentContent: getAvailableMethodCalls(getMethodCalls(torrentContentMethodCallConfigs)),
       torrentList: getAvailableMethodCalls(getMethodCalls(torrentListMethodCallConfigs)),
