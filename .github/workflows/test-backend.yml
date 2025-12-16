@@ -37,6 +37,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm run test || pnpm run test || pnpm run test
+        env:
+          FLOOD_OPTION_ASSETS: 'false'
 
       - uses: codecov/codecov-action@v3
         if: matrix.node == '24'
