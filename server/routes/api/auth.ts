@@ -1,6 +1,6 @@
 import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
-import {array, literal, nativeEnum, number, strictObject, string, union, void as voidSchema} from 'zod';
+import {strictObject, string} from 'zod';
 
 import config from '../../../config';
 import type {
@@ -48,41 +48,6 @@ const preloadConfigs: AuthVerificationPreloadConfigs = {
   pollInterval: config.torrentClientPollInterval,
 };
 
-const authenticationResponseSchema = strictObject({
-  success: literal(true),
-  username: string(),
-  level: nativeEnum(AccessLevel),
-});
-
-const registrationSuccessSchema = union([authenticationResponseSchema, strictObject({username: string()})]);
-
-const verificationConfigsSchema = strictObject({
-  authMethod: authMethodSchema,
-  pollInterval: number(),
-});
-
-const verificationResponseSchema = union([
-  strictObject({
-    initialUser: literal(true),
-    configs: verificationConfigsSchema,
-  }),
-  strictObject({
-    initialUser: literal(false),
-    username: string(),
-    level: nativeEnum(AccessLevel),
-    configs: verificationConfigsSchema,
-  }),
-]);
-
-const verificationUnauthorizedSchema = strictObject({configs: verificationConfigsSchema});
-
-const validationErrorSchema = strictObject({message: string()});
-
-const userSummarySchema = credentialsSchema.pick({
-  username: true,
-  level: true,
-});
-
 const usernameParamSchema = credentialsSchema.pick({username: true});
 
 const registrationQuerySchema = strictObject({cookie: string().optional()});
@@ -100,10 +65,6 @@ const authRoutes = async (fastify: FastifyInstance) => {
     {
       schema: {
         body: authAuthenticationSchema,
-        response: {
-          200: authenticationResponseSchema,
-          401: validationErrorSchema,
-        },
       },
       ...(authRateLimitOptions ?? {}),
     },
@@ -150,11 +111,6 @@ const authRoutes = async (fastify: FastifyInstance) => {
       schema: {
         body: authRegistrationSchema,
         querystring: registrationQuerySchema,
-        response: {
-          200: registrationSuccessSchema,
-          404: literal('Not found'),
-          400: validationErrorSchema,
-        },
       },
     },
     async (req, reply): Promise<void> => {
@@ -181,12 +137,6 @@ const authRoutes = async (fastify: FastifyInstance) => {
     '/verify',
     {
       ...(authRateLimitOptions ?? {}),
-      schema: {
-        response: {
-          200: verificationResponseSchema,
-          401: verificationUnauthorizedSchema,
-        },
-      },
     },
     async (req, reply): Promise<void> => {
       if (config.authMethod === 'none') {
@@ -245,11 +195,6 @@ const authRoutes = async (fastify: FastifyInstance) => {
       '/logout',
       {
         ...(authRateLimitOptions ?? {}),
-        schema: {
-          response: {
-            200: voidSchema(),
-          },
-        },
       },
       (_req, reply) => {
         clearAuthCookie(reply);
@@ -271,11 +216,6 @@ const authRoutes = async (fastify: FastifyInstance) => {
         '/users',
         {
           ...(authRateLimitOptions ?? {}),
-          schema: {
-            response: {
-              200: array(userSummarySchema),
-            },
-          },
         },
         async (_req, reply): Promise<void> => {
           const users = await Users.listUsers();
@@ -296,9 +236,6 @@ const authRoutes = async (fastify: FastifyInstance) => {
           ...(authRateLimitOptions ?? {}),
           schema: {
             params: usernameParamSchema,
-            response: {
-              200: usernameParamSchema,
-            },
           },
         },
         async (req, reply): Promise<void> => {
@@ -313,10 +250,6 @@ const authRoutes = async (fastify: FastifyInstance) => {
           schema: {
             body: authUpdateUserSchema,
             params: usernameParamSchema,
-            response: {
-              200: strictObject({}),
-              400: validationErrorSchema,
-            },
           },
         },
         async (req, reply): Promise<void> => {
