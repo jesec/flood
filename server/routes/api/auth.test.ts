@@ -36,7 +36,7 @@ const testNonAdminUser = {
 } as const;
 let testNonAdminUserToken = '';
 
-const app = fastify({disableRequestLogging: true, logger: false});
+const app = fastify({disableRequestLogging: true, logger: true});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {
@@ -58,7 +58,7 @@ describe('GET /api/auth/verify (initial)', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const verificationResponse: AuthVerificationResponse = res.body;
 
@@ -81,7 +81,7 @@ describe('POST /api/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect('Set-Cookie', /jwt=.*;/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         [testAdminUserToken] = res.headers['set-cookie'];
         expect(typeof testAdminUserToken).toBe('string');
@@ -98,7 +98,7 @@ describe('POST /api/auth/register', () => {
       .set('Accept', 'application/json')
       .expect(401)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.headers['set-cookie']).toBeUndefined();
 
@@ -117,7 +117,7 @@ describe('POST /api/auth/register', () => {
       .expect('Content-Type', /json/)
       .expect('Set-Cookie', /jwt=.*;/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         [testNonAdminUserToken] = res.headers['set-cookie'];
         expect(typeof testNonAdminUserToken).toBe('string');
@@ -135,7 +135,7 @@ describe('POST /api/auth/register', () => {
       .set('Cookie', [testNonAdminUserToken])
       .expect(403)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.headers['set-cookie']).toBeUndefined();
 
@@ -153,7 +153,7 @@ describe('POST /api/auth/register', () => {
       .expect(500)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.headers['set-cookie']).toBeUndefined();
 
@@ -174,7 +174,7 @@ describe('POST /api/auth/register', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.headers['set-cookie']).toBeUndefined();
 
@@ -194,10 +194,18 @@ describe('POST /api/auth/register', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(422)
+      .expect(function (res) {
+        if (res.status != 400) {
+          console.log(JSON.stringify(res.body, null, 2));
+        }
+      })
+      .expect(400)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) {
+          console.log(err);
+          return done(err);
+        }
 
         expect(res.headers['set-cookie']).toBeUndefined();
 
@@ -214,7 +222,7 @@ describe('GET /api/auth/verify', () => {
       .set('Accept', 'application/json')
       .expect(401)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body.configs).toBeDefined();
 
@@ -230,7 +238,7 @@ describe('GET /api/auth/verify', () => {
       .set('Cookie', [testAdminUserToken])
       .expect(200)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         const verificationResponse: AuthVerificationResponse = res.body;
 
@@ -255,7 +263,7 @@ describe('GET /api/auth/verify', () => {
       .set('Cookie', [`jwt=${getAuthToken('nonExistentUser')}`])
       .expect(401)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body.configs).toBeDefined();
 
@@ -274,7 +282,7 @@ describe('GET /api/auth/logout', () => {
       .expect(200)
       .expect('Set-Cookie', /jwt=;/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -286,7 +294,7 @@ describe('GET /api/auth/logout', () => {
       .set('Accept', 'application/json')
       .expect(401)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -300,10 +308,10 @@ describe('POST /api/auth/authenticate', () => {
         username: 'root',
       })
       .set('Accept', 'application/json')
-      .expect(422)
+      .expect(400)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -319,7 +327,7 @@ describe('POST /api/auth/authenticate', () => {
       .expect(401)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -336,7 +344,7 @@ describe('POST /api/auth/authenticate', () => {
       .expect('Content-Type', /json/)
       .expect('Set-Cookie', /jwt/)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -350,7 +358,7 @@ describe('GET /api/auth/users', () => {
       .set('Accept', 'application/json')
       .expect(401)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -363,7 +371,7 @@ describe('GET /api/auth/users', () => {
       .set('Cookie', [testNonAdminUserToken])
       .expect(403)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(Array.isArray(res.body)).toBe(false);
 
@@ -379,7 +387,7 @@ describe('GET /api/auth/users', () => {
       .set('Cookie', [testAdminUserToken])
       .expect(200)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(Array.isArray(res.body)).toBe(true);
         expect(typeof res.body[0].username).toBe('string');
@@ -407,7 +415,7 @@ describe('PATCH /api/auth/users/{username}', () => {
       .set('Cookie', [testAdminUserToken])
       .expect(500)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -420,7 +428,7 @@ describe('PATCH /api/auth/users/{username}', () => {
       .set('Cookie', [testNonAdminUserToken])
       .expect(403)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -433,7 +441,7 @@ describe('PATCH /api/auth/users/{username}', () => {
       .set('Cookie', [testAdminUserToken])
       .expect(200)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -449,9 +457,14 @@ describe('PATCH /api/auth/users/{username}', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(422)
+      .expect(function (res) {
+        if (res.status != 400) {
+          console.log(JSON.stringify(res.body, null, 2));
+        }
+      })
+      .expect(400)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -466,7 +479,7 @@ describe('DELETE /api/auth/users/{username}', () => {
       .set('Cookie', [testAdminUserToken])
       .expect(500)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -479,7 +492,7 @@ describe('DELETE /api/auth/users/{username}', () => {
       .set('Cookie', [testNonAdminUserToken])
       .expect(403)
       .end((err, _res) => {
-        if (err) done(err);
+        if (err) return done(err);
         done();
       });
   });
@@ -492,7 +505,7 @@ describe('DELETE /api/auth/users/{username}', () => {
       .set('Cookie', [testAdminUserToken])
       .expect(200)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body.username).toBe(testNonAdminUser.username);
 

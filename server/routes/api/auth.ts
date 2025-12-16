@@ -1,14 +1,11 @@
-import type {Response} from 'express';
-import express from 'express';
-import rateLimit from 'express-rate-limit';
-import passport from 'passport';
+import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
+import {ZodTypeProvider} from 'fastify-type-provider-zod';
+import {strictObject, string} from 'zod';
 
 import config from '../../../config';
 import type {
-  AuthAuthenticationOptions,
   AuthAuthenticationResponse,
   AuthRegistrationOptions,
-  AuthUpdateUserOptions,
   AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
 import {
@@ -17,33 +14,24 @@ import {
   authUpdateUserSchema,
   AuthVerificationPreloadConfigs,
 } from '../../../shared/schema/api/auth';
-import type {Credentials, UserInDatabase} from '../../../shared/schema/Auth';
+import {type Credentials, credentialsSchema} from '../../../shared/schema/Auth';
+import {NotFoundError} from '../../errors';
+import {authenticateHook, authenticateRequest} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
 import Users from '../../models/Users';
 import {bootstrapServicesForUser, destroyUserServices} from '../../services';
-import {getAuthToken, getCookieOptions} from '../../util/authUtil';
-
-const router = express.Router();
+import {clearAuthCookie, getAuthToken, setAuthCookie} from '../../util/authUtil';
+import {rateLimit} from '../utils';
 
 const failedLoginResponse = 'Failed login.';
 
-// Limit each IP to 200 request every 5 minutes
-// to prevent brute forcing password or denial-of-service
-router.use(
-  '/',
-  rateLimit({
-    windowMs: 5 * 60 * 1000,
-    max: 200,
-  }),
-);
-
 const sendAuthenticationResponse = (
-  res: Response,
+  reply: FastifyReply,
   credentials: Required<Pick<Credentials, 'username' | 'level'>>,
-): Response => {
+): void => {
   const {username, level} = credentials;
 
-  res.cookie('jwt', getAuthToken(username), getCookieOptions());
+  setAuthCookie(reply, getAuthToken(username));
 
   const response: AuthAuthenticationResponse = {
     success: true,
@@ -51,7 +39,7 @@ const sendAuthenticationResponse = (
     level,
   };
 
-  return res.json(response);
+  reply.send(response);
 };
 
 const preloadConfigs: AuthVerificationPreloadConfigs = {
@@ -59,278 +47,227 @@ const preloadConfigs: AuthVerificationPreloadConfigs = {
   pollInterval: config.torrentClientPollInterval,
 };
 
-router.use('/users', passport.authenticate('jwt', {session: false}), requireAdmin);
+const usernameParamSchema = credentialsSchema.pick({username: true});
 
-/**
- * POST /api/auth/authenticate
- * @summary Authenticates a user
- * @tags Auth
- * @security None
- * @param {AuthAuthenticationOptions} request.body.required - options - application/json
- * @return {object} 422 - request validation error - application/json
- * @return {object} 401 - incorrect username or password - application/json
- * @return {AuthAuthenticationResponse} 200 - success response - application/json
- */
-router.post<unknown, unknown, AuthAuthenticationOptions>('/authenticate', async (req, res): Promise<Response> => {
-  if (config.authMethod === 'none') {
-    return sendAuthenticationResponse(res, Users.getConfigUser());
-  }
+const registrationQuerySchema = strictObject({cookie: string().optional()});
 
-  const parsedResult = authAuthenticationSchema.safeParse(req.body);
-
-  if (!parsedResult.success) {
-    return res.status(422).json({message: 'Validation error.'});
-  }
-
-  const credentials = parsedResult.data;
-
-  return Users.comparePassword(credentials).then(
-    (level) =>
-      sendAuthenticationResponse(res, {
-        ...credentials,
-        level,
-      }),
-    () =>
-      res.status(401).json({
-        message: failedLoginResponse,
-      }),
-  );
-});
-
-// Allow unauthenticated registration if no users are currently registered.
-router.use('/register', (req, res, next) => {
-  Users.initialUserGate({
-    handleInitialUser: () => {
-      next();
-    },
-    handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (err: unknown, user: UserInDatabase) => {
-        if (err || !user) {
-          return res.status(401).send('Unauthorized');
-        }
-        req.user = user;
-        // Only admin users can create users
-        requireAdmin(req, res, next);
-      })(req, res, next);
-    },
+const authRoutes = async (fastify: FastifyInstance) => {
+  const authRateLimitOptions = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 200,
   });
-});
 
-/**
- * POST /api/auth/register
- * @summary Registers a user
- * @tags Auth
- * @security None - initial request
- * @security Administrator - subsequent requests
- * @param {AuthRegistrationOptions} request.body.required - options - application/json
- * @param {'true' | 'false'} cookie.query - whether to Set-Cookie if succeeded
- * @return {string} 404 - registration is disabled
- * @return {string} 403 - user is not authorized to create user
- * @return {object} 422 - request validation error - application/json
- * @return {{username: string}} 200 - success response if cookie=false - application/json
- * @return {AuthAuthenticationResponse} 200 - success response - application/json
- */
-router.post<unknown, unknown, AuthRegistrationOptions, {cookie: string}>(
-  '/register',
-  async (req, res): Promise<Response> => {
-    // No user can be registered when authMethod is none
-    if (config.authMethod === 'none') {
-      // Return 404
-      return res.status(404).send('Not found');
-    }
+  const typedFastify = fastify.withTypeProvider<ZodTypeProvider>();
 
-    const parsedResult = authRegistrationSchema.safeParse(req.body);
-
-    if (!parsedResult.success) {
-      return res.status(422).json({message: 'Validation error.'});
-    }
-
-    const credentials = parsedResult.data;
-
-    // Attempt to save the user
-    return Users.createUser(credentials).then(
-      (user) => {
-        bootstrapServicesForUser(user);
-
-        if (req.query.cookie === 'false') {
-          return res.status(200).json({username: user.username});
-        }
-
-        return sendAuthenticationResponse(res, credentials);
+  typedFastify.post(
+    '/authenticate',
+    {
+      schema: {
+        body: authAuthenticationSchema,
       },
-      ({message}) => res.status(500).json({message}),
-    );
-  },
-);
-
-// Allow unauthenticated verification if no users are currently registered.
-router.use('/verify', (req, res, next) => {
-  // Unconditionally provide a token if auth is disabled
-  if (config.authMethod === 'none') {
-    const {username, level} = Users.getConfigUser();
-
-    res.cookie('jwt', getAuthToken(username), getCookieOptions());
-
-    const response: AuthVerificationResponse = {
-      initialUser: false,
-      username,
-      level,
-      configs: preloadConfigs,
-    };
-
-    res.json(response);
-    return;
-  }
-
-  Users.initialUserGate({
-    handleInitialUser: () => {
-      const response: AuthVerificationResponse = {
-        initialUser: true,
-        configs: preloadConfigs,
-      };
-      res.json(response);
+      ...(authRateLimitOptions ?? {}),
     },
-    handleSubsequentUser: () => {
-      passport.authenticate('jwt', {session: false}, (err: unknown, user: UserInDatabase) => {
-        if (err || !user) {
-          res.status(401).json({
-            configs: preloadConfigs,
-          });
+    async ({body: credentials}, reply): Promise<void> => {
+      if (config.authMethod === 'none') {
+        sendAuthenticationResponse(reply, Users.getConfigUser());
+        return;
+      }
+
+      try {
+        const level = await Users.comparePassword(credentials);
+
+        sendAuthenticationResponse(reply, {username: credentials.username, level});
+      } catch {
+        reply.status(401).send({
+          message: failedLoginResponse,
+        });
+      }
+    },
+  );
+
+  const ensureRegistrationPermission = async (req: FastifyRequest, reply: FastifyReply) => {
+    await Users.initialUserGate({
+      handleInitialUser: () => undefined,
+      handleSubsequentUser: async () => {
+        await authenticateRequest(req);
+        if (reply.sent) {
           return;
         }
 
-        req.user = user;
-        next();
-      })(req, res, next);
-    },
-  });
-});
-
-/**
- * GET /api/auth/verify
- * @summary Verifies the connectivity and validity of session
- * @tags Auth
- * @security User
- * @return {string} 401 - not authenticated or token expired
- * @return {string} 500 - authenticated succeeded but user is unattached (this should NOT happen)
- * @return {AuthVerificationResponse} 200 - success response - application/json
- */
-router.get('/verify', (req, res): Response => {
-  if (req.user == null) {
-    return res.status(500).send('Unattached user.');
-  }
-
-  const response: AuthVerificationResponse = {
-    initialUser: false,
-    username: req.user.username,
-    level: req.user.level,
-    configs: preloadConfigs,
+        await requireAdmin(req, reply);
+      },
+    });
   };
 
-  return res.json(response);
-});
+  typedFastify.post<{
+    Body: AuthRegistrationOptions;
+    Querystring: {cookie?: string};
+  }>(
+    '/register',
+    {
+      ...(authRateLimitOptions ?? {}),
+      preHandler: ensureRegistrationPermission,
+      schema: {
+        body: authRegistrationSchema,
+        querystring: registrationQuerySchema,
+      },
+    },
+    async (req, reply): Promise<void> => {
+      if (config.authMethod === 'none') {
+        reply.status(404).send('Not found');
+        return;
+      }
 
-// All subsequent routes are protected.
-router.use('/', passport.authenticate('jwt', {session: false}));
+      const credentials = req.body;
 
-/**
- * GET /api/auth/logout
- * @summary Clears the session cookie
- * @tags Auth
- * @security User
- * @return {string} 401 - not authenticated or token expired
- * @return {} 200 - success response
- */
-router.get('/logout', (_req, res) => {
-  res.clearCookie('jwt').send();
-});
+      const user = await Users.createUser(credentials);
+      bootstrapServicesForUser(user);
 
-// All subsequent routes need administrator access.
-router.use('/', requireAdmin);
+      if (req.query.cookie === 'false') {
+        reply.status(200).send({username: user.username});
+        return;
+      }
 
-router.use('/users', (_req, res, next) => {
-  // No operation on user when authMethod is none
-  if (config.authMethod === 'none') {
-    // Return 404
-    res.status(404).send('Not found');
-  }
-
-  next();
-});
-
-/**
- * GET /api/auth/users
- * @summary Lists all users
- * @tags Auth
- * @security Administrator
- * @return {string} 401 - not authenticated or token expired
- * @return {string} 403 - user is not authorized to list users
- * @return {Array<Pick<UserInDatabase, 'username' | 'level'>>} 200 - success response - application/json
- */
-router.get('/users', async (_req, res): Promise<Response> => {
-  return Users.listUsers().then(
-    (users) =>
-      res.json(
-        users.map((user) => ({
-          username: user.username,
-          level: user.level,
-        })),
-      ),
-    ({code, message}) => res.status(500).json({code, message}),
+      sendAuthenticationResponse(reply, credentials);
+    },
   );
-});
 
-/**
- * DELETE /api/auth/users/{username}
- * @summary Deletes a user
- * @tags Auth
- * @security Administrator
- * @param {string} username.path - username of the user to be deleted
- * @return {string} 401 - not authenticated or token expired
- * @return {string} 403 - user is not authorized to delete user
- * @return {{username: string}} 200 - success response - application/json
- */
-router.delete('/users/:username', async (req, res): Promise<Response> => {
-  return Users.removeUser(req.params.username)
-    .then(() => res.json({username: req.params.username}))
-    .catch(({code, message}) => res.status(500).json({code, message}));
-});
+  fastify.get(
+    '/verify',
+    {
+      ...(authRateLimitOptions ?? {}),
+    },
+    async (req, reply): Promise<void> => {
+      if (config.authMethod === 'none') {
+        const {username, level} = Users.getConfigUser();
 
-/**
- * PATCH /api/auth/users/{username}
- * @summary Updates a user
- * @tags Auth
- * @security Administrator
- * @param {string} username.path - username of the user to be updated
- * @param {AuthUpdateUserOptions} request.body.required - options - application/json
- * @return {string} 401 - not authenticated or token expired
- * @return {string} 403 - user is not authorized to update user
- * @return {object} 422 - request validation error - application/json
- * @return {} 200 - success response
- */
-router.patch<{username: Credentials['username']}, unknown, AuthUpdateUserOptions>(
-  '/users/:username',
-  async (req, res): Promise<Response> => {
-    const {username} = req.params;
+        setAuthCookie(reply, getAuthToken(username));
 
-    const parsedResult = authUpdateUserSchema.safeParse(req.body);
+        const response: AuthVerificationResponse = {
+          initialUser: false,
+          username,
+          level,
+          configs: preloadConfigs,
+        };
 
-    if (!parsedResult.success) {
-      return res.status(422).json({message: 'Validation error.'});
-    }
+        reply.send(response);
+        return;
+      }
 
-    const patch = parsedResult.data;
+      await Users.initialUserGate({
+        handleInitialUser: () => {
+          const response: AuthVerificationResponse = {
+            initialUser: true,
+            configs: preloadConfigs,
+          };
+          reply.send(response);
+        },
+        handleSubsequentUser: async () => {
+          const isAuthenticated = await authenticateRequest(req, {attachOnly: true});
 
-    return Users.updateUser(username, patch)
-      .then((newUsername) => {
-        return Users.lookupUser(newUsername).then(async (user) => {
+          if (!isAuthenticated || req.user == null) {
+            reply.status(401).send({
+              configs: preloadConfigs,
+            });
+            return;
+          }
+
+          const response: AuthVerificationResponse = {
+            initialUser: false,
+            username: req.user.username,
+            level: req.user.level,
+            configs: preloadConfigs,
+          };
+
+          reply.send(response);
+        },
+      });
+    },
+  );
+
+  await typedFastify.register(async (authenticatedRoutes) => {
+    const typedAuthenticatedRoutes = authenticatedRoutes.withTypeProvider<ZodTypeProvider>();
+
+    typedAuthenticatedRoutes.addHook('preHandler', authenticateHook);
+
+    typedAuthenticatedRoutes.get(
+      '/logout',
+      {
+        ...(authRateLimitOptions ?? {}),
+      },
+      (_req, reply) => {
+        clearAuthCookie(reply);
+        reply.send();
+      },
+    );
+
+    await typedAuthenticatedRoutes.register(async (adminRoutes) => {
+      const typedAdminRoutes = adminRoutes.withTypeProvider<ZodTypeProvider>();
+
+      typedAdminRoutes.addHook('preHandler', requireAdmin);
+      typedAdminRoutes.addHook('preHandler', async (_req, _reply) => {
+        if (config.authMethod === 'none') {
+          throw new NotFoundError();
+        }
+      });
+
+      typedAdminRoutes.get(
+        '/users',
+        {
+          ...(authRateLimitOptions ?? {}),
+        },
+        async (_req, reply): Promise<void> => {
+          const users = await Users.listUsers();
+          reply.send(
+            users.map((user) => ({
+              username: user.username,
+              level: user.level,
+            })),
+          );
+        },
+      );
+
+      typedAdminRoutes.delete<{
+        Params: {username: Credentials['username']};
+      }>(
+        '/users/:username',
+        {
+          ...(authRateLimitOptions ?? {}),
+          schema: {
+            params: usernameParamSchema,
+          },
+        },
+        async (req, reply): Promise<void> => {
+          await Users.removeUser(req.params.username);
+          reply.send({username: req.params.username});
+        },
+      );
+
+      typedAdminRoutes.patch(
+        '/users/:username',
+        {
+          schema: {
+            body: authUpdateUserSchema,
+            params: usernameParamSchema,
+          },
+        },
+        async (req, reply): Promise<void> => {
+          const {username} = req.params;
+          const patch = req.body;
+
+          const newUsername = await Users.updateUser(username, patch);
+
+          const user = await Users.lookupUser(newUsername);
+
           await destroyUserServices(user._id);
-          bootstrapServicesForUser(user);
-          return res.status(200).json({});
-        });
-      })
-      .catch(({code, message}) => res.status(500).json({code, message}));
-  },
-);
 
-export default router;
+          bootstrapServicesForUser(user);
+
+          reply.status(200).send({});
+        },
+      );
+    });
+  });
+};
+
+export default authRoutes;

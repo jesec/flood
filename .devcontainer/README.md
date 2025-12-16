@@ -75,39 +75,39 @@ The dev container image is automatically built and published to GitHub Container
 
 ```bash
 # Backend tests (spawns real torrent clients)
-npm test
+pnpm run test
 
 # Frontend tests
-npm run test:client
+pnpm run test:client
 
 # Storybook tests
-npm run test-storybook
+pnpm run test-storybook
 ```
 
 ### Starting Development Servers
 
 ```bash
 # Terminal 1: Backend server (port 3000)
-npm run start:development:server
+pnpm run start:development:server
 
 # Terminal 2: Frontend dev server (port 4200)
-npm run start:development:client
+pnpm run start:development:client
 
 # Terminal 3: Storybook (port 6006)
-npm run storybook
+pnpm run storybook
 ```
 
 ### Type Checking and Linting
 
 ```bash
 # Type check
-npm run check-types
+pnpm run check-types
 
 # Lint
-npm run lint
+pnpm run lint
 
 # Format
-npm run format-source
+pnpm run format-source
 ```
 
 ## 🔄 Rebuilding the Image
@@ -151,7 +151,7 @@ If you need to test dev container changes locally:
 
 - Ensure you're running inside the dev container
 - Torrent clients are pre-installed in the container
-- Check logs: `npm test -- --verbose`
+- Check logs: `pnpm run test -- --verbose`
 
 ### Out-of-date dependencies
 
