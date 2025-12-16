@@ -1,7 +1,7 @@
-import {defineConfig, defineWorkspace, type UserConfig} from 'vitest/config';
+import {defineConfig, defineWorkspace, type ViteUserConfig} from 'vitest/config';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-type VitestPlugin = NonNullable<UserConfig['plugins']>[number];
+type VitestPlugin = NonNullable<ViteUserConfig['plugins']>[number];
 
 const tsconfigPathsPlugin = tsconfigPaths() as VitestPlugin;
 
