@@ -23,6 +23,8 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import contentDisposition from 'content-disposition';
+import {promisify} from 'node:util';
+
 import createTorrent from 'create-torrent';
 import type {FastifyInstance, FastifyRequest, RouteGenericInterface} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
@@ -53,6 +55,14 @@ type FloodRequest<T extends RouteGenericInterface = RouteGenericInterface> = Fas
   services: NonNullable<FastifyRequest['services']>;
   user: NonNullable<FastifyRequest['user']>;
 };
+
+const createTorrentAsync = promisify(
+  createTorrent as unknown as (
+    input: Parameters<typeof createTorrent>[0],
+    opts: Parameters<typeof createTorrent>[1],
+    callback: Parameters<typeof createTorrent>[2],
+  ) => void,
+);
 
 const getDestination = async (
   services: ServiceInstances,
@@ -275,24 +285,21 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
 
     let torrent: Buffer;
     try {
-      torrent = await new Promise<Buffer>((resolve, reject) => {
-        createTorrent(
-          sanitizedPath,
-          {
-            name,
-            comment,
-            createdBy: 'Flood - flood.js.org',
-            private: isPrivate,
-            announceList: [trackers],
-            info: infoSource
-              ? {
-                  source: infoSource,
-                }
-              : undefined,
-          },
-          (err, torrent) => (err ? reject(err) : resolve(torrent)),
-        );
+      const announceList = trackers?.length ? trackers.map((tracker) => [tracker]) : undefined;
+      const result = await createTorrentAsync(sanitizedPath, {
+        name,
+        comment,
+        createdBy: 'Flood - flood.js.org',
+        private: isPrivate,
+        announceList,
+        info: infoSource
+          ? {
+              source: infoSource,
+            }
+          : undefined,
       });
+
+      torrent = Buffer.isBuffer(result) ? result : Buffer.from(result);
     } catch (error) {
       const {message} = (error as {message?: string}) ?? {};
       return reply.status(500).send({message});
