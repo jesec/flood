@@ -7,8 +7,9 @@ import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import WebpackBar from 'webpackbar';
 
-import paths from '../../shared/config/paths.mjs';
+import {buildPaths} from '../../shared/config/buildPaths.mjs';
 
+const paths = buildPaths;
 const require = createRequire(import.meta.url);
 
 export default {

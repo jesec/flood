@@ -7,8 +7,10 @@ import webpack from 'webpack';
 
 import checkRequiredFiles from '../client/scripts/utils/checkRequiredFiles.mjs';
 import {measureFileSizesBeforeBuild, printFileSizesAfterBuild} from '../client/scripts/utils/FileSizeReporter.mjs';
-import paths from '../shared/config/paths.mjs';
+import {buildPaths} from '../shared/config/buildPaths.mjs';
 import clientConfig from '../client/config/webpack.config.prod.mjs';
+
+const paths = buildPaths;
 
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';

@@ -6,8 +6,10 @@ import yargs from 'yargs/yargs';
 
 import checkRequiredFiles from './utils/checkRequiredFiles.mjs';
 import {choosePort, prepareUrls} from './utils/WebpackDevServerUtils.mjs';
-import paths from '../../shared/config/paths.mjs';
+import {buildPaths} from '../../shared/config/buildPaths.mjs';
 import config from '../config/webpack.config.dev.mjs';
+
+const paths = buildPaths;
 
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';

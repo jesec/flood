@@ -1,3 +1,4 @@
+import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 import fs from 'node:fs';
 
 import fastify from 'fastify';
@@ -8,6 +9,8 @@ import type {Feed, Rule} from '../../../shared/types/Feed';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
+
+vi.useRealTimers();
 
 const app = fastify({disableRequestLogging: true, logger: false});
 let request: supertest.SuperTest<supertest.Test>;
@@ -33,91 +36,71 @@ const feed: AddFeedOptions = {
 let addedFeed: Feed | null = null;
 
 describe('GET /api/feed-monitor', () => {
-  it('Expects nothing, yet. Verifies data structure.', (done) => {
-    request
+  it('Expects nothing, yet. Verifies data structure.', async () => {
+    const res = await request
       .get('/api/feed-monitor')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        const expectedResponse = {
-          feeds: [],
-          rules: [],
-        };
+    const expectedResponse = {
+      feeds: [],
+      rules: [],
+    };
 
-        expect(res.body).toStrictEqual(expectedResponse);
-
-        done();
-      });
+    expect(res.body).toStrictEqual(expectedResponse);
   });
 });
 
 describe('PUT /api/feed-monitor/feeds', () => {
-  it('Subscribes to a feed', (done) => {
-    request
+  it('Subscribes to a feed', async () => {
+    const res = await request
       .put('/api/feed-monitor/feeds')
       .send(feed)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        const response: Feed = res.body;
+    const response: Feed = res.body;
 
-        expect(response).toMatchObject(feed);
+    expect(response).toMatchObject(feed);
 
-        expect(response._id).not.toBeNull();
-        expect(typeof response._id).toBe('string');
+    expect(response._id).not.toBeNull();
+    expect(typeof response._id).toBe('string');
 
-        addedFeed = response;
-
-        done();
-      });
+    addedFeed = response;
   });
 
-  it('GET /api/feed-monitor to verify added feed', (done) => {
-    request
+  it('GET /api/feed-monitor to verify added feed', async () => {
+    const res = await request
       .get('/api/feed-monitor')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        const expectedResponse = {
-          feeds: [addedFeed],
-          rules: [],
-        };
+    const expectedResponse = {
+      feeds: [addedFeed],
+      rules: [],
+    };
 
-        expect(res.body).toStrictEqual(expectedResponse);
-
-        done();
-      });
+    expect(res.body).toStrictEqual(expectedResponse);
   });
 
-  it('GET /api/feed-monitor/feeds to verify added feed', (done) => {
-    request
+  it('GET /api/feed-monitor/feeds to verify added feed', async () => {
+    const res = await request
       .get('/api/feed-monitor/feeds')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body).toStrictEqual([addedFeed]);
-
-        done();
-      });
+    expect(res.body).toStrictEqual([addedFeed]);
   });
 });
 
@@ -126,66 +109,51 @@ describe('PATCH /api/feed-monitor/feeds/{id}', () => {
     label: 'Modified Feed',
   };
 
-  it('Modifies the added feed', (done) => {
-    expect(addedFeed).not.toBe(null);
-    if (addedFeed == null) return;
+  it('Modifies the added feed', async () => {
+    expect(addedFeed).not.toBeNull();
+    const feedId = addedFeed?._id as string;
 
-    request
-      .patch(`/api/feed-monitor/feeds/${addedFeed._id}`)
+    await request
+      .patch(`/api/feed-monitor/feeds/${feedId}`)
       .send(modifyFeedOptions)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, _res) => {
-        if (err) return done(err);
-
-        done();
-      });
+      .expect('Content-Type', /json/);
   });
 
-  it('GET /api/feed-monitor/feeds/{id} to verify modified feed', (done) => {
-    expect(addedFeed).not.toBe(null);
-    if (addedFeed == null) return;
+  it('GET /api/feed-monitor/feeds/{id} to verify modified feed', async () => {
+    expect(addedFeed).not.toBeNull();
+    const feedId = addedFeed?._id as string;
 
-    request
-      .get(`/api/feed-monitor/feeds/${addedFeed._id}`)
+    const res = await request
+      .get(`/api/feed-monitor/feeds/${feedId}`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        addedFeed = {...(addedFeed as Feed), ...modifyFeedOptions};
+    addedFeed = {...(addedFeed as Feed), ...modifyFeedOptions};
 
-        expect(res.body).toStrictEqual([addedFeed]);
-
-        done();
-      });
+    expect(res.body).toStrictEqual([addedFeed]);
   });
 });
 
 describe('GET /api/feed-monitor/feeds/{id}/items', () => {
-  it('Requests items of the feed', (done) => {
-    expect(addedFeed).not.toBe(null);
-    if (addedFeed == null) return;
+  it('Requests items of the feed', async () => {
+    expect(addedFeed).not.toBeNull();
+    const feedId = addedFeed?._id as string;
 
-    request
-      .get(`/api/feed-monitor/feeds/${addedFeed._id}/items`)
+    const res = await request
+      .get(`/api/feed-monitor/feeds/${feedId}/items`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(Array.isArray(res.body)).toBe(true);
-
-        done();
-      });
+    expect(Array.isArray(res.body)).toBe(true);
   });
 });
 
@@ -196,21 +164,16 @@ fs.mkdirSync(tempDirectory, {recursive: true});
 let addedRule: Rule;
 
 describe('GET /api/feed-monitor/rules', () => {
-  it('Expects nothing, verifies the response is an array', (done) => {
-    request
+  it('Expects nothing, verifies the response is an array', async () => {
+    const res = await request
       .get(`/api/feed-monitor/rules`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(Array.isArray(res.body)).toBe(true);
-
-        done();
-      });
+    expect(Array.isArray(res.body)).toBe(true);
   });
 });
 
@@ -225,122 +188,91 @@ describe('PUT /api/feed-monitor/rules', () => {
     startOnLoad: false,
   };
 
-  it('Adds an automation rule', (done) => {
-    expect(addedFeed).not.toBe(null);
-    if (addedFeed == null) return;
-    rule.feedIDs = [addedFeed._id];
+  it('Adds an automation rule', async () => {
+    expect(addedFeed).not.toBeNull();
+    rule.feedIDs = [addedFeed?._id as string];
 
-    request
+    const res = await request
       .put('/api/feed-monitor/rules')
       .send(rule)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        const response: Rule = res.body;
+    const response: Rule = res.body;
 
-        expect(response).toMatchObject(rule);
+    expect(response).toMatchObject(rule);
 
-        expect(response._id).not.toBeNull();
-        expect(typeof response._id).toBe('string');
+    expect(response._id).not.toBeNull();
+    expect(typeof response._id).toBe('string');
 
-        addedRule = response;
-
-        done();
-      });
+    addedRule = response;
   });
 
-  it('GET /api/feed-monitor to verify added rule', (done) => {
-    request
+  it('GET /api/feed-monitor to verify added rule', async () => {
+    const res = await request
       .get('/api/feed-monitor')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body.rules).toStrictEqual([addedRule]);
-
-        done();
-      });
+    expect(res.body.rules).toStrictEqual([addedRule]);
   });
 
-  it('GET /api/feed-monitor/rules to verify added rule', (done) => {
-    request
+  it('GET /api/feed-monitor/rules to verify added rule', async () => {
+    const res = await request
       .get('/api/feed-monitor/rules')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body).toStrictEqual([addedRule]);
-
-        done();
-      });
+    expect(res.body).toStrictEqual([addedRule]);
   });
 });
 
 describe('DELETE /api/feed-monitor/{id}', () => {
-  it('Deletes the added feed', (done) => {
-    expect(addedFeed).not.toBe(null);
-    if (addedFeed == null) return;
+  it('Deletes the added feed', async () => {
+    expect(addedFeed).not.toBeNull();
+    const feedId = addedFeed?._id as string;
 
-    request
-      .delete(`/api/feed-monitor/${addedFeed._id}`)
+    await request
+      .delete(`/api/feed-monitor/${feedId}`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, _res) => {
-        if (err) return done(err);
-
-        done();
-      });
+      .expect('Content-Type', /json/);
   });
 
-  it('Deletes the added rule', (done) => {
-    request
+  it('Deletes the added rule', async () => {
+    await request
       .delete(`/api/feed-monitor/${addedRule._id}`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, _res) => {
-        if (err) return done(err);
-
-        done();
-      });
+      .expect('Content-Type', /json/);
   });
 
-  it('GET /api/feed-monitor to verify feed and rule are deleted', (done) => {
-    request
+  it('GET /api/feed-monitor to verify feed and rule are deleted', async () => {
+    const res = await request
       .get('/api/feed-monitor')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        const expectedResponse = {
-          feeds: [],
-          rules: [],
-        };
+    const expectedResponse = {
+      feeds: [],
+      rules: [],
+    };
 
-        expect(res.body).toStrictEqual(expectedResponse);
-
-        done();
-      });
+    expect(res.body).toStrictEqual(expectedResponse);
   });
 });

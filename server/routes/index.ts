@@ -6,7 +6,6 @@ import fastifyCookie from '@fastify/cookie';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
 import fastifyStatic from '@fastify/static';
-import paths from '@shared/config/paths';
 import type {FastifyError, FastifyInstance, FastifyReply} from 'fastify';
 import {serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
@@ -14,8 +13,10 @@ import morgan from 'morgan';
 import config from '../../config';
 import Users from '../models/Users';
 import apiRoutes from './api';
+import {createServerPaths} from 'server/config/paths';
 
 const constructRoutes = async (fastify: FastifyInstance) => {
+  const {appDist} = createServerPaths();
   await Users.bootstrapServicesForAllUsers();
 
   fastify.setValidatorCompiler(validatorCompiler);
@@ -62,9 +63,9 @@ const constructRoutes = async (fastify: FastifyInstance) => {
   });
 
   if (config.serveAssets !== false) {
-    await fastify.register(fastifyStatic, {root: paths.appDist, prefix: servedPath, etag: false});
+    await fastify.register(fastifyStatic, {root: appDist, prefix: servedPath, etag: false});
 
-    const html = fs.readFileSync(path.join(paths.appDist, 'index.html'), {
+    const html = fs.readFileSync(path.join(appDist, 'index.html'), {
       encoding: 'utf8',
     });
 

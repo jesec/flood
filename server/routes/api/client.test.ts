@@ -1,3 +1,5 @@
+import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
+
 import fastify from 'fastify';
 import supertest from 'supertest';
 
@@ -20,24 +22,19 @@ afterAll(async () => {
 
 const authToken = `jwt=${getAuthToken('_config')}`;
 
-vi.setTimeout(20000);
+vi.setConfig({testTimeout: 20000});
 
 describe('GET /api/client/connection-test', () => {
-  it('Checks connection status', (done) => {
-    request
+  it('Checks connection status', async () => {
+    const res = await request
       .get('/api/client/connection-test')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body).toMatchObject({isConnected: true});
-
-        done();
-      });
+    expect(res.body).toMatchObject({isConnected: true});
   });
 });
 
@@ -47,36 +44,27 @@ const settings: Partial<ClientSettings> = {
 };
 
 describe('PATCH /api/client/settings', () => {
-  it('Sets client settings', (done) => {
-    request
+  it('Sets client settings', async () => {
+    await request
       .patch('/api/client/settings')
       .send(settings)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect('Content-Type', /json/);
   });
 });
 
 describe('GET /api/client/settings', () => {
-  it('Gets all client settings', (done) => {
-    request
+  it('Gets all client settings', async () => {
+    const res = await request
       .get('/api/client/settings')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body).toMatchObject(settings);
-
-        done();
-      });
+    expect(res.body).toMatchObject(settings);
   });
 });

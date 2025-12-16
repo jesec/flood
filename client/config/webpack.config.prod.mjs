@@ -7,11 +7,9 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import WebpackBar from 'webpackbar';
 
-import paths from '../../shared/config/paths.mjs';
+import {buildPaths} from '../../shared/config/buildPaths.mjs';
 
-if (process.env.NODE_ENV !== 'production') {
-  throw new Error('Production builds must have NODE_ENV=production.');
-}
+const paths = buildPaths;
 
 export default {
   mode: 'production',
