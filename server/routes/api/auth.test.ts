@@ -194,6 +194,11 @@ describe('POST /api/auth/register', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
+      .expect(function (res) {
+        if (res.status != 400) {
+          console.log(JSON.stringify(res.body, null, 2));
+        }
+      })
       .expect(400)
       .expect('Content-Type', /json/)
       .end((err, res) => {
@@ -452,6 +457,11 @@ describe('PATCH /api/auth/users/{username}', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
+      .expect(function (res) {
+        if (res.status != 400) {
+          console.log(JSON.stringify(res.body, null, 2));
+        }
+      })
       .expect(400)
       .end((err, _res) => {
         if (err) return done(err);
