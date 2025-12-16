@@ -5,11 +5,10 @@ import fastifyCompress from '@fastify/compress';
 import fastifyCookie from '@fastify/cookie';
 import fastifyRateLimit from '@fastify/rate-limit';
 import fastifySSE from '@fastify/sse';
-import type {ZodTypeProvider} from 'fastify-type-provider-zod';
-import {serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
 import fastifyStatic from '@fastify/static';
 import paths from '@shared/config/paths';
 import type {FastifyError, FastifyInstance, FastifyReply} from 'fastify';
+import {serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
 
 import config from '../../config';

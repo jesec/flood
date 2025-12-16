@@ -1,8 +1,8 @@
 import type {FastifyInstance, FastifyReply, FastifyRequest} from 'fastify';
+import {ZodTypeProvider} from 'fastify-type-provider-zod';
 
 import config from '../../../config';
 import type {
-  AuthAuthenticationOptions,
   AuthAuthenticationResponse,
   AuthRegistrationOptions,
   AuthUpdateUserOptions,
@@ -22,7 +22,6 @@ import Users from '../../models/Users';
 import {bootstrapServicesForUser, destroyUserServices} from '../../services';
 import {clearAuthCookie, getAuthToken, setAuthCookie} from '../../util/authUtil';
 import {rateLimit} from '../utils';
-import {ZodTypeProvider} from 'fastify-type-provider-zod';
 
 const failedLoginResponse = 'Failed login.';
 
