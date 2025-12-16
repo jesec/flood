@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import {afterAll, beforeAll, vi} from 'vitest';
 
 const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
 
@@ -32,24 +33,38 @@ const transmissionProcess = spawn(
   },
 );
 
-process.argv = ['node', 'flood'];
-process.argv.push('--rundir', temporaryRuntimeDirectory);
-process.argv.push('--allowedpath', temporaryRuntimeDirectory);
-process.argv.push('--auth', 'none');
-process.argv.push('--trurl', `http://127.0.0.1:${rpcPort}/transmission/rpc`);
-process.argv.push('--truser', 'transmission');
-process.argv.push('--trpass', 'transmission');
-process.argv.push('--assets', 'false');
+beforeAll(() => {
+  const argv = [
+    'node',
+    'flood',
+    '--rundir',
+    temporaryRuntimeDirectory,
+    '--allowedpath',
+    temporaryRuntimeDirectory,
+    '--auth',
+    'none',
+    '--trurl',
+    `http://127.0.0.1:${rpcPort}/transmission/rpc`,
+    '--truser',
+    'transmission',
+    '--trpass',
+    'transmission',
+    '--assets',
+    'false',
+  ];
+  vi.stubGlobal('process', {...process, argv});
+});
 
-afterAll((done) => {
-  transmissionProcess.on('close', () => {
-    if (process.env.CI !== 'true') {
-      // TODO: This leads to test flakiness caused by ENOENT error
-      // NeDB provides no method to close database connection
-      fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
-    }
-    done();
+afterAll(async () => {
+  vi.unstubAllGlobals();
+  await new Promise((resolve) => {
+    transmissionProcess.on('close', resolve);
+    transmissionProcess.kill('SIGKILL');
   });
 
-  transmissionProcess.kill('SIGKILL');
+  if (process.env.CI !== 'true') {
+    // TODO: This leads to test flakiness caused by ENOENT error
+    // NeDB provides no method to close database connection
+    fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
+  }
 });

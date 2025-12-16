@@ -1,3 +1,4 @@
+import {describe, expect, it} from 'vitest';
 import {UserInDatabase} from '@shared/schema/Auth';
 import {LocationTreeNode} from '@shared/types/Taxonomy';
 

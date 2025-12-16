@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import {afterAll, beforeAll, vi} from 'vitest';
 
 const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
 
@@ -19,17 +20,30 @@ network.scgi.open_local = "${rTorrentSocket}"
 `,
 );
 
-process.argv = ['node', 'flood'];
-process.argv.push('--rundir', temporaryRuntimeDirectory);
-process.argv.push('--auth', 'none');
-process.argv.push('--rtsocket', rTorrentSocket);
-process.argv.push('--allowedpath', temporaryRuntimeDirectory);
-process.argv.push('--rtorrent');
-process.argv.push('--rtconfig', `${temporaryRuntimeDirectory}/rtorrent.rc`);
-process.argv.push('--test');
-process.argv.push('--assets', 'false');
+beforeAll(() => {
+  const argv = [
+    'node',
+    'flood',
+    '--rundir',
+    temporaryRuntimeDirectory,
+    '--auth',
+    'none',
+    '--rtsocket',
+    rTorrentSocket,
+    '--allowedpath',
+    temporaryRuntimeDirectory,
+    '--rtorrent',
+    '--rtconfig',
+    `${temporaryRuntimeDirectory}/rtorrent.rc`,
+    '--test',
+    '--assets',
+    'false',
+  ];
+  vi.stubGlobal('process', {...process, argv});
+});
 
-afterAll((done) => {
+afterAll(() => {
+  vi.unstubAllGlobals();
   if (fs.existsSync(`${temporaryRuntimeDirectory}/rtorrent.pid`)) {
     process.kill(Number(fs.readFileSync(`${temporaryRuntimeDirectory}/rtorrent.pid`).toString()));
   }
@@ -38,5 +52,4 @@ afterAll((done) => {
     // NeDB provides no method to close database connection
     fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
   }
-  done();
 });
