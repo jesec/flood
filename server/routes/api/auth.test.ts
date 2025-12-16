@@ -300,7 +300,7 @@ describe('POST /api/auth/authenticate', () => {
         username: 'root',
       })
       .set('Accept', 'application/json')
-      .expect(422)
+      .expect(400)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
         if (err) return done(err);

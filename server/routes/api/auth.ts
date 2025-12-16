@@ -62,13 +62,11 @@ const authRoutes = async (fastify: FastifyInstance) => {
       },
       ...(authRateLimitOptions ?? {}),
     },
-    async (req, reply): Promise<void> => {
+    async ({body: credentials}, reply): Promise<void> => {
       if (config.authMethod === 'none') {
         sendAuthenticationResponse(reply, Users.getConfigUser());
         return;
       }
-
-      const credentials = req.body;
 
       try {
         const level = await Users.comparePassword(credentials);
