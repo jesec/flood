@@ -37,7 +37,7 @@ describe('PATCH /api/settings', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body).toStrictEqual(settings);
 
@@ -56,7 +56,7 @@ describe('GET /api/settings', () => {
       .expect(200)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) done(err);
+        if (err) return done(err);
 
         expect(res.body).toMatchObject(settings);
 
@@ -76,7 +76,7 @@ describe('GET /api/settings/{property}', () => {
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
-          if (err) done(err);
+          if (err) return done(err);
 
           expect(settings).toMatchObject(res.body);
 

@@ -1,17 +1,21 @@
 import type {ServerEvents} from '@shared/types/ServerEvents';
-import type {Response} from 'express';
+import type {FastifyReply} from 'fastify';
 
 class ServerEvent {
-  res: Response;
+  reply: FastifyReply;
 
-  constructor(res: Response) {
-    this.res = res;
+  constructor(reply: FastifyReply) {
+    this.reply = reply;
   }
 
   emit<T extends keyof ServerEvents>(id: number, eventType: T, data: ServerEvents[T]) {
-    this.res.write(`id:${id}\n`);
-    this.res.write(`event:${eventType}\n`);
-    this.res.write(`data:${JSON.stringify(data)}\n\n`);
+    this.reply.sse
+      .send({
+        id: `${id}`,
+        event: eventType,
+        data: data,
+      })
+      .catch(() => {});
   }
 }
 
