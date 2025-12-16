@@ -110,7 +110,7 @@ describe('POST /api/torrents/add-urls', () => {
       .send({...addTorrentByURLOptions, nonExistingOption: 1})
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
-      .expect(422)
+      .expect(400)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
         if (err) return done(err);
@@ -247,7 +247,7 @@ describe('POST /api/torrents/add-files', () => {
       .send({...addTorrentByFileOptions, destination: []})
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
-      .expect(422)
+      .expect(400)
       .expect('Content-Type', /json/)
       .end((err, _res) => {
         if (err) return done(err);

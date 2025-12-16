@@ -47,16 +47,16 @@ pnpm run test                        # Run tests to catch regressions
 ```bash
 # Package Manager: pnpm (v9.7.0) is the project's package manager
 pnpm install --frozen-lockfile  # Install dependencies with lockfile
-npm run build                   # Build production (esbuild for server, webpack for client)
-npm start                       # Start production server (node --enable-source-maps dist/index.js)
-npm start -- --port 8080       # With custom options (pass args after --)
+pnpm run build                   # Build production (esbuild for server, webpack for client)
+pnpm start                       # Start production server (node --enable-source-maps dist/index.js)
+pnpm start -- --port 8080       # With custom options (pass args after --)
 ```
 
 ### Development Mode
 
 ```bash
-npm run start:development:server  # Server with tsx watch mode (hot reload via tsx watch)
-npm run start:development:client  # Client webpack-dev-server (port 4200, with Panda CSS watch)
+pnpm run start:development:server  # Server with tsx watch mode (hot reload via tsx watch)
+pnpm run start:development:client  # Client webpack-dev-server (port 4200, with Panda CSS watch)
 # Run both in separate terminals for full development environment
 ```
 
@@ -108,10 +108,13 @@ pnpm test -- --selectProjects=auth
 All API endpoints use Zod schemas for validation:
 
 ```typescript
-const parsedResult = addTorrentByURLSchema.safeParse(req.body);
-if (!parsedResult.success) {
-  return res.status(422).json({message: 'Validation error.'});
-}
+fastify.route({
+  ...,
+  schema: {
+    body: RequestBodySchema,
+  },
+  ...,
+})
 ```
 
 ### Database: NeDB (Embedded)
