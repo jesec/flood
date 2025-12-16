@@ -1,7 +1,10 @@
-const fs = require('node:fs');
-const path = require('node:path');
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 // Make sure any symlinks in the project folder are resolved:
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const appDirectory = path.resolve(path.join(__dirname, '../..'));
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
@@ -34,4 +37,4 @@ const PATHS = {
   dist: resolveApp('dist'),
 };
 
-module.exports = PATHS;
+export default PATHS;
