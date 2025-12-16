@@ -47,7 +47,7 @@
     ]
   },
   "scripts": {
-    "build": "panda codegen && node scripts/build.js",
+    "build": "panda codegen && node scripts/build.mjs",
     "build-pkg": "rm -rf dist && npm run build && npm run pkg",
     "pkg": "pkg . --out-path dist-pkg --no-bytecode --public --options=enable-source-maps",
     "format-source": "prettier -w .",
@@ -56,9 +56,9 @@
     "lint": "NODE_ENV=development eslint --max-warnings 0 .",
     "prepack": "rm -rf dist && npm run build",
     "start": "node --enable-source-maps --use_strict dist/index.js",
-    "start:development:client": "concurrently \"panda --watch\" \"node client/scripts/development.js\"",
+    "start:development:client": "concurrently \"panda --watch\" \"node client/scripts/development.mjs\"",
     "start:development:server": "NODE_ENV=development tsx watch server/bin/start.ts",
-    "start:test:rtorrent": "node scripts/testsetup.js",
+    "start:test:rtorrent": "node scripts/testsetup.mjs",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "lint-staged": "lint-staged",

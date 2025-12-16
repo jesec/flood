@@ -1,9 +1,9 @@
-const chalk = require('chalk');
-const crypto = require('node:crypto');
-const fs = require('node:fs');
-const os = require('node:os');
-const path = require('node:path');
-const {spawn} = require('node:child_process');
+import chalk from 'chalk';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {spawn} from 'node:child_process';
 
 const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
 
@@ -24,15 +24,21 @@ network.scgi.open_local = "${rTorrentSocket}"
 `,
 );
 
-let argv = [];
-argv.push('--rundir', temporaryRuntimeDirectory);
-argv.push('--auth', 'none');
-argv.push('--rtsocket', rTorrentSocket);
-argv.push('--allowedpath', temporaryRuntimeDirectory);
-argv.push('--rtorrent');
-argv.push('--rtconfig', `${temporaryRuntimeDirectory}/rtorrent.rc`);
-argv.push('--test');
-argv = argv.concat(process.argv.slice(2));
+const argv = [
+  '--rundir',
+  temporaryRuntimeDirectory,
+  '--auth',
+  'none',
+  '--rtsocket',
+  rTorrentSocket,
+  '--allowedpath',
+  temporaryRuntimeDirectory,
+  '--rtorrent',
+  '--rtconfig',
+  `${temporaryRuntimeDirectory}/rtorrent.rc`,
+  '--test',
+  ...process.argv.slice(2),
+];
 
 let floodProcess;
 
@@ -41,8 +47,8 @@ const startFlood = () => {
     return;
   }
 
-  floodProcess = spawn('npm', ['run', 'start:development:server', '--'].concat(argv), {
-    cwd: path.join(__dirname, '..'),
+  floodProcess = spawn('npm', ['run', 'start:development:server', '--', ...argv], {
+    cwd: path.join(process.cwd()),
     stdio: 'inherit',
   });
 };
@@ -50,8 +56,6 @@ const startFlood = () => {
 const closeProcesses = () => {
   floodProcess.on('close', () => {
     if (process.env.CI !== 'true') {
-      // TODO: This leads to test flakiness caused by ENOENT error
-      // NeDB provides no method to close database connection
       fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
     }
   });

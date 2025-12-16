@@ -8,4 +8,12 @@ declare const PATHS: {
   dist: string;
 };
 
-export = PATHS;
+export const appBuild: string;
+export const appDist: string;
+export const appPublic: string;
+export const appHtml: string;
+export const appIndex: string;
+export const appSrc: string;
+export const dist: string;
+
+export default PATHS;
