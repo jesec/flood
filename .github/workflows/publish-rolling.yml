@@ -50,7 +50,7 @@ jobs:
       - run: npm pack
 
       - name: Publish to npm with provenance
-        run: npm publish --access public ./*.tgz
+        run: npm publish --access public --tag master ./*.tgz
         env:
           NODE_AUTH_TOKEN: ''
 
