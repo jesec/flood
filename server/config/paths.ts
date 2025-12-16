@@ -20,32 +20,30 @@ const findProjectRoot = (startDir: string) => {
   }
 };
 
-const defaultBaseDir = findProjectRoot(path.dirname(process.argv[1]));
+// Make sure any symlinks in the project folder are resolved:
+const appDirectory = path.resolve(path.join(__dirname, '../../..'));
+const resolveApp = (relativePath: string) => path.resolve(appDirectory, relativePath);
 
-const createBaseResolvers = (baseDir = defaultBaseDir) => {
-  const appDirectory = path.resolve(baseDir);
-  const resolveApp = (relativePath: string) => path.resolve(appDirectory, relativePath);
+const getAppDist = () => {
+  // In production, assets are in assets/.
+  let appDist = path.resolve(path.join(__dirname, 'assets'));
 
-  return {appDirectory, resolveApp};
+  if (!fs.existsSync(appDist)) {
+    // In development, assets are in ${appDirectory}/dist/assets/.
+    appDist = resolveApp('dist/assets');
+  }
+
+  if (!fs.existsSync(appDist)) {
+    // Assets are placed to /usr when Flood is managed by package
+    // managers other than npm. This allows users to serve static
+    // assets from web server directly if they want.
+    appDist = path.resolve('/usr/share/flood/assets');
+  }
+
+  return appDist;
 };
 
-export const createServerPaths = (baseDir = defaultBaseDir) => {
-  const {appDirectory, resolveApp} = createBaseResolvers(baseDir);
-
-  const getAppDist = () => {
-    const localAssets = path.resolve(appDirectory, 'shared/config/assets');
-    if (fs.existsSync(localAssets)) {
-      return localAssets;
-    }
-
-    const buildAssets = resolveApp('dist/assets');
-    if (fs.existsSync(buildAssets)) {
-      return buildAssets;
-    }
-
-    return path.resolve('/usr/share/flood/assets');
-  };
-
+export const createServerPaths = () => {
   return {
     appDist: getAppDist(),
   };
