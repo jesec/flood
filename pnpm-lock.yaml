@@ -107,9 +107,6 @@ importers:
       '@types/cookie-parser':
         specifier: ^1.4.9
         version: 1.4.9(@types/express@4.17.23)
-      '@types/create-torrent':
-        specifier: ^5.0.2
-        version: 5.0.2
       '@types/d3':
         specifier: ^7.4.3
         version: 7.4.3
@@ -2462,9 +2459,6 @@ packages:
 
   '@types/cookiejar@2.1.5':
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==}
-
-  '@types/create-torrent@5.0.2':
-    resolution: {integrity: sha512-uZx7xzwCF2DW1tWBvd+VVlXsTmWJ7Ox/vuGwh7ObXlvylSS8LTMeb+eMocVtf9vV5JYALQHyUJ2hd86sljSYBA==}
 
   '@types/d3-array@3.2.1':
     resolution: {integrity: sha512-Y2Jn2idRrLzUfAKV2LyRImR+y4oa2AntrgID95SHJxuMUrkNXmanDSed71sRNZysveJVt1hLLemQZIady0FpEg==}
@@ -10703,10 +10697,6 @@ snapshots:
       '@types/express': 4.17.23
 
   '@types/cookiejar@2.1.5': {}
-
-  '@types/create-torrent@5.0.2':
-    dependencies:
-      '@types/node': 16.18.126
 
   '@types/d3-array@3.2.1': {}
 

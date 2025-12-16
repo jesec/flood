@@ -25,6 +25,7 @@ import type {
 import contentDisposition from 'content-disposition';
 import {promisify} from 'node:util';
 
+//@ts-ignore
 import createTorrent from 'create-torrent';
 import type {FastifyInstance, FastifyRequest, RouteGenericInterface} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
@@ -56,13 +57,22 @@ type FloodRequest<T extends RouteGenericInterface = RouteGenericInterface> = Fas
   user: NonNullable<FastifyRequest['user']>;
 };
 
-const createTorrentAsync = promisify(
-  createTorrent as (
-    input: Parameters<typeof createTorrent>[0],
-    opts: Parameters<typeof createTorrent>[1],
-    callback: (err: Error | null, torrent: Buffer) => void,
-  ) => void,
-) as (input: Parameters<typeof createTorrent>[0], opts?: Parameters<typeof createTorrent>[1]) => Promise<Buffer>;
+const createTorrentAsync = promisify(createTorrent) as (
+  input: string,
+  opts: {
+    name: string;
+    creationDate: Date;
+    comment: string;
+    createdBy: string;
+    private: boolean | number;
+    pieceLength: number;
+    maxPieceLength: number;
+    announceList: string[][];
+    urlList: string[];
+    info: any;
+    onProgress?: unknown;
+  },
+) => Promise<Buffer>;
 
 const getDestination = async (
   services: ServiceInstances,
