@@ -36,7 +36,7 @@ const testNonAdminUser = {
 } as const;
 let testNonAdminUserToken = '';
 
-const app = fastify({disableRequestLogging: true, logger: false});
+const app = fastify({disableRequestLogging: true, logger: true});
 let request: supertest.SuperTest<supertest.Test>;
 
 beforeAll(async () => {
@@ -197,7 +197,10 @@ describe('POST /api/auth/register', () => {
       .expect(400)
       .expect('Content-Type', /json/)
       .end((err, res) => {
-        if (err) return done(err);
+        if (err) {
+          console.log(err);
+          return done(err);
+        }
 
         expect(res.headers['set-cookie']).toBeUndefined();
 

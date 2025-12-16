@@ -6,7 +6,6 @@ import config from '../../../config';
 import type {
   AuthAuthenticationResponse,
   AuthRegistrationOptions,
-  AuthUpdateUserOptions,
   AuthVerificationResponse,
 } from '../../../shared/schema/api/auth';
 import {
@@ -308,10 +307,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
         },
       );
 
-      typedAdminRoutes.patch<{
-        Body: AuthUpdateUserOptions;
-        Params: {username: Credentials['username']};
-      }>(
+      typedAdminRoutes.patch(
         '/users/:username',
         {
           schema: {
