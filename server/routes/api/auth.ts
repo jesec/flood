@@ -14,8 +14,7 @@ import {
   authUpdateUserSchema,
   AuthVerificationPreloadConfigs,
 } from '../../../shared/schema/api/auth';
-import {authMethodSchema, type Credentials, credentialsSchema} from '../../../shared/schema/Auth';
-import {AccessLevel} from '../../../shared/schema/constants/Auth';
+import {type Credentials, credentialsSchema} from '../../../shared/schema/Auth';
 import {NotFoundError} from '../../errors';
 import {authenticateHook, authenticateRequest} from '../../middleware/authenticate';
 import requireAdmin from '../../middleware/requireAdmin';
