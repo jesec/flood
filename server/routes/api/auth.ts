@@ -22,6 +22,7 @@ import Users from '../../models/Users';
 import {bootstrapServicesForUser, destroyUserServices} from '../../services';
 import {clearAuthCookie, getAuthToken, setAuthCookie} from '../../util/authUtil';
 import {rateLimit} from '../utils';
+import {ZodTypeProvider} from 'fastify-type-provider-zod';
 
 const failedLoginResponse = 'Failed login.';
 
@@ -53,11 +54,12 @@ const authRoutes = async (fastify: FastifyInstance) => {
     max: 200,
   });
 
-  fastify.post<{
-    Body: AuthAuthenticationOptions;
-  }>(
+  fastify.withTypeProvider<ZodTypeProvider>().post(
     '/authenticate',
     {
+      schema: {
+        body: authAuthenticationSchema,
+      },
       ...(authRateLimitOptions ?? {}),
     },
     async (req, reply): Promise<void> => {
@@ -66,14 +68,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
         return;
       }
 
-      const parsedResult = authAuthenticationSchema.safeParse(req.body);
-
-      if (!parsedResult.success) {
-        reply.status(422).send({message: 'Validation error.'});
-        return;
-      }
-
-      const credentials = parsedResult.data;
+      const credentials = req.body;
 
       try {
         const level = await Users.comparePassword(credentials);
