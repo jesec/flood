@@ -1,6 +1,7 @@
 import childProcess from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import {promisify} from 'node:util';
 
 import type {
   AddTorrentByFileOptions,
@@ -23,7 +24,6 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import contentDisposition from 'content-disposition';
-import {promisify} from 'node:util';
 
 //@ts-ignore
 import createTorrent from 'create-torrent';
