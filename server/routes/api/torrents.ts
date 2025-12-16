@@ -57,12 +57,12 @@ type FloodRequest<T extends RouteGenericInterface = RouteGenericInterface> = Fas
 };
 
 const createTorrentAsync = promisify(
-  createTorrent as unknown as (
+  createTorrent as (
     input: Parameters<typeof createTorrent>[0],
     opts: Parameters<typeof createTorrent>[1],
-    callback: Parameters<typeof createTorrent>[2],
+    callback: (err: Error | null, torrent: Buffer) => void,
   ) => void,
-);
+) as (input: Parameters<typeof createTorrent>[0], opts?: Parameters<typeof createTorrent>[1]) => Promise<Buffer>;
 
 const getDestination = async (
   services: ServiceInstances,
@@ -285,7 +285,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
 
     let torrent: Buffer;
     try {
-      const announceList = trackers?.length ? trackers.map((tracker) => [tracker]) : undefined;
+      const announceList = trackers != null && trackers.length > 0 ? trackers.map((tracker) => [tracker]) : undefined;
       const result = await createTorrentAsync(sanitizedPath, {
         name,
         comment,
@@ -299,7 +299,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
           : undefined,
       });
 
-      torrent = Buffer.isBuffer(result) ? result : Buffer.from(result);
+      torrent = result;
     } catch (error) {
       const {message} = (error as {message?: string}) ?? {};
       return reply.status(500).send({message});
