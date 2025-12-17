@@ -358,7 +358,7 @@ describe('DELETE /api/auth/users/{username}', () => {
 
   it('Deletes an existing user with admin credentials', async () => {
     const res = await request
-      .delete(`/api/auth/users/${testAdminUser.username}`)
+      .delete(`/api/auth/users/${testNonAdminUser.username}`)
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])

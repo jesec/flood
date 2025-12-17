@@ -227,9 +227,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
         },
       );
 
-      typedAdminRoutes.delete<{
-        Params: {username: Credentials['username']};
-      }>(
+      typedAdminRoutes.delete(
         '/users/:username',
         {
           ...(authRateLimitOptions ?? {}),
