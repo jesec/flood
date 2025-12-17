@@ -2,8 +2,32 @@ import {makeAutoObservable} from 'mobx';
 import jsonpatch, {Operation} from 'fast-json-patch';
 import {KeyboardEvent, MouseEvent, TouchEvent} from 'react';
 
-import type {Taxonomy} from '@shared/types/Taxonomy';
+import type {LocationTreeNode, Taxonomy} from '@shared/types/Taxonomy';
 import torrentStatusMap, {TorrentStatus} from '@shared/constants/torrentStatusMap';
+
+const defaultLocationTree = (): LocationTreeNode => ({
+  directoryName: '',
+  fullPath: '',
+  children: [],
+  containedCount: 0,
+  containedSize: 0,
+});
+
+const normalizeLocationTree = (locationTree?: LocationTreeNode): LocationTreeNode => {
+  if (locationTree == null) {
+    return defaultLocationTree();
+  }
+
+  return {
+    directoryName: locationTree.directoryName ?? '',
+    fullPath: locationTree.fullPath ?? '',
+    children: Array.isArray(locationTree.children)
+      ? locationTree.children.map((child) => normalizeLocationTree(child))
+      : [],
+    containedCount: locationTree.containedCount ?? 0,
+    containedSize: locationTree.containedSize ?? 0,
+  };
+};
 
 class TorrentFilterStore {
   locationFilter: Array<string> = [];
@@ -15,7 +39,7 @@ class TorrentFilterStore {
   filterTrigger = false;
 
   taxonomy: Taxonomy = {
-    locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
+    locationTree: defaultLocationTree(),
     statusCounts: {},
     statusSizes: {},
     tagCounts: {},
@@ -49,10 +73,14 @@ class TorrentFilterStore {
 
   handleTorrentTaxonomyDiffChange(diff: Operation[]) {
     jsonpatch.applyPatch(this.taxonomy, diff);
+    this.taxonomy.locationTree = normalizeLocationTree(this.taxonomy.locationTree);
   }
 
   handleTorrentTaxonomyFullUpdate(taxonomy: Taxonomy) {
-    this.taxonomy = taxonomy;
+    this.taxonomy = {
+      ...taxonomy,
+      locationTree: normalizeLocationTree(taxonomy.locationTree),
+    };
   }
 
   setSearchFilter(filter: string) {
