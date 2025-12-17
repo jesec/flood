@@ -1,10 +1,12 @@
 import fastify from 'fastify';
 import supertest from 'supertest';
-import {afterAll, beforeAll, describe, expect, it} from 'vitest';
+import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
 import type {FloodSettings} from '../../../shared/types/FloodSettings';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
+
+vi.useRealTimers();
 
 const app = fastify({disableRequestLogging: true, logger: false});
 let request: supertest.SuperTest<supertest.Test>;

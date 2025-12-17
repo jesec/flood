@@ -70,17 +70,17 @@ pnpm run start:development:client  # Client webpack-dev-server (port 4200, with 
 ### Testing
 
 ```bash
-pnpm test                        # Run all Jest integration tests (spawns real torrent clients!)
-pnpm test:watch                  # Watch mode with Jest
-pnpm test -- server/.jest/rtorrent.test.ts  # Run specific test file
+pnpm test                        # Run all Vitest integration tests (spawns real torrent clients!)
+pnpm test:watch                  # Watch mode with Vitest
+pnpm test -- --project rtorrent server/routes/api/torrents.test.ts  # Run a specific server test against rTorrent
 pnpm run test:client             # Cypress E2E tests (requires server on port 4200)
 pnpm run test-storybook          # Run Storybook interaction tests
 
-# Test specific torrent clients (runs relevant Jest project):
-pnpm test -- --selectProjects=rtorrent
-pnpm test -- --selectProjects=qbittorrent
-pnpm test -- --selectProjects=transmission
-pnpm test -- --selectProjects=auth
+# Test specific torrent clients (runs relevant Vitest project):
+pnpm test -- --project rtorrent
+pnpm test -- --project qbittorrent
+pnpm test -- --project transmission
+pnpm test -- --project auth
 ```
 
 ## Critical Architectural Patterns

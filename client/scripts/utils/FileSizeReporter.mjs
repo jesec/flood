@@ -3,13 +3,13 @@
  * Provides file size reporting for build output
  */
 
-const fs = require('node:fs');
-const path = require('node:path');
-const zlib = require('node:zlib');
-const chalk = require('chalk');
+import fs from 'node:fs';
+import path from 'node:path';
+import zlib from 'node:zlib';
 
-// Simple filesize formatter
-function formatFileSize(bytes) {
+import chalk from 'chalk';
+
+const formatFileSize = (bytes) => {
   const units = ['B', 'KB', 'MB', 'GB'];
   let size = bytes;
   let unitIndex = 0;
@@ -19,13 +19,10 @@ function formatFileSize(bytes) {
     unitIndex++;
   }
 
-  return size.toFixed(unitIndex === 0 ? 0 : 2) + ' ' + units[unitIndex];
-}
+  return `${size.toFixed(unitIndex === 0 ? 0 : 2)} ${units[unitIndex]}`;
+};
 
-// Calculate gzip size
-function gzipSize(contents) {
-  return zlib.gzipSync(contents).length;
-}
+const gzipSize = (contents) => zlib.gzipSync(contents).length;
 
 // Strip ANSI color codes
 function stripAnsi(str) {
@@ -33,8 +30,7 @@ function stripAnsi(str) {
   return str.replace(/\u001b\[[0-9;]*m/g, '');
 }
 
-// Recursively read directory
-function recursiveReadDir(dir, fileList = []) {
+const recursiveReadDir = (dir, fileList = []) => {
   const files = fs.readdirSync(dir);
 
   files.forEach((file) => {
@@ -49,18 +45,13 @@ function recursiveReadDir(dir, fileList = []) {
   });
 
   return fileList;
-}
+};
 
-function canReadAsset(asset) {
-  return (
-    /\.(js|css)$/.test(asset) && !/service-worker\.js/.test(asset) && !/precache-manifest\.[0-9a-f]+\.js/.test(asset)
-  );
-}
+const canReadAsset = (asset) =>
+  /\.(js|css)$/.test(asset) && !/service-worker\.js/.test(asset) && !/precache-manifest\.[0-9a-f]+\.js/.test(asset);
 
-// Prints a detailed summary of build files.
-function printFileSizesAfterBuild(webpackStats, previousSizeMap, buildFolder, maxBundleGzipSize, maxChunkGzipSize) {
-  const root = previousSizeMap.root;
-  const sizes = previousSizeMap.sizes;
+const printFileSizesAfterBuild = (webpackStats, previousSizeMap, buildFolder, maxBundleGzipSize, maxChunkGzipSize) => {
+  const {root, sizes} = previousSizeMap;
   const assets = (webpackStats.stats || [webpackStats])
     .map((stats) =>
       stats
@@ -74,20 +65,18 @@ function printFileSizesAfterBuild(webpackStats, previousSizeMap, buildFolder, ma
           return {
             folder: path.join(path.basename(buildFolder), path.dirname(asset.name)),
             name: path.basename(asset.name),
-            size: size,
-            sizeLabel: formatFileSize(size) + (difference ? ' (' + difference + ')' : ''),
+            size,
+            sizeLabel: `${formatFileSize(size)}${difference ? ` (${difference})` : ''}`,
           };
         }),
     )
     .reduce((single, all) => all.concat(single), []);
+
   assets.sort((a, b) => b.size - a.size);
-  const longestSizeLabelLength = Math.max.apply(
-    null,
-    assets.map((a) => stripAnsi(a.sizeLabel).length),
-  );
+  const longestSizeLabelLength = Math.max(...assets.map((a) => stripAnsi(a.sizeLabel).length));
   let suggestBundleSplitting = false;
   assets.forEach((asset) => {
-    let sizeLabel = asset.sizeLabel;
+    let {sizeLabel} = asset;
     const sizeLength = stripAnsi(sizeLabel).length;
     if (sizeLength < longestSizeLabelLength) {
       const rightPadding = ' '.repeat(longestSizeLabelLength - sizeLength);
@@ -100,11 +89,9 @@ function printFileSizesAfterBuild(webpackStats, previousSizeMap, buildFolder, ma
       suggestBundleSplitting = true;
     }
     console.log(
-      '  ' +
-        (isLarge ? chalk.yellow(sizeLabel) : sizeLabel) +
-        '  ' +
-        chalk.dim(asset.folder + path.sep) +
-        chalk.cyan(asset.name),
+      `  ${isLarge ? chalk.yellow(sizeLabel) : sizeLabel}  ${chalk.dim(`${asset.folder}${path.sep}`)}${chalk.cyan(
+        asset.name,
+      )}`,
     );
   });
   if (suggestBundleSplitting) {
@@ -113,34 +100,32 @@ function printFileSizesAfterBuild(webpackStats, previousSizeMap, buildFolder, ma
     console.log(chalk.yellow('Consider reducing it with code splitting: https://goo.gl/9VhYWB'));
     console.log(chalk.yellow('You can also analyze the project dependencies: https://goo.gl/LeUzfb'));
   }
-}
+};
 
-function removeFileNameHash(buildFolder, fileName) {
-  return fileName
+const removeFileNameHash = (buildFolder, fileName) =>
+  fileName
     .replace(buildFolder, '')
     .replace(/\\/g, '/')
-    .replace(/\/?(.*)(\.[0-9a-f]+)(\.chunk)?(\.js|\.css)/, (match, p1, p2, p3, p4) => p1 + p4);
-}
+    .replace(/\/?(.*)(\.[0-9a-f]+)(\.chunk)?(\.js|\.css)/, (_match, p1, _p2, _p3, p4) => p1 + p4);
 
-// Input: 1024, 2048
-// Output: "(+1 KB)"
-function getDifferenceLabel(currentSize, previousSize) {
+const getDifferenceLabel = (currentSize, previousSize) => {
   const FIFTY_KILOBYTES = 1024 * 50;
   const difference = currentSize - previousSize;
   const fileSize = !Number.isNaN(difference) ? formatFileSize(Math.abs(difference)) : 0;
   if (difference >= FIFTY_KILOBYTES) {
-    return chalk.red('+' + fileSize);
-  } else if (difference < FIFTY_KILOBYTES && difference > 0) {
-    return chalk.yellow('+' + fileSize);
-  } else if (difference < 0) {
-    return chalk.green('-' + fileSize);
-  } else {
-    return '';
+    return chalk.red(`+${fileSize}`);
   }
-}
+  if (difference < FIFTY_KILOBYTES && difference > 0) {
+    return chalk.yellow(`+${fileSize}`);
+  }
+  if (difference < 0) {
+    return chalk.green(`-${fileSize}`);
+  }
+  return '';
+};
 
-function measureFileSizesBeforeBuild(buildFolder) {
-  return new Promise((resolve) => {
+const measureFileSizesBeforeBuild = (buildFolder) =>
+  new Promise((resolve) => {
     try {
       const fileNames = recursiveReadDir(buildFolder);
       const sizes = fileNames.filter(canReadAsset).reduce((memo, fileName) => {
@@ -152,19 +137,14 @@ function measureFileSizesBeforeBuild(buildFolder) {
 
       resolve({
         root: buildFolder,
-        sizes: sizes,
+        sizes,
       });
     } catch {
-      // If directory doesn't exist or error reading, return empty sizes
       resolve({
         root: buildFolder,
         sizes: {},
       });
     }
   });
-}
 
-module.exports = {
-  measureFileSizesBeforeBuild: measureFileSizesBeforeBuild,
-  printFileSizesAfterBuild: printFileSizesAfterBuild,
-};
+export {measureFileSizesBeforeBuild, printFileSizesAfterBuild};

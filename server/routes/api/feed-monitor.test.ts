@@ -2,13 +2,15 @@ import fs from 'node:fs';
 
 import fastify from 'fastify';
 import supertest from 'supertest';
-import {afterAll, beforeAll, describe, expect, it} from 'vitest';
+import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '../../../shared/types/api/feed-monitor';
 import type {Feed, Rule} from '../../../shared/types/Feed';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
+
+vi.useRealTimers();
 
 const app = fastify({disableRequestLogging: true, logger: false});
 let request: supertest.SuperTest<supertest.Test>;

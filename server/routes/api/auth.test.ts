@@ -2,7 +2,7 @@ import crypto from 'node:crypto';
 
 import fastify from 'fastify';
 import supertest from 'supertest';
-import {afterAll, beforeAll, describe, expect, it} from 'vitest';
+import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
 import type {
   AuthRegistrationOptions,
@@ -13,6 +13,8 @@ import type {ClientConnectionSettings} from '../../../shared/schema/ClientConnec
 import {AccessLevel} from '../../../shared/schema/constants/Auth';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
+
+vi.useRealTimers();
 
 const testConnectionSettings: ClientConnectionSettings = {
   client: 'rTorrent',
@@ -49,7 +51,6 @@ beforeAll(async () => {
 afterAll(async () => {
   await app.close();
 });
-
 describe('GET /api/auth/verify (initial)', () => {
   it('Verify without credential', async () => {
     const res = await request

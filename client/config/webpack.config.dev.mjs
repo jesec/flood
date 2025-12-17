@@ -1,17 +1,23 @@
-const path = require('node:path');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const WebpackBar = require('webpackbar');
-const paths = require('../../shared/config/paths');
+import {createRequire} from 'node:module';
+import path from 'node:path';
 
-module.exports = {
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import WebpackBar from 'webpackbar';
+
+import {buildPaths} from '../../shared/config/buildPaths.mjs';
+
+const paths = buildPaths;
+const require = createRequire(import.meta.url);
+
+export default {
   mode: 'development',
   module: {
     rules: [
       {
-        test: /\.(ts|js)x?$/,
+        test: /(ts|js)x?$/,
         exclude: /node_modules/,
         use: [
           {

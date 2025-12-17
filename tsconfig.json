@@ -5,7 +5,7 @@
     "target": "esnext",
     "moduleResolution": "Bundler",
     "allowJs": true,
-    "module": "esnext",
+    "module": "es2020",
     "noEmit": true,
     "strict": true,
     "isolatedModules": true,

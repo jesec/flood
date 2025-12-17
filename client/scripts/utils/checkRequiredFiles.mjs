@@ -1,8 +1,9 @@
-const fs = require('node:fs');
-const path = require('node:path');
-const chalk = require('chalk');
+import fs from 'node:fs';
+import path from 'node:path';
 
-function checkRequiredFiles(files) {
+import chalk from 'chalk';
+
+const checkRequiredFiles = (files) => {
   let currentFilePath;
   try {
     files.forEach((filePath) => {
@@ -18,6 +19,6 @@ function checkRequiredFiles(files) {
     console.log(chalk.red('  Searched in: ') + chalk.cyan(dirName));
     return false;
   }
-}
+};
 
-module.exports = checkRequiredFiles;
+export default checkRequiredFiles;

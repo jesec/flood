@@ -12,7 +12,7 @@ import supertest from 'supertest';
 import {beforeAll, describe, expect, it} from 'vitest';
 
 import config from '../../../config';
-import paths from '../../../shared/config/paths';
+import {buildPaths as paths} from '../../../shared/config/buildPaths';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
 import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
