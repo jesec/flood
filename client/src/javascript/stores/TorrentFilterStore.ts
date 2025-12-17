@@ -51,10 +51,13 @@ class TorrentFilterStore {
     jsonpatch.applyPatch(this.taxonomy, diff);
   }
 
-  handleTorrentTaxonomyFullUpdate(taxonomy: Taxonomy) {
+  handleTorrentTaxonomyFullUpdate(taxonomy: Partial<Taxonomy>) {
+    const statusSizes = taxonomy.statusSizes ?? this.taxonomy.statusSizes ?? {};
+
     this.taxonomy = {
+      ...this.taxonomy,
       ...taxonomy,
-      statusSizes: {'': 0, ...(taxonomy.statusSizes ?? {})},
+      statusSizes: {'': 0, ...statusSizes},
     };
   }
 

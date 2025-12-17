@@ -23,7 +23,7 @@ describe('TorrentFilterStore', () => {
     const taxonomyMissingSizes = {
       ...baseTaxonomy,
       statusSizes: undefined,
-    } as unknown as Taxonomy;
+    } satisfies Partial<Taxonomy>;
 
     TorrentFilterStore.handleTorrentTaxonomyFullUpdate(taxonomyMissingSizes);
 
