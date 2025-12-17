@@ -15,6 +15,9 @@ const paths = buildPaths;
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
 
+// Makes the script crash on unhandled rejections instead of silently
+// ignoring them. In the future, promise rejections that are not handled will
+// terminate the Node.js process with a non-zero exit code.
 process.on('unhandledRejection', (err) => {
   throw err;
 });
@@ -22,6 +25,7 @@ process.on('unhandledRejection', (err) => {
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
+// Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndex])) {
   process.exit(1);
 }
@@ -33,13 +37,14 @@ const copyPublicFolder = () => {
   });
 };
 
+// Create the production build and print the deployment instructions.
 const build = async (previousFileSizes) => {
   console.log('Creating an optimized production build...');
   console.log('building server...');
 
   await esbuild.build({
-    entryPoints: [path.resolve('server/bin/start.ts')],
-    outfile: path.resolve('dist/index.js'),
+    entryPoints: [path.resolve(buildPaths.appSrc, 'server/bin/start.ts')],
+    outfile: path.resolve(buildPaths.appSrc, 'dist/index.js'),
     platform: 'node',
     target: 'node12',
     bundle: true,
