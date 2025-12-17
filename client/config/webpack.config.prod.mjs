@@ -13,6 +13,7 @@ const paths = buildPaths;
 
 export default {
   mode: 'production',
+  devtool: 'source-map',
   module: {
     rules: [
       {
