@@ -1,4 +1,3 @@
-import {beforeAll, describe, expect, it} from 'vitest';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -10,6 +9,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import fastify from 'fastify';
 import supertest from 'supertest';
+import {beforeAll, describe, expect, it} from 'vitest';
 
 import paths from '../../../shared/config/paths';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
