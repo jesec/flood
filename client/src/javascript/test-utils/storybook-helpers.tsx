@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import {vi} from 'vitest';
 
 /**
  * Creates a properly typed mock event for testing
