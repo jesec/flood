@@ -11,6 +11,7 @@ import fastify from 'fastify';
 import supertest from 'supertest';
 import {beforeAll, describe, expect, it} from 'vitest';
 
+import config from '../../../config';
 import paths from '../../../shared/config/paths';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
@@ -18,7 +19,6 @@ import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../sha
 import type {TorrentList} from '../../../shared/types/Torrent';
 import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
-import config from '../../../config';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
