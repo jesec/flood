@@ -3,7 +3,6 @@
  */
 
 import React from 'react';
-import {vi} from 'vitest';
 
 /**
  * Creates a properly typed mock event for testing
@@ -116,10 +115,10 @@ export class StoryErrorBoundary extends React.Component<
  */
 export function cleanupStory() {
   // Clear any timers
-  vi.clearAllTimers();
+  jest.clearAllTimers();
 
   // Clear all mocks
-  vi.clearAllMocks();
+  jest.clearAllMocks();
 
   // Reset document body
   document.body.innerHTML = '';
