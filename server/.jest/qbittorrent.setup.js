@@ -58,5 +58,5 @@ const qBittorrentDaemon = spawn(
 
 afterAll(() => {
   qBittorrentDaemon.kill('SIGKILL');
-  fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
+  fs.rmSync(temporaryRuntimeDirectory, {recursive: true, force: true});
 });
