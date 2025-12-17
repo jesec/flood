@@ -24,7 +24,11 @@ const formatFileSize = (bytes) => {
 
 const gzipSize = (contents) => zlib.gzipSync(contents).length;
 
-const stripAnsi = (str) => str.replace(/\u001b\[[0-9;]*m/g, '');
+// Strip ANSI color codes
+function stripAnsi(str) {
+  // eslint-disable-next-line no-control-regex
+  return str.replace(/\u001b\[[0-9;]*m/g, '');
+}
 
 const recursiveReadDir = (dir, fileList = []) => {
   const files = fs.readdirSync(dir);

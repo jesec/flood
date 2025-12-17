@@ -1,24 +1,5 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
-
-const findProjectRoot = (startDir: string) => {
-  let current = startDir;
-
-  while (true) {
-    const packageJson = path.join(current, 'package.json');
-    if (fs.existsSync(packageJson)) {
-      return current;
-    }
-
-    const parent = path.dirname(current);
-    if (parent === current) {
-      return startDir;
-    }
-
-    current = parent;
-  }
-};
 
 // Make sure any symlinks in the project folder are resolved:
 const appDirectory = path.resolve(path.join(__dirname, '../../..'));
