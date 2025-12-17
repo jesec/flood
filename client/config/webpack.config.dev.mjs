@@ -1,10 +1,10 @@
-import path from 'node:path';
 import {createRequire} from 'node:module';
+import path from 'node:path';
 
+import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 import ESLintPlugin from 'eslint-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import WebpackBar from 'webpackbar';
 
 import {buildPaths} from '../../shared/config/buildPaths.mjs';
@@ -65,7 +65,7 @@ export default {
       },
       {
         exclude: [/node_modules/],
-        test: /.(ts|js)x?$/,
+        test: /\.(ts|js)x?$/,
         use: ['source-map-loader'],
         enforce: 'pre',
       },
@@ -82,10 +82,14 @@ export default {
         issuer: /\.s?css$/,
         type: 'asset/resource',
       },
+      // "url" loader works like "file" loader except that it embeds assets
+      // smaller than specified limit in bytes as data URLs to avoid requests.
+      // A missing `test` is equivalent to a match.
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
         type: 'asset/resource',
       },
+      // https://github.com/lingui/js-lingui/issues/1048
       {
         resourceQuery: /raw-lingui/,
         type: 'javascript/auto',
@@ -101,8 +105,13 @@ export default {
     },
   },
   output: {
+    // Add /* filename */ comments to generated require()s in the output.
     pathinfo: true,
+    // This does not produce a real file. It's just the virtual path that is
+    // served by WebpackDevServer in development. This is the JS bundle
+    // containing code from all our entry points, and the Webpack runtime.
     filename: 'static/js/bundle.js',
+    // There are also additional JS chunk files if you use code splitting.
     chunkFilename: 'static/js/[name].chunk.js',
     assetModuleFilename: 'static/media/[name].[hash:8].[ext]',
   },
@@ -114,11 +123,14 @@ export default {
       configType: 'flat',
       eslintPath: require.resolve('eslint'),
     }),
+    // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,
     }),
     new ReactRefreshWebpackPlugin(),
+    // Watcher doesn't work well if you mistype casing in a path so we use
+    // a plugin that prints an error when you attempt to do this.
     new CaseSensitivePathsPlugin(),
     new WebpackBar(),
   ],

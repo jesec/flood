@@ -1,10 +1,10 @@
 import path from 'node:path';
 
-import webpack from 'webpack';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
+import webpack from 'webpack';
 import WebpackBar from 'webpackbar';
 
 import {buildPaths} from '../../shared/config/buildPaths.mjs';
@@ -87,6 +87,7 @@ export default {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
         type: 'asset/resource',
       },
+      // https://github.com/lingui/js-lingui/issues/1048
       {
         resourceQuery: /raw-lingui/,
         type: 'javascript/auto',

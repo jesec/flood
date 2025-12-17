@@ -1,5 +1,3 @@
-import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
-
 import fastify from 'fastify';
 import supertest from 'supertest';
 import {afterAll, beforeAll, describe, expect, it} from 'vitest';

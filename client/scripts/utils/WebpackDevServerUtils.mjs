@@ -1,7 +1,8 @@
-import os from 'node:os';
 import net from 'node:net';
-import chalk from 'chalk';
+import os from 'node:os';
 import url from 'node:url';
+
+import chalk from 'chalk';
 
 const getLocalIPAddress = () => {
   const interfaces = os.networkInterfaces();

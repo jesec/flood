@@ -1,9 +1,8 @@
-import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 import crypto from 'node:crypto';
 
 import fastify from 'fastify';
 import supertest from 'supertest';
-import {afterAll, beforeAll, describe, expect, it} from 'vitest';
+import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
 import type {
   AuthRegistrationOptions,

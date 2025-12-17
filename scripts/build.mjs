@@ -1,14 +1,14 @@
 import path from 'node:path';
 
-import esbuild from 'esbuild';
 import chalk from 'chalk';
+import esbuild from 'esbuild';
 import fs from 'fs-extra';
 import webpack from 'webpack';
 
+import clientConfig from '../client/config/webpack.config.prod.mjs';
 import checkRequiredFiles from '../client/scripts/utils/checkRequiredFiles.mjs';
 import {measureFileSizesBeforeBuild, printFileSizesAfterBuild} from '../client/scripts/utils/FileSizeReporter.mjs';
 import {buildPaths} from '../shared/config/buildPaths.mjs';
-import clientConfig from '../client/config/webpack.config.prod.mjs';
 
 const paths = buildPaths;
 

@@ -1,8 +1,6 @@
-import {describe, expect, it, vi} from 'vitest';
-
 import {UserInDatabase} from '@shared/schema/Auth';
 import {LocationTreeNode} from '@shared/types/Taxonomy';
-import {describe, expect, it} from 'vitest';
+import {describe, expect, it, vi} from 'vitest';
 
 import TaxonomyService from '../../server/services/taxonomyService';
 

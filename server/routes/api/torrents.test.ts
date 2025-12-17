@@ -1,4 +1,3 @@
-import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -13,7 +12,7 @@ import supertest from 'supertest';
 import {beforeAll, describe, expect, it} from 'vitest';
 
 import config from '../../../config';
-import paths from '../../../shared/config/paths';
+import {buildPaths as paths} from '../../../shared/config/buildPaths';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
 import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
@@ -23,8 +22,6 @@ import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
-
-const paths = buildPaths;
 
 const app = fastify({bodyLimit: 100 * 1024 * 1024 * 1024, disableRequestLogging: true, forceCloseConnections: true});
 let request: supertest.SuperTest<supertest.Test>;

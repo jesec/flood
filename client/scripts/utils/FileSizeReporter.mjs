@@ -6,6 +6,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import zlib from 'node:zlib';
+
 import chalk from 'chalk';
 
 const formatFileSize = (bytes) => {

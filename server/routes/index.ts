@@ -9,11 +9,11 @@ import fastifyStatic from '@fastify/static';
 import type {FastifyError, FastifyInstance, FastifyReply} from 'fastify';
 import {serializerCompiler, validatorCompiler} from 'fastify-type-provider-zod';
 import morgan from 'morgan';
+import {createServerPaths} from 'server/config/paths';
 
 import config from '../../config';
 import Users from '../models/Users';
 import apiRoutes from './api';
-import {createServerPaths} from 'server/config/paths';
 
 const constructRoutes = async (fastify: FastifyInstance) => {
   const {appDist} = createServerPaths();

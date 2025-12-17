@@ -4,10 +4,10 @@ import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import yargs from 'yargs/yargs';
 
-import checkRequiredFiles from './utils/checkRequiredFiles.mjs';
-import {choosePort, prepareUrls} from './utils/WebpackDevServerUtils.mjs';
 import {buildPaths} from '../../shared/config/buildPaths.mjs';
 import config from '../config/webpack.config.dev.mjs';
+import checkRequiredFiles from './utils/checkRequiredFiles.mjs';
+import {choosePort, prepareUrls} from './utils/WebpackDevServerUtils.mjs';
 
 const paths = buildPaths;
 
