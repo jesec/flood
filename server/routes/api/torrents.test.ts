@@ -10,8 +10,10 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import fastify from 'fastify';
 import supertest from 'supertest';
+import {beforeAll, describe, expect, it} from 'vitest';
 
-import {buildPaths} from '../../../shared/config/buildPaths';
+import config from '../../../config';
+import paths from '../../../shared/config/paths';
 import type {TorrentStatus} from '../../../shared/constants/torrentStatusMap';
 import type {AddTorrentByFileOptions, AddTorrentByURLOptions} from '../../../shared/schema/api/torrents';
 import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../shared/types/api/torrents';
@@ -45,8 +47,6 @@ beforeAll(async () => {
 });
 
 const tempDirectory = getTempPath('download');
-
-vi.setConfig({testTimeout: 40000});
 
 const torrentFiles = [
   path.join(paths.appSrc, 'fixtures/single.torrent'),
@@ -134,18 +134,19 @@ describe('POST /api/torrents/add-urls', () => {
 
   it('Adds torrents via URLs', async () => {
     const torrentAdded = watchTorrentList('add');
-    await request
+    const res = await request
       .post('/api/torrents/add-urls')
       .send(addTorrentByURLOptions)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect((res) => {
-        if (res.status !== 200 && res.status !== 202) {
-          throw new Error('Failed to add torrents');
-        }
-      });
+      .expect('Content-Type', /json/);
 
+    if (res.status !== 200 && res.status !== 202) {
+      throw new Error('Failed to add torrents');
+    }
+
+    // Continue after 15 seconds even if torrentAdded is not resolved to let the next step
+    // determine if the torrents have been successfully added.
     await Promise.race([torrentAdded, new Promise((r) => setTimeout(r, 1000 * 15))]);
     await new Promise((r) => setTimeout(r, 1000 * 3));
   });
@@ -236,17 +237,16 @@ describe('POST /api/torrents/add-files', () => {
 
   it('Adds torrents via files', async () => {
     const torrentAdded = watchTorrentList('add');
-    await request
+    const res = await request
       .post('/api/torrents/add-files')
       .send(addTorrentByFileOptions)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .expect((res) => {
-        if (res.status !== 200 && res.status !== 202) {
-          throw new Error(`Failed to add torrents ${JSON.stringify(res.body)}`);
-        }
-      });
+      .expect('Content-Type', /json/);
+
+    if (res.status !== 200 && res.status !== 202) {
+      throw new Error(`Failed to add torrents ${JSON.stringify(res.body)}`);
+    }
 
     await torrentAdded;
   });
@@ -353,7 +353,7 @@ describe('POST /api/torrents/create', () => {
         createdTorrentHash = torrent.hash;
         expect(torrent.isPrivate).toBe(false);
 
-        if (process.argv.includes('--trurl')) {
+        if (config.configUser?.client === 'Transmission') {
           // TODO: Test skipped as Transmission does not support isCompleted and isBasePath
           return;
         }
@@ -446,7 +446,7 @@ describe('POST /api/torrents/move', () => {
       .set('Accept', 'application/json')
       .expect(200);
 
-    // Wait a while for move to complete
+    // Wait a while
     await new Promise((r) => setTimeout(r, 1000 * 2));
 
     expect(fs.existsSync(path.join(destDirectory, 'dummy'))).toBe(true);

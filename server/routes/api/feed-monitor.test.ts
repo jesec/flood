@@ -3,6 +3,7 @@ import fs from 'node:fs';
 
 import fastify from 'fastify';
 import supertest from 'supertest';
+import {afterAll, beforeAll, describe, expect, it} from 'vitest';
 
 import type {AddFeedOptions, AddRuleOptions, ModifyFeedOptions} from '../../../shared/types/api/feed-monitor';
 import type {Feed, Rule} from '../../../shared/types/Feed';
@@ -110,11 +111,13 @@ describe('PATCH /api/feed-monitor/feeds/{id}', () => {
   };
 
   it('Modifies the added feed', async () => {
-    expect(addedFeed).not.toBeNull();
-    const feedId = addedFeed?._id as string;
+    expect(addedFeed).not.toBe(null);
+    if (addedFeed == null) {
+      throw new Error('Expected feed to exist');
+    }
 
     await request
-      .patch(`/api/feed-monitor/feeds/${feedId}`)
+      .patch(`/api/feed-monitor/feeds/${addedFeed._id}`)
       .send(modifyFeedOptions)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
@@ -123,11 +126,13 @@ describe('PATCH /api/feed-monitor/feeds/{id}', () => {
   });
 
   it('GET /api/feed-monitor/feeds/{id} to verify modified feed', async () => {
-    expect(addedFeed).not.toBeNull();
-    const feedId = addedFeed?._id as string;
+    expect(addedFeed).not.toBe(null);
+    if (addedFeed == null) {
+      throw new Error('Expected feed to exist');
+    }
 
     const res = await request
-      .get(`/api/feed-monitor/feeds/${feedId}`)
+      .get(`/api/feed-monitor/feeds/${addedFeed._id}`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
@@ -142,11 +147,13 @@ describe('PATCH /api/feed-monitor/feeds/{id}', () => {
 
 describe('GET /api/feed-monitor/feeds/{id}/items', () => {
   it('Requests items of the feed', async () => {
-    expect(addedFeed).not.toBeNull();
-    const feedId = addedFeed?._id as string;
+    expect(addedFeed).not.toBe(null);
+    if (addedFeed == null) {
+      throw new Error('Expected feed to exist');
+    }
 
     const res = await request
-      .get(`/api/feed-monitor/feeds/${feedId}/items`)
+      .get(`/api/feed-monitor/feeds/${addedFeed._id}/items`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
@@ -189,8 +196,11 @@ describe('PUT /api/feed-monitor/rules', () => {
   };
 
   it('Adds an automation rule', async () => {
-    expect(addedFeed).not.toBeNull();
-    rule.feedIDs = [addedFeed?._id as string];
+    expect(addedFeed).not.toBe(null);
+    if (addedFeed == null) {
+      throw new Error('Expected feed to exist');
+    }
+    rule.feedIDs = [addedFeed._id];
 
     const res = await request
       .put('/api/feed-monitor/rules')
@@ -237,11 +247,13 @@ describe('PUT /api/feed-monitor/rules', () => {
 
 describe('DELETE /api/feed-monitor/{id}', () => {
   it('Deletes the added feed', async () => {
-    expect(addedFeed).not.toBeNull();
-    const feedId = addedFeed?._id as string;
+    expect(addedFeed).not.toBe(null);
+    if (addedFeed == null) {
+      throw new Error('Expected feed to exist');
+    }
 
     await request
-      .delete(`/api/feed-monitor/${feedId}`)
+      .delete(`/api/feed-monitor/${addedFeed._id}`)
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')

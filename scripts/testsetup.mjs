@@ -56,7 +56,9 @@ const startFlood = () => {
 const closeProcesses = () => {
   floodProcess.on('close', () => {
     if (process.env.CI !== 'true') {
-      fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
+      // TODO: This leads to test flakiness caused by ENOENT error
+      // NeDB provides no method to close database connection
+      fs.rmSync(temporaryRuntimeDirectory, {recursive: true, force: true});
     }
   });
 

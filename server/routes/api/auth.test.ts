@@ -3,6 +3,7 @@ import crypto from 'node:crypto';
 
 import fastify from 'fastify';
 import supertest from 'supertest';
+import {afterAll, beforeAll, describe, expect, it} from 'vitest';
 
 import type {
   AuthRegistrationOptions,
@@ -104,6 +105,31 @@ describe('POST /api/auth/register', () => {
     expect(typeof testNonAdminUserToken).toBe('string');
   });
 
+  it('Register subsequent user with non-admin credentials', async () => {
+    const options: AuthRegistrationOptions = testNonAdminUser;
+    const res = await request
+      .post('/api/auth/register')
+      .send(options)
+      .set('Accept', 'application/json')
+      .set('Cookie', [testNonAdminUserToken])
+      .expect(403);
+
+    expect(res.headers['set-cookie']).toBeUndefined();
+  });
+
+  it('Register duplicate user with admin credentials', async () => {
+    const options: AuthRegistrationOptions = testNonAdminUser;
+    const res = await request
+      .post('/api/auth/register')
+      .send(options)
+      .set('Accept', 'application/json')
+      .set('Cookie', [testAdminUserToken])
+      .expect(500)
+      .expect('Content-Type', /json/);
+
+    expect(res.headers['set-cookie']).toBeUndefined();
+  });
+
   it('Register subsequent user with admin credentials expecting no cookie', async () => {
     const options: AuthRegistrationOptions = {
       ...testNonAdminUser,
@@ -132,11 +158,6 @@ describe('POST /api/auth/register', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(function (response) {
-        if (response.status != 400) {
-          console.log(JSON.stringify(response.body, null, 2));
-        }
-      })
       .expect(400)
       .expect('Content-Type', /json/);
 
@@ -314,11 +335,6 @@ describe('PATCH /api/auth/users/{username}', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(function (res) {
-        if (res.status != 400) {
-          console.log(JSON.stringify(res.body, null, 2));
-        }
-      })
       .expect(400);
   });
 });

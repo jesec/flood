@@ -2,6 +2,7 @@ import {afterAll, beforeAll, describe, expect, it, vi} from 'vitest';
 
 import fastify from 'fastify';
 import supertest from 'supertest';
+import {afterAll, beforeAll, describe, expect, it} from 'vitest';
 
 import type {ClientSettings} from '../../../shared/types/ClientSettings';
 import {getAuthToken} from '../../util/authUtil';
@@ -21,8 +22,6 @@ afterAll(async () => {
 });
 
 const authToken = `jwt=${getAuthToken('_config')}`;
-
-vi.setConfig({testTimeout: 20000});
 
 describe('GET /api/client/connection-test', () => {
   it('Checks connection status', async () => {

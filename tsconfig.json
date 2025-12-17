@@ -21,6 +21,6 @@
       "@shared/*": ["shared/*"]
     }
   },
-  "include": ["./**/*.ts", "./**/*.tsx", "./.storybook/**/*.ts", "./.storybook/**/*.tsx"],
+  "include": ["./**/*.ts", "./**/*.mts", "./**/*.tsx", "./.storybook/**/*.ts", "./.storybook/**/*.tsx"],
   "exclude": ["node_modules", "cypress", "dist"]
 }
