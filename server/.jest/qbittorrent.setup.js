@@ -4,11 +4,48 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+import {afterAll, vi} from 'vitest';
+
 const temporaryRuntimeDirectory = path.resolve(os.tmpdir(), `flood.test.${crypto.randomBytes(12).toString('hex')}`);
 
 fs.mkdirSync(temporaryRuntimeDirectory, {recursive: true});
+fs.mkdirSync(path.join(temporaryRuntimeDirectory, 'db'), {recursive: true});
+fs.mkdirSync(path.join(temporaryRuntimeDirectory, 'temp'), {recursive: true});
 
 const qbtPort = Math.floor(Math.random() * (65534 - 20000) + 20000);
+
+const config = {
+  baseURI: '/',
+  dbCleanInterval: 1000 * 60 * 60,
+  dbPath: path.resolve(path.join(temporaryRuntimeDirectory, 'db')),
+  tempPath: path.resolve(path.join(temporaryRuntimeDirectory, 'temp')),
+  authMethod: 'none',
+  configUser: {
+    client: 'qBittorrent',
+    type: 'web',
+    version: 1,
+    url: `http://127.0.0.1:${qbtPort}`,
+    username: 'admin',
+    password: 'adminadmin',
+  },
+  floodServerHost: '127.0.0.1',
+  floodServerPort: 3000,
+  maxHistoryStates: 30,
+  torrentClientPollInterval: 1000 * 2,
+  torrentClientPollIntervalIdle: 1000 * 60 * 15,
+  secret: crypto.randomBytes(36).toString('hex'),
+  ssl: false,
+  sslKey: path.resolve(path.join(temporaryRuntimeDirectory, 'key.pem')),
+  sslCert: path.resolve(path.join(temporaryRuntimeDirectory, 'fullchain.pem')),
+  allowedPaths: [temporaryRuntimeDirectory],
+  serveAssets: false,
+  disableRateLimit: false,
+};
+
+vi.mock('../../config', () => ({
+  __esModule: true,
+  default: config,
+}));
 
 const qBittorrentDaemon = spawn(
   'qbittorrent-nox',
@@ -19,16 +56,7 @@ const qBittorrentDaemon = spawn(
   },
 );
 
-process.argv = ['node', 'flood'];
-process.argv.push('--rundir', temporaryRuntimeDirectory);
-process.argv.push('--allowedpath', temporaryRuntimeDirectory);
-process.argv.push('--auth', 'none');
-process.argv.push('--qburl', `http://127.0.0.1:${qbtPort}`);
-process.argv.push('--qbuser', 'admin');
-process.argv.push('--qbpass', 'adminadmin');
-process.argv.push('--assets', 'false');
-
 afterAll(() => {
   qBittorrentDaemon.kill('SIGKILL');
-  fs.rmdirSync(temporaryRuntimeDirectory, {recursive: true});
+  fs.rmSync(temporaryRuntimeDirectory, {recursive: true, force: true});
 });
