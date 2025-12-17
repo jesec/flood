@@ -1,22 +1,22 @@
-const os = require('node:os');
-const net = require('node:net');
-const chalk = require('chalk');
-const url = require('node:url');
+import net from 'node:net';
+import os from 'node:os';
+import url from 'node:url';
 
-// Get local IP address
-function getLocalIPAddress() {
+import chalk from 'chalk';
+
+const getLocalIPAddress = () => {
   const interfaces = os.networkInterfaces();
   for (const name of Object.keys(interfaces)) {
-    for (const iface of interfaces[name]) {
+    for (const iface of interfaces[name] ?? []) {
       if (iface.family === 'IPv4' && !iface.internal) {
         return iface.address;
       }
     }
   }
   return null;
-}
+};
 
-function prepareUrls(protocol, host, port, pathname = '/') {
+const prepareUrls = (protocol, host, port, pathname = '/') => {
   const formatUrl = (hostname) =>
     url.format({
       protocol,
@@ -33,20 +33,20 @@ function prepareUrls(protocol, host, port, pathname = '/') {
     });
 
   const isUnspecifiedHost = host === '0.0.0.0' || host === '::';
-  let prettyHost, lanUrlForConfig, lanUrlForTerminal;
+  let prettyHost;
+  let lanUrlForConfig;
+  let lanUrlForTerminal;
   if (isUnspecifiedHost) {
     prettyHost = 'localhost';
     try {
       lanUrlForConfig = getLocalIPAddress();
-      if (lanUrlForConfig) {
-        if (/^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/.test(lanUrlForConfig)) {
-          lanUrlForTerminal = prettyPrintUrl(lanUrlForConfig);
-        } else {
-          lanUrlForConfig = undefined;
-        }
+      if (lanUrlForConfig && /^10[.]|^172[.](1[6-9]|2[0-9]|3[0-1])[.]|^192[.]168[.]/.test(lanUrlForConfig)) {
+        lanUrlForTerminal = prettyPrintUrl(lanUrlForConfig);
+      } else {
+        lanUrlForConfig = undefined;
       }
     } catch {
-      // ignored
+      // ignore network resolution issues
     }
   } else {
     prettyHost = host;
@@ -59,18 +59,15 @@ function prepareUrls(protocol, host, port, pathname = '/') {
     localUrlForTerminal,
     localUrlForBrowser,
   };
-}
+};
 
-// Simple port detection
-function choosePort(host, defaultPort) {
-  return new Promise((resolve, reject) => {
+const choosePort = (host, defaultPort) =>
+  new Promise((resolve, reject) => {
     const server = net.createServer();
 
     server.once('error', (err) => {
       if (err.code === 'EADDRINUSE') {
-        // Port is in use, try the next one
         console.log(chalk.yellow(`Port ${defaultPort} is already in use.`));
-        // Try next port
         choosePort(host, defaultPort + 1)
           .then(resolve)
           .catch(reject);
@@ -95,13 +92,7 @@ function choosePort(host, defaultPort) {
 
     server.listen(defaultPort, host);
   });
-}
 
-function isRoot() {
-  return process.getuid && process.getuid() === 0;
-}
+const isRoot = () => Boolean(process.getuid && process.getuid() === 0);
 
-module.exports = {
-  choosePort,
-  prepareUrls,
-};
+export {choosePort, prepareUrls};

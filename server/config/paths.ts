@@ -1,9 +1,9 @@
-const fs = require('node:fs');
-const path = require('node:path');
+import fs from 'node:fs';
+import path from 'node:path';
 
 // Make sure any symlinks in the project folder are resolved:
-const appDirectory = path.resolve(path.join(__dirname, '../..'));
-const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
+const appDirectory = path.resolve(path.join(__dirname, '../../..'));
+const resolveApp = (relativePath: string) => path.resolve(appDirectory, relativePath);
 
 const getAppDist = () => {
   // In production, assets are in assets/.
@@ -24,14 +24,8 @@ const getAppDist = () => {
   return appDist;
 };
 
-const PATHS = {
-  appBuild: resolveApp('dist/assets'),
-  appDist: getAppDist(),
-  appPublic: resolveApp('client/src/public/'),
-  appHtml: resolveApp('client/src/index.html'),
-  appIndex: resolveApp('client/src/javascript/app.tsx'),
-  appSrc: resolveApp('./'),
-  dist: resolveApp('dist'),
+export const createServerPaths = () => {
+  return {
+    appDist: getAppDist(),
+  };
 };
-
-module.exports = PATHS;

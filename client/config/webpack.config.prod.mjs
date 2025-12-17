@@ -1,24 +1,22 @@
-const path = require('node:path');
-const webpack = require('webpack');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const WebpackBar = require('webpackbar');
-const paths = require('../../shared/config/paths');
+import path from 'node:path';
 
-// Assert this just to be safe.
-// Development builds of React are slow and not intended for production.
-if (process.env.NODE_ENV !== 'production') {
-  throw new Error('Production builds must have NODE_ENV=production.');
-}
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import webpack from 'webpack';
+import WebpackBar from 'webpackbar';
 
-module.exports = {
+import {buildPaths} from '../../shared/config/buildPaths.mjs';
+
+const paths = buildPaths;
+
+export default {
   mode: 'production',
   module: {
     rules: [
       {
-        test: /\.(ts|js)x?$/,
+        test: /(ts|js)x?$/,
         exclude: /node_modules/,
         use: [
           {
@@ -35,7 +33,6 @@ module.exports = {
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
-              // filename is static/css/x.css, so root path is ../../
               publicPath: '../../',
             },
           },
@@ -69,7 +66,7 @@ module.exports = {
       },
       {
         exclude: [/node_modules/],
-        test: /\.(ts|js)x?$/,
+        test: /.(ts|js)x?$/,
         use: ['source-map-loader'],
         enforce: 'pre',
       },
@@ -86,9 +83,6 @@ module.exports = {
         issuer: /\.s?css$/,
         type: 'asset/resource',
       },
-      // "url" loader works like "file" loader except that it embeds assets
-      // smaller than specified limit in bytes as data URLs to avoid requests.
-      // A missing `test` is equivalent to a match.
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
         type: 'asset/resource',
@@ -109,19 +103,13 @@ module.exports = {
     },
   },
   output: {
-    // The build folder.
     path: paths.appBuild,
-    // Generated JS file names (with nested folders).
-    // There will be one main bundle, and one file per asynchronous chunk.
-    // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[chunkhash:8].js',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     assetModuleFilename: 'static/media/[name].[hash:8][ext]',
-    // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: (info) => path.relative(paths.appSrc, info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   plugins: [
-    // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
       template: paths.appHtml,
@@ -171,7 +159,6 @@ module.exports = {
     ],
   },
   performance: {
-    // TODO: Add code-splitting and re-enable this when the bundle is smaller
     hints: false,
   },
 };

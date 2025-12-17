@@ -181,11 +181,11 @@ export default [
       '**/*.spec.js',
       '**/*.spec.ts',
       '**/*.spec.tsx',
-      '**/.jest/*.js',
+      '**/.vitest/**/*.{js,ts}',
     ],
     languageOptions: {
       globals: {
-        ...globals.jest,
+        ...globals.vitest,
       },
     },
     rules: {

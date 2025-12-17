@@ -1,4 +1,17 @@
-// Do this as the first thing so that any code reading it knows the right env.
+import path from 'node:path';
+
+import chalk from 'chalk';
+import esbuild from 'esbuild';
+import fs from 'fs-extra';
+import webpack from 'webpack';
+
+import clientConfig from '../client/config/webpack.config.prod.mjs';
+import checkRequiredFiles from '../client/scripts/utils/checkRequiredFiles.mjs';
+import {measureFileSizesBeforeBuild, printFileSizesAfterBuild} from '../client/scripts/utils/FileSizeReporter.mjs';
+import {buildPaths} from '../shared/config/buildPaths.mjs';
+
+const paths = buildPaths;
+
 process.env.BABEL_ENV = 'production';
 process.env.NODE_ENV = 'production';
 
@@ -9,19 +22,6 @@ process.on('unhandledRejection', (err) => {
   throw err;
 });
 
-const path = require('node:path');
-const esbuild = require('esbuild');
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const webpack = require('webpack');
-const checkRequiredFiles = require('../client/scripts/utils/checkRequiredFiles');
-const FileSizeReporter = require('../client/scripts/utils/FileSizeReporter');
-const paths = require('../shared/config/paths');
-const clientConfig = require('../client/config/webpack.config.prod');
-
-const {measureFileSizesBeforeBuild, printFileSizesAfterBuild} = FileSizeReporter;
-
-// These sizes are pretty large. We'll warn for bundles exceeding them.
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
@@ -43,14 +43,15 @@ const build = async (previousFileSizes) => {
   console.log('building server...');
 
   await esbuild.build({
-    entryPoints: [path.resolve(__dirname, '..', 'server/bin/start.ts')],
-    outfile: path.resolve(__dirname, '..', 'dist/index.js'),
+    entryPoints: [path.resolve(buildPaths.appSrc, 'server/bin/start.ts')],
+    outfile: path.resolve(buildPaths.appSrc, 'dist/index.js'),
     platform: 'node',
     target: 'node12',
     bundle: true,
     external: ['geoip-country'],
     sourcemap: 'inline',
   });
+
   console.log('building client...');
 
   const compiler = webpack([clientConfig]);
@@ -68,16 +69,10 @@ const build = async (previousFileSizes) => {
   });
 };
 
-// First, read the current file sizes in build directory.
-// This lets us display how much they changed later.
 measureFileSizesBeforeBuild(paths.appBuild)
   .then((previousFileSizes) => {
-    // Remove all content but keep the directory so that
-    // if you're in it, you don't end up in Trash
     fs.emptyDirSync(paths.dist);
-    // Merge with the public folder
     copyPublicFolder();
-    // Start the webpack build
     return build(previousFileSizes);
   })
   .then(

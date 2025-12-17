@@ -5,7 +5,7 @@
     "target": "esnext",
     "moduleResolution": "Bundler",
     "allowJs": true,
-    "module": "esnext",
+    "module": "es2020",
     "noEmit": true,
     "strict": true,
     "isolatedModules": true,
@@ -21,6 +21,6 @@
       "@shared/*": ["shared/*"]
     }
   },
-  "include": ["./**/*.ts", "./**/*.tsx", "./.storybook/**/*.ts", "./.storybook/**/*.tsx"],
+  "include": ["./**/*.ts", "./**/*.mts", "./**/*.tsx", "./.storybook/**/*.ts", "./.storybook/**/*.tsx"],
   "exclude": ["node_modules", "cypress", "dist"]
 }

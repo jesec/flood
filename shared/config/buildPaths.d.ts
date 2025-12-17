@@ -1,6 +1,5 @@
-declare const PATHS: {
+export type BuildPaths = {
   appBuild: string;
-  appDist: string;
   appPublic: string;
   appHtml: string;
   appIndex: string;
@@ -8,4 +7,4 @@ declare const PATHS: {
   dist: string;
 };
 
-export = PATHS;
+export const buildPaths: BuildPaths;
