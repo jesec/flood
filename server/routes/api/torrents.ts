@@ -294,7 +294,7 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
 
     let torrent: Buffer;
     try {
-      const announceList = trackers != null && trackers.length > 0 ? trackers.map((tracker) => [tracker]) : undefined;
+      const announceList = trackers?.length > 0 ? trackers.map((tracker) => [tracker]) : undefined;
       const result = await createTorrentAsync(sanitizedPath, {
         name,
         comment,
