@@ -17,7 +17,7 @@ class TorrentFilterStore {
   taxonomy: Taxonomy = {
     locationTree: {directoryName: '', fullPath: '', children: [], containedCount: 0, containedSize: 0},
     statusCounts: {},
-    statusSizes: {},
+    statusSizes: {'': 0},
     tagCounts: {},
     tagSizes: {},
     trackerCounts: {},
@@ -52,7 +52,10 @@ class TorrentFilterStore {
   }
 
   handleTorrentTaxonomyFullUpdate(taxonomy: Taxonomy) {
-    this.taxonomy = taxonomy;
+    this.taxonomy = {
+      ...taxonomy,
+      statusSizes: {'': 0, ...(taxonomy.statusSizes ?? {})},
+    };
   }
 
   setSearchFilter(filter: string) {

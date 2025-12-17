@@ -35,6 +35,7 @@ const createProject = (name: string, setupFile: string, include: string[], exclu
   });
 
 export default defineWorkspace([
+  createProject('client', 'client/.jest/setup.js', ['client/**/*.test.ts']),
   createProject('auth', 'server/.jest/auth.setup.js', ['server/routes/api/auth.test.ts']),
   createProject(
     'qbittorrent',
