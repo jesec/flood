@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 
 import fastify from 'fastify';
 import supertest from 'supertest';
+import {afterAll, beforeAll, describe, expect, it} from 'vitest';
 
 import type {
   AuthRegistrationOptions,
@@ -50,140 +51,101 @@ afterAll(async () => {
 });
 
 describe('GET /api/auth/verify (initial)', () => {
-  it('Verify without credential', (done) => {
-    request
+  it('Verify without credential', async () => {
+    const res = await request
       .get('/api/auth/verify')
       .send()
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        const verificationResponse: AuthVerificationResponse = res.body;
+    const verificationResponse: AuthVerificationResponse = res.body;
 
-        expect(verificationResponse.initialUser).toBe(true);
-        expect(verificationResponse.configs).toBeDefined();
-
-        done();
-      });
+    expect(verificationResponse.initialUser).toBe(true);
+    expect(verificationResponse.configs).toBeDefined();
   });
 });
 
 describe('POST /api/auth/register', () => {
-  it('Register initial user', (done) => {
+  it('Register initial user', async () => {
     const options: AuthRegistrationOptions = testAdminUser;
-    request
+    const res = await request
       .post('/api/auth/register')
       .send(options)
       .set('Accept', 'application/json')
       .expect(200)
       .expect('Content-Type', /json/)
-      .expect('Set-Cookie', /jwt=.*;/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Set-Cookie', /jwt=.*;/);
 
-        [testAdminUserToken] = res.headers['set-cookie'];
-        expect(typeof testAdminUserToken).toBe('string');
-
-        done();
-      });
+    [testAdminUserToken] = res.headers['set-cookie'];
+    expect(typeof testAdminUserToken).toBe('string');
   });
 
-  it('Register subsequent user with no credential', (done) => {
+  it('Register subsequent user with no credential', async () => {
     const options: AuthRegistrationOptions = testNonAdminUser;
-    request
-      .post('/api/auth/register')
-      .send(options)
-      .set('Accept', 'application/json')
-      .expect(401)
-      .end((err, res) => {
-        if (err) return done(err);
+    const res = await request.post('/api/auth/register').send(options).set('Accept', 'application/json').expect(401);
 
-        expect(res.headers['set-cookie']).toBeUndefined();
-
-        done();
-      });
+    expect(res.headers['set-cookie']).toBeUndefined();
   });
 
-  it('Register subsequent user with admin credentials', (done) => {
+  it('Register subsequent user with admin credentials', async () => {
     const options: AuthRegistrationOptions = testNonAdminUser;
-    request
+    const res = await request
       .post('/api/auth/register')
       .send(options)
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
       .expect(200)
       .expect('Content-Type', /json/)
-      .expect('Set-Cookie', /jwt=.*;/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Set-Cookie', /jwt=.*;/);
 
-        [testNonAdminUserToken] = res.headers['set-cookie'];
-        expect(typeof testNonAdminUserToken).toBe('string');
-
-        done();
-      });
+    [testNonAdminUserToken] = res.headers['set-cookie'];
+    expect(typeof testNonAdminUserToken).toBe('string');
   });
 
-  it('Register subsequent user with non-admin credentials', (done) => {
+  it('Register subsequent user with non-admin credentials', async () => {
     const options: AuthRegistrationOptions = testNonAdminUser;
-    request
+    const res = await request
       .post('/api/auth/register')
       .send(options)
       .set('Accept', 'application/json')
       .set('Cookie', [testNonAdminUserToken])
-      .expect(403)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect(403);
 
-        expect(res.headers['set-cookie']).toBeUndefined();
-
-        done();
-      });
+    expect(res.headers['set-cookie']).toBeUndefined();
   });
 
-  it('Register duplicate user with admin credentials', (done) => {
+  it('Register duplicate user with admin credentials', async () => {
     const options: AuthRegistrationOptions = testNonAdminUser;
-    request
+    const res = await request
       .post('/api/auth/register')
       .send(options)
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
       .expect(500)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.headers['set-cookie']).toBeUndefined();
-
-        done();
-      });
+    expect(res.headers['set-cookie']).toBeUndefined();
   });
 
-  it('Register subsequent user with admin credentials expecting no cookie', (done) => {
+  it('Register subsequent user with admin credentials expecting no cookie', async () => {
     const options: AuthRegistrationOptions = {
       ...testNonAdminUser,
       username: crypto.randomBytes(8).toString('hex'),
     };
-    request
+    const res = await request
       .post('/api/auth/register?cookie=false')
       .send(options)
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.headers['set-cookie']).toBeUndefined();
-
-        done();
-      });
+    expect(res.headers['set-cookie']).toBeUndefined();
   });
 
-  it('Register subsequent user with admin credentials and malformed data', (done) => {
-    request
+  it('Register subsequent user with admin credentials and malformed data', async () => {
+    const res = await request
       .post('/api/auth/register')
       .send({
         ...testNonAdminUser,
@@ -194,130 +156,82 @@ describe('POST /api/auth/register', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(function (res) {
-        if (res.status != 400) {
-          console.log(JSON.stringify(res.body, null, 2));
-        }
-      })
       .expect(400)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) {
-          console.log(err);
-          return done(err);
-        }
+      .expect('Content-Type', /json/);
 
-        expect(res.headers['set-cookie']).toBeUndefined();
-
-        done();
-      });
+    expect(res.headers['set-cookie']).toBeUndefined();
   });
 });
 
 describe('GET /api/auth/verify', () => {
-  it('Verify without credential', (done) => {
-    request
-      .get('/api/auth/verify')
-      .send()
-      .set('Accept', 'application/json')
-      .expect(401)
-      .end((err, res) => {
-        if (err) return done(err);
+  it('Verify without credential', async () => {
+    const res = await request.get('/api/auth/verify').send().set('Accept', 'application/json').expect(401);
 
-        expect(res.body.configs).toBeDefined();
-
-        done();
-      });
+    expect(res.body.configs).toBeDefined();
   });
 
-  it('Verify with valid credentials', (done) => {
-    request
+  it('Verify with valid credentials', async () => {
+    const res = await request
       .get('/api/auth/verify')
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect(200);
 
-        const verificationResponse: AuthVerificationResponse = res.body;
+    const verificationResponse: AuthVerificationResponse = res.body;
 
-        expect(verificationResponse.initialUser).toBe(false);
+    expect(verificationResponse.initialUser).toBe(false);
 
-        if (verificationResponse.initialUser === false) {
-          expect(verificationResponse.level).toBe(testAdminUser.level);
-          expect(verificationResponse.username).toBe(testAdminUser.username);
-        }
+    if (verificationResponse.initialUser === false) {
+      expect(verificationResponse.level).toBe(testAdminUser.level);
+      expect(verificationResponse.username).toBe(testAdminUser.username);
+    }
 
-        expect(verificationResponse.configs).toBeDefined();
-
-        done();
-      });
+    expect(verificationResponse.configs).toBeDefined();
   });
 
-  it('Verify with wrong credentials generated by server secret', (done) => {
-    request
+  it('Verify with wrong credentials generated by server secret', async () => {
+    const res = await request
       .get('/api/auth/verify')
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [`jwt=${getAuthToken('nonExistentUser')}`])
-      .expect(401)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect(401);
 
-        expect(res.body.configs).toBeDefined();
-
-        done();
-      });
+    expect(res.body.configs).toBeDefined();
   });
 });
 
 describe('GET /api/auth/logout', () => {
-  it('Logouts with credentials', (done) => {
-    request
+  it('Logouts with credentials', async () => {
+    await request
       .get('/api/auth/logout')
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
       .expect(200)
-      .expect('Set-Cookie', /jwt=;/)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect('Set-Cookie', /jwt=;/);
   });
 
-  it('Logouts without credential', (done) => {
-    request
-      .get('/api/auth/logout')
-      .send()
-      .set('Accept', 'application/json')
-      .expect(401)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+  it('Logouts without credential', async () => {
+    await request.get('/api/auth/logout').send().set('Accept', 'application/json').expect(401);
   });
 });
 
 describe('POST /api/auth/authenticate', () => {
-  it('Authenticate with no credential', (done) => {
-    request
+  it('Authenticate with no credential', async () => {
+    await request
       .post('/api/auth/authenticate')
       .send({
         username: 'root',
       })
       .set('Accept', 'application/json')
       .expect(400)
-      .expect('Content-Type', /json/)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect('Content-Type', /json/);
   });
 
-  it('Authenticate with wrong credentials', (done) => {
-    request
+  it('Authenticate with wrong credentials', async () => {
+    await request
       .post('/api/auth/authenticate')
       .send({
         username: 'root',
@@ -325,15 +239,11 @@ describe('POST /api/auth/authenticate', () => {
       })
       .set('Accept', 'application/json')
       .expect(401)
-      .expect('Content-Type', /json/)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect('Content-Type', /json/);
   });
 
-  it('Authenticate with correct credentials', (done) => {
-    request
+  it('Authenticate with correct credentials', async () => {
+    await request
       .post('/api/auth/authenticate')
       .send({
         username: testAdminUser.username,
@@ -342,58 +252,36 @@ describe('POST /api/auth/authenticate', () => {
       .set('Accept', 'application/json')
       .expect(200)
       .expect('Content-Type', /json/)
-      .expect('Set-Cookie', /jwt/)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect('Set-Cookie', /jwt/);
   });
 });
 
 describe('GET /api/auth/users', () => {
-  it('Lists user without credential', (done) => {
-    request
-      .get('/api/auth/users')
-      .send()
-      .set('Accept', 'application/json')
-      .expect(401)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+  it('Lists user without credential', async () => {
+    await request.get('/api/auth/users').send().set('Accept', 'application/json').expect(401);
   });
 
-  it('Lists user with non-admin credentials', (done) => {
-    request
+  it('Lists user with non-admin credentials', async () => {
+    const res = await request
       .get('/api/auth/users')
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [testNonAdminUserToken])
-      .expect(403)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect(403);
 
-        expect(Array.isArray(res.body)).toBe(false);
-
-        done();
-      });
+    expect(Array.isArray(res.body)).toBe(false);
   });
 
-  it('Lists user with admin credentials', (done) => {
-    request
+  it('Lists user with admin credentials', async () => {
+    const res = await request
       .get('/api/auth/users')
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect(200);
 
-        expect(Array.isArray(res.body)).toBe(true);
-        expect(typeof res.body[0].username).toBe('string');
-
-        done();
-      });
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(typeof res.body[0].username).toBe('string');
   });
 });
 
@@ -407,47 +295,35 @@ describe('PATCH /api/auth/users/{username}', () => {
     },
   };
 
-  it('Updates a nonexistent user with admin credentials', (done) => {
-    request
+  it('Updates a nonexistent user with admin credentials', async () => {
+    await request
       .patch(`/api/auth/users/${`nonExistentUser`}`)
       .send(patch)
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(500)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect(500);
   });
 
-  it('Updates an existing user with non-admin credentials', (done) => {
-    request
+  it('Updates an existing user with non-admin credentials', async () => {
+    await request
       .patch(`/api/auth/users/${testAdminUser.username}`)
       .send(patch)
       .set('Accept', 'application/json')
       .set('Cookie', [testNonAdminUserToken])
-      .expect(403)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect(403);
   });
 
-  it('Updates an existing user with admin credentials', (done) => {
-    request
+  it('Updates an existing user with admin credentials', async () => {
+    await request
       .patch(`/api/auth/users/${testNonAdminUser.username}`)
       .send(patch)
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(200)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect(200);
   });
 
-  it('Updates an existing user with admin credentials and malformed data', (done) => {
-    request
+  it('Updates an existing user with admin credentials and malformed data', async () => {
+    await request
       .patch(`/api/auth/users/${testNonAdminUser.username}`)
       .send({
         client: {
@@ -457,59 +333,37 @@ describe('PATCH /api/auth/users/{username}', () => {
       })
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(function (res) {
-        if (res.status != 400) {
-          console.log(JSON.stringify(res.body, null, 2));
-        }
-      })
-      .expect(400)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect(400);
   });
 });
 
 describe('DELETE /api/auth/users/{username}', () => {
-  it('Deletes a nonexistent user with admin credentials', (done) => {
-    request
+  it('Deletes a nonexistent user with admin credentials', async () => {
+    await request
       .delete(`/api/auth/users/${`nonExistentUser`}`)
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(500)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect(500);
   });
 
-  it('Deletes an existing user with non-admin credentials', (done) => {
-    request
+  it('Deletes an existing user with non-admin credentials', async () => {
+    await request
       .delete(`/api/auth/users/${testAdminUser.username}`)
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [testNonAdminUserToken])
-      .expect(403)
-      .end((err, _res) => {
-        if (err) return done(err);
-        done();
-      });
+      .expect(403);
   });
 
-  it('Deletes an existing user with admin credentials', (done) => {
-    request
+  it('Deletes an existing user with admin credentials', async () => {
+    const res = await request
       .delete(`/api/auth/users/${testNonAdminUser.username}`)
       .send()
       .set('Accept', 'application/json')
       .set('Cookie', [testAdminUserToken])
-      .expect(200)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect(200);
 
-        expect(res.body.username).toBe(testNonAdminUser.username);
-
-        done();
-      });
+    expect(res.body.username).toBe(testNonAdminUser.username);
   });
 });

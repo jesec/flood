@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import supertest from 'supertest';
+import {afterAll, beforeAll, describe, expect, it} from 'vitest';
 
 import type {FloodSettings} from '../../../shared/types/FloodSettings';
 import {getAuthToken} from '../../util/authUtil';
@@ -28,60 +29,45 @@ const settings: Partial<FloodSettings> = {
 };
 
 describe('PATCH /api/settings', () => {
-  it('Adds settings', (done) => {
-    request
+  it('Adds settings', async () => {
+    const res = await request
       .patch('/api/settings')
       .send(settings)
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body).toStrictEqual(settings);
-
-        done();
-      });
+    expect(res.body).toStrictEqual(settings);
   });
 });
 
 describe('GET /api/settings', () => {
-  it('Gets all settings', (done) => {
-    request
+  it('Gets all settings', async () => {
+    const res = await request
       .get('/api/settings')
       .send()
       .set('Cookie', [authToken])
       .set('Accept', 'application/json')
       .expect(200)
-      .expect('Content-Type', /json/)
-      .end((err, res) => {
-        if (err) return done(err);
+      .expect('Content-Type', /json/);
 
-        expect(res.body).toMatchObject(settings);
-
-        done();
-      });
+    expect(res.body).toMatchObject(settings);
   });
 });
 
 describe('GET /api/settings/{property}', () => {
   Object.keys(settings).forEach((setting) => {
-    it(`Gets property ${setting}`, (done) => {
-      request
+    it(`Gets property ${setting}`, async () => {
+      const res = await request
         .get(`/api/settings/${setting}`)
         .send()
         .set('Cookie', [authToken])
         .set('Accept', 'application/json')
         .expect(200)
-        .expect('Content-Type', /json/)
-        .end((err, res) => {
-          if (err) return done(err);
+        .expect('Content-Type', /json/);
 
-          expect(settings).toMatchObject(res.body);
-
-          done();
-        });
+      expect(settings).toMatchObject(res.body);
     });
   });
 });
