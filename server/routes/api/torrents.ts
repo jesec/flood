@@ -24,8 +24,7 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import contentDisposition from 'content-disposition';
-
-//@ts-ignore
+//@ts-expect-error missing types
 import createTorrent from 'create-torrent';
 import type {FastifyInstance, FastifyRequest, RouteGenericInterface} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
