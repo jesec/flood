@@ -18,6 +18,7 @@ import type {MoveTorrentsOptions, SetTorrentsTrackersOptions} from '../../../sha
 import type {TorrentList} from '../../../shared/types/Torrent';
 import type {TorrentContent} from '../../../shared/types/TorrentContent';
 import type {TorrentTracker} from '../../../shared/types/TorrentTracker';
+import config from '../../../config';
 import {getTempPath} from '../../models/TemporaryStorage';
 import {getAuthToken} from '../../util/authUtil';
 import constructRoutes from '..';
@@ -349,7 +350,7 @@ describe('POST /api/torrents/create', () => {
         createdTorrentHash = torrent.hash;
         expect(torrent.isPrivate).toBe(false);
 
-        if (process.argv.includes('--trurl')) {
+        if (config.configUser?.client === 'Transmission') {
           // TODO: Test skipped as Transmission does not support isCompleted and isBasePath
           return;
         }
