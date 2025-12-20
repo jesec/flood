@@ -53,6 +53,7 @@ import {
   getTorrentETAFromProperties,
   getTorrentPercentCompleteFromProperties,
   getTorrentStatusFromProperties,
+  SEQUENTIAL_SET_METHOD,
 } from './util/torrentPropertiesUtil';
 
 class RTorrentClientGatewayService extends ClientGatewayService {
@@ -90,6 +91,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByFileOptions>): Promise<string[]> {
+    const availableMethods = await this.availableMethodCalls;
     await fs.promises.mkdir(destination, {recursive: true});
 
     let processedFiles: string[] = files;
@@ -110,7 +112,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     const additionalCalls = getAddTorrentPropertiesCalls({
       destination,
       isBasePath,
-      isSequential,
+      isSequential: isSequential && availableMethods.methodList.includes(SEQUENTIAL_SET_METHOD),
       isInitialSeeding,
       tags,
     });
@@ -164,6 +166,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
     isInitialSeeding,
     start,
   }: Required<AddTorrentByURLOptions>): Promise<string[]> {
+    const availableMethods = await this.availableMethodCalls;
     await fs.promises.mkdir(destination, {recursive: true});
 
     const {files, urls} = await fetchUrls(inputUrls, cookies);
@@ -174,6 +177,14 @@ class RTorrentClientGatewayService extends ClientGatewayService {
 
     const result: string[] = [];
 
+    const additionalCalls = getAddTorrentPropertiesCalls({
+      destination,
+      isBasePath,
+      isSequential: isSequential && availableMethods.methodList.includes(SEQUENTIAL_SET_METHOD),
+      isInitialSeeding,
+      tags,
+    });
+
     if (urls[0]) {
       const methodName = await this.getPreferredMethod(
         start ? ['load.start_throw', 'load.start'] : ['load.throw', 'load.normal'],
@@ -183,11 +194,7 @@ class RTorrentClientGatewayService extends ClientGatewayService {
         .methodCall('system.multicall', [
           urls.map((url) => ({
             methodName,
-            params: [
-              '',
-              url,
-              ...getAddTorrentPropertiesCalls({destination, isBasePath, isSequential, isInitialSeeding, tags}),
-            ],
+            params: ['', url, ...additionalCalls],
           })),
         ])
         .then(this.processClientRequestSuccess, this.processRTorrentRequestError);
