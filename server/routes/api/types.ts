@@ -1,6 +1,5 @@
 import type {IncomingMessage, ServerResponse} from 'node:http';
 
-import type {ZodTypeProvider} from 'fastify-type-provider-zod';
 import type {
   ContextConfigDefault,
   FastifyBaseLogger,
@@ -15,6 +14,7 @@ import type {
   RouteHandlerMethod,
 } from 'fastify';
 import type {ResolveFastifyRequestType} from 'fastify/types/type-provider.d.ts';
+import type {ZodTypeProvider} from 'fastify-type-provider-zod';
 
 export type App = FastifyInstance<
   RawServerDefault,

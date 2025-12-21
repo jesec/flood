@@ -11,9 +11,9 @@ import type {
 } from '@shared/schema/api/torrents';
 import {
   CheckTorrentsOptions,
-  ICreateTorrentOptions,
   CreateTorrentOptionsSchema,
   DeleteTorrentsOptions,
+  ICreateTorrentOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
   SetTorrentsInitialSeedingOptions,
@@ -60,7 +60,7 @@ function createTorrentAsync(input: TorrentInput, option: CreateTorrentOptions): 
     createTorrent(input, option, (error, torrent) => {
       if (error) return reject(error);
 
-      resolve(torrent);
+      resolve(torrent!);
     });
   });
 }
