@@ -1,7 +1,6 @@
 import childProcess from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import {promisify} from 'node:util';
 
 import type {
   AddTorrentByFileOptions,
@@ -10,9 +9,10 @@ import type {
   ReannounceTorrentsOptions,
   SetTorrentsTagsOptions,
 } from '@shared/schema/api/torrents';
-import type {
+import {
   CheckTorrentsOptions,
-  CreateTorrentOptions,
+  ICreateTorrentOptions,
+  CreateTorrentOptionsSchema,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
@@ -24,8 +24,7 @@ import type {
   StopTorrentsOptions,
 } from '@shared/types/api/torrents';
 import contentDisposition from 'content-disposition';
-//@ts-expect-error missing types
-import createTorrent from 'create-torrent';
+import createTorrent, {type CreateTorrentOptions, type TorrentInput} from 'create-torrent';
 import type {FastifyInstance, FastifyRequest, RouteGenericInterface} from 'fastify';
 import {ZodTypeProvider} from 'fastify-type-provider-zod';
 import sanitize from 'sanitize-filename';
@@ -56,22 +55,15 @@ type FloodRequest<T extends RouteGenericInterface = RouteGenericInterface> = Fas
   user: NonNullable<FastifyRequest['user']>;
 };
 
-const createTorrentAsync = promisify(createTorrent) as (
-  input: string,
-  opts?: {
-    name?: string;
-    creationDate?: Date;
-    comment?: string;
-    createdBy?: string;
-    private?: boolean | number;
-    pieceLength?: number;
-    maxPieceLength?: number;
-    announceList?: string[][];
-    urlList?: string[];
-    info?: any;
-    onProgress?: unknown;
-  },
-) => Promise<Buffer>;
+function createTorrentAsync(input: TorrentInput, option: CreateTorrentOptions): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    createTorrent(input, option, (error, torrent) => {
+      if (error) return reject(error);
+
+      resolve(torrent);
+    });
+  });
+}
 
 const getDestination = async (
   services: ServiceInstances,
@@ -270,73 +262,81 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
    * @summary Creates a torrent
    * @tags Torrents
    * @security User
-   * @param {CreateTorrentOptions} request.body.required - options - application/json
+   * @param {ICreateTorrentOptions} request.body.required - options - application/json
    * @return {object} 200 - success response - application/x-bittorrent
    * @return {Error} 500 - failure response - application/json
    */
-  fastify.post<{
-    Body: CreateTorrentOptions;
-  }>('/create', async (req, reply) => {
-    const request = req as FloodRequest<{Body: CreateTorrentOptions}>;
-    const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = request.body;
+  typedFastify.post(
+    '/create',
+    {
+      schema: {
+        body: CreateTorrentOptionsSchema,
+      },
+    },
+    async (req, reply) => {
+      const request = req as FloodRequest<{Body: ICreateTorrentOptions}>;
+      const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = request.body;
 
-    if (typeof sourcePath !== 'string') {
-      return reply.status(422).send({message: 'Validation error.'});
-    }
+      if (typeof sourcePath !== 'string') {
+        return reply.status(422).send({message: 'Validation error.'});
+      }
 
-    const sanitizedPath = sanitizePath(sourcePath);
-    if (!isAllowedPath(sanitizedPath)) {
-      const {code, message} = accessDeniedError();
-      return reply.status(403).send({code, message});
-    }
+      const sanitizedPath = sanitizePath(sourcePath);
+      if (!isAllowedPath(sanitizedPath)) {
+        const {code, message} = accessDeniedError();
+        return reply.status(403).send({code, message});
+      }
 
-    const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat('.torrent');
+      const torrentFileName = sanitize(name ?? sanitizedPath.split(path.sep).pop() ?? `${Date.now()}`).concat(
+        '.torrent',
+      );
 
-    let torrent: Buffer;
-    try {
-      const announceList = trackers?.length > 0 ? trackers.map((tracker) => [tracker]) : undefined;
-      const result = await createTorrentAsync(sanitizedPath, {
-        name,
-        comment,
-        createdBy: 'Flood - flood.js.org',
-        private: isPrivate,
-        announceList,
-        info: infoSource
-          ? {
-              source: infoSource,
-            }
-          : undefined,
-      });
+      let torrent: Buffer;
+      try {
+        const announceList = trackers?.length > 0 ? trackers.map((tracker) => [tracker]) : undefined;
+        const result = await createTorrentAsync(sanitizedPath, {
+          name,
+          comment,
+          createdBy: 'Flood - flood.js.org',
+          private: isPrivate,
+          announceList,
+          info: infoSource
+            ? {
+                source: infoSource,
+              }
+            : undefined,
+        });
 
-      torrent = result;
-    } catch (error) {
-      const {message} = (error as {message?: string}) ?? {};
-      return reply.status(500).send({message});
-    }
+        torrent = result;
+      } catch (error) {
+        const {message} = (error as {message?: string}) ?? {};
+        return reply.status(500).send({message});
+      }
 
-    await request.services.clientGatewayService
-      .addTorrentsByFile({
-        files: [torrent.toString('base64')],
-        destination: (await fs.promises.lstat(sanitizedPath)).isDirectory()
-          ? sanitizedPath
-          : path.dirname(sanitizedPath),
-        tags: tags ?? [],
-        isBasePath: true,
-        isCompleted: true,
-        isSequential: false,
-        isInitialSeeding: isInitialSeeding ?? false,
-        start: start ?? false,
-      })
-      .catch(() => {
-        // do nothing.
-      });
+      await request.services.clientGatewayService
+        .addTorrentsByFile({
+          files: [torrent.toString('base64')],
+          destination: (await fs.promises.lstat(sanitizedPath)).isDirectory()
+            ? sanitizedPath
+            : path.dirname(sanitizedPath),
+          tags: tags ?? [],
+          isBasePath: true,
+          isCompleted: true,
+          isSequential: false,
+          isInitialSeeding: isInitialSeeding ?? false,
+          start: start ?? false,
+        })
+        .catch(() => {
+          // do nothing.
+        });
 
-    return reply
-      .header('Content-Disposition', contentDisposition(torrentFileName))
-      .type('application/x-bittorrent')
-      .status(200)
-      .send(torrent);
-  });
+      return reply
+        .header('Content-Disposition', contentDisposition(torrentFileName))
+        .type('application/x-bittorrent')
+        .status(200)
+        .send(torrent);
+    },
+  );
 
   /**
    * POST /api/torrents/start
