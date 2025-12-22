@@ -42,10 +42,10 @@ importers:
         specifier: ^8.3.0
         version: 8.3.0
       '@fastify/cookie':
-        specifier: ^10.0.0
+        specifier: ^10.0.1
         version: 10.0.1
       '@fastify/rate-limit':
-        specifier: ^10.0.2
+        specifier: ^10.3.0
         version: 10.3.0
       '@fastify/sse':
         specifier: ^0.4.0
@@ -141,7 +141,7 @@ importers:
         specifier: ^1.9.10
         version: 1.9.10
       '@types/node':
-        specifier: ^22.0.0
+        specifier: ^22.19.3
         version: 22.19.3
       '@types/parse-torrent':
         specifier: ^5.8.7
@@ -183,13 +183,13 @@ importers:
         specifier: ^8.40.0
         version: 8.40.0(eslint@9.34.0(jiti@1.21.7))(typescript@5.0.4)
       '@vitest/coverage-v8':
-        specifier: ^2.1.4
+        specifier: ^2.1.9
         version: 2.1.9(vitest@2.1.9(@types/node@22.19.3)(lightningcss@1.25.1)(sass@1.90.0)(terser@5.43.1))
       autoprefixer:
         specifier: ^10.4.21
         version: 10.4.21(postcss@8.5.6)
       axios:
-        specifier: ^1.12.0
+        specifier: ^1.12.2
         version: 1.12.2
       axios-mock-adapter:
         specifier: ^2.1.0
@@ -243,7 +243,7 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0
       esbuild:
-        specifier: ^0.25.9
+        specifier: ^0.25.10
         version: 0.25.10
       eslint:
         specifier: ^9.34.0
@@ -315,8 +315,8 @@ importers:
         specifier: ^0.4.12
         version: 0.4.12
       jsonwebtoken:
-        specifier: ^9.0.2
-        version: 9.0.2
+        specifier: ^9.0.3
+        version: 9.0.3
       lint-staged:
         specifier: ^15.5.2
         version: 15.5.2
@@ -330,7 +330,7 @@ importers:
         specifier: ^6.13.7
         version: 6.13.7
       mobx-react-lite:
-        specifier: ^4.0.8
+        specifier: ^4.1.0
         version: 4.1.0(mobx@6.13.7)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       morgan:
         specifier: ^1.10.1
@@ -453,7 +453,7 @@ importers:
         specifier: ^8.40.0
         version: 8.40.0(eslint@9.34.0(jiti@1.21.7))(typescript@5.0.4)
       vite-tsconfig-paths:
-        specifier: ^5.1.3
+        specifier: ^5.1.4
         version: 5.1.4(typescript@5.0.4)(vite@5.4.21(@types/node@22.19.3)(lightningcss@1.25.1)(sass@1.90.0)(terser@5.43.1))
       vitest:
         specifier: ^2.1.9
@@ -5426,8 +5426,8 @@ packages:
   jsonfile@6.2.0:
     resolution: {integrity: sha512-FGuPw30AdOIUTRMC2OMRtQV+jkVj2cfPqSeWXv1NEAJ1qZ5zb1X6z1mFhbfOB/iy3ssJCD+3KuZ8r8C3uVFlAg==}
 
-  jsonwebtoken@9.0.2:
-    resolution: {integrity: sha512-PRp66vJ865SSqOlgqS8hujT5U4AOgMfhrwYIuIhfKaoSCZcirrmASQr8CX7cUg+RMih+hgznrjp99o+W4pJLHQ==}
+  jsonwebtoken@9.0.3:
+    resolution: {integrity: sha512-MT/xP0CrubFRNLNKvxJ2BYfy53Zkm++5bX9dtuPbqAeQpTVe0MQTFhao8+Cp//EmJp244xt6Drw/GVEGCUj40g==}
     engines: {node: '>=12', npm: '>=6'}
 
   jsprim@2.0.2:
@@ -5442,11 +5442,11 @@ packages:
     resolution: {integrity: sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==}
     engines: {node: '>=8'}
 
-  jwa@1.4.2:
-    resolution: {integrity: sha512-eeH5JO+21J78qMvTIDdBXidBd6nG2kZjg5Ohz/1fpa28Z4CcsWUzJ1ZZyFq/3z3N17aZy+ZuBoHljASbL1WfOw==}
+  jwa@2.0.1:
+    resolution: {integrity: sha512-hRF04fqJIP8Abbkq5NKGN0Bbr3JxlQ+qhZufXVr0DvujKy93ZCbXZMHDL4EOtodSbCWxOqR8MS1tXA5hwqCXDg==}
 
-  jws@3.2.2:
-    resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
+  jws@4.0.1:
+    resolution: {integrity: sha512-EKI/M/yqPncGUUh44xz0PxSidXFr/+r0pA70+gIYhjv+et7yxM+s29Y+VGDkovRofQem0fs7Uvf4+YmAdyRduA==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -14133,9 +14133,9 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  jsonwebtoken@9.0.2:
+  jsonwebtoken@9.0.3:
     dependencies:
-      jws: 3.2.2
+      jws: 4.0.1
       lodash.includes: 4.3.0
       lodash.isboolean: 3.0.3
       lodash.isinteger: 4.0.4
@@ -14162,15 +14162,15 @@ snapshots:
 
   junk@3.1.0: {}
 
-  jwa@1.4.2:
+  jwa@2.0.1:
     dependencies:
       buffer-equal-constant-time: 1.0.1
       ecdsa-sig-formatter: 1.0.11
       safe-buffer: 5.2.1
 
-  jws@3.2.2:
+  jws@4.0.1:
     dependencies:
-      jwa: 1.4.2
+      jwa: 2.0.1
       safe-buffer: 5.2.1
 
   keyv@4.5.4:
@@ -15081,7 +15081,7 @@ snapshots:
 
   passport-jwt@4.0.1:
     dependencies:
-      jsonwebtoken: 9.0.2
+      jsonwebtoken: 9.0.3
       passport-strategy: 1.0.0
 
   passport-strategy@1.0.0: {}
