@@ -60,7 +60,7 @@ function createTorrentAsync(input: TorrentInput, option: CreateTorrentOptions): 
     createTorrent(input, option, (error, torrent) => {
       if (error) return reject(error);
 
-      resolve(torrent!);
+      resolve(Buffer.from(torrent!));
     });
   });
 }
@@ -276,10 +276,6 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
     async (req, reply) => {
       const request = req as FloodRequest<{Body: ICreateTorrentOptions}>;
       const {name, sourcePath, trackers, comment, infoSource, isPrivate, isInitialSeeding, tags, start} = request.body;
-
-      if (typeof sourcePath !== 'string') {
-        return reply.status(422).send({message: 'Validation error.'});
-      }
 
       const sanitizedPath = sanitizePath(sourcePath);
       if (!isAllowedPath(sanitizedPath)) {
