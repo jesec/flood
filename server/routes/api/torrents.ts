@@ -287,27 +287,19 @@ const torrentsRoutes = async (fastify: FastifyInstance) => {
         '.torrent',
       );
 
-      let torrent: Buffer;
-      try {
-        const announceList = trackers?.length > 0 ? trackers.map((tracker) => [tracker]) : undefined;
-        const result = await createTorrentAsync(sanitizedPath, {
-          name,
-          comment,
-          createdBy: 'Flood - flood.js.org',
-          private: isPrivate,
-          announceList,
-          info: infoSource
-            ? {
-                source: infoSource,
-              }
-            : undefined,
-        });
-
-        torrent = result;
-      } catch (error) {
-        const {message} = (error as {message?: string}) ?? {};
-        return reply.status(500).send({message});
-      }
+      const announceList = trackers?.length > 0 ? trackers.map((tracker) => [tracker]) : undefined;
+      const torrent: Buffer = await createTorrentAsync(sanitizedPath, {
+        name,
+        comment,
+        createdBy: 'Flood - flood.js.org',
+        private: isPrivate,
+        announceList,
+        info: infoSource
+          ? {
+              source: infoSource,
+            }
+          : undefined,
+      });
 
       await request.services.clientGatewayService
         .addTorrentsByFile({
