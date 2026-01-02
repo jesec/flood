@@ -9,6 +9,7 @@ import SettingStore from '@client/stores/SettingStore';
 import TorrentActions from '@client/actions/TorrentActions';
 import UIStore from '@client/stores/UIStore';
 
+import {DEFAULT_TAG} from './Defaults';
 import AddTorrentsActions from './AddTorrentsActions';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import TagSelect from '../../general/form-elements/TagSelect';
@@ -31,7 +32,6 @@ const AddTorrentsByURL: FC = () => {
   const formRef = useRef<FormHandle>(null);
   const textboxRef = useRef<HTMLInputElement>(null);
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
-
   const {i18n} = useLingui();
 
   return (
@@ -80,6 +80,7 @@ const AddTorrentsByURL: FC = () => {
       <FormRow>
         <TagSelect
           id="tags"
+          defaultValue={[DEFAULT_TAG]}
           label={i18n._('torrents.add.tags')}
           onTagSelected={(tags) => {
             if (textboxRef.current != null) {

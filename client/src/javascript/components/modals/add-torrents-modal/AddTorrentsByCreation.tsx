@@ -6,6 +6,7 @@ import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
 import TorrentActions from '@client/actions/TorrentActions';
 import UIStore from '@client/stores/UIStore';
 
+import {DEFAULT_TAG} from './Defaults';
 import AddTorrentsActions from './AddTorrentsActions';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
 import TagSelect from '../../general/form-elements/TagSelect';
@@ -66,6 +67,7 @@ const AddTorrentsByCreation: FC = () => {
       <FormRow>
         <TagSelect
           id="tags"
+          defaultValue={[DEFAULT_TAG]}
           label={i18n._('torrents.add.tags')}
           placeholder={i18n._('torrents.create.tags.input.placeholder')}
         />

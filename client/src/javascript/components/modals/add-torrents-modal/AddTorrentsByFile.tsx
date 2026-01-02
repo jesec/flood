@@ -7,6 +7,7 @@ import SettingStore from '@client/stores/SettingStore';
 import TorrentActions from '@client/actions/TorrentActions';
 import UIStore from '@client/stores/UIStore';
 
+import {DEFAULT_TAG} from './Defaults';
 import AddTorrentsActions from './AddTorrentsActions';
 import FileDropzone from '../../general/form-elements/FileDropzone';
 import FilesystemBrowserTextbox from '../../general/form-elements/FilesystemBrowserTextbox';
@@ -50,6 +51,7 @@ const AddTorrentsByFile: FC = () => {
         <TagSelect
           label={i18n._('torrents.add.tags')}
           id="tags"
+          defaultValue={[DEFAULT_TAG]}
           onTagSelected={(tags) => {
             if (textboxRef.current != null) {
               const suggestedPath = SettingStore.floodSettings.torrentDestinations?.[tags[0]];
