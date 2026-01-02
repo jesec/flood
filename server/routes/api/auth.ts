@@ -51,6 +51,40 @@ const usernameParamSchema = credentialsSchema.pick({username: true});
 
 const registrationQuerySchema = strictObject({cookie: string().optional()});
 
+interface BasicAuthCredentials {
+  username: string;
+  password: string;
+}
+
+export function extractBasicAuth(request: FastifyRequest): BasicAuthCredentials | null {
+  const authHeader = request.headers.authorization;
+  if (!authHeader) {
+    return null;
+  }
+
+  const [scheme, encoded] = authHeader.split(' ');
+  if (scheme !== 'Basic' || !encoded) {
+    return null;
+  }
+
+  let decoded: string;
+  try {
+    decoded = Buffer.from(encoded, 'base64').toString('utf8');
+  } catch {
+    return null;
+  }
+
+  const separatorIndex = decoded.indexOf(':');
+  if (separatorIndex === -1) {
+    return null;
+  }
+
+  return {
+    username: decoded.slice(0, separatorIndex),
+    password: decoded.slice(separatorIndex + 1),
+  };
+}
+
 const authRoutes = async (fastify: FastifyInstance) => {
   const authRateLimitOptions = rateLimit({
     windowMs: 5 * 60 * 1000,
@@ -166,9 +200,17 @@ const authRoutes = async (fastify: FastifyInstance) => {
           const isAuthenticated = await authenticateRequest(req, {attachOnly: true});
 
           if (!isAuthenticated || req.user == null) {
-            reply.status(401).send({
-              configs: preloadConfigs,
-            });
+            const auth = extractBasicAuth(req);
+            if (auth) {
+              reply.status(401).send({
+                configs: preloadConfigs,
+                username: auth.username,
+              });
+            } else {
+              reply.status(401).send({
+                configs: preloadConfigs,
+              });
+            }
             return;
           }
 
