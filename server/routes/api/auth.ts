@@ -172,6 +172,9 @@ const authRoutes = async (fastify: FastifyInstance) => {
       ...(authRateLimitOptions ?? {}),
     },
     async (req, reply): Promise<void> => {
+      const auth = extractBasicAuth(req);
+      const basicUsername = auth?.username;
+
       if (config.authMethod === 'none') {
         const {username, level} = Users.getConfigUser();
 
@@ -181,6 +184,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
           initialUser: false,
           username,
           level,
+          basicUsername,
           configs: preloadConfigs,
         };
 
@@ -192,6 +196,7 @@ const authRoutes = async (fastify: FastifyInstance) => {
         handleInitialUser: () => {
           const response: AuthVerificationResponse = {
             initialUser: true,
+            basicUsername,
             configs: preloadConfigs,
           };
           reply.send(response);
@@ -200,22 +205,16 @@ const authRoutes = async (fastify: FastifyInstance) => {
           const isAuthenticated = await authenticateRequest(req, {attachOnly: true});
 
           if (!isAuthenticated || req.user == null) {
-            const auth = extractBasicAuth(req);
-            if (auth) {
-              reply.status(401).send({
-                configs: preloadConfigs,
-                username: auth.username,
-              });
-            } else {
-              reply.status(401).send({
-                configs: preloadConfigs,
-              });
-            }
+            reply.status(401).send({
+              basicUsername,
+              configs: preloadConfigs,
+            });
             return;
           }
 
           const response: AuthVerificationResponse = {
             initialUser: false,
+            basicUsername,
             username: req.user.username,
             level: req.user.level,
             configs: preloadConfigs,

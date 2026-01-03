@@ -11,7 +11,8 @@ export var DEFAULT_TAG = '';
 // does not work.
 (() => {
   axios.get<AuthVerificationResponse>(`${baseURI}api/auth/verify`, {withCredentials: true}).then(({data}) => {
-    console.log('auth: ', data.username);
-    DEFAULT_TAG = data.username || '';
+    console.log('auth: ', data.username, data.basicUsername);
+    DEFAULT_TAG =
+      data.username && data.username != '_config' ? data.username : data.basicUsername ? data.basicUsername : '';
   });
 })();

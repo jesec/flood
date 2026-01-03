@@ -51,5 +51,6 @@ export type AuthVerificationResponse = (
       level: AccessLevel;
     }
 ) & {
+  basicUsername?: string;
   configs: AuthVerificationPreloadConfigs;
 };
