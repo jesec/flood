@@ -1,4 +1,4 @@
-import {FC, useRef, useState} from 'react';
+import {FC, use, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
 import {Form, FormHandle, FormRow} from '@client/ui';
@@ -31,6 +31,7 @@ const AddTorrentsByFile: FC = () => {
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
 
   const {i18n} = useLingui();
+  const defaultTag = use(DEFAULT_TAG);
 
   return (
     <Form className="inverse" ref={formRef}>
@@ -51,7 +52,7 @@ const AddTorrentsByFile: FC = () => {
         <TagSelect
           label={i18n._('torrents.add.tags')}
           id="tags"
-          defaultValue={[DEFAULT_TAG]}
+          defaultValue={[defaultTag]}
           onTagSelected={(tags) => {
             if (textboxRef.current != null) {
               const suggestedPath = SettingStore.floodSettings.torrentDestinations?.[tags[0]];

@@ -1,4 +1,4 @@
-import {FC, useRef, useState} from 'react';
+import {FC, use, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
 import {css} from '@client/styled-system/css';
@@ -33,6 +33,7 @@ const AddTorrentsByURL: FC = () => {
   const textboxRef = useRef<HTMLInputElement>(null);
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
   const {i18n} = useLingui();
+  const defaultTag = use(DEFAULT_TAG);
 
   return (
     <Form className="inverse" ref={formRef}>
@@ -80,7 +81,7 @@ const AddTorrentsByURL: FC = () => {
       <FormRow>
         <TagSelect
           id="tags"
-          defaultValue={[DEFAULT_TAG]}
+          defaultValue={[defaultTag]}
           label={i18n._('torrents.add.tags')}
           onTagSelected={(tags) => {
             if (textboxRef.current != null) {
