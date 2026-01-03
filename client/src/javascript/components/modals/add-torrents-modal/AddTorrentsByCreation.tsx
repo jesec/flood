@@ -1,4 +1,4 @@
-import {FC, use, useRef, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
 import {Checkbox, Form, FormHandle, FormRow, Textbox} from '@client/ui';
@@ -28,7 +28,7 @@ const AddTorrentsByCreation: FC = () => {
   const formRef = useRef<FormHandle>(null);
   const {i18n} = useLingui();
   const [isCreatingTorrents, setIsCreatingTorrents] = useState<boolean>(false);
-  const defaultTag = use(DEFAULT_TAG);
+  const defaultTag = DEFAULT_TAG.read();
 
   return (
     <Form className="inverse" ref={formRef}>

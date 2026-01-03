@@ -1,4 +1,4 @@
-import {FC, use, useRef, useState} from 'react';
+import {FC, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
 import {Form, FormHandle, FormRow} from '@client/ui';
@@ -31,7 +31,7 @@ const AddTorrentsByFile: FC = () => {
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
 
   const {i18n} = useLingui();
-  const defaultTag = use(DEFAULT_TAG);
+  const defaultTag = DEFAULT_TAG.read();
 
   return (
     <Form className="inverse" ref={formRef}>
