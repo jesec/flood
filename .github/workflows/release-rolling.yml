@@ -1,4 +1,4 @@
-name: build-rolling
+name: Publish Packages
 
 on:
   push:
