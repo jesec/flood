@@ -54,6 +54,7 @@ jobs:
   docker:
     needs: package
     uses: ./.github/workflows/build-docker.yml
+    secrets: inherit
     with:
       push: true
       platforms: linux/amd64,linux/arm64
