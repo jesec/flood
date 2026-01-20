@@ -68,7 +68,9 @@ jobs:
       rtorrent-version: master
       rtorrent-tags: |
         jesec/rtorrent-flood:${{ needs.package.outputs.version }}
+        jesec/rtorrent-flood:latest
         ghcr.io/jesec/rtorrent-flood:${{ needs.package.outputs.version }}
+        ghcr.io/jesec/rtorrent-flood:latest
 
   github-release:
     needs:
