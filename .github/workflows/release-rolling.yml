@@ -37,4 +37,4 @@ jobs:
       rtorrent-version: master
       rtorrent-tags: |
         jesec/rtorrent-flood:master
-        jesec/rtorrent-flood:latest
+        ghcr.io/jesec/rtorrent-flood:master
