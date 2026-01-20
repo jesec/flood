@@ -37,7 +37,7 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install --reinstall -y qemu-user-static
 
-      - run: sudo npm install -g pkg
+      - run: sudo npm install -g @yao-pkg/pkg
 
       - name: Install Bazel
         run: |
