@@ -37,7 +37,22 @@ jobs:
               per_page: 100,
             });
 
-            const allowedLogins = new Set(["claude[bot]"]);
+            core.info(`Fetched ${comments.length} comments on PR #${prNumber}`);
+            core.info(
+              JSON.stringify(
+                comments.map((c) => ({
+                  id: c.id,
+                  user: c.user?.login,
+                  created_at: c.created_at,
+                  updated_at: c.updated_at,
+                  body_preview: (c.body || "").slice(0, 200),
+                })),
+                null,
+                2,
+              ),
+            );
+
+            const allowedLogins = new Set(["claude[bot]", "github-actions[bot]"]);
             const isClaudeBody = (body = "") => {
               const lower = body.toLowerCase();
               return (
@@ -51,6 +66,10 @@ jobs:
               const login = comment.user?.login?.toLowerCase();
               return login && allowedLogins.has(login) && isClaudeBody(comment.body);
             });
+
+            core.info(
+              `Detected ${claudeComments.length} Claude-like comments (allowed bots: ${[...allowedLogins].join(", ")})`,
+            );
 
             if (claudeComments.length <= 1) {
               core.info("No duplicate Claude comments to remove.");
