@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read
   issues: write
-  pull-requests: read
+  pull-requests: write
 
 jobs:
   cleanup:
@@ -52,19 +52,11 @@ jobs:
               ),
             );
 
-            const allowedLogins = new Set(["claude[bot]", "github-actions[bot]"]);
-            const isClaudeBody = (body = "") => {
-              const lower = body.toLowerCase();
-              return (
-                lower.includes("claude code is working") ||
-                lower.includes("claude finished @") ||
-                lower.includes("claude encountered an error")
-              );
-            };
+            const allowedLogins = new Set(["claude[bot]"]);
 
             const claudeComments = comments.filter((comment) => {
               const login = comment.user?.login?.toLowerCase();
-              return login && allowedLogins.has(login) && isClaudeBody(comment.body);
+              return login && allowedLogins.has(login);
             });
 
             core.info(
