@@ -9,6 +9,9 @@ on:
       - master
 
 jobs:
+  debian:
+    uses: ./.github/workflows/build-debian.yml
+
   build-pkg:
     runs-on: ubuntu-24.04
 

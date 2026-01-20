@@ -8,63 +8,26 @@ on:
       - completed
 
 jobs:
-  flood-bin:
+  build:
+    uses: ./.github/workflows/build-debian.yml
+    secrets: inherit
+
+  publish:
+    needs: build
     runs-on: ubuntu-24.04
-
-    env:
-      USE_BAZEL_VERSION: '7.x'
-
-    strategy:
-      matrix:
-        node: ['22']
-
     steps:
       - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
-
-      - name: Set up QEMU
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install --reinstall -y qemu-user-static
-
-      - run: sudo npm install -g pkg
-
-      - name: Install Bazel
-        run: |
-          sudo wget https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64 -O /usr/local/bin/bazel
-          sudo chmod +x /usr/local/bin/bazel
-
-      - name: Copy flood-bin distribution files
-        run: cp -rf distribution/debian/flood-bin/* .
 
       - name: Parse version
         id: parse_version
         run: echo VERSION=`jq .version package.json -r` >> $GITHUB_OUTPUT
 
-      - name: Update BUILD
-        run: |
-          sed -i 's/replace-with-your-name <to-be-determined@tbd>/Jesse Chan <jc@linux.com>/' ./BUILD
-          sed -i 's/version-to-be-replaced/${{ steps.parse_version.outputs.VERSION }}/' ./BUILD
+      - name: Download Debian artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: flood-debian
 
-      - name: Extract Flood tarball
-        run: |
-          npm pack flood@${{ steps.parse_version.outputs.VERSION }}
-          tar xvf flood-*.tgz --strip-components=1
-
-      - name: Package .deb
-        run: |
-          mkdir ~/.pkg-cache
-          bazel build flood-deb-arm64 flood-deb-x64 --sandbox_writable_path=`printf ~/.pkg-cache`
-          cp -L bazel-bin/flood-deb-arm64.deb flood-linux-arm64.deb
-          cp -L bazel-bin/flood-deb-x64.deb flood-linux-x64.deb
-
-      - run: gh release upload v${{ steps.parse_version.outputs.VERSION }} flood-linux-arm64.deb flood-linux-x64.deb
+      - name: Publish release assets
+        run: gh release upload v${{ steps.parse_version.outputs.VERSION }} flood-linux-arm64.deb flood-linux-x64.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
