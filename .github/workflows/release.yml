@@ -1,4 +1,4 @@
-name: Publish Rolling Docker Image
+name: Publish Packages
 
 on:
   push:
