@@ -80,6 +80,8 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-24.04
+    env:
+      LOCAL_REGISTRY: 127.0.0.1:5000
 
     services:
       registry:
@@ -100,6 +102,12 @@ jobs:
       - name: Locate package tarball
         id: package
         run: echo "tarball=$(ls artifacts/*.tgz)" >> "$GITHUB_OUTPUT"
+
+      - name: Compute local image tags
+        id: local
+        run: |
+          printf 'flood=%s\n' "${LOCAL_REGISTRY}/${{ inputs['flood-repository'] }}:${{ inputs['flood-version'] }}" >> "$GITHUB_OUTPUT"
+          printf 'rtorrent=%s\n' "${LOCAL_REGISTRY}/rtorrent-flood:${{ inputs['rtorrent-version'] }}" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -125,43 +133,66 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build flood image
+        id: build_flood
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./distribution/containers/Dockerfile.release
           platforms: ${{ inputs.platforms }}
-          push: ${{ inputs.push }}
-          load: true
+          push: true
           pull: false
-          tags: ${{ inputs['flood-tags'] }}
+          tags: ${{ steps.local.outputs.flood }}
           build-args: |
             PACKAGE_TARBALL=${{ steps.package.outputs.tarball }}
             FLOOD_VERSION=${{ inputs['flood-version'] }}
 
-      - name: Push flood image to local registry (PR)
-        if: inputs.push == false
+      - name: Export local flood image ref
+        run: echo "FLOOD_IMAGE_LOCAL=${{ steps.local.outputs.flood }}" >> $GITHUB_ENV
+
+      - name: Mirror flood image to targets
+        if: inputs.push
         env:
-          FLOOD_VERSION: ${{ inputs['flood-version'] }}
-          FLOOD_REPOSITORY: ${{ inputs['flood-repository'] }}
+          LOCAL_TAG: ${{ steps.local.outputs.flood }}
         run: |
-          src_tag=$(printf "%s" "${{ inputs['flood-tags'] }}" | head -n1)
-          local_tag="127.0.0.1:5000/${FLOOD_REPOSITORY}:${FLOOD_VERSION}"
-          docker tag "$src_tag" "$local_tag"
-          docker push "$local_tag"
-          echo "FLOOD_IMAGE_LOCAL=$local_tag" >> $GITHUB_ENV
+          tags=""
+          while IFS= read -r tag; do
+            [ -z "$tag" ] && continue
+            tags="$tags --tag $tag"
+          done <<< "${{ inputs['flood-tags'] }}"
+          if [ -z "$tags" ]; then
+            echo "No flood tags specified; skipping mirror"
+            exit 0
+          fi
+          docker buildx imagetools create $tags "$LOCAL_TAG"
 
       - name: Build rtorrent-flood image
         if: inputs.build-rtorrent
+        id: build_rtorrent
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./distribution/containers/Dockerfile.rtorrent
           platforms: ${{ inputs.platforms }}
-          push: ${{ inputs.push }}
-          load: ${{ inputs.push == false }}
+          push: true
           pull: false
           network: host
-          tags: ${{ inputs['rtorrent-tags'] }}
+          tags: ${{ steps.local.outputs.rtorrent }}
           build-args: |
-            FLOOD_IMAGE=${{ env.FLOOD_IMAGE_LOCAL || inputs['flood-image'] }}
+            FLOOD_IMAGE=${{ steps.local.outputs.flood }}
             RTORRENT_IMAGE=${{ inputs['rtorrent-image'] }}
+
+      - name: Mirror rtorrent-flood image to targets
+        if: inputs.push && inputs.build-rtorrent
+        env:
+          LOCAL_TAG: ${{ steps.local.outputs.rtorrent }}
+        run: |
+          tags=""
+          while IFS= read -r tag; do
+            [ -z "$tag" ] && continue
+            tags="$tags --tag $tag"
+          done <<< "${{ inputs['rtorrent-tags'] }}"
+          if [ -z "$tags" ]; then
+            echo "No rtorrent-flood tags specified; skipping mirror"
+            exit 0
+          fi
+          docker buildx imagetools create $tags "$LOCAL_TAG"
