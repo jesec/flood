@@ -19,7 +19,7 @@ jobs:
         jesec/flood:pr-${{ github.event.pull_request.number || 'check' }}
       rtorrent-tags: |
         jesec/rtorrent-flood:pr-validate
-      platforms: linux/amd64
+      platforms: linux/amd64,linux/arm64
 
   pkg:
     needs: package
