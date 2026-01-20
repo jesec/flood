@@ -1,0 +1,98 @@
+name: build-npm-package
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: Node.js version for the build
+        required: false
+        type: string
+        default: '22'
+      package-name:
+        description: Optional override for the package name
+        required: false
+        type: string
+      package-version:
+        description: Optional override for the package version
+        required: false
+        type: string
+    outputs:
+      version:
+        description: Package version used for the build
+        value: ${{ jobs.build.outputs.version }}
+      tarball:
+        description: Path to the packed tarball artifact
+        value: ${{ jobs.build.outputs.tarball }}
+  workflow_dispatch:
+    inputs:
+      node-version:
+        description: Node.js version for the build
+        required: false
+        type: string
+        default: '22'
+      package-name:
+        description: Optional override for the package name
+        required: false
+        type: string
+      package-version:
+        description: Optional override for the package version
+        required: false
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      tarball: ${{ steps.pack.outputs.tarball }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Resolve package version
+        if: inputs.package-version != ''
+        id: resolved_version
+        run: |
+          version="${{ inputs.package-version }}"
+          version="${version#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Set package version
+        if: inputs.package-version != ''
+        run: npm pkg set version="${{ steps.resolved_version.outputs.version }}"
+
+      - name: Override package name
+        if: inputs.package-name != ''
+        run: npm pkg set name="${{ inputs.package-name }}"
+
+      - run: pnpm run build
+
+      - name: Capture package metadata
+        id: meta
+        run: echo "version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Pack build output
+        id: pack
+        env:
+          npm_config_ignore_scripts: 'true'
+          npm_config_loglevel: 'error'
+        run: |
+          mkdir -p artifacts
+          tarball=$(npm pack --pack-destination artifacts --json | jq -r '.[0].filename')
+          echo "tarball=artifacts/$tarball" >> "$GITHUB_OUTPUT"
+
+      - name: Upload package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-package
+          path: ${{ steps.pack.outputs.tarball }}
+          if-no-files-found: error

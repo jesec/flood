@@ -1,11 +1,11 @@
 # Use node alpine docker image
 FROM docker.io/node:22-alpine
 
-ARG PACKAGE=flood
-ARG VERSION=latest
+ARG PACKAGE_TARBALL=artifacts/flood.tgz
 
-# Get specified version from npm
-RUN npm i -g "${PACKAGE}"@"${VERSION}" &&\
+# Install the provided package tarball from the build artifact
+COPY ${PACKAGE_TARBALL} /tmp/flood.tgz
+RUN npm i -g /tmp/flood.tgz &&\
     node --version &&\
     npm ls --global &&\
     npm cache clean --force

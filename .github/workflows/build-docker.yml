@@ -1,0 +1,163 @@
+name: build-docker
+
+on:
+  workflow_call:
+    inputs:
+      package-artifact:
+        description: Artifact name containing the npm package tarball
+        required: false
+        default: npm-package
+        type: string
+      push:
+        description: Whether to push the built images
+        required: false
+        default: false
+        type: boolean
+      platforms:
+        description: Target platforms
+        required: false
+        default: linux/amd64
+        type: string
+      flood-tags:
+        description: Docker tags for the flood image (newline separated)
+        required: true
+        type: string
+      flood-version:
+        description: Flood version used for build args
+        required: false
+        default: dev
+        type: string
+      flood-image:
+        description: Full image reference to use for flood base (for dependent builds)
+        required: false
+        default: jesec/flood:dev
+        type: string
+      flood-registry:
+        description: Registry host for flood image
+        required: false
+        default: docker.io
+        type: string
+      flood-repository:
+        description: Repository path for flood image
+        required: false
+        default: jesec/flood
+        type: string
+      build-rtorrent:
+        description: Whether to build rtorrent-flood image
+        required: false
+        default: true
+        type: boolean
+      rtorrent-tags:
+        description: Docker tags for the rtorrent-flood image (newline separated)
+        required: false
+        default: jesec/rtorrent-flood:dev
+        type: string
+      rtorrent-version:
+        description: rtorrent version to embed
+        required: false
+        default: master
+        type: string
+      rtorrent-registry:
+        description: Registry host for rtorrent base image
+        required: false
+        default: docker.io
+        type: string
+      rtorrent-repository:
+        description: Repository path for rtorrent base image
+        required: false
+        default: jesec/rtorrent
+        type: string
+      rtorrent-image:
+        description: Full image reference for rtorrent base
+        required: false
+        default: docker.io/jesec/rtorrent:master
+        type: string
+
+jobs:
+  docker:
+    runs-on: ubuntu-24.04
+
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+        options: >-
+          --name ci-registry
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs['package-artifact'] }}
+          path: artifacts
+
+      - name: Locate package tarball
+        id: package
+        run: echo "tarball=$(ls artifacts/*.tgz)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: network=host
+
+      - name: Login to Docker Hub
+        if: inputs.push
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GHCR
+        if: inputs.push
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build flood image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./distribution/containers/Dockerfile.release
+          platforms: ${{ inputs.platforms }}
+          push: ${{ inputs.push }}
+          load: true
+          pull: false
+          tags: ${{ inputs['flood-tags'] }}
+          build-args: |
+            PACKAGE_TARBALL=${{ steps.package.outputs.tarball }}
+            FLOOD_VERSION=${{ inputs['flood-version'] }}
+
+      - name: Push flood image to local registry (PR)
+        if: inputs.push == false
+        env:
+          FLOOD_VERSION: ${{ inputs['flood-version'] }}
+          FLOOD_REPOSITORY: ${{ inputs['flood-repository'] }}
+        run: |
+          src_tag=$(printf "%s" "${{ inputs['flood-tags'] }}" | head -n1)
+          local_tag="127.0.0.1:5000/${FLOOD_REPOSITORY}:${FLOOD_VERSION}"
+          docker tag "$src_tag" "$local_tag"
+          docker push "$local_tag"
+          echo "FLOOD_IMAGE_LOCAL=$local_tag" >> $GITHUB_ENV
+
+      - name: Build rtorrent-flood image
+        if: inputs.build-rtorrent
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./distribution/containers/Dockerfile.rtorrent
+          platforms: ${{ inputs.platforms }}
+          push: ${{ inputs.push }}
+          load: ${{ inputs.push == false }}
+          pull: false
+          network: host
+          tags: ${{ inputs['rtorrent-tags'] }}
+          build-args: |
+            FLOOD_IMAGE=${{ env.FLOOD_IMAGE_LOCAL || inputs['flood-image'] }}
+            RTORRENT_IMAGE=${{ inputs['rtorrent-image'] }}

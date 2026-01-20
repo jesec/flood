@@ -1,0 +1,39 @@
+name: build-rolling
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  version:
+    runs-on: ubuntu-24.04
+    outputs:
+      build_version: ${{ steps.build.outputs.version }}
+    steps:
+      - name: Compute build version
+        id: build
+        run: echo "version=0.0.0-master.${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+  package:
+    needs: version
+    uses: ./.github/workflows/package.yml
+    with:
+      package-name: '@jesec/flood'
+      package-version: ${{ needs.version.outputs.build_version }}
+
+  docker:
+    needs: package
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      push: true
+      platforms: linux/amd64,linux/arm64
+      flood-version: master
+      flood-tags: |
+        jesec/flood:master
+        ghcr.io/jesec/flood:master
+      build-rtorrent: true
+      rtorrent-version: master
+      rtorrent-tags: |
+        jesec/rtorrent-flood:master
+        jesec/rtorrent-flood:latest

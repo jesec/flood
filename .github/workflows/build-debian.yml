@@ -1,4 +1,4 @@
-name: Build Debian Packages
+name: build-debian
 
 on:
   workflow_dispatch:

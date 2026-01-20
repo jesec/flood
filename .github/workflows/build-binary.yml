@@ -1,0 +1,111 @@
+name: build-binary
+
+on:
+  workflow_call:
+    inputs:
+      package-artifact:
+        description: Artifact name containing the npm package tarball
+        required: false
+        default: npm-package
+        type: string
+      node-version:
+        description: Node.js version to use
+        required: false
+        default: '22'
+        type: string
+      upload-name:
+        description: Artifact name for the generated binaries
+        required: false
+        default: pkg-binaries
+        type: string
+  workflow_dispatch:
+    inputs:
+      package-artifact:
+        description: Artifact name containing the npm package tarball
+        required: false
+        default: npm-package
+        type: string
+      node-version:
+        description: Node.js version to use
+        required: false
+        default: '22'
+        type: string
+      upload-name:
+        description: Artifact name for the generated binaries
+        required: false
+        default: pkg-binaries
+        type: string
+
+jobs:
+  pkg:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs['package-artifact'] }}
+          path: artifacts
+
+      - name: Locate package tarball
+        id: package
+        run: echo "tarball=$(ls artifacts/*.tgz)" >> "$GITHUB_OUTPUT"
+
+      - name: Extract package contents
+        run: |
+          mkdir package
+          tar -xzf "${{ steps.package.outputs.tarball }}" -C package --strip-components=1
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs['node-version'] }}
+
+      - name: Upgrade npm for OIDC
+        run: npm install -g npm@latest
+
+      - name: Install build dependencies
+        working-directory: package
+        run: npm install
+
+      - name: Set up QEMU
+        run: |
+          sudo apt-get update
+          sudo apt-get install --reinstall -y qemu-user-static
+
+      - name: Install ldid
+        run: |
+          sudo wget https://github.com/jesec/ldid-static/releases/download/v2.1.4/ldid-amd64 -O /usr/local/bin/ldid
+          sudo chmod +x /usr/local/bin/ldid
+
+      - name: Install pkg
+        run: sudo npm i -g @yao-pkg/pkg
+
+      - name: Build executables
+        working-directory: package
+        run: npm run pkg
+
+      - name: Normalize linux artifact names
+        working-directory: package
+        run: |
+          if [ -f dist-pkg/flood-linuxstatic-x64 ]; then
+            mv dist-pkg/flood-linuxstatic-x64 dist-pkg/flood-linux-x64
+          fi
+          if [ -f dist-pkg/flood-linuxstatic-arm64 ]; then
+            mv dist-pkg/flood-linuxstatic-arm64 dist-pkg/flood-linux-arm64
+          fi
+
+      - name: Upload pkg artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ inputs['upload-name'] }}
+          path: |
+            package/dist-pkg/flood-linux-x64
+            package/dist-pkg/flood-linux-arm64
+            package/dist-pkg/flood-macos-x64
+            package/dist-pkg/flood-macos-arm64
+            package/dist-pkg/flood-win-x64.exe
+            package/dist-pkg/flood-win-arm64.exe
+          if-no-files-found: error
