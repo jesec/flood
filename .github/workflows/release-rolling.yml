@@ -54,7 +54,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ''
           npm_config_ignore_scripts: 'true'
-        run: npm publish --access public --provenance --tag master "${{ steps.package_tarball.outputs.path }}"
+        run: npm publish --access public --provenance --tag master "./${{ steps.package_tarball.outputs.path }}"
 
   docker:
     needs: package
