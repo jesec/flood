@@ -134,7 +134,7 @@ jobs:
 
       - name: Install regctl
         if: inputs.push
-        uses: regclient/actions/regctl-installer@v1
+        uses: regclient/actions/regctl-installer@v0.1.0
 
       - name: Build flood image
         id: build_flood
