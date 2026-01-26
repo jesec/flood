@@ -136,6 +136,10 @@ jobs:
         if: inputs.push
         uses: regclient/actions/regctl-installer@v0.1.0
 
+      - name: Configure regctl for local registry
+        if: inputs.push
+        run: regctl registry set --tls disabled "${LOCAL_REGISTRY}"
+
       - name: Build flood image
         id: build_flood
         uses: docker/build-push-action@v5
