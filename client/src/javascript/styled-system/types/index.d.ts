@@ -1,5 +1,5 @@
 /* eslint-disable */
-import './global.d.ts';
+import './global.d.ts'
 export * from './conditions';
 export * from './pattern';
 export * from './recipe';
