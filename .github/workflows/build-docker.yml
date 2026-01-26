@@ -132,6 +132,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install regctl
+        if: inputs.push
+        uses: regclient/actions/regctl-installer@v1
+
       - name: Build flood image
         id: build_flood
         uses: docker/build-push-action@v5
@@ -154,16 +158,10 @@ jobs:
         env:
           LOCAL_TAG: ${{ steps.local.outputs.flood }}
         run: |
-          tags=""
           while IFS= read -r tag; do
             [ -z "$tag" ] && continue
-            tags="$tags --tag $tag"
+            regctl image copy "$LOCAL_TAG" "$tag"
           done <<< "${{ inputs['flood-tags'] }}"
-          if [ -z "$tags" ]; then
-            echo "No flood tags specified; skipping mirror"
-            exit 0
-          fi
-          docker buildx imagetools create $tags "$LOCAL_TAG"
 
       - name: Build rtorrent-flood image
         if: inputs.build-rtorrent
@@ -186,13 +184,7 @@ jobs:
         env:
           LOCAL_TAG: ${{ steps.local.outputs.rtorrent }}
         run: |
-          tags=""
           while IFS= read -r tag; do
             [ -z "$tag" ] && continue
-            tags="$tags --tag $tag"
+            regctl image copy "$LOCAL_TAG" "$tag"
           done <<< "${{ inputs['rtorrent-tags'] }}"
-          if [ -z "$tags" ]; then
-            echo "No rtorrent-flood tags specified; skipping mirror"
-            exit 0
-          fi
-          docker buildx imagetools create $tags "$LOCAL_TAG"
