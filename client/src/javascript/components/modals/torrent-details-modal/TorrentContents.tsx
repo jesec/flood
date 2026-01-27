@@ -21,18 +21,21 @@ const TorrentContents: FC = observer(() => {
   const [selectedIndices, setSelectedIndices] = useState<number[]>([]);
   const {i18n} = useLingui();
 
+  const torrentHash =
+    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+
   useEffect(() => {
-    if (UIStore.activeModal?.id === 'torrent-details') {
-      TorrentActions.fetchTorrentContents(UIStore.activeModal?.hash).then((fetchedContents) => {
+    if (torrentHash) {
+      TorrentActions.fetchTorrentContents(torrentHash).then((fetchedContents) => {
         if (fetchedContents != null) {
           setContents(fetchedContents);
           setItemsTree(selectionTree.getSelectionTree(fetchedContents));
         }
       });
     }
-  }, []);
+  }, [torrentHash]);
 
-  if (UIStore.activeModal?.id !== 'torrent-details') {
+  if (!torrentHash) {
     return null;
   }
 

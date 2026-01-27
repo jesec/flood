@@ -43,6 +43,12 @@ export interface FloodSettings {
 
   // Display upload and download speed in page title
   UIPageTitleSpeedEnabled: boolean;
+
+  // Show torrent details as bottom panel instead of modal
+  UITorrentDetailsPanel?: boolean;
+
+  // Details panel height (bottom panel for torrent details)
+  detailsPanelHeight?: number;
 }
 
 export type FloodSetting = keyof FloodSettings;

@@ -1,0 +1,146 @@
+@use '../tools/themes';
+@use '../tools/variables';
+
+.view--torrent-list {
+  &.has-details-panel {
+    display: grid;
+    grid-template-rows: 1fr auto var(--details-panel-height, 400px);
+    transition: grid-template-rows 0.2s ease;
+
+    .torrent-list-section {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 0;
+    }
+  }
+}
+
+.torrent-details-panel-resize-handle {
+  @include themes.theme('background', 'panel--border');
+  height: 8px;
+  cursor: row-resize;
+  position: relative;
+  z-index: 10;
+  transition: background 0.1s;
+
+  &:hover {
+    @include themes.theme('background', 'table--heading--color');
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 4px;
+    @include themes.theme('background', 'table--heading--color');
+    border-radius: 2px;
+    opacity: 0.5;
+  }
+}
+
+.torrent-details-panel-resize-line {
+  @include themes.theme('background', 'table--heading--color');
+  height: 2px;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: fixed;
+  right: 0;
+  transition: opacity 0.2s;
+  z-index: 1000;
+}
+
+.torrent-details-panel {
+  @include themes.theme('background', 'torrent-list--background');
+  border-top: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &__header {
+    border-bottom: 0;
+    padding: variables.$spacing-unit;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
+    position: relative;
+
+    .torrent-details__header {
+      flex: 1;
+      margin: 0;
+      min-width: 0;
+    }
+  }
+
+  &__close-button {
+    @include themes.theme('color', 'panel--foreground');
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    padding: 0 8px;
+    margin-left: variables.$spacing-unit;
+    flex-shrink: 0;
+    transition: opacity 0.1s;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__tabs {
+    @include themes.theme('border-bottom', 'panel--border');
+    display: flex;
+    gap: 4px;
+    padding: 0 variables.$spacing-unit;
+    flex-shrink: 0;
+  }
+
+  &__tab {
+    @include themes.theme('color', 'torrent--secondary--foreground');
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    position: relative;
+    transition: color 0.1s;
+
+    &:hover {
+      @include themes.theme('color', 'table--heading--color--hover');
+    }
+
+    &.is-active {
+      @include themes.theme('color', 'table--heading--color--active');
+
+      &::after {
+        @include themes.theme('background', 'torrent--background--selected');
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+      }
+    }
+  }
+
+  &__content {
+    flex: 1;
+    overflow: auto;
+    padding: variables.$spacing-unit;
+  }
+
+  &__empty-state {
+    @include themes.theme('color', 'torrents-list--alert--foreground');
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+}

@@ -17,10 +17,13 @@ const TorrentPeers: FC = () => {
   const [peers, setPeers] = useState<Array<TorrentPeer>>([]);
   const [pollingDelay, setPollingDelay] = useState<number | null>(null);
 
+  const torrentHash =
+    UIStore.detailsPanelHash || (UIStore.activeModal?.id === 'torrent-details' ? UIStore.activeModal.hash : null);
+
   const fetchPeers = () => {
     setPollingDelay(null);
-    if (UIStore.activeModal?.id === 'torrent-details') {
-      TorrentActions.fetchTorrentPeers(UIStore.activeModal?.hash).then((data) => {
+    if (torrentHash) {
+      TorrentActions.fetchTorrentPeers(torrentHash).then((data) => {
         if (data != null) {
           setPeers(data);
         }
@@ -29,7 +32,7 @@ const TorrentPeers: FC = () => {
     setPollingDelay(ConfigStore.pollInterval);
   };
 
-  useEffect(() => fetchPeers(), []);
+  useEffect(() => fetchPeers(), [torrentHash]);
   useInterval(() => fetchPeers(), pollingDelay);
 
   return (
