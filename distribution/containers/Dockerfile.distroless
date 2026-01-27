@@ -1,3 +1,5 @@
+ARG RTORRENT_IMAGE=docker.io/jesec/rtorrent:master
+
 FROM docker.io/alpine as build
 
 WORKDIR /root
@@ -41,7 +43,7 @@ ENV FLOOD_OPTION_HOST="0.0.0.0"
 ENTRYPOINT ["/bin/tini", "--", "flood"]
 
 # rtorrent-flood image
-FROM docker.io/jesec/rtorrent:master as rtorrent
+FROM ${RTORRENT_IMAGE} as rtorrent
 FROM flood as rtorrent-flood
 
 # Install rTorrent

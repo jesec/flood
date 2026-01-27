@@ -72,6 +72,29 @@ jobs:
         ghcr.io/jesec/rtorrent-flood:${{ needs.package.outputs.version }}
         ghcr.io/jesec/rtorrent-flood:latest
 
+  docker-distroless:
+    needs:
+      - package
+      - pkg
+    uses: ./.github/workflows/build-docker-distroless.yml
+    secrets: inherit
+    with:
+      push: true
+      platforms: linux/amd64,linux/arm64
+      flood-version: ${{ needs.package.outputs.version }}
+      flood-tags: |
+        jesec/flood:latest-distroless
+        jesec/flood:${{ needs.package.outputs.version }}-distroless
+        ghcr.io/jesec/flood:latest-distroless
+        ghcr.io/jesec/flood:${{ needs.package.outputs.version }}-distroless
+      build-rtorrent: true
+      rtorrent-version: master
+      rtorrent-tags: |
+        jesec/rtorrent-flood:${{ needs.package.outputs.version }}-distroless
+        jesec/rtorrent-flood:latest-distroless
+        ghcr.io/jesec/rtorrent-flood:${{ needs.package.outputs.version }}-distroless
+        ghcr.io/jesec/rtorrent-flood:latest-distroless
+
   github-release:
     needs:
       - npm-publish
