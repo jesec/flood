@@ -31,6 +31,19 @@ jobs:
     with:
       upload-name: pkg-binaries-pr
 
+  docker-distroless:
+    needs: pkg
+    uses: ./.github/workflows/build-docker-distroless.yml
+    with:
+      push: false
+      binary-artifact: pkg-binaries-pr
+      flood-version: pr-${{ github.event.pull_request.number || 'check' }}
+      flood-tags: |
+        jesec/flood:pr-${{ github.event.pull_request.number || 'check' }}-distroless
+      rtorrent-tags: |
+        jesec/rtorrent-flood:pr-${{ github.event.pull_request.number || 'check' }}-distroless
+      platforms: linux/amd64,linux/arm64
+
   debian:
     needs: package
     uses: ./.github/workflows/build-debian.yml
