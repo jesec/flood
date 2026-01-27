@@ -1,8 +1,5 @@
 name: build-docker
 
-permissions:
-  contents: read
-
 on:
   workflow_call:
     inputs:
