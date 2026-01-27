@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {FC} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import {Add, Menu, Remove, Start, Stop} from '@client/ui/icons';

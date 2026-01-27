@@ -1,0 +1,83 @@
+name: Claude Comment Cleanup
+
+on:
+  workflow_run:
+    workflows:
+      - 'Claude Code Review'
+    types: [completed]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove duplicate Claude comments
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const run = context.payload.workflow_run;
+            const pr = run?.pull_requests?.[0];
+            if (!pr) {
+              core.info("No pull request associated with this workflow run; skipping cleanup.");
+              return;
+            }
+
+            const prNumber = pr.number;
+            const {owner, repo} = context.repo;
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number: prNumber,
+              per_page: 100,
+            });
+
+            core.info(`Fetched ${comments.length} comments on PR #${prNumber}`);
+            core.info(
+              JSON.stringify(
+                comments.map((c) => ({
+                  id: c.id,
+                  user: c.user?.login,
+                  created_at: c.created_at,
+                  updated_at: c.updated_at,
+                  body_preview: (c.body || "").slice(0, 200),
+                })),
+                null,
+                2,
+              ),
+            );
+
+            const allowedLogins = new Set(["claude[bot]"]);
+
+            const claudeComments = comments.filter((comment) => {
+              const login = comment.user?.login?.toLowerCase();
+              return login && allowedLogins.has(login);
+            });
+
+            core.info(
+              `Detected ${claudeComments.length} Claude-like comments (allowed bots: ${[...allowedLogins].join(", ")})`,
+            );
+
+            if (claudeComments.length <= 1) {
+              core.info("No duplicate Claude comments to remove.");
+              return;
+            }
+
+            claudeComments.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+            const [keep, ...duplicates] = claudeComments;
+
+            for (const duplicate of duplicates) {
+              core.info(`Deleting duplicate comment ${duplicate.id} from ${duplicate.user?.login}`);
+              await github.rest.issues.deleteComment({
+                owner,
+                repo,
+                comment_id: duplicate.id,
+              });
+            }
+
+            core.info(`Kept comment ${keep.id} and removed ${duplicates.length} duplicate(s).`);

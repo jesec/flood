@@ -11,8 +11,7 @@ interface ActionProps {
   noTip?: boolean;
 }
 
-const Action: FC<ActionProps> = (props: ActionProps) => {
-  const {clickHandler, icon, label, slug, noTip} = props;
+const Action: FC<ActionProps> = ({clickHandler, icon, label, slug, noTip = false}: ActionProps) => {
   const classes = classnames('action tooltip__wrapper', {
     [`action--${slug}`]: slug != null,
   });
@@ -23,10 +22,6 @@ const Action: FC<ActionProps> = (props: ActionProps) => {
       <span className="action__label">{label}</span>
     </Tooltip>
   );
-};
-
-Action.defaultProps = {
-  noTip: false,
 };
 
 export default Action;

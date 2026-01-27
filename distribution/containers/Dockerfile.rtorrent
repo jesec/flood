@@ -1,9 +1,9 @@
-ARG FLOOD_VERSION=latest
-ARG RTORRENT_VERSION=latest
+ARG FLOOD_IMAGE=jesec/flood:latest
+ARG RTORRENT_IMAGE=jesec/rtorrent:latest
 
-FROM docker.io/jesec/rtorrent:$RTORRENT_VERSION as rtorrent
+FROM ${RTORRENT_IMAGE} AS rtorrent
 
-FROM docker.io/jesec/flood:$FLOOD_VERSION as flood
+FROM ${FLOOD_IMAGE} AS flood
 
 # Install rTorrent
 COPY --from=rtorrent / /

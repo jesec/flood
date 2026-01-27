@@ -8,52 +8,54 @@
 #
 # Sources should be mounted to /workspaces/flood.
 
-FROM docker.io/jesec/rtorrent:master as rtorrent
+FROM docker.io/ubuntu:jammy
 
-FROM docker.io/ubuntu:focal as flood
-
-COPY ./.devcontainer/library-scripts /tmp/library-scripts/
-
-# Configure base container
-RUN /bin/bash /tmp/library-scripts/common-debian.sh true vscode 1000 1000 true
+# Ensure apt is in non-interactive mode
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install prerequisites
-RUN apt update
-RUN apt install -y \
-    dpkg-dev software-properties-common
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    gnupg \
+    software-properties-common \
+    wget \
+    && rm -rf /var/lib/apt/lists/*
 
-# Configure Docker-from-Docker
-RUN /bin/bash /tmp/library-scripts/docker-debian.sh true "/var/run/docker-host.sock" "/var/run/docker.sock" vscode false
-ENTRYPOINT ["/usr/local/share/docker-init.sh"]
-CMD ["sleep", "infinity"]
+# Install Node.js 22
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends nodejs && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_15.x | bash -
-RUN apt install -y \
-    nodejs
+# Install pnpm 9.7.0
+RUN npm install -g pnpm@9.7.0
 
-# Install rTorrent, qBittorrent and Transmission
-COPY --from=rtorrent / /
-RUN add-apt-repository -y ppa:qbittorrent-team/qbittorrent-unstable
-RUN add-apt-repository -y ppa:transmissionbt/ppa
-RUN apt install -y \
-    qbittorrent-nox transmission-daemon
+# Install rTorrent from jesec's releases (same as CI)
+RUN wget -q https://github.com/jesec/rtorrent/releases/latest/download/rtorrent-linux-amd64.deb && \
+    apt-get install -y --no-install-recommends ./rtorrent-linux-amd64.deb && \
+    rm rtorrent-linux-amd64.deb
 
-# Install development tools
-RUN apt install -y \
-    git zsh
+# Install qBittorrent from PPA
+RUN add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends qbittorrent-nox && \
+    rm -rf /var/lib/apt/lists/*
+
+# Install Transmission from default repos (PPA not available for jammy)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends transmission-daemon && \
+    rm -rf /var/lib/apt/lists/*
 
 # Install runtime dependencies
-RUN apt install -y \
-    mediainfo
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    mediainfo && \
+    rm -rf /var/lib/apt/lists/*
 
-# Run as vscode user
-USER vscode
+# Expose ports for Flood server, webpack dev server, and Storybook
+EXPOSE 3000 4200 6006
 
-# Apply shell customizations
-RUN git clone https://github.com/jesec/.dotfiles.git ~/.dotfiles
-RUN cd ~/.dotfiles && bash setup.sh
-
-# Expose port 3000 and 4200
-EXPOSE 3000
-EXPOSE 4200
+# Default command (overridden by dev container features)
+CMD ["sleep", "infinity"]

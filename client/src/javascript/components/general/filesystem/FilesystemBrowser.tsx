@@ -1,5 +1,4 @@
-import {css} from '@emotion/react';
-import {darken, lighten, rgba, saturate} from 'polished';
+import {css} from '@client/styled-system/css';
 import {FC, memo, ReactNodeArray, useEffect, useRef, useState} from 'react';
 import {sort} from 'fast-sort';
 import {Trans} from '@lingui/react';
@@ -10,45 +9,47 @@ import FloodActions from '@client/actions/FloodActions';
 import termMatch from '@client/util/termMatch';
 
 const foregroundColor = '#5E728C';
+const borderColor = '#dde2e8'; // lighten(0.43, foregroundColor)
+const hoverColor = '#374c66'; // saturate(0.1, darken(0.15, foregroundColor))
+const hoverBackground = 'rgba(94, 114, 140, 0.1)'; // rgba(foregroundColor, 0.1)
 
-const itemPadding = css({padding: '3px 9px'});
+const itemPaddingStyle = css.raw({padding: '3px 9px'});
 
-const headerStyle = css({
-  borderBottom: `1px solid ${lighten(0.43, foregroundColor)}`,
+const headerStyle = css.raw({
+  borderBottom: `1px solid ${borderColor}`,
   marginBottom: '3px',
   paddingBottom: '3px',
   opacity: 0.75,
-  '&:last-child': {
+  _last: {
     marginBottom: 0,
+  },
+});
+
+const baseListItemStyle = css.raw({
+  transition: 'color 0.25s',
+  whiteSpace: 'nowrap',
+  '& button': {
+    width: '100%',
+    height: '100%',
+    textAlign: 'left',
+    _disabled: {
+      pointerEvents: 'none',
+    },
+    ...itemPaddingStyle,
   },
 });
 
 const listItemStyle = css({
   opacity: 0.5,
-  transition: 'color 0.25s',
-  whiteSpace: 'nowrap',
-  button: [
-    itemPadding,
-    {
-      width: '100%',
-      height: '100%',
-      padding: '3px 9px',
-      textAlign: 'left',
-      '&:disabled': {
-        pointerEvents: 'none',
-      },
-    },
-  ],
+  ...baseListItemStyle,
 });
 
-const listItemActiveStyle = css({
-  color: saturate(0.1, darken(0.15, foregroundColor)),
-  background: rgba(foregroundColor, 0.1),
-  button: {
-    ':focus': {
-      outline: 'none',
-      WebkitTapHighlightColor: 'transparent',
-    },
+const listItemSelectableActiveStyle = css.raw({
+  color: hoverColor,
+  background: hoverBackground,
+  '& button:focus': {
+    outline: 'none',
+    WebkitTapHighlightColor: 'transparent',
   },
 });
 
@@ -57,8 +58,9 @@ const listItemSelectableStyle = css({
   cursor: 'pointer',
   transition: 'background 0.25s, color 0.25s',
   userSelect: 'none',
-  '&:hover': listItemActiveStyle,
-  '&:focus-within': listItemActiveStyle,
+  _hover: listItemSelectableActiveStyle,
+  _focusWithin: listItemSelectableActiveStyle,
+  ...baseListItemStyle,
 });
 
 const MESSAGES = {
@@ -160,17 +162,13 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
       const parentDirectory = `${currentDirectory.split(separator).slice(0, -2).join(separator)}${separator}`;
       const parentDirectoryElement = (
         <li
-          css={[
-            listItemStyle,
-            listItemSelectableStyle,
-            {
-              '@media (max-width: 720px)': headerStyle,
-            },
-          ]}
+          className={`${listItemSelectableStyle} ${css({
+            '@media (max-width: 720px)': headerStyle,
+          })}`}
           key={parentDirectory}
         >
           <button type="button" onClick={() => onItemSelection?.(parentDirectory, true)}>
-            <Arrow css={{transform: 'scale(0.75) rotate(180deg)'}} />
+            <Arrow className={css({transform: 'scale(0.75) rotate(180deg)'})} />
             ..
           </button>
         </li>
@@ -185,17 +183,16 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
               const inputDestination = `${currentDirectory}${lastSegment}${separator}`;
               return [
                 <li
-                  css={[
-                    listItemStyle,
-                    listItemSelectableStyle,
-                    {fontWeight: 'bold', '@media (max-width: 720px)': {display: 'none'}},
-                  ]}
+                  className={`${listItemSelectableStyle} ${css({
+                    '@media (max-width: 720px)': {display: 'none'},
+                  })}`}
+                  style={{fontWeight: 'bold'}}
                   key={inputDestination}
                 >
                   <button type="button" onClick={() => onItemSelection?.(inputDestination, false)}>
                     <FolderClosedOutlined />
-                    <span css={{whiteSpace: 'pre-wrap'}}>{lastSegment}</span>
-                    <em css={{fontWeight: 'lighter'}}>
+                    <span style={{whiteSpace: 'pre-wrap'}}>{lastSegment}</span>
+                    <em style={{fontWeight: 'lighter'}}>
                       {' - '}
                       <Trans id="filesystem.error.enoent" />
                     </em>
@@ -213,11 +210,8 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
               const destination = `${currentDirectory}${subDirectory}${separator}`;
               return (
                 <li
-                  css={[
-                    listItemStyle,
-                    isDirectorySelectable ? listItemSelectableStyle : undefined,
-                    directoryMatched.includes(subDirectory) ? {fontWeight: 'bold'} : undefined,
-                  ]}
+                  className={isDirectorySelectable ? listItemSelectableStyle : listItemStyle}
+                  style={directoryMatched.includes(subDirectory) ? {fontWeight: 'bold'} : undefined}
                   key={destination}
                 >
                   <button
@@ -244,11 +238,8 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
               const destination = `${currentDirectory}${file}`;
               return (
                 <li
-                  css={[
-                    listItemStyle,
-                    isFileSelectable ? listItemSelectableStyle : undefined,
-                    fileMatched.includes(file) ? {fontWeight: 'bold'} : undefined,
-                  ]}
+                  className={isFileSelectable ? listItemSelectableStyle : listItemStyle}
+                  style={fileMatched.includes(file) ? {fontWeight: 'bold'} : undefined}
                   key={destination}
                 >
                   <button
@@ -274,38 +265,33 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
 
     return (
       <div
-        css={{
+        className={css({
           color: foregroundColor,
           listStyle: 'none',
           padding: '3px 0px',
-          '.icon': {
+          '& .icon': {
             fill: 'currentColor',
             height: '14px',
             width: '14px',
-            marginRight: `${25 * (1 / 5)}px`,
+            marginRight: '5px',
             marginTop: '-3px',
             verticalAlign: 'middle',
           },
-        }}
+        })}
       >
         {currentDirectory && (
           <li
-            css={[
-              listItemStyle,
-              headerStyle,
-              itemPadding,
-              {
-                whiteSpace: 'pre-wrap',
-                wordBreak: 'break-all',
-                '.icon': {
-                  transform: 'scale(0.9)',
-                  marginTop: '-2px !important',
-                },
-                '@media (max-width: 720px)': {
-                  display: 'none',
-                },
+            className={`${listItemStyle} ${css(headerStyle, itemPaddingStyle, {
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-all',
+              '& .icon': {
+                transform: 'scale(0.9)',
+                marginTop: '-2px !important',
               },
-            ]}
+              '@media (max-width: 720px)': {
+                display: 'none',
+              },
+            })}`}
           >
             <FolderOpenSolid />
             {currentDirectory}
@@ -313,7 +299,7 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
         )}
         <ul ref={listRef}>{listItems}</ul>
         {errorMessage && (
-          <div css={[listItemStyle, itemPadding, {opacity: 1}]}>
+          <div className={`${listItemStyle} ${css(itemPaddingStyle)}`} style={{opacity: 1}}>
             <em>
               <Trans id={errorMessage} />
             </em>
@@ -323,11 +309,5 @@ const FilesystemBrowser: FC<FilesystemBrowserProps> = memo(
     );
   },
 );
-
-FilesystemBrowser.defaultProps = {
-  selectable: undefined,
-  onItemSelection: undefined,
-  onYieldFocus: undefined,
-};
 
 export default FilesystemBrowser;

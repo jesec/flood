@@ -1,16 +1,32 @@
+import type {CookieSerializeOptions} from '@fastify/cookie';
 import type {AuthToken} from '@shared/schema/Auth';
-import {CookieOptions} from 'express';
+import type {FastifyReply} from 'fastify';
 import jwt from 'jsonwebtoken';
 
 import config from '../../config';
 
 const EXPIRATION_SECONDS = 60 * 60 * 24 * 7; // one week
 
-export const getCookieOptions = (): CookieOptions => ({
+export const getCookieOptions = (): CookieSerializeOptions => ({
+  path: '/',
   expires: new Date(Date.now() + EXPIRATION_SECONDS * 1000),
   httpOnly: true,
   sameSite: 'strict',
 });
+
+export const setAuthCookie = (reply: FastifyReply, token: string): void => {
+  reply.setCookie('jwt', token, getCookieOptions());
+};
+
+export const clearAuthCookie = (reply: FastifyReply): void => {
+  reply.clearCookie('jwt', {
+    path: '/',
+    expires: new Date(0),
+    maxAge: 0,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+};
 
 export const getAuthToken = (username: string, iat?: number): string => {
   const authTokenPayload: Partial<AuthToken> = {

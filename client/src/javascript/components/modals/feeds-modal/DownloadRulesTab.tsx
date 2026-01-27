@@ -1,7 +1,7 @@
 import {FC, ReactElement, useRef, useState} from 'react';
 import {Trans, useLingui} from '@lingui/react';
 
-import {Button, Form, FormError, FormRow, FormRowItem} from '@client/ui';
+import {Button, Form, FormHandle, FormError, FormRow, FormRowItem} from '@client/ui';
 import FeedActions from '@client/actions/FeedActions';
 import {isNotEmpty, isRegExValid} from '@client/util/validators';
 
@@ -70,7 +70,7 @@ interface RuleFormData {
 }
 
 const DownloadRulesTab: FC = () => {
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const {i18n} = useLingui();
 
   const [currentRule, setCurrentRule] = useState<Rule | null>(null);

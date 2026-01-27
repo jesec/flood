@@ -1,7 +1,7 @@
 import {FC, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
-import {Form, FormRow} from '@client/ui';
+import {Form, FormHandle, FormRow} from '@client/ui';
 import TorrentActions from '@client/actions/TorrentActions';
 import TorrentStore from '@client/stores/TorrentStore';
 
@@ -9,7 +9,7 @@ import Modal from '../Modal';
 import TagSelect from '../../general/form-elements/TagSelect';
 
 const SetTagsModal: FC = () => {
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const {i18n} = useLingui();
   const [isSettingTags, setIsSettingTags] = useState<boolean>(false);
 

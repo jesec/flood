@@ -1,4 +1,4 @@
-import {FC} from 'react';
+import React, {FC} from 'react';
 import {useLingui} from '@lingui/react';
 
 import ModalActions from '../ModalActions';

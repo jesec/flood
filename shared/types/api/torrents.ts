@@ -1,29 +1,33 @@
+import {z} from 'zod';
+
 import type {TorrentPriority, TorrentProperties} from '../Torrent';
 import type {TorrentContentPriority} from '../TorrentContent';
 
 // POST /api/torrents/create
-export interface CreateTorrentOptions {
+export const CreateTorrentOptionsSchema = z.object({
   // Name of the torrent:
   // For multi-file torrents, this becomes the base directory
   // For single-file torrents, this becomes the filename
-  name?: string;
+  name: z.string().optional(),
   // Path to the file of folder
-  sourcePath: string;
+  sourcePath: z.string(),
   // Trackers
-  trackers: Array<string>;
+  trackers: z.array(z.string()),
   // Optional comment in torrent file
-  comment?: string;
+  comment: z.string().optional(),
   // Optional source entry in infohash
-  infoSource?: string;
+  infoSource: z.string().optional(),
   // Whether the torrent is private
-  isPrivate: boolean;
+  isPrivate: z.boolean(),
   // Whether to use initial seeding mode
-  isInitialSeeding?: boolean;
+  isInitialSeeding: z.boolean().optional(),
   // Whether to start torrent
-  start?: boolean;
+  start: z.boolean().optional(),
   // Tags, not added to torrent file
-  tags?: Array<string>;
-}
+  tags: z.array(z.string()).optional(),
+});
+
+export type ICreateTorrentOptions = z.infer<typeof CreateTorrentOptionsSchema>;
 
 // POST /api/torrents/check-hash
 export interface CheckTorrentsOptions {

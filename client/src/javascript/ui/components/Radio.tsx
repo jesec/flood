@@ -11,7 +11,7 @@ type RadioProps = Omit<ToggleInputProps, 'icon' | 'id' | 'type' | 'value'> & {
 
 const Radio: FC<RadioProps> = (props: RadioProps) => {
   const {groupID, id} = props;
-  return <ToggleInput {...props} icon={<Circle />} id={groupID} type="radio" value={id} />;
+  return <ToggleInput {...props} icon={<Circle />} id={id} groupID={groupID} type="radio" value={id} />;
 };
 
 export default Radio;

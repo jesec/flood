@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {Trans, useLingui} from '@lingui/react';
 
 import type {TorrentProperties} from '@shared/types/Torrent';

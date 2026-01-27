@@ -1,63 +1,48 @@
-name: Build
+name: build
+
+permissions:
+  contents: read
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
 
 jobs:
-  build-pkg:
-    runs-on: ubuntu-24.04
+  package:
+    uses: ./.github/workflows/package.yml
 
-    steps:
-      - uses: actions/checkout@v4
+  docker:
+    needs: package
+    uses: ./.github/workflows/build-docker.yml
+    with:
+      push: false
+      flood-version: pr-${{ github.event.pull_request.number || 'check' }}
+      flood-tags: |
+        jesec/flood:pr-${{ github.event.pull_request.number || 'check' }}
+      rtorrent-tags: |
+        jesec/rtorrent-flood:pr-validate
+      platforms: linux/amd64,linux/arm64
 
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
+  pkg:
+    needs: package
+    uses: ./.github/workflows/build-binary.yml
+    with:
+      upload-name: pkg-binaries-pr
 
-      - run: pnpm install --frozen-lockfile
-      - run: sudo npm install -g @yao-pkg/pkg
+  docker-distroless:
+    needs: pkg
+    uses: ./.github/workflows/build-docker-distroless.yml
+    with:
+      push: false
+      binary-artifact: pkg-binaries-pr
+      flood-version: pr-${{ github.event.pull_request.number || 'check' }}
+      flood-tags: |
+        jesec/flood:pr-${{ github.event.pull_request.number || 'check' }}-distroless
+      rtorrent-tags: |
+        jesec/rtorrent-flood:pr-${{ github.event.pull_request.number || 'check' }}-distroless
+      platforms: linux/amd64,linux/arm64
 
-      - run: npm run build-pkg
-
-      - run: dist-pkg/flood-linuxstatic-x64 --help
-
-  build-real:
-    runs-on: ubuntu-24.04
-
-    strategy:
-      matrix:
-        node: ['20', '22']
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-          cache: 'pnpm'
-
-      - run: pnpm install --frozen-lockfile
-      - run: npm run build
-      - run: npm run start -- --help
-
-  build:
-    # so we do not need to update GitHub repo config
-    needs: [build-real, build-pkg]
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node: ['18', '20']
-      fail-fast: false
-    steps:
-      - run: echo pass
+  debian:
+    needs: package
+    uses: ./.github/workflows/build-debian.yml

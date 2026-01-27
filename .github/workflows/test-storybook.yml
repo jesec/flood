@@ -1,0 +1,49 @@
+name: Test Storybook
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test-storybook-real:
+    runs-on: ubuntu-24.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['22', '24']
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Build Storybook
+        run: npm run build-storybook
+
+      - name: Serve Storybook and run tests
+        run: |
+          npx http-server storybook-static --port 6006 --silent &
+          npx wait-on tcp:127.0.0.1:6006
+          npm run test-storybook
+
+  test-storybook:
+    # so we do not need to update GitHub repo config
+    runs-on: ubuntu-latest
+    needs:
+      - test-storybook-real
+    steps:
+      - run: echo ok

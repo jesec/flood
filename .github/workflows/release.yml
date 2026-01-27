@@ -1,4 +1,4 @@
-name: Release
+name: Publish Packages
 
 on:
   push:
@@ -6,121 +6,109 @@ on:
       - 'v*'
 
 jobs:
-  release:
+  package:
+    uses: ./.github/workflows/package.yml
+
+  npm-publish:
+    needs: package
     runs-on: ubuntu-24.04
-
-    strategy:
-      matrix:
-        node: [20]
-
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+      - name: Download package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: npm-package
+          path: artifacts
 
-      - name: Use Node.js ${{ matrix.node }}
+      - name: Locate package tarball
+        id: package_tarball
+        run: echo "path=$(ls artifacts/*.tgz)" >> "$GITHUB_OUTPUT"
+
+      - name: Use Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node }}
+          node-version: '22'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
 
-      - run: sudo npm i -g @yao-pkg/pkg
-      - run: pnpm install --frozen-lockfile
+      - name: Upgrade npm for OIDC support
+        run: npm install -g npm@latest
 
-      - run: npm publish --access public
+      - name: Publish to npm with provenance
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ''
+          npm_config_ignore_scripts: 'true'
+        run: npm publish --access public --provenance "${{ steps.package_tarball.outputs.path }}"
 
-      - name: Set up QEMU
+  pkg:
+    needs: package
+    uses: ./.github/workflows/build-binary.yml
+
+  debian:
+    needs: package
+    uses: ./.github/workflows/build-debian.yml
+
+  docker:
+    needs: package
+    uses: ./.github/workflows/build-docker.yml
+    permissions:
+      contents: read
+      packages: write
+    secrets: inherit
+    with:
+      push: true
+      platforms: linux/amd64,linux/arm64
+      flood-version: ${{ needs.package.outputs.version }}
+      flood-tags: |
+        jesec/flood:latest
+        jesec/flood:${{ needs.package.outputs.version }}
+        ghcr.io/jesec/flood:latest
+        ghcr.io/jesec/flood:${{ needs.package.outputs.version }}
+      build-rtorrent: true
+      rtorrent-version: master
+      rtorrent-tags: |
+        jesec/rtorrent-flood:${{ needs.package.outputs.version }}
+        jesec/rtorrent-flood:latest
+        ghcr.io/jesec/rtorrent-flood:${{ needs.package.outputs.version }}
+        ghcr.io/jesec/rtorrent-flood:latest
+
+  github-release:
+    needs:
+      - npm-publish
+      - pkg
+      - debian
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download pkg artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: pkg-binaries
+          path: release-assets
+
+      - name: Download debian artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: flood-debian
+          path: release-assets
+        continue-on-error: true
+
+      - name: Fetch release body
         run: |
-          sudo apt-get update
-          sudo apt-get install --reinstall -y qemu-user-static
-
-      - name: Install ldid
-        run: |
-          sudo wget https://github.com/jesec/ldid-static/releases/download/v2.1.4/ldid-amd64 -O /usr/local/bin/ldid
-          sudo chmod +x /usr/local/bin/ldid
-
-      - run: npm run build-pkg
-      - run: git fetch origin ${{ github.ref }}
-      - run: git for-each-ref ${{ github.ref }} --format="%(contents)" > body
-
-      - name: Rename linuxstatic to linux
-        run: |
-          mv dist-pkg/flood-linuxstatic-x64 dist-pkg/flood-linux-x64
-          mv dist-pkg/flood-linuxstatic-arm64 dist-pkg/flood-linux-arm64
-
-      - name: Get the version
-        id: get_version
-        run: echo VERSION=${GITHUB_REF/refs\/tags\//} >> $GITHUB_OUTPUT
+          git fetch origin ${{ github.ref }}
+          git for-each-ref ${{ github.ref }} --format="%(contents)" > body
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          name: Release ${{ steps.get_version.outputs.VERSION }}
+          name: Release ${{ github.ref_name }}
           body_path: body
-          files: |
-            dist-pkg/flood-linux-x64
-            dist-pkg/flood-linux-arm64
-            dist-pkg/flood-macos-x64
-            dist-pkg/flood-macos-arm64
-            dist-pkg/flood-win-x64.exe
-            dist-pkg/flood-win-arm64.exe
-
-  release-docker:
-    needs: release
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Parse semantic version
-        id: parse_semver
-        run: |
-          full_version=`echo ${GITHUB_REF/refs\/tags\/v/}`
-          major_version=`echo $full_version | cut -d'.' -f1`
-          minor_version=`echo $full_version | cut -d'.' -f2`
-          major_minor=`echo $major_version.$minor_version`
-          echo MAJOR_VERSION=$major_version >> $GITHUB_OUTPUT
-          echo MAJOR_MINOR=$major_minor >> $GITHUB_OUTPUT
-          echo FULL_VERSION=$full_version >> $GITHUB_OUTPUT
-
-      - name: Set up QEMU
-        run: |
-          sudo apt-get update
-          sudo apt-get install --reinstall -y qemu-user-static
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Wait until the package is available
-        uses: nick-invision/retry@v3
-        with:
-          command: curl -f -s https://registry.npmjs.org/flood/${{ steps.parse_semver.outputs.FULL_VERSION }} &>/dev/null
-          timeout_minutes: 30
-          max_attempts: 15
-          retry_wait_seconds: 15
-
-      - run: sleep 120
-
-      - name: Publish to Docker Hub
-        uses: docker/build-push-action@v5
-        with:
-          build-args: VERSION=${{ steps.parse_semver.outputs.FULL_VERSION }}
-          context: .
-          file: ./distribution/containers/Dockerfile.release
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            jesec/flood:latest
-            jesec/flood:${{ steps.parse_semver.outputs.MAJOR_VERSION }}
-            jesec/flood:${{ steps.parse_semver.outputs.MAJOR_MINOR }}
-            jesec/flood:${{ steps.parse_semver.outputs.FULL_VERSION }}
+          files: release-assets/**/*

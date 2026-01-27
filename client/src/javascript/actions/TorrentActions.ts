@@ -13,7 +13,7 @@ import type {
 } from '@shared/schema/api/torrents';
 import {
   CheckTorrentsOptions,
-  CreateTorrentOptions,
+  ICreateTorrentOptions,
   DeleteTorrentsOptions,
   MoveTorrentsOptions,
   SetTorrentContentsPropertiesOptions,
@@ -85,7 +85,7 @@ const TorrentActions = {
       },
     ),
 
-  createTorrent: (options: CreateTorrentOptions): Promise<void> =>
+  createTorrent: (options: ICreateTorrentOptions): Promise<void> =>
     axios.post<Blob>(`${baseURI}api/torrents/create`, options, {responseType: 'blob'}).then(
       ({data}) => {
         download(data, (options.name || `${Date.now()}`).concat('.torrent'));

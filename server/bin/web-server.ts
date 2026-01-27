@@ -2,28 +2,30 @@ import fs from 'node:fs';
 import type {Server} from 'node:http';
 import type {Http2SecureServer} from 'node:http2';
 
-import chalk from 'chalk';
 import type {FastifyInstance} from 'fastify';
 import fastify from 'fastify';
 
 import config from '../../config';
 import packageJSON from '../../package.json';
 import constructRoutes from '../routes';
+import {createLogger} from '../util/logger';
 
 const startWebServer = async () => {
   const {ssl = false, floodServerHost: host, floodServerPort: port} = config;
+  const serverLogger = createLogger('web-server');
 
-  let instance: FastifyInstance<Http2SecureServer> | FastifyInstance<Server>;
+  let instance: FastifyInstance<Http2SecureServer, any, any, any> | FastifyInstance<Server, any, any, any>;
 
   if (ssl) {
     if (!config.sslKey || !config.sslCert) {
-      console.error('Cannot start HTTPS server, `sslKey` or `sslCert` is missing in config.js.');
+      serverLogger.fatal('Cannot start HTTPS server, `sslKey` or `sslCert` is missing in config.js.');
       process.exit(1);
     }
 
     instance = fastify({
       bodyLimit: 100 * 1024 * 1024,
       trustProxy: 'loopback',
+      loggerInstance: serverLogger,
       https: {
         key: fs.readFileSync(config.sslKey),
         cert: fs.readFileSync(config.sslCert),
@@ -33,10 +35,11 @@ const startWebServer = async () => {
     instance = fastify({
       bodyLimit: 100 * 1024 * 1024,
       trustProxy: 'loopback',
+      loggerInstance: serverLogger,
     });
   }
 
-  await constructRoutes(instance as FastifyInstance);
+  await constructRoutes(instance);
 
   if (typeof port === 'string' && !/^\d+$/.test(port)) {
     await instance.listen({path: port});
@@ -49,17 +52,17 @@ const startWebServer = async () => {
     if (addressObject.family == 'IPv6') {
       hostname = `[${addressObject.address}]`;
     }
-    const address = chalk.underline(`${ssl ? 'https' : 'http'}://${hostname}:${addressObject.port}`);
+    const url = `${ssl ? 'https' : 'http'}://${hostname}:${addressObject.port}`;
 
-    console.log(chalk.green(`Flood server ${packageJSON.version} starting on ${address}\n`));
+    instance.log.info({url, version: packageJSON.version}, 'Flood server listening');
   }
 
   if (config.authMethod === 'none') {
-    console.log(chalk.yellow('Starting without builtin authentication\n'));
+    instance.log.warn('Starting without builtin authentication');
   }
 
   if (config.serveAssets === false) {
-    console.log(chalk.blue('Static assets not served\n'));
+    instance.log.info('Static assets not served');
   }
 };
 

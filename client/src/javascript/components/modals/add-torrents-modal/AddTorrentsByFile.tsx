@@ -1,7 +1,7 @@
 import {FC, useRef, useState} from 'react';
 import {useLingui} from '@lingui/react';
 
-import {Form, FormRow} from '@client/ui';
+import {Form, FormHandle, FormRow} from '@client/ui';
 import {saveAddTorrentsUserPreferences} from '@client/util/userPreferences';
 import SettingStore from '@client/stores/SettingStore';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -25,7 +25,7 @@ interface AddTorrentsByFileFormData {
 
 const AddTorrentsByFile: FC = () => {
   const filesRef = useRef<ProcessedFiles>([]);
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormHandle>(null);
   const textboxRef = useRef<HTMLInputElement>(null);
   const [isAddingTorrents, setIsAddingTorrents] = useState<boolean>(false);
 

@@ -14,7 +14,8 @@ import TorrentDetailsPanelResizeHandle from '@client/components/torrent-details-
 import TorrentList from '@client/components/torrent-list/TorrentList';
 import UIStore from '@client/stores/UIStore';
 
-import 'overlayscrollbars/overlayscrollbars.css';
+// Load OverlayScrollbars CSS into the third-party layer
+import '@client/util/loadOverlayScrollbars';
 
 const Alerts = lazy(() => import('@client/components/alerts/Alerts'));
 const Modals = lazy(() => import('@client/components/modals/Modals'));

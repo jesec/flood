@@ -2,6 +2,7 @@ import {FC, Suspense, useEffect, useState} from 'react';
 import {Trans} from '@lingui/react';
 import {useInterval} from 'react-use';
 
+import {css} from '@client/styled-system/css';
 import {CheckmarkThick, CountryFlag, Lock, Spinner} from '@client/ui/icons';
 import ConfigStore from '@client/stores/ConfigStore';
 import TorrentActions from '@client/actions/TorrentActions';
@@ -37,15 +38,14 @@ const TorrentPeers: FC = () => {
   return (
     <div className="torrent-details__section torrent-details__section--peers">
       <table
-        className="torrent-details__table table"
-        css={{
-          td: {
+        className={`torrent-details__table table ${css({
+          '& td': {
             maxWidth: '140px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
           },
-        }}
+        })}`}
       >
         <thead className="torrent-details__table__heading">
           <tr>

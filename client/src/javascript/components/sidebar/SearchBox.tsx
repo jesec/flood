@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {FC, useEffect, useRef} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import {Close, Search} from '@client/ui/icons';
@@ -25,7 +25,7 @@ const SearchBox: FC = observer(() => {
   return (
     <div
       className={classnames({
-        sidebar__item: true, // eslint-disable-line
+        sidebar__item: true,
         search: true,
         'is-in-use': isSearchActive,
       })}

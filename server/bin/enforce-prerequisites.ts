@@ -2,8 +2,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import config from '../../config';
-import {appDist} from '../../shared/config/paths';
+import {createServerPaths} from '../config/paths';
 
+const {appDist} = createServerPaths();
 const staticAssets = [path.join(appDist, 'index.html')];
 
 // Taken from react-scripts/check-required-files, but without console.logs.
@@ -13,7 +14,7 @@ const doFilesExist = (files: Array<string>) => {
       fs.accessSync(filename, fs.constants.F_OK);
     });
     return true;
-  } catch (err) {
+  } catch {
     return false;
   }
 };

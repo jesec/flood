@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: ['22']
+        node: ['22', '24']
         check: [check-source-formatting, check-types, lint]
 
     steps:
@@ -33,11 +33,6 @@ jobs:
   check:
     # so we do not need to update GitHub repo config
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        node: ['20']
-        check: [check-source-formatting, check-types, lint]
     needs:
       - check-real
     steps:

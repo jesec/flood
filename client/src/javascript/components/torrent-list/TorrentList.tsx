@@ -1,5 +1,5 @@
 import {FC, KeyboardEvent, ReactNode, useEffect, useRef} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {reaction} from 'mobx';
 import {Trans} from '@lingui/react';
 import {useEvent} from 'react-use';

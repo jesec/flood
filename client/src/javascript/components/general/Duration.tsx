@@ -42,9 +42,7 @@ interface DurationProps {
   value: number;
 }
 
-const Duration: FC<DurationProps> = (props: DurationProps) => {
-  const {suffix, value} = props;
-
+const Duration: FC<DurationProps> = ({suffix, value}: DurationProps) => {
   if (value == null) {
     return null;
   }
@@ -152,10 +150,6 @@ const Duration: FC<DurationProps> = (props: DurationProps) => {
       {suffixElement}
     </span>
   );
-};
-
-Duration.defaultProps = {
-  suffix: undefined,
 };
 
 export default Duration;

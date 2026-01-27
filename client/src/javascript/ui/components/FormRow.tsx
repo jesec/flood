@@ -8,7 +8,7 @@ interface FormRowProps {
   wrap?: boolean;
 }
 
-const FormRow: FC<FormRowProps> = ({children, align, justify, wrap}: FormRowProps) => {
+const FormRow: FC<FormRowProps> = ({children, align = 'start', justify = 'start', wrap = false}: FormRowProps) => {
   const classes = classnames('form__row', {
     'form__row--wrap': wrap,
     [`form__row--justify--${justify}`]: justify,
@@ -16,12 +16,6 @@ const FormRow: FC<FormRowProps> = ({children, align, justify, wrap}: FormRowProp
   });
 
   return <div className={classes}>{children}</div>;
-};
-
-FormRow.defaultProps = {
-  align: 'start',
-  justify: 'start',
-  wrap: false,
 };
 
 export default FormRow;

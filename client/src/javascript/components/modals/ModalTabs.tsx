@@ -1,10 +1,12 @@
 import classnames from 'classnames';
 import {FC, ReactNode} from 'react';
 
+import {css} from '@client/styled-system/css';
+
 export interface Tab {
   id?: string;
   label: ReactNode;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   content: FC<any>;
   props?: Record<string, unknown>;
   modalContentClasses?: string;
@@ -16,9 +18,7 @@ interface ModalTabsProps {
   onTabChange: (tab: Tab) => void;
 }
 
-const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
-  const {activeTabId, tabs = {}, onTabChange} = props;
-
+const ModalTabs: FC<ModalTabsProps> = ({activeTabId, tabs = {}, onTabChange}: ModalTabsProps) => {
   return (
     <ul className="modal__tabs">
       {Object.keys(tabs).map((tabId) => {
@@ -33,15 +33,15 @@ const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
         return (
           <li className={classes} key={tabId}>
             <button
-              css={{
-                ':focus': {
+              className={css({
+                _focus: {
                   outline: 'none',
                   WebkitTapHighlightColor: 'transparent',
                 },
-                ':focus-visible': {
+                _focusVisible: {
                   outline: 'dashed',
                 },
-              }}
+              })}
               type="button"
               onClick={() => {
                 if (onTabChange) {
@@ -56,10 +56,6 @@ const ModalTabs: FC<ModalTabsProps> = (props: ModalTabsProps) => {
       })}
     </ul>
   );
-};
-
-ModalTabs.defaultProps = {
-  tabs: {},
 };
 
 export default ModalTabs;

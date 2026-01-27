@@ -1,6 +1,6 @@
 import classnames from 'classnames';
 import {FC, useEffect, useRef, useState} from 'react';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import {useLingui} from '@lingui/react';
 
 import FloodActions from '@client/actions/FloodActions';
@@ -9,7 +9,7 @@ import NotificationStore from '@client/stores/NotificationStore';
 
 import type {Notification} from '@shared/types/Notification';
 
-import Tooltip from '../general/Tooltip';
+import Tooltip, {TooltipHandle} from '../general/Tooltip';
 
 const NOTIFICATIONS_PER_PAGE = 10;
 
@@ -158,7 +158,7 @@ const NotificationBottomToolbar: FC<NotificationBottomToolbarProps> = ({
 const NotificationsButton: FC = observer(() => {
   const {i18n} = useLingui();
 
-  const tooltipRef = useRef<Tooltip>(null);
+  const tooltipRef = useRef<TooltipHandle>(null);
   const notificationsListRef = useRef<HTMLUListElement>(null);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);

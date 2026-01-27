@@ -5,7 +5,6 @@ import type {TorrentProperties} from '@shared/types/Torrent';
 
 import DirectoryFileList from './DirectoryFileList';
 // TODO: Fix this circular dependency
-// eslint-disable-next-line import/no-cycle
 import DirectoryTreeNode from './DirectoryTreeNode';
 
 interface DirectoryTreeProps {

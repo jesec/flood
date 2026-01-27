@@ -21,7 +21,7 @@ export interface FormRowItemProps {
 }
 
 const FormRowItem = forwardRef<HTMLDivElement, FormRowItemProps>(
-  ({children, className, type, width, grow, shrink}: FormRowItemProps, ref) => {
+  ({children, className, type, width = 'auto', grow = true, shrink = true}: FormRowItemProps, ref) => {
     const classes = classnames('form__row__item', className, {
       [`form__row__item--${width}`]: width,
       'form__row__item--grow': grow,
@@ -36,11 +36,5 @@ const FormRowItem = forwardRef<HTMLDivElement, FormRowItemProps>(
     );
   },
 );
-
-FormRowItem.defaultProps = {
-  grow: true,
-  shrink: true,
-  width: 'auto',
-};
 
 export default FormRowItem;
