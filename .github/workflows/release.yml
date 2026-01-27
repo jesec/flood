@@ -54,6 +54,9 @@ jobs:
   docker:
     needs: package
     uses: ./.github/workflows/build-docker.yml
+    permissions:
+      contents: read
+      packages: write
     secrets: inherit
     with:
       push: true
@@ -77,6 +80,9 @@ jobs:
       - package
       - pkg
     uses: ./.github/workflows/build-docker-distroless.yml
+    permissions:
+      contents: read
+      packages: write
     secrets: inherit
     with:
       push: true
