@@ -2,7 +2,6 @@ name: build
 
 permissions:
   contents: read
-  packages: read
 
 on:
   pull_request:
@@ -30,6 +29,19 @@ jobs:
     uses: ./.github/workflows/build-binary.yml
     with:
       upload-name: pkg-binaries-pr
+
+  docker-distroless:
+    needs: pkg
+    uses: ./.github/workflows/build-docker-distroless.yml
+    with:
+      push: false
+      binary-artifact: pkg-binaries-pr
+      flood-version: pr-${{ github.event.pull_request.number || 'check' }}
+      flood-tags: |
+        jesec/flood:pr-${{ github.event.pull_request.number || 'check' }}-distroless
+      rtorrent-tags: |
+        jesec/rtorrent-flood:pr-${{ github.event.pull_request.number || 'check' }}-distroless
+      platforms: linux/amd64,linux/arm64
 
   debian:
     needs: package

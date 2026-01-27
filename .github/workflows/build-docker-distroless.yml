@@ -1,4 +1,4 @@
-name: build-docker
+name: build-docker-distroless
 
 permissions:
   contents: read
@@ -6,10 +6,10 @@ permissions:
 on:
   workflow_call:
     inputs:
-      package-artifact:
-        description: Artifact name containing the npm package tarball
+      binary-artifact:
+        description: Artifact name containing the pkg executables
         required: false
-        default: npm-package
+        default: pkg-binaries
         type: string
       push:
         description: Whether to push the built images
@@ -22,23 +22,13 @@ on:
         default: linux/amd64
         type: string
       flood-tags:
-        description: Docker tags for the flood image (newline separated)
+        description: Docker tags for the flood distroless image (newline separated)
         required: true
         type: string
       flood-version:
-        description: Flood version used for build args
+        description: Flood version used for local tag only
         required: false
         default: dev
-        type: string
-      flood-image:
-        description: Full image reference to use for flood base (for dependent builds)
-        required: false
-        default: jesec/flood:dev
-        type: string
-      flood-registry:
-        description: Registry host for flood image
-        required: false
-        default: docker.io
         type: string
       flood-repository:
         description: Repository path for flood image
@@ -46,29 +36,19 @@ on:
         default: jesec/flood
         type: string
       build-rtorrent:
-        description: Whether to build rtorrent-flood image
+        description: Whether to build rtorrent-flood distroless image
         required: false
         default: true
         type: boolean
       rtorrent-tags:
-        description: Docker tags for the rtorrent-flood image (newline separated)
+        description: Docker tags for the rtorrent-flood distroless image (newline separated)
         required: false
-        default: jesec/rtorrent-flood:dev
+        default: jesec/rtorrent-flood:dev-distroless
         type: string
       rtorrent-version:
-        description: rtorrent version to embed
+        description: rtorrent version used for local tag only
         required: false
         default: master
-        type: string
-      rtorrent-registry:
-        description: Registry host for rtorrent base image
-        required: false
-        default: docker.io
-        type: string
-      rtorrent-repository:
-        description: Repository path for rtorrent base image
-        required: false
-        default: jesec/rtorrent
         type: string
       rtorrent-image:
         description: Full image reference for rtorrent base
@@ -89,24 +69,21 @@ jobs:
           - 5000:5000
         options: >-
           --name ci-registry
+
     steps:
       - uses: actions/checkout@v4
 
-      - name: Download package artifact
+      - name: Download pkg binaries artifact
         uses: actions/download-artifact@v4
         with:
-          name: ${{ inputs['package-artifact'] }}
+          name: ${{ inputs['binary-artifact'] }}
           path: artifacts
-
-      - name: Locate package tarball
-        id: package
-        run: echo "tarball=$(ls artifacts/*.tgz)" >> "$GITHUB_OUTPUT"
 
       - name: Compute local image tags
         id: local
         run: |
-          printf 'flood=%s\n' "${LOCAL_REGISTRY}/${{ inputs['flood-repository'] }}:${{ inputs['flood-version'] }}" >> "$GITHUB_OUTPUT"
-          printf 'rtorrent=%s\n' "${LOCAL_REGISTRY}/rtorrent-flood:${{ inputs['rtorrent-version'] }}" >> "$GITHUB_OUTPUT"
+          printf 'flood=%s\n' "${LOCAL_REGISTRY}/${{ inputs['flood-repository'] }}:${{ inputs['flood-version'] }}-distroless" >> "$GITHUB_OUTPUT"
+          printf 'rtorrent=%s\n' "${LOCAL_REGISTRY}/rtorrent-flood:${{ inputs['rtorrent-version'] }}-distroless" >> "$GITHUB_OUTPUT"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -139,24 +116,19 @@ jobs:
         if: inputs.push
         run: regctl registry set --tls disabled "${LOCAL_REGISTRY}"
 
-      - name: Build flood image
+      - name: Build flood distroless image
         id: build_flood
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./distribution/containers/Dockerfile.release
+          file: ./distribution/containers/Dockerfile.distroless
+          target: flood
           platforms: ${{ inputs.platforms }}
           push: true
           pull: false
           tags: ${{ steps.local.outputs.flood }}
-          build-args: |
-            PACKAGE_TARBALL=${{ steps.package.outputs.tarball }}
-            FLOOD_VERSION=${{ inputs['flood-version'] }}
 
-      - name: Export local flood image ref
-        run: echo "FLOOD_IMAGE_LOCAL=${{ steps.local.outputs.flood }}" >> $GITHUB_ENV
-
-      - name: Mirror flood image to targets
+      - name: Mirror flood distroless image to targets
         if: inputs.push
         env:
           LOCAL_TAG: ${{ steps.local.outputs.flood }}
@@ -166,23 +138,22 @@ jobs:
             regctl image copy "$LOCAL_TAG" "$tag"
           done <<< "${{ inputs['flood-tags'] }}"
 
-      - name: Build rtorrent-flood image
+      - name: Build rtorrent-flood distroless image
         if: inputs.build-rtorrent
         id: build_rtorrent
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./distribution/containers/Dockerfile.rtorrent
+          file: ./distribution/containers/Dockerfile.distroless
+          target: rtorrent-flood
           platforms: ${{ inputs.platforms }}
           push: true
           pull: false
-          network: host
           tags: ${{ steps.local.outputs.rtorrent }}
           build-args: |
-            FLOOD_IMAGE=${{ steps.local.outputs.flood }}
             RTORRENT_IMAGE=${{ inputs['rtorrent-image'] }}
 
-      - name: Mirror rtorrent-flood image to targets
+      - name: Mirror rtorrent-flood distroless image to targets
         if: inputs.push && inputs.build-rtorrent
         env:
           LOCAL_TAG: ${{ steps.local.outputs.rtorrent }}

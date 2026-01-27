@@ -59,6 +59,9 @@ jobs:
   docker:
     needs: package
     uses: ./.github/workflows/build-docker.yml
+    permissions:
+      contents: read
+      packages: write
     secrets: inherit
     with:
       push: true
@@ -72,3 +75,27 @@ jobs:
       rtorrent-tags: |
         jesec/rtorrent-flood:master
         ghcr.io/jesec/rtorrent-flood:master
+
+  pkg:
+    needs: package
+    uses: ./.github/workflows/build-binary.yml
+
+  docker-distroless:
+    needs: pkg
+    uses: ./.github/workflows/build-docker-distroless.yml
+    permissions:
+      contents: read
+      packages: write
+    secrets: inherit
+    with:
+      push: true
+      platforms: linux/amd64,linux/arm64
+      flood-version: master
+      flood-tags: |
+        jesec/flood:master-distroless
+        ghcr.io/jesec/flood:master-distroless
+      build-rtorrent: true
+      rtorrent-version: master
+      rtorrent-tags: |
+        jesec/rtorrent-flood:master-distroless
+        ghcr.io/jesec/rtorrent-flood:master-distroless
